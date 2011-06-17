@@ -29,7 +29,7 @@
 #include <QVariantList>
 
 
-namespace KWord
+namespace Words
 {
 
 }

@@ -137,7 +137,7 @@ Item                                                                   Status
      - Make it possible to delete a chart                               --
      - Make the chart selected when it is created                       --
      - Save as embedded document                                        --
-  + KWord                                                               ----
+  + Words                                                               ----
      - Set chartshape to use own data                                   done
      - Save as embedded document                                        done
   + KPresenter 								----

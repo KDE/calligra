@@ -232,14 +232,14 @@ bool WPXMemoryInputStream::atEOS()
 #endif
 
 #if LIBWPD_VERSION_MINOR>8
-class KWordListener : public WPXDocumentInterface
+class WordsListener : public WPXDocumentInterface
 #else
-class KWordListener : public WPXHLListenerImpl
+class WordsListener : public WPXHLListenerImpl
 #endif
 {
 public:
-    KWordListener();
-    virtual ~KWordListener();
+    WordsListener();
+    virtual ~WordsListener();
 #if LIBWPD_VERSION_MINOR>8
 	virtual void setDocumentMetaData(const WPXPropertyList &propList) {};
 	virtual void startDocument();
@@ -348,18 +348,18 @@ private:
 
 
 
-KWordListener::KWordListener()
+WordsListener::WordsListener()
 {
 }
 
-KWordListener::~KWordListener()
+WordsListener::~WordsListener()
 {
 }
 
-void KWordListener::startDocument()
+void WordsListener::startDocument()
 {
     root = "<!DOCTYPE DOC>\n";
-    root.append("<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
+    root.append("<DOC mime=\"application/x-words\" syntaxVersion=\"2\" editor=\"Words\">\n");
 
     // paper definition
     root.append("<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n");
@@ -373,7 +373,7 @@ void KWordListener::startDocument()
     root.append("<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n");
 }
 
-void KWordListener::endDocument()
+void WordsListener::endDocument()
 {
     root.append("</FRAMESET>\n");
     root.append("</FRAMESETS>\n");
@@ -381,13 +381,13 @@ void KWordListener::endDocument()
     root.append("</DOC>\n");
 }
 
-void KWordListener::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
+void WordsListener::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
 {
     root.append("<PARAGRAPH>\n");
     root.append("<TEXT>");
 }
 
-void KWordListener::closeParagraph()
+void WordsListener::closeParagraph()
 {
     root.append("</TEXT>\n");
     root.append("<LAYOUT>\n");
@@ -398,25 +398,25 @@ void KWordListener::closeParagraph()
     root.append("</PARAGRAPH>\n");
 }
 
-void KWordListener::insertTab()
+void WordsListener::insertTab()
 {
 }
 
-void KWordListener::insertText(const WPXString &text)
+void WordsListener::insertText(const WPXString &text)
 {
     root.append(QString::fromUtf8(text.cstr()));
 }
 
-void KWordListener::openSpan(const WPXPropertyList &propList)
+void WordsListener::openSpan(const WPXPropertyList &propList)
 {
 }
 
 
-void KWordListener::closeSpan()
+void WordsListener::closeSpan()
 {
 }
 
-void KWordListener::insertLineBreak()
+void WordsListener::insertLineBreak()
 {
 }
 
@@ -428,7 +428,7 @@ WPImport::WPImport(QObject* parent, const QVariantList&)
 KoFilter::ConversionStatus WPImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/x-kword" || from != "application/wordperfect")
+    if (to != "application/x-words" || from != "application/wordperfect")
         return KoFilter::NotImplemented;
 
     // open input file
@@ -449,7 +449,7 @@ KoFilter::ConversionStatus WPImport::convert(const QByteArray& from, const QByte
     WPXMemoryInputStream* instream = new WPXMemoryInputStream(buf, fsize);
 
     // open and parse the file
-    KWordListener listener;
+    WordsListener listener;
 #if LIBWPD_VERSION_MINOR>8
     WPDResult error = WPDocument::parse(instream, static_cast<WPXDocumentInterface *>(&listener), NULL);
 #else

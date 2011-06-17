@@ -24,18 +24,18 @@
 #include <klocale.h>
 #include <calligraversion.h>
 
-static const char* KWORD_DESCRIPTION = I18N_NOOP("Calligra Word Processor");
+static const char* WORDS_DESCRIPTION = I18N_NOOP("Calligra Word Processor");
 // First official public release Oct 2000 version 0.8
 // Calligra-1.1-beta1: version 0.9
 // Calligra-1.1-beta2: version 1.1 (to remove confusion)
 // Calligra-1.2: version 1.2
 // From then on: always the same as the Calligra version
-static const char* KWORD_VERSION = CALLIGRA_VERSION_STRING;
+static const char* WORDS_VERSION = CALLIGRA_VERSION_STRING;
 
-KAboutData * newKWordAboutData()
+KAboutData * newWordsAboutData()
 {
     KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Words"),
-                                            KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
+                                            WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
                                             ki18n("(c) 1998-2010, The Words Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/words/");
     aboutData->setProductName("calligra-words"); // for bugs.kde.org

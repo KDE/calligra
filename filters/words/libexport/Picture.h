@@ -23,7 +23,7 @@
 #include <QtCore/QString>
 #include <QtCore/QIODevice>
 #include <QtGui/QPixmap>
-#include "kword_libexport_export.h"
+#include "words_libexport_export.h"
 
 #include "PictureKey.h"
 
@@ -40,7 +40,7 @@ class PictureShared;
  *
  * @short A picture container class
  */
-class KWORD_LIBEXPORT_EXPORT Picture
+class WORDS_LIBEXPORT_EXPORT Picture
 {
 public:
     /**

@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_1_3_OASIS_GENERATOR
-#define KWORD_1_3_OASIS_GENERATOR
+#ifndef WORDS_1_3_OASIS_GENERATOR
+#define WORDS_1_3_OASIS_GENERATOR
 
 #define STRICT_OOWRITER_VERSION_1
 
@@ -30,25 +30,25 @@ class KZip;
 class KoStore;
 class KoGenStyle;
 class KoXmlWriter;
-class KWord13Document;
+class Words13Document;
 
 #include <KoGenStyles.h>
 
-class KWord13OasisGenerator
+class Words13OasisGenerator
 {
 public:
-    explicit KWord13OasisGenerator(void);
-    ~KWord13OasisGenerator(void);
+    explicit Words13OasisGenerator(void);
+    ~Words13OasisGenerator(void);
 
-    bool prepare(KWord13Document& kwordDocument);
-    bool generate(const QString& fileName, KWord13Document& kwordDocument);
+    bool prepare(Words13Document& kwordDocument);
+    bool generate(const QString& fileName, Words13Document& kwordDocument);
 protected: // Generating phase
     /**
      * @param writer output writer
      * @param frameset the frameset to generate
      * @param main true if this is the man frameset.
      */
-    void generateTextFrameset(KoXmlWriter& writer, KWordTextFrameset* frameset, bool main);
+    void generateTextFrameset(KoXmlWriter& writer, WordsTextFrameset* frameset, bool main);
     void writeStylesXml(void);
     void writeContentXml(void);
     void writeMetaXml(void);
@@ -57,21 +57,21 @@ protected: // Generating phase
 protected: // Preparing phase
     /// Preparing page layout
     void preparePageLayout(void);
-    void prepareTextFrameset(KWordTextFrameset* frameset);
+    void prepareTextFrameset(WordsTextFrameset* frameset);
     /// Also sets the name of the automatical style
-    void declareLayout(KWord13Layout& layout);
+    void declareLayout(Words13Layout& layout);
     /// Also sets the name of the automatical style
-    void declareStyle(KWord13Layout& layout);
+    void declareStyle(Words13Layout& layout);
     double numberOrNull(const QString& str) const;
     double positiveNumberOrNull(const QString& str) const;
-    void fillGenStyleWithFormatOne(const KWord13FormatOneData& one, KoGenStyle& gs, const bool style) const;
-    void fillGenStyleWithLayout(const KWord13Layout& layout, KoGenStyle& gs, const bool style) const;
+    void fillGenStyleWithFormatOne(const Words13FormatOneData& one, KoGenStyle& gs, const bool style) const;
+    void fillGenStyleWithLayout(const Words13Layout& layout, KoGenStyle& gs, const bool style) const;
 protected:
-    KWord13Document* m_kwordDocument;
+    Words13Document* m_kwordDocument;
     KoStore* m_store;
     QString m_contentAutomaticStyles; ///< Automatic styles for content.xml (in OO format)
     KoGenStyles m_oasisGenStyles; ///< OASIS styles
     KoXmlWriter* m_manifestWriter; ///< Manifest file writer
 };
 
-#endif // KWORD_1_3_OASIS_GENERATOR
+#endif // WORDS_1_3_OASIS_GENERATOR

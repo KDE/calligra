@@ -62,7 +62,7 @@ ENDIF(FALSE)
 ########### install files ###############
 
 install( FILES 
-  kword_docx_import.desktop
-#todo  kword_docx_export.desktop
+  words_docx_import.desktop
+#todo  words_docx_export.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )

@@ -83,7 +83,7 @@
                     </property>
                     <widget class="QRadioButton">
                         <property name="name">
-                            <cstring>kwordStyleButton</cstring>
+                            <cstring>wordsStyleButton</cstring>
                         </property>
                         <property name="geometry">
                             <rect>
@@ -94,7 +94,7 @@
                             </rect>
                         </property>
                         <property name="text">
-                            <string>KWord style</string>
+                            <string>Words style</string>
                         </property>
                         <property name="checked">
                             <bool>true</bool>

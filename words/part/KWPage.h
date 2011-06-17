@@ -23,7 +23,7 @@
 
 #include "KWPageManager.h"
 #include "KWPageStyle.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <KoText.h>
 #include <KoTextPage.h>
@@ -42,7 +42,7 @@ class KoShapeManager;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage : public KoTextPage
+class WORDS_EXPORT KWPage : public KoTextPage
 {
 public:
     inline KWPage() : priv(0), n(0) {}

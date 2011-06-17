@@ -1715,13 +1715,13 @@ void OoImpressImport::parseSpanOrSimilar(QDomDocument& doc, const QDomElement& p
             if (smallCaps) {
                 text.setAttribute("fontattribute", "smallcaps");
             } else {
-                // Both KWord/KPresenter and OO use "uppercase" and "lowercase".
-                // TODO in KWord: "capitalize".
+                // Both Words/KPresenter and OO use "uppercase" and "lowercase".
+                // TODO in Words: "capitalize".
                 text.setAttribute("fontattribute", m_styleStack.property(ooNS::fo, "text-transform"));
             }
         }
 #endif
-        // background color (property of the paragraph in OOo, of the text in kword/kpresenter)
+        // background color (property of the paragraph in OOo, of the text in words/kpresenter)
         if (m_styleStack.hasProperty(ooNS::fo, "background-color")) {
             QString bgColor = m_styleStack.property(ooNS::fo, "background-color");
             if (bgColor != "transparent")

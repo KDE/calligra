@@ -23,11 +23,11 @@
 #include <QString>
 #include <QPair>
 
-// Static methods for simple OO<->KWord conversions
+// Static methods for simple OO<->Words conversions
 // (enums etc.)
-// import* means OO->KWord
-// export* means KWord->OO
-// Only put here the conversions that are specific to KWord.
+// import* means OO->Words
+// export* means Words->OO
+// Only put here the conversions that are specific to Words.
 // Those that can be used in KPresenter<->ooimpress should go to OoUtils.
 
 namespace Conversion
@@ -37,15 +37,15 @@ QString importAlignment(const QString&);
 QString exportAlignment(const QString&);
 
 // Convert frame wrapping (run-around)
-// KWord-1.3 knows runaround(int) and runaroundSide(QString)
+// Words-1.3 knows runaround(int) and runaroundSide(QString)
 QPair<int, QString> importWrapping(const QString&);
 QString exportWrapping(const QPair<int, QString>& runAroundAttribs);
 
 // Convert overflow behavior ("what to do if the text is bigger than the frame")
 int importOverflowBehavior(const QString& oasisOverflowBehavior);
-QString exportOverflowBehavior(const QString& kwordAutoCreateNewFrame);
+QString exportOverflowBehavior(const QString& wordsAutoCreateNewFrame);
 
-// Convert numbering format (for a list) to a kword counter type
+// Convert numbering format (for a list) to a words counter type
 int importCounterType(const QString& numFormat);
 
 // Header-footer helpers

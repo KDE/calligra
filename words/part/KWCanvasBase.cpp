@@ -21,7 +21,7 @@
  */
 #include "KWCanvasBase.h"
 
-// kword includes
+// words includes
 #include "KWCanvas.h"
 #include "KWGui.h"
 #include "KWViewMode.h"

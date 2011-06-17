@@ -190,7 +190,7 @@ struct RTFTableRow {
     int left;
 };
 
-/// KWord format
+/// Words format
 struct KWFormat {
     RTFFormat fmt;
     QString xmldata;
@@ -233,9 +233,9 @@ public:
     RTFImport(QObject* parent, const QVariantList&);
 
     /**
-     * Convert document from RTF to KWord format.
+     * Convert document from RTF to Words format.
      * @param from the mimetype for RTF
-     * @param to the mimetype for KWord
+     * @param to the mimetype for Words
      * @return true if the document was successfully converted
      */
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
@@ -455,7 +455,7 @@ public:
      */
     void resetState();
     /**
-     * Add anchor to current destination (see KWord DTD).
+     * Add anchor to current destination (see Words DTD).
      * @param instance the frameset number in the document
      */
     void addAnchor(const char *instance);
@@ -483,7 +483,7 @@ public:
     void addVariable(const DomNode& spec, int type, const QString& key, const RTFFormat* fmt = 0);
     void addImportedPicture(const QString& rawFileName);
     /**
-     *  Add a date/time field and split it for KWord
+     *  Add a date/time field and split it for Words
      * @param format format of the date/time
      * @param isDate is it a date field? (For the default format, if needed)
      * @param fmt ???

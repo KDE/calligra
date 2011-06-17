@@ -77,7 +77,7 @@ public:
  * Graphics Handler
  * ************************************************
  */
-class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
+class WordsGraphicsHandler : public QObject, public wvWare::GraphicsHandler
 {
     Q_OBJECT
 private:
@@ -114,18 +114,18 @@ private:
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
-        KWordGraphicsHandler* const gh;
+        WordsGraphicsHandler* const gh;
     public:
-        DrawClient(KWordGraphicsHandler* p) :gh(p) {}
+        DrawClient(WordsGraphicsHandler* p) :gh(p) {}
 };
 public:
-    KWordGraphicsHandler(Document* document,
+    WordsGraphicsHandler(Document* document,
                          KoXmlWriter* bodyWriter,
                          KoXmlWriter* manifestWriter,
                          KoStore* store, KoGenStyles* mainStyles,
                          const wvWare::Drawings* p_drawings,
                          const wvWare::Word97::FIB& fib);
-    ~KWordGraphicsHandler();
+    ~WordsGraphicsHandler();
 
     /**
      * Set the appropriate writer for object properties and content.

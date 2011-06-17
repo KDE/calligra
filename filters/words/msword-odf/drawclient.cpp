@@ -47,7 +47,7 @@ QString mm(double v) {
 }
 
 QRectF
-KWordGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
+WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 {
     const DocOfficeArtClientAnchor* a = ca.anon.get<DocOfficeArtClientAnchor>();
     if (!a || (a->clientAnchor == -1)) {
@@ -70,13 +70,13 @@ KWordGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 }
 
 QString
-KWordGraphicsHandler::DrawClient::getPicturePath(const quint32 pib)
+WordsGraphicsHandler::DrawClient::getPicturePath(const quint32 pib)
 {
     return gh->getPicturePath(pib);
 }
 
 void
-KWordGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
+WordsGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                                        const MSO::OfficeArtClientData* cd,
                                                        Writer& out)
 {
@@ -97,7 +97,7 @@ KWordGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClien
 }
 
 KoGenStyle
-KWordGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
+WordsGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                                      const MSO::OfficeArtClientData* cd,
                                                      const DrawStyle& ds,
                                                      Writer& out)
@@ -114,7 +114,7 @@ KWordGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientT
 }
 
 void
-KWordGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
+WordsGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
                                                 const MSO::OfficeArtClientTextBox* clientTextbox,
                                                 const MSO::OfficeArtClientData* clientData,
                                                 KoGenStyle& style,
@@ -135,7 +135,7 @@ KWordGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
 }
 
 const MSO::OfficeArtDggContainer*
-KWordGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
+WordsGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
 {
 #ifdef USE_OFFICEARTDGG_CONTAINER
     return &gh->m_officeArtDggContainer;
@@ -145,7 +145,7 @@ KWordGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
 }
 
 const MSO::OfficeArtSpContainer*
-KWordGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
+WordsGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
 {
     //TODO: No supoort for master shapes at the moment.
     Q_UNUSED(spid);
@@ -153,20 +153,20 @@ KWordGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
 }
 
 const MSO::OfficeArtSpContainer*
-KWordGraphicsHandler::DrawClient::defaultShapeContainer(void)
+WordsGraphicsHandler::DrawClient::defaultShapeContainer(void)
 {
     //Specific for Ppt at the moment.
     return 0;
 }
 
 QColor
-KWordGraphicsHandler::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
+WordsGraphicsHandler::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
     return QColor(c.red, c.green, c.blue);
 }
 
 QString
-KWordGraphicsHandler::DrawClient::formatPos(qreal v)
+WordsGraphicsHandler::DrawClient::formatPos(qreal v)
 {
     //assuming the client uses the DrawingWriter class
     return mm(v);
@@ -179,14 +179,14 @@ KWordGraphicsHandler::DrawClient::formatPos(qreal v)
 //ignored.  [MS-DOC] — v20100926
 
 bool
-KWordGraphicsHandler::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
+WordsGraphicsHandler::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
 {
     Q_UNUSED(o);
     return false;
 }
 
 void
-KWordGraphicsHandler::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* ct,
+WordsGraphicsHandler::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* ct,
                                                     const MSO::OfficeArtClientData& o,
                                                     Writer& out)
 {

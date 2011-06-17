@@ -20,7 +20,7 @@ install(TARGETS hancomwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kword_hancomword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_hancomword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 
@@ -43,5 +43,5 @@ install( FILES  kword_hancomword_import.desktop  DESTINATION ${SERVICES_INSTALL_
 #
 #METASOURCES = AUTO
 #
-#service_DATA = kword_hancomword_import.desktop
+#service_DATA = words_hancomword_import.desktop
 #servicedir = $(kde_servicesdir)

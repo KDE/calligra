@@ -34,7 +34,7 @@
 #include <KoPatternBackground.h>
 
 /*
-TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
+TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */
 
 K_PLUGIN_FACTORY(WmfExportFactory, registerPlugin<WmfExport>();)

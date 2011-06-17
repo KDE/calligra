@@ -162,7 +162,7 @@ void KWPageSettingsDialog::slotApplyClicked()
         Q_ASSERT(lay.leftMargin == -1);
         Q_ASSERT(lay.rightMargin == -1);
 
-        // its a page spread, which kword can handle, so we can safely set the
+        // its a page spread, which words can handle, so we can safely set the
         // normal page size and assume that the page object will do the right thing
         lay.width /= (qreal) 2;
     }

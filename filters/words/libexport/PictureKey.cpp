@@ -101,7 +101,7 @@ void PictureKey::loadAttributes(const QDomElement &elem)
     int hour = 0, minute = 0, second = 0, msec = 0; // We must initialize to zero, as not all compilers are C99-compliant
 
     if (elem.hasAttribute("key")) {
-        // Note: the old KWord format (up to 1.1-beta2) has no date/time
+        // Note: the old Words format (up to 1.1-beta2) has no date/time
         m_filename = elem.attribute("key");
     } else {
         // ### TODO: document which format is this?

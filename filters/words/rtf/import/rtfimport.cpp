@@ -90,7 +90,7 @@ static RTFProperty propertyTable[] =
     PROP(0L,  "}",  insertSymbol,  0L, '}'),
     PROP(0L,  "~",  insertSymbol,  0L, 0x00a0),
     PROP(0L,  "-",  insertSymbol,  0L, 0x00ad),
-    PROP(0L,  "adjustright", ignoreKeyword,  0L, 0),   // Not supported, KWord has no grid
+    PROP(0L,  "adjustright", ignoreKeyword,  0L, 0),   // Not supported, Words has no grid
     PROP(0L,  "ansi", setAnsiCodepage,  0L, 0),
     PROP(0L,  "ansicpg", setCodepage,  0L, 0),
     MEMBER(0L,  "b",  setToggleProperty, state.format.bold, 0),
@@ -129,7 +129,7 @@ static RTFProperty propertyTable[] =
     PROP(0L,  "clbrdrr", selectLayoutBorderFromCell, 0L, 1),
     PROP(0L,  "clbrdrt", selectLayoutBorderFromCell, 0L, 2),
     MEMBER(0L,  "clcbpat", setNumericProperty, state.tableCell.bgcolor, 0),
-    PROP(0L,  "cs", ignoreKeyword,  0L, 0),   // Not supported by KWord 1.3
+    PROP(0L,  "cs", ignoreKeyword,  0L, 0),   // Not supported by Words 1.3
     PROP(0L,  "datafield", skipGroup,  0L, 0),   // Binary data in variables are not supported
     MEMBER("@rtf",  "deff",  setNumericProperty, defaultFont, 0),
     MEMBER("@rtf",  "deftab", setNumericProperty, defaultTab, 0),
@@ -150,7 +150,7 @@ static RTFProperty propertyTable[] =
     PROP("@fonttbl", "fmodern", setFontStyleHint, 0L, QFont::TypeWriter),
     PROP("@fonttbl", "fnil",  setFontStyleHint, 0L, QFont::AnyStyle),
     MEMBER(0L,  "footery", setNumericProperty, state.section.footerMargin, 0),
-    PROP(0L,  "formshade", ignoreKeyword,  0L, 0),   // Not supported, KWord has no form support
+    PROP(0L,  "formshade", ignoreKeyword,  0L, 0),   // Not supported, Words has no form support
     MEMBER("@fonttbl", "fprq",  setNumericProperty, font.fixedPitch, 0),
     PROP("@fonttbl", "froman", setFontStyleHint, 0L, QFont::Serif),
     MEMBER(0L,  "fs",  setNumericProperty, state.format.fontSize, 0),
@@ -279,7 +279,7 @@ static RTFField fieldTable[] = {
 };
 
 
-// KWord attributes
+// Words attributes
 static const char *alignN[4] = { "left", "right", "justify", "center" };
 static const char *boolN[2] = { "false", "true" };
 static const char *borderN[4] = { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOTTOMBORDER" };
@@ -308,8 +308,8 @@ RTFImport::RTFImport(QObject* parent, const QVariantList&)
 
 KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    // This filter only supports RTF to KWord conversion
-    if ((from != "application/rtf") || (to != "application/x-kword"))
+    // This filter only supports RTF to Words conversion
+    if ((from != "application/rtf") || (to != "application/x-words"))
         return KoFilter::NotImplemented;
 
     QTime debugTime;
@@ -330,7 +330,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!m_batch) {
             KMessageBox::error(0L,
                                i18n("The file cannot be loaded, as it cannot be opened."),
-                               i18n("KWord's RTF Import Filter"), 0);
+                               i18n("Words's RTF Import Filter"), 0);
         }
         return KoFilter::FileNotFound;
     }
@@ -345,7 +345,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!m_batch) {
             KMessageBox::error(0L,
                                i18n("The file cannot be loaded, as it seems not to be an RTF document."),
-                               i18n("KWord's RTF Import Filter"), 0);
+                               i18n("Words's RTF Import Filter"), 0);
         }
         return KoFilter::WrongFormat;
     }
@@ -360,7 +360,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!m_batch) {
             KMessageBox::error(0L,
                                i18n("The document cannot be loaded, as it seems not to follow the RTF syntax."),
-                               i18n("KWord's RTF Import Filter"), 0);
+                               i18n("Words's RTF Import Filter"), 0);
         }
         return KoFilter::WrongFormat;
     }
@@ -373,7 +373,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
             if (!m_batch) {
                 force = (KMessageBox::warningYesNo(0L,
                                                    i18n("The RTF (Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?", token.value),
-                                                   i18n("KWord's RTF Import Filter")) == KMessageBox::Yes);
+                                                   i18n("Words's RTF Import Filter")) == KMessageBox::Yes);
             }
             if (!force) {
                 in.close();
@@ -387,7 +387,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
             if (!m_batch) {
                 force = (KMessageBox::warningYesNo(0L,
                                                    i18n("The PWD (PocketWord's Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?", token.value),
-                                                   i18n("KWord's RTF Import Filter")) == KMessageBox::Yes);
+                                                   i18n("Words's RTF Import Filter")) == KMessageBox::Yes);
             }
             if (!force) {
                 in.close();
@@ -401,7 +401,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
             if (!m_batch) {
                 force = (KMessageBox::warningYesNo(0L,
                                                    i18n("The URTF (\"Unicode Rich Text Format\") document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?", token.value),
-                                                   i18n("KWord's RTF Import Filter")) == KMessageBox::Yes);
+                                                   i18n("Words's RTF Import Filter")) == KMessageBox::Yes);
             }
             if (!force) {
                 in.close();
@@ -414,7 +414,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!m_batch) {
             KMessageBox::error(0L,
                                i18n("The RTF document cannot be loaded, as it has an unexpected first keyword: \\%1.", token.text),
-                               i18n("KWord's RTF Import Filter"), 0);
+                               i18n("Words's RTF Import Filter"), 0);
         }
         return KoFilter::WrongFormat;
     }
@@ -564,9 +564,9 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
 
     // Create main document
     DomNode mainDoc("DOC");
-    mainDoc.setAttribute("mime", "application/x-kword");
+    mainDoc.setAttribute("mime", "application/x-words");
     mainDoc.setAttribute("syntaxVersion", "3");
-    mainDoc.setAttribute("editor", "KWord's RTF Import Filter");
+    mainDoc.setAttribute("editor", "Words's RTF Import Filter");
     mainDoc.addNode("PAPER");
     mainDoc.setAttribute("format", 6);
     mainDoc.setAttribute("columns", 1);
@@ -589,7 +589,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
     mainDoc.addNode("ATTRIBUTES");
     mainDoc.setAttribute("standardpage", 1);
     mainDoc.setAttribute("processing", 0);
-    //mainDoc.setAttribute( "unit", "pt" ); // use KWord default instead
+    //mainDoc.setAttribute( "unit", "pt" ); // use Words default instead
     mainDoc.setAttribute("hasHeader", hasHeader);
     mainDoc.setAttribute("hasFooter", hasFooter);
     mainDoc.closeNode("ATTRIBUTES");
@@ -1515,15 +1515,15 @@ void RTFImport::insertDateTime(RTFProperty *property)
 void RTFImport::addDateTime(const QString& format, const bool isDate, RTFFormat& fmt)
 {
     bool asDate = isDate; // Should the variable be a date variable?
-    QString kwordFormat(format);
+    QString wordsFormat(format);
     if (format.isEmpty()) {
         if (isDate)
-            kwordFormat = "DATElocale";
+            wordsFormat = "DATElocale";
         else
-            kwordFormat = "TIMElocale";
+            wordsFormat = "TIMElocale";
     } else if (!isDate) {
         // It is a time with a specified format, so check if it is really a time
-        // (as in KWord 1.3, a date can have a time format but a time cannot have a date format
+        // (as in Words 1.3, a date can have a time format but a time cannot have a date format
         const QRegExp regexp("[yMd]");  // any date format character?
         asDate = (regexp.indexIn(format) > -1);  // if yes, then it is a date
     }
@@ -1536,7 +1536,7 @@ void RTFImport::addDateTime(const QString& format, const bool isDate, RTFFormat&
         node.setAttribute("day", 0);
         node.setAttribute("fix", 0);
         node.closeNode("DATE");
-        addVariable(node, 0, kwordFormat, &fmt);
+        addVariable(node, 0, wordsFormat, &fmt);
     } else {
         node.clear(7);
         node.addNode("TIME");
@@ -1545,7 +1545,7 @@ void RTFImport::addDateTime(const QString& format, const bool isDate, RTFFormat&
         node.setAttribute("second", 0);
         node.setAttribute("fix", 0);
         node.closeNode("TIME");
-        addVariable(node, 2, kwordFormat, &fmt);
+        addVariable(node, 2, wordsFormat, &fmt);
     }
 }
 
@@ -1639,7 +1639,7 @@ void RTFImport::parseField(RTFProperty *)
                 format.replace("a/p", "ap"); // Approximation
                 format.replace("AM/PM", "AP");
                 format.replace("A/P", "AP"); // Approximation
-                format.remove("'"); // KWord 1.3 cannot protect text in date/time
+                format.remove("'"); // Words 1.3 cannot protect text in date/time
                 addDateTime(format, (fieldName == "DATE"), fldfmt);
             } else if (fieldName == "IMPORT") {
                 addImportedPicture(list[1]);
@@ -2083,7 +2083,7 @@ void RTFImport::addLayout(DomNode &node, const QString &name, const RTFLayout &l
         // Note: 240 is a sort of magic value for one line (Once upon a time, it meant 12pt for a single line)
         switch (layout.spaceBetween) {
         case 240: {
-            lineSpacingType = "single"; // ### TODO: does KWord really supports this?
+            lineSpacingType = "single"; // ### TODO: does Words really supports this?
             break;
         }
         case 360: {
@@ -2288,7 +2288,7 @@ void RTFImport::finishTable()
     for (int i = 0; i < textState->rows.count(); i++) {
         RTFTableRow &row = textState->rows[i];
         int h  = abs(row.height);
-        int y2 = y1 + ((h < 400) ? 400 : h); // KWord work-around
+        int y2 = y1 + ((h < 400) ? 400 : h); // Words work-around
         int x1 = row.left;
 
         for (int k = 0; k < row.cells.count(); k++) {
