@@ -178,25 +178,29 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
-    KoGenStyle *textStyle;
+    KoGenStyle *textStyle = 0;
 
     bool suppresFontSize = false;
     if (m_textStyles.size() == 0 && m_paragraphProperties->pap().dcs.lines > 1) {
         suppresFontSize = true;
     }
 
-    // Apply any extra properties to our auto style
-    // those extra properties is the diff beteween the referenceChp and the summed chp.
-    // ReferenceCHP can be either the paragraph or a named style
-    if (msTextStyle->sti() != 65) {
-        // this is not default paragraph font
+    // Apply any extra properties to the auto style.  Those extra properties
+    // are the diff beteween the referenceChp and the summed chp.  ReferenceCHP
+    // can be either from the paragraph style or the character style.
+    if (msTextStyle->sti() != stiNormalChar) {
+        // this is not the default character style
         textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
         }
         textStyle->setParentName(msTextStyleName);
-        //if we have a new font, process that
+
+        //FIXME: It doesn't make sense to compare CHPs, because those have been
+        //merged in the CHP::applyCHPSPRM function.
         const wvWare::Word97::CHP* refChp = &msTextStyle->chp();
+
+        //if we have a new font, process that
         if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
             if (!fontName.isEmpty()) {
                 textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
@@ -834,8 +838,6 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         refChp = 0;
     }
 
-    //TODO: The logic has to be reviewed!  Check the font-weight update.
-
 /*
     According to [MS-DOC]:
 
@@ -856,6 +858,9 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
 
     if (!bgColor.isNull()) {
         updateBgColor(bgColor);
+    }
+    if (!m_fontColor.isNull()) {
+        m_fontColor.clear();
     }
 
     //ico = color of text, but this has been replaced by cv
@@ -904,10 +909,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     //fBold = bold text if 1
-
-    //FIXME: This wasn't the proper fix for Bug 239172.
-//     if (!refChp || (chp->istd == 10)) {
-    if (!refChp || refChp->fBold != chp->fBold) {
+    if (!refChp || (refChp->fBold != chp->fBold)) {
         style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
     }
 

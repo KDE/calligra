@@ -85,7 +85,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_maximumAllowedWidth(0.0)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
- , m_endOfArea()
+ , m_endOfArea(0)
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
  , m_verticalAlignOffset(0)
@@ -457,10 +457,11 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 Q_ASSERT(!cursor->it.atEnd());
                 QTextFrame::iterator nextIt = cursor->it;
                 ++nextIt;
-                if (!nextIt.currentFrame())
+                bool wasIncremented = !nextIt.currentFrame();
+                if (wasIncremented)
                     cursor->it = nextIt;
                 m_endOfArea = new FrameIterator(cursor);
-                if (!cursor->it.atEnd())
+                if (!wasIncremented)
                     ++(cursor->it);
                 setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);

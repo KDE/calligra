@@ -130,9 +130,18 @@ public:
      * A special purpose function which provides the first font color not set
      * to cvAuto from the styles hierarchy of the lately processed paragraph.
      *
-     * @return font color in the format "#RRGGBB" or an empty string
+     * @return font color in the format "#RRGGBB" or an empty string.
      */
     QString paragraphBaseFontColorBkp() const { return m_paragraphBaseFontColorBkp; }
+
+    /**
+     * Provides access to the background color of the lately processed
+     * paragraph to other handlers.  Notice that text-properties of any of the
+     * text styles might modify the background color.
+     *
+     * @return background color in the format "#RRGGBB" or an empty string.
+     */
+    QString paragraphBgColor() const { return m_paragraph ? m_paragraph->currentBgColor() : QString(); }
 
     // Provide access to private attributes for our handlers
     Document* document() const { return m_document; }
@@ -187,6 +196,9 @@ private:
 
     KWord::Table* m_currentTable;
     Paragraph *m_paragraph; //pointer to paragraph object
+
+    // The 1st font color not set to cvAuto from the built-in styles hierarchy
+    // of the lately processed paragraph.
     QString m_paragraphBaseFontColorBkp;
 
 #if 1

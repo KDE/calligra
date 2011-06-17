@@ -66,7 +66,6 @@ protected:
     enum FrameStartElement {FrameStart, RectStart, LineStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
-    KoFilter::ConversionStatus createFrameEnd();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
@@ -94,7 +93,6 @@ protected:
         bool wrapRead;
         QString currentShapeId; //!< set in read_shape()
         QString imagedataPath; //!< set in read_shape()
-        QString imagedataFile; //!< set in read_shape()
         QString shapeAltText; //!< set in read_shape()
         QString shapeTitle; //!< set in read_shape()
 
@@ -105,11 +103,6 @@ protected:
         qreal shadowOpacity;
 
         QString anchorType;
-
-        //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
-        //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
-        QString currentObjectWidthCm;
-        QString currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
 
         int formulaIndex;
         QString shapeTypeString;

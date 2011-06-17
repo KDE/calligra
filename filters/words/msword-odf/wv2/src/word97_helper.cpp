@@ -247,6 +247,7 @@ typedef enum
     sprmPDtap = 0x664A,
     sprmCDttmRMark = 0x6805,
     sprmCObjLocation = 0x680E,
+    sprmCRsidProp = 0x6815,
     sprmCDttmRMarkDel = 0x6864,
     sprmCBrc = 0x6865,
     sprmCCv = 0x6870,
@@ -372,6 +373,7 @@ U16 determineParameterLength( U16 sprm, const U8* in, WordVersion version )
         if ( operandSizes[ index ] != 0 ) {
 #ifdef WV2_DEBUG_SPRMS
             wvlog << "==> Size of the sprm argument:" << (U16) operandSizes[index] << endl;
+            wvlog << "sgc:" << (U16) ((sprm & 0x1C00) >> 10);
 #endif
             return operandSizes[ index ];
         }
@@ -1144,14 +1146,16 @@ namespace
     const Word97::CHP* determineCHP( U16 istd, const Style* paragraphStyle, const StyleSheet* styleSheet )
     {
         const Word97::CHP* chp( 0 );
-        if ( istd == 10 && paragraphStyle )
+        if ( istd == 10 && paragraphStyle ) {
             chp = &paragraphStyle->chp();
+        }
         else if ( istd != 10 && styleSheet ) {
             const Style* style( styleSheet->styleByIndex( istd ) );
-            chp = style != 0 && style->type() == sgcChp ? &style->chp() : 0;
+            chp = ((style != 0) && (style->type() == sgcChp)) ? &style->chp() : 0;
         }
-        else
+        else {
             wvlog << "Warning: sprmCFxyz couldn't find a style" << endl;
+        }
         return chp;
     }
 }
@@ -1246,12 +1250,12 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
                     wvlog << "got a character style!" << endl;
                     const UPECHPX& upechpx( style->upechpx() );
                     apply( upechpx.grpprl, upechpx.cb, paragraphStyle, styleSheet, dataStream, version );
-                }
-                else
+                } else {
                     wvlog << "Warning: Couldn't find the character style with istd " << istd << endl;
-            }
-            else
+                }
+            } else {
                 wvlog << "Warning: Tried to change the character style, but the stylesheet was 0" << endl;
+            }
             break;
         }
         case SPRM::sprmCIstdPermute:
@@ -1289,28 +1293,34 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             kcd = *ptr;
             break;
         case SPRM::sprmCFBold:
+        {
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "sprmCFBold operand: 0x" << hex << *ptr << "| istd: 0x" << hex << istd <<
+                     "| paragraphStyle:" << paragraphStyle;
+#endif
+            U8 val = 0;
             if ( *ptr < 128 ) {
-                fBold = *ptr == 1;
+                val = *ptr == 1;
+            } else if ( *ptr == 128 && paragraphStyle ) {
+                val = paragraphStyle->chp().fBold;
+            } else if ( *ptr == 129 && paragraphStyle ) {
+                val = !( paragraphStyle->chp().fBold );
             } else {
-                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                // use parent's value
-                if ( *ptr == 128 && chp ) {
-                    fBold = chp->fBold;
-                }
-                // use opposite of parent's value
-                else if ( *ptr == 129 && chp ) {
-                    fBold = !chp->fBold;
-                }
-                // failed to get parent's chp, make it BOLD
-                else if ( !chp ) {
-                    fBold = 1;
-                }
+                wvlog << "Warning: sprmCFBold couldn't find a style" << endl;
+                val = 1;
+            }
+            //Already set before (SPRM arrived twice), using a negation.
+            if (fBold && (fBold == val)) {
+                fBold = !fBold;
+            } else {
+                fBold = val;
             }
             break;
+        }
         case SPRM::sprmCFItalic:
-            if ( *ptr < 128 )
+            if ( *ptr < 128 ) {
                 fItalic = *ptr == 1;
-            else {
+            } else {
                 //see comments on SPRM::sprmCFBold above
                 const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
                 if (*ptr == 128 && chp) {
@@ -1323,13 +1333,13 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             }
             break;
         case SPRM::sprmCFStrike:
+#ifdef WV2_DEBUG_SPRMS
             wvlog << "sprmCFStrike -- fStrike = " << static_cast<int>( fStrike ) << " *ptr = " << static_cast<int>( *ptr ) << endl;
-            if (*ptr < 128)
+#endif
+            if (*ptr < 128) {
                 fStrike = *ptr == 1;
-            else {
+            } else {
                 const Word97::CHP* chp(determineCHP( istd, paragraphStyle, styleSheet));
-                if ( chp )
-                    wvlog << "chp->fStrike = " << static_cast<int>( chp->fStrike ) << endl;
                 if (*ptr == 128 && chp) {
                     fStrike = chp->fStrike;
                 } else if (*ptr == 129 && chp) {
@@ -1338,12 +1348,14 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
                     fStrike = 1;
                 }
             }
+#ifdef WV2_DEBUG_SPRMS
             wvlog << "sprmCFStrike -- fStrike (changed) = " << static_cast<int>( fStrike ) << endl;
+#endif
             break;
         case SPRM::sprmCFOutline:
-            if (*ptr < 128)
+            if (*ptr < 128) {
                 fOutline = *ptr == 1;
-            else {
+            } else {
                 const Word97::CHP* chp(determineCHP(istd, paragraphStyle, styleSheet));
                 if (*ptr == 128 && chp) {
                     fOutline = chp->fOutline;
@@ -1355,9 +1367,9 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             }
             break;
         case SPRM::sprmCFShadow:
-            if (*ptr < 128)
+            if (*ptr < 128) {
                 fShadow = *ptr == 1;
-            else {
+            } else {
                 const Word97::CHP* chp(determineCHP(istd, paragraphStyle, styleSheet));
                 if (*ptr == 128 && chp) {
                     fShadow = chp->fShadow;
@@ -1369,9 +1381,9 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             }
             break;
         case SPRM::sprmCFSmallCaps:
-            if (*ptr < 128)
+            if (*ptr < 128) {
                 fSmallCaps = *ptr == 1;
-            else {
+            } else {
                 const Word97::CHP* chp(determineCHP(istd, paragraphStyle, styleSheet));
                 if (*ptr == 128 && chp) {
                     fSmallCaps = chp->fSmallCaps;
@@ -1383,9 +1395,9 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             }
             break;
         case SPRM::sprmCFCaps:
-            if ( *ptr < 128 )
+            if ( *ptr < 128 ) {
                 fCaps = *ptr == 1;
-            else {
+            } else {
                 const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
                 if (*ptr == 128 && chp) {
                     fCaps = chp->fCaps;
@@ -1397,9 +1409,9 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             }
             break;
         case SPRM::sprmCFVanish:
-            if ( *ptr < 128 )
+            if ( *ptr < 128 ) {
                 fVanish = *ptr == 1;
-            else {
+            } else {
                 const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
                 if (*ptr == 128 && chp) {
                     fVanish = chp->fVanish;
@@ -1542,14 +1554,15 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             fDStrike = *ptr == 1;
             break;
         case SPRM::sprmCFImprint:
-            if ( *ptr < 128 )
+            if ( *ptr < 128 ) {
                 fImprint = *ptr == 1;
-            else if ( *ptr == 128 && paragraphStyle )
+            } else if ( *ptr == 128 && paragraphStyle ) {
                 fImprint = paragraphStyle->chp().fImprint;
-            else if ( *ptr == 129 && paragraphStyle )
+            } else if ( *ptr == 129 && paragraphStyle ) {
                 fImprint = !( paragraphStyle->chp().fImprint );
-            else
+            } else {
                 wvlog << "Warning: sprmCFImprint couldn't find a style" << endl;
+            }
             break;
         case SPRM::sprmCFSpec:
             fSpec = *ptr == 1;
@@ -1558,21 +1571,23 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             fObj = *ptr == 1;
             break;
         case SPRM::sprmCPropRMark:
-            if ( *ptr != 7 )
+            if ( *ptr != 7 ) {
                 wvlog << "Error: sprmCPropRMark has an unexpected size" << endl;
+            }
             fPropMark = *( ptr + 1 ) == 1;
             ibstPropRMark = readS16( ptr + 2 );
             dttmPropRMark.readPtr( ptr + 4 );
             break;
         case SPRM::sprmCFEmboss:
-            if ( *ptr < 128 )
+            if ( *ptr < 128 ) {
                 fEmboss = *ptr == 1;
-            else if ( *ptr == 128 && paragraphStyle )
+            } else if ( *ptr == 128 && paragraphStyle ) {
                 fEmboss = paragraphStyle->chp().fEmboss;
-            else if ( *ptr == 129 && paragraphStyle )
+            } else if ( *ptr == 129 && paragraphStyle ) {
                 fEmboss = !( paragraphStyle->chp().fEmboss );
-            else
+            } else {
                 wvlog << "Warning: sprmCFEmboss couldn't find a style" << endl;
+            }
             break;
         case SPRM::sprmCSfxText:
             sfxtText = *ptr;
@@ -2109,8 +2124,9 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             rgdxaCenter.push_back( readS16( myPtr ) );
             myPtr += 2;
         }
+#ifdef WV2_DEBUG_SPRMS
         wvlog << "rgdxaCenter[0]: " << rgdxaCenter[0] << endl;
-
+#endif
         const int tcSize = version == Word8 ? Word97::TC::sizeOf : Word95::TC::sizeOf;
         myLim = myPtr + ( remainingLength / tcSize ) * tcSize;
         while ( myPtr < myLim ) {
