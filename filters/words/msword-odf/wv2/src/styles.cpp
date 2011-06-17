@@ -658,6 +658,8 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
             m_properties->pap().istd = readU16( data );
             data += 2;
             cbUPX -= 2;
+
+            cbUPX = qMin(cbUPX, U16(m_std->grupxLen - 4));
 #ifdef WV2_DEBUG_SPRMS
             wvlog << "############# Applying paragraph exceptions: " << cbUPX << endl;
 #endif
@@ -672,6 +674,8 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
                 // character
                 cbUPX = readU16( data );
                 data += 2;
+
+                cbUPX = qMin(cbUPX, U16(m_std->grupxLen - datapos));
 #ifdef WV2_DEBUG_SPRMS
                 wvlog << "############# Applying character exceptions: " << cbUPX << endl;
 #endif
@@ -708,9 +712,9 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         else {
             // no need to do anything regarding the stiNormalChar parentStyle
             // let's just merge the upxchpx character exceptions into ourselves
-             bool ok;
-             m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
-             mergeUpechpx(this, version);
+            bool ok;
+            m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
+            mergeUpechpx(this, version);
         }
 
         //finally apply so the chpx so we have ourselves a nice chp

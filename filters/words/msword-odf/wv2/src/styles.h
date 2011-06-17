@@ -183,6 +183,9 @@ struct STD
      */
     UString xstzName;
 
+    /**
+     * A GrLPUpxSw structure that specifies the formatting for the style.
+     */
     U8* grupx;
 
     // -------------------------
@@ -216,7 +219,9 @@ class StyleSheet;
 class ParagraphProperties;
 class ListInfoProvider;
 
-// The structure to hold the UPE for character styles.
+/**
+ * The structure to hold the UPE for character styles.
+ */
 struct UPECHPX
 {
     UPECHPX() : istd( 0 ), cb( 0 ), grpprl( 0 ) {}
@@ -258,7 +263,7 @@ public:
     bool isInvalid() const { return m_invalid; }
 
     /**
-     * The stylesheet can have "empty" slots
+     * The stylesheet can have "empty" slots.
      */
     bool isEmpty() const { return m_isEmpty; }
     /**
@@ -267,40 +272,45 @@ public:
     bool isWrapped() const { return m_isWrapped; }
 
     /**
-     * Unwrap the style and create a valid PAP/CHP
+     * Unwrap the style and create a valid PAP/CHP.
      */
     void unwrapStyle( const StyleSheet& stylesheet, WordVersion version );
 
     /**
-     * Get the (unique?) sti of that style
+     * @return the (unique?) sti of that style
      */
     U16 sti() const;
 
     /**
-     * Get the type of the style (paragraph/character style)
+     * @return the type of the style (paragraph/character style)
      */
     ST_StyleType type() const;
 
     /**
-     * Style name
+     * @return the style name
      */
     UString name() const;
 
     /**
-     * Id of following style
+     * @return ID of following style
      */
     U16 followingStyle() const;
 
-    /*
-     * For paragraph styles only
+    /**
+     * For paragraph styles only.
+     * @return a reference to Paragraph Properties (PAP)
      */
     const ParagraphProperties& paragraphProperties() const;
-    /*
-     * For paragraph styles only
+
+    /**
+     * For paragraph styles only.
+     * @return a reference to Character Properties (CHP)
      */
     const Word97::CHP& chp() const;
-    /*
-     * For character styles only
+
+    /**
+     * For character styles only.
+     * @return a reference to the UPE array
      */
     const UPECHPX& upechpx() const;
 
@@ -308,8 +318,10 @@ private:
     Style( const Style& rhs );
     Style& operator=( const Style& rhs );
 
-    // This helper method merges two CHPX structures to one
-    // (needed for character styles)
+    /**
+     * This helper method merges two CHPX structures to one (needed for
+     * character styles).
+     */
     void mergeUpechpx( const Style* parentStyle, WordVersion version );
 
     bool m_isEmpty;
@@ -324,9 +336,14 @@ public:
     Word97::STD* m_std;
 private:
 
-    mutable ParagraphProperties *m_properties; // "mutable" in case someone goes mad
-    mutable Word97::CHP *m_chp; //  with the styles. We have to create a default style
-    mutable UPECHPX *m_upechpx; // to avoid crashes and still have to keep ownership!
+    /**
+     * UPEs are not stored in the file, they are a cache of the based-on chain.
+     */
+    // "mutable" in case someone goes mad with the styles.  We have to create a
+    // default style to avoid crashes and still have to keep ownership!
+    mutable ParagraphProperties *m_properties;
+    mutable Word97::CHP *m_chp;
+    mutable UPECHPX *m_upechpx;
 }; // Style
 
 

@@ -714,9 +714,9 @@ void KWordTableHandler::tableCellEnd()
 
     //process shading information
     const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
-    QString fontColor = document()->textHandler()->paragraphBaseFontColorBkp();
-    //TODO: not sure if the document backgroud color really helps here
-    QString color = Conversion::shdToColorStr(shd, document()->currentBgColor(), fontColor);
+    QString color = Conversion::shdToColorStr(shd,
+                                              document()->textHandler()->paragraphBgColor(),
+                                              document()->textHandler()->paragraphBaseFontColorBkp());
     if (!color.isNull()) {
         KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName);
         Q_ASSERT(cellStyle);

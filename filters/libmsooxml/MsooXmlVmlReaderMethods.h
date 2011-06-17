@@ -104,11 +104,6 @@ protected:
 
         QString anchorType;
 
-        //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
-        //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
-        QString currentObjectWidthCm;
-        QString currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
-
         int formulaIndex;
         QString shapeTypeString;
         QString extraShapeFormulas;

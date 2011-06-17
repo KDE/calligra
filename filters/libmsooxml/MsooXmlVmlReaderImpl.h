@@ -352,16 +352,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:stroke", "none");
     }
 
-    m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
     if (m_currentVMLProperties.filled) {
         if (m_currentVMLProperties.fillType == "solid") {
             m_currentDrawStyle->addProperty("draw:fill", "solid");
+            m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
         }
         else if (m_currentVMLProperties.fillType == "gradient" || m_currentVMLProperties.fillType == "gradientRadial") {
             m_currentDrawStyle->addProperty("draw:fill", "gradient");
             m_currentDrawStyle->addProperty("draw:fill-gradient-name", m_currentVMLProperties.gradientStyle);
         }
-        else if (m_currentVMLProperties.fillType == "picture") {
+        else if (m_currentVMLProperties.fillType == "picture" || m_currentVMLProperties.fillType == "pattern") {
             KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
             fillStyle.addProperty("xlink:href", m_currentVMLProperties.imagedataPath);
             fillStyle.addProperty("xlink:type", "simple");
@@ -369,9 +369,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             const QString imageName = mainStyles->insert(fillStyle);
             m_currentDrawStyle->addProperty("draw:fill", "bitmap");
             m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
-            // Fix me, whether these should be used or not is most likely some vml parameter
-            m_currentDrawStyle->addProperty("draw:fill-image-height", widthString);
-            m_currentDrawStyle->addProperty("draw:fill-image-width", heightString);
+            if (m_currentVMLProperties.fillType == "picture") {
+                m_currentDrawStyle->addProperty("style:repeat", "stretch");
+            }
+            else {
+                m_currentDrawStyle->addProperty("style:repeat", "repeat");
+            }
         }
     }
     else {
@@ -427,6 +430,7 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.shadowColor = "#101010"; // default
     m_currentVMLProperties.shadowXOffset = "2pt"; // default
     m_currentVMLProperties.shadowYOffset = "2pt"; //default
+    m_currentVMLProperties.imagedataPath = QString();
 }
 
 QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
@@ -461,7 +465,7 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
         newColor = "#ffff00";
     }
     else if (color == "window") {
-        newColor = "#ffffff";
+        newColor = "#ffffff"; // should ask from system
     }
     else if (color == "white") {
         newColor = "#ffffff";
@@ -500,7 +504,10 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
         newColor = "#00ffff";
     }
     else if (color == "windowText") {
-        newColor = "#000000";
+        newColor = "#000000"; // should ask from system
+    }
+    else if (color == "buttonFace") {
+        newColor = "#808080"; // should ask from system
     }
     else if (color == "fill") { // referencing the other color
         newColor = m_currentVMLProperties.shapeColor;
@@ -763,7 +770,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
  - [done] fill (Shape Fill Properties) §14.1.2.5
  - formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
- - imagedata (Image Data) §14.1.2.11
+ - [done] imagedata (Image Data) §14.1.2.11
  - lock (Shape Protections) §14.2.2.18
  - path (Shape Path) §14.1.2.14
  - [done] shadow (Shadow Effect) §14.1.2.18
@@ -805,6 +812,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
             ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
+            ELSE_TRY_READ_IF(imagedata)
             else if (qualifiedName() == "w10:wrap") {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
@@ -1036,7 +1044,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
  - [done] group (Shape Group) §14.1.2.7
  - handles (Set of Handles) §14.1.2.9
  - image (Image File) §14.1.2.10
- - imagedata (Image Data) §14.1.2.11
+ - [done] imagedata (Image Data) §14.1.2.11
  - [done] line (Line) §14.1.2.12
  - lock (Shape Protections) §14.2.2.18
  - [done] oval (Oval) §14.1.2.13
@@ -1178,6 +1186,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
+            ELSE_TRY_READ_IF(imagedata)
             else if (qualifiedName() == "w10:wrap") {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
@@ -1232,6 +1241,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
             ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
+            ELSE_TRY_READ_IF(imagedata)
             else if (qualifiedName() == "w10:wrap") {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
@@ -1413,8 +1423,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
             m_currentGradientStyle.addAttribute("svg:cy", QString("%1%").arg(50));
             m_currentGradientStyle.addAttribute("svg:r", "80%"); ; // fix me if possible
         }
-        else if (type == "frame" || type == "tile" || type == "pattern") {
+        else if (type == "frame") {
             m_currentVMLProperties.fillType = "picture";
+        }
+        else if (type == "tile" || type == "pattern") {
+            m_currentVMLProperties.fillType = "pattern";
         }
         else {
             m_currentVMLProperties.fillType = "solid"; // defaulting
@@ -1975,7 +1988,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
  - [done] fill (Shape Fill Properties) §14.1.2.5
  - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
- - imagedata (Image Data) §14.1.2.11
+ - [done] imagedata (Image Data) §14.1.2.11
  - lock (Shape Protections) §14.2.2.18
  - [done] path (Shape Path) §14.1.2.14
  - [done shadow (Shadow Effect) §14.1.2.18
@@ -2008,6 +2021,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
             ELSE_TRY_READ_IF(shadow)
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(stroke)
+            ELSE_TRY_READ_IF(imagedata)
             SKIP_UNKNOWN
         }
     }
@@ -2302,37 +2316,61 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     }
 
     body = frameBuf.originalWriter();
+    bool makeFrameInstead = false;
+
+    // Checking for a special case where there is a picture and the shape is a rectange
+    // In this case we draw a simple frame, this because calligra atm. does not support
+    // wmf/emf pictures are the background fill of an element
+    if (!m_currentVMLProperties.imagedataPath.isEmpty() &&
+        m_currentVMLProperties.shapePath == " M ?f4 ?f5 L ?f4 ?f11 ?f9 ?f11 ?f9 ?f5 Z N") {
+        m_currentVMLProperties.filled = false;
+        makeFrameInstead = true;
+    }
 
     if (m_outputFrames) {
-        createFrameStart(CustomStart);
+        if (makeFrameInstead) {
+            createFrameStart();
+        }
+        else {
+            createFrameStart(CustomStart);
+        }
     }
 
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
-
-        QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
-        if (flip.contains("x")) {
-            m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
+        if (makeFrameInstead) {
+            body->startElement("draw:image");
+            body->addAttribute("xlink:type", "simple");
+            body->addAttribute("xlink:show", "embed");
+            body->addAttribute("xlink:actuate", "onLoad");
+            body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
+            body->endElement(); // draw:image
         }
-        if (flip.contains("y")) {
-            m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
+        else {
+            m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
+
+            QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
+            if (flip.contains("x")) {
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
+            }
+            if (flip.contains("y")) {
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
+            }
+            m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
+                arg(m_currentVMLProperties.modifiers);
+            m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").
+                arg(m_currentVMLProperties.viewBox);
+            m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
+                arg(m_currentVMLProperties.shapePath);
+            m_currentVMLProperties.shapeTypeString += ">";
+            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
+            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.normalFormulas;
+            m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
+
+            body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
         }
-        m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
-            arg(m_currentVMLProperties.modifiers);
-        m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").
-            arg(m_currentVMLProperties.viewBox);
-        m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
-            arg(m_currentVMLProperties.shapePath);
-        m_currentVMLProperties.shapeTypeString += ">";
-        m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
-        m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.normalFormulas;
-        m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
-
-        body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
-
-        body->endElement(); //draw:frame or draw:rect
+        body->endElement(); //draw:frame or draw:custom-shape
     }
 
     popCurrentDrawStyle();
@@ -2349,7 +2387,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
  - arc (§14.1.2.1)
  - background (Part 1, §17.2.1)
  - curve (§14.1.2.3)
- - group (§14.1.2.7)
+ - [done] group (§14.1.2.7)
  - image (§14.1.2.10)
  - line (§14.1.2.12)
  - object (Part 1, §17.3.3.19)
@@ -2357,10 +2395,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
  - pict (§9.2.2.2)
  - pict (§9.5.1)
  - polyline (§14.1.2.15)
- - rect (§14.1.2.16)
- - roundrect (§14.1.2.17)
+ - [done] rect (§14.1.2.16)
+ - [done] roundrect (§14.1.2.17)
  - [done] shape (§14.1.2.19)
- - shapetype (§14.1.2.20)
+ - [done] shapetype (§14.1.2.20)
 
  Child elements:
  - none

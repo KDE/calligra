@@ -51,32 +51,39 @@ class Cell
 {
 public:
     void appendDrawing( XlsxDrawingObject* obj ){
-        if (!embedded)
+        if (!embedded) {
             embedded = new EmbeddedCellObjects;
+        }
         embedded->drawings.append( obj );
     }
     void appendOleObject( const QPair<QString,QString>& oleObject, const QString& oleFrameBegin ){
-        if ( !embedded )
+        if (!embedded) {
             embedded = new EmbeddedCellObjects;
+        }
         embedded->oleObjects.append( oleObject );
         embedded->oleFrameBegins.append( oleFrameBegin );
     }
     void setHyperLink( const QString& link ) {
-        if ( !embedded )
+        if (!embedded) {
             embedded = new EmbeddedCellObjects;
+        }
         embedded->hyperlink = link;
     }
     QList< QPair<QString,QString> > oleObjects() const {
-        if ( embedded )
+        if (embedded) {
             return embedded->oleObjects;
-        else
+        }
+        else {
             return QList< QPair<QString,QString> >();
+        }
     }
     QString hyperlink() const {
-        if ( embedded )
+        if (embedded) {
             return embedded->hyperlink;
-        else
+        }
+        else {
             return QString();
+        }
     }
     int column, row;
     int rowsMerged, columnsMerged;
@@ -87,9 +94,8 @@ public:
     QString valueType;
     QByteArray valueAttr;
     QString valueAttrValue;
-    QString formula;    
+    QString formula;
     EmbeddedCellObjects* embedded;
-    
 
     Cell(/*Sheet* s,*/ int columnIndex, int rowIndex) : /*sheet(s),*/ column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), isPlainText(true), embedded(0) {}
     ~Cell() { delete embedded; }
