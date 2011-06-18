@@ -138,10 +138,14 @@ private:
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processBentConnector3(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer& out);
 
+    typedef void (ODrawToOdf::*PathArtist)(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const;
+    void drawPathBentConnector2(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const;
+    void drawPathBentConnector3(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const;
+    void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);    
+    
     // shapes2.cpp
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out);

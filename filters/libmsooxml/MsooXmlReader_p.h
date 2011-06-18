@@ -344,6 +344,19 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         destination = val_tmp; \
     }
 
+//! Converts @a string into longlong @a destination; returns KoFilter::WrongFormat on failure.
+//! @warning @a destination is left unchanged if @a string is empty, so it is up to developer to initialize it.
+#define STRING_TO_LONGLONG(string, destination, debugElement) \
+    if (string.isEmpty()) {} else { \
+        bool ok; \
+        const quint64 val_tmp = string.toLongLong(&ok); \
+        if (!ok) { \
+            kDebug() << "STRING_TO_LONGLONG: error converting" << string << "to LONGLONG (attribute" << debugElement << ")"; \
+            return KoFilter::WrongFormat; \
+        } \
+        destination = val_tmp; \
+    }
+
 //! Converts @a string into a qreal value in @a destination; returns KoFilter::WrongFormat on failure.
 //! @warning @a destination is left unchanged if @a string is empty, so it is up to developer to initialize it.
 #define STRING_TO_QREAL(string, destination, debugElement) \

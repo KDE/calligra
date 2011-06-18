@@ -47,7 +47,7 @@ class StateTool : public KoToolBase
   signals:
     void shapeChanged(StateShape* );
   protected:
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
   private:
     StateShape* m_currentShape;

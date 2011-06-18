@@ -72,11 +72,11 @@ void KWPageManagerPrivate::setPageOffset(int pageNum, qreal offset)
     pageOffsets[pageNum] = offset;
 }
 
-void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
+void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
 {
+#if 0
     if (pageNumbers.isEmpty() || ! pages.contains(pageId))
         return;
-
     const int oldPageNumber = pages[pageId].pageNumber;
     int diff = newPageNumber - oldPageNumber;
     int from = oldPageNumber;
@@ -119,6 +119,12 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
     }
 
     Q_ASSERT(pages.count() == oldPages.count()); // don't loose anything :)
+#else
+    if (newPageNumber >= 0)
+        visiblePageNumbers[pageId] = newPageNumber;
+    else
+        visiblePageNumbers.remove(pageId);
+#endif
 }
 
 void KWPageManagerPrivate::insertPage(const Page &newPage)
@@ -343,11 +349,12 @@ void KWPageManager::removePage(int pageNumber)
 void KWPageManager::removePage(const KWPage &page)
 {
     Q_ASSERT(page.isValid());
-    kDebug() << page.pageNumber();
+    kDebug(32001) << page.pageNumber();
 
     const int removedPageNumber = page.pageNumber();
     const int offset = page.pageSide() == KWPage::PageSpread ? 2 : 1;
     d->pages.remove(d->pageNumbers[removedPageNumber]);
+    d->visiblePageNumbers.remove(removedPageNumber);
 
     // decrease the pagenumbers of pages following the pageNumber
     QMap<int, int> pageNumbers = d->pageNumbers;

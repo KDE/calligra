@@ -60,7 +60,7 @@ protected:
     /// reimplemented from KoToolBase
     virtual QWidget * createOptionWidget();
     /// reimplemented from KoToolBase
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
 private Q_SLOTS:
     virtual void resourceChanged(int key, const QVariant & res);

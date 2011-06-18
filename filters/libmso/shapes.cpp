@@ -166,7 +166,23 @@ void ODrawToOdf::processStraightConnector1(const OfficeArtSpContainer& o, Writer
 
 }
 
-void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::drawPathBentConnector2(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
+{
+    shapePath.moveTo(sx1,sy1);
+    shapePath.lineTo(sx2, sy1);
+    shapePath.lineTo(sx2,sy2);
+}
+
+void ODrawToOdf::drawPathBentConnector3(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
+{
+
+    shapePath.moveTo(sx1,sy1);
+    shapePath.lineTo((sx1 + sx2)/2.0, sy1);
+    shapePath.lineTo((sx1 + sx2)/2.0, sy2);
+    shapePath.lineTo(sx2,sy2);
+}
+
+void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
 {
     const OfficeArtDggContainer * drawingGroup = 0;
     if (client) {
@@ -203,10 +219,7 @@ void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& ou
 
     // compute path
     QPainterPath shapePath;
-    shapePath.moveTo(sx1,sy1);
-    shapePath.lineTo((sx1 + sx2)/2.0, sy1);
-    shapePath.lineTo((sx1 + sx2)/2.0, sy2);
-    shapePath.lineTo(sx2,sy2);
+    (this->*drawPath)(sx1,sy1,sx2,sy2,shapePath);
 
     // transform the path according the shape properties like flip and rotation
     QTransform m;
@@ -248,21 +261,20 @@ void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& ou
 
 }
 
-
 void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
 {
-    QString url;
-    const Pib* pib = get<Pib>(o);
-    if (pib && client) {
-        url = client->getPicturePath(pib->pib);
-    } else {
-        // Does not make much sense to display an empty frame, following
-        // PPT->ODP filters of both OOo and MS Office.
-        return;
-    }
+    DrawStyle ds(0, &o);
+
+    // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
+    if (!ds.pib()) return;
+
     out.xml.startElement("draw:frame");
     processStyleAndText(o, out);
 
+    QString url;
+    if (client) {
+        url = client->getPicturePath(ds.pib());
+    }
     // if the image cannot be found, just place an empty frame
     if (url.isEmpty()) {
         out.xml.endElement(); //draw:frame
@@ -294,441 +306,488 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
 {
     quint16 shapeType = o.shapeProp.rh.recInstance;
     switch (shapeType) {
-        case msosptTextBox:
-        case msosptRectangle: {
-            processRectangle(o, out); break;
-        }
-        case msosptRoundRectangle: {
-            processRoundRectangle(o, out); break;
-        }
-        case msosptEllipse: {
-            processEllipse(o, out); break; //TODO
-        }
-        case msosptDiamond: {
-            processDiamond(o, out); break;
-        }
-        case msosptIsocelesTriangle: {
-            processIsocelesTriangle(o, out); break;
-        }
-        case msosptRightTriangle: {
-            processRightTriangle(o, out); break;
-        }
-        case msosptParallelogram: {
-            processParallelogram(o, out); break;
-        }
-        case msosptTrapezoid: {
-            processTrapezoid(o, out); break;
-        }
-        case msosptOctagon: {
-            processOctagon(o, out); break;
-        }
-        case msosptHexagon: {
-            processHexagon(o, out); break;
-        }
-        case msosptPlus: {
-            processPlus(o, out); break;
-        }
-        case msosptStar: {
-            processStar(o, out); break;
-        }
-        case msosptArrow: {
-            processArrow(o, out); break;
-        }
-        case msosptHomePlate: {
-            processHomePlate(o, out); break;
-        }
-        case msosptCube: {
-            processCube(o, out); break;
-        }
-        case msosptPlaque: {
-            processPlaque(o, out); break;
-        }
-        case msosptCan: {
-            processCan(o, out); break;
-        }
-        case msosptDonut: {
-            processDonut(o, out); break;
-        }
-        case msosptCallout1: {
-            processCallout1(o, out); break;
-        }
-        case msosptCallout2: {
-            processCallout2(o, out); break;
-        }
-        case msosptCallout3: {
-            processCallout3(o, out); break;
-        }
-        case msosptAccentCallout1: {
-            processAccentCallout1(o, out); break;
-        }
-        case msosptAccentCallout2: {
-            processAccentCallout2(o, out); break;
-        }
-        case msosptAccentCallout3: {
-            processAccentCallout3(o, out); break;
-        }
-        case msosptBorderCallout1: {
-            processBorderCallout1(o, out); break;
-        }
-        case msosptBorderCallout2: {
-            processBorderCallout2(o, out); break;
-        }
-        case msosptBorderCallout3: {
-            processBorderCallout3(o, out); break;
-        }
-        case msosptAccentBorderCallout1: {
-            processAccentBorderCallout1(o, out); break;
-        }
-        case msosptAccentBorderCallout2: {
-            processAccentBorderCallout2(o, out); break;
-        }
-        case msosptAccentBorderCallout3: {
-            processAccentBorderCallout3(o, out); break;
-        }
-        case msosptRibbon: {
-            processRibbon(o, out); break;
-        }
-        case msosptRibbon2: {
-            processRibbon2(o, out); break;
-        }
-        case msosptChevron: {
-            processChevron(o, out); break;
-        }
-        case msosptPentagon: {
-            processPentagon(o, out); break;
-        }
-        case msosptNoSmoking: {
-            processNoSmoking(o, out); break;
-        }
-        case msosptSeal8: {
-            processSeal8(o, out); break;
-        }
-        case msosptSeal16: {
-            processSeal16(o, out); break;
-        }
-        case msosptSeal32: {
-            processSeal32(o, out); break;
-        }
-        case msosptWedgeRectCallout: {
-            processWedgeRectCallout(o, out); break;
-        }
-        case msosptWedgeRRectCallout: {
-            processWedgeRRectCallout(o, out); break;
-        }
-        case msosptWedgeEllipseCallout: {
-            processWedgeEllipseCallout(o, out); break;
-        }
-        case msosptWave: {
-            processWave(o, out); break;
-        }
-        case msosptFoldedCorner: {
-            processFoldedCorner(o, out); break;
-        }
-        case msosptLeftArrow: {
-            processLeftArrow(o, out); break;
-        }
-        case msosptDownArrow: {
-            processDownArrow(o, out); break;
-        }
-        case msosptUpArrow: {
-            processUpArrow(o, out); break;
-        }
-        case msosptLeftRightArrow: {
-            processLeftRightArrow(o, out); break;
-        }
-        case msosptUpDownArrow: {
-            processUpDownArrow(o, out); break;
-        }
-        case msosptIrregularSeal1: {
-            processIrregularSeal1(o, out); break;
-        }
-        case msosptIrregularSeal2: {
-            processIrregularSeal2(o, out); break;
-        }
-        case msosptLightningBolt: {
-            processLightningBolt(o, out); break;
-        }
-        case msosptHeart: {
-            processHeart(o, out); break;
-        }
-        case msosptQuadArrow: {
-            processQuadArrow(o, out); break;
-        }
-        case msosptLeftArrowCallout: {
-            processLeftArrowCallout(o, out); break;
-        }
-        case msosptRightArrowCallout: {
-            processRightArrowCallout(o, out); break;
-        }
-        case msosptUpArrowCallout: {
-            processUpArrowCallout(o, out); break;
-        }
-        case msosptDownArrowCallout: {
-            processDownArrowCallout(o, out); break;
-        }
-        case msosptLeftRightArrowCallout: {
-            processLeftRightArrowCallout(o, out); break;
-        }
-        case msosptUpDownArrowCallout: {
-            processUpDownArrowCallout(o, out); break;
-        }
-        case msosptQuadArrowCallout: {
-            processQuadArrowCallout(o, out); break;
-        }
-        case msosptBevel: {
-            processBevel(o, out); break;
-        }
-        case msosptLeftBracket: {
-            processLeftBracket(o, out); break;
-        }
-        case msosptRightBracket: {
-            processRightBracket(o, out); break;
-        }
-        case msosptLeftBrace: {
-            processLeftBrace(o, out); break;
-        }
-        case msosptRightBrace: {
-            processRightBrace(o, out); break;
-        }
-        case msosptLeftUpArrow: {
-            processLeftUpArrow(o, out); break;
-        }
-        case msosptBentUpArrow: {
-            processBentUpArrow(o, out); break;
-        }
-        case msosptBentArrow: {
-            processBentArrow(o, out); break;
-        }
-        case msosptSeal24: {
-            processSeal24(o, out); break;
-        }
-        case msosptStripedRightArrow: {
-            processStripedRightArrow(o, out); break;
-        }
-        case msosptNotchedRightArrow: {
-            processNotchedRightArrow(o, out); break;
-        }
-        case msosptBlockArc: {
-            processBlockArc(o, out); break;
-        }
-        case msosptSmileyFace: {
-            processSmileyFace(o, out); break;
-        }
-        case msosptVerticalScroll: {
-            processVerticalScroll(o, out); break;
-        }
-        case msosptHorizontalScroll: {
-            processHorizontalScroll(o, out); break;
-        }
-        case msosptCircularArrow: {
-            processCircularArrow(o, out); break;
-        }
-        case msosptArc: // OpenOffice abuses msosptNotchedCircularArrow for arc, according MS ODraw docs it is unused value
-        case msosptNotchedCircularArrow: {
-            processNotchedCircularArrow(o, out); break;
-        }
-        case msosptUturnArrow: {
-            processUturnArrow(o, out); break;
-        }
-        case msosptCurvedRightArrow: {
-            processCurvedRightArrow(o, out); break;
-        }
-        case msosptCurvedLeftArrow: {
-            processCurvedLeftArrow(o, out); break;
-        }
-        case msosptCurvedUpArrow: {
-            processCurvedUpArrow(o, out); break;
-        }
-        case msosptCurvedDownArrow: {
-            processCurvedDownArrow(o, out); break;
-        }
-        case msosptCloudCallout: {
-            processCloudCallout(o, out); break;
-        }
-        case msosptEllipseRibbon: {
-            processEllipseRibbon(o, out); break;
-        }
-        case msosptEllipseRibbon2: {
-            processEllipseRibbon2(o, out); break;
-        }
-        case msosptFlowChartProcess: {
-            processFlowChartProcess(o, out); break;
-        }
-        case msosptFlowChartDecision: {
-            processFlowChartDecision(o, out); break;
-        }
-        case msosptFlowChartInputOutput: {
-            processFlowChartInputOutput(o, out); break;
-        }
-        case msosptFlowChartPredefinedProcess: {
-            processFlowChartPredefinedProcess(o, out); break;
-        }
-        case msosptFlowChartInternalStorage: {
-            processFlowChartInternalStorage(o, out); break;
-        }
-        case msosptFlowChartDocument: {
-            processFlowChartDocument(o, out); break;
-        }
-        case msosptFlowChartMultidocument: {
-            processFlowChartMultidocument(o, out); break;
-        }
-        case msosptFlowChartTerminator: {
-            processFlowChartTerminator(o, out); break;
-        }
-        case msosptFlowChartPreparation: {
-            processFlowChartPreparation(o, out); break;
-        }
-        case msosptFlowChartManualInput: {
-            processFlowChartManualInput(o, out); break;
-        }
-        case msosptFlowChartManualOperation: {
-            processFlowChartManualOperation(o, out); break;
-        }
-        case msosptFlowChartConnector: {
-            processFlowChartConnector(o, out); break;
-        }
-        case msosptFlowChartPunchedCard: {
-            processFlowChartPunchedCard(o, out); break;
-        }
-        case msosptFlowChartPunchedTape: {
-            processFlowChartPunchedTape(o, out); break;
-        }
-        case msosptFlowChartSummingJunction: {
-            processFlowChartSummingJunction(o, out); break;
-        }
-        case msosptFlowChartOr: {
-            processFlowChartOr(o, out); break;
-        }
-        case msosptFlowChartCollate: {
-            processFlowChartCollate(o, out); break;
-        }
-        case msosptFlowChartSort: {
-            processFlowChartSort(o, out); break;
-        }
-        case msosptFlowChartExtract: {
-            processFlowChartExtract(o, out); break;
-        }
-        case msosptFlowChartMerge: {
-            processFlowChartMerge(o, out); break;
-        }
-        case msosptFlowChartOnlineStorage: {
-            processFlowChartOnlineStorage(o, out); break;
-        }
-        case msosptFlowChartMagneticTape: {
-            processFlowChartMagneticTape(o, out); break;
-        }
-        case msosptFlowChartMagneticDisk: {
-            processFlowChartMagneticDisk(o, out); break;
-        }
-        case msosptFlowChartMagneticDrum: {
-            processFlowChartMagneticDrum(o, out); break;
-        }
-        case msosptFlowChartDisplay: {
-            processFlowChartDisplay(o, out); break;
-        }
-        case msosptFlowChartDelay: {
-            processFlowChartDelay(o, out); break;
-        }
-        case msosptFlowChartAlternateProcess: {
-            processFlowChartAlternateProcess(o, out); break;
-        }
-        case msosptFlowChartOffpageConnector: {
-            processFlowChartOffpageConnector(o, out); break;
-        }
-        case msosptCallout90: {
-            processCallout90(o, out); break;
-        }
-        case msosptAccentCallout90: {
-            processAccentCallout90(o, out); break;
-        }
-        case msosptBorderCallout90: {
-            processBorderCallout90(o, out); break;
-        }
-        case msosptAccentBorderCallout90: {
-            processAccentBorderCallout90(o, out); break;
-        }
-        case msosptLeftRightUpArrow: {
-            processLeftRightUpArrow(o, out); break;
-        }
-        case msosptSun: {
-            processSun(o, out); break;
-        }
-        case msosptMoon: {
-            processMoon(o, out); break;
-        }
-        case msosptBracketPair: {
-            processBracketPair(o, out); break;
-        }
-        case msosptBracePair: {
-            processBracePair(o, out); break;
-        }
-        case msosptSeal4: {
-            processSeal4(o, out); break;
-        }
-        case msosptDoubleWave: {
-            processDoubleWave(o, out); break;
-        }
-        case msosptActionButtonBlank: {
-            processActionButtonBlank(o, out); break;
-        }
-        case msosptActionButtonHome: {
-            processActionButtonHome(o, out); break;
-        }
-        case msosptActionButtonHelp: {
-            processActionButtonHelp(o, out); break;
-        }
-        case msosptActionButtonInformation: {
-            processActionButtonInformation(o, out); break;
-        }
-        case msosptActionButtonForwardNext: {
-            processActionButtonForwardNext(o, out); break;
-        }
-        case msosptActionButtonBackPrevious: {
-            processActionButtonBackPrevious(o, out); break;
-        }
-        case msosptActionButtonEnd: {
-            processActionButtonEnd(o, out); break;
-        }
-        case msosptActionButtonBeginning: {
-            processActionButtonBeginning(o, out); break;
-        }
-        case msosptActionButtonReturn: {
-            processActionButtonReturn(o, out); break;
-        }
-        case msosptActionButtonDocument: {
-            processActionButtonDocument(o, out); break;
-        }
-        case msosptActionButtonSound: {
-            processActionButtonSound(o, out); break;
-        }
-        case msosptActionButtonMovie: {
-            processActionButtonMovie(o, out); break;
-        }
+    case msosptNotPrimitive:
+        processNotPrimitive(o, out);
+        break;
+    case msosptRectangle:
+        processRectangle(o, out);
+        break;
+    case msosptRoundRectangle:
+        processRoundRectangle(o, out);
+        break;
+    case msosptEllipse:
+        // TODO: Something has to be done here (LukasT).
+        processEllipse(o, out);
+        break;
+    case msosptDiamond:
+        processDiamond(o, out);
+        break;
+    case msosptIsocelesTriangle:
+        processIsocelesTriangle(o, out);
+        break;
+    case msosptRightTriangle:
+        processRightTriangle(o, out);
+        break;
+    case msosptParallelogram:
+        processParallelogram(o, out);
+        break;
+    case msosptTrapezoid:
+        processTrapezoid(o, out);
+        break;
+    case msosptHexagon:
+        processHexagon(o, out);
+        break;
+    case msosptOctagon:
+        processOctagon(o, out);
+        break;
+    case msosptPlus:
+        processPlus(o, out);
+        break;
+    case msosptStar:
+        processStar(o, out);
+        break;
+    case msosptArrow:
+        processArrow(o, out);
+        break;
+    //
+    // TODO: msosptThickArrow
+    //
+    case msosptHomePlate:
+        processHomePlate(o, out);
+        break;
+    case msosptCube:
+        processCube(o, out);
+        break;
+    //
+    // TODO: msosptBaloon, msosptSeal
+    //
 
-        // old shapes.cpp code
-        case msosptLine: {
-            processLine(o, out); break;
-        }
-        case msosptStraightConnector1: {
-            processStraightConnector1(o, out); break;
-        }
-        case msosptBentConnector3: {
-            processBentConnector3(o, out); break;
-        }
-        case msosptPictureFrame:
-        case msosptHostControl: {
-            processPictureFrame(o, out); break;
-        }
-        case msosptNotPrimitive: {
-            processNotPrimitive(o, out); break;
-        }
-        default:{
-            qDebug() << "cannot handle object of type " << shapeType; break;
-        }
+    // NOTE: OpenOffice treats msosptNotchedCircularArrow as msosptArc.  The
+    // msosptNotchedCircularArrow value SHOULD NOT be used according to the
+    // MS-ODRAW spec.  However it occures in many Word8 files.
+    case msosptArc:
+        processNotchedCircularArrow(o, out);
+        break;
+    case msosptLine:
+        processLine(o, out);
+        break;
+    case msosptPlaque:
+        processPlaque(o, out);
+        break;
+    case msosptCan:
+        processCan(o, out);
+        break;
+    case msosptDonut:
+        processDonut(o, out);
+        break;
+    //
+    // TODO: msosptTextSimple, msosptTextOctagon, msosptTextHexagon,
+    // msosptTextCurve, msosptTextWave, msosptTextRing, msosptTextOnCurve,
+    // msosptTextOnRing
+    //
+    case msosptStraightConnector1:
+        processStraightConnector1(o, out);
+        break;
+    case msosptBentConnector2:
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector2);
+        break;
+    case msosptBentConnector3:
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector3);
+        break;
+    //
+    // TODO: msosptBentConnector1, msosptBentConnector4,
+    // msosptBentConnector5, msosptCurvedConnector2, msosptCurvedConnector3,
+    // msosptCurvedConnector4, msosptCurvedConnector5
+    //
+    case msosptCallout1:
+        processCallout1(o, out);
+        break;
+    case msosptCallout2:
+        processCallout2(o, out);
+        break;
+    case msosptCallout3:
+        processCallout3(o, out);
+        break;
+    case msosptAccentCallout1:
+        processAccentCallout1(o, out);
+        break;
+    case msosptAccentCallout2:
+        processAccentCallout2(o, out);
+        break;
+    case msosptAccentCallout3:
+        processAccentCallout3(o, out);
+        break;
+    case msosptBorderCallout1:
+        processBorderCallout1(o, out);
+        break;
+    case msosptBorderCallout2:
+        processBorderCallout2(o, out);
+        break;
+    case msosptBorderCallout3:
+        processBorderCallout3(o, out);
+        break;
+    case msosptAccentBorderCallout1:
+        processAccentBorderCallout1(o, out);
+        break;
+    case msosptAccentBorderCallout2:
+        processAccentBorderCallout2(o, out);
+        break;
+    case msosptAccentBorderCallout3:
+        processAccentBorderCallout3(o, out);
+        break;
+    case msosptRibbon:
+        processRibbon(o, out);
+        break;
+    case msosptRibbon2:
+        processRibbon2(o, out);
+        break;
+    case msosptChevron:
+        processChevron(o, out);
+        break;
+    case msosptPentagon:
+        processPentagon(o, out);
+        break;
+    case msosptNoSmoking:
+        processNoSmoking(o, out);
+        break;
+    case msosptSeal8:
+        processSeal8(o, out);
+        break;
+    case msosptSeal16:
+        processSeal16(o, out);
+        break;
+    case msosptSeal32:
+        processSeal32(o, out);
+        break;
+    case msosptWedgeRectCallout:
+        processWedgeRectCallout(o, out);
+        break;
+    case msosptWedgeRRectCallout:
+        processWedgeRRectCallout(o, out);
+        break;
+    case msosptWedgeEllipseCallout:
+        processWedgeEllipseCallout(o, out);
+        break;
+    case msosptWave:
+        processWave(o, out);
+        break;
+    case msosptFoldedCorner:
+        processFoldedCorner(o, out);
+        break;
+    case msosptLeftArrow:
+        processLeftArrow(o, out);
+        break;
+    case msosptDownArrow:
+        processDownArrow(o, out);
+        break;
+    case msosptUpArrow:
+        processUpArrow(o, out);
+        break;
+    case msosptLeftRightArrow:
+        processLeftRightArrow(o, out);
+        break;
+    case msosptUpDownArrow:
+        processUpDownArrow(o, out);
+        break;
+    case msosptIrregularSeal1:
+        processIrregularSeal1(o, out);
+        break;
+    case msosptIrregularSeal2:
+        processIrregularSeal2(o, out);
+        break;
+    case msosptLightningBolt:
+        processLightningBolt(o, out);
+        break;
+    case msosptHeart:
+        processHeart(o, out);
+        break;
+    case msosptPictureFrame:
+        processPictureFrame(o, out);
+        break;
+    case msosptQuadArrow:
+        processQuadArrow(o, out);
+        break;
+    case msosptLeftArrowCallout:
+        processLeftArrowCallout(o, out);
+        break;
+    case msosptRightArrowCallout:
+        processRightArrowCallout(o, out);
+        break;
+    case msosptUpArrowCallout:
+        processUpArrowCallout(o, out);
+        break;
+    case msosptDownArrowCallout:
+        processDownArrowCallout(o, out);
+        break;
+    case msosptLeftRightArrowCallout:
+        processLeftRightArrowCallout(o, out);
+        break;
+    case msosptUpDownArrowCallout:
+        processUpDownArrowCallout(o, out);
+        break;
+    case msosptQuadArrowCallout:
+        processQuadArrowCallout(o, out);
+        break;
+    case msosptBevel:
+        processBevel(o, out);
+        break;
+    case msosptLeftBracket:
+        processLeftBracket(o, out);
+        break;
+    case msosptRightBracket:
+        processRightBracket(o, out);
+        break;
+    case msosptLeftBrace:
+        processLeftBrace(o, out);
+        break;
+    case msosptRightBrace:
+        processRightBrace(o, out);
+        break;
+    case msosptLeftUpArrow:
+        processLeftUpArrow(o, out);
+        break;
+    case msosptBentUpArrow:
+        processBentUpArrow(o, out);
+        break;
+    case msosptBentArrow:
+        processBentArrow(o, out);
+        break;
+    case msosptSeal24:
+        processSeal24(o, out);
+        break;
+    case msosptStripedRightArrow:
+        processStripedRightArrow(o, out);
+        break;
+    case msosptNotchedRightArrow:
+        processNotchedRightArrow(o, out);
+        break;
+    case msosptBlockArc:
+        processBlockArc(o, out);
+        break;
+    case msosptSmileyFace:
+        processSmileyFace(o, out);
+        break;
+    case msosptVerticalScroll:
+        processVerticalScroll(o, out);
+        break;
+    case msosptHorizontalScroll:
+        processHorizontalScroll(o, out);
+        break;
+    case msosptCircularArrow:
+        processCircularArrow(o, out);
+        break;
+    case msosptNotchedCircularArrow:
+        processNotchedCircularArrow(o, out);
+        break;
+    case msosptUturnArrow:
+        processUturnArrow(o, out);
+        break;
+    case msosptCurvedRightArrow:
+        processCurvedRightArrow(o, out);
+        break;
+    case msosptCurvedLeftArrow:
+        processCurvedLeftArrow(o, out);
+        break;
+    case msosptCurvedUpArrow:
+        processCurvedUpArrow(o, out);
+        break;
+    case msosptCurvedDownArrow:
+        processCurvedDownArrow(o, out);
+        break;
+    case msosptCloudCallout:
+        processCloudCallout(o, out);
+        break;
+    case msosptEllipseRibbon:
+        processEllipseRibbon(o, out);
+        break;
+    case msosptEllipseRibbon2:
+        processEllipseRibbon2(o, out);
+        break;
+    case msosptFlowChartProcess:
+        processFlowChartProcess(o, out);
+        break;
+    case msosptFlowChartDecision:
+        processFlowChartDecision(o, out);
+        break;
+    case msosptFlowChartInputOutput:
+        processFlowChartInputOutput(o, out);
+        break;
+    case msosptFlowChartPredefinedProcess:
+        processFlowChartPredefinedProcess(o, out);
+        break;
+    case msosptFlowChartInternalStorage:
+        processFlowChartInternalStorage(o, out);
+        break;
+    case msosptFlowChartDocument:
+        processFlowChartDocument(o, out);
+        break;
+    case msosptFlowChartMultidocument:
+        processFlowChartMultidocument(o, out);
+        break;
+    case msosptFlowChartTerminator:
+        processFlowChartTerminator(o, out);
+        break;
+    case msosptFlowChartPreparation:
+        processFlowChartPreparation(o, out);
+        break;
+    case msosptFlowChartManualInput:
+        processFlowChartManualInput(o, out);
+        break;
+    case msosptFlowChartManualOperation:
+        processFlowChartManualOperation(o, out);
+        break;
+    case msosptFlowChartConnector:
+        processFlowChartConnector(o, out);
+        break;
+    case msosptFlowChartPunchedCard:
+        processFlowChartPunchedCard(o, out);
+        break;
+    case msosptFlowChartPunchedTape:
+        processFlowChartPunchedTape(o, out);
+        break;
+    case msosptFlowChartSummingJunction:
+        processFlowChartSummingJunction(o, out);
+        break;
+    case msosptFlowChartOr:
+        processFlowChartOr(o, out);
+        break;
+    case msosptFlowChartCollate:
+        processFlowChartCollate(o, out);
+        break;
+    case msosptFlowChartSort:
+        processFlowChartSort(o, out);
+        break;
+    case msosptFlowChartExtract:
+        processFlowChartExtract(o, out);
+        break;
+    case msosptFlowChartMerge:
+        processFlowChartMerge(o, out);
+        break;
+    //
+    // TODO: msosptFlowChartOfflineStorage
+    //
+    case msosptFlowChartOnlineStorage:
+        processFlowChartOnlineStorage(o, out);
+        break;
+    case msosptFlowChartMagneticTape:
+        processFlowChartMagneticTape(o, out);
+        break;
+    case msosptFlowChartMagneticDisk:
+        processFlowChartMagneticDisk(o, out);
+        break;
+    case msosptFlowChartMagneticDrum:
+        processFlowChartMagneticDrum(o, out);
+        break;
+    case msosptFlowChartDisplay:
+        processFlowChartDisplay(o, out);
+        break;
+    case msosptFlowChartDelay:
+        processFlowChartDelay(o, out);
+        break;
+    //
+    // TODO: msosptTextPlainText, msosptTextStop, msosptTextTriangle,
+    // msosptTextTriangleInverted, msosptTextChevron,
+    // msosptTextChevronInverted, msosptTextRingInside, msosptTextRingOutside,
+    // msosptTextArchUpCurve, msosptTextArchDownCurve, msosptTextCircleCurve,
+    // msosptTextButtonCurve, msosptTextArchUpPour, msosptTextArchDownPour,
+    // msosptTextCirclePour, msosptTextButtonPour, msosptTextCurveUp,
+    // msosptTextCurveDown, msosptTextCascadeUp, msosptTextCascadeDown,
+    // msosptTextWave1, msosptTextWave2, msosptTextWave3, msosptTextWave4,
+    // msosptTextInflate, msosptTextDeflate, msosptTextInflateBottom,
+    // msosptTextDeflateBottom, msosptTextInflateTop, msosptTextDeflateTop,
+    // msosptTextDeflateInflate, msosptTextDeflateInflateDeflate,
+    // msosptTextFadeRight, msosptTextFadeLeft, msosptTextFadeUp,
+    // msosptTextFadeDown, msosptTextSlantUp, msosptTextSlantDown,
+    // msosptTextCanUp, msosptTextCanDown
+    //
+    case msosptFlowChartAlternateProcess:
+        processFlowChartAlternateProcess(o, out);
+        break;
+    case msosptFlowChartOffpageConnector:
+        processFlowChartOffpageConnector(o, out);
+        break;
+    case msosptCallout90:
+        processCallout90(o, out);
+        break;
+    case msosptAccentCallout90:
+        processAccentCallout90(o, out);
+        break;
+    case msosptBorderCallout90:
+        processBorderCallout90(o, out);
+        break;
+    case msosptAccentBorderCallout90:
+        processAccentBorderCallout90(o, out);
+        break;
+    case msosptLeftRightUpArrow:
+        processLeftRightUpArrow(o, out);
+        break;
+    case msosptSun:
+        processSun(o, out);
+        break;
+    case msosptMoon:
+        processMoon(o, out);
+        break;
+    case msosptBracketPair:
+        processBracketPair(o, out);
+        break;
+    case msosptBracePair:
+        processBracePair(o, out);
+        break;
+    case msosptSeal4:
+        processSeal4(o, out);
+        break;
+    case msosptDoubleWave:
+        processDoubleWave(o, out);
+        break;
+    case msosptActionButtonBlank:
+        processActionButtonBlank(o, out);
+        break;
+    case msosptActionButtonHome:
+        processActionButtonHome(o, out);
+        break;
+    case msosptActionButtonHelp:
+        processActionButtonHelp(o, out);
+        break;
+    case msosptActionButtonInformation:
+        processActionButtonInformation(o, out);
+        break;
+    case msosptActionButtonForwardNext:
+        processActionButtonForwardNext(o, out);
+        break;
+    case msosptActionButtonBackPrevious:
+        processActionButtonBackPrevious(o, out);
+        break;
+    case msosptActionButtonEnd:
+        processActionButtonEnd(o, out);
+        break;
+    case msosptActionButtonBeginning:
+        processActionButtonBeginning(o, out);
+        break;
+    case msosptActionButtonReturn:
+        processActionButtonReturn(o, out);
+        break;
+    case msosptActionButtonDocument:
+        processActionButtonDocument(o, out);
+        break;
+    case msosptActionButtonSound:
+        processActionButtonSound(o, out);
+        break;
+    case msosptActionButtonMovie:
+        processActionButtonMovie(o, out);
+        break;
+    case msosptHostControl:
+        processPictureFrame(o, out);
+        break;
+    // TODO: Implement processTextBox, do not process msosptTextBox as
+    // msosptRectangle.
+    case msosptTextBox:
+        processRectangle(o, out);
+        break;
+    default:
+        qDebug() << "Cannot handle shape 0x" << hex << shapeType;
+        break;
     }
 }
-
-
 
 void ODrawToOdf::processStyleAndText(const MSO::OfficeArtSpContainer& o,
                                      Writer& out)
@@ -1037,19 +1096,16 @@ QString ODrawToOdf::path2svg(const QPainterPath &path)
     for (int i = 0; i < count; i++) {
 
         QPainterPath::Element e = path.elementAt(i);
-        switch(e.type){
-            case QPainterPath::MoveToElement:{
-                d.append(QString("M %1 %2").arg(e.x).arg(e.y));
-                break;
-            }
-            case QPainterPath::LineToElement:{
-                d.append(QString("L %1 %2").arg(e.x).arg(e.y));
-                break;
-            }
-            default:{
-                //TODO CurveToElement, CurveToElementDataElement
-                qDebug() << "This element unhandled";
-            }
+        switch(e.type) {
+        case QPainterPath::MoveToElement:
+            d.append(QString("M %1 %2").arg(e.x).arg(e.y));
+            break;
+        case QPainterPath::LineToElement:
+            d.append(QString("L %1 %2").arg(e.x).arg(e.y));
+            break;
+        default:
+            //TODO: CurveToElement, CurveToElementDataElement
+            qDebug() << "This element unhandled";
         }
     }
     return d;

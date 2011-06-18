@@ -68,6 +68,9 @@ set( calligrastageprivate_LIB_SRCS
      KPrPicturesImport.cpp
      KPrPdfPrintJob.cpp
      KPrSlidesSorterDocumentModel.cpp
+     KPrSlidesManagerView.cpp
+     KPrSelectionManager.cpp
+     KPrSelectionToggle.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp

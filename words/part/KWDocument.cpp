@@ -227,22 +227,28 @@ QGraphicsItem *KWDocument::createCanvasItem()
     return item;
 }
 
-KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
+KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName, bool addUndoRedoCommand)
 {
     kDebug(32001) << "afterPageNum=" << afterPageNum << "masterPageName=" << masterPageName;
     KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum, masterPageName);
-    addCommand(cmd);
+    if (addUndoRedoCommand)
+        addCommand(cmd);
+    else
+        cmd->redo();
     Q_ASSERT(cmd->page().isValid());
-    return cmd->page();
+    KWPage page = cmd->page();
+    if (!addUndoRedoCommand)
+        delete cmd;
+    return page;
 }
 
-KWPage KWDocument::appendPage(const QString &masterPageName)
+KWPage KWDocument::appendPage(const QString &masterPageName, bool addUndoRedoCommand)
 {
     int number = 0;
     KWPage last = m_pageManager.last();
     if (last.isValid())
         number = last.pageNumber();
-    return insertPage(number, masterPageName);
+    return insertPage(number, masterPageName, addUndoRedoCommand);
 }
 
 void KWDocument::removePage(int pageNumber)
@@ -342,6 +348,8 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
         // schedule all calls so multiple layout calls are compressed
         lay->scheduleLayout();
     }
+
+    firePageSetupChanged();
 }
 
 void KWDocument::layoutProgressChanged(int percent)

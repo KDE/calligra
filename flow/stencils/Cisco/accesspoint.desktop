@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=AccessPoint
+Name[de]=AccessPoint
 Name[el]=Σημείο πρόσβασης
 Name[et]=Tugijaam
+Name[nb]=Aksesspunkt
 Name[nl]=AccessPoint
 Name[pt]=Ponto de Acesso
 Name[pt_BR]=Ponto de acesso
@@ -9,3 +11,4 @@ Name[sv]=Anslutningspunkt
 Name[uk]=Точка доступу
 Name[x-test]=xxAccessPointxx
 Name[zh_CN]=入口点
+Name[zh_TW]=存取點

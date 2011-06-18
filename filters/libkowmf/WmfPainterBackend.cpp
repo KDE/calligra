@@ -107,7 +107,6 @@ bool WmfPainterBackend::begin(const QRect &boundingBox)
     mViewportOrg = QPoint(0, 0);
     mWindowExtIsSet = false;
     mViewportExtIsSet = false;
-    mWindowViewportIsSet = false;
     mOutputTransform = mPainter->transform();
     mWorldTransform = QTransform();
 
@@ -326,19 +325,21 @@ void WmfPainterBackend::recalculateWorldTransform()
         return;
 
     // FIXME: Check windowExt == 0 in any direction
+    qreal windowViewportScaleX;
+    qreal windowViewportScaleY;
     if (mWindowExtIsSet && mViewportExtIsSet) {
         // Both window and viewport are set.
-        mWindowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
-        mWindowViewportScaleY = qreal(mViewportExt.height()) / qreal(mWindowExt.height());
+        windowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
+        windowViewportScaleY = qreal(mViewportExt.height()) / qreal(mWindowExt.height());
 #if DEBUG_WMFPAINT
         kDebug(31000) << "Scale for Window -> Viewport"
-                      << mWindowViewportScaleX << mWindowViewportScaleY;
+                      << windowViewportScaleX << windowViewportScaleY;
 #endif
     }
     else {
         // At most one of window and viewport ext is set: Use same width for window and viewport
-        mWindowViewportScaleX = qreal(1.0);
-        mWindowViewportScaleY = qreal(1.0);
+        windowViewportScaleX = qreal(1.0);
+        windowViewportScaleY = qreal(1.0);
 #if DEBUG_WMFPAINT
         kDebug(31000) << "Only one of Window or Viewport set: scale window -> viewport = 1";
 #endif
@@ -370,7 +371,7 @@ void WmfPainterBackend::recalculateWorldTransform()
 
     // Calculate the world transform.
     mWorldTransform.translate(-mWindowOrg.x(), -mWindowOrg.y());
-    mWorldTransform.scale(mWindowViewportScaleX, mWindowViewportScaleY);
+    mWorldTransform.scale(windowViewportScaleX, windowViewportScaleY);
     if (mViewportExtIsSet) {
         mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
     } 
@@ -390,7 +391,6 @@ void WmfPainterBackend::recalculateWorldTransform()
 
     // Apply the world transform to the painter.
     mPainter->setWorldTransform(mWorldTransform);
-    mWindowViewportIsSet = true;
 
     // Apply the output transform.
     QTransform currentMatrix = mPainter->worldTransform();
@@ -781,6 +781,104 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
     }
 
     mPainter->restore();
+}
+
+
+// ----------------------------------------------------------------
+//                         Private functions
+
+
+void WmfPainterBackend::updateFromGraphicscontext(WmfDeviceContext &context)
+{
+    // Graphic objects
+
+    if (context.changedItems & DCBrush) {
+        mPainter->setBrush(context.brush);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting fill brush to" << context.brush;
+#endif
+        // FIXME: context.image
+    }
+    if (context.changedItems & DCFont) {
+        mPainter->setFont(context.font);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting font to" << context.font;
+#endif
+    }
+    if (context.changedItems & DCPalette) {
+        // NYI
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting palette (NYI)";
+#endif
+    }
+    if (context.changedItems & DCPen) {
+        mPainter->setPen(context.pen);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting pen to" << context.pen;
+#endif
+    }
+    if (context.changedItems & DCRegion) {
+        // Not used until SETCLIPREGION is used
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** region changed to" << context.region;
+#endif
+    }
+
+    // Structure objects
+
+    if (context.changedItems & DCBgTextColor) {
+        mPainter->setPen(context.backgroundColor);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting background text color to" << context.backgroundColor;
+#endif
+    }
+    if (context.changedItems & DCFgTextColor) {
+        mPainter->setPen(context.foregroundTextColor);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting foreground text color to" << context.foregroundColor;
+#endif
+    }
+
+    //----------------------------------------------------------------
+    // Output surface not supported
+    //DCViewportExt
+    //DCViewportorg
+    //DCWindowExt  
+    //DCWindoworg  
+
+    //----------------------------------------------------------------
+    // Graphic Properties
+
+    if (context.changedItems & DCBgMixMode) {
+        // FIXME: Check the default value for this.
+        mPainter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
+                                                                      : Qt::OpaqueMode);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
+#endif
+    }
+    //Break extra space NYI
+    //Font mapping mode NYI
+    if (context.changedItems & DCFgMixMode) {
+        // FIXME: Check the default value for this.
+        QPainter::CompositionMode  compMode = QPainter::CompositionMode_Source;
+        if (context.rop < 17)
+            compMode = koWmfOpTab16[context.rop];
+        mPainter->setCompositionMode(compMode);
+
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting composition mode to" << context.rop;
+#endif
+    }
+    //layoutMode not necessary to handle here
+    //Mapping mode NYI
+    //PolyFillMode not necessary to handle here
+    //Stretchblt mode NYI
+    //textAlign not necessary to handle here
+    //Text extra space NYI
+
+    // Reset all changes until next time.
+    context.changedItems = 0;
 }
 
 

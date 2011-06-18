@@ -129,6 +129,8 @@ typedef enum
     sprmPFAdjustRight = 0x2448,
     sprmPFInnerTableCell = 0x244B,
     sprmPFInnerTtp = 0x244C,
+    sprmPFDyaBeforeAuto = 0x245B,
+    sprmPFDyaAfterAuto = 0x245C,
     sprmPNLvlAnmFake = 0x25FF, // Fake entry!
     sprmPIncLvl = 0x2602,
     sprmPIlvl = 0x260A,
@@ -627,8 +629,12 @@ void PAP::apply( const U8* grpprl, U16 count, const Style* style, const StyleShe
     SPRM::apply<PAP>( this, &PAP::applyPAPSPRM, grpprl, count, style, styleSheet, dataStream, version );
 }
 
-    U32 icoToRGB(U16 ico)
+    U32 icoToCOLORREF(U16 ico)
     {
+        //TODO: Do not place the fAuto byte in front!  The MS-ODRAW
+        //OfficeArtCOLORREF is an equivalent and has the byte properly at the
+        //end.  Oooo, it's confusing ...
+
         switch(ico)
         {
             case 0: //default and we choose black as most paper is white
@@ -1076,6 +1082,12 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPNLvlAnmFake:
             nLvlAnm = *ptr;
             break;
+        case SPRM::sprmPFDyaBeforeAuto:
+            dyaBeforeAuto = *ptr == 1;
+            break;
+        case SPRM::sprmPFDyaAfterAuto:
+            dyaAfterAuto = *ptr == 1;
+            break;
         //START - table related SPRMs
         case SPRM::sprmPFInTable:
             fInTable = *ptr == 1;
@@ -1420,7 +1432,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCIco: {
             U16 ico = *ptr;
-            cv=Word97::icoToRGB(ico);
+            cv=Word97::icoToCOLORREF(ico);
             break;
         }
         case SPRM::sprmCCv: {

@@ -300,8 +300,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -655,7 +655,7 @@ void KarbonView::unclipObjects()
     }
     if (!shapesToUnclip.count())
         return;
-    
+
     d->canvas->addCommand(new KoShapeUnclipCommand(d->part, shapesToUnclip));
 }
 

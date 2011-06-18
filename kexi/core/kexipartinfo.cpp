@@ -22,7 +22,6 @@
 #include "KexiMainWindowIface.h"
 
 #include <kexidb/global.h>
-#include <KAction>
 #include <KActionCollection>
 
 using namespace KexiPart;
@@ -102,15 +101,34 @@ Info::Private::Private()
 
 //------------------------------
 
+KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
+    : KAction(KIcon(info->createItemIcon()), info->instanceCaption() + "...", parent)
+    , m_info(info)
+{
+    setObjectName(KexiPart::nameForCreateAction(*m_info));
+    // default tooltip and what's this
+    setToolTip(i18n("Create new object of type \"%1\"",
+                m_info->instanceCaption().toLower()));
+    setWhatsThis(i18n("Creates new object of type \"%1\"",
+                    m_info->instanceCaption().toLower()));
+    connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
+    connect(this, SIGNAL(newObjectRequested(KexiPart::Info*)),
+            &Kexi::partManager(), SIGNAL(newObjectRequested(KexiPart::Info*)));
+}
+
+void KexiNewObjectAction::slotTriggered()
+{
+    emit newObjectRequested(m_info);
+}
+
+//------------------------------
+
 Info::Info(KService::Ptr ptr)
         : d(new Private(ptr))
 {
-    KAction *act = new KAction(
-        KIcon(createItemIcon()),
-        instanceCaption() + "...",
-        KexiMainWindowIface::global()->actionCollection()
-    );
-    act->setObjectName(KexiPart::nameForCreateAction(*this));
+    KexiNewObjectAction *act = new KexiNewObjectAction(
+        this,
+        KexiMainWindowIface::global()->actionCollection());
     KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
 }
 
@@ -244,3 +262,5 @@ QString KexiPart::nameForCreateAction(const Info& info)
 {
     return info.objectName() + "part_create";
 }
+
+#include "kexipartinfo_p.moc"

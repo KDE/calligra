@@ -153,14 +153,13 @@ void Part::createGUIClients()//KexiMainWindow *win)
                             KexiPart::nameForCreateAction(*info()));
         // - update action's tooltip and "what's this"
         QString tip(toolTip());
-        if (tip.isEmpty())
-            tip = i18n("Create new object of type \"%1\"", info()->instanceCaption().toLower());
-        act->setToolTip(tip);
+        if (!tip.isEmpty()) {
+            act->setToolTip(tip);
+        }
         QString what(whatsThis());
-        if (what.isEmpty())
-            what = i18n("Creates new object of type \"%1\"", info()->instanceCaption().toLower());
-        act->setWhatsThis(what);
-        connect(act, SIGNAL(triggered()), this, SLOT(slotCreate()));
+        if (!what.isEmpty()) {
+            act->setWhatsThis(what);
+        }
 #ifdef __GNUC__
 #warning TODO  KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently
 #else
@@ -382,11 +381,6 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
 
     kDebug() << "window returned.";
     return window;
-}
-
-void Part::slotCreate()
-{
-    emit newObjectRequest(d->info);
 }
 
 KexiDB::SchemaData* Part::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
