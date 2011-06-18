@@ -179,8 +179,8 @@ void KSpreadLatexExportDiaImpl::accept()
         config->setEmbeded(true);
     else
         config->setEmbeded(false);
-    if (kwordStyleButton == styleGroup->selected())
-        config->useKwordStyle();
+    if (wordsStyleButton == styleGroup->selected())
+        config->useWordsStyle();
     else
         config-> useLatexStyle();
     /* class names are not translated */

@@ -150,7 +150,7 @@ int KPrSlidesSorterDocumentModel::rowCount(const QModelIndex &parent) const
 
 QStringList KPrSlidesSorterDocumentModel::mimeTypes() const
 {
-    return QStringList() << "application/x-koffice-sliderssorter";
+    return QStringList() << "application/x-calligra-sliderssorter";
 }
 
 QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexes) const
@@ -230,7 +230,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return true;
     }
 
-    if (!data->hasFormat("application/x-koffice-sliderssorter")) {
+    if (!data->hasFormat("application/x-calligra-sliderssorter")) {
         return false;
     }
 
@@ -238,7 +238,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return false;
     }
 
-    QByteArray encoded = data->data("application/x-koffice-sliderssorter");
+    QByteArray encoded = data->data("application/x-calligra-sliderssorter");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
     QList<KoPAPageBase *> slides;   
 

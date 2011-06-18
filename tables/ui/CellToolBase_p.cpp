@@ -63,7 +63,7 @@
 #include "ui/ExternalEditor.h"
 #include "ui/SheetView.h"
 
-// KOffice
+// Calligra
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoResourceManager.h>

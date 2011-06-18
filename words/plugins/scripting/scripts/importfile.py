@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import codecs, traceback, Kross, KWord
+import codecs, traceback, Kross, Words
 
 class Reader:
     """ The Reader class provides us implementations for the different file formats
@@ -11,7 +11,7 @@ class Reader:
         filtername = "Text Files"
         filtermask = "*.txt"
         def __init__(self, file):
-            doc = KWord.mainFrameSet().document()
+            doc = Words.mainFrameSet().document()
 
             f = open(file, "r")
             doc.setText( ''.join(f.readlines()) )
@@ -21,7 +21,7 @@ class Reader:
         filtername = "Html Files"
         filtermask = "*.htm *.html"
         def __init__(self, file):
-            doc = KWord.mainFrameSet().document()
+            doc = Words.mainFrameSet().document()
 
             #cursor = doc.rootFrame().lastCursorPosition()
             #cursor = doc.lastCursor()
@@ -49,7 +49,7 @@ class ImportFile:
 
         try:
             openpage = self.dialog.addPage("Open","Import File","document-open")
-            openwidget = forms.createFileWidget(openpage, "kfiledialog:///kwordsampleimportfile")
+            openwidget = forms.createFileWidget(openpage, "kfiledialog:///wordssampleimportfile")
             openwidget.setMode("Opening")
             #openwidget.minimumWidth = 540
             #openwidget.minimumHeight = 400

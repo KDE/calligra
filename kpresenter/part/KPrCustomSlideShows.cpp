@@ -21,7 +21,7 @@
 #include "KPrCustomSlideShows.h"
 
 #include <kdebug.h>
-//KOffice includes
+//Calligra includes
 #include <KoPAPageBase.h>
 #include <KoPAPage.h>
 #include <KoPALoadingContext.h>

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 1999-2006 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2006 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,7 +23,7 @@
 #include "FormulaEditorHighlighter.h"
 #include "Selection.h"
 
-// KOffice
+// Calligra
 
 // KDE
 #include <kdebug.h>

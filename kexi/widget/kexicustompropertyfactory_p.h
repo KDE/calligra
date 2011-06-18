@@ -53,7 +53,7 @@ protected:
  is unable to enter invalid characters. Any chages to a null value or empty string,
  have no effect.
 
- @todo move this to koproperty library (when KexiUtils is moves to kofficecore)
+ @todo move this to koproperty library (when KexiUtils is moves to calligracore)
  */
 class KexiIdentifierPropertyEdit : public KoProperty::StringEdit
 {

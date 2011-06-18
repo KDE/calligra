@@ -21,20 +21,20 @@
 #include "kword13format.h"
 
 
-KWord13Format::KWord13Format(void) : m_id(-1), m_pos(-1)
+Words13Format::Words13Format(void) : m_id(-1), m_pos(-1)
 {
 }
 
-KWord13Format::~KWord13Format(void)
+Words13Format::~Words13Format(void)
 {
 }
 
-int KWord13Format::length(void)
+int Words13Format::length(void)
 {
     return 1;
 }
 
-KWord13FormatOneData* KWord13Format::getFormatOneData(void)
+Words13FormatOneData* Words13Format::getFormatOneData(void)
 {
     return 0;
 }

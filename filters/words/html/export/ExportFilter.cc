@@ -521,7 +521,7 @@ bool HtmlWorker::doOpenHead(void)
     QString strVersion("$Revision$");
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
-    *m_streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version"
+    *m_streamOut << "<meta name=\"Generator\" content=\"Words HTML Export Filter Version"
     << strVersion.mid(10).remove('$')
     << "\"" << (isXML() ? " /" : "") // X(HT)ML closes empty elements, HTML not!
     << ">\n";

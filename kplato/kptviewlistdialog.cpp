@@ -29,7 +29,7 @@
 namespace KPlato
 {
 
-// little helper stolen from kmail/kword
+// little helper stolen from kmail/words
 static inline QPixmap loadIcon( const char * name ) {
   return KIconLoader::global()->loadIcon( QString::fromLatin1(name), KIconLoader::NoGroup, KIconLoader::SizeMedium );
 }
@@ -94,7 +94,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << "AccountsView"
             << "ProjectStatusView"
             << "PerformanceStatusView";
-    /* Deactivate for koffice 2.0
+    /* Deactivate for calligra 2.0
             << "Tasks by Resources";
     */
     QStringList lst;
@@ -115,7 +115,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Cost Breakdown" )
             << i18n( "Project Performance Chart" )
             << i18n( "Tasks Performance Chart" );
-    /* Deactivate for koffice 2.0
+    /* Deactivate for calligra 2.0
             << i18n( "Tasks by Resources" );
     */
     widget.viewtype->addItems( lst );

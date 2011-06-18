@@ -18,68 +18,68 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_1_3_PARSER_H
-#define KWORD_1_3_PARSER_H
+#ifndef WORDS_1_3_PARSER_H
+#define WORDS_1_3_PARSER_H
 
 #include <QtXml>
 #include <q3ptrstack.h>
 
-class KWord13Paragraph;
-class KWord13Document;
-class KWord13Frameset;
-class KWord13Layout;
-class KWord13Format;
+class Words13Paragraph;
+class Words13Document;
+class Words13Frameset;
+class Words13Layout;
+class Words13Format;
 
 /**
  * Type of element
  *
  * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
  */
-enum KWord13StackItemType {
-    KWord13TypeUnknown  = 0,
-    KWord13TypeBottom,      ///< Bottom of the stack
-    KWord13TypeIgnore,      ///< Element is known but ignored
-    KWord13TypeEmpty,       ///< Element is empty
-    KWord13TypeDocument,    ///< Element is the document ( \<DOC\> )
-    KWord13TypePaper,       ///< \<PAPER\>
-    KWord13TypeFrameset,    ///< \<FRAMESET\> (with exceptions)
-    KWord13TypeUnknownFrameset, ///< a \<FRAMESET\> which is not supported
-    KWord13TypeParagraph,   ///< \<PARAGRAPH\>
-    KWord13TypeText,        ///< \<TEXT\>
-    KWord13TypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
-    KWord13TypeFormat,      ///< \<FORMAT\>, child of \<FORMATS\>
-    KWord13TypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
-    KWord13TypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
-    KWord13TypeVariable,        ///< \<FORMAT id="4"\> or \<VARIABLE\>
-    KWord13TypePicturesPlural,  ///< \<PICTURES\>, \<PIXMAPS\> or \<CLIPARTS\>
-    KWord13TypePictureFrameset, ///< \<FRAMESET typeInfo="2"\> (picture, image, clipart)
-    KWord13TypePicture,         ///<  \<PICTURE\>, \<IMAGE\> or \<CLIPART\>
-    KWord13TypeAnchor           ///< \<FORMAT id="6"\>
+enum Words13StackItemType {
+    Words13TypeUnknown  = 0,
+    Words13TypeBottom,      ///< Bottom of the stack
+    Words13TypeIgnore,      ///< Element is known but ignored
+    Words13TypeEmpty,       ///< Element is empty
+    Words13TypeDocument,    ///< Element is the document ( \<DOC\> )
+    Words13TypePaper,       ///< \<PAPER\>
+    Words13TypeFrameset,    ///< \<FRAMESET\> (with exceptions)
+    Words13TypeUnknownFrameset, ///< a \<FRAMESET\> which is not supported
+    Words13TypeParagraph,   ///< \<PARAGRAPH\>
+    Words13TypeText,        ///< \<TEXT\>
+    Words13TypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
+    Words13TypeFormat,      ///< \<FORMAT\>, child of \<FORMATS\>
+    Words13TypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
+    Words13TypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
+    Words13TypeVariable,        ///< \<FORMAT id="4"\> or \<VARIABLE\>
+    Words13TypePicturesPlural,  ///< \<PICTURES\>, \<PIXMAPS\> or \<CLIPARTS\>
+    Words13TypePictureFrameset, ///< \<FRAMESET typeInfo="2"\> (picture, image, clipart)
+    Words13TypePicture,         ///<  \<PICTURE\>, \<IMAGE\> or \<CLIPART\>
+    Words13TypeAnchor           ///< \<FORMAT id="6"\>
 };
 
-class KWord13StackItem
+class Words13StackItem
 {
 public:
-    KWord13StackItem();
-    ~KWord13StackItem();
+    Words13StackItem();
+    ~Words13StackItem();
 public:
     QString itemName;   ///< Name of the tag (only for error purposes)
-    KWord13StackItemType elementType;
-    KWord13Frameset* m_currentFrameset;
+    Words13StackItemType elementType;
+    Words13Frameset* m_currentFrameset;
 };
 
-class KWord13StackItemStack : public Q3PtrStack<KWord13StackItem>
+class Words13StackItemStack : public Q3PtrStack<Words13StackItem>
 {
 public:
-    KWord13StackItemStack(void) { }
-    ~KWord13StackItemStack(void) { }
+    Words13StackItemStack(void) { }
+    ~Words13StackItemStack(void) { }
 };
 
-class KWord13Parser : public QXmlDefaultHandler
+class Words13Parser : public QXmlDefaultHandler
 {
 public:
-    explicit KWord13Parser(KWord13Document* kwordDocument);
-    virtual ~KWord13Parser(void);
+    explicit Words13Parser(Words13Document* kwordDocument);
+    virtual ~Words13Parser(void);
 protected: //QXml
     /// Process opening tag
     virtual bool startElement(const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
@@ -92,28 +92,28 @@ protected: //QXml
     virtual bool fatalError(const QXmlParseException& exception);
 protected:
     /// Process children of \<FORMAT id="1"\>
-    bool startElementFormatOneProperty(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementFormatOneProperty(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process children of \<LAYOUT\> (with exceptions)
-    bool startElementLayoutProperty(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementLayoutProperty(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process \<NAME\>
-    bool startElementName(const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementName(const QString&, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process \<FORMAT\>
-    bool startElementFormat(const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementFormat(const QString&, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process \<LAYOUT\> and \<STYLE\>
-    bool startElementLayout(const QString&, const QXmlAttributes&, KWord13StackItem *stackItem);
+    bool startElementLayout(const QString&, const QXmlAttributes&, Words13StackItem *stackItem);
     /// Process \<PARAGRAPH\>
-    bool startElementParagraph(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementParagraph(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process \<FRAME\>
-    bool startElementFrame(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementFrame(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process \<FRAMESET\>
-    bool startElementFrameset(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementFrameset(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process opening tag of some elements that are children of \<DOC\> and which only define document properties
     bool startElementDocumentAttributes(const QString& name, const QXmlAttributes& attributes,
-                                        KWord13StackItem *stackItem, const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType);
+                                        Words13StackItem *stackItem, const Words13StackItemType& allowedParentType, const Words13StackItemType& newType);
     /// Process \<KEY\>
-    bool startElementKey(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementKey(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /// Process \<ANCHOR\>
-    bool startElementAnchor(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementAnchor(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem);
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *
@@ -125,11 +125,11 @@ protected:
                                 const QString& microsecond) const;
 protected:
     QString indent; //DEBUG
-    KWord13StackItemStack parserStack;
-    KWord13Document* m_kwordDocument;
-    KWord13Paragraph* m_currentParagraph; ///< Current paragraph
-    KWord13Layout* m_currentLayout; ///< Current layout (or style)
-    KWord13Format* m_currentFormat; ///< Current format
+    Words13StackItemStack parserStack;
+    Words13Document* m_kwordDocument;
+    Words13Paragraph* m_currentParagraph; ///< Current paragraph
+    Words13Layout* m_currentLayout; ///< Current layout (or style)
+    Words13Format* m_currentFormat; ///< Current format
 };
 
-#endif // KWORD_1_3_PARSER_H
+#endif // WORDS_1_3_PARSER_H

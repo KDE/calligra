@@ -192,9 +192,9 @@ public:
     QDomElement docroot();
 
     /**
-     * creates a KWord Variable (Link, ...)
+     * creates a Words Variable (Link, ...)
      **/
-    void appendKWordVariable(QDomDocument& doc, QDomElement& format,
+    void appendWordsVariable(QDomDocument& doc, QDomElement& format,
                              const QString& text, const QString& key, int type, QDomElement& child);
 
 private:

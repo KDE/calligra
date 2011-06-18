@@ -1,5 +1,5 @@
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000, 2002 Robert JACOLIN
 **
@@ -34,17 +34,17 @@ class Xml2LatexParser : public XmlParser
     QTextStream _out;
     /** Name of the latex file. */
     //QString  _filename;
-    /** The KWord document exported. */
+    /** The Words document exported. */
     const KoStore* _in;
 
-    /** KWord document header. */
+    /** Words document header. */
     //FileHeader  _header;
-    /** The root class which contains one kword document. */
+    /** The root class which contains one words document. */
     Document    _document;
 
 public:
     /**
-     * @param in The document from kword.
+     * @param in The document from words.
      * @param fileOut Output latex filename.
      * @param config ???
      */

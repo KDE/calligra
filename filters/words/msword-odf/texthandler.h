@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -60,7 +60,7 @@ class PAP;
 }
 }
 
-class KWordReplacementHandler : public wvWare::InlineReplacementHandler
+class WordsReplacementHandler : public wvWare::InlineReplacementHandler
 {
 public:
     virtual wvWare::U8 hardLineBreak();
@@ -69,12 +69,12 @@ public:
 };
 
 
-class KWordTextHandler : public QObject, public wvWare::TextHandler
+class WordsTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~KWordTextHandler() { }
+    WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    ~WordsTextHandler() { }
 
     //////// TextHandler interface
 
@@ -162,7 +162,7 @@ signals:
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void tableFound(KWord::Table* table);
+    void tableFound(Words::Table* table);
     void inlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
     void floatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
 /*     void updateListDepth(int); */
@@ -194,7 +194,7 @@ private:
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
 
-    KWord::Table* m_currentTable;
+    Words::Table* m_currentTable;
     Paragraph *m_paragraph; //pointer to paragraph object
 
     // The 1st font color not set to cvAuto from the built-in styles hierarchy
@@ -232,7 +232,7 @@ private:
 
     //save/restore (very similar to the wv2 method)
     struct State {
-        State(KWord::Table* table, Paragraph* paragraph,
+        State(Words::Table* table, Paragraph* paragraph,
               QString listStyleName, int listDepth, int listID,
               const QMap<int, QString> &prevLists,
               KoXmlWriter* drawingWriter, bool insideDrawing) :
@@ -246,7 +246,7 @@ private:
             drawingWriter(drawingWriter),
             insideDrawing(insideDrawing)
         {}
-        KWord::Table* table;
+        Words::Table* table;
         Paragraph* paragraph;
         QString listStyleName;
         int listDepth; //tells us which list level we're on (-1 if not in a list)

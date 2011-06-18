@@ -2,7 +2,7 @@
    Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
-   Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2007 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -3109,7 +3109,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
             }
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
             else if (tagName == "object") {
-                EmbeddedKOfficeObject *ch = new EmbeddedKOfficeObject(doc(), this);
+                EmbeddedCalligraObject *ch = new EmbeddedCalligraObject(doc(), this);
                 if (ch->load(e))
                     insertObject(ch);
                 else {
@@ -3161,9 +3161,9 @@ bool Sheet::loadChildren(KoStore* _store)
     Q_UNUSED(_store);
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
-        if (object->sheet() == this && (object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART)) {
+        if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
             kDebug() << "Calligra::Tables::Sheet::loadChildren";
-            if (!dynamic_cast<EmbeddedKOfficeObject*>(object)->embeddedObject()->loadDocument(_store))
+            if (!dynamic_cast<EmbeddedCalligraObject*>(object)->embeddedObject()->loadDocument(_store))
                 return false;
         }
     }
@@ -3263,9 +3263,9 @@ bool Sheet::saveChildren(KoStore* _store, const QString &_path)
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
     int i = 0;
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
-        if (object->sheet() == this && (object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART)) {
+        if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
             QString path = QString("%1/%2").arg(_path).arg(i++);
-            if (!dynamic_cast<EmbeddedKOfficeObject*>(object)->embeddedObject()->document()->saveToStore(_store, path))
+            if (!dynamic_cast<EmbeddedCalligraObject*>(object)->embeddedObject()->document()->saveToStore(_store, path))
                 return false;
         }
     }

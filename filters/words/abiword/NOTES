@@ -1,6 +1,6 @@
 1. Welcome
 
- Welcome to KWord's AbiWord import/export filter.
+ Welcome to Words's AbiWord import/export filter.
 
  For now, this file is just a storage for some technical notes.
 
@@ -11,7 +11,7 @@
 
  See the file FileFormats.html for an overview!
 
- The AbiWord filter for KWord *must* be able to read all those formats. A user
+ The AbiWord filter for Words *must* be able to read all those formats. A user
  will not be happy if you tell him that his sub-version is not supported!
 
  However to make it easier all these formats differ mainly only in the header.

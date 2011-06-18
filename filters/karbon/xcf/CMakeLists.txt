@@ -35,7 +35,7 @@ install( FILES  karbon_xcf_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #	../../../karbon/libkarboncommon.la
 #
 #INCLUDES = \
-#	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
+#	$(CALLIGRA_INCLUDES) $(KOPAINTER_INCLUDES) \
 #	-I$(top_srcdir)/karbon \
 #	-I$(top_srcdir)/karbon/core \
 #	-I$(top_srcdir)/karbon/render \

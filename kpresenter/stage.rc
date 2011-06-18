@@ -8,8 +8,8 @@
   <Action name="extra_defaulttemplate"/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="koffice_undo"/>
-  <Action name="koffice_redo"/>
+  <Action name="calligra_undo"/>
+  <Action name="calligra_redo"/>
   <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
@@ -187,8 +187,8 @@
 <ToolBar name="mainToolBar"><Text>File</Text>
 </ToolBar>
 <ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>
-  <Action name="koffice_undo"/>
-  <Action name="koffice_redo"/>
+  <Action name="calligra_undo"/>
+  <Action name="calligra_redo"/>
   <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>

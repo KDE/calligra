@@ -19,11 +19,11 @@
 
 /*
    This file is based on the file :
-    koffice/filters/kword/html/htmlexportdia.h
+    calligra/filters/words/html/htmlexportdia.h
  Copyright (C) 2001 Nicolas Goutte <goutte@kde.org>
 
    which was based on the old file:
-    /home/kde/koffice/filters/kspread/csv/csvfilterdia.h
+    /home/kde/calligra/filters/kspread/csv/csvfilterdia.h
 
    The old file was copyrighted by
     Copyright (C) 1999 David Faure <faure@kde.org>
@@ -72,7 +72,7 @@ public:
 
 private:
     QButtonGroup* styleBox,       *langBox,        *docBox;
-    QRadioButton*  latexStyleRBtn, *kwordStyleRBtn; /* Document style */
+    QRadioButton*  latexStyleRBtn, *wordsStyleRBtn; /* Document style */
     QRadioButton*  unicodeRBtn,    *latin1RBtn;  /* Language       */
     QRadioButton*  newDocRBtn,     *embededRBtn; /* Latex file     */
 

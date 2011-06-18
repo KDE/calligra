@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
 
    Copyright (C) 2009 Benjamin Cail <cricketc@gmail.com>
 
@@ -142,7 +142,7 @@ private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
 
     // ODF styles.  The MS equivalents are below.
-    KoGenStyle* m_odfParagraphStyle; //pointer to KOffice structure for paragraph formatting
+    KoGenStyle* m_odfParagraphStyle; //pointer to Calligra structure for paragraph formatting
     KoGenStyle* m_odfParagraphStyle2; //place to store original style when we have an inner paragraph
     KoGenStyles* m_mainStyles; //pointer to style collection for this document
 

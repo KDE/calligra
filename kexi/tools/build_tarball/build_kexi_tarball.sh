@@ -12,7 +12,7 @@ DIRNAME=`pwd`/`dirname $0`
 cd $DIRNAME
 
 # General
-MODULE=koffice
+MODULE=calligra
 PROJECT=kexi
 PROJECT_TITLE=Kexi
 MODULE_PATH=trunk/$MODULE
@@ -22,7 +22,7 @@ MODULE_PATH=trunk/$MODULE
 KDESOURCEDIR=branches/KDE/3.5
 KDEADMIN_PATH=$KDESOURCEDIR/kde-common/admin
 
-PROJECT_PATH=koffice/kexi
+PROJECT_PATH=calligra/kexi
 #For versions in a branch:
 PROJECT_VER=1.0
 #PROJECT_PATH=branches/kexi/$PROJECT_VER
@@ -53,7 +53,7 @@ echo $DIST_VER | grep -e "beta" -e "rc" \
 
 fixAppSpecific()
 {
-	rm -f ../changes-* #remove koffice-specific changelog
+	rm -f ../changes-* #remove calligra-specific changelog
 	mv CHANGES ../
 	echo "For complete list of authors see kexi/main/kexiaboutdata.h file or use \"Help->About Kexi\" menu command." > ../AUTHORS
 }
@@ -122,17 +122,17 @@ if ! [ -e $DESTINATION/source/$MODULE ]; then
 	echo "$SVN_PROGRAM co $SVN_HOST/$KDEADMIN_PATH" >> $DESTINATION/LOG
 	$SVN_PROGRAM co $SVN_HOST/$KDEADMIN_PATH >> $DESTINATION/LOG 2>&1 || exit 1
 
-  # Get KOffice top-level dir
+  # Get Calligra top-level dir
 	echo "$SVN_PROGRAM co -N $SVN_HOST/$MODULE_PATH" >> $DESTINATION/LOG
 	$SVN_PROGRAM co -N $SVN_HOST/$MODULE_PATH >> $DESTINATION/LOG 2>&1 || exit 1
 
-  # Get KoProperty, KOffice{Core|UI} and KROSS from lib
+  # Get KoProperty, Calligra{Core|UI} and KROSS from lib
 	echo "cd $MODULE && $SVN_PROGRAM up -N lib ; cd .. " >> $DESTINATION/LOG
 	(cd $MODULE && $SVN_PROGRAM up -N lib ; cd .. )  >> $DESTINATION/LOG 2>&1 || exit 1
 	echo "cd $MODULE/lib && $SVN_PROGRAM up koproperty ; cd .." >> $DESTINATION/LOG
 	(cd $MODULE/lib && $SVN_PROGRAM up koproperty ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
-	echo "cd $MODULE/lib && $SVN_PROGRAM up kofficecore ; cd .." >> $DESTINATION/LOG
-	(cd $MODULE/lib && $SVN_PROGRAM up kofficecore ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
+	echo "cd $MODULE/lib && $SVN_PROGRAM up calligracore ; cd .." >> $DESTINATION/LOG
+	(cd $MODULE/lib && $SVN_PROGRAM up calligracore ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
 	echo "cd $MODULE/lib && $SVN_PROGRAM up kross ; cd .." >> $DESTINATION/LOG
 	(cd $MODULE/lib && $SVN_PROGRAM up kross ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
 

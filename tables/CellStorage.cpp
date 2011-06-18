@@ -32,7 +32,7 @@
 // KDE
 #include <klocale.h>
 
-// KOffice
+// Calligra
 #include <KoXmlWriter.h>
 
 // KSpread

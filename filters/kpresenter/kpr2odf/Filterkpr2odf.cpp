@@ -38,7 +38,7 @@
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
-//KOffice includes
+//Calligra includes
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoDocumentInfo.h>

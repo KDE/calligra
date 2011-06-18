@@ -22,10 +22,10 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 static const char* FLOW_DESCRIPTION = I18N_NOOP("Calligra Flowchart And Diagram Tool");
-static const char* FLOW_VERSION = KOFFICE_VERSION_STRING;
+static const char* FLOW_VERSION = CALLIGRA_VERSION_STRING;
 
 KAboutData* newFlowAboutData()
 {

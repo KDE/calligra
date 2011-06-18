@@ -147,7 +147,7 @@ kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 target_link_libraries(calligrastageprivate kopageapp kowidgets textlayout ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
-set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### calligrastagepart ###
