@@ -634,7 +634,7 @@ void WordsGraphicsHandler::parseOfficeArtContainer()
 int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
 {
     kDebug(30513);
-
+/*
     if (!blipStore) return(1);
 
     // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
@@ -707,14 +707,14 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
             }
         }
     }
-
-    return(0);
+*/
+    return 0;
 }
 
 QString WordsGraphicsHandler::getPicturePath(quint32 pib) const
 {
     quint32 offset = 0;
-    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, pib, offset);
+    QByteArray rgbUid = getRgbUid(*m_officeArtDggContainer, pib, offset);
 
     if (rgbUid.length()) {
         if (m_picNames.contains(rgbUid)) {
@@ -731,7 +731,7 @@ void WordsGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
     // write style <style:default-style style:family="graphic">
     KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
     style.setDefaultStyle(true);
-    DrawStyle ds(&m_officeArtDggContainer);
+    DrawStyle ds(m_officeArtDggContainer);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, *styles);
@@ -871,7 +871,7 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    DrawStyle ds(m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -939,7 +939,7 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    DrawStyle ds(m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -987,7 +987,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    DrawStyle ds(m_officeArtDggContainer, 0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -1067,7 +1067,7 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    DrawStyle ds(m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);

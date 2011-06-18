@@ -138,7 +138,7 @@ const MSO::OfficeArtDggContainer*
 WordsGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
 {
 #ifdef USE_OFFICEARTDGG_CONTAINER
-    return &gh->m_officeArtDggContainer;
+    return gh->m_officeArtDggContainer;
 #else
     return 0;
 #endif
