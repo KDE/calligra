@@ -2,6 +2,11 @@
 
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
+find_library(QT_QTWEBKIT_LIBRARY)
+
+#if(QT_QTWEBKIT_FOUND)
+  add_subdirectory(webbrowser)
+
 
 ########### next target ###############
 
