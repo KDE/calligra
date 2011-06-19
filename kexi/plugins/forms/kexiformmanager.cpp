@@ -249,7 +249,9 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << ":library_widget_KFDTabWidget"
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
             << ":library_widget_Spring"
+	     << ":library_widget_WebBrowserWidget"
 #endif
+           
             << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();
@@ -550,3 +552,4 @@ void KexiFormManager::slotPointerClicked()
 }
 
 #include "kexiformmanager.moc"
+
