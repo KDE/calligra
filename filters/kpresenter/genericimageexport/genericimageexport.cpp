@@ -17,21 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Own
+#include "genericimageexport.h"
+
+// Qt
 #include <QPixmap>
 #include <QPainter>
 
+// KDE
 #include <kmessagebox.h>
 
+// Calligra
 #include <KoFilterChain.h>
 #include <KoStore.h>
 #include <kpluginfactory.h>
 #include <KoDocument.h>
 #include <exportsizedia.h>
 
+// Stage
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include "KPrCanvas.h"
-#include "genericimageexport.h"
+
 
 K_PLUGIN_FACTORY(GenericImageExportFactory, registerPlugin<GenericImageExport>();)
 K_EXPORT_PLUGIN(GenericImageExportFactory("genericimageexport"))

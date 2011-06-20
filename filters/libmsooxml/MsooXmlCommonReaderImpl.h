@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -32,8 +32,6 @@ void MSOOXML_CURRENT_CLASS::initInternal()
     m_hasPosOffsetV = false;
     m_posOffsetH = 0;
     m_posOffsetV = 0;
-    m_currentTextStylePredefined = false;
-    m_currentParagraphStylePredefined = false;
     m_currentTextStyleProperties = 0;
 }
 

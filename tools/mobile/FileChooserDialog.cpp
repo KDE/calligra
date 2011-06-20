@@ -51,7 +51,7 @@ void FileChooserDialog::initUi()
     fileChooser->spreadsheetView->setRootIndex(fileModel->index(startDir));
     connect(fileChooser->spreadsheetView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeRootIndex(QModelIndex)));
     fileModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::AllDirs);
-    fileModel->setNameFilterDisables(true);
+    fileModel->setNameFilterDisables(false);
 }
 
 void FileChooserDialog::updateRecentDocumentModel()
@@ -153,7 +153,7 @@ int FileChooserDialog::checkFileType(QString ext)
         return WORDS;
     else if (stageExtensions.contains(ext))
         return STAGE;
-    else if (tableExtensions.contains("ext"))
+    else if (tableExtensions.contains(ext))
         return TABLES;
 
     return UNKNOWN;

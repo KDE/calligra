@@ -3,7 +3,7 @@
  * OR FOR SPECIAL PARAG.
  */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2002, 2003 Robert JACOLIN
 **
@@ -23,8 +23,8 @@
 **
 */
 
-#ifndef __KWORD_VARIABLEZONE_H__
-#define __KWORD_VARIABLEZONE_H__
+#ifndef __WORDS_VARIABLEZONE_H__
+#define __WORDS_VARIABLEZONE_H__
 
 #include <QTextStream>
 #include <QString>
@@ -72,4 +72,4 @@ public:
 
 };
 
-#endif /* __KWORD_VARIABLEZONE_H__ */
+#endif /* __WORDS_VARIABLEZONE_H__ */

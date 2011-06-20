@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Dag Andersen <koffice-devel@kde.org
+   Copyright (C) 2009 Dag Andersen <calligra-devel@kde.org
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,8 +58,8 @@ MacroCommand *TaskDescriptionPanel::buildCommand()
     MacroCommand *cmd = new MacroCommand(s);
     bool modified = false;
 
-    if ( m_node.description() != descriptionfield->toPlainText() ) {
-        cmd->addCommand(new NodeModifyDescriptionCmd(m_node, descriptionfield->toPlainText()));
+    if ( m_node.description() != descriptionfield->textOrHtml() ) {
+        cmd->addCommand(new NodeModifyDescriptionCmd(m_node, descriptionfield->textOrHtml()));
         modified = true;
     }
     if (!modified) {

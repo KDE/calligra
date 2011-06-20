@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Service
+Name=OpenOffice.org Writer Import Filter for Words
+Name[pt]=Filtro de Importação do OpenOffice.org Writer para o Words
+Name[pt_BR]=Filtro de importação de OpenOffice.org Writer para o Words
+Name[sv]=OpenOffice.org Writer-importfilter för Words
+Name[uk]=Фільтр імпорту OpenOffice.org Writer для Words
+Name[x-test]=xxOpenOffice.org Writer Import Filter for Wordsxx
+X-KDE-Export=application/x-words
+X-KDE-Import=application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.master
+X-KDE-Weight=1
+X-KDE-Library=oowriterimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+X-KDE-ServiceTypes=CalligraFilter

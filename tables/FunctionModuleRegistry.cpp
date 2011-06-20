@@ -88,7 +88,7 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 
 void FunctionModuleRegistry::loadFunctionModules()
 {
-    const quint32 minKSpreadVersion = KOFFICE_MAKE_VERSION(2, 1, 0);
+    const quint32 minKSpreadVersion = CALLIGRA_MAKE_VERSION(2, 1, 0);
     const QString serviceType = QLatin1String("CalligraTables/Plugin");
     const QString query = QLatin1String("([X-CalligraTables-InterfaceVersion] == 0) and "
                                         "([X-KDE-PluginInfo-Category] == 'FunctionModule')");

@@ -118,6 +118,7 @@ void KPrPicturesImport::pictureImported(KJob *job)
         }
         else {
             kWarning(33001) << "imageData not valid";
+            delete shape;
         }
     }
     else {

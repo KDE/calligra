@@ -22,7 +22,7 @@
 #define KWVIEWMODEPREVIEW_H
 
 #include "KWViewMode.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <QString>
 
@@ -30,7 +30,7 @@
  * A mode for previewing the overall document
  * Pages are organized in a grid (mostly useful with low zoom levels)
  */
-class KWORD_EXPORT KWViewModePreview : public KWViewMode
+class WORDS_EXPORT KWViewModePreview : public KWViewMode
 {
     Q_OBJECT
 public:
@@ -38,8 +38,8 @@ public:
     explicit KWViewModePreview();
     ~KWViewModePreview() {}
 
-    virtual QPointF documentToView(const QPointF &point) const;
-    virtual QPointF viewToDocument(const QPointF &point) const;
+    virtual QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const;
+    virtual QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const;
     virtual QSizeF contentsSize() const;
 
     /**
@@ -65,7 +65,7 @@ public:
     const QString type() const {
         return KWViewModePreview::viewMode();
     }
-    QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
+    QList<ViewMap> mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const;
 
     /// set the gap between the pages
     void setGap(int gap);

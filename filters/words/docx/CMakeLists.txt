@@ -18,6 +18,7 @@ set(docximport_PART_SRCS
     DocxXmlNumberingReader.cpp
     DocxXmlFootnoteReader.cpp
     DocxXmlEndnoteReader.cpp
+    DocxXmlSettingsReader.cpp
     DocxImport.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/XlsxXmlChartReader.cpp
@@ -61,7 +62,7 @@ ENDIF(FALSE)
 ########### install files ###############
 
 install( FILES 
-  kword_docx_import.desktop
-#todo  kword_docx_export.desktop
+  words_docx_import.desktop
+#todo  words_docx_export.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )

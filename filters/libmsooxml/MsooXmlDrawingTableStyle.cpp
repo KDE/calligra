@@ -36,11 +36,16 @@ DrawingTableStyleConverter::~DrawingTableStyleConverter()
 
 void DrawingTableStyleConverter::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
-    if(!m_style) {
+    if (!m_style) {
         return;
     }
 
-    TableStyleProperties* const styleProperties = m_style->properties(type);
+    TableStyleProperties* styleProperties = m_style->properties(type);
+
+    if (type == DrawingTableStyle::WholeTbl) {
+        styleProperties->bordersToEdgesOnly = true;
+    }
+
     TableStyleConverter::applyStyle(styleProperties, style, row, column);
 }
 
@@ -148,7 +153,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 
     if (role & DrawingTableStyleConverterProperties::LastRow) {
         if(row == lastRow) {
-            applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::LastRow, cellStyle, row, column);
         }
     }
 
@@ -166,25 +171,25 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 
     if(role & DrawingTableStyleConverterProperties::NeCell) {
         if(row == 0 && column == 0) {
-            applyStyle(DrawingTableStyle::NwCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::NeCell, cellStyle, row, column);
         }
     }
 
     if(role & DrawingTableStyleConverterProperties::NwCell) {
         if(row == 0 && column == lastColumn) {
-            applyStyle(DrawingTableStyle::NeCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::NwCell, cellStyle, row, column);
         }
     }
 
     if(role & DrawingTableStyleConverterProperties::SeCell) {
         if(row == lastRow && column == 0) {
-            applyStyle(DrawingTableStyle::SwCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::SeCell, cellStyle, row, column);
         }
     }
 
     if(role & DrawingTableStyleConverterProperties::SwCell) {
         if(row == lastRow && column == lastColumn) {
-            applyStyle(DrawingTableStyle::SeCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::SwCell, cellStyle, row, column);
         }
     }
 

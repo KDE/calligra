@@ -347,9 +347,9 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
         if (cview->masterTable() == c || cview->detailsTable() == c
                 || cview->connectionRect().intersects(r)) {
             r |= cview->oldRect();
-            kDebug() << r;
+            //kDebug() << r;
             r |= cview->connectionRect();
-            kDebug() << r;
+            //kDebug() << r;
         }
 //   updateContents(cview->oldRect());
 //   updateContents(cview->connectionRect());

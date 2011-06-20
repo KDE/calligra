@@ -32,7 +32,7 @@
 // KDE
 #include <klocale.h>
 
-// KOffice
+// Calligra
 #include <KoXmlWriter.h>
 
 // KSpread
@@ -1649,6 +1649,11 @@ const LinkStorage* CellStorage::linkStorage() const
 const StyleStorage* CellStorage::styleStorage() const
 {
     return d->styleStorage;
+}
+
+const UserInputStorage* CellStorage::userInputStorage() const
+{
+    return d->userInputStorage;
 }
 
 const ValidityStorage* CellStorage::validityStorage() const

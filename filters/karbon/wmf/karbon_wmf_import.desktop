@@ -62,4 +62,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/x-wmf
 X-KDE-Weight=1
 X-KDE-Library=wmfimport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

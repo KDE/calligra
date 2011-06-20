@@ -1,6 +1,6 @@
 
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -46,6 +46,8 @@ public:
     QString target(const QString& path, const QString& file, const QString& id);
 
     QString targetForType(const QString& path, const QString& file, const QString& relType);
+
+    unsigned targetCountWithWord(const QString& searchTerm);
 
 private:
     class Private;

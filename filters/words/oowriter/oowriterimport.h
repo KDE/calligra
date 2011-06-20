@@ -54,7 +54,7 @@ private:
     void applyListStyle(QDomDocument& doc, QDomElement& layoutElement, const KoXmlElement& paragraph);
     void writeCounter(QDomDocument& doc, QDomElement& layoutElement, bool heading, int level, bool ordered);
     QDomElement parseParagraph(QDomDocument& doc, const KoXmlElement& paragraph);
-    void parseSpanOrSimilar(QDomDocument& doc, const KoXmlElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
+    void parseSpanOrSimilar(QDomDocument& doc, const KoXmlElement& parent, QDomElement& wordsParagraph, QDomElement& wordsFormats, QString& paragraphText, uint& pos);
     // Reads from m_styleStack, writes the text properties to parentElement
     void writeFormat(QDomDocument& doc, QDomElement& parentElement, int id, int pos, int length);
     // Reads from m_styleStack, writes the paragraph properties to layoutElement
@@ -82,14 +82,14 @@ private:
     void importHeaderFooter(QDomDocument& doc, const KoXmlElement& headerFooter, bool isHeader, KoXmlElement& style);
     void anchorFrameset(QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName);
     void appendField(QDomDocument& doc, QDomElement& outputFormats, const KoXmlElement& object, uint pos);
-    void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const KoXmlElement& object, uint pos,
+    void appendWordsVariable(QDomDocument& doc, QDomElement& formats, const KoXmlElement& object, uint pos,
                              const QString& key, int type, QDomElement& child);
     void appendBookmark(QDomDocument& doc, int paragId, int pos, const QString& name);
     void appendBookmark(QDomDocument& doc, int paragId, int pos, int endParagId, int endPos, const QString& name);
     void parseTable(QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement);
     void parseInsideOfTable(QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement,
                             const QString& tableName, const QVector<double> & columnLefts, uint& row, uint& column);
-    static QString kWordStyleName(const QString& ooStyleName);
+    static QString WordsStyleName(const QString& ooStyleName);
 
     KoXmlDocument   m_content;
     KoXmlDocument   m_meta;

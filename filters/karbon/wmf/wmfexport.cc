@@ -18,7 +18,7 @@
 */
 
 #include "wmfexport.h"
-#include <kowmfwrite.h>
+#include <WmfWriter.h>
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -34,7 +34,7 @@
 #include <KoPatternBackground.h>
 
 /*
-TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
+TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */
 
 K_PLUGIN_FACTORY(WmfExportFactory, registerPlugin<WmfExport>();)
@@ -64,7 +64,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
         return KoFilter::WrongFormat;
 
     // open Placeable Wmf file
-    mWmf = new KoWmfWrite(m_chain->outputFile());
+    mWmf = new Libwmf::WmfWriter(m_chain->outputFile());
     if (!mWmf->begin()) {
         delete mWmf;
         return KoFilter::WrongFormat;

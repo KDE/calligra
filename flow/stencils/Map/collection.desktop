@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=Map
+Name[el]=Χάρτης
 Name[et]=Kaart
+Name[nb]=Kart
 Name[pt]=Mapa
 Name[pt_BR]=Mapa
 Name[sv]=Karta
+Name[ug]=خەرىتە
 Name[uk]=Карта
 Name[x-test]=xxMapxx
 X-KDE-DirType=odg-collection

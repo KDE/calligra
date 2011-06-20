@@ -152,6 +152,6 @@ X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.chart,application
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.koffice.kchart
+X-DBUS-ServiceName=org.calligra.kchart
 Categories=Qt;KDE;Office;X-KDE-More;
 X-DocPath=kchart/index.html

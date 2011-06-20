@@ -9,7 +9,7 @@ if(OOOSDK_FOUND)
 		../../filters/libmso
 	)
 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -fPIC")
 
 	QT4_WRAP_CPP(MOCFILES slideview.h combinedview.h slideloader.h
 		dirslideloader.h oothread.h)

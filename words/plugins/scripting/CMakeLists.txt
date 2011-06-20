@@ -6,13 +6,13 @@ include_directories(
 
 add_subdirectory( scripts )
 
-set(krossmodulekword_PART_SRCS
+set(krossmodulewords_PART_SRCS
 	Module.cpp
 	TextCursor.cpp
 	KWScriptingPart.cpp
 )
 
-qt4_wrap_cpp(krossmodulekword_PART_SRCS
+qt4_wrap_cpp(krossmodulewords_PART_SRCS
 	Page.h PageLayout.h
 	Style.h
 	TextDocument.h TextFrame.h TextList.h TextTable.h
@@ -20,8 +20,8 @@ qt4_wrap_cpp(krossmodulekword_PART_SRCS
 	Tool.h
 )
 
-kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
-target_link_libraries(krossmodulekword kokross wordsprivate)
-install(TARGETS krossmodulekword DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES krossmodulekword.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kde4_add_plugin(krossmodulewords ${krossmodulewords_PART_SRCS})
+target_link_libraries(krossmodulewords kokross wordsprivate)
+install(TARGETS krossmodulewords DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES krossmodulewords.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Concatenated Payload
+Name[el]=Συγκέντρωση φόρτου
+Name[nb]=Sammensatt nyttelast
 Name[pt]=Dados Concatenados
 Name[pt_BR]=Dados concatenados
 Name[sv]=Sammansatt nyttolast
 Name[uk]=З'єднане навантаження
 Name[x-test]=xxConcatenated Payloadxx
+Name[zh_TW]=串接負載

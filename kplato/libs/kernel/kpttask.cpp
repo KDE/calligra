@@ -802,7 +802,7 @@ EffortCostMap Task::bcwpPrDay( long int id, KPlato::EffortCostCalculationType ty
             e.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
         }
         // add bcwp startup/shutdown cost
-        if ( m_shutdownCost > 0.0 && completion().isFinished() ) {
+        if ( m_shutdownCost > 0.0 && completion().finishIsValid() ) {
             QDate finish = completion().finishTime().date();
             e.addBcwpCost( finish, m_shutdownCost );
             kDebug()<<"addBcwpCost:"<<finish<<m_shutdownCost;
@@ -815,7 +815,7 @@ EffortCostMap Task::bcwpPrDay( long int id, KPlato::EffortCostCalculationType ty
                 }
             }
         }
-        if ( m_startupCost > 0.0 && completion().isStarted() ) {
+        if ( m_startupCost > 0.0 && completion().startIsValid() ) {
             QDate start = completion().startTime().date();
             e.addBcwpCost( start, m_startupCost );
             // bcwp is cumulative so add to all entries after start

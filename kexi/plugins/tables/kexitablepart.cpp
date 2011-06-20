@@ -52,20 +52,17 @@ public:
     QPointer<KexiLookupColumnPage> lookupColumnPage;
 };
 
-KexiTablePart::KexiTablePart(QObject *parent, const QVariantList&l)
-        : KexiPart::Part(parent, l)
-        , d(new Private())
+KexiTablePart::KexiTablePart(QObject *parent, const QVariantList& l)
+  : KexiPart::Part(parent,
+        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+              "Use '_' character instead of spaces. First character should be a..z character. "
+              "If you cannot use latin characters in your language, use english word.",
+              "table"),
+        i18nc("tooltip", "Create new table"),
+        i18nc("what's this", "Creates new table."),
+        l)
+  , d(new Private)
 {
-    kDebug();
-    setInternalPropertyValue("instanceName",
-                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                   "Use '_' character instead of spaces. First character should be a..z character. "
-                                   "If you cannot use latin characters in your language, use english word.",
-                                   "table"));
-    setInternalPropertyValue("instanceCaption", i18n("Table"));
-    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new table"));
-    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new table."));
-    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
 //! @todo js: also add Kexi::TextViewMode when we'll have SQL ALTER TABLE EDITOR!!!
 }
 

@@ -9,8 +9,8 @@ data. All database objects - tables, queries and forms - are stored in the
 database, making it easy to share data and design.
 
 Kexi is Free/Libre/Open-Source Software. As a real member of the KDE and 
-KOffice projects, Kexi integrates fluently into both. It is designed to be 
-fully usable also without KDE on Linux/Unix and MS Windows platforms.
+Calligra Suite projects, Kexi integrates fluently into both. It is designed 
+to be fully usable also without KDE on Linux/Unix and MS Windows platforms.
 
 Kexi is considered as a long awaited Open Source competitor for Microsoft 
 Access, FileMaker and Oracle Forms. Its development is motivated by the 
@@ -26,18 +26,17 @@ Developers: http://kexi-project.org/contact.html
 Kexi (users and developers) mailing list: kexi@kde.org
    (subscribe at https://mail.kde.org/mailman/listinfo/kexi)
 
-DISABLED: Developer and advanced user mailing list: kexi-devel@kde.org
-DISABLED:   (subscribe at https://mail.kde.org/mailman/listinfo/kexi)
-
-If you have questions about this README file or about KOffice in general,
-please mail to the KOffice users mailing list: koffice@kde.org
-   (subscribe at https://mail.kde.org/mailman/listinfo/koffice)
+If you have questions about this README file or about Calligra in general,
+please mail to the Calligra development mailing list: calligra-devel@kde.org
+(subscription required at
+ https://mail.kde.org/mailman/listinfo/calligra-devel)
+or visit Calligra Users Forum at http://forum.kde.org/viewforum.php?f=203
 
 
 Links:
 ======
-Kexi at KOffice.org: http://koffice.org/kexi/
-Kexi Project Home Page: http://kexi-project.org/
+Kexi at Calligra-Suite.org: http://www.calligra-suite.org/kexi
+Kexi Project Home Page: http://kexi-project.org
 
 --
 Have fun,

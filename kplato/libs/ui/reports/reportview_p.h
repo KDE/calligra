@@ -37,6 +37,7 @@ class RecordNavigator;
 class ScriptAdaptor;
 class ReportDesigner;
 
+class KToolBar;
 
 class QScrollArea;
 class QDomElement;
@@ -77,6 +78,8 @@ public slots:
 
 protected:
     ReportData *createReportData( const QString &type );
+    void populateToolbar( KToolBar *tb );
+
 };
 
 class ReportSourceModel : public QStandardItemModel

@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -195,7 +195,7 @@ void AcceleratorScrollSlide::beginSliding()
                         qDebug() << replyForVibratorController.errorMessage();
                     }
                 }
-                qDebug()<<"signal next is emited ";
+                qDebug()<<"signal next is emitted ";
                 emit next();
 
             }
@@ -208,7 +208,7 @@ void AcceleratorScrollSlide::beginSliding()
                         qDebug() << replyForVibratorController.errorMessage();
                     }
                 }
-                qDebug()<<"signal previous is emited ";
+                qDebug()<<"signal previous is emitted ";
                 emit previous();
 
             }

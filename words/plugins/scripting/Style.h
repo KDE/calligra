@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -229,7 +229,8 @@ public:
     enum ListStyle {
         None = KoListStyle::None,
         SquareItem = KoListStyle::SquareItem,
-        DiscItem = KoListStyle::DiscItem,
+        DiscItem = KoListStyle::Bullet,
+        Bullet = KoListStyle::Bullet,
         CircleItem = KoListStyle::CircleItem,
         DecimalItem = KoListStyle::DecimalItem,
         AlphaLowerItem = KoListStyle::AlphaLowerItem,

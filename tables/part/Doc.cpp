@@ -131,7 +131,7 @@ public:
     KoResourceManager *resourceManager;
 };
 
-// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+// Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
 /*****************************************************************************
@@ -171,7 +171,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
 
 Doc::~Doc()
 {
-    //don't save config when kword is embedded into konqueror
+    //don't save config when words is embedded into konqueror
     if (isReadWrite())
         saveConfig();
 

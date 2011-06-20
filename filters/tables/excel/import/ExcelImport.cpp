@@ -88,6 +88,10 @@
 K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
 K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 
+static const qreal SIDEWINDERPROGRESS = 40.0;
+static const qreal ODFPROGRESS = 40.0;
+static const qreal EMBEDDEDPROGRESS = 15.0;
+
 using namespace Swinder;
 using namespace XlsUtils;
 
@@ -139,6 +143,11 @@ static QString encodeAddress(const QString& sheetName, uint column, uint row)
 class ExcelImport::Private
 {
 public:
+    Private(ExcelImport *q)
+    : q(q)
+    {
+    }
+
     QString inputFile;
     Calligra::Tables::DocBase* outputDoc;
 
@@ -191,12 +200,14 @@ public:
 
     KoXmlWriter* beginMemoryXmlWriter(const char* docElement);
     KoXmlDocument endMemoryXmlWriter(KoXmlWriter* writer);
+
+    ExcelImport *q;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
-    d = new Private;
+    d = new Private(this);
     d->storeout = 0;
 }
 
@@ -241,7 +252,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
-    connect(d->workbook, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
+    connect(d->workbook, SIGNAL(sigProgress(int)), this, SLOT(slotSigProgress(int)));
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
         d->workbook = 0;
@@ -331,6 +342,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     store->disallowNameExpansion();
 
     KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
+
     d->processEmbeddedObjects(xmlDoc.documentElement(), store);
 
     // sheet background images
@@ -411,6 +423,32 @@ void ExcelImport::Private::processMetaData()
     // template
     // lastauthor
     // edittime
+
+    switch (workbook->version()) {
+    case Workbook::Excel95:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 95");
+        break;
+    case Workbook::Excel97:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 97");
+        break;
+    case Workbook::Excel2000:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2000");
+        break;
+    case Workbook::Excel2002:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2002");
+        break;
+    case Workbook::Excel2003:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2003");
+        break;
+    case Workbook::Excel2007:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2007");
+        break;
+    case Workbook::Excel2010:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2010");
+        break;
+    default:
+        info->setOriginalGenerator("Calligra xls Filter/Unknown");
+    }
 }
 
 void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store)
@@ -440,6 +478,8 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
     KoOdfLoadingContext odfContext(odfStyles, store);
     KoShapeLoadingContext shapeContext(odfContext, outputDoc->resourceManager());
 
+    int numSheetTotal = rootElement.childNodesCount();
+    int currentSheet = 0;
     KoXmlElement sheetElement;
     forEachElement(sheetElement, rootElement) {
         Q_ASSERT(sheetElement.namespaceURI() == KoXmlNS::table && sheetElement.localName() == "table");
@@ -447,6 +487,8 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
         Calligra::Tables::Sheet* sheet = outputDoc->map()->sheet(sheetId);
 
         KoXmlElement cellElement;
+        int numCellElements = sheetElement.childNodesCount();
+        int currentCell = 0;
         forEachElement(cellElement, sheetElement) {
             Q_ASSERT(cellElement.namespaceURI() == KoXmlNS::table);
             if (cellElement.localName() == "shapes") {
@@ -465,7 +507,16 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
                     cell.loadOdfObject(element, shapeContext);
                 }
             }
+            ++currentCell;
+            const int progress = int(currentSheet / qreal(numSheetTotal) * EMBEDDEDPROGRESS
+                               + (EMBEDDEDPROGRESS / qreal(numSheetTotal) * currentCell/numCellElements)
+                               + SIDEWINDERPROGRESS + ODFPROGRESS) + 0.5;
+            emit q->sigProgress(progress);
         }
+
+        ++currentSheet;
+        const int progress = int(currentSheet / qreal(numSheetTotal) * EMBEDDEDPROGRESS + SIDEWINDERPROGRESS + ODFPROGRESS + 0.5);
+        emit q->sigProgress(progress);
     }
 }
 
@@ -1305,8 +1356,8 @@ void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
 void ExcelImport::Private::addProgress(int addValue)
 {
     rowsCountDone += addValue;
-    const int progress = int(rowsCountDone / double(rowsCountTotal) * 100.0 + 0.5);
-    workbook->emitProgress(progress);
+    const int progress = int(rowsCountDone / qreal(rowsCountTotal) * ODFPROGRESS + 0.5 + SIDEWINDERPROGRESS);
+    emit q->sigProgress(progress);
 }
 
 KoXmlWriter* ExcelImport::Private::beginMemoryXmlWriter(const char* docElement)
@@ -1334,7 +1385,7 @@ KoXmlWriter* ExcelImport::Private::beginMemoryXmlWriter(const char* docElement)
     xml->addAttribute("xmlns:fo", KoXmlNS::fo);
     xml->addAttribute("xmlns:anim", KoXmlNS::anim);
     xml->addAttribute("xmlns:smil", KoXmlNS::smil);
-    xml->addAttribute("xmlns:koffice", KoXmlNS::koffice);
+    xml->addAttribute("xmlns:calligra", KoXmlNS::calligra);
     xml->addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
     xml->addAttribute("xmlns:dc", KoXmlNS::dc);
     xml->addAttribute("xmlns:xlink", KoXmlNS::xlink);
@@ -1400,4 +1451,9 @@ void ExcelImport::Private::processNumberFormats()
             }
         }
     }
+}
+
+void ExcelImport::slotSigProgress(int progress)
+{
+    emit sigProgress(int(SIDEWINDERPROGRESS/100.0 * progress + 0.5));
 }

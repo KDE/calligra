@@ -159,7 +159,7 @@ void View::initGUI()
     KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     m_mainWindow->createDockWidget( &toolBoxFactory );
 
-    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(QList<QWidget*>)), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QList<QWidget*> &) ) );
 
     SectionsBoxDockFactory structureDockerFactory;
     m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( m_mainWindow->createDockWidget( &structureDockerFactory ) );
@@ -326,7 +326,7 @@ void View::clipboardDataChanged()
 
   if (data)
   {
-    // TODO see if we can use the KoPasteController instead of having to add this feature in each koffice app.
+    // TODO see if we can use the KoPasteController instead of having to add this feature in each calligra app.
     QStringList mimeTypes = m_canvas->toolProxy()->supportedPasteMimeTypes();
     mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
     mimeTypes << KoOdf::mimeType( KoOdf::Presentation );

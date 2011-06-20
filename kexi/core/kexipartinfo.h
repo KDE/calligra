@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #ifndef KEXIPARTINFO_H
 #define KEXIPARTINFO_H
 
+#include "kexi.h"
 #include "kexipartmanager.h"
 
 class KexiProject;
@@ -38,12 +39,17 @@ class Part;
 class KEXICORE_EXPORT Info
 {
 public:
-    Info(KService::Ptr service);
     ~Info();
 
-    /**
-     * @return a i18n'ed group name e.g. "Tables"
-     */
+    /*! i18n'd instance name usable for displaying in gui as object's caption,
+     e.g. "Table".
+     It is taken from the corresponding plugin (service) .desktop file
+     (Name property). */
+    QString instanceCaption() const;
+
+    /*! @return a i18n'ed group name e.g. "Tables".
+     It is taken from the corresponding plugin (service) .desktop file
+     (GenericName property). */
     QString groupName() const;
 
 //  /**
@@ -75,6 +81,26 @@ public:
      * @return the KService::Ptr associated with this part
      */
     KService::Ptr ptr() const;
+
+    /*! @return supported modes for dialogs created by this part, i.e. a combination
+     of Kexi::ViewMode enum elements. Modes are declared in related .desktop file
+     by setting boolean values for properties X-Kexi-SupportsDataView,
+     X-Kexi-SupportsDesignView, X-Kexi-SupportsTextView.
+
+     The default value is Kexi::DataViewMode | Kexi::DesignViewMode.
+     This information is used to set supported view modes for every
+     KexiView-derived object created by this KexiPart. */
+    Kexi::ViewModes supportedViewModes() const;
+
+    /*! @return supported modes for dialogs created by this part in "user mode", i.e. a combination
+     of Kexi::ViewMode enum elements.
+     Modes are declared in related .desktop file by setting boolean values for properties
+     X-Kexi-SupportsDataViewInUserMode, X-Kexi-SupportsDesignViewInUserMode,
+     X-Kexi-SupportsTextViewInUserMode.
+     The default value is Kexi::DataViewMode.
+     This information is used to set supported view modes for every
+     KexiView-derived object created by this KexiPart. */
+    Kexi::ViewModes supportedUserViewModes() const;
 
     /**
      * @return true if loading was tried but failed
@@ -112,9 +138,12 @@ public:
 
 protected:
     /**
-     * Used in StaticInfo
+     * Used in StaticPartInfo
      */
-    Info();
+    Info(const QString& partClass, const QString& itemIcon,
+         const QString& objectName);
+
+    explicit Info(KService::Ptr service);
 
     friend class Manager;
     friend class ::KexiProject;
@@ -152,6 +181,8 @@ protected:
      */
     bool isIdStoredInPartDatabase() const;
 
+private:
+    Q_DISABLE_COPY(Info)
     class Private;
     Private * const d;
 };

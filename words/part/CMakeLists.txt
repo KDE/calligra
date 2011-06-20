@@ -1,14 +1,15 @@
 project(wordspart)
 
-add_subdirectory( tests )
+#TODO port to textlayout-rework
+#add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )
+include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
-########### KWordPrivate library ###############
+########### WordsPrivate library ###############
 
 set(wordsprivate_LIB_SRCS
     KWFactory.cpp
-    KWord.cpp
+    Words.cpp
     KWApplicationConfig.cpp
     KWCanvasBase.cpp
     KWCanvas.cpp
@@ -17,9 +18,9 @@ set(wordsprivate_LIB_SRCS
     KWGui.cpp
     KWView.cpp
     KWPage.cpp
+    KWPageCacheManager.cpp
     KWPageManager.cpp
     KWPageStyle.cpp
-    KWPageTextInfo.cpp
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
@@ -27,17 +28,14 @@ set(wordsprivate_LIB_SRCS
     KWOdfLoader.cpp
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
-    KWDLoader.cpp
+    KWRootAreaProvider.cpp
 
-    frames/KWTextDocumentLayout.cpp
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
-    frames/KWTextFrame.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
     frames/KWOutlineShape.cpp
-    frames/KWPageBackground.cpp
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWFrameGeometry.cpp
@@ -98,18 +96,18 @@ endif( Soprano_FOUND )
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain)
+target_link_libraries(wordsprivate komain textlayout)
 if( Soprano_FOUND )
     target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(wordsprivate
-    PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-########### KWordPart Library ###############
+########### WordsPart Library ###############
 
 set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
@@ -123,26 +121,26 @@ target_link_libraries(wordspart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordspr
 install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
-########### KWord exe ###############
+########### Words exe ###############
 
 set(words_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon(words_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/words.png")
 
-kde4_add_kdeinit_executable( words ${words_KDEINIT_SRCS})
+kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(words PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(words PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
-   set_target_properties(words PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
+   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
+   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_words  ${KDE4_KDEUI_LIBS} komain )
+target_link_libraries(kdeinit_calligrawords  ${KDE4_KDEUI_LIBS} komain )
 
-install(TARGETS kdeinit_words  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( words kdeinit_words )
-install(TARGETS words  ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries( calligrawords kdeinit_calligrawords )
+install(TARGETS calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
@@ -152,11 +150,11 @@ install( PROGRAMS words.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
-kword_export.h
+words_export.h
 KWPage.h
 KWPageManager.h
 KWPageStyle.h
-KWord.h
+Words.h
 KWCanvasBase.h
 KWCanvas.h
 KWCanvasItem.h
@@ -168,6 +166,9 @@ KWViewModeNormal.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
 
 install( FILES
+frames/KWFrame.h
 frames/KWFrameLayout.h
+frames/KWFrameSet.h
+frames/KWTextFrameSet.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 

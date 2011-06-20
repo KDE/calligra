@@ -10,7 +10,7 @@ set(wmfimport_PART_SRCS
 
 kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
 
-target_link_libraries(wmfimport kowmf karbonui)
+target_link_libraries(wmfimport libwmf karbonui)
 
 install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -22,7 +22,7 @@ kde4_add_plugin(wmfexport ${wmfexport_PART_SRCS})
 
 target_link_libraries(
     wmfexport
-    kowmf
+    libwmf
     karboncommon
     karbonui
     pigmentcms

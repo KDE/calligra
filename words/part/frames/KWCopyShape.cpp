@@ -19,18 +19,23 @@
 
 #include "KWCopyShape.h"
 #include "KWPage.h"
-#include "KWPageTextInfo.h"
 #include "KWPageManager.h"
+#include "KWFrame.h"
+#include "KWFrameSet.h"
+#include "KWTextFrameSet.h"
+#include "KWRootAreaProvider.h"
 
 #include <KoShapeBorderModel.h>
 #include <KoShapeLoadingContext.h>
 #include <KoViewConverter.h>
 #include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
 
 #include <QPainter>
 #include <QPainterPath>
-// #include <KDebug>
+#include <KDebug>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
         : m_original(original),
@@ -42,33 +47,22 @@ KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
     QSet<KoShape*> delegates;
     delegates << m_original;
     setToolDelegates(delegates);
+
+    kDebug(32001) << "originalShape=" << m_original;
 }
 
 KWCopyShape::~KWCopyShape()
 {
+    kDebug(32001) << "originalShape=" << m_original;
 }
 
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if(m_original == 0)
-        return;
-
-    if (m_pageManager) {
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_original->userData());
-        if (data) {
-            KWPage currentPage = m_pageManager->page(this);
-            KWPageTextInfo info(currentPage);
-            data->relayoutFor(info);
-        }
-    }
+    Q_ASSERT(m_original);
 
     //paint all child shapes
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
     if (container) {
-        if (!container->shapeCount()) {
-            return;
-        }
-
         QList<KoShape*> sortedObjects = container->shapes();
         sortedObjects.append(m_original);
         qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
@@ -79,12 +73,29 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         // been applied once before this function is called.
         QTransform baseMatrix = container->absoluteTransformation(&converter).inverted() * painter.transform();
 
+        KWPage copypage = m_pageManager->page(this);
+        Q_ASSERT(copypage.isValid());
         foreach(KoShape *shape, sortedObjects) {
             painter.save();
             if (shape != m_original) {
                 painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
             }
-            shape->paint(painter, converter);
+            KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+            if (data == 0) {
+                shape->paint(painter, converter);
+            }
+            else {
+                // Since the rootArea is shared between the copyShape and the originalShape we need to
+                // temporary switch the used KoTextPage to be sure the proper page-numbers are displayed.
+                KWPage originalpage = m_pageManager->page(shape);
+                Q_ASSERT(originalpage.isValid());
+                KoTextLayoutRootArea *area = data->rootArea();
+                if (area)
+                    area->setPage(new KWPage(copypage));
+                shape->paint(painter, converter);
+                if (area)
+                    area->setPage(new KWPage(originalpage));
+            }
             painter.restore();
             if (shape->border()) {
                 painter.save();
@@ -102,30 +113,23 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
             m_original->border()->paint(m_original, painter, converter);
         }
     }
-
 }
 
 void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
 {
-    if(m_original == 0)
-        return;
-
+    Q_ASSERT(m_original);
     m_original->paintDecorations(painter, converter, canvas);
 }
 
 QPainterPath KWCopyShape::outline() const
 {
-    if(m_original == 0)
-        return QPainterPath();
-
+    Q_ASSERT(m_original);
     return m_original->outline();
 }
 
 void KWCopyShape::saveOdf(KoShapeSavingContext &context) const
 {
-    if(m_original == 0)
-        return;
-
+    Q_ASSERT(m_original);
     KWCopyShape *me = const_cast<KWCopyShape*>(this);
     me->setAdditionalAttribute("draw:copy-of", m_original->name());
     saveOdfAttributes(context, OdfAllAttributes);
@@ -141,4 +145,9 @@ bool KWCopyShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &co
 #endif
 
     return false; // TODO
+}
+
+KoShape *KWCopyShape::original() const
+{
+    return m_original;
 }

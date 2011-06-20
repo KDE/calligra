@@ -35,7 +35,6 @@ set(msooxml_LIB_SRCS
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
-    MsooXmlDocumentTableStyle.cpp
 )
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
@@ -45,7 +44,7 @@ if(QCA2_FOUND)
    target_link_libraries(msooxml ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
 
-set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 find_package(SharedMimeInfo)

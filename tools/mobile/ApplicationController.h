@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
@@ -159,6 +159,8 @@ public:
     //! Called from main window's paintEvent()
     void handleMainWindowPaintEvent(QPaintEvent *event);
 
+    //! Called from main window's resizeEvent()
+    void handleMainWindowResizeEvent(QResizeEvent* event);
 public slots:
     //! Implemented for KoAbstractApplicationController
     virtual void setWindowTitle(const QString& title);

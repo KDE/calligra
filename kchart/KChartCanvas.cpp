@@ -26,7 +26,7 @@
 // KDE
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShapeCreateCommand.h>

@@ -36,6 +36,9 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
+private slots:
+    void slotSigProgress(int progress);
+
 private:
     class Private;
     Private* d;

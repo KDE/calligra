@@ -32,8 +32,8 @@
 #include <ui_ImportDialogUI.h>
 #include <ImportDialog.h>
 
-AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
-        : KDialog(parent)
+AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
+: KDialog(parent)
 {
     QWidget *widget = new QWidget();
     m_ui.setupUi(widget);
@@ -57,10 +57,29 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
 
     m_ui.comboBoxEncoding->addItems(encodings);
 
+    // The Recommended  and Local  is the fallback don't use when selecting the correct encoding
+    for (int i = 2; i < m_ui.comboBoxEncoding->count(); ++i) {
+        // the string in strCodec and the one given back by codec->name() are not always the same so 
+        // we check both
+        const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->itemText(i)));
+        QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
+        if (!codec) {
+            bool ok = false;
+            codec = KGlobal::charsets()->codecForName(strCodec, ok);
+            if (!ok) {
+                codec = 0;
+            }
+        }
+        //kDebug(30502) << "Data:" << strCodec << (codec ? codec->name(): "");
+        if ((codec && encoding == codec->name()) || strCodec == encoding) {
+            m_ui.comboBoxEncoding->setCurrentIndex(i);
+            break;
+        }
+    }
     setMainWidget(widget);
 }
 
-AsciiImportDialog :: ~AsciiImportDialog()
+AsciiImportDialog::~AsciiImportDialog()
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
 }
@@ -68,7 +87,7 @@ AsciiImportDialog :: ~AsciiImportDialog()
 QTextCodec* AsciiImportDialog::getCodec() const
 {
     const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->currentText()));
-    kDebug(30502) << "Encoding:" << strCodec;
+    kDebug(30502) << "Encoding:" << strCodec << m_ui.comboBoxEncoding->currentText();
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());

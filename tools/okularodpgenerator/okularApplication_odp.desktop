@@ -1,4 +1,3 @@
-#!/usr/bin/env xdg-open
 [Desktop Entry]
 Encoding=UTF-8
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;
@@ -13,7 +12,6 @@ Name[el]=okular
 Name[en_GB]=okular
 Name[es]=okular
 Name[et]=Okular
-Name[fr]=Okular
 Name[ga]=okular
 Name[it]=Okular
 Name[nb]=okular
@@ -37,7 +35,6 @@ GenericName[el]=Προβολέας εγγράφων
 GenericName[en_GB]=Document Viewer
 GenericName[es]=Visualizador de documentos
 GenericName[et]=Dokumendinäitaja
-GenericName[fr]=Afficheur de documents
 GenericName[ga]=Amharcán Cáipéisí
 GenericName[it]=Visore di documenti
 GenericName[ja]=文書ビューア
@@ -47,6 +44,7 @@ GenericName[nl]=Documentenviewer
 GenericName[pt]=Visualizador de Documentos
 GenericName[pt_BR]=Visualizador de documentos
 GenericName[sv]=Dokumentvisare
+GenericName[ug]=پۈتۈك كۆرگۈچ
 GenericName[uk]=Перегляд документів
 GenericName[wa]=Håyneu di documints
 GenericName[x-test]=xxDocument Viewerxx

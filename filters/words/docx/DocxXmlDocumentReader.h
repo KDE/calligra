@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -31,6 +31,8 @@
 #include <MsooXmlThemesReader.h>
 #include "DocxXmlNotesReader.h"
 
+#include <MsooXmlDrawingTableStyle.h>
+
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
@@ -43,7 +45,6 @@ class DocxXmlDocumentReaderContext;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
-class DocumentTableStyle;
 class TableStyleProperties;
 class LocalTableStyles;
 }
@@ -68,6 +69,7 @@ protected:
     KoFilter::ConversionStatus read_body();
     KoFilter::ConversionStatus read_p();
     KoFilter::ConversionStatus read_r();
+    KoFilter::ConversionStatus read_smartTag();
     KoFilter::ConversionStatus read_rPr();
     KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_vanish();
@@ -89,6 +91,7 @@ protected:
     KoFilter::ConversionStatus read_outline();
     KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
+    KoFilter::ConversionStatus read_control();
     KoFilter::ConversionStatus read_webHidden();
     KoFilter::ConversionStatus read_bookmarkStart();
     KoFilter::ConversionStatus read_bookmarkEnd();
@@ -113,6 +116,7 @@ protected:
     KoFilter::ConversionStatus read_jc();
     KoFilter::ConversionStatus read_spacing();
     KoFilter::ConversionStatus read_trPr();
+    KoFilter::ConversionStatus read_cnfStyle();
     KoFilter::ConversionStatus read_trHeight();
     enum shdCaller {
         shd_rPr,
@@ -250,6 +254,11 @@ protected:
 private:
     void init();
 
+    //! Returns true if the field returned something that requires a closing element
+    bool handleSpecialField();
+
+    QString m_specialCharacters;
+
     QColor m_backgroundColor; //Documet background color
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
@@ -267,8 +276,6 @@ private:
     //! Used by read_strike() and read_dstrike()
     void readStrikeElement(KoCharacterStyle::LineType type);
 
-    void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
-
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
     void applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding);
@@ -280,8 +287,7 @@ private:
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
-       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType,
-       CurrentPageComplexFieldCharType, NumberOfPagesComplexFieldCharType
+       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;
@@ -309,12 +315,18 @@ private:
 
     QMap<QString, QString> m_bookmarks; //!< Bookmarks
 
+    //!< Width of the object
+    QString m_currentObjectWidthCm;
+    QString m_currentObjectHeightCm;
+
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
     uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
     KoGenStyle m_currentTableRowStyle;
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
+    MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
+
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
 
     bool m_closeHyperlink; // should read_r close hyperlink
@@ -354,8 +366,7 @@ public:
     QMap<QString, QString> m_comments;
 
     QMap<QString, QString> m_endnotes;
-
-    QMap<QString, MSOOXML::DocumentTableStyle*> m_tableStyles;
+    QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
 
 private:
 };

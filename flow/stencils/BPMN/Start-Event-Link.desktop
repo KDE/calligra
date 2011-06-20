@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Start-Event-Link
+Name[es]=Enlace al evento inicial
 Name[et]=Sündmuse alguse link
+Name[nb]=Start-hendelse-lenke
 Name[pt]=Evento-Inicial-Ligação
 Name[pt_BR]=Link do evento inicial
+Name[sv]=Starthändelse-länk
 Name[uk]=Посилання на початкову подію
 Name[x-test]=xxStart-Event-Linkxx
 Name[zh_TW]=開始─事件─連結

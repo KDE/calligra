@@ -33,7 +33,7 @@ class View;
 class ViewAdaptor : public KoViewAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.projectmanaging.view")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.projectmanaging.view")
 
 public:
     explicit ViewAdaptor( View* );

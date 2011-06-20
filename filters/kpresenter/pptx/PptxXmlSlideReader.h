@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -27,7 +27,7 @@
 #include <MsooXmlThemesReader.h>
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlDrawingTableStyle.h>
-
+#include <VmlDrawingReader.h>
 #include <KoGenStyle.h>
 
 class KoXmlWriter;
@@ -196,6 +196,8 @@ protected:
     KoFilter::ConversionStatus read_txBody();
     KoFilter::ConversionStatus read_graphicFrame();
     KoFilter::ConversionStatus read_nvGraphicFramePr();
+    KoFilter::ConversionStatus read_controls();
+    KoFilter::ConversionStatus read_control();
 
     KoFilter::ConversionStatus read_xfrm_p();
     KoFilter::ConversionStatus read_cNvPr_p();
@@ -294,7 +296,7 @@ public:
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
         QMap<QString, QString> masterColorMap,
-        QMap<QString, QString> _oleReplacements,
+        VmlDrawingReader& _vmlReader,
         QString _tableStylesFilePath = QString());
 
     PptxImport* import;
@@ -314,11 +316,7 @@ public:
     QVector<QString> pageFrames; //! Frames which go to masterslide
     QMap<int, QString> commentAuthors;
 
-    // This value is always initialized with values from master slide, but it is possible
-    // that slide/layout override it with custom map
-    QMap<QString, QString> colorMap;
-
-    QMap<QString, QString> oleReplacements;
+    VmlDrawingReader& vmlReader;
 
     // Used to keep track, whether we should skip elements
     // currently we need to read some slides twice

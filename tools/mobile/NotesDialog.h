@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -69,7 +69,7 @@ public:
         QLabel *currentSlideNumber;
 public slots:
         /*!
-          * functions which gets and shows the notes for a perticular page number
+          * functions which gets and shows the notes for a particular page number
           */
         void showNotesDialog(int page);
         /*!

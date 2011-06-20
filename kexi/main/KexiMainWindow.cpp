@@ -248,7 +248,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
-    KGlobal::locale()->insertCatalog("koffice");
+    KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
 
 #ifdef CUSTOM_VERSION
@@ -359,11 +359,13 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //2.0: unused setStandardMDIMenuEnabled(false);
     setAsDefaultHost(); //this is default host now.
     KIconLoader::global()->addAppDir("kexi");
-    KIconLoader::global()->addAppDir("koffice");
+    KIconLoader::global()->addAppDir("calligra");
 
     //get informed
     connect(&Kexi::partManager(), SIGNAL(partLoaded(KexiPart::Part*)),
             this, SLOT(slotPartLoaded(KexiPart::Part*)));
+    connect(&Kexi::partManager(), SIGNAL(newObjectRequested(KexiPart::Info*)),
+            this, SLOT(newObject(KexiPart::Info*)));
 //2.0: unused  connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) );
 //2.0: unused  connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
 // connect( this, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
@@ -1698,10 +1700,13 @@ void KexiMainWindow::updateReadOnlyState()
     
 // update "insert ....." actions for every part
     KActionCollection *ac = actionCollection();
-    foreach(KexiPart::Info *info, *Kexi::partManager().partInfoList()) {
-        QAction *a = ac->action(KexiPart::nameForCreateAction(*info));
-        if (a)
-            a->setEnabled(!readOnly);
+    KexiPart::PartInfoList *plist = Kexi::partManager().infoList();
+    if (plist) {
+        foreach(KexiPart::Info *info, *plist) {
+            QAction *a = ac->action(KexiPart::nameForCreateAction(*info));
+            if (a)
+                a->setEnabled(!readOnly);
+        }
     }
 }
 
@@ -2307,8 +2312,6 @@ void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 {
     if (!p)
         return;
-    connect(p, SIGNAL(newObjectRequest(KexiPart::Info*)),
-            this, SLOT(newObject(KexiPart::Info*)));
     p->createGUIClients();//this);
 }
 
@@ -3567,7 +3570,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
                               currentWindow()->partItem()->name()),
                          i18n("Selected view (%1) is not supported by this object type (%2).",
                               Kexi::nameForViewMode(viewMode),
-                              currentWindow()->part()->instanceCaption()));
+                              currentWindow()->part()->info()->instanceCaption()));
         /* UNUSED, see KexiToggleViewModeAction
             d->toggleLastCheckedMode();*/
         return false;
@@ -4188,8 +4191,8 @@ bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMod
     }
     kDebug() << part << item->partClass();
     if (part)
-        kDebug() << item->partClass() << part->supportedUserViewModes();
-    return part && (part->supportedUserViewModes() & viewMode);
+        kDebug() << item->partClass() << part->info()->supportedUserViewModes();
+    return part && (part->info()->supportedUserViewModes() & viewMode);
 }
 
 KexiWindow *
@@ -4260,7 +4263,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(*item, part));
         d->mainWidget->tabWidget()->setTabWhatsThis(
             tabIndex,
-            i18n("Tab for \"%1\" (%2).", item->captionOrName(), part->instanceCaption()));
+            i18n("Tab for \"%1\" (%2).", item->captionOrName(), part->info()->instanceCaption()));
         d->mainWidget->tabWidget()->setCurrentWidget(windowContainer);
 
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -4366,10 +4369,10 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
     KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
     if (!part)
         return 0;
-    if (viewMode == Kexi::DataViewMode && !(part->supportedViewModes() & Kexi::DataViewMode)) {
-        if (part->supportedViewModes() & Kexi::DesignViewMode)
+    if (viewMode == Kexi::DataViewMode && !(part->info()->supportedViewModes() & Kexi::DataViewMode)) {
+        if (part->info()->supportedViewModes() & Kexi::DesignViewMode)
             return openObjectFromNavigator(item, Kexi::DesignViewMode, openingCancelled);
-        else if (part->supportedViewModes() & Kexi::TextViewMode)
+        else if (part->info()->supportedViewModes() & Kexi::TextViewMode)
             return openObjectFromNavigator(item, Kexi::TextViewMode, openingCancelled);
     }
     //do the same as in openObject()
@@ -4438,7 +4441,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
                 "<p>" + i18n("Do you want to permanently delete:\n"
                              "%1\n"
                              "If you click \"Delete\", you will not be able to undo the deletion.",
-                             "</p><p>" + part->instanceCaption() + " \"" + item->name() + "\"?</p>"),
+                             "</p><p>" + part->info()->instanceCaption() + " \"" + item->name() + "\"?</p>"),
                 0, KGuiItem(i18n("Delete"), "edit-delete"), KStandardGuiItem::no())) {
             return cancelled;
         }

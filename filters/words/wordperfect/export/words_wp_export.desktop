@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Words WordPerfect Export Filter
+Name[pt]=Filtro de Exportação de WordPerfect do Words
+Name[pt_BR]=Filtro de exportação de WordPerfect para o Words
+Name[sv]=Words-exportfilter för WordPerfect
+Name[uk]=Фільтр експорту WordPerfect для Words
+Name[x-test]=xxWords WordPerfect Export Filterxx
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+X-KDE-Export=application/wordperfect
+X-KDE-Library=wpexport
+X-KDE-ServiceTypes=CalligraFilter

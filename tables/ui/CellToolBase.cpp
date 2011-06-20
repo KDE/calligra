@@ -103,7 +103,7 @@
 #include "dialogs/SubtotalDialog.h"
 #include "dialogs/ValidityDialog.h"
 
-// KOffice
+// Calligra
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoResourceManager.h>
@@ -1127,8 +1127,9 @@ void CellToolBase::init()
 {
 }
 
-QWidget* CellToolBase::createOptionWidget()
+QList <QWidget*> CellToolBase::createOptionWidgets()
 {
+    QList<QWidget *> widgets;
     d->optionWidget = new CellToolOptionWidget(this);
 
     connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
@@ -1137,7 +1138,9 @@ QWidget* CellToolBase::createOptionWidget()
             d->optionWidget->locationComboBox(), SLOT(slotRemoveAreaName(const QString&)));
 
     selection()->update(); // initialize the location combobox
-    return d->optionWidget;
+    d->optionWidget->setWindowTitle(i18n("Cell Editor"));
+    widgets.append(d->optionWidget);
+    return widgets;
 }
 
 KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)

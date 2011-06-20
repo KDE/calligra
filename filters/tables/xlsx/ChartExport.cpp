@@ -35,7 +35,7 @@
 using namespace Charting;
 
 ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
-    : m_width(0), m_height(0), m_chart(chart), m_theme(theme), sheetReplacement(true), paletteSet( false )
+    : m_x(0), m_y(0), m_width(0), m_height(0), m_chart(chart), m_theme(theme), sheetReplacement(true), paletteSet( false )
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -266,13 +266,31 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoG
             }            
             break;
             default:
-              style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+            {
+                if ( paletteSet )
+                {
+                    style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#C0C0C0", KoGenStyle::GraphicType );
+                }
+                else
+                {
+                    style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+                }
+            }
         }
     }
     else
     {        
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+        if ( paletteSet )
+        {
+            style.addProperty( "draw:fill-color", "#C0C0C0", KoGenStyle::GraphicType );
+            Q_ASSERT( style.property( "draw:fill-color", KoGenStyle::GraphicType ) == "#C0C0C0" );
+        }
+        else
+        {
+            style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+        }
+        //style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
     }
     return styles.insert( style, "ch" );
 }
@@ -324,7 +342,7 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
 
 QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart");
+    KoGenStyle style(KoGenStyle::ChartAutoStyle/*, "chart"*/);
     return genPlotAreaStyle( styleID, style, styles, mainStyles );
 }
 
@@ -477,9 +495,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     int countYAxis = 0;
     foreach(Charting::Axis* axis, chart()->m_axes) {
         //TODO handle series-axis
+        KoGenStyle axisstyle(KoGenStyle::ChartAutoStyle, "chart");
         if(axis->m_type == Charting::Axis::SeriesAxis) continue;
 
         bodyWriter->startElement("chart:axis");
+        axisstyle.addProperty( "fo:font-size", QString( "%0pt" ).arg( chart()->m_textSize ), KoGenStyle::TextType );
+        bodyWriter->addAttribute( "chart:style-name", styles.insert( axisstyle, "ch" ) );
         switch(axis->m_type) {
             case Charting::Axis::VerticalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "y");

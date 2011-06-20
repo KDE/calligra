@@ -214,7 +214,7 @@ protected:
     QAction *m_itemMenuTitle, *m_partMenuTitle,
     *m_exportActionMenu_sep, *m_pageSetupAction_sep;
 
-    KexiPart::Part *m_prevSelectedPart;
+    KexiPart::Info *m_prevSelectedPartInfo;
     KToolBar *m_toolbar;
     KexiSmallToolButton /* *m_newObjectToolButton,*/ *m_deleteObjectToolButton;
     

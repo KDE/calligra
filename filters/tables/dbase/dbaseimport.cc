@@ -87,7 +87,7 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
     root += "  hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\"";
     root += "  formular=\"0\" lcmode=\"0\" >\n";
 
-    // KOffice default font
+    // Calligra default font
     QFont font = KoGlobal::defaultFont();
 
     // define columns

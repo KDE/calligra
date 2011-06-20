@@ -25,7 +25,14 @@
 
 class KPrViewModeSlidesSorter;
 class KoPADocument;
+class KoPAPageBase;
 
+/**
+ * Class meant to hold the model for Slides Sorter
+ * This model lets display slides as thumbnails in a List view, using standard QT
+ * view/model framework. It supports copy and move of slides, and include a context
+ * menu to present options when dropping.
+ */
 class KPrSlidesSorterDocumentModel: public QAbstractListModel
 {
     Q_OBJECT
@@ -33,7 +40,13 @@ public:
     KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document = 0);
     ~KPrSlidesSorterDocumentModel();
 
+    /**
+     * Set the current document
+     * @param document a KoPADocument that holds current document
+     */
     void setDocument(KoPADocument *document);
+
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
 
     QVariant data(const QModelIndex &index, int role) const;
 
@@ -49,11 +62,24 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
+    /**
+     * Drop selected slides (copy/move) if a modifier key is pressed
+     * or display a context menu with alternatives.
+     * @param slides list of slides to be dropped
+     * @param pageAfter destination of the drop
+     * @param action the drop action
+     */
+    void doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action);
+
 public slots:
     void update();
 
 private:
-    const KoPADocument *m_document;
+    //A reference to current document
+    KoPADocument *m_document;
+    //A reference to Slides sorter class
     KPrViewModeSlidesSorter *m_viewModeSlidesSorter;
 };
 

@@ -399,9 +399,9 @@ void KarbonFilterEffectsTool::regionHeightChanged(double height)
     canvas()->addCommand(new FilterRegionChangeCommand(d->currentEffect, region, d->currentShape));
 }
 
-QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
+QList<QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
 {
-    QMap<QString, QWidget*> widgets;
+    QList<QWidget*> widgets;
 
     FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
     KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
@@ -431,7 +431,8 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     addFilterLayout->addWidget(editButton, 0, 2);
     connect(editButton, SIGNAL(clicked()), this, SLOT(editFilter()));
 
-    widgets.insert(i18n("Add Filter"), addFilterWidget);
+    addFilterWidget->setWindowTitle(i18n("Add Filter"));
+    widgets.append(addFilterWidget);
 
     //---------------------------------------------------------------------
 
@@ -447,7 +448,8 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     configFilterLayout->addWidget(d->configStack, 1, 0);
     configFilterLayout->setContentsMargins(0, 0, 0, 0);
 
-    widgets.insert(i18n("Effect Properties"), configFilterWidget);
+    configFilterWidget->setWindowTitle(i18n("Effect Properties"));
+    widgets.append(configFilterWidget);
 
     //---------------------------------------------------------------------
 
@@ -479,10 +481,10 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     filterRegionLayout->addWidget(new QLabel(i18n("H:")), 1, 2);
     filterRegionLayout->addWidget(d->posH, 1, 3);
     filterRegionLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), 2, 0);
-
     filterRegionLayout->setContentsMargins(0, 0, 0, 0);
-
-    widgets.insert(i18n("Effect Region"), filterRegionWidget);
+    
+    filterRegionWidget->setWindowTitle(i18n("Effect Region"));
+    widgets.append(filterRegionWidget);
 
     //---------------------------------------------------------------------
 

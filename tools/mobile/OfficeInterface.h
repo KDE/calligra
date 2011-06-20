@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -52,7 +52,7 @@ public:
     // should be shown in the menubar.
     // Possible values : All, presentation, document, spreadsheet
     //
-    // NOTE: this is not actually used yet in the main program and may be extented
+    // NOTE: this is not actually used yet in the main program and may be extended
     // in the future.
     virtual QStringList pluginSupportTypes() = 0;
 };

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -114,10 +114,11 @@ DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
-
+    // Prefer lastColor
     if (lastColor.isValid()) {
         return lastColor;
     }
+
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))
@@ -151,6 +152,7 @@ QColor DrawingMLColorSchemeSystemItem::value() const
     else if (systemColor == QLatin1String("btnShadow")) {
         return QPalette().color(QPalette::Active, QPalette::Dark);
     }
+
 //! @todo Use more of systemColor
     return QColor(Qt::black); // TODO; better default?
 }

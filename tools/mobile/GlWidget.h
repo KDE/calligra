@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -75,7 +75,7 @@ public:
                        float, float, float, float, float, float, float, float,
                        float, float, float, float, float, float, float, float);
     /*
-     * fuctions to get the values such as size,position,and rotation.
+     * functions to get the values such as size,position,and rotation.
      * Slide shape could be useful in future when each cordinate value is to be verified
      */
     QList<float> getSlideSize();

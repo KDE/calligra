@@ -61,7 +61,6 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kcomponentdata.h>
-#include <kdatatool.h>
 #include <kdebug.h>
 
 #include <KFontChooser>
@@ -82,7 +81,7 @@
 #include <kicon.h>
 #include <knotifyconfigwidget.h>
 
-// KOffice includes
+// Calligra includes
 #include <KoGlobal.h>
 #include <KoDpi.h>
 #include <KoCanvasControllerWidget.h>
@@ -723,8 +722,8 @@ void View::initView()
         shell()->createDockWidget(&toolBoxFactory);
 
         // Setup the tool options dock widget manager.
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -1636,7 +1635,7 @@ void View::keyPressEvent(QKeyEvent *event)
 {
 #ifndef NDEBUG
     if ((event->modifiers() & Qt::ControlModifier) && (event->modifiers() & Qt::ShiftModifier)) {
-        if (event->key() == Qt::Key_V) { // Ctrl+Shift+V to show debug (similar to KWord)
+        if (event->key() == Qt::Key_V) { // Ctrl+Shift+V to show debug (similar to Words)
             d->activeSheet->printDebug();
         }
     }

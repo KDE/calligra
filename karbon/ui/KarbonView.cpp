@@ -93,6 +93,7 @@
 #include <KoPathSeparateCommand.h>
 #include <KoPathReverseCommand.h>
 #include <KoPathPointMoveCommand.h>
+#include <KoShapeTransformCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
@@ -151,7 +152,8 @@ public:
             , closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
             , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
-            , deleteSelectionAction(0), viewAction(0), showRulerAction(0)
+            , deleteSelectionAction(0), clipObjects(0), unclipObjects(0)
+            , flipVertical(0), flipHorizontal(0), viewAction(0), showRulerAction(0)
             , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
@@ -176,6 +178,8 @@ public:
     KAction * deleteSelectionAction;
     KAction * clipObjects;
     KAction * unclipObjects;
+    KAction * flipVertical;
+    KAction * flipHorizontal;
 
     KToggleAction * viewAction;
     KToggleAction * showRulerAction;
@@ -296,14 +300,17 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
-        bool b = d->showRulerAction->isChecked();
-        d->horizRuler->setVisible(b);
-        d->vertRuler->setVisible(b);
+        KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+        if(interfaceGroup.readEntry<bool>("ShowRulers", false)) {
+            d->horizRuler->setVisible(true);
+            d->vertRuler->setVisible(true);
+            d->showRulerAction->setChecked(true);
+        }
     }
 
     setLayout(layout);
@@ -486,7 +493,7 @@ void KarbonView::fileImportGraphic()
         // use import filters to load the file
         KoFilterManager man(&importPart);
         KoFilter::ConversionStatus status = KoFilter::OK;
-        QString importedFile = man.importDocument(fname, status);
+        QString importedFile = man.importDocument(fname, QString(), status);
         if (status != KoFilter::OK) {
             importPart.showLoadingErrorDialog();
             success = false;
@@ -648,8 +655,60 @@ void KarbonView::unclipObjects()
     }
     if (!shapesToUnclip.count())
         return;
-    
+
     d->canvas->addCommand(new KoShapeUnclipCommand(d->part, shapesToUnclip));
+}
+
+void KarbonView::flipVertical()
+{
+    selectionFlip(false, true);
+}
+
+void KarbonView::flipHorizontal()
+{
+    selectionFlip(true, false);
+}
+
+void KarbonView::selectionFlip(bool horizontally, bool vertically)
+{
+    if (!horizontally && !vertically)
+        return;
+
+    KoSelection* selection = d->canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
+    if( ! selectedShapes.count() )
+        return;
+
+    // mirror about center point
+    QPointF mirrorCenter = selection->absolutePosition(KoFlake::CenteredPosition);
+
+    QTransform mirrorMatrix;
+    mirrorMatrix.translate(mirrorCenter.x(), mirrorCenter.y());
+    mirrorMatrix.scale( horizontally ? -1.0 : 1.0, vertically ? -1.0 : 1.0);
+    mirrorMatrix.translate(-mirrorCenter.x(), -mirrorCenter.y());
+
+    QList<QTransform> oldState;
+    QList<QTransform> newState;
+    foreach( KoShape* shape, selectedShapes ) {
+        shape->update();
+        oldState << shape->transformation();
+        // apply the mirror transformation
+        shape->applyAbsoluteTransformation(mirrorMatrix);
+        newState << shape->transformation();
+    }
+    selection->applyAbsoluteTransformation(mirrorMatrix);
+
+    QUndoCommand *cmd = new KoShapeTransformCommand(selectedShapes, oldState, newState);
+    if (horizontally && !vertically)
+        cmd->setText(i18n("Mirror Horizontally"));
+    else if (!horizontally && vertically)
+        cmd->setText(i18n("Mirror Vertically"));
+    else
+        cmd->setText(i18n("Mirror Horizontally and Vertically"));
+    d->canvas->addCommand(cmd);
 }
 
 void KarbonView::closePath()
@@ -890,6 +949,10 @@ void KarbonView::initActions()
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
+
+    KAction *actionEditGuides = new KAction(i18n("Edit Guides"), this);
+    actionCollection()->addAction("edit_guides", actionEditGuides);
+    connect(actionEditGuides, SIGNAL(triggered()), this, SLOT(editGuides()));
     // edit <-----
 
     // object ----->
@@ -965,6 +1028,14 @@ void KarbonView::initActions()
     d->unclipObjects  = new KAction(KIcon("unclip"), i18n("&Unclip Objects"), this);
     actionCollection()->addAction("object_unclip", d->unclipObjects );
     connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
+
+    d->flipVertical = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    actionCollection()->addAction("object_flip_vertical", d->flipVertical);
+    connect(d->flipVertical, SIGNAL(triggered()), this, SLOT(flipVertical()));
+
+    d->flipHorizontal = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    actionCollection()->addAction("object_flip_horizontal", d->flipHorizontal);
+    connect(d->flipHorizontal, SIGNAL(triggered()), this, SLOT(flipHorizontal()));
 
     // object <-----
 
@@ -1076,14 +1147,21 @@ void KarbonView::setNumberOfRecentFiles(unsigned int number)
 
 void KarbonView::showRuler()
 {
-    if (shell() && d->showRulerAction->isChecked()) {
-        d->horizRuler->show();
-        d->vertRuler->show();
+    if(!shell())
+        return;
+
+    const bool showRuler = d->showRulerAction->isChecked();
+    d->horizRuler->setVisible(showRuler);
+    d->vertRuler->setVisible(showRuler);
+    if (showRuler)
         updateRuler();
-    } else {
-        d->horizRuler->hide();
-        d->vertRuler->hide();
-    }
+
+    // this will make the last setting of the ruler visibility persistent
+    KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+    if (!showRuler && !interfaceGroup.hasDefault("ShowRulers"))
+        interfaceGroup.revertToDefault("ShowRulers");
+    else
+        interfaceGroup.writeEntry("ShowRulers", showRuler);
 }
 
 void KarbonView::togglePageMargins(bool b)
@@ -1109,6 +1187,11 @@ void KarbonView::showGuides()
 {
     d->part->guidesData().setShowGuideLines(d->showGuidesAction->isChecked());
     d->canvas->update();
+}
+
+void KarbonView::editGuides()
+{
+    KoToolManager::instance()->switchToolRequested("GuidesTool_ID");
 }
 
 void KarbonView::snapToGrid()
@@ -1146,7 +1229,8 @@ void KarbonView::selectionChanged()
     if (!shell())
         return;
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    int count = selection->selectedShapes(KoFlake::FullSelection).count();
+    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::FullSelection);
+    const int count = selectedShapes.count();
 
     d->closePath->setEnabled(false);
     d->combinePath->setEnabled(false);
@@ -1155,6 +1239,10 @@ void KarbonView::selectionChanged()
     d->subtractPath->setEnabled(false);
     d->unitePath->setEnabled(false);
     d->pathSnapToGrid->setEnabled(false);
+    d->clipObjects->setEnabled(false);
+    d->unclipObjects->setEnabled(false);
+    d->flipHorizontal->setEnabled(count > 0);
+    d->flipVertical->setEnabled(count > 0);
 
     kDebug(38000) << count << " shapes selected";
 
@@ -1162,7 +1250,7 @@ void KarbonView::selectionChanged()
         uint selectedPaths = 0;
         uint selectedParametrics = 0;
         // check for different shape types for enabling specific actions
-        foreach(KoShape* shape, selection->selectedShapes(KoFlake::FullSelection)) {
+        foreach(KoShape* shape, selectedShapes) {
             if (dynamic_cast<KoPathShape*>(shape)) {
                 KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
                 if (ps && ps->isParametricShape())
@@ -1183,6 +1271,8 @@ void KarbonView::selectionChanged()
         d->subtractPath->setEnabled(selectedPaths + selectedParametrics == 2);
         d->unitePath->setEnabled(selectedPaths + selectedParametrics == 2);
         d->pathSnapToGrid->setEnabled(selectedPaths > 0);
+        d->clipObjects->setEnabled(selectedPaths > 0 && count > 1);
+        d->unclipObjects->setEnabled(selectedShapes.first()->clipPath() != 0);
         // if only one shape selected, set its parent layer as the active layer
         if (count == 1) {
             KoShapeContainer * parent = selection->selectedShapes().first()->parent();

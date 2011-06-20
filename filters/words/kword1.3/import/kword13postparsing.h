@@ -18,22 +18,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_1_3_POST_PARSING
-#define KWORD_1_3_POST_PARSING
+#ifndef WORDS_1_3_POST_PARSING
+#define WORDS_1_3_POST_PARSING
 
 class KoStore;
-class KWord13Document;
+class Words13Document;
 
-class KWord13PostParsing
+class Words13PostParsing
 {
 public:
-    explicit KWord13PostParsing(void);
-    ~KWord13PostParsing(void);
+    explicit Words13PostParsing(void);
+    ~Words13PostParsing(void);
 public:
     bool postParsePictures(KoStore* store);
-    bool postParse(KoStore* store, KWord13Document& doc);
+    bool postParse(KoStore* store, Words13Document& doc);
 protected:
-    KWord13Document* m_kwordDocument;
+    Words13Document* m_kwordDocument;
 };
 
-#endif // KWORD_1_3_POST_PARSING
+#endif // WORDS_1_3_POST_PARSING

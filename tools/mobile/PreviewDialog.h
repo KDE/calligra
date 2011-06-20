@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -130,7 +130,7 @@ private:
     PreviewWindow *m_previewWindow;
 
     /*!
-     * falg to check whether preview dialog is open
+     * flag to check whether preview dialog is open
      */
     bool m_isPreviewDialogActive;
 

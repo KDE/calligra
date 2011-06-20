@@ -2584,6 +2584,41 @@ void ExcelReader::handleBOF(BOFRecord* record)
 
     if (record->type() == BOFRecord::Workbook) {
         d->handlerStack.push_back(d->globals);
+        qDebug() << "figuring out version" << record->version() << record->rawVersion();
+        if (record->version() == Swinder::Excel95) {
+            d->workbook->setVersion(Workbook::Excel95);
+        } else if (record->version() == Swinder::Excel97) {
+            if (record->recordSize() >= 8) {
+                switch (record->verLastXLSaved()) {
+                case BOFRecord::LExcel97:
+                    d->workbook->setVersion(Workbook::Excel97);
+                    break;
+                case BOFRecord::LExcel2000:
+                    d->workbook->setVersion(Workbook::Excel2000);
+                    break;
+                case BOFRecord::LExcel2002:
+                    d->workbook->setVersion(Workbook::Excel2002);
+                    break;
+                case BOFRecord::LExcel2003:
+                    d->workbook->setVersion(Workbook::Excel2003);
+                    break;
+                case BOFRecord::LExcel2007:
+                    d->workbook->setVersion(Workbook::Excel2007);
+                    break;
+                case BOFRecord::LExcel2010:
+                    d->workbook->setVersion(Workbook::Excel2010);
+                    break;
+                default:
+                    // pretend that anything newer than 2010 is 2010
+                    d->workbook->setVersion(Workbook::Excel2010);
+                    break;
+                }
+            } else {
+                d->workbook->setVersion(Workbook::Excel97);
+            }
+        } else {
+            d->workbook->setVersion(Workbook::Unknown);
+        }
     } else if (record->type() == BOFRecord::Worksheet) {
         // find the sheet and make it active
         // which sheet ? look from from previous BoundSheet

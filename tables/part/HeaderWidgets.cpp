@@ -59,7 +59,7 @@
 #include <kmessagebox.h>
 #include <kwordwrap.h>
 
-// KOffice
+// Calligra
 #include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
@@ -205,10 +205,8 @@ void RowHeaderWidget::paintSizeIndicator(int mouseY)
 
 void RowHeaderWidget::removeSizeIndicator()
 {
-    if (m_rubberband) {
-        delete m_rubberband;
-        m_rubberband = 0;
-    }
+    delete m_rubberband;
+    m_rubberband = 0;
 }
 
 void RowHeaderWidget::updateRows(int from, int to)
@@ -377,10 +375,8 @@ void ColumnHeaderWidget::paintSizeIndicator(int mouseX)
 
 void ColumnHeaderWidget::removeSizeIndicator()
 {
-    if (m_rubberband) {
-        delete m_rubberband;
-        m_rubberband = 0;
-    }
+    delete m_rubberband;
+    m_rubberband = 0;
 }
 
 void ColumnHeaderWidget::updateColumns(int from, int to)

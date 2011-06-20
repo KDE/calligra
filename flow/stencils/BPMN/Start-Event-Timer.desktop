@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Start-Event-Timer
+Name[es]=Temporizador del evento inicial
 Name[et]=Sündmuse alguse taimer
+Name[nb]=Start-hendelse-tidtaker
 Name[pt]=Evento-Inicial-Temporizador
 Name[pt_BR]=Cronômetro do evento inicial
+Name[sv]=Starthändelse-tidtagning
 Name[uk]=Таймер початкової події
 Name[x-test]=xxStart-Event-Timerxx
 Name[zh_TW]=開始─事件─計時器

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
+#include "msodraw.h"
 #include <KoXmlWriter.h>
 #include <QtCore/QtDebug>
 #include <QtGui/QColor>
@@ -98,39 +100,38 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
     const OfficeArtSpContainer* master = 0;
 
     if (client) {
-        style = client->createGraphicStyle(o.clientTextbox.data(),
-                                           o.clientData.data(), out);
         drawingGroup = client->getOfficeArtDggContainer();
 
         //locate the OfficeArtSpContainer of the master shape
         if (o.shapeProp.fHaveMaster) {
-            const DrawStyle tmp(drawingGroup, &o);
+            const DrawStyle tmp(0, &o);
             quint32 spid = tmp.hspMaster();
             master = client->getMasterShapeContainer(spid);
         } else {
             master = client->defaultShapeContainer();
         }
     }
-
     const DrawStyle ds(drawingGroup, master, &o);
+    if (client) {
+        style = client->createGraphicStyle(o.clientTextbox.data(),
+                                           o.clientData.data(), ds, out);
+    }
     defineGraphicProperties(style, ds, out.styles);
 
     if (client) {
-        client->addTextStyles(o.clientTextbox.data(),
-                              o.clientData.data(), out, style);
+        client->addTextStyles(o.shapeProp.rh.recInstance,
+                              o.clientTextbox.data(),
+                              o.clientData.data(), style, out);
     }
 }
 
 namespace
 {
-const char* dashses[11] = {
-    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
-    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
-};
 const char* arrowHeads[6] = {
     "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
+
 QString format(double v)
 {
     static const QString f("%1");
@@ -138,11 +139,13 @@ QString format(double v)
     static const QRegExp r("\\.?0+$");
     return f.arg(v, 0, 'f').replace(r, e);
 }
+
 QString pt(double v)
 {
     static const QString pt("pt");
     return format(v) + pt;
 }
+
 QString percent(double v)
 {
     return format(v) + '%';
@@ -177,7 +180,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // dr3d:texture-mode
     // dr3d:vertical-segments
     // draw:auto-grow-height
+    style.addProperty("draw:auto-grow-height", "false", gt);
     // draw:auto-grow-width
+    style.addProperty("draw:auto-grow-width", "false", gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -189,6 +194,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:caption-type
     // draw:color-inversion
     // draw:color-mode
+    if (ds.fPictureBiLevel()) {
+        style.addProperty("draw:color-mode", "mono", gt);
+    } else if (ds.fPictureGray()) {
+        style.addProperty("draw:color-mode", "greyscale", gt);
+    }
     // draw:contrast
     // draw:decimal-places
     // draw:end-guide
@@ -204,29 +214,51 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:fill-color
         // only set the color if the fill type is 'solid' because OOo ignores
         // fill='none' if the color is set
-        if (fillType == 0 && client) {
-            QColor tmp = processOfficeArtCOLORREF(ds.fillColor(), ds);
-            style.addProperty("draw:fill-color", tmp.name(), gt);
+        switch (fillType) {
+        case msofillSolid:
+        {
+            if (!client) break;
+            QColor color = processOfficeArtCOLORREF(ds.fillColor(), ds);
+            style.addProperty("draw:fill-color", color.name(), gt);
+            break;
         }
         // draw:fill-gradient-name
-        else if ((fillType >=4 && fillType <=8) && client) {
+        case msofillShade:
+        case msofillShadeCenter:
+        case msofillShadeShape:
+        case msofillShadeScale:
+        case msofillShadeTitle:
+        {
+            if (!client) break;
             KoGenStyle gs(KoGenStyle::LinearGradientStyle);
             defineGradientStyle(gs, ds);
-            QString tmp = styles.insert(gs);
-            style.addProperty("draw:fill-gradient-name", tmp, gt);
+            QString gname = styles.insert(gs);
+            style.addProperty("draw:fill-gradient-name", gname, gt);
+            break;
         }
         // draw:fill-hatch-name
         // draw:fill-hatch-solid
         // draw:fill-image-height
         // draw:fill-image-name
-        quint32 fillBlip = ds.fillBlip();
-        QString fillImagePath;
-        if (client) {
+        case msofillPattern:
+        case msofillTexture:
+        case msofillPicture:
+        {
+            if (!client) break;
+            quint32 fillBlip = ds.fillBlip();
+            QString fillImagePath;
             fillImagePath = client->getPicturePath(fillBlip);
+            if (!fillImagePath.isEmpty()) {
+                style.addProperty("draw:fill-image-name",
+                                  "fillImage" + QString::number(fillBlip), gt);
+
+                style.addProperty("style:repeat", getRepeatStyle(fillType), gt);
+            }
+            break;
         }
-        if (!fillImagePath.isEmpty()) {
-            style.addProperty("draw:fill-image-name",
-                              "fillImage" + QString::number(fillBlip), gt);
+        case msofillBackground:
+        default:
+            break;
         }
         // draw:fill-image-ref-point
         // draw:fill-image-ref-point-x
@@ -253,7 +285,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:image-opacity
     // draw:line-distance
     // draw:luminance
-    qreal lineWidthPt = 0;
+    qreal lineWidthPt = ds.lineWidth() / 12700.;
     if (ds.fLine()) {
         // draw:marker-end
         quint32 lineEndArrowhead = ds.lineEndArrowhead();
@@ -282,42 +314,52 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
-
-    // NOTE: fShadow property specifies whether the shape has a shadow.
     if (ds.fShadow()) {
         // draw:shadow
         style.addProperty("draw:shadow", "visible", gt);
         // draw:shadow-color
-        OfficeArtCOLORREF clr = ds.shadowColor();
-        style.addProperty("draw:fill-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
-        // draw:shadow-offset-x
-        style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
-        // draw:shadow-offset-y
-        style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+        if (client) {
+            QColor clr = processOfficeArtCOLORREF(ds.shadowColor(), ds);
+            style.addProperty("draw:shadow-color", clr.name(), gt);
+        }
+        // NOTE: shadowOffset* properties MUST exist if shadowType property
+        // equals msoshadowOffset or msoshadowDouble, otherwise MUST be
+        // ignored, MS-ODRAW 2.3.13.6
+        quint32 type = ds.shadowType();
+        if ((type == 0) || (type == 1)) {
+            // draw:shadow-offset-x
+            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
+            // draw:shadow-offset-y
+            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+        }
         // draw:shadow-opacity
         float shadowOpacity = toQReal(ds.shadowOpacity());
         style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    } else {
+        style.addProperty("draw:shadow", "hidden", gt);
     }
     // draw:show-unit
     // draw:start-guide
     // draw:start-line-spacing-horizontal
     // draw:start-line-spacing-vertical
-
     // draw:stroke ('dash', 'none' or 'solid')
+
     // NOTE: OOo interprets solid line with width 0 as hairline, so if width ==
     // 0, stroke *must* be none to avoid OOo from displaying a line
-    if (ds.fLine() || ds.fNoLineDrawDash()) {
+    if (!ds.fLine() && ds.fNoLineDrawDash()) {
+        style.addProperty("draw:stroke", "dash", gt);
+        style.addProperty("draw:stroke-dash", defineDashStyle(msolineDashSys, styles), gt);
+    }
+    else if (ds.fLine()) {
         quint32 lineDashing = ds.lineDashing();
         if (lineWidthPt == 0) {
             style.addProperty("draw:stroke", "none", gt);
         } else if (lineDashing > 0 && lineDashing < 11) {
             style.addProperty("draw:stroke", "dash", gt);
-            // draw:stroke-dash from 2.3.8.17 lineDashing
-            style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
+            style.addProperty("draw:stroke-dash", defineDashStyle(lineDashing, styles), gt);
         } else {
             style.addProperty("draw:stroke", "solid", gt);
         }
-
     } else {
         style.addProperty("draw:stroke", "none", gt);
     }
@@ -325,7 +367,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:stroke-linejoin
     // draw:symbol-color
     // draw:textarea-horizontal-align
+    style.addProperty("draw:textarea-horizontal-align", getHorizontalAlign(ds.anchorText()), gt);
     // draw:textarea-vertical-align
+    style.addProperty("draw:textarea-vertical-align", getVerticalAlign(ds.anchorText()), gt);
     // draw:tile-repeat-offset
     // draw:unit
     // draw:visible-area-height
@@ -354,6 +398,14 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:padding-left
     // fo:padding-right
     // fo:padding-top
+    // TODO: Else the containing shape SHOULD use a set of default internal
+    // margins for text on shapes.  Test files required.
+    if (!ds.fAutoTextMargin()) {
+        style.addProperty("fo:padding-bottom", pt(ds.dyTextBottom()/12700.), gt);
+        style.addProperty("fo:padding-left", pt(ds.dxTextLeft()/12700.), gt);
+        style.addProperty("fo:padding-right", pt(ds.dxTextRight()/12700.), gt);
+        style.addProperty("fo:padding-top", pt(ds.dyTextTop()/12700.), gt);
+    }
     // fo:wrap-option
     // style:border-line-width
     // style:border-line-width-bottom
@@ -362,8 +414,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:border-line-width-top
     // style:editable
     // style:flow-with-text
-    // style:horizontal-pos
-    // style:horizontal-rel
+    // style:horizontal-pos (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:horizontal-pos", getHorizontalPos(ds.posH()), gt);
+    // style:horizontal-rel (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:horizontal-rel", getHorizontalRel(ds.posRelH()), gt);
     // style:mirror
     // style:number-wrapped-paragraphs
     // style:overflow-behavior
@@ -371,11 +425,13 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:protect
     // style:rel-height
     // style:rel-width
-    // style:repeat
+    // style:repeat // handled for image see draw:fill-image-name
     // style:run-through
     // style:shadow
-    // style:vertical-pos
-    // style:vertical-rel
+    // style:vertical-pos (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:vertical-pos", getVerticalPos(ds.posV()), gt);
+    // style:vertical-rel (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:vertical-rel", getVerticalRel(ds.posRelV()), gt);
     // style:wrap
     // style:wrap-contour
     // style:wrap-contour-mode
@@ -384,9 +440,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // svg:height
     if (ds.fLine() || ds.fNoLineDrawDash()) {
         if (client) {
-            QColor tmp = processOfficeArtCOLORREF(ds.lineColor(), ds);
             // svg:stroke-color from 2.3.8.1 lineColor
-            style.addProperty("svg:stroke-color", tmp.name(), gt);
+            QColor clr = processOfficeArtCOLORREF(ds.lineColor(), ds);
+            style.addProperty("svg:stroke-color", clr.name(), gt);
         }
         // svg:stroke-opacity from 2.3.8.2 lineOpacity
         style.addProperty("svg:stroke-opacity",
@@ -410,17 +466,24 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
 void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 {
-    // TODO another fill types
+    // TODO: another fill types
 
-    // convert angle to two points representing crossing of the line with rectangle to use it in svg
+    // convert angle to two points representing crossing of
+    // the line with rectangle to use it in svg
     // size of rectangle is 100*100 with the middle in 0,0
     // line coordinates are x1,y1; 0,0; x2,y2
     int dx=0,dy=0;
-    int angle = ((int)toQReal(ds.fillAngle())-90)%360;
+    int angle = (int)toQReal(ds.fillAngle());
 
+    // from observations of the documents it seems
+    // that angle is stored in -180,180 in MS 2003 documents
     if (angle < 0) {
-        angle = angle + 360;
+        angle = angle + 180;
     }
+
+    // 0 angle means that the angle is actually 90 degrees
+    // From docs: Zero angle represents the vector from bottom to top. [MS-ODRAW:fillAngle], p.198
+    angle = (angle + 90) % 360;
 
     qreal cosA = cos(angle * M_PI / 180);
     qreal sinA = sin(angle * M_PI / 180);
@@ -440,19 +503,54 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     }
 
     style.addAttribute("svg:spreadMethod", "reflect");
-    style.addAttribute("svg:x1", QString("%1\%").arg(50 - dx));
-    style.addAttribute("svg:x2", QString("%1\%").arg(50 + dx));
-    style.addAttribute("svg:y1", QString("%1\%").arg(50 + dy));
-    style.addAttribute("svg:y2", QString("%1\%").arg(50 - dy));
+
+    int x1 = 50 - dx;
+    int y1 = 50 + dy;
+    int x2 = 50 + dx;
+    int y2 = 50 - dy;
+
+    if (ds.fillFocus() == 100) {
+        qSwap(x1,x2);
+        qSwap(y1,y2);
+    } else if (ds.fillFocus() == 50) {
+        int sx = (x2 - x1) * 0.5;
+        int sy = (y2 - y1) * 0.5;
+        x2 = x1 +  sx;
+        y2 = y1 +  sy;
+
+        // in one case don't swap the gradient vector
+        if (angle != 90) {
+            qSwap(x1,x2);
+            qSwap(y1,y2);
+        }
+    } else if (ds.fillFocus() == -50) {
+        int sx = (x2 - x1) * 0.5;
+        int sy = (y2 - y1) * 0.5;
+        x2 = x1 + sx;
+        y2 = y1 + sy;
+        // in this case we have to swap the gradient vector
+        // check some gradient file from MS Office 2003
+        if (angle == 90) {
+            qSwap(x1,x2);
+            qSwap(y1,y2);
+        }
+    }
 
     QBuffer writerBuffer;
     writerBuffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&writerBuffer);
 
+    qreal fillOpacity = toQReal(ds.fillOpacity());
+    qreal fillBackOpacity = toQReal(ds.fillBackOpacity());
     // if fillShadeColors() is not empty use the colors and points defined inside
     // if it is empty use the colors defined inside fillColor() and fillBackColor
 
     if (ds.fillShadeColors()) {
+        style.addAttribute("svg:x1", QString("%1\%").arg(x1));
+        style.addAttribute("svg:y1", QString("%1\%").arg(y1));
+        style.addAttribute("svg:x2", QString("%1\%").arg(x2));
+        style.addAttribute("svg:y2", QString("%1\%").arg(y2));
+
         IMsoArray a = ds.fillShadeColors_complex();
 
         QBuffer streamBuffer(&a.data);
@@ -461,90 +559,154 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
         OfficeArtCOLORREF color;
         FixedPoint fixedPoint;
-        for (int i=0; i<a.nElems; i++) {
-            parseOfficeArtCOLORREF(in,color);
-            parseFixedPoint(in,fixedPoint);
+        for (int i = 0; i < a.nElems; i++) {
+            try {
+                parseOfficeArtCOLORREF(in,color);
+            } catch (EOFException _e) {
+                qDebug() << _e.msg;
+                break;
+            } catch (IOException _e) {
+                qDebug() << _e.msg;
+                break;
+            }
+            try {
+                parseFixedPoint(in,fixedPoint);
+            } catch (EOFException _e) {
+                qDebug() << _e.msg;
+                break;
+            } catch (IOException _e) {
+                qDebug() << _e.msg;
+                break;
+            }
 
+            qreal offset = toQReal(fixedPoint);
             elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", QString("%1").arg(toQReal(fixedPoint)));
+            elementWriter.addAttribute("svg:offset", QString("%1").arg(offset));
             elementWriter.addAttribute("svg:stop-color", processOfficeArtCOLORREF(color, ds).name());
+            qreal opacity = ((1.0 - offset) * fillBackOpacity + offset * fillOpacity);
+            if (opacity != 1.0) {
+                elementWriter.addAttribute("svg:stop-opacity", opacity);
+            }
             elementWriter.endElement();
         }
         streamBuffer.close();
     } else {
-
         QColor fillColor = processOfficeArtCOLORREF(ds.fillColor(), ds);
         QColor backColor = processOfficeArtCOLORREF(ds.fillBackColor(), ds);
 
-        // if the angle is negative the colors are swapped
-        if (toQReal(ds.fillAngle()) >= 0) {
-            QColor tempColor = fillColor;
-            fillColor = backColor;
-            backColor = tempColor;
+        if (ds.fillFocus() == 50){
+            if (toQReal( ds.fillAngle() ) > 0){
+                qSwap(x1,x2);
+                qSwap(y1,y2);
+            }
         }
 
-        // if fillFocus() is 0 or 100 than use only two colors for gradient fill
-        // else place one of the colors at 0 and 1 position of gradient fill and the second color between them
-        int fillFocus = ds.fillFocus();
-        if (fillFocus == 100) {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
+        style.addAttribute("svg:x1", QString("%1\%").arg(x1));
+        style.addAttribute("svg:y1", QString("%1\%").arg(y1));
+        style.addAttribute("svg:x2", QString("%1\%").arg(x2));
+        style.addAttribute("svg:y2", QString("%1\%").arg(y2));
 
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-        } else if (fillFocus == 0) {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
-        } else if (fillFocus < 0) {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", QString("%1").arg((fillFocus+100)/100.0));
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-        } else {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", QString("%1").arg((fillFocus)/100.0));
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
+        elementWriter.startElement("svg:stop");
+        elementWriter.addAttribute("svg:offset", "0");
+        elementWriter.addAttribute("svg:stop-color", fillColor.name());
+        if (fillOpacity != 1.0) {
+            elementWriter.addAttribute("svg:stop-opacity", fillOpacity);
         }
+        elementWriter.endElement();
+
+        elementWriter.startElement("svg:stop");
+        elementWriter.addAttribute("svg:offset", "1");
+        elementWriter.addAttribute("svg:stop-color", backColor.name());
+        if (fillBackOpacity != 1.0) {
+            elementWriter.addAttribute("svg:stop-opacity", fillBackOpacity);
+        }
+        elementWriter.endElement();
     }
 
     QString elementContents = QString::fromUtf8(writerBuffer.buffer(), writerBuffer.buffer().size());
     style.addChildElement("svg:stop", elementContents);
 }
 
+QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
+{
+    if (lineDashing <= 0 || lineDashing > 10) {
+        return QString();
+    }
+
+    KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
+    switch (lineDashing) {
+    case msolineSolid:
+        break;
+    case msolineDashSys:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:distance", "100%");
+        break;
+    case msolineDotSys:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "200%");
+        break;
+    case msolineDashDotSys:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case msolineDashDotDotSys:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case msolineDotGEL:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case msolineDashGEL:
+        strokeDash.addAttribute("draw:dots1", "4");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case msolineLongDashGEL:
+        strokeDash.addAttribute("draw:dots1", "8");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case msolineDashDotGEL:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case msolineLongDashDotGEL:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case msolineLongDashDotDotGEL:
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "2");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    };
+
+    if (lineDashing < 5) {
+        strokeDash.addAttribute("draw:distance", "100%");
+    } else {
+        strokeDash.addAttribute("draw:distance", "300%");
+    }
+    return styles.insert(strokeDash, QString("Dash_20_%1").arg(lineDashing),
+                         KoGenStyles::DontAddNumberToName);
+}
+
 QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
 {
+    static QRgb systemColors[25] = {
+        0xc0c0c0, 0x008080, 0x000080, 0x808080, 0xc0c0c0, 0xffffff, 0x000000,
+        0x000000, 0x000000, 0xffffff, 0xc0c0c0, 0xc0c0c0, 0x808080, 0x000080,
+        0xffffff, 0xc0c0c0, 0x808080, 0x808080, 0x000000, 0xc0c0c0, 0xffffff,
+        0x000000, 0xc0c0c0, 0x000000, 0xffffc0
+    };
     //TODO: implement all cases!!!
     QColor ret;
     MSO::OfficeArtCOLORREF tmp;
@@ -554,62 +716,76 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     // 0x00F0 map directly to system colors.  Table [1] specifies values that
     // have special meaning, [1] MS-ODRAW 2.2.2
     if (c.fSysIndex) {
+        if (c.red >= 0xF0) {
+            switch (c.red) {
+            // Use the fill color of the shape.
+            case 0xF0:
+                tmp = ds.fillColor();
+                break;
+            // If the shape contains a line, use the line color of the
+            // shape. Otherwise, use the fill color.
+            case 0xF1:
+            {
+                if (ds.fLine()) {
+                    tmp = ds.lineColor();
+                } else {
+                    tmp = ds.fillColor();
+                }
+                break;
+            }
+            // Use the line color of the shape.
+            case 0xF2:
+                tmp = ds.lineColor();
+                break;
+            // Use the shadow color of the shape.
+            case 0xF3:
+                tmp = ds.shadowColor();
+                break;
+            // TODO: Use the current, or last-used, color.
+            case 0xF4:
+                qWarning() << "red: Unhandled fSysIndex 0xF4!";
+                break;
+            // Use the fill background color of the shape.
+            case 0xF5:
+                tmp  = ds.fillBackColor();
+                break;
+            // TODO: Use the line background color of the shape.
+            case 0xF6:
+                qWarning() << "red: Unhandled fSysIndex 0xF6!";
+                break;
+            // If the shape contains a fill, use the fill color of the
+            // shape. Otherwise, use the line color.
+            case 0xF7:
+            {
+                if (ds.fFilled()) {
+                    tmp = ds.fillColor();
+                } else {
+                    tmp = ds.lineColor();
+                }
+                break;
+            }
+            default:
+                qWarning() << "red: Unhandled fSysIndex!" << c.red;
+                break;
+            }
+        } else if (c.green == 0) {
+            tmp = c;
+            // system colors
+            if (c.red < 25) {
+                const QRgb& col = systemColors[c.red];
+                tmp.red = qRed(col);
+                tmp.green = qGreen(col);
+                tmp.blue = qBlue(col);
+            } else {
+                qWarning() << "red: Unhandled system color" << c.red;
+            }
+        }
 
-        switch (c.red) {
-        // Use the fill color of the shape.
-        case 0xF0:
-            tmp = ds.fillColor();
-            break;
-        // If the shape contains a line, use the line color of the
-        // shape. Otherwise, use the fill color.
-        case 0xF1:
-        {
-            if (ds.fLine()) {
-                tmp = ds.lineColor();
-            } else {
-                tmp = ds.fillColor();
-            }
-            break;
-        }
-        // Use the line color of the shape.
-        case 0xF2:
-            tmp = ds.lineColor();
-            break;
-        // Use the shadow color of the shape.
-        case 0xF3:
-            tmp = ds.shadowColor();
-            break;
-        // TODO: Use the current, or last-used, color.
-        case 0xF4:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        // Use the fill background color of the shape.
-        case 0xF5:
-            tmp  = ds.fillBackColor();
-            break;
-        // TODO: Use the line background color of the shape.
-        case 0xF6:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        // If the shape contains a fill, use the fill color of the
-        // shape. Otherwise, use the line color.
-        case 0xF7:
-        {
-            if (ds.fFilled()) {
-                tmp = ds.fillColor();
-            } else {
-                tmp = ds.lineColor();
-            }
-            break;
-        }
-        default:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        }
         ret = client->toQColor(tmp);
         qreal p = c.blue / (qreal) 255;
 
-        switch (c.green) {
+        switch (c.green & 0xF) {
+        case 0x00: break; // do nothing
         // Darken the color by the value that is specified in the blue field.
         // A blue value of 0xFF specifies that the color is to be left
         // unchanged, whereas a blue value of 0x00 specifies that the color is
@@ -640,17 +816,24 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
             }
             break;
 	}
-        //TODO: 
+        //TODO:
         case 0x03:
         case 0x04:
         case 0x05:
         case 0x06:
-        case 0x20:
-        case 0x40:
-        case 0x80:
         default:
-            qWarning() << "green: Unhandled fSysIndex!";
+            qWarning() << "green: Unhandled fSysIndex!" << c.green;
             break;
+        }
+        // TODO
+        if (c.green & 0x20) {
+            qWarning() << "green: unhandled 0x20";
+        }
+        if (c.green & 0x40) {
+            qWarning() << "green: unhandled 0x40";
+        }
+        if (c.green & 0x80) {
+            qWarning() << "green: unhandled 0x80";
         }
     } else {
         ret = client->toQColor(c);
@@ -661,21 +844,21 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
 const char* getFillType(quint32 fillType)
 {
     switch (fillType) {
-    case 1: // msofillPattern
+    case msofillPattern:
         // NOTE: there's usually a DIB file used for the pattern, check also
         // draw:fill="hatch" and <draw:hatch> in ODF specification
-    case 2: // msofillTexture
-    case 3: // msofillPicture
+    case msofillTexture:
+    case msofillPicture:
         return "bitmap";
-    case 4: // msofillShade
-    case 5: // msofillShadeCenter
-    case 6: // msofillShadeShape
-    case 7: // msofillShadeScale
-    case 8: // msofillShadeTitle
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeScale:
+    case msofillShadeTitle:
         return "gradient";
-    case 9: // msofillBackground
+    case msofillBackground:
         return "none";
-    case 0: // msofillSolid
+    case msofillSolid:
     default:
         return "solid";
     }
@@ -684,18 +867,18 @@ const char* getFillType(quint32 fillType)
 const char* getRepeatStyle(quint32 fillType)
 {
     switch (fillType) {
-    case 3: // msofillPicture
-    case 7: // msofillShadeScale
+    case msofillPicture:
+    case msofillShadeScale:
         return "stretch";
-    case 0: // msofillSolid
-    case 4: // msofillShade
-    case 5: // msofillShadeCenter
-    case 6: // msofillShadeShape
-    case 8: // msofillShadeTitle
-    case 9: // msofillBackground
+    case msofillSolid:
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeTitle:
+    case msofillBackground:
         return "no-repeat";
-    case 1: // msofillPattern
-    case 2: // msofillTexture
+    case msofillPattern:
+    case msofillTexture:
     default:
         return "repeat";
     }
@@ -705,17 +888,130 @@ const char* getGradientRendering(quint32 fillType)
 {
     //TODO: Add the logic!!!
     switch (fillType) {
-    case 0: //msofillSolid
-    case 1: //msofillPattern
-    case 2: //msofillTexture
-    case 3: //msofillPicture
-    case 4: //msofillShade
-    case 5: //msofillShadeCenter
-    case 6: //msofillShadeShape
-    case 7: //msofillShadeScale
-    case 8: //msofillShadeTitle
-    case 9: //msofillBackground
+    case msofillSolid:
+    case msofillPattern:
+    case msofillTexture:
+    case msofillPicture:
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeScale:
+    case msofillShadeTitle:
+    case msofillBackground:
     default:
         return "axial";
+    }
+}
+
+const char* getHorizontalPos(quint32 posH)
+{
+    switch (posH) {
+    case 0: // msophAbs
+        return "from-left";
+    case 1: // msophLeft
+        return "left";
+    case 2: // msophCenter
+        return "center";
+    case 3: // msophRight
+        return "right";
+    case 4: // msophInside
+        return "inside";
+    case 5: // msophOutside
+        return "outside";
+    default:
+        return "from-left";
+    }
+}
+
+const char* getHorizontalRel(quint32 posRelH)
+{
+    switch (posRelH) {
+    case 0: //msoprhMargin
+        return "page-content";
+    case 1: //msoprhPage
+        return "page";
+    case 2: //msoprhText
+        return "paragraph";
+    case 3: //msoprhChar
+        return "char";
+    default:
+        return "page-content";
+    }
+}
+
+const char* getVerticalPos(quint32 posV)
+{
+    switch (posV) {
+    case 0: // msophAbs
+        return "from-top";
+    case 1: // msophTop
+        return "top";
+    case 2: // msophCenter
+        return "middle";
+    case 3: // msophBottom
+        return "bottom";
+    case 4: // msophInside - not compatible with ODF
+        return "top";
+    case 5: // msophOutside - not compatible with ODF
+        return "bottom";
+    default:
+        return "from-top";
+    }
+}
+
+const char* getVerticalRel(quint32 posRelV)
+{
+    switch (posRelV) {
+    case 0: //msoprvMargin
+        return "page-content";
+    case 1: //msoprvPage
+        return "page";
+    case 2: //msoprvText
+        return "paragraph";
+    case 3: //msoprvLine
+        return "char";
+    default:
+        return "page-content";
+    }
+}
+
+const char* getHorizontalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case msoanchorTop:
+    case msoanchorTopBaseline:
+    case msoanchorMiddle:
+    case msoanchorBottom:
+    case msoanchorBottomBaseline:
+        return "left";
+    case msoanchorTopCentered:
+    case msoanchorTopCenteredBaseline:
+    case msoanchorMiddleCentered:
+    case msoanchorBottomCentered:
+    case msoanchorBottomCenteredBaseline:
+        return "justify";
+    default:
+        return "left";
+    }
+}
+
+const char* getVerticalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case msoanchorTop:
+    case msoanchorTopCentered:
+    case msoanchorTopBaseline: //not compatible with ODF
+    case msoanchorTopCenteredBaseline: //not compatible with ODF
+        return "top";
+    case msoanchorMiddle:
+    case msoanchorMiddleCentered:
+        return "middle";
+    case msoanchorBottom:
+    case msoanchorBottomCentered:
+    case msoanchorBottomBaseline: //not compatible with ODF
+    case msoanchorBottomCenteredBaseline: //not compatible with ODF
+        return "bottom";
+    default:
+        return "top";
     }
 }

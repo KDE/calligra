@@ -28,13 +28,13 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
 {
     widget.setupUi(this);
     m_textGroup = new QButtonGroup(widget.textGroupBox);
-    m_textGroup->addButton(widget.createNewPage, KWord::AutoCreateNewFrameBehavior);
-    m_textGroup->addButton(widget.resizeLastFrame, KWord::AutoExtendFrameBehavior);
-    m_textGroup->addButton(widget.noExtraText, KWord::IgnoreContentFrameBehavior);
+    m_textGroup->addButton(widget.createNewPage, Words::AutoCreateNewFrameBehavior);
+    m_textGroup->addButton(widget.resizeLastFrame, Words::AutoExtendFrameBehavior);
+    m_textGroup->addButton(widget.noExtraText, Words::IgnoreContentFrameBehavior);
     m_newPageGroup = new QButtonGroup(widget.newPageGroupBox);
-    m_newPageGroup->addButton(widget.noFollowup, KWord::NoFollowupFrame);
-    m_newPageGroup->addButton(widget.reconnect, KWord::ReconnectNewFrame);
-    m_newPageGroup->addButton(widget.placeCopy, KWord::CopyNewFrame);
+    m_newPageGroup->addButton(widget.noFollowup, Words::NoFollowupFrame);
+    m_newPageGroup->addButton(widget.reconnect, Words::ReconnectNewFrame);
+    m_newPageGroup->addButton(widget.placeCopy, Words::CopyNewFrame);
 
     connect(m_newPageGroup, SIGNAL(buttonClicked(int)), this, SLOT(newPageGroupUpdated(int)));
     connect(widget.keepAspectRatio, SIGNAL(clicked()), this, SLOT(keepAspectChanged()));
@@ -70,8 +70,8 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
     GuiHelper copyFrame, allFrames, protectContent, evenOdd, keepAspect;
     // radioGroups
     GuiHelper::State newFrame = GuiHelper::Unset, frameBehavior = GuiHelper::Unset;
-    KWord::NewFrameBehavior nfb = KWord::ReconnectNewFrame;
-    KWord::FrameBehavior fb = KWord::AutoExtendFrameBehavior;
+    Words::NewFrameBehavior nfb = Words::ReconnectNewFrame;
+    Words::FrameBehavior fb = Words::AutoExtendFrameBehavior;
     foreach (KWFrame *frame, frames) {
         if (frameBehavior == GuiHelper::Unset) {
             fb = frame->frameBehavior();
@@ -91,9 +91,11 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
             if (frame->frameSet()->frames().indexOf(frame) > 0)
                 copyFrame.addState(frame->isCopy() ? GuiHelper::On : GuiHelper::Off);
         }
-
+#if 0
         evenOdd.addState(frame->frameOnBothSheets() ? GuiHelper::On : GuiHelper::Off);
-
+#else
+        evenOdd.addState(GuiHelper::Off);
+#endif
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(frame->frameSet());
         if (textFs == 0)
             keepAspect.addState(frame->shape()->keepAspectRatio() ? GuiHelper::On : GuiHelper::Off);
@@ -138,15 +140,17 @@ void KWGeneralFrameProperties::save()
         if (widget.keepAspectRatio->checkState() != Qt::PartiallyChecked)
             frame->shape()->setKeepAspectRatio(widget.keepAspectRatio->checkState() == Qt::Checked);
         if (m_textGroup->checkedId() != -1) {
-            KWord::FrameBehavior fb = static_cast<KWord::FrameBehavior>(m_textGroup->checkedId());
+            Words::FrameBehavior fb = static_cast<Words::FrameBehavior>(m_textGroup->checkedId());
             frame->setFrameBehavior(fb);
         }
         if (m_newPageGroup->checkedId() != -1) {
-            KWord::NewFrameBehavior nfb = static_cast<KWord::NewFrameBehavior>(m_newPageGroup->checkedId());
+            Words::NewFrameBehavior nfb = static_cast<Words::NewFrameBehavior>(m_newPageGroup->checkedId());
             frame->setNewFrameBehavior(nfb);
         }
+#if 0
         if (widget.evenOdd->checkState() != Qt::PartiallyChecked)
             frame->setFrameOnBothSheets(widget.evenOdd->checkState() != Qt::Checked);
+#endif
         if (frame->frameSet()) {
             if (widget.protectContent->checkState() != Qt::PartiallyChecked)
                 frame->shape()->setContentProtected(widget.protectContent->checkState() == Qt::Checked);
@@ -164,7 +168,7 @@ void KWGeneralFrameProperties::save()
 
 void KWGeneralFrameProperties::newPageGroupUpdated(int which)
 {
-    widget.createNewPage->setEnabled(which == KWord::ReconnectNewFrame);
+    widget.createNewPage->setEnabled(which == Words::ReconnectNewFrame);
 }
 
 void KWGeneralFrameProperties::keepAspectChanged()

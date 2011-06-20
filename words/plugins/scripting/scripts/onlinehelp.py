@@ -15,7 +15,7 @@ class Dialog:
 
         #self.part = self.forms.loadPart(page, "libkhtmlpart", "file:///home/kde4/kspreaddocument2.html")
         #self.part = self.forms.loadPart(page, "libkhtmlpart", "http://127.0.0.1:8282/")
-        self.part = self.forms.loadPart(page, "libkhtmlpart", "http://techbase.kde.org/Development/Tutorials/KWord_Scripting")
+        self.part = self.forms.loadPart(page, "libkhtmlpart", "http://techbase.kde.org/Development/Tutorials/Words_Scripting")
         if not self.part:
             raise "Failed to load the KHTML KPart"
         self.part.javaScriptEnabled = False

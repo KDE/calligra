@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _FILTER_KWORD_1_3__KWORDFRAMESET_H
-#define _FILTER_KWORD_1_3__KWORDFRAMESET_H
+#ifndef _FILTER_WORDS_1_3__WORDSFRAMESET_H
+#define _FILTER_WORDS_1_3__WORDSFRAMESET_H
 
 class QString;
 class QTextStream;
@@ -31,13 +31,13 @@ class QTextStream;
 
 #include "kword13paragraph.h"
 
-class KWord13Frameset
+class Words13Frameset
 {
 public:
-    KWord13Frameset(int frameType, int frameInfo, const QString& name);
-    virtual ~KWord13Frameset(void);
+    Words13Frameset(int frameType, int frameInfo, const QString& name);
+    virtual ~Words13Frameset(void);
 public:
-    virtual bool addParagraph(const KWord13Paragraph& para);
+    virtual bool addParagraph(const Words13Paragraph& para);
     virtual bool setKey(const QString& key);
     virtual void xmldump(QTextStream& iostream);
 public:
@@ -49,23 +49,23 @@ protected:
     QString m_name; ///< Name of frameset
 };
 
-class KWordTextFrameset : public KWord13Frameset
+class WordsTextFrameset : public Words13Frameset
 {
 public:
-    KWordTextFrameset(int frameType, int frameInfo, const QString& name);
-    virtual ~KWordTextFrameset(void);
+    WordsTextFrameset(int frameType, int frameInfo, const QString& name);
+    virtual ~WordsTextFrameset(void);
 public:
-    virtual bool addParagraph(const KWord13Paragraph& para);
+    virtual bool addParagraph(const Words13Paragraph& para);
     virtual void xmldump(QTextStream& iostream);
 public:
-    KWord13ParagraphGroup m_paragraphGroup;
+    Words13ParagraphGroup m_paragraphGroup;
 };
 
-class KWord13PictureFrameset : public KWord13Frameset
+class Words13PictureFrameset : public Words13Frameset
 {
 public:
-    KWord13PictureFrameset(int frameType, int frameInfo, const QString& name);
-    virtual ~KWord13PictureFrameset(void);
+    Words13PictureFrameset(int frameType, int frameInfo, const QString& name);
+    virtual ~Words13PictureFrameset(void);
 public:
     virtual bool setKey(const QString& key);
     virtual void xmldump(QTextStream& iostream);
@@ -73,4 +73,4 @@ public:
     QString m_pictureKey;
 };
 
-#endif // _FILTER_KWORD_1_3__KWORDFRAMESET_H
+#endif // _FILTER_WORDS_1_3__WORDSFRAMESET_H

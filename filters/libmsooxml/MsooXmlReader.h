@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -51,7 +51,8 @@ protected:
 public:
     virtual ~MsooXmlReaderContext();
     MSOOXML::MsooXmlRelationships* relationships;
-private:    
+    QMap<QString, QString> colorMap;
+private:
     Q_DISABLE_COPY(MsooXmlReaderContext)
 };
 
@@ -83,11 +84,12 @@ public:
     //! Reimplemented after QXmlStreamReader: adds line, column and filename information
     void raiseError(const QString & message = QString());
 
+    // Uncomment if debugging is needed
     //! Reimplemented after QXmlStreamReader for supporting undo read and for debugging purposes
-    TokenType readNext();
+    //TokenType readNext();
 
     //! Undoes recent readNext(); only one recent readNext() can be undoed
-    void undoReadNext();
+    //void undoReadNext();
 
     // const strings (for optimization)
     static const char* constOn;

@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Start-Event-Message
+Name[es]=Mensaje del evento inicial
 Name[et]=Sündmuse alguse sõnum
+Name[nb]=Start-hendelse-melding
 Name[pt]=Evento-Inicial-Mensagem
 Name[pt_BR]=Mensagem do evento inicial
+Name[sv]=Starthändelse-brev
 Name[uk]=Повідомлення початкової події
 Name[x-test]=xxStart-Event-Messagexx
 Name[zh_TW]=開始─事件─訊息

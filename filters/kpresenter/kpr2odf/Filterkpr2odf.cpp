@@ -18,6 +18,10 @@
    Boston, MA  02110-1301  USA.
 */
 
+// Own
+#include "Filterkpr2odf.h"
+
+// POSIX
 #include <cmath>
 #include <cfloat>
 
@@ -34,7 +38,7 @@
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
-//KOffice includes
+//Calligra includes
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoDocumentInfo.h>
@@ -43,8 +47,6 @@
 #include <KoXmlNS.h>
 #include <KoOdf.h>
 #include <KoGenStyle.h>
-
-#include "Filterkpr2odf.h"
 
 using std::sin;
 using std::cos;

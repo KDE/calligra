@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=Phone Ethernet
+Name[el]=Phone Ethernet
+Name[nb]=Ethernet-telefon
+Name[nl]=Telefoon ethernet
 Name[pt]=Telefone Ethernet
 Name[pt_BR]=Telefone Ethernet
 Name[sv]=Telefon Ethernet
 Name[uk]=Мережа телефону
 Name[x-test]=xxPhone Ethernetxx
+Name[zh_TW]=電話乙太網路

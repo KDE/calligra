@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -28,6 +28,7 @@
 #include "tablehandler.h"
 //#include "versionmagic.h"
 #include "paragraph.h"
+#include "exceptions.h"
 
 #include <wv2/src/handlers.h>
 #include <wv2/src/functordata.h>
@@ -46,6 +47,7 @@
 #include <vector>
 #include <stack>
 
+
 class Document;
 
 namespace wvWare
@@ -58,7 +60,7 @@ class PAP;
 }
 }
 
-class KWordReplacementHandler : public wvWare::InlineReplacementHandler
+class WordsReplacementHandler : public wvWare::InlineReplacementHandler
 {
 public:
     virtual wvWare::U8 hardLineBreak();
@@ -67,12 +69,12 @@ public:
 };
 
 
-class KWordTextHandler : public QObject, public wvWare::TextHandler
+class WordsTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~KWordTextHandler() { Q_ASSERT (m_fldStart == m_fldEnd); }
+    WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    ~WordsTextHandler() { }
 
     //////// TextHandler interface
 
@@ -80,7 +82,8 @@ public:
     virtual void sectionEnd();
     virtual void pageBreak();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
-    virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
+    virtual void footnoteFound(wvWare::FootnoteData data, wvWare::UString characters,
+                               wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
     virtual void annotationFound(wvWare::UString characters,
@@ -100,9 +103,16 @@ public:
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
     virtual void inlineObjectFound(const wvWare::PictureData& data);
-    virtual void floatingObjectFound(unsigned int globalCP );
+    virtual void floatingObjectFound(unsigned int globalCP);
 
     ///////// Our own interface
+
+    /**
+     * Check the current texthandler state.  At the moment only the number of
+     * opened and closed fields if checked.
+     * @return 0 - Not Ok, 1 - Ok
+     */
+    bool stateOk() const;
 
     /**
      * Paragraph can be present in {header, footer, footnote, endnote,
@@ -115,6 +125,23 @@ public:
      * @return font name
      */
     QString getFont(unsigned ftc) const;
+
+    /**
+     * A special purpose function which provides the first font color not set
+     * to cvAuto from the styles hierarchy of the lately processed paragraph.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string.
+     */
+    QString paragraphBaseFontColorBkp() const { return m_paragraphBaseFontColorBkp; }
+
+    /**
+     * Provides access to the background color of the lately processed
+     * paragraph to other handlers.  Notice that text-properties of any of the
+     * text styles might modify the background color.
+     *
+     * @return background color in the format "#RRGGBB" or an empty string.
+     */
+    QString paragraphBgColor() const { return m_paragraph ? m_paragraph->currentBgColor() : QString(); }
 
     // Provide access to private attributes for our handlers
     Document* document() const { return m_document; }
@@ -135,12 +162,22 @@ signals:
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void tableFound(KWord::Table* table);
+    void tableFound(Words::Table* table);
     void inlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
     void floatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
 /*     void updateListDepth(int); */
 
 private:
+
+    /**
+     * A special purpose function which provides the font color of the current
+     * paragraph.  Looking for the first built-in paragraph style in the styles
+     * hierarchy providing a font color not set to cvAuto.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string
+     */
+    QString paragraphBaseFontColor() const;
+
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
     Document* m_document; // The document owning this text handler
@@ -157,8 +194,13 @@ private:
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
 
-    KWord::Table* m_currentTable;
+    Words::Table* m_currentTable;
     Paragraph *m_paragraph; //pointer to paragraph object
+
+    // The 1st font color not set to cvAuto from the built-in styles hierarchy
+    // of the lately processed paragraph.
+    QString m_paragraphBaseFontColorBkp;
+
 #if 1
     bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
     int        m_dcs_fdct;
@@ -188,20 +230,31 @@ private:
     //  State
     // ************************************************
 
-    //save/restore for processing footnotes (very similar to the wv2 method)
+    //save/restore (very similar to the wv2 method)
     struct State {
-        State(KWord::Table* curTab, Paragraph* para, QString lStyleName,
-              int curListDepth, int curListID, const QMap<int, QString> &preLists) :
-                currentTable(curTab), paragraph(para), listStyleName(lStyleName),
-                currentListDepth(curListDepth), currentListID(curListID),
-                previousLists(preLists) {}
+        State(Words::Table* table, Paragraph* paragraph,
+              QString listStyleName, int listDepth, int listID,
+              const QMap<int, QString> &prevLists,
+              KoXmlWriter* drawingWriter, bool insideDrawing) :
 
-        KWord::Table* currentTable;
+            table(table),
+            paragraph(paragraph),
+            listStyleName(listStyleName),
+            listDepth(listDepth),
+            listID(listID),
+            previousLists(prevLists),
+            drawingWriter(drawingWriter),
+            insideDrawing(insideDrawing)
+        {}
+        Words::Table* table;
         Paragraph* paragraph;
         QString listStyleName;
-        int currentListDepth; //tells us which list level we're on (-1 if not in a list)
-        int currentListID; //tracks the id of the current list - 0 if no list
+        int listDepth; //tells us which list level we're on (-1 if not in a list)
+        int listID;    //tracks the id of the current list - 0 if no list
         QMap<int, QString> previousLists; //remember previous lists, to continue numbering
+
+        KoXmlWriter* drawingWriter;
+        bool insideDrawing;
     };
 
     std::stack<State> m_oldStates;
@@ -214,7 +267,7 @@ private:
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
     QString createBulletStyle(const QString& textStyleName) const;
-    void updateListStyle(const QString& textStyleName);
+    void updateListStyle(const QString& textStyleName) throw(InvalidFormatException);
 
     QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QString m_listStyleName; //track the name of the list style
@@ -236,7 +289,7 @@ private:
     {
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
-        //REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
+        REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
         //REF = 0x03, ///< Reference
         //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
         //SET = 0x06,

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -145,7 +145,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(si)
             ELSE_WRONG_FORMAT
@@ -166,6 +166,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
  - [done] r (Rich Text Run) §18.4.4
  - rPh (Phonetic Run) §18.4.6
  - [done] t (Text) §18.4.12
+
  Parent elements:
  - [done] sst (§18.4.9)
 
@@ -191,7 +192,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(t)
             ELSE_TRY_READ_IF(r)
@@ -204,7 +205,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
 
     body = buf.releaseWriter();
     siBuffer.close();
-    (*m_context->strings)[m_index] = siData;
+    (*m_context->strings)[m_index] = QString::fromUtf8(siData);
 
     m_index++;
     READ_EPILOGUE

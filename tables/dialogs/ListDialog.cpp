@@ -302,10 +302,8 @@ void ListDialog::slotOk()
         d->config->group("Parameters").writeEntry("Other list", result);
         //todo refresh AutoFillCommand::other
         // I don't know how to do for the moment
-        if (AutoFillCommand::other != 0) {
-            delete(AutoFillCommand::other);
-            AutoFillCommand::other = 0;
-        }
+        delete(AutoFillCommand::other);
+        AutoFillCommand::other = 0;
     }
     accept();
 }

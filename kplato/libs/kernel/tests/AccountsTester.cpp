@@ -43,7 +43,7 @@ void AccountsTester::init()
     t2 = QTime( 17, 0, 0 );
     length = t1.msecsTo( t2 );
 
-    t = project->createTask( project );
+    t = project->createTask();
     t->setName( "T1" );
     project->addTask( t, project );
     t->estimate()->setUnit( Duration::Unit_d );

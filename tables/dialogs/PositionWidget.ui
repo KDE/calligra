@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author>The KSpread Team &lt;koffice-devel@kde.org&gt;</author>
+ <author>The KSpread Team &lt;calligra-devel@kde.org&gt;</author>
  <comment>This file is part of the KDE project
-Copyright (C) 2006 The KSpread Team &lt;koffice-devel@kde.org&gt;
+Copyright (C) 2006 The KSpread Team &lt;calligra-devel@kde.org&gt;
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

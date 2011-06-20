@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -151,6 +151,7 @@ void MsooXmlReader::raiseError(const QString & message)
     kDebug() << errorString();
 }
 
+/*
 QXmlStreamReader::TokenType MsooXmlReader::readNext()
 {
     if (m_readUndoed) {
@@ -166,6 +167,7 @@ void MsooXmlReader::undoReadNext()
 {
     m_readUndoed = true;
 }
+*/
 
 void MsooXmlReader::raiseElNotFoundError(const char* elementName)
 {

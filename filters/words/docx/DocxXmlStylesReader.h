@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -27,6 +27,7 @@
 #include <QtCore/QMap>
 
 #include "DocxXmlDocumentReader.h"
+#include <MsooXmlDrawingTableStyle.h>
 
 #include <KoGenStyles.h>
 #include <KoCharacterStyle.h>
@@ -60,6 +61,8 @@ protected:
     // Styles which are applied to all styles
     KoGenStyle m_defaultTextStyle;
     KoGenStyle m_defaultParagraphStyle;
+
+    MSOOXML::DrawingTableStyle* m_currentStyle;
 
 private:
     void init();

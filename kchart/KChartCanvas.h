@@ -22,7 +22,7 @@
 #ifndef KCHARTCANVAS_H
 #define KCHARTCANVAS_H
 
-// KOffice
+// Calligra
 #include <KoCanvasBase.h>
 
 // Qt
