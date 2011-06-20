@@ -112,6 +112,8 @@ protected:
         QString viewBox;
         QString shapePath;
         int extraFormulaIndex;
+        QString leftMargin, rightMargin, topMargin, bottomMargin;
+        bool fitTextToShape, fitShapeToText;
 
         // Parameters for group shape situation
         bool insideGroup;

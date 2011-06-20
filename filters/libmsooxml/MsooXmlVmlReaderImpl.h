@@ -403,6 +403,19 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentVMLProperties.opacity));
     }
 
+    if (m_currentVMLProperties.fitTextToShape) {
+        m_currentDrawStyle->addProperty("draw:fit-to-size", "true");
+    }
+
+    if (m_currentVMLProperties.fitShapeToText) {
+        m_currentDrawStyle->addProperty("draw:auto-grow-height", "true");
+    }
+
+    m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.leftMargin);
+    m_currentDrawStyle->addProperty("fo:margin-right", m_currentVMLProperties.rightMargin);
+    m_currentDrawStyle->addProperty("fo:margin-top", m_currentVMLProperties.topMargin);
+    m_currentDrawStyle->addProperty("fo:margin-bottom", m_currentVMLProperties.bottomMargin);
+
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
         body->addAttribute("draw:style-name", drawStyleName);
@@ -431,6 +444,12 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.shadowXOffset = "2pt"; // default
     m_currentVMLProperties.shadowYOffset = "2pt"; //default
     m_currentVMLProperties.imagedataPath = QString();
+    m_currentVMLProperties.leftMargin = "0.1in"; // default
+    m_currentVMLProperties.rightMargin = "0.1in"; // default
+    m_currentVMLProperties.topMargin = "0.05in"; //default
+    m_currentVMLProperties.bottomMargin = "0.05in"; //default
+    m_currentVMLProperties.fitTextToShape = false;
+    m_currentVMLProperties.fitShapeToText = false;
 }
 
 QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
@@ -2458,6 +2477,44 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
+    VMLShapeProperties oldProperties = m_currentVMLProperties;
+    TRY_READ_ATTR_WITHOUT_NS(style)
+    RETURN_IF_ERROR(parseCSS(style))
+
+    if (m_currentVMLProperties.vmlStyle.value("mso-fit-shape-to-text") == "t") {
+        oldProperties.fitShapeToText = true;
+    }
+    if (m_currentVMLProperties.vmlStyle.value("mso-fit-text-to-shape") == "t") {
+        oldProperties.fitTextToShape = true;
+    }
+
+    // In below code, the else clauses are needed for cases that not all insets are defined
+    TRY_READ_ATTR_WITHOUT_NS(inset)
+    if (!inset.isEmpty()) {
+        doPrependCheck(inset);
+        int index = inset.indexOf(',');
+        if (index > 0) {
+            oldProperties.leftMargin = inset.left(index);
+            inset = inset.mid(index + 1);
+            doPrependCheck(inset);
+            index = inset.indexOf(',');
+            if (index > 0) {
+                oldProperties.topMargin = inset.left(index);
+                inset = inset.mid(index + 1);
+                doPrependCheck(inset);
+                index = inset.indexOf(',');
+                if (index > 0) {
+                    oldProperties.rightMargin = inset.left(index);
+                    oldProperties.bottomMargin = inset.mid(index + 1);
+                    doPrependCheck(oldProperties.bottomMargin);
+                } else {
+                    oldProperties.rightMargin = inset.left(index);
+                }
+            } else {
+                oldProperties.topMargin = inset.left(index);
+            }
+        }
+    }
 
     while (!atEnd()) {
         readNext();
@@ -2468,6 +2525,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
 #endif
         }
     }
+
+    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
