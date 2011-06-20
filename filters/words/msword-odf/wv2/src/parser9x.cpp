@@ -752,14 +752,26 @@ void Parser9x::processParagraph( U32 fc )
             const PLCFIterator<Word97::PCD> pcdIt( m_plcfpcd->at( ( *it ).m_position.piece ) );
 
             while ( index < limit ) {
-                Word97::CHP* chp = new Word97::CHP( style->chp() );
-                U32 length = m_properties->fullSavedChp( ( *it ).m_startFC + index * ( ( *it ).m_isUnicode ? 2 : 1 ), chp, style );
+                //A temp character style initialized to CHPs of the paragraph
+                //style.  On top of it's CHPs both CHPX and the built-in
+                //character style referred by the istd are applied, while
+                //comparing with it's the current CHPs.
+                Style charStyle( style->chp() );
+
+                U32 fc = ( *it ).m_startFC + index * ( ( *it ).m_isUnicode ? 2 : 1 );
+                U32 length = m_properties->fullSavedChp( fc,
+                                                         &(const_cast<Word97::CHP&>(charStyle.chp())),
+                                                         &charStyle );
                 if ( ( *it ).m_isUnicode ) {
                     length >>= 1;
                 }
                 length = length > limit - index ? limit - index : length;
 
-                m_properties->applyClxGrpprl( pcdIt.current(), m_fib.fcClx, chp, style );
+                m_properties->applyClxGrpprl( pcdIt.current(), m_fib.fcClx,
+                                              &(const_cast<Word97::CHP&>(charStyle.chp())),
+                                              &charStyle );
+
+                Word97::CHP* chp = new Word97::CHP( charStyle.chp() );
                 // keep it that way, else the CHP gets deleted!
                 SharedPtr<const Word97::CHP> sharedChp( chp );
                 processChunk( *it, chp, length, index, pcdIt.currentStart() );
