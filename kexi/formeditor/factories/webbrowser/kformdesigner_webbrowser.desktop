@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
+Name=Web Browser
+Name[en_GB]=Web Browser
+X-KDE-Library=kformdesigner_webbrowser
+X-KFormDesigner-FactoryGroup=
+X-KFormDesigner-WidgetFactoryVersion=2
