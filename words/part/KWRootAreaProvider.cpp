@@ -136,7 +136,7 @@ void KWRootAreaProvider::handleDependentProviders(int pageNumber)
     }
 }
 
-KWTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *documentLayout)
+KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *documentLayout)
 {
     KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
     Q_ASSERT(pageManager);
@@ -222,14 +222,12 @@ KWTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
         }
     }
 
-    //kDebug(32001)<<rootAreaPage->rootAreas.count() << frames.count();
-    //Q_ASSERT(rootAreaPage->rootAreas.count() < frames.count());
     KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
 
     KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, m_textFrameSet, frame, pageNumber);
     area->setAcceptsPageBreak(true);
 
-    if (frame) {
+    if (frame) { // Not every KoTextLayoutRootArea has a frame that contains a KoShape for display purposes.
         KoShape *shape = frame->shape();
         Q_ASSERT(shape);
         //Q_ASSERT_X(pageNumber == pageManager->page(shape).pageNumber(), __FUNCTION__, QString("KWPageManager is out-of-sync, pageNumber=%1 vs pageNumber=%2 with offset=%3 vs offset=%4 on frameSetType=%5").arg(pageNumber).arg(pageManager->page(shape).pageNumber()).arg(shape->absolutePosition().y()).arg(pageManager->page(shape).offsetInDocument()).arg(Words::frameSetTypeName(m_textFrameSet->textFrameSetType())).toLocal8Bit());
@@ -253,7 +251,10 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     if (pageManager->pageCount() == 0) // not ready yet (may happen e.g. on loading a document)
         return 0;
 
-    KWTextLayoutRootArea *area = 0;
+    // We are interested in the first KoTextLayoutRootArea that has a shape associated for display
+    // purposes. This can mean that multiple KoTextLayoutRootArea are created but only selected
+    // ones that should be layouted and displayed are passed on to the textlayout-library.
+    KoTextLayoutRootArea *area = 0;
     do {
         area = provideNext(documentLayout);
     } while(m_textFrameSet->textFrameSetType() != Words::MainTextFrameSet && area && !area->associatedShape());
