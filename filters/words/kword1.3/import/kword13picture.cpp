@@ -28,17 +28,17 @@
 
 #include "kword13picture.h"
 
-KWord13Picture::KWord13Picture(void) : m_tempFile(0), m_valid(false)
+Words13Picture::Words13Picture(void) : m_tempFile(0), m_valid(false)
 {
 
 }
 
-KWord13Picture::~KWord13Picture(void)
+Words13Picture::~Words13Picture(void)
 {
     delete m_tempFile;
 }
 
-bool KWord13Picture::loadPicture(KoStore* store)
+bool Words13Picture::loadPicture(KoStore* store)
 {
     kDebug(30520) << "Loading picture:" << m_storeName;
 
@@ -56,7 +56,7 @@ bool KWord13Picture::loadPicture(KoStore* store)
     return m_valid;
 }
 
-QString KWord13Picture::getOasisPictureName(void) const
+QString Words13Picture::getOasisPictureName(void) const
 {
     if (! m_valid || ! m_tempFile)
         return QString();

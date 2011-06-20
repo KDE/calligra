@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -124,7 +124,7 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     MSOOXML::MsooXmlRelationships& _relationships,
     QMap<int, QString> _commentAuthors,
     QMap<QString, QString> masterColorMap,
-    QMap<QString, QString> _oleReplacements,
+    VmlDrawingReader& _vmlReader,
     QString _tableStylesFilePath)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
@@ -133,7 +133,8 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
         slideMasterProperties(_slideMasterProperties),
         notesMasterProperties(_notesMasterProperties),
         commentAuthors(_commentAuthors),
-        oleReplacements(_oleReplacements), firstReadingRound(false),
+        vmlReader(_vmlReader),
+        firstReadingRound(false),
         tableStylesFilePath(_tableStylesFilePath)
 {
     colorMap = masterColorMap;
@@ -591,7 +592,26 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 MSOOXML::Utils::splitPathAndFile(notesTarget, &notesPath, &notesFile);
 
                 QMap<int, QString> dummyAuthors;
-                QMap<QString, QString> dummyOles;
+                VmlDrawingReader vmlreader(this);
+                QString vmlTarget = m_context->relationships->targetForType(notesPath, notesFile,
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+
+                if (!vmlTarget.isEmpty()) {
+                    QString errorMessage, vmlPath, vmlFile;
+
+                    QString fileName = vmlTarget;
+                    fileName.remove(0, m_context->path.length());
+                    MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
+
+                    VmlDrawingReaderContext vmlContext(*m_context->import,
+                        vmlPath, vmlFile, *m_context->relationships);
+
+                   const KoFilter::ConversionStatus status =
+                       m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+                   if (status != KoFilter::OK) {
+                       vmlreader.raiseError(errorMessage);
+                   }
+                }
 
                 PptxXmlSlideReaderContext context(
                     *m_context->import,
@@ -605,7 +625,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                     *m_context->relationships,
                     dummyAuthors,
                     m_context->notesMasterProperties->colorMap,
-                    dummyOles
+                    vmlreader
                 );
 
                 // In first round we only read possible colorMap override
@@ -685,11 +705,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txStyles()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bodyStyle)
             ELSE_TRY_READ_IF(titleStyle)
             ELSE_TRY_READ_IF(otherStyle)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -728,7 +749,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_notesStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -739,6 +760,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_notesStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -781,7 +803,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -792,6 +814,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -803,10 +826,78 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL controls
+//! controls handler (List of controls)
+/*!
+ Parent elements:
+
+ Child elements:
+ - [done] control (Embedded Control) §19.3.2.1
+*/
+KoFilter::ConversionStatus PptxXmlSlideReader::read_controls()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(control)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL control
+//! control handler (Embedded Control)
+/*!
+ Parent elements:
+ - [done] controls (§19.3.1.15)
+
+ Child elements:
+ - extLst (Extension List) §19.2.1.12
+ - pic (Picture) §19.3.1.37
+*/
+KoFilter::ConversionStatus PptxXmlSlideReader::read_control()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(spid)
+    spid = "_x0000_s" + spid;
+
+    QString frameBeing = m_context->vmlReader.frames().value(spid);
+    // Replacement image
+    if (!frameBeing.isEmpty()) {
+        body->addCompleteElement(frameBeing.toUtf8());
+        body->startElement("draw:image");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:show", "embed");
+        body->addAttribute("xlink:actuate", "onLoad");
+        body->addAttribute("xlink:href", m_context->vmlReader.content().value(spid));
+        body->endElement(); // draw:image
+        body->addCompleteElement("</draw:frame>");
+    }
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL oleObj
 //! oleObj handler (Global Element for Embedded objects and Controls)
 /*!
  Parent elements:
+ - [done] cSld (§19.3.1.16)
 
  Child elements:
  - embed (Embedded Object or Control) §19.3.2.2
@@ -818,7 +909,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id);
     TRY_READ_ATTR_WITHOUT_NS(imgW);
     TRY_READ_ATTR_WITHOUT_NS(imgH);
@@ -833,7 +924,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -860,7 +951,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         body->addAttribute("xlink:type", "simple");
         body->addAttribute("xlink:show", "embed");
         body->addAttribute("xlink:actuate", "onLoad");
-        body->addAttribute("xlink:href", m_context->oleReplacements.value(spid));
+        body->addAttribute("xlink:href", m_context->vmlReader.content().value(spid));
         body->endElement(); // draw:image
     }
 
@@ -899,7 +990,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -910,6 +1001,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -952,7 +1044,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -963,6 +1055,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -990,7 +1083,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 
  Child elements:
     - [done] bg (Slide Background) §19.3.1.1
-    - controls (List of controls) §19.3.1.15
+    - [done] controls (List of controls) §19.3.1.15
     - custDataLst (Customer Data List) §19.3.1.18
     - extLst (Extension List) §19.2.1.12
     - [done] spTree (Shape Tree) §19.3.1.45
@@ -1003,10 +1096,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bg)
             ELSE_TRY_READ_IF(spTree)
+            ELSE_TRY_READ_IF(controls)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1070,9 +1165,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMapOvr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, overrideClrMapping)
+            SKIP_UNKNOWN
         }
     }
 
@@ -1102,11 +1198,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bgPr)
             ELSE_TRY_READ_IF(bgRef)
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1160,7 +1256,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, schemeClr)
             ELSE_TRY_READ_IF_NS(a, srgbClr)
@@ -1212,7 +1308,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ_IF_NS(a, solidFill)
@@ -1308,7 +1404,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (m_context->type == SlideLayout) {
                 shapeBuf = new QBuffer;
@@ -1424,7 +1520,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
 
    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // TRY_READ_IF(extLst)
 //! @todo add ELSE_WRONG_FORMAT
@@ -1467,7 +1563,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, bodyPr)
             ELSE_TRY_READ_IF_NS(a, lstStyle)
@@ -1537,7 +1633,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
             ELSE_TRY_READ_IF(nvGraphicFramePr)
@@ -1596,7 +1692,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "p:cNvPr") {
                 read_cNvPr_p();
@@ -1644,9 +1740,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(ph)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1670,7 +1767,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cNvPr_p()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
@@ -1685,7 +1782,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_xfrm_p()
     const QXmlStreamAttributes attrs(attributes());
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:off")) {
                 TRY_READ(off);

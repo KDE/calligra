@@ -57,6 +57,9 @@ public:
 
     virtual void dragLeaveEvent(QDragLeaveEvent *e);
 
+    //Reimplemented to provide suitable signals for selection and deselection of items
+    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
     //Manage click events outside of items, to provide
     //a suitable active item for the context menu.
     virtual bool eventFilter(QObject *watched, QEvent *event);
@@ -85,7 +88,6 @@ public:
      */
     QPair<int, int> cursorRowAndColumn() const;
 
-
 signals:
 
     /** Is emitted if the user has request a context menu */
@@ -98,6 +100,12 @@ signals:
     //without a item selected event.
     /** Is emitted if the selection has been changed within a procedure code */
     void indexChanged(QModelIndex index);
+
+    /** Is emitted when all items are deselected */
+    void selectionCleared();
+
+    /** Is emitted when an item is selected */
+    void itemSelected();
 
 private:
 

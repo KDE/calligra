@@ -21,14 +21,14 @@
  */
 #include "KWCanvasBase.h"
 
-// kword includes
+// words includes
 #include "KWCanvas.h"
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 #include "KWPageCacheManager.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>

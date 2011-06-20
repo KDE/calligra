@@ -229,9 +229,6 @@ public:
 signals:
     void newObjectRequest(KexiPart::Info *info);
 
-protected slots:
-    void slotCreate();
-
 protected:
     /*!
      Creates new Plugin

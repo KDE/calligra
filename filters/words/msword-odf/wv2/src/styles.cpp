@@ -563,6 +563,19 @@ Style::Style( const U16 stdfSize, OLEStreamReader* tableStream, U16* ftc )
     }
 }
 
+Style::Style(const Word97::CHP& chp)
+    :
+    m_isEmpty( true ),
+    m_isWrapped( false ),
+    m_invalid( true ),
+    m_std( 0 ),
+    m_properties( 0 ),
+    m_chp( 0 ),
+    m_upechpx( 0 )
+{
+    m_chp = new Word97::CHP( chp );
+}
+
 Style::~Style()
 {
     delete m_std;
@@ -649,33 +662,42 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
             }
         }
 
-        U8 *data = m_std->grupx;
+        if (m_std->grupxLen >= 4) {
+            U8 *data = m_std->grupx;
 
-        // paragraph
-        U16 cbUPX = readU16( data );
-        data += 2;
-        m_properties->pap().istd = readU16( data );
-        data += 2;
-        cbUPX -= 2;
-#ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# Applying paragraph exceptions: " << cbUPX << endl;
-#endif
-        m_properties->pap().apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
-        data += cbUPX;
-#ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
-#endif
+            // paragraph
+            U16 cbUPX = readU16( data );
+            data += 2;
+            m_properties->pap().istd = readU16( data );
+            data += 2;
+            cbUPX -= 2;
 
-        // character
-        cbUPX = readU16( data );
-        data += 2;
+            cbUPX = qMin(cbUPX, U16(m_std->grupxLen - 4));
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# Applying character exceptions: " << cbUPX << endl;
+            wvlog << "############# Applying paragraph exceptions: " << cbUPX << endl;
 #endif
-        m_chp->apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
+            m_properties->pap().apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
+            wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
 #endif
+            U16 datapos = 4 + cbUPX + 2;
+            if (m_std->grupxLen >= datapos) {
+                data += cbUPX;
+
+                // character
+                cbUPX = readU16( data );
+                data += 2;
+
+                cbUPX = qMin(cbUPX, U16(m_std->grupxLen - datapos));
+#ifdef WV2_DEBUG_SPRMS
+                wvlog << "############# Applying character exceptions: " << cbUPX << endl;
+#endif
+                m_chp->apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
+#ifdef WV2_DEBUG_SPRMS
+                wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
+#endif
+            }
+        }
     }
     else if ( m_std->sgc == sgcChp ) {
         const Style* parentStyle = 0;
@@ -703,9 +725,9 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         else {
             // no need to do anything regarding the stiNormalChar parentStyle
             // let's just merge the upxchpx character exceptions into ourselves
-             bool ok;
-             m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
-             mergeUpechpx(this, version);
+            bool ok;
+            m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
+            mergeUpechpx(this, version);
         }
 
         //finally apply so the chpx so we have ourselves a nice chp

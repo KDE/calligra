@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
 
@@ -60,7 +60,7 @@ QPair<int, QString> Conversion::importWrapping(const QString& oowrap)
     ////if ( oowrap == "parallel" || oowrap == "dynamic" )
     // dynamic is called "optimal" in the OO GUI. It's different from biggest because it can lead to parallel.
 
-    // Those are not supported in KWord, let's use biggest instead
+    // Those are not supported in Words, let's use biggest instead
     return qMakePair(1, QString::fromLatin1("biggest"));
 }
 
@@ -90,9 +90,9 @@ int Conversion::importOverflowBehavior(const QString& oasisOverflowBehavior)
     return 0;
 }
 
-QString Conversion::exportOverflowBehavior(const QString& kwordAutoCreateNewFrame)
+QString Conversion::exportOverflowBehavior(const QString& wordsAutoCreateNewFrame)
 {
-    switch (kwordAutoCreateNewFrame.toInt()) {
+    switch (wordsAutoCreateNewFrame.toInt()) {
     case 1:
         return "auto-create-new-frame";
     case 2:

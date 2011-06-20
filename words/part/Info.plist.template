@@ -44,14 +44,14 @@
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
-                <string>application/x-kword</string>
-                <string>application/x-kword-crypt</string>
+                <string>application/x-words</string>
+                <string>application/x-words-crypt</string>
             </array>
             <key>CFBundleTypeOSTypes</key>
             <array>
             </array>
             <key>CFBundleTypeName</key>
-            <string>KWord Document</string>
+            <string>Words Document</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
         </dict>

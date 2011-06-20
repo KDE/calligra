@@ -27,7 +27,7 @@
 // Qt
 #include <QMouseEvent>
 
-// KOffice
+// Calligra
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomController.h>

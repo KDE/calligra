@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="31">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="koffice_undo"/>
-  <Action name="koffice_redo"/>
+  <Action name="calligra_undo"/>
+  <Action name="calligra_redo"/>
   <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
@@ -63,8 +63,8 @@
 </MenuBar>
 
  <ToolBar fullWidth="true" name="edit_toolbar" position="top"><Text>Edit</Text>
-  <Action name="koffice_undo"/>
-  <Action name="koffice_redo"/>
+  <Action name="calligra_undo"/>
+  <Action name="calligra_redo"/>
   <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>

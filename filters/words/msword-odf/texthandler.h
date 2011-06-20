@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -60,7 +60,7 @@ class PAP;
 }
 }
 
-class KWordReplacementHandler : public wvWare::InlineReplacementHandler
+class WordsReplacementHandler : public wvWare::InlineReplacementHandler
 {
 public:
     virtual wvWare::U8 hardLineBreak();
@@ -69,12 +69,12 @@ public:
 };
 
 
-class KWordTextHandler : public QObject, public wvWare::TextHandler
+class WordsTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~KWordTextHandler() { }
+    WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    ~WordsTextHandler() { }
 
     //////// TextHandler interface
 
@@ -126,6 +126,23 @@ public:
      */
     QString getFont(unsigned ftc) const;
 
+    /**
+     * A special purpose function which provides the first font color not set
+     * to cvAuto from the styles hierarchy of the lately processed paragraph.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string.
+     */
+    QString paragraphBaseFontColorBkp() const { return m_paragraphBaseFontColorBkp; }
+
+    /**
+     * Provides access to the background color of the lately processed
+     * paragraph to other handlers.  Notice that text-properties of any of the
+     * text styles might modify the background color.
+     *
+     * @return background color in the format "#RRGGBB" or an empty string.
+     */
+    QString paragraphBgColor() const { return m_paragraph ? m_paragraph->currentBgColor() : QString(); }
+
     // Provide access to private attributes for our handlers
     Document* document() const { return m_document; }
     void setDocument(Document * document) { m_document = document; }
@@ -145,12 +162,22 @@ signals:
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void tableFound(KWord::Table* table);
+    void tableFound(Words::Table* table);
     void inlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
     void floatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
 /*     void updateListDepth(int); */
 
 private:
+
+    /**
+     * A special purpose function which provides the font color of the current
+     * paragraph.  Looking for the first built-in paragraph style in the styles
+     * hierarchy providing a font color not set to cvAuto.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string
+     */
+    QString paragraphBaseFontColor() const;
+
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
     Document* m_document; // The document owning this text handler
@@ -167,8 +194,13 @@ private:
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
 
-    KWord::Table* m_currentTable;
+    Words::Table* m_currentTable;
     Paragraph *m_paragraph; //pointer to paragraph object
+
+    // The 1st font color not set to cvAuto from the built-in styles hierarchy
+    // of the lately processed paragraph.
+    QString m_paragraphBaseFontColorBkp;
+
 #if 1
     bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
     int        m_dcs_fdct;
@@ -200,7 +232,7 @@ private:
 
     //save/restore (very similar to the wv2 method)
     struct State {
-        State(KWord::Table* table, Paragraph* paragraph,
+        State(Words::Table* table, Paragraph* paragraph,
               QString listStyleName, int listDepth, int listID,
               const QMap<int, QString> &prevLists,
               KoXmlWriter* drawingWriter, bool insideDrawing) :
@@ -214,7 +246,7 @@ private:
             drawingWriter(drawingWriter),
             insideDrawing(insideDrawing)
         {}
-        KWord::Table* table;
+        Words::Table* table;
         Paragraph* paragraph;
         QString listStyleName;
         int listDepth; //tells us which list level we're on (-1 if not in a list)

@@ -46,8 +46,8 @@ KoFilter::ConversionStatus GenericFilter::convert(const QByteArray &from, const 
 {
 
     //find the right script to use
-    KService::List offers = KServiceTypeTrader::self()->query("KOfficeGenericFilter",
-                            "(Type == 'Service') and ('KOfficeGenericFilter' in ServiceTypes) and (exist Exec)");
+    KService::List offers = KServiceTypeTrader::self()->query("CalligraGenericFilter",
+                            "(Type == 'Service') and ('CalligraGenericFilter' in ServiceTypes) and (exist Exec)");
 
     if (offers.isEmpty())
         return KoFilter::NotImplemented;
@@ -67,11 +67,11 @@ KoFilter::ConversionStatus GenericFilter::convert(const QByteArray &from, const 
     }
 
     //decide between import/export
-    if (m_to == "application/x-kword" || m_to == "application/x-karbon" ||
+    if (m_to == "application/x-words" || m_to == "application/x-karbon" ||
             m_to == "application/x-kspread" || m_to == "application/x-flow" ||
             m_to == "application/x-kchart" || m_to == "application/x-kpresenter")
         return doImport();
-    else if (m_from == "application/x-kword" || m_from == "application/x-karbon" ||
+    else if (m_from == "application/x-words" || m_from == "application/x-karbon" ||
              m_from == "application/x-kspread" || m_from == "application/x-flow" ||
              m_from == "application/x-kchart" || m_from == "application/x-kpresenter")
         return doExport();

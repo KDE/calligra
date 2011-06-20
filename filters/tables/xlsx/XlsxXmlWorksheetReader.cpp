@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -79,6 +79,7 @@
 
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     uint _worksheetNumber,
+    uint _numberOfWorkSheets,
     const QString& _worksheetName,
     const QString& _state,
     const QString _path, const QString _file,
@@ -93,6 +94,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
+        , numberOfWorkSheets(_numberOfWorkSheets)
         , worksheetName(_worksheetName)
         , state(_state)
         , themes(_themes)
@@ -357,7 +359,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_dialogsheet()
  - colBreaks (Vertical Page Breaks) §18.3.1.14
  - [done] cols (Column Information) §18.3.1.17
  - [done] conditionalFormatting (Conditional Formatting) §18.3.1.18
- - controls (Embedded Controls) §18.3.1.21
+ - [done] controls (Embedded Controls) §18.3.1.21
  - customProperties (Custom Properties) §18.3.1.23
  - customSheetViews (Custom Sheet Views) §18.3.1.27
  - dataConsolidate (Data Consolidate) §18.3.1.29
@@ -447,9 +449,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
             else if (name() == "drawing") {
                 KoXmlWriter *tempBodyHolder = body;
                 body = new KoXmlWriter(&drawingBuffer);
-                body->startElement("table:shapes");
                 TRY_READ(drawing)
-                body->endElement(); //table:shapes
                 delete body;
                 body = tempBodyHolder;
             }
@@ -457,6 +457,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
+            else if (name() == "controls") {
+                KoXmlWriter *tempBodyHolder = body;
+                body = new KoXmlWriter(&drawingBuffer);
+                TRY_READ(controls)
+                delete body;
+                body = tempBodyHolder;
+            }
             ELSE_TRY_READ_IF(autoFilter)
             SKIP_UNKNOWN
         }
@@ -681,7 +688,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
     }
 
     // Adding drawings, if there are any
+    body->startElement("table:shapes");
     body->addCompleteElement(&drawingBuffer);
+    body->endElement(); // table:shapes
 
     body->endElement(); // table:table
 
@@ -1204,11 +1213,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         row->hidden = hidden.toInt() > 0;
     }
 
+    qreal range = (55.0/m_context->numberOfWorkSheets);
+    int counter = 0;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
+            if (counter == 40) {
+                // set the progress by the position of what was read
+                qreal progress = 45 + range * (m_context->worksheetNumber - 1)
+                               + range * device()->pos() / device()->size();
+                m_context->import->reportProgress(progress);
+                counter = 0;
+            }
+            ++counter;
             TRY_READ_IF(c) // modifies m_currentColumn
             SKIP_UNKNOWN
         }
@@ -2094,10 +2113,33 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_legacyDrawing()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL controls
+/*
+ Parent elements:
+ - [done] worksheet (§18.3.1.99)
+
+ Child elements:
+ - [done] control (Embedded Control) §18.3.1.19
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_controls()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if( isStartElement() ) {
+            TRY_READ_IF(control)
+            ELSE_WRONG_FORMAT
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL oleObjects
 /*
  Parent elements:
- - dialogsheet (§18.3.1.34)
+ - [done] dialogsheet (§18.3.1.34)
  - [done] worksheet (§18.3.1.99)
 
  Child elements:
@@ -2113,6 +2155,45 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
             TRY_READ_IF(oleObject)
             ELSE_WRONG_FORMAT
         }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL control
+/*
+ Parent elements:
+ - [done] controls (§18.3.1.21)
+
+ Child elements:
+ - controlPr (Embedded Control Properties) §18.3.1.20
+
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_control()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(shapeId)
+
+    // TODO: Maybe we want to do something with the actual control element.
+
+    // In vmldrawing, the shape identifier has also the extra chars below, therefore
+    // we have to add them here for the match
+    shapeId = "_x0000_s" + shapeId;
+
+    body->addCompleteElement(m_context->oleFrameBegins.value(shapeId).toUtf8());
+    body->startElement("draw:image");
+    body->addAttribute("xlink:href", m_context->oleReplacements.value(shapeId));
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:show", "embed");
+    body->addAttribute("xlink:actuate", "onLoad");
+    body->endElement(); // draw:image
+    body->addCompleteElement("</draw:frame>");
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
     }
     READ_EPILOGUE
 }
@@ -2142,8 +2223,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString destinationName = QLatin1String("") + link.mid(link.lastIndexOf('/') + 1);
-    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, false ) )
-    addManifestEntryForFile(destinationName);
+    KoFilter::ConversionStatus status = m_context->import->copyFile(link, destinationName, false);
+    if (status == KoFilter::OK) {
+        addManifestEntryForFile(destinationName);
+    }
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);

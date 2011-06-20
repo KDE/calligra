@@ -29,7 +29,7 @@
 //KDE includes
 #include <KMessageBox>
 
-//KOffice includes
+//Calligra includes
 #include <KoPAPageBase.h>
 #include <KPrDocument.h>
 

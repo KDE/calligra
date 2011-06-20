@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
@@ -38,7 +38,7 @@ namespace Scripting
 
 /**
 * The TextDocument object represents a QTextDocument within the Scribe
-* text-engine KWord uses to enable editing of text content.
+* text-engine Words uses to enable editing of text content.
 */
 class TextDocument : public QObject
 {

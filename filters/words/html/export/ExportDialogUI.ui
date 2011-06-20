@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ExportDialogUI</class>
-<comment>Export dialog for KWord's HTML export filter</comment>
+<comment>Export dialog for Words's HTML export filter</comment>
 <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
 <widget class="QWidget">
     <property name="name">
@@ -177,7 +177,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Convert most of the document (Recommended for re-importing in KWord or for exporting to older browsers)</string>
+                        <string>Convert most of the document (Recommended for re-importing in Words or for exporting to older browsers)</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -191,7 +191,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Convert as much as possible of the KWord document (Recommended for exporting to other modern word processors or to modern browsers)</string>
+                        <string>Convert as much as possible of the Words document (Recommended for exporting to other modern word processors or to modern browsers)</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">

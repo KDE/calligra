@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -69,6 +69,7 @@ protected:
     KoFilter::ConversionStatus read_body();
     KoFilter::ConversionStatus read_p();
     KoFilter::ConversionStatus read_r();
+    KoFilter::ConversionStatus read_smartTag();
     KoFilter::ConversionStatus read_rPr();
     KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_vanish();
@@ -90,6 +91,7 @@ protected:
     KoFilter::ConversionStatus read_outline();
     KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
+    KoFilter::ConversionStatus read_control();
     KoFilter::ConversionStatus read_webHidden();
     KoFilter::ConversionStatus read_bookmarkStart();
     KoFilter::ConversionStatus read_bookmarkEnd();
@@ -312,6 +314,10 @@ private:
     qreal   m_dropCapDistance;
 
     QMap<QString, QString> m_bookmarks; //!< Bookmarks
+
+    //!< Width of the object
+    QString m_currentObjectWidthCm;
+    QString m_currentObjectHeightCm;
 
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()

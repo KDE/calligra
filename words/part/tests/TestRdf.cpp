@@ -702,8 +702,8 @@ void TestRdf::KoTextRdfCoreTripleFunctions()
                      Node::createResourceNode(QUrl("uri:test8")),
                      Node(LiteralValue::createPlainLiteral("happy")),
                      context);
-    m->addStatement(Node::createResourceNode(QUrl("http://www.koffice.org/testB1")),
-                     Node::createResourceNode(QUrl("http://www.koffice.org/testB2")),
+    m->addStatement(Node::createResourceNode(QUrl("http://www.calligra-suite.org/testB1")),
+                     Node::createResourceNode(QUrl("http://www.calligra-suite.org/testB2")),
                      Node(LiteralValue::createPlainLiteral("zed")),
                      context);
 
@@ -729,7 +729,7 @@ void TestRdf::KoTextRdfCoreTripleFunctions()
 
     QString sparqlQuery = ""
         "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "prefix ko: <http://www.koffice.org/> \n"
+        "prefix ko: <http://www.calligra-suite.org/> \n"
         "select ?s ?binding  \n"
         "where { \n"
         "    ?s ko:testB2 ?binding \n"

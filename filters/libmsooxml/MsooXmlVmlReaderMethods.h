@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -38,12 +38,14 @@ protected:
     // v namespace:
     KoFilter::ConversionStatus genericReader();
     KoFilter::ConversionStatus read_oval();
+    KoFilter::ConversionStatus read_line();
     KoFilter::ConversionStatus read_roundrect();
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();
     KoFilter::ConversionStatus read_VML_background();
     KoFilter::ConversionStatus read_shapetype();
     KoFilter::ConversionStatus read_formulas();
+    KoFilter::ConversionStatus read_path();
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_shape();
     KoFilter::ConversionStatus read_imagedata();
@@ -52,16 +54,18 @@ protected:
     KoFilter::ConversionStatus read_stroke();
     KoFilter::ConversionStatus read_shadow();
 
+    void handlePathValues(const QXmlStreamAttributes& attrs);
     void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
     void takeDefaultValues();
+
+    QString rgbColor(QString color);
 
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
-    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart, GroupStart};
+    enum FrameStartElement {FrameStart, RectStart, LineStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
-    KoFilter::ConversionStatus createFrameEnd();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
@@ -79,14 +83,16 @@ protected:
         QString lineCapStyle;
         QString joinStyle;
         QString strokeStyleName;
+        QString fillType;
+        QString gradientStyle;
         QString shapeColor; //!< set in read_shape()
+        QString shapeSecondaryColor; // used eg. for some gradients
 
         qreal opacity;
 
         bool wrapRead;
         QString currentShapeId; //!< set in read_shape()
         QString imagedataPath; //!< set in read_shape()
-        QString imagedataFile; //!< set in read_shape()
         QString shapeAltText; //!< set in read_shape()
         QString shapeTitle; //!< set in read_shape()
 
@@ -94,25 +100,26 @@ protected:
 
         QString shadowColor;
         QString shadowXOffset, shadowYOffset;
+        qreal shadowOpacity;
 
         QString anchorType;
-
-        //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
-        //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
-        QString currentObjectWidthCm;
-        QString currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
 
         int formulaIndex;
         QString shapeTypeString;
         QString extraShapeFormulas;
+        QString normalFormulas;
+        QString modifiers;
+        QString viewBox;
+        QString shapePath;
         int extraFormulaIndex;
+        QString leftMargin, rightMargin, topMargin, bottomMargin;
+        bool fitTextToShape, fitShapeToText;
 
         // Parameters for group shape situation
         bool insideGroup;
         int groupWidth, groupHeight; // Relative group extends
         int groupX, groupY; // Relative group origin
         qreal groupXOffset, groupYOffset; // Offset caused by the group parent
-        QString groupWidthUnit, groupHeightUnit; // pt, cm etc.
         qreal real_groupWidth, real_groupHeight;
     };
 

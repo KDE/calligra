@@ -33,7 +33,7 @@
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 #include <kross/ui/model.h>
-// koffice
+// calligra
 #include <KoDockRegistry.h>
 #include <KoMainWindow.h>
 #include <KoDocument.h>

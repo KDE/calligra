@@ -490,7 +490,8 @@ void SheetView::obscureCells(const QPoint &position, int numXCells, int numYCell
     if (numXCells != 0 || numYCells != 0)
         d->obscuredInfo->insert(Region(position.x(), position.y(), numXCells + 1, numYCells + 1), true);
 
-    QSize newObscuredRange = d->obscuredInfo->usedArea().size();
+    QRect obscuredArea = d->obscuredInfo->usedArea();
+    QSize newObscuredRange(obscuredArea.right(), obscuredArea.bottom());
     if (newObscuredRange != d->obscuredRange) {
         d->obscuredRange = newObscuredRange;
         emit obscuredRangeChanged(d->obscuredRange);

@@ -39,13 +39,13 @@ kde4_add_plugin(mswriteexport ${mswriteexport_PART_SRCS})
 
 
 
-target_link_libraries(mswriteexport kowmf kwordexportfilters)
+target_link_libraries(mswriteexport kowmf wordsexportfilters)
 
 install(TARGETS mswriteexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kword_mswrite_import.desktop kword_mswrite_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_mswrite_import.desktop words_mswrite_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

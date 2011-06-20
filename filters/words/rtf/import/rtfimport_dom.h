@@ -51,7 +51,7 @@ public:
      */
     void addTextNode(const char *text, QTextCodec* codec);
     /**
-     * Add border to existing frameset (see KWord DTD).
+     * Add border to existing frameset (see Words DTD).
      */
     void addBorder(int id, const QColor &color, int style, double width);
     /**
@@ -71,11 +71,11 @@ public:
      */
     void addKey(const QDateTime& dt, const QString& filename, const QString& name = QString());
     /**
-     * Add frameset to document (see KWord DTD).
+     * Add frameset to document (see Words DTD).
      */
     void addFrameSet(const char *name, int frameType, int frameInfo);
     /**
-     * Add frame to existing frameset (see KWord DTD).
+     * Add frame to existing frameset (see Words DTD).
      */
     void addFrame(int left, int top, int right, int bottom,
                   int autoCreateNewFrame, int newFrameBehaviour,

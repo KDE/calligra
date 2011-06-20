@@ -1,3 +1,3 @@
 
 
-add_subdirectory( kword )
+add_subdirectory( words )

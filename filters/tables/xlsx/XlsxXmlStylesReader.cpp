@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -22,6 +22,7 @@
  */
 
 #include "XlsxXmlStylesReader.h"
+#include "XlsxImport.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -259,7 +260,7 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     case JustifyVerticalAlignment: // ok?
     case DistributedVerticalAlignment:
         cellStyle->addProperty("style:vertical-align", "top");
-        cellStyle->addProperty("koffice:vertical-distributed", "distributed");
+        cellStyle->addProperty("calligra:vertical-distributed", "distributed");
         wrapOption = 1;
         break;
     case NoVerticalAlignment:
@@ -309,8 +310,9 @@ bool XlsxCellFormat::setupCellStyle(
 
 //----------------------------------------------------------
 
-XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart, MSOOXML::DrawingMLTheme* _themes)
-        : styles(&_styles), skipFirstPart(_skipFirstPart), themes(_themes)
+XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart,
+    XlsxImport* _import, MSOOXML::DrawingMLTheme* _themes)
+        : styles(&_styles), skipFirstPart(_skipFirstPart), import(_import), themes(_themes)
 {
     // This is default array of colors from the spec
     colorIndices.push_back("000000");
@@ -483,6 +485,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
 {
     READ_PROLOGUE
 
+    int counter = 0;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -494,6 +497,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
                 SKIP_UNKNOWN
             }
             else {
+                if (counter == 40) {
+                    // set the progress by the position of what was read
+                    qreal progress = 5 + 25 * device()->pos() / device()->size();
+                    m_context->import->reportProgress(progress);
+                    counter = 0;
+                }
+                ++counter;
                 TRY_READ_IF(fonts)
                 ELSE_TRY_READ_IF(fills)
                 ELSE_TRY_READ_IF(numFmts)

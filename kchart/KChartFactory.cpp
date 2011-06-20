@@ -100,9 +100,9 @@ const KComponentData &KChartFactory::global()
 KIconLoader* KChartFactory::iconLoader()
 {
   if ( !s_iconLoader ) {
-      // Tell the iconloader about share/apps/koffice/icons
+      // Tell the iconloader about share/apps/calligra/icons
       s_iconLoader = new KIconLoader(global().componentName(), global().dirs());
-      s_iconLoader->addAppDir("koffice");
+      s_iconLoader->addAppDir("calligra");
   }
   
   return s_iconLoader;

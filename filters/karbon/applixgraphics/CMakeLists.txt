@@ -29,7 +29,7 @@ install( FILES  kontour_applixgraphic_import.desktop  DESTINATION ${SERVICES_INS
 
 ######## General stuff
 #
-#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+#INCLUDES= -I$(srcdir) $(CALLIGRA_INCLUDES) $(all_includes)
 #libapplixgraphicimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
 #
 ######## Files
@@ -37,7 +37,7 @@ install( FILES  kontour_applixgraphic_import.desktop  DESTINATION ${SERVICES_INS
 #kde_module_LTLIBRARIES = libapplixgraphicimport.la
 #
 #libapplixgraphicimport_la_SOURCES = applixgraphicimport.cc
-#libapplixgraphicimport_la_LIBADD = $(KOFFICE_LIBS)
+#libapplixgraphicimport_la_LIBADD = $(CALLIGRA_LIBS)
 #noinst_HEADERS = applixgraphicimport.h
 #
 #METASOURCES = AUTO

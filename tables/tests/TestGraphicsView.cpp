@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     KComponentData cd("graphicsview-test");
 
     Calligra::Tables::Doc doc;
-    bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/koffice/docs/oos_AMSAT-IARU_Link_Model.ods"));
+    bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/calligra/docs/oos_AMSAT-IARU_Link_Model.ods"));
     if (!ok) {
         qDebug() << "failed to load";
         return 0;

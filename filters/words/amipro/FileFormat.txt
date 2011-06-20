@@ -6,7 +6,7 @@ Last rev: March 16, 2002
 1  Foreword
 -----------
 This is solely based on my reverse-engineering work whilst
-I work on AmiPro import filter for KWord.
+I work on AmiPro import filter for Words.
 
 2  Structure of AmiPro document
 -------------------------------

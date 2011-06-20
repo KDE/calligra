@@ -9,7 +9,7 @@
 * The \a Scripting::Module class enables access to the KPlato
 * functionality from within the scripting backends.
 *
-* \see http://www.koffice.org/kword
+* \see http://www.calligra-suite.org/words
 * \see http://kross.dipe.org
 *
 * @section Legal

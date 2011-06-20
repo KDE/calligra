@@ -31,5 +31,5 @@ paint the same contents in many pages.  This is done by having a frame with a
 KWCopyShape as its main Shape.  The KWCopyShape gets the original shape as argument.
 
 Technical details of frames, framesets and shape interaction are described 
-in kword/part/frames/DESIGN
+in words/part/frames/DESIGN
 

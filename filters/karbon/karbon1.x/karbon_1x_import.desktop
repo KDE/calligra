@@ -44,4 +44,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1
 X-KDE-Library=karbon1ximport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

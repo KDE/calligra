@@ -78,9 +78,6 @@ public:
      */
     QSize iconSize() const;
 
-    //Add a delete key feature to the slides sorter view
-    bool eventFilter(QObject *watched, QEvent *event);
-
 protected:
 
     /**
@@ -162,6 +159,12 @@ private slots:
 
     /** Provides a custom context menu for the slides sorter view*/
     void slidesSorterContextMenu(QContextMenuEvent *event);
+
+    /** Enable standard edit actions */
+    void enableEditActions();
+
+    /** Disable standard edit actions */
+    void disableEditActions();
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

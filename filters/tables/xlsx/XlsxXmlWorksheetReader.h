@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -81,6 +81,8 @@ protected:
     KoFilter::ConversionStatus read_customFilter();
     KoFilter::ConversionStatus read_oleObjects();
     KoFilter::ConversionStatus read_oleObject();
+    KoFilter::ConversionStatus read_controls();
+    KoFilter::ConversionStatus read_control();
     KoFilter::ConversionStatus read_tableParts();
     KoFilter::ConversionStatus read_tablePart();
 
@@ -133,6 +135,7 @@ public:
     //! Creates the context object.
     XlsxXmlWorksheetReaderContext(
         uint _worksheetNumber,
+        uint _numberOfWorkSheets,
         const QString& _worksheetName,
         const QString& _state,
         const QString _path, const QString _file,
@@ -149,6 +152,7 @@ public:
 
     Sheet* sheet;
     const uint worksheetNumber;
+    const uint numberOfWorkSheets;
     const QString worksheetName;
     QString state;
     MSOOXML::DrawingMLTheme* themes;
