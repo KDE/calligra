@@ -335,6 +335,13 @@ void KPrViewModeSlidesSorter::addSlide()
     }
 }
 
+void KPrViewModeSlidesSorter::renameCurrentSlide()
+{
+    QModelIndexList selectedItems = m_slidesSorter->selectionModel()->selectedIndexes();
+    m_slidesSorter->edit(selectedItems.first());
+
+}
+
 void KPrViewModeSlidesSorter::editCut()
 {
     editCopy();
@@ -427,6 +434,12 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
     menu.addAction(KIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
     menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
 
+    QModelIndexList selectedItems = m_slidesSorter->selectionModel()->selectedIndexes();
+
+    if (selectedItems.count() == 1 && selectedItems.first().isValid()) {
+        menu.addAction(KIcon("edit-rename"), i18n("Rename"), this, SLOT(renameCurrentSlide()));
+    }
+
     menu.exec(event->globalPos());
 }
 
@@ -444,4 +457,21 @@ void KPrViewModeSlidesSorter::disableEditActions()
     ac->action("edit_copy")->setEnabled(false);
     ac->action("edit_cut")->setEnabled(false);
     ac->action("edit_delete")->setEnabled(false);
+}
+
+void KPrViewModeSlidesSorter::selectSlides(const QList<KoPAPageBase *> &slides)
+{
+    if (slides.isEmpty()) {
+        return;
+    }
+
+    m_slidesSorter->clearSelection();
+
+    foreach (KoPAPageBase *slide, slides) {
+        int row = m_view->kopaDocument()->pageIndex(slide);
+        QModelIndex index = m_documentModel->index(row, 0, QModelIndex());
+        if (index.isValid()) {
+            m_slidesSorter->selectionModel()->select(index, QItemSelectionModel::Select);
+        }
+    }
 }
