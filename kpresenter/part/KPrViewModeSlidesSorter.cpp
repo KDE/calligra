@@ -528,18 +528,20 @@ int KPrViewModeSlidesSorter::zoom()
 
 void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
-    QMenu menu(m_slidesSorterView);
+    QMenu menu(m_slidesSorterView);   
     menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
-    menu.addAction(KIcon("edit-cut"), i18n("Cut"), this,  SLOT(editCut()));
-    menu.addAction(KIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
-    menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
 
     QModelIndexList selectedItems = m_slidesSorter->selectionModel()->selectedIndexes();
 
     if (selectedItems.count() == 1 && selectedItems.first().isValid()) {
         menu.addAction(KIcon("edit-rename"), i18n("Rename"), this, SLOT(renameCurrentSlide()));
     }
+
+    menu.addSeparator();
+    menu.addAction(KIcon("edit-cut"), i18n("Cut"), this,  SLOT(editCut()));
+    menu.addAction(KIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
+    menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
 
     menu.exec(event->globalPos());
 }
