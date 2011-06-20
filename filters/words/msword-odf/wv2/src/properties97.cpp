@@ -325,14 +325,8 @@ U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* par
     }
 
     // Step 5: Now that we are at the correct place let's apply the CHPX
-    // grpprl.  The built-in character style referred to by istd provided by
-    // sprmCIstd will be applied recursively.
-    //
-    // FIXME: It's NOT correct to compare the built-in character style and CHPX
-    // against paragraphStyle->chp().  The CHPS which are beeing prepared
-    // (started as a snapshot of paragraphStyle->chp()) might have been
-    // modified in Step 0 and will be modified by application of the built-in
-    // character style.  We MUST compare agains the CHPS.
+    // grpprl.  The built-in character style referred to by the istd provided
+    // by sprmCIstd will be applied recursively.
     chp->applyExceptions( fkpit.current(), paragraphStyle, m_stylesheet, 0, m_version );
     return fkpit.currentLim() - fc;
 }

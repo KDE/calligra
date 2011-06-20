@@ -32,6 +32,7 @@ class KoTextShapeData;
 class KWTextFrameSet;
 class KWFrame;
 class KWPage;
+class KWTextLayoutRootArea;
 
 class KWRootAreaPage
 {
@@ -65,6 +66,7 @@ private:
     QHash<KoTextLayoutRootArea*, KWRootAreaPage *> m_pageHash;
     QList<QPair<KWRootAreaProvider *, int> > m_dependentProviders;
 
+    KWTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout);
     void addDependentProvider(KWRootAreaProvider *provider, int pageNumber);
     void handleDependentProviders(int pageNumber);
 };

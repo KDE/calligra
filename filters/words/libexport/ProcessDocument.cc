@@ -528,7 +528,7 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
     QList<TagProcessing> tagProcessingList;
 
     QString fileName; // Words 0.8
-    PictureKey key; // Re-saved by Words 1.2 or Words 1.3
+    PictureKey key; // Re-saved by KWord 1.2 or KWord 1.3
     tagProcessingList.append(TagProcessing("FILENAME", ProcessStringValueTag, &fileName));
     tagProcessingList.append(TagProcessing("PICTURE",  ProcessImageTag, &key));
     ProcessSubtags(myNode, tagProcessingList, leader);

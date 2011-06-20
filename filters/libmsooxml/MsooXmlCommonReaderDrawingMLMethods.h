@@ -116,6 +116,7 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
+KoFilter::ConversionStatus read_gradFillRpr();
 QString m_gradAngle;
 KoFilter::ConversionStatus read_lin();
 KoFilter::ConversionStatus read_gsLst();
@@ -125,12 +126,10 @@ KoFilter::ConversionStatus read_gd();
 bool m_contentAvLstExists; // whether avLst exists
 QMap<QString, QString> m_avModifiers;
 KoFilter::ConversionStatus read_avLst();
-enum noFillCaller {
-        noFill_rPr
-};
-KoFilter::ConversionStatus read_noFill(noFillCaller caller);
+KoFilter::ConversionStatus read_noFill();
 KoFilter::ConversionStatus read_schemeClr();
 KoFilter::ConversionStatus read_prstClr();
+KoFilter::ConversionStatus read_hslClr();
 KoFilter::ConversionStatus read_sysClr();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();

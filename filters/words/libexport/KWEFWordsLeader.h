@@ -95,7 +95,7 @@ protected: // leader/worker functions
     bool doOpenDocument(void);
     bool doCloseDocument(void);
 public:
-    /// -1: unknown, 1: Words 0.8, 2: Words 1.1 & 1.2, 3: Words 1.3
+    /// -1: unknown, 1: KWord 0.8, 2: KWord 1.1 & 1.2, 3: KWord 1.3
     int m_syntaxVersion;
     /// true if oldSyntax (Words 0.8)
     bool m_oldSyntax;

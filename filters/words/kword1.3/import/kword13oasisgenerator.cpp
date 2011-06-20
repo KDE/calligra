@@ -321,14 +321,14 @@ void Words13OasisGenerator::fillGenStyleWithLayout(const Words13Layout& layout, 
 {
     // ### TODO syntaxVersion < 3
 
-    QString str; // Help string to store each Words 1.3 layout property
+    QString str; // Help string to store each KWord 1.3 layout property
 
     str = layout.getProperty("FLOW:align");
     if (str.isEmpty() && ! style) {
         // Nothing to do!
     } else if ((str == "left") || (str == "right") || (str == "center") || (str == "justify")) {
         gs.addProperty("fo:text-align", str);
-    } else { // Words 1.3's "auto" (or empty/unknown string for a style)
+    } else { // KWord 1.3's "auto" (or empty/unknown string for a style)
         gs.addProperty("fo:text-align", "start");   // i.e. direction-dependent
     }
 
@@ -700,7 +700,7 @@ void Words13OasisGenerator::writeMetaXml(void)
         writer->endElement();
     }
 
-    // ### TODO: what about the other document info of Words 1.3?
+    // ### TODO: what about the other document info of KWord 1.3?
 
     QDateTime dt;
 

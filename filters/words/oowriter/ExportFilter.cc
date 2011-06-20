@@ -1387,7 +1387,7 @@ void OOWriterWorker::processFootnote(const VariableData& variable)
 
 void OOWriterWorker::processNote(const VariableData& variable)
 {
-    // Words 1.3's annotations are anonymous and undated,
+    // KWord 1.3's annotations are anonymous and undated,
     //  however the OO specification tells that author and date are mandatory (even if OOWriter 1.1 consider them optional)
 
     *m_streamOut << "<office:annotation office:create-date=\"";
@@ -1403,7 +1403,7 @@ void OOWriterWorker::processNote(const VariableData& variable)
 
     // We try to use the document author's name as annotation author
     if (m_docInfo.fullName.isEmpty())
-        *m_streamOut << escapeOOText(i18nc("Pseudo-author for annotations", "Words 1.3"));
+        *m_streamOut << escapeOOText(i18nc("Pseudo-author for annotations", "KWord 1.3"));
     else
         *m_streamOut << escapeOOText(m_docInfo.fullName);
 

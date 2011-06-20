@@ -46,6 +46,7 @@ public:
     KWPageBackground()
     {
         setSelectable(false);
+        setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
     }
     virtual ~KWPageBackground()
     {

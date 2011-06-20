@@ -2,12 +2,13 @@
 Type=Application
 Name=Calligra Words
 Name[cs]=Calligra Words
+Name[nb]=Calligra Words
 Name[pt]=Words do Calligra
 Name[pt_BR]=Calligra Words
 Name[sv]=Calligra Words
 Name[uk]=Words Calligra
 Name[x-test]=xxCalligra Wordsxx
-Exec=words %u
+Exec=calligrawords %u
 GenericName=Word Processor
 GenericName[bg]=Текстообработваща програма
 GenericName[ca]=Processador de textos

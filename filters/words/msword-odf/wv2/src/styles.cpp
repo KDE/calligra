@@ -563,6 +563,19 @@ Style::Style( const U16 stdfSize, OLEStreamReader* tableStream, U16* ftc )
     }
 }
 
+Style::Style(const Word97::CHP& chp)
+    :
+    m_isEmpty( true ),
+    m_isWrapped( false ),
+    m_invalid( true ),
+    m_std( 0 ),
+    m_properties( 0 ),
+    m_chp( 0 ),
+    m_upechpx( 0 )
+{
+    m_chp = new Word97::CHP( chp );
+}
+
 Style::~Style()
 {
     delete m_std;
