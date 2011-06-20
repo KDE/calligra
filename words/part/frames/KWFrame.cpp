@@ -84,6 +84,9 @@ KWFrame::~KWFrame()
                                                  // copyShapes as retired
         if (justMe) {
             kDebug(32001) << "Last KWFrame removed from frameSet=" << m_frameSet;
+            // FIXME: Fix when a proper way to delete framesets have been found.
+            // The frameset is never deleted (here) because removeFrame() above results in
+            // m_frameSet to be set to 0.
             delete m_frameSet;
             m_frameSet = 0;
         }
