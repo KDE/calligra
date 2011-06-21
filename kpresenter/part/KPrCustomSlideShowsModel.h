@@ -176,12 +176,16 @@ public:
 
     void updateCustomSlideShowsList(const QString &name);
 
+
+
 signals:
     void customSlideShowsChanged();
 
 public slots:
 
-private:
+private:   
+    QList<KoPAPageBase *> decodeSlidesList(QByteArray encoded);
+
     KPrCustomSlideShows *m_customSlideShows;
     QString m_currentCustomSlideShowName;
     QSize m_iconSize;

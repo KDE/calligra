@@ -63,11 +63,9 @@ QVariant KPrCustomSlideShowsModel::data(const QModelIndex &index, int role) cons
         case Qt::DisplayRole:
         {
             QString name = i18n("Unknown");
-            if (page)
-            {
+            if (page) {
                 name = page->name ();
-                if (name.isEmpty())
-                {
+                if (name.isEmpty()) {
                     //Default case
                     name = i18n("Slide %1",  index.row());
                 }
@@ -117,8 +115,7 @@ QModelIndex KPrCustomSlideShowsModel::index(int row, int column, const QModelInd
     }
 
     // check if parent is root node
-    if(!parent.isValid())
-    {
+    if (!parent.isValid()) {
         if (row >= 0 && row < rowCount(QModelIndex())) {
             return createIndex(row, column, m_customSlideShows->pageByIndex(m_currentCustomSlideShowName, row));
         }
@@ -191,61 +188,54 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
         }
 
         if (data->hasFormat("application/x-koffice-sliderssorter")) {
-
             QByteArray encoded = data->data("application/x-koffice-sliderssorter");
-            QDataStream stream(&encoded, QIODevice::ReadOnly);
+            slides = decodeSlidesList(encoded);
 
-            // decode the data
-            while( ! stream.atEnd() )
-            {
-                QVariant v;
-                stream >> v;
-                slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
-            }
-
-            if (slides.empty ()) {
+            if (slides.empty()) {
                 return false;
             }
-
-            //order slides
-            QMap<int, KoPAPageBase*> map;
-            foreach (KoPAPageBase *slide, slides)
-                map.insert(m_document->pageIndex(slide), slide);
-
-            slides = map.values();
 
             doCustomSlideShowAction(KPrCustomSlideShowsModel::SLIDES_ADD, slides, beginRow);
         }
 
         if (data->hasFormat("application/x-koffice-customslideshows")) {
-
             QByteArray encoded = data->data("application/x-koffice-customslideshows");
-            QDataStream stream(&encoded, QIODevice::ReadOnly);
+            slides = decodeSlidesList(encoded);
 
-            // decode the data
-            while( ! stream.atEnd() )
-            {
-                QVariant v;
-                stream >> v;
-                slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
-            }
-
-            if (slides.empty ()) {
+            if (slides.empty()) {
                 return false;
             }
-
-            //order slides
-            QMap<int, KoPAPageBase*> map;
-            foreach (KoPAPageBase *slide, slides)
-                map.insert(m_customSlideShows->indexByPage(m_currentCustomSlideShowName, slide), slide);
-
-            slides = map.values();
 
             doCustomSlideShowAction(KPrCustomSlideShowsModel::SLIDES_MOVE, slides, beginRow);
         }
         return true;
     }
     return false;
+}
+
+QList<KoPAPageBase *> KPrCustomSlideShowsModel::decodeSlidesList(QByteArray encoded)
+{
+    QList<KoPAPageBase *> slides;
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+
+    // decode the data
+    while(!stream.atEnd()) {
+        QVariant v;
+        stream >> v;
+        slides.append(static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
+    }
+
+    if (slides.empty()) {
+        return slides;
+    }
+
+    //order slides
+    QMap<int, KoPAPageBase*> map;
+    foreach (KoPAPageBase *slide, slides)
+        map.insert(m_customSlideShows->indexByPage(m_currentCustomSlideShowName, slide), slide);
+    slides = map.values();
+
+    return slides;
 }
 
 void KPrCustomSlideShowsModel::setCustomSlideShows(KPrCustomSlideShows *customShows)
@@ -346,8 +336,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(CustomShowActions c_actio
     if (c_action == KPrCustomSlideShowsModel::SLIDES_ADD) {
         //insert the slides on the current custom show
         int i = beginRow;
-        foreach(KoPAPageBase *page, slides)
-        {
+        foreach(KoPAPageBase *page, slides) {
             //You can insert a slide just one time.
             if (!selectedSlideShow.contains(page)) {
                 selectedSlideShow.insert(i, page);
@@ -372,8 +361,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(CustomShowActions c_actio
     }
     else if (c_action == KPrCustomSlideShowsModel::SLIDES_DELETE) {
         //delete de slides on the current custom show
-        foreach(KoPAPageBase *page, slides)
-        {
+        foreach(KoPAPageBase *page, slides) {
             selectedSlideShow.removeAll(page);
         }
         updated = true;

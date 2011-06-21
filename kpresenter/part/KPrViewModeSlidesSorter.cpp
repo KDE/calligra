@@ -19,21 +19,6 @@
 */
 
 #include "KPrViewModeSlidesSorter.h"
-
-#include <QtCore/QEvent>
-#include <QtGui/QPainter>
-#include <QVariant>
-#include <QScrollBar>
-#include <QMenu>
-#include <QtCore/qmath.h>
-#include <QGridLayout>
-#include <QPushButton>
-#include <QSplitter>
-#include <QComboBox>
-#include <QLabel>
-#include <QPropertyAnimation>
-#include <QLineEdit>
-
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrFactory.h"
 #include "KPrSlidesManagerView.h"
@@ -42,23 +27,28 @@
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrSlidesSorterItemDelegate.h"
+#include <KPrView.h>
 
+//Qt Headers
+#include <QMenu>
+#include <QContextMenuEvent>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QSplitter>
+#include <QComboBox>
+#include <QLabel>
+#include <QPropertyAnimation>
+#include <QLineEdit>
+
+//Calligra Headers
 #include <KoResourceManager.h>
-#include <KoRuler.h>
-#include <KoSelection.h>
-#include <KoShapeLayer.h>
-#include <KoShapeManager.h>
 #include <KoText.h>
-#include <KoToolManager.h>
-#include <KoToolProxy.h>
 #include <KoZoomController.h>
-
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <KoPAMasterPage.h>
 #include <KoPAView.h>
-#include <KPrView.h>
 #include <KoPAPageMoveCommand.h>
 #include <KoPAPageDeleteCommand.h>
 #include <KoPAOdfPageSaveHelper.h>
@@ -67,6 +57,7 @@
 #include <KoCopyController.h>
 #include <KoCutController.h>
 
+//KDE Headers
 #include <klocale.h>
 #include <KDebug>
 #include <kconfiggroup.h>
@@ -140,7 +131,6 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     m_slidesSorterView->setIconSize(m_iconSize);
     m_customSlideShowView->setIconSize(m_iconSize);
 
-
     //Populate ComboBox
     customShowChanged(0);
     updateCustomSlideShowsList();
@@ -159,15 +149,19 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_buttonDelCustomSlideShow, SIGNAL(clicked()), this, SLOT(removeCustomSlideShow()));
     connect(m_buttonAddSlideToCurrentShow, SIGNAL(clicked()), this, SLOT(addSlideToCustomShow()));
     connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlideFromCustomShow()));
-    connect(m_slidesSorterView, SIGNAL(selectionCleared()), this, SLOT(disableEditActions()));
-    connect(m_slidesSorterView, SIGNAL(itemSelected()), this, SLOT(enableEditActions()));
     connect(m_customSlideShowModel, SIGNAL(customSlideShowsChanged()), this, SLOT(updateCustomSlideShowsList()));
 
-    //setup signals for manage standard edit actions
+    //setup signals for manage edit actions
     connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
     connect(view->cutController(), SIGNAL(copyRequested()), this, SLOT(editCut()));
     connect(view, SIGNAL(selectAllRequested()), m_slidesSorterView, SLOT(selectAll()));
     connect(view, SIGNAL(deselectAllRequested()), m_slidesSorterView, SLOT(clearSelection()));
+    connect(m_slidesSorterView, SIGNAL(selectionCleared()), this, SLOT(disableEditActions()));
+    connect(m_slidesSorterView, SIGNAL(itemSelected()), this, SLOT(enableEditActions()));
+    connect(m_slidesSorterView, SIGNAL(focusLost()), SLOT(disableEditActions()));
+    connect(m_slidesSorterView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
+    connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(disableEditActions()));
+    connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 
     //install selection manager for Slides Sorter View and Custom Shows View
     new KPrSelectionManager(m_slidesSorterView);
@@ -259,10 +253,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
     connect(m_view->kopaDocument(),SIGNAL(pageAdded(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
     connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
-    connect(m_slidesSorterView, SIGNAL(focusLost()), SLOT(disableEditActions()));
-    connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(disableEditActions()));
-    connect(m_slidesSorterView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
-    connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 
     //change zoom saving slot
     connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
@@ -306,7 +296,6 @@ void KPrViewModeSlidesSorter::deactivate()
         connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
-
     disableEditActions();
 }
 
@@ -402,7 +391,6 @@ void KPrViewModeSlidesSorter::itemClicked(const QModelIndex index)
     }
 
     KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(index.row(), false);
-
     if (page) {
         m_view->setActivePage(page);
     }
@@ -412,7 +400,6 @@ void KPrViewModeSlidesSorter::itemClicked(const QModelIndex index)
 QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
 {
     QList<KoPAPageBase *> slides;
-
     QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();
     if (selectedItems.count() == 0) {
         return slides;
@@ -548,7 +535,6 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
     QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();
-
     if (selectedItems.count() == 1 && selectedItems.first().isValid()) {
         menu.addAction(KIcon("edit-rename"), i18n("Rename"), this, SLOT(renameCurrentSlide()));
     }
@@ -603,7 +589,6 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     if (panelVisible != m_editCustomSlideShow) {
         const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
         const int duration = animate ? 600 : 1;
-
         QPropertyAnimation *animation = new QPropertyAnimation (m_customSlideShowView, "maximumHeight");
 
         if (!panelVisible) {
@@ -693,12 +678,11 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
     if (newName.isEmpty()) {
         updateCustomSlideShowsList();
     }
-    //If the name is not already in use, use it
-    else if(!m_customSlideShowModel->customShowsNamesList().contains(newName)) {
+    //If the name is not already in use, use it, otherwise let the user know
+    else if (!m_customSlideShowModel->customShowsNamesList().contains(newName)) {
        m_customSlideShowModel->renameCustomShow(m_customSlideShowModel->currentSlideShow(), newName);
        updateCustomSlideShowsList();
     }
-    //otherwise let the user know
     else {
         KMessageBox Message;
         Message.sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),

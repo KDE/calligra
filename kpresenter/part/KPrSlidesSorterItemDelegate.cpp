@@ -33,7 +33,6 @@ KPrSlidesSorterItemDelegate::KPrSlidesSorterItemDelegate(KoPADocument *document,
 
 KPrSlidesSorterItemDelegate::~KPrSlidesSorterItemDelegate()
 {
-
 }
 
 void KPrSlidesSorterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const

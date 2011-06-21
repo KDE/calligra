@@ -58,9 +58,7 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
 
     // Paint the line where the slide should go
     if (isDraging()) {
-
         QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
-
         QPair <int, int> m_pair = cursorRowAndColumn();
         int numberColumn = m_pair.first;
         int numberRow = m_pair.second;
@@ -68,7 +66,6 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
 
         QPoint point1(numberColumn * size.width() + spacing() / 2, numberRow * size.height() + spacing() - scrollBarValue);
         QPoint point2(numberColumn * size.width() + spacing() / 2, (numberRow + 1) * size.height() - scrollBarValue);
-
         QLineF line(point1, point2);
 
         QPainter painter(this->viewport());
@@ -215,12 +212,10 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
             }
             break;
         }
-
         default:
             break;
         }
     }
-
     return QObject::eventFilter(watched, event);
 }
 

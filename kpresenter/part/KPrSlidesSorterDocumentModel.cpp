@@ -79,20 +79,17 @@ QVariant KPrSlidesSorterDocumentModel::data(const QModelIndex &index, int role) 
     }
 
     Q_ASSERT(index.model() == this);
-
     KoPAPageBase *page = pageFromIndex(index);
 
     switch (role) {
         case Qt::DisplayRole:
         {
             QString name = i18n("Unknown");
-            if (page)
-            {
+            if (page) {
                 name = page->name();
-                if (name.isEmpty())
-                {
+                if (name.isEmpty()) {
                     //Default case
-                    name = i18n("Slide %1",  m_document->pageIndex(page) + 1);
+                    name = i18n("Slide %1", m_document->pageIndex(page) + 1);
                 }
             }
             return name;
@@ -143,7 +140,6 @@ int KPrSlidesSorterDocumentModel::rowCount(const QModelIndex &parent) const
     if (!m_document) {
         return 0;
     }
-
     return m_document->pages(false).count();
 }
 
@@ -199,7 +195,6 @@ bool KPrSlidesSorterDocumentModel::removeRows(int row, int count, const QModelIn
     bool success = true;
     beginRemoveRows(parent,row, row + count- 1);
     endRemoveRows();
-
     return success;
 }
 
@@ -268,14 +263,14 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         pageAfter = m_document->pageByIndex(beginRow - 1,false);
     }
 
-    if (!slides.empty ()) {
+    if (!slides.empty()) {
         doDrop(slides, pageAfter, action);
     }
 
     return true;
 }
 
-void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
+void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter, Qt::DropAction action)
 {
      Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
      bool enableMove = true;
@@ -309,16 +304,17 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
                 popup.addAction(popupMoveAction);
             }
             popup.addAction(popupCopyAction);
-
             popup.addSeparator();
             popup.addAction(popupCancelAction);
 
             QAction *result = popup.exec(QCursor::pos());
 
-            if(result == popupCopyAction)
+            if (result == popupCopyAction) {
                 action = Qt::CopyAction;
-            else if(result == popupMoveAction)
+            }
+            else if (result == popupMoveAction) {
                 action = Qt::MoveAction;
+            }
             else {
                 return;
             }
