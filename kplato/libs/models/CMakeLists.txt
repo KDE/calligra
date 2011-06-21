@@ -4,6 +4,7 @@ add_subdirectory( tests )
 include_directories(
     ../kernel 
     ${KOMAIN_INCLUDES}
+    ${KUNDO2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
     ${KDE4_INCLUDES}
