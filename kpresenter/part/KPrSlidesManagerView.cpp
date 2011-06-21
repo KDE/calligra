@@ -71,9 +71,11 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
 
         QLineF line(point1, point2);
 
-        QPainter painter(this->viewport());
+        QPainter painter(this->viewport());       
         QPen pen = QPen(palette().brush(QPalette::Highlight), spacing()/4);
+        pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
+        painter.setOpacity(0.8);
         painter.drawLine(line);
     }
 }
