@@ -41,7 +41,6 @@ class KPrSelectionManager : public QObject
 
 public:
     KPrSelectionManager(QAbstractItemView *parent);
-
     virtual ~KPrSelectionManager();
     virtual bool eventFilter(QObject *watched, QEvent *event);
 

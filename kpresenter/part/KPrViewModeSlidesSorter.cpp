@@ -42,7 +42,6 @@
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrSlidesSorterItemDelegate.h"
-#include "commands/KPrSetCustomSlideShowsCommand.h"
 
 #include <KoResourceManager.h>
 #include <KoRuler.h>
@@ -250,7 +249,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     if (view) {
         view->hide();
     }
-    //m_slidesSorter->show();
     m_centralWidget->show();
     m_slidesSorterView->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
@@ -703,7 +701,8 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
     //otherwise let the user know
     else {
         KMessageBox Message;
-        Message.sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"), KMessageBox::Notify );
+        Message.sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
+                      KMessageBox::Notify);
         updateCustomSlideShowsList();
     }
 }

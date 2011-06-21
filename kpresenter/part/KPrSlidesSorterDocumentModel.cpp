@@ -19,9 +19,7 @@
 */
 
 #include "KPrSlidesSorterDocumentModel.h"
-
 #include "KPrViewModeSlidesSorter.h"
-#include "KPrPage.h"
 
 //Calligra headers
 #include <KoPADocument.h>
@@ -82,7 +80,7 @@ QVariant KPrSlidesSorterDocumentModel::data(const QModelIndex &index, int role) 
 
     Q_ASSERT(index.model() == this);
 
-    KoPAPageBase *page = m_document->pageByIndex(index.row(), false);
+    KoPAPageBase *page = pageFromIndex(index);
 
     switch (role) {
         case Qt::DisplayRole:
@@ -157,13 +155,15 @@ QStringList KPrSlidesSorterDocumentModel::mimeTypes() const
 QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexes) const
 {
     // check if there is data to encode
-    if(! indexes.count())
+    if (!indexes.count()) {
         return 0;
+    }
 
     // check if we support a format
     QStringList types = mimeTypes();
-    if( types.isEmpty() )
+    if (types.isEmpty()) {
         return 0;
+    }
 
     QMimeData *data = new QMimeData();
     QString format = types[0];
@@ -231,21 +231,16 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return true;
     }
 
-    if (!data->hasFormat("application/x-calligra-sliderssorter")) {
-        return false;
-    }
-
-    if (column > 0) {
+    if (!data->hasFormat("application/x-calligra-sliderssorter") | (column > 0)) {
         return false;
     }
 
     QByteArray encoded = data->data("application/x-calligra-sliderssorter");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
-    QList<KoPAPageBase *> slides;   
+    QList<KoPAPageBase *> slides;
 
     // decode the data
-    while(!stream.atEnd())
-    {
+    while (!stream.atEnd()) {
         QVariant v;
         stream >> v;
         slides.append(static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));

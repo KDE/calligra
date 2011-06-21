@@ -112,7 +112,6 @@ public:
      */
     void setDocument(KPrDocument *document);
 
-
     /**
      * @brief updates the list of slides of a custom slide show
      *

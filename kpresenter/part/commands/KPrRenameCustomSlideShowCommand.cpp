@@ -23,8 +23,8 @@
 #include "KPrCustomSlideShowsModel.h"
 #include "KPrCustomSlideShows.h"
 
-KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &oldName, const QString &newName, QUndoCommand *parent)
-    : QUndoCommand(parent)
+KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &oldName, const QString &newName, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_doc(doc)
     , m_model(model)
     , m_oldName(oldName)

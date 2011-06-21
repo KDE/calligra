@@ -71,8 +71,8 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
 
         QLineF line(point1, point2);
 
-        QPainter painter(this->viewport());       
-        QPen pen = QPen(palette().brush(QPalette::Highlight), spacing()/4);
+        QPainter painter(this->viewport());
+        QPen pen = QPen(palette().brush(QPalette::Highlight), spacing() / 4);
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
         painter.setOpacity(0.8);
@@ -118,8 +118,9 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 
     clearSelection();
 
-    if (!model())
+    if (!model()) {
         return;
+    }
 
     int newIndex = cursorSlideIndex();
 
@@ -133,12 +134,11 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
 {
     ev->accept();
-    if (!model())
+    if (!model()) {
         return;
-
+    }
     setDragingFlag();
     viewport()->update();
-
 }
 
 void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
@@ -184,7 +184,7 @@ QRect KPrSlidesManagerView::itemSize() const
 void KPrSlidesManagerView::setItemSize(QRect size)
 {
     m_itemSize = size;
-    setSpacing(m_itemSize.width()/10);
+    setSpacing(m_itemSize.width() / 10);
 }
 
 void KPrSlidesManagerView::setDragingFlag(bool flag)

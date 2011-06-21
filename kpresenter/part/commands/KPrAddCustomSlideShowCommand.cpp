@@ -23,8 +23,8 @@
 #include "KPrCustomSlideShows.h"
 #include "KoPAPageBase.h"
 
-KPrAddCustomSlideShowCommand::KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QUndoCommand *parent)
-    : QUndoCommand(parent)
+KPrAddCustomSlideShowCommand::KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_doc(doc)
     , m_model(model)
     , m_name(name)

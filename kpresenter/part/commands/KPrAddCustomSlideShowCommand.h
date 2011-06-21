@@ -20,15 +20,15 @@
 #ifndef KPRADDCUSTOMSLIDESHOWCOMMAND_H
 #define KPRADDCUSTOMSLIDESHOWCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KPrDocument;
 class KPrCustomSlideShowsModel;
 
-class KPrAddCustomSlideShowCommand : public QUndoCommand
+class KPrAddCustomSlideShowCommand : public KUndo2Command
 {
 public:
-    explicit KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QUndoCommand *parent = 0);
+    explicit KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, KUndo2Command *parent = 0);
 
     virtual ~KPrAddCustomSlideShowCommand();
 
