@@ -123,7 +123,6 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     m_customSlideShowView->setMaximumHeight(0);
 
     //Layout Widgets
-
     toolBarLayout->addWidget(slideShowsLabel);
     toolBarLayout->addWidget(m_customSlideShowsList);
     toolBarLayout->addWidget(m_buttonAddCustomSlideShow);
@@ -174,7 +173,6 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     //install selection manager for Slides Sorter View and Custom Shows View
     new KPrSelectionManager(m_slidesSorterView);
     new KPrSelectionManager(m_customSlideShowView);
-
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(view->kopaDocument(), m_slidesSorterView);
@@ -300,9 +298,7 @@ void KPrViewModeSlidesSorter::deactivate()
 
     //change zoom saving slot and restore normal view zoom values
     disconnect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
-
     m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_PAGE | KoZoomMode::ZOOM_WIDTH);
-
     m_view->setActivePage(m_view->kopaDocument()->pageByIndex(m_slidesSorterView->currentIndex().row(), false));
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
@@ -371,6 +367,23 @@ void KPrViewModeSlidesSorter::populate()
 QSize KPrViewModeSlidesSorter::iconSize() const
 {
     return m_iconSize;
+}
+
+void KPrViewModeSlidesSorter::selectSlides(const QList<KoPAPageBase *> &slides)
+{
+    if (slides.isEmpty()) {
+        return;
+    }
+
+    m_slidesSorterView->clearSelection();
+
+    foreach (KoPAPageBase *slide, slides) {
+        int row = m_view->kopaDocument()->pageIndex(slide);
+        QModelIndex index = m_slidesSorterModel->index(row, 0, QModelIndex());
+        if (index.isValid()) {
+            m_slidesSorterView->selectionModel()->select(index, QItemSelectionModel::Select);
+        }
+    }
 }
 
 void KPrViewModeSlidesSorter::activateNormalViewMode()
@@ -449,7 +462,6 @@ void KPrViewModeSlidesSorter::renameCurrentSlide()
 {
     QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();
     m_slidesSorterView->edit(selectedItems.first());
-
 }
 
 void KPrViewModeSlidesSorter::editCut()
@@ -483,7 +495,6 @@ void KPrViewModeSlidesSorter::editPaste()
 void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
 {
     Q_UNUSED(mode);
-
     //at zoom 100%, iconSize is set in 200 x 200
     //KPrSlidesSorterDocumentModel uses iconSize function in decorate Role.
     setIconSize(QSize(qRound(zoom*200),qRound(zoom*200)));
@@ -501,7 +512,6 @@ void KPrViewModeSlidesSorter::setIconSize(QSize size)
     if (size != m_iconSize) {
         m_iconSize = size;
     }
-
 }
 
 void KPrViewModeSlidesSorter::loadZoomConfig()
@@ -549,7 +559,6 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
     menu.addAction(KIcon("edit-cut"), i18n("Cut"), this,  SLOT(editCut()));
     menu.addAction(KIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
     menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
-
     menu.exec(event->globalPos());
 }
 
@@ -594,7 +603,6 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
 
     //Decide show or hide Custom Slide Shows View
     if (panelVisible != m_editCustomSlideShow) {
-
         const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
         const int duration = animate ? 600 : 1;
 
@@ -631,7 +639,6 @@ void KPrViewModeSlidesSorter::deleteSlideFromCustomShow()
     if (selectedItems.count() == 0) {
         return;
     }
-
     m_customSlideShowModel->removeSlidesByIndexes(selectedItems);
 }
 
@@ -699,7 +706,6 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
         Message.sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"), KMessageBox::Notify );
         updateCustomSlideShowsList();
     }
-
 }
 
 void KPrViewModeSlidesSorter::enableEditCustomShowButtons()
@@ -721,21 +727,4 @@ void KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons()
 {
     m_buttonAddSlideToCurrentShow->setEnabled(m_slidesSorterView->hasFocus());
     m_buttonDelSlideFromCurrentShow->setEnabled(m_customSlideShowView->hasFocus());
-}
-
-void KPrViewModeSlidesSorter::selectSlides(const QList<KoPAPageBase *> &slides)
-{
-    if (slides.isEmpty()) {
-        return;
-    }
-
-    m_slidesSorterView->clearSelection();
-
-    foreach (KoPAPageBase *slide, slides) {
-        int row = m_view->kopaDocument()->pageIndex(slide);
-        QModelIndex index = m_slidesSorterModel->index(row, 0, QModelIndex());
-        if (index.isValid()) {
-            m_slidesSorterView->selectionModel()->select(index, QItemSelectionModel::Select);
-        }
-    }
 }
