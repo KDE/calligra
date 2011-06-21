@@ -41,6 +41,7 @@
 #include "KPrCustomSlideShowsModel.h"
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
+#include "KPrSlidesSorterItemDelegate.h"
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 
 #include <KoResourceManager.h>
@@ -170,8 +171,14 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(view, SIGNAL(selectAllRequested()), m_slidesSorterView, SLOT(selectAll()));
     connect(view, SIGNAL(deselectAllRequested()), m_slidesSorterView, SLOT(clearSelection()));
 
-    //install selection manager for Slides Sorter View
-    m_selectionManagerSlidesSorter = new KPrSelectionManager(m_slidesSorterView);
+    //install selection manager for Slides Sorter View and Custom Shows View
+    new KPrSelectionManager(m_slidesSorterView);
+    new KPrSelectionManager(m_customSlideShowView);
+
+
+    //install delegate for Slides Sorter View
+    KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(view->kopaDocument(), m_slidesSorterView);
+    m_slidesSorterView->setItemDelegate(slidesSorterDelegate);
 }
 
 KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
@@ -440,8 +447,8 @@ void KPrViewModeSlidesSorter::addSlide()
 
 void KPrViewModeSlidesSorter::renameCurrentSlide()
 {
-    QModelIndexList selectedItems = m_slidesSorter->selectionModel()->selectedIndexes();
-    m_slidesSorter->edit(selectedItems.first());
+    QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();
+    m_slidesSorterView->edit(selectedItems.first());
 
 }
 
@@ -532,7 +539,7 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
     menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
-    QModelIndexList selectedItems = m_slidesSorter->selectionModel()->selectedIndexes();
+    QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();
 
     if (selectedItems.count() == 1 && selectedItems.first().isValid()) {
         menu.addAction(KIcon("edit-rename"), i18n("Rename"), this, SLOT(renameCurrentSlide()));
@@ -722,13 +729,13 @@ void KPrViewModeSlidesSorter::selectSlides(const QList<KoPAPageBase *> &slides)
         return;
     }
 
-    m_slidesSorter->clearSelection();
+    m_slidesSorterView->clearSelection();
 
     foreach (KoPAPageBase *slide, slides) {
         int row = m_view->kopaDocument()->pageIndex(slide);
-        QModelIndex index = m_documentModel->index(row, 0, QModelIndex());
+        QModelIndex index = m_slidesSorterModel->index(row, 0, QModelIndex());
         if (index.isValid()) {
-            m_slidesSorter->selectionModel()->select(index, QItemSelectionModel::Select);
+            m_slidesSorterView->selectionModel()->select(index, QItemSelectionModel::Select);
         }
     }
 }

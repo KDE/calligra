@@ -131,7 +131,6 @@ private:
     KPrSlidesManagerView *m_customSlideShowView;
     KPrSlidesSorterDocumentModel *m_slidesSorterModel;
     int m_zoom;
-    KPrSelectionManager *m_selectionManagerSlidesSorter;
     QWidget *m_centralWidget;
     KPrCustomSlideShowsModel *m_customSlideShowModel;
     QSize m_iconSize;

@@ -43,6 +43,7 @@ KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
+    setSpacing(m_itemSize.width()/10);
     viewport()->installEventFilter(this);
 }
 
@@ -58,19 +59,21 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
     // Paint the line where the slide should go
     if (isDraging()) {
 
-        QSize size(itemSize().width(), itemSize().height());
+        QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
 
         QPair <int, int> m_pair = cursorRowAndColumn();
         int numberColumn = m_pair.first;
         int numberRow = m_pair.second;
         int scrollBarValue = verticalScrollBar()->value();
 
-        QPoint point1(numberColumn * size.width(), numberRow * size.height() - scrollBarValue);
-        QPoint point2(numberColumn * size.width(), (numberRow + 1) * size.height() - scrollBarValue);
+        QPoint point1(numberColumn * size.width() + spacing() / 2, numberRow * size.height() + spacing() - scrollBarValue);
+        QPoint point2(numberColumn * size.width() + spacing() / 2, (numberRow + 1) * size.height() - scrollBarValue);
 
         QLineF line(point1, point2);
 
         QPainter painter(this->viewport());
+        QPen pen = QPen(palette().brush(QPalette::Highlight), spacing()/4);
+        painter.setPen(pen);
         painter.drawLine(line);
     }
 }
@@ -150,11 +153,13 @@ void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
 
 void KPrSlidesManagerView::focusOutEvent(QFocusEvent *event)
 {
+    Q_UNUSED(event);
     emit focusLost();
 }
 
 void KPrSlidesManagerView::focusInEvent(QFocusEvent *event)
 {
+    Q_UNUSED(event);
     emit focusGot();
 }
 
@@ -177,6 +182,7 @@ QRect KPrSlidesManagerView::itemSize() const
 void KPrSlidesManagerView::setItemSize(QRect size)
 {
     m_itemSize = size;
+    setSpacing(m_itemSize.width()/10);
 }
 
 void KPrSlidesManagerView::setDragingFlag(bool flag)
@@ -276,17 +282,17 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
 int KPrSlidesManagerView::cursorSlideIndex() const
 {
     QPair <int, int> m_pair = cursorRowAndColumn();
-    int slidesNumber = qFloor((contentsRect().width() - 20) / itemSize().width());
+    int slidesNumber = qFloor((contentsRect().width() - 20) / (itemSize().width() + spacing()));
     return (m_pair.first + m_pair.second * slidesNumber);
 }
 
 QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
 {
     //20 is for the margin.
-    int slidesNumber = qFloor((contentsRect().width() - 20) / itemSize().width());
+    QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
+    int slidesNumber = qFloor((contentsRect().width() - 20) / size.width());
     int scrollBarValue = verticalScrollBar()->value();
 
-    QSize size(itemSize().width(), itemSize().height());
     QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
 
     int numberColumn = qFloor(cursorPosition.x() / size.width());

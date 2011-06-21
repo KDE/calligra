@@ -41,7 +41,6 @@
 #include <QApplication>
 #include <QMenu>
 
-
 KPrSlidesSorterDocumentModel::KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document)
    : QAbstractListModel(parent)
    , m_viewModeSlidesSorter(viewModeSlidesSorter)
