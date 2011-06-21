@@ -1,7 +1,9 @@
 
 add_subdirectory( tests )
 
-include_directories(${KOODF_INCLUDES})
+include_directories(${KOODF_INCLUDES}
+                   ${KUNDO2_INCLUDES})
+
 
 ########### KPlato kernel library ###############
 
