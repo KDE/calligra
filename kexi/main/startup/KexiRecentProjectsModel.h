@@ -34,7 +34,7 @@ public:
         CategoryRole = 0xA2BEF158
     };
 
-    KexiRecentProjectsModel(const KexiRecentProjects& projects,
+    explicit KexiRecentProjectsModel(const KexiRecentProjects& projects,
                             QObject *parent = 0);
 
     QModelIndex  index(int row, int column = 0,
@@ -50,7 +50,10 @@ private:
 class KexiRecentProjectsProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:
-    KexiRecentProjectsProxyModel(QObject *parent = 0);
+    explicit KexiRecentProjectsProxyModel(QObject *parent = 0);
+
+protected:
+    virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const;
 };
 
 #endif

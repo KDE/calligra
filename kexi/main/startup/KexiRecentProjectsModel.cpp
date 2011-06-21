@@ -26,6 +26,7 @@
 #include <kexidb/utils.h>
 
 #include <KDateTime>
+#include <KDebug>
 
 KexiRecentProjectsModel::KexiRecentProjectsModel(
     const KexiRecentProjects& projects, QObject *parent)
@@ -163,7 +164,16 @@ Qt::ItemFlags KexiRecentProjectsModel::flags(const QModelIndex& index) const
 KexiRecentProjectsProxyModel::KexiRecentProjectsProxyModel(QObject *parent)
  : KCategorizedSortFilterProxyModel(parent)
 {
-    setCategorizedModel(true);
+    // disable since by default we are globally sorting by date: setCategorizedModel(true);
+}
+
+bool KexiRecentProjectsProxyModel::subSortLessThan(
+    const QModelIndex& left, const QModelIndex& right) const
+{
+    KexiProjectData *pdataLeft = static_cast<KexiProjectData*>(left.internalPointer());
+    KexiProjectData *pdataRight = static_cast<KexiProjectData*>(right.internalPointer());
+    //kDebug() << *pdataLeft << *pdataRight;
+    return pdataLeft->lastOpened() < pdataRight->lastOpened();
 }
 
 #include "KexiRecentProjectsModel.moc"

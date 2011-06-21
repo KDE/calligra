@@ -88,6 +88,7 @@ void KexiMainRecentProjectsPage::loadProjects()
     KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects());
     m_recentProjectsProxyModel->setSourceModel(model);
     m_recentProjects->setModel(m_recentProjectsProxyModel);
+    m_recentProjectsProxyModel->sort(0, Qt::DescendingOrder);
 }
 
 void KexiMainRecentProjectsPage::slotItemClicked(const QModelIndex& index)
