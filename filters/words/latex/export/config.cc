@@ -1,5 +1,5 @@
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by Words into LATEX.
 **
 ** Copyright (C) 2002-2003 Robert JACOLIN
 **
@@ -48,7 +48,7 @@ Config::Config(const Config &config)
     setEmbeded(config.isEmbeded());
 
     setEncoding(config.getEncoding());
-    if (config.isKwordStyleUsed()) useKwordStyle();
+    if (config.isWordsStyleUsed()) useWordsStyle();
 }
 
 /*******************************************/

@@ -34,7 +34,7 @@ kde4_add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
 
 target_link_libraries(kplatokernel koodf ${QT_QTGUI_LIBRARY})
 
-set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 

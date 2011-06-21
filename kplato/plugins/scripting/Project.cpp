@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
  * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
  *

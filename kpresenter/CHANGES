@@ -43,7 +43,7 @@ Changes:
 - Now PresSpeed is into each page
 - Now PageUp/PageDown during presentation go to beginning of the next/previous slide
 - Each object effect can have it's own speed now
-- Copy between kword/kpresenter
+- Copy between words/kpresenter
 - Now we can configure header/footer by page
 - Configure Custom Slide Show
 - Add statistic variable
@@ -185,7 +185,7 @@ Bugfixes:
 Changes between KPresenter-1.2-beta2 and KPresenter-1.2-RC1
 ===========================================================
 New:
-- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- Like all of Calligra: a readonly GUI for embedding into Konqueror
 - More DCOP calls
 
 Bugfixes:
@@ -208,7 +208,7 @@ Bugfixes:
   an image or a clipart)
 
 Crashes:
-- Fixed crash when we close kword and "special char dialogbox" is not closed
+- Fixed crash when we close words and "special char dialogbox" is not closed
 - Fixed several memory leaks
 - Fixed crash when we cancel insert time/date variable.
 - Fixed crash when we duplicate page and there was an embedded document.

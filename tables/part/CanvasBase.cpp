@@ -84,7 +84,7 @@
 #include <kwordwrap.h>
 #include <kxmlguifactory.h>
 
-// KOffice
+// Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoStore.h>

@@ -22,7 +22,7 @@
 #include "kexiaboutdata.h"
 #include <kexi_version.h>
 
-#include <kofficeversion.h> //only for KOFFICE_VERSION_STRING
+#include <calligraversion.h> //only for CALLIGRA_VERSION_STRING
 #include <klocale.h>
 
 static const char *description =
@@ -42,7 +42,7 @@ KAboutData* Kexi::createAboutData()
         ki18n(KEXI_APP_NAME),
         KEXI_VERSION_STRING
 #ifndef CUSTOM_VERSION
-        " (Calligra " KOFFICE_VERSION_STRING ")"
+        " (Calligra " CALLIGRA_VERSION_STRING ")"
 #endif
         , ki18n(description),
         KAboutData::License_LGPL_V2,

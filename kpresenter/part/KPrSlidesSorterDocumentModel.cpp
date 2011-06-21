@@ -30,6 +30,7 @@
 #include <KoPAPageMoveCommand.h>
 #include <KoPAOdfPageSaveHelper.h>
 #include <KoDrag.h>
+#include <KoShapeRenameCommand.h>
 
 //KDE Headers
 #include <KIcon>
@@ -89,7 +90,7 @@ QVariant KPrSlidesSorterDocumentModel::data(const QModelIndex &index, int role) 
             QString name = i18n("Unknown");
             if (page)
             {
-                name = page->name ();
+                name = page->name();
                 if (name.isEmpty())
                 {
                     //Default case
@@ -102,9 +103,40 @@ QVariant KPrSlidesSorterDocumentModel::data(const QModelIndex &index, int role) 
         {
             return QIcon(page->thumbnail(m_viewModeSlidesSorter->iconSize()));
         }
+        case Qt::EditRole:
+        {
+            return page->name();
+        }
         default:
             return QVariant();
     }
+}
+
+bool KPrSlidesSorterDocumentModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(! index.isValid() || !m_document) {
+        return false;
+    }
+
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+    switch (role)
+    {
+        case Qt::EditRole:
+        {
+            QUndoCommand *cmd = new KoShapeRenameCommand(shape, value.toString());
+            // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
+            m_document->addCommand(cmd);
+            break;
+        }
+        default:
+            return false;
+    }
+
+    emit dataChanged(index, index);
+    return true;
 }
 
 int KPrSlidesSorterDocumentModel::rowCount(const QModelIndex &parent) const
@@ -119,7 +151,7 @@ int KPrSlidesSorterDocumentModel::rowCount(const QModelIndex &parent) const
 
 QStringList KPrSlidesSorterDocumentModel::mimeTypes() const
 {
-    return QStringList() << "application/x-koffice-sliderssorter";
+    return QStringList() << "application/x-calligra-sliderssorter";
 }
 
 QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexes) const
@@ -173,7 +205,7 @@ Qt::ItemFlags KPrSlidesSorterDocumentModel::flags(const QModelIndex &index) cons
     Qt::ItemFlags defaultFlags = QAbstractListModel::flags (index);
 
     if (index.isValid()) {
-        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEditable | defaultFlags;
     }
     else {
         return Qt::ItemIsDropEnabled | defaultFlags;
@@ -192,7 +224,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return true;
     }
 
-    if (!data->hasFormat("application/x-koffice-sliderssorter")) {
+    if (!data->hasFormat("application/x-calligra-sliderssorter")) {
         return false;
     }
 
@@ -200,7 +232,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return false;
     }
 
-    QByteArray encoded = data->data("application/x-koffice-sliderssorter");
+    QByteArray encoded = data->data("application/x-calligra-sliderssorter");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
     QList<KoPAPageBase *> slides;
 
@@ -297,6 +329,7 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
         KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
         m_document->addCommand(command);
         m_viewModeSlidesSorter->view()->setActivePage(slides.first());
+        m_viewModeSlidesSorter->selectSlides(slides);
         return;
     }
     case Qt::CopyAction: {
@@ -307,6 +340,7 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
         m_viewModeSlidesSorter->view()->setActivePage(pageAfter);
         m_viewModeSlidesSorter->editPaste();
         m_viewModeSlidesSorter->view()->setActivePage(slides.first());
+        m_viewModeSlidesSorter->selectSlides(slides);
         return;
     }
     default:

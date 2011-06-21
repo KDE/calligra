@@ -24,13 +24,13 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 namespace KPlato
 {
 
 static const char* KPLATO_DESCRIPTION=I18N_NOOP("Calligra Plan - KDE Project Planning and Management Tool");
-static const char* KPLATO_VERSION=KOFFICE_VERSION_STRING;
+static const char* KPLATO_VERSION=CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {

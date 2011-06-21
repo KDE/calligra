@@ -66,14 +66,14 @@ class WorkPackage;
 
 /**
  * DocumentChild stores info about documents opened for editing.
- * Editors can be KParts, KOffice or Other.
+ * Editors can be KParts, Calligra or Other.
  */
 class DocumentChild : public QObject
 {
     Q_OBJECT
 public:
     // The type of document this child handles
-    enum DocType { Type_Unknown = 0, Type_KOffice, Type_KParts, Type_Other };
+    enum DocType { Type_Unknown = 0, Type_Calligra, Type_KParts, Type_Other };
 
     explicit DocumentChild( WorkPackage *parent );
 //    DocumentChild( KParts::ReadWritePart *editor, const KUrl &url, const Document *doc, Part *parent);
@@ -159,8 +159,8 @@ public:
     
     //Config &config() { return m_config; }
     
-    /// Open KOffice document for editing
-//     DocumentChild *openKOfficeDocument( KMimeType::Ptr mimetype, const Document *doc );
+    /// Open Calligra document for editing
+//     DocumentChild *openCalligraDocument( KMimeType::Ptr mimetype, const Document *doc );
     /// Open KParts document for editing
 //     DocumentChild *openKPartsDocument( KService::Ptr service, const Document *doc );
     /// Open document for editing, return true if ok, false if failure

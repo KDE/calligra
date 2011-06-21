@@ -43,7 +43,7 @@ install( FILES  karbon_ai_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #	-module -avoid-version -no-undefined
 #
 #INCLUDES = \
-#	$(KOFFICE_INCLUDES) \
+#	$(CALLIGRA_INCLUDES) \
 #	$(KOPAINTER_INCLUDES) \
 #	-I$(top_srcdir)/karbon \
 #	-I$(top_srcdir)/karbon/core \

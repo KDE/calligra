@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
@@ -7,7 +7,7 @@
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
- * Utils::columnName() based on Cell::columnName() from koffice/kspread/Utils.cpp:
+ * Utils::columnName() based on Cell::columnName() from calligra/kspread/Utils.cpp:
  * Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * Copyright 2004 Tomas Mecir <mecirt@gmail.com>
  * Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>

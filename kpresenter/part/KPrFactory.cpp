@@ -73,8 +73,8 @@ KIconLoader* KPrFactory::iconLoader()
     if( !s_iconLoader )
     {
         s_iconLoader = new KIconLoader( componentData().componentName() );
-        // Tell the iconloader about share/apps/koffice/icons
-        s_iconLoader->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        s_iconLoader->addAppDir("calligra");
     }
 
     return s_iconLoader;

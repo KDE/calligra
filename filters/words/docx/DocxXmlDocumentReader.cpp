@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 KoGmbh (casper.boemann@kogmbh.com).
@@ -619,6 +619,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 {
     READ_PROLOGUE
 
+    // Protecting in case the object is inside a textbox inside a shape
+    VMLShapeProperties oldProperties = m_currentVMLProperties;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -634,6 +637,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
@@ -1305,22 +1310,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(dxaOrig)
-    m_currentVMLProperties.currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
-    kDebug() << "m_currentObjectWidthCm" << m_currentVMLProperties.currentObjectWidthCm;
+    m_currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
     TRY_READ_ATTR(dyaOrig)
-    m_currentVMLProperties.currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
+    m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
+
+    // Protecting in case the object is inside a textbox inside a shape
+    VMLShapeProperties oldProperties = m_currentVMLProperties;
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(v, shapetype)
-            ELSE_TRY_READ_IF_NS(v, shape)
+            else if (name() == "shape") {
+                m_outputFrames = false;
+                TRY_READ(shape)
+                m_outputFrames = true;
+            }
             ELSE_TRY_READ_IF_NS(o, OLEObject)
+            ELSE_TRY_READ_IF(control)
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
@@ -1433,7 +1447,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
     body->startElement("text:note-citation");
 
     // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
-    // the value based on the footnote style, it is hardcoded for the moment as koffice has no support
+    // the value based on the footnote style, it is hardcoded for the moment as calligra has no support
     // for it
     body->addTextSpan(id);
 
@@ -1489,7 +1503,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
     body->startElement("text:note-citation");
 
     // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
-    // the value based on the footnote style, it is hardcoded for the moment as koffice has no support
+    // the value based on the footnote style, it is hardcoded for the moment as calligra has no support
     // for it
     body->addTextSpan(id);
 
@@ -1538,6 +1552,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
        else if (fldCharType == "end") {
            m_complexCharStatus = NoneAllowed;
            m_complexCharType = NoComplexFieldCharType;
+           m_complexCharValue.clear();
        }
     }
 
@@ -1568,7 +1583,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
     else if (type == "page") {
-        m_currentParagraphStyle.addProperty("fo:break-after", "page");
+        m_currentParagraphStyle.addProperty("fo:break-before", "page");
     }
     else {
         body->startElement("text:line-break");
@@ -1632,6 +1647,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 instruction.remove(0, 12); // removes GOTOBUTTON
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
+            }
+            else if (instruction.startsWith("MACROBUTTON")) {
+                m_complexCharType = MacroButtonFieldCharType;
+                m_complexCharValue = "[";
             }
             else {
                 m_complexCharValue = instruction;
@@ -2288,7 +2307,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+    if (m_complexCharType == InternalHyperlinkComplexFieldCharType ||
+        m_complexCharType == MacroButtonFieldCharType) {
         body->addTextSpan(m_complexCharValue);
     }
 
@@ -5324,6 +5344,48 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL control
+//! Reads a activeX control object
+/*
+ Parent elements:
+ - [done] object (§17.3.3.19)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_control()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    body->startElement("draw:frame");
+    body->addAttribute("svg:width", m_currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentObjectHeightCm);
+    body->addAttribute("text:anchor-type", "as-char"); // default for these
+
+    // Do we even want to try anything with activeX controls?
+    /*
+    TRY_READ_ATTR_WITH_NS(r, id)
+    const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+    kDebug() << "oleName:" << oleName;
+    */
+
+    // Replacement image
+    body->startElement("draw:image");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:show", "embed");
+    body->addAttribute("xlink:actuate", "onLoad");
+    body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
+    body->endElement(); // draw:image
+
+    body->endElement(); // draw:frame
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
 // ---------------------------------------------------------------------------
 
 #define blipFill_NS "pic"
@@ -5345,22 +5407,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 // <o:OLEObject Type="Embed" ProgID="Visio.Drawing.11" ShapeID="_x0000_i1025"
 //              DrawAspect="Content" ObjectID="_1240488905" r:id="rId10"/>
 
+    body->startElement("draw:frame");
+    body->addAttribute("svg:width", m_currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentObjectHeightCm);
+    body->addAttribute("text:anchor-type", "as-char"); // default for these
+
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
     kDebug() << "oleName:" << oleName;
 
-//! @todo ooo saves binaries to the root dir; should we?
-
-    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
+    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);
     KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
     if (stat == KoFilter::OK) {
+        body->startElement("draw:object-ole");
         addManifestEntryForFile(destinationName);
+        body->addAttribute("xlink:href", destinationName);
+        body->endElement(); // draw:object-ole
     }
+
+    // Replacement image
+    body->startElement("draw:image");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:show", "embed");
+    body->addAttribute("xlink:actuate", "onLoad");
+    body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
+    body->endElement(); // draw:image
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
     }
+
+    body->endElement(); // draw:frame
 
     READ_EPILOGUE
 }

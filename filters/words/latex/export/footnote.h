@@ -2,7 +2,7 @@
  * YOU MUST LOOK AT IN THE LAYOUT CLASS.
  */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -22,8 +22,8 @@
 **
 */
 
-#ifndef __KWORD_LATEX_FOOTNOTE_H__
-#define __KWORD_LATEX_FOOTNOTE_H__
+#ifndef __WORDS_LATEX_FOOTNOTE_H__
+#define __WORDS_LATEX_FOOTNOTE_H__
 
 #include <QString>
 //Added by qt3to4:
@@ -102,5 +102,5 @@ public:
 };
 
 
-#endif /* __KWORD_LATEX_FOOTNOTE_H__ */
+#endif /* __WORDS_LATEX_FOOTNOTE_H__ */
 

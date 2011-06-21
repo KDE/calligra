@@ -28,7 +28,7 @@
 #include <kpluginfactory.h>
 
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 
 #include <wpexport.h>
 #include <wp5.h>
@@ -47,7 +47,7 @@ WPExport::convert(const QByteArray& from,
                   const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/wordperfect" || from != "application/x-kword")
+    if (to != "application/wordperfect" || from != "application/x-words")
         return KoFilter::NotImplemented;
 
     // document version is determined using file extension,
@@ -62,7 +62,7 @@ WPExport::convert(const QByteArray& from,
     if (version == 5) worker = new WPFiveWorker();
     else worker = new WPSixWorker();
 
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     KoFilter::ConversionStatus result;
     result = leader->convert(m_chain, from, to);

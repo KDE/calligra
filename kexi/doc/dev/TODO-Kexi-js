@@ -200,7 +200,7 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 -"Could rename table \"%1\" using the same name."
   --> "Could NOT rename table \"%1\" using the same name."
 
-I am using update_kexi_po to recreate kexi.po file. THis will run cd koffice/ && make -f admin/Makefile.common package-messages
+I am using update_kexi_po to recreate kexi.po file. THis will run cd calligra/ && make -f admin/Makefile.common package-messages
 
 
 === Import/Export Framework TODO ===
@@ -780,7 +780,7 @@ KEXIDB:
 - ConnectionData: make local sockets default for unix, instead of tcp/ip
 
 GENERAL:
-- removed conflict between standalone and KOffice version by:
+- removed conflict between standalone and Calligra version by:
 -- inserting "standalone" word into module names, 
    eg. kexidb_mysqldriver.so -> kexidb_mysqldriver_standalone.so
 -- renaming kexi to kexi-standalone
@@ -795,8 +795,8 @@ MARKETING:
   http://developers.slashdot.org/comments.pl?sid=164824&cid=13755151
 
 
-ACCESIBILITY - Mouseless Operation Problems (KOffice 1.4.1):
-- MORE: http://accessibility.kde.org/reports/koffice-1.4.1-accessibility-assessment.pdf
+ACCESIBILITY - Mouseless Operation Problems (Calligra 1.4.1):
+- MORE: http://accessibility.kde.org/reports/calligra-1.4.1-accessibility-assessment.pdf
 - It is not possible to select the data type of a
 field in the table editor. Alt+DownArrow does not work.
 - When editing the fields of a table, it is not
@@ -1030,7 +1030,7 @@ ALTER TABLE t1_new RENAME TO t1;
 - unhide "Editor type" property for auto fields (it's hidden in 1.1 due to a crash)
 
 TODO:
-- inform Raphael about koffice.org/1.5/ url, give him the php code
+- inform Raphael about calligra-suite.org/1.5/ url, give him the php code
 
 Table Designer TODO
 - i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)

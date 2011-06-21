@@ -27,7 +27,7 @@ class KPrView;
 class KPrViewAdaptor : public KoViewAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.koffice.presentation.view" )
+    Q_CLASSINFO( "D-Bus Interface", "org.kde.calligra.presentation.view" )
 
 public:
     explicit KPrViewAdaptor( KPrView* view );

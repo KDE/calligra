@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
@@ -26,7 +26,7 @@
 #include <KoColorBackground.h>
 
 /**
-* \brief This namespace holds all the KWord scripting API.
+* \brief This namespace holds all the Words scripting API.
 */
 namespace Scripting
 {
@@ -37,8 +37,8 @@ namespace Scripting
 * The following python sample resizes the first frame of a
 * frameset named MyFrameSet to half of it's original size;
 * \code
-* import KWord
-* fs = KWord.frameSetByName("MyFrameSet")
+* import Words
+* fs = Words.frameSetByName("MyFrameSet")
 * if not fs:
 *     raise "No FrameSet named 'MyFrameSet'"
 * if fs.frameCount() < 1:
@@ -50,9 +50,9 @@ namespace Scripting
 * The following python sample script does iterate over all frames
 * each frameset has and prints the shape-id;
 * \code
-* import KWord
-* for i in range( KWord.frameSetCount() ):
-*     fs = KWord.frameSet(i)
+* import Words
+* for i in range( Words.frameSetCount() ):
+*     fs = Words.frameSet(i)
 *     for k in fs.frameCount():
 *         print fs.frame(k).shapeId()
 * \endcode
@@ -84,9 +84,9 @@ public:
 
     /// what should happen when the frame is full (too small for its contents)
     enum FrameBehavior {
-        AutoExtendFrameBehavior = KWord::AutoExtendFrameBehavior, ///< Make the frame bigger to fit the contents
-        AutoCreateNewFrameBehavior = KWord::AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
-        IgnoreContentFrameBehavior = KWord::IgnoreContentFrameBehavior ///< Ignore the content and clip it
+        AutoExtendFrameBehavior = Words::AutoExtendFrameBehavior, ///< Make the frame bigger to fit the contents
+        AutoCreateNewFrameBehavior = Words::AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
+        IgnoreContentFrameBehavior = Words::IgnoreContentFrameBehavior ///< Ignore the content and clip it
     };
 
 public slots:
@@ -134,7 +134,7 @@ public slots:
     * \endcode
     */
     void setFrameBehavior(int framebehavior) {
-        m_frame->setFrameBehavior((KWord::FrameBehavior) framebehavior);
+        m_frame->setFrameBehavior((Words::FrameBehavior) framebehavior);
     }
 
     /** Return the text runaround property for this frame. This property specifies

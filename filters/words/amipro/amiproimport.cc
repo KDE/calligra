@@ -65,7 +65,7 @@ static QString XMLEscape(const QString& str)
     return result;
 }
 
-// helper function to convert AmiPro format to KWord's FORMAT
+// helper function to convert AmiPro format to Words's FORMAT
 static QString AmiProFormatAsXML(AmiProFormat format)
 {
     QString result;
@@ -94,7 +94,7 @@ static QString AmiProFormatAsXML(AmiProFormat format)
     return result;
 }
 
-// helper function to convert AmiPro list of formats to KWord FORMATS
+// helper function to convert AmiPro list of formats to Words FORMATS
 static QString AmiProFormatListAsXML(AmiProFormatList& formatList)
 {
     QString result;
@@ -113,7 +113,7 @@ static QString AmiProFormatListAsXML(AmiProFormatList& formatList)
     return result;
 }
 
-// helper function to convert AmiPro paragraph layout to KWord's LAYOUT
+// helper function to convert AmiPro paragraph layout to Words's LAYOUT
 static QString AmiProLayoutAsXML(const AmiProLayout& layout)
 {
     QString result;
@@ -179,7 +179,7 @@ static QString AmiProLayoutAsXML(const AmiProLayout& layout)
     return result;
 }
 
-// helper function to convert AmiPro style to KWord STYLE
+// helper function to convert AmiPro style to Words STYLE
 static QString AmiProStyleAsXML(const AmiProStyle& style)
 {
     QString result;
@@ -235,7 +235,7 @@ static QString AmiProStyleAsXML(const AmiProStyle& style)
     return result;
 }
 
-// helper function to convert AmiPro styles to KWord STYLES
+// helper function to convert AmiPro styles to Words STYLES
 static QString AmiProStyleListAsXML(AmiProStyleList& styleList)
 {
     QString result;
@@ -263,7 +263,7 @@ bool AmiProConverter::doOpenDocument()
 {
     QString prolog = "<!DOCTYPE DOC>\n";
 
-    prolog.append("<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
+    prolog.append("<DOC mime=\"application/x-words\" syntaxVersion=\"2\" editor=\"Words\">\n");
     prolog.append("<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n");
     prolog.append(" <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n");
     prolog.append("</PAPER>\n");
@@ -309,7 +309,7 @@ bool AmiProConverter::doParagraph(const QString& text, AmiProFormatList formatLi
 KoFilter::ConversionStatus AmiProImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/x-kword" || from != "application/x-amipro")
+    if (to != "application/x-words" || from != "application/x-amipro")
         return KoFilter::NotImplemented;
 
     // parse/convert input file

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Words WML Export Filter
+Name[pt]=Filtro de Exportação de WML para o Words
+Name[pt_BR]=Filtro de exportação de WML para o Words
+Name[sv]=Words WML-exportfilter
+Name[uk]=Фільтр експорту WML для Words
+Name[x-test]=xxWords WML Export Filterxx
+X-KDE-Export=text/vnd.wap.wml
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+X-KDE-Library=wmlexport
+X-KDE-ServiceTypes=CalligraFilter

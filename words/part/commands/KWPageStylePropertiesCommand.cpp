@@ -103,7 +103,7 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
     const qreal sizeDifference = m_newLayout.height - m_oldLayout.height;
     foreach (KWFrameSet *fs, document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        bool remove = tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet;
+        bool remove = tfs && tfs->textFrameSetType() == Words::MainTextFrameSet;
         foreach (KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
             if (remove && shape->boundingRect().intersects(page.rect())) {

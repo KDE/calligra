@@ -1,7 +1,7 @@
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
       "http://www.wapforum.org/DTD/wml_1.1.xml" >
 <wml>
-<card name="Test file for KWord">
+<card name="Test file for Words">
 <p>The quick brown fox jumps over the lazy dog</p>
 </card>
 
@@ -21,7 +21,7 @@
 </card>
 
 <card>
-<p>Hyperlink test, go to <a href="http://www.koffice.org">KOffice website</a></p>
+<p>Hyperlink test, go to <a href="http://www.calligra-suite.org">Calligra website</a></p>
 </card>
 
 <card>

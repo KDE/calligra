@@ -19,7 +19,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -52,7 +52,7 @@
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 
 #include "ExportFilter.h"
 
@@ -134,11 +134,11 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
             strReturn += "&apos;";
             break;
         }
-        case 1: { // (Non-XML-compatible) replacement character from KWord 0.8
-            strReturn += '#'; //use KWord 1.[123] replacement character instead
+        case 1: { // (Non-XML-compatible) replacement character from Words 0.8
+            strReturn += '#'; //use Words 1.[123] replacement character instead
             break;
         }
-        // Following characters are not allowed in XML (but some files from KWord 0.8 have some of them.)
+        // Following characters are not allowed in XML (but some files from Words 0.8 have some of them.)
         case  0:
         case  2:
         case  3:
@@ -459,7 +459,7 @@ void OOWriterWorker::writeMetaXml(void)
     zipWriteData(" <office:meta>\n");
 
     // Tell who we are in case that we have a bug in our filter output!
-    zipWriteData("  <meta:generator>KWord's OOWriter Export Filter");
+    zipWriteData("  <meta:generator>Words's OOWriter Export Filter");
     zipWriteData(QString("$Revision$").mid(10).remove('$')); // has a leading and a trailing space.
 
     zipWriteData("</meta:generator>\n");
@@ -495,7 +495,7 @@ void OOWriterWorker::writeMetaXml(void)
 
     zipWriteData("  <meta:document-statistic");
 
-    // KWord files coming from import filters mostly do not have no page count
+    // Words files coming from import filters mostly do not have no page count
     if (m_numPages > 0) {
         zipWriteData(" meta:page-count=\"");
         zipWriteData(QString::number(m_numPages));
@@ -720,7 +720,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     if (force
             || (formatOrigin.strikeout != formatData.strikeout)
             || (formatOrigin.strikeoutType != formatData.strikeoutType)) {
-        // OOWriter can only do single, double, thick (and slash and X that KWord cannot do.)
+        // OOWriter can only do single, double, thick (and slash and X that Words cannot do.)
         //  So no dash, dot and friends.
 
         strElement += "style:text-crossing-out=\"";
@@ -1115,7 +1115,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor, const AnchorType ancho
         *m_streamOut << " text:anchor-type=\"as-char\"";
     }
     *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
-    //*m_streamOut << " fo:min-height=\"1pt\"";// ### TODO: a better height (can be calulated from the KWord table frames)
+    //*m_streamOut << " fo:min-height=\"1pt\"";// ### TODO: a better height (can be calulated from the Words table frames)
     *m_streamOut << ">\n";
 
     *m_streamOut << "<table:table table:name=\""
@@ -1489,7 +1489,7 @@ void OOWriterWorker::processParagraphData(const QString &paraText,
             } else if (2 == (*paraFormatDataIt).id) {
                 processTextImage(paraText, formatLayout, (*paraFormatDataIt));
             } else if (3 == (*paraFormatDataIt).id) {
-                // Just a (KWord 0.8) tab stop, nothing else to do!
+                // Just a (Words 0.8) tab stop, nothing else to do!
                 *m_streamOut << "<text:tab-stop/>";
             } else if (4 == (*paraFormatDataIt).id) {
                 processVariable(paraText, formatLayout, (*paraFormatDataIt));

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Words Microsoft Write Export Filter
+Name[pt]=Filtro de Exportação de Microsoft Write para o Words
+Name[pt_BR]=Filtro de exportação de Microsoft Write para o Words
+Name[sv]=Words-exportfilter för Microsoft Write
+Name[uk]=Фільтр експорту MS Word Write для Words
+Name[x-test]=xxWords Microsoft Write Export Filterxx
+X-KDE-Export=application/x-mswrite
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+X-KDE-Library=mswriteexport
+X-KDE-ServiceTypes=CalligraFilter

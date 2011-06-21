@@ -20,7 +20,7 @@
 #ifndef KWCHANGEPAGESTYLECOMMAND_H
 #define KWCHANGEPAGESTYLECOMMAND_H
 
-#include "../kword_export.h"
+#include "../words_export.h"
 #include "../KWPageStyle.h"
 #include "../KWPage.h"
 
@@ -29,7 +29,7 @@
 class KWDocument;
 
 /// The undo / redo command for setting a page style on a page
-class KWORD_TEST_EXPORT KWChangePageStyleCommand : public QUndoCommand
+class WORDS_TEST_EXPORT KWChangePageStyleCommand : public QUndoCommand
 {
 public:
     /**
