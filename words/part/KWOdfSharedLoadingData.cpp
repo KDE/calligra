@@ -120,7 +120,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
 
 bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElement &style)
 {
-    frame->setFrameBehavior(KWord::IgnoreContentFrameBehavior);
+    frame->setFrameBehavior(Words::IgnoreContentFrameBehavior);
     KoXmlElement properties(KoXml::namedItemNS(style, KoXmlNS::style, "graphic-properties"));
     if (properties.isNull())
         return frame;
@@ -143,18 +143,18 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
 
     QString overflow = properties.attributeNS(KoXmlNS::style, "overflow-behavior", QString());
     if (overflow == "clip")
-        frame->setFrameBehavior(KWord::IgnoreContentFrameBehavior);
+        frame->setFrameBehavior(Words::IgnoreContentFrameBehavior);
     else if (overflow == "auto-create-new-frame")
-        frame->setFrameBehavior(KWord::AutoCreateNewFrameBehavior);
+        frame->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
     else
-        frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
-    QString newFrameBehavior = properties.attributeNS(KoXmlNS::koffice, "frame-behavior-on-new-page", QString());
+        frame->setFrameBehavior(Words::AutoExtendFrameBehavior);
+    QString newFrameBehavior = properties.attributeNS(KoXmlNS::calligra, "frame-behavior-on-new-page", QString());
     if (newFrameBehavior == "followup")
-        frame->setNewFrameBehavior(KWord::ReconnectNewFrame);
+        frame->setNewFrameBehavior(Words::ReconnectNewFrame);
     else if (newFrameBehavior == "copy")
-        frame->setNewFrameBehavior(KWord::CopyNewFrame);
+        frame->setNewFrameBehavior(Words::CopyNewFrame);
     else
-        frame->setNewFrameBehavior(KWord::NoFollowupFrame);
+        frame->setNewFrameBehavior(Words::NoFollowupFrame);
 
     return true;
 }

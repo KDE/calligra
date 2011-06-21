@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script helps finding out problems in filter of kspread/kword/kpresenter
+# This script helps finding out problems in filter of kspread/words/kpresenter
 # by converting .ksp/.kpr/.kwd -> filter extension -> .ksp/.kpr/.kwd and comparing the initial and final .ksp/.kpr/.kwd files.
 # We use the ksp/kpr/kwd format as a "dump" of the KSpread data, to check if everything is correct
 # in memory, but the point is of course to ensure that the filter extension has all the information.
@@ -24,12 +24,12 @@ case "$1" in
 	    newmimetype=application/vnd.sun.xml.calc
 	    ;;
 	    *)
-	    printf "Usage: %s {kspread|kword|kpresenter} <file name> {gnumeric|opencalc}\n" "$0"
+	    printf "Usage: %s {kspread|words|kpresenter} <file name> {gnumeric|opencalc}\n" "$0"
 	    exit 1;
 	esac
 	;;
-	kword)
-	appname=kword
+	words)
+	appname=words
 	oldextension=kwd
 	case "$3" in 
 	    rtf)
@@ -69,7 +69,7 @@ case "$1" in
             newmimetype=text/plain
 	    ;;
 	    *)
-	    printf "Usage: %s {kspread|kword|kpresenter} <file name> {rtf|amipro|oowriter|latex|paldoc|abiword|wml|wordperfect|ascii}\n" "$0"
+	    printf "Usage: %s {kspread|words|kpresenter} <file name> {rtf|amipro|oowriter|latex|paldoc|abiword|wml|wordperfect|ascii}\n" "$0"
 	    exit 1;
 	esac
 	;;
@@ -94,7 +94,7 @@ case "$1" in
                 newmimetype=image/tiff
                 ;;
 		*)
-		printf "Usage: %s {kspread|kword|kpresenter|krita} <file name> {magick-png}\n" "$0"
+		printf "Usage: %s {kspread|words|kpresenter|krita} <file name> {magick-png}\n" "$0"
 		exit1;
 	esac
 	;;
@@ -107,12 +107,12 @@ case "$1" in
 	    newmimetype=application/vnd.sun.xml.impress
 	    ;;
 	    *)
-	    printf "Usage: %s {kspread|kword|kpresenter} <file name> {ooimpress}\n" "$0"
+	    printf "Usage: %s {kspread|words|kpresenter} <file name> {ooimpress}\n" "$0"
 	    exit 1;
 	esac
 	;;
 	*)
-	printf "Usage: %s {kspread|kword|kpresenter|krita} <file name> <type of filter>\n" "$0"
+	printf "Usage: %s {kspread|words|kpresenter|krita} <file name> <type of filter>\n" "$0"
 	exit 1;
 esac
 	

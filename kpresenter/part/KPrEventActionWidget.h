@@ -25,7 +25,7 @@
 #include "stage_export.h"
 
 class KPrEventActionData;
-class QUndoCommand;
+class KUndo2Command;
 
 /**
  * Widget used for configuring an event action
@@ -48,7 +48,7 @@ signals:
     /**
      * Send signal to add the created command to the command history
      */
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
 };
 
 #endif /* KOEVENTACTIONWIDGET_H */

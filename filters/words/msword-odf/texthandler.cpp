@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -47,22 +47,22 @@
 #include "document.h"
 #include "msdoc.h"
 
-wvWare::U8 KWordReplacementHandler::hardLineBreak()
+wvWare::U8 WordsReplacementHandler::hardLineBreak()
 {
     return '\n';
 }
 
-wvWare::U8 KWordReplacementHandler::nonBreakingHyphen()
+wvWare::U8 WordsReplacementHandler::nonBreakingHyphen()
 {
     return '-'; // normal hyphen for now
 }
 
-wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
+wvWare::U8 WordsReplacementHandler::nonRequiredHyphen()
 {
-    return 0xad; // soft hyphen, according to kword.dtd
+    return 0xad; // soft hyphen, according to words.dtd
 }
 
-KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
+WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
     : m_mainStyles(0)
     , m_document(0)
     , m_parser(parser)
@@ -109,7 +109,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
 }
-bool KWordTextHandler::stateOk() const
+bool WordsTextHandler::stateOk() const
 {
     if (m_fldStart != m_fldEnd) {
         return false;
@@ -117,7 +117,7 @@ bool KWordTextHandler::stateOk() const
     return true;
 }
 
-KoXmlWriter* KWordTextHandler::currentWriter() const
+KoXmlWriter* WordsTextHandler::currentWriter() const
 {
     KoXmlWriter* writer = NULL;
 
@@ -138,8 +138,33 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
     return writer;
 }
 
+QString WordsTextHandler::paragraphBaseFontColor() const
+{
+    if (!m_paragraph) return QString();
+
+    const wvWare::StyleSheet& styles = m_parser->styleSheet();
+    const wvWare::Style* ps = m_paragraph->paragraphStyle();
+    quint16 istdBase = 0x0fff;
+    QString color;
+
+    while (!ps->isEmpty()) {
+        if (ps->chp().cv != wvWare::Word97::cvAuto) {
+            color = QString::number(ps->chp().cv | 0xff000000, 16).right(6).toUpper();
+            color.prepend('#');
+            break;
+        }
+        istdBase = ps->m_std->istdBase;
+        if (istdBase == 0x0fff) {
+            break;
+        } else {
+            ps = styles.styleByIndex(istdBase);
+        }
+    }
+    return color;
+}
+
 //increment m_sectionNumber
-void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
+void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513) ;
 
@@ -252,7 +277,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     }
 } //end sectionStart()
 
-void KWordTextHandler::sectionEnd()
+void WordsTextHandler::sectionEnd()
 {
     kDebug(30513);
 
@@ -269,13 +294,13 @@ void KWordTextHandler::sectionEnd()
     }
 }
 
-void KWordTextHandler::pageBreak(void)
+void WordsTextHandler::pageBreak(void)
 {
     m_breakBeforePage = true;
 }
 
 //signal that there's another subDoc to parse
-void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
+void WordsTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 {
     kDebug(30513);
 
@@ -293,7 +318,7 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
-void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
+void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
                                      wvWare::UString characters,
                                      wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
@@ -434,10 +459,10 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
     m_footnoteBuffer = 0;
 
     //bool autoNumbered = (character.unicode() == 2);
-    //QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
+    //QDomElement varElem = insertVariable( 11 /*Words code for footnotes*/, chp, "STRI" );
     //QDomElement footnoteElem = varElem.ownerDocument().createElement( "FOOTNOTE" );
     //if ( autoNumbered )
-    //    footnoteElem.setAttribute( "value", 1 ); // KWord will renumber anyway
+    //    footnoteElem.setAttribute( "value", 1 ); // Words will renumber anyway
     //else
     //    footnoteElem.setAttribute( "value", QString(QChar(character.unicode())) );
     //footnoteElem.setAttribute( "notetype", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote" );
@@ -451,7 +476,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
     //varElem.appendChild( footnoteElem );
 } //end footnoteFound()
 
-void KWordTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
+void WordsTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
 {
     KoXmlWriter* writer;
     QBuffer buf;
@@ -492,7 +517,7 @@ void KWordTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
     }
 }
 
-void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
+void WordsTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
 {
     KoXmlWriter* writer;
     QBuffer buf;
@@ -529,7 +554,7 @@ void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
     }
 }
 
-void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+void WordsTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                         const wvWare::AnnotationFunctor& parseAnnotation)
 {
     Q_UNUSED(characters);
@@ -574,7 +599,7 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationBuffer = 0;
 }
 
-void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
+void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
     kDebug(30513) ;
 
@@ -585,7 +610,7 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
 
     if (!m_currentTable) {
         static int s_tableNumber = 0;
-        m_currentTable = new KWord::Table();
+        m_currentTable = new Words::Table();
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
         m_currentTable->tap = tap;
         //insertAnchor( m_currentTable->name );
@@ -614,11 +639,11 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
     for (int i = 0; i <= tap->itcMac; i++) {
         m_currentTable->cacheCellEdge(tap->rgdxaCenter[ i ]);
     }
-    KWord::Row row(new wvWare::TableRowFunctor(functor), tap);
+    Words::Row row(new wvWare::TableRowFunctor(functor), tap);
     m_currentTable->rows.append(row);
 }
 
-void KWordTextHandler::tableEndFound()
+void WordsTextHandler::tableEndFound()
 {
     kDebug(30513) ;
 
@@ -639,7 +664,7 @@ void KWordTextHandler::tableEndFound()
         closeList();
     }
 
-    KWord::Table* table = m_currentTable;
+    Words::Table* table = m_currentTable;
     //reset m_currentTable
     m_currentTable = 0L;
     //must delete table in Document!
@@ -650,7 +675,7 @@ void KWordTextHandler::tableEndFound()
 //TODO: merge inlineObjectFound with floatingObjectFound, both of them are
 //stable actually
 
-void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
+void WordsTextHandler::inlineObjectFound(const wvWare::PictureData& data)
 {
     kDebug(30513);
     //inline object should be inside of a pragraph
@@ -704,7 +729,7 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
     m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
 }
 
-void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
+void WordsTextHandler::floatingObjectFound(unsigned int globalCP)
 {
     kDebug(30513);
     //floating object should be inside of a pragraph (or at least it's anchor)
@@ -759,7 +784,7 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
 }
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
-void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
+void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
     kDebug(30513) << "**********************************************";
 
@@ -826,7 +851,8 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     }
 
     //lists related logic
-    if (paragraphProperties->pap().ilfo == 0) {
+    qint16 ilfo = paragraphProperties->pap().ilfo;
+    if (ilfo == 0) {
 
         // Not in a list at all in the word document, so check if we need to
         // close one in the odt.
@@ -836,7 +862,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
-    } else if (paragraphProperties->pap().ilfo > 0) {
+    } else if (ilfo > 0) {
 
         // We're in a list in the word document.
         //
@@ -874,14 +900,15 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
-    //set paragraph properties
+    //set paragraph and character properties of the paragraph
     m_paragraph->setParagraphProperties(paragraphProperties);
+    m_paragraph->setCharacterProperties(chp);
     //set current named style in m_paragraph
     m_paragraph->setParagraphStyle(paragraphStyle);
     //provide the background color information
-    m_paragraph->setBgColor(m_document->currentBgColor());
+    m_paragraph->updateBgColor(m_document->currentBgColor());
 
-    KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
+    KoGenStyle* style = m_paragraph->koGenStyle();
 
     //check if the master-page-name attribute is required
     if (document()->writeMasterPageName() && !document()->writingHeader())
@@ -900,7 +927,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
 } //end paragraphStart()
 
-void KWordTextHandler::paragraphEnd()
+void WordsTextHandler::paragraphEnd()
 {
     kDebug(30513) << "-----------------------------------------------";
 
@@ -971,11 +998,14 @@ void KWordTextHandler::paragraphEnd()
         m_listLevelStyleRequired = false;
     }
 
+    //save the font color
+    m_paragraphBaseFontColorBkp = paragraphBaseFontColor();
+
     delete m_paragraph;
     m_paragraph = 0;
 }//end paragraphEnd()
 
-void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
+void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
 {
     //NOTE: The content between fieldStart and fieldSeparator represents field
     //instructions and the content between fieldSeparator and fieldEnd
@@ -1053,7 +1083,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     m_fldStart++;
 }//end fieldStart()
 
-void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
+void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
 {
     kDebug(30513) ;
     m_fld->m_afterSeparator = true;
@@ -1160,7 +1190,7 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
  * However, fields which do not enjoy such support are dealt with by emitting
  * the "result" text generated by Word as vanilla text in @ref runOftext.
  */
-void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
+void WordsTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
 //    Q_UNUSED(chp);
     kDebug(30513);
@@ -1456,12 +1486,24 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         bool useOutlineLevel = true;
 
         if (rx.indexIn(*inst) >= 0) {
-            useOutlineLevel = false;
+            // Most of the files contain semicolons instead of commas.
             QStringList fragments = rx.cap(1).split(QRegExp(";"));
-            levels = fragments.last().toInt();
-            for (int i = 0 ; i < fragments.size(); i += 2) {
-                customStyles.insert(Conversion::processStyleName(fragments[i]),
-                                    fragments[i + 1].toInt());
+            if (fragments.size() % 2) {
+                fragments = rx.cap(1).split(QRegExp(","));
+            }
+            if (!(fragments.size() % 2)) {
+                bool ok;
+                for (int n, i = 0 ; i < fragments.size(); i += 2) {
+                    n = fragments[i + 1].toInt(&ok);
+                    if (!ok) {
+                        continue;
+                    }
+                    else if (levels < n) {
+                        levels = n;
+                    }
+                    customStyles.insert(Conversion::processStyleName(fragments[i]), n);
+                }
+                useOutlineLevel = false;
             }
         }
         /*
@@ -1502,6 +1544,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 }
             }
         }
+        //TODO: re-order m_tocStyleNames based on the outline level
+
         /*
          * ************************************************
          * table-of-content
@@ -1634,10 +1678,10 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 /**
  * This handles a basic section of text.
  * 
- * Fields which are not supported by inline variables in @ref fieldEnd are also dealt with by 
- * emitting the "result" text generated by Word as vanilla text here.
+ * Fields which are not supported by inline variables in @ref fieldEnd are also
+ * dealt with by emitting the "result" text generated by Word as vanilla text.
  */
-void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
+void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
     bool common_flag = false;
     QString newText(Conversion::string(text));
@@ -1737,7 +1781,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 
 // Return the name of a font. We have to convert the Microsoft font names to
 // something that might just be present under X11.
-QString KWordTextHandler::getFont(unsigned ftc) const
+QString WordsTextHandler::getFont(unsigned ftc) const
 { 
     kDebug(30513) ;
     Q_ASSERT(m_parser);
@@ -1797,7 +1841,7 @@ QString KWordTextHandler::getFont(unsigned ftc) const
         */
 }//end getFont()
 
-bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo)
+bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo)
 {
     kDebug(30513);
 
@@ -1892,7 +1936,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 } //end writeListInfo()
 
 
-QString KWordTextHandler::createBulletStyle(const QString& textStyleName) const
+QString WordsTextHandler::createBulletStyle(const QString& textStyleName) const
 {
     const KoGenStyle* textStyle = m_mainStyles->style(textStyleName);
 
@@ -1935,7 +1979,7 @@ QString KWordTextHandler::createBulletStyle(const QString& textStyleName) const
     return m_mainStyles->insert(style, QString("T"));
 }
 
-void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(InvalidFormatException)
+void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(InvalidFormatException)
 {
     kDebug(30513) << "writing the list-level-style";
 
@@ -1995,10 +2039,33 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         listStyleWriter.startElement("style:list-level-properties");
         listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
         listStyleWriter.startElement("style:list-level-label-alignment");
+        //fo:margin-left
+        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
+        //fo:text-indent
+        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
 
+//         if (listInfo->indent()) {
+            // NOTE: According to lists.h, this should be the indent before the
+            // label. Sounds like fo:margin-left.
+//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
+//         }
+//         if (listInfo->space()) {
+            // NOTE: This produces wrong results (see the document attached to KDE
+            // bug 244411 and it's not clear why that is so. The specs say that
+            // the dxaSpace is the "minimum space between number and paragraph"
+            // and as such following should be right but it is not. So, we
+            // disabled it for now till someone has an idea why that is so.
+//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+//         }
+
+        //text:label-followed-by
         switch (listInfo->followingChar()) {
         case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
+            //text:list-tab-stop-position
+#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
+            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
+#endif
             break;
         case 1:
             listStyleWriter.addAttribute("text:label-followed-by", "nothing");
@@ -2010,17 +2077,6 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
             break;
         }
 
-        if (listInfo->space()) {
-            // This produces wrong results (see the document attached to KDE
-            // bug 244411 and it's not clear why that is so. The specs say that
-            // the dxaSpace is the "minimum space between number and paragraph"
-            // and as such following should be right but it is not. So, we
-            // disabled it for now till someone has an idea why that is so.
-            // listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-        }
-        if (listInfo->indent()) {
-            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-        }
         listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
@@ -2130,7 +2186,7 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
 
         //listInfo->isLegal() hmm
         //listInfo->notRestarted() [by higher level of lists] not supported
-        //listInfo->followingchar() ignored, it's always a space in KWord currently
+        //listInfo->followingchar() ignored, it's always a space in Words currently
         //*************************************
         listStyleWriter.startElement("style:list-level-properties");
         listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
@@ -2149,10 +2205,18 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         }
 
         listStyleWriter.startElement("style:list-level-label-alignment");
-
+        //fo:margin-left
+        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
+        //fo:text-indent
+        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
+        //text:label-followed-by
         switch (listInfo->followingChar()) {
         case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
+            //text:list-tab-stop-position
+#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
+            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
+#endif
             break;
         case 1:
             listStyleWriter.addAttribute("text:label-followed-by", "nothing");
@@ -2164,13 +2228,14 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
             break;
         }
 
-        if (listInfo->space()) {
-            // Disabled for now. Have a look at the comment at the other text:min-label-distance above to see why.
-            //listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-        }
-        if (listInfo->indent()) {
-            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-        }
+        //NOTE: Disabled for now. Have a look at the comment at the other
+        //text:min-label-distance and text-indent above to see why.
+//         if (listInfo->space()) {
+//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+//         }
+//         if (listInfo->indent()) {
+//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
+//         }
         listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
@@ -2191,7 +2256,7 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
     listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);
 } //end updateListStyle()
 
-void KWordTextHandler::closeList()
+void WordsTextHandler::closeList()
 {
     kDebug(30513);
     // Set the correct XML writer, get the last used writer from stack
@@ -2213,12 +2278,12 @@ void KWordTextHandler::closeList()
     m_listStyleName = "";
 }
 
-bool KWordTextHandler::listIsOpen()
+bool WordsTextHandler::listIsOpen()
 {
     return m_currentListID != 0;
 }
 
-void KWordTextHandler::saveState()
+void WordsTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
@@ -2235,7 +2300,7 @@ void KWordTextHandler::saveState()
     m_insideDrawing = false;
 }
 
-void KWordTextHandler::restoreState()
+void WordsTextHandler::restoreState()
 {
     kDebug(30513);
     //if the stack is corrupt, we won't even try to set it correctly
@@ -2268,7 +2333,7 @@ void KWordTextHandler::restoreState()
     m_insideDrawing = s.insideDrawing;
 }
 
-void KWordTextHandler::fld_saveState()
+void WordsTextHandler::fld_saveState()
 {
     m_fldStates.push(m_fld);
 
@@ -2276,7 +2341,7 @@ void KWordTextHandler::fld_saveState()
     m_fld = 0;
 }
 
-void KWordTextHandler::fld_restoreState()
+void WordsTextHandler::fld_restoreState()
 {
     //if the stack is corrupt, we won't even try to set it correctly
     if (m_fldStates.empty()) {
@@ -2303,7 +2368,7 @@ void KWordTextHandler::fld_restoreState()
 #ifdef TEXTHANDLER_OBSOLETE
 
 //create an element for the variable
-QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
+QDomElement WordsTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
 {
     Q_UNUSED(chp);
 
@@ -2324,7 +2389,7 @@ QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const w
     return varElem;
 }
 
-QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
+QDomElement WordsTextHandler::insertAnchor(const QString& fsname)
 {
     Q_UNUSED(fsname);
 

@@ -41,7 +41,7 @@
 #include <QSortFilterProxyModel>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QTimer>
 
 #include <kicon.h>
@@ -1353,7 +1353,7 @@ void View::slotProjectWorktimeFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
@@ -1636,7 +1636,7 @@ void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
         KMessageBox::sorry( this, i18n( "Cannot baseline. The project is already baselined." ) );
         return;
     }
-    QUndoCommand *cmd;
+    KUndo2Command *cmd;
     if ( sm->isBaselined() ) {
         int res = KMessageBox::warningContinueCancel( this, i18n( "This schedule is baselined. Do you want to remove the baseline?" ) );
         if ( res == KMessageBox::Cancel ) {
@@ -1694,7 +1694,7 @@ void View::slotAddSubTaskFinished( int result )
         return;
     }
     if ( result  == QDialog::Accepted) {
-        QUndoCommand *m = dia->buildCommand();
+        KUndo2Command *m = dia->buildCommand();
         getPart() ->addCommand( m ); // add task to project
     }
     dia->deleteLater();
@@ -1717,7 +1717,7 @@ void View::slotAddTaskFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand *m = dia->buildCommand();
+        KUndo2Command *m = dia->buildCommand();
         getPart() ->addCommand( m ); // add task to project
     }
     dia->deleteLater();
@@ -1794,7 +1794,7 @@ void View::slotDefineWBSFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted ) {
-        QUndoCommand *cmd = dia->buildCommand();
+        KUndo2Command *cmd = dia->buildCommand();
         if ( cmd ) {
             getPart()->addCommand( cmd );
         }
@@ -1948,7 +1948,7 @@ void View::slotProjectEditFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -1963,7 +1963,7 @@ void View::slotTaskEditFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -1978,7 +1978,7 @@ void View::slotSummaryTaskEditFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -2060,7 +2060,7 @@ void View::slotTaskProgressFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2075,7 +2075,7 @@ void View::slotMilestoneProgressFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2121,7 +2121,7 @@ void View::slotTaskDescriptionFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2285,7 +2285,7 @@ void View::slotAddRelationFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2323,7 +2323,7 @@ void View::slotModifyRelationFinished( int result )
         return ;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand *cmd = dia->buildCommand();
+        KUndo2Command *cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -2389,7 +2389,7 @@ void View::slotEditResourceFinished( int result )
         return ;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd )
             getPart() ->addCommand( cmd );
     }
@@ -2595,7 +2595,7 @@ void View::slotCreateReport()
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2641,7 +2641,7 @@ void View::slotOpenReportFileFinished( int result )
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
     dlg->show();
     dlg->raise();
@@ -2655,7 +2655,7 @@ void View::slotEditReportDesign( ReportView *view )
     }
     ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2668,7 +2668,7 @@ void View::slotReportDesignFinished( int /*result */)
     }
 }
 
-void View::slotModifyReportDefinition( QUndoCommand *cmd )
+void View::slotModifyReportDefinition( KUndo2Command *cmd )
 {
     cmd->redo();
     delete cmd; // TODO Maybe add command history to views and/or view selector?
@@ -2935,7 +2935,7 @@ void View::slotCurrencyConfigFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted ) {
-        QUndoCommand *c = dlg->buildCommand( getProject() );
+        KUndo2Command *c = dlg->buildCommand( getProject() );
         if ( c ) {
             getPart()->addCommand( c );
         }
@@ -2954,36 +2954,36 @@ QString View::standardTaskStatusReport() const
     s += "<report:title>" + i18n( "Report" ) + "</report:title>";
     s += "<report:script report:script-interpreter=\"javascript\" ></report:script>";
     s += "<report:grid report:grid-divisions=\"4\" report:grid-snap=\"1\" report:page-unit=\"cm\" report:grid-visible=\"1\" />";
-    s += "<report:page-style report:print-orientation=\"portrait\" fo:margin-bottom=\"1,00cm\" fo:margin-top=\"1,00cm\" fo:margin-left=\"1,00cm\" fo:margin-right=\"1,00cm\" report:page-size=\"A4\" >predefined</report:page-style>";
+    s += "<report:page-style report:print-orientation=\"portrait\" fo:margin-bottom=\"1cm\" fo:margin-top=\"1cm\" fo:margin-left=\"1cm\" fo:margin-right=\"1cm\" report:page-size=\"A4\" >predefined</report:page-style>";
     s += "<report:body>";
-    s += "<report:section svg:height=\"1,75cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-page-any\" >";
-    s += "<report:field report:name=\"field16\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Manager()\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"0.9388cm\" report:z-index=\"-2\" >";
+    s += "<report:section svg:height=\"1.75cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-page-any\" >";
+    s += "<report:field report:name=\"field16\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Manager()\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
-    s += "<report:label report:name=\"label16\" report:horizontal-align=\"left\" svg:x=\"13cm\" svg:width=\"2.5cm\" svg:y=\"0cm\" report:caption=\"" + i18nc( "Project manager", "Manager:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
+    s += "<report:label report:name=\"label16\" report:horizontal-align=\"left\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0cm\" report:caption=\"" + i18nc( "Project manager", "Manager:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"1\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
-    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"1cm\" report:z-index=\"-1\" >";
-    s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"1\" >";
+    s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"0%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
-    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"2.5cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Project:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
+    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Project:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
-    s += "<report:line report:name=\"line15\" svg:y1=\"1.2229cm\" svg:x1=\"18.9715cm\" svg:y2=\"1.2229cm\" svg:x2=\"0cm\" report:z-index=\"0\" >";
+    s += "<report:line report:name=\"line15\" svg:y1=\"1.2229cm\" svg:x1=\"0cm\" svg:y2=\"1.2229cm\" svg:x2=\"18.9715cm\" report:z-index=\"0\" >";
     s += "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:line>";
     s += "</report:section>";
-    s += "<report:section svg:height=\"1,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-report\" >";
+    s += "<report:section svg:height=\"1.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-report\" >";
     s += "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.25cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Task Status Report" ) + "\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
     s += "</report:section>";
-    s += "<report:section svg:height=\"2,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"footer-page-any\" >";
+    s += "<report:section svg:height=\"2.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"footer-page-any\" >";
     s += "<report:field report:name=\"field10\" report:horizontal-align=\"right\" report:item-data-source=\"=constants.PageNumber()\" svg:x=\"6.75cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
@@ -3006,7 +3006,7 @@ QString View::standardTaskStatusReport() const
     s += "</report:section>";
     s += "<report:detail>";
     s += "<report:group report:group-sort=\"ascending\" report:group-column=\"Parent\" >";
-    s += "<report:section svg:height=\"2,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"group-header\" >";
+    s += "<report:section svg:height=\"2.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"group-header\" >";
     s += "<report:label report:name=\"label6\" report:horizontal-align=\"left\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"1.75cm\" report:caption=\"" + i18nc( "Task name", "Name" ) + "\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
         s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
         s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
@@ -3021,7 +3021,7 @@ QString View::standardTaskStatusReport() const
     s += "</report:label>";
     s += "</report:section>";
     s += "</report:group>";
-    s += "<report:section svg:height=\"0,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"detail\" >";
+    s += "<report:section svg:height=\"0.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"detail\" >";
     s += "<report:field report:name=\"field7\" report:horizontal-align=\"left\" report:item-data-source=\"NodeName\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";

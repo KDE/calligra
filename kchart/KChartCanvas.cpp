@@ -26,7 +26,7 @@
 // KDE
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShapeCreateCommand.h>
@@ -96,7 +96,7 @@ bool KChartCanvas::snapToGrid() const
     return false;
 }
 
-void KChartCanvas::addCommand( QUndoCommand *command )
+void KChartCanvas::addCommand( KUndo2Command *command )
 {
     m_part->KoDocument::addCommand( command );
     adjustOrigin();

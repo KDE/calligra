@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2003 Werner Trobin <trobin@kde.org>
    Copyright (C) 2003 David Faure <faure@kde.org>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
@@ -154,7 +154,7 @@ void DrawingWriter::setChildRectangle(MSO::OfficeArtChildAnchor& anchor)
  * Graphics Handler
  * ************************************************
  */
-KWordGraphicsHandler::KWordGraphicsHandler(Document* doc,
+WordsGraphicsHandler::WordsGraphicsHandler(Document* doc,
                                            KoXmlWriter* bodyWriter,
                                            KoXmlWriter* manifestWriter,
                                            KoStore* store, KoGenStyles* mainStyles,
@@ -181,7 +181,7 @@ KWordGraphicsHandler::KWordGraphicsHandler(Document* doc,
     init();
 }
 
-KWordGraphicsHandler::~KWordGraphicsHandler()
+WordsGraphicsHandler::~WordsGraphicsHandler()
 {
     delete m_pOfficeArtHeaderDgContainer;
     delete m_pOfficeArtBodyDgContainer;
@@ -190,7 +190,7 @@ KWordGraphicsHandler::~KWordGraphicsHandler()
 /*
  * NOTE: All containers parsed by this function are optional.
  */
-void KWordGraphicsHandler::init()
+void WordsGraphicsHandler::init()
 {
     kDebug(30513);
 
@@ -227,12 +227,12 @@ void KWordGraphicsHandler::init()
     }
 }
 
-void KWordGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
+void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
 {
     emit textBoxFound(index, stylesxml);
 }
 
-DrawStyle KWordGraphicsHandler::getBgDrawStyle()
+DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 {
     const OfficeArtSpContainer* shape = 0;
     if (m_pOfficeArtBodyDgContainer) {
@@ -241,7 +241,7 @@ DrawStyle KWordGraphicsHandler::getBgDrawStyle()
     return DrawStyle(&m_officeArtDggContainer, 0, shape);
 }
 
-void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
+void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
     kDebug(30513) ;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);
@@ -339,7 +339,7 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     processDrawingObject(*o, out);
 }
 
-void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
+void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 {
 #ifdef DEBUG_GHANDLER
     kDebug(30513) << "globalCP" << globalCP ;
@@ -390,7 +390,7 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
     }
 }
 
-void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr,
+void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr,
                                          wvWare::Word97::FSPA* spa, uint spid,
                                          DrawingWriter& out)
 {
@@ -435,7 +435,7 @@ void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
     }
 }
 
-void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
+void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
 {
     if (o.rgfb.size() < 2) {
         return;
@@ -482,7 +482,7 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     m_processingGroup = false;
 }
 
-void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     kDebug(30513);
 
@@ -536,7 +536,7 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     }
 }
 
-void KWordGraphicsHandler::parseOfficeArtContainer()
+void WordsGraphicsHandler::parseOfficeArtContainer()
 {
     kDebug(30513);
 
@@ -673,7 +673,7 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
     }
 }
 
-int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
+int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
 {
     kDebug(30513);
 
@@ -752,7 +752,7 @@ int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
     return(0);
 }
 
-QString KWordGraphicsHandler::getPicturePath(quint32 pib) const
+QString WordsGraphicsHandler::getPicturePath(quint32 pib) const
 {
     quint32 offset = 0;
     QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, pib, offset);
@@ -767,7 +767,7 @@ QString KWordGraphicsHandler::getPicturePath(quint32 pib) const
     return QString();
 }
 
-void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
+void WordsGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
 {
     // write style <style:default-style style:family="graphic">
     KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
@@ -779,7 +779,7 @@ void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
     styles->insert(style);
 }
 
-void KWordGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)
+void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)
 {
     if (m_processingGroup) return;
     if (m_objectType == Inline) return;
@@ -866,7 +866,7 @@ void KWordGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const Dra
     style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700., gt);
 }
 
-void KWordGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
+void WordsGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
 {
     if (m_processingGroup) return;
 
@@ -882,7 +882,7 @@ void KWordGraphicsHandler::definePositionAttributes(KoGenStyle& style, const Dra
     }
 }
 
-void KWordGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
+void WordsGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
 {
     if (m_processingGroup) return;
 
@@ -894,7 +894,7 @@ void KWordGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
     }
 }
 
-void KWordGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
+void WordsGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
 {
     if (m_processingGroup) return;
 
@@ -906,7 +906,7 @@ void KWordGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
     }
 }
 
-void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     QString styleName;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
@@ -966,7 +966,7 @@ void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     out.xml.endElement(); //draw:frame
 }
 
-void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
+void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
     kDebug(30513) ;
 
@@ -1024,7 +1024,7 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     return;
 }
 
-void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
+void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
     kDebug(30513) ;
 
@@ -1100,7 +1100,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     return;
 }
 
-void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
+void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
     kDebug(30513) ;
 
@@ -1170,7 +1170,7 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     out.xml.endElement(); //custom-shape
 }
 
-void KWordGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
+void WordsGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
 {
     if (m_objectType != Inline) return;
 

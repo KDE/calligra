@@ -1,7 +1,7 @@
-KOffice Filter Wrapper
+Calligra Filter Wrapper
 ======================
 
-This is a generic framework for developing KOffice import and export
+This is a generic framework for developing Calligra import and export
 filters in a scripting language of your choice (Python, Perl, etc).
 
 Requirements for your filter:
@@ -12,7 +12,7 @@ Requirements for your filter:
 
 Name=My cool filter in Perl
 Type=Service
-ServiceTypes=KOfficeGenericFilter
+ServiceTypes=CalligraGenericFilter
 Exec=my_filter.pl
 X-KDE-Wrapper-Export=<MIME type of the exported file>
 X-KDE-Wrapper-Import=<MIME type of the imported file>

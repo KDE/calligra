@@ -21,7 +21,7 @@
 // Local
 #include "GenValidationStyle.h"
 
-// KOffice
+// Calligra
 #include <KoXmlWriter.h>
 
 // KSpread

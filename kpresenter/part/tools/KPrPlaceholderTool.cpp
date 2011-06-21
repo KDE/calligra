@@ -19,7 +19,7 @@
 
 #include "KPrPlaceholderTool.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPainter>
 #include <klocale.h>
 
@@ -89,7 +89,7 @@ void KPrPlaceholderTool::activate(ToolActivation toolActivation, const QSet<KoSh
         newShape->setPosition( shape->position() );
         newShape->setAdditionalAttribute( "presentation:class", shape->additionalAttribute( "presentation:class" ) );
 
-        QUndoCommand *cmd = new QUndoCommand( i18n( "Edit Shape" ) );
+        KUndo2Command *cmd = new KUndo2Command( i18n( "Edit Shape" ) );
 
         // replace placeholder by shape
         canvas()->shapeController()->removeShape( shape, cmd );

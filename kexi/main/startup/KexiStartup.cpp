@@ -823,7 +823,7 @@ tristate KexiStartupHandler::detectActionForFile(
 
     // "application/x-kexiproject-sqlite", etc.:
     QString tmpDriverName = Kexi::driverManager().lookupByMime(mimename).toLatin1();
-//@todo What about trying to reuse KOFFICE FILTER CHAINS here?
+//@todo What about trying to reuse CALLIGRA FILTER CHAINS here?
     bool useDetectedDriver = suggestedDriverName.isEmpty() || suggestedDriverName.toLower() == detectedDriverName.toLower();
     if (!useDetectedDriver) {
         int res = KMessageBox::Yes;

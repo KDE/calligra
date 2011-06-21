@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -41,7 +41,7 @@ namespace wvWare
 }
 
 /**
- * Static methods for simple MSWord->KWord conversions (enums etc.)
+ * Static methods for simple DOC->ODT conversions (enums etc.)
  */
 namespace Conversion
 {
@@ -106,18 +106,37 @@ namespace Conversion
     /**
      * Hackery for gray levels.
      */
-    int ditheringToGray(int ipat, bool* ok);
+    int ditheringToGray(const quint16 ipat, bool* ok);
 
     /**
      * Convert shading pattern (ipat) to RGB color.
      */
-    uint shadingPatternToColor(int ipat);
+    quint32 shadingPatternToColor(const quint16 ipat);
 
     /**
      * Convert the shading information to a color string.
+     * @param SHD structure
+     * @param background color in the format "#RRGGBB"
+     * @param font color in the format "#RRGGBB"
      * @return color in the format "#RRGGBB" or an empty string.
      */
-    QString shdToColorStr(const wvWare::Word97::SHD& shd);
+    QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor);
+
+    /**
+     * Compute a color contrasting to the provided background color.
+     * @return color in the format "#RRGGBB".
+     */
+    QString contrastFontColor(const QString& bgColor);
+
+    /**
+     * Compute a color for a COLORREF set to cvAuto.
+     * @param SHD shading structure
+     * @param background color in the format "#RRGGBB"
+     * @param font color in the format "#RRGGBB"
+     * @return color in the format "#RRGGBB".
+     */
+    QString computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor,  const QString& fontColor);
+
 
     /**
      * Convert linespacing struct to string.
@@ -148,32 +167,32 @@ namespace Conversion
     QString setBorderAttributes(const wvWare::Word97::BRC& brc);
 
     /**
-     * Get a koffice:borderspecial value "style".
+     * Get a calligra:borderspecial value "style".
      */
-    QString borderKOfficeAttributes(const wvWare::Word97::BRC& brc);
+    QString borderCalligraAttributes(const wvWare::Word97::BRC& brc);
 
     /**
-     * Convert wv2's Header Type to a KWord frameInfo value.
+     * Convert wv2's Header Type to a Words frameInfo value.
      */
     int headerTypeToFrameInfo(unsigned char type);
 
     /**
-     * Convert wv2's Header Type to a KWord frameset name.
+     * Convert wv2's Header Type to a Words frameset name.
      */
     QString headerTypeToFramesetName(unsigned char type);
 
     /**
-     * Convert a mask of Header Types to the hType value for KWord.
+     * Convert a mask of Header Types to the hType value for Words.
      */
     int headerMaskToHType(unsigned char mask);
 
     /**
-     * Convert a mask of Header Types to the fType value for KWord
+     * Convert a mask of Header Types to the fType value for Words
      */
     int headerMaskToFType(unsigned char mask);
 
     /**
-     * Convert wv2's FLD to KWord FIELD.subtype (or -1 if can't be handled)
+     * Convert wv2's FLD to Words FIELD.subtype (or -1 if can't be handled)
      */
     int fldToFieldType(const wvWare::FLD* fld);
 

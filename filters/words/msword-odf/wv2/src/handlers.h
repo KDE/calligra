@@ -271,9 +271,11 @@ namespace wvWare {
         // Paragraph related callbacks...
         /**
          * Denotes the start of a paragraph.
-         * The paragraph properties are passed in the @p paragraphProperties argument.
+         * @param paragraph properties of the paragraph.
+         * @param character properties of the paragraph provided for empty
+         * paragraphs to set correct font-size, line-height, etc.
          */
-        virtual void paragraphStart( SharedPtr<const ParagraphProperties> paragraphProperties );
+        virtual void paragraphStart( SharedPtr<const ParagraphProperties> paragraphProperties, SharedPtr<const Word97::CHP> characterProperties);
         virtual void paragraphEnd();
 
         /**

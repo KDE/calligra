@@ -217,7 +217,7 @@ QSize CalendarDayView::sizeHint() const
 void CalendarDayView::slotSetWork()
 {
     kDebug();
-    if ( receivers( SIGNAL( executeCommand( QUndoCommand* ) ) ) == 0 ) {
+    if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
         return;
     }
     Calendar *cal = model()->calendar();
@@ -264,7 +264,7 @@ void CalendarDayView::slotIntervalEditDialogFinished( int result )
 void CalendarDayView::slotSetVacation()
 {
     kDebug();
-    if ( receivers( SIGNAL( executeCommand( QUndoCommand* ) ) ) == 0 ) {
+    if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
         return;
     }
     QModelIndexList lst = selectionModel()->selectedIndexes();
@@ -294,7 +294,7 @@ void CalendarDayView::slotSetVacation()
 void CalendarDayView::slotSetUndefined()
 {
     kDebug();
-    if ( receivers( SIGNAL( executeCommand( QUndoCommand* ) ) ) == 0 ) {
+    if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
         return;
     }
     QModelIndexList lst = selectionModel()->selectedIndexes();
@@ -459,9 +459,9 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     m_calendarview->setDragEnabled ( true );
     m_calendarview->setAcceptDrops( true );
 
-    connect( m_calendarview->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
-    connect( m_dayview->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
-    connect( m_dayview, SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( m_calendarview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_dayview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_dayview, SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_calendarview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentCalendarChanged( QModelIndex ) ) );
     connect( m_calendarview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotCalendarSelectionChanged( const QModelIndexList ) ) );

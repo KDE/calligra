@@ -26,7 +26,7 @@
 #include <QFontMetricsF>
 #include <QColor>
 #include <kdebug.h>
-//// Copied from koffice KoUnit.h
+//// Copied from calligra KoUnit.h
 //
 //// 1 inch ^= 72 pt
 //// 1 inch ^= 25.399956 mm (-pedantic ;p)

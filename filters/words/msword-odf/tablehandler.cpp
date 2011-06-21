@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -38,8 +38,8 @@
 
 using Conversion::twipsToPt;
 
-KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles) :
-m_floatingTable(false)
+WordsTableHandler::WordsTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles) :
+    m_floatingTable(false)
 {
     // This strange value (-2), is used to create a check that e.g.  a
     // table row is not written before a table:table is started.
@@ -50,13 +50,13 @@ m_floatingTable(false)
     m_mainStyles = mainStyles; //for formatting styles
 }
 
-KoXmlWriter * KWordTableHandler::currentWriter() const
+KoXmlWriter * WordsTableHandler::currentWriter() const
 {
     return document()->textHandler()->currentWriter();
 }
 
 // Called by Document before invoking the table-row-functors
-void KWordTableHandler::tableStart(KWord::Table* table)
+void WordsTableHandler::tableStart(Words::Table* table)
 {
     kDebug(30513);
 
@@ -278,7 +278,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     }
 }
 
-void KWordTableHandler::tableEnd()
+void WordsTableHandler::tableEnd()
 {
     kDebug(30513) ;
     m_currentTable = 0L; // we don't own it, Document does
@@ -297,7 +297,7 @@ void KWordTableHandler::tableEnd()
     }
 }
 
-void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
+void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
     kDebug(30513) ;
     if (m_row == -2) {
@@ -350,7 +350,7 @@ void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     writer->addAttribute("table:style-name", rowStyleName.toUtf8());
 }
 
-void KWordTableHandler::tableRowEnd()
+void WordsTableHandler::tableRowEnd()
 {
     kDebug(30513);
     m_currentY += rowHeight();
@@ -374,7 +374,7 @@ static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, con
     }
 }
 
-void KWordTableHandler::tableCellStart()
+void WordsTableHandler::tableCellStart()
 {
     kDebug(30513) ;
 
@@ -396,7 +396,6 @@ void KWordTableHandler::tableCellStart()
     // Get table cell descriptor
     //merging, alignment, ... information
     const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
-    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
 
     //left boundary of current cell
     int leftEdgePos = m_tap->rgdxaCenter[ m_column ]; // in DXAs
@@ -423,10 +422,10 @@ void KWordTableHandler::tableCellStart()
 //         kDebug(30513) <<"fVertRestart is set!";
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
-        QList<KWord::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
+        QList<Words::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
         for (; it != m_currentTable->rows.end(); ++it)  {
             // Find cell right below us in row (*it), if any
-            KWord::TAPptr tapBelow = (*it).tap;
+            Words::TAPptr tapBelow = (*it).tap;
             const wvWare::Word97::TC* tcBelow = 0L;
             for (int c = 0; !tcBelow && c < tapBelow->itcMac ; ++c) {
                 if (qAbs(tapBelow->rgdxaCenter[ c ] - leftEdgePos) <= 3
@@ -494,7 +493,7 @@ void KWordTableHandler::tableCellStart()
     kDebug(30513) << " tableCellStart row=" << m_row << " WordColumn="
                   << m_column << " colSpan="
                   << colSpan << " (from" << leftCellNumber
-                  << " to" << rightCellNumber << " for KWord) rowSpan="
+                  << " to" << rightCellNumber << " for Words) rowSpan="
                   << rowSpan << " cellRect=" << cellRect;
 #endif
 
@@ -552,9 +551,9 @@ void KWordTableHandler::tableCellStart()
     //set borders for the four edges of the cell
     if (brcTop.brcType > 0 && brcTop.brcType < 64) {
         cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
-        QString kba = Conversion::borderKOfficeAttributes(brcTop);
+        QString kba = Conversion::borderCalligraAttributes(brcTop);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-top",kba);
+            cellStyle.addProperty("calligra:specialborder-top",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcTop);
         if (!dba.isEmpty()) {
@@ -565,9 +564,9 @@ void KWordTableHandler::tableCellStart()
     //left
     if (brcLeft.brcType > 0 && brcLeft.brcType < 64) {
         cellStyle.addProperty("fo:border-left", Conversion::setBorderAttributes(brcLeft));
-        QString kba = Conversion::borderKOfficeAttributes(brcLeft);
+        QString kba = Conversion::borderCalligraAttributes(brcLeft);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-left",kba);
+            cellStyle.addProperty("calligra:specialborder-left",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcLeft);
         if (!dba.isEmpty()) {
@@ -578,9 +577,9 @@ void KWordTableHandler::tableCellStart()
     //bottom
     if (brcBottom.brcType != 0 && brcBottom.brcType < 64) {
         cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
-        QString kba = Conversion::borderKOfficeAttributes(brcBottom);
+        QString kba = Conversion::borderCalligraAttributes(brcBottom);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-bottom",kba);
+            cellStyle.addProperty("calligra:specialborder-bottom",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcBottom);
         if (!dba.isEmpty()) {
@@ -591,9 +590,9 @@ void KWordTableHandler::tableCellStart()
     //right
     if (brcRight.brcType > 0 && brcRight.brcType < 64) {
         cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
-        QString kba = Conversion::borderKOfficeAttributes(brcRight);
+        QString kba = Conversion::borderCalligraAttributes(brcRight);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-right",kba);
+            cellStyle.addProperty("calligra:specialborder-right",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcRight);
         if (!dba.isEmpty()) {
@@ -604,9 +603,9 @@ void KWordTableHandler::tableCellStart()
     //top left to bottom right
     if (brcTL2BR.brcType > 0 && brcTL2BR.brcType < 64) {
         cellStyle.addProperty("style:diagonal-tl-br", Conversion::setBorderAttributes(brcTL2BR));
-        QString kba = Conversion::borderKOfficeAttributes(brcTL2BR);
+        QString kba = Conversion::borderCalligraAttributes(brcTL2BR);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-tl-br",kba);
+            cellStyle.addProperty("calligra:specialborder-tl-br",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcTL2BR);
         if (!dba.isEmpty()) {
@@ -617,22 +616,14 @@ void KWordTableHandler::tableCellStart()
     //top right to bottom left
     if (brcTR2BL.brcType > 0 && brcTR2BL.brcType < 64) {
         cellStyle.addProperty("style:diagonal-bl-tr", Conversion::setBorderAttributes(brcTR2BL));
-        QString kba = Conversion::borderKOfficeAttributes(brcTR2BL);
+        QString kba = Conversion::borderCalligraAttributes(brcTR2BL);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-tr-bl",kba);
+            cellStyle.addProperty("calligra:specialborder-tr-bl",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcTR2BL);
         if (!dba.isEmpty()) {
             cellStyle.addProperty("style:diagonal-bl-tr-widths", dba);
         }
-    }
-
-    //process shading information
-    QString color = Conversion::shdToColorStr(shd);
-    if (!color.isEmpty()) {
-        cellStyle.addProperty("fo:background-color", color);
-        //add the current background-color to stack
-        document()->addBgColor(color);
     }
 
     //text direction
@@ -683,9 +674,10 @@ void KWordTableHandler::tableCellStart()
         // If not set to colSpan, we need to (re)set it to a known value.
         m_colSpan = 1;
     }
+    m_cellStyleName = cellStyleName;
 }
 
-void KWordTableHandler::tableCellEnd()
+void WordsTableHandler::tableCellEnd()
 {
     kDebug(30513);
 
@@ -718,20 +710,24 @@ void KWordTableHandler::tableCellEnd()
     }
     m_colSpan = 1;
 
-    if (m_tap) {
-        //if the backgroud-color was provided, then remove it from stack
-        const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
-        const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+    if (!m_tap) return;
 
-        if ( !Conversion::shdToColorStr(shd).isEmpty() &&
-             !(tc.fVertMerge && !tc.fVertRestart) )
-        {
-            document()->rmBgColor();
-        }
+    //process shading information
+    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+    QString color = Conversion::shdToColorStr(shd,
+                                              document()->textHandler()->paragraphBgColor(),
+                                              document()->textHandler()->paragraphBaseFontColorBkp());
+    if (!color.isNull()) {
+        KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName);
+        Q_ASSERT(cellStyle);
+        cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);
+        m_cellStyleName.clear();
+        //add the current background-color to stack
+//         document()->addBgColor(color);
     }
 }
 
-void KWord::Table::cacheCellEdge(int cellEdge)
+void Words::Table::cacheCellEdge(int cellEdge)
 {
     kDebug(30513) ;
     uint size = m_cellEdges.size();
@@ -753,7 +749,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     kDebug(30513) << cellEdge << " -> added. Size=" << size + 1;
 }
 
-int KWord::Table::columnNumber(int cellEdge) const
+int Words::Table::columnNumber(int cellEdge) const
 {
     kDebug(30513) ;
     for (unsigned int i = 0; i < (unsigned int)m_cellEdges.size(); i++) {
@@ -766,7 +762,7 @@ int KWord::Table::columnNumber(int cellEdge) const
     return 0;
 }
 
-double KWordTableHandler::rowHeight() const
+double WordsTableHandler::rowHeight() const
 {
     kDebug(30513) ;
     return qMax(m_tap->dyaRowHeight / 20.0, 20.0);

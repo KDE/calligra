@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kchart;">
-  <!ENTITY package "koffice"> 
+  <!ENTITY package "calligra"> 
+  <!ENTITY koffice "Calligra">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
   <!ENTITY dataeditor "Data Editor">

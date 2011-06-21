@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Words WordPerfect Import Filter
+Name[pt]=Filtro de Importação de WordPerfect para o Words
+Name[pt_BR]=Filtro de importação de WordPerfect para o Words
+Name[sv]=Words-importfilter för WordPerfect
+Name[uk]=Фільтр імпорту WordPerfect для Words
+Name[x-test]=xxWords WordPerfect Import Filterxx
+X-KDE-Export=application/x-words
+X-KDE-Import=application/wordperfect
+X-KDE-Weight=1
+X-KDE-Library=wpimport
+X-KDE-ServiceTypes=CalligraFilter

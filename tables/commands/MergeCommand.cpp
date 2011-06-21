@@ -31,7 +31,7 @@
 
 using namespace Calligra::Tables;
 
-MergeCommand::MergeCommand(QUndoCommand* parent)
+MergeCommand::MergeCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent),
         m_merge(true),
         m_mergeHorizontal(false),

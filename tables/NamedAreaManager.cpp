@@ -33,7 +33,7 @@
 // Qt
 #include <QHash>
 
-// KOffice
+// Calligra
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 

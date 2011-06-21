@@ -28,8 +28,8 @@
 #include <KoShapeLayer.h>
 #include <klocale.h>
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent)
-        : QUndoCommand(parent), m_document(document), m_cmdType(commandType)
+KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, KUndo2Command* parent)
+        : KUndo2Command(parent), m_document(document), m_cmdType(commandType)
 {
     m_layers.append(layer);
 
@@ -39,8 +39,8 @@ KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, K
         setText(i18n("Lower Layer"));
 }
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent)
-        : QUndoCommand(parent), m_document(document), m_layers(layers), m_cmdType(commandType)
+KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, KUndo2Command* parent)
+        : KUndo2Command(parent), m_document(document), m_layers(layers), m_cmdType(commandType)
 {
     if (m_cmdType == RaiseLayer)
         setText(i18n("Raise Layer"));

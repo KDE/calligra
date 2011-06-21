@@ -20,16 +20,16 @@
 #ifndef FILTERADDCOMMAND_H
 #define FILTERADDCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KoShape;
 class KoFilterEffect;
 
 /// A command do add a new filter effect to a filter effect stack
-class FilterAddCommand : public QUndoCommand
+class FilterAddCommand : public KUndo2Command
 {
 public:
-    FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, QUndoCommand *parent = 0);
+    FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, KUndo2Command *parent = 0);
     ~FilterAddCommand();
     /// redo the command
     virtual void redo();

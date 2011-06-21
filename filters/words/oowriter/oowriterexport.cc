@@ -19,7 +19,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -42,7 +42,7 @@
 #include <QByteArray>
 
 K_PLUGIN_FACTORY(OOWRITERExportFactory, registerPlugin<OOWRITERExport>();)
-K_EXPORT_PLUGIN(OOWRITERExportFactory("kwordoowriterexport", "calligrafilters"))
+K_EXPORT_PLUGIN(OOWRITERExportFactory("wordsoowriterexport", "calligrafilters"))
 
 OOWRITERExport::OOWRITERExport(QObject* parent , const QVariantList &) :
         KoFilter(parent)
@@ -51,7 +51,7 @@ OOWRITERExport::OOWRITERExport(QObject* parent , const QVariantList &) :
 
 KoFilter::ConversionStatus OOWRITERExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (to != "application/vnd.sun.xml.writer" || from != "application/x-kword") {
+    if (to != "application/vnd.sun.xml.writer" || from != "application/x-words") {
         return KoFilter::NotImplemented;
     }
 
@@ -65,7 +65,7 @@ KoFilter::ConversionStatus OOWRITERExport::convert(const QByteArray& from, const
         return KoFilter::StupidError;
     }
 
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     if (!leader) {
         kError(30506) << "Cannot create Worker! Aborting!" << endl;

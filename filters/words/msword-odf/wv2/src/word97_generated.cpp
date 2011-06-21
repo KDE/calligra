@@ -552,10 +552,10 @@ bool SHD::read(OLEStreamReader *stream, bool preservePos) {
 
     shifterU16=stream->readU16();
     ico=shifterU16;
-    cvFore=Word97::icoToRGB(ico);
+    cvFore=Word97::icoToCOLORREF(ico);
     shifterU16>>=5;
     ico=shifterU16;
-    cvBack=Word97::icoToRGB(ico);
+    cvBack=Word97::icoToCOLORREF(ico);
     shifterU16>>=5;
     ipat=shifterU16;
 
@@ -575,14 +575,14 @@ void SHD::readPtr(const U8 *ptr) {
     shifterU16=readU16(ptr);
     ptr+=sizeof(U16);
     icoFore=shifterU16 & 0x1F;
-    cvFore=Word97::icoToRGB(icoFore);
+    cvFore=Word97::icoToCOLORREF(icoFore);
     shifterU16>>=5;
     icoBack=shifterU16 & 0x1F;
-    cvBack=Word97::icoToRGB(icoBack);
+    cvBack=Word97::icoToCOLORREF(icoBack);
     shifterU16>>=5;
     ipat=shifterU16;
 
-#ifdef DEBUG_SHD
+#ifdef WV2_DEBUG_SHD
     wvlog << "icoFore: 0x" << hex << icoFore << endl;
     wvlog << "icoBack: 0x" << hex << icoBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;
@@ -658,7 +658,7 @@ void SHD::readSHDOperandPtr(const U8 *ptr) {
     shifterU16=readU16(ptr);
     ipat=shifterU16;
 
-#ifdef DEBUG_SHD
+#ifdef WV2_DEBUG_SHD
     wvlog << "cvFore: 0x" << hex << cvFore << endl;
     wvlog << "cvBack: 0x" << hex << cvBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;
@@ -924,7 +924,7 @@ bool BRC::read(OLEStreamReader *stream, bool preservePos) {
     brcType=shifterU16;
     shifterU16=stream->readU16();
     ico=shifterU16 & 0xFF;
-    cv=Word97::icoToRGB(ico);
+    cv=Word97::icoToCOLORREF(ico);
     shifterU16>>=8;
     dptSpace=shifterU16;
     shifterU16>>=5;
@@ -951,7 +951,7 @@ void BRC::readPtr(const U8 *ptr) {
     shifterU16=readU16(ptr);
     ptr+=sizeof(U16);
     ico=shifterU16 & 0xFF;
-    cv=Word97::icoToRGB(ico);
+    cv=Word97::icoToCOLORREF(ico);
     shifterU16>>=8;
     dptSpace=shifterU16;
     shifterU16>>=5;
@@ -6884,6 +6884,8 @@ bool PAP::read(OLEStreamReader *stream, bool preservePos) {
     unused17=stream->readU8();
     fNoAutoHyph=stream->readU8();
     fWidowControl=stream->readU8();
+    dyaBeforeAuto=stream->readU8();
+    dyaAfterAuto=stream->readU8();
     dxaRight=stream->readS32();
     dxaLeft=stream->readS32();
     dxaLeft1=stream->readS32();
@@ -6980,6 +6982,8 @@ bool PAP::write(OLEStreamWriter *stream, bool preservePos) const {
     stream->write(unused17);
     stream->write(fNoAutoHyph);
     stream->write(fWidowControl);
+    stream->write(dyaBeforeAuto);
+    stream->write(dyaAfterAuto);
     stream->write(dxaRight);
     stream->write(dxaLeft);
     stream->write(dxaLeft1);
@@ -7064,6 +7068,8 @@ void PAP::clear() {
     unused17=0;
     fNoAutoHyph=0;
     fWidowControl=1;
+    dyaBeforeAuto=0;
+    dyaAfterAuto=0;
     dxaRight=0;
     dxaLeft=0;
     dxaLeft1=0;
@@ -7177,6 +7183,10 @@ std::string PAP::toString() const
     s += uint2string( fNoAutoHyph );
     s += "\nfWidowControl=";
     s += uint2string( fWidowControl );
+    s += "\ndyaBeforeAuto=";
+    s += uint2string( dyaBeforeAuto );
+    s += "\ndyaAfterAuto=";
+    s += uint2string( dyaAfterAuto );
     s += "\ndxaRight=";
     s += int2string( dxaRight );
     s += "\ndxaLeft=";
@@ -7321,6 +7331,8 @@ bool operator==(const PAP &lhs, const PAP &rhs) {
            lhs.unused17==rhs.unused17 &&
            lhs.fNoAutoHyph==rhs.fNoAutoHyph &&
            lhs.fWidowControl==rhs.fWidowControl &&
+           lhs.dyaBeforeAuto==rhs.dyaBeforeAuto &&
+           lhs.dyaAfterAuto==rhs.dyaAfterAuto &&
            lhs.dxaRight==rhs.dxaRight &&
            lhs.dxaLeft==rhs.dxaLeft &&
            lhs.dxaLeft1==rhs.dxaLeft1 &&

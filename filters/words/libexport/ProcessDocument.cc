@@ -22,7 +22,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -47,14 +47,14 @@
 #include "KWEFStructures.h"
 #include "TagProcessing.h"
 #include "ProcessDocument.h"
-#include "KWEFKWordLeader.h"
+#include "KWEFWordsLeader.h"
 
 
-// == KOFFICE DOCUMENT INFORMATION ==
+// == CALLIGRA DOCUMENT INFORMATION ==
 
 // TODO: verify that all document info is read!
 
-void ProcessTextTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+void ProcessTextTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     QString *tagText = (QString *) tagData;
 
@@ -69,7 +69,7 @@ void ProcessTextTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 
 static void ProcessAboutTag(QDomNode         myNode,
                             void            *tagData,
-                            KWEFKWordLeader *leader)
+                            KWEFWordsLeader *leader)
 {
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
 
@@ -86,7 +86,7 @@ static void ProcessAboutTag(QDomNode         myNode,
 
 static void ProcessAuthorTag(QDomNode         myNode,
                              void            *tagData,
-                             KWEFKWordLeader *leader)
+                             KWEFWordsLeader *leader)
 {
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
 
@@ -112,7 +112,7 @@ static void ProcessAuthorTag(QDomNode         myNode,
 
 void ProcessDocumentInfoTag(QDomNode         myNode,
                             void            *,
-                            KWEFKWordLeader *leader)
+                            KWEFWordsLeader *leader)
 {
     AllowNoAttributes(myNode);
 
@@ -128,7 +128,7 @@ void ProcessDocumentInfoTag(QDomNode         myNode,
 }
 
 
-// == KWORD ==
+// == WORDS ==
 
 // Every tag has its own processing function. All of those functions
 // have the same parameters since the functions are passed to
@@ -161,7 +161,7 @@ static void ProcessOneAttrTag(QDomNode  myNode,
                               const QString&   attrName,
                               const QString&   attrType,
                               void     *attrData,
-                              KWEFKWordLeader *leader)
+                              KWEFWordsLeader *leader)
 {
     QList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing(attrName, attrType, attrData);
@@ -171,7 +171,7 @@ static void ProcessOneAttrTag(QDomNode  myNode,
 }
 
 
-static void ProcessColorAttrTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
+static void ProcessColorAttrTag(QDomNode myNode, void *tagData, KWEFWordsLeader *)
 {
     QColor *attrValue = (QColor *) tagData;
 
@@ -190,7 +190,7 @@ static void ProcessColorAttrTag(QDomNode myNode, void *tagData, KWEFKWordLeader 
 static void ProcessBoolIntAttrTag(QDomNode  myNode,
                                   const QString&   attrName,
                                   void     *attrData,
-                                  KWEFKWordLeader *leader)
+                                  KWEFWordsLeader *leader)
 {
     ProcessOneAttrTag(myNode, attrName, "bool", attrData, leader);
 }
@@ -199,24 +199,24 @@ static void ProcessBoolIntAttrTag(QDomNode  myNode,
 // --------------------------------------------------------------------------------
 
 
-static void ProcessIntValueTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessIntValueTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     ProcessOneAttrTag(myNode, "value", "int", tagData, leader);
 }
 
 
-static void ProcessBoolIntValueTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessBoolIntValueTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     ProcessBoolIntAttrTag(myNode, "value", tagData, leader);
 }
 
 
-static void ProcessStringValueTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessStringValueTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     ProcessOneAttrTag(myNode, "value", "QString", tagData, leader);
 }
 
-static void ProcessStringNameTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessStringNameTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     ProcessOneAttrTag(myNode, "name", "QString", tagData, leader);
 }
@@ -225,7 +225,7 @@ static void ProcessStringNameTag(QDomNode myNode, void *tagData, KWEFKWordLeader
 // --------------------------------------------------------------------------------
 
 
-static void ProcessOldLayoutChildTag(QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/)
+static void ProcessOldLayoutChildTag(QDomNode myNode, void *tagData, KWEFWordsLeader* /*leader*/)
 {
     QList<AttrProcessing> attrProcessingList;
 
@@ -240,7 +240,7 @@ static void ProcessOldLayoutChildTag(QDomNode myNode, void *tagData, KWEFKWordLe
     ProcessAttributes(myNode, attrProcessingList);
 }
 
-static void ProcessUnderlineTag(QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/)
+static void ProcessUnderlineTag(QDomNode myNode, void *tagData, KWEFWordsLeader* /*leader*/)
 {
     TextFormatting* text = (TextFormatting*) tagData;
     QString str, style;
@@ -270,7 +270,7 @@ static void ProcessUnderlineTag(QDomNode myNode, void *tagData, KWEFKWordLeader*
     }
 }
 
-static void ProcessStrikeoutTag(QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/)
+static void ProcessStrikeoutTag(QDomNode myNode, void *tagData, KWEFWordsLeader* /*leader*/)
 {
     TextFormatting* text = (TextFormatting*) tagData;
     QString type, linestyle;
@@ -299,7 +299,7 @@ static void ProcessStrikeoutTag(QDomNode myNode, void *tagData, KWEFKWordLeader*
 
 void ProcessAnchorTag(QDomNode       myNode,
                       void          *tagData,
-                      KWEFKWordLeader *leader)
+                      KWEFWordsLeader *leader)
 {
     QString *instance = (QString *) tagData;
 
@@ -322,7 +322,7 @@ void ProcessAnchorTag(QDomNode       myNode,
 }
 
 
-static void ProcessLinkTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
+static void ProcessLinkTag(QDomNode myNode, void *tagData, KWEFWordsLeader *)
 {
     VariableData *variable = (VariableData *) tagData;
 
@@ -337,7 +337,7 @@ static void ProcessLinkTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
 }
 
 
-static void ProcessPgNumTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
+static void ProcessPgNumTag(QDomNode myNode, void *tagData, KWEFWordsLeader *)
 {
     VariableData *variable = (VariableData *) tagData;
 
@@ -352,7 +352,7 @@ static void ProcessPgNumTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
 }
 
 
-static void ProcessTypeTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
+static void ProcessTypeTag(QDomNode myNode, void *tagData, KWEFWordsLeader *)
 {
     VariableData *variable = (VariableData *) tagData;
 
@@ -363,7 +363,7 @@ static void ProcessTypeTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
     ProcessAttributes(myNode, attrProcessingList);
 }
 
-static void ProcessFieldTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
+static void ProcessFieldTag(QDomNode myNode, void *tagData, KWEFWordsLeader *)
 {
     VariableData *variable = (VariableData *) tagData;
     int subtype;
@@ -390,7 +390,7 @@ static void ProcessFieldTag(QDomNode myNode, void *tagData, KWEFKWordLeader *)
         variable->setField(name, value);
 }
 
-static void ProcessFootnoteTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessFootnoteTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     VariableData *variable = (VariableData *) tagData;
     QString frameset, value, numberingtype, notetype;
@@ -413,7 +413,7 @@ static void ProcessFootnoteTag(QDomNode myNode, void *tagData, KWEFKWordLeader *
     }
 }
 
-static void ProcessNoteTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessNoteTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     Q_UNUSED(leader);
     VariableData *variable = (VariableData *) tagData;
@@ -431,7 +431,7 @@ static void ProcessNoteTag(QDomNode myNode, void *tagData, KWEFKWordLeader *lead
 }
 
 // ### TODO: some files have not a <VARIABLE> tag but its supposed children are directly children of <FORMAT id="4">
-static void ProcessVariableTag(QDomNode myNode, void* tagData, KWEFKWordLeader* leader)
+static void ProcessVariableTag(QDomNode myNode, void* tagData, KWEFWordsLeader* leader)
 {
     VariableData *variable = (VariableData *) tagData;
 
@@ -472,7 +472,7 @@ static void AppendTagProcessingFormatOne(QList<TagProcessing>& tagProcessingList
     << TagProcessing("VARIABLE")
     << TagProcessing("TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor)
     << TagProcessing("OFFSETFROMBASELINE")
-    << TagProcessing("CHARSET")    // Old KWord documents or KWord's RTF import filter
+    << TagProcessing("CHARSET")    // Old Words documents or Words's RTF import filter
     ;
 
     if (formatData.text.language == "xx") {
@@ -485,7 +485,7 @@ static void AppendTagProcessingFormatOne(QList<TagProcessing>& tagProcessingList
 
 static void SubProcessFormatOneTag(QDomNode myNode,
                                    ValueListFormatData *formatDataList, int formatPos, int formatLen,
-                                   KWEFKWordLeader *leader)
+                                   KWEFWordsLeader *leader)
 {
     if (formatPos == -1 || formatLen == -1) {
         // We have no position and no length defined
@@ -497,7 +497,7 @@ static void SubProcessFormatOneTag(QDomNode myNode,
         << " = " << myNode.nodeValue()
         << endl;
 
-        // In the old syntax (KWord 0.8), the comment would be displayed for each paragraph, so do not show it.
+        // In the old syntax (Words 0.8), the comment would be displayed for each paragraph, so do not show it.
         if (! leader->m_oldSyntax)
             kDebug(30508) << "Missing formatting for <FORMAT> (style or syntax version 1 ?)";
     }
@@ -513,31 +513,31 @@ static void SubProcessFormatOneTag(QDomNode myNode,
 
 static void SubProcessFormatTwoTag(QDomNode myNode,
                                    ValueListFormatData *formatDataList, int formatPos, int formatLen,
-                                   KWEFKWordLeader *leader)
+                                   KWEFWordsLeader *leader)
 {
     if ((formatPos == -1)) {
         // We have no position defined
         kWarning(30508) << "Missing text image position!";
         return;
     }
-    // In KWord 0.8, the len attribute was not defined
+    // In Words 0.8, the len attribute was not defined
     if (formatLen == -1)
         formatLen = 1;
 
     FormatData formatData(2, formatPos, formatLen);
     QList<TagProcessing> tagProcessingList;
 
-    QString fileName; // KWord 0.8
+    QString fileName; // Words 0.8
     PictureKey key; // Re-saved by KWord 1.2 or KWord 1.3
     tagProcessingList.append(TagProcessing("FILENAME", ProcessStringValueTag, &fileName));
     tagProcessingList.append(TagProcessing("PICTURE",  ProcessImageTag, &key));
     ProcessSubtags(myNode, tagProcessingList, leader);
 
     if (!fileName.isEmpty()) {
-        kDebug(30508) << "KWord 0.8 text image:" << fileName;
+        kDebug(30508) << "Words 0.8 text image:" << fileName;
         key = PictureKey(fileName);
     } else {
-        kDebug(30508) << "KWord 1.2/1.3 text image:" << key.toString();
+        kDebug(30508) << "Words 1.2/1.3 text image:" << key.toString();
     }
 
     formatData.frameAnchor.key = key;
@@ -549,7 +549,7 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
 
 static void SubProcessFormatThreeTag(QDomNode myNode,
                                      ValueListFormatData *formatDataList, int formatPos, int /*formatLen*/,
-                                     KWEFKWordLeader *leader)
+                                     KWEFWordsLeader *leader)
 {
     if ((formatPos == -1)) { // formatLen is never there but is 1.
         // We have no position and no length defined
@@ -564,7 +564,7 @@ static void SubProcessFormatThreeTag(QDomNode myNode,
 
 static void SubProcessFormatFourTag(QDomNode myNode,
                                     ValueListFormatData *formatDataList, int formatPos, int formatLen,
-                                    KWEFKWordLeader *leader)
+                                    KWEFWordsLeader *leader)
 {
     if ((formatPos == -1) || (formatLen == -1)) {
         // We have no position and no length defined
@@ -584,7 +584,7 @@ static void SubProcessFormatFourTag(QDomNode myNode,
 
 static void SubProcessFormatSixTag(QDomNode myNode,
                                    ValueListFormatData *formatDataList, int formatPos, int formatLen,
-                                   KWEFKWordLeader *leader)
+                                   KWEFWordsLeader *leader)
 {
     if (formatPos != -1 && formatLen != -1) {
         QString instance;
@@ -606,7 +606,7 @@ static void SubProcessFormatSixTag(QDomNode myNode,
     }
 }
 
-static void ProcessFormatTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessFormatTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
     int formatId  = -1;
@@ -620,7 +620,7 @@ static void ProcessFormatTag(QDomNode myNode, void *tagData, KWEFKWordLeader *le
     ProcessAttributes(myNode, attrProcessingList);
 
     if ((formatId == -1) && (leader->m_oldSyntax)) {
-        formatId = 1; // KWord 0.8 did not define it in <LAYOUT>
+        formatId = 1; // Words 0.8 did not define it in <LAYOUT>
     }
 
     switch (formatId) {
@@ -628,11 +628,11 @@ static void ProcessFormatTag(QDomNode myNode, void *tagData, KWEFKWordLeader *le
         SubProcessFormatOneTag(myNode, formatDataList, formatPos, formatLen, leader);
         break;
     }
-    case 2: { // text image (KWord 0.8)
+    case 2: { // text image (Words 0.8)
         SubProcessFormatTwoTag(myNode, formatDataList, formatPos, formatLen, leader);
         break;
     }
-    case 3: { // KWord 0.8 tabulator
+    case 3: { // Words 0.8 tabulator
         SubProcessFormatThreeTag(myNode, formatDataList, formatPos, formatLen, leader);
         break;
     }
@@ -649,7 +649,7 @@ static void ProcessFormatTag(QDomNode myNode, void *tagData, KWEFKWordLeader *le
         AllowNoSubtags(myNode, leader);
         break;
     }
-    case 5: // KWord 0.8 footnote
+    case 5: // Words 0.8 footnote
     default:
         kWarning(30508) << "Unexpected FORMAT attribute id value " << formatId;
         AllowNoSubtags(myNode, leader);
@@ -658,7 +658,7 @@ static void ProcessFormatTag(QDomNode myNode, void *tagData, KWEFKWordLeader *le
 }
 
 
-void ProcessFormatsTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+void ProcessFormatsTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
@@ -674,7 +674,7 @@ void ProcessFormatsTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 // --------------------------------------------------------------------------------
 
 
-static void ProcessCounterTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessCounterTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     CounterData *counter = (CounterData *) tagData;
 
@@ -704,7 +704,7 @@ static void ProcessCounterTag(QDomNode myNode, void *tagData, KWEFKWordLeader *l
 }
 
 
-static void ProcessLayoutTabulatorTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessLayoutTabulatorTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     TabulatorList* tabulatorList = (TabulatorList*) tagData;
 
@@ -735,7 +735,7 @@ static void ProcessLayoutTabulatorTag(QDomNode myNode, void *tagData, KWEFKWordL
 }
 
 
-static void ProcessIndentsTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessIndentsTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -749,7 +749,7 @@ static void ProcessIndentsTag(QDomNode myNode, void *tagData, KWEFKWordLeader *l
 }
 
 
-static void ProcessLayoutOffsetTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessLayoutOffsetTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -762,7 +762,7 @@ static void ProcessLayoutOffsetTag(QDomNode myNode, void *tagData, KWEFKWordLead
 }
 
 
-static void ProcessLineBreakingTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessLineBreakingTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -779,7 +779,7 @@ static void ProcessLineBreakingTag(QDomNode myNode, void *tagData, KWEFKWordLead
 }
 
 
-static void ProcessShadowTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessShadowTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -800,7 +800,7 @@ static void ProcessShadowTag(QDomNode myNode, void *tagData, KWEFKWordLeader *le
     AllowNoSubtags(myNode, leader);
 }
 
-static void ProcessAnyBorderTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessAnyBorderTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     BorderData *border =  static_cast <BorderData*>(tagData);
 
@@ -821,12 +821,12 @@ static void ProcessAnyBorderTag(QDomNode myNode, void *tagData, KWEFKWordLeader 
     AllowNoSubtags(myNode, leader);
 }
 
-static void ProcessFollowingTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessFollowingTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     ProcessOneAttrTag(myNode, "name", "QString", tagData, leader);
 }
 
-static void ProcessLinespacingTag(QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/)
+static void ProcessLinespacingTag(QDomNode myNode, void *tagData, KWEFWordsLeader* /*leader*/)
 {
     LayoutData *layout = (LayoutData *) tagData;
     QString oldValue, spacingType;
@@ -838,7 +838,7 @@ static void ProcessLinespacingTag(QDomNode myNode, void *tagData, KWEFKWordLeade
     attrProcessingList << AttrProcessing("spacingvalue"  , spacingValue);
     ProcessAttributes(myNode, attrProcessingList);
 
-    // KWord pre-1.2 uses only the "value" attribute (stored in oldValue)
+    // Words pre-1.2 uses only the "value" attribute (stored in oldValue)
     // while 1.2 uses mainly "type" and "spacingvalue", while keeping "value" for compatibility
 
     if (spacingType.isEmpty()) {
@@ -877,7 +877,7 @@ static void ProcessLinespacingTag(QDomNode myNode, void *tagData, KWEFKWordLeade
     }
 }
 
-static void ProcessLineSpaceTag(QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/)
+static void ProcessLineSpaceTag(QDomNode myNode, void *tagData, KWEFWordsLeader* /*leader*/)
 {
     // <LINESPACE> is an old tag, of before syntax 1
     LayoutData *layout = (LayoutData *) tagData;
@@ -893,7 +893,7 @@ static void ProcessLineSpaceTag(QDomNode myNode, void *tagData, KWEFKWordLeader*
     layout->lineSpacing     = spacingValue;
 }
 
-static void ProcessFlowTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+static void ProcessFlowTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -901,8 +901,8 @@ static void ProcessFlowTag(QDomNode myNode, void *tagData, KWEFKWordLeader *lead
 
     QList<AttrProcessing> attrProcessingList;
     if (leader->m_oldSyntax) {
-        // KWord 0.8
-        attrProcessingList << AttrProcessing("value", oldAlign);    // KWord 0.8
+        // Words 0.8
+        attrProcessingList << AttrProcessing("value", oldAlign);    // Words 0.8
     }
     // New syntax and some files from syntax 1
     attrProcessingList << AttrProcessing("align", normalAlign);
@@ -911,18 +911,18 @@ static void ProcessFlowTag(QDomNode myNode, void *tagData, KWEFKWordLeader *lead
 
     if (leader->m_oldSyntax && normalAlign.isEmpty()) {
         if (oldAlign.isEmpty()) {
-            layout->alignment = "left"; // KWord 0.8 did not support right-to-left
+            layout->alignment = "left"; // Words 0.8 did not support right-to-left
         } else {
             const int align = oldAlign.toInt();
             if ((align < 0) || (align > 3)) {
-                kWarning(30508) << "KWord 0.8 flow unknown: " << oldAlign;
+                kWarning(30508) << "Words 0.8 flow unknown: " << oldAlign;
                 layout->alignment = "left"; // Unknown, so assume left
             } else {
                 const char* flows[] = {"left", "right", "center", "justify" };
                 layout->alignment = flows[ align ];
             }
         }
-        kDebug(30508) << "KWord 0.8 flow:" << oldAlign << " corrected:" << layout->alignment;
+        kDebug(30508) << "Words 0.8 flow:" << oldAlign << " corrected:" << layout->alignment;
     } else {
         layout->alignment = normalAlign;
     }
@@ -930,7 +930,7 @@ static void ProcessFlowTag(QDomNode myNode, void *tagData, KWEFKWordLeader *lead
 }
 
 
-void ProcessLayoutTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+void ProcessLayoutTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader)
 // Processes <LAYOUT> and <STYLE>
 {
     QList<AttrProcessing> attrProcessingList;
@@ -991,7 +991,7 @@ void ProcessLayoutTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 
 
 static void ProcessImageKeyTag(QDomNode myNode,
-                               void *tagData, KWEFKWordLeader *)
+                               void *tagData, KWEFWordsLeader *)
 {
     PictureKey *key = (PictureKey*) tagData;
 
@@ -1000,7 +1000,7 @@ static void ProcessImageKeyTag(QDomNode myNode,
 }
 
 void ProcessImageTag(QDomNode myNode,
-                     void *tagData, KWEFKWordLeader *leader)
+                     void *tagData, KWEFWordsLeader *leader)
 { // <PICTURE>
     QList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing("keepAspectRatio");

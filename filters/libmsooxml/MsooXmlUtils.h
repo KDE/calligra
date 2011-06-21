@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
@@ -148,7 +148,7 @@ private:
 
 //! Helper that sets given variable to specified value on destruction
 //! Object of type Setter are supposed to be created on the stack.
-//! @todo Copied from koffice/kexi/kexiutils/utils.h; replace with a shared code
+//! @todo Copied from calligra/kexi/kexiutils/utils.h; replace with a shared code
 template <typename T>
 class Setter
 {
@@ -317,9 +317,6 @@ struct MSOOXML_EXPORT DoubleModifier {
     qreal value;
     bool valid;
 };
-
-//! Converts color string to rgb color string #xxYYZZ
-MSOOXML_EXPORT QString rgbColor(QString color);
 
 MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     const DoubleModifier& modulation, const DoubleModifier& offset);

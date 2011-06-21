@@ -53,14 +53,14 @@ bool Document::analyzeDocumentClass(Command* documentclass)
 
 bool Document::generate(KoStore* store)
 {
-    QDomDocument doc("KWORD");
+    QDomDocument doc("WORDS");
     doc.appendChild(doc.createProcessingInstruction("xml",
                     "version=\"1.0\" encoding=\"UTF-8\""));
 
     /* DOC */
     QDomElement root = doc.createElement("DOC");
     root.setAttribute("editor", "LaTex Import Filter");
-    root.setAttribute("mime", "application/x-kword");
+    root.setAttribute("mime", "application/x-words");
     root.setAttribute("syntaxVersion", "1");
     doc.appendChild(root);
 

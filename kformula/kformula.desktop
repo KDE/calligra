@@ -122,6 +122,6 @@ X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.formula,application/x-kformula
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.formula
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.koffice.kformula
+X-DBUS-ServiceName=org.calligra.kformula
 X-DocPath=kformula/index.html
 Categories=Qt;KDE;Office;X-KDE-More;

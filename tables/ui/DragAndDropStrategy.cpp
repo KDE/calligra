@@ -118,7 +118,7 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
     }
 }
 
-QUndoCommand* DragAndDropStrategy::createCommand()
+KUndo2Command* DragAndDropStrategy::createCommand()
 {
     const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = d->lastPoint - (shape ? shape->position() : QPointF(0.0, 0.0));

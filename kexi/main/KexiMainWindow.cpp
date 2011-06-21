@@ -345,7 +345,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //2.0: unused setStandardMDIMenuEnabled(false);
     setAsDefaultHost(); //this is default host now.
     KIconLoader::global()->addAppDir("kexi");
-    KIconLoader::global()->addAppDir("koffice");
+    KIconLoader::global()->addAppDir("calligra");
 
     //get informed
     connect(&Kexi::partManager(), SIGNAL(partLoaded(KexiPart::Part*)),

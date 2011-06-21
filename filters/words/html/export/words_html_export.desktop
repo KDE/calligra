@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Words HTML Export Filter
+Name[pt]=Filtro de Exportação de HTML para o Words
+Name[pt_BR]=Filtro de exportação de HTML para o Words
+Name[sv]=Words HTML-exportfilter
+Name[uk]=Фільтр експорту HTML для Words
+Name[x-test]=xxWords HTML Export Filterxx
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+X-KDE-Export=text/html
+X-KDE-Library=htmlexport
+X-KDE-ServiceTypes=CalligraFilter

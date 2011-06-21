@@ -58,13 +58,13 @@ using namespace KFormDesigner;
 // Command
 
 Command::Command(Command *parent)
-        : QUndoCommand(parent)
+        : KUndo2Command(parent)
         , m_blockRedoOnce(false)
 {
 }
 
 Command::Command(const QString &text, Command *parent)
-        : QUndoCommand(parent)
+        : KUndo2Command(parent)
         , m_blockRedoOnce(false)
 {
     Q_UNUSED(text);
@@ -253,7 +253,7 @@ void PropertyCommand::undo()
     d->form->setUndoing(false);
 }
 
-bool PropertyCommand::mergeWith(const QUndoCommand * command)
+bool PropertyCommand::mergeWith(const KUndo2Command * command)
 {
     if (id() != command->id())
         return false;
@@ -1951,7 +1951,7 @@ PropertyCommandGroup::~PropertyCommandGroup()
 
 #if 0
 //bool CommandGroup::copyPropertyValuesFrom(const CommandGroup &commandGroup)
-bool PropertyCommandGroup::mergeWith(const QUndoCommand * command)
+bool PropertyCommandGroup::mergeWith(const KUndo2Command * command)
 {
     if (id() != command->id()) {
         return false;
@@ -2030,7 +2030,7 @@ bool PropertyCommandGroup::mergeWith(const QUndoCommand * command)
 
 void PropertyCommandGroup::execute()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommandGroup &c)
@@ -2115,7 +2115,7 @@ void InlineTextEditingCommand::undo()
     d->form->setSlotPropertyChangedEnabled(true);
 }
 
-bool InlineTextEditingCommand::mergeWith(const QUndoCommand * command)
+bool InlineTextEditingCommand::mergeWith(const KUndo2Command * command)
 {
     if (id() != command->id())
         return false;

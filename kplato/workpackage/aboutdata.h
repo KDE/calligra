@@ -23,13 +23,13 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 namespace KPlatoWork
 {
 
 static const char* KPLATOWORK_DESCRIPTION=I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
-static const char* KPLATOWORK_VERSION=KOFFICE_VERSION_STRING;
+static const char* KPLATOWORK_VERSION=CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {

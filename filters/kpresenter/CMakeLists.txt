@@ -1,9 +1,9 @@
-include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOMAIN_INCLUDES}  ${KOTEXT_INCLUDES})
+include_directories(${CMAKE_SOURCE_DIR}/filters/words/libexport ${KOMAIN_INCLUDES}  ${KOTEXT_INCLUDES})
 
-MESSAGE(STATUS "KPresenter: still need to port svg, genericimageexport, kword, ooimporss, magicpoint, kpr and ooppt filters")
+MESSAGE(STATUS "KPresenter: still need to port svg, genericimageexport, words, ooimporss, magicpoint, kpr and ooppt filters")
 #add_subdirectory( svg )
 #add_subdirectory( genericimageexport )
-#add_subdirectory( kword )
+#add_subdirectory( words )
 #add_subdirectory( ooimpress )
 add_subdirectory( powerpoint )
 #add_subdirectory( magicpoint )

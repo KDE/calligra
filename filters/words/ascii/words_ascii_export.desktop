@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Words Ascii Export Filter
+Name[pt]=Filtro de Exportação de Ascii para o Words
+Name[pt_BR]=Filtro de exportação de ASCII para o Words
+Name[sv]=Words ASCII-exportfilter
+Name[uk]=Фільтр експорту ASCII для Words
+Name[x-test]=xxWords Ascii Export Filterxx
+X-KDE-Export=text/plain
+X-KDE-Import=application/x-words
+X-KDE-Weight=50
+X-KDE-Library=asciiexport
+X-KDE-ServiceTypes=CalligraFilter

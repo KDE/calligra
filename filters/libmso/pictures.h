@@ -30,6 +30,17 @@ struct PictureReference {
     QByteArray uid;
 };
 
+enum OfficeArtBlipType {
+    officeArtBlipEMF  = 0xF01A,
+    officeArtBlipWMF  = 0xF01B,
+    officeArtBlipPICT = 0xF01C,
+    officeArtBlipJPEG = 0xF01D,
+    officeArtBlipPNG  = 0xF01E,
+    officeArtBlipDIB  = 0xF01F,
+    officeArtBlipTIFF = 0xF029,
+    officeArtBlipJPEG2 = 0xF02A // same handling as JPEG
+};
+
 /**
  * Save the next picture record in the 'Pictures' stream into the ODF store.
  *
@@ -66,5 +77,16 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
  **/
 QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb);
 
+/**
+ * Note: Copied from filters/libkowmf/qwmf.cc, the name is confusing as
+ * the method convert the data into BMP and then into QImage
+ *
+ * Converts dib to QImage
+ * @param QImage input which will be filled with converted dib pixels
+ * @param dib dib bytes
+ * @param size size of the dib in bytes
+ * @return if the conversion was successful
+ **/
+bool dibToBmp(QImage& bmp, const char* dib, long size);
 
 #endif
