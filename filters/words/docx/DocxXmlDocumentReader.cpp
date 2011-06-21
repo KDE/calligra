@@ -1552,6 +1552,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
        else if (fldCharType == "end") {
            m_complexCharStatus = NoneAllowed;
            m_complexCharType = NoComplexFieldCharType;
+           m_complexCharValue.clear();
        }
     }
 
@@ -1646,6 +1647,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 instruction.remove(0, 12); // removes GOTOBUTTON
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
+            }
+            else if (instruction.startsWith("MACROBUTTON")) {
+                m_complexCharType = MacroButtonFieldCharType;
+                m_complexCharValue = "[";
             }
             else {
                 m_complexCharValue = instruction;
@@ -2302,7 +2307,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+    if (m_complexCharType == InternalHyperlinkComplexFieldCharType ||
+        m_complexCharType == MacroButtonFieldCharType) {
         body->addTextSpan(m_complexCharValue);
     }
 

@@ -287,7 +287,8 @@ private:
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
-       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType
+       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType,
+       MacroButtonFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;
