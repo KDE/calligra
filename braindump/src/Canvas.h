@@ -42,7 +42,7 @@ class Canvas : public QWidget, public KoCanvasBase
     RootSection* rootSection() const { return m_doc; }
 
     /// reimplemented method
-    virtual void addCommand( QUndoCommand *command );
+    virtual void addCommand( KUndo2Command *command );
     /// reimplemented method
     virtual KoShapeManager * shapeManager() const;
     /// reimplemented method

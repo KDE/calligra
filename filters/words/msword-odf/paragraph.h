@@ -54,9 +54,17 @@ public:
     void closeInnerParagraph();
 
     /**
-     * Set the paragraph properties (PAP) that apply to this paragraph.
+     * Set the paragraph properties (PAP) that apply to the paragraph.
      */
-    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties);
+    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> pap) { m_paragraphProperties = pap; }
+
+    /**
+     * Set the character properties (CHP) that apply to the paragraph.
+     *
+     * @param CHPs provided by wv2 for empty paragraphs to set proper
+     * font-size, line-height, etc. into text-properties.
+     */
+    void setCharacterProperties(wvWare::SharedPtr<const wvWare::Word97::CHP> chp) { m_characterProperties = chp; }
 
     /**
      * Set the built-in (named) style that applies to the paragraph.
@@ -140,6 +148,7 @@ public:
 private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
+    wvWare::SharedPtr<const wvWare::Word97::CHP> m_characterProperties;
 
     // ODF styles.  The MS equivalents are below.
     KoGenStyle* m_odfParagraphStyle; //pointer to Calligra structure for paragraph formatting

@@ -44,7 +44,7 @@
 
 class QGridLayout;
 class QToolButton;
-class QUndoCommand;
+class KUndo2Command;
 class KFind;
 class KReplace;
 
@@ -88,7 +88,7 @@ public:
     // Current "find" operation
     KFind* find;
     KReplace* replace;
-    QUndoCommand* replaceCommand;
+    KUndo2Command* replaceCommand;
     int findLeftColumn;
     int findRightColumn;
     int findTopRow;

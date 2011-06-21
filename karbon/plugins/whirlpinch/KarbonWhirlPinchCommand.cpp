@@ -102,8 +102,8 @@ public:
     QList< QList<PointData> > pathData;
 };
 
-KarbonWhirlPinchCommand::KarbonWhirlPinchCommand(KoPathShape * path, qreal angle, qreal pinch, qreal radius, QUndoCommand *parent)
-        : QUndoCommand(parent), d(new Private(path, angle, pinch, radius))
+KarbonWhirlPinchCommand::KarbonWhirlPinchCommand(KoPathShape * path, qreal angle, qreal pinch, qreal radius, KUndo2Command *parent)
+        : KUndo2Command(parent), d(new Private(path, angle, pinch, radius))
 {
     setText(i18n("Whirl & pinch"));
 
@@ -143,7 +143,7 @@ void KarbonWhirlPinchCommand::redo()
     d->pathShape->normalize();
     d->pathShape->update();
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void KarbonWhirlPinchCommand::undo()
@@ -160,5 +160,5 @@ void KarbonWhirlPinchCommand::undo()
     d->pathShape->normalize();
     d->pathShape->update();
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

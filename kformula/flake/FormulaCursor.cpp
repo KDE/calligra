@@ -35,7 +35,7 @@
 #include <algorithm>
 
 #include <kdebug.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 

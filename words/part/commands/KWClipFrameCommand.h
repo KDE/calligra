@@ -20,7 +20,7 @@
 #ifndef KWCLIPFRAMECOMMAND_H
 #define KWCLIPFRAMECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KWFrame;
@@ -28,10 +28,10 @@ class KWDocument;
 class KoShapeContainer;
 
 /// The undo / redo command for making a frame 'clipped'.
-class KWClipFrameCommand : public QUndoCommand
+class KWClipFrameCommand : public KUndo2Command
 {
 public:
-    explicit KWClipFrameCommand(const QList<KWFrame*> &frames, KWDocument *document, QUndoCommand *parent = 0);
+    explicit KWClipFrameCommand(const QList<KWFrame*> &frames, KWDocument *document, KUndo2Command *parent = 0);
     ~KWClipFrameCommand();
 
     /// (re)do the command

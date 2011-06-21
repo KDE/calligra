@@ -69,7 +69,7 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>

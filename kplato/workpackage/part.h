@@ -37,7 +37,7 @@
 #include <kservice.h>
 #include <kparts/part.h>
 
-class QUndoStack;
+class KUndo2QStack;
 
 class KoView;
 class KoStore;
@@ -205,7 +205,7 @@ public:
     bool openFile();
     bool saveFile();
 
-    QUndoStack *undoStack() const { return m_undostack; }
+    KUndo2QStack *undoStack() const { return m_undostack; }
 
 public slots:
     /**
@@ -216,7 +216,7 @@ public slots:
 
     virtual void setModified( bool mod );
 
-    void addCommand( QUndoCommand *cmd );
+    void addCommand( KUndo2Command *cmd );
 
     void viewWorkpackageDocument( Document *doc );
 
@@ -249,7 +249,7 @@ private:
     bool m_modified;
     bool m_loadingFromProjectStore;
 
-    QUndoStack *m_undostack;
+    KUndo2QStack *m_undostack;
 
 };
 

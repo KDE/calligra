@@ -32,8 +32,8 @@
 #include <KLocale>
 #include <KDebug>
 
-KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, QUndoCommand *parent)
-    : QUndoCommand(i18n("Page Properties"), parent),
+KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent)
+    : KUndo2Command(i18n("Page Properties"), parent),
     m_document(document),
     m_style(styleBefore),
     m_styleBefore(styleBefore),
@@ -136,14 +136,14 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
 
 void KWPageStylePropertiesCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     m_style.priv()->copyProperties(m_styleAfter.priv());
     m_document->updatePagesForStyle(m_style);
 }
 
 void KWPageStylePropertiesCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     m_style.priv()->copyProperties(m_styleBefore.priv());
     m_document->updatePagesForStyle(m_style);
 }

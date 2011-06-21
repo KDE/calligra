@@ -30,8 +30,8 @@
 #include "TableDataElement.h"
 #include <kdebug.h>
 
-FormulaCommand::FormulaCommand(QUndoCommand* parent)
-              : QUndoCommand(parent)
+FormulaCommand::FormulaCommand(KUndo2Command* parent)
+              : KUndo2Command(parent)
 {
     m_done=false;
 }
@@ -58,7 +58,7 @@ void FormulaCommand::setRedoCursorPosition ( const FormulaCursor& position )
     m_redoCursorPosition=position;
 }
 
-FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int position, int length, const QString& added , QUndoCommand* parent)
+FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int position, int length, const QString& added , KUndo2Command* parent)
                   : FormulaCommand(parent)
 {
     m_ownerElement = owner;
@@ -93,7 +93,7 @@ void FormulaCommandReplaceText::undo()
     m_ownerElement->insertGlyphs(m_glyphpos,m_removedGlyphs);
 }
 
-FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner, int position, int length, QList< BasicElement* > elements, bool wrap,QUndoCommand* parent )
+FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner, int position, int length, QList< BasicElement* > elements, bool wrap,KUndo2Command* parent )
                             : FormulaCommand(parent)
 {
     m_ownerElement=owner;
@@ -178,7 +178,7 @@ void FormulaCommandReplaceElements::undo()
     }
 }
 
-FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newelement, QUndoCommand* parent )
+FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newelement, KUndo2Command* parent )
                    : FormulaCommand ( parent)
 {
     m_data=data;
@@ -408,7 +408,7 @@ void FormulaCommandReplaceColumn::undo()
 
 // FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
 //                                                   QHash<QString,QString> attributes )
-//                        : QUndoCommand()
+//                        : KUndo2Command()
 // {
 //     m_ownerElement = cursor.ownerElement();
 //     m_attributes = attributes;

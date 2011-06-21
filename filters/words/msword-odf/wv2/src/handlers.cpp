@@ -168,7 +168,7 @@ void TextHandler::headersFound( const HeaderFunctor& parseHeaders )
     parseHeaders();
 }
 
-void TextHandler::paragraphStart( SharedPtr<const ParagraphProperties> /*paragraphProperties*/ )
+void TextHandler::paragraphStart( SharedPtr<const ParagraphProperties> /*paragraphProperties*/, SharedPtr<const Word97::CHP> /*chp*/ )
 {
 }
 

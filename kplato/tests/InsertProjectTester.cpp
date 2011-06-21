@@ -37,7 +37,7 @@ void InsertProjectTester::init()
 void InsertProjectTester::addCalendar( Part &part )
 {
     Project &p = part.getProject();
-    QUndoCommand *c = new CalendarAddCmd( &p, new Calendar(), -1, 0 );
+    KUndo2Command *c = new CalendarAddCmd( &p, new Calendar(), -1, 0 );
     part.addCommand( c );
 }
 
@@ -56,7 +56,7 @@ void InsertProjectTester::testCalendar()
 void InsertProjectTester::addResourceGroup( Part &part )
 {
     Project &p = part.getProject();
-    QUndoCommand *c = new AddResourceGroupCmd( &p, new ResourceGroup() );
+    KUndo2Command *c = new AddResourceGroupCmd( &p, new ResourceGroup() );
     part.addCommand( c );
 }
 
@@ -76,7 +76,7 @@ void InsertProjectTester::addResource( Part &part )
 {
     Project &p = part.getProject();
     QVERIFY( p.resourceGroupAt( 0 ) );
-    QUndoCommand *c = new AddResourceCmd( p.resourceGroupAt( 0 ), new Resource() );
+    KUndo2Command *c = new AddResourceCmd( p.resourceGroupAt( 0 ), new Resource() );
     part.addCommand( c );
 }
 
@@ -98,7 +98,7 @@ void InsertProjectTester::addTask( Part &part )
     Project &p = part.getProject();
     Task *t = new Task();
     t->setId( p.uniqueNodeId() );
-    QUndoCommand *c = new TaskAddCmd( &p, t, 0 );
+    KUndo2Command *c = new TaskAddCmd( &p, t, 0 );
     part.addCommand( c );
 }
 
@@ -118,7 +118,7 @@ void InsertProjectTester::addGroupRequest( Part &part )
 {
     Project &p = part.getProject();
     Task *t = static_cast<Task*>( p.childNode( 0 ) );
-    QUndoCommand *c = new AddResourceGroupRequestCmd( *t, new ResourceGroupRequest( p.resourceGroupAt( 0 ), 1 ) );
+    KUndo2Command *c = new AddResourceGroupRequestCmd( *t, new ResourceGroupRequest( p.resourceGroupAt( 0 ), 1 ) );
     part.addCommand( c );
 }
 
@@ -144,7 +144,7 @@ void InsertProjectTester::addResourceRequest( Part &part )
 {
     Project &p = part.getProject();
     ResourceGroupRequest *g = p.childNode( 0 )->requests().requests().at( 0 );
-    QUndoCommand *c = new AddResourceRequestCmd( g, new  ResourceRequest( p.resourceGroupAt( 0 )->resourceAt( 0 ), 1  ) );
+    KUndo2Command *c = new AddResourceRequestCmd( g, new  ResourceRequest( p.resourceGroupAt( 0 )->resourceAt( 0 ), 1  ) );
     part.addCommand( c );
 }
 

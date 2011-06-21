@@ -26,8 +26,8 @@
 
 #include <QPainter>
 #include <QString>
-#include <QUndoCommand>
-#include <QUndoStack>
+#include <kundo2command.h>
+#include <kundo2qstack.h>
 
 #include <KoGlobal.h>
 #include <KoXmlWriter.h>
@@ -45,7 +45,7 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
 {
     setComponentData( KFormulaPartFactory::global(), false );
 
-    m_commandHistory = new QUndoStack(this);
+    m_commandHistory = new KUndo2QStack(this);
     m_formulaElement = new FormulaElement;
 /*    connect( m_commandHistory, SIGNAL( commandExecuted() ),
 		         this, SLOT( slotExecuted() ) );

@@ -126,7 +126,7 @@ bool KPrSlidesSorterDocumentModel::setData(const QModelIndex &index, const QVari
     {
         case Qt::EditRole:
         {
-            QUndoCommand *cmd = new KoShapeRenameCommand(shape, value.toString());
+            KUndo2Command *cmd = new KoShapeRenameCommand(shape, value.toString());
             // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
             m_document->addCommand(cmd);
             break;

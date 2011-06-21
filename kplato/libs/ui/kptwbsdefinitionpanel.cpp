@@ -32,7 +32,7 @@
 #include <QComboBox>
 #include <QTableWidget>
 #include <QStringList>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace KPlato
 {
@@ -133,7 +133,7 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
 void WBSDefinitionPanel::setStartValues() {
 }
 
-QUndoCommand *WBSDefinitionPanel::buildCommand() {
+KUndo2Command *WBSDefinitionPanel::buildCommand() {
     WBSDefinition def = m_def;
     def.setProjectCode( projectCode->text() );
     def.setProjectSeparator( projectSeparator->text() );

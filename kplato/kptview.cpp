@@ -41,7 +41,7 @@
 #include <QSortFilterProxyModel>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QTimer>
 
 #include <kicon.h>
@@ -1353,7 +1353,7 @@ void View::slotProjectWorktimeFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
@@ -1636,7 +1636,7 @@ void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
         KMessageBox::sorry( this, i18n( "Cannot baseline. The project is already baselined." ) );
         return;
     }
-    QUndoCommand *cmd;
+    KUndo2Command *cmd;
     if ( sm->isBaselined() ) {
         int res = KMessageBox::warningContinueCancel( this, i18n( "This schedule is baselined. Do you want to remove the baseline?" ) );
         if ( res == KMessageBox::Cancel ) {
@@ -1694,7 +1694,7 @@ void View::slotAddSubTaskFinished( int result )
         return;
     }
     if ( result  == QDialog::Accepted) {
-        QUndoCommand *m = dia->buildCommand();
+        KUndo2Command *m = dia->buildCommand();
         getPart() ->addCommand( m ); // add task to project
     }
     dia->deleteLater();
@@ -1717,7 +1717,7 @@ void View::slotAddTaskFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand *m = dia->buildCommand();
+        KUndo2Command *m = dia->buildCommand();
         getPart() ->addCommand( m ); // add task to project
     }
     dia->deleteLater();
@@ -1794,7 +1794,7 @@ void View::slotDefineWBSFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted ) {
-        QUndoCommand *cmd = dia->buildCommand();
+        KUndo2Command *cmd = dia->buildCommand();
         if ( cmd ) {
             getPart()->addCommand( cmd );
         }
@@ -1948,7 +1948,7 @@ void View::slotProjectEditFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -1963,7 +1963,7 @@ void View::slotTaskEditFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -1978,7 +1978,7 @@ void View::slotSummaryTaskEditFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -2060,7 +2060,7 @@ void View::slotTaskProgressFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2075,7 +2075,7 @@ void View::slotMilestoneProgressFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2121,7 +2121,7 @@ void View::slotTaskDescriptionFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2285,7 +2285,7 @@ void View::slotAddRelationFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * m = dia->buildCommand();
+        KUndo2Command * m = dia->buildCommand();
         if ( m ) {
             getPart() ->addCommand( m );
         }
@@ -2323,7 +2323,7 @@ void View::slotModifyRelationFinished( int result )
         return ;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand *cmd = dia->buildCommand();
+        KUndo2Command *cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -2389,7 +2389,7 @@ void View::slotEditResourceFinished( int result )
         return ;
     }
     if ( result == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
+        KUndo2Command * cmd = dia->buildCommand();
         if ( cmd )
             getPart() ->addCommand( cmd );
     }
@@ -2595,7 +2595,7 @@ void View::slotCreateReport()
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2641,7 +2641,7 @@ void View::slotOpenReportFileFinished( int result )
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
     dlg->show();
     dlg->raise();
@@ -2655,7 +2655,7 @@ void View::slotEditReportDesign( ReportView *view )
     }
     ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2668,7 +2668,7 @@ void View::slotReportDesignFinished( int /*result */)
     }
 }
 
-void View::slotModifyReportDefinition( QUndoCommand *cmd )
+void View::slotModifyReportDefinition( KUndo2Command *cmd )
 {
     cmd->redo();
     delete cmd; // TODO Maybe add command history to views and/or view selector?
@@ -2935,7 +2935,7 @@ void View::slotCurrencyConfigFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted ) {
-        QUndoCommand *c = dlg->buildCommand( getProject() );
+        KUndo2Command *c = dlg->buildCommand( getProject() );
         if ( c ) {
             getPart()->addCommand( c );
         }

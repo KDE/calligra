@@ -26,7 +26,7 @@
 #include <QTimer>
 #include <QStyleOption>
 #include <QDomDocument>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include <kdebug.h>
 #include <KLocale>
@@ -289,7 +289,7 @@ public:
     QString  filename;
 
 //2.0    K3CommandHistory  *commandHistory;
-    KUndoStack undoStack;
+    KUndo2Stack undoStack;
     KActionCollection internalCollection;
     KActionCollection *collection;
     KFormDesigner::ActionGroup* widgetActionGroup;

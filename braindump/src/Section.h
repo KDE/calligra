@@ -25,7 +25,7 @@
 
 class Layout;
 class SectionContainer;
-class KUndoStack;
+class KUndo2Stack;
 class RootSection;
 
 class Section :  public SectionGroup {

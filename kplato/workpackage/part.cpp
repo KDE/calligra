@@ -47,7 +47,7 @@
 #include <qfileinfo.h>
 #include <QDir>
 #include <QTimer>
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QPointer>
 
 #include <kdebug.h>
@@ -312,7 +312,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     m_xmlLoader(),
     m_modified( false ),
     m_loadingFromProjectStore( false ),
-    m_undostack( new QUndoStack( this ) )
+    m_undostack( new KUndo2QStack( this ) )
 {
     setComponentData( Factory::global() );
     // Add library translation files
@@ -344,7 +344,7 @@ Part::~Part()
     qDeleteAll( m_packageMap );
 }
 
-void Part::addCommand( QUndoCommand *cmd )
+void Part::addCommand( KUndo2Command *cmd )
 {
     if ( cmd ) {
         m_undostack->push( cmd );
