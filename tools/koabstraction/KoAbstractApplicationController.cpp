@@ -60,7 +60,7 @@
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 #include <kmimetypetrader.h>
 
 #include <QApplication>
@@ -884,7 +884,7 @@ bool KoAbstractApplicationController::removeCurrentSheet()
             kspreadDoc->setModified(true);
             setDocumentModified(true);
             Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
-            QUndoCommand* command = new RemoveSheetCommand(tbl);
+            KUndo2Command* command = new RemoveSheetCommand(tbl);
             kspreadDoc->addCommand(command);
             return true;
         }

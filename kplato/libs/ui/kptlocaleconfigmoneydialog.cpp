@@ -48,7 +48,7 @@ void LocaleConfigMoneyDialog::slotChanged() {
     enableButtonOk(true);
 }
 
-QUndoCommand *LocaleConfigMoneyDialog::buildCommand( Project &project ) {
+KUndo2Command *LocaleConfigMoneyDialog::buildCommand( Project &project ) {
     MacroCommand *m = new ModifyProjectLocaleCmd( project, i18n( "Modify currency settings" ) );
     MacroCommand *cmd = m_panel->buildCommand();
     if (cmd) {

@@ -20,13 +20,13 @@
 #ifndef _REMOVE_SECTION_COMMAND_H_
 #define _REMOVE_SECTION_COMMAND_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class DocumentModel;
 class Section;
 class SectionGroup;
 
-class RemoveSectionCommand : public QUndoCommand {
+class RemoveSectionCommand : public KUndo2Command {
 public:
   RemoveSectionCommand( Section* _section, DocumentModel* _model );
   virtual void undo();

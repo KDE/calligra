@@ -42,7 +42,7 @@ using namespace Calligra::Tables;
   class ResizeColumnManipulator
 ****************************************************************************/
 
-ResizeColumnManipulator::ResizeColumnManipulator(QUndoCommand* parent)
+ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
     setText(i18n("Resize Column"));
@@ -74,7 +74,7 @@ bool ResizeColumnManipulator::process(Element* element)
   class ResizeRowManipulator
 ****************************************************************************/
 
-ResizeRowManipulator::ResizeRowManipulator(QUndoCommand* parent)
+ResizeRowManipulator::ResizeRowManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
     setText(i18n("Resize Row"));
@@ -229,7 +229,7 @@ QString HideShowManipulator::name() const
   class AdjustColumnRowManipulator
 ****************************************************************************/
 
-AdjustColumnRowManipulator::AdjustColumnRowManipulator(QUndoCommand* parent)
+AdjustColumnRowManipulator::AdjustColumnRowManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent),
         m_adjustColumn(false),
         m_adjustRow(false)
@@ -552,7 +552,7 @@ QString AdjustColumnRowManipulator::name() const
   class InsertDeleteColumnManipulator
 ****************************************************************************/
 
-InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(QUndoCommand *parent)
+InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mode(Insert)
         , m_template(0)
@@ -601,7 +601,7 @@ bool InsertDeleteColumnManipulator::process(Element* element)
 
         // undo deletion
         if (m_mode == Delete) {
-            QUndoCommand::undo(); // process child commands (from CellStorage)
+            KUndo2Command::undo(); // process child commands (from CellStorage)
         }
     } else {
         // delete rows
@@ -610,7 +610,7 @@ bool InsertDeleteColumnManipulator::process(Element* element)
 
         // undo insertion
         if (m_mode == Insert) {
-            QUndoCommand::undo(); // process child commands (from CellStorage)
+            KUndo2Command::undo(); // process child commands (from CellStorage)
         }
     }
     return true;
@@ -649,9 +649,9 @@ bool InsertDeleteColumnManipulator::mainProcessing()
 {
     if (cells().count() > 1) { // non-contiguous selection
         if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
-            QUndoCommand::undo(); // process all sub-commands
+            KUndo2Command::undo(); // process all sub-commands
         } else {
-            QUndoCommand::redo(); // process all sub-commands
+            KUndo2Command::redo(); // process all sub-commands
         }
         return true;
     }
@@ -675,7 +675,7 @@ bool InsertDeleteColumnManipulator::postProcessing()
   class InsertDeleteRowManipulator
 ****************************************************************************/
 
-InsertDeleteRowManipulator::InsertDeleteRowManipulator(QUndoCommand *parent)
+InsertDeleteRowManipulator::InsertDeleteRowManipulator(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mode(Insert)
         , m_template(0)
@@ -724,7 +724,7 @@ bool InsertDeleteRowManipulator::process(Element* element)
 
         // undo deletion
         if (m_mode == Delete) {
-            QUndoCommand::undo(); // process child commands (from CellStorage)
+            KUndo2Command::undo(); // process child commands (from CellStorage)
         }
     } else {
         // delete rows
@@ -733,7 +733,7 @@ bool InsertDeleteRowManipulator::process(Element* element)
 
         // undo insertion
         if (m_mode == Insert) {
-            QUndoCommand::undo(); // process child commands (from CellStorage)
+            KUndo2Command::undo(); // process child commands (from CellStorage)
         }
     }
     return true;
@@ -772,9 +772,9 @@ bool InsertDeleteRowManipulator::mainProcessing()
 {
     if (cells().count() > 1) { // non-contiguous selection
         if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
-            QUndoCommand::undo(); // process all sub-commands
+            KUndo2Command::undo(); // process all sub-commands
         } else {
-            QUndoCommand::redo(); // process all sub-commands
+            KUndo2Command::redo(); // process all sub-commands
         }
         return true;
     }

@@ -54,7 +54,7 @@ void TaskCompletionDialog::slotChanged( bool )
     enableButtonOk( true );
 }
 
-QUndoCommand *TaskCompletionDialog::buildCommand()
+KUndo2Command *TaskCompletionDialog::buildCommand()
 {
     //kDebug();
     return m_panel->buildCommand();
@@ -127,7 +127,7 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
 
 }
 
-QUndoCommand *TaskCompletionPanel::buildCommand()
+KUndo2Command *TaskCompletionPanel::buildCommand()
 {
     MacroCommand *cmd = new MacroCommand( i18n("Modify task completion") );
     Completion &org = m_package->task()->completion();

@@ -31,8 +31,8 @@
 #include <KLocale>
 #include <KDebug>
 
-KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, QUndoCommand *parent)
-        : QUndoCommand(i18n("Remove Page"), parent),
+KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, KUndo2Command *parent)
+        : KUndo2Command(i18n("Remove Page"), parent),
         m_document(document),
         m_pageSide(page.pageSide()),
         m_pageLayout(page.pageStyle().pageLayout()),
@@ -103,7 +103,7 @@ KWPageRemoveCommand::~KWPageRemoveCommand()
 void KWPageRemoveCommand::redo()
 {
     kDebug(32001) << "pageNumber=" << m_pageNumber;
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     KWPage page = m_document->pageManager()->page(m_pageNumber);
     Q_ASSERT(page.isValid());
@@ -151,7 +151,7 @@ void KWPageRemoveCommand::undo()
 {
     kDebug(32001) << "pageNumber=" << m_pageNumber;
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 #if 0
     // insert the page
     KWPage page = m_document->pageManager()->insertPage(m_pageNumber);

@@ -66,7 +66,7 @@ public:
     /// reimplemented from KoCanvasBase
     virtual KoUnit unit() const;
     /// reimplemented from KoCanvasBase
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
     /// reimplemented from KoCanvasBase
     KoShapeManager *shapeManager() const;
     /// reimplemented from KoCanvasBase

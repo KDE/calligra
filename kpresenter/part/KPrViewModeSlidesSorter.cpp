@@ -320,7 +320,7 @@ void KPrViewModeSlidesSorter::deleteSlide()
     QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();
 
     if (!selectedSlides.empty() && m_view->kopaDocument()->pages().count() > selectedSlides.count()) {
-         QUndoCommand *cmd = new KoPAPageDeleteCommand(m_view->kopaDocument(), selectedSlides);
+         KUndo2Command *cmd = new KoPAPageDeleteCommand(m_view->kopaDocument(), selectedSlides);
         if (cmd) {
             m_view->kopaDocument()->addCommand(cmd);
         }

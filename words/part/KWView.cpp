@@ -1115,7 +1115,7 @@ void KWView::editDeleteFrame()
         }
         frames.append(shape);
     }
-    QUndoCommand *cmd = canvasBase()->shapeController()->removeShapes(frames);
+    KUndo2Command *cmd = canvasBase()->shapeController()->removeShapes(frames);
     m_document->addCommand(cmd);
 }
 
@@ -1290,7 +1290,7 @@ void KWView::createLinkedFrame()
         return;
     selection->deselectAll();
 
-    QUndoCommand *cmd = new QUndoCommand(i18n("Create Linked Copy"));
+    KUndo2Command *cmd = new KUndo2Command(i18n("Create Linked Copy"));
     foreach (KoShape *shape, oldSelection) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);
@@ -1601,7 +1601,7 @@ void KWView::variableChanged(){
 void adjustZOrderOfSelectedFrames(KoCanvasBase *canvasBase, KWDocument *document, KoShapeReorderCommand::MoveShapeType direction)
 {
     // TODO we should not allow any shapes to fall behind the main text frame.
-    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
+    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
                         canvasBase->shapeManager(), direction);
     if (cmd)
         document->addCommand(cmd);

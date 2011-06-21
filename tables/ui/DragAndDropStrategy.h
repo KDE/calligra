@@ -48,7 +48,7 @@ public:
     virtual ~DragAndDropStrategy();
 
     virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual QUndoCommand* createCommand();
+    virtual KUndo2Command* createCommand();
 
     bool dragStarted() const;
 

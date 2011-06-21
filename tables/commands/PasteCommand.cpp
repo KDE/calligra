@@ -45,7 +45,7 @@ using namespace Calligra::Tables;
 class PasteCellCommand : public AbstractRegionCommand
 {
 public:
-    PasteCellCommand(QUndoCommand *parent = 0)
+    PasteCellCommand(KUndo2Command *parent = 0)
             : AbstractRegionCommand(parent)
             , m_pasteMode(Paste::Normal)
             , m_pasteOperation(Paste::OverWrite)
@@ -81,7 +81,7 @@ protected:
 
     bool mainProcessing() {
         if (m_reverse) {
-            QUndoCommand::undo(); // undo child commands
+            KUndo2Command::undo(); // undo child commands
             return true;
         }
         return AbstractRegionCommand::mainProcessing();
@@ -100,7 +100,7 @@ private:
 
 
 
-PasteCommand::PasteCommand(QUndoCommand *parent)
+PasteCommand::PasteCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mimeData(0)
         , m_xmlDocument(0)
@@ -254,9 +254,9 @@ bool PasteCommand::mainProcessing()
                 }
             }
         }
-        QUndoCommand::redo(); // redo the child commands
+        KUndo2Command::redo(); // redo the child commands
     } else { // undo
-        QUndoCommand::undo(); // undo the child commands
+        KUndo2Command::undo(); // undo the child commands
     }
     return true;
 }

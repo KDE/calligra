@@ -32,7 +32,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstandardaction.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>

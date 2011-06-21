@@ -3285,7 +3285,7 @@ void CellToolBase::replace()
     connect(d->replace, SIGNAL(replace(const QString &, int, int, int)),
             this, SLOT(slotReplace(const QString &, int, int, int)));
 
-    d->replaceCommand = new QUndoCommand(i18n("Replace"));
+    d->replaceCommand = new KUndo2Command(i18n("Replace"));
 
     findNext();
     delete dialog;

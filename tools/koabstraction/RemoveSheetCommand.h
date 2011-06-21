@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <tables/Sheet.h>
 #include <tables/Map.h>
@@ -27,7 +27,7 @@ namespace Calligra { namespace Tables {
     class Map;
 } }
 
-class RemoveSheetCommand : public QUndoCommand
+class RemoveSheetCommand : public KUndo2Command
 {
 public:
     explicit RemoveSheetCommand(Calligra::Tables::Sheet* sheet);
