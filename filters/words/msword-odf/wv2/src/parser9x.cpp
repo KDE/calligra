@@ -729,12 +729,9 @@ void Parser9x::processParagraph( U32 fc )
             m_textHandler->tableEndFound();
         }
 
-        // Now that we have the complete PAP, let's see if this paragraph belongs to a list
+        // Now that we have the complete PAP, let's see if this paragraph
+        // belongs to a list
         props->createListInfo( *m_lists );
-
-        // keep it that way, else the ParagraphProperties get deleted!
-        SharedPtr<const ParagraphProperties> sharedProps( props );
-        m_textHandler->paragraphStart( sharedProps );
 
         // Get the appropriate style for this paragraph
         const Style* style = m_properties->styleByIndex( props->pap().istd );
@@ -743,9 +740,30 @@ void Parser9x::processParagraph( U32 fc )
             return;
         }
 
-        // Now walk the paragraph, chunk for chunk
         std::list<Chunk>::const_iterator it = m_currentParagraph->begin();
         std::list<Chunk>::const_iterator end = m_currentParagraph->end();
+
+        //CHPs for empty paragraphs.
+        Word97::CHP* paragraphChp = 0;
+
+        //A paragraph having one empty chunk of text.
+        if ( m_currentParagraph->size() == 1 &&
+	     (( *it ).m_text.length() == 0))
+        {
+            paragraphChp = new Word97::CHP( style->chp() );
+            m_properties->fullSavedChp( ( *it ).m_startFC, paragraphChp, style );
+#ifdef WV2_DEBUG_PARAGRAPHS
+            paragraphChp->dump();
+#endif
+        }
+
+        // keep it that way, else the variables get deleted!
+        SharedPtr<const ParagraphProperties> sharedPap( props );
+        SharedPtr<const Word97::CHP> sharedPChp( paragraphChp );
+
+        m_textHandler->paragraphStart( sharedPap, sharedPChp );
+
+        // Now walk the paragraph, chunk for chunk
         for ( ; it != end; ++it ) {
             U32 index = 0;
             const U32 limit = ( *it ).m_text.length();
@@ -774,7 +792,7 @@ void Parser9x::processParagraph( U32 fc )
                 Word97::CHP* chp = new Word97::CHP( charStyle.chp() );
                 // keep it that way, else the CHP gets deleted!
                 SharedPtr<const Word97::CHP> sharedChp( chp );
-                processChunk( *it, chp, length, index, pcdIt.currentStart() );
+                processChunk( *it, sharedChp, length, index, pcdIt.currentStart() );
                 index += length;
             }
             //bookmark check for the next to last CP (paragraph mark)
