@@ -68,7 +68,7 @@ class VirtualKeyBoard;
 class GLPresenter;
 #endif
 
-class KUndoStack;
+class KUndo2Stack;
 class KoTextEditor;
 class PresentationTool;
 class MainWindowAdaptor;

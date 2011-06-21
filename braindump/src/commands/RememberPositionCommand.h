@@ -24,7 +24,7 @@
 #include <QList>
 #include <QMap>
 #include <QRectF>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KoShape;
 
@@ -34,9 +34,9 @@ class KoShape;
  * group in a 'column' layout, then the layout will change all position of the shapes
  * when undoing, you will want to see the shapes to come back to their original position.
  */
-class RememberPositionCommand : public QUndoCommand {
+class RememberPositionCommand : public KUndo2Command {
   public:
-    explicit RememberPositionCommand(const QList<KoShape*>& _shapes, QUndoCommand *cmd = 0);
+    explicit RememberPositionCommand(const QList<KoShape*>& _shapes, KUndo2Command *cmd = 0);
     virtual ~RememberPositionCommand();
   public:
     virtual void undo();

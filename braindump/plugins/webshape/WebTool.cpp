@@ -19,7 +19,7 @@
 
 #include "WebTool.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPainter>
 
 #include <KoCanvasBase.h>
@@ -31,7 +31,7 @@
 #include <klocalizedstring.h>
 #include "WebToolWidget.h"
 
-class ChangeScroll : public QUndoCommand {
+class ChangeScroll : public KUndo2Command {
 public:
   ChangeScroll( WebShape* shape, const QPointF& oldScroll ) : m_shape(shape), m_newScroll(shape->scroll()), m_oldScroll(oldScroll)
   {
@@ -52,7 +52,7 @@ private:
   QPointF m_oldScroll;
 };
 
-class ChangeZoom : public QUndoCommand {
+class ChangeZoom : public KUndo2Command {
 public:
   ChangeZoom( WebShape* shape, qreal oldZoom ) : m_shape(shape), m_newZoom(shape->zoom()), m_oldZoom(oldZoom)
   {

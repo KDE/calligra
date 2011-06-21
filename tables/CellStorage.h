@@ -32,7 +32,7 @@
 
 class KoXmlWriter;
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace Calligra
 {
@@ -404,7 +404,7 @@ public:
      * for each sub-storage an undo-capable command is attached to \p parent.
      * \see startUndoRecording
      */
-    void stopUndoRecording(QUndoCommand *parent);
+    void stopUndoRecording(KUndo2Command *parent);
 
 Q_SIGNALS:
     void insertNamedArea(const Region&, const QString&);

@@ -40,7 +40,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 

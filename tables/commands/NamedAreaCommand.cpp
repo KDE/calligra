@@ -30,7 +30,7 @@
 
 using namespace Calligra::Tables;
 
-NamedAreaCommand::NamedAreaCommand(QUndoCommand* parent)
+NamedAreaCommand::NamedAreaCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
     setText(i18n("Add Named Area"));

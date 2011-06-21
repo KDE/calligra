@@ -33,7 +33,7 @@ class QString;
 class QPainter;
 class QPointF;
 class QRectF;
-class QUndoCommand;
+class KUndo2Command;
 
 enum CursorDirection {
     MoveRight,

@@ -20,7 +20,7 @@
 #ifndef FILTERINPUTCHANGECOMMAND_H
 #define FILTERINPUTCHANGECOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KoShape;
 class KoFilterEffect;
@@ -41,12 +41,12 @@ struct InputChangeData {
 };
 
 /// A command to change the input of a filter effect
-class FilterInputChangeCommand : public QUndoCommand
+class FilterInputChangeCommand : public KUndo2Command
 {
 public:
-    explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = 0, QUndoCommand *parent = 0);
+    explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = 0, KUndo2Command *parent = 0);
 
-    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape * shape = 0, QUndoCommand *parent = 0);
+    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape * shape = 0, KUndo2Command *parent = 0);
 
     /// redo the command
     virtual void redo();

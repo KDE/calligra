@@ -67,6 +67,7 @@ const char* getStrokeValue(const uint brcType);
 Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
         : m_paragraphProperties(0),
         m_paragraphProperties2(0),
+        m_characterProperties(0),
         m_odfParagraphStyle(0),
         m_odfParagraphStyle2(0),
         m_mainStyles(0),
@@ -229,12 +230,21 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
 {
     kDebug(30513);
 
-    //TODO: paragraph-properties have to be set before text-properties to have
-    //proper automatic colors.
+    //TODO: The paragraph-properties might have to be set before
+    //text-properties to have proper automatic colors.
 
-    // Set up the paragraph style.
+    //[MS-DOC] PAP -> [ODF] paragraph-properties
     applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle,
                              m_inHeaderFooter && m_containsPageNumberField, this, tabLeader);
+
+    //[MS-DOC] CHP -> [ODF] text-properties
+    if (m_textStrings.isEmpty()) {
+        if (m_characterProperties) {
+            applyCharacterProperties(m_characterProperties, m_odfParagraphStyle, m_paragraphStyle);
+        } else {
+            kDebug(30513) << "Missing CHPs for an empty paragraph!";
+        }
+    }
 
     // MS Word puts dropcap characters in its own paragraph with the
     // rest of the text in the subsequent paragraph. On the other
@@ -466,12 +476,6 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
             startedSpan = false;
         }
     } //if (!m_textStrings.isEmpty())
-//     else {
-
-        //TODO: Call applyCharacterProperties to add text-properties to
-        //m_odfParagraphStyle.  CHPs for empty paragraphs not provided by wv2!
-
-//     }
 
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
@@ -544,11 +548,6 @@ void Paragraph::closeInnerParagraph()
     m_textStyles2.clear();
     m_textStrings2.clear();
     m_addCompleteElement2.clear();
-}
-
-void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties)
-{
-    m_paragraphProperties = properties;
 }
 
 void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& properties,
@@ -636,12 +635,20 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     //dyaBefore = vertical spacing before paragraph (unsigned)
     //dyaAfter = vertical spacing after paragraph (unsigned)
     if (!refPap || refPap->dyaBefore != pap.dyaBefore) {
-        // apply twip -> pt conversion
-        style->addPropertyPt("fo:margin-top", (double)pap.dyaBefore / 20.0, KoGenStyle::ParagraphType);
+        double marginTop = (double)pap.dyaBefore / 20.0;
+        if (pap.dyaBeforeAuto) {
+           //TODO: Figure out the proper logic for automatic margins.
+            marginTop = 14;
+        }
+        style->addPropertyPt("fo:margin-top", marginTop, KoGenStyle::ParagraphType);
     }
     if (!refPap || refPap->dyaAfter != pap.dyaAfter) {
-        // apply twip -> pt conversion
-        style->addPropertyPt("fo:margin-bottom", (double)pap.dyaAfter / 20.0, KoGenStyle::ParagraphType);
+        double marginBottom = (double)pap.dyaAfter / 20.0;
+        if (pap.dyaAfterAuto) {
+           //TODO: Figure out the proper logic for automatic margins.
+            marginBottom = 14;
+        }
+        style->addPropertyPt("fo:margin-bottom", marginBottom, KoGenStyle::ParagraphType);
     }
 
     // Linespacing
@@ -827,6 +834,9 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
 
 void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters, const QString& bgColor, bool preserveFontColor)
 {
+    //TODO: Also compare against the CHPs of the paragraph style.  At the
+    //moment comparing against CHPs of the referred built-in character style.
+
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;
     if (parentStyle) {
@@ -835,24 +845,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         refChp = 0;
     }
 
-/*
-    According to [MS-DOC]:
-
-    sprmCIstd - An unsigned integer that specifies the istd of a character
-    style to apply (parentStyle in our case)
-
-    To apply the istd:
-
-    1. Reset the character properties of the text to match the results of
-    the paragraph style (in other words, revert any formatting that is
-    applied on top of the paragraph style).
-
-    2. Fetch the set of properties from the specified character style. (For
-    instructions, see Applying Properties.)
-
-    3. Apply those properties to the current text.
-*/
-
+    //initialize the colors
     if (!bgColor.isNull()) {
         updateBgColor(bgColor);
     }

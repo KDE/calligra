@@ -280,7 +280,7 @@ void KarbonLayerDocker::addLayer()
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName(name);
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        QUndoCommand *cmd = new KoShapeCreateCommand(m_part, layer, 0);
+        KUndo2Command *cmd = new KoShapeCreateCommand(m_part, layer, 0);
         cmd->setText(i18n("Create Layer"));
         canvasController->canvas()->addCommand(cmd);
         m_model->update();
@@ -295,7 +295,7 @@ void KarbonLayerDocker::deleteItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedLayers, selectedShapes);
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
         if (m_part->document().layers().count() > selectedLayers.count()) {
@@ -330,7 +330,7 @@ void KarbonLayerDocker::raiseItem()
 
     KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
         // check if all layers could be raised
@@ -364,7 +364,7 @@ void KarbonLayerDocker::lowerItem()
 
     KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
         // check if all layers could be raised

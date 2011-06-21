@@ -41,7 +41,7 @@
 
 class QAbstractItemModel;
 class QDomElement;
-class QUndoCommand;
+class KUndo2Command;
 class QWidget;
 
 class KoDataCenterBase;

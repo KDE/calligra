@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND
 #define CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "Region.h"
 
@@ -37,13 +37,13 @@ class Sheet;
  * \ingroup Commands
  * \brief Abstract base class for all region related operations.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT AbstractRegionCommand : public Region, public QUndoCommand
+class CALLIGRA_TABLES_COMMON_EXPORT AbstractRegionCommand : public Region, public KUndo2Command
 {
 public:
     /**
      * Constructor.
      */
-    AbstractRegionCommand(QUndoCommand* parent = 0);
+    AbstractRegionCommand(KUndo2Command* parent = 0);
 
     /**
      * Destructor.

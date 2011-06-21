@@ -78,6 +78,12 @@ public:
      */
     QSize iconSize() const;
 
+    /**
+     * Clear selection and select a list of slides on slides sorter view
+     * @param slides list to be selected
+     */
+    void selectSlides(const QList<KoPAPageBase *> &slides);
+
 protected:
 
     /**
@@ -141,6 +147,9 @@ private slots:
 
     /** add a new slide after the current active page*/
     void addSlide();
+
+    /** Rename current slide on Slides Sorter View */
+    void renameCurrentSlide();
 
     /** cut the current selected slides*/
     void editCut();

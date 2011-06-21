@@ -79,8 +79,8 @@ void HideSheetCommand::undo()
 
 // ----- ShowSheetCommand -----
 
-ShowSheetCommand::ShowSheetCommand(Sheet* sheet, QUndoCommand* parent)
-        : QUndoCommand(parent)
+ShowSheetCommand::ShowSheetCommand(Sheet* sheet, KUndo2Command* parent)
+        : KUndo2Command(parent)
 {
     map = sheet->map();
     sheetName = sheet->sheetName();
@@ -109,7 +109,7 @@ void ShowSheetCommand::undo()
 // ----- AddSheetCommand -----
 
 AddSheetCommand::AddSheetCommand(Sheet* sheet)
-        : QUndoCommand(i18n("Add Sheet"))
+        : KUndo2Command(i18n("Add Sheet"))
         , m_sheet(sheet)
         , m_firstrun(true)
 {
@@ -136,7 +136,7 @@ void AddSheetCommand::undo()
 // ----- DuplicateSheetCommand -----
 
 DuplicateSheetCommand::DuplicateSheetCommand()
-        : QUndoCommand(i18n("Duplicate Sheet"))
+        : KUndo2Command(i18n("Duplicate Sheet"))
         , m_oldSheet(0)
         , m_newSheet(0)
         , m_firstrun(true)

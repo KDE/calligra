@@ -29,7 +29,7 @@
 
 using namespace Calligra::Tables;
 
-CommentCommand::CommentCommand(QUndoCommand* parent)
+CommentCommand::CommentCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
 }

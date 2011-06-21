@@ -118,7 +118,7 @@
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 #include <tables/Map.h>
 #include <tables/DocBase.h>
 #include <tables/part/View.h>

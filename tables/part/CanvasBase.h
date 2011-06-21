@@ -87,7 +87,7 @@ public:
     /// reimplemented method from KoCanvasBase
     virtual bool snapToGrid() const;
     /// reimplemented method from KoCanvasBase
-    virtual void addCommand(QUndoCommand* command);
+    virtual void addCommand(KUndo2Command* command);
     /// reimplemented method from KoCanvasBase
     virtual KoShapeManager* shapeManager() const;
     /// reimplemented method from KoCanvasBase

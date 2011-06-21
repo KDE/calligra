@@ -22,8 +22,8 @@
 #include "KPrCustomSlideShows.h"
 #include "KPrDocument.h"
 
-KPrSetCustomSlideShowsCommand::KPrSetCustomSlideShowsCommand( KPrDocument * doc, KPrCustomSlideShows * newSlideShows, QUndoCommand *parent )
-: QUndoCommand( parent )
+KPrSetCustomSlideShowsCommand::KPrSetCustomSlideShowsCommand( KPrDocument * doc, KPrCustomSlideShows * newSlideShows, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_doc( doc )
 , m_oldSlideShows( doc->customSlideShows() )
 , m_newSlideShows( newSlideShows )

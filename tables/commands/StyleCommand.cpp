@@ -35,7 +35,7 @@
 
 using namespace Calligra::Tables;
 
-StyleCommand::StyleCommand(QUndoCommand* parent)
+StyleCommand::StyleCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
         , m_horizontalPen(QPen(QColor(), 0, Qt::NoPen))
         , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
