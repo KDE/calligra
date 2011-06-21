@@ -67,6 +67,8 @@
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
+#include <QDebug>
+
       // static void printIndentation(QTextStream *stream, unsigned int indent)
 void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int indent)
 {
@@ -342,33 +344,93 @@ void SvgWriter_generic::saveRectangle(RectangleShape * rectangle)
     *m_body << "/>" << endl;
     }
 
-static QString createUID(const KoShape* obj)
+static int count(const QString element, bool inc)
 {
      static unsigned int groupCount = 0;
      static unsigned int textCount = 0;
      static unsigned int shapeCount = 0;
      static unsigned int layerCount = 0;
      static unsigned int imageCount = 0;
+ 
+     if (element == "group") {
+       if(inc)
+           return groupCount++;
+       else
+         return groupCount;
+     } else if(element == "text") {
+       if(inc)
+         return textCount++;
+       else
+         return textCount;
+     } else if(element == "shape") {
+       if(inc)
+         return shapeCount++;
+       else
+         return shapeCount;
+     } else if(element == "layer") {
+       if(inc)
+         return layerCount++;
+       else
+         return layerCount;
+     } else if(element == "image") {
+       if(inc)
+         return imageCount++;
+       else
+         return imageCount;
+     }
+     return -1;
+}
+QString SvgWriter_generic::createUID(const KoShape * obj)
+{
+     
+     QString refId;
+     const KoShapeGroup *noKey = new KoShapeGroup();
      
      const KoShapeLayer *layer = dynamic_cast<const KoShapeLayer*>(obj);
         if(layer) {
-           return "Layer" + QString().setNum(layerCount++);
-           } else {
+           do{
+                refId = "Layer" + QString().setNum(count("layer", true));
+                }while(m_shapeIds.key(refId, noKey) != noKey);
+                
+                return "Layer" + QString().setNum(count("layer", false) - 1);
+         } 
+           else {
                const KoShapeGroup *group = dynamic_cast<const KoShapeGroup*>(obj);
                if (group) {
-                  return "Group" + QString().setNum(groupCount++);
-               } else if(obj->shapeId() == ArtisticTextShapeID) {//TODO:Plain text
-                    return "ArtisticTextShape" + QString().setNum(textCount++);
+                 do{
+                   refId = "Group" + QString().setNum(count("group", true));
+                 }while(m_shapeIds.key(refId, noKey) != noKey);
+                 
+                 return "Group" + QString().setNum(count("group", false) - 1);
+               } 
+               else if(obj->shapeId() == ArtisticTextShapeID) {//TODO:Plain text
+                    do{
+                       refId = "ArtisticText" + QString().setNum(count("text", true));
+                       }while(m_shapeIds.key(refId, noKey) != noKey);
+                 
+                       return "ArtisticText" + QString().setNum(count("text", false) - 1);
+               
                    } else if(obj->shapeId() == "PictureShape") {
-                        return "Picture" + QString().setNum(imageCount++);
-                      } else {
-                           return "Shape" + QString().setNum(shapeCount++);
+                        do{
+                            refId = "Image" + QString().setNum(count("image", true));
+                          }while(m_shapeIds.key(refId, noKey) != noKey);
+                 
+                          return "Image" + QString().setNum(count("image", false) - 1);
+               
+                      } 
+                      else {
+                          do{
+                          refId = "Shape" + QString().setNum(count("shape", true));
+                          }while(m_shapeIds.key(refId, noKey) != noKey);
+                 
+                          return "Shape" + QString().setNum(count("shape", false) - 1);
+               
                          }
            }
     
      }
 
-static QString createUID()
+QString SvgWriter_generic::createUID()
 {
      static unsigned int nr = 0;
      
@@ -377,13 +439,19 @@ static QString createUID()
 
 QString SvgWriter_generic::createID(const KoShape * obj)
 {
+    qDebug() << "Contents of m_shapeIds:\nShape\tID" << endl;
     QString id;
-   // if (! m_shapeIds.contains(obj)) {
+    if (! m_shapeIds.contains(obj)) {
         id = obj->name().isEmpty() ? createUID(obj) : obj->name();
         m_shapeIds.insert(obj, id);
-     //} else {
-        //id = m_shapeIds[obj];
-      //}
+        
+        QList<const KoShape *> list = m_shapeIds.keys(); 
+        for(int i = 0; i < list.size(); i++){
+        qDebug() << list.at(i) << m_shapeIds.value(list.at(i));
+        }
+     } else {
+        id = m_shapeIds.value(obj);
+      }
     return id;
 }
 

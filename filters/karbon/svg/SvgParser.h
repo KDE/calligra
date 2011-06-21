@@ -146,8 +146,11 @@ protected:
     /// Returns inherited attribute value for specified element
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
-    void parseAppData();
+    virtual void parseAppData() =0;
+    QString m_appData_tagName;
+    
 private:
+  
     QSizeF m_documentSize;
     SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;

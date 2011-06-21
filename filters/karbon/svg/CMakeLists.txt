@@ -42,6 +42,7 @@ set(karbonsvgimport_PART_SRCS
     SvgClipPathHelper.cpp
     SvgTextHelper.cpp
     SvgLoadingContext.cpp
+    SvgParser_Stage.cpp
     ${SHAPES_SOURCES} 
 )
 

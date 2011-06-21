@@ -83,7 +83,9 @@
                 
       bool m_hasAppData;
       QString m_appData;
-      QMap<const KoShape*, QString> m_shapeIds;//For testing this is made protected. Will be private as before,finally.
+            
+      QString getID(const KoShape *obj);
+      QMap<const KoShape*, QString> m_shapeIds;
       
   private:
       
@@ -108,17 +110,15 @@
       void saveFont(const QFont &font, QTextStream *stream);
       void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
-      
-      QString getID(const KoShape *obj);
       QString createID(const KoShape * obj);
-
+      QString createUID(const KoShape * shape);
+      QString createUID();
 
       /// Checks if the matrix only has translation set
       bool isTranslation(const QTransform &);
 
       void startDocument();
       void saveToplevelShapes();
-    //  bool endDocument(const QString defs, const QString body);
       void savePlainText();
      
       
