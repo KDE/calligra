@@ -18,6 +18,7 @@ public:
 private:
     // set the positions of the balloons relative to eachother and the boundries
     void setPositions();
+    void reposition(int index);
 
 private:
     QList<KoBalloon*> *annotations;

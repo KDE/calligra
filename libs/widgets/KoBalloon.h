@@ -13,9 +13,11 @@ public:
     int y() {return m_y;}
     virtual void paintEvent(QPaintEvent *event);
 
+protected:
+    int m_y;
+
 private:
     QString m_content;
-    int m_y;
 
 };
 

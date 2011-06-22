@@ -8,17 +8,24 @@ KoAnnotationSideBar::KoAnnotationSideBar(QWidget *parent) :
 
 void KoAnnotationSideBar::addAnnotation(QString content, int position)
 {
-    KoBalloon *curr;
+    KoBalloon *curr, *newBalloon;
     int i;
     for(i = 0; i < annotations->size(); ++i)
     {
         curr = annotations->at(i);
-        if(curr->y() < position)
+        if(curr->y() < position) // TODO: check for relative position in line for same y values
         {
-            annotations->insert(i, new KoBalloon(content, position, this));
-            break;
+            break; // insert here. if never reached, insert at end
         }
     }
+    newBalloon = new KoBalloon(content, position, this);
+    newBalloon->resize(this->width(), newBalloon->sizeHint().height());
+    newBalloon->move(0, position);
+    annotations->insert(i, newBalloon);
+    reposition(i);
+    newBalloon->setVisible(true);
+    newBalloon->setFocus();
+    this->repaint();
 }
 
 void KoAnnotationSideBar::paintEvent(QPaintEvent *event)
@@ -29,18 +36,75 @@ void KoAnnotationSideBar::paintEvent(QPaintEvent *event)
     painter.setBackgroundMode(Qt::OpaqueMode);
     painter.setBackground(QBrush(Qt::gray));
 
-    setPositions();
+    //setPositions();
 
     for(i = 0; i < annotations->size(); ++i)
     {
         curr = annotations->at(i);
         curr->paintEvent(event);
         QPoint anchorConnection((curr->pos()).x() - 30, curr->y());// 30 pixels to the left of current balloon
+// TODO: change distance based on magnification from viewer
         painter.drawLine(anchorConnection, curr->pos());
     }
 }
 
-void KoAnnotationSideBar::setPositions()
+/*
+ * fix collisions with adjacent balloons
+ */
+void KoAnnotationSideBar::reposition(int index)
 {
-    //TODO: algorithm to statically place note balloons
-}
+    if(index < 0 || index >= annotations->size()) return; //just to be safe
+    if(annotations->empty()) return;
+
+    KoBalloon *curr, *adj;
+    int tempTop, tempBottom, distance, currIndex;
+    curr = annotations->at(index);
+    // check if it collides with a lower balloon, if it does, move it up and fix any upper collisions
+    if(index < annotations->size() - 1)
+    {
+        currIndex = index + 1;
+        adj = annotations->at(currIndex--);
+        tempTop = adj->pos().y();
+        tempBottom = curr->pos().y() + curr->height();
+        while(tempTop < tempBottom)
+        {
+            distance = tempBottom - tempTop;
+            tempTop = curr->pos().y() - distance;
+            curr->move(curr->pos().x(), tempTop);
+            if(currIndex < 0) break;
+            adj = curr;
+            curr = annotations->at(currIndex--);
+            tempBottom = curr->pos().y() + curr->height();
+        }
+        // fix if balloons were moved past 0
+        tempBottom = 0;
+        currIndex++;
+        while(tempTop < tempBottom)
+        {
+            curr->move(curr->pos().x(), tempBottom);
+            tempBottom += curr->height();
+            if(currIndex >= annotations->size()) break;
+            curr = annotations->at(++currIndex);
+            tempTop = curr->pos().y();
+        }
+
+    }
+}// END reposition
+
+/* void KoAnnotationSideBar::setPositions()
+{
+    int i, newY;
+    KoBalloon *curr;
+    for(i = 0; i < annotations->size(); ++i)
+    {
+        curr = annotations->at(i);
+        newY = curr->pos().y();
+        /* if(lower collision)
+               newY = collision->pos().y() - curr->height();
+           if(newY < 0) newY = 0;
+           if(upper collision)
+               newY = collision->pos().y() + collision->height();
+
+
+    }
+} */

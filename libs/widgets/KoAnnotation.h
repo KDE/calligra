@@ -7,15 +7,15 @@ class KoAnnotation : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoAnnotation(QString author, QDateTime date, QTextBlock content, QObject *parent = 0);
+    explicit KoAnnotation(QString author, QDateTime date, QString content, QObject *parent = 0);
     QString author(){return m_author;}
     QDateTime date(){return m_date;}
-    QTextBlock content(){return m_content;}
+    QString content(){return m_content;}
 
 private:
     QString m_author;
     QDateTime m_date;
-    QTextBlock m_content;
+    QString m_content;
 
 };
 
