@@ -144,7 +144,6 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
-#include <KDebug>
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
     // don't process tablet events for stylus middle and right mouse button
