@@ -7,6 +7,7 @@ Comment[pt_BR]=Plugin do Calligra
 Comment[sv]=Calligra-insticksprogram
 Comment[uk]=Додаток Calligra
 Comment[x-test]=xxCalligra Pluginxx
+Comment[zh_TW]=Calligra 外掛程式
 
 [PropertyDef::MenuEntries]
 Type=QStringList
