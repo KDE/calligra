@@ -7,6 +7,7 @@ Comment[pt_BR]=Filtro do Calligra
 Comment[sv]=Calligra-filter
 Comment[uk]=Фільтр Calligra
 Comment[x-test]=xxCalligra Filterxx
+Comment[zh_TW]=Calligra 過濾器
 
 [PropertyDef::X-KDE-Import]
 Type=QStringList
