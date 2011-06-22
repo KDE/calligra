@@ -37,8 +37,10 @@
 #include <KoGenStyle.h>
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <QtGui/QColor>
+
+#include <QColor>
 #include <QByteArray>
+#include <QSharedPointer>
 
 using namespace wvWare;
 using namespace MSO;
@@ -634,7 +636,7 @@ void WordsGraphicsHandler::parseOfficeArtContainer()
 int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
 {
     kDebug(30513);
-/*
+
     if (!blipStore) return(1);
 
     // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
@@ -668,46 +670,38 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
 #endif
                     continue;
                 }
-                LEInputStream::Mark _zero;
-                _zero = in.setMark();
-                in.skip(fbse->foDelay);
+                int _zero = in.pos();
+                in.seek(fbse->foDelay);
 
                 //let's check the record header if there's a BLIP stored
-                LEInputStream::Mark _m;
-                _m = in.setMark();
-                OfficeArtRecordHeader rh;
-                try {
-                    parseOfficeArtRecordHeader(in, rh);
-                } catch (IOException _e) {
-                    kDebug(30513) << _e.msg;
-                    in.rewind(_zero);
-                    continue;
-                } catch (...) {
+                int _m = in.pos();
+
+                MSO::OfficeArtRecordHeader rh(in.data().constData() + in.pos(), in.size() - in.pos());
+                if (!rh) {
                     kWarning(30513) << "Warning: Caught an unknown exception!";
-                    in.rewind(_zero);
+                    in.seek(_zero);
                     continue;
+
                 }
-                in.rewind(_m);
+
+                in.seek(_m);
                 if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
                     continue;
                 }
-                fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
-                try {
-                    parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
-                } catch (IOException _e) {
-                    kDebug(30513) << _e.msg;
-                    in.rewind(_zero);
-                    continue;
-                } catch (...) {
+
+                OfficeArtBlip embeddedBlip(in.data().constData() + in.pos(), in.size() - in.pos());
+                if (!embeddedBlip) {
                     kWarning(30513) << "Warning: Caught an unknown exception!";
-                    in.rewind(_zero);
+                    in.seek(_zero);
                     continue;
                 }
-                in.rewind(_zero);
+                const_cast<OfficeArtFBSE*>(fbse)->embeddedBlip = embeddedBlip;
+
+                in.seek(_zero);
             }
         }
     }
-*/
+
     return 0;
 }
 
