@@ -516,7 +516,7 @@ public:
     const char* _data;
     quint32 _size;
     CurrentUserAtom() :_data(0), _size(0) {}
-    explicit CurrentUserAtom(const char* data, const quint32 size);
+    explicit CurrentUserAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     quint32 size;
     quint32 headerToken;
@@ -542,7 +542,7 @@ public:
     const char* _data;
     quint32 _size;
     TODOS() :_data(0), _size(0) {}
-    explicit TODOS(const char* data, const quint32 size);
+    explicit TODOS(const char* data, const quint32 maxsize);
     MSOArray<Byte> anon;
     inline operator const void * () const { return _data; }
     inline const TODOS* operator->() const { return this; }
@@ -578,7 +578,7 @@ public:
     const char* _data;
     quint32 _size;
     CurrentUserStream() :_data(0), _size(0) {}
-    explicit CurrentUserStream(const char* data, const quint32 size);
+    explicit CurrentUserStream(const char* data, const quint32 maxsize);
     CurrentUserAtom anon1;
     MSOArray<Byte> trailing;
     inline operator const void * () const { return _data; }
@@ -591,7 +591,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBStoreDelay() :_data(0), _size(0) {}
-    explicit OfficeArtBStoreDelay(const char* data, const quint32 size);
+    explicit OfficeArtBStoreDelay(const char* data, const quint32 maxsize);
     MSOArray<OfficeArtBStoreContainerFileBlock> rgfb;
     inline operator const void * () const { return _data; }
     inline const OfficeArtBStoreDelay* operator->() const { return this; }
@@ -618,7 +618,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlipJPEG() :_data(0), _size(0) {}
-    explicit OfficeArtBlipJPEG(const char* data, const quint32 size);
+    explicit OfficeArtBlipJPEG(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> rgbUid1;
     MSOCastArray<char> rgbUid2;
@@ -635,7 +635,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlipPNG() :_data(0), _size(0) {}
-    explicit OfficeArtBlipPNG(const char* data, const quint32 size);
+    explicit OfficeArtBlipPNG(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> rgbUid1;
     MSOCastArray<char> rgbUid2;
@@ -652,7 +652,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlipDIB() :_data(0), _size(0) {}
-    explicit OfficeArtBlipDIB(const char* data, const quint32 size);
+    explicit OfficeArtBlipDIB(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> rgbUid1;
     MSOCastArray<char> rgbUid2;
@@ -669,7 +669,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlipTIFF() :_data(0), _size(0) {}
-    explicit OfficeArtBlipTIFF(const char* data, const quint32 size);
+    explicit OfficeArtBlipTIFF(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> rgbUid1;
     MSOCastArray<char> rgbUid2;
@@ -714,7 +714,7 @@ public:
     const char* _data;
     quint32 _size;
     PowerPointStructs() :_data(0), _size(0) {}
-    explicit PowerPointStructs(const char* data, const quint32 size);
+    explicit PowerPointStructs(const char* data, const quint32 maxsize);
     MSOArray<PowerPointStruct> anon;
     inline operator const void * () const { return _data; }
     inline const PowerPointStructs* operator->() const { return this; }
@@ -760,7 +760,7 @@ public:
     const char* _data;
     quint32 _size;
     UserDateAtom() :_data(0), _size(0) {}
-    explicit UserDateAtom(const char* data, const quint32 size);
+    explicit UserDateAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> userDate;
     inline operator const void * () const { return _data; }
@@ -773,7 +773,7 @@ public:
     const char* _data;
     quint32 _size;
     HeaderAtom() :_data(0), _size(0) {}
-    explicit HeaderAtom(const char* data, const quint32 size);
+    explicit HeaderAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> header;
     inline operator const void * () const { return _data; }
@@ -786,7 +786,7 @@ public:
     const char* _data;
     quint32 _size;
     FooterAtom() :_data(0), _size(0) {}
-    explicit FooterAtom(const char* data, const quint32 size);
+    explicit FooterAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> footer;
     inline operator const void * () const { return _data; }
@@ -799,7 +799,7 @@ public:
     const char* _data;
     quint32 _size;
     PerSlideHeadersFootersContainer() :_data(0), _size(0) {}
-    explicit PerSlideHeadersFootersContainer(const char* data, const quint32 size);
+    explicit PerSlideHeadersFootersContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     HeadersFootersAtom hfAtom;
     UserDateAtom userDateAtom;
@@ -828,7 +828,7 @@ public:
     const char* _data;
     quint32 _size;
     DocInfoListContainer() :_data(0), _size(0) {}
-    explicit DocInfoListContainer(const char* data, const quint32 size);
+    explicit DocInfoListContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<DocInfoListSubContainerOrAtom> rgChildRec;
     inline operator const void * () const { return _data; }
@@ -870,7 +870,7 @@ public:
     const char* _data;
     quint32 _size;
     DocProgTagsContainer() :_data(0), _size(0) {}
-    explicit DocProgTagsContainer(const char* data, const quint32 size);
+    explicit DocProgTagsContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<DocProgTagsSubContainerOrAtom> rgChildRec;
     inline operator const void * () const { return _data; }
@@ -896,7 +896,7 @@ public:
     const char* _data;
     quint32 _size;
     BlipCollection9Container() :_data(0), _size(0) {}
-    explicit BlipCollection9Container(const char* data, const quint32 size);
+    explicit BlipCollection9Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<BlipEntityAtom> rgBlipEntityAtom;
     inline operator const void * () const { return _data; }
@@ -927,7 +927,7 @@ public:
     const char* _data;
     quint32 _size;
     ExHyperlink9Container() :_data(0), _size(0) {}
-    explicit ExHyperlink9Container(const char* data, const quint32 size);
+    explicit ExHyperlink9Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -965,7 +965,7 @@ public:
     const char* _data;
     quint32 _size;
     EnvelopeData9Atom() :_data(0), _size(0) {}
-    explicit EnvelopeData9Atom(const char* data, const quint32 size);
+    explicit EnvelopeData9Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1024,7 +1024,7 @@ public:
     const char* _data;
     quint32 _size;
     HTMLPublishInfo9Container() :_data(0), _size(0) {}
-    explicit HTMLPublishInfo9Container(const char* data, const quint32 size);
+    explicit HTMLPublishInfo9Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1037,7 +1037,7 @@ public:
     const char* _data;
     quint32 _size;
     BroadcastDocInfo9Container() :_data(0), _size(0) {}
-    explicit BroadcastDocInfo9Container(const char* data, const quint32 size);
+    explicit BroadcastDocInfo9Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1050,7 +1050,7 @@ public:
     const char* _data;
     quint32 _size;
     OutlineTextProps9Container() :_data(0), _size(0) {}
-    explicit OutlineTextProps9Container(const char* data, const quint32 size);
+    explicit OutlineTextProps9Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<OutlineTextProps9Entry> rgOutlineTextProps9Entry;
     inline operator const void * () const { return _data; }
@@ -1077,7 +1077,7 @@ public:
     const char* _data;
     quint32 _size;
     StyleTextProp9Atom() :_data(0), _size(0) {}
-    explicit StyleTextProp9Atom(const char* data, const quint32 size);
+    explicit StyleTextProp9Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<StyleTextProp9> rgStyleTextProp9;
     inline operator const void * () const { return _data; }
@@ -1090,7 +1090,7 @@ public:
     const char* _data;
     quint32 _size;
     FontCollection10Container() :_data(0), _size(0) {}
-    explicit FontCollection10Container(const char* data, const quint32 size);
+    explicit FontCollection10Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<FontCollectionEntry> rgFontCollectionEntry;
     inline operator const void * () const { return _data; }
@@ -1117,7 +1117,7 @@ public:
     const char* _data;
     quint32 _size;
     AuthorNameAtom() :_data(0), _size(0) {}
-    explicit AuthorNameAtom(const char* data, const quint32 size);
+    explicit AuthorNameAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> authorName;
     inline operator const void * () const { return _data; }
@@ -1160,7 +1160,7 @@ public:
     const char* _data;
     quint32 _size;
     CopyrightAtom() :_data(0), _size(0) {}
-    explicit CopyrightAtom(const char* data, const quint32 size);
+    explicit CopyrightAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> copyright;
     inline operator const void * () const { return _data; }
@@ -1173,7 +1173,7 @@ public:
     const char* _data;
     quint32 _size;
     KeywordsAtom() :_data(0), _size(0) {}
-    explicit KeywordsAtom(const char* data, const quint32 size);
+    explicit KeywordsAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> keywords;
     inline operator const void * () const { return _data; }
@@ -1202,7 +1202,7 @@ public:
     const char* _data;
     quint32 _size;
     OutlineTextProps10Container() :_data(0), _size(0) {}
-    explicit OutlineTextProps10Container(const char* data, const quint32 size);
+    explicit OutlineTextProps10Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<OutlineTextProps10Entry> rgOutlineTextProps10Entry;
     inline operator const void * () const { return _data; }
@@ -1215,7 +1215,7 @@ public:
     const char* _data;
     quint32 _size;
     StyleTextProp10Atom() :_data(0), _size(0) {}
-    explicit StyleTextProp10Atom(const char* data, const quint32 size);
+    explicit StyleTextProp10Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<TextCFException10> rgStyleTextProp10;
     inline operator const void * () const { return _data; }
@@ -1243,7 +1243,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideListTable10Container() :_data(0), _size(0) {}
-    explicit SlideListTable10Container(const char* data, const quint32 size);
+    explicit SlideListTable10Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1256,7 +1256,7 @@ public:
     const char* _data;
     quint32 _size;
     DiffTree10Container() :_data(0), _size(0) {}
-    explicit DiffTree10Container(const char* data, const quint32 size);
+    explicit DiffTree10Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1269,7 +1269,7 @@ public:
     const char* _data;
     quint32 _size;
     ModifyPasswordAtom() :_data(0), _size(0) {}
-    explicit ModifyPasswordAtom(const char* data, const quint32 size);
+    explicit ModifyPasswordAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> modifyPassword;
     inline operator const void * () const { return _data; }
@@ -1299,7 +1299,7 @@ public:
     const char* _data;
     quint32 _size;
     SmartTagStore11Container() :_data(0), _size(0) {}
-    explicit SmartTagStore11Container(const char* data, const quint32 size);
+    explicit SmartTagStore11Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1312,7 +1312,7 @@ public:
     const char* _data;
     quint32 _size;
     OutlineTextProps11Container() :_data(0), _size(0) {}
-    explicit OutlineTextProps11Container(const char* data, const quint32 size);
+    explicit OutlineTextProps11Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1325,7 +1325,7 @@ public:
     const char* _data;
     quint32 _size;
     BinaryTagDataBlob() :_data(0), _size(0) {}
-    explicit BinaryTagDataBlob(const char* data, const quint32 size);
+    explicit BinaryTagDataBlob(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> data;
     inline operator const void * () const { return _data; }
@@ -1337,7 +1337,7 @@ public:
     const char* _data;
     quint32 _size;
     PP12DocBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP12DocBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP12DocBinaryTagExtension(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> tagName;
     RecordHeader rhData;
@@ -1352,7 +1352,7 @@ public:
     const char* _data;
     quint32 _size;
     SorterViewInfoContainer() :_data(0), _size(0) {}
-    explicit SorterViewInfoContainer(const char* data, const quint32 size);
+    explicit SorterViewInfoContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1380,7 +1380,7 @@ public:
     const char* _data;
     quint32 _size;
     MasterListWithTextContainer() :_data(0), _size(0) {}
-    explicit MasterListWithTextContainer(const char* data, const quint32 size);
+    explicit MasterListWithTextContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<MasterPersistAtom> rgMasterPersistAtom;
     inline operator const void * () const { return _data; }
@@ -1414,7 +1414,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideListWithTextContainer() :_data(0), _size(0) {}
-    explicit SlideListWithTextContainer(const char* data, const quint32 size);
+    explicit SlideListWithTextContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<SlideListWithTextSubContainerOrAtom> rgChildRec;
     inline operator const void * () const { return _data; }
@@ -1427,7 +1427,7 @@ public:
     const char* _data;
     quint32 _size;
     NotesListWithTextContainer() :_data(0), _size(0) {}
-    explicit NotesListWithTextContainer(const char* data, const quint32 size);
+    explicit NotesListWithTextContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<NotesPersistAtom> rgNotesPersistAtom;
     inline operator const void * () const { return _data; }
@@ -1474,7 +1474,7 @@ public:
     const char* _data;
     quint32 _size;
     TextCharsAtom() :_data(0), _size(0) {}
-    explicit TextCharsAtom(const char* data, const quint32 size);
+    explicit TextCharsAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> textChars;
     inline operator const void * () const { return _data; }
@@ -1487,7 +1487,7 @@ public:
     const char* _data;
     quint32 _size;
     TextBytesAtom() :_data(0), _size(0) {}
-    explicit TextBytesAtom(const char* data, const quint32 size);
+    explicit TextBytesAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> textChars;
     inline operator const void * () const { return _data; }
@@ -1500,7 +1500,7 @@ public:
     const char* _data;
     quint32 _size;
     MasterTextPropAtom() :_data(0), _size(0) {}
-    explicit MasterTextPropAtom(const char* data, const quint32 size);
+    explicit MasterTextPropAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<MasterTextPropRun> rgMasterTextPropRun;
     inline operator const void * () const { return _data; }
@@ -1526,7 +1526,7 @@ public:
     const char* _data;
     quint32 _size;
     StyleTextPropAtom() :_data(0), _size(0) {}
-    explicit StyleTextPropAtom(const char* data, const quint32 size);
+    explicit StyleTextPropAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -1686,7 +1686,7 @@ public:
     const char* _data;
     quint32 _size;
     TabStops() :_data(0), _size(0) {}
-    explicit TabStops(const char* data, const quint32 size);
+    explicit TabStops(const char* data, const quint32 maxsize);
     quint16 count;
     MSOArray<TabStop> rgTabStop;
     inline operator const void * () const { return _data; }
@@ -1855,7 +1855,7 @@ public:
     const char* _data;
     quint32 _size;
     FontCollectionContainer() :_data(0), _size(0) {}
-    explicit FontCollectionContainer(const char* data, const quint32 size);
+    explicit FontCollectionContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<FontCollectionEntry> rgFontCollectionEntry;
     inline operator const void * () const { return _data; }
@@ -1890,7 +1890,7 @@ public:
     const char* _data;
     quint32 _size;
     FontEmbedDataBlob() :_data(0), _size(0) {}
-    explicit FontEmbedDataBlob(const char* data, const quint32 size);
+    explicit FontEmbedDataBlob(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> data;
     inline operator const void * () const { return _data; }
@@ -1915,7 +1915,7 @@ public:
     const char* _data;
     quint32 _size;
     KinsokuLeadingAtom() :_data(0), _size(0) {}
-    explicit KinsokuLeadingAtom(const char* data, const quint32 size);
+    explicit KinsokuLeadingAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> kinsokuLeading;
     inline operator const void * () const { return _data; }
@@ -1928,7 +1928,7 @@ public:
     const char* _data;
     quint32 _size;
     KinsokuFollowingAtom() :_data(0), _size(0) {}
-    explicit KinsokuFollowingAtom(const char* data, const quint32 size);
+    explicit KinsokuFollowingAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> kinsokuFollowing;
     inline operator const void * () const { return _data; }
@@ -1941,7 +1941,7 @@ public:
     const char* _data;
     quint32 _size;
     TextSpecialInfoAtom() :_data(0), _size(0) {}
-    explicit TextSpecialInfoAtom(const char* data, const quint32 size);
+    explicit TextSpecialInfoAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<TextSIRun> rgSIRun;
     inline operator const void * () const { return _data; }
@@ -1954,7 +1954,7 @@ public:
     const char* _data;
     quint32 _size;
     SmartTags() :_data(0), _size(0) {}
-    explicit SmartTags(const char* data, const quint32 size);
+    explicit SmartTags(const char* data, const quint32 maxsize);
     quint32 count;
     MSOCastArray<quint32> rgSmartTagIndex;
     inline operator const void * () const { return _data; }
@@ -2010,7 +2010,7 @@ public:
     const char* _data;
     quint32 _size;
     PersistDirectoryAtom() :_data(0), _size(0) {}
-    explicit PersistDirectoryAtom(const char* data, const quint32 size);
+    explicit PersistDirectoryAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<PersistDirectoryEntry> rgPersistDirEntry;
     inline operator const void * () const { return _data; }
@@ -2023,7 +2023,7 @@ public:
     const char* _data;
     quint32 _size;
     UnknownDocumentContainerChild() :_data(0), _size(0) {}
-    explicit UnknownDocumentContainerChild(const char* data, const quint32 size);
+    explicit UnknownDocumentContainerChild(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> unknown;
     inline operator const void * () const { return _data; }
@@ -2036,7 +2036,7 @@ public:
     const char* _data;
     quint32 _size;
     UnknownOfficeArtClientDataChild() :_data(0), _size(0) {}
-    explicit UnknownOfficeArtClientDataChild(const char* data, const quint32 size);
+    explicit UnknownOfficeArtClientDataChild(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> unknown;
     inline operator const void * () const { return _data; }
@@ -2049,7 +2049,7 @@ public:
     const char* _data;
     quint32 _size;
     UnknownSlideContainerChild() :_data(0), _size(0) {}
-    explicit UnknownSlideContainerChild(const char* data, const quint32 size);
+    explicit UnknownSlideContainerChild(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> unknown;
     inline operator const void * () const { return _data; }
@@ -2062,7 +2062,7 @@ public:
     const char* _data;
     quint32 _size;
     UnknownTextContainerChild() :_data(0), _size(0) {}
-    explicit UnknownTextContainerChild(const char* data, const quint32 size);
+    explicit UnknownTextContainerChild(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> unknown;
     inline operator const void * () const { return _data; }
@@ -2075,7 +2075,7 @@ public:
     const char* _data;
     quint32 _size;
     PersistDirectoryEntry() :_data(0), _size(0) {}
-    explicit PersistDirectoryEntry(const char* data, const quint32 size);
+    explicit PersistDirectoryEntry(const char* data, const quint32 maxsize);
     quint32 persistId;
     quint16 cPersist;
     MSOCastArray<quint32> rgPersistOffset;
@@ -2101,7 +2101,7 @@ public:
     const char* _data;
     quint32 _size;
     SchemeListElementColorSchemeAtom() :_data(0), _size(0) {}
-    explicit SchemeListElementColorSchemeAtom(const char* data, const quint32 size);
+    explicit SchemeListElementColorSchemeAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<ColorStruct> rgSchemeColor;
     inline operator const void * () const { return _data; }
@@ -2114,7 +2114,7 @@ public:
     const char* _data;
     quint32 _size;
     RoundTripOArtTextStyles12Atom() :_data(0), _size(0) {}
-    explicit RoundTripOArtTextStyles12Atom(const char* data, const quint32 size);
+    explicit RoundTripOArtTextStyles12Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2127,7 +2127,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideNameAtom() :_data(0), _size(0) {}
-    explicit SlideNameAtom(const char* data, const quint32 size);
+    explicit SlideNameAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> slideName;
     inline operator const void * () const { return _data; }
@@ -2140,7 +2140,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideProgTagsContainer() :_data(0), _size(0) {}
-    explicit SlideProgTagsContainer(const char* data, const quint32 size);
+    explicit SlideProgTagsContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<SlideProgTagsSubContainerOrAtom> rgTypeRec;
     inline operator const void * () const { return _data; }
@@ -2153,7 +2153,7 @@ public:
     const char* _data;
     quint32 _size;
     PP9SlideBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP9SlideBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP9SlideBinaryTagExtension(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> tagName;
     RecordHeader rhData;
@@ -2168,7 +2168,7 @@ public:
     const char* _data;
     quint32 _size;
     Comment10Container() :_data(0), _size(0) {}
-    explicit Comment10Container(const char* data, const quint32 size);
+    explicit Comment10Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2181,7 +2181,7 @@ public:
     const char* _data;
     quint32 _size;
     Comment10Atom() :_data(0), _size(0) {}
-    explicit Comment10Atom(const char* data, const quint32 size);
+    explicit Comment10Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2251,7 +2251,7 @@ public:
     const char* _data;
     quint32 _size;
     ExtTimeNodeContainer() :_data(0), _size(0) {}
-    explicit ExtTimeNodeContainer(const char* data, const quint32 size);
+    explicit ExtTimeNodeContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2264,7 +2264,7 @@ public:
     const char* _data;
     quint32 _size;
     BuildListContainer() :_data(0), _size(0) {}
-    explicit BuildListContainer(const char* data, const quint32 size);
+    explicit BuildListContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2294,7 +2294,7 @@ public:
     const char* _data;
     quint32 _size;
     TagNameAtom() :_data(0), _size(0) {}
-    explicit TagNameAtom(const char* data, const quint32 size);
+    explicit TagNameAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> tagName;
     inline operator const void * () const { return _data; }
@@ -2307,7 +2307,7 @@ public:
     const char* _data;
     quint32 _size;
     TagValueAtom() :_data(0), _size(0) {}
-    explicit TagValueAtom(const char* data, const quint32 size);
+    explicit TagValueAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> tagValue;
     inline operator const void * () const { return _data; }
@@ -2320,7 +2320,7 @@ public:
     const char* _data;
     quint32 _size;
     RoundTripMainMasterRecord() :_data(0), _size(0) {}
-    explicit RoundTripMainMasterRecord(const char* data, const quint32 size);
+    explicit RoundTripMainMasterRecord(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2333,7 +2333,7 @@ public:
     const char* _data;
     quint32 _size;
     TemplateNameAtom() :_data(0), _size(0) {}
-    explicit TemplateNameAtom(const char* data, const quint32 size);
+    explicit TemplateNameAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> templateName;
     inline operator const void * () const { return _data; }
@@ -2346,7 +2346,7 @@ public:
     const char* _data;
     quint32 _size;
     RoundTripSlideSyncInfo12Container() :_data(0), _size(0) {}
-    explicit RoundTripSlideSyncInfo12Container(const char* data, const quint32 size);
+    explicit RoundTripSlideSyncInfo12Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2375,7 +2375,7 @@ public:
     const char* _data;
     quint32 _size;
     NotesRoundTripAtom() :_data(0), _size(0) {}
-    explicit NotesRoundTripAtom(const char* data, const quint32 size);
+    explicit NotesRoundTripAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2388,7 +2388,7 @@ public:
     const char* _data;
     quint32 _size;
     HandoutContainer() :_data(0), _size(0) {}
-    explicit HandoutContainer(const char* data, const quint32 size);
+    explicit HandoutContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2401,7 +2401,7 @@ public:
     const char* _data;
     quint32 _size;
     ExControlStg() :_data(0), _size(0) {}
-    explicit ExControlStg(const char* data, const quint32 size);
+    explicit ExControlStg(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2414,7 +2414,7 @@ public:
     const char* _data;
     quint32 _size;
     ExOleObjStg() :_data(0), _size(0) {}
-    explicit ExOleObjStg(const char* data, const quint32 size);
+    explicit ExOleObjStg(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2427,7 +2427,7 @@ public:
     const char* _data;
     quint32 _size;
     UserEditAtom() :_data(0), _size(0) {}
-    explicit UserEditAtom(const char* data, const quint32 size);
+    explicit UserEditAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     quint32 lastSlideIdRef;
     quint16 version;
@@ -2452,7 +2452,7 @@ public:
     const char* _data;
     quint32 _size;
     VbaProjectStg() :_data(0), _size(0) {}
-    explicit VbaProjectStg(const char* data, const quint32 size);
+    explicit VbaProjectStg(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2543,7 +2543,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideSchemeColorSchemeAtom() :_data(0), _size(0) {}
-    explicit SlideSchemeColorSchemeAtom(const char* data, const quint32 size);
+    explicit SlideSchemeColorSchemeAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOArray<ColorStruct> rgSchemeColor;
     inline operator const void * () const { return _data; }
@@ -2556,7 +2556,7 @@ public:
     const char* _data;
     quint32 _size;
     RoundTripSlideRecord() :_data(0), _size(0) {}
-    explicit RoundTripSlideRecord(const char* data, const quint32 size);
+    explicit RoundTripSlideRecord(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2569,7 +2569,7 @@ public:
     const char* _data;
     quint32 _size;
     NamedShowsContainer() :_data(0), _size(0) {}
-    explicit NamedShowsContainer(const char* data, const quint32 size);
+    explicit NamedShowsContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2582,7 +2582,7 @@ public:
     const char* _data;
     quint32 _size;
     SummaryContainer() :_data(0), _size(0) {}
-    explicit SummaryContainer(const char* data, const quint32 size);
+    explicit SummaryContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2595,7 +2595,7 @@ public:
     const char* _data;
     quint32 _size;
     DocRoutingSlipAtom() :_data(0), _size(0) {}
-    explicit DocRoutingSlipAtom(const char* data, const quint32 size);
+    explicit DocRoutingSlipAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2608,7 +2608,7 @@ public:
     const char* _data;
     quint32 _size;
     PrintOptionsAtom() :_data(0), _size(0) {}
-    explicit PrintOptionsAtom(const char* data, const quint32 size);
+    explicit PrintOptionsAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2621,7 +2621,7 @@ public:
     const char* _data;
     quint32 _size;
     RoundTripCustomTableStyles12Atom() :_data(0), _size(0) {}
-    explicit RoundTripCustomTableStyles12Atom(const char* data, const quint32 size);
+    explicit RoundTripCustomTableStyles12Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2675,7 +2675,7 @@ public:
     const char* _data;
     quint32 _size;
     ExAviMovieContainer() :_data(0), _size(0) {}
-    explicit ExAviMovieContainer(const char* data, const quint32 size);
+    explicit ExAviMovieContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2688,7 +2688,7 @@ public:
     const char* _data;
     quint32 _size;
     ExCDAudioContainer() :_data(0), _size(0) {}
-    explicit ExCDAudioContainer(const char* data, const quint32 size);
+    explicit ExCDAudioContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2727,7 +2727,7 @@ public:
     const char* _data;
     quint32 _size;
     FriendlyNameAtom() :_data(0), _size(0) {}
-    explicit FriendlyNameAtom(const char* data, const quint32 size);
+    explicit FriendlyNameAtom(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<quint16> friendlyName;
     inline operator const void * () const { return _data; }
@@ -2740,7 +2740,7 @@ public:
     const char* _data;
     quint32 _size;
     TargetAtom() :_data(0), _size(0) {}
-    explicit TargetAtom(const char* data, const quint32 size);
+    explicit TargetAtom(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<quint16> target;
     inline operator const void * () const { return _data; }
@@ -2753,7 +2753,7 @@ public:
     const char* _data;
     quint32 _size;
     LocationAtom() :_data(0), _size(0) {}
-    explicit LocationAtom(const char* data, const quint32 size);
+    explicit LocationAtom(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<quint16> location;
     inline operator const void * () const { return _data; }
@@ -2766,7 +2766,7 @@ public:
     const char* _data;
     quint32 _size;
     ExMCIMovieContainer() :_data(0), _size(0) {}
-    explicit ExMCIMovieContainer(const char* data, const quint32 size);
+    explicit ExMCIMovieContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2779,7 +2779,7 @@ public:
     const char* _data;
     quint32 _size;
     ExMIDIAudioContainer() :_data(0), _size(0) {}
-    explicit ExMIDIAudioContainer(const char* data, const quint32 size);
+    explicit ExMIDIAudioContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2792,7 +2792,7 @@ public:
     const char* _data;
     quint32 _size;
     ExWAVAudioEmbeddedContainer() :_data(0), _size(0) {}
-    explicit ExWAVAudioEmbeddedContainer(const char* data, const quint32 size);
+    explicit ExWAVAudioEmbeddedContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2805,7 +2805,7 @@ public:
     const char* _data;
     quint32 _size;
     ExWAVAudioLinkContainer() :_data(0), _size(0) {}
-    explicit ExWAVAudioLinkContainer(const char* data, const quint32 size);
+    explicit ExWAVAudioLinkContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2818,7 +2818,7 @@ public:
     const char* _data;
     quint32 _size;
     UnknownExObjListSubContainerChild() :_data(0), _size(0) {}
-    explicit UnknownExObjListSubContainerChild(const char* data, const quint32 size);
+    explicit UnknownExObjListSubContainerChild(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -2864,7 +2864,7 @@ public:
     const char* _data;
     quint32 _size;
     MenuNameAtom() :_data(0), _size(0) {}
-    explicit MenuNameAtom(const char* data, const quint32 size);
+    explicit MenuNameAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> menuName;
     inline operator const void * () const { return _data; }
@@ -2877,7 +2877,7 @@ public:
     const char* _data;
     quint32 _size;
     ProgIDAtom() :_data(0), _size(0) {}
-    explicit ProgIDAtom(const char* data, const quint32 size);
+    explicit ProgIDAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> progId;
     inline operator const void * () const { return _data; }
@@ -2890,7 +2890,7 @@ public:
     const char* _data;
     quint32 _size;
     ClipboardNameAtom() :_data(0), _size(0) {}
-    explicit ClipboardNameAtom(const char* data, const quint32 size);
+    explicit ClipboardNameAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> clipboardName;
     inline operator const void * () const { return _data; }
@@ -2903,7 +2903,7 @@ public:
     const char* _data;
     quint32 _size;
     MetafileBlob() :_data(0), _size(0) {}
-    explicit MetafileBlob(const char* data, const quint32 size);
+    explicit MetafileBlob(const char* data, const quint32 maxsize);
     RecordHeader rh;
     qint16 mm;
     qint16 xExt;
@@ -2947,7 +2947,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtFRITContainer() :_data(0), _size(0) {}
-    explicit OfficeArtFRITContainer(const char* data, const quint32 size);
+    explicit OfficeArtFRITContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<OfficeArtFRIT> rgfrit;
     inline operator const void * () const { return _data; }
@@ -2973,7 +2973,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBStoreContainer() :_data(0), _size(0) {}
-    explicit OfficeArtBStoreContainer(const char* data, const quint32 size);
+    explicit OfficeArtBStoreContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<OfficeArtBStoreContainerFileBlock> rgfb;
     inline operator const void * () const { return _data; }
@@ -2986,7 +2986,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtSpgrContainer() :_data(0), _size(0) {}
-    explicit OfficeArtSpgrContainer(const char* data, const quint32 size);
+    explicit OfficeArtSpgrContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<OfficeArtSpgrContainerFileBlock> rgfb;
     inline operator const void * () const { return _data; }
@@ -2999,7 +2999,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtSolverContainer() :_data(0), _size(0) {}
-    explicit OfficeArtSolverContainer(const char* data, const quint32 size);
+    explicit OfficeArtSolverContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<OfficeArtSolverContainerFileBlock> rgfb;
     inline operator const void * () const { return _data; }
@@ -3100,7 +3100,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtFOPT() :_data(0), _size(0) {}
-    explicit OfficeArtFOPT(const char* data, const quint32 size);
+    explicit OfficeArtFOPT(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<OfficeArtFOPTEChoice> fopt;
     MSOCastArray<char> complexData;
@@ -3114,7 +3114,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtSecondaryFOPT() :_data(0), _size(0) {}
-    explicit OfficeArtSecondaryFOPT(const char* data, const quint32 size);
+    explicit OfficeArtSecondaryFOPT(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<OfficeArtFOPTEChoice> fopt;
     MSOCastArray<char> complexData;
@@ -3128,7 +3128,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtTertiaryFOPT() :_data(0), _size(0) {}
-    explicit OfficeArtTertiaryFOPT(const char* data, const quint32 size);
+    explicit OfficeArtTertiaryFOPT(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<OfficeArtFOPTEChoice> fopt;
     MSOCastArray<char> complexData;
@@ -3168,7 +3168,7 @@ public:
     const char* _data;
     quint32 _size;
     PVertices_complex() :_data(0), _size(0) {}
-    explicit PVertices_complex(const char* data, const quint32 size);
+    explicit PVertices_complex(const char* data, const quint32 maxsize);
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
@@ -3182,7 +3182,7 @@ public:
     const char* _data;
     quint32 _size;
     PSegmentInfo_complex() :_data(0), _size(0) {}
-    explicit PSegmentInfo_complex(const char* data, const quint32 size);
+    explicit PSegmentInfo_complex(const char* data, const quint32 maxsize);
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
@@ -3196,7 +3196,7 @@ public:
     const char* _data;
     quint32 _size;
     FillShadeColors_complex() :_data(0), _size(0) {}
-    explicit FillShadeColors_complex(const char* data, const quint32 size);
+    explicit FillShadeColors_complex(const char* data, const quint32 maxsize);
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
@@ -3210,7 +3210,7 @@ public:
     const char* _data;
     quint32 _size;
     PWrapPolygonVertices_complex() :_data(0), _size(0) {}
-    explicit PWrapPolygonVertices_complex(const char* data, const quint32 size);
+    explicit PWrapPolygonVertices_complex(const char* data, const quint32 maxsize);
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
@@ -3275,7 +3275,7 @@ public:
     const char* _data;
     quint32 _size;
     XlsOfficeArtClientAnchor() :_data(0), _size(0) {}
-    explicit XlsOfficeArtClientAnchor(const char* data, const quint32 size);
+    explicit XlsOfficeArtClientAnchor(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     bool fMove;
     bool fSize;
@@ -3380,7 +3380,7 @@ public:
     const char* _data;
     quint32 _size;
     ShapeFlagsAtom() :_data(0), _size(0) {}
-    explicit ShapeFlagsAtom(const char* data, const quint32 size);
+    explicit ShapeFlagsAtom(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -3393,7 +3393,7 @@ public:
     const char* _data;
     quint32 _size;
     ShapeFlags10Atom() :_data(0), _size(0) {}
-    explicit ShapeFlags10Atom(const char* data, const quint32 size);
+    explicit ShapeFlags10Atom(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -3432,7 +3432,7 @@ public:
     const char* _data;
     quint32 _size;
     SoundContainer() :_data(0), _size(0) {}
-    explicit SoundContainer(const char* data, const quint32 size);
+    explicit SoundContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -3469,7 +3469,7 @@ public:
     const char* _data;
     quint32 _size;
     MacroNameAtom() :_data(0), _size(0) {}
-    explicit MacroNameAtom(const char* data, const quint32 size);
+    explicit MacroNameAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> macroName;
     inline operator const void * () const { return _data; }
@@ -3498,7 +3498,7 @@ public:
     const char* _data;
     quint32 _size;
     RecolorInfoAtom() :_data(0), _size(0) {}
-    explicit RecolorInfoAtom(const char* data, const quint32 size);
+    explicit RecolorInfoAtom(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> todo;
     inline operator const void * () const { return _data; }
@@ -3524,7 +3524,7 @@ public:
     const char* _data;
     quint32 _size;
     ShapeProgsTagContainer() :_data(0), _size(0) {}
-    explicit ShapeProgsTagContainer(const char* data, const quint32 size);
+    explicit ShapeProgsTagContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<ShapeProgTagsSubContainerOrAtom> rgChildRec;
     inline operator const void * () const { return _data; }
@@ -3537,7 +3537,7 @@ public:
     const char* _data;
     quint32 _size;
     PP9ShapeBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP9ShapeBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP9ShapeBinaryTagExtension(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<quint16> tagName;
     RecordHeader rhData;
@@ -3552,7 +3552,7 @@ public:
     const char* _data;
     quint32 _size;
     PP10ShapeBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP10ShapeBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP10ShapeBinaryTagExtension(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<quint16> tagName;
     RecordHeader rhData;
@@ -3567,7 +3567,7 @@ public:
     const char* _data;
     quint32 _size;
     PP11ShapeBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP11ShapeBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP11ShapeBinaryTagExtension(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<quint16> tagName;
     RecordHeader rhData;
@@ -3621,7 +3621,7 @@ public:
     const char* _data;
     quint32 _size;
     RoundTripShapeCheckSumForCustomLayouts12Atom() :_data(0), _size(0) {}
-    explicit RoundTripShapeCheckSumForCustomLayouts12Atom(const char* data, const quint32 size);
+    explicit RoundTripShapeCheckSumForCustomLayouts12Atom(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     quint32 shapeCheckSum;
     quint32 textCheckSum;
@@ -3661,7 +3661,7 @@ public:
     const char* _data;
     quint32 _size;
     PptOfficeArtClientTextBox() :_data(0), _size(0) {}
-    explicit PptOfficeArtClientTextBox(const char* data, const quint32 size);
+    explicit PptOfficeArtClientTextBox(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<TextClientDataSubContainerOrAtom> rgChildRec;
     inline operator const void * () const { return _data; }
@@ -3701,7 +3701,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtColorMRUContainer() :_data(0), _size(0) {}
-    explicit OfficeArtColorMRUContainer(const char* data, const quint32 size);
+    explicit OfficeArtColorMRUContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOArray<MSOCR> rgmsocr;
     inline operator const void * () const { return _data; }
@@ -3744,7 +3744,7 @@ public:
     const char* _data;
     quint32 _size;
     todo() :_data(0), _size(0) {}
-    explicit todo(const char* data, const quint32 size);
+    explicit todo(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> anon;
     inline operator const void * () const { return _data; }
@@ -4156,7 +4156,7 @@ public:
     const char* _data;
     quint32 _size;
     LPStshi() :_data(0), _size(0) {}
-    explicit LPStshi(const char* data, const quint32 size);
+    explicit LPStshi(const char* data, const quint32 maxsize);
     quint16 cbSthi;
     MSOCastArray<char> stshi;
     inline operator const void * () const { return _data; }
@@ -4169,7 +4169,7 @@ public:
     const char* _data;
     quint32 _size;
     LPStd() :_data(0), _size(0) {}
-    explicit LPStd(const char* data, const quint32 size);
+    explicit LPStd(const char* data, const quint32 maxsize);
     quint16 cbStd;
     MSOCastArray<char> std;
     quint8 padding;
@@ -4184,7 +4184,7 @@ public:
     const char* _data;
     quint32 _size;
     PlcfSed() :_data(0), _size(0) {}
-    explicit PlcfSed(const char* data, const quint32 size);
+    explicit PlcfSed(const char* data, const quint32 maxsize);
     MSOCastArray<quint32> aCP;
     MSOArray<Sed> aSed;
     inline operator const void * () const { return _data; }
@@ -4263,7 +4263,7 @@ public:
     const char* _data;
     quint32 _size;
     PrcData() :_data(0), _size(0) {}
-    explicit PrcData(const char* data, const quint32 size);
+    explicit PrcData(const char* data, const quint32 maxsize);
     qint16 cbGrpprl;
     MSOArray<Sprm> GrpPrl;
     inline operator const void * () const { return _data; }
@@ -4291,7 +4291,7 @@ public:
     const char* _data;
     quint32 _size;
     Pcdt() :_data(0), _size(0) {}
-    explicit Pcdt(const char* data, const quint32 size);
+    explicit Pcdt(const char* data, const quint32 maxsize);
     quint8 clxt;
     quint32 lcb;
     MSOArray<Pcd> PlcPcd;
@@ -4346,7 +4346,7 @@ public:
     const char* _data;
     quint32 _size;
     SttbfFfn() :_data(0), _size(0) {}
-    explicit SttbfFfn(const char* data, const quint32 size);
+    explicit SttbfFfn(const char* data, const quint32 maxsize);
     quint16 cData;
     quint16 cbExtra;
     MSOArray<SttbfFfnEntry> data;
@@ -4359,7 +4359,7 @@ public:
     const char* _data;
     quint32 _size;
     SttbfFfnEntry() :_data(0), _size(0) {}
-    explicit SttbfFfnEntry(const char* data, const quint32 size);
+    explicit SttbfFfnEntry(const char* data, const quint32 maxsize);
     quint8 cchData;
     MSOCastArray<char> Data;
     inline operator const void * () const { return _data; }
@@ -4372,7 +4372,7 @@ public:
     const char* _data;
     quint32 _size;
     CodePageString() :_data(0), _size(0) {}
-    explicit CodePageString(const char* data, const quint32 size);
+    explicit CodePageString(const char* data, const quint32 maxsize);
     quint32 size;
     MSOCastArray<char> characters;
     inline operator const void * () const { return _data; }
@@ -4398,7 +4398,7 @@ public:
     const char* _data;
     quint32 _size;
     ClipboardData() :_data(0), _size(0) {}
-    explicit ClipboardData(const char* data, const quint32 size);
+    explicit ClipboardData(const char* data, const quint32 maxsize);
     quint32 size;
     quint32 format;
     MSOCastArray<char> data;
@@ -4424,7 +4424,7 @@ public:
     const char* _data;
     quint32 _size;
     TypedPropertyValue() :_data(0), _size(0) {}
-    explicit TypedPropertyValue(const char* data, const quint32 size);
+    explicit TypedPropertyValue(const char* data, const quint32 maxsize);
     quint16 type;
     quint16 padding;
     quint16 vt_I2;
@@ -4446,7 +4446,7 @@ public:
     const char* _data;
     quint32 _size;
     PropertySet() :_data(0), _size(0) {}
-    explicit PropertySet(const char* data, const quint32 size);
+    explicit PropertySet(const char* data, const quint32 maxsize);
     quint32 size;
     quint32 numProperties;
     MSOArray<PropertyIdentifierAndOffset> propertyIdentifierAndOffset;
@@ -4461,7 +4461,7 @@ public:
     const char* _data;
     quint32 _size;
     PropertySetStream() :_data(0), _size(0) {}
-    explicit PropertySetStream(const char* data, const quint32 size);
+    explicit PropertySetStream(const char* data, const quint32 maxsize);
     quint16 byteOrder;
     quint16 version;
     quint32 systemIdentifier;
@@ -4486,7 +4486,7 @@ public:
     const char* _data;
     quint32 _size;
     SummaryInformationPropertySetStream() :_data(0), _size(0) {}
-    explicit SummaryInformationPropertySetStream(const char* data, const quint32 size);
+    explicit SummaryInformationPropertySetStream(const char* data, const quint32 maxsize);
     PropertySetStream propertySet;
     inline operator const void * () const { return _data; }
     inline const SummaryInformationPropertySetStream* operator->() const { return this; }
@@ -4498,7 +4498,7 @@ public:
     const char* _data;
     quint32 _size;
     DocumentSummaryInformationPropertySetStream() :_data(0), _size(0) {}
-    explicit DocumentSummaryInformationPropertySetStream(const char* data, const quint32 size);
+    explicit DocumentSummaryInformationPropertySetStream(const char* data, const quint32 maxsize);
     PropertySetStream propertySet;
     inline operator const void * () const { return _data; }
     inline const DocumentSummaryInformationPropertySetStream* operator->() const { return this; }
@@ -4510,7 +4510,7 @@ public:
     const char* _data;
     quint32 _size;
     PicturesStream() :_data(0), _size(0) {}
-    explicit PicturesStream(const char* data, const quint32 size);
+    explicit PicturesStream(const char* data, const quint32 maxsize);
     OfficeArtBStoreDelay anon1;
     MSOArray<Byte> trailing;
     inline operator const void * () const { return _data; }
@@ -4540,7 +4540,7 @@ public:
     const char* _data;
     quint32 _size;
     SoundCollectionContainer() :_data(0), _size(0) {}
-    explicit SoundCollectionContainer(const char* data, const quint32 size);
+    explicit SoundCollectionContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     SoundCollectionAtom soundCollectionAtom;
     MSOArray<SoundContainer> rgSoundContainer;
@@ -4554,7 +4554,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideHeadersFootersContainer() :_data(0), _size(0) {}
-    explicit SlideHeadersFootersContainer(const char* data, const quint32 size);
+    explicit SlideHeadersFootersContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     HeadersFootersAtom hfAtom;
     UserDateAtom userDateAtom;
@@ -4569,7 +4569,7 @@ public:
     const char* _data;
     quint32 _size;
     NotesHeadersFootersContainer() :_data(0), _size(0) {}
-    explicit NotesHeadersFootersContainer(const char* data, const quint32 size);
+    explicit NotesHeadersFootersContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     HeadersFootersAtom hfAtom;
     UserDateAtom userDateAtom;
@@ -4598,7 +4598,7 @@ public:
     const char* _data;
     quint32 _size;
     TextPFException9() :_data(0), _size(0) {}
-    explicit TextPFException9(const char* data, const quint32 size);
+    explicit TextPFException9(const char* data, const quint32 maxsize);
     PFMasks masks;
     quint16 bulletBlipRef;
     quint16 fBulletHasAutoNumber;
@@ -4615,7 +4615,7 @@ public:
     const char* _data;
     quint32 _size;
     TextCFException9() :_data(0), _size(0) {}
-    explicit TextCFException9(const char* data, const quint32 size);
+    explicit TextCFException9(const char* data, const quint32 maxsize);
     CFMasks masks;
     quint8 pp10runid;
     quint32 unuseda;
@@ -4633,7 +4633,7 @@ public:
     const char* _data;
     quint32 _size;
     TextDefaults9Atom() :_data(0), _size(0) {}
-    explicit TextDefaults9Atom(const char* data, const quint32 size);
+    explicit TextDefaults9Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     TextCFException9 cf9;
     TextPFException9 pf9;
@@ -4647,7 +4647,7 @@ public:
     const char* _data;
     quint32 _size;
     Kinsoku9Container() :_data(0), _size(0) {}
-    explicit Kinsoku9Container(const char* data, const quint32 size);
+    explicit Kinsoku9Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     Kinsoku9Atom kinsoku9Atom;
     KinsokuLeadingAtom kinsokuLeadingAtom;
@@ -4662,7 +4662,7 @@ public:
     const char* _data;
     quint32 _size;
     OutlineTextProps9Entry() :_data(0), _size(0) {}
-    explicit OutlineTextProps9Entry(const char* data, const quint32 size);
+    explicit OutlineTextProps9Entry(const char* data, const quint32 maxsize);
     OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
     StyleTextProp9Atom styleTextProp9Atom;
     inline operator const void * () const { return _data; }
@@ -4675,7 +4675,7 @@ public:
     const char* _data;
     quint32 _size;
     TextCFException10() :_data(0), _size(0) {}
-    explicit TextCFException10(const char* data, const quint32 size);
+    explicit TextCFException10(const char* data, const quint32 maxsize);
     CFMasks masks;
     quint16 newEAFontRef;
     quint16 csFontRef;
@@ -4693,7 +4693,7 @@ public:
     const char* _data;
     quint32 _size;
     TextDefaults10Atom() :_data(0), _size(0) {}
-    explicit TextDefaults10Atom(const char* data, const quint32 size);
+    explicit TextDefaults10Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     TextCFException10 cf10;
     inline operator const void * () const { return _data; }
@@ -4706,7 +4706,7 @@ public:
     const char* _data;
     quint32 _size;
     CommentIndex10Container() :_data(0), _size(0) {}
-    explicit CommentIndex10Container(const char* data, const quint32 size);
+    explicit CommentIndex10Container(const char* data, const quint32 maxsize);
     RecordHeader rh;
     AuthorNameAtom authorNameAtom;
     CommentIndex10Atom authorIndexAtom;
@@ -4720,7 +4720,7 @@ public:
     const char* _data;
     quint32 _size;
     OutlineTextProps10Entry() :_data(0), _size(0) {}
-    explicit OutlineTextProps10Entry(const char* data, const quint32 size);
+    explicit OutlineTextProps10Entry(const char* data, const quint32 maxsize);
     OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
     StyleTextProp10Atom styleTextProp10Atom;
     inline operator const void * () const { return _data; }
@@ -4733,7 +4733,7 @@ public:
     const char* _data;
     quint32 _size;
     PP11DocBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP11DocBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP11DocBinaryTagExtension(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> tagName;
     RecordHeader rhData;
@@ -4749,7 +4749,7 @@ public:
     const char* _data;
     quint32 _size;
     UnknownBinaryTag() :_data(0), _size(0) {}
-    explicit UnknownBinaryTag(const char* data, const quint32 size);
+    explicit UnknownBinaryTag(const char* data, const quint32 maxsize);
     TagNameAtom tagNameAtom;
     BinaryTagDataBlob tagData;
     inline operator const void * () const { return _data; }
@@ -4813,7 +4813,7 @@ public:
     const char* _data;
     quint32 _size;
     TextContainer() :_data(0), _size(0) {}
-    explicit TextContainer(const char* data, const quint32 size);
+    explicit TextContainer(const char* data, const quint32 maxsize);
     TextHeaderAtom textHeaderAtom;
     class C_text {
     friend class TextContainer;
@@ -4843,7 +4843,7 @@ public:
     const char* _data;
     quint32 _size;
     TextContainerMeta() :_data(0), _size(0) {}
-    explicit TextContainerMeta(const char* data, const quint32 size);
+    explicit TextContainerMeta(const char* data, const quint32 maxsize);
     class C_meta {
     friend class TextContainerMeta;
     private:
@@ -4890,7 +4890,7 @@ public:
     const char* _data;
     quint32 _size;
     TextRuler() :_data(0), _size(0) {}
-    explicit TextRuler(const char* data, const quint32 size);
+    explicit TextRuler(const char* data, const quint32 maxsize);
     bool fDefaultTabSize;
     bool fCLevels;
     bool fTabStops;
@@ -4941,7 +4941,7 @@ public:
     const char* _data;
     quint32 _size;
     TextPFException() :_data(0), _size(0) {}
-    explicit TextPFException(const char* data, const quint32 size);
+    explicit TextPFException(const char* data, const quint32 maxsize);
     PFMasks masks;
     BulletFlags bulletFlags;
     qint16 bulletChar;
@@ -4981,7 +4981,7 @@ public:
     const char* _data;
     quint32 _size;
     TextCFException() :_data(0), _size(0) {}
-    explicit TextCFException(const char* data, const quint32 size);
+    explicit TextCFException(const char* data, const quint32 maxsize);
     CFMasks masks;
     CFStyle fontStyle;
     quint16 fontRef;
@@ -5007,7 +5007,7 @@ public:
     const char* _data;
     quint32 _size;
     FontCollectionEntry() :_data(0), _size(0) {}
-    explicit FontCollectionEntry(const char* data, const quint32 size);
+    explicit FontCollectionEntry(const char* data, const quint32 maxsize);
     FontEntityAtom fontEntityAtom;
     FontEmbedDataBlob fontEmbedData1;
     FontEmbedDataBlob fontEmbedData2;
@@ -5023,7 +5023,7 @@ public:
     const char* _data;
     quint32 _size;
     KinsokuContainer() :_data(0), _size(0) {}
-    explicit KinsokuContainer(const char* data, const quint32 size);
+    explicit KinsokuContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     KinsokuAtom kinsokuAtom;
     KinsokuLeadingAtom kinsokuLeadingAtom;
@@ -5038,7 +5038,7 @@ public:
     const char* _data;
     quint32 _size;
     TextSIException() :_data(0), _size(0) {}
-    explicit TextSIException(const char* data, const quint32 size);
+    explicit TextSIException(const char* data, const quint32 maxsize);
     bool spell;
     bool lang;
     bool altLang;
@@ -5080,7 +5080,7 @@ public:
     const char* _data;
     quint32 _size;
     TextMasterStyleLevel() :_data(0), _size(0) {}
-    explicit TextMasterStyleLevel(const char* data, const quint32 size);
+    explicit TextMasterStyleLevel(const char* data, const quint32 maxsize);
     TextPFException pf;
     TextCFException cf;
     inline operator const void * () const { return _data; }
@@ -5129,7 +5129,7 @@ public:
     const char* _data;
     quint32 _size;
     PP12SlideBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP12SlideBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP12SlideBinaryTagExtension(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> tagName;
     RecordHeader rhData;
@@ -5144,7 +5144,7 @@ public:
     const char* _data;
     quint32 _size;
     ProgStringTagContainer() :_data(0), _size(0) {}
-    explicit ProgStringTagContainer(const char* data, const quint32 size);
+    explicit ProgStringTagContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     TagNameAtom tagNameAtom;
     TagValueAtom tagValueAtom;
@@ -5173,7 +5173,7 @@ public:
     const char* _data;
     quint32 _size;
     ExObjListContainer() :_data(0), _size(0) {}
-    explicit ExObjListContainer(const char* data, const quint32 size);
+    explicit ExObjListContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     ExObjListAtom exObjListAtom;
     MSOArray<ExObjListSubContainer> rgChildRec;
@@ -5187,7 +5187,7 @@ public:
     const char* _data;
     quint32 _size;
     ExControlContainer() :_data(0), _size(0) {}
-    explicit ExControlContainer(const char* data, const quint32 size);
+    explicit ExControlContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     ExControlAtom exControlAtom;
     ExOleObjAtom exOleObjAtom;
@@ -5205,7 +5205,7 @@ public:
     const char* _data;
     quint32 _size;
     ExHyperlinkContainer() :_data(0), _size(0) {}
-    explicit ExHyperlinkContainer(const char* data, const quint32 size);
+    explicit ExHyperlinkContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     ExHyperlinkAtom exHyperlinkAtom;
     FriendlyNameAtom friendlyNameAtom;
@@ -5221,7 +5221,7 @@ public:
     const char* _data;
     quint32 _size;
     ExOleLinkContainer() :_data(0), _size(0) {}
-    explicit ExOleLinkContainer(const char* data, const quint32 size);
+    explicit ExOleLinkContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     ExOleLinkAtom exOleLinkAtom;
     ExOleObjAtom exOleObjAtom;
@@ -5239,7 +5239,7 @@ public:
     const char* _data;
     quint32 _size;
     ExOleEmbedContainer() :_data(0), _size(0) {}
-    explicit ExOleEmbedContainer(const char* data, const quint32 size);
+    explicit ExOleEmbedContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     ExOleEmbedAtom exOleEmbedAtom;
     ExOleObjAtom exOleObjAtom;
@@ -5257,7 +5257,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtFDGGBlock() :_data(0), _size(0) {}
-    explicit OfficeArtFDGGBlock(const char* data, const quint32 size);
+    explicit OfficeArtFDGGBlock(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     OfficeArtFDGG head;
     MSOArray<OfficeArtIDCL> Rgidcl;
@@ -5271,7 +5271,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtSolverContainerFileBlock() :_data(0), _size(0) {}
-    explicit OfficeArtSolverContainerFileBlock(const char* data, const quint32 size);
+    explicit OfficeArtSolverContainerFileBlock(const char* data, const quint32 maxsize);
     class C_anon {
     friend class OfficeArtSolverContainerFileBlock;
     private:
@@ -7052,7 +7052,7 @@ public:
     const char* _data;
     quint32 _size;
     PptOfficeArtClientAnchor() :_data(0), _size(0) {}
-    explicit PptOfficeArtClientAnchor(const char* data, const quint32 size);
+    explicit PptOfficeArtClientAnchor(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     SmallRectStruct rect1;
     RectStruct rect2;
@@ -7066,7 +7066,7 @@ public:
     const char* _data;
     quint32 _size;
     AnimationInfoContainer() :_data(0), _size(0) {}
-    explicit AnimationInfoContainer(const char* data, const quint32 size);
+    explicit AnimationInfoContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     AnimationInfoAtom animationAtom;
     SoundContainer animationSound;
@@ -7080,7 +7080,7 @@ public:
     const char* _data;
     quint32 _size;
     MouseClickInteractiveInfoContainer() :_data(0), _size(0) {}
-    explicit MouseClickInteractiveInfoContainer(const char* data, const quint32 size);
+    explicit MouseClickInteractiveInfoContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     InteractiveInfoAtom interactiveInfoAtom;
     MacroNameAtom macroNameAtom;
@@ -7094,7 +7094,7 @@ public:
     const char* _data;
     quint32 _size;
     MouseOverInteractiveInfoContainer() :_data(0), _size(0) {}
-    explicit MouseOverInteractiveInfoContainer(const char* data, const quint32 size);
+    explicit MouseOverInteractiveInfoContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     InteractiveInfoAtom interactiveInfoAtom;
     MacroNameAtom macroNameAtom;
@@ -7108,7 +7108,7 @@ public:
     const char* _data;
     quint32 _size;
     ShapeClientRoundtripDataSubcontainerOrAtom() :_data(0), _size(0) {}
-    explicit ShapeClientRoundtripDataSubcontainerOrAtom(const char* data, const quint32 size);
+    explicit ShapeClientRoundtripDataSubcontainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class ShapeClientRoundtripDataSubcontainerOrAtom;
     private:
@@ -7132,7 +7132,7 @@ public:
     const char* _data;
     quint32 _size;
     ShapeProgBinaryTagSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit ShapeProgBinaryTagSubContainerOrAtom(const char* data, const quint32 size);
+    explicit ShapeProgBinaryTagSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class ShapeProgBinaryTagSubContainerOrAtom;
     private:
@@ -7155,7 +7155,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtClientTextBox() :_data(0), _size(0) {}
-    explicit OfficeArtClientTextBox(const char* data, const quint32 size);
+    explicit OfficeArtClientTextBox(const char* data, const quint32 maxsize);
     class C_anon {
     friend class OfficeArtClientTextBox;
     private:
@@ -7177,7 +7177,7 @@ public:
     const char* _data;
     quint32 _size;
     TextRulerAtom() :_data(0), _size(0) {}
-    explicit TextRulerAtom(const char* data, const quint32 size);
+    explicit TextRulerAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     TextRuler textRuler;
     inline operator const void * () const { return _data; }
@@ -7203,7 +7203,7 @@ public:
     const char* _data;
     quint32 _size;
     Fib() :_data(0), _size(0) {}
-    explicit Fib(const char* data, const quint32 size);
+    explicit Fib(const char* data, const quint32 maxsize);
     FibBase base;
     quint16 csw;
     FibRgW97 fibRgW;
@@ -7226,7 +7226,7 @@ public:
     const char* _data;
     quint32 _size;
     STSH() :_data(0), _size(0) {}
-    explicit STSH(const char* data, const quint32 size);
+    explicit STSH(const char* data, const quint32 maxsize);
     LPStshi lpstshi;
     MSOArray<LPStd> rglpstd;
     inline operator const void * () const { return _data; }
@@ -7239,7 +7239,7 @@ public:
     const char* _data;
     quint32 _size;
     Clx() :_data(0), _size(0) {}
-    explicit Clx(const char* data, const quint32 size);
+    explicit Clx(const char* data, const quint32 maxsize);
     MSOArray<Pcr> RgPrc;
     Pcdt pcdt;
     inline operator const void * () const { return _data; }
@@ -7252,7 +7252,7 @@ public:
     const char* _data;
     quint32 _size;
     Pcr() :_data(0), _size(0) {}
-    explicit Pcr(const char* data, const quint32 size);
+    explicit Pcr(const char* data, const quint32 maxsize);
     quint8 clxt;
     PrcData prcData;
     inline operator const void * () const { return _data; }
@@ -7286,7 +7286,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlipEMF() :_data(0), _size(0) {}
-    explicit OfficeArtBlipEMF(const char* data, const quint32 size);
+    explicit OfficeArtBlipEMF(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> rgbUid1;
     MSOCastArray<char> rgbUid2;
@@ -7303,7 +7303,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlipWMF() :_data(0), _size(0) {}
-    explicit OfficeArtBlipWMF(const char* data, const quint32 size);
+    explicit OfficeArtBlipWMF(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> rgbUid1;
     MSOCastArray<char> rgbUid2;
@@ -7320,7 +7320,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlipPICT() :_data(0), _size(0) {}
-    explicit OfficeArtBlipPICT(const char* data, const quint32 size);
+    explicit OfficeArtBlipPICT(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     MSOCastArray<char> rgbUid1;
     MSOCastArray<char> rgbUid2;
@@ -7337,7 +7337,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBlip() :_data(0), _size(0) {}
-    explicit OfficeArtBlip(const char* data, const quint32 size);
+    explicit OfficeArtBlip(const char* data, const quint32 maxsize);
     class C_anon {
     friend class OfficeArtBlip;
     private:
@@ -7381,7 +7381,7 @@ public:
     const char* _data;
     quint32 _size;
     PP9DocBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP9DocBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP9DocBinaryTagExtension(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> tagName;
     RecordHeader rhData;
@@ -7407,7 +7407,7 @@ public:
     const char* _data;
     quint32 _size;
     TextMasterStyle9Level() :_data(0), _size(0) {}
-    explicit TextMasterStyle9Level(const char* data, const quint32 size);
+    explicit TextMasterStyle9Level(const char* data, const quint32 maxsize);
     TextPFException9 pf9;
     TextCFException9 cf9;
     inline operator const void * () const { return _data; }
@@ -7420,7 +7420,7 @@ public:
     const char* _data;
     quint32 _size;
     StyleTextProp9() :_data(0), _size(0) {}
-    explicit StyleTextProp9(const char* data, const quint32 size);
+    explicit StyleTextProp9(const char* data, const quint32 maxsize);
     TextPFException9 pf9;
     TextCFException9 cf9;
     TextSIException si;
@@ -7434,7 +7434,7 @@ public:
     const char* _data;
     quint32 _size;
     PP10DocBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP10DocBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP10DocBinaryTagExtension(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<char> tagName;
     RecordHeader rhData;
@@ -7463,7 +7463,7 @@ public:
     const char* _data;
     quint32 _size;
     TextMasterStyle10Level() :_data(0), _size(0) {}
-    explicit TextMasterStyle10Level(const char* data, const quint32 size);
+    explicit TextMasterStyle10Level(const char* data, const quint32 maxsize);
     TextCFException10 cf10;
     inline operator const void * () const { return _data; }
     inline const TextMasterStyle10Level* operator->() const { return this; }
@@ -7514,7 +7514,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideListWithTextSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit SlideListWithTextSubContainerOrAtom(const char* data, const quint32 size);
+    explicit SlideListWithTextSubContainerOrAtom(const char* data, const quint32 maxsize);
     SlidePersistAtom slidePersistAtom;
     MSOArray<TextContainer> atoms;
     inline operator const void * () const { return _data; }
@@ -7527,7 +7527,7 @@ public:
     const char* _data;
     quint32 _size;
     MouseClickTextInfo() :_data(0), _size(0) {}
-    explicit MouseClickTextInfo(const char* data, const quint32 size);
+    explicit MouseClickTextInfo(const char* data, const quint32 maxsize);
     MouseClickInteractiveInfoContainer interactive;
     MouseClickTextInteractiveInfoAtom text;
     inline operator const void * () const { return _data; }
@@ -7540,7 +7540,7 @@ public:
     const char* _data;
     quint32 _size;
     MouseOverTextInfo() :_data(0), _size(0) {}
-    explicit MouseOverTextInfo(const char* data, const quint32 size);
+    explicit MouseOverTextInfo(const char* data, const quint32 maxsize);
     MouseOverInteractiveInfoContainer interactive;
     MouseOverTextInteractiveInfoAtom text;
     inline operator const void * () const { return _data; }
@@ -7553,7 +7553,7 @@ public:
     const char* _data;
     quint32 _size;
     TextClientDataSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit TextClientDataSubContainerOrAtom(const char* data, const quint32 size);
+    explicit TextClientDataSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class TextClientDataSubContainerOrAtom;
     private:
@@ -7575,7 +7575,7 @@ public:
     const char* _data;
     quint32 _size;
     TextPFRun() :_data(0), _size(0) {}
-    explicit TextPFRun(const char* data, const quint32 size);
+    explicit TextPFRun(const char* data, const quint32 maxsize);
     quint32 count;
     quint16 indentLevel;
     TextPFException pf;
@@ -7589,7 +7589,7 @@ public:
     const char* _data;
     quint32 _size;
     TextCFRun() :_data(0), _size(0) {}
-    explicit TextCFRun(const char* data, const quint32 size);
+    explicit TextCFRun(const char* data, const quint32 maxsize);
     quint32 count;
     TextCFException cf;
     inline operator const void * () const { return _data; }
@@ -7602,7 +7602,7 @@ public:
     const char* _data;
     quint32 _size;
     TextCFExceptionAtom() :_data(0), _size(0) {}
-    explicit TextCFExceptionAtom(const char* data, const quint32 size);
+    explicit TextCFExceptionAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     TextCFException cf;
     inline operator const void * () const { return _data; }
@@ -7615,7 +7615,7 @@ public:
     const char* _data;
     quint32 _size;
     DefaultRulerAtom() :_data(0), _size(0) {}
-    explicit DefaultRulerAtom(const char* data, const quint32 size);
+    explicit DefaultRulerAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     TextRuler defaultTextRuler;
     inline operator const void * () const { return _data; }
@@ -7628,7 +7628,7 @@ public:
     const char* _data;
     quint32 _size;
     TextPFExceptionAtom() :_data(0), _size(0) {}
-    explicit TextPFExceptionAtom(const char* data, const quint32 size);
+    explicit TextPFExceptionAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     quint16 reserved;
     TextPFException pf;
@@ -7642,7 +7642,7 @@ public:
     const char* _data;
     quint32 _size;
     TextSIRun() :_data(0), _size(0) {}
-    explicit TextSIRun(const char* data, const quint32 size);
+    explicit TextSIRun(const char* data, const quint32 maxsize);
     quint32 count;
     TextSIException si;
     inline operator const void * () const { return _data; }
@@ -7655,7 +7655,7 @@ public:
     const char* _data;
     quint32 _size;
     TextSIExceptionAtom() :_data(0), _size(0) {}
-    explicit TextSIExceptionAtom(const char* data, const quint32 size);
+    explicit TextSIExceptionAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     TextSIException textSIException;
     inline operator const void * () const { return _data; }
@@ -7668,7 +7668,7 @@ public:
     const char* _data;
     quint32 _size;
     TextMasterStyleAtom() :_data(0), _size(0) {}
-    explicit TextMasterStyleAtom(const char* data, const quint32 size);
+    explicit TextMasterStyleAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     quint16 cLevels;
     quint16 lstLvl1level;
@@ -7696,7 +7696,7 @@ public:
     const char* _data;
     quint32 _size;
     PP10SlideBinaryTagExtension() :_data(0), _size(0) {}
-    explicit PP10SlideBinaryTagExtension(const char* data, const quint32 size);
+    explicit PP10SlideBinaryTagExtension(const char* data, const quint32 maxsize);
     RecordHeader rh;
     MSOCastArray<quint16> tagName;
     RecordHeader rhData;
@@ -7720,7 +7720,7 @@ public:
     const char* _data;
     quint32 _size;
     ExObjListSubContainer() :_data(0), _size(0) {}
-    explicit ExObjListSubContainer(const char* data, const quint32 size);
+    explicit ExObjListSubContainer(const char* data, const quint32 maxsize);
     class C_anon {
     friend class ExObjListSubContainer;
     private:
@@ -7750,7 +7750,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtDggContainer() :_data(0), _size(0) {}
-    explicit OfficeArtDggContainer(const char* data, const quint32 size);
+    explicit OfficeArtDggContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     OfficeArtFDGGBlock drawingGroup;
     OfficeArtBStoreContainer blipStore;
@@ -7910,7 +7910,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtClientAnchor() :_data(0), _size(0) {}
-    explicit OfficeArtClientAnchor(const char* data, const quint32 size);
+    explicit OfficeArtClientAnchor(const char* data, const quint32 maxsize);
     class C_anon {
     friend class OfficeArtClientAnchor;
     private:
@@ -7932,7 +7932,7 @@ public:
     const char* _data;
     quint32 _size;
     PptOfficeArtClientData() :_data(0), _size(0) {}
-    explicit PptOfficeArtClientData(const char* data, const quint32 size);
+    explicit PptOfficeArtClientData(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     ShapeFlagsAtom shapeFlagsAtom;
     ShapeFlags10Atom shapeFlags10Atom;
@@ -7956,7 +7956,7 @@ public:
     const char* _data;
     quint32 _size;
     ShapeProgBinaryTagContainer() :_data(0), _size(0) {}
-    explicit ShapeProgBinaryTagContainer(const char* data, const quint32 size);
+    explicit ShapeProgBinaryTagContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     ShapeProgBinaryTagSubContainerOrAtom rec;
     inline operator const void * () const { return _data; }
@@ -7969,7 +7969,7 @@ public:
     const char* _data;
     quint32 _size;
     WordDocument() :_data(0), _size(0) {}
-    explicit WordDocument(const char* data, const quint32 size);
+    explicit WordDocument(const char* data, const quint32 maxsize);
     Fib fib;
     inline operator const void * () const { return _data; }
     inline const WordDocument* operator->() const { return this; }
@@ -7981,7 +7981,7 @@ public:
     const char* _data;
     quint32 _size;
     Table() :_data(0), _size(0) {}
-    explicit Table(const char* data, const quint32 size);
+    explicit Table(const char* data, const quint32 maxsize);
     STSH stsh;
     PlcfSed plcfSed;
     Plcfhdd plcfHdd;
@@ -8019,7 +8019,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtFBSE() :_data(0), _size(0) {}
-    explicit OfficeArtFBSE(const char* data, const quint32 size);
+    explicit OfficeArtFBSE(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     quint8 btWin32;
     quint8 btMacOS;
@@ -8045,7 +8045,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtBStoreContainerFileBlock() :_data(0), _size(0) {}
-    explicit OfficeArtBStoreContainerFileBlock(const char* data, const quint32 size);
+    explicit OfficeArtBStoreContainerFileBlock(const char* data, const quint32 maxsize);
     class C_anon {
     friend class OfficeArtBStoreContainerFileBlock;
     private:
@@ -8066,7 +8066,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideViewInfoInstance() :_data(0), _size(0) {}
-    explicit SlideViewInfoInstance(const char* data, const quint32 size);
+    explicit SlideViewInfoInstance(const char* data, const quint32 maxsize);
     RecordHeader rh;
     SlideViewInfoAtom slideViewInfoAtom;
     ZoomViewInfoAtom zoomViewInfoAtom;
@@ -8081,7 +8081,7 @@ public:
     const char* _data;
     quint32 _size;
     DocProgBinaryTagSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit DocProgBinaryTagSubContainerOrAtom(const char* data, const quint32 size);
+    explicit DocProgBinaryTagSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class DocProgBinaryTagSubContainerOrAtom;
     private:
@@ -8105,7 +8105,7 @@ public:
     const char* _data;
     quint32 _size;
     TextMasterStyle9Atom() :_data(0), _size(0) {}
-    explicit TextMasterStyle9Atom(const char* data, const quint32 size);
+    explicit TextMasterStyle9Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     quint16 cLevels;
     TextMasterStyle9Level lstLvl1;
@@ -8123,7 +8123,7 @@ public:
     const char* _data;
     quint32 _size;
     BlipEntityAtom() :_data(0), _size(0) {}
-    explicit BlipEntityAtom(const char* data, const quint32 size);
+    explicit BlipEntityAtom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     quint8 winBlipType;
     quint8 unused;
@@ -8138,7 +8138,7 @@ public:
     const char* _data;
     quint32 _size;
     TextMasterStyle10Atom() :_data(0), _size(0) {}
-    explicit TextMasterStyle10Atom(const char* data, const quint32 size);
+    explicit TextMasterStyle10Atom(const char* data, const quint32 maxsize);
     RecordHeader rh;
     quint16 cLevels;
     quint16 lstLvl1level;
@@ -8166,7 +8166,7 @@ public:
     const char* _data;
     quint32 _size;
     TextContainerInteractiveInfo() :_data(0), _size(0) {}
-    explicit TextContainerInteractiveInfo(const char* data, const quint32 size);
+    explicit TextContainerInteractiveInfo(const char* data, const quint32 maxsize);
     class C_interactive {
     friend class TextContainerInteractiveInfo;
     private:
@@ -8187,7 +8187,7 @@ public:
     const char* _data;
     quint32 _size;
     DocumentTextInfoContainer() :_data(0), _size(0) {}
-    explicit DocumentTextInfoContainer(const char* data, const quint32 size);
+    explicit DocumentTextInfoContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     KinsokuContainer kinsoku;
     FontCollectionContainer fontCollection;
@@ -8207,7 +8207,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideProgBinaryTagSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit SlideProgBinaryTagSubContainerOrAtom(const char* data, const quint32 size);
+    explicit SlideProgBinaryTagSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class SlideProgBinaryTagSubContainerOrAtom;
     private:
@@ -8230,7 +8230,7 @@ public:
     const char* _data;
     quint32 _size;
     DrawingGroupContainer() :_data(0), _size(0) {}
-    explicit DrawingGroupContainer(const char* data, const quint32 size);
+    explicit DrawingGroupContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     OfficeArtDggContainer OfficeArtDgg;
     inline operator const void * () const { return _data; }
@@ -8243,7 +8243,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtClientData() :_data(0), _size(0) {}
-    explicit OfficeArtClientData(const char* data, const quint32 size);
+    explicit OfficeArtClientData(const char* data, const quint32 maxsize);
     class C_anon {
     friend class OfficeArtClientData;
     private:
@@ -8265,7 +8265,7 @@ public:
     const char* _data;
     quint32 _size;
     ShapeProgTagsSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit ShapeProgTagsSubContainerOrAtom(const char* data, const quint32 size);
+    explicit ShapeProgTagsSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class ShapeProgTagsSubContainerOrAtom;
     private:
@@ -8286,7 +8286,7 @@ public:
     const char* _data;
     quint32 _size;
     DocumentContainer() :_data(0), _size(0) {}
-    explicit DocumentContainer(const char* data, const quint32 size);
+    explicit DocumentContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     DocumentAtom documentAtom;
     ExObjListContainer exObjList;
@@ -8323,7 +8323,7 @@ public:
     const char* _data;
     quint32 _size;
     DocInfoListSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit DocInfoListSubContainerOrAtom(const char* data, const quint32 size);
+    explicit DocInfoListSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class DocInfoListSubContainerOrAtom;
     private:
@@ -8349,7 +8349,7 @@ public:
     const char* _data;
     quint32 _size;
     DocProgBinaryTagContainer() :_data(0), _size(0) {}
-    explicit DocProgBinaryTagContainer(const char* data, const quint32 size);
+    explicit DocProgBinaryTagContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     DocProgBinaryTagSubContainerOrAtom rec;
     inline operator const void * () const { return _data; }
@@ -8362,7 +8362,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideProgBinaryTagContainer() :_data(0), _size(0) {}
-    explicit SlideProgBinaryTagContainer(const char* data, const quint32 size);
+    explicit SlideProgBinaryTagContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     SlideProgBinaryTagSubContainerOrAtom rec;
     inline operator const void * () const { return _data; }
@@ -8375,7 +8375,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtSpContainer() :_data(0), _size(0) {}
-    explicit OfficeArtSpContainer(const char* data, const quint32 size);
+    explicit OfficeArtSpContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     OfficeArtFSPGR shapeGroup;
     OfficeArtFSP shapeProp;
@@ -8400,7 +8400,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtInlineSpContainer() :_data(0), _size(0) {}
-    explicit OfficeArtInlineSpContainer(const char* data, const quint32 size);
+    explicit OfficeArtInlineSpContainer(const char* data, const quint32 maxsize);
     OfficeArtSpContainer shape;
     MSOArray<OfficeArtBStoreContainerFileBlock> rgfb;
     inline operator const void * () const { return _data; }
@@ -8413,7 +8413,7 @@ public:
     const char* _data;
     quint32 _size;
     DocProgTagsSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit DocProgTagsSubContainerOrAtom(const char* data, const quint32 size);
+    explicit DocProgTagsSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class DocProgTagsSubContainerOrAtom;
     private:
@@ -8434,7 +8434,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideProgTagsSubContainerOrAtom() :_data(0), _size(0) {}
-    explicit SlideProgTagsSubContainerOrAtom(const char* data, const quint32 size);
+    explicit SlideProgTagsSubContainerOrAtom(const char* data, const quint32 maxsize);
     class C_anon {
     friend class SlideProgTagsSubContainerOrAtom;
     private:
@@ -8455,7 +8455,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtDgContainer() :_data(0), _size(0) {}
-    explicit OfficeArtDgContainer(const char* data, const quint32 size);
+    explicit OfficeArtDgContainer(const char* data, const quint32 maxsize);
     OfficeArtRecordHeader rh;
     OfficeArtFDG drawingData;
     OfficeArtFRITContainer regroupItems;
@@ -8473,7 +8473,7 @@ public:
     const char* _data;
     quint32 _size;
     OfficeArtSpgrContainerFileBlock() :_data(0), _size(0) {}
-    explicit OfficeArtSpgrContainerFileBlock(const char* data, const quint32 size);
+    explicit OfficeArtSpgrContainerFileBlock(const char* data, const quint32 maxsize);
     class C_anon {
     friend class OfficeArtSpgrContainerFileBlock;
     private:
@@ -8498,7 +8498,7 @@ public:
     const char* _data;
     quint32 _size;
     DrawingContainer() :_data(0), _size(0) {}
-    explicit DrawingContainer(const char* data, const quint32 size);
+    explicit DrawingContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     OfficeArtDgContainer OfficeArtDg;
     inline operator const void * () const { return _data; }
@@ -8511,7 +8511,7 @@ public:
     const char* _data;
     quint32 _size;
     MainMasterContainer() :_data(0), _size(0) {}
-    explicit MainMasterContainer(const char* data, const quint32 size);
+    explicit MainMasterContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     SlideAtom slideAtom;
     SlideShowSlideInfoAtom unknown;
@@ -8537,7 +8537,7 @@ public:
     const char* _data;
     quint32 _size;
     SlideContainer() :_data(0), _size(0) {}
-    explicit SlideContainer(const char* data, const quint32 size);
+    explicit SlideContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     SlideAtom slideAtom;
     SlideShowSlideInfoAtom slideShowSlideInfoAtom;
@@ -8560,7 +8560,7 @@ public:
     const char* _data;
     quint32 _size;
     NotesContainer() :_data(0), _size(0) {}
-    explicit NotesContainer(const char* data, const quint32 size);
+    explicit NotesContainer(const char* data, const quint32 maxsize);
     RecordHeader rh;
     NotesAtom notesAtom;
     PerSlideHeadersFootersContainer perSlideHFContainer;
@@ -8580,7 +8580,7 @@ public:
     const char* _data;
     quint32 _size;
     MasterOrSlideContainer() :_data(0), _size(0) {}
-    explicit MasterOrSlideContainer(const char* data, const quint32 size);
+    explicit MasterOrSlideContainer(const char* data, const quint32 maxsize);
     class C_anon {
     friend class MasterOrSlideContainer;
     private:
@@ -8601,7 +8601,7 @@ public:
     const char* _data;
     quint32 _size;
     PowerPointStruct() :_data(0), _size(0) {}
-    explicit PowerPointStruct(const char* data, const quint32 size);
+    explicit PowerPointStruct(const char* data, const quint32 maxsize);
     class C_anon {
     friend class PowerPointStruct;
     private:
