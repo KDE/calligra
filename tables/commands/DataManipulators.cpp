@@ -36,7 +36,7 @@
 
 using namespace Calligra::Tables;
 
-AbstractDataManipulator::AbstractDataManipulator(QUndoCommand* parent)
+AbstractDataManipulator::AbstractDataManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
     m_checkLock = true;
@@ -103,7 +103,7 @@ bool AbstractDataManipulator::mainProcessing()
 {
     if (m_reverse) {
         // reverse - use the stored value
-        QUndoCommand::undo(); // undo child commands
+        KUndo2Command::undo(); // undo child commands
         return true;
     }
     return AbstractRegionCommand::mainProcessing();
@@ -118,7 +118,7 @@ bool AbstractDataManipulator::postProcessing()
     return true;
 }
 
-AbstractDFManipulator::AbstractDFManipulator(QUndoCommand *parent)
+AbstractDFManipulator::AbstractDFManipulator(KUndo2Command *parent)
         : AbstractDataManipulator(parent)
 {
     m_changeformat = true;
@@ -151,7 +151,7 @@ bool AbstractDFManipulator::process(Element* element)
 }
 
 
-DataManipulator::DataManipulator(QUndoCommand* parent)
+DataManipulator::DataManipulator(KUndo2Command* parent)
         : AbstractDataManipulator(parent)
         , m_format(Format::None)
         , m_parsing(false)
@@ -387,7 +387,7 @@ bool CaseManipulator::wantChange(Element *element, int col, int row)
 
 
 
-ShiftManipulator::ShiftManipulator(QUndoCommand *parent)
+ShiftManipulator::ShiftManipulator(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mode(Insert)
 {
@@ -423,7 +423,7 @@ bool ShiftManipulator::process(Element* element)
 
         // undo deletion
         if (m_mode == Delete) {
-            QUndoCommand::undo(); // undo child commands
+            KUndo2Command::undo(); // undo child commands
         }
     } else { // deletion
         if (m_direction == ShiftBottom) {
@@ -436,7 +436,7 @@ bool ShiftManipulator::process(Element* element)
 
         // undo insertion
         if (m_mode == Insert) {
-            QUndoCommand::undo(); // undo child commands
+            KUndo2Command::undo(); // undo child commands
         }
     }
     return true;
@@ -491,9 +491,9 @@ bool ShiftManipulator::mainProcessing()
 {
     if (cells().count() > 1) { // non-contiguous selection
         if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
-            QUndoCommand::undo(); // process all sub-commands
+            KUndo2Command::undo(); // process all sub-commands
         } else {
-            QUndoCommand::redo(); // process all sub-commands
+            KUndo2Command::redo(); // process all sub-commands
         }
         return true;
     }

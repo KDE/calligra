@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+Name=Words AbiWord Import Filter
+Name[pt]=Filtro de importação do AbiWord para o Words
+Name[pt_BR]=Filtro de importação de AbiWord para o Words
+Name[sv]=Words-importfilter för Abiword
+Name[uk]=Фільтр імпорту AbiWord для Words
+Name[x-test]=xxWords AbiWord Import Filterxx
+Name[zh_TW]=Words AbiWord 匯入過濾程式
+X-KDE-Export=application/x-words
+X-KDE-Import=application/x-abiword
+X-KDE-Weight=1
+X-KDE-Library=abiwordimport
+X-KDE-ServiceTypes=CalligraFilter

@@ -1,12 +1,12 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import KWord
+import Words
 
-#KWord.insertPage( KWord.pageCount() )
-#if KWord.pageCount() < 1: KWord.insertPage(0)
+#Words.insertPage( Words.pageCount() )
+#if Words.pageCount() < 1: Words.insertPage(0)
 
-doc = KWord.mainFrameSet().document()
+doc = Words.mainFrameSet().document()
 
 doc.setHtml(
     (

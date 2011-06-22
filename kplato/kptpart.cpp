@@ -108,7 +108,7 @@ Part::~Part()
 
 void Part::setReadWrite( bool rw )
 {
-    m_config.setReadWrite( rw || !isEmbedded() ); // embedded in koffice doc
+    m_config.setReadWrite( rw || !isEmbedded() ); // embedded in calligra doc
     KoDocument::setReadWrite( rw );
 }
 

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 KoGmbh (casper.boemann@kogmbh.com).
@@ -619,6 +619,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 {
     READ_PROLOGUE
 
+    // Protecting in case the object is inside a textbox inside a shape
+    VMLShapeProperties oldProperties = m_currentVMLProperties;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -634,6 +637,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
@@ -1309,6 +1314,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     TRY_READ_ATTR(dyaOrig)
     m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
 
+    // Protecting in case the object is inside a textbox inside a shape
+    VMLShapeProperties oldProperties = m_currentVMLProperties;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -1325,6 +1333,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
@@ -1437,7 +1447,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
     body->startElement("text:note-citation");
 
     // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
-    // the value based on the footnote style, it is hardcoded for the moment as koffice has no support
+    // the value based on the footnote style, it is hardcoded for the moment as calligra has no support
     // for it
     body->addTextSpan(id);
 
@@ -1493,7 +1503,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
     body->startElement("text:note-citation");
 
     // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
-    // the value based on the footnote style, it is hardcoded for the moment as koffice has no support
+    // the value based on the footnote style, it is hardcoded for the moment as calligra has no support
     // for it
     body->addTextSpan(id);
 
@@ -1542,6 +1552,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
        else if (fldCharType == "end") {
            m_complexCharStatus = NoneAllowed;
            m_complexCharType = NoComplexFieldCharType;
+           m_complexCharValue.clear();
        }
     }
 
@@ -1636,6 +1647,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 instruction.remove(0, 12); // removes GOTOBUTTON
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
+            }
+            else if (instruction.startsWith("MACROBUTTON")) {
+                m_complexCharType = MacroButtonFieldCharType;
+                m_complexCharValue = "[";
             }
             else {
                 m_complexCharValue = instruction;
@@ -2292,7 +2307,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+    if (m_complexCharType == InternalHyperlinkComplexFieldCharType ||
+        m_complexCharType == MacroButtonFieldCharType) {
         body->addTextSpan(m_complexCharValue);
     }
 

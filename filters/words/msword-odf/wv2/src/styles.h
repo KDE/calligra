@@ -246,6 +246,13 @@ class WV2_EXPORT Style
 public:
 
     Style( const U16 stdfSize, OLEStreamReader* tableStream, U16* ftc );
+
+    /**
+     * A special purpose constructor which creates an invalid Style class which
+     * stores a copy of the provided CHPs.
+     */
+    Style(const Word97::CHP& chp);
+
     ~Style();
 
     /**

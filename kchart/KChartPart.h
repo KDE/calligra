@@ -35,7 +35,7 @@
 // KDE
 #include <kconfig.h>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <koChart.h>
 #include <KoShapeControllerBase.h>

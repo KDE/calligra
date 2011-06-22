@@ -2,7 +2,7 @@
  * YOU MUST LOOK AT IN THE LAYOUT CLASS.
  */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -22,8 +22,8 @@
 **
 */
 
-#ifndef __KWORD_LISTPARA_H__
-#define __KWORD_LISTPARA_H__
+#ifndef __WORDS_LISTPARA_H__
+#define __WORDS_LISTPARA_H__
 
 #include "para.h"
 
@@ -123,4 +123,4 @@ public:
 //@}
 };
 
-#endif /* __KWORD_LISTPARA_H__ */
+#endif /* __WORDS_LISTPARA_H__ */

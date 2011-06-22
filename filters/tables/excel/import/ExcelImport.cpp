@@ -1385,7 +1385,7 @@ KoXmlWriter* ExcelImport::Private::beginMemoryXmlWriter(const char* docElement)
     xml->addAttribute("xmlns:fo", KoXmlNS::fo);
     xml->addAttribute("xmlns:anim", KoXmlNS::anim);
     xml->addAttribute("xmlns:smil", KoXmlNS::smil);
-    xml->addAttribute("xmlns:koffice", KoXmlNS::koffice);
+    xml->addAttribute("xmlns:calligra", KoXmlNS::calligra);
     xml->addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
     xml->addAttribute("xmlns:dc", KoXmlNS::dc);
     xml->addAttribute("xmlns:xlink", KoXmlNS::xlink);

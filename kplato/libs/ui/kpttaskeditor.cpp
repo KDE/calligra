@@ -322,7 +322,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << NodeModel::NodeName );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
@@ -910,7 +910,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( m_view->baseModel(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
@@ -1205,7 +1205,7 @@ TaskWorkPackageView::TaskWorkPackageView( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( m_view->baseModel(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 

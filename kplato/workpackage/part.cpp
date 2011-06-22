@@ -47,7 +47,7 @@
 #include <qfileinfo.h>
 #include <QDir>
 #include <QTimer>
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QPointer>
 
 #include <kdebug.h>
@@ -104,8 +104,8 @@ DocumentChild::DocumentChild( WorkPackage *parent)
 // {
 //     setFileInfo( url );
 //     if ( dynamic_cast<KoDocument*>( editor ) ) {
-//         kDebug()<<"Creating KOffice doc";
-//         m_type = Type_KOffice;
+//         kDebug()<<"Creating Calligra doc";
+//         m_type = Type_Calligra;
 //         connect( static_cast<KoDocument*>( editor ), SIGNAL( modified( bool ) ), this, SLOT( setModified( bool ) ) );
 //     } else {
 //         kDebug()<<"Creating KParts doc";
@@ -120,7 +120,7 @@ DocumentChild::~DocumentChild()
     disconnect( KDirWatch::self(), SIGNAL( dirty( const QString & ) ), this, SLOT( slotDirty( const QString &) ) );
     KDirWatch::self()->removeFile( filePath() );
 
-    if ( m_type == Type_KOffice || m_type == Type_KParts ) {
+    if ( m_type == Type_Calligra || m_type == Type_KParts ) {
         delete m_editor;
     }
 }
@@ -279,7 +279,7 @@ bool DocumentChild::saveToStore( KoStore *store )
     KDirWatch::self()->removeFile( filePath() );
     bool ok = false;
     bool wasmod = m_filemodified;
-    if ( m_type == Type_KOffice || m_type == Type_KParts ) {
+    if ( m_type == Type_Calligra || m_type == Type_KParts ) {
         if ( m_editor->isModified() ) {
             ok = m_editor->save(); // hmmmm
         } else {
@@ -312,7 +312,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     m_xmlLoader(),
     m_modified( false ),
     m_loadingFromProjectStore( false ),
-    m_undostack( new QUndoStack( this ) )
+    m_undostack( new KUndo2QStack( this ) )
 {
     setComponentData( Factory::global() );
     // Add library translation files
@@ -344,7 +344,7 @@ Part::~Part()
     qDeleteAll( m_packageMap );
 }
 
-void Part::addCommand( QUndoCommand *cmd )
+void Part::addCommand( KUndo2Command *cmd )
 {
     if ( cmd ) {
         m_undostack->push( cmd );

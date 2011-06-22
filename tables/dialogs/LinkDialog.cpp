@@ -248,8 +248,8 @@ void LinkDialog::setText(const QString& text)
     d->cellText->blockSignals(false);
 }
 
-// link must be complete, e.g. "http://www.koffice.org" instead of
-// "www.koffice.org" only, since protocol is used to decide which page to show
+// link must be complete, e.g. "http://www.calligra-suite.org" instead of
+// "www.calligra-suite.org" only, since protocol is used to decide which page to show
 void LinkDialog::setLink(const QString& link)
 {
     if (link.startsWith("https://")) {

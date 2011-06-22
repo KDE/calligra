@@ -53,7 +53,7 @@ kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.karbon")
+   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon 2")
 endif (Q_WS_MAC)
 

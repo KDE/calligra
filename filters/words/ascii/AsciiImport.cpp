@@ -30,7 +30,7 @@
 #include <kpluginfactory.h>
 #include <kencodingprober.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoStore.h>
@@ -43,7 +43,7 @@
 #define MAXLINES 10000
 
 K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
-K_EXPORT_PLUGIN(AsciiImportFactory("kwordasciiimportng", "calligrafilters"))
+K_EXPORT_PLUGIN(AsciiImportFactory("wordsasciiimportng", "calligrafilters"))
 
 bool checkEncoding(QTextCodec *codec, QByteArray &data)
 {
@@ -302,7 +302,7 @@ bool AsciiImport::createMeta(KoOdfWriteStore &store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(KOFFICE_VERSION_STRING));
+    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     xmlWriter->startElement("meta:creation-date");

@@ -35,7 +35,7 @@
 // KDE
 #include <knuminput.h>
 
-// KOffice
+// Calligra
 #include <KoCanvasBase.h>
 #include <KoUnit.h>
 #include <KoUnitDoubleSpinBox.h>

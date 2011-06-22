@@ -30,7 +30,7 @@
 #include <kio/job.h>
 #include <KoFilterManager.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uOut, const QString & outputFormat, const bool batch )
 {
@@ -47,7 +47,7 @@ bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uO
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), KOFFICE_VERSION_STRING,
+    KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), CALLIGRA_VERSION_STRING,
                           ki18n("Calligra Document Converter"),
                           KAboutData::License_GPL,
                           ki18n("(c) 2001-2011 Calligra developers") );
@@ -66,7 +66,7 @@ int main( int argc, char **argv )
 
     KApplication app;
 
-    // Install the libkoffice* translations
+    // Install the libcalligra* translations
     KGlobal::locale()->insertCatalog("calligra");
 
     // Get the command line arguments which we have to parse

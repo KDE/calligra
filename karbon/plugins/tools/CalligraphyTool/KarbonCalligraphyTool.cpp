@@ -139,7 +139,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
 
     m_shape->simplifyGuidePath();
 
-    QUndoCommand * cmd = canvas()->shapeController()->addShape(m_shape);
+    KUndo2Command * cmd = canvas()->shapeController()->addShape(m_shape);
     if (cmd) {
         m_lastShape = m_shape;
         canvas()->addCommand(cmd);

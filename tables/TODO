@@ -31,7 +31,7 @@ BUGS
 
 
 
-Things to do after the release of KOffice 2.0
+Things to do after the release of Calligra 2.0
 =============================================
 
 Item										Prio	Status
@@ -324,7 +324,7 @@ Item										Prio	Status
     - "Validity..."
 
 
-Things to do before the release of KOffice 2.0
+Things to do before the release of Calligra 2.0
 ==============================================
 
 Item                                                               Prio Status
@@ -364,7 +364,7 @@ Things not in bugzilla
 
 * OpenFormula compliance (Medium group)
   - implement all functions of the Small and Medium group	      1 ----
-    see koffice/kspread/functions/TODO
+    see calligra/kspread/functions/TODO
   - implement the calculation settings				      1 ----
     see section 8.5.2 in [1] and section 3.3 in [2]
 

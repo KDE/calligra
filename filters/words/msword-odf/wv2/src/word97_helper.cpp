@@ -1295,33 +1295,21 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             kcd = *ptr;
             break;
         case SPRM::sprmCFBold:
-        {
 #ifdef WV2_DEBUG_SPRMS
             wvlog << "sprmCFBold operand: 0x" << hex << *ptr << "| istd: 0x" << hex << istd <<
                      "| paragraphStyle:" << paragraphStyle;
 #endif
-            U8 val = 0;
             if ( *ptr < 128 ) {
-                val = *ptr == 1;
+                fBold = *ptr == 1;
             } else if ( *ptr == 128 && paragraphStyle ) {
-                val = paragraphStyle->chp().fBold;
+                fBold = paragraphStyle->chp().fBold;
             } else if ( *ptr == 129 && paragraphStyle ) {
-                val = !( paragraphStyle->chp().fBold );
+                fBold = !( paragraphStyle->chp().fBold );
             } else {
                 wvlog << "Warning: sprmCFBold couldn't find a style" << endl;
-                val = !fBold;
-            }
-            //NOTE: Experiemntal.  Use a negation if this SPRM arrived twice.
-            //Check the FIXME: comment in Properties97::fullSavedChp.  This
-            //workaround MIGHT be required also for other operands of type
-            //ToggleOperand.
-            if (fBold && (fBold == val)) {
                 fBold = !fBold;
-            } else {
-                fBold = val;
             }
             break;
-        }
         case SPRM::sprmCFItalic:
             if ( *ptr < 128 ) {
                 fItalic = *ptr == 1;
@@ -1604,8 +1592,8 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         // All the BiDi flags below aren't documented. The question is whether we should
         // add some BiDi versions of e.g. fBold and interpret these sprms here like plain
-        // sprmCFBold. For now I just ignore them, as the only user of wv2 is KWord, and
-        // KWord is intelligent enough to support BiDi "the right way." (Werner)
+        // sprmCFBold. For now I just ignore them, as the only user of wv2 is Words, and
+        // Words is intelligent enough to support BiDi "the right way." (Werner)
         case SPRM::sprmCFBiDi:
             // ###### Undocumented
             //wvlog << "Warning: sprmCFBiDi not implemented" << endl;

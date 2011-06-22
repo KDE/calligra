@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -112,6 +112,8 @@ protected:
         QString viewBox;
         QString shapePath;
         int extraFormulaIndex;
+        QString leftMargin, rightMargin, topMargin, bottomMargin;
+        bool fitTextToShape, fitShapeToText;
 
         // Parameters for group shape situation
         bool insideGroup;

@@ -326,7 +326,7 @@ void View::clipboardDataChanged()
 
   if (data)
   {
-    // TODO see if we can use the KoPasteController instead of having to add this feature in each koffice app.
+    // TODO see if we can use the KoPasteController instead of having to add this feature in each calligra app.
     QStringList mimeTypes = m_canvas->toolProxy()->supportedPasteMimeTypes();
     mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
     mimeTypes << KoOdf::mimeType( KoOdf::Presentation );
@@ -389,7 +389,7 @@ void View::groupSelection() {
     KoShapeGroup *group = new KoShapeGroup();
     if( selection->activeLayer() )
         selection->activeLayer()->addShape( group );
-    QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
+    KUndo2Command *cmd = new KUndo2Command( i18n("Group shapes") );
     new KoShapeCreateCommand( m_activeSection->sectionContainer(), group, cmd );
     new KoShapeGroupCommand( group, groupedShapes, cmd );
     m_canvas->addCommand( cmd );  
@@ -411,7 +411,7 @@ void View::ungroupSelection() {
     containerSet << shape;
   }
 
-  QUndoCommand *cmd = new QUndoCommand( i18n("Ungroup shapes") );
+  KUndo2Command *cmd = new KUndo2Command( i18n("Ungroup shapes") );
 
   // add a ungroup command for each found shape container to the macro command
   foreach( KoShape* shape, containerSet )

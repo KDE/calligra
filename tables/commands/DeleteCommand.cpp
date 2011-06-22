@@ -30,7 +30,7 @@
 
 using namespace Calligra::Tables;
 
-DeleteCommand::DeleteCommand(QUndoCommand *parent)
+DeleteCommand::DeleteCommand(KUndo2Command *parent)
         : AbstractDataManipulator(parent)
         , m_mode(Everything)
 {

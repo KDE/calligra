@@ -32,7 +32,7 @@ class KFormulaPartView;
 class KFormulaPartViewAdaptor: public QDBusAbstractAdaptor
 {
   Q_OBJECT
-  Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.formula.view")
+  Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.formula.view")
 
 public:
    explicit KFormulaPartViewAdaptor( KFormulaPartView *view_ );

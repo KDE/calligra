@@ -28,7 +28,7 @@
 #include <QTextCodec>
 //Added by qt3to4:
 #include <QByteArray>
-#include "kwordlatexexportdia.h"
+#include "wordslatexexportdia.h"
 
 K_PLUGIN_FACTORY(LATEXExportFactory, registerPlugin<LATEXExport>();)
 K_EXPORT_PLUGIN(LATEXExportFactory("calligrafilters"))
@@ -43,7 +43,7 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
 {
     QString config;
 
-    if (to != "text/x-tex" || from != "application/x-kword")
+    if (to != "text/x-tex" || from != "application/x-words")
         return KoFilter::NotImplemented;
 
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
@@ -55,7 +55,7 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
     /* input file Reading */
     in->close();
 
-    KWordLatexExportDia* dialog = new KWordLatexExportDia(in);
+    WordsLatexExportDia* dialog = new WordsLatexExportDia(in);
     dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();

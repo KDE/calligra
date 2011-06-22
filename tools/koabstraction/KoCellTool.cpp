@@ -25,7 +25,7 @@
 #include "KoCellTool.h"
 #include "FoCellEditor.h"
 
-// KOffice
+// Calligra
 #include <tables/Cell.h>
 #include <tables/Style.h>
 #include <tables/CellStorage.h>

@@ -475,7 +475,7 @@ void KarbonView::fileImportGraphic()
         picture->setPosition(QPointF());
         picture->setKeepAspectRatio(true);
 
-        QUndoCommand * cmd = d->canvas->shapeController()->addShapeDirect(picture);
+        KUndo2Command * cmd = d->canvas->shapeController()->addShapeDirect(picture);
         cmd->setText(i18n("Insert graphics"));
         d->canvas->addCommand(cmd);
         d->canvas->shapeManager()->selection()->select(picture);
@@ -634,7 +634,7 @@ void KarbonView::clipObjects()
     if( ! clipPaths.count() )
         return;
 
-    QUndoCommand * cmd = new KoShapeClipCommand( d->part, shapeToClip, clipPaths );
+    KUndo2Command * cmd = new KoShapeClipCommand( d->part, shapeToClip, clipPaths );
     d->canvas->addCommand( cmd );
 }
 
@@ -701,7 +701,7 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
     }
     selection->applyAbsoluteTransformation(mirrorMatrix);
 
-    QUndoCommand *cmd = new KoShapeTransformCommand(selectedShapes, oldState, newState);
+    KUndo2Command *cmd = new KoShapeTransformCommand(selectedShapes, oldState, newState);
     if (horizontally && !vertically)
         cmd->setText(i18n("Mirror Horizontally"));
     else if (!horizontally && vertically)
@@ -806,7 +806,7 @@ void KarbonView::booleanOperation(KarbonBooleanCommand::BooleanOperation operati
     }
 
     if (paths.size() == 2) {
-        QUndoCommand * macro = new QUndoCommand(i18n("Boolean Operation"));
+        KUndo2Command * macro = new KUndo2Command(i18n("Boolean Operation"));
         KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>(paths[0]);
         if (paramShape && paramShape->isParametricShape())
             new KoParameterToPathCommand(paramShape, macro);

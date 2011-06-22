@@ -25,7 +25,7 @@
 #include <kdialog.h>
 
 class KLocale;
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlato
 {
@@ -38,7 +38,7 @@ class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KDialog {
 public:
     LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);
 
-    QUndoCommand *buildCommand( Project &project );
+    KUndo2Command *buildCommand( Project &project );
 
 protected slots:
     void slotChanged();

@@ -20,7 +20,7 @@
 #include "StateToolWidget.h"
 
 #include <QItemDelegate>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KCategorizedSortFilterProxyModel>
 
@@ -88,7 +88,7 @@ void StateToolWidget::save()
   }
 }
 
-QUndoCommand * StateToolWidget::createCommand()
+KUndo2Command * StateToolWidget::createCommand()
 {
     save();
 
