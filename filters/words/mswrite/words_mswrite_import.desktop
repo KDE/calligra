@@ -6,6 +6,7 @@ Name[pt_BR]=Filtro de importação de Microsoft Write para o Words
 Name[sv]=Words-importfilter för Microsoft Write
 Name[uk]=Фільтр імпорту Microsoft Write для Words
 Name[x-test]=xxWords Microsoft Write Import Filterxx
+Name[zh_TW]=Words Microsoft Write 匯入過濾程式
 X-KDE-Export=application/x-words
 X-KDE-Import=application/x-mswrite
 X-KDE-Weight=1

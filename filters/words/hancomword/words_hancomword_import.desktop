@@ -6,6 +6,7 @@ Name[pt_BR]=Filtro de importação de HancomWord para o Words
 Name[sv]=Words-importfilter för HancomWord
 Name[uk]=Фільтр імпорту HancomWord для Words
 Name[x-test]=xxWords HancomWord Import Filterxx
+Name[zh_TW]=Words HancomWord 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-hancomword
 X-KDE-Weight=1
