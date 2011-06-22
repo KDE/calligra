@@ -4,6 +4,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 ########### next target ###############
 
+add_subdirectory(widgets/webbrowser)
+
 set(kexihandler_form_PART_SRCS kexiforms.cpp )
 
 kde4_add_plugin(kexihandler_form ${kexihandler_form_PART_SRCS})
