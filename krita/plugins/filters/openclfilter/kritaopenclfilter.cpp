@@ -27,6 +27,7 @@
 #include <kis_processing_information.h>
 #include <kis_iterator_ng.h>
 #include <kis_math_toolbox.h>
+#include <kexi/kexidb/parser/sqltypes.h>
 
 KritaOpenCLFilter::KritaOpenCLFilter() : KisFilter(id(), categoryOther(), i18n("&OpenCL..."))
 {
@@ -55,7 +56,8 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                            ) const
 {
-    KoColorSpace *colorSpace = device->colorSpace();
+    /* VARIABLES */
+    int numberOfPixels = rect.height() * rect.width();
   
     /* GET KERNEL CODE */
     QVariant text;
@@ -74,30 +76,30 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
     
     QCLProgram program = context.buildProgramFromSourceCode(qPrintable(kernelCode));
     QCLKernel kritaKernel = program.createKernel("kritaKernel");
-    kritaKernel.setGlobalWorkSize(rect.size);
+    kritaKernel.setGlobalWorkSize(numberOfPixels);
     
     /* CREATE DATA STRUCTURES FOR KERNEL */
-    // input
-    QCLVector<double> blue  = context.createVector<double>(rect.size);
-    QCLVector<double> green = context.createVector<double>(rect.size);
-    QCLVector<double> red   = context.createVector<double>(rect.size);
-    QCLVector<double> alpha = context.createVector<double>(rect.size);
+    // Input
+    QCLVector<double> blue  = context.createVector<double>(numberOfPixels);
+    QCLVector<double> green = context.createVector<double>(numberOfPixels);
+    QCLVector<double> red   = context.createVector<double>(numberOfPixels);
+    QCLVector<double> alpha = context.createVector<double>(numberOfPixels);
     
-    // output
-    QCLVector<double> blue_output  = context.createVector<double>(rect.size);
-    QCLVector<double> green_output = context.createVector<double>(rect.size);
-    QCLVector<double> red_output   = context.createVector<double>(rect.size);
-    QCLVector<double> alpha_output = context.createVector<double>(rect.size);
+    // Output
+    QCLVector<double> blue_output  = context.createVector<double>(numberOfPixels);
+    QCLVector<double> green_output = context.createVector<double>(numberOfPixels);
+    QCLVector<double> red_output   = context.createVector<double>(numberOfPixels);
+    QCLVector<double> alpha_output = context.createVector<double>(numberOfPixels);
     
     /* SUPPLY THE DATA TO KERNEL */
-    // MathToolbox: handles 8, 16, 32 bits
-    QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
+    // MathToolbox: cjamge rawData to doubles
     KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
+    QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
     if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
       return;
     }
     
-    // Iterator
+    // Iterator - read pixels
     KisRectIteratorSP iterator = device->createRectIteratorNG(rect);
     int currentPixel = 0;
     do {
@@ -108,12 +110,18 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
       red[currentPixel]   = toDoubleFuncPtr[2](pixel, device->colorSpace()->channels()[2]->pos());
       alpha[currentPixel] = toDoubleFuncPtr[3](pixel, device->colorSpace()->channels()[3]->pos());
       
-      currentPixel+1;
+      ++currentPixel;
     } while (iterator->nextPixel());
     
     /* APPLY KERNEL */
     kritaKernel(blue, green, red, alpha, blue_output, green_output, red_output, alpha_output);
     
     /* WRITE THE RESULT*/
-    // ??
+    // MathToolbox: change doubles back to rawData
+    QVector<PtrFromDouble> fromDoubleFuncPtr(device->colorSpace()->channels().count());
+    if (!mathToolbox->getFromDoubleChannelPtr(device->colorSpace()->channels(), fromDoubleFuncPtr)) {
+      return;
+    }
+    
+    // Iterator - write pixels
 }
