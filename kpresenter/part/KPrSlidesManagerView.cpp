@@ -279,22 +279,22 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
 int KPrSlidesManagerView::cursorSlideIndex() const
 {
     QPair <int, int> m_pair = cursorRowAndColumn();
-    int slidesNumber = qFloor((contentsRect().width() - 20) / (itemSize().width() + spacing()));
+    int slidesNumber = qFloor((contentsRect().width() - (23 + spacing() - contentsMargins().right())) /
+                              (itemSize().width() + spacing()));
     return (m_pair.first + m_pair.second * slidesNumber);
 }
 
 QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
 {
-    //20 is for the margin.
+    //23 is for the margin.
     QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
-    int slidesNumber = qFloor((contentsRect().width() - 20) / size.width());
+    int slidesNumber = qFloor((contentsRect().width() - (23 + spacing() - contentsMargins().right())) / size.width());
     int scrollBarValue = verticalScrollBar()->value();
-
     QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
-
     int numberColumn = qFloor(cursorPosition.x() / size.width());
     int numberRow = qFloor((cursorPosition.y() + scrollBarValue) / size.height());
-    int numberMod = (numberColumn + slidesNumber * numberRow) % (model()->rowCount(QModelIndex()) + 1);
+    int numberMod = model()->rowCount(QModelIndex()) > 0 ?
+                (numberColumn + slidesNumber * numberRow) % (model()->rowCount(QModelIndex())) : 0;
 
      int totalRows = qCeil((model()->rowCount(QModelIndex())) / slidesNumber);
 
@@ -302,13 +302,18 @@ QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
         numberColumn = slidesNumber;
     }
 
-    if (numberColumn > numberMod) {
-        numberColumn = numberColumn - (numberMod + 1);
+    if ((numberColumn > numberMod) & (model()->rowCount(QModelIndex()) % slidesNumber != 0)) {
+        numberColumn = model()->rowCount(QModelIndex()) % slidesNumber;
+    }
+
+    if (model()->rowCount(QModelIndex()) % slidesNumber == 0) {
+        totalRows = totalRows - 1;
     }
 
     if (numberRow > totalRows) {
         numberRow = totalRows;
-        numberColumn = model()->rowCount(QModelIndex()) % slidesNumber;
+        numberColumn = model()->rowCount(QModelIndex()) % slidesNumber != 0 ?
+                    model()->rowCount(QModelIndex()) % slidesNumber : slidesNumber;
     }
 
     return QPair<int,int>(numberColumn, numberRow);

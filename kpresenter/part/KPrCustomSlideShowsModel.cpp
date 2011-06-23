@@ -125,7 +125,7 @@ QModelIndex KPrCustomSlideShowsModel::index(int row, int column, const QModelInd
 
 QStringList KPrCustomSlideShowsModel::mimeTypes() const
 {
-    return QStringList() << "application/x-koffice-customslideshows";
+    return QStringList() << "application/x-calligra-customslideshows";
 }
 
 QMimeData * KPrCustomSlideShowsModel::mimeData(const QModelIndexList &indexes) const
@@ -167,7 +167,7 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
         return true;
     }
 
-    if (data->hasFormat("application/x-koffice-sliderssorter") | data->hasFormat("application/x-koffice-customslideshows")) {
+    if (data->hasFormat("application/x-calligra-sliderssorter") | data->hasFormat("application/x-calligra-customslideshows")) {
 
         if (column > 0) {
             return false;
@@ -187,8 +187,8 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
             beginRow = rowCount(QModelIndex());
         }
 
-        if (data->hasFormat("application/x-koffice-sliderssorter")) {
-            QByteArray encoded = data->data("application/x-koffice-sliderssorter");
+        if (data->hasFormat("application/x-calligra-sliderssorter")) {
+            QByteArray encoded = data->data("application/x-calligra-sliderssorter");
             slides = decodeSlidesList(encoded);
 
             if (slides.empty()) {
@@ -198,8 +198,8 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
             doCustomSlideShowAction(KPrCustomSlideShowsModel::SLIDES_ADD, slides, beginRow);
         }
 
-        if (data->hasFormat("application/x-koffice-customslideshows")) {
-            QByteArray encoded = data->data("application/x-koffice-customslideshows");
+        if (data->hasFormat("application/x-calligra-customslideshows")) {
+            QByteArray encoded = data->data("application/x-calligra-customslideshows");
             slides = decodeSlidesList(encoded);
 
             if (slides.empty()) {
