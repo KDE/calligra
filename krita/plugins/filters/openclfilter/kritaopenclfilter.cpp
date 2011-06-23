@@ -55,6 +55,8 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                            ) const
 {
+    KoColorSpace *colorSpace = device->colorSpace();
+  
     /* GET KERNEL CODE */
     QVariant text;
     config->getProperty("kernel", text);
@@ -65,28 +67,53 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
     }
     
     /* CREATE A KERNEL */
-    QCLContext context;                                                                 // context
+    QCLContext context;
     if(!context.create(QCLDevice::GPU)) {
       qFatal("Could not create OpenCL context");
     }
     
-    QCLProgram program = context.buildProgramFromSourceCode(qPrintable(kernelCode));   // program
+    QCLProgram program = context.buildProgramFromSourceCode(qPrintable(kernelCode));
     QCLKernel kritaKernel = program.createKernel("kritaKernel");
-    kritaKernel.setGlobalWorkSize(100);
+    kritaKernel.setGlobalWorkSize(rect.size);
     
     /* CREATE DATA STRUCTURES FOR KERNEL */
-    QCLVector<int> red = context.createVector<int>(100);
-    QCLVector<int> red_output = context.createVector<int>(100);
+    // input
+    QCLVector<double> blue  = context.createVector<double>(rect.size);
+    QCLVector<double> green = context.createVector<double>(rect.size);
+    QCLVector<double> red   = context.createVector<double>(rect.size);
+    QCLVector<double> alpha = context.createVector<double>(rect.size);
+    
+    // output
+    QCLVector<double> blue_output  = context.createVector<double>(rect.size);
+    QCLVector<double> green_output = context.createVector<double>(rect.size);
+    QCLVector<double> red_output   = context.createVector<double>(rect.size);
+    QCLVector<double> alpha_output = context.createVector<double>(rect.size);
     
     /* SUPPLY THE DATA TO KERNEL */
-    KisRectIteratorSP iterator = device->createRectIteratorNG(0, 0, 10, 10);
+    // MathToolbox: handles 8, 16, 32 bits
+    QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
+    if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
+      return;
+    }
+    
+    // Iterator
+    KisRectIteratorSP iterator = device->createRectIteratorNG(rect);
     int currentPixel = 0;
     do {
       const quint8* pixel = iterator->rawData();
-      red[currentPixel] = *pixel;
+      
+      blue[currentPixel]  = toDoubleFuncPtr[0](data, device->colorSpace()->channels()[ki]->pos());
+      green[currentPixel] = toDoubleFuncPtr[1](data, device->colorSpace()->channels()[ki]->pos());
+      red[currentPixel]   = toDoubleFuncPtr[2](data, device->colorSpace()->channels()[ki]->pos());
+      alpha[currentPixel] = toDoubleFuncPtr[3](data, device->colorSpace()->channels()[ki]->pos());
+      
       currentPixel+1;
     } while (iterator->nextPixel());
     
     /* APPLY KERNEL */
     kritaKernel(red, red_output);
+    
+    /* WRITE THE RESULT*/
+    // ??
 }
