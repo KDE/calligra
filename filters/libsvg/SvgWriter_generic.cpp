@@ -88,6 +88,7 @@ SvgWriter_generic::SvgWriter_generic(const QList<KoShapeLayer*> &layers, const Q
     m_toplevelShapes.append(layer);
           
     m_hasAppData = false; //Initailly does not store app data
+    
 }
 
 
@@ -99,6 +100,7 @@ SvgWriter_generic::SvgWriter_generic(const QList<KoShape*> &toplevelShapes, cons
     m_userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
           
     m_hasAppData = false; //Initailly does not store app data
+  
 }
 
 SvgWriter_generic::~SvgWriter_generic()
@@ -439,7 +441,7 @@ QString SvgWriter_generic::createUID()
 
 QString SvgWriter_generic::createID(const KoShape * obj)
 {
-    qDebug() << "Contents of m_shapeIds:\nShape\tID" << endl;
+    //qDebug() << "Contents of m_shapeIds:\nShape\tID" << endl;
     QString id;
     if (! m_shapeIds.contains(obj)) {
         id = obj->name().isEmpty() ? createUID(obj) : obj->name();
@@ -447,10 +449,11 @@ QString SvgWriter_generic::createID(const KoShape * obj)
         
         QList<const KoShape *> list = m_shapeIds.keys(); 
         for(int i = 0; i < list.size(); i++){
-        qDebug() << list.at(i) << m_shapeIds.value(list.at(i));
+      //  qDebug() << list.at(i) << m_shapeIds.value(list.at(i));
         }
      } else {
-        id = m_shapeIds.value(obj);
+       id = m_shapeIds.value(obj);
+       qDebug() << "using existing ID -" <<  id;       
       }
     return id;
 }

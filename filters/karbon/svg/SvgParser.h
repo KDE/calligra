@@ -146,8 +146,13 @@ protected:
     /// Returns inherited attribute value for specified element
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
-    virtual void parseAppData() =0;
+    virtual void parseAppData(const KoXmlElement &) =0;
+    virtual void setAppDataTag() =0;
+    virtual void createAppData() =0;
+    
     QString m_appData_tagName;
+    bool m_hasAppData;
+    QList<KoShape*> m_shapes;
     
 private:
   
@@ -161,8 +166,8 @@ private:
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes
     KoResourceManager *m_documentResourceManager;
-    QList<KoShape*> m_shapes;
-    QList<KoShape*> m_toplevelShapes;
+    //QList<KoShape*> m_shapes;
+    QList<KoShape*> m_toplevelShapes;// Where is this used?
     SvgCssHelper m_cssStyles;
 };
 

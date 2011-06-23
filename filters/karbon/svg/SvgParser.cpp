@@ -73,6 +73,7 @@ SvgParser::SvgParser(KoResourceManager *documentResourceManager)
     m_styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
     m_styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
     m_styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule";
+     
 }
 
 SvgParser::~SvgParser()
@@ -1491,11 +1492,6 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
     return shapes;
 }
 
-void SvgParser::parseAppData()
-{
-    qDebug("Parsing app data");
-}
-
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 {
     QList<KoShape*> shapes;
@@ -1526,12 +1522,9 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             }
         }
 
-        if(b.tagName() == "calligra:frame") { //Script will always be saved by Stage
-          parseAppData();                    //No need to parse the script
-        }
                 
         if (b.tagName() == "svg") {
-            shapes += parseSvg(b);
+           shapes += parseSvg(b);
         } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
             // treat svg link <a> as group so we don't miss its child elements
             m_context.pushGraphicsContext(b);
@@ -1597,6 +1590,10 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                 shapes.append(shape);
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
+        }else if(b.tagName() == m_appData_tagName) { //Script will always be saved by Stage
+          //qDebug() << "Found app data" << endl;
+          parseAppData(b);                    //No need to parse the script
+          //createAppData();
         } else {
             continue;
         }
@@ -1605,7 +1602,8 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         if (isSwitch)
             break;
     }
-
+    createAppData();
+    
     return shapes;
 }
 

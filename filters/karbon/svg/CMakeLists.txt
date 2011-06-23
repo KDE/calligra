@@ -43,7 +43,10 @@ set(karbonsvgimport_PART_SRCS
     SvgTextHelper.cpp
     SvgLoadingContext.cpp
     SvgParser_Stage.cpp
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgAnimationData.cpp
     ${SHAPES_SOURCES} 
+    
 )
 
 kde4_add_plugin(karbonsvgimport ${karbonsvgimport_PART_SRCS})

@@ -3,6 +3,7 @@
 #include "SvgWriter_generic.h"
 #include "SvgAnimationData.h"
 #include "KoShape.h"
+#include <QDebug>
 
 SvgWriter_Stage::SvgWriter_Stage(const QList<KoShapeLayer*> &layers, const QSizeF& pageSize): SvgWriter_generic(layers, pageSize)
 {
@@ -20,8 +21,7 @@ SvgWriter_Stage::SvgWriter_Stage(const QList< KoShape* >& toplevelShapes, const 
   m_frames = new QTextStream(&m_appData, QIODevice::ReadWrite);
           
   saveScript();
-  //addAppData(m_framesString);
-}
+  }
 
 SvgWriter_Stage::~SvgWriter_Stage()
 {
@@ -30,15 +30,16 @@ SvgWriter_Stage::~SvgWriter_Stage()
 
 void SvgWriter_Stage::saveAppData(KoShape *shape)
 {
-    forTesting(shape);// Adds a frame object to this shape
-
+    if(shape->applicationData() == 0){
+      forTesting(shape);// Adds a frame object to this shape
+    }
+    
     SvgAnimationData * appData = dynamic_cast<SvgAnimationData*>(shape->applicationData());
-    Frame *frameObj = new Frame();
+    Frame *frameObj;// = new Frame();
     frameObj = &(appData->frame());
           
     saveFrame(frameObj);
-    //return m_framesString;
-}
+    }
       
       //This function will eventually be removed.
       //Only used for dummy data.

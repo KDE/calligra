@@ -30,7 +30,7 @@
     * Instead of a new slide, in an animated SVG presentation, 
     * each frame is zoomed into.
     */
-  class Frame :public KoXmlElement
+  class Frame
     {
       public:
         Frame();
@@ -40,7 +40,7 @@
         */
       void setDefaultValues();
       void setTitle(const QString& title);
-      void setRefId(const QString& refId); //Data type for ref id of groups/shapes?
+      void setRefId(const QString& refId); 
       void setTransitionProfile(const QString& transProfile);
 
       void setHide(bool condition);

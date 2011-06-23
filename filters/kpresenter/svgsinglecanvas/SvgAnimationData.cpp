@@ -46,9 +46,10 @@
 
     if ( applicationData == 0 ) {
           applicationData = new SvgAnimationData();
+          applicationData->setFrame(frame);
     }
 
-    applicationData->setFrame(frame);
+    
     shape->setApplicationData(applicationData);
     
     //'frame' saved as a part of 'shape' now.
