@@ -195,6 +195,12 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
                 return false;
             }
 
+            //order slides
+            QMap<int, KoPAPageBase*> map;
+            foreach (KoPAPageBase *slide, slides)
+                map.insert(m_document->pageIndex(slide), slide);
+            slides = map.values();
+
             doCustomSlideShowAction(KPrCustomSlideShowsModel::SLIDES_ADD, slides, beginRow);
         }
 
@@ -205,6 +211,12 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
             if (slides.empty()) {
                 return false;
             }
+
+            //order slides
+            QMap<int, KoPAPageBase*> map;
+            foreach (KoPAPageBase *slide, slides)
+                map.insert(m_customSlideShows->indexByPage(m_activeCustomSlideShowName, slide), slide);
+            slides = map.values();
 
             doCustomSlideShowAction(KPrCustomSlideShowsModel::SLIDES_MOVE, slides, beginRow);
         }
@@ -224,17 +236,6 @@ QList<KoPAPageBase *> KPrCustomSlideShowsModel::decodeSlidesList(QByteArray enco
         stream >> v;
         slides.append(static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
     }
-
-    if (slides.empty()) {
-        return slides;
-    }
-
-    //order slides
-    QMap<int, KoPAPageBase*> map;
-    foreach (KoPAPageBase *slide, slides)
-        map.insert(m_customSlideShows->indexByPage(m_activeCustomSlideShowName, slide), slide);
-    slides = map.values();
-
     return slides;
 }
 

@@ -191,7 +191,7 @@ private slots:
     void customShowChanged(int showNumber);
 
     /** Delete selected slides from the current custom slide show */
-    void deleteSlideFromCustomShow();
+    void deleteSlidesFromCustomShow();
 
     /** Add slides selected on Slides Sorter view to the current custom slide show */
     void addSlideToCustomShow();

@@ -144,7 +144,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_buttonAddCustomSlideShow, SIGNAL(clicked()), this, SLOT(addCustomSlideShow()));
     connect(m_buttonDelCustomSlideShow, SIGNAL(clicked()), this, SLOT(removeCustomSlideShow()));
     connect(m_buttonAddSlideToCurrentShow, SIGNAL(clicked()), this, SLOT(addSlideToCustomShow()));
-    connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlideFromCustomShow()));
+    connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlidesFromCustomShow()));
     connect(m_customSlideShowModel, SIGNAL(customSlideShowsChanged()), this, SLOT(updateCustomSlideShowsList()));
 
     //setup signals for manage edit actions
@@ -419,10 +419,15 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
 
 void KPrViewModeSlidesSorter::deleteSlide()
 {
-    // create a list with all selected slides
-    QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();   
-    if (m_slidesSorterModel->removeSlides(selectedSlides)) {
-        m_customSlideShowModel->removeSlidesFromAll(selectedSlides);
+    if (m_slidesSorterView->hasFocus()) {
+        // create a list with all selected slides
+        QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();
+        if (m_slidesSorterModel->removeSlides(selectedSlides)) {
+            m_customSlideShowModel->removeSlidesFromAll(selectedSlides);
+        }
+    }
+    else if (m_customSlideShowView->hasFocus()) {
+        deleteSlidesFromCustomShow();
     }
 }
 
@@ -524,12 +529,13 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
     menu.addAction(KIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
     menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
     menu.exec(event->globalPos());
+    enableEditActions();
 }
 
 void KPrViewModeSlidesSorter::customSlideShowsContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_customSlideShowView);
-    menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlideFromCustomShow()));
+    menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlidesFromCustomShow()));
     menu.exec(event->globalPos());
 }
 
@@ -596,7 +602,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     }
 }
 
-void KPrViewModeSlidesSorter::deleteSlideFromCustomShow()
+void KPrViewModeSlidesSorter::deleteSlidesFromCustomShow()
 {
     QModelIndexList selectedItems = m_customSlideShowView->selectionModel()->selectedIndexes();
     if (selectedItems.count() == 0) {
@@ -690,4 +696,7 @@ void KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons()
 {
     m_buttonAddSlideToCurrentShow->setEnabled(m_slidesSorterView->hasFocus());
     m_buttonDelSlideFromCurrentShow->setEnabled(m_customSlideShowView->hasFocus());
+    KActionCollection *ac = canvas()->canvasController()->actionCollection();
+    ac->action("edit_delete")->setEnabled(m_customSlideShowView->hasFocus() |
+                                          !m_slidesSorterView->selectionModel()->selectedIndexes().isEmpty());
 }
