@@ -103,16 +103,16 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
     do {
       const quint8* pixel = iterator->rawData();
       
-      blue[currentPixel]  = toDoubleFuncPtr[0](data, device->colorSpace()->channels()[ki]->pos());
-      green[currentPixel] = toDoubleFuncPtr[1](data, device->colorSpace()->channels()[ki]->pos());
-      red[currentPixel]   = toDoubleFuncPtr[2](data, device->colorSpace()->channels()[ki]->pos());
-      alpha[currentPixel] = toDoubleFuncPtr[3](data, device->colorSpace()->channels()[ki]->pos());
+      blue[currentPixel]  = toDoubleFuncPtr[0](pixel, device->colorSpace()->channels()[0]->pos());
+      green[currentPixel] = toDoubleFuncPtr[1](pixel, device->colorSpace()->channels()[1]->pos());
+      red[currentPixel]   = toDoubleFuncPtr[2](pixel, device->colorSpace()->channels()[2]->pos());
+      alpha[currentPixel] = toDoubleFuncPtr[3](pixel, device->colorSpace()->channels()[3]->pos());
       
       currentPixel+1;
     } while (iterator->nextPixel());
     
     /* APPLY KERNEL */
-    kritaKernel(red, red_output);
+    kritaKernel(blue, green, red, alpha, blue_output, green_output, red_output, alpha_output);
     
     /* WRITE THE RESULT*/
     // ??
