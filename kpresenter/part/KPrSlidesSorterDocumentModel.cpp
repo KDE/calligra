@@ -25,11 +25,14 @@
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <KoPAViewBase.h>
+#include <KoPAView.h>
 #include <KoPAPage.h>
-#include <KoPAPageMoveCommand.h>
 #include <KoPAOdfPageSaveHelper.h>
 #include <KoDrag.h>
+#include <KoPAPageMoveCommand.h>
 #include <KoShapeRenameCommand.h>
+#include <KoPAPageDeleteCommand.h>
+
 
 //KDE Headers
 #include <KIcon>
@@ -79,7 +82,7 @@ QVariant KPrSlidesSorterDocumentModel::data(const QModelIndex &index, int role) 
     }
 
     Q_ASSERT(index.model() == this);
-    KoPAPageBase *page = pageFromIndex(index);
+    KoPAPageBase *page = pageByIndex(index);
 
     switch (role) {
         case Qt::DisplayRole:
@@ -329,7 +332,6 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> &slides, KoPAPag
          return;
      }
 
-
     switch (action) {
     case Qt::MoveAction: {
         //You can't move slides that not belong to the current document
@@ -341,19 +343,13 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> &slides, KoPAPag
         if (slides.isEmpty()) {
             return;
         }
-        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
-        m_document->addCommand(command);
-        m_viewModeSlidesSorter->view()->setActivePage(slides.first());
-        m_viewModeSlidesSorter->selectSlides(slides);
+        moveSlides(slides, pageAfter);
         return;
     }
     case Qt::CopyAction: {
-        KoPAOdfPageSaveHelper saveHelper(m_document, slides);
-        KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(m_document->documentType()), saveHelper);
-        drag.addToClipboard();
+        copySlides(slides);
         m_viewModeSlidesSorter->view()->setActivePage(pageAfter);
-        m_viewModeSlidesSorter->editPaste();
+        pasteSlides();
         m_viewModeSlidesSorter->view()->setActivePage(slides.first());
         m_viewModeSlidesSorter->selectSlides(slides);
         return;
@@ -364,10 +360,67 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> &slides, KoPAPag
     }
 }
 
-KoPAPageBase * KPrSlidesSorterDocumentModel::pageFromIndex(const QModelIndex &index) const
+KoPAPageBase * KPrSlidesSorterDocumentModel::pageByIndex(const QModelIndex &index) const
 {
     Q_ASSERT(index.internalPointer());
     return static_cast<KoPAPageBase*>(index.internalPointer());
+}
+
+bool KPrSlidesSorterDocumentModel::removeSlides(QList<KoPAPageBase *> &slides)
+{
+    if (!slides.empty() && m_document->pages().count() > slides.count()) {
+         KUndo2Command *cmd = new KoPAPageDeleteCommand(m_document, slides);
+        if (cmd) {
+            m_document->addCommand(cmd);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool KPrSlidesSorterDocumentModel::addNewSlide()
+{
+    KoPAView *view = dynamic_cast<KoPAView *>(m_viewModeSlidesSorter->view());
+    if (view) {
+        view->insertPage();
+        return true;
+    }
+    return false;
+}
+
+bool KPrSlidesSorterDocumentModel::copySlides(QList<KoPAPageBase *> &slides)
+{
+    if (!slides.empty()) {
+        // Copy Pages
+        KoPAOdfPageSaveHelper saveHelper(m_document, slides);
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(m_document->documentType()), saveHelper);
+        drag.addToClipboard();
+        return true;
+    }
+    return false;
+}
+
+bool KPrSlidesSorterDocumentModel::pasteSlides()
+{
+    KoPAView *view = dynamic_cast<KoPAView *>(m_viewModeSlidesSorter->view());
+    if (view) {
+        view->pagePaste();
+        return true;
+    }
+    return false;
+}
+
+bool KPrSlidesSorterDocumentModel::moveSlides(QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter)
+{
+    KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
+    if (command) {
+        m_document->addCommand(command);
+        m_viewModeSlidesSorter->view()->setActivePage(slides.first());
+        m_viewModeSlidesSorter->selectSlides(slides);
+        return true;
+    }
+    return false;
 }
 
 #include "KPrSlidesSorterDocumentModel.moc"

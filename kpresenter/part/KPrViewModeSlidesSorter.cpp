@@ -27,7 +27,7 @@
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrSlidesSorterItemDelegate.h"
-#include <KPrView.h>
+#include "KPrView.h"
 
 //Qt Headers
 #include <QMenu>
@@ -49,10 +49,6 @@
 #include <KoPAPageBase.h>
 #include <KoPAMasterPage.h>
 #include <KoPAView.h>
-#include <KoPAPageMoveCommand.h>
-#include <KoPAPageDeleteCommand.h>
-#include <KoPAOdfPageSaveHelper.h>
-#include <KoDrag.h>
 #include <KoCanvasController.h>
 #include <KoCopyController.h>
 #include <KoCutController.h>
@@ -424,23 +420,15 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
 void KPrViewModeSlidesSorter::deleteSlide()
 {
     // create a list with all selected slides
-    QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();
-
-    if (!selectedSlides.empty() && m_view->kopaDocument()->pages().count() > selectedSlides.count()) {
-         KUndo2Command *cmd = new KoPAPageDeleteCommand(m_view->kopaDocument(), selectedSlides);
-        if (cmd) {
-            m_view->kopaDocument()->addCommand(cmd);
-            m_customSlideShowModel->removeSlidesFromAll(selectedSlides);
-        }
+    QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();   
+    if (m_slidesSorterModel->removeSlides(selectedSlides)) {
+        m_customSlideShowModel->removeSlidesFromAll(selectedSlides);
     }
 }
 
 void KPrViewModeSlidesSorter::addSlide()
 {
-    KoPAView *view = dynamic_cast<KoPAView *>(m_view);
-    if (view) {
-        view->insertPage();
-    }
+    m_slidesSorterModel->addNewSlide();
 }
 
 void KPrViewModeSlidesSorter::renameCurrentSlide()
@@ -458,23 +446,13 @@ void KPrViewModeSlidesSorter::editCut()
 void KPrViewModeSlidesSorter::editCopy()
 {
     // separate selected layers and selected shapes
-    QList<KoPAPageBase*> slides = extractSelectedSlides();;
-
-    if (!slides.empty()) {
-        // Copy Pages
-        KoPAOdfPageSaveHelper saveHelper(m_view->kopaDocument (), slides);
-        KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(m_view->kopaDocument()->documentType()), saveHelper);
-        drag.addToClipboard();
-    }
+    QList<KoPAPageBase*> slides = extractSelectedSlides();
+    m_slidesSorterModel->copySlides(slides);
 }
 
 void KPrViewModeSlidesSorter::editPaste()
 {
-    KoPAView *view = dynamic_cast<KoPAView *>(m_view);
-    if (view) {
-        view->pagePaste();
-    }
+    m_slidesSorterModel->pasteSlides();
 }
 
 void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
@@ -612,7 +590,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
 
     //Populate Custom Slide Shows View if visible
     if (panelVisible) {
-        m_customSlideShowModel->setCurrentSlideShow(showNumber - 1);
+        m_customSlideShowModel->setActiveSlideShow(showNumber - 1);
     }
 }
 
@@ -659,7 +637,7 @@ void KPrViewModeSlidesSorter::updateCustomSlideShowsList()
     slideShows << i18n("Default") << (m_customSlideShowModel->customShowsNamesList());
     m_customSlideShowsList->clear();
     m_customSlideShowsList->addItems(slideShows);
-    int index = slideShows.indexOf(m_customSlideShowModel->currentSlideShow());
+    int index = slideShows.indexOf(m_customSlideShowModel->activeCustomSlideShow());
     m_customSlideShowsList->setCurrentIndex(index >= 0 ? index : 0);
     customShowChanged(m_customSlideShowsList->currentIndex());
 
@@ -670,7 +648,7 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
 {
     QString newName = m_customSlideShowsList->currentText();
 
-    if (newName == m_customSlideShowModel->currentSlideShow()) {
+    if (newName == m_customSlideShowModel->activeCustomSlideShow()) {
         return;
     }
 
@@ -680,7 +658,7 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
     }
     //If the name is not already in use, use it, otherwise let the user know
     else if (!m_customSlideShowModel->customShowsNamesList().contains(newName)) {
-       m_customSlideShowModel->renameCustomShow(m_customSlideShowModel->currentSlideShow(), newName);
+       m_customSlideShowModel->renameCustomShow(m_customSlideShowModel->activeCustomSlideShow(), newName);
        updateCustomSlideShowsList();
     }
     else {

@@ -38,6 +38,9 @@ class QComboBox;
 
 //This view mode holds Slides Sorter view widget and
 //holds view and toolbar to manage custom slide shows
+//This class also manages all interaction between
+//the standard GUI and the slides sorter view and between
+//slides sorter view - custom slide shows view
 class KPrViewModeSlidesSorter : public KoPAViewMode
 {
     Q_OBJECT

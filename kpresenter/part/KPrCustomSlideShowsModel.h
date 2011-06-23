@@ -27,6 +27,12 @@ class KPrCustomSlideShows;
 class KoPAPageBase;
 class KPrDocument;
 
+/**
+ * Class meant to hold the model for Custom Slide Shows View
+ * This model lets display slides as thumbnails in a List view, using standard QT
+ * view/model framework. It supports add, remove and move slides of a custom slide show
+ * and add, remove or rename slide Shows
+ */
 class KPrCustomSlideShowsModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -71,25 +77,25 @@ public:
     void setCustomSlideShows(KPrCustomSlideShows *customShows);
 
     /**
-     * @brief Returns the current slide show name
+     * @brief Returns the active slide show name
      *
-     * @return the current slide show name
+     * @return the active slide show name
      */
-    QString currentSlideShow();
+    QString activeCustomSlideShow();
 
     /**
-     * @brief Set the current custom slide show by name
+     * @brief Set the active custom slide show by name
      *
      * @param name of the custom slide show
      */
-    void setCurrentSlideShow(QString name);
+    void setActiveSlideShow(QString name);
 
     /**
-     * @brief Set the current custom slide show by index
+     * @brief Set the active custom slide show by index
      *
      * @param index of the custom slide show within the KPrCustomSlideShows class
      */
-    void setCurrentSlideShow(int index);
+    void setActiveSlideShow(int index);
 
     /**
      * Setter of the size with a rect
@@ -174,11 +180,17 @@ public:
      */
     void removeCustomShow(const QString &name);
 
-    void updateCustomSlideShowsList(const QString &name);
-
-
+    /**
+     * @brief Change active custom slide show and notify the change
+     * If name exists change active custom slide show to name otherwise
+     * switch to the default slide set
+     *
+     * @param name of the Custom Slide Show
+     */
+    void updateCustomSlideShowsList(const QString name);
 
 signals:
+    /** Notify a change of the active custom slide show */
     void customSlideShowsChanged();
 
 public slots:
@@ -187,7 +199,7 @@ private:
     QList<KoPAPageBase *> decodeSlidesList(QByteArray encoded);
 
     KPrCustomSlideShows *m_customSlideShows;
-    QString m_currentCustomSlideShowName;
+    QString m_activeCustomSlideShowName;
     QSize m_iconSize;
     KPrDocument *m_document;
 

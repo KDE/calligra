@@ -52,12 +52,12 @@ KPrCustomSlideShowsModel::~KPrCustomSlideShowsModel(){
 
 QVariant KPrCustomSlideShowsModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || !m_customSlideShows || m_currentCustomSlideShowName.isEmpty()) {
+    if (!index.isValid() || !m_customSlideShows || m_activeCustomSlideShowName.isEmpty()) {
         return QVariant();
     }
     Q_ASSERT(index.model() == this);
 
-    KoPAPageBase *page = m_customSlideShows->pageByIndex(m_currentCustomSlideShowName, index.row());
+    KoPAPageBase *page = m_customSlideShows->pageByIndex(m_activeCustomSlideShowName, index.row());
 
     switch (role) {
         case Qt::DisplayRole:
@@ -83,9 +83,9 @@ QVariant KPrCustomSlideShowsModel::data(const QModelIndex &index, int role) cons
 
 int KPrCustomSlideShowsModel::rowCount(const QModelIndex &parent) const
 {
-    if (!m_currentCustomSlideShowName.isEmpty()) {
+    if (!m_activeCustomSlideShowName.isEmpty()) {
         if (!parent.isValid()) {
-            return m_customSlideShows->getByName(m_currentCustomSlideShowName).count();
+            return m_customSlideShows->getByName(m_activeCustomSlideShowName).count();
         }
     }
 
@@ -94,7 +94,7 @@ int KPrCustomSlideShowsModel::rowCount(const QModelIndex &parent) const
 
 Qt::ItemFlags KPrCustomSlideShowsModel::flags(const QModelIndex &index) const
 {
-    if (m_currentCustomSlideShowName.isEmpty()) {
+    if (m_activeCustomSlideShowName.isEmpty()) {
         return 0;
     }
 
@@ -110,14 +110,14 @@ Qt::ItemFlags KPrCustomSlideShowsModel::flags(const QModelIndex &index) const
 
 QModelIndex KPrCustomSlideShowsModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (m_currentCustomSlideShowName.isEmpty()) {
+    if (m_activeCustomSlideShowName.isEmpty()) {
         return QModelIndex();
     }
 
     // check if parent is root node
     if (!parent.isValid()) {
         if (row >= 0 && row < rowCount(QModelIndex())) {
-            return createIndex(row, column, m_customSlideShows->pageByIndex(m_currentCustomSlideShowName, row));
+            return createIndex(row, column, m_customSlideShows->pageByIndex(m_activeCustomSlideShowName, row));
         }
     }
     return QModelIndex();
@@ -232,7 +232,7 @@ QList<KoPAPageBase *> KPrCustomSlideShowsModel::decodeSlidesList(QByteArray enco
     //order slides
     QMap<int, KoPAPageBase*> map;
     foreach (KoPAPageBase *slide, slides)
-        map.insert(m_customSlideShows->indexByPage(m_currentCustomSlideShowName, slide), slide);
+        map.insert(m_customSlideShows->indexByPage(m_activeCustomSlideShowName, slide), slide);
     slides = map.values();
 
     return slides;
@@ -241,34 +241,34 @@ QList<KoPAPageBase *> KPrCustomSlideShowsModel::decodeSlidesList(QByteArray enco
 void KPrCustomSlideShowsModel::setCustomSlideShows(KPrCustomSlideShows *customShows)
 {
     m_customSlideShows = customShows;
-    m_currentCustomSlideShowName.clear();
+    m_activeCustomSlideShowName.clear();
     reset();
 }
 
 
-QString KPrCustomSlideShowsModel::currentSlideShow()
+QString KPrCustomSlideShowsModel::activeCustomSlideShow()
 {
-    return m_currentCustomSlideShowName;
+    return m_activeCustomSlideShowName;
 }
 
-void KPrCustomSlideShowsModel::setCurrentSlideShow(QString name)
+void KPrCustomSlideShowsModel::setActiveSlideShow(QString name)
 {
-    if (!m_customSlideShows | (m_currentCustomSlideShowName == name)) {
+    if (!m_customSlideShows | (m_activeCustomSlideShowName == name)) {
         return;
     }
     if (m_customSlideShows->names().contains(name)) {
-        m_currentCustomSlideShowName = name;
+        m_activeCustomSlideShowName = name;
     }
     reset();
 }
 
-void KPrCustomSlideShowsModel::setCurrentSlideShow(int index)
+void KPrCustomSlideShowsModel::setActiveSlideShow(int index)
 {
     if (!m_customSlideShows) {
         return;
     }
     QString name = m_customSlideShows->names().value(index);
-    setCurrentSlideShow(name);
+    setActiveSlideShow(name);
 }
 
 void KPrCustomSlideShowsModel::setIconSize(QSize size)
@@ -316,7 +316,7 @@ void KPrCustomSlideShowsModel::removeSlidesByIndexes(QModelIndexList pageIndexes
     QList<KoPAPageBase *> slides;
 
     foreach (QModelIndex index, pageIndexes)
-        slides.append(m_customSlideShows->pageByIndex(m_currentCustomSlideShowName, index.row()));
+        slides.append(m_customSlideShows->pageByIndex(m_activeCustomSlideShowName, index.row()));
 
     doCustomSlideShowAction(KPrCustomSlideShowsModel::SLIDES_DELETE, slides, 0);
 }
@@ -331,7 +331,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(CustomShowActions c_actio
     bool updated = false;
 
     //get the slideshow
-    QList<KoPAPageBase*> selectedSlideShow = m_customSlideShows->getByName(m_currentCustomSlideShowName);
+    QList<KoPAPageBase*> selectedSlideShow = m_customSlideShows->getByName(m_activeCustomSlideShowName);
 
     if (c_action == KPrCustomSlideShowsModel::SLIDES_ADD) {
         //insert the slides on the current custom show
@@ -373,7 +373,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(CustomShowActions c_actio
     if (updated) {
         //update the SlideShow with the resulting list
         KPrEditCustomSlideShowsCommand *command = new KPrEditCustomSlideShowsCommand(
-                    m_document, this, m_currentCustomSlideShowName, selectedSlideShow);
+                    m_document, this, m_activeCustomSlideShowName, selectedSlideShow);
         m_document->addCommand(command);
     }
 
@@ -398,12 +398,9 @@ void KPrCustomSlideShowsModel::removeCustomShow(const QString &name)
     m_document->addCommand(command);
 }
 
-void KPrCustomSlideShowsModel::updateCustomSlideShowsList(const QString &name)
+void KPrCustomSlideShowsModel::updateCustomSlideShowsList(const QString name)
 {
-    m_currentCustomSlideShowName.clear();
-    if (m_customSlideShows->names().contains(name)) {
-        m_currentCustomSlideShowName = name;
-    }
-    reset();
+    m_activeCustomSlideShowName.clear();
+    setActiveSlideShow(name);
     emit customSlideShowsChanged();
 }
