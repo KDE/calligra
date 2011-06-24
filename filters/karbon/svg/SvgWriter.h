@@ -88,7 +88,6 @@ private:
     void saveColorStops(const QGradientStops &colorStops, SvgSavingContext &context);
     QString saveGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
     QString savePattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context);
-    QString getTransform(const QTransform &matrix);
     void saveFont(const QFont &font, SvgSavingContext &context);
     void saveTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveFont, qreal baselineOffset);
 

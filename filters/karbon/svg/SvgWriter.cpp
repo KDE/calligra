@@ -177,7 +177,7 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("g");
     context.shapeWriter().addAttribute("id", getID(group));
-    context.shapeWriter().addAttribute("transform", getTransform(group->transformation()));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(group->transformation()));
 
     saveStyle(group, context);
 
@@ -221,7 +221,7 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("path");
     context.shapeWriter().addAttribute("id", getID(path));
-    context.shapeWriter().addAttribute("transform", getTransform(path->transformation()));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(path->transformation()));
 
     saveStyle(path, context);
 
@@ -236,7 +236,7 @@ void SvgWriter::saveEllipse(EllipseShape *ellipse, SvgSavingContext &context)
         const bool isCircle = size.width() == size.height();
         context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
         context.shapeWriter().addAttribute("id", getID(ellipse));
-        context.shapeWriter().addAttribute("transform", getTransform(ellipse->transformation()));
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(ellipse->transformation()));
 
         if (isCircle) {
             context.shapeWriter().addAttributePt("r", 0.5 * size.width());
@@ -259,7 +259,7 @@ void SvgWriter::saveRectangle(RectangleShape *rectangle, SvgSavingContext &conte
 {
     context.shapeWriter().startElement("rect");
     context.shapeWriter().addAttribute("id", getID(rectangle));
-    context.shapeWriter().addAttribute("transform", getTransform(rectangle->transformation()));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(rectangle->transformation()));
 
     saveStyle(rectangle, context);
 
@@ -321,24 +321,6 @@ QString SvgWriter::getID(const KoShape *obj)
     return id;
 }
 
-QString SvgWriter::getTransform(const QTransform &matrix)
-{
-    if (matrix.isIdentity())
-        return "";
-
-    if (matrix.type() == QTransform::TxTranslate) {
-        return QString("translate(%1, %2)")
-                     .arg(SvgUtil::toUserSpace(matrix.dx()))
-                     .arg(SvgUtil::toUserSpace(matrix.dy()));
-    } else {
-        return QString("matrix(%1 %2 %3 %4 %5 %6)")
-                     .arg(matrix.m11()).arg(matrix.m12())
-                     .arg(matrix.m21()).arg(matrix.m22())
-                     .arg(SvgUtil::toUserSpace(matrix.dx()))
-                     .arg(SvgUtil::toUserSpace(matrix.dy()));
-    }
-}
-
 bool SvgWriter::isTranslation(const QTransform &m)
 {
     return m.type() == QTransform::TxTranslate;
@@ -374,7 +356,7 @@ QString SvgWriter::saveGradient(const QGradient *gradient, const QTransform &gra
         const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
         context.styleWriter().startElement("linearGradient");
         context.styleWriter().addAttribute("id", uid);
-        context.styleWriter().addAttribute("gradientTransform", getTransform(gradientTransform));
+        context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
         context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
         context.styleWriter().addAttribute("x1", g->start().x());
         context.styleWriter().addAttribute("y1", g->start().y());
@@ -388,7 +370,7 @@ QString SvgWriter::saveGradient(const QGradient *gradient, const QTransform &gra
         const QRadialGradient * g = static_cast<const QRadialGradient*>(gradient);
         context.styleWriter().startElement("radialGradient");
         context.styleWriter().addAttribute("id", uid);
-        context.styleWriter().addAttribute("gradientTransform", getTransform(gradientTransform));
+        context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
         context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
         context.styleWriter().addAttribute("cx", g->center().x());
         context.styleWriter().addAttribute("cy", g->center().y());
@@ -763,7 +745,7 @@ void SvgWriter::saveText(ArtisticTextShape *text, SvgSavingContext &context)
         } else {
             context.shapeWriter().addAttributePt("x", anchorOffset);
             context.shapeWriter().addAttributePt("y", text->baselineOffset());
-            context.shapeWriter().addAttribute("transform", getTransform(text->transformation()));
+            context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(text->transformation()));
         }
         foreach(const ArtisticTextRange &range, formattedText) {
             saveTextRange(range, context, !hasSingleRange, text->baselineOffset());
@@ -809,7 +791,7 @@ void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
         context.shapeWriter().addAttributePt("x", position.x());
         context.shapeWriter().addAttributePt("y", position.y());
     } else {
-        context.shapeWriter().addAttribute("transform", getTransform(picture->transformation()));
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(picture->transformation()));
     }
 
     context.shapeWriter().addAttributePt("width", picture->size().width());
