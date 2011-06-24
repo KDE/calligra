@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
     Copyright (C) 2002 Lars Siebold <khandha5@gmx.net>
     Copyright (C) 2002 Werner Trobin <trobin@kde.org>
