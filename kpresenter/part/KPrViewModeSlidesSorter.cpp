@@ -642,7 +642,7 @@ void KPrViewModeSlidesSorter::updateCustomSlideShowsList()
     disconnect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
 
     QStringList slideShows;
-    slideShows << i18n("Default") << (m_customSlideShowModel->customShowsNamesList());
+    slideShows << i18n("All slides") << (m_customSlideShowModel->customShowsNamesList());
     m_customSlideShowsList->clear();
     m_customSlideShowsList->addItems(slideShows);
     int index = slideShows.indexOf(m_customSlideShowModel->activeCustomSlideShow());
