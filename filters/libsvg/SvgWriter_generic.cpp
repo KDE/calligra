@@ -35,7 +35,7 @@
 
 
 #include "SvgWriter_generic.h"
-#include "filters/karbon/svg/SvgUtil.h"
+#include "SvgUtil.h"
 
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>

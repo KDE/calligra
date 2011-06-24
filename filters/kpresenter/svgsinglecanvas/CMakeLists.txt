@@ -6,10 +6,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/c
 ########## next traget ################
 set(LIBSVG_SOURCES
   ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
+  ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgUtil.cpp
   )
-set(KARBON_SOURCES
-  ${CMAKE_SOURCE_DIR}/filters/karbon/svg/SvgUtil.cpp
-)
+#set(KARBON_SOURCES
+  #${CMAKE_SOURCE_DIR}/filters/karbon/svg/SvgUtil.cpp
+#)
 
 set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/ellipse/EllipseShape.cpp
@@ -24,10 +25,9 @@ set(SHAPES_SOURCES
 set(svgsinglecanvasexport_PART_SRCS 
     Frame.cpp
     SvgAnimationData.cpp
-    #SvgWriter_generic.cpp
     ${LIBSVG_SOURCES}
     ${SHAPES_SOURCES}
-    ${KARBON_SOURCES}
+    #${KARBON_SOURCES}
 )
 
 

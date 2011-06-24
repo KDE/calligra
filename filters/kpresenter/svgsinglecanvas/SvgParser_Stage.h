@@ -17,7 +17,7 @@
     * Boston, MA 02110-1301, USA.
     */
 
-#include "SvgParser.h"
+#include "SvgParser_generic.h"
 //#include <Frame.h>
 
 class SvgParser;

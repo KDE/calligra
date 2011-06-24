@@ -6,18 +6,27 @@ ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_S
 
 set(LIBSVG_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgParser_generic.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgUtil.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgGradientHelper.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgPatternHelper.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgFilterHelper.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgCssHelper.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgClipPathHelper.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgTextHelper.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgLoadingContext.cpp
     )
 
 set(STAGE_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgAnimationData.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgWriter_Stage.cpp
     )
 
 set(karbonsvgexport_PART_SRCS 
     SvgExport.cpp
-    SvgUtil.cpp
+    #SvgUtil.cpp
     SvgWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgWriter_Stage.cpp
     ${SHAPES_SOURCES} 
     ${LIBSVG_SOURCES}
     ${STAGE_SOURCES} #Only for testing
@@ -33,20 +42,11 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonsvgimport_PART_SRCS 
     SvgImport.cpp
-    SvgUtil.cpp
-    SvgParser.cpp
-    SvgGradientHelper.cpp
-    SvgPatternHelper.cpp
-    SvgFilterHelper.cpp
-    SvgCssHelper.cpp
-    SvgClipPathHelper.cpp
-    SvgTextHelper.cpp
-    SvgLoadingContext.cpp
-    SvgParser_Stage.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgAnimationData.cpp
+    SvgParser.cpp    
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgParser_Stage.cpp
     ${SHAPES_SOURCES} 
-    
+    ${STAGE_SOURCES}
+    ${LIBSVG_SOURCES}
 )
 
 kde4_add_plugin(karbonsvgimport ${karbonsvgimport_PART_SRCS})
