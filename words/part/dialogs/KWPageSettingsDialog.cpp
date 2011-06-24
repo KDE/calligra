@@ -144,7 +144,7 @@ void KWPageSettingsDialog::reject()
 
 void KWPageSettingsDialog::slotApplyClicked()
 {
-    KUndo2Command *cmd = new KUndo2Command(i18n("Change Page Style"));
+    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Change Page Style"));
     KWPageStyle styleToUpdate = m_pageStyle;
 
     if (styleToUpdate.name() != m_page.pageStyle().name()) {

@@ -36,7 +36,7 @@ using namespace Calligra::Tables;
 BorderColorCommand::BorderColorCommand()
         : AbstractRegionCommand()
 {
-    setText(i18n("Change Border Color"));
+    setText(i18nc("(qtundo-format)", "Change Border Color"));
 }
 
 bool BorderColorCommand::preProcessing()

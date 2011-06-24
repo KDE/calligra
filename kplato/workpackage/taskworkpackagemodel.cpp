@@ -310,7 +310,7 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
         QDateTime dt = QDateTime::currentDateTime();
         QDate date = dt.date();
         // xgettext: no-c-format
-        MacroCommand *m = new MacroCommand( i18n( "Modify completion" ) );
+        MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify completion" ) );
         if ( ! c.isStarted() ) {
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
@@ -339,7 +339,7 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
         if ( value.toInt() > 0 ) {
             QDateTime dt = QDateTime::currentDateTime();
             QDate date = dt.date();
-            MacroCommand *m = new MacroCommand( i18n( "Set finished" ) );
+            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Set finished" ) );
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
             m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
@@ -360,7 +360,7 @@ bool TaskWorkPackageModel::setRemainingEffort( Node *node, const QVariant &value
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify remaining effort" ) ) );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify remaining effort" ) ) );
         return true;
     }
     return false;
@@ -373,7 +373,7 @@ bool TaskWorkPackageModel::setActualEffort( Node *node, const QVariant &value, i
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify actual effort" ) ) );
+        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify actual effort" ) ) );
         return true;
     }
     return false;

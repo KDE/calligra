@@ -32,7 +32,7 @@ using namespace Calligra::Tables;
 
 AutoFormatCommand::AutoFormatCommand()
 {
-    setText(i18n("Auto-Format"));
+    setText(i18nc("(qtundo-format)", "Auto-Format"));
 }
 
 AutoFormatCommand::~AutoFormatCommand()

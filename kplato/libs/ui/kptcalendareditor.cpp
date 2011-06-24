@@ -275,7 +275,7 @@ void CalendarDayView::slotSetVacation()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18n( "Modify Weekday State" ) );
+    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Weekday State" ) );
     foreach ( const QModelIndex &i, lst ) {
         CalendarDay *day = model()->day( i );
         if ( day == 0 || day->state() == CalendarDay::NonWorking ) {
@@ -305,7 +305,7 @@ void CalendarDayView::slotSetUndefined()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18n( "Modify Weekday State" ) );
+    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Weekday State" ) );
     foreach ( const QModelIndex &i, lst ) {
         CalendarDay *day = model()->day( i );
         if ( day == 0 || day->state() == CalendarDay::Undefined ) {
@@ -784,7 +784,7 @@ void CalendarEditor::slotSetVacation()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18n ( "Modify Calendar" ) );
+    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Calendar" ) );
     foreach ( const QDate &date, m_currentMenuDateList ) {
         kDebug()<<"handle:"<<date;
         CalendarDay *day = currentCalendar()->findDay( date );
@@ -818,7 +818,7 @@ void CalendarEditor::slotSetUndefined()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18n ( "Modify Calendar" ) );
+    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Calendar" ) );
     foreach ( const QDate &date, m_currentMenuDateList ) {
         CalendarDay *day = currentCalendar()->findDay( date );
         if ( day && day->state() != CalendarDay::Undefined ) {

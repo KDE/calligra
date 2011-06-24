@@ -73,7 +73,7 @@ KUndo2Command *PackageSettingsPanel::buildCommand()
     if ( s == m_package.settings() ) {
         return 0;
     }
-    return new ModifyPackageSettingsCmd( &m_package, s, i18n( "Modify package settings" ) );
+    return new ModifyPackageSettingsCmd( &m_package, s, i18nc( "(qtundo-format)", "Modify package settings" ) );
 }
 
 void PackageSettingsPanel::slotChanged() {

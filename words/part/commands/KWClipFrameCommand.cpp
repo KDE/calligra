@@ -38,7 +38,7 @@ public:
 };
 
 KWClipFrameCommand::KWClipFrameCommand(const QList<KWFrame*> &frames, KWDocument *document, KUndo2Command *parent)
-    : KUndo2Command(i18n("Clip Frame"), parent),
+    : KUndo2Command(i18nc("(qtundo-format)", "Clip Frame"), parent),
     m_document(document),
     m_frames(frames),
     m_ownClipShapes(false)
