@@ -41,11 +41,11 @@ class KoShapeGroup;
 class KoResourceManager;
 class SvgTextHelper;
 
-class SvgParser
+class SvgParser_generic
 {
 public:
-    SvgParser(KoResourceManager *documentResourceManager);
-    virtual ~SvgParser();
+    SvgParser_generic(KoResourceManager *documentResourceManager);
+    virtual ~SvgParser_generic();
 
     /// Parses a svg fragment, returning the list of top level child shapes
     QList<KoShape*> parseSvg(const KoXmlElement &e, QSizeF * fragmentSize = 0);

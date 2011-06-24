@@ -20,11 +20,11 @@
 #include "SvgParser_generic.h"
 //#include <Frame.h>
 
-class SvgParser;
+class SvgParser_generic;
 class KoResourceManager;
 class Frame;
 
-class SvgParser_Stage : public SvgParser
+class SvgParser_Stage : public SvgParser_generic
 {
 public:
   

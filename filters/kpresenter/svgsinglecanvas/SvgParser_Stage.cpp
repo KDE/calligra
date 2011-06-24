@@ -22,7 +22,7 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 
-SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):SvgParser(documentResourceManager)
+SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):SvgParser_generic(documentResourceManager)
 {
     setAppDataTag();
     NS = new QString("calligra:");
