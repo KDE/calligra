@@ -415,6 +415,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     // 4. Paint the custom borders, diagonal lines and page borders
     coordinate = startCoordinate;
     processedMergedCells.clear();
+    processedObscuredCells.clear();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -438,8 +439,16 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
                                           cell, this);
             }
             coordinate = savedCoordinate;
-            const CellView cellView = this->cellView(col, row);
-            cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
+            Cell theCell(sheet(), col, row);
+            const CellView cellView = d->cellViewToProcess(theCell, coordinate, processedObscuredCells, this, visRect);
+            if (!!theCell && (theCell.column() != col || theCell.row() != row)) {
+                cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
+                                          visRect,
+                                          theCell, this);
+            }
+            const CellView cellView2 = this->cellView(col, row);
+            coordinate = savedCoordinate;
+            cellView2.paintCellBorders(paintRect, painter, clipRect, coordinate,
                                       visRect,
                                       Cell(sheet(), col, row), this);
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));

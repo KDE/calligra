@@ -698,7 +698,7 @@ static void fillSequence(const QList<Cell>& _srcList,
 
 AutoFillCommand::AutoFillCommand()
 {
-    setText(i18n("Autofill"));
+    setText(i18nc("(qtundo-format)", "Autofill"));
 }
 
 AutoFillCommand::~AutoFillCommand()

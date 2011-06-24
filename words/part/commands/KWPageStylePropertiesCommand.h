@@ -26,7 +26,7 @@
 #include <KoPageLayout.h>
 #include <KoText.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KWDocument;
 class KWPage;
@@ -36,7 +36,7 @@ class KWPage;
  * When altering the size of a page this command will also reposition all required
  * frames to account for the changes.
  */
-class WORDS_TEST_EXPORT KWPageStylePropertiesCommand : public QUndoCommand
+class WORDS_TEST_EXPORT KWPageStylePropertiesCommand : public KUndo2Command
 {
 public:
     /**
@@ -47,7 +47,7 @@ public:
      * @param direction the new page layout direction
      * @param parent the parent for macro command functionality
      */
-    explicit KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, QUndoCommand *parent = 0);
+    explicit KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent = 0);
 
     /// redo the command
     virtual void redo();

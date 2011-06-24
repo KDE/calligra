@@ -2492,6 +2492,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
     TRY_READ_ATTR_WITHOUT_NS(inset)
     if (!inset.isEmpty()) {
         doPrependCheck(inset);
+        inset.replace(",,", ",0,");
         int index = inset.indexOf(',');
         if (index > 0) {
             oldProperties.leftMargin = inset.left(index);

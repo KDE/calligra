@@ -90,7 +90,7 @@ public:
                                  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                  const wvWare::AnnotationFunctor& parseAnnotation);
 
-    virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties);
+    virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
     virtual void paragraphEnd();
     virtual void fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
     virtual void fieldSeparator(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);

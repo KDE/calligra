@@ -389,7 +389,7 @@ void View::groupSelection() {
     KoShapeGroup *group = new KoShapeGroup();
     if( selection->activeLayer() )
         selection->activeLayer()->addShape( group );
-    QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
+    KUndo2Command *cmd = new KUndo2Command( i18nc("(qtundo-format)", "Group shapes") );
     new KoShapeCreateCommand( m_activeSection->sectionContainer(), group, cmd );
     new KoShapeGroupCommand( group, groupedShapes, cmd );
     m_canvas->addCommand( cmd );  
@@ -411,7 +411,7 @@ void View::ungroupSelection() {
     containerSet << shape;
   }
 
-  QUndoCommand *cmd = new QUndoCommand( i18n("Ungroup shapes") );
+  KUndo2Command *cmd = new KUndo2Command( i18nc("(qtundo-format)", "Ungroup shapes") );
 
   // add a ungroup command for each found shape container to the macro command
   foreach( KoShape* shape, containerSet )

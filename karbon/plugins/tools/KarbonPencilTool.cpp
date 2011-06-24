@@ -292,7 +292,7 @@ void KarbonPencilTool::finish(bool closePath)
     path->setShapeId(KoPathShapeId);
     path->setBorder(currentBorder());
 
-    QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+    KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
     if (cmd) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();

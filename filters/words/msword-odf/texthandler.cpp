@@ -784,7 +784,7 @@ void WordsTextHandler::floatingObjectFound(unsigned int globalCP)
 }
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
-void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
+void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
     kDebug(30513) << "**********************************************";
 
@@ -900,8 +900,9 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
-    //set paragraph properties
+    //set paragraph and character properties of the paragraph
     m_paragraph->setParagraphProperties(paragraphProperties);
+    m_paragraph->setCharacterProperties(chp);
     //set current named style in m_paragraph
     m_paragraph->setParagraphStyle(paragraphStyle);
     //provide the background color information

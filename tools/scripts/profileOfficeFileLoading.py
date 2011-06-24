@@ -11,7 +11,7 @@
 import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 
 applications = {
-  'words': ['odt', 'doc', 'docx'],
+  'calligrawords': ['odt', 'doc', 'docx'],
   'calligrastage': ['odp', 'ppt', 'pptx'],
   'calligratables': ['ods', 'xls', 'xlsx']
 }

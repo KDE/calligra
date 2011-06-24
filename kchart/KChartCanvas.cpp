@@ -96,7 +96,7 @@ bool KChartCanvas::snapToGrid() const
     return false;
 }
 
-void KChartCanvas::addCommand( QUndoCommand *command )
+void KChartCanvas::addCommand( KUndo2Command *command )
 {
     m_part->KoDocument::addCommand( command );
     adjustOrigin();

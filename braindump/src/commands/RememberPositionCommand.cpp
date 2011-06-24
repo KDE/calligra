@@ -20,7 +20,7 @@
 #include "RememberPositionCommand.h"
 #include <KoShape.h>
 
-RememberPositionCommand::RememberPositionCommand(const QList<KoShape*>& _shapes, QUndoCommand *cmd ) : QUndoCommand(cmd) {
+RememberPositionCommand::RememberPositionCommand(const QList<KoShape*>& _shapes, KUndo2Command *cmd ) : KUndo2Command(cmd) {
   foreach(KoShape* shape, _shapes) {
     m_shapesToGeom[shape] = QRectF(shape->absolutePosition(), shape->size());
   }

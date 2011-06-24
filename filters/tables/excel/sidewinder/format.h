@@ -56,7 +56,7 @@ public:
 */
 inline bool operator==(const Pen& p1, const Pen& p2)
 {
-    return p1.style == p2.style && p1.width == p1.width && p1.color == p2.color;
+    return p1.style == p2.style && p1.width == p2.width && p1.color == p2.color;
 }
 
 /**
@@ -64,7 +64,7 @@ inline bool operator==(const Pen& p1, const Pen& p2)
 */
 inline bool operator!=(const Pen& p1, const Pen& p2)
 {
-    return p1.style != p2.style || p1.width != p1.width || p1.color != p2.color;
+    return p1.style != p2.style || p1.width != p2.width || p1.color != p2.color;
 }
 
 

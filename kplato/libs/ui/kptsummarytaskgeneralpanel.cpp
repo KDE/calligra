@@ -80,7 +80,7 @@ void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
 }
 
 MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
-    MacroCommand *cmd = new MacroCommand(i18n("Modify task"));
+    MacroCommand *cmd = new MacroCommand(i18nc("(qtundo-format)", "Modify task"));
     bool modified = false;
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {

@@ -20,15 +20,15 @@
 #ifndef KPRPAGELAYOUTCOMMAND_H
 #define KPRPAGELAYOUTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KPrPageLayout;
 class KPrPlaceholders;
 
-class KPrPageLayoutCommand : public QUndoCommand
+class KPrPageLayoutCommand : public KUndo2Command
 {
 public:
-    KPrPageLayoutCommand( KPrPlaceholders * placeholders, KPrPageLayout * layout, QUndoCommand *parent = 0 );
+    KPrPageLayoutCommand( KPrPlaceholders * placeholders, KPrPageLayout * layout, KUndo2Command *parent = 0 );
     virtual ~KPrPageLayoutCommand();
 
     /// redo the command
