@@ -35,6 +35,7 @@
     {
       public:
         Frame();
+        Frame(const KoXmlElement& e);
       ~Frame();
       /*
         * Sets the default values for all frame attrbutes

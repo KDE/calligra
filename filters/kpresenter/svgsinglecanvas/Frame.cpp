@@ -18,6 +18,52 @@
       */
       #include "Frame.h"
 
+Frame::Frame(const KoXmlElement& e)
+{
+    if(e.hasAttribute("calligra:title")) {
+      setTitle(e.attribute("calligra:title"));
+      }
+
+    if(e.hasAttribute("calligra:refid")) {
+      setRefId(e.attribute("calligra:refid"));
+      }
+
+    if(e.hasAttribute("calligra:clip")) {
+      setClip((e.attribute("calligra:clip") == "true"));
+      }
+
+    if(e.hasAttribute("calligra:hide")) {
+      setHide((e.attribute("calligra:hide") == "true"));
+      }
+
+    if(e.hasAttribute("calligra:sequence")) {
+      setSequence(e.attribute("calligra:sequence").toInt());
+      //m_frame->setSequence(++s);
+      }
+     
+     if(e.hasAttribute("calligra:timeout-ms")) {
+      setTimeout(e.attribute("calligra:timeout-ms").toInt());
+      }
+    
+    if(e.hasAttribute("calligra:timeout-enable")) {
+      enableTimeout(e.attribute("calligra:timeout-enable").toInt());
+      }
+    
+    if(e.hasAttribute("calligra:transition-profile")) {
+      setTransitionProfile(e.attribute("calligra:transition-profile"));
+      }
+    
+    if(e.hasAttribute("calligra:transition-duration-ms")) {
+      setTransitionDuration(e.attribute("calligra:transition-duration-ms").toInt());
+      }
+      
+    if(e.hasAttribute("calligra:transition-zoom-percent")) {
+      setZoomPercent(e.attribute("calligra:transition-zoom-percent").toInt());
+      }
+    
+    Frame();
+}
+
       Frame::Frame() 
       {
         m_attributes.append("title");
