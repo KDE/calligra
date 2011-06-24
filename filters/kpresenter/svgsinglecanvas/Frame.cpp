@@ -20,6 +20,7 @@
 
 Frame::Frame(const KoXmlElement& e)
 {
+  //TODO:Use namespace instead of writing 'calligra:' again and again
     if(e.hasAttribute("calligra:title")) {
       setTitle(e.attribute("calligra:title"));
       }
@@ -83,31 +84,61 @@ Frame::Frame(const KoXmlElement& e)
       Frame::~Frame() 
       {
         }
-   
-/*bool Frame::setAttribute(const QString& attrName, const QString& value)
+        
+static void printIndentation(QTextStream *stream, unsigned int indent)
+//void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int indent)
 {
-    if(m_attrrValues.contains(attrName)){
-      m_attrrValues[m_attrrValues.key(attrName)] = value;
-    }
+    static const QString INDENT("  ");
+    for (unsigned int i = 0; i < indent;++i)
+    *stream << INDENT;
 }
 
-bool Frame::setAttribute(const QString& attrName, const bool& value)
+void Frame::writeToStream(QTextStream * stream)
 {
+    unsigned indent = 1;
+    //QTextStream * stream;
     
-    if(m_attrrValues.contains(attrName)){
-      m_attrrValues[m_attrrValues.key(attrName)] = QString.value;
-    }
-}
-
-bool Frame::setAttribute(const QString& attrName, const int& value)
-{
-    if(m_attrrValues.contains(attrName)){
-      m_attrrValues[m_attrrValues.key(attrName)] = QString.setNum(value);
-    }
-
-}*/
-
-      void Frame::setDefaultValues()
+    printIndentation(stream, indent++);
+    *stream << "<calligra:frame" << endl;
+       
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "title=\"" << title() << "\"" << endl;
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "refid=\"" << refId() << "\"" << endl;
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "transition-profile=\"" << transitionProfile() << "\"" << endl;
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "hide=\"";
+     if(isHide())
+       *stream << "true";
+     else
+       *stream << "false";
+     *stream << "\"" << endl;
+     
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "clip=\"";
+     if(isClip())
+       *stream << "true";
+     else
+       *stream << "false";
+     *stream << "\"" << endl;
+     
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "timeout-enable=\"" << isEnableTimeout() << "\"" << endl;
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "sequence=\"" << sequence() << "\"" << endl;
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "transition-zoom-percent=\"" << zoomPercent() << "\"" << endl;
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "timeout-ms=\"" << timeout() << "\"" << endl;
+     printIndentation(stream, indent);
+     *stream << "calligra:" << "transition-duration-ms=\"" << transitionDuration() << "\"" << endl;
+               
+     *stream << "/>" << endl;
+     
+     }
+   
+void Frame::setDefaultValues()
       {
       m_title = "No Title";
       m_refId = "No Ref ID"; // What should this be?

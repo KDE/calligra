@@ -32,13 +32,10 @@ void SvgParser_Stage::setAppDataTag()
 
 void SvgParser_Stage::createAppData()
 {
-   QString refId;
-   
    foreach(KoShape *shape, m_shapes){
       foreach(Frame * frame, m_frameList){
-        refId = frame->refId();
-   
-        if(shape->name() == refId){
+          
+        if(shape->name() == frame->refId()){
            SvgAnimationData * appData = new SvgAnimationData();
        
            appData->setFrame(frame);

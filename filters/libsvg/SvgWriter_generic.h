@@ -79,7 +79,7 @@
   protected:
     
       virtual void saveAppData(KoShape *shape) =0;
-      void printIndentation(QTextStream *stream, unsigned int indent);
+//      void printIndentation(QTextStream *stream, unsigned int indent);
                 
       bool m_hasAppData;
       QString m_appData;

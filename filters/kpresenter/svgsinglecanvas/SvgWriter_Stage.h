@@ -23,10 +23,7 @@ public:
       void saveAppData(KoShape *shape);
  
 private:
-      /*
-      * Saves the properties associated with the shape used for SVg animation.
-      */
-      void saveFrame(Frame *frame);
+      
       void savePlainText();
       void saveScript();
       void forTesting(KoShape *shape);

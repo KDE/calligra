@@ -41,6 +41,7 @@
         * Sets the default values for all frame attrbutes
         */
       void setDefaultValues();
+      void writeToStream(QTextStream * stream);
       /*bool setAttribute(const QString& attrName, const QString& value);
       bool setAttribute(const QString& attrName, const bool& value);
       bool setAttribute(const QString& attrName, const int& value);

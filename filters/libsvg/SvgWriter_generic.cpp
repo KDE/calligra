@@ -69,8 +69,8 @@
 
 #include <QDebug>
 
-      // static void printIndentation(QTextStream *stream, unsigned int indent)
-void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int indent)
+static void printIndentation(QTextStream *stream, unsigned int indent)
+//void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int indent)
 {
     static const QString INDENT("  ");
     for (unsigned int i = 0; i < indent;++i)
