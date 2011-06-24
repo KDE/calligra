@@ -33,7 +33,7 @@ void SvgWriter_Stage::saveAppData(KoShape *shape)
     if(shape->applicationData() == 0){
       forTesting(shape);// Adds a frame object to this shape
     }
-    
+        
     SvgAnimationData * appData = dynamic_cast<SvgAnimationData*>(shape->applicationData());
     Frame *frameObj;// = new Frame();
     frameObj = &(appData->frame());
@@ -67,9 +67,21 @@ void SvgWriter_Stage::saveFrame(Frame * frame)
      printIndentation(m_frames, indent);
      *m_frames << "calligra:" << "transition-profile=\"" << frame->transitionProfile() << "\"" << endl;
      printIndentation(m_frames, indent);
-     *m_frames << "calligra:" << "hide=\"" << frame->isHide() << "\"" << endl;
+     *m_frames << "calligra:" << "hide=\"";
+     if(frame->isHide())
+       *m_frames << "true";
+     else
+       *m_frames << "false";
+     *m_frames << "\"" << endl;
+     
      printIndentation(m_frames, indent);
-     *m_frames << "calligra:" << "clip=\"" << frame->isClip() << "\"" << endl;
+     *m_frames << "calligra:" << "clip=\"";
+     if(frame->isClip())
+       *m_frames << "true";
+     else
+       *m_frames << "false";
+     *m_frames << "\"" << endl;
+     
      printIndentation(m_frames, indent);
      *m_frames << "calligra:" << "timeout-enable=\"" << frame->isEnableTimeout() << "\"" << endl;
      printIndentation(m_frames, indent);

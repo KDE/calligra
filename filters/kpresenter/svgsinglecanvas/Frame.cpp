@@ -20,13 +20,47 @@
 
       Frame::Frame() 
       {
+        m_attributes.append("title");
+        m_attributes.append("refid");
+        m_attributes.append("transition-profile");
+        m_attributes.append("hide");
+        m_attributes.append("clip");
+        m_attributes.append("timeout-enable");
+        m_attributes.append("sequence");
+        m_attributes.append("transition-zoom-percent");
+        m_attributes.append("timeout-ms");
+        m_attributes.append("transition-duration-ms");
+        
         setDefaultValues();
       }
 
       Frame::~Frame() 
       {
         }
-        
+   
+/*bool Frame::setAttribute(const QString& attrName, const QString& value)
+{
+    if(m_attrrValues.contains(attrName)){
+      m_attrrValues[m_attrrValues.key(attrName)] = value;
+    }
+}
+
+bool Frame::setAttribute(const QString& attrName, const bool& value)
+{
+    
+    if(m_attrrValues.contains(attrName)){
+      m_attrrValues[m_attrrValues.key(attrName)] = QString.value;
+    }
+}
+
+bool Frame::setAttribute(const QString& attrName, const int& value)
+{
+    if(m_attrrValues.contains(attrName)){
+      m_attrrValues[m_attrrValues.key(attrName)] = QString.setNum(value);
+    }
+
+}*/
+
       void Frame::setDefaultValues()
       {
       m_title = "No Title";
@@ -145,3 +179,7 @@
           return m_transitionDurationMs;
         }
           
+QList< QString > Frame::attributes() const
+{
+    return m_attributes;
+}

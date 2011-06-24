@@ -18,8 +18,11 @@ public:
     
 private:
     
-  QList<Frame*> m_frameList;
-  const QString *NS; //Namespace
+    QList<Frame*> m_frameList;
+    QList<QString> m_attributes;
+    
+    Frame * m_frame;
+    QString *NS; //Namespace
   
  // Frame * frame;
 

@@ -22,6 +22,7 @@
 
     #include <QString>
     #include <KoXmlReader.h>
+#include <qmap.h>
 
 
     /*
@@ -39,6 +40,10 @@
         * Sets the default values for all frame attrbutes
         */
       void setDefaultValues();
+      /*bool setAttribute(const QString& attrName, const QString& value);
+      bool setAttribute(const QString& attrName, const bool& value);
+      bool setAttribute(const QString& attrName, const int& value);
+      */
       void setTitle(const QString& title);
       void setRefId(const QString& refId); 
       void setTransitionProfile(const QString& transProfile);
@@ -65,6 +70,8 @@
       int timeout() const;
       int transitionDuration() const;
       
+      QList<QString> attributes() const;
+      
     private:
       QString m_title;
       QString m_refId;
@@ -79,8 +86,8 @@
       int m_transitionDurationMs;
       int m_timeoutMs;
 
-      
-      
+      QList<QString> m_attributes;
+      //QMap<QString *, QString * > m_attrrValues; 
     };
     
     #endif /*FRAME_H*/
