@@ -33,6 +33,7 @@
 #include <QVariantList>
 #include <QtGui/QGradient>
 
+class SvgSavingContext;
 class KoShapeLayer;
 class KoShapeGroup;
 class KoShape;
@@ -69,40 +70,33 @@ public:
     bool save(const QString &filename, bool writeInlineImages);
 
 private:
-    void saveLayer(KoShapeLayer * layer);
-    void saveGroup(KoShapeGroup * group);
-    void saveShape(KoShape * shape);
-    void savePath(KoPathShape * path);
-    void saveEllipse(EllipseShape * ellipse);
-    void saveRectangle(RectangleShape * rectangle);
+    void saveLayer(KoShapeLayer *layer, SvgSavingContext &context);
+    void saveGroup(KoShapeGroup *group, SvgSavingContext &context);
+    void saveShape(KoShape *shape, SvgSavingContext &context);
+    void savePath(KoPathShape *path, SvgSavingContext &context);
+    void saveEllipse(EllipseShape *ellipse, SvgSavingContext &context);
+    void saveRectangle(RectangleShape *rectangle, SvgSavingContext &context);
 
-    void saveImage(KoShape *picture);
-    void saveText(ArtisticTextShape * text);
+    void saveImage(KoShape *picture, SvgSavingContext &context);
+    void saveText(ArtisticTextShape *text, SvgSavingContext &context);
 
-    void getStyle(KoShape * shape, QTextStream * stream);
-    void getFill(KoShape * shape, QTextStream *stream);
-    void getStroke(KoShape * shape, QTextStream *stream);
-    void getEffects(KoShape *shape, QTextStream *stream);
-    void getClipping(KoShape *shape, QTextStream *stream);
-    void getColorStops(const QGradientStops & colorStops);
-    void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
-    void getPattern(KoPatternBackground * pattern, KoShape * shape);
-    QString getTransform(const QTransform &matrix, const QString &attributeName);
-    void saveFont(const QFont &font, QTextStream *stream);
-    void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
+    void saveStyle(KoShape *shape, SvgSavingContext &context);
+    void saveFill(KoShape * shape, SvgSavingContext &context);
+    void saveStroke(KoShape * shape, SvgSavingContext &context);
+    void saveEffects(KoShape *shape, SvgSavingContext &context);
+    void saveClipping(KoShape *shape, SvgSavingContext &context);
+    void saveColorStops(const QGradientStops &colorStops, SvgSavingContext &context);
+    QString saveGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
+    QString savePattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context);
+    QString getTransform(const QTransform &matrix);
+    void saveFont(const QFont &font, SvgSavingContext &context);
+    void saveTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveFont, qreal baselineOffset);
 
     QString getID(const KoShape *obj);
     QString createUID(const QString &base);
 
     /// Checks if the matrix only has translation set
     bool isTranslation(const QTransform &);
-
-    QTextStream* m_stream;
-    QTextStream* m_defs;
-    QTextStream* m_body;
-
-    unsigned int m_indent;
-    unsigned int m_indent2;
 
     QHash<const KoShape*, QString> m_shapeIds;
     QHash<QString, int> m_uniqueNames;
