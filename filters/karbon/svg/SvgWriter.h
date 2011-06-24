@@ -94,9 +94,6 @@ private:
     QString getID(const KoShape *obj);
     QString createUID(const QString &base);
 
-    /// Checks if the matrix only has translation set
-    bool isTranslation(const QTransform &);
-
     QHash<const KoShape*, QString> m_shapeIds;
     QHash<QString, int> m_uniqueNames;
     QList<KoShape*> m_toplevelShapes;

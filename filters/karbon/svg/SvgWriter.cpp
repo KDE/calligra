@@ -321,11 +321,6 @@ QString SvgWriter::getID(const KoShape *obj)
     return id;
 }
 
-bool SvgWriter::isTranslation(const QTransform &m)
-{
-    return m.type() == QTransform::TxTranslate;
-}
-
 void SvgWriter::saveColorStops(const QGradientStops &colorStops, SvgSavingContext &context)
 {
     foreach(const QGradientStop &stop, colorStops) {
@@ -738,7 +733,7 @@ void SvgWriter::saveText(ArtisticTextShape *text, SvgSavingContext &context)
     // check if we are set on a path
     if (text->layout() == ArtisticTextShape::Straight) {
         QTransform m = text->transformation();
-        if (isTranslation(m)) {
+        if (m.type() == QTransform::TxTranslate) {
             QPointF position = text->position();
             context.shapeWriter().addAttributePt("x", position.x() + anchorOffset);
             context.shapeWriter().addAttributePt("y", position.y() + text->baselineOffset());
@@ -786,7 +781,7 @@ void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
     context.shapeWriter().addAttribute("id", getID(picture));
 
     QTransform m = picture->transformation();
-    if (isTranslation(m)) {
+    if (m.type() == QTransform::TxTranslate) {
         const QPointF position = picture->position();
         context.shapeWriter().addAttributePt("x", position.x());
         context.shapeWriter().addAttributePt("y", position.y());
