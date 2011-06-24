@@ -978,7 +978,7 @@ bool ResourceItemModel::setAccount( Resource *res, const QVariant &value, int ro
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = res->account();
             if ( old != a ) {
-                emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18n( "Modify resource account" ) ) );
+                emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18nc( "(qtundo-format)", "Modify resource account" ) ) );
                 return true;
             }
     }
@@ -1244,7 +1244,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         KABC::VCardConverter vc;
         KABC::Addressee::List lst = vc.parseVCards( vcard );
         foreach( const KABC::Addressee &a, lst ) {
-            if ( m == 0 ) m = new MacroCommand( i18np( "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
+            if ( m == 0 ) m = new MacroCommand( i18ncp( "(qtundo-format)", "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
             Resource *r = new Resource();
             QString uid = a.uid();
             if ( ! m_project->findResource( uid ) ) {
@@ -1307,7 +1307,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
     //kDebug();
-    emit executeCommand( new AddResourceGroupCmd( m_project, g, i18n( "Add resource group" ) ) );
+    emit executeCommand( new AddResourceGroupCmd( m_project, g, i18nc( "(qtundo-format)", "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
         return createIndex( row, 0, g );
@@ -1318,7 +1318,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource * /*after*/ )
 {
     //kDebug();
-    emit executeCommand( new AddResourceCmd( g, r, i18n( "Add resource" ) ) );
+    emit executeCommand( new AddResourceCmd( g, r, i18nc( "(qtundo-format)", "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
         return createIndex( row, 0, r );

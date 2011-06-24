@@ -38,7 +38,7 @@ RoundCornersCommand::RoundCornersCommand(KoPathShape * path, qreal radius, KUndo
     m_copy = new KoPathShape();
     copyPath(m_copy, m_path);
     m_copy->normalize();
-    setText(i18n("Round Corners"));
+    setText(i18nc("(qtundo-format)", "Round Corners"));
 }
 
 RoundCornersCommand::~RoundCornersCommand()

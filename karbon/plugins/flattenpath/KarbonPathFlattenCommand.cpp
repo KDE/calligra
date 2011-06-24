@@ -162,7 +162,7 @@ KarbonPathFlattenCommand::KarbonPathFlattenCommand(KoPathShape * path, qreal fla
         }
         d->oldPointData.append(subpathData);
     }
-    setText(i18n("Flatten path"));
+    setText(i18nc("(qtundo-format)", "Flatten path"));
 }
 
 KarbonPathFlattenCommand::~KarbonPathFlattenCommand()

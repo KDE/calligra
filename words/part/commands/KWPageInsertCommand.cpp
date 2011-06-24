@@ -68,7 +68,7 @@ public:
 
 
 KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum, const QString &masterPageName, KUndo2Command *parent)
-    : KUndo2Command(i18n("Insert Page"), parent),
+    : KUndo2Command(i18nc("(qtundo-format)", "Insert Page"), parent),
     d(new KWPageInsertCommand::Private(document, afterPageNum, masterPageName))
 {
 }

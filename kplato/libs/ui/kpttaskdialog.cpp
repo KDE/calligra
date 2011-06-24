@@ -91,7 +91,7 @@ void TaskDialog::slotTaskRemoved( Node *node )
 }
 
 MacroCommand *TaskDialog::buildCommand() {
-    MacroCommand *m = new MacroCommand(i18n("Modify task"));
+    MacroCommand *m = new MacroCommand(i18nc("(qtundo-format)", "Modify task"));
     bool modified = false;
     MacroCommand *cmd = m_generalTab->buildCommand();
     if (cmd) {
@@ -164,7 +164,7 @@ void TaskAddDialog::slotNodeRemoved( Node *node )
 
 MacroCommand *TaskAddDialog::buildCommand()
 {
-    MacroCommand *c = new MacroCommand( i18n( "Add task" ) );
+    MacroCommand *c = new MacroCommand( i18nc( "(qtundo-format)", "Add task" ) );
     c->addCommand( new TaskAddCmd( &m_project, m_node, m_currentnode ) );
     MacroCommand *m = TaskDialog::buildCommand();
     if ( m ) {

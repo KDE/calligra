@@ -26,7 +26,7 @@ RemoveSheetCommand::RemoveSheetCommand(Calligra::Tables::Sheet* s)
 {
     sheet = s;
     map = sheet->map();
-    setText(i18n("Remove Sheet"));
+    setText(i18nc("(qtundo-format)", "Remove Sheet"));
 }
 
 void RemoveSheetCommand::redo()

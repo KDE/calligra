@@ -156,7 +156,7 @@ void PertEditor::removeTaskFromRequiredList()
         return;
     }
     // remove the relation
-    emit executeCommand( new DeleteRelationCmd( *m_project, r, i18n( "Remove task dependency" ) ) );
+    emit executeCommand( new DeleteRelationCmd( *m_project, r, i18nc( "(qtundo-format)", "Remove task dependency" ) ) );
 }
 
 void PertEditor::setProject( Project *project )
