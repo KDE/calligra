@@ -2650,7 +2650,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 if ( r != 0 ) {
                     continue;
                 }
-                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Add resource" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Add resource" ) );
                 if ( pargr == 0 ) {
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
@@ -2841,11 +2841,11 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
             //kDebug()<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
             if ( d != node->estimate()->expectedEstimate() ) {
-                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Modify estimate" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify estimate" ) );
                 cmd->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), d ) );
             }
             if ( unit != node->estimate()->unit() ) {
-                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Modify estimate" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify estimate" ) );
                 cmd->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), unit ) );
             }
             if ( cmd == 0 ) {
@@ -2909,7 +2909,7 @@ bool NodeItemModel::setRunningAccount( Node *node, const QVariant &value, int ro
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify running account" ) ) );
+                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify running account" ) ) );
             }
             return true;
     }
@@ -2929,7 +2929,7 @@ bool NodeItemModel::setStartupAccount( Node *node, const QVariant &value, int ro
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify startup account" ) ) );
+                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify startup account" ) ) );
             }
             return true;
     }
@@ -2944,7 +2944,7 @@ bool NodeItemModel::setStartupCost( Node *node, const QVariant &value, int role 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify startup cost" ) ) );
+            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18nc( "(qtundo-format)", "Modify startup cost" ) ) );
             return true;
     }
     return false;
@@ -2962,7 +2962,7 @@ bool NodeItemModel::setShutdownAccount( Node *node, const QVariant &value, int r
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify shutdown account" ) ) );
+                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify shutdown account" ) ) );
             }
             return true;
     }
@@ -2977,7 +2977,7 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify shutdown cost" ) ) );
+            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18nc( "(qtundo-format)", "Modify shutdown cost" ) ) );
             return true;
     }
     return false;
@@ -2993,7 +2993,7 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         Completion &c = static_cast<Task*>( node )->completion();
         QDateTime dt = QDateTime::currentDateTime();
         QDate date = dt.date();
-        MacroCommand *m = new MacroCommand( i18n( "Modify completion" ) );
+        MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify completion" ) );
         if ( ! c.isStarted() ) {
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
@@ -3022,7 +3022,7 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         if ( value.toInt() > 0 ) {
             QDateTime dt = QDateTime::currentDateTime();
             QDate date = dt.date();
-            MacroCommand *m = new MacroCommand( i18n( "Set finished" ) );
+            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Set finished" ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
@@ -3043,7 +3043,7 @@ bool NodeItemModel::setRemainingEffort( Node *node, const QVariant &value, int r
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify remaining effort" ) ) );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify remaining effort" ) ) );
         return true;
     }
     return false;
@@ -3056,7 +3056,7 @@ bool NodeItemModel::setActualEffort( Node *node, const QVariant &value, int role
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify actual effort" ) ) );
+        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify actual effort" ) ) );
         return true;
     }
     return false;
@@ -3070,7 +3070,7 @@ bool NodeItemModel::setStartedTime( Node *node, const QVariant &value, int role 
             if ( t == 0 ) {
                 return false;
             }
-            MacroCommand *m = new MacroCommand( i18n( "Modify actual start time" ) );
+            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify actual start time" ) );
             if ( ! t->completion().isStarted() ) {
                 m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
             }
@@ -3098,7 +3098,7 @@ bool NodeItemModel::setFinishedTime( Node *node, const QVariant &value, int role
             if ( t == 0 ) {
                 return false;
             }
-            MacroCommand *m = new MacroCommand( i18n( "Modify actual finish time" ) );
+            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify actual finish time" ) );
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
                 if ( t->completion().percentFinished() < 100 ) {
@@ -3405,7 +3405,7 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
         int offset = 0;
         MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Move tasks" ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
             // append nodes if dropped *on* another node, insert if dropped *after*
             int pos = row == -1 ? -1 : row + offset;
             cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
@@ -3447,7 +3447,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
-    emit executeCommand( new TaskAddCmd( m_project, node, after, i18n( "Add task") ) );
+    emit executeCommand( new TaskAddCmd( m_project, node, after, i18nc( "(qtundo-format)", "Add task" ) ) );
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
@@ -3462,7 +3462,7 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 
 QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
-    emit executeCommand( new SubtaskAddCmd( m_project, node, parent, i18n( "Add sub-task" ) ) );
+    emit executeCommand( new SubtaskAddCmd( m_project, node, parent, i18nc( "(qtundo-format)", "Add sub-task" ) ) );
     reset();
     int row = -1;
     if ( node->parentNode() ) {
@@ -4296,7 +4296,7 @@ bool MilestoneItemModel::setRunningAccount( Node *node, const QVariant &value, i
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify running account" ) ) );
+                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify running account" ) ) );
             }
             return true;
     }
@@ -4316,7 +4316,7 @@ bool MilestoneItemModel::setStartupAccount( Node *node, const QVariant &value, i
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify startup account" ) ) );
+                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify startup account" ) ) );
             }
             return true;
     }
@@ -4331,7 +4331,7 @@ bool MilestoneItemModel::setStartupCost( Node *node, const QVariant &value, int 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify startup cost" ) ) );
+            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18nc( "(qtundo-format)", "Modify startup cost" ) ) );
             return true;
     }
     return false;
@@ -4349,7 +4349,7 @@ bool MilestoneItemModel::setShutdownAccount( Node *node, const QVariant &value, 
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify shutdown account" ) ) );
+                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify shutdown account" ) ) );
             }
             return true;
     }
@@ -4364,7 +4364,7 @@ bool MilestoneItemModel::setShutdownCost( Node *node, const QVariant &value, int
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify shutdown cost" ) ) );
+            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18nc( "(qtundo-format)", "Modify shutdown cost" ) ) );
             return true;
     }
     return false;
@@ -4621,7 +4621,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         int offset = 0;
         MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Move tasks" ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
             // append nodes if dropped *on* another node, insert if dropped *after*
             int pos = row == -1 ? -1 : row + offset;
             cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
-# This script takes a KWord XML file as entry (as saved by KWord)
-# and generates a KWord XML file that is ready to be used as a template.
+# This script takes a Words XML file as entry (as saved by Words)
+# and generates a Words XML file that is ready to be used as a template.
 # Usually one will run unzip first, to extract maindoc.xml from the document,
 # and use that as the <inputFile>.
 # David Faure <faure@kde.org>

@@ -58,7 +58,7 @@ public:
         Boolean,     ///< True, False (also i18n-ized)
         Integer,     ///< 14, 3, 1977
         Float,       ///< 3.141592, 1e10, 5.9e-7
-        String,      ///< "KOffice", "The quick brown fox..."
+        String,      ///< "Calligra", "The quick brown fox..."
         Operator,    ///< +, *, /, -
         Cell,        ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
         Range,       ///< C1:C100
@@ -220,8 +220,8 @@ public:
      * For any other type of token, it returns QString().
      *
      * Note that token text for a string token still has leading and trailing
-     * double-quotes, i.e for "KOffice", text() return "KOffice"
-     * (with the quotes, 9 characters) while asString() only return KOffice
+     * double-quotes, i.e for "Calligra", text() return "Calligra"
+     * (with the quotes, 9 characters) while asString() only return Calligra
      * (without quotes, 7 characters).
      */
     QString asString() const;

@@ -118,16 +118,16 @@ void CanvasController::openDocument(const QString& path)
         KoToolManager::instance()->addController(this);
         KoPACanvasItem *paCanvasItem = dynamic_cast<KoPACanvasItem*>(m_canvasItem);
 
-        m_paView = new PAView(this, dynamic_cast<KoPACanvasBase*>(m_canvasItem), prDocument);
-        paCanvasItem->setView(m_paView);
-
-        m_zoomController = m_paView->zoomController();
-        m_zoomHandler = static_cast<KoZoomHandler*>(paCanvasItem->viewConverter());
-
-        m_currentSlideNum = -1;
-        nextSlide();
-
         if (paCanvasItem) {
+            m_paView = new PAView(this, dynamic_cast<KoPACanvasBase*>(m_canvasItem), prDocument);
+            paCanvasItem->setView(m_paView);
+
+            m_zoomController = m_paView->zoomController();
+            m_zoomHandler = static_cast<KoZoomHandler*>(paCanvasItem->viewConverter());
+
+            m_currentSlideNum = -1;
+            nextSlide();
+
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
             connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), paCanvasItem, SLOT(slotSetDocumentOffset(QPoint)));
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
@@ -196,9 +196,9 @@ void CanvasController::openDocument(const QString& path)
         m_zoomController->setPageSize(m_currentTextDocPage.rect().size());
         m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
 
-        canvasItem->updateSize();
-
         if (canvasItem) {
+            canvasItem->updateSize();
+
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
             connect(canvasItem, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning

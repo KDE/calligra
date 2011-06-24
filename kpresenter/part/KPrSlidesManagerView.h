@@ -63,6 +63,10 @@ public:
     //a suitable active item for the context menu.
     virtual bool eventFilter(QObject *watched, QEvent *event);
 
+    void focusOutEvent(QFocusEvent *event);
+
+    void focusInEvent(QFocusEvent *event);
+
     /**
      * Setter of the size with a rect
      *
@@ -105,6 +109,12 @@ signals:
 
     /** Is emitted when an item is selected */
     void itemSelected();
+
+    /** Is emitted when the view loses focus */
+    void focusLost();
+
+    /** Is emitted when the view get focus */
+    void focusGot();
 
 private:
 

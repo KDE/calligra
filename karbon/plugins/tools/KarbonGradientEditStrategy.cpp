@@ -31,7 +31,7 @@
 
 #include <QBrush>
 #include <QGradient>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPainter>
 
 #include <math.h>
@@ -311,7 +311,7 @@ void GradientStrategy::applyChanges()
     }
 }
 
-QUndoCommand * GradientStrategy::createCommand(QUndoCommand * parent)
+KUndo2Command * GradientStrategy::createCommand(KUndo2Command * parent)
 {
     if (m_newBrush == m_oldBrush)
         return 0;

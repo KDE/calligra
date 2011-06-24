@@ -35,7 +35,7 @@ using namespace Calligra::Tables;
 DefinePrintRangeCommand::DefinePrintRangeCommand()
         : AbstractRegionCommand()
 {
-    setText(i18n("Define Print Range"));
+    setText(i18nc("(qtundo-format)", "Define Print Range"));
 }
 
 void DefinePrintRangeCommand::redo()

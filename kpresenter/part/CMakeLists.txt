@@ -72,12 +72,16 @@ set( calligrastageprivate_LIB_SRCS
      KPrSelectionManager.cpp
      KPrSelectionToggle.cpp
      KPrCustomSlideShowsModel.cpp
+     KPrSlidesSorterItemDelegate.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
      commands/KPrSetCustomSlideShowsCommand.cpp
      commands/KPrEditCustomSlideShowsCommand.cpp
+     commands/KPrAddCustomSlideShowCommand.cpp
+     commands/KPrDelCustomSlideShowCommand.cpp
+     commands/KPrRenameCustomSlideShowCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
@@ -144,7 +148,7 @@ kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 target_link_libraries(calligrastageprivate kopageapp kowidgets textlayout ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
-set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### calligrastagepart ###

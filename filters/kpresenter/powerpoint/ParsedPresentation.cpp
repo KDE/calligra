@@ -57,7 +57,7 @@ parseCurrentUserStream(POLE::Storage& storage, CurrentUserStream& cus)
     LEInputStream stream(&buffer);
     try {
         parseCurrentUserStream(stream, cus);
-    } catch (IOException e) {
+    } catch (const IOException& e) {
         qDebug() << "caught IOException while parsing CurrentUserStream: " << " " << e.msg;
         qDebug() << "stream position: " << stream.getPosition();
         return false;
@@ -82,7 +82,7 @@ parsePowerPointStructs(POLE::Storage& storage, PowerPointStructs& pps)
     LEInputStream stream(&buffer);
     try {
         parsePowerPointStructs(stream, pps);
-    } catch (IOException e) {
+    } catch (const IOException& e) {
         qDebug() << "caught IOException while parsing PowerPointStructs " << " " << e.msg;
         qDebug() << "stream position: " << stream.getPosition();
         return false;
@@ -108,7 +108,7 @@ parsePictures(POLE::Storage& storage, PicturesStream& pps)
     LEInputStream stream(&buffer);
     try {
         parsePicturesStream(stream, pps);
-    } catch (IOException e) {
+    } catch (const IOException& e) {
         qDebug() << "caught IOException while parsing Pictures " << " " << e.msg;
         qDebug() << "stream position: " << stream.getPosition();
         return false;

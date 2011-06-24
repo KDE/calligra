@@ -988,7 +988,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
     }
 }
 
-void Map::addCommand(QUndoCommand *command)
+void Map::addCommand(KUndo2Command *command)
 {
     emit commandAdded(command);
 }

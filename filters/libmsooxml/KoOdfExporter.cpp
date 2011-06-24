@@ -163,7 +163,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     kDebug(30003) << "created manifest and styles.xml";
 
-    // create settings.xml, apparently it is used to note koffice that msoffice files should
+    // create settings.xml, apparently it is used to note calligra that msoffice files should
     // have different behavior with some things
     if (!outputStore->open("settings.xml")) {
         delete outputStore;

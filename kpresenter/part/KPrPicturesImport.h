@@ -29,7 +29,7 @@ class KoPAMasterPage;
 class KPrDocument;
 class KPrView;
 class KJob;
-class QUndoCommand;
+class KUndo2Command;
 
 class KPrPicturesImport : public QObject
 {
@@ -50,7 +50,7 @@ private:
     KoPAPageBase *m_currentPage;
     KoPAMasterPage *m_masterPage;
     KoShapeFactoryBase *m_factory;
-    QUndoCommand *m_cmd;
+    KUndo2Command *m_cmd;
 };
 
 #endif /* KPRPICTURESIMPORT_H */

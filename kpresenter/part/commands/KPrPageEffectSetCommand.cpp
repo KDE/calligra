@@ -35,14 +35,14 @@ KPrPageEffectSetCommand::KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEf
     Q_ASSERT( m_newPageEffect != m_oldPageEffect );
     if ( m_newPageEffect ) {
         if ( ! m_oldPageEffect ) {
-            setText( i18n( "Create page effect" ) );
+            setText( i18nc( "(qtundo-format)", "Create page effect" ) );
         }
         else {
-            setText( i18n( "Modify page effect" ) );
+            setText( i18nc( "(qtundo-format)", "Modify page effect" ) );
         }
     }
     else {
-        setText( i18n( "Delete page effect" ) );
+        setText( i18nc( "(qtundo-format)", "Delete page effect" ) );
     }
 }
 

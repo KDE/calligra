@@ -23,8 +23,8 @@
 #ifndef KWFRAME_H
 #define KWFRAME_H
 
-#include "KWord.h"
-#include "kword_export.h"
+#include "Words.h"
+#include "words_export.h"
 
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
@@ -43,7 +43,7 @@ class KWPage;
  * A frame is really just a shape that is used to place the content
  * of a frameset.
  */
-class KWORD_EXPORT KWFrame : public KoShapeApplicationData
+class WORDS_EXPORT KWFrame : public KoShapeApplicationData
 {
 public:
     /**
@@ -59,21 +59,21 @@ public:
     /**
      * This property what should happen when the frame is full
      */
-    KWord::FrameBehavior frameBehavior() const {
+    Words::FrameBehavior frameBehavior() const {
         return m_frameBehavior;
     }
     /**
      * Set what should happen when the frame is full
      * @param fb the new FrameBehavior
      */
-    void setFrameBehavior(KWord::FrameBehavior fb) {
+    void setFrameBehavior(Words::FrameBehavior fb) {
         m_frameBehavior = fb;
     }
 
     /**
      * For frame duplication policy on new page creation.
      */
-    KWord::NewFrameBehavior newFrameBehavior() const {
+    Words::NewFrameBehavior newFrameBehavior() const {
         return m_newFrameBehavior;
     }
     /**
@@ -81,7 +81,7 @@ public:
      * Altering this does not change the frames placed until a new page is created.
      * @param nf the NewFrameBehavior.
      */
-    void setNewFrameBehavior(KWord::NewFrameBehavior nf) {
+    void setNewFrameBehavior(Words::NewFrameBehavior nf) {
         m_newFrameBehavior = nf;
     }
 
@@ -168,9 +168,9 @@ public:
 
 private:
     KoShape *m_shape;
-    KWord::FrameBehavior m_frameBehavior;
+    Words::FrameBehavior m_frameBehavior;
     bool m_copyToEverySheet;
-    KWord::NewFrameBehavior m_newFrameBehavior;
+    Words::NewFrameBehavior m_newFrameBehavior;
     // The page number is only used during loading.
     // It is set to the page number if the frame contains a page anchored frame.
     // In all other cases it is set to -1.

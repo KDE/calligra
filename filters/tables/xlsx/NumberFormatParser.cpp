@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -371,7 +371,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
                 if (isLongest && !isReallyReallyLong)
                     xmlWriter.addAttribute("number:style", "long");
                 if (isWayTooLong) {       // the month format is "mmmmm" then it's the extra-short format of month
-                    xmlWriter.addAttribute("koffice:number-length", "extra-short");
+                    xmlWriter.addAttribute("calligra:number-length", "extra-short");
                 }
                 xmlWriter.addAttribute("number:textual", "true");
                 xmlWriter.endElement();

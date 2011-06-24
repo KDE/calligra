@@ -35,7 +35,7 @@ class RowFormat;
 class RowStyleCommand : public AbstractRegionCommand
 {
 public:
-    RowStyleCommand(QUndoCommand *parent = 0);
+    RowStyleCommand(KUndo2Command *parent = 0);
     virtual ~RowStyleCommand();
 
     void setHeight(double height);

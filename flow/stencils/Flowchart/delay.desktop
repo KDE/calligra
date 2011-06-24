@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Delay
+Name[cs]=Prodleva
 Name[el]=Καθυστέρηση
 Name[nb]=Forsinkelse
 Name[nl]=Vertraging
@@ -10,3 +11,4 @@ Name[ug]=كېچىكتۈر
 Name[uk]=Затримка
 Name[x-test]=xxDelayxx
 Name[zh_CN]=延迟
+Name[zh_TW]=延遲

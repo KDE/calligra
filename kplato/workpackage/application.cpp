@@ -73,10 +73,10 @@ KPlatoWork_Application::KPlatoWork_Application()
     : KUniqueApplication(),
     m_mainwindow( 0 )
 {
-    // Tell the iconloader about share/apps/koffice/icons
-/*    KIconLoader::global()->addAppDir("koffice");
+    // Tell the iconloader about share/apps/calligra/icons
+/*    KIconLoader::global()->addAppDir("calligra");
 
-    // Initialize all KOffice directories etc.
+    // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
     new KoApplicationAdaptor(this);

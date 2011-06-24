@@ -53,7 +53,7 @@ public:
     bool snapToGrid() const;
 
     /// reimplemented method from superclass
-    void addCommand( QUndoCommand* command );
+    void addCommand( KUndo2Command* command );
 
     /// reimplemented method from superclass
     KoShapeManager* shapeManager() const;

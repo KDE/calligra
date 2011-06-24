@@ -9,6 +9,7 @@ Name[pt_BR]=Calligra Stage
 Name[sv]=Calligra Stage
 Name[uk]=Calligra Stage
 Name[x-test]=xxCalligra Stagexx
+Name[zh_TW]=Calligra Stage
 Exec=calligrastage %u
 GenericName=Presentation
 GenericName[bg]=Екранни презентации

@@ -67,8 +67,8 @@ public:
 };
 
 
-KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum, const QString &masterPageName, QUndoCommand *parent)
-    : QUndoCommand(i18n("Insert Page"), parent),
+KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum, const QString &masterPageName, KUndo2Command *parent)
+    : KUndo2Command(i18nc("(qtundo-format)", "Insert Page"), parent),
     d(new KWPageInsertCommand::Private(document, afterPageNum, masterPageName))
 {
 }
@@ -80,7 +80,7 @@ KWPageInsertCommand::~KWPageInsertCommand()
 
 void KWPageInsertCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (! d->pageCreated) { // create the page the first time.
         d->pageCreated = true;
@@ -152,7 +152,7 @@ void KWPageInsertCommand::redo()
 
 void KWPageInsertCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (! d->page.isValid())
         return;
     KWPageManagerPrivate *priv = d->document->pageManager()->priv();

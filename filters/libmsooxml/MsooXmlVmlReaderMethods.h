@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -63,10 +63,9 @@ protected:
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
-    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart, GroupStart};
+    enum FrameStartElement {FrameStart, RectStart, LineStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
-    KoFilter::ConversionStatus createFrameEnd();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
@@ -94,7 +93,6 @@ protected:
         bool wrapRead;
         QString currentShapeId; //!< set in read_shape()
         QString imagedataPath; //!< set in read_shape()
-        QString imagedataFile; //!< set in read_shape()
         QString shapeAltText; //!< set in read_shape()
         QString shapeTitle; //!< set in read_shape()
 
@@ -106,11 +104,6 @@ protected:
 
         QString anchorType;
 
-        //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
-        //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
-        QString currentObjectWidthCm;
-        QString currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
-
         int formulaIndex;
         QString shapeTypeString;
         QString extraShapeFormulas;
@@ -119,13 +112,14 @@ protected:
         QString viewBox;
         QString shapePath;
         int extraFormulaIndex;
+        QString leftMargin, rightMargin, topMargin, bottomMargin;
+        bool fitTextToShape, fitShapeToText;
 
         // Parameters for group shape situation
         bool insideGroup;
         int groupWidth, groupHeight; // Relative group extends
         int groupX, groupY; // Relative group origin
         qreal groupXOffset, groupYOffset; // Offset caused by the group parent
-        QString groupWidthUnit, groupHeightUnit; // pt, cm etc.
         qreal real_groupWidth, real_groupHeight;
     };
 

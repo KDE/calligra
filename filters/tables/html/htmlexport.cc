@@ -32,7 +32,7 @@
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoDocumentInfo.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 #include <tables/CellStorage.h>
 #include <tables/Map.h>
@@ -183,7 +183,7 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
     str += QString("content=\"text/html; charset=%1\">\n").arg(QString(m_dialog->encoding()->name()));
     str += "<meta name=\"Generator\" ";
     str += "content=\"KSpread HTML Export Filter Version = ";
-    str += KOFFICE_VERSION_STRING;
+    str += CALLIGRA_VERSION_STRING;
     str += "\">\n";
 
     // Insert stylesheet

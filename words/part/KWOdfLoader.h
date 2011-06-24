@@ -23,7 +23,7 @@
 #ifndef KWODFLOADER_H
 #define KWODFLOADER_H
 
-#include "KWord.h"
+#include "Words.h"
 #include "KoXmlReaderForward.h"
 
 #include <KoTextLoader.h>
@@ -38,7 +38,7 @@ class QTextDocument;
 class QTextCursor;
 
 /**
- * Class that has a lot of the OpenDocument (ODF) loading code for KWord.
+ * Class that has a lot of the OpenDocument (ODF) loading code for Words.
  */
 class KWOdfLoader : public QObject
 {
@@ -79,10 +79,10 @@ private:
     void loadFinished(KoOdfLoadingContext &context, QTextCursor &cursor);
 
     /// helper function to create a KWTextFrameSet+KWFrame for a header/footer.
-    void loadHeaderFooterFrame(KoShapeLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType);
+    void loadHeaderFooterFrame(KoShapeLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, Words::TextFrameSetType fsType);
 
 private:
-    /// The KWord document.
+    /// The Words document.
     QPointer<KWDocument> m_document;
 };
 

@@ -20,17 +20,17 @@
 #ifndef FILTERREMOVECOMMAND_H
 #define FILTERREMOVECOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KoShape;
 class KoFilterEffect;
 class KoFilterEffectStack;
 
 /// A command do remove a filter effect from a filter effect stack
-class FilterRemoveCommand : public QUndoCommand
+class FilterRemoveCommand : public KUndo2Command
 {
 public:
-    FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, QUndoCommand *parent = 0);
+    FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, KUndo2Command *parent = 0);
     ~FilterRemoveCommand();
     /// redo the command
     virtual void redo();

@@ -73,7 +73,7 @@ KoFilter::ConversionStatus OoWriterImport::convert(QByteArray const & from, QByt
     if ((from != "application/vnd.sun.xml.writer"
             && from != "application/vnd.sun.xml.writer.template"
             && from != "application/vnd.sun.xml.writer.master")
-            || to != "application/x-kword") {
+            || to != "application/x-words") {
         kWarning(30518) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
@@ -161,8 +161,8 @@ KoFilter::ConversionStatus OoWriterImport::convert(QByteArray const & from, QByt
     // store preview
 
     if (! thumbnail.isNull()) {
-        // ### TODO: thumbnail.setAlphaBuffer( false ); // legacy KOffice previews have no alpha channel
-        // Legacy KOffice previews are 256x256x8 instead of 128x128x32
+        // ### TODO: thumbnail.setAlphaBuffer( false ); // legacy Calligra previews have no alpha channel
+        // Legacy Calligra previews are 256x256x8 instead of 128x128x32
         QImage preview(thumbnail.smoothScale(256, 256).convertDepth(8, Qt::AvoidDither | Qt::DiffuseDither));
         // Not to be able to generate a preview is not an error
         if (!preview.isNull()) {
@@ -193,14 +193,14 @@ void OoWriterImport::createStyles(QDomDocument& doc)
             continue;
 
         // We use the style stack, to flatten out parent styles
-        // Once KWord supports style inheritance, replace this with a single m_styleStack.push.
+        // Once Words supports style inheritance, replace this with a single m_styleStack.push.
         // (We still need to use StyleStack, since that's what writeLayout/writeFormat read from)
         addStyles(&e);
 
         QDomElement styleElem = doc.createElement("STYLE");
         stylesElem.appendChild(styleElem);
 
-        QString styleName = kWordStyleName(e.attributeNS(ooNS::style, "name", QString()));
+        QString styleName = WordsStyleName(e.attributeNS(ooNS::style, "name", QString()));
         QDomElement element = doc.createElement("NAME");
         element.setAttribute("value", styleName);
         styleElem.appendChild(element);
@@ -209,11 +209,11 @@ void OoWriterImport::createStyles(QDomDocument& doc)
         QString followingStyle = m_styleStack.property(ooNS::style, "next-style-name");
         if (!followingStyle.isEmpty()) {
             QDomElement element = doc.createElement("FOLLOWING");
-            element.setAttribute("name", kWordStyleName(followingStyle));
+            element.setAttribute("name", WordsStyleName(followingStyle));
             styleElem.appendChild(element);
         }
 
-        // ### In KWord the style says "I'm part of the outline" (TOC)
+        // ### In Words the style says "I'm part of the outline" (TOC)
         // ### In OOo the paragraph says that (text:h)
         // Hence this hack...
         // OASIS solution for this: style:default-outline-level attribute
@@ -383,7 +383,7 @@ void OoWriterImport::writePageLayout(QDomDocument& mainDocument, const QString& 
                 elementPaper.setAttribute("slFootNoteLenth", pageWidth);
             }
             elementPaper.setAttribute("slFootNotePosition", footnoteSep.attributeNS(ooNS::style, "adjustment", QString()));
-            // Not in KWord: color, distance before and after separator
+            // Not in Words: color, distance before and after separator
             // Not in OOo: line type of separator (solid, dot, dash etc.)
         }
 
@@ -450,10 +450,10 @@ void OoWriterImport::writePageLayout(QDomDocument& mainDocument, const QString& 
 
 void OoWriterImport::prepareDocument(QDomDocument& mainDocument, QDomElement& framesetsElem)
 {
-    mainDocument = KoDocument::createDomDocument("kword", "DOC", "1.2");
+    mainDocument = KoDocument::createDomDocument("words", "DOC", "1.2");
     QDomElement docElement = mainDocument.documentElement();
-    docElement.setAttribute("editor", "KWord's OOWriter Import Filter");
-    docElement.setAttribute("mime", "application/x-kword");
+    docElement.setAttribute("editor", "Words's OOWriter Import Filter");
+    docElement.setAttribute("mime", "application/x-words");
     docElement.setAttribute("syntaxVersion", "2");
 
     framesetsElem = mainDocument.createElement("FRAMESETS");
@@ -639,7 +639,7 @@ void OoWriterImport::insertStyles(const KoXmlElement& styles, QDomDocument& doc)
         } else if (localName == "endnotes-configuration" && ns == ooNS::text) {
             importFootnotesConfiguration(doc, e, true);
         } else if (localName == "linenumbering-configuration" && ns == ooNS::text) {
-            // Not implemented in KWord
+            // Not implemented in Words
         } else if (localName == "number-style" && ns == ooNS::number) {
             // TODO
         } else if ((localName == "date-style"
@@ -831,7 +831,7 @@ void OoWriterImport::writeCounter(QDomDocument& doc, QDomElement& layoutElement,
             case 0x25CF: // large disc
                 counter.setAttribute("type", 10);   // a disc bullet
                 break;
-            case 0xE00C: // losange - TODO in KWord. Not in OASIS either (reserved Unicode area!)
+            case 0xE00C: // losange - TODO in Words. Not in OASIS either (reserved Unicode area!)
                 counter.setAttribute("type", 10);   // a disc bullet
                 break;
             case 0xE00A: // square. Not in OASIS (reserved Unicode area!)
@@ -968,7 +968,7 @@ void OoWriterImport::parseSpanOrSimilar(QDomDocument& doc, const KoXmlElement& p
             textData = OoUtils::expandWhitespace(ts);
             shouldWriteFormat = true;
         } else if (isTextNS && localName == "tab-stop") { // text:tab-stop
-            // KWord currently uses \t.
+            // Words currently uses \t.
             // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
             // One more good reason to switch to <text:tab-stop> instead...
             textData = '\t';
@@ -996,7 +996,7 @@ void OoWriterImport::parseSpanOrSimilar(QDomDocument& doc, const KoXmlElement& p
                 // As we do not support it now, treat it as a <text:span> without formatting
                 parseSpanOrSimilar(doc, ts, outputParagraph, outputFormats, paragraphText, pos);
             } else {
-                // The problem is that KWord's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
+                // The problem is that Words's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
                 // So we have to fake.
                 QDomElement fakeParagraph, fakeFormats;
                 uint fakePos = 0;
@@ -1006,7 +1006,7 @@ void OoWriterImport::parseSpanOrSimilar(QDomDocument& doc, const KoXmlElement& p
                 QDomElement linkElement(doc.createElement("LINK"));
                 linkElement.setAttribute("hrefName", ts.attributeNS(ooNS::xlink, "href", QString()));
                 linkElement.setAttribute("linkName", text);
-                appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, linkElement);
+                appendWordsVariable(doc, outputFormats, ts, pos, "STRING", 9, linkElement);
             }
             m_styleStack.restore();
         } else if (isTextNS &&
@@ -1031,7 +1031,7 @@ void OoWriterImport::parseSpanOrSimilar(QDomDocument& doc, const KoXmlElement& p
                     || localName == "user-defined"
                     || localName.startsWith("sender-")
                    ))
-            // TODO in kword: printed-by, initial-creator
+            // TODO in words: printed-by, initial-creator
         {
             textData = "#";     // field placeholder
             appendField(doc, outputFormats, ts, pos);
@@ -1108,7 +1108,7 @@ QDomElement OoWriterImport::parseParagraph(QDomDocument& doc, const KoXmlElement
     QString styleName = m_styleStack.userStyleName("paragraph");
     if (!styleName.isEmpty()) {
         QDomElement nameElement = doc.createElement("NAME");
-        nameElement.setAttribute("value", kWordStyleName(styleName));
+        nameElement.setAttribute("value", WordsStyleName(styleName));
         layoutElement.appendChild(nameElement);
     }
 
@@ -1124,7 +1124,7 @@ QDomElement OoWriterImport::parseParagraph(QDomDocument& doc, const KoXmlElement
     if (masterPageName != m_currentMasterPage) {
         // Detected a change in the master page -> this means we have to use a new page layout
         // and insert a frame break if not on the first paragraph.
-        // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
+        // In Words we don't support sections so the first paragraph is the one that determines the page layout.
         if (m_currentMasterPage.isEmpty()) {
             m_currentMasterPage = masterPageName; // before writePageLayout to avoid recursion
             writePageLayout(doc, masterPageName);
@@ -1136,7 +1136,7 @@ QDomElement OoWriterImport::parseParagraph(QDomDocument& doc, const KoXmlElement
                 layoutElement.appendChild(pageBreakElem);
             }
             pageBreakElem.setAttribute("hardFrameBreak", "true");
-            // We have no way to store the new page layout, KWord doesn't have sections.
+            // We have no way to store the new page layout, Words doesn't have sections.
         }
     }
 
@@ -1193,7 +1193,7 @@ void OoWriterImport::writeFormat(QDomDocument& doc, QDomElement& formats, int id
         qreal pointSize = m_styleStack.fontSize().first;
 
         QDomElement fontSize(doc.createElement("SIZE"));
-        fontSize.setAttribute("value", qRound(pointSize));   // KWord uses toInt()!
+        fontSize.setAttribute("value", qRound(pointSize));   // Words uses toInt()!
         format.appendChild(fontSize);
     }
     if (m_styleStack.hasProperty(ooNS::fo, "font-weight")) {     // 3.10.24
@@ -1233,7 +1233,7 @@ void OoWriterImport::writeFormat(QDomDocument& doc, QDomElement& formats, int id
         }
         if (wordByWord)
             strikeOut.setAttribute("wordbyword", 1);
-        // not supported by KWord: "slash" and "X"
+        // not supported by Words: "slash" and "X"
         // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
         format.appendChild(strikeOut);
     }
@@ -1272,8 +1272,8 @@ void OoWriterImport::writeFormat(QDomDocument& doc, QDomElement& formats, int id
         if (smallCaps) {
             fontAttrib.setAttribute("value", "smallcaps");
         } else {
-            // Both KWord and OO use "uppercase" and "lowercase".
-            // TODO in KWord: "capitalize".
+            // Both Words and OO use "uppercase" and "lowercase".
+            // TODO in Words: "capitalize".
             fontAttrib.setAttribute("value", m_styleStack.property(ooNS::fo, "text-transform"));
         }
         format.appendChild(fontAttrib);
@@ -1319,9 +1319,9 @@ void OoWriterImport::writeFormat(QDomDocument& doc, QDomElement& formats, int id
 
     /*
       Missing properties:
-      style:use-window-font-color, 3.10.4 - this is what KWord uses by default (fg color from the color style)
+      style:use-window-font-color, 3.10.4 - this is what Words uses by default (fg color from the color style)
          OO also switches to another color when necessary to avoid dark-on-dark and light-on-light cases.
-         (that is TODO in KWord)
+         (that is TODO in Words)
       style:text-outline, 3.10.5 - not implemented in kotext
       style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
@@ -1397,11 +1397,11 @@ void OoWriterImport::writeLayout(QDomDocument& doc, QDomElement& layoutElement)
         QDomElement pageBreak = doc.createElement("PAGEBREAKING");
         if (m_styleStack.hasProperty(ooNS::fo, "break-before")) {    // 3.11.24
             bool breakBefore = m_styleStack.property(ooNS::fo, "break-before") != "auto";
-            // TODO in KWord: implement difference between "column" and "page"
+            // TODO in Words: implement difference between "column" and "page"
             pageBreak.setAttribute("hardFrameBreak", breakBefore ? "true" : "false");
         } else if (m_styleStack.hasProperty(ooNS::fo, "break-after")) {   // 3.11.24
             bool breakAfter = m_styleStack.property(ooNS::fo, "break-after") != "auto";
-            // TODO in KWord: implement difference between "column" and "page"
+            // TODO in Words: implement difference between "column" and "page"
             pageBreak.setAttribute("hardFrameBreakAfter", breakAfter ? "true" : "false");
         }
 
@@ -1417,7 +1417,7 @@ void OoWriterImport::writeLayout(QDomDocument& doc, QDomElement& layoutElement)
         layoutElement.appendChild(pageBreak);
     }
 
-    // TODO in KWord: padding
+    // TODO in Words: padding
     /* padding works together with the borders. The margins are around a
      * paragraph, and the padding is the space between the border and the
      * paragraph. In the OOo UI, you can only select padding when you have
@@ -1430,7 +1430,7 @@ void OoWriterImport::writeLayout(QDomDocument& doc, QDomElement& layoutElement)
      */
 
     /*
-      Paragraph properties not implemented in KWord:
+      Paragraph properties not implemented in Words:
         style:text-align-last
         style:justify-single-word
         fo:background-color (3.11.25, bg color for a paragraph, unlike style:text-background-color)
@@ -1464,7 +1464,7 @@ void OoWriterImport::importFrame(QDomElement& frameElementOut, const KoXmlElemen
         // TODO handle percentage (of enclosing table/frame/page)
         width = KoUnit::parseValue(object.attributeNS(ooNS::svg, "width", QString()));
     } else if (object.hasAttributeNS(ooNS::fo, "min-width")) {
-        // min-width is not supported in KWord. Let's use it as a fixed width.
+        // min-width is not supported in Words. Let's use it as a fixed width.
         width = KoUnit::parseValue(object.attributeNS(ooNS::fo, "min-width", QString()));
     } else {
         kWarning(30518) << "Error in text-box: neither width nor min-width specified!";
@@ -1483,7 +1483,7 @@ void OoWriterImport::importFrame(QDomElement& frameElementOut, const KoXmlElemen
 
     // draw:textarea-vertical-align, draw:textarea-horizontal-align
 
-    // Not supported in KWord: fo:max-height  fo:max-width
+    // Not supported in Words: fo:max-height  fo:max-width
     //                         Anchor, Shadow (3.11.30), Columns
 
     //  #### horizontal-pos horizontal-rel vertical-pos vertical-rel anchor-type
@@ -1508,8 +1508,8 @@ void OoWriterImport::importFrame(QDomElement& frameElementOut, const KoXmlElemen
     frameElementOut.setAttribute("runaround", attribs.first);
     if (!attribs.second.isEmpty())
         frameElementOut.setAttribute("runaroundSide", attribs.second);
-    // ## runaroundGap is a problem. KWord-1.3 had one value, OO has 4 (margins on all sides, see p98).
-    // Fixed in KWord-post-1.3, it has 4 values now.
+    // ## runaroundGap is a problem. Words-1.3 had one value, OO has 4 (margins on all sides, see p98).
+    // Fixed in Words-post-1.3, it has 4 values now.
 
 
     if (isText) {
@@ -1520,11 +1520,11 @@ void OoWriterImport::importFrame(QDomElement& frameElementOut, const KoXmlElemen
             // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
             overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
         }
-        // Not implemented in KWord: contour wrapping
+        // Not implemented in Words: contour wrapping
         frameElementOut.setAttribute("autoCreateNewFrame", overflowBehavior);
     }
 
-    // TODO sheetSide (not implemented in KWord, but in its DTD)
+    // TODO sheetSide (not implemented in Words, but in its DTD)
 
     importCommonFrameProperties(frameElementOut);
 }
@@ -1621,7 +1621,7 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const KoXmlElement& obj
     m_styleStack.save();
     fillStyleStack(object, ooNS::draw, "style-name");   // get the style for the graphics element
 
-    // Create KWord frameset
+    // Create Words frameset
     QDomElement framesetElement(doc.createElement("FRAMESET"));
     framesetElement.setAttribute("frameType", 1);
     framesetElement.setAttribute("frameInfo", 0);
@@ -1662,14 +1662,14 @@ void OoWriterImport::importFootnote(QDomDocument& doc, const KoXmlElement& objec
     // The var
     QDomElement footnoteElem = doc.createElement("FOOTNOTE");
     if (autoNumbered)
-        footnoteElem.setAttribute("value", 1);   // KWord will renumber anyway
+        footnoteElem.setAttribute("value", 1);   // Words will renumber anyway
     else
         footnoteElem.setAttribute("value", label);
     footnoteElem.setAttribute("notetype", endnote ? "endnote" : "footnote");
     footnoteElem.setAttribute("numberingtype", autoNumbered ? "auto" : "manual");
     footnoteElem.setAttribute("frameset", frameName);
 
-    appendKWordVariable(doc, formats, citationElem, pos, "STRI", 11 /*KWord code for footnotes*/, footnoteElem);
+    appendWordsVariable(doc, formats, citationElem, pos, "STRI", 11 /*Words code for footnotes*/, footnoteElem);
 
     // The frameset
     QDomElement framesetElement(doc.createElement("FRAMESET"));
@@ -1857,7 +1857,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
             dateElement.setAttribute("second", time.second());
             if (object.hasAttributeNS(ooNS::text, "date-adjust"))
                 dateElement.setAttribute("correct", object.attributeNS(ooNS::text, "date-adjust", QString()));
-            appendKWordVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
+            appendWordsVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
         } else if (localName == "time") {
             // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
             QDateTime dt(QDateTime::fromString(object.attributeNS(ooNS::text, "time-value", QString()), Qt::ISODate));
@@ -1877,7 +1877,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
             timeElement.setAttribute("second", time.second());
             /*if (object.hasAttributeNS( ooNS::text, "time-adjust"))
               timeElem.setAttribute("correct", object.attributeNS( ooNS::text, "time-adjust", QString()));*/ // ### TODO
-            appendKWordVariable(doc, outputFormats, object, pos, "TIME" + dateFormat, 2, timeElement);
+            appendWordsVariable(doc, outputFormats, object, pos, "TIME" + dateFormat, 2, timeElement);
 
         } else if (localName == "print-time"
                    || localName == "print-date"
@@ -1897,7 +1897,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
             dateElement.setAttribute("subtype", subtype);
             if (object.hasAttributeNS(ooNS::text, "date-adjust"))
                 dateElement.setAttribute("correct", object.attributeNS(ooNS::text, "date-adjust", QString()));
-            appendKWordVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
+            appendWordsVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
         }
     }// end of date/time variables
     else if (localName == "page-number") {
@@ -1915,14 +1915,14 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         QDomElement pgnumElement(doc.createElement("PGNUM"));
         pgnumElement.setAttribute("subtype", subtype);
         pgnumElement.setAttribute("value", object.text());
-        appendKWordVariable(doc, outputFormats, object, pos, "NUMBER", 4, pgnumElement);
+        appendWordsVariable(doc, outputFormats, object, pos, "NUMBER", 4, pgnumElement);
     } else if (localName == "chapter") {
         const QString display = object.attributeNS(ooNS::text, "display", QString());
         // display can be name, number, number-and-name, plain-number-and-name, plain-number
         QDomElement pgnumElement(doc.createElement("PGNUM"));
         pgnumElement.setAttribute("subtype", 2); // VST_CURRENT_SECTION
         pgnumElement.setAttribute("value", object.text());
-        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 4, pgnumElement);
+        appendWordsVariable(doc, outputFormats, object, pos, "STRING", 4, pgnumElement);
     } else if (localName == "file-name") {
         subtype = 5;
 
@@ -1942,7 +1942,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         QDomElement fieldElement(doc.createElement("FIELD"));
         fieldElement.setAttribute("subtype", subtype);
         fieldElement.setAttribute("value", object.text());
-        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElement);
+        appendWordsVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElement);
     } else if (localName == "author-name"
                || localName == "author-initials"
                || localName == "subject"
@@ -1953,7 +1953,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
 
         if (localName == "author-initials")
             subtype = 16;       // VST_INITIAL
-        else if (localName == "subject")   // TODO in kword
+        else if (localName == "subject")   // TODO in words
             subtype = 10; // title
         else if (localName == "title")
             subtype = 10;
@@ -1963,7 +1963,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         QDomElement authorElem = doc.createElement("FIELD");
         authorElem.setAttribute("subtype", subtype);
         authorElem.setAttribute("value", object.text());
-        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
+        appendWordsVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
     } else if (localName.startsWith("sender-")) {
         int subtype = -1;
         const QByteArray afterText(localName.toLatin1());
@@ -1999,7 +1999,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
             QDomElement fieldElem = doc.createElement("FIELD");
             fieldElem.setAttribute("subtype", subtype);
             fieldElem.setAttribute("value", object.text());
-            appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElem);
+            appendWordsVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElem);
         }
     } else if (localName == "variable-set"
                || localName == "user-defined") {
@@ -2010,14 +2010,14 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         QDomElement customElem = doc.createElement("CUSTOM");
         customElem.setAttribute("name", object.attributeNS(ooNS::text, "name", QString()));
         customElem.setAttribute("value", object.text());
-        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 6, customElem);
+        appendWordsVariable(doc, outputFormats, object, pos, "STRING", 6, customElem);
     } else {
         kWarning(30518) << "Unsupported field " << localName;
     }
 // TODO localName == "page-variable-get", "initial-creator" and many more
 }
 
-void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const KoXmlElement& object, uint pos,
+void OoWriterImport::appendWordsVariable(QDomDocument& doc, QDomElement& formats, const KoXmlElement& object, uint pos,
         const QString& key, int type, QDomElement& child)
 {
     QDomElement variableElement(doc.createElement("VARIABLE"));
@@ -2045,7 +2045,7 @@ void OoWriterImport::parseTable(QDomDocument &doc, const KoXmlElement& parent, Q
     QString tableName(parent.attributeNS(ooNS::table, "name", QString()));     // TODO: what if empty (non-unique?)
     kDebug(30518) << "Found table" << tableName;
 
-    // In OOWriter a table is never inside a paragraph, in KWord it is always in a paragraph
+    // In OOWriter a table is never inside a paragraph, in Words it is always in a paragraph
     QDomElement paragraphElementOut(doc.createElement("PARAGRAPH"));
     currentFramesetElement.appendChild(paragraphElementOut);
 
@@ -2127,7 +2127,7 @@ void OoWriterImport::parseInsideOfTable(QDomDocument &doc, const KoXmlElement& p
     kDebug(30518) << "parseInsideOfTable: columnLefts.size()=" << columnLefts.size();
     QDomElement framesetsPluralElement(doc.documentElement().namedItem("FRAMESETS").toElement());
     if (framesetsPluralElement.isNull()) {
-        kError(30518) << "Cannot find KWord's <FRAMESETS>! Cannot process table!" << endl;
+        kError(30518) << "Cannot find Words's <FRAMESETS>! Cannot process table!" << endl;
         return;
     }
 
@@ -2276,7 +2276,7 @@ void OoWriterImport::appendTOC(QDomDocument& doc, const KoXmlElement& toc)
         m_styleStack.restore();
     }
 
-    // KWord has a special attribute to know if a TOC is present
+    // Words has a special attribute to know if a TOC is present
     m_hasTOC = true;
 }
 
@@ -2305,11 +2305,11 @@ void OoWriterImport::finishDocumentContent(QDomDocument& mainDocument)
     }
 }
 
-QString OoWriterImport::kWordStyleName(const QString& ooStyleName)
+QString OoWriterImport::WordsStyleName(const QString& ooStyleName)
 {
     if (ooStyleName.startsWith("Contents ")) {
         QString s(ooStyleName);
-        return s.replace(0, 9, QString("Contents Head "));   // Awful hack for KWord's broken "update TOC" feature
+        return s.replace(0, 9, QString("Contents Head "));   // Awful hack for Words's broken "update TOC" feature
     } else {
         return ooStyleName;
     }

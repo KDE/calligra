@@ -81,7 +81,7 @@
 #include <kicon.h>
 #include <knotifyconfigwidget.h>
 
-// KOffice includes
+// Calligra includes
 #include <KoGlobal.h>
 #include <KoDpi.h>
 #include <KoCanvasControllerWidget.h>
@@ -686,8 +686,8 @@ void View::initView()
     // Setup the map model.
     d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
     installEventFilter(d->mapViewModel); // listen to KParts::GUIActivateEvent
-    connect(d->mapViewModel, SIGNAL(addCommandRequested(QUndoCommand*)),
-            doc(), SLOT(addCommand(QUndoCommand*)));
+    connect(d->mapViewModel, SIGNAL(addCommandRequested(KUndo2Command*)),
+            doc(), SLOT(addCommand(KUndo2Command*)));
     connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
             this, SLOT(setActiveSheet(Sheet*)));
 
@@ -1375,7 +1375,7 @@ void View::insertSheet()
 
     selection()->emitCloseEditor(true); // save changes
     Sheet * t = doc()->map()->createSheet();
-    QUndoCommand* command = new AddSheetCommand(t);
+    KUndo2Command* command = new AddSheetCommand(t);
     doc()->addCommand(command);
     setActiveSheet(t);
 
@@ -1417,7 +1417,7 @@ void View::hideSheet()
     if (i < 0) i = 1;
     QString sn = vs[i];
 
-    QUndoCommand* command = new HideSheetCommand(activeSheet());
+    KUndo2Command* command = new HideSheetCommand(activeSheet());
     doc()->addCommand(command);
 
     d->tabBar->removeTab(d->activeSheet->sheetName());
@@ -1635,7 +1635,7 @@ void View::keyPressEvent(QKeyEvent *event)
 {
 #ifndef NDEBUG
     if ((event->modifiers() & Qt::ControlModifier) && (event->modifiers() & Qt::ShiftModifier)) {
-        if (event->key() == Qt::Key_V) { // Ctrl+Shift+V to show debug (similar to KWord)
+        if (event->key() == Qt::Key_V) { // Ctrl+Shift+V to show debug (similar to Words)
             d->activeSheet->printDebug();
         }
     }
@@ -1702,7 +1702,7 @@ void View::paperLayoutDlg()
 void View::resetPrintRange()
 {
     DefinePrintRangeCommand* command = new DefinePrintRangeCommand();
-    command->setText(i18n("Reset Print Range"));
+    command->setText(i18nc("(qtundo-format)", "Reset Print Range"));
     command->setSheet(activeSheet());
     command->add(Region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), activeSheet()));
     doc()->addCommand(command);
@@ -1721,7 +1721,7 @@ void View::deleteSheet()
         selection()->emitCloseEditor(false); // discard changes
         doc()->setModified(true);
         Sheet * tbl = activeSheet();
-        QUndoCommand* command = new RemoveSheetCommand(tbl);
+        KUndo2Command* command = new RemoveSheetCommand(tbl);
         doc()->addCommand(command);
     }
 }
@@ -1756,7 +1756,7 @@ void View::slotRename()
             return;
         }
 
-        QUndoCommand* command = new RenameSheetCommand(sheet, newName);
+        KUndo2Command* command = new RenameSheetCommand(sheet, newName);
         doc()->addCommand(command);
 
         doc()->setModified(true);

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Merge
+Name[cs]=Sloučit
 Name[el]=Συγχώνευση
 Name[nb]=Slå sammen
 Name[nl]=Samenvoegen
@@ -10,3 +11,4 @@ Name[ug]=بىرىكتۈر
 Name[uk]=Об'єднання
 Name[x-test]=xxMergexx
 Name[zh_CN]=合并
+Name[zh_TW]=合併

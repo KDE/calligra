@@ -362,7 +362,7 @@ void WmfPainterBackend::recalculateWorldTransform()
         flip = true;
     }
     if (flip) {
-        kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
+        //kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
         mWorldTransform.translate(midpointX, midpointY);
         mWorldTransform.scale(scaleX, scaleY);
         mWorldTransform.translate(-midpointX, -midpointY);
@@ -662,7 +662,7 @@ void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 
     // fill polygons
     if (brush != Qt::NoBrush) {
-        kDebug(31000) << "Filling polygon with " << brush;
+        //kDebug(31000) << "Filling polygon with " << brush;
         mPainter->fillRect(region.boundingRect(), brush);
     }
 

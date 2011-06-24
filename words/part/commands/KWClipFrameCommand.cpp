@@ -37,8 +37,8 @@ public:
     void saveOdf(KoShapeSavingContext &) const {}
 };
 
-KWClipFrameCommand::KWClipFrameCommand(const QList<KWFrame*> &frames, KWDocument *document, QUndoCommand *parent)
-    : QUndoCommand(i18n("Clip Frame"), parent),
+KWClipFrameCommand::KWClipFrameCommand(const QList<KWFrame*> &frames, KWDocument *document, KUndo2Command *parent)
+    : KUndo2Command(i18nc("(qtundo-format)", "Clip Frame"), parent),
     m_document(document),
     m_frames(frames),
     m_ownClipShapes(false)
@@ -53,7 +53,7 @@ KWClipFrameCommand::~KWClipFrameCommand()
 
 void KWClipFrameCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     bool createClipShapes = m_clipShapes.count() != m_frames.count();
     for (int i = 0; i < m_frames.count(); ++i) {
         KWFrame *frame = m_frames.at(i);
@@ -80,7 +80,7 @@ void KWClipFrameCommand::redo()
 
 void KWClipFrameCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     Q_ASSERT(m_clipShapes.count() == m_frames.count());
 
     for (int i = 0; i < m_frames.count(); ++i) {

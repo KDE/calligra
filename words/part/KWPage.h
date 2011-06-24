@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005, 2007-2008, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2005, 2007-2008, 2011 Sebastian Sauer <mail@dipe.org>
@@ -23,7 +23,7 @@
 
 #include "KWPageManager.h"
 #include "KWPageStyle.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <KoText.h>
 #include <KoTextPage.h>
@@ -42,7 +42,7 @@ class KoShapeManager;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage : public KoTextPage
+class WORDS_EXPORT KWPage : public KoTextPage
 {
 public:
     inline KWPage() : priv(0), n(0) {}

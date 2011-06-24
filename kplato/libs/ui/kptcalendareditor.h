@@ -33,7 +33,7 @@
 
 class QPoint;
 class QDragMoveEvent;
-class QUndoCommand;
+class KUndo2Command;
 
 class KoDocument;
 
@@ -110,7 +110,7 @@ signals:
     void contextMenuRequested( QModelIndex, const QPoint& );
     void focusChanged();
     
-    void executeCommand( QUndoCommand *cmd );
+    void executeCommand( KUndo2Command *cmd );
     
 public slots:
     void setCurrentCalendar( Calendar *calendar );

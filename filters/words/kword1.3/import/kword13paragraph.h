@@ -19,8 +19,8 @@
 */
 
 
-#ifndef _FILTER_KWORD_1_3__KWORDPARAGRAPH_H
-#define _FILTER_KWORD_1_3__KWORDPARAGRAPH_H
+#ifndef _FILTER_WORDS_1_3__WORDSPARAGRAPH_H
+#define _FILTER_WORDS_1_3__WORDSPARAGRAPH_H
 
 #include <QString>
 #include <q3valuelist.h>
@@ -30,16 +30,16 @@
 
 #include "kword13layout.h"
 
-class KWord13Format;
+class Words13Format;
 
 /**
  * A paragraph
  */
-class KWord13Paragraph
+class Words13Paragraph
 {
 public:
-    explicit KWord13Paragraph(void);
-    ~KWord13Paragraph(void);
+    explicit Words13Paragraph(void);
+    ~Words13Paragraph(void);
 public:
     void xmldump(QTextStream& iostream);
     void setText(const QString& str);
@@ -47,9 +47,9 @@ public:
     QString text(void) const;
 public:
     /// \<LAYOUT\>
-    KWord13Layout m_layout;
+    Words13Layout m_layout;
     /// \<FORMATS\>
-    Q3PtrList<KWord13Format> m_formats;
+    Q3PtrList<Words13Format> m_formats;
 private:
     QString m_text; ///< Text
 };
@@ -58,10 +58,10 @@ private:
  * Group of paragraphs
  * (Mostly all paragraphs of a text frameset)
  */
-class KWord13ParagraphGroup : public Q3ValueList <KWord13Paragraph>
+class Words13ParagraphGroup : public Q3ValueList <Words13Paragraph>
 {
 public:
     void xmldump(QTextStream& iostream);
 };
 
-#endif //  _FILTER_KWORD_1_3__KWORDPARAGRAPH_H
+#endif //  _FILTER_WORDS_1_3__WORDSPARAGRAPH_H

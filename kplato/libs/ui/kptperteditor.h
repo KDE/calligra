@@ -57,7 +57,7 @@ class KoDocument;
 
 class QTreeWidgetItem;
 class QModelIndex;
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlato
 {
@@ -91,7 +91,7 @@ public:
     void setAvailableItemEnabled( Node *node );
     
 signals:
-    void executeCommand( QUndoCommand* );
+    void executeCommand( KUndo2Command* );
 
 protected:
     bool isInRequiredList( Node *node );

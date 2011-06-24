@@ -247,7 +247,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
-    KGlobal::locale()->insertCatalog("koffice");
+    KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
 
 #ifdef CUSTOM_VERSION
@@ -358,7 +358,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //2.0: unused setStandardMDIMenuEnabled(false);
     setAsDefaultHost(); //this is default host now.
     KIconLoader::global()->addAppDir("kexi");
-    KIconLoader::global()->addAppDir("koffice");
+    KIconLoader::global()->addAppDir("calligra");
 
     //get informed
     connect(&Kexi::partManager(), SIGNAL(partLoaded(KexiPart::Part*)),
