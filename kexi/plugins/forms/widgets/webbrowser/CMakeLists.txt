@@ -12,7 +12,13 @@ set (QT_USE_QTWEBKIT TRUE)
 target_link_libraries(
     kformdesigner_webbrowser
     kformdesigner
-   # ${MARBLE_LIBRARIES}
+    kexicore
+    kexiguiutils
+    kexidatatable
+    kexiextendedwidgets
+    kformdesigner
+    ${KOPROPERTY_LIBS}
+    kexiformutils
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}

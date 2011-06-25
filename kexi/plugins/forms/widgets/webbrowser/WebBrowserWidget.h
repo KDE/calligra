@@ -23,9 +23,9 @@
 #define WEBBROWSERWIDGET_H
 #include <QtGui/QWidget>
 #include <QtGui/QPushButton>
-#include "widgetfactory.h"	//these already inherit Qt headers reqd
+#include "widgetfactory.h"	
 #include "container.h"
-#include <FormWidgetInterface.h>
+#include <formeditor/FormWidgetInterface.h>
 #include <plugins/forms/kexiformdataiteminterface.h>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
@@ -41,7 +41,6 @@ class ToolBar; //added
 class QHBoxLayout;
 class QLabel;
 class QUrl;
- QUrl m_url;
 
 
 class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget, 
@@ -51,22 +50,13 @@ class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget,
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
-    Q_PROPERTY(QUrl url READ url WRITE seturl)
+    Q_PROPERTY(QUrl url READ url WRITE setUrl)
 
     
 public:
-	WebBrowserWidget();    
-	~WebBrowserWidget();
-	WebBrowserWidget(QWidget *parent=0);
-void setValueInternal(const QVariant&, bool b){}
-void setInvalidState(const QString& q){}
-void setReadOnly(bool b1){}
-bool valueIsNull();
-bool valueIsEmpty();
-bool cursorAtStart();
-bool cursorAtEnd();
-void clear();
-QVariant value();
+    WebBrowserWidget();    
+    ~WebBrowserWidget();
+    WebBrowserWidget(QWidget *parent=0);
 
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
@@ -75,36 +65,47 @@ QVariant value();
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
 
-inline QUrl url() const {
+    inline QUrl* url() const {
 	
 	return m_url;
     }
 
+    virtual QVariant value();
+    virtual void setInvalidState(const QString& displayText);
+    virtual bool valueIsNull();
+    virtual bool valueIsEmpty();
+    virtual bool cursorAtStart();
+    virtual bool cursorAtEnd();
+    virtual void clear();
+    bool isReadOnly() const ;
+    virtual void setReadOnly(bool readOnly);  
+
 
 public slots:
-void setDataSource(const QString &ds);
+    void setDataSource(const QString &ds);
+    void setDataSourcePartClass(const QString &ds);
+    void setUrl(const QUrl& url);
+    void loadPreviousPage();
+    void  loadNextPage(); 
+    void onreload(); 
 
-void setDataSourcePartClass(const QString &partClass);
+protected:
+    virtual void setValueInternal(const QVariant& add, bool removeOld); 
+    void updateUrl();
+    bool m_readOnly;
+    QUrl* m_url;
 
-void seturl(QUrl m_url);
 
-
-//void openUrl();
- void onLoadFinished(bool finished);
- void loadPreviousPage();
- void  loadNextPage(); 
- void onreload(); 
-  void openUrl(); 
-
-  private:
-  QAction* m_softkeyAction;
+private:
+    QAction* m_softkeyAction;
     QWebView* m_view;
     QLineEdit* m_lineEdit;
     QLabel *m_label;
     QVBoxLayout* v_layout;
     ToolBar* m_toolbar;
+    bool m_urlChanged_enabled;   
     QWebHistory* m_history;
-  
+   
 };
 
 class ToolBar : public QWidget
@@ -113,18 +114,16 @@ class ToolBar : public QWidget
 
 public:
     ToolBar(QWidget *parent = 0);
-signals:
-   void goBack();
-   void goForward();
-   void  doreload();
+
+signals: 
+    void goBack();
+    void goForward();
+    void  doreload();
     
 private slots:
     void onBackPressed(); 
     void onForward();
-    
     void onReload();
-  
-   //void loadPreviousPage();
     
 private:
 
@@ -133,7 +132,6 @@ private:
     QHBoxLayout* m_layout;
     QPushButton* m_reload;  
 };
-#endif // WEBBROWSERWIDGET_H
-
+#endif 
 
 

@@ -19,8 +19,6 @@
 
 
 #include "WebBrowserWidget.h"
-//#include <QApplication>
-//#include <QLabel>
 #include <QtWebKit>
 #include <QtWebKit/QWebHistory>
 #include <QWebView>
@@ -34,9 +32,6 @@
 #include <QWebPage>
 #include <QtGui/QWidget>
 #include <QtGui/QApplication>
-//#include <QtGui/QLineEdit>
-
-//class QPushButton;
 
 ToolBar::ToolBar(QWidget* parent):QWidget(parent)
 {	
@@ -52,36 +47,47 @@ ToolBar::ToolBar(QWidget* parent):QWidget(parent)
     setLayout(m_layout);
     m_layout->addStretch();
 
-   connect(m_backButton,SIGNAL(clicked()),SLOT(onBackPressed()));
-   connect(m_forward,SIGNAL(clicked()),SLOT(onForward()));
-   connect(m_reload,SIGNAL(clicked()),SLOT(onReload()));
+    connect(m_backButton,SIGNAL(clicked()),SLOT(onBackPressed()));
+    connect(m_forward,SIGNAL(clicked()),SLOT(onForward()));
+    connect(m_reload,SIGNAL(clicked()),SLOT(onReload()));
 
 
 };
 
-void ToolBar::onForward() //this is the slot,ie function
+void ToolBar::onForward() 
 {
     emit goForward();
 //emit signal here
 }
 
 
-void ToolBar::onReload() //this is the slot,ie function
+void ToolBar::onReload() 
 {
     emit doreload();
-//emit signal here
+
 }
 
 
-void ToolBar::onBackPressed() //this is the slot,ie function
+void ToolBar::onBackPressed() 
 {
     emit goBack();
-//emit signal here
+
 }
 
-WebBrowserWidget::WebBrowserWidget(QWidget *parent): QWidget(parent),KexiFormDataItemInterface(),KFormDesigner::FormWidgetInterface()//m_url
+WebBrowserWidget::WebBrowserWidget(QWidget *parent)
+        : QWidget(parent),KexiFormDataItemInterface()
+        ,KFormDesigner::FormWidgetInterface()
+        ,m_url(false)
+	,m_readOnly(false)
+	,m_urlChanged_enabled(false)
 {
+    setFocusPolicy(Qt::StrongFocus);
+    setMinimumHeight(sizeHint().height());
+    setMinimumWidth(minimumHeight());
 
+    m_softkeyAction = new QAction( tr("Options"), this );
+    m_softkeyAction->setSoftKeyRole(QAction::PositiveSoftKey);
+    addAction(m_softkeyAction);
   
     m_view = new QWebView(this);
     m_view->load(QUrl("http://www.kde.org"));
@@ -91,25 +97,14 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent): QWidget(parent),KexiFormDat
     v_layout->addWidget(m_toolbar);
     setLayout(v_layout);
     v_layout->addStretch();
-   connect(m_view,SIGNAL(loadFinished(bool)),SLOT(onLoadFinished(bool)));
-   connect(m_toolbar,SIGNAL(goBack()),SLOT(loadPreviousPage()));
-  connect(m_toolbar,SIGNAL(goForward()),SLOT(loadNextPage())); 
-  connect(m_toolbar,SIGNAL(doreload()),SLOT(onreload()));
-  connect(m_view,SIGNAL(urlChanged(QUrl)),this,SLOT(openurl()));
+    connect(m_toolbar,SIGNAL(goBack()),SLOT(loadPreviousPage()));
+    connect(m_toolbar,SIGNAL(goForward()),SLOT(loadNextPage())); 
+    connect(m_toolbar,SIGNAL(doreload()),SLOT(onreload()));
+    connect(m_view,SIGNAL(urlChanged(QUrl)),this,SLOT(setUrl(const QUrl)));
 
 
 };
 
-/*void WebBrowserWidget::setValueInternal(const QVariant&, bool b){}
-void WebBrowserWidget::setInvalidState(const QString& q){}
-void  WebBrowserWidget::setReadOnly(bool b1){}
-bool    WebBrowserWidget::valueIsNull(){return true;}
-bool   WebBrowserWidget::valueIsEmpty(){return true;}
-bool    WebBrowserWidget::cursorAtStart(){return true;}
-bool    WebBrowserWidget::cursorAtEnd(){return true;}
-void    WebBrowserWidget::clear(){}
-QVariant WebBrowserWidget::value(){return QUrl;}
-*/
 WebBrowserWidget::~WebBrowserWidget()
 {
 
@@ -119,6 +114,7 @@ WebBrowserWidget::~WebBrowserWidget()
 WebBrowserWidget::WebBrowserWidget()  
 {
 }
+
 void WebBrowserWidget::loadPreviousPage()
 {
     if(m_view->history()->canGoBack())
@@ -136,31 +132,111 @@ void WebBrowserWidget::loadNextPage()
     }
 }
 
+void WebBrowserWidget::setDataSourcePartClass(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourcePartClass(ds);
+    }
+ 
+
+
+void WebBrowserWidget::setDataSource(const QString &ds)
+{
+    KexiFormDataItemInterface::setDataSource(ds);
+    
+}
 void WebBrowserWidget::onreload()
 {
-   m_view->reload();
+    m_view->reload();
 }
 
-void WebBrowserWidget::seturl(QUrl m_url)
+void WebBrowserWidget::setUrl(const QUrl& url)
 {
-       //if (!url.startsWith("http://",Qt::CaseInsensitive))
-       // url.prepend("http://");
-    m_view->load(m_url);
+    *m_url=url;
+    m_view->load(*m_url);
 }//ok
 
-void WebBrowserWidget::openUrl()
+
+bool WebBrowserWidget::cursorAtStart()
 {
-	seturl(m_url);
+    return true; //! \todo ?
+}
+
+bool WebBrowserWidget::cursorAtEnd()
+{
+    return true; //! \todo ?
+}
+
+
+QVariant WebBrowserWidget::value()
+{
+    if (dataSource().isEmpty()) {
+        //not db-aware
+        return QVariant();
+    }
+    //db-aware mode
+    setUrl(*m_url);
+    return *m_url;
+
+
+}
+
+bool WebBrowserWidget::valueIsNull()
+{
+    return (*m_url).isEmpty();
+
+}
+void WebBrowserWidget::clear()
+{
+    setUrl(QUrl("www.google.com"));
 }
 
 
 
-/*void WebBrowserWidget::onLoadFinished(bool finished)
+void WebBrowserWidget::setInvalidState(const QString& displayText)
 {
-    if(finished){
-        m_lineEdit->clear();
-        m_lineEdit->setPlaceholderText("Enter url ..."); //takes a const qstring parameter
-         }
-}*/
-//K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(StdWidgetFactory, stdwidgets)
+    Q_UNUSED(displayText);
+
+    if (!dataSource().isEmpty()) {
+        *m_url = QUrl();
+    }
+    setReadOnly(true);
+}
+
+void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
+{
+    Q_UNUSED(add); //compares  
+    Q_UNUSED(removeOld);
+
+    if (isReadOnly())
+        return;
+    m_urlChanged_enabled= false;		//if removeold is true then change the Url to value of add as specified in kexidataitem interface.cpp
+
+    if (removeOld)
+        {*m_url=add.toUrl();			//set property editor to add
+	 setUrl(*m_url); 
+	}       
+    else
+        { *m_url=QUrl( m_origValue.toString() + add.toString()) ;//else put value of add to current value of m_origValue
+     	setUrl(*m_url);
+        }
+
+    m_urlChanged_enabled = true;
+}
+
+bool WebBrowserWidget::valueIsEmpty()
+{
+    return false;
+}
+
+
+bool WebBrowserWidget::isReadOnly() const
+{
+    return m_readOnly;
+}
+
+
+void  WebBrowserWidget::setReadOnly(bool val)
+{
+    m_readOnly=val;
+}
+
 #include "WebBrowserWidget.moc"
