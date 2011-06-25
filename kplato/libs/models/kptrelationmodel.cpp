@@ -349,7 +349,7 @@ bool RelationItemModel::setLag( Relation *r, const QVariant &value, int role )
             if ( d == r->lag() ) {
                 return false;
             }
-            emit executeCommand( new ModifyRelationLagCmd( r, d, i18n( "Modify relation time lag" ) ) );
+            emit executeCommand( new ModifyRelationLagCmd( r, d, i18nc( "(qtundo-format)", "Modify relation time lag" ) ) );
             return true;
         }
         default:

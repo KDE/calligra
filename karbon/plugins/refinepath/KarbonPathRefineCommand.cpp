@@ -38,7 +38,7 @@ public:
 KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(path, insertPointsCount))
 {
-    setText(i18n("Refine path"));
+    setText(i18nc("(qtundo-format)", "Refine path"));
 }
 
 KarbonPathRefineCommand::~KarbonPathRefineCommand()

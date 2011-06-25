@@ -182,9 +182,9 @@ bool StyleCommand::preProcessing()
 {
     if (m_firstrun) {
         if (m_style->isDefault())
-            setText(i18n("Reset Style"));
+            setText(i18nc("(qtundo-format)", "Reset Style"));
         else
-            setText(i18n("Change Style"));
+            setText(i18nc("(qtundo-format)", "Change Style"));
 
         // special handling for precision
         if (m_style->hasAttribute(Style::Precision)) {

@@ -45,7 +45,7 @@ using namespace Calligra::Tables;
 ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
-    setText(i18n("Resize Column"));
+    setText(i18nc("(qtundo-format)", "Resize Column"));
 }
 
 ResizeColumnManipulator::~ResizeColumnManipulator()
@@ -77,7 +77,7 @@ bool ResizeColumnManipulator::process(Element* element)
 ResizeRowManipulator::ResizeRowManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
-    setText(i18n("Resize Row"));
+    setText(i18nc("(qtundo-format)", "Resize Row"));
 }
 
 ResizeRowManipulator::~ResizeRowManipulator()
@@ -557,7 +557,7 @@ InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(KUndo2Command *pare
         , m_mode(Insert)
         , m_template(0)
 {
-    setText(i18n("Insert Columns"));
+    setText(i18nc("(qtundo-format)", "Insert Columns"));
 }
 
 InsertDeleteColumnManipulator::~InsertDeleteColumnManipulator()
@@ -576,9 +576,9 @@ void InsertDeleteColumnManipulator::setReverse(bool reverse)
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
     if (!m_reverse)
-        setText(i18n("Insert Columns"));
+        setText(i18nc("(qtundo-format)", "Insert Columns"));
     else
-        setText(i18n("Remove Columns"));
+        setText(i18nc("(qtundo-format)", "Remove Columns"));
 }
 
 bool InsertDeleteColumnManipulator::process(Element* element)
@@ -680,7 +680,7 @@ InsertDeleteRowManipulator::InsertDeleteRowManipulator(KUndo2Command *parent)
         , m_mode(Insert)
         , m_template(0)
 {
-    setText(i18n("Insert Rows"));
+    setText(i18nc("(qtundo-format)", "Insert Rows"));
 }
 
 InsertDeleteRowManipulator::~InsertDeleteRowManipulator()
@@ -699,9 +699,9 @@ void InsertDeleteRowManipulator::setReverse(bool reverse)
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
     if (!m_reverse)
-        setText(i18n("Insert Rows"));
+        setText(i18nc("(qtundo-format)", "Insert Rows"));
     else
-        setText(i18n("Remove Rows"));
+        setText(i18nc("(qtundo-format)", "Remove Rows"));
 }
 
 bool InsertDeleteRowManipulator::process(Element* element)
