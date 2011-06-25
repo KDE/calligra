@@ -29,7 +29,7 @@ FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectSt
         , m_isRemoved(false), m_filterEffectIndex(filterEffectIndex)
 {
     Q_ASSERT(filterStack);
-    setText(i18n("Remove filter effect"));
+    setText(i18nc("(qtundo-format)", "Remove filter effect"));
 }
 
 FilterRemoveCommand::~FilterRemoveCommand()

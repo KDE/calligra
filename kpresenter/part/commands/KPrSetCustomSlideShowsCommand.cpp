@@ -30,7 +30,7 @@ KPrSetCustomSlideShowsCommand::KPrSetCustomSlideShowsCommand( KPrDocument * doc,
 , m_deleteNewSlideShows( true )
 {
     // TODO 2.1 change text to "Edit custom slide shows"
-    setText( i18n("Edit") );
+    setText( i18nc("(qtundo-format)", "Edit") );
 }
 
 KPrSetCustomSlideShowsCommand::~KPrSetCustomSlideShowsCommand()

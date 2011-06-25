@@ -33,7 +33,7 @@ FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoSh
     if (m_oldFilterStack)
         m_oldFilterStack->ref();
 
-    setText(i18n("Set filter stack"));
+    setText(i18nc("(qtundo-format)", "Set filter stack"));
 }
 
 FilterStackSetCommand::~FilterStackSetCommand()

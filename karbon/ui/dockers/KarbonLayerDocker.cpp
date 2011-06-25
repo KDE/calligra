@@ -281,7 +281,7 @@ void KarbonLayerDocker::addLayer()
         layer->setName(name);
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
         KUndo2Command *cmd = new KoShapeCreateCommand(m_part, layer, 0);
-        cmd->setText(i18n("Create Layer"));
+        cmd->setText(i18nc("(qtundo-format)", "Create Layer"));
         canvasController->canvas()->addCommand(cmd);
         m_model->update();
     }
@@ -305,7 +305,7 @@ void KarbonLayerDocker::deleteItem()
                 deleteShapes.append(layer);
             }
             cmd = new KoShapeDeleteCommand(m_part, deleteShapes);
-            cmd->setText(i18n("Delete Layer"));
+            cmd->setText(i18nc("(qtundo-format)", "Delete Layer"));
         } else {
             KMessageBox::error(0L, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
         }

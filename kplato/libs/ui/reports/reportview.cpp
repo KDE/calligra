@@ -708,7 +708,7 @@ void ReportDesignDialog::saveToView()
     if ( m_view == 0 ) {
         return;
     }
-    KUndo2Command *cmd = new ModifyReportDefinitionCmd( m_view, document(), i18n( "Modify report definition" ) );
+    KUndo2Command *cmd = new ModifyReportDefinitionCmd( m_view, document(), i18nc( "(qtundo-format)", "Modify report definition" ) );
     emit modifyReportDefinition( cmd );
     m_panel->m_modified = false;
 }

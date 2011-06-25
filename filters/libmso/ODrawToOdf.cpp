@@ -562,20 +562,20 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
         for (int i = 0; i < a.nElems; i++) {
             try {
                 parseOfficeArtCOLORREF(in,color);
-            } catch (EOFException _e) {
-                qDebug() << _e.msg;
+            } catch (const IOException& e) {
+                qDebug() << e.msg;
                 break;
-            } catch (IOException _e) {
-                qDebug() << _e.msg;
+            } catch (...) {
+                qDebug() << "Warning: Caught an unknown exception!";
                 break;
             }
             try {
                 parseFixedPoint(in,fixedPoint);
-            } catch (EOFException _e) {
-                qDebug() << _e.msg;
+            } catch (const IOException& e) {
+                qDebug() << e.msg;
                 break;
-            } catch (IOException _e) {
-                qDebug() << _e.msg;
+            } catch (...) {
+                qDebug() << "Warning: Caught an unknown exception!";
                 break;
             }
 

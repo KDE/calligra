@@ -161,16 +161,16 @@ bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
                 case 0: { // Milestone
                     NamedCommand *cmd = 0;
                     if ( node->constraint() == Node::FixedInterval ) {
-                        cmd = new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime(), i18n( "Set type to Milestone" ) );
+                        cmd = new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime(), i18nc( "(qtundo-format)", "Set type to Milestone" ) );
                     } else {
-                        cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                        cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18nc( "(qtundo-format)", "Set type to Milestone" ) );
                     }
                     emit executeCommand( cmd );
                     return true;
                 }
                 default: { // Estimate
                     --v;
-                    MacroCommand *m = new MacroCommand( i18n( "Set type to %1", Estimate::typeToString( (Estimate::Type)v, true ) ) );
+                    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Set type to %1", Estimate::typeToString( (Estimate::Type)v, true ) ) );
                     m->addCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v ) );
                     if ( node->type() == Node::Type_Milestone ) {
                         if ( node->constraint() == Node::FixedInterval ) {

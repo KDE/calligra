@@ -32,7 +32,7 @@
 #include <KDebug>
 
 KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, KUndo2Command *parent)
-        : KUndo2Command(i18n("Remove Page"), parent),
+        : KUndo2Command(i18nc("(qtundo-format)", "Remove Page"), parent),
         m_document(document),
         m_pageSide(page.pageSide()),
         m_pageLayout(page.pageStyle().pageLayout()),

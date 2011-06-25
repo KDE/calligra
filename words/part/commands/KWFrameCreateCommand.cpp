@@ -26,7 +26,7 @@
 #include <KLocale>
 
 KWFrameCreateCommand::KWFrameCreateCommand(KoShapeControllerBase *shapeController, KWFrame *frame, KUndo2Command *parent)
-        : KUndo2Command(i18n("Create Frame"), parent),
+        : KUndo2Command(i18nc("(qtundo-format)", "Create Frame"), parent),
         m_frame(frame),
         m_frameSet(frame->frameSet())
 {

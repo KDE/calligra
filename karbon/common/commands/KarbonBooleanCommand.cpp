@@ -65,7 +65,7 @@ KarbonBooleanCommand::KarbonBooleanCommand(
     d->pathB = pathB;
     d->operation = operation;
 
-    setText(i18n("Boolean Operation"));
+    setText(i18nc("(qtundo-format)", "Boolean Operation"));
 }
 
 KarbonBooleanCommand::~KarbonBooleanCommand()
