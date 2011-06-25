@@ -288,6 +288,7 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_TEXT_ACTION:
+            break;
         case META_TEXTARRAY_ACTION:
             {
                 QPoint   startPoint;
@@ -359,7 +360,29 @@ bool SvmParser::parse(const QByteArray &data)
                 mContext.changedItems |= GCTextColor;
             }
         case META_TEXTFILLCOLOR_ACTION:
+            {
+                quint32  colorData;
+                bool     doSet;
+
+                stream >> colorData;
+                stream >> doSet;
+                
+                kDebug(31000) << "Text fill color :" << colorData << '(' << doSet << ')';
+
+                mContext.textFillColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
+                kDebug(31000) << "Color:"  << mContext.textFillColor;
+                mContext.changedItems |= GCTextFillColor;
+            }
+            break;
         case META_TEXTALIGN_ACTION:
+            {
+                quint16  textAlign;
+                stream >> textAlign;
+
+                mContext.textAlign = (TextAlign)textAlign;
+                //kDebug(31000) << "TextAlign:"  << mContext.textAlign;
+                mContext.changedItems |= GCTextAlign;
+            }
             break;
         case META_MAPMODE_ACTION:
             {
@@ -408,6 +431,19 @@ bool SvmParser::parse(const QByteArray &data)
         case META_LAYOUTMODE_ACTION:
         case META_TEXTLANGUAGE_ACTION:
         case META_OVERLINECOLOR_ACTION:
+            {
+                quint32  colorData;
+                bool     doSet;
+
+                stream >> colorData;
+                stream >> doSet;
+                
+                kDebug(31000) << "Overline color :" << colorData << '(' << doSet << ')';
+
+                mContext.overlineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
+                kDebug(31000) << "Brush:"  << mContext.overlineColor;
+                mContext.changedItems |= GCOverlineColor;
+            }
             break;
         case META_RENDERGRAPHIC_ACTION:
             //dumpAction(stream, version, totalSize);
@@ -502,7 +538,9 @@ void SvmParser::parseFont(QDataStream &stream, QFont &font)
     quint32  height;
     stream >> width;
     stream >> height;
-    font.setPointSize(height);
+    // Multiply by 0.7 since it seems that, just like WMF, the height
+    // in the font struct is actually the height of the character cell.
+    font.setPointSize(height * 7 / 10);
 
     qint8   temp8;
     bool    tempbool;

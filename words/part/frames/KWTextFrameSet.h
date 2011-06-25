@@ -78,7 +78,10 @@ protected:
     friend class TestTextFrameSorting;
     friend class TestTextFrameManagement;
 
-    void setupFrame(KWFrame *frame);
+    virtual void setupFrame(KWFrame *frame);
+
+private:
+    void setupDocument();
 
 private:
     QTextDocument *m_document;

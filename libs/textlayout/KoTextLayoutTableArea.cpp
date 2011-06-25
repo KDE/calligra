@@ -22,6 +22,7 @@
 
 #include "TableIterator.h"
 #include "KoTextLayoutArea.h"
+#include "KoPointedAt.h"
 
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
@@ -36,6 +37,7 @@
 #include <QRectF>
 #include <QVector>
 
+#include "FrameIterator.h"
 
 class KoTextLayoutTableArea::Private
 {
@@ -93,14 +95,14 @@ KoTextLayoutTableArea::~KoTextLayoutTableArea()
     delete d;
 }
 
-int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
     int lastRow = d->endOfArea->row;
     if (d->endOfArea->frameIterators[0] == 0) {
         --lastRow;
     }
     if (lastRow <  d->startOfArea->row) {
-        return -1; // empty
+        return KoPointedAt(); // empty
     }
 
     int firstRow = qMax(d->startOfArea->row, d->headerRows);
@@ -155,7 +157,7 @@ int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy acc
             }
         }
     }
-    return -1;
+    return KoPointedAt();
 }
 
 QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
@@ -208,7 +210,7 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     }
 }
 
-bool KoTextLayoutTableArea::layout(TableIterator *cursor)
+bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);
     d->headerRows = cursor->headerRows;
@@ -270,6 +272,7 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         setBottom(d->rowPositions[cursor->row + 1] + bottomBorderWidth);
 
         if (complete) {
+            setVirginPage(false);
             cursor->row++;
             for (int col = 0; col < d->table->columns(); ++col) {
                 delete cursor->frameIterators[col];
@@ -303,10 +306,12 @@ void KoTextLayoutTableArea::layoutColumns()
 {
     QTextTableFormat tableFormat = d->table->format();
 
+    d->columnPositions.resize(d->table->columns() + 1);
+    d->columnWidths.resize(d->table->columns() + 1);
+
     // Table width.
     d->tableWidth = 0;
     qreal parentWidth = right() - left();
-
     if (tableFormat.width().rawValue() == 0 || tableFormat.alignment() == Qt::AlignJustify) {
         // We got a zero width value or alignment is justify, so use 100% of parent.
         d->tableWidth = parentWidth - tableFormat.leftMargin() - tableFormat.rightMargin();
@@ -324,11 +329,9 @@ void KoTextLayoutTableArea::layoutColumns()
         }
     }
 
-    d->columnPositions.resize(d->table->columns() + 1);
-    d->columnWidths.resize(d->table->columns() + 1);
-
     // Column widths.
     qreal availableWidth = d->tableWidth; // Width available for columns.
+    QList<int> fixedWidthColumns; // List of fixed width columns.
     QList<int> relativeWidthColumns; // List of relative width columns.
     qreal relativeWidthSum = 0; // Sum of relative column width values.
     int numNonStyleColumns = 0;
@@ -337,11 +340,13 @@ void KoTextLayoutTableArea::layoutColumns()
 
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
             // Relative width specified. Will be handled in the next loop.
+            d->columnWidths[col] = 0.0;
             relativeWidthColumns.append(col);
             relativeWidthSum += columnStyle.relativeColumnWidth();
         } else if (columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
             // Only width specified, so use it.
             d->columnWidths[col] = columnStyle.columnWidth();
+            fixedWidthColumns.append(col);
             availableWidth -= columnStyle.columnWidth();
         } else {
             // Neither width nor relative width specified.
@@ -351,18 +356,31 @@ void KoTextLayoutTableArea::layoutColumns()
         }
     }
 
+    // Handle the case that the fixed size columns are larger then the defined table width
+    if (availableWidth < 0.0) {
+        if (tableFormat.width().rawValue() == 0 && fixedWidthColumns.count() > 0) {
+            // If not table width was defined then we need to scale down the fixed size columns so they match
+            // into the width of the table.
+            qreal diff = (-availableWidth) / qreal(fixedWidthColumns.count());
+            foreach(int col, fixedWidthColumns) {
+                d->columnWidths[col] = qMax(qreal(0.0), d->columnWidths[col] - diff);
+            }
+        }
+        availableWidth = 0.0;
+    }
+
     // Calculate width to those columns that don't actually request it
     qreal widthForNonWidthColumn = ((1.0 - qMin<qreal>(relativeWidthSum, 1.0)) * availableWidth);
     availableWidth -= widthForNonWidthColumn; // might as well do this calc before dividing by numNonStyleColumns
-    if (numNonStyleColumns)
+    if (numNonStyleColumns > 0 && widthForNonWidthColumn > 0.0) {
         widthForNonWidthColumn /= numNonStyleColumns;
+    }
 
     // Relative column widths have now been summed up and can be distributed.
     foreach (int col, relativeWidthColumns) {
         KoTableColumnStyle columnStyle = d->carsManager.columnStyle(col);
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth) || columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
-            d->columnWidths[col] =
-                qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
+            d->columnWidths[col] = qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
         } else {
             d->columnWidths[col] = widthForNonWidthColumn;
         }
@@ -476,6 +494,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     }
 
     bool allCellsFullyDone = true;
+    bool anyCellTried = false;
     bool noCellsFitted = true;
     int col = 0;
     while (col < d->table->columns()) {
@@ -488,6 +507,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
              * contribute to the row height.
              */
             KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
+            anyCellTried = true;
 
             qreal maxBottom = maximumAllowedBottom();
             if (rowHasExactHeight) {
@@ -519,13 +539,16 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             KoTextLayoutArea *cellArea = new KoTextLayoutArea(this, documentLayout());
             d->cellAreas[cell.row()][cell.column()] = cellArea;
 
+            qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftBorderWidth();
+            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightBorderWidth());
+
             cellArea->setReferenceRect(
-                    d->columnPositions[col] + cellStyle.leftPadding()
-                    + cellStyle.leftBorderWidth(),
-                    d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding()
-                    - cellStyle.rightBorderWidth(),
+                    left,
+                    right,
                     areaTop,
                     maxBottom);
+
+            cellArea->setVirginPage(virginPage());
 
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
@@ -549,7 +572,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         col += cell.columnSpan(); // Skip across column spans.
     }
 
-    if (noCellsFitted && !rowHasExactHeight) {
+    if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
         if (cursor->row > d->startOfArea->row) {
@@ -613,11 +636,16 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
 
             d->cellAreas[cell.row()][cell.column()] = cellArea;
 
+            qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftBorderWidth();
+            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightBorderWidth());
+
             cellArea->setReferenceRect(
-                    d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftBorderWidth(),
-                    d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightBorderWidth(),
+                    left,
+                    right,
                     d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
+
+            cellArea->setVirginPage(virginPage());
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
             cellArea->layout(cellCursor);

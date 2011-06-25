@@ -1691,6 +1691,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
 
             KoBookmark *bookmark = new KoBookmark(cursor.block().document());
+            bookmark->setManager(textObjectManager);
             if (textObjectManager && bookmark->loadOdf(ts, d->context)) {
                 textObjectManager->insertInlineObject(cursor, bookmark);
             }
@@ -1985,6 +1986,13 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
             if (tblTag.namespaceURI() == KoXmlNS::table) {
                 if (tblLocalName == "table-column") {
                     loadTableColumn(tblTag, tbl, columns);
+                } else if (tblLocalName == "table-columns") {
+                    KoXmlElement e;
+                    forEachElement(e, tblTag) {
+                        if (e.localName() == "table-column") {
+                            loadTableColumn(e, tbl, columns);
+                        }
+                    }
                 } else if (tblLocalName == "table-row") {
                     if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                         d->openChangeRegion(tblTag);
@@ -2254,6 +2262,8 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
                 }
             }
 
+            textObjectManager->insertInlineObject(cursor, anchor);
+
             if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                 d->closeChangeRegion(element);
         }
@@ -2271,11 +2281,10 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
 
 
     // for "meta-information" about the TOC we use this class
-    KoTableOfContentsGeneratorInfo * info = new KoTableOfContentsGeneratorInfo();
-    info->setSharedLoadingData( d->textSharedData );
+    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
 
-    info->tableOfContentData()->name = element.attribute("name");
-    info->tableOfContentData()->styleName = element.attribute("style-name");
+    info->m_name = element.attribute("name");
+    info->m_styleName = element.attribute("style-name");
 
     KoXmlElement e;
     forEachElement(e, element) {
@@ -2284,7 +2293,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
         }
 
         if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text) {
-            info->loadOdf(e);
+            info->loadOdf(d->textSharedData, e);
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();
             Q_ASSERT( !tocFormat.hasProperty(KoText::TableOfContentsData) );

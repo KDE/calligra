@@ -37,7 +37,6 @@ protected:
 
     // v namespace:
     KoFilter::ConversionStatus genericReader();
-    QString m_currentEl;
     KoFilter::ConversionStatus read_oval();
     KoFilter::ConversionStatus read_roundrect();
     KoFilter::ConversionStatus read_rect();
@@ -51,6 +50,12 @@ protected:
     KoFilter::ConversionStatus read_textbox();
     KoFilter::ConversionStatus read_group();
     KoFilter::ConversionStatus read_stroke();
+    KoFilter::ConversionStatus read_shadow();
+
+    void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
+    void takeDefaultValues();
+
+    QString rgbColor(QString color);
 
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
@@ -63,47 +68,67 @@ protected:
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
 
-    QMap<QByteArray, QString> m_vmlStyle;
-
     //writer where style:background-image is stored for style:page-layout-properties
     KoXmlWriter* m_pDocBkgImageWriter;
 
-    QString m_imagedataPath; //!< set in read_shape()
-    QString m_imagedataFile; //!< set in read_shape()
-    QString m_shapeAltText; //!< set in read_shape()
-    QString m_shapeTitle; //!< set in read_shape()
-    QString m_shapeColor; //!< set in read_shape()
-    QString m_currentShapeId; //!< set in read_shape()
+    struct VMLShapeProperties {
+        QString currentEl;
 
-    QString m_strokeColor; // stroke color
-    qreal m_strokeWidth; // stroke width
+        QMap<QByteArray, QString> vmlStyle;
 
-    //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
-    //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
-    QString m_currentObjectWidthCm;
-    QString m_currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
+        QString strokeColor; // stroke color
+        QString strokeWidth; // stroke width
+        QString lineCapStyle;
+        QString joinStyle;
+        QString strokeStyleName;
+        QString fillType;
+        QString gradientStyle;
+        QString shapeColor; //!< set in read_shape()
+        QString shapeSecondaryColor; // used eg. for some gradients
+
+        qreal opacity;
+
+        bool wrapRead;
+        QString currentShapeId; //!< set in read_shape()
+        QString imagedataPath; //!< set in read_shape()
+        QString imagedataFile; //!< set in read_shape()
+        QString shapeAltText; //!< set in read_shape()
+        QString shapeTitle; //!< set in read_shape()
+
+        bool stroked, filled, shadowed;
+
+        QString shadowColor;
+        QString shadowXOffset, shadowYOffset;
+        qreal shadowOpacity;
+
+        QString anchorType;
+
+        //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
+        //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
+        QString currentObjectWidthCm;
+        QString currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
+
+        int formulaIndex;
+        QString shapeTypeString;
+        QString extraShapeFormulas;
+        int extraFormulaIndex;
+
+        // Parameters for group shape situation
+        bool insideGroup;
+        int groupWidth, groupHeight; // Relative group extends
+        int groupX, groupY; // Relative group origin
+        qreal groupXOffset, groupYOffset; // Offset caused by the group parent
+        QString groupWidthUnit, groupHeightUnit; // pt, cm etc.
+        qreal real_groupWidth, real_groupHeight;
+    };
+
+    VMLShapeProperties m_currentVMLProperties;
+
+    // Using stack to make sure correct properties are handled in a case when
+    // there are group shapes
+    QStack<VMLShapeProperties> m_VMLShapeStack;
 
     bool m_outputFrames; // Whether read_shape should output something to shape
-    bool m_wrapRead;
-    QString m_anchorType;
 
-    // For group shape situation
-    bool m_insideGroup;
-
-    // Relative group widths
-    int m_groupWidth, m_groupHeight;
-
-    // Relative group original
-    int m_groupX, m_groupY;
-
-    // Offset caused by the group parent
-    qreal m_groupXOffset, m_groupYOffset;
-
-    QString m_groupWidthUnit; // pt, cm etc.
-    QString m_groupHeightUnit;
-    qreal m_real_groupWidth;
-    qreal m_real_groupHeight;
-
-    int m_formulaIndex;
-    QString m_shapeTypeString;
-    QMap<QString, QString> m_shapeTypeStrings;
+    // Elements defined by v:shapeType
+    QMap<QString, VMLShapeProperties> m_definedShapeTypes;

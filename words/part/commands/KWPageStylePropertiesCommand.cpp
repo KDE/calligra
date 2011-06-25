@@ -40,9 +40,10 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
     m_styleAfter(styleAfter)
 {
     Q_ASSERT(m_styleAfter != m_styleBefore); // would be kinda useless
-    m_styleBefore.detach("dummy"); // all mine now!
-    m_styleAfter.detach("dummy"); // all mine now!
+    m_styleBefore.detach(m_styleBefore.name()); // all mine now!
+    m_styleAfter.detach(m_styleAfter.name()); // all mine now!
 
+#if 0
     // All frames below \a pos move \a distance upon redoing this command
     QMap<qreal, qreal> offsetsMap; // posInDocument, distance.
 
@@ -130,6 +131,7 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
     if (page.pageNumber() % 2 == 0 && newLayout.leftMargin < 0)
         new KWPageInsertCommand(m_document, page.pageNumber(), QString(), this);
 #endif
+#endif
 }
 
 void KWPageStylePropertiesCommand::redo()
@@ -137,10 +139,6 @@ void KWPageStylePropertiesCommand::redo()
     QUndoCommand::redo();
     m_style.priv()->copyProperties(m_styleAfter.priv());
     m_document->updatePagesForStyle(m_style);
-#if 0
-    m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
-    m_document->firePageSetupChanged();
-#endif
 }
 
 void KWPageStylePropertiesCommand::undo()
@@ -148,10 +146,6 @@ void KWPageStylePropertiesCommand::undo()
     QUndoCommand::undo();
     m_style.priv()->copyProperties(m_styleBefore.priv());
     m_document->updatePagesForStyle(m_style);
-#if 0
-    m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
-    m_document->firePageSetupChanged();
-#endif
 }
 
 #if 0

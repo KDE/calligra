@@ -97,7 +97,7 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
 #ifdef WV2_DUMP_FIB
     wvlog << "Dumping some parts of the FIB: " << endl;
     wvlog << "   wIdent=" << m_fib.wIdent << endl;
-    wvlog << "   nFib=" << m_fib.nFib << endl;
+    wvlog << "   nFib=0x" << hex << m_fib.nFib << dec << endl;
     wvlog << "   nFibBack=" << m_fib.nFibBack << endl;
     wvlog << "   lid=0x" << hex << m_fib.lid << dec << endl;
     wvlog << "   lidFE=0x" << hex << m_fib.lidFE << dec << endl;
@@ -121,15 +121,7 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
     wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << endl;
     wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << endl;
     wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << endl;
-    wvlog << "   cswNew=" << m_fib.cswNew << endl;
-#endif
-#ifdef WV2_DEBUG_DOP
-    wvlog << "Debug DOP:" << endl;
-    if (m_fib.cswNew) {
-        wvlog << "A document > Word 8, not much support for this DOP.";
-    } else {
-        wvlog << "Dop97: A document <= Word 8";
-    }
+    wvlog << "   cswNew=" << hex << m_fib.cswNew << dec << endl;
 #endif
     // Initialize all the cached data structures like stylesheets, fonts,
     // textconverter,...
@@ -782,7 +774,7 @@ void Parser9x::processParagraph( U32 fc )
 
         if ( m_cellMarkFound ) {
             m_tableHandler->tableCellEnd();
-            if ( --m_remainingCells ) {
+            if ( --m_remainingCells > 0) {
                 m_tableHandler->tableCellStart();
             }
         }
@@ -845,12 +837,12 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             bkmk_length = nextBkl - nextBkf;
             disruption = nextBkf;
 
-            Q_ASSERT (nextBkf <= nextBkl);
-
 #ifdef WV2_DEBUG_BOOKMARK
-            wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << 
-                     " disruption=" << disruption << " length=" << length << endl;
+            wvlog << "nextBkf=" << nextBkf << "(0x" << hex << nextBkf << ")" <<dec<<
+                     "nextBkl=" << nextBkl << "(0x" << hex << nextBkl << ")" <<dec<<
+                     "disruption=" << disruption << "length=" << length << endl;
 #endif
+            Q_ASSERT (nextBkf <= nextBkl);
         }
 
         if ( (disruption >= startCP) && (disruption < (startCP + length)) ) {
@@ -1021,7 +1013,9 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
 }
 }
 
-void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
+void Parser9x::emitFootnote( UString characters, U32 globalCP,
+                             SharedPtr<const Word97::CHP> chp,
+                             U32 /* length */ )
 {
     if ( !m_footnotes ) {
         wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << endl;
@@ -1033,7 +1027,13 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const W
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
     if ( ok ) {
-        m_textHandler->footnoteFound( data.type, characters, chp,
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "char: 0x" << hex << characters[0].unicode() <<
+                 "| fAuto:" << data.autoNumbered <<
+                 "| fSpec:" << chp->fSpec;
+#endif
+        SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( globalCP ) );
+        m_textHandler->footnoteFound( data, characters, sep, chp,
                                       make_functor( *this, &Parser9x::parseFootnote, data ));
     }
 }
@@ -1134,11 +1134,14 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     }
     stream->pop();
 
-    if ( picf->cbHeader < 58 ) {
-        wvlog << "Error: Found an image with a PICF smaller than 58 bytes! Skipping the image." << endl;
+    //[MS-DOC] — v20101219, 419/621
+    if ( picf->cbHeader != 0x44 ) {
+        wvlog << "Error: Expected size of the PICF structure is 0x44, got " << hex << picf->cbHeader;
+        wvlog << "Skipping the image!" << endl;
         delete picf;
         return;
     }
+
     if ( picf->fError ) {
         wvlog << "Information: Skipping the image, fError is set" << endl;
         delete picf;
@@ -1157,17 +1160,19 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     if ( picf->mfp.mm == 0x0066 )
     {
         U8 cchPicName = stream->readU8();
-	U8* stPicName = new U8[cchPicName + 1];
-
-        stream->read(stPicName, cchPicName);
-	stPicName[cchPicName] = '\0';
-
 #ifdef WV2_DEBUG_PICTURES
         wvlog << "cchPicName: " << cchPicName << endl;
-        wvlog << "stPicName: " << stPicName << endl;
 #endif
+        if (cchPicName) {
+            U8* stPicName = new U8[cchPicName + 1];
+            stream->read(stPicName, cchPicName);
+            stPicName[cchPicName] = '\0';
+#ifdef WV2_DEBUG_PICTURES
+            wvlog << "stPicName: " << stPicName << endl;
+#endif
+            delete [] stPicName;
+        }
 	offset += cchPicName + 1;
-	delete [] stPicName;
     }
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );

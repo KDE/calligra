@@ -100,6 +100,7 @@ qreal m_largestParaFont; // Largest font used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
+void handleRprAttributes(const QXmlStreamAttributes& attrs);
 KoFilter::ConversionStatus read_DrawingML_rPr();
 KoFilter::ConversionStatus read_endParaRPr();
 
@@ -218,8 +219,8 @@ int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
 
 // Shape properties
-int m_svgX; //!< set by read_off()
-int m_svgY; //!< set by read_off()
+qint64 m_svgX; //!< set by read_off()
+qint64 m_svgY; //!< set by read_off()
 int m_svgWidth; //! set by read_ext()
 int m_svgHeight; //! set by read_ext()
 int m_svgChX; //!< set by read_chOff()
@@ -230,8 +231,8 @@ int m_svgChHeight; //! set by read_chExt()
 // a group shape
 bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
 struct GroupProp {
-    qreal svgXOld;
-    qreal svgYOld;
+    qint64 svgXOld;
+    qint64 svgYOld;
     qreal svgWidthOld;
     qreal svgHeightOld;
     qreal svgXChOld;

@@ -55,7 +55,7 @@ KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
     setFocusPolicy(Qt::StrongFocus);
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
     m_viewConverter = new KoZoomHandler();
-    m_viewMode = KWViewMode::create(viewMode, document, this);
+    m_viewMode = KWViewMode::create(viewMode, document);
 }
 
 KWCanvasItem::~KWCanvasItem()
@@ -88,14 +88,14 @@ bool KWCanvasItem::snapToGrid() const
 void KWCanvasItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mouseMoveEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseMoveEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
 void KWCanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mousePressEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mousePressEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!me.isAccepted() && me.button() == Qt::RightButton) {
         // XXX: Port to graphicsitem!
         //m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
@@ -107,14 +107,14 @@ void KWCanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 void KWCanvasItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mouseReleaseEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseReleaseEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
 void KWCanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mouseDoubleClickEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseDoubleClickEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
@@ -143,7 +143,7 @@ void KWCanvasItem::keyReleaseEvent(QKeyEvent *e)
 void KWCanvasItem::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     QWheelEvent ev(event->pos().toPoint(), event->delta(), event->buttons(), event->modifiers(), event->orientation());
-    m_toolProxy->wheelEvent(&ev, m_viewMode->viewToDocument(event->pos() + m_documentOffset));
+    m_toolProxy->wheelEvent(&ev, m_viewMode->viewToDocument(event->pos() + m_documentOffset, m_viewConverter));
     event->setAccepted(ev.isAccepted());
 }
 

@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
@@ -78,7 +77,7 @@
 #include "kis_selection_decoration.h"
 #include "canvas/kis_canvas_decoration.h"
 #include "kis_node_commands_adapter.h"
-
+#include "kis_iterator_ng.h"
 #include "kis_clipboard.h"
 #include "kis_view2.h"
 
@@ -191,7 +190,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
-    m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 
     m_smooth  = new KAction(i18n("Smooth..."), this);
@@ -389,7 +387,6 @@ void KisSelectionManager::cut()
 
     layer->paintDevice()->clearSelection(m_view->selection());
     QRect rect = m_view->selection()->selectedRect();
-    deselect();
 
     transaction.commit(m_view->image()->undoAdapter());
 
@@ -1576,25 +1573,29 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
 
     // TODO if the source is linked... copy from all linked layers?!?
 
-
+    // Copy image data
+    KisPainter gc;
+    gc.begin(clip);
+    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.bitBlt(0, 0, device, r.x(), r.y(), r.width(), r.height());
+    gc.end();
 
     if (selection) {
         // Apply selection mask.
 
-        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
-        KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
-
+        KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, r.width());
+        KisHLineConstIteratorPixel selectionIt = selection->createHLineConstIterator(r.x(), r.y(), r.width());
+        // KisHLineConstIteratorSP selectionIt = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
         for (qint32 y = 0; y < r.height(); y++) {
 
-            while (!layerIt.isDone()) {
+            for (qint32 x = 0; x < r.width(); x++) {
 
-                cs->applyAlphaU8Mask(layerIt.rawData(), selectionIt.rawData(), 1);
+                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt.oldRawData(), 1);
 
-
-                ++layerIt;
+                layerIt->nextPixel();
                 ++selectionIt;
             }
-            layerIt.nextRow();
+            layerIt->nextRow();
             selectionIt.nextRow();
         }
     }

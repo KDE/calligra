@@ -18,17 +18,16 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KO_TOOL_DOCKER_H
-#define KO_TOOL_DOCKER_H
+#ifndef _TOOL_DOCKER_H
+#define _TOOL_DOCKER_H
 
 #include <QDockWidget>
-#include <QMap>
 
 class QWidget;
 
 /**
-   The tool docker shows the tool option widget associated with the
-   current tool and the current canvas.
+ * The tool docker shows the tool option widget associated with the
+ * current tool and the current canvas.
  */
 class ToolDocker : public QDockWidget
 {
@@ -43,7 +42,7 @@ public slots:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */
-    void setOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap);
+    void setOptionWidgets(const QList<QWidget *> &optionWidgetList);
 
     /**
      * Returns whether the docker has an optionwidget attached

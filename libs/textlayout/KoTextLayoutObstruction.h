@@ -21,7 +21,7 @@
 #ifndef KOTEXTLAYOUTOBSTRUCTION_H
 #define KOTEXTLAYOUTOBSTRUCTION_H
 
-#include "kotext_export.h"
+#include "textlayout_export.h"
 
 #include <QTransform>
 #include <QMultiMap>
@@ -30,7 +30,7 @@
 class KoShape;
 
 ///  Class that allows us with the runaround of QPainterPaths
-class KOTEXT_EXPORT KoTextLayoutObstruction
+class TEXTLAYOUT_EXPORT KoTextLayoutObstruction
 {
 public:
     KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);
@@ -63,6 +63,9 @@ public:
 
     bool noTextAround() const;
 
+    // Don't run around unless available space is > than this when m_side == Enough.
+    qreal runAroundThreshold() const;
+
     static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
 private:
     enum Side { None, Left, Right, Empty, Both, Bigger, Enough };
@@ -74,6 +77,7 @@ private:
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
     qreal m_distance;
+    qreal m_runAroundThreshold;
 };
 
 #endif

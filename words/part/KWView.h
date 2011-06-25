@@ -109,6 +109,9 @@ public slots:
     void offsetInDocumentMoved(int yOffset);
     void variableChanged();
 
+    /// displays the KWPageSettingsDialog that allows to change properties of the entire page
+    void formatPage();
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
@@ -148,12 +151,20 @@ private slots:
     void sendToBack();
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
-    /// displays the KWPageSettingsDialog that allows to change properties of the entire page
-    void formatPage();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
     /// convert current frame to an inline frame
     void inlineFrame();
+    /// anchor the current shape "as-char"
+    void anchorAsChar();
+    /// anchor the current shape "to-char"
+    void anchorToChar();
+    /// anchor the current shape "to-paragraph"
+    void anchorToParagraph();
+    /// anchor the current shape "to-page"
+    void anchorToPage();
+    /// make the current shape free floating
+    void setFloating();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
@@ -196,7 +207,10 @@ private slots:
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
-
+    /// The document has finished loading. This is used to update the text that can be searched.
+    void loadingCompleted();
+    /// The KWPageSettingsDialog was closed.
+    void pageSettingsDialogFinished();
 private:
 
     /// loops over the selected shapes and returns the frames that go with them.
@@ -231,6 +245,10 @@ private:
     KActionMenu* m_actionMenu;
 
     bool m_snapToGrid;
+    QString m_lastPageSettingsTab;
+
+    QSizeF m_maxPageSize; // The maximum size of the pages we have encountered. This is used to
+                         // make sure that we always show all pages correctly in page/pagewidth mode.
 };
 
 #endif

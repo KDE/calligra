@@ -25,8 +25,6 @@
 #include "frames/KWTextFrameSet.h"
 
 #include <KoResourceManager.h>
-#include <KoExecutePolicy.h>
-#include <KoAction.h>
 #include <KoSelection.h>
 #include <KoShape.h>
 
@@ -38,7 +36,6 @@
 KWStatistics::KWStatistics(KoResourceManager *provider, KWDocument *document, KoSelection *selection, QWidget *parent)
         : QWidget(parent),
         m_resourceManager(provider),
-        m_action(new KoAction(this)),
         m_selection(selection),
         m_document(document),
         m_textDocument(0),
@@ -52,38 +49,18 @@ KWStatistics::KWStatistics(KoResourceManager *provider, KWDocument *document, Ko
         m_paragraphs(0),
         m_autoUpdate(true)
 {
-    if (m_selection) {
-        m_showInDocker = true;
-        m_autoUpdate = false;
-        m_timer = new QTimer(this);
-        m_timer->setInterval(2000); // make the interval configurable?
-        m_timer->setSingleShot(true);
-        widgetDocker.setupUi(this);
-        widgetDocker.refresh->setIcon(KIcon("view-refresh"));
+    m_showInDocker = true;
+    m_autoUpdate = false;
+    m_timer = new QTimer(this);
+    m_timer->setInterval(2000); // make the interval configurable?
+    m_timer->setSingleShot(true);
+    widgetDocker.setupUi(this);
+    widgetDocker.refresh->setIcon(KIcon("view-refresh"));
 
-        connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
-        connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
-        connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-        connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
-    } else {
-        m_showInDocker = false;
-        widget.setupUi(this);
-        m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
-
-        connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(updateResource(int)));
-        connect(m_action, SIGNAL(triggered(const QVariant&)), this, SLOT(updateData()), Qt::DirectConnection);
-        connect(m_action, SIGNAL(updateUi(const QVariant&)), this, SLOT(updateDataUi()), Qt::DirectConnection);
-        connect(widget.footEndNotes, SIGNAL(toggled(bool)), m_action, SLOT(execute()));
-
-        m_action->execute();
-    }
-}
-
-void KWStatistics::updateResource(int which)
-{
-    if (which == KWord::CurrentPageCount  || which == KWord::CurrentFrameSetCount ||
-            which == KWord::CurrentPictureCount || which == KWord::CurrentTableCount)
-        m_action->execute();
+    connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
+    connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
+    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 }
 
 void KWStatistics::updateData()

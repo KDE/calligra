@@ -1,6 +1,9 @@
 [Desktop Entry]
 Name=callback
+Name[el]=επανάκληση
+Name[nb]=tilbakekall
 Name[pt]=retorno
 Name[pt_BR]=retorno
+Name[sv]=återanrop
 Name[uk]=Повернення
 Name[x-test]=xxcallbackxx

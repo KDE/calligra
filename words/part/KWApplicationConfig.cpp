@@ -34,7 +34,10 @@ KWApplicationConfig::KWApplicationConfig()
         m_viewFormattingTabs(false),
         m_createBackupFile(true),
         m_statusBarShowPage(true),
-        m_statusBarShowModified(false),
+        m_statusBarShowPageStyle(true),
+        m_statusBarShowPageSize(false),
+        m_statusBarShowLineNumber(true),
+        m_statusBarShowModified(true),
         m_statusBarShowMouse(false),
         m_statusBarShowZoom(true),
         m_zoom(100),
@@ -69,6 +72,9 @@ void KWApplicationConfig::load(KWDocument *document)
     m_zoomMode = static_cast<KoZoomMode::Mode>(interface.readEntry("ZoomMode", (int) m_zoomMode));
 
     m_statusBarShowPage = interface.readEntry("StatusBarShowPage", m_statusBarShowPage);
+    m_statusBarShowPageStyle = interface.readEntry("StatusBarShowPageStyle", m_statusBarShowPageStyle);
+    m_statusBarShowPageSize = interface.readEntry("StatusBarShowPageSize", m_statusBarShowPageSize);
+    m_statusBarShowLineNumber = interface.readEntry("StatusBarShowLineNumber", m_statusBarShowLineNumber);
     m_statusBarShowModified = interface.readEntry("StatusBarShowModified", m_statusBarShowModified);
     m_statusBarShowMouse = interface.readEntry("StatusBarShowMouse", m_statusBarShowMouse);
     m_statusBarShowZoom = interface.readEntry("StatusBarShowZoom", m_statusBarShowZoom);
@@ -141,6 +147,9 @@ void KWApplicationConfig::save()
 //    interface.writeEntry("ShowGrid" , m_bShowGrid);
 //    interface.writeEntry("SnapToGrid" , m_bSnapToGrid);
     interface.writeEntry("StatusBarShowPage", m_statusBarShowPage);
+    interface.writeEntry("StatusBarShowPageStyle", m_statusBarShowPageStyle);
+    interface.writeEntry("StatusBarShowPageSize", m_statusBarShowPageSize);
+    interface.writeEntry("StatusBarShowLineNumber", m_statusBarShowLineNumber);
     interface.writeEntry("StatusBarShowModified", m_statusBarShowModified);
     interface.writeEntry("StatusBarShowMouse", m_statusBarShowMouse);
     interface.writeEntry("StatusBarShowZoom", m_statusBarShowZoom);

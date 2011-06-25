@@ -258,6 +258,10 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
     KoFilter::ConversionStatus status = KoFilter::OK;
 
     QIODevice* inputDevice = Utils::openDeviceForFile(zip, errorMessage, sourceName, status);
+    if (!inputDevice) {
+        // Source did not exist
+        return KoFilter::CreationError;
+    }
     inputDevice->open(QIODevice::ReadOnly);
 
     OOXML_POLE::Storage storage(inputDevice);
@@ -1309,33 +1313,6 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
     return value; // the original is OK
 }
 
-MSOOXML_EXPORT QString Utils::rgbColor(QString color)
-{
-    // It is possible that color is eg #abcdef [adddd], this removes the extra end
-    if (color.indexOf(' ') > 0) {
-        color = color.left(color.indexOf(' '));
-    }
-
-    QString newColor;
-    if (color == "red") {
-        newColor = "#ff0000";
-    }
-    else if (color == "green") {
-        newColor = "#00ff00";
-    }
-    else if (color == "blue") {
-        newColor = "#0000ff";
-    }
-    else if (color == "yellow") {
-        newColor = "#ffff00";
-    }
-    else {
-        newColor = color;
-    }
-
-    return newColor;
-}
-
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
 {
     QString v(ST_PositiveUniversalMeasure_to_ODF(value));
@@ -1349,7 +1326,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
     m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
-    m_indent(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
+    m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
 {
 }
 
@@ -1371,6 +1348,7 @@ void Utils::ParagraphBulletProperties::clear()
     m_suffix = UNUSED;
     m_align = UNUSED;
     m_indent = UNUSED;
+    m_margin = UNUSED;
     m_picturePath = UNUSED;
     m_bulletSize = QSize();
     m_bulletColor = UNUSED;
@@ -1396,6 +1374,11 @@ void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
 void Utils::ParagraphBulletProperties::setStartValue(const QString& value)
 {
     m_startValue = value;
+}
+
+void Utils::ParagraphBulletProperties::setMargin(const qreal margin)
+{
+    m_margin = QString("%1").arg(margin);
 }
 
 void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
@@ -1479,6 +1462,9 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     if (properties.m_indent != UNUSED) {
         m_indent = properties.m_indent;
     }
+    if (properties.m_margin != UNUSED) {
+        m_margin = properties.m_margin;
+    }
     if (properties.m_picturePath != UNUSED) {
         m_picturePath = properties.m_picturePath;
     }
@@ -1534,21 +1520,32 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
 
     returnValue += "<style:list-level-properties ";
 
-    if (m_indent != "UNUSED") {
-        returnValue += QString("text:space-before=\"%1pt\" ").arg(m_indent);
-    }
+    returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
 
-    if (!m_bulletSize.isEmpty()) {
+    if (!m_bulletSize.isEmpty() && m_type == ParagraphBulletProperties::PictureType) {
         returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
             arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
     }
+    returnValue += ">";
 
-    returnValue += "/>";
+    if (m_margin != "UNUSED") {
+        returnValue += "<style:list-level-label-alignment ";
+        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(m_margin);
+        if (m_indent != "UNUSED") {
+            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(m_indent);
+        }
+        returnValue += "/>";
+    }
+
+    returnValue += "</style:list-level-properties>";
 
     returnValue += "<style:text-properties ";
 
     if (m_bulletColor != "UNUSED") {
     	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
+    }
+    if (m_type != ParagraphBulletProperties::PictureType) {
+        returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
     }
 
     returnValue += "/>";
@@ -1556,47 +1553,6 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     returnValue += ending;
 
     return returnValue;
-}
-
-MSOOXML_EXPORT void Utils::copyPropertiesFromStyle(const KoGenStyle& sourceStyle, KoGenStyle& targetStyle, KoGenStyle::PropertyType type)
-{
-    if (sourceStyle.isEmpty()) {
-        return;
-    }
-
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter tempWriter(&buffer);
-    sourceStyle.writeStyleProperties(&tempWriter, type);
-
-    QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
-    // We have to add the properties in a loop
-    // This works as long as text-properties don't have children
-    // Currenty KoGenStyle doesn't support adding this in other ways.
-
-    int separatorLocation = content.indexOf(' ');
-    content = content.right(content.size() - (separatorLocation + 1));
-    separatorLocation = content.indexOf(' ');
-    if (separatorLocation < 0) {
-        separatorLocation = content.indexOf('/');
-    }
-    while (separatorLocation > 0) {
-        int equalSignLocation = content.indexOf('=');
-        if (equalSignLocation < 0) {
-            break;
-        }
-        QString propertyName = content.left(equalSignLocation);
-        // Removing equal and one quota
-        content = content.right(content.size() - (equalSignLocation) - 2);
-        separatorLocation = content.indexOf('\"');
-        if (separatorLocation < 0) {
-            separatorLocation = content.indexOf('/');
-        }
-        QString propertyValue = content.left(separatorLocation);
-        content = content.right(content.size() - (separatorLocation + 2));
-        targetStyle.addProperty(propertyName, propertyValue, type);
-    }
 }
 
 MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)

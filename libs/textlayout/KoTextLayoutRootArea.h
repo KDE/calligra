@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTROOTAREA_H
 #define KOTEXTLAYOUTROOTAREA_H
 
-#include "kotext_export.h"
+#include "textlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 
@@ -32,7 +32,7 @@ class KoTextPage;
 /**
  * When laying out text it happens in areas that can occupy space of various size.
  */
-class KOTEXT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
+class TEXTLAYOUT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
 {
 public:
     /// constructor
@@ -41,7 +41,7 @@ public:
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the frame
-    virtual bool layout(FrameIterator *cursor);
+    bool layoutRoot(FrameIterator *cursor);
 
     /// Sets an associated shape which can be retrieved with associatedShape()
     /// KoTextLayoutRootArea doesn't use it for anything.
@@ -64,6 +64,9 @@ public:
     void setDirty();
 
     bool isDirty() const;
+
+    /// Returns the cursor position of the following root frame
+    FrameIterator *nextStartOfArea() const;
 
     virtual KoText::Direction parentTextDirection() const;
 

@@ -42,9 +42,10 @@ class QPainterPath;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
+class KoCharacterStyle;
 #include "KoXmlReaderForward.h"
-class KoOdfLoadingContext;
 class KoTableCellStylePrivate;
+class KoShapeLoadingContext;
 
 /**
  * A container for all properties for the table cell style.
@@ -65,11 +66,18 @@ public:
         FormulaHidden,
         ProtectedAndFormulaHidden
     };
-    
+
     enum CellTextDirection {
         Default = 0,
         LeftToRight,
         TopToBottom
+    };
+    
+    enum RotationAlignment {
+        RAlignNone,
+        RAlignBottom,
+        RAlignTop,
+        RAlignCenter
     };
     
     enum Property {
@@ -83,8 +91,10 @@ public:
         AlignFromType,      ///< Should the alignment property be respected or should the alignment be based on the value type
         RotationAngle,      ///< Rotation angle of the cell content, in degrees
         Direction,          ///< The direction of the text in the cell. This is a CellTextDirection.
+        RotationAlign,      ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
+        TextWritingMode     ///< KoText::Direction, the direction for writing text in the cell
     };
-    
+
     /// Constructor
     KoTableCellStyle(QObject *parent = 0);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
@@ -133,10 +143,24 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
-    
+
+    /**
+     * Get the character style for this cell style
+     *
+     * @return the character style
+     */
+    KoCharacterStyle *characterStyle();
+
+    /**
+     * Sets the character style for this cell style
+     *
+     * @param style The character style
+     */
+    void setCharacterStyle(KoCharacterStyle *style);
+
     bool shrinkToFit() const;
     void setShrinkToFit(bool state);
-    
+
     bool repeatContent() const;
     void setRepeatContent(bool state);
 
@@ -154,27 +178,33 @@ public:
     void setAlignment(Qt::Alignment alignment);
     Qt::Alignment alignment() const;
     
+    KoText::Direction textDirection() const;
+    void setTextDirection (KoText::Direction value);
+
     void setWrap(bool state);
     bool wrap() const;
 
     CellProtectionFlag cellProtection() const;
     void setCellProtection (CellProtectionFlag protection);
-    
+
     void setPrintContent(bool state);
     bool printContent() const;
-    
+
     void setDecimalPlaces(int places);
     int decimalPlaces() const;
-    
+
     void setAlignFromType(bool state);
     bool alignFromType() const;
-    
+
     void setRotationAngle(int value);
     int rotationAngle() const;
-    
+
     void setDirection(CellTextDirection direction);
     CellTextDirection direction() const;
     
+    void setRotationAlignment(RotationAlignment align);
+    RotationAlignment rotationAlignment () const;
+
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);
 
@@ -222,7 +252,7 @@ public:
      * @param context the odf loading context
      * @param element the element containing the
      */
-    void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
+    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
 
     void saveOdf(KoGenStyle &style);
 

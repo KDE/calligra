@@ -300,14 +300,17 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
-        bool b = d->showRulerAction->isChecked();
-        d->horizRuler->setVisible(b);
-        d->vertRuler->setVisible(b);
+        KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+        if(interfaceGroup.readEntry<bool>("ShowRulers", false)) {
+            d->horizRuler->setVisible(true);
+            d->vertRuler->setVisible(true);
+            d->showRulerAction->setChecked(true);
+        }
     }
 
     setLayout(layout);
@@ -652,7 +655,7 @@ void KarbonView::unclipObjects()
     }
     if (!shapesToUnclip.count())
         return;
-    
+
     d->canvas->addCommand(new KoShapeUnclipCommand(d->part, shapesToUnclip));
 }
 
@@ -946,6 +949,10 @@ void KarbonView::initActions()
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
+
+    KAction *actionEditGuides = new KAction(i18n("Edit Guides"), this);
+    actionCollection()->addAction("edit_guides", actionEditGuides);
+    connect(actionEditGuides, SIGNAL(triggered()), this, SLOT(editGuides()));
     // edit <-----
 
     // object ----->
@@ -1140,14 +1147,21 @@ void KarbonView::setNumberOfRecentFiles(unsigned int number)
 
 void KarbonView::showRuler()
 {
-    if (shell() && d->showRulerAction->isChecked()) {
-        d->horizRuler->show();
-        d->vertRuler->show();
+    if(!shell())
+        return;
+
+    const bool showRuler = d->showRulerAction->isChecked();
+    d->horizRuler->setVisible(showRuler);
+    d->vertRuler->setVisible(showRuler);
+    if (showRuler)
         updateRuler();
-    } else {
-        d->horizRuler->hide();
-        d->vertRuler->hide();
-    }
+
+    // this will make the last setting of the ruler visibility persistent
+    KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+    if (!showRuler && !interfaceGroup.hasDefault("ShowRulers"))
+        interfaceGroup.revertToDefault("ShowRulers");
+    else
+        interfaceGroup.writeEntry("ShowRulers", showRuler);
 }
 
 void KarbonView::togglePageMargins(bool b)
@@ -1173,6 +1187,11 @@ void KarbonView::showGuides()
 {
     d->part->guidesData().setShowGuideLines(d->showGuidesAction->isChecked());
     d->canvas->update();
+}
+
+void KarbonView::editGuides()
+{
+    KoToolManager::instance()->switchToolRequested("GuidesTool_ID");
 }
 
 void KarbonView::snapToGrid()

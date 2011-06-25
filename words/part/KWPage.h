@@ -84,15 +84,8 @@ public:
 
     /**
      * return a rectangle outlining this page, using the offset in the document.
-     * For page-spreads the page size will effectively be 2 pages unless the
-     * pageNumber param is specified and the pagenumber of either the left or the
-     * right page is passed.
-     * @param pageNumber passing a pagenumber will return the rect of either the
-     *  left or the right halve of a pageSpread.
-     * Passing a pagenumber that is not represented by this object will have
-     *  unpredictabe results.
      */
-    QRectF rect(int pageNumber = -1) const;
+    QRectF rect() const;
 
     // the y coordinate
     /**
@@ -113,15 +106,25 @@ public:
     /// set the pageSide of this page, see the PageSide
     void setPageSide(PageSide ps);
 
-    /// returns the user visible number of this page.
-    int pageNumber() const;
+    /// reimplemented from KoTextPage
+    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
+
+    /// reimplemented from KoTextPage
+    virtual int pageNumber() const;
 
     /**
-     * Adjusts the page number of this page and all pages following.
-     * Page numbers that are set like this are never saved, this is runtime data only.
-     * Instead you should insert a pagraph in the main-text flow with the new page number.
+     * Adjusts the visible page number of this page.
+     *
+     * This implements hard-coded page numbers like those defined via @a KoParagraphStyle::PageNumber . If
+     * the page number equals zero then the page has an auto page number. That means previous page number
+     * plus one.
+     *
+     * @param pageNumber The visible page-number for this page.
      */
-    void setPageNumber(int pageNumber);
+    void setVisiblePageNumber(int pageNumber);
+
+    /// reimplemented from KoTextPage
+    virtual QString masterPageName() const;
 
     /// returns the page style applied on this page
     KWPageStyle pageStyle() const;
@@ -177,10 +180,6 @@ public:
     inline bool operator<(const KWPage &other) const { return n < other.n; }
     inline bool operator>(const KWPage &other) const { return n > other.n; }
     uint hash() const;
-
-    /// reimplemented from KoTextPage
-    virtual int pageNumber(PageSelection select, int adjustment = 0) const;
-    virtual QString masterPageName() const;
 
 private:
     friend class KWPageTextInfo;

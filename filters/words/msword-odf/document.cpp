@@ -30,8 +30,9 @@
 #include "texthandler.h"
 #include "graphicshandler.h"
 //#include "versionmagic.h"
-#include "msodraw.h"
 #include "mswordodfimport.h"
+#include "msodraw.h"
+#include "msdoc.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -51,13 +52,6 @@
 
 #include <QBuffer>
 #include <QColor>
-
-//specifies the location from which the offset of a page border is measured
-enum PgbOffsetFrom {
-    pgbFromText,  //offset measured from the text
-    pgbFromEdge   //offset measured from the edge of the page
-};
-
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
@@ -124,10 +118,10 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
                 this, SLOT(slotTableFound(KWord::Table*)));
-        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
+        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter* )),
-                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter* )));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter*)),
+                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter*)));
         connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
                 this, SLOT(slotTextBoxFound(unsigned int, bool)));
 
@@ -325,7 +319,7 @@ void Document::processStyles()
         const wvWare::Style* style = styles.styleByIndex(i);
         Q_ASSERT(style);
         QString displayName = Conversion::string(style->name());
-        QString name = Conversion::styleNameString(style->name());
+        QString name = Conversion::styleName2QString(style->name());
 
         // if the invariant style identifier says it's a style used for line numbers
         if (style->sti() == 40) {
@@ -333,20 +327,21 @@ void Document::processStyles()
         }
 
         // Process paragraph styles.
-        if (style && style->type() == wvWare::Style::sgcPara) {
+        if (style && style->type() == sgcPara) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            const wvWare::Style* followingStyle = styles.styleByIndex(style->followingStyle());
             if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::string(followingStyle->name());
+                QString followingName = Conversion::styleName2QString(followingStyle->name());
+                userStyle.addAttribute("style:next-style-name", followingName);
             }
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleName2QString(parentStyle->name()));
             }
 
             //set font name in style
@@ -357,9 +352,9 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, currentBgColor());
-            Paragraph::applyParagraphProperties(style->paragraphProperties(),
-                                                &userStyle, parentStyle, false, 0);
+            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle,
+                                                false, 0, 0, currentBgColor());
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
 
             // Add style to main collection, using the name that it
             // had in the .doc.
@@ -370,7 +365,7 @@ void Document::processStyles()
             if (actualName.contains("TOC")) {
                 m_tocStyleNames.append(actualName);
             }
-        } else if (style && style->type() == wvWare::Style::sgcChp) {
+        } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");
@@ -378,7 +373,7 @@ void Document::processStyles()
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleName2QString(parentStyle->name()));
             }
 
             //set font name in style
@@ -389,7 +384,8 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, currentBgColor());
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle,
+                                                false, false, currentBgColor());
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
@@ -403,13 +399,19 @@ void Document::processStyles()
     m_mainStyles->insert(defaultStyle, "nevershown");
 }
 
-//just call parsing function
-bool Document::parse()
+quint8 Document::parse()
 {
-    kDebug(30513) ;
-    if (m_parser)
-        return m_parser->parse();
-    return false;
+    if (m_parser) {
+        if (!m_parser->parse()) {
+            return 1;
+        }
+    }
+    //make sure texthandler is fine after parsing
+    if (!m_textHandler->stateOk()) {
+        kError(30513) << "TextHandler state after parsing NOT Ok!";
+        return 2;
+    }
+    return 0;
 }
 
 void Document::setProgress(const int percent)
@@ -478,16 +480,22 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 //             textHandler()->set_breakBeforePage(true);
 //         }
 
-        //A continuous section break. The next section starts on the next line.
-        if (sep->bkc == 0) {
+        switch (sep->bkc) {
+        case bkcContinuous:
             kDebug(30513) << "omitting page-layout & master-page creation";
             m_omittMasterPage = true;
-        }
-        //A new page section break. The next section starts on the next page.
-        else if (sep->bkc == 2) {
+            break;
+        case bkcNewPage:
+        case bkcEvenPage:
+        case bkcOddPage:
             kDebug(30513) << "using the last defined master-page";
             m_useLastMasterPage = true;
             m_writeMasterPageName = true;
+            break;
+        default:
+            kWarning(30513) << "Warning: section break type (" << sep->bkc << ") NOT SUPPORTED!";
+            m_omittMasterPage = true;
+            break;
         }
 
         //cleaning required!
@@ -920,29 +928,19 @@ void Document::slotTableFound(KWord::Table* table)
 void Document::slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the graphicsHandler
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(writer);
-    }
+    Q_UNUSED(writer);
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleInlineObject(data);
-
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(m_bodyWriter);
-    }
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
 }
 
 void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the graphicsHandler
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(writer);
-    }
+    Q_UNUSED(writer);
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleFloatingObject(globalCP);
-
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(m_bodyWriter);
-    }
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
 }
 
 void Document::slotTextBoxFound(unsigned int index, bool stylesxml)

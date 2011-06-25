@@ -28,6 +28,7 @@
 #include "tablehandler.h"
 //#include "versionmagic.h"
 #include "paragraph.h"
+#include "exceptions.h"
 
 #include <wv2/src/handlers.h>
 #include <wv2/src/functordata.h>
@@ -45,6 +46,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+
 
 class Document;
 
@@ -72,7 +74,7 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
     Q_OBJECT
 public:
     KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~KWordTextHandler() { Q_ASSERT (m_fldStart == m_fldEnd); }
+    ~KWordTextHandler() { }
 
     //////// TextHandler interface
 
@@ -80,7 +82,8 @@ public:
     virtual void sectionEnd();
     virtual void pageBreak();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
-    virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
+    virtual void footnoteFound(wvWare::FootnoteData data, wvWare::UString characters,
+                               wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
     virtual void annotationFound(wvWare::UString characters,
@@ -100,9 +103,16 @@ public:
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
     virtual void inlineObjectFound(const wvWare::PictureData& data);
-    virtual void floatingObjectFound(unsigned int globalCP );
+    virtual void floatingObjectFound(unsigned int globalCP);
 
     ///////// Our own interface
+
+    /**
+     * Check the current texthandler state.  At the moment only the number of
+     * opened and closed fields if checked.
+     * @return 0 - Not Ok, 1 - Ok
+     */
+    bool stateOk() const;
 
     /**
      * Paragraph can be present in {header, footer, footnote, endnote,
@@ -188,20 +198,31 @@ private:
     //  State
     // ************************************************
 
-    //save/restore for processing footnotes (very similar to the wv2 method)
+    //save/restore (very similar to the wv2 method)
     struct State {
-        State(KWord::Table* curTab, Paragraph* para, QString lStyleName,
-              int curListDepth, int curListID, const QMap<int, QString> &preLists) :
-                currentTable(curTab), paragraph(para), listStyleName(lStyleName),
-                currentListDepth(curListDepth), currentListID(curListID),
-                previousLists(preLists) {}
+        State(KWord::Table* table, Paragraph* paragraph,
+              QString listStyleName, int listDepth, int listID,
+              const QMap<int, QString> &prevLists,
+              KoXmlWriter* drawingWriter, bool insideDrawing) :
 
-        KWord::Table* currentTable;
+            table(table),
+            paragraph(paragraph),
+            listStyleName(listStyleName),
+            listDepth(listDepth),
+            listID(listID),
+            previousLists(prevLists),
+            drawingWriter(drawingWriter),
+            insideDrawing(insideDrawing)
+        {}
+        KWord::Table* table;
         Paragraph* paragraph;
         QString listStyleName;
-        int currentListDepth; //tells us which list level we're on (-1 if not in a list)
-        int currentListID; //tracks the id of the current list - 0 if no list
+        int listDepth; //tells us which list level we're on (-1 if not in a list)
+        int listID;    //tracks the id of the current list - 0 if no list
         QMap<int, QString> previousLists; //remember previous lists, to continue numbering
+
+        KoXmlWriter* drawingWriter;
+        bool insideDrawing;
     };
 
     std::stack<State> m_oldStates;
@@ -214,7 +235,7 @@ private:
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
     QString createBulletStyle(const QString& textStyleName) const;
-    void updateListStyle(const QString& textStyleName);
+    void updateListStyle(const QString& textStyleName) throw(InvalidFormatException);
 
     QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QString m_listStyleName; //track the name of the list style

@@ -79,6 +79,7 @@
 
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     uint _worksheetNumber,
+    uint _numberOfWorkSheets,
     const QString& _worksheetName,
     const QString& _state,
     const QString _path, const QString _file,
@@ -93,6 +94,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
+        , numberOfWorkSheets(_numberOfWorkSheets)
         , worksheetName(_worksheetName)
         , state(_state)
         , themes(_themes)
@@ -259,7 +261,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     readNext();
     //kDebug() << *this << namespaceUri();
 
-    if (!expectEl("worksheet")) {
+    if (name() != "worksheet" && name() != "dialogsheet" && name() != "chartsheet") {
         return KoFilter::WrongFormat;
     }
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
@@ -280,7 +282,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
-    TRY_READ(worksheet)
+    if (name() == "worksheet") {
+        TRY_READ(worksheet)
+    }
+    else if (name() == "dialogsheet") {
+        TRY_READ(dialogsheet)
+    }
+
     kDebug() << "===========finished============";
     return KoFilter::OK;
 }
@@ -318,6 +326,27 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
     body->endElement(); // office:annotation
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL chartsheet
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_chartsheet()
+{
+    READ_PROLOGUE
+
+    return read_sheetHelper("chartsheet");
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL dialogsheet
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_dialogsheet()
+{
+    READ_PROLOGUE
+
+    return read_sheetHelper("dialogsheet");
+
+    READ_EPILOGUE
+}
 
 #undef CURRENT_EL
 #define CURRENT_EL worksheet
@@ -325,7 +354,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
 /*! ECMA-376, 18.3.1.99, p. 1894.
  Root element of Worksheet parts within a SpreadsheetML document.
  Child elements:
- - autoFilter (AutoFilter Settings) §18.3.1.2
+ - [done] autoFilter (AutoFilter Settings) §18.3.1.2
  - cellWatches (Cell Watch Items) §18.3.1.9
  - colBreaks (Vertical Page Breaks) §18.3.1.14
  - [done] cols (Column Information) §18.3.1.17
@@ -369,6 +398,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 {
     READ_PROLOGUE
 
+    return read_sheetHelper("worksheet");
+
+    READ_EPILOGUE
+}
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QString& type)
+{
     // In the first round we do not wish to output anything
     QBuffer fakeBuffer;
     KoXmlWriter fakeBody(&fakeBuffer);
@@ -392,23 +428,38 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     //The style might be changed depending on what elements we find,
     //hold the body writer so that we can set the proper style
     KoXmlWriter* heldBody = body;
-    QBuffer* bodyBuffer = new QBuffer();
-    bodyBuffer->open(QIODevice::ReadWrite);
-    body = new KoXmlWriter(bodyBuffer);
+    QBuffer bodyBuffer;
+    bodyBuffer.open(QIODevice::ReadWrite);
+    body = new KoXmlWriter(&bodyBuffer);
+
+    QBuffer drawingBuffer;
+    drawingBuffer.open(QIODevice::ReadWrite);
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        if (isEndElement() && name() == type) {
+            break;
+        }
         if (isStartElement() && !m_context->firstRoundOfReading) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(sheetData) // does fill the m_context->sheet
             ELSE_TRY_READ_IF(mergeCells)
-            ELSE_TRY_READ_IF(drawing)
+            else if (name() == "drawing") {
+                KoXmlWriter *tempBodyHolder = body;
+                body = new KoXmlWriter(&drawingBuffer);
+                body->startElement("table:shapes");
+                TRY_READ(drawing)
+                body->endElement(); //table:shapes
+                delete body;
+                body = tempBodyHolder;
+            }
+            ELSE_TRY_READ_IF(legacyDrawing)
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
+            ELSE_TRY_READ_IF(autoFilter)
             SKIP_UNKNOWN
         }
         else if (isStartElement() && m_context->firstRoundOfReading) {
@@ -417,8 +468,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             SKIP_UNKNOWN
         }
     }
-
-    bodyBuffer->close();
 
     if (m_context->firstRoundOfReading) {
         // Sorting conditional styles according to the priority
@@ -481,29 +530,52 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 
     const QString currentTableStyleName(mainStyles->insert(m_tableStyle, "ta"));
     heldBody->addAttribute("table:style-name", currentTableStyleName);
-    heldBody->addCompleteElement(bodyBuffer);
+    heldBody->addCompleteElement(&bodyBuffer);
     delete body;
-    delete bodyBuffer;
     body = heldBody;
 
     // now we have everything to start writing the actual cells
-    for(int c = 0; c <= m_context->sheet->maxColumn(); ++c) {
+    int c = 0;
+    while (c <= m_context->sheet->maxColumn()) {
         body->startElement("table:table-column");
-        if (Column* column = m_context->sheet->column(c, false)) {
-            //xmlWriter->addAttribute("table:default-cell-style-name", defaultStyleName);
-            if (column->hidden) {
-                body->addAttribute("table:visibility", "collapse");
+        int repeatedColumns = 1;
+        bool currentColumnHidden = false;
+        Column* column = m_context->sheet->column(c, false);
+        if (column && column->hidden) {
+            body->addAttribute("table:visibility", "collapse");
+            currentColumnHidden = true;
+        }
+        ++c;
+        while (c <= m_context->sheet->maxColumn()) {
+            column = m_context->sheet->column(c, false);
+            if (column && column->hidden ) {
+                if (currentColumnHidden) {
+                    ++repeatedColumns;
+                }
+                else {
+                    break;
+                }
             }
-            //xmlWriter->addAttribute("table:number-columns-repeated", );
-            //xmlWriter->addAttribute("table:style-name", styleName);
+            else {
+                if (!currentColumnHidden) {
+                    ++repeatedColumns;
+                }
+                else {
+                    break;
+                }
+            }
+            ++c;
+        }
+        if (repeatedColumns > 1) {
+           body->addAttribute("table:number-columns-repeated", repeatedColumns);
         }
         body->endElement();  // table:table-column
     }
+
     const int rowCount = m_context->sheet->maxRow();
     for(int r = 0; r <= rowCount; ++r) {
         body->startElement("table:table-row");
         if (Row* row = m_context->sheet->row(r, false)) {
-
             if (!row->styleName.isEmpty()) {
                 body->addAttribute("table:style-name", row->styleName);
             }
@@ -610,13 +682,54 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         body->endElement(); // table:table-row
     }
 
+    // Adding drawings, if there are any
+    body->addCompleteElement(&drawingBuffer);
+
     body->endElement(); // table:table
+
+    if (!m_context->autoFilters.isEmpty()) {
+        body->startElement("table:database-ranges");
+        int index = 0;
+        while (index < m_context->autoFilters.size()) {
+            body->startElement("table:database-range");
+            body->addAttribute("table:target-range-address", m_context->autoFilters.at(index).area);
+            body->addAttribute("table:display-filter-buttons", "true");
+            body->addAttribute("table:name", QString("%1_%2").arg(m_context->worksheetName).arg(index));
+            QString type = m_context->autoFilters.at(index).type;
+            int filterConditionSize = m_context->autoFilters.at(index).filterConditions.size();
+            if (filterConditionSize > 0) {
+                if (type == "and") {
+                    body->startElement("table:filter-and");
+                }
+                else if (type == "or") {
+                    body->startElement("table:filter-or");
+                }
+                else {
+                    body->startElement("table:filter");
+                }
+                int conditionIndex = 0;
+                while (conditionIndex < filterConditionSize) {
+                    body->startElement("table:filter-condition");
+                    body->addAttribute("table:field-number", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).field);
+                    body->addAttribute("table:value", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).value);
+                    body->addAttribute("table:operator", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).opField);
+                    body->endElement(); // table:filter-condition
+                    ++conditionIndex;
+                }
+                body->endElement(); // table:filter | table:filter-or | table:filter-and
+            }
+            body->endElement(); // table:database-range
+            ++index;
+        }
+
+        body->endElement(); // table:database-ranges
+    }
 
     if (m_context->firstRoundOfReading) {
         body = oldBody;
     }
 
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #undef CURRENT_EL
@@ -642,7 +755,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_conditionalFormatting()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(cfRule)
             SKIP_UNKNOWN
@@ -736,7 +849,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "formula") {
                 TRY_READ(formula)
@@ -844,7 +957,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cols()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_WRONG_FORMAT
@@ -1006,7 +1119,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(row)
             ELSE_WRONG_FORMAT
@@ -1093,11 +1206,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         row->hidden = hidden.toInt() > 0;
     }
 
+    qreal range = (55.0/m_context->numberOfWorkSheets);
+    int counter = 0;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
+            if (counter == 40) {
+                // set the progress by the position of what was read
+                qreal progress = 45 + range * (m_context->worksheetNumber - 1)
+                               + range * device()->pos() / device()->size();
+                m_context->import->reportProgress(progress);
+                counter = 0;
+            }
+            ++counter;
             TRY_READ_IF(c) // modifies m_currentColumn
             SKIP_UNKNOWN
         }
@@ -1159,7 +1282,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_TRY_READ_IF(v)
@@ -1281,7 +1404,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             if (!fontStyle) {
                 kWarning() << "No font with ID:" << cellFormat->fontId;
             } else {
-                MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
+                KoGenStyle::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
             }
         }
         if (!cellFormat->setupCellStyle(m_context->styles, &cellStyle)) {
@@ -1357,7 +1480,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
 
     while (!atEnd() && !hasError()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
             cell->formula = MSOOXML::convertFormula(text().toString());
         }
@@ -1545,7 +1668,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(mergeCell)
             ELSE_WRONG_FORMAT
@@ -1601,7 +1724,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
     }
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
     READ_EPILOGUE
 }
@@ -1657,12 +1780,239 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(hyperlink)
             ELSE_WRONG_FORMAT
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL customFilters
+/*
+ Parent elements:
+ - [done] filterColumn (§18.3.2.7)
+
+ Child elements:
+ - [done] customFilter (Custom Filter Criteria) §18.3.2.2
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_customFilters()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    QString andValue = attrs.value("and").toString();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(customFilter)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    if (!m_context->autoFilters.isEmpty()) {
+        if (andValue == "1") {
+            m_context->autoFilters.last().type = "and";
+        } else {
+            m_context->autoFilters.last().type = "or";
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL filters
+/*
+ Parent elements:
+ - [done] filterColumn (§18.3.2.7)
+
+ Child elements:
+ - dateGroupItem (Date Grouping) §18.3.2.4
+ - [done] filter (Filter) §18.3.2.6
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filters()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(blank)
+
+    m_context->currentFilterCondition.value = "^(";
+
+    bool hasValueAlready = false;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (name() == "filter") {
+                if (hasValueAlready) {
+                    m_context->currentFilterCondition.value += "|";
+                }
+                hasValueAlready = true;
+                TRY_READ(filter)
+            }
+            SKIP_UNKNOWN
+        }
+    }
+
+    m_context->currentFilterCondition.value += ")$";
+    m_context->currentFilterCondition.opField = "match";
+
+    if (blank == "1") {
+        m_context->currentFilterCondition.value = "0";
+        m_context->currentFilterCondition.opField = "empty";
+    }
+
+    if (!m_context->autoFilters.isEmpty()) {
+        m_context->autoFilters.last().filterConditions.push_back(m_context->currentFilterCondition);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL customFilter
+/*
+ Parent elements:
+ - [done] customFilters (§18.3.2.2)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_customFilter()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    QString opValue = attrs.value("operator").toString();
+
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    m_context->currentFilterCondition.value = val;
+
+    if (opValue == "notEqual") {
+        m_context->currentFilterCondition.opField = "!=";
+    }
+    else {
+        m_context->currentFilterCondition.opField = "=";
+    }
+
+    if (!m_context->autoFilters.isEmpty()) {
+        m_context->autoFilters.last().filterConditions.push_back(m_context->currentFilterCondition);
+    }
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL filter
+/*
+ Parent elements:
+ - [done] filters (§18.3.2.8)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filter()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    m_context->currentFilterCondition.value += val;
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL filterColumn
+/*
+ Parent elements:
+ - [done] autoFilter (§18.3.1.2)
+
+ Child elements:
+ - colorFilter (Color Filter Criteria) §18.3.2.1
+ - [done] customFilters (Custom Filters) §18.3.2.3
+ - dynamicFilter (Dynamic Filter) §18.3.2.5
+ - extLst (Future Feature Data Storage Area) §18.2.10
+ - [done] filters (Filter Criteria) §18.3.2.8
+ - iconFilter (Icon Filter) §18.3.2.9
+ - top10 (Top 10) §18.3.2.10
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filterColumn()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(colId)
+
+    m_context->currentFilterCondition.field = colId;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(filters)
+            ELSE_TRY_READ_IF(customFilters)
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL autoFilter
+/*
+ Parent elements:
+ - customSheetView (§18.3.1.25)
+ - filter (§18.10.1.33)
+ - table (§18.5.1.2)
+ - [done] worksheet (§18.3.1.99)
+
+ Child elements:
+ - extLst (Future Feature Data Storage Area) §18.2.10
+ - [done] filterColumn (AutoFilter Column) §18.3.2.7
+ - sortState (Sort State) §18.3.1.92
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_autoFilter()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(ref)
+
+    ref.prepend(".");
+    ref.prepend(m_context->worksheetName);
+
+    int colon = ref.indexOf(':');
+    if (colon > 0) {
+        ref.insert(colon + 1, '.');
+        ref.insert(colon + 1, m_context->worksheetName);
+    }
+
+    XlsxXmlWorksheetReaderContext::AutoFilter autoFilter;
+    autoFilter.area = ref;
+    m_context->autoFilters.push_back(autoFilter);
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(filterColumn)
+            SKIP_UNKNOWN
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -1707,7 +2057,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_tableParts()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() ) {
             TRY_READ_IF(tablePart)
             ELSE_WRONG_FORMAT
@@ -1746,6 +2096,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_tablePart()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL legacyDrawing
+// todo
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_legacyDrawing()
+{
+    READ_PROLOGUE
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL oleObjects
 /*
  Parent elements:
@@ -1760,7 +2120,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() ) {
             TRY_READ_IF(oleObject)
             ELSE_WRONG_FORMAT
@@ -1803,7 +2163,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
     READ_EPILOGUE
 }

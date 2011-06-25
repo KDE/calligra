@@ -72,11 +72,11 @@ void KWPageManagerPrivate::setPageOffset(int pageNum, qreal offset)
     pageOffsets[pageNum] = offset;
 }
 
-void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
+void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
 {
+#if 0
     if (pageNumbers.isEmpty() || ! pages.contains(pageId))
         return;
-
     const int oldPageNumber = pages[pageId].pageNumber;
     int diff = newPageNumber - oldPageNumber;
     int from = oldPageNumber;
@@ -119,6 +119,12 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
     }
 
     Q_ASSERT(pages.count() == oldPages.count()); // don't loose anything :)
+#else
+    if (newPageNumber >= 0)
+        visiblePageNumbers[pageId] = newPageNumber;
+    else
+        visiblePageNumbers.remove(pageId);
+#endif
 }
 
 void KWPageManagerPrivate::insertPage(const Page &newPage)
@@ -343,11 +349,12 @@ void KWPageManager::removePage(int pageNumber)
 void KWPageManager::removePage(const KWPage &page)
 {
     Q_ASSERT(page.isValid());
-    kDebug() << page.pageNumber();
+    kDebug(32001) << page.pageNumber();
 
     const int removedPageNumber = page.pageNumber();
     const int offset = page.pageSide() == KWPage::PageSpread ? 2 : 1;
     d->pages.remove(d->pageNumbers[removedPageNumber]);
+    d->visiblePageNumbers.remove(removedPageNumber);
 
     // decrease the pagenumbers of pages following the pageNumber
     QMap<int, int> pageNumbers = d->pageNumbers;
@@ -370,42 +377,6 @@ void KWPageManager::removePage(const KWPage &page)
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
 #endif
-}
-
-QPointF KWPageManager::clipToDocument(const QPointF &point) const
-{
-    qreal startOfpage = 0.0;
-
-    KWPage page;
-    // decrease the pagenumbers of pages following the pageNumber
-    QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
-    while (iter != d->pageNumbers.constEnd()) {
-        const KWPageManagerPrivate::Page p = d->pages[iter.value()];
-        startOfpage += p.style.pageLayout().height + d->padding.top + d->padding.bottom;
-        if (startOfpage >= point.y()) {
-            page = KWPage(d, iter.value());
-            break;
-        }
-        ++iter;
-    }
-    if (! page.isValid())
-        page = last();
-
-    QRectF rect = page.rect();
-    if (rect.contains(point))
-        return point;
-
-    QPointF rc(point);
-    if (rect.top() > rc.y())
-        rc.setY(rect.top());
-    else if (rect.bottom() < rc.y())
-        rc.setY(rect.bottom());
-
-    if (rect.left() > rc.x())
-        rc.setX(rect.left());
-    else if (rect.right() < rc.x())
-        rc.setX(rect.right());
-    return rc;
 }
 
 QList<KWPage> KWPageManager::pages(const QString &pageStyle) const

@@ -119,12 +119,32 @@ public:
      */
     virtual void setFrameSet(KWFrameSet *newFrameSet);
 
+    void cleanupShape(KoShape* shape);
+
+    /*
     void clearLoadingData() {
         m_anchoredPageNumber = -1;
     }
-    int loadingPageNumber() const {
+    */
+
+    int anchoredPageNumber() const {
         return m_anchoredPageNumber;
     }
+    qreal anchoredFrameOffset() const {
+        return m_anchoredFrameOffset;
+    }
+    void setAnchoredFrameOffset(qreal offset) {
+        m_anchoredFrameOffset = offset;
+    }
+
+    /**
+     * Returns the list of copy-shapes, see @a KWCopyShape , that
+     * are copies of this KWFrame.
+     */
+    QList<KWFrame*> copies() const;
+
+    void addCopy(KWFrame* frame);
+    void removeCopy(KWFrame* frame);
 
     /**
      * States if this frame is a copy of the previous one.
@@ -155,11 +175,11 @@ private:
     // It is set to the page number if the frame contains a page anchored frame.
     // In all other cases it is set to -1.
     int m_anchoredPageNumber;
+    qreal m_anchoredFrameOffset;
 
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
-
-    void cleanupShape(KoShape* shape);
+    QList<KWFrame*> m_copyShapes;
 };
 
 #endif

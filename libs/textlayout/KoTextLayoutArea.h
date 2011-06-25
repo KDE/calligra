@@ -20,9 +20,9 @@
 #ifndef KOTEXTLAYOUTAREA_H
 #define KOTEXTLAYOUTAREA_H
 
-#include "kotext_export.h"
+#include "textlayout_export.h"
 
-#include "FrameIterator.h"
+#include "KoPointedAt.h"
 
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
@@ -36,9 +36,12 @@ class KoTextDocumentLayout;
 class KoTextBlockData;
 class KoImageCollection;
 class KoInlineNote;
+class KoPointedAt;
 class QTextList;
 class KoTextBlockBorderData;
 class KoTextLayoutEndNotesArea;
+class KoTextLayoutTableArea;
+class FrameIterator;
 
 /**
  * When layout'ing text it is chopped into physical area of space.
@@ -51,7 +54,7 @@ class KoTextLayoutEndNotesArea;
  * Layout happens until maximalAllowedY() is reached. That maximum may be set by
  * the RootArea, but it may also be set by for example a row in a table with fixed height.
  */
-class KOTEXT_EXPORT KoTextLayoutArea
+class TEXTLAYOUT_EXPORT KoTextLayoutArea
 {
 public:
     /// constructor
@@ -60,11 +63,12 @@ public:
 
     /// Returns true if the area starts at the cursor position
     bool isStartingAt(FrameIterator *cursor) const;
-    /// Returns the last cursor position this frame has
-    FrameIterator *endFrameIterator() const;
+
+    QTextFrame::iterator startTextFrameIterator() const;
+    QTextFrame::iterator endTextFrameIterator() const;
 
     /// Layouts as much as we can
-    virtual bool layout(FrameIterator *cursor);
+    bool layout(FrameIterator *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
     QRectF boundingRect() const;
@@ -111,7 +115,7 @@ public:
     void setNoWrap(qreal maximumAllowedWidth);
 
     qreal listIndent() const;
-    qreal textIndent(QTextBlock block) const;
+    qreal textIndent(QTextBlock block, QTextList *textList) const;
     qreal x() const;
     qreal width() const;
 
@@ -121,6 +125,13 @@ public:
     /// Areas that accept page breaks return true, default is false;
     bool acceptsPageBreak() const;
 
+    /// Should be set to true when first starting layouting page
+    /// Should be set to false when we add anything during layout
+    void setVirginPage(bool virgin);
+
+    /// returns true if we have not yet added anything to the page
+    bool virginPage() const;
+
     /// Sets the amound the contenst should be vertically offset due to any outside induced
     /// vertical alignment
     void setVerticalAlignOffset(qreal offset);
@@ -128,7 +139,7 @@ public:
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
-    int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+    KoPointedAt hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
 
     /// Calc a bounding box rect of the selection
     /// or invalid if not
@@ -171,6 +182,8 @@ private:
 
     void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
+    void drawOverlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
+
     void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
     int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
@@ -205,6 +218,7 @@ private:
     FrameIterator *m_endOfArea;
 
     bool m_acceptsPageBreak;
+    bool m_virginPage;
     qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
 

@@ -82,6 +82,24 @@ public:
     /// returns true if the KWPageStyle is valid
     bool isValid() const;
 
+    /// Specifies the type of pages that a page master should generate.
+    enum PageUsageType {
+        AllPages, ///< if there are no style:header-left or style:footer-left elements, the header and footer content is the same for left and right pages.
+        LeftPages, ///< style:header-left or style:footer-left elements are ignored.
+        MirroredPages, ///< if there are no style:header-left or style:footer-left elements, the header and footer content is the same for left and right pages.
+        RightPages ///< style:header-left or style:footer-left elements are ignored.
+    };
+
+    /**
+     * Returns the type of pages that should be generated.
+     */
+    PageUsageType pageUsage() const;
+
+    /**
+     * Sets the type of pages that should be generated.
+     */
+    void setPageUsage(PageUsageType pageusage) const;
+
     /**
      * Return the current columns settings.
      */

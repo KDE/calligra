@@ -26,7 +26,6 @@
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
 #include "KWDocument.h"
-#include "KWDocument_p.h"
 #include "KWCopyShape.h"
 
 #include <KoTextShapeData.h>
@@ -55,21 +54,7 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
 {
     Q_ASSERT(m_kwordDocument);
     setName(KWord::frameSetTypeName(m_textFrameSetType));
-
-    m_document->setUseDesignMetrics(true);
-
-    KoTextDocument doc(m_document);
-    doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-    KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-    doc.setStyleManager(styleManager);
-    KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-    doc.setChangeTracker(changeTracker);
-    doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
-
-    // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
-    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
-    m_document->setDocumentLayout(lay);
-    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+    setupDocument();
 
     kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType());
 }
@@ -105,6 +90,20 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     Q_ASSERT(frame->shape());
     Q_ASSERT(frame->frameSet() == this);
     Q_ASSERT(frames().contains(frame));
+
+    KWPage page = m_pageManager->page(frame->shape());
+    if (!page.isValid()) {
+        // This can happen if the KWFrame was created by someone else at a time where we didn't start
+        // layouting yet and therefore things are not proper setup yet. That's okay and they will be
+        // proper setup at a later time once we start layouting.
+    } else {
+        if (page.pageNumber() <= m_rootAreaProvider->pages().count()) {
+            // The just added KWFrame needs to invalidate the layouter so the layouter picks up the new
+            // KWFrame on the next layout-run.
+            m_rootAreaProvider->clearPages(page.pageNumber());
+        }
+    }
+
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
     if (!data) {
         // copy-frames don't need to be setup cause they only point to the referenced KWFrame which
@@ -113,64 +112,38 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         return;
     }
 
-    // Create a new KWPage for the KWFrame if there is no page already
-    KWPage page = m_pageManager->page(frame->shape());
-    if (!page.isValid()) {
-        Q_ASSERT_X(textFrameSetType() == KWord::OtherTextFrameSet, __FUNCTION__, QString("Only OtherTextFrameSet should not be connect with a KWPage, frameSetType=%1").arg(KWord::frameSetTypeName(textFrameSetType())).toLocal8Bit());
-//         page = kwordDocument()->appendPage();
-//         Q_ASSERT(page.isValid());
-    }
-
     kDebug(32001) << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 
-    // the QTexDocument is shared between the shapes
+    // Handle the special case that the KoTextShapeData already defines a QTextDocument that we need
+    // to take over. This is the case for example with OtherTextFrameSet's where the KWTextFrameSet
+    // and the KWFrame are created after the TextShape was created and it's loadOdf was called what
+    // means that the QTextDocument of the KoTextShapeData already has content we like to take over.
+    // The mainTextFrame's are created on demand and need to be ignored.
+    if (textFrameSetType() != KWord::MainTextFrameSet && frameCount() == 1 && data->document() && m_document->isEmpty()) {
+        Q_ASSERT(m_document != data->document());
+        delete m_document;
+        m_document = data->document();
+        setupDocument();
+    }
+
+    // The QTexDocument is shared between the shapes and we are the owner.
     data->setDocument(m_document, false);
 
 #if 0
-    PageProcessingQueue *ppq = m_kwordDocument->pageQueue();
-    ppq->addPage(page);
-#else
-    /* following would recursivly call KWRootAreaProvider::provide again...
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-    Q_ASSERT(lay);
-    lay->layout();
-    */
-#endif
-
-#if 0
-    if (data == 0) {// probably a copy frame.
-        Q_ASSERT(frameCount() > 1);
-        return;
-    }
-    if (frameCount() == 1 && m_document->isEmpty()) { // just added first frame...
-        delete m_document;
-        m_document = data->document();
-        m_document->setDocumentLayout(new KWTextDocumentLayout(this));
-        if (m_kwordDocument) {
-            KoTextDocument doc(m_document);
-            KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-            doc.setStyleManager(styleManager);
-            KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-            doc.setChangeTracker(changeTracker);
-            doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-            doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
-        }
-        data->setDocument(m_document, false);
-    } else {
-        m_frameOrderDirty = true;
-        data->setDocument(m_document, false);
-        data->setEndPosition(-1);
-        data->foul();
-        if (m_allowLayoutRequests) {
-            KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
-            if (lay) {
-                lay->scheduleLayout();
-                emit lay->shapeAdded(frame->shape());
-            }
+    m_frameOrderDirty = true;
+    data->setDocument(m_document, false);
+    data->setEndPosition(-1);
+    data->foul();
+    if (m_allowLayoutRequests) {
+        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
+        if (lay) {
+            lay->scheduleLayout();
+            emit lay->shapeAdded(frame->shape());
         }
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
-#else
+#endif
+
     KoTextDocument doc(m_document);
     KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(doc.styleManager() == styleManager);
@@ -178,9 +151,26 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     Q_ASSERT(doc.changeTracker() == changeTracker);
     Q_ASSERT(doc.inlineTextObjectManager() == m_kwordDocument->inlineTextObjectManager());
     Q_ASSERT(doc.undoStack() == m_kwordDocument->resourceManager()->undoStack());
-#endif
 }
 
+void KWTextFrameSet::setupDocument()
+{
+    m_document->setUseDesignMetrics(true);
+
+    KoTextDocument doc(m_document);
+    doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
+    KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    doc.setStyleManager(styleManager);
+    KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    doc.setChangeTracker(changeTracker);
+    doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
+
+    // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
+    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
+    m_document->setDocumentLayout(lay);
+    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+}
+    
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();

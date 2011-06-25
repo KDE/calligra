@@ -188,6 +188,7 @@ SET (calligratablescommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
+    Find.cpp
     tests/inspector.cpp
     ${chart_DIR_SRCS}
     ${commands_DIR_SRCS}
@@ -355,11 +356,15 @@ install( FILES
     PointStorage.h
     PrintSettings.h
     ProtectableObject.h
+    RectStorage.h
     Region.h
+    RTree.h
     Sheet.h
     Style.h
     Value.h
     ValueConverter.h
+    ValueStorage.h
+    Find.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
     part/CanvasBase.h

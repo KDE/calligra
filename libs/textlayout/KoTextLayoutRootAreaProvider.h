@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTROOTAREAPROVIDER_H
 #define KOTEXTLAYOUTROOTAREAPROVIDER_H
 
-#include "kotext_export.h"
+#include "textlayout_export.h"
 
 #include <QSizeF>
 #include <QRectF>
@@ -34,7 +34,7 @@ class KoTextLayoutObstruction;
  * When laying out text we need an area where upon the text will be placed.
  * A KoTextLayoutRootAreaProvider provides the layout process with such areas
  */
-class KOTEXT_EXPORT KoTextLayoutRootAreaProvider
+class TEXTLAYOUT_EXPORT KoTextLayoutRootAreaProvider
 {
 public:
     /// constructor
@@ -54,15 +54,11 @@ public:
     ///   - do other things to other structures (eg resizing the textshape)
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) = 0;
 
-    /// Returns true if a page-break should be applied before the "beforeThis" root area
-    virtual bool suggestPageBreak(KoTextLayoutRootArea *beforeThis) { Q_UNUSED(beforeThis); return false; }
-
     /// Returns a suggested a size for the root area
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;
 
-    /// Return a list of obstructions intersecting rect
-    /// Obstructions present in the excludingThese list will not be returned
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese) = 0;
+    /// Return a list of obstructions intersecting root area
+    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea) = 0;
 
 };
 

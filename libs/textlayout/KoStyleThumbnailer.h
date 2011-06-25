@@ -24,10 +24,11 @@
 #ifndef KOSTYLETHUMBNAILER_H
 #define KOSTYLETHUMBNAILER_H
 
-#include "kotext_export.h"
+#include "textlayout_export.h"
 
 #include <QPixmap>
 
+class QSize;
 class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
@@ -35,7 +36,7 @@ class KoParagraphStyle;
 /**
  * Helper class to create (and cache) thumbnails of styles
  */
-class KOTEXT_EXPORT KoStyleThumbnailer
+class TEXTLAYOUT_EXPORT KoStyleThumbnailer
 {
 public:
     /**
@@ -57,13 +58,33 @@ public:
 
     /**
      * Return a thumbnail representing the style
+     * The thunbnail is 250*48 pt.
+     * The created thumbnail is cached.
      */
     QPixmap thumbnail(KoParagraphStyle *style);
 
     /**
+     * @returns a thumbnail representing the @param style, constrained into the @param size.
+     * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
+     * The real font size is indicated in this case.
+     * The thumbnail is NOT cached.
+     */
+    QPixmap thumbnail(KoParagraphStyle *style, QSize size);
+
+    /**
      * Return a thumbnail representing the style
+     * The thunbnail is 250*48 pt.
+     * The created thumbnail is cached.
      */
     QPixmap thumbnail(KoCharacterStyle *style);
+
+    /**
+     * @returns a thumbnail representing the @param style, constrained into the @param size.
+     * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
+     * The real font size is indicated in this case.
+     * The thumbnail is NOT cached.
+     */
+    QPixmap thumbnail(KoCharacterStyle *style, QSize size);
 
 private:
     class Private;

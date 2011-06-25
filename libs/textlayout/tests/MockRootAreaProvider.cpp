@@ -22,7 +22,8 @@
 #include "KoTextLayoutRootArea.h"
 
 MockRootAreaProvider::MockRootAreaProvider()
-    : m_area(0)
+    : m_area(0),
+    m_askedForMoreThenOneArea(false)
 {
 }
 
@@ -32,6 +33,7 @@ KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *docume
         m_area = new KoTextLayoutRootArea(documentLayout);
         return m_area;
     }
+    m_askedForMoreThenOneArea = true;
     return 0;
 }
 
@@ -44,7 +46,7 @@ QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
     return QSizeF(200,1000);
 }
 
-QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese)
+QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
     QList<KoTextLayoutObstruction*> obstructions;
 

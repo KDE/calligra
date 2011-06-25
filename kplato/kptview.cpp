@@ -2613,7 +2613,6 @@ void View::slotOpenReportFile()
 {
     KFileDialog *dlg = new KFileDialog( KUrl(), QString(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2642,6 +2641,7 @@ void View::slotOpenReportFileFinished( int result )
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
     dlg->show();
     dlg->raise();

@@ -28,12 +28,10 @@
 
 #include <KDebug>
 
-void KWPage::setPageNumber(int pageNumber)
+void KWPage::setVisiblePageNumber(int pageNumber)
 {
-    Q_ASSERT_X(false, __FUNCTION__, "Changing the page-number afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to make this dynamic.");
-
     if (isValid())
-        priv->setPageNumberForId(n, pageNumber);
+        priv->setVisiblePageNumber(n, pageNumber);
 }
 
 bool KWPage::isValid() const
@@ -81,12 +79,10 @@ void KWPage::setPageSide(PageSide ps)
     if (page.pageSide == ps)
         return;
 
-    const bool needsRenumbering = (page.pageSide == PageSpread && ps != PageSpread) || ps == PageSpread;
+    //const bool needsRenumbering = (page.pageSide == PageSpread && ps != PageSpread) || ps == PageSpread;
     page.pageSide = ps;
     priv->pages.insert(n, page);
-
-    if (needsRenumbering)
-        priv->setPageNumberForId(n, page.pageNumber);
+    //if (needsRenumbering) priv->setVisiblePageNumber(n, page.pageNumber);
 }
 
 KWPage::PageSide KWPage::pageSide() const
@@ -220,15 +216,10 @@ void KWPage::setOffsetInDocument(qreal offset)
     priv->setPageOffset(priv->pages[n].pageNumber, offset);
 }
 
-QRectF KWPage::rect(int pageNumber) const
+QRectF KWPage::rect() const
 {
     if (! isValid())
         return QRectF();
-    const KWPageManagerPrivate::Page &page = priv->pages[n];
-    if (pageNumber == page.pageNumber && page.pageSide == PageSpread) // left
-        return QRectF(0, offsetInDocument(), width() / 2, height());
-    if (pageNumber == page.pageNumber + 1 && page.pageSide == PageSpread) // right
-        return QRectF(width() / 2, offsetInDocument(), width() / 2, height());
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
@@ -326,14 +317,14 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager)
     QPainter gc(&img);
     gc.fillRect(0, 0, img.width(), img.height(), QBrush(Qt::white));
     gc.translate(0, -zoomHandler.documentToViewY(offsetInDocument()));
-    gc.setClipRect(zoomHandler.documentToView(rect(pageNumber())));
+    gc.setClipRect(zoomHandler.documentToView(rect()));
     shapeManager->paint(gc, zoomHandler, false);
     gc.end();
 
     return img;
 }
 
-int KWPage::pageNumber(PageSelection select, int adjustment) const
+int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
 {
     KWPage page = *(const_cast<KWPage*>(this));
     switch (select) {
@@ -349,15 +340,27 @@ int KWPage::pageNumber(PageSelection select, int adjustment) const
     if (! page.isValid())
         return -1;
 
-    if (adjustment != 0) {
-        const int wantedPageNumber = page.pageNumber() + adjustment;
-        Q_ASSERT(page.priv); // it would have been invalid above otherwise
-        if (! page.priv->pageNumbers.contains(wantedPageNumber))
-            return -1; // doesn't exist.
-        return wantedPageNumber;
+    int pageNumber = 0;
+    if (select != KoTextPage::CurrentPage) {
+        pageNumber = page.visiblePageNumber();
+    } else {
+        int n = page.pageNumber();
+        if (priv->visiblePageNumbers.contains(n))
+            pageNumber = priv->visiblePageNumbers[n];
     }
 
-    return page.pageNumber();
+    if (pageNumber == 0) {
+        page = page.previous();
+        pageNumber = page.isValid() ? qMax(1, page.visiblePageNumber() + 1) : 1;
+    }
+
+    if (adjustment != 0) {
+        pageNumber += adjustment;
+        if (!page.priv->pageNumbers.contains(pageNumber))
+            pageNumber = -1; // doesn't exist.
+    }
+
+    return pageNumber;
 }
 
 QString KWPage::masterPageName() const

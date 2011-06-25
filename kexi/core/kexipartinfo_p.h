@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,9 @@
 #define KEXIPROJECTPARTITEM_P_H
 
 #include "kexipartinfo.h"
-#include <kservice.h>
+
+#include <KAction>
+#include <KService>
 
 namespace KexiPart
 {
@@ -35,13 +37,30 @@ public:
     //! used in StaticItem class
     Private();
 
+    void getBooleanProperty(const KService::Ptr& aPtr, const char* name, bool* target)
+    {
+        QVariant val = aPtr->property(name, QVariant::Bool);
+        if (val.isValid())
+            *target = val.toBool();
+    }
+
     KService::Ptr ptr;
     QString errorMessage;
+    QString instanceCaption;
     QString groupName;
 //    QString mimeType;
     QString itemIcon;
     QString objectName;
+    
     QString partClass;
+    /*! Supported modes for dialogs created by this part.
+    @see KexiPart::Info::supportedViewModes() */
+    Kexi::ViewModes supportedViewModes;
+
+    /*! Supported modes for dialogs created by this part in user mode.
+    @see KexiPart::Info::supportedUserViewModes() */
+    Kexi::ViewModes supportedUserViewModes;
+    
 #if 0 //moved as internal to KexiProject
     int projectPartID;
 #endif
@@ -51,5 +70,24 @@ public:
     bool isPropertyEditorAlwaysVisibleInDesignMode;
 };
 }
+
+//! Helper for creating new objects.
+//! On triggering, the request is passed to part manager
+//! @internal
+class KexiNewObjectAction : public KAction
+{
+    Q_OBJECT
+public:
+    KexiNewObjectAction(KexiPart::Info* info, QObject *parent);
+
+signals:
+    void newObjectRequested(KexiPart::Info* info);
+
+private slots:
+    void slotTriggered();
+
+private:
+    KexiPart::Info* m_info;
+};
 
 #endif
