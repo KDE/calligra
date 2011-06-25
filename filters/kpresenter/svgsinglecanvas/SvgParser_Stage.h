@@ -17,32 +17,46 @@
     * Boston, MA 02110-1301, USA.
     */
 
+#ifndef SVG_PARSER_STAGE_H
+#define SVG_PARSER_STAGE_H
+
 #include "SvgParser_generic.h"
-//#include <Frame.h>
 
 class SvgParser_generic;
 class KoResourceManager;
 class Frame;
 
+/**
+ * Inherits SvgParser_generic
+ * Parses an SVg document in Stage.
+ */
 class SvgParser_Stage : public SvgParser_generic
 {
 public:
   
-  SvgParser_Stage(KoResourceManager *documentResourceManager);
+    SvgParser_Stage(KoResourceManager *documentResourceManager);
     virtual ~SvgParser_Stage();
 
+    /**
+     * @param e The XMl element with attributes for Frames
+     */
     void parseAppData(const KoXmlElement& e);
+    /**
+     * Sets the tage name to be searched for to find app data
+     */
     void setAppDataTag();
+    /**
+     * Adds a Frame object to each shape that had contained Frame data
+     */
     void createAppData();
     
 private:
-    
+    /**
+     * @brief m_frameList - 
+     * Contains all the Frame objects created from the data 
+     * parsed from the SVG document
+     */
     QList<Frame*> m_frameList;
-    QList<QString> m_attributes;
-    
-    Frame * m_frame;
     QString *NS; //Namespace
-  
- // Frame * frame;
-
 };
+#endif /*SVG_PARSER_STAGE_H*/

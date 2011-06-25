@@ -28,9 +28,9 @@ SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):Svg
     NS = new QString("calligra:");
     //m_frame = new Frame();
     m_frameList.begin();
-    m_frame = new Frame();
+    //m_frame = new Frame();
     
-    m_attributes = m_frame->attributes();
+   // m_attributes = m_frame->attributes();
 }
 
 SvgParser_Stage::~SvgParser_Stage()
@@ -40,7 +40,7 @@ SvgParser_Stage::~SvgParser_Stage()
 void SvgParser_Stage::parseAppData(const KoXmlElement& e)
 {
    Frame *frame = new Frame(e);
-   m_frameList.append(m_frame);
+   m_frameList.append(frame);
    }
 
 void SvgParser_Stage::setAppDataTag()

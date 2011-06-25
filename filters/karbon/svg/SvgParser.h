@@ -17,20 +17,39 @@
     * Boston, MA 02110-1301, USA.
     */
 
+#ifndef SVG_PARSER_H
+#define SVG_PARSER_H
+
 #include "SvgParser_generic.h"
 
 class SvgParser;
 class KoResourceManager;
 
+/**
+ * This class inherits SvgParser_generic and parses an SVG document.
+ * The functions for parsing app specific data, which are virtual functions from SvgParser_generic
+ * have no use here, since Karbon does not save any data with an app specific tag name.
+ * However, it can be added later.
+ */
 class SvgParser : public SvgParser_generic
 {
 public:
-  
-  SvgParser(KoResourceManager *documentResourceManager);
+    /**
+     * @brief SvgParser(KoResourceManager *documentResourceManager) - Constructor
+     */
+    SvgParser(KoResourceManager *documentResourceManager);
+    /**
+     * @brief ~SvgParser() - Destructor
+     */
     virtual ~SvgParser();
 
+    /**
+     *Virtual functions from SvgParser_generic
+     */
     void parseAppData(const KoXmlElement& e);
     void setAppDataTag();
     void createAppData();
     
 };
+
+#endif /*SVG_PARSER_H*/

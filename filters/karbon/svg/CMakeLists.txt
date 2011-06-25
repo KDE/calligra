@@ -4,6 +4,8 @@ ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_S
 
 ########### next target ###############
 
+#These have been added in this way temporarily, 
+#since the CMakeLists of libsvg are still not worked out correctly.
 set(LIBSVG_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
     ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgParser_generic.cpp
@@ -16,7 +18,8 @@ set(LIBSVG_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgTextHelper.cpp
     ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgLoadingContext.cpp
     )
-
+#These have been added here to test the SvgWriter_generic for Stage specific data,
+#since saving of SVG's still not implemented in Stage
 set(STAGE_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgAnimationData.cpp
@@ -24,12 +27,11 @@ set(STAGE_SOURCES
 
 set(karbonsvgexport_PART_SRCS 
     SvgExport.cpp
-    #SvgUtil.cpp
     SvgWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgWriter_Stage.cpp
     ${SHAPES_SOURCES} 
     ${LIBSVG_SOURCES}
-    ${STAGE_SOURCES} #Only for testing
+    ${STAGE_SOURCES} 
 )
 
 kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})

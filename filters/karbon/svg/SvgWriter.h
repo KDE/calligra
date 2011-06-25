@@ -20,7 +20,7 @@
 #ifndef SVGWRITER_H
 #define SVGWRITER_H
 
-#include "filters/libsvg/SvgWriter_generic.h"
+#include "SvgWriter_generic.h"
 
 class SvgWriter;
 class KoShapeLayer;
@@ -37,6 +37,10 @@ public:
       /// Destroys the svg writer
       ~SvgWriter();
       
+      /**
+       * Virtual method of parent class implemented to save app specific data.
+       * @param shape The KoShape to which application data has to be added.
+       */
       void saveAppData(KoShape *shape);
  
 };

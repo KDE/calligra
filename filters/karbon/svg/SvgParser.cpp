@@ -41,3 +41,4 @@ void SvgParser::createAppData()
 {
   //No app Data
 }
+

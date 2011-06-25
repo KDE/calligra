@@ -20,6 +20,7 @@
 
 Frame::Frame(const KoXmlElement& e)
 {
+  //static int s = 0;
   //TODO:Use namespace instead of writing 'calligra:' again and again
     if(e.hasAttribute("calligra:title")) {
       setTitle(e.attribute("calligra:title"));
@@ -39,7 +40,7 @@ Frame::Frame(const KoXmlElement& e)
 
     if(e.hasAttribute("calligra:sequence")) {
       setSequence(e.attribute("calligra:sequence").toInt());
-      //m_frame->setSequence(++s);
+      //setSequence(++s);
       }
      
      if(e.hasAttribute("calligra:timeout-ms")) {

@@ -26,115 +26,114 @@
   * Boston, MA 02110-1301, USA.
   */
 
-  #ifndef SVGWRITER_GENERIC_H
-  #define SVGWRITER_GENERIC_H
+#ifndef SVGWRITER_GENERIC_H
+#define SVGWRITER_GENERIC_H
 
-  #include <KoFilter.h>
-  #include <QVariantList>
-  #include <QtGui/QGradient>
+#include <KoFilter.h>
+#include <QVariantList>
+#include <QtGui/QGradient>
   
 
-  class KoShapeLayer;
-  class KoShapeGroup;
-  class KoShape;
-  class KoPathShape;
-  class KoShapeBorderModel;
-  class ArtisticTextShape;
-  class TextShape;
-  class ArtisticTextRange;
-  class EllipseShape;
-  class RectangleShape;
-  class Frame;
-  class KoPatternBackground;
-  class QTextStream;
-  class QPixmap;
-  class QImage;
-  class QColor;
-  class QBrush;
-
+class KoShapeLayer;
+class KoShapeGroup;
+class KoShape;
+class KoPathShape;
+class KoShapeBorderModel;
+class ArtisticTextShape;
+class TextShape;
+class ArtisticTextRange;
+class EllipseShape;
+class RectangleShape;
+class Frame;
+class KoPatternBackground;
+class QTextStream;
+class QPixmap;
+class QImage;
+class QColor;
+class QBrush;
 
   /// Implements exporting shapes to SVG
-  class SvgWriter_generic
-  {
-  public:
-      /// Creates svg writer to export specified layers
-      SvgWriter_generic(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize);
+class SvgWriter_generic
+{
+public:
+    /// Creates svg writer to export specified layers
+    SvgWriter_generic(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize);
 
-      /// Creates svg writer to export specified shapes
-      SvgWriter_generic(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize);
+    /// Creates svg writer to export specified shapes
+    SvgWriter_generic(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize);
 
-      /// Destroys the svg writer
-      virtual ~SvgWriter_generic();
+    /// Destroys the svg writer
+    virtual ~SvgWriter_generic();
 
-      /// Writes svg to specified output device
-      bool save(QIODevice &outputDevice);
+    /// Writes svg to specified output device
+    bool save(QIODevice &outputDevice);
       
-      /// Writes svg with additonal app data to specified output device
-//      bool save(QIODevice &outputDevice, QTextStream *appDataStream);
+    /// Writes svg to the specified file
+    bool save(const QString &filename, bool writeInlineImages);
 
-      /// Writes svg to the specified file
-      bool save(const QString &filename, bool writeInlineImages);
-
-  protected:
+protected:
+    /**
+     * virtual method to be implemented by a child class 
+     * To save application specific data in the correct format
+     */
+    virtual void saveAppData(KoShape *shape) =0;
+    QString getID(const KoShape *obj);
     
-      virtual void saveAppData(KoShape *shape) =0;
-//      void printIndentation(QTextStream *stream, unsigned int indent);
-                
-      bool m_hasAppData;
-      QString m_appData;
-            
-      QString getID(const KoShape *obj);
-      QMap<const KoShape*, QString> m_shapeIds;
+    bool m_hasAppData;
+    QString m_appData;
+    QMap<const KoShape*, QString> m_shapeIds;
       
-  private:
+private:
       
-      void saveLayer(KoShapeLayer * layer);
-      void saveGroup(KoShapeGroup * group);
-      void saveShape(KoShape * shape);
-      void savePath(KoPathShape * path);
-      void saveEllipse(EllipseShape * ellipse);
-      void saveRectangle(RectangleShape * rectangle);
-      void saveImage(KoShape *picture);
-      void saveText(ArtisticTextShape * text);
+    void saveLayer(KoShapeLayer * layer);
+    void saveGroup(KoShapeGroup * group);
+    void saveShape(KoShape * shape);
+    void savePath(KoPathShape * path);
+    void saveEllipse(EllipseShape * ellipse);
+    void saveRectangle(RectangleShape * rectangle);
+    void saveImage(KoShape *picture);
+    void saveText(ArtisticTextShape * text);
 
-      void getStyle(KoShape * shape, QTextStream * stream);
-      void getFill(KoShape * shape, QTextStream *stream);
-      void getStroke(KoShape * shape, QTextStream *stream);
-      void getEffects(KoShape *shape, QTextStream *stream);
-      void getClipping(KoShape *shape, QTextStream *stream);
-      void getColorStops(const QGradientStops & colorStops);
-      void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
-      void getPattern(KoPatternBackground * pattern, KoShape * shape);
-      QString getTransform(const QTransform &matrix, const QString &attributeName);
-      void saveFont(const QFont &font, QTextStream *stream);
-      void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
+    void getStyle(KoShape * shape, QTextStream * stream);
+    void getFill(KoShape * shape, QTextStream *stream);
+    void getStroke(KoShape * shape, QTextStream *stream);
+    void getEffects(KoShape *shape, QTextStream *stream);
+    void getClipping(KoShape *shape, QTextStream *stream);
+    void getColorStops(const QGradientStops & colorStops);
+    void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
+    void getPattern(KoPatternBackground * pattern, KoShape * shape);
+    QString getTransform(const QTransform &matrix, const QString &attributeName);
+    void saveFont(const QFont &font, QTextStream *stream);
+    void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
-      QString createID(const KoShape * obj);
-      QString createUID(const KoShape * shape);
-      QString createUID();
+    QString createID(const KoShape * obj);
+    QString createUID(const KoShape * shape);
+    QString createUID();
 
-      /// Checks if the matrix only has translation set
-      bool isTranslation(const QTransform &);
+    /// Checks if the matrix only has translation set
+    bool isTranslation(const QTransform &);
 
-      void startDocument();
-      void saveToplevelShapes();
-      void savePlainText();
-     
-      
-      QTextStream* m_stream;
-      QTextStream* m_defs;
-      QTextStream* m_body;
+    /**
+     * Writes the header for the SVG document
+     */
+    void startDocument();
+    void saveToplevelShapes();
+    //Not working yet
+    void savePlainText();
+           
+    QTextStream* m_stream;
+    QTextStream* m_defs;
+    QTextStream* m_body;
                   
-      unsigned int m_indent;
-      unsigned int m_indent2;
+    unsigned int m_indent;
+    unsigned int m_indent2;
 
-      //QMap<const KoShape*, QString> m_shapeIds;
-      QList<KoShape*> m_toplevelShapes;
-      QTransform m_userSpaceMatrix;
-      QSizeF m_pageSize;
-      bool m_writeInlineImages;
-      QString m_filename;
+    QList<KoShape*> m_toplevelShapes;
+    QTransform m_userSpaceMatrix;
+    QSizeF m_pageSize;
+    bool m_writeInlineImages;
+    QString m_filename;
 
-      };
+};
 
-  #endif /*SVGWRITER_GENERIC_H */
+#endif /*SVGWRITER_GENERIC_H */

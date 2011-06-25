@@ -167,7 +167,7 @@ private:
     QStringList m_styleAttributes; ///< style related attributes
     KoResourceManager *m_documentResourceManager;
     //QList<KoShape*> m_shapes;
-    QList<KoShape*> m_toplevelShapes;// Where is this used?
+    QList<KoShape*> m_toplevelShapes;
     SvgCssHelper m_cssStyles;
 };
 
