@@ -1,7 +1,7 @@
 /*
+ * Sozi - A presentation tool using the SVG standard
  * 
  * Copyright (C) 2010 Guillaume Savaton
- * Copyright (C) 2011 Aakriti Gupta
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -435,3 +435,4 @@ sozi.Display.prototype.tableOfContentsIsVisible = function () {
 };
 
 // vim: sw=3
+

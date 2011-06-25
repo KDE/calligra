@@ -1,7 +1,7 @@
 /*
+ * Sozi - A presentation tool using the SVG standard
  * 
  * Copyright (C) 2010 Guillaume Savaton
- * Copyright (C) 2011 Aakriti Gupta
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -768,3 +768,4 @@ sozi.Player.prototype.toggleTableOfContents = function() {
 window.addEventListener("load", sozi.Player.prototype.onLoad.bind(new sozi.Player()), false);
 
 // vim: sw=3
+
