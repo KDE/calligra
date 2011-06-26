@@ -11,6 +11,6 @@ Name[en_GB]=Web Browser
 X-KDE-Library=kformdesigner_webbrowser
 
 
-X-KFormDesigner-FactoryGroup=
+X-KFormDesigner-FactoryGroup=kexi
 
 X-KFormDesigner-WidgetFactoryVersion=2
