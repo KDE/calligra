@@ -65,7 +65,7 @@ public:
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
 
-    inline QUrl* url() const {
+    inline QUrl url() const {
 	
 	return m_url;
     }
@@ -93,7 +93,7 @@ protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld); 
     void updateUrl();
     bool m_readOnly;
-    QUrl* m_url;
+    QUrl m_url;
 
 
 private:

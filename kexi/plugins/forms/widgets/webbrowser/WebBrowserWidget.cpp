@@ -77,7 +77,7 @@ void ToolBar::onBackPressed()
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
         ,KFormDesigner::FormWidgetInterface()
-        ,m_url(false)
+        //,m_url
 	,m_readOnly(false)
 	,m_urlChanged_enabled(false)
 {
@@ -88,7 +88,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     m_softkeyAction = new QAction( tr("Options"), this );
     m_softkeyAction->setSoftKeyRole(QAction::PositiveSoftKey);
     addAction(m_softkeyAction);
-  
+ //   m_url=new Qurl();
     m_view = new QWebView(this);
     m_view->load(QUrl("http://www.kde.org"));
     v_layout = new QVBoxLayout();
@@ -150,8 +150,8 @@ void WebBrowserWidget::onreload()
 
 void WebBrowserWidget::setUrl(const QUrl& url)
 {
-    *m_url=url;
-    m_view->load(*m_url);
+     m_url=url;
+     m_view->load(m_url);
 }//ok
 
 
@@ -173,15 +173,15 @@ QVariant WebBrowserWidget::value()
         return QVariant();
     }
     //db-aware mode
-    setUrl(*m_url);
-    return *m_url;
+    
+    return m_url;
 
 
 }
 
 bool WebBrowserWidget::valueIsNull()
 {
-    return (*m_url).isEmpty();
+    return (m_url).isEmpty();
 
 }
 void WebBrowserWidget::clear()
@@ -196,7 +196,7 @@ void WebBrowserWidget::setInvalidState(const QString& displayText)
     Q_UNUSED(displayText);
 
     if (!dataSource().isEmpty()) {
-        *m_url = QUrl();
+        m_url.clear();
     }
     setReadOnly(true);
 }
@@ -211,12 +211,12 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
     m_urlChanged_enabled= false;		//if removeold is true then change the Url to value of add as specified in kexidataitem interface.cpp
 
     if (removeOld)
-        {*m_url=add.toUrl();			//set property editor to add
-	 setUrl(*m_url); 
+        { 			//set property editor to add
+	 setUrl(add.toUrl()); 
 	}       
     else
-        { *m_url=QUrl( m_origValue.toString() + add.toString()) ;//else put value of add to current value of m_origValue
-     	setUrl(*m_url);
+        { setUrl(QUrl( m_origValue.toString() + add.toString())) ;//else put value of add to current value of m_origValue
+     	//setUrl(m_url);
         }
 
     m_urlChanged_enabled = true;
