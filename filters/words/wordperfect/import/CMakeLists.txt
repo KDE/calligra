@@ -19,7 +19,7 @@ install(TARGETS wpimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kword_wp_import.desktop   DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_wp_import.desktop   DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

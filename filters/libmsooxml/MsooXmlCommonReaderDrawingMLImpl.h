@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -1375,7 +1375,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
  - [done] tcStyle (§20.1.4.2.29)
 
  Child elements:
- - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
@@ -1383,7 +1383,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
  - [done] sysClr (System Color) §20.1.2.3.33
 
 */
-//! @todo support all child elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 {
     READ_PROLOGUE
@@ -1407,8 +1406,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(prstClr)
-            SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1433,7 +1432,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
  - [done] tcTxStyle (§20.1.4.2.30)
 
  Child elements:
- - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
@@ -1466,8 +1465,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(prstClr)
-            SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1488,14 +1487,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
  - tcStyle (§20.1.4.2.29)
 
  Child elements:
- - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
  - [done] sysClr (System Color) §20.1.2.3.33
 */
-//! @todo support all child elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 {
     READ_PROLOGUE
@@ -1524,8 +1522,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(prstClr)
-            SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1978,14 +1976,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
  - effectDag (Effect Container) §20.1.8.25
  - effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §20.1.2.2.15
- - gradFill (Gradient Fill) §20.1.8.33
+ - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
  - [done] highlight (Highlight Color) §21.1.2.3.4
  - [done] hlinkClick (Click Hyperlink) §21.1.2.3.5
  - hlinkMouseOver (Mouse-Over Hyperlink) §21.1.2.3.6
  - [done] latin (Latin Font) §21.1.2.3.7
  - ln (Outline) §20.1.2.2.24
- - noFill (No Fill) §20.1.8.44
+ - [done] noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - rtl (Right to Left Run) §21.1.2.2.8
  - [done] solidFill (Solid Fill) §20.1.8.54
@@ -2014,6 +2012,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
             ELSE_TRY_READ_IF(solidFill)
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
+            }
+            else if (name() == "gradFill") {
+                TRY_READ(gradFillRpr)
+            }
+            else if (name() == "noFill") {
+                m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
             }
             ELSE_TRY_READ_IF(hlinkClick)
             SKIP_UNKNOWN
@@ -2166,10 +2170,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             TRY_READ_IF(latin)
             //ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
-            // As odf does not support gradFill for text, it's better to not use it at all, as relying on the first color
-            // can create bad results.
-            //ELSE_TRY_READ_IF(gradFill)
-            ELSE_TRY_READ_IF_IN_CONTEXT(noFill)
+            else if (name() == "gradFill") {
+                TRY_READ(gradFillRpr)
+            }
+            else if (name() == "noFill") {
+                m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
+            }
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
             }
@@ -3397,7 +3403,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
  - [done] rPr (§21.1.2.3.9)
 
  Child elements:
- - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
@@ -3418,11 +3424,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(prstClr)
-            SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
-//    m_currentTextStyleProperties->setBackground(m_currentColor);
     // note: paragraph background is unsupported in presentation applications anyway...
     if (m_currentColor.isValid()) {
         m_currentParagraphStyle.addProperty("fo:background-color", m_currentColor.name());
@@ -3472,7 +3477,7 @@ This element especifies a solid color fill.
     - uLn (§21.1.2.3.14)
 
  Child elements:
-    - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+    - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
     - [done] prstClr (Preset Color) §20.1.2.3.22
     - [done] schemeClr (Scheme Color) §20.1.2.3.29
     - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
@@ -3482,8 +3487,6 @@ This element especifies a solid color fill.
  Attributes:
     None.
 */
-//! CASE #P121
-//! @todo support all child elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 {
     READ_PROLOGUE
@@ -3495,11 +3498,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
-            //TODO hslClr hue, saturation, luminecence color
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(prstClr)
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -3513,8 +3516,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
  - bg (§21.4.3.1);
  - [done] bgFillStyleLst (§20.1.4.1.7);
  - [done] bgPr (§19.3.1.2);
- - defRPr (§21.1.2.3.2);
- - endParaRPr (§21.1.2.2.3);
+ - [elsewhere] defRPr (§21.1.2.3.2);
+ - [elsewhere] endParaRPr (§21.1.2.2.3);
  - fill (§20.1.8.28);
  - fill (§20.1.4.2.9);
  - fillOverlay (§20.1.8.29);
@@ -3530,7 +3533,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
  - lnR (§21.1.3.8);
  - lnT (§21.1.3.9);
  - lnTlToBr (§21.1.3.10);
- - rPr (§21.1.2.3.9);
+ - [elsewhere] rPr (§21.1.2.3.9);
  - [done] spPr (§21.2.2.197);
  - [done] spPr (§21.3.2.23);
  - [done] spPr (§21.4.3.7);
@@ -3610,6 +3613,78 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lin()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL gradFill
+//! Special gradFill handler for text properties
+// Meant to support gradFill as part of rpr as well as can be done as odf does not support
+// proper way
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFillRpr()
+{
+    READ_PROLOGUE2(gradFillRPr)
+
+    QList<QPair<int, QColor> > gradPositions;
+    int exactIndex = -1;
+    int beforeIndex = -1;
+    int afterIndex = -1;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (name() == "gs") {
+                TRY_READ(gs)
+                gradPositions.push_back(QPair<int, QColor>(m_gradPosition, m_currentColor));
+                if (m_gradPosition == 50) {
+                    exactIndex = gradPositions.size() - 1;
+                } else if (m_gradPosition < 50) {
+                    if (beforeIndex < 0) {
+                        beforeIndex = gradPositions.size() - 1;
+                    } else if (m_gradPosition > gradPositions.at(beforeIndex).first) {
+                        beforeIndex = gradPositions.size() - 1;
+                    }
+                } else {
+                    if (afterIndex < 0) {
+                        afterIndex = gradPositions.size() - 1;
+                    } else if (m_gradPosition < gradPositions.at(afterIndex).first) {
+                        afterIndex = gradPositions.size() - 1;
+                    }
+                }
+            }
+        }
+    }
+
+    // The logic here is to find the color that is in the middle, or if it's not present
+    // find the colors before and after it and calculate the middle color
+
+    if (exactIndex > -1) {
+        m_currentColor = gradPositions.at(exactIndex).second;
+    }
+    else {
+        int firstDistance = 50 - gradPositions.at(beforeIndex).first;
+        int secondDistance = gradPositions.at(afterIndex).first - 50;
+        qreal multiplier = 0;
+        int red, green, blue;
+
+        if (firstDistance <= secondDistance) {
+            multiplier = secondDistance / firstDistance;
+            red = multiplier * gradPositions.at(beforeIndex).second.red() + gradPositions.at(afterIndex).second.red();
+            green = multiplier * gradPositions.at(beforeIndex).second.green() + gradPositions.at(afterIndex).second.green();
+            blue = multiplier * gradPositions.at(beforeIndex).second.blue() + gradPositions.at(afterIndex).second.blue();
+        } else {
+            multiplier = firstDistance / secondDistance;
+            red = multiplier * gradPositions.at(afterIndex).second.red() + gradPositions.at(beforeIndex).second.red();
+            green = multiplier * gradPositions.at(afterIndex).second.green() + gradPositions.at(beforeIndex).second.green();
+            blue = multiplier * gradPositions.at(afterIndex).second.blue() + gradPositions.at(beforeIndex).second.blue();
+        }
+        red = red / (multiplier + 1);
+        green = green / (multiplier + 1);
+        blue = blue / (multiplier + 1);
+        m_currentColor = QColor(red, green, blue);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL gsLst
 //! gradient stop list
 /*
@@ -3652,13 +3727,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
  - [done] gsLst (§20.1.8.37)
 
  Child Elements:
- - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
  - [done] sysClr (System Color) §20.1.2.3.33
-
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
 {
@@ -3677,7 +3751,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(prstClr)
-            SKIP_UNKNOWN
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -3719,12 +3794,9 @@ Parents:
 */
 #undef CURRENT_EL
 #define CURRENT_EL noFill
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill(noFillCaller caller)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill()
 {
     READ_PROLOGUE
-    if (caller == noFill_rPr) {
-       m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
-    }
     readNext();
     READ_EPILOGUE
 }
@@ -4186,7 +4258,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_effectLst()
  - [done] effectLst (§20.1.8.26)
 
  Child elements:
- - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
@@ -4218,7 +4290,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_outerShdw()
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(prstClr)
-            SKIP_UNKNOWN
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -4550,6 +4623,42 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL hslClr
+//! hslClr (hue saturation luminance color)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hslClr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR_WITHOUT_NS(hue)
+    READ_ATTR_WITHOUT_NS(sat)
+    READ_ATTR_WITHOUT_NS(lum)
+
+    qreal trueHue = hue.toDouble() / 6000.0 / 360;
+    qreal trueSat = sat.left(sat.size() - 1).toDouble() / 100.0;
+    qreal trueLum = lum.left(lum.size() - 1).toDouble() / 100.0;
+
+    m_currentColor.setHslF(trueHue, trueSat, trueLum);
+
+    //TODO: all the color transformations
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(shade)
+            ELSE_TRY_READ_IF(satMod)
+            ELSE_TRY_READ_IF(alpha)
+            SKIP_UNKNOWN
+        }
+    }
+
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL prstClr
 //! prstClr (preset color)
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
@@ -4566,6 +4675,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
         }
         else if (val == "antiqueWhite") {
             m_currentColor = QColor(250, 235, 215);
+        }
+        else if (val == "aqua") {
+            m_currentColor = QColor(0, 255, 255);
+        }
+        else if (val == "aquamarine") {
+            m_currentColor = QColor(127, 255, 212);
+        }
+        else if (val == "azure") {
+            m_currentColor = QColor(240, 255, 255);
+        }
+        else if (val == "beige") {
+            m_currentColor = QColor(245, 245, 220);
+        }
+        else if (val == "bisque") {
+            m_currentColor = QColor(255, 228, 196);
         }
         else if (val == "black") {
             m_currentColor = QColor(0, 0, 0);
@@ -4989,7 +5113,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
  - [done] pPr (§21.1.2.2.7)
 
  Child elements:
- - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done]schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
@@ -5013,7 +5137,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(prstClr)
-            SKIP_UNKNOWN
+            ELSE_TRY_READ_IF(hslClr)
+            ELSE_WRONG_FORMAT
         }
     }
     if (m_currentColor.isValid()) {
@@ -5541,7 +5666,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
      - hlinkMouseOver (Mouse-Over Hyperlink)           §21.1.2.3.6
      - [done] latin (Latin Font)                              §21.1.2.3.7
      - ln (Outline)                                    §20.1.2.2.24
-     - noFill (No Fill)                                §20.1.8.44
+     - [done] noFill (No Fill)                                §20.1.8.44
      - pattFill (Pattern Fill)                         §20.1.8.47
      - rtl (Right to Left Run)                         §21.1.2.2.8
      - [done] solidFill (Solid Fill)                          §20.1.8.54
@@ -5569,7 +5694,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
-            //ELSE_TRY_READ_IF(gradFill) // we do not support this properly, thus disabded for the moment
+            else if (name() == "gradFill") {
+                TRY_READ(gradFillRpr)
+            }
+            else if (name() == "noFill") {
+                m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
+            }
             ELSE_TRY_READ_IF(latin)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 The koffice team <koffice@kde.org>
+   Copyright (C) 2002 The calligra team <calligra@kde.org>
    Copyright (C) 2003 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or

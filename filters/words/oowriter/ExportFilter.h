@@ -19,7 +19,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -36,7 +36,7 @@
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 //Added by qt3to4:
 #include <QList>
 #include <QTextStream>
@@ -66,7 +66,7 @@ public:
         AnchorUnknown = 0, // ### TODO: is this really needed?
         AnchorInlined, ///< The frameset is inlined
         AnchorNonInlined, ///< the frameset is not inlined
-        AnchorTextImage ///< This is a text image (KWord 0.8; inlined; only for pictures)
+        AnchorTextImage ///< This is a text image (Words 0.8; inlined; only for pictures)
     };
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
@@ -80,7 +80,7 @@ public:
     virtual bool doFullPaperBorders(const double top, const double left,
                                     const double bottom, const double right);
     /**
-     * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
+     * Other data of Words's \<PAPER\> which are not in @see doFullPaperFormat
      */
     virtual bool doFullPaperFormatOther(const int columns, const double columnspacing, const int numPages);
     virtual bool doOpenStyles(void);
@@ -165,7 +165,7 @@ private:
 
     QMap<QString, QString> m_mapTextStyleKeys; ///< Map of keys to automatic text styles
     QMap<QString, QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
-    VariableSettingsData m_varSet; ///< KWord's \<VARIABLESETTINGS\>
+    VariableSettingsData m_varSet; ///< Words's \<VARIABLESETTINGS\>
     int m_numPages; ///< Number of pages @note if the input file comes from a filter, this data is often missing.
     double m_columnspacing; ///< Spacing between columns
     int m_columns; ///< Number of columns

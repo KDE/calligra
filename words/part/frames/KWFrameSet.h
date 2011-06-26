@@ -23,9 +23,9 @@
 #ifndef KWFRAMESET_H
 #define KWFRAMESET_H
 
-#include "KWord.h"
+#include "Words.h"
 #include "KWFrame.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <QObject>
 
@@ -36,12 +36,12 @@
  * The FrameSet holds KWFrame objects that actually render the content this object
  * holds to the screen or to the printer.
  */
-class KWORD_EXPORT KWFrameSet : public QObject
+class WORDS_EXPORT KWFrameSet : public QObject
 {
     Q_OBJECT
 public:
     /// Constructor.
-    KWFrameSet(KWord::FrameSetType type = KWord::OtherFrameSet);
+    KWFrameSet(Words::FrameSetType type = Words::OtherFrameSet);
     virtual ~KWFrameSet();
 
     /**
@@ -97,7 +97,7 @@ public:
         return m_frames.count();
     }
 
-    KWord::FrameSetType type() const {
+    Words::FrameSetType type() const {
         return m_type;
     }
 
@@ -129,7 +129,7 @@ private:
     /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;
     /// The type of the frameset.
-    KWord::FrameSetType m_type;
+    Words::FrameSetType m_type;
     /// The name of the frameset.
     QString m_name;
 };

@@ -27,7 +27,7 @@
 #include <QStyledItemDelegate>
 #include <QWidget>
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlato
 {
@@ -59,7 +59,7 @@ class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase {
 public:
     explicit WBSDefinitionPanel( Project &project, WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
-    QUndoCommand *buildCommand();
+    KUndo2Command *buildCommand();
 
     bool ok();
 

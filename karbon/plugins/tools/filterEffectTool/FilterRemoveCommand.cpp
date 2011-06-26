@@ -24,12 +24,12 @@
 
 #include <KLocale>
 
-FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, QUndoCommand *parent)
-        : QUndoCommand(parent), m_filterEffect(0), m_filterStack(filterStack), m_shape(shape)
+FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, KUndo2Command *parent)
+        : KUndo2Command(parent), m_filterEffect(0), m_filterStack(filterStack), m_shape(shape)
         , m_isRemoved(false), m_filterEffectIndex(filterEffectIndex)
 {
     Q_ASSERT(filterStack);
-    setText(i18n("Remove filter effect"));
+    setText(i18nc("(qtundo-format)", "Remove filter effect"));
 }
 
 FilterRemoveCommand::~FilterRemoveCommand()
@@ -40,7 +40,7 @@ FilterRemoveCommand::~FilterRemoveCommand()
 
 void FilterRemoveCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (m_shape)
         m_shape->update();
@@ -63,5 +63,5 @@ void FilterRemoveCommand::undo()
     if (m_shape)
         m_shape->update();
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

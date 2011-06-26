@@ -18,7 +18,7 @@ target_link_libraries(flowprivate kopageapp)
 target_link_libraries(flowprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(flowprivate PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS flowprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

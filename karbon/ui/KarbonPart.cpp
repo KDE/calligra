@@ -69,7 +69,7 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -77,7 +77,7 @@
 #include <QtCore/QRectF>
 #include <QtGui/QPainter>
 
-// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+// Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
 
 class KarbonPart::Private

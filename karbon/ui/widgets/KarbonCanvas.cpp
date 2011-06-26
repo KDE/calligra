@@ -294,7 +294,7 @@ bool KarbonCanvas::snapToGrid() const
     return d->part->gridData().snapToGrid();
 }
 
-void KarbonCanvas::addCommand(QUndoCommand *command)
+void KarbonCanvas::addCommand(KUndo2Command *command)
 {
     d->part->addCommand(command);
     updateSizeAndOffset();

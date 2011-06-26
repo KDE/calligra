@@ -27,12 +27,12 @@ using namespace Calligra::Tables;
 
 // ----- PageLayoutCommand -----
 
-PageLayoutCommand::PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, QUndoCommand* parent)
-        : QUndoCommand(parent)
+PageLayoutCommand::PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, KUndo2Command* parent)
+        : KUndo2Command(parent)
         , m_sheet(sheet)
         , m_settings(settings)
 {
-    setText(i18n("Set Page Layout"));
+    setText(i18nc("(qtundo-format)", "Set Page Layout"));
 }
 
 void PageLayoutCommand::redo()
