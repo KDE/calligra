@@ -5,6 +5,7 @@ CMakeLists.txt.user
 .directory
 *.rej
 *.orig
+.kdev_include_paths
 *.patch
 .gdb_history
 .kdev_include_paths
