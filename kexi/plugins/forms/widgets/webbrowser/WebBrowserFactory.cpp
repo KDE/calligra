@@ -40,7 +40,7 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
     webBrowser->setName(i18n("Web Browser"));
     webBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
                                     "spaces and non latin1 characters.", "webBrowser"));
-    webBrowser->setDescription(i18n("Web Browser"));
+    webBrowser->setDescription(i18n("Web widget with browsing features."));
     addClass(webBrowser);
 }
 
