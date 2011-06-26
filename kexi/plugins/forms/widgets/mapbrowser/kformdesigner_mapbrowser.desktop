@@ -6,5 +6,5 @@ Name=Map Browser
 Name[en_GB]=Map Browser
 
 X-KDE-Library=kformdesigner_mapbrowser
-X-KFormDesigner-FactoryGroup=
+X-KFormDesigner-FactoryGroup=kexi
 X-KFormDesigner-WidgetFactoryVersion=2
