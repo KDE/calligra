@@ -40,7 +40,7 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
     mapBrowser->setName(i18n("Map Browser"));
     mapBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
                                      "spaces and non latin1 characters.", "mapBrowser"));
-    mapBrowser->setDescription(i18n("Dispaly Map."));
+    mapBrowser->setDescription(i18n("Displays an interactive map."));
     addClass(mapBrowser);
 }
 
