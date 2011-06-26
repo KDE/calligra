@@ -2,13 +2,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formedito
 
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
-
-########### next target ###############
-
-if(MARBLE_FOUND)
-  add_subdirectory(mapbrowser)
-endif(MARBLE_FOUND)
-
 ########### next target ###############
 
 set(kformdesigner_containers_PART_SRCS containerfactory.cpp )
