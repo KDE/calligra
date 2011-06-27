@@ -2548,7 +2548,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             }
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
-            ELSE_TRY_READ_IF(jc)
+            ELSE_TRY_READ_IF_IN_CONTEXT(jc)
             ELSE_TRY_READ_IF(tabs)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
@@ -3265,7 +3265,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sz()
 //! Paragraph Alignment
 /*! ECMA-376, 17.3.1.13, p.239
 */
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
@@ -3273,11 +3273,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
     // Does ODF support high/low/medium kashida ?
     val = val.toLower();
     if ((val == "both") || (val == "distribute")) {
-        m_currentParagraphStyle.addProperty("fo:text-align", "justify");
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", "justify");
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::CenterAlign);
+        }
     }
-    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center")) {
-        m_currentParagraphStyle.addProperty("fo:text-align", val);
+    else if (val == "center") {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::CenterAlign);
+        }
     }
+    else if ((val == "start") || (val == "left")) {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+             m_tableMainStyle->setHorizontalAlign(KoTblStyle::LeftAlign);
+        }
+    }
+    else if ((val == "right") || (val == "end")) {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::RightAlign);
+        }
+    }
+
     readNext();
     READ_EPILOGUE
 }
@@ -4550,16 +4577,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_currentTableStyle.clear();
 
+    m_tableMainStyle = KoTblStyle::create();
+    if (m_moveToStylesXml) {
+        m_tableMainStyle->setAutoStyleInStylesDotXml(true);
+    }
+    m_tableMainStyle->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
+
     bool sectionAdded = false;
     if (m_createSectionStyle) {
         m_createSectionStyle = false;
         sectionAdded = true;
-        KoTblStyle::Ptr style = KoTblStyle::create();
-        if (m_moveToStylesXml) {
-            style->setAutoStyleInStylesDotXml(true);
-        }
-        style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
-        m_table->setTableStyle(style);
     }
     // Fix me, for tables inside tables this might not work
     m_activeRoles = 0;
@@ -4585,6 +4612,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 //             ELSE_WRONG_FORMAT
         }
     }
+
+    m_table->setTableStyle(m_tableMainStyle);
 
     defineTableStyles();
 
@@ -4640,7 +4669,7 @@ void DocxXmlDocumentReader::defineTableStyles()
 
  Child elements:
  - bidiVisual (Visually Right to Left Table) §17.4.1
- - jc (Table Alignment) §17.4.29
+ - [done] jc (Table Alignment) §17.4.29
  - shd (Table Shading) §17.4.32
  - [done] tblBorders (Table Borders) §17.4.39
  - tblCaption (Table Caption) §17.4.41
@@ -4670,6 +4699,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
             TRY_READ_IF(tblStyle)
             ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
+            ELSE_TRY_READ_IF_IN_CONTEXT(jc)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
