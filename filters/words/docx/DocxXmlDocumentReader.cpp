@@ -619,9 +619,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 {
     READ_PROLOGUE
 
-    // Protecting in case the object is inside a textbox inside a shape
-    VMLShapeProperties oldProperties = m_currentVMLProperties;
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -637,8 +634,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
-    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
@@ -2249,7 +2244,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
             ELSE_TRY_READ_IF(object)
-            ELSE_TRY_READ_IF(pict)
+            else if (name() == "pict") {
+                // Protecting in case the object is inside a textbox inside a shape
+                VMLShapeProperties oldProperties = m_currentVMLProperties;
+                TRY_READ(pict)
+                m_currentVMLProperties = oldProperties;
+            }
             ELSE_TRY_READ_IF(instrText)
             ELSE_TRY_READ_IF(fldChar)
             ELSE_TRY_READ_IF(lastRenderedPageBreak)

@@ -2483,6 +2483,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
         else {
             m_currentVMLProperties.fillType = "solid"; // defaulting
         }
+        // Needed for picture bullets, do not remove
+        m_context->import->imageSize(imagedata, m_imageSize);
     }
 
     readNext();

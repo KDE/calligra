@@ -222,6 +222,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     reportProgress(25);
 
+    QMap<QString, DocxXmlDocumentReader::VMLShapeProperties> definedShapeTypes;
+
     // 4. parse numbering
     {
         const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
@@ -235,6 +237,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 numberingPathAndFile, &numberingReader, writers, errorMessage, &context) )
         }
+        definedShapeTypes = numberingReader.m_definedShapeTypes;
     }
 
     reportProgress(30);
@@ -291,6 +294,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
+        // It is possible that some of the templates are defined in numberingreader
+        documentReader.m_definedShapeTypes = definedShapeTypes;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
