@@ -50,7 +50,7 @@ class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget,
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
-    Q_PROPERTY(QUrl url READ url WRITE setUrl)
+    Q_PROPERTY(QString url READ url WRITE setUrl)
 
     
 public:
@@ -65,9 +65,9 @@ public:
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
 
-    inline QUrl url() const {
+    inline QString url() const {
 	
-	return m_url;
+	return m_url.toString();
     }
 
     virtual QVariant value();
@@ -84,14 +84,14 @@ public:
 public slots:
     void setDataSource(const QString &ds);
     void setDataSourcePartClass(const QString &ds);
-    void setUrl(const QUrl& url);
+    void setUrl(const QString& url);
     void loadPreviousPage();
-    void  loadNextPage(); 
+    void loadNextPage(); 
     void onreload(); 
 
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld); 
-    void updateUrl();
+  //  void updateUrl();
     bool m_readOnly;
     QUrl m_url;
 

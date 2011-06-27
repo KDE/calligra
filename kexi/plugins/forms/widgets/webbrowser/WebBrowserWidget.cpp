@@ -100,7 +100,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     connect(m_toolbar,SIGNAL(goBack()),SLOT(loadPreviousPage()));
     connect(m_toolbar,SIGNAL(goForward()),SLOT(loadNextPage())); 
     connect(m_toolbar,SIGNAL(doreload()),SLOT(onreload()));
-    connect(m_view,SIGNAL(urlChanged(QUrl)),this,SLOT(setUrl(const QUrl)));
+    connect(m_view,SIGNAL(urlChanged(QUrl)),this,SLOT(setUrl(QString)));
 
 
 };
@@ -148,9 +148,9 @@ void WebBrowserWidget::onreload()
     m_view->reload();
 }
 
-void WebBrowserWidget::setUrl(const QUrl& url)
+void WebBrowserWidget::setUrl(const QString& url)
 {
-     m_url=url;
+     m_url=QUrl(url);
      m_view->load(m_url);
 }//ok
 
@@ -186,7 +186,7 @@ bool WebBrowserWidget::valueIsNull()
 }
 void WebBrowserWidget::clear()
 {
-    setUrl(QUrl("www.google.com"));
+    setUrl("www.google.com");
 }
 
 
@@ -212,10 +212,10 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
 
     if (removeOld)
         { 			//set property editor to add
-	 setUrl(add.toUrl()); 
+	 setUrl(add.toString()); 
 	}       
     else
-        { setUrl(QUrl( m_origValue.toString() + add.toString())) ;//else put value of add to current value of m_origValue
+        { setUrl(m_origValue.toString() + add.toString()) ;//else put value of add to current value of m_origValue
      	//setUrl(m_url);
         }
 
