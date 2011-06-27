@@ -2880,6 +2880,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
     m_rot = 0;
+    m_z_index = 0;
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
     if (m_moveToStylesXml) {
@@ -2919,6 +2920,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
+        body->addAttribute("draw:z-index", m_z_index);
+
         if (m_alignH.isEmpty()) {
             m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
         } else {
@@ -5512,7 +5515,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - [done] wrapTopAndBottom (Top and Bottom Wrapping) §20.4.2.20
 
  Attributes:
- - allowOverlap (Allow Objects to Overlap)
+ - [done] allowOverlap (Allow Objects to Overlap)
  - [done] behindDoc (Display Behind Document Text)
  - [done] distB (Distance From Text on Bottom Edge) (see also: inline)
  - [done] distL (Distance From Text on Left Edge) (see also: inline)
@@ -5521,7 +5524,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - hidden (Hidden)
  - layoutInCell (Layout In Table Cell)
  - locked (Lock Anchor)
- - relativeHeight (Relative Z-Ordering Position)
+ - [done] relativeHeight (Relative Z-Ordering Position)
  - simplePos (Page Positioning)
 */
 //! @todo support all elements
@@ -5550,6 +5553,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     distToODF("fo:margin-left", distL);
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
+
+    TRY_READ_ATTR_WITHOUT_NS(relativeHeight)
+    if (!relativeHeight.isEmpty()) {
+        m_z_index = relativeHeight.toInt();
+    }
 
     behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
     allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());

@@ -308,6 +308,8 @@ private:
     //! State of fldChar
     ComplexCharStatus m_complexCharStatus;
 
+    int m_z_index;
+
     enum DropCapStatus {
         NoDropCap, DropCapRead, DropCapDone
     };
