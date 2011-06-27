@@ -237,8 +237,18 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
     applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle,
                              m_inHeaderFooter && m_containsPageNumberField, this, tabLeader);
 
-    //[MS-DOC] CHP -> [ODF] text-properties
-    if (m_textStrings.isEmpty()) {
+    // text-properties are required for empty paragraphs or paragraphs
+    // containing only floating/inline objects.  If there is any text chunk,
+    // then the text-properties are included in the style of type TextStyle.
+    bool textPropsRequired = false;
+    for (int i = 0; i < m_textStyles.size(); i++) {
+        if (!m_textStyles[i]) {
+            textPropsRequired = true;
+            break;
+        }
+    }
+    // [MS-DOC] CHP -> [ODF] text-properties
+    if (m_textStrings.isEmpty() || textPropsRequired) {
         if (m_characterProperties) {
             applyCharacterProperties(m_characterProperties, m_odfParagraphStyle, m_paragraphStyle);
         } else {
@@ -308,74 +318,34 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
         writer->startElement("text:p", false);
         writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
+        const wvWare::Word97::PAP& pap = m_paragraphProperties->pap();
         int dxaAbs = 0;
         int dyaAbs = 0;
-        const wvWare::Word97::PAP& pap = m_paragraphProperties->pap();
 
-        //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
-        // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside
-        if (pap.dxaAbs == -4) {
-            gs.addProperty("style:horizontal-pos","center", gt);
-        }
-        else if (pap.dxaAbs == -8) {
-            gs.addProperty("style:horizontal-pos","right", gt);
-        }
-        else if (pap.dxaAbs == -12) {
-            gs.addProperty("style:horizontal-pos","inside", gt);
-        }
-        else if (pap.dxaAbs == -16) {
-            gs.addProperty("style:horizontal-pos","outside", gt);
-        }
-        else {
+        // horizontal position of the anchor
+        QString pos = Conversion::getHorizontalPos(pap.dxaAbs);
+        gs.addProperty("style:horizontal-pos", pos, gt);
+        if (pos == "from-left") {
             dxaAbs = pap.dxaAbs;
-            gs.addProperty("style:horizontal-pos","from-left", gt);
         }
-        //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
-        // (-4) - top, (-8) - middle, (-12) - bottom, (-16) - inside,
-        // (-20) - outside
-        if (pap.dyaAbs == -4) {
-            gs.addProperty("style:vertical-pos","top", gt);
-        }
-        else if (pap.dyaAbs == -8) {
-            gs.addProperty("style:vertical-pos","middle", gt);
-        }
-        else if (pap.dyaAbs == -12) {
-            gs.addProperty("style:vertical-pos","bottom", gt);
-        }
-        else if (pap.dyaAbs == -16) {
-            gs.addProperty("style:vertical-pos","inline", gt);
-        }
-        else if (pap.dyaAbs == -20) {
-            gs.addProperty("style:vertical-pos","inline", gt);
-        }
-        else {
+        // vertical position of the anchor
+        pos = Conversion::getVerticalPos(pap.dyaAbs);
+        gs.addProperty("style:vertical-pos", pos, gt);
+        if (pos == "from-top") {
             dyaAbs = pap.dyaAbs;
-            gs.addProperty("style:vertical-pos","from-top", gt);
         }
-        //MS-DOC - PositionCodeOperand - anchor vertical position
-        // 0 - margin, 1 - page, 2 - paragraph
-        if (pap.pcVert == 0) {
-            gs.addProperty("style:vertical-rel","page-content", gt);
+        // relative vertical position of the anchor
+        QString anchor = Conversion::getVerticalRel(pap.pcVert);
+	if (!anchor.isEmpty()) {
+            gs.addProperty("style:vertical-rel", anchor, gt);
         }
-        else if (pap.pcVert == 1) {
-            gs.addProperty("style:vertical-rel","page", gt);
-        }
-        else if (pap.pcVert == 2) {
-            gs.addProperty("style:vertical-rel","paragraph", gt);
-        }
-        //MS-DOC - PositionCodeOperand - anchor horizontal position
-        // 0 - current column, 1 - margin, 2 - page
-        if (pap.pcHorz == 0) {
-            gs.addProperty("style:horizontal-rel","paragraph", gt);
-        }
-        else if (pap.pcHorz == 1) {
-            gs.addProperty("style:horizontal-rel","page-content", gt);
-        }
-        else if (pap.pcHorz == 2) {
-            gs.addProperty("style:horizontal-rel","page", gt);
+        // relative horizontal position of the anchor
+        anchor = Conversion::getHorizontalRel(pap.pcHorz);
+        if (!anchor.isEmpty()) {
+            gs.addProperty("style:horizontal-rel", anchor, gt);
         }
 
-        //in case a header or footer is processed, save the style into styles.xml
+        // In case a header/footer is processed, save the style into styles.xml
         if (m_inStylesDotXml) {
             gs.setAutoStyleInStylesDotXml(true);
         }
@@ -395,13 +365,13 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
         writer->addAttribute("text:anchor-type", "paragraph");
 
         if (pap.dxaWidth != 0) {
-            writer->addAttributePt("svg:width", (double)pap.dxaWidth/20);
+            writer->addAttributePt("svg:width", (double)pap.dxaWidth / 20);
         }
         if (pap.dyaHeight != 0) {
-            writer->addAttributePt("svg:height", (double)pap.dyaHeight/20);
+            writer->addAttributePt("svg:height", (double)pap.dyaHeight / 20);
         }
-        writer->addAttributePt("svg:x", (double)dxaAbs/20);
-        writer->addAttributePt("svg:y", (double)dyaAbs/20);
+        writer->addAttributePt("svg:x", (double)dxaAbs / 20);
+        writer->addAttributePt("svg:y", (double)dyaAbs / 20);
         writer->startElement("draw:text-box");
     }
 
