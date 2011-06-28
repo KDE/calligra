@@ -171,6 +171,7 @@ WordsGraphicsHandler::WordsGraphicsHandler(Document* doc,
 , m_mainStyles(mainStyles)
 , m_drawings(p_drawings)
 , m_fib(fib)
+, m_officeArtDggContainer(0)
 , m_pOfficeArtHeaderDgContainer(0)
 , m_pOfficeArtBodyDgContainer(0)
 , m_processingGroup(false)
@@ -214,6 +215,10 @@ void WordsGraphicsHandler::init()
     }
 
     const OfficeArtBStoreContainer* blipStore = 0;
+    if (!m_officeArtDggContainer) {
+        kDebug(30513) << "no Office Art Dgg Container present.";
+        return;
+    }
     blipStore = m_officeArtDggContainer->blipStore.data();
 
     if (!blipStore) {
@@ -714,7 +719,7 @@ QString WordsGraphicsHandler::getPicturePath(quint32 pib) const
         if (m_picNames.contains(rgbUid)) {
             return "Pictures/" + m_picNames[rgbUid];
         } else {
-            qDebug() << "UNKNOWN picture reference!";
+            kWarning(30513) << "UNKNOWN picture reference!";
         }
     }
     return QString();
