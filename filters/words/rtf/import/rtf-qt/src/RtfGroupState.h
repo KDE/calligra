@@ -17,10 +17,10 @@
 
 #ifndef RTFREADER_RTFGROUPSTATE_H
 #define RTFREADER_RTFGROUPSTATE_H
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
-    class RtfGroupState
+    class RTFREADER_EXPORT RtfGroupState
     {
     public:
 	RtfGroupState() : endOfFile( false ), didChangeDestination( false )

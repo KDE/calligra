@@ -27,12 +27,12 @@ class QTextImageFormat;
 
 #include <QtCore/QStack>
 #include <QtGui/QTextCharFormat>
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     class Reader;
 
-    class TextDocumentRtfOutput: public AbstractRtfOutput
+    class RTFREADER_EXPORT TextDocumentRtfOutput: public AbstractRtfOutput
     {
       public:
 	TextDocumentRtfOutput( QTextDocument *document );

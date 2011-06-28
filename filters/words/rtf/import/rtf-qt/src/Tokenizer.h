@@ -21,13 +21,13 @@
 #include "Token.h"
 
 #include <QtCore/QFile>
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     /**
       RTF tokenizer
       */
-    class Tokenizer {
+    class RTFREADER_EXPORT Tokenizer {
       public:
 	explicit Tokenizer( QFile *inputDevice ) : m_inputDevice( inputDevice )
 	{}

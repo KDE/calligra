@@ -22,12 +22,12 @@
 #include <QtGui/QColor>
 
 #include "Destination.h"
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     class Reader;
 
-    class PictDestination: public Destination
+    class RTFREADER_EXPORT PictDestination: public Destination
     {
       public:
 	PictDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );

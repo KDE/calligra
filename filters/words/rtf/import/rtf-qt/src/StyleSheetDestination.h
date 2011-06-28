@@ -23,12 +23,12 @@
 
 #include "Destination.h"
 #include "StyleSheetTableEntry.h"
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     class Reader;
 
-    class StyleSheetDestination: public Destination
+    class RTFREADER_EXPORT StyleSheetDestination: public Destination
     {
       public:
 	StyleSheetDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );

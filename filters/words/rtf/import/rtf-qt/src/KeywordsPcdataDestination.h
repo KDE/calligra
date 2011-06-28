@@ -1,4 +1,4 @@
-/*
+#include "rtfreader_export.h"/*
     Copyright (C)  2010  Brad Hards <bradh@frogmouth.net>
 
     This program is free software: you can redistribute it and/or modify
@@ -22,12 +22,12 @@
 #include <QtGui/QColor>
 
 #include "PcdataDestination.h"
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     class Reader;
 
-    class KeywordsPcdataDestination: public PcdataDestination
+    class RTFREADER_EXPORT KeywordsPcdataDestination: public PcdataDestination
     {
       public:
 	KeywordsPcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );

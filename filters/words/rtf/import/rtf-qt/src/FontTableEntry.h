@@ -17,14 +17,14 @@
 
 #ifndef RTFREADER_FONTTABLEENTRY_H
 #define RTFREADER_FONTTABLEENTRY_H
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     enum FontFamily { Nil, Roman, Swiss, Modern, Script, Decor, Tech, Bidi };
 
     enum FontPitch { Default = 0, Fixed = 1, Variable = 2 };
 
-    class FontTableEntry
+    class RTFREADER_EXPORT FontTableEntry
     {
       public:	
 	FontTableEntry() : m_fontFamily( Nil ), m_fontPitch( Default )

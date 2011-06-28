@@ -23,12 +23,12 @@
 
 #include "Destination.h"
 #include "FontTableEntry.h"
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     class Reader;
 
-    class FontTableDestination: public Destination
+    class RTFREADER_EXPORT FontTableDestination: public Destination
     {
       public:
 	FontTableDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );

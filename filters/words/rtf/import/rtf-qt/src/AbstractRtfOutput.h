@@ -26,7 +26,7 @@
 
 #include "FontTableEntry.h"
 #include "StyleSheetTableEntry.h"
-
+#include "rtfreader_export.h"
 /**
    Namespace for the public interface for the RtfReader classes
 */
@@ -35,7 +35,7 @@ namespace RtfReader
     /**
 	Abstract output strategy for RTF Parser
     */
-    class AbstractRtfOutput
+    class RTFREADER_EXPORT AbstractRtfOutput
     {
       public:
 	AbstractRtfOutput();

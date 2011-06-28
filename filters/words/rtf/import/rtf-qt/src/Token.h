@@ -20,7 +20,7 @@
 
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
-
+#include "rtfreader_export.h"
 namespace RtfReader
 {
     enum TokenType { OpenGroup, CloseGroup, Control, Plain, Binary };
@@ -28,7 +28,7 @@ namespace RtfReader
     /**
       RTF token
       */
-    class Token {
+    class RTFREADER_EXPORT Token {
       public: /* TODO: convert to getters / setters */
 	void dump() const;
 	TokenType type;
