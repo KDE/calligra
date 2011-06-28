@@ -447,7 +447,7 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, sp);
+    DrawStyle ds(&m_officeArtDggContainer, 0, sp);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -486,7 +486,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
 {
     kDebug(30513);
 
-    DrawStyle ds(0, &o);
+    DrawStyle ds(0, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
@@ -939,8 +939,8 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
         out.xml.addAttribute("svg:width", mm(out.vLength()));
         out.xml.addAttribute("svg:height", mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 -1 1 0 " +
-               mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
-         break;
+                mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
+        break;
     default : //standard text flow
         out.xml.addAttribute("svg:width", mm(out.hLength()));
         out.xml.addAttribute("svg:height", mm(out.vLength()));
