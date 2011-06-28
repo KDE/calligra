@@ -23,7 +23,6 @@
  */
 
 #include "DocxXmlDocumentReader.h"
-#include "DocxXmlNotesReader.h"
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
 #include "DocxImport.h"

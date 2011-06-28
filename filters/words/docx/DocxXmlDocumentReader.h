@@ -29,7 +29,6 @@
 
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
-#include "DocxXmlNotesReader.h"
 
 #include <MsooXmlDrawingTableStyle.h>
 
