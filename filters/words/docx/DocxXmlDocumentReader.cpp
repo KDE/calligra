@@ -266,7 +266,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
 
-    body->addAttribute("text:use-soft-page-breaks", "true");
     int counter = 0;
 
     while (!atEnd()) {
@@ -1998,6 +1997,45 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             body = textPBuf.originalWriter();
             if (!m_createSectionToNext) { // In ooxml it seems that nothing should be created if sectPr was present
                 if (m_listFound) {
+                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+                    if (m_moveToStylesXml) {
+                        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                    }
+
+                    int index = 0;
+                    while (index < m_currentBulletList.size()) {
+                        m_currentBulletProperties = m_currentBulletList.at(index);
+
+                        if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType) {
+                            // The reason why we are inserting bullets only here, is that we have to check for the actual
+                            // text size before we can determine how big a potential picture bullet should be
+
+                            // Try 1 : paragraph defined
+                            QString fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
+                            if (fontSize.isEmpty()) {
+                                const KoGenStyle *parent = mainStyles->style(m_currentParagraphStyle.parentName());
+                                if (parent != 0) {
+                                    // Try 2 : parent defined
+                                    fontSize = parent->property("fo:font-size", KoGenStyle::TextType);
+                                    if (fontSize.isEmpty()) {
+                                        // Try 3 : default text size
+                                        fontSize = "11pt"; // This should be acquired from stylesreader, do later.
+                                    }
+                                }
+                            }
+                            if (!fontSize.isEmpty()) {
+                                fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
+                                qreal convertedSize = fontSize.toDouble();
+                                m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+                            }
+                        }
+
+                        m_currentListStyle.addChildElement("list-style-properties",
+                            m_currentBulletProperties.convertToListProperties());
+                        ++index;
+                    }
+                    m_currentListStyleName = mainStyles->insert(m_currentListStyle);
+
                     body->startElement("text:list");
                     if (!m_currentListStyleName.isEmpty()) {
                         body->addAttribute("text:style-name", m_currentListStyleName);
@@ -2839,9 +2877,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
     // In docx, this value defines a predetermined style from numbering xml,
     // The styles from numbering have to be given some name, NumStyle has been chosen here
     if (!val.isEmpty()) {
-        m_currentListStyleName = QString("NumStyle%1").arg(val);
         if (val == "0") {
             m_listFound = false; // spec says that this means deleted list
+        } else {
+            m_currentBulletList = m_context->m_bulletStyles[val];
         }
     }
 

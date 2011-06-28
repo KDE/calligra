@@ -257,6 +257,8 @@ protected:
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
     QString m_currentTableStyleBase;
 
+    QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
+
 private:
     void init();
 
@@ -376,6 +378,8 @@ public:
 
     QMap<QString, QString> m_endnotes;
     QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
+
+    QMap<QString, QList<MSOOXML::Utils::ParagraphBulletProperties> > m_bulletStyles;
 
 private:
 };
