@@ -619,9 +619,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 {
     READ_PROLOGUE
 
-    // Protecting in case the object is inside a textbox inside a shape
-    VMLShapeProperties oldProperties = m_currentVMLProperties;
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -637,8 +634,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
-    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
@@ -2249,7 +2244,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
             ELSE_TRY_READ_IF(object)
-            ELSE_TRY_READ_IF(pict)
+            else if (name() == "pict") {
+                // Protecting in case the object is inside a textbox inside a shape
+                VMLShapeProperties oldProperties = m_currentVMLProperties;
+                TRY_READ(pict)
+                m_currentVMLProperties = oldProperties;
+            }
             ELSE_TRY_READ_IF(instrText)
             ELSE_TRY_READ_IF(fldChar)
             ELSE_TRY_READ_IF(lastRenderedPageBreak)
@@ -2548,7 +2548,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             }
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
-            ELSE_TRY_READ_IF(jc)
+            ELSE_TRY_READ_IF_IN_CONTEXT(jc)
             ELSE_TRY_READ_IF(tabs)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
@@ -2880,6 +2880,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
     m_rot = 0;
+    m_z_index = 0;
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
     if (m_moveToStylesXml) {
@@ -2919,6 +2920,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
+        body->addAttribute("draw:z-index", m_z_index);
+
         if (m_alignH.isEmpty()) {
             m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
         } else {
@@ -3265,7 +3268,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sz()
 //! Paragraph Alignment
 /*! ECMA-376, 17.3.1.13, p.239
 */
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
@@ -3273,11 +3276,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
     // Does ODF support high/low/medium kashida ?
     val = val.toLower();
     if ((val == "both") || (val == "distribute")) {
-        m_currentParagraphStyle.addProperty("fo:text-align", "justify");
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", "justify");
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::CenterAlign);
+        }
     }
-    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center")) {
-        m_currentParagraphStyle.addProperty("fo:text-align", val);
+    else if (val == "center") {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::CenterAlign);
+        }
     }
+    else if ((val == "start") || (val == "left")) {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+             m_tableMainStyle->setHorizontalAlign(KoTblStyle::LeftAlign);
+        }
+    }
+    else if ((val == "right") || (val == "end")) {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::RightAlign);
+        }
+    }
+
     readNext();
     READ_EPILOGUE
 }
@@ -4550,16 +4580,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_currentTableStyle.clear();
 
+    m_tableMainStyle = KoTblStyle::create();
+    if (m_moveToStylesXml) {
+        m_tableMainStyle->setAutoStyleInStylesDotXml(true);
+    }
+    m_tableMainStyle->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
+
     bool sectionAdded = false;
     if (m_createSectionStyle) {
         m_createSectionStyle = false;
         sectionAdded = true;
-        KoTblStyle::Ptr style = KoTblStyle::create();
-        if (m_moveToStylesXml) {
-            style->setAutoStyleInStylesDotXml(true);
-        }
-        style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
-        m_table->setTableStyle(style);
     }
     // Fix me, for tables inside tables this might not work
     m_activeRoles = 0;
@@ -4585,6 +4615,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 //             ELSE_WRONG_FORMAT
         }
     }
+
+    m_table->setTableStyle(m_tableMainStyle);
 
     defineTableStyles();
 
@@ -4640,7 +4672,7 @@ void DocxXmlDocumentReader::defineTableStyles()
 
  Child elements:
  - bidiVisual (Visually Right to Left Table) §17.4.1
- - jc (Table Alignment) §17.4.29
+ - [done] jc (Table Alignment) §17.4.29
  - shd (Table Shading) §17.4.32
  - [done] tblBorders (Table Borders) §17.4.39
  - tblCaption (Table Caption) §17.4.41
@@ -4670,6 +4702,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
             TRY_READ_IF(tblStyle)
             ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
+            ELSE_TRY_READ_IF_IN_CONTEXT(jc)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -5482,7 +5515,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - [done] wrapTopAndBottom (Top and Bottom Wrapping) §20.4.2.20
 
  Attributes:
- - allowOverlap (Allow Objects to Overlap)
+ - [done] allowOverlap (Allow Objects to Overlap)
  - [done] behindDoc (Display Behind Document Text)
  - [done] distB (Distance From Text on Bottom Edge) (see also: inline)
  - [done] distL (Distance From Text on Left Edge) (see also: inline)
@@ -5491,7 +5524,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - hidden (Hidden)
  - layoutInCell (Layout In Table Cell)
  - locked (Lock Anchor)
- - relativeHeight (Relative Z-Ordering Position)
+ - [done] relativeHeight (Relative Z-Ordering Position)
  - simplePos (Page Positioning)
 */
 //! @todo support all elements
@@ -5520,6 +5553,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     distToODF("fo:margin-left", distL);
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
+
+    TRY_READ_ATTR_WITHOUT_NS(relativeHeight)
+    if (!relativeHeight.isEmpty()) {
+        m_z_index = relativeHeight.toInt();
+    }
 
     behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
     allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());

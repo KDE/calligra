@@ -37,6 +37,7 @@
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
 #include <KoBorder.h>
+#include <KoTblStyle.h>
 
 //#define NO_DRAWINGML_PICTURE // disables pic:pic, etc. in MsooXmlCommonReader
 
@@ -113,7 +114,11 @@ protected:
     KoFilter::ConversionStatus read_b();
     KoFilter::ConversionStatus read_u();
     KoFilter::ConversionStatus read_sz();
-    KoFilter::ConversionStatus read_jc();
+    enum jcCaller {
+       jc_tblPr,
+       jc_pPr
+    };
+    KoFilter::ConversionStatus read_jc(jcCaller caller);
     KoFilter::ConversionStatus read_spacing();
     KoFilter::ConversionStatus read_trPr();
     KoFilter::ConversionStatus read_cnfStyle();
@@ -244,6 +249,7 @@ protected:
 
     KoTable* m_table;
     QString m_currentTableStyle;
+    KoTblStyle::Ptr m_tableMainStyle;
 
     MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
@@ -301,6 +307,8 @@ private:
     };
     //! State of fldChar
     ComplexCharStatus m_complexCharStatus;
+
+    int m_z_index;
 
     enum DropCapStatus {
         NoDropCap, DropCapRead, DropCapDone

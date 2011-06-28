@@ -868,7 +868,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
                 QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
                 // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
-                if (m_contentAvLstExists && false) {
+                if (m_contentAvLstExists) {
                     QMapIterator<QString, QString> i(m_avModifiers);
                     while (i.hasNext()) {
                         i.next();
@@ -3659,6 +3659,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFillRpr()
         m_currentColor = gradPositions.at(exactIndex).second;
     }
     else {
+        if (beforeIndex < 0) {
+            beforeIndex = 0; // It is possible that the stops are only listed for aread 50+
+        }
+        if (afterIndex < 0) {
+            afterIndex = beforeIndex; // It is possible that the stops are only listed for areas -50
+        }
         int firstDistance = 50 - gradPositions.at(beforeIndex).first;
         int secondDistance = gradPositions.at(afterIndex).first - 50;
         qreal multiplier = 0;
@@ -3891,8 +3897,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gd()
 
     // In theory we should interpret all possible values here, not just "val"
     // in practise it does not happen
-    if (fmla.startsWith("val")) {
-        fmla = fmla.mid(3);
+    if (fmla.startsWith("val ")) {
+        fmla = fmla.mid(4);
     }
 
     m_avModifiers[name] = fmla;
@@ -5473,13 +5479,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
     if (ok) {
         switch (m_currentSpacingType) {
             case (spacingMarginTop):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100.0);
                 break;
             case (spacingMarginBottom):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100.0);
                 break;
             case (spacingLines):
-                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100.0);
                 break;
         }
     }
