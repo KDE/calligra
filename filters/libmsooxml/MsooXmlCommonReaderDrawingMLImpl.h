@@ -2910,30 +2910,32 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
 
-    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
-        qreal bReal = b.toDouble() / 100000;
-        qreal tReal = t.toDouble() / 100000;
-        qreal lReal = l.toDouble() / 100000;
-        qreal rReal = r.toDouble() / 100000;
+    if (!m_recentDestName.endsWith("wmf") && !m_recentDestName.endsWith("emf")) {
+        if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
+            qreal bReal = b.toDouble() / 100000;
+            qreal tReal = t.toDouble() / 100000;
+            qreal lReal = l.toDouble() / 100000;
+            qreal rReal = r.toDouble() / 100000;
 
-        int rectLeft = m_imageSize.rwidth() * lReal;
-        int rectTop = m_imageSize.rheight() * tReal;
-        int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
-        int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
+            int rectLeft = m_imageSize.rwidth() * lReal;
+            int rectTop = m_imageSize.rheight() * tReal;
+            int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
+            int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
 
-        QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
-            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
-        QImage image;
-        m_context->import->imageFromFile(m_recentDestName, image);
-        image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+            QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
+                m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+             QImage image;
+            m_context->import->imageFromFile(m_recentDestName, image);
+            image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
 
-        if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
-            // Todo, here we should delete the generated black area(s)
+            if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
+                // Todo, here we should delete the generated black area(s)
+            }
+
+            RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+            addManifestEntryForFile(destinationName);
+            m_xlinkHref = destinationName;
         }
-
-        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
-        addManifestEntryForFile(destinationName);
-        m_xlinkHref = destinationName;
     }
 
     readNext();
