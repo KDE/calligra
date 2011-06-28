@@ -468,7 +468,34 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         else if (highlighted)
             painter->setFont(boldFont);
 
-        const QFontMetricsF fm(painter->font());
+        QFontMetricsF fm(painter->font());
+#if 0
+        if (height < fm.ascent() - fm.descent()) {
+            // try to scale down the font to make it fit
+            QFont font = painter->font();
+            qreal maxSize = font.pointSizeF();
+            qreal minSize = maxSize / 2;
+            while (minSize > 1) {
+                font.setPointSizeF(minSize);
+                const QFontMetricsF fm2(font);
+                if (height >= fm2.ascent() - fm2.descent())
+                    break;
+                minSize /= 2;
+            }
+            while (minSize < 0.99 * maxSize) {
+                qreal middle = (maxSize + minSize) / 2;
+                font.setPointSizeF(middle);
+                const QFontMetricsF fm2(font);
+                if (height >= fm2.ascent() - fm2.descent()) {
+                    minSize = middle;
+                } else {
+                    maxSize = middle;
+                }
+            }
+            painter->setFont(font);
+            fm = QFontMetricsF(font);
+        }
+#endif
         if (height >= fm.ascent() - fm.descent()) {
             painter->drawText(rect, Qt::AlignCenter, rowText);
         }
@@ -1010,9 +1037,35 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
             painter->setFont(boldFont);
 
         QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
-        const QFontMetricsF fm(painter->font());
-        const qreal len = fm.width(colText);
-        if (width >= len) {
+        QFontMetricsF fm(painter->font());
+#if 0
+        if (width < fm.width(colText)) {
+            // try to scale down the font to make it fit
+            QFont font = painter->font();
+            qreal maxSize = font.pointSizeF();
+            qreal minSize = maxSize / 2;
+            while (minSize > 1) {
+                font.setPointSizeF(minSize);
+                const QFontMetricsF fm2(font);
+                if (width >= fm2.width(colText))
+                    break;
+                minSize /= 2;
+            }
+            while (minSize < 0.99 * maxSize) {
+                qreal middle = (maxSize + minSize) / 2;
+                font.setPointSizeF(middle);
+                const QFontMetricsF fm2(font);
+                if (width >= fm2.width(colText)) {
+                    minSize = middle;
+                } else {
+                    maxSize = middle;
+                }
+            }
+            painter->setFont(font);
+            fm = QFontMetricsF(font);
+        }
+#endif
+        if (width >= fm.width(colText)) {
 #if 0
             switch (x % 3) {
             case 0: colText = QString::number(height) + 'h'; break;
