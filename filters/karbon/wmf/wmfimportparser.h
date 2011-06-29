@@ -115,8 +115,8 @@ private:
     //-----------------------------------------------------------------------------
     // Utilities
     // Add pen, brush and points to a path
-    void appendPen(KoShape& obj);
-    void appendBrush(KoShape& obj);
+    void appendPen(Libwmf::WmfDeviceContext &context, KoShape& obj);
+    void appendBrush(Libwmf::WmfDeviceContext &context, KoShape& obj);
     void appendPoints(KoPathShape& path, const QPolygon& pa);
     // coordinate transformation
     // translate wmf to (0,0) -> scale to document size
@@ -129,8 +129,6 @@ private:
     KoShape * createShape(const QString &shapeID);
 
     KarbonDocument *mDoc;
-    QPen      mPen;
-    QBrush    mBrush;
     // current origin of WMF logical coordinate
     QPoint    mCurrentOrg;
     double    mScaleX;

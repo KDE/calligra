@@ -916,6 +916,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                         stream >> arg;
                         if (dibToBmp(bmpSrc, stream, (size - 5) * 2)) {
+                            // FIXME: Do we unnecessarily take a detour over a QPixmap here?
                             handle->image = QPixmap::fromImage(bmpSrc);
                             handle->brush.setTexture(handle->image);
                         } else {
