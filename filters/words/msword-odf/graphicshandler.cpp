@@ -950,16 +950,25 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
+    // OfficeArtClientTextBox.
+    quint32 textId = 0;
     if (o.clientTextbox) {
         const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
         if (tb) {
-            uint index = (tb->clientTextBox / 0x10000) - 1;
-            emit textBoxFound(index, out.stylesxml);
+            textId = tb->clientTextBox;
         } else {
             kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         }
     } else {
-        kDebug(30513) << "OfficeArtClientTextBox missing!";
+        if (ds.iTxid() < 0) {
+            kDebug(30513) << "lTxid property - negative text identifier!";
+        } else {
+            textId = (quint32)ds.iTxid();
+        }
+    }
+    if (textId) {
+        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
     }
 
     out.xml.endElement(); //draw:text-box
