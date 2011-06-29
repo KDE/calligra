@@ -83,7 +83,6 @@ bool WMFImportParser::play(KarbonDocument& doc)
 
 bool WMFImportParser::begin(const QRect &boundingBox)
 {
-    mBackgroundMode = Qt::TransparentMode;
     mCurrentOrg.setX(boundingBox.left());
     mCurrentOrg.setY(boundingBox.top());
 
@@ -138,13 +137,6 @@ void WMFImportParser::setBrush(const QBrush &brush)
 {
     mBrush = brush;
 }
-
-
-void WMFImportParser::setBackgroundMode(Qt::BGMode mode)
-{
-    mBackgroundMode = mode;
-}
-
 
 
 void WMFImportParser::setWindowOrg(int left, int top)

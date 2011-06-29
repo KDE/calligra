@@ -117,7 +117,6 @@ public:
     virtual void  setBrush(const QBrush &) = 0;
 
     // Drawing attributes/modes
-    virtual void  setBackgroundMode(Qt::BGMode) = 0;
     virtual void  setCompositionMode(QPainter::CompositionMode) = 0;
 
     // Change logical Coordinate

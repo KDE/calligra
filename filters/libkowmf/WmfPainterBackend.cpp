@@ -224,16 +224,6 @@ void WmfPainterBackend::setBrush(const QBrush &brush)
 #endif
 }
 
-void WmfPainterBackend::setBackgroundMode(Qt::BGMode mode)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << mode << "(ignored)";
-#endif
-
-    mPainter->setBackgroundMode(mode);
-}
-
-
 void WmfPainterBackend::setCompositionMode(QPainter::CompositionMode mode)
 {
 #if DEBUG_WMFPAINT
@@ -850,7 +840,7 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
     if (context.changedItems & DCBgMixMode) {
         // FIXME: Check the default value for this.
         mPainter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
-                                                                      : Qt::OpaqueMode);
+                                                                     : Qt::OpaqueMode);
 #if DEBUG_WMFPAINT
         kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
 #endif

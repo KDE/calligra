@@ -90,7 +90,6 @@ private:
     void  setBrush(const QBrush& brush);
 
     // Drawing attributes/modes
-    void  setBackgroundMode(Qt::BGMode mode);
     void  setCompositionMode(QPainter::CompositionMode mode);
 
     /**

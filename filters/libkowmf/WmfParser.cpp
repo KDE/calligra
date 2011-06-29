@@ -355,11 +355,6 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     stream >> bkMode;
                     //kDebug(31000) << "New bkMode: " << bkMode;
 
-                    if (bkMode == TRANSPARENT) // TRANSPARENT=1, OPAQUE=2
-                        m_backend->setBackgroundMode(Qt::TransparentMode);
-                    else
-                        m_backend->setBackgroundMode(Qt::OpaqueMode);
-
                     mDeviceContext.bgMixMode = bkMode;
                     mDeviceContext.changedItems |= DCBgMixMode;
                 }
