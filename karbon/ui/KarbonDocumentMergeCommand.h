@@ -20,11 +20,11 @@
 #ifndef _KARBONDOCUMENTMERGECOMMAND_H_
 #define _KARBONDOCUMENTMERGECOMMAND_H_
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KarbonPart;
 
-class KarbonDocumentMergeCommand : public QUndoCommand
+class KarbonDocumentMergeCommand : public KUndo2Command
 {
 public:
     KarbonDocumentMergeCommand(KarbonPart * targetPart, KarbonPart * sourcePart);

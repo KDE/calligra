@@ -40,7 +40,7 @@ class Style;
 class StyleCommand : public AbstractRegionCommand
 {
 public:
-    StyleCommand(QUndoCommand* parent = 0);
+    StyleCommand(KUndo2Command* parent = 0);
     virtual ~StyleCommand();
 
     // SetSelectionFontWorker

@@ -20,13 +20,13 @@
 #ifndef _MOVE_SECTION_COMMAND_H_
 #define _MOVE_SECTION_COMMAND_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class DocumentModel;
 class Section;
 class SectionGroup;
 
-class MoveSectionCommand : public QUndoCommand {
+class MoveSectionCommand : public KUndo2Command {
 public:
   MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above );
   MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx );

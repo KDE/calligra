@@ -5,6 +5,7 @@ Name[pt_BR]=Componente de imagens vetoriais do Calligra
 Name[sv]=Calligra skalbar grafikkomponent
 Name[uk]=Компонент векторної графіки Calligra
 Name[x-test]=xxCalligra Scalable Graphics Componentxx
+Name[zh_TW]=Calligra 可縮放圖片元件
 X-KDE-Library=karbonpart
 MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;
 # kghostview has 6 for application/postscript, we need to be under that...

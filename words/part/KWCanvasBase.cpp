@@ -77,7 +77,7 @@ void KWCanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
     *vertical = m_document->gridData().gridY();
 }
 
-void KWCanvasBase::addCommand(QUndoCommand *command)
+void KWCanvasBase::addCommand(KUndo2Command *command)
 {
     m_document->addCommand(command);
 }

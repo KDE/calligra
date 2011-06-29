@@ -22,12 +22,12 @@
 
 #include "stage_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KoPAPageBase;
 class KPrPageEffect;
 
-class STAGE_EXPORT KPrPageEffectSetCommand : public QUndoCommand
+class STAGE_EXPORT KPrPageEffectSetCommand : public KUndo2Command
 {
 public:
     KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect );

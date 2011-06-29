@@ -205,18 +205,20 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     QList<KWFrame *> frames = kwdoc->frameLayout()->framesOn(m_textFrameSet, pageNumber);
 
     // position OtherFrameSet's which are anchored to this page
-    foreach(KWFrameSet* fs, kwdoc->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (fs->type() != Words::OtherFrameSet && (!tfs || tfs->textFrameSetType() != Words::OtherTextFrameSet))
-            continue;
-        foreach (KWFrame *frame, fs->frames()) {
-            if (frame->anchoredPageNumber() == pageNumber) {
-                qreal oldOffset = frame->anchoredFrameOffset();
-                qreal newOffset = rootAreaPage->page.offsetInDocument();
-                if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
-                    frame->setAnchoredFrameOffset(newOffset);
-                    QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
-                    frame->shape()->setPosition(pos);
+    if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
+        foreach(KWFrameSet* fs, kwdoc->frameSets()) {
+            KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+            if (fs->type() != Words::OtherFrameSet && (!tfs || tfs->textFrameSetType() != Words::OtherTextFrameSet))
+                continue;
+            foreach (KWFrame *frame, fs->frames()) {
+                if (frame->anchoredPageNumber() == pageNumber) {
+                    qreal oldOffset = frame->anchoredFrameOffset();
+                    qreal newOffset = rootAreaPage->page.offsetInDocument();
+                    if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
+                        frame->setAnchoredFrameOffset(newOffset);
+                        QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
+                        frame->shape()->setPosition(pos);
+                    }
                 }
             }
         }
@@ -254,10 +256,13 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     // We are interested in the first KoTextLayoutRootArea that has a shape associated for display
     // purposes. This can mean that multiple KoTextLayoutRootArea are created but only selected
     // ones that should be layouted and displayed are passed on to the textlayout-library.
+    // This is only done for headers and footers cause they are continuous whereas for example
+    // Words::OtherFrameSet and Words::OtherTextFrameSet framesets may not have the correct position
+    // or not shape assigned at this point but later.
     KoTextLayoutRootArea *area = 0;
     do {
         area = provideNext(documentLayout);
-    } while(m_textFrameSet->textFrameSetType() != Words::MainTextFrameSet && area && !area->associatedShape());
+    } while(Words::isHeaderFooter(m_textFrameSet) && area && !area->associatedShape());
 
     return area;
 }

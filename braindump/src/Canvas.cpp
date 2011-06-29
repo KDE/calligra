@@ -25,7 +25,7 @@
 
 #include <kxmlguifactory.h>
 #include <KAction>
-#include <kundostack.h>
+#include <kundo2stack.h>
 
 #include <KoCanvasController.h>
 #include <KoSelection.h>
@@ -91,7 +91,7 @@ void Canvas::setDocumentOffset(const QPoint &offset) {
   updateOffset();
 }
 
-void Canvas::addCommand( QUndoCommand *command )
+void Canvas::addCommand( KUndo2Command *command )
 {
   m_doc->addCommand( m_view->activeSection(), command );
   updateOriginAndSize();

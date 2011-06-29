@@ -121,7 +121,7 @@ bool KFormulaCanvas::snapToGrid() const
     return false;             // KFormula doesn't use a grid
 }
 
-void KFormulaCanvas::addCommand( QUndoCommand *command )
+void KFormulaCanvas::addCommand( KUndo2Command *command )
 {
     Q_UNUSED( command );
 }

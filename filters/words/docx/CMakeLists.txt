@@ -11,7 +11,6 @@ set(docximport_PART_SRCS
     DocxXmlStylesReader.cpp
     DocxXmlFontTableReader.cpp
     DocxXmlCommentsReader.cpp
-    DocxXmlNotesReader.cpp
     DocxXmlDocumentReader.cpp
     DocxXmlHeaderReader.cpp
     DocxXmlFooterReader.cpp

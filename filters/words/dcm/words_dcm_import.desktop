@@ -6,6 +6,7 @@ Name[pt_BR]=Filtro de importação de relatórios estruturados DICOM para o Word
 Name[sv]=Words-importfilter för DICOM strukturerad rapport
 Name[uk]=Фільтр імпорту структурованих звітів DICOM для Words
 Name[x-test]=xxWords DICOM Structured Report Import Filterxx
+Name[zh_TW]=Words DICOM 結構報告匯入過濾程式
 X-KDE-Export=application/x-words
 X-KDE-Import=application/dicom
 X-KDE-Weight=1

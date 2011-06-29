@@ -141,6 +141,8 @@ bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
 KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
         QString& errorMessage)
 {
+    writers->body->addAttribute("text:use-soft-page-breaks", "true");
+
     // 0. parse settings.xml
     {
         DocxXmlSettingsReaderContext context(d->documentSettings);
@@ -194,7 +196,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     reportProgress(15);
 
-    // Main document context, to which we collect footnotes, endnotes, comments
+    // Main document context, to which we collect footnotes, endnotes, comments, numbering, tablestyles
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
 
     // 3. parse styles
@@ -223,19 +225,18 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     reportProgress(25);
 
     // 4. parse numbering
-    {
-        const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
-            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
-        DocxXmlNumberingReader numberingReader(writers);
-        if (!numberingPathAndFile.isEmpty()) {
-            QString numberingPath, numberingFile;
-            MSOOXML::Utils::splitPathAndFile(numberingPathAndFile, &numberingPath, &numberingFile);
-            DocxXmlDocumentReaderContext context(*this, numberingPath, numberingFile, *relationships, &themes);
+    const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
+    DocxXmlNumberingReader numberingReader(writers);
+    QString numberingPath, numberingFile;
+    MSOOXML::Utils::splitPathAndFile(numberingPathAndFile, &numberingPath, &numberingFile);
+    DocxXmlDocumentReaderContext numberingContext(*this, numberingPath, numberingFile, *relationships, &themes);
 
-            RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
-                numberingPathAndFile, &numberingReader, writers, errorMessage, &context) )
-        }
+    if (!numberingPathAndFile.isEmpty()) {
+        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+            numberingPathAndFile, &numberingReader, writers, errorMessage, &numberingContext) )
     }
+    mainContext.m_bulletStyles = numberingContext.m_bulletStyles;
 
     reportProgress(30);
 
@@ -291,6 +292,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
+        // It is possible that some of the templates are defined in numberingreader
+        documentReader.m_definedShapeTypes = numberingReader.m_definedShapeTypes;;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }

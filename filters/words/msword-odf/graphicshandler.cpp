@@ -286,8 +286,8 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     OfficeArtInlineSpContainer co;
     try {
         parseOfficeArtInlineSpContainer(*in, co);
-    } catch (IOException _e) {
-        kDebug(30513) << _e.msg;
+    } catch (const IOException& e) {
+        kDebug(30513) << e.msg;
         in->rewind(_zero);
         return;
     } catch (...) {
@@ -447,7 +447,7 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, sp);
+    DrawStyle ds(&m_officeArtDggContainer, 0, sp);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -486,7 +486,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
 {
     kDebug(30513);
 
-    DrawStyle ds(0, &o);
+    DrawStyle ds(0, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
@@ -566,7 +566,7 @@ void WordsGraphicsHandler::parseOfficeArtContainer()
     try {
         parseOfficeArtDggContainer(in, m_officeArtDggContainer);
     }
-    catch (IOException e) {
+    catch (const IOException& e) {
         kDebug(30513) << "Caught IOException while parsing OfficeArtDggContainer.";
         kDebug(30513) << e.msg;
         return;
@@ -586,7 +586,7 @@ void WordsGraphicsHandler::parseOfficeArtContainer()
     try {
         drawingsVariable = in.readuint8();
     }
-    catch (IOException e) {
+    catch (const IOException& e) {
         kDebug(30513) << "Caught IOException while parsing DrawingsVariable.";
         kDebug(30513) << e.msg;
         return;
@@ -607,7 +607,7 @@ void WordsGraphicsHandler::parseOfficeArtContainer()
         }
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
-    catch (IOException e) {
+    catch (const IOException& e) {
         kDebug(30513) << "Caught IOException while parsing OfficeArtDgContainer.";
         kDebug(30513) << e.msg;
         return;
@@ -626,7 +626,7 @@ void WordsGraphicsHandler::parseOfficeArtContainer()
     try {
         drawingsVariable = in.readuint8();
     }
-    catch (IOException e) {
+    catch (const IOException& e) {
         kDebug(30513) << "Caught IOException while parsing the 2nd DrawingsVariable.";
         kDebug(30513) << e.msg;
         return;
@@ -653,7 +653,7 @@ void WordsGraphicsHandler::parseOfficeArtContainer()
         }
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
-    catch (IOException e) {
+    catch (const IOException& e) {
         kDebug(30513) << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
         kDebug(30513) << e.msg;
         return;
@@ -720,8 +720,8 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
                 OfficeArtRecordHeader rh;
                 try {
                     parseOfficeArtRecordHeader(in, rh);
-                } catch (IOException _e) {
-                    kDebug(30513) << _e.msg;
+                } catch (const IOException& e) {
+                    kDebug(30513) << e.msg;
                     in.rewind(_zero);
                     continue;
                 } catch (...) {
@@ -736,8 +736,8 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
                 fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
                 try {
                     parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
-                } catch (IOException _e) {
-                    kDebug(30513) << _e.msg;
+                } catch (const IOException& e) {
+                    kDebug(30513) << e.msg;
                     in.rewind(_zero);
                     continue;
                 } catch (...) {
@@ -939,8 +939,8 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
         out.xml.addAttribute("svg:width", mm(out.vLength()));
         out.xml.addAttribute("svg:height", mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 -1 1 0 " +
-               mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
-         break;
+                mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
+        break;
     default : //standard text flow
         out.xml.addAttribute("svg:width", mm(out.hLength()));
         out.xml.addAttribute("svg:height", mm(out.vLength()));

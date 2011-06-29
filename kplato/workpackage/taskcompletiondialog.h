@@ -31,7 +31,7 @@
 
 #include <QWidget>
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlato {
     class ScheduleManager;
@@ -48,7 +48,7 @@ class KPLATOWORK_EXPORT TaskCompletionDialog : public KDialog
 public:
     explicit TaskCompletionDialog( WorkPackage &p, ScheduleManager *sm, QWidget *parent=0 );
 
-    QUndoCommand *buildCommand();
+    KUndo2Command *buildCommand();
 
 protected slots:
     void slotChanged( bool );
@@ -63,7 +63,7 @@ class KPLATOWORK_EXPORT TaskCompletionPanel : public QWidget, public Ui::TaskCom
 public:
     explicit TaskCompletionPanel( WorkPackage &p, ScheduleManager *sm, QWidget *parent=0 );
 
-    QUndoCommand *buildCommand();
+    KUndo2Command *buildCommand();
 
     void enableWidgets();
 

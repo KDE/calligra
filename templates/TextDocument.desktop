@@ -61,6 +61,7 @@ Comment[pt_BR]=Novo documento do Words:
 Comment[sv]=Nytt Words-dokument:
 Comment[uk]=Новий документ Words:
 Comment[x-test]=xxNew Words document:xx
+Comment[zh_TW]=新建 Words 文件：
 Type=Link
 URL=.source/TextDocument.kwt
 Icon=application-vnd.oasis.opendocument.text

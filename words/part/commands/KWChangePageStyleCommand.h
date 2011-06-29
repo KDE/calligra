@@ -24,12 +24,12 @@
 #include "../KWPageStyle.h"
 #include "../KWPage.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KWDocument;
 
 /// The undo / redo command for setting a page style on a page
-class WORDS_TEST_EXPORT KWChangePageStyleCommand : public QUndoCommand
+class WORDS_TEST_EXPORT KWChangePageStyleCommand : public KUndo2Command
 {
 public:
     /**
@@ -39,7 +39,7 @@ public:
      * @param parent the parent for command macros
      * @param masterPageName the master page name for the new page
      */
-    explicit KWChangePageStyleCommand(KWDocument *document, KWPage &page, const KWPageStyle &newStyle, QUndoCommand *parent = 0);
+    explicit KWChangePageStyleCommand(KWDocument *document, KWPage &page, const KWPageStyle &newStyle, KUndo2Command *parent = 0);
 
     /// redo the command
     virtual void redo();

@@ -26,7 +26,7 @@
 class KWRemoveFrameClipCommand : public KWClipFrameCommand
 {
 public:
-    explicit KWRemoveFrameClipCommand(const QList<KWFrame*> &frames, KWDocument *document, QUndoCommand *parent = 0);
+    explicit KWRemoveFrameClipCommand(const QList<KWFrame*> &frames, KWDocument *document, KUndo2Command *parent = 0);
 
     /// (re)do the command
     virtual void redo();

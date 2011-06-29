@@ -57,7 +57,7 @@ class QScrollArea;
 class QDomElement;
 class QDockWidget;
 class QDomElement;
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlato
 {
@@ -196,7 +196,7 @@ public:
 
 signals:
     void createReportView( ReportDesignDialog *dlg );
-    void modifyReportDefinition( QUndoCommand *cmd );
+    void modifyReportDefinition( KUndo2Command *cmd );
 
 public slots:
     void slotViewCreated( ViewBase *view );
