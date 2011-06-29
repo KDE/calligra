@@ -63,7 +63,6 @@ private:
     void  setBrush(const QBrush &brush);
 
     // Drawing attributes/modes
-    void  setBackgroundColor(const QColor &c);
     void  setBackgroundMode(Qt::BGMode mode);
 
     void  setCompositionMode(QPainter::CompositionMode);
@@ -135,7 +134,6 @@ private:
     QPen      mPen;
     QBrush    mBrush;
     Qt::BGMode mBackgroundMode;
-    QColor    mBackgroundColor;
     // current origin of WMF logical coordinate
     QPoint    mCurrentOrg;
     double    mScaleX;

@@ -140,12 +140,6 @@ void WMFImportParser::setBrush(const QBrush &brush)
 }
 
 
-void WMFImportParser::setBackgroundColor(const QColor &c)
-{
-    mBackgroundColor = c;
-}
-
-
 void WMFImportParser::setBackgroundMode(Qt::BGMode mode)
 {
     mBackgroundMode = mode;

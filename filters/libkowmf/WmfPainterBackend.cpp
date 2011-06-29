@@ -224,16 +224,6 @@ void WmfPainterBackend::setBrush(const QBrush &brush)
 #endif
 }
 
-void WmfPainterBackend::setBackgroundColor(const QColor &c)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << c;
-#endif
-
-    mPainter->setBackground(QBrush(c));
-}
-
-
 void WmfPainterBackend::setBackgroundMode(Qt::BGMode mode)
 {
 #if DEBUG_WMFPAINT
@@ -841,14 +831,12 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
     }
 
     // Structure objects
-#if 0 // FIXME
     if (context.changedItems & DCBgTextColor) {
-        mPainter->setPen(context.backgroundColor);
+        mPainter->setBackground(QBrush(context.backgroundColor));
 #if DEBUG_WMFPAINT
         kDebug(31000) << "*** Setting background text color to" << context.backgroundColor;
 #endif
     }
-#endif
     //----------------------------------------------------------------
     // Output surface not supported
     //DCViewportExt
