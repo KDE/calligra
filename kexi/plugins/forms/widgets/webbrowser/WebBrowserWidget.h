@@ -91,6 +91,7 @@ public slots:
 
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld); 
+    void setUrl(const QUrl& url);
   //  void updateUrl();
     bool m_readOnly;
     QUrl m_url;
