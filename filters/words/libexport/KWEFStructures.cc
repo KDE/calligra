@@ -156,7 +156,7 @@ void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatD
     int lastPos = 0; // last position
 
     for(int i = 0; i < paraFormatDataList.count(); ++i) {
-        FormatData data = paraFormatDataList[i];
+        FormatData &data = paraFormatDataList[i];
 
         if (data.pos > lastPos) {
 #if 0
