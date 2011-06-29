@@ -47,135 +47,6 @@ namespace Libwmf
 {
 
 
-// This table is used to call the correct parse function for each record.
-//
-// FIXME: This should be inline instead so that we don't have to
-//        define so very many unnecessary functions.
-
-#if 0
-static const struct KoWmfFunc {
-    void (WmfParser::*method)(quint32, QDataStream&);
-    QString name;
-} koWmfFunc[] = {
-    //                                    index metafunc
-    { &WmfParser::end, "end" }, // 0 0x00
-    { &WmfParser::setBkColor, "setBkColor" }, // 1 0x01
-    { &WmfParser::setBkMode, "setBkMode" }, // 2 0x02
-    { &WmfParser::setMapMode, "setMapMode" }, // 3 0x03
-    { &WmfParser::setRop, "setRop" }, // 4 0x04
-    { &WmfParser::setRelAbs, "setRelAbs" }, // 5 0x05
-    { &WmfParser::setPolyFillMode, "setPolyFillMode" }, // 6 0x06
-    { &WmfParser::SetStretchBltMode, "SetStretchBltMode" }, // 7 0x07
-    { &WmfParser::notyet, "setTextCharExtra" }, // 8 0x08
-    { &WmfParser::setTextColor, "setTextColor" }, // 9 0x09
-    { &WmfParser::notyet, "setTextJustification" }, // 10 0x0a
-    { &WmfParser::setWindowOrg, "setWindowOrg" }, // 11 0x0b
-    { &WmfParser::setWindowExt, "setWindowExt" }, // 12 0x0c
-    { &WmfParser::setViewportOrg, "setViewportOrg" }, // 13 0x0d
-    { &WmfParser::setViewportExt, "setViewportExt" }, // 14 0x0e
-    { &WmfParser::OffsetWindowOrg, "OffsetWindowOrg" }, // 15 0x0f
-    { &WmfParser::ScaleWindowExt, "ScaleWindowExt" }, // 16 0x10
-    { &WmfParser::notyet, "notyet" }, // 17 0x11
-    { &WmfParser::notyet, "ScaleViewportExt" }, // 18 0x12
-    { &WmfParser::lineTo, "lineTo" }, // 19 0x13
-    { &WmfParser::moveTo, "moveTo" }, // 20 0x14
-    { &WmfParser::excludeClipRect, "excludeClipRect" }, // 21 0x15
-    { &WmfParser::intersectClipRect, "intersectClipRect" }, // 22 0x16
-    { &WmfParser::arc, "arc" }, // 23 0x17
-    { &WmfParser::ellipse, "ellipse" }, // 24 0x18
-    { &WmfParser::notyet, "notyet" }, // 25 0x19  floodfill
-    { &WmfParser::pie, "pie" }, // 26 0x1a
-    { &WmfParser::rectangle, "rectangle" }, // 27 0x1b
-    { &WmfParser::roundRect, "roundRect" }, // 28 0x1c
-    { &WmfParser::patBlt, "patBlt" }, // 29 0x1d
-    { &WmfParser::saveDC, "saveDC" }, // 30 0x1e
-    { &WmfParser::setPixel, "setPixel" }, // 31 0x1f
-    { &WmfParser::notyet, "notyet" }, // 32 0x20
-    { &WmfParser::textOut, "textOut" }, // 33 0x21
-    { &WmfParser::bitBlt, "bitBlt" }, // 34 0x22
-    { &WmfParser::notyet, "notyet" }, // 35 0x23
-    { &WmfParser::polygon, "polygon" }, // 36 0x24
-    { &WmfParser::polyline, "polyline" }, // 37 0x25
-    { &WmfParser::escape, "escape" }, // 38 0x26
-    { &WmfParser::restoreDC, "restoreDC" }, // 39 0x27
-    { &WmfParser::region, "region" }, // 40 0x28
-    { &WmfParser::region, "region" }, // 41 0x29
-    { &WmfParser::region, "region" }, // 42 0x2a
-    { &WmfParser::region, "region" }, // 43 0x2b
-    { &WmfParser::region, "region" }, // 44 0x2c
-    { &WmfParser::selectObject, "selectObject" }, // 45 0x2d
-    { &WmfParser::setTextAlign, "setTextAlign" }, // 46 0x2e
-    { 0, "unimplemented" }, // 47 0x2f
-    { &WmfParser::chord, "chord" }, // 48 0x30
-    { &WmfParser::notyet, "notyet" }, // 49 0x31  setmapperflags
-    { &WmfParser::extTextOut, "extTextOut" }, // 50 0x32
-    { &WmfParser::setDibToDev, "setDibToDev" }, // 51 0x33
-    { &WmfParser::palette, "palette" }, // 52 0x34
-    { &WmfParser::palette, "palette" }, // 53 0x35
-    { &WmfParser::palette, "palette" }, // 54 0x36
-    { &WmfParser::palette, "palette" }, // 55 0x37
-    { &WmfParser::polyPolygon, "polyPolygon" }, // 56 0x38
-    { &WmfParser::palette, "palette" }, // 57 0x39
-    { 0, "unimplemented" }, // 58 0x3a
-    { 0, "unimplemented" }, // 59 0x3b
-    { 0, "unimplemented" }, // 60 0x3c
-    { 0, "unimplemented" }, // 61 0x3d
-    { 0, "unimplemented" }, // 62 0x3e
-    { 0, "unimplemented" }, // 63 0x3f
-    { &WmfParser::dibBitBlt, "dibBitBlt" }, // 64 0x40
-    { &WmfParser::dibStretchBlt, "dibStretchBlt" }, // 65 0x41
-    { &WmfParser::dibCreatePatternBrush, "dibCreatePatternBrush" }, // 66 0x42
-    { &WmfParser::stretchDib, "stretchDib" }, // 67 0x43
-    { 0, "unimplemented" }, // 68 0x44
-    { 0, "unimplemented" }, // 69 0x45
-    { 0, "unimplemented" }, // 70 0x46
-    { 0, "unimplemented" }, // 71 0x47
-    { &WmfParser::extFloodFill, "extFloodFill" }, // 72 0x48
-    { &WmfParser::setLayout, "setLayout" }, // 73 0x49
-    { 0, "unimplemented" }, // 74 0x4a
-    { 0, "unimplemented" }, // 75 0x4b
-    { &WmfParser::resetDC, "resetDC" }, // 76 0x4c
-    { &WmfParser::startDoc, "startDoc" }, // 77 0x4d
-    { 0, "unimplemented" }, // 78 0x4e
-    { &WmfParser::startPage, "startPage" }, // 79 0x4f
-    { &WmfParser::endPage, "endPage" }, // 80 0x50
-    { 0, "unimplemented" }, // 81 0x51
-    { 0, "unimplemented" }, // 82 0x52
-    { 0, "unimplemented" }, // 83 0x53
-    { 0, "unimplemented" }, // 84 0x54
-    { 0, "unimplemented" }, // 85 0x55
-    { 0, "unimplemented" }, // 86 0x56
-    { 0, "unimplemented" }, // 87 0x57
-    { 0, "unimplemented" }, // 88 0x58
-    { 0, "unimplemented" }, // 89 0x59
-    { 0, "unimplemented" }, // 90 0x5a
-    { 0, "unimplemented" }, // 91 0x5b
-    { 0, "unimplemented" }, // 92 0x5c
-    { 0, "unimplemented" }, // 93 0x5d
-    { &WmfParser::endDoc, "endDoc" }, // 94 0x5e
-    { 0, "unimplemented" }, // 95 0x5f
-    { &WmfParser::deleteObject, "deleteObject" }, // 96 0xf0
-    { 0, "unimplemented" }, // 97 0xf1
-    { 0, "unimplemented" }, // 98 0xf2
-    { 0, "unimplemented" }, // 99 0xf3
-    { 0, "unimplemented" }, // 100 0xf4
-    { 0, "unimplemented" }, // 101 0xf5
-    { 0, "unimplemented" }, // 102 0xf6
-    { &WmfParser::createPalette, "createPalette" }, // 103 0xf7
-    { &WmfParser::createBrush, "createBrush" }, // 104 0xf8
-    { &WmfParser::createPatternBrush, "createPatternBrush" }, // 105 0xf9
-    { &WmfParser::createPenIndirect, "createPenIndirect" }, // 106 0xfa
-    { &WmfParser::createFontIndirect, "createFontIndirect" }, // 107 0xfb
-    { &WmfParser::createBrushIndirect, "createBrushIndirect" }, //108 0xfc
-    { &WmfParser::createBitmapIndirect, "createBitmapIndirect" }, //109 0xfd
-    { &WmfParser::createBitmap, "createBitmap" }, // 110 0xfe
-    { &WmfParser::createRegion, "createRegion" } // 111 0xff
-};
-#endif
-
-// ----------------------------------------------------------------
-
-
 WmfParser::WmfParser()
 {
     mNbrFunc = 0;
@@ -230,6 +101,7 @@ bool WmfParser::load(const QByteArray& array)
 
     QDataStream stream(mBuffer);
     stream.setByteOrder(QDataStream::LittleEndian);
+
     mStackOverflow = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
@@ -383,9 +255,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             kDebug(31000) << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
         } else {
             kDebug(31000) << "DPI :" << mDpi;
-            kDebug(31000) << "inch :" << (mBBoxRight - mBBoxLeft) / mDpi
+            kDebug(31000) << "size (inch):" << (mBBoxRight - mBBoxLeft) / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) / mDpi;
-            kDebug(31000) << "mm :" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
+            kDebug(31000) << "size (mm):" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) * 25.4 / mDpi;
         }
         kDebug(31000) << mValid << "" << mStandard << "" << mPlaceable;
@@ -398,6 +270,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
         mObjHandleTab[ i ] = 0;
     }
 
+    mDeviceContext = new WmfDeviceContext();
+
     quint16 recordType;
     quint32 size;
     int  bufferOffset;
@@ -406,7 +280,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     QDataStream stream(mBuffer);
     stream.setByteOrder(QDataStream::LittleEndian);
 
-    // Set the output strategy.
+    // Set the output backend.
     m_backend = backend;
 
     // Set some initial values.
@@ -443,15 +317,6 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                           << ", index" << dec << index << ")";
 #endif
 
-#if 0
-            if ((index > 111) || (koWmfFunc[ index ].method == 0)) {
-                // function outside WMF specification
-                kError(31000) << "BROKEN WMF file: Record number" << hex << recordType << dec
-                              << " index " << index;
-                mValid = false;
-                break;
-            }
-#endif
             if (mNbrFunc) {
                 // debug mode
                 if ((j + 12) > mNbrFunc) {
@@ -474,10 +339,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             }
 
             // Execute the function and parse the record.
-#if 0
-            (this->*koWmfFunc[index].method)(size, stream);
-#else
-            switch(recordType & 0xff) {
+            switch (recordType & 0xff) {
             case (META_EOF & 0xff):
                 // Don't need to do anything here.
                 break;
@@ -487,6 +349,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> color;
                     m_backend->setBackgroundColor(qtColor(color));
+
+                    mDeviceContext->backgroundColor = qtColor(color);
+                    mDeviceContext->changedItems |= DCBgTextColor;
                 }
                 break;
             case (META_SETBKMODE & 0xff):
@@ -494,16 +359,24 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     quint16 bkMode;
 
                     stream >> bkMode;
-                    if (bkMode == 1)
+                    //kDebug(31000) << "New bkMode: " << bkMode;
+
+                    if (bkMode == TRANSPARENT) // TRANSPARENT=1, OPAQUE=2
                         m_backend->setBackgroundMode(Qt::TransparentMode);
                     else
                         m_backend->setBackgroundMode(Qt::OpaqueMode);
+
+                    mDeviceContext->bgMixMode = bkMode;
+                    mDeviceContext->changedItems |= DCBgMixMode;
                 }
                 break;
             case (META_SETMAPMODE & 0xff):
                 {
                     stream >> mMapMode;
                     //kDebug(31000) << "New mapmode: " << mMapMode;
+
+                    //mDeviceContext->FontMapMode = mMapMode;Not defined yet
+                    mDeviceContext->changedItems |= DCFontMapMode;
                 }
                 break;
             case (META_SETROP2 & 0xff):
@@ -512,6 +385,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> rop;
                     m_backend->setCompositionMode(winToQtComposition(rop));
+
+                    mDeviceContext->rop = rop;
+                    mDeviceContext->changedItems |= DCFgMixMode;
                 }                break;
             case (META_SETRELABS & 0xff):
                 break;
@@ -521,6 +397,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> winding;
                     mWinding = (winding != 0);
+
+                    mDeviceContext->polyFillMode = winding;
+                    mDeviceContext->changedItems |= DCPolyFillMode;
                 }
                 break;
             case (META_SETSTRETCHBLTMODE & 0xff):
@@ -532,8 +411,10 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> color;
                     mTextColor = qtColor(color);
-
                     m_backend->setTextPen(QPen(mTextColor));
+
+                    mDeviceContext->foregroundTextColor = mTextColor;
+                    mDeviceContext->changedItems |= DCFgTextColor;
                 }
                 break;
             case (META_SETTEXTJUSTIFICATION & 0xff):
@@ -643,7 +524,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
                 }
                 break;
+
             // ----------------------------------------------------------------
+            //                         Drawing records
 
             case (META_LINETO & 0xff):
                 {
@@ -743,7 +626,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left, right, bottom;
 
                     stream >> bottom >> right >> top >> left;
-                    kDebug(31000) << left << top << right << bottom;
+                    //kDebug(31000) << left << top << right << bottom;
                     m_backend->drawRect(left, top, right - left, bottom - top);
                 }
                 break;
@@ -1099,11 +982,14 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // negative value allowed for width and height
                     stream >> layout >> reserved;
+#if DEBUG_RECORDS
+                    kDebug(31000) << "layout=" << layout;
+#endif
                     mLayout = (WmfLayout)layout;
 
-#if DEBUG_RECORDS
-                    kDebug(31000) << "setLayout: layout=" << layout;
-#endif
+                    mDeviceContext->layoutMode = mLayout;
+                    mDeviceContext->changedItems |= DCLayoutMode;
+
                 }
                 break;
             case (META_DELETEOBJECT & 0xff):
@@ -1187,13 +1073,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
 
                         // A negative width means to use device units.
-                        kDebug(31000) << "Font height:" << height;
+                        //kDebug(31000) << "Font height:" << height;
                         handle->height = height;
                         // FIXME: For some reason this value needs to be multiplied by
                         //        a factor.  0.6 seems to give a good result, but why??
                         // ANSWER(?): The doc says the height is the height of the character cell.
-                        //            But normally the font height is only the height above the baseline,
-                        //            isn't it?
+                        //            But normally the font height is only the height above the
+                        //            baseline, isn't it?
                         handle->font.setPointSize(qAbs(height) * 6 / 10);
                         if (weight == 0)
                             weight = QFont::Normal;
@@ -1260,9 +1146,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 createEmptyObject();
                break;
             default:
+                // function outside WMF specification
+                kError(31000) << "BROKEN WMF file: Record number" << hex << recordType << dec
+                              << " index " << index;
+                mValid = false;
                 break;
             }
-#endif
+
             mBuffer->seek(bufferOffset + (size << 1));
         }
 
@@ -1276,6 +1166,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     }
     delete[] mObjHandleTab;
     mObjHandleTab = 0;
+
+    delete mDeviceContext;
+    mDeviceContext = 0;
 
     return true;
 }

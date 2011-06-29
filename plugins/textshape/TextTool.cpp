@@ -2,7 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -448,7 +448,7 @@ void TextTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    addAction("edit_selectall", action);
+    addAction("edit_select_all", action);
 
     action = new KAction(i18n("Special Character..."), this);
     action->setIcon(KIcon("character-set"));
@@ -477,7 +477,7 @@ void TextTool::createActions()
 
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -501,7 +501,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 {
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
-    QTextDocument *document = new QTextDocument();
+    QTextDocument *document = new QTextDocument(); // this document is leaked
 
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
     KoTextDocument(document).setInlineTextObjectManager(inlineManager);
@@ -512,7 +512,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
 
-    KoTextDocument(document).setUndoStack(new KUndoStack());
+    KoTextDocument(document).setUndoStack(new KUndo2Stack());
 
 #if 0
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
@@ -1231,6 +1231,8 @@ void TextTool::updateActions()
     if (textEditor == 0)
         return;
     m_allowActions = false;
+
+    //Update the characterStyle related GUI elements
     QTextCharFormat cf = textEditor->charFormat();
     m_actionFormatBold->setChecked(cf.fontWeight() > QFont::Normal);
     m_actionFormatItalic->setChecked(cf.fontItalic());
@@ -1264,6 +1266,7 @@ void TextTool::updateActions()
     m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
     m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
+    //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
         bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
@@ -1282,6 +1285,7 @@ void TextTool::updateActions()
 
     m_actionFormatDecreaseIndent->setEnabled(textEditor->blockFormat().leftMargin() > 0.);
 
+    //change tracking
     if (m_changeTracker && m_changeTracker->displayChanges())
         m_actionShowChanges->setChecked(true);
     if (m_changeTracker && m_changeTracker->recordChanges())
@@ -1415,8 +1419,10 @@ void TextTool::repaintCaret()
         }
 
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
-        Q_ASSERT(textShape);
-        Q_ASSERT(textShape->textShapeData());
+        if (!textShape)
+            return;
+        if (!textShape->textShapeData())
+            return;
 
         QRectF repaintRect = caretRect(textEditor->cursor());
         repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
@@ -1481,9 +1487,9 @@ KoToolSelection* TextTool::selection()
     return m_textEditor.data();
 }
 
-QMap<QString, QWidget *> TextTool::createOptionWidgets()
+QList<QWidget *> TextTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
@@ -1502,6 +1508,8 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple styles widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), ssw, SLOT(setCurrentFormat(QTextBlockFormat)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), ssw, SLOT(setCurrentFormat(QTextCharFormat)));
     connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
@@ -1513,10 +1521,14 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     updateStyleManager();
     if (m_textShape)
         updateActions();
-    widgets.insert(i18n("Character"), scw);
-    widgets.insert(i18n("Paragraph"), spw);
-    widgets.insert(i18n("Styles"), ssw);
-    widgets.insert(i18n("Table"), stw);
+    scw->setWindowTitle(i18n("Character"));
+    widgets.append(scw);
+    spw->setWindowTitle(i18n("Paragraph"));
+    widgets.append(spw);
+    ssw->setWindowTitle(i18n("Styles"));
+    widgets.append(ssw);
+    stw->setWindowTitle(i18n("Table"));
+    widgets.append(stw);
     return widgets;
 }
 
@@ -1529,11 +1541,11 @@ void TextTool::addUndoCommand()
 {
     return;
 /*    if (! m_allowAddUndoCommand) return;
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0)
-                : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, TextTool *tool, KUndo2Command *parent = 0)
+                : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
                 m_document(document),
                 m_tool(tool) {
         }
@@ -1579,7 +1591,7 @@ void TextTool::addUndoCommand()
         canvas()->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
 */}
 
-void TextTool::addCommand(QUndoCommand *command)
+void TextTool::addCommand(KUndo2Command *command)
 {
 /*    m_currentCommand = command;
     TextCommandBase *cmd = dynamic_cast<TextCommandBase*>(command);
@@ -1594,7 +1606,7 @@ void TextTool::addCommand(QUndoCommand *command)
     m_textEditor.data()->addCommand(command);
 }
 
-void TextTool::startEditing(QUndoCommand* command)
+void TextTool::startEditing(KUndo2Command* command)
 {
     m_currentCommand = command;
     m_currentCommandHasChildren = true;
@@ -1893,16 +1905,16 @@ void TextTool::startMacro(const QString &title)
 
     if (m_currentCommand) return;
 
-    class MacroCommand : public QUndoCommand
+    class MacroCommand : public KUndo2Command
     {
     public:
-        MacroCommand(const QString &title) : QUndoCommand(title), m_first(true) {}
+        MacroCommand(const QString &title) : KUndo2Command(title), m_first(true) {}
         virtual void redo() {
             if (! m_first)
-                QUndoCommand::redo();
+                KUndo2Command::redo();
             m_first = false;
         }
-        virtual bool mergeWith(const QUndoCommand *) {
+        virtual bool mergeWith(const KUndo2Command *) {
             return false;
         }
         bool m_first;
@@ -2121,7 +2133,7 @@ void TextTool::readConfig()
         QColor bgColor, defaultColor;
         QString changeAuthor;
         int changeSaveFormat = KoChangeTracker::DELTAXML;
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         if (interface.exists()) {
             bgColor = interface.readEntry("insertionBgColor", defaultColor);
             m_changeTracker->setInsertionBgColor(bgColor);
@@ -2145,7 +2157,7 @@ void TextTool::readConfig()
 void TextTool::writeConfig()
 {
     if (m_changeTracker) {
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
         interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
         interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());

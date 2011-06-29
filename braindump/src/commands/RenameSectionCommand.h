@@ -20,13 +20,13 @@
 #ifndef _RENAME_SECTION_COMMAND_H_
 #define _RENAME_SECTION_COMMAND_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class DocumentModel;
 class Section;
 class SectionGroup;
 
-class RenameSectionCommand : public QUndoCommand {
+class RenameSectionCommand : public KUndo2Command {
 public:
   RenameSectionCommand( DocumentModel* _model, Section* _section, const QString& _newName );
   virtual void undo();

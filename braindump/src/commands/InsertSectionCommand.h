@@ -20,14 +20,14 @@
 #ifndef _INSERT_SECTION_COMMAND_H_
 #define _INSERT_SECTION_COMMAND_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class DocumentModel;
 class Section;
 class SectionsIO;
 class SectionGroup;
 
-class InsertSectionCommand : public QUndoCommand {
+class InsertSectionCommand : public KUndo2Command {
 public:
   InsertSectionCommand( SectionsIO* _sectionIO, Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above );
   InsertSectionCommand( SectionsIO* _sectionIO, Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx );

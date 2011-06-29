@@ -27,6 +27,7 @@
 class StylesWidget;
 class SpecialButton;
 class KoStyleManager;
+class KoStyleThumbnailer;
 class KoParagraphStyle;
 class KoCharacterStyle;
 
@@ -35,6 +36,7 @@ class SimpleStylesWidget : public QWidget
     Q_OBJECT
 public:
     explicit SimpleStylesWidget(QWidget *parent = 0);
+    virtual ~SimpleStylesWidget();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
@@ -54,6 +56,9 @@ private:
     bool m_blockSignals;
     StylesWidget *m_popupForBlock;
     StylesWidget *m_popupForChar;
+    KoStyleThumbnailer *m_thumbnailer;
+    SpecialButton *m_blockFrame;
+    SpecialButton *m_charFrame;
 };
 
 #endif

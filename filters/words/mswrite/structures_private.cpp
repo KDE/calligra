@@ -628,7 +628,7 @@ bool PageTable::readFromDevice(void)
             if (pp.getPageNumber() != m_pageNumberStart)
                 ErrorAndQuit(Error::InvalidFormat, "pageTable & sectionProperty disagree on pageNumberStart\n");
         } else {
-            // according to KOffice 1.2:
+            // according to Calligra 1.2:
             //
             // "the pageTable can get really out of sync with reality
             //  if the user doesn't repaginate after deleting a few pages

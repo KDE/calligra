@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA
  */
 
-// kword includes
+// words includes
 #include "KWView.h"
 #include "KWGui.h"
 #include "KWDocument.h"
@@ -53,8 +53,8 @@
 #include "commands/KWRemoveFrameClipCommand.h"
 #include <KoShapeReorderCommand.h>
 
-// koffice libs includes
-#include <kofficeversion.h>
+// calligra libs includes
+#include <calligraversion.h>
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
@@ -147,7 +147,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     setupActions();
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    
+
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
     KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
@@ -285,7 +285,7 @@ void KWView::setupActions()
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
     m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in Words.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
 
     m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
@@ -294,7 +294,7 @@ void KWView::setupActions()
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
     m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
@@ -396,6 +396,31 @@ void KWView::setupActions()
     action->setWhatsThis(i18n("Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position."));
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
+
+    action = new KAction(i18n("As Character"), this);
+    action->setToolTip(i18n("Insert the current shape as a character in the text"));
+    actionCollection()->addAction("anchor_as_character", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
+
+    action = new KAction(i18n("To Character"), this);
+    action->setToolTip(i18n("Anchor the current shape to the character at the current position"));
+    actionCollection()->addAction("anchor_to_character", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToChar()));
+
+    action = new KAction(i18n("To Paragraph"), this);
+    action->setToolTip(i18n("Anchor the current shape to current paragraph"));
+    actionCollection()->addAction("anchor_to_paragraph", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToParagraph()));
+
+    action = new KAction(i18n("To Page"), this);
+    action->setToolTip(i18n("Anchor the current shape to current page"));
+    actionCollection()->addAction("anchor_to_page", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToPage()));
+
+    action = new KAction(i18n("Set Floating"), this);
+    action->setToolTip(i18n("Set the current shape floating"));
+    actionCollection()->addAction("set_shape_floating", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(setFloating()));
 
     action = new KAction(i18n("Previous Page"), this);
     actionCollection()->addAction("page_previous", action);
@@ -966,8 +991,8 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(KOffice::versionMajor())
-                              .arg(KOffice::versionMinor()).arg(KOffice::versionRelease()));
+    dia->printer().setCreator(QString("Words %1.%2.%3").arg(Calligra::versionMajor())
+                              .arg(Calligra::versionMinor()).arg(Calligra::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -1093,12 +1118,12 @@ void KWView::editDeleteFrame()
         KWFrame *frame = frameForShape(shape);
         if (frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-            if (fs && fs->textFrameSetType() != KWord::OtherTextFrameSet)
+            if (fs && fs->textFrameSetType() != Words::OtherTextFrameSet)
                 continue; // can't delete auto-generated frames
         }
         frames.append(shape);
     }
-    QUndoCommand *cmd = canvasBase()->shapeController()->removeShapes(frames);
+    KUndo2Command *cmd = canvasBase()->shapeController()->removeShapes(frames);
     m_document->addCommand(cmd);
 }
 
@@ -1107,7 +1132,7 @@ void KWView::toggleHeader()
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
     m_document->relayout();
 }
 
@@ -1116,7 +1141,7 @@ void KWView::toggleFooter()
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
     m_document->relayout();
 }
 
@@ -1145,7 +1170,19 @@ void KWView::formatPage()
         if (editor)
             dia->showTextDirection(editor->isBidiDocument());
     }
+    if (!m_lastPageSettingsTab.isEmpty()) {
+        KPageWidgetItem *item = dia->pageItem(m_lastPageSettingsTab);
+        if (item)
+            dia->setCurrentPage(item);
+    }
+    connect(dia, SIGNAL(finished()), this, SLOT(pageSettingsDialogFinished()));
     dia->show();
+}
+
+void KWView::pageSettingsDialogFinished()
+{
+    KWPageSettingsDialog *dia = qobject_cast<KWPageSettingsDialog*>(QObject::sender());
+    m_lastPageSettingsTab = dia && dia->currentPage() ? dia->currentPage()->name() : QString();
 }
 
 void KWView::editSemanticStylesheets()
@@ -1214,6 +1251,32 @@ void KWView::inlineFrame()
     handler->insertInlineObject(anchor);
 }
 
+void KWView::anchorAsChar()
+{
+
+}
+
+void KWView::anchorToChar()
+{
+
+}
+
+void KWView::anchorToParagraph()
+{
+
+}
+
+void KWView::anchorToPage()
+{
+
+}
+
+void KWView::setFloating()
+{
+
+}
+
+
 void KWView::showStatisticsDialog()
 {
     KWStatisticsDialog *dia = new KWStatisticsDialog(this);
@@ -1235,7 +1298,7 @@ void KWView::createLinkedFrame()
         return;
     selection->deselectAll();
 
-    QUndoCommand *cmd = new QUndoCommand(i18n("Create Linked Copy"));
+    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Create Linked Copy"));
     foreach (KoShape *shape, oldSelection) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);
@@ -1426,9 +1489,9 @@ void KWView::selectionChanged()
         Q_ASSERT(frame);
         QVariant variant;
         variant.setValue<void*>(frame);
-        m_canvas->resourceManager()->setResource(KWord::CurrentFrame, variant);
+        m_canvas->resourceManager()->setResource(Words::CurrentFrame, variant);
         variant.setValue<void*>(frame->frameSet());
-        m_canvas->resourceManager()->setResource(KWord::CurrentFrameSet, variant);
+        m_canvas->resourceManager()->setResource(Words::CurrentFrameSet, variant);
         break;
     }
 }
@@ -1439,9 +1502,17 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
         m_canvas->resourceManager()->setResource(KoCanvasResource::CurrentPage, m_currentPage.pageNumber());
-        m_zoomController->setPageSize(m_currentPage.rect().size());
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+
+        QSizeF newPageSize = m_currentPage.rect().size();
+        QSizeF newMaxPageSize = QSize(qMax(m_maxPageSize.width(), newPageSize.width()),
+                                     qMax(m_maxPageSize.height(), newPageSize.height()));
+        if (newMaxPageSize != m_maxPageSize) {
+            m_maxPageSize = newMaxPageSize;
+            m_zoomController->setPageSize(m_maxPageSize);
+        }
+
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
     }
 }
 
@@ -1538,7 +1609,7 @@ void KWView::variableChanged(){
 void adjustZOrderOfSelectedFrames(KoCanvasBase *canvasBase, KWDocument *document, KoShapeReorderCommand::MoveShapeType direction)
 {
     // TODO we should not allow any shapes to fall behind the main text frame.
-    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
+    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
                         canvasBase->shapeManager(), direction);
     if (cmd)
         document->addCommand(cmd);

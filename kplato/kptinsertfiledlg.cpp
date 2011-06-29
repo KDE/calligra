@@ -31,7 +31,7 @@
 namespace KPlato
 {
 
-// little helper stolen from kmail/kword
+// little helper stolen from kmail/words
 static inline QPixmap loadIcon( const char * name ) {
   return KIconLoader::global()->loadIcon( QString::fromLatin1(name), KIconLoader::NoGroup, KIconLoader::SizeMedium );
 }

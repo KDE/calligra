@@ -259,7 +259,7 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     }
 }
 
-void KPrDocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
+void KPrDocument::pageRemoved( KoPAPageBase * page, KUndo2Command * parent )
 {
     // only normal pages can be part of a slide show
     if ( dynamic_cast<KPrPage *>( page ) ) {

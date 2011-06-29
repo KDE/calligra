@@ -183,7 +183,7 @@ class MyDialog:
 def start(action, myconfig, myorca):
     while True:
         try:
-            myorca.speak("KOffice Spreadsheet")
+            myorca.speak("Calligra Spreadsheet")
             break
         except IOError:
             forms = Kross.module("forms")

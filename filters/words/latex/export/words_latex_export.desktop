@@ -1,0 +1,17 @@
+[Desktop Entry]
+X-KDE-Export=text/x-tex
+ExportDescription=LATEX
+Icon=
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+ImportDescription=Words
+Name=Words LATEX Export Filter
+Name[pt]=Filtro de Exportação de LATEX para o Words
+Name[pt_BR]=Filtro de exportação de LaTeX para o Words
+Name[sv]=Words Latex-exportfilter
+Name[uk]=Фільтр експорту LATEX для Words
+Name[x-test]=xxWords LATEX Export Filterxx
+Name[zh_TW]=Words LATEX 匯出過濾程式
+X-KDE-ServiceTypes=CalligraFilter
+Type=Service
+X-KDE-Library=wordslatexexport

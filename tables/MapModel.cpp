@@ -188,7 +188,7 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
         case Qt::EditRole: {
             const QString name(value.toString());
             if (!name.isEmpty()) {
-                QUndoCommand* const command = new RenameSheetCommand(sheet, name);
+                KUndo2Command* const command = new RenameSheetCommand(sheet, name);
                 emit addCommandRequested(command);
                 emit dataChanged(index, index);
                 return true;
@@ -209,7 +209,7 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
 
 bool MapModel::setHidden(Sheet* sheet, bool hidden)
 {
-    QUndoCommand* command;
+    KUndo2Command* command;
     if (hidden && !sheet->isHidden()) {
         command = new HideSheetCommand(sheet);
     } else if (!hidden && sheet->isHidden()) {

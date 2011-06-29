@@ -2,7 +2,7 @@
  Kexi IDEAS, ISSUES, PROPOSALS
  Copyright (C) 2003 Jarosław Staniek staniek at kde.org
  Started: 2003-08-01
- Kexi home page: http://www.koffice.org/kexi/
+ Kexi home page: http://www.calligra-suite.org/kexi/
 ---------------------------------------------------
 
 |

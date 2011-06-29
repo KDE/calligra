@@ -21,14 +21,14 @@
  */
 #include "KWCanvasBase.h"
 
-// kword includes
+// words includes
 #include "KWCanvas.h"
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 #include "KWPageCacheManager.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
@@ -77,7 +77,7 @@ void KWCanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
     *vertical = m_document->gridData().gridY();
 }
 
-void KWCanvasBase::addCommand(QUndoCommand *command)
+void KWCanvasBase::addCommand(KUndo2Command *command)
 {
     m_document->addCommand(command);
 }

@@ -149,6 +149,11 @@ KisToolMultihand::~KisToolMultihand()
 {
 }
 
+int KisToolMultihand::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 void KisToolMultihand::initTransformations()
 {
     // mirror mode decide own number of brushes
@@ -850,7 +855,11 @@ void KisToolMultihand::updateOutlineRect()
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 
+#ifdef __GNUC__
 #warning "Remove adjusted() call -- it smells hacky"
+#else
+#pragma WARNING( "Remove adjusted() call -- it smells hacky" )
+#endif
     m_oldOutlineRect = outlineDocRect.adjusted(-2,-2,2,2);
 
     canvas()->updateCanvas(m_oldOutlineRect);

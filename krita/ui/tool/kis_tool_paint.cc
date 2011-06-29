@@ -107,7 +107,12 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
-void KisToolPaint::resourceChanged(int key, const QVariant & v)
+int KisToolPaint::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP;
+}
+
+void KisToolPaint::resourceChanged(int key, const QVariant& v)
 {
     KisTool::resourceChanged(key, v);
 
@@ -116,7 +121,7 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
             slotSetCompositeMode(canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString());
             break;
         case(KisCanvasResourceProvider::Opacity):
-            slotSetOpacity(v.toInt());
+            slotSetOpacity(v.toDouble());
             break;
         default: //nothing
             break;
@@ -317,9 +322,9 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 }
 
 
-void KisToolPaint::slotSetOpacity(int opacityPerCent)
+void KisToolPaint::slotSetOpacity(qreal opacity)
 {
-    m_opacity = (int)(qreal(opacityPerCent) * OPACITY_OPAQUE_U8 / 100);
+    m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)

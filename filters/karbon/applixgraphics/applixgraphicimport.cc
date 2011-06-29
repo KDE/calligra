@@ -360,6 +360,8 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                 // An die Position zurueckspringen
                 in.at(pos);
 
+                // TODO: remove the new/delete alltogether by just having one for loop
+                // to write out the data, then no array is needed for storing the data at all.
                 int a, b;
                 float wink = 0.0;
                 int *x = new int[nsides];
@@ -390,7 +392,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
 
                 str += "   </polyline>\n";
 
-
+                delete x[], y[];
             }
             /********************************************************************
              * Element TXT - Text                                               *

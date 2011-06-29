@@ -18,19 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_1_3_PICTURE
-#define KWORD_1_3_PICTURE
+#ifndef WORDS_1_3_PICTURE
+#define WORDS_1_3_PICTURE
 
 class KTemporaryFile;
 class KoStore;
 
 #include <QString>
 
-class KWord13Picture
+class Words13Picture
 {
 public:
-    explicit KWord13Picture(void);
-    ~KWord13Picture(void);
+    explicit Words13Picture(void);
+    ~Words13Picture(void);
 public:
     bool loadPicture(KoStore* store);
     QString getOasisPictureName(void) const;
@@ -40,4 +40,4 @@ public:
     bool m_valid; ///< Is the picture valid?
 };
 
-#endif // KWORD_1_3_PICTURE
+#endif // WORDS_1_3_PICTURE

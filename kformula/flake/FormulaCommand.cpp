@@ -30,8 +30,8 @@
 #include "TableDataElement.h"
 #include <kdebug.h>
 
-FormulaCommand::FormulaCommand(QUndoCommand* parent)
-              : QUndoCommand(parent)
+FormulaCommand::FormulaCommand(KUndo2Command* parent)
+              : KUndo2Command(parent)
 {
     m_done=false;
 }
@@ -58,7 +58,7 @@ void FormulaCommand::setRedoCursorPosition ( const FormulaCursor& position )
     m_redoCursorPosition=position;
 }
 
-FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int position, int length, const QString& added , QUndoCommand* parent)
+FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int position, int length, const QString& added , KUndo2Command* parent)
                   : FormulaCommand(parent)
 {
     m_ownerElement = owner;
@@ -67,7 +67,7 @@ FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int p
     m_length = length;
     m_removedGlyphs=m_ownerElement->glyphList(position,length);
     m_removed=m_ownerElement->text().mid(position,length);
-    setText( i18n( "Add text to formula" ) );
+    setText( i18nc( "(qtundo-format)", "Add text to formula" ) );
     setUndoCursorPosition(FormulaCursor(m_ownerElement, m_position+m_removed.length()));
     setRedoCursorPosition(FormulaCursor(m_ownerElement, m_position+m_added.length()));
 }
@@ -93,7 +93,7 @@ void FormulaCommandReplaceText::undo()
     m_ownerElement->insertGlyphs(m_glyphpos,m_removedGlyphs);
 }
 
-FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner, int position, int length, QList< BasicElement* > elements, bool wrap,QUndoCommand* parent )
+FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner, int position, int length, QList< BasicElement* > elements, bool wrap,KUndo2Command* parent )
                             : FormulaCommand(parent)
 {
     m_ownerElement=owner;
@@ -178,7 +178,7 @@ void FormulaCommandReplaceElements::undo()
     }
 }
 
-FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newelement, QUndoCommand* parent )
+FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newelement, KUndo2Command* parent )
                    : FormulaCommand ( parent)
 {
     m_data=data;
@@ -223,7 +223,7 @@ FormulaCommandReplaceRow::FormulaCommandReplaceRow ( FormulaData* data, FormulaC
         m_newRows<<tmpRow;
     }
     m_oldRows=table->childElements().mid(number, oldlength);
-    setText( i18n( "Change rows" ) );
+    setText( i18nc( "(qtundo-format)", "Change rows" ) );
     if (newlength==0 && oldlength>=table->childElements().count()) {
         m_empty=new TableRowElement();
         m_empty->insertChild(0, new TableDataElement());
@@ -408,7 +408,7 @@ void FormulaCommandReplaceColumn::undo()
 
 // FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
 //                                                   QHash<QString,QString> attributes )
-//                        : QUndoCommand()
+//                        : KUndo2Command()
 // {
 //     m_ownerElement = cursor.ownerElement();
 //     m_attributes = attributes;
@@ -421,7 +421,7 @@ void FormulaCommandReplaceColumn::undo()
 //             m_attributes.insert( i.key(), i.value() );
 //     }
 // 
-//     setText( i18n( "Attribute Changed" ) );
+//     setText( i18nc( "(qtundo-format)", "Attribute Changed" ) );
 // }
 // 
 // void FormulaCommandAttribute::redo()

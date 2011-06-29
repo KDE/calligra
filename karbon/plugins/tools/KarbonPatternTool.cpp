@@ -41,7 +41,7 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QWidget>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
         : KoToolBase(canvas), m_currentStrategy(0), m_optionsWidget(0)
@@ -123,7 +123,7 @@ void KarbonPatternTool::mouseReleaseEvent(KoPointerEvent *event)
     // if we are editing, get out of edit mode and add a command to the stack
     if (m_currentStrategy && m_currentStrategy->isEditing()) {
         m_currentStrategy->setEditing(false);
-        QUndoCommand * cmd = m_currentStrategy->createCommand();
+        KUndo2Command * cmd = m_currentStrategy->createCommand();
         if (cmd)
             canvas()->addCommand(cmd);
 
@@ -267,9 +267,9 @@ void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
     }
 }
 
-QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
+QList<QWidget *> KarbonPatternTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
 
     m_optionsWidget = new KarbonPatternOptionsWidget();
     connect(m_optionsWidget, SIGNAL(patternChanged()),
@@ -283,11 +283,11 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     connect(chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(patternSelected(KoResource*)));
 
-    widgets.insert(i18n("Pattern Options"), m_optionsWidget);
-    widgets.insert(i18n("Patterns"), chooser);
-
+    m_optionsWidget->setWindowTitle(i18n("Pattern Options"));
+    widgets.append(m_optionsWidget);
+    chooser->setWindowTitle(i18n("Patterns"));
+    widgets.append(chooser);
     updateOptionsWidget();
-
     return widgets;
 }
 

@@ -33,7 +33,7 @@ KWFactory::KWFactory(QObject *parent)
         : KPluginFactory(*aboutData(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
-    // main app is KWord.
+    // main app is Words.
     (void) componentData();
 }
 
@@ -62,7 +62,7 @@ QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *pa
 KAboutData *KWFactory::aboutData()
 {
     if (!s_aboutData) {
-        s_aboutData = newKWordAboutData();
+        s_aboutData = newWordsAboutData();
     }
     return s_aboutData;
 }
@@ -76,7 +76,7 @@ const KComponentData &KWFactory::componentData()
                                             "data", "words/templates/");
         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
-        KIconLoader::global()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("calligra");
     }
     return *s_instance;
 }

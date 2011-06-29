@@ -214,29 +214,51 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:fill-color
         // only set the color if the fill type is 'solid' because OOo ignores
         // fill='none' if the color is set
-        if (fillType == 0 && client) {
-            QColor tmp = processOfficeArtCOLORREF(ds.fillColor(), ds);
-            style.addProperty("draw:fill-color", tmp.name(), gt);
+        switch (fillType) {
+        case msofillSolid:
+        {
+            if (!client) break;
+            QColor color = processOfficeArtCOLORREF(ds.fillColor(), ds);
+            style.addProperty("draw:fill-color", color.name(), gt);
+            break;
         }
         // draw:fill-gradient-name
-        else if ((fillType >=4 && fillType <=8) && client) {
+        case msofillShade:
+        case msofillShadeCenter:
+        case msofillShadeShape:
+        case msofillShadeScale:
+        case msofillShadeTitle:
+        {
+            if (!client) break;
             KoGenStyle gs(KoGenStyle::LinearGradientStyle);
             defineGradientStyle(gs, ds);
-            QString tmp = styles.insert(gs);
-            style.addProperty("draw:fill-gradient-name", tmp, gt);
+            QString gname = styles.insert(gs);
+            style.addProperty("draw:fill-gradient-name", gname, gt);
+            break;
         }
         // draw:fill-hatch-name
         // draw:fill-hatch-solid
         // draw:fill-image-height
         // draw:fill-image-name
-        quint32 fillBlip = ds.fillBlip();
-        QString fillImagePath;
-        if (client) {
+        case msofillPattern:
+        case msofillTexture:
+        case msofillPicture:
+        {
+            if (!client) break;
+            quint32 fillBlip = ds.fillBlip();
+            QString fillImagePath;
             fillImagePath = client->getPicturePath(fillBlip);
+            if (!fillImagePath.isEmpty()) {
+                style.addProperty("draw:fill-image-name",
+                                  "fillImage" + QString::number(fillBlip), gt);
+
+                style.addProperty("style:repeat", getRepeatStyle(fillType), gt);
+            }
+            break;
         }
-        if (!fillImagePath.isEmpty()) {
-            style.addProperty("draw:fill-image-name",
-                              "fillImage" + QString::number(fillBlip), gt);
+        case msofillBackground:
+        default:
+            break;
         }
         // draw:fill-image-ref-point
         // draw:fill-image-ref-point-x
@@ -362,19 +384,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:border-right
     // fo:border-top
     // fo:clip
-    // TODO: Else the containing shape SHOULD use a set of default internal
-    // margins for text on shapes.  Test files required.
-    if (!ds.fAutoTextMargin()) {
-        // fo:margin
-        // fo:margin-bottom
-        style.addProperty("fo:margin-bottom", pt(ds.dyTextBottom()/12700.), gt);
-        // fo:margin-left
-        style.addProperty("fo:margin-left", pt(ds.dxTextLeft()/12700.), gt);
-        // fo:margin-right
-        style.addProperty("fo:margin-right", pt(ds.dxTextRight()/12700.), gt);
-        // fo:margin-top
-        style.addProperty("fo:margin-top", pt(ds.dyTextTop()/12700.), gt);
-    }
+    // fo:margin
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
     // fo:max-height
     // fo:max-width
     // fo:min-height
@@ -384,6 +398,14 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:padding-left
     // fo:padding-right
     // fo:padding-top
+    // TODO: Else the containing shape SHOULD use a set of default internal
+    // margins for text on shapes.  Test files required.
+    if (!ds.fAutoTextMargin()) {
+        style.addProperty("fo:padding-bottom", pt(ds.dyTextBottom()/12700.), gt);
+        style.addProperty("fo:padding-left", pt(ds.dxTextLeft()/12700.), gt);
+        style.addProperty("fo:padding-right", pt(ds.dxTextRight()/12700.), gt);
+        style.addProperty("fo:padding-top", pt(ds.dyTextTop()/12700.), gt);
+    }
     // fo:wrap-option
     // style:border-line-width
     // style:border-line-width-bottom
@@ -403,7 +425,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:protect
     // style:rel-height
     // style:rel-width
-    // style:repeat
+    // style:repeat // handled for image see draw:fill-image-name
     // style:run-through
     // style:shadow
     // style:vertical-pos (NOTE: tests on PPT, XLS required)
@@ -540,20 +562,20 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
         for (int i = 0; i < a.nElems; i++) {
             try {
                 parseOfficeArtCOLORREF(in,color);
-            } catch (EOFException _e) {
-                qDebug() << _e.msg;
+            } catch (const IOException& e) {
+                qDebug() << e.msg;
                 break;
-            } catch (IOException _e) {
-                qDebug() << _e.msg;
+            } catch (...) {
+                qDebug() << "Warning: Caught an unknown exception!";
                 break;
             }
             try {
                 parseFixedPoint(in,fixedPoint);
-            } catch (EOFException _e) {
-                qDebug() << _e.msg;
+            } catch (const IOException& e) {
+                qDebug() << e.msg;
                 break;
-            } catch (IOException _e) {
-                qDebug() << _e.msg;
+            } catch (...) {
+                qDebug() << "Warning: Caught an unknown exception!";
                 break;
             }
 
@@ -679,6 +701,12 @@ QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
 
 QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
 {
+    static QRgb systemColors[25] = {
+        0xc0c0c0, 0x008080, 0x000080, 0x808080, 0xc0c0c0, 0xffffff, 0x000000,
+        0x000000, 0x000000, 0xffffff, 0xc0c0c0, 0xc0c0c0, 0x808080, 0x000080,
+        0xffffff, 0xc0c0c0, 0x808080, 0x808080, 0x000000, 0xc0c0c0, 0xffffff,
+        0x000000, 0xc0c0c0, 0x000000, 0xffffc0
+    };
     //TODO: implement all cases!!!
     QColor ret;
     MSO::OfficeArtCOLORREF tmp;
@@ -688,62 +716,76 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     // 0x00F0 map directly to system colors.  Table [1] specifies values that
     // have special meaning, [1] MS-ODRAW 2.2.2
     if (c.fSysIndex) {
+        if (c.red >= 0xF0) {
+            switch (c.red) {
+            // Use the fill color of the shape.
+            case 0xF0:
+                tmp = ds.fillColor();
+                break;
+            // If the shape contains a line, use the line color of the
+            // shape. Otherwise, use the fill color.
+            case 0xF1:
+            {
+                if (ds.fLine()) {
+                    tmp = ds.lineColor();
+                } else {
+                    tmp = ds.fillColor();
+                }
+                break;
+            }
+            // Use the line color of the shape.
+            case 0xF2:
+                tmp = ds.lineColor();
+                break;
+            // Use the shadow color of the shape.
+            case 0xF3:
+                tmp = ds.shadowColor();
+                break;
+            // TODO: Use the current, or last-used, color.
+            case 0xF4:
+                qWarning() << "red: Unhandled fSysIndex 0xF4!";
+                break;
+            // Use the fill background color of the shape.
+            case 0xF5:
+                tmp  = ds.fillBackColor();
+                break;
+            // TODO: Use the line background color of the shape.
+            case 0xF6:
+                qWarning() << "red: Unhandled fSysIndex 0xF6!";
+                break;
+            // If the shape contains a fill, use the fill color of the
+            // shape. Otherwise, use the line color.
+            case 0xF7:
+            {
+                if (ds.fFilled()) {
+                    tmp = ds.fillColor();
+                } else {
+                    tmp = ds.lineColor();
+                }
+                break;
+            }
+            default:
+                qWarning() << "red: Unhandled fSysIndex!" << c.red;
+                break;
+            }
+        } else if (c.green == 0) {
+            tmp = c;
+            // system colors
+            if (c.red < 25) {
+                const QRgb& col = systemColors[c.red];
+                tmp.red = qRed(col);
+                tmp.green = qGreen(col);
+                tmp.blue = qBlue(col);
+            } else {
+                qWarning() << "red: Unhandled system color" << c.red;
+            }
+        }
 
-        switch (c.red) {
-        // Use the fill color of the shape.
-        case 0xF0:
-            tmp = ds.fillColor();
-            break;
-        // If the shape contains a line, use the line color of the
-        // shape. Otherwise, use the fill color.
-        case 0xF1:
-        {
-            if (ds.fLine()) {
-                tmp = ds.lineColor();
-            } else {
-                tmp = ds.fillColor();
-            }
-            break;
-        }
-        // Use the line color of the shape.
-        case 0xF2:
-            tmp = ds.lineColor();
-            break;
-        // Use the shadow color of the shape.
-        case 0xF3:
-            tmp = ds.shadowColor();
-            break;
-        // TODO: Use the current, or last-used, color.
-        case 0xF4:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        // Use the fill background color of the shape.
-        case 0xF5:
-            tmp  = ds.fillBackColor();
-            break;
-        // TODO: Use the line background color of the shape.
-        case 0xF6:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        // If the shape contains a fill, use the fill color of the
-        // shape. Otherwise, use the line color.
-        case 0xF7:
-        {
-            if (ds.fFilled()) {
-                tmp = ds.fillColor();
-            } else {
-                tmp = ds.lineColor();
-            }
-            break;
-        }
-        default:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        }
         ret = client->toQColor(tmp);
         qreal p = c.blue / (qreal) 255;
 
-        switch (c.green) {
+        switch (c.green & 0xF) {
+        case 0x00: break; // do nothing
         // Darken the color by the value that is specified in the blue field.
         // A blue value of 0xFF specifies that the color is to be left
         // unchanged, whereas a blue value of 0x00 specifies that the color is
@@ -779,12 +821,19 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         case 0x04:
         case 0x05:
         case 0x06:
-        case 0x20:
-        case 0x40:
-        case 0x80:
         default:
-            qWarning() << "green: Unhandled fSysIndex!";
+            qWarning() << "green: Unhandled fSysIndex!" << c.green;
             break;
+        }
+        // TODO
+        if (c.green & 0x20) {
+            qWarning() << "green: unhandled 0x20";
+        }
+        if (c.green & 0x40) {
+            qWarning() << "green: unhandled 0x40";
+        }
+        if (c.green & 0x80) {
+            qWarning() << "green: unhandled 0x80";
         }
     } else {
         ret = client->toQColor(c);
@@ -920,7 +969,7 @@ const char* getVerticalRel(quint32 posRelV)
     case 2: //msoprvText
         return "paragraph";
     case 3: //msoprvLine
-        return "line";
+        return "char";
     default:
         return "page-content";
     }

@@ -31,7 +31,7 @@
 #include "kformula_export.h"
 
 class QIODevice;
-class QUndoStack;
+class KUndo2QStack;
 class KoDataCenterBase;
 class KoXmlWriter;
 
@@ -96,7 +96,7 @@ protected:
 private:
     FormulaElement* m_formulaElement;
     /// The undo stack
-    QUndoStack* m_commandHistory;
+    KUndo2QStack* m_commandHistory;
 
 };
 

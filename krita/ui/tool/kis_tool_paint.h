@@ -68,7 +68,7 @@ class KRITAUI_EXPORT KisToolPaint
 public:
     KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolPaint();
-
+    virtual int flags() const;
 
 protected:
 
@@ -136,7 +136,7 @@ public slots:
 private slots:
 
     void slotPopupQuickHelp();
-    void slotSetOpacity(int opacityPerCent);
+    void slotSetOpacity(qreal opacity);
 
     void slotSetCompositeMode(const QString& compositeOp);
     void makeColorLighter();

@@ -134,6 +134,7 @@ public slots:
     void togglePageMargins(bool);
     void showRuler();
     void showGuides();
+    void editGuides();
     void snapToGrid();
 
 protected slots:

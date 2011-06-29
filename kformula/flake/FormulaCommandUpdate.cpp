@@ -25,7 +25,7 @@
 
 
 FormulaCommandUpdate::FormulaCommandUpdate (KoFormulaShape* shape, FormulaCommand* command )
-                    : QUndoCommand ()
+                    : KUndo2Command ()
 {
     m_shape=shape;
     m_command=command;

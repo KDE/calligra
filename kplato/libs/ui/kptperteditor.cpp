@@ -50,7 +50,7 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     m_requiredList = widget.required;
     m_requiredList->hideColumn( 1 ); // child node name
     m_requiredList->setEditTriggers( QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed );
-    connect( m_requiredList->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
     updateReadWrite( part->isReadWrite() && ! part->isEmbedded() );
 
     widget.addBtn->setIcon( KIcon( "arrow-right" ) );
@@ -65,7 +65,7 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     connect( widget.addBtn, SIGNAL(clicked()), this, SLOT(slotAddClicked() ) );
     connect( widget.removeBtn, SIGNAL(clicked() ), this, SLOT(slotRemoveClicked() ) );
 
-    connect( this, SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( this, SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 }
 
 void PertEditor::slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem *prev )
@@ -156,7 +156,7 @@ void PertEditor::removeTaskFromRequiredList()
         return;
     }
     // remove the relation
-    emit executeCommand( new DeleteRelationCmd( *m_project, r, i18n( "Remove task dependency" ) ) );
+    emit executeCommand( new DeleteRelationCmd( *m_project, r, i18nc( "(qtundo-format)", "Remove task dependency" ) ) );
 }
 
 void PertEditor::setProject( Project *project )

@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import traceback, Kross, KWord
+import traceback, Kross, Words
 
 class InsertShape:
 
@@ -15,7 +15,7 @@ class InsertShape:
         self.dialog.setButtons("Ok|Cancel")
         #self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        self.shapes = KWord.shapeKeys()
+        self.shapes = Words.shapeKeys()
         page = self.dialog.addPage("", "")
         widget = self.forms.createWidgetFromUI(page,
             '<ui version="4.0" >'
@@ -45,7 +45,7 @@ class InsertShape:
         try:
             shapeId = self.shapes[ self.widgetlist.currentRow ]
 
-            frame = KWord.addFrame("myshape", shapeId)
+            frame = Words.addFrame("myshape", shapeId)
             if frame == None:
                 raise "No such shape \"%s\"" % shapeId
 

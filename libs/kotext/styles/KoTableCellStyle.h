@@ -92,6 +92,8 @@ public:
         RotationAngle,      ///< Rotation angle of the cell content, in degrees
         Direction,          ///< The direction of the text in the cell. This is a CellTextDirection.
         RotationAlign,      ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
+        TextWritingMode,    ///< KoText::Direction, the direction for writing text in the cell
+        VerticalGlyphOrientation    ///< bool, specify wether this feature is enabled or not
     };
 
     /// Constructor
@@ -176,6 +178,9 @@ public:
 
     void setAlignment(Qt::Alignment alignment);
     Qt::Alignment alignment() const;
+    
+    KoText::Direction textDirection() const;
+    void setTextDirection (KoText::Direction value);
 
     void setWrap(bool state);
     bool wrap() const;
@@ -192,14 +197,17 @@ public:
     void setAlignFromType(bool state);
     bool alignFromType() const;
 
-    void setRotationAngle(int value);
-    int rotationAngle() const;
+    void setRotationAngle(qreal value);
+    qreal rotationAngle() const;
 
     void setDirection(CellTextDirection direction);
     CellTextDirection direction() const;
     
     void setRotationAlignment(RotationAlignment align);
     RotationAlignment rotationAlignment () const;
+    
+    void setVerticalGlyphOrientation(bool state);
+    bool verticalGlyphOrientation() const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);

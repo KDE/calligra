@@ -1,4 +1,4 @@
-include_directories (${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} )
+include_directories (${CMAKE_CURRENT_BINARY_DIR} ${CALLIGRA_INCLUDE_DIR} )
 
 ########### next target ###############
 

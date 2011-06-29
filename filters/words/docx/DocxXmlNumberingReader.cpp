@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -25,8 +25,6 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
-#include <KoGenStyles.h>
-#include <limits.h>
 #include <MsooXmlUnits.h>
 
 #define MSOOXML_CURRENT_NS "w"
@@ -58,7 +56,7 @@ DocxXmlNumberingReader::~DocxXmlNumberingReader()
 
 void DocxXmlNumberingReader::init()
 {
-    m_insideGroup = false;
+    m_currentVMLProperties.insideGroup = false;
     m_outputFrames = false;
 }
 
@@ -282,8 +280,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
         }
     }
 
-    m_picBulletPaths[numPicBulletId] = m_imagedataPath;
-    m_picBulletSizes[numPicBulletId] = m_imageSize;
+    m_picBulletPaths[numPicBulletId] = m_currentVMLProperties.imagedataPath;
 
     READ_EPILOGUE
 }
@@ -436,7 +433,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    TRY_READ_ATTR(numId);
+    TRY_READ_ATTR(numId)
 
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
 
@@ -454,19 +451,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
         }
     }
 
-    int index = 0;
-    while (index < m_currentBulletList.size()) {
-        m_currentBulletProperties = m_currentBulletList.at(index);
-        m_currentListStyle.addChildElement("list-style-properties",
-            m_currentBulletProperties.convertToListProperties());
-        ++index;
-    }
-
-    if (!numId.isEmpty()) {
-        QString name = "NumStyle" + numId;
-        KoGenStyles::InsertionFlags insertionFlags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
-        mainStyles->insert(m_currentListStyle, name, insertionFlags);
-    }
+    m_context->m_bulletStyles[numId] = m_currentBulletList;
 
     READ_EPILOGUE
 }
@@ -573,7 +558,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlPicBulletId()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_picBulletPaths.value(val));
-        m_currentBulletProperties.setBulletSize(m_picBulletSizes.value(val));
     }
 
     readNext();
@@ -634,14 +618,14 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     if (!hanging.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
         if (ok) {
-           m_currentBulletProperties.setIndent(leftInd - firstInd);
+           m_currentBulletProperties.setIndent(-firstInd);
         }
 
     }
-    else if (firstLine.isEmpty()) {
+    else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
         if (ok) {
-           m_currentBulletProperties.setIndent(leftInd - firstInd);
+           m_currentBulletProperties.setIndent(firstInd);
         }
     }
 

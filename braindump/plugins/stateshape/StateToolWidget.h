@@ -21,7 +21,7 @@
 
 #include "ui_StateShapeConfigWidget.h"
 
-class QUndoCommand;
+class KUndo2Command;
 class KCategorizedSortFilterProxyModel;
 class StatesModel;
 class StateShape;
@@ -39,7 +39,7 @@ class StateToolWidget : public QWidget
     virtual void save();
   private:
     /// reimplemented
-    virtual QUndoCommand * createCommand();
+    virtual KUndo2Command * createCommand();
   private:
     void blockChildSignals( bool block );
   private:

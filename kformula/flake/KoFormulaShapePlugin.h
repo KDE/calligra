@@ -27,7 +27,7 @@
  * @short A plugin for the formula shape and tool
  *
  * This class implements a formula plugin that is loadable by any flake supporting
- * KOffice application. It only contains a destructor and a constructor where the
+ * Calligra application. It only contains a destructor and a constructor where the
  * latter has code in it. All functionality has to be in the constructor.
  * In the constructor the plugin registers a shape and a tool in the KoShapeRegistry
  * so that the applications "know" that the formula plugin exists.

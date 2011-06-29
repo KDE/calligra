@@ -34,9 +34,9 @@ int main( int argc, char **argv )
   KAboutData* about = newBrainDumpAboutData();
   KCmdLineArgs::init( argc, argv, about );
 
-  KApplication app;
+  KUniqueApplication app;
 
-  KIconLoader::global()->addAppDir("koffice");
+  KIconLoader::global()->addAppDir("calligra");
   KoGlobal::initialize();
 
   KComponentData* m_documentData = new KComponentData(about);

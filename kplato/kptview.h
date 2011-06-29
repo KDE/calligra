@@ -35,7 +35,7 @@
 class QProgressBar;
 class QStackedWidget;
 class QSplitter;
-class QUndoCommand;
+class KUndo2Command;
 
 class KAction;
 class KToggleAction;
@@ -240,7 +240,7 @@ protected slots:
     void slotEditReportDesign( ReportView *view );
     void slotCreateReport();
     void slotOpenReportFile();
-    void slotModifyReportDefinition( QUndoCommand *cmd );
+    void slotModifyReportDefinition( KUndo2Command *cmd );
 
 #ifndef NDEBUG
     void slotPrintDebug();
@@ -341,7 +341,7 @@ private:
     QMap<QAction*, Schedule*> m_scheduleActions;
 
     QMultiMap<ScheduleManager*, CalculateScheduleCmd*> m_calculationcommands;
-    QList<QUndoCommand*> m_undocommands;
+    QList<KUndo2Command*> m_undocommands;
 
     bool m_readWrite;
 

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -41,12 +41,14 @@ public:
                                  const QVector<QString>& _sharedStrings,
                                  const XlsxComments& _comments,
                                  const XlsxStyles& _styles,
-                                 MSOOXML::MsooXmlRelationships& _relationships);
+                                 MSOOXML::MsooXmlRelationships& _relationships,
+                                 QString _file, QString _path);
     XlsxImport *import;
     MSOOXML::DrawingMLTheme *themes;
     const QVector<QString>* sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;
+    QString file, path;
 };
 
 //! A class reading MSOOXML XLSX markup - workbook.xml part.

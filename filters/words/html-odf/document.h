@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -40,16 +40,16 @@
 
 class KoStoreDevice;
 
-namespace kword
+namespace words
 {
 class Parser;
 class BRC;
 }
 class KoFilterChain;
-class KWordTableHandler;
-class KWordPictureHandler;
-class KWordTextHandler;
-class KWordGraphicsHandler;
+class WordsTableHandler;
+class WordsPictureHandler;
+class WordsTextHandler;
+class WordsGraphicsHandler;
 
 class Document : public QObject
 {
@@ -58,7 +58,7 @@ public:
     Document();
     virtual ~Document();
 
-    KWordTextHandler *textHandler() const {
+    WordsTextHandler *textHandler() const {
         return m_textHandler;
     }
 
@@ -101,9 +101,9 @@ private:
     void processAssociatedStrings();
     enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 };
 
-    KWordTextHandler*        m_textHandler;
-    KWordTableHandler*       m_tableHandler;
-    KWordGraphicsHandler*    m_graphicsHandler;
+    WordsTextHandler*        m_textHandler;
+    WordsTableHandler*       m_tableHandler;
+    WordsGraphicsHandler*    m_graphicsHandler;
 
     KoFilterChain* m_chain;
     bool m_bodyFound;

@@ -36,7 +36,7 @@
 // KDE
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
 #include "KoXmlNS.h"
@@ -108,7 +108,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
         gc.end();
     }
     QVector<QRect> clipRects = painter.clipRegion().rects();
-    foreach (const QRect rc, clipRects) {
+    foreach (const QRect &rc, clipRects) {
         painter.drawImage(rc.topLeft(), *cache, rc);
     }
     m_cache.insert(rc.size().toSize().height(), cache);
@@ -211,15 +211,6 @@ void VectorShape::drawEmf(QPainter &painter) const
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
-    // Create a QBuffer to read from...
-    QBuffer     emfBuffer((QByteArray *)&m_contents, 0);
-    emfBuffer.open(QIODevice::ReadOnly);
-
-    // ...but what we really want is a stream.
-    QDataStream  emfStream;
-    emfStream.setDevice(&emfBuffer);
-    emfStream.setByteOrder(QDataStream::LittleEndian);
-
     // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
 
@@ -231,7 +222,8 @@ void VectorShape::drawEmf(QPainter &painter) const
     Libemf::OutputDebugStrategy  emfDebugOutput;
     emfParser.setOutput( &emfDebugOutput );
 #endif
-    emfParser.loadFromStream(emfStream);
+
+    emfParser.load(m_contents);
 }
 
 void VectorShape::drawSvm(QPainter &painter) const

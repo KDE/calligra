@@ -42,11 +42,14 @@ public:
 
 protected:
     /// reimplemented from superclass
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
 private slots:
     /// insert a table of contents
     void insertTableOfContents();
+
+    /// format the table of contents template
+    void formatTableOfContents();
 
 private:
 };

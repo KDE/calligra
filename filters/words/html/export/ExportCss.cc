@@ -44,7 +44,7 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
     const QChar qch0(strText[0]);
     if ((qch0 < 'a' || qch0 > 'z') && (qch0 < 'A' || qch0 > 'Z')) {
         // Not a letter, so we have to add a prefix
-        strReturn += "kWoRd_"; // The curious spelling is for allowing a HTML import to identfy it and to remove it.
+        strReturn += "Words_"; // The curious spelling is for allowing a HTML import to identfy it and to remove it.
         // The processing of the character itself is done below
     }
 
@@ -558,11 +558,11 @@ bool HtmlCssWorker::doOpenStyles(void)
     const QString strVersion("$Revision$");
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
-    *m_streamOut << "/* KWORD_CSS_EXPORT ="
+    *m_streamOut << "/* WORDS_CSS_EXPORT ="
     << strVersion.mid(10).remove('$')
     << "*/\n";
 
-    // TODO: does KWord give a paper color?
+    // TODO: does Words give a paper color?
     *m_streamOut << "BODY\n{\n  background-color: #FFFFFF\n}\n";
 
     return true;

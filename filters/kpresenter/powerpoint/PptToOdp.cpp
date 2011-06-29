@@ -738,33 +738,6 @@ PptToOdp::~PptToOdp()
     delete p;
 }
 
-QMap<QByteArray, QString>
-createPictures(KoStore* store, KoXmlWriter* manifest, const OfficeArtBStoreDelay& d)
-{
-    QMap<QByteArray, QString> fileNames;
-    PictureReference ref;
-
-    foreach (const OfficeArtBStoreContainerFileBlock& block, d.anon1) {
-        ref = savePicture(block, store);
-        if (ref.name.length() == 0) {
-            kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
-            continue;
-        }
-        manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
-        fileNames[ref.uid] = ref.name;
-    }
-
-#ifdef DEBUG_PPTTOODP
-    qDebug() << "fileNames: DEBUG";
-    QMap<QByteArray, QString>::const_iterator i = fileNames.constBegin();
-    while (i != fileNames.constEnd()) {
-        qDebug() << i.key().toHex() << ": " << i.value();
-        ++i;
-    }
-#endif
-
-    return fileNames;
-}
 QMap<quint16, QString>
 createBulletPictures(const PP9DocBinaryTagExtension* pp9, KoStore* store, KoXmlWriter* manifest)
 {
@@ -855,7 +828,7 @@ PptToOdp::doConversion(KoStore* storeout)
     // store the images from the 'Pictures' stream
     storeout->disallowNameExpansion();
     storeout->enterDirectory("Pictures");
-    pictureNames = createPictures(storeout, manifest, p->pictures.anon1);
+    pictureNames = createPictures(storeout, manifest, &p->pictures.anon1.rgfb);
     // read pictures from the PowerPoint Document structures
     bulletPictureNames = createBulletPictures(getPP<PP9DocBinaryTagExtension>(
             p->documentContainer), storeout, manifest);
@@ -1094,11 +1067,10 @@ setRgbUid(const T* a, QByteArray& rgbUid)
 QString PptToOdp::getPicturePath(const quint32 pib) const
 {
     bool use_offset = false;
-    quint32 n = pib - 1;
     quint32 offset = 0;
 
     const OfficeArtDggContainer& dgg = p->documentContainer->drawingGroup.OfficeArtDgg;
-    QByteArray rgbUid = getRgbUid(dgg, n, offset);
+    QByteArray rgbUid = getRgbUid(dgg, pib, offset);
 
     if (!rgbUid.isEmpty()) {
         if (pictureNames.contains(rgbUid)) {
@@ -1111,7 +1083,7 @@ QString PptToOdp::getPicturePath(const quint32 pib) const
     }
     if (use_offset) {
         const OfficeArtBStoreDelay& d = p->pictures.anon1;
-        foreach (const OfficeArtBStoreContainerFileBlock& block, d.anon1) {
+        foreach (const OfficeArtBStoreContainerFileBlock& block, d.rgfb) {
             if (block.anon.is<OfficeArtBlip>()) {
                 if (block.anon.get<OfficeArtBlip>()->streamOffset == offset) {
 
@@ -1338,28 +1310,47 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             quint32 fillType = ds.fillType();
             style.addProperty("draw:fill", getFillType(fillType), dp);
             // draw:fill-color
-            if (fillType == 0) {
-                // only set the color if the fill type is 'solid' because OOo ignores
-                // fill='none' if the color is set
-                QColor tmp = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
-                style.addProperty("draw:fill-color", tmp.name(), dp);
+            switch (fillType) {
+            case msofillSolid:
+            {
+                QColor color = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
+                style.addProperty("draw:fill-color", color.name(), dp);
+                break;
             }
             // draw:fill-gradient-name
-            else if ((fillType >= 4) && (fillType <= 8)) {
+            case msofillShade:
+            case msofillShadeCenter:
+            case msofillShadeShape:
+            case msofillShadeScale:
+            case msofillShadeTitle:
+            {
                 KoGenStyle gs(KoGenStyle::LinearGradientStyle);
                 odrawtoodf.defineGradientStyle(gs, ds);
-                QString tmp = styles.insert(gs);
-                style.addProperty("draw:fill-gradient-name", tmp, dp);
+                QString gname = styles.insert(gs);
+                style.addProperty("draw:fill-gradient-name", gname, dp);
+                break;
             }
             // draw:fill-hatch-name
             // draw:fill-hatch-solid
             // draw:fill-image-height
             // draw:fill-image-name
-            quint32 fillBlip = ds.fillBlip();
-            const QString fillImagePath = getPicturePath(fillBlip);
-            if (!fillImagePath.isEmpty()) {
-                style.addProperty("draw:fill-image-name",
-                                  "fillImage" + QString::number(fillBlip), dp);
+            case msofillPattern:
+            case msofillTexture:
+            case msofillPicture:
+            {
+                quint32 fillBlip = ds.fillBlip();
+                const QString fillImagePath = getPicturePath(fillBlip);
+                if (!fillImagePath.isEmpty()) {
+                    style.addProperty("draw:fill-image-name",
+                                      "fillImage" + QString::number(fillBlip), dp);
+                    style.addProperty("style:repeat", getRepeatStyle(fillType), dp);
+                }
+                break;
+            }
+            //TODO:
+            case msofillBackground:
+            default:
+                break;
             }
             // draw:fill-image-ref-point-x
             // draw:fill-image-ref-point-y
@@ -1368,10 +1359,11 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             // draw:gradient-step-count
             // draw:opacity-name
             // draw:opacity
+            style.addProperty("draw:opacity",
+                              percent(100.0 * toQReal(ds.fillOpacity())), dp);
             // draw:secondary-fill-color
             // draw:tile-repeat-offset
-            // style:repeat
-            style.addProperty("style:repeat", getRepeatStyle(fillType));
+            // style:repeat // handled for image see draw:fill-image-name
         } else {
             style.addProperty("draw:fill", "none", dp);
         }
@@ -2580,6 +2572,10 @@ PptToOdp::processParagraph(Writer& out,
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineParagraphProperties(style, pf, min_fontsize);
+    //NOTE: Help text layout to apply correct line-height for empty lines.
+    if (start == end) {
+        defineTextProperties(style, cf, 0, 0, 0);
+    }
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
     out.xml.addCompleteElement(&spans_buf);
     out.xml.endElement(); //text:p

@@ -2,10 +2,12 @@
 Name=Data Store
 Name[el]=Αποθήκη δεδομένων
 Name[et]=Andmesalvesti
+Name[nb]=Datalager
 Name[nl]=Gegevensopslag
-Name[pt]=Armazém Dados
+Name[pt]=Armazém de Dados
 Name[pt_BR]=Armazenamento de dados
 Name[sv]=Datalagring
 Name[uk]=Сховище даних
 Name[x-test]=xxData Storexx
 Name[zh_CN]=数据存储
+Name[zh_TW]=資料儲存

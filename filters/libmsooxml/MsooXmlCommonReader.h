@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -94,7 +94,6 @@ protected:
     bool m_moveToStylesXml;
 
     QSize m_imageSize;
-    QPen m_currentPen;
 
     QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
 

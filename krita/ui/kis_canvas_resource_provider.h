@@ -98,7 +98,7 @@ public:
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
     static const KoColorProfile* getScreenProfile(int screen = -1);
-    
+
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
 
@@ -112,8 +112,10 @@ public:
     void setMirrorVertical(bool mirrorVertical);
     bool mirrorVertical() const;
 
-    void setOpacity(int opacity);
-    int opacity();
+    void setOpacity(qreal opacity);
+    qreal opacity();
+
+    void setPaintOpPreset(const KisPaintOpPresetSP preset);
 
 public slots:
 
@@ -121,7 +123,6 @@ public slots:
     void slotSetBGColor(const KoColor& c);
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
-    void slotPaintOpPresetActivated(const KisPaintOpPresetSP preset);
     void slotNodeActivated(const KisNodeSP node);
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
     void slotPainting();

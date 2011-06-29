@@ -26,7 +26,7 @@ kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
 target_link_libraries(kformulaprivate kformulalib)
 
-set_target_properties(kformulaprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kformulaprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 
 install(TARGETS kformulaprivate ${INSTALL_TARGETS_DEFAULT_ARGS})

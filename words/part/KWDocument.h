@@ -28,7 +28,7 @@
 #include "KWPageManager.h"
 #include "KWApplicationConfig.h"
 #include "frames/KWFrameLayout.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
@@ -37,20 +37,22 @@
 #include <QObject>
 #include <QPainter>
 #include <QRect>
+#include <QPointer>
 
 class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
+class KoUpdater;
 
 class KLocalizedString;
 class QIODevice;
 
 /**
- * The class that represents a KWord document containing content and settings.
+ * The class that represents a Words document containing content and settings.
  */
-class KWORD_EXPORT KWDocument : public KoDocument, public KoShapeControllerBase
+class WORDS_EXPORT KWDocument : public KoDocument, public KoShapeControllerBase
 {
     Q_OBJECT
 public:
@@ -113,14 +115,18 @@ public:
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
+     * @param addUndoRedoCommand if true then an undo-redo action is added to the
+     * document to allow undo/redo inserting the page.
      */
-    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString());
+    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      * @param masterPageName the name of the master page to use for this new page.
+     * @param addUndoRedoCommand if true then an undo-redo action is added to the
+     * document to allow undo/redo appending the page.
      */
-    KWPage appendPage(const QString &masterPageName = QString());
+    KWPage appendPage(const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
     /**
      * remove a page from the document.
      * @param pageNumber the pageNumber that should be removed.
@@ -171,10 +177,18 @@ public:
     void updatePagesForStyle(const KWPageStyle &style);
 
 public slots:
-    /// Relayout the pages
-    void relayout();
-    /// Register new frameset
-    void addFrameSet(KWFrameSet *f);
+    /**
+     * Relayout the pages or frames within the framesets.
+     * @param framesets The framesets that should be relayouted. If no framesets are
+     * provided (empty list) then all framesets and therefore all pages are relayouted.
+     */
+    void relayout(QList<KWFrameSet*> framesets = QList<KWFrameSet*>());
+    /**
+     * Register a frameset.
+     * @param frameset The frameset that should be registered. Future operations like
+     * for example @a relayout() operate on all registered framesets.
+     */
+    void addFrameSet(KWFrameSet *frameset);
     /**
      * Remove frameset from the document stopping it from being saved or displayed.
      * Note that the document is normally the one that deletes framesets when the
@@ -198,6 +212,13 @@ private slots:
     void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
+    void layoutProgressChanged(int percent);
+    void layoutFinished();
+
+protected:
+    /// reimplemented from KoDocument
+    virtual void setupOpenFileSubProgress();
+
 private:
     friend class KWDLoader;
     friend class KWOdfLoader;
@@ -211,7 +232,7 @@ private:
      * Called before loading
      * It's important to clear out anything that might be in the document already,
      * for things like using DBUS to load multiple documents into the same KWDocument,
-     * or "reload" when kword is embedded into konqueror.
+     * or "reload" when words is embedded into konqueror.
      */
     void clear();
 
@@ -229,6 +250,7 @@ private:
     KWApplicationConfig m_config;
     bool m_mainFramesetEverFinished;
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
+    QPointer<KoUpdater> m_layoutProgressUpdater;
 };
 
 #endif

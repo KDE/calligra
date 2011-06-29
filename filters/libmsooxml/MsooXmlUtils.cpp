@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
@@ -7,7 +7,7 @@
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
- * Utils::columnName() based on Cell::columnName() from koffice/kspread/Utils.cpp:
+ * Utils::columnName() based on Cell::columnName() from calligra/kspread/Utils.cpp:
  * Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * Copyright 2004 Tomas Mecir <mecirt@gmail.com>
  * Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
@@ -1313,33 +1313,6 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
     return value; // the original is OK
 }
 
-MSOOXML_EXPORT QString Utils::rgbColor(QString color)
-{
-    // It is possible that color is eg #abcdef [adddd], this removes the extra end
-    if (color.indexOf(' ') > 0) {
-        color = color.left(color.indexOf(' '));
-    }
-
-    QString newColor;
-    if (color == "red") {
-        newColor = "#ff0000";
-    }
-    else if (color == "green") {
-        newColor = "#00ff00";
-    }
-    else if (color == "blue") {
-        newColor = "#0000ff";
-    }
-    else if (color == "yellow") {
-        newColor = "#ffff00";
-    }
-    else {
-        newColor = color;
-    }
-
-    return newColor;
-}
-
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
 {
     QString v(ST_PositiveUniversalMeasure_to_ODF(value));
@@ -1540,12 +1513,12 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
         }
         ending = "</text:list-level-style-bullet>";
     }
-    if (m_align != "UNUSED") {
-        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
-    }
     returnValue += ">";
 
     returnValue += "<style:list-level-properties ";
+    if (m_align != "UNUSED") {
+        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
+    }
 
     returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
 
