@@ -21,8 +21,9 @@
 #include "WebBrowserFactory.h"
 #include "WidgetInfo.h"
 #include "formIO.h"
-#include "klocalizedstring.h"
+#include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
+
 #include <QVariant>
 #include <QVariantList>
 #include <KDebug>
@@ -34,13 +35,14 @@
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
   :WidgetFactory(parent, "webbrowser")
 {
-    KFormDesigner::WidgetInfo *webBrowser = new KFormDesigner::WidgetInfo(this);
-    webBrowser->setPixmap("form");
+    KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
+    webBrowser->setPixmap("internet-web-browser");
     webBrowser->setClassName("WebBrowserWidget");
     webBrowser->setName(i18n("Web Browser"));
     webBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
                                     "spaces and non latin1 characters.", "webBrowser"));
     webBrowser->setDescription(i18n("Web widget with browsing features."));
+    webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
 }
 
