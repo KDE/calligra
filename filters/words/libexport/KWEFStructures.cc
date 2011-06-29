@@ -155,10 +155,10 @@ void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatD
     ValueListFormatData::Iterator  paraFormatDataIt;
     int lastPos = 0; // last position
 
-    for(int i = 0; i < paraFormatDataList.count(); ++i) {
-        FormatData &data = paraFormatDataList[i];
-
-        if (data.pos > lastPos) {
+    for (paraFormatDataIt = paraFormatDataList.begin();
+            paraFormatDataIt != paraFormatDataList.end();
+            paraFormatDataIt++) {
+        if ((*paraFormatDataIt).pos > lastPos) {
 #if 0
             kDebug(30508) << "CreateMissingFormatData: lastPos =" << lastPos
             << ", pos = " << (*paraFormatDataIt).pos
@@ -166,8 +166,8 @@ void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatD
 #endif
 
             // We must add a FormatData
-            paraFormatDataList.insert(i,
-                                      FormatData(lastPos, data.pos - lastPos, true));
+            paraFormatDataIt = paraFormatDataList.insert(paraFormatDataIt,
+                                                         FormatData(lastPos, (*paraFormatDataIt).pos - lastPos, true));
         }
 #if 0
         else {
@@ -181,7 +181,7 @@ void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatD
         /* A check for pos < lastPos might be interesting at this point */
 
 
-        lastPos = data.pos + data.len;
+        lastPos = (*paraFormatDataIt).pos + (*paraFormatDataIt).len;
 
     }
 
