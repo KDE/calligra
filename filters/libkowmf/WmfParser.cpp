@@ -744,7 +744,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> idx;
                     if ((idx < mNbrObject) && (mObjHandleTab[ idx ] != 0))
-                        mObjHandleTab[ idx ]->apply(m_backend, &mDeviceContext);
+                        mObjHandleTab[ idx ]->apply(&mDeviceContext);
                     else
                         kDebug(31000) << "WmfParser::selectObject : selection of an empty object";
                 }

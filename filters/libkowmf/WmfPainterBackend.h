@@ -84,11 +84,6 @@ private:
     /// This must be called at the end of every function that changes the transform.
     void recalculateWorldTransform();
 
-    // Drawing tools
-    // the pen : the width of the pen is in logical coordinate
-    void  setPen(const QPen& pen);
-    void  setBrush(const QBrush& brush);
-
     // Drawing attributes/modes
     void  setCompositionMode(QPainter::CompositionMode mode);
 

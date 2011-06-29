@@ -111,11 +111,6 @@ public:
     virtual void  save() = 0;
     virtual void  restore() = 0;
 
-    // Drawing tools
-    // the pen : the width of the pen is in logical coordinate
-    virtual void  setPen(const QPen &p) = 0;
-    virtual void  setBrush(const QBrush &) = 0;
-
     // Drawing attributes/modes
     virtual void  setCompositionMode(QPainter::CompositionMode) = 0;
 

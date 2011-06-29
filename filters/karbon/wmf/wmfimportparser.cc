@@ -127,18 +127,6 @@ void WMFImportParser::restore()
 }
 
 
-void WMFImportParser::setPen(const QPen &pen)
-{
-    //mPen = pen;
-}
-
-
-void WMFImportParser::setBrush(const QBrush &brush)
-{
-    //mBrush = brush;
-}
-
-
 void WMFImportParser::setWindowOrg(int left, int top)
 {
     mCurrentOrg.setX(left);

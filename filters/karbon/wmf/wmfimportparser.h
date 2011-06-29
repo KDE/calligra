@@ -57,11 +57,6 @@ private:
     void  save();
     void  restore();
 
-    // Drawing tools
-    // the pen : the width of the pen is in logical coordinate
-    void  setPen(const QPen &pen);
-    void  setBrush(const QBrush &brush);
-
     // Drawing attributes/modes
     void  setCompositionMode(QPainter::CompositionMode);
 

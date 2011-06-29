@@ -43,27 +43,27 @@ class KoWmfHandle
 {
 public:
     virtual ~KoWmfHandle() {}
-    virtual void apply(WmfAbstractBackend *, WmfDeviceContext *) = 0;
+    virtual void apply(WmfDeviceContext *) = 0;
 };
 
 class KoWmfBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *, WmfDeviceContext *);
+    virtual void apply(WmfDeviceContext *);
     QBrush brush;
 };
 
 class KoWmfPenHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *, WmfDeviceContext *);
+    virtual void apply(WmfDeviceContext *);
     QPen pen;
 };
 
 class KoWmfPatternBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *, WmfDeviceContext *);
+    virtual void apply(WmfDeviceContext *);
     QBrush brush;
     QPixmap image;
 };
@@ -71,7 +71,7 @@ public:
 class KoWmfFontHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *, WmfDeviceContext *);
+    virtual void apply(WmfDeviceContext *);
     QFont font;
     int rotation;
     int height;                 // Can be negative. In 'font' above, we store the absolute value.

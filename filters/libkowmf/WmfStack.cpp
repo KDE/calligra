@@ -30,32 +30,26 @@
 namespace Libwmf
 {
 
-void KoWmfBrushHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
+void KoWmfBrushHandle::apply(WmfDeviceContext *dc)
 {
-    p->setBrush(brush);
-
     dc->brush = brush;
     dc->changedItems |= DCBrush;
 }
 
-void KoWmfPenHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
+void KoWmfPenHandle::apply(WmfDeviceContext *dc)
 {
-    p->setPen(pen);
-
     kDebug(31000) << "Setting pen" << pen;
     dc->pen = pen;
     dc->changedItems |= DCPen;
 }
 
-void KoWmfPatternBrushHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
+void KoWmfPatternBrushHandle::apply(WmfDeviceContext *dc)
 {
-    p->setBrush(brush);
-
     dc->brush = brush;
     dc->changedItems |= DCBrush;
 }
 
-void KoWmfFontHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
+void KoWmfFontHandle::apply(WmfDeviceContext *dc)
 {
     dc->font = font;
     dc->rotation = rotation;

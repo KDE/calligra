@@ -183,47 +183,6 @@ void WmfPainterBackend::restore()
 }
 
 
-void WmfPainterBackend::setPen(const QPen &pen)
-{
-#if 0 // Using device context instead now.
-#if DEBUG_WMFPAINT
-    kDebug(31000) << pen;
-#endif
-
-    QPen p = pen;
-    int width = pen.width();
-
-    if (dynamic_cast<QPrinter *>(mTarget)) {
-        width = 0;
-    } else {
-        // WMF spec: width of pen in logical coordinate
-        // => width of pen proportional with device context width
-        QRect rec = mPainter->window();
-        // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
-#if 0
-        QRect devRec = rec * mPainter->matrix();
-        if (rec.width() != 0)
-            width = (width * devRec.width()) / rec.width() ;
-        else
-            width = 0;
-#endif
-    }
-
-    p.setWidth(width);
-    mPainter->setPen(p);
-#endif
-}
-
-void WmfPainterBackend::setBrush(const QBrush &brush)
-{
-#if 0 // Using device context instead now.
-#if DEBUG_WMFPAINT
-    kDebug(31000) << brush;
-#endif
-    mPainter->setBrush(brush);
-#endif
-}
-
 void WmfPainterBackend::setCompositionMode(QPainter::CompositionMode mode)
 {
 #if DEBUG_WMFPAINT
