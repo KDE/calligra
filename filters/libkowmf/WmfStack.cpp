@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <kdebug.h>
+
 #include "WmfStack.h"
 #include "WmfAbstractBackend.h"
 #include "WmfDeviceContext.h"
@@ -28,10 +30,10 @@
 namespace Libwmf
 {
 
-
 void KoWmfBrushHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setBrush(brush);
+
     dc->brush = brush;
     dc->changedItems |= DCBrush;
 }
@@ -39,6 +41,8 @@ void KoWmfBrushHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 void KoWmfPenHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setPen(pen);
+
+    kDebug(31000) << "Setting pen" << pen;
     dc->pen = pen;
     dc->changedItems |= DCPen;
 }
@@ -46,6 +50,7 @@ void KoWmfPenHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 void KoWmfPatternBrushHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setBrush(brush);
+
     dc->brush = brush;
     dc->changedItems |= DCBrush;
 }

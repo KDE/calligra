@@ -44,13 +44,13 @@ WmfDeviceContext::WmfDeviceContext()
 void WmfDeviceContext::reset()
 {
     // Graphics Objects
-    brush = QBrush();
+    brush = QBrush(Qt::NoBrush);
     image = QImage();
     font = QFont();
     rotation = 0;
     height = 0;
     //Palette
-    pen = QPen();
+    pen = QPen(Qt::black);
     clipRegion = QRegion();
 
     // Structure Objects
@@ -76,6 +76,7 @@ void WmfDeviceContext::reset()
     //Text extra space
 
     changedItems = 0xffffffff;  // Everything changed the first time.
+    //changedItems = 0x0;  // Everything changed the first time.
 }
 
 

@@ -307,7 +307,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 index -= 0x90;
             }
             
-#if DEBUG_RECORDS
+#if 0 & DEBUG_RECORDS
             kDebug(31000) << "Record = " << koWmfFunc[ index ].name
                           << " (" << hex << recordType
                           << ", index" << dec << index << ")";
@@ -1038,6 +1038,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                         handle->pen.setColor(qtColor(color));
                         handle->pen.setWidth(width);
+                        kDebug(31000) << "Creating pen" << handle->pen;
                     }
                 }
                 break;

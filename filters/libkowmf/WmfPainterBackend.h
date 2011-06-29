@@ -136,7 +136,7 @@ private:
     void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false);
 
  private:
-    void updateFromGraphicscontext(WmfDeviceContext &context);
+    void updateFromDeviceContext(WmfDeviceContext &context);
 
 protected:
     bool  mIsInternalPainter;      // True if the painter wasn't externally provided.
