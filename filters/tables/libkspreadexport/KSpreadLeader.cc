@@ -89,7 +89,7 @@ KoFilter::ConversionStatus Leader::convert()
         return KoFilter::StupidError;
     }
     KoDocumentInfo *info = document->documentInfo();
-    if (!document) {
+    if (!info) {
         kWarning(30508) << "the KoDocumentInfo is NULL!";
         return KoFilter::StupidError;
     }

@@ -868,7 +868,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
                 QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
                 // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
-                if (m_contentAvLstExists && false) {
+                if (m_contentAvLstExists) {
                     QMapIterator<QString, QString> i(m_avModifiers);
                     while (i.hasNext()) {
                         i.next();
@@ -2910,30 +2910,32 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
 
-    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
-        qreal bReal = b.toDouble() / 100000;
-        qreal tReal = t.toDouble() / 100000;
-        qreal lReal = l.toDouble() / 100000;
-        qreal rReal = r.toDouble() / 100000;
+    if (!m_recentDestName.endsWith("wmf") && !m_recentDestName.endsWith("emf")) {
+        if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
+            qreal bReal = b.toDouble() / 100000;
+            qreal tReal = t.toDouble() / 100000;
+            qreal lReal = l.toDouble() / 100000;
+            qreal rReal = r.toDouble() / 100000;
 
-        int rectLeft = m_imageSize.rwidth() * lReal;
-        int rectTop = m_imageSize.rheight() * tReal;
-        int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
-        int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
+            int rectLeft = m_imageSize.rwidth() * lReal;
+            int rectTop = m_imageSize.rheight() * tReal;
+            int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
+            int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
 
-        QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
-            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
-        QImage image;
-        m_context->import->imageFromFile(m_recentDestName, image);
-        image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+            QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
+                m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+             QImage image;
+            m_context->import->imageFromFile(m_recentDestName, image);
+            image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
 
-        if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
-            // Todo, here we should delete the generated black area(s)
+            if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
+                // Todo, here we should delete the generated black area(s)
+            }
+
+            RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+            addManifestEntryForFile(destinationName);
+            m_xlinkHref = destinationName;
         }
-
-        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
-        addManifestEntryForFile(destinationName);
-        m_xlinkHref = destinationName;
     }
 
     readNext();
@@ -3659,6 +3661,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFillRpr()
         m_currentColor = gradPositions.at(exactIndex).second;
     }
     else {
+        if (beforeIndex < 0) {
+            beforeIndex = 0; // It is possible that the stops are only listed for aread 50+
+        }
+        if (afterIndex < 0) {
+            afterIndex = beforeIndex; // It is possible that the stops are only listed for areas -50
+        }
         int firstDistance = 50 - gradPositions.at(beforeIndex).first;
         int secondDistance = gradPositions.at(afterIndex).first - 50;
         qreal multiplier = 0;
@@ -3891,8 +3899,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gd()
 
     // In theory we should interpret all possible values here, not just "val"
     // in practise it does not happen
-    if (fmla.startsWith("val")) {
-        fmla = fmla.mid(3);
+    if (fmla.startsWith("val ")) {
+        fmla = fmla.mid(4);
     }
 
     m_avModifiers[name] = fmla;
@@ -5473,13 +5481,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
     if (ok) {
         switch (m_currentSpacingType) {
             case (spacingMarginTop):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100.0);
                 break;
             case (spacingMarginBottom):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100.0);
                 break;
             case (spacingLines):
-                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100.0);
                 break;
         }
     }

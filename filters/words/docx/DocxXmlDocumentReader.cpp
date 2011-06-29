@@ -23,7 +23,6 @@
  */
 
 #include "DocxXmlDocumentReader.h"
-#include "DocxXmlNotesReader.h"
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
 #include "DocxImport.h"
@@ -266,7 +265,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
 
-    body->addAttribute("text:use-soft-page-breaks", "true");
     int counter = 0;
 
     while (!atEnd()) {
@@ -619,9 +617,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 {
     READ_PROLOGUE
 
-    // Protecting in case the object is inside a textbox inside a shape
-    VMLShapeProperties oldProperties = m_currentVMLProperties;
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -637,8 +632,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
-    m_currentVMLProperties = oldProperties;
 
     READ_EPILOGUE
 }
@@ -2003,6 +1996,45 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             body = textPBuf.originalWriter();
             if (!m_createSectionToNext) { // In ooxml it seems that nothing should be created if sectPr was present
                 if (m_listFound) {
+                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+                    if (m_moveToStylesXml) {
+                        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                    }
+
+                    int index = 0;
+                    while (index < m_currentBulletList.size()) {
+                        m_currentBulletProperties = m_currentBulletList.at(index);
+
+                        if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType) {
+                            // The reason why we are inserting bullets only here, is that we have to check for the actual
+                            // text size before we can determine how big a potential picture bullet should be
+
+                            // Try 1 : paragraph defined
+                            QString fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
+                            if (fontSize.isEmpty()) {
+                                const KoGenStyle *parent = mainStyles->style(m_currentParagraphStyle.parentName());
+                                if (parent != 0) {
+                                    // Try 2 : parent defined
+                                    fontSize = parent->property("fo:font-size", KoGenStyle::TextType);
+                                    if (fontSize.isEmpty()) {
+                                        // Try 3 : default text size
+                                        fontSize = "11pt"; // This should be acquired from stylesreader, do later.
+                                    }
+                                }
+                            }
+                            if (!fontSize.isEmpty()) {
+                                fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
+                                qreal convertedSize = fontSize.toDouble();
+                                m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+                            }
+                        }
+
+                        m_currentListStyle.addChildElement("list-style-properties",
+                            m_currentBulletProperties.convertToListProperties());
+                        ++index;
+                    }
+                    m_currentListStyleName = mainStyles->insert(m_currentListStyle);
+
                     body->startElement("text:list");
                     if (!m_currentListStyleName.isEmpty()) {
                         body->addAttribute("text:style-name", m_currentListStyleName);
@@ -2249,7 +2281,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
             ELSE_TRY_READ_IF(object)
-            ELSE_TRY_READ_IF(pict)
+            else if (name() == "pict") {
+                // Protecting in case the object is inside a textbox inside a shape
+                VMLShapeProperties oldProperties = m_currentVMLProperties;
+                TRY_READ(pict)
+                m_currentVMLProperties = oldProperties;
+            }
             ELSE_TRY_READ_IF(instrText)
             ELSE_TRY_READ_IF(fldChar)
             ELSE_TRY_READ_IF(lastRenderedPageBreak)
@@ -2548,7 +2585,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             }
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
-            ELSE_TRY_READ_IF(jc)
+            ELSE_TRY_READ_IF_IN_CONTEXT(jc)
             ELSE_TRY_READ_IF(tabs)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
@@ -2839,9 +2876,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
     // In docx, this value defines a predetermined style from numbering xml,
     // The styles from numbering have to be given some name, NumStyle has been chosen here
     if (!val.isEmpty()) {
-        m_currentListStyleName = QString("NumStyle%1").arg(val);
         if (val == "0") {
             m_listFound = false; // spec says that this means deleted list
+        } else {
+            m_currentBulletList = m_context->m_bulletStyles[val];
         }
     }
 
@@ -2880,6 +2918,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
     m_rot = 0;
+    m_z_index = 0;
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
     if (m_moveToStylesXml) {
@@ -2919,6 +2958,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
+        body->addAttribute("draw:z-index", m_z_index);
+
         if (m_alignH.isEmpty()) {
             m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
         } else {
@@ -3265,7 +3306,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sz()
 //! Paragraph Alignment
 /*! ECMA-376, 17.3.1.13, p.239
 */
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
@@ -3273,11 +3314,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
     // Does ODF support high/low/medium kashida ?
     val = val.toLower();
     if ((val == "both") || (val == "distribute")) {
-        m_currentParagraphStyle.addProperty("fo:text-align", "justify");
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", "justify");
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::CenterAlign);
+        }
     }
-    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center")) {
-        m_currentParagraphStyle.addProperty("fo:text-align", val);
+    else if (val == "center") {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::CenterAlign);
+        }
     }
+    else if ((val == "start") || (val == "left")) {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+             m_tableMainStyle->setHorizontalAlign(KoTblStyle::LeftAlign);
+        }
+    }
+    else if ((val == "right") || (val == "end")) {
+        if (caller == jc_pPr) {
+            m_currentParagraphStyle.addProperty("fo:text-align", val);
+        }
+        else {
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::RightAlign);
+        }
+    }
+
     readNext();
     READ_EPILOGUE
 }
@@ -4550,16 +4618,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_currentTableStyle.clear();
 
+    m_tableMainStyle = KoTblStyle::create();
+    if (m_moveToStylesXml) {
+        m_tableMainStyle->setAutoStyleInStylesDotXml(true);
+    }
+    m_tableMainStyle->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
+
     bool sectionAdded = false;
     if (m_createSectionStyle) {
         m_createSectionStyle = false;
         sectionAdded = true;
-        KoTblStyle::Ptr style = KoTblStyle::create();
-        if (m_moveToStylesXml) {
-            style->setAutoStyleInStylesDotXml(true);
-        }
-        style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
-        m_table->setTableStyle(style);
     }
     // Fix me, for tables inside tables this might not work
     m_activeRoles = 0;
@@ -4585,6 +4653,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 //             ELSE_WRONG_FORMAT
         }
     }
+
+    m_table->setTableStyle(m_tableMainStyle);
 
     defineTableStyles();
 
@@ -4640,7 +4710,7 @@ void DocxXmlDocumentReader::defineTableStyles()
 
  Child elements:
  - bidiVisual (Visually Right to Left Table) §17.4.1
- - jc (Table Alignment) §17.4.29
+ - [done] jc (Table Alignment) §17.4.29
  - shd (Table Shading) §17.4.32
  - [done] tblBorders (Table Borders) §17.4.39
  - tblCaption (Table Caption) §17.4.41
@@ -4670,6 +4740,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
             TRY_READ_IF(tblStyle)
             ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
+            ELSE_TRY_READ_IF_IN_CONTEXT(jc)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -5482,7 +5553,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - [done] wrapTopAndBottom (Top and Bottom Wrapping) §20.4.2.20
 
  Attributes:
- - allowOverlap (Allow Objects to Overlap)
+ - [done] allowOverlap (Allow Objects to Overlap)
  - [done] behindDoc (Display Behind Document Text)
  - [done] distB (Distance From Text on Bottom Edge) (see also: inline)
  - [done] distL (Distance From Text on Left Edge) (see also: inline)
@@ -5491,7 +5562,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - hidden (Hidden)
  - layoutInCell (Layout In Table Cell)
  - locked (Lock Anchor)
- - relativeHeight (Relative Z-Ordering Position)
+ - [done] relativeHeight (Relative Z-Ordering Position)
  - simplePos (Page Positioning)
 */
 //! @todo support all elements
@@ -5520,6 +5591,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     distToODF("fo:margin-left", distL);
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
+
+    TRY_READ_ATTR_WITHOUT_NS(relativeHeight)
+    if (!relativeHeight.isEmpty()) {
+        m_z_index = relativeHeight.toInt();
+    }
 
     behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
     allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());

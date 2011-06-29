@@ -235,11 +235,7 @@ void TextHandler::tableEndFound( )
 
 }
 
-void TextHandler::inlineObjectFound(const PictureData& /*data*/)
-{
-}
-
-void TextHandler::floatingObjectFound( unsigned int /*globalCP*/ )
+void TextHandler::msodrawObjectFound(const unsigned int /*globalCP*/, const PictureData* /*data*/)
 {
 }
 

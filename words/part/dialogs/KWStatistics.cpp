@@ -286,7 +286,7 @@ int KWStatistics::countCJKChars(const QString &text)
     int count = 0;
 
     QString::const_iterator it;
-    for (it = text.constBegin(); it != text.constEnd(); it++) {
+    for (it = text.constBegin(); it != text.constEnd(); ++it) {
         QChar qChar = *it;
         /*
          * CJK punctuations: 0x3000 - 0x303F (but I believe we shouldn't include this in the statistics)
