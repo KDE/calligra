@@ -17,3 +17,11 @@ kde4_add_unit_test(TestCustomSlideShows TESTNAME stage-part-TestCustomSlideShows
 
 target_link_libraries(TestCustomSlideShows calligrastageprivate ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestEditCustomSlideShowsCommand_test_SRCS TestEditCustomSlideShowsCommand.cpp )
+
+kde4_add_unit_test(TestEditCustomSlideShowsCommand TESTNAME stage-part-TestEditCustomSlideShowsCommand  ${TestEditCustomSlideShowsCommand_test_SRCS})
+
+target_link_libraries(TestEditCustomSlideShowsCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
+

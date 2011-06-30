@@ -25,7 +25,9 @@ class KPrDocument;
 class KoPAPageBase;
 class KPrCustomSlideShowsModel;
 
-class KPrEditCustomSlideShowsCommand: public KUndo2Command
+#include <stage_export.h>
+
+class STAGE_TEST_EXPORT KPrEditCustomSlideShowsCommand: public KUndo2Command
 {
 public:
     KPrEditCustomSlideShowsCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent = 0 );
