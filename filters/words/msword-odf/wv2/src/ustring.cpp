@@ -68,7 +68,7 @@ bool wvWare::isNaN(double d)
 #elif defined HAVE_FLOAT_H
   return _isnan(d) != 0;
 #else
-  return !(d == d);
+  return !(d == NaN);
 #endif
 }
 
