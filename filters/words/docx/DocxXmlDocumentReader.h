@@ -275,6 +275,12 @@ private:
     ///reads the border in a table style
     KoBorder::BorderData getBorderData();
 
+    //! The list identifier of the previous list, used to restart numbering if the current ID is different
+    QString m_previousNumIdUsed;
+
+    //! Marks whether to restart numbering
+    bool m_restartListNumbering;
+
     //! Creates border style for readBorderElement().
     //! Result is added to m_borderStyles and m_borderPaddings
     void createBorderStyle(const QString& size, const QString& color,

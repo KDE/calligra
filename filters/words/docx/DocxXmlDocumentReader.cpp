@@ -153,6 +153,8 @@ void DocxXmlDocumentReader::init()
     m_createSectionToNext = false;
     m_currentVMLProperties.insideGroup = false;
     m_outputFrames = true;
+    m_previousNumIdUsed = "";
+    m_restartListNumbering = false;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -2033,8 +2035,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                             m_currentBulletProperties.convertToListProperties());
                         ++index;
                     }
-                    m_currentListStyleName = mainStyles->insert(m_currentListStyle);
-
+                    if (m_restartListNumbering) {
+                        m_currentListStyleName = mainStyles->insert(m_currentListStyle, QString(), KoGenStyles::AllowDuplicates);
+                    }
+                    else {
+                        m_currentListStyleName = mainStyles->insert(m_currentListStyle);
+                    }
                     body->startElement("text:list");
                     if (!m_currentListStyleName.isEmpty()) {
                         body->addAttribute("text:style-name", m_currentListStyleName);
@@ -2880,6 +2886,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
             m_listFound = false; // spec says that this means deleted list
         } else {
             m_currentBulletList = m_context->m_bulletStyles[val];
+            if (m_previousNumIdUsed != val) {
+                m_restartListNumbering = true;
+            }
+            else {
+                m_restartListNumbering = false;
+            }
+            m_previousNumIdUsed = val;
         }
     }
 
@@ -3334,7 +3347,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
             m_currentParagraphStyle.addProperty("fo:text-align", val);
         }
         else {
-             m_tableMainStyle->setHorizontalAlign(KoTblStyle::LeftAlign);
+            m_tableMainStyle->setHorizontalAlign(KoTblStyle::LeftAlign);
         }
     }
     else if ((val == "right") || (val == "end")) {
@@ -3791,6 +3804,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
     TRY_READ_ATTR(val)
 
     m_currentTableStyle = val;
+
+    //Inheriting values from the defined style
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyle);
+    m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
 
     readNext();
 
@@ -4659,7 +4676,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     defineTableStyles();
 
     m_table->saveOdf(*body, *mainStyles);
-
 
     if (sectionAdded) {
         m_currentSectionStyleName = m_table->tableStyle()->name();
