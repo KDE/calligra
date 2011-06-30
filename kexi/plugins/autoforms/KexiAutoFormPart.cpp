@@ -24,10 +24,18 @@
 #include <KDebug>
 #include <core/KexiWindow.h>
 
-KexiAutoFormPart::KexiAutoFormPart(QObject* parent, const QVariantList& args): Part(parent, args)
+KexiAutoFormPart::KexiAutoFormPart(QObject* parent, const QVariantList& args)
+: KexiPart::Part(parent,
+                 i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+                 "Use '_' character instead of spaces. First character should be a..z character. "
+                 "If you cannot use latin characters in your language, use english word.",
+                 "report"),
+                 i18nc("tooltip", "Create new autoform"),
+                 i18nc("what's this", "Creates new autoform."),
+                 args)
 {
     kDebug();
-    setInternalPropertyValue("instanceName",
+    /*setInternalPropertyValue("instanceName",
                              i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                              "Use '_' character instead of spaces. First character should be a..z character. "
                              "If you cannot use latin characters in your language, use english word.",
@@ -35,7 +43,8 @@ KexiAutoFormPart::KexiAutoFormPart(QObject* parent, const QVariantList& args): P
                              setInternalPropertyValue("instanceCaption", i18n("AutoForm"));
                              setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new AutoForm"));
     setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new autoform."));
-    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
+    
+    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);*/
     setInternalPropertyValue("newObjectsAreDirty", true);
 }
 
