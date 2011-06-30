@@ -104,7 +104,7 @@ public:
     void setDebug(int nbFunc);
 
     // -------------------------------------------------------------------------
-    // A virtual QPainter : inherit those virtuals functions
+    // A virtual QPainter: inherit those virtuals functions
     // for a good documentation : check QPainter documentation
     virtual bool  begin(const QRect &boundingBox) = 0;
     virtual bool  end() = 0;
@@ -135,15 +135,12 @@ public:
     virtual void  drawPolyline(WmfDeviceContext &context, const QPolygon &pa) = 0;
     virtual void  drawPolygon(WmfDeviceContext &context, const QPolygon &pa) = 0;
     // drawPolyPolygon draw the XOR of a list of polygons
-    // listPa : list of polygons
     virtual void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa) = 0;
     virtual void  drawImage(WmfDeviceContext &context, int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1) = 0;
     virtual void  patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
                          quint32 rasterOperation) = 0;
 
     // Text drawing functions
-    // rotation = the degrees of rotation in counterclockwise
-    // not yet implemented in KWinMetaFile
     virtual void  drawText(WmfDeviceContext &context, int x, int y, const QString &s) = 0;
 
     // matrix transformation : only used for bitmap manipulation
