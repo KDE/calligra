@@ -40,6 +40,7 @@ class SectionsBoxDock : public QDockWidget {
     void updateGUI();
   private slots:
     void slotSectionActivated(const QModelIndex &);
+    void slotSectionActivated(Section*);
     
     void slotMinimalView();
     void slotDetailedView();
