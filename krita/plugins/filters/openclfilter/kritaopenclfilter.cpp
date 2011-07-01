@@ -27,13 +27,16 @@
 #include <kis_processing_information.h>
 #include <kis_iterator_ng.h>
 #include <kis_math_toolbox.h>
+#include <QTimer>
+#include <qclcontext.h>
+#include <QTime>
 
 KritaOpenCLFilter::KritaOpenCLFilter() : KisFilter(id(), categoryOther(), i18n("&OpenCL..."))
 {
     setSupportsPainting(false);
     setSupportsIncrementalPainting(false);
     setSupportsAdjustmentLayers(false);
-    setSupportsThreading(false);
+    setSupportsThreading(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -57,18 +60,16 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
 {
     /* VARIABLES */
     int numberOfPixels = rect.height() * rect.width();
-    qint32 pixelSize = device->pixelSize();
-    QVector<qint32> valueOfPixel(pixelSize);
   
     /* GET KERNEL CODE */
     QVariant text;
     config->getProperty("kernel", text);
     QString kernelCode = text.toString();
     
-    if(kernelCode.isEmpty() || kernelCode.size() <= 20) {
+    if(kernelCode.isEmpty()) {
       return;
     }
-    
+
     /* CREATE A KERNEL */
     QCLContext context;
     if(!context.create(QCLDevice::GPU)) {
@@ -94,22 +95,17 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
     
     /* SUPPLY THE DATA TO KERNEL */
     // MathToolbox: change rawData to doubles
-    /*KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
     QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
     if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
       return;
-    }*/
-    
-    // Read pixels
-    QVector< quint8* > readPixels = device->readPlanarBytes(rect.x(), rect.y(), rect.width(), rect.height());
-    for(int i = 0; i < numberOfPixels; ++i) {
-      qDebug() << "Blue: " << readPixels[0];
     }
     
-    /*KisRectConstIteratorNG readIterator = device->createRectConstIteratorNG(rect);
+    // Read pixels  
+    KisRectIteratorSP readIterator = device->createRectIteratorNG(rect);
     int currentPixel = 0;
     do {
-      const quint8* pixel = readIterator->oldRawData();
+      const quint8* pixel = readIterator->rawData();
       
       blue[currentPixel]  = toDoubleFuncPtr[0](pixel, device->colorSpace()->channels()[0]->pos());
       green[currentPixel] = toDoubleFuncPtr[1](pixel, device->colorSpace()->channels()[1]->pos());
@@ -117,18 +113,29 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
       alpha[currentPixel] = toDoubleFuncPtr[3](pixel, device->colorSpace()->channels()[3]->pos());
       
       ++currentPixel;
-    } while (readIterator->nextPixel());*/
+    } while (readIterator->nextPixel());
     
     /* APPLY KERNEL */
-    //kritaKernel(blue, green, red, alpha, blue_output, green_output, red_output, alpha_output);
+    kritaKernel(blue, green, red, alpha, blue_output, green_output, red_output, alpha_output);
     
     /* WRITE THE RESULT*/
-    // MathToolbox: change doubles back to rawData
-    /*QVector<PtrFromDouble> fromDoubleFuncPtr(device->colorSpace()->channels().count());
+    //MathToolbox: change doubles back to rawData
+    QVector<PtrFromDouble> fromDoubleFuncPtr(device->colorSpace()->channels().count());
     if (!mathToolbox->getFromDoubleChannelPtr(device->colorSpace()->channels(), fromDoubleFuncPtr)) {
       return;
-    }*/
+    }
     
     // Write Pixels
-    //device->writePlanarBytes();
+    KisRectIteratorSP writeIterator = device->createRectIteratorNG(rect);
+    currentPixel = 0;
+    do {
+      quint8* pixel = writeIterator->rawData();
+      
+      fromDoubleFuncPtr[0](pixel, device->colorSpace()->channels()[0]->pos(), blue_output[currentPixel]);
+      fromDoubleFuncPtr[1](pixel, device->colorSpace()->channels()[1]->pos(), green_output[currentPixel]);
+      fromDoubleFuncPtr[2](pixel, device->colorSpace()->channels()[2]->pos(), red_output[currentPixel]);
+      fromDoubleFuncPtr[3](pixel, device->colorSpace()->channels()[3]->pos(), alpha_output[currentPixel]);
+      
+      ++currentPixel;
+    } while (writeIterator->nextPixel());
 }

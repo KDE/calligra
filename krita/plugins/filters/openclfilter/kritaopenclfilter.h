@@ -22,8 +22,6 @@
 #define KRITAOPENCLFILTER_H
 
 #include <filter/kis_filter.h>
-#include <qclcontext.h>
-
 
 class KritaOpenCLFilter : public KisFilter
 {
