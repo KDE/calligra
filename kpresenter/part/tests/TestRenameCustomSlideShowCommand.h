@@ -17,32 +17,17 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRADDCUSTOMSLIDESHOWCOMMAND_H
-#define KPRADDCUSTOMSLIDESHOWCOMMAND_H
+#ifndef TESTRENAMECUSTOMSLIDESHOWCOMMAND_H
+#define TESTRENAMECUSTOMSLIDESHOWCOMMAND_H
 
-#include <kundo2command.h>
+#include <QtTest/QtTest>
 
-class KPrDocument;
-class KPrCustomSlideShowsModel;
-
-#include "stage_export.h"
-
-class STAGE_TEST_EXPORT KPrAddCustomSlideShowCommand : public KUndo2Command
+class TestRenameCustomSlideShowCommand : public QObject
 {
-public:
-    explicit KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, KUndo2Command *parent = 0);
+    Q_OBJECT
+private slots:
+    void renameCustomShow();
 
-    virtual ~KPrAddCustomSlideShowCommand();
-
-    /// redo the command
-    virtual void redo();
-    /// revert the actions done in redo
-    virtual void undo();
-
-private:
-    KPrDocument *m_doc;
-    KPrCustomSlideShowsModel *m_model;
-    QString m_name;
 };
 
-#endif // KPRADDCUSTOMSLIDESHOWCOMMAND_H
+#endif // TESTRENAMECUSTOMSLIDESHOWCOMMAND_H

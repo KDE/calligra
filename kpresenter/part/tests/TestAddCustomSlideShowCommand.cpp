@@ -17,17 +17,17 @@
 * Boston, MA 02110-1301, USA.
 */
 
+#include "TestAddCustomSlideShowCommand.h"
 
-#include "TestEditCustomSlideShowsCommand.h"
 #include "KPrDocument.h"
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "PAMock.h"
-#include "commands/KPrEditCustomSlideShowsCommand.h"
+#include "commands/KPrAddCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
 
-void TestEditCustomSlideShowsCommand::moveSingleSlide()
+void TestAddCustomSlideShowCommand::addCustomSlideShow()
 {
     MockDocument doc;
 
@@ -43,41 +43,18 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
 
-    KoPAPage *page2 = new KoPAPage(master1);
-    doc.insertPage(page2, 0);
-
-    KoPAPage *page3 = new KoPAPage(master1);
-    doc.insertPage(page3, 0);
-
-    QList<KoPAPageBase*> slideList;
-
-    slideList.append(page1);
-    slideList.append(page2);
-    slideList.append(page3);
-
     QString customShowName = "test 1";
 
     KPrCustomSlideShowsModel model(&doc, 0);
 
-    doc.customSlideShows()->insert(customShowName, slideList);
+    KPrAddCustomSlideShowCommand cmd(&doc, &model, customShowName);
 
-    QList<KoPAPageBase*> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
+    cmd.redo();
+    QVERIFY(doc.customSlideShows()->names().count() == 1);
 
-    QVERIFY(initialSlideShow.count() == 3);
-
-    initialSlideShow.move(0, 2);
-
-    KPrEditCustomSlideShowsCommand command(&doc, &model, customShowName, initialSlideShow);
-
-    command.redo();
-    QList<KoPAPageBase*> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
-    QVERIFY(modifiedSlideShow.at(2) == initialSlideShow.at(2));
-
-    command.undo();
-    modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
-    QVERIFY(modifiedSlideShow.at(0) == initialSlideShow.at(2));
+    cmd.undo();
+    QVERIFY(doc.customSlideShows()->names().count() == 0);
 }
 
-QTEST_MAIN(TestEditCustomSlideShowsCommand)
-#include "TestEditCustomSlideShowsCommand.moc"
-
+QTEST_MAIN(TestAddCustomSlideShowCommand)
+#include "TestAddCustomSlideShowCommand.moc"

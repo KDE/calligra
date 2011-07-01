@@ -17,17 +17,17 @@
 * Boston, MA 02110-1301, USA.
 */
 
+#include "TestRenameCustomSlideShowCommand.h"
 
-#include "TestEditCustomSlideShowsCommand.h"
 #include "KPrDocument.h"
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "PAMock.h"
-#include "commands/KPrEditCustomSlideShowsCommand.h"
+#include "commands/KPrRenameCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
 
-void TestEditCustomSlideShowsCommand::moveSingleSlide()
+void TestRenameCustomSlideShowCommand::renameCustomShow()
 {
     MockDocument doc;
 
@@ -56,28 +56,24 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     slideList.append(page3);
 
     QString customShowName = "test 1";
+    QString customShowNewName = "new test 1";
 
     KPrCustomSlideShowsModel model(&doc, 0);
 
     doc.customSlideShows()->insert(customShowName, slideList);
 
-    QList<KoPAPageBase*> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
+    QVERIFY(doc.customSlideShows()->names().count() == 1);
 
-    QVERIFY(initialSlideShow.count() == 3);
+    KPrRenameCustomSlideShowCommand cmd(&doc, &model, customShowName, customShowNewName);
 
-    initialSlideShow.move(0, 2);
+    cmd.redo();
+    QVERIFY(!doc.customSlideShows()->names().contains(customShowName) &&
+            doc.customSlideShows()->names().contains(customShowNewName));
 
-    KPrEditCustomSlideShowsCommand command(&doc, &model, customShowName, initialSlideShow);
-
-    command.redo();
-    QList<KoPAPageBase*> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
-    QVERIFY(modifiedSlideShow.at(2) == initialSlideShow.at(2));
-
-    command.undo();
-    modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
-    QVERIFY(modifiedSlideShow.at(0) == initialSlideShow.at(2));
+    cmd.undo();
+    QVERIFY(doc.customSlideShows()->names().contains(customShowName) &&
+            !doc.customSlideShows()->names().contains(customShowNewName));
 }
 
-QTEST_MAIN(TestEditCustomSlideShowsCommand)
-#include "TestEditCustomSlideShowsCommand.moc"
-
+QTEST_MAIN(TestRenameCustomSlideShowCommand)
+#include "TestRenameCustomSlideShowCommand.moc"

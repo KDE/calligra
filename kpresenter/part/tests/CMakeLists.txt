@@ -25,3 +25,27 @@ kde4_add_unit_test(TestEditCustomSlideShowsCommand TESTNAME stage-part-TestEditC
 
 target_link_libraries(TestEditCustomSlideShowsCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestAddCustomSlideShowCommand_test_SRCS TestAddCustomSlideShowCommand.cpp )
+
+kde4_add_unit_test(TestAddCustomSlideShowCommand TESTNAME stage-part-TestAddCustomSlideShowCommand  ${TestAddCustomSlideShowCommand_test_SRCS})
+
+target_link_libraries(TestAddCustomSlideShowCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestDelCustomSlideShowCommand_test_SRCS TestDelCustomSlideShowCommand.cpp )
+
+kde4_add_unit_test(TestDelCustomSlideShowCommand TESTNAME stage-part-TestDelCustomSlideShowCommand  ${TestDelCustomSlideShowCommand_test_SRCS})
+
+target_link_libraries(TestDelCustomSlideShowCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestRenameCustomSlideShowCommand_test_SRCS TestRenameCustomSlideShowCommand.cpp )
+
+kde4_add_unit_test(TestRenameCustomSlideShowCommand TESTNAME stage-part-TestRenameCustomSlideShowCommand  ${TestRenameCustomSlideShowCommand_test_SRCS})
+
+target_link_libraries(TestRenameCustomSlideShowCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
+

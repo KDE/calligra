@@ -17,17 +17,17 @@
 * Boston, MA 02110-1301, USA.
 */
 
+#include "TestDelCustomSlideShowCommand.h"
 
-#include "TestEditCustomSlideShowsCommand.h"
 #include "KPrDocument.h"
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "PAMock.h"
-#include "commands/KPrEditCustomSlideShowsCommand.h"
+#include "commands/KPrDelCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
 
-void TestEditCustomSlideShowsCommand::moveSingleSlide()
+void TestDelCustomSlideShowCommand::delCustomSlideShow()
 {
     MockDocument doc;
 
@@ -61,23 +61,17 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
 
     doc.customSlideShows()->insert(customShowName, slideList);
 
-    QList<KoPAPageBase*> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
+    QVERIFY(doc.customSlideShows()->names().count() == 1);
 
-    QVERIFY(initialSlideShow.count() == 3);
+    KPrDelCustomSlideShowCommand cmd(&doc, &model, customShowName);
 
-    initialSlideShow.move(0, 2);
+    cmd.redo();
+    QVERIFY(doc.customSlideShows()->names().count() == 0);
 
-    KPrEditCustomSlideShowsCommand command(&doc, &model, customShowName, initialSlideShow);
-
-    command.redo();
-    QList<KoPAPageBase*> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
-    QVERIFY(modifiedSlideShow.at(2) == initialSlideShow.at(2));
-
-    command.undo();
-    modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
-    QVERIFY(modifiedSlideShow.at(0) == initialSlideShow.at(2));
+    cmd.undo();
+    QVERIFY(doc.customSlideShows()->names().count() == 1);
 }
 
-QTEST_MAIN(TestEditCustomSlideShowsCommand)
-#include "TestEditCustomSlideShowsCommand.moc"
 
+QTEST_MAIN(TestDelCustomSlideShowCommand)
+#include "TestDelCustomSlideShowCommand.moc"
