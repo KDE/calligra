@@ -154,7 +154,6 @@ void DocxXmlDocumentReader::init()
     m_currentVMLProperties.insideGroup = false;
     m_outputFrames = true;
     m_previousNumIdUsed = "";
-    m_restartListNumbering = false;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -2003,43 +2002,44 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
                     }
 
-                    int index = 0;
-                    while (index < m_currentBulletList.size()) {
-                        m_currentBulletProperties = m_currentBulletList.at(index);
+                    if (m_usedListStyles.value(m_previousNumIdUsed).isEmpty()) {
+                        int index = 0;
+                        while (index < m_currentBulletList.size()) {
+                            m_currentBulletProperties = m_currentBulletList.at(index);
 
-                        if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType) {
-                            // The reason why we are inserting bullets only here, is that we have to check for the actual
-                            // text size before we can determine how big a potential picture bullet should be
+                            if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType) {
+                                // The reason why we are inserting bullets only here, is that we have to check for the actual
+                                // text size before we can determine how big a potential picture bullet should be
 
-                            // Try 1 : paragraph defined
-                            QString fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
-                            if (fontSize.isEmpty()) {
-                                const KoGenStyle *parent = mainStyles->style(m_currentParagraphStyle.parentName());
-                                if (parent != 0) {
-                                    // Try 2 : parent defined
-                                    fontSize = parent->property("fo:font-size", KoGenStyle::TextType);
-                                    if (fontSize.isEmpty()) {
-                                        // Try 3 : default text size
-                                        fontSize = "11pt"; // This should be acquired from stylesreader, do later.
+                                // Try 1 : paragraph defined
+                                QString fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
+                                if (fontSize.isEmpty()) {
+                                    const KoGenStyle *parent = mainStyles->style(m_currentParagraphStyle.parentName());
+                                    if (parent != 0) {
+                                        // Try 2 : parent defined
+                                        fontSize = parent->property("fo:font-size", KoGenStyle::TextType);
+                                        if (fontSize.isEmpty()) {
+                                            // Try 3 : default text size
+                                            fontSize = "11pt"; // This should be acquired from stylesreader, do later.
+                                        }
                                     }
                                 }
+                                if (!fontSize.isEmpty()) {
+                                    fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
+                                    qreal convertedSize = fontSize.toDouble();
+                                    m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+                                }
                             }
-                            if (!fontSize.isEmpty()) {
-                                fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
-                                qreal convertedSize = fontSize.toDouble();
-                                m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
-                            }
-                        }
 
-                        m_currentListStyle.addChildElement("list-style-properties",
-                            m_currentBulletProperties.convertToListProperties());
-                        ++index;
-                    }
-                    if (m_restartListNumbering) {
+                            m_currentListStyle.addChildElement("list-style-properties",
+                                m_currentBulletProperties.convertToListProperties());
+                            ++index;
+                        }
                         m_currentListStyleName = mainStyles->insert(m_currentListStyle, QString(), KoGenStyles::AllowDuplicates);
+                        m_usedListStyles[m_previousNumIdUsed] = m_currentListStyleName;
                     }
                     else {
-                        m_currentListStyleName = mainStyles->insert(m_currentListStyle);
+                        m_currentListStyleName = m_usedListStyles.value(m_previousNumIdUsed);
                     }
                     body->startElement("text:list");
                     if (!m_currentListStyleName.isEmpty()) {
@@ -2886,12 +2886,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
             m_listFound = false; // spec says that this means deleted list
         } else {
             m_currentBulletList = m_context->m_bulletStyles[val];
-            if (m_previousNumIdUsed != val) {
-                m_restartListNumbering = true;
-            }
-            else {
-                m_restartListNumbering = false;
-            }
             m_previousNumIdUsed = val;
         }
     }

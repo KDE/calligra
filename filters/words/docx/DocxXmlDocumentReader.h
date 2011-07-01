@@ -275,12 +275,6 @@ private:
     ///reads the border in a table style
     KoBorder::BorderData getBorderData();
 
-    //! The list identifier of the previous list, used to restart numbering if the current ID is different
-    QString m_previousNumIdUsed;
-
-    //! Marks whether to restart numbering
-    bool m_restartListNumbering;
-
     //! Creates border style for readBorderElement().
     //! Result is added to m_borderStyles and m_borderPaddings
     void createBorderStyle(const QString& size, const QString& color,
@@ -348,6 +342,12 @@ private:
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
     QString m_currentListStyleName;
+    //! The list identifier of the previous list, used to restart numbering if the current ID is different
+    QString m_previousNumIdUsed;
+
+    //! Map of list styles encountered so far, we can used the same list style if we have used it before
+    // instead of creating a new one.
+    QMap<QString, QString> m_usedListStyles;
 
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
