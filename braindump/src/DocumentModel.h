@@ -27,6 +27,7 @@ class Section;
 class SectionGroup;
 
 class DocumentModel : public KoDocumentSectionModel {
+    Q_OBJECT
   public:
     enum Role {
       SectionPtr = 0x1252BAD
@@ -56,6 +57,11 @@ class DocumentModel : public KoDocumentSectionModel {
     QModelIndex index( SectionGroup* );
     Section* dataFromIndex(const QModelIndex& index) const;
     void* dataToIndex(Section* section) const;
+  signals:
+    /**
+     * This signal is emitted when the active section is changed.
+     */
+    void activeSectionChanged(Section* section);
   private:
     RootSection* m_document;
 };

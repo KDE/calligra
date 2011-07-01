@@ -70,7 +70,7 @@ FormulaToken::FormulaToken(const FormulaToken& token)
         d->data[i] = token.d->data[i];
 }
 
-void FormulaToken::operator=(const FormulaToken& token)
+FormulaToken& FormulaToken::operator=(const FormulaToken& token)
 {
     d->ver = token.d->ver;
     d->id = token.id();
@@ -78,6 +78,7 @@ void FormulaToken::operator=(const FormulaToken& token)
     d->data.resize(token.d->data.size());
     for (unsigned i = 0; i < d->data.size(); i++)
         d->data[i] = token.d->data[i];
+    return *this;
 }
 
 FormulaToken::~FormulaToken()
