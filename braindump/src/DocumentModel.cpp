@@ -128,6 +128,11 @@ bool DocumentModel::setData(const QModelIndex &index, const QVariant &value, int
         m_document->addCommand(section, new RenameSectionCommand(this, section, value.toString()));
         return true;
       }
+      case ActiveRole: {
+        Section* section = dataFromIndex(index);
+        emit(activeSectionChanged(section));
+        return true;
+      }
     }
   }
   return false;
@@ -306,3 +311,5 @@ void DocumentModel::changeSectionName( Section* _section, const QString& _name)
   QModelIndex idx = index(_section);
   emit(dataChanged(idx, idx));
 }
+
+#include "DocumentModel.moc"

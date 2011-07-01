@@ -27,13 +27,15 @@ class KPrCustomSlideShows;
 class KoPAPageBase;
 class KPrDocument;
 
+#include "stage_export.h"
+
 /**
  * Class meant to hold the model for Custom Slide Shows View
  * This model lets display slides as thumbnails in a List view, using standard QT
  * view/model framework. It supports add, remove and move slides of a custom slide show
  * and add, remove or rename slide Shows
  */
-class KPrCustomSlideShowsModel : public QAbstractListModel
+class STAGE_TEST_EXPORT KPrCustomSlideShowsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:

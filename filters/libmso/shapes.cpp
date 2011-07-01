@@ -17,6 +17,23 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
+/**
+ * Note that the implementations here are supposed to be defined by DrawingML.
+ * This details the geometry etc. in Appendix D, in the file 
+ * presetShapeDefinitions.xml.
+ * 
+ * @note Of the BentConnector[2345] shapes, the MS Office suite only appears to
+ * support the [23] variants. The remainder have been coded in a manner 
+ * consistent with the [23] variants, but have not been tested.
+ * 
+ * @note Of the CurvedConnector[2345], the MS Office suite only appears to 
+ * support the [23] variants. The remainder have been coded in a manner 
+ * consistent with the [23] variants, but have not been tested. The [23] 
+ * variants themselves have only been implemented in order to allow support for
+ * them to be added/tested.
+ */
+
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 #include "msodraw.h"
@@ -166,20 +183,135 @@ void ODrawToOdf::processStraightConnector1(const OfficeArtSpContainer& o, Writer
 
 }
 
-void ODrawToOdf::drawPathBentConnector2(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
 {
-    shapePath.moveTo(sx1,sy1);
-    shapePath.lineTo(sx2, sy1);
-    shapePath.lineTo(sx2,sy2);
+    shapePath.moveTo(l, t);
+    shapePath.lineTo(r, t);
+    shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector3(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
 {
+    qreal w = qAbs(r - l);
+    qreal adj1 = 50000;
+    qreal x1 = (w * adj1) / 100000;
+    shapePath.moveTo(l, t);
+    shapePath.lineTo(l + x1, t);
+    shapePath.lineTo(l + x1, b);
+    shapePath.lineTo(r, b);
+}
 
-    shapePath.moveTo(sx1,sy1);
-    shapePath.lineTo((sx1 + sx2)/2.0, sy1);
-    shapePath.lineTo((sx1 + sx2)/2.0, sy2);
-    shapePath.lineTo(sx2,sy2);
+void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+{
+    qreal w = qAbs(r - l);
+    qreal h = qAbs(b - t);
+    qreal adj1 = 50000;
+    qreal adj2 = 50000;
+    qreal x1 = (w * adj1) / 100000;
+    qreal x2 = (x1 + r) / 2;
+    qreal y2 = (h * adj2) / 100000;
+    qreal y1 = (t + y2) / 2;
+    
+    shapePath.moveTo(l, t);
+    shapePath.lineTo(l + x1, t);
+    shapePath.lineTo(l + x1, y2);
+    shapePath.lineTo(r, y2);
+    shapePath.lineTo(r, b);
+}
+
+void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+{
+    qreal w = qAbs(r - l);
+    qreal h = qAbs(b - t);
+    qreal adj1 = 50000;
+    qreal adj2 = 50000;
+    qreal adj3 = 50000;
+    qreal x1 = (w * adj1) / 100000;
+    qreal x3 = (w * adj3) / 100000;
+    qreal x2 = (x1 + x3) / 2;
+    qreal y2 = (h * adj2) / 100000;
+    qreal y1 = (t + y2) / 2;
+    qreal y3 = (b + y2) / 2;
+    
+    shapePath.moveTo(l, t);
+    shapePath.lineTo(l + x1, t);
+    shapePath.lineTo(l + x1, y2);
+    shapePath.lineTo(l + x3, y2);
+    shapePath.lineTo(l + x3, b);
+    shapePath.lineTo(r, b);
+}
+
+void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+{
+    qreal w = qAbs(r - l);
+    qreal h = qAbs(b - t);
+
+    shapePath.moveTo(l,t);
+    shapePath.cubicTo(l + w / 2, t, r, h / 2, r, b);
+}
+
+void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+{
+    qreal w = qAbs(r - l);
+    qreal h = qAbs(b - t);
+    qreal adj1 = 50000;
+    qreal x2 = (w * adj1) / 100000;
+    qreal x1 = (l + x2) / 2;
+        
+    shapePath.moveTo(l,t);
+    shapePath.cubicTo(x1, t, l + x2, h / 4, l + x2, h / 2);
+}
+
+void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+{
+    qreal w = qAbs(r - l);
+    qreal h = qAbs(b - t);
+    qreal adj1 = 50000;
+    qreal adj2 = 50000;
+    qreal x2 = (w * adj1) / 100000;
+    qreal x1 = (l + x2) / 2;
+    qreal x3 = (r + x2) / 2;
+    qreal x4 = (x2 + x3) / 2;
+    qreal x5 = (x3 + r) / 2;
+    qreal y4 = (h * adj2) / 100000;
+    qreal y1 = (t + y4) / 2;
+    qreal y2 = (t + y1) / 2;
+    qreal y3 = (y1 + y4) / 2;
+    qreal y5 = (b + y4) / 2;
+        
+    shapePath.moveTo(l, t);
+    shapePath.cubicTo(x1, t, l + x2, y2, l + x2, y1);
+    shapePath.cubicTo(l + x2, y3, x4, y4, x3, y4);
+    shapePath.cubicTo(x5, y4, r, y5, r, b);
+}
+
+void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+{
+    qreal w = qAbs(r - l);
+    qreal h = qAbs(b - t);
+    qreal adj1 = 50000;
+    qreal adj2 = 50000;
+    qreal adj3 = 50000;
+    qreal x3 = (w * adj1) / 100000;
+    qreal x6 = (w * adj3) / 100000;
+    qreal x1 = (x3 + x6) / 2;
+    qreal x2 = (l + x3) / 2;
+    qreal x4 = (x3 + x1) / 2;
+    qreal x5 = (x6 + x1) / 2;
+    qreal x7 = (x6 + r) / 2;
+    qreal y4 = (h * adj2) / 100000;
+    qreal y1 = (t + y4) / 2;
+    qreal y2 = (t + y1) / 2;
+    qreal y3 = (y1 + y4) / 2;
+    qreal y5 = (b + y4) / 2;
+    qreal y6 = (y5 + y4) / 2;
+    qreal y7 = (y5 + b) / 2;
+
+    shapePath.moveTo(l, t);
+    shapePath.cubicTo(x2, t, l + x3, y2, l + x3, y1);
+    shapePath.cubicTo(x3, y3, x4, y4, x1, y4);
+    shapePath.cubicTo(x5, y4, l + x6, y6, l + x6, y5);
+    shapePath.cubicTo(l + x6, y7, x7, b, r, b);
 }
 
 void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
@@ -219,7 +351,7 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
 
     // compute path
     QPainterPath shapePath;
-    (this->*drawPath)(sx1,sy1,sx2,sy2,shapePath);
+    (this->*drawPath)(sx1, sy1, sx2, sy2, shapePath);
 
     // transform the path according the shape properties like flip and rotation
     QTransform m;
@@ -394,11 +526,24 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     case msosptBentConnector3:
         processConnector(o, out, &ODrawToOdf::drawPathBentConnector3);
         break;
-    //
-    // TODO: msosptBentConnector1, msosptBentConnector4,
-    // msosptBentConnector5, msosptCurvedConnector2, msosptCurvedConnector3,
-    // msosptCurvedConnector4, msosptCurvedConnector5
-    //
+    case msosptBentConnector4:
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector4);
+        break;
+    case msosptBentConnector5:
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector5);
+        break;
+    case msosptCurvedConnector2:
+        processConnector(o, out, &ODrawToOdf::drawPathCurvedConnector2);
+        break;
+    case msosptCurvedConnector3:
+        processConnector(o, out, &ODrawToOdf::drawPathCurvedConnector3);
+        break;
+    case msosptCurvedConnector4:
+        processConnector(o, out, &ODrawToOdf::drawPathCurvedConnector4);
+        break;
+    case msosptCurvedConnector5:
+        processConnector(o, out, &ODrawToOdf::drawPathCurvedConnector5);
+        break;
     case msosptCallout1:
         processCallout1(o, out);
         break;

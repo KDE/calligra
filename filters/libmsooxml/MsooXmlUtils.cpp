@@ -1513,12 +1513,12 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
         }
         ending = "</text:list-level-style-bullet>";
     }
-    if (m_align != "UNUSED") {
-        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
-    }
     returnValue += ">";
 
     returnValue += "<style:list-level-properties ";
+    if (m_align != "UNUSED") {
+        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
+    }
 
     returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
 

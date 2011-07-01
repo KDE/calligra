@@ -35,6 +35,7 @@
 
 #include "SvgWriter.h"
 #include "SvgUtil.h"
+#include "SvgSavingContext.h"
 
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -65,15 +66,8 @@
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
-static void printIndentation(QTextStream *stream, unsigned int indent)
-{
-    static const QString INDENT("  ");
-    for (unsigned int i = 0; i < indent;++i)
-        *stream << INDENT;
-}
-
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
-    : m_indent(0), m_indent2(0), m_pageSize(pageSize)
+    : m_pageSize(pageSize)
     , m_writeInlineImages(true)
 {
     const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
@@ -84,7 +78,8 @@ SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
 }
 
 SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize)
-    : m_indent(0), m_indent2(0), m_toplevelShapes(toplevelShapes), m_pageSize(pageSize)
+    : m_toplevelShapes(toplevelShapes)
+    , m_pageSize(pageSize)
     , m_writeInlineImages(true)
 {
     const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
@@ -121,65 +116,48 @@ bool SvgWriter::save(QIODevice &outputDevice)
     m_uniqueNames.clear();
     m_shapeIds.clear();
 
-    m_stream = new QTextStream(&outputDevice);
-    QString body;
-    m_body = new QTextStream(&body, QIODevice::ReadWrite);
-    QString defs;
-    m_defs = new QTextStream(&defs, QIODevice::ReadWrite);
+    QTextStream svgStream(&outputDevice);
 
     // standard header:
-    *m_defs <<
-    "<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
-    "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<
-    "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
-    << endl;
+    svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
+    svgStream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ";
+    svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
 
     // add some PR.  one line is more than enough.
-    *m_defs <<
-    "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
+    svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
 
-    *m_defs <<
-    "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" <<
-    m_pageSize.width() << "pt\" height=\"" << m_pageSize.height() << "pt\">" << endl;
-    printIndentation(m_defs, ++m_indent2);
-    *m_defs << "<defs>" << endl;
+    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
+    svgStream << " width=\"" << m_pageSize.width() << "pt\"";
+    svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
 
-    m_indent++;
-    m_indent2++;
+    {
+        SvgSavingContext savingContext(outputDevice);
 
-    // top level shapes
-    foreach(KoShape *shape, m_toplevelShapes) {
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
-        if(layer) {
-            saveLayer(layer);
-        } else {
-            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-            if (group)
-                saveGroup(group);
-            else
-                saveShape(shape);
+        // top level shapes
+        foreach(KoShape *shape, m_toplevelShapes) {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+            if(layer) {
+                saveLayer(layer, savingContext);
+            } else {
+                KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+                if (group)
+                    saveGroup(group, savingContext);
+                else
+                    saveShape(shape, savingContext);
+            }
         }
     }
 
     // end tag:
-    printIndentation(m_defs, --m_indent2);
-    *m_defs << "</defs>" << endl;
-    *m_body << "</svg>" << endl;
-
-    *m_stream << defs;
-    *m_stream << body;
-
-    delete m_stream;
-    delete m_defs;
-    delete m_body;
+    svgStream << endl << "</svg>" << endl;
 
     return true;
 }
 
-void SvgWriter::saveLayer(KoShapeLayer * layer)
+void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
 {
-    printIndentation(m_body, m_indent++);
-    *m_body << "<g" << getID(layer) << ">" << endl;
+    context.shapeWriter().startElement("g");
+    context.shapeWriter().addAttribute("id", getID(layer));
 
     QList<KoShape*> sortedShapes = layer->shapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
@@ -187,22 +165,21 @@ void SvgWriter::saveLayer(KoShapeLayer * layer)
     foreach(KoShape * shape, sortedShapes) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
         if (group)
-            saveGroup(group);
+            saveGroup(group, context);
         else
-            saveShape(shape);
+            saveShape(shape, context);
     }
 
-    printIndentation(m_body, --m_indent);
-    *m_body << "</g>" << endl;
+    context.shapeWriter().endElement();
 }
 
-void SvgWriter::saveGroup(KoShapeGroup * group)
+void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 {
-    printIndentation(m_body, m_indent++);
-    *m_body << "<g" << getID(group);
-    *m_body << getTransform(group->transformation(), " transform");
-    getStyle(group, m_body);
-    *m_body << ">" << endl;
+    context.shapeWriter().startElement("g");
+    context.shapeWriter().addAttribute("id", getID(group));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(group->transformation()));
+
+    saveStyle(group, context);
 
     QList<KoShape*> sortedShapes = group->shapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
@@ -210,93 +187,94 @@ void SvgWriter::saveGroup(KoShapeGroup * group)
     foreach(KoShape * shape, sortedShapes) {
         KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);
         if (childGroup)
-            saveGroup(childGroup);
+            saveGroup(childGroup, context);
         else
-            saveShape(shape);
+            saveShape(shape, context);
     }
 
-    printIndentation(m_body, --m_indent);
-    *m_body << "</g>" << endl;
+    context.shapeWriter().endElement();
 }
 
-void SvgWriter::saveShape(KoShape * shape)
+void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
 {
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(path);
         bool isParametric = parameterShape && parameterShape->isParametricShape();
         if (path->pathShapeId() == RectangleShapeId && isParametric) {
-            saveRectangle(static_cast<RectangleShape*>(path));
+            saveRectangle(static_cast<RectangleShape*>(path), context);
         } else if (path->pathShapeId() == EllipseShapeId && isParametric) {
-            saveEllipse(static_cast<EllipseShape*>(path));
+            saveEllipse(static_cast<EllipseShape*>(path), context);
         } else {
-            savePath(path);
+            savePath(path, context);
         }
     } else {
         if (shape->shapeId() == ArtisticTextShapeID) {
-            saveText(static_cast<ArtisticTextShape*>(shape));
+            saveText(static_cast<ArtisticTextShape*>(shape), context);
         } else if (shape->shapeId() == "PictureShape") {
-            saveImage(shape);
+            saveImage(shape, context);
         }
     }
 }
 
-void SvgWriter::savePath(KoPathShape * path)
+void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 {
-    printIndentation(m_body, m_indent);
-    *m_body << "<path" << getID(path);
+    context.shapeWriter().startElement("path");
+    context.shapeWriter().addAttribute("id", getID(path));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(path->transformation()));
 
-    getStyle(path, m_body);
+    saveStyle(path, context);
 
-    *m_body << " d=\"" << path->toString(m_userSpaceMatrix) << "\" ";
-    *m_body << getTransform(path->transformation(), " transform");
-
-    *m_body << " />" << endl;
+    context.shapeWriter().addAttribute("d", path->toString(m_userSpaceMatrix));
+    context.shapeWriter().endElement();
 }
 
-void SvgWriter::saveEllipse(EllipseShape * ellipse)
+void SvgWriter::saveEllipse(EllipseShape *ellipse, SvgSavingContext &context)
 {
     if (ellipse->type() == EllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle()) {
-        printIndentation(m_body, m_indent);
-        QSizeF size = ellipse->size();
-        if (size.width() == size.height()) {
-            *m_body << "<circle" << getID(ellipse);
-            *m_body << " r=\"" << 0.5 * size.width() << "pt\"";
+        const QSizeF size = ellipse->size();
+        const bool isCircle = size.width() == size.height();
+        context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
+        context.shapeWriter().addAttribute("id", getID(ellipse));
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(ellipse->transformation()));
+
+        if (isCircle) {
+            context.shapeWriter().addAttributePt("r", 0.5 * size.width());
         } else {
-            *m_body << "<ellipse" << getID(ellipse);
-            *m_body << " rx=\"" << 0.5 * size.width() << "pt\"";
-            *m_body << " ry=\"" << 0.5 * size.height() << "pt\"";
+            context.shapeWriter().addAttributePt("rx", 0.5 * size.width());
+            context.shapeWriter().addAttributePt("ry", 0.5 * size.height());
         }
-        *m_body << " cx=\"" << 0.5 * size.width() << "pt\"";
-        *m_body << " cy=\"" << 0.5 * size.height() << "pt\"";
-        *m_body << getTransform(ellipse->transformation(), " transform");
-        getStyle(ellipse, m_body);
-        *m_body << "/>" << endl;
+        context.shapeWriter().addAttributePt("cx", 0.5 * size.width());
+        context.shapeWriter().addAttributePt("cy", 0.5 * size.height());
+
+        saveStyle(ellipse, context);
+
+        context.shapeWriter().endElement();
     } else {
-        savePath(ellipse);
+        savePath(ellipse, context);
     }
 }
 
-void SvgWriter::saveRectangle(RectangleShape * rectangle)
+void SvgWriter::saveRectangle(RectangleShape *rectangle, SvgSavingContext &context)
 {
-    printIndentation(m_body, m_indent);
-    *m_body << "<rect" << getID(rectangle);
-    *m_body << getTransform(rectangle->transformation(), " transform");
+    context.shapeWriter().startElement("rect");
+    context.shapeWriter().addAttribute("id", getID(rectangle));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(rectangle->transformation()));
 
-    getStyle(rectangle, m_body);
+    saveStyle(rectangle, context);
 
-    QSizeF size = rectangle->size();
-    *m_body << " width=\"" << size.width() << "pt\"";
-    *m_body << " height=\"" << size.height() << "pt\"";
+    const QSizeF size = rectangle->size();
+    context.shapeWriter().addAttributePt("width", size.width());
+    context.shapeWriter().addAttributePt("height", size.height());
 
     double rx = rectangle->cornerRadiusX();
     if (rx > 0.0)
-        *m_body << " rx=\"" << 0.01 * rx * 0.5 * size.width() << "pt\"";
+        context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
     double ry = rectangle->cornerRadiusY();
     if (ry > 0.0)
-        *m_body << " ry=\"" << 0.01 * ry * 0.5 * size.height() << "pt\"";
+        context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
 
-    *m_body << "/>" << endl;
+    context.shapeWriter().endElement();
 }
 
 QString SvgWriter::createUID(const QString &base)
@@ -340,102 +318,64 @@ QString SvgWriter::getID(const KoShape *obj)
         // record id for this shape
         m_shapeIds.insert(obj, id);
     }
-    return QString(" id=\"%1\"").arg(id);
+    return id;
 }
 
-QString SvgWriter::getTransform(const QTransform &matrix, const QString &attributeName)
+void SvgWriter::saveColorStops(const QGradientStops &colorStops, SvgSavingContext &context)
 {
-    if (matrix.isIdentity())
-        return "";
-
-    QString transform = attributeName + "=\"";
-    if (isTranslation(matrix)) {
-        transform += QString("translate(%1, %2)")
-                     .arg(SvgUtil::toUserSpace(matrix.dx()))
-                     .arg(SvgUtil::toUserSpace(matrix.dy()));
-    } else {
-        transform += QString("matrix(%1 %2 %3 %4 %5 %6)")
-                     .arg(matrix.m11()).arg(matrix.m12())
-                     .arg(matrix.m21()).arg(matrix.m22())
-                     .arg(SvgUtil::toUserSpace(matrix.dx()))
-                     .arg(SvgUtil::toUserSpace(matrix.dy()));
-    }
-
-    return transform + "\"";
-}
-
-bool SvgWriter::isTranslation(const QTransform &m)
-{
-    return (m.m11() == 1.0 && m.m12() == 0.0 && m.m21() == 0.0 && m.m22() == 1.0);
-}
-
-void SvgWriter::getColorStops(const QGradientStops & colorStops)
-{
-    m_indent2++;
     foreach(const QGradientStop &stop, colorStops) {
-        printIndentation(m_defs, m_indent2);
-        *m_defs << "<stop stop-color=\"" << stop.second.name();
-        *m_defs << "\" offset=\"" << QString().setNum(stop.first);
-        *m_defs << "\" stop-opacity=\"" << stop.second.alphaF() << "\"" << " />" << endl;
+        context.styleWriter().startElement("stop");
+        context.styleWriter().addAttribute("stop-color", stop.second.name());
+        context.styleWriter().addAttribute("offset", stop.first);
+        context.styleWriter().addAttribute("stop-opacity", stop.second.alphaF());
+        context.styleWriter().endElement();
     }
-    m_indent2--;
 }
 
-void SvgWriter::getGradient(const QGradient * gradient, const QTransform &gradientTransform)
+QString SvgWriter::saveGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context)
 {
     if (! gradient)
-        return;
+        return QString();
 
     Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 
     const QString spreadMethod[3] = {
-        QString("spreadMethod=\"pad\" "),
-        QString("spreadMethod=\"reflect\" "),
-        QString("spreadMethod=\"repeat\" ")
+        QString("pad"),
+        QString("reflect"),
+        QString("repeat")
     };
 
-    QString uid = createUID("gradient");
+    const QString uid = createUID("gradient");
+
     if (gradient->type() == QGradient::LinearGradient) {
         const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
-        // do linear grad
-        printIndentation(m_defs, m_indent2);
-        *m_defs << "<linearGradient id=\"" << uid << "\" ";
-        *m_defs << getTransform(gradientTransform, "gradientTransform") << " ";
-        *m_defs << "gradientUnits=\"objectBoundingBox\" ";
-        *m_defs << "x1=\"" << g->start().x() << "\" ";
-        *m_defs << "y1=\"" << g->start().y() << "\" ";
-        *m_defs << "x2=\"" << g->finalStop().x() << "\" ";
-        *m_defs << "y2=\"" << g->finalStop().y() << "\" ";
-        *m_defs << spreadMethod[g->spread()];
-        *m_defs << ">" << endl;
-
+        context.styleWriter().startElement("linearGradient");
+        context.styleWriter().addAttribute("id", uid);
+        context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
+        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+        context.styleWriter().addAttribute("x1", g->start().x());
+        context.styleWriter().addAttribute("y1", g->start().y());
+        context.styleWriter().addAttribute("x2", g->finalStop().x());
+        context.styleWriter().addAttribute("y2", g->finalStop().y());
+        context.styleWriter().addAttribute("spreadMethod", spreadMethod[g->spread()]);
         // color stops
-        getColorStops(gradient->stops());
-
-        printIndentation(m_defs, m_indent2);
-        *m_defs << "</linearGradient>" << endl;
-        *m_body << "url(#" << uid << ")";
+        saveColorStops(gradient->stops(), context);
+        context.styleWriter().endElement();
     } else if (gradient->type() == QGradient::RadialGradient) {
         const QRadialGradient * g = static_cast<const QRadialGradient*>(gradient);
-        // do radial grad
-        printIndentation(m_defs, m_indent2);
-        *m_defs << "<radialGradient id=\"" << uid << "\" ";
-        *m_defs << getTransform(gradientTransform, "gradientTransform") << " ";
-        *m_defs << "gradientUnits=\"objectBoundingBox\" ";
-        *m_defs << "cx=\"" << g->center().x() << "\" ";
-        *m_defs << "cy=\"" << g->center().y() << "\" ";
-        *m_defs << "fx=\"" << g->focalPoint().x() << "\" ";
-        *m_defs << "fy=\"" << g->focalPoint().y() << "\" ";
-        *m_defs << "r=\"" << QString().setNum(g->radius()) << "\" ";
-        *m_defs << spreadMethod[g->spread()];
-        *m_defs << ">" << endl;
-
+        context.styleWriter().startElement("radialGradient");
+        context.styleWriter().addAttribute("id", uid);
+        context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
+        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+        context.styleWriter().addAttribute("cx", g->center().x());
+        context.styleWriter().addAttribute("cy", g->center().y());
+        context.styleWriter().addAttribute("fx", g->focalPoint().x());
+        context.styleWriter().addAttribute("fy", g->focalPoint().y());
+        context.styleWriter().addAttribute("r", g->radius());
+        context.styleWriter().addAttribute("spreadMethod", spreadMethod[g->spread()]);
         // color stops
-        getColorStops(gradient->stops());
-
-        printIndentation(m_defs, m_indent2);
-        *m_defs << "</radialGradient>" << endl;
-        *m_body << "url(#" << uid << ")";
+        saveColorStops(gradient->stops(), context);
+        context.styleWriter().endElement();
     } else if (gradient->type() == QGradient::ConicalGradient) {
         //const QConicalGradient * g = static_cast<const QConicalGradient*>( gradient );
         // fake conical grad as radial.
@@ -461,16 +401,18 @@ void SvgWriter::getGradient(const QGradient * gradient, const QTransform &gradie
         *m_body << "url(#" << uid << ")";
         */
     }
+
+    return uid;
 }
 
 // better than nothing
-void SvgWriter::getPattern(KoPatternBackground * pattern, KoShape * shape)
+QString SvgWriter::savePattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context)
 {
-    QString uid = createUID("pattern");
+    const QString uid = createUID("pattern");
 
-    QSizeF shapeSize = shape->size();
-    QSizeF patternSize = pattern->patternDisplaySize();
-    QSize imageSize = pattern->pattern().size();
+    const QSizeF shapeSize = shape->size();
+    const QSizeF patternSize = pattern->patternDisplaySize();
+    const QSize imageSize = pattern->pattern().size();
 
     // calculate offset in point
     QPointF offset = pattern->referencePointOffset();
@@ -509,150 +451,143 @@ void SvgWriter::getPattern(KoPatternBackground * pattern, KoShape * shape)
 
     offset = shape->absoluteTransformation(0).map(offset);
 
-    printIndentation(m_defs, m_indent2);
-    *m_defs << "<pattern id=\"" << uid << "\"";
-    *m_defs << " x=\"" << SvgUtil::toUserSpace(offset.x()) << "\"";
-    *m_defs << " y=\"" << SvgUtil::toUserSpace(offset.y()) << "\"";
+    context.styleWriter().startElement("pattern");
+    context.styleWriter().addAttribute("id", uid);
+    context.styleWriter().addAttribute("x", SvgUtil::toUserSpace(offset.x()));
+    context.styleWriter().addAttribute("y", SvgUtil::toUserSpace(offset.y()));
 
     if (pattern->repeat() == KoPatternBackground::Stretched) {
-        *m_defs << " width=\"100%\"";
-        *m_defs << " height=\"100%\"";
-        *m_defs << " patternUnits=\"objectBoundingBox\"";
+        context.styleWriter().addAttribute("width", "100%");
+        context.styleWriter().addAttribute("height", "100%");
+        context.styleWriter().addAttribute("patternUnits", "objectBoundingBox");
     } else {
-        *m_defs << " width=\"" << SvgUtil::toUserSpace(patternSize.width()) << "\"";
-        *m_defs << " height=\"" << SvgUtil::toUserSpace(patternSize.height()) << "\"";
-        *m_defs << " patternUnits=\"userSpaceOnUse\"";
+        context.styleWriter().addAttribute("width", SvgUtil::toUserSpace(patternSize.width()));
+        context.styleWriter().addAttribute("height", SvgUtil::toUserSpace(patternSize.height()));
+        context.styleWriter().addAttribute("patternUnits", "userSpaceOnUse");
     }
 
-    *m_defs << " viewBox=\"0 0 " << imageSize.width() << " " << imageSize.height() << "\"";
+    context.styleWriter().addAttribute("viewBox", QString("0 0 %1 %2").arg(imageSize.width()).arg(imageSize.height()));
     //*m_defs << " patternContentUnits=\"userSpaceOnUse\"";
-    *m_defs << ">" << endl;
 
-    printIndentation(m_defs, m_indent2++);
-
-    *m_defs << "<image";
-
-    *m_defs << " x=\"0\"";
-    *m_defs << " y=\"0\"";
-    *m_defs << " width=\"" << imageSize.width() << "px\"";
-    *m_defs << " height=\"" << imageSize.height() << "px\"";
+    context.styleWriter().startElement("image");
+    context.styleWriter().addAttribute("x", "0");
+    context.styleWriter().addAttribute("y", "0");
+    context.styleWriter().addAttribute("width", QString("%1px").arg(imageSize.width()));
+    context.styleWriter().addAttribute("height", QString("%1px").arg(imageSize.height()));
 
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
     if (pattern->pattern().save(&buffer, "PNG")) {
         const QString mimeType(KMimeType::findByContent(ba)->name());
-        *m_defs << " xlink:href=\"data:" << mimeType << ";base64," << ba.toBase64() <<  "\"";
+        context.styleWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
     }
 
-    *m_defs << "/>" << endl;
+    context.styleWriter().endElement(); // image
+    context.styleWriter().endDocument(); // pattern
 
-    printIndentation(m_defs, --m_indent2);
-    *m_defs << "</pattern>" << endl;
-
-    *m_body << "url(#" << uid << ")";
+    return uid;
 }
 
-void SvgWriter::getStyle(KoShape * shape, QTextStream * stream)
+void SvgWriter::saveStyle(KoShape *shape, SvgSavingContext &context)
 {
-    getFill(shape, stream);
-    getStroke(shape, stream);
-    getEffects(shape, stream);
-    getClipping(shape, stream);
+    saveFill(shape, context);
+    saveStroke(shape, context);
+    saveEffects(shape, context);
+    saveClipping(shape, context);
     if (! shape->isVisible())
-        *stream << " display=\"none\"";
+        context.shapeWriter().addAttribute("display", "none");
     if (shape->transparency() > 0.0)
-        *stream << " opacity=\"" << 1.0 - shape->transparency() << "\"";
+        context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
 }
 
-void SvgWriter::getFill(KoShape * shape, QTextStream *stream)
+void SvgWriter::saveFill(KoShape * shape, SvgSavingContext &context)
 {
     if (! shape->background()) {
-        *stream << " fill=\"none\"";
+        context.shapeWriter().addAttribute("fill", "none");
     }
 
     QBrush fill(Qt::NoBrush);
     KoColorBackground * cbg = dynamic_cast<KoColorBackground*>(shape->background());
     if (cbg) {
-        *stream << " fill=\"" << cbg->color().name() << "\"";
+        context.shapeWriter().addAttribute("fill", cbg->color().name());
         if (cbg->color().alphaF() < 1.0)
-            *stream << " fill-opacity=\"" << cbg->color().alphaF() << "\"";
+            context.shapeWriter().addAttribute("fill-opacity", cbg->color().alphaF());
     }
     KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
     if (gbg) {
-        *stream << " fill=\"";
-        getGradient(gbg->gradient(), gbg->transform());
-        *stream << "\"";
+        QString gradientId = saveGradient(gbg->gradient(), gbg->transform(), context);
+        context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
     }
     KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
     if (pbg) {
-        *stream << " fill=\"";
-        getPattern(pbg, shape);
-        *stream << "\"";
+        const QString patternId = savePattern(pbg, shape, context);
+        context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
     }
 
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path && shape->background()) {
         // non-zero is default, so only write fillrule if evenodd is set
         if (path->fillRule() == Qt::OddEvenFill)
-            *stream << " fill-rule=\"evenodd\"";
+            context.shapeWriter().addAttribute("fill-rule", "evenodd");
     }
 }
 
-void SvgWriter::getStroke(KoShape *shape, QTextStream *stream)
+void SvgWriter::saveStroke(KoShape *shape, SvgSavingContext &context)
 {
     const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(shape->border());
     if (! line)
         return;
 
-    *stream << " stroke=\"";
-    if (line->lineStyle() == Qt::NoPen)
-        *stream << "none";
-    else if (line->lineBrush().gradient())
-        getGradient(line->lineBrush().gradient(), line->lineBrush().transform());
-    else
-        *stream << line->color().name();
-    *stream << "\"";
+    QString strokeStr("none");
+    if (line->lineBrush().gradient()) {
+        QString gradientId = saveGradient(line->lineBrush().gradient(), line->lineBrush().transform(), context);
+        strokeStr = "url(#" + gradientId + ")";
+    } else {
+        strokeStr = line->color().name();
+    }
+    if (!strokeStr.isEmpty())
+        context.shapeWriter().addAttribute("stroke", strokeStr);
 
     if (line->color().alphaF() < 1.0)
-        *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
-    *stream << " stroke-width=\"" << SvgUtil::toUserSpace(line->lineWidth()) << "\"";
+        context.shapeWriter().addAttribute("stroke-opacity", line->color().alphaF());
+    context.shapeWriter().addAttribute("stroke-width", SvgUtil::toUserSpace(line->lineWidth()));
 
     if (line->capStyle() == Qt::FlatCap)
-        *stream << " stroke-linecap=\"butt\"";
+        context.shapeWriter().addAttribute("stroke-linecap", "butt");
     else if (line->capStyle() == Qt::RoundCap)
-        *stream << " stroke-linecap=\"round\"";
+        context.shapeWriter().addAttribute("stroke-linecap", "round");
     else if (line->capStyle() == Qt::SquareCap)
-        *stream << " stroke-linecap=\"square\"";
+        context.shapeWriter().addAttribute("stroke-linecap", "square");
 
     if (line->joinStyle() == Qt::MiterJoin) {
-        *stream << " stroke-linejoin=\"miter\"";
-        *stream << " stroke-miterlimit=\"" << line->miterLimit() << "\"";
+        context.shapeWriter().addAttribute("stroke-linejoin", "miter");
+        context.shapeWriter().addAttribute("stroke-miterlimit", line->miterLimit());
     } else if (line->joinStyle() == Qt::RoundJoin)
-        *stream << " stroke-linejoin=\"round\"";
+        context.shapeWriter().addAttribute("stroke-linejoin", "round");
     else if (line->joinStyle() == Qt::BevelJoin)
-        *stream << " stroke-linejoin=\"bevel\"";
+        context.shapeWriter().addAttribute("stroke-linejoin", "bevel");
 
     // dash
     if (line->lineStyle() > Qt::SolidLine) {
         qreal dashFactor = line->lineWidth();
 
         if (line->dashOffset() != 0)
-            *stream << " stroke-dashoffset=\"" << dashFactor * line->dashOffset() << "\"";
-        *stream << " stroke-dasharray=\" ";
+            context.shapeWriter().addAttribute("stroke-dashoffset", dashFactor * line->dashOffset());
 
+        QString dashStr;
         const QVector<qreal> dashes = line->lineDashes();
         int dashCount = dashes.size();
         for (int i = 0; i < dashCount; ++i) {
             if (i > 0)
-                *stream << ",";
-            *stream << dashes[i] * dashFactor;
+                dashStr += ",";
+            dashStr += QString("%1").arg(dashes[i] * dashFactor);
         }
-        *stream << "\"";
+        context.shapeWriter().addAttribute("stroke-dasharray", dashStr);
     }
 }
 
-void SvgWriter::getEffects(KoShape *shape, QTextStream *stream)
+void SvgWriter::saveEffects(KoShape *shape, SvgSavingContext &context)
 {
     KoFilterEffectStack * filterStack = shape->filterEffectStack();
     if (!filterStack)
@@ -662,24 +597,14 @@ void SvgWriter::getEffects(KoShape *shape, QTextStream *stream)
     if (!filterEffects.count())
         return;
 
-    QString uid = createUID("filter");
+    const QString uid = createUID("filter");
 
-    printIndentation(m_defs, m_indent2);
+    filterStack->save(context.styleWriter(), uid);
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter writer(&buffer, m_indent2*2);
-
-    filterStack->save(writer, uid);
-
-    *m_defs << ba;
-    *m_defs << endl;
-
-    *stream << " filter=\"url(#" << uid << ")\"";
+    context.shapeWriter().addAttribute("filter", "url(#" + uid + ")");
 }
 
-void SvgWriter::getClipping(KoShape *shape, QTextStream *stream)
+void SvgWriter::saveClipping(KoShape *shape, SvgSavingContext &context)
 {
     KoClipPath *clipPath = shape->clipPath();
     if (!clipPath)
@@ -692,174 +617,159 @@ void SvgWriter::getClipping(KoShape *shape, QTextStream *stream)
 
     path->close();
 
-    QString uid = createUID("clippath");
+    const QString uid = createUID("clippath");
 
-    printIndentation(m_defs, m_indent2);
+    context.styleWriter().startElement("clipPath");
+    context.styleWriter().addAttribute("id", uid);
+    context.styleWriter().addAttribute("clipPathUnits", "userSpaceOnUse");
 
-    *m_defs << "<clipPath id=\"" << uid << "\" clipPathUnits=\"userSpaceOnUse\">" << endl;
+    context.styleWriter().startElement("path");
+    context.styleWriter().addAttribute("d", path->toString(path->absoluteTransformation(0)*m_userSpaceMatrix));
+    context.styleWriter().endElement(); // path
 
-    printIndentation(m_defs, ++m_indent2);
+    context.styleWriter().endElement(); // clipPath
 
-    *m_defs << "<path";
-    *m_defs << " d=\"" << path->toString(path->absoluteTransformation(0)*m_userSpaceMatrix) << "\"";
-    *m_defs << "/>" << endl;
-
-    printIndentation(m_defs, --m_indent2);
-
-    *m_defs << "</clipPath>" << endl;
-
-    *stream << " clip-path=\"url(#" << uid << ")\"";
+    context.shapeWriter().addAttribute("clip-path", "url(#" + uid + ")");
     if (clipPath->clipRule() != Qt::WindingFill)
-        *stream << " clip-rule=\"evenodd\"";
+        context.shapeWriter().addAttribute("clip-rule", "evenodd");
 }
 
-void SvgWriter::saveFont(const QFont &font, QTextStream *stream)
+void SvgWriter::saveFont(const QFont &font, SvgSavingContext &context)
 {
-    *stream << " font-family=\"" << font.family() << "\"";
-    *stream << " font-size=\"" << font.pointSize() << "pt\"";
+    context.shapeWriter().addAttribute("font-family", font.family());
+    context.shapeWriter().addAttributePt("font-size", font.pointSizeF());
 
     if (font.bold())
-        *stream << " font-weight=\"bold\"";
+        context.shapeWriter().addAttribute("font-weight", "bold");
     if (font.italic())
-        *stream << " font-style=\"italic\"";
+        context.shapeWriter().addAttribute("font-style", "italic");
 }
 
-void SvgWriter::saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveRangeFont, qreal baselineOffset)
+void SvgWriter::saveTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveRangeFont, qreal baselineOffset)
 {
-    *stream << "<tspan";
+    context.shapeWriter().startElement("tspan");
     if (range.hasXOffsets()) {
-        *stream << (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? " x=\"" : " dx=\"");
+        const char *attributeName = (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? "x" : "dx");
+        QString attributeValue;
         int charIndex = 0;
         while(range.hasXOffset(charIndex)) {
             if (charIndex)
-                *stream << ",";
-            *stream << QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
+                attributeValue += ",";
+            attributeValue += QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
         }
-        *stream << "\"";
+        context.shapeWriter().addAttribute(attributeName, attributeValue);
     }
     if (range.hasYOffsets()) {
         if (range.yOffsetType() != ArtisticTextRange::AbsoluteOffset)
             baselineOffset = 0;
-        *stream << (range.yOffsetType() == ArtisticTextRange::AbsoluteOffset ? " y=\"" : " dy=\"");
+        const char *attributeName = (range.yOffsetType() == ArtisticTextRange::AbsoluteOffset ? " y" : " dy");
+        QString attributeValue;
         int charIndex = 0;
         while(range.hasYOffset(charIndex)) {
             if (charIndex)
-                *stream << ",";
-            *stream << QString("%1").arg(SvgUtil::toUserSpace(baselineOffset+range.yOffset(charIndex++)));
+                attributeValue += ",";
+            attributeValue += QString("%1").arg(SvgUtil::toUserSpace(baselineOffset+range.yOffset(charIndex++)));
         }
-        *stream << "\"";
+        context.shapeWriter().addAttribute(attributeName, attributeValue);
     }
     if (range.hasRotations()) {
-        *stream << " rotate=\"";
+        QString attributeValue;
         int charIndex = 0;
         while(range.hasRotation(charIndex)) {
             if (charIndex)
-                *stream << ",";
-            *stream << QString("%1").arg(range.rotation(charIndex++));
+                attributeValue += ",";
+            attributeValue += QString("%1").arg(range.rotation(charIndex++));
         }
-        *stream << "\"";
+        context.shapeWriter().addAttribute("rotate", attributeValue);
     }
     if (range.baselineShift() != ArtisticTextRange::None) {
         switch(range.baselineShift()) {
         case ArtisticTextRange::Sub:
-            *stream << " baseline-shift=\"sub\"";
+            context.shapeWriter().addAttribute("baseline-shift", "sub");
             break;
         case ArtisticTextRange::Super:
-            *stream << " baseline-shift=\"super\"";
+            context.shapeWriter().addAttribute("baseline-shift", "super");
             break;
         case ArtisticTextRange::Percent:
-            *stream << " baseline-shift=\"";
-            *stream << QString("%1%").arg(range.baselineShiftValue()*100);
-            *stream << "\"";
+            context.shapeWriter().addAttribute("baseline-shift", QString("%1%").arg(range.baselineShiftValue()*100));
             break;
         case ArtisticTextRange::Length:
-            *stream << " baseline-shift=\"";
-            *stream << QString("%1%").arg(SvgUtil::toUserSpace(range.baselineShiftValue()));
-            *stream << "\"";
+            context.shapeWriter().addAttribute("baseline-shift", QString("%1%").arg(SvgUtil::toUserSpace(range.baselineShiftValue())));
             break;
         default:
             break;
         }
     }
     if (saveRangeFont)
-        saveFont(range.font(), stream);
-    *stream << ">";
-    *stream << range.text();
-    *stream << "</tspan>" << endl;
+        saveFont(range.font(), context);
+    context.shapeWriter().addTextNode(range.text());
+    context.shapeWriter().endElement();
 }
 
-void SvgWriter::saveText(ArtisticTextShape * text)
+void SvgWriter::saveText(ArtisticTextShape *text, SvgSavingContext &context)
 {
-    printIndentation(m_body, m_indent++);
-    *m_body << "<text" << getID(text);
+    context.shapeWriter().startElement("text");
+    context.shapeWriter().addAttribute("id", getID(text));
 
-    getStyle(text, m_body);
+    saveStyle(text, context);
 
     const QList<ArtisticTextRange> formattedText = text->text();
 
     // if we have only a single text range, save the font on the text element
     const bool hasSingleRange = formattedText.size() == 1;
     if (hasSingleRange) {
-        saveFont(formattedText.first().font(), m_body);
+        saveFont(formattedText.first().font(), context);
     }
 
     qreal anchorOffset = 0.0;
     if (text->textAnchor() == ArtisticTextShape::AnchorMiddle) {
         anchorOffset += 0.5 * text->size().width();
-        *m_body << " text-anchor=\"middle\"";
+        context.shapeWriter().addAttribute("text-anchor", "middle");
     } else if (text->textAnchor() == ArtisticTextShape::AnchorEnd) {
         anchorOffset += text->size().width();
-        *m_body << " text-anchor=\"end\"";
+        context.shapeWriter().addAttribute("text-anchor", "end");
     }
-
-    printIndentation(m_body, m_indent);
 
     // check if we are set on a path
     if (text->layout() == ArtisticTextShape::Straight) {
         QTransform m = text->transformation();
-        if (isTranslation(m)) {
+        if (m.type() == QTransform::TxTranslate) {
             QPointF position = text->position();
-            *m_body << " x=\"" << position.x() + anchorOffset << "pt\"";
-            *m_body << " y=\"" << position.y() + text->baselineOffset() << "pt\"";
+            context.shapeWriter().addAttributePt("x", position.x() + anchorOffset);
+            context.shapeWriter().addAttributePt("y", position.y() + text->baselineOffset());
         } else {
-            *m_body << " x=\"" << anchorOffset << "pt\"";
-            *m_body << " y=\"" << text->baselineOffset() << "pt\"";
-            *m_body << getTransform(text->transformation(), " transform");
+            context.shapeWriter().addAttributePt("x", anchorOffset);
+            context.shapeWriter().addAttributePt("y", text->baselineOffset());
+            context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(text->transformation()));
         }
-        *m_body << ">" << endl;
         foreach(const ArtisticTextRange &range, formattedText) {
-            saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
+            saveTextRange(range, context, !hasSingleRange, text->baselineOffset());
         }
     } else {
         KoPathShape * baseline = KoPathShape::createShapeFromPainterPath(text->baseline());
 
-        QString id;
+        QString id = createUID("baseline");
+        context.styleWriter().startElement("path");
+        context.styleWriter().addAttribute("id", id);
+        context.styleWriter().addAttribute("d", baseline->toString(baseline->absoluteTransformation(0) * m_userSpaceMatrix));
+        context.styleWriter().endElement();
 
-        printIndentation(m_defs, m_indent);
-
-        id = createUID("baseline");
-        *m_defs << "<path id=\"" << id << "\"";
-        *m_defs << " d=\"" << baseline->toString(baseline->absoluteTransformation(0) * m_userSpaceMatrix) << "\" ";
-        *m_defs << " />" << endl;
-
-        *m_body << ">" << endl;
-        *m_body << "<textPath xlink:href=\"#" << id << "\"";
+        context.shapeWriter().startElement("textPath");
+        context.shapeWriter().addAttribute("xlink:href", "#"+id);
         if (text->startOffset() > 0.0)
-            *m_body << " startOffset=\"" << text->startOffset() * 100.0 << "%\"";
-        *m_body << ">";
+            context.shapeWriter().addAttribute("startOffset", QString("%1%").arg(text->startOffset() * 100.0));
         foreach(const ArtisticTextRange &range, formattedText) {
-            saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
+            saveTextRange(range, context, !hasSingleRange, text->baselineOffset());
         }
-        *m_body << "</textPath>" << endl;
+        context.shapeWriter().endElement();
 
         delete baseline;
     }
 
-    printIndentation(m_body, --m_indent);
-    *m_body << "</text>" << endl;
+    context.shapeWriter().endElement();
 }
 
-void SvgWriter::saveImage(KoShape *picture)
+void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
 {
     KoImageData *imageData = qobject_cast<KoImageData*>(picture->userData());
     if (! imageData) {
@@ -867,20 +777,20 @@ void SvgWriter::saveImage(KoShape *picture)
         return;
     }
 
-    printIndentation(m_body, m_indent);
+    context.shapeWriter().startElement("image");
+    context.shapeWriter().addAttribute("id", getID(picture));
 
-    *m_body << "<image" << getID(picture);
     QTransform m = picture->transformation();
-    if (isTranslation(m)) {
-        QPointF position = picture->position();
-        *m_body << " x=\"" << position.x() << "pt\"";
-        *m_body << " y=\"" << position.y() << "pt\"";
+    if (m.type() == QTransform::TxTranslate) {
+        const QPointF position = picture->position();
+        context.shapeWriter().addAttributePt("x", position.x());
+        context.shapeWriter().addAttributePt("y", position.y());
     } else {
-        *m_body << getTransform(picture->transformation(), " transform");
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(picture->transformation()));
     }
 
-    *m_body << " width=\"" << picture->size().width() << "pt\"";
-    *m_body << " height=\"" << picture->size().height() << "pt\"";
+    context.shapeWriter().addAttributePt("width", picture->size().width());
+    context.shapeWriter().addAttributePt("height", picture->size().height());
 
     if (m_writeInlineImages) {
         QByteArray ba;
@@ -888,7 +798,8 @@ void SvgWriter::saveImage(KoShape *picture)
         buffer.open(QIODevice::WriteOnly);
         if (imageData->saveData(buffer)) {
             const QString mimeType(KMimeType::findByContent(ba)->name());
-            *m_body << " xlink:href=\"data:" << mimeType << ";base64," << ba.toBase64() <<  "\"";
+            const QString header("data:" + mimeType + ";base64,");
+            context.shapeWriter().addAttribute("xlink:href", header + ba.toBase64());
         }
     } else {
         // write to a temp file first
@@ -917,10 +828,10 @@ void SvgWriter::saveImage(KoShape *picture)
             // move the temp file to the destination directory
             KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), url);
             if (job && KIO::NetAccess::synchronousRun(job, 0))
-                *m_body << " xlink:href=\"" << url.fileName() << "\"";
+                context.shapeWriter().addAttribute("xlink:href", url.fileName());
             else
                 KIO::NetAccess::removeTempFile(imgFile.fileName());
         }
     }
-    *m_body << " />" << endl;
+    context.shapeWriter().endElement();
 }

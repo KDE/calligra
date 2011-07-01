@@ -213,6 +213,26 @@ namespace Conversion
 /*    // Convert alignment code to string */
 /*    QString alignment( int jc ); */
 
+    /**
+     * @return horizontal position for the anchor.
+     */
+    const char* getHorizontalPos(qint16 dxaAbs);
+
+    /**
+     * @return relative horizontal position for the anchor.
+     */
+    const char* getHorizontalRel(uint pcHorz);
+
+    /**
+     * @return vertical position for the anchor.
+     */
+    const char* getVerticalPos(qint16 dyaAbs);
+
+    /**
+     * @return relative vertical position for the anchor.
+     */
+    const char* getVerticalRel(uint pcVert);
+
 } // namespace Conversion
 
 #endif

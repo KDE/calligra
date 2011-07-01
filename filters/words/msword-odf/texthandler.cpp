@@ -512,7 +512,7 @@ void WordsTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
 
     if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
+        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), true);
         delete writer;
     }
 }
@@ -549,7 +549,7 @@ void WordsTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
 
     if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
+        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), true);
         delete writer;
     }
 }
@@ -672,10 +672,7 @@ void WordsTextHandler::tableEndFound()
     emit tableFound(table);
 }
 
-//TODO: merge inlineObjectFound with floatingObjectFound, both of them are
-//stable actually
-
-void WordsTextHandler::inlineObjectFound(const wvWare::PictureData& data)
+void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data)
 {
     kDebug(30513);
     //inline object should be inside of a pragraph
@@ -706,61 +703,11 @@ void WordsTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    emit inlineObjectFound(data, writer);
-
-    //TODO: we should really improve processing of lists somehow
-    if (listIsOpen()) {
-        closeList();
+    if (data) {
+        emit inlineObjectFound(*data, writer);
+    } else {
+        emit floatingObjectFound(globalCP, writer);
     }
-    if (m_fld->m_hyperLinkActive) {
-        writer->endElement();
-        m_fld->m_hyperLinkActive = false;
-    }
-    //cleanup
-    delete m_drawingWriter;
-    m_drawingWriter = 0;
-    m_insideDrawing = false;
-
-    //restore the state
-    restoreState();
-
-    //now add content to our current paragraph
-    QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
-}
-
-void WordsTextHandler::floatingObjectFound(unsigned int globalCP)
-{
-    kDebug(30513);
-    //floating object should be inside of a pragraph (or at least it's anchor)
-    Q_ASSERT(m_paragraph);
-
-    //ignore if field instructions are processed
-    if (m_fld->m_insideField && !m_fld->m_afterSeparator) {
-        kWarning(30513) << "Warning: Object located in field instractions, Ignoring!";
-        return;
-    }
-
-    //save the state of tables/paragraphs/lists (text-box)
-    saveState();
-
-    //Create temporary writer for the picture tags.
-    KoXmlWriter* writer = 0;
-    QBuffer buf;
-
-    buf.open(QIODevice::WriteOnly);
-    writer = new KoXmlWriter(&buf);
-    m_drawingWriter = writer;
-    m_insideDrawing = true;
-
-    //frame or drawing shape acting as a hyperlink
-    if (m_fld->m_hyperLinkActive) {
-        writer->startElement("draw:a");
-        writer->addAttribute("xlink:type", "simple");
-        writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
-    }
-
-    emit floatingObjectFound(globalCP, writer);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
