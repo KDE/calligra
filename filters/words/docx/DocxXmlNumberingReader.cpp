@@ -404,7 +404,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlText()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         if (!m_bulletStyle) {
-            m_currentBulletProperties.setSuffix(val.right(1));
+            if (val.at(0) == '%' && val.length() == 2) {
+                m_currentBulletProperties.setSuffix("");
+            }
+            else {
+                m_currentBulletProperties.setSuffix(val.right(1));
+            }
         }
         else {
             m_bulletCharacter = val;

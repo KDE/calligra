@@ -161,7 +161,7 @@ void PageSpan::_writeHeaderFooter(const char *headerFooterTagName,
 	headerFooterOpen.write(xHandler);
 	for (std::vector<DocumentElement *>::const_iterator iter = headerFooterContent.begin();
 	     iter != headerFooterContent.end();
-	     iter++) {
+	     ++iter) {
 		(*iter)->write(xHandler);
 	}
 	TagCloseElement headerFooterClose(headerFooterTagName);

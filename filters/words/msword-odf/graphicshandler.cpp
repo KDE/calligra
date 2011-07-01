@@ -149,6 +149,14 @@ void DrawingWriter::setChildRectangle(MSO::OfficeArtChildAnchor& anchor)
     yBottom = anchor.yBottom;
 }
 
+void DrawingWriter::setRect(const QRect& rect)
+{
+    xLeft = rect.left();
+    xRight = rect.right();
+    yTop = rect.top();
+    yBottom = rect.bottom();
+}
+
 /*
  * ************************************************
  * Graphics Handler
@@ -391,7 +399,8 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 }
 
 void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr,
-                                         wvWare::Word97::FSPA* spa, uint spid,
+                                         wvWare::Word97::FSPA* spa,
+                                         uint spid,
                                          DrawingWriter& out)
 {
     if (!spgr) {
@@ -417,8 +426,8 @@ void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
         if (co.anon.is<OfficeArtSpgrContainer>()) {
             sp = (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
             if (sp && sp->shapeProp.spid == spid) {
-                out.setRectangle(*spa);
                 processGroupShape(*co.anon.get<OfficeArtSpgrContainer>(), out);
+                m_processingGroup = false;
                 break;
             } else {
                 m_zIndex = m_zIndex + (*co.anon.get<OfficeArtSpgrContainer>()).rgfb.size();
@@ -435,12 +444,48 @@ void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
     }
 }
 
+QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
+{
+    if (o.clientAnchor) {
+        const DocOfficeArtClientAnchor* a = o.clientAnchor->anon.get<DocOfficeArtClientAnchor>();
+        if (!a) {
+            return QRect();
+        }
+        const PLCF<wvWare::Word97::FSPA>* plcfSpa = 0;
+        if (m_document->writingHeader()) {
+            plcfSpa = m_drawings->getSpaHdr();
+        } else {
+            plcfSpa = m_drawings->getSpaMom();
+        }
+        PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
+        const wvWare::Word97::FSPA* spa = it.current();
+	Q_ASSERT(m_pSpa == spa);
+        return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);
+    }
+    else if (o.childAnchor) {
+        const MSO::OfficeArtChildAnchor& r = *o.childAnchor;
+        return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+    } else {
+        return QRect();
+    }
+}
+
 void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
 {
     if (o.rgfb.size() < 2) {
         return;
     }
+
     const OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+
+    if (sp && sp->shapeGroup) {
+        QRect oldCoords = getRect(*sp);
+        if (oldCoords.isValid()) {
+            out.setRect(oldCoords);
+            //process shape information for the group
+            out.setGroupRectangle(*sp->shapeGroup);
+	}
+    }
 
     //create graphic style for the group shape
     QString styleName;
@@ -461,11 +506,6 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     setZIndexAttribute(out);
     m_processingGroup = true;
 
-    if (sp && sp->shapeGroup) {
-        //process shape information for the group
-        out.setGroupRectangle(*sp->shapeGroup);
-    }
-
     for (int i = 1; i < o.rgfb.size(); ++i) {
         if (o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
             OfficeArtSpContainer sp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
@@ -474,12 +514,10 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
             }
             processDrawingObject(sp, out);
         } else {
-            kDebug(30513) << "Nested group shapes not supported!";
-            //TODO: nested group shape!
+            processGroupShape(*o.rgfb[i].anon.get<OfficeArtSpgrContainer>(), out);
         }
     }
     out.xml.endElement(); // draw:g
-    m_processingGroup = false;
 }
 
 void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
@@ -950,16 +988,25 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
+    // OfficeArtClientTextBox.
+    quint32 textId = 0;
     if (o.clientTextbox) {
         const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
         if (tb) {
-            uint index = (tb->clientTextBox / 0x10000) - 1;
-            emit textBoxFound(index, out.stylesxml);
+            textId = tb->clientTextBox;
         } else {
             kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         }
     } else {
-        kDebug(30513) << "OfficeArtClientTextBox missing!";
+        if (ds.iTxid() < 0) {
+            kDebug(30513) << "lTxid property - negative text identifier!";
+        } else {
+            textId = (quint32)ds.iTxid();
+        }
+    }
+    if (textId) {
+        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
     }
 
     out.xml.endElement(); //draw:text-box
