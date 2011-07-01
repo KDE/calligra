@@ -290,6 +290,8 @@ void View::createCanvas(Section* _currentSection)
   connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
   
   m_canvas->updateOriginAndSize();
+  
+  setEnabled(_currentSection);
 }
 
 void View::setActiveSection( Section* page )

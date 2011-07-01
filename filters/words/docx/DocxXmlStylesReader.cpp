@@ -414,7 +414,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 if (m_currentStyleProperties == 0) {
                     m_currentStyleProperties = new MSOOXML::TableStyleProperties;
                 }
+                m_tableMainStyle = KoTblStyle::create();
                 TRY_READ(tblPr)
+                m_currentStyle->mainStyle = m_tableMainStyle;
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
                 m_currentStyleProperties = 0;
             }

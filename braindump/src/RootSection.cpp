@@ -32,6 +32,10 @@ RootSection::RootSection() : SectionGroup(0), m_undoStack(new KUndo2Stack(this))
 {
   connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
   connect(m_undoStack, SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
+  if(sections().isEmpty())
+  {
+    newSection(0);
+  }
 }
 
 RootSection::~RootSection()
