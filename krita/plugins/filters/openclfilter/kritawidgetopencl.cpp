@@ -35,7 +35,6 @@ KritaWidgetOpenCL::KritaWidgetOpenCL(QWidget * parent) : KisConfigWidget(parent)
 KisPropertiesConfiguration* KritaWidgetOpenCL::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("OpenCL", 1);
-    qDebug() << "is called?";
     config->setProperty("kernel", textEdit->toPlainText());
     return config;
 }

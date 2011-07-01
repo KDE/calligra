@@ -27,7 +27,6 @@
 #include <kis_processing_information.h>
 #include <kis_iterator_ng.h>
 #include <kis_math_toolbox.h>
-#include <kexi/kexidb/parser/sqltypes.h>
 
 KritaOpenCLFilter::KritaOpenCLFilter() : KisFilter(id(), categoryOther(), i18n("&OpenCL..."))
 {
@@ -58,6 +57,8 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
 {
     /* VARIABLES */
     int numberOfPixels = rect.height() * rect.width();
+    qint32 pixelSize = device->pixelSize();
+    QVector<qint32> valueOfPixel(pixelSize);
   
     /* GET KERNEL CODE */
     QVariant text;
@@ -92,18 +93,23 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
     QCLVector<double> alpha_output = context.createVector<double>(numberOfPixels);
     
     /* SUPPLY THE DATA TO KERNEL */
-    // MathToolbox: cjamge rawData to doubles
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
+    // MathToolbox: change rawData to doubles
+    /*KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
     QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
     if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
       return;
+    }*/
+    
+    // Read pixels
+    QVector< quint8* > readPixels = device->readPlanarBytes(rect.x(), rect.y(), rect.width(), rect.height());
+    for(int i = 0; i < numberOfPixels; ++i) {
+      qDebug() << "Blue: " << readPixels[0];
     }
     
-    // Iterator - read pixels
-    KisRectIteratorSP iterator = device->createRectIteratorNG(rect);
+    /*KisRectConstIteratorNG readIterator = device->createRectConstIteratorNG(rect);
     int currentPixel = 0;
     do {
-      const quint8* pixel = iterator->rawData();
+      const quint8* pixel = readIterator->oldRawData();
       
       blue[currentPixel]  = toDoubleFuncPtr[0](pixel, device->colorSpace()->channels()[0]->pos());
       green[currentPixel] = toDoubleFuncPtr[1](pixel, device->colorSpace()->channels()[1]->pos());
@@ -111,17 +117,18 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
       alpha[currentPixel] = toDoubleFuncPtr[3](pixel, device->colorSpace()->channels()[3]->pos());
       
       ++currentPixel;
-    } while (iterator->nextPixel());
+    } while (readIterator->nextPixel());*/
     
     /* APPLY KERNEL */
-    kritaKernel(blue, green, red, alpha, blue_output, green_output, red_output, alpha_output);
+    //kritaKernel(blue, green, red, alpha, blue_output, green_output, red_output, alpha_output);
     
     /* WRITE THE RESULT*/
     // MathToolbox: change doubles back to rawData
-    QVector<PtrFromDouble> fromDoubleFuncPtr(device->colorSpace()->channels().count());
+    /*QVector<PtrFromDouble> fromDoubleFuncPtr(device->colorSpace()->channels().count());
     if (!mathToolbox->getFromDoubleChannelPtr(device->colorSpace()->channels(), fromDoubleFuncPtr)) {
       return;
-    }
+    }*/
     
-    // Iterator - write pixels
+    // Write Pixels
+    //device->writePlanarBytes();
 }
