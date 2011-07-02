@@ -196,9 +196,9 @@ bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode v
         }
     }
     qDebug() << part << item->partClass();
-    if (part)
-        qDebug() << item->partClass() << part->supportedUserViewModes();
-    return part && (part->supportedUserViewModes() & viewMode) && (viewMode == Kexi::DataViewMode);
+    /*if (part)
+        qDebug() << item->partClass() << part->supportedUserViewModes();*/
+    return part /*&& (part->supportedUserViewModes() & viewMode)*/ && (viewMode == Kexi::DataViewMode);
 }
 
 //========KexiMainWindowIFace====================
