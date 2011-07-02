@@ -67,6 +67,7 @@ public:
     qreal vOffset();
     qreal hOffset();
 
+    void setRect(const QRect& rect);
     void setRectangle(wvWare::Word97::FSPA& spa);
     void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
     void setChildRectangle(MSO::OfficeArtChildAnchor& anchor);
@@ -273,6 +274,11 @@ private:
      * Insert an empty frame.  Use when the picture is an external file.
      */
     void insertEmptyInlineFrame(DrawingWriter& out);
+
+    /**
+     * A helper to get the correct rectangle for a shape or a childShape.
+     */
+    QRect getRect(const MSO::OfficeArtSpContainer &o);
 
     Document* m_document;
     KoStore* m_store;

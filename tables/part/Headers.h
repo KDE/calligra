@@ -65,9 +65,6 @@ protected:
     void resize(const QSizeF& size, const QSizeF& oldSize);
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
-
-    void drawText(QPainter* painter, const QFont& font, const QPointF& location, const QString& text, double width) const;
-
     
     void doToolChanged(const QString& toolId);
 
@@ -155,8 +152,6 @@ protected:
     void focusOut(QFocusEvent* ev);
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
-
-    void drawText(QPainter* painter, const QFont& font, qreal ypos, qreal width, const QString& text) const;
 
     void doToolChanged(const QString& toolId);
 protected:

@@ -117,6 +117,7 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
   delete m_model;
   m_model = model;
 
+  connect(m_model, SIGNAL(activeSectionChanged(Section*)), SLOT(slotSectionActivated(Section*)));
   connect(m_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(insertedSection(QModelIndex,int)));
   connect(m_model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(removedSection()));
 
@@ -126,6 +127,11 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
 void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
 {
   Section* section = qVariantValue<Section*>(m_proxy->data(index, DocumentModel::SectionPtr));
+  m_view->setActiveSection(section);
+}
+
+void SectionsBoxDock::slotSectionActivated(Section* section)
+{
   m_view->setActiveSection(section);
 }
 
