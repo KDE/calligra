@@ -110,7 +110,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
     svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
 
     {
-        SvgSavingContext savingContext(outputDevice);
+        SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
 
         // top level shapes
         foreach(KoShape *shape, m_toplevelShapes) {

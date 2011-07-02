@@ -32,8 +32,8 @@ class QTransform;
 class KOSVG_EXPORT SvgSavingContext
 {
 public:
-    /// Creates a new svg svaing context on the specified output device
-    SvgSavingContext(QIODevice &outputDevice);
+    /// Creates a new svg saving context on the specified output device
+    SvgSavingContext(QIODevice &outputDevice, bool saveInlineImages = true);
 
     /// Virtual destructor
     virtual ~SvgSavingContext();
@@ -52,6 +52,9 @@ public:
 
     /// Returns the transformation used to transform into usre space
     QTransform userSpaceTransform() const;
+
+    /// Returns if image should be saved inline
+    bool isSavingInlineImages() const;
 
 private:
     class Private;

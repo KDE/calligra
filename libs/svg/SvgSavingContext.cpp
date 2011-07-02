@@ -32,6 +32,7 @@ class SvgSavingContext::Private
 public:
     Private(QIODevice &outputDevice)
         : output(outputDevice), styleWriter(0), shapeWriter(0)
+        , saveInlineImages(true)
     {
         styleWriter = new KoXmlWriter(&styleBuffer, 1);
         styleWriter->startElement("defs");
@@ -56,12 +57,13 @@ public:
     QHash<QString, int> uniqueNames;
     QHash<const KoShape*, QString> shapeIds;
     QTransform userSpaceMatrix;
+    bool saveInlineImages;
 };
 
-SvgSavingContext::SvgSavingContext(QIODevice &outputDevice)
+SvgSavingContext::SvgSavingContext(QIODevice &outputDevice, bool saveInlineImages)
     : d(new Private(outputDevice))
 {
-
+    d->saveInlineImages = saveInlineImages;
 }
 
 SvgSavingContext::~SvgSavingContext()
@@ -131,4 +133,9 @@ QString SvgSavingContext::getID(const KoShape *obj)
 QTransform SvgSavingContext::userSpaceTransform() const
 {
     return d->userSpaceMatrix;
+}
+
+bool SvgSavingContext::isSavingInlineImages() const
+{
+    return d->saveInlineImages;
 }
