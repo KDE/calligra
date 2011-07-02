@@ -20,10 +20,12 @@ set(KexiMobile_SRCS main.cpp
 
 qt4_automoc(${KexiMobile_SRCS})
 
-add_executable(KexiMobile ${KexiMobile_SRCS})
+add_executable(keximobile ${KexiMobile_SRCS})
 
-target_link_libraries(KexiMobile ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
+target_link_libraries(keximobile ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
 	kexiextendedwidgets
 	kexicore
 	kdeui
 )
+
+install(TARGETS keximobile ${INSTALL_TARGETS_DEFAULT_ARGS})
