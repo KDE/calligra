@@ -194,7 +194,7 @@ void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, QPai
 {
     qreal w = qAbs(r - l);
     qreal adj1 = 50000;
-    qreal x1 = (w * adj1) / 100000;
+    qreal x1 = w * adj1 / 100000;
 
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
@@ -208,10 +208,10 @@ void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, QPai
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
     qreal adj2 = 50000;
-    qreal x1 = (w * adj1) / 100000;
-    qreal x2 = (x1 + r) / 2;
-    qreal y2 = (h * adj2) / 100000;
-    qreal y1 = (t + y2) / 2;
+    qreal x1 = w * adj1 / 100000;
+    qreal x2 = x1 + r / 2;
+    qreal y2 = h * adj2 / 100000;
+    qreal y1 = t + y2 / 2;
     
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
@@ -227,12 +227,12 @@ void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, QPai
     qreal adj1 = 50000;
     qreal adj2 = 50000;
     qreal adj3 = 50000;
-    qreal x1 = (w * adj1) / 100000;
-    qreal x3 = (w * adj3) / 100000;
-    qreal x2 = (x1 + x3) / 2;
-    qreal y2 = (h * adj2) / 100000;
-    qreal y1 = (t + y2) / 2;
-    qreal y3 = (b + y2) / 2;
+    qreal x1 = w * adj1 / 100000;
+    qreal x3 = w * adj3 / 100000;
+    qreal x2 = x1 + x3 / 2;
+    qreal y2 = h * adj2 / 100000;
+    qreal y1 = t + y2 / 2;
+    qreal y3 = b + y2 / 2;
     
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
@@ -272,16 +272,16 @@ void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, QP
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
     qreal adj2 = 50000;
-    qreal x2 = (w * adj1) / 100000;
-    qreal x1 = (l + x2) / 2;
-    qreal x3 = (r + x2) / 2;
-    qreal x4 = (x2 + x3) / 2;
-    qreal x5 = (x3 + r) / 2;
-    qreal y4 = (h * adj2) / 100000;
-    qreal y1 = (t + y4) / 2;
-    qreal y2 = (t + y1) / 2;
-    qreal y3 = (y1 + y4) / 2;
-    qreal y5 = (b + y4) / 2;
+    qreal x2 = w * adj1 / 100000;
+    qreal x1 = l + x2 / 2;
+    qreal x3 = r + x2 / 2;
+    qreal x4 = x2 + x3 / 2;
+    qreal x5 = x3 + r / 2;
+    qreal y4 = h * adj2 / 100000;
+    qreal y1 = t + y4 / 2;
+    qreal y2 = t + y1 / 2;
+    qreal y3 = y1 + y4 / 2;
+    qreal y5 = b + y4 / 2;
         
     shapePath.moveTo(l, t);
     shapePath.cubicTo(x1, t, l + x2, y2, l + x2, y1);
@@ -296,20 +296,20 @@ void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, QP
     qreal adj1 = 50000;
     qreal adj2 = 50000;
     qreal adj3 = 50000;
-    qreal x3 = (w * adj1) / 100000;
-    qreal x6 = (w * adj3) / 100000;
-    qreal x1 = (x3 + x6) / 2;
-    qreal x2 = (l + x3) / 2;
-    qreal x4 = (x3 + x1) / 2;
-    qreal x5 = (x6 + x1) / 2;
-    qreal x7 = (x6 + r) / 2;
-    qreal y4 = (h * adj2) / 100000;
-    qreal y1 = (t + y4) / 2;
-    qreal y2 = (t + y1) / 2;
-    qreal y3 = (y1 + y4) / 2;
-    qreal y5 = (b + y4) / 2;
-    qreal y6 = (y5 + y4) / 2;
-    qreal y7 = (y5 + b) / 2;
+    qreal x3 = w * adj1 / 100000;
+    qreal x6 = w * adj3 / 100000;
+    qreal x1 = x3 + x6 / 2;
+    qreal x2 = l + x3 / 2;
+    qreal x4 = x3 + x1 / 2;
+    qreal x5 = x6 + x1 / 2;
+    qreal x7 = x6 + r / 2;
+    qreal y4 = h * adj2 / 100000;
+    qreal y1 = t + y4 / 2;
+    qreal y2 = t + y1 / 2;
+    qreal y3 = y1 + y4 / 2;
+    qreal y5 = b + y4 / 2;
+    qreal y6 = y5 + y4 / 2;
+    qreal y7 = y5 + b / 2;
 
     shapePath.moveTo(l, t);
     shapePath.cubicTo(x2, t, l + x3, y2, l + x3, y1);
