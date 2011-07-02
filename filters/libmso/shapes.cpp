@@ -195,6 +195,7 @@ void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, QPai
     qreal w = qAbs(r - l);
     qreal adj1 = 50000;
     qreal x1 = (w * adj1) / 100000;
+
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
     shapePath.lineTo(l + x1, b);
@@ -246,7 +247,7 @@ void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, QP
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
 
-    shapePath.moveTo(l,t);
+    shapePath.moveTo(l, t);
     shapePath.cubicTo(l + w / 2, t, r, h / 2, r, b);
 }
 
@@ -255,11 +256,14 @@ void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, QP
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
-    qreal x2 = (w * adj1) / 100000;
-    qreal x1 = (l + x2) / 2;
+    qreal x2 = w * adj1 / 100000;
+    qreal x1 = l + x2 /*/ 2*/;
+    qreal x3 = r + x2 / 2;
+    qreal y3 = h * 3 / 4;
         
-    shapePath.moveTo(l,t);
-    shapePath.cubicTo(x1, t, l + x2, h / 4, l + x2, h / 2);
+    shapePath.moveTo(l, t);
+    shapePath.cubicTo(x1, t, x1, t + h / 2, l + x2, t + h / 2);
+    shapePath.cubicTo(l + x2, t + h / 2, l + x2, b, r, b);
 }
 
 void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
@@ -314,6 +318,9 @@ void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, QP
     shapePath.cubicTo(l + x6, y7, x7, b, r, b);
 }
 
+/**
+ * Common handler for Connectors.
+ */
 void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
 {
     const OfficeArtDggContainer * drawingGroup = 0;
@@ -1248,9 +1255,15 @@ QString ODrawToOdf::path2svg(const QPainterPath &path)
         case QPainterPath::LineToElement:
             d.append(QString("L %1 %2").arg(e.x).arg(e.y));
             break;
+        case QPainterPath::CurveToElement:
+            d.append(QString("C %1 %2").arg(e.x).arg(e.y));
+            break;
+        case QPainterPath::CurveToDataElement:
+            d.append(QString(" %1 %2").arg(e.x).arg(e.y));
+            break;
         default:
             //TODO: CurveToElement, CurveToElementDataElement
-            qDebug() << "This element unhandled";
+            qDebug() << "This element unhandled: " << e.type;
         }
     }
     return d;
