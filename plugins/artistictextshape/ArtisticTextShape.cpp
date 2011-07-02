@@ -29,6 +29,8 @@
 #include <KoUnit.h>
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
+#include <SvgSavingContext.h>
+#include <SvgUtil.h>
 
 #include <KLocale>
 #include <KDebug>
@@ -950,3 +952,141 @@ void ArtisticTextShape::finishTextUpdate()
 
     m_textUpdateCounter--;
 }
+
+bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
+{
+    context.shapeWriter().startElement("text");
+    context.shapeWriter().addAttribute("id", context.getID(this));
+
+    saveSvgStyle(this, context);
+
+    const QList<ArtisticTextRange> formattedText = text();
+
+    // if we have only a single text range, save the font on the text element
+    const bool hasSingleRange = formattedText.size() == 1;
+    if (hasSingleRange) {
+        saveSvgFont(formattedText.first().font(), context);
+    }
+
+    qreal anchorOffset = 0.0;
+    if (textAnchor() == ArtisticTextShape::AnchorMiddle) {
+        anchorOffset += 0.5 * this->size().width();
+        context.shapeWriter().addAttribute("text-anchor", "middle");
+    } else if (textAnchor() == ArtisticTextShape::AnchorEnd) {
+        anchorOffset += this->size().width();
+        context.shapeWriter().addAttribute("text-anchor", "end");
+    }
+
+    // check if we are set on a path
+    if (layout() == ArtisticTextShape::Straight) {
+        QTransform m = transformation();
+        if (m.type() == QTransform::TxTranslate) {
+            const QPointF pos = position();
+            context.shapeWriter().addAttributePt("x", pos.x() + anchorOffset);
+            context.shapeWriter().addAttributePt("y", pos.y() + baselineOffset());
+        } else {
+            context.shapeWriter().addAttributePt("x", anchorOffset);
+            context.shapeWriter().addAttributePt("y", baselineOffset());
+            context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+        }
+        foreach(const ArtisticTextRange &range, formattedText) {
+            saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
+        }
+    } else {
+        KoPathShape * baselineShape = KoPathShape::createShapeFromPainterPath(baseline());
+
+        QString id = context.createUID("baseline");
+        context.styleWriter().startElement("path");
+        context.styleWriter().addAttribute("id", id);
+        context.styleWriter().addAttribute("d", baselineShape->toString(baselineShape->absoluteTransformation(0) * context.userSpaceTransform()));
+        context.styleWriter().endElement();
+
+        context.shapeWriter().startElement("textPath");
+        context.shapeWriter().addAttribute("xlink:href", "#"+id);
+        if (startOffset() > 0.0)
+            context.shapeWriter().addAttribute("startOffset", QString("%1%").arg(startOffset() * 100.0));
+        foreach(const ArtisticTextRange &range, formattedText) {
+            saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
+        }
+        context.shapeWriter().endElement();
+
+        delete baselineShape;
+    }
+
+    context.shapeWriter().endElement();
+
+    return true;
+}
+
+void ArtisticTextShape::saveSvgFont(const QFont &font, SvgSavingContext &context)
+{
+    context.shapeWriter().addAttribute("font-family", font.family());
+    context.shapeWriter().addAttributePt("font-size", font.pointSizeF());
+
+    if (font.bold())
+        context.shapeWriter().addAttribute("font-weight", "bold");
+    if (font.italic())
+        context.shapeWriter().addAttribute("font-style", "italic");
+}
+
+void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveRangeFont, qreal baselineOffset)
+{
+    context.shapeWriter().startElement("tspan");
+    if (range.hasXOffsets()) {
+        const char *attributeName = (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? "x" : "dx");
+        QString attributeValue;
+        int charIndex = 0;
+        while(range.hasXOffset(charIndex)) {
+            if (charIndex)
+                attributeValue += ",";
+            attributeValue += QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
+        }
+        context.shapeWriter().addAttribute(attributeName, attributeValue);
+    }
+    if (range.hasYOffsets()) {
+        if (range.yOffsetType() != ArtisticTextRange::AbsoluteOffset)
+            baselineOffset = 0;
+        const char *attributeName = (range.yOffsetType() == ArtisticTextRange::AbsoluteOffset ? " y" : " dy");
+        QString attributeValue;
+        int charIndex = 0;
+        while(range.hasYOffset(charIndex)) {
+            if (charIndex)
+                attributeValue += ",";
+            attributeValue += QString("%1").arg(SvgUtil::toUserSpace(baselineOffset+range.yOffset(charIndex++)));
+        }
+        context.shapeWriter().addAttribute(attributeName, attributeValue);
+    }
+    if (range.hasRotations()) {
+        QString attributeValue;
+        int charIndex = 0;
+        while(range.hasRotation(charIndex)) {
+            if (charIndex)
+                attributeValue += ",";
+            attributeValue += QString("%1").arg(range.rotation(charIndex++));
+        }
+        context.shapeWriter().addAttribute("rotate", attributeValue);
+    }
+    if (range.baselineShift() != ArtisticTextRange::None) {
+        switch(range.baselineShift()) {
+        case ArtisticTextRange::Sub:
+            context.shapeWriter().addAttribute("baseline-shift", "sub");
+            break;
+        case ArtisticTextRange::Super:
+            context.shapeWriter().addAttribute("baseline-shift", "super");
+            break;
+        case ArtisticTextRange::Percent:
+            context.shapeWriter().addAttribute("baseline-shift", QString("%1%").arg(range.baselineShiftValue()*100));
+            break;
+        case ArtisticTextRange::Length:
+            context.shapeWriter().addAttribute("baseline-shift", QString("%1%").arg(SvgUtil::toUserSpace(range.baselineShiftValue())));
+            break;
+        default:
+            break;
+        }
+    }
+    if (saveRangeFont)
+        saveSvgFont(range.font(), context);
+    context.shapeWriter().addTextNode(range.text());
+    context.shapeWriter().endElement();
+}
+

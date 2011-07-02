@@ -24,6 +24,7 @@ class KoXmlWriter;
 class KoShape;
 class QIODevice;
 class QString;
+class QTransform;
 
 #include "kosvg_export.h"
 
@@ -48,6 +49,9 @@ public:
 
     /// Returns the unique id for the given shape
     QString getID(const KoShape *obj);
+
+    /// Returns the transformation used to transform into usre space
+    QTransform userSpaceTransform() const;
 
 private:
     class Private;

@@ -24,7 +24,7 @@
 #include "ArtisticTextRange.h"
 #include <KoShape.h>
 #include <KoPostscriptPaintDevice.h>
-
+#include <SvgSerializable.h>
 #include <QtGui/QFont>
 
 class QPainter;
@@ -35,7 +35,7 @@ class KoPathShape;
 /// Character position within text shape (range index, range character index)
 typedef QPair<int, int> CharIndex;
 
-class ArtisticTextShape : public KoShape
+class ArtisticTextShape : public KoShape, public SvgSerializable
 {
 public:
     enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };
@@ -63,6 +63,8 @@ public:
     virtual void setSize( const QSizeF &size );
     /// reimplemented
     virtual QPainterPath outline() const;
+    /// reimplemented from SvgSerializable
+    virtual bool saveSvg(SvgSavingContext &context);
 
     /// Sets the plain text to display
     void setPlainText(const QString &newText);
@@ -202,6 +204,11 @@ private:
 
     /// Returns the bounding box for an empty text shape
     QRectF nullBoundBox() const;
+
+    /// Saves svg font
+    void saveSvgFont(const QFont &font, SvgSavingContext &context);
+    /// Saves svg text range
+    void saveSvgTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveFont, qreal baselineOffset);
 
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;

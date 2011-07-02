@@ -18,6 +18,8 @@
  */
 
 #include "SvgSavingContext.h"
+#include "SvgUtil.h"
+
 #include <KoXmlWriter.h>
 #include <KoShape.h>
 #include <KoShapeGroup.h>
@@ -34,6 +36,9 @@ public:
         styleWriter = new KoXmlWriter(&styleBuffer, 1);
         styleWriter->startElement("defs");
         shapeWriter = new KoXmlWriter(&shapeBuffer, 1);
+
+        const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
+        userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
     }
 
     ~Private()
@@ -50,6 +55,7 @@ public:
 
     QHash<QString, int> uniqueNames;
     QHash<const KoShape*, QString> shapeIds;
+    QTransform userSpaceMatrix;
 };
 
 SvgSavingContext::SvgSavingContext(QIODevice &outputDevice)
@@ -122,3 +128,7 @@ QString SvgSavingContext::getID(const KoShape *obj)
     return id;
 }
 
+QTransform SvgSavingContext::userSpaceTransform() const
+{
+    return d->userSpaceMatrix;
+}

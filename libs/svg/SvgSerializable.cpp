@@ -18,6 +18,8 @@
  */
 
 #include "SvgSerializable.h"
+#include "SvgSavingContext.h"
+#include "SvgStyleWriter.h"
 
 SvgSerializable::~SvgSerializable()
 {
@@ -30,5 +32,5 @@ bool SvgSerializable::saveSvg(SvgSavingContext &/*context*/)
 
 void SvgSerializable::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
-
+    SvgStyleWriter::saveSvgStyle(shape, context);
 }

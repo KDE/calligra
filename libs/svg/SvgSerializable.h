@@ -22,8 +22,8 @@
 
 #include "kosvg_export.h"
 
-class KoShape;
 class SvgSavingContext;
+class KoShape;
 
 class KOSVG_EXPORT SvgSerializable
 {

@@ -26,54 +26,39 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef SVGWRITER_H
-#define SVGWRITER_H
+#ifndef SVGSTYLEWRITER_H
+#define SVGSTYLEWRITER_H
 
 #include "kosvg_export.h"
-#include <QtCore/QList>
-#include <QtCore/QSizeF>
-#include <QtCore/QString>
+#include <QtGui/QGradient>
 
 class SvgSavingContext;
-class KoShapeLayer;
-class KoShapeGroup;
 class KoShape;
-class KoPathShape;
-class QTextStream;
-class QIODevice;
-class QFont;
+class KoPatternBackground;
+class QTransform;
 
-/// Implements exporting shapes to SVG
-class KOSVG_EXPORT SvgWriter
+/// Helper class to save svg styles
+class KOSVG_EXPORT SvgStyleWriter
 {
 public:
-    /// Creates svg writer to export specified layers
-    SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize);
+    /// Saves the style of the specified shape
+    static void saveSvgStyle(KoShape *shape, SvgSavingContext &context);
 
-    /// Creates svg writer to export specified shapes
-    SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize);
-
-    /// Destroys the svg writer
-    virtual ~SvgWriter();
-
-    /// Writes svg to specified output device
-    bool save(QIODevice &outputDevice);
-
-    /// Writes svg to the specified file
-    bool save(const QString &filename, bool writeInlineImages);
-
-private:
-    void saveLayer(KoShapeLayer *layer, SvgSavingContext &context);
-    void saveGroup(KoShapeGroup *group, SvgSavingContext &context);
-    void saveShape(KoShape *shape, SvgSavingContext &context);
-    void savePath(KoPathShape *path, SvgSavingContext &context);
-
-    void saveImage(KoShape *picture, SvgSavingContext &context);
-
-    QList<KoShape*> m_toplevelShapes;
-    QSizeF m_pageSize;
-    bool m_writeInlineImages;
-    QString m_filename;
+protected:
+    /// Saves fill style of specified shape
+    static void saveSvgFill(KoShape *shape, SvgSavingContext &context);
+    /// Saves stroke style of specified shape
+    static void saveSvgStroke(KoShape *shape, SvgSavingContext &context);
+    /// Saves effects of specified shape
+    static void saveSvgEffects(KoShape *shape, SvgSavingContext &context);
+    /// Saves clipping of specified shape
+    static void saveSvgClipping(KoShape *shape, SvgSavingContext &context);
+    /// Saves gradient color stops
+    static void saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context);
+    /// Saves gradient
+    static QString saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
+    /// Saves pattern
+    static QString saveSvgPattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context);
 };
 
-#endif // SVGWRITER_H
+#endif // SVGSTYLEWRITER_H

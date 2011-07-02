@@ -5,6 +5,7 @@ set(kosvg_LIB_SRCS
     SvgGraphicContext.cpp
     SvgSavingContext.cpp
     SvgWriter.cpp
+    SvgStyleWriter.cpp
     SvgSerializable.cpp
 )
 
