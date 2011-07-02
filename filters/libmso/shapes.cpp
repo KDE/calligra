@@ -23,15 +23,9 @@
  * This details the geometry etc. in Appendix D, in the file 
  * presetShapeDefinitions.xml.
  * 
- * @note Of the BentConnector[2345] shapes, the MS Office suite only appears to
+ * @note Of the {Bent,Curved}Connector[2345] shapes, the MS Office only seems to
  * support the [23] variants. The remainder have been coded in a manner 
  * consistent with the [23] variants, but have not been tested.
- * 
- * @note Of the CurvedConnector[2345], the MS Office suite only appears to 
- * support the [23] variants. The remainder have been coded in a manner 
- * consistent with the [23] variants, but have not been tested. The [23] 
- * variants themselves have only been implemented in order to allow support for
- * them to be added/tested.
  */
 
 #include "ODrawToOdf.h"
@@ -154,43 +148,21 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement();
 }
 
-void ODrawToOdf::processStraightConnector1(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::drawStraightConnector1(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
-    const QRectF rect = getRect(o);
-    qreal x1 = rect.x();
-    qreal y1 = rect.y();
-    qreal x2 = rect.x() + rect.width();
-    qreal y2 = rect.y() + rect.height();
-
-    // shape mirroring
-    if (o.shapeProp.fFlipV) {
-        qSwap(y1, y2);
-    }
-    if (o.shapeProp.fFlipH) {
-        qSwap(x1, x2);
-    }
-
-    out.xml.startElement("draw:connector");
-    out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
-    out.xml.addAttribute("svg:y1", client->formatPos(out.vOffset(y1)));
-    out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
-    out.xml.addAttribute("svg:y2", client->formatPos(out.vOffset(y2)));
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
     out.xml.addAttribute("draw:type", "line");
-    processText(o, out);
-    out.xml.endElement();
-
+    shapePath.moveTo(l, t);
+    shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     shapePath.moveTo(l, t);
     shapePath.lineTo(r, t);
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     qreal w = qAbs(r - l);
     qreal adj1 = 50000;
@@ -202,7 +174,7 @@ void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, QPai
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
@@ -220,7 +192,7 @@ void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, QPai
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
@@ -242,7 +214,7 @@ void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, QPai
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
@@ -251,7 +223,7 @@ void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, QP
     shapePath.cubicTo(l + w / 2, t, r, h / 2, r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
@@ -266,7 +238,7 @@ void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, QP
     shapePath.cubicTo(l + x2, t + h / 2, l + x2, b, r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
@@ -289,7 +261,7 @@ void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, QP
     shapePath.cubicTo(x5, y4, r, y5, r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
@@ -356,16 +328,13 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
         sy2 = shapeRect.bottomRight().y();
     }
 
-    // compute path
-    QPainterPath shapePath;
-    (this->*drawPath)(sx1, sy1, sx2, sy2, shapePath);
-
-    // transform the path according the shape properties like flip and rotation
+    // Prepare to transform the path according the shape properties like flip 
+    // and rotation.
     QTransform m;
     m.reset();
     m.translate( -shapeRect.center().x(), -shapeRect.center().y() );
 
-    // shape mirroring
+    // Mirroring
     if (o.shapeProp.fFlipH){
         m.scale(-1,1);
     }
@@ -379,14 +348,19 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     }
 
     m.translate( shapeRect.center().x(), shapeRect.center().y() );
+
+    out.xml.startElement("draw:connector");
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    
+    // Compute path and transform it.
+    QPainterPath shapePath;
+    (this->*drawPath)(sx1, sy1, sx2, sy2, out, shapePath);
     shapePath = m.map(shapePath);
 
     // translate the QPainterPath into svg:d attribute
     QString path = path2svg(shapePath);
 
-    out.xml.startElement("draw:connector");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
     out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
     out.xml.addAttribute("svg:y1", client->formatPos(out.vOffset(y1)));
     out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
@@ -397,7 +371,6 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
 
     processText(o, out);
     out.xml.endElement();
-
 }
 
 void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
@@ -525,7 +498,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     // msosptTextOnRing
     //
     case msosptStraightConnector1:
-        processStraightConnector1(o, out);
+        processConnector(o, out, &ODrawToOdf::drawStraightConnector1);
         break;
     case msosptBentConnector2:
         processConnector(o, out, &ODrawToOdf::drawPathBentConnector2);
@@ -1262,8 +1235,7 @@ QString ODrawToOdf::path2svg(const QPainterPath &path)
             d.append(QString(" %1 %2").arg(e.x).arg(e.y));
             break;
         default:
-            //TODO: CurveToElement, CurveToElementDataElement
-            qDebug() << "This element unhandled: " << e.type;
+            qWarning() << "This element unhandled: " << e.type;
         }
     }
     return d;
