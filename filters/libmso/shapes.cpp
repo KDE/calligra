@@ -157,6 +157,7 @@ void ODrawToOdf::drawStraightConnector1(qreal l, qreal t, qreal r, qreal b, Writ
 
 void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     shapePath.moveTo(l, t);
     shapePath.lineTo(r, t);
     shapePath.lineTo(r, b);
@@ -164,6 +165,7 @@ void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writ
 
 void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     qreal w = qAbs(r - l);
     qreal adj1 = 50000;
     qreal x1 = w * adj1 / 100000;
@@ -176,14 +178,15 @@ void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writ
 
 void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
     qreal adj2 = 50000;
     qreal x1 = w * adj1 / 100000;
-    qreal x2 = x1 + r / 2;
+//    qreal x2 = x1 + r / 2;
     qreal y2 = h * adj2 / 100000;
-    qreal y1 = t + y2 / 2;
+//    qreal y1 = t + y2 / 2;
     
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
@@ -194,6 +197,7 @@ void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writ
 
 void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
@@ -201,10 +205,10 @@ void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writ
     qreal adj3 = 50000;
     qreal x1 = w * adj1 / 100000;
     qreal x3 = w * adj3 / 100000;
-    qreal x2 = x1 + x3 / 2;
+//    qreal x2 = x1 + x3 / 2;
     qreal y2 = h * adj2 / 100000;
-    qreal y1 = t + y2 / 2;
-    qreal y3 = b + y2 / 2;
+//    qreal y1 = t + y2 / 2;
+//    qreal y3 = b + y2 / 2;
     
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
@@ -216,6 +220,7 @@ void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writ
 
 void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
 
@@ -225,13 +230,14 @@ void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Wr
 
 void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
     qreal x2 = w * adj1 / 100000;
     qreal x1 = l + x2 /*/ 2*/;
-    qreal x3 = r + x2 / 2;
-    qreal y3 = h * 3 / 4;
+//    qreal x3 = r + x2 / 2;
+//    qreal y3 = h * 3 / 4;
         
     shapePath.moveTo(l, t);
     shapePath.cubicTo(x1, t, x1, t + h / 2, l + x2, t + h / 2);
@@ -240,6 +246,7 @@ void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Wr
 
 void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
@@ -263,6 +270,7 @@ void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Wr
 
 void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
 {
+    Q_UNUSED(out);
     qreal w = qAbs(r - l);
     qreal h = qAbs(b - t);
     qreal adj1 = 50000;
