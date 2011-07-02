@@ -20,12 +20,12 @@
 #ifndef _CHANGE_LAYOUT_COMMAND_H_
 #define _CHANGE_LAYOUT_COMMAND_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class RememberPositionCommand;
 class Section;
 
-class ChangeLayoutCommand : public QUndoCommand {
+class ChangeLayoutCommand : public KUndo2Command {
   public:
     ChangeLayoutCommand( Section* _section, const QString& _newLayout);
     virtual ~ChangeLayoutCommand();

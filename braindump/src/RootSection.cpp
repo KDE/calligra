@@ -19,7 +19,7 @@
 
 #include "RootSection.h"
 
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include "Section.h"
 #include "SectionsIO.h"
@@ -28,10 +28,14 @@
 
 #include <KDebug>
 
-RootSection::RootSection() : SectionGroup(0), m_undoStack(new KUndoStack(this)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this)), m_currentSection(0)
+RootSection::RootSection() : SectionGroup(0), m_undoStack(new KUndo2Stack(this)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this)), m_currentSection(0)
 {
   connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
   connect(m_undoStack, SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
+  if(sections().isEmpty())
+  {
+    newSection(0);
+  }
 }
 
 RootSection::~RootSection()
@@ -48,7 +52,7 @@ SectionsIO* RootSection::sectionsIO()
   return m_sectionsSaver;
 }
 
-void RootSection::addCommand(Section* _section, QUndoCommand* _command)
+void RootSection::addCommand(Section* _section, KUndo2Command* _command)
 {
   kDebug() << _command << " is added for section " << _section;
   m_commandsMap[_command] =_section;
@@ -60,14 +64,14 @@ void RootSection::createActions(KActionCollection* _actionCollection) {
   m_undoStack->createRedoAction(_actionCollection);
 }
 
-KUndoStack* RootSection::undoStack()
+KUndo2Stack* RootSection::undoStack()
 {
   return m_undoStack;
 }
 
 void RootSection::undoIndexChanged(int idx)
 {
-  const QUndoCommand* command = m_undoStack->command(idx - 1);
+  const KUndo2Command* command = m_undoStack->command(idx - 1);
   kDebug() << idx << " " << command << " " << m_undoStack->count() << " " << m_undoStack->cleanIndex() << " " << m_undoStack->index();
   Section* section = m_commandsMap[command];
   if(!section && idx == m_undoStack->count())

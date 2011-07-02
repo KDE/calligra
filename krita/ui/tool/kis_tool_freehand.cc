@@ -109,6 +109,11 @@ KisToolFreehand::~KisToolFreehand()
     delete m_painter;
 }
 
+int KisToolFreehand::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 void KisToolFreehand::deactivate()
 {
     if(mode() == PAINT_MODE)
@@ -182,6 +187,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                                          KisVector2D::Zero(),
                                                          e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed());
         m_previousTangent = QPointF(0.0, 0.0);
+        m_haveTangent = false;
         m_strokeBegin = e->point;
 
         e->accept();
@@ -244,12 +250,16 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                             m_strokeTimeMeasure.elapsed());
 
     if (m_smooth) {
-        if (m_previousTangent.isNull()) {
-            m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * (m_smoothness / 3.0);
+        if (!m_haveTangent) {
+            m_haveTangent = true;
+            m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * m_smoothness /
+                                 (3.0 * (info.currentTime() - m_previousPaintInformation.currentTime()));
         } else {
-            QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 6.0);
-            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
-            QPointF control2 = m_previousPaintInformation.pos() - newTangent;
+            QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * m_smoothness /
+                                  (3.0 * (info.currentTime() - m_olderPaintInformation.currentTime()));
+            qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
+            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
+            QPointF control2 = m_previousPaintInformation.pos() - newTangent * scaleFactor;
             paintBezierCurve(m_olderPaintInformation,
                             control1,
                             control2,
@@ -292,14 +302,16 @@ void KisToolFreehand::finishStroke()
         // shouldn't happen
         return;
     }
-    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 3.0);
-    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
+    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * m_smoothness / 3.0;
+    qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
+    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
     QPointF control2 = m_previousPaintInformation.pos() - newTangent;
     paintBezierCurve(m_olderPaintInformation,
                     control1,
                     control2,
                     m_previousPaintInformation);
     m_previousTangent = QPointF(0.0, 0.0);
+    m_haveTangent = false;
 }
 
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)
@@ -390,6 +402,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     }
 
     m_previousTangent = QPointF(0, 0);
+    m_haveTangent = false;
 
 
 #ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
@@ -640,13 +653,27 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
 
 void KisToolFreehand::increaseBrushSize()
 {
-    currentPaintOpPreset()->settings()->changePaintOpSize(1, 0);
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int increment = 1;
+    if(paintopSize > 100) {
+        increment = 30;
+    } else if (paintopSize > 10){
+        increment = 10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
     showOutlineTemporary();
 }
 
 void KisToolFreehand::decreaseBrushSize()
 {
-    currentPaintOpPreset()->settings()->changePaintOpSize(-1, 0);
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int decrement = -1;
+    if(paintopSize > 100) {
+        decrement = -30;
+    } else if (paintopSize > 20){
+        decrement = -10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
     showOutlineTemporary();
 }
 
@@ -659,12 +686,15 @@ void KisToolFreehand::updateOutlineRect()
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 
-#ifdef __GNUC__
-#warning "Remove adjusted() call -- it smells hacky"
-#else
-#pragma WARNING( "Remove adjusted() call -- it smells hacky" )
-#endif
-    m_oldOutlineRect = outlineDocRect.adjusted(-2,-2,2,2);
+    // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
+    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
+    // See BUG 275829
+    qreal zoomX;
+    qreal zoomY;
+    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+    qreal xoffset = 2.0/zoomX;
+    qreal yoffset = 2.0/zoomY;
+    m_oldOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
 
     canvas()->updateCanvas(m_oldOutlineRect);
 }

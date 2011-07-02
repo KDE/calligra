@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -22,6 +22,7 @@
  */
 
 #include "DocxXmlStylesReader.h"
+#include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
@@ -172,7 +173,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pPrDefault)
             ELSE_TRY_READ_IF(rPrDefault)
@@ -203,7 +204,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_pPrDefault()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pPr)
             ELSE_WRONG_FORMAT
@@ -229,7 +230,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_rPrDefault()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rPr)
             ELSE_WRONG_FORMAT
@@ -351,9 +352,10 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             // Both types must be copied as it can contain both
             KoGenStyle::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::ParagraphType);
             KoGenStyle::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::TextType);
-            // Fixme: this value should be in fact read from settings.xml, in practise it most often it seems to be 720
-            // which equals to 36 pt
-            m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", 36);
+            if (m_context->import->documentSettings().contains("defaultTabStop")) {
+                QString val = m_context->import->documentSetting("defaultTabStop").toString();
+                m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", TWIP_TO_POINT(val.toDouble()));
+            }
         }
         else if (type == "table") {
             m_currentStyle = new MSOOXML::DrawingTableStyle;
@@ -373,7 +375,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
@@ -412,7 +414,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 if (m_currentStyleProperties == 0) {
                     m_currentStyleProperties = new MSOOXML::TableStyleProperties;
                 }
+                m_tableMainStyle = KoTblStyle::create();
                 TRY_READ(tblPr)
+                m_currentStyle->mainStyle = m_tableMainStyle;
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
                 m_currentStyleProperties = 0;
             }
@@ -517,7 +521,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tcPr)
             ELSE_TRY_READ_IF(rPr)

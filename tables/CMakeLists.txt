@@ -269,7 +269,7 @@ target_link_libraries(calligratablesodf komain)
 target_link_libraries(calligratablesodf LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(calligratablesodf PROPERTIES
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS calligratablesodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -293,7 +293,7 @@ endif()
 target_link_libraries(calligratablescommon LINK_INTERFACE_LIBRARIES komain calligratablesodf )
 
 set_target_properties(calligratablescommon PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS calligratablescommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### next target ###############
@@ -356,11 +356,14 @@ install( FILES
     PointStorage.h
     PrintSettings.h
     ProtectableObject.h
+    RectStorage.h
     Region.h
+    RTree.h
     Sheet.h
     Style.h
     Value.h
     ValueConverter.h
+    ValueStorage.h
     Find.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES

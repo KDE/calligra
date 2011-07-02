@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+    /* This file is part of the KDE project
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@
 #include "KWView.h"
 #include "KWCanvas.h"
 
+#include "KoRdfSemanticTreeWidgetItem.h"
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 
@@ -53,6 +54,9 @@ void KWRdfDockerTree::setDocumentRdf(KoDocumentRdf *rdf)
 
 void KWRdfDockerTree::setCanvas(KoCanvasBase *canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
+    }
     m_canvas = canvas;
 }
 

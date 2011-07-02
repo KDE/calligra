@@ -23,7 +23,7 @@
 // KDE
 #include <kmessagebox.h>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 

@@ -22,7 +22,7 @@
 
 #include "ui_WebShapeConfigWidget.h"
 
-class QUndoCommand;
+class KUndo2Command;
 class WebShape;
 class WebTool;
 
@@ -36,7 +36,7 @@ class WebToolWidget : public QWidget
     void save();
   private:
     /// reimplemented
-    QUndoCommand * createCommand();
+    KUndo2Command * createCommand();
     WebShape *shape();
   private:
     void blockChildSignals( bool block );

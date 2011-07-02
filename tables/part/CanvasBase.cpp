@@ -84,7 +84,7 @@
 #include <kwordwrap.h>
 #include <kxmlguifactory.h>
 
-// KOffice
+// Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoStore.h>
@@ -165,7 +165,7 @@ bool CanvasBase::snapToGrid() const
     return false; // FIXME
 }
 
-void CanvasBase::addCommand(QUndoCommand* command)
+void CanvasBase::addCommand(KUndo2Command* command)
 {
     doc()->addCommand(command);
 }

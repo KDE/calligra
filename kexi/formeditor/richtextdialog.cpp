@@ -155,9 +155,9 @@ RichTextDialog::slotActionTriggered(QAction* action)
                 isChecked ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
             m_edit->setCurrentCharFormat(currentCharFormat);
         }
-    } else if (action == m_superscriptTextAction) {
-        if (isChecked && m_superscriptTextAction->isChecked()) {
-            m_superscriptTextAction->setChecked(false);
+    } else if (action == m_subscriptTextAction) {
+        if (isChecked && m_subscriptTextAction->isChecked()) {
+            m_subscriptTextAction->setChecked(false);
             QTextCharFormat currentCharFormat = m_edit->currentCharFormat();
             currentCharFormat.setVerticalAlignment(
                 isChecked ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);

@@ -137,7 +137,6 @@ PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
         : KoPageLayoutDialog(parent, sheet->printSettings()->pageLayout())
         , d(new Private)
 {
-    setFaceType(KPageDialog::Tabbed);
     showPageSpread(false);
 
     QWidget* page = new QWidget(this);
@@ -220,7 +219,7 @@ void PageLayoutDialog::accept()
 
     if (applyToDocument()) {
         // Apply to all sheets.
-        QUndoCommand* macroCommand = new QUndoCommand(i18n("Set Page Layout"));
+        KUndo2Command* macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Set Page Layout"));
         const QList<Sheet*> sheets = d->sheet->map()->sheetList();
         for (int i = 0; i < sheets.count(); ++i) {
             PageLayoutCommand* command = new PageLayoutCommand(sheets[i], settings, macroCommand);

@@ -126,14 +126,6 @@ MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completio
         if ( cmd == 0 ) cmd = new MacroCommand( c );
         cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
     }
-    if ( org.isStarted() != curr.isStarted() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
-    }
-    if ( org.isFinished() != curr.isFinished() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
-    }
     if ( org.startTime() != curr.startTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
         cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
@@ -141,6 +133,14 @@ MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completio
     if ( org.finishTime() != curr.finishTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
+    }
+    if ( org.isStarted() != curr.isStarted() ) {
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
+    }
+    if ( org.isFinished() != curr.isFinished() ) {
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
     }
     QList<QDate> orgdates = org.entries().keys();
     QList<QDate> currdates = curr.entries().keys();

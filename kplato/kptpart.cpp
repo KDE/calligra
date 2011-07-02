@@ -108,7 +108,7 @@ Part::~Part()
 
 void Part::setReadWrite( bool rw )
 {
-    m_config.setReadWrite( rw || !isEmbedded() ); // embedded in koffice doc
+    m_config.setReadWrite( rw || !isEmbedded() ); // embedded in calligra doc
     KoDocument::setReadWrite( rw );
 }
 
@@ -904,7 +904,7 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
         project.removeId( oldid ); // remove old id
         project.registerNodeId( n ); // register new id
     }
-    MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, i18n( "Insert project" ) );
+    MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, i18nc( "(qtundo-format)", "Insert project" ) );
     if ( m->isEmpty() ) {
         delete m;
     } else {

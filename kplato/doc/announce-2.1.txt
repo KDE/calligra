@@ -22,7 +22,7 @@ It is possible to re-schedule the project from  a specified time based on the
 current performance, to cater for changes like additional tasks or resource availability changes.
 
 Scripting:
-Scripting is provided via the common KOffice scripting interface.
+Scripting is provided via the common Calligra scripting interface.
 Scripts are provided that can:
 * Import resources from a KPlato file.
 * Export and import resource assignments.

@@ -82,7 +82,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
     tool()->repaintDecorations();
 }
 
-QUndoCommand* AbstractSelectionStrategy::createCommand()
+KUndo2Command* AbstractSelectionStrategy::createCommand()
 {
     return 0;
 }

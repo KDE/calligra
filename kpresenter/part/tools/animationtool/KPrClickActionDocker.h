@@ -27,7 +27,7 @@
 #include <KoCanvasObserverBase.h>
 
 class QComboBox;
-class QUndoCommand;
+class KUndo2Command;
 class KoPAViewBase;
 class KoCanvasBase;
 class QCheckBox;
@@ -46,7 +46,7 @@ public:
     void setView( KoPAViewBase* view );
 
 public slots:
-    void addCommand( QUndoCommand * command );
+    void addCommand( KUndo2Command * command );
 
 private slots:
     /// selection has changed
@@ -54,7 +54,7 @@ private slots:
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
-
+    virtual void unsetCanvas() { m_canvas = 0; m_view = 0; }
 private:
     KoPAViewBase *m_view;
     KPrSoundCollection *m_soundCollection;

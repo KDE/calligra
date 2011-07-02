@@ -30,7 +30,7 @@ class KPrPresentationTool;
 class KPrPresentationToolAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.tool")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.presentation.tool")
 
 public:
     explicit KPrPresentationToolAdaptor(KPrPresentationTool *tool);

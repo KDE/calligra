@@ -2,6 +2,7 @@
 Name=PC
 Name[el]=PC
 Name[et]=PC
+Name[nb]=PC
 Name[nl]=PC
 Name[pt]=PC
 Name[pt_BR]=PC
@@ -9,3 +10,4 @@ Name[sv]=Persondator
 Name[uk]=ПК
 Name[x-test]=xxPCxx
 Name[zh_CN]=PC
+Name[zh_TW]=PC

@@ -255,7 +255,7 @@ void KarbonGradientTool::mouseReleaseEvent(KoPointerEvent *event)
     Q_UNUSED(event)
     // if we are editing, get out of edit mode and add a command to the stack
     if (m_currentStrategy) {
-        QUndoCommand * cmd = m_currentStrategy->createCommand(m_currentCmd);
+        KUndo2Command * cmd = m_currentStrategy->createCommand(m_currentCmd);
         canvas()->addCommand(m_currentCmd ? m_currentCmd : cmd);
         m_currentCmd = 0;
         if (m_gradientWidget) {
@@ -278,7 +278,7 @@ void KarbonGradientTool::mouseDoubleClickEvent(KoPointerEvent *event)
     canvas()->updateCanvas(m_currentStrategy->boundingRect(*canvas()->viewConverter()));
 
     if (m_currentStrategy->handleDoubleClick(event->point)) {
-        QUndoCommand * cmd = m_currentStrategy->createCommand(m_currentCmd);
+        KUndo2Command * cmd = m_currentStrategy->createCommand(m_currentCmd);
         canvas()->addCommand(m_currentCmd ? m_currentCmd : cmd);
         m_currentCmd = 0;
         if (m_gradientWidget) {
@@ -483,7 +483,7 @@ void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
     }
 }
 
-QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
+QList<QWidget *> KarbonGradientTool::createOptionWidgets()
 {
     m_gradientWidget = new KarbonGradientEditWidget();
     m_gradientWidget->setGradient(*m_gradient);
@@ -499,9 +499,11 @@ QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
     connect(chooser, SIGNAL(resourceSelected(KoResource *)),
             this, SLOT(gradientSelected(KoResource *)));
 
-    QMap<QString, QWidget *> widgets;
-    widgets.insert(i18n("Edit Gradient"), m_gradientWidget);
-    widgets.insert(i18n("Predefined Gradients"), chooser);
+    QList<QWidget *> widgets;
+    m_gradientWidget->setWindowTitle(i18n("Edit Gradient"));
+    widgets.append(m_gradientWidget);
+    chooser->setWindowTitle(i18n("Predefined Gradients"));
+    widgets.append(chooser);
 
     return widgets;
 }

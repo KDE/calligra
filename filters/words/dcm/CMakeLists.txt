@@ -6,8 +6,8 @@ add_definitions(-DHAVE_CONFIG_H)
 
 kde4_add_plugin(dcmimport ${dcmimport_PART_SRCS})
 
-target_link_libraries(dcmimport kwordexportfilters ${DCMTK_LIBRARIES})
+target_link_libraries(dcmimport wordsexportfilters ${DCMTK_LIBRARIES})
 
 install(TARGETS dcmimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  kword_dcm_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_dcm_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

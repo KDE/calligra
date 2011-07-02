@@ -26,7 +26,7 @@
 #include <KoGradientBackground.h>
 
 class QPainter;
-class QUndoCommand;
+class KUndo2Command;
 class QLinearGradient;
 class QRadialGradient;
 class QConicalGradient;
@@ -74,7 +74,7 @@ public:
     }
 
     /// create the command for changing the shapes background
-    QUndoCommand * createCommand(QUndoCommand * parent);
+    KUndo2Command * createCommand(KUndo2Command * parent);
 
     /// schedules a repaint of the shape and gradient handles
     void repaint(const KoViewConverter &converter) const;

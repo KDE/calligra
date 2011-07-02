@@ -47,7 +47,7 @@ public:
      */
     virtual ~MergeStrategy();
 
-    virtual QUndoCommand* createCommand();
+    virtual KUndo2Command* createCommand();
 
 private:
     class Private;

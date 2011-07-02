@@ -32,7 +32,7 @@ class KChartView;
 class ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.chart.view")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.chart.view")
 public:
     explicit ViewAdaptor( KChartView *view_ );
 

@@ -54,9 +54,9 @@ using namespace Calligra::Tables;
   class AbstractRegionCommand
 ****************************************************************************/
 
-AbstractRegionCommand::AbstractRegionCommand(QUndoCommand* parent)
+AbstractRegionCommand::AbstractRegionCommand(KUndo2Command* parent)
         : Region(),
-        QUndoCommand(parent),
+        KUndo2Command(parent),
         m_sheet(0),
         m_reverse(false),
         m_firstrun(true),

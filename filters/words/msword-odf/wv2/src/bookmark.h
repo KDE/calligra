@@ -62,12 +62,12 @@ namespace wvWare
              * Returns the global CP of the next bookmark start,
              * 0xffffffff if none exists or invalid.
              */
-            U32 nextBookmarkStart() const;
+            U32 nextBookmarkStart();
             /**
              * Returns the global CP of the next bookmark end,
              * 0xffffffff if none exists or invalid.
              */
-            U32 nextBookmarkEnd();
+            U32 nextBookmarkEnd() const;
 
             /**
              * Check for unprocessed bookmars located before @param globalCP.
@@ -84,7 +84,7 @@ namespace wvWare
              * Validate bookmarks.
              * @param num. of invalid bookmarks detected
              */
-            bool valid(U16 &num);
+            bool valid(U16 &num, const U32 ccpText);
 
             PLCF<Word97::BKF>* m_start;
             PLCFIterator<Word97::BKF>* m_startIt;

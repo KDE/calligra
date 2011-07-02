@@ -26,14 +26,14 @@ kde4_add_plugin(palmdocexport ${palmdocexport_PART_SRCS})
 
 
 
-target_link_libraries(palmdocexport kwordexportfilters)
+target_link_libraries(palmdocexport wordsexportfilters)
 
 install(TARGETS palmdocexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kword_palmdoc_import.desktop kword_palmdoc_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_palmdoc_import.desktop words_palmdoc_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Producer
+Name[el]=Παραγωγός
 Name[es]=Productor
+Name[nb]=Produsent
 Name[nl]=Producent
 Name[pt]=Produtor
 Name[pt_BR]=Produtor
@@ -8,3 +10,4 @@ Name[sv]=Producent
 Name[ug]=فىلىم ئىشلىگۈچى
 Name[uk]=Підсистема створення
 Name[x-test]=xxProducerxx
+Name[zh_TW]=生產者

@@ -1,5 +1,5 @@
 /***************************************************************************
-                       main.cc - using the thesaurus KDataTool stand alone
+                       main.cc - using the thesaurus stand alone
                        -------------------
     begin            : 2001-12-22
     copyright        : (C) 2001 by Daniel Naber

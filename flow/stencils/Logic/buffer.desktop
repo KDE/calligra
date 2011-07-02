@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Buffer
+Name[nb]=Buffer
 Name[nl]=Buffer
 Name[pt]=Tampão
 Name[pt_BR]=Tampão
@@ -7,3 +8,4 @@ Name[sv]=Buffer
 Name[ug]=يىغلەك
 Name[uk]=Буфер
 Name[x-test]=xxBufferxx
+Name[zh_TW]=緩衝器

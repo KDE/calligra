@@ -23,6 +23,7 @@
 #define KOTEXTTOOL_H
 
 #include "TextShape.h"
+#include "KoPointedAt.h"
 
 #include <KoToolBase.h>
 
@@ -49,7 +50,7 @@ class KAction;
 class KFontAction;
 class FontSizeAction;
 
-class QUndoCommand;
+class KUndo2Command;
 
 class MockCanvas;
 
@@ -102,7 +103,7 @@ public:
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
@@ -114,7 +115,7 @@ public:
 
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
-    void startEditing(QUndoCommand* command);
+    void startEditing(KUndo2Command* command);
 
     void stopEditing();
 
@@ -135,7 +136,7 @@ public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
     /// add a command to the undo stack, executing it as well.
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
     //When enabled, display changes
@@ -283,7 +284,7 @@ private slots:
 private:
     void repaintCaret();
     void repaintSelection();
-    int pointToPosition(const QPointF & point) const;
+    KoPointedAt hitTest(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point);
@@ -339,7 +340,7 @@ private:
     KoColorPopupAction *m_actionFormatTextColor;
     KoColorPopupAction *m_actionFormatBackgroundColor;
 
-    QUndoCommand *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
+    KUndo2Command *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
 
     bool m_currentCommandHasChildren;
 

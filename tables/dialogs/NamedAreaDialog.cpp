@@ -297,9 +297,9 @@ void EditNamedAreaDialog::slotOk()
     if (!region.isValid())
         return;
 
-    QUndoCommand* macroCommand = 0;
+    KUndo2Command* macroCommand = 0;
     if (!m_initialAreaName.isEmpty() && m_initialAreaName != m_areaNameEdit->text()) {
-        macroCommand = new QUndoCommand(i18n("Replace Named Area"));
+        macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Replace Named Area"));
         // remove the old named area
         NamedAreaCommand* command = new NamedAreaCommand(macroCommand);
         command->setAreaName(m_initialAreaName);

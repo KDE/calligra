@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2003 Werner Trobin <trobin@kde.org>
    Copyright (C) 2003 David Faure <faure@kde.org>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
@@ -67,6 +67,7 @@ public:
     qreal vOffset();
     qreal hOffset();
 
+    void setRect(const QRect& rect);
     void setRectangle(wvWare::Word97::FSPA& spa);
     void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
     void setChildRectangle(MSO::OfficeArtChildAnchor& anchor);
@@ -77,7 +78,7 @@ public:
  * Graphics Handler
  * ************************************************
  */
-class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
+class WordsGraphicsHandler : public QObject, public wvWare::GraphicsHandler
 {
     Q_OBJECT
 private:
@@ -114,16 +115,24 @@ private:
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
-        KWordGraphicsHandler* const gh;
+        WordsGraphicsHandler* const gh;
     public:
-        DrawClient(KWordGraphicsHandler* p) :gh(p) {}
+        DrawClient(WordsGraphicsHandler* p) :gh(p) {}
 };
 public:
-    KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
+    WordsGraphicsHandler(Document* document,
+                         KoXmlWriter* bodyWriter,
+                         KoXmlWriter* manifestWriter,
                          KoStore* store, KoGenStyles* mainStyles,
                          const wvWare::Drawings* p_drawings,
                          const wvWare::Word97::FIB& fib);
-    ~KWordGraphicsHandler();
+    ~WordsGraphicsHandler();
+
+    /**
+     * Set the appropriate writer for object properties and content.
+     * @param writer KoXmlWriter provided by the Document class
+     */
+    void setCurrentWriter(KoXmlWriter* writer) { m_currentWriter = writer; };
 
     /**
      * This method gets called when a floating object is found by wv2 parser.
@@ -136,12 +145,6 @@ public:
      * @param data PictureData as defined in functordata.h
      */
     virtual void handleInlineObject(const wvWare::PictureData& data);
-
-    /**
-     * Set the appropriate writer for object properties and content.
-     * @param writer KoXmlWriter provided by the Document class
-     */
-    void setBodyWriter(KoXmlWriter* writer);
 
     /**
      * Get the DrawStyle to access document backgroud properties and defaults.
@@ -182,14 +185,13 @@ private:
 
     /**
      * Parse floating pictures data from the WordDocument stream.
+     *
+     * @param specifies the container for all the BLIPs that are used in all
+     * the drawings in the parent document.
+     *
      * @return 0 - success, 1 - failed
      */
-    int parseFloatingPictures(void);
-
-    /**
-     * Store floating pictures into ODT, write the appropriate manifest entry.
-     */
-    QMap<QByteArray, QString> createFloatingPictures(KoStore* store, KoXmlWriter* manifest);
+    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer* blipStore);
 
     /**
      * Process the default properties for all drawing objects stored in
@@ -273,9 +275,14 @@ private:
      */
     void insertEmptyInlineFrame(DrawingWriter& out);
 
+    /**
+     * A helper to get the correct rectangle for a shape or a childShape.
+     */
+    QRect getRect(const MSO::OfficeArtSpContainer &o);
+
     Document* m_document;
     KoStore* m_store;
-    KoXmlWriter* m_bodyWriter;
+    KoXmlWriter* m_currentWriter;
     KoXmlWriter* m_manifestWriter;
     KoGenStyles* m_mainStyles;
 

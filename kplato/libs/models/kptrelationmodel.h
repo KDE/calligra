@@ -26,7 +26,7 @@
 
 class QMimeData;
 class QModelIndex;
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlato
 {
@@ -85,7 +85,7 @@ public:
     QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
 signals:
-    void executeCommand( QUndoCommand* );
+    void executeCommand( KUndo2Command* );
     
 protected slots:
     void slotNodeChanged( Node* );

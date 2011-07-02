@@ -68,6 +68,9 @@ set( calligrastageprivate_LIB_SRCS
      KPrPicturesImport.cpp
      KPrPdfPrintJob.cpp
      KPrSlidesSorterDocumentModel.cpp
+     KPrSlidesManagerView.cpp
+     KPrSelectionManager.cpp
+     KPrSelectionToggle.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
@@ -139,7 +142,7 @@ kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 target_link_libraries(calligrastageprivate kopageapp kowidgets textlayout ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
-set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### calligrastagepart ###
@@ -188,7 +191,11 @@ install( FILES
         KPrAnimationDirector.h
         KPrCustomSlideShows.h
         KPrDocument.h  
+        KPrPage.h
+        KPrPageData.h
+        KPrDeclarations.h
         KPrPresentationTool.h
+        KPrNotes.h
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
@@ -200,3 +207,6 @@ install( FILES
          animations/KPrShapeAnimation.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/animations)
 
+install( FILES
+         pagelayout/KPrPlaceholders.h
+         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/pagelayout)

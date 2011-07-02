@@ -40,6 +40,9 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
 #include <KoTextMeta.h>
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -113,17 +116,17 @@ KoRdfPrefixMapping *KoDocumentRdf::prefixMapping() const
  */
 Soprano::Node KoDocumentRdf::inlineRdfContext() const
 {
-    return Node(QUrl("http://www.koffice.org/Rdf/inline-rdf"));
+    return Node(QUrl("http://www.calligra-suite.org/Rdf/inline-rdf"));
 }
 
 QString KoDocumentRdf::rdfInternalMetadataWithoutSubjectURI() const
 {
-    return "http://www.koffice.org/Rdf/internal/content.xml";
+    return "http://www.calligra-suite.org/Rdf/internal/content.xml";
 }
 
 QString KoDocumentRdf::rdfPathContextPrefix() const
 {
-    return "http://www.koffice.org/Rdf/path/";
+    return "http://www.calligra-suite.org/Rdf/path/";
 }
 
 Soprano::Node KoDocumentRdf::manifestRdfNode() const

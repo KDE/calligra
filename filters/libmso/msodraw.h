@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
@@ -96,7 +96,7 @@ enum MSOSPT
     msosptSeal16 = 0x3b,
     msosptSeal32 = 0x3c,
     msosptWedgeRectCallout = 0x3d,
-    msosptWedgeRRectCalloud = 0x3e,
+    msosptWedgeRRectCallout = 0x3e,
     msosptWedgeEllipseCallout = 0x3f,
 
     msosptWave = 0x40,
@@ -391,32 +391,6 @@ enum POSRELV
     msoprvPage = 0x2,
     msoprvText = 0x3,
     msoprvLine = 0x4
-};
-
-/*
- * ---------------------------------------------------
- * Following enumeration are not defined in [MS-ODRAW]
- * ---------------------------------------------------
- */
-
-/**
- * The HALIGN enumeration specifies horizontal alignment.
- */
-enum HALIGN
-{
-    hAlignLeft = 0x0,
-    hAlignCenter = 0x1,
-    hAlignRight = 0x2
-};
-
-/**
- * The VALIGN enumeration specifies vertical alignment.
- */
-enum VALIGN
-{
-    vAlignTop = 0x0,
-    vAlignMiddle = 0x1,
-    vAlignBottom = 0x2
 };
 
 #endif

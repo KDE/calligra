@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=NPN Transistor
+Name[de]=NPN-Transistor
 Name[el]=NPN Transistor
 Name[et]=NPN transistor
+Name[nb]=NPN-transistor
 Name[nl]=NPN transistor
 Name[pt]=Transístor NPN
 Name[pt_BR]=Transistor NPN
@@ -9,3 +11,4 @@ Name[sv]=NPN-transistor
 Name[uk]=Транзистор NPN
 Name[x-test]=xxNPN Transistorxx
 Name[zh_CN]=NPN 三极管
+Name[zh_TW]=NPN 電晶體

@@ -1,5 +1,5 @@
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -19,8 +19,8 @@
 **
 */
 
-#ifndef __KWORD_LISTTABLE_H__
-#define __KWORD_LISTTABLE_H__
+#ifndef __WORDS_LISTTABLE_H__
+#define __WORDS_LISTTABLE_H__
 
 #include "table.h"
 #include <QList>
@@ -59,5 +59,5 @@ public:
 private:
 };
 
-#endif /* __KWORD_LISTTABLE_H__ */
+#endif /* __WORDS_LISTTABLE_H__ */
 

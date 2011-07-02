@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Service
+Name[el]=Υπηρεσία
 Name[es]=Servicio
 Name[et]=Teenus
 Name[nb]=Tjeneste
@@ -10,3 +11,4 @@ Name[ug]=مۇلازىمەت
 Name[uk]=Служба
 Name[x-test]=xxServicexx
 Name[zh_CN]=服务
+Name[zh_TW]=服務

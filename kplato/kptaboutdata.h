@@ -24,17 +24,17 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 namespace KPlato
 {
 
 static const char* KPLATO_DESCRIPTION=I18N_NOOP("Calligra Plan - KDE Project Planning and Management Tool");
-static const char* KPLATO_VERSION=KOFFICE_VERSION_STRING;
+static const char* KPLATO_VERSION=CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18n("Plan"),
+    KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
                                            KPLATO_VERSION, ki18n(KPLATO_DESCRIPTION), KAboutData::License_GPL,
                                            ki18n("(c) 1998-2011, The Plan Team"),
                                            KLocalizedString(),

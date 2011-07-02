@@ -1,4 +1,4 @@
-This is the MS Office Word 12+ import/export filter for KWord
+This is the MS Office Word 12+ import/export filter for Words
 
 Started on May 2009
 
@@ -19,7 +19,7 @@ Format specifications document:
 *Free, from ECMA - http://www.ecma-international.org/publications/standards/Ecma-376.htm.
  The ISO approval process changed the specifications, but MS Office 2007 format, 
  if implemented with compliance to any paper, it is compliant with the ECMA documents.
-**Documentation used so far in KOffice implementation:
+**Documentation used so far in Calligra implementation:
 ***ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference.pdf
 *Paid from ISO:
  http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=51463 
