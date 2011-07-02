@@ -32,7 +32,6 @@
 #include "kosvg_export.h"
 #include <QtCore/QList>
 #include <QtCore/QSizeF>
-#include <QtCore/QString>
 
 class SvgSavingContext;
 class KoShapeLayer;
@@ -42,6 +41,7 @@ class KoPathShape;
 class QTextStream;
 class QIODevice;
 class QFont;
+class QString;
 
 /// Implements exporting shapes to SVG
 class KOSVG_EXPORT SvgWriter
@@ -68,12 +68,9 @@ private:
     void saveShape(KoShape *shape, SvgSavingContext &context);
     void savePath(KoPathShape *path, SvgSavingContext &context);
 
-    void saveImage(KoShape *picture, SvgSavingContext &context);
-
     QList<KoShape*> m_toplevelShapes;
     QSizeF m_pageSize;
     bool m_writeInlineImages;
-    QString m_filename;
 };
 
 #endif // SVGWRITER_H

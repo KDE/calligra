@@ -24,8 +24,13 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
+
+#include <KIO/NetAccess>
+
 #include <QtCore/QBuffer>
 #include <QtCore/QHash>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 class SvgSavingContext::Private
 {
@@ -138,4 +143,26 @@ QTransform SvgSavingContext::userSpaceTransform() const
 bool SvgSavingContext::isSavingInlineImages() const
 {
     return d->saveInlineImages;
+}
+
+QString SvgSavingContext::createFileName(const QString &extension)
+{
+    QFile *file = qobject_cast<QFile*>(&d->output);
+    if (!file)
+        return QString();
+
+    // get url of destination directory
+    KUrl url(file->fileName());
+    QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
+    url.setDirectory(url.directory());
+    // create a filename for the image file at the destination directory
+    QString fname = dstBaseFilename + '_' + createUID("picture");
+    url.setFileName(fname + extension);
+    // check if file exists already
+    int i = 0;
+    // change filename as long as the filename already exists
+    while (KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0))
+        url.setFileName(fname + QString("_%1").arg(++i) + extension);
+
+    return url.fileName();
 }

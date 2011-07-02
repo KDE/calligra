@@ -23,13 +23,14 @@
 #include <QPixmap>
 #include <KoTosContainer.h>
 #include <KoFrameShape.h>
+#include <SvgSerializable.h>
 
 #define PICTURESHAPEID "PictureShape"
 
 class KoImageCollection;
 class RenderQueue;
 
-class PictureShape : public KoTosContainer, public KoFrameShape
+class PictureShape : public KoTosContainer, public KoFrameShape, public SvgSerializable
 {
 public:
     enum PictureMode {
@@ -50,7 +51,8 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     // reimplemented
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
-
+    // reimplemented from SvgSerializable
+    virtual bool saveSvg(SvgSavingContext &context);
     /**
      * Get the collection used in the shape.
      */

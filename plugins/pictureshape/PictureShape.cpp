@@ -20,6 +20,9 @@
  */
 
 #include "PictureShape.h"
+#include "GreyscaleFilterEffect.h"
+#include "MonoFilterEffect.h"
+#include "WatermarkFilterEffect.h"
 
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
@@ -32,15 +35,20 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
+#include <KoFilterEffectStack.h>
+#include <SvgSavingContext.h>
+#include <SvgUtil.h>
+
+#include <KMimeType>
+#include <KTemporaryFile>
+#include <KIO/NetAccess>
+#include <KIO/CopyJob>
+#include <KDebug>
 
 #include <QPainter>
 #include <QTimer>
 #include <QPixmapCache>
-#include <kdebug.h>
-#include <KoFilterEffectStack.h>
-#include "GreyscaleFilterEffect.h"
-#include "MonoFilterEffect.h"
-#include "WatermarkFilterEffect.h"
+#include <QtCore/QBuffer>
 
 QString generate_key(qint64 key, const QSize & size)
 {
@@ -307,4 +315,65 @@ void PictureShape::setMode(PictureShape::PictureMode mode)
             filterEffectStack()->appendFilterEffect(filterMode);
         update();
     }
+}
+
+bool PictureShape::saveSvg(SvgSavingContext &context)
+{
+    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    if (!imageData) {
+        qWarning() << "Picture has no image data. Omitting.";
+        return false;
+    }
+
+    context.shapeWriter().startElement("image");
+    context.shapeWriter().addAttribute("id", context.getID(this));
+
+    QTransform m = transformation();
+    if (m.type() == QTransform::TxTranslate) {
+        const QPointF pos = position();
+        context.shapeWriter().addAttributePt("x", pos.x());
+        context.shapeWriter().addAttributePt("y", pos.y());
+    } else {
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(m));
+    }
+
+    const QSizeF s = size();
+    context.shapeWriter().addAttributePt("width", s.width());
+    context.shapeWriter().addAttributePt("height", s.height());
+
+    if (context.isSavingInlineImages()) {
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        if (imageData->saveData(buffer)) {
+            const QString mimeType(KMimeType::findByContent(ba)->name());
+            const QString header("data:" + mimeType + ";base64,");
+            context.shapeWriter().addAttribute("xlink:href", header + ba.toBase64());
+        }
+    } else {
+        // write to a temp file first
+        KTemporaryFile imgFile;
+        if (imageData->saveData(imgFile)) {
+            // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
+            // get the mime type from the temp file content
+            KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
+            // get extension from mimetype
+            QString ext = "";
+            QStringList patterns = mimeType->patterns();
+            if (patterns.count())
+                ext = patterns.first().mid(1);
+
+            QString dstFilename = context.createFileName(ext);
+
+            // move the temp file to the destination directory
+            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
+            if (job && KIO::NetAccess::synchronousRun(job, 0))
+                context.shapeWriter().addAttribute("xlink:href", dstFilename);
+            else
+                KIO::NetAccess::removeTempFile(imgFile.fileName());
+        }
+    }
+    context.shapeWriter().endElement();
+
+    return true;
 }

@@ -42,17 +42,11 @@
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
 #include <KoPathShape.h>
-#include <KoImageData.h>
 #include <KoXmlWriter.h>
-#include <KMimeType>
-#include <KTemporaryFile>
-#include <KIO/NetAccess>
-#include <KIO/CopyJob>
 
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QTextStream>
-#include <QtCore/QFileInfo>
 
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     : m_pageSize(pageSize)
@@ -80,13 +74,11 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
     if (!fileOut.open(QIODevice::WriteOnly))
         return false;
 
-    m_filename = filename;
     m_writeInlineImages = writeInlineImages;
 
     const bool success = save(fileOut);
 
     m_writeInlineImages = true;
-    m_filename.clear();
 
     fileOut.close();
 
@@ -188,10 +180,6 @@ void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path) {
         savePath(path, context);
-    } else {
-        if (shape->shapeId() == "PictureShape") {
-            saveImage(shape, context);
-        }
     }
     */
 }
@@ -206,73 +194,4 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("d", path->toString(context.userSpaceTransform()));
     context.shapeWriter().endElement();
-}
-
-void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
-{
-    /*
-    KoImageData *imageData = qobject_cast<KoImageData*>(picture->userData());
-    if (! imageData) {
-        qWarning() << "Picture has no image data. Omitting.";
-        return;
-    }
-
-    context.shapeWriter().startElement("image");
-    context.shapeWriter().addAttribute("id", context.getID(picture));
-
-    QTransform m = picture->transformation();
-    if (m.type() == QTransform::TxTranslate) {
-        const QPointF position = picture->position();
-        context.shapeWriter().addAttributePt("x", position.x());
-        context.shapeWriter().addAttributePt("y", position.y());
-    } else {
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(picture->transformation()));
-    }
-
-    context.shapeWriter().addAttributePt("width", picture->size().width());
-    context.shapeWriter().addAttributePt("height", picture->size().height());
-
-    if (m_writeInlineImages) {
-        QByteArray ba;
-        QBuffer buffer(&ba);
-        buffer.open(QIODevice::WriteOnly);
-        if (imageData->saveData(buffer)) {
-            const QString mimeType(KMimeType::findByContent(ba)->name());
-            const QString header("data:" + mimeType + ";base64,");
-            context.shapeWriter().addAttribute("xlink:href", header + ba.toBase64());
-        }
-    } else {
-        // write to a temp file first
-        KTemporaryFile imgFile;
-        if (imageData->saveData(imgFile)) {
-            // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
-            // get the mime type from the temp file content
-            KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
-            // get url of destination directory
-            KUrl url(m_filename);
-            QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
-            url.setDirectory(url.directory());
-            // create a filename for the image file at the destination directory
-            QString fname = dstBaseFilename + '_' + context.createUID("picture");
-            // get extension from mimetype
-            QString ext = "";
-            QStringList patterns = mimeType->patterns();
-            if (patterns.count())
-                ext = patterns.first().mid(1);
-            url.setFileName(fname + ext);
-            // check if file exists already
-            int i = 0;
-            // change filename as long as the filename already exists
-            while (KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0))
-                url.setFileName(fname + QString("_%1").arg(++i) + ext);
-            // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), url);
-            if (job && KIO::NetAccess::synchronousRun(job, 0))
-                context.shapeWriter().addAttribute("xlink:href", url.fileName());
-            else
-                KIO::NetAccess::removeTempFile(imgFile.fileName());
-        }
-    }
-    context.shapeWriter().endElement();
-    */
 }

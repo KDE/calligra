@@ -22,6 +22,7 @@
 
 class KoXmlWriter;
 class KoShape;
+class KoImageData;
 class QIODevice;
 class QString;
 class QTransform;
@@ -55,6 +56,9 @@ public:
 
     /// Returns if image should be saved inline
     bool isSavingInlineImages() const;
+
+    /// Create a filename suitable for saving external data
+    QString createFileName(const QString &extension);
 
 private:
     class Private;
