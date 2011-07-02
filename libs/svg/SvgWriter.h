@@ -29,9 +29,9 @@
 #ifndef SVGWRITER_H
 #define SVGWRITER_H
 
-#include <KoFilter.h>
 #include <QVariantList>
 #include <QtGui/QGradient>
+#include "kosvg_export.h"
 
 class SvgSavingContext;
 class KoShapeLayer;
@@ -51,7 +51,7 @@ class QColor;
 class QBrush;
 
 /// Implements exporting shapes to SVG
-class SvgWriter
+class KOSVG_EXPORT SvgWriter
 {
 public:
     /// Creates svg writer to export specified layers
@@ -91,11 +91,6 @@ private:
     void saveFont(const QFont &font, SvgSavingContext &context);
     void saveTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveFont, qreal baselineOffset);
 
-    QString getID(const KoShape *obj);
-    QString createUID(const QString &base);
-
-    QHash<const KoShape*, QString> m_shapeIds;
-    QHash<QString, int> m_uniqueNames;
     QList<KoShape*> m_toplevelShapes;
     QTransform m_userSpaceMatrix;
     QSizeF m_pageSize;

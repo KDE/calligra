@@ -21,10 +21,14 @@
 #define SVGSAVINGCONTEXT_H
 
 class KoXmlWriter;
+class KoShape;
 class QIODevice;
+class QString;
+
+#include "kosvg_export.h"
 
 /// Context for saving svg files
-class SvgSavingContext
+class KOSVG_EXPORT SvgSavingContext
 {
 public:
     /// Creates a new svg svaing context on the specified output device
@@ -38,6 +42,12 @@ public:
 
     /// Provides access to the shape writer
     KoXmlWriter &shapeWriter();
+
+    /// Create a unqiue id from the specified base text
+    QString createUID(const QString &base);
+
+    /// Returns the unique id for the given shape
+    QString getID(const KoShape *obj);
 
 private:
     class Private;

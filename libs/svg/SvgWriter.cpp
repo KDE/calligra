@@ -36,6 +36,7 @@
 #include "SvgWriter.h"
 #include "SvgUtil.h"
 #include "SvgSavingContext.h"
+#include "SvgSerializable.h"
 
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -46,8 +47,8 @@
 #include <KoPatternBackground.h>
 #include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <plugins/artistictextshape/ArtisticTextRange.h>
-#include <pathshapes/rectangle/RectangleShape.h>
-#include <pathshapes/ellipse/EllipseShape.h>
+#include <plugins/pathshapes/rectangle/RectangleShape.h>
+#include <plugins/pathshapes/ellipse/EllipseShape.h>
 #include <KoImageData.h>
 #include <KoFilterEffect.h>
 #include <KoFilterEffectStack.h>
@@ -112,10 +113,6 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
 
 bool SvgWriter::save(QIODevice &outputDevice)
 {
-    // reset data for generating unique names
-    m_uniqueNames.clear();
-    m_shapeIds.clear();
-
     QTextStream svgStream(&outputDevice);
 
     // standard header:
@@ -157,7 +154,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
 void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("g");
-    context.shapeWriter().addAttribute("id", getID(layer));
+    context.shapeWriter().addAttribute("id", context.getID(layer));
 
     QList<KoShape*> sortedShapes = layer->shapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
@@ -176,7 +173,7 @@ void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
 void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("g");
-    context.shapeWriter().addAttribute("id", getID(group));
+    context.shapeWriter().addAttribute("id", context.getID(group));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(group->transformation()));
 
     saveStyle(group, context);
@@ -197,6 +194,15 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 
 void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
 {
+    SvgSerializable *svgShape = dynamic_cast<SvgSerializable*>(shape);
+    if (svgShape) {
+        if (svgShape->saveSvg(context))
+            return;
+    }
+
+    // TODO: implement generic saving of shape via a switch element
+
+    /*
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(path);
@@ -215,12 +221,13 @@ void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
             saveImage(shape, context);
         }
     }
+    */
 }
 
 void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("path");
-    context.shapeWriter().addAttribute("id", getID(path));
+    context.shapeWriter().addAttribute("id", context.getID(path));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(path->transformation()));
 
     saveStyle(path, context);
@@ -231,11 +238,12 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
 void SvgWriter::saveEllipse(EllipseShape *ellipse, SvgSavingContext &context)
 {
+    /*
     if (ellipse->type() == EllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle()) {
         const QSizeF size = ellipse->size();
         const bool isCircle = size.width() == size.height();
         context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
-        context.shapeWriter().addAttribute("id", getID(ellipse));
+        context.shapeWriter().addAttribute("id", context.getID(ellipse));
         context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(ellipse->transformation()));
 
         if (isCircle) {
@@ -253,12 +261,14 @@ void SvgWriter::saveEllipse(EllipseShape *ellipse, SvgSavingContext &context)
     } else {
         savePath(ellipse, context);
     }
+    */
 }
 
 void SvgWriter::saveRectangle(RectangleShape *rectangle, SvgSavingContext &context)
 {
+    /*
     context.shapeWriter().startElement("rect");
-    context.shapeWriter().addAttribute("id", getID(rectangle));
+    context.shapeWriter().addAttribute("id", context.getID(rectangle));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(rectangle->transformation()));
 
     saveStyle(rectangle, context);
@@ -275,50 +285,7 @@ void SvgWriter::saveRectangle(RectangleShape *rectangle, SvgSavingContext &conte
         context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
 
     context.shapeWriter().endElement();
-}
-
-QString SvgWriter::createUID(const QString &base)
-{
-    QString idBase = base.isEmpty() ? "defitem" : base;
-    int counter = m_uniqueNames.value(idBase);
-    m_uniqueNames.insert(idBase, counter+1);
-
-    return idBase + QString("%1").arg(counter);
-}
-
-QString SvgWriter::getID(const KoShape *obj)
-{
-    QString id;
-    // do we have already an id for this object ?
-    if (m_shapeIds.contains(obj)) {
-        // use existing id
-        id = m_shapeIds[obj];
-    } else {
-        // initialize from object name
-        id = obj->name();
-        // if object name is not empty and was not used already
-        // we can use it as is
-        if (!id.isEmpty() && !m_uniqueNames.contains(id)) {
-            // add to unique names so it does not get reused
-            m_uniqueNames.insert(id, 1);
-        } else {
-            if (id.isEmpty()) {
-                // differentiate a little between shape types
-                if (dynamic_cast<const KoShapeGroup*>(obj))
-                    id = "group";
-                else if (dynamic_cast<const KoShapeLayer*>(obj))
-                    id = "layer";
-                else
-                    id = "shape";
-            }
-            // create a compeletely new id based on object name
-            // or a generic name
-            id = createUID(id);
-        }
-        // record id for this shape
-        m_shapeIds.insert(obj, id);
-    }
-    return id;
+    */
 }
 
 void SvgWriter::saveColorStops(const QGradientStops &colorStops, SvgSavingContext &context)
@@ -345,7 +312,7 @@ QString SvgWriter::saveGradient(const QGradient *gradient, const QTransform &gra
         QString("repeat")
     };
 
-    const QString uid = createUID("gradient");
+    const QString uid = context.createUID("gradient");
 
     if (gradient->type() == QGradient::LinearGradient) {
         const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
@@ -408,7 +375,7 @@ QString SvgWriter::saveGradient(const QGradient *gradient, const QTransform &gra
 // better than nothing
 QString SvgWriter::savePattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context)
 {
-    const QString uid = createUID("pattern");
+    const QString uid = context.createUID("pattern");
 
     const QSizeF shapeSize = shape->size();
     const QSizeF patternSize = pattern->patternDisplaySize();
@@ -597,7 +564,7 @@ void SvgWriter::saveEffects(KoShape *shape, SvgSavingContext &context)
     if (!filterEffects.count())
         return;
 
-    const QString uid = createUID("filter");
+    const QString uid = context.createUID("filter");
 
     filterStack->save(context.styleWriter(), uid);
 
@@ -617,7 +584,7 @@ void SvgWriter::saveClipping(KoShape *shape, SvgSavingContext &context)
 
     path->close();
 
-    const QString uid = createUID("clippath");
+    const QString uid = context.createUID("clippath");
 
     context.styleWriter().startElement("clipPath");
     context.styleWriter().addAttribute("id", uid);
@@ -647,6 +614,7 @@ void SvgWriter::saveFont(const QFont &font, SvgSavingContext &context)
 
 void SvgWriter::saveTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveRangeFont, qreal baselineOffset)
 {
+    /*
     context.shapeWriter().startElement("tspan");
     if (range.hasXOffsets()) {
         const char *attributeName = (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? "x" : "dx");
@@ -704,12 +672,14 @@ void SvgWriter::saveTextRange(const ArtisticTextRange &range, SvgSavingContext &
         saveFont(range.font(), context);
     context.shapeWriter().addTextNode(range.text());
     context.shapeWriter().endElement();
+    */
 }
 
 void SvgWriter::saveText(ArtisticTextShape *text, SvgSavingContext &context)
 {
+    /*
     context.shapeWriter().startElement("text");
-    context.shapeWriter().addAttribute("id", getID(text));
+    context.shapeWriter().addAttribute("id", context.getID(text));
 
     saveStyle(text, context);
 
@@ -748,7 +718,7 @@ void SvgWriter::saveText(ArtisticTextShape *text, SvgSavingContext &context)
     } else {
         KoPathShape * baseline = KoPathShape::createShapeFromPainterPath(text->baseline());
 
-        QString id = createUID("baseline");
+        QString id = context.createUID("baseline");
         context.styleWriter().startElement("path");
         context.styleWriter().addAttribute("id", id);
         context.styleWriter().addAttribute("d", baseline->toString(baseline->absoluteTransformation(0) * m_userSpaceMatrix));
@@ -767,10 +737,12 @@ void SvgWriter::saveText(ArtisticTextShape *text, SvgSavingContext &context)
     }
 
     context.shapeWriter().endElement();
+    */
 }
 
 void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
 {
+    /*
     KoImageData *imageData = qobject_cast<KoImageData*>(picture->userData());
     if (! imageData) {
         qWarning() << "Picture has no image data. Omitting.";
@@ -778,7 +750,7 @@ void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
     }
 
     context.shapeWriter().startElement("image");
-    context.shapeWriter().addAttribute("id", getID(picture));
+    context.shapeWriter().addAttribute("id", context.getID(picture));
 
     QTransform m = picture->transformation();
     if (m.type() == QTransform::TxTranslate) {
@@ -813,7 +785,7 @@ void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
             QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
             url.setDirectory(url.directory());
             // create a filename for the image file at the destination directory
-            QString fname = dstBaseFilename + '_' + createUID("picture");
+            QString fname = dstBaseFilename + '_' + context.createUID("picture");
             // get extension from mimetype
             QString ext = "";
             QStringList patterns = mimeType->patterns();
@@ -834,4 +806,5 @@ void SvgWriter::saveImage(KoShape *picture, SvgSavingContext &context)
         }
     }
     context.shapeWriter().endElement();
+    */
 }

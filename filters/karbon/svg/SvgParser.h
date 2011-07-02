@@ -25,10 +25,10 @@
 #include "SvgGradientHelper.h"
 #include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
-#include "SvgGraphicContext.h"
 #include "SvgCssHelper.h"
 #include "SvgClipPathHelper.h"
 #include "SvgLoadingContext.h"
+#include <SvgGraphicContext.h>
 
 #include <KoXmlReader.h>
 

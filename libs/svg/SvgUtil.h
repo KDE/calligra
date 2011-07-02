@@ -20,6 +20,7 @@
 #ifndef SVGUTIL_H
 #define SVGUTIL_H
 
+#include "kosvg_export.h"
 #include <QtCore/QPointF>
 #include <QtCore/QSizeF>
 #include <QtGui/QTransform>
@@ -28,7 +29,7 @@ class QString;
 class QRectF;
 class SvgGraphicsContext;
 
-class SvgUtil
+class KOSVG_EXPORT SvgUtil
 {
 public:
     /**
