@@ -47,8 +47,6 @@
 #include <KoPatternBackground.h>
 #include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <plugins/artistictextshape/ArtisticTextRange.h>
-#include <plugins/pathshapes/rectangle/RectangleShape.h>
-#include <plugins/pathshapes/ellipse/EllipseShape.h>
 #include <KoImageData.h>
 #include <KoFilterEffect.h>
 #include <KoFilterEffectStack.h>
@@ -205,15 +203,7 @@ void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
     /*
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path) {
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(path);
-        bool isParametric = parameterShape && parameterShape->isParametricShape();
-        if (path->pathShapeId() == RectangleShapeId && isParametric) {
-            saveRectangle(static_cast<RectangleShape*>(path), context);
-        } else if (path->pathShapeId() == EllipseShapeId && isParametric) {
-            saveEllipse(static_cast<EllipseShape*>(path), context);
-        } else {
-            savePath(path, context);
-        }
+        savePath(path, context);
     } else {
         if (shape->shapeId() == ArtisticTextShapeID) {
             saveText(static_cast<ArtisticTextShape*>(shape), context);
@@ -234,58 +224,6 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("d", path->toString(m_userSpaceMatrix));
     context.shapeWriter().endElement();
-}
-
-void SvgWriter::saveEllipse(EllipseShape *ellipse, SvgSavingContext &context)
-{
-    /*
-    if (ellipse->type() == EllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle()) {
-        const QSizeF size = ellipse->size();
-        const bool isCircle = size.width() == size.height();
-        context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
-        context.shapeWriter().addAttribute("id", context.getID(ellipse));
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(ellipse->transformation()));
-
-        if (isCircle) {
-            context.shapeWriter().addAttributePt("r", 0.5 * size.width());
-        } else {
-            context.shapeWriter().addAttributePt("rx", 0.5 * size.width());
-            context.shapeWriter().addAttributePt("ry", 0.5 * size.height());
-        }
-        context.shapeWriter().addAttributePt("cx", 0.5 * size.width());
-        context.shapeWriter().addAttributePt("cy", 0.5 * size.height());
-
-        saveStyle(ellipse, context);
-
-        context.shapeWriter().endElement();
-    } else {
-        savePath(ellipse, context);
-    }
-    */
-}
-
-void SvgWriter::saveRectangle(RectangleShape *rectangle, SvgSavingContext &context)
-{
-    /*
-    context.shapeWriter().startElement("rect");
-    context.shapeWriter().addAttribute("id", context.getID(rectangle));
-    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(rectangle->transformation()));
-
-    saveStyle(rectangle, context);
-
-    const QSizeF size = rectangle->size();
-    context.shapeWriter().addAttributePt("width", size.width());
-    context.shapeWriter().addAttributePt("height", size.height());
-
-    double rx = rectangle->cornerRadiusX();
-    if (rx > 0.0)
-        context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
-    double ry = rectangle->cornerRadiusY();
-    if (ry > 0.0)
-        context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
-
-    context.shapeWriter().endElement();
-    */
 }
 
 void SvgWriter::saveColorStops(const QGradientStops &colorStops, SvgSavingContext &context)

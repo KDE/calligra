@@ -19,6 +19,10 @@
 
 #include "SvgSerializable.h"
 
+SvgSerializable::~SvgSerializable()
+{
+}
+
 bool SvgSerializable::saveSvg(SvgSavingContext &/*context*/)
 {
     return false;

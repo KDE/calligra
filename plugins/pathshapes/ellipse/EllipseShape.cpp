@@ -27,6 +27,8 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <SvgSavingContext.h>
+#include <SvgUtil.h>
 
 #include <math.h>
 
@@ -371,4 +373,32 @@ qreal EllipseShape::endAngle() const
 QString EllipseShape::pathShapeId() const
 {
     return EllipseShapeId;
+}
+
+bool EllipseShape::saveSvg(SvgSavingContext &context)
+{
+    if (type() == EllipseShape::Arc && startAngle() == endAngle()) {
+        const QSizeF size = this->size();
+        const bool isCircle = size.width() == size.height();
+        context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
+        context.shapeWriter().addAttribute("id", context.getID(this));
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+
+        if (isCircle) {
+            context.shapeWriter().addAttributePt("r", 0.5 * size.width());
+        } else {
+            context.shapeWriter().addAttributePt("rx", 0.5 * size.width());
+            context.shapeWriter().addAttributePt("ry", 0.5 * size.height());
+        }
+        context.shapeWriter().addAttributePt("cx", 0.5 * size.width());
+        context.shapeWriter().addAttributePt("cy", 0.5 * size.height());
+
+        saveSvgStyle(this, context);
+
+        context.shapeWriter().endElement();
+    } else {
+        return false;
+    }
+
+    return true;
 }

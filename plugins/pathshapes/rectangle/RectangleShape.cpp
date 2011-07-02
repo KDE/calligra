@@ -27,6 +27,8 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <SvgSavingContext.h>
+#include <SvgUtil.h>
 
 RectangleShape::RectangleShape()
 : m_cornerRadiusX(0)
@@ -293,4 +295,28 @@ void RectangleShape::setCornerRadiusY(qreal radius)
 QString RectangleShape::pathShapeId() const
 {
     return RectangleShapeId;
+}
+
+bool RectangleShape::saveSvg(SvgSavingContext &context)
+{
+    context.shapeWriter().startElement("rect");
+    context.shapeWriter().addAttribute("id", context.getID(this));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+
+    saveSvgStyle(this, context);
+
+    const QSizeF size = this->size();
+    context.shapeWriter().addAttributePt("width", size.width());
+    context.shapeWriter().addAttributePt("height", size.height());
+
+    double rx = cornerRadiusX();
+    if (rx > 0.0)
+        context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
+    double ry = cornerRadiusY();
+    if (ry > 0.0)
+        context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
+
+    context.shapeWriter().endElement();
+
+    return true;
 }

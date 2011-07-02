@@ -28,6 +28,7 @@ class SvgSavingContext;
 class KOSVG_EXPORT SvgSerializable
 {
 public:
+    virtual ~SvgSerializable();
     virtual bool saveSvg(SvgSavingContext &context);
 
 protected:

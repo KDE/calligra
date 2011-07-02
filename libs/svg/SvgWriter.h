@@ -41,8 +41,6 @@ class KoPathShape;
 class KoShapeBorderModel;
 class ArtisticTextShape;
 class ArtisticTextRange;
-class EllipseShape;
-class RectangleShape;
 class KoPatternBackground;
 class QTextStream;
 class QPixmap;
@@ -74,8 +72,6 @@ private:
     void saveGroup(KoShapeGroup *group, SvgSavingContext &context);
     void saveShape(KoShape *shape, SvgSavingContext &context);
     void savePath(KoPathShape *path, SvgSavingContext &context);
-    void saveEllipse(EllipseShape *ellipse, SvgSavingContext &context);
-    void saveRectangle(RectangleShape *rectangle, SvgSavingContext &context);
 
     void saveImage(KoShape *picture, SvgSavingContext &context);
     void saveText(ArtisticTextShape *text, SvgSavingContext &context);
