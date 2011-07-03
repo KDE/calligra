@@ -24,11 +24,13 @@
 #include <KoXmlReader.h>
 
 class SvgGraphicsContext;
+class KoResourceManager;
+class KoImageCollection;
 
 class KOSVG_EXPORT SvgLoadingContext
 {
 public:
-    SvgLoadingContext();
+    SvgLoadingContext(KoResourceManager *documentResourceManager);
     ~SvgLoadingContext();
 
     /// Returns the current graphics context
@@ -51,6 +53,9 @@ public:
 
     /// Returns the next z-index
     int nextZIndex();
+
+    /// Returns the image collection used for managing images
+    KoImageCollection* imageCollection();
 
 private:
     class Private;

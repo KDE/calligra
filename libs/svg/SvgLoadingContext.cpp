@@ -21,6 +21,8 @@
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
 
+#include <KoResourceManager.h>
+
 #include <KDebug>
 
 #include <QtCore/QStack>
@@ -46,12 +48,14 @@ public:
     QStack<SvgGraphicsContext*> gcStack;
     QString initialXmlBaseDir;
     int zIndex;
+    KoResourceManager *documentResourceManager;
 };
 
-SvgLoadingContext::SvgLoadingContext()
+SvgLoadingContext::SvgLoadingContext(KoResourceManager *documentResourceManager)
     : d(new Private())
 {
-
+    d->documentResourceManager = documentResourceManager;
+    Q_ASSERT(d->documentResourceManager);
 }
 
 SvgLoadingContext::~SvgLoadingContext()
@@ -145,3 +149,7 @@ int SvgLoadingContext::nextZIndex()
     return d->zIndex++;
 }
 
+KoImageCollection* SvgLoadingContext::imageCollection()
+{
+    return d->documentResourceManager->imageCollection();
+}

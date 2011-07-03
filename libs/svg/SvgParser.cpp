@@ -58,7 +58,7 @@
 
 
 SvgParser::SvgParser(KoResourceManager *documentResourceManager)
-    : m_documentResourceManager(documentResourceManager)
+    : m_context(documentResourceManager), m_documentResourceManager(documentResourceManager)
 {
     // the order of the font attributes is important, don't change without reason !!!
     m_fontAttributes << "font-family" << "font-size" << "font-weight";
