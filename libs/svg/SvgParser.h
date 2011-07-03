@@ -128,7 +128,8 @@ protected:
 
     /// creates a shape from the given shape id
     KoShape * createShape(const QString &shapeID);
-
+    /// Creates shape from specified svg element
+    KoShape * createShapeFromElement(const KoXmlElement &element, SvgLoadingContext &context);
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
 

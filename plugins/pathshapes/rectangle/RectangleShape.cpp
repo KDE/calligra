@@ -28,6 +28,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 #include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
 #include <SvgUtil.h>
 
 RectangleShape::RectangleShape()
@@ -317,6 +318,33 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
 
     context.shapeWriter().endElement();
+
+    return true;
+}
+
+bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+    const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
+    const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));
+    const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width"));
+    const qreal h = SvgUtil::parseUnitY(context.currentGC(), element.attribute("height"));
+    const bool hasRx = element.hasAttribute("rx");
+    const bool hasRy = element.hasAttribute("ry");
+    double rx = hasRx ? SvgUtil::parseUnitX(context.currentGC(), element.attribute("rx")) : 0.0;
+    double ry = hasRy ? SvgUtil::parseUnitY(context.currentGC(), element.attribute("ry")) : 0.0;
+    if (hasRx && !hasRy)
+        ry = rx;
+    if (!hasRx && hasRy)
+        rx = ry;
+
+    setSize(QSizeF(w, h));
+    setPosition(QPointF(x, y));
+    if (rx >= 0.0)
+        setCornerRadiusX(qMin(100.0, rx / (0.5 * w) * 100.0));
+    if (ry >= 0.0)
+        setCornerRadiusY(qMin(100.0, ry / (0.5 * h) * 100.0));
+    if (w == 0.0 || h == 0.0)
+        setVisible(false);
 
     return true;
 }

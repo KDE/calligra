@@ -82,6 +82,9 @@ public:
     /// reimplemented from SvgSerializable
     virtual bool saveSvg(SvgSavingContext &context);
 
+    /// reimplemented from SvgSerializable
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
+
 protected:
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;

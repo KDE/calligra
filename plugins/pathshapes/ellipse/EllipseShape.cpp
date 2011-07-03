@@ -28,6 +28,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 #include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
 #include <SvgUtil.h>
 
 #include <math.h>
@@ -396,6 +397,32 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
         saveSvgStyle(this, context);
 
         context.shapeWriter().endElement();
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
+bool EllipseShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+    if (element.tagName() == "ellipse") {
+        const qreal rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("rx"));
+        const qreal ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute("ry"));
+        const qreal cx = element.attribute("cx").isEmpty() ? 0.0 : SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx"));
+        const qreal cy = element.attribute("cy").isEmpty() ? 0.0 : SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy"));
+        setSize(QSizeF(2*rx, 2*ry));
+        setPosition(QPointF(cx - rx, cy - ry));
+        if (rx == 0.0 || ry == 0.0)
+            setVisible(false);
+    } else if (element.tagName() == "circle") {
+        const qreal r  = SvgUtil::parseUnitXY(context.currentGC(), element.attribute("r"));
+        const qreal cx = element.attribute("cx").isEmpty() ? 0.0 : SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx"));
+        const qreal cy = element.attribute("cy").isEmpty() ? 0.0 : SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy"));
+        setSize(QSizeF(2*r, 2*r));
+        setPosition(QPointF(cx - r, cy - r));
+        if (r == 0.0)
+            setVisible(false);
     } else {
         return false;
     }
