@@ -1842,80 +1842,82 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     return 0;
 }
 
-KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
+KoShape * SvgParser::createPath(const KoXmlElement &element)
 {
+    KoShape *obj = 0;
+    if (element.tagName() == "line") {
+        KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+        if (path) {
+            double x1 = element.attribute("x1").isEmpty() ? 0.0 : parseUnitX(element.attribute("x1"));
+            double y1 = element.attribute("y1").isEmpty() ? 0.0 : parseUnitY(element.attribute("y1"));
+            double x2 = element.attribute("x2").isEmpty() ? 0.0 : parseUnitX(element.attribute("x2"));
+            double y2 = element.attribute("y2").isEmpty() ? 0.0 : parseUnitY(element.attribute("y2"));
+            path->clear();
+            path->moveTo(QPointF(x1, y1));
+            path->lineTo(QPointF(x2, y2));
+            path->normalize();
+            obj = path;
+        }
+    } else if (element.tagName() == "polyline" || element.tagName() == "polygon") {
+        KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+        if (path) {
+            path->clear();
 
-    m_context.pushGraphicsContext(b);
-
-    KoShape *obj = createShapeFromElement(b, m_context);
-
-    if (!obj) {
-        if (b.tagName() == "line") {
-            KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-            if (path) {
-                double x1 = b.attribute("x1").isEmpty() ? 0.0 : parseUnitX(b.attribute("x1"));
-                double y1 = b.attribute("y1").isEmpty() ? 0.0 : parseUnitY(b.attribute("y1"));
-                double x2 = b.attribute("x2").isEmpty() ? 0.0 : parseUnitX(b.attribute("x2"));
-                double y2 = b.attribute("y2").isEmpty() ? 0.0 : parseUnitY(b.attribute("y2"));
-                path->clear();
-                path->moveTo(QPointF(x1, y1));
-                path->lineTo(QPointF(x2, y2));
-                path->normalize();
-                obj = path;
+            bool bFirst = true;
+            QString points = element.attribute("points").simplified();
+            points.replace(',', ' ');
+            points.remove('\r');
+            points.remove('\n');
+            QStringList pointList = points.split(' ', QString::SkipEmptyParts);
+            for (QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it) {
+                QPointF point;
+                point.setX(SvgUtil::fromUserSpace((*it).toDouble()));
+                ++it;
+                if (it == pointList.end())
+                    break;
+                point.setY(SvgUtil::fromUserSpace((*it).toDouble()));
+                if (bFirst) {
+                    path->moveTo(point);
+                    bFirst = false;
+                } else
+                    path->lineTo(point);
             }
-        } else if (b.tagName() == "polyline" || b.tagName() == "polygon") {
-            KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-            if (path) {
-                path->clear();
+            if (element.tagName() == "polygon")
+                path->close();
 
-                bool bFirst = true;
-                QString points = b.attribute("points").simplified();
-                points.replace(',', ' ');
-                points.remove('\r');
-                points.remove('\n');
-                QStringList pointList = points.split(' ', QString::SkipEmptyParts);
-                for (QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it) {
-                    QPointF point;
-                    point.setX(SvgUtil::fromUserSpace((*it).toDouble()));
-                    ++it;
-                    if (it == pointList.end())
-                        break;
-                    point.setY(SvgUtil::fromUserSpace((*it).toDouble()));
-                    if (bFirst) {
-                        path->moveTo(point);
-                        bFirst = false;
-                    } else
-                        path->lineTo(point);
-                }
-                if (b.tagName() == "polygon")
-                    path->close();
+            path->setPosition(path->normalize());
 
-                path->setPosition(path->normalize());
+            obj = path;
+        }
+    } else if (element.tagName() == "path") {
+        KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+        if (path) {
+            path->clear();
 
-                obj = path;
-            }
-        } else if (b.tagName() == "path") {
-            KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-            if (path) {
-                path->clear();
+            KoPathShapeLoader loader(path);
+            loader.parseSvg(element.attribute("d"), true);
+            path->setPosition(path->normalize());
 
-                KoPathShapeLoader loader(path);
-                loader.parseSvg(b.attribute("d"), true);
-                path->setPosition(path->normalize());
+            QPointF newPosition = QPointF(SvgUtil::fromUserSpace(path->position().x()),
+                                          SvgUtil::fromUserSpace(path->position().y()));
+            QSizeF newSize = QSizeF(SvgUtil::fromUserSpace(path->size().width()),
+                                    SvgUtil::fromUserSpace(path->size().height()));
 
-                QPointF newPosition = QPointF(SvgUtil::fromUserSpace(path->position().x()),
-                                              SvgUtil::fromUserSpace(path->position().y()));
-                QSizeF newSize = QSizeF(SvgUtil::fromUserSpace(path->size().width()),
-                                        SvgUtil::fromUserSpace(path->size().height()));
+            path->setSize(newSize);
+            path->setPosition(newPosition);
 
-                path->setSize(newSize);
-                path->setPosition(newPosition);
-
-                obj = path;
-            }
+            obj = path;
         }
     }
 
+    return obj;
+}
+
+KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
+{
+    m_context.pushGraphicsContext(b);
+
+    KoShape *obj = createShapeFromElement(b, m_context);
     if (! obj) {
         m_context.popGraphicsContext();
         return 0;
@@ -1978,6 +1980,10 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
 
         object = shape;
         break;
+    }
+
+    if (!object) {
+        object = createPath(element);
     }
 
     return object;

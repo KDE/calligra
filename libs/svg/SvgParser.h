@@ -97,6 +97,8 @@ protected:
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
     /// Create text object from the given xml element
     KoShape * createText(const KoXmlElement &, const QList<KoShape*> & shapes);
+    /// Create path object from the given xml element
+    KoShape * createPath(const KoXmlElement &);
     /// Parses font attributes
     void parseFont(const SvgStyles &styles);
     /// Parse nested text ranges
