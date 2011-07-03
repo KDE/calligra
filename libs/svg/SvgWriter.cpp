@@ -169,19 +169,14 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
 {
     SvgSerializable *svgShape = dynamic_cast<SvgSerializable*>(shape);
-    if (svgShape) {
-        if (svgShape->saveSvg(context))
-            return;
-    }
+    if (svgShape && svgShape->saveSvg(context))
+        return;
+
+    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    if (path && savePath(path, context))
+        return;
 
     // TODO: implement generic saving of shape via a switch element
-
-    /*
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (path) {
-        savePath(path, context);
-    }
-    */
 }
 
 void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
