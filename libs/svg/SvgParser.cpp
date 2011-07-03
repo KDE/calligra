@@ -1918,25 +1918,22 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     m_context.pushGraphicsContext(b);
 
     KoShape *obj = createShapeFromElement(b, m_context);
-    if (! obj) {
-        m_context.popGraphicsContext();
-        return 0;
+    if (obj) {
+        obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+
+        if (!style.isEmpty())
+            parseStyle(obj, style);
+        else
+            parseStyle(obj, collectStyles(b));
+
+        // handle id
+        if (!b.attribute("id").isEmpty())
+            obj->setName(b.attribute("id"));
+
+        obj->setZIndex(m_context.nextZIndex());
     }
 
-    obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-
-    if (!style.isEmpty())
-        parseStyle(obj, style);
-    else
-        parseStyle(obj, collectStyles(b));
-
-    // handle id
-    if (!b.attribute("id").isEmpty())
-        obj->setName(b.attribute("id"));
-
     m_context.popGraphicsContext();
-
-    obj->setZIndex(m_context.nextZIndex());
 
     return obj;
 }
