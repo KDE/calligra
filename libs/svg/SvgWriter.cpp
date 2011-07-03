@@ -173,8 +173,10 @@ void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
         return;
 
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (path && savePath(path, context))
+    if (path) {
+        savePath(path, context);
         return;
+    }
 
     // TODO: implement generic saving of shape via a switch element
 }
