@@ -34,3 +34,8 @@ void SvgSerializable::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
     SvgStyleWriter::saveSvgStyle(shape, context);
 }
+
+bool SvgSerializable::loadSvg(const KoXmlElement &/*element*/, SvgLoadingContext &/*context*/)
+{
+    return false;
+}

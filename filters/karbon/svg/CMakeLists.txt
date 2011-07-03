@@ -21,14 +21,6 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonsvgimport_PART_SRCS 
     SvgImport.cpp
-    SvgParser.cpp
-    SvgGradientHelper.cpp
-    SvgPatternHelper.cpp
-    SvgFilterHelper.cpp
-    SvgCssHelper.cpp
-    SvgClipPathHelper.cpp
-    SvgTextHelper.cpp
-    SvgLoadingContext.cpp
     ${SHAPES_SOURCES} 
 )
 

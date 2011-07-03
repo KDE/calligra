@@ -40,9 +40,9 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
-#include <pathshapes/rectangle/RectangleShape.h>
-#include <pathshapes/ellipse/EllipseShape.h>
-#include <plugins/artistictextshape/ArtisticTextShape.h>
+//#include <pathshapes/rectangle/RectangleShape.h>
+//#include <pathshapes/ellipse/EllipseShape.h>
+//#include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
@@ -1621,6 +1621,7 @@ void SvgParser::parseDefs(const KoXmlElement &e)
 // Creating functions
 // ---------------------------------------------------------------------------------------
 
+/*
 ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, SvgGraphicsContext *gc)
 {
     ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace), gc->font);
@@ -1668,9 +1669,11 @@ ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, S
 
     return range;
 }
+*/
 
 void SvgParser::parseTextRanges(const KoXmlElement &element, SvgTextHelper &textContext, KoShape *textShape, const QList<KoShape*> & shapes)
 {
+    /*
     ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(textShape);
     if (!text)
         return;
@@ -1720,10 +1723,12 @@ void SvgParser::parseTextRanges(const KoXmlElement &element, SvgTextHelper &text
             continue;
         }
     }
+    */
 }
 
 KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoShape*> & shapes)
 {
+    /*
     QString anchor;
 
     ArtisticTextShape *text = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
@@ -1846,6 +1851,8 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     m_context.popGraphicsContext();
 
     return text;
+    */
+    return 0;
 }
 
 KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
@@ -1855,6 +1862,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     m_context.pushGraphicsContext(b);
 
     if (b.tagName() == "rect") {
+        /*
         double x = parseUnitX(b.attribute("x"));
         double y = parseUnitY(b.attribute("y"));
         double w = parseUnitX(b.attribute("width"));
@@ -1881,7 +1889,9 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
             if (w == 0.0 || h == 0.0)
                 obj->setVisible(false);
         }
+        */
     } else if (b.tagName() == "ellipse") {
+        /*
         obj = createShape(EllipseShapeId);
         if (obj) {
             double rx = parseUnitX(b.attribute("rx"));
@@ -1893,7 +1903,9 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
             if (rx == 0.0 || ry == 0.0)
                 obj->setVisible(false);
         }
+        */
     } else if (b.tagName() == "circle") {
+        /*
         obj = createShape(EllipseShapeId);
         if (obj) {
             double r  = parseUnitXY(b.attribute("r"));
@@ -1904,6 +1916,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
             if (r == 0.0)
                 obj->setVisible(false);
         }
+        */
     } else if (b.tagName() == "line") {
         KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
         if (path) {

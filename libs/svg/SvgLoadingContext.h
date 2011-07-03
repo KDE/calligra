@@ -20,11 +20,12 @@
 #ifndef SVGLOADINGCONTEXT_H
 #define SVGLOADINGCONTEXT_H
 
+#include "kosvg_export.h"
 #include <KoXmlReader.h>
 
 class SvgGraphicsContext;
 
-class SvgLoadingContext
+class KOSVG_EXPORT SvgLoadingContext
 {
 public:
     SvgLoadingContext();

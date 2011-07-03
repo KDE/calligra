@@ -1,4 +1,4 @@
-include_directories( ${KOSVG_INCLUDES} ${KOODF_INCLUDES} ${FLAKE_INCLUDES} )
+include_directories( ${KOSVG_INCLUDES} ${KOODF_INCLUDES} ${FLAKE_INCLUDES} ${KOMAIN_INCLUDES})
 
 set(kosvg_LIB_SRCS
     SvgUtil.cpp
@@ -7,11 +7,19 @@ set(kosvg_LIB_SRCS
     SvgWriter.cpp
     SvgStyleWriter.cpp
     SvgSerializable.cpp
+    SvgParser.cpp
+    SvgGradientHelper.cpp
+    SvgPatternHelper.cpp
+    SvgFilterHelper.cpp
+    SvgCssHelper.cpp
+    SvgClipPathHelper.cpp
+    SvgTextHelper.cpp
+    SvgLoadingContext.cpp
 )
 
 kde4_add_library(kosvg SHARED ${kosvg_LIB_SRCS})
 
-target_link_libraries(kosvg koodf flake ${QT_QTXML_LIBRARY})
+target_link_libraries(kosvg koodf flake komain ${QT_QTXML_LIBRARY})
 
 set_target_properties(kosvg PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

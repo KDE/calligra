@@ -22,6 +22,7 @@
 #ifndef SVGPARSER_H
 #define SVGPARSER_H
 
+#include "kosvg_export.h"
 #include "SvgGradientHelper.h"
 #include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
@@ -41,7 +42,7 @@ class KoShapeGroup;
 class KoResourceManager;
 class SvgTextHelper;
 
-class SvgParser
+class KOSVG_EXPORT SvgParser
 {
 public:
     SvgParser(KoResourceManager *documentResourceManager);

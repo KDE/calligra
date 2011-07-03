@@ -23,13 +23,20 @@
 #include "kosvg_export.h"
 
 class SvgSavingContext;
+class SvgLoadingContext;
 class KoShape;
+class KoXmlElement;
 
 class KOSVG_EXPORT SvgSerializable
 {
 public:
     virtual ~SvgSerializable();
+
+    /// Saves data utilizing specified svg saving context
     virtual bool saveSvg(SvgSavingContext &context);
+
+    /// Loads data from specified svg element
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
 protected:
     /// Saves the style of the specified shape
