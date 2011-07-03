@@ -291,3 +291,22 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
     return 0;
 }
+
+QList<KoShapeFactoryBase*> KoShapeRegistry::factoriesForElement(const QString &nameSpace, const QString &elementName)
+{
+    // Pair of namespace, tagname
+    QPair<QString, QString> p = QPair<QString, QString>(nameSpace, elementName);
+
+    QMultiMap<int, KoShapeFactoryBase*> priorityMap = d->factoryMap.value(p);
+    QList<KoShapeFactoryBase*> shapeFactories = priorityMap.values();
+    if (shapeFactories.size() > 1) {
+        // sort list by priority
+        const int factoryCount = shapeFactories.size();
+        const int middleIndex = factoryCount >> 1;
+        for (int i = 0; i < middleIndex; ++i) {
+            shapeFactories.swap(i, factoryCount-i);
+        }
+    }
+
+    return shapeFactories;
+}
