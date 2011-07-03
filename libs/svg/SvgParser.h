@@ -92,8 +92,6 @@ protected:
     qreal parseUnitXY(const QString &unit);
     /// Parses a color attribute
     bool parseColor(QColor &, const QString &);
-    /// Parse a image
-    bool parseImage(const QString &imageAttribute, QImage &image);
 
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());

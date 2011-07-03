@@ -53,6 +53,8 @@ public:
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
     // reimplemented from SvgSerializable
     virtual bool saveSvg(SvgSavingContext &context);
+    // reimplemented from SvgSerializable
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
     /**
      * Get the collection used in the shape.
      */

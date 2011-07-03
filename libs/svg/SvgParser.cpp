@@ -650,19 +650,6 @@ bool SvgParser::parseClipPath(const KoXmlElement &e, const KoXmlElement &referen
     return true;
 }
 
-bool SvgParser::parseImage(const QString &attribute, QImage &image)
-{
-    if (attribute.startsWith(QLatin1String("data:"))) {
-        int start = attribute.indexOf("base64,");
-        if (start > 0 && image.loadFromData(QByteArray::fromBase64(attribute.mid(start + 7).toLatin1())))
-            return true;
-    } else if (image.load(m_context.absoluteFilePath(attribute))) {
-        return true;
-    }
-
-    return false;
-}
-
 void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QString &params)
 {
     QColor fillcolor = gc->fillColor;
@@ -1925,32 +1912,6 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
                 path->setPosition(newPosition);
 
                 obj = path;
-            }
-        } else if (b.tagName() == "image") {
-            double x = b.hasAttribute("x") ? parseUnitX(b.attribute("x")) : 0;
-            double y = b.hasAttribute("x") ? parseUnitY(b.attribute("y")) : 0;
-            double w = b.hasAttribute("width") ? parseUnitX(b.attribute("width")) : 0;
-            double h = b.hasAttribute("height") ? parseUnitY(b.attribute("height")) : 0;
-
-            // zero width of height disables rendering this image (see svg spec)
-            if (w == 0.0 || h == 0.0)
-                return 0;
-            QString fname = b.attribute("xlink:href");
-            QImage img;
-            if (parseImage(fname, img)) {
-                KoShape *picture = createShape("PictureShape");
-                KoImageCollection *imageCollection = m_documentResourceManager->imageCollection();
-
-                if (picture && imageCollection) {
-                    // TODO use it already for loading
-                    KoImageData *data = imageCollection->createImageData(img);
-
-                    picture->setUserData(data);
-                    picture->setSize(QSizeF(w, h));
-                    picture->setPosition(QPointF(x, y));
-
-                    obj = picture;
-                }
             }
         }
     }

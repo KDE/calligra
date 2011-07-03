@@ -37,6 +37,7 @@
 #include <KoGenStyle.h>
 #include <KoFilterEffectStack.h>
 #include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
 #include <SvgUtil.h>
 
 #include <KMimeType>
@@ -374,6 +375,45 @@ bool PictureShape::saveSvg(SvgSavingContext &context)
         }
     }
     context.shapeWriter().endElement();
+
+    return true;
+}
+
+bool PictureShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+    const qreal x = element.hasAttribute("x") ? SvgUtil::parseUnitX(context.currentGC(), element.attribute("x")) : 0;
+    const qreal y = element.hasAttribute("x") ? SvgUtil::parseUnitY(context.currentGC(), element.attribute("y")) : 0;
+    const qreal w = element.hasAttribute("width") ? SvgUtil::parseUnitX(context.currentGC(), element.attribute("width")) : 0;
+    const qreal h = element.hasAttribute("height") ? SvgUtil::parseUnitY(context.currentGC(), element.attribute("height")) : 0;
+
+    // zero width of height disables rendering this image (see svg spec)
+    if (w == 0.0 || h == 0.0)
+        return 0;
+
+    const QString href = element.attribute("xlink:href");
+
+    QImage image;
+
+    if (href.startsWith(QLatin1String("data:"))) {
+        int start = href.indexOf("base64,");
+        if (start <= 0)
+            return false;
+        if(!image.loadFromData(QByteArray::fromBase64(href.mid(start + 7).toLatin1())))
+            return false;
+    } else if (!image.load(context.absoluteFilePath(href))) {
+        return false;
+    }
+
+    KoImageCollection *imageCollection = context.imageCollection();
+    if (!imageCollection)
+        return false;
+
+    // TODO use it already for loading
+    KoImageData *data = imageCollection->createImageData(image);
+
+    setUserData(data);
+    setSize(QSizeF(w, h));
+    setPosition(QPointF(x, y));
 
     return true;
 }
