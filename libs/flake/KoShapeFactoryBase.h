@@ -276,10 +276,10 @@ protected:
      * @param nameSpace the ODF name space (like
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
      * take it from KoXmlNS.h)
-     * @param elementNames the name of the element itself, like "draw"
+     * @param elementNames the name of the element itself, like "path"
      *
      */
-    void setOdfElementNames(const QString &nameSpace, const QStringList &elementNames);
+    void setXmlElementNames(const QString &nameSpace, const QStringList &elementNames);
 
     /**
      * Set the namespaces and according element tags used for quick checking whether this shapefactory
@@ -288,9 +288,9 @@ protected:
      *
      * @param elementNamesList containing a list of namespace (like
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
-     * take it from KoXmlNS.h) to a list of elementName of the element itself, like "draw"
+     * take it from KoXmlNS.h) to a list of elementName of the element itself, like "path"
      */
-    void setOdfElements(const QList<QPair<QString, QStringList> > &elementNamesList);
+    void setXmlElements(const QList<QPair<QString, QStringList> > &elementNamesList);
 
     /**
      * The hidden boolean requests if the shape should be hidden in the

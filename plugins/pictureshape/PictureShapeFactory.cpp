@@ -42,7 +42,7 @@ PictureShapeFactory::PictureShapeFactory()
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
     setIcon("x-shape-image");
-    setOdfElementNames(KoXmlNS::draw, QStringList("image"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(1);
 }
 

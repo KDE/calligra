@@ -34,7 +34,7 @@ RectangleShapeFactory::RectangleShapeFactory()
     setToolTip(i18n("A rectangle"));
     setIcon("rectangle-shape");
     setFamily("geometric");
-    setOdfElementNames(KoXmlNS::draw, QStringList("rect"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("rect"));
     setLoadingPriority(1);
 }
 

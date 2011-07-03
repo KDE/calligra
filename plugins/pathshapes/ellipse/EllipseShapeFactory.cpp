@@ -37,7 +37,7 @@ EllipseShapeFactory::EllipseShapeFactory()
     setFamily("geometric");
     QStringList elementNames;
     elementNames << "ellipse" << "circle";
-    setOdfElementNames(KoXmlNS::draw, elementNames);
+    setXmlElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(1);
 }
 

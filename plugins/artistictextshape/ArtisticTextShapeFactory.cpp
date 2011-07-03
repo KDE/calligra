@@ -33,7 +33,7 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     setToolTip(i18n("A shape which shows a single text line"));
     setIcon( "text" );
     setLoadingPriority( 5 );
-    setOdfElementNames( KoXmlNS::draw, QStringList( "custom-shape" ) );
+    setXmlElementNames( KoXmlNS::draw, QStringList( "custom-shape" ) );
 }
 
 KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const

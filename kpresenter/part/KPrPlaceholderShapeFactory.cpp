@@ -33,7 +33,7 @@ KPrPlaceholderShapeFactory::KPrPlaceholderShapeFactory()
 {
     QStringList elementNames;
     elementNames << "text-box" << "object" << "image";
-    setOdfElementNames( KoXmlNS::draw, elementNames );
+    setXmlElementNames( KoXmlNS::draw, elementNames );
     // use a really high number as we want to be used before the normal shapes try to load it
     setLoadingPriority( 1000 );
     setHidden(true);
