@@ -43,7 +43,7 @@ void AnimatorModel::init()
     m_enabled = false;
     
     this->blockSignals(true);
-    setFramesNumber(0, false);
+    setFramesNumber(12, false);
     setFrame(0);
     
     setOnionNext(0);
@@ -219,6 +219,7 @@ QVariant AnimatorModel::data(const QModelIndex& index, int role) const
 //         }
     } else if (role == Qt::BackgroundRole)
     {
+        // TODO: use constants and colors, not manually rgb...
         int r = 127, g = 127, b = 127;
         
         if (index.column() == m_frame)

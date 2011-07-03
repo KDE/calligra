@@ -124,9 +124,10 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     connect(ext_light_table, SIGNAL(toggled(bool)), m_model, SLOT(toogleExtLTable(bool)));
     addAction( ext_light_table );
     
-    QAction* show_all = m_onion_toolbar->addAction(SmallIcon("layer-visible-on"), i18n("Show all frames (recommended for shape layers before exit)"));
+    QAction* show_all = m_onion_toolbar->addAction(SmallIcon("layer-visible-on"), i18n("Enable/disable plugin"));
     show_all->setCheckable(true);
     connect(show_all, SIGNAL(toggled(bool)), m_model, SLOT(setEnabled(bool)));
+    show_all->setEnabled(true);
     addAction( show_all );
     
     // Player toolbar
