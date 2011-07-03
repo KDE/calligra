@@ -156,7 +156,7 @@ QString SvgSavingContext::createFileName(const QString &extension)
     QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
     url.setDirectory(url.directory());
     // create a filename for the image file at the destination directory
-    QString fname = dstBaseFilename + '_' + createUID("picture");
+    QString fname = dstBaseFilename + '_' + createUID("file");
     url.setFileName(fname + extension);
     // check if file exists already
     int i = 0;
