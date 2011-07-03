@@ -281,10 +281,15 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     m_backend = backend;
 
     // Set some initial values.
+#if 0
     mWindowTop    = 0;
     mWindowLeft   = 0;
     mWindowWidth  = 1;
     mWindowHeight = 1;
+#else
+    mDeviceContext.windowOrg = QPoint(0, 0);
+    mDeviceContext.windowExt = QSize(1, 1);
+#endif
 
     QRect bbox(QPoint(mBBoxLeft,mBBoxTop),
                QSize(mBBoxRight - mBBoxLeft, mBBoxBottom - mBBoxTop));
@@ -405,9 +410,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left;
 
                     stream >> top >> left;
+
                     m_backend->setWindowOrg(left, top);
-                    mWindowLeft = left;
-                    mWindowTop = top;
+                    mDeviceContext.windowOrg = QPoint(left, top);
 #if DEBUG_RECORDS
                     kDebug(31000) <<"Org: (" << left <<","  << top <<")";
 #endif
@@ -424,8 +429,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 #endif
 
                     m_backend->setWindowExt(width, height);
-                    mWindowWidth  = width;
-                    mWindowHeight = height;
+                    mDeviceContext.windowExt = QSize(width, height);
                 }
                 break;
             case (META_SETVIEWPORTORG & 0xff):
@@ -434,6 +438,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> top >> left;
                     m_backend->setViewportOrg(left, top);
+                    mDeviceContext.viewportOrg = QPoint(left, top);
 
 #if DEBUG_RECORDS
                     kDebug(31000) <<"Org: (" << left <<","  << top <<")";
@@ -451,6 +456,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 #endif
 
                     m_backend->setViewportExt(width, height);
+                    mDeviceContext.viewportExt = QSize(width, height);
                 }
                 break;
             case (META_OFFSETWINDOWORG & 0xff):
@@ -458,11 +464,16 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 offTop, offLeft;
 
                     stream >> offTop >> offLeft;
-                    m_backend->setWindowOrg(mWindowLeft + offLeft, mWindowTop + offTop);
+                    m_backend->setWindowOrg(mDeviceContext.windowOrg.x() + offLeft,
+                                            mDeviceContext.windowOrg.y() + offTop);
 
+#if 0
                     // FIXME: Check if we must move the right and bottom edges too.
                     mWindowLeft = mWindowLeft + offLeft;
                     mWindowTop  = mWindowTop + offTop;
+#else
+                    mDeviceContext.windowOrg += QPoint(offLeft, offTop);
+#endif
                 }
                 break;
             case (META_SCALEWINDOWEXT & 0xff):
@@ -474,17 +485,36 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     stream >> heightDenum >> heightNum >> widthDenum >> widthNum;
 
                     if ((widthDenum != 0) && (heightDenum != 0)) {
-                        width = (qint32(mWindowWidth) * widthNum) / widthDenum;
-                        height = (qint32(mWindowHeight) * heightNum) / heightDenum;
+                        width = (qint32(mDeviceContext.windowExt.width()) * widthNum) / widthDenum;
+                        height = (qint32(mDeviceContext.windowExt.height()) * heightNum) / heightDenum;
                         m_backend->setWindowExt(width, height);
 
+#if 0
                         mWindowWidth  = width;
                         mWindowHeight = height;
+#else
+                        mDeviceContext.windowExt = QSize(width, height);
+#endif
                     }
                     //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
                 }
                 break;
             case (META_OFFSETVIEWPORTORG & 0xff):
+                {
+                    qint16 offTop, offLeft;
+
+                    stream >> offTop >> offLeft;
+                    m_backend->setViewportOrg(mDeviceContext.windowOrg.x() + offLeft,
+                                              mDeviceContext.windowOrg.y() + offTop);
+
+#if 0
+                    // FIXME: Check if we must move the right and bottom edges too.
+                    mViewportLeft = mViewportLeft + offLeft;
+                    mViewportTop  = mViewportTop + offTop;
+#else
+                    mDeviceContext.viewportOrg += QPoint(offLeft, offTop);
+#endif
+                }
                 break;
             case (META_SCALEVIEWPORTEXT & 0xff):
                 {
@@ -495,12 +525,18 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     stream >> heightDenum >> heightNum >> widthDenum >> widthNum;
 
                     if ((widthDenum != 0) && (heightDenum != 0)) {
-                        width = (qint32(mWindowWidth) * widthNum) / widthDenum;
-                        height = (qint32(mWindowHeight) * heightNum) / heightDenum;
+                        width = (qint32(mDeviceContext.windowExt.width()) * widthNum) / widthDenum;
+                        height = (qint32(mDeviceContext.windowExt.height()) * heightNum) / heightDenum;
+#if 0
                         m_backend->setWindowExt(width, height);
 
+                        // FIXME: !!!!!   Window should be Viewport
                         mWindowWidth  = width;
                         mWindowHeight = height;
+#else
+                        m_backend->setViewportExt(width, height);
+                        mDeviceContext.viewportExt = QSize(width, height);
+#endif
                     }
                     //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
                 }

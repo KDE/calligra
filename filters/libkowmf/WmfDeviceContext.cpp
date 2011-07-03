@@ -34,10 +34,6 @@ namespace Libwmf
 WmfDeviceContext::WmfDeviceContext()
 {
     reset();
-
-    m_windowExtIsSet = false;
-    m_viewportExtIsSet = false;
-    m_worldTransform.reset();
 }
 
 
@@ -76,7 +72,11 @@ void WmfDeviceContext::reset()
     //Text extra space
 
     changedItems = 0xffffffff;  // Everything changed the first time.
-    //changedItems = 0x0;  // Everything changed the first time.
+
+    // Derivative values.
+    m_windowExtIsSet = false;
+    m_viewportExtIsSet = false;
+    m_worldTransform.reset();
 }
 
 
@@ -181,8 +181,6 @@ void WmfDeviceContext::recalculateWorldTransform()
     }
     //kDebug(31000) << "After window viewport calculation" << m_worldTransform;
 }
-
-
 
 
 }
