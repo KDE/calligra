@@ -77,8 +77,7 @@ void AnimatorView::setModel(QAbstractItemModel* model)
 {
     connect(this, SIGNAL(activated(QModelIndex)), model, SLOT(activateLayer(QModelIndex)));
     resizeColumnsToContents();
-    connect(amodel(), SIGNAL(framesNumberChanged(int)), this, SLOT(resizeColumnsToContents()));
-//     connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(tempCheck()));
+    connect(model, SIGNAL(framesNumberChanged(int)), this, SLOT(resizeColumnsToContents()));
     QTableView::setModel(model);
 }
 
