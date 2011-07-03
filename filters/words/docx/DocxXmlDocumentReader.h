@@ -29,7 +29,6 @@
 
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
-#include "DocxXmlNotesReader.h"
 
 #include <MsooXmlDrawingTableStyle.h>
 
@@ -257,6 +256,8 @@ protected:
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
     QString m_currentTableStyleBase;
 
+    QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
+
 private:
     void init();
 
@@ -341,6 +342,12 @@ private:
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
     QString m_currentListStyleName;
+    //! The list identifier of the previous list, used to restart numbering if the current ID is different
+    QString m_previousNumIdUsed;
+
+    //! Map of list styles encountered so far, we can used the same list style if we have used it before
+    // instead of creating a new one.
+    QMap<QString, QString> m_usedListStyles;
 
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
@@ -376,6 +383,8 @@ public:
 
     QMap<QString, QString> m_endnotes;
     QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
+
+    QMap<QString, QList<MSOOXML::Utils::ParagraphBulletProperties> > m_bulletStyles;
 
 private:
 };

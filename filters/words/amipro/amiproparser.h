@@ -117,7 +117,7 @@ public:
     enum { OK, UnknownError, FileError, InvalidFormat } Error;
 
     bool process(const QString& filename);
-    int result() {
+    int result() const {
         return m_result;
     }
 

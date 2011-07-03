@@ -141,10 +141,17 @@ private:
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer& out);
 
-    typedef void (ODrawToOdf::*PathArtist)(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const;
-    void drawPathBentConnector2(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const;
-    void drawPathBentConnector3(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const;
-    void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);    
+    typedef void (ODrawToOdf::*PathArtist)(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawStraightConnector1(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);
     
     // shapes2.cpp
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);

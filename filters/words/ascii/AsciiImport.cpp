@@ -158,7 +158,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
 
-    QString styleName("Preformated Text");
+    QString styleName("txt");
     KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
     style.addAttribute("style:display-name", styleName);
     style.addProperty("fo:font-family", "dejavu sans mono", KoGenStyle::TextType);
@@ -219,7 +219,8 @@ void AsciiImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, cons
         if (!line.isNull()) {
             bodyWriter->startElement("text:p");
             bodyWriter->addAttribute("text:style-name", styleName);
-            bodyWriter->addTextSpan(line);
+            if (!line.isEmpty())
+                bodyWriter->addTextSpan(line);
             bodyWriter->endElement();
         }
     }
@@ -263,7 +264,9 @@ void AsciiImport::convertSentence(QTextStream &stream, KoXmlWriter *bodyWriter, 
         if (!paragraph.isNull()) {
             bodyWriter->startElement("text:p");
             bodyWriter->addAttribute("text:style-name", styleName);
-            bodyWriter->addTextSpan(paragraph.simplified());
+            QString s = paragraph.simplified();
+            if (!s.isEmpty())
+                bodyWriter->addTextSpan(s);
             bodyWriter->endElement();
         }
     }
@@ -285,7 +288,9 @@ void AsciiImport::convertEmptyLine(QTextStream &stream, KoXmlWriter *bodyWriter,
         if (!paragraph.isNull()) {
             bodyWriter->startElement("text:p");
             bodyWriter->addAttribute("text:style-name", styleName);
-            bodyWriter->addTextSpan(paragraph.simplified());
+            QString s = paragraph.simplified();
+            if (!s.isEmpty())
+                bodyWriter->addTextSpan(s);
             bodyWriter->endElement();
         }
     }
