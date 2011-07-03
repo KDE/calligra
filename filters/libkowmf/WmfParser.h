@@ -132,19 +132,6 @@ private:
     // the output strategy
     WmfAbstractBackend *m_backend;
 
-#if 0
-    // The current window.  The union of all windows in the file is the bounding box.
-    //
-    // We can't use a QRect here because width/height may be negative -- see mBBox* above.
-    qint16   mWindowLeft;
-    qint16   mWindowTop;
-    qint16   mWindowWidth;
-    qint16   mWindowHeight;
-    qint16   mViewportLeft;
-    qint16   mViewportTop;
-    qint16   mViewportWidth;
-    qint16   mViewportHeight;
-#endif
     // Current state of the drawing
     WmfDeviceContext  mDeviceContext;
 
