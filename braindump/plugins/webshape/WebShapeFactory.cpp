@@ -28,42 +28,41 @@
 
 #include "WebShape.h"
 
-WebShapeFactory::WebShapeFactory() 
-   : KoShapeFactoryBase( WEBSHAPEID,
-                     i18n("Web Shape") )
+WebShapeFactory::WebShapeFactory()
+    : KoShapeFactoryBase(WEBSHAPEID,
+                         i18n("Web Shape"))
 {
-  setToolTip( i18n("A web shape") );
-  setIcon( "applications-internet" );
-  setXmlElementNames( "http://kde.org/braindump", QStringList( "web" ) );
+    setToolTip(i18n("A web shape"));
+    setIcon("applications-internet");
+    setXmlElementNames("http://kde.org/braindump", QStringList("web"));
 }
 
 KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
-  WebShape* fooShape = new WebShape();
-  fooShape->setShapeId(WEBSHAPEID);
-  // set defaults
-  return fooShape;
+    WebShape* fooShape = new WebShape();
+    fooShape->setShapeId(WEBSHAPEID);
+    // set defaults
+    return fooShape;
 }
 
 KoShape *WebShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
 {
-  WebShape* fooShape = new WebShape();
-  if(params->contains("url"))
-  {
-    fooShape->setUrl(params->property("url").toUrl());
-  }
-  fooShape->setShapeId(WEBSHAPEID);
-  // use the params
-  return fooShape;
+    WebShape* fooShape = new WebShape();
+    if(params->contains("url")) {
+        fooShape->setUrl(params->property("url").toUrl());
+    }
+    fooShape->setShapeId(WEBSHAPEID);
+    // use the params
+    return fooShape;
 }
 
 bool WebShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext& /*context*/) const
 {
-  return ( e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump" );
+    return (e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump");
 }
 
 QList<KoShapeConfigWidgetBase*> WebShapeFactory::createShapeOptionPanels()
 {
-  QList<KoShapeConfigWidgetBase*> answer;
-  return answer;
+    QList<KoShapeConfigWidgetBase*> answer;
+    return answer;
 }

@@ -43,21 +43,18 @@ bool TreeSortFilter::numericLessThan(const QString &l, const QString &r) const
     QString rs(r);
     const int len = (l.length() > r.length() ? r.length() : l.length());
 
-    for(int i = 0;i < len; ++i)
-    {
+    for(int i = 0; i < len; ++i) {
         const QChar li(l.at(i));
         const QChar ri(r.at(i));
 
         if(li >= QLatin1Char('0') &&
-           li <= QLatin1Char('9') &&
-           ri >= QLatin1Char('0') &&
-           ri <= QLatin1Char('9'))
-        {
+                li <= QLatin1Char('9') &&
+                ri >= QLatin1Char('0') &&
+                ri <= QLatin1Char('9')) {
             ls = l.mid(i);
             rs = r.mid(i);
             break;
-        }
-        else if(li != ri)
+        } else if(li != ri)
             break;
     }
 
@@ -77,12 +74,10 @@ bool TreeSortFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
 
     QModelIndex current(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
 
-    if(sourceModel()->hasChildren(current))
-    {
+    if(sourceModel()->hasChildren(current)) {
         bool atLeastOneValidChild = false;
         int i = 0;
-        while(!atLeastOneValidChild)
-        {
+        while(!atLeastOneValidChild) {
             const QModelIndex child(current.child(i, current.column()));
             if(!child.isValid())
                 // No valid child
