@@ -152,13 +152,6 @@ WordsGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
     return 0;
 }
 
-const MSO::OfficeArtSpContainer*
-WordsGraphicsHandler::DrawClient::defaultShapeContainer(void)
-{
-    //Specific for Ppt at the moment.
-    return 0;
-}
-
 QColor
 WordsGraphicsHandler::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {

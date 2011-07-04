@@ -40,7 +40,6 @@ public:
     virtual void addTextStyles(const quint16 msospt, const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
     virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-    virtual const MSO::OfficeArtSpContainer* defaultShapeContainer();
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
 

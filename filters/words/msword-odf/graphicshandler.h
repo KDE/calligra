@@ -111,7 +111,6 @@ private:
 
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer();
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
