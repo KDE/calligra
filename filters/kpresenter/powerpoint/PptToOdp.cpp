@@ -226,6 +226,7 @@ private:
     PptToOdp* const ppttoodp;
 
     QRectF getRect(const MSO::OfficeArtClientAnchor&);
+    QRectF getReserveRect(void);
     QString getPicturePath(const quint32 pib);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
     void processClientData(const MSO::OfficeArtClientTextBox* ct,
@@ -289,6 +290,11 @@ QRectF PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
     if (a) {
         return ::getRect(*a);
     }
+    return QRectF();
+}
+QRectF PptToOdp::DrawClient::getReserveRect(void)
+{
+    //NOTE: No PPT test files at the moment.
     return QRect(0, 0, 1, 1);
 }
 QString PptToOdp::DrawClient::getPicturePath(const quint32 pib)

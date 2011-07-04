@@ -76,8 +76,11 @@ ODrawToOdf::getRect(const OfficeArtSpContainer &o)
         return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
     } else if (o.clientAnchor && client) {
         return client->getRect(*o.clientAnchor);
+    } else if (o.shapeProp.fHaveAnchor && client) {
+        return client->getReserveRect();
+    } else {
+        return QRectF();
     }
-    return QRect(0, 0, 1, 1);
 }
 
 QRectF

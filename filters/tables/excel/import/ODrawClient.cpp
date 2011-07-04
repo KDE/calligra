@@ -87,6 +87,12 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
     return QRectF();
 }
 
+QRectF ODrawClient::getReserveRect(void)
+{
+    //NOTE: No XLS test files at the moment.
+    return QRectF();
+}
+
 QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor)
 {
     const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();

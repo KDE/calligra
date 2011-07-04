@@ -35,10 +35,18 @@ public:
     public:
         virtual ~Client() {}
         /**
-         * Get the bounding rect that defines the position of the diagram
-         * in the hosting document.
+         * Get the bounding rect that defines the position and dimensions of
+         * the shape in the hosting document.
          **/
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&) = 0;
+
+        /**
+         * Get the bounding rect that defines the position and dimensions of
+         * the shape in the hosting document if OfficeArtClientAnchor is
+         * missing.
+         */
+        virtual QRectF getReserveRect(void) = 0;
+
         /**
          * Get the path in the ODF document that corresponds to the
          * image generated from the image with the given pib.

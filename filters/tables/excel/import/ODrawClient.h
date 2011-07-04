@@ -31,6 +31,7 @@ class ODrawClient : public ODrawToOdf::Client
 public:
     explicit ODrawClient(Swinder::Sheet* sheet);
     virtual QRectF getRect(const MSO::OfficeArtClientAnchor& anchor);
+    virtual QRectF getReserveRect(void);
     QRectF getGlobalRect(const MSO::OfficeArtClientAnchor& anchor);
     virtual QString getPicturePath(const quint32 pib);
     virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
