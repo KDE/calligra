@@ -74,6 +74,12 @@ public:
     /// Checks if a definition with the specified id exists
     bool hasDefinition(const QString &id) const;
 
+    /// Adds a css style sheet
+    void addStyleSheet(const KoXmlElement &styleSheet);
+
+    /// Returns list of css styles matching to the specified element
+    QStringList matchingStyles(const KoXmlElement &element) const;
+
 private:
     class Private;
     Private * const d;

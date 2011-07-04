@@ -26,10 +26,9 @@
 #include "SvgGradientHelper.h"
 #include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
-#include "SvgCssHelper.h"
 #include "SvgClipPathHelper.h"
 #include "SvgLoadingContext.h"
-#include <SvgGraphicContext.h>
+#include "SvgGraphicContext.h"
 
 #include <KoXmlReader.h>
 
@@ -154,7 +153,6 @@ private:
     KoResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
-    SvgCssHelper m_cssStyles;
 };
 
 #endif

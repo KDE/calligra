@@ -20,6 +20,7 @@
 #include "SvgLoadingContext.h"
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
+#include "SvgCssHelper.h"
 
 #include <KoResourceManager.h>
 
@@ -51,6 +52,8 @@ public:
     KoResourceManager *documentResourceManager;
     QHash<QString, KoShape*> loadedShapes;
     QHash<QString, KoXmlElement> definitions;
+    SvgCssHelper cssStyles;
+
 };
 
 SvgLoadingContext::SvgLoadingContext(KoResourceManager *documentResourceManager)
@@ -183,4 +186,14 @@ KoXmlElement SvgLoadingContext::definition(const QString &id) const
 bool SvgLoadingContext::hasDefinition(const QString &id) const
 {
     return d->definitions.contains(id);
+}
+
+void SvgLoadingContext::addStyleSheet(const KoXmlElement &styleSheet)
+{
+    d->cssStyles.parseStylesheet(styleSheet);
+}
+
+QStringList SvgLoadingContext::matchingStyles(const KoXmlElement &element) const
+{
+    return d->cssStyles.matchStyles(element);
 }

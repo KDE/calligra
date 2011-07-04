@@ -861,7 +861,7 @@ SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
     }
 
     // match css style rules to element
-    QStringList cssStyles = m_cssStyles.matchStyles(e);
+    QStringList cssStyles = m_context.matchingStyles(e);
 
     // collect all css style attributes
     foreach(const QString &style, cssStyles) {
@@ -1510,7 +1510,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "clipPath") {
             parseClipPath(b);
         } else if (b.tagName() == "style") {
-            m_cssStyles.parseStylesheet(b);
+            m_context.addStyleSheet(b);
         } else if (b.tagName() == "rect" ||
                    b.tagName() == "ellipse" ||
                    b.tagName() == "circle" ||
@@ -1545,7 +1545,7 @@ void SvgParser::parseDefs(const KoXmlElement &e)
             continue;
 
         if (b.tagName() == "style") {
-            m_cssStyles.parseStylesheet(b);
+            m_context.addStyleSheet(b);
         } else if (b.tagName() == "defs") {
             parseDefs(b);
         } else {
