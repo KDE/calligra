@@ -26,6 +26,7 @@
 class SvgGraphicsContext;
 class KoResourceManager;
 class KoImageCollection;
+class KoShape;
 
 class KOSVG_EXPORT SvgLoadingContext
 {
@@ -56,6 +57,12 @@ public:
 
     /// Returns the image collection used for managing images
     KoImageCollection* imageCollection();
+
+    /// Registers a shape so it can be referenced later
+    void registerShape(const QString &id, KoShape *shape);
+
+    /// Returns shape with specified id
+    KoShape* shapeById(const QString &id);
 
 private:
     class Private;

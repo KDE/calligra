@@ -19,6 +19,7 @@
  */
 
 #include "ArtisticTextShape.h"
+#include "ArtisticTextLoadingContext.h"
 
 #include <KoPathShape.h>
 #include <KoShapeSavingContext.h>
@@ -30,6 +31,8 @@
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
 #include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
+#include <SvgGraphicContext.h>
 #include <SvgUtil.h>
 
 #include <KLocale>
@@ -1090,3 +1093,193 @@ void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavi
     context.shapeWriter().endElement();
 }
 
+bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingContext &context)
+{
+    clear();
+
+    QString anchor;
+    if (!textElement.attribute("text-anchor").isEmpty())
+        anchor = textElement.attribute("text-anchor");
+
+    ArtisticTextLoadingContext textContext;
+    textContext.parseCharacterTransforms(textElement, context.currentGC());
+
+    KoXmlElement parentElement = textElement;
+    // first check if we have a "textPath" child element
+    for (KoXmlNode n = textElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "textPath") {
+            parentElement = e;
+            break;
+        }
+    }
+
+    KoPathShape *path = 0;
+    bool pathInDocument = false;
+    double offset = 0.0;
+
+    const bool hasTextPathElement = parentElement != textElement && parentElement.hasAttribute("xlink:href");
+    if (hasTextPathElement) {
+        // create the referenced path shape
+        context.pushGraphicsContext(parentElement);
+        // TODO: port
+        //parseFont(collectStyles(parentElement));
+        textContext.pushCharacterTransforms();
+        textContext.parseCharacterTransforms(parentElement, context.currentGC());
+
+        QString href = parentElement.attribute("xlink:href").mid(1);
+        KoPathShape *path = dynamic_cast<KoPathShape*>(context.shapeById(href));
+        if (path) {
+            pathInDocument = true;
+        } else {
+            /* TODO port
+            KoXmlElement p = m_defs[href];
+            path = dynamic_cast<KoPathShape*>(createObject(p));
+            pathInDocument = false;
+            path->applyAbsoluteTransformation(context.currentGC()->matrix.inverted());
+            */
+        }
+        // parse the start offset
+        if (! parentElement.attribute("startOffset").isEmpty()) {
+            QString start = parentElement.attribute("startOffset");
+            if (start.endsWith('%'))
+                offset = 0.01 * start.remove('%').toDouble();
+            else {
+                const float pathLength = path ? path->outline().length() : 0.0;
+                if (pathLength > 0.0)
+                    offset = start.toDouble() / pathLength;
+            }
+        }
+    }
+
+    if (parentElement.hasChildNodes()) {
+        // parse child elements
+        parseTextRanges(parentElement, context, textContext);
+        if (!context.currentGC()->preserveWhitespace) {
+            const QString text = plainText();
+            if (text.endsWith(' '))
+                removeText(text.length()-1, 1);
+        }
+        setPosition(textContext.textPosition());
+    } else {
+        // a single text range
+        appendText(createTextRange(textElement.text(), textContext, context.currentGC()));
+        setPosition(textContext.textPosition());
+    }
+
+    if (hasTextPathElement) {
+        if (path) {
+            if (pathInDocument)
+                putOnPath(path);
+            else
+                putOnPath(path->absoluteTransformation(0).map(path->outline()));
+
+            if (offset > 0.0)
+                setStartOffset(offset);
+        }
+
+        textContext.popCharacterTransforms();
+        context.popGraphicsContext();
+    }
+
+    // adjust position by baseline offset
+    if (! isOnPath())
+        setPosition(position() - QPointF(0, baselineOffset()));
+
+    if (anchor == "middle")
+        setTextAnchor(ArtisticTextShape::AnchorMiddle);
+    else if (anchor == "end")
+        setTextAnchor(ArtisticTextShape::AnchorEnd);
+
+    return true;
+}
+
+void ArtisticTextShape::parseTextRanges(const KoXmlElement &element, SvgLoadingContext &context, ArtisticTextLoadingContext &textContext)
+{
+    for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement e = n.toElement();
+        if (e.isNull()) {
+            ArtisticTextRange range = createTextRange(n.toText().data(), textContext, context.currentGC());
+            appendText(range);
+        }
+        else if (e.tagName() == "tspan") {
+            SvgGraphicsContext *gc = context.pushGraphicsContext(e);
+            // TODO: port
+            // parseFont(collectStyles(e));
+            textContext.pushCharacterTransforms();
+            textContext.parseCharacterTransforms(e, gc);
+            parseTextRanges(e, context, textContext);
+            textContext.popCharacterTransforms();
+            context.popGraphicsContext();
+        }
+        else if (e.tagName() == "tref") {
+            if (e.attribute("xlink:href").isEmpty())
+                continue;
+
+            QString href = e.attribute("xlink:href").mid(1);
+            ArtisticTextShape *refText = dynamic_cast<ArtisticTextShape*>(context.shapeById(href));
+            if (refText) {
+                foreach (const ArtisticTextRange &range, refText->text()) {
+                    appendText(range);
+                }
+            } else {
+                /* TODO: port
+                KoXmlElement p = m_defs[href];
+                SvgGraphicsContext *gc = m_context.currentGC();
+                text->appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace), gc->font));
+                */
+            }
+        }
+        else {
+            continue;
+        }
+    }
+}
+
+ArtisticTextRange ArtisticTextShape::createTextRange(const QString &text, ArtisticTextLoadingContext &context, SvgGraphicsContext *gc)
+{
+    ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace), gc->font);
+
+    const int textLength = range.text().length();
+    switch(context.xOffsetType()) {
+    case ArtisticTextLoadingContext::Absolute:
+        range.setXOffsets(context.xOffsets(textLength), ArtisticTextRange::AbsoluteOffset);
+        break;
+    case ArtisticTextLoadingContext::Relative:
+        range.setXOffsets(context.xOffsets(textLength), ArtisticTextRange::RelativeOffset);
+        break;
+    default:
+        // no x-offsets
+        break;
+    }
+    switch(context.yOffsetType()) {
+    case ArtisticTextLoadingContext::Absolute:
+        range.setYOffsets(context.yOffsets(textLength), ArtisticTextRange::AbsoluteOffset);
+        break;
+    case ArtisticTextLoadingContext::Relative:
+        range.setYOffsets(context.yOffsets(textLength), ArtisticTextRange::RelativeOffset);
+        break;
+    default:
+        // no y-offsets
+        break;
+    }
+
+    range.setRotations(context.rotations(textLength));
+    range.setLetterSpacing(gc->letterSpacing);
+    range.setWordSpacing(gc->wordSpacing);
+    if(gc->baselineShift == "sub") {
+        range.setBaselineShift(ArtisticTextRange::Sub);
+    } else if(gc->baselineShift == "super") {
+        range.setBaselineShift(ArtisticTextRange::Super);
+    } else if(gc->baselineShift.endsWith('%')) {
+        range.setBaselineShift(ArtisticTextRange::Percent, SvgUtil::fromPercentage(gc->baselineShift));
+    } else {
+        qreal value = SvgUtil::parseUnitX(gc, gc->baselineShift);
+        if (value != 0.0)
+            range.setBaselineShift(ArtisticTextRange::Length, value);
+    }
+
+    //range.printDebug();
+
+    return range;
+}

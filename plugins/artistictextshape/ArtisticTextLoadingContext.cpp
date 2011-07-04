@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SvgTextHelper.h"
+#include "ArtisticTextLoadingContext.h"
 #include "SvgUtil.h"
 #include "SvgGraphicContext.h"
 
@@ -26,12 +26,12 @@
 
 #include <math.h>
 
-SvgTextHelper::SvgTextHelper()
+ArtisticTextLoadingContext::ArtisticTextLoadingContext()
     : m_textPosition(HUGE_VAL, HUGE_VAL)
 {
 }
 
-QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace)
+QString ArtisticTextLoadingContext::simplifyText(const QString &text, bool preserveWhiteSpace)
 {
     // simplifies text according ot the svg specification
     QString simple = text;
@@ -48,7 +48,7 @@ QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace
     return stripped;
 }
 
-SvgTextHelper::OffsetType SvgTextHelper::xOffsetType() const
+ArtisticTextLoadingContext::OffsetType ArtisticTextLoadingContext::xOffsetType() const
 {
     if(m_currentAbsolutePosX.data.count())
         return Absolute;
@@ -63,7 +63,7 @@ SvgTextHelper::OffsetType SvgTextHelper::xOffsetType() const
     return None;
 }
 
-SvgTextHelper::OffsetType SvgTextHelper::yOffsetType() const
+ArtisticTextLoadingContext::OffsetType ArtisticTextLoadingContext::yOffsetType() const
 {
     if(m_currentAbsolutePosY.data.count())
         return Absolute;
@@ -78,7 +78,7 @@ SvgTextHelper::OffsetType SvgTextHelper::yOffsetType() const
     return None;
 }
 
-CharTransforms SvgTextHelper::xOffsets(int count)
+CharTransforms ArtisticTextLoadingContext::xOffsets(int count)
 {
     switch(xOffsetType()) {
     case Absolute: {
@@ -97,7 +97,7 @@ CharTransforms SvgTextHelper::xOffsets(int count)
     }
 }
 
-CharTransforms SvgTextHelper::yOffsets(int count)
+CharTransforms ArtisticTextLoadingContext::yOffsets(int count)
 {
     switch(yOffsetType()) {
     case Absolute: {
@@ -116,12 +116,12 @@ CharTransforms SvgTextHelper::yOffsets(int count)
     }
 }
 
-CharTransforms SvgTextHelper::rotations(int count)
+CharTransforms ArtisticTextLoadingContext::rotations(int count)
 {
     return collectValues(count, m_currentRotations, m_rotations);
 }
 
-QPointF SvgTextHelper::textPosition() const
+QPointF ArtisticTextLoadingContext::textPosition() const
 {
     qreal x = 0.0, y = 0.0;
     if (m_textPosition.x() != HUGE_VAL)
@@ -133,7 +133,7 @@ QPointF SvgTextHelper::textPosition() const
 }
 
 /// Parses current character transforms (x,y,dx,dy,rotate)
-void SvgTextHelper::parseCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc)
+void ArtisticTextLoadingContext::parseCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc)
 {
     m_currentAbsolutePosX = parseList(element.attribute("x"), gc, XLength);
     m_currentAbsolutePosY = parseList(element.attribute("y"), gc, YLength);
@@ -149,7 +149,7 @@ void SvgTextHelper::parseCharacterTransforms(const KoXmlElement &element, SvgGra
     }
 }
 
-void SvgTextHelper::pushCharacterTransforms()
+void ArtisticTextLoadingContext::pushCharacterTransforms()
 {
     m_absolutePosX.append(m_currentAbsolutePosX);
     m_currentAbsolutePosX = CharTransformState();
@@ -163,7 +163,7 @@ void SvgTextHelper::pushCharacterTransforms()
     m_currentRotations = CharTransformState();
 }
 
-void SvgTextHelper::popCharacterTransforms()
+void ArtisticTextLoadingContext::popCharacterTransforms()
 {
     m_currentAbsolutePosX = m_absolutePosX.last();
     m_absolutePosX.pop_back();
@@ -177,7 +177,7 @@ void SvgTextHelper::popCharacterTransforms()
     m_rotations.pop_back();
 }
 
-CharTransforms SvgTextHelper::parseList(const QString &listString, SvgGraphicsContext *gc, ValueType type)
+CharTransforms ArtisticTextLoadingContext::parseList(const QString &listString, SvgGraphicsContext *gc, ValueType type)
 {
     if (listString.isEmpty()) {
         return CharTransforms();
@@ -201,7 +201,7 @@ CharTransforms SvgTextHelper::parseList(const QString &listString, SvgGraphicsCo
     }
 }
 
-CharTransforms SvgTextHelper::collectValues(int count, CharTransformState &current, CharTransformStack &stack)
+CharTransforms ArtisticTextLoadingContext::collectValues(int count, CharTransformState &current, CharTransformStack &stack)
 {
     CharTransforms collected;
 
@@ -231,7 +231,7 @@ CharTransforms SvgTextHelper::collectValues(int count, CharTransformState &curre
     return collected;
 }
 
-void SvgTextHelper::printDebug()
+void ArtisticTextLoadingContext::printDebug()
 {
     QString indent;
     foreach(const CharTransformState &state, CharTransformStack(m_absolutePosX) << m_currentAbsolutePosX) {

@@ -8,12 +8,12 @@ set(kosvg_LIB_SRCS
     SvgStyleWriter.cpp
     SvgSerializable.cpp
     SvgParser.cpp
+    SvgStyleParser.cpp
     SvgGradientHelper.cpp
     SvgPatternHelper.cpp
     SvgFilterHelper.cpp
     SvgCssHelper.cpp
     SvgClipPathHelper.cpp
-    SvgTextHelper.cpp
     SvgLoadingContext.cpp
 )
 

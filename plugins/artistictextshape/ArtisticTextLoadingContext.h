@@ -30,7 +30,7 @@ typedef QList<qreal> CharTransforms;
 class KoXmlElement;
 class SvgGraphicsContext;
 
-class SvgTextHelper
+class ArtisticTextLoadingContext
 {
 public:
     enum OffsetType {
@@ -39,7 +39,7 @@ public:
         Relative
     };
 
-    SvgTextHelper();
+    ArtisticTextLoadingContext();
 
     static QString simplifyText(const QString &text, bool preserveWhiteSpace = false);
 

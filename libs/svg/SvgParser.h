@@ -95,14 +95,10 @@ protected:
 
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
-    /// Create text object from the given xml element
-    KoShape * createText(const KoXmlElement &, const QList<KoShape*> & shapes);
     /// Create path object from the given xml element
     KoShape * createPath(const KoXmlElement &);
     /// Parses font attributes
     void parseFont(const SvgStyles &styles);
-    /// Parse nested text ranges
-    void parseTextRanges(const KoXmlElement &element, SvgTextHelper &textContext, KoShape *textShape, const QList<KoShape*> & shapes);
     /// find object with given id in document
     KoShape * findObject(const QString &name);
     /// find object with given id in given group
@@ -148,6 +144,9 @@ protected:
 
     /// Returns inherited attribute value for specified element
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
+
+    /// Applies id to specified shape
+    void applyId(const QString &id, KoShape *shape);
 
 private:
     QSizeF m_documentSize;

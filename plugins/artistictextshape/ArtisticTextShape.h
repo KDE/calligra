@@ -29,6 +29,8 @@
 
 class QPainter;
 class KoPathShape;
+class ArtisticTextLoadingContext;
+class SvgGraphicsContext;
 
 #define ArtisticTextShapeID "ArtisticText"
 
@@ -65,6 +67,8 @@ public:
     virtual QPainterPath outline() const;
     /// reimplemented from SvgSerializable
     virtual bool saveSvg(SvgSavingContext &context);
+    /// reimplemented from SvgSerializable
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
     /// Sets the plain text to display
     void setPlainText(const QString &newText);
@@ -209,6 +213,10 @@ private:
     void saveSvgFont(const QFont &font, SvgSavingContext &context);
     /// Saves svg text range
     void saveSvgTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveFont, qreal baselineOffset);
+    /// Parse nested text ranges
+    void parseTextRanges(const KoXmlElement &element, SvgLoadingContext &context, ArtisticTextLoadingContext &textContext);
+    /// Creates text range
+    ArtisticTextRange createTextRange(const QString &text, ArtisticTextLoadingContext &context, SvgGraphicsContext *gc);
 
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;

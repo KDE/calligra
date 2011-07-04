@@ -25,7 +25,6 @@
 
 #include "SvgParser.h"
 #include "SvgUtil.h"
-#include "SvgTextHelper.h"
 #include "SvgSerializable.h"
 
 #include <KoShape.h>
@@ -41,7 +40,6 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
-//#include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
@@ -1382,8 +1380,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
                 QList<KoShape*> childShapes = parseContainer(a);
 
                 // handle id
-                if (!a.attribute("id").isEmpty())
-                    group->setName(a.attribute("id"));
+                applyId(a.attribute("id"), group);
 
                 addToGroup(childShapes, group);
                 parseStyle(group, styles);   // apply style to group after size is set
@@ -1522,8 +1519,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             QList<KoShape*> childShapes = parseContainer(b);
 
             // handle id
-            if (!b.attribute("id").isEmpty())
-                group->setName(b.attribute("id"));
+            applyId(b.attribute("id"), group);
 
             addToGroup(childShapes, group);
             if (b.hasAttribute("viewBox")) {
@@ -1563,12 +1559,9 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                    b.tagName() == "polyline" ||
                    b.tagName() == "polygon" ||
                    b.tagName() == "path" ||
-                   b.tagName() == "image") {
+                   b.tagName() == "image" ||
+                   b.tagName() == "text") {
             KoShape *shape = createObject(b);
-            if (shape)
-                shapes.append(shape);
-        } else if (b.tagName() == "text") {
-            KoShape *shape = createText(b, shapes);
             if (shape)
                 shapes.append(shape);
         } else if (b.tagName() == "use") {
@@ -1607,240 +1600,6 @@ void SvgParser::parseDefs(const KoXmlElement &e)
 
 // Creating functions
 // ---------------------------------------------------------------------------------------
-
-/*
-ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, SvgGraphicsContext *gc)
-{
-    ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace), gc->font);
-
-    const int textLength = range.text().length();
-    switch(context.xOffsetType()) {
-    case SvgTextHelper::Absolute:
-        range.setXOffsets(context.xOffsets(textLength), ArtisticTextRange::AbsoluteOffset);
-        break;
-    case SvgTextHelper::Relative:
-        range.setXOffsets(context.xOffsets(textLength), ArtisticTextRange::RelativeOffset);
-        break;
-    default:
-        // no x-offsets
-        break;
-    }
-    switch(context.yOffsetType()) {
-    case SvgTextHelper::Absolute:
-        range.setYOffsets(context.yOffsets(textLength), ArtisticTextRange::AbsoluteOffset);
-        break;
-    case SvgTextHelper::Relative:
-        range.setYOffsets(context.yOffsets(textLength), ArtisticTextRange::RelativeOffset);
-        break;
-    default:
-        // no y-offsets
-        break;
-    }
-
-    range.setRotations(context.rotations(textLength));
-    range.setLetterSpacing(gc->letterSpacing);
-    range.setWordSpacing(gc->wordSpacing);
-    if(gc->baselineShift == "sub") {
-        range.setBaselineShift(ArtisticTextRange::Sub);
-    } else if(gc->baselineShift == "super") {
-        range.setBaselineShift(ArtisticTextRange::Super);
-    } else if(gc->baselineShift.endsWith('%')) {
-        range.setBaselineShift(ArtisticTextRange::Percent, SvgUtil::fromPercentage(gc->baselineShift));
-    } else {
-        qreal value = SvgUtil::parseUnitX(gc, gc->baselineShift);
-        if (value != 0.0)
-            range.setBaselineShift(ArtisticTextRange::Length, value);
-    }
-
-    //range.printDebug();
-
-    return range;
-}
-*/
-
-void SvgParser::parseTextRanges(const KoXmlElement &element, SvgTextHelper &textContext, KoShape *textShape, const QList<KoShape*> & shapes)
-{
-    /*
-    ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(textShape);
-    if (!text)
-        return;
-
-    for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        KoXmlElement e = n.toElement();
-        if (e.isNull()) {
-            ArtisticTextRange range = createTextRange(n.toText().data(), textContext, m_context.currentGC());
-            text->appendText(range);
-        }
-        else if (e.tagName() == "tspan") {
-            SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
-            parseFont(collectStyles(e));
-            textContext.pushCharacterTransforms();
-            textContext.parseCharacterTransforms(e, gc);
-            parseTextRanges(e, textContext, text, shapes);
-            textContext.popCharacterTransforms();
-            m_context.popGraphicsContext();
-        }
-        else if (e.tagName() == "tref") {
-            if (e.attribute("xlink:href").isEmpty())
-                continue;
-
-            QString key = e.attribute("xlink:href").mid(1);
-            if (! m_defs.contains(key)) {
-                // try to find referenced object in document
-                KoShape *obj = findObject(key);
-                // try to find referenced object in actual group, which is not yet part of document
-                if (! obj)
-                    obj = findObject(key, shapes);
-                if (obj) {
-                    ArtisticTextShape *refText = dynamic_cast<ArtisticTextShape*>(obj);
-                    if (refText) {
-                        foreach (const ArtisticTextRange &range, refText->text()) {
-                            text->appendText(range);
-                        }
-                    }
-                }
-            }
-            else {
-                KoXmlElement p = m_defs[key];
-                SvgGraphicsContext *gc = m_context.currentGC();
-                text->appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace), gc->font));
-            }
-        }
-        else {
-            continue;
-        }
-    }
-    */
-}
-
-KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoShape*> & shapes)
-{
-    /*
-    QString anchor;
-
-    ArtisticTextShape *text = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
-    if (! text)
-        return 0;
-    text->clear();
-
-    m_context.pushGraphicsContext(textElement);
-
-    if (! textElement.attribute("text-anchor").isEmpty())
-        anchor = textElement.attribute("text-anchor");
-
-    SvgStyles elementStyles = collectStyles(textElement);
-    parseFont(elementStyles);
-    KoXmlElement styleElement = textElement;
-
-    SvgTextHelper context;
-    context.parseCharacterTransforms(textElement, m_context.currentGC());
-
-    KoXmlElement parentElement = textElement;
-    // first check if we have a "textPath" child element
-    for (KoXmlNode n = textElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        KoXmlElement e = n.toElement();
-        if (e.tagName() == "textPath") {
-            parentElement = e;
-            break;
-        }
-    }
-
-    KoPathShape *path = 0;
-    bool pathInDocument = false;
-    double offset = 0.0;
-
-    const bool hasTextPathElement = parentElement != textElement && parentElement.hasAttribute("xlink:href");
-    if (hasTextPathElement) {
-        // create the referenced path shape
-        m_context.pushGraphicsContext(parentElement);
-        parseFont(collectStyles(parentElement));
-        context.pushCharacterTransforms();
-        context.parseCharacterTransforms(parentElement, m_context.currentGC());
-
-        QString key = parentElement.attribute("xlink:href").mid(1);
-        if (! m_defs.contains(key)) {
-            // try to find referenced object in document
-            KoShape *obj = findObject(key);
-            // try to find referenced object in actual group, which is not yet part of document
-            if (! obj)
-                obj = findObject(key, shapes);
-            if (obj)
-                path = dynamic_cast<KoPathShape*>(obj);
-            if (path)
-                pathInDocument = true;
-        } else {
-            KoXmlElement p = m_defs[key];
-            path = dynamic_cast<KoPathShape*>(createObject(p));
-            pathInDocument = false;
-            path->applyAbsoluteTransformation(m_context.currentGC()->matrix.inverted());
-        }
-        // parse the start offset
-        if (! parentElement.attribute("startOffset").isEmpty()) {
-            QString start = parentElement.attribute("startOffset");
-            if (start.endsWith('%'))
-                offset = 0.01 * start.remove('%').toDouble();
-            else {
-                const float pathLength = path ? path->outline().length() : 0.0;
-                if (pathLength > 0.0)
-                    offset = start.toDouble() / pathLength;
-            }
-        }
-    }
-
-    if (parentElement.hasChildNodes()) {
-        // parse child elements
-        parseTextRanges(parentElement, context, text, shapes);
-        if (!m_context.currentGC()->preserveWhitespace) {
-            const QString plainText = text->plainText();
-            if (plainText.endsWith(' '))
-                text->removeText(plainText.length()-1, 1);
-        }
-        text->setPosition(context.textPosition());
-    } else {
-        // a single text range
-        text->appendText(createTextRange(textElement.text(), context, m_context.currentGC()));
-        text->setPosition(context.textPosition());
-    }
-
-    if (hasTextPathElement) {
-        if (path) {
-            if (pathInDocument)
-                text->putOnPath(path);
-            else
-                text->putOnPath(path->absoluteTransformation(0).map(path->outline()));
-
-            if (offset > 0.0)
-                text->setStartOffset(offset);
-        }
-
-        context.popCharacterTransforms();
-        m_context.popGraphicsContext();
-    }
-
-    // adjust position by baseline offset
-    if (! text->isOnPath())
-        text->setPosition(text->position() - QPointF(0, text->baselineOffset()));
-
-    if (anchor == "middle")
-        text->setTextAnchor(ArtisticTextShape::AnchorMiddle);
-    else if (anchor == "end")
-        text->setTextAnchor(ArtisticTextShape::AnchorEnd);
-
-    if (!textElement.attribute("id").isEmpty())
-        text->setName(textElement.attribute("id"));
-
-    text->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-    text->setZIndex(m_context.nextZIndex());
-
-    // apply the style merged from the text element and the last tspan element
-    parseStyle(text, mergeStyles(collectStyles(styleElement), elementStyles));
-
-    m_context.popGraphicsContext();
-
-    return text;
-    */
-    return 0;
-}
 
 KoShape * SvgParser::createPath(const KoXmlElement &element)
 {
@@ -1921,15 +1680,12 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     if (obj) {
         obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
 
-        if (!style.isEmpty())
-            parseStyle(obj, style);
-        else
-            parseStyle(obj, collectStyles(b));
+        SvgStyles objStyle = style.isEmpty() ? collectStyles(b) : style;
+        parseStyle(obj, objStyle);
+        parseFont(objStyle);
 
         // handle id
-        if (!b.attribute("id").isEmpty())
-            obj->setName(b.attribute("id"));
-
+        applyId(b.attribute("id"), obj);
         obj->setZIndex(m_context.nextZIndex());
     }
 
@@ -2029,4 +1785,13 @@ QString SvgParser::inheritedAttribute(const QString &attributeName, const KoXmlE
         parent = currentElement.parentNode();
     }
     return QString();
+}
+
+void SvgParser::applyId(const QString &id, KoShape *shape)
+{
+    if (id.isEmpty())
+        return;
+
+    shape->setName(id);
+    m_context.registerShape(id, shape);
 }

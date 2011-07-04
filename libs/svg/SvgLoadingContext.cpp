@@ -49,6 +49,7 @@ public:
     QString initialXmlBaseDir;
     int zIndex;
     KoResourceManager *documentResourceManager;
+    QHash<QString, KoShape*> loadedShapes;
 };
 
 SvgLoadingContext::SvgLoadingContext(KoResourceManager *documentResourceManager)
@@ -152,4 +153,15 @@ int SvgLoadingContext::nextZIndex()
 KoImageCollection* SvgLoadingContext::imageCollection()
 {
     return d->documentResourceManager->imageCollection();
+}
+
+void SvgLoadingContext::registerShape(const QString &id, KoShape *shape)
+{
+    if (!id.isEmpty())
+        d->loadedShapes.insert(id, shape);
+}
+
+KoShape* SvgLoadingContext::shapeById(const QString &id)
+{
+    return d->loadedShapes.value(id);
 }
