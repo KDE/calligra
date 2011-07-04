@@ -86,45 +86,6 @@ QList<KoShape*> SvgParser::shapes() const
 // Helper functions
 // ---------------------------------------------------------------------------------------
 
-KoShape * SvgParser::findObject(const QString &name, const QList<KoShape*> & shapes)
-{
-    foreach(KoShape *shape, shapes) {
-        if (shape->name() == name)
-            return shape;
-
-        KoShape *resultShape = findObject(name, dynamic_cast<KoShapeContainer*>(shape));
-        if (resultShape)
-            return resultShape;
-    }
-
-    return 0;
-}
-
-KoShape * SvgParser::findObject(const QString &name, KoShapeContainer *group)
-{
-    if (! group)
-        return 0;
-
-    foreach(KoShape *shape, group->shapes()) {
-        if (shape->name() == name)
-            return shape;
-
-        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-        if (container) {
-            KoShape *resultShape = findObject(name, container);
-            if (resultShape)
-                return resultShape;
-        }
-    }
-
-    return 0;
-}
-
-KoShape * SvgParser::findObject(const QString &name)
-{
-    return findObject(name, m_shapes);
-}
-
 SvgGradientHelper* SvgParser::findGradient(const QString &id, const QString &href)
 {
     // check if gradient was already parsed, and return it

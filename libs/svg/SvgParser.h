@@ -99,12 +99,6 @@ protected:
     KoShape * createPath(const KoXmlElement &);
     /// Parses font attributes
     void parseFont(const SvgStyles &styles);
-    /// find object with given id in document
-    KoShape * findObject(const QString &name);
-    /// find object with given id in given group
-    KoShape * findObject(const QString &name, KoShapeContainer *);
-    /// find object with given if in given shape list
-    KoShape * findObject(const QString &name, const QList<KoShape*> & shapes);
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient(const QString &id, const QString &href = QString());
     /// find pattern with given id in pattern map
