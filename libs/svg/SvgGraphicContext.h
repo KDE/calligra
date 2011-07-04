@@ -31,8 +31,7 @@ public:
     enum StyleType {
         None,     ///< no style
         Solid,    ///< solid style
-        Gradient, ///< gradient style
-        Pattern   ///< pattern style
+        Complex   ///< gradient or pattern style
     };
 
     SvgGraphicsContext();

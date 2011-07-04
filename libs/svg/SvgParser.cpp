@@ -623,31 +623,10 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
         } else if (params.startsWith(QLatin1String("url("))) {
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.indexOf(')', start);
-            QString key = params.mid(start, end - start);
-            // try to find referenced gradient
-            SvgGradientHelper *gradHelper = findGradient(key);
-            if (gradHelper) {
-                // great, we have a gradient fill
-                gc->fillType = SvgGraphicsContext::Gradient;
-                gc->fillId = key;
-            } else {
-                // try to find referenced pattern
-                SvgPatternHelper *pattern = findPattern(key);
-                if (pattern) {
-                    // great we have a pattern fill
-                    gc->fillType = SvgGraphicsContext::Pattern;
-                    gc->fillId = key;
-                } else {
-                    // no referenced fill found -> reset fill id
-                    gc->fillId.clear();
-                    kDebug() << params.mid(end + 1).trimmed();
-                    // check if there is a fallback color
-                    if (parseColor(fillcolor, params.mid(end + 1).trimmed()))
-                        gc->fillType = SvgGraphicsContext::Solid;
-                    else
-                        gc->fillType = SvgGraphicsContext::None;
-                }
-            }
+            gc->fillId = params.mid(start, end - start);
+            gc->fillType = SvgGraphicsContext::Complex;
+            // check if there is a fallback color
+            parseColor(fillcolor, params.mid(end + 1).trimmed());
         } else {
             // great we have a solid fill
             gc->fillType = SvgGraphicsContext::Solid;
@@ -664,22 +643,10 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
         } else if (params.startsWith(QLatin1String("url("))) {
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.indexOf(')', start);
-            QString key = params.mid(start, end - start);
-            // try to find referenced gradient
-            SvgGradientHelper *gradHelper = findGradient(key);
-            if (gradHelper) {
-                // great, we have a gradient stroke
-                gc->strokeType = SvgGraphicsContext::Gradient;
-                gc->strokeId = key;
-            } else {
-                // no referenced stroke found -> reset stroke id
-                gc->strokeId.clear();
-                // check if there is a fallback color
-                if (parseColor(strokecolor, params.mid(end + 1).trimmed()))
-                    gc->fillType = SvgGraphicsContext::Solid;
-                else
-                    gc->fillType = SvgGraphicsContext::None;
-            }
+            gc->strokeId = params.mid(start, end - start);
+            gc->strokeType = SvgGraphicsContext::Complex;
+            // check if there is a fallback color
+            parseColor(strokecolor, params.mid(end + 1).trimmed());
         } else {
             // great we have a solid stroke
             gc->strokeType = SvgGraphicsContext::Solid;
@@ -932,13 +899,16 @@ void SvgParser::applyFillStyle(KoShape *shape)
     if (! gc)
         return;
 
-    switch (gc->fillType) {
-    case SvgGraphicsContext::None:
+    kDebug() << gc->fillType;
+    if (gc->fillType == SvgGraphicsContext::None) {
         shape->setBackground(0);
-        break;
-    case SvgGraphicsContext::Gradient: {
+    } else if (gc->fillType == SvgGraphicsContext::Solid) {
+        shape->setBackground(new KoColorBackground(gc->fillColor));
+    } else if (gc->fillType == SvgGraphicsContext::Complex) {
+        // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->fillId);
         if (gradient) {
+            // great, we have a gradient fill
             KoGradientBackground *bg = 0;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
                 bg = new KoGradientBackground(*gradient->gradient());
@@ -950,89 +920,85 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 QTransform invShapematrix = shape->transformation().inverted();
                 bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
             }
-
             shape->setBackground(bg);
-        }
-    }
-    break;
-    case SvgGraphicsContext::Pattern: {
-        SvgPatternHelper *pattern = findPattern(gc->fillId);
-        KoImageCollection *imageCollection = m_documentResourceManager->imageCollection();
-        if (pattern && imageCollection) {
-            QRectF objectBound = QRectF(QPoint(), shape->size());
-            QRectF currentBoundbox = gc->currentBoundbox;
+        } else {
+            // try to find referenced pattern
+            SvgPatternHelper *pattern = findPattern(gc->fillId);
+            KoImageCollection *imageCollection = m_documentResourceManager->imageCollection();
+            if (pattern && imageCollection) {
+                // great we have a pattern fill
+                QRectF objectBound = QRectF(QPoint(), shape->size());
+                QRectF currentBoundbox = gc->currentBoundbox;
 
-            // properties from the object are not inherited
-            // so we are creating a new context without copying
-            SvgGraphicsContext *gc = m_context.pushGraphicsContext(pattern->content(), false);
+                // properties from the object are not inherited
+                // so we are creating a new context without copying
+                SvgGraphicsContext *gc = m_context.pushGraphicsContext(pattern->content(), false);
 
-            // the pattern establishes a new coordinate system with its
-            // origin at the patterns x and y attributes
-            gc->matrix = QTransform();
-            // object bounding box units are relative to the object the pattern is applied
-            if (pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                gc->currentBoundbox = objectBound;
-                gc->forcePercentage = true;
-            } else {
-                // inherit the current bounding box
-                gc->currentBoundbox = currentBoundbox;
-            }
-
-            parseStyle(0, pattern->content());
-
-            // parse the pattern content elements
-            QList<KoShape*> patternContent = parseContainer(pattern->content());
-
-            // generate the pattern image from the shapes and the object bounding rect
-            QImage image = pattern->generateImage(objectBound, patternContent);
-
-            m_context.popGraphicsContext();
-
-            // delete the shapes created from the pattern content
-            qDeleteAll(patternContent);
-
-            if (!image.isNull()) {
-                KoPatternBackground *bg = new KoPatternBackground(imageCollection);
-                bg->setPattern(image);
-
-                QPointF refPoint = shape->documentToShape(pattern->position(objectBound));
-                QSizeF tileSize = pattern->size(objectBound);
-
-                bg->setPatternDisplaySize(tileSize);
-                if (pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                    if (tileSize == objectBound.size())
-                        bg->setRepeat(KoPatternBackground::Stretched);
+                // the pattern establishes a new coordinate system with its
+                // origin at the patterns x and y attributes
+                gc->matrix = QTransform();
+                // object bounding box units are relative to the object the pattern is applied
+                if (pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox) {
+                    gc->currentBoundbox = objectBound;
+                    gc->forcePercentage = true;
+                } else {
+                    // inherit the current bounding box
+                    gc->currentBoundbox = currentBoundbox;
                 }
 
-                // calculate pattern reference point offset in percent of tileSize
-                // and relative to the topleft corner of the shape
-                qreal fx = refPoint.x() / tileSize.width();
-                qreal fy = refPoint.y() / tileSize.height();
-                if (fx < 0.0)
-                    fx = floor(fx);
-                else if (fx > 1.0)
-                    fx = ceil(fx);
-                else
-                    fx = 0.0;
-                if (fy < 0.0)
-                    fy = floor(fy);
-                else if (fx > 1.0)
-                    fy = ceil(fy);
-                else
-                    fy = 0.0;
-                qreal offsetX = 100.0 * (refPoint.x() - fx * tileSize.width()) / tileSize.width();
-                qreal offsetY = 100.0 * (refPoint.y() - fy * tileSize.height()) / tileSize.height();
-                bg->setReferencePointOffset(QPointF(offsetX, offsetY));
+                parseStyle(0, pattern->content());
 
-                shape->setBackground(bg);
+                // parse the pattern content elements
+                QList<KoShape*> patternContent = parseContainer(pattern->content());
+
+                // generate the pattern image from the shapes and the object bounding rect
+                QImage image = pattern->generateImage(objectBound, patternContent);
+
+                m_context.popGraphicsContext();
+
+                // delete the shapes created from the pattern content
+                qDeleteAll(patternContent);
+
+                if (!image.isNull()) {
+                    KoPatternBackground *bg = new KoPatternBackground(imageCollection);
+                    bg->setPattern(image);
+
+                    QPointF refPoint = shape->documentToShape(pattern->position(objectBound));
+                    QSizeF tileSize = pattern->size(objectBound);
+
+                    bg->setPatternDisplaySize(tileSize);
+                    if (pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox) {
+                        if (tileSize == objectBound.size())
+                            bg->setRepeat(KoPatternBackground::Stretched);
+                    }
+
+                    // calculate pattern reference point offset in percent of tileSize
+                    // and relative to the topleft corner of the shape
+                    qreal fx = refPoint.x() / tileSize.width();
+                    qreal fy = refPoint.y() / tileSize.height();
+                    if (fx < 0.0)
+                        fx = floor(fx);
+                    else if (fx > 1.0)
+                        fx = ceil(fx);
+                    else
+                        fx = 0.0;
+                    if (fy < 0.0)
+                        fy = floor(fy);
+                    else if (fx > 1.0)
+                        fy = ceil(fy);
+                    else
+                        fy = 0.0;
+                    qreal offsetX = 100.0 * (refPoint.x() - fx * tileSize.width()) / tileSize.width();
+                    qreal offsetY = 100.0 * (refPoint.y() - fy * tileSize.height()) / tileSize.height();
+                    bg->setReferencePointOffset(QPointF(offsetX, offsetY));
+
+                    shape->setBackground(bg);
+                }
+            } else {
+                // no referenced fill found, use fallback color
+                shape->setBackground(new KoColorBackground(gc->fillColor));
             }
         }
-    }
-    break;
-    case SvgGraphicsContext::Solid:
-    default:
-        shape->setBackground(new KoColorBackground(gc->fillColor));
-        break;
     }
 
     KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
@@ -1046,8 +1012,9 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
     if (! gc)
         return;
 
-    switch (gc->strokeType) {
-    case SvgGraphicsContext::Solid: {
+    if (gc->strokeType == SvgGraphicsContext::None) {
+        shape->setBorder(0);
+    } else if (gc->strokeType == SvgGraphicsContext::Solid) {
         double lineWidth = gc->stroke.lineWidth();
         QVector<qreal> dashes = gc->stroke.lineDashes();
 
@@ -1065,11 +1032,11 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
             border->setLineStyle(Qt::SolidLine, QVector<qreal>());
         }
         shape->setBorder(border);
-    }
-    break;
-    case SvgGraphicsContext::Gradient: {
+    } else if (gc->strokeType == SvgGraphicsContext::Complex) {
+        // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->strokeId);
         if (gradient) {
+            // great, we have a gradient stroke
             QBrush brush;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
                 brush = *gradient->gradient();
@@ -1084,13 +1051,12 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
             border->setLineBrush(brush);
             border->setLineStyle(Qt::SolidLine, QVector<qreal>());
             shape->setBorder(border);
+        } else {
+            // no referenced stroke found, use fallback color
+            KoLineBorder *border = new KoLineBorder(gc->stroke);
+            border->setLineStyle(Qt::SolidLine, QVector<qreal>());
+            shape->setBorder(border);
         }
-    }
-    break;
-    case SvgGraphicsContext::None:
-    default:
-        shape->setBorder(0);
-        break;
     }
 }
 
