@@ -370,9 +370,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             indirect->setTemporaryTarget(targetDevice);
             indirect->setTemporaryCompositeOp(m_compositeOp);
             indirect->setTemporaryOpacity(m_opacity);
-            
+
             KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(currentNode().data());
-            
+
             if(paintLayer)
                 indirect->setTemporaryChannelFlags(paintLayer->channelLockFlags());
         }
@@ -392,7 +392,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_painter->beginTransaction(m_transactionText);
 
     setupPainter(m_painter);
-    
+
     if (m_paintIncremental) {
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);
@@ -456,11 +456,11 @@ void KisToolFreehand::endPaint()
         }
         m_paintJobs.clear();
     }
-    
+
     if (m_assistant) {
         static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
     }
-    
+
 #ifdef ENABLE_RECORDING
     if (image() && m_pathPaintAction)
         image()->actionRecorder()->addAction(*m_pathPaintAction);
@@ -510,6 +510,17 @@ bool KisToolFreehand::wantsAutoScroll() const
 {
     return false;
 }
+
+void KisToolFreehand::setDirty(const QVector<QRect> &rects)
+{
+    currentNode()->setDirty(rects);
+    if (!m_paintIncremental) {
+        foreach(const QRect &rc, rects) {
+            m_incrementalDirtyRegion += rc;
+        }
+    }
+}
+
 
 void KisToolFreehand::setDirty(const QRegion& region)
 {
