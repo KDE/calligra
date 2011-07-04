@@ -30,6 +30,7 @@
 #include <KoUnit.h>
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
+#include <KoPathShapeLoader.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
@@ -1128,16 +1129,30 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
         textContext.parseCharacterTransforms(parentElement, context.currentGC());
 
         QString href = parentElement.attribute("xlink:href").mid(1);
-        KoPathShape *path = dynamic_cast<KoPathShape*>(context.shapeById(href));
+        path = dynamic_cast<KoPathShape*>(context.shapeById(href));
         if (path) {
             pathInDocument = true;
         } else if (context.hasDefinition(href)) {
             const KoXmlElement &p = context.definition(href);
-            /* TODO port
-            path = dynamic_cast<KoPathShape*>(createObject(p));
-            pathInDocument = false;
-            path->applyAbsoluteTransformation(context.currentGC()->matrix.inverted());
-            */
+            // must be a path element as per svg spec
+            if (p.tagName() == "path") {
+                pathInDocument = false;
+                path = new KoPathShape();
+                path->clear();
+
+                KoPathShapeLoader loader(path);
+                loader.parseSvg(p.attribute("d"), true);
+                path->setPosition(path->normalize());
+
+                QPointF newPosition = QPointF(SvgUtil::fromUserSpace(path->position().x()),
+                                              SvgUtil::fromUserSpace(path->position().y()));
+                QSizeF newSize = QSizeF(SvgUtil::fromUserSpace(path->size().width()),
+                                        SvgUtil::fromUserSpace(path->size().height()));
+
+                path->setSize(newSize);
+                path->setPosition(newPosition);
+                path->applyAbsoluteTransformation(SvgUtil::parseTransform(p.attribute("transform")));
+            }
         }
         // parse the start offset
         if (! parentElement.attribute("startOffset").isEmpty()) {
@@ -1169,10 +1184,12 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
 
     if (hasTextPathElement) {
         if (path) {
-            if (pathInDocument)
+            if (pathInDocument) {
                 putOnPath(path);
-            else
+            } else {
                 putOnPath(path->absoluteTransformation(0).map(path->outline()));
+                delete path;
+            }
 
             if (offset > 0.0)
                 setStartOffset(offset);
@@ -1224,7 +1241,7 @@ void ArtisticTextShape::parseTextRanges(const KoXmlElement &element, SvgLoadingC
                 }
             } else if (context.hasDefinition(href)) {
                 const KoXmlElement &p = context.definition(href);
-                SvgGraphicsContext *gc = m_context.currentGC();
+                SvgGraphicsContext *gc = context.currentGC();
                 appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace), gc->font));
             }
         }
