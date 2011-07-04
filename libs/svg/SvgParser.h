@@ -154,7 +154,6 @@ private:
     QMap<QString, SvgGradientHelper> m_gradients;
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
-    QMap<QString, KoXmlElement> m_defs;
     QMap<QString, SvgClipPathHelper> m_clipPaths;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes

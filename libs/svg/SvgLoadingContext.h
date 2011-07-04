@@ -28,6 +28,7 @@ class KoResourceManager;
 class KoImageCollection;
 class KoShape;
 
+/// Contains data used for loading svg
 class KOSVG_EXPORT SvgLoadingContext
 {
 public:
@@ -35,7 +36,7 @@ public:
     ~SvgLoadingContext();
 
     /// Returns the current graphics context
-    SvgGraphicsContext *currentGC();
+    SvgGraphicsContext *currentGC() const;
 
     /// Pushes a new graphics context to the stack
     SvgGraphicsContext *pushGraphicsContext(const KoXmlElement &element = KoXmlElement(), bool inherit = true);
@@ -47,7 +48,7 @@ public:
     void setInitialXmlBaseDir(const QString &baseDir);
 
     /// Returns the current xml base dir
-    QString xmlBaseDir();
+    QString xmlBaseDir() const;
 
     /// Constructs an absolute file path from the given href and current xml base directory
     QString absoluteFilePath(const QString &href);
@@ -63,6 +64,15 @@ public:
 
     /// Returns shape with specified id
     KoShape* shapeById(const QString &id);
+
+    /// Adds a definition for later use
+    void addDefinition(const KoXmlElement &element);
+
+    /// Returns the definition with the specified id
+    KoXmlElement definition(const QString &id) const;
+
+    /// Checks if a definition with the specified id exists
+    bool hasDefinition(const QString &id) const;
 
 private:
     class Private;

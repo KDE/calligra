@@ -50,6 +50,7 @@ public:
     int zIndex;
     KoResourceManager *documentResourceManager;
     QHash<QString, KoShape*> loadedShapes;
+    QHash<QString, KoXmlElement> definitions;
 };
 
 SvgLoadingContext::SvgLoadingContext(KoResourceManager *documentResourceManager)
@@ -64,7 +65,7 @@ SvgLoadingContext::~SvgLoadingContext()
     delete d;
 }
 
-SvgGraphicsContext *SvgLoadingContext::currentGC()
+SvgGraphicsContext *SvgLoadingContext::currentGC() const
 {
     if (d->gcStack.isEmpty())
         return 0;
@@ -112,7 +113,7 @@ void SvgLoadingContext::setInitialXmlBaseDir(const QString &baseDir)
     d->initialXmlBaseDir = baseDir;
 }
 
-QString SvgLoadingContext::xmlBaseDir()
+QString SvgLoadingContext::xmlBaseDir() const
 {
     SvgGraphicsContext *gc = currentGC();
     return (gc && !gc->xmlBaseDir.isEmpty()) ? gc->xmlBaseDir : d->initialXmlBaseDir;
@@ -164,4 +165,22 @@ void SvgLoadingContext::registerShape(const QString &id, KoShape *shape)
 KoShape* SvgLoadingContext::shapeById(const QString &id)
 {
     return d->loadedShapes.value(id);
+}
+
+void SvgLoadingContext::addDefinition(const KoXmlElement &element)
+{
+    const QString id = element.attribute("id");
+    if (id.isEmpty() || d->definitions.contains(id))
+        return;
+    d->definitions.insert(id, element);
+}
+
+KoXmlElement SvgLoadingContext::definition(const QString &id) const
+{
+    return d->definitions.value(id);
+}
+
+bool SvgLoadingContext::hasDefinition(const QString &id) const
+{
+    return d->definitions.contains(id);
 }

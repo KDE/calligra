@@ -132,23 +132,23 @@ SvgGradientHelper* SvgParser::findGradient(const QString &id, const QString &hre
         return &m_gradients[ id ];
 
     // check if gradient was stored for later parsing
-    if (!m_defs.contains(id))
+    if (!m_context.hasDefinition(id))
         return 0;
 
-    const KoXmlElement &e = m_defs[ id ];
+    const KoXmlElement &e = m_context.definition(id);
     if (!e.tagName().contains("Gradient"))
         return 0;
 
     if (e.childNodesCount() == 0) {
         QString mhref = e.attribute("xlink:href").mid(1);
 
-        if (m_defs.contains(mhref))
+        if (m_context.hasDefinition(mhref))
             return findGradient(mhref, id);
         else
             return 0;
     } else {
         // ok parse gradient now
-        if (! parseGradient(m_defs[ id ], m_defs[ href ]))
+        if (! parseGradient(m_context.definition(id), m_context.definition(href)))
             return 0;
     }
 
@@ -172,12 +172,12 @@ SvgPatternHelper* SvgParser::findPattern(const QString &id)
         return &m_patterns[ id ];
 
     // check if pattern was stored for later parsing
-    if (!m_defs.contains(id))
+    if (!m_context.hasDefinition(id))
         return 0;
 
     SvgPatternHelper pattern;
 
-    const KoXmlElement &e = m_defs[ id ];
+    const KoXmlElement &e = m_context.definition(id);
     if (e.tagName() != "pattern")
         return 0;
 
@@ -191,7 +191,7 @@ SvgPatternHelper* SvgParser::findPattern(const QString &id)
     }
 
     // ok parse pattern now
-    parsePattern(pattern, m_defs[ id ]);
+    parsePattern(pattern, m_context.definition(id));
     // add to parsed pattern list
     m_patterns.insert(id, pattern);
 
@@ -205,20 +205,20 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
         return &m_filters[ id ];
 
     // check if filter was stored for later parsing
-    if (!m_defs.contains(id))
+    if (!m_context.hasDefinition(id))
         return 0;
 
-    KoXmlElement e = m_defs[ id ];
+    const KoXmlElement &e = m_context.definition(id);
     if (e.childNodesCount() == 0) {
         QString mhref = e.attribute("xlink:href").mid(1);
 
-        if (m_defs.contains(mhref))
+        if (m_context.hasDefinition(mhref))
             return findFilter(mhref, id);
         else
             return 0;
     } else {
         // ok parse filter now
-        if (! parseFilter(m_defs[ id ], m_defs[ href ]))
+        if (! parseFilter(m_context.definition(id), m_context.definition(href)))
             return 0;
     }
 
@@ -242,20 +242,20 @@ SvgClipPathHelper* SvgParser::findClipPath(const QString &id, const QString &hre
         return &m_clipPaths[ id ];
 
     // check if clip path was stored for later parsing
-    if (!m_defs.contains(id))
+    if (!m_context.hasDefinition(id))
         return 0;
 
-    KoXmlElement e = m_defs[ id ];
+    const KoXmlElement &e = m_context.definition(id);
     if (e.childNodesCount() == 0) {
         QString mhref = e.attribute("xlink:href").mid(1);
 
-        if (m_defs.contains(mhref))
+        if (m_context.hasDefinition(mhref))
             return findClipPath(mhref, id);
         else
             return 0;
     } else {
         // ok clip path filter now
-        if (! parseClipPath(m_defs[ id ], m_defs[ href ]))
+        if (! parseClipPath(m_context.definition(id), m_context.definition(href)))
             return 0;
     }
 
@@ -1365,8 +1365,8 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
 
         // TODO: use width and height attributes too
 
-        if (m_defs.contains(key)) {
-            const KoXmlElement &a = m_defs[key];
+        if (m_context.hasDefinition(key)) {
+            const KoXmlElement &a = m_context.definition(key);
             SvgStyles styles = mergeStyles(collectStyles(e), collectStyles(a));
             if (a.tagName() == "g" || a.tagName() == "a" || a.tagName() == "symbol") {
                 m_context.pushGraphicsContext(a);
@@ -1543,9 +1543,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
             parseGradient(b);
         } else if (b.tagName() == "pattern") {
-            QString id = b.attribute("id");
-            if (!id.isEmpty() && !m_defs.contains(id))
-                m_defs.insert(id, b);
+            m_context.addDefinition(b);
         } else if (b.tagName() == "filter") {
             parseFilter(b);
         } else if (b.tagName() == "clipPath") {
@@ -1590,10 +1588,7 @@ void SvgParser::parseDefs(const KoXmlElement &e)
         } else if (b.tagName() == "defs") {
             parseDefs(b);
         } else {
-            QString definition = b.attribute("id");
-            if (!definition.isEmpty() && !m_defs.contains(definition)) {
-                m_defs.insert(definition, b);
-            }
+            m_context.addDefinition(b);
         }
     }
 }

@@ -1131,9 +1131,9 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
         KoPathShape *path = dynamic_cast<KoPathShape*>(context.shapeById(href));
         if (path) {
             pathInDocument = true;
-        } else {
+        } else if (context.hasDefinition(href)) {
+            const KoXmlElement &p = context.definition(href);
             /* TODO port
-            KoXmlElement p = m_defs[href];
             path = dynamic_cast<KoPathShape*>(createObject(p));
             pathInDocument = false;
             path->applyAbsoluteTransformation(context.currentGC()->matrix.inverted());
@@ -1222,12 +1222,10 @@ void ArtisticTextShape::parseTextRanges(const KoXmlElement &element, SvgLoadingC
                 foreach (const ArtisticTextRange &range, refText->text()) {
                     appendText(range);
                 }
-            } else {
-                /* TODO: port
-                KoXmlElement p = m_defs[href];
+            } else if (context.hasDefinition(href)) {
+                const KoXmlElement &p = context.definition(href);
                 SvgGraphicsContext *gc = m_context.currentGC();
-                text->appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace), gc->font));
-                */
+                appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace), gc->font));
             }
         }
         else {
