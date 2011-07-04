@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/common ${CMAKE_SOURCE_DIR}/filter/karbon/svg ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/common ${CMAKE_SOURCE_DIR}/karbon/ui ${CMAKE_SOURCE_DIR}/filter/karbon/svg ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
 
 
 ########## next traget ################
@@ -23,6 +23,7 @@ set(SHAPES_SOURCES
 
 
 set(svgsinglecanvasexport_PART_SRCS 
+    ${CMAKE_SOURCE_DIR}/karbon/ui/KarbonPart.h
     Frame.cpp
     SvgAnimationData.cpp
     ${LIBSVG_SOURCES}

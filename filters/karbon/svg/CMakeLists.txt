@@ -28,7 +28,8 @@ set(STAGE_SOURCES
 set(karbonsvgexport_PART_SRCS 
     SvgExport.cpp
     SvgWriter.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgWriter_Stage.cpp
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgWriter_Stage.cpp #for testing
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgParser_Stage.cpp #for testing
     ${SHAPES_SOURCES} 
     ${LIBSVG_SOURCES}
     ${STAGE_SOURCES} 
