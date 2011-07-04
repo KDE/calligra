@@ -100,7 +100,7 @@ void TileDrawingJob::run()
 
     pixmapPainter.translate(-docRect.x(), -docRect.y());
 
-    double loffset, toffset;
+    qreal loffset, toffset;
     const int left = m_sheet->leftColumn(docRect.left(), loffset);
     const int right = m_sheet->rightColumn(docRect.right());
     const int top = m_sheet->topRow(docRect.top(), toffset);
