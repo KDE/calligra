@@ -43,7 +43,7 @@ public:
     bool loadOdf( const KoXmlElement &element, const QRectF & pageSize );
     void saveOdf( KoXmlWriter & xmlWriter );
 
-    QString presentationObject();
+    QString presentationObject() const;
 
     /**
      * Calculate object rect according to the page size

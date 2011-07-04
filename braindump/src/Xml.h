@@ -19,9 +19,11 @@
 
 #include <KoXmlWriter.h>
 
-namespace Xml {
-  inline void writeBraindumpNS( KoXmlWriter& bodyWriter ) {
+namespace Xml
+{
+inline void writeBraindumpNS(KoXmlWriter& bodyWriter)
+{
     bodyWriter.addAttribute("xmlns:braindump", "http://kde.org/braindump");
-  }
+}
 
 }

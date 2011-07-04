@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _TRAJECTORY_H_
-#define _TRAJECTORY_H_
+#ifndef KORESOURCETAGGING_TEST_H
+#define KORESOURCETAGGING_TEST_H
 
+#include <QtTest/QtTest>
+#include "KoResourceTagging.h"
 
-#include <QVector>
-#include <QPointF>
-
-class Trajectory
+class KoResourceTagging_test : public QObject
 {
+    Q_OBJECT
 
-public:
-    Trajectory();
-    ~Trajectory();
-    const QVector<QPointF> &getLinearTrajectory(const QPointF &start, const QPointF &end, double space);
-    QVector<QPointF> getDDATrajectory(QPointF start, QPointF end, double space);
+private slots:
 
-    inline int size() const { return m_size; }
-
-private:
-    QVector<QPointF> m_path;
-    int m_i;
-    int m_size;
+    // tests
+    void testIntialization();    
+    void testAddingDeletingTag();
+    void testSearchingTag();
+    void testReadWriteXML();
 
 private:
-    void addPoint(QPointF pos);
-    void reset();
-
+    void addData();
+    KoResourceTagging* m_tagObject;
+    QStringList m_resourceNames, m_tags;
 };
-#endif
 
+#endif

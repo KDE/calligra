@@ -935,8 +935,8 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     }
 
     // In which cell did the user click?
-    double xpos;
-    double ypos;
+    qreal xpos;
+    qreal ypos;
     const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
     const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
@@ -1180,8 +1180,8 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     }
 
     // In which cell did the user click?
-    double xpos;
-    double ypos;
+    qreal xpos;
+    qreal ypos;
     const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
     const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.

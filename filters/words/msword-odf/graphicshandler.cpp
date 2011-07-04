@@ -202,7 +202,7 @@ void WordsGraphicsHandler::init()
 {
     kDebug(30513);
 
-    parseOfficeArtContainer();
+    parseOfficeArtContainers();
 
     //create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
@@ -251,6 +251,13 @@ DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 
 void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
+    //TODO: The globalCP might be required to obtain the SPA structure for
+    //inline MS-ODRAW shapes whith missing OfficeArtClientAnchor.
+
+    //TODO: It seems that both inline and floating objects have placement and
+    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
+    //the index into plcfSpa.
+
     kDebug(30513) ;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);
 
@@ -380,8 +387,10 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 
     PLCFIterator<Word97::FSPA> it(plcfSpa->at(0));
     for (size_t i = 0; i < plcfSpa->count(); i++, ++it) {
+#ifdef DEBUG_GHANDLER
         kDebug(30513) << "FSPA start:" << it.currentStart();
         kDebug(30513) << "FSPA spid:" << it.current()->spid;
+#endif
 
         if ((it.currentStart() + threshold) == globalCP) {
             bool inStylesXml = m_document->writingHeader();
@@ -393,6 +402,9 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
             m_zIndex = 1;
 
             locateDrawing((dg->groupShape).data(), it.current(), (uint)it.current()->spid, out);
+
+            //reset global attributes
+            m_pSpa = 0;
             return;
         }
     }
@@ -574,7 +586,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     }
 }
 
-void WordsGraphicsHandler::parseOfficeArtContainer()
+void WordsGraphicsHandler::parseOfficeArtContainers()
 {
     kDebug(30513);
 
