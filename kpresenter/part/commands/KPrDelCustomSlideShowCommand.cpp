@@ -23,13 +23,12 @@
 #include "KPrCustomSlideShows.h"
 #include "KoPAPageBase.h"
 
-KPrDelCustomSlideShowCommand::KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, KUndo2Command *parent)
+KPrDelCustomSlideShowCommand::KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_doc(doc)
     , m_model(model)
     , m_name(name)
     , m_oldCustomShow(doc->customSlideShows()->getByName(name))
-    , m_delOldCustomShow(true)
 {
     setText(i18n("Remove custom slide show"));
 }
@@ -43,12 +42,10 @@ void KPrDelCustomSlideShowCommand::redo()
 {
     m_doc->customSlideShows()->remove(m_name);
     m_model->updateCustomSlideShowsList(m_name);
-    m_delOldCustomShow = true;
 }
 
 void KPrDelCustomSlideShowCommand::undo()
 {
     m_doc->customSlideShows()->insert(m_name, m_oldCustomShow);
     m_model->updateCustomSlideShowsList(m_name);
-    m_delOldCustomShow = false;
 }

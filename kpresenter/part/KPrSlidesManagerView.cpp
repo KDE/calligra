@@ -24,17 +24,17 @@
 #include <QtCore/qmath.h>
 #include <QPaintEvent>
 #include <QScrollBar>
+#include <QPainter>
+#include <QPen>
 
 //Kde headers
 #include <klocale.h>
 #include <KIconLoader>
 
-//Calligra headers
-#include <KoToolProxy.h>
-
 KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     : QListView(parent)
     , m_dragingFlag(false)
+    , margin(23)
 {
     setViewMode(QListView::IconMode);
     setFlow(QListView::LeftToRight);
@@ -279,16 +279,15 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
 int KPrSlidesManagerView::cursorSlideIndex() const
 {
     QPair <int, int> m_pair = cursorRowAndColumn();
-    int slidesNumber = qFloor((contentsRect().width() - (23 + spacing() - contentsMargins().right())) /
+    int slidesNumber = qFloor((contentsRect().width() - (margin + spacing() - contentsMargins().right())) /
                               (itemSize().width() + spacing()));
     return (m_pair.first + m_pair.second * slidesNumber);
 }
 
 QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
 {
-    //23 is for the margin.
     QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
-    int slidesNumber = qFloor((contentsRect().width() - (23 + spacing() - contentsMargins().right())) / size.width());
+    int slidesNumber = qFloor((contentsRect().width() - (margin + spacing() - contentsMargins().right())) / size.width());
     int scrollBarValue = verticalScrollBar()->value();
     QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
     int numberColumn = qFloor(cursorPosition.x() / size.width());

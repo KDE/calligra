@@ -567,13 +567,11 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
 
     //Change document current custom slide show
     KPrDocument *doc = static_cast<KPrDocument *>(m_view->kopaDocument());
-    if (doc) {
-        doc->setActiveCustomSlideShow(name);
-    }
+    doc->setActiveCustomSlideShow(name);
 
     //Decide show or hide Custom Slide Shows View
     if (panelVisible != m_editCustomSlideShow) {
-        const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+        const bool animate = KGlobalSettings::graphicEffectsLevel() && KGlobalSettings::SimpleAnimationEffects;
         const int duration = animate ? 600 : 1;
         QPropertyAnimation *animation = new QPropertyAnimation (m_customSlideShowView, "maximumHeight");
 

@@ -89,7 +89,7 @@ public:
      * @param slides list of slides to be removed
      * @return true if the command execution was successful
      */
-    bool removeSlides(QList<KoPAPageBase *> &slides);
+    bool removeSlides(const QList<KoPAPageBase *> &slides);
 
     /**
      * @brief Add a new slide after the current active page
@@ -104,7 +104,7 @@ public:
      * @param slides list of slides to be copied
      * @return true if the command execution was successful
      */
-    bool copySlides(QList<KoPAPageBase *> &slides);
+    bool copySlides(const QList<KoPAPageBase *> &slides);
 
     /**
      * @brief Paste slides from clipboard
@@ -120,7 +120,7 @@ public:
      * @param pageAfter indicates where the slides will be moved
      * @return true if the command execution was successful
      */
-    bool moveSlides(QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter);
+    bool moveSlides(const QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter);
 
 public slots:
     /** emit signals indicating a change in the model layout or items */

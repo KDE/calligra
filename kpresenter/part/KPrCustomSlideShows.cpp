@@ -84,7 +84,7 @@ QList<KoPAPageBase*> KPrCustomSlideShows::getByName( const QString &name ) const
     return it.value();
 }
 
-KoPAPageBase * KPrCustomSlideShows::pageByIndex(const QString &name, int index) const
+KoPAPageBase *KPrCustomSlideShows::pageByIndex(const QString &name, int index) const
 {
     QList<KoPAPageBase*> pages = getByName(name);
     return pages.value(index);

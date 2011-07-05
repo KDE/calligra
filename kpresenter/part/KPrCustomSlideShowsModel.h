@@ -44,9 +44,9 @@ public:
     //within a custom show.
     enum CustomShowActions
     {
-        SLIDES_ADD = 0,        ///< add slides
-        SLIDES_DELETE    = 1,  ///< delete slides
-        SLIDES_MOVE     = 2,  ///< move slides
+        SlidesAdd,       ///< add slides
+        SlidesDelete,    ///< delete slides
+        SlidesMove       ///< move slides
     };
 
     explicit KPrCustomSlideShowsModel(KPrDocument *document, QObject *parent = 0);
@@ -65,11 +65,9 @@ public:
 
     virtual Qt::DropActions supportedDropActions() const;
 
-    //virtual bool removeRows(int row, int count, const QModelIndex &parent);
-
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
     /**
      * @brief Set the current KPrCustomSlideShows
@@ -83,14 +81,14 @@ public:
      *
      * @return the active slide show name
      */
-    QString activeCustomSlideShow();
+    QString activeCustomSlideShow() const;
 
     /**
      * @brief Set the active custom slide show by name
      *
      * @param name of the custom slide show
      */
-    void setActiveSlideShow(QString name);
+    void setActiveSlideShow(const QString &name);
 
     /**
      * @brief Set the active custom slide show by index
@@ -104,7 +102,7 @@ public:
      *
      * @param size which is a QRect
      */
-    void setIconSize(QSize size);
+    void setIconSize(const QSize &size);
 
     /**
      * @brief Returns the current slide show names list
@@ -126,21 +124,21 @@ public:
      * @param name of the custom slide show
      * @param newCustomShow list of slides
      */
-    void updateCustomShow(QString name, QList<KoPAPageBase *> newCustomShow);
+    void updateCustomShow(const QString &name, const QList<KoPAPageBase *> &newCustomShow);
 
     /**
      * @brief Deletes all the ocurrencies of a given list of slides from all the known custom SlideShows
      *
      * @param slideShow list of slides to be removed
      */
-    void removeSlidesFromAll(QList<KoPAPageBase *> pages);
+    void removeSlidesFromAll(const QList<KoPAPageBase *> &pages);
 
     /**
      * @brief Deletes all the ocurrencies of a given list of slides indexes from current custom SlideShows
      *
      * @param slideIndexes list of slide indexes to be removed
      */
-    void removeSlidesByIndexes(QModelIndexList slideIndexes);
+    void removeSlidesByIndexes(const QModelIndexList &slideIndexes);
 
     /**
      * @brief Add a given list of slides to the current custom slide show
@@ -148,7 +146,7 @@ public:
      * @param pages list of slides to be added.
      * @param row the insertion will be performed before the given row
      */
-    void addSlides(QList<KoPAPageBase *> pages, int row);
+    void addSlides(const QList<KoPAPageBase *> &pages, const int &row);
 
     /**
      * @brief Manage all edit actions on a custom slide show
@@ -158,7 +156,7 @@ public:
      * @param beginRow destination row for copy and move actions
      * @return true if the action success
      */
-    bool doCustomSlideShowAction(CustomShowActions c_action, QList<KoPAPageBase *> slides, int beginRow);
+    bool doCustomSlideShowAction(const CustomShowActions &c_action, const QList<KoPAPageBase *> &slides, int beginRow);
 
     /**
      * @brief Insert a new Custom SlideShow
@@ -189,7 +187,7 @@ public:
      *
      * @param name of the Custom Slide Show
      */
-    void updateCustomSlideShowsList(const QString name);
+    void updateCustomSlideShowsList(const QString &name);
 
 signals:
     /** Notify a change of the active custom slide show */
@@ -197,7 +195,7 @@ signals:
 
 public slots:
 
-private:   
+private:
     QList<KoPAPageBase *> decodeSlidesList(QByteArray encoded);
 
     KPrCustomSlideShows *m_customSlideShows;

@@ -366,10 +366,10 @@ KoPAPageBase * KPrSlidesSorterDocumentModel::pageByIndex(const QModelIndex &inde
     return static_cast<KoPAPageBase*>(index.internalPointer());
 }
 
-bool KPrSlidesSorterDocumentModel::removeSlides(QList<KoPAPageBase *> &slides)
+bool KPrSlidesSorterDocumentModel::removeSlides(const QList<KoPAPageBase *> &slides)
 {
     if (!slides.empty() && m_document->pages().count() > slides.count()) {
-         KUndo2Command *cmd = new KoPAPageDeleteCommand(m_document, slides);
+        KUndo2Command *cmd = new KoPAPageDeleteCommand(m_document, slides);
         if (cmd) {
             m_document->addCommand(cmd);
             return true;
@@ -388,7 +388,7 @@ bool KPrSlidesSorterDocumentModel::addNewSlide()
     return false;
 }
 
-bool KPrSlidesSorterDocumentModel::copySlides(QList<KoPAPageBase *> &slides)
+bool KPrSlidesSorterDocumentModel::copySlides(const QList<KoPAPageBase *> &slides)
 {
     if (!slides.empty()) {
         // Copy Pages
@@ -411,7 +411,7 @@ bool KPrSlidesSorterDocumentModel::pasteSlides()
     return false;
 }
 
-bool KPrSlidesSorterDocumentModel::moveSlides(QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter)
+bool KPrSlidesSorterDocumentModel::moveSlides(const QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter)
 {
     KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
     if (command) {

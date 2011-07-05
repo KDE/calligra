@@ -29,7 +29,7 @@ class KPrCustomSlideShowsModel;
 class KPrDelCustomSlideShowCommand : public KUndo2Command
 {
 public:
-    KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, KUndo2Command *parent = 0);
+    KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent = 0);
 
     virtual ~KPrDelCustomSlideShowCommand();
 
@@ -43,7 +43,6 @@ private:
     KPrCustomSlideShowsModel *m_model;
     QString m_name;
     QList<KoPAPageBase *> m_oldCustomShow;
-    bool m_delOldCustomShow;
 };
 
 #endif // KPRDELCUSTOMSLIDESHOWCOMMAND_H

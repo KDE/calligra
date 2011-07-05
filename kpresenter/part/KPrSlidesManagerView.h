@@ -22,7 +22,6 @@
 #define KPRSLIDESMANAGERVIEW_H
 
 #include <QListView>
-class KoToolProxy;
 
 /**
  * Class meant to hold a List View of slides thumbnails
@@ -141,7 +140,7 @@ private:
 
     QRect m_itemSize;
     bool m_dragingFlag;
-    KoToolProxy *m_toolProxy;
+    int margin;
 
 };
 
