@@ -359,6 +359,7 @@ bool SvmParser::parse(const QByteArray &data)
                 kDebug(31000) << "Color:"  << mContext.textColor;
                 mContext.changedItems |= GCTextColor;
             }
+            break;
         case META_TEXTFILLCOLOR_ACTION:
             {
                 quint32  colorData;
@@ -366,7 +367,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> mContext.textFillColorSet;
                 
-                kDebug(31000) << "Text fill color :" << colorData
+                kDebug(31000) << "Text fill color :" << hex << colorData << dec
                               << '(' << mContext.textFillColorSet << ')';
 
                 mContext.textFillColor = QColor::fromRgb(colorData);
@@ -429,8 +430,15 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTLINE_ACTION:
         case META_FLOATTRANSPARENT_ACTION:
         case META_GRADIENTEX_ACTION:
+            break;
         case META_LAYOUTMODE_ACTION:
+            {
+                stream >> mContext.layoutMode;
+                kDebug(31000) << "New layout mode:" << hex << mContext.layoutMode << dec << "hex";
+            }
+            break;
         case META_TEXTLANGUAGE_ACTION:
+            break;
         case META_OVERLINECOLOR_ACTION:
             {
                 quint32  colorData;
