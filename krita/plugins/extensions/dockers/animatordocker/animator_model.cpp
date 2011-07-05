@@ -170,12 +170,9 @@ void AnimatorModel::realUpdate()
 
 void AnimatorModel::afterUpdate()
 {
-//     std::cout << "Before emmiting " << m_frame << std::endl;
-    
     emit frameChanged(m_frame);
     emit framesNumberChanged(m_frame_num);
     
-    emit dataChanged(createIndex(0, 0), createIndex(rowCount(), columnCount()));
     emit layoutChanged();
 }
 
@@ -286,10 +283,11 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
             }
         } else if (role == Qt::BackgroundRole)
         {
-            if (section == m_frame)
-            {
-                return QBrush(QColor(10, 10, 10, 127));
-            }
+            // This is probably a slowness factor
+//             if (section == m_frame)
+//             {
+//                 return QBrush(QColor(10, 10, 10, 127));
+//             }
         }
     }
     
@@ -316,6 +314,8 @@ void AnimatorModel::setNodeManager(KisNodeManager* nodeman)
 
 void AnimatorModel::setFrame(int frame)
 {
+//     std::cout << "setFrame(" << frame << ")" << std::endl;
+    int old_f = m_frame;
     if (frame == m_frame)
         return;
     
@@ -323,6 +323,12 @@ void AnimatorModel::setFrame(int frame)
     {
         m_frame = frame;
         emit frameChanged(m_frame);
+        emit dataChanged(createIndex(old_f, 0), createIndex(old_f, rowCount()));
+        emit dataChanged(createIndex(m_frame, 0), createIndex(m_frame, rowCount()));
+        
+        // NOTE: THIS CAUSES *MUCH* SLOWNESS
+//         emit headerDataChanged(Qt::Horizontal, old_f, old_f);
+//         emit headerDataChanged(Qt::Horizontal, m_frame, m_frame);
     }
 }
 
@@ -414,14 +420,14 @@ void AnimatorModel::frameUpdate()
     
     if (m_nodeman)
     {
-        m_nodeman->nodesUpdated();
-        m_nodeman->updateGUI();
+//         m_nodeman->nodesUpdated();
+// //         m_nodeman->updateGUI();
     }
 
-    emit headerDataChanged(Qt::Vertical, 0, columnCount()-1);
+//     emit headerDataChanged(Qt::Horizontal, 0, columnCount()-1);
     
 //     if (rec)
-    updateCanvas();
+//     updateCanvas();
 }
 
 void AnimatorModel::lightTableUpdate()
@@ -496,7 +502,11 @@ void AnimatorModel::activateLayer(QModelIndex index)
     if (nodeFromIndex(index))
         m_nodeman->activateNode( nodeFromIndex(index) );
     
-    afterUpdate();
+    // DO NOT DO THIS!!!
+//     afterUpdate();
+        
+//     emit dataChanged(createIndex(0, 0), createIndex(rowCount(), columnCount()));
+//     emit headerDataChanged(Qt::Horizontal, 0, columnCount());
 }
 
 void AnimatorModel::updateCanvas()
