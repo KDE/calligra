@@ -21,6 +21,7 @@
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
 #include "SvgCssHelper.h"
+#include "SvgStyleParser.h"
 
 #include <KoResourceManager.h>
 
@@ -34,7 +35,7 @@ class SvgLoadingContext::Private
 {
 public:
     Private()
-        : zIndex(0)
+        : zIndex(0), styleParser(0)
     {
 
     }
@@ -45,6 +46,7 @@ public:
             kWarning() << "the context stack is not empty (current count" << gcStack.size() << ", expected 0)";
         qDeleteAll(gcStack);
         gcStack.clear();
+        delete styleParser;
     }
     QStack<SvgGraphicsContext*> gcStack;
     QString initialXmlBaseDir;
@@ -53,13 +55,14 @@ public:
     QHash<QString, KoShape*> loadedShapes;
     QHash<QString, KoXmlElement> definitions;
     SvgCssHelper cssStyles;
-
+    SvgStyleParser *styleParser;
 };
 
 SvgLoadingContext::SvgLoadingContext(KoResourceManager *documentResourceManager)
     : d(new Private())
 {
     d->documentResourceManager = documentResourceManager;
+    d->styleParser = new SvgStyleParser(*this);
     Q_ASSERT(d->documentResourceManager);
 }
 
@@ -196,4 +199,9 @@ void SvgLoadingContext::addStyleSheet(const KoXmlElement &styleSheet)
 QStringList SvgLoadingContext::matchingStyles(const KoXmlElement &element) const
 {
     return d->cssStyles.matchStyles(element);
+}
+
+SvgStyleParser &SvgLoadingContext::styleParser()
+{
+    return *d->styleParser;
 }

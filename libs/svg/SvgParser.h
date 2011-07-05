@@ -29,6 +29,7 @@
 #include "SvgClipPathHelper.h"
 #include "SvgLoadingContext.h"
 #include "SvgGraphicContext.h"
+#include "SvgStyleParser.h"
 
 #include <KoXmlReader.h>
 
@@ -58,23 +59,14 @@ public:
 
 protected:
 
-    typedef QMap<QString, QString> SvgStyles;
-
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const KoXmlElement &);
     /// Parses a use element, returning a list of child shapes
     QList<KoShape*> parseUse(const KoXmlElement &);
     /// Parses definitions for later use
     void parseDefs(const KoXmlElement &);
-    /// Parses style attributes, applying them to the given shape
-    void parseStyle(KoShape *, const KoXmlElement &);
-    void parseStyle(KoShape *, const SvgStyles &);
-    /// Parses a single style attribute
-    void parsePA(SvgGraphicsContext *, const QString &, const QString &);
     /// Parses a gradient element
     bool parseGradient(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
-    /// Parses gradient color stops
-    void parseColorStops(QGradient *, const KoXmlElement &);
     /// Parses a pattern element
     void parsePattern(SvgPatternHelper &pattern, const KoXmlElement &);
     /// Parses a filter element
@@ -89,15 +81,11 @@ protected:
     qreal parseUnitY(const QString &unit);
     /// parses a length attribute in xy-direction
     qreal parseUnitXY(const QString &unit);
-    /// Parses a color attribute
-    bool parseColor(QColor &, const QString &);
 
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
     /// Create path object from the given xml element
     KoShape * createPath(const KoXmlElement &);
-    /// Parses font attributes
-    void parseFont(const SvgStyles &styles);
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient(const QString &id, const QString &href = QString());
     /// find pattern with given id in pattern map
@@ -106,11 +94,6 @@ protected:
     SvgFilterHelper* findFilter(const QString &id, const QString &href = QString());
     /// find clip path with given id in clip path map
     SvgClipPathHelper* findClipPath(const QString &id, const QString &href = QString());
-
-    /// Creates style map from given xml element
-    SvgStyles collectStyles(const KoXmlElement &);
-    /// Merges two style elements, returning the merged style
-    SvgStyles mergeStyles(const SvgStyles &, const SvgStyles &);
 
     /// Adds list of shapes to the given group shape
     void addToGroup(QList<KoShape*> shapes, KoShapeGroup * group);
@@ -122,6 +105,12 @@ protected:
 
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
+
+    /// Applies styles to the given shape
+    void applyStyle(KoShape *, const KoXmlElement &);
+
+    /// Applies styles to the given shape
+    void applyStyle(KoShape *, const SvgStyles &);
 
     /// Applies the current fill style to the object
     void applyFillStyle(KoShape * shape);
@@ -135,9 +124,6 @@ protected:
     /// Applies the current clip path to the object
     void applyClipping(KoShape *shape);
 
-    /// Returns inherited attribute value for specified element
-    QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
-
     /// Applies id to specified shape
     void applyId(const QString &id, KoShape *shape);
 
@@ -148,8 +134,6 @@ private:
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, SvgClipPathHelper> m_clipPaths;
-    QStringList m_fontAttributes; ///< font related attributes
-    QStringList m_styleAttributes; ///< style related attributes
     KoResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;

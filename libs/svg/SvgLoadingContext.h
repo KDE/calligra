@@ -24,6 +24,7 @@
 #include <KoXmlReader.h>
 
 class SvgGraphicsContext;
+class SvgStyleParser;
 class KoResourceManager;
 class KoImageCollection;
 class KoShape;
@@ -79,6 +80,9 @@ public:
 
     /// Returns list of css styles matching to the specified element
     QStringList matchingStyles(const KoXmlElement &element) const;
+
+    /// Returns a style parser to parse styles
+    SvgStyleParser &styleParser();
 
 private:
     class Private;

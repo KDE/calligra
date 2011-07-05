@@ -56,17 +56,9 @@
 
 
 SvgParser::SvgParser(KoResourceManager *documentResourceManager)
-    : m_context(documentResourceManager), m_documentResourceManager(documentResourceManager)
+    : m_context(documentResourceManager)
+    , m_documentResourceManager(documentResourceManager)
 {
-    // the order of the font attributes is important, don't change without reason !!!
-    m_fontAttributes << "font-family" << "font-size" << "font-weight";
-    m_fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
-    // the order of the style attributes is important, don't change without reason !!!
-    m_styleAttributes << "color" << "display";
-    m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
-    m_styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
-    m_styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
-    m_styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule";
 }
 
 SvgParser::~SvgParser()
@@ -228,20 +220,6 @@ SvgClipPathHelper* SvgParser::findClipPath(const QString &id, const QString &hre
         return 0;
 }
 
-SvgParser::SvgStyles SvgParser::mergeStyles(const SvgStyles &referencedBy, const SvgStyles &referencedStyles)
-{
-    // 1. use all styles of the referencing styles
-    SvgStyles mergedStyles = referencedBy;
-    // 2. use all styles of the referenced style which are not in the referencing styles
-    SvgStyles::const_iterator it = referencedStyles.constBegin();
-    for (; it != referencedStyles.constEnd(); ++it) {
-        if (!referencedBy.contains(it.key())) {
-            mergedStyles.insert(it.key(), it.value());
-        }
-    }
-    return mergedStyles;
-}
-
 // Parsing functions
 // ---------------------------------------------------------------------------------------
 
@@ -263,96 +241,6 @@ qreal SvgParser::parseUnitY(const QString &unit)
 qreal SvgParser::parseUnitXY(const QString &unit)
 {
     return SvgUtil::parseUnitXY(m_context.currentGC(), unit);
-}
-
-bool SvgParser::parseColor(QColor &color, const QString &s)
-{
-    if (s.isEmpty() || s == "none")
-        return false;
-
-    if (s.startsWith(QLatin1String("rgb("))) {
-        QString parse = s.trimmed();
-        QStringList colors = parse.split(',');
-        QString r = colors[0].right((colors[0].length() - 4));
-        QString g = colors[1];
-        QString b = colors[2].left((colors[2].length() - 1));
-
-        if (r.contains("%")) {
-            r = r.left(r.length() - 1);
-            r = QString::number(int((double(255 * r.toDouble()) / 100.0)));
-        }
-
-        if (g.contains("%")) {
-            g = g.left(g.length() - 1);
-            g = QString::number(int((double(255 * g.toDouble()) / 100.0)));
-        }
-
-        if (b.contains("%")) {
-            b = b.left(b.length() - 1);
-            b = QString::number(int((double(255 * b.toDouble()) / 100.0)));
-        }
-
-        color = QColor(r.toInt(), g.toInt(), b.toInt());
-    } else if (s == "currentColor") {
-        color = m_context.currentGC()->currentColor;
-    } else {
-        // QColor understands #RRGGBB and svg color names
-        color.setNamedColor(s.trimmed());
-    }
-
-    return true;
-}
-
-void SvgParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
-{
-    QGradientStops stops;
-    QColor c;
-
-    for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        KoXmlElement stop = n.toElement();
-        if (stop.tagName() == "stop") {
-            float offset;
-            QString temp = stop.attribute("offset");
-            if (temp.contains('%')) {
-                temp = temp.left(temp.length() - 1);
-                offset = temp.toFloat() / 100.0;
-            } else
-                offset = temp.toFloat();
-
-            QString stopColorStr = stop.attribute("stop-color");
-            if (!stopColorStr.isEmpty()) {
-                if (stopColorStr == "inherit") {
-                    stopColorStr = inheritedAttribute("stop-color", stop);
-                }
-                parseColor(c, stopColorStr);
-            }
-            else {
-                // try style attr
-                QString style = stop.attribute("style").simplified();
-                QStringList substyles = style.split(';', QString::SkipEmptyParts);
-                for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
-                    QStringList substyle = it->split(':');
-                    QString command = substyle[0].trimmed();
-                    QString params  = substyle[1].trimmed();
-                    if (command == "stop-color")
-                        parseColor(c, params);
-                    if (command == "stop-opacity")
-                        c.setAlphaF(params.toDouble());
-                }
-
-            }
-            QString opacityStr = stop.attribute("stop-opacity");
-            if (!opacityStr.isEmpty()) {
-                if (opacityStr == "inherit") {
-                    opacityStr = inheritedAttribute("stop-opacity", stop);
-                }
-                c.setAlphaF(opacityStr.toDouble());
-            }
-            stops.append(QPair<qreal, QColor>(offset, c));
-        }
-    }
-    if (stops.count())
-        gradient->setStops(stops);
 }
 
 bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referencedBy)
@@ -405,7 +293,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     QColor c = gc->currentColor;
 
     if (!b.attribute("color").isEmpty()) {
-        parseColor(c, b.attribute("color"));
+        m_context.styleParser().parseColor(c, b.attribute("color"));
     } else {
         // try style attr
         QString style = b.attribute("style").simplified();
@@ -415,7 +303,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
             QString command = substyle[0].trimmed();
             QString params  = substyle[1].trimmed();
             if (command == "color")
-                parseColor(c, params);
+                m_context.styleParser().parseColor(c, params);
         }
     }
     gc->currentColor = c;
@@ -476,7 +364,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
 
     // Parse the color stops. The referencing gradient does not have colorstops,
     // so use the stops from the gradient it references to (e in this case and not b)
-    parseColorStops(gradhelper.gradient(), e);
+    m_context.styleParser().parseColorStops(gradhelper.gradient(), e);
     gradhelper.setTransform(SvgUtil::parseTransform(b.attribute("gradientTransform")));
     m_gradients.insert(gradientId, gradhelper);
 
@@ -609,274 +497,18 @@ bool SvgParser::parseClipPath(const KoXmlElement &e, const KoXmlElement &referen
     return true;
 }
 
-void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QString &params)
+void SvgParser::applyStyle(KoShape *obj, const KoXmlElement &e)
 {
-    QColor fillcolor = gc->fillColor;
-    QColor strokecolor = gc->stroke.color();
-
-    if (params == "inherit")
-        return;
-
-    if (command == "fill") {
-        if (params == "none") {
-            gc->fillType = SvgGraphicsContext::None;
-        } else if (params.startsWith(QLatin1String("url("))) {
-            unsigned int start = params.indexOf('#') + 1;
-            unsigned int end = params.indexOf(')', start);
-            gc->fillId = params.mid(start, end - start);
-            gc->fillType = SvgGraphicsContext::Complex;
-            // check if there is a fallback color
-            parseColor(fillcolor, params.mid(end + 1).trimmed());
-        } else {
-            // great we have a solid fill
-            gc->fillType = SvgGraphicsContext::Solid;
-            parseColor(fillcolor,  params);
-        }
-    } else if (command == "fill-rule") {
-        if (params == "nonzero")
-            gc->fillRule = Qt::WindingFill;
-        else if (params == "evenodd")
-            gc->fillRule = Qt::OddEvenFill;
-    } else if (command == "stroke") {
-        if (params == "none") {
-            gc->strokeType = SvgGraphicsContext::None;
-        } else if (params.startsWith(QLatin1String("url("))) {
-            unsigned int start = params.indexOf('#') + 1;
-            unsigned int end = params.indexOf(')', start);
-            gc->strokeId = params.mid(start, end - start);
-            gc->strokeType = SvgGraphicsContext::Complex;
-            // check if there is a fallback color
-            parseColor(strokecolor, params.mid(end + 1).trimmed());
-        } else {
-            // great we have a solid stroke
-            gc->strokeType = SvgGraphicsContext::Solid;
-            parseColor(strokecolor, params);
-        }
-    } else if (command == "stroke-width") {
-        gc->stroke.setLineWidth(parseUnitXY(params));
-    } else if (command == "stroke-linejoin") {
-        if (params == "miter")
-            gc->stroke.setJoinStyle(Qt::MiterJoin);
-        else if (params == "round")
-            gc->stroke.setJoinStyle(Qt::RoundJoin);
-        else if (params == "bevel")
-            gc->stroke.setJoinStyle(Qt::BevelJoin);
-    } else if (command == "stroke-linecap") {
-        if (params == "butt")
-            gc->stroke.setCapStyle(Qt::FlatCap);
-        else if (params == "round")
-            gc->stroke.setCapStyle(Qt::RoundCap);
-        else if (params == "square")
-            gc->stroke.setCapStyle(Qt::SquareCap);
-    } else if (command == "stroke-miterlimit") {
-        gc->stroke.setMiterLimit(params.toFloat());
-    } else if (command == "stroke-dasharray") {
-        QVector<qreal> array;
-        if (params != "none") {
-            QString dashString = params;
-            QStringList dashes = dashString.replace(',', ' ').simplified().split(' ');
-            for (QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it)
-                array.append((*it).toFloat());
-        }
-        gc->stroke.setLineStyle(Qt::CustomDashLine, array);
-    } else if (command == "stroke-dashoffset") {
-        gc->stroke.setDashOffset(params.toFloat());
-    }
-    // handle opacity
-    else if (command == "stroke-opacity")
-        strokecolor.setAlphaF(SvgUtil::fromPercentage(params));
-    else if (command == "fill-opacity") {
-        float opacity = SvgUtil::fromPercentage(params);
-        if (opacity < 0.0)
-            opacity = 0.0;
-        if (opacity > 1.0)
-            opacity = 1.0;
-        fillcolor.setAlphaF(opacity);
-    } else if (command == "opacity") {
-        gc->opacity = SvgUtil::fromPercentage(params);
-    } else if (command == "font-family") {
-        QString family = params;
-        family.replace('\'' , ' ');
-        gc->font.setFamily(family);
-    } else if (command == "font-size") {
-        float pointSize = parseUnitY(params);
-        if (pointSize > 0.0f)
-            gc->font.setPointSizeF(pointSize);
-    } else if (command == "font-weight") {
-        int weight = QFont::Normal;
-
-        // map svg weight to qt weight
-        // svg value        qt value
-        // 100,200,300      1, 17, 33
-        // 400              50          (normal)
-        // 500,600          58,66
-        // 700              75          (bold)
-        // 800,900          87,99
-
-        if (params == "bold")
-            weight = QFont::Bold;
-        else if (params == "lighter") {
-            weight = gc->font.weight();
-            if (weight <= 17)
-                weight = 1;
-            else if (weight <= 33)
-                weight = 17;
-            else if (weight <= 50)
-                weight = 33;
-            else if (weight <= 58)
-                weight = 50;
-            else if (weight <= 66)
-                weight = 58;
-            else if (weight <= 75)
-                weight = 66;
-            else if (weight <= 87)
-                weight = 75;
-            else if (weight <= 99)
-                weight = 87;
-        } else if (params == "bolder") {
-            weight = gc->font.weight();
-            if (weight >= 87)
-                weight = 99;
-            else if (weight >= 75)
-                weight = 87;
-            else if (weight >= 66)
-                weight = 75;
-            else if (weight >= 58)
-                weight = 66;
-            else if (weight >= 50)
-                weight = 58;
-            else if (weight >= 33)
-                weight = 50;
-            else if (weight >= 17)
-                weight = 50;
-            else if (weight >= 1)
-                weight = 17;
-        } else {
-            bool ok;
-            // try to read numerical weight value
-            weight = params.toInt(&ok, 10);
-
-            if (!ok)
-                return;
-
-            switch (weight) {
-            case 100: weight = 1; break;
-            case 200: weight = 17; break;
-            case 300: weight = 33; break;
-            case 400: weight = 50; break;
-            case 500: weight = 58; break;
-            case 600: weight = 66; break;
-            case 700: weight = 75; break;
-            case 800: weight = 87; break;
-            case 900: weight = 99; break;
-            }
-        }
-        gc->font.setWeight(weight);
-    } else if (command == "text-decoration") {
-        if (params == "line-through")
-            gc->font.setStrikeOut(true);
-        else if (params == "underline")
-            gc->font.setUnderline(true);
-    } else if (command == "letter-spacing") {
-        gc->letterSpacing = parseUnitX(params);
-    } else if (command == "baseline-shift") {
-        gc->baselineShift = params;
-    } else if (command == "word-spacing") {
-        gc->wordSpacing = parseUnitX(params);
-    } else if (command == "color") {
-        QColor color;
-        parseColor(color, params);
-        gc->currentColor = color;
-    } else if (command == "display") {
-        if (params == "none")
-            gc->display = false;
-    } else if (command == "filter") {
-        if (params != "none" && params.startsWith("url(")) {
-            unsigned int start = params.indexOf('#') + 1;
-            unsigned int end = params.indexOf(')', start);
-            gc->filterId = params.mid(start, end - start);
-        }
-    } else if (command == "clip-path") {
-        if (params != "none" && params.startsWith("url(")) {
-            unsigned int start = params.indexOf('#') + 1;
-            unsigned int end = params.indexOf(')', start);
-            gc->clipPathId = params.mid(start, end - start);
-        }
-    } else if (command == "clip-rule") {
-        if (params == "nonzero")
-            gc->clipRule = Qt::WindingFill;
-        else if (params == "evenodd")
-            gc->clipRule = Qt::OddEvenFill;
-    }
-
-    gc->fillColor = fillcolor;
-    gc->stroke.setColor(strokecolor);
+    applyStyle(obj, m_context.styleParser().collectStyles(e));
 }
 
-SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
-{
-    SvgStyles styleMap;
-
-    // collect individual presentation style attributes which have the priority 0
-    foreach(const QString & command, m_styleAttributes) {
-        if (e.hasAttribute(command))
-            styleMap[command] = e.attribute(command);
-    }
-    foreach(const QString & command, m_fontAttributes) {
-        if (e.hasAttribute(command))
-            styleMap[command] = e.attribute(command);
-    }
-
-    // match css style rules to element
-    QStringList cssStyles = m_context.matchingStyles(e);
-
-    // collect all css style attributes
-    foreach(const QString &style, cssStyles) {
-        QStringList substyles = style.split(';', QString::SkipEmptyParts);
-        if (!substyles.count())
-            continue;
-        for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
-            QStringList substyle = it->split(':');
-            if (substyle.count() != 2)
-                continue;
-            QString command = substyle[0].trimmed();
-            QString params  = substyle[1].trimmed();
-            // only use style and font attributes
-            if (m_styleAttributes.contains(command) || m_fontAttributes.contains(command))
-                styleMap[command] = params;
-        }
-    }
-
-    // replace keyword "inherit" for style values
-    QMutableMapIterator<QString, QString> it(styleMap);
-    while (it.hasNext()) {
-        it.next();
-        if (it.value() == "inherit") {
-            it.setValue(inheritedAttribute(it.key(), e));
-        }
-    }
-
-    return styleMap;
-}
-
-void SvgParser::parseStyle(KoShape *obj, const KoXmlElement &e)
-{
-    parseStyle(obj, collectStyles(e));
-}
-
-void SvgParser::parseStyle(KoShape *obj, const SvgStyles &styles)
+void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
     if (!gc)
         return;
 
-    // make sure we parse the style attributes in the right order
-    foreach(const QString & command, m_styleAttributes) {
-        const QString &params = styles.value(command);
-        if (params.isEmpty())
-            continue;
-        parsePA(gc, command, params);
-    }
+    m_context.styleParser().parseStyle(styles);
 
     if (!obj)
         return;
@@ -899,7 +531,6 @@ void SvgParser::applyFillStyle(KoShape *shape)
     if (! gc)
         return;
 
-    kDebug() << gc->fillType;
     if (gc->fillType == SvgGraphicsContext::None) {
         shape->setBackground(0);
     } else if (gc->fillType == SvgGraphicsContext::Solid) {
@@ -946,7 +577,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                     gc->currentBoundbox = currentBoundbox;
                 }
 
-                parseStyle(0, pattern->content());
+                applyStyle(0, pattern->content());
 
                 // parse the pattern content elements
                 QList<KoShape*> patternContent = parseContainer(pattern->content());
@@ -1259,21 +890,6 @@ void SvgParser::applyClipping(KoShape *shape)
     }
 }
 
-void SvgParser::parseFont(const SvgStyles &styles)
-{
-    SvgGraphicsContext *gc = m_context.currentGC();
-    if (!gc)
-        return;
-
-    // make sure to only parse font attributes here
-    foreach(const QString & command, m_fontAttributes) {
-        const QString &params = styles.value(command);
-        if (params.isEmpty())
-            continue;
-        parsePA(gc, command, params);
-    }
-}
-
 QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
 {
     QList<KoShape*> shapes;
@@ -1294,15 +910,15 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
 
         if (m_context.hasDefinition(key)) {
             const KoXmlElement &a = m_context.definition(key);
-            SvgStyles styles = mergeStyles(collectStyles(e), collectStyles(a));
+            SvgStyles styles = m_context.styleParser().mergeStyles(e, a);
             if (a.tagName() == "g" || a.tagName() == "a" || a.tagName() == "symbol") {
                 m_context.pushGraphicsContext(a);
 
                 KoShapeGroup *group = new KoShapeGroup();
                 group->setZIndex(m_context.nextZIndex());
 
-                parseStyle(0, styles);
-                parseFont(styles);
+                applyStyle(0, styles);
+                m_context.styleParser().parseFont(styles);
 
                 QList<KoShape*> childShapes = parseContainer(a);
 
@@ -1310,7 +926,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
                 applyId(a.attribute("id"), group);
 
                 addToGroup(childShapes, group);
-                parseStyle(group, styles);   // apply style to group after size is set
+                applyStyle(group, styles);   // apply style to group after size is set
 
                 shapes.append(group);
 
@@ -1350,7 +966,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 
     SvgGraphicsContext *gc = m_context.pushGraphicsContext();
 
-    parseStyle(0, e);
+    applyStyle(0, e);
 
     bool hasViewBox = e.hasAttribute("viewBox");
     QRectF viewBox;
@@ -1439,9 +1055,9 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             KoShapeGroup *group = new KoShapeGroup();
             group->setZIndex(m_context.nextZIndex());
 
-            SvgStyles styles = collectStyles(b);
-            parseStyle(0, styles);   // parse style for inheritance
-            parseFont(styles);
+            SvgStyles styles = m_context.styleParser().collectStyles(b);
+            m_context.styleParser().parseFont(styles);
+            applyStyle(0, styles);   // parse style for inheritance
 
             QList<KoShape*> childShapes = parseContainer(b);
 
@@ -1456,7 +1072,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                 viewTransform.scale(group->size().width() / viewBox.width() , group->size().height() / viewBox.height());
                 group->applyAbsoluteTransformation(viewTransform);
             }
-            parseStyle(group, styles);   // apply style to this group after size is set
+            applyStyle(group, styles);   // apply style to this group after size is set
 
             shapes.append(group);
 
@@ -1602,9 +1218,9 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     if (obj) {
         obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
 
-        SvgStyles objStyle = style.isEmpty() ? collectStyles(b) : style;
-        parseStyle(obj, objStyle);
-        parseFont(objStyle);
+        SvgStyles objStyle = style.isEmpty() ? m_context.styleParser().collectStyles(b) : style;
+        m_context.styleParser().parseFont(objStyle);
+        applyStyle(obj, objStyle);
 
         // handle id
         applyId(b.attribute("id"), obj);
@@ -1691,19 +1307,6 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     delete oldFill;
 
     return shape;
-}
-
-QString SvgParser::inheritedAttribute(const QString &attributeName, const KoXmlElement &e)
-{
-    KoXmlNode parent = e.parentNode();
-    while (!parent.isNull()) {
-        KoXmlElement currentElement = parent.toElement();
-        if (currentElement.hasAttribute(attributeName)) {
-            return currentElement.attribute(attributeName);
-        }
-        parent = currentElement.parentNode();
-    }
-    return QString();
 }
 
 void SvgParser::applyId(const QString &id, KoShape *shape)
