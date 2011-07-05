@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlatoWork
 {
@@ -42,7 +42,7 @@ class KPLATOWORK_EXPORT PackageSettingsDialog : public KDialog
 public:
     explicit PackageSettingsDialog( WorkPackage &p, QWidget *parent=0 );
 
-    QUndoCommand *buildCommand();
+    KUndo2Command *buildCommand();
 
 private:
     PackageSettingsPanel *dia;
@@ -54,7 +54,7 @@ class PackageSettingsPanel : public QWidget, public Ui_PackageSettings
 public:
     explicit PackageSettingsPanel( WorkPackage &p, QWidget *parent=0 );
 
-    QUndoCommand *buildCommand();
+    KUndo2Command *buildCommand();
     WorkPackageSettings settings() const;
     void setSettings( const WorkPackageSettings &settings );
 

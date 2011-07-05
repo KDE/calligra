@@ -126,8 +126,9 @@ namespace wvWare
         void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
-        //I can't create Functor for textbox in advance because i don't know lid
-        virtual void parseTextBox( uint lid, bool bodyDrawing);
+
+        //Can't create Functor for textbox in advance.  Index into plcfTxbxTxt unknown.
+        virtual void parseTextBox(uint index, bool stylesxml);
 
     protected:
         // First all variables which don't change their state during
@@ -256,8 +257,8 @@ namespace wvWare
         void emitBookmark( U32 globalCP );
 
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
-        void emitPictureData( SharedPtr<const Word97::CHP> chp );
-        void emitDrawnObject( U32 globalCP );
+
+        void emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp );
 
         void parseHeader( const HeaderData& data, unsigned char mask );
 

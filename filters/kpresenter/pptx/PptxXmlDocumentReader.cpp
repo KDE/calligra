@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -55,6 +55,7 @@ PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
           path(_path), file(_file), relationships(&_relationships)
 {
     firstReadRound = true;
+    numberOfItems = 0;
 }
 
 class PptxXmlDocumentReader::Private
@@ -195,7 +196,26 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
     result = new PptxSlideProperties();
     result->m_slideMasterName = slideMasterPathAndFile;
 
-    QMap<QString, QString> dummyoles;
+    VmlDrawingReader vmlreader(this);
+    QString vmlTarget = m_context->relationships->targetForType(slideLayoutPath, slideLayoutFile,
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+
+    if (!vmlTarget.isEmpty()) {
+        QString errorMessage, vmlPath, vmlFile;
+
+        QString fileName = vmlTarget;
+        fileName.remove(0, m_context->path.length());
+        MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
+
+        VmlDrawingReaderContext vmlContext(*m_context->import,
+            vmlPath, vmlFile, *m_context->relationships);
+
+        const KoFilter::ConversionStatus status =
+            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        if (status != KoFilter::OK) {
+            vmlreader.raiseError(errorMessage);
+        }
+    }
 
     MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
@@ -209,7 +229,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
         *m_context->relationships,
         d->commentAuthors,
         d->slideMasterPageProperties[slideMasterPathAndFile].colorMap,
-        dummyoles
+        vmlreader
     );
 
     PptxXmlSlideReader slideLayoutReader(this);
@@ -316,7 +336,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         *m_context->relationships,
         d->commentAuthors,
         d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap,
-        vmlreader.content(),
+        vmlreader,
         tableStylesFilePath
     );
 
@@ -394,7 +414,27 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
 
     //empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
-    QMap<QString, QString> dummyOles;
+
+    VmlDrawingReader vmlreader(this);
+    QString vmlTarget = m_context->relationships->targetForType(notesMasterPath, notesMasterFile,
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+
+    if (!vmlTarget.isEmpty()) {
+        QString errorMessage, vmlPath, vmlFile;
+
+        QString fileName = vmlTarget;
+        fileName.remove(0, m_context->path.length());
+        MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
+
+        VmlDrawingReaderContext vmlContext(*m_context->import,
+            vmlPath, vmlFile, *m_context->relationships);
+
+        const KoFilter::ConversionStatus status =
+            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        if (status != KoFilter::OK) {
+            vmlreader.raiseError(errorMessage);
+        }
+    }
 
     PptxXmlSlideReaderContext context(
         *m_context->import,
@@ -407,7 +447,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
         *m_context->relationships,
         d->commentAuthors,
         dummyMap,
-        dummyOles,
+        vmlreader,
         QString()
     );
 
@@ -489,7 +529,27 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     //empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
-    QMap<QString, QString> dummyOles;
+
+    VmlDrawingReader vmlreader(this);
+    QString vmlTarget = m_context->relationships->targetForType(slideMasterPath, slideMasterFile,
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+
+    if (!vmlTarget.isEmpty()) {
+        QString errorMessage, vmlPath, vmlFile;
+
+        QString fileName = vmlTarget;
+        fileName.remove(0, m_context->path.length());
+        MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
+
+        VmlDrawingReaderContext vmlContext(*m_context->import,
+            vmlPath, vmlFile, *m_context->relationships);
+
+        const KoFilter::ConversionStatus status =
+            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        if (status != KoFilter::OK) {
+            vmlreader.raiseError(errorMessage);
+        }
+    }
 
     PptxXmlSlideReaderContext context(
         *m_context->import,
@@ -502,7 +562,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         *m_context->relationships,
         d->commentAuthors,
         dummyMap,
-        dummyOles,
+        vmlreader,
         QString()
     );
 
@@ -551,9 +611,15 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            TRY_READ_IF(sldId)
+            if (name() == "sldId") {
+                TRY_READ(sldId)
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -576,9 +642,15 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            TRY_READ_IF(notesMasterId)
+            if (name() == "notesMasterId") {
+                TRY_READ(notesMasterId)
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -604,9 +676,15 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            TRY_READ_IF(sldMasterId)
+            if (name() == "sldMasterId") {
+                TRY_READ(sldMasterId)
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -817,6 +895,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                 mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
             ++index;
         }
+    } else {
+        m_context->numberOfItems = m_context->relationships->targetCountWithWord("slideMasters") +
+            m_context->relationships->targetCountWithWord("notesMasters") +
+            m_context->relationships->targetCountWithWord("slides");
     }
 
     READ_EPILOGUE

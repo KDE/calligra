@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -143,7 +143,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
@@ -154,7 +154,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
     body = rBuf.originalWriter();
 
     body->startElement("text:span", false);
-    if (!m_currentTextStyle.isEmpty()) {
+    if (!m_currentTextStyle.isEmpty() || !m_currentTextStyle.parentName().isEmpty()) {
         const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
         body->addAttribute("text:style-name", currentTextStyleName);
     }
@@ -203,7 +203,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(sz)

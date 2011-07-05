@@ -52,13 +52,13 @@ private:
     bool checkDocumentVersion();
 
     // Formatting routines
-    bool addKWordHeader();
+    bool addWordsHeader();
     bool addPageProperties();
     bool addStyles();
     bool addHeaders();
     bool addFooters();
     bool addBody();
-    QString convertToKWordString(const QByteArray& s);
+    QString convertToWordsString(const QByteArray& s);
 
     // Node routines
     bool parseNodes(const QByteArray& n);
@@ -66,7 +66,7 @@ private:
     bool parseTable(const QByteArray& n);
     bool parseGraphics(const QByteArray& n);
 
-    // finished KWord document
+    // finished Words document
     QString maindoc;
 };
 

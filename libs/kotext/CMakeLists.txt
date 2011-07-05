@@ -8,12 +8,10 @@ add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
-    KoTextShapeData.cpp
     KoText.cpp
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
     KoTextBlockPaintStrategyBase.cpp
-    KoTextDocumentLayout.cpp
     KoTextOdfSaveHelper.cpp
     KoTextPaste.cpp
     KoTextDocument.cpp
@@ -36,14 +34,15 @@ set(kotext_LIB_SRCS
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
+    KoSection.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoTextAnchor.cpp
-    KoTextShapeContainerModel.cpp
     KoTextShapeSavingContext.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
+    KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
     KoReplaceStrategy.cpp
@@ -118,7 +117,7 @@ endif( FREETYPE_FOUND )
 
 
 set_target_properties(kotext PROPERTIES
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -143,18 +142,18 @@ install(
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
-    KoTextDocumentLayout.h
     KoText.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h
     KoTextPaste.h
-    KoTextShapeData.h
     KoVariable.h
     KoVariableManager.h
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h
+    KoTextSoftPageBreak.cpp
+    KoSection.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
@@ -172,6 +171,7 @@ install(
     styles/KoTableFormat.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
+    styles/KoTableBorderStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )

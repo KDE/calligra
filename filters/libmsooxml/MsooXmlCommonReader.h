@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -59,14 +59,10 @@ protected:
 
     //! Used for creating style in w:pPr (style:style/@style:name attr)
     KoGenStyle m_currentParagraphStyle;
-    bool m_currentParagraphStylePredefined; //!< true if m_currentParagraphStyle shouldn't be created in read_pPr
-
-    KoGenStyle m_currentTableStyle;
 
     void setupParagraphStyle();
 
     KoGenStyle m_currentTextStyle;
-    bool m_currentTextStylePredefined; //!< true if m_currentTextStyle shouldn't be created in read_rPr
     KoCharacterStyle* m_currentTextStyleProperties;
 
     KoGenStyle m_currentListStyle;
@@ -78,9 +74,6 @@ protected:
 
     //! Style (from styles.xml) to apply to the current paragraph or similar element, set by read_pStyle()
     QString m_currentStyleName;
-
-    //! Set by rStyle
-    QString m_currentRunStyleName;
 
     bool isDefaultTocStyle(const QString& name) const;
 
@@ -101,7 +94,6 @@ protected:
     bool m_moveToStylesXml;
 
     QSize m_imageSize;
-    QPen m_currentPen;
 
     QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
 

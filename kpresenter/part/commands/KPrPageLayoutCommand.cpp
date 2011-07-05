@@ -21,8 +21,8 @@
 
 #include "pagelayout/KPrPlaceholders.h"
 
-KPrPageLayoutCommand::KPrPageLayoutCommand( KPrPlaceholders * placeholders, KPrPageLayout * layout, QUndoCommand *parent )
-: QUndoCommand( parent )
+KPrPageLayoutCommand::KPrPageLayoutCommand( KPrPlaceholders * placeholders, KPrPageLayout * layout, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_placeholders( placeholders )
 , m_oldLayout( placeholders->layout() )
 , m_newLayout( layout )
@@ -36,12 +36,12 @@ KPrPageLayoutCommand::~KPrPageLayoutCommand()
 
 void KPrPageLayoutCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     m_placeholders->setLayout( m_newLayout );
 }
 
 void KPrPageLayoutCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     m_placeholders->setLayout( m_oldLayout );
 }

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=hpf
+Name[el]=hpf
+Name[nb]=hpf
 Name[pt]=hpf
 Name[pt_BR]=hpf
 Name[sv]=högpassfilter
 Name[uk]=Фільтр високих частот
 Name[x-test]=xxhpfxx
+Name[zh_TW]=hpf

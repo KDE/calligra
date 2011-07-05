@@ -45,7 +45,7 @@ WBSDefinitionDialog::WBSDefinitionDialog(Project &project, WBSDefinition &def, Q
 }
 
 
-QUndoCommand *WBSDefinitionDialog::buildCommand() {
+KUndo2Command *WBSDefinitionDialog::buildCommand() {
     return m_panel->buildCommand();
 }
 

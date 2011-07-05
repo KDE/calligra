@@ -2,6 +2,8 @@
    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+   Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +25,7 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
+#include <klineedit.h>
 #include <QHeaderView>
 #include <QAbstractProxyModel>
 
@@ -49,6 +52,10 @@ public:
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
+    KLineEdit *tagSearchLineEdit, *tagOpLineEdit;
+    KoResource *curResource;
+    QString knsrcFile;
+    QCompleter *tagCompleter;
 };
 
 KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
@@ -66,49 +73,76 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
 
-    QGridLayout* layout = new QGridLayout( this );
-    layout->addWidget( d->view, 0, 0, 1, 5 );
+    d->tagSearchLineEdit = new KLineEdit(this);
+    d->tagSearchLineEdit->setClearButtonShown(true);
+    d->tagSearchLineEdit->setClickMessage("Enter search tag here");
+    d->tagSearchLineEdit->setEnabled( true );
+    d->tagSearchLineEdit->hide();
+
+    connect( d->tagSearchLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagSearchLineEditActivated(QString)));
+    connect( d->tagSearchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
+
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->addWidget( d->tagSearchLineEdit );
+    layout->addWidget( d->view );
+
+    QGridLayout* buttonLayout = new QGridLayout;
 
     QPushButton *button = new QPushButton( this );
-    button->setIcon( SmallIcon( "list-add" ) );
-    button->setToolTip( i18n("Import") );
+    button->setIcon( SmallIcon("document-open") );
+    button->setToolTip( i18n("Import Resource") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
-    layout->addWidget( button, 1, 0 );
+    buttonLayout->addWidget( button, 0, 0 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "list-remove" ) );
-    button->setToolTip( i18n("Delete") );
+    button->setIcon( SmallIcon("trash-empty") );
+    button->setToolTip( i18n("Delete Resource") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
-    layout->addWidget( button, 1, 1 );
+    buttonLayout->addWidget( button, 0, 1 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "bookmarks" ) );
-    button->setToolTip( i18n("Download") );
+    button->setIcon( SmallIcon("download") );
+    button->setToolTip( i18n("Download Resource") );
     button->setEnabled( true );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsDownload );
-    layout->addWidget( button, 1, 3 );
+    buttonLayout->addWidget( button, 0, 3 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "download" ) );
-    button->setToolTip( i18n("Share") );
+    button->setIcon( SmallIcon("go-up") );
+    button->setToolTip( i18n("Share Resource") );
     button->setEnabled( false );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);
-    layout->addWidget( button, 1, 4 );
+    buttonLayout->addWidget( button, 0, 4 );
 
 
     connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
-    layout->setColumnStretch( 0, 1 );
-    layout->setColumnStretch( 1, 1 );
-    layout->setColumnStretch( 2, 2 );
-    layout->setSpacing( 0 );
-    layout->setMargin( 0 );
+    buttonLayout->setColumnStretch( 0, 1 );
+    buttonLayout->setColumnStretch( 1, 1 );
+    buttonLayout->setColumnStretch( 2, 2 );
+    buttonLayout->setSpacing( 0 );
+    buttonLayout->setMargin( 0 );
 
-    updateRemoveButtonState();
+    d->tagOpLineEdit = new KLineEdit( this );
+    d->tagOpLineEdit->setClickMessage("Add / Remove Tag");
+    d->tagOpLineEdit->setEnabled( false );
+    d->tagOpLineEdit->hide();
+
+    connect( d->tagOpLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagOpLineEditActivated(QString)));
+    connect( d->tagOpLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagOpLineEditTextChanged(QString)));
+
+    layout->addWidget( d->tagOpLineEdit );
+    layout->addLayout( buttonLayout );
+
+    d->tagCompleter = new QCompleter(getTagNamesList(""),this);
+    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+
+
+    updateButtonState();
 }
 
 KoResourceItemChooser::~KoResourceItemChooser()
@@ -148,14 +182,22 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 #ifdef GHNS
     else if (button == Button_GhnsDownload) {
 
-        KNS3::DownloadDialog dialog(this);
+        KNS3::DownloadDialog dialog(d->knsrcFile, this);
         dialog.exec();
-/*
+
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
-            qDebug() << "Changed Entry: " << e.name() << e.installedFiles();
-        }
-*/
-    }
+
+             foreach(const QString &file, e.installedFiles()) {
+                 QFileInfo fi(file);
+                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+"/"+fi.fileName() , false );
+              }
+
+       foreach(const QString &file, e.uninstalledFiles()) {
+                 QFileInfo fi(file);
+                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+"/"+fi.fileName());
+              }
+      }
+     }
     else if (button == Button_GhnsUpload) {
 
         QModelIndex index = d->view->currentIndex();
@@ -164,7 +206,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
             KoResource * resource = resourceFromModelIndex(index);
             if( resource ) {
-                KNS3::UploadDialog dialog(this);
+                KNS3::UploadDialog dialog(d->knsrcFile, this);
                 dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
                 dialog.setUploadName(resource->name());
                 dialog.exec();
@@ -172,7 +214,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         }
     }
 #endif
-    updateRemoveButtonState();
+    updateButtonState();
 }
 
 void KoResourceItemChooser::showButtons( bool show )
@@ -191,14 +233,40 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 #endif
 }
 
+void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
+{
+    showSearchBar ? d->tagSearchLineEdit->show() : d->tagSearchLineEdit->hide();
+    showOpBar ? d->tagOpLineEdit->show() : d->tagOpLineEdit->hide();
+}
+
+void KoResourceItemChooser::setRowCount( int rowCount )
+{
+    int resourceCount = d->model->resourceServerAdapter()->resources().count();
+    d->model->setColumnCount( static_cast<qreal>(resourceCount) / rowCount );
+    //Force an update to get the right row height (in theory)
+    QRect geometry = d->view->geometry();
+    d->view->setViewMode(KoResourceItemView::FIXED_ROWS);
+    d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
+    d->view->setGeometry(geometry);
+}
+
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );
+    //Force an update to get the right column width
+    QRect geometry = d->view->geometry();
+    d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
+    d->view->setGeometry(geometry);
 }
 
 void KoResourceItemChooser::setRowHeight( int rowHeight )
 {
     d->view->verticalHeader()->setDefaultSectionSize( rowHeight );
+}
+
+void KoResourceItemChooser::setColumnWidth( int columnWidth )
+{
+    d->view->horizontalHeader()->setDefaultSectionSize( columnWidth );
 }
 
 void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )
@@ -222,6 +290,7 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
         return;
 
     d->view->setCurrentIndex(index);
+    setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
 }
 
 void KoResourceItemChooser::setCurrentItem(int row, int column)
@@ -244,27 +313,37 @@ void KoResourceItemChooser::activated( const QModelIndex & index )
     if( ! index.isValid() )
         return;
 
-    KoResource * resource = resourceFromModelIndex(index);
+    d->curResource = resourceFromModelIndex(index);
 
-    if( resource ) {
-        emit resourceSelected( resource );
+    if( d->curResource ) {
+        emit resourceSelected( d->curResource );
+        setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource ));
     }
-    updateRemoveButtonState();
+
+    updateButtonState();
 }
 
-void KoResourceItemChooser::updateRemoveButtonState()
+void KoResourceItemChooser::updateButtonState()
 {
     QAbstractButton * removeButton = d->buttonGroup->button( Button_Remove );
     if( ! removeButton )
         return;
 
+    QAbstractButton * uploadButton = d->buttonGroup->button(Button_GhnsUpload);
+    if(!uploadButton)
+        return;
+
     KoResource * resource = currentResource();
     if( resource ) {
         removeButton->setEnabled( resource->removable() );
+        uploadButton->setEnabled(resource->removable());
+        d->tagOpLineEdit->setEnabled( resource->removable());
         return;
     }
 
     removeButton->setEnabled( false );
+    uploadButton->setEnabled(false);
+    d->tagOpLineEdit->setEnabled( false );
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
@@ -282,5 +361,131 @@ KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& ind
     return static_cast<KoResource*>( index.internalPointer() );
 }
 
+void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
+{
+    d->knsrcFile = knsrcFileArg;
+}
+
+QSize KoResourceItemChooser::viewSize()
+{
+    return d->view->size();
+}
+
+void KoResourceItemChooser::setTagOpLineEdit(QStringList tagsList)
+{
+    QString tags;
+    if(!tagsList.isEmpty()) {
+        tagsList.sort();
+        tags = tagsList.join(", ");
+        tags.append(", ");
+        d->tagOpLineEdit->setText(tags);
+     }
+    else
+    {
+        d->tagOpLineEdit->clear();
+    }
+
+    d->tagCompleter = new QCompleter(getTagNamesList(tags),this);
+    d->tagOpLineEdit->setCompleter(d->tagCompleter);
+}
+
+
+void KoResourceItemChooser::tagOpLineEditActivated(QString lineEditText)
+{
+    QStringList tagsListNew = lineEditText.split(", ");
+    if(tagsListNew.contains("")) {
+        tagsListNew.removeAll("");
+    }
+
+    QStringList tagsList = d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource);
+
+    foreach(const QString& tag, tagsListNew) {
+        if(!tagsList.contains(tag)) {
+            d->model->resourceServerAdapter()->addTag(d->curResource, tag);
+        }
+     }
+
+     foreach(const QString& tag, tagsList) {
+        if(!tagsListNew.contains(tag)) {
+            d->model->resourceServerAdapter()->delTag(d->curResource, tag);
+        }
+     }
+
+    setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource));
+}
+
+void KoResourceItemChooser::tagOpLineEditTextChanged(QString lineEditText)
+{
+    if(lineEditText.isEmpty()) {
+        QStringList assignedTagsList = d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource);
+        foreach(const QString& tag, assignedTagsList) {
+            d->model->resourceServerAdapter()->delTag(d->curResource, tag);
+        }
+    }
+    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagOpLineEdit->setCompleter(d->tagCompleter);
+}
+
+QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
+{
+    QStringList tagNamesList = d->model->resourceServerAdapter()->getTagNamesList();
+
+    if(lineEditText.contains(", ")) {
+        QStringList tagsList = lineEditText.split(", ");
+        if(tagsList.contains("")) {
+           tagsList.removeAll("");
+         }
+
+        QStringList autoCompletionTagsList;
+        QString joinText;
+
+        if(lineEditText.endsWith(", ")) {
+            joinText=lineEditText;
+        }
+        else {
+            tagsList.removeLast();
+            joinText = tagsList.join(", ");
+            joinText.append(", ");
+        }
+
+        for(int i=0; i< tagNamesList.count(); i++) {
+            if (!tagsList.contains(tagNamesList.at(i))) {
+                autoCompletionTagsList  << joinText + tagNamesList.at(i);
+            }
+        }
+        return autoCompletionTagsList;
+    }
+    return tagNamesList;
+ }
+
+QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
+{
+    return d->model->resourceServerAdapter()->searchTag(lineEditText);
+}
+
+void KoResourceItemChooser::tagSearchLineEditActivated(QString lineEditText)
+{
+    d->model->resourceServerAdapter()->setTagSearch(true);
+    d->model->resourceServerAdapter()->setTaggedResourceFileNames(getTaggedResourceFileNames(lineEditText));
+    d->model->resourceServerAdapter()->updateServer();
+
+    if(!lineEditText.endsWith(", ")) {
+        lineEditText.append(", ");
+    }
+    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+    d->tagSearchLineEdit->setText( lineEditText );
+
+}
+
+void KoResourceItemChooser::tagSearchLineEditTextChanged(QString lineEditText)
+{
+    if(lineEditText.isEmpty()) {
+        d->model->resourceServerAdapter()->setTagSearch(false);
+        d->model->resourceServerAdapter()->updateServer();
+    }
+    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+}
 
 #include <KoResourceItemChooser.moc>

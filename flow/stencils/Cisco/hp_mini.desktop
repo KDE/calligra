@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=HP Mini
+Name[el]=HP Mini
 Name[es]=HP Mini
 Name[et]=HP Mini
+Name[nb]=HP Mini
 Name[nl]=HP Mini
 Name[pt]=HP Mini
 Name[pt_BR]=HP Mini
@@ -9,3 +11,4 @@ Name[sv]=HP-minidator
 Name[uk]=HP Mini
 Name[x-test]=xxHP Minixx
 Name[zh_CN]=HP 迷你
+Name[zh_TW]=HP Mini

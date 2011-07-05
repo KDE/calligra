@@ -36,34 +36,35 @@ typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFa
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
 
 BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+    : KParts::Plugin(parent)
 {
-  setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
+    setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
 
-  // TODO try to use action list, or to get access to the state menu
-  
-  KActionMenu* actionMenu = new KActionMenu(i18n("States"), this);
-  actionCollection()->addAction("States", actionMenu);
-  
-  foreach(const QString& catId, StatesRegistry::instance()->categorieIds()) {
-    foreach(const QString& stateId, StatesRegistry::instance()->stateIds(catId)) {
-      const State* state = StatesRegistry::instance()->state(catId, stateId);
-      KAction* action = new KAction(state->name(), this);
-      actionCollection()->addAction(QString("State_%1_%2").arg(catId).arg(stateId), action);
-      actionMenu->addAction(action);
-      QuickStateHandler* handler = new QuickStateHandler( catId, stateId, this );
-      connect(action, SIGNAL(triggered()), handler, SLOT(activate()));
-      QPixmap image( 32, 32);
-      QPainter p(&image);
-      state->renderer()->render(&p, QRectF(0,0, 32,32));
-      action->setIcon(image);
+    // TODO try to use action list, or to get access to the state menu
+
+    KActionMenu* actionMenu = new KActionMenu(i18n("States"), this);
+    actionCollection()->addAction("States", actionMenu);
+
+    foreach(const QString & catId, StatesRegistry::instance()->categorieIds()) {
+        foreach(const QString & stateId, StatesRegistry::instance()->stateIds(catId)) {
+            const State* state = StatesRegistry::instance()->state(catId, stateId);
+            KAction* action = new KAction(state->name(), this);
+            actionCollection()->addAction(QString("State_%1_%2").arg(catId).arg(stateId), action);
+            actionMenu->addAction(action);
+            QuickStateHandler* handler = new QuickStateHandler(catId, stateId, this);
+            connect(action, SIGNAL(triggered()), handler, SLOT(activate()));
+            QPixmap image(32, 32);
+            QPainter p(&image);
+            state->renderer()->render(&p, QRectF(0, 0, 32, 32));
+            action->setIcon(image);
+        }
+        actionMenu->addSeparator();
     }
-    actionMenu->addSeparator();
-  }
 }
 
-BraindumpQuickStatesPlugin::~BraindumpQuickStatesPlugin() {
-  
+BraindumpQuickStatesPlugin::~BraindumpQuickStatesPlugin()
+{
+
 }
 
 #include "BraindumpQuickStatesPlugin.moc"

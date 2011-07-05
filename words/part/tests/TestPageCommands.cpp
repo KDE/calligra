@@ -1,5 +1,5 @@
 /*
- * This file is part of KOffice tests
+ * This file is part of Calligra tests
  *
  * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  *
@@ -170,7 +170,7 @@ void TestPageCommands::testInsertPageCommand2() // auto remove of frames
     KWDocument document;
     KWFrameSet *fs = new KWFrameSet();
     document.addFrameSet(fs);
-    KWTextFrameSet *tfs = new KWTextFrameSet(&document, KWord::MainTextFrameSet);
+    KWTextFrameSet *tfs = new KWTextFrameSet(&document, Words::MainTextFrameSet);
     document.addFrameSet(tfs);
 
     KWPageInsertCommand command1(&document, 0);
@@ -321,7 +321,7 @@ void TestPageCommands::testRemovePageCommand2() // auto remove of frames
     KWDocument document;
     KWFrameSet *fs = new KWFrameSet();
     document.addFrameSet(fs);
-    KWTextFrameSet *tfs = new KWTextFrameSet(&document, KWord::MainTextFrameSet);
+    KWTextFrameSet *tfs = new KWTextFrameSet(&document, Words::MainTextFrameSet);
     document.addFrameSet(tfs);
 
     KWPageInsertCommand insertCommand(&document, 0);
@@ -402,13 +402,13 @@ void TestPageCommands::testRemovePageCommand4() // auto remove of frames
     MockShape *shape1 = new MockShape();
     new KWFrame(shape1, fs);
 
-    KWTextFrameSet *tfs = new KWTextFrameSet(&document, KWord::MainTextFrameSet);
+    KWTextFrameSet *tfs = new KWTextFrameSet(&document, Words::MainTextFrameSet);
     document.addFrameSet(tfs);
     MockShape *shape2 = new MockShape();
     shape2->setUserData(new KoTextShapeData());
     new KWTextFrame(shape2, tfs);
 
-    KWTextFrameSet *header = new KWTextFrameSet(&document, KWord::EvenPagesHeaderTextFrameSet);
+    KWTextFrameSet *header = new KWTextFrameSet(&document, Words::EvenPagesHeaderTextFrameSet);
     document.addFrameSet(header);
     MockShape *shape3 = new MockShape();
     shape3->setUserData(new KoTextShapeData());

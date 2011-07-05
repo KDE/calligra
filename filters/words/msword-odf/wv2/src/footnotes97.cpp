@@ -37,6 +37,14 @@ Footnotes97::Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib )
           << "   fcPlcfendTxt=" << fib.fcPlcfendTxt << " lcbPlcfendTxt=" << fib.lcbPlcfendTxt << endl;
 #endif
     tableStream->push();
+
+#ifdef WV2_DEBUG_FOOTNOTES
+    wvlog << "ccpFtn:" << fib.ccpFtn;
+    wvlog << "ccpEdn:" << fib.ccpEdn;
+#endif
+
+    //TODO: validation required!
+
     // Footnotes
     init( fib.fcPlcffndRef, fib.lcbPlcffndRef, fib.fcPlcffndTxt, fib.lcbPlcffndTxt,
           tableStream, &m_footnoteRef, &m_footnoteRefIt, m_footnoteTxt, m_footnoteTxtIt );

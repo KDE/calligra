@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Gateway
+Name[cs]=Brána
+Name[el]=Πύλη
+Name[es]=Puerta de enlace
 Name[et]=Lüüs
+Name[nb]=Portner
 Name[nl]=Gateway
 Name[pt]='Gateway'
 Name[pt_BR]=Gateway
 Name[sv]=Port
+Name[ug]=تور ئۆتكىلى
 Name[uk]=Шлюз
 Name[x-test]=xxGatewayxx
 Name[zh_CN]=网关

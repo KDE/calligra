@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Square Wave
+Name[de]=Rechteckwelle
+Name[nb]=Firkantbølge
 Name[nl]=Blokgolf
 Name[pt]=Onda Quadrada
 Name[pt_BR]=Onda quadrada
@@ -7,3 +9,4 @@ Name[sv]=Fyrkantsvåg
 Name[uk]=Квадратний сигнал
 Name[x-test]=xxSquare Wavexx
 Name[zh_CN]=方波
+Name[zh_TW]=方波

@@ -50,9 +50,9 @@ namespace Word97 {
     const U32 cvAuto = 0xff000000;
 
     /**
-     * Helper function to convert ico color codes to 24bit rgb values
+     * Helper function to convert ico color codes to 24bit COLORREF
      */
-    U32 icoToRGB(U16 ico);
+    U32 icoToCOLORREF(U16 ico);
 
 /**
  * Font Family Name (FFN), this code is located in the template-Word97.h
@@ -3179,7 +3179,6 @@ struct CHP : public Shared {
      * specifies if the text is scaled to fit the line
      */
     U16 fTNYCompress:1;
-
 }; // CHP
 
 bool operator==(const CHP &lhs, const CHP &rhs);
@@ -3494,7 +3493,9 @@ bool operator!=(const DOGRID &lhs, const DOGRID &rhs);
 
 
 /**
- * Document Properties (DOP)
+ * Document Properties (DOP) - The Dop97 structure contains document and
+ * compatibility settings.  These settings influence the appearance and
+ * behavior of the current document and store the document-level state.
  */
 struct DOP {
     /**
@@ -3525,6 +3526,10 @@ struct DOP {
     void clear();
 
     // Data
+
+    // --------------------
+    // DopBase - BEGIN
+    // --------------------
     /**
      * 1 when facing pages should be printed.
      * Default 0.
@@ -4018,6 +4023,13 @@ struct DOP {
      */
     U16 iGutterPos:1;
 
+    // --------------------
+    //  DopBase - END
+    // --------------------
+
+    // --------------------
+    //  Copts80 - BEGIN
+    // --------------------
     /**
      * (see above)
      */
@@ -4117,6 +4129,10 @@ struct DOP {
      * (reserved)
      */
     U32 unused84_22:10;
+
+    // --------------------
+    //  Copts80 - END
+    // --------------------
 
     /**
      * Autoformat Document Type: 0 for normal. 1 for letter, and 2 for email.
@@ -4460,7 +4476,12 @@ struct FIB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Validate FIB.
+     * Validate FIB.  Don't take warnings too seriously.  It seems that the
+     * information depends on the file content saved by a specific MS Office
+     * version.  Don't expect to recognize the MS Office version which saved
+     * the file based on the value of the nFib or the nFibNew attribute.  The
+     * nFib seems to be used for backward compatibility.  The nFibNew seems to
+     * be used by MS Office > 2k, sometimes.
      */
     bool valid() const;
 
@@ -4470,6 +4491,11 @@ struct FIB {
     void clear();
 
     // Data
+
+    // --------------------
+    // FibBase - BEGIN
+    // --------------------
+
     /**
      * (fibh) FIBH Beginning of the FIB header magic number
      */
@@ -4627,6 +4653,10 @@ struct FIB {
      * file offset of last character of text in document text stream + 1
      */
     U32 fcMac;
+
+    // --------------------
+    // FibBase - END
+    // --------------------
 
     /**
      * Count of fields in the array of "shorts"
@@ -7036,6 +7066,22 @@ struct PAP : public Shared {
     U8 fWidowControl;
 
     /**
+     * A Bool8 value that specifies whether the space displayed before this
+     * paragraph uses auto spacing.  A value of 1 specifies that the
+     * sprmPDyaBefore value MUST be ignored when the application supports auto
+     * spacing.  By default, auto spacing is disabled for paragraphs.
+     */
+    U8 dyaBeforeAuto;
+
+    /**
+     * A Bool8 value that specifies whether the space displayed after this
+     * paragraph uses auto spacing.  A value of 1 specifies that sprmPDyaAfter
+     * MUST be ignored if the application supports auto spacing.  By default,
+     * auto spacing is disabled for paragraphs.
+     */
+    U8 dyaAfterAuto;
+
+    /**
      * indent from right margin (signed).
      */
     S32 dxaRight;
@@ -7865,16 +7911,17 @@ struct PICF : public Shared {
 
     // Data
     /**
-     * number of bytes in the PIC structure plus size of following picture
-     * data which may be a Window's metafile, a bitmap, or the filename of a TIFF
-     * file. In the case of a Macintosh PICT picture, this includes the size of
-     * the PIC, the standard "x" metafile, and the Macintosh PICT data. See Appendix
-     * B for more information.
+     * Number of bytes in the PICF structure plus size of following picture
+     * data which may be a Window's metafile, a bitmap, or the filename of a
+     * TIFF file.  In the case of a Macintosh PICT picture, this includes the
+     * size of the PIC, the standard "x" metafile, and the Macintosh PICT
+     * data. See Appendix B for more information.
      */
     U32 lcb;
 
     /**
-     * number of bytes in the PIC (to allow for future expansion).
+     * An unsigned integer that specifies the size, in bytes, of this PICF
+     * structure. This value MUST be 0x44.
      */
     U16 cbHeader;
 
@@ -7893,27 +7940,30 @@ struct PICF : public Shared {
      * Rect for window origin and extents when metafile is stored -- ignored
      * if 0 (8 bytes).
      */
-    /*
+
+    /**
      * innerHeader (14 bytes): A PICF_Shape structure that specifies additional
      * header information.  According to [MS-DOC] — v20101219
      */
     U8 bm_rcWinMF[14];
 
-    /*
-     * BEGIN picmid (38 bytes): A PICMID structure that specifies the size and
-     * border information of the picture.  According to [MS-DOC] — v20101219
-     */
     /**
-     * horizontal measurement in twips of the rectangle the picture should
-     * be imaged within. when scaling bitmaps, dxaGoal and dyaGoal may be ignored
-     * if the operation would cause the bitmap to shrink or grow by a non -power-of-two
-     * factor
+     * [ BEGIN ] picmid (38 bytes): A PICMID structure that specifies the size
+     * and border information of the picture.  According to [MS-DOC] —
+     * v20101219
+     */
+
+    /**
+     * A signed integer that specifies the initial width of the picture, in
+     * twips, before cropping or scaling occurs. This value MUST be greater
+     * than zero.
      */
     S16 dxaGoal;
 
     /**
-     * vertical measurement in twips of the rectangle the picture should be
-     * imaged within.
+     * A signed integer that specifies the initial height of the picture, in
+     * twips, before cropping or scaling occurs. This value MUST be greater
+     * than zero.
      */
     S16 dyaGoal;
 
@@ -7928,25 +7978,22 @@ struct PICF : public Shared {
     U16 my;
 
     /**
-     * the amount the picture has been cropped on the left in twips. for all
-     * of the Crop values, a positive measurement means the specified border has
-     * been moved inward from its original setting and a negative measurement
-     * means the border has been moved outward from its original setting.
+     * dxaReserved1 - This value MUST be zero and MUST be ignored.
      */
     S16 dxaCropLeft;
 
     /**
-     * the amount the picture has been cropped on the top in twips.
+     * dyaReserved1 - This value MUST be zero and MUST be ignored.
      */
     S16 dyaCropTop;
 
     /**
-     * the amount the picture has been cropped on the right in twips.
+     * dxaReserved2 - This value MUST be zero and MUST be ignored.
      */
     S16 dxaCropRight;
 
     /**
-     * the amount the picture has been cropped on the bottom in twips.
+     * dyaReserved2 - This value MUST be zero and MUST be ignored.
      */
     S16 dyaCropBottom;
 
@@ -8009,17 +8056,18 @@ struct PICF : public Shared {
     BRC brcRight;
 
     /**
-     * horizontal offset of hand annotation origin
+     * This value MUST be zero and MUST be ignored.
      */
     S16 dxaOrigin;
 
     /**
-     * vertical offset of hand annotation origin
+     * This value MUST be zero and MUST be ignored.
      */
     S16 dyaOrigin;
 
-    // END picmid
-
+    /**
+     * [ END ] picmid
+     */
     /**
      * This value MUST be 0 and MUST be ignored.
      */
@@ -8701,6 +8749,18 @@ struct SEP : public Shared {
      */
     OLST olstAnm;
 
+    /**
+     * Specifies the numbering format used for footnotes.  By default,
+     * footnotes use the msonfcArabic numbering format.
+     */
+    U16 nfcFtnRef;
+
+    /**
+     * Specifies the numbering format used for endnotes.  By default, endnotes
+     * use the msonfcLCRoman numbering format.
+     */
+    U16 nfcEdnRef;
+
 }; // SEP
 
 bool operator==(const SEP &lhs, const SEP &rhs);
@@ -8767,137 +8827,6 @@ bool operator!=(const SEPX &lhs, const SEPX &rhs);
 
 
 /**
- * STyle Definition (STD)
- */
-/* This structure has been commented out because we can't handle it correctly
- * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
- * include that aux. file here, please change the template file.
- */
-//struct STD {
-//    /**
-//     * Creates an empty STD structure and sets the defaults
-//     */
-//    STD();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    STD(OLEStreamReader *stream, bool preservePos=false);
-//    /**
-//     * Attention: This struct allocates memory on the heap
-//     */
-//    STD(const STD &rhs);
-//    ~STD();
-
-//    STD &operator=(const STD &rhs);
-
-//    /**
-//     * This method reads the STD structure from the stream.
-//     * If  preservePos is true we push/pop the position of
-//     * the stream to save the state. If it's false the state
-//     * of stream will be changed!
-//     */
-//    bool read(OLEStreamReader *stream, bool preservePos=false);
-
-//    /**
-//     * Same as reading :)
-//     */
-//    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
-
-//    /**
-//     * Set all the fields to the inital value (default is 0)
-//     */
-//    void clear();
-
-//    // Data
-//    /**
-//     * invariant style identifier
-//     */
-//    U16 sti:12;
-
-//    /**
-//     * spare field for any temporary use, always reset back to zero!
-//     */
-//    U16 fScratch:1;
-
-//    /**
-//     * PHEs of all text with this style are wrong
-//     */
-//    U16 fInvalHeight:1;
-
-//    /**
-//     * UPEs have been generated
-//     */
-//    U16 fHasUpe:1;
-
-//    /**
-//     * std has been mass-copied; if unused at save time, style should be deleted
-//     */
-//    U16 fMassCopy:1;
-
-//    /**
-//     * style type code
-//     */
-//    U16 sgc:4;
-
-//    /**
-//     * base style
-//     */
-//    U16 istdBase:12;
-
-//    /**
-//     * # of UPXs (and UPEs)
-//     */
-//    U16 cupx:4;
-
-//    /**
-//     * next style
-//     */
-//    U16 istdNext:12;
-
-//    /**
-//     * offset to end of upx's, start of upe's
-//     */
-//    U16 bchUpe;
-
-//    /**
-//     * auto redefine style when appropriate
-//     */
-//    U16 fAutoRedef:1;
-
-//    /**
-//     * hidden from UI?
-//     */
-//    U16 fHidden:1;
-
-//    /**
-//     * unused bits
-//     */
-//    U16 unused8_3:14;
-
-//    /**
-//     * sub-names are separated by chDelimStyle
-//     */
-//    XCHAR *xstzName;   //    XCHAR xstzName[];
-
-//    U8 *grupx;   //    U8 grupx[];
-
-//    /**
-//     * the UPEs are not stored on the file; they are a cache of the based-on
-//     * chain
-//     */
-//    U8 *grupe;   //    U8 grupe[];
-
-//private:
-//    void clearInternal();
-
-//}; // STD
-
-//bool operator==(const STD &lhs, const STD &rhs);
-//bool operator!=(const STD &lhs, const STD &rhs);
-
-
-/**
  * STyleSHeet Information (STSHI)
  */
 struct STSHI {
@@ -8927,6 +8856,11 @@ struct STSHI {
      * Set all the fields to the inital value (default is 0)
      */
     void clear();
+
+    /**
+     * Dumps all fields of this structure (for debugging)
+     */
+    void dump() const;
 
     // Size of the structure
     static const unsigned int sizeOf;

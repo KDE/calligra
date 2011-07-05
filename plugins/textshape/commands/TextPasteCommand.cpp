@@ -41,25 +41,25 @@
                     // we can't include a private header from kotext outside of kotext.
 #endif
 
-TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent)
-    : QUndoCommand (parent),
+TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent)
+    : KUndo2Command (parent),
     m_tool(tool),
     m_first(true),
     m_mode(mode)
 {
-    setText(i18n("Paste"));
+    setText(i18nc("(qtundo-format)", "Paste"));
 }
 
 void TextPasteCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void TextPasteCommand::redo()
 {
     KoTextEditor *editor = KoTextDocument(m_tool->m_textShapeData->document()).textEditor();
     if (!m_first) {
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         //kDebug() << "begin paste command";
         editor->cursor()->beginEditBlock();
@@ -81,21 +81,18 @@ void TextPasteCommand::redo()
                 odfType = KoOdf::OpenOfficeClipboard;
             }
             bool weOwnRdfModel = true;
-            Soprano::Model *rdfModel = 0;
+            const Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
             rdfModel = Soprano::createModel();
             if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                if (rdfModel) {
-                    delete rdfModel;
-                }
+                delete rdfModel;
                 rdfModel = rdf->model();
                 weOwnRdfModel = false;
             }
 #endif
 
             //kDebug() << "pasting odf text";
-            KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(),
-                              m_tool->canvas(), rdfModel);
+            KoTextPaste paste(*editor->cursor(), m_tool->canvas(), rdfModel);
             paste.paste(odfType, data);
             //kDebug() << "done with pasting odf";
 

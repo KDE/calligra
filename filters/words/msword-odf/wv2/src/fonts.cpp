@@ -28,6 +28,10 @@ using namespace wvWare;
 FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib )
 {
     m_fallbackFont = new Word97::FFN();
+    if (!m_fallbackFont) {
+        wvlog << "Error: FFN allocation!";
+        return;
+    }
     m_fallbackFont->xszFfn = "Helvetica";
 
     reader->push();
@@ -37,6 +41,13 @@ FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib 
         int bytesLeft = reader->readU16() - 2;
         while ( bytesLeft > 0 ) {
             Word97::FFN* ffn = new Word97::FFN( reader, Word97::FFN::Word95, false );
+
+            if (!ffn) {
+                wvlog << "Error: FFN allocation!";
+                reader->pop();
+                return;
+            }
+
             m_fonts.push_back( ffn );
             bytesLeft -= ffn->cbFfnM1 + 1;
         }
@@ -44,16 +55,26 @@ FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib 
     else { // Word97 or newer
         const U16 count = reader->readU16();
         const U16 extraData = reader->readU16();
-        if ( extraData != 0 )
+        if ( extraData != 0 ) {
             wvlog << "Huh?? Found STTBF extra data within the STTBF of FFNs" << endl;
+        }
+        for ( int i = 0; i < count; ++i ) {
+            Word97::FFN* ffn = new Word97::FFN( reader, Word97::FFN::Word97, false );
 
-        for ( int i = 0; i < count; ++i )
-            m_fonts.push_back( new Word97::FFN( reader, Word97::FFN::Word97, false ) );
+            if (!ffn) {
+                wvlog << "Error: FFN allocation!";
+                reader->pop();
+                return;
+            }
+
+            m_fonts.push_back( ffn );
+        }
     }
 
-    if ( reader->tell() - fib.fcSttbfffn != fib.lcbSttbfffn )
+    if ( reader->tell() - fib.fcSttbfffn != fib.lcbSttbfffn ) {
         wvlog << "Warning: Didn't read lcbSttbfffn bytes: read=" << reader->tell() - fib.fcSttbfffn
               << " lcbSttbfffn=" << fib.lcbSttbfffn << endl;
+    }
     reader->pop();
 }
 
@@ -65,8 +86,9 @@ FontCollection::~FontCollection()
 
 const Word97::FFN& FontCollection::font( S16 ftc ) const
 {
-    if ( ftc >= 0 && static_cast<U16>( ftc ) < m_fonts.size() )
+    if ( ftc >= 0 && static_cast<U16>( ftc ) < m_fonts.size() ) {
         return *m_fonts[ ftc ];
+    }
     return *m_fallbackFont;
 }
 
@@ -76,7 +98,8 @@ void FontCollection::dump() const
     std::vector<Word97::FFN*>::const_iterator end = m_fonts.end();
     for ( ; it != end; ++it ) {
         wvlog << "Font: xszFfn='" << ( *it )->xszFfn.ascii() << "'" << endl;
-        if ( !( *it )->xszFfnAlt.isEmpty() )
+        if ( !( *it )->xszFfnAlt.isEmpty() ) {
             wvlog << "      xszFfnAlt='" << ( *it )->xszFfnAlt.ascii() << "'" << endl;
+        }
     }
 }

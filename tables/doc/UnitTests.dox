@@ -10,8 +10,8 @@
 <ul>
 <li><a href="http://lists.kde.org/?l=kde-cvs&m=109511244721480&w=2">
 http://lists.kde.org/?l=kde-cvs&amp;m=109511244721480&amp;w=2</a></li>
-<li><a href="http://lists.kde.org/?l=koffice-devel&m=109518196922944&w=2">
-http://lists.kde.org/?l=koffice-devel&amp;m=109518196922944&amp;w=2</a></li>
+<li><a href="http://lists.kde.org/?l=calligra-devel&m=109518196922944&w=2">
+http://lists.kde.org/?l=calligra-devel&amp;m=109518196922944&amp;w=2</a></li>
 </ul>
 
 <p>It is well known that writing clean and easily understandable module will lead
@@ -27,14 +27,14 @@ not accessible via menu, because it is intended to be used only by the developer
 Ideally, there should be tests for all modules contained in KSpread. It is
 the responsibility of the developer to create the corresponding <tt>tester</tt>
 for the code that he or she is working on. All tests should be kept in
-<tt>koffice/kspread/tests/</tt>.</p>
+<tt>calligra/kspread/tests/</tt>.</p>
 
 <p>Making a new tester is not difficult. The easiest way is to copy an already
 existing tester and modify it. Basically, it must be a subclass of class Tester
-(see <tt>koffice/kspread/tests/tester.h</tt>). Just reimplement the virtual
+(see <tt>calligra/kspread/tests/tester.h</tt>). Just reimplement the virtual
 function <tt>run()</tt> and it is ready. In order to make it possible to run
 the new tester, add an instance of the class in TestRunner
-(for details, see <tt>koffice/kspread/tests/testrunner.cc</tt>).</p>
+(for details, see <tt>calligra/kspread/tests/testrunner.cc</tt>).</p>
 
 <p>A tester must be self-contained, it should not use any test data from
 current document. If necessary, it must create (or hard code) the data by

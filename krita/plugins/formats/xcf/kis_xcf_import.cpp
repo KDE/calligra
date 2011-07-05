@@ -63,7 +63,7 @@ extern "C" {
 }
 
 K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
-K_EXPORT_PLUGIN(XCFImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(XCFImportFactory("calligrafilters"))
 
 KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -235,6 +235,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         // Set some properties
         layer->setCompositeOp(layerModeG2K(xcflayer.mode));
         layer->setVisible(xcflayer.isVisible);
+        layer->disableAlphaChannel(xcflayer.mode != GIMP_NORMAL_MODE);
 
         image->addNode(layer.data(), image->rootLayer().data());
 

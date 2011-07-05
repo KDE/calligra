@@ -1,5 +1,5 @@
 
-KOFFICE RELEASE 1.3 BETA 1 21 avril 2003
+CALLIGRA RELEASE 1.3 BETA 1 21 avril 2003
 18 april 2003
 - bugs
 	o fix the dcop interface.
@@ -22,12 +22,12 @@ KOFFICE RELEASE 1.3 BETA 1 21 avril 2003
 22 February 2003
 - bugs
 	o don't close koStore if not open;
-	o the kword document is no more added at the end of latex file;
+	o the words document is no more added at the end of latex file;
 	o text color work again.
 
 - features
 	o Define default font size;
-	o Change font only in kword mode;
+	o Change font only in words mode;
 	o background color.
 
 3 November 2002
@@ -45,7 +45,7 @@ KOFFICE RELEASE 1.3 BETA 1 21 avril 2003
 - internal
 	o Change the way to go through options to parser.
 
-KOFFICE RELEASE 1.2 11 September 2002
+CALLIGRA RELEASE 1.2 11 September 2002
 
 19 may 2002
 - features

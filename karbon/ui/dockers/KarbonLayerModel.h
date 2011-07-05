@@ -70,7 +70,7 @@ private:
     /// Returns the parent model index from the given child shape
     QModelIndex parentIndexFromShape(const KoShape * child) const;
 
-    /// Recursively locks childs of the specified shape container
+    /// Recursively locks children of the specified shape container
     void lockRecursively(KoShapeContainer *container, bool lock);
 
     KarbonDocument *m_document; ///< the underlying data structure

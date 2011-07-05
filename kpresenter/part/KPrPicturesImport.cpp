@@ -33,7 +33,7 @@
 #include <KDebug>
 #include <kio/job.h>
 #include <KFileDialog>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 KPrPicturesImport::KPrPicturesImport()
 {
@@ -54,7 +54,7 @@ void KPrPicturesImport::import(KPrView *view)
             m_masterPage = activePage->masterPage();
 
             m_doc = view->kprDocument();
-            m_cmd = new QUndoCommand(i18n("Insert Pictures"));
+            m_cmd = new KUndo2Command(i18nc("(qtundo-format)", "Insert Pictures"));
             import();
         }
     }
@@ -118,6 +118,7 @@ void KPrPicturesImport::pictureImported(KJob *job)
         }
         else {
             kWarning(33001) << "imageData not valid";
+            delete shape;
         }
     }
     else {

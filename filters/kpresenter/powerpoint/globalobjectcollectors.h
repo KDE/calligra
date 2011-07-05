@@ -151,6 +151,7 @@ public:
         if (!fb || fb->opid.fComplex || fb->fillBlip == 0) return QString();
         KoGenStyle fillImage(KoGenStyle::FillImageStyle);
         fillImage.addAttribute("xlink:href", pto.getPicturePath(fb->fillBlip));
+        fillImage.addAttribute("xlink:type", "simple");
         return styles.insert(fillImage,
                              QString("fillImage%1").arg(fb->fillBlip),
                              KoGenStyles::DontAddNumberToName);

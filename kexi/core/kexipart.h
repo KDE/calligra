@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,7 +41,7 @@ namespace KexiPart
 class Info;
 class Item;
 class GUIClient;
-class StaticInfo;
+class StaticPartInfo;
 
 /*! Official (registered) type IDs for objects like table, query, form... */
 enum ObjectType {
@@ -66,18 +66,11 @@ enum ObjectType {
   Notes for plugins implementors:  This class supports InternalPropertyMap interface,
   so supported internal properties affecting its behaviour are:
   - newObjectsAreDirty: True if newly created, unsaved objects are dirty. False by default.
-  - instanceName: base i18n'd name of objects created by a plugin, e.g. "table",
-    see instanceName().
-  - instanceCaption: i18n'd instance name usable for displaying in gui as object's caption,
-    e.g. "Table", see instanceCaption()
-  - instanceToolTip: i18n'd tool tip for "Create" action for a given part, e.g. "Create new table"
-  - instanceWhatsThis: i18n'd "What's This" text for "Create" action for a given part,
-    e.g. "Creates new table."
-  - textViewModeCaption: custum action text replacing standard "Text View" text.
+  - textViewModeCaption: custum i18n'd action text replacing standard "Text View" text.
     Used in for query's "SQL View".
   In general: a whole set of i18n'd action names, initialised on KexiPart::Part subclass ctor.
-  The names are useful because the same action can have other name for each part
-  E.g. "New table" vs "New query" can have different forms for some languages.
+  The names are useful because the same action can have other name for each part,
+  e.g. "New table" vs "New query" can have different forms for some languages.
   So this is a flexible way for customizing translatable strings.
  */
 class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalPropertyMap
@@ -85,8 +78,6 @@ class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalProper
     Q_OBJECT
 
 public:
-    Part(QObject *parent, const QVariantList &);
-
     virtual ~Part();
 
 //! @todo make it protected, outside world should use KexiProject
@@ -103,23 +94,6 @@ public:
         Q_UNUSED(sender);
         return false;
     }
-
-    /*! \return supported modes for dialogs created by this part, i.e. a combination
-     of Kexi::ViewMode enum elements.
-     Set this member in your KexiPart subclass' ctor, if you need to override the default value
-     that equals Kexi::DataViewMode | Kexi::DesignViewMode,
-     or Kexi::DesignViewMode in case of Kexi::PartStaticPart object.
-     This information is used to set supported view modes for every
-     KexiView-derived object created by this KexiPart. */
-    Kexi::ViewModes supportedViewModes() const;
-
-    /*! \return supported modes for dialogs created by this part in "user mode", i.e. a combination
-     of Kexi::ViewMode enum elements.
-     Set this member in your KexiPart subclass' ctor, if you need to override the default value
-     that equals Kexi::DataViewMode. or 0 in case of Kexi::PartStaticPart object.
-     This information is used to set supported view modes for every
-     KexiView-derived object created by this KexiPart. */
-    Kexi::ViewModes supportedUserViewModes() const;
 
 //! @todo make it protected, outside world should use KexiProject
     /*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode.
@@ -172,16 +146,17 @@ public:
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode, 
                                  QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
-    /*! i18n'd instance name usable for displaying in gui as object's name.
-     The name is valid identifier - contains latin1 lowercase characters only.
-     @todo move this to Info class when the name could be moved as localized property
-     to service's .desktop file. */
+    /*! @return i18n'd instance name usable for displaying in gui as object's name,
+     e.g. "table".
+     The name is valid identifier - contains latin-1 lowercase characters only. */
     QString instanceName() const;
 
-    /*! i18n'd instance name usable for displaying in gui as object's caption.
-     @todo move this to Info class when the name could be moved as localized property
-     to service's .desktop file. */
-    QString instanceCaption() const;
+    /*! @return i18n'd tooltip that can also act as descriptive name of the action.
+     Example: "Create new table". */
+    QString toolTip() const;
+
+    /*! @return i18n'd "what's this" string. Example: "Creates new table." */
+    QString whatsThis() const;
 
     Info *info() const;
 
@@ -254,12 +229,28 @@ public:
 signals:
     void newObjectRequest(KexiPart::Info *info);
 
-protected slots:
-    void slotCreate();
-
 protected:
+    /*!
+     Creates new Plugin
+     @param parent parent of this plugin
+     @param instanceName i18n'd  instance name written using only lowercase alphanumeric
+            characters (a..z, 0..9).
+            Use '_' character instead of spaces. First character should be a..z character.
+            If you cannot use latin characters in your language, use english word.
+            Example: "table".
+     @param toolTip i18n'd tooltip that can also act as descriptive name of the action.
+                    Example: "Create new table".
+     @param whatsThis i18n'd "what's this" string. Example: "Creates new table."
+     @param list extra arguments passed to the plugin
+    */
+    Part(QObject *parent, 
+        const QString& instanceName,
+        const QString& toolTip,
+        const QString& whatsThis,
+        const QVariantList& list);
+
     //! Used by StaticPart
-    Part(QObject* parent, StaticInfo *info);
+    Part(QObject* parent, StaticPartInfo *info);
 
 #if 0
     /*! For reimplementation. Create here all part actions (KAction or similar).
@@ -328,30 +319,13 @@ protected:
 
     void setInfo(Info *info);
 
-//    int registeredPartID() const;
-
-    /*! Sets supported modes for windows created by this part in "user mode".
-     The default is Kexi::DataViewMode. It is altered in classes like KexiSimplePrintingPart.
-     @see supportedUserViewModes() */
-    void setSupportedUserViewModes(Kexi::ViewModes modes);
-
-    /*! Sets supported view modes for this part. */
-    void setSupportedViewModes(Kexi::ViewModes modes);
-
-    /*! Creates actions for view mode @a mode. The action are appended in the local toolbar(s).
-     For implementation.
-     @since 2.0 */
-//  virtual QList<KAction*> createViewActions(Kexi::ViewMode mode) { return QList<KAction*>(); };
-
-    /*! @return action for name @a name, shared between views.
-     @since 2.0 */
-//  KAction* sharedViewAction(const char* name) const;
-
 private:
     //! Calls loadSchemaData() (virtual), updates ownership of schema data for @a window
     //! and assigns the created data to @a window.
     void loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
                               Kexi::ViewMode viewMode);
+
+    Q_DISABLE_COPY(Part)
 
     class Private;
     Private * const d;

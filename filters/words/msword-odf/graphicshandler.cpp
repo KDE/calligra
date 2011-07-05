@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2003 Werner Trobin <trobin@kde.org>
    Copyright (C) 2003 David Faure <faure@kde.org>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
@@ -25,11 +25,12 @@
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 #include "pictures.h"
+#include "msodraw.h"
 
 #include "graphicshandler.h"
-#include "document.h"
 #include "conversion.h"
-#include "msodraw.h"
+#include "document.h"
+#include "msdoc.h"
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
@@ -43,19 +44,17 @@ using namespace MSO;
 
 using Conversion::twipsToPt;
 
-#define IMG_BUF_SIZE 2048L
+//#define DEBUG_GHANDLER
 
+// Specifies the format of the picture data for the PICF structure.
+enum
+{
+    MM_SHAPE = 0x0064,
+    MM_SHAPEFILE = 0x0066
+};
 
 namespace
 {
-const char* dashses[11] = {
-    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
-    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
-};
-const char* arrowHeads[6] = {
-    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
-    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
-};
 QString format(double v) {
     static const QString f("%1");
     static const QString e("");
@@ -80,18 +79,12 @@ QString mm(double v) {
  * Drawing Writer
  * ************************************************
  */
-DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
-                             bool stylesxml_, bool inlineObj)
-        : Writer(xmlWriter, kostyles, stylesxml_),
+DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& styles,  bool stylesxml_)
+        : Writer(xmlWriter, styles, stylesxml_),
           xLeft(0),
           xRight(0),
           yTop(0),
-          yBottom(0),
-          m_pSpa(0),
-          m_picf(0),
-          m_rgbUid(0),
-          m_bodyDrawing(true),
-          m_inline(inlineObj)
+          yBottom(0)
 {
     scaleX = 25.4 / 1440;
     scaleY = 25.4 / 1440;
@@ -117,7 +110,7 @@ qreal DrawingWriter::hOffset()
     return Writer::hOffset(xLeft);
 }
 
-void DrawingWriter::SetRectangle(wvWare::Word97::FSPA& spa)
+void DrawingWriter::setRectangle(wvWare::Word97::FSPA& spa)
 {
     xLeft = spa.xaLeft;
     xRight = spa.xaRight;
@@ -128,14 +121,15 @@ void DrawingWriter::SetRectangle(wvWare::Word97::FSPA& spa)
 //FIXME: It doesn't make sense with current initialization, because when first
 //time called, scaleX and scaleY are both set to zero!  Both xOffset and
 //yOffset doesn't change!
-void DrawingWriter::SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
+void DrawingWriter::setGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
 {
     if (fspgr.xRight == fspgr.xLeft) {
         return;
     }
 
-    if (fspgr.yBottom == fspgr.yTop)
+    if (fspgr.yBottom == fspgr.yTop) {
         return;
+    }
 
     xOffset = xOffset + xLeft*scaleX;
     yOffset = yOffset + yTop*scaleY;
@@ -147,7 +141,7 @@ void DrawingWriter::SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
     yOffset = yOffset - fspgr.yTop * scaleY;
 }
 
-void DrawingWriter::SetClientRectangle(MSO::OfficeArtChildAnchor& anchor)
+void DrawingWriter::setChildRectangle(MSO::OfficeArtChildAnchor& anchor)
 {
     xLeft = anchor.xLeft;
     xRight = anchor.xRight;
@@ -155,33 +149,47 @@ void DrawingWriter::SetClientRectangle(MSO::OfficeArtChildAnchor& anchor)
     yBottom = anchor.yBottom;
 }
 
+void DrawingWriter::setRect(const QRect& rect)
+{
+    xLeft = rect.left();
+    xRight = rect.right();
+    yTop = rect.top();
+    yBottom = rect.bottom();
+}
+
 /*
  * ************************************************
  * Graphics Handler
  * ************************************************
  */
-KWordGraphicsHandler::KWordGraphicsHandler(Document* doc,
-                                           KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
+WordsGraphicsHandler::WordsGraphicsHandler(Document* doc,
+                                           KoXmlWriter* bodyWriter,
+                                           KoXmlWriter* manifestWriter,
                                            KoStore* store, KoGenStyles* mainStyles,
                                            const wvWare::Drawings* p_drawings,
                                            const wvWare::Word97::FIB& fib)
 : QObject()
 , m_document(doc)
 , m_store(store)
-, m_bodyWriter(bodyWriter)
+, m_currentWriter(bodyWriter)
 , m_manifestWriter(manifestWriter)
 , m_mainStyles(mainStyles)
 , m_drawings(p_drawings)
 , m_fib(fib)
 , m_pOfficeArtHeaderDgContainer(0)
 , m_pOfficeArtBodyDgContainer(0)
+, m_processingGroup(false)
+, m_objectType(Inline)
+, m_rgbUid(0)
 , m_zIndex(0)
+, m_picf(0)
+, m_pSpa(0)
 {
     kDebug(30513) ;
     init();
 }
 
-KWordGraphicsHandler::~KWordGraphicsHandler()
+WordsGraphicsHandler::~WordsGraphicsHandler()
 {
     delete m_pOfficeArtHeaderDgContainer;
     delete m_pOfficeArtBodyDgContainer;
@@ -190,18 +198,14 @@ KWordGraphicsHandler::~KWordGraphicsHandler()
 /*
  * NOTE: All containers parsed by this function are optional.
  */
-void KWordGraphicsHandler::init()
+void WordsGraphicsHandler::init()
 {
     kDebug(30513);
 
-    parseOfficeArtContainer();
+    parseOfficeArtContainers();
 
     //create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
-
-    //parse and store floating pictures  
-    parseFloatingPictures();
-    m_picNames = createFloatingPictures(m_store, m_manifestWriter);
 
     //Provide the backgroud color information to the Document
     DrawStyle ds = getBgDrawStyle();
@@ -213,14 +217,30 @@ void KWordGraphicsHandler::init()
             m_document->updateBgColor(tmp);
         }
     }
+
+    const OfficeArtBStoreContainer* blipStore = 0;
+    blipStore = m_officeArtDggContainer.blipStore.data();
+
+    if (!blipStore) {
+#ifdef DEBUG_GHANDLER
+        kDebug(30513) << "Container of BLIPs not present.";
+#endif
+        return;
+    }
+    //parse and store floating pictures
+    if (!parseFloatingPictures(blipStore)) {
+        m_store->enterDirectory("Pictures");
+        m_picNames = createPictures(m_store, m_manifestWriter, &blipStore->rgfb);
+        m_store->leaveDirectory();
+    }
 }
 
-void KWordGraphicsHandler::setBodyWriter(KoXmlWriter* writer)
+void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
 {
-    m_bodyWriter = writer;
+    emit textBoxFound(index, stylesxml);
 }
 
-DrawStyle KWordGraphicsHandler::getBgDrawStyle()
+DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 {
     const OfficeArtSpContainer* shape = 0;
     if (m_pOfficeArtBodyDgContainer) {
@@ -229,46 +249,87 @@ DrawStyle KWordGraphicsHandler::getBgDrawStyle()
     return DrawStyle(&m_officeArtDggContainer, 0, shape);
 }
 
-void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
+void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
+    //TODO: The globalCP might be required to obtain the SPA structure for
+    //inline MS-ODRAW shapes whith missing OfficeArtClientAnchor.
+
+    //TODO: It seems that both inline and floating objects have placement and
+    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
+    //the index into plcfSpa.
+
     kDebug(30513) ;
+    quint32 size = (data.picf->lcb - data.picf->cbHeader);
+
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "\nPICF DEBUG:"
+                  << "\nPICF size: 0x" << hex << data.picf->cbHeader
+                  << "\nOfficeArtInlineSpContainer size:" << dec << size
+                  << "\nStorage Format: 0x" << hex << data.picf->mfp.mm;
+#endif
+
+    //the picture is store in some external file
+    if (data.picf->mfp.mm == MM_SHAPEFILE) {
+        DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
+        m_objectType = Inline;
+        m_picf = data.picf;
+        insertEmptyInlineFrame(out);
+        return;
+    }
+
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
-    int size = (data.picf->lcb - data.picf->cbHeader);
+    if (!in) {
+        kDebug(30513) << "Data stream not provided, no access to inline shapes!";
+        return;
+    }
+    if (data.fcPic > in->getSize()) {
+        kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
+        return;
+    }
 
-    kDebug(30513) << "\nCurrent stream position: " << in->getPosition()
-		  << "\nOfficeArtInlineSpContainer offset: " << data.fcPic
-                  << "\nPICF size: " << data.picf->cbHeader
-                  << "\nOfficeArtData size: " << size;
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "\nCurrent stream position:" << in->getPosition()
+                  << "\nOfficeArtInlineSpContainer offset:" << dec << data.fcPic;
+#endif
 
     // parse the OfficeArtInlineSpContainer and rewind the stream
     LEInputStream::Mark _zero;
     _zero = in->setMark();
     in->skip(data.fcPic);
+
     OfficeArtInlineSpContainer co;
-    parseOfficeArtInlineSpContainer(*in, co);
+    try {
+        parseOfficeArtInlineSpContainer(*in, co);
+    } catch (const IOException& e) {
+        kDebug(30513) << e.msg;
+        in->rewind(_zero);
+        return;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        in->rewind(_zero);
+        return;
+    }
+    in->rewind(_zero);
 
     int n = (data.fcPic + size) - in->getPosition();
     if (n) {
         kDebug(30513) << n << "bytes left while parsing OfficeArtInlineSpContainer";
     }
-    in->rewind(_zero);
 
-    // store picture data if present and update m_picNames
     PictureReference ref;
+    // store picture data if present and update m_picNames
     m_store->enterDirectory("Pictures");
     foreach (const OfficeArtBStoreContainerFileBlock& block, co.rgfb) {
         const OfficeArtFBSE* fbse = block.anon.get<MSO::OfficeArtFBSE>();
         if (!fbse) {
             kDebug(30513) << "Warning: FBSE container not found, skipping ";
-        }
-        else {
+        } else {
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
                 ref.uid = fbse->rgbUid;
                 continue;
-            }
-            else {
+            } else {
                 ref = savePicture(block, m_store);
                 if (ref.name.length() == 0) {
                     kDebug(30513) << "empty name in picture reference";
@@ -281,69 +342,82 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     }
     m_store->leaveDirectory();
 
-    DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, true);
-    out.m_picf = data.picf;
-    out.m_rgbUid = ref.uid;
+    bool inStylesXml = m_document->writingHeader();
+    DrawingWriter out(*m_currentWriter, *m_mainStyles, inStylesXml);
 
-    OfficeArtSpContainer* o = &(co.shape);
+    //global attributes
+    m_objectType = Inline;
+    m_rgbUid = ref.uid;
+    m_picf = data.picf;
+
+    const OfficeArtSpContainer* o = &(co.shape);
     processDrawingObject(*o, out);
 }
 
-void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
+void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 {
+#ifdef DEBUG_GHANDLER
     kDebug(30513) << "globalCP" << globalCP ;
-    // draw shape or group of shapes
+#endif
     if (!m_drawings) {
         return;
     }
 
-    const PLCF<Word97::FSPA>* fspa = m_drawings->getSpaMom();
-    if (fspa != 0) {
-        PLCFIterator<Word97::FSPA> it(fspa->at(0));
+    const PLCF<Word97::FSPA>* plcfSpa = 0;
+    MSO::OfficeArtDgContainer* dg = 0;
+    uint threshold = 0;
 
-        //search for drawing in main body
-        for (size_t i = 0; i < fspa->count(); i++, ++it) {
-            kDebug(30513) << "FSPA start:" << it.currentStart();
-            kDebug(30513) << "FSPA spid:" << it.current()->spid;
-
-            if (it.currentStart() == globalCP) {
-                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
-                out.m_pSpa = it.current();
-                out.m_bodyDrawing = true;
-                locateDrawing((m_pOfficeArtBodyDgContainer->groupShape).data(), out,
-			      it.current(), (uint) it.current()->spid);
-                return;
-            }
-        }
+    if (m_document->writingHeader()) {
+        plcfSpa = m_drawings->getSpaHdr();
+        dg = m_pOfficeArtHeaderDgContainer;
+        threshold = m_fib.ccpText + m_fib.ccpFtn;
+    } else {
+        plcfSpa = m_drawings->getSpaMom();
+        dg = m_pOfficeArtBodyDgContainer;
     }
 
-    fspa = m_drawings->getSpaHdr();
-    if (fspa != 0) {
-        PLCFIterator<Word97::FSPA> itHeader(fspa->at(0));
-        //search for drawing in header
-        for (size_t i = 0; i < fspa->count(); i++, ++itHeader) {
-            kDebug(30513) << "FSPA start:" << itHeader.currentStart() + m_fib.ccpText + m_fib.ccpFtn;
-            kDebug(30513) << "FSPA spid:" << itHeader.current()->spid;
+    if (!plcfSpa) {
+        kDebug(30513) << "MISSING plcfSpa!";
+        return;
+    }
+    if (!dg) {
+        kDebug(30513) << "MISSING OfficeArtDgContainer!";
+        return;
+    }
 
-            if ((itHeader.currentStart() + m_fib.ccpText + m_fib.ccpFtn)  == globalCP) {
-                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
-                out.m_pSpa = itHeader.current();
-                out.m_bodyDrawing = false;
-                locateDrawing((m_pOfficeArtHeaderDgContainer->groupShape).data(), out,
-                              itHeader.current(), (uint) itHeader.current()->spid);
-                return;
-            }
+    PLCFIterator<Word97::FSPA> it(plcfSpa->at(0));
+    for (size_t i = 0; i < plcfSpa->count(); i++, ++it) {
+#ifdef DEBUG_GHANDLER
+        kDebug(30513) << "FSPA start:" << it.currentStart();
+        kDebug(30513) << "FSPA spid:" << it.current()->spid;
+#endif
+
+        if ((it.currentStart() + threshold) == globalCP) {
+            bool inStylesXml = m_document->writingHeader();
+            DrawingWriter out(*m_currentWriter, *m_mainStyles, inStylesXml);
+
+            //global attributes
+            m_objectType = Floating;
+            m_pSpa = it.current();
+            m_zIndex = 1;
+
+            locateDrawing((dg->groupShape).data(), it.current(), (uint)it.current()->spid, out);
+
+            //reset global attributes
+            m_pSpa = 0;
+            return;
         }
     }
 }
 
-void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr, DrawingWriter& out, 
-                                         wvWare::Word97::FSPA* spa, uint spid)
+void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr,
+                                         wvWare::Word97::FSPA* spa,
+                                         uint spid,
+                                         DrawingWriter& out)
 {
     if (!spgr) {
         return;
     }
-    m_zIndex = 0;
 
     //FIXME: combine childAnchor, shapeGroup coordinates with information from
     //clientAnchor pointing to the SPA structure!
@@ -352,32 +426,29 @@ void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
     //(4) of shapes.  The group (4) container contains a variable number of
     //shape containers and other group (4) containers.  Each group (4) is a
     //shape.  The first container MUST be an OfficeArtSpContainer record, which
-    //MUST contain shape information for the group. MS-ODRAW, 2.2.16
+    //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
+    const OfficeArtSpContainer* sp = spgr->rgfb[0].anon.get<OfficeArtSpContainer>();
+    if (sp && (sp->shapeProp.spid == spid)) {
+        kDebug(30513) << "An unprocessed shape referred from text, ignoring!";
+        return;
+    }
 
-    foreach (const OfficeArtSpgrContainerFileBlock& co, spgr->rgfb) {
-
+    for(int i = 1; i < spgr->rgfb.size(); i++) {
+        const OfficeArtSpgrContainerFileBlock& co = spgr->rgfb[i];
         if (co.anon.is<OfficeArtSpgrContainer>()) {
-            const OfficeArtSpContainer* first = 
-                (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
-            if (first && first->shapeProp.spid == spid) {
-                out.SetRectangle(*spa);
-                processGroup(*co.anon.get<OfficeArtSpgrContainer>(), out);
+            sp = (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
+            if (sp && sp->shapeProp.spid == spid) {
+                processGroupShape(*co.anon.get<OfficeArtSpgrContainer>(), out);
+                m_processingGroup = false;
                 break;
             } else {
                 m_zIndex = m_zIndex + (*co.anon.get<OfficeArtSpgrContainer>()).rgfb.size();
             }
         } else {
-            const OfficeArtSpContainer &sp = *co.anon.get<OfficeArtSpContainer>();
-            if (sp.shapeProp.fGroup) {
-		if (sp.shapeGroup) {
-                    out.SetGroupRectangle(*sp.shapeGroup);
-                }
-                if (sp.shapeProp.spid == spid) {
-                    kDebug(30513) << "An unprocessed shape storing information for the group is referred from text!";
-                }
-            } else if (sp.shapeProp.spid == spid) {
-                out.SetRectangle(*spa);
-                processDrawingObject(sp, out);
+            sp = co.anon.get<OfficeArtSpContainer>();
+            if (sp && sp->shapeProp.spid == spid) {
+                out.setRectangle(*spa);
+                processDrawingObject(*sp, out);
                 break;
             }
             m_zIndex++;
@@ -385,636 +456,527 @@ void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
     }
 }
 
-void KWordGraphicsHandler::processGroup(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
+QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
+{
+    if (o.clientAnchor) {
+        const DocOfficeArtClientAnchor* a = o.clientAnchor->anon.get<DocOfficeArtClientAnchor>();
+        if (!a) {
+            return QRect();
+        }
+        const PLCF<wvWare::Word97::FSPA>* plcfSpa = 0;
+        if (m_document->writingHeader()) {
+            plcfSpa = m_drawings->getSpaHdr();
+        } else {
+            plcfSpa = m_drawings->getSpaMom();
+        }
+        PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
+        const wvWare::Word97::FSPA* spa = it.current();
+	Q_ASSERT(m_pSpa == spa);
+        return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);
+    }
+    else if (o.childAnchor) {
+        const MSO::OfficeArtChildAnchor& r = *o.childAnchor;
+        return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+    } else {
+        return QRect();
+    }
+}
+
+void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
 {
     if (o.rgfb.size() < 2) {
         return;
     }
-    //TODO: create corresponding style and apply style properties
-    out.xml.startElement("draw:g");
-    const OfficeArtSpContainer *first = o.rgfb[0].anon.get<OfficeArtSpContainer>();
 
-    if (first && first->shapeGroup) {
-        //process shape information for the group
-        out.SetGroupRectangle(*first->shapeGroup);
+    const OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+
+    if (sp && sp->shapeGroup) {
+        QRect oldCoords = getRect(*sp);
+        if (oldCoords.isValid()) {
+            out.setRect(oldCoords);
+            //process shape information for the group
+            out.setGroupRectangle(*sp->shapeGroup);
+	}
     }
+
+    //create graphic style for the group shape
+    QString styleName;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    DrawStyle ds(&m_officeArtDggContainer, 0, sp);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
+    styleName = out.styles.insert(style, "gr");
+
+    out.xml.startElement("draw:g");
+    out.xml.addAttribute("draw:style-name", styleName);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+    m_processingGroup = true;
 
     for (int i = 1; i < o.rgfb.size(); ++i) {
         if (o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
             OfficeArtSpContainer sp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
             if (sp.childAnchor) {
-                out.SetClientRectangle(*sp.childAnchor); //set child rectangle
+                out.setChildRectangle(*sp.childAnchor);
             }
-            processDrawingObject(sp, out); //draw objects
-        } 
-	//TODO: another group shape can be here! We should call locateDrawing
-	//again!
+            processDrawingObject(sp, out);
+        } else {
+            processGroupShape(*o.rgfb[i].anon.get<OfficeArtSpgrContainer>(), out);
+        }
     }
     out.xml.endElement(); // draw:g
 }
 
-void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     kDebug(30513);
 
-    DrawStyle ds(0, &o);
+    DrawStyle ds(0, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
-    // check the shape type and process it
+#ifdef DEBUG_GHANDLER
     kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
     kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
     kDebug(30513) << "Selected properties: ";
     kDebug(30513) << "pib: " << ds.pib();
+#endif
 
-    // textbox can be msosptTextBox or msosptRectangle or ...
-    if (!o.clientTextbox.isNull()) {
-        kDebug(30513)<< "processing text box";
-        parseTextBox(o, out);
-        return;
-    }
-
-    switch (o.shapeProp.rh.recInstance)
-    {
-        case msosptRectangle: {
-            //TODO: this looks suspicious, tests REQUIRED !
-
-            kDebug(30513)<< "processing rectangle";
-            //check group shape boolean properties for details
-            if (ds.fHorizRule()) {
-                kDebug(30513)<< "processing a line shape";
-                processLineShape(o, out);
-            } else {
-                processRectangle(o, out);
-            }
-            break;
-        }
-        case msosptEllipse:
-            kDebug(30513)<< "processing ellipse";
-            break;
-        case msosptPictureFrame:
-            kDebug(30513)<< "processing a frame shape";
-            if (out.m_inline) {
-                processInlinePictureFrame(o, out);
-	    }
-            else {
-                processFloatingPictureFrame(o, out);
-            }
-            break;
-        case msosptHostControl:
-            kDebug(30513)<< "processing host control";
-            parseTextBox(o, out);
-            break;
-        default:
+    switch (o.shapeProp.rh.recInstance) {
+    case msosptTextBox:
+#ifdef DEBUG_GHANDLER
+        kDebug(30513)<< "processing TextBox";
+#endif
+        processTextBox(o, out);
+        break;
+    case msosptRectangle:
+        if (ds.fHorizRule()) {
+#ifdef DEBUG_GHANDLER
+            kDebug(30513)<< "processing Line";
+#endif
+            processLineShape(o, out);
+        } else {
             odrawtoodf.processDrawingObject(o, out);
-            break;
+        }
+        break;
+    case msosptPictureFrame:
+#ifdef DEBUG_GHANDLER
+        kDebug(30513)<< "processing PictureFrame";
+#endif
+        if (m_objectType == Inline) {
+            processInlinePictureFrame(o, out);
+        } else {
+            processFloatingPictureFrame(o, out);
+        }
+        break;
+    case msosptHostControl:
+#ifdef DEBUG_GHANDLER
+        kDebug(30513)<< "processing Host Control";
+#endif
+        processTextBox(o, out);
+        break;
+    default:
+        odrawtoodf.processDrawingObject(o, out);
+        break;
     }
 }
 
-void KWordGraphicsHandler::parseOfficeArtContainer()
+void WordsGraphicsHandler::parseOfficeArtContainers()
 {
     kDebug(30513);
 
-    if (m_fib.lcbDggInfo != 0) {
+    if (!m_fib.lcbDggInfo) return;
 
-        POLE::Stream& stream = m_document->poleTableStream();
-        QByteArray array;
-        QBuffer buffer;
-
-        array.resize(m_fib.lcbDggInfo);
-        stream.seek(m_fib.fcDggInfo);
-        unsigned long n = stream.read((unsigned char*) array.data(), m_fib.lcbDggInfo);
-        if (n != m_fib.lcbDggInfo) {
-            kError(30513) << "Error while reading from " << stream.fullName().data() << "stream";
-            return;
-        }
-
-        buffer.setData(array);
-        buffer.open(QIODevice::ReadOnly);
-        LEInputStream in(&buffer);
-
-        //parse OfficeArfDggContainer from msdoc
-        try {
-            parseOfficeArtDggContainer(in, m_officeArtDggContainer);
-        }
-        catch (IOException e) {
-            kDebug(30513) << "caught IOException while parsing parseOfficeArtDggContainer";
-            return;
-        }
-        catch (...) {
-            kDebug(30513) << "caught unknown exception while parsing parseOfficeArtDggContainer";
-            return;
-        }
-        kDebug(30513) << "OfficeArtDggContainer parsed successfully" ;
-
-        // parse drawingsVariable from msdoc
-        // 0 - next OfficeArtDgContainer belongs to Main document;
-        // 1 - next OfficeArtDgContainer belongs to Header Document
-        unsigned char drawingsVariable = 0;
-        try {
-            drawingsVariable = in.readuint8();
-        }
-        catch (IOException e) {
-            kDebug(30513) << "caught IOException while parsing drawingsVariable ";
-            return;
-        }
-        catch (...) {
-            kDebug(30513) << "caught unknown exception while parsing drawingsVariable";
-            return;
-        }
-
-        //parse OfficeArfDgContainer from msdoc
-        OfficeArtDgContainer *pDgContainer = 0;
-        try {
-            pDgContainer = new OfficeArtDgContainer();
-            if (drawingsVariable == 0) {
-                m_pOfficeArtBodyDgContainer = pDgContainer;
-            } else {
-                m_pOfficeArtHeaderDgContainer = pDgContainer;
-            }
-            parseOfficeArtDgContainer(in, *pDgContainer);
-        }
-        catch (IOException e) {
-            kDebug(30513) << "caught IOException while parsing OfficeArtDgContainer ";
-            return;
-        }
-        catch (...) {
-            kDebug(30513) << "caught unknown exception while parsing OfficeArtDgContainer";
-            return;
-        }
-
-        // parse drawingsVariable from msdoc
-        // 0 - next OfficeArtDgContainer belongs to Main document;
-        // 1 - next OfficeArtDgContainer belongs to Header Document
-        try {
-            drawingsVariable = in.readuint8();
-        }
-        catch (IOException e) {
-            kDebug(30513) << "caught IOException while parsing second drawingsVariable ";
-            //wvlog << "in position: " << in.getPosition() << std::endl;
-            return;
-        }
-        catch (...) {
-            kDebug(30513) << "caught unknown exception while parsing second drawingsVariable";
-            return;
-        }
-
-        //parse OfficeArfDgContainer from msdoc
-        pDgContainer = 0;
-        try {
-            pDgContainer = new OfficeArtDgContainer();
-            if (drawingsVariable == 0) {
-                if (m_pOfficeArtBodyDgContainer != 0){
-                    delete m_pOfficeArtBodyDgContainer;
-                }
-                m_pOfficeArtBodyDgContainer = pDgContainer;
-            }
-            else {
-                if (m_pOfficeArtHeaderDgContainer != 0) {
-                    delete m_pOfficeArtHeaderDgContainer;
-                }
-                m_pOfficeArtHeaderDgContainer = pDgContainer;
-            }
-            parseOfficeArtDgContainer(in, *pDgContainer);
-        }
-        catch (IOException e) {
-            kDebug(30513) << "caught IOException while parsing second OfficeArtDgContainer ";
-            return;
-        }
-        catch (...) {
-            kDebug(30513) << "caught unknown exception while parsing second OfficeArtDgContainer";
-            return;
-        }
-
-        quint32 r = buffer.size() - in.getPosition();
-        if (r > 0) {
-            kError(30513) << r << "bytes left to parse from the OfficeArtDggContainer";
-        }
+    POLE::Stream& stream = m_document->poleTableStream();
+    if (stream.fail()) {
+        kDebug(30513) << "Table stream not provided, no access to OfficeArt file records!";
+        return;
     }
-    return;
+
+    QByteArray array;
+    QBuffer buffer;
+    array.resize(m_fib.lcbDggInfo);
+    stream.seek(m_fib.fcDggInfo);
+    unsigned long n = stream.read((unsigned char*) array.data(), m_fib.lcbDggInfo);
+    if (n != m_fib.lcbDggInfo) {
+        kError(30513) << "Error while reading from " << stream.fullName().data() << "stream";
+        return;
+    }
+
+    buffer.setData(array);
+    buffer.open(QIODevice::ReadOnly);
+    LEInputStream in(&buffer);
+
+    //parse OfficeArfDggContainer from msdoc
+    try {
+        parseOfficeArtDggContainer(in, m_officeArtDggContainer);
+    }
+    catch (const IOException& e) {
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDggContainer.";
+        kDebug(30513) << e.msg;
+        return;
+    }
+    catch (...) {
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDggContainer.";
+        return;
+    }
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDggContainer [ OK ]" ;
+#endif
+
+    // parse drawingsVariable from msdoc
+    // 0 - next OfficeArtDgContainer belongs to Main document;
+    // 1 - next OfficeArtDgContainer belongs to Header Document
+    unsigned char drawingsVariable = 0;
+    try {
+        drawingsVariable = in.readuint8();
+    }
+    catch (const IOException& e) {
+        kDebug(30513) << "Caught IOException while parsing DrawingsVariable.";
+        kDebug(30513) << e.msg;
+        return;
+    }
+    catch (...) {
+        kDebug(30513) << "Caught UNKNOWN exception while parsing DrawingsVariable.";
+        return;
+    }
+
+    //parse OfficeArfDgContainer from msdoc
+    OfficeArtDgContainer *pDgContainer = 0;
+    try {
+        pDgContainer = new OfficeArtDgContainer();
+        if (drawingsVariable == 0) {
+            m_pOfficeArtBodyDgContainer = pDgContainer;
+        } else {
+            m_pOfficeArtHeaderDgContainer = pDgContainer;
+        }
+        parseOfficeArtDgContainer(in, *pDgContainer);
+    }
+    catch (const IOException& e) {
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
+        return;
+    }
+    catch (...) {
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
+        return;
+    }
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
+
+    // parse drawingsVariable from msdoc
+    // 0 - next OfficeArtDgContainer belongs to Main Document
+    // 1 - next OfficeArtDgContainer belongs to Header Document
+    try {
+        drawingsVariable = in.readuint8();
+    }
+    catch (const IOException& e) {
+        kDebug(30513) << "Caught IOException while parsing the 2nd DrawingsVariable.";
+        kDebug(30513) << e.msg;
+        return;
+    }
+    catch (...) {
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd DrawingsVariable.";
+        return;
+    }
+
+    //parse OfficeArfDgContainer from msdoc
+    pDgContainer = 0;
+    try {
+        pDgContainer = new OfficeArtDgContainer();
+        if (drawingsVariable == 0) {
+            if (m_pOfficeArtBodyDgContainer != 0){
+                delete m_pOfficeArtBodyDgContainer;
+            }
+            m_pOfficeArtBodyDgContainer = pDgContainer;
+        } else {
+            if (m_pOfficeArtHeaderDgContainer != 0) {
+                delete m_pOfficeArtHeaderDgContainer;
+            }
+            m_pOfficeArtHeaderDgContainer = pDgContainer;
+        }
+        parseOfficeArtDgContainer(in, *pDgContainer);
+    }
+    catch (const IOException& e) {
+        kDebug(30513) << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
+        return;
+    }
+    catch (...) {
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd OfficeArtDgContainer.";
+        return;
+    }
+
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
+
+    quint32 r = buffer.size() - in.getPosition();
+    if (r > 0) {
+        kError(30513) << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
+    }
 }
 
-void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
+int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
+{
+    kDebug(30513);
+
+    if (!blipStore) return(1);
+
+    // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
+    LEInputStream& in = m_document->wdocumentStream();
+
+    for (int i = 0; i < blipStore->rgfb.size(); i++) {
+        OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
+
+	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
+	//containers.  Not parsing Blip store because MD4 digests in
+	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
+	//picture path association.
+        if (block.anon.is<OfficeArtFBSE>()) {
+            OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
+            if (!fbse->embeddedBlip) {
+
+                //NOTE: An foDelay value of 0xffffffff specifies that the file
+                //is not in the delay stream and cRef must be zero.  A cRef
+                //value of 0x00000000 specifies an empty slot in the
+                //OfficeArtBStoreContainer.
+
+                if (fbse->foDelay == 0xffffffff) {
+#ifdef DEBUG_GHANDLER
+                    kDebug(30513) << "File not in the delay stream, continuing.";
+#endif
+                    continue;
+                }
+                if (!fbse->cRef) {
+#ifdef DEBUG_GHANDLER
+                    kDebug(30513) << "Empty slot, continuing.";
+#endif
+                    continue;
+                }
+                LEInputStream::Mark _zero;
+                _zero = in.setMark();
+                in.skip(fbse->foDelay);
+
+                //let's check the record header if there's a BLIP stored
+                LEInputStream::Mark _m;
+                _m = in.setMark();
+                OfficeArtRecordHeader rh;
+                try {
+                    parseOfficeArtRecordHeader(in, rh);
+                } catch (const IOException& e) {
+                    kDebug(30513) << e.msg;
+                    in.rewind(_zero);
+                    continue;
+                } catch (...) {
+                    kWarning(30513) << "Warning: Caught an unknown exception!";
+                    in.rewind(_zero);
+                    continue;
+                }
+                in.rewind(_m);
+                if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
+                    continue;
+                }
+                fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
+                try {
+                    parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
+                } catch (const IOException& e) {
+                    kDebug(30513) << e.msg;
+                    in.rewind(_zero);
+                    continue;
+                } catch (...) {
+                    kWarning(30513) << "Warning: Caught an unknown exception!";
+                    in.rewind(_zero);
+                    continue;
+                }
+                in.rewind(_zero);
+            }
+        }
+    }
+    return(0);
+}
+
+QString WordsGraphicsHandler::getPicturePath(quint32 pib) const
+{
+    quint32 offset = 0;
+    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, pib, offset);
+
+    if (rgbUid.length()) {
+        if (m_picNames.contains(rgbUid)) {
+            return "Pictures/" + m_picNames[rgbUid];
+        } else {
+            qDebug() << "UNKNOWN picture reference!";
+        }
+    }
+    return QString();
+}
+
+void WordsGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
 {
     // write style <style:default-style style:family="graphic">
     KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
-    DrawStyle ds(&m_officeArtDggContainer);
     style.setDefaultStyle(true);
-    defineGraphicProperties(style, ds);
+    DrawStyle ds(&m_officeArtDggContainer);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, *styles);
     styles->insert(style);
 }
 
-void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
-                                                  const QString& listStyle)
+void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)
 {
-    MSO::OfficeArtCOLORREF clr;
+    if (m_processingGroup) return;
+    if (m_objectType == Inline) return;
+
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
-    // dr3d:ambient-color
-    // dr3d:back-scale
-    // dr3d:backface-culling
-    // dr3d:close-back
-    // dr3d:close-front
-    // dr3d:depth
-    // dr3d:diffuse-color
-    // dr3d:edge-rounding
-    // dr3d:edge-rounding-mode
-    // dr3d:emissive-color
-    // dr3d:end-angle
-    // dr3d:horizontal-segments
-    // dr3d:lighting-mode
-    // dr3d:normals-direction
-    // dr3d:normals-kind
-    // dr3d:shadow
-    // dr3d:shininess
-    // dr3d:specular-color
-    // dr3d:texture-filter
-    // dr3d:texture-generation-mode-x
-    // dr3d:texture-generation-mode-y
-    // dr3d:texture-kind
-    // dr3d:texture-mode
-    // dr3d:vertical-segments
-    // draw:auto-grow-height
-    // draw:auto-grow-width
-    // draw:blue
-    // draw:caption-angle
-    // draw:caption-angle-type
-    // draw:caption-escape
-    // draw:caption-escape-direction
-    // draw:caption-fit-line-length
-    // draw:caption-gap
-    // draw:caption-line-length
-    // draw:caption-type
-    // draw:color-inversion
-    // draw:color-mode
-    // draw:contrast
-    // draw:decimal-places
-    // draw:end-guide
-    // draw:end-line-spacing-horizontal
-    // draw:end-line-spacing-vertical
+    wvWare::Word97::FSPA* spa = m_pSpa;
 
-    // NOTE: fFilled specifies whether fill of the shape is render based on the
-    // properties of the "fill style" property set.
-    if (ds.fFilled()) {
-        qint32 fillType = ds.fillType();
-        // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-        style.addProperty("draw:fill", getFillType(fillType), gt);
-        // NOTE: only set the color if the fill type is 'solid' because OOo
-        // ignores fill='none' if the color is set
-        if (fillType == 0) {
-            clr = ds.fillColor();
-            style.addProperty("draw:fill-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
-        }
-    } else {
-        style.addProperty("draw:fill", "none", gt);
-    }
-    // draw:fill-gradient-name
-    // draw:fill-hatch-name
-    // draw:fill-hatch-solid
-    // draw:fill-image-name
-    // draw:fill-image-ref-point
-    // draw:fill-image-ref-point-x
-    // draw:fill-image-ref-point-y
-    // draw:fill-image-height
-    // draw:fill-image-width
-    // draw:fit-to-contour
-    // draw:fit-to-size
-    // draw:frame-display-border
-    // draw:frame-display-scrollbar
-    // draw:frame-margin-horizontal
-    // draw:frame-margin-vertical
-    // draw:gamma
-    // draw:gradient-step-count
-    // draw:green
-    // draw:guide-distance
-    // draw:guide-overhang
-    // draw:image-opacity
-    // draw:line-distance
-    // draw:luminance
-    // draw:marker-end
-    quint32 lineEndArrowhead = ds.lineEndArrowhead();
-    if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
-        style.addProperty("draw:marker-end", arrowHeads[lineEndArrowhead], gt);
-    }
-    // draw:marker-end-center
-    // draw:marker-end-width
-    qreal lineWidthPt = ds.lineWidth() / 12700.;
-    style.addProperty("draw:marker-end-width",
-                      pt(lineWidthPt*4*(1+ds.lineEndArrowWidth())), gt);
-    // draw:marker-start
-    quint32 lineStartArrowhead = ds.lineStartArrowhead();
-    if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
-        style.addProperty("draw:marker-start", arrowHeads[lineStartArrowhead],
-                          gt);
-    }
-    // draw:marker-start-center
-    // draw:marker-start-width
-    style.addProperty("draw:marker-start-width",
-                      pt(lineWidthPt*4*(1+ds.lineStartArrowWidth())), gt);
-    // draw:measure-align
-    // draw:measure-vertical-align
-    // draw:ole-draw-aspect
-    // draw:opacity
-    // draw:opacity-name
-    // draw:parallel
-    // draw:placing
-    // draw:red
-    // draw:secondary-fill-color
-
-    // NOTE: fShadow property specifies whether the shape has a shadow.
-    if (ds.fShadow()) {
-        // draw:shadow
-        style.addProperty("draw:shadow", "visible", gt);
-        // draw:shadow-color
-        clr = ds.shadowColor();
-        style.addProperty("draw:shadow-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
-        //shadowOffset* properties MUST exist if shadowType property equals
-        //msoshadowOffset or msoshadowDouble, otherwise MUST be ignored,
-        //MS-ODRAW 2.3.13.6
-        quint32 type = ds.shadowType();
-        if ((type == 0) || (type == 1)) {
-            // draw:shadow-offset-x
-            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.), gt);
-            // draw:shadow-offset-y
-            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.), gt);
-        }
-        // draw:shadow-opacity
-        float shadowOpacity = toQReal(ds.shadowOpacity());
-        style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
-    } else {
-        style.addProperty("draw:shadow", "hidden");
-    }
-    // draw:show-unit
-    // draw:start-guide
-    // draw:start-line-spacing-horizontal
-    // draw:start-line-spacing-vertical
-    // draw:stroke ('dash', 'none' or 'solid')
-    quint32 lineDashing = ds.lineDashing();
-    // OOo interprets solid line with with 0 as hairline, so if
-    // width == 0, stroke *must* be none to avoid OOo from
-    // displaying a line
-    if (lineWidthPt == 0) {
-        style.addProperty("draw:stroke", "none", gt);
-    } else if (ds.fLine() || ds.fNoLineDrawDash()) {
-        if (lineDashing > 0 && lineDashing < 11) {
-            style.addProperty("draw:stroke", "dash", gt);
-        } else {
-            style.addProperty("draw:stroke", "solid", gt);
-        }
-    } else {
-        style.addProperty("draw:stroke", "none", gt);
-    }
-    // draw:stroke-dash from 2.3.8.17 lineDashing
-    if (lineDashing > 0 && lineDashing < 11) {
-        style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
-    }
-    // draw:stroke-dash-names
-    // draw:stroke-linejoin
-    // draw:symbol-color
-    // draw:textarea-horizontal-align
-    // draw:textarea-vertical-align
-    // draw:tile-repeat-offset
-    // draw:unit
-    // draw:visible-area-height
-    // draw:visible-area-left
-    // draw:visible-area-top
-    // draw:visible-area-width
-    // draw:wrap-influence-on-position
-    // fo:background-color
-    // fo:border
-    // fo:border-bottom
-    // fo:border-left
-    // fo:border-right
-    // fo:border-top
-    // fo:clip
-    // fo:max-height
-    // fo:max-width
-    // fo:min-height
-    // fo:min-width
-    // fo:padding
-    // fo:padding-left
-    // fo:padding-top
-    // fo:padding-right
-    // fo:padding-bottom
-    // fo:wrap-option
-    // style:border-line-width
-    // style:border-line-width-bottom
-    // style:border-line-width-left
-    // style:border-line-width-right
-    // style:border-line-width-top
-    // style:editable
-    // style:flow-with-text
-    // style:mirror
-    // style:overflow-behavior
-    // style:print-content
-    // style:protect
-    // style:rel-height
-    // style:rel-width
-    // style:repeat
-    // svg:fill-rule
-    // svg:height
-    // svg:stroke-color from 2.3.8.1 lineColor
-    clr = ds.lineColor();
-    QColor lineColor(clr.red,clr.green,clr.blue);
-    style.addProperty("svg:stroke-color", lineColor.name(), gt);
-    // svg:stroke-opacity from 2.3.8.2 lineOpacity
-    style.addProperty("svg:stroke-opacity",
-                      percent(100.0 * ds.lineOpacity() / 0x10000), gt);
-    // svg:stroke-width from 2.3.8.14 lineWidth
-    style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
-    // svg:width
-    // svg:x
-    // svg:y
-    // text:anchor-page-number
-    // text:anchor-type
-    // text:animation
-    // text:animation-delay
-    // text:animation-direction
-    // text:animation-repeat
-    // text:animation-start-inside
-    // text:animation-steps
-    // text:animation-stop-inside
-
-    /* associate with a text:list-style element */
-    if (!listStyle.isNull()) {
-        style.addAttribute("style:list-style-name", listStyle);
-    }
-}
-
-void KWordGraphicsHandler::defineAnchorProperties(KoGenStyle& style, const DrawStyle& ds)
-{
-    // style:horizontal-pos MS-ODRAW - 2.3.4.19
-    quint32 posH = ds.posH();
-    if (posH == 0) {  // msophAbs
-        style.addProperty("style:horizontal-pos","from-left");
-    } else if (posH == 1) { // msophLeft
-        style.addProperty("style:horizontal-pos","left");
-    } else if (posH == 2) { // msophCenter
-        style.addProperty("style:horizontal-pos","center");
-    } else if (posH == 3) { // msophRight
-        style.addProperty("style:horizontal-pos","right");
-    } else if (posH == 4) { // msophInside
-        style.addProperty("style:horizontal-pos","inside");
-    } else if (posH == 5) { // msophOutside
-        style.addProperty("style:horizontal-pos","outside");
-    }
-
-    // style:horizontal-rel MS-ODRAW 2.3.4.20
-    quint32 posRelH = ds.posRelH();
-
-    if (posRelH == 0) {//msoprhMargin
-        style.addProperty("style:horizontal-rel","page-content");
-    } else if (posRelH == 1) {//msoprhPage
-        style.addProperty("style:horizontal-rel","page");
-    } else if (posRelH == 2) {//msoprhText
-        style.addProperty("style:horizontal-rel","paragraph");
-    } else if (posRelH == 3) {//msoprhChar
-        style.addProperty("style:horizontal-rel","char");
-    } else {
-        style.addProperty("style:horizontal-rel","page-content");
-    }
-
-    // style:vertical-pos MS-ODRAW - 2.3.4.21
-    quint32 posV = ds.posV();
-    if (posV == 0) {  // msophAbs
-        style.addProperty("style:vertical-pos","from-top");
-    } else if (posV == 1) { // msophTop
-        style.addProperty("style:vertical-pos","top");
-    } else if (posV == 2) { // msophCenter
-        style.addProperty("style:vertical-pos","middle");
-    } else if (posV == 3) { // msophBottom
-        style.addProperty("style:vertical-pos","bottom");
-    } else if (posV == 4) { // msophInside - not possible to write it into odf
-        style.addProperty("style:vertical-pos","top");
-    } else if (posV == 5) { // msophOutside - not possible to write it into odf
-        style.addProperty("style:vertical-pos","bottom");
-    }
-
-    // style:vertical-rel MS-ODRAW 2.3.4.22
-    quint32 posRelV = ds.posRelV();
-    if (posRelV == 0) {//msoprvMargin
-        style.addProperty("style:vertical-rel","page-content");
-    } else if (posRelV == 1) {//msoprvPage
-        style.addProperty("style:vertical-rel","page");
-    } else if (posRelV == 2) {//msoprvText
-        style.addProperty("style:vertical-rel","paragraph");
-    } else if (posRelV == 3) { //msoprvLine
-        style.addProperty("style:vertical-rel","line");
-    } else {
-        style.addProperty("style:vertical-rel","page-content");
-    }
-}
-
-void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa)
-{
-    //process the wrapping style, (MS-DOC, page 464)
+    // style:number-wrapped-paragraphs
+    // style:run-through
+    // style:wrap
+    // style:wrap-contour
+    // style:wrap-contour-mode
+    // style:wrap-dynamic-threshold
     if (spa != 0) {
         bool check_wrk = false;
-        if (spa->wr == 0) {
-            //wrap around the object
+        switch (spa->wr) {
+        case 0: //wrap around the object
+        case 2: //square wrapping
             check_wrk = true;
-        }
-        else if (spa->wr == 1) {
-            //top and bottom wrapping
-            style.addProperty("style:wrap", "none");
-        }
-        else if (spa->wr == 2) {
-            //square wrapping
-            check_wrk = true;
-        }
-        else if (spa->wr == 3) {
-            //in front or behind the text
-            style.addProperty("style:wrap", "run-through");
-	    //check if shape is behind the text
+            break;
+        case 1: //top and bottom wrapping
+            style.addProperty("style:wrap", "none", gt);
+            break;
+        case 3: //in front or behind the text
+            style.addProperty("style:wrap", "run-through", gt);
+            //check if shape is behind the text
             if ((spa->fBelowText == 1) || (ds.fBehindDocument())) {
-                style.addProperty("style:run-through", "background");
+                style.addProperty("style:run-through", "background", gt);
             } else {
-                style.addProperty("style:run-through", "foreground");
+                style.addProperty("style:run-through", "foreground", gt);
             }
-        }
-        else if (spa->wr == 4) {
-            //tight wrapping
+            break;
+        case 4: //tight wrapping
             check_wrk = true;
-            style.addProperty("style:wrap-contour", "true");
-            style.addProperty("style:wrap-contour-mode", "outside");
-        }
-        else if (spa->wr == 5) {
-            //through wrapping
+            style.addProperty("style:wrap-contour", "true", gt);
+            style.addProperty("style:wrap-contour-mode", "outside", gt);
+            break;
+        case 5: //through wrapping
             check_wrk = true;
-            style.addProperty("style:wrap-contour", "true");
-            style.addProperty("style:wrap-contour-mode", "full");
+            style.addProperty("style:wrap-contour", "true", gt);
+            style.addProperty("style:wrap-contour-mode", "full", gt);
+            break;
         }
         //check details of the text wrapping around this shape
         if (check_wrk) {
-            if (spa->wrk == 0) {
-                style.addProperty("style:wrap", "parallel");
-            }
-            else if (spa->wrk == 1) {
-                style.addProperty("style:wrap", "left");
-            }
-            else if (spa->wrk == 2) {
-                style.addProperty("style:wrap", "right");
-            }
-            else if (spa->wrk == 3) {
-                style.addProperty("style:wrap", "biggest");
+            switch (spa->wrk) {
+            case 0:
+                style.addProperty("style:wrap", "parallel", gt);
+                break;
+            case 1:
+                style.addProperty("style:wrap", "left", gt);
+                break;
+            case 2:
+                style.addProperty("style:wrap", "right", gt);
+                break;
+            case 3:
+                style.addProperty("style:wrap", "biggest", gt);
+                break;
             }
         }
-    }
-    //no information from plcfSpa available 
-    else {
-        style.addProperty("style:wrap", "run-through");
-        if (ds.fBehindDocument()) {
-            style.addProperty("style:run-through", "background");
-        } else {
-            style.addProperty("style:run-through", "foreground");
+        // ODF-1.2: specifies the number of paragraphs that can wrap around a
+        // frame if wrap mode is in {left, right, parallel, dynamic} and anchor
+        // type is in {char, paragraph}
+        if ((spa->wr != 1) && (spa->wr != 3)) {
+            style.addProperty("style:number-wrapped-paragraphs", "no-limit");
         }
-    }
-
-    //margins are related to text wrapping, 
-    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700.);
-    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700.);
-    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700.);
-    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700.);
-
-    // style:number-wrapped-paragraphs
-    // style:wrap-dynamic-treshold
-}
-
-void KWordGraphicsHandler::SetAnchorTypeAttribute(DrawingWriter& out)
-{
-    if (out.m_inline) {
-        out.xml.addAttribute("text:anchor-type","as-char");
     } else {
-        out.xml.addAttribute("text:anchor-type","char");
+        style.addProperty("style:wrap", "run-through", gt);
+        if (ds.fBehindDocument()) {
+            style.addProperty("style:run-through", "background", gt);
+        } else {
+            style.addProperty("style:run-through", "foreground", gt);
+        }
+    }
+
+    // margins are related to text wrapping
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
+    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700., gt);
+    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700., gt);
+    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700., gt);
+    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700., gt);
+}
+
+void WordsGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
+{
+    if (m_processingGroup) return;
+
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+    if (m_objectType == Inline) {
+        style.addProperty("style:vertical-rel", "baseline", gt);
+        style.addProperty("style:vertical-pos", "top", gt);
+    } else {
+        style.addProperty("style:horizontal-pos", getHorizontalPos(ds.posH()), gt);
+        style.addProperty("style:horizontal-rel", getHorizontalRel(ds.posRelH()), gt);
+        style.addProperty("style:vertical-pos", getVerticalPos(ds.posV()), gt);
+        style.addProperty("style:vertical-rel", getVerticalRel(ds.posRelV()), gt);
     }
 }
 
-void KWordGraphicsHandler::SetZIndexAttribute(DrawingWriter& out)
+void WordsGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
 {
-    out.xml.addAttribute("draw:z-index",m_zIndex);
+    if (m_processingGroup) return;
+
+    // text:anchor-type
+    if (m_objectType == Inline) {
+        out.xml.addAttribute("text:anchor-type", "as-char");
+    } else {
+        out.xml.addAttribute("text:anchor-type", "char");
+    }
 }
 
-void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+void WordsGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
+{
+    if (m_processingGroup) return;
+
+    // draw:z-index
+    if (m_objectType == Floating) {
+        out.xml.addAttribute("draw:z-index", m_zIndex);
+    } else {
+        out.xml.addAttribute("draw:z-index", 0);
+    }
+}
+
+void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     QString styleName;
-    DrawStyle ds(&m_officeArtDggContainer, &o);
-    DrawStyle drawStyle(&m_officeArtDggContainer, 0, &o);
-    wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    if (!out.m_bodyDrawing) {
-        style.setAutoStyleInStylesDotXml(true);
-    }
-    defineGraphicProperties(style, ds);
-    defineWrappingProperties(style, ds, spa);
-    defineAnchorProperties(style, ds);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
     styleName = out.styles.insert(style);
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAttribute(out);
-    SetZIndexAttribute(out);
 
-    switch(drawStyle.txflTextFlow()) {
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+
+    switch(ds.txflTextFlow()) {
     case 1: //msotxflTtoBA up-down
     case 3: //msotxflTtoBN up-down
     case 5: //msotxflVertN up-down
@@ -1027,8 +989,8 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
         out.xml.addAttribute("svg:width", mm(out.vLength()));
         out.xml.addAttribute("svg:height", mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 -1 1 0 " +
-               mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
-         break;
+                mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
+        break;
     default : //standard text flow
         out.xml.addAttribute("svg:width", mm(out.hLength()));
         out.xml.addAttribute("svg:height", mm(out.vLength()));
@@ -1038,80 +1000,77 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
 
     out.xml.startElement("draw:text-box");
 
-    emit textBoxFound(o.shapeProp.spid , out.m_bodyDrawing);
-
-    out.xml.endElement(); //draw:text-box
-    out.xml.endElement(); //draw:frame
-}
-
-void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,DrawingWriter& out)
-{
-    QString styleName;
-    DrawStyle ds(&m_officeArtDggContainer,&o);
-    wvWare::Word97::FSPA* spa = out.m_pSpa;
-    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
-
-    if (!out.m_bodyDrawing) {
-        style.setAutoStyleInStylesDotXml(true);
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
+    // OfficeArtClientTextBox.
+    quint32 textId = 0;
+    if (o.clientTextbox) {
+        const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
+        if (tb) {
+            textId = tb->clientTextBox;
+        } else {
+            kDebug(30513) << "DocOfficeArtClientTextBox missing!";
+        }
+    } else {
+        if (ds.iTxid() < 0) {
+            kDebug(30513) << "lTxid property - negative text identifier!";
+        } else {
+            textId = (quint32)ds.iTxid();
+        }
     }
-    defineGraphicProperties(style, ds);
-    defineWrappingProperties(style, ds, spa);
-    defineAnchorProperties(style, ds);
-    styleName = out.styles.insert(style);
+    if (textId) {
+        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
+    }
 
-    out.xml.startElement("draw:frame");
-    out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAttribute(out);
-    SetZIndexAttribute(out);
-    out.xml.addAttribute("draw:layer", "layout");
-    out.xml.addAttribute("svg:width", mm(out.hLength()));
-    out.xml.addAttribute("svg:height", mm(out.vLength()));
-    out.xml.addAttribute("svg:x", mm(out.hOffset()));
-    out.xml.addAttribute("svg:y", mm(out.vOffset()));
-
-    out.xml.startElement("draw:text-box");
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); //draw:frame
 }
 
-void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
+void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
     kDebug(30513) ;
 
-    QString styleName;
-    DrawStyle ds(0, &o);
-    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    // Shape instance contained in OfficeArtInlineSpContainer.  BLIP properties
+    // contained in o.shapePrimaryOptions or o.shapeTertiaryOptions1 are stored
+    // in the order they are encountered, and the property values
+    // OfficeArtFOPTE.opid.fBid, OfficeArtFOPTE.opid.fComplex, and
+    // OfficeArtFOPTE.op MUST be ignored.  [MS-ODRAW] — v20101219
 
-    //in case a header or footer is processed, save the style into styles.xml
-    if (m_document->writingHeader()) {
-        style.setAutoStyleInStylesDotXml(true);
-    }
-    defineGraphicProperties(style, ds);
-    style.addProperty("style:vertical-rel","baseline");
-    style.addProperty("style:vertical-pos","top");
+    QString styleName;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
     styleName = out.styles.insert(style);
 
+    // A diagram drawing canvas placed inline with surrounding text.
+    if (ds.fPseudoInline()) {
+        out.xml.startElement("draw:rect");
+    } else {
+        out.xml.startElement("draw:frame");
+    }
+    out.xml.addAttribute("draw:style-name", styleName);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+
+    double hscale = m_picf->mx / 1000.0;
+    double vscale = m_picf->my / 1000.0;
+    out.xml.addAttributePt("svg:width", twipsToPt(m_picf->dxaGoal) * hscale);
+    out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
+
+    QString name = m_picNames.value(m_rgbUid);
     QString url;
-    QString name = m_picNames.value(out.m_rgbUid);
     if (!name.isEmpty()) {
         url.append("Pictures/");
         url.append(name);
-    }
-    out.xml.startElement("draw:frame");
-    if (url.isEmpty()) {
+    } else {
         // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
+        out.xml.endElement(); //draw:frame (draw:rect)
         return;
     }
-    out.xml.addAttribute("draw:style-name", styleName);
-    out.xml.addAttribute("text:anchor-type","as-char");
-
-    double hscale = out.m_picf->mx / 1000.0;
-    double vscale = out.m_picf->my / 1000.0;
-
-    out.xml.addAttributePt("svg:width", twipsToPt(out.m_picf->dxaGoal) * hscale);
-    out.xml.addAttributePt("svg:height", twipsToPt(out.m_picf->dyaGoal) * vscale);
-
     //TODO: process border information (complex properties)
 
     out.xml.startElement("draw:image");
@@ -1124,51 +1083,43 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     return;
 }
 
-void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
+void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
     kDebug(30513) ;
 
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+
+    // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
+    if (!ds.pib()) return;
+
     QString styleName;
-    DrawStyle ds(&m_officeArtDggContainer, &o);
-    wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    //in case a header or footer is processed, save the style into styles.xml
-    if (m_document->writingHeader()) {
-        style.setAutoStyleInStylesDotXml(true);
-    }
-    defineGraphicProperties(style, ds);
-    defineWrappingProperties(style, ds, spa);
-    defineAnchorProperties(style, ds);
-
-    //ODF-1.2: specifies the number of paragraphs that can wrap around a frame
-    //if wrap mode is in {left, right, parallel, dynamic} and anchor type is in
-    //{char, paragraph}
-    if (spa) {
-        if ((spa->wr != 1) && (spa->wr != 3)) {
-            style.addProperty("style:number-wrapped-paragraphs", "no-limit");
-        }
-    }
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
     styleName = out.styles.insert(style);
 
-    QString url;
-    if (ds.pib()) {
-        url = getPicturePath(ds.pib());
-    }
     out.xml.startElement("draw:frame");
-    if (url.isEmpty()) {
-        //if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
-        return;
-    }
     out.xml.addAttribute("draw:style-name", styleName);
-    out.xml.addAttribute("text:anchor-type","char");
-    SetZIndexAttribute(out);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+
     out.xml.addAttribute("svg:width", mm(out.hLength()));
     out.xml.addAttribute("svg:height", mm(out.vLength()));
     out.xml.addAttribute("svg:x", mm(out.hOffset()));
     out.xml.addAttribute("svg:y", mm(out.vOffset()));
 
+    QString url = getPicturePath(ds.pib());
+
+    //if the image cannot be found, just place an empty frame
+    if (url.isEmpty()) {
+        out.xml.endElement(); //draw:frame
+        return;
+    }
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
     out.xml.addAttribute("xlink:type", "simple");
@@ -1208,19 +1159,20 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     return;
 }
 
-void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
+void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
     kDebug(30513) ;
 
     QString styleName;
-    DrawStyle ds(0, &o);
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    //in case a header or footer is processed, save the style into styles.xml
-    if (m_document->writingHeader()) {
-        style.setAutoStyleInStylesDotXml(true);
-    }
-    defineGraphicProperties(style, ds);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    //TODO: maybe wrapping related attributes have to be set
 
     //NOTE: also the dxWidthHR propertie may store the width information
     float width = ds.pctHR() / 10.0;
@@ -1257,8 +1209,9 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     //create a custom shape
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAttribute(out);
-    SetZIndexAttribute(out);
+
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
 
     QString height = QString::number(ds.dxHeightHR() / 1440.0f).append("in");
     out.xml.addAttribute("svg:height", height);
@@ -1276,87 +1229,31 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     out.xml.endElement(); //custom-shape
 }
 
-void KWordGraphicsHandler::parseFloatingPictures(void)
+void WordsGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
 {
-    kDebug(30513);
+    if (m_objectType != Inline) return;
 
-    // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
-    LEInputStream* in = m_document->wdocumentStream();
+    QString styleName;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (blipStore) {
-        for (int i = 0; i < blipStore->rgfb.size(); i++) {
-            OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
+    DrawStyle ds;
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
+    styleName = out.styles.insert(style);
 
-	    //we are looking for the missing content of OfficeArtFBSE
-            if (block.anon.is<OfficeArtFBSE>()) {
-                OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
-                if (!fbse->embeddedBlip) {
-
-                    //NOTE: An foDelay value of 0xffffffff specifies that the
-                    //file is not in the delay stream and cRef must be zero.
-
-                    //NOTE: A cRef value of 0x00000000 specifies an empty slot
-                    //in the OfficeArtBStoreContainer.
-
-                    if (fbse->foDelay != 0xffffffff) {
-                        if (!fbse->cRef) {
-                            kDebug(30513) << "Strange, no references to this BLIP, skipping";
-                            continue;
-                        }
-                        LEInputStream::Mark _zero;
-                        _zero = in->setMark();
-                        in->skip(fbse->foDelay);
-
-                        //let's check the record header if there's a BLIP stored
-                        LEInputStream::Mark _m;
-                        _m = in->setMark();
-                        OfficeArtRecordHeader rh;
-                        parseOfficeArtRecordHeader(*in, rh);
-                        in->rewind(_m);
-                        if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
-                            continue;
-                        }
-                        fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
-                        parseOfficeArtBlip(*in, *(fbse->embeddedBlip.data()));
-                        in->rewind(_zero);
-                    }
-                }
-            } //else there's an OfficeArtBlip inside
-        }
-    }
-    return;
+    out.xml.startElement("draw:frame");
+    out.xml.addAttribute("draw:style-name", styleName);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+    double hscale = m_picf->mx / 1000.0;
+    double vscale = m_picf->my / 1000.0;
+    out.xml.addAttributePt("svg:width", twipsToPt(m_picf->dxaGoal) * hscale);
+    out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
+    out.xml.endElement(); //draw:frame
 }
-
-QMap<QByteArray, QString>
-KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manifest)
-{
-    PictureReference ref;
-    QMap<QByteArray, QString> fileNames;
-
-    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (blipStore) {
-        store->enterDirectory("Pictures");
-        foreach (const OfficeArtBStoreContainerFileBlock& block, blipStore->rgfb) {
-            ref = savePicture(block, store);
-            if (ref.name.length() == 0) {
-                kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
-                continue;
-	    }
-            manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
-            fileNames[ref.uid] = ref.name;
-        }
-        store->leaveDirectory();
-    }
-    return fileNames;
-}
-
-QString KWordGraphicsHandler::getPicturePath(int pib) const
-{
-    int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(&m_officeArtDggContainer, picturePosition);
-    return rgbUid.length() ? "Pictures/" + m_picNames[rgbUid] : "";
-}
-
 
 #include "graphicshandler.moc"

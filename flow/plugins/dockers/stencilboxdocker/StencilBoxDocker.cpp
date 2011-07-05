@@ -1,4 +1,4 @@
-/* Part of the KOffice project
+/* Part of the Calligra project
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
  *
@@ -135,9 +135,8 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
         loadShapeCollections();
     }
 
-    regenerateProxyMap();
-    m_treeWidget->setFamilyMap(m_proxyMap);
-    
+    m_treeWidget->setFamilyMap(m_modelMap);
+    m_treeWidget->regenerateFilteredMap();
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
     connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
@@ -205,23 +204,7 @@ void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 void StencilBoxDocker::reapplyFilter()
 {
     QRegExp regExp(m_filterLineEdit->originalText(), Qt::CaseInsensitive, QRegExp::RegExp2);
-    foreach(QSortFilterProxyModel* model, m_proxyMap)
-    {
-        model->setFilterRegExp(regExp);
-    }
-    m_treeWidget->filter();
-}
-
-void StencilBoxDocker::regenerateProxyMap()
-{
-    QMapIterator<QString, CollectionItemModel*> i(m_modelMap);
-    while(i.hasNext())
-    {
-        i.next();
-        QSortFilterProxyModel* proxy = new QSortFilterProxyModel();
-        proxy->setSourceModel(i.value());
-        m_proxyMap.insert(i.key(), proxy);
-    }
+    m_treeWidget->setFilter(regExp);
 }
 
 /// Generate lists of shapes registered
@@ -372,6 +355,16 @@ void StencilBoxDocker::removeCollection(const QString& family)
 
         m_modelMap.remove(family);
         delete model;
-        regenerateProxyMap();
+        m_treeWidget->regenerateFilteredMap();
+    }
+}
+
+void StencilBoxDocker::setViewMode(QListView::ViewMode iconMode)
+{
+    QMapIterator<QString, CollectionItemModel*> i(m_modelMap);
+    while(i.hasNext())
+    {
+        i.next();
+        i.value()->setViewMode(iconMode);
     }
 }

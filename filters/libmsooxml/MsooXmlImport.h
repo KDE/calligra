@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -97,6 +97,9 @@ public:
 
     //! Helper class to get information about predefined ooxml shapes
     PredefinedShapeHelper m_shapeHelper;
+
+    /*! report progress of the filter */
+    void reportProgress(unsigned progress);
 
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,

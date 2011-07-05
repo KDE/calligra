@@ -22,7 +22,7 @@
 #include <kpluginfactory.h>
 #include <kurlrequester.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
@@ -112,7 +112,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
     KoFilterManager manager(&d);
     QByteArray nativeFormat = d.nativeFormatMimeType();
     KoFilter::ConversionStatus status;
-    QString s = manager.importDocument(fileName, status);
+    QString s = manager.importDocument(fileName, QString(), status);
     KisImageWSP importedImage = d.image();
 
     if (importedImage) {
@@ -133,7 +133,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
     const KoColorSpace* oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    QUndoCommand* cmd = srcLAB->convertTo(labCS);
+    KUndo2Command* cmd = srcLAB->convertTo(labCS);
     delete cmd;
     dbgPlugins << "convert ref to lab";
     dbgPlugins << "ref : " << srcLAB->extent();

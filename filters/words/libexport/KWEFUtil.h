@@ -21,11 +21,11 @@
 #ifndef KWEF_UTIL_H
 #define KWEF_UTIL_H
 
-#include <kword_libexport_export.h>
+#include <words_libexport_export.h>
 namespace KWEFUtil
 {
 
-KWORD_LIBEXPORT_EXPORT QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
+WORDS_LIBEXPORT_EXPORT QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
         const bool quot = false, const bool apos = false);
 }
 

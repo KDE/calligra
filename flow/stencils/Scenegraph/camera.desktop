@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=camera
+Name[el]=κάμερα
 Name[et]=kaamera
+Name[nb]=kamera
 Name[nl]=camera
 Name[pt]=câmara
 Name[pt_BR]=câmera
@@ -8,3 +10,4 @@ Name[sv]=kamera
 Name[uk]=Відеокамера
 Name[x-test]=xxcameraxx
 Name[zh_CN]=相机
+Name[zh_TW]=相機

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -591,19 +591,24 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
 
+    reportProgress(5);
+
     // 2. parse styles
     XlsxStyles styles;
-    XlsxXmlStylesReaderContext colorContext(styles, true, &themes);
+    XlsxXmlStylesReaderContext colorContext(styles, true, this, &themes);
     {
         // In first round we read color overrides, in 2nd round we can actually use them.
         XlsxXmlStylesReader stylesReader(writers);
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &colorContext))
-        XlsxXmlStylesReaderContext context2(styles, false, &themes);
+        reportProgress(15);
+        XlsxXmlStylesReaderContext context2(styles, false, this, &themes);
         context2.colorIndices = colorContext.colorIndices; // Overriding default colors potentially
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context2))
     }
+
+    reportProgress(30);
 
     // 3. parse shared strings
     QVector<QString> sharedStrings;
@@ -613,6 +618,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
     }
+
+    reportProgress(35);
 
     // 4. parse comments
     XlsxComments comments;
@@ -624,12 +631,17 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
             "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
     }
 
+    reportProgress(40);
+
     // 5. parse document
     {
-        XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships);
+        XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships, "workbook.xml", "xl");
         XlsxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR(loadAndParseDocument(d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context))
     }
+
+    reportProgress(100);
+
     // more here...
     return KoFilter::OK;
 }

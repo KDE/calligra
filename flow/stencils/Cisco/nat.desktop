@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=NAT
+Name[el]=NAT
 Name[es]=NAT
 Name[et]=NAT
+Name[nb]=NAT
 Name[nl]=NAT
 Name[pt]=NAT
 Name[pt_BR]=NAT
@@ -9,3 +11,4 @@ Name[sv]=NAT
 Name[uk]=NAT
 Name[x-test]=xxNATxx
 Name[zh_CN]=NAT
+Name[zh_TW]=NAT

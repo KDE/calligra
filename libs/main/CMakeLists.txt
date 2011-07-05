@@ -33,12 +33,13 @@ set(komain_LIB_SRCS
     KoRulerController.cpp
     KoRuler.cpp
     KoToolBox.cpp
+    KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoVersionDialog.cpp
     KoViewAdaptor.cpp
     KoView.cpp
-    kofficeversion.cpp
+    calligraversion.cpp
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
@@ -80,11 +81,6 @@ set(komain_LIB_SRCS
 
     rdf/KoDocumentRdfBase.cpp
     rdf/KoDocumentRdfEditWidgetBase.cpp
-
-    ActionJob_p.cpp
-    KoAction.cpp
-    KoExecutePolicy.cpp
-    KoJobsListPolicy.cpp
 
     KoFindBase.cpp
     KoFindMatch.cpp
@@ -147,9 +143,8 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
     ${KDE4_KCAL_LIBS}
-    ${KDE4_THREADWEAVER_LIBRARIES}
     kowidgets
-    kotext
+    textlayout
 )
 if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
@@ -159,7 +154,7 @@ endif( Soprano_FOUND )
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
 set_target_properties(komain PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -176,8 +171,8 @@ install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 
 install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(FILES kofficedocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
-install(FILES koffice_shell.rc DESTINATION ${DATA_INSTALL_DIR}/koffice )
+install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 install( FILES
     KoApplication.h
     KoApplicationAdaptor.h
@@ -200,13 +195,14 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
     KoViewAdaptor.h
     KoImageSelectionWidget.h
-    kofficeversion.h
+    calligraversion.h
     KoProgressUpdater.h
     KoProgressBar.h
     KoUpdater.h
@@ -217,6 +213,13 @@ DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 if( Soprano_FOUND )
     install( FILES
+        rdf/KoRdfFoaF.h
+        rdf/KoRdfCalendarEvent.h
+        rdf/KoRdfLocation.h
+        rdf/KoRdfFoaFTreeWidgetItem.h
+        rdf/KoRdfCalendarEventTreeWidgetItem.h
+        rdf/KoRdfLocationTreeWidgetItem.h
+        rdf/KoChangeTrackerDisabledRAII.h
         rdf/RdfForward.h
         rdf/KoDocumentRdf.h
         rdf/KoSopranoTableModelDelegate.h

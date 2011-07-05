@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2009 Dag Andersen <koffice-devel@kde.org>
+  Copyright (C) 2006 - 2009 Dag Andersen <calligra-devel@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@
 
 class KoDocument;
 class QDomElement;
-class QUndoCommand;
+class KUndo2Command;
 class QPainter;
 class QModelIndex;
 
@@ -279,7 +279,7 @@ public:
 
 signals:
     /// Connect to this signal if your model modifies data using undo commands.
-    void executeCommand( QUndoCommand* );
+    void executeCommand( KUndo2Command* );
     
 public slots:
     virtual void setScheduleManager( ScheduleManager *sm );

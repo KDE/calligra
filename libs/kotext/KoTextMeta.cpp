@@ -98,11 +98,13 @@ void KoTextMeta::updatePosition(const QTextDocument *document, QTextInlineObject
 
 void KoTextMeta::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(pd);
-    Q_UNUSED(format);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
+    Q_UNUSED(format);
+    Q_UNUSED(pd);
+    object.setWidth(0);
+    object.setAscent(0);
+    object.setDescent(0);
 }
 
 void KoTextMeta::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)
@@ -130,11 +132,6 @@ void KoTextMeta::setEndBookmark(KoTextMeta *bookmark)
 KoTextMeta *KoTextMeta::endBookmark() const
 {
     return d->endBookmark;
-}
-
-KoShape *KoTextMeta::shape() const
-{
-    return shapeForPosition(d->document, d->posInDocument);
 }
 
 int KoTextMeta::position() const

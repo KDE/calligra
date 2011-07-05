@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=CallManager
-Name[pt]=Gestor Chamadas
+Name[de]=CallManager
+Name[el]=CallManager
+Name[nb]=Oppringingshåndtering
+Name[pt]=Gestor de Chamadas
 Name[pt_BR]=Gerenciador de chamadas
 Name[sv]=Uppringningshantering
 Name[uk]=Диспетчер дзвінків
 Name[x-test]=xxCallManagerxx
+Name[zh_TW]=CallManager

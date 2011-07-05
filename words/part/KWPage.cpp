@@ -1,5 +1,7 @@
-/* This file is part of the KOffice project
- * Copyright (C) 2005, 2008, 2010 Thomas Zander <zander@kde.org>
+/* This file is part of the Calligra project
+ * Copyright (C) 2005, 2007-2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2005, 2007-2008, 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,10 +28,10 @@
 
 #include <KDebug>
 
-void KWPage::setPageNumber(int pageNumber)
+void KWPage::setVisiblePageNumber(int pageNumber)
 {
     if (isValid())
-        priv->setPageNumberForId(n, pageNumber);
+        priv->setVisiblePageNumber(n, pageNumber);
 }
 
 bool KWPage::isValid() const
@@ -77,12 +79,10 @@ void KWPage::setPageSide(PageSide ps)
     if (page.pageSide == ps)
         return;
 
-    const bool needsRenumbering = (page.pageSide == PageSpread && ps != PageSpread) || ps == PageSpread;
+    //const bool needsRenumbering = (page.pageSide == PageSpread && ps != PageSpread) || ps == PageSpread;
     page.pageSide = ps;
     priv->pages.insert(n, page);
-
-    if (needsRenumbering)
-        priv->setPageNumberForId(n, page.pageNumber);
+    //if (needsRenumbering) priv->setVisiblePageNumber(n, page.pageNumber);
 }
 
 KWPage::PageSide KWPage::pageSide() const
@@ -208,18 +208,18 @@ qreal KWPage::marginClosestBinding() const
 qreal KWPage::offsetInDocument() const
 {
     // the y coordinate
-    return isValid() ? priv->pageOffset(priv->pages[n].pageNumber, false) : 0.;
+    return isValid() ? priv->pageOffset(priv->pages[n].pageNumber) : 0.;
 }
 
-QRectF KWPage::rect(int pageNumber) const
+void KWPage::setOffsetInDocument(qreal offset)
+{
+    priv->setPageOffset(priv->pages[n].pageNumber, offset);
+}
+
+QRectF KWPage::rect() const
 {
     if (! isValid())
         return QRectF();
-    const KWPageManagerPrivate::Page &page = priv->pages[n];
-    if (pageNumber == page.pageNumber && page.pageSide == PageSpread) // left
-        return QRectF(0, offsetInDocument(), width() / 2, height());
-    if (pageNumber == page.pageNumber + 1 && page.pageSide == PageSpread) // right
-        return QRectF(width() / 2, offsetInDocument(), width() / 2, height());
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
@@ -317,9 +317,69 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager)
     QPainter gc(&img);
     gc.fillRect(0, 0, img.width(), img.height(), QBrush(Qt::white));
     gc.translate(0, -zoomHandler.documentToViewY(offsetInDocument()));
-    gc.setClipRect(zoomHandler.documentToView(rect(pageNumber())));
+    gc.setClipRect(zoomHandler.documentToView(rect()));
     shapeManager->paint(gc, zoomHandler, false);
     gc.end();
 
     return img;
+}
+
+int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
+{
+    KWPage page = *(const_cast<KWPage*>(this));
+    switch (select) {
+    case KoTextPage::CurrentPage: break;
+    case KoTextPage::PreviousPage:
+        page = page.previous();
+        break;
+    case KoTextPage::NextPage:
+        page = page.next();
+        break;
+    }
+
+    if (! page.isValid())
+        return -1;
+
+    int pageNumber = 0;
+    if (select != KoTextPage::CurrentPage) {
+        pageNumber = page.visiblePageNumber();
+    } else {
+        int n = page.pageNumber();
+        if (priv->visiblePageNumbers.contains(n))
+            pageNumber = priv->visiblePageNumbers[n];
+    }
+
+    if (pageNumber == 0) {
+        page = page.previous();
+        pageNumber = page.isValid() ? qMax(1, page.visiblePageNumber() + 1) : 1;
+    }
+
+    if (adjustment != 0) {
+        pageNumber += adjustment;
+        if (!page.priv->pageNumbers.contains(pageNumber))
+            pageNumber = -1; // doesn't exist.
+    }
+
+    return pageNumber;
+}
+
+QString KWPage::masterPageName() const
+{
+    KWPageStyle pagestyle = pageStyle();
+    if (pagestyle.isValid()) {
+        QString name = pagestyle.name();
+        if (!name.isEmpty())
+            return name;
+    }
+    KWPage prevpage = previous();
+    while (prevpage.isValid()) {
+        KWPageStyle prevpagestyle = prevpage.pageStyle();
+        if (prevpagestyle.isValid()) {
+            if (!prevpagestyle.nextStyleName().isEmpty())
+                return prevpagestyle.nextStyleName();
+            if (!prevpagestyle.name().isEmpty())
+                return prevpagestyle.name();
+        }
+    }
+    return QString();
 }

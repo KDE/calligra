@@ -20,8 +20,6 @@
 #include "KWFrameConnectSelector.h"
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
-
 
 KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
         : m_state(state),
@@ -39,7 +37,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
 {
     m_state->addUser();
     m_frame = frame;
-    KWTextFrame *textFrame = dynamic_cast<KWTextFrame*>(frame);
+    KWFrame *textFrame = dynamic_cast<KWFrame*>(frame);
     if (textFrame == 0)
         return false;
     widget.framesList->clear();
@@ -49,7 +47,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
 
     foreach (KWFrameSet *fs, m_state->document()->frameSets()) {
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (textFs == 0 || textFs->textFrameSetType() != KWord::OtherTextFrameSet)
+        if (textFs == 0 || textFs->textFrameSetType() != Words::OtherTextFrameSet)
             continue;
         m_frameSets.append(textFs);
         QTreeWidgetItem *row = new QTreeWidgetItem(widget.framesList);
@@ -61,7 +59,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
 
     if (textFrame->frameSet()) { // already has a frameset
         KWTextFrameSet *textFs = static_cast<KWTextFrameSet*>(textFrame->frameSet());
-        if (textFs->textFrameSetType() != KWord::OtherTextFrameSet)
+        if (textFs->textFrameSetType() != Words::OtherTextFrameSet)
             return false; // can't alter frameSet of this auto-generated frame!
 
         if (textFs->frameCount() == 1) { // don't allow us to remove the last frame of an FS
@@ -127,7 +125,7 @@ void KWFrameConnectSelector::save()
 
 void KWFrameConnectSelector::open(KoShape *shape)
 {
-    KWFrame *frame = new KWTextFrame(shape, 0);
+    KWFrame *frame = new KWFrame(shape, 0);
     m_state->setFrame(frame);
     open(frame);
 }

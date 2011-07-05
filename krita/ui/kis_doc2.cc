@@ -44,10 +44,10 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <kstandarddirs.h>
 
-// KOffice
+// Calligra
 #include <KoApplication.h>
 #include <KoCanvasBase.h>
 #include <KoColorProfile.h>
@@ -114,8 +114,6 @@ public:
             : undoAdapter(0)
             , nserver(0)
             , macroNestDepth(0)
-            , ioProgressTotalSteps(0)
-            , ioProgressBase(0)
             , kraLoader(0)
             , dieOnError(false)
     {
@@ -130,8 +128,6 @@ public:
     KisUndoAdapter *undoAdapter;
     KisNameServer *nserver;
     qint32 macroNestDepth;
-    int ioProgressTotalSteps;
-    int ioProgressBase;
 
     KisImageSP image;
     KisShapeController* shapeController;
@@ -198,15 +194,10 @@ void KisDoc2::openTemplate(const KUrl& url)
 
 bool KisDoc2::init()
 {
-    if (m_d->undoAdapter) {
-        delete m_d->undoAdapter;
-        m_d->undoAdapter = 0;
-    }
-
-    if (m_d->nserver) {
-        delete m_d->nserver;
-        m_d->nserver = 0;
-    }
+    delete m_d->undoAdapter;
+    m_d->undoAdapter = 0;
+    delete m_d->nserver;
+    m_d->nserver = 0;
 
     m_d->undoAdapter = new KisUndoAdapter(this);
     connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
@@ -562,7 +553,7 @@ KisUndoAdapter* KisDoc2::undoAdapter() const
 
 void KisDoc2::undoIndexChanged(int idx)
 {
-    const QUndoCommand* command = undoStack()->command(idx);
+    const KUndo2Command* command = undoStack()->command(idx);
     if (command) {
         m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
     }

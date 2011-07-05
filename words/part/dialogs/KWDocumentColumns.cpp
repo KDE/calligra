@@ -31,6 +31,7 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     setUnit(KoUnit(KoUnit::Millimeter));
 
     QGridLayout *layout = new QGridLayout(widget.previewPane);
+    layout->setMargin(0);
     widget.previewPane->setLayout(layout);
     m_preview = new KoPagePreviewWidget(this);
     layout->addWidget(m_preview);

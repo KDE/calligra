@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ * Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,11 +25,13 @@
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
 #include <kis_config.h>
+#include <QCompleter>
 
 class KisPaintOpPresetsChooserPopup::Private
 {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
+    bool firstShown;
 };
 
 KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
@@ -57,6 +60,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.viewModeButton->setMenu(menu);
     m_d->uiWdgPaintOpPresets.viewModeButton->setPopupMode(QToolButton::InstantPopup);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(false,true);
     
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
@@ -64,9 +68,15 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(searchTextChanged(const QString&)));
 
+    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
+                this, SLOT(setLineEditCompleter(const QString&)));
+
+    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(returnPressed(QString)),
+                this, SLOT(returnKeyPressed(QString)));
+
     connect(m_d->uiWdgPaintOpPresets.showAllCheckBox, SIGNAL(toggled(bool)),
             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setShowAll(bool)));
-   
+    m_d->firstShown = true;
 }
 
 KisPaintOpPresetsChooserPopup::~KisPaintOpPresetsChooserPopup()
@@ -89,4 +99,30 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
 {
     KisConfig().setPresetChooserViewMode(KisPresetChooser::DETAIL);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
+}
+
+void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
+{
+    QWidget::paintEvent(event);
+    //Workaround to get the colum and row size right
+    if(m_d->firstShown) {
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
+        m_d->firstShown = false;
+    }
+}
+
+void KisPaintOpPresetsChooserPopup::setLineEditCompleter(const QString& searchString)
+{
+    QCompleter* tagCompleter = new QCompleter(m_d->uiWdgPaintOpPresets.wdgPresetChooser->getTagNamesList(searchString),this);
+    m_d->uiWdgPaintOpPresets.searchBar->setCompleter(tagCompleter);
+}
+
+void KisPaintOpPresetsChooserPopup::returnKeyPressed(QString lineEditText)
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->returnKeyPressed(lineEditText);
+    if(!lineEditText.endsWith(", ")) {
+        lineEditText.append(", ");
+    }
+    m_d->uiWdgPaintOpPresets.searchBar->setText(lineEditText);
+    setLineEditCompleter(lineEditText);
 }

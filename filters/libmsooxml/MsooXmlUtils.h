@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
@@ -86,6 +86,8 @@ public:
 
     void setNumFormat(const QString& numFormat);
 
+    void setMargin(qreal margin);
+
     void setIndent(qreal indent);
 
     void setPicturePath(const QString& picturePath);
@@ -112,9 +114,10 @@ public:
 
     int m_level;
 
-private:
     enum ParagraphBulletType {BulletType, NumberType, PictureType, DefaultType};
     ParagraphBulletType m_type;
+
+private:
 
     QString m_startValue;
     QString m_bulletFont;
@@ -123,6 +126,7 @@ private:
     QString m_suffix;
     QString m_align;
     QString m_indent;
+    QString m_margin;
     QString m_picturePath;
     QString m_bulletColor;
     QSize m_bulletSize;
@@ -145,7 +149,7 @@ private:
 
 //! Helper that sets given variable to specified value on destruction
 //! Object of type Setter are supposed to be created on the stack.
-//! @todo Copied from koffice/kexi/kexiutils/utils.h; replace with a shared code
+//! @todo Copied from calligra/kexi/kexiutils/utils.h; replace with a shared code
 template <typename T>
 class Setter
 {
@@ -199,9 +203,6 @@ public:
 private:
     T** m_pptr;
 };
-
-//! Copies properties from one KoGenStyle to another
-MSOOXML_EXPORT void copyPropertiesFromStyle(const KoGenStyle& sourceStyle, KoGenStyle& targetStyle, KoGenStyle::PropertyType type);
 
 //! Decodes boolean attribute @a value. If unspecified returns @a defaultValue.
 //! @return true unless @a value is equal to "false", "off" or "0".
@@ -317,9 +318,6 @@ struct MSOOXML_EXPORT DoubleModifier {
     qreal value;
     bool valid;
 };
-
-//! Converts color string to rgb color string #xxYYZZ
-MSOOXML_EXPORT QString rgbColor(QString color);
 
 MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     const DoubleModifier& modulation, const DoubleModifier& offset);

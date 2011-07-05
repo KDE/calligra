@@ -60,4 +60,4 @@ X-KDE-Export=application/x-karbon
 X-KDE-Import=image/x-msod
 X-KDE-Weight=1
 X-KDE-Library=karbonmsodimport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

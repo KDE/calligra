@@ -47,7 +47,7 @@ public:
      */
     virtual ~AutoFillStrategy();
 
-    virtual QUndoCommand* createCommand();
+    virtual KUndo2Command* createCommand();
 
 private:
     class Private;

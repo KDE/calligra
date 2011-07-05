@@ -22,10 +22,6 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
 
-#ifdef HAVE_QCA2
-    #include <QtCrypto>
-#endif
-
 namespace Swinder
 {
 
@@ -51,9 +47,6 @@ public:
     void decryptBytes(unsigned count, unsigned char* data);
     void skipBytes(unsigned count);
 private:
-#ifdef HAVE_QCA2
-    QCA::Initializer m_qca;
-#endif
     QByteArray m_salt;
     QByteArray m_encryptedVerifier;
     QByteArray m_encryptedVerifierHash;

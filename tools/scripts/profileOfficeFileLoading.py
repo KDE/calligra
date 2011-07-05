@@ -1,6 +1,6 @@
 #! /usr/bin/python -Qwarnall
 
-# This script profiles loading of documents in KOffice.
+# This script profiles loading of documents in Calligra.
 # It is called like this:
 #  profileOfficeFileLoading.py $dir $outputfile
 # The script outputs an csv file that contains the times various functions took
@@ -11,9 +11,9 @@
 import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 
 applications = {
-  'kword': ['odt', 'doc', 'docx'],
-  'kpresenter': ['odp', 'ppt', 'pptx'],
-  'kspread': ['ods', 'xls', 'xlsx']
+  'calligrawords': ['odt', 'doc', 'docx'],
+  'calligrastage': ['odp', 'ppt', 'pptx'],
+  'calligratables': ['ods', 'xls', 'xlsx']
 }
 
 # limit how many backtraces are recordes, since it takes a lot of time
@@ -89,6 +89,8 @@ def containsRealError(err):
 	# out
 	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element styles failed to validate content") != -1:
 		return None
+	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element automatic-styles failed to validate content") != -1:
+		return None
 	return err
 
 class odfvalidator:
@@ -96,7 +98,7 @@ class odfvalidator:
 		path = sys.path[0]
 		self.relaxNGValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cd05-schema-koffice.rng'),
+				'OpenDocument-v1.2-cd05-schema-calligra.rng'),
 				'r')))
 		self.relaxNGManifextValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
@@ -364,7 +366,7 @@ def createStackTraceGraph(results):
 		for l in r.backtrace:
 			l = l.rstrip()
 			n += 1
-			m = re.search('/koffice/.*/([^/]+:\d+)$', l)
+			m = re.search('/calligra/.*/([^/]+:\d+)$', l)
 			if m != None:
 				key = m.group(1)
 				nodes[key] = l
@@ -376,13 +378,13 @@ def createStackTraceGraph(results):
 	out.write('digraph {')
 	svn = 'http://websvn.kde.org/trunk'
 	for a in nodes:
-		m = re.search('(/koffice/.*):(\d+)$', nodes[a])
+		m = re.search('(/calligra/.*):(\d+)$', nodes[a])
 		n = '"' + a + '" [URL = "'
 		if m:
 			out.write(n + svn + m.group(1) + '?view=markup#l'
 				+ m.group(2) + '"];')
 		else:
-			m = re.search('(/kofficetests/.*)', nodes[a])
+			m = re.search('(/calligratests/.*)', nodes[a])
 			if m:
 				out.write(n + svn + '/tests' + m.group(1)
 					+ '"];')

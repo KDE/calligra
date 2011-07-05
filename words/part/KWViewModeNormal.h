@@ -33,12 +33,12 @@
  * in between. This strategy is mirrored
  * in this viewmode.  Only when there is at least one PageSpread kind of page will the
  * behavior change slightly.  A pagespread type page is what the user will perceive as
- * 2 pages, but KWord internally sees as one big page with a special type.  Since it is
+ * 2 pages, but Words internally sees as one big page with a special type.  Since it is
  * about twice as wide as normal pages this viewmode will try to layout the rest of
  * the pages side by side.
  * @see KWViewMode
  */
-class KWORD_EXPORT KWViewModeNormal : public KWViewMode
+class WORDS_EXPORT KWViewModeNormal : public KWViewMode
 {
     Q_OBJECT
 public:
@@ -48,8 +48,10 @@ public:
     KWViewModeNormal();
     ~KWViewModeNormal() {}
 
-    virtual QPointF documentToView(const QPointF &point) const;
-    virtual QPointF viewToDocument(const QPointF &point) const;
+    using KWViewMode::documentToView;
+
+    virtual QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const;
+    virtual QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const;
     virtual QSizeF contentsSize() const {
         return m_contents;
     }
@@ -61,7 +63,7 @@ public:
     virtual const QString type() const {
         return KWViewModeNormal::viewMode();
     }
-    virtual QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
+    virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const;
 
 protected:
     void updatePageCache();

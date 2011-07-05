@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=WLAN controller
+Name[el]=Ελεγκτής WLAN
 Name[es]=Controlador de WLAN
 Name[et]=WLAN-i kontroller
+Name[nb]=WLAN-styrer
 Name[pt]=Controlador WLAN
 Name[pt_BR]=Controlador WLAN
 Name[sv]=Styrenhet för trådlöst lokalt nätverk
 Name[uk]=Контролер WLAN
 Name[x-test]=xxWLAN controllerxx
+Name[zh_TW]=無線網路控制器

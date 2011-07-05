@@ -36,7 +36,7 @@
 // KDE
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
 #include "KoXmlNS.h"
@@ -47,17 +47,20 @@
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 
-#include "kowmfpaint.h"
+// Wmf support
+#include "WmfPainterBackend.h"
 
 // Vector shape
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
 #include "libemf/EmfOutputDebugStrategy.h"
+#include "libsvm/SvmParser.h"
+#include "libsvm/SvmPainterBackend.h"
 
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
-    , m_type(VectorTypeUndetermined)
+    , m_type(VectorTypeNone)
 {
     setShapeId(VectorShape_SHAPEID);
    // Default size of the shape.
@@ -83,12 +86,20 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
     update();
 }
 
+
+// ----------------------------------------------------------------
+//                             Painting
+
+
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
+#if 1  // Set to 0 to get uncached painting, which is good for debugging
     QRectF rc = converter.documentToView(boundingRect());
+
+    // If necessary, recreate the cached image.
     QImage *cache = m_cache.take(rc.size().toSize().height());
     if (!cache || cache->isNull()) {
-        // create the cache image
+        // Create the cache image.
         cache = new QImage(rc.size().toSize(), QImage::Format_ARGB32);
         cache->fill(0);
         QPainter gc(cache);
@@ -97,32 +108,47 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
         gc.end();
     }
     QVector<QRect> clipRects = painter.clipRegion().rects();
-    foreach(const QRect rc, clipRects) {
+    foreach (const QRect &rc, clipRects) {
         painter.drawImage(rc.topLeft(), *cache, rc);
     }
     m_cache.insert(rc.size().toSize().height(), cache);
+#else
+    applyConversion(painter, converter);
+    draw(painter);
+#endif
 }
 
 void VectorShape::draw(QPainter &painter)
 {
-    // If the data is uninitialized, e.g. because loading failed, draw the null shape
+    // If the data is uninitialized, e.g. because loading failed, draw the null shape.
     if (m_contents.count() == 0) {
         drawNull(painter);
         return;
     }
 
-    // Actually draw the contents
     m_contents = qUncompress(m_contents);
 
+    // Check if the type is undetermined.  It could be that if we got
+    // the contents via setCompressedContents().
+    //
+    // FIXME: make setCompressedContents() return a bool and check the
+    //        contents there already.
     if (m_type == VectorTypeUndetermined) {
+        // FIXME: Break out into its own function.
         if (isWmf(m_contents)) {
             m_type = VectorTypeWmf;
         }
         else if (isEmf(m_contents)) {
             m_type = VectorTypeEmf;
         }
+        else if (isSvm(m_contents)) {
+            m_type = VectorTypeSvm;
+        }
+        else
+            m_type = VectorTypeNone;
     }
 
+    // Actually draw the contents
     switch (m_type) {
     case VectorTypeNone:
         drawNull(painter);
@@ -132,6 +158,9 @@ void VectorShape::draw(QPainter &painter)
         break;
     case VectorTypeEmf:
         drawEmf(painter);
+        break;
+    case VectorTypeSvm:
+        drawSvm(painter);
         break;
     default:
         drawNull(painter);
@@ -158,7 +187,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     // Debug
     //drawNull(painter);
 
-    KoWmfPaint  wmfPainter;
+    Libwmf::WmfPainterBackend  wmfPainter(&painter, size());
 
     if (!wmfPainter.load(m_contents)) {
         drawNull(painter);
@@ -167,23 +196,8 @@ void VectorShape::drawWmf(QPainter &painter) const
 
     painter.save();
 
-    // Position the bitmap to the right place and resize it to fit.
-    QRect   wmfBoundingRect = wmfPainter.boundingRect(); // Not QRectF because a wmf contains only ints.
-    QSizeF  shapeSize       = size();
-
-#if DEBUG_VECTORSHAPE
-    kDebug(31000) << "-------------------------------- Starting WMF --------------------------------";
-    kDebug(31000) << "wmfBoundingRect: " << wmfBoundingRect;
-    kDebug(31000) << "shapeSize: "       << shapeSize;
-#endif
-
-    // Create a transformation that makes the Wmf fit perfectly into the shape size.
-    painter.scale(shapeSize.width() / wmfBoundingRect.width(),
-                  shapeSize.height() / wmfBoundingRect.height());
-    painter.translate(-wmfBoundingRect.left(), -wmfBoundingRect.top());
-
     // Actually paint the WMF.
-    wmfPainter.play(painter, true);
+    wmfPainter.play();
 
     painter.restore();
 }
@@ -197,18 +211,10 @@ void VectorShape::drawEmf(QPainter &painter) const
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
-    // Create a QBuffer to read from...
-    QBuffer     emfBuffer((QByteArray  *)&m_contents, 0);
-    emfBuffer.open(QIODevice::ReadOnly);
-
-    // ...but what we really want is a stream.
-    QDataStream  emfStream;
-    emfStream.setDevice(&emfBuffer);
-    emfStream.setByteOrder(QDataStream::LittleEndian);
-
     // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
-#if 1
+
+#if 1  // Set to 0 to get debug output
     // Create a new painter output strategy.  Last param = true means keep aspect ratio.
     Libemf::OutputPainterStrategy  emfPaintOutput( painter, shapeSizeInt, true );
     emfParser.setOutput( &emfPaintOutput );
@@ -216,10 +222,27 @@ void VectorShape::drawEmf(QPainter &painter) const
     Libemf::OutputDebugStrategy  emfDebugOutput;
     emfParser.setOutput( &emfDebugOutput );
 #endif
-    emfParser.loadFromStream(emfStream);
 
-    return;
+    emfParser.load(m_contents);
 }
+
+void VectorShape::drawSvm(QPainter &painter) const
+{
+    QSize  shapeSizeInt( size().width(), size().height() );
+
+    // FIXME: Make it static to save time?
+    Libsvm::SvmParser  svmParser;
+
+    // Create a new painter backend.
+    Libsvm::SvmPainterBackend  svmPaintOutput(&painter, shapeSizeInt);
+    svmParser.setBackend(&svmPaintOutput);
+    svmParser.parse(m_contents);
+}
+
+
+// ----------------------------------------------------------------
+//                         Loading and Saving
+
 
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {
@@ -227,7 +250,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
     KoXmlWriter             &xmlWriter = context.xmlWriter();
 
     QString fileName = fileSaver.getFilename("VectorImages/Image");
-    char *mimeType;
+    QByteArray mimeType;
 
     switch (m_type) {
     case VectorTypeWmf:
@@ -235,6 +258,9 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
         break;
     case VectorTypeEmf:
         mimeType = "application/x-emf";
+        break;
+    case VectorTypeSvm:
+        mimeType = "application/x-svm";// FIXME: Check if this is true
         break;
     default:
         // FIXME: What here?
@@ -244,7 +270,9 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
     xmlWriter.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
-    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType, m_contents);
+    QByteArray  uncompressedContents = qUncompress(m_contents);
+    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType.constData(),
+                        uncompressedContents);
     xmlWriter.endElement(); // draw:frame
 }
 
@@ -299,13 +327,29 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         return false;
     }
 
+    // Try to recognize the type.  We should do this before the
+    // compression below, because that's a semi-expensive operation.
     m_type = VectorTypeUndetermined;
+    if (isWmf(m_contents)) {
+        m_type = VectorTypeWmf;
+    }
+    else if (isEmf(m_contents)) {
+        m_type = VectorTypeEmf;
+    }
+    else if (isSvm(m_contents)) {
+        m_type = VectorTypeSvm;
+    }
+    else
+        m_type = VectorTypeNone;
 
-    // compress for biiiig memory savings
+    // Return false if we didn't manage to identify the type.
+    if (m_type == VectorTypeNone)
+        return false;
+
+    // Compress for biiiig memory savings.
     m_contents = qCompress(m_contents);
 
-    // Return true if we managed to identify the type.
-    return m_type != VectorTypeNone;
+    return true;
 }
 
 
@@ -362,6 +406,19 @@ bool VectorShape::isEmf(const QByteArray &bytes)
         && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F')
     {
         kDebug(31000) << "EMF identified";
+        return true;
+    }
+
+    return false;
+}
+
+bool VectorShape::isSvm(const QByteArray &bytes)
+{
+    kDebug(31000) << "Check for SVM";
+
+    // Check the SVM signature.
+    if (bytes.startsWith("VCLMTF")) {
+        kDebug(31000) << "SVM identified";
         return true;
     }
 

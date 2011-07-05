@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=Vertical LED
+Name[de]=Senkrechte LED
+Name[el]=Κάθετο LED
 Name[et]=Vertikaalne LED
+Name[nb]=Loddrett LED
 Name[nl]=Verticale led
 Name[pt]=LED Vertical
 Name[pt_BR]=LED vertical
 Name[sv]=Vertikal lysdiod
 Name[uk]=Світлодіод (вертикально)
 Name[x-test]=xxVertical LEDxx
+Name[zh_TW]=垂直發光二極體

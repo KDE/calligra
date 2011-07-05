@@ -71,7 +71,6 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
             if (shape == d->connectionShape)
                 continue;
 
-            QTransform m = shape->absoluteTransformation(0);
             KoConnectionPoints connectionPoints = shape->connectionPoints();
             if (! connectionPoints.count()) {
                 QSizeF size = shape->size();
@@ -121,7 +120,7 @@ void KoPathConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers modi
     KoParameterChangeStrategy::finishInteraction(modifiers);
 }
 
-QUndoCommand* KoPathConnectionPointStrategy::createCommand()
+KUndo2Command* KoPathConnectionPointStrategy::createCommand()
 {
     Q_D(KoPathConnectionPointStrategy);
 

@@ -25,6 +25,8 @@
 #include "globalobjectcollectors.h"
 #include "pictures.h"
 #include "ODrawToOdf.h"
+#include "msodraw.h"
+#include "msppt.h"
 
 #include <kdebug.h>
 #include <KoOdf.h>
@@ -224,7 +226,8 @@ private:
     PptToOdp* const ppttoodp;
 
     QRectF getRect(const MSO::OfficeArtClientAnchor&);
-    QString getPicturePath(int pib);
+    QRectF getReserveRect(void);
+    QString getPicturePath(const quint32 pib);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
     void processClientData(const MSO::OfficeArtClientTextBox* ct,
                            const MSO::OfficeArtClientData& cd,
@@ -234,16 +237,24 @@ private:
                               Writer& out);
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd, Writer& out);
-    void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
-            const MSO::OfficeArtClientData* clientData,
-            Writer& out, KoGenStyle& style);
+            const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
+    void addTextStyles(const quint16 msospt,
+                       const MSO::OfficeArtClientTextBox* clientTextbox,
+                       const MSO::OfficeArtClientData* clientData,
+                       KoGenStyle& style, Writer& out);
+
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-    const MSO::OfficeArtSpContainer* defaultShapeContainer() { return dc_data->defaultShape; };
 
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
     QString formatPos(qreal v);
+
+    /**
+     * Check if a placeholder is valid and allowed by the slide layout.
+     * @param PlaceholderAtom
+     * @return 1 - allowed, 0 - forbidden
+     */
+    bool placeholderAllowed(const MSO::PlaceholderAtom* pa) const;
 
     struct DrawClientData {
         const MSO::MasterOrSlideContainer* masterSlide;
@@ -252,13 +263,8 @@ private:
         const MSO::NotesContainer* notesSlide;
         const MSO::SlideListWithTextSubContainerOrAtom* slideTexts;
 
-        //OfficeArtDgContainer/shape - for MS Office 2003 outputs, this one
-        //seems to contain missing boolean properties for the content of
-        //OfficeArtDgContainer/groupShape
-        const MSO::OfficeArtSpContainer* defaultShape;
-
         DrawClientData(): masterSlide(0), presSlide(0), notesMasterSlide(0),
-                          notesSlide(0), slideTexts(0), defaultShape(0) {};
+                          notesSlide(0), slideTexts(0) {};
     };
     DrawClientData dc_data[1];
 
@@ -268,14 +274,12 @@ public:
                            const MSO::SlideContainer* sc,
                            const MSO::NotesContainer* nmc,
                            const MSO::NotesContainer* nc,
-                           const MSO::OfficeArtSpContainer* shape = 0,
                            const MSO::SlideListWithTextSubContainerOrAtom* stc = 0)
     {
         dc_data->masterSlide = mc;
         dc_data->presSlide = sc;
         dc_data->notesMasterSlide = nmc;
         dc_data->notesSlide = nc;
-        dc_data->defaultShape = shape;
         dc_data->slideTexts = stc;
     }
 };
@@ -286,9 +290,14 @@ QRectF PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
     if (a) {
         return ::getRect(*a);
     }
+    return QRectF();
+}
+QRectF PptToOdp::DrawClient::getReserveRect(void)
+{
+    //NOTE: No PPT test files at the moment.
     return QRect(0, 0, 1, 1);
 }
-QString PptToOdp::DrawClient::getPicturePath(int pib)
+QString PptToOdp::DrawClient::getPicturePath(const quint32 pib)
 {
     return ppttoodp->getPicturePath(pib);
 }
@@ -354,8 +363,10 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
 KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
+        const DrawStyle& ds,
         Writer& out)
 {
+    Q_UNUSED(ds);
     KoGenStyle style;
 
     const PptOfficeArtClientData* cd = 0;
@@ -367,7 +378,12 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
     quint32 textType = ppttoodp->getTextType(tb, cd);
-    bool isPlaceholder = cd && cd->placeholderAtom;
+    bool isPlaceholder = false;
+    if ( (cd && cd->placeholderAtom) &&
+          placeholderAllowed(cd->placeholderAtom.data()) )
+    {
+        isPlaceholder = true;
+    }
     if (isPlaceholder) { // type is presentation
         bool canBeParentStyle = false;
         if ( (textType != 99) && out.stylesxml && dc_data->masterSlide) {
@@ -410,14 +426,14 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
             listStyleName = out.styles.insert(list);
         }
     }
-
     return style;
 }
 
 void PptToOdp::DrawClient::addTextStyles(
+        const quint16 msospt,
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
-        Writer& out, KoGenStyle& style)
+        KoGenStyle& style, Writer& out)
 {
     const PptOfficeArtClientData* cd = 0;
     if (clientData) {
@@ -427,9 +443,24 @@ void PptToOdp::DrawClient::addTextStyles(
     if (clientTextbox) {
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
-    bool isPlaceholder = cd && cd->placeholderAtom;
+
+    //NOTE: [content.xml] As soon the content or graphic-style of a placeholder
+    //changed, make it a normal shape to be ODF compliant.
+    //
+    //TODO: check if the graphic-style changed compared to the parent
+
+    bool isPlaceholder = false;
+    bool potentialPlaceholder = false;
+    if ( (cd && cd->placeholderAtom) &&
+          placeholderAllowed(cd->placeholderAtom.data()) )
+    {
+        isPlaceholder = true;
+    }
+    if (msospt == msosptRectangle) {
+        potentialPlaceholder = true;
+    }
+
     if (out.stylesxml) {
-        const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
         //get the main master slide's MasterOrSlideContainer
         const MasterOrSlideContainer* m = 0;
         if (dc_data->masterSlide && isPlaceholder) {
@@ -438,6 +469,7 @@ void PptToOdp::DrawClient::addTextStyles(
                 m = ppttoodp->p->getMaster(m->anon.get<SlideContainer>());
             }
         }
+        const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
         PptTextPFRun pf(ppttoodp->p->documentContainer, m, dc_data->slideTexts, cd, tc);
         ppttoodp->defineParagraphProperties(style, pf, 0);
         PptTextCFRun cf(ppttoodp->p->documentContainer, m, tc, 0);
@@ -453,8 +485,11 @@ void PptToOdp::DrawClient::addTextStyles(
     if (isPlaceholder) {
         out.xml.addAttribute("presentation:style-name", styleName);
         QString className = getPresentationClass(cd->placeholderAtom.data());
-        if (className.isEmpty() || !out.stylesxml) {
-            const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
+        const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
+
+        if ( className.isEmpty() ||
+             (!out.stylesxml && (!potentialPlaceholder || getText(tc).size())) )
+        {
             className = getPresentationClass(tc);
             out.xml.addAttribute("presentation:placeholder", "false");
         } else {
@@ -526,6 +561,158 @@ QString PptToOdp::DrawClient::formatPos(qreal v)
     return mm(v * (25.4 / 576));
 }
 
+bool PptToOdp::DrawClient::placeholderAllowed(const MSO::PlaceholderAtom* pa) const
+{
+    //For details check the following chapter: 2.5.10 SlideAtom
+    //[MS-PPT] — v20101219
+
+    //TODO: Num. and combinations of placeholder shapes matters!
+
+    if (!pa || (pa->position == (qint32) 0xFFFFFFFF)) {
+        return false;
+    }
+    quint8 placementId = pa->placementId;
+    quint32 geom = SL_TitleSlide;
+
+    const MSO::MainMasterContainer* mm = 0;
+    const MSO::SlideContainer* tm = 0;
+    if (ppttoodp->m_processingMasters) {
+        const MSO::MasterOrSlideContainer* mc = dc_data->masterSlide;
+        if (mc) {
+            if (mc->anon.is<MainMasterContainer>()) {
+                mm = mc->anon.get<MainMasterContainer>();
+                geom = mm->slideAtom.geom;
+            } else if (mc->anon.is<SlideContainer>()) {
+                tm = mc->anon.get<SlideContainer>();
+                geom = tm->slideAtom.geom;
+            }
+        }
+    } else {
+        if (dc_data->presSlide) {
+            geom = dc_data->presSlide->slideAtom.geom;
+        }
+    }
+    //Main Master Slide
+    if (mm) {
+        switch(geom) {
+        case SL_TitleBody:
+            switch (placementId) {
+            case PT_MasterTitle:
+            case PT_MasterBody:
+            case PT_MasterDate:
+            case PT_MasterFooter:
+            case PT_MasterSlideNumber:
+                return true;
+            default:
+                return false;
+            }
+        default:
+            return false;
+        }
+    }
+    //Title Master Slide
+    if (tm) {
+        switch(geom) {
+        case SL_MasterTitle:
+            switch (placementId) {
+            case PT_MasterCenterTitle:
+            case PT_MasterSubTitle:
+            case PT_MasterDate:
+            case PT_MasterFooter:
+            case PT_MasterSlideNumber:
+                return true;
+            default:
+                return false;
+            }
+        default:
+            return false;
+        }
+    }
+    //Presentation Slide
+    switch(geom) {
+    case SL_TitleSlide:
+        switch (placementId) {
+        case PT_CenterTitle:
+        case PT_SubTitle:
+            return true;
+        default:
+            return false;
+        }
+    case SL_TitleBody:
+        switch (placementId) {
+        case PT_Title:
+        case PT_Body:
+        case PT_Table:
+        case PT_OrgChart:
+        case PT_Graph:
+        case PT_Object:
+        case PT_VerticalBody:
+            return true;
+        default:
+            return false;
+        }
+    case SL_TitleOnly:
+        switch (placementId) {
+        case PT_Title:
+            return true;
+        default:
+            return false;
+        }
+    case SL_TwoColumns:
+        //TODO: support placeholder combinations
+        return true;
+    case SL_TwoRows:
+    case SL_ColumnTwoRows:
+    case SL_TwoRowsColumn:
+    case SL_TwoColumnsRow:
+        switch (placementId) {
+        case PT_Title:
+        case PT_Body:
+        case PT_Object:
+            return true;
+        default:
+            return false;
+        }
+    case SL_FourObjects:
+        switch (placementId) {
+        case PT_Title:
+        case PT_Object:
+            return true;
+        default:
+            return false;
+        }
+    case SL_BigObject:
+        switch (placementId) {
+        case PT_Object:
+            return true;
+        default:
+            return false;
+        }
+    case SL_Blank:
+        //TODO: support placeholder combinations
+        return false;
+    case SL_VerticalTitleBody:
+        switch (placementId) {
+        case PT_VerticalTitle:
+        case PT_VerticalBody:
+            return true;
+        default:
+            return false;
+        }
+    case SL_VerticalTwoRows:
+        switch (placementId) {
+        case PT_VerticalTitle:
+        case PT_VerticalBody:
+        case PT_Graph:
+            return true;
+        default:
+            return false;
+        }
+    default:
+        return false;
+    }
+}
+
 /*
  * ************************************************
  * PptToOdp
@@ -539,6 +726,7 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentSlideTexts(0),
   m_currentMaster(0),
   m_currentSlide(0),
+  m_processingMasters(false),
   m_isList(false)
 {
 }
@@ -548,23 +736,6 @@ PptToOdp::~PptToOdp()
     delete p;
 }
 
-QMap<QByteArray, QString>
-createPictures(POLE::Storage& storage, KoStore* store, KoXmlWriter* manifest)
-{
-    QMap<QByteArray, QString> fileNames;
-    POLE::Stream* stream = new POLE::Stream(&storage, "/Pictures");
-    while (!stream->eof() && !stream->fail()
-            && stream->tell() < stream->size()) {
-
-        PictureReference ref = savePicture(*stream, store);
-        if (ref.name.length() == 0) break;
-        manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
-        fileNames[ref.uid] = ref.name;
-    }
-    storage.close();
-    delete stream;
-    return fileNames;
-}
 QMap<quint16, QString>
 createBulletPictures(const PP9DocBinaryTagExtension* pp9, KoStore* store, KoXmlWriter* manifest)
 {
@@ -625,7 +796,7 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
         return KoFilter::FileNotFound;
     }
 
-    KoFilter::ConversionStatus status = doConversion(storage, storeout);
+    KoFilter::ConversionStatus status = doConversion(storeout);
 
     if (m_progress_update) {
         (m_filter->*m_setProgress)(100);
@@ -642,11 +813,11 @@ PptToOdp::convert(POLE::Storage& storage, KoStore* storeout)
         qDebug() << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
     }
-    return doConversion(storage, storeout);
+    return doConversion(storeout);
 }
 
 KoFilter::ConversionStatus
-PptToOdp::doConversion(POLE::Storage& storage, KoStore* storeout)
+PptToOdp::doConversion(KoStore* storeout)
 {
     KoOdfWriteStore odfWriter(storeout);
     KoXmlWriter* manifest = odfWriter.manifestWriter(
@@ -655,8 +826,7 @@ PptToOdp::doConversion(POLE::Storage& storage, KoStore* storeout)
     // store the images from the 'Pictures' stream
     storeout->disallowNameExpansion();
     storeout->enterDirectory("Pictures");
-    pictureNames = createPictures(storage,
-                                  storeout, manifest);
+    pictureNames = createPictures(storeout, manifest, &p->pictures.anon1.rgfb);
     // read pictures from the PowerPoint Document structures
     bulletPictureNames = createBulletPictures(getPP<PP9DocBinaryTagExtension>(
             p->documentContainer), storeout, manifest);
@@ -884,13 +1054,57 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& st
     odrawtoodf.defineGraphicProperties(style, ds, styles);
 }
 
-QString PptToOdp::getPicturePath(int pib) const
+template<class T>
+void
+setRgbUid(const T* a, QByteArray& rgbUid)
 {
-    int picturePosition = pib - 1;
-    const OfficeArtDggContainer* dgg
-        = &p->documentContainer->drawingGroup.OfficeArtDgg;
-    QByteArray rgbUid = getRgbUid(dgg, picturePosition);
-    return rgbUid.length() ? "Pictures/" + pictureNames[rgbUid] : "";
+    if (!a) return;
+    rgbUid = a->rgbUid1 + a->rgbUid2;
+}
+
+QString PptToOdp::getPicturePath(const quint32 pib) const
+{
+    bool use_offset = false;
+    quint32 offset = 0;
+
+    const OfficeArtDggContainer& dgg = p->documentContainer->drawingGroup.OfficeArtDgg;
+    QByteArray rgbUid = getRgbUid(dgg, pib, offset);
+
+    if (!rgbUid.isEmpty()) {
+        if (pictureNames.contains(rgbUid)) {
+            return "Pictures/" + pictureNames[rgbUid];
+        } else {
+            qDebug() << "UNKNOWN picture reference:" << rgbUid.toHex();
+            use_offset = true;
+            rgbUid.clear();
+        }
+    }
+    if (use_offset) {
+        const OfficeArtBStoreDelay& d = p->pictures.anon1;
+        foreach (const OfficeArtBStoreContainerFileBlock& block, d.rgfb) {
+            if (block.anon.is<OfficeArtBlip>()) {
+                if (block.anon.get<OfficeArtBlip>()->streamOffset == offset) {
+
+                    const OfficeArtBlip* b = block.anon.get<OfficeArtBlip>();
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipEMF>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipWMF>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipPICT>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipJPEG>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipPNG>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipDIB>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipTIFF>(), rgbUid);
+
+                    if (!rgbUid.isEmpty()) {
+                        if (pictureNames.contains(rgbUid)) {
+                            qDebug() << "Reusing OfficeArtBlip offset:" << offset;
+                            return "Pictures/" + pictureNames[rgbUid];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return QString();
 }
 
 void PptToOdp::defineTextProperties(KoGenStyle& style,
@@ -1094,28 +1308,47 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             quint32 fillType = ds.fillType();
             style.addProperty("draw:fill", getFillType(fillType), dp);
             // draw:fill-color
-            if (fillType == 0) {
-                // only set the color if the fill type is 'solid' because OOo ignores
-                // fill='none' if the color is set
-                QColor tmp = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
-                style.addProperty("draw:fill-color", tmp.name(), dp);
+            switch (fillType) {
+            case msofillSolid:
+            {
+                QColor color = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
+                style.addProperty("draw:fill-color", color.name(), dp);
+                break;
             }
             // draw:fill-gradient-name
-            else if ((fillType >= 4) && (fillType <= 8)) {
+            case msofillShade:
+            case msofillShadeCenter:
+            case msofillShadeShape:
+            case msofillShadeScale:
+            case msofillShadeTitle:
+            {
                 KoGenStyle gs(KoGenStyle::LinearGradientStyle);
                 odrawtoodf.defineGradientStyle(gs, ds);
-                QString tmp = styles.insert(gs);
-                style.addProperty("draw:fill-gradient-name", tmp, dp);
+                QString gname = styles.insert(gs);
+                style.addProperty("draw:fill-gradient-name", gname, dp);
+                break;
             }
             // draw:fill-hatch-name
             // draw:fill-hatch-solid
             // draw:fill-image-height
             // draw:fill-image-name
-            quint32 fillBlip = ds.fillBlip();
-            const QString fillImagePath = getPicturePath(fillBlip);
-            if (!fillImagePath.isEmpty()) {
-                style.addProperty("draw:fill-image-name",
-                                  "fillImage" + QString::number(fillBlip), dp);
+            case msofillPattern:
+            case msofillTexture:
+            case msofillPicture:
+            {
+                quint32 fillBlip = ds.fillBlip();
+                const QString fillImagePath = getPicturePath(fillBlip);
+                if (!fillImagePath.isEmpty()) {
+                    style.addProperty("draw:fill-image-name",
+                                      "fillImage" + QString::number(fillBlip), dp);
+                    style.addProperty("style:repeat", getRepeatStyle(fillType), dp);
+                }
+                break;
+            }
+            //TODO:
+            case msofillBackground:
+            default:
+                break;
             }
             // draw:fill-image-ref-point-x
             // draw:fill-image-ref-point-y
@@ -1124,10 +1357,11 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             // draw:gradient-step-count
             // draw:opacity-name
             // draw:opacity
+            style.addProperty("draw:opacity",
+                              percent(100.0 * toQReal(ds.fillOpacity())), dp);
             // draw:secondary-fill-color
             // draw:tile-repeat-offset
-            // style:repeat
-            style.addProperty("style:repeat", getRepeatStyle(fillType));
+            // style:repeat // handled for image see draw:fill-image-name
         } else {
             style.addProperty("draw:fill", "none", dp);
         }
@@ -1677,7 +1911,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // TODO: svg:linearGradient
     // TODO: svg:radialGradient
     // TODO: draw:hatch
-    // style:fill-image
+    // draw:fill-image
     FillImageCollector fillImageCollector(styles, *this);
     collectGlobalObjects(fillImageCollector, *p);
     // draw:marker
@@ -1788,6 +2022,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         }
         writer.endElement();
     }
+    m_processingMasters = true;
+
     foreach (const MSO::MasterOrSlideContainer* m, p->masters) {
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
@@ -1807,15 +2043,9 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
 
-        //NOTE: The shape seems to provide boolean properties which are missing
-        //for shapes contained in spgr (MS Office 2003 specific).  There were
-        //problems with shadows on MS Office 2007 outputs, so it's disabled at
-        //the moment and all regressions have to be fixed.
         if (drawing->OfficeArtDg.groupShape) {
             const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
-            const OfficeArtSpContainer* shape = 0;
-//             const OfficeArtSpContainer* shape = (drawing->OfficeArtDg.shape).data();
-            drawclient.setDrawClientData(m, 0, 0, 0, shape);
+            drawclient.setDrawClientData(m, 0, 0, 0);
             odrawtoodf.processGroupShape(spgr, out);
         }
         master.addChildElement("", QString::fromUtf8(buffer.buffer(),
@@ -1827,7 +2057,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         }
         masterNames[m] = styles.insert(master, "M");
     }
-    m_currentMaster = NULL;
+    m_currentMaster = 0;
+    m_processingMasters = false;
 
     // Creating dateTime class object
     if (getSlideHF()) {
@@ -2051,7 +2282,10 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
 int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
                               const QString& text, const int start, int end, quint16* p_fs)
 {
-    int count = cf.addCurrentCFRun(tc, start);
+    //num. of chars already formatted by this TextCFRun
+    quint32 num = 0;
+
+    int count = cf.addCurrentCFRun(tc, start, num);
     *p_fs = cf.fontSize();
 
 #ifdef DEBUG_PPTTOODP
@@ -2061,19 +2295,23 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 #endif
 
     if (!tc) {
-        qDebug() << "processTextSpan: returning!";
+        qDebug() << "processTextSpan: TextContainer missing!";
         return -1;
     }
+
+#ifdef DEBUG_PPTTOODP
+    qDebug() << "Characters already formatted by this TextCFRun:" << num;
+#endif
 
     //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
     //TextMasterStyleLevel, handle this case. (uzak)
 
-    //NOTE: At the moment, TextSIException data are not processed in the
-    //defineTextProperties function, so keep it simple! (uzak)
+    //NOTE: TextSIException data are not processed in the defineTextProperties
+    //function at the moment, so keep it simple! (uzak)
     const TextSIException* si = 0;
-    int i = 0;
 
-#ifdef SI_EXCEPTION
+#ifdef SI_EXCEPTION_SUPPORT
+    int i = 0;
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
     if (tc->specialinfo) {
@@ -2100,7 +2338,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 #endif
     // find a meta character
     const TextContainerMeta* meta = 0;
-    for (i = 0; i < tc->meta.size(); ++i) {
+    for (int i = 0; i < tc->meta.size(); ++i) {
         const TextContainerMeta& m = tc->meta[i];
         end = getMeta<SlideNumberMCAtom>(m, meta, start, end);
         end = getMeta<DateTimeMCAtom>(m, meta, start, end);
@@ -2110,18 +2348,21 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         end = getMeta<RTFDateTimeMCAtom>(m, meta, start, end);
     }
 
-    // find the right bookmark
+    //TODO: process bookmarks
     const TextBookmarkAtom* bookmark = 0;
-    for (i = 0; i < tc->bookmark.size(); ++i) {
+#ifdef BOOKMARK_SUPPORT
+    // find the right bookmark
+    for (int i = 0; i < tc->bookmark.size(); ++i) {
         if (tc->bookmark[i].begin < start && tc->bookmark[i].end >= start) {
             bookmark = &tc->bookmark[i];
         }
     }
+#endif
 
     // find the interactive atom
     const MouseClickTextInfo* mouseclick = 0;
     const MouseOverTextInfo* mouseover = 0;
-    for (i = 0; i < tc->interactive.size(); ++i) {
+    for (int i = 0; i < tc->interactive.size(); ++i) {
         const TextContainerInteractiveInfo& ti = tc->interactive[i];
         const MouseClickTextInfo* a =
                 ti.interactive.get<MouseClickTextInfo>();
@@ -2135,13 +2376,12 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         }
     }
 
-#ifdef SI_EXCEPTION
     // determine the end of the range
+#ifdef SI_EXCEPTION_SUPPORT
     if (si && siend < end) {
         end = siend;
     }
 #endif
-
     if (meta) {
         end = start + 1; // meta is always one character
     }
@@ -2154,6 +2394,12 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     if (mouseover && mouseover->text.range.end < end) {
         end = mouseover->text.range.end;
     }
+
+    KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+    defineTextProperties(style, cf, 0, 0, si);
+    out.xml.startElement("text:span", false);
+    out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
     if (mouseclick) {
         /**
@@ -2179,22 +2425,16 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             out.xml.addAttribute("xlink:href", link.first);
         }
     } else {
-        out.xml.startElement("text:span", false);
-
         //count specifies the number of characters of the corresponding text to
         //which this character formatting applies
         if (count > 0) {
-            int tmp = start + count;
+            int tmp = start + (count - num);
             //moved to left by one character in the processTextForBody function
             if (tmp <= end) {
                 end = tmp;
             }
         }
     }
-    KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
-    style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineTextProperties(style, cf, 0, 0, si);
-    out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
     if (meta) {
         getMeta(*meta, out.xml);
@@ -2204,7 +2444,11 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         out.xml.addTextSpan(txt);
     }
 
-    out.xml.endElement();
+    if (mouseclick || mouseover) {
+        out.xml.endElement(); //text:a
+    }
+
+    out.xml.endElement(); //text:span
     return end;
 } //end processTextSpan()
 
@@ -2223,7 +2467,7 @@ int PptToOdp::processTextSpans(Writer& out, PptTextCFRun& cf, const MSO::TextCon
         }
         if (r < pos) {
             // some error
-            qDebug() << "pos: " << pos << " end: " << end << " r: " << r;
+            qDebug() << "pos: " << pos << "| end: " << end << " r: " << r;
             return -2;
         }
         pos = r;
@@ -2297,8 +2541,9 @@ PptToOdp::processParagraph(Writer& out,
 
     if (m_isList) {
         int depth = pf.level() + 1;
+        quint32 num = 0;
         //CFException for the first run of text required for the list style
-        cf.addCurrentCFRun(tc, start);
+        cf.addCurrentCFRun(tc, start, num);
         QString listStyle = defineAutoListStyle(out, pf, cf);
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)
@@ -2319,6 +2564,10 @@ PptToOdp::processParagraph(Writer& out,
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineParagraphProperties(style, pf, min_fontsize);
+    //NOTE: Help text layout to apply correct line-height for empty lines.
+    if (start == end) {
+        defineTextProperties(style, cf, 0, 0, 0);
+    }
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
     out.xml.addCompleteElement(&spans_buf);
     out.xml.endElement(); //text:p
@@ -2497,14 +2746,9 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
-    //NOTE: The shape seems to provide boolean properties which are missing for
-    //shapes contained in spgr (MS Office 2003 specific).
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
-        const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
-	//FIXME: Found problems with the approach of using the shape to access
-	//any missing properties.  Disabling of this approach would cause regressions.
-        drawclient.setDrawClientData(master, slide, 0, 0, shape, m_currentSlideTexts);
+        drawclient.setDrawClientData(master, slide, 0, 0, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 
@@ -2526,7 +2770,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
             out.xml.addAttribute("draw:style-name", value);
         }
         const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
-        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, 0, m_currentSlideTexts);
+        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
         out.xml.endElement();
     }

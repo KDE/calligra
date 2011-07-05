@@ -32,7 +32,7 @@
 
 class KoXmlWriter;
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace Calligra
 {
@@ -52,6 +52,7 @@ class Region;
 class RichTextStorage;
 class Sheet;
 class StyleStorage;
+class UserInputStorage;
 class Validity;
 class ValidityStorage;
 class Value;
@@ -380,6 +381,7 @@ public:
     const FusionStorage* fusionStorage() const;
     const LinkStorage* linkStorage() const;
     const StyleStorage* styleStorage() const;
+    const UserInputStorage* userInputStorage() const;
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
 
@@ -402,7 +404,7 @@ public:
      * for each sub-storage an undo-capable command is attached to \p parent.
      * \see startUndoRecording
      */
-    void stopUndoRecording(QUndoCommand *parent);
+    void stopUndoRecording(KUndo2Command *parent);
 
 Q_SIGNALS:
     void insertNamedArea(const Region&, const QString&);

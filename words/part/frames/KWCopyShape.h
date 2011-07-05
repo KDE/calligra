@@ -19,7 +19,7 @@
 #ifndef KWCOPYSHAPE_H
 #define KWCOPYSHAPE_H
 
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <KoShape.h>
 
@@ -31,7 +31,7 @@ class KWPageManager;
  * reused from the original, as passed on the constructor.  The shapes appearance
  * will be the same as the original, just in a different place in the document.
  */
-class KWORD_TEST_EXPORT KWCopyShape : public KoShape
+class WORDS_TEST_EXPORT KWCopyShape : public KoShape
 {
 public:
     /**
@@ -52,8 +52,7 @@ public:
     /// reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    KoShape *original() {return m_original;}
-    void retire() {m_original=0;}
+    KoShape *original() const;
 
 private:
     KoShape *m_original;

@@ -29,13 +29,14 @@
 #include <KoStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoTextLoader.h>
+#include <KoTextWriter.h>
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KTemporaryFile>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-#include <KoTextShapeData.h>
+#include <KoTextShapeDataBase.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -46,7 +47,6 @@
 #include <KoListStyle.h>
 #include <KoTableStyle.h>
 #include <KoTableCellStyle.h>
-#include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -66,7 +66,7 @@
 TestChangeTracking::TestChangeTracking()
 {
     componentData = new KComponentData("TestLoading");
-    componentData->dirs()->addResourceType("styles", "data", "kword/styles/");
+    componentData->dirs()->addResourceType("styles", "data", "words/styles/");
 }
 
 TestChangeTracking::~TestChangeTracking()
@@ -114,21 +114,16 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
     textSharedLoadingData->loadOdfStyles(shapeLoadingContext, styleManager);
     shapeLoadingContext.addSharedData(KOTEXT_SHARED_LOADING_ID, textSharedLoadingData);
 
-    KoTextShapeData *textShapeData = new KoTextShapeData;
     QTextDocument *document = new QTextDocument;
-    textShapeData->setDocument(document, false /* ownership */);
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
+    KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
     KoTextDocument(document).setStyleManager(styleManager);
-    textShapeData->document()->setDocumentLayout(layout);
     KoTextDocument(document).setChangeTracker(changeTracker);
 
-    if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
-        qDebug() << "KoTextShapeData failed to load ODT";
-    }
+    KoTextLoader loader(shapeLoadingContext);
+    QTextCursor cursor(document);
+    loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
 
     delete readStore;
-    delete textShapeData;
     return document;
 }
 
@@ -184,18 +179,13 @@ QString TestChangeTracking::documentToOdt(QTextDocument *document)
         }
     }
 
-    KoTextShapeData *textShapeData = new KoTextShapeData;
-    textShapeData->setDocument(document, false /* ownership */);
-    if (qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) == 0) {
-        // Setup layout and managers just like kotext
-        KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-        textShapeData->document()->setDocumentLayout(layout);
-        layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
-        KoStyleManager *styleManager = new KoStyleManager;
-        KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
-    }
+    // Setup layout and managers just like kotext
+    KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
+    KoStyleManager *styleManager = new KoStyleManager;
+    KoTextDocument(document).setStyleManager(styleManager);
 
-    textShapeData->saveOdf(context);
+    KoTextWriter writer(context, 0);
+    writer.write(document, 0, -1);
 
     contentTmpFile.close();
 
@@ -225,7 +215,6 @@ QString TestChangeTracking::documentToOdt(QTextDocument *document)
 
 
     delete store;
-    delete textShapeData;
 
     return odt;
 }
@@ -294,10 +283,10 @@ void TestChangeTracking::testChangeTracking_data()
 
     //Complex Delete Merges
     QTest::newRow("Paragraph with list-item - 1")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item/paragraph-merge-with-list-item-tracked.odt" << "DeltaXML";
-    QTest::newRow("Paragraph with list-item - 2")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-from-a-list-at-a-higher-level/paragraph-merge-with-list-item-from-a-list-at-a-higher-level-tracked.odt" << "DeltaXML";
+    QTest::newRow("Paragraph with list-item - 2")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-2/paragraph-merge-with-list-item-2.odt" << "DeltaXML";
     QTest::newRow("Paragraph with list-item - 3")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-simple/paragraph-merge-with-list-item-simple-tracked.odt" << "DeltaXML";
     QTest::newRow("List Item with a Paragraph - 1")  << "ChangeTracking/complex-delete-merges/list-item-merge-with-a-succeeding-paragraph/list-item-merge-with-a-succeeding-paragraph-tracked.odt" << "DeltaXML";
-    QTest::newRow("List Item with a Paragraph - 2")  << "ChangeTracking/complex-delete-merges/list-item-from-a-higher-level-list-merge-with-a-succeeding-paragraph/list-item-from-a-higher-level-list-merge-with-a-succeeding-paragraph-tracked.odt" << "DeltaXML";
+    QTest::newRow("List Item with a Paragraph - 2")  << "ChangeTracking/complex-delete-merges/list-item-merge-with-a-succeeding-paragraph-2/list-item-merge-with-a-succeeding-paragraph-2.odt" << "DeltaXML";
     QTest::newRow("List Item with a Paragraph - 3")  << "ChangeTracking/complex-delete-merges/list-item-merge-with-a-succeeding-paragraph-simple/list-item-merge-with-a-succeeding-paragraph-simple-tracked.odt" << "DeltaXML";
     QTest::newRow("List Item Merges")  << "ChangeTracking/complex-delete-merges/list-item-merge-simple/list-item-merge-simple-tracked.odt" << "DeltaXML";
     QTest::newRow("List Merges")  << "ChangeTracking/complex-delete-merges/list-merges/list-merges-tracked.odt" << "DeltaXML";
@@ -305,7 +294,7 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Header with Paragraph")  << "ChangeTracking/complex-delete-merges/header-merge-with-paragrah-simple/header-merge-with-paragrah-simple-tracked.odt" << "DeltaXML";
     
     //Other tests
-    //QTest::newRow("Others-1")  << "ChangeTracking/other/michiels-deletion-sample/delete-text-across-siblings-tracked.odt";
+    //QTest::newRow("Others-1")  << "ChangeTracking/other/michiels-deletion-sample/delete-text-across-siblings-tracked.odt" << "DeltaXML";
     QTest::newRow("Others-2")  << "ChangeTracking/other/list-id-sample/list-sample-tracked.odt" << "DeltaXML";
     QTest::newRow("Others-3")  << "ChangeTracking/other/list-table-list-1/list-table-list-tracked.odt" << "DeltaXML";
 
@@ -346,6 +335,15 @@ bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &ro
     roundTripReadStore->close();
 
     bool returnValue = (originalDocumentString == roundTripDocumentString);
+    if (!returnValue) {
+        qDebug() << "***********************ORIGINAL DOCUMENT************************";
+        qDebug() << originalDocumentString;
+        qDebug() << "****************************************************************";
+        qDebug() << "***********************AFTER ROUND-TRIP************************";
+        qDebug() << roundTripDocumentString;
+        qDebug() << "****************************************************************";
+        
+    }
     return returnValue;
 }
 

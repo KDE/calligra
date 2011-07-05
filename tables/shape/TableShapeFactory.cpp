@@ -27,15 +27,12 @@
 #include <klocale.h>
 
 #include <KoResourceManager.h>
-#include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 
 #include <Map.h>
-
-#include "TableShape.h"
-#include "TableToolFactory.h"
+#include <TableShape.h>
 
 using namespace Calligra::Tables;
 
@@ -46,12 +43,11 @@ TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 {
     Q_UNUSED(parent);
     KoShapeRegistry::instance()->add(new TableShapeFactory());
-    KoToolRegistry::instance()->add(new TableToolFactory());
 }
 
 
 TableShapeFactory::TableShapeFactory()
-        : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"))
+    : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"), "Spreadsheet Shape")
 {
     setToolTip(i18n("Spreadsheet Shape"));
     setIcon("spreadsheetshape");
@@ -66,29 +62,4 @@ bool TableShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
 {
     Q_UNUSED(context);
     return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
-}
-
-KoShape *TableShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
-{
-    TableShape *shape = new TableShape();
-    shape->setShapeId(TableShapeId);
-    if (documentResources) {
-        Q_ASSERT(documentResources->hasResource(MapResourceId));
-        Map *map = static_cast<Map*>(documentResources->resource(MapResourceId).value<void*>());
-        shape->setMap(map);
-    }
-    return shape;
-}
-
-void TableShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
-{
-    if (manager->hasResource(MapResourceId)) return;
-    // One spreadsheet map for all inserted tables to allow referencing cells among them.
-    QVariant variant;
-    Map* map = new Map();
-    // Make the KoResourceManager manage this Map, since we cannot delete it ourselves
-    map->setParent(manager);
-    QObject::connect(manager, SIGNAL(destroyed()), map, SLOT(deleteLater()));
-    variant.setValue<void*>(map);
-    manager->setResource(MapResourceId, variant);
 }

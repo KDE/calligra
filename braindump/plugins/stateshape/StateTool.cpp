@@ -44,71 +44,69 @@ StateTool::~StateTool()
 
 void StateTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape*> &/*shapes*/)
 {
-  KoSelection *selection = canvas()->shapeManager()->selection();
-  foreach( KoShape *shape, selection->selectedShapes() ) 
-  {
-    m_currentShape = dynamic_cast<StateShape*>( shape );
-    if(m_currentShape)
-      break;
-  }
-  emit(shapeChanged(m_currentShape));
-  if( m_currentShape == 0 ) 
-  {
-    // none found
-    emit done();
-    return;
-  }
-  useCursor( QCursor( Qt::ArrowCursor ) );
-}
-void StateTool::paint( QPainter &painter, const KoViewConverter &converter)
-{
-  Q_UNUSED(painter);
-  Q_UNUSED(converter);
-}
-
-void StateTool::mousePressEvent( KoPointerEvent *event )
-{
-  StateShape *hit = 0;
-  QRectF roi( event->point, QSizeF(1,1) );
-  QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( roi );
-  KoSelection *selection = canvas()->shapeManager()->selection();
-  foreach( KoShape *shape, shapes ) 
-  {
-    hit = dynamic_cast<StateShape*>( shape );
-    if(hit) {
-      if(hit == m_currentShape) {
-        const State* state = StatesRegistry::instance()->state(m_currentShape->categoryId(), m_currentShape->stateId());
-        const State* newState = StatesRegistry::instance()->nextState(state);
-        if(newState)
-        {
-          canvas()->addCommand(new StateShapeChangeStateCommand(m_currentShape, newState->category()->id(), newState->id()));
-        }
-      } else {
-        selection->deselectAll();
-        m_currentShape = hit;
-        selection->select( m_currentShape );
-        emit(shapeChanged(m_currentShape));
-      }
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    foreach(KoShape * shape, selection->selectedShapes()) {
+        m_currentShape = dynamic_cast<StateShape*>(shape);
+        if(m_currentShape)
+            break;
     }
-  }
+    emit(shapeChanged(m_currentShape));
+    if(m_currentShape == 0) {
+        // none found
+        emit done();
+        return;
+    }
+    useCursor(QCursor(Qt::ArrowCursor));
 }
-
-void StateTool::mouseMoveEvent( KoPointerEvent *event )
+void StateTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-  event->ignore();
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
-void StateTool::mouseReleaseEvent( KoPointerEvent *event )
+void StateTool::mousePressEvent(KoPointerEvent *event)
 {
-  event->ignore();
+    StateShape *hit = 0;
+    QRectF roi(event->point, QSizeF(1, 1));
+    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    foreach(KoShape * shape, shapes) {
+        hit = dynamic_cast<StateShape*>(shape);
+        if(hit) {
+            if(hit == m_currentShape) {
+                const State* state = StatesRegistry::instance()->state(m_currentShape->categoryId(), m_currentShape->stateId());
+                const State* newState = StatesRegistry::instance()->nextState(state);
+                if(newState) {
+                    canvas()->addCommand(new StateShapeChangeStateCommand(m_currentShape, newState->category()->id(), newState->id()));
+                }
+            } else {
+                selection->deselectAll();
+                m_currentShape = hit;
+                selection->select(m_currentShape);
+                emit(shapeChanged(m_currentShape));
+            }
+        }
+    }
 }
 
-QMap<QString, QWidget *> StateTool::createOptionWidgets() {
-  QMap<QString, QWidget *> widgets;
-  StateToolWidget* widget = new StateToolWidget(this);
-  widget->open(m_currentShape);
-  widgets[i18n("State tool options")] = widget;
-  return widgets;
+void StateTool::mouseMoveEvent(KoPointerEvent *event)
+{
+    event->ignore();
+}
+
+void StateTool::mouseReleaseEvent(KoPointerEvent *event)
+{
+    event->ignore();
+}
+
+QList<QWidget *> StateTool::createOptionWidgets()
+{
+    QList<QWidget *> widgets;
+    StateToolWidget* widget = new StateToolWidget(this);
+    widget->open(m_currentShape);
+    widget->setWindowTitle(i18n("State tool options"));
+    widgets.append(widget);
+    return widgets;
 }
 
 #include "StateTool.moc"

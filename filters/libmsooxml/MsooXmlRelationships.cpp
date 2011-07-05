@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -72,6 +72,20 @@ MsooXmlRelationships::~MsooXmlRelationships()
 {
     delete d;
 }
+
+unsigned MsooXmlRelationships::targetCountWithWord(const QString& searchTerm)
+{
+    unsigned count = 0;
+    QMapIterator<QString, QString> i(d->rels);
+    while (i.hasNext()) {
+        i.next();
+        if (i.value().contains(searchTerm)) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 
 QString MsooXmlRelationships::target(const QString& path, const QString& file, const QString& id)
 {

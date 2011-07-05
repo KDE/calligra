@@ -2,7 +2,8 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
    Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
-   Copyright (C) 2010, Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010-2011 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org> 
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,8 +28,9 @@
 
 #include <kdebug.h>
 #include <kpluginfactory.h>
+#include <kencodingprober.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoStore.h>
@@ -41,7 +43,19 @@
 #define MAXLINES 10000
 
 K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
-K_EXPORT_PLUGIN(AsciiImportFactory("kwordasciiimportng", "calligrafilters"))
+K_EXPORT_PLUGIN(AsciiImportFactory("wordsasciiimportng", "calligrafilters"))
+
+bool checkEncoding(QTextCodec *codec, QByteArray &data)
+{
+    QTextCodec::ConverterState state(QTextCodec::ConvertInvalidToNull);
+    QString unicode = codec->toUnicode(data.constData(), data.size(), &state);
+    for (int i = 0; i < unicode.size(); ++i) {
+        if (unicode[i] == 0) {
+            return false;
+        }
+    }
+    return true;
+}
 
 AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
 : KoFilter(parent)
@@ -59,29 +73,55 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         return KoFilter::NotImplemented;
     }
 
-    AsciiImportDialog* dialog = 0;
+    QFile in(m_chain->inputFile());
+    if (!in.open(QIODevice::ReadOnly)) {
+        kError(30502) << "Unable to open input file!" << endl;
+        in.close();
+        return KoFilter::FileNotFound;
+    }
+
+    // try to read 100000 bytes so we can be quite sure the guessed encoding is correct.
+    QByteArray data = in.read(100000);
+    in.seek(0);
+
+    // this code is inspired by the kate encoding guessing
+    // first try UTF-8
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    if (!checkEncoding(codec, data)) {
+        // then try to guess the encoding from the content
+        KEncodingProber prober(KEncodingProber::Universal);
+        prober.feed(data);
+        kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
+        if (prober.confidence() > 0.5) {
+            codec = QTextCodec::codecForName(prober.encoding());
+        }
+        if (!codec || !checkEncoding(codec, data )) {
+            // then try the fallback ISO 8859-15
+            codec = QTextCodec::codecForName("ISO 8859-15");
+            if (!checkEncoding(codec, data)) {
+                // if all failed use UTF-8
+                codec = QTextCodec::codecForName("UTF-8");
+                kWarning(30502) << "fallback to UTF-8 encoding";
+            }
+        }
+    }
+
+    int paragraphStrategy = 0;
+
     if (!m_chain->manager()->getBatchMode()) {
-        dialog = new AsciiImportDialog(QApplication::activeWindow());
+        QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(codec->name(), QApplication::activeWindow());
         if (!dialog) {
             kError(30502) << "Dialog has not been created! Aborting!" << endl;
+            in.close();
             return KoFilter::StupidError;
         }
         if (!dialog->exec()) {
             kDebug(30502) << "Dialog was aborted! Aborting filter!"; // this isn't an error!
+            in.close();
             return KoFilter::UserCancelled;
         }
-    }
-
-    QTextCodec* codec;
-
-    int paragraphStrategy = 0;
-    if (dialog) {
         codec = dialog->getCodec();
         paragraphStrategy = dialog->getParagraphStrategy();
-        delete dialog;
-    }
-    else {
-        codec = QTextCodec::codecForName("UTF-8");
     }
 
     if (!codec) {
@@ -91,15 +131,18 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     kDebug(30502) << "Charset used:" << codec->name();
 
+    QTextStream stream(&in);
+    stream.setCodec(codec);
+
     //create output files
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
     if (!store || store->bad()) {
-        kWarning(30003) << "Unable to open output file!";
+        kWarning(30502) << "Unable to open output file!";
         delete store;
         return KoFilter::FileNotFound;
     }
     store->disallowNameExpansion();
-    kDebug(30003) << "created store.";
+    kDebug(30502) << "created store.";
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 
@@ -115,17 +158,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
 
-    QFile in(m_chain->inputFile());
-    if (!in.open(QIODevice::ReadOnly)) {
-        kError(30502) << "Unable to open input file!" << endl;
-        in.close();
-        return KoFilter::FileNotFound;
-    }
-
-    QTextStream stream(&in);
-    stream.setCodec(codec);
-
-    QString styleName("Preformated Text");
+    QString styleName("txt");
     KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
     style.addAttribute("style:display-name", styleName);
     style.addProperty("fo:font-family", "dejavu sans mono", KoGenStyle::TextType);
@@ -186,7 +219,8 @@ void AsciiImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, cons
         if (!line.isNull()) {
             bodyWriter->startElement("text:p");
             bodyWriter->addAttribute("text:style-name", styleName);
-            bodyWriter->addTextSpan(line);
+            if (!line.isEmpty())
+                bodyWriter->addTextSpan(line);
             bodyWriter->endElement();
         }
     }
@@ -230,7 +264,9 @@ void AsciiImport::convertSentence(QTextStream &stream, KoXmlWriter *bodyWriter, 
         if (!paragraph.isNull()) {
             bodyWriter->startElement("text:p");
             bodyWriter->addAttribute("text:style-name", styleName);
-            bodyWriter->addTextSpan(paragraph.simplified());
+            QString s = paragraph.simplified();
+            if (!s.isEmpty())
+                bodyWriter->addTextSpan(s);
             bodyWriter->endElement();
         }
     }
@@ -252,7 +288,9 @@ void AsciiImport::convertEmptyLine(QTextStream &stream, KoXmlWriter *bodyWriter,
         if (!paragraph.isNull()) {
             bodyWriter->startElement("text:p");
             bodyWriter->addAttribute("text:style-name", styleName);
-            bodyWriter->addTextSpan(paragraph.simplified());
+            QString s = paragraph.simplified();
+            if (!s.isEmpty())
+                bodyWriter->addTextSpan(s);
             bodyWriter->endElement();
         }
     }
@@ -269,7 +307,7 @@ bool AsciiImport::createMeta(KoOdfWriteStore &store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(KOFFICE_VERSION_STRING));
+    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     xmlWriter->startElement("meta:creation-date");

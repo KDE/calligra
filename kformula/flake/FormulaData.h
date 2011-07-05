@@ -23,7 +23,7 @@
 #include "FormulaElement.h"
 #include "kformula_export.h"
 #include <QObject>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "KoFormulaShape.h"
 #include "KoShapeSavingContext.h"
 

@@ -93,7 +93,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
 , m_model( 0 )
 {
     setWindowTitle( i18n( "Document" ) );
-    
+
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
     layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, -1 );
@@ -338,8 +338,8 @@ void KoPADocumentStructureDocker::addLayer()
                 qSort( layers.begin(), layers.end(), KoShape::compareShapeZIndex );
                 layer->setZIndex( layers.last()->zIndex() + 1 );
             }
-            QUndoCommand *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
-            cmd->setText( i18n( "Create Layer") );
+            KUndo2Command *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
+            cmd->setText( i18nc( "(qtundo-format)", "Create Layer" ) );
             m_doc->addCommand( cmd );
             m_model->update();
         }
@@ -355,7 +355,7 @@ void KoPADocumentStructureDocker::deleteItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -368,7 +368,7 @@ void KoPADocumentStructureDocker::deleteItem()
                 deleteShapes.append( page );
             }
             cmd = new KoShapeDeleteCommand( m_doc, deleteShapes );
-            cmd->setText( i18n( "Delete Layer" ) );
+            cmd->setText( i18nc( "(qtundo-format)", "Delete Layer" ) );
         }
         else
         {
@@ -399,7 +399,7 @@ void KoPADocumentStructureDocker::raiseItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -433,7 +433,7 @@ void KoPADocumentStructureDocker::lowerItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -498,6 +498,12 @@ void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas )
     }
 }
 
+void KoPADocumentStructureDocker::unsetCanvas()
+{
+    m_doc = 0;
+    m_model->setDocument(0);
+}
+
 void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)
 {
     if ( m_doc ) {
@@ -533,7 +539,7 @@ void KoPADocumentStructureDocker::thumbnailView()
 void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
 {
     bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
-    
+
     // if we switch to non-expandable mode (ThumbnailMode) and if current index
     // is not a page, we need to select the corresponding page first, otherwise
     // none of the page will be selected when we do collapse all

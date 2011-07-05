@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -34,7 +34,10 @@
 
 #include "mswordodfimport.h"
 #include "document.h"
-#include "fibbase.h"
+#include "exceptions.h"
+#include "msdoc.h"
+
+#include "generated/simpleParser.h"
 #include "pole.h"
 
 //function prototypes of local functions
@@ -85,44 +88,57 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     LEInputStream wdstm(&buff1);
 
-    FibBase fb(wdstm);
-
-    //1Table Stream or 0Table Stream
-    const char* tblstm_name = fb.fWhichTblStm ? "1Table" : "0Table";
-    QBuffer buff2;
-    if (!readStream(storage, tblstm_name, buff2)) {
+    MSO::FibBase fibBase;
+    LEInputStream::Mark m = wdstm.setMark();
+    try {
+        parseFibBase(wdstm, fibBase);
+    } catch (const IOException &e) {
+        kError(30513) << e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
         return KoFilter::InvalidFormat;
     }
-    LEInputStream tblstm(&buff2);
+    wdstm.rewind(m);
 
-    //Provided to the Document at the moment
+    //document is encrypted or obfuscated
+    if (fibBase.fEncrypted) {
+        return KoFilter::PasswordProtected;
+    }
+
+    //1Table Stream or 0Table Stream
+    const char* tblstm_name = fibBase.fWhichTblStm ? "1Table" : "0Table";
     POLE::Stream tblstm_pole(&storage, tblstm_name);
+    if (tblstm_pole.fail()) {
+        if (fibBase.nFib >= Word8nFib) {
+            kDebug(30513) << "Either the 1Table stream or the 0Table stream MUST be present in the file!";
+            return KoFilter::InvalidFormat;
+        }
+    }
 
     //Data Stream
+    LEInputStream* datastm = 0;
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
         kDebug(30513) << "Failed to open /Data stream, no big deal (OPTIONAL).";
+    } else {
+        datastm = new LEInputStream(&buff3);
     }
-    LEInputStream datastm(&buff3);
 
     /*
      * ************************************************
      *  Processing file
      * ************************************************
      */
-    //document is encrypted or obfuscated
-    if (fb.fEncrypted) {
-        return KoFilter::PasswordProtected;
-    }
-
-    // Create output files
-    KoStore *storeout;
     struct Finalizer {
     public:
-        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0),
-                                    m_contentWriter(0), m_bodyWriter(0) { }
+        Finalizer(LEInputStream* s) : m_store(0), m_genStyles(0), m_document(0),
+                                      m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
         ~Finalizer() {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
+            if (m_datastm) {
+                delete m_datastm;
+            }
         }
 
         KoStore *m_store;
@@ -130,15 +146,19 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         Document *m_document;
         KoXmlWriter *m_contentWriter;
         KoXmlWriter *m_bodyWriter;
+        LEInputStream* m_datastm;
     };
+    Finalizer finalizer(datastm);
 
+    // Create output files
+    KoStore *storeout;
     storeout = KoStore::createStore(outputFile, KoStore::Write,
                                     "application/vnd.oasis.opendocument.text", KoStore::Zip);
     if (!storeout) {
         kWarning(30513) << "Unable to open output file!";
         return KoFilter::FileNotFound;
     }
-    Finalizer finalizer(storeout);
+    finalizer.m_store = storeout;
     storeout->disallowNameExpansion();
     kDebug(30513) << "created storeout.";
     KoOdfWriteStore oasisStore(storeout);
@@ -179,10 +199,21 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), this,
-                                      bodyWriter, &metaWriter, &manifestWriter,
-                                      storeout, mainStyles,
-                                      &wdstm, tblstm_pole, &datastm);
+    Document *document = 0;
+
+    try {
+        document = new Document(QFile::encodeName(inputFile).data(), this,
+                                bodyWriter, &metaWriter, &manifestWriter,
+                                storeout, mainStyles,
+                                wdstm, tblstm_pole, datastm);
+    } catch (const InvalidFormatException &_e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
+    }
+
     finalizer.m_document = document;
 
     //check that we can parse the document?
@@ -190,9 +221,22 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::WrongFormat;
     }
     //actual parsing & action
-    if (!document->parse()) {
-        return KoFilter::CreationError;
+    try {
+        quint8 ret = document->parse();
+        switch (ret) {
+        case 1:
+            return KoFilter::CreationError;
+        case 2:
+            return KoFilter::StupidError;
+        }
+    } catch (const InvalidFormatException &_e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
     }
+
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
 
@@ -232,6 +276,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     storeout->open("settings.xml");
     KoStoreDevice settingsDev(storeout);
     KoXmlWriter *settingsWriter = oasisStore.createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
     settingsWriter->startElement("config:config-item");
@@ -246,6 +291,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     settingsWriter->endElement();
     settingsWriter->endElement(); // config-item-set
 
+    settingsWriter->endElement(); // settings
     settingsWriter->endElement(); // document-settings
     settingsWriter->endDocument();
     delete settingsWriter;

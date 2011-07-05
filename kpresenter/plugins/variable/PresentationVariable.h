@@ -43,17 +43,17 @@ public:
      */
     PresentationVariable();
 
-    void setProperties(const KoProperties *props);
-
-    void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
+    virtual void setProperties(const KoProperties *props);
 
     ///reimplemented
-    void saveOdf(KoShapeSavingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context);
 
     ///reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
+    virtual void resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+
     KPrDeclarations::Type m_type;
 };
 

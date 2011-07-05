@@ -44,10 +44,10 @@ set(flake_SRCS
     #KoUnavailCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
-    KoCanvasControllerGraphicsWidget.cpp
     KoCanvasControllerWidget.cpp
     KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp
+    KoDeferredShapeFactoryBase.cpp
     KoToolFactoryBase.cpp
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
@@ -198,13 +198,15 @@ kde4_add_library(flake SHARED ${flake_SRCS})
 target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms koodf)
 
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms koodf)
+target_link_libraries(flake kundo2)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
 endif(HAVE_OPENGL)
 
 set_target_properties(flake PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 ########### install files ###############
@@ -235,6 +237,7 @@ install(
     KoDataCenterBase.h
     KoDockFactoryBase.h
     KoDockRegistry.h
+    KoDeferredShapeFactoryBase.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h
@@ -246,6 +249,7 @@ install(
     KoInsets.h
     KoPathSegment.h
     KoPointerEvent.h
+    KoRTree.h
     KoSelection.h
     KoShape.h
     KoShapeBorderModel.h

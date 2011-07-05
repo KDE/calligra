@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=Civil
+Name[el]=Civil
 Name[et]=Ehitus
+Name[nb]=Sivilteknikk
 Name[nl]=Civiel
 Name[pt]=Civil
 Name[pt_BR]=Civil
+Name[sv]=Väg och vatten
 Name[uk]=Будівництво
 Name[x-test]=xxCivilxx
 X-KDE-DirType=odg-collection

@@ -35,7 +35,7 @@
 #include <kstandarddirs.h>
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
 #include "KoXmlNS.h"
@@ -47,6 +47,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeBackground.h>
 
 
 // The XML of a frame looks something like this:
@@ -139,6 +140,7 @@ KoUnavailShape::Private::Private()
 KoUnavailShape::Private::~Private()
 {
     qDeleteAll(objectEntries);
+    qDeleteAll(embeddedFiles);
 }
 
 
@@ -165,20 +167,28 @@ KoUnavailShape::~KoUnavailShape()
 void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion(painter, converter);
-    draw(painter);
+    if (background()) {
+        QPainterPath p;
+        p.addRect(QRectF(QPointF(), size()));
+        background()->paint(painter, p);
+    } 
+
+    // Only draw something if the frame isn't empty.
+    kDebug(30006) << "Number of objects:" << d->objectEntries.size();
+    if (!d->objectEntries.isEmpty()) {
+        draw(painter);
+    }
 }
 
 void KoUnavailShape::draw(QPainter &painter) const
 {
-#if 0
-    // Draw a frame and a cross.
-    drawNull(painter);
-#else
-    // Draw a nice question mark.
+    // Draw a nice question mark with a frame around it.
+
+    painter.save();
 
     // Get the question mark "icon".
     QPixmap questionMark;
-    questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
+    questionMark.load(KStandardDirs::locate("data", "calligra/icons/questionmark.png"));
 
     // The size of the image is:
     //  - the size of the shape if  shapesize < 2cm
@@ -194,7 +204,12 @@ void KoUnavailShape::draw(QPainter &painter) const
 
     painter.drawPixmap((width - picSize) / qreal(2.0), (height - picSize) / qreal(2.0),
                        picSize, picSize, questionMark);
-#endif
+
+    painter.restore();
+
+    // Draw a gray rectangle around the shape.
+    painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.drawRect(QRectF(QPointF(0,0), size()));
 }
 
 void KoUnavailShape::drawNull(QPainter &painter) const
@@ -252,7 +267,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
         QString newName = objectName;
         if (!objectName.isEmpty()) {
-            newName = fileSaver.getFilename("UObject");
+            newName = fileSaver.getFilename("Object ");
+
             // FIXME: We must make a copy of the byte array here because
             //        otherwise we won't be able to save > 1 time.
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
@@ -409,6 +425,13 @@ void KoUnavailShape::Private::saveObjects(const KoXmlElement & element)
     // Loop through all the child elements of the draw:frame and save them.
     KoXmlNode n = element.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
+        kDebug(30006) << "In draw:frame, node =" << n.nodeName();
+
+        // This disregards #text, but that's not in the spec anyway so
+        // it doesn't need to be saved.
+        if (!n.isElement())
+            continue;
+
         ObjectEntry  *object = new ObjectEntry;
 
         QByteArray contentsTmp;

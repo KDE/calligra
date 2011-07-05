@@ -144,9 +144,11 @@ public:
     virtual OLEStreamReader* getTable() = 0;
 
     /**
-     * Looks for textbox text data and process them
+     * Look for textbox text data and process them.
+     * @param index into plcfTxbxTxt
+     * @param processing a header/footer
      */
-    virtual void parseTextBox( uint lid, bool bodyDrawing) =0;
+    virtual void parseTextBox(uint index, bool stylesxml) = 0;
 
     /**
      * The inline replacement handler is used to replace certain characters on the fly.

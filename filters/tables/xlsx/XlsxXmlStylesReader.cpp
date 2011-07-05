@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -22,6 +22,7 @@
  */
 
 #include "XlsxXmlStylesReader.h"
+#include "XlsxImport.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -259,7 +260,7 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     case JustifyVerticalAlignment: // ok?
     case DistributedVerticalAlignment:
         cellStyle->addProperty("style:vertical-align", "top");
-        cellStyle->addProperty("koffice:vertical-distributed", "distributed");
+        cellStyle->addProperty("calligra:vertical-distributed", "distributed");
         wrapOption = 1;
         break;
     case NoVerticalAlignment:
@@ -288,7 +289,7 @@ bool XlsxCellFormat::setupCellStyle(
             kWarning() << "No font with ID:" << fontId;
             return false;
         }
-        MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, *cellStyle, KoGenStyle::TextType);
+        KoGenStyle::copyPropertiesFromStyle(*fontStyle, *cellStyle, KoGenStyle::TextType);
     }
     if (applyFill && fillId >= 0) {
         KoGenStyle *fillStyle = styles->fillStyle(fillId);
@@ -296,12 +297,12 @@ bool XlsxCellFormat::setupCellStyle(
             kWarning() << "No fill with ID:" << fillId;
             return false;
         }
-        MSOOXML::Utils::copyPropertiesFromStyle(*fillStyle, *cellStyle, KoGenStyle::TableCellType);
+        KoGenStyle::copyPropertiesFromStyle(*fillStyle, *cellStyle, KoGenStyle::TableCellType);
     }
     if (applyBorder && borderId >= 0) {
         KoGenStyle *borderStyle = styles->borderStyle(borderId);
         if (borderStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*borderStyle, *cellStyle, KoGenStyle::TableCellType);
+            KoGenStyle::copyPropertiesFromStyle(*borderStyle, *cellStyle, KoGenStyle::TableCellType);
         }
     }
     return true;
@@ -309,8 +310,9 @@ bool XlsxCellFormat::setupCellStyle(
 
 //----------------------------------------------------------
 
-XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart, MSOOXML::DrawingMLTheme* _themes)
-        : styles(&_styles), skipFirstPart(_skipFirstPart), themes(_themes)
+XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart,
+    XlsxImport* _import, MSOOXML::DrawingMLTheme* _themes)
+        : styles(&_styles), skipFirstPart(_skipFirstPart), import(_import), themes(_themes)
 {
     // This is default array of colors from the spec
     colorIndices.push_back("000000");
@@ -483,10 +485,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
 {
     READ_PROLOGUE
 
+    int counter = 0;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // In the first round we read potential color overrides
             if (m_context->skipFirstPart) {
@@ -494,6 +497,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
                 SKIP_UNKNOWN
             }
             else {
+                if (counter == 40) {
+                    // set the progress by the position of what was read
+                    qreal progress = 5 + 25 * device()->pos() / device()->size();
+                    m_context->import->reportProgress(progress);
+                    counter = 0;
+                }
+                ++counter;
                 TRY_READ_IF(fonts)
                 ELSE_TRY_READ_IF(fills)
                 ELSE_TRY_READ_IF(numFmts)
@@ -536,7 +546,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(font)) {
                 m_currentFontStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
@@ -579,7 +589,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
     while( !atEnd() )
     {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() )
         {
             TRY_READ_IF( numFmt )
@@ -664,7 +674,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(sz)
             ELSE_TRY_READ_IF(name)
@@ -741,7 +751,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxfs()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(dxf)
             ELSE_WRONG_FORMAT
@@ -781,7 +791,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(font)
             ELSE_TRY_READ_IF(fill)
@@ -790,9 +800,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
             SKIP_UNKNOWN
         }
     }
-    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFontStyle, cellStyle, KoGenStyle::TextType);
-    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFillStyle, cellStyle, KoGenStyle::TableCellType);
-    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
+    KoGenStyle::copyPropertiesFromStyle(*m_currentFontStyle, cellStyle, KoGenStyle::TextType);
+    KoGenStyle::copyPropertiesFromStyle(*m_currentFillStyle, cellStyle, KoGenStyle::TableCellType);
+    KoGenStyle::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
     m_currentCellFormat->setupCellStyleAlignment(&cellStyle);
 
     m_context->styles->conditionalStyles.insert(m_context->styles->conditionalStyles.size() + 1,
@@ -844,7 +854,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(xf)
             ELSE_WRONG_FORMAT
@@ -928,7 +938,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(alignment)
             SKIP_UNKNOWN
@@ -1008,7 +1018,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(fill)) {
                 m_currentFillStyle = new KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -1049,7 +1059,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gradientFill)
             ELSE_TRY_READ_IF(patternFill)
@@ -1085,7 +1095,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_patternFill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bgColor)
             ELSE_TRY_READ_IF(fgColor)
@@ -1318,7 +1328,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_gradientFill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //! @todo            TRY_READ_IF(stop)
 //todo            ELSE_WRONG_FORMAT
@@ -1354,7 +1364,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(border)) {
                 m_currentBorderStyle = new KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -1391,7 +1401,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bottom)
             ELSE_TRY_READ_IF(diagonal)
@@ -1426,7 +1436,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bottom()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1460,7 +1470,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_top()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1493,7 +1503,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_left()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1526,7 +1536,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1559,7 +1569,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1600,7 +1610,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_colors()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(indexedColors)
             SKIP_UNKNOWN
@@ -1626,7 +1636,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_indexedColors()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rgbColor)
             ELSE_WRONG_FORMAT

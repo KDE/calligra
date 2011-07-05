@@ -1,7 +1,7 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2008,2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #ifndef KW_PAGEMANAGER_H
 #define KW_PAGEMANAGER_H
 
-#include "kword_export.h"
+#include "words_export.h"
 #include "KWPageStyle.h"
 
 #include <KoPageLayout.h>
@@ -39,7 +39,7 @@ class KWPageManagerPrivate;
  * The Page Manager manages all the pages a document contains and separates all the frames
  * the document contains into actual printed pages.
  */
-class KWORD_EXPORT KWPageManager
+class WORDS_EXPORT KWPageManager
 {
 public:
     explicit KWPageManager();
@@ -72,7 +72,7 @@ public:
     KWPage page(int pageNumber) const;
 
     /**
-     * return the KWPage instance where the rect is on. Returns 0 if page does not exist.
+     * return the KWPage instance where the shape is on. Returns 0 if page does not exist.
      */
     KWPage page(const KoShape *shape) const;
 
@@ -122,14 +122,6 @@ public:
 
     /// Remove @p page renumbering all pages after pages already added
     void removePage(const KWPage &page);
-
-    /**
-     * Returns the argument point, with altered coordinats if the point happens to be
-     * outside all pages.
-     * The resulting point is the shortest distance from the argument inside the document.
-     * @param point the point to test
-     */
-    QPointF clipToDocument(const QPointF &point) const;
 
     /**
      * Return an ordered list of all pages.

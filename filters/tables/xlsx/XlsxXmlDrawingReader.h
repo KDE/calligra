@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -112,7 +112,10 @@ public:
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
 protected:
-    KoFilter::ConversionStatus read_anchor(const QStringRef &name);
+    KoFilter::ConversionStatus read_oneCellAnchor();
+    KoFilter::ConversionStatus read_twoCellAnchor();
+    KoFilter::ConversionStatus read_absoluteAnchor();
+    KoFilter::ConversionStatus read_anchor(const QString& reference);
     KoFilter::ConversionStatus read_from();
     KoFilter::ConversionStatus read_to();
     KoFilter::ConversionStatus read_col();

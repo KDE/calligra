@@ -35,10 +35,10 @@
 class MockCanvas : public KoCanvasBase
 {
 public:
-    QUndoStack *stack;
+    KUndo2QStack *stack;
     KoShapeManager *manager;
     MockCanvas(): KoCanvasBase(0) {
-        stack=new QUndoStack();
+        stack=new KUndo2QStack();
         manager=new KoShapeManager(this);
     }
     ~MockCanvas() {
@@ -50,7 +50,7 @@ public:
         return false;
     }
 
-    void addCommand(QUndoCommand* c) {
+    void addCommand(KUndo2Command* c) {
 //         c->redo();
         stack->push(c);
     }

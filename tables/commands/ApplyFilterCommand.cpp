@@ -36,7 +36,7 @@ using namespace Calligra::Tables;
 ApplyFilterCommand::ApplyFilterCommand()
         : AbstractRegionCommand()
 {
-    setText(i18n("Apply Filter"));
+    setText(i18nc("(qtundo-format)", "Apply Filter"));
 }
 
 ApplyFilterCommand::~ApplyFilterCommand()

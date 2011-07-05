@@ -217,7 +217,7 @@ void IntervalEditDialog::slotChanged()
 
 MacroCommand *IntervalEditDialog::buildCommand()
 {
-    MacroCommand *cmd = new MacroCommand( i18n( "Modify Work Interval" ) );
+    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify Work Interval" ) );
     foreach ( const QDate &d, m_dates ) {
         // these are dates, weekdays don't have date
         CalendarDay *day = m_calendar->findDay( d );
@@ -272,7 +272,7 @@ MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay 
         cmd->addCommand(c);
     }
     if (cmd) {
-        cmd->setText( i18n( "Modify Work Interval" ) );
+        cmd->setText( i18nc( "(qtundo-format)", "Modify Work Interval" ) );
     }
     return cmd;
 }

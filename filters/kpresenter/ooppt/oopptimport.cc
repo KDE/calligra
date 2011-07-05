@@ -26,8 +26,6 @@
 #include <KoFilterChain.h>
 
 #include <KPluginFactory>
-#include <KRun>
-#include <KProcess>
 #include <KShell>
 #include <KDebug>
 
@@ -54,7 +52,7 @@ KoFilter::ConversionStatus OOPPTImport::convert(const QByteArray& from, const QB
         QString input = m_chain->inputFile();
         QString output = m_chain->outputFile();
 
-        QString command("python KOfficeOODocumentConverter.py ");
+        QString command("python CalligraOODocumentConverter.py ");
         command += KShell::quoteArg(input);
         command += ' ';
         command += KShell::quoteArg(output);

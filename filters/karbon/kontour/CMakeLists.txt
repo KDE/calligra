@@ -29,7 +29,7 @@ install( FILES  karbon_kontour_import.desktop  DESTINATION ${SERVICES_INSTALL_DI
 
 ######## General stuff
 #
-#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(top_srcdir)/karbon -I$(top_srcdir)/karbon/core $(all_includes)
+#INCLUDES= -I$(srcdir) $(CALLIGRA_INCLUDES) $(KOPAINTER_INCLUDES) -I$(top_srcdir)/karbon -I$(top_srcdir)/karbon/core $(all_includes)
 #
 ######## Files
 ## Obviously you have to change "foo" (and maybe "import") to
@@ -40,7 +40,7 @@ install( FILES  karbon_kontour_import.desktop  DESTINATION ${SERVICES_INSTALL_DI
 #
 #libkarbonkontourimport_la_SOURCES = kontourimport.cpp
 #libkarbonkontourimport_la_LDFLAGS = -module $(KDE_PLUGIN)
-#libkarbonkontourimport_la_LIBADD = $(KOFFICE_LIBS) ../../../karbon/libkarboncommon.la
+#libkarbonkontourimport_la_LIBADD = $(CALLIGRA_LIBS) ../../../karbon/libkarboncommon.la
 #
 #METASOURCES = AUTO
 #
@@ -50,7 +50,7 @@ install( FILES  karbon_kontour_import.desktop  DESTINATION ${SERVICES_INSTALL_DI
 ## Note: If your filter imports or exports some special file
 ## which KDE doesn't have a mimetype for, yet, you'll have to
 ## create a mimetype and install it using those two lines.
-## In case of doubt please ask koffice@kde.org or
-## koffice-devel@kde.org. Thanks.
+## In case of doubt please ask calligra@kde.org or
+## calligra-devel@kde.org. Thanks.
 ## mydata_DATA = x-foo.desktop
 ## mydatadir = $(kde_mimedir)/text

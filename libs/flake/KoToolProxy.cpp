@@ -51,7 +51,7 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
 
     QPoint offset = QPoint(controller->canvasOffsetX(), controller->canvasOffsetY());
     QPoint origin = controller->canvas()->documentOrigin();
-    QPoint viewPoint = widgetScrollPoint + origin - offset;
+    QPoint viewPoint = widgetScrollPoint - origin - offset;
 
     QRectF mouseArea(viewPoint, QSizeF(10, 10));
     mouseArea.setTopLeft(mouseArea.center());
@@ -134,7 +134,7 @@ QPointF KoToolProxy::widgetToDocument(const QPointF &widgetPoint) const
 {
     QPoint offset = QPoint(d->controller->canvasOffsetX(), d->controller->canvasOffsetY());
     QPoint origin = d->controller->canvas()->documentOrigin();
-    QPoint viewPoint = widgetPoint.toPoint() + origin - offset;
+    QPoint viewPoint = widgetPoint.toPoint() - origin - offset;
 
     return d->controller->canvas()->viewConverter()->viewToDocument(viewPoint);
 }

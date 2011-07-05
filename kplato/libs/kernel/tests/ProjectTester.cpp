@@ -391,7 +391,7 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
-    // Calculate backword
+    // Calculate bacwords
     s = "Calculate backwards, Task: MustFinishOn -----------------------------------";
     qDebug()<<endl<<"Testing:"<<s;
     m_project->setConstraintStartTime( DateTime( today, QTime(0,0,0) ) );

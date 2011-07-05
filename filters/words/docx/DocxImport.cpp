@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -36,6 +36,7 @@
 #include "DocxXmlCommentsReader.h"
 #include "DocxXmlEndnoteReader.h"
 #include "DocxXmlFontTableReader.h"
+#include "DocxXmlSettingsReader.h"
 
 #include <QColor>
 #include <QFile>
@@ -84,6 +85,7 @@ public:
     DocxDocumentType type;
     bool macrosEnabled;
     QMap<QString, QVariant> documentSettings;
+    QMap<QString, QString> colorMap;
 };
 
 DocxImport::DocxImport(QObject* parent, const QVariantList &)
@@ -136,35 +138,22 @@ bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
     return mime == "application/vnd.oasis.opendocument.text";
 }
 
-static QVariant readSettings(const KoXmlElement &element)
-{
-    QVariant result;
-    QVariantMap m;
-    KoXmlElement e;
-    forEachElement(e, element) {
-        QVariant v = readSettings(e);
-        if (!v.isValid())
-            v = e.attribute("val");
-        m[e.tagName()] = v;
-    }
-    if (!m.isEmpty())
-        result.setValue(m);
-    return result;
-}
-
 KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
         QString& errorMessage)
 {
+    writers->body->addAttribute("text:use-soft-page-breaks", "true");
+
     // 0. parse settings.xml
-    QList<QByteArray> partNameList = this->partNames(MSOOXML::ContentTypes::wordSettings);
-    if (partNameList.count() == 1) {
-        KoXmlDocument settingsXML;
-        if (loadAndParse(partNameList.first(), settingsXML, errorMessage) == KoFilter::OK) {
-            d->documentSettings = readSettings(settingsXML.documentElement()).value<QVariantMap>();
-        }
+    {
+        DocxXmlSettingsReaderContext context(d->documentSettings);
+        DocxXmlSettingsReader settingsReader(writers);
+        d->colorMap = context.colorMap;
+
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::wordSettings, &settingsReader, writers, errorMessage, &context) )
     }
 
-    emit sigProgress(15);
+    reportProgress(5);
 
     // 1. parse font table
     {
@@ -205,9 +194,9 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         kDebug() << "Reading ThemePathAndFile:" << docThemePathAndFile << "status=" << status;
     }
 
-    emit sigProgress(25);
+    reportProgress(15);
 
-    // Main document context, to which we collect footnotes, endnotes, comments
+    // Main document context, to which we collect footnotes, endnotes, comments, numbering, tablestyles
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
 
     // 3. parse styles
@@ -233,24 +222,23 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         }
     }
 
-    emit sigProgress(40);
+    reportProgress(25);
 
     // 4. parse numbering
-    {
-        const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
-            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
-        DocxXmlNumberingReader numberingReader(writers);
-        if (!numberingPathAndFile.isEmpty()) {
-            QString numberingPath, numberingFile;
-            MSOOXML::Utils::splitPathAndFile(numberingPathAndFile, &numberingPath, &numberingFile);
-            DocxXmlDocumentReaderContext context(*this, numberingPath, numberingFile, *relationships, &themes);
+    const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
+    DocxXmlNumberingReader numberingReader(writers);
+    QString numberingPath, numberingFile;
+    MSOOXML::Utils::splitPathAndFile(numberingPathAndFile, &numberingPath, &numberingFile);
+    DocxXmlDocumentReaderContext numberingContext(*this, numberingPath, numberingFile, *relationships, &themes);
 
-            RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
-                numberingPathAndFile, &numberingReader, writers, errorMessage, &context) )
-        }
+    if (!numberingPathAndFile.isEmpty()) {
+        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+            numberingPathAndFile, &numberingReader, writers, errorMessage, &numberingContext) )
     }
+    mainContext.m_bulletStyles = numberingContext.m_bulletStyles;
 
-    emit sigProgress(50);
+    reportProgress(30);
 
     // 5. parse footnotes
     {
@@ -268,7 +256,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_footnotes = context.m_footnotes;
         }
 
-    emit sigProgress(60);
+    reportProgress(35);
 
     // 6. parse comments
         const QString commentPathAndFile(relationships->targetForType(documentPath, documentFile,
@@ -284,7 +272,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_comments = context.m_comments;
         }
 
-    emit sigProgress(70);
+    reportProgress(40);
 
     // 7. parse endnotes
         const QString endnotePathAndFile(relationships->targetForType(documentPath, documentFile,
@@ -300,15 +288,17 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_endnotes = context.m_endnotes;
         }
 
-    emit sigProgress(80);
+    reportProgress(45);
 
     // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
+        // It is possible that some of the templates are defined in numberingreader
+        documentReader.m_definedShapeTypes = numberingReader.m_definedShapeTypes;;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
 
-    emit sigProgress(100);
+    reportProgress(100);
 
     return KoFilter::OK;
 }

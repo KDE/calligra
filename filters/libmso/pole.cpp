@@ -1,5 +1,6 @@
 /* POLE - Portable C++ library to access OLE Storage
    Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -35,10 +36,18 @@
 #include <vector>
 
 #include <string.h>
+
 #include <QList>
+#include <QString>
 
 // enable to activate debugging output
 //#define POLE_DEBUG
+
+// validate storage object against [MS-CFB] — v20110318
+//#define CHECK_STORAGE_OBJECTS
+
+// validate sibling names against positions in the black red tree
+//#define CHECK_SIBLINGS
 
 #define OLE_HEADER_SIZE 0x200
 
@@ -550,10 +559,12 @@ const unsigned DirTree::End = 0xffffffff;
 /*
  * Compare DirEntry names according to the spec.
  */
-int ename_cmp(std::string str1, std::string str2)
+int ename_cmp(QString& str1, QString& str2)
 {
-    if (str1.length() < str2.length()) return -1;
-    else if (str1.length() > str2.length()) return 1;
+    str1 = str1.toUpper();
+    str2 = str2.toUpper();
+    if (str1.size() < str2.size()) return -1;
+    else if (str1.size() > str2.size()) return 1;
     else return str1.compare(str2);
 }
 
@@ -568,13 +579,13 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 
 #ifdef POLE_DEBUG
     e = dirtree->entry(index);
-    printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+    printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
            e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
 
-    std::cout << "[KIDS]" << std::endl;
+    if (chi.size()) std::cout << "[KIDS]:" << std::endl;
     for (unsigned i = 0; i < chi.size(); i++) {
         e = dirtree->entry(chi[i]);
-        printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+        printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
                e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
     }
     std::cout << "---------------------" << std::endl;
@@ -594,48 +605,56 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 bool DirTree::valid() const
 {
     const DirEntry* e;
+    QString str1, str2;
     for (unsigned i = 0; i < entries.size(); i++) {
         e = &entries[i];
 
         //Looking for invalid user streams.
         if (!e->valid && e->size) {
-            std::cerr << "DirTree::valid() Invalid user stream detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
         if ( (i > 0) &&
-             (e->valid && !e->dir) &&
-             ((e->size == 0) || ((int)e->child != -1)) )
+             (e->valid && !e->dir) && ((int)e->child != -1))
         {
-            std::cerr << "DirTree::valid() Invalid user stream detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
-        //Looking for invalid user storages. The ((int)e->child == -1)
-        //condition results in false positives.
+#ifdef CHECK_STORAGE_OBJECTS
+        //NOTE: It's not possible to detect invalid storages objects.  Too many
+        //false positives on Word8 documents.
         if ( (i > 0) &&
              (e->valid && e->dir) &&
-             ((e->size != 0) || (e->start != 0)) )
+             (((int)e->child == -1) || (e->start != 0) || (e->size != 0)) )
         {
-            std::cerr << "DirTree::valid() Invalid user storage detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid user storage detected!" << std::endl;
             return false;
         }
+#endif
         //Looking for duplicate names of DirEntries at this level.
         if (!valid_enames(const_cast<DirTree*>(this), i)) {
-            std::cerr << "DirTree::valid() Invalid DirEntry detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid DirEntry detected!" << std::endl;
             return false;
         }
+
+#ifdef CHECK_SIBLINGS
+        //NOTE: Too many False Positives, mainly Word8 files with embedded
+        //documents.
+        //
         //Check the name of the left/right DirEntry.
         if ((int)e->prev != -1) {
-            if (ename_cmp(e->name, (entries[e->prev]).name) < 0) {
-		std::cerr << "DirTree::valid() [name, position] mismatch detected!" << std::endl;
-                return false;
-            }
+            str1 = QString(entries[e->prev].name.data());
         }
         if ((int)e->next != -1) {
-            if (ename_cmp(e->name, (entries[e->next]).name) > 0) {
-		std::cerr << "DirTree::valid() [name, position] mismatch detected!" << std::endl;
+            str2 = QString(entries[e->next].name.data());
+        }
+        if (!str1.isEmpty() && !str2.isEmpty()) {
+            if (ename_cmp(str1, str2) > 0) {
+                std::cerr << "DirTree::valid [name, position] mismatch detected!" << std::endl;
                 return false;
             }
         }
+#endif
     }
     return true;
 }
@@ -853,7 +872,8 @@ void DirTree::load(unsigned char* buffer, unsigned size)
             name.erase(0, 1);
         }
 
-        // 2 = file (aka stream), 1 = directory (aka storage), 5 = root
+        // 0 = Unknown or unallocated, 1 = directory (aka storage),
+        // 2 = file (aka stream), 5 = root
         unsigned type = buffer[ 0x42 + p];
 
         DirEntry e;
@@ -881,6 +901,7 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         // CLSID, contains a object class GUI if this entry is a storage or root
         // storage or all zero if not.
 #ifdef POLE_DEBUG
+        if (!e.valid) std::cout << "INVALID ";
         printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%lu size=%lu clsid=%lu.%lu.%lu.%lu\n",
                name.c_str(), type, e.prev, e.next, e.child, e.start, e.size, readU32(buffer + 0x50 + p), readU32(buffer + 0x54 + p), readU32(buffer + 0x58 + p), readU32(buffer + 0x5C + p));
 #endif

@@ -75,6 +75,7 @@ public:
     // The maximum accessed cell range used for the scrollbar ranges.
     QSize accessedCellRange;
     FusionStorage* obscuredInfo;
+    QSize obscuredRange; // size of the bonuding box of obscuredInfo
 #ifdef CALLIGRA_TABLES_MT
     QReadWriteLock obscuredLock;
 #endif
@@ -170,6 +171,7 @@ SheetView::SheetView(const Sheet* sheet)
     d->defaultCellView = createDefaultCellView();
     d->accessedCellRange =  sheet->usedArea().size().expandedTo(QSize(256, 256));
     d->obscuredInfo = new FusionStorage(sheet->map());
+    d->obscuredRange = QSize(0, 0);
 }
 
 SheetView::~SheetView()
@@ -413,6 +415,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     // 4. Paint the custom borders, diagonal lines and page borders
     coordinate = startCoordinate;
     processedMergedCells.clear();
+    processedObscuredCells.clear();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -436,8 +439,16 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
                                           cell, this);
             }
             coordinate = savedCoordinate;
-            const CellView cellView = this->cellView(col, row);
-            cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
+            Cell theCell(sheet(), col, row);
+            const CellView cellView = d->cellViewToProcess(theCell, coordinate, processedObscuredCells, this, visRect);
+            if (!!theCell && (theCell.column() != col || theCell.row() != row)) {
+                cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
+                                          visRect,
+                                          theCell, this);
+            }
+            const CellView cellView2 = this->cellView(col, row);
+            coordinate = savedCoordinate;
+            cellView2.paintCellBorders(paintRect, painter, clipRect, coordinate,
                                       visRect,
                                       Cell(sheet(), col, row), this);
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
@@ -487,6 +498,13 @@ void SheetView::obscureCells(const QPoint &position, int numXCells, int numYCell
     // Obscure the cells
     if (numXCells != 0 || numYCells != 0)
         d->obscuredInfo->insert(Region(position.x(), position.y(), numXCells + 1, numYCells + 1), true);
+
+    QRect obscuredArea = d->obscuredInfo->usedArea();
+    QSize newObscuredRange(obscuredArea.right(), obscuredArea.bottom());
+    if (newObscuredRange != d->obscuredRange) {
+        d->obscuredRange = newObscuredRange;
+        emit obscuredRangeChanged(d->obscuredRange);
+    }
 }
 
 QPoint SheetView::obscuringCell(const QPoint &obscuredCell) const
@@ -562,6 +580,14 @@ bool SheetView::obscuresCells(const QPoint &cell) const
     if (pair.first.toRect().topLeft() != cell)
         return false;
     return true;
+}
+
+QSize SheetView::totalObscuredRange() const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->obscuredLock);
+#endif
+    return d->obscuredRange;
 }
 
 #ifdef CALLIGRA_TABLES_MT

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>342</width>
-    <height>255</height>
+    <height>335</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -22,13 +22,7 @@
      <property name="title">
       <string>Text elsewhere will:</string>
      </property>
-     <layout class="QVBoxLayout">
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <property name="margin">
-       <number>9</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QRadioButton" name="runThrough">
         <property name="text">
@@ -70,6 +64,40 @@
          <string>Run on both sides of this shape</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QRadioButton" name="enough">
+          <property name="text">
+           <string>Run on sides that are wider than:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KoUnitDoubleSpinBox" name="threshold">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

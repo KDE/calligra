@@ -8,7 +8,8 @@ set(karbonsvgexport_PART_SRCS
     SvgExport.cpp
     SvgUtil.cpp
     SvgWriter.cpp
-    ${SHAPES_SOURCES} 
+    SvgSavingContext.cpp
+    ${SHAPES_SOURCES}
 )
 
 kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})
@@ -28,6 +29,8 @@ set(karbonsvgimport_PART_SRCS
     SvgFilterHelper.cpp
     SvgCssHelper.cpp
     SvgClipPathHelper.cpp
+    SvgTextHelper.cpp
+    SvgLoadingContext.cpp
     ${SHAPES_SOURCES} 
 )
 
