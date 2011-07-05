@@ -35,6 +35,7 @@
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
+#include <SvgStyleParser.h>
 
 #include <KLocale>
 #include <KDebug>
@@ -1102,6 +1103,9 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
     if (!textElement.attribute("text-anchor").isEmpty())
         anchor = textElement.attribute("text-anchor");
 
+    SvgStyles elementStyles = context.styleParser().collectStyles(textElement);
+    context.styleParser().parseFont(elementStyles);
+
     ArtisticTextLoadingContext textContext;
     textContext.parseCharacterTransforms(textElement, context.currentGC());
 
@@ -1123,8 +1127,7 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
     if (hasTextPathElement) {
         // create the referenced path shape
         context.pushGraphicsContext(parentElement);
-        // TODO: port
-        //parseFont(collectStyles(parentElement));
+        context.styleParser().parseFont(context.styleParser().collectStyles(parentElement));
         textContext.pushCharacterTransforms();
         textContext.parseCharacterTransforms(parentElement, context.currentGC());
 
@@ -1194,7 +1197,6 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
             if (offset > 0.0)
                 setStartOffset(offset);
         }
-
         textContext.popCharacterTransforms();
         context.popGraphicsContext();
     }
@@ -1221,8 +1223,7 @@ void ArtisticTextShape::parseTextRanges(const KoXmlElement &element, SvgLoadingC
         }
         else if (e.tagName() == "tspan") {
             SvgGraphicsContext *gc = context.pushGraphicsContext(e);
-            // TODO: port
-            // parseFont(collectStyles(e));
+            context.styleParser().parseFont(context.styleParser().collectStyles(e));
             textContext.pushCharacterTransforms();
             textContext.parseCharacterTransforms(e, gc);
             parseTextRanges(e, context, textContext);
