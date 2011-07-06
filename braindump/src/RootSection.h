@@ -30,23 +30,24 @@ class KUndo2Command;
 class ViewManager;
 class SectionsIO;
 
-class RootSection : public QObject, public SectionGroup {
+class RootSection : public QObject, public SectionGroup
+{
     Q_OBJECT
-  public:
+public:
     RootSection();
     ~RootSection();
     ViewManager* viewManager();
     SectionsIO* sectionsIO();
     void addCommand(Section* , KUndo2Command* command);
-    void createActions(KActionCollection* );
+    void createActions(KActionCollection*);
     KUndo2Stack* undoStack(); // TODO remove when it is again possible to hide the undo stack
-    void setCurrentSection(Section* ); // TODO when the command statck is hidden again, remove
-  signals:
+    void setCurrentSection(Section*);  // TODO when the command statck is hidden again, remove
+signals:
     /// This signal is emitted when a command is executed in the undo stack
     void commandExecuted();
-  private slots:
+private slots:
     void undoIndexChanged(int idx);
-  private:
+private:
     KUndo2Stack* m_undoStack;
     ViewManager* m_viewManager;
     SectionsIO* m_sectionsSaver;

@@ -575,7 +575,7 @@ void Sheet::adjustDocumentHeight(double deltaHeight)
     emit documentSizeChanged(d->documentSize);
 }
 
-int Sheet::leftColumn(double _xpos, double &_left) const
+int Sheet::leftColumn(qreal _xpos, qreal &_left) const
 {
     _left = 0.0;
     int col = 1;
@@ -596,7 +596,7 @@ int Sheet::rightColumn(double _xpos) const
     return col;
 }
 
-int Sheet::topRow(double _ypos, double & _top) const
+int Sheet::topRow(qreal _ypos, qreal & _top) const
 {
     qreal top;
     int row = rowFormats()->rowForPosition(_ypos, &top);
@@ -2505,7 +2505,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     // Create a dict of cell anchored shapes with the cell as key.
     foreach(KoShape* shape, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell()) {
-            double dummy;
+            qreal dummy;
             const QPointF position = shape->position();
             const int col = leftColumn(position.x(), dummy);
             const int row = topRow(position.y(), dummy);

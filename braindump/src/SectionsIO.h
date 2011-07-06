@@ -31,31 +31,32 @@ class Section;
 class SectionGroup;
 class KUndo2Stack;
 
-class SectionsIO : public QObject {
-  Q_OBJECT
-  public:
+class SectionsIO : public QObject
+{
+    Q_OBJECT
+public:
     SectionsIO(RootSection* rootSection);
     ~SectionsIO();
-  public:
+public:
     enum PushMode {
-      SinglePush,
-      RecursivePush
+        SinglePush,
+        RecursivePush
     };
     /**
      * push a section to save
      */
     void push(Section* _section, PushMode _pushMode = SinglePush);
-  public slots:
+public slots:
     void save();
-  private:
+private:
     void load();
-  private:
+private:
     RootSection* m_rootSection;
     QTimer* m_timer;
     struct SaveContext;
     QMap<Section*, SaveContext*> m_contextes;
     QString m_directory; ///< directory where the sections are saved
-  private:
+private:
     /**
      * Save the structure and update the m_contextes map
      * @param contextToRemove contains a list of used context, that need to be removed

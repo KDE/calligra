@@ -158,7 +158,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
         switch (c) {
             // condition or color or locale...
         case '[': {
-            const char ch = i < numberFormat.length() - 1 ? numberFormat[ ++i ].toLatin1() : ']';
+            const char ch = (i < numberFormat.length() - 1) ? numberFormat[ ++i ].toLatin1() : ']';
             if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
                 // color code
                 QString colorName;

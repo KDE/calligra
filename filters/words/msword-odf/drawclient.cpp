@@ -61,11 +61,24 @@ WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
         plcfSpa = gh->m_drawings->getSpaMom();
     }
     if (!plcfSpa) {
-        kDebug(30513) << "MISSING plcfSpa, returning QRect(0, 0, 1, 1)";
-        return QRect(0, 0, 1, 1);
+        kDebug(30513) << "MISSING plcfSpa, returning QRectF()";
+        return QRectF();
     }
     PLCFIterator<Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
     Word97::FSPA* spa = it.current();
+    return QRectF(spa->xaLeft, spa->yaTop, (spa->xaRight - spa->xaLeft), (spa->yaBottom - spa->yaTop));
+}
+
+QRectF
+WordsGraphicsHandler::DrawClient::getReserveRect(void)
+{
+    //At least for floating MS-ODRAW shapes the SPA structure for the current
+    //CP is provided by the GraphicsHandler.  No test files for inline shapes
+    //at the moment.
+    Word97::FSPA* spa = gh->m_pSpa;
+
+    //DO NOT remove the assert, please send the file to: matus.uzak@ixonos.com
+    Q_ASSERT(spa);
     return QRectF(spa->xaLeft, spa->yaTop, (spa->xaRight - spa->xaLeft), (spa->yaBottom - spa->yaTop));
 }
 
@@ -149,13 +162,6 @@ WordsGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
 {
     //TODO: No supoort for master shapes at the moment.
     Q_UNUSED(spid);
-    return 0;
-}
-
-const MSO::OfficeArtSpContainer*
-WordsGraphicsHandler::DrawClient::defaultShapeContainer(void)
-{
-    //Specific for Ppt at the moment.
     return 0;
 }
 
