@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words HTML Export Filter
+Name[cs]=Exportní filtr HTML pro Words
+Name[es]=Filtro de Words de exportación a HTML
+Name[et]=Wordsi HTML-i ekspordifilter
+Name[nb]=HTML-eksportfilter for Words
+Name[nds]=HTML-Exportfilter för Words
 Name[pt]=Filtro de Exportação de HTML para o Words
 Name[pt_BR]=Filtro de exportação de HTML para o Words
 Name[sv]=Words HTML-exportfilter
