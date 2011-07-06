@@ -45,6 +45,9 @@ set(kowidgets_LIB_SRCS
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
+    KoMarkerModel.cpp
+    KoMarkerItemDelegate.cpp
+    KoMarkerSelector.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
 )
