@@ -20,11 +20,11 @@
 
 /**
  * Note that the implementations here are supposed to be defined by DrawingML.
- * This details the geometry etc. in Appendix D, in the file 
+ * This details the geometry etc. in Appendix D, in the file
  * presetShapeDefinitions.xml.
- * 
+ *
  * @note Of the {Bent,Curved}Connector[2345] shapes, the MS Office only seems to
- * support the [23] variants. The remainder have been coded in a manner 
+ * support the [23] variants. The remainder have been coded in a manner
  * consistent with the [23] variants, but have not been tested.
  */
 
@@ -76,8 +76,11 @@ ODrawToOdf::getRect(const OfficeArtSpContainer &o)
         return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
     } else if (o.clientAnchor && client) {
         return client->getRect(*o.clientAnchor);
+    } else if (o.shapeProp.fHaveAnchor && client) {
+        return client->getReserveRect();
+    } else {
+        return QRectF();
     }
-    return QRect(0, 0, 1, 1);
 }
 
 QRectF
@@ -187,7 +190,7 @@ void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writ
 //    qreal x2 = x1 + r / 2;
     qreal y2 = h * adj2 / 100000;
 //    qreal y1 = t + y2 / 2;
-    
+
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
     shapePath.lineTo(l + x1, y2);
@@ -209,7 +212,7 @@ void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writ
     qreal y2 = h * adj2 / 100000;
 //    qreal y1 = t + y2 / 2;
 //    qreal y3 = b + y2 / 2;
-    
+
     shapePath.moveTo(l, t);
     shapePath.lineTo(l + x1, t);
     shapePath.lineTo(l + x1, y2);
@@ -238,7 +241,7 @@ void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Wr
     qreal x1 = l + x2 /*/ 2*/;
 //    qreal x3 = r + x2 / 2;
 //    qreal y3 = h * 3 / 4;
-        
+
     shapePath.moveTo(l, t);
     shapePath.cubicTo(x1, t, x1, t + h / 2, l + x2, t + h / 2);
     shapePath.cubicTo(l + x2, t + h / 2, l + x2, b, r, b);
@@ -261,7 +264,7 @@ void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Wr
     qreal y2 = t + y1 / 2;
     qreal y3 = y1 + y4 / 2;
     qreal y5 = b + y4 / 2;
-        
+
     shapePath.moveTo(l, t);
     shapePath.cubicTo(x1, t, l + x2, y2, l + x2, y1);
     shapePath.cubicTo(l + x2, y3, x4, y4, x3, y4);
@@ -336,7 +339,7 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
         sy2 = shapeRect.bottomRight().y();
     }
 
-    // Prepare to transform the path according the shape properties like flip 
+    // Prepare to transform the path according the shape properties like flip
     // and rotation.
     QTransform m;
     m.reset();
@@ -360,10 +363,28 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     out.xml.startElement("draw:connector");
     addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
-    
+
     // Compute path and transform it.
     QPainterPath shapePath;
     (this->*drawPath)(sx1, sy1, sx2, sy2, out, shapePath);
+
+    // Temporary support for arrowheads: remove when the core gets marker
+    // support (we already support that via addGraphicStyleToDrawElement).
+    //
+    // The idea is not to render perfectly (rotation, style etc.), but convey
+    // the semantic sense that there *is* an arrowhead.
+    if (ds.lineStartArrowhead()) {
+        shapePath.moveTo(sx1, sy1);
+        shapePath.lineTo(sx1 + 70, sy1 + 70/2);
+        shapePath.lineTo(sx1 + 70, sy1 - 70/2);
+        shapePath.closeSubpath();
+    }
+    if (ds.lineEndArrowhead()) {
+        shapePath.moveTo(sx2, sy2);
+        shapePath.lineTo(sx2 - 70, sy2 + 70/2);
+        shapePath.lineTo(sx2 - 70, sy2 - 70/2);
+        shapePath.closeSubpath();
+    }
     shapePath = m.map(shapePath);
 
     // translate the QPainterPath into svg:d attribute

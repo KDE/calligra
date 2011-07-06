@@ -358,6 +358,8 @@ install( FILES
     ProtectableObject.h
     RectStorage.h
     Region.h
+    RowColumnFormat.h
+    RowFormatStorage.h
     RTree.h
     Sheet.h
     Style.h
