@@ -426,8 +426,8 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             // 1. Check to see if the item is a loadable SVG file
 
             // FIXME: Check in the manifest first.
-            //d->scalablePreview->load(previewData);
-            d->scalablePreview->load(QString("/home/leinir/musicshapetest.svg")); // FIXME: This is just test data.
+            //d->scalablePreview->load(QString("/home/ingwa/musicshapetest.svg")); // FIXME: This is just test data.
+            d->scalablePreview->load(previewData);
             if (d->scalablePreview->isValid()) {
                 kDebug(30006) << "Found scalable preview image!";
                 d->scalablePreview->setViewBox(d->scalablePreview->boundsOnElement("svg"));
