@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words ASCII Import Filter
+Name[cs]=Importní filtr ASCII pro Words
+Name[es]=Filtro de Words de importación de ASCII
+Name[et]=Wordsi ASCII impordifilter
+Name[nb]=Ascii-importfilter for Words
+Name[nds]=ASCII-Importfilter för Words
 Name[pt]=Filtro de Importação de ASCII para o Words
 Name[pt_BR]=Filtro de importação de ASCII para o Words
 Name[sv]=Words ASCII-importfilter
