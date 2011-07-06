@@ -141,7 +141,7 @@ CombinedView::openFile(const QString& path) {
     }
     QString dir = oothread->toPng(path, koodploader->slideSize().width());
     ooodploader->setSlideDir(dir);
-    // if ppt, convert to odp with koffice and put in queue for conversion to
+    // if ppt, convert to odp with calligra and put in queue for conversion to
     // png
 
     // adapt zoom level to number of slides

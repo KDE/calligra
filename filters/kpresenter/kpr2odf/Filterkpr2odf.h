@@ -27,7 +27,7 @@
 #include <QSizeF>
 #include <QPointF>
 
-//KOffice includes
+//Calligra includes
 #include <KoDom.h>
 #include <KoFilter.h>
 #include <KoGenStyles.h>

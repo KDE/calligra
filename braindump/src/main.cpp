@@ -29,28 +29,28 @@
 #include "RootSection.h"
 #include "SectionsIO.h"
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-  KAboutData* about = newBrainDumpAboutData();
-  KCmdLineArgs::init( argc, argv, about );
+    KAboutData* about = newBrainDumpAboutData();
+    KCmdLineArgs::init(argc, argv, about);
 
-  KApplication app;
+    KUniqueApplication app;
 
-  KIconLoader::global()->addAppDir("koffice");
-  KoGlobal::initialize();
+    KIconLoader::global()->addAppDir("calligra");
+    KoGlobal::initialize();
 
-  KComponentData* m_documentData = new KComponentData(about);
-  
-  RootSection* doc = new RootSection;
-  
-  MainWindow* window = new MainWindow(doc, *m_documentData);
-  window->setVisible(true);
-  
-  app.exec();
+    KComponentData* m_documentData = new KComponentData(about);
 
-  // Ensure the root section is saved
-  doc->sectionsIO()->save();
-  
-  delete doc;
-  app.exit(0);
+    RootSection* doc = new RootSection;
+
+    MainWindow* window = new MainWindow(doc, *m_documentData);
+    window->setVisible(true);
+
+    app.exec();
+
+    // Ensure the root section is saved
+    doc->sectionsIO()->save();
+
+    delete doc;
+    app.exit(0);
 }

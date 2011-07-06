@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=Relational Database
+Name[el]=Σχεσιακή βάση δεδομένων
 Name[et]=Relatsiooniline andmebaas
-Name[pt]=Base Dados Relacional
+Name[nb]=Relasjonsdatabase
+Name[nl]=Relationele database
+Name[pt]=Base de Dados Relacional
 Name[pt_BR]=Banco de dados relacional
 Name[sv]=Relationsdatabas
 Name[uk]=Реляційна база даних
 Name[x-test]=xxRelational Databasexx
+Name[zh_TW]=關聯資料庫

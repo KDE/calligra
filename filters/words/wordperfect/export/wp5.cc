@@ -24,7 +24,7 @@
 #include <QByteArray>
 
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 #include <KWEFUtil.h>
 
 #include <wp5.h>

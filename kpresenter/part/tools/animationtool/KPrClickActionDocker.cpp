@@ -64,8 +64,8 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
         QWidget * optionWidget = factory->createOptionWidget();
         layout->addWidget( optionWidget );
         m_eventActionWidgets.insert( factory->id(), optionWidget );
-        connect( optionWidget, SIGNAL( addCommand( QUndoCommand * ) ),
-                 this, SLOT( addCommand( QUndoCommand * ) ) );
+        connect( optionWidget, SIGNAL( addCommand( KUndo2Command * ) ),
+                 this, SLOT( addCommand( KUndo2Command * ) ) );
     }
 
     setLayout( layout );
@@ -109,6 +109,8 @@ void KPrClickActionDocker::selectionChanged()
 
 void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
 {
+    m_canvas->disconnectCanvasObserver(this);
+    
     m_canvas = canvas;
 
     if ( m_canvas ) {
@@ -130,7 +132,7 @@ void KPrClickActionDocker::setView(KoPAViewBase  *view )
     setCanvas(view->kopaCanvas());
 }
 
-void KPrClickActionDocker::addCommand( QUndoCommand * command )
+void KPrClickActionDocker::addCommand( KUndo2Command * command )
 {
     if ( m_view ) {
         m_view->kopaCanvas()->addCommand( command );

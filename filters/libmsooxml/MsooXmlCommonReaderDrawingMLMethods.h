@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -100,6 +100,7 @@ qreal m_largestParaFont; // Largest font used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
+void handleRprAttributes(const QXmlStreamAttributes& attrs);
 KoFilter::ConversionStatus read_DrawingML_rPr();
 KoFilter::ConversionStatus read_endParaRPr();
 
@@ -115,6 +116,7 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
+KoFilter::ConversionStatus read_gradFillRpr();
 QString m_gradAngle;
 KoFilter::ConversionStatus read_lin();
 KoFilter::ConversionStatus read_gsLst();
@@ -124,12 +126,10 @@ KoFilter::ConversionStatus read_gd();
 bool m_contentAvLstExists; // whether avLst exists
 QMap<QString, QString> m_avModifiers;
 KoFilter::ConversionStatus read_avLst();
-enum noFillCaller {
-        noFill_rPr
-};
-KoFilter::ConversionStatus read_noFill(noFillCaller caller);
+KoFilter::ConversionStatus read_noFill();
 KoFilter::ConversionStatus read_schemeClr();
 KoFilter::ConversionStatus read_prstClr();
+KoFilter::ConversionStatus read_hslClr();
 KoFilter::ConversionStatus read_sysClr();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
@@ -218,8 +218,8 @@ int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
 
 // Shape properties
-int m_svgX; //!< set by read_off()
-int m_svgY; //!< set by read_off()
+qint64 m_svgX; //!< set by read_off()
+qint64 m_svgY; //!< set by read_off()
 int m_svgWidth; //! set by read_ext()
 int m_svgHeight; //! set by read_ext()
 int m_svgChX; //!< set by read_chOff()
@@ -230,8 +230,8 @@ int m_svgChHeight; //! set by read_chExt()
 // a group shape
 bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
 struct GroupProp {
-    qreal svgXOld;
-    qreal svgYOld;
+    qint64 svgXOld;
+    qint64 svgYOld;
     qreal svgWidthOld;
     qreal svgHeightOld;
     qreal svgXChOld;

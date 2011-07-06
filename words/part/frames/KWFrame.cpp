@@ -36,12 +36,12 @@
 
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         : m_shape(shape),
-        m_frameBehavior(KWord::AutoExtendFrameBehavior),
-        m_newFrameBehavior(KWord::NoFollowupFrame),
+        m_frameBehavior(Words::AutoExtendFrameBehavior),
+        m_newFrameBehavior(Words::NoFollowupFrame),
         m_anchoredPageNumber(pageNumber),
+        m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
         m_minimumFrameHeight(0.0) // no minimum height per default
-
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -50,22 +50,27 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
 
     KWTextFrameSet* parentFrameSet = dynamic_cast<KWTextFrameSet*>(parent);
     if (parentFrameSet) {
-        if (KWord::isHeaderFooter(parentFrameSet)) {
+        if (Words::isHeaderFooter(parentFrameSet)) {
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
-        if (parentFrameSet->textFrameSetType() != KWord::OtherTextFrameSet) {
+        if (parentFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                data->setResizeMethod(KoTextShapeDataBase::NoResize);
+            }
+        } else {
             shape->setGeometryProtected(true);
+            shape->setCollisionDetection(false);
         }
     }
 
-    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << Words::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 }
 
 KWFrame::~KWFrame()
 {
-    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << Words::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 
     KoShape *ourShape = m_shape;
     m_shape = 0; // no delete is needed as the shape deletes us.
@@ -79,6 +84,9 @@ KWFrame::~KWFrame()
                                                  // copyShapes as retired
         if (justMe) {
             kDebug(32001) << "Last KWFrame removed from frameSet=" << m_frameSet;
+            // FIXME: Fix when a proper way to delete framesets have been found.
+            // The frameset is never deleted (here) because removeFrame() above results in
+            // m_frameSet to be set to 0.
             delete m_frameSet;
             m_frameSet = 0;
         }
@@ -92,7 +100,14 @@ qreal KWFrame::minimumFrameHeight() const
 
 void KWFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
 {
+    if (m_minimumFrameHeight == minimumFrameHeight)
+        return;
     m_minimumFrameHeight = minimumFrameHeight;
+
+    // transfer the minimumFrameHeight to the copy-shapes
+    foreach(KWFrame* copyFrame, m_copyShapes) {
+        copyFrame->setMinimumFrameHeight(m_minimumFrameHeight);
+    }
 }
 
 void KWFrame::cleanupShape(KoShape* shape)
@@ -132,6 +147,22 @@ void KWFrame::setFrameSet(KWFrameSet *fs)
         fs->addFrame(this);
 }
 
+QList<KWFrame*> KWFrame::copies() const
+{
+    return m_copyShapes;
+}
+
+void KWFrame::addCopy(KWFrame* frame)
+{
+    if (!m_copyShapes.contains(frame))
+        m_copyShapes.append(frame);
+}
+
+void KWFrame::removeCopy(KWFrame* frame)
+{
+    m_copyShapes.removeAll(frame);
+}
+
 void KWFrame::copySettings(const KWFrame *frame)
 {
     setFrameBehavior(frame->frameBehavior());
@@ -143,13 +174,13 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
 {
     QString value;
     switch (frameBehavior()) {
-    case KWord::AutoCreateNewFrameBehavior:
+    case Words::AutoCreateNewFrameBehavior:
         value = "auto-create-new-frame";
         break;
-    case KWord::IgnoreContentFrameBehavior:
+    case Words::IgnoreContentFrameBehavior:
         value = "clip";
         break;
-    case KWord::AutoExtendFrameBehavior:
+    case Words::AutoExtendFrameBehavior:
         // the third case, AutoExtendFrame is handled by min-height
         value.clear();
         if (minimumFrameHeight() > 1)
@@ -160,12 +191,12 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
         m_shape->setAdditionalStyleAttribute("style:overflow-behavior", value);
 
     switch (newFrameBehavior()) {
-    case KWord::ReconnectNewFrame: value = "followup"; break;
-    case KWord::NoFollowupFrame: value.clear(); break; // "none" is the default
-    case KWord::CopyNewFrame: value = "copy"; break;
+    case Words::ReconnectNewFrame: value = "followup"; break;
+    case Words::NoFollowupFrame: value.clear(); break; // "none" is the default
+    case Words::CopyNewFrame: value = "copy"; break;
     }
     if (!value.isEmpty()) {
-        m_shape->setAdditionalStyleAttribute("koffice:frame-behavior-on-new-page", value);
+        m_shape->setAdditionalStyleAttribute("calligra:frame-behavior-on-new-page", value);
     }
 
     // shape properties

@@ -35,7 +35,7 @@ class KoShapeContainer;
 /**
  * This class is an interface that positions the shape linked to text anchor
  */
-class KOTEXT_EXPORT KoAnchorStrategy{
+class KOTEXT_EXPORT KoAnchorStrategy {
 public:
     KoAnchorStrategy(){};
     virtual ~KoAnchorStrategy(){};
@@ -68,7 +68,7 @@ public:
  * <li> Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
  *    the TextShape's \a KoTextShapeContainerModel . </ol>
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
- * @see KWAnchorStrategy for more information about the layout of anchors/shapes in KWord.
+ * @see KWAnchorStrategy for more information about the layout of anchors/shapes in Words.
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
 {
@@ -188,7 +188,7 @@ public:
     /**
      * Returns true if the anchored frame is positioned as a (potentially big) character in
      * the text layout or false when it will not take any space as an inline object.
-     * An anchor which behaves as a characterin the text will potentially change the
+     * An anchor which behaves as a character in the text will potentially change the
      * ascent/descent of the line.
      */
     bool behavesAsCharacter() const;

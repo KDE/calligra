@@ -24,7 +24,11 @@
 #include "../KoDocument.h"
 #include "KoSopranoTableModelDelegate.h"
 #include "KoSopranoTableModel.h"
+#include "KoRdfSemanticTreeWidgetItem.h"
 #include "../KoGlobal.h"
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
 
 #include <kdebug.h>
 #include <QComboBox>
@@ -345,8 +349,8 @@ void KoDocumentRdfEditWidget::addTriple()
     // want to create a bnode, we change it to a URI first.
     //
     Soprano::Node obj(QUrl(const_cast<Soprano::Model*>(m_rdf->model())->createBlankNode().toString()));
-    Soprano::Statement st(Soprano::Node(QUrl("http://koffice.org/new-node")),
-                          Soprano::Node(QUrl("http://koffice.org/new-node")),
+    Soprano::Statement st(Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
+                          Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
                           obj,
                           m_rdf->manifestRdfNode());
     int newRowNumber = d->m_tripleModel->insertStatement(st);

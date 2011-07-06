@@ -19,7 +19,7 @@
 
 #ifndef FORMULACOMMANDUPDATE_H
 #define FORMULACOMMANDUPDATE_H
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class FormulaCommand;
 class KoFormulaShape;
@@ -34,7 +34,7 @@ class FormulaData;
  *
  **/
 
-class FormulaCommandUpdate : public QUndoCommand {
+class FormulaCommandUpdate : public KUndo2Command {
 public:
     FormulaCommandUpdate(KoFormulaShape* shape, FormulaCommand* command);
 

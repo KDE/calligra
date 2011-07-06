@@ -1,9 +1,14 @@
 [Desktop Entry]
 Name=ATM Router
+Name[de]=ATM-Router
+Name[el]=Δρομολογητής ATM
 Name[et]=ATM marsruuter
+Name[nb]=ATM-ruter
+Name[nds]=ATM-Nettweger
 Name[nl]=ATM-router
 Name[pt]=Encaminhador ATM
 Name[pt_BR]=Roteador ATM
 Name[sv]=ATM-router
 Name[uk]=Маршрутизатор ATM
 Name[x-test]=xxATM Routerxx
+Name[zh_TW]=ATM 路由器

@@ -68,9 +68,9 @@ const KComponentData &KFormulaPartFactory::global()
     if ( !s_global )
     {
         s_global = new KComponentData( aboutData() );
-        s_global->dirs()->addResourceType( "toolbar", "data", "koffice/toolbar/");
-        // Tell the iconloader about share/apps/koffice/icons*/
-        KIconLoader::global()->addAppDir("koffice");
+        s_global->dirs()->addResourceType( "toolbar", "data", "calligra/toolbar/");
+        // Tell the iconloader about share/apps/calligra/icons*/
+        KIconLoader::global()->addAppDir("calligra");
     }
     return *s_global;
 }

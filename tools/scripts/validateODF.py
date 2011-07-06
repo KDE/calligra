@@ -34,7 +34,7 @@ schemas = {
 		"OpenDocument-manifest-schema-v1.0-os.rng"],
 	"1.1": ["OpenDocument-schema-v1.1.rng",
 		"OpenDocument-manifest-schema-v1.1.rng"],
-	"1.2": ["OpenDocument-v1.2-cd05-schema-koffice.rng",
+	"1.2": ["OpenDocument-v1.2-cd05-schema-calligra.rng",
 		"OpenDocument-v1.2-cd05-manifest-schema.rng"]
 }
 

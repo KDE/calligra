@@ -22,7 +22,7 @@
 #include "DeleteCommand.h"
 #include <klocale.h>
 #include <TextTool.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
@@ -33,19 +33,19 @@
 
 #include <QWeakPointer>
 
-DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *parent) :
+DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command *parent) :
     TextCommandBase (parent),
     m_tool(tool),
     m_first(true),
     m_undone(false),
     m_mode(mode)
 {
-    setText(i18n("Delete"));
+    setText(i18nc("(qtundo-format)", "Delete"));
 }
 
 void DeleteCommand::undo()
 {
-    foreach (QUndoCommand *command, m_shapeDeleteCommands)
+    foreach (KUndo2Command *command, m_shapeDeleteCommands)
         command->undo();
 
     TextCommandBase::undo();
@@ -58,7 +58,7 @@ void DeleteCommand::redo()
 {
     m_undone = false;
     if (!m_first) {
-        foreach (QUndoCommand *command, m_shapeDeleteCommands)
+        foreach (KUndo2Command *command, m_shapeDeleteCommands)
             command->redo();
 
         TextCommandBase::redo();
@@ -90,7 +90,7 @@ void DeleteCommand::deleteChar()
     if (!caret->hasSelection())
         caret->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-    deleteSelection(*caret);
+    deleteSelection();
 }
 
 void DeleteCommand::deletePreviousChar()
@@ -106,12 +106,15 @@ void DeleteCommand::deletePreviousChar()
     if (!caret->hasSelection())
         caret->movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
-    deleteSelection(*caret);
+    deleteSelection();
 }
 
-void DeleteCommand::deleteSelection(QTextCursor &selection)
+void DeleteCommand::deleteSelection()
 {
-    QTextCursor cursor(selection);
+    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    Q_ASSERT(textEditor);
+    QTextCursor *caret = textEditor->cursor();
+    QTextCursor cursor(*caret);
 
     //Store the position and length. Will be used in checkMerge
     m_position = (cursor.anchor() < cursor.position()) ? cursor.anchor():cursor.position();
@@ -142,18 +145,19 @@ void DeleteCommand::deleteSelection(QTextCursor &selection)
         m_format = firstFormat;
 
     //Delete any inline objects present within the selection
-    deleteInlineObjects(selection);
+    deleteInlineObjects();
 
-    //Now finally Delete the selected text
-    selection.deleteChar();
+    //Now finally Delete the selected text. Don't use selection.deleteChar() direct
+    //cause the Texteditor needs to know about the changes too.
+    textEditor->deleteChar();
 }
 
-void DeleteCommand::deleteInlineObjects(QTextCursor &selection)
+void DeleteCommand::deleteInlineObjects()
 {
     KoTextEditor *textEditor = m_tool->m_textEditor.data();
-    if (textEditor == 0)
-        return;
-    QTextCursor cursor(selection);
+    Q_ASSERT(textEditor);
+    QTextCursor *caret = textEditor->cursor();
+    QTextCursor cursor(*caret);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
@@ -193,7 +197,7 @@ void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (anchor) {
                 KoShape *shape = anchor->shape();
-                QUndoCommand *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
+                KUndo2Command *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
                 shapeDeleteCommand->redo();
                 m_shapeDeleteCommands.push_back(shapeDeleteCommand);
         }
@@ -206,13 +210,13 @@ int DeleteCommand::id() const
     return 56789;
 }
 
-bool DeleteCommand::mergeWith(const QUndoCommand *command)
+bool DeleteCommand::mergeWith(const KUndo2Command *command)
 {
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, QUndoCommand *parent = 0)
-        : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
+        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
         m_document(document)
         {}
 
@@ -255,7 +259,7 @@ bool DeleteCommand::mergeWith(const QUndoCommand *command)
     return true;
 }
 
-bool DeleteCommand::checkMerge( const QUndoCommand *command )
+bool DeleteCommand::checkMerge( const KUndo2Command *command )
 {
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
 
@@ -286,9 +290,11 @@ void DeleteCommand::updateListChanges()
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(m_position);
     QTextBlock endBlock = document->findBlock(m_position + m_length);
+    if (endBlock != document->end())
+        endBlock = endBlock.next();
     QTextList *currentList;
 
-    for (QTextBlock currentBlock = startBlock; currentBlock != endBlock.next(); currentBlock = currentBlock.next()) {
+    for (QTextBlock currentBlock = startBlock; currentBlock != endBlock; currentBlock = currentBlock.next()) {
         tempCursor.setPosition(currentBlock.position());
         currentList = tempCursor.currentList();
         if (currentList) {
@@ -320,7 +326,7 @@ DeleteCommand::~DeleteCommand()
             delete object;
         }
 
-        foreach (QUndoCommand *command, m_shapeDeleteCommands)
+        foreach (KUndo2Command *command, m_shapeDeleteCommands)
             delete command;
     }
 }

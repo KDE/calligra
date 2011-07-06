@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Memory
+Name[el]=Μνήμη
 Name[es]=Memoria
+Name[nb]=Minne
 Name[nl]=Geheugen
 Name[pt]=Memória
 Name[pt_BR]=Memória
@@ -9,3 +11,4 @@ Name[ug]=ئەسلەك
 Name[uk]=Пам'ять
 Name[x-test]=xxMemoryxx
 Name[zh_CN]=内存
+Name[zh_TW]=記憶體

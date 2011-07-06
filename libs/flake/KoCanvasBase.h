@@ -3,7 +3,7 @@
    Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-      
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -31,11 +31,12 @@
 #include <QRect>
 #include <QWidget>
 #include <QCursor>
+#include <QObject>
 
 #include "flake_export.h"
 
 class QGraphicsWidget;
-class QUndoCommand;
+class KUndo2Command;
 
 class KoResourceManager;
 class KoShapeManager;
@@ -47,6 +48,7 @@ class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
 class KoGuidesData;
+
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -107,7 +109,7 @@ public:
      * it when the undo limit is reached, or when deleting the command history itself.
      * @param command the command to add
      */
-    virtual void addCommand(QUndoCommand *command) = 0;
+    virtual void addCommand(KUndo2Command *command) = 0;
 
     /**
      * return the current shapeManager
@@ -185,6 +187,13 @@ public:
      * This method should somehow call QWidget::updateMicroFocus() on the canvas widget.
      */
     virtual void updateInputMethodInfo() = 0;
+
+    /**
+     * disconnect the given QObject completely and utterly from any and all
+     * connections it has to any QObject owned by the canvas. Do this in
+     * the setCanvas of every KoCanvasObserver.
+     */
+    virtual void disconnectCanvasObserver(QObject *object);
 
     /**
      * Return a pointer to the resource manager associated with this

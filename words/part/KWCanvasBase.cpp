@@ -21,14 +21,14 @@
  */
 #include "KWCanvasBase.h"
 
-// kword includes
+// words includes
 #include "KWCanvas.h"
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 #include "KWPageCacheManager.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
@@ -77,7 +77,7 @@ void KWCanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
     *vertical = m_document->gridData().gridY();
 }
 
-void KWCanvasBase::addCommand(QUndoCommand *command)
+void KWCanvasBase::addCommand(KUndo2Command *command)
 {
     m_document->addCommand(command);
 }
@@ -395,6 +395,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                         pageCache->exposed.clear();
                         QRect rc(QPoint(0,0), pageSizeView.toSize());
 
+
                         const int UPDATE_SIZE = 64; //pixels
 
                         if (rc.height() < UPDATE_SIZE) {
@@ -418,7 +419,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     // rects that are in view and paint them.
                     if (!pageCache->exposed.isEmpty()) {
                         QRegion paintRegion;
-                        QRegion remainingUnExposed;
+                        QVector<QRect> remainingUnExposed;
                         const QVector<QRect> &exposed = pageCache->exposed;
                         for (int i = 0; i < exposed.size(); ++i) {
 
@@ -431,11 +432,11 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                 gc.end();
                             }
                             else {
-                                remainingUnExposed += rc;
+                                remainingUnExposed << rc;
                             }
                         }
 
-                        pageCache->exposed = remainingUnExposed.rects();
+                        pageCache->exposed = remainingUnExposed;
 
                         // paint the exposed regions of the page
                         QPainter gc(pageCache->cache);
@@ -561,7 +562,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     // rects that are in view and paint them.
                     if (!pageCache->exposed.isEmpty()) {
                         QRegion paintRegion;
-                        QRegion remainingUnExposed;
+                        QVector<QRect> remainingUnExposed;
                         const QVector<QRect> &exposed = pageCache->exposed;
                         for (int i = 0; i < exposed.size(); ++i) {
 
@@ -574,11 +575,11 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                 gc.end();
                             }
                             else {
-                                remainingUnExposed += rc;
+                                remainingUnExposed << rc;
                             }
                         }
 
-                        pageCache->exposed = remainingUnExposed.rects();
+                        pageCache->exposed = remainingUnExposed;
 
                         // paint the exposed regions of the page
                         QPainter gc(pageCache->cache);

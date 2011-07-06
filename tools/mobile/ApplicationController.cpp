@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
@@ -119,7 +119,7 @@
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 #include <tables/Map.h>
 #include <tables/DocBase.h>
 #include <tables/part/View.h>
@@ -3420,7 +3420,7 @@ bool ApplicationController::startNewInstance(const KoAbstractApplicationOpenDocu
                              ? QString() : args.documentsToOpen.first();
     cmdLineArgs << fileName;
     cmdLineArgs << (args.openAsTemplates ? "true" : "false");
-    return QProcess::startDetached(FREOFFICE_APPLICATION_PATH, cmdLineArgs);
+    return QProcess::startDetached(qApp->applicationFilePath(), cmdLineArgs);
 }
 
 void ApplicationController::setProgressIndicatorVisible(bool visible)

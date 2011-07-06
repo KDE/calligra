@@ -54,7 +54,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string extracomment="@title:tab">Summary task</string>
+       <string comment="@title:tab">Summary task</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
@@ -66,7 +66,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Default:</string>
+          <string comment="@label:chooser">Default:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_SummaryTaskDefaultColor</cstring>
@@ -86,7 +86,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="kcfg_SummaryTaskLevelColorsEnabled">
          <property name="title">
-          <string extracomment="@title:group">Use level colors</string>
+          <string comment="@title:group">Use level colors</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -104,7 +104,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string extracomment="@label:chooser">Level 1</string>
+             <string comment="@label:chooser">Level 1</string>
             </property>
             <property name="buddy">
              <cstring>kcfg_SummaryTaskDefaultColor</cstring>
@@ -130,7 +130,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string extracomment="@label:chooser">Level 2</string>
+             <string comment="@label:chooser">Level 2</string>
             </property>
             <property name="buddy">
              <cstring>kcfg_SummaryTaskDefaultColor</cstring>
@@ -156,7 +156,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string extracomment="@label:chooser">Level 3</string>
+             <string comment="@label:chooser">Level 3</string>
             </property>
             <property name="buddy">
              <cstring>kcfg_SummaryTaskDefaultColor</cstring>
@@ -182,7 +182,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string extracomment="@label:chooser">Level 4</string>
+             <string comment="@label:chooser">Level 4</string>
             </property>
             <property name="buddy">
              <cstring>kcfg_SummaryTaskDefaultColor</cstring>
@@ -213,7 +213,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string extracomment="@title:tab">Task</string>
+       <string comment="@title:tab">Task</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
@@ -225,7 +225,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Normal:</string>
+          <string comment="@label:chooser">Normal:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskNormalColor</cstring>
@@ -251,7 +251,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Critical:</string>
+          <string comment="@label:chooser">Critical:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskCriticalColor</cstring>
@@ -277,7 +277,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Finished:</string>
+          <string comment="@label:chooser">Finished:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskFinishedColor</cstring>
@@ -303,7 +303,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Error:</string>
+          <string comment="@label:chooser">Error:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskErrorColor</cstring>
@@ -331,7 +331,7 @@
      </widget>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
-       <string extracomment="@title:tab">Milestone</string>
+       <string comment="@title:tab">Milestone</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
@@ -343,7 +343,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Normal:</string>
+          <string comment="@label:chooser">Normal:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_MilestoneNormalColor</cstring>
@@ -369,7 +369,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Critical:</string>
+          <string comment="@label:chooser">Critical:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskCriticalColor</cstring>
@@ -395,7 +395,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Finished:</string>
+          <string comment="@label:chooser">Finished:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskFinishedColor</cstring>
@@ -421,7 +421,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string extracomment="@label:chooser">Error:</string>
+          <string comment="@label:chooser">Error:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskErrorColor</cstring>

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Tablet
+Name[el]=Πινάκιο
 Name[es]=Tableta
 Name[et]=Tahvelarvuti
+Name[nb]=Tegneplate
 Name[nl]=Tablet
 Name[pt]=Tablete
 Name[pt_BR]=Tablet
@@ -9,3 +11,4 @@ Name[sv]=Ritplatta
 Name[ug]=سەزگۈر تاختا
 Name[uk]=Планшет
 Name[x-test]=xxTabletxx
+Name[zh_TW]=平板裝置

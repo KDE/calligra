@@ -31,7 +31,7 @@
 #include <QSplitter>
 #include <QLabel>
 #include <QWidget>
-#include <QUndoStack>
+#include <kundo2qstack.h>
 
 #include <assert.h>
 #include <kicon.h>

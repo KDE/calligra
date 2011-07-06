@@ -35,7 +35,7 @@ static void InsertTimeVariable(QDomDocument& mainDocument,
     QDomElement typeElement = mainDocument.createElement("TYPE");
     typeElement.setAttribute("key", strKey);
     typeElement.setAttribute("type", 2); // Time
-    typeElement.setAttribute("text", "-"); // Dummy, we let KWord do the work!
+    typeElement.setAttribute("text", "-"); // Dummy, we let Words do the work!
     variableElement.appendChild(typeElement); //Append to <VARIABLE>
     QDomElement timeElement = mainDocument.createElement("TIME");
     // We cannot calculate the time, so default to midnight
@@ -52,7 +52,7 @@ static void InsertDateVariable(QDomDocument& mainDocument,
     QDomElement typeElement = mainDocument.createElement("TYPE");
     typeElement.setAttribute("key", strKey);
     typeElement.setAttribute("type", 0); // date
-    typeElement.setAttribute("text", "-"); // Just a dummy, KWord will do the work
+    typeElement.setAttribute("text", "-"); // Just a dummy, Words will do the work
     variableElement.appendChild(typeElement); //Append to <VARIABLE>
     QDomElement dateElement = mainDocument.createElement("DATE");
     // As we have no idea about the current date, use the *nix epoch 1970-01-01
@@ -75,8 +75,8 @@ static bool ProcessTimeField(QDomDocument& mainDocument,
     } else if (strType == "time_ampm") {
         InsertTimeVariable(mainDocument, variableElement, "TIMEam");
     } else {
-        // time_zone: not supported due to KWord
-        // time_epoch: not supported due to KWord (%Z)
+        // time_zone: not supported due to Words
+        // time_epoch: not supported due to Words (%Z)
         return false;
     }
     return true;

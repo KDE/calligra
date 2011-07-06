@@ -18,15 +18,13 @@
  */
 
 #include "KWStatistics.h"
-#include "KWord.h"
+#include "Words.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 
 #include <KoResourceManager.h>
-#include <KoExecutePolicy.h>
-#include <KoAction.h>
 #include <KoSelection.h>
 #include <KoShape.h>
 
@@ -38,7 +36,6 @@
 KWStatistics::KWStatistics(KoResourceManager *provider, KWDocument *document, KoSelection *selection, QWidget *parent)
         : QWidget(parent),
         m_resourceManager(provider),
-        m_action(new KoAction(this)),
         m_selection(selection),
         m_document(document),
         m_textDocument(0),
@@ -52,38 +49,18 @@ KWStatistics::KWStatistics(KoResourceManager *provider, KWDocument *document, Ko
         m_paragraphs(0),
         m_autoUpdate(true)
 {
-    if (m_selection) {
-        m_showInDocker = true;
-        m_autoUpdate = false;
-        m_timer = new QTimer(this);
-        m_timer->setInterval(2000); // make the interval configurable?
-        m_timer->setSingleShot(true);
-        widgetDocker.setupUi(this);
-        widgetDocker.refresh->setIcon(KIcon("view-refresh"));
+    m_showInDocker = true;
+    m_autoUpdate = false;
+    m_timer = new QTimer(this);
+    m_timer->setInterval(2000); // make the interval configurable?
+    m_timer->setSingleShot(true);
+    widgetDocker.setupUi(this);
+    widgetDocker.refresh->setIcon(KIcon("view-refresh"));
 
-        connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
-        connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
-        connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-        connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
-    } else {
-        m_showInDocker = false;
-        widget.setupUi(this);
-        m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
-
-        connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(updateResource(int)));
-        connect(m_action, SIGNAL(triggered(const QVariant&)), this, SLOT(updateData()), Qt::DirectConnection);
-        connect(m_action, SIGNAL(updateUi(const QVariant&)), this, SLOT(updateDataUi()), Qt::DirectConnection);
-        connect(widget.footEndNotes, SIGNAL(toggled(bool)), m_action, SLOT(execute()));
-
-        m_action->execute();
-    }
-}
-
-void KWStatistics::updateResource(int which)
-{
-    if (which == KWord::CurrentPageCount  || which == KWord::CurrentFrameSetCount ||
-            which == KWord::CurrentPictureCount || which == KWord::CurrentTableCount)
-        m_action->execute();
+    connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
+    connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
+    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 }
 
 void KWStatistics::updateData()
@@ -117,11 +94,11 @@ void KWStatistics::updateData()
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
         if (m_showInDocker && (!(footEnd ||
-                                 (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
-                                  tfs->textFrameSetType() == KWord::OtherTextFrameSet))))
+                                 (tfs->textFrameSetType() == Words::MainTextFrameSet ||
+                                  tfs->textFrameSetType() == Words::OtherTextFrameSet))))
             continue;
-        else if (!(footEnd || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
-                               tfs->textFrameSetType() == KWord::OtherTextFrameSet)))
+        else if (!(footEnd || (tfs->textFrameSetType() == Words::MainTextFrameSet ||
+                               tfs->textFrameSetType() == Words::OtherTextFrameSet)))
             continue;
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
@@ -249,13 +226,13 @@ void KWStatistics::updateDataUi()
     } else {
         // tab 1
         widget.pages->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentPageCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentPageCount), 0));
         widget.frames->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentFrameSetCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentFrameSetCount), 0));
         widget.pictures->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentPictureCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentPictureCount), 0));
         widget.tables->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentTableCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentTableCount), 0));
 
         // tab 2
         widget.words->setText(KGlobal::locale()->formatNumber(m_words, 0));
@@ -309,7 +286,7 @@ int KWStatistics::countCJKChars(const QString &text)
     int count = 0;
 
     QString::const_iterator it;
-    for (it = text.constBegin(); it != text.constEnd(); it++) {
+    for (it = text.constBegin(); it != text.constEnd(); ++it) {
         QChar qChar = *it;
         /*
          * CJK punctuations: 0x3000 - 0x303F (but I believe we shouldn't include this in the statistics)

@@ -99,7 +99,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_scaleCursors[6] = KisCursor::sizeVerCursor();
     m_scaleCursors[7] = KisCursor::sizeFDiagCursor();
     QPixmap shearPixmap;
-    shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
     m_shearCursors[7] = QCursor(shearPixmap.transformed(QTransform().rotate(45)));
     m_shearCursors[6] = QCursor(shearPixmap.transformed(QTransform().rotate(90)));
     m_shearCursors[5] = QCursor(shearPixmap.transformed(QTransform().rotate(135)));
@@ -897,6 +897,13 @@ void KisToolTransform::keyPressEvent(QKeyEvent *event)
 
 void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
+    if (event->key() == Qt::Key_Return) {
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        applyTransform();
+        initTransform(m_currentArgs.mode());
+        QApplication::restoreOverrideCursor();
+    }
+
     if (event->key() == Qt::Key_Meta) {
         setTransformFunction(m_prevMousePos, event->modifiers());
 
@@ -975,7 +982,7 @@ double KisToolTransform::gradientDescent_partialDeriv2_f(QVector3D v1, QVector3D
 int KisToolTransform::gradientDescent(QVector3D v1, QVector3D v2, QVector3D desired, double x0, double y0, double epsilon, double gradStep, int nbIt1, int nbIt2, double epsilon_deriv, double *x_min, double *y_min) {
    double val = gradientDescent_f(v1, v2, desired, x0, y0);
    double derivX, derivY;
-   double x1, y1; 
+   double x1, y1;
    int exit;
    double step;
    for (int i = 0; i < nbIt1 && val > epsilon; ++i) {
@@ -995,7 +1002,7 @@ int KisToolTransform::gradientDescent(QVector3D v1, QVector3D v2, QVector3D desi
          if (j > nbIt2) {
             exit = 1;
             break;
-         }   
+         }
          x1 = x0 - step * derivX;
          y1 = y0 - step * derivY;
 
@@ -1003,17 +1010,17 @@ int KisToolTransform::gradientDescent(QVector3D v1, QVector3D v2, QVector3D desi
             step /= 2;
          } else {
             break;
-         }   
+         }
          ++j;
       } while(1);
       if (exit) {
          break;
       } else {
-         x0 = x1; 
-         y0 = y1; 
+         x0 = x1;
+         y0 = y1;
          val = gradientDescent_f(v1, v2, desired, x0, y0);
-      }   
-   }   
+      }
+   }
 
    if (val <= epsilon) {
       *x_min = x0;
@@ -1973,7 +1980,7 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
         m_transform = QTransform();
         m_origImg = new QImage(dev->convertToQImage(0, x, y, w, h));
         if (selection) {
-            m_origSelectionImg = new QImage(selection->convertToQImage(0, x, y, w, h));
+            m_origSelectionImg = new QImage(selection->projection()->convertToQImage(0, x, y, w, h));
         } else {
             m_origSelectionImg = new QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             m_origSelectionImg->fill(0xFFFFFFFF);
@@ -2273,7 +2280,7 @@ void KisToolTransform::applyTransform()
     setCurrentNodeLocked(false);
 }
 
-void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
+void KisToolTransform::notifyCommandAdded(const KUndo2Command * command)
 {
     const ApplyTransformCmdData * cmd1 = dynamic_cast<const ApplyTransformCmdData*>(command);
     const TransformCmd* cmd2 = dynamic_cast<const TransformCmd*>(command);
@@ -2290,7 +2297,7 @@ void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
     }
 }
 
-void KisToolTransform::notifyCommandExecuted(const QUndoCommand * command)
+void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
 {
     Q_UNUSED(command);
     const ApplyTransformCmdData * presentCmd1 = 0;

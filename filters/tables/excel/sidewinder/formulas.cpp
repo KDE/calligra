@@ -70,7 +70,7 @@ FormulaToken::FormulaToken(const FormulaToken& token)
         d->data[i] = token.d->data[i];
 }
 
-void FormulaToken::operator=(const FormulaToken& token)
+FormulaToken& FormulaToken::operator=(const FormulaToken& token)
 {
     d->ver = token.d->ver;
     d->id = token.id();
@@ -78,6 +78,7 @@ void FormulaToken::operator=(const FormulaToken& token)
     d->data.resize(token.d->data.size());
     for (unsigned i = 0; i < d->data.size(); i++)
         d->data[i] = token.d->data[i];
+    return *this;
 }
 
 FormulaToken::~FormulaToken()
@@ -1515,7 +1516,7 @@ static void dumpStack(std::vector<QString> stack)
 {
     std::cout << std::endl;
     std::cout << "Stack now is: " ;
-    if (!stack.size())
+    if (stack.empty())
         std::cout << "(empty)" ;
 
     for (unsigned i = 0; i < stack.size(); i++)
@@ -1682,7 +1683,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
         case FormulaToken::Function: {
             mergeTokens(&stack, token.functionParams(), QString(";"));
-            if (stack.size()) {
+            if (!stack.empty()) {
                 QString str(token.functionName() ? token.functionName() : "??");
                 str.append(QString("("));
                 str.append(stack[stack.size()-1]);
@@ -1695,7 +1696,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
         case FormulaToken::FunctionVar:
             if (token.functionIndex() != 255) {
                 mergeTokens(&stack, token.functionParams(), QString(";"));
-                if (stack.size()) {
+                if (!stack.empty()) {
                     QString str;
                     if (token.functionIndex() != 255)
                         str = token.functionName() ? token.functionName() : "??";
@@ -1707,7 +1708,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             } else {
                 unsigned count = token.functionParams() - 1;
                 mergeTokens(&stack, count, QString(";"));
-                if (stack.size()) {
+                if (!stack.empty()) {
                     QString str;
                     str.append(QString("("));
                     str.append(stack[ stack.size()-1 ]);
@@ -1720,7 +1721,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
         case FormulaToken::Attr:
             if (token.attr() & 0x10) { // SUM
                 mergeTokens(&stack, 1, QString(";"));
-                if (stack.size()) {
+                if (!stack.empty()) {
                     QString str("SUM");
                     str.append(QString("("));
                     str.append(stack[ stack.size()-1 ]);
@@ -1742,7 +1743,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
             if( isShared ) {
               FormulaTokens ft = sharedFormulas(formulaCellPos);
-              if (ft.size() > 0)
+              if (!ft.empty())
                   stack.push_back(decodeFormula(row, col, isShared, ft));
             } else {
               // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the

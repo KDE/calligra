@@ -55,8 +55,9 @@ void KWPageStylePrivate::clear()
     footerMinimumHeight = 0;
     footNoteDistance = 10;
     endNoteDistance = 10;
-    headers = KWord::HFTypeNone;
-    footers = KWord::HFTypeNone;
+    headers = Words::HFTypeNone;
+    footers = Words::HFTypeNone;
+    pageUsage = KWPageStyle::AllPages;
     columns.columns = 1;
     columns.columnSpacing = 17; // ~ 6mm
     direction = KoText::AutoDirection;
@@ -101,12 +102,22 @@ KWPageStyle::~KWPageStyle()
 {
 }
 
-void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p)
+KWPageStyle::PageUsageType KWPageStyle::pageUsage() const
+{
+    return d ? d->pageUsage : KWPageStyle::AllPages;
+}
+
+void KWPageStyle::setPageUsage(KWPageStyle::PageUsageType pageusage) const
+{
+    d->pageUsage = pageusage;
+}
+
+void KWPageStyle::setFooterPolicy(Words::HeaderFooterType p)
 {
     d->footers = p;
 }
 
-void KWPageStyle::setHeaderPolicy(KWord::HeaderFooterType p)
+void KWPageStyle::setHeaderPolicy(Words::HeaderFooterType p)
 {
     d->headers = p;
 }
@@ -131,12 +142,12 @@ void KWPageStyle::setColumns(const KoColumns &columns)
     d->columns = columns;
 }
 
-KWord::HeaderFooterType KWPageStyle::headerPolicy() const
+Words::HeaderFooterType KWPageStyle::headerPolicy() const
 {
     return d->headers;
 }
 
-KWord::HeaderFooterType KWPageStyle::footerPolicy() const
+Words::HeaderFooterType KWPageStyle::footerPolicy() const
 {
     return d->footers;
 }
@@ -241,12 +252,12 @@ void KWPageStyle::setFootNoteSeparatorLineType(Qt::PenStyle type)
     d->footNoteSeparatorLineType = type;
 }
 
-KWord::FootNoteSeparatorLinePos KWPageStyle::footNoteSeparatorLinePosition() const
+Words::FootNoteSeparatorLinePos KWPageStyle::footNoteSeparatorLinePosition() const
 {
     return d->footNoteSeparatorLinePos;
 }
 
-void KWPageStyle::setFootNoteSeparatorLinePosition(KWord::FootNoteSeparatorLinePos position)
+void KWPageStyle::setFootNoteSeparatorLinePosition(Words::FootNoteSeparatorLinePos position)
 {
     d->footNoteSeparatorLinePos = position;
 }
@@ -312,7 +323,7 @@ KoGenStyle KWPageStyle::saveOdf() const
 // addChildElement its instead saved as a child of style:page-layout-properties  I can't follow why...
 // so lets disable this until I figure out how to save this in the right position in the tree.
 #if 0
-    if (headerPolicy() != KWord::HFTypeNone) {
+    if (headerPolicy() != Words::HFTypeNone) {
         writer.startElement("style:header-style");
         writer.startElement("style:header-footer-properties");
         writer.addAttribute("fo:min-height", "0.01pt");
@@ -321,7 +332,7 @@ KoGenStyle KWPageStyle::saveOdf() const
         writer.endElement();
         writer.endElement();
     }
-    if (footerPolicy() != KWord::HFTypeNone) {
+    if (footerPolicy() != Words::HFTypeNone) {
         writer.startElement("style:footer-style");
         writer.startElement("style:header-footer-properties");
         writer.addAttribute("fo:min-height", "0.01pt");
@@ -345,6 +356,17 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         return;
     QString direction = props.attributeNS(KoXmlNS::style, "writing-mode", "lr-tb");
     d->direction = KoText::directionFromString(direction);
+
+    QString pageUsage = props.attributeNS(KoXmlNS::style, "page-usage", "all");
+    if (pageUsage == "left") {
+        d->pageUsage = LeftPages;
+    } else if (pageUsage == "mirrored") {
+        d->pageUsage = MirroredPages;
+    } else if (pageUsage == "right") {
+        d->pageUsage = RightPages;
+    } else { // "all"
+        d->pageUsage = AllPages;
+    }
 
     KoXmlElement columns = KoXml::namedItemNS(props, KoXmlNS::style, "columns");
     if (!columns.isNull()) {
@@ -433,7 +455,6 @@ void KWPageStyle::setDirection(KoText::Direction direction)
 bool KWPageStyle::operator==(const KWPageStyle &other) const
 {
     bool equals = d == other.d;
-    Q_ASSERT_X(!d || !other.d || (equals == (d->name == other.d->name)), __FUNCTION__, QString("Different styles with the same name are not allowed, equals=%1 name1=%2 name2=%3").arg(equals).arg(d->name).arg(other.d->name).toLocal8Bit());
     return equals;
 }
 

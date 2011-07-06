@@ -27,7 +27,7 @@
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 #include <KWEFUtil.h>
 
 #include <amiproexport.h>
@@ -175,11 +175,11 @@ AmiProExport::convert(const QByteArray& from,
                       const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/x-amipro" || from != "application/x-kword")
+    if (to != "application/x-amipro" || from != "application/x-words")
         return KoFilter::NotImplemented;
 
     AmiProWorker* worker = new AmiProWorker();
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     KoFilter::ConversionStatus result;
     result = leader->convert(m_chain, from, to);

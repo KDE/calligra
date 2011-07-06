@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=IP
+Name[el]=IP
 Name[et]=IP
+Name[nb]=IP
 Name[nl]=IP
 Name[pt]=IP
 Name[pt_BR]=IP
@@ -9,3 +11,4 @@ Name[ug]=IP
 Name[uk]=IP
 Name[x-test]=xxIPxx
 Name[zh_CN]=IP
+Name[zh_TW]=IP

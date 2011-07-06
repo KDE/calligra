@@ -114,8 +114,8 @@ public:
     * For any other type of token, it returns QString().
     *
     * Note that token text for a string token still has leading and trailing
-    * double-quotes, i.e for "KOffice", text() return "KOffice"
-    * (with the quotes, 9 characters) while asString() only return KOffice
+    * double-quotes, i.e for "Calligra", text() return "Calligra"
+    * (with the quotes, 9 characters) while asString() only return Calligra
     * (without quotes, 7 characters).
     */
     QString asIdentifierName() const;

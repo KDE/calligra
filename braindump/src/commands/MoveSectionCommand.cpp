@@ -23,31 +23,31 @@
 #include "Section.h"
 #include <kdebug.h>
 
-MoveSectionCommand::MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above ) : m_section(_section), m_parent(_parent), m_previousParent(_section->sectionParent()), m_model(_model), m_above(_above), m_idx(-1), m_previousIndex(_section->sectionParent()->indexOf(_section))
+MoveSectionCommand::MoveSectionCommand(Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above) : m_section(_section), m_parent(_parent), m_previousParent(_section->sectionParent()), m_model(_model), m_above(_above), m_idx(-1), m_previousIndex(_section->sectionParent()->indexOf(_section))
 {
-  Q_ASSERT( _above == 0 || _parent == _above->sectionParent());
-  Q_ASSERT( m_previousIndex >= 0 && m_previousIndex < m_previousParent->sections().count());
+    Q_ASSERT(_above == 0 || _parent == _above->sectionParent());
+    Q_ASSERT(m_previousIndex >= 0 && m_previousIndex < m_previousParent->sections().count());
 }
 
-MoveSectionCommand::MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx ) : m_section(_section), m_parent(_parent), m_previousParent(_section->sectionParent()), m_model(_model), m_above(0), m_idx(_idx), m_previousIndex(_section->sectionParent()->indexOf(_section))
+MoveSectionCommand::MoveSectionCommand(Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx) : m_section(_section), m_parent(_parent), m_previousParent(_section->sectionParent()), m_model(_model), m_above(0), m_idx(_idx), m_previousIndex(_section->sectionParent()->indexOf(_section))
 {
-  Q_ASSERT( _idx >= 0 && _idx <= _parent->sections().count());
-  Q_ASSERT( m_previousIndex >= 0 && m_previousIndex < m_previousParent->sections().count());
+    Q_ASSERT(_idx >= 0 && _idx <= _parent->sections().count());
+    Q_ASSERT(m_previousIndex >= 0 && m_previousIndex < m_previousParent->sections().count());
 }
 
 void MoveSectionCommand::undo()
 {
-  m_model->removeSection(m_section);
-  m_model->insertSection(m_section, m_previousParent, m_previousIndex);
+    m_model->removeSection(m_section);
+    m_model->insertSection(m_section, m_previousParent, m_previousIndex);
 }
 
 void MoveSectionCommand::redo()
 {
-  Q_ASSERT(m_idx != -1 || m_above);
-  m_model->removeSection(m_section);
-  if(m_above || m_idx == -1) {
-    m_model->insertSection(m_section, m_parent, m_above);
-  } else {
-    m_model->insertSection(m_section, m_parent, m_idx);
-  }
+    Q_ASSERT(m_idx != -1 || m_above);
+    m_model->removeSection(m_section);
+    if(m_above || m_idx == -1) {
+        m_model->insertSection(m_section, m_parent, m_above);
+    } else {
+        m_model->insertSection(m_section, m_parent, m_idx);
+    }
 }

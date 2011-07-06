@@ -28,28 +28,28 @@ class KoShape;
 class WebTool : public KoToolBase
 {
     Q_OBJECT
-  public:
+public:
     explicit WebTool(KoCanvasBase *canvas);
     ~WebTool();
-    
-    /// reimplemented
-    void activate( ToolActivation toolActivation, const QSet<KoShape*> &shapes );
 
     /// reimplemented
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
     /// reimplemented
-    virtual void mousePressEvent( KoPointerEvent *event );
-    /// reimplemented
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    /// reimplemented
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-  signals:
-    void shapeChanged(WebShape* );
-  protected:
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-  private:
+    /// reimplemented
+    virtual void mousePressEvent(KoPointerEvent *event);
+    /// reimplemented
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    /// reimplemented
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+signals:
+    void shapeChanged(WebShape*);
+protected:
+    virtual QList<QWidget *> createOptionWidgets();
+
+private:
     WebShape* m_currentShape;
     KoShape* m_tmpShape;
     enum DragMode {

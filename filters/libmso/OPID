@@ -31,6 +31,12 @@ OfficeArtTertiaryFOPT
 8b - txdir - pecifies the direction of the text (MAY be used)
 bf - [Text Boolean Properties]
 
+[Geometry Text Property Set]
+c0 - gtextUNICODE - specifies the text for this shape’s geometry text
+c2 - gtextAlign - specifies how geometry text is aligned on this shape
+c4 - gtextSpacing - specifies the amount of spacing between characters in the text
+c5 - gtextSize - specifies the font size, in points of the geometry text for this shape
+c6 - gtextCSSFont - specifies extra font information
 ff - [Geometry Text Boolean Properties]
 
 [Blip Property Set]
@@ -168,6 +174,14 @@ ff - [Geometry Text Boolean Properties]
 301 - hspMaster - specifies the master shape for a shape
 303 - cxstyle - specifies the connector style for this shape
 304 - bWMode - specifies how a shape will render in black-and-white display mode
+305 - bWModePureBW - specifies how a shape will render in pure black-and-white display mode
+306 - bWModeBW - specifies how a shape will render in normal black-and-white display
+mode
+307 - idDiscussAnchor - specifies whether a shape is an anchor for discussion comments
+309 - dgmLayout - specifies the diagram node layout for a shape
+30a - dgmNodeKind - specifies a diagram node type for the shape
+30b - dgmLayoutMRU - specifies the most recently used diagram layout for the child shapes of a shape
+30c - equationXML - specifies alternative mathematical content for an image
 33f - [Shape Boolean Properties]
 
 [Callout Property Set]

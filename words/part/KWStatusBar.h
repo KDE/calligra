@@ -38,10 +38,11 @@ class KoCanvasBase;
 
 class KWDocument;
 class KWView;
-
+class KWStatusBarEditItem;
+class KWStatusBarButtonItem;
 
 /**
- * The KWStatusBar class implements an extended statusbar for KWord.
+ * The KWStatusBar class implements an extended statusbar for Words.
  */
 class KWStatusBar : public QObject
 {
@@ -61,11 +62,20 @@ public slots:
 private slots:
     void setModified(bool modified);
     void updatePageCount();
+    void gotoPage(int pagenumber = -1);
+    void updatePageStyle();
+    void showPageStyle();
+    void updatePageSize();
+    void updateCursorPosition();
+    void gotoLine();
     void updateMousePosition(const QPoint&);
     void resourceChanged(int, const QVariant&);
     void updateCurrentTool(KoCanvasController*);
     void createZoomWidget();
     void showPage(bool visible);
+    void showPageStyle(bool visible);
+    void showPageSize(bool visible);
+    void showLineColumn(bool visible);
     void showModified(bool visible);
     void showMouse(bool visible);
     void showZoom(bool visible);
@@ -77,7 +87,7 @@ private:
     *
     * \param statusBar The parent statusbar this statusbar is child
     * of. We will embed our own widgets into this statusbar.
-    * \param view The KWord view instance the statusbar belongs to. Each
+    * \param view The Words view instance the statusbar belongs to. Each
     * KWStatusBar instance belongs to exactly one view.
     */
     KWStatusBar(KStatusBar *statusBar, KWView* view);
@@ -92,7 +102,10 @@ private:
     QAction *m_zoomAction;
 
     QLabel *m_modifiedLabel;
-    QLabel *m_pageLabel;
+    KWStatusBarEditItem *m_pageLabel;
+    KWStatusBarButtonItem *m_pageStyleLabel;
+    QLabel *m_pageSizeLabel;
+    KWStatusBarEditItem *m_lineLabel;
     QLabel *m_mousePosLabel;
     KSqueezedTextLabel *m_statusLabel;
     QList<KWView*> m_views;

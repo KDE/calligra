@@ -152,6 +152,24 @@ QTransform SvgUtil::parseTransform(const QString &transform)
     return result;
 }
 
+QString SvgUtil::transformToString(const QTransform &transform)
+{
+    if (transform.isIdentity())
+        return QString();
+
+    if (transform.type() == QTransform::TxTranslate) {
+        return QString("translate(%1, %2)")
+                     .arg(toUserSpace(transform.dx()))
+                     .arg(toUserSpace(transform.dy()));
+    } else {
+        return QString("matrix(%1 %2 %3 %4 %5 %6)")
+                     .arg(transform.m11()).arg(transform.m12())
+                     .arg(transform.m21()).arg(transform.m22())
+                     .arg(toUserSpace(transform.dx()))
+                     .arg(toUserSpace(transform.dy()));
+    }
+}
+
 QRectF SvgUtil::parseViewBox(QString viewbox)
 {
     QRectF viewboxRect;
@@ -177,7 +195,7 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
     if (!start) {
         return 0.0;
     }
-    double value = 0.0;
+    qreal value = 0.0;
     const char *end = parseNumber(start, value);
 
     if (int(end - start) < unit.length()) {

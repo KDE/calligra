@@ -45,7 +45,7 @@ PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
     connect(dia, SIGNAL(changed(bool) ), SLOT(enableButtonOk(bool)));
 }
 
-QUndoCommand *PackageSettingsDialog::buildCommand()
+KUndo2Command *PackageSettingsDialog::buildCommand()
 {
     //kDebug();
     return dia->buildCommand();
@@ -66,14 +66,14 @@ PackageSettingsPanel::PackageSettingsPanel(WorkPackage &p, QWidget *parent)
     connect( ui_documents, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
 }
 
-QUndoCommand *PackageSettingsPanel::buildCommand()
+KUndo2Command *PackageSettingsPanel::buildCommand()
 {
     //kDebug();
     WorkPackageSettings s = settings();
     if ( s == m_package.settings() ) {
         return 0;
     }
-    return new ModifyPackageSettingsCmd( &m_package, s, i18n( "Modify package settings" ) );
+    return new ModifyPackageSettingsCmd( &m_package, s, i18nc( "(qtundo-format)", "Modify package settings" ) );
 }
 
 void PackageSettingsPanel::slotChanged() {

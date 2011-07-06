@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=Content Service Router
+Name[el]=Content Service Router
 Name[et]=Content Service marsruuter
-Name[pt]=Encaminhador Serviços Conteúdos
+Name[nb]=Ruter for innholdstjeneste
+Name[nl]=Content Service Router
+Name[pt]=Encaminhamento Serviços de Conteúdos
 Name[pt_BR]=Roteador de serviços de conteúdo
 Name[sv]=Innehållstjänstrouter
 Name[uk]=Маршрутизатор служби даних
 Name[x-test]=xxContent Service Routerxx
+Name[zh_TW]=內容服務路由器

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Connector
+Name[el]=Υποδοχή
 Name[es]=Conector
+Name[nb]=Tilkobling
 Name[nl]=Connector
 Name[pt]=Ligação
 Name[pt_BR]=Conector
@@ -9,3 +11,4 @@ Name[ug]=ئۇلىغۇچ
 Name[uk]=З'єднувач
 Name[x-test]=xxConnectorxx
 Name[zh_CN]=连接器
+Name[zh_TW]=連接器

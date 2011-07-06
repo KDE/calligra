@@ -78,8 +78,8 @@ const KComponentData &Factory::global()
 
         s_global->dirs()->addResourceType("kplatoprojects", "data", "kplatowork/projects/");
 
-        // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
 
     }
     return *s_global;

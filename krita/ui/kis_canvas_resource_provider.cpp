@@ -54,12 +54,13 @@
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
 {
-    m_fGChanged = true;  
+    m_fGChanged = true;
     m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
 {
+    disconnect(); // in case Qt gets confused
 }
 
 void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceManager)
@@ -195,15 +196,14 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
     emit sigGradientChanged(gradient);
 }
 
-void KisCanvasResourceProvider::slotPaintOpPresetActivated(const KisPaintOpPresetSP preset)
+void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
 {
-
     Q_ASSERT(preset->valid());
     Q_ASSERT(!preset->paintOp().id().isEmpty());
     Q_ASSERT(preset->settings());
     if (!preset) return;
 
-    dbgUI << "slotPaintOpPresetActivated" << preset->paintOp();
+    dbgUI << "setPaintOpPreset" << preset->paintOp();
 
     QVariant v;
     v.setValue(preset);
@@ -414,6 +414,16 @@ void KisCanvasResourceProvider::setMirrorVertical(bool mirrorVertical)
 bool KisCanvasResourceProvider::mirrorVertical() const
 {
     return m_resourceManager->resource(MirrorVertical).toBool();
+}
+
+void KisCanvasResourceProvider::setOpacity(qreal opacity)
+{
+    m_resourceManager->setResource(Opacity, opacity);
+}
+
+qreal KisCanvasResourceProvider::opacity()
+{
+    return m_resourceManager->resource(Opacity).toDouble();
 }
 
 #include "kis_canvas_resource_provider.moc"

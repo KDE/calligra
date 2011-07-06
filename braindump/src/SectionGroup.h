@@ -24,30 +24,31 @@
 
 class Section;
 
-class SectionGroup {
-  public:
+class SectionGroup
+{
+public:
     explicit SectionGroup(SectionGroup* parent);
     SectionGroup(const SectionGroup& _rhs);
     virtual ~SectionGroup();
-    void insertSection( Section* page, int index );
-    void insertSection( Section* page, Section* before = 0 );
-    void removeSection( Section* page );
-    QList<Section*> sections( ) const;
-    Section* newSection( Section* before = 0 );
-    Section* nextSection( Section* section );
-    int indexOf( Section* section );
-  protected:
+    void insertSection(Section* page, int index);
+    void insertSection(Section* page, Section* before = 0);
+    void removeSection(Section* page);
+    QList<Section*> sections() const;
+    Section* newSection(Section* before = 0);
+    Section* nextSection(Section* section);
+    int indexOf(Section* section);
+protected:
     virtual void sectionAdded(Section* page);
     virtual void sectionRemoved(Section* page);
-  public:
+public:
     /**
      * @return the parent section (if any) of that document.
      */
     SectionGroup* sectionParent();
     static QString nextName();
-  private:
+private:
     void setSectionParent(SectionGroup* parent);
-  private:
+private:
     SectionGroup* m_parent;
     QList<Section*> m_children;
     static int s_count;

@@ -21,7 +21,7 @@
         <Action name="view_mode"/>
     </Menu>
 </MenuBar>
-<ToolBar name="view_toolbar" fullWidth="false">
+<ToolBar name="view_toolbar">
     <text>View</text>
     <Separator/>
     <Action name="view_mode"/>

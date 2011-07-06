@@ -43,6 +43,12 @@
 // enable to activate debugging output
 //#define POLE_DEBUG
 
+// validate storage object against [MS-CFB] — v20110318
+//#define CHECK_STORAGE_OBJECTS
+
+// validate sibling names against positions in the black red tree
+//#define CHECK_SIBLINGS
+
 #define OLE_HEADER_SIZE 0x200
 
 namespace POLE
@@ -614,36 +620,41 @@ bool DirTree::valid() const
             std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
-        //Looking for invalid user storages. The ((int)e->child == -1)
-        //condition results in false positives.
+#ifdef CHECK_STORAGE_OBJECTS
+        //NOTE: It's not possible to detect invalid storages objects.  Too many
+        //false positives on Word8 documents.
         if ( (i > 0) &&
              (e->valid && e->dir) &&
-             ((e->size != 0) || (e->start != 0)) )
+             (((int)e->child == -1) || (e->start != 0) || (e->size != 0)) )
         {
             std::cerr << "DirTree::valid Invalid user storage detected!" << std::endl;
             return false;
         }
+#endif
         //Looking for duplicate names of DirEntries at this level.
         if (!valid_enames(const_cast<DirTree*>(this), i)) {
             std::cerr << "DirTree::valid Invalid DirEntry detected!" << std::endl;
             return false;
         }
+
+#ifdef CHECK_SIBLINGS
+        //NOTE: Too many False Positives, mainly Word8 files with embedded
+        //documents.
+        //
         //Check the name of the left/right DirEntry.
-        str1 = QString(e->name.data());
         if ((int)e->prev != -1) {
-            str2 = QString(entries[e->prev].name.data());
-            if (ename_cmp(str1, str2) < 0) {
-		std::cerr << "DirTree::valid [name, position] mismatch detected (prev)!" << std::endl;
-                return false;
-            }
+            str1 = QString(entries[e->prev].name.data());
         }
         if ((int)e->next != -1) {
             str2 = QString(entries[e->next].name.data());
+        }
+        if (!str1.isEmpty() && !str2.isEmpty()) {
             if (ename_cmp(str1, str2) > 0) {
-		std::cerr << "DirTree::valid [name, position] mismatch detected (next)!" << std::endl;
+                std::cerr << "DirTree::valid [name, position] mismatch detected!" << std::endl;
                 return false;
             }
         }
+#endif
     }
     return true;
 }
@@ -861,7 +872,8 @@ void DirTree::load(unsigned char* buffer, unsigned size)
             name.erase(0, 1);
         }
 
-        // 2 = file (aka stream), 1 = directory (aka storage), 5 = root
+        // 0 = Unknown or unallocated, 1 = directory (aka storage),
+        // 2 = file (aka stream), 5 = root
         unsigned type = buffer[ 0x42 + p];
 
         DirEntry e;

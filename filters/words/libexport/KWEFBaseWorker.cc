@@ -29,11 +29,11 @@
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
-#include "KWEFKWordLeader.h"
+#include "KWEFWordsLeader.h"
 
-void KWEFBaseWorker::registerKWordLeader(KWEFKWordLeader* leader)
+void KWEFBaseWorker::registerWordsLeader(KWEFWordsLeader* leader)
 {
-    m_kwordLeader = leader;
+    m_wordsLeader = leader;
 }
 
 //
@@ -75,8 +75,8 @@ bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array) con
 //   false if the file is empty or if an error occurred
 {
     bool flag = false;
-    if (m_kwordLeader) {
-        flag = m_kwordLeader->loadSubFile(fileName, array);
+    if (m_wordsLeader) {
+        flag = m_wordsLeader->loadSubFile(fileName, array);
     } else {
         kWarning(30508) << "Leader is unknown! (KWEFBaseWorker::loadSubFile)";
     }
@@ -85,11 +85,11 @@ bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array) con
 
 QIODevice* KWEFBaseWorker::getSubFileDevice(const QString& fileName) const
 {
-    if (!m_kwordLeader) {
+    if (!m_wordsLeader) {
         kWarning(30508) << "Leader is unknown! (KWEFBaseWorker::getSubFileDevice)";
         return NULL;
     }
-    return m_kwordLeader->getSubFileDevice(fileName);
+    return m_wordsLeader->getSubFileDevice(fileName);
 }
 
 QImage KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString& inExtension) const

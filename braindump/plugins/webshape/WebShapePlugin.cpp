@@ -27,16 +27,16 @@
 #include "WebToolFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY(webshape,
-    KGenericFactory<WebShapePlugin>( "WebShapePlugin" ) )
- 
+                           KGenericFactory<WebShapePlugin>("WebShapePlugin"))
+
 WebShapePlugin::WebShapePlugin(QObject *parent, const QStringList&)
     : QObject(parent)
 {
     // register the shape's factory
     KoShapeRegistry::instance()->add(
-        new WebShapeFactory( ) );
+        new WebShapeFactory());
     // we could register more things here in this same plugin.
-    KoToolRegistry::instance()->add( new WebToolFactory( ) );
+    KoToolRegistry::instance()->add(new WebToolFactory());
 }
 
 #include "WebShapePlugin.moc"

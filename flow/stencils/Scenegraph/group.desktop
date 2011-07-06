@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=group
+Name[el]=ομάδα
 Name[es]=grupo
+Name[nb]=gruppe
 Name[pt]=grupo
 Name[pt_BR]=grupo
 Name[sv]=grupp
@@ -8,3 +10,4 @@ Name[ug]=گۇرۇپپا
 Name[uk]=Група
 Name[x-test]=xxgroupxx
 Name[zh_CN]=组
+Name[zh_TW]=群組

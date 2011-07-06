@@ -177,6 +177,9 @@ public:
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
+    /// returns a number that increases every time documentChanged is called
+    int documentChangedCount() const;
+
     /// Return a list of obstructions intersecting current root area (during layout)
     QList<KoTextLayoutObstruction *> currentObstructions();
 
@@ -191,6 +194,11 @@ public:
     bool layoutBlocked() const;
 
 signals:
+    /**
+     * Signal that is emitted during layouting to inform about the progress done so far.
+     */
+    void layoutProgressChanged(int percent);
+
     /**
      * Signal is emitted every time a layout run has completely finished (all text is positioned).
      */
@@ -247,6 +255,9 @@ protected:
 private:
     class Private;
     Private * const d;
+
+    bool doLayout();
+    void updateProgress(const QTextFrame::iterator &it);
 };
 
 #endif

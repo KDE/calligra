@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=Switch Processor
+Name[el]=Επεξεργαστής μεταγωγής
 Name[et]=Kommutaatori protsessor
+Name[nb]=Datasvitsj-prosessor
+Name[nl]=Switch Processor
 Name[pt]=Processador de Comutação
 Name[pt_BR]=Processador de comutação de rotas
 Name[sv]=Linjeväxelprocessor
 Name[uk]=Процесор комутації маршрутів
 Name[x-test]=xxSwitch Processorxx
+Name[zh_TW]=交換處理器

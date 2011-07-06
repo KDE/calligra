@@ -2,12 +2,12 @@ include_directories( ${KOMAIN_INCLUDES} )
 
 ########### next target ###############
 
-set(kwordexportfilters_LIB_SRCS
+set(wordsexportfilters_LIB_SRCS
     TagProcessing.cc
     KWEFStructures.cc
     ProcessDocument.cc
     KWEFUtil.cc
-    KWEFKWordLeader.cc
+    KWEFWordsLeader.cc
     KWEFBaseWorker.cc
     Picture.h
     PictureBase.h
@@ -25,11 +25,11 @@ set(kwordexportfilters_LIB_SRCS
     PictureShared.cpp
 )
 
-kde4_add_library(kwordexportfilters SHARED ${kwordexportfilters_LIB_SRCS})
+kde4_add_library(wordsexportfilters SHARED ${wordsexportfilters_LIB_SRCS})
 
-target_link_libraries(kwordexportfilters komain)
-target_link_libraries(kwordexportfilters LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(wordsexportfilters komain)
+target_link_libraries(wordsexportfilters LINK_INTERFACE_LIBRARIES komain)
 
-set_target_properties(kwordexportfilters PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kwordexportfilters  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(wordsexportfilters PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+install(TARGETS wordsexportfilters  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Microphone
+Name[el]=Μικρόφωνο
 Name[es]=Micrófono
 Name[et]=Mikrofon
+Name[nb]=Mikrofon
 Name[nl]=Microfoon
 Name[pt]=Microfone
 Name[pt_BR]=Microfone
@@ -10,3 +12,4 @@ Name[ug]=مىكروفون
 Name[uk]=Мікрофон
 Name[x-test]=xxMicrophonexx
 Name[zh_CN]=话筒
+Name[zh_TW]=麥克風

@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 
-KWFrameSet::KWFrameSet(KWord::FrameSetType type)
+KWFrameSet::KWFrameSet(Words::FrameSetType type)
     : QObject(),
     m_type(type)
 {
@@ -56,13 +56,30 @@ void KWFrameSet::addFrame(KWFrame *frame)
     m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
     frame->setFrameSet(this);
     setupFrame(frame);
+    if (frame->isCopy()) {
+        KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+        if (copyShape && copyShape->original()) {
+            KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
+            if (originalFrame) {
+                originalFrame->addCopy(frame);
+            }
+        }
+    }
     emit frameAdded(frame);
 }
 
 void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
 {
     Q_ASSERT(frame);
-    if (!frame->isCopy()) {
+    if (frame->isCopy()) {
+        KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+        if (copyShape && copyShape->original()) {
+            KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
+            if (originalFrame) {
+                originalFrame->removeCopy(frame);
+            }
+        }
+    } else {
 #if 0
         // Loop over all frames to see if there is a copy frame that references the removed
         // frame; if it does, then mark the copy as obsolete
@@ -74,6 +91,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
             }
         }
 #else
+//TODO use the copyFrame-list the KWFrame's remembers now
         // Loop over all frames to see if there is a copy frame that references the removed
         // frame; if it does, then delete the copy too.
         for(int i = frames().count() - 1; i >= 0; --i) {

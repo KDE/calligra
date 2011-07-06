@@ -87,6 +87,12 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
     return QRectF();
 }
 
+QRectF ODrawClient::getReserveRect(void)
+{
+    //NOTE: No XLS test files at the moment.
+    return QRectF();
+}
+
 QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor)
 {
     const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
@@ -184,10 +190,12 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
     return style;
 }
 
-void ODrawClient::addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox,
+void ODrawClient::addTextStyles(const quint16 msospt,
+                                const MSO::OfficeArtClientTextBox *clientTextbox,
                                 const MSO::OfficeArtClientData *clientData,
                                 KoGenStyle &style, Writer &out)
 {
+    Q_UNUSED(msospt);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
 }
@@ -200,13 +208,6 @@ const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
 const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
 {
     //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
-    MSO::OfficeArtSpContainer* sp = NULL;
-    return sp;
-}
-
-const MSO::OfficeArtSpContainer* ODrawClient::defaultShapeContainer()
-{
-    //TODO: provide the OfficeArtDgContainer.shape container if required
     MSO::OfficeArtSpContainer* sp = NULL;
     return sp;
 }

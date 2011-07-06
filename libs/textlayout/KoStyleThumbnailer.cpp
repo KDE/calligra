@@ -33,14 +33,22 @@
 #include "KoSectionStyle.h"
 #include "KoTextDocument.h"
 #include "KoTextDocumentLayout.h"
+#include "KoTextLayoutRootArea.h"
+#include "FrameIterator.h"
 
-#include <QTextLayout>
+#include <klocale.h>
+
+#include <QFont>
+#include <QPixmap>
+#include <QPixmapCache>
+#include <QRect>
+#include <QTextTable>
+#include <QTextTableFormat>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QPixmap>
-#include <QMap>
+#include <QTextLayout>
+
 #include <kdebug.h>
-#include <klocale.h>
 
 class KoStyleThumbnailer::Private
 {
@@ -48,78 +56,138 @@ public:
     Private() : pixmapHelperDocument(0){ }
 
     QTextDocument *pixmapHelperDocument;
-    QMap<int,QPixmap> pixmapMap; // map of pixmap representations of the styles
+    KoTextDocumentLayout *documentLayout;
+    QPixmapCache pixmapCache; // cache of pixmap representations of the styles
 };
 
 KoStyleThumbnailer::KoStyleThumbnailer()
         : d(new Private())
 {
+    d->pixmapHelperDocument = new QTextDocument;
+    d->documentLayout = new KoTextDocumentLayout(d->pixmapHelperDocument);
+    d->pixmapHelperDocument->setDocumentLayout(d->documentLayout);
 }
 
 KoStyleThumbnailer::~KoStyleThumbnailer()
 {
+    delete d->documentLayout;
+    delete d->pixmapHelperDocument;
     delete d;
-}
-
-void KoStyleThumbnailer::setPixmapHelperDocument(QTextDocument *pixmapHelperDocument)
-{
-    if (d->pixmapHelperDocument)
-        return;
-    d->pixmapHelperDocument = pixmapHelperDocument;
 }
 
 QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style)
 {
-    if (d->pixmapMap.contains(style->styleId())) {
-        return d->pixmapMap[style->styleId()];
+    return thumbnail(style, QSize(250, 48));
+}
+
+QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
+{
+    QString pixmapKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
+    QPixmap pm(size.width(), size.height());
+
+    if (d->pixmapCache.find(pixmapKey, &pm)) {
+        return pm;
     }
-    QTextCursor cursor (d->pixmapHelperDocument);
-    QPixmap pm(250,48);
 
     pm.fill(Qt::transparent);
-    QPainter p(&pm);
 
-    p.translate(0, 1.5);
-    p.setRenderHint(QPainter::Antialiasing);
+    KoParagraphStyle *clone = style->clone();
+    QTextCursor cursor(d->pixmapHelperDocument);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(style->name());
+    cursor.insertText(clone->name());
     QTextBlock block = cursor.block();
-    style->applyStyle(block, true);
-    dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->layout();
+    clone->applyStyle(block, true);
 
-    d->pixmapHelperDocument->drawContents(&p);
+    layoutThumbnail(size, pm);
 
-    d->pixmapMap.insert(style->styleId(), pm);
+    d->pixmapCache.insert(pixmapKey, pm);
+    delete clone;
     return pm;
 }
 
 QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style)
 {
-    if (d->pixmapMap.contains(style->styleId())) {
-        return d->pixmapMap[style->styleId()];
+    return thumbnail(style, QSize(250, 48));
+}
+
+QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
+{
+    QString pixmapKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
+    QPixmap pm(size.width(), size.height());
+
+    if (d->pixmapCache.find(pixmapKey, &pm)) {
+        return pm;
     }
-    QTextCursor cursor (d->pixmapHelperDocument);
-    QPixmap pm(250,48);
 
     pm.fill(Qt::transparent);
-    QPainter p(&pm);
 
-    p.translate(0, 1.5);
-    p.setRenderHint(QPainter::Antialiasing);
+    KoCharacterStyle *clone = style->clone();
+    QTextCursor cursor(d->pixmapHelperDocument);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(style->name());
+    cursor.insertText(clone->name());
     QTextBlock block = cursor.block();
-    style->applyStyle(block);
-    dynamic_cast<KoTextDocumentLayout*> (d->pixmapHelperDocument->documentLayout())->layout();
+    clone->applyStyle(block);
 
-    d->pixmapHelperDocument->drawContents(&p);
+    layoutThumbnail(size, pm);
 
-    d->pixmapMap.insert(style->styleId(), pm);
+    d->pixmapCache.insert(pixmapKey, pm);
+    delete clone;
     return pm;
+}
+
+void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
+{
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing);
+
+    QTextCursor cursor (d->pixmapHelperDocument);
+
+    d->documentLayout->removeRootArea();
+    KoTextLayoutRootArea rootArea(d->documentLayout);
+
+    FrameIterator frameCursor(d->pixmapHelperDocument->rootFrame());
+    rootArea.setReferenceRect(0, size.width(), 0, 1E6);
+    rootArea.setNoWrap(1E6);
+    rootArea.layoutRoot(&frameCursor);
+
+    QSizeF documentSize = rootArea.boundingRect().size();
+    if (documentSize.width() > size.width() || documentSize.height() > size.height()) {
+        QTextCharFormat fmt;
+        cursor.select(QTextCursor::Document);
+        fmt = cursor.charFormat();
+        //calculate the font reduction factor so that the text fits and apply the new font size
+        qreal reductionFactor = qMin(size.width()/documentSize.width(), size.height()/(documentSize.height()+2));
+        fmt.setFontPointSize((int)(fmt.fontPointSize()*reductionFactor));
+        cursor.mergeCharFormat(fmt);
+
+        frameCursor = FrameIterator(d->pixmapHelperDocument->rootFrame());
+        rootArea.setReferenceRect(0, size.width(), 0, 1E6);
+        rootArea.setNoWrap(1E6);
+        rootArea.layoutRoot(&frameCursor);
+
+        //check that we now fit and eventually reduce the font size iteratively. this shouldn't be needed
+        documentSize = rootArea.boundingRect().size();
+
+        while ((documentSize.width() > size.width() || (documentSize.height()+2) > size.height()) && fmt.fontPointSize()>0) {
+            fmt = cursor.blockCharFormat();
+            fmt.setFontPointSize(fmt.fontPointSize() - 1);
+            cursor.setBlockCharFormat(fmt);
+
+            frameCursor = FrameIterator(d->pixmapHelperDocument->rootFrame());
+            rootArea.setReferenceRect(0, size.width(), 0, 1E6);
+            rootArea.setNoWrap(1E6);
+            rootArea.layoutRoot(&frameCursor);
+            documentSize = rootArea.boundingRect().size();
+        }
+    }
+
+    KoTextDocumentLayout::PaintContext pc;
+    p.translate(0, 1.5);
+    rootArea.paint(&p, pc);
 }

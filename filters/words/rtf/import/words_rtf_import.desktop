@@ -1,0 +1,21 @@
+[Desktop Entry]
+Type=Service
+Name=Words RTF Import Filter
+Name[cs]=Dialog exportního filtru RTF pro Words
+Name[es]=Filtro de Words de importación de RTF
+Name[et]=Wordsi RTF-i impordifilter
+Name[nb]=RTF-importfilter for Words
+Name[nds]=RTF-Importfilter för Words
+Name[pt]=Filtro de Importação de RTF para o Words
+Name[pt_BR]=Filtro de importação de RTF para o Words
+Name[sv]=Words RTF-importfilter
+Name[uk]=Фільтр експорту RTF для Words
+Name[x-test]=xxWords RTF Import Filterxx
+Name[zh_TW]=Words RTF 匯入過濾程式
+X-KDE-Import=application/rtf
+X-KDE-Weight=1
+ImportDescription=RTF
+X-KDE-Export=application/vnd.oasis.opendocument.text
+ExportDescription=Words
+X-KDE-Library=rtfimport
+X-KDE-ServiceTypes=CalligraFilter

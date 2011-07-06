@@ -231,6 +231,9 @@ GETTER(qint32,                 PictureBrightness,    pictureBrightness,    0)   
         } \
         return DEFAULT; \
     }
+
+//TODO: CalloutBooleanProperties, ProtectionBooleanProperties
+
 // FOPT        NAME           TEST                       DEFAULT
 #define FOPT ShapeBooleanProperties
 GETTER(fBackground,           fUsefBackground,           false)
@@ -292,6 +295,12 @@ GETTER(fLineOpaqueBackColor,  fUsefLineOpaqueBackColor,  false)
 GETTER(fShadowObscured,       fUsefShadowObscured,       false)
 GETTER(fShadow,               fUsefShadow,               false)
 #undef FOPT
+#define FOPT DiagramBooleanProperties
+GETTER(fPseudoInline,         fUsefPseudoInline,         false)
+GETTER(fDoLayout,             fUsefDoLayout,             true)
+GETTER(fReverse,              fUsefReverse,              false)
+GETTER(fDoFormat,             fUsefDoFormat,             false)
+#undef FOPT
 #define FOPT TextBooleanProperties
 GETTER(fFitShapeToText,       fUsefFitShapeToText,       false)
 GETTER(fAutoTextMargin,       fUsefAutoTextMargin,       false)
@@ -306,6 +315,7 @@ GETTER(fLooping,              fUsefLooping,              false)
 GETTER(fRewind,               fUsefRewind,               false)
 GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
 #undef FOPT
+#undef GETTER
 
 // The override was discussed at Office File Formats Forum:
 // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a1cf51a7-fb93-4028-b3ac-3ed2fd77a94b

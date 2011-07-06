@@ -32,7 +32,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstandardaction.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
@@ -49,88 +49,88 @@
 
 MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_activeView(0), m_dockerManager(0)
 {
-  Q_ASSERT(componentData.isValid());
-  KGlobal::setActiveComponent(componentData);
-  
-  // then, setup our actions
-  setupActions();
-  
-  // Create the docker manager after setting up the action
-  m_dockerManager = new DockerManager(this);
-  
-  // Setup the view
-  view = new View( m_doc, this);
-  setCentralWidget(view);
-  
-  // a call to KXmlGuiWindow::setupGUI() populates the GUI
-  // with actions, using KXMLGUI.
-  // It also applies the saved mainwindow settings, if any, and ask the
-  // mainwindow to automatically save settings if changed: window size,
-  // toolbar position, icon size, etc.
-  setupGUI();
-  
-  activateView(view);
+    Q_ASSERT(componentData.isValid());
+    KGlobal::setActiveComponent(componentData);
 
-  // Position and show toolbars according to user's preference
-  setAutoSaveSettings(componentData.componentName());
+    // then, setup our actions
+    setupActions();
 
-  const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-  QRect desk = QApplication::desktop()->screenGeometry(scnum);
+    // Create the docker manager after setting up the action
+    m_dockerManager = new DockerManager(this);
 
-  // if the desktop is virtual then use virtual screen size
-  if (QApplication::desktop()->isVirtualDesktop())
-      desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
-  
-  KConfigGroup config ( KGlobal::config(), componentData.componentName() );
-  const QSize size( config.readEntry( QString::fromLatin1("Width %1").arg(desk.width()), 0 ),
-                    config.readEntry( QString::fromLatin1("Height %1").arg(desk.height()), 0 ) );
-  resize( size );
+    // Setup the view
+    view = new View(m_doc, this);
+    setCentralWidget(view);
 
-  foreach (QDockWidget *wdg, m_dockWidgets) {
-      if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
-          wdg->setVisible(true);
-      }
-  }
-  forceDockTabFonts();
+    // a call to KXmlGuiWindow::setupGUI() populates the GUI
+    // with actions, using KXMLGUI.
+    // It also applies the saved mainwindow settings, if any, and ask the
+    // mainwindow to automatically save settings if changed: window size,
+    // toolbar position, icon size, etc.
+    setupGUI();
+
+    activateView(view);
+
+    // Position and show toolbars according to user's preference
+    setAutoSaveSettings(componentData.componentName());
+
+    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+
+    // if the desktop is virtual then use virtual screen size
+    if(QApplication::desktop()->isVirtualDesktop())
+        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
+
+    KConfigGroup config(KGlobal::config(), componentData.componentName());
+    const QSize size(config.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), 0),
+                     config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
+    resize(size);
+
+    foreach(QDockWidget * wdg, m_dockWidgets) {
+        if((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
+            wdg->setVisible(true);
+        }
+    }
+    forceDockTabFonts();
 }
 
 MainWindow::~MainWindow()
 {
-  // The view need to be deleted before the dockermanager
-  delete view;
+    // The view need to be deleted before the dockermanager
+    delete view;
 }
 
 void MainWindow::setupActions()
 {
-  KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
-  m_doc->createActions(actionCollection());
-  m_dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
-  actionCollection()->addAction("settings_dockers_menu", m_dockWidgetMenu);
-  m_dockWidgetMenu->setVisible(false);
+    KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
+    m_doc->createActions(actionCollection());
+    m_dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
+    actionCollection()->addAction("settings_dockers_menu", m_dockWidgetMenu);
+    m_dockWidgetMenu->setVisible(false);
 }
 
 QDockWidget* MainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
 
-    if (!m_dockWidgetMap.contains(factory->id())) {
+    if(!m_dockWidgetMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
-        if (!dockWidget) return 0;
+        if(!dockWidget) return 0;
         m_dockWidgets.push_back(dockWidget);
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
 
-        if (dockWidget->widget() && dockWidget->widget()->layout())
+        if(dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
 
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
         bool visible = true;
 
-        switch (factory->defaultDockPosition()) {
+        switch(factory->defaultDockPosition()) {
         case KoDockFactoryBase::DockTornOff:
             dockWidget->setFloating(true); // position nicely?
             break;
@@ -148,9 +148,9 @@ QDockWidget* MainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         addDockWidget(side, dockWidget);
-        if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
+        if(dockWidget->features() & QDockWidget::DockWidgetClosable) {
             m_dockWidgetMenu->addAction(dockWidget->toggleViewAction());
-            if (!visible)
+            if(!visible)
                 dockWidget->hide();
         }
 
@@ -177,8 +177,8 @@ QDockWidget* MainWindow::createDockWidget(KoDockFactoryBase* factory)
 void MainWindow::forceDockTabFonts()
 {
     QObjectList chis = children();
-    for (int i = 0; i < chis.size(); ++i) {
-        if (chis.at(i)->inherits("QTabBar")) {
+    for(int i = 0; i < chis.size(); ++i) {
+        if(chis.at(i)->inherits("QTabBar")) {
             QFont dockWidgetFont  = KGlobalSettings::generalFont();
             qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
             dockWidgetFont.setPointSizeF(pointSize);
@@ -189,74 +189,66 @@ void MainWindow::forceDockTabFonts()
 
 DockerManager* MainWindow::dockerManager()
 {
-  return m_dockerManager;
+    return m_dockerManager;
 }
 
 void MainWindow::activateView(View* view)
 {
-  Q_ASSERT(factory());
-  // Desactivate previous view
-  if(m_activeView)
-  {
-    factory()->removeClient(m_activeView);
-    foreach(StatusBarItem* item, m_statusBarItems[m_activeView])
-    {
-      item->ensureItemHidden(statusBar());
+    Q_ASSERT(factory());
+    // Desactivate previous view
+    if(m_activeView) {
+        factory()->removeClient(m_activeView);
+        foreach(StatusBarItem * item, m_statusBarItems[m_activeView]) {
+            item->ensureItemHidden(statusBar());
+        }
     }
-  }
 
-  // Set the new view
-  m_activeView = view;
-  if(m_activeView)
-  {
-    factory()->addClient(view);
-    // Show the status widget for the current view
-    foreach(StatusBarItem* item, m_statusBarItems[m_activeView])
-    {
-      item->ensureItemShown(statusBar());
+    // Set the new view
+    m_activeView = view;
+    if(m_activeView) {
+        factory()->addClient(view);
+        // Show the status widget for the current view
+        foreach(StatusBarItem * item, m_statusBarItems[m_activeView]) {
+            item->ensureItemShown(statusBar());
+        }
     }
-  }
 }
 
 void MainWindow::addStatusBarItem(QWidget* _widget, int _stretch, View* _view)
 {
-  Q_ASSERT(_widget);
-  Q_ASSERT(_view);
-  QList<StatusBarItem*>& list = m_statusBarItems[_view];
-  StatusBarItem* item = new StatusBarItem(_widget, _stretch, _view);
-  if(_view == m_activeView)
-  {
-    item->ensureItemShown(statusBar());
-  }
-  list.append(item);
+    Q_ASSERT(_widget);
+    Q_ASSERT(_view);
+    QList<StatusBarItem*>& list = m_statusBarItems[_view];
+    StatusBarItem* item = new StatusBarItem(_widget, _stretch, _view);
+    if(_view == m_activeView) {
+        item->ensureItemShown(statusBar());
+    }
+    list.append(item);
 }
 
 void MainWindow::removeStatusBarItem(QWidget* _widget)
 {
-  foreach(View* key, m_statusBarItems.keys())
-  {
-    QList<StatusBarItem*>& list = m_statusBarItems[key];
-    foreach(StatusBarItem* item, list)
-    {
-      if(item->m_widget == _widget)
-      {
-        list.removeAll(item);
-        item->ensureItemHidden(statusBar());
-        delete item;
-        return;
-      }
+    foreach(View * key, m_statusBarItems.keys()) {
+        QList<StatusBarItem*>& list = m_statusBarItems[key];
+        foreach(StatusBarItem * item, list) {
+            if(item->m_widget == _widget) {
+                list.removeAll(item);
+                item->ensureItemHidden(statusBar());
+                delete item;
+                return;
+            }
+        }
     }
-  }
-  kWarning() << "Widget " << _widget << " not found in the status bar";
+    kWarning() << "Widget " << _widget << " not found in the status bar";
 }
 
 QList<KoCanvasObserverBase*> MainWindow::canvasObservers()
 {
     QList<KoCanvasObserverBase*> observers;
 
-    foreach(QDockWidget *docker, m_dockWidgets) {
+    foreach(QDockWidget * docker, m_dockWidgets) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
-        if (observer) {
+        if(observer) {
             observers << observer;
         }
     }

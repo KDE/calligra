@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Handheld
+Name[el]=Χειρός
+Name[et]=Pihuarvuti
+Name[nb]=Håndholdt
 Name[nl]=Handheld
 Name[pt]=Dispositivo Móvel
 Name[pt_BR]=Handheld
@@ -7,3 +10,4 @@ Name[sv]=Handdator
 Name[uk]=Кишеньковий пристрій
 Name[x-test]=xxHandheldxx
 Name[zh_CN]=手持设备
+Name[zh_TW]=手持

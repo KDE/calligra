@@ -35,7 +35,7 @@
 #include <QPen>
 #include <QByteArray>
 
-// KOffice
+// Calligra
 #include <KoDocumentInfo.h>
 
 // Calligra::Tables

@@ -1236,8 +1236,8 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         for (int i = 0; i < shapes.count(); ++i) {
             KoShape* const shape = shapes[i];
             const QPointF bottomRight = shape->boundingRect().bottomRight();
-            double endX = 0.0;
-            double endY = 0.0;
+            qreal endX = 0.0;
+            qreal endY = 0.0;
             const int col = sheet()->leftColumn(bottomRight.x(), endX);
             const int row = sheet()->topRow(bottomRight.y(), endY);
             shape->setAdditionalAttribute("table:end-cell-address", Cell(sheet(), col, row).name());

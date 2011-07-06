@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Comment
+Name[cs]=Komentář
+Name[el]=Σχόλιο
 Name[es]=Comentario
 Name[et]=Kommentaar
+Name[nb]=Kommentar
 Name[pt]=Comentário
 Name[pt_BR]=Comentário
 Name[sv]=Kommentar
-Name[ug]=پىكىر
+Name[ug]=ئىزاھات
 Name[uk]=Коментар
 Name[x-test]=xxCommentxx
 Name[zh_CN]=注释
+Name[zh_TW]=註解

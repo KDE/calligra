@@ -28,7 +28,7 @@
 #include <QTextStream>
 #include <KoFilter.h>
 #include <KoStore.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 class KoOdfWriteStore;
 class QByteArray;

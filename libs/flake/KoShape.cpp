@@ -94,7 +94,9 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       detectCollision(false),
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
-      textRunAroundDistance(1.0)
+      textRunAroundDistance(1.0),
+      textRunAroundThreshold(0.0),
+      anchored(false)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -280,7 +282,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
     Q_UNUSED(painter);
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
-    /* Since this code is not actually used (kivio is going to be the main user) lets disable instead of fix.
+    /* Since this code is not actually used (flow is going to be the main user) lets disable instead of fix.
         if (selected)
         {
             // draw connectors
@@ -398,7 +400,7 @@ bool KoShape::hitTest(const QPointF &position) const
 QRectF KoShape::boundingRect() const
 {
     Q_D(const KoShape);
-    QSizeF mySize = size();
+
     QTransform transform = absoluteTransformation(0);
     QRectF bb = outlineRect();
     if (d->border) {
@@ -483,41 +485,51 @@ QTransform KoShape::transformation() const
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
-    if(s1->runThrough() > s2->runThrough()) {
-        return false;
-    }
-    if(s1->runThrough() < s2->runThrough()) {
-        return true;
-    }
-
     bool foundCommonParent = false;
     KoShape *parentShapeS1 = s1;
     KoShape *parentShapeS2 = s2;
     int index1 = parentShapeS1->zIndex();
     int index2 = parentShapeS2->zIndex();
+    int runThrough1 = parentShapeS1->runThrough();
+    int runThrough2 = parentShapeS2->runThrough();
     while (parentShapeS1 && !foundCommonParent) {
         parentShapeS2 = s2;
         index2 = parentShapeS2->zIndex();
+        runThrough2 = parentShapeS2->runThrough();
         while (parentShapeS2) {
             if (parentShapeS2 == parentShapeS1) {
                 foundCommonParent = true;
                 break;
             }
             index2 = parentShapeS2->zIndex();
+            runThrough2 = parentShapeS2->runThrough();
             parentShapeS2 = parentShapeS2->parent();
         }
 
         if (!foundCommonParent) {
             index1 = parentShapeS1->zIndex();
+            runThrough1 = parentShapeS1->runThrough();
             parentShapeS1 = parentShapeS1->parent();
         }
     }
+
+    // If the shape runs through the foreground or background.
+    if (runThrough1 > runThrough2) {
+        return false;
+    }
+    if (runThrough1 < runThrough2) {
+        return true;
+    }
+
+    // If the one shape is a parent/child of the other then sort so.
     if (s1 == parentShapeS2) {
         return true;
     }
-    else if (s2 == parentShapeS1) {
+    if (s2 == parentShapeS1) {
         return false;
     }
+
+    // If we went that far then the z-Index is used for sorting.
     return index1 < index2;
 }
 
@@ -889,6 +901,30 @@ void KoShape::setTextRunAroundDistance(qreal distance)
     d->textRunAroundDistance = distance;
 }
 
+qreal KoShape::textRunAroundThreshold() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundThreshold;
+}
+
+void KoShape::setAnchored(bool anchored)
+{
+    Q_D(KoShape);
+    d->anchored = anchored;
+}
+
+bool KoShape::isAnchored() const
+{
+    Q_D(const KoShape);
+    return d->anchored;
+}
+
+void KoShape::setTextRunAroundThreshold(qreal threshold)
+{
+    Q_D(KoShape);
+    d->textRunAroundThreshold = threshold;
+}
+
 void KoShape::setBackground(KoShapeBackground *fill)
 {
     Q_D(KoShape);
@@ -909,8 +945,10 @@ KoShapeBackground * KoShape::background() const
 void KoShape::setZIndex(int zIndex)
 {
     Q_D(KoShape);
-    notifyChanged();
+    if (d->zIndex == zIndex)
+        return;
     d->zIndex = zIndex;
+    notifyChanged();
 }
 
 int KoShape::runThrough()
@@ -1189,7 +1227,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 
     if (parent() && parent()->isClipped(this)) {
         /*
-         * In KOffice clipping is done using a parent shape which can be rotated, sheared etc
+         * In Calligra clipping is done using a parent shape which can be rotated, sheared etc
          * and even non-square.  So the ODF interoperability version we write here is really
          * just a very simple version of that...
          */
@@ -1229,7 +1267,8 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             break;
     }
     style.addProperty("style:wrap", wrap);
-    style.addProperty("fo:margin", QString::number(textRunAroundDistance()) + "pt");
+    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
+    style.addPropertyPt("fo:margin", textRunAroundDistance());
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
@@ -1299,6 +1338,13 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
             setTextRunAroundSide(KoShape::EnoughRunAroundSide);
         else if (wrap == "parallel")
             setTextRunAroundSide(KoShape::BothRunAroundSide);
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::style, "wrap-dynamic-threshold")) {
+        QString wrapThreshold = styleStack.property(KoXmlNS::style, "wrap-dynamic-threshold");
+        if (!wrapThreshold.isEmpty()) {
+            setTextRunAroundThreshold(KoUnit::parseValue(wrapThreshold));
+        }
     }
 }
 
@@ -1438,8 +1484,8 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
 
         KoLineBorder *border = new KoLineBorder();
 
-        if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
-            QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-gradient")) {
+            QString gradientName = styleStack.property(KoXmlNS::calligra, "stroke-gradient");
             QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, size());
             border->setLineBrush(brush);
         } else {
@@ -1456,18 +1502,17 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
         return border;
 #ifndef NWORKAROUND_ODF_BUGS
     } else if (stroke.isEmpty()) {
-        QPen pen;
+        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
         if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
             KoLineBorder *border = new KoLineBorder();
 
-            // FIXME: (make it possible to) use a cosmetic pen
-            if (pen.widthF() == 0.0)
-                border->setLineWidth(0.5);
-            else
-                border->setLineWidth(pen.widthF());
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixPenWidth(pen, context);
+#endif
+            border->setLineWidth(pen.widthF());
             border->setJoinStyle(pen.joinStyle());
             border->setLineStyle(pen.style(), pen.dashPattern());
-            border->setLineBrush(pen.brush());
+            border->setColor(pen.color());
 
             return border;
         }
@@ -1487,7 +1532,7 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
         qreal offsetX = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-x"));
         qreal offsetY = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-y"));
         shadow->setOffset(QPointF(offsetX, offsetY));
-        qreal blur = KoUnit::parseValue(styleStack.property(KoXmlNS::koffice, "shadow-blur-radius"));
+        qreal blur = KoUnit::parseValue(styleStack.property(KoXmlNS::calligra, "shadow-blur-radius"));
         shadow->setBlur(blur);
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
@@ -1527,7 +1572,6 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
 
         KoConnectionPoint connector;
 
-        const QRectF bbox = boundingRect();
         const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
         if (align.isEmpty()) {
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1784,7 +1828,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
 
     // save glue points see ODF 9.2.19 Glue Points
     if(d->connectors.count()) {
-        QSizeF s = size();
         KoConnectionPoints::const_iterator cp = d->connectors.constBegin();
         KoConnectionPoints::const_iterator lastCp = d->connectors.constEnd();
         for(; cp != lastCp; ++cp) {

@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD13_FORMAT_OTHER
-#define KWORD13_FORMAT_OTHER
+#ifndef WORDS13_FORMAT_OTHER
+#define WORDS13_FORMAT_OTHER
 
 #include "kword13format.h"
 
@@ -28,11 +28,11 @@
  *
  * For \<FORMAT id="4"\>
  */
-class KWord13FormatFour : public KWord13Format
+class Words13FormatFour : public Words13Format
 {
 public:
-    explicit KWord13FormatFour(void);
-    virtual ~KWord13FormatFour(void);
+    explicit Words13FormatFour(void);
+    virtual ~Words13FormatFour(void);
 public:
     QString m_text; ///< replacement text
 };
@@ -42,14 +42,14 @@ public:
  *
  * For \<FORMAT id="6"\>
  */
-class KWord13FormatSix : public KWord13Format
+class Words13FormatSix : public Words13Format
 {
 public:
-    KWord13FormatSix(void);
-    virtual ~KWord13FormatSix(void);
+    Words13FormatSix(void);
+    virtual ~Words13FormatSix(void);
 public:
     QString m_anchorName; ///< name of anchor
 };
 
 
-#endif // KWORD13_FORMAT_OTHER
+#endif // WORDS13_FORMAT_OTHER

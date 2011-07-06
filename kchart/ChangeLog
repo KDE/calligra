@@ -568,7 +568,7 @@
 
     * KChartPart::initTestChart() is renamed generateBarChartTemplate().
     * Translate two strings in that function.
-    * Added commented code for calling generateBarChartTemplate() when the user chooses the bar char template. The advantage of this is that the row/column labels won't be translated otherwise. This feature will be activated in KOffice 1.5/2.0 as Inge thought it is too late for such changes before KOffice 1.4.
+    * Added commented code for calling generateBarChartTemplate() when the user chooses the bar char template. The advantage of this is that the row/column labels won't be translated otherwise. This feature will be activated in Calligra 1.5/2.0 as Inge thought it is too late for such changes before Calligra 1.4.
 
 2005-03-30 Fredrik Edemar <f_edemar@linux.se>
     In KChartColorConfigPage: do not crash when the OK/Apply button is pressed and disable the KColorButton when there isn't any data to config.

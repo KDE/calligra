@@ -83,7 +83,8 @@ namespace
             return new Parser95( storage, wordDocument );
         }
         // (0x00c1)
-        else if ( nFib == Word8nFib ) {
+        else if ( (nFib == Word8nFib) || (nFib == 0x00c0) || (nFib == 0x00c2) )
+        {
             wvlog << "Word 8 (aka Word 97) document found" << endl;
             return new Parser97( storage, wordDocument );
         }

@@ -36,6 +36,10 @@ namespace MSOOXML {
 
 struct MSOOXML_EXPORT TableStyleProperties
 {
+    TableStyleProperties() {
+        bordersToEdgesOnly = false;
+    }
+
     enum Property {
         BottomBorder = 1,
         InsideHBorder = 2,
@@ -76,6 +80,10 @@ struct MSOOXML_EXPORT TableStyleProperties
 
     QString verticalAlign;
     bool glyphOrientation;
+
+    // There seems to be behavior that when ooxml defines wholetbl borders, it wants them to be
+    // applied only to the cells which are on the edges, not to every cell
+    bool bordersToEdgesOnly;
 
     KoGenStyle textStyle;
     KoGenStyle paragraphStyle;

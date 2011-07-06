@@ -95,7 +95,7 @@ kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} $
 
 target_link_libraries(planprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} ${QT_QT3SUPPORT_LIBRARY} komain)
 
-set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS planprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 

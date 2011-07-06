@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=source substitution
+Name[el]=αντικατάσταση πηγής
+Name[nb]=kildeerstatning
+Name[nl]=bronsubstitutie
 Name[pt]=substituição fonte
 Name[pt_BR]=substituição de fonte
 Name[sv]=källersättning
 Name[uk]=Замінник лінеаризованого джерела струму
 Name[x-test]=xxsource substitutionxx
+Name[zh_TW]=source substitution
