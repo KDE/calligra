@@ -281,13 +281,18 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
     kDebug(32001) << "afterPageNumber=" << afterIndex+1;
 
+    bool atLeastOneRemove = false;
+    KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
     if (afterIndex >= 0) {
         for(int i = m_pages.count() - 1; i > afterIndex; --i) {
             KWRootAreaPage *page = m_pages.takeLast();
             foreach(KoTextLayoutRootArea *area, page->rootAreas)
                 m_pageHash.remove(area);
             delete page;
+            pageManager->removePage(i+1);
+            atLeastOneRemove = true;
         }
+
         /*FIXME
         for(int i = m_dependentProviders.count() - 1; i >= 0; --i) {
             QPair<KWRootAreaProvider *, int> p = m_dependentProviders[i];
@@ -295,14 +300,24 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
                 m_dependentProviders.removeAt(i);
         }
         */
+
     } else {
+        atLeastOneRemove = !m_pages.isEmpty();
         qDeleteAll(m_pages);
         m_pages.clear();
         m_pageHash.clear();
+
+        /*FIXME that would result in flickering :-/
+        for(int i = pageManager->pageCount(); i >= 1; --i)
+            pageManager->removePage(i);
+        */
+
         /*FIXME
         m_dependentProviders.clear();
         */
     }
+    if (atLeastOneRemove)
+        m_textFrameSet->wordsDocument()->firePageSetupChanged();
 }
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
