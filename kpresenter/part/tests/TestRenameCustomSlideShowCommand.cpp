@@ -62,7 +62,7 @@ void TestRenameCustomSlideShowCommand::renameCustomShow()
 
     doc.customSlideShows()->insert(customShowName, slideList);
 
-    QVERIFY(doc.customSlideShows()->names().count() == 1);
+    QCOMPARE(doc.customSlideShows()->names().count(), 1);
 
     KPrRenameCustomSlideShowCommand cmd(&doc, &model, customShowName, customShowNewName);
 

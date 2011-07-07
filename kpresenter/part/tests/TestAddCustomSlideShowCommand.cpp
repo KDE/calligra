@@ -50,10 +50,10 @@ void TestAddCustomSlideShowCommand::addCustomSlideShow()
     KPrAddCustomSlideShowCommand cmd(&doc, &model, customShowName);
 
     cmd.redo();
-    QVERIFY(doc.customSlideShows()->names().count() == 1);
+    QCOMPARE(doc.customSlideShows()->names().count(), 1);
 
     cmd.undo();
-    QVERIFY(doc.customSlideShows()->names().count() == 0);
+    QCOMPARE(doc.customSlideShows()->names().count(), 0);
 }
 
 QTEST_MAIN(TestAddCustomSlideShowCommand)

@@ -61,15 +61,15 @@ void TestDelCustomSlideShowCommand::delCustomSlideShow()
 
     doc.customSlideShows()->insert(customShowName, slideList);
 
-    QVERIFY(doc.customSlideShows()->names().count() == 1);
+    QCOMPARE(doc.customSlideShows()->names().count(), 1);
 
     KPrDelCustomSlideShowCommand cmd(&doc, &model, customShowName);
 
     cmd.redo();
-    QVERIFY(doc.customSlideShows()->names().count() == 0);
+    QCOMPARE(doc.customSlideShows()->names().count(), 0);
 
     cmd.undo();
-    QVERIFY(doc.customSlideShows()->names().count() == 1);
+    QCOMPARE(doc.customSlideShows()->names().count(), 1);
 }
 
 
