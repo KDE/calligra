@@ -300,7 +300,7 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
                 return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             case Qt::ToolTipRole: {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
             }
             case Qt::EditRole:
                 return node->constraintEndTime();
@@ -321,7 +321,7 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
             }
             break;
         }
