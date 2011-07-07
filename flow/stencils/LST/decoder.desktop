@@ -2,8 +2,10 @@
 Name=Decoder
 Name[el]=Αποκωδικοποιητής
 Name[es]=Decodificador
+Name[nb]=Avkoder
 Name[pt]=Descodificador
 Name[pt_BR]=Decodificador 
 Name[sv]=Avkodare
 Name[uk]=Декодер
 Name[x-test]=xxDecoderxx
+Name[zh_TW]=解碼器

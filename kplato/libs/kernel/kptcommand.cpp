@@ -75,14 +75,14 @@ MacroCommand::~MacroCommand()
     }
 }
 
-void MacroCommand::addCommand( QUndoCommand *cmd )
+void MacroCommand::addCommand( KUndo2Command *cmd )
 {
     cmds.append( cmd );
 }
 
 void MacroCommand::execute()
 {
-    foreach ( QUndoCommand *c, cmds ) {
+    foreach ( KUndo2Command *c, cmds ) {
         c->redo();
     }
 }

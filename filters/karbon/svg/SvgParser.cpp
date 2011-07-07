@@ -2021,13 +2021,17 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
 KoShape * SvgParser::createShape(const QString &shapeID)
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
-    if (! factory) {
+    if (!factory) {
         kWarning(30514) << "Could not find factory for shape id" << shapeID;
         return 0;
     }
 
     KoShape *shape = factory->createDefaultShape(m_documentResourceManager);
-    if (shape && shape->shapeId().isEmpty())
+    if (!shape) {
+        kWarning(30514) << "Could not create Default shape for shape id" << shapeID;
+        return 0;
+    }
+    if (shape->shapeId().isEmpty())
         shape->setShapeId(factory->id());
 
     // reset tranformation that might come from the default shape

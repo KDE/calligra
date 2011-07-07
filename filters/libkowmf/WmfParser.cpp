@@ -101,6 +101,7 @@ bool WmfParser::load(const QByteArray& array)
 
     QDataStream stream(mBuffer);
     stream.setByteOrder(QDataStream::LittleEndian);
+
     mStackOverflow = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
@@ -254,9 +255,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             kDebug(31000) << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
         } else {
             kDebug(31000) << "DPI :" << mDpi;
-            kDebug(31000) << "inch :" << (mBBoxRight - mBBoxLeft) / mDpi
+            kDebug(31000) << "size (inch):" << (mBBoxRight - mBBoxLeft) / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) / mDpi;
-            kDebug(31000) << "mm :" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
+            kDebug(31000) << "size (mm):" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) * 25.4 / mDpi;
         }
         kDebug(31000) << mValid << "" << mStandard << "" << mPlaceable;
@@ -269,6 +270,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
         mObjHandleTab[ i ] = 0;
     }
 
+    mDeviceContext = new WmfDeviceContext();
+
     quint16 recordType;
     quint32 size;
     int  bufferOffset;
@@ -277,7 +280,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     QDataStream stream(mBuffer);
     stream.setByteOrder(QDataStream::LittleEndian);
 
-    // Set the output strategy.
+    // Set the output backend.
     m_backend = backend;
 
     // Set some initial values.
@@ -346,6 +349,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> color;
                     m_backend->setBackgroundColor(qtColor(color));
+
+                    mDeviceContext->backgroundColor = qtColor(color);
+                    mDeviceContext->changedItems |= DCBgTextColor;
                 }
                 break;
             case (META_SETBKMODE & 0xff):
@@ -353,16 +359,24 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     quint16 bkMode;
 
                     stream >> bkMode;
-                    if (bkMode == 1)
+                    //kDebug(31000) << "New bkMode: " << bkMode;
+
+                    if (bkMode == TRANSPARENT) // TRANSPARENT=1, OPAQUE=2
                         m_backend->setBackgroundMode(Qt::TransparentMode);
                     else
                         m_backend->setBackgroundMode(Qt::OpaqueMode);
+
+                    mDeviceContext->bgMixMode = bkMode;
+                    mDeviceContext->changedItems |= DCBgMixMode;
                 }
                 break;
             case (META_SETMAPMODE & 0xff):
                 {
                     stream >> mMapMode;
                     //kDebug(31000) << "New mapmode: " << mMapMode;
+
+                    //mDeviceContext->FontMapMode = mMapMode;Not defined yet
+                    mDeviceContext->changedItems |= DCFontMapMode;
                 }
                 break;
             case (META_SETROP2 & 0xff):
@@ -371,6 +385,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> rop;
                     m_backend->setCompositionMode(winToQtComposition(rop));
+
+                    mDeviceContext->rop = rop;
+                    mDeviceContext->changedItems |= DCFgMixMode;
                 }                break;
             case (META_SETRELABS & 0xff):
                 break;
@@ -380,6 +397,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> winding;
                     mWinding = (winding != 0);
+
+                    mDeviceContext->polyFillMode = winding;
+                    mDeviceContext->changedItems |= DCPolyFillMode;
                 }
                 break;
             case (META_SETSTRETCHBLTMODE & 0xff):
@@ -391,8 +411,10 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> color;
                     mTextColor = qtColor(color);
-
                     m_backend->setTextPen(QPen(mTextColor));
+
+                    mDeviceContext->foregroundTextColor = mTextColor;
+                    mDeviceContext->changedItems |= DCFgTextColor;
                 }
                 break;
             case (META_SETTEXTJUSTIFICATION & 0xff):
@@ -502,7 +524,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
                 }
                 break;
+
             // ----------------------------------------------------------------
+            //                         Drawing records
 
             case (META_LINETO & 0xff):
                 {
@@ -602,7 +626,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left, right, bottom;
 
                     stream >> bottom >> right >> top >> left;
-                    kDebug(31000) << left << top << right << bottom;
+                    //kDebug(31000) << left << top << right << bottom;
                     m_backend->drawRect(left, top, right - left, bottom - top);
                 }
                 break;
@@ -958,11 +982,14 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // negative value allowed for width and height
                     stream >> layout >> reserved;
+#if DEBUG_RECORDS
+                    kDebug(31000) << "layout=" << layout;
+#endif
                     mLayout = (WmfLayout)layout;
 
-#if DEBUG_RECORDS
-                    kDebug(31000) << "setLayout: layout=" << layout;
-#endif
+                    mDeviceContext->layoutMode = mLayout;
+                    mDeviceContext->changedItems |= DCLayoutMode;
+
                 }
                 break;
             case (META_DELETEOBJECT & 0xff):
@@ -1046,13 +1073,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
 
                         // A negative width means to use device units.
-                        kDebug(31000) << "Font height:" << height;
+                        //kDebug(31000) << "Font height:" << height;
                         handle->height = height;
                         // FIXME: For some reason this value needs to be multiplied by
                         //        a factor.  0.6 seems to give a good result, but why??
                         // ANSWER(?): The doc says the height is the height of the character cell.
-                        //            But normally the font height is only the height above the baseline,
-                        //            isn't it?
+                        //            But normally the font height is only the height above the
+                        //            baseline, isn't it?
                         handle->font.setPointSize(qAbs(height) * 6 / 10);
                         if (weight == 0)
                             weight = QFont::Normal;
@@ -1139,6 +1166,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     }
     delete[] mObjHandleTab;
     mObjHandleTab = 0;
+
+    delete mDeviceContext;
+    mDeviceContext = 0;
 
     return true;
 }

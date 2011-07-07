@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>

@@ -19,16 +19,16 @@
 */
 
 #include <latexexportIface.h>
-#include "kwordlatexexportdia.h"
+#include "wordslatexexportdia.h"
 
 /*
- *  Constructs a KWordLatexExportDia which is a child of 'parent', with the
+ *  Constructs a WordsLatexExportDia which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-LatexExportIface::LatexExportIface(KWordLatexExportDia* dia)
+LatexExportIface::LatexExportIface(WordsLatexExportDia* dia)
         : DCOPObject("FilterConfigDia")
 {
     _dialog = dia;

@@ -21,7 +21,7 @@
 #include "KWRdfDocker.h"
 
 #include "KWCanvas.h"
-#include "KWord.h"
+#include "Words.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"

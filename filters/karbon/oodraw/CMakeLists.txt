@@ -30,7 +30,7 @@ install( FILES  karbon_oodraw_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR
 ######## General stuff
 #
 #INCLUDES= -I$(srcdir)/../../liboofilter \
-#	$(KOFFICE_INCLUDES) \
+#	$(CALLIGRA_INCLUDES) \
 #	$(KOPAINTER_INCLUDES) \
 #	-I$(top_srcdir)/karbon \
 #	-I$(top_srcdir)/karbon/core \
@@ -44,7 +44,7 @@ install( FILES  karbon_oodraw_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR
 #liboodrawimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 #liboodrawimport_la_LIBADD  = ../../liboofilter/liboofilter.la \
 #							../../../karbon/libkarboncommon.la \
-#							$(KOFFICE_LIBS)
+#							$(CALLIGRA_LIBS)
 #
 #METASOURCES = AUTO
 #

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -216,13 +216,15 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
     }
 
     while (!atEnd()) {
-        QXmlStreamReader::TokenType tokenType = readNext();
-        if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+        readNext();
+        if (isEndElement() && name() == "wsDr") {
+            break;
+        }
         if (isStartElement()) {
-            const QStringRef s = qualifiedName();
-            if ( s == "xdr:oneCellAnchor" || s == "xdr:twoCellAnchor" || s == "xdr:absoluteAnchor" || s == "xdr:grpSp" ) {
-                read_anchor(s);
-            }
+            TRY_READ_IF(oneCellAnchor)
+            ELSE_TRY_READ_IF(twoCellAnchor)
+            ELSE_TRY_READ_IF(absoluteAnchor)
+            SKIP_UNKNOWN
         }
     }
 #if 0
@@ -234,10 +236,39 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 
 #undef CURRENT_EL
 #define CURRENT_EL twoCellAnchor
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_twoCellAnchor()
 {
     READ_PROLOGUE
 
+    return read_anchor("twoCellAnchor");
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oneCellAnchor
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_oneCellAnchor()
+{
+    READ_PROLOGUE
+
+    return read_anchor("oneCellAnchor");
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL absoluteAnchor
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_absoluteAnchor()
+{
+    READ_PROLOGUE
+
+    return read_anchor("absoluteAnchor");
+
+    READ_EPILOGUE
+}
+
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString& reference)
+{
     class DrawingObjectGuard { // like QScopedPointer but sets the pointer to NULL afterwards
         public:
             DrawingObjectGuard(XlsxDrawingObject** obj) : m_obj(obj) {}
@@ -251,9 +282,11 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
     DrawingObjectGuard _guard(&m_currentDrawingObject);
 
     while (!atEnd()) {
-        QXmlStreamReader::TokenType tokenType = readNext();
-        if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
-        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        if (isEndElement() && name() == reference) {
+            break;
+        }
+        kDebug() << *this;
         if (isStartElement()) {
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
@@ -278,8 +311,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
             m_currentDrawingObject = 0;
         }
     }
-
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #undef CURRENT_EL
@@ -293,7 +325,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
     m_anchorType = XlsxDrawingObject::FromAnchor;
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_TRY_READ_IF(row)
@@ -313,7 +345,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
     m_anchorType = XlsxDrawingObject::ToAnchor;
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_TRY_READ_IF(row)
@@ -377,7 +409,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:graphic") {
                 read_graphic2();
@@ -399,7 +431,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphic2()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:graphicData") {
                 read_graphicData2();
@@ -417,11 +449,10 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicData2()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            //TRY_READ_IF_NS(pic, pic)
             TRY_READ_IF_NS(pic, pic)
-            if (qualifiedName() == "c:chart") {
+            else if (qualifiedName() == "c:chart") {
                 read_chart();
             }
             else if (qualifiedName() == QLatin1String("dgm:relIds")) {

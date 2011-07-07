@@ -24,10 +24,10 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
-static const char* description=I18N_NOOP("KOffice Formula Editor");
-static const char* version=KOFFICE_VERSION_STRING;
+static const char* description=I18N_NOOP("Calligra Formula Editor");
+static const char* version=CALLIGRA_VERSION_STRING;
 
 KAboutData * newKFormulaAboutData()
 {
@@ -35,6 +35,7 @@ KAboutData * newKFormulaAboutData()
                                              version, ki18n(description), KAboutData::License_GPL,
                                              ki18n("(c) 1998-2008, The KFormula Team"), KLocalizedString(),
 					     "http://www.calligra-suite.org/kformula/" );
+    aboutData->setProductName( "calligra-formula" ); // for bugs.kde.org
     aboutData->addAuthor( ki18n("Andrea Rizzi"), ki18n( "original author" ), "rizzi@kde.org" );
     aboutData->addAuthor( ki18n("Ulrich Kuettler"), ki18n( "core developer" ), "ulrich.kuettler@gmx.de" );
     aboutData->addAuthor( ki18n("Heinrich Kuettler"), ki18n( "core developer" ), "heinrich.kuettler@gmx.de" );

@@ -19,6 +19,6 @@ install(TARGETS starwriterimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kword_starwriter_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_starwriter_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

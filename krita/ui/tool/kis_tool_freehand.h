@@ -52,8 +52,8 @@ public:
 
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();
-
-    virtual void setDirty(const QRegion& region);
+    virtual int flags() const;
+    virtual void setDirty(const QVector<QRect>& region);
 
 protected:
     void gesture(const QPointF &offsetInDocPixels,
@@ -111,6 +111,7 @@ protected:
     QTimer m_strokeTimer;
     KisPaintInformation m_olderPaintInformation;
     KisPaintInformation m_previousPaintInformation;
+    bool m_haveTangent;
     QPointF m_previousTangent;
     double m_dragDist;
     QPointF m_strokeBegin;
@@ -142,7 +143,7 @@ private:
     bool m_explicitShowOutline;
 
 
-    QRegion m_incrementalDirtyRegion;
+    QVector<QRect> m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPathPaintAction* m_pathPaintAction;
     QThreadPool* m_executor;

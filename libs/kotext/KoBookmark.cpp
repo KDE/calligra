@@ -73,11 +73,13 @@ void KoBookmark::updatePosition(const QTextDocument *document, QTextInlineObject
 
 void KoBookmark::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(pd);
-    Q_UNUSED(format);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
+    Q_UNUSED(format);
+    Q_UNUSED(pd);
+    object.setWidth(0);
+    object.setAscent(0);
+    object.setDescent(0);
 }
 
 void KoBookmark::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)
@@ -88,8 +90,12 @@ void KoBookmark::paint(QPainter &, QPaintDevice *, const QTextDocument *, const 
 void KoBookmark::setName(const QString &name)
 {
     d->name = name;
-    if (d->selection)
+    // Yeah... but usually, you create your startbookmark, give it a name,
+    // insert it, then create your endbookmark and set the end on this. I
+    // don't think this is particularly useful, but it cannot hurt.
+    if (d->selection) {
         d->endBookmark->setName(name);
+    }
 }
 
 QString KoBookmark::name() const
@@ -114,6 +120,13 @@ KoBookmark::BookmarkType KoBookmark::type()
 void KoBookmark::setEndBookmark(KoBookmark *bookmark)
 {
     d->endBookmark = bookmark;
+    // The spec says:
+    // 19.837.5 <text:bookmark-end>
+    // The text:name attribute specifies matching names for bookmarks.
+    // 19.837.6 <text:bookmark-start>
+    // The text:name attribute specifies matching names for bookmarks.
+    // so let's set the endname to the startname.
+    d->endBookmark->setName(name());
     d->selection = true;
 }
 

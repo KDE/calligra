@@ -40,6 +40,7 @@
 #include <krita_export.h>
 
 class KisUndoAdapter;
+class KisCanvasResourceProvider;
 
 /**
  * A scratchpad is a painting canvas with only one zoomlevel and based on
@@ -106,9 +107,12 @@ public slots:
 
     /// fill the visible area of the paint device with a solid color
     void fillSolid(const KoColor& color);
-    
+
     /// fill the cutoutOverlay rect with the cotent of an image, used to get the image back when selecting a preset
     void setPresetImage(const QImage& image);
+
+    /// Set canvas resource provider, this has to be done otherwise the scratchpad doesn't work
+    void setCanvasResourceProvider(KisCanvasResourceProvider* resourceProvider);
 
 signals:
 
@@ -176,7 +180,8 @@ private:
     QBrush m_checkBrush;
     bool m_paintIncremental;
     quint8 m_opacity;
-    QRegion m_incrementalDirtyRegion;
+    QVector<QRect> m_incrementalDirtyRegion;
+    KisCanvasResourceProvider* m_resourceProvider;
 };
 
 #endif // KIS_SCRATCH_PAD_H

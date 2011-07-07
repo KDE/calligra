@@ -28,7 +28,7 @@
 #include "KWPageManager.h"
 #include "KWApplicationConfig.h"
 #include "frames/KWFrameLayout.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
@@ -50,9 +50,9 @@ class KLocalizedString;
 class QIODevice;
 
 /**
- * The class that represents a KWord document containing content and settings.
+ * The class that represents a Words document containing content and settings.
  */
-class KWORD_EXPORT KWDocument : public KoDocument, public KoShapeControllerBase
+class WORDS_EXPORT KWDocument : public KoDocument, public KoShapeControllerBase
 {
     Q_OBJECT
 public:
@@ -115,14 +115,18 @@ public:
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
+     * @param addUndoRedoCommand if true then an undo-redo action is added to the
+     * document to allow undo/redo inserting the page.
      */
-    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString());
+    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      * @param masterPageName the name of the master page to use for this new page.
+     * @param addUndoRedoCommand if true then an undo-redo action is added to the
+     * document to allow undo/redo appending the page.
      */
-    KWPage appendPage(const QString &masterPageName = QString());
+    KWPage appendPage(const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
     /**
      * remove a page from the document.
      * @param pageNumber the pageNumber that should be removed.
@@ -228,7 +232,7 @@ private:
      * Called before loading
      * It's important to clear out anything that might be in the document already,
      * for things like using DBUS to load multiple documents into the same KWDocument,
-     * or "reload" when kword is embedded into konqueror.
+     * or "reload" when words is embedded into konqueror.
      */
     void clear();
 

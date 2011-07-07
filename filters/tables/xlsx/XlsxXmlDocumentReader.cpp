@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -44,7 +44,9 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     const QVector<QString>& _sharedStrings,
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
-    MSOOXML::MsooXmlRelationships& _relationships
+    MSOOXML::MsooXmlRelationships& _relationships,
+    QString _file,
+    QString _path
     )
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , import(&_import)
@@ -52,6 +54,8 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
         , sharedStrings(&_sharedStrings)
         , comments(&_comments)
         , styles(&_styles)
+        , file(_file)
+        , path(_path)
 {
 }
 
@@ -184,7 +188,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_workbook()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(sheets)
             SKIP_UNKNOWN
@@ -211,17 +215,20 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 {
     READ_PROLOGUE
 
-    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets");
+    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
+        m_context->relationships->targetCountWithWord("dialogsheets") +
+        m_context->relationships->targetCountWithWord("chartsheets");
+    unsigned worksheet = 1;
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "sheet") {
                 TRY_READ(sheet)
-                m_context->import->reportProgress(45 + 55/numberOfWorkSheets);
-                --numberOfWorkSheets;
+                ++worksheet;
+                m_context->import->reportProgress(45 + (55/numberOfWorkSheets) * worksheet);
             }
             ELSE_WRONG_FORMAT
         }
@@ -251,14 +258,14 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     READ_ATTR_WITHOUT_NS(name)
     TRY_READ_ATTR_WITHOUT_NS(state)
     kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name << "state:" << state;
-//! @todo    TRY_READ_ATTR_WITHOUT_NS(state)
 
-//! @todo implement MsooXmlRelationships with internal MsooXmlRelationshipsReader
-//!       (for now we hardcode relationships, e.g. we use sheet1, sheet2...)
+    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
+        m_context->relationships->targetCountWithWord("dialogsheets") +
+        m_context->relationships->targetCountWithWord("chartsheets");
     d->worksheetNumber++; // counted from 1
-    QString path = QString("xl/worksheets");
-    QString file = QString("sheet%1.xml").arg(d->worksheetNumber);
-    QString filepath = path + "/" + file;
+    QString path, file;
+    QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
+    MSOOXML::Utils::splitPathAndFile(filepath, &path, &file);
     kDebug() << "path:" << path << "file:" << file;
 
     // Loading potential ole replacements
@@ -282,7 +289,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     }
 
     XlsxXmlWorksheetReader worksheetReader(this);
-    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, state, path, file,
+    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, numberOfWorkSheets, name, state, path, file,
                                           m_context->themes, *m_context->sharedStrings,
                                           *m_context->comments,
                                           *m_context->styles,

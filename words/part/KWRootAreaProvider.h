@@ -65,6 +65,7 @@ private:
     QHash<KoTextLayoutRootArea*, KWRootAreaPage *> m_pageHash;
     QList<QPair<KWRootAreaProvider *, int> > m_dependentProviders;
 
+    KoTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout);
     void addDependentProvider(KWRootAreaProvider *provider, int pageNumber);
     void handleDependentProviders(int pageNumber);
 };

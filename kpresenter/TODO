@@ -25,18 +25,18 @@ MISSING FEATURES / TODO:
   again and again)
 - Synchronize object background and page background => object can't load picture and page can't use different brush type.
 
-KOffice in general:
+Calligra in general:
 =======================
 - koTemplateChooseDia:
   - Restart with last presentation (suggesting it in initial "open" dialog)
     (using kapp->getConfig)
 
 
-KPresenter after koffice 1.3
+KPresenter after calligra 1.3
 ============================
 Todo:
 - Create compatibility for saving in old format for page effect speed.
-- Put in zip format copy/paste object to dnd between OO and koffice
+- Put in zip format copy/paste object to dnd between OO and calligra
 
 
 In Progress:
@@ -108,7 +108,7 @@ In Progress:
 -> save/load protect object
 -> save/load embedded object
 
-After koffice-1.4
+After calligra-1.4
 -> allow to move object outside page (ask by boiko)
 -> allow to put all transparent picture with a specific color (ask by boiko)
 

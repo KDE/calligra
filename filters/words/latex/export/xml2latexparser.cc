@@ -1,7 +1,7 @@
 /* TODO : Manage File problems !
  */
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by Words into LATEX.
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **

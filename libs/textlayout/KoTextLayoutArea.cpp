@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008,2011 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2007-2008 Pierre Ducroquet <pinaraf@pinaraf.info>
@@ -55,6 +55,7 @@
 #include <KoImageCollection.h>
 #include <KoInlineNote.h>
 #include <KoInlineNote.h>
+#include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 
@@ -85,7 +86,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_maximumAllowedWidth(0.0)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
- , m_endOfArea()
+ , m_endOfArea(0)
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
  , m_verticalAlignOffset(0)
@@ -135,25 +136,28 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
-                // check if p is over table of content
-                if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
-                        && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
-                    return m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
-                }
-                ++tocIndex;
-            }
             continue;
         } else {
             if (!block.isValid())
                 continue;
+        }
+        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            // check if p is over table of content
+            if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
+                    && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
+                pointedAt = m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
+                pointedAt.position = block.position();
+                return pointedAt;
+            }
+            ++tocIndex;
+            continue;
         }
         if (basicallyFound) // a subsequent table or lines have now had their chance
             return pointedAt;
 
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
-        next++;
+        ++next;
         if (next != stop && point.y() > layout->boundingRect().bottom()) {
             // just skip this block.
             continue;
@@ -209,7 +213,10 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
     }
+
     int tableAreaIndex = 0;
+    int tocIndex = 0;
+
     for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
@@ -239,6 +246,14 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
         } else {
             if (!block.isValid())
                 continue;
+        }
+        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            if (cursor.selectionStart()  <= block.position()
+                && cursor.selectionEnd() >= block.position()) {
+                retval |= m_tableOfContentsAreas[tocIndex]->boundingRect();
+            }
+            ++tocIndex;
+            continue;
         }
 
         if(cursor.selectionEnd() < block.position()) {
@@ -302,6 +317,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
+    qDeleteAll(m_tableOfContentsAreas);
+    m_tableOfContentsAreas.clear();
     m_blockRects.clear();
     delete m_endNotesArea;
     m_endNotesArea=0;
@@ -318,7 +335,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
     m_prevBorderPadding = 0;
-
     while (!cursor->it.atEnd()) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
@@ -388,15 +404,23 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_y = m_endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
-            } else if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
-/*                QVariant data = subFrame->format().property(KoText::TableOfContentsData);
+            }
+        } else if (block.isValid()) {
+            if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+                QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
+                QTextDocument *tocDocument = data.value<QTextDocument *>();
+
+                data = block.blockFormat().property(KoParagraphStyle::TableOfContentsData);
                 KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
 
                 if (!tocInfo->generator()) {
-                    new ToCGenerator(subFrame, tocInfo); // attaches it self to the frame
+                    // The generator attaches itself to the tocInfo
+                    new ToCGenerator(tocDocument, block, tocInfo);
                 }
-*/                // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
-                KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
+                tocInfo->generator()->setMaxTabPosition(right() - left());
+
+                // Let's create KoTextLayoutArea and let to handle the ToC
+                KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;
                 if (!m_blockRects.isEmpty()) {
@@ -404,7 +428,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
                 tocArea->setVirginPage(virginPage());
                 tocArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
-                if (tocArea->layout(cursor->subFrameIterator(subFrame)) == false) {
+                QTextLayout *blayout = block.layout();
+                blayout->beginLayout();
+                QTextLine line = blayout->createLine();
+                line.setNumColumns(0);
+                line.setPosition(QPointF(left(), m_y));
+                blayout->endLayout();
+
+                if (tocArea->layout(cursor->subFrameIterator(tocDocument->rootFrame())) == false) {
+                    cursor->lineTextStart = 1; // fake we are not done
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = tocArea->bottom();
                     setBottom(m_y + m_footNotesHeight);
@@ -420,49 +452,54 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_bottomSpacing = 0;
                 m_y = tocArea->bottom();
                 delete cursor->currentSubFrameIterator;
+                cursor->lineTextStart = -1; // fake we are done
                 cursor->currentSubFrameIterator = 0;
-            }
-        } else if (block.isValid()) {
-
-            // FIXME this doesn't work for cells inside tables. We probably should make it more
-            // generic to handle such cases too.
-            bool masterPageNameChanged = false;
-            QString masterPageName = block.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
-            if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
-                masterPageNameChanged = true;
-                cursor->masterPageName = masterPageName;
-            }
-
-            if (!virginPage() &&
-                (masterPageNameChanged ||
-                    (acceptsPageBreak() &&
-                    (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)))) {
-                m_endOfArea = new FrameIterator(cursor);
-                setBottom(m_y + m_footNotesHeight);
-                if (!m_blockRects.isEmpty()) {
-                    m_blockRects.last().setBottom(m_y);
+            } else {
+                // FIXME this doesn't work for cells inside tables. We probably should make it more
+                // generic to handle such cases too.
+                bool masterPageNameChanged = false;
+                QString masterPageName = block.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
+                if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
+                    masterPageNameChanged = true;
+                    cursor->masterPageName = masterPageName;
                 }
-                return false;
-            }
 
-            if (layoutBlock(cursor) == false) {
-                m_endOfArea = new FrameIterator(cursor);
-                setBottom(m_y + m_footNotesHeight);
-                m_blockRects.last().setBottom(m_y);
-                return false;
-            }
+                if (!virginPage() &&
+                    (masterPageNameChanged ||
+                        (acceptsPageBreak() &&
+                        (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)))) {
+                    m_endOfArea = new FrameIterator(cursor);
+                    setBottom(m_y + m_footNotesHeight);
+                    if (!m_blockRects.isEmpty()) {
+                        m_blockRects.last().setBottom(m_y);
+                    }
+                    return false;
+                }
 
-            if (acceptsPageBreak()
-                   && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
-                m_endOfArea = new FrameIterator(cursor);
-                Q_ASSERT(!cursor->it.atEnd());
-                ++(cursor->it);
-                setBottom(m_y + m_footNotesHeight);
-                m_blockRects.last().setBottom(m_y);
-                return false;
+                if (layoutBlock(cursor) == false) {
+                    m_endOfArea = new FrameIterator(cursor);
+                    setBottom(m_y + m_footNotesHeight);
+                    m_blockRects.last().setBottom(m_y);
+                    return false;
+                }
+
+                if (acceptsPageBreak()
+                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
+                    Q_ASSERT(!cursor->it.atEnd());
+                    QTextFrame::iterator nextIt = cursor->it;
+                    ++nextIt;
+                    bool wasIncremented = !nextIt.currentFrame();
+                    if (wasIncremented)
+                        cursor->it = nextIt;
+                    m_endOfArea = new FrameIterator(cursor);
+                    if (!wasIncremented)
+                        ++(cursor->it);
+                    setBottom(m_y + m_footNotesHeight);
+                    m_blockRects.last().setBottom(m_y);
+                    return false;
+                }
             }
         }
-
         bool atEnd = cursor->it.atEnd();
         if (!atEnd) {
             ++(cursor->it);
@@ -555,7 +592,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     else
         m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
 
-
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
     if (textList) {
@@ -622,14 +658,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         blockData->setCounterWidth(0.0);
         blockData->setCounterIsImage(false);
     }
-
     if (blockData == 0) {
         blockData = new KoTextBlockData();
         block.setUserData(blockData);
     }
 
     QTextLayout *layout = block.layout();
-
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
 
@@ -640,7 +674,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         option.setTextDirection(Qt::LeftToRight);
 
     option.setUseDesignMetrics(true);
-
     // Drop caps
     // first remove any drop-caps related formatting that's already there in the layout.
     // we'll do it all afresh now.
@@ -654,7 +687,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
     if (formatRanges.count() != layout->additionalFormats().count())
         layout->setAdditionalFormats(formatRanges);
-
     bool dropCaps = format.dropCaps();
     int dropCapsLength = format.dropCapsLength();
     int dropCapsLines = format.dropCapsLines();
@@ -734,9 +766,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_dropCapsNChars = 0;
     }
 
-    ///@TODO: check this : is width the right function to call ?
-    qreal leftMargin = format.leftMargin().value(width());
-    qreal rightMargin = format.rightMargin().value(width());
+    qreal leftMargin = format.leftMargin();
+    qreal rightMargin = format.rightMargin();
 
     m_listIndent = 0;
     qreal listLabelIndent = 0;
@@ -747,8 +778,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
             m_listIndent = textList->format().doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
-            if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
+            if (!format.hasProperty(KoParagraphStyle::ListLevel)) {
                 leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
+                m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
             }
         }
     }
@@ -758,7 +790,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     m_x = left() + (m_isRtl ? rightMargin : leftMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
-
     m_indent = 0;
     QTextLine line;
     bool anyLineAdded = false;
@@ -778,8 +809,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (tabStopDistance <= 0) {
         tabStopDistance = m_documentLayout->defaultTabSpacing();
     }
-    tabStopDistance *= qt_defaultDpiY() / 72.;
-    option.setTabStop(tabStopDistance);
 
     QList<KoText::Tab> tabs = format.tabPositions();
     qreal tabOffset = - left();
@@ -789,8 +818,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     } else {
         tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
     }
+
     // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
-    qreal position = tabOffset * qt_defaultDpiY() / 72.;
+    qreal position = tabOffset;
 
     if (!tabs.isEmpty()) {
         //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
@@ -802,8 +832,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // Since we might have tabs relative to first indent we need to always specify a lot of
     // regular interval tabs (relative to the indent naturally)
     // So first figure out where the first regular interval tab should be.
-    position -= tabOffset * qt_defaultDpiY() / 72.;
-    position = (int(position / tabStopDistance) + 1) * tabStopDistance + tabOffset * qt_defaultDpiY() / 72.;
+    position = tabOffset;
+    position = (int(position / tabStopDistance) + 1) * tabStopDistance + tabOffset;
     for(int i=0 ; i<16; ++i) { // let's just add 16 but we really should limit to pagewidth
         KoText::Tab tab;
 
@@ -817,22 +847,23 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     ///@TODO: don't do this kind of conversion, we lose data for layout.
     foreach (KoText::Tab kTab, tabs) {
 #if QT_VERSION >= 0x040700
-        qTabs.append(QTextOption::Tab(kTab.position, kTab.type, kTab.delimiter));
+        qTabs.append(QTextOption::Tab((kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1, kTab.type, kTab.delimiter));
 #else
         QTextOption::Tab tab;
-        tab.position = kTab.position;
+        tab.position = (kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1;
         tab.type = kTab.type;
         tab.delimiter = kTab.delimiter;
         qTabs.append(tab);
 #endif
     }
     option.setTabs(qTabs);
+    option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
 
     //Now once we know the physical context we can work on the borders of the paragraph
     handleBordersAndSpacing(blockData, &block);
     m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
 
-    if (textList) {
+    if (textList && block.layout()->lineCount() == 1) {
         // if list set counterposition. Do this after borders so we can account for them.
         if (m_isRtl) {
             m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
@@ -852,73 +883,89 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 blockData->setCounterPosition(QPointF(x(), m_y));
             }
         }
-    }
 
-    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-            qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
-            if (!m_documentLayout->relativeTabs()) {
-                listTab += leftMargin + m_indent;
-            } else {
-                listTab -= leftMargin + m_indent; // express it relatively like other tabs
-            }
-
-            foreach(KoText::Tab tab, tabs) {
-                qreal position = tab.position  * 72. / qt_defaultDpiY();
-                if (position > listLabelIndent) {
-                    // found the relevant normal tab
-                    if (position > listTab && listTab > listLabelIndent) {
-                        // But special tab is more relevant
-                        position = listTab;
+        if (textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+            if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+                if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
+                    qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                    if (!m_documentLayout->relativeTabs()) {
+                        listTab += leftMargin + m_indent;
+                    } else {
+                        listTab -= leftMargin + m_indent; // express it relatively like other tabs
                     }
-                    m_indent += position;
-                    break;
+
+                    foreach(KoText::Tab tab, tabs) {
+                        qreal position = tab.position  * 72. / qt_defaultDpiY();
+                        if (position > listLabelIndent) {
+                            // found the relevant normal tab
+                            if (position > listTab && listTab > listLabelIndent) {
+                                // But special tab is more relevant
+                                position = listTab;
+                            }
+                            m_indent += position;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    m_indent = 0;
                 }
             }
         }
     }
 
     layout->setTextOption(option);
-
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
     runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
-
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
-
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
-
-        // during fit is where documentLayout->positionInlineObjects is called
-        //so now is a good time to position the obstructions
-        documentLayout()->positionAnchoredObstructions();
-
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
         if (acceptsPageBreak() && !format.nonBreakableLines() && bottomOfText > maximumAllowedBottom() - 150) {
-            int softBreakPos = block.text().indexOf(QChar(0x000c), line.textStart());
-            if (softBreakPos > 0 && softBreakPos < line.textStart() + line.textLength()) {
+            int softBreakPos = -1;
+            QString text = block.text();
+            int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
+
+            while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
+                QTextCursor c1(block);
+                c1.setPosition(block.position() + pos);
+                c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+                KoTextSoftPageBreak *softPageBreak = dynamic_cast<KoTextSoftPageBreak*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
+                if (softPageBreak) {
+                    softBreakPos = pos;
+                    break;
+                }
+
+                pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+            }
+
+            if (softBreakPos >= 0 && softBreakPos < line.textStart() + line.textLength()) {
                 line.setNumColumns(softBreakPos - line.textStart() + 1, line.width());
                 softBreak = true;
+                // if the softBreakPos is at the start of the line stop here so
+                // we don't add a line here. That fixes the problem that e.g. the counter is before
+                // the page break and the text is after the page break
+                if (!virginPage() && softBreakPos == 0) {
+                    return false;
+                }
             }
         }
         findFootNotes(block, line);
-
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
             // in case we resume layout on next page the line is reused later
             // but if not then we need to make sure the line becomes invisible
             // we use m_maximalAllowedBottom because we want to be below
             // footnotes too.
-
             if (!virginPage() && format.nonBreakableLines()) {
                 line.setPosition(QPointF(x(), m_maximalAllowedBottom));
                 cursor->lineTextStart = -1;
@@ -934,7 +981,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
         confirmFootNotes();
         anyLineAdded = true;
-
         maxLineHeight = qMax(maxLineHeight, addLine(line, cursor, blockData));
 
         if (!runAroundHelper.stayOnBaseline()) {
@@ -942,7 +988,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             maxLineHeight = 0;
             m_indent = 0;
         }
-
         // drop caps
         if (m_dropCapsNChars > 0) { // we just laid out the dropped chars
             y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
@@ -958,7 +1003,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 m_dropCapsWidth = 0;
             }
         }
-
         // Expand bounding rect so if we have content outside we show it
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
@@ -969,10 +1013,19 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (softBreak) {
             return false;
         }
+
+        // during fit is where documentLayout->positionInlineObjects is called
+        //so now is a good time to position the obstructions
+        int oldObstructionCount = documentLayout()->currentObstructions().size();
+
+        documentLayout()->positionAnchoredObstructions();
+
+        if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
+            return false;
+        }
     }
 
-    ///@TODO: fixme : do not use rawValue, use value instead
-    m_bottomSpacing = format.bottomMargin().rawValue();
+    m_bottomSpacing = format.bottomMargin();
 
     layout->endLayout();
     setVirginPage(false);
@@ -996,7 +1049,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
         return guessGlyphWidth * 3;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
+        if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
             return textList->format().doubleProperty(KoListStyle::TextIndent);
         }
     }
@@ -1088,6 +1141,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
+        } else if ( block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+            // stretch line height to ms-word size
+            fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
         }
         height = block.charFormat().fontPointSize() * fontStretch;
     } else {
@@ -1328,9 +1384,9 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
 
 void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block)
 {
-
     QTextBlockFormat format = block->blockFormat();
-    qreal spacing = qMax(m_bottomSpacing, format.topMargin());
+    KoParagraphStyle formatStyle(format, block->charFormat());
+    qreal spacing = qMax(m_bottomSpacing, formatStyle.topMargin());
 
     KoTextBlockBorderData border(QRectF(x(), m_y, width(), 1));
     border.setEdge(border.Left, format, KoParagraphStyle::LeftBorderStyle,
@@ -1358,7 +1414,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             // Merged mean we don't have inserts inbetween the blocks
             qreal divider = m_y;
             if (spacing) {
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + format.topMargin());
+                divider += spacing * m_bottomSpacing / (m_bottomSpacing + formatStyle.topMargin());
             }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);

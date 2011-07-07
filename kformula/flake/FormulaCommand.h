@@ -23,7 +23,7 @@
 #ifndef FORMULACOMMAND_H
 #define FORMULACOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include <QHash>
 #include <QMetaType>
@@ -44,9 +44,9 @@ class TableRowElement;
  *
  **/
 
-class FormulaCommand :  public QUndoCommand {
+class FormulaCommand :  public KUndo2Command {
 public:
-    FormulaCommand(QUndoCommand* parent=0);
+    FormulaCommand(KUndo2Command* parent=0);
     
     virtual void changeCursor(FormulaCursor& cursor, bool undo) const;
 
@@ -66,7 +66,7 @@ Q_DECLARE_METATYPE(FormulaCommand*)
 
 class FormulaCommandReplaceText : public FormulaCommand {
 public:
-    FormulaCommandReplaceText( TokenElement* owner, int position,int length, const QString& added , QUndoCommand *parent=0);
+    FormulaCommandReplaceText( TokenElement* owner, int position,int length, const QString& added , KUndo2Command *parent=0);
 
     ~FormulaCommandReplaceText();
 
@@ -97,7 +97,7 @@ private:
 
 class FormulaCommandReplaceElements : public FormulaCommand {
 public:
-    FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , bool wrap=false, QUndoCommand *parent=0);
+    FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , bool wrap=false, KUndo2Command *parent=0);
 
     ~FormulaCommandReplaceElements();
 
@@ -133,7 +133,7 @@ private:
 
 class FormulaCommandLoad : public FormulaCommand {
 public:
-    FormulaCommandLoad( FormulaData* data, FormulaElement* newelement, QUndoCommand *parent=0);
+    FormulaCommandLoad( FormulaData* data, FormulaElement* newelement, KUndo2Command *parent=0);
 
     ~FormulaCommandLoad ();
     
@@ -213,7 +213,7 @@ private:
 //  * class is created to make it possible to revert the changes. The former attributes
 //  * are stored in m_oldAttributes.
 //  */
-// class FormulaCommandAttribute : public QUndoCommand {
+// class FormulaCommandAttribute : public KUndo2Command {
 // public:
 //     /**
 //      * The constructor

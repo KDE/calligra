@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -213,9 +213,12 @@ protected:
 class XlsxXmlStylesReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart, MSOOXML::DrawingMLTheme* _themes);
+    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart,
+                               XlsxImport* _import,
+                               MSOOXML::DrawingMLTheme* _themes);
     XlsxStyles* styles;
     bool skipFirstPart;
+    XlsxImport* import;
     MSOOXML::DrawingMLTheme* themes;
     QVector<QString> colorIndices;
 };

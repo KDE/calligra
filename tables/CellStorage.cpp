@@ -32,7 +32,7 @@
 // KDE
 #include <klocale.h>
 
-// KOffice
+// Calligra
 #include <KoXmlWriter.h>
 
 // KSpread
@@ -133,7 +133,7 @@ public:
         delete rowRepeatStorage;
     }
 
-    void createCommand(QUndoCommand *parent) const;
+    void createCommand(KUndo2Command *parent) const;
 
     Sheet*                  sheet;
     BindingStorage*         bindingStorage;
@@ -158,7 +158,7 @@ public:
 #endif
 };
 
-void CellStorage::Private::createCommand(QUndoCommand *parent) const
+void CellStorage::Private::createCommand(KUndo2Command *parent) const
 {
     if (!undoData->bindings.isEmpty()) {
         RectStorageUndoCommand<Binding> *const command
@@ -1677,7 +1677,7 @@ void CellStorage::startUndoRecording()
     d->undoData = new CellStorageUndoData();
 }
 
-void CellStorage::stopUndoRecording(QUndoCommand *parent)
+void CellStorage::stopUndoRecording(KUndo2Command *parent)
 {
 #ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);

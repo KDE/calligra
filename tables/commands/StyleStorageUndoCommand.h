@@ -23,7 +23,7 @@
 // Qt
 #include <QList>
 #include <QPair>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 // KSpread
 #include "StyleStorage.h"
@@ -42,12 +42,12 @@ namespace Tables
  *
  * Used for recording undo data in CellStorage.
  */
-class StyleStorageUndoCommand : public QUndoCommand
+class StyleStorageUndoCommand : public KUndo2Command
 {
 public:
     typedef QPair<QRectF, SharedSubStyle> Pair;
 
-    explicit StyleStorageUndoCommand(StyleStorage *storage, QUndoCommand *parent = 0);
+    explicit StyleStorageUndoCommand(StyleStorage *storage, KUndo2Command *parent = 0);
 
     virtual void undo();
 
@@ -61,8 +61,8 @@ private:
     QList<Pair> m_undoData;
 };
 
-StyleStorageUndoCommand::StyleStorageUndoCommand(StyleStorage *storage, QUndoCommand *parent)
-        : QUndoCommand(parent)
+StyleStorageUndoCommand::StyleStorageUndoCommand(StyleStorage *storage, KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_storage(storage)
 {
 }
@@ -72,7 +72,7 @@ void StyleStorageUndoCommand::undo()
     for (int i = 0; i < m_undoData.count(); ++i) {
         m_storage->insert(m_undoData[i].first.toRect(), m_undoData[i].second);
     }
-    QUndoCommand::undo(); // undo possible child commands
+    KUndo2Command::undo(); // undo possible child commands
 }
 
 void StyleStorageUndoCommand::add(const QList<Pair>& pairs)

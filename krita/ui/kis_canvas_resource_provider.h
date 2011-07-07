@@ -59,6 +59,8 @@ public:
         CurrentPaintOpPreset,
         CurrentGeneratorConfiguration,
         CurrentCompositeOp,
+        MirrorHorizontal,
+        MirrorVertical,
         MirrorAxisCenter,
         Opacity
     };
@@ -97,11 +99,23 @@ public:
 
     static const KoColorProfile* getScreenProfile(int screen = -1);
 
+    void setCurrentCompositeOp(const QString& compositeOp);
+    QString currentCompositeOp() const;
+
     QList<KisAbstractPerspectiveGrid*> perspectiveGrids() const;
     void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
     void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
-    
-    void setPaintOpPresetModified();
+
+    void setMirrorHorizontal(bool mirrorHorizontal);
+    bool mirrorHorizontal() const;
+
+    void setMirrorVertical(bool mirrorVertical);
+    bool mirrorVertical() const;
+
+    void setOpacity(qreal opacity);
+    qreal opacity();
+
+    void setPaintOpPreset(const KisPaintOpPresetSP preset);
 
 public slots:
 
@@ -109,7 +123,6 @@ public slots:
     void slotSetBGColor(const KoColor& c);
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
-    void slotPaintOpPresetActivated(const KisPaintOpPresetSP preset);
     void slotNodeActivated(const KisNodeSP node);
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
     void slotPainting();
@@ -143,7 +156,7 @@ signals:
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
-    void sigPaintOpPresetModified();
+    void sigCompositeOpChanged(const QString &);
 
 private:
 

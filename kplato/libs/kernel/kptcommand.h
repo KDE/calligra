@@ -23,7 +23,7 @@
 
 #include "kplatokernel_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPointer>
 
 #include "kptappointment.h"
@@ -56,11 +56,11 @@ class Resource;
 class Schedule;
 class StandardWorktime;
 
-class KPLATOKERNEL_EXPORT NamedCommand : public QUndoCommand
+class KPLATOKERNEL_EXPORT NamedCommand : public KUndo2Command
 {
 public:
     NamedCommand( const QString& name )
-        : QUndoCommand( name )
+        : KUndo2Command( name )
     {}
     virtual void redo() { execute(); }
     virtual void undo() { unexecute(); }
@@ -80,15 +80,15 @@ protected:
 
 };
 
-class KPLATOKERNEL_EXPORT MacroCommand : public QUndoCommand
+class KPLATOKERNEL_EXPORT MacroCommand : public KUndo2Command
 {
 public:
     MacroCommand( const QString& name = QString() )
-        : QUndoCommand( name )
+        : KUndo2Command( name )
     {}
     ~MacroCommand();
     
-    void addCommand( QUndoCommand *cmd );
+    void addCommand( KUndo2Command *cmd );
     
     virtual void redo() { execute(); }
     virtual void undo() { unexecute(); }
@@ -99,7 +99,7 @@ public:
     bool isEmpty() const { return cmds.isEmpty(); }
     
 protected:
-    QList<QUndoCommand*> cmds;
+    QList<KUndo2Command*> cmds;
 };
 
 

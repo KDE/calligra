@@ -362,7 +362,7 @@ void WmfPainterBackend::recalculateWorldTransform()
         flip = true;
     }
     if (flip) {
-        kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
+        //kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
         mWorldTransform.translate(midpointX, midpointY);
         mWorldTransform.scale(scaleX, scaleY);
         mWorldTransform.translate(-midpointX, -midpointY);
@@ -662,7 +662,7 @@ void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 
     // fill polygons
     if (brush != Qt::NoBrush) {
-        kDebug(31000) << "Filling polygon with " << brush;
+        //kDebug(31000) << "Filling polygon with " << brush;
         mPainter->fillRect(region.boundingRect(), brush);
     }
 
@@ -781,6 +781,104 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
     }
 
     mPainter->restore();
+}
+
+
+// ----------------------------------------------------------------
+//                         Private functions
+
+
+void WmfPainterBackend::updateFromGraphicscontext(WmfDeviceContext &context)
+{
+    // Graphic objects
+
+    if (context.changedItems & DCBrush) {
+        mPainter->setBrush(context.brush);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting fill brush to" << context.brush;
+#endif
+        // FIXME: context.image
+    }
+    if (context.changedItems & DCFont) {
+        mPainter->setFont(context.font);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting font to" << context.font;
+#endif
+    }
+    if (context.changedItems & DCPalette) {
+        // NYI
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting palette (NYI)";
+#endif
+    }
+    if (context.changedItems & DCPen) {
+        mPainter->setPen(context.pen);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting pen to" << context.pen;
+#endif
+    }
+    if (context.changedItems & DCRegion) {
+        // Not used until SETCLIPREGION is used
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** region changed to" << context.region;
+#endif
+    }
+
+    // Structure objects
+
+    if (context.changedItems & DCBgTextColor) {
+        mPainter->setPen(context.backgroundColor);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting background text color to" << context.backgroundColor;
+#endif
+    }
+    if (context.changedItems & DCFgTextColor) {
+        mPainter->setPen(context.foregroundTextColor);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting foreground text color to" << context.foregroundColor;
+#endif
+    }
+
+    //----------------------------------------------------------------
+    // Output surface not supported
+    //DCViewportExt
+    //DCViewportorg
+    //DCWindowExt  
+    //DCWindoworg  
+
+    //----------------------------------------------------------------
+    // Graphic Properties
+
+    if (context.changedItems & DCBgMixMode) {
+        // FIXME: Check the default value for this.
+        mPainter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
+                                                                      : Qt::OpaqueMode);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
+#endif
+    }
+    //Break extra space NYI
+    //Font mapping mode NYI
+    if (context.changedItems & DCFgMixMode) {
+        // FIXME: Check the default value for this.
+        QPainter::CompositionMode  compMode = QPainter::CompositionMode_Source;
+        if (context.rop < 17)
+            compMode = koWmfOpTab16[context.rop];
+        mPainter->setCompositionMode(compMode);
+
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "*** Setting composition mode to" << context.rop;
+#endif
+    }
+    //layoutMode not necessary to handle here
+    //Mapping mode NYI
+    //PolyFillMode not necessary to handle here
+    //Stretchblt mode NYI
+    //textAlign not necessary to handle here
+    //Text extra space NYI
+
+    // Reset all changes until next time.
+    context.changedItems = 0;
 }
 
 

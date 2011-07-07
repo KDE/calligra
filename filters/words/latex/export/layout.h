@@ -1,6 +1,6 @@
 
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __KWORD_LAYOUT_H__
-#define __KWORD_LAYOUT_H__
+#ifndef __WORDS_LAYOUT_H__
+#define __WORDS_LAYOUT_H__
 
 #include <QTextStream>
 #include <QString>
@@ -203,4 +203,4 @@ private:
     void analyzeBreakLine(const QDomNode);
 };
 
-#endif /* __KWORD_LAYOUT_H__ */
+#endif /* __WORDS_LAYOUT_H__ */

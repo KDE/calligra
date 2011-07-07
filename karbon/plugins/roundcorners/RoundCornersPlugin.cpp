@@ -84,7 +84,7 @@ void RoundCornersPlugin::slotRoundCorners()
     if (QDialog::Rejected == m_roundCornersDlg->exec())
         return;
 
-    QUndoCommand * cmd = new QUndoCommand(i18n("Round Corners"));
+    KUndo2Command * cmd = new KUndo2Command(i18nc("(qtundo-format)", "Round Corners"));
 
     // convert to path before if we have a parametric shape
     KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);

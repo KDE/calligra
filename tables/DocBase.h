@@ -53,7 +53,7 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
+    enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and words have have SavePage too
 
     /**
      * Creates a new document.

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+Name=Words WML Import Filter
+Name[pt]=Filtro de Importação de WML para o Words
+Name[pt_BR]=Filtro de importação de WML para o Words
+Name[sv]=Words WML-importfilter
+Name[uk]=Фільтр імпорту WML для Words
+Name[x-test]=xxWords WML Import Filterxx
+Name[zh_TW]=Words WML 匯入過濾程式
+X-KDE-Export=application/x-words
+X-KDE-Import=text/vnd.wap.wml
+X-KDE-Weight=1
+X-KDE-Library=wmlimport
+X-KDE-ServiceTypes=CalligraFilter

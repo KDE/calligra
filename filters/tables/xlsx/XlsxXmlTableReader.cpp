@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -129,7 +129,7 @@ KoFilter::ConversionStatus XlsxXmlTableReader::read_table()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
         }
     }

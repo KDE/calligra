@@ -7,6 +7,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
     ${CMAKE_SOURCE_DIR}/kplato/libs/models
     ${CMAKE_BINARY_DIR}/kplato/libs/models
+    ${CMAKE_SOURCE_DIR}/kplato/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/kplato/libs/ui
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
@@ -35,6 +36,14 @@ set(kplatoui_LIB_SRCS
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
     reports/reportexportpanel.cpp
+    reports/odt/ReportODTRenderer.cpp
+    reports/odt/KoSimpleOdtDocument.cpp
+    reports/odt/KoSimpleOdtImage.cpp
+    reports/odt/KoSimpleOdtPicture.cpp
+    reports/odt/KoSimpleOdtTextBox.cpp
+    reports/odt/KoSimpleOdtLine.cpp
+    reports/odt/KoSimpleOdtCheckBox.cpp
+    reports/odt/KoSimpleOdtPrimitive.cpp
 
     kptganttitemdelegate.cpp
 
@@ -141,7 +150,7 @@ kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 set ( KPLATO_REPORTS_LIBS koreport koproperty )
 target_link_libraries(kplatoui ${KDE4_KABC_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
-set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 

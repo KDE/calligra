@@ -82,6 +82,9 @@ public:
      */
     static QTransform parseTransform(const QString &transform);
 
+    /// Converts specified transformation to a string
+    static QString transformToString(const QTransform &transform);
+
     /// Parses a viewbox attribute into an rectangle
     static QRectF parseViewBox(QString viewbox);
 

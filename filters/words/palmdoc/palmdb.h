@@ -35,59 +35,59 @@ public:
     virtual bool load(const char* filename);
     virtual bool save(const char* filename);
 
-    QString name() {
+    QString name() const {
         return m_name;
     }
     void setName(const QString& n) {
         m_name = n;
     }
 
-    int attributes() {
+    int attributes() const {
         return m_attributes;
     }
     void setAttributes(int a) {
         m_attributes = a;
     }
 
-    int version() {
+    int version() const {
         return m_version;
     }
     void setVersion(int v) {
         m_version = v;
     }
 
-    QDateTime creationDate() {
+    QDateTime creationDate() const {
         return m_creationDate;
     }
     void setCreationDate(QDateTime d) {
         m_creationDate = d;
     }
 
-    QDateTime modificationDate() {
+    QDateTime modificationDate() const {
         return m_modificationDate;
     }
     void setModificationDate(QDateTime d) {
         m_modificationDate = d;
     }
 
-    QDateTime lastBackupDate() {
+    QDateTime lastBackupDate() const {
         return m_lastBackupDate;
     }
     void setLastBackupDate(QDateTime d) {
         m_lastBackupDate = d;
     }
 
-    QString type() {
+    QString type() const {
         return m_type;
     }
-    QString creator() {
+    QString creator() const {
         return m_creator;
     }
 
     void setType(const QString& t);
     void setCreator(const QString& c);
 
-    int uniqueIDSeed() {
+    int uniqueIDSeed() const {
         return m_uniqueIDSeed;
     }
     void setUniqueIDSeed(int i) {

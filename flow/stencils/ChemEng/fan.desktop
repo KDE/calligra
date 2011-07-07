@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=fan
+Name[de]=Lüfter
 Name[el]=ανεμιστήρας
 Name[nb]=vifte
 Name[nl]=ventilator
@@ -9,4 +10,4 @@ Name[sv]=fläkt
 Name[uk]=Вентилятор або розмішувач
 Name[x-test]=xxfanxx
 Name[zh_CN]=风扇
-Name[zh_TW]=風扇
+Name[zh_TW]=fan

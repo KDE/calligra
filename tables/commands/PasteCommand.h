@@ -41,7 +41,7 @@ namespace Tables
 class PasteCommand : public AbstractRegionCommand
 {
 public:
-    PasteCommand(QUndoCommand *parent = 0);
+    PasteCommand(KUndo2Command *parent = 0);
     virtual ~PasteCommand();
 
     /**

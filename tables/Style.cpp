@@ -386,7 +386,7 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
         else
             setVAlign(Style::VAlignUndefined);
     }
-    if (styleStack.property(KoXmlNS::koffice, "vertical-distributed") == "distributed") {
+    if (styleStack.property(KoXmlNS::calligra, "vertical-distributed") == "distributed") {
         if (valign() == Style::Top)
             setVAlign(Style::VJustified);
         else
@@ -1281,7 +1281,7 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
             style.addProperty("style:vertical-align", value);
 
         if (valign() == VJustified || valign() == VDistributed)
-            style.addProperty("koffice:vertical-distributed", "distributed");
+            style.addProperty("calligra:vertical-distributed", "distributed");
     }
 
     if (keysToStore.contains(BackgroundColor) && backgroundColor().isValid())

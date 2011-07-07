@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -339,6 +339,19 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         const int val_tmp = string.toInt(&ok); \
         if (!ok) { \
             kDebug() << "STRING_TO_INT: error converting" << string << "to int (attribute" << debugElement << ")"; \
+            return KoFilter::WrongFormat; \
+        } \
+        destination = val_tmp; \
+    }
+
+//! Converts @a string into longlong @a destination; returns KoFilter::WrongFormat on failure.
+//! @warning @a destination is left unchanged if @a string is empty, so it is up to developer to initialize it.
+#define STRING_TO_LONGLONG(string, destination, debugElement) \
+    if (string.isEmpty()) {} else { \
+        bool ok; \
+        const quint64 val_tmp = string.toLongLong(&ok); \
+        if (!ok) { \
+            kDebug() << "STRING_TO_LONGLONG: error converting" << string << "to LONGLONG (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
         destination = val_tmp; \

@@ -152,7 +152,7 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     m_view->setDefaultColumns( show );
 
 
-    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
@@ -362,7 +362,7 @@ void ScheduleEditor::slotAddSchedule()
     if ( sm && sm->parentManager() ) {
         sm = sm->parentManager();
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        part()->addCommand( new AddScheduleManagerCmd( sm, m, idx, i18n( "Create sub-schedule" ) ) );
+        part()->addCommand( new AddScheduleManagerCmd( sm, m, idx, i18nc( "(qtundo-format)", "Create sub-schedule" ) ) );
         QModelIndex idx = model()->index( m );
         if ( idx.isValid() ) {
             m_view->setFocus();
@@ -373,7 +373,7 @@ void ScheduleEditor::slotAddSchedule()
     } else {
         Project *p = m_view->project();
         ScheduleManager *m = p->createScheduleManager();
-        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, idx, i18n( "Add schedule %1", m->name() ) );
+        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, idx, i18nc( "(qtundo-format)", "Add schedule %1", m->name() ) );
         part() ->addCommand( cmd );
         QModelIndex idx = model()->index( m );
         if ( idx.isValid() ) {
@@ -395,7 +395,7 @@ void ScheduleEditor::slotAddSubSchedule()
             ++row;
         }
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        part()->addCommand( new AddScheduleManagerCmd( sm, m, row, i18n( "Create sub-schedule" ) ) );
+        part()->addCommand( new AddScheduleManagerCmd( sm, m, row, i18nc( "(qtundo-format)", "Create sub-schedule" ) ) );
         m_view->expand( model()->index( sm ) );
         QModelIndex idx = model()->index( m );
         if ( idx.isValid() ) {
