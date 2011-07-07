@@ -186,6 +186,8 @@ private slots:
     void insertImage();
     /// insert a footnote or an endnote
     void insertFootEndNote();
+	/// insert a comment
+	void insertAnnotation();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
     /// go to previous page
@@ -216,6 +218,7 @@ private:
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;
     KAction *m_actionAddBookmark;
+	KAction *m_actionAddComment;
     KAction *m_actionFormatFont;
     KAction *m_actionEditDelFrame;
     KAction *m_actionRaiseFrame;

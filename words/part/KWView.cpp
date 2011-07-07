@@ -80,6 +80,7 @@
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoInlineNote.h>
 #include <KoBookmark.h>
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
@@ -93,6 +94,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kuser.h>
 #include <KToggleAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -154,12 +156,12 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     if(win) {
         connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
     }
-    // temp comments section
+    /* temp comments section
     KoAnnotationSideBar *commentbar = new KoAnnotationSideBar(this);
-    commentbar->addAnnotation(QString("This is a test"), 0);
+    commentbar->addAnnotation(0);
     commentbar->setVisible(true);
 
-    layout->addWidget(commentbar);
+    layout->addWidget(commentbar); */
 
     m_find = new KoFindText(texts, this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
@@ -352,6 +354,12 @@ void KWView::setupActions()
     actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
+	m_actionAddComment = new KAction(i18n("Comment"), this);
+	m_actionAddComment->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
+	m_actionAddComment->setToolTip(i18n("Insert a comment about the selected text"));
+	actionCollection()->addAction("insert_annotation", m_actionAddComment);
+	connect(m_actionAddComment, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
+
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
     action->setIconText(i18n("Bookmark"));
     action->setIcon(KIcon("bookmarks"));
@@ -367,7 +375,7 @@ void KWView::setupActions()
     action = new KAction(i18n("Footnote/Endnote..."), this);
     action->setToolTip(i18n("Insert a footnote referencing the selected text"));
     actionCollection()->addAction("insert_footendnote", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
+	connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
 
     action = new KAction(i18n("Page Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
@@ -1374,6 +1382,17 @@ void KWView::insertFootEndNote()
     KWInsertInlineNoteDialog *diag = new KWInsertInlineNoteDialog(m_document, this);
     connect(diag, SIGNAL(finished(int)), diag, SLOT(deleteLater()));
     diag->show();
+}
+
+void KWView::insertAnnotation()
+{
+	KoInlineNote *note = new KoInlineNote(KoInlineNote::Annotation);
+	KUser user(KUser::UseRealUserID);
+	note->setAuthor(user.property(KUser::FullName).toString());
+	KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
+	Q_ASSERT(handler);
+	QTextCursor *cursor = const_cast<QTextCursor*>(handler->cursor());
+	m_document->inlineTextObjectManager()->insertInlineObject(*cursor, note);
 }
 
 void KWView::setGuideVisibility(bool on)

@@ -22,11 +22,17 @@
 
 #include <KoBalloon.h>
 #include <KoAnnotation.h>
+#include <QLabel>
+#include <QTextEdit>
+#include <QMenu>
+#include <QPushButton>
 
-class KoAnnotationBalloon : public KoBalloon
+#include <QGridLayout>
+
+class KoAnnotationBalloon : public KoBalloon, public QTextFrame
 {
 public:
-    KoAnnotationBalloon(KoAnnotation content, int position = 0, QWidget *parent = 0);
+    KoAnnotationBalloon(KoAnnotation *content, int position, QWidget *parent);
 
 public slots:
     // override setFocus, gives focus to m_textContent
@@ -38,8 +44,8 @@ private:
     QLabel *m_author;
     QLabel *m_date;
 
-    QPushButton *optionButton;
-    QMenu *options;
+    QPushButton *m_optionButton;
+    QMenu *m_options;
 };
 
 #endif // KOANNOTATIONBALLOON_H

@@ -19,13 +19,14 @@
 
 #include "KoBalloon.h"
 
-KoBalloon::KoBalloon(QString content, int position, QWidget *parent) :
-    QWidget(parent), m_y(position), m_content(content)
+KoBalloon::KoBalloon(int position, QWidget *parent) :
+    QWidget(parent), m_y(position)
 {
 }
 
 void KoBalloon::paintEvent(QPaintEvent *event)
 {
+    QWidget::paintEvent(event);
     QPainter painter(this);
     QBrush brush(Qt::green);
     painter.setBackgroundMode(Qt::OpaqueMode);

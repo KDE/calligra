@@ -59,6 +59,7 @@
   <Separator/>
   <!-- Inside the text, more -->
   <Action name="insert_footendnote"/>
+  <Action name="insert_annotation"/>
   <Action name="insert_contents"/>
   <Action name="insert_variable"/> <!-- menu -->
   <Menu name="semantic_object_menu"><text>Semantic Object</text>

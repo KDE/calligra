@@ -47,8 +47,12 @@ set(kowidgets_LIB_SRCS
     KoLineStyleModel.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
-    KoAnnotationSideBar.cpp
     KoBalloon.cpp
+    KoAnnotation.cpp
+    KoAnnotationBalloon.cpp
+    KoAnnotationSideBar.cpp
+    
+    
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -107,8 +111,10 @@ install( FILES
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
-    KoAnnotationSideBar.h
-    KoBalloon.h
+    KoBalloon.cpp
+    KoAnnotation.cpp
+    KoAnnotationBalloon.cpp
+    KoAnnotationSideBar.cpp
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}

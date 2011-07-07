@@ -47,7 +47,8 @@ public:
         : textFrame(0)
         , autoNumbering(false)
         , type(t)
-    {
+		, date(QDateTime::currentDateTime())
+	{
     }
 
     QTextFrame *textFrame;
@@ -89,6 +90,11 @@ void KoInlineNote::setLabel(const QString &text)
 void KoInlineNote::setId(const QString &id)
 {
     d->id = id;
+}
+
+void KoInlineNote::setAuthor(const QString &author)
+{
+	d->author = author;
 }
 
 QTextFrame *KoInlineNote::textFrame() const

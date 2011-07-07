@@ -21,26 +21,39 @@
 #define KOANNOTATIONSIDEBAR_H
 
 #include <QWidget>
+#include "kowidgets_export.h"
 #include "KoBalloon.h"
+#include "KoAnnotationBalloon.h"
 
+/**
+ * This keeps track of Annotations; adding, removing, repositioning, displaying.
+ */
 class KoAnnotationSideBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KoAnnotationSideBar(QWidget *parent = 0);
+	explicit KoAnnotationSideBar(QWidget *parent = 0);
 
+public slots:
     // add a new annotation to the list
-    void addAnnotation(QString content, int position);
-    // overridden paint event
-    void paintEvent(QPaintEvent *event);
+    void addAnnotation(int position);
+	// remove the annotation with this id
+	void removeAnnotation(int id);
+
+protected:
+	// reimplemented
+	virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+					   const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
     // set the positions of the balloons relative to eachother and the boundries
-    void setPositions();
-    void reposition(int index);
+    //void setPositions();
+    void repositionInsert(int index);
+    // reposition balloons around index, item removed before this call
+    void repositionRemove(int index);
 
 private:
-    QList<KoBalloon*> *annotations;
+	QList<KoAnnotationBalloon*> *annotations;
 
 };
 

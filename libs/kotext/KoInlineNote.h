@@ -71,6 +71,12 @@ public:
      */
     void setId(const QString &id);
 
+	/**
+	 * Set the author name. only used in annotations.
+	 * @param author the new author name
+	 */
+	void setAuthor(const QString &author);
+
     /// return the current text
     QTextFrame *textFrame() const;
 
