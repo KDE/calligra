@@ -123,7 +123,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     m_pCanvas->selection()->emitCloseEditor(true); // save changes
 
     // Find the first visible row and the y position of this row.
-    double y;
+    qreal y;
     int row = sheet->topRow(m_pCanvas->yOffset(), y);
 
     // Did the user click between two rows?
@@ -141,7 +141,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
 
     //if row is hide and it's the first row
     //you mustn't resize it.
-    double tmp2;
+    qreal tmp2;
     int tmpRow = sheet->topRow(ev_PosY - 1, tmp2);
     if (sheet->rowFormats()->isHiddenOrFiltered(tmpRow) && tmpRow == 1)
         m_bResize = false;
@@ -149,7 +149,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     // So he clicked between two rows ?
     if (m_bResize) {
         // Determine row to resize
-        double tmp;
+        qreal tmp;
         m_iResizedRow = sheet->topRow(ev_PosY - 1, tmp);
         if (!sheet->isProtected())
             paintSizeIndicator(_ev->pos().y());
@@ -158,7 +158,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
             m_bSelection = true;
         }
 
-        double tmp;
+        qreal tmp;
         int hit_row = sheet->topRow(ev_PosY, tmp);
         if (hit_row > KS_rowMax)
             return;
@@ -343,7 +343,7 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
-        double y;
+        qreal y;
         int row = sheet->topRow(ev_PosY, y);
         if (row > KS_rowMax)
             return;
@@ -369,7 +369,7 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
 
         //What is the internal size of 1 pixel
         const double unzoomedPixel = m_pCanvas->zoomHandler()->unzoomItY(1.0);
-        double y;
+        qreal y;
         int tmpRow = sheet->topRow(m_pCanvas->yOffset(), y);
 
         while (y < dHeight + m_pCanvas->yOffset() && tmpRow <= KS_rowMax) {
@@ -404,7 +404,6 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     const QRectF paintRect = m_pCanvas->zoomHandler()->viewToDocument(painterRect);
 
     // the painter
-    painter->scale(m_pCanvas->zoomHandler()->zoomedResolutionX(), m_pCanvas->zoomHandler()->zoomedResolutionY());
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
@@ -421,16 +420,14 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     selectionColor.setAlpha(127);
     const QBrush selectionBrush(selectionColor);
 
-    painter->setClipRect(paintRect);
-
-    double yPos;
+    qreal yPos;
     // Get the top row and the current y-position
     int y = sheet->topRow(qMax<qreal>(0, paintRect.y() + m_pCanvas->yOffset()), yPos);
     // Align to the offset
     yPos = yPos - m_pCanvas->yOffset();
 
     const KoViewConverter *converter = m_pCanvas->zoomHandler();
-    const double width = converter->viewToDocumentX(this->width() - 1);
+    const qreal width = this->width() - 1;
 
     QSet<int> selectedRows;
     QSet<int> affectedRows;
@@ -447,7 +444,9 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
             ++y;
             continue;
         }
-        const double height = sheet->rowFormats()->rowHeight(y);
+        const qreal rawHeight = sheet->rowFormats()->rowHeight(y);
+        const qreal height = converter->documentToViewY(rawHeight);
+        const QRectF rect(0, converter->documentToViewY(yPos), width, height);
 
         if (selected || highlighted) {
             painter->setPen(selectionColor.dark(150));
@@ -456,9 +455,9 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
             painter->setPen(backgroundColor.dark(150));
             painter->setBrush(backgroundBrush);
         }
-        painter->drawRect(QRectF(0, yPos, width, height));
+        painter->drawRect(rect);
 
-        QString rowText = QString::number(y);
+        const QString rowText = QString::number(y);
 
         // Reset painter
         painter->setFont(normalFont);
@@ -469,28 +468,39 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         else if (highlighted)
             painter->setFont(boldFont);
 
-        const int ascent = painter->fontMetrics().ascent();
-        if (height >= ascent - painter->fontMetrics().descent()) {
+        QFontMetricsF fm(painter->font());
 #if 0
-            const double len = painter->fontMetrics().width(rowText);
-
-            switch (y % 3) {
-            case 0: rowText = QString::number(height) + 'h'; break;
-            case 1: rowText = QString::number(painter.fontMetrics().ascent()) + 'a'; break;
-            case 2: rowText = QString::number(painter.fontMetrics().descent()) + 'd'; break;
+        if (height < fm.ascent() - fm.descent()) {
+            // try to scale down the font to make it fit
+            QFont font = painter->font();
+            qreal maxSize = font.pointSizeF();
+            qreal minSize = maxSize / 2;
+            while (minSize > 1) {
+                font.setPointSizeF(minSize);
+                const QFontMetricsF fm2(font);
+                if (height >= fm2.ascent() - fm2.descent())
+                    break;
+                minSize /= 2;
             }
-            //kDebug() << "font height: " << painter.fontMetrics().ascent();
-            painter.drawLine(1, yPos, 4, yPos + 3);
+            while (minSize < 0.99 * maxSize) {
+                qreal middle = (maxSize + minSize) / 2;
+                font.setPointSizeF(middle);
+                const QFontMetricsF fm2(font);
+                if (height >= fm2.ascent() - fm2.descent()) {
+                    minSize = middle;
+                } else {
+                    maxSize = middle;
+                }
+            }
+            painter->setFont(font);
+            fm = QFontMetricsF(font);
+        }
 #endif
-            drawText(painter,
-                     painter->font(),
-                     yPos + (height - ascent) / 2,
-//                            yPos + ( height - painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
-                     width,
-                     rowText);
+        if (height >= fm.ascent() - fm.descent()) {
+            painter->drawText(rect, Qt::AlignCenter, rowText);
         }
 
-        yPos += height;
+        yPos += rawHeight;
         y++;
     }
 }
@@ -500,36 +510,6 @@ void RowHeader::focusOut(QFocusEvent*)
 {
     m_pCanvas->disableAutoScroll();
     m_bMousePressed = false;
-}
-
-void RowHeader::drawText(QPainter* painter, const QFont& font,
-                         qreal ypos, qreal width, const QString& text) const
-{
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
-        return;
-
-    const double scaleX = POINT_TO_INCH(double(KoDpi::dpiX()));
-    const double scaleY = POINT_TO_INCH(double(KoDpi::dpiY()));
-
-    // Qt scales the font already with the logical resolution. Do not do it twice!
-    painter->save();
-    painter->scale(1.0 / scaleX, 1.0 / scaleY);
-
-    QTextLayout textLayout(text, font);
-    textLayout.beginLayout();
-    textLayout.setTextOption(QTextOption(Qt::AlignHCenter));
-    forever {
-        QTextLine line = textLayout.createLine();
-        if (!line.isValid())
-            break;
-        line.setLineWidth(width * scaleX);
-    }
-    textLayout.endLayout();
-    QPointF loc(0, ypos * scaleY);
-    textLayout.draw(painter, loc);
-
-    painter->restore();
 }
 
 void RowHeader::doToolChanged(const QString& toolId)
@@ -586,7 +566,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
     m_bSelection = false;
 
     // Find the first visible column and the x position of this column.
-    double x;
+    qreal x;
 
     const double unzoomedPixel = m_pCanvas->zoomHandler()->unzoomItX(1.0);
     if (sheet->layoutDirection() == Qt::RightToLeft) {
@@ -614,7 +594,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         //if col is hide and it's the first column
         //you mustn't resize it.
-        double tmp2;
+        qreal tmp2;
         tmpCol = sheet->leftColumn(dWidth - ev_PosX + 1, tmp2);
         if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 0) {
             kDebug() << "No resize:" << tmpCol << "," << sheet->columnFormat(tmpCol)->isHiddenOrFiltered();
@@ -640,7 +620,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         //if col is hide and it's the first column
         //you mustn't resize it.
-        double tmp2;
+        qreal tmp2;
         int tmpCol = sheet->leftColumn(ev_PosX - 1, tmp2);
         if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1)
             m_bResize = false;
@@ -649,7 +629,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
     // So he clicked between two rows ?
     if (m_bResize) {
         // Determine the column to resize
-        double tmp;
+        qreal tmp;
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             m_iResizedColumn = sheet->leftColumn(ev_PosX - 1, tmp);
             // kDebug() <<"RColumn:" << m_iResizedColumn <<", PosX:" << ev_PosX;
@@ -669,7 +649,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
             m_bSelection = true;
         }
 
-        double tmp;
+        qreal tmp;
         int hit_col = sheet->leftColumn(ev_PosX, tmp);
         if (hit_col > KS_colMax)
             return;
@@ -865,7 +845,7 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
-        double x;
+        qreal x;
         int col = sheet->leftColumn(ev_PosX, x);
 
         if (col > KS_colMax)
@@ -901,7 +881,7 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
     else {
         //What is the internal size of 1 pixel
         const double unzoomedPixel = m_pCanvas->zoomHandler()->unzoomItX(1.0);
-        double x;
+        qreal x;
 
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             int tmpCol = sheet->leftColumn(m_pCanvas->xOffset(), x);
@@ -975,7 +955,6 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     const QRectF paintRect = m_pCanvas->zoomHandler()->viewToDocument(painterRect);
 
     // the painter
-    painter->scale(m_pCanvas->zoomHandler()->zoomedResolutionX(), m_pCanvas->zoomHandler()->zoomedResolutionY());
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
@@ -992,9 +971,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     selectionColor.setAlpha(127);
     const QBrush selectionBrush(selectionColor);
 
-    painter->setClipRect(paintRect);
-
-    double xPos;
+    qreal xPos;
     int x;
 
     if (sheet->layoutDirection() == Qt::RightToLeft) {
@@ -1010,162 +987,105 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     }
 
     const KoViewConverter *converter = m_pCanvas->zoomHandler();
-    const double height = converter->viewToDocumentY(this->height() - 1);
+    const qreal height = this->height() - 1;
 
+    QSet<int> selectedColumns;
+    QSet<int> affectedColumns;
+    if (!m_pCanvas->selection()->referenceSelectionMode() && m_cellToolIsActive) {
+        selectedColumns = m_pCanvas->selection()->columnsSelected();
+        affectedColumns = m_pCanvas->selection()->columnsAffected();
+    }
+
+    int deltaX = 1;
     if (sheet->layoutDirection() == Qt::RightToLeft) {
         if (x > KS_colMax)
             x = KS_colMax;
 
         xPos -= sheet->columnFormat(x)->width();
+        deltaX = -1;
+    }
 
-        QSet<int> selectedColumns;
-        QSet<int> affectedColumns;
-        if (!m_pCanvas->selection()->referenceSelectionMode() && m_cellToolIsActive) {
-            selectedColumns = m_pCanvas->selection()->columnsSelected();
-            affectedColumns = m_pCanvas->selection()->columnsAffected();
-        }
-        //Loop through the columns, until we are out of range
-        while (xPos <= paintRect.right() && x <= KS_colMax) {
-            bool selected = (selectedColumns.contains(x));
-            bool highlighted = (!selected && affectedColumns.contains(x));
+    //Loop through the columns, until we are out of range
+    while (xPos <= paintRect.right() && x <= KS_colMax) {
+        bool selected = (selectedColumns.contains(x));
+        bool highlighted = (!selected && affectedColumns.contains(x));
 
-            const ColumnFormat* columnFormat = sheet->columnFormat(x);
-            if (columnFormat->isHiddenOrFiltered()) {
-                ++x;
-                continue;
-            }
-            double width = columnFormat->width();
-
-            if (selected || highlighted) {
-                painter->setPen(selectionColor.dark(150));
-                painter->setBrush(selectionBrush);
-            } else {
-                painter->setPen(backgroundColor.dark(150));
-                painter->setBrush(backgroundBrush);
-            }
-            painter->drawRect(QRectF(xPos, 0, width, height));
-
-            // Reset painter
-            painter->setFont(normalFont);
-            painter->setPen(palette().text().color());
-
-            if (selected)
-                painter->setPen(palette().highlightedText().color());
-            else if (highlighted)
-                painter->setFont(boldFont);
-
-            QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
-            double len = painter->fontMetrics().width(colText);
-            if (width >= len) {
-                drawText(painter,
-                         painter->font(),
-                         QPointF(xPos,
-                                 (height - painter->fontMetrics().ascent() - painter->fontMetrics().descent()) / 2),
-                         colText,
-                         width);
-            }
-            xPos += columnFormat->width();
-            --x;
-        }
-    } else { // if ( sheet->layoutDirection() == Qt::LeftToRight )
-        QSet<int> selectedColumns;
-        QSet<int> affectedColumns;
-        if (!m_pCanvas->selection()->referenceSelectionMode() && m_cellToolIsActive) {
-            selectedColumns = m_pCanvas->selection()->columnsSelected();
-            affectedColumns = m_pCanvas->selection()->columnsAffected();
-        }
-        //Loop through the columns, until we are out of range
-        while (xPos <= paintRect.right() && x <= KS_colMax) {
-            bool selected = (selectedColumns.contains(x));
-            bool highlighted = (!selected && affectedColumns.contains(x));
-
-            const ColumnFormat *columnFormat = sheet->columnFormat(x);
-            if (columnFormat->isHiddenOrFiltered()) {
-                ++x;
-                continue;
-            }
-            double width = columnFormat->width();
-
-            QColor backgroundColor = palette().window().color();
-
-            if (selected || highlighted) {
-                painter->setPen(selectionColor.dark(150));
-                painter->setBrush(selectionBrush);
-            } else {
-                painter->setPen(backgroundColor.dark(150));
-                painter->setBrush(backgroundBrush);
-            }
-            painter->drawRect(QRectF(xPos, 0, width, height));
-
-            // Reset painter
-            painter->setFont(normalFont);
-            painter->setPen(palette().text().color());
-
-            if (selected)
-                painter->setPen(palette().highlightedText().color());
-            else if (highlighted)
-                painter->setFont(boldFont);
-
-            QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
-            int len = painter->fontMetrics().width(colText);
-            if (width >= len) {
-#if 0
-                switch (x % 3) {
-                case 0: colText = QString::number(height) + 'h'; break;
-                case 1: colText = QString::number(painter->fontMetrics().ascent()) + 'a'; break;
-                case 2: colText = QString::number(painter->fontMetrics().descent()) + 'd'; break;
-                }
-#endif
-                drawText(painter,
-                         painter->font(),
-                         QPointF(xPos,
-                                 (height - painter->fontMetrics().ascent() - painter->fontMetrics().descent()) / 2),
-                         colText,
-                         width);
-            }
-
-            xPos += columnFormat->width();
+        const ColumnFormat *columnFormat = sheet->columnFormat(x);
+        if (columnFormat->isHiddenOrFiltered()) {
             ++x;
+            continue;
         }
+        const qreal width = converter->documentToViewX(columnFormat->width());
+        const QRectF rect(converter->documentToViewX(xPos), 0, width, height);
+
+        if (selected || highlighted) {
+            painter->setPen(selectionColor.dark(150));
+            painter->setBrush(selectionBrush);
+        } else {
+            painter->setPen(backgroundColor.dark(150));
+            painter->setBrush(backgroundBrush);
+        }
+        painter->drawRect(rect);
+
+        // Reset painter
+        painter->setFont(normalFont);
+        painter->setPen(palette().text().color());
+
+        if (selected)
+            painter->setPen(palette().highlightedText().color());
+        else if (highlighted)
+            painter->setFont(boldFont);
+
+        QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
+        QFontMetricsF fm(painter->font());
+#if 0
+        if (width < fm.width(colText)) {
+            // try to scale down the font to make it fit
+            QFont font = painter->font();
+            qreal maxSize = font.pointSizeF();
+            qreal minSize = maxSize / 2;
+            while (minSize > 1) {
+                font.setPointSizeF(minSize);
+                const QFontMetricsF fm2(font);
+                if (width >= fm2.width(colText))
+                    break;
+                minSize /= 2;
+            }
+            while (minSize < 0.99 * maxSize) {
+                qreal middle = (maxSize + minSize) / 2;
+                font.setPointSizeF(middle);
+                const QFontMetricsF fm2(font);
+                if (width >= fm2.width(colText)) {
+                    minSize = middle;
+                } else {
+                    maxSize = middle;
+                }
+            }
+            painter->setFont(font);
+            fm = QFontMetricsF(font);
+        }
+#endif
+        if (width >= fm.width(colText)) {
+#if 0
+            switch (x % 3) {
+            case 0: colText = QString::number(height) + 'h'; break;
+            case 1: colText = QString::number(fm.ascent()) + 'a'; break;
+            case 2: colText = QString::number(fm.descent()) + 'd'; break;
+            }
+#endif
+            painter->drawText(rect, Qt::AlignCenter, colText);
+        }
+
+        xPos += columnFormat->width();
+
+        x += deltaX;
     }
 }
-
 
 void ColumnHeader::focusOut(QFocusEvent*)
 {
     m_pCanvas->disableAutoScroll();
     m_bMousePressed = false;
-}
-
-void ColumnHeader::drawText(QPainter* painter, const QFont& font,
-                            const QPointF& location, const QString& text,
-                            double width) const
-{
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
-        return;
-
-    const double scaleX = POINT_TO_INCH(double(KoDpi::dpiX()));
-    const double scaleY = POINT_TO_INCH(double(KoDpi::dpiY()));
-
-    // Qt scales the font already with the logical resolution. Do not do it twice!
-    painter->save();
-    painter->scale(1.0 / scaleX, 1.0 / scaleY);
-
-    QTextLayout textLayout(text, font);
-    textLayout.beginLayout();
-    textLayout.setTextOption(QTextOption(Qt::AlignHCenter));
-    forever {
-        QTextLine line = textLayout.createLine();
-        if (!line.isValid())
-            break;
-        line.setLineWidth(width * scaleX);
-    }
-    textLayout.endLayout();
-    QPointF loc(location.x() * scaleX, location.y() * scaleY);
-    textLayout.draw(painter, loc);
-
-    painter->restore();
 }
 
 void ColumnHeader::doToolChanged(const QString& toolId)

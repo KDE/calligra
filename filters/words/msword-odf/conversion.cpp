@@ -931,3 +931,71 @@ QString Conversion::rncToStartNumberingAt(int rnc)
         return "page";
     }
 }
+
+const char* Conversion::getHorizontalPos(qint16 dxaAbs)
+{
+    // [MS-DOC] — v20101219: (-4) - center, (-8) - right, (-12) - inside, (-16)
+    // - outside
+    switch (dxaAbs) {
+    case (-4):
+        return "center";
+    case (-8):
+        return "right";
+    case (-12):
+        return "inside";
+    case (-16):
+        return "outside";
+    default:
+        return "from-left";
+    }
+}
+
+const char* Conversion::getHorizontalRel(uint pcHorz)
+{
+    // [MS-DOC] — v20101219: 0 - current column, 1 - margin, 2 - page
+    switch (pcHorz) {
+    case 0:
+        return "paragraph";
+    case 1:
+        return "page-content";
+    case 2:
+        return "page";
+    default:
+        return "";
+    }
+}
+
+const char* Conversion::getVerticalPos(qint16 dyaAbs)
+{
+    // [MS-DOC] — v20101219: (-4) - top, (-8) - middle, (-12) - bottom, (-16) -
+    // inside, (-20) - outside
+    switch (dyaAbs) {
+    case (-4):
+        return "top";
+    case (-8):
+        return "middle";
+    case (-12):
+        return "bottom";
+    case (-16):
+        return "inline";
+    case (-20):
+        return "inline";
+    default:
+        return "from-top";
+    }
+}
+
+const char* Conversion::getVerticalRel(uint pcVert)
+{
+    // [MS-DOC] — v20101219: 0 - margin, 1 - page, 2 - paragraph
+    switch (pcVert) {
+    case 0:
+        return "page-content";
+    case 1:
+        return "page";
+    case 2:
+        return "paragraph";
+    default:
+        return "";
+    }
+}

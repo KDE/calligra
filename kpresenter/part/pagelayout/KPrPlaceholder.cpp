@@ -78,7 +78,7 @@ void KPrPlaceholder::saveOdf( KoXmlWriter & xmlWriter )
     xmlWriter.endElement();
 }
 
-QString KPrPlaceholder::presentationObject()
+QString KPrPlaceholder::presentationObject() const
 {
     return m_presentationObject;
 }

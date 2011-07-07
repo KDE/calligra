@@ -502,7 +502,7 @@ void WorksheetSubStreamHandler::handleLabelSST(LabelSSTRecord* record)
 
     Cell* cell = d->sheet->cell(column, row, true);
     if (cell) {
-        if (formatRuns.size())
+        if (!formatRuns.empty())
             cell->setValue(Value(str, formatRuns));
         else
             cell->setValue(Value(str));

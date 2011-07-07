@@ -282,7 +282,7 @@ void StringBuffer::ensureCapacity(int p_capacity)
     m_capacity = newSize;
 }
 
-uint StringBuffer::length()
+uint StringBuffer::length() const
 {
     return m_length;
 }
@@ -299,7 +299,7 @@ int StringBuffer::toInt()
     return data.toInt();
 }
 
-const char *StringBuffer::toLatin1()
+const char *StringBuffer::toLatin1() const
 {
     return m_buffer;
 }

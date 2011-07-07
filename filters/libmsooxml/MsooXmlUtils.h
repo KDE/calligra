@@ -114,9 +114,10 @@ public:
 
     int m_level;
 
-private:
     enum ParagraphBulletType {BulletType, NumberType, PictureType, DefaultType};
     ParagraphBulletType m_type;
+
+private:
 
     QString m_startValue;
     QString m_bulletFont;
