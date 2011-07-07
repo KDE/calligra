@@ -26,7 +26,9 @@ class KPrDocument;
 class KoPAPageBase;
 class KPrCustomSlideShowsModel;
 
-class KPrDelCustomSlideShowCommand : public KUndo2Command
+#include "stage_export.h"
+
+class STAGE_TEST_EXPORT KPrDelCustomSlideShowCommand : public KUndo2Command
 {
 public:
     KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent = 0);

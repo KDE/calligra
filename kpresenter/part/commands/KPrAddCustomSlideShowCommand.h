@@ -25,7 +25,9 @@
 class KPrDocument;
 class KPrCustomSlideShowsModel;
 
-class KPrAddCustomSlideShowCommand : public KUndo2Command
+#include "stage_export.h"
+
+class STAGE_TEST_EXPORT KPrAddCustomSlideShowCommand : public KUndo2Command
 {
 public:
     explicit KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent = 0);

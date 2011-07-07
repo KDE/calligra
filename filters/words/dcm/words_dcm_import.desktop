@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words DICOM Structured Report Import Filter
+Name[cs]=Importní filtr formátu Strukturované zprávy DICOM pro Words
+Name[es]=Filtro de Words de importación de informes estructurados de DICOM
+Name[et]=Wordsi DICOM-i struktureeritud aruande impordifilter
+Name[nb]=Words DICOM importfilter for strukturert rapport
+Name[nds]=Importfilter för Words för DICOM-Struktuurberichten
 Name[pt]=Filtro de Importação de Relatórios Estruturados DICOM para o Words
 Name[pt_BR]=Filtro de importação de relatórios estruturados DICOM para o Words
 Name[sv]=Words-importfilter för DICOM strukturerad rapport

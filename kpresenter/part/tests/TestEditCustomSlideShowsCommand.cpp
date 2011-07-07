@@ -19,15 +19,13 @@
 
 
 #include "TestEditCustomSlideShowsCommand.h"
-#include "../KPrDocument.h"
+#include "KPrDocument.h"
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "PAMock.h"
-#include "../commands/KPrEditCustomSlideShowsCommand.h"
-#include "../KPrCustomSlideShows.h"
-#include "../KPrCustomSlideShowsModel.h"
-
-#include <qtest_kde.h>
+#include "commands/KPrEditCustomSlideShowsCommand.h"
+#include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsModel.h"
 
 void TestEditCustomSlideShowsCommand::moveSingleSlide()
 {

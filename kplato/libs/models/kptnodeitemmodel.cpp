@@ -182,13 +182,7 @@ QVariant NodeModel::description( const Node *node, int role ) const
             return s;
         }
         case Qt::ToolTipRole: {
-            KRichTextWidget w( node->description(), 0 );
-            w.switchToPlainText();
-            QString s = w.textOrHtml();
-            if ( s.length() > 300 ) {
-                s = s.left( 300 ) + "...";
-            }
-            return s;
+            return node->description();
         }
         case Qt::EditRole:
             return node->description();

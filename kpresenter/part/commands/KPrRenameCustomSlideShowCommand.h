@@ -25,7 +25,9 @@
 class KPrDocument;
 class KPrCustomSlideShowsModel;
 
-class KPrRenameCustomSlideShowCommand : public KUndo2Command
+#include "stage_export.h"
+
+class STAGE_TEST_EXPORT KPrRenameCustomSlideShowCommand : public KUndo2Command
 {
 public:
     KPrRenameCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &oldName, const QString &newName, KUndo2Command *parent = 0);
