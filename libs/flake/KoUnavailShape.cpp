@@ -146,7 +146,7 @@ KoUnavailShape::Private::Private()
     : scalablePreview(new QSvgRenderer())
 {
     // Get the question mark "icon".
-    questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
+    questionMark.load(KStandardDirs::locate("data", "calligra/icons/questionmark.png"));
 }
 
 KoUnavailShape::Private::~Private()
