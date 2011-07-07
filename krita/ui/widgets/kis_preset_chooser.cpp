@@ -2,6 +2,8 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,7 +109,7 @@ class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 
 public:
     KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-         : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false){}
+         : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false), m_filterNames(false){}
     virtual ~KisPresetProxyAdapter() {}
 
     virtual QList< KoResource* > resources() {
@@ -133,7 +135,8 @@ public:
             return true;
 
         return ((preset->paintOp() == m_paintopID || m_showAll) &&
-                preset->name().contains(m_nameFilter, Qt::CaseInsensitive));
+                preset->name().contains(m_nameFilter, Qt::CaseInsensitive) &&
+                (!m_filterNames || m_filteredNames.contains(preset->name())));
     }
 
     ///Set id for paintop to be accept by the proxy model, if not filter is set all
@@ -143,16 +146,33 @@ public:
         m_paintopID = paintopID;
     }
 
+    KoID presetFilter()
+    {
+        return m_paintopID;
+    }
+
     /// Set a filter for preset name, only presets with name containing the string will be shown
     void setPresetNameFilter(const QString &nameFilter)
     {
         m_nameFilter = nameFilter;
+    }
+    
+    void setFilteredNames(const QStringList filteredNames)
+    {
+        m_filterNames = true;
+        m_filteredNames = filteredNames;
     }
 
     void setShowAll(bool show)
     {
         m_showAll = show;
     }
+
+    bool showAll()
+    {
+        return m_showAll;
+    }
+
 
     ///Resets the model connected to the adapter
     void invalidate() {
@@ -163,6 +183,8 @@ private:
     KoID m_paintopID;
     QString m_nameFilter;
     bool m_showAll;
+    bool m_filterNames;
+    QStringList m_filteredNames;
 };
 
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
@@ -174,6 +196,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     m_presetProxy = new KisPresetProxyAdapter(rserver);
     m_chooser = new KoResourceItemChooser(m_presetProxy, this);
+    QString knsrcFile = "kritapresets.knsrc";
+    m_chooser->setKnsrcFile(knsrcFile);
     m_chooser->showGetHotNewStuff(true, true);
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);
@@ -194,7 +218,17 @@ KisPresetChooser::~KisPresetChooser()
 
 void KisPresetChooser::setPresetFilter(const KoID& paintopID)
 {
+    KoID oldFilter = m_presetProxy->presetFilter();
     m_presetProxy->setPresetFilter(paintopID);
+    if(oldFilter.id() != paintopID.id() && !m_presetProxy->showAll()) {
+        m_presetProxy->invalidate();
+        updateViewSettings();
+    }
+}
+
+void KisPresetChooser::setFilteredNames(const QStringList filteredNames)
+{
+    m_presetProxy->setFilteredNames(filteredNames);
     m_presetProxy->invalidate();
     updateViewSettings();
 }
@@ -211,6 +245,11 @@ void KisPresetChooser::setShowAll(bool show)
     m_presetProxy->setShowAll(show);
     m_presetProxy->invalidate();
     updateViewSettings();
+}
+
+void KisPresetChooser::showButtons(bool show)
+{
+    m_chooser->showButtons(show);
 }
 
 void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
@@ -243,10 +282,21 @@ void KisPresetChooser::updateViewSettings()
         m_chooser->setRowHeight(floor(width/cols));
         m_chooser->setColumnCount(cols);
         m_delegate->setShowText(false);
-    } else {
+    } else if (m_mode == DETAIL) {
         m_chooser->setColumnCount(1);
         m_delegate->setShowText(true);
+    } else if (m_mode == STRIP) {
+        m_chooser->setRowCount(1);
+        // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
+        m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
+        m_delegate->setShowText(false);
     }
+    
+}
+
+KoResource* KisPresetChooser::currentResource()
+{
+    return m_chooser->currentResource();
 }
 
 #include "kis_preset_chooser.moc"

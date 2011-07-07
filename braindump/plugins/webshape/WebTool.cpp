@@ -174,10 +174,11 @@ void WebTool::mouseReleaseEvent( KoPointerEvent *event )
   m_dragMode = NO_DRAG;
 }
 
-QMap<QString, QWidget *> WebTool::createOptionWidgets() {
-  QMap<QString, QWidget *> widgets;
+QList<QWidget *> WebTool::createOptionWidgets() {
+  QList<QWidget *> widgets;
   WebToolWidget* widget = new WebToolWidget(this);
   widget->open(m_currentShape);
-  widgets[i18n("Web tool options")] = widget;
+  widget->setWindowTitle(i18n("Web tool options"));
+  widgets.append(widget);
   return widgets;
 }

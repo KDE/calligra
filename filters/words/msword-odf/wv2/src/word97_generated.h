@@ -50,9 +50,9 @@ namespace Word97 {
     const U32 cvAuto = 0xff000000;
 
     /**
-     * Helper function to convert ico color codes to 24bit rgb values
+     * Helper function to convert ico color codes to 24bit COLORREF
      */
-    U32 icoToRGB(U16 ico);
+    U32 icoToCOLORREF(U16 ico);
 
 /**
  * Font Family Name (FFN), this code is located in the template-Word97.h
@@ -3494,7 +3494,9 @@ bool operator!=(const DOGRID &lhs, const DOGRID &rhs);
 
 
 /**
- * Document Properties (DOP)
+ * Document Properties (DOP) - The Dop97 structure contains document and
+ * compatibility settings.  These settings influence the appearance and
+ * behavior of the current document and store the document-level state.
  */
 struct DOP {
     /**
@@ -3525,6 +3527,10 @@ struct DOP {
     void clear();
 
     // Data
+
+    // --------------------
+    // DopBase - BEGIN
+    // --------------------
     /**
      * 1 when facing pages should be printed.
      * Default 0.
@@ -4018,6 +4024,13 @@ struct DOP {
      */
     U16 iGutterPos:1;
 
+    // --------------------
+    //  DopBase - END
+    // --------------------
+
+    // --------------------
+    //  Copts80 - BEGIN
+    // --------------------
     /**
      * (see above)
      */
@@ -4117,6 +4130,10 @@ struct DOP {
      * (reserved)
      */
     U32 unused84_22:10;
+
+    // --------------------
+    //  Copts80 - END
+    // --------------------
 
     /**
      * Autoformat Document Type: 0 for normal. 1 for letter, and 2 for email.
@@ -4460,9 +4477,12 @@ struct FIB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Validate FIB.  Don't take this info and warnings too seriously at the
-     * moment.  I still have to spend some time to process the info from FIB
-     * properly.
+     * Validate FIB.  Don't take warnings too seriously.  It seems that the
+     * information depends on the file content saved by a specific MS Office
+     * version.  Don't expect to recognize the MS Office version which saved
+     * the file based on the value of the nFib or the nFibNew attribute.  The
+     * nFib seems to be used for backward compatibility.  The nFibNew seems to
+     * be used by MS Office > 2k, sometimes.
      */
     bool valid() const;
 
@@ -4472,6 +4492,11 @@ struct FIB {
     void clear();
 
     // Data
+
+    // --------------------
+    // FibBase - BEGIN
+    // --------------------
+
     /**
      * (fibh) FIBH Beginning of the FIB header magic number
      */
@@ -4629,6 +4654,10 @@ struct FIB {
      * file offset of last character of text in document text stream + 1
      */
     U32 fcMac;
+
+    // --------------------
+    // FibBase - END
+    // --------------------
 
     /**
      * Count of fields in the array of "shorts"
@@ -7036,6 +7065,22 @@ struct PAP : public Shared {
      * placed at the beginning of a page
      */
     U8 fWidowControl;
+
+    /**
+     * A Bool8 value that specifies whether the space displayed before this
+     * paragraph uses auto spacing.  A value of 1 specifies that the
+     * sprmPDyaBefore value MUST be ignored when the application supports auto
+     * spacing.  By default, auto spacing is disabled for paragraphs.
+     */
+    U8 dyaBeforeAuto;
+
+    /**
+     * A Bool8 value that specifies whether the space displayed after this
+     * paragraph uses auto spacing.  A value of 1 specifies that sprmPDyaAfter
+     * MUST be ignored if the application supports auto spacing.  By default,
+     * auto spacing is disabled for paragraphs.
+     */
+    U8 dyaAfterAuto;
 
     /**
      * indent from right margin (signed).

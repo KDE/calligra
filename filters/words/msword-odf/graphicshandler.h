@@ -119,11 +119,19 @@ private:
         DrawClient(KWordGraphicsHandler* p) :gh(p) {}
 };
 public:
-    KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
+    KWordGraphicsHandler(Document* document,
+                         KoXmlWriter* bodyWriter,
+                         KoXmlWriter* manifestWriter,
                          KoStore* store, KoGenStyles* mainStyles,
                          const wvWare::Drawings* p_drawings,
                          const wvWare::Word97::FIB& fib);
     ~KWordGraphicsHandler();
+
+    /**
+     * Set the appropriate writer for object properties and content.
+     * @param writer KoXmlWriter provided by the Document class
+     */
+    void setCurrentWriter(KoXmlWriter* writer) { m_currentWriter = writer; };
 
     /**
      * This method gets called when a floating object is found by wv2 parser.
@@ -136,12 +144,6 @@ public:
      * @param data PictureData as defined in functordata.h
      */
     virtual void handleInlineObject(const wvWare::PictureData& data);
-
-    /**
-     * Set the appropriate writer for object properties and content.
-     * @param writer KoXmlWriter provided by the Document class
-     */
-    void setBodyWriter(KoXmlWriter* writer);
 
     /**
      * Get the DrawStyle to access document backgroud properties and defaults.
@@ -182,14 +184,13 @@ private:
 
     /**
      * Parse floating pictures data from the WordDocument stream.
+     *
+     * @param specifies the container for all the BLIPs that are used in all
+     * the drawings in the parent document.
+     *
      * @return 0 - success, 1 - failed
      */
-    int parseFloatingPictures(void);
-
-    /**
-     * Store floating pictures into ODT, write the appropriate manifest entry.
-     */
-    QMap<QByteArray, QString> createFloatingPictures(KoStore* store, KoXmlWriter* manifest);
+    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer* blipStore);
 
     /**
      * Process the default properties for all drawing objects stored in
@@ -275,7 +276,7 @@ private:
 
     Document* m_document;
     KoStore* m_store;
-    KoXmlWriter* m_bodyWriter;
+    KoXmlWriter* m_currentWriter;
     KoXmlWriter* m_manifestWriter;
     KoGenStyles* m_mainStyles;
 

@@ -152,7 +152,7 @@ void DocxXmlDocumentReader::init()
     m_closeHyperlink = false;
     m_createSectionStyle = false;
     m_createSectionToNext = false;
-    m_insideGroup = false;
+    m_currentVMLProperties.insideGroup = false;
     m_outputFrames = true;
 }
 
@@ -265,11 +265,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
+
+    body->addAttribute("text:use-soft-page-breaks", "true");
+    int counter = 0;
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
+            if (counter == 40) {
+                // set the progress by the position of what was read
+                qreal progress = 45 + 55 * device()->pos() / device()->size();
+                m_context->import->reportProgress(progress);
+                counter = 0;
+            }
+            ++counter;
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(sectPr)
@@ -350,7 +361,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pgSz)
             ELSE_TRY_READ_IF(pgMar)
@@ -605,7 +616,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(v, rect)
             ELSE_TRY_READ_IF_NS(v, roundrect)
@@ -613,6 +624,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(v, group)
             ELSE_TRY_READ_IF_NS(v, oval)
+            ELSE_TRY_READ_IF_NS(v, line)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -849,7 +861,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
             SKIP_UNKNOWN
@@ -900,7 +912,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
             SKIP_UNKNOWN
@@ -994,7 +1006,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
         }
     }
@@ -1036,7 +1048,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgBorders()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 RETURN_IF_ERROR(readBorderElement(TopBorder, "top", m_pageBorderStyles, m_pageBorderPaddings));
@@ -1288,16 +1300,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(dxaOrig)
-    m_currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
-    kDebug() << "m_currentObjectWidthCm" << m_currentObjectWidthCm;
+    m_currentVMLProperties.currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
+    kDebug() << "m_currentObjectWidthCm" << m_currentVMLProperties.currentObjectWidthCm;
     TRY_READ_ATTR(dyaOrig)
-    m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
+    m_currentVMLProperties.currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            //! @todo support VML here
             TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(o, OLEObject)
@@ -1348,7 +1359,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
  - sdtContent (§17.5.2.33)
  - sdtContent (§17.5.2.35)
  - sdtContent (§17.5.2.36)
- - smartTag (§17.5.1.9)
+ - [done] smartTag (§17.5.1.9)
  - sub (§22.1.2.112)
  - sup (§22.1.2.114)
  - tbl (§17.4.38)
@@ -1548,16 +1559,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
 
     TRY_READ_ATTR(type)
 
-    if (type.isEmpty()) {
-        body->startElement("text:line-break");
-        body->endElement();
-    }
-
     if (type == "column") {
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
     else if (type == "page") {
         m_currentParagraphStyle.addProperty("fo:break-after", "page");
+    }
+    else {
+        body->startElement("text:line-break");
+        body->endElement();
     }
     readNext();
     READ_EPILOGUE
@@ -1597,7 +1607,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (m_complexCharStatus == InstrAllowed) {
             QString instruction = text().toString().trimmed();
 
@@ -1639,7 +1649,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - [done] hyperlink (§17.16.22)
  - [done] p (§17.3.1.22)
  - [done] sdtContent (§17.5.2.36)
- - smartTag (§17.5.1.9)
+ - [done] smartTag (§17.5.1.9)
 
  Child elements:
  - bdo (Bidirectional Override) §17.3.2.3
@@ -1674,7 +1684,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - proofErr (Proofing Error Anchor) §17.13.8.1
  - [done] r (Text Run) §17.3.2.25
  - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
- - smartTag (Inline-Level Smart Tag) §17.5.1.9
+ - [done] smartTag (Inline-Level Smart Tag) §17.5.1.9
  - subDoc (Anchor for Subdocument Location) §17.17.1.1
 */
 //! @todo support all elements
@@ -1714,7 +1724,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(r)
             ELSE_TRY_READ_IF(sdt)
@@ -1722,6 +1732,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(fldSimple)
+            ELSE_TRY_READ_IF(smartTag)
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1745,7 +1756,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdtContent()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
@@ -1757,6 +1768,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdtContent()
             ELSE_TRY_READ_IF(r)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(smartTag)
             SKIP_UNKNOWN
         }
     }
@@ -1801,7 +1813,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
@@ -1868,15 +1880,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
  - proofErr (Proofing Error Anchor) §17.13.8.1
  - [done] r (Text Run) §17.3.2.25
  - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
- - smartTag (Inline-Level Smart Tag) §17.5.1.9
+ - [done] smartTag (Inline-Level Smart Tag) §17.5.1.9
  - subDoc (Anchor for Subdocument Location) §17.17.1.1
 */
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 {
     READ_PROLOGUE
-    const read_p_args args = m_read_p_args;
-    m_read_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_currentStyleName.clear();
     m_currentListStyleName.clear();
@@ -1893,7 +1903,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
     bool oldWasCaption = m_wasCaption;
     m_wasCaption = false;
-    if (oldWasCaption || (args & read_p_Skip)) {
+    if (oldWasCaption) {
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
@@ -1930,15 +1940,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(p)) {
-                // CASE #301: avoid nested paragaraphs
-                kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
-                TRY_READ_WITH_ARGS(p, read_p_Skip;)
-            }
             //ELSE_TRY_READ_IF(commentRangeEnd)
-            ELSE_TRY_READ_IF(sdt)
+            TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(commentRangeStart)
             ELSE_TRY_READ_IF(bookmarkStart)
@@ -1948,12 +1953,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
             ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF(smartTag)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    if (oldWasCaption || (args & read_p_Skip)) {
+    if (oldWasCaption) {
         //nothing
     } else {
         if (m_dropCapStatus == DropCapRead) {
@@ -2031,6 +2037,88 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL smartTag
+//! smartTag Handler (Smart Tag)
+/*
+ Parent elements:
+ - bdo (§17.3.2.3);
+ - customXml (§17.5.1.3);
+ - del (§17.13.5.14); dir (§17.3.2.8);
+ - [done] fldSimple (§17.16.19);
+ - [done] hyperlink (§17.16.22);
+ - ins (§17.13.5.18);
+ - moveFrom (§17.13.5.22);
+ - moveTo (§17.13.5.25);
+ - [done] p (§17.3.1.22);
+ - [done] sdtContent (§17.5.2.36);
+ - [done] smartTag (§17.5.1.9)
+
+ Child elements:
+ - bdo (Bidirectional Override) §17.3.2.3
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+ - [done] commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+ - customXml (Inline-Level Custom XML Element) §17.5.1.3
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content) §17.13.5.14
+ - dir (Bidirectional Embedding Level) §17.3.2.8
+ - [done] fldSimple (Simple Field) §17.16.19
+ - [done] hyperlink (Hyperlink) §17.16.22
+ - ins (Inserted Run Content) §17.13.5.18
+ - moveFrom (Move Source Run Content) §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+ - moveTo (Move Destination Run Content) §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+ - [done] oMath (Office Math) §22.1.2.77
+ - [done] oMathPara (Office Math Paragraph) §22.1.2.78
+ - permEnd (Range Permission End) §17.13.7.1
+ - permStart (Range Permission Start) §17.13.7.2
+ - proofErr (Proofing Error Anchor) §17.13.8.1
+ - [done] r (Text Run) §17.3.2.25
+ - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
+ - [done] smartTag (Inline-Level Smart Tag) §17.5.1.9
+ - smartTagPr (Smart Tag Properties) §17.5.1.10
+ - subDoc (Anchor for Subdocument Location) §17.17.1.1
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_smartTag()
+{
+    READ_PROLOGUE
+
+    // todo, use as RDF info?
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(smartTag)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(fldSimple)
+            ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF(commentRangeStart)
+            ELSE_TRY_READ_IF(r)
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF(sdt)
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL r
 //! r handler (Text Run)
 /*! ECMA-376, 17.3.2.25, p.320.
@@ -2049,7 +2137,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - rt (§17.3.3.24)
  - rubyBase (§17.3.3.27)
  - [done] sdtContent (§17.5.2.36)
- - smartTag (§17.5.1.9)
+ - [done] smartTag (§17.5.1.9)
 
  Child elements:
  - annotationRef (Comment Information Block) §17.13.4.1
@@ -2125,11 +2213,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     body = buffer.setWriter(body);
 
     while (!atEnd()) {
-//kDebug() <<"[0]";
         readNext();
         kDebug() << *this;
-//kDebug() <<"[1]";
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
@@ -2285,7 +2371,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] rStyle (Referenced Character Style) §17.3.2.29
  - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
- - shd (Run Shading) §17.3.2.32
+ - [done] shd (Run Shading) §17.3.2.32
  - [done] smallCaps (Small Caps) §17.3.2.33
  - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
  - [done] spacing (Character Spacing Adjustment) §17.3.2.35
@@ -2312,7 +2398,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(b)
             ELSE_TRY_READ_IF(i)
@@ -2428,7 +2514,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "rPr") {
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
@@ -2507,12 +2593,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_webHidden()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -2527,7 +2613,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_webHidden()
  - sdtContent (§17.5.2.33)
  - sdtContent (§17.5.2.35)
  - sdtContent (§17.5.2.36)
- - smartTag (§17.5.1.9)
+ - [done] smartTag (§17.5.1.9)
  - sub (§22.1.2.112)
  - sup (§22.1.2.114)
  - tbl (§17.4.38)
@@ -2575,12 +2661,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -2595,7 +2681,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
  - sdtContent (§17.5.2.33)
  - sdtContent (§17.5.2.35)
  - sdtContent (§17.5.2.36)
- - smartTag (§17.5.1.9)
+ - [done] smartTag (§17.5.1.9)
  - sub (§22.1.2.112)
  - sup (§22.1.2.114)
  - tbl (§17.4.38)
@@ -2784,7 +2870,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(wp, anchor)
             ELSE_TRY_READ_IF_NS(wp, inline)
@@ -3012,11 +3098,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     if (!hanging.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
         if (ok) {
-           m_currentParagraphStyle.addPropertyPt("fo:text-indent", leftInd - firstInd);
+           m_currentParagraphStyle.addPropertyPt("fo:text-indent", -firstInd);
         }
 
     }
-    else if (firstLine.isEmpty()) {
+    else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
         if (ok) {
            m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
@@ -3098,12 +3184,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_u()
  - rPr (§17.3.1.30)
  - rPr (§17.5.2.28)
  - rPr (§17.9.25)
- - rPr (§17.7.9.1)
- - rPr (§17.7.5.4) (within style)
+ - [done] rPr (§17.7.9.1)
+ - [done] rPr (§17.7.5.4) (within style)
  - [done] rPr (§17.3.2.28)
- - rPr (§17.5.2.27)
- - rPr (§17.7.6.2)
- - rPr (§17.3.2.27)
+ - [done] rPr (§17.5.2.27)
+ - [done] rPr (§17.7.6.2)
+ - [done] rPr (§17.3.2.27)
  No child elements.
 */
 //! @todo support all elements
@@ -3404,7 +3490,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcMar()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             if (QUALIFIED_NAME_IS(top)) {
@@ -3454,7 +3540,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             if (QUALIFIED_NAME_IS(top)) {
@@ -3504,7 +3590,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 m_currentStyleProperties->top = getBorderData();
@@ -3708,7 +3794,7 @@ bool DocxXmlDocumentReader::handleSpecialField()
  - hyperlink (§17.16.22)
  - [done] p (§17.3.1.22)
  - [done] sdtContent (§17.5.2.36)
- - smartTag (§17.5.1.9)
+ - [done] smartTag (§17.5.1.9)
 
  Child elements:
 
@@ -3744,7 +3830,7 @@ bool DocxXmlDocumentReader::handleSpecialField()
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
  - [done] r (Text Run)                                                           §17.3.2.25
  - [done] sdt (Inline-Level Structured Document Tag)                                    §17.5.2.31
- - smartTag (Inline-Level Smart Tag)                                             §17.5.1.9
+ - [done] smartTag (Inline-Level Smart Tag)                                             §17.5.1.9
  - subDoc (Anchor for Subdocument Location)                                      §17.17.1.1
 
  @todo support all elements
@@ -3761,7 +3847,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF(r)
@@ -3771,6 +3857,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
             ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF(smartTag)
             SKIP_UNKNOWN
         }
     }
@@ -3811,7 +3898,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tab)
             ELSE_WRONG_FORMAT
@@ -3933,7 +4020,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
     m_borderPaddings.clear();
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 RETURN_IF_ERROR(readBorderElement(TopBorder, "top", m_borderStyles, m_borderPaddings));
@@ -4295,7 +4382,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
  containing the background element.
 
  Child element:
- - drawing (§17.3.3.9)
+ - [done] drawing (§17.3.3.9)
+
  Attributes:
  - [done] color (Background Color)
  - themeColor (Background Theme Color)
@@ -4326,7 +4414,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
 
         while (!atEnd()) {
             readNext();
-            BREAK_IF_END_OF(CURRENT_EL);
+            BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 if (qualifiedName() == "v:background") {
                     TRY_READ(VML_background)
@@ -4357,10 +4445,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
  - comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2);
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] endnote (§17.11.2);
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - sdtContent (§17.5.2.34)
  - [done] tc (§17.4.66)
 
@@ -4430,7 +4518,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if(QUALIFIED_NAME_IS(tblPr)) {
                 m_currentStyleProperties = new MSOOXML::TableStyleProperties;
@@ -4443,6 +4531,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
             }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
+            SKIP_UNKNOWN
 //             ELSE_TRY_READ_IF(bookmarkStart)
 //             ELSE_TRY_READ_IF(bookmarkEnd)
 //             ELSE_WRONG_FORMAT
@@ -4528,11 +4617,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tblStyle)
             ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -4565,9 +4655,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -4610,13 +4701,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
     style->setWidth(columnWidth);
     column->setStyle(style);
 
-    while(!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-//         if(isStartElement()) {
-//             TRY_READ_IF(extLst)
-//         }
-    }
+    readNext();
 
     READ_EPILOGUE
 }
@@ -4674,12 +4759,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tc)
             ELSE_TRY_READ_IF(trPr)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -4693,7 +4779,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 #define CURRENT_EL trPr
 /*
 Parent elements:
- - tr (§17.4.79)
+ - [done] tr (§17.4.79)
 
 child elements:
  - cantSplit (Table Row Cannot Break Across Pages) §17.4.6
@@ -4717,10 +4803,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trPr()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(trHeight)
             ELSE_TRY_READ_IF(cnfStyle)
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -4883,7 +4970,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if(qualifiedName() == "w:p") {
                 KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
@@ -4998,7 +5085,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gridSpan)
             ELSE_TRY_READ_IF(cnfStyle)
@@ -5010,6 +5097,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
             else if (name() == "textDirection") {
                 TRY_READ(textDirectionTc)
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -5145,7 +5233,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 m_currentStyleProperties->top = getBorderData();
@@ -5171,6 +5259,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
                 m_currentStyleProperties->tr2bl = getBorderData();
                 m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tr2blBorder;
             }
+            SKIP_UNKNOWN
         }
     }
 
@@ -5234,8 +5323,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 //! @todo ooo saves binaries to the root dir; should we?
 
     QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
-    RETURN_IF_ERROR( m_context->import->copyFile(oleName, destinationName, false ) )
-    addManifestEntryForFile(destinationName);
+    KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
+    if (stat == KoFilter::OK) {
+        addManifestEntryForFile(destinationName);
+    }
 
     while (!atEnd()) {
         readNext();
@@ -5326,7 +5417,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
             ELSE_TRY_READ_IF(positionH)
@@ -5368,6 +5459,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 }
                 saveStyleWrap("none");
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -5420,11 +5512,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_inline()
     m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(wp, extent)
             ELSE_TRY_READ_IF(docPr)
             ELSE_TRY_READ_IF_NS(a, graphic)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -5445,7 +5538,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_extent()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
     READ_EPILOGUE
 }
@@ -5486,7 +5579,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_docPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, hlinkClick)
             SKIP_UNKNOWN
@@ -5531,7 +5624,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_positionH()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(align)
             ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
@@ -5576,7 +5669,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_positionV()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(align)
             ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
@@ -5658,7 +5751,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapSquare()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
 //        if (isStartElement()) {
 //! @todo effectExtent
 //        }
@@ -5733,7 +5826,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
 //        if (isStartElement()) {
 //! @todo effectExtent
 //        }
@@ -5782,10 +5875,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
     break;
     }
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
 
     READ_EPILOGUE
 }
@@ -5807,6 +5897,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMathPara()
         if (isStartElement()) {
             TRY_READ_IF(oMath)
             ELSE_TRY_READ_IF(oMathParaPr)
+            SKIP_UNKNOWN
         }
     }
 
@@ -5849,6 +5940,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMath()
             if (qualifiedName() == "m:r") {
                 TRY_READ(r_m)
             }
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -5923,6 +6015,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
             else if (qualifiedName() == "m:t") {
                 TRY_READ(t_m)
             }
+            SKIP_UNKNOWN
         }
     }
 

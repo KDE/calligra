@@ -137,7 +137,6 @@ PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
         : KoPageLayoutDialog(parent, sheet->printSettings()->pageLayout())
         , d(new Private)
 {
-    setFaceType(KPageDialog::Tabbed);
     showPageSpread(false);
 
     QWidget* page = new QWidget(this);

@@ -216,6 +216,7 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read_settings()
         if (isStartElement()) {
             TRY_READ_IF(defaultTabStop)
             ELSE_TRY_READ_IF(displayBackgroundShape)
+            ELSE_TRY_READ_IF(clrSchemeMapping)
             SKIP_UNKNOWN
         }
     }
@@ -225,7 +226,7 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read_settings()
 
 #undef CURRENT_EL
 #define CURRENT_EL defaultTabStop
-//! w:footnotes handler (Document footnotes)
+//! w:defaultTabStop handler (Default Tab Stop)
 /*!
 
  Parent elements:
@@ -249,7 +250,7 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read_defaultTabStop()
 
 #undef CURRENT_EL
 #define CURRENT_EL displayBackgroundShape
-//! w:footnotes handler (Document footnotes)
+//! w:displayBackgroundShape handler (Display background shape)
 /*!
 
  Parent elements:
@@ -266,6 +267,67 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read_displayBackgroundShape()
     TRY_READ_ATTR(val)
 
     m_context->documentSettings["diplayBackgroundShape"] = val;
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL clrSchemeMapping
+//! w:clrSchemeMapping handler (Color scheme mapping)
+/*!
+
+ Parent elements:
+ - [done] settings (§17.15.1.78)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlSettingsReader::read_clrSchemeMapping()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    int index = 0;
+    while (index < attrs.size()) {
+        QString handledAttr = attrs.at(index).name().toString();
+        // There is a mismatch between the settings file and the theme file
+        // created with the naming of the theme colors, here we make sure
+        // that they match.
+        if (handledAttr == "t1") {
+            handledAttr = "tx1";
+        }
+        else if (handledAttr == "t2") {
+            handledAttr = "tx2";
+        }
+        else if (handledAttr == "hyperlink") {
+            handledAttr = "hlink";
+        }
+        else if (handledAttr == "followedHyperlink") {
+            handledAttr = "folHlink";
+        }
+        QString attrValue = attrs.value(handledAttr).toString();
+        if (attrValue == "light1") {
+            attrValue = "lt1";
+        }
+        else if (attrValue == "light2") {
+            attrValue = "lt2";
+        }
+        else if (attrValue == "dark1") {
+            attrValue = "dk1";
+        }
+        else if (attrValue == "dark2") {
+            attrValue = "dk2";
+        }
+        else if (attrValue == "hyperlink") {
+            attrValue = "hlink";
+        }
+        else if (attrValue == "followedHyperlink") {
+            attrValue = "folHlink";
+        }
+        m_context->colorMap[handledAttr] = attrValue;
+        ++index;
+    }
 
     readNext();
     READ_EPILOGUE

@@ -82,7 +82,7 @@
 class KoTextWriter::TagInformation
 {
     public:
-        TagInformation():tagName(NULL), attributeList()
+        TagInformation():tagName(0), attributeList()
         {
         }
 
@@ -386,14 +386,16 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     int changeId = 0, returnChangeId = 0;
 
     if (!changeTracker) {
+        //kDebug(30015) << "tag:" << tagInformation.name() << openedTagStack.size();
         if (tagInformation.name()) {
             writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
             QPair<QString, QString> attribute;
             foreach (attribute, tagInformation.attributes()) {
                 writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
             }
-            openedTagStack.push(tagInformation.name());
         }
+        openedTagStack.push(tagInformation.name());
+        //kDebug(30015) << "stack" << openedTagStack.size();
         return changeId;
     }
     
@@ -546,12 +548,15 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
 void KoTextWriter::Private::closeTagRegion(int changeId)
 {
-    if (!changeTracker) return;
-
+    // the tag needs to be closed even if there is no change tracking
+    //kDebug(30015) << "stack" << openedTagStack.size();
     const char *tagName = openedTagStack.pop();
+    //kDebug(30015) << "tag:" << tagName << openedTagStack.size();
     if (tagName) {
         writer->endElement(); // close the tag
     }
+
+    if (!changeTracker) return;
 
     if (changeId)
         changeStack.pop();
@@ -1057,10 +1062,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     writer->addTextSpan(text);
                 }
 
-                if (changeTracker)
-                    closeTagRegion(changeId);
-                else if (fragmentTagInformation.name())
-                    writer->endElement();
+                closeTagRegion(changeId);
             } // if (inlineObject)
 
             previousCharFormat = charFormat;
@@ -1104,10 +1106,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
 
-    if (changeTracker)
-        closeTagRegion(changeId);
-    else if (blockTagInformation.name())
-        writer->endElement();
+    closeTagRegion(changeId);
 }
 
 //Check if the whole Block is a part of a single change
@@ -1666,6 +1665,7 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
 {
     QTextBlock block = document->findBlock(from);
+    int sectionLevel = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
@@ -1677,6 +1677,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             QVariant v = format.property(KoParagraphStyle::SectionStart);
             KoSection* section = (KoSection*)(v.value<void*>());
             if (section) {
+                ++sectionLevel;
                 section->saveOdf(context);
             }
         }
@@ -1732,7 +1733,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         if (format.hasProperty(KoParagraphStyle::SectionEnd)) {
             QVariant v = format.property(KoParagraphStyle::SectionEnd);
             KoSectionEnd* section = (KoSectionEnd*)(v.value<void*>());
-            if (section) {
+            if (section && sectionLevel >= 1) {
+                --sectionLevel;
                 section->saveOdf(context);
             }
         }
@@ -1740,6 +1742,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         block = block.next();
     } // while
+
+    while (sectionLevel >= 1) {
+        --sectionLevel;
+        KoSectionEnd sectionEnd;
+        sectionEnd.saveOdf(context);
+    }
 }
 
 int KoTextWriter::Private::checkForSplit(const QTextBlock &block)

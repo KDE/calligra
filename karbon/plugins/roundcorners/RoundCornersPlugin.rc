@@ -11,7 +11,7 @@
         <Action name="path_round_corners"/>
     </Menu>
 </MenuBar>
-<ToolBar name="Effects" hidden="true" fullWidth="false">
+<ToolBar name="Effects" hidden="true">
     <Action name="path_round_corners"/>
 </ToolBar>
 </gui>

@@ -143,7 +143,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
@@ -203,7 +203,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(sz)

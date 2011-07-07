@@ -54,6 +54,7 @@ public:
     {
         m_delimiter.append( QChar::fromLatin1( '.' ) );
         m_delimiter.append( QChar::fromLatin1( ':' ) );
+        m_delimiter.append( QChar::fromLatin1( ';' ) );
         m_delimiter.append( QChar::fromLatin1( ' ' ) );
     }
     bool parse();
@@ -116,7 +117,7 @@ bool Parser::parse()
 Parser::Token Parser::parseToken()
 {
     Token::TokenType type = Token::End;
-    if ( m_pos != m_input.end() )
+    if ( m_pos != m_input.constEnd() )
     {
         switch( m_delimiter.indexOf( *m_pos ) )
         {
@@ -153,15 +154,18 @@ Parser::Token Parser::parseToken()
 
         if ( type == Token::Identifier )
             identifier = m_input.mid( startPos, m_index - startPos );
-        ++m_pos;
-        ++m_index;
+        if ( m_pos != m_input.constEnd() )
+        {
+            ++m_pos;
+            ++m_index;
+        }
     }
     else
     {
         int startPos = m_index;
         for ( ; m_pos != m_input.constEnd() && !m_delimiter.contains( *m_pos ); ++m_pos, ++m_index )
             ;
-        if ( startPos == m_index )
+        if ( m_pos != m_input.constEnd() && startPos == m_index )
         {
             ++m_index;
             ++m_pos;
@@ -232,11 +236,12 @@ bool Parser::parseRegion2()
     //qDebug() << "ParseRegion2";
     bool res = true;
 
-    if ( m_currentToken.m_type != Token::Identifier )
+    if ( m_currentToken.m_type != Token::Identifier && m_currentToken.m_type != Token::Dot )
         res = false;
 
-    const QString firstIdentifier = m_currentToken.m_identifier;
-    m_currentToken = parseToken();
+    const QString firstIdentifier = m_currentToken.m_type != Token::Dot ? m_currentToken.m_identifier : tableName();
+    if ( m_currentToken.m_type != Token::Dot )
+        m_currentToken = parseToken();
     if ( m_currentToken.m_type == Token::Dot )
     {
         m_currentToken = parseToken();
@@ -378,6 +383,8 @@ CellRegion::CellRegion( TableSource *source, const QString& regions )
     // See ODF specs $8.3.1 "Referencing Table Cells"
     Parser parser( regions );
     const bool success = parser.parse();
+    if ( !success )
+        kDebug() << "Parsing cell region failed";
     d->rects = parser.getResult().toVector();
     d->table = source->get( parser.tableName() );
 //     QStringList regionsList = regions.split( " ", QString::SkipEmptyParts );

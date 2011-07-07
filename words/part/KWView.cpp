@@ -149,7 +149,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     setupActions();
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    
+
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
     KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
@@ -404,6 +404,31 @@ void KWView::setupActions()
     action->setWhatsThis(i18n("Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position."));
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
+
+    action = new KAction(i18n("As Character"), this);
+    action->setToolTip(i18n("Insert the current shape as a character in the text"));
+    actionCollection()->addAction("anchor_as_character", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
+
+    action = new KAction(i18n("To Character"), this);
+    action->setToolTip(i18n("Anchor the current shape to the character at the current position"));
+    actionCollection()->addAction("anchor_to_character", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToChar()));
+
+    action = new KAction(i18n("To Paragraph"), this);
+    action->setToolTip(i18n("Anchor the current shape to current paragraph"));
+    actionCollection()->addAction("anchor_to_paragraph", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToParagraph()));
+
+    action = new KAction(i18n("To Page"), this);
+    action->setToolTip(i18n("Anchor the current shape to current page"));
+    actionCollection()->addAction("anchor_to_page", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToPage()));
+
+    action = new KAction(i18n("Set Floating"), this);
+    action->setToolTip(i18n("Set the current shape floating"));
+    actionCollection()->addAction("set_shape_floating", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(setFloating()));
 
     action = new KAction(i18n("Previous Page"), this);
     actionCollection()->addAction("page_previous", action);
@@ -1153,7 +1178,19 @@ void KWView::formatPage()
         if (editor)
             dia->showTextDirection(editor->isBidiDocument());
     }
+    if (!m_lastPageSettingsTab.isEmpty()) {
+        KPageWidgetItem *item = dia->pageItem(m_lastPageSettingsTab);
+        if (item)
+            dia->setCurrentPage(item);
+    }
+    connect(dia, SIGNAL(finished()), this, SLOT(pageSettingsDialogFinished()));
     dia->show();
+}
+
+void KWView::pageSettingsDialogFinished()
+{
+    KWPageSettingsDialog *dia = qobject_cast<KWPageSettingsDialog*>(QObject::sender());
+    m_lastPageSettingsTab = dia && dia->currentPage() ? dia->currentPage()->name() : QString();
 }
 
 void KWView::editSemanticStylesheets()
@@ -1221,6 +1258,32 @@ void KWView::inlineFrame()
     // TODO move caret
     handler->insertInlineObject(anchor);
 }
+
+void KWView::anchorAsChar()
+{
+
+}
+
+void KWView::anchorToChar()
+{
+
+}
+
+void KWView::anchorToParagraph()
+{
+
+}
+
+void KWView::anchorToPage()
+{
+
+}
+
+void KWView::setFloating()
+{
+
+}
+
 
 void KWView::showStatisticsDialog()
 {
@@ -1458,7 +1521,15 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
         m_canvas->resourceManager()->setResource(KoCanvasResource::CurrentPage, m_currentPage.pageNumber());
-        m_zoomController->setPageSize(m_currentPage.rect().size());
+
+        QSizeF newPageSize = m_currentPage.rect().size();
+        QSizeF newMaxPageSize = QSize(qMax(m_maxPageSize.width(), newPageSize.width()),
+                                     qMax(m_maxPageSize.height(), newPageSize.height()));
+        if (newMaxPageSize != m_maxPageSize) {
+            m_maxPageSize = newMaxPageSize;
+            m_zoomController->setPageSize(m_maxPageSize);
+        }
+
         m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
         m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
     }

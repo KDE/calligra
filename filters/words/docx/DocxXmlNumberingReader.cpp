@@ -58,7 +58,7 @@ DocxXmlNumberingReader::~DocxXmlNumberingReader()
 
 void DocxXmlNumberingReader::init()
 {
-    m_insideGroup = false;
+    m_currentVMLProperties.insideGroup = false;
     m_outputFrames = false;
 }
 
@@ -282,7 +282,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
         }
     }
 
-    m_picBulletPaths[numPicBulletId] = m_imagedataPath;
+    m_picBulletPaths[numPicBulletId] = m_currentVMLProperties.imagedataPath;
     m_picBulletSizes[numPicBulletId] = m_imageSize;
 
     READ_EPILOGUE
@@ -634,14 +634,14 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     if (!hanging.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
         if (ok) {
-           m_currentBulletProperties.setIndent(leftInd - firstInd);
+           m_currentBulletProperties.setIndent(-firstInd);
         }
 
     }
-    else if (firstLine.isEmpty()) {
+    else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
         if (ok) {
-           m_currentBulletProperties.setIndent(leftInd - firstInd);
+           m_currentBulletProperties.setIndent(firstInd);
         }
     }
 

@@ -20,7 +20,7 @@
 
 #include "WmfWriter.h"
 
-#include "WmfStruct.h"
+#include "WmfStructs.h"
 #include "WmfParser.h"
 
 #include <kdebug.h>

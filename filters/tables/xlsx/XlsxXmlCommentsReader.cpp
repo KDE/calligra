@@ -133,7 +133,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comments()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(authors)
             ELSE_TRY_READ_IF(commentList)
@@ -159,7 +159,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_authors()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(author)
             ELSE_WRONG_FORMAT
@@ -205,7 +205,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_commentPr()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             //TRY_READ_IF(anchor)
             //ELSE_WRONG_FORMAT
@@ -229,7 +229,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_commentList()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(comment)
             ELSE_WRONG_FORMAT
@@ -260,7 +260,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
     std::auto_ptr<XlsxComment> comment(authorIdInt < 0 ? 0 : new XlsxComment(authorIdInt));
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(text)
             ELSE_TRY_READ_IF(commentPr)
@@ -301,7 +301,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_text()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(r)
             ELSE_TRY_READ_IF(t)

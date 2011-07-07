@@ -34,7 +34,7 @@ static const char* KPLATO_VERSION=KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18n("Plan"),
+    KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
                                            KPLATO_VERSION, ki18n(KPLATO_DESCRIPTION), KAboutData::License_GPL,
                                            ki18n("(c) 1998-2011, The Plan Team"),
                                            KLocalizedString(),

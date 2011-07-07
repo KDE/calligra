@@ -552,7 +552,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "sldId") {
                 TRY_READ(sldId)
@@ -583,7 +583,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "notesMasterId") {
                 TRY_READ(notesMasterId)
@@ -617,7 +617,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "sldMasterId") {
                 TRY_READ(sldMasterId)

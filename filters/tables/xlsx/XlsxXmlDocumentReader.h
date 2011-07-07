@@ -41,12 +41,14 @@ public:
                                  const QVector<QString>& _sharedStrings,
                                  const XlsxComments& _comments,
                                  const XlsxStyles& _styles,
-                                 MSOOXML::MsooXmlRelationships& _relationships);
+                                 MSOOXML::MsooXmlRelationships& _relationships,
+                                 QString _file, QString _path);
     XlsxImport *import;
     MSOOXML::DrawingMLTheme *themes;
     const QVector<QString>* sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;
+    QString file, path;
 };
 
 //! A class reading MSOOXML XLSX markup - workbook.xml part.

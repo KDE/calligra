@@ -68,7 +68,7 @@ public:
     QTextFrame::iterator endTextFrameIterator() const;
 
     /// Layouts as much as we can
-    virtual bool layout(FrameIterator *cursor);
+    bool layout(FrameIterator *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
     QRectF boundingRect() const;
@@ -181,6 +181,8 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
 
     void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
+
+    void drawOverlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
     void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 

@@ -73,6 +73,7 @@ public:
        , layoutScheduled(false)
        , continuousLayout(true)
        , layoutBlocked(false)
+       , restartLayout(false)
     {
     }
     KoStyleManager *styleManager;
@@ -102,6 +103,8 @@ public:
     bool layoutScheduled;
     bool continuousLayout;
     bool layoutBlocked;
+    bool restartLayout;
+
     enum AnchoringState {
         AnchoringPreState
         ,AnchoringMovingState
@@ -131,6 +134,9 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
 {
+    delete d->paintDevice;
+    delete d->layoutPosition;
+    qDeleteAll(d->rootAreaList);
     qDeleteAll(d->freeObstructions);
     qDeleteAll(d->anchoredObstructions);
     qDeleteAll(d->textAnchors);
@@ -224,7 +230,7 @@ qreal KoTextDocumentLayout::defaultTabSpacing()
     return d->defaultTabSizing;
 }
 
-
+// this method is called on every char inserted or deleted, on format changes, setting/moving of variables or objects.
 void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
 {
     Q_UNUSED(charsAdded);
@@ -245,13 +251,36 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         from = block.position() + block.length();
     }
 
-    // Mark the previous of the corresponding and all following root areas as dirty.
-    KoTextLayoutRootArea *area = rootAreaForPosition(position);
-    int startFromIndex = area ? qMax(0, d->rootAreaList.indexOf(area) - 1) : 0;
-    for(int i = startFromIndex; i < d->rootAreaList.count(); ++i)
-        if (!d->rootAreaList[i]->isDirty())
+    // Mark the to the position corresponding root-areas as dirty. If there is no root-area for the position then we
+    // don't need to mark anything dirty but still need to go on to force a scheduled relayout.
+    if (!d->rootAreaList.isEmpty()) {
+        KoTextLayoutRootArea *fromArea = rootAreaForPosition(position);
+        int startIndex = fromArea ? qMax(0, d->rootAreaList.indexOf(fromArea)) : 0;
+        int endIndex = startIndex;
+        if (charsRemoved != 0 || charsAdded != 0) {
+            // If any characters got removed or added make sure to also catch other root-areas that may be
+            // affected by this change. Note that adding, removing or formatting text will always charsRemoved>0
+            // and charsAdded>0 cause they are changing a range of characters. One case where both is zero is if
+            // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
+            // those cases we only need to relayout the root-area dirty where the variable is on.
+            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
+            endIndex = (toArea && toArea != fromArea) ? qMax(startIndex, d->rootAreaList.indexOf(toArea)) : startIndex;
+            // The previous and following root-area of that range are selected too cause they can also be affect by
+            // changes done to the range of root-areas.
+            if (startIndex >= 1)
+                --startIndex;
+            if (endIndex + 1 < d->rootAreaList.count())
+                ++endIndex;
+        }
+        // Mark all selected root-areas as dirty so they are relayouted.
+        for(int i = startIndex; i <= endIndex; ++i) {
             d->rootAreaList[i]->setDirty();
+        }
+    }
 
+    // Once done we emit the layoutIsDirty signal. The consumer (e.g. the TextShape) will then layout dirty
+    // root-areas and if needed following ones which got dirty cause content moved to them. Also this will
+    // created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
     emitLayoutIsDirty();
 }
 
@@ -362,9 +391,11 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
                 d->anchoringState = Private::AnchoringMovingState;
                 if (d->anchoringCycle <= 10) // loop-protection
                     d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
+                d->anchoringIndex++;
+            } else {
+                break;
             }
             // move the index to next not positioned shape
-            d->anchoringIndex++;
         }
         break;
     }
@@ -408,8 +439,8 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
-    foreach(KoTextAnchor *anchor, d->textAnchors) {
-        anchor->setAnchorStrategy(0);
+    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+        d->textAnchors[i]->setAnchorStrategy(0);
     }
 
     qDeleteAll(d->anchoredObstructions);
@@ -452,28 +483,39 @@ void KoTextDocumentLayout::layout()
         return;
     }
 
-    class LayoutState {
-        public:
-            LayoutState(KoTextDocumentLayout::Private *_d) : d(_d) {
-                Q_ASSERT(!d->isLayouting);
-                d->isLayouting = true;
-            }
-            ~LayoutState() {
-                Q_ASSERT(d->isLayouting);
-                d->isLayouting = false;
-            }
-        private:
-            KoTextDocumentLayout::Private *d;
-    };
-    LayoutState layoutstate(d);
+    Q_ASSERT(!d->isLayouting);
+    d->isLayouting = true;
 
+    bool finished;
+    do {
+        // Try to layout as long as d->restartLayout==true. This can happen for example if
+        // a schedule layout call interrupts the layouting and asks for a new layout run.
+        finished = doLayout();
+    } while (d->restartLayout);
+
+    Q_ASSERT(d->isLayouting);
+    d->isLayouting = false;
+
+    if (finished) {
+        // We are only finished with layouting if continuousLayout()==true.
+        emit finishedLayout();
+    }
+}
+
+bool KoTextDocumentLayout::doLayout()
+{
     delete d->layoutPosition;
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
     d->layoutScheduled = false;
+    d->restartLayout = false;
     KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        if (d->restartLayout) {
+            return false; // Abort layouting to restart from the beginning.
+        }
+
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -500,9 +542,14 @@ void KoTextDocumentLayout::layout()
             do {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
-                finished = rootArea->layout(tmpPosition);
+                finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    d->anchoringIndex = 0;
+                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                         d->textAnchors[i]->setAnchorStrategy(0);
+                     }
+                     d->textAnchors.clear();
+                     d->anchoringIndex = 0;
+                    //d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -515,6 +562,7 @@ void KoTextDocumentLayout::layout()
             d->layoutPosition = tmpPosition;
 
             d->provider->doPostLayout(rootArea, false);
+            updateProgress(rootArea->startTextFrameIterator());
 
             if (finished) {
                 d->provider->releaseAllAfter(rootArea);
@@ -523,24 +571,23 @@ void KoTextDocumentLayout::layout()
                 while (d->rootAreaList.size() > newsize) {
                     d->rootAreaList.removeLast();
                 }
-                emit finishedLayout();
-                return;
+                return true; // Finished layouting
             }
 
             if (!continuousLayout()) {
-                return; // Let's take a break
+                return false; // Let's take a break. We are not finished layouting yet.
             }
         } else {
             delete d->layoutPosition;
             d->layoutPosition = new FrameIterator(rootArea->nextStartOfArea());
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 d->provider->releaseAllAfter(rootArea);
+                // We must also delete them from our own list too
                 int newsize = d->rootAreaList.indexOf(rootArea) + 1;
                 while (d->rootAreaList.size() > newsize) {
                     d->rootAreaList.removeLast();
                 }
-                emit finishedLayout();
-                return;
+                return true; // Finished layouting
             }
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
@@ -549,7 +596,11 @@ void KoTextDocumentLayout::layout()
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
-        // Request a Root Area
+        if (d->restartLayout) {
+            return false; // Abort layouting to restart from the beginning.
+        }
+
+        // Request a new root-area. If NULL is returned then layouting is finished.
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
         if (rootArea) {
@@ -566,9 +617,14 @@ void KoTextDocumentLayout::layout()
             do {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
-                rootArea->layout(tmpPosition);
+                rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    d->anchoringIndex = 0;
+                    //d->anchoringIndex = 0;
+                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                         d->textAnchors[i]->setAnchorStrategy(0);
+                     }
+                     d->textAnchors.clear();
+                     d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -581,12 +637,13 @@ void KoTextDocumentLayout::layout()
             d->layoutPosition = tmpPosition;
 
             d->provider->doPostLayout(rootArea, true);
+            updateProgress(rootArea->startTextFrameIterator());
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
-                break;
+                return true; // Finished layouting
             }
             if (!continuousLayout()) {
-                return; // let's take a break
+                return false; // Let's take a break. We are not finished layouting yet.
             }
         } else {
             break; // with no more space there is nothing else we can do
@@ -595,11 +652,12 @@ void KoTextDocumentLayout::layout()
                                                // 50 just to seperate pages
     }
 
-    emit finishedLayout();
+    return true; // Finished layouting
 }
 
 void KoTextDocumentLayout::scheduleLayout()
 {
+    // Compress multiple scheduleLayout calls into one executeScheduledLayout.
     if (d->layoutScheduled) {
         return;
     }
@@ -610,10 +668,16 @@ void KoTextDocumentLayout::scheduleLayout()
 void KoTextDocumentLayout::executeScheduledLayout()
 {
     // Only do the actual layout if it wasn't done meanwhile by someone else.
-    if (d->layoutScheduled) {
-        d->layoutScheduled = false;
-        if (!d->isLayouting)
-            layout();
+    if (!d->layoutScheduled) {
+        return;
+    }
+    d->layoutScheduled = false;
+    if (d->isLayouting) {
+        // Since we are already layouting ask for a restart to be sure to also include
+        // root-areas that got dirty and are before the currently processed root-area.
+        d->restartLayout = true;
+    } else {
+        layout();
     }
 }
 
@@ -686,6 +750,18 @@ QList<KoShape*> KoTextDocumentLayout::shapes() const
             listOfShapes.append(rootArea->associatedShape());
     }
     return listOfShapes;
+}
+
+void KoTextDocumentLayout::updateProgress(const QTextFrame::iterator &it)
+{
+    QTextBlock block = it.currentBlock();
+    if (block.isValid()) {
+        int percent = block.position() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
+        emit layoutProgressChanged(percent);
+    } else if (it.currentFrame()) {
+        int percent = it.currentFrame()->firstPosition() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
+        emit layoutProgressChanged(percent);
+    }
 }
 
 #include <KoTextDocumentLayout.moc>

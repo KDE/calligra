@@ -34,7 +34,7 @@ int main( int argc, char **argv )
   KAboutData* about = newBrainDumpAboutData();
   KCmdLineArgs::init( argc, argv, about );
 
-  KApplication app;
+  KUniqueApplication app;
 
   KIconLoader::global()->addAppDir("koffice");
   KoGlobal::initialize();
