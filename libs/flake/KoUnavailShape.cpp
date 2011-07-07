@@ -425,8 +425,8 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             // Check to see if we know the mimetype for this entry. Specifically:
             // 1. Check to see if the item is a loadable SVG file
 
-            // FIXME: Check in the manifest first.
-            //d->scalablePreview->load(QString("/home/ingwa/musicshapetest.svg")); // FIXME: This is just test data.
+            // FIXME: Perhaps check in the manifest first? But this
+            //        seems to work well.
             d->scalablePreview->load(previewData);
             if (d->scalablePreview->isValid()) {
                 kDebug(30006) << "Found scalable preview image!";
