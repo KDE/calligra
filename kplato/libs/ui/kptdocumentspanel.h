@@ -27,7 +27,7 @@
 #include "kptdocuments.h"
 
 #include <QWidget>
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QModelIndex>
 
 namespace KPlato
@@ -72,7 +72,7 @@ private:
     enum State { Unmodified = 1, Modified = 2, Added = 4, Removed = 8 };
     QMap<Document*, State> m_state;
     QMap<Document*, KUrl> m_orgurl;
-    QUndoStack m_cmds;
+    KUndo2QStack m_cmds;
     DocumentTreeView *m_view;
 };
 

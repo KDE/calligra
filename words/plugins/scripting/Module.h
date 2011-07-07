@@ -1,5 +1,5 @@
 /*
- * This file is part of KWord
+ * This file is part of Words
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
@@ -24,7 +24,7 @@
 
 #include <KoScriptingModule.h>
 
-#include <KWord.h>
+#include <Words.h>
 #include <QWeakPointer>
 
 class KWDocument;
@@ -33,11 +33,11 @@ namespace Scripting
 {
 
 /**
-* The Module class enables access to the KWord functionality
+* The Module class enables access to the Words functionality
 * from within the scripting backends.
-* It will be shown as 'KWord' entity in scripting code.
+* It will be shown as 'Words' entity in scripting code.
 *
-* KWord provides as top-level containers the \a FrameSet
+* Words provides as top-level containers the \a FrameSet
 * objects. Each such frameset is then able to contain
 * multiple \a Frame objects. The frameset also allows to
 * access the \a TextDocument object to deals with the actual
@@ -45,28 +45,28 @@ namespace Scripting
 *
 * Python example to set the content of the main text document;
 * \code
-* import KWord
-* doc = KWord.mainFrameSet().document()
+* import Words
+* doc = Words.mainFrameSet().document()
 * doc.setHtml("<b>Hello World</b>")
 * \endcode
 *
 * Python example to append content to the main text document
 * and set the page header and footer;
 * \code
-* import KWord
-* doc = KWord.mainFrameSet().document()
+* import Words
+* doc = Words.mainFrameSet().document()
 * doc.lastCursor().insertHtml("Even more <b>Hello World</b>")
-* KWord.firstPageHeaderFrameSet().document().setText("Header")
-* KWord.firstPageFooterFrameSet().document().setText("Footer")
+* Words.firstPageHeaderFrameSet().document().setText("Header")
+* Words.firstPageFooterFrameSet().document().setText("Footer")
 * \endcode
 *
 * Python example that prints the documents Url and some other
 * meta information;
 * \code
-* import KWord
-* print KWord.document().url()
-* print KWord.document().documentInfoTitle()
-* print KWord.document().documentInfoAuthorName()
+* import Words
+* print Words.document().url()
+* print Words.document().documentInfoTitle()
+* print Words.document().documentInfoAuthorName()
 * \endcode
 */
 class Module : public KoScriptingModule
@@ -78,7 +78,7 @@ public:
 
     KWDocument* kwDoc();
     virtual KoDocument* doc();
-    QObject* findFrameSet(KWord::TextFrameSetType type);
+    QObject* findFrameSet(Words::TextFrameSetType type);
 
 public slots:
 
@@ -91,9 +91,9 @@ public slots:
     *
     * Python example that iterates over all pages;
     * \code
-    * import KWord
-    * for i in range( KWord.pageCount() ):
-    *     page = KWord.page(i)
+    * import Words
+    * for i in range( Words.pageCount() ):
+    *     page = Words.page(i)
     *     print "width=%s height=%s" % (page.width(),page.height())
     * \endcode
     */
@@ -122,29 +122,29 @@ public slots:
 
     /** Return the \a FrameSet that holds the headers for the odd pages */
     QObject* oddPagesHeaderFrameSet() {
-        return findFrameSet(KWord::OddPagesHeaderTextFrameSet);
+        return findFrameSet(Words::OddPagesHeaderTextFrameSet);
     }
     /** Return the \a FrameSet that holds the headers for the even pages */
     QObject* evenPagesHeaderFrameSet() {
-        return findFrameSet(KWord::EvenPagesHeaderTextFrameSet);
+        return findFrameSet(Words::EvenPagesHeaderTextFrameSet);
     }
     /** Return the \a FrameSet that holds the footers for the odd pages */
     QObject* oddPagesFooterFrameSet() {
-        return findFrameSet(KWord::OddPagesFooterTextFrameSet);
+        return findFrameSet(Words::OddPagesFooterTextFrameSet);
     }
     /** Return the \a FrameSet that holds the footers for the even pages */
     QObject* evenPagesFooterFrameSet() {
-        return findFrameSet(KWord::EvenPagesFooterTextFrameSet);
+        return findFrameSet(Words::EvenPagesFooterTextFrameSet);
     }
 
     /** Return the \a FrameSet that holds all the frames for the main text area */
     QObject* mainFrameSet() {
-        return findFrameSet(KWord::MainTextFrameSet);
+        return findFrameSet(Words::MainTextFrameSet);
     }
 
     /** Return any other \a FrameSet not managed by the auto-frame layout */
     QObject* otherFrameSet() {
-        return findFrameSet(KWord::OtherTextFrameSet);
+        return findFrameSet(Words::OtherTextFrameSet);
     }
 
     /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */

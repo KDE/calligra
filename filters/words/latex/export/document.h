@@ -1,5 +1,5 @@
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000-2002 Robert JACOLIN
 **
@@ -19,8 +19,8 @@
 **
 */
 
-#ifndef __KWORD_LATEX_DOCUMENT_H__
-#define __KWORD_LATEX_DOCUMENT_H__
+#ifndef __WORDS_LATEX_DOCUMENT_H__
+#define __WORDS_LATEX_DOCUMENT_H__
 
 #include <QList>
 #include <QTextStream>
@@ -40,7 +40,7 @@
 class Document: public XmlParser
 {
 public:
-    enum EGenerate { E_LATEX, E_KWORD, E_CONFIG };
+    enum EGenerate { E_LATEX, E_WORDS, E_CONFIG };
 
 private:
     QList<Element*> _headers;
@@ -89,7 +89,7 @@ public:
     Key* searchKey(const QString& keyName);
     /** Save the file in a temp file. */
     QString extractData(const QString& key);
-    /** Build a DOM tree (e.g. a KOffice part) */
+    /** Build a DOM tree (e.g. a Calligra part) */
     //QDomNode extractKoData(const QString& key);
     //Pixmap*  searchPixmap(const QString&);
 
@@ -109,4 +109,4 @@ private:
     void  generateTypeFooter(QTextStream&, Element*);
 };
 
-#endif /* __KWORD_LATEX_DOCUMENT_H__ */
+#endif /* __WORDS_LATEX_DOCUMENT_H__ */

@@ -150,7 +150,7 @@ kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 set ( KPLATO_REPORTS_LIBS koreport koproperty )
 target_link_libraries(kplatoui ${KDE4_KABC_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
-set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 

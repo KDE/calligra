@@ -271,9 +271,11 @@ namespace wvWare {
         // Paragraph related callbacks...
         /**
          * Denotes the start of a paragraph.
-         * The paragraph properties are passed in the @p paragraphProperties argument.
+         * @param paragraph properties of the paragraph.
+         * @param character properties of the paragraph provided for empty
+         * paragraphs to set correct font-size, line-height, etc.
          */
-        virtual void paragraphStart( SharedPtr<const ParagraphProperties> paragraphProperties );
+        virtual void paragraphStart( SharedPtr<const ParagraphProperties> paragraphProperties, SharedPtr<const Word97::CHP> characterProperties);
         virtual void paragraphEnd();
 
         /**
@@ -383,16 +385,14 @@ namespace wvWare {
         virtual void fieldEnd( const FLD* fld, SharedPtr<const Word97::CHP> chp );
 
         /**
-         * This method is called every time we find an inline object.
-         * @param data the picture data as defined by functordata.
+         * This method is called every time an inline or floating MS-ODRAW
+         * object is found.  If the @param data is ZERO, then it's a floating
+         * object.  Else it's an inline object.
+         *
+         * @param globalCP the CP to which the floating object is anchored
+         * @param data the inline object data as defined by functordata
          */
-        virtual void inlineObjectFound(const PictureData& data);
-
-        /**
-         * This method is called every time we find a floating object.
-	 * @param cp of a drawing
-         */
-        virtual void floatingObjectFound( unsigned int globalCP );
+        virtual void msodrawObjectFound( const unsigned int globalCP, const PictureData* data );
 
         /**
          * Denotes the start of a bookmark.

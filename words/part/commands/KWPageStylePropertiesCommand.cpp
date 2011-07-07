@@ -32,8 +32,8 @@
 #include <KLocale>
 #include <KDebug>
 
-KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, QUndoCommand *parent)
-    : QUndoCommand(i18n("Page Properties"), parent),
+KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent)
+    : KUndo2Command(i18nc("(qtundo-format)", "Page Properties"), parent),
     m_document(document),
     m_style(styleBefore),
     m_styleBefore(styleBefore),
@@ -103,7 +103,7 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
     const qreal sizeDifference = m_newLayout.height - m_oldLayout.height;
     foreach (KWFrameSet *fs, document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        bool remove = tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet;
+        bool remove = tfs && tfs->textFrameSetType() == Words::MainTextFrameSet;
         foreach (KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
             if (remove && shape->boundingRect().intersects(page.rect())) {
@@ -136,14 +136,14 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
 
 void KWPageStylePropertiesCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     m_style.priv()->copyProperties(m_styleAfter.priv());
     m_document->updatePagesForStyle(m_style);
 }
 
 void KWPageStylePropertiesCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     m_style.priv()->copyProperties(m_styleBefore.priv());
     m_document->updatePagesForStyle(m_style);
 }

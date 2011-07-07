@@ -1,4 +1,4 @@
-KWord stores all its data as shapes. textshapes, imageshapes, vector shapes, formula shapes. etc.
+Words stores all its data as shapes. textshapes, imageshapes, vector shapes, formula shapes. etc.
 Each shape can have a hierarchy of child shapes. So a text can contain an image shape.
 
 For shapes that don't have a parent shape we store them in KWFrame instances.
@@ -11,7 +11,7 @@ KWFrameSet
 
 There are the KWTextFrame and KWImageFrame classes which inherit from KWFrame. The concept is
 quite the same for those and they typically just add some variables and handling specific for
-KWord.
+Words.
 
 
 Lifetime

@@ -60,7 +60,7 @@
 // KDE
 #include <KColorUtils>
 
-// KOffice
+// Calligra
 #include <KoPostscriptPaintDevice.h>
 #include <KoZoomHandler.h>
 

@@ -19,7 +19,7 @@
 
 #include "WebToolWidget.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QWebPage>
 #include <QWebFrame>
 
@@ -29,7 +29,7 @@
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
 
-class ChangeUrl : public QUndoCommand {
+class ChangeUrl : public KUndo2Command {
 public:
   ChangeUrl( WebShape* shape, const QUrl& newUrl ) : m_shape(shape), m_newUrl(newUrl), m_oldUrl(shape->url())
   {
@@ -48,7 +48,7 @@ private:
   QUrl m_oldUrl;
 };
 
-class ChangeCached : public QUndoCommand {
+class ChangeCached : public KUndo2Command {
 public:
   ChangeCached( WebShape* shape ) : m_shape(shape) {
     if(shape->isCached())
@@ -119,7 +119,7 @@ void WebToolWidget::save()
   }
 }
 
-QUndoCommand * WebToolWidget::createCommand()
+KUndo2Command * WebToolWidget::createCommand()
 {
     save();
 

@@ -21,7 +21,7 @@
 
 #include <QMimeData>
 
-#include <kundostack.h>
+#include <kundo2stack.h>
 
 #include <KoShapeRenameCommand.h>
 

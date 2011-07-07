@@ -24,7 +24,7 @@ Split frames needs to be implemented.
 Styles have to be saved external (and/or an import/export facility).
 Books (collection of documents) should be implemented
 
-- It should be possible to keep files and shapes external. Kword should also
+- It should be possible to keep files and shapes external. Words should also
 notice a changed file (preferably at runtime) and reload it.
 
 Add a RMB option on a copy-frame to update position of all copies in that FS.

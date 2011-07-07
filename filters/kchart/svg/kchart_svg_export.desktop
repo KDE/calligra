@@ -59,4 +59,4 @@ X-KDE-Import=application/x-kchart
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1
 X-KDE-Library=kchartsvgexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

@@ -27,7 +27,7 @@
 #include "calligra_tables_limits.h"
 #include "Region.h"
 
-// KOffice
+// Calligra
 #include <KoPageLayout.h>
 #include <KoUnit.h>
 

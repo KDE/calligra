@@ -61,7 +61,7 @@ void SummaryTaskDialog::slotTaskRemoved( Node *node )
 
 
 MacroCommand *SummaryTaskDialog::buildCommand() {
-    MacroCommand *m = new MacroCommand(i18n("Modify Summary Task"));
+    MacroCommand *m = new MacroCommand(i18nc("(qtundo-format)", "Modify Summary Task"));
     bool modified = false;
     MacroCommand *cmd = m_generalTab->buildCommand();
     if (cmd) {

@@ -37,12 +37,12 @@ public:
     bool mainFrame;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
     qreal headerMinimumHeight,footerMinimumHeight;
-    KWord::HeaderFooterType headers, footers;
+    Words::HeaderFooterType headers, footers;
 
     qreal footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
     int footNoteSeparatorLineLength; ///< It's a percentage of page.
     Qt::PenStyle footNoteSeparatorLineType; ///< foot note separate type
-    KWord::FootNoteSeparatorLinePos footNoteSeparatorLinePos; ///< alignment in page
+    Words::FootNoteSeparatorLinePos footNoteSeparatorLinePos; ///< alignment in page
 
     // See parag 16.2 for all the ODF features.
     KoText::Direction direction;

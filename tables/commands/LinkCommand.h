@@ -22,7 +22,7 @@
 #define CALLIGRA_TABLES_LINK_COMMAND
 
 #include <QString>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <Cell.h>
 
@@ -35,7 +35,7 @@ namespace Tables
  * \ingroup Commands
  * \brief Adds/Removes a hyperlink.
  */
-class LinkCommand : public QUndoCommand
+class LinkCommand : public KUndo2Command
 {
 public:
     LinkCommand(const Cell& cell, const QString& text, const QString& link);

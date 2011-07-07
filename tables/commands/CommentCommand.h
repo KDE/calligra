@@ -35,7 +35,7 @@ namespace Tables
 class CommentCommand : public AbstractRegionCommand
 {
 public:
-    CommentCommand(QUndoCommand* parent = 0);
+    CommentCommand(KUndo2Command* parent = 0);
     void setComment(const QString& comment);
 
 protected:

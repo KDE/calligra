@@ -41,7 +41,7 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
         m_dialog(new ExportDialogUI(this))
 {
     setButtons(Ok | Cancel);
-    setCaption(i18n("KWord's HTML Export Filter"));
+    setCaption(i18n("Words's HTML Export Filter"));
     kapp->restoreOverrideCursor();
 
     QStringList encodingList;

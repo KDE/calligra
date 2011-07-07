@@ -22,7 +22,7 @@
 #ifndef KFORMULA_FORMULADOCUMENT_H
 #define KFORMULA_FORMULADOCUMENT_H
 
-// KOffice
+// Calligra
 #include <KoDocument.h>
 #include <KoXmlReaderForward.h>
 
