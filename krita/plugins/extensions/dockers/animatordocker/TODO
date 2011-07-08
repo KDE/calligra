@@ -26,6 +26,7 @@ Before 0.2 release:
 Before 0.3 release:
 * Group layers full support
 * [INPROGRESS] Moving/deleting/adding frames
+* [INPROGRESS] Animated layers classes
 * Add support for disabling shape filling
 
 Before 1.0 release:
