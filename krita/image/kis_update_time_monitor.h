@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_UPDATE_SCHEDULER_TEST_H
-#define KIS_UPDATE_SCHEDULER_TEST_H
+#ifndef __KIS_UPDATE_TIME_MONITOR_H
+#define __KIS_UPDATE_TIME_MONITOR_H
 
-#include <QtTest/QtTest>
+#include "krita_export.h"
 
-#include "kis_types.h"
+#include <QVector>
+class QPointF;
+class QRect;
 
-class KisUpdateSchedulerTest : public QObject
+
+class KRITAIMAGE_EXPORT KisUpdateTimeMonitor
 {
-    Q_OBJECT
+public:
+    static KisUpdateTimeMonitor* instance();
+    ~KisUpdateTimeMonitor();
+
+    void startStrokeMeasure(const QPointF &startPos);
+    void reportMouseMove(const QPointF &pos);
+    void printValues();
+
+    void reportJobStarted(void *key);
+    void reportJobFinished(void *key, const QVector<QRect> &rects);
+    void reportUpdateFinished(const QRect &rect);
 
 private:
-    KisImageSP buildTestingImage();
+    KisUpdateTimeMonitor();
 
-private slots:
-    void testMerge();
-    void benchmarkOverlappedMerge();
-    void testLocking();
-    void testExclusiveStrokes();
-
-    void testTimeMonitor();
+private:
+    struct Private;
+    Private * const m_d;
 };
 
-#endif /* KIS_UPDATE_SCHEDULER_TEST_H */
-
+#endif /* __KIS_UPDATE_TIME_MONITOR_H */

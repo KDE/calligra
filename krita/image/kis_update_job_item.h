@@ -26,6 +26,7 @@
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
+#include "kis_update_time_monitor.h"
 
 class KisUpdateJobItem :  public QObject, public QRunnable
 {
@@ -76,6 +77,7 @@ public:
 
         QRect changeRect = m_walker->changeRect();
         emit sigContinueUpdate(changeRect);
+        KisUpdateTimeMonitor::instance()->reportUpdateFinished(m_walker->requestedRect());
     }
 
     inline void setWalker(KisBaseRectsWalkerSP walker) {

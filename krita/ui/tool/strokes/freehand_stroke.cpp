@@ -83,22 +83,26 @@ FreehandStrokeJobStrategy::FreehandStrokeJobStrategy()
 {
 }
 
+#include "kis_update_time_monitor.h"
+
 void FreehandStrokeJobStrategy::processDab(DabProcessingData *data)
 {
     Data *internalData = dynamic_cast<Data*>(data);
+    QVector<QRect> dirtyRects;
+
 
     switch(internalData->type) {
     case Data::POINT:
         internalData->dragDistance = KisDistanceInformation(0,0);
         internalData->painter->paintAt(internalData->pi1);
-        internalData->node->setDirty(internalData->painter->takeDirtyRegion());
+        dirtyRects = internalData->painter->takeDirtyRegion();
         break;
     case Data::LINE:
         internalData->dragDistance =
             internalData->painter->paintLine(internalData->pi1,
                                              internalData->pi2,
                                              internalData->dragDistance);
-        internalData->node->setDirty(internalData->painter->takeDirtyRegion());
+        dirtyRects = internalData->painter->takeDirtyRegion();
         break;
     case Data::CURVE:
         internalData->dragDistance =
@@ -107,7 +111,11 @@ void FreehandStrokeJobStrategy::processDab(DabProcessingData *data)
                                                     internalData->control2,
                                                     internalData->pi2,
                                                     internalData->dragDistance);
-        internalData->node->setDirty(internalData->painter->takeDirtyRegion());
+        dirtyRects = internalData->painter->takeDirtyRegion();
         break;
     };
+
+    KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
+
+    internalData->node->setDirty(dirtyRects);
 }

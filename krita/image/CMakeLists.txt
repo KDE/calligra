@@ -127,6 +127,7 @@ set(kritaimage_LIB_SRCS
    kis_strokes_queue.cpp
    kis_simple_update_queue.cpp
    kis_update_scheduler.cpp
+   kis_update_time_monitor.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
@@ -217,6 +218,7 @@ kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES} )
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kritaimage rt )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

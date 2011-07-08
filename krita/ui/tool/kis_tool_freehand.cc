@@ -58,6 +58,7 @@
 #include <kis_painting_assistants_manager.h>
 #include <kis_3d_object_model.h>
 
+#include "kis_update_time_monitor.h"
 #include "strokes/freehand_stroke.h"
 
 #define ENABLE_RECORDING
@@ -183,7 +184,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
         setMode(KisTool::PAINT_MODE);
 
+        KisUpdateTimeMonitor::instance()->startStrokeMeasure(convertToPixelCoord(adjustPosition(e->point, e->point)));
         initPaint(e);
+
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
@@ -236,6 +239,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     QPointF adjusted = adjustPosition(e->point, m_strokeBegin);
     QPointF pos = convertToPixelCoord(adjusted);
     QPointF dragVec = pos - m_previousPaintInformation.pos();
+
+    KisUpdateTimeMonitor::instance()->reportMouseMove(pos);
 
     qreal perspective = 1.0;
     foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {

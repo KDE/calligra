@@ -1110,9 +1110,12 @@ void KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 }
 
+#include "kis_update_time_monitor.h"
+
 void KisImage::addJob(KisDabProcessingStrategy::DabProcessingData *data)
 {
     if (m_d->scheduler) {
+        KisUpdateTimeMonitor::instance()->reportJobStarted(data);
         m_d->scheduler->addJob(data);
     }
 }
