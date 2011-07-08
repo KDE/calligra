@@ -718,16 +718,25 @@ void SheetView::setActiveHighlight(const QPoint &cell)
 void SheetView::setHighlightColor(const QColor &color)
 {
     d->highlightColor = color;
+    if (hasHighlightedCells()) {
+        invalidate();
+    }
 }
 
 void SheetView::setHighlightMaskColor(const QColor &color)
 {
     d->highlightMaskColor = color;
+    if (hasHighlightedCells()) {
+        invalidate();
+    }
 }
 
 void SheetView::setActiveHighlightColor(const QColor &color)
 {
     d->activeHighlightColor = color;
+    if (hasHighlightedCells()) {
+        invalidate();
+    }
 }
 
 #include "SheetView.moc"
