@@ -55,7 +55,7 @@ public:
      * @param QString& the table name
      * @return a const reference to QList<uint> which is, in fact, the cached primary key list
      */
-    const QList<uint>& getCachedPkeys(const QString&);
+    const QList<uint>& getCachedPkeys(const QString&) const;
 
     /*!
      * Get current position in cache

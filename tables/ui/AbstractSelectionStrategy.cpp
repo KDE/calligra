@@ -61,8 +61,8 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
     const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
     // In which cell did the user click?
-    double xpos;
-    double ypos;
+    qreal xpos;
+    qreal ypos;
     int col = selection->activeSheet()->leftColumn(position.x(), xpos);
     int row = selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.

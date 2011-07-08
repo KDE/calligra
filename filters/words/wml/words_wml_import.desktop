@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words WML Import Filter
+Name[cs]=Importní filtr formátu WML pro Words
+Name[es]=Filtro de Words de importación de WML
+Name[et]=Wordsi WML-i impordifilter
+Name[nb]=WML-importfilter for Words
+Name[nds]=WML-Importfilter för Words
 Name[pt]=Filtro de Importação de WML para o Words
 Name[pt_BR]=Filtro de importação de WML para o Words
 Name[sv]=Words WML-importfilter

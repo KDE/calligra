@@ -107,8 +107,6 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
             const DrawStyle tmp(0, &o);
             quint32 spid = tmp.hspMaster();
             master = client->getMasterShapeContainer(spid);
-        } else {
-            master = client->defaultShapeContainer();
         }
     }
     const DrawStyle ds(drawingGroup, master, &o);

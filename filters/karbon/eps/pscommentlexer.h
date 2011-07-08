@@ -45,6 +45,7 @@ typedef enum {
     Action_ByteArraySpecial
 } Action;
 
+// TODO: Looks like this class is duplicated in ailexer.h
 class StringBuffer
 {
 public:
@@ -54,10 +55,10 @@ public:
     void append(char c);
     void clear();
     QString toString() const;
-    uint length();
+    uint length() const;
     double toFloat();
     int toInt();
-    const char *toLatin1();
+    const char *toLatin1() const;
     QString mid(uint index, uint len = 0xffffffff) const;
 private:
     char *m_buffer;
@@ -98,16 +99,16 @@ public:
     BoundingBoxExtractor();
     virtual ~BoundingBoxExtractor();
 
-    int llx() {
+    int llx() const {
         return m_llx;
     }
-    int lly() {
+    int lly() const {
         return m_lly;
     }
-    int urx() {
+    int urx() const {
         return m_urx;
     }
-    int ury() {
+    int ury() const {
         return m_ury;
     }
 private:
