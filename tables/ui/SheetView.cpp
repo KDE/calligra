@@ -463,6 +463,33 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
         if (!rightToLeft)
             coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
     }
+
+    // 5. Paint cell highlighting
+    if (hasHighlightedCells()) {
+        QPointF active = activeHighlight();
+        QPainterPath p;
+        CellPaintData* activeData = 0;
+        for (QList<CellPaintData>::iterator it(cached_cells.begin()); it != cached_cells.end(); ++it) {
+            if (isHighlighted(it->cell.cellPosition())) {
+                p.addRect(it->coordinate.x(), it->coordinate.y(), it->cellView.cellWidth(), it->cellView.cellHeight());
+                if (it->cell.cellPosition() == active) {
+                    activeData = &*it;
+                }
+            }
+        }
+        QPainterPath base;
+        base.addRect(painter.clipPath().boundingRect().adjusted(-5, -5, 5, 5));
+        p = base.subtracted(p);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QBrush(QColor(0, 0, 0, 128)));
+        painter.drawPath(p);
+
+        if (activeData) {
+            painter.setBrush(QBrush(QColor(255, 127, 0, 128)));
+            painter.setPen(QPen(Qt::black));
+            painter.drawRect(QRectF(activeData->coordinate.x(), activeData->coordinate.y(), activeData->cellView.cellWidth(), activeData->cellView.cellHeight()));
+        }
+    }
 }
 
 void SheetView::invalidateRange(const QRect& range)
