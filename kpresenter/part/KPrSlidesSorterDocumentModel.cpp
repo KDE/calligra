@@ -273,7 +273,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
     return true;
 }
 
-void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter, Qt::DropAction action)
+void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
 {
      Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
      bool enableMove = true;

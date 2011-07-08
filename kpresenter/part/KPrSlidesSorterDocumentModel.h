@@ -73,7 +73,7 @@ public:
      * @param pageAfter destination of the drop
      * @param action the drop action
      */
-    void doDrop(QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter, Qt::DropAction action);
+    void doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action);
 
     /**
      * @brief Return the page that match the give index in the list
