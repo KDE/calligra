@@ -18,9 +18,9 @@
     */
 
 #include "SvgParser_Stage.h"
-#include "SvgAnimationData.h"
 #include <KoShape.h>
 #include <KoShapeGroup.h>
+#include "SvgAnimationData.h"
 
 SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):SvgParser_generic(documentResourceManager)
 {

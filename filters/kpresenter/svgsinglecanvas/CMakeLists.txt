@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/common ${CMAKE_SOURCE_DIR}/karbon/ui ${CMAKE_SOURCE_DIR}/filter/karbon/svg ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
+include_directories( ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/common ${CMAKE_SOURCE_DIR}/karbon/ui ${CMAKE_SOURCE_DIR}/filter/karbon/svg ${CMAKE_SOURCE_DIR}/plugins ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
 
 
 ########## next traget ################
@@ -14,17 +14,21 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp 
 )
-
 
 set(svgsinglecanvasexport_PART_SRCS 
     ${CMAKE_SOURCE_DIR}/karbon/ui/KarbonPart.h
-    Frame.cpp
     SvgAnimationData.cpp
+    #PresentationViewPortShape.cpp
+    #ViewPortShapeConfigCommand.cpp
     ${LIBSVG_SOURCES}
     ${SHAPES_SOURCES}
 )
 
+#kde4_add_ui_files(rectpathshape_PART_SRCS
+ #   ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/RectangleShapeConfigWidget.ui
+  #  )
 
 kde4_add_plugin(svgsinglecanvasexport ${svgsinglecanvasexport_PART_SRCS})
 

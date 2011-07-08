@@ -1,5 +1,5 @@
-#include <rectangle/RectangleShape.h>
 #include <KoXmlReader.h>
+#include <plugins/pathshapes/rectangle/RectangleShape.h>
 
 #define PresentationViewPortShapeId "PresentationViewPortShape"
 

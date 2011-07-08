@@ -21,10 +21,10 @@
 #define SVG_PARSER_STAGE_H
 
 #include "SvgParser_generic.h"
+#include "SvgAnimationData.h"
 
 class SvgParser_generic;
 class KoResourceManager;
-//class Frame;
 class PresentationViewPortShape;
 
 /**

@@ -22,7 +22,7 @@
 
 //#include "Frame.h"
 #include <libs/flake/KoShapeApplicationData.h>
-#include "PresentationViewPortShape.h"
+#include "presentationviewportshape/PresentationViewPortShape.h"
 
 //class Frame;
 class KoShape;
