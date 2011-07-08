@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2011 Aakriti Gupta<aakriti.a.gupta@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,6 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "ViewPortShapeConfigWidget.h"
 //#include "RectangleShapeConfigWidget.h"
 #include "plugins/pathshapes/rectangle/RectangleShape.h"
