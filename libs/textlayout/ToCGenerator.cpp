@@ -97,8 +97,13 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
     QTextBlock::iterator it;
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
+        if (!currentFragment.isValid())
+            continue;
+        QString s = currentFragment.text();
+        if (s.isEmpty())
+            continue;
         // most possibly inline object
-        if (currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter && currentFragment.isValid()) {
+        if (s[s.length() - 1].unicode() == QChar::ObjectReplacementCharacter) {
             KoInlineObject *inlineObject = inlineTextObjectManager->inlineTextObject( currentFragment.charFormat() );
             KoBookmark *bookmark = dynamic_cast<KoBookmark*>(inlineObject);
             if (bookmark) {
@@ -236,7 +241,9 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             bookmark->setName(target);
                             bookmark->setType(KoBookmark::SinglePosition);
                             QTextCursor blockCursor(block);
+#if QT_VERSION >= 0x040700 
                             blockCursor.setKeepPositionOnInsert(true);
+#endif
                             m_documentLayout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
                         }
 
