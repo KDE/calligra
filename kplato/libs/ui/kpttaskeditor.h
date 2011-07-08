@@ -177,7 +177,8 @@ private slots:
     void slotMoveTaskDown();
 
     void slotSplitView();
-    
+    void slotProjectShown( bool );
+
 private:
     void edit( QModelIndex index );
 

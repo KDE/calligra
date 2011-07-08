@@ -10,7 +10,7 @@
     </entry>
     <entry name="ConstraintType" type="Enum">
       <label>Scheduling constraint type</label>
-      <choice>
+      <choices>
         <choice name="AsSoonAsPossible"/>
         <choice name="AsLateAsPossible"/>
         <choice name="MustStartOn"/>
@@ -18,60 +18,67 @@
         <choice name="StartNotEarlierThan"/>
         <choice name="FinishNotLaterThan"/>
         <choice name="FixedInterval"/>
-      </choice>
+      </choices>
+      <default>AsSoonAsPossible</default>
     </entry>
     <entry name="StartTimeUsage" type="Enum">
       <label>Defines how start constraint time is used</label>
-      <choice>
+      <choices>
         <choice name="CurrentdateTime"/>
         <choice name="CurrentDate"/>
         <choice name="SpecifiedDateTime"/>
-      </choice>
+      </choices>
+      <default>CurrentdateTime</default>
     </entry>
     <entry name="ConstraintStartTime" type="DateTime">
       <label>Constraint start date and time</label>
     </entry>
     <entry name="EndTimeUsage" type="Enum">
       <label>Defines how end constraint time is used</label>
-      <choice>
+      <choices>
         <choice name="CurrentdateTime"/>
         <choice name="CurrentDate"/>
         <choice name="SpecifiedDateTime"/>
-      </choice>
+      </choices>
+      <default>CurrentdateTime</default>
     </entry>
     <entry name="ConstraintEndTime" type="DateTime">
       <label>Constraint end date and time</label>
     </entry>
 
-    <entry name="EstimateType" type="Int">
+    <entry name="EstimateType" type="Enum">
       <label>Type of estimate</label>
-      <choice>
+      <choices>
         <choice name="Effort"/>
         <choice name="Duration"/>
-        <choice name="Length"/>
-      </choice>
+      </choices>
+      <default>Effort</default>
     </entry>
     <entry name="Unit" type="Enum">
       <label>Estimate time unit</label>
-      <choice>
-        <choice name="year"/>
-        <choice name="month"/>
-        <choice name="week"/>
-        <choice name="day"/>
-        <choice name="hour"/>
-        <choice name="min"/>
-        <choice name="sec"/>
-        <choice name="ms"/>
-      </choice>
+      <choices>
+        <choice name="Year"/>
+        <choice name="Month"/>
+        <choice name="Week"/>
+        <choice name="Day"/>
+        <choice name="Hour"/>
+        <choice name="Minute"/>
+        <choice name="Second"/>
+        <choice name="Millisecond"/>
+      </choices>
+      <default>Hour</default>
     </entry>
     <entry name="ExpectedEstimate" type="Double">
       <label>Expected estimate</label>
+      <default>8.0</default>
     </entry>
     <entry name="OptimisticRatio" type="Int">
       <label>Optimistic estimate</label>
+      <default>-75</default>
     </entry>
     <entry name="PessimisticRatio" type="Int">
       <label>Pessimistic estimate</label>
+      <default>100</default>
     </entry>
 
     <entry name="Description" type="String">
@@ -170,11 +177,11 @@
   <group name="Miscellaneous">
     <entry name="MinimumDurationUnit" type="Int">
       <label>The smallest duration unit allowed</label>
-      <default>4</default>
+      <default>EnumUnit::Hour</default>
     </entry>
     <entry name="MaximumDurationUnit" type="Int">
       <label>The largest duration unit allowed</label>
-      <default>1</default>
+      <default>EnumUnit::Month</default>
     </entry>
   </group>
 

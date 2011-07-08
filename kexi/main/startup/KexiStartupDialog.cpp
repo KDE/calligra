@@ -352,7 +352,7 @@ void KexiStartupDialog::setupPageTemplates()
     QString clickMsg("\n\n" + i18n("Click \"OK\" button to proceed."));
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_BlankDatabase = d->templatesWidget->addPage(templPageWidget,
-                                           i18nc("Keep this text narrow: split to multiple rows if needed", "Blank Database"));
+                                           i18n("Blank Database"));
     d->templPageWidgetItem_BlankDatabase->setHeader(i18n("New Blank Database Project"));
     d->templPageWidgetItem_BlankDatabase->setIcon(KIcon("x-office-document"));
     tmplyr = new QVBoxLayout(templPageWidget);
@@ -372,7 +372,7 @@ void KexiStartupDialog::setupPageTemplates()
     QString kexi_sqlite_icon_name(KexiDB::defaultFileBasedDriverIcon());
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_CreateFromTemplate = d->templatesWidget->addPage(templPageWidget,
-            i18nc("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"));
+            i18n("Create From Template"));
     d->templPageWidgetItem_CreateFromTemplate->setHeader(i18n("New Database Project From Template"));
     d->templPageWidgetItem_CreateFromTemplate->setIcon(KIcon(kexi_sqlite_icon_name));
     tmplyr = new QVBoxLayout(templPageWidget);
@@ -423,7 +423,7 @@ void KexiStartupDialog::setupPageTemplates()
 // d->templatesSectionID_import = itemID++;
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_ImportExisting = d->templatesWidget->addPage(templPageWidget,
-                                            i18nc("Keep this text narrow: split to multiple rows if needed", "Import Existing\nDatabase"));
+                                            i18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
         i18n("Import Existing Database as New Database Project"));
     d->templPageWidgetItem_ImportExisting->setIcon(KIcon("document-import-database"));

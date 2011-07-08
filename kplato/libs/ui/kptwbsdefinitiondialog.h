@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KPlato
 {
@@ -38,7 +38,7 @@ class KPLATOUI_EXPORT WBSDefinitionDialog : public KDialog {
 public:
     explicit WBSDefinitionDialog(Project &project, WBSDefinition &def, QWidget *parent=0);
 
-    QUndoCommand *buildCommand();
+    KUndo2Command *buildCommand();
 
 protected slots:
     void slotOk();

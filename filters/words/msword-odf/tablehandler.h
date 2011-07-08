@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
@@ -45,7 +45,7 @@ namespace wvWare
 }
 class KoRect;
 
-namespace KWord
+namespace Words
 {
     typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
     typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
@@ -81,7 +81,7 @@ namespace KWord
          */
         int columnNumber(int cellEdge) const;
 
-        QString name;    // kword's grpMgr attribute
+        QString name;    // words's grpMgr attribute
         QList<Row> rows; // need to use QValueList to benefit from implicit sharing
         TAPptr tap;      // table properties
 
@@ -96,11 +96,11 @@ namespace KWord
     };
 }
 
-class KWordTableHandler : public QObject, public wvWare::TableHandler
+class WordsTableHandler : public QObject, public wvWare::TableHandler
 {
     Q_OBJECT
 public:
-    KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    WordsTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
 
     //////// TableHandler interface
     virtual void tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
@@ -116,7 +116,7 @@ public:
         m_document = document;
     }
 
-    void tableStart(KWord::Table* table);
+    void tableStart(Words::Table* table);
     void tableEnd();
 
 protected:
@@ -134,7 +134,7 @@ private:
     // The document owning this table handler.
     Document* m_document;
 
-    KWord::Table* m_currentTable;
+    Words::Table* m_currentTable;
 
     KoXmlWriter* m_bodyWriter;
     KoGenStyles* m_mainStyles;
@@ -150,6 +150,8 @@ private:
     QString m_margin[6];
 
     bool m_floatingTable; //true - table is floatin table; false - table is not floating table
+
+    QString m_cellStyleName;
 };
 
 #endif // TABLEHANDLER_H

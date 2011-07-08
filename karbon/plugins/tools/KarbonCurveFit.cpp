@@ -74,11 +74,11 @@ public:
         m_Y *= s / len;
     }
 
-    qreal dot(const FitVector &v) {
+    qreal dot(const FitVector &v) const {
         return ((m_X*v.m_X) + (m_Y*v.m_Y));
     }
 
-    qreal length() {
+    qreal length() const {
         return (qreal) sqrt(m_X*m_X + m_Y*m_Y);
     }
 

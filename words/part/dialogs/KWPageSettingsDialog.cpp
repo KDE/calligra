@@ -30,6 +30,7 @@
 #include <QPushButton>
 #include <QListWidget>
 #include <KInputDialog>
+#include <KDebug>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
         : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
@@ -143,17 +144,14 @@ void KWPageSettingsDialog::reject()
 
 void KWPageSettingsDialog::slotApplyClicked()
 {
-    QUndoCommand *cmd = new QUndoCommand(i18n("Change Page Style"));
+    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Change Page Style"));
     KWPageStyle styleToUpdate = m_pageStyle;
 
-    styleToUpdate.detach(styleToUpdate.name());
-
     if (styleToUpdate.name() != m_page.pageStyle().name()) {
-        //new KWNewPageStyleCommand(m_document, styleToUpdate, cmd);
-        foreach(KWPage page, m_document->pageManager()->pages(m_page.pageStyle().name())) {
-            new KWChangePageStyleCommand(page, styleToUpdate, cmd);
-        }
+        new KWChangePageStyleCommand(m_document, m_page, styleToUpdate, cmd);
     }
+
+    styleToUpdate.detach(styleToUpdate.name());
 
     styleToUpdate.setDirection(textDirection());
     KoPageLayout lay = pageLayout();
@@ -164,7 +162,7 @@ void KWPageSettingsDialog::slotApplyClicked()
         Q_ASSERT(lay.leftMargin == -1);
         Q_ASSERT(lay.rightMargin == -1);
 
-        // its a page spread, which kword can handle, so we can safely set the
+        // its a page spread, which words can handle, so we can safely set the
         // normal page size and assume that the page object will do the right thing
         lay.width /= (qreal) 2;
     }
@@ -235,13 +233,12 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
 {
     QListWidgetItem *item = m_pageStylesView->item(row);
     KWPageStyle pagestyle = item ? m_document->pageManager()->pageStyle(item->text()) : KWPageStyle();
-    if (pagestyle.isValid()) {
+    if (pagestyle.isValid())
         m_pageStyle = pagestyle;
-        setPageLayout(m_pageStyle.pageLayout());
-        setPageSpread(m_pageStyle.isPageSpread());
-        setTextDirection(m_pageStyle.direction());
-        m_columns->setColumns(m_pageStyle.columns());
-    }
+    setPageLayout(m_pageStyle.pageLayout());
+    setPageSpread(m_pageStyle.isPageSpread());
+    setTextDirection(m_pageStyle.direction());
+    m_columns->setColumns(m_pageStyle.columns());
     m_clonePageStyleButton->setEnabled(pagestyle.isValid());
     m_deletePageStyleButton->setEnabled(pagestyle.isValid() && item->text() != m_document->pageManager()->defaultPageStyle().name());
     enableButtonOk(pagestyle.isValid());

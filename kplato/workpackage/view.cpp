@@ -67,7 +67,6 @@
 #include <KTemporaryFile>
 
 #include <kmessagebox.h>
-#include <krun.h>
 #include <kvbox.h>
 #include <kmimetype.h>
 #include <kprocess.h>
@@ -330,7 +329,7 @@ void View::slotPackageSettings()
     }
     PackageSettingsDialog *dia = new PackageSettingsDialog( *wp, this );
     if ( dia->exec() == QDialog::Accepted ) {
-        QUndoCommand *cmd = dia->buildCommand();
+        KUndo2Command *cmd = dia->buildCommand();
         if ( cmd ) {
             kDebug();
             part()->addCommand( cmd );
@@ -433,7 +432,7 @@ void View::slotTaskProgress()
     TaskProgressDialog dlg( *n, currentScheduleManager(), w, this );
     if ( dlg.exec() == QDialog::Accepted ) {
         kDebug();
-        QUndoCommand *cmd = dlg.buildCommand();
+        KUndo2Command *cmd = dlg.buildCommand();
         if ( cmd ) {
             cmd->redo(); //FIXME m_part->addCommand( cmd );
         }
@@ -450,7 +449,7 @@ void View::slotTaskCompletion()
     TaskCompletionDialog *dlg = new TaskCompletionDialog( *wp, currentScheduleManager(), this );
     if ( dlg->exec() == QDialog::Accepted ) {
         kDebug();
-        QUndoCommand *cmd = dlg->buildCommand();
+        KUndo2Command *cmd = dlg->buildCommand();
         if ( cmd ) {
             m_part->addCommand( cmd );
         }

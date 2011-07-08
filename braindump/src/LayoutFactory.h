@@ -24,14 +24,15 @@ class QString;
 
 class Layout;
 
-class LayoutFactory {
-  public:
-    LayoutFactory( const QString& _id, const QString& _name );
+class LayoutFactory
+{
+public:
+    LayoutFactory(const QString& _id, const QString& _name);
     virtual ~LayoutFactory();
     const QString& id() const;
     const QString& name() const;
     virtual Layout* createLayout() const = 0;
-  private:
+private:
     struct Private;
     Private* const d;
 };

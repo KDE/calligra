@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ void Conversion::convert(const QString& inputFileName, QFile* outputFile)
 
     contall.append("</office:document>");
 
-    QFile temp1(KStandardDirs::locate("data","kword/html-odf/converter.xsl"));
+    QFile temp1(KStandardDirs::locate("data","words/html-odf/converter.xsl"));
     temp1.open(QIODevice::ReadOnly);
 
 

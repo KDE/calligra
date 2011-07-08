@@ -21,6 +21,7 @@
 #define MSOOXMLDRAWINGTABLESTYLE_H
 
 #include <MsooXmlTableStyle.h>
+#include <KoTblStyle.h>
 
 /**
  * The idea behind these classes is the following:
@@ -82,6 +83,9 @@ public:
     ///the style takes ownership of the properties
     void addProperties(Type type, TableStyleProperties* properties);
     TableStyleProperties* properties(Type type) const;
+
+    //Style of the whole table, not cell styles
+    KoTblStyle::Ptr mainStyle;
 
 private:
     QMap<Type, TableStyleProperties*> m_properties;

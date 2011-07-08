@@ -1,5 +1,5 @@
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000,2002 Robert JACOLIN
 **
@@ -19,8 +19,8 @@
 **
 */
 
-#ifndef __KWORD_PARA_H__
-#define __KWORD_PARA_H__
+#ifndef __WORDS_PARA_H__
+#define __WORDS_PARA_H__
 
 #include <QString>
 #include <QStack>  /* historic list */
@@ -203,4 +203,4 @@ private:
 
 };
 
-#endif /* __KWORD_PARA_H__ */
+#endif /* __WORDS_PARA_H__ */

@@ -33,7 +33,7 @@ class KWApplicationConfig
 public:
     KWApplicationConfig();
 
-    /// load the kword settings.
+    /// load the words settings.
     void load(KWDocument *document);
     /// save the config settings.
     void save();
@@ -109,7 +109,7 @@ public:
     }
 
     /**
-     * Set the zoom level for new views and for next startups of kword.
+     * Set the zoom level for new views and for next startups of words.
      * Documents shown at 100% will show the page on screen at the same amount of
      * metric units as the user set them to be. In other words; the paper and the
      * screen versions should be exactly the same.

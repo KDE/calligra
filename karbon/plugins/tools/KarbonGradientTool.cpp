@@ -255,7 +255,7 @@ void KarbonGradientTool::mouseReleaseEvent(KoPointerEvent *event)
     Q_UNUSED(event)
     // if we are editing, get out of edit mode and add a command to the stack
     if (m_currentStrategy) {
-        QUndoCommand * cmd = m_currentStrategy->createCommand(m_currentCmd);
+        KUndo2Command * cmd = m_currentStrategy->createCommand(m_currentCmd);
         canvas()->addCommand(m_currentCmd ? m_currentCmd : cmd);
         m_currentCmd = 0;
         if (m_gradientWidget) {
@@ -278,7 +278,7 @@ void KarbonGradientTool::mouseDoubleClickEvent(KoPointerEvent *event)
     canvas()->updateCanvas(m_currentStrategy->boundingRect(*canvas()->viewConverter()));
 
     if (m_currentStrategy->handleDoubleClick(event->point)) {
-        QUndoCommand * cmd = m_currentStrategy->createCommand(m_currentCmd);
+        KUndo2Command * cmd = m_currentStrategy->createCommand(m_currentCmd);
         canvas()->addCommand(m_currentCmd ? m_currentCmd : cmd);
         m_currentCmd = 0;
         if (m_gradientWidget) {

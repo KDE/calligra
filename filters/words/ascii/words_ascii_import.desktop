@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Service
+Name=Words ASCII Import Filter
+Name[cs]=Importní filtr ASCII pro Words
+Name[es]=Filtro de Words de importación de ASCII
+Name[et]=Wordsi ASCII impordifilter
+Name[nb]=Ascii-importfilter for Words
+Name[nds]=ASCII-Importfilter för Words
+Name[pt]=Filtro de Importação de ASCII para o Words
+Name[pt_BR]=Filtro de importação de ASCII para o Words
+Name[sv]=Words ASCII-importfilter
+Name[uk]=Фільтр імпорту ASCII для Words
+Name[x-test]=xxWords ASCII Import Filterxx
+Name[zh_TW]=Words ASCII 匯入過濾程式
+X-KDE-Export=application/vnd.oasis.opendocument.text
+X-KDE-Import=text/plain
+X-KDE-Weight=1
+X-KDE-Library=asciiimport
+X-KDE-ServiceTypes=CalligraFilter

@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Calligra
+Name[es]=Calligra
+Name[et]=Calligra
+Name[nb]=Calligra
+Name[nds]=Calligra
+Name[pt]=Calligra
+Name[pt_BR]=Calligra
+Name[sv]=Calligra
+Name[uk]=Calligra
+Name[x-test]=xxCalligraxx
+Name[zh_TW]=Calligra
+NoDisplay=true
+X-DocPath=calligra/index.html
+Categories=Qt;KDE;Office;

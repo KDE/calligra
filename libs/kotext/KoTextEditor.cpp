@@ -46,7 +46,7 @@
 #include "commands/InsertTableColumnCommand.h"
 
 #include <KLocale>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include <QApplication>
 #include <QFontDatabase>
@@ -60,7 +60,7 @@
 #include <QTextTableCell>
 #include <QTimer>
 #include <QString>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <kdebug.h>
 
@@ -106,11 +106,11 @@ KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
 
 void KoTextEditor::Private::documentCommandAdded()
 {
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, QUndoCommand *parent = 0)
-        : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
+        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
         m_document(document)
         {}
 
@@ -133,14 +133,14 @@ void KoTextEditor::Private::documentCommandAdded()
 
     //kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
     if (!headCommand || editorState == NoOp) {
-        headCommand = new QUndoCommand(commandTitle);
+        headCommand = new KUndo2Command(commandTitle);
         if (KoTextDocument(document).undoStack()) {
             //kDebug() << "pushing head: " << headCommand->text();
             KoTextDocument(document).undoStack()->push(headCommand);
         }
     }
     else if ((editorState == KeyPress || editorState == Delete) && headCommand->childCount()) {
-        headCommand = new QUndoCommand(commandTitle);
+        headCommand = new KUndo2Command(commandTitle);
         if (KoTextDocument(document).undoStack()) {
             //kDebug() << "pushing head: " << headCommand->text();
             KoTextDocument(document).undoStack()->push(headCommand);
@@ -317,12 +317,12 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
-void KoTextEditor::addCommand(QUndoCommand *command, bool addCommandToStack)
+void KoTextEditor::addCommand(KUndo2Command *command, bool addCommandToStack)
 {
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
     //kDebug() << "will push the custom command: " << command->text();
     d->headCommand = command;
-    QUndoStack *stack = KoTextDocument(d->document).undoStack();
+    KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
     if (stack && addCommandToStack)
         stack->push(command);
     else
@@ -367,7 +367,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
                     cursor.setCharFormat(fm);
                     iter = block.begin();
                 } else {
-                    iter++;
+                    ++iter;
                 }
             }
             block = block.next();
@@ -798,7 +798,7 @@ void KoTextEditor::insertFrameBreak()
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
         QTextBlockFormat bf = d->caret.blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+        bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.insertBlock(bf);
         if (block.textList())
             block.textList()->remove(block);
@@ -806,7 +806,7 @@ void KoTextEditor::insertFrameBreak()
         QTextBlockFormat bf = d->caret.blockFormat();
         newLine();
         bf = d->caret.blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore); // TODO we should create an autostyle instead
+        bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.setBlockFormat(bf);
     }
     d->updateState(KoTextEditor::Private::NoOp);
@@ -1112,10 +1112,12 @@ void KoTextEditor::insertTableOfContents()
 {
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
 
-    QTextFrameFormat tocFormat;
+    QTextBlockFormat tocFormat;
     tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
-    KoTableOfContentsGeneratorInfo * info = new KoTableOfContentsGeneratorInfo();
-    tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
+    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
+    QTextDocument *tocDocument = new QTextDocument();
+    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
+    tocFormat.setProperty(KoParagraphStyle::TableOfContentsDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
@@ -1137,7 +1139,8 @@ void KoTextEditor::insertTableOfContents()
         tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
-    d->caret.insertFrame(tocFormat);
+    d->caret.insertBlock(tocFormat);
+    d->caret.movePosition(QTextCursor::Right);
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();

@@ -66,6 +66,8 @@ public:
        , changeTracker(0)
        , inlineTextObjectManager(0)
        , provider(0)
+       ,layoutPosition(0)
+       ,anchoringRootArea(0)
        , anchoringIndex(0)
        , defaultTabSizing(0)
        , y(0)
@@ -74,6 +76,7 @@ public:
        , continuousLayout(true)
        , layoutBlocked(false)
        , restartLayout(false)
+       , documentChangedCount(0)
     {
     }
     KoStyleManager *styleManager;
@@ -89,13 +92,13 @@ public:
     QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
+    KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     int anchoringCycle; // how many times have we cycled in iterative mode;
     QRectF anchoringParagraphRect;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
-    KoTextLayoutRootArea *anchoringRootArea;
 
     qreal defaultTabSizing;
     qreal y;
@@ -111,6 +114,7 @@ public:
         ,AnchoringFinalState
     };
     AnchoringState anchoringState;
+    int documentChangedCount;
 };
 
 
@@ -251,16 +255,28 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         from = block.position() + block.length();
     }
 
-    // Mark the to the position corresponding root-areas as dirty. We determinate the range of the root-areas
-    // the added and removed chars span. Additionaly the previous and following root-area of that range are
-    // selected too cause they can also be affect by changes done to the range. All that root-areas then marked
-    // dirty. If there is no root-area for the position then we don't need to mark anything dirty but still
-    // need to go on to force a scheduled relayout.
+    // Mark the to the position corresponding root-areas as dirty. If there is no root-area for the position then we
+    // don't need to mark anything dirty but still need to go on to force a scheduled relayout.
     if (!d->rootAreaList.isEmpty()) {
         KoTextLayoutRootArea *fromArea = rootAreaForPosition(position);
-        KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
-        int startIndex = qMax(0, fromArea ? d->rootAreaList.indexOf(fromArea) - 1 : 0);
-        int endIndex = qMax(startIndex, qMin(d->rootAreaList.count() - 1, ((toArea && toArea != fromArea) ? d->rootAreaList.indexOf(toArea) : startIndex) + 1));
+        int startIndex = fromArea ? qMax(0, d->rootAreaList.indexOf(fromArea)) : 0;
+        int endIndex = startIndex;
+        if (charsRemoved != 0 || charsAdded != 0) {
+            // If any characters got removed or added make sure to also catch other root-areas that may be
+            // affected by this change. Note that adding, removing or formatting text will always charsRemoved>0
+            // and charsAdded>0 cause they are changing a range of characters. One case where both is zero is if
+            // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
+            // those cases we only need to relayout the root-area dirty where the variable is on.
+            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
+            endIndex = (toArea && toArea != fromArea) ? qMax(startIndex, d->rootAreaList.indexOf(toArea)) : startIndex;
+            // The previous and following root-area of that range are selected too cause they can also be affect by
+            // changes done to the range of root-areas.
+            if (startIndex >= 1)
+                --startIndex;
+            if (endIndex + 1 < d->rootAreaList.count())
+                ++endIndex;
+        }
+        // Mark all selected root-areas as dirty so they are relayouted.
         for(int i = startIndex; i <= endIndex; ++i) {
             d->rootAreaList[i]->setDirty();
         }
@@ -270,6 +286,11 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     // root-areas and if needed following ones which got dirty cause content moved to them. Also this will
     // created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
     emitLayoutIsDirty();
+}
+
+int KoTextDocumentLayout::documentChangedCount() const
+{
+    return d->documentChangedCount;
 }
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
@@ -315,6 +336,8 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
 
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
+    if (!d->anchoringRootArea)
+        return;
     KoTextPage *page = d->anchoringRootArea->page();
     if (!page)
         return;
@@ -379,9 +402,11 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
                 d->anchoringState = Private::AnchoringMovingState;
                 if (d->anchoringCycle <= 10) // loop-protection
                     d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
+                d->anchoringIndex++;
+            } else {
+                break;
             }
             // move the index to next not positioned shape
-            d->anchoringIndex++;
         }
         break;
     }
@@ -425,8 +450,8 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
-    foreach(KoTextAnchor *anchor, d->textAnchors) {
-        anchor->setAnchorStrategy(0);
+    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+        d->textAnchors[i]->setAnchorStrategy(0);
     }
 
     qDeleteAll(d->anchoredObstructions);
@@ -460,6 +485,8 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::emitLayoutIsDirty()
 {
+    d->documentChangedCount++;
+
     emit layoutIsDirty();
 }
 
@@ -530,7 +557,12 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    d->anchoringIndex = 0;
+                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                         d->textAnchors[i]->setAnchorStrategy(0);
+                     }
+                     d->textAnchors.clear();
+                     d->anchoringIndex = 0;
+                    //d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -600,7 +632,12 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    d->anchoringIndex = 0;
+                    //d->anchoringIndex = 0;
+                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                         d->textAnchors[i]->setAnchorStrategy(0);
+                     }
+                     d->textAnchors.clear();
+                     d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;

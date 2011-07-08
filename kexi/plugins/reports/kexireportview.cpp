@@ -79,13 +79,13 @@ KexiReportView::KexiReportView(QWidget *parent)
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(i18n("Export: "), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
-    viewActions << (a = new KAction(KIcon("kword"), QString(), this));
+    viewActions << (a = new KAction(KIcon("words"), QString(), this));
 #else
-    viewActions << (a = new KAction(KIcon("kword"), i18n("Save to KWord"), this));
+    viewActions << (a = new KAction(KIcon("words"), i18n("Save to Words"), this));
 #endif
-    a->setObjectName("save_to_kword");
-    a->setToolTip(i18n("Save the report to a KWord document"));
-    a->setWhatsThis(i18n("Save the report to a KWord document"));
+    a->setObjectName("save_to_words");
+    a->setToolTip(i18n("Save the report to a Words document"));
+    a->setWhatsThis(i18n("Save the report to a Words document"));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderODT()));
 
@@ -241,7 +241,7 @@ void KexiReportView::slotRenderODT()
             }
         }
         if (!renderer->render(cxt, m_reportDocument)) {
-            KMessageBox::error(this, i18n("Failed to save %1 to KWord", cxt.destinationUrl.prettyUrl()) , i18n("Saving to KWord failed"));
+            KMessageBox::error(this, i18n("Failed to save %1 to Words", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words failed"));
         } else {
             KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
         }

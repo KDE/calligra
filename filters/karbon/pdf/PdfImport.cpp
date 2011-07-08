@@ -22,15 +22,11 @@
 
 #include <QtCore/QString>
 #include <QtCore/QFile>
-#include <QtSvg/QSvgGenerator>
 
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
 #include <KPluginFactory>
-#include <KRun>
-#include <KProcess>
-#include <KShell>
 #include <KDebug>
 
 #include <poppler/PDFDoc.h>

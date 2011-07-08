@@ -1,19 +1,19 @@
 == Kexi CHANGES ==
 
-1.1.1 "Access Granted" - within KOffice 1.6.1
+1.1.1 "Access Granted" - within Calligra 1.6.1
  * Support for parameter queries in Design and SQL view;
     user is asked for entering value of a parameter in a dialog window.
  * Data-aware combo box is for use with forms and tabular views;
     data source for the combo box can be defined in the Table Designer.
 
-1.1 "Access Granted" - within KOffice 1.6
+1.1 "Access Granted" - within Calligra 1.6
    (alpha 1: 2006-07-01, beta 1: 2006-09-11, stable: 2006-??-??)
  * Object data type and data-aware image form widget
  * Improvements in Auto Field form widget
  * Table design altering without removing the existing data
  * Support for Data-aware combo boxes in the Table View
 
-1.0 "Black Mamba" - within KOffice 1.5 
+1.0 "Black Mamba" - within Calligra 1.5 
    (beta 1: 2006-01-31, beta 2: 2006-03-11, rc 1: 2006-03-29, stable: 2006-04-11)
  * Improved data-aware forms. 
  * Form Designer's Data Source Pane for assigning data source to forms and
@@ -34,10 +34,10 @@
  * Handbook added (incomplete). 
  * More than two hundreds of overall improvements and bug fixes.
 
-0.9 "Shorthorn" - released independent of KOffice (beta 1: 2005-05-07, stable: 2005-05-31)
+0.9 "Shorthorn" - released independent of Calligra (beta 1: 2005-05-07, stable: 2005-05-31)
  * better translation for messages compared to 0.8 version, especialy in Form Designer
 
-0.8 - within KOffice 1.4 (beta 1: 2005-04-29, stable: 2005-06-14)
+0.8 - within Calligra 1.4 (beta 1: 2005-04-29, stable: 2005-06-14)
  * Database forms are now officially supported
  * Many improvements in handling server databases
  * For users' convenience, Tabular Data View's behaviour is similar 

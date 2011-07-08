@@ -22,7 +22,7 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 namespace Calligra
 {
@@ -31,15 +31,16 @@ namespace Tables
 
 static const char* description = I18N_NOOP("Calligra Spreadsheet Application");
 
-// Always the same as the KOffice version
-static const char* version = KOFFICE_VERSION_STRING;
+// Always the same as the Calligra version
+static const char* version = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData("tables", 0, ki18n("Calligra Tables"),
+    KAboutData * aboutData = new KAboutData("tables", 0, ki18nc("application name", "Tables"),
                                             version, ki18n(description), KAboutData::License_LGPL,
                                             ki18n("(c) 1998-2010, The Calligra Tables Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/tables/");
+    aboutData->setProductName("calligra-tables"); // for bugs.kde.org
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "mkruisselbrink@kde.org");
     aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("ODS and Excel, functions, scripting"), "mail@dipe.org");

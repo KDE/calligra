@@ -135,7 +135,7 @@ public:
 // do 15.5.24
 // continue at 15.5.28
         ForceDisablingList,       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
-        
+
         // other properties
         BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
         SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
@@ -153,13 +153,15 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
-        
+
         NormalLineHeight,         ///< bool, internal property for reserved usage
+        TableOfContentsData,      // set when block is instead a TableOfContents
+        TableOfContentsDocument   // set when block is instead a TableOfContents
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
-        IdeographAlpha,           ///< space should be added between portions of Asian, Western and complex texts
+        IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
     };
     
     enum VerticalAlign {
@@ -455,19 +457,19 @@ public:
     /// duplicated property from QTextBlockFormat
     void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
-    QTextLength topMargin() const;
+    qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
     void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength bottomMargin() const;
+    qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
     void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength leftMargin() const;
+    qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
     void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength rightMargin() const;
+    qreal rightMargin() const;
     /// set the margin around the paragraph, making the margin on all sides equal.
     void setMargin(QTextLength margin);
 

@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>LatexExportDia</class>
-<comment>This dialog box is used for all latex filter in koffice.</comment>
+<comment>This dialog box is used for all latex filter in calligra.</comment>
 <author>Robert Jacolin &lt;rjacolin@ifrance.com&gt;</author>
 <widget class="QDialog">
     <property name="name">
@@ -83,7 +83,7 @@
                     </property>
                     <widget class="QRadioButton">
                         <property name="name">
-                            <cstring>kwordStyleButton</cstring>
+                            <cstring>wordsStyleButton</cstring>
                         </property>
                         <property name="geometry">
                             <rect>
@@ -94,7 +94,7 @@
                             </rect>
                         </property>
                         <property name="text">
-                            <string>KWord style</string>
+                            <string>Words style</string>
                         </property>
                         <property name="checked">
                             <bool>true</bool>

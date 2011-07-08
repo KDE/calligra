@@ -18,6 +18,6 @@ Name[sv]=Plan iCalendar exportfilter
 Name[uk]=Фільтр експорту до iCalendar Plan
 Name[x-test]=xxPlan iCalendar Export Filterxx
 Name[zh_TW]=Plan iCalendar 匯出過濾程式
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Library=planicalexport

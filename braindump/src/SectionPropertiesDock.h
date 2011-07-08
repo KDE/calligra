@@ -28,17 +28,18 @@ class Section;
 #include <QDockWidget>
 #include <KoDockFactoryBase.h>
 
-class SectionPropertiesDock : public QDockWidget {
+class SectionPropertiesDock : public QDockWidget
+{
     Q_OBJECT
-  public:
+public:
     SectionPropertiesDock();
     virtual ~SectionPropertiesDock();
     void setRootSection(RootSection* _rootSection);
     void setSection(Section* _section);
-  private slots:
+private slots:
     void reload();
-    void layoutChanged( int index );
-  private:
+    void layoutChanged(int index);
+private:
     Ui::WdgSectionProperties m_wdgSectionProperties;
     Section* m_currentSection;
     RootSection* m_rootSection;

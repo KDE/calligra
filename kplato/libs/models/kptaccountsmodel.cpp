@@ -336,13 +336,13 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
             switch ( value.toInt() ) {
                 case Qt::Unchecked:
                     if ( a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, i18n( "De-select as default account" ) ) );
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, i18nc( "(qtundo-format)", "De-select as default account" ) ) );
                         return true;
                     }
                     break;
                 case Qt::Checked:
                     if ( ! a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, i18n( "Select as default account" ) ) );
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, i18nc( "(qtundo-format)", "Select as default account" ) ) );
                         return true;
                     }
                     break;
@@ -437,7 +437,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent, 
         account->setName( m_project->accounts().uniqueId( s ) );
         //m_project->accounts().insertId( account );
     }
-    emit executeCommand( new AddAccountCmd( *m_project, account, parent, index, i18n( "Add account" ) ) );
+    emit executeCommand( new AddAccountCmd( *m_project, account, parent, index, i18nc( "(qtundo-format)", "Add account" ) ) );
     int row = -1;
     if ( parent ) {
         row = parent->accountList().indexOf( account );

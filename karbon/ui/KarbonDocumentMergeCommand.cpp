@@ -45,7 +45,7 @@ public:
 };
 
 KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonPart * targetPart, KarbonPart * sourcePart)
-        : QUndoCommand(0), d(new Private())
+        : KUndo2Command(0), d(new Private())
 {
     d->targetPart = targetPart;
     d->layers = sourcePart->document().layers();
@@ -56,7 +56,7 @@ KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonPart * targetPart, 
     foreach(KoShape * shape, d->shapes) {
         sourcePart->removeShape(shape);
     }
-    setText(i18n("Insert graphics"));
+    setText(i18nc("(qtundo-format)", "Insert graphics"));
 }
 
 KarbonDocumentMergeCommand::~KarbonDocumentMergeCommand()
@@ -76,12 +76,12 @@ void KarbonDocumentMergeCommand::redo()
         d->hasMerged = true;
     }
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void KarbonDocumentMergeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     if (d->hasMerged) {
         foreach(KoShapeLayer * layer, d->layers) {

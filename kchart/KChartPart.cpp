@@ -48,7 +48,7 @@ using std::cerr;
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 
-// KOffice
+// Calligra
 #include <KoZoomHandler.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>

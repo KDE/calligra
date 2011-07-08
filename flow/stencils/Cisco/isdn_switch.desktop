@@ -2,9 +2,10 @@
 Name=ISDN switch
 Name[el]=ISDN switch
 Name[et]=ISDN kommutaator
+Name[nb]=ISDN-svitsj
 Name[nl]=ISDN switch
 Name[pt]=Comutador RDIS
-Name[pt_BR]=Comutador RDIS
+Name[pt_BR]=Comutador ISDN
 Name[sv]=ISDN-växel
 Name[uk]=Комутатор ISDN
 Name[x-test]=xxISDN switchxx

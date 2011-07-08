@@ -205,7 +205,8 @@ void TestLogicFunctions::testXOR()
     CHECK_EVAL("XOR(0;1)", Value(true));
     CHECK_EVAL("XOR(0;0)", Value(false));
     // multiple parameters...
-    CHECK_EVAL("XOR(TRUE();TRUE();TRUE())", Value(false));
+    CHECK_EVAL("XOR(TRUE();TRUE();TRUE())", Value(true));
+    CHECK_EVAL("XOR(TRUE();FALSE();TRUE();TRUE();TRUE();TRUE())", Value(true));
     CHECK_EVAL("XOR(FALSE();FALSE();FALSE())", Value(false));
     CHECK_EVAL("XOR(TRUE();TRUE();FALSE())", Value(false));
     CHECK_EVAL("XOR(FALSE();TRUE();TRUE())", Value(false));

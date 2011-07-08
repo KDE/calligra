@@ -20,7 +20,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -41,7 +41,7 @@
 #include <KoFilterManager.h>
 
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 
 #include "ExportDialog.h"
 #include "ExportFilter.h"
@@ -66,7 +66,7 @@ HTMLExport::HTMLExport(QObject* parent, const QVariantList &) :
 
 KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ((from != "application/x-kword") || (to != "text/html")) {
+    if ((from != "application/x-words") || (to != "text/html")) {
         return KoFilter::NotImplemented;
     }
 
@@ -107,7 +107,7 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
         worker->setCodec(dialog.getCodec());
     }
 
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     if (!leader) {
         kError(30503) << "Cannot create Worker! Aborting!" << endl;

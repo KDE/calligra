@@ -47,7 +47,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
 
     foreach (KWFrameSet *fs, m_state->document()->frameSets()) {
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (textFs == 0 || textFs->textFrameSetType() != KWord::OtherTextFrameSet)
+        if (textFs == 0 || textFs->textFrameSetType() != Words::OtherTextFrameSet)
             continue;
         m_frameSets.append(textFs);
         QTreeWidgetItem *row = new QTreeWidgetItem(widget.framesList);
@@ -59,7 +59,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
 
     if (textFrame->frameSet()) { // already has a frameset
         KWTextFrameSet *textFs = static_cast<KWTextFrameSet*>(textFrame->frameSet());
-        if (textFs->textFrameSetType() != KWord::OtherTextFrameSet)
+        if (textFs->textFrameSetType() != Words::OtherTextFrameSet)
             return false; // can't alter frameSet of this auto-generated frame!
 
         if (textFs->frameCount() == 1) { // don't allow us to remove the last frame of an FS

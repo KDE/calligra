@@ -22,17 +22,18 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 static const char* description=I18N_NOOP("Calligra Presentation Tool");
-static const char* version=KOFFICE_VERSION_STRING;
+static const char* version=CALLIGRA_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "stage", 0, ki18n("Stage"),
+    KAboutData * aboutData=new KAboutData( "stage", 0, ki18nc("application name", "Stage"),
                                            version, ki18n(description), KAboutData::License_LGPL,
                                            ki18n("(c) 1998-2010, The Stage Team"), KLocalizedString(),
                                            "http://www.calligra-suite.org/stage/");
+    aboutData->setProductName("calligra-stage"); // for bugs.kde.org
     aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Former maintainer"), "montel@kde.org");
     aboutData->addAuthor(ki18n("Reginald Stadlbauer"),ki18n("Original author"), "reggie@kde.org");

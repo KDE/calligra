@@ -54,7 +54,7 @@
 
 
 K_PLUGIN_FACTORY(MSWriteImportFactory, registerPlugin<MSWriteImport>();)
-K_EXPORT_PLUGIN(MSWriteImportFactory("kwordmswriteimport"))
+K_EXPORT_PLUGIN(MSWriteImportFactory("wordsmswriteimport"))
 
 
 //
@@ -146,10 +146,10 @@ public:
 
 
 //
-// Generator that creates the KWord file
+// Generator that creates the Words file
 //
 
-class KWordGenerator : public MSWrite::Generator, public MSWrite::NeedsDevice
+class WordsGenerator : public MSWrite::Generator, public MSWrite::NeedsDevice
 {
 private:
     // KoStore can only have 1 file open at a time
@@ -172,7 +172,7 @@ private:
             delete [] m_data;
         }
 
-        WRIObject operator= (const WRIObject &rhs) {
+        WRIObject& operator= (const WRIObject &rhs) {
             delete [] m_data;
 
             m_dataLength = rhs.m_dataLength;
@@ -218,7 +218,7 @@ private:
     QTextCodec *m_codec;
     QTextDecoder *m_decoder;
 
-    // import options (compensate for differences between KWord and MS Write)
+    // import options (compensate for differences between Words and MS Write)
     bool m_simulateLineSpacing;
     bool m_simulateImageOffset;
 
@@ -243,7 +243,7 @@ private:
     MSWriteImport *m_koLink;
 
     // XML output that is held back until after "Text Frameset 1" is output
-    // (i.e. header & footer must come after the Body in KWord)
+    // (i.e. header & footer must come after the Body in Words)
     bool m_delayOutput;
     QString m_heldOutput;
 
@@ -263,7 +263,7 @@ private:
     }
 
 public:
-    KWordGenerator() : m_hasHeader(false), m_isHeaderOnFirstPage(false),
+    WordsGenerator() : m_hasHeader(false), m_isHeaderOnFirstPage(false),
             m_hasFooter(false), m_isFooterOnFirstPage(false),
             m_writeHeaderFirstTime(true), m_writeFooterFirstTime(true),
             inWhat(Nothing),
@@ -284,7 +284,7 @@ public:
             kWarning(30509) << "Cannot convert from Win Charset!";
     }
 
-    virtual ~KWordGenerator() {
+    virtual ~WordsGenerator() {
         delete m_decoder;
     }
 
@@ -363,11 +363,11 @@ public:
         // start document
         // TODO: error checking
         writeTextInternal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        writeTextInternal("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.3//EN\" "
-                          "\"http://www.koffice.org/DTD/kword-1.3.dtd\">");
-        writeTextInternal("<DOC xmlns=\"http://www.koffice.org/DTD/kword\" "
-                          "mime=\"application/x-kword\" "
-                          "syntaxVersion=\"3\" editor=\"KWord\">");
+        writeTextInternal("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD words 1.3//EN\" "
+                          "\"http://www.calligra-suite.org/DTD/words-1.3.dtd\">");
+        writeTextInternal("<DOC xmlns=\"http://www.calligra-suite.org/DTD/words\" "
+                          "mime=\"application/x-words\" "
+                          "syntaxVersion=\"3\" editor=\"Words\">");
 
         writeTextInternal("<PAPER format=\"1\" "
                           "width=\"%i\" height=\"%i\" "
@@ -482,7 +482,7 @@ public:
         inWhat = Footer;
         m_hasFooter = true;
 
-        // footers must go after body in KWord
+        // footers must go after body in Words
         delayOutput(true);
 
         // footer frameset will be written in writeParaInfoBegin()
@@ -508,7 +508,7 @@ public:
         inWhat = Header;
         m_hasHeader = true;
 
-        // headers must go after body in KWord
+        // headers must go after body in Words
         delayOutput(true);
 
         // header frameset will be written in writeParaInfoBegin()
@@ -1213,8 +1213,8 @@ public:
         return writeTextInternal("\xC2\xAD");
     }
 
-    void setKOfficeLink(MSWriteImport *kofficeLink) {
-        m_koLink = kofficeLink;
+    void setCalligraLink(MSWriteImport *calligraLink) {
+        m_koLink = calligraLink;
     }
 
     void sigProgress(const int value) {
@@ -1245,7 +1245,7 @@ KoFilter::ConversionStatus MSWriteImport::convert(const QByteArray &from, const 
     kDebug(30509) << "MSWriteImport $Date$ using LibMSWrite"
     << MSWrite::Version << endl;
 
-    if (to != "application/x-kword" || from != "application/x-mswrite") {
+    if (to != "application/x-words" || from != "application/x-mswrite") {
         kError(30509) << "Internal error!  Filter not implemented?" << endl;
         return KoFilter::NotImplemented;
     }
@@ -1306,7 +1306,7 @@ KoFilter::ConversionStatus MSWriteImport::convert(const QByteArray &from, const 
 
 
     // create Generator that will produce the .KWD file
-    m_generator = new KWordGenerator;
+    m_generator = new WordsGenerator;
     if (!m_generator) {
         kError(30509) << "Could not allocate memory for generator" << endl;
         return KoFilter::OutOfMemory;
@@ -1319,7 +1319,7 @@ KoFilter::ConversionStatus MSWriteImport::convert(const QByteArray &from, const 
     m_generator->setFilterChain(m_chain);
 
     // hand over sigProgess to give some feedback to the user
-    m_generator->setKOfficeLink(this);
+    m_generator->setCalligraLink(this);
 
 
     // hook up Generator to Parser
@@ -1329,7 +1329,7 @@ KoFilter::ConversionStatus MSWriteImport::convert(const QByteArray &from, const 
     // filter!
     if (!m_parser->parse()) {
         // try to return somewhat more meaningful errors than StupidError
-        // for the day that KOffice actually reports them to the user properly
+        // for the day that Calligra actually reports them to the user properly
         int errorCode = m_device->bad();
         switch (errorCode) {
         case MSWrite::Error::Ok:

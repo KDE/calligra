@@ -45,6 +45,7 @@
 
 #include <KLocale>
 #include <KIcon>
+#include <KStandardAction>
 #include <KDebug>
 
 #include <QtGui/QAction>
@@ -53,7 +54,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 #include <float.h>
 
@@ -117,7 +118,9 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
-    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+
+    addAction("edit_select_all", KStandardAction::selectAll(this, SLOT(selectAll()), this));
+    addAction("edit_deselect_all", KStandardAction::deselect(this, SLOT(deselectAll()), this));
 
     setTextMode(true);
 }
@@ -315,13 +318,14 @@ void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     if (m_currentStrategy) {
         m_currentStrategy->finishInteraction(event->modifiers());
-        QUndoCommand *cmd = m_currentStrategy->createCommand();
+        KUndo2Command *cmd = m_currentStrategy->createCommand();
         if (cmd)
             canvas()->addCommand(cmd);
         delete m_currentStrategy;
         m_currentStrategy = 0;
     }
     updateActions();
+    event->ignore();
 }
 
 void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
@@ -355,7 +359,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Delete:
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             } else if( textCursor() >= 0 && textCursor() < m_currentShape->plainText().length()) {
                 removeFromTextCursor( textCursor(), 1 );
             }
@@ -363,7 +366,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Backspace:
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             } else {
                 removeFromTextCursor( textCursor()-1, 1 );
             }
@@ -448,7 +450,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             }
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             }
             addToTextCursor( event->text() );
         }
@@ -479,6 +480,9 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     updateActions();
     emit statusTextChanged( i18n("Press return to finish editing.") );
     repaintDecorations();
+
+    KoShapeManager *manager = canvas()->shapeManager();
+    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 void ArtisticTextTool::blinkCursor()
@@ -496,6 +500,9 @@ void ArtisticTextTool::deactivate()
     }
     m_hoverPath = 0;
     m_hoverText = 0;
+
+    KoShapeManager *manager = canvas()->shapeManager();
+    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 void ArtisticTextTool::updateActions()
@@ -564,8 +571,8 @@ void ArtisticTextTool::convertText()
     path->setTransformation( m_currentShape->transformation() );
     path->setShapeId( KoPathShapeId );
 
-    QUndoCommand * cmd = canvas()->shapeController()->addShapeDirect( path );
-    cmd->setText( i18n("Convert to Path") );
+    KUndo2Command * cmd = canvas()->shapeController()->addShapeDirect( path );
+    cmd->setText( i18nc("(qtundo-format)", "Convert to Path") );
     canvas()->shapeController()->removeShape( m_currentShape, cmd );
     canvas()->addCommand( cmd );
 
@@ -684,7 +691,11 @@ void ArtisticTextTool::createTextCursorShape()
 void ArtisticTextTool::removeFromTextCursor( int from, unsigned int count )
 {
     if ( from >= 0 ) {
-        QUndoCommand *cmd = new RemoveTextRangeCommand(this, m_currentShape, from, count);
+        if (m_selection.hasSelection()) {
+            // clear selection before text is removed, or else selection will be invalid
+            m_selection.clear();
+        }
+        KUndo2Command *cmd = new RemoveTextRangeCommand(this, m_currentShape, from, count);
         canvas()->addCommand( cmd );
     }
 }
@@ -701,14 +712,14 @@ void ArtisticTextTool::addToTextCursor( const QString &str )
         if ( len ) {
             const int textLength = m_currentShape->plainText().length();
             if (m_textCursor <= textLength) {
-                QUndoCommand *cmd = new AddTextRangeCommand(this, m_currentShape, printable, m_textCursor);
+                KUndo2Command *cmd = new AddTextRangeCommand(this, m_currentShape, printable, m_textCursor);
                 canvas()->addCommand( cmd );
             } else if (m_textCursor > textLength && m_textCursor <= textLength + m_linefeedPositions.size()) {
                 const QPointF pos = m_linefeedPositions.value(m_textCursor-textLength-1);
                 ArtisticTextRange newLine(printable, m_currentShape->fontAt(textLength-1));
                 newLine.setXOffsets(QList<qreal>() << pos.x(), ArtisticTextRange::AbsoluteOffset);
                 newLine.setYOffsets(QList<qreal>() << pos.y()-m_currentShape->baselineOffset(), ArtisticTextRange::AbsoluteOffset);
-                QUndoCommand *cmd = new AddTextRangeCommand(this, m_currentShape, newLine, m_textCursor);
+                KUndo2Command *cmd = new AddTextRangeCommand(this, m_currentShape, newLine, m_textCursor);
                 canvas()->addCommand( cmd );
                 m_linefeedPositions.clear();
             }
@@ -788,7 +799,7 @@ void ArtisticTextTool::changeFontProperty(FontProperty property, const QVariant 
     if (index.first < 0)
         return;
 
-    QUndoCommand * cmd = new QUndoCommand;
+    KUndo2Command * cmd = new KUndo2Command;
     int collectedCharCount = 0;
     while(collectedCharCount < selectedCharCount) {
         ArtisticTextRange &range = ranges[index.first];
@@ -890,6 +901,20 @@ void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mod
         currentRange.setFont(font);
     }
     canvas()->addCommand(new ReplaceTextRangeCommand(m_currentShape, ranges, from, count, this));
+}
+
+void ArtisticTextTool::selectAll()
+{
+    if (m_currentShape) {
+        m_selection.selectText(0, m_currentShape->plainText().count());
+    }
+}
+
+void ArtisticTextTool::deselectAll()
+{
+    if (m_currentShape) {
+        m_selection.clear();
+    }
 }
 
 #include <ArtisticTextTool.moc>

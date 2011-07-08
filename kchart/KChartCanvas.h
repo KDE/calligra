@@ -22,14 +22,14 @@
 #ifndef KCHARTCANVAS_H
 #define KCHARTCANVAS_H
 
-// KOffice
+// Calligra
 #include <KoCanvasBase.h>
 
 // Qt
 #include <QWidget>
 
 class QPaintEvent;
-class QUndoCommand;
+class KUndo2Command;
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
@@ -55,7 +55,7 @@ public:
 
     virtual void gridSize( qreal*, qreal* ) const;
     virtual bool snapToGrid() const;
-    virtual void addCommand( QUndoCommand* );
+    virtual void addCommand( KUndo2Command* );
     virtual KoShapeManager *shapeManager() const;
     virtual void updateCanvas( const QRectF& );
     virtual KoToolProxy *toolProxy() const;
