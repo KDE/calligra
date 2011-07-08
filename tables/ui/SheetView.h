@@ -32,6 +32,7 @@ class QRect;
 class QRectF;
 class QSize;
 class QSizeF;
+class QColor;
 
 class KoViewConverter;
 
@@ -132,6 +133,9 @@ public:
     QPoint activeHighlight() const;
     void setActiveHighlight(const QPoint& cell);
 
+    void setHighlightMaskColor(const QColor& color);
+    void setHighlightColor(const QColor& color);
+    void setActiveHighlightColor(const QColor& color);
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
 

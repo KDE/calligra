@@ -86,6 +86,9 @@ public:
 #ifdef CALLIGRA_TABLES_MT
     QReadWriteLock highlightLock;
 #endif
+    QColor highlightColor;
+    QColor highlightMaskColor;
+    QColor activeHighlightColor;
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
 #ifdef CALLIGRA_TABLES_MT
@@ -178,6 +181,8 @@ SheetView::SheetView(const Sheet* sheet)
     d->accessedCellRange =  sheet->usedArea().size().expandedTo(QSize(256, 256));
     d->obscuredInfo = new FusionStorage(sheet->map());
     d->obscuredRange = QSize(0, 0);
+    d->highlightMaskColor = QColor(0, 0, 0, 128);
+    d->activeHighlightColor = QColor(255, 127, 0, 128);
 }
 
 SheetView::~SheetView()
@@ -477,15 +482,21 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
                 }
             }
         }
-        QPainterPath base;
-        base.addRect(painter.clipPath().boundingRect().adjusted(-5, -5, 5, 5));
-        p = base.subtracted(p);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(QBrush(QColor(0, 0, 0, 128)));
-        painter.drawPath(p);
+        if (d->highlightColor.isValid()) {
+            painter.setBrush(QBrush(d->highlightColor));
+            painter.drawPath(p);
+        }
+        if (d->highlightMaskColor.isValid()) {
+            QPainterPath base;
+            base.addRect(painter.clipPath().boundingRect().adjusted(-5, -5, 5, 5));
+            p = base.subtracted(p);
+            painter.setBrush(QBrush(d->highlightMaskColor));
+            painter.drawPath(p);
+        }
 
-        if (activeData) {
-            painter.setBrush(QBrush(QColor(255, 127, 0, 128)));
+        if (activeData && d->activeHighlightColor.isValid()) {
+            painter.setBrush(QBrush(d->activeHighlightColor));
             painter.setPen(QPen(Qt::black));
             painter.drawRect(QRectF(activeData->coordinate.x(), activeData->coordinate.y(), activeData->cellView.cellWidth(), activeData->cellView.cellHeight()));
         }
@@ -702,6 +713,21 @@ void SheetView::setActiveHighlight(const QPoint &cell)
         if (!cell.isNull()) r.add(cell);
         invalidateRegion(r);
     }
+}
+
+void SheetView::setHighlightColor(const QColor &color)
+{
+    d->highlightColor = color;
+}
+
+void SheetView::setHighlightMaskColor(const QColor &color)
+{
+    d->highlightMaskColor = color;
+}
+
+void SheetView::setActiveHighlightColor(const QColor &color)
+{
+    d->activeHighlightColor = color;
 }
 
 #include "SheetView.moc"
