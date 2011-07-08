@@ -42,6 +42,8 @@ class AutoForm : public QWidget,
 public:
     AutoForm(QWidget* parent, KexiRecordNavigatorIface *nav);
     virtual ~AutoForm();
+
+    int itemIndex(AutoWidget*);
     
 protected:
     virtual void resizeEvent(QResizeEvent* );
@@ -84,13 +86,16 @@ protected:
     virtual void updateWidgetScrollBars();
     virtual QScrollBar* verticalScrollBar() const;
     
+    //Reimplement from KexiFormDataProvider
+    virtual void valueChanged(KexiDataItemInterface* item);
+    
 private:
     QLabel *m_title;
     QGridLayout *m_layout;
-    QList<AutoWidget*> m_widgets;
+    QHash<int, AutoWidget*> m_widgets;
     
     KexiDB::RecordData *m_previousRecord;
-    
+        
     void buildForm();
     void layoutForm();
 };

@@ -24,12 +24,13 @@
 #include "AutoWidget.h"
 #include <QLineEdit>
 
+class AutoForm;
 
 class AutoLineEdit : public AutoWidget
 {
-
+    Q_OBJECT
 public:
-    AutoLineEdit(QWidget *parent);
+    AutoLineEdit(AutoForm *parent);
     virtual ~AutoLineEdit();
     
     virtual void setReadOnly(bool readOnly);
@@ -45,6 +46,9 @@ public:
     virtual bool valueIsEmpty();
     virtual bool valueIsNull();
     virtual QVariant value();
+    
+private slots:
+    void slotTextEdited(const QString &text);
     
 private:
     QLineEdit *m_lineEdit;

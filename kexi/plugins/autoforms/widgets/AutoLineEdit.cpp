@@ -21,11 +21,13 @@
 #include "AutoLineEdit.h"
 #include <KDebug>
 #include <kexidb/queryschema.h>
+#include "AutoForm.h"
 
-AutoLineEdit::AutoLineEdit(QWidget* parent): AutoWidget(parent)
+AutoLineEdit::AutoLineEdit(AutoForm* parent): AutoWidget(parent)
 {
     m_lineEdit = new QLineEdit(this);
     setWidget(m_lineEdit);
+    connect(m_lineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(slotTextEdited(const QString&)));
 }
 
 AutoLineEdit::~AutoLineEdit()
@@ -79,7 +81,7 @@ bool AutoLineEdit::valueIsNull()
 
 QVariant AutoLineEdit::value()
 {
-    kDebug();
+    kDebug() << m_lineEdit->text();
     return m_lineEdit->text();
 }
 
@@ -90,4 +92,9 @@ void AutoLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
     setObjectName("AutoLineEdit_" + cinfo->field->name());
 }
 
+void AutoLineEdit::slotTextEdited(const QString& text)
+{
+    kDebug();
+    signalValueChanged();
+}
 

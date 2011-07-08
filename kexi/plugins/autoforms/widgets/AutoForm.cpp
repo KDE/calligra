@@ -262,12 +262,15 @@ void AutoForm::buildForm()
 {
     KexiTableViewColumn::List col_list = KexiDataAwareObjectInterface::data()->columns();
 
+    int column = 0;
+    
     foreach(KexiTableViewColumn *col, col_list) {
         kDebug() << col->captionAliasOrName();
         AutoWidget* widget = new AutoLineEdit(this);
         widget->setDataSource(col->field()->name());
         widget->setColumnInfo(col->columnInfo());
-        m_widgets << widget;
+        m_widgets[column] = widget;
+        column++;
     }
     setMainDataSourceWidget(this);
     
@@ -283,4 +286,28 @@ void AutoForm::layoutForm()
         ++row;
     }
     resize(sizeHint());
+}
+
+void AutoForm::valueChanged(KexiDataItemInterface* item)
+{
+    kDebug() << item->field()->captionOrName();
+    if (!item)
+        return;
+    //only signal start editing when no row editing was started already
+       
+        if (m_editor != item) {
+        kDebug() << "Editing Item Started";
+        m_rowEditing = true;
+        m_editor = item;
+        startEditCurrentCell();
+    }
+    fillDuplicatedDataItems(dynamic_cast<KexiFormDataItemInterface*>(item), item->value());
+        
+    //value changed: clear 'default value' mode (e.g. a blue italic text)
+    dynamic_cast<KexiFormDataItemInterface*>(item)->setDisplayDefaultValue(dynamic_cast<QWidget*>(item), false);
+}
+
+int AutoForm::itemIndex(AutoWidget* widget)
+{
+    return m_widgets.key(widget);
 }

@@ -22,8 +22,11 @@
 #include <QLabel>
 #include <kexidb/field.h>
 #include <QHBoxLayout>
+#include <QEvent>
 
-AutoWidget::AutoWidget(QWidget* parent): QWidget(parent), m_widget(0)
+#include "AutoForm.h"
+
+AutoWidget::AutoWidget(AutoForm* parent): QWidget(parent), m_widget(0)
 {
     m_fieldLabel = new QLabel(this);
     
@@ -31,6 +34,9 @@ AutoWidget::AutoWidget(QWidget* parent): QWidget(parent), m_widget(0)
     m_layout->addWidget(m_fieldLabel, 1);
     
     setLayout(m_layout);
+    m_parent = parent;
+    
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 AutoWidget::~AutoWidget()
@@ -47,10 +53,30 @@ void AutoWidget::setWidget(QWidget* widget)
 {
     if (!m_widget) {
         m_widget = widget;
-        m_layout->addWidget(widget, 1);
+        setFocusProxy(m_widget);
+        m_layout->addWidget(m_widget, 1);
+        m_widget->installEventFilter(this);
     }
 }
 
+void AutoWidget::gotFocus()
+{
+    kDebug() << m_parent->itemIndex(this);
+    m_parent->setCursorPosition(m_parent->currentRow(), m_parent->itemIndex(this));
+}
 
-
-
+bool AutoWidget::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == m_widget) {
+        //Get the focus event for the editing widget
+        if (event->type() == QEvent::FocusIn) {
+            gotFocus();
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        // pass the event on to the parent class
+        return QWidget::eventFilter(obj, event);
+    }
+}

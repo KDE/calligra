@@ -25,6 +25,7 @@
 #include <QVariant>
 #include <dataviewcommon/kexiformdataiteminterface.h>
 
+class AutoForm;
 class QLabel;
 class QHBoxLayout;
 namespace KexiDB {
@@ -38,14 +39,23 @@ public:
     virtual ~AutoWidget();
     
 protected:
-    explicit AutoWidget(QWidget* parent = 0);
+    explicit AutoWidget(AutoForm* parent);
     
     void setLabel(const QString& label);
     void setWidget(QWidget* widget);
+    
+    //virtual void focusInEvent(QFocusEvent* );
+    virtual bool eventFilter(QObject *obj, QEvent *event);
+    
 private:
     QLabel *m_fieldLabel;
     QHBoxLayout *m_layout;
     QWidget *m_widget;
+    
+    AutoForm* m_parent;
+    
+protected slots:
+    void gotFocus();
 };
 
 #endif // AUTOWIDGETBASE_H
