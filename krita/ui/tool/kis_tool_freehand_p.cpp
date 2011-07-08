@@ -26,6 +26,8 @@
 #include <kis_paint_information.h>
 #include <kis_paint_device.h>
 
+#include "kis_update_time_monitor.h"
+
 FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand,
                                    KisPainter* painter,
                                    const KisPaintInformation & pi1,
@@ -62,7 +64,10 @@ void FreehandPaintAtJob::run()
 {
     m_dragDist = KisDistanceInformation(0,0);
     m_painter->paintAt(KisPaintInformation(m_pi1));
-    m_toolFreeHand->setDirty(m_painter->takeDirtyRegion());
+
+    QVector<QRect> rects = m_painter->takeDirtyRegion();
+    KisUpdateTimeMonitor::instance()->reportJobFinished(this, rects);
+    m_toolFreeHand->setDirty(rects);
 }
 
 
@@ -84,7 +89,10 @@ void FreehandPaintLineJob::run()
 {
     m_dragDist = (m_previousPaintJob) ? m_previousPaintJob->dragDist() : KisDistanceInformation(0.0, 0.0);
     m_dragDist = m_painter->paintLine(m_pi1, m_pi2, m_dragDist);
-    m_toolFreeHand->setDirty(m_painter->takeDirtyRegion());
+
+    QVector<QRect> rects = m_painter->takeDirtyRegion();
+    KisUpdateTimeMonitor::instance()->reportJobFinished(this, rects);
+    m_toolFreeHand->setDirty(rects);
 }
 
 FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand,
@@ -108,6 +116,9 @@ void FreehandPaintBezierJob::run()
 {
     m_dragDist = (m_previousPaintJob) ? m_previousPaintJob->dragDist() : KisDistanceInformation(0.0, 0.0);
     m_dragDist = m_painter->paintBezierCurve(m_pi1, m_control1, m_control2, m_pi2, m_dragDist);
-    m_toolFreeHand->setDirty(m_painter->takeDirtyRegion());
+
+    QVector<QRect> rects = m_painter->takeDirtyRegion();
+    KisUpdateTimeMonitor::instance()->reportJobFinished(this, rects);
+    m_toolFreeHand->setDirty(rects);
 }
 

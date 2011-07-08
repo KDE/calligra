@@ -57,7 +57,7 @@
 #include <kis_view2.h>
 #include <kis_painting_assistants_manager.h>
 #include <kis_3d_object_model.h>
-
+#include "kis_update_time_monitor.h"
 #define ENABLE_RECORDING
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
@@ -180,7 +180,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             return;
 
         setMode(KisTool::PAINT_MODE);
-
+        KisUpdateTimeMonitor::instance()->startStrokeMeasure(convertToPixelCoord(adjustPosition(e->point, e->point)));
         initPaint(e);
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
@@ -234,7 +234,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     QPointF adjusted = adjustPosition(e->point, m_strokeBegin);
     QPointF pos = convertToPixelCoord(adjusted);
     QPointF dragVec = pos - m_previousPaintInformation.pos();
-
+    KisUpdateTimeMonitor::instance()->reportMouseMove(pos);
     qreal perspective = 1.0;
     foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
         if (grid->contains(adjusted)) {
@@ -475,7 +475,11 @@ void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
     m_hasPaintAtLeastOnce = true;
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob(new FreehandPaintAtJob(this, m_painter, pi, previousJob), previousJob);
+
+    FreehandPaintJob* job = new FreehandPaintAtJob(this, m_painter, pi, previousJob);
+    KisUpdateTimeMonitor::instance()->reportJobStarted(job);
+    queuePaintJob(job, previousJob);
+
     m_pathPaintAction->addPoint(pi);
 }
 
@@ -484,7 +488,11 @@ void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
 {
     m_hasPaintAtLeastOnce = true;
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob(new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob), previousJob);
+
+    FreehandPaintJob* job = new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob);
+    KisUpdateTimeMonitor::instance()->reportJobStarted(job);
+    queuePaintJob(job, previousJob);
+
     m_pathPaintAction->addLine(pi1, pi2);
 }
 
@@ -495,7 +503,11 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 {
     m_hasPaintAtLeastOnce = true;
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob(new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob);
+
+    FreehandPaintJob* job = new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob);
+    KisUpdateTimeMonitor::instance()->reportJobStarted(job);
+    queuePaintJob(job, previousJob);
+
     m_pathPaintAction->addCurve(pi1, control1, control2, pi2);
 }
 
@@ -524,6 +536,8 @@ void KisToolFreehand::setDirty(const QVector<QRect> &rects)
 
 void KisToolFreehand::setDirty(const QRegion& region)
 {
+    qFatal("kddjdjd");
+
     if (region.isEmpty())
         return;
 
