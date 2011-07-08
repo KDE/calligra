@@ -35,6 +35,7 @@
 
 #include "CellView.h"
 #include "calligra_tables_limits.h"
+#include "PointStorage.h"
 #include "RectStorage.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
@@ -80,6 +81,11 @@ public:
     QReadWriteLock obscuredLock;
 #endif
 
+    PointStorage<bool> highlightedCells;
+    QPoint activeHighlight;
+#ifdef CALLIGRA_TABLES_MT
+    QReadWriteLock highlightLock;
+#endif
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
 #ifdef CALLIGRA_TABLES_MT
@@ -620,6 +626,55 @@ CellView* SheetView::createDefaultCellView()
 CellView* SheetView::createCellView(int col, int row)
 {
     return new CellView(this, col, row);
+}
+
+bool SheetView::isHighlighted(const QPoint &cell) const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->highlightLock);
+#endif
+    return d->highlightedCells.lookup(cell.x(), cell.y());
+}
+
+void SheetView::setHighlighted(const QPoint &cell, bool isHighlighted)
+{
+#ifdef CALLIGRA_TABLES_MT
+    QWriteLocker(&d->highlightLock);
+#endif
+    bool oldVal;
+    if (isHighlighted) {
+        oldVal = d->highlightedCells.insert(cell.x(), cell.y(), true);
+    } else {
+        oldVal = d->highlightedCells.take(cell.x(), cell.y());
+    }
+    if (oldVal != isHighlighted) {
+        invalidateRegion(Region(cell));
+    }
+}
+
+bool SheetView::hasHighlightedCells() const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->highlightLock);
+#endif
+    return d->highlightedCells.count() > 0;
+}
+
+QPoint SheetView::activeHighlight() const
+{
+    return d->activeHighlight;
+}
+
+void SheetView::setActiveHighlight(const QPoint &cell)
+{
+    QPoint oldVal = d->activeHighlight;
+    d->activeHighlight = cell;
+    if (oldVal != cell) {
+        Region r;
+        if (!oldVal.isNull()) r.add(oldVal);
+        if (!cell.isNull()) r.add(cell);
+        invalidateRegion(r);
+    }
 }
 
 #include "SheetView.moc"

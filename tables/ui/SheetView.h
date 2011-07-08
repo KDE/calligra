@@ -123,6 +123,15 @@ public:
     bool obscuresCells(const QPoint& cell) const;
     QSize totalObscuredRange() const;
 
+    /*
+     * Highlighting cells.
+     */
+    bool isHighlighted(const QPoint& cell) const;
+    void setHighlighted(const QPoint& cell, bool isHighlighted);
+    bool hasHighlightedCells() const;
+    QPoint activeHighlight() const;
+    void setActiveHighlight(const QPoint& cell);
+
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
 
