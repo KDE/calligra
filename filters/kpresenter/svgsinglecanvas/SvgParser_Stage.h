@@ -24,7 +24,8 @@
 
 class SvgParser_generic;
 class KoResourceManager;
-class Frame;
+//class Frame;
+class PresentationViewPortShape;
 
 /**
  * Inherits SvgParser_generic
@@ -56,7 +57,7 @@ private:
      * Contains all the Frame objects created from the data 
      * parsed from the SVG document
      */
-    QList<Frame*> m_frameList;
+    QList<PresentationViewPortShape*> m_frameList;
     QString *NS; //Namespace
 };
 #endif /*SVG_PARSER_STAGE_H*/

@@ -21,7 +21,8 @@ set(LIBSVG_SOURCES
 #These have been added here to test the SvgWriter_generic for Stage specific data,
 #since saving of SVG's still not implemented in Stage
 set(STAGE_SOURCES
-    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
+    //${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/PresentationViewPortShape.cpp
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgAnimationData.cpp
     )
 

@@ -22,7 +22,7 @@
 
 #include "SvgWriter_generic.h"
 
-class Frame;
+//class Frame;
 class KoShape;
 class QTextStream;
 class SvgWriter;

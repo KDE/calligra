@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "SvgAnimationData.h"
-#include "Frame.h"
+//#include "Frame.h"
 #include "KoShape.h"
 
 SvgAnimationData::SvgAnimationData()
@@ -28,19 +28,19 @@ SvgAnimationData::~SvgAnimationData()
 {
 }
 
-void SvgAnimationData::setFrame(Frame *frame)
+void SvgAnimationData::setFrame(PresentationViewPortShape *frame)
 {
     m_frame = *frame;
 }
 
-Frame SvgAnimationData::frame()
+PresentationViewPortShape SvgAnimationData::frame()
 {
     return m_frame;
 }
 
   ///Temporary function.
   ///Only for testing
-void SvgAnimationData::addNewFrame(KoShape *shape, Frame *frame)
+void SvgAnimationData::addNewFrame(KoShape *shape, PresentationViewPortShape *frame)
 {
     SvgAnimationData *applicationData = dynamic_cast<SvgAnimationData*>( shape->applicationData() );
 

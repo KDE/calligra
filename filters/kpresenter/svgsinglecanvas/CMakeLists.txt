@@ -1,5 +1,3 @@
-
-
 include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/common ${CMAKE_SOURCE_DIR}/karbon/ui ${CMAKE_SOURCE_DIR}/filter/karbon/svg ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
 
 
@@ -8,9 +6,6 @@ set(LIBSVG_SOURCES
   ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
   ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgUtil.cpp
   )
-#set(KARBON_SOURCES
-  #${CMAKE_SOURCE_DIR}/filters/karbon/svg/SvgUtil.cpp
-#)
 
 set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/ellipse/EllipseShape.cpp
@@ -28,7 +23,6 @@ set(svgsinglecanvasexport_PART_SRCS
     SvgAnimationData.cpp
     ${LIBSVG_SOURCES}
     ${SHAPES_SOURCES}
-    #${KARBON_SOURCES}
 )
 
 

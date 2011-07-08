@@ -54,10 +54,10 @@ void SvgWriter_Stage::saveAppData(KoShape *shape)
     }
         
     SvgAnimationData * appData = dynamic_cast<SvgAnimationData*>(shape->applicationData());
-    Frame *frameObj;// = new Frame();
+    PresentationViewPortShape *frameObj;// = new Frame();
     frameObj = &(appData->frame());
           
-    frameObj->writeToStream(m_frames);       
+    frameObj->saveSvg(m_frames);       
     }
       
 void SvgWriter_Stage::saveScript()
@@ -73,7 +73,7 @@ void SvgWriter_Stage::forTesting(KoShape * shape)
 {
      //First save Frame properties to a shape. This is for testing only.
     SvgAnimationData  *obj = new SvgAnimationData();
-    Frame *frame = new Frame(); //Default properties set 
+    PresentationViewPortShape *frame = new PresentationViewPortShape(); //Default properties set 
     frame->setRefId(m_shapeIds[shape]);
     
     obj->addNewFrame(shape, frame);
