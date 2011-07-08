@@ -2257,6 +2257,7 @@ void NodeItemModel::setShowProject( bool on )
 {
     m_projectshown = on;
     reset();
+    emit projectShownChanged( on );
 }
 
 void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
