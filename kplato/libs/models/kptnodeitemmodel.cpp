@@ -182,13 +182,7 @@ QVariant NodeModel::description( const Node *node, int role ) const
             return s;
         }
         case Qt::ToolTipRole: {
-            KRichTextWidget w( node->description(), 0 );
-            w.switchToPlainText();
-            QString s = w.textOrHtml();
-            if ( s.length() > 300 ) {
-                s = s.left( 300 ) + "...";
-            }
-            return s;
+            return node->description();
         }
         case Qt::EditRole:
             return node->description();
@@ -306,7 +300,7 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
                 return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             case Qt::ToolTipRole: {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
             }
             case Qt::EditRole:
                 return node->constraintEndTime();
@@ -327,7 +321,7 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
             }
             break;
         }
@@ -2263,6 +2257,7 @@ void NodeItemModel::setShowProject( bool on )
 {
     m_projectshown = on;
     reset();
+    emit projectShownChanged( on );
 }
 
 void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
