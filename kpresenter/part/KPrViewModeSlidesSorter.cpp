@@ -138,6 +138,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     m_customSlideShowView->setDragDropMode(QAbstractItemView::InternalMove);
 
     //setup signals
+    connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(takePageFromCustomSlideShows(KoPAPageBase*)));
     connect(m_slidesSorterView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_customSlideShowView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(customSlideShowsContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorterView, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
@@ -422,9 +423,7 @@ void KPrViewModeSlidesSorter::deleteSlide()
     if (m_slidesSorterView->hasFocus()) {
         // create a list with all selected slides
         QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();
-        if (m_slidesSorterModel->removeSlides(selectedSlides)) {
-            m_customSlideShowModel->removeSlidesFromAll(selectedSlides);
-        }
+        m_slidesSorterModel->removeSlides(selectedSlides);
     }
     else if (m_customSlideShowView->hasFocus()) {
         deleteSlidesFromCustomShow();
@@ -697,4 +696,9 @@ void KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons()
     KActionCollection *ac = canvas()->canvasController()->actionCollection();
     ac->action("edit_delete")->setEnabled(m_customSlideShowView->hasFocus() |
                                           !m_slidesSorterView->selectionModel()->selectedIndexes().isEmpty());
+}
+
+void KPrViewModeSlidesSorter::takePageFromCustomSlideShows(KoPAPageBase *page)
+{
+    m_customSlideShowModel->removeSlideFromAll(page);
 }

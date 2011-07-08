@@ -146,9 +146,6 @@ private:
     QToolButton *m_buttonDelSlideFromCurrentShow;
     QComboBox *m_customSlideShowsList;
 
-public slots:
-    void editPaste();
-
 private slots:
     /** Changes the view active page to match the slides sorter current index*/
     void updateActivePageToCurrentIndex();
@@ -173,6 +170,9 @@ private slots:
 
     /** copy the current selected slides*/
     void editCopy();
+
+    /** paste slides in slides sorter view*/
+    void editPaste();
 
     /** update the zoom of the Slides Sorter view*/
     void updateZoom(KoZoomMode::Mode mode, qreal zoom);
@@ -224,6 +224,9 @@ private slots:
 
     /** Enable/Disable add and remove slides buttons for Custom Slide Show View */
     void manageAddRemoveSlidesButtons();
+
+    /** Remove deleted slides from custom slide Shows */
+    void takePageFromCustomSlideShows(KoPAPageBase* pages);
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

@@ -134,6 +134,13 @@ public:
     void removeSlidesFromAll(const QList<KoPAPageBase *> &pages);
 
     /**
+     * @brief Deletes all the ocurrencies of a given slide from all the known custom SlideShows
+     *
+     * @param slideShow list of slides to be removed
+     */
+    void removeSlideFromAll(KoPAPageBase *page);
+
+    /**
      * @brief Deletes all the ocurrencies of a given list of slides indexes from current custom SlideShows
      *
      * @param slideIndexes list of slide indexes to be removed

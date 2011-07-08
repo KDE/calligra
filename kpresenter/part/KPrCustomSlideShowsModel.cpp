@@ -320,6 +320,16 @@ void KPrCustomSlideShowsModel::removeSlidesFromAll(const QList<KoPAPageBase *> &
     reset();
 }
 
+
+void KPrCustomSlideShowsModel::removeSlideFromAll(KoPAPageBase *page)
+{
+    if (!m_customSlideShows) {
+        return;
+    }
+    m_customSlideShows->removeSlideFromAll(page);
+    reset();
+}
+
 void KPrCustomSlideShowsModel::removeSlidesByIndexes(const QModelIndexList &pageIndexes)
 {
     QList<KoPAPageBase *> slides;
