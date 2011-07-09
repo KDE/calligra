@@ -32,6 +32,8 @@
 #include "kis_image.h"
 #include "animator_light_table.h"
 
+#include "simple_animated_layer.h"
+
 
 class AnimatorModel : public QAbstractTableModel
 {
@@ -50,6 +52,9 @@ public:
     
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+
+public slots:
+    void testSlot();
     
 public slots:
     void setCanvas(KisCanvas2* canvas);
@@ -95,7 +100,7 @@ public slots:
     void renameLayer(QModelIndex index, QString& name);
     void renameLayer(int l_num, QString& name);
     
-    void visibleAll();
+//     void visibleAll();
     
     void setEnabled(bool en);
     
@@ -120,16 +125,16 @@ public:
     /**
      * Differs from nodeFromIndex: just gives node from index, no any search for other ways
      */
-    KisNode* nodeAtIndex(const QModelIndex& index) const;
+    const KisNode* nodeAtIndex(const QModelIndex& index) const;
     
     /**
      * Returns node from given index or extrapolates previous nodes in this row
      * TODO: real extropolation
      */
-    KisNode* nodeFromIndex(const QModelIndex& index) const;
+    const KisNode* nodeFromIndex(const QModelIndex& index) const;
     
-    KisNode* previousFrame(const QModelIndex& index) const;
-    KisNode* nextFrame(const QModelIndex& index) const;
+    const KisNode* previousFrame(const QModelIndex& index) const;
+    const KisNode* nextFrame(const QModelIndex& index) const;
     
     void goNext();
     
@@ -161,9 +166,13 @@ private:
     
     bool m_enabled;
     
+    bool m_updating;
     
-    QList< KisNode* > m_main_layers;
-    QList< QList < KisNode* > > m_frames_layers;
+    
+//     QList< KisNode* > m_main_layers;                            // old
+//     QList< QList < KisNode* > > m_frames_layers;                // old
+    
+    QList< AnimatedLayer* > m_layers;                           // new
     
     const QModelIndex& indexFromNode(KisNode* node) const;
      
