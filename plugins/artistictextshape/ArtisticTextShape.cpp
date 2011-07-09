@@ -1132,10 +1132,7 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
         textContext.parseCharacterTransforms(parentElement, context.currentGC());
 
         QString href = parentElement.attribute("xlink:href").mid(1);
-        path = dynamic_cast<KoPathShape*>(context.shapeById(href));
-        if (path) {
-            pathInDocument = true;
-        } else if (context.hasDefinition(href)) {
+        if (context.hasDefinition(href)) {
             const KoXmlElement &p = context.definition(href);
             // must be a path element as per svg spec
             if (p.tagName() == "path") {
@@ -1155,6 +1152,11 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
                 path->setSize(newSize);
                 path->setPosition(newPosition);
                 path->applyAbsoluteTransformation(SvgUtil::parseTransform(p.attribute("transform")));
+            }
+        } else {
+            path = dynamic_cast<KoPathShape*>(context.shapeById(href));
+            if (path) {
+                pathInDocument = true;
             }
         }
         // parse the start offset
