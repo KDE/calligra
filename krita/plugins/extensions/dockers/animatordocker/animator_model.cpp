@@ -367,10 +367,10 @@ void AnimatorModel::frameUpdate()
         
         if (m_layers[i]->isFrameChanged())
         {
+            if (old_frame)
+                m_image->updateProjection(old_frame, old_frame->exactBounds());
 	    if (frame)
                 m_image->updateProjection(frame, frame->exactBounds());
-	    if (old_frame)
-                m_image->updateProjection(old_frame, old_frame->exactBounds());
         }
         
 //         foreach (
@@ -713,6 +713,8 @@ void AnimatorModel::copyFramePrevious(QModelIndex index)
         }
         
         m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
+        
+        update();
     } else
     {
         std::cout << "Has node already or no frames: can't copy" << std::endl;
@@ -736,6 +738,8 @@ void AnimatorModel::copyFrameNext(QModelIndex index)
         }
         
         m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
+        
+        update();
     } else
     {
         std::cout << "Has node already or no frames: can't copy" << std::endl;
@@ -945,6 +949,16 @@ const QModelIndex& AnimatorModel::indexFromNode(KisNode* node) const
 void AnimatorModel::goNext()
 {
     setFrame(m_frame+1);
+}
+
+void AnimatorModel::goFirst()
+{
+    setFrame(0);
+}
+
+bool AnimatorModel::isLast()
+{
+    return m_frame >= columnCount()-1;
 }
 
 void AnimatorModel::toogleExtLTable(bool val)

@@ -39,6 +39,10 @@ public slots:
     void play(bool ch);
     void setFps(int fps);
     void nextFrame();
+    void setLoop(bool loop);
+    
+public:
+    bool getLoop();
 
 protected:
     int getTime();
@@ -46,6 +50,8 @@ protected:
 private:
     AnimatorModel* m_model;
     QTimer* m_timer;
+    
+    bool m_loop;
     
     int m_fps;
 };
