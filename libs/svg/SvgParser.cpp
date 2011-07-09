@@ -1248,7 +1248,7 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
             continue;
         }
 
-        // reset tranformation that might come from the default shape
+        // reset transformation that might come from the default shape
         shape->setTransformation(QTransform());
 
         // reset border
