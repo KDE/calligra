@@ -103,5 +103,7 @@ void KWStartupWidget::buttonClicked()
     style.setPageLayout(m_layout);
     m_doc->setUnit(m_unit);
 
+    m_doc->relayout();
+
     emit documentSelected();
 }
