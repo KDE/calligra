@@ -42,6 +42,7 @@ SimpleAnimatedLayer::SimpleAnimatedLayer(const KisGroupLayer& source) : Animated
 
 void SimpleAnimatedLayer::update()
 {
+    m_frames.clear();
     for ( qint32 i = 0; i < childCount(); ++i )
     {
         const KisNode* chsource = childNodes(QStringList(),  KoProperties())[i];
@@ -159,7 +160,7 @@ void SimpleAnimatedLayer::visibleFrame(int f, bool v)
     if (f < 0 || f >= m_frames.size())
         return;
     
-    KisNode* node = m_frames[f];
+    KisNode* node = getFrameLayer(f);
     if (node)
         node->setVisible(v);
 }

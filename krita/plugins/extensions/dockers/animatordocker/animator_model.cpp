@@ -368,9 +368,13 @@ void AnimatorModel::frameUpdate()
         if (m_layers[i]->isFrameChanged())
         {
             if (old_frame)
+            {
                 m_image->updateProjection(old_frame, old_frame->exactBounds());
+            }
 	    if (frame)
+            {
                 m_image->updateProjection(frame, frame->exactBounds());
+            }
         }
         
 //         foreach (
@@ -689,6 +693,7 @@ void AnimatorModel::createFrame(QModelIndex index, char* layer_type)
         m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));                  // TODO: Set name with zero-leading
         
         update();
+        frameUpdate();
     } else
     {
         std::cout << "Has node already: may be clear instead?" << std::endl;
@@ -715,6 +720,7 @@ void AnimatorModel::copyFramePrevious(QModelIndex index)
         m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
         
         update();
+        frameUpdate();
     } else
     {
         std::cout << "Has node already or no frames: can't copy" << std::endl;
@@ -740,6 +746,7 @@ void AnimatorModel::copyFrameNext(QModelIndex index)
         m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
         
         update();
+        frameUpdate();
     } else
     {
         std::cout << "Has node already or no frames: can't copy" << std::endl;
@@ -753,6 +760,7 @@ void AnimatorModel::clearFrame(QModelIndex index)
     {
         m_nodeman->removeNode(node);
         update();
+        frameUpdate();
     } else
     {
         std::cout << "Already clear" << std::endl;
