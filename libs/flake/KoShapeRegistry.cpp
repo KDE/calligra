@@ -298,14 +298,10 @@ QList<KoShapeFactoryBase*> KoShapeRegistry::factoriesForElement(const QString &n
     QPair<QString, QString> p = QPair<QString, QString>(nameSpace, elementName);
 
     QMultiMap<int, KoShapeFactoryBase*> priorityMap = d->factoryMap.value(p);
-    QList<KoShapeFactoryBase*> shapeFactories = priorityMap.values();
-    if (shapeFactories.size() > 1) {
-        // sort list by priority
-        const int factoryCount = shapeFactories.size();
-        const int middleIndex = factoryCount >> 1;
-        for (int i = 0; i < middleIndex; ++i) {
-            shapeFactories.swap(i, factoryCount-i);
-        }
+    QList<KoShapeFactoryBase*> shapeFactories;
+    // sort list by priority
+    foreach(KoShapeFactoryBase *f, priorityMap.values()) {
+        shapeFactories.prepend(f);
     }
 
     return shapeFactories;
