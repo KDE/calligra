@@ -283,6 +283,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
 void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
+    setProperty(FixedLineHeight, 0.0);
     remove(NormalLineHeight);
 }
 
@@ -294,6 +295,7 @@ int KoParagraphStyle::lineHeightPercent() const
 void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
+    setProperty(PercentLineHeight, 0);
     remove(NormalLineHeight);
 }
 
@@ -1255,8 +1257,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 }
             }
         }
-        else
+        else {
             setProperty(NormalLineHeight, true);
+            setProperty(PercentLineHeight, 0);
+            setProperty(FixedLineHeight, 0.0);
+        }
     }
     else {
         const QString lineSpacing(styleStack.property(KoXmlNS::style, "line-spacing"));
@@ -1944,10 +1949,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::PercentLineHeight) {
+            } else if (key == KoParagraphStyle::PercentLineHeight && lineHeightPercent() != 0) {
                 style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() >= 0) {
+            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() != 0) {
                 style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacingFromFont && lineHeightAbsolute() == 0) {
