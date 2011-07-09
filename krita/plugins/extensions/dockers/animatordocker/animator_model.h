@@ -53,23 +53,17 @@ public:
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-public slots:
-    void testSlot();
+// public slots:
+//     void testSlot();
     
 public slots:
     void setCanvas(KisCanvas2* canvas);
     void setImage(KisImageWSP image);
-    void setLightTable(AnimatorLightTable* table);
     
-    void toogleExtLTable(bool val);
+    void setLightTable(AnimatorLightTable* table);
+    void toggleExtLTable(bool val);
     
     void update();
-    
-    /**
-     * This functions gets info about layers and update info about animation layers
-     */
-    void realUpdate();
-    void afterUpdate();
     
     void nodeDestroyed(QObject* node);
 
@@ -152,12 +146,13 @@ public:
     
     
 protected:
-    KisNode* getAnimatedLayerByChild(const KisNode* node);
-    
     /**
-     * Make all frames of layer unvisible
+     * This functions gets info about layers and update info about animation layers
      */
-    void unvisibleLayer(int n);
+    void realUpdate();
+    void afterUpdate();
+    
+    KisNode* getAnimatedLayerByChild(const KisNode* node);
     
     bool activateAtIndex(QModelIndex index);
     bool activateBeforeIndex(QModelIndex index);

@@ -117,7 +117,7 @@ KisNode* SimpleAnimatedLayer::getNextKeyFrame(int num)
         num = -1;
     if (num >= m_frames.size())
         return 0;
-    while (++num > m_frames.size())
+    while (++num < m_frames.size())
     {
         if (m_frames[num])
             return m_frames[num];

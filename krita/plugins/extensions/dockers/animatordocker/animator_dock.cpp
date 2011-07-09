@@ -121,7 +121,7 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     
     QAction* ext_light_table = m_onion_toolbar->addAction(SmallIcon("document-edit"), i18n("Extended lighttable (in additional docker)"));
     ext_light_table->setCheckable(true);
-    connect(ext_light_table, SIGNAL(toggled(bool)), m_model, SLOT(toogleExtLTable(bool)));
+    connect(ext_light_table, SIGNAL(toggled(bool)), m_model, SLOT(toggleExtLTable(bool)));
     addAction( ext_light_table );
     
     QAction* show_all = m_onion_toolbar->addAction(SmallIcon("layer-visible-on"), i18n("Enable/disable plugin"));

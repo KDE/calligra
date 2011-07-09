@@ -46,6 +46,7 @@ public:
     void setDocument(KisDoc2* document);
     
 public slots:
+    void exportFrame(int num);
     void exportAll();
     
     

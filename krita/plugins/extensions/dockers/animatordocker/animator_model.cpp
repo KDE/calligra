@@ -145,6 +145,8 @@ void AnimatorModel::realUpdate()
             {
                 fnum = lay->lastFrame();
             }
+            
+            connect(lay, SIGNAL(destroyed(QObject*)), this, SLOT(nodeDestroyed(QObject*)));
         }
     }
     
@@ -237,9 +239,6 @@ QVariant AnimatorModel::data(const QModelIndex& index, int role) const
 QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     QVariant t;
-//     std::cout << "headerData()" << std::endl;
-
-    connect(this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(testSlot()));
     
     if (orientation == Qt::Vertical) {
         if (role == Qt::DisplayRole)
@@ -279,10 +278,10 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
     return t;
 }
 
-void AnimatorModel::testSlot()
-{
-    std::cout << "headerDataChanged()" << std::endl;
-}
+// void AnimatorModel::testSlot()
+// {
+//     std::cout << "headerDataChanged()" << std::endl;
+// }
 
 
 int AnimatorModel::columnCount(const QModelIndex& parent) const
@@ -499,20 +498,6 @@ void AnimatorModel::lightTableUpdate()
 //     updateCanvas();
 }
 
-void AnimatorModel::unvisibleLayer(int n)
-{
-//     AnimatedLayer* b = m_layers[n];
-//     
-//     int i = 0;
-//     const KisNode* frame = b->firstChild();
-//     while (i < b->childCount())
-//     {
-//         const_cast<KisNode*>(frame)->setVisible(false);
-//         frame = b->at(++i);
-// //         frame = frame->nextSibling();
-//     }
-}
-
 void AnimatorModel::setCanvas(KisCanvas2* canvas)
 {
     m_canvas = canvas;
@@ -570,55 +555,16 @@ const KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
 const KisNode* AnimatorModel::nextFrame(const QModelIndex& index) const
 {
     return m_layers[index.row()]->getNextKeyFrame(index.column());
-//     qint32 base = index.row();
-//     qint32 fr = index.column()+1;
-//     
-//     const KisNode* node = 0;
-//     
-//     if (m_layers.size() > base)
-//     {
-//         while (!node && fr < m_layers[base]->childCount())
-//         {
-//             node = m_layers[base]->at(fr);
-//             ++fr;
-//         }
-//     }
-//     
-//     return node;
 }
 
 const KisNode* AnimatorModel::previousFrame(const QModelIndex& index) const
 {
     return m_layers[index.row()]->getPreviousKeyFrame(index.column());
-//     qint32 base = index.row();
-//     qint32 fr = index.column()-1;
-//     
-//     const KisNode* node = 0;
-//     
-//     if (m_layers.size() > base)
-//     {
-//         while (!node && fr >= 0)
-//         {
-//             if (fr < m_layers[base]->childCount())
-//                 node = m_layers[base]->at(fr);
-//             --fr;
-//         }
-//     }
-//     
-//     return node;
 }
 
 const KisNode* AnimatorModel::nodeAtIndex(const QModelIndex& index) const
 {
-//     if (m_layers.size() > index.row()) // && index.row() >= 0)
-//     {
     return m_layers[index.row()]->getKeyFrameLayer(index.column());
-//         if (m_layers[index.row()]->childCount() > index.column() && index.column() >= 0)
-//         {
-//             return m_layers[index.row()]->at(index.column());
-//         }
-//     }
-//     return 0;
 }
 
 bool AnimatorModel::activateAtIndex(QModelIndex index)
@@ -969,29 +915,11 @@ bool AnimatorModel::isLast()
     return m_frame >= columnCount()-1;
 }
 
-void AnimatorModel::toogleExtLTable(bool val)
+void AnimatorModel::toggleExtLTable(bool val)
 {
     m_ext_lighttable = val;
     frameUpdate();
 }
-
-// void AnimatorModel::visibleAll()
-// {
-//     foreach (AnimatedLayer* lay, m_layers)
-//     {
-//         lay->visibleAll(true);
-//     }
-//     AnimatedLayer* lay;
-//     foreach (lay, m_layers)
-//     {
-//         const KisNode* frame = lay->firstChild();
-//         while (frame)
-//         {
-//             const_cast<KisNode*>(frame)->setVisible(true);
-//             frame = frame->nextSibling();
-//         }
-//     }
-// }
 
 void AnimatorModel::setEnabled(bool en)
 {

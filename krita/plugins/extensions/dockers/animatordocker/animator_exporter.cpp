@@ -49,6 +49,13 @@ AnimatorExporter::~AnimatorExporter()
 
 }
 
+void AnimatorExporter::exportFrame(int num)
+{
+    m_model->setFrame(num);
+    QByteArray* mime = new QByteArray("image/png");
+    KoFilter::ConversionStatus status =  m_filter_manager->exportDocument(getName(num), *mime);
+}
+
 void AnimatorExporter::exportAll()
 {
 //     m_document->exportDocument();
@@ -60,13 +67,7 @@ void AnimatorExporter::exportAll()
     
     for (int i = 0; i < m_model->columnCount(); ++i)
     {
-//         std::cout << "Export frame " << i << std::endl;
-        
-        m_model->setFrame(i);
-        QByteArray* mime = new QByteArray("image/png");
-        KoFilter::ConversionStatus status =  m_filter_manager->exportDocument(getName(i), *mime);
-        
-//         std::cout << (status == KoFilter::OK) << std::endl;
+        exportFrame(i);
     }
     
     m_model->enableOnion();
