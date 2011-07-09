@@ -24,6 +24,9 @@ AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source)
 {
 //     m_source = const_cast<KisGroupLayer*>( &source );
     
+    setFrameNumber(0);
+    setFrameNumber(0);
+    
     connect(this, SIGNAL(requireRedraw()), this, SLOT(frameUpdate()));
 }
 
@@ -39,15 +42,21 @@ AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source)
 //     frameChange(true);
 // }
 
+void AnimatedLayer::setFrameNumber(int num)
+{
+    m_old_frame = m_frame;
+    m_frame = num;
+    emit requireRedraw();
+}
+
 int AnimatedLayer::getFrameNumber()
 {
     return m_frame;
 }
 
-void AnimatedLayer::setFrameNumber(int num)
+int AnimatedLayer::getOldFrame()
 {
-    m_frame = num;
-    emit requireRedraw();
+    return m_old_frame;
 }
 
 bool AnimatedLayer::isValid()

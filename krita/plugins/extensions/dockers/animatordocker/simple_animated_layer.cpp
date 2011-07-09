@@ -23,6 +23,8 @@
 
 #include "simple_animated_layer.h"
 
+#include <iostream>
+
 SimpleAnimatedLayer::SimpleAnimatedLayer(const KisGroupLayer& source) : AnimatedLayer(source)
 {
 //     if (!source)
@@ -73,7 +75,16 @@ void SimpleAnimatedLayer::update()
 
 void SimpleAnimatedLayer::frameUpdate()
 {
-    visibleAll(false);
+    frameUpdate(false);
+}
+
+void SimpleAnimatedLayer::frameUpdate(bool do_all)
+{
+    if (do_all)
+        visibleAll(false);
+    else
+        visibleFrame(getOldFrame(), false);
+    
     KisNode* node = getFrameLayer(getFrameNumber());
     if (node)
     {
@@ -101,13 +112,22 @@ KisNode* SimpleAnimatedLayer::getKeyFrameLayer(int num)
 
 KisNode* SimpleAnimatedLayer::getNextKeyFrame(int num)
 {
+    if (num < 0)
+        num = -1;
+    if (num >= m_frames.size())
+        return 0;
+    while (++num > m_frames.size())
+    {
+        if (m_frames[num])
+            return m_frames[num];
+    }
     return 0;
 }
 
 KisNode* SimpleAnimatedLayer::getPreviousKeyFrame(int num)
 {
     if (num < 0)
-        num = 0;
+        return 0;
     if (num >= m_frames.size())
         num = m_frames.size();
     while (--num >= 0)
@@ -118,11 +138,37 @@ KisNode* SimpleAnimatedLayer::getPreviousKeyFrame(int num)
     return 0;
 }
 
+bool SimpleAnimatedLayer::isFrameChanged()
+{
+    return getFrameLayer(getFrameNumber()) != getFrameLayer(getOldFrame());
+}
+
+int SimpleAnimatedLayer::firstFrame()
+{
+    return 0;
+}
+
+int SimpleAnimatedLayer::lastFrame()
+{
+    return m_frames.size();
+}
+
+// PROTECTED
+void SimpleAnimatedLayer::visibleFrame(int f, bool v)
+{
+    if (f < 0 || f >= m_frames.size())
+        return;
+    
+    KisNode* node = m_frames[f];
+    if (node)
+        node->setVisible(v);
+}
+
 void SimpleAnimatedLayer::visibleAll(bool v)
 {
-    foreach (const KisNode* cn, m_frames)
+    foreach (KisNode* node, m_frames)
     {
-        KisNode* node = const_cast<KisNode*>( cn );
+//         KisNode* node = const_cast<KisNode*>( cn );
         if (node)
             node->setVisible(v);
     }

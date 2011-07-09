@@ -42,10 +42,25 @@ public:
     virtual KisNode* getFrameLayer(int num) = 0;
     virtual KisNode* getKeyFrameLayer(int num) = 0;
     
-    virtual KisNode* getPreviousKeyFrame(int num) = 0;          // May be this isn't required here
+    virtual KisNode* getPreviousKeyFrame(int num) = 0;
+    virtual KisNode* getNextKeyFrame(int num) = 0;
+    
+    virtual bool isFrameChanged() = 0;
+    
+    /**
+     * @return number of first frame with some info
+     */
+    virtual int firstFrame() = 0;
+    
+    /**
+     * @return number of last frame with some info+1 [firstFrame; lastFrame)
+     */
+    virtual int lastFrame() = 0;
     
     void setFrameNumber(int num);
     int getFrameNumber();
+    
+    int getOldFrame();
     
 public slots:
     virtual void update() = 0;
@@ -60,6 +75,7 @@ protected:
 //     void frameChange(bool ch);
     
 private:
+    int m_old_frame;
     int m_frame;
     
     bool m_valid;

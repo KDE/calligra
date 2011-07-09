@@ -29,6 +29,9 @@ Before 0.3 release:
 * [INPROGRESS] Animated layers classes
 * Add support for disabling shape filling
 
+Before 0.4:
+* Support for "image layers" (for audio first of all)
+
 Before 1.0 release:
 * Real-time player
 * Filter extended support (extrapolation)
