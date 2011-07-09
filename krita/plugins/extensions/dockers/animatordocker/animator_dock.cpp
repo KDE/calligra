@@ -138,6 +138,11 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     connect(play_act, SIGNAL(toggled(bool)), m_player, SLOT(play(bool)));
     addAction( play_act );
     
+    QAction* loop_act = m_player_toolbar->addAction(SmallIcon("task-recurring"), i18n("Toggle looping"));
+    loop_act->setCheckable(true);
+    connect(loop_act, SIGNAL(toggled(bool)), m_player, SLOT(setLoop(bool)));
+    addAction( loop_act );
+    
 //     // Create new button
 //     m_new_button = new QToolButton(this);
 //     

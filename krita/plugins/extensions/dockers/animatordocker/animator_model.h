@@ -135,8 +135,12 @@ public:
     
     const KisNode* previousFrame(const QModelIndex& index) const;
     const KisNode* nextFrame(const QModelIndex& index) const;
-    
+
+public:
     void goNext();
+    void goFirst();
+    
+    bool isLast();
     
 public:
     void setOnionNext(int n);

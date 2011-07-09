@@ -27,6 +27,7 @@ AnimatorPlayer::AnimatorPlayer(AnimatorModel* model)
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     setFps(1);
+    setLoop(false);
     setModel(model);
 }
 
@@ -64,6 +65,19 @@ void AnimatorPlayer::play(bool ch)
 void AnimatorPlayer::nextFrame()
 {
 //     std::cout << "next frame" << std::endl;
-    m_model->goNext();
+    if (m_loop && m_model->isLast())
+        m_model->goFirst();
+    else
+        m_model->goNext();
 //     m_model->updateCanvas();
+}
+
+bool AnimatorPlayer::getLoop()
+{
+    return m_loop;
+}
+
+void AnimatorPlayer::setLoop(bool loop)
+{
+    m_loop = loop;
 }
