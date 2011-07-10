@@ -841,6 +841,7 @@ void NodeSchedule::addAppointment( Schedule *resource, const DateTime &start, co
     Q_ASSERT ( result );
     result = resource->add( a );
     Q_ASSERT ( result );
+    Q_UNUSED ( result ); // cheating the compiler in release mode to not warn about unused-but-set-variable
     //kDebug()<<"Added interval to new"<<a;
 }
 
@@ -975,6 +976,7 @@ void ResourceSchedule::addAppointment( Schedule *node, const DateTime &start, co
     Q_ASSERT ( result == true );
     result = node->add( a );
     Q_ASSERT ( result == true );
+    Q_UNUSED ( result );  //don't warn about unused-but-set-variable in release mode
     //kDebug()<<"Added interval to new"<<a;
 }
 

@@ -1499,7 +1499,6 @@ void PasteWidgetCommand::execute()
     }
 
     container->form()->selectFormWidget();
-    QStringList::ConstIterator endIt = d->names.constEnd();
     foreach (const QString& widgetName, d->names) { // We select all the pasted widgets
         ObjectTreeItem *item = d->form->objectTree()->lookup(widgetName);
         if (item) {

@@ -187,6 +187,7 @@ bool OpenCalcImport::readRowFormat(KoXmlElement & rowNode, KoXmlElement * rowSty
         table->cellStorage()->setStyle(Calligra::Tables::Region(QRect(1, row, KS_colMax, 1)), layout);
 
 
+        Q_UNUSED(insertPageBreak); //for now, as long as below code is commented.
         // if ( insertPageBreak ) TODO:
         //   rowL->setPageBreak( true )
 
@@ -935,6 +936,7 @@ bool OpenCalcImport::readColLayouts(KoXmlElement & content, Sheet * table)
             if (width != -1.0)
                 col->setWidth(width);
 
+            Q_UNUSED(insertPageBreak); //TODO 
             // if ( insertPageBreak )
             //   col->setPageBreak( true )
 
