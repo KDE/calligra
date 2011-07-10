@@ -1,11 +1,13 @@
-include_directories( ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/common ${CMAKE_SOURCE_DIR}/karbon/ui ${CMAKE_SOURCE_DIR}/filter/karbon/svg ${CMAKE_SOURCE_DIR}/plugins ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
-
+include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/karbon/common ${CMAKE_SOURCE_DIR}/karbon/ui ${CMAKE_SOURCE_DIR}/filter/karbon/svg ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
 
 ########## next traget ################
 set(LIBSVG_SOURCES
   ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
   ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgUtil.cpp
   )
+#set(KARBON_SOURCES
+  #${CMAKE_SOURCE_DIR}/filters/karbon/svg/SvgUtil.cpp
+#)
 
 set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/ellipse/EllipseShape.cpp
@@ -14,16 +16,15 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp 
 )
 
 set(svgsinglecanvasexport_PART_SRCS 
     ${CMAKE_SOURCE_DIR}/karbon/ui/KarbonPart.h
     SvgAnimationData.cpp
-    #PresentationViewPortShape.cpp
-    #ViewPortShapeConfigCommand.cpp
+    Frame.cpp 
     ${LIBSVG_SOURCES}
     ${SHAPES_SOURCES}
+    #${KARBON_SOURCES}
 )
 
 #kde4_add_ui_files(rectpathshape_PART_SRCS

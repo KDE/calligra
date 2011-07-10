@@ -20,13 +20,11 @@
 #ifndef SVGANIMATIONDATA_H
 #define SVGANIMATIONDATA_H
 
-//#include "Frame.h"
+#include "Frame.h"
 #include <libs/flake/KoShapeApplicationData.h>
-#include "presentationviewportshape/PresentationViewPortShape.h"
 
-//class Frame;
+class Frame;
 class KoShape;
-class PresentationViewPortShape;
 
 /**
  * Inherits from KoshapeApplicationData
@@ -41,24 +39,23 @@ class SvgAnimationData : public KoShapeApplicationData
     /**
      * Sets the frame properties for the calling shape
      */
-    void setFrame(PresentationViewPortShape *frame);
+    void setFrame(Frame *frame);
     /**
      * Returns the Frame object which contains information for the shape animation.
      */
-   // Frame frame();
-   PresentationViewPortShape frame();// TODO:change frame to pres...
+    Frame frame();
     /**
      * This function adds a new frame to a shape.
      * This function will only be used for tests.
      * Eventually, will be removed from here.
      */
-    void addNewFrame(KoShape *shape, PresentationViewPortShape *frame);
+    void addNewFrame(KoShape *shape, Frame *frame);
     
   private:
       /**
        * The Frame object which contains frame attributes and their values
        */
-      PresentationViewPortShape m_frame;
+      Frame m_frame;
 };
 
 #endif /*SVGANIMATIONDATA_H */

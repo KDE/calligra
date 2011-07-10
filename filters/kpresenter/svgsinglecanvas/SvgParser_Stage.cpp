@@ -39,9 +39,7 @@ SvgParser_Stage::~SvgParser_Stage()
 
 void SvgParser_Stage::parseAppData(const KoXmlElement& e)
 {
-   PresentationViewPortShape *frame = new PresentationViewPortShape();
-   frame->loadSvg(e);
-   
+   Frame *frame = new Frame(e);
    m_frameList.append(frame);
    }
 
@@ -54,7 +52,7 @@ void SvgParser_Stage::setAppDataTag()
 void SvgParser_Stage::createAppData()
 {
    foreach(KoShape *shape, m_shapes){
-      foreach(PresentationViewPortShape * frame, m_frameList){
+      foreach(Frame * frame, m_frameList){
           
         if(shape->name() == frame->refId()){
            SvgAnimationData * appData = new SvgAnimationData();

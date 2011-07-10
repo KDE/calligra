@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Presentation View Port
-Name[en_GB]=Presentation View Port
-X-KDE-ServiceTypes=KOffice/Shape
-Type=Service
-X-KDE-Library=presentationviewportshape
-X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
