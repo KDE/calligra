@@ -704,7 +704,6 @@ void TaskEditor::slotAddTask()
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
-        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
@@ -727,7 +726,6 @@ void TaskEditor::slotAddMilestone()
         t->estimate()->clear();
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
-        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
@@ -739,7 +737,6 @@ void TaskEditor::slotAddMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
@@ -758,7 +755,6 @@ void TaskEditor::slotAddSubMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
@@ -776,20 +772,14 @@ void TaskEditor::slotAddSubtask()
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
 void TaskEditor::edit( QModelIndex i )
 {
     if ( i.isValid() ) {
-        if ( m_view->slaveView()->hasFocus() ) {
-            m_view->masterView()->setFocus();
-        }
-
-        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
-        QModelIndex p = m_view->model()->parent( i );
-        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+        m_view->setParentsExpanded( i, true ); // in case treeview does not have focus
         m_view->edit( i );
     }
 }

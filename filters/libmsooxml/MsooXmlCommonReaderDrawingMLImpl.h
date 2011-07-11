@@ -1717,6 +1717,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
+#else
+Q_UNUSED(pprRead);
 #endif
 
     body = textPBuf.originalWriter();
@@ -5854,6 +5856,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     // text in shape
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+#else
+  Q_UNUSED(spAutoFit);
 #endif
     READ_EPILOGUE
 }

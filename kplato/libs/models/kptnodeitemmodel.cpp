@@ -2275,7 +2275,6 @@ void NodeItemModel::slotNodeInserted( Node *node )
     endInsertRows();
     m_node = 0;
     emit nodeInserted( node );
-    slotLayoutChanged(); //HACK to get both treeviews updated FIXME
 }
 
 void NodeItemModel::slotNodeToBeRemoved( Node *node )
@@ -3458,7 +3457,6 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
     emit executeCommand( new SubtaskAddCmd( m_project, node, parent, i18nc( "(qtundo-format)", "Add sub-task" ) ) );
-    reset();
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
