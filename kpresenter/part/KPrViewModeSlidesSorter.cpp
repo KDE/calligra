@@ -82,6 +82,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     m_customSlideShowsList = new QComboBox;
     m_customSlideShowsList->setEditable(false);
     m_customSlideShowsList->setInsertPolicy(QComboBox::NoInsert);
+    m_customSlideShowsList->setMinimumContentsLength(30);
     slideShowsLabel->setBuddy(m_customSlideShowsList);
 
     m_buttonAddCustomSlideShow = new QToolButton();
