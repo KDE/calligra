@@ -218,7 +218,7 @@ void WmfPainterBackend::setPen(const QPen &pen)
     } else {
         // WMF spec: width of pen in logical coordinate
         // => width of pen proportional with device context width
-        QRect rec = mPainter->window();
+        // QRect rec = mPainter->window();
         // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
 #if 0
         QRect devRec = rec * mPainter->matrix();
