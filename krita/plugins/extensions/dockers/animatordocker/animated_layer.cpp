@@ -17,6 +17,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <iostream>
 
 #include "animated_layer.h"
 
@@ -24,10 +25,12 @@ AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source)
 {
 //     m_source = const_cast<KisGroupLayer*>( &source );
     
-    setFrameNumber(0);
-    setFrameNumber(0);
+    m_frame = 0;
+    m_old_frame = 0;
+//     setFrameNumber(0);
+//     setFrameNumber(0);
     
-    connect(this, SIGNAL(requireRedraw()), this, SLOT(frameUpdate()));
+//     connect(this, SIGNAL(requireRedraw()), this, SLOT(frameUpdate()));
 }
 
 // bool AnimatedLayer::needProjection() const
@@ -42,11 +45,12 @@ AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source)
 //     frameChange(true);
 // }
 
-void AnimatedLayer::setFrameNumber(int num)
+KisNode* AnimatedLayer::setFrameNumber(int num)
 {
     m_old_frame = m_frame;
     m_frame = num;
-    emit requireRedraw();
+//     emit requireRedraw();
+    return frameUpdate();
 }
 
 int AnimatedLayer::getFrameNumber()
@@ -56,6 +60,7 @@ int AnimatedLayer::getFrameNumber()
 
 int AnimatedLayer::getOldFrame()
 {
+    std::cout << "oldFrame: " << m_old_frame << std::endl;
     return m_old_frame;
 }
 
@@ -78,3 +83,38 @@ void AnimatedLayer::setValid(bool valid)
 // {
 //     return m_source;
 // }
+
+void AnimatedLayer::setNodeManager(KisNodeManager* nodeman)
+{
+    m_nodeman = nodeman;
+}
+
+KisNodeManager* AnimatedLayer::getNodeManager()
+{
+    return m_nodeman;
+}
+
+KisNode* AnimatedLayer::getNextKeyFrame(int num)
+{
+    return getFrameAt(getNextKey(num));
+}
+
+KisNode* AnimatedLayer::getPreviousKeyFrame(int num)
+{
+    return getFrameAt(getPreviousKey(num));
+}
+
+KisNode* AnimatedLayer::getFrameLayer(int num)
+{
+    return getOldFrameLayer(num);
+}
+
+KisNode* AnimatedLayer::getOldFrameLayer(int num)
+{
+    return getFrameAt(getCurrentKey(num));
+}
+
+KisNode* AnimatedLayer::getCachedFrame()
+{
+    return getOldFrameLayer(getOldFrame());
+}
