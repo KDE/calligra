@@ -34,22 +34,30 @@ public:
     
 public slots:
     virtual void update();
-    virtual void frameUpdate();
-    virtual void frameUpdate(bool do_all);
+    virtual KisNode* frameUpdate();
+    virtual KisNode* frameUpdate(bool do_all);
     
 public:
-    virtual KisNode* getFrameLayer(int num);
+//     virtual KisNode* getFrameLayer(int num);
     virtual KisNode* getKeyFrameLayer(int num);
-    virtual KisNode* getPreviousKeyFrame(int num);
-    virtual KisNode* getNextKeyFrame(int num);
+//     virtual KisNode* getPreviousKeyFrame(int num);
+//     virtual KisNode* getNextKeyFrame(int num);
+    
+    virtual int getNextKey(int num);
+    virtual int getPreviousKey(int num);
+    virtual int getCurrentKey(int num);
     
     virtual bool isFrameChanged();
+    
+    virtual void clearJunk();
     
 public:
     virtual int firstFrame();
     virtual int lastFrame();
 
 protected:
+    virtual KisNode* getFrameAt(int num);
+    
     virtual void visibleFrame(int f, bool v);
     virtual void visibleAll(bool v);
     

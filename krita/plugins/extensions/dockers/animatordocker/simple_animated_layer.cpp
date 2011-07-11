@@ -74,17 +74,17 @@ void SimpleAnimatedLayer::update()
     }
 }
 
-void SimpleAnimatedLayer::frameUpdate()
+KisNode* SimpleAnimatedLayer::frameUpdate()
 {
-    frameUpdate(false);
+    return frameUpdate(false);
 }
 
-void SimpleAnimatedLayer::frameUpdate(bool do_all)
+KisNode* SimpleAnimatedLayer::frameUpdate(bool do_all)
 {
-    if (do_all)
+//     if (do_all)
         visibleAll(false);
-    else
-        visibleFrame(getOldFrame(), false);
+//     else
+//         visibleFrame(getOldFrame(), false);
     
     KisNode* node = getFrameLayer(getFrameNumber());
     if (node)
@@ -93,25 +93,39 @@ void SimpleAnimatedLayer::frameUpdate(bool do_all)
         node->setOpacity(255);
 //         node->
     }
+    
+    return node;
 //     AnimatedLayer::frameUpdate();
 }
 
-KisNode* SimpleAnimatedLayer::getFrameLayer(int num)
+// KisNode* SimpleAnimatedLayer::getFrameLayer(int num)
+// {
+//     KisNode* r = getKeyFrameLayer(num);
+//     if (!r)
+//         r = getPreviousKeyFrame(num);
+//     return r;
+// }
+
+int SimpleAnimatedLayer::getCurrentKey(int num)
 {
-    KisNode* r = getKeyFrameLayer(num);
-    if (!r)
-        r = getPreviousKeyFrame(num);
-    return r;
+    if (getKeyFrameLayer(num))
+        return num;
+    return getPreviousKey(num);
 }
 
 KisNode* SimpleAnimatedLayer::getKeyFrameLayer(int num)
+{
+    return getFrameAt(num);
+}
+
+KisNode* SimpleAnimatedLayer::getFrameAt(int num)
 {
     if (num >= 0 && num < m_frames.size())
         return m_frames[num];
     return 0;
 }
 
-KisNode* SimpleAnimatedLayer::getNextKeyFrame(int num)
+int SimpleAnimatedLayer::getNextKey(int num)
 {
     if (num < 0)
         num = -1;
@@ -120,12 +134,12 @@ KisNode* SimpleAnimatedLayer::getNextKeyFrame(int num)
     while (++num < m_frames.size())
     {
         if (m_frames[num])
-            return m_frames[num];
+            return num;
     }
-    return 0;
+    return -1;
 }
 
-KisNode* SimpleAnimatedLayer::getPreviousKeyFrame(int num)
+int SimpleAnimatedLayer::getPreviousKey(int num)
 {
     if (num < 0)
         return 0;
@@ -134,15 +148,18 @@ KisNode* SimpleAnimatedLayer::getPreviousKeyFrame(int num)
     while (--num >= 0)
     {
         if (m_frames[num])
-            return m_frames[num];
+            return num;
     }
-    return 0;
+    return -1;
 }
 
 bool SimpleAnimatedLayer::isFrameChanged()
 {
-    return getFrameLayer(getFrameNumber()) != getFrameLayer(getOldFrame());
+    bool ch = getOldFrameLayer(getFrameNumber()) != getCachedFrame();
+    return ch;
 }
+
+
 
 int SimpleAnimatedLayer::firstFrame()
 {
@@ -152,6 +169,18 @@ int SimpleAnimatedLayer::firstFrame()
 int SimpleAnimatedLayer::lastFrame()
 {
     return m_frames.size();
+}
+
+void SimpleAnimatedLayer::clearJunk()
+{
+    int n = childCount();
+    for (int i = 0; i < n; ++i)
+    {
+        const KisNode* hn = at(i);
+        KisNode* here = const_cast<KisNode*>(hn);
+        if (!m_frames.contains(here))
+            getNodeManager()->removeNode(here);
+    }
 }
 
 // PROTECTED

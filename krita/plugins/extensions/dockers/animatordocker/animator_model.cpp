@@ -30,6 +30,7 @@
 #include "animator_model.h"
 
 #include <iostream>
+#include "interpolated_animated_layer.h"
 
 AnimatorModel::AnimatorModel(QObject* parent): QAbstractTableModel(parent)
 {
@@ -105,7 +106,8 @@ void AnimatorModel::realUpdate()
             if (node->name().startsWith("_ani_"))       // Simple
             {
                 KisGroupLayer* gnode = dynamic_cast<KisGroupLayer*>(node);
-                lay = new SimpleAnimatedLayer(*gnode);
+//                 lay = new SimpleAnimatedLayer(*gnode);
+                lay = new InterpolatedAnimatedLayer(*gnode);
                 
                 if (!lay->isValid())
                 {
@@ -114,7 +116,7 @@ void AnimatorModel::realUpdate()
                 
                 lay->setName(gnode->name());
                 
-//                 std::cout << "Was here" << std::endl;
+                lay->setNodeManager(m_nodeman);
                 
                 const KisNode* pn = gnode->parent();
                 int nindex = pn->index(gnode);
@@ -122,8 +124,6 @@ void AnimatorModel::realUpdate()
                 
                 
                 m_nodeman->removeNode(gnode);
-//                 delete gnode;
-//                 m_nodeman->activateNode(const_cast<KisNode*>( pn ));
                 m_nodeman->insertNode(lay, const_cast<KisNode*>( pn ), nindex);
                 
                 for (int i = 0; i < lay->childCount(); ++i)
@@ -346,49 +346,25 @@ void AnimatorModel::frameUpdate()
     
     m_updating = true;
     
-    // Just old code without onion support
     for (qint32 i = 0; i < rowCount(); ++i)
     {
-//         // Make all frames unvisible
-//         unvisibleLayer(i);
+        KisNode* frame = m_layers[i]->setFrameNumber(m_frame);
+//         KisNode* old_frame = m_layers[i]->getOldFrameLayer(m_layers[i]->getOldFrame());
+        KisNode* old_frame = m_layers[i]->getCachedFrame();
         
-//         KisNode* frame = const_cast<KisNode*>( nodeFromIndex(createIndex(i, m_frame)) );
-//         if (frame)
-//         {
-//             frame->setOpacity(255);             // Restore after onion skin
-//             frame->setVisible(true);
-//             m_image->updateProjection(frame, m_image->bounds());
-//         }
-
-        m_layers[i]->setFrameNumber(m_frame);
-        KisNode* frame = m_layers[i]->getFrameLayer(m_frame);
-        KisNode* old_frame = m_layers[i]->getFrameLayer(m_layers[i]->getOldFrame());
-        
-        if (m_layers[i]->isFrameChanged())
+        if (m_layers[i]->isFrameChanged() || frame != old_frame)
         {
             if (old_frame)
             {
+                old_frame->setVisible(false);
                 m_image->updateProjection(old_frame, old_frame->exactBounds());
             }
 	    if (frame)
             {
-                m_image->updateProjection(frame, frame->exactBounds());
+                frame->setVisible(true);
+                m_image->updateProjection(frame, /*m_image->bounds()*/ /*old_frame?*/ frame->exactBounds() /*| old_frame->exactBounds() : frame->exactBounds()*/);
             }
         }
-        
-//         foreach (
-
-
-//         if (m_image)
-//         {
-//             QRect t_b = m_image->bounds();
-//             for (int j = 0; j < columnCount(); ++j)
-//             {
-//                 const KisNode* t = m_layers[i]->getKeyFrameLayer(j);
-//                 if (t)
-//                     m_image->updateProjection(const_cast<KisNode*>(t), t_b);
-//             }
-//         }
         
         if (m_onion_en && !m_ext_lighttable)
         {
@@ -546,7 +522,7 @@ const KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
 //         result = previousFrame(index);
     if (m_layers.size() > index.row())
     {
-        return m_layers[index.row()]->getFrameLayer(index.column());
+        return m_layers[index.row()]->getOldFrameLayer(index.column());
     }
 //     return result;
     return 0;
@@ -727,27 +703,6 @@ void AnimatorModel::nodeDestroyed(QObject* node)
 
 void AnimatorModel::createLayer()
 {
-//     const KisNode* tnode = m_nodeman->activeNode();
-//     KisNode* current_layer = const_cast<KisNode*>( tnode );
-//     
-//     if (current_layer->parent() == 0)
-//     {
-//         // Active layer is root
-//         if (m_main_layers.length() > 0)
-//         {
-//             current_layer = m_main_layers[0];
-//         } else
-//         {
-//             // No frame layers currently
-//             
-//         }
-//     } else
-//     {
-//         // TODO: add layer just after current selected:
-//         // Check current active layer -> if it's frame or frame layer than move new layer under it after creation
-//         
-//     }
-    
     int pos = 0;
     
     KisNode* current = getAnimatedLayerByChild(m_nodeman->activeNode());
@@ -764,7 +719,6 @@ void AnimatorModel::createLayer()
     }
 
     KisNode* node = new KisGroupLayer(m_image, "_ani_NNN", 255);                // TODO: ask for name
-//     m_nodeman->insertNode(node, m_image->root(), 0);
     m_nodeman->insertNode(node, m_image->root(), pos);
 }
 
