@@ -1698,8 +1698,6 @@ void View::paperLayoutDlg()
     hf.footRight = headerFooter->localizeHeadFootLine(headerFooter->footRight());
     hf.footMid   = headerFooter->localizeHeadFootLine(headerFooter->footMid());
 */
-    KoUnit unit = doc()->unit();
-
     PageLayoutDialog dialog(this, d->activeSheet);
     dialog.exec();
 }

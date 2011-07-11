@@ -1215,7 +1215,6 @@ void WmfParser::createBoundingBox(QDataStream &stream)
             return;
         }
 
-        bool  isOrgOrExt = true;
         bool  doRecalculateBBox = false;
         qint16  orgX = 0;
         qint16  orgY = 0;
@@ -1372,7 +1371,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
             break;
 
         default:
-            isOrgOrExt = false;
+          ;
         }
 
         // Recalculate the BBox if it was indicated above that it should be.

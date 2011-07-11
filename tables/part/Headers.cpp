@@ -208,14 +208,10 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
         // Remove size indicator painted by paintSizeIndicator
         removeSizeIndicator();
 
-        int start = m_iResizedRow;
-        int end = m_iResizedRow;
         QRect rect;
         rect.setCoords(1, m_iResizedRow, KS_colMax, m_iResizedRow);
         if (m_pCanvas->selection()->isRowSelected()) {
             if (m_pCanvas->selection()->contains(QPoint(1, m_iResizedRow))) {
-                start = m_pCanvas->selection()->lastRange().top();
-                end = m_pCanvas->selection()->lastRange().bottom();
                 rect = m_pCanvas->selection()->lastRange();
             }
         }
@@ -700,14 +696,10 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
         // Remove size indicator painted by paintSizeIndicator
         removeSizeIndicator();
 
-        int start = m_iResizedColumn;
-        int end   = m_iResizedColumn;
         QRect rect;
         rect.setCoords(m_iResizedColumn, 1, m_iResizedColumn, KS_rowMax);
         if (m_pCanvas->selection()->isColumnSelected()) {
             if (m_pCanvas->selection()->contains(QPoint(m_iResizedColumn, 1))) {
-                start = m_pCanvas->selection()->lastRange().left();
-                end   = m_pCanvas->selection()->lastRange().right();
                 rect  = m_pCanvas->selection()->lastRange();
             }
         }

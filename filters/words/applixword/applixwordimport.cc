@@ -193,7 +193,6 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     m_instep   = 0;
     m_progress = 0;
 
-    int  rueck;
     int  pos;
     bool ok;
     QString           mystr, textstr;
@@ -236,7 +235,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                         coltxt = mystr.left(pos);
                         mystr.remove(0, pos + 1);
                         int c, m, y, k;
-                        rueck = sscanf((const char *) mystr.toLatin1() ,
+                        sscanf((const char *) mystr.toLatin1() ,
                                        ":%d:%d:%d:%d>",
                                        &c, &m, &y, &k);
                         kDebug(30517) << " Color :" << c << "" << m << "" << y << "" << k << "" << coltxt << "";
