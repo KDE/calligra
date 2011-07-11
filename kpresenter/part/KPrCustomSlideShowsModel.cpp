@@ -142,7 +142,6 @@ QMimeData * KPrCustomSlideShowsModel::mimeData(const QModelIndexList &indexes) c
     }
 
     QMimeData *data = new QMimeData();
-    QString format = types[0];
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
 
@@ -152,7 +151,7 @@ QMimeData * KPrCustomSlideShowsModel::mimeData(const QModelIndexList &indexes) c
         stream << QVariant::fromValue(qulonglong(it->internalPointer()));
     }
 
-    data->setData(format, encoded);
+    data->setData(types[0], encoded);
     return data;
 }
 
@@ -346,14 +345,14 @@ void KPrCustomSlideShowsModel::addSlides(const QList<KoPAPageBase *> &pages, con
     doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesAdd, pages, row);
 }
 
-bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &c_action, const QList<KoPAPageBase *> &slides, int beginRow)
+bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &action, const QList<KoPAPageBase *> &slides, int beginRow)
 {
     bool updated = false;
 
     //get the slideshow
     QList<KoPAPageBase*> selectedSlideShow = m_customSlideShows->getByName(m_activeCustomSlideShowName);
 
-    if (c_action == KPrCustomSlideShowsModel::SlidesAdd) {
+    if (action == KPrCustomSlideShowsModel::SlidesAdd) {
         //insert the slides on the current custom show
         int i = beginRow;
         foreach(KoPAPageBase *page, slides) {
@@ -365,7 +364,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
         }
         updated = true;
     }
-    else if (c_action == KPrCustomSlideShowsModel::SlidesMove) {
+    else if (action == KPrCustomSlideShowsModel::SlidesMove) {
        //move the slides on the current custom show
        // slides order within the slides list is important to get the expected behaviour
        if (beginRow >= selectedSlideShow.count()) {
@@ -379,7 +378,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
         }
         updated = true;
     }
-    else if (c_action == KPrCustomSlideShowsModel::SlidesDelete) {
+    else if (action == KPrCustomSlideShowsModel::SlidesDelete) {
         //delete de slides on the current custom show
         foreach(KoPAPageBase *page, slides) {
             selectedSlideShow.removeAll(page);

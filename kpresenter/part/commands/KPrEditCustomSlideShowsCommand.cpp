@@ -31,7 +31,7 @@ KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
 , m_newCustomShow(newCustomShow)
 , m_oldCustomShow(doc->customSlideShows()->getByName(name))
 {
-    setText(i18n("Edit custom slide shows"));
+    setText(i18n("Edit custom slide show"));
 }
 
 KPrEditCustomSlideShowsCommand::~KPrEditCustomSlideShowsCommand()

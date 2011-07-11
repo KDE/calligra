@@ -35,7 +35,6 @@ KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *do
 
 KPrRenameCustomSlideShowCommand::~KPrRenameCustomSlideShowCommand()
 {
-
 }
 
 void KPrRenameCustomSlideShowCommand::redo()

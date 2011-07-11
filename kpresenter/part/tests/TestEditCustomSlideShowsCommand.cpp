@@ -71,11 +71,13 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
 
     command.redo();
     QList<KoPAPageBase*> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
-    QCOMPARE(modifiedSlideShow.at(2), initialSlideShow.at(2));
+    QCOMPARE(modifiedSlideShow, initialSlideShow);
 
     command.undo();
     modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
     QCOMPARE(modifiedSlideShow.at(0), initialSlideShow.at(2));
+    QCOMPARE(modifiedSlideShow.at(1), initialSlideShow.at(0));
+    QCOMPARE(modifiedSlideShow.at(2), initialSlideShow.at(1));
 }
 
 QTEST_MAIN(TestEditCustomSlideShowsCommand)

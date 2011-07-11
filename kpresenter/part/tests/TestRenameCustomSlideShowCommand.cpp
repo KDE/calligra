@@ -67,12 +67,12 @@ void TestRenameCustomSlideShowCommand::renameCustomShow()
     KPrRenameCustomSlideShowCommand cmd(&doc, &model, customShowName, customShowNewName);
 
     cmd.redo();
-    QVERIFY(!doc.customSlideShows()->names().contains(customShowName) &&
-            doc.customSlideShows()->names().contains(customShowNewName));
+    QVERIFY(!doc.customSlideShows()->names().contains(customShowName));
+    QVERIFY(doc.customSlideShows()->names().contains(customShowNewName));
 
     cmd.undo();
-    QVERIFY(doc.customSlideShows()->names().contains(customShowName) &&
-            !doc.customSlideShows()->names().contains(customShowNewName));
+    QVERIFY(doc.customSlideShows()->names().contains(customShowName));
+    QVERIFY(!doc.customSlideShows()->names().contains(customShowNewName));
 }
 
 QTEST_MAIN(TestRenameCustomSlideShowCommand)

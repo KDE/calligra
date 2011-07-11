@@ -620,12 +620,12 @@ void KPrViewModeSlidesSorter::addCustomSlideShow()
 {
     //We create a different default name for every SlideShow:
     static int newSlideShowsCount = 1;
-    while(m_customSlideShowModel->customShowsNamesList().contains(i18n("New Slide Show %1", newSlideShowsCount)))
+    while(m_customSlideShowModel->customShowsNamesList().contains(i18n("Slide Show %1", newSlideShowsCount)))
     {
         ++newSlideShowsCount;
     }
 
-    m_customSlideShowModel->addNewCustomShow(i18n("New Slide Show %1", newSlideShowsCount));
+    m_customSlideShowModel->addNewCustomShow(i18n("Slide Show %1", newSlideShowsCount));
 }
 
 
@@ -694,7 +694,7 @@ void KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons()
     m_buttonAddSlideToCurrentShow->setEnabled(m_slidesSorterView->hasFocus());
     m_buttonDelSlideFromCurrentShow->setEnabled(m_customSlideShowView->hasFocus());
     KActionCollection *ac = canvas()->canvasController()->actionCollection();
-    ac->action("edit_delete")->setEnabled(m_customSlideShowView->hasFocus() |
+    ac->action("edit_delete")->setEnabled(m_customSlideShowView->hasFocus() ||
                                           !m_slidesSorterView->selectionModel()->selectedIndexes().isEmpty());
 }
 

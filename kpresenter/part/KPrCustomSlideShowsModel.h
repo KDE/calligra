@@ -163,7 +163,7 @@ public:
      * @param beginRow destination row for copy and move actions
      * @return true if the action success
      */
-    bool doCustomSlideShowAction(const CustomShowActions &c_action, const QList<KoPAPageBase *> &slides, int beginRow);
+    bool doCustomSlideShowAction(const CustomShowActions &action, const QList<KoPAPageBase *> &slides, int beginRow);
 
     /**
      * @brief Insert a new Custom SlideShow
@@ -199,8 +199,6 @@ public:
 signals:
     /** Notify a change of the active custom slide show */
     void customSlideShowsChanged();
-
-public slots:
 
 private:
     QList<KoPAPageBase *> decodeSlidesList(QByteArray encoded);

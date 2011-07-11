@@ -30,7 +30,7 @@ class KPrCustomSlideShowsModel;
 class STAGE_TEST_EXPORT KPrEditCustomSlideShowsCommand: public KUndo2Command
 {
 public:
-    KPrEditCustomSlideShowsCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent = 0 );
+    KPrEditCustomSlideShowsCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent = 0);
 
     virtual ~KPrEditCustomSlideShowsCommand();
 
