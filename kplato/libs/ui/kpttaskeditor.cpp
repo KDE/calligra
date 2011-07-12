@@ -92,6 +92,9 @@ QVariant TaskEditorItemModel::headerData( int section, Qt::Orientation orientati
 
 QVariant TaskEditorItemModel::data( const QModelIndex &index, int role ) const
 {
+    if ( role == Qt::TextAlignmentRole ) {
+        return NodeItemModel::data( index, role );
+    }
     Node *n = node( index );
     if ( n != 0 && index.column() == NodeModel::NodeType ) {
         return type( n, role );
@@ -374,7 +377,7 @@ void TaskEditor::setGuiActive( bool activate )
     kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
@@ -984,7 +987,7 @@ void TaskView::setGuiActive( bool activate )
     kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
@@ -1285,7 +1288,7 @@ void TaskWorkPackageView::setGuiActive( bool activate )
     kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
