@@ -261,11 +261,7 @@ QVariant CriticalPathItemModel::headerData( int section, Qt::Orientation orienta
 
 QVariant CriticalPathItemModel::alignment( int column ) const
 {
-    switch ( column ) {
-        case 0: return QVariant(); // use default for column 0
-        default: return Qt::AlignCenter;
-    }
-    return QVariant();
+    return m_nodemodel.headerData( column, Qt::TextAlignmentRole );
 }
 
 int CriticalPathItemModel::columnCount( const QModelIndex & ) const
@@ -771,11 +767,7 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
 
 QVariant PertResultItemModel::alignment( int column ) const
 {
-    switch ( column ) {
-        case 0: return QVariant(); // use default for column 0
-        default: return Qt::AlignCenter;
-    }
-    return QVariant();
+    return m_nodemodel.headerData( column, Qt::TextAlignmentRole );
 }
 
 QAbstractItemDelegate *PertResultItemModel::createDelegate( int column, QWidget * /*parent*/ ) const
