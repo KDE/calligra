@@ -92,6 +92,9 @@ QVariant TaskEditorItemModel::headerData( int section, Qt::Orientation orientati
 
 QVariant TaskEditorItemModel::data( const QModelIndex &index, int role ) const
 {
+    if ( role == Qt::TextAlignmentRole ) {
+        return NodeItemModel::data( index, role );
+    }
     Node *n = node( index );
     if ( n != 0 && index.column() == NodeModel::NodeType ) {
         return type( n, role );
@@ -374,7 +377,7 @@ void TaskEditor::setGuiActive( bool activate )
     kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
@@ -704,7 +707,6 @@ void TaskEditor::slotAddTask()
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
-        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
@@ -727,7 +729,6 @@ void TaskEditor::slotAddMilestone()
         t->estimate()->clear();
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
-        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
@@ -739,7 +740,6 @@ void TaskEditor::slotAddMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
@@ -758,7 +758,6 @@ void TaskEditor::slotAddSubMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
@@ -776,20 +775,14 @@ void TaskEditor::slotAddSubtask()
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
 void TaskEditor::edit( QModelIndex i )
 {
     if ( i.isValid() ) {
-        if ( m_view->slaveView()->hasFocus() ) {
-            m_view->masterView()->setFocus();
-        }
-
-        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
-        QModelIndex p = m_view->model()->parent( i );
-        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+        m_view->setParentsExpanded( i, true ); // in case treeview does not have focus
         m_view->edit( i );
     }
 }
@@ -994,7 +987,7 @@ void TaskView::setGuiActive( bool activate )
     kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
@@ -1295,7 +1288,7 @@ void TaskWorkPackageView::setGuiActive( bool activate )
     kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }

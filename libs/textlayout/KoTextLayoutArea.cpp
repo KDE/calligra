@@ -167,6 +167,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 
         for (int i = 0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
+            QRectF lineRect = line.naturalTextRect();
             if (point.y() > line.y() + line.height()) {
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
@@ -179,14 +180,14 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
                     (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
                 return KoPointedAt();
             }
-            if (point.x() > line.x() + line.naturalTextWidth() && layout->textOption().textDirection() == Qt::RightToLeft) {
+            if (point.x() > lineRect.x() + lineRect.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
                 // totally right of RTL text means the position is the start of the text.
                 //TODO how about the other side?
                 pointedAt.position = block.position() + line.textStart();
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 return pointedAt;
             }
-            if (point.x() > line.x() + line.naturalTextWidth()) {
+            if (point.x() > lineRect.x() + lineRect.width()) {
                 // right of line
                 basicallyFound = true;
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
@@ -420,9 +421,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
                 if (!tocInfo->generator()) {
                     // The generator attaches itself to the tocInfo
-                    new ToCGenerator(tocDocument, block, tocInfo);
+                    new ToCGenerator(tocDocument, tocInfo);
                 }
                 tocInfo->generator()->setMaxTabPosition(right() - left());
+
+                if (!cursor->currentSubFrameIterator) {
+                    // Let the generator know which QTextBlock it needs to ask for a relayout once the toc got generated.
+                    tocInfo->generator()->setBlock(block);
+                }
 
                 // Let's create KoTextLayoutArea and let to handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
@@ -563,11 +569,6 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
     return line;
 }
 
-bool compareTab(const KoText::Tab &tab1, const KoText::Tab &tab2)
-{
-    return tab1.position < tab2.position;
-}
-
 // layoutBlock() method is structured like this:
 //
 // 1) Setup various helper values
@@ -658,10 +659,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData->setLabelFormat(labelFormat);
         }
     } else if (blockData) { // make sure it is empty
-        blockData->setCounterText(QString());
-        blockData->setCounterSpacing(0.0);
-        blockData->setCounterWidth(0.0);
-        blockData->setCounterIsImage(false);
+        blockData->clearCounter();
     }
     if (blockData == 0) {
         blockData = new KoTextBlockData();
@@ -834,9 +832,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal position = tabOffset;
 
     if (!tabs.isEmpty()) {
-        //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
-        qSort(tabs.begin(), tabs.end(), compareTab);
-
         position = tabs.last().position;
     }
 

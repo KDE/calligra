@@ -621,7 +621,7 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, int role ) c
         case Qt::WhatsThisRole:
             return QVariant();
         case Qt::TextAlignmentRole:
-            return Qt::AlignRight;
+            return (int)(Qt::AlignRight|Qt::AlignVCenter);
     }
     return QVariant();
 }
@@ -659,7 +659,7 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, const QDate 
         case Qt::WhatsThisRole:
             return QVariant();
         case Qt::TextAlignmentRole:
-            return Qt::AlignRight;
+            return (int)(Qt::AlignRight|Qt::AlignVCenter);
         case Qt::BackgroundRole: {
             if ( res->calendar() && res->calendar()->state( date ) != CalendarDay::Working ) {
                 QColor c( 0xf0f0f0 );
@@ -697,7 +697,7 @@ QVariant ResourceAppointmentsItemModel::total( const Appointment *a, int role ) 
         case Qt::WhatsThisRole:
             return QVariant();
         case Qt::TextAlignmentRole:
-            return Qt::AlignRight;
+            return (int)(Qt::AlignRight|Qt::AlignVCenter);
         case Qt::ForegroundRole:
             if ( m_externalEffortMap.contains( a ) ) {
                 return QVariant( Qt::blue );
@@ -741,7 +741,7 @@ QVariant ResourceAppointmentsItemModel::assignment( const Appointment *a, const 
         case Qt::WhatsThisRole:
             return QVariant();
         case Qt::TextAlignmentRole:
-            return Qt::AlignRight;
+            return (int)(Qt::AlignRight|Qt::AlignVCenter);
         case Qt::ForegroundRole:
             if ( m_externalEffortMap.contains( a ) ) {
                 return QVariant( Qt::blue );
@@ -789,6 +789,9 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
     if ( ! index.isValid() ) {
         kDebug()<<"Invalid index:"<<index;
         return result;
+    }
+    if ( role == Qt::TextAlignmentRole ) {
+        return headerData( index.column(), Qt::Horizontal, role );
     }
     Resource *r = resource( index );
     if ( r ) {
@@ -932,7 +935,7 @@ QVariant ResourceAppointmentsItemModel::headerData( int section, Qt::Orientation
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
                 case 0: return QVariant();
-                default: return Qt::AlignRight;
+                default: return (int)(Qt::AlignRight|Qt::AlignVCenter);
             }
         }
     }
@@ -1506,6 +1509,9 @@ QVariant ResourceAppointmentsRowModel::data( const QModelIndex &index, int role 
     if ( ! index.isValid() ) {
         return QVariant();
     }
+    if ( role == Qt::TextAlignmentRole ) {
+        return headerData( index.column(), Qt::Horizontal, role );
+    }
     return static_cast<Private*>(index.internalPointer() )->data( index.column(), id(), role );
 }
 
@@ -1521,6 +1527,17 @@ QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation 
             case StartTime: return i18n( "Start Time" );
             case EndTime: return i18n( "End Time" );
             case Load: return i18nc( "@title:column noun", "Load" );
+        }
+    }
+    if ( role == Qt::TextAlignmentRole ) {
+        switch ( section ) {
+            case Name:
+            case Type:
+            case StartTime:
+            case EndTime:
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);;
+            case Load:
+                return (int)(Qt::AlignRight|Qt::AlignVCenter);
         }
     }
     return ItemModelBase::headerData( section, orientation, role );

@@ -698,6 +698,18 @@ bool SheetView::hasHighlightedCells() const
     return d->highlightedCells.count() > 0;
 }
 
+void SheetView::clearHighlightedCells()
+{
+#ifdef CALLIGRA_TABLES_MT
+    QWriteLocker(&d->highlightLock);
+#endif
+    d->activeHighlight = QPoint();
+    if (d->highlightedCells.count()) {
+        d->highlightedCells.clear();
+        invalidate();
+    }
+}
+
 QPoint SheetView::activeHighlight() const
 {
     return d->activeHighlight;

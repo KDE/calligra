@@ -591,11 +591,7 @@ QVariant TaskStatusItemModel::headerData( int section, Qt::Orientation orientati
 
 QVariant TaskStatusItemModel::alignment( int column ) const
 {
-    switch ( column ) {
-        case 0: return QVariant(); // use default
-        default: return Qt::AlignCenter;
-    }
-    return QVariant();
+    return m_nodemodel.headerData( column, Qt::TextAlignmentRole );
 }
 
 QAbstractItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent ) const

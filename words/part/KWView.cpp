@@ -245,6 +245,8 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("edit_paste");
     if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("edit_paste_text");
+    if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("delete_page");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("edit_delete");
@@ -972,6 +974,7 @@ QList<KWFrame*> KWView::selectedFrames() const
 }
 
 // -------------------- Actions -----------------------
+
 void KWView::editFrameProperties()
 {
     KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, this);
