@@ -2,6 +2,8 @@
 Name=saturation
 Name[el]=κορεσμός
 Name[es]=saturación
+Name[nb]=metning
+Name[nl]=Verzadiging
 Name[pt]=saturação
 Name[pt_BR]=saturação
 Name[sv]=mättnad
@@ -9,3 +11,4 @@ Name[ug]=تويۇنۇشچانلىقى
 Name[uk]=Характеристика насиченості
 Name[x-test]=xxsaturationxx
 Name[zh_CN]=饱和度
+Name[zh_TW]=saturation

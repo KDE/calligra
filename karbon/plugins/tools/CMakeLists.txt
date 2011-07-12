@@ -52,7 +52,7 @@ target_link_libraries(karbontools karboncommon karbonui kowidgets)
 
 install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
+kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 
 ########### install files ###############
 

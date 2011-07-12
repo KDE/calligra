@@ -196,7 +196,7 @@ void OoImpressImport::createDocumentContent(QDomDocument &doccontent)
         }
 
         // FIXME show-end-of-presentation-slide is not standard as of 20060531.
-        // dfaure will request its addition per #koffice on 20060531
+        // dfaure will request its addition per #calligra on 20060531
         // (pgquiles AT elpauer DOT org)
         if (settings.attributeNS(ooNS::presentation, "show-end-of-presentation-slide", QString()) == "true") {
             QDomElement infElem = doc.createElement("SHOWENDOFPRESENTATIONSLIDE");
@@ -1715,13 +1715,13 @@ void OoImpressImport::parseSpanOrSimilar(QDomDocument& doc, const QDomElement& p
             if (smallCaps) {
                 text.setAttribute("fontattribute", "smallcaps");
             } else {
-                // Both KWord/KPresenter and OO use "uppercase" and "lowercase".
-                // TODO in KWord: "capitalize".
+                // Both Words/KPresenter and OO use "uppercase" and "lowercase".
+                // TODO in Words: "capitalize".
                 text.setAttribute("fontattribute", m_styleStack.property(ooNS::fo, "text-transform"));
             }
         }
 #endif
-        // background color (property of the paragraph in OOo, of the text in kword/kpresenter)
+        // background color (property of the paragraph in OOo, of the text in words/kpresenter)
         if (m_styleStack.hasProperty(ooNS::fo, "background-color")) {
             QString bgColor = m_styleStack.property(ooNS::fo, "background-color");
             if (bgColor != "transparent")
@@ -1959,7 +1959,7 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
         }
 
         QDomElement typeElem = doc.createElement("TYPE");
-        typeElem.setAttribute("key", "DATE0locale"); // ### find out the correlation between KOffice and OOo date/time types
+        typeElem.setAttribute("key", "DATE0locale"); // ### find out the correlation between Calligra and OOo date/time types
         typeElem.setAttribute("type", 0); // VT_DATE
         typeElem.setAttribute("text", object.text());
 
@@ -1992,7 +1992,7 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
         }
 
         QDomElement typeElem = doc.createElement("TYPE");
-        typeElem.setAttribute("key", "TIMElocale"); // ### find out the correlation between KOffice and OOo date/time types
+        typeElem.setAttribute("key", "TIMElocale"); // ### find out the correlation between Calligra and OOo date/time types
         typeElem.setAttribute("type", 2); // VT_TIME
         typeElem.setAttribute("text", object.text());
 

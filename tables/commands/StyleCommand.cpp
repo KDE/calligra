@@ -35,7 +35,7 @@
 
 using namespace Calligra::Tables;
 
-StyleCommand::StyleCommand(QUndoCommand* parent)
+StyleCommand::StyleCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
         , m_horizontalPen(QPen(QColor(), 0, Qt::NoPen))
         , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
@@ -182,9 +182,9 @@ bool StyleCommand::preProcessing()
 {
     if (m_firstrun) {
         if (m_style->isDefault())
-            setText(i18n("Reset Style"));
+            setText(i18nc("(qtundo-format)", "Reset Style"));
         else
-            setText(i18n("Change Style"));
+            setText(i18nc("(qtundo-format)", "Change Style"));
 
         // special handling for precision
         if (m_style->hasAttribute(Style::Precision)) {

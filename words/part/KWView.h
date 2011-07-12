@@ -21,7 +21,7 @@
 #ifndef KWVIEW_H
 #define KWVIEW_H
 
-#include "kword_export.h"
+#include "words_export.h"
 #include "KWPage.h"
 
 #include <KoView.h>
@@ -44,17 +44,17 @@ class KActionMenu;
 
 class KToggleAction;
 /**
- * KWords view class. Following the broad model-view-controller idea this class
+ * Wordss view class. Following the broad model-view-controller idea this class
  * shows you one view on the document. There can be multiple views of the same document each
  * in with independent settings for viewMode and zoom etc.
  */
-class KWORD_EXPORT KWView : public KoView
+class WORDS_EXPORT KWView : public KoView
 {
     Q_OBJECT
 
 public:
     /**
-     * Construct a new view on the kword document.
+     * Construct a new view on the words document.
      * The view will have a canvas as a member which does all the actual painting, the view will
      * be responsible for handling the actions.  The View is technically speaking the controller
      * class in the MVC design.

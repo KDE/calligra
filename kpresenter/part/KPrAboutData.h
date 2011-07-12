@@ -22,10 +22,10 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 static const char* description=I18N_NOOP("Calligra Presentation Tool");
-static const char* version=KOFFICE_VERSION_STRING;
+static const char* version=CALLIGRA_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {

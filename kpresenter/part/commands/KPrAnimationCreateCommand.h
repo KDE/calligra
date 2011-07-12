@@ -20,13 +20,13 @@
 #ifndef KPRANIMATIONCREATECOMMAND_H
 #define KPRANIMATIONCREATECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KPrDocument;
 class KPrShapeAnimation;
 
 /// Command to create an animation
-class KPrAnimationCreateCommand : public QUndoCommand
+class KPrAnimationCreateCommand : public KUndo2Command
 {
 public:
     KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation );

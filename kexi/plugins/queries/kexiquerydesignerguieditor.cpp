@@ -416,7 +416,6 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             QString fieldName = (*set)["field"].value().toString();
             QString fieldAndTableName = fieldName;
             KexiDB::Field *currentField = 0; // will be set if this column is a single field
-            KexiDB::QueryColumnInfo* currentColumn = 0;
             if (!tableName.isEmpty())
                 fieldAndTableName.prepend(tableName + ".");
             const bool fieldVisible = (*set)["visible"].value().toBool();
@@ -489,8 +488,6 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                         continue;
                     }
                     temp->query()->addField(currentField, fieldVisible);
-                    currentColumn = temp->query()->expandedOrInternalField(
-                                        temp->query()->fieldsExpanded().count() - 1);
                     if (fieldVisible)
                         fieldsFound = true;
                     if (!alias.isEmpty())

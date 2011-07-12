@@ -38,7 +38,7 @@ class KWPage;
 class KoGenChanges;
 
 /**
- * Class that has a lot of the OpenDocument (ODF) saving code for KWord.
+ * Class that has a lot of the OpenDocument (ODF) saving code for Words.
  */
 class KWOdfWriter : public QObject
 {
@@ -71,7 +71,7 @@ private:
 
     bool saveOdfSettings(KoStore *store);
 
-    /// The KWord document.
+    /// The Words document.
     KWDocument *m_document;
     QHash<KWPageStyle, QString> m_masterPages;
     /// Since ODF requires zindexes >= 0 and we can have negative ones we will calculate an offset per

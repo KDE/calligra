@@ -623,7 +623,7 @@ KoShape * KarbonImport::loadPath(const KoXmlElement &element)
 
     KoXmlElement child;
     forEachElement(child, element) {
-        // backward compatibility for karbon before koffice 1.3.x
+        // backward compatibility for karbon before calligra 1.3.x
         if (child.tagName() == "PATH") {
             KoPathShape * subpath = new KoPathShape();
 
@@ -927,7 +927,6 @@ KoShape * KarbonImport::loadSpiral(const KoXmlElement &element)
         startAngle += adv_ang;
     }
 
-    QPointF topLeft = spiral->outline().boundingRect().topLeft();
     spiral->normalize();
 
     QTransform m;

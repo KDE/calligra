@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Storage
+Name[cs]=Úložiště
 Name[el]=Αποθήκη
 Name[es]=Almacenamiento
 Name[et]=Salvesti
+Name[nb]=Lagring
 Name[nl]=Opslag
 Name[pt]=Armazenamento
 Name[pt_BR]=Armazenamento
@@ -11,3 +13,4 @@ Name[ug]=ساقلاش
 Name[uk]=Сховище даних
 Name[x-test]=xxStoragexx
 Name[zh_CN]=存储
+Name[zh_TW]=儲存裝置

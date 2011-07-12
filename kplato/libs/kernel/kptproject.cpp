@@ -2091,19 +2091,16 @@ double Project::bcwp( const QDate &date, long id ) const
 
     double budgetAtCompletion;
     double plannedCompleted;
-    double actualCompleted;
     double budgetedCompleted;
     bool useEffort = false; //FIXME
     if ( useEffort ) {
         budgetAtCompletion = plan.totalEffort().toDouble( Duration::Unit_h );
         plannedCompleted = plan.effortTo( date ).toDouble( Duration::Unit_h );
         //actualCompleted = actual.effortTo( date ).toDouble( Duration::Unit_h );
-        actualCompleted = actualEffortTo( date ).toDouble( Duration::Unit_h );
         budgetedCompleted = budgetedWorkPerformed( date, id ).toDouble( Duration::Unit_h );
     } else {
         budgetAtCompletion = plan.totalCost();
         plannedCompleted = plan.costTo( date );
-        actualCompleted = actual.costTo( date );
         budgetedCompleted = budgetedCostPerformed( date, id );
     }
     double percentageCompletion = budgetedCompleted / budgetAtCompletion;

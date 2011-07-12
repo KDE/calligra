@@ -1,6 +1,6 @@
-[koffice]
+[calligra]
 DockerPlugins=Scripting
-DockerPluginsDisabled=kofficedockers
+DockerPluginsDisabled=calligradockers
 FlakePlugins=
 FlakePluginsDisabled=
 ShapePlugins=

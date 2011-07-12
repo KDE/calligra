@@ -226,6 +226,7 @@ private:
     PptToOdp* const ppttoodp;
 
     QRectF getRect(const MSO::OfficeArtClientAnchor&);
+    QRectF getReserveRect(void);
     QString getPicturePath(const quint32 pib);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
     void processClientData(const MSO::OfficeArtClientTextBox* ct,
@@ -244,7 +245,6 @@ private:
 
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-    const MSO::OfficeArtSpContainer* defaultShapeContainer() { return dc_data->defaultShape; };
 
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
     QString formatPos(qreal v);
@@ -263,13 +263,8 @@ private:
         const MSO::NotesContainer* notesSlide;
         const MSO::SlideListWithTextSubContainerOrAtom* slideTexts;
 
-        //OfficeArtDgContainer/shape - for MS Office 2003 outputs, this one
-        //seems to contain missing boolean properties for the content of
-        //OfficeArtDgContainer/groupShape
-        const MSO::OfficeArtSpContainer* defaultShape;
-
         DrawClientData(): masterSlide(0), presSlide(0), notesMasterSlide(0),
-                          notesSlide(0), slideTexts(0), defaultShape(0) {};
+                          notesSlide(0), slideTexts(0) {};
     };
     DrawClientData dc_data[1];
 
@@ -279,14 +274,12 @@ public:
                            const MSO::SlideContainer* sc,
                            const MSO::NotesContainer* nmc,
                            const MSO::NotesContainer* nc,
-                           const MSO::OfficeArtSpContainer* shape = 0,
                            const MSO::SlideListWithTextSubContainerOrAtom* stc = 0)
     {
         dc_data->masterSlide = mc;
         dc_data->presSlide = sc;
         dc_data->notesMasterSlide = nmc;
         dc_data->notesSlide = nc;
-        dc_data->defaultShape = shape;
         dc_data->slideTexts = stc;
     }
 };
@@ -297,6 +290,11 @@ QRectF PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
     if (a) {
         return ::getRect(*a);
     }
+    return QRectF();
+}
+QRectF PptToOdp::DrawClient::getReserveRect(void)
+{
+    //NOTE: No PPT test files at the moment.
     return QRect(0, 0, 1, 1);
 }
 QString PptToOdp::DrawClient::getPicturePath(const quint32 pib)
@@ -1029,13 +1027,9 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
 }
 
 void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
-    const TextPFException9* pf9 = 0;
     if (p->documentContainer) {
         const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
                 p->documentContainer);
-        if (pp9 && pp9->textDefaultsAtom) {
-            pf9 = &pp9->textDefaultsAtom->pf9;
-        }
     }
     PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);
@@ -1310,28 +1304,47 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             quint32 fillType = ds.fillType();
             style.addProperty("draw:fill", getFillType(fillType), dp);
             // draw:fill-color
-            if (fillType == 0) {
-                // only set the color if the fill type is 'solid' because OOo ignores
-                // fill='none' if the color is set
-                QColor tmp = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
-                style.addProperty("draw:fill-color", tmp.name(), dp);
+            switch (fillType) {
+            case msofillSolid:
+            {
+                QColor color = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
+                style.addProperty("draw:fill-color", color.name(), dp);
+                break;
             }
             // draw:fill-gradient-name
-            else if ((fillType >= 4) && (fillType <= 8)) {
+            case msofillShade:
+            case msofillShadeCenter:
+            case msofillShadeShape:
+            case msofillShadeScale:
+            case msofillShadeTitle:
+            {
                 KoGenStyle gs(KoGenStyle::LinearGradientStyle);
                 odrawtoodf.defineGradientStyle(gs, ds);
-                QString tmp = styles.insert(gs);
-                style.addProperty("draw:fill-gradient-name", tmp, dp);
+                QString gname = styles.insert(gs);
+                style.addProperty("draw:fill-gradient-name", gname, dp);
+                break;
             }
             // draw:fill-hatch-name
             // draw:fill-hatch-solid
             // draw:fill-image-height
             // draw:fill-image-name
-            quint32 fillBlip = ds.fillBlip();
-            const QString fillImagePath = getPicturePath(fillBlip);
-            if (!fillImagePath.isEmpty()) {
-                style.addProperty("draw:fill-image-name",
-                                  "fillImage" + QString::number(fillBlip), dp);
+            case msofillPattern:
+            case msofillTexture:
+            case msofillPicture:
+            {
+                quint32 fillBlip = ds.fillBlip();
+                const QString fillImagePath = getPicturePath(fillBlip);
+                if (!fillImagePath.isEmpty()) {
+                    style.addProperty("draw:fill-image-name",
+                                      "fillImage" + QString::number(fillBlip), dp);
+                    style.addProperty("style:repeat", getRepeatStyle(fillType), dp);
+                }
+                break;
+            }
+            //TODO:
+            case msofillBackground:
+            default:
+                break;
             }
             // draw:fill-image-ref-point-x
             // draw:fill-image-ref-point-y
@@ -1340,10 +1353,11 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             // draw:gradient-step-count
             // draw:opacity-name
             // draw:opacity
+            style.addProperty("draw:opacity",
+                              percent(100.0 * toQReal(ds.fillOpacity())), dp);
             // draw:secondary-fill-color
             // draw:tile-repeat-offset
-            // style:repeat
-            style.addProperty("style:repeat", getRepeatStyle(fillType));
+            // style:repeat // handled for image see draw:fill-image-name
         } else {
             style.addProperty("draw:fill", "none", dp);
         }
@@ -2025,15 +2039,9 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
 
-        //NOTE: The shape seems to provide boolean properties which are missing
-        //for shapes contained in spgr (MS Office 2003 specific).  There were
-        //problems with shadows on MS Office 2007 outputs, so it's disabled at
-        //the moment and all regressions have to be fixed.
         if (drawing->OfficeArtDg.groupShape) {
             const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
-            const OfficeArtSpContainer* shape = 0;
-//             const OfficeArtSpContainer* shape = (drawing->OfficeArtDg.shape).data();
-            drawclient.setDrawClientData(m, 0, 0, 0, shape);
+            drawclient.setDrawClientData(m, 0, 0, 0);
             odrawtoodf.processGroupShape(spgr, out);
         }
         master.addChildElement("", QString::fromUtf8(buffer.buffer(),
@@ -2734,13 +2742,9 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
-    //NOTE: The shape seems to provide boolean properties which are missing for
-    //shapes contained in spgr (MS Office 2003 specific).  However problems
-    //were detected on both 2003/2007 files, so this approach got disabled.
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
-//         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
-        drawclient.setDrawClientData(master, slide, 0, 0, 0, m_currentSlideTexts);
+        drawclient.setDrawClientData(master, slide, 0, 0, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 
@@ -2762,7 +2766,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
             out.xml.addAttribute("draw:style-name", value);
         }
         const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
-        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, 0, m_currentSlideTexts);
+        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
         out.xml.endElement();
     }

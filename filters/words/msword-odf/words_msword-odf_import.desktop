@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Words MS Word-ODF Import Filter
+Name[cs]=Importní filtr formátu MS Word-ODF pro Words
 Name[de]=Words-MS-Word-ODF-Importfilter
 Name[el]=Φίλτρο εισαγωγής Words MS Word-ODF
 Name[en_GB]=Words MS Word-ODF Import Filter
@@ -20,4 +21,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword
 X-KDE-Weight=1
 X-KDE-Library=mswordodf_import
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

@@ -21,7 +21,7 @@
 #include "../frames/KWFrame.h"
 
 
-KWRemoveFrameClipCommand::KWRemoveFrameClipCommand(const QList<KWFrame*> &frames, KWDocument *document, QUndoCommand *parent)
+KWRemoveFrameClipCommand::KWRemoveFrameClipCommand(const QList<KWFrame*> &frames, KWDocument *document, KUndo2Command *parent)
     :KWClipFrameCommand(frames, document, parent)
 {
     foreach (KWFrame *frame, frames) {

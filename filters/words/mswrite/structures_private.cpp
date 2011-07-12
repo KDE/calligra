@@ -628,7 +628,7 @@ bool PageTable::readFromDevice(void)
             if (pp.getPageNumber() != m_pageNumberStart)
                 ErrorAndQuit(Error::InvalidFormat, "pageTable & sectionProperty disagree on pageNumberStart\n");
         } else {
-            // according to KOffice 1.2:
+            // according to Calligra 1.2:
             //
             // "the pageTable can get really out of sync with reality
             //  if the user doesn't repaginate after deleting a few pages
@@ -1086,16 +1086,16 @@ bool FormatInfoPage::add(const void *property)
         if (m_type == ParaType) {
             assert(!m_formatParaProperty);
             m_formatParaProperty = new FormatParaProperty [MaxElements + 1]; // lazy memory allocation (+1 for default prop)
-            m_formatParaProperty [MaxElements].setDevice(m_device);  // we will be == this default which has to writeToArray which NeedsDevice
             if (!m_formatParaProperty)
                 ErrorAndQuit(Error::OutOfMemory, "could not allocate memory for formatParaProperty[]\n");
-        } else { // if (m_type == CharType)
+	    m_formatParaProperty [MaxElements].setDevice(m_device);  // we will be == this default which has to writeToArray which NeedsDevice
+	} else { // if (m_type == CharType)
             assert(!m_formatCharProperty);
             m_formatCharProperty = new FormatCharProperty [MaxElements + 1]; // lazy memory allocation (+1 for default prop)
-            m_formatCharProperty [MaxElements].setDevice(m_device);  // we will be == this default which has to writeToArray which NeedsDevice
             if (!m_formatCharProperty)
                 ErrorAndQuit(Error::OutOfMemory, "could not allocate memory for formatCharProperty[]\n");
-        }
+	    m_formatCharProperty [MaxElements].setDevice(m_device);  // we will be == this default which has to writeToArray which NeedsDevice
+	}
 
         m_numProperty = 0;
     }

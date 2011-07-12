@@ -22,15 +22,15 @@
 #include "KPrCustomSlideShows.h"
 #include "KPrDocument.h"
 
-KPrSetCustomSlideShowsCommand::KPrSetCustomSlideShowsCommand( KPrDocument * doc, KPrCustomSlideShows * newSlideShows, QUndoCommand *parent )
-: QUndoCommand( parent )
+KPrSetCustomSlideShowsCommand::KPrSetCustomSlideShowsCommand( KPrDocument * doc, KPrCustomSlideShows * newSlideShows, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_doc( doc )
 , m_oldSlideShows( doc->customSlideShows() )
 , m_newSlideShows( newSlideShows )
 , m_deleteNewSlideShows( true )
 {
     // TODO 2.1 change text to "Edit custom slide shows"
-    setText( i18n("Edit") );
+    setText( i18nc("(qtundo-format)", "Edit") );
 }
 
 KPrSetCustomSlideShowsCommand::~KPrSetCustomSlideShowsCommand()

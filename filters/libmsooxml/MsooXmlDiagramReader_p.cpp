@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
@@ -2850,16 +2850,12 @@ void SnakeAlgorithm::virtualDoLayout() {
     const qreal h = layout()->finalValues()["h"];
     qreal x = 0;
     qreal y = 0;
-    enum { TopLeft, TopRight, BottomLeft, BottomRight } direction = TopLeft;
 
     if (growDirection == "tR") {
-        direction = TopRight;
         x = w - childs.first()->finalValues()["w"];
     } else if (growDirection == "bL") {
-        direction = BottomLeft;
         y = h - childs.first()->finalValues()["h"];
     } else if (growDirection == "bR") {
-        direction = BottomRight;
         x = w - childs.first()->finalValues()["w"];
         y = h - childs.first()->finalValues()["h"];
     }

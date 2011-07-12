@@ -916,13 +916,11 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 // const bool autoIncColumnCanBeOmitted = m_newRowEditing && m_editor->columnInfo()->field->isAutoIncrement();
 
     bool valueChanged = m_editor->valueChanged();
-    bool editCurrentCellAgain = false;
 
     if (valueChanged) {
         if (!m_editor->valueIsValid()) {
             //used e.g. for date or time values - the value can be null but not necessary invalid
             res = Validator::Error;
-            editCurrentCellAgain = true;
             QWidget *par = dynamic_cast<QScrollArea*>(this) ? dynamic_cast<QScrollArea*>(this)->widget() :
                            dynamic_cast<QWidget*>(this);
             QWidget *edit = dynamic_cast<QWidget*>(m_editor);
@@ -949,7 +947,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                       + "\n\n" + Kexi::msgYouCanImproveData();
                 desc = i18n("The column's constraint is declared as NOT NULL.");
-                editCurrentCellAgain = true;
                 //   allow = false;
                 //   removeEditor();
                 //   return true;
@@ -969,7 +966,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + Kexi::msgYouCanImproveData();
                     desc = i18n("The column's constraint is declared as NOT EMPTY.");
-                    editCurrentCellAgain = true;
                     //    allow = false;
                     //    removeEditor();
                     //    return true;
@@ -985,7 +981,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + Kexi::msgYouCanImproveData();
                     desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
-                    editCurrentCellAgain = true;
 //    allow = false;
                     //    removeEditor();
                     //    return true;
@@ -1053,12 +1048,10 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             else
                 KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), msg, desc);
         }
-        editCurrentCellAgain = true;
 //  allow = false;
     } else if (res == Validator::Warning) {
         //js: todo: message!!!
         KMessageBox::messageBox(dynamic_cast<QWidget*>(this), KMessageBox::Sorry, msg + "\n" + desc);
-        editCurrentCellAgain = true;
     }
 
     if (res == Validator::Ok) {

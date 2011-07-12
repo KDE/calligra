@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
@@ -1193,7 +1193,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     int level = 0;
     bool readingGradient = false;
     bool readingGradientStop = false;
-    bool readingOutline = false;
     Charting::Gradient* gradient = NULL;
     Charting::Gradient::GradientStop currentStop;
     while (!atEnd()) {
@@ -1313,11 +1312,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             TRY_READ_ATTR_WITHOUT_NS(ang)
             if ( !ang.isEmpty() )
                 gradient->angle = ang.toDouble() / 60000.0;
-        } else if ( qualifiedName() == "a:ln" ) {
-            if ( isStartElement() )
-                readingOutline = true;
-            else if ( isEndElement() )
-                readingOutline = false;
         } else if ( qualifiedName() == "a:noFill" )
         {
             m_currentShapeProperties->lineFill.setType( Charting::Fill::None );

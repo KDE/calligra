@@ -18,7 +18,7 @@
  */
 
 #include "KWStatistics.h"
-#include "KWord.h"
+#include "Words.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameSet.h"
@@ -94,11 +94,11 @@ void KWStatistics::updateData()
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
         if (m_showInDocker && (!(footEnd ||
-                                 (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
-                                  tfs->textFrameSetType() == KWord::OtherTextFrameSet))))
+                                 (tfs->textFrameSetType() == Words::MainTextFrameSet ||
+                                  tfs->textFrameSetType() == Words::OtherTextFrameSet))))
             continue;
-        else if (!(footEnd || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
-                               tfs->textFrameSetType() == KWord::OtherTextFrameSet)))
+        else if (!(footEnd || (tfs->textFrameSetType() == Words::MainTextFrameSet ||
+                               tfs->textFrameSetType() == Words::OtherTextFrameSet)))
             continue;
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
@@ -226,13 +226,13 @@ void KWStatistics::updateDataUi()
     } else {
         // tab 1
         widget.pages->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentPageCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentPageCount), 0));
         widget.frames->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentFrameSetCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentFrameSetCount), 0));
         widget.pictures->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentPictureCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentPictureCount), 0));
         widget.tables->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(KWord::CurrentTableCount), 0));
+            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentTableCount), 0));
 
         // tab 2
         widget.words->setText(KGlobal::locale()->formatNumber(m_words, 0));
@@ -286,7 +286,7 @@ int KWStatistics::countCJKChars(const QString &text)
     int count = 0;
 
     QString::const_iterator it;
-    for (it = text.constBegin(); it != text.constEnd(); it++) {
+    for (it = text.constBegin(); it != text.constEnd(); ++it) {
         QChar qChar = *it;
         /*
          * CJK punctuations: 0x3000 - 0x303F (but I believe we shouldn't include this in the statistics)

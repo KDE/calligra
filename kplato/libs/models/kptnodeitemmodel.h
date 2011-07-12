@@ -297,7 +297,8 @@ public:
 
 signals:
     void nodeInserted( Node *node );
-    
+    void projectShownChanged( bool );
+
 public slots:
     virtual void setScheduleManager( ScheduleManager *sm );
     void setShowProject( bool on );

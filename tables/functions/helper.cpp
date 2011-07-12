@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Sascha Pfau <MrPeacock@gmail.com>
-   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
+   Copyright (C) 1998-2002 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -250,8 +250,6 @@ long double Calligra::Tables::yearFrac(const QDate& refDate, const QDate& startD
     //
     // calculation
     //
-
-    QDate date0 = refDate; // referenceDate
 
     if (date2 < date1) {
         // exchange dates

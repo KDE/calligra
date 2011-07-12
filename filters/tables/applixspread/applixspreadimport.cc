@@ -233,9 +233,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             // '.' // instance (usage) of a shared formula
             // ':' // simple value
 
-            bool isFormula = false;
             if (contentType == ';' || contentType == '.') {
-                isFormula = true;
                 // Skip the value
                 int pos = 0;
                 while (!mystr.at(pos).isSpace()) {

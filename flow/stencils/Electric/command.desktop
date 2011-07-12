@@ -2,6 +2,7 @@
 Name=command
 Name[el]=εντολή
 Name[nb]=styring
+Name[nds]=Befehl
 Name[nl]=commando
 Name[pt]=comando
 Name[pt_BR]=comando
@@ -9,3 +10,4 @@ Name[sv]=kommando
 Name[ug]=بۇيرۇق
 Name[uk]=Керівний механізм реле (горизонтально)
 Name[x-test]=xxcommandxx
+Name[zh_TW]=command

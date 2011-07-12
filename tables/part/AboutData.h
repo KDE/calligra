@@ -22,7 +22,7 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 namespace Calligra
 {
@@ -31,8 +31,8 @@ namespace Tables
 
 static const char* description = I18N_NOOP("Calligra Spreadsheet Application");
 
-// Always the same as the KOffice version
-static const char* version = KOFFICE_VERSION_STRING;
+// Always the same as the Calligra version
+static const char* version = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {

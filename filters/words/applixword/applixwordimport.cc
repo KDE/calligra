@@ -193,7 +193,6 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     m_instep   = 0;
     m_progress = 0;
 
-    int  rueck;
     int  pos;
     bool ok;
     QString           mystr, textstr;
@@ -236,7 +235,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                         coltxt = mystr.left(pos);
                         mystr.remove(0, pos + 1);
                         int c, m, y, k;
-                        rueck = sscanf((const char *) mystr.toLatin1() ,
+                        sscanf((const char *) mystr.toLatin1() ,
                                        ":%d:%d:%d:%d>",
                                        &c, &m, &y, &k);
                         kDebug(30517) << " Color :" << c << "" << m << "" << y << "" << k << "" << coltxt << "";
@@ -773,7 +772,7 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(KOFFICE_VERSION_STRING));
+    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     xmlWriter->startElement("meta:creation-date");

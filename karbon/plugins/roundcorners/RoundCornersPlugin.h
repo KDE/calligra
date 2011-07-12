@@ -30,7 +30,7 @@
 #include <kdialog.h>
 #include <QVariantList>
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KarbonView;
 class RoundCornersDlg;

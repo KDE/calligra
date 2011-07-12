@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
 
    Copyright (C) 2009 Benjamin Cail <cricketc@gmail.com>
 
@@ -54,16 +54,34 @@ public:
     void closeInnerParagraph();
 
     /**
-     * Set the named style from the stylesheet that applies to this paragraph.
+     * Set the paragraph properties (PAP) that apply to the paragraph.
+     */
+    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> pap) { m_paragraphProperties = pap; }
+
+    /**
+     * Set the character properties (CHP) that apply to the paragraph.
+     *
+     * @param CHPs provided by wv2 for empty paragraphs to set proper
+     * font-size, line-height, etc. into text-properties.
+     */
+    void setCharacterProperties(wvWare::SharedPtr<const wvWare::Word97::CHP> chp) { m_characterProperties = chp; }
+
+    /**
+     * Set the built-in (named) style that applies to the paragraph.
      */
     void setParagraphStyle(const wvWare::Style* paragraphStyle);
 
     /**
-     * Set the paragraph properties (PAP) that apply to this paragraph.
+     * @return the built-in (named) style that applies to the paragraph.
      */
-    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties);
+    const wvWare::Style* paragraphStyle() const { return m_paragraphStyle; }
 
-    KoGenStyle* getOdfParagraphStyle();
+    /**
+     * @return the KoGenStyle of family Paragraph prepared for the current
+     * paragraph to other handlers.
+     */
+    KoGenStyle* koGenStyle() const { return m_odfParagraphStyle; };
+
     bool containsPageNumberField() const {
         return m_containsPageNumberField;
     }
@@ -82,8 +100,8 @@ public:
 
     void setCombinedCharacters(bool isCombined);
 
-    // Static functions for parsing wvWare properties and applying
-    // them onto a KoGenStyle.
+    // Static functions which process wvWare properties and store them into
+    // corresponding properties of a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool setDefaultAlign, Paragraph *paragraph,
@@ -93,7 +111,8 @@ public:
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool suppressFontSize=false, bool combineCharacters=false,
-                                         const QString& bgColor=QString());
+                                         const QString& bgColor=QString(),
+                                         bool preserveFontColor = false);
 
     /**
      * Add a color item to the backgroud-color stack.
@@ -113,7 +132,7 @@ public:
     static void updateBgColor(const QString& val);
 
     /**
-     * @return the current background-color in the format "#RRGGBB".
+     * @return the background color in the format "#RRGGBB" or an empty string.
      */
     static QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
 
@@ -129,9 +148,10 @@ public:
 private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
+    wvWare::SharedPtr<const wvWare::Word97::CHP> m_characterProperties;
 
     // ODF styles.  The MS equivalents are below.
-    KoGenStyle* m_odfParagraphStyle; //pointer to KOffice structure for paragraph formatting
+    KoGenStyle* m_odfParagraphStyle; //pointer to Calligra structure for paragraph formatting
     KoGenStyle* m_odfParagraphStyle2; //place to store original style when we have an inner paragraph
     KoGenStyles* m_mainStyles; //pointer to style collection for this document
 
@@ -141,10 +161,10 @@ private:
 
     //std::vector<QString> m_textStrings; // list of text strings within a paragraph
     //std::vector<QString> m_textStrings2; // original list when in inner paragraph
-    QList<QString> m_textStrings; // list of text strings within a paragraph
+    QList<QString> m_textStrings;  // list of text strings within a paragraph
     QList<QString> m_textStrings2; // original list when in inner paragraph
-    std::vector<const KoGenStyle*> m_textStyles; // list of styles for text within a paragraph
-    std::vector<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
+    QList<const KoGenStyle*> m_textStyles;  // list of styles for text within a paragraph
+    QList<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
     std::vector<bool> m_addCompleteElement;         // list of flags if we should output the complete parahraph instead of processing it
     std::vector<bool> m_addCompleteElement2;        // original list when in inner paragraph
 
@@ -165,6 +185,9 @@ private:
     //A stack for backgroud-colors, which represets a background color context
     //for automatic colors.
     static QStack<QString> m_bgColors;
+
+    //The font color, which represents the context for automatic colors.
+    static QString m_fontColor;
 
 }; //end class Paragraph
 #endif //PARAGRAPH_H

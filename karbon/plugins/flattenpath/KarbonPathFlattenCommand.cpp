@@ -137,8 +137,8 @@ public:
     QList< QList<PointData> > oldPointData;
 };
 
-KarbonPathFlattenCommand::KarbonPathFlattenCommand(KoPathShape * path, qreal flatness, QUndoCommand * parent)
-        : QUndoCommand(parent), d(new Private(path, flatness))
+KarbonPathFlattenCommand::KarbonPathFlattenCommand(KoPathShape * path, qreal flatness, KUndo2Command * parent)
+        : KUndo2Command(parent), d(new Private(path, flatness))
 {
     // save original point data
     uint subpathCount = d->path->subpathCount();
@@ -162,7 +162,7 @@ KarbonPathFlattenCommand::KarbonPathFlattenCommand(KoPathShape * path, qreal fla
         }
         d->oldPointData.append(subpathData);
     }
-    setText(i18n("Flatten path"));
+    setText(i18nc("(qtundo-format)", "Flatten path"));
 }
 
 KarbonPathFlattenCommand::~KarbonPathFlattenCommand()
@@ -230,14 +230,14 @@ void KarbonPathFlattenCommand::redo()
         d->flattened = true;
         d->path->normalize();
     } else {
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     }
     d->path->update();
 }
 
 void KarbonPathFlattenCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (d->flattened) {
         uint subpathCount = d->oldPointData.count();
         for (uint subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {

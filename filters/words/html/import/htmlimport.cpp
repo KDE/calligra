@@ -42,10 +42,10 @@ HTMLImport::HTMLImport(QObject* parent, const QVariantList &) :
 
 KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (to != "application/x-kword" || from != "text/html")
+    if (to != "application/x-words" || from != "text/html")
         return KoFilter::NotImplemented;
 
-    KoStore *k = KoStore::createStore(m_chain->outputFile(), KoStore::Write, "application/x-kword");
+    KoStore *k = KoStore::createStore(m_chain->outputFile(), KoStore::Write, "application/x-words");
     KWDWriter *w = new KWDWriter(k);
     KHTMLReader h(w);
     KUrl url;

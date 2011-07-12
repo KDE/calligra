@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Extract
+Name[cs]=Rozbalit
 Name[el]=Εξαγωγή
 Name[nb]=Pakk ut
 Name[nl]=Uitpakken
@@ -10,3 +11,4 @@ Name[ug]=ئايرىش
 Name[uk]=Розпакування
 Name[x-test]=xxExtractxx
 Name[zh_CN]=解压缩
+Name[zh_TW]=解開

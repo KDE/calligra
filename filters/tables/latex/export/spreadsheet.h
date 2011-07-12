@@ -1,5 +1,5 @@
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2002, 2003 Robert JACOLIN
 **
@@ -30,7 +30,7 @@
 
 enum EGenerate {
     E_LATEX,
-    E_KWORD,
+    E_WORDS,
     E_CONFIG
 };
 

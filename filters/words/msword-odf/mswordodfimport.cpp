@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -92,8 +92,8 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     LEInputStream::Mark m = wdstm.setMark();
     try {
         parseFibBase(wdstm, fibBase);
-    } catch (IOException _e) {
-        kError(30513) << _e.msg;
+    } catch (const IOException &e) {
+        kError(30513) << e.msg;
         return KoFilter::InvalidFormat;
     } catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
@@ -206,7 +206,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
                                 bodyWriter, &metaWriter, &manifestWriter,
                                 storeout, mainStyles,
                                 wdstm, tblstm_pole, datastm);
-    } catch (InvalidFormatException _e) {
+    } catch (const InvalidFormatException &_e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;
     } catch (...) {
@@ -229,7 +229,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         case 2:
             return KoFilter::StupidError;
         }
-    } catch (InvalidFormatException _e) {
+    } catch (const InvalidFormatException &_e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;
     } catch (...) {

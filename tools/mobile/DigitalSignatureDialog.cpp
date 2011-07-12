@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -46,7 +46,6 @@ static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
     xmlXPathObjectPtr xpath = 0;
     xmlChar *result = 0;
     int ret;
-    xmlExternalEntityLoader defaultEntityLoader = 0;
     QString sha1Hash;
     /*
      * build an XML tree from a the file; we need to add default
@@ -57,7 +56,6 @@ static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
     /*
      * Do not fetch DTD over network
      */
-    defaultEntityLoader = xmlNoNetExternalEntityLoader;
     xmlSetExternalEntityLoader(xmlNoNetExternalEntityLoader);
     xmlLoadExtDtdDefaultValue = 0;
 

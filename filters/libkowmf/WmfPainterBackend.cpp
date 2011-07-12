@@ -218,7 +218,7 @@ void WmfPainterBackend::setPen(const QPen &pen)
     } else {
         // WMF spec: width of pen in logical coordinate
         // => width of pen proportional with device context width
-        QRect rec = mPainter->window();
+        // QRect rec = mPainter->window();
         // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
 #if 0
         QRect devRec = rec * mPainter->matrix();
@@ -362,7 +362,7 @@ void WmfPainterBackend::recalculateWorldTransform()
         flip = true;
     }
     if (flip) {
-        kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
+        //kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
         mWorldTransform.translate(midpointX, midpointY);
         mWorldTransform.scale(scaleX, scaleY);
         mWorldTransform.translate(-midpointX, -midpointY);
@@ -662,7 +662,7 @@ void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 
     // fill polygons
     if (brush != Qt::NoBrush) {
-        kDebug(31000) << "Filling polygon with " << brush;
+        //kDebug(31000) << "Filling polygon with " << brush;
         mPainter->fillRect(region.boundingRect(), brush);
     }
 
