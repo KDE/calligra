@@ -1172,6 +1172,7 @@ QVariant NodeModel::completed( const Node *node, int role ) const
     const Task *t = static_cast<const Task*>( node );
     switch ( role ) {
         case Qt::DisplayRole:
+            kDebug()<<t->name()<<t->completion().percentFinished();
             return t->completion().percentFinished();
         case Qt::EditRole:
             return t->completion().percentFinished();
@@ -2239,34 +2240,34 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeAllocation:
             case NodeEstimateType:
             case NodeEstimateCalendar:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeEstimate:
             case NodeOptimisticRatio:
             case NodePessimisticRatio:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
             case NodeRisk:
             case NodeConstraint:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeConstraintStart:
             case NodeConstraintEnd:
             case NodeRunningAccount:
             case NodeStartupAccount:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeStartupCost:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
             case NodeShutdownAccount:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeShutdownCost:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
             case NodeDescription:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
 
             // Based on edited values
             case NodeExpected:
             case NodeVarianceEstimate:
             case NodeOptimistic:
             case NodePessimistic:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
 
             // After scheduling
             case NodeStartTime:
@@ -2275,39 +2276,40 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeEarlyFinish:
             case NodeLateStart:
             case NodeLateFinish:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodePositiveFloat:
             case NodeFreeFloat:
             case NodeNegativeFloat:
             case NodeStartFloat:
             case NodeFinishFloat:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
             case NodeAssignments:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
 
             // Based on scheduled values
             case NodeDuration:
             case NodeVarianceDuration:
             case NodeOptimisticDuration:
             case NodePessimisticDuration:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
 
             // Completion
             case NodeStatus:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeCompleted:
+                return (int)(Qt::AlignCenter); // special, presented as a bar
             case NodePlannedEffort:
             case NodeActualEffort:
             case NodeRemainingEffort:
             case NodePlannedCost:
             case NodeActualCost:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
             case NodeActualStart:
             case NodeStarted:
             case NodeActualFinish:
             case NodeFinished:
             case NodeStatusNote:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
 
             // Scheduling errors
             case NodeSchedulingStatus:
@@ -2318,27 +2320,27 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeConstraintsError:
             case NodeEffortNotMet:
             case NodeSchedulingError:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
 
             case NodeWBSCode:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeLevel:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
 
             // Performance
             case NodeBCWS:
             case NodeBCWP:
             case NodeACWP:
             case NodePerformanceIndex:
-                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
             case NodeCritical:
             case NodeCriticalPath:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
 
             case WPOwnerName:
             case WPTransmitionStatus:
             case WPTransmitionTime:
-                return QVariant(); // text, use default alignment
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             default:
                 return QVariant();
         }
@@ -3999,6 +4001,9 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
     if ( ! index.isValid() ) {
         return QVariant();
     }
+    if ( role == Qt::TextAlignmentRole ) {
+        return headerData( index.column(), Qt::Horizontal, role );
+    }
     QModelIndex idx = index;
     QList<Node*> lst;
     if ( m_showSpecial ) {
@@ -4540,12 +4545,23 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
 QAbstractItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
+        case NodeModel::NodeEstimateType: return new EnumDelegate( parent );
+        case NodeModel::NodeEstimateCalendar: return new EnumDelegate( parent );
+        case NodeModel::NodeEstimate: return new DurationSpinBoxDelegate( parent );
+        case NodeModel::NodeOptimisticRatio: return new SpinBoxDelegate( parent );
+        case NodeModel::NodePessimisticRatio: return new SpinBoxDelegate( parent );
+        case NodeModel::NodeRisk: return new EnumDelegate( parent );
         case NodeModel::NodeConstraint: return new EnumDelegate( parent );
         case NodeModel::NodeRunningAccount: return new EnumDelegate( parent );
         case NodeModel::NodeStartupAccount: return new EnumDelegate( parent );
         case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
         case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
         case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
+
+        case NodeModel::NodeCompleted: return new TaskCompleteDelegate( parent );
+        case NodeModel::NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
+        case NodeModel::NodeActualEffort: return new DurationSpinBoxDelegate( parent );
+
         default: return 0;
     }
     return 0;
