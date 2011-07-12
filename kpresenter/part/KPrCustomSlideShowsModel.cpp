@@ -356,16 +356,8 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
         //insert the slides on the current custom show
         int i = beginRow;
         foreach(KoPAPageBase *page, slides) {
-            //You can insert a slide just one time.
-            if (!selectedSlideShow.contains(page)) {
                 selectedSlideShow.insert(i, page);
                 i++;
-            }
-            else {
-                KoPAPageBase *duplicateSlide = page;
-                selectedSlideShow.insert(i, duplicateSlide);
-                i++;
-            }
         }
         updated = true;
     }

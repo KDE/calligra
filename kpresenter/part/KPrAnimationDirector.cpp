@@ -289,7 +289,6 @@ void KPrAnimationDirector::updatePageAnimation()
 {
     m_animationCache->clear();
 
-    qDebug("updatePageAnimation index: %d", m_pageIndex);
     m_animationCache->setPageSize(m_pages[m_pageIndex]->size());
     qreal zoom;
     m_zoomHandler.zoom(&zoom, &zoom);
@@ -397,9 +396,7 @@ bool KPrAnimationDirector::nextStep()
         // The active page and the substeps are updated later as
         // first the current page has to be painted again for the page effect
         if ( m_pageIndex < m_pages.size() -1 ) {
-            qDebug("p index: %d", m_pageIndex);
             ++m_pageIndex;
-            qDebug("d index: %d", m_pageIndex);
         }
         else {
             return true;
