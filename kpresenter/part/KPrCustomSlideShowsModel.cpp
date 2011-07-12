@@ -361,6 +361,11 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
                 selectedSlideShow.insert(i, page);
                 i++;
             }
+            else {
+                KoPAPageBase *duplicateSlide = page;
+                selectedSlideShow.insert(i, duplicateSlide);
+                i++;
+            }
         }
         updated = true;
     }

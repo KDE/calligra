@@ -275,7 +275,9 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 
     KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
     Q_ASSERT( kprPage );
-    m_pageIndex = m_pages.indexOf(page);
+    if (m_pageIndex > m_pages.size() || m_pageIndex < 0) {
+        m_pageIndex = m_pages.indexOf(page);
+    }
     m_animations = kprPage->animations().steps();
 
     // it can be that the pages have different sizes. So we need to recalulate
@@ -287,6 +289,7 @@ void KPrAnimationDirector::updatePageAnimation()
 {
     m_animationCache->clear();
 
+    qDebug("updatePageAnimation index: %d", m_pageIndex);
     m_animationCache->setPageSize(m_pages[m_pageIndex]->size());
     qreal zoom;
     m_zoomHandler.zoom(&zoom, &zoom);
@@ -394,7 +397,9 @@ bool KPrAnimationDirector::nextStep()
         // The active page and the substeps are updated later as
         // first the current page has to be painted again for the page effect
         if ( m_pageIndex < m_pages.size() -1 ) {
+            qDebug("p index: %d", m_pageIndex);
             ++m_pageIndex;
+            qDebug("d index: %d", m_pageIndex);
         }
         else {
             return true;
