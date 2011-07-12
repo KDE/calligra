@@ -99,7 +99,7 @@ public:
     void setCopyType(CopyLayerType type);
     CopyLayerType copyType() const;
     
-    bool isParentOk(const KisNode* parent);
+    bool allowAsParent(const KisNode* parent) const;
 
     /**
      * This function is called by the original to notify

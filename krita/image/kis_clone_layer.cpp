@@ -199,24 +199,24 @@ QIcon KisCloneLayer::icon() const
     return KIcon("edit-copy");
 }
 
-bool KisCloneLayer::isParentOk(const KisNode* parent)
+bool KisCloneLayer::allowAsParent(const KisNode* parent) const
 {
     const KisNode* source = dynamic_cast<KisNode*>(copyFrom().data());
     if (source)
     {
         if (source->inherits("KisGroupLayer"))
         {
-            while (source && source->parent())
+            while (parent && parent->parent())
             {
-                if (source == parent)
+                if (parent == source || !parent->allowAsChild(const_cast<KisNode*>(source)))
                 {
                     return false;
                 }
-                source = source->parent();
+                parent = parent->parent();
             }
         } else if (source->inherits("KisCloneLayer"))
         {
-            return dynamic_cast<KisCloneLayer*>(const_cast<KisNode*>(source))->isParentOk(parent);
+            return dynamic_cast<KisCloneLayer*>(const_cast<KisNode*>(source))->allowAsParent(parent);
         }
         return true;
     }
