@@ -2231,6 +2231,118 @@ QVariant NodeModel::headerData( int section, int role )
             default: return QVariant();
         }
     }
+    if ( role == Qt::TextAlignmentRole ) {
+        switch (section) {
+            case NodeName:
+            case NodeType:
+            case NodeResponsible:
+            case NodeAllocation:
+            case NodeEstimateType:
+            case NodeEstimateCalendar:
+                return QVariant(); // text, use default alignment
+            case NodeEstimate:
+            case NodeOptimisticRatio:
+            case NodePessimisticRatio:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+            case NodeRisk:
+            case NodeConstraint:
+                return QVariant(); // text, use default alignment
+            case NodeConstraintStart:
+            case NodeConstraintEnd:
+            case NodeRunningAccount:
+            case NodeStartupAccount:
+                return QVariant(); // text, use default alignment
+            case NodeStartupCost:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+            case NodeShutdownAccount:
+                return QVariant(); // text, use default alignment
+            case NodeShutdownCost:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+            case NodeDescription:
+                return QVariant(); // text, use default alignment
+
+            // Based on edited values
+            case NodeExpected:
+            case NodeVarianceEstimate:
+            case NodeOptimistic:
+            case NodePessimistic:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+
+            // After scheduling
+            case NodeStartTime:
+            case NodeEndTime:
+            case NodeEarlyStart:
+            case NodeEarlyFinish:
+            case NodeLateStart:
+            case NodeLateFinish:
+                return QVariant(); // text, use default alignment
+            case NodePositiveFloat:
+            case NodeFreeFloat:
+            case NodeNegativeFloat:
+            case NodeStartFloat:
+            case NodeFinishFloat:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+            case NodeAssignments:
+                return QVariant(); // text, use default alignment
+
+            // Based on scheduled values
+            case NodeDuration:
+            case NodeVarianceDuration:
+            case NodeOptimisticDuration:
+            case NodePessimisticDuration:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+
+            // Completion
+            case NodeStatus:
+                return QVariant(); // text, use default alignment
+            case NodeCompleted:
+            case NodePlannedEffort:
+            case NodeActualEffort:
+            case NodeRemainingEffort:
+            case NodePlannedCost:
+            case NodeActualCost:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+            case NodeActualStart:
+            case NodeStarted:
+            case NodeActualFinish:
+            case NodeFinished:
+            case NodeStatusNote:
+                return QVariant(); // text, use default alignment
+
+            // Scheduling errors
+            case NodeSchedulingStatus:
+            case NodeNotScheduled:
+            case NodeAssignmentMissing:
+            case NodeResourceOverbooked:
+            case NodeResourceUnavailable:
+            case NodeConstraintsError:
+            case NodeEffortNotMet:
+            case NodeSchedulingError:
+                return QVariant(); // text, use default alignment
+
+            case NodeWBSCode:
+                return QVariant(); // text, use default alignment
+            case NodeLevel:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+
+            // Performance
+            case NodeBCWS:
+            case NodeBCWP:
+            case NodeACWP:
+            case NodePerformanceIndex:
+                return (int)(Qt::AlignRight|Qt::AlignBottom); // number
+            case NodeCritical:
+            case NodeCriticalPath:
+                return QVariant(); // text, use default alignment
+
+            case WPOwnerName:
+            case WPTransmitionStatus:
+            case WPTransmitionTime:
+                return QVariant(); // text, use default alignment
+            default:
+                return QVariant();
+        }
+    }
     if ( role == Qt::WhatsThisRole ) {
         switch ( section ) {
             case NodeNegativeFloat: return WhatsThis::nodeNegativeFloat();
@@ -3115,6 +3227,9 @@ bool NodeItemModel::setFinishedTime( Node *node, const QVariant &value, int role
 QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
+    if ( role == Qt::TextAlignmentRole ) {
+        return headerData( index.column(), Qt::Horizontal, role );
+    }
     Node *n = node( index );
     if ( n != 0 ) {
         result = m_nodemodel.data( n, index.column(), role );
@@ -3181,14 +3296,8 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
 QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole ) {
+        if ( role == Qt::DisplayRole || role == Qt::TextAlignmentRole ) {
             return m_nodemodel.headerData( section, role );
-        } else if ( role == Qt::TextAlignmentRole ) {
-            switch (section) {
-                case NodeModel::NodeName: return Qt::AlignLeft;
-                case NodeModel::NodeType: return Qt::AlignCenter;
-                default: return QVariant();
-            }
         }
     }
     if ( role == Qt::ToolTipRole ) {
@@ -4366,6 +4475,9 @@ bool MilestoneItemModel::setShutdownCost( Node *node, const QVariant &value, int
 QVariant MilestoneItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
+    if ( role == Qt::TextAlignmentRole ) {
+        return headerData( index.column(), Qt::Horizontal, role );
+    }
     Node *n = node( index );
     if ( n != 0 ) {
         if ( index.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
@@ -4415,14 +4527,8 @@ bool MilestoneItemModel::setData( const QModelIndex &index, const QVariant &valu
 QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole ) {
+        if ( role == Qt::DisplayRole || role == Qt::TextAlignmentRole) {
             return m_nodemodel.headerData( section, role );
-        } else if ( role == Qt::TextAlignmentRole ) {
-            switch (section) {
-                case NodeModel::NodeName: return Qt::AlignLeft;
-                case NodeModel::NodeType: return Qt::AlignCenter;
-                default: return QVariant();
-            }
         }
     }
     if ( role == Qt::ToolTipRole ) {

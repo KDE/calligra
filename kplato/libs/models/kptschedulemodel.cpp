@@ -700,6 +700,9 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
     //kDebug()<<index.row()<<","<<index.column();
     QVariant result;
+    if ( role == Qt::TextAlignmentRole ) {
+        return headerData( index.column(), Qt::Horizontal, role );
+    }
     switch ( index.column() ) {
         case ScheduleModel::ScheduleName: result = name( index, role ); break;
         case ScheduleModel::ScheduleState: result = state( index, role ); break;
@@ -769,9 +772,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
-            switch (section) {
-                default: return Qt::AlignCenter;
-            }
+            return QVariant();
         }
     }
     if ( role == Qt::ToolTipRole ) {

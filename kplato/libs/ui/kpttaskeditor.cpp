@@ -92,6 +92,9 @@ QVariant TaskEditorItemModel::headerData( int section, Qt::Orientation orientati
 
 QVariant TaskEditorItemModel::data( const QModelIndex &index, int role ) const
 {
+    if ( role == Qt::TextAlignmentRole ) {
+        return NodeItemModel::data( index, role );
+    }
     Node *n = node( index );
     if ( n != 0 && index.column() == NodeModel::NodeType ) {
         return type( n, role );
