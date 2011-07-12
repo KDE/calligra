@@ -222,6 +222,11 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                 }
             }
         }
+    } else {
+        if (!documentLayout->referencedLayout()) {
+            KoTextDocumentLayout *reflay = dynamic_cast<KoTextDocumentLayout*>(kwdoc->frameLayout()->mainFrameSet()->document()->documentLayout());
+            documentLayout->setReferencedLayout(reflay);
+        }
     }
 
     KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
