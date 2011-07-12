@@ -26,6 +26,8 @@ class QPainter;
 class QVector2D;
 
 static const qreal CURVE_RANGE = 1.0;
+static const qreal SMALLEST_STEP = 0.0001;
+static const int BLIB_RADIUS = 5;
 
 class KisCurveWidgetBase : public QWidget
 {
@@ -56,6 +58,7 @@ protected:
     bool removePoint(const QVector2D& pos);
 
     QList<QPointF> m_points;
+    // converts from point space to widget space
     QMatrix m_converterMatrix;
 
 private:

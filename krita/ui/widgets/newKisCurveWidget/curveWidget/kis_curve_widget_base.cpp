@@ -23,6 +23,7 @@
 #include <QPainterPath>
 #include <QVector2D>
 #include <QMouseEvent>
+#include <QDebug>
 
 /// delete later, it was moved to kis_curve.h
 bool pointCompare (const QPointF &p1, const QPointF &p2)
@@ -71,7 +72,7 @@ void KisCurveWidgetBase::mousePressEvent(QMouseEvent *event)
             QVector2D pointPos(m_points.at(i));
             QVector2D mouseDistance = (mousePos-pointPos);
             mouseDistance*=QVector2D(m_converterMatrix.m11(), m_converterMatrix.m22());
-            if(mouseDistance.lengthSquared()<100) {
+            if(mouseDistance.lengthSquared()<BLIB_RADIUS*BLIB_RADIUS) {
                 m_currentPoint=i;
                 movingButton=true;
                 break;
@@ -91,26 +92,34 @@ void KisCurveWidgetBase::mousePressEvent(QMouseEvent *event)
 
 void KisCurveWidgetBase::mouseMoveEvent(QMouseEvent *event)
 {
+    qDebug() << "KisCurveWidgetBase::mouseMoveEvent(QMouseEvent): " << event->pos();
     if(m_currentPoint!=-1) {
         QPointF mousePos = m_converterMatrix.inverted().map(event->posF());
         mousePos.setX(qBound(0., mousePos.x(), CURVE_RANGE));
         mousePos.setY(qBound(0., mousePos.y(), CURVE_RANGE));
+        qDebug() << "  mapped mousePos: " << mousePos;
+        qDebug() << "  m_currentPoint:  " << m_currentPoint;
+        qDebug() << "  m_points.size:   " << m_points.size();
 
         if(m_currentPoint!=0 && m_currentPoint!=m_points.size()-1) {
             if(!(rect().adjusted(-20, -20, 20, 20).contains(event->pos()))) {
                 m_points.removeAt(m_currentPoint);
                 m_currentPoint = -1;
                 update();
+                qDebug() << "  first Branch";
                 return;
             }
-            else if(mousePos.x()<m_points.at(m_currentPoint-1).x()+1) {
-                m_points[m_currentPoint].setX(m_points.at(m_currentPoint-1).x()+1);
+            else if(mousePos.x()<m_points.at(m_currentPoint-1).x()+SMALLEST_STEP) {
+                m_points[m_currentPoint].setX(m_points.at(m_currentPoint-1).x()+SMALLEST_STEP);
+                qDebug() << "  second Branch";
             }
-            else if (mousePos.x()>m_points.at(m_currentPoint+1).x()-1) {
-                m_points[m_currentPoint].setX(m_points.at(m_currentPoint+1).x()-1);
+            else if (mousePos.x()>m_points.at(m_currentPoint+1).x()-SMALLEST_STEP) {
+                m_points[m_currentPoint].setX(m_points.at(m_currentPoint+1).x()-SMALLEST_STEP);
+                qDebug() << "  third Branch";
             }
             else {
                 m_points[m_currentPoint].setX(mousePos.x());
+                qDebug() << "  fourth Branch";
             }
         }
         m_points[m_currentPoint].setY(mousePos.y());
@@ -120,8 +129,8 @@ void KisCurveWidgetBase::mouseMoveEvent(QMouseEvent *event)
 
 void KisCurveWidgetBase::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(event->button()==Qt::LeftButton)
-        m_currentPoint=-1;
+    Q_UNUSED(event);
+    m_currentPoint=-1;
 }
 
 void KisCurveWidgetBase::mouseDoubleClickEvent(QMouseEvent *event)
@@ -141,7 +150,7 @@ void KisCurveWidgetBase::resizeEvent(QResizeEvent *)
 void KisCurveWidgetBase::paintBlips(QPainter *painter)
 {
     for(int i=0; i<m_points.size(); i++) {
-        painter->drawEllipse(m_points.at(i), 5/m_converterMatrix.m11(), 5/m_converterMatrix.m22());
+        painter->drawEllipse(m_points.at(i), BLIB_RADIUS/m_converterMatrix.m11(), BLIB_RADIUS/m_converterMatrix.m22());
     }
 }
 
@@ -162,8 +171,15 @@ void KisCurveWidgetBase::addPoint(const QVector2D& pos)
 
 bool KisCurveWidgetBase::removePoint(const QVector2D& pos)
 {
+    qDebug() << "KisCurveWidgetBase::removePoint:";
     for(int i=0; i<m_points.size(); i++) {
-        if((QVector2D(m_points.at(i))-pos).lengthSquared()<36) {
+        qDebug() << "  distance to point nr " << i << ": " << (QVector2D(m_points.at(i))-pos).lengthSquared();
+
+        QVector2D pointPos(m_points.at(i));
+        QVector2D mouseDistance = (pos-pointPos);
+        mouseDistance*=QVector2D(m_converterMatrix.m11(), m_converterMatrix.m22());
+
+        if(mouseDistance.lengthSquared()<BLIB_RADIUS*BLIB_RADIUS) {
             if(i>0 && i<m_points.size()-1) { // don't remove a point, if on start or end
                 m_points.removeAt(i);
                 update();
