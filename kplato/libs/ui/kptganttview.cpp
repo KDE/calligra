@@ -383,7 +383,9 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m_manager( 0 )
 {
     kDebug()<<"------------------- create MyKDGanttView -----------------------";
-    setItemModel( new GanttItemModel( this ) );
+    GanttItemModel *gm = new GanttItemModel( this );
+    setItemModel( gm );
+    treeView()->createItemDelegates( gm );
 
     QList<int> show;
     show << NodeModel::NodeName
@@ -724,8 +726,9 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m_manager( 0 )
 {
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------";
-
-    setItemModel( new MilestoneItemModel( this ) );
+    MilestoneItemModel *mm = new MilestoneItemModel( this );
+    setItemModel( mm );
+    treeView()->createItemDelegates( mm );
 
     sfModel()->setFilterRole ( Qt::EditRole );
     sfModel()->setFilterFixedString( QString::number( Node::Type_Milestone ) );
