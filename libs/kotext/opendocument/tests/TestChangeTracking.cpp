@@ -57,6 +57,7 @@
 #include <KoTextSharedSavingData.h>
 #include <KoTextDocument.h>
 #include <kstandarddirs.h>
+#include <KoTextEditor.h>
 
 #include <KoGenChanges.h>
 #include <KoChangeTracker.h>
@@ -183,9 +184,9 @@ QString TestChangeTracking::documentToOdt(QTextDocument *document)
     KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
     KoStyleManager *styleManager = new KoStyleManager;
     KoTextDocument(document).setStyleManager(styleManager);
+    KoTextDocument(document).setTextEditor(new KoTextEditor(document));
 
-    KoTextWriter writer(context, 0);
-    writer.write(document, 0, -1);
+    KoTextWriter::saveOdf(context, 0, document, 0, -1);
 
     contentTmpFile.close();
 

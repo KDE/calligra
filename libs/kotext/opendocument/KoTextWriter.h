@@ -51,6 +51,8 @@ public:
     */
     ~KoTextWriter();
 
+    static void saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, QTextDocument *document, int from, int to);
+
     /**
      * Save a paragraph style used in a text block
      *
