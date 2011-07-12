@@ -37,15 +37,15 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *);
-    void deletePoints(int fromX, int toX);
+    void deletePoints(qreal fromX, qreal toX);
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseDoubleClickEvent(QMouseEvent *) {} //do nothing, overide superclass
     void mouseReleaseEvent(QMouseEvent *) {}     //same here
 
 private:
-    QMap<int, int> m_points;
-    int m_lastPointX;
+    QMap<qreal, qreal> m_points;
+    qreal m_lastPointX;
 };
 
 #endif // KIS_FREEHAND_CURVE_WIDGET_H

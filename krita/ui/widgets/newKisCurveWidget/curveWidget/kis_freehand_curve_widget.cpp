@@ -35,7 +35,7 @@ QList<QPointF> KisFreehandCurveWidget::controlPoints() const
 {
     QList<QPointF> retPoints;
 
-    for (QMap<int, int>::const_iterator iter=m_points.begin(); iter!=(m_points.end()); ++iter) {
+    for (QMap<qreal, qreal>::const_iterator iter=m_points.begin(); iter!=(m_points.end()); ++iter) {
         retPoints.append(QPointF(iter.key(), iter.value()));
     }
 
@@ -71,23 +71,23 @@ void KisFreehandCurveWidget::paintEvent(QPaintEvent *)
     painter.setMatrix(m_converterMatrix);
 
     QPainterPath path;
-    QMap<int, int>::iterator firstPoint = m_points.begin();
+    QMap<qreal, qreal>::iterator firstPoint = m_points.begin();
     path.moveTo(firstPoint.key(), firstPoint.value());
 
 
-    for (QMap<int, int>::iterator iter=m_points.begin(); iter!=(m_points.end()); ++iter) {
+    for (QMap<qreal, qreal>::iterator iter=m_points.begin(); iter!=(m_points.end()); ++iter) {
         path.lineTo(iter.key(), iter.value());
     }
 
     painter.drawPath(path);
 }
 
-void KisFreehandCurveWidget::deletePoints(int fromX, int toX)
+void KisFreehandCurveWidget::deletePoints(qreal fromX, qreal toX)
 {
-    int start = qMin(fromX, toX);
-    int end = qMax(fromX, toX);
+    qreal start = qMin(fromX, toX);
+    qreal end = qMax(fromX, toX);
 
-    QList<int> keys = m_points.keys();
+    QList<qreal> keys = m_points.keys();
     for(int i=0; i<keys.size(); i++) {
         if(keys.at(i)>start && keys.at(i)<end)
             m_points.remove(keys.at(i));
@@ -110,6 +110,7 @@ void KisFreehandCurveWidget::mouseMoveEvent(QMouseEvent *event)
     QVector2D mousePos(m_converterMatrix.inverted().map(event->posF()));
     mousePos.setX(qBound(0., mousePos.x(), CURVE_RANGE));
     mousePos.setY(qBound(0., mousePos.y(), CURVE_RANGE));
+    qDebug() << "KisFreehandCurveWidget::mouseMoveEvent: " << m_points.size() << "  " << m_lastPointX;
 
     if(event->buttons()&Qt::LeftButton) {
         deletePoints(m_lastPointX, mousePos.x());

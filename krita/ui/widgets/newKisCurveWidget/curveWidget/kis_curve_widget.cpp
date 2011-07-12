@@ -86,8 +86,8 @@ KisCurveWidget::KisCurveWidget(QWidget *parent)
     resetButton->setMaximumSize(30, 30);
 
     //default is cubic curve
-    m_currentCurve = m_splineWidget;
-    m_currentCurve->show();
+    m_currentCurveWidget = m_splineWidget;
+    m_currentCurveWidget->show();
     splineButton->click();
 
     connect(functionlikeButton, SIGNAL(clicked()), SLOT(switchToFunction()));
@@ -95,6 +95,8 @@ KisCurveWidget::KisCurveWidget(QWidget *parent)
     connect(lineButton,       SIGNAL(clicked()), SLOT(switchToLinear()));
     connect(freehandButton,     SIGNAL(clicked()), SLOT(switchToFreehand()));
     connect(resetButton,        SIGNAL(clicked()), SLOT(reset()));
+
+    resize(800, 600);
 }
 
 KisCurveWidget::~KisCurveWidget()
@@ -102,17 +104,17 @@ KisCurveWidget::~KisCurveWidget()
 
 void KisCurveWidget::reset()
 {
-    m_currentCurve->reset();
+    m_currentCurveWidget->reset();
 }
 
 void KisCurveWidget::switchTo(KisCurveWidgetBase* newWidget)
 {
-    if(m_currentCurve == newWidget) return;
+    if(m_currentCurveWidget == newWidget) return;
 
-    newWidget->setControlPoints(m_currentCurve->controlPoints());
-    m_currentCurve->hide();
-    m_currentCurve = newWidget;
-    m_currentCurve->show();
+    newWidget->setControlPoints(m_currentCurveWidget->controlPoints());
+    m_currentCurveWidget->hide();
+    m_currentCurveWidget = newWidget;
+    m_currentCurveWidget->show();
 
 }
 

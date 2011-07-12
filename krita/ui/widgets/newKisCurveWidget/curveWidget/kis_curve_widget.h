@@ -43,7 +43,7 @@ protected:
     void switchTo(KisCurveWidgetBase* newWidget);
 
 private:
-    KisCurveWidgetBase* m_currentCurve;
+    KisCurveWidgetBase* m_currentCurveWidget;
     KisCurveWidgetBase* m_functionLikeWidget;
     KisCurveWidgetBase* m_splineWidget;
     KisCurveWidgetBase* m_lineWidget;
