@@ -4695,21 +4695,17 @@ void DocxXmlDocumentReader::defineTableStyles()
     MSOOXML::DrawingTableStyleConverterProperties converterProperties;
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
+    converterProperties.setRoles(m_activeRoles);
+    converterProperties.setLocalStyles(*m_currentLocalTableStyles);
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
-    Q_ASSERT(tableStyle);
-    if (tableStyle) {
-        converterProperties.setRoles(m_activeRoles);
-        converterProperties.setLocalStyles(*m_currentLocalTableStyles);
-
-        MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
-        for(int row = 0; row < rowCount; ++row ) {
-            for(int column = 0; column < columnCount; ++column ) {
-                KoCellStyle::Ptr style = styleConverter.style(row, column);
-                if (m_moveToStylesXml) {
-                    style->setAutoStyleInStylesDotXml(true);
-                }
-                m_table->cellAt(row, column)->setStyle(style);
+    MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
+    for(int row = 0; row < rowCount; ++row ) {
+        for(int column = 0; column < columnCount; ++column ) {
+            KoCellStyle::Ptr style = styleConverter.style(row, column);
+            if (m_moveToStylesXml) {
+                style->setAutoStyleInStylesDotXml(true);
             }
+            m_table->cellAt(row, column)->setStyle(style);
         }
     }
     //converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
