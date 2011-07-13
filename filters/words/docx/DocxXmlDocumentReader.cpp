@@ -679,6 +679,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 
     DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
+    context.m_tableStyles = m_context->m_tableStyles;
+    context.m_bulletStyles = m_context->m_bulletStyles;
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
@@ -755,6 +757,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
 
     DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
+    context.m_tableStyles = m_context->m_tableStyles;
+    context.m_bulletStyles = m_context->m_bulletStyles;
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
@@ -3801,7 +3805,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
 
     //Inheriting values from the defined style
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyle);
-    m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
+    Q_ASSERT(tableStyle);
+    if (tableStyle) {
+        m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
+    }
 
     readNext();
 
@@ -4688,10 +4695,9 @@ void DocxXmlDocumentReader::defineTableStyles()
     MSOOXML::DrawingTableStyleConverterProperties converterProperties;
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
-    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(*m_currentLocalTableStyles);
-
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
@@ -4702,7 +4708,6 @@ void DocxXmlDocumentReader::defineTableStyles()
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
-
     //converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
 }
 
