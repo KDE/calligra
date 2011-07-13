@@ -3805,7 +3805,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
 
     //Inheriting values from the defined style
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyle);
-    m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
+    Q_ASSERT(tableStyle);
+    if (tableStyle) {
+        m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
+    }
 
     readNext();
 
@@ -4693,20 +4696,22 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
-    converterProperties.setRoles(m_activeRoles);
-    converterProperties.setLocalStyles(*m_currentLocalTableStyles);
+    Q_ASSERT(tableStyle);
+    if (tableStyle) {
+        converterProperties.setRoles(m_activeRoles);
+        converterProperties.setLocalStyles(*m_currentLocalTableStyles);
 
-    MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
-    for(int row = 0; row < rowCount; ++row ) {
-        for(int column = 0; column < columnCount; ++column ) {
-            KoCellStyle::Ptr style = styleConverter.style(row, column);
-            if (m_moveToStylesXml) {
-                style->setAutoStyleInStylesDotXml(true);
+        MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
+        for(int row = 0; row < rowCount; ++row ) {
+            for(int column = 0; column < columnCount; ++column ) {
+                KoCellStyle::Ptr style = styleConverter.style(row, column);
+                if (m_moveToStylesXml) {
+                    style->setAutoStyleInStylesDotXml(true);
+                }
+                m_table->cellAt(row, column)->setStyle(style);
             }
-            m_table->cellAt(row, column)->setStyle(style);
         }
     }
-
     //converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
 }
 
