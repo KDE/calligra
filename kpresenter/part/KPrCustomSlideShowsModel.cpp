@@ -145,10 +145,19 @@ QMimeData * KPrCustomSlideShowsModel::mimeData(const QModelIndexList &indexes) c
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
 
-    // encode the data
+    // encode the data & order slides
     QModelIndexList::ConstIterator it = indexes.begin();
-    for ( ; it != indexes.end(); ++it) {
-        stream << QVariant::fromValue(qulonglong(it->internalPointer()));
+
+    QMap<int, KoPAPageBase*> map;
+    for( ; it != indexes.end(); ++it) {
+        map.insert(m_customSlideShows->indexByPage(m_activeCustomSlideShowName, (KoPAPageBase*)it->internalPointer()),
+                   (KoPAPageBase*)it->internalPointer());
+    }
+
+    QList<KoPAPageBase *> slides = map.values();
+
+    foreach (KoPAPageBase *slide, slides) {
+        stream << QVariant::fromValue(qulonglong((void*)slide));
     }
 
     data->setData(types[0], encoded);
@@ -186,9 +195,6 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
             beginRow = rowCount(QModelIndex());
         }
 
-        bool doAction = false;
-        CustomShowActions customAction;
-
         if (data->hasFormat("application/x-calligra-sliderssorter")) {
             QByteArray encoded = data->data("application/x-calligra-sliderssorter");
             slides = decodeSlidesList(encoded);
@@ -197,8 +203,8 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
                 return false;
             }
 
-            doAction = true;
-            customAction = KPrCustomSlideShowsModel::SlidesAdd;
+            //perform action
+            doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesAdd, slides, beginRow);
         }
         else if (data->hasFormat("application/x-calligra-customslideshows")) {
             QByteArray encoded = data->data("application/x-calligra-customslideshows");
@@ -208,28 +214,10 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
                 return false;
             }
 
-            doAction = true;
-            customAction = KPrCustomSlideShowsModel::SlidesMove;
-        }
-
-        if (doAction) {
-            //Order Slides
-            QMap<int, KoPAPageBase*> map;
-            if (customAction == KPrCustomSlideShowsModel::SlidesAdd) {
-                foreach (KoPAPageBase *slide, slides) {
-                    map.insert(m_document->pageIndex(slide), slide);
-                }
-            }
-            else if (customAction == KPrCustomSlideShowsModel::SlidesMove) {
-                foreach (KoPAPageBase *slide, slides) {
-                    map.insert(m_customSlideShows->indexByPage(m_activeCustomSlideShowName, slide), slide);
-                }
-            }
-            slides = map.values();
             //perform action
-            doCustomSlideShowAction(customAction, slides, beginRow);
-            return true;
+            doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesMove, slides, beginRow);
         }
+        return true;
     }
     return false;
 }
