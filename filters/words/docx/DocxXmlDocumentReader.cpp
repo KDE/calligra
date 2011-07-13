@@ -679,6 +679,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 
     DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
+    context.m_tableStyles = m_context->m_tableStyles;
+    context.m_bulletStyles = m_context->m_bulletStyles;
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
@@ -755,6 +757,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
 
     DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
+    context.m_tableStyles = m_context->m_tableStyles;
+    context.m_bulletStyles = m_context->m_bulletStyles;
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
