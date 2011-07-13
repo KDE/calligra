@@ -17,36 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOANNOTATIONBALLOON_H
-#define KOANNOTATIONBALLOON_H
-
-#include <KoBalloon.h>
-#include <KoInlineNote.h>
-#include <QLabel>
-#include <QTextEdit>
-#include <QMenu>
-#include <QPushButton>
-#include <QTextFrame>
-#include "kowidgets_export.h"
 #include "KoAnnotation.h"
 
-#include <QGridLayout>
-
-class KOWIDGETS_EXPORT KoAnnotationBalloon : public KoBalloon
+KoAnnotation::KoAnnotation(QString author) :
+		m_author(author),
+		m_date(QDateTime::currentDateTime())
 {
-public:
-	explicit KoAnnotationBalloon(int position, KoAnnotation *data, QWidget *parent = 0);
+}
 
-public slots:
-
-private:
-	KoAnnotation *d;
-	QTextEdit *m_textContent;
-	QLabel *m_authorLabel;
-	QLabel *m_dateLabel;
-
-    QPushButton *m_optionButton;
-    QMenu *m_options;
-};
-
-#endif // KOANNOTATIONBALLOON_H
+KoAnnotation::KoAnnotation(QString &author, QDateTime &date, QString &text) :
+		m_author(author),
+		m_date(date),
+		m_text(text)
+{
+}

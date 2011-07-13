@@ -18,29 +18,38 @@
  */
 
 #include "KoAnnotationBalloon.h"
+#include <QDateTime>
 
-KoAnnotationBalloon::KoAnnotationBalloon(KoAnnotation *content, int position, QWidget *parent):
-        KoBalloon(position, parent), m_content(content)
+KoAnnotationBalloon::KoAnnotationBalloon(int position, KoAnnotation *data, QWidget *parent):
+		KoBalloon(position, parent),
+		d(data)
 {
-    QGridLayout *layout = new QGridLayout(this);
-    setLayout(layout);
-    m_textContent = new QTextEdit(m_content->content(), this);
-    m_author = new QLabel(m_content->author(), this);
-    m_date = new QLabel((m_content->date()).toString("MM/dd/yyyy hh:mm"));
+	QGridLayout *layout = new QGridLayout(this);
 
-    layout->addWidget(m_textContent, 0, 0, 1, 2);
-    layout->addWidget(m_author, 1, 0);
-    layout->addWidget(m_date, 2, 0);
+	m_authorLabel = new QLabel(d->author());
+	m_dateLabel = new QLabel(d->date().toString("MM/dd/yyyy hh:mm"));
+	m_textContent = new QTextEdit(d->text(), this);
+
+	QFont font = m_authorLabel->font();
+	font.setPointSize(8);
+	m_authorLabel->setFont(font);
+	m_dateLabel->setFont(font);
+
+	layout->addWidget(m_textContent, 0, 0, 1, 2);
+	layout->addWidget(m_authorLabel, 1, 0);
+	layout->addWidget(m_dateLabel, 2, 0);
 
     m_optionButton = new QPushButton(this);
     m_options = new QMenu(this);
-    // TODO: add menu items
+	m_options->addAction("Delete");
     m_optionButton->setMenu(m_options);
 
-    layout->addWidget(m_optionButton, 1, 1, 2, 1, Qt::AlignCenter);
+	layout->addWidget(m_optionButton, 1, 1, 2, 1, Qt::AlignCenter);
+
+	setLayout(layout);
+	QPalette pal = palette();
+	pal.setColor(QPalette::Window, Qt::green);
+	setPalette(pal);
+	setAutoFillBackground(true);
 }
 
-void KoAnnotationBalloon::setFocus()
-{
-    m_textContent->setFocus();
-}

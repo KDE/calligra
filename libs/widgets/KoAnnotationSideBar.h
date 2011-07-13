@@ -24,11 +24,12 @@
 #include "kowidgets_export.h"
 #include "KoBalloon.h"
 #include "KoAnnotationBalloon.h"
+#include <QTextInlineObject>
 
 /**
  * This keeps track of Annotations; adding, removing, repositioning, displaying.
  */
-class KoAnnotationSideBar : public QWidget
+class KOWIDGETS_EXPORT KoAnnotationSideBar : public QWidget
 {
     Q_OBJECT
 public:
@@ -36,14 +37,14 @@ public:
 
 public slots:
     // add a new annotation to the list
-    void addAnnotation(int position);
+	//void addAnnotation(int position);
 	// remove the annotation with this id
 	void removeAnnotation(int id);
 
 protected:
 	// reimplemented
-	virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-					   const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+	//virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+					   //const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
     // set the positions of the balloons relative to eachother and the boundries

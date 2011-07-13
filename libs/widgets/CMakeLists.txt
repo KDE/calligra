@@ -47,8 +47,8 @@ set(kowidgets_LIB_SRCS
     KoLineStyleModel.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
-    KoBalloon.cpp
-    KoAnnotation.cpp
+	KoBalloon.cpp
+	KoAnnotation.cpp
     KoAnnotationBalloon.cpp
     KoAnnotationSideBar.cpp
     
@@ -111,10 +111,10 @@ install( FILES
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
-    KoBalloon.cpp
-    KoAnnotation.cpp
-    KoAnnotationBalloon.cpp
-    KoAnnotationSideBar.cpp
+	KoBalloon.h
+	KoAnnotation.h
+	KoAnnotationBalloon.h
+	KoAnnotationSideBar.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}

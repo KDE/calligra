@@ -89,6 +89,7 @@
 
 // KDE + Qt includes
 #include <QHBoxLayout>
+#include <QGridLayout>
 #include <KMenu>
 #include <QTimer>
 #include <klocale.h>
@@ -137,9 +138,9 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
+	QGridLayout *layout = new QGridLayout(this);
     layout->setMargin(0);
-    layout->addWidget(m_gui);
+	layout->addWidget(m_gui, 0, 0);
 
     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
@@ -155,13 +156,12 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
     if(win) {
         connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
-    }
-    /* temp comments section
-    KoAnnotationSideBar *commentbar = new KoAnnotationSideBar(this);
-    commentbar->addAnnotation(0);
-    commentbar->setVisible(true);
+	}
 
-    layout->addWidget(commentbar); */
+    KoAnnotationSideBar *commentbar = new KoAnnotationSideBar(this);
+	//commentbar->addAnnotation(0);
+
+	layout->addWidget(commentbar, 0, 1);
 
     m_find = new KoFindText(texts, this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
@@ -169,7 +169,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
 
-    layout->addWidget(toolbar);
+	layout->addWidget(toolbar, 1, 0);
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
 

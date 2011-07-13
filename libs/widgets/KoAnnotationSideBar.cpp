@@ -18,16 +18,28 @@
  */
 
 #include "KoAnnotationSideBar.h"
+#include <kuser.h>
+#include "KoAnnotation.h"
 
 KoAnnotationSideBar::KoAnnotationSideBar(QWidget *parent) :
     QWidget(parent)
 {
-    annotations = new QList<KoBalloon*>();
+	annotations = new QList<KoAnnotationBalloon*>();
+	QVBoxLayout *layout = new QVBoxLayout(this);
+	KUser user(KUser::UseRealUserID);
+	KoAnnotation *note = new KoAnnotation(user.property(KUser::FullName).toString());
+	KoAnnotationBalloon *balloon = new KoAnnotationBalloon(0, note, this);
+	layout->addWidget(balloon, Qt::AlignTop);
+	setLayout(layout);
+	QPalette pal = palette();
+	pal.setColor(QPalette::Window, Qt::darkGray);
+	setPalette(pal);
+	setAutoFillBackground(true);
 }
 
-void KoAnnotationSideBar::addAnnotation(int position)
+/*void KoAnnotationSideBar::addAnnotation(int position)
 {
-    KoBalloon *curr, *newBalloon;
+	KoAnnotationBalloon *curr, *newBalloon;
     int i;
     for(i = 0; i < annotations->size(); ++i)
     {
@@ -37,21 +49,27 @@ void KoAnnotationSideBar::addAnnotation(int position)
             break; // insert here. if never reached, insert at end
         }
     }
-    newBalloon = new KoBalloon(position, this);
+	newBalloon = new KoAnnotationBalloon(position, this);
     newBalloon->resize(this->width(), newBalloon->sizeHint().height());
     newBalloon->move(0, position);
     annotations->insert(i, newBalloon);
     repositionInsert(i);
     newBalloon->setVisible(true);
-    newBalloon->setFocus();
+	//newBalloon->setFocus();
     this->repaint();
+}*/
+
+void KoAnnotationSideBar::removeAnnotation(int id)
+{
+
 }
 
-void KoAnnotationSideBar::paintEvent(QPaintEvent *event)
+/*void KoAnnotationSideBar::paint(QPainter& painter, QPaintDevice* device,
+								const QTextDocument* document, const QRectF& rect,
+								QTextInlineObject obj, int position, const QTextCharFormat& format)
 {
     int i;
-    KoBalloon *curr;
-    QPainter painter(this);
+	KoBalloon *curr;
     painter.setBackgroundMode(Qt::OpaqueMode);
     painter.setBackground(QBrush(Qt::gray));
 
@@ -60,12 +78,12 @@ void KoAnnotationSideBar::paintEvent(QPaintEvent *event)
     for(i = 0; i < annotations->size(); ++i)
     {
         curr = annotations->at(i);
-        curr->paintEvent(event);
+		//curr->paint(event);
         QPoint anchorConnection((curr->pos()).x() - 30, curr->y());// 30 pixels to the left of current balloon
 // TODO: change distance based on magnification from viewer
         painter.drawLine(anchorConnection, curr->pos());
     }
-}
+}*/
 
 /*
  * fix collisions with adjacent balloons
