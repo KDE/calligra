@@ -20,7 +20,7 @@
 #ifndef SVGLOADINGCONTEXT_H
 #define SVGLOADINGCONTEXT_H
 
-#include "kosvg_export.h"
+#include "flake_export.h"
 #include <KoXmlReader.h>
 
 class SvgGraphicsContext;
@@ -30,7 +30,7 @@ class KoImageCollection;
 class KoShape;
 
 /// Contains data used for loading svg
-class KOSVG_EXPORT SvgLoadingContext
+class FLAKE_EXPORT SvgLoadingContext
 {
 public:
     SvgLoadingContext(KoResourceManager *documentResourceManager);

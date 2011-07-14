@@ -359,11 +359,8 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
+                   ${CMAKE_SOURCE_DIR}/libs/flake/svg
                    ${CMAKE_BINARY_DIR}/libs/flake)
-
-# kosvg depends on flake and koodf
-set(KOSVG_INCLUDES ${CMAKE_SOURCE_DIR}/libs/svg
-                   ${CMAKE_BINARY_DIR}/libs/svg)
 
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext

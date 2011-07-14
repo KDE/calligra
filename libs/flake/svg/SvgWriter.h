@@ -29,7 +29,7 @@
 #ifndef SVGWRITER_H
 #define SVGWRITER_H
 
-#include "kosvg_export.h"
+#include "flake_export.h"
 #include <QtCore/QList>
 #include <QtCore/QSizeF>
 
@@ -44,7 +44,7 @@ class QFont;
 class QString;
 
 /// Implements exporting shapes to SVG
-class KOSVG_EXPORT SvgWriter
+class FLAKE_EXPORT SvgWriter
 {
 public:
     /// Creates svg writer to export specified layers

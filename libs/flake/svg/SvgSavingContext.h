@@ -27,10 +27,10 @@ class QIODevice;
 class QString;
 class QTransform;
 
-#include "kosvg_export.h"
+#include "flake_export.h"
 
 /// Context for saving svg files
-class KOSVG_EXPORT SvgSavingContext
+class FLAKE_EXPORT SvgSavingContext
 {
 public:
     /// Creates a new svg saving context on the specified output device

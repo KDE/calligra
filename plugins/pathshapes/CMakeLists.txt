@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOSVG_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
 
 add_subdirectory(pics)
 
@@ -36,7 +36,7 @@ kde4_add_ui_files(pathshapes_PART_SRCS
 )
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 
-target_link_libraries(pathshapes flake kosvg kowidgets)
+target_link_libraries(pathshapes flake kowidgets)
 
 install(TARGETS pathshapes  DESTINATION ${PLUGIN_INSTALL_DIR})
 

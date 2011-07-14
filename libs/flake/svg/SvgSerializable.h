@@ -20,14 +20,14 @@
 #ifndef SVGSERIALIZABLE_H
 #define SVGSERIALIZABLE_H
 
-#include "kosvg_export.h"
+#include "flake_export.h"
 
 class SvgSavingContext;
 class SvgLoadingContext;
 class KoShape;
 class KoXmlElement;
 
-class KOSVG_EXPORT SvgSerializable
+class FLAKE_EXPORT SvgSerializable
 {
 public:
     virtual ~SvgSerializable();

@@ -29,7 +29,7 @@
 #ifndef SVGSTYLEWRITER_H
 #define SVGSTYLEWRITER_H
 
-#include "kosvg_export.h"
+#include "flake_export.h"
 #include <QtGui/QGradient>
 
 class SvgSavingContext;
@@ -38,7 +38,7 @@ class KoPatternBackground;
 class QTransform;
 
 /// Helper class to save svg styles
-class KOSVG_EXPORT SvgStyleWriter
+class FLAKE_EXPORT SvgStyleWriter
 {
 public:
     /// Saves the style of the specified shape

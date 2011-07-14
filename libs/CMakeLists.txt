@@ -1,7 +1,6 @@
 add_subdirectory( koplugin )
 add_subdirectory( widgets )
 add_subdirectory( odf )
-add_subdirectory( svg )
 add_subdirectory( textlayout )
 add_subdirectory( kotext )
 add_subdirectory( flake )

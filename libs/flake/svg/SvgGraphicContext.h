@@ -21,10 +21,10 @@
 #ifndef SVGGRAPHICCONTEXT_H
 #define SVGGRAPHICCONTEXT_H
 
-#include "kosvg_export.h"
+#include "flake_export.h"
 #include <KoLineBorder.h>
 
-class KOSVG_EXPORT SvgGraphicsContext
+class FLAKE_EXPORT SvgGraphicsContext
 {
 public:
     // Fill/stroke styles

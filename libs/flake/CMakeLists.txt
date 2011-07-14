@@ -184,6 +184,20 @@ set(flake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/KoPathSegmentChangeStrategy.cpp
+    svg/SvgUtil.cpp
+    svg/SvgGraphicContext.cpp
+    svg/SvgSavingContext.cpp
+    svg/SvgWriter.cpp
+    svg/SvgStyleWriter.cpp
+    svg/SvgSerializable.cpp
+    svg/SvgParser.cpp
+    svg/SvgStyleParser.cpp
+    svg/SvgGradientHelper.cpp
+    svg/SvgPatternHelper.cpp
+    svg/SvgFilterHelper.cpp
+    svg/SvgCssHelper.cpp
+    svg/SvgClipPathHelper.cpp
+    svg/SvgLoadingContext.cpp
 )
 
 kde4_add_ui_files(flake_SRCS
