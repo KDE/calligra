@@ -134,10 +134,7 @@ QVariant AccountModel::headerData( int property, int role ) const
         }
     }
     if ( role == Qt::TextAlignmentRole ) {
-        switch (property) {
-            case AccountModel::Description: return Qt::AlignLeft;
-            default: return QVariant();
-        }
+        return QVariant();
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( property ) {
@@ -1077,7 +1074,7 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
             switch ( section ) {
                 case 0: return QVariant();
                 case 1: return QVariant();
-                default: return Qt::AlignRight;
+                default: return (int)(Qt::AlignRight|Qt::AlignVCenter);
             }
             return QVariant();
         }

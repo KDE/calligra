@@ -35,10 +35,18 @@ public:
     public:
         virtual ~Client() {}
         /**
-         * Get the bounding rect that defines the position of the diagram
-         * in the hosting document.
+         * Get the bounding rect that defines the position and dimensions of
+         * the shape in the hosting document.
          **/
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&) = 0;
+
+        /**
+         * Get the bounding rect that defines the position and dimensions of
+         * the shape in the hosting document if OfficeArtClientAnchor is
+         * missing.
+         */
+        virtual QRectF getReserveRect(void) = 0;
+
         /**
          * Get the path in the ODF document that corresponds to the
          * image generated from the image with the given pib.
@@ -93,13 +101,6 @@ public:
          * @param spid identifier of the master shape.
          **/
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
-
-        /**
-         * Retrieve OfficeArtDgContainer.shape, which seems to contain
-         * additional properties to check before the default properties in the
-         * OfficeArtDggContainer are checked (MS Office 2003 specific).
-         **/
-        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer() = 0;
 
         /**
          * Convert the OfficeArtCOLORREF to a QColor.

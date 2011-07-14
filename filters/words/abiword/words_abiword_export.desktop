@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words AbiWord Export Filter
+Name[cs]=Exportní filtr AbiWord pro Words
+Name[es]=Filtro de Words de exportación a AbiWord
+Name[et]=Wordsi AbiWordi ekspordifilter
+Name[nb]=AbiWord-eksportfilter for Words
+Name[nds]=AbiWord-Exportfilter för Words
 Name[pt]=Filtro de exportação para AbiWord do Words
 Name[pt_BR]=Filtro de exportação de AbiWord para o Words
 Name[sv]=Words-exportfilter för Abiword

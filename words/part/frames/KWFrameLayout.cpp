@@ -312,6 +312,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
+    if (!page.isValid())
+        return;
 
     /* +-----------------+
        |  0              | <- pageStyle->pageLayout()->topMargin + layout->topPadding

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words Microsoft Write Export Filter
+Name[cs]=Exportní filtr formátu MS Write pro Words
+Name[es]=Filtro de Words de exportación a Microsoft Write
+Name[et]=Wordsi Microsoft Write'i ekspordifilter
+Name[nb]=Microsoft Write-eksportfilter for Words
+Name[nds]="Microsoft Write"-Exportfilter för Words
 Name[pt]=Filtro de Exportação de Microsoft Write para o Words
 Name[pt_BR]=Filtro de exportação de Microsoft Write para o Words
 Name[sv]=Words-exportfilter för Microsoft Write

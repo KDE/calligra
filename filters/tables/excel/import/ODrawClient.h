@@ -31,6 +31,7 @@ class ODrawClient : public ODrawToOdf::Client
 public:
     explicit ODrawClient(Swinder::Sheet* sheet);
     virtual QRectF getRect(const MSO::OfficeArtClientAnchor& anchor);
+    virtual QRectF getReserveRect(void);
     QRectF getGlobalRect(const MSO::OfficeArtClientAnchor& anchor);
     virtual QString getPicturePath(const quint32 pib);
     virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
@@ -40,7 +41,6 @@ public:
     virtual void addTextStyles(const quint16 msospt, const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
     virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-    virtual const MSO::OfficeArtSpContainer* defaultShapeContainer();
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
 

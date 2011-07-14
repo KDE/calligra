@@ -22,14 +22,15 @@
 
 #include <QObject>
 
-class QuickStateHandler : public QObject {
-  Q_OBJECT
-  public:
+class QuickStateHandler : public QObject
+{
+    Q_OBJECT
+public:
     QuickStateHandler(const QString& _catId, const QString& _textId, QObject* _obj);
     ~QuickStateHandler();
-  public slots:
+public slots:
     void activate();
-  private:
+private:
     QString m_catId;
     QString m_textId;
 };

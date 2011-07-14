@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words RTF Export Filter
+Name[cs]=Exportní filtr formátu RTF pro Words
+Name[es]=Filtro de Words de exportación a RTF
+Name[et]=Wordsi RTF-i ekspordifilter
+Name[nb]=RTF-eksportfilter for Words
+Name[nds]=RTF-Exportfilter för Words
 Name[pt]=Filtro de Exportação de RTF para o Words
 Name[pt_BR]=Filtro de exportação de RTF para o Words
 Name[sv]=Words RTF-exportfilter

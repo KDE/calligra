@@ -30,55 +30,67 @@ SectionShapeContainerModel::~SectionShapeContainerModel()
 {
 }
 
-void SectionShapeContainerModel::add(KoShape *child) {
-    if (m_members.contains(child))
+void SectionShapeContainerModel::add(KoShape *child)
+{
+    if(m_members.contains(child))
         return;
     m_members.append(child);
     if(m_updateLayout) {
-      m_section->layout()->addShape(child);
+        m_section->layout()->addShape(child);
     }
 }
 
-void SectionShapeContainerModel::setClipped(const KoShape *, bool) {
+void SectionShapeContainerModel::setClipped(const KoShape *, bool)
+{
 }
 
-bool SectionShapeContainerModel::isClipped(const KoShape *) const {
+bool SectionShapeContainerModel::isClipped(const KoShape *) const
+{
     return false;
 }
 
-void SectionShapeContainerModel::setInheritsTransform(const KoShape *, bool) {
+void SectionShapeContainerModel::setInheritsTransform(const KoShape *, bool)
+{
 }
 
-bool SectionShapeContainerModel::inheritsTransform(const KoShape *) const {
+bool SectionShapeContainerModel::inheritsTransform(const KoShape *) const
+{
     return false;
 }
 
-void SectionShapeContainerModel::remove(KoShape *child) {
+void SectionShapeContainerModel::remove(KoShape *child)
+{
     m_members.removeAll(child);
     if(m_updateLayout) {
-      m_section->layout()->removeShape(child);
+        m_section->layout()->removeShape(child);
     }
 }
 
-int SectionShapeContainerModel::count() const {
+int SectionShapeContainerModel::count() const
+{
     return m_members.count();
 }
 
-QList<KoShape*> SectionShapeContainerModel::shapes() const {
+QList<KoShape*> SectionShapeContainerModel::shapes() const
+{
     return QList<KoShape*>(m_members);
 }
 
-void SectionShapeContainerModel::containerChanged(KoShapeContainer *, KoShape::ChangeType ) {
+void SectionShapeContainerModel::containerChanged(KoShapeContainer *, KoShape::ChangeType)
+{
 }
 
-void SectionShapeContainerModel::childChanged(KoShape *, KoShape::ChangeType) {
+void SectionShapeContainerModel::childChanged(KoShape *, KoShape::ChangeType)
+{
 }
 
-bool SectionShapeContainerModel::isChildLocked(const KoShape *child) const {
+bool SectionShapeContainerModel::isChildLocked(const KoShape *child) const
+{
     Q_ASSERT(child->parent());
     return child->isGeometryProtected() || child->parent()->isGeometryProtected();
 }
 
-void SectionShapeContainerModel::setUpdateLayout(bool v) {
-  m_updateLayout = v;
+void SectionShapeContainerModel::setUpdateLayout(bool v)
+{
+    m_updateLayout = v;
 }

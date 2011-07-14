@@ -123,7 +123,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     m_pCanvas->selection()->emitCloseEditor(true); // save changes
 
     // Find the first visible row and the y position of this row.
-    double y;
+    qreal y;
     int row = sheet->topRow(m_pCanvas->yOffset(), y);
 
     // Did the user click between two rows?
@@ -141,7 +141,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
 
     //if row is hide and it's the first row
     //you mustn't resize it.
-    double tmp2;
+    qreal tmp2;
     int tmpRow = sheet->topRow(ev_PosY - 1, tmp2);
     if (sheet->rowFormats()->isHiddenOrFiltered(tmpRow) && tmpRow == 1)
         m_bResize = false;
@@ -149,7 +149,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     // So he clicked between two rows ?
     if (m_bResize) {
         // Determine row to resize
-        double tmp;
+        qreal tmp;
         m_iResizedRow = sheet->topRow(ev_PosY - 1, tmp);
         if (!sheet->isProtected())
             paintSizeIndicator(_ev->pos().y());
@@ -158,7 +158,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
             m_bSelection = true;
         }
 
-        double tmp;
+        qreal tmp;
         int hit_row = sheet->topRow(ev_PosY, tmp);
         if (hit_row > KS_rowMax)
             return;
@@ -208,14 +208,10 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
         // Remove size indicator painted by paintSizeIndicator
         removeSizeIndicator();
 
-        int start = m_iResizedRow;
-        int end = m_iResizedRow;
         QRect rect;
         rect.setCoords(1, m_iResizedRow, KS_colMax, m_iResizedRow);
         if (m_pCanvas->selection()->isRowSelected()) {
             if (m_pCanvas->selection()->contains(QPoint(1, m_iResizedRow))) {
-                start = m_pCanvas->selection()->lastRange().top();
-                end = m_pCanvas->selection()->lastRange().bottom();
                 rect = m_pCanvas->selection()->lastRange();
             }
         }
@@ -343,7 +339,7 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
-        double y;
+        qreal y;
         int row = sheet->topRow(ev_PosY, y);
         if (row > KS_rowMax)
             return;
@@ -369,7 +365,7 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
 
         //What is the internal size of 1 pixel
         const double unzoomedPixel = m_pCanvas->zoomHandler()->unzoomItY(1.0);
-        double y;
+        qreal y;
         int tmpRow = sheet->topRow(m_pCanvas->yOffset(), y);
 
         while (y < dHeight + m_pCanvas->yOffset() && tmpRow <= KS_rowMax) {
@@ -420,7 +416,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     selectionColor.setAlpha(127);
     const QBrush selectionBrush(selectionColor);
 
-    double yPos;
+    qreal yPos;
     // Get the top row and the current y-position
     int y = sheet->topRow(qMax<qreal>(0, paintRect.y() + m_pCanvas->yOffset()), yPos);
     // Align to the offset
@@ -566,7 +562,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
     m_bSelection = false;
 
     // Find the first visible column and the x position of this column.
-    double x;
+    qreal x;
 
     const double unzoomedPixel = m_pCanvas->zoomHandler()->unzoomItX(1.0);
     if (sheet->layoutDirection() == Qt::RightToLeft) {
@@ -594,7 +590,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         //if col is hide and it's the first column
         //you mustn't resize it.
-        double tmp2;
+        qreal tmp2;
         tmpCol = sheet->leftColumn(dWidth - ev_PosX + 1, tmp2);
         if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 0) {
             kDebug() << "No resize:" << tmpCol << "," << sheet->columnFormat(tmpCol)->isHiddenOrFiltered();
@@ -620,7 +616,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         //if col is hide and it's the first column
         //you mustn't resize it.
-        double tmp2;
+        qreal tmp2;
         int tmpCol = sheet->leftColumn(ev_PosX - 1, tmp2);
         if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1)
             m_bResize = false;
@@ -629,7 +625,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
     // So he clicked between two rows ?
     if (m_bResize) {
         // Determine the column to resize
-        double tmp;
+        qreal tmp;
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             m_iResizedColumn = sheet->leftColumn(ev_PosX - 1, tmp);
             // kDebug() <<"RColumn:" << m_iResizedColumn <<", PosX:" << ev_PosX;
@@ -649,7 +645,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
             m_bSelection = true;
         }
 
-        double tmp;
+        qreal tmp;
         int hit_col = sheet->leftColumn(ev_PosX, tmp);
         if (hit_col > KS_colMax)
             return;
@@ -700,14 +696,10 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
         // Remove size indicator painted by paintSizeIndicator
         removeSizeIndicator();
 
-        int start = m_iResizedColumn;
-        int end   = m_iResizedColumn;
         QRect rect;
         rect.setCoords(m_iResizedColumn, 1, m_iResizedColumn, KS_rowMax);
         if (m_pCanvas->selection()->isColumnSelected()) {
             if (m_pCanvas->selection()->contains(QPoint(m_iResizedColumn, 1))) {
-                start = m_pCanvas->selection()->lastRange().left();
-                end   = m_pCanvas->selection()->lastRange().right();
                 rect  = m_pCanvas->selection()->lastRange();
             }
         }
@@ -845,7 +837,7 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
-        double x;
+        qreal x;
         int col = sheet->leftColumn(ev_PosX, x);
 
         if (col > KS_colMax)
@@ -881,7 +873,7 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
     else {
         //What is the internal size of 1 pixel
         const double unzoomedPixel = m_pCanvas->zoomHandler()->unzoomItX(1.0);
-        double x;
+        qreal x;
 
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             int tmpCol = sheet->leftColumn(m_pCanvas->xOffset(), x);

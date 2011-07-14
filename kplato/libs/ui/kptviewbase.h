@@ -381,6 +381,7 @@ signals:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
+    void mousePressEvent( QMouseEvent *event );
     /**
       Reimplemented from QTreeView to make tab/backtab in editor work reasonably well.
       Move the cursor in the way described by \a cursorAction, *not* using the

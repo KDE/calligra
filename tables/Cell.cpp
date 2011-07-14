@@ -1236,8 +1236,8 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         for (int i = 0; i < shapes.count(); ++i) {
             KoShape* const shape = shapes[i];
             const QPointF bottomRight = shape->boundingRect().bottomRight();
-            double endX = 0.0;
-            double endY = 0.0;
+            qreal endX = 0.0;
+            qreal endY = 0.0;
             const int col = sheet()->leftColumn(bottomRight.x(), endX);
             const int row = sheet()->topRow(bottomRight.y(), endY);
             shape->setAdditionalAttribute("table:end-cell-address", Cell(sheet(), col, row).name());
@@ -1950,22 +1950,17 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
             if (result.hasAttribute("dataType"))
                 dataType = result.attribute("dataType");
 
-            bool clear = true;
             // boolean ?
             if (dataType == "Bool") {
                 if (t == "false")
                     setValue(Value(false));
                 else if (t == "true")
                     setValue(Value(true));
-                else
-                    clear = false;
             } else if (dataType == "Num") {
                 bool ok = false;
                 double dd = t.toDouble(&ok);
                 if (ok)
                     setValue(Value(dd));
-                else
-                    clear = false;
             } else if (dataType == "Date") {
                 bool ok = false;
                 double dd = t.toDouble(&ok);
@@ -1982,8 +1977,6 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                     QDate date(year, month, day);
                     if (date.isValid())
                         setValue(Value(date, sheet()->map()->calculationSettings()));
-                    else
-                        clear = false;
                 }
             } else if (dataType == "Time") {
                 bool ok = false;
@@ -2005,8 +1998,6 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                     QTime time(hours, minutes, second);
                     if (time.isValid())
                         setValue(Value(time, sheet()->map()->calculationSettings()));
-                    else
-                        clear = false;
                 }
             } else {
                 setValue(Value(t));
