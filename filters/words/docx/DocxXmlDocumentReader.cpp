@@ -66,8 +66,8 @@ public:
         insert("double", KoBorder::BorderDouble);
         insert("dotted", KoBorder::BorderDotted);
         insert("dashed", KoBorder::BorderDashed);
-        insert("dotDash", KoBorder::BorderDashDotPattern);
-        insert("dotDotDash", KoBorder::BorderDashDotDotPattern);
+        insert("dotDash", KoBorder::BorderDashDot);
+        insert("dotDotDash", KoBorder::BorderDashDotDot);
         insert("triple", KoBorder::BorderDouble); //FIXME
         insert("thinThickSmallGap", KoBorder::BorderSolid); //FIXME
         insert("thickThinSmallGap", KoBorder::BorderSolid); //FIXME
