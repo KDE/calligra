@@ -73,7 +73,8 @@ class KoWmfFontHandle: public KoWmfHandle
 public:
     virtual void apply(WmfDeviceContext *);
     QFont font;
-    int rotation;
+    int escapement;
+    int orientation;
     int height;                 // Can be negative. In 'font' above, we store the absolute value.
 };
 

@@ -1042,7 +1042,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 {
                     qint16  height;             // Height of the character cell
                     qint16  width;              // Average width (not used)
-                    qint16  rotation;           // The rotation of the text in 1/10th degrees
+                    qint16  escapement;         // The rotation of the text in 1/10th degrees
                     qint16  orientation;        // The rotation of each character
                     quint16 weight, property, fixedPitch, arg;
 
@@ -1050,14 +1050,15 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     if (addHandle(handle)) {
                         stream >> height >> width;
-                        stream >> rotation >> orientation;
+                        stream >> escapement >> orientation;
                         stream >> weight >> property >> arg >> arg;
                         stream >> fixedPitch;
 
                         //kDebug(31000) << height << width << weight << property;
                         // text rotation (in 1/10 degree)
                         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
-                        handle->rotation = rotation;
+                        handle->escapement = escapement;
+                        handle->orientation = orientation;
 
                         // A negative height means to use device units.
                         //kDebug(31000) << "Font height:" << height;

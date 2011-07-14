@@ -52,7 +52,8 @@ void KoWmfPatternBrushHandle::apply(WmfDeviceContext *dc)
 void KoWmfFontHandle::apply(WmfDeviceContext *dc)
 {
     dc->font = font;
-    dc->rotation = rotation;
+    dc->escapement = escapement;
+    dc->orientation = orientation;
     dc->height = height;
     dc->changedItems |= DCFont; // Includes the font itself, the rotation and the height;
 }

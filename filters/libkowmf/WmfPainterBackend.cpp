@@ -711,7 +711,11 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
         y = -3 * y;
     }
 
-    mPainter->drawText(x, y, width, height, Qt::AlignLeft|Qt::AlignTop, text);
+    mPainter->translate(x, y);
+    if (context.escapement != 0) {
+        mPainter->rotate(qreal(context.escapement) / qreal(-10.0));
+    }
+    mPainter->drawText(0, 0, width, height, Qt::AlignLeft|Qt::AlignTop, text);
 
     mPainter->restore();
 }

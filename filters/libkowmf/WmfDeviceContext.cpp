@@ -43,7 +43,8 @@ void WmfDeviceContext::reset()
     brush = QBrush(Qt::NoBrush);
     image = QImage();
     font = QFont();
-    rotation = 0;
+    escapement = 0;
+    orientation = 0;
     height = 0;
     //Palette
     pen = QPen(Qt::black);
