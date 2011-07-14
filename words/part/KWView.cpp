@@ -170,7 +170,8 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
 #ifdef SHOULD_BUILD_RDF
         KWRdfDockerFactory factory(this);
-        shell()->createDockWidget(&factory);
+        KWRdfDocker *rdfDdocker = dynamic_cast<KWRdfDocker *>(shell()->createDockWidget(&factory));
+        if (rdfDdocker) rdfDdocker->setCanvas(this->canvasBase());
 #endif
     }
 
