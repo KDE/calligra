@@ -42,7 +42,7 @@ def singleFileConvertAndValidate(filename, validate):
                 args = ["koconverter", batchOption, filepath, convertedfile]
 
                 # ENABLE THIS LINE FOR DEBUG print "executing koconverter "+filepath+" "+convertedfile
-                p = subprocess.call(args)
+                p = subprocess.call(args, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
                	# validate out.odt
                 if not os.path.exists(convertedfile):
