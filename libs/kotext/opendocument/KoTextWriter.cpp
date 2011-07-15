@@ -1668,7 +1668,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         QTextCursor cursor(block);
 
-        if (cursor.currentFrame() != document->rootFrame()) {
+        if (cursor.currentFrame()->format().hasProperty(KoText::SubFrameType)) {
             break; // we've reached the "end" (end/footnotes saved in another way)
         }
 
