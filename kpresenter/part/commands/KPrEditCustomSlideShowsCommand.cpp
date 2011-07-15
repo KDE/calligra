@@ -20,7 +20,6 @@
 #include "KPrEditCustomSlideShowsCommand.h"
 #include "KPrDocument.h"
 #include "KoPAPageBase.h"
-#include "KPrCustomSlideShowsModel.h"
 
 KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
     KPrDocument *doc, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent)

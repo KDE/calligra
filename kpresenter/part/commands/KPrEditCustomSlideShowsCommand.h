@@ -23,7 +23,6 @@
 #include <kundo2command.h>
 class KPrDocument;
 class KoPAPageBase;
-class KPrCustomSlideShowsModel;
 
 #include <stage_export.h>
 
