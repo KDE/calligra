@@ -44,7 +44,7 @@ KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(KPrDocument *document, QObjec
     , m_iconSize(QSize(200,200))
     , m_document(document)
 {
-
+    connect(m_customSlideShows, SIGNAL(updated()), this, SLOT(updateModel()));
 }
 
 KPrCustomSlideShowsModel::~KPrCustomSlideShowsModel(){
@@ -289,34 +289,6 @@ void KPrCustomSlideShowsModel::setDocument(KPrDocument *document)
     setCustomSlideShows(document->customSlideShows());
 }
 
-void KPrCustomSlideShowsModel::updateCustomShow(const QString &name, const QList<KoPAPageBase *> &newCustomShow)
-{
-    if (!m_customSlideShows) {
-        return;
-    }
-    m_customSlideShows->update(name, newCustomShow);
-    reset();
-}
-
-void KPrCustomSlideShowsModel::removeSlidesFromAll(const QList<KoPAPageBase *> &pages)
-{
-    if (!m_customSlideShows) {
-        return;
-    }
-    m_customSlideShows->removeSlidesFromAll(pages);
-    reset();
-}
-
-
-void KPrCustomSlideShowsModel::removeSlideFromAll(KoPAPageBase *page)
-{
-    if (!m_customSlideShows) {
-        return;
-    }
-    m_customSlideShows->removeSlideFromAll(page);
-    reset();
-}
-
 void KPrCustomSlideShowsModel::removeSlidesByIndexes(const QModelIndexList &pageIndexes)
 {
     QList<KoPAPageBase *> slides;
@@ -377,7 +349,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
     if (updated) {
         //update the SlideShow with the resulting list
         KPrEditCustomSlideShowsCommand *command = new KPrEditCustomSlideShowsCommand(
-                    m_document, this, m_activeCustomSlideShowName, selectedSlideShow);
+                    m_document, m_activeCustomSlideShowName, selectedSlideShow);
         m_document->addCommand(command);
     }
 
@@ -407,4 +379,10 @@ void KPrCustomSlideShowsModel::updateCustomSlideShowsList(const QString &name)
     m_activeCustomSlideShowName.clear();
     setActiveSlideShow(name);
     emit customSlideShowsChanged();
+}
+
+void KPrCustomSlideShowsModel::updateModel()
+{
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
 }

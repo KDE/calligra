@@ -93,6 +93,9 @@ public:
      */
     void selectSlides(const QList<KoPAPageBase *> &slides);
 
+    /** Set active custom slide show */
+    void setActiveCustomSlideShow(int index);
+
 protected:
 
     /**
@@ -153,6 +156,9 @@ private slots:
     /** Update the slides sorter document model*/
     void updateSlidesSorterDocumentModel();
 
+    /** Updates custom slide Shows list */
+    void updateCustomSlideShowsList();
+
     /** Changes the view active page to match the slides sorter item selected*/
     void itemClicked(const QModelIndex);
 
@@ -204,9 +210,6 @@ private slots:
     /** Remove a new slides custom Show */
     void removeCustomSlideShow();
 
-    /** Updates custom slide Shows list */
-    void updateCustomSlideShowsList();
-
     /** Renames current custom slide show */
     void renameCustomSlideShow();
 
@@ -224,9 +227,6 @@ private slots:
 
     /** Enable/Disable add and remove slides buttons for Custom Slide Show View */
     void manageAddRemoveSlidesButtons();
-
-    /** Remove deleted slides from custom slide Shows */
-    void takePageFromCustomSlideShows(KoPAPageBase* pages);
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

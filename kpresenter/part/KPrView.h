@@ -37,6 +37,7 @@ class KoPAPageBase;
 class STAGE_EXPORT KPrView : public KoPAView
 {
     Q_OBJECT
+    friend class KPrConfigureSlideShowDialog;
 public:
     explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
     ~KPrView();
@@ -58,6 +59,11 @@ public:
      * Get the presentation view mode
      */
     KPrViewModePresentation * presentationMode() const;
+
+    /**
+     * Get the slides sorter view mode
+     */
+    KPrViewModeSlidesSorter *slidesSorter() const;
 
     /**
      * Find whether the presentation view mode is active

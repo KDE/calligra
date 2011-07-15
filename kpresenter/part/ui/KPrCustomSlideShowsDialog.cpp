@@ -43,7 +43,7 @@ KPrCustomSlideShowsDialog::KPrCustomSlideShowsDialog( QWidget *parent, KPrCustom
                                                       KPrDocument *doc, KPrCustomSlideShows *&newSlideShows )
 : QDialog(parent)
 , m_firstTime( true )
-, m_slideShows( new KPrCustomSlideShows(*slideShows) )
+, m_slideShows( new KPrCustomSlideShows() )
 , m_oldSlideShows(slideShows)
 , m_doc(doc)
 {
@@ -180,7 +180,7 @@ void KPrCustomSlideShowsDialog::loadCustomSlideShowsData()
     if( !m_firstTime )
     {
         delete m_slideShows;
-        m_slideShows = new KPrCustomSlideShows(*m_oldSlideShows);
+        m_slideShows = m_oldSlideShows;
         m_uiWidget.customSlideShowsList->clear();
     }
     m_firstTime = false;

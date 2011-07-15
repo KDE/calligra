@@ -119,28 +119,6 @@ public:
     void setDocument(KPrDocument *document);
 
     /**
-     * @brief updates the list of slides of a custom slide show
-     *
-     * @param name of the custom slide show
-     * @param newCustomShow list of slides
-     */
-    void updateCustomShow(const QString &name, const QList<KoPAPageBase *> &newCustomShow);
-
-    /**
-     * @brief Deletes all the ocurrencies of a given list of slides from all the known custom SlideShows
-     *
-     * @param slideShow list of slides to be removed
-     */
-    void removeSlidesFromAll(const QList<KoPAPageBase *> &pages);
-
-    /**
-     * @brief Deletes all the ocurrencies of a given slide from all the known custom SlideShows
-     *
-     * @param slideShow list of slides to be removed
-     */
-    void removeSlideFromAll(KoPAPageBase *page);
-
-    /**
      * @brief Deletes all the ocurrencies of a given list of slides indexes from current custom SlideShows
      *
      * @param slideIndexes list of slide indexes to be removed
@@ -196,9 +174,15 @@ public:
      */
     void updateCustomSlideShowsList(const QString &name);
 
+    QStringList namesByPage(KoPAPageBase *page);
+
 signals:
     /** Notify a change of the active custom slide show */
     void customSlideShowsChanged();
+
+private slots:
+    /** emit signals indicating a change in the model layout or items */
+    void updateModel();
 
 private:
     QList<KoPAPageBase *> decodeSlidesList(QByteArray encoded);

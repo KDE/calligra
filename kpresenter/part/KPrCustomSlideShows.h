@@ -24,6 +24,7 @@
 #include<QMap>
 #include<QList>
 #include<QString>
+#include<QObject>
 
 //Forward declarations
 class KoXmlWriter;
@@ -35,8 +36,9 @@ class KPrDocument;
 
 #include "stage_export.h"
 
-class STAGE_TEST_EXPORT KPrCustomSlideShows
+class STAGE_TEST_EXPORT KPrCustomSlideShows : public QObject
 {
+    Q_OBJECT
 public:
     KPrCustomSlideShows();
     ~KPrCustomSlideShows();
@@ -155,7 +157,20 @@ public:
      */
     void loadOdf( const KoXmlElement & presentationSettings, KoPALoadingContext & context );
 
+    /**
+     * @brief Return the names of custom shows that contains the given page
+     *
+     * @param page the page to be searched in the custom shows
+     * @return a List of the Slide Show names that contains the page
+     *         a blank list if the page was not found
+     */
+    QStringList namesByPage(KoPAPageBase *page);
+
+signals:
+    void updated();
+
 private:
     QMap< QString, QList<KoPAPageBase*> > m_customSlideShows;
+
 };
 #endif /* KPRCUSTOMSLIDESHOWS_H */

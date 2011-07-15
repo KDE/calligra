@@ -61,6 +61,7 @@ void KPrCustomSlideShows::update( const QString &name, const QList<KoPAPageBase*
     Q_ASSERT( it != m_customSlideShows.constEnd() );
     Q_UNUSED( it ); // only used in the above Q_ASSERT.
     m_customSlideShows.insert( name, slideShow );
+    emit updated();
 }
 void KPrCustomSlideShows::rename( const QString &oldName, const QString &newName )
 {
@@ -109,6 +110,7 @@ void KPrCustomSlideShows::addSlideToAll( KoPAPageBase *page, unsigned int positi
         it.value().insert( (position<=size)? position : size, page );
         ++it;
     }
+    emit updated();
 }
 
 void KPrCustomSlideShows::addSlidesToAll( const QList<KoPAPageBase*> &slideShow, unsigned int position )
@@ -127,6 +129,7 @@ void KPrCustomSlideShows::removeSlideFromAll( KoPAPageBase* page )
         it.value().removeAll( page );
         ++it;
     }
+    emit updated();
 }
 
 void KPrCustomSlideShows::removeSlidesFromAll( const QList<KoPAPageBase*> &slideShow )
@@ -191,4 +194,17 @@ void KPrCustomSlideShows::loadOdf( const KoXmlElement & presentationSettings, Ko
             }
         }
     }
+}
+
+QStringList KPrCustomSlideShows::namesByPage(KoPAPageBase *page)
+{
+    QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
+    QStringList names;
+    while(it != m_customSlideShows.end()) {
+        if (it.value().contains(page)) {
+            names.append(it.key());
+        }
+        ++it;
+    }
+    return names;
 }

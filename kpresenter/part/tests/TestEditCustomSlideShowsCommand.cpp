@@ -57,8 +57,6 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
 
     QString customShowName = "test 1";
 
-    KPrCustomSlideShowsModel model(&doc, 0);
-
     doc.customSlideShows()->insert(customShowName, slideList);
 
     QList<KoPAPageBase*> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
@@ -67,7 +65,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
 
     initialSlideShow.move(0, 2);
 
-    KPrEditCustomSlideShowsCommand command(&doc, &model, customShowName, initialSlideShow);
+    KPrEditCustomSlideShowsCommand command(&doc, customShowName, initialSlideShow);
 
     command.redo();
     QList<KoPAPageBase*> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);

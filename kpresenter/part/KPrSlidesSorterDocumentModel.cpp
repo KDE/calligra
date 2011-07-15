@@ -20,6 +20,7 @@
 
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrViewModeSlidesSorter.h"
+#include "KPrDocument.h"
 
 //Calligra headers
 #include <KoPADocument.h>
@@ -32,7 +33,7 @@
 #include <KoPAPageMoveCommand.h>
 #include <KoShapeRenameCommand.h>
 #include <KoPAPageDeleteCommand.h>
-
+#include "commands/KPrDeleteSlidesCommand.h"
 
 //KDE Headers
 #include <KIcon>
@@ -369,7 +370,8 @@ KoPAPageBase * KPrSlidesSorterDocumentModel::pageByIndex(const QModelIndex &inde
 bool KPrSlidesSorterDocumentModel::removeSlides(const QList<KoPAPageBase *> &slides)
 {
     if (!slides.empty() && m_document->pages().count() > slides.count()) {
-        KUndo2Command *cmd = new KoPAPageDeleteCommand(m_document, slides);
+        KPrDocument *doc = static_cast<KPrDocument *>(m_document);
+        KUndo2Command *cmd = new KPrDeleteSlidesCommand(doc, slides);
         if (cmd) {
             m_document->addCommand(cmd);
             return true;

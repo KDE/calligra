@@ -135,6 +135,12 @@ KPrViewModePresentation * KPrView::presentationMode() const
     return m_presentationMode;
 }
 
+
+KPrViewModeSlidesSorter * KPrView::slidesSorter() const
+{
+    return m_slidesSorterMode;
+}
+
 bool KPrView::isPresentationRunning() const
 {
     return ( viewMode() == m_presentationMode );
@@ -369,22 +375,14 @@ void KPrView::showSlidesSorter()
 
 void KPrView::dialogCustomSlideShows()
 {
-    KPrDocument *doc = static_cast<KPrDocument *>( kopaDocument() );
-    KPrCustomSlideShows *finalSlideShows;
-    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), doc, finalSlideShows );
-    dialog.setModal( true );
-    if ( dialog.exec() == QDialog::Accepted ) {
-        kopaCanvas()->addCommand( new KPrSetCustomSlideShowsCommand( doc, finalSlideShows ) );
-    }
-    else {
-        delete finalSlideShows;
-    }
+    slidesSorter()->setActiveCustomSlideShow(1);
+    showSlidesSorter();
 }
 
 void KPrView::configureSlideShow()
 {
     KPrDocument *doc = static_cast<KPrDocument *>( kopaDocument() );
-    KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog( doc, this );
+    KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog(doc, this);
 
     if ( dialog->exec() == QDialog::Accepted ) {
         doc->setActiveCustomSlideShow( dialog->activeCustomSlideShow() );

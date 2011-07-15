@@ -139,7 +139,6 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     m_customSlideShowView->setDragDropMode(QAbstractItemView::InternalMove);
 
     //setup signals
-    connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(takePageFromCustomSlideShows(KoPAPageBase*)));
     connect(m_slidesSorterView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_customSlideShowView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(customSlideShowsContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorterView, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
@@ -699,7 +698,12 @@ void KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons()
                                           !m_slidesSorterView->selectionModel()->selectedIndexes().isEmpty());
 }
 
-void KPrViewModeSlidesSorter::takePageFromCustomSlideShows(KoPAPageBase *page)
+void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
 {
-    m_customSlideShowModel->removeSlideFromAll(page);
+    disconnect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+
+    m_customSlideShowsList->setCurrentIndex(index >= 0 && index < m_customSlideShowsList->count() ? index : 0);
+    customShowChanged(m_customSlideShowsList->currentIndex());
+
+    connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
 }

@@ -23,10 +23,9 @@
 #include "KPrCustomSlideShowsModel.h"
 
 KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
-    KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent)
+    KPrDocument *doc, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent)
 : KUndo2Command(parent)
 , m_doc(doc)
-, m_model(model)
 , m_name(name)
 , m_newCustomShow(newCustomShow)
 , m_oldCustomShow(doc->customSlideShows()->getByName(name))
@@ -41,10 +40,10 @@ KPrEditCustomSlideShowsCommand::~KPrEditCustomSlideShowsCommand()
 
 void KPrEditCustomSlideShowsCommand::redo()
 {
-    m_model->updateCustomShow(m_name, m_newCustomShow);
+    m_doc->customSlideShows()->update(m_name, m_newCustomShow);
 }
 
 void KPrEditCustomSlideShowsCommand::undo()
 {
-    m_model->updateCustomShow(m_name, m_oldCustomShow);
+    m_doc->customSlideShows()->update(m_name, m_oldCustomShow);
 }
