@@ -462,12 +462,12 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
         xOffset = -0.5 * textShape->size().width();
     }
 
-    if (context.rotation) {
+    if (context.escapement) {
         // we rotate around the anchor point
         QPointF anchor(-xOffset, -yOffset);
         QTransform matrix;
         matrix.translate(anchor.x(), anchor.y());
-        matrix.rotate(qreal(context.rotation) * M_PI / qreal(1800.0));  // rotation is in 1/10th of a degree
+        matrix.rotate(qreal(context.escapement) * M_PI / qreal(1800.0));  // rotation is in 1/10th of a degree
         matrix.translate(-anchor.x(), -anchor.y());
         textShape->applyTransformation(matrix);
     }
