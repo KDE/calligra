@@ -87,6 +87,9 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
 
 bool SvgWriter::save(QIODevice &outputDevice)
 {
+    if (m_toplevelShapes.isEmpty())
+        return false;
+
     QTextStream svgStream(&outputDevice);
 
     // standard header:
