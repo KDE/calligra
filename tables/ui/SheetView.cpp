@@ -682,13 +682,16 @@ void SheetView::setHighlighted(const QPoint &cell, bool isHighlighted)
 #ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->highlightLock);
 #endif
+    bool oldHadHighlights = d->highlightedCells.count() > 0;
     bool oldVal;
     if (isHighlighted) {
         oldVal = d->highlightedCells.insert(cell.x(), cell.y(), true);
     } else {
         oldVal = d->highlightedCells.take(cell.x(), cell.y());
     }
-    if (oldVal != isHighlighted) {
+    if (oldHadHighlights != (d->highlightedCells.count() > 0)) {
+        invalidate();
+    } else if (oldVal != isHighlighted) {
         invalidateRegion(Region(cell));
     }
 }
