@@ -22,6 +22,7 @@
 
 #include "generated/simpleParser.h"
 #include "writer.h"
+#include "msodraw.h"
 
 class DrawStyle;
 class QColor;
@@ -153,7 +154,7 @@ private:
     void drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);
-    
+
     // shapes2.cpp
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -311,6 +312,7 @@ public:
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles, MSOSPT shapeType);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
     QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
