@@ -3736,7 +3736,7 @@ void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, 
     out.xml.addAttribute("draw:glue-points", "10800 0 3160 3160 0 10800 3160 18440 10800 21600 18440 18440 21600 10800 18440 3160 ?f14 ?f15");
     processModifiers(o, out, QList<int>() << 1350<< 25920);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
-    out.xml.addAttribute("draw:enhanced-path", "W 0 0 21600 21600 ?f22 ?f23 ?f18 ?f19 L ?f14 ?f15 Z N");
+    out.xml.addAttribute("draw:enhanced-path", "V 0 0 21600 21600 ?f22 ?f23 ?f18 ?f19 L ?f14 ?f15 Z N");
     out.xml.addAttribute("draw:type", "round-callout");
     out.xml.addAttribute("draw:text-areas", "3200 3200 18400 18400");
     setShapeMirroring(o, out);
