@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Left-Up Arrow
+Name[bg]=Стрелка наляво-нагоре
 Name[de]=Pfeil nach links und oben
 Name[el]=Αριστερό-πάνω βέλος
 Name[es]=Flecha izquierda-arriba
@@ -10,6 +11,7 @@ Name[nds]=Piel links-hooch
 Name[nl]=Pijl links-omhoog
 Name[pt]=Seta Esquerda-Cima
 Name[pt_BR]=Seta Esquerda-Cima
+Name[ru]=Стрелка влево и вверх
 Name[sv]=Vänster-uppåtpil
 Name[uk]=Стрілки ліворуч і вгору
 Name[x-test]=xxLeft-Up Arrowxx
