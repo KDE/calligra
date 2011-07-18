@@ -279,6 +279,9 @@ void SheetView::invalidate()
     d->defaultCellView = createDefaultCellView();
     d->cache.clear();
     d->cachedArea = QRegion();
+    delete d->obscuredInfo;
+    d->obscuredInfo = new FusionStorage(d->sheet->map());
+    d->obscuredRange = QSize(0, 0);
 }
 
 void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase*, const QRect& visibleRect)
