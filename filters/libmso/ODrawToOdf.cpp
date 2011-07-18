@@ -114,7 +114,7 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
         style = client->createGraphicStyle(o.clientTextbox.data(),
                                            o.clientData.data(), ds, out);
     }
-    defineGraphicProperties(style, ds, out.styles);
+    defineGraphicProperties(style, ds, out.styles, MSOSPT(o.shapeProp.rh.recInstance));
 
     if (client) {
         client->addTextStyles(o.shapeProp.rh.recInstance,
@@ -150,7 +150,7 @@ QString percent(double v)
 }
 } //namespace
 
-void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles)
+void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles, MSOSPT shapeType)
 {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     // dr3d:ambient-color
@@ -435,6 +435,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:wrap-contour-mode
     // style:wrap-dynamic-treshold
     // svg:fill-rule
+    if (shapeType == msosptDonut) {
+        // don't save default rule here "nonzero" for other shapes
+        style.addProperty("svg:fill-rule" ,"evenodd");
+    }
     // svg:height
     if (ds.fLine() || ds.fNoLineDrawDash()) {
         if (client) {
@@ -623,6 +627,10 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
     QString elementContents = QString::fromUtf8(writerBuffer.buffer(), writerBuffer.buffer().size());
     style.addChildElement("svg:stop", elementContents);
+}
+
+void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles){
+    defineGraphicProperties(style, ds, styles, msosptRectangle);
 }
 
 QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
