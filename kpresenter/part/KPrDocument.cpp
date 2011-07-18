@@ -35,7 +35,6 @@
 #include "KPrPageSelectStrategyActive.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
-#include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "commands/KPrDeleteSlidesCommand.h"
 #include <KoPACanvas.h>
 #include <KoPACanvasItem.h>

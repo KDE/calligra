@@ -27,8 +27,6 @@
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include "KPrCustomSlideShows.h"
-#include "KPrCustomSlideShowsDialog.h"
-#include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "KPrViewModeSlidesSorter.h"
 
 KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document, KPrView *parent )

@@ -204,7 +204,7 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
             }
 
             //perform action
-            doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesAdd, slides, beginRow);
+            doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesAdd, slides, QList<int>(), beginRow);
         }
         else if (data->hasFormat("application/x-calligra-customslideshows")) {
             QByteArray encoded = data->data("application/x-calligra-customslideshows");
@@ -215,7 +215,7 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
             }
 
             //perform action
-            doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesMove, slides, beginRow);
+            doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesMove, slides, QList<int>(), beginRow);
         }
         return true;
     }
@@ -292,20 +292,21 @@ void KPrCustomSlideShowsModel::setDocument(KPrDocument *document)
 void KPrCustomSlideShowsModel::removeSlidesByIndexes(const QModelIndexList &pageIndexes)
 {
     QList<KoPAPageBase *> slides;
+    QList<int> indexesList;
 
     foreach (QModelIndex index, pageIndexes) {
-        slides.append(m_customSlideShows->pageByIndex(m_activeCustomSlideShowName, index.row()));
+        indexesList.append(index.row());
     }
 
-    doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesDelete, slides, 0);
+    doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesDelete, slides, indexesList);
 }
 
 void KPrCustomSlideShowsModel::addSlides(const QList<KoPAPageBase *> &pages, const int &row)
 {
-    doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesAdd, pages, row);
+    doCustomSlideShowAction(KPrCustomSlideShowsModel::SlidesAdd, pages, QList<int>(), row);
 }
 
-bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &action, const QList<KoPAPageBase *> &slides, int beginRow)
+bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &action, const QList<KoPAPageBase *> &slides, QList<int> indexes, int beginRow)
 {
     bool updated = false;
 
@@ -337,8 +338,13 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
     }
     else if (action == KPrCustomSlideShowsModel::SlidesDelete) {
         //delete de slides on the current custom show
-        foreach(KoPAPageBase *page, slides) {
-            selectedSlideShow.removeAll(page);
+        //delete command use indexes because the custom show could have
+        //more than one copy of the same slide.
+        qSort(indexes);
+        int i = 0;
+        foreach(int row, indexes) {
+            selectedSlideShow.removeAt(row - i);
+            i++;
         }
         updated = true;
     }

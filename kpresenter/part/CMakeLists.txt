@@ -77,7 +77,6 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
-     commands/KPrSetCustomSlideShowsCommand.cpp
      commands/KPrEditCustomSlideShowsCommand.cpp
      commands/KPrAddCustomSlideShowCommand.cpp
      commands/KPrDelCustomSlideShowCommand.cpp
@@ -126,7 +125,6 @@ set( calligrastageprivate_LIB_SRCS
      pagelayout/KPrPageLayoutSharedSavingData.cpp
      pagelayout/KPrPlaceholders.cpp
 
-     ui/KPrCustomSlideShowsDialog.cpp
      ui/KPrConfigureSlideShowDialog.cpp
      ui/KPrConfigurePresenterViewDialog.cpp
      ui/KPrPresentationToolWidget.cpp
@@ -137,7 +135,6 @@ set( calligrastageprivate_LIB_SRCS
    )
 
 kde4_add_ui_files(calligrastageprivate_LIB_SRCS
-     ui/KPrCustomSlideShowsDialog.ui
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
      ui/KPrPresentationTool.ui

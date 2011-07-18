@@ -126,7 +126,9 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     //initialize widgets
     m_centralWidget->hide();
     m_slidesSorterView->setIconSize(m_iconSize);
+    m_slidesSorterView->setAutoScroll(true);
     m_customSlideShowView->setIconSize(m_iconSize);
+    m_customSlideShowView->setAutoScroll(true);
 
     //Populate ComboBox
     customShowChanged(0);
@@ -137,6 +139,13 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     m_customSlideShowView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_customSlideShowView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_customSlideShowView->setDragDropMode(QAbstractItemView::InternalMove);
+
+    //Setup slides sorter view
+    m_slidesSorterModel->setDocument(m_view->kopaDocument());
+    m_slidesSorterView->setModel(m_slidesSorterModel);
+    m_slidesSorterView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_slidesSorterView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_slidesSorterView->setDragDropMode(QAbstractItemView::InternalMove);
 
     //setup signals
     connect(m_slidesSorterView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
@@ -336,11 +345,6 @@ void KPrViewModeSlidesSorter::removeShape( KoShape *shape )
 void KPrViewModeSlidesSorter::populate()
 {
     //Init m_slidesSorter view
-    m_slidesSorterModel->setDocument(m_view->kopaDocument());
-    m_slidesSorterView->setModel(m_slidesSorterModel);
-    m_slidesSorterView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_slidesSorterView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_slidesSorterView->setDragDropMode(QAbstractItemView::InternalMove);
     QModelIndex item = m_slidesSorterModel->index(0, 0, QModelIndex());
     m_slidesSorterView->setItemSize(m_slidesSorterView->visualRect(item));
 
@@ -580,6 +584,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
             animation->setEndValue(0);
             //Deactivate tool buttons and edition
             disableEditCustomShowButtons();
+            m_slidesSorterView->setAutoScroll(true);
         }
         else {
             animation->setDuration(duration);
@@ -587,6 +592,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
             animation->setEndValue(m_slidesSorterView->height()/2);
             //Activate tool buttons and edition
             enableEditCustomShowButtons();
+            m_slidesSorterView->setAutoScroll(false);
         }
         animation->start();
     }

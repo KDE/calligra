@@ -134,6 +134,7 @@ void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
     if (!model()) {
         return;
     }
+    QListView::dragMoveEvent(ev);
     setDragingFlag();
     viewport()->update();
 }

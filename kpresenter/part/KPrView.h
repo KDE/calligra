@@ -133,7 +133,7 @@ protected slots:
     void createAnimation();
     void showNotes();
     void showSlidesSorter();
-    void dialogCustomSlideShows();
+    void editCustomSlideShows();
     void configureSlideShow();
     void configurePresenterView();
     void exportToHtml();
@@ -151,7 +151,7 @@ private:
     KAction *m_actionViewModeNormal;
     KAction *m_actionViewModeNotes;
     KAction *m_actionViewModeSlidesSorter;
-    KAction *m_actionCreateCustomSlideShowsDialog;
+    KAction *m_actionEditCustomSlideShows;
     KAction *m_actionExportHtml;
     KAction *m_actionInsertPictures;
     KAction *m_actionDrawOnPresentation;

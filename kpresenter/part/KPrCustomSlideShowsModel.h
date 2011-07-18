@@ -136,12 +136,13 @@ public:
     /**
      * @brief Manage all edit actions on a custom slide show
      *
-     * @param c_action action to be performed according to CustomShowsAction Enum
-     * @param slides list of slides to be added/deleted or moved
+     * @param action action to be performed according to CustomShowsAction Enum
+     * @param slides list of slides to be added or moved
+     * @param indexes list of indexes of the slides to be deleted
      * @param beginRow destination row for copy and move actions
      * @return true if the action success
      */
-    bool doCustomSlideShowAction(const CustomShowActions &action, const QList<KoPAPageBase *> &slides, int beginRow);
+    bool doCustomSlideShowAction(const CustomShowActions &action, const QList<KoPAPageBase *> &slides, QList<int> indexes, int beginRow = 0);
 
     /**
      * @brief Insert a new Custom SlideShow
