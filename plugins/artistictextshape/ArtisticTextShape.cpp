@@ -31,15 +31,18 @@
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
 #include <KoPathShapeLoader.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
 #include <SvgStyleParser.h>
+#include <SvgWriter.h>
 
 #include <KLocale>
 #include <KDebug>
 
+#include <QtCore/QBuffer>
 #include <QtGui/QPen>
 #include <QtGui/QPainter>
 #include <QtGui/QFont>
@@ -72,8 +75,25 @@ void ArtisticTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConv
 {
 }
 
-void ArtisticTextShape::saveOdf(KoShapeSavingContext &/*context*/) const
+void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
 {
+    SvgWriter svgWriter(QList<KoShape*>() << (KoShape*)this, size());
+    QByteArray fileContent;
+    QBuffer fileContentDevice(&fileContent);
+    if (!fileContentDevice.open(QIODevice::WriteOnly))
+        return;
+
+    if(!svgWriter.save(fileContentDevice)) {
+        kWarning() << "Could not write svg content";
+        return;
+    }
+
+    const QString fileName = context.embeddedSaver().getFilename("SvgImages/Image");
+    const QString mimeType = "image/svg+xml";
+
+    context.xmlWriter().startElement("draw:frame");
+    context.embeddedSaver().embedFile(context.xmlWriter(), "draw:image", fileName, mimeType.toLatin1(), fileContent);
+    context.xmlWriter().endElement(); // draw:frame
 }
 
 bool ArtisticTextShape::loadOdf(const KoXmlElement &/*element*/, KoShapeLoadingContext &/*context*/)
