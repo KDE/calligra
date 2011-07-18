@@ -76,7 +76,7 @@ public:
     // The maximum accessed cell range used for the scrollbar ranges.
     QSize accessedCellRange;
     FusionStorage* obscuredInfo;
-    QSize obscuredRange; // size of the bonuding box of obscuredInfo
+    QSize obscuredRange; // size of the bounding box of obscuredInfo
 #ifdef CALLIGRA_TABLES_MT
     QReadWriteLock obscuredLock;
 #endif
