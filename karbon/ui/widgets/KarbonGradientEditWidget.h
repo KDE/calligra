@@ -105,7 +105,6 @@ protected Q_SLOTS:
     void combosChange(int);
     void addGradientToPredefs();
     void opacityChanged(qreal value, bool final);
-    void stopsChanged();
     void stopChanged();
 protected:
     void setupUI();
@@ -115,7 +114,6 @@ protected:
     void blockChildSignals(bool block);
 
 private:
-    KarbonGradientWidget * m_gradientWidget;
     KComboBox        *m_gradientTarget;
     KComboBox        *m_gradientRepeat;
     KComboBox        *m_gradientType;

@@ -20,7 +20,6 @@
 */
 
 #include "KarbonGradientEditWidget.h"
-#include "KarbonGradientWidget.h"
 
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
@@ -164,7 +163,14 @@ void KarbonGradientEditWidget::setupUI()
     QGridLayout* editLayout = new QGridLayout(this);
 
     int row = 0;
-    editLayout->addWidget(new QLabel(i18n("Type:"), this), row, 0);
+    editLayout->addWidget(new QLabel(i18n("Target:"), this), row, 0);
+    m_gradientTarget = new KComboBox(false, this);
+    m_gradientTarget->insertItem(0, i18n("Stroke"));
+    m_gradientTarget->insertItem(1, i18n("Fill"));
+    m_gradientTarget->setCurrentIndex(FillGradient);
+    editLayout->addWidget(m_gradientTarget, row, 1);
+
+    editLayout->addWidget(new QLabel(i18n("Type:"), this), ++row, 0);
     m_gradientType = new KComboBox(false, this);
     m_gradientType->insertItem(0, i18nc("Linear gradient type", "Linear"));
     m_gradientType->insertItem(1, i18nc("Radial gradient type", "Radial"));
@@ -177,17 +183,6 @@ void KarbonGradientEditWidget::setupUI()
     m_gradientRepeat->insertItem(1, i18n("Reflect"));
     m_gradientRepeat->insertItem(2, i18n("Repeat"));
     editLayout->addWidget(m_gradientRepeat, row, 1);
-
-    editLayout->addWidget(new QLabel(i18n("Target:"), this), ++row, 0);
-    m_gradientTarget = new KComboBox(false, this);
-    m_gradientTarget->insertItem(0, i18n("Stroke"));
-    m_gradientTarget->insertItem(1, i18n("Fill"));
-    m_gradientTarget->setCurrentIndex(FillGradient);
-    editLayout->addWidget(m_gradientTarget, row, 1);
-
-    m_gradientWidget = new KarbonGradientWidget(this);
-    m_gradientWidget->setStops(m_stops);
-    editLayout->addWidget(m_gradientWidget, ++row, 0, 1, 2);
 
     editLayout->addWidget(new QLabel(i18n("Overall opacity:"), this), ++row, 0);
     m_opacity = new KoSliderCombo(this);
@@ -215,7 +210,6 @@ void KarbonGradientEditWidget::setupConnections()
     connect(m_gradientType, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_gradientRepeat, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_gradientTarget, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
-    connect(m_gradientWidget, SIGNAL(changed()), this, SLOT(stopsChanged()));
     connect(m_addToPredefs, SIGNAL(clicked()), this, SLOT(addGradientToPredefs()));
     connect(m_opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(opacityChanged(qreal, bool)));
     connect(m_actionStopColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(stopChanged()));
@@ -225,7 +219,6 @@ void KarbonGradientEditWidget::blockChildSignals(bool block)
 {
     m_gradientType->blockSignals(block);
     m_gradientRepeat->blockSignals(block);
-    m_gradientWidget->blockSignals(block);
     m_addToPredefs->blockSignals(block);
     m_opacity->blockSignals(block);
     m_stopColor->blockSignals(block);
@@ -251,7 +244,6 @@ void KarbonGradientEditWidget::updateUI()
         m_opacity->setValue(opacity * 100);
     else
         m_opacity->setValue(100);
-    m_gradientWidget->setStops(m_stops);
 
     // now update the stop color and opacity
     if (m_stopIndex >= 0 && m_stopIndex < m_stops.count()) {
@@ -355,8 +347,6 @@ void KarbonGradientEditWidget::opacityChanged(qreal value, bool final)
     for (uint i = 0; i < stopCount; ++i)
         m_stops[i].second.setAlphaF(m_gradOpacity);
 
-    m_gradientWidget->setStops(m_stops);
-
     emit changed();
 }
 
@@ -399,12 +389,6 @@ void KarbonGradientEditWidget::addGradientToPredefs()
 
     if (! server->addResource(g))
         delete g;
-}
-
-void KarbonGradientEditWidget::stopsChanged()
-{
-    m_stops = m_gradientWidget->stops();
-    emit changed();
 }
 
 void KarbonGradientEditWidget::stopChanged()
