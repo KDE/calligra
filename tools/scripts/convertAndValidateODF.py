@@ -14,7 +14,7 @@
 # NOTE! Jing jar has to be in the same directory as this script for this to work, and it must be named jing.jar
 #  
 
-import sys, os, os.path, tempfile, subprocess, lxml.etree, zipfile, urllib, hashlib, shlex, mimetypes, shutil, re, getopt
+import sys, os, os.path, tempfile, subprocess, lxml.etree, zipfile, urllib, hashlib, shlex, shutil, re, getopt
 
 # this function gets jing, then for each file in fileList it converts the file, and validates its XML against RelaxNG
 def convertAndValidateFilesInDir(dir):
@@ -35,11 +35,12 @@ def singleFileConvertAndValidate(filename, validate):
         convertToMime = getExtByMime(filepath)
         if convertToMime is not None:
         	# Create filename for where conversion is stored
-                convertedfile = filename+"."+convertToMime
-                batchOption = "--batch"
+        	convertextension = getConvertExtension(convertToMime)
+                convertedfile = filename + "." + convertextension
 
+                applicationname = getApplicationName(convertextension)
                 # Do the conversion
-                args = ["koconverter", batchOption, filepath, convertedfile]
+                args = [applicationname, "--roundtrip-filename", filepath, convertedfile]
 
                 # ENABLE THIS LINE FOR DEBUG print "executing koconverter "+filepath+" "+convertedfile
                 p = subprocess.call(args, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -91,48 +92,27 @@ def singleFileConvertAndValidate(filename, validate):
 
 #This function gets the input file formats closest match in ODF format for version
 def getExtByMime(filename):
-	mtype,entype = mimetypes.guess_type(filename)
-	if mtype is not None: 
-		fext = mimetypes.guess_extension(mtype)
-		if fext is not None:
-			if fext == ".doc":
-				textMime = "odt"
-                        	return textMime
-                	elif fext == ".docx":
-				textMime = "odt"
-                       		return textMime
-			elif fext == ".odt":
-				textMime = "odt"
-				return textMime
-                	elif fext == ".csv":
-				spreadsheetMime = "ods"
-                        	return spreadsheetMime
-                	elif fext == ".txt":
-				textMime = "odt"
-                        	return textMime
-                	elif fext == ".ppt":
-				pptMime = "odp"
-                        	return pptMime
-                	elif fext == ".pptx":
-				pptMime = "odp"
-                        	return pptMime
-			elif fext == ".odp":
-				pptMime = "odp"
-				return pptMime
-                	elif fext == ".xls":
-				spreadsheetMime = "ods"
-                        	return spreadsheetMime
-                	elif fext == ".xlsx":
-				spreadsheetMime = "ods"
-                        	return spreadsheetMime
-			elif fext == ".ods":
-				spreadsheetMime = "ods"
-				return spreadsheetMime
-		else:	
-			return None
-	else:
-		return None
-			
+        (path, pathext) = os.path.splitext(filename)
+        return pathext
+
+def getConvertExtension(extension):
+    if extension == ".odt" or extension == ".docx" or extension == ".doc" or extension == ".txt":
+        return "odt"
+    if extension == ".odp" or extension == ".ppt" or extension == ".pptx":
+        return "odp"
+    if extension == ".ods" or extension == ".xls" or extension == ".xlsx":
+        return "ods"
+
+
+def getApplicationName(extension):
+    if extension == ".odt":
+        return "words"
+    if extension == ".odp":
+        return "calligrastage"
+    if extension == ".ods":
+        return "calligratables"
+
+
 def getODFVersion(zip):
 	content = lxml.etree.parse(zip.open("content.xml", "r"))
 	return content.getroot().get(
@@ -285,6 +265,7 @@ if __name__ == '__main__':
 					sys.exit(ret)
 			elif sys.argv[1] == "no":
 				filepath = os.path.abspath(os.path.join(sys.argv[2], sys.argv[3]))
+				print filepath
                 		if os.path.exists(filepath):
                                 	ret = singleFileConvertAndValidate(filepath, False)
                                 	sys.exit(ret)
