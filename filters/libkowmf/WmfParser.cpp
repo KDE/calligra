@@ -791,28 +791,25 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 break;
             case (META_TEXTOUT & 0xff):
                 {
-                    qint16 textLength;
+                    quint16 textLength;
+                    qint16 x, y;
 
                     stream >> textLength;
 
                     QByteArray text;
                     text.resize(textLength);
-
                     stream.readRawData(text.data(), textLength);
+
                     // The string is always of even length, so if the actual data is
                     // of uneven length, read an extra byte.
                     if (textLength & 0x01) {
-                        qint8 dummy;
+                        quint8 dummy;
                         stream >> dummy;
                     }
-
-                    qint16 x, y;
 
                     stream >> y;
                     stream >> x;
 
-                    // FIXME: If we ever want to support vertical text (e.g. japanese),
-                    //        we need to send the vertical text align as well.
                     m_backend->drawText(mDeviceContext, x, y, text);
                 }
                 break;
@@ -895,13 +892,6 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 break;
             case (META_EXTTEXTOUT & 0xff):
                 {
-#if 0
-                    qint16 parm[8];
-                    for (int i = 0; i < 4; ++i)
-                        stream >> parm[i];
-                    quint16 stringLength = parm[ 2 ];
-                    quint16 fwOpts = parm [ 3 ];
-#else
                     qint16 y, x;
                     qint16 stringLength;
                     quint16 fwOpts;
@@ -911,18 +901,30 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     stream >> x;
                     stream >> stringLength;
                     stream >> fwOpts;
-#endif
-
-                    QByteArray text;
-                    text.resize(stringLength);
 
                     // ETO_CLIPPED flag adds 4 parameters
                     if (fwOpts & (ETO_CLIPPED | ETO_OPAQUE)) {
                         // read the optional clip rect
                         stream >> bottom >> right >> top >> left;
                     }
+
+                    // Read the string. Note that it's padded to 16 bits.
+                    QByteArray text;
+                    text.resize(stringLength);
                     stream.readRawData(text.data(), stringLength);
 
+                    if (stringLength & 0x01) {
+                        quint8  padding;
+                        stream >> padding;
+                    }
+
+#if DEBUG_RECORDS
+                    kDebug(31000) << "text at" << x << y << "length" << stringLength
+                                  << ':' << text;
+                    //kDebug(31000) << "flags:" << hex << fwOpts << dec;
+                    kDebug(31000) << "flags:" << fwOpts;
+                    kDebug(31000) << "record length:" << size;
+#endif
                     m_backend->drawText(mDeviceContext, x, y, text);
                 }
                 break;
