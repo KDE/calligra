@@ -36,12 +36,12 @@ def singleFileConvertAndValidate(filename, validate):
         if convertToMime is not None:
         	# Create filename for where conversion is stored
         	convertextension = getConvertExtension(convertToMime)
-                convertedfile = filename + "." + convertextension
+                convertedfile = filepath + "." + convertextension
 
                 applicationname = getApplicationName(convertextension)
                 # Do the conversion
                 args = [applicationname, "--roundtrip-filename", filepath, convertedfile]
-
+                print args
                 # ENABLE THIS LINE FOR DEBUG print "executing koconverter "+filepath+" "+convertedfile
                 p = subprocess.call(args, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
@@ -105,11 +105,11 @@ def getConvertExtension(extension):
 
 
 def getApplicationName(extension):
-    if extension == ".odt":
+    if extension == "odt":
         return "words"
-    if extension == ".odp":
+    if extension == "odp":
         return "calligrastage"
-    if extension == ".ods":
+    if extension == "ods":
         return "calligratables"
 
 
