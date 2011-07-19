@@ -23,7 +23,7 @@ IF ( EXISTS ${PATH_TO_TEST_FILES} )
 
                         IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ) AND ( ${test_file} MATCHES ".*[.](odt|odp|ods|xls|xlsx|ppt|pptx|doc|dox|txt)" ))
                                 IF ( NOT EXISTS ${PATH_TO_CSTESTER_RESULTS_FILES}/${test_file}.check )
-                                        execute_process(COMMAND cstester --create ${PATH_TO_TEST_FILES}/${test_file})
+                                        execute_process(COMMAND cstester --create ${PATH_TO_TEST_FILES}/${test_file} OUTPUT_QUIET ERROR_QUIET)
                                 ENDIF()
 
                                 ADD_TEST(${test_file}_verify cstester --verify ${PATH_TO_TEST_FILES}/${test_file})
