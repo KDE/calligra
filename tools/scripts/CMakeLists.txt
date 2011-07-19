@@ -18,7 +18,7 @@ IF ( EXISTS ${PATH_TO_TEST_FILES} )
         # Use for cstester
         option(ENABLE_CSTESTER_TESTING "Enable testing with cstester" OFF)
 
-        IF(${ENABLE_CSTESTER_TESTING})
+        IF(ENABLE_CSTESTER_TESTING)
                 foreach(test_file ${list_of_test_files})
 
                         IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ) AND ( ${test_file} MATCHES ".*[.](odt|odp|ods|xls|xlsx|ppt|pptx|doc|dox|txt)" ))
