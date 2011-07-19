@@ -17,6 +17,11 @@ kde4_add_plugin(kformdesigner_mapbrowser  ${kformdesigner_mapbrowser_PART_SRCS})
 target_link_libraries(
     kformdesigner_mapbrowser
     kformdesigner
+    kexicore
+    kexiguiutils
+    kexidatatable
+    kexiextendedwidgets
+    kexiformutils
     ${MARBLE_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
@@ -26,7 +31,13 @@ target_link_libraries(
     ${QT_QTXML_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )
-
+#kexicore
+#kexiguiutils
+#kexidatatable
+#kexiextendedwidgets
+#kformdesigner
+#${KOPROPERTY_LIBS}
+#kexiformutils
 
 install(TARGETS kformdesigner_mapbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 

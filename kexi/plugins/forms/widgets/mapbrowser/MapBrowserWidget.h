@@ -26,13 +26,54 @@
 #include "widgetfactory.h"
 #include "container.h"
 #include "FormWidgetInterface.h"
+#include <kexi/plugins/forms/kexiformdataiteminterface.h>
 
-class MapBrowserWidget : public Marble::MarbleWidget, public KFormDesigner::FormWidgetInterface
+class MapBrowserWidget : public Marble::MarbleWidget, 
+			 public KFormDesigner::FormWidgetInterface,
+			 public KexiFormDataItemInterface    
 {
     Q_OBJECT
-    
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
 public:
     MapBrowserWidget(QWidget *parent=0);
+    virtual ~MapBrowserWidget();
+
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourcePartClass() const {
+        return KexiFormDataItemInterface::dataSourcePartClass();
+    }
+    
+    virtual QVariant value();
+    virtual bool valueIsNull();
+    virtual bool valueIsEmpty();
+    virtual bool cursorAtStart();
+    virtual bool cursorAtEnd();
+    virtual void clear();
+    
+    virtual void setInvalidState(const QString&);
+    virtual void setReadOnly(bool);
+public slots:
+    //! Sets the datasource to \a ds
+    inline void setDataSource(const QString &ds) {
+        KexiFormDataItemInterface::setDataSource(ds);
+    }
+    inline void setDataSourcePartClass(const QString &partClass) {
+        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    }
+    void slotMapChanged();
+    
+protected:
+    QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
+    void deserializeData(const QVariant& serialized);
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
+private:
+    QString m_serializedData;
+    //! Used in slotTextChanged()
+    bool m_slotMapChanged_enabled;///TODO: do we need this to be 1 bit? As in some other widgets
+    
 };
 
 #endif // MAPBROWSERWIDGET_H

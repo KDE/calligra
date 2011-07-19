@@ -34,6 +34,7 @@
 MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
   :WidgetFactory(parent, "mapbrowser")
 {
+    Q_UNUSED(args);
     KFormDesigner::WidgetInfo *mapBrowser = new KFormDesigner::WidgetInfo(this);
     mapBrowser->setPixmap("marbleicon");
     mapBrowser->setClassName("MapBrowserWidget");
