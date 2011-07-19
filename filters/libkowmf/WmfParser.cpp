@@ -46,6 +46,125 @@
 namespace Libwmf
 {
 
+// Used for debugging of records
+static const struct KoWmfFunc {
+    const char *name;
+} koWmfFunc[] = {
+    //                                    index metafunc
+    { "end" }, // 0 0x00
+    { "setBkColor" }, // 1 0x01
+    { "setBkMode" }, // 2 0x02
+    { "setMapMode" }, // 3 0x03
+    { "setRop" }, // 4 0x04
+    { "setRelAbs" }, // 5 0x05
+    { "setPolyFillMode" }, // 6 0x06
+    { "setStretchBltMode" }, // 7 0x07
+    { "setTextCharExtra" }, // 8 0x08
+    { "setTextColor" }, // 9 0x09
+    { "setTextJustification" }, // 10 0x0a
+    { "setWindowOrg" }, // 11 0x0b
+    { "setWindowExt" }, // 12 0x0c
+    { "setViewportOrg" }, // 13 0x0d
+    { "setViewportExt" }, // 14 0x0e
+    { "offsetWindowOrg" }, // 15 0x0f
+    { "scaleWindowExt" }, // 16 0x10
+    { "offsetViewportOrg" }, // 17 0x11
+    { "scaleViewportExt" }, // 18 0x12
+    { "lineTo" }, // 19 0x13
+    { "moveTo" }, // 20 0x14
+    { "excludeClipRect" }, // 21 0x15
+    { "intersectClipRect" }, // 22 0x16
+    { "arc" }, // 23 0x17
+    { "ellipse" }, // 24 0x18
+    { "floodfill" }, // 25 0x19  floodfill
+    { "pie" }, // 26 0x1a
+    { "rectangle" }, // 27 0x1b
+    { "roundRect" }, // 28 0x1c
+    { "patBlt" }, // 29 0x1d
+    { "saveDC" }, // 30 0x1e
+    { "setPixel" }, // 31 0x1f
+    { "offsetClipRegion" }, // 32 0x20
+    { "textOut" }, // 33 0x21
+    { "bitBlt" }, // 34 0x22
+    { "stretchBlt" }, // 35 0x23
+    { "polygon" }, // 36 0x24
+    { "polyline" }, // 37 0x25
+    { "escape" }, // 38 0x26
+    { "restoreDC" }, // 39 0x27
+    { "fillRegion" }, // 40 0x28
+    { "frameRegion" }, // 41 0x29
+    { "invertRegion" }, // 42 0x2a
+    { "paintRegion" }, // 43 0x2b
+    { "selectClipRegion" }, // 44 0x2c
+    { "selectObject" }, // 45 0x2d
+    { "setTextAlign" }, // 46 0x2e
+    { "noSuchRecord" }, // 47 0x2f
+    { "chord" }, // 48 0x30
+    { "setMapperFlags" }, // 49 0x31
+    { "extTextOut" }, // 50 0x32
+    { "setDibToDev" }, // 51 0x33
+    { "selectPalette" }, // 52 0x34
+    { "realizePalette" }, // 53 0x35
+    { "animatePalette" }, // 54 0x36
+    { "setPalEntries" }, // 55 0x37
+    { "polyPolygon" }, // 56 0x38
+    { "resizePalette" }, // 57 0x39
+    { "noSuchRecord" }, // 58 0x3a
+    { "noSuchRecord" }, // 59 0x3b
+    { "noSuchRecord" }, // 60 0x3c
+    { "noSuchRecord" }, // 61 0x3d
+    { "noSuchRecord" }, // 62 0x3e
+    { "unimplemented" }, // 63 0x3f
+    { "dibBitBlt" }, // 64 0x40
+    { "dibStretchBlt" }, // 65 0x41
+    { "dibCreatePatternBrush" }, // 66 0x42
+    { "stretchDib" }, // 67 0x43
+    { "noSuchRecord" }, // 68 0x44
+    { "noSuchRecord" }, // 69 0x45
+    { "noSuchRecord" }, // 70 0x46
+    { "noSuchRecord" }, // 71 0x47
+    { "extFloodFill" }, // 72 0x48
+    { "setLayout" }, // 73 0x49
+    { "unimplemented" }, // 74 0x4a
+    { "unimplemented" }, // 75 0x4b
+    { "resetDC" }, // 76 0x4c
+    { "startDoc" }, // 77 0x4d
+    { "unimplemented" }, // 78 0x4e
+    { "startPage" }, // 79 0x4f
+    { "endPage" }, // 80 0x50
+    { "unimplemented" }, // 81 0x51
+    { "unimplemented" }, // 82 0x52
+    { "unimplemented" }, // 83 0x53
+    { "unimplemented" }, // 84 0x54
+    { "unimplemented" }, // 85 0x55
+    { "unimplemented" }, // 86 0x56
+    { "unimplemented" }, // 87 0x57
+    { "unimplemented" }, // 88 0x58
+    { "unimplemented" }, // 89 0x59
+    { "unimplemented" }, // 90 0x5a
+    { "unimplemented" }, // 91 0x5b
+    { "unimplemented" }, // 92 0x5c
+    { "unimplemented" }, // 93 0x5d
+    { "endDoc" }, // 94 0x5e
+    { "unimplemented" }, // 95 0x5f
+    { "deleteObject" }, // 96 0xf0
+    { "noSuchRecord" }, // 97 0xf1
+    { "noSuchRecord" }, // 98 0xf2
+    { "noSuchRecord" }, // 99 0xf3
+    { "noSuchRecord" }, // 100 0xf4
+    { "noSuchRecord" }, // 101 0xf5
+    { "noSuchRecord" }, // 102 0xf6
+    { "createPalette" }, // 103 0xf7
+    { "createBrush" }, // 104 0xf8
+    { "createPatternBrush" }, // 105 0xf9
+    { "createPenIndirect" }, // 106 0xfa
+    { "createFontIndirect" }, // 107 0xfb
+    { "createBrushIndirect" }, //108 0xfc
+    { "createBitmapIndirect" }, //109 0xfd
+    { "createBitmap" }, // 110 0xfe
+    { "createRegion" } // 111 0xff
+};
+
 
 WmfParser::WmfParser()
 {
@@ -305,7 +424,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 index -= 0x90;
             }
             
-#if 0 & DEBUG_RECORDS
+#if DEBUG_RECORDS
             kDebug(31000) << "Record = " << koWmfFunc[ index ].name
                           << " (" << hex << recordType
                           << ", index" << dec << index << ")";
@@ -672,28 +791,25 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 break;
             case (META_TEXTOUT & 0xff):
                 {
-                    qint16 textLength;
+                    quint16 textLength;
+                    qint16 x, y;
 
                     stream >> textLength;
 
                     QByteArray text;
                     text.resize(textLength);
-
                     stream.readRawData(text.data(), textLength);
+
                     // The string is always of even length, so if the actual data is
                     // of uneven length, read an extra byte.
                     if (textLength & 0x01) {
-                        qint8 dummy;
+                        quint8 dummy;
                         stream >> dummy;
                     }
-
-                    qint16 x, y;
 
                     stream >> y;
                     stream >> x;
 
-                    // FIXME: If we ever want to support vertical text (e.g. japanese),
-                    //        we need to send the vertical text align as well.
                     m_backend->drawText(mDeviceContext, x, y, text);
                 }
                 break;
@@ -776,13 +892,6 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 break;
             case (META_EXTTEXTOUT & 0xff):
                 {
-#if 0
-                    qint16 parm[8];
-                    for (int i = 0; i < 4; ++i)
-                        stream >> parm[i];
-                    quint16 stringLength = parm[ 2 ];
-                    quint16 fwOpts = parm [ 3 ];
-#else
                     qint16 y, x;
                     qint16 stringLength;
                     quint16 fwOpts;
@@ -792,18 +901,30 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     stream >> x;
                     stream >> stringLength;
                     stream >> fwOpts;
-#endif
-
-                    QByteArray text;
-                    text.resize(stringLength);
 
                     // ETO_CLIPPED flag adds 4 parameters
                     if (fwOpts & (ETO_CLIPPED | ETO_OPAQUE)) {
                         // read the optional clip rect
                         stream >> bottom >> right >> top >> left;
                     }
+
+                    // Read the string. Note that it's padded to 16 bits.
+                    QByteArray text;
+                    text.resize(stringLength);
                     stream.readRawData(text.data(), stringLength);
 
+                    if (stringLength & 0x01) {
+                        quint8  padding;
+                        stream >> padding;
+                    }
+
+#if DEBUG_RECORDS
+                    kDebug(31000) << "text at" << x << y << "length" << stringLength
+                                  << ':' << text;
+                    //kDebug(31000) << "flags:" << hex << fwOpts << dec;
+                    kDebug(31000) << "flags:" << fwOpts;
+                    kDebug(31000) << "record length:" << size;
+#endif
                     m_backend->drawText(mDeviceContext, x, y, text);
                 }
                 break;
