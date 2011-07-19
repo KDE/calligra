@@ -10,7 +10,7 @@ IF ( EXISTS ${PATH_TO_TEST_FILES} )
 
 	foreach(test_file ${list_of_test_files})
 		
-		IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ))
+		IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ) AND ( ${test_file} MATCHES ".*[.](odt|odp|ods|xls|xlsx|ppt|pptx|doc|dox|txt)" ))
 			ADD_TEST(${test_file} python ${CMAKE_CURRENT_SOURCE_DIR}/convertAndValidateODF.py no ${PATH_TO_TEST_FILES} ${test_file}) 
 		ENDIF()
 	endforeach()
