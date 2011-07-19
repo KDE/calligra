@@ -311,8 +311,7 @@ public:
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles, MSOSPT shapeType);
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles, MSOSPT shapeType = msosptRectangle);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
     QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);

@@ -629,10 +629,6 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     style.addChildElement("svg:stop", elementContents);
 }
 
-void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles){
-    defineGraphicProperties(style, ds, styles, msosptRectangle);
-}
-
 QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
 {
     if (lineDashing <= 0 || lineDashing > 10) {
