@@ -31,12 +31,16 @@
 #include "KoShapeGroup.h"
 #include "KoShapeLayer.h"
 #include "KoUnavailShape.h"
+#include "commands/KoShapeGroupCommand.h"
+#include "svg/SvgParser.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <QString>
 #include <QHash>
@@ -53,6 +57,7 @@ public:
     void init(KoShapeRegistry *q);
 
     KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
+    KoShape *createShapeFromSvg(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
 
 
     // Map namespace,tagname to priority:factory
@@ -231,6 +236,10 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
                                                        KoShapeLoadingContext &context,
                                                        const KoXmlElement &element) const
 {
+    KoShape *svgShape = createShapeFromSvg(fullElement, context, element);
+    if (svgShape)
+        return svgShape;
+
     // Pair of namespace, tagname
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
 
@@ -287,6 +296,65 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             // element, but this attempt has failed.
             delete shape;
         }
+    }
+
+    return 0;
+}
+
+KoShape *KoShapeRegistry::Private::createShapeFromSvg(const KoXmlElement &fullElement,
+                                                       KoShapeLoadingContext &context,
+                                                       const KoXmlElement &element) const
+{
+    kDebug(30006) << fullElement.tagName() << "-" << element.tagName();
+
+    if (fullElement.tagName() == "frame" && element.tagName() == "image") {
+        kDebug(30006) << "trying to create shapes form svg image";
+        QString href = element.attribute("href");
+        if (href.isEmpty())
+            return 0;
+
+        // check the mimetype
+        if (href.startsWith("./")) {
+            href.remove(0,2);
+        }
+        QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+        kDebug(30006) << mimetype;
+        if (mimetype != "image/svg+xml")
+            return 0;
+
+        if (!context.odfLoadingContext().store()->open(href))
+            return 0;
+
+        KoStoreDevice dev(context.odfLoadingContext().store());
+        KoXmlDocument xmlDoc;
+
+        int line, col;
+        QString errormessage;
+
+        const bool parsed = xmlDoc.setContent(&dev, &errormessage, &line, &col);
+
+        context.odfLoadingContext().store()->close();
+
+        if (! parsed) {
+            kError(30006) << "Error while parsing file: "
+            << "at line " << line << " column: " << col
+            << " message: " << errormessage << endl;
+            return 0;
+        }
+
+        SvgParser parser(context.documentResourceManager());
+
+        QList<KoShape*> shapes = parser.parseSvg(xmlDoc.documentElement());
+        if (shapes.isEmpty())
+            return 0;
+        if (shapes.count() == 1)
+            return shapes.first();
+
+        KoShapeGroup *svgGroup = new KoShapeGroup;
+        KoShapeGroupCommand cmd(svgGroup, shapes);
+        cmd.redo();
+
+        return svgGroup;
     }
 
     return 0;
