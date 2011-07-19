@@ -32,18 +32,23 @@ def singleFileConvertAndValidate(filename, validate):
         # Create a filename for the output odt file
         filename, extension = os.path.splitext(filepath)
 
-        convertToMime = getExtByMime(filepath)
-        if convertToMime is not None:
+        src_extension = getExtByMime(filepath)
+        if src_extension is not None:
         	# Create filename for where conversion is stored
-        	convertextension = getConvertExtension(convertToMime)
-                convertedfile = filepath + "." + convertextension
+        	dst_extension = getConvertExtension(src_extension)
+                convertedfile = filepath + "." + dst_extension
+        	
+        	if "." + dst_extension == src_extension:
 
-                applicationname = getApplicationName(convertextension)
-                # Do the conversion
-                args = [applicationname, "--roundtrip-filename", filepath, convertedfile]
+                    applicationname = getApplicationName(dst_extension)
+                    # Do the conversion
+                    args = [applicationname, "--roundtrip-filename", convertedfile, filepath]
+                else:
+                    args = ["koconverter", "--batch", filepath, convertedfile]
+                    
                 print args
-                # ENABLE THIS LINE FOR DEBUG print "executing koconverter "+filepath+" "+convertedfile
                 p = subprocess.call(args, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+                
 
                	# validate out.odt
                 if not os.path.exists(convertedfile):
