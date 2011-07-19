@@ -29,6 +29,7 @@
 class KarbonGradientWidget;
 class KoSliderCombo;
 class KComboBox;
+class KDoubleNumInput;
 class KoColorPopupAction;
 class QToolButton;
 class QPushButton;
@@ -114,12 +115,13 @@ protected:
     void blockChildSignals(bool block);
 
 private:
-    KComboBox        *m_gradientTarget;
-    KComboBox        *m_gradientRepeat;
-    KComboBox        *m_gradientType;
-    QPushButton      *m_addToPredefs;
-    KoSliderCombo * m_opacity;
-    QToolButton * m_stopColor;
+    KComboBox *m_gradientTarget;
+    KComboBox *m_gradientRepeat;
+    KComboBox *m_gradientType;
+    QPushButton *m_addToPredefs;
+    KoSliderCombo *m_opacity;
+    KDoubleNumInput *m_stopPosition;
+    QToolButton *m_stopColor;
     qreal m_gradOpacity;    ///< the gradient opacity
     int m_stopIndex; ///< the index of the selected gradient stop
     KoCheckerBoardPainter m_checkerPainter;

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2002 Beno�t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
-   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008,2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kurl.h>
+#include <KNumInput>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QPointF>
@@ -168,36 +169,39 @@ void KarbonGradientEditWidget::setupUI()
     m_gradientTarget->insertItem(0, i18n("Stroke"));
     m_gradientTarget->insertItem(1, i18n("Fill"));
     m_gradientTarget->setCurrentIndex(FillGradient);
-    editLayout->addWidget(m_gradientTarget, row, 1);
+    editLayout->addWidget(m_gradientTarget, row, 1, 1, 2);
 
     editLayout->addWidget(new QLabel(i18n("Type:"), this), ++row, 0);
     m_gradientType = new KComboBox(false, this);
     m_gradientType->insertItem(0, i18nc("Linear gradient type", "Linear"));
     m_gradientType->insertItem(1, i18nc("Radial gradient type", "Radial"));
     m_gradientType->insertItem(2, i18nc("Conical gradient type", "Conical"));
-    editLayout->addWidget(m_gradientType, row, 1);
+    editLayout->addWidget(m_gradientType, row, 1, 1, 2);
 
     editLayout->addWidget(new QLabel(i18n("Repeat:"), this), ++row, 0);
     m_gradientRepeat = new KComboBox(false, this);
     m_gradientRepeat->insertItem(0, i18nc("No gradient spread", "None"));
     m_gradientRepeat->insertItem(1, i18n("Reflect"));
     m_gradientRepeat->insertItem(2, i18n("Repeat"));
-    editLayout->addWidget(m_gradientRepeat, row, 1);
+    editLayout->addWidget(m_gradientRepeat, row, 1, 1, 2);
 
     editLayout->addWidget(new QLabel(i18n("Overall opacity:"), this), ++row, 0);
     m_opacity = new KoSliderCombo(this);
     m_opacity->setDecimals(0);
-    editLayout->addWidget(m_opacity, row, 1);
+    editLayout->addWidget(m_opacity, row, 1, 1, 2);
 
-    editLayout->addWidget(new QLabel(i18n("Stop color:"), this), ++row, 0);
+    editLayout->addWidget(new QLabel(i18n("Color stop:"), this), ++row, 0);
     m_stopColor = new QToolButton(this);
     editLayout->addWidget(m_stopColor, row, 1);
+    m_stopPosition = new KDoubleNumInput(this);
+    m_stopPosition->setRange(0.0, 1.0, 0.01, false);
+    editLayout->addWidget(m_stopPosition, row, 2);
     m_actionStopColor = new KoColorPopupAction(this);
     m_actionStopColor ->setToolTip(i18n("Stop color."));
     m_stopColor->setDefaultAction(m_actionStopColor);
 
     m_addToPredefs = new QPushButton(i18n("&Add to Predefined Gradients"), this);
-    editLayout->addWidget(m_addToPredefs, ++row, 0, 1, 2);
+    editLayout->addWidget(m_addToPredefs, ++row, 0, 1, 3);
 
     editLayout->setSpacing(3);
     editLayout->setMargin(6);
@@ -213,6 +217,7 @@ void KarbonGradientEditWidget::setupConnections()
     connect(m_addToPredefs, SIGNAL(clicked()), this, SLOT(addGradientToPredefs()));
     connect(m_opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(opacityChanged(qreal, bool)));
     connect(m_actionStopColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(stopChanged()));
+    connect(m_stopPosition, SIGNAL(valueChanged(double)), this, SLOT(stopChanged()));
 }
 
 void KarbonGradientEditWidget::blockChildSignals(bool block)
@@ -222,6 +227,7 @@ void KarbonGradientEditWidget::blockChildSignals(bool block)
     m_addToPredefs->blockSignals(block);
     m_opacity->blockSignals(block);
     m_stopColor->blockSignals(block);
+    m_stopPosition->blockSignals(block);
 }
 
 void KarbonGradientEditWidget::updateUI()
@@ -246,13 +252,14 @@ void KarbonGradientEditWidget::updateUI()
         m_opacity->setValue(100);
 
     // now update the stop color and opacity
-    if (m_stopIndex >= 0 && m_stopIndex < m_stops.count()) {
+    const bool colorStopSelected = m_stopIndex >= 0 && m_stopIndex < m_stops.count();
+    if (colorStopSelected) {
         QColor c = m_stops[m_stopIndex].second;
         m_actionStopColor->setCurrentColor(c);
-        m_stopColor->setEnabled(true);
-    } else {
-        m_stopColor->setEnabled(false);
+        m_stopPosition->setValue(m_stops[m_stopIndex].first);
     }
+    m_stopColor->setEnabled(colorStopSelected);
+    m_stopPosition->setEnabled(colorStopSelected);
 
     blockChildSignals(false);
 }
@@ -394,6 +401,7 @@ void KarbonGradientEditWidget::addGradientToPredefs()
 void KarbonGradientEditWidget::stopChanged()
 {
     if (m_stopIndex >= 0 && m_stopIndex < m_stops.count()) {
+        m_stops[m_stopIndex].first = m_stopPosition->value();
         m_stops[m_stopIndex].second = m_actionStopColor->currentColor();
         emit changed();
     }
