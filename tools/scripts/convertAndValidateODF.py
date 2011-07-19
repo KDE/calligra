@@ -28,7 +28,6 @@ def convertAndValidateFilesInDir(dir):
 def singleFileConvertAndValidate(filename, validate):
 	
 	filepath = filename
-
         # Create a filename for the output odt file
         filename, extension = os.path.splitext(filepath)
 
@@ -47,7 +46,8 @@ def singleFileConvertAndValidate(filename, validate):
                     args = ["koconverter", "--batch", filepath, convertedfile]
                     
                 print args
-                p = subprocess.call(args, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+                fnull = open(os.devnull, 'w')
+                p = subprocess.call(args, stdout = fnull, stderr = fnull)
                 
 
                	# validate out.odt
