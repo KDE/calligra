@@ -27,7 +27,7 @@ IF ( EXISTS ${PATH_TO_TEST_FILES} )
                                 ENDIF()
 
                                 ADD_TEST(${test_file}_verify cstester --verify ${PATH_TO_TEST_FILES}/${test_file})
-                                set_property(TEST ${test_file}_create PROPERTY LABELS cstester)
+                                set_property(TEST ${test_file}_verify PROPERTY LABELS cstester)
                         ENDIF()
                 endforeach()
         ENDIF()
