@@ -111,7 +111,7 @@ def getConvertExtension(extension):
 
 def getApplicationName(extension):
     if extension == "odt":
-        return "words"
+        return "calligrawords"
     if extension == "odp":
         return "calligrastage"
     if extension == "ods":
