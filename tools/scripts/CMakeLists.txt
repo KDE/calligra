@@ -10,7 +10,7 @@ IF ( EXISTS ${PATH_TO_TEST_FILES} )
 
 	foreach(test_file ${list_of_test_files})
 		
-		IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ) AND ( ${test_file} MATCHES ".*[.](odt|odp|ods|xls|xlsx|ppt|pptx|doc|dox|txt)" ))
+		IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ) AND ( ${test_file} MATCHES ".*[.](odt|odp|ods|xls|xlsx|ppt|pptx|doc|dox|txt)$" ))
 			ADD_TEST(${test_file} python ${CMAKE_CURRENT_SOURCE_DIR}/convertAndValidateODF.py no ${PATH_TO_TEST_FILES} ${test_file}) 
 		ENDIF()
 	endforeach()
@@ -21,7 +21,7 @@ IF ( EXISTS ${PATH_TO_TEST_FILES} )
         IF(ENABLE_CSTESTER_TESTING)
                 foreach(test_file ${list_of_test_files})
 
-                        IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ) AND ( ${test_file} MATCHES ".*[.](odt|odp|ods|xls|xlsx|ppt|pptx|doc|dox|txt)" ))
+                        IF ( NOT ( ${test_file} MATCHES ".*[.]svn.*" ) AND ( ${test_file} MATCHES ".*[.](odt|odp|ods|xls|xlsx|ppt|pptx|doc|dox|txt)$" ))
                                 add_test(${test_file}_cstester python ${CMAKE_CURRENT_SOURCE_DIR}/run_cstester.py ${PATH_TO_TEST_FILES}/${test_file})
                                 set_property(TEST ${test_file}_cstester PROPERTY LABELS cstester)
                         ENDIF()
