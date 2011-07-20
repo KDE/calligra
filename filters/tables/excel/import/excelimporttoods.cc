@@ -594,7 +594,7 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
     std::map<std::pair<unsigned, QString>, QString> &namedAreas = workbook->namedAreas();
     if(namedAreas.size() > 0) {
         xmlWriter->startElement("table:named-expressions");
-        for(std::map<std::pair<unsigned, QString>, QString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
+        for(std::map<std::pair<unsigned, QString>, QString>::iterator it = namedAreas.begin(); it != namedAreas.end(); ++it) {
             xmlWriter->startElement("table:named-range");
             xmlWriter->addAttribute("table:name", it->first.second ); // e.g. "My Named Range"
             QString range = it->second;

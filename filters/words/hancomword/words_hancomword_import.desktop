@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words HancomWord Import Filter
+Name[cs]=Importní filtr HancomWord pro Words
+Name[es]=Filtro de Words de importación de HancomWord
+Name[et]=Wordsi HancomWordi impordifilter
+Name[nb]=HancomWord-importfilter for Words
+Name[nds]=HancomWord-Importfilter för Words
 Name[pt]=Filtro de Importação de HancomWord para o Words
 Name[pt_BR]=Filtro de importação de HancomWord para o Words
 Name[sv]=Words-importfilter för HancomWord

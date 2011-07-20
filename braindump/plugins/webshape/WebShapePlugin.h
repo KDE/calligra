@@ -21,8 +21,9 @@
 #define _WEB_SHAPE_PLUGIN_
 
 #include <QObject>
- 
-class WebShapePlugin : public QObject {
+
+class WebShapePlugin : public QObject
+{
     Q_OBJECT
 public:
     WebShapePlugin(QObject *parent, const QStringList&);

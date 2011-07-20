@@ -608,7 +608,7 @@ bool KWDWriter::writeDoc()
 }
 
 
-QDomElement KWDWriter::mainFrameset()
+QDomElement KWDWriter::mainFrameset() const
 {
     return _mainFrameset;
 }

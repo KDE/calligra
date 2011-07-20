@@ -332,6 +332,26 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
+    Q_ASSERT(connect(baseModel(), SIGNAL(projectShownChanged(bool)), SLOT(slotProjectShown(bool))));
+}
+
+void TaskEditor::slotProjectShown( bool on )
+{
+    kDebug()<<proxyModel();
+    QModelIndex idx;
+    if ( proxyModel() ) {
+        if ( proxyModel()->rowCount() > 0 ) {
+            idx = proxyModel()->index( 0, 0 );
+            m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
+        }
+    } else if ( baseModel() && baseModel()->rowCount() > 0 ) {
+        idx = baseModel()->index( 0, 0 );
+        m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
+    }
+    if ( on && idx.isValid() ) {
+        m_view->masterView()->expand( idx );
+    }
+    slotEnableActions();
 }
 
 void TaskEditor::updateReadWrite( bool rw )
@@ -466,6 +486,7 @@ void TaskEditor::slotEnableActions()
 
 void TaskEditor::updateActionsEnabled( bool on )
 {
+//     kDebug()<<selectedRowCount()<<selectedNode()<<currentNode();
     if ( ! on ) {
         menuAddTask->setEnabled( false );
         actionAddTask->setEnabled( false );
@@ -483,17 +504,33 @@ void TaskEditor::updateActionsEnabled( bool on )
         
     int selCount = selectedRowCount();
     if ( selCount == 0 ) {
-        menuAddTask->setEnabled( true );
-        actionAddTask->setEnabled( true );
-        actionAddMilestone->setEnabled( true );
-        menuAddSubTask->setEnabled( false );
-        actionAddSubtask->setEnabled( false );
-        actionAddSubMilestone->setEnabled( false );
-        actionDeleteTask->setEnabled( false );
-        actionMoveTaskUp->setEnabled( false );
-        actionMoveTaskDown->setEnabled( false );
-        actionIndentTask->setEnabled( false );
-        actionUnindentTask->setEnabled( false );
+        if ( currentNode() ) {
+            // there are tasks but none is selected
+            menuAddTask->setEnabled( false );
+            actionAddTask->setEnabled( false );
+            actionAddMilestone->setEnabled( false );
+            menuAddSubTask->setEnabled( false );
+            actionAddSubtask->setEnabled( false );
+            actionAddSubMilestone->setEnabled( false );
+            actionDeleteTask->setEnabled( false );
+            actionMoveTaskUp->setEnabled( false );
+            actionMoveTaskDown->setEnabled( false );
+            actionIndentTask->setEnabled( false );
+            actionUnindentTask->setEnabled( false );
+        } else {
+            // we need to be able to add the first task
+            menuAddTask->setEnabled( true );
+            actionAddTask->setEnabled( true );
+            actionAddMilestone->setEnabled( true );
+            menuAddSubTask->setEnabled( false );
+            actionAddSubtask->setEnabled( false );
+            actionAddSubMilestone->setEnabled( false );
+            actionDeleteTask->setEnabled( false );
+            actionMoveTaskUp->setEnabled( false );
+            actionMoveTaskDown->setEnabled( false );
+            actionIndentTask->setEnabled( false );
+            actionUnindentTask->setEnabled( false );
+        }
         return;
     }
     Node *n = selectedNode(); // 0 if not a single task, summarytask or milestone
@@ -512,6 +549,22 @@ void TaskEditor::updateActionsEnabled( bool on )
         actionUnindentTask->setEnabled( false );
         return;
     }
+    if ( selCount == 1 && n != currentNode() ) {
+        // multi selection in progress
+        menuAddTask->setEnabled( false );
+        actionAddTask->setEnabled( false );
+        actionAddMilestone->setEnabled( false );
+        menuAddSubTask->setEnabled( false );
+        actionAddSubtask->setEnabled( false );
+        actionAddSubMilestone->setEnabled( false );
+        actionDeleteTask->setEnabled( false );
+        actionMoveTaskUp->setEnabled( false );
+        actionMoveTaskDown->setEnabled( false );
+        actionIndentTask->setEnabled( false );
+        actionUnindentTask->setEnabled( false );
+        return;
+    }
+
     bool baselined = false;
     Project *p = m_view->project();
     if ( p && p->isBaselined() ) {
@@ -651,7 +704,6 @@ void TaskEditor::slotAddTask()
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
-        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
@@ -674,7 +726,6 @@ void TaskEditor::slotAddMilestone()
         t->estimate()->clear();
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
-        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
@@ -686,7 +737,6 @@ void TaskEditor::slotAddMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
@@ -705,7 +755,6 @@ void TaskEditor::slotAddSubMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
@@ -723,20 +772,14 @@ void TaskEditor::slotAddSubtask()
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
-    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
 void TaskEditor::edit( QModelIndex i )
 {
     if ( i.isValid() ) {
-        if ( m_view->slaveView()->hasFocus() ) {
-            m_view->masterView()->setFocus();
-        }
-
-        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
-        QModelIndex p = m_view->model()->parent( i );
-        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+        m_view->setParentsExpanded( i, true ); // in case treeview does not have focus
         m_view->edit( i );
     }
 }

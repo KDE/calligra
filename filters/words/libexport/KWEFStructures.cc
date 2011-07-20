@@ -166,8 +166,8 @@ void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatD
 #endif
 
             // We must add a FormatData
-            paraFormatDataList.insert(paraFormatDataIt,
-                                      FormatData(lastPos, (*paraFormatDataIt).pos - lastPos, true));
+            paraFormatDataIt = paraFormatDataList.insert(paraFormatDataIt,
+                                                         FormatData(lastPos, (*paraFormatDataIt).pos - lastPos, true));
         }
 #if 0
         else {

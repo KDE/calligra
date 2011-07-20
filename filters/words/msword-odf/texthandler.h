@@ -102,8 +102,7 @@ public:
     virtual void bookmarkStart( const wvWare::BookmarkData& data );
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
-    virtual void inlineObjectFound(const wvWare::PictureData& data);
-    virtual void floatingObjectFound(unsigned int globalCP);
+    virtual void msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data);
 
     ///////// Our own interface
 
