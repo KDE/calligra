@@ -470,6 +470,7 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     //KPrSlidesSorterDocumentModel uses iconSize function in decorate Role.
     setIconSize(QSize(qRound(zoom*200),qRound(zoom*200)));
     m_slidesSorterView->setIconSize(iconSize());
+    m_customSlideShowModel->setIconSize(iconSize());
     m_customSlideShowView->setIconSize(iconSize());
 
     //update item size
