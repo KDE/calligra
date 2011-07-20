@@ -1374,6 +1374,9 @@ QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /
 
 QString FormulaToken::array(unsigned row, unsigned col) const
 {
+    Q_UNUSED(row);
+    Q_UNUSED(col);
+
     #ifdef __GNUC__
         #warning TODO Implement FormulaToken::array()
     #endif
