@@ -519,7 +519,7 @@ int KPrViewModeSlidesSorter::zoom()
 
 void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
-    QMenu menu(m_slidesSorterView);   
+    QMenu menu(m_slidesSorterView);
     menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
