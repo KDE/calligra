@@ -76,6 +76,7 @@ const KComponentData &Factory::global()
         s_global->dirs()->addResourceType("planwork_template", "data", "planwork/templates/");
         s_global->dirs()->addResourceType("projects", "data", "planwork/projects/");
 
+        // keep this to be able to pick up old ḱplato files
         s_global->dirs()->addResourceType("kplatoprojects", "data", "kplatowork/projects/");
 
         // Tell the iconloader about share/apps/calligra/icons

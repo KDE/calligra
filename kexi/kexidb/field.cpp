@@ -179,6 +179,7 @@ QString Field::typeName(uint type)
 
 QStringList Field::typeNames()
 {
+    m_typeNames.init();
     return m_typeNames.names;
 }
 
@@ -697,6 +698,7 @@ Field::FieldTypeNames::FieldTypeNames()
 
 void Field::FieldTypeNames::init()
 {
+    kDebug() << "====================================\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\===================================";
     if (m_initialized)
         return;
     m_initialized = true;

@@ -44,6 +44,7 @@ void KPrCustomSlideShows::insert( const QString &name, const QList<KoPAPageBase*
 {
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.find( name );
     Q_ASSERT( it == m_customSlideShows.end() );
+    Q_UNUSED( it ); // only used in the above Q_ASSERT.
     m_customSlideShows.insert( name, slideShow );
 }
 
@@ -58,6 +59,7 @@ void KPrCustomSlideShows::update( const QString &name, const QList<KoPAPageBase*
 {
     QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.constFind( name );
     Q_ASSERT( it != m_customSlideShows.constEnd() );
+    Q_UNUSED( it ); // only used in the above Q_ASSERT.
     m_customSlideShows.insert( name, slideShow );
 }
 void KPrCustomSlideShows::rename( const QString &oldName, const QString &newName )

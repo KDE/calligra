@@ -57,11 +57,11 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     page =  new KVBox();
     addPage(page, i18n("&Resources"));
     m_resourcesTab = new RequestResourcesPanel(page, project, task);
-    
+
     page =  new KVBox();
     addPage(page, i18n("&Documents"));
     m_documentsTab = new DocumentsPanel( task, page );
-    
+
     page =  new KVBox();
     addPage(page, i18n("&Cost"));
     m_costTab = new TaskCostPanel(task, accounts, page);
@@ -74,6 +74,8 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
 
     enableButtonOk(false);
 
+    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)), SLOT(slotCurrentChanged(KPageWidgetItem*, KPageWidgetItem*)));
+
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_documentsTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
@@ -81,6 +83,17 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     connect(m_descriptionTab, SIGNAL( textChanged(bool) ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 
     connect(&project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
+}
+
+void TaskDialog::slotCurrentChanged( KPageWidgetItem *current, KPageWidgetItem *prev )
+{
+    //kDebug()<<current->widget()<<m_descriptionTab->parent();
+    // HACK: KPageDialog grabs focus when a tab is clicked.
+    // KRichTextWidget still flashes the caret so the user thinks it has the focus.
+    // For now, just give the KRichTextWidget focus.
+    if ( current->widget() == m_descriptionTab->parent() ) {
+        m_descriptionTab->descriptionfield->setFocus();
+    }
 }
 
 void TaskDialog::slotTaskRemoved( Node *node )

@@ -147,8 +147,6 @@ void Canvas::paintEvent(QPaintEvent *event)
     shapeManager()->paint(painter, *converter, false);
     painter.setRenderHint(QPainter::Antialiasing, false);
 
-    QRectF updateRect = converter->viewToDocument(clipRect);
-
     painter.setRenderHint(QPainter::Antialiasing);
     m_toolProxy->paint(painter, *converter);
 }

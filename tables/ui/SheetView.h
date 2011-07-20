@@ -130,6 +130,7 @@ public:
     bool isHighlighted(const QPoint& cell) const;
     void setHighlighted(const QPoint& cell, bool isHighlighted);
     bool hasHighlightedCells() const;
+    void clearHighlightedCells();
     QPoint activeHighlight() const;
     void setActiveHighlight(const QPoint& cell);
 

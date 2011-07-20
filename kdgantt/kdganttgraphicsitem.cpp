@@ -434,7 +434,6 @@ void GraphicsItem::mouseMoveEvent( QGraphicsSceneMouseEvent* event )
 {
     if (  !isEditable() ) return;
     //qDebug() << "GraphicsItem::mouseMoveEvent("<<event<<"), m_istate="<< static_cast<ItemDelegate::InteractionState>( m_istate );
-    QPointF pos = event->pos() - m_presspos;
     switch( m_istate ) {
     case ItemDelegate::State_ExtendLeft:
     case ItemDelegate::State_ExtendRight:

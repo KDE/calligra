@@ -29,6 +29,7 @@
 
 #include "KPlatoXmlLoader.h" //NB!
 
+#include "kptglobal.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
@@ -447,7 +448,7 @@ bool Part::loadKPlatoWorkPackages()
 {
     m_loadingFromProjectStore = true;
     KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "kplatoprojects", "*.kplatowork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    QStringList lst = sd->findAllResources( "planprojects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
     //kDebug()<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
@@ -460,6 +461,7 @@ bool Part::loadKPlatoWorkPackages()
 
 bool Part::loadNativeFormatFromStore(const QString& file)
 {
+    kDebug()<<file;
     KoStore * store = KoStore::createStore(file, KoStore::Read, "", KoStore::Auto);
 
     if (store->bad()) {
@@ -592,9 +594,9 @@ bool Part::loadKPlatoXML( const KoXmlDocument &document, KoStore* )
         kError() << "No mime type specified!" << endl;
         KMessageBox::error( 0, i18n( "Invalid document. No mimetype specified." ) );
         return false;
-    } else if ( value != "application/x-vnd.kde.plan.work" ) {
+    } else if ( value != "application/x-vnd.kde.kplato.work" ) {
         kError() << "Unknown mime type " << value;
-        KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
+        KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
     QString syntaxVersion = plan.attribute( "version", KPLATOWORK_MAX_FILE_SYNTAX_VERSION );
