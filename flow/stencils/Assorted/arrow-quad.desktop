@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Quad Arrow
+Name[bg]=Четворна стрелка
 Name[de]=Pfeil in alle vier Richtungen
 Name[el]=Τετραπλό βέλος
 Name[es]=Flecha cuádruple
@@ -10,6 +11,7 @@ Name[nds]=Krüüzpiel
 Name[nl]=Pijl naar vier richtingen
 Name[pt]=Seta Quádrupla
 Name[pt_BR]=Seta Quádrupla
+Name[ru]=Стрелки в четыре стороны
 Name[sv]=Fyrdubbel pil
 Name[uk]=Стрілки у чотири боки
 Name[x-test]=xxQuad Arrowxx

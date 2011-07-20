@@ -21,6 +21,7 @@
 #include "KWRdfDocker.h"
 
 #include "KWCanvas.h"
+#include "KWView.h"
 #include "Words.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
@@ -67,6 +68,8 @@ KWRdfDocker::KWRdfDocker()
     connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateDataForced()));
     connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+
+    widgetDocker.autoRefresh->setCheckState( Qt::Checked );
 }
 
 KWRdfDocker::~KWRdfDocker()
@@ -75,6 +78,8 @@ KWRdfDocker::~KWRdfDocker()
 
 void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
 {
+    kDebug(30015) << "canvas:" << canvas;
+    
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     }
@@ -99,6 +104,12 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant&)),
             this, SLOT(resourceChanged(int,const QVariant&)));
 }
+
+KoCanvasBase* KWRdfDocker::canvas()
+{
+    return m_canvas;
+}
+
 
 void KWRdfDocker::semanticObjectAdded(KoRdfSemanticItem *item)
 {
@@ -143,22 +154,26 @@ void KWRdfDocker::updateDataForced()
 
 void KWRdfDocker::updateData()
 {
-    //kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
+    kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
     if (!m_document || !m_canvas || !isVisible())
         return;
-    //kDebug(30015) << "updating docker...";
+    kDebug(30015) << "updating docker...";
+
     // TODO try to get rid of 'handler' here by remembering the position in the resourceChanged()
     KoTextEditor *handler = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
     KoDocumentRdf *rdf = m_document->documentRdf();
-    if (handler && rdf) {
+    if (handler && rdf)
+    {
         //kDebug(30015) << "m_lastCursorPosition:" << m_lastCursorPosition;
         //kDebug(30015) << " currentpos:" << handler->position();
+
         // If the cursor hasn't moved, there is no work to do.
         if (m_lastCursorPosition == handler->position())
             return;
         m_lastCursorPosition = handler->position();
         Soprano::Model* model = rdf->findStatements(handler);
         //kDebug(30015) << "----- current Rdf ----- sz:" << model->statementCount();
+
         //
         // Now expand the found Rdf a little bit
         // and try to show any Semantic Objects
@@ -175,6 +190,7 @@ void KWRdfDocker::updateData()
 void KWRdfDocker::setAutoUpdate(int state)
 {
     //kDebug(30015) << "m_textDocument:" << m_textDocument;
+
     if (state == Qt::Checked) {
         KoDocumentRdf::ensureTextTool();
         m_autoUpdate = true;

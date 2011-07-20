@@ -114,7 +114,7 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
         style = client->createGraphicStyle(o.clientTextbox.data(),
                                            o.clientData.data(), ds, out);
     }
-    defineGraphicProperties(style, ds, out.styles);
+    defineGraphicProperties(style, ds, out.styles, MSOSPT(o.shapeProp.rh.recInstance));
 
     if (client) {
         client->addTextStyles(o.shapeProp.rh.recInstance,
@@ -150,7 +150,7 @@ QString percent(double v)
 }
 } //namespace
 
-void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles)
+void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles, MSOSPT shapeType)
 {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     // dr3d:ambient-color
@@ -435,6 +435,28 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:wrap-contour-mode
     // style:wrap-dynamic-treshold
     // svg:fill-rule
+    switch (shapeType) {
+    case msosptDonut:
+    case msosptActionButtonBlank:
+    case msosptActionButtonHome:
+    case msosptActionButtonHelp:
+    case msosptActionButtonInformation:
+    case msosptActionButtonForwardNext:
+    case msosptActionButtonBackPrevious:
+    case msosptActionButtonEnd:
+    case msosptActionButtonBeginning:
+    case msosptActionButtonReturn:
+    case msosptActionButtonDocument:
+    case msosptActionButtonSound:
+    case msosptActionButtonMovie:
+    {
+        style.addProperty("svg:fill-rule" ,"evenodd");
+        break;
+    }
+    default:
+        // don't save default rule here "nonzero" for other shapes
+        break;
+    }
     // svg:height
     if (ds.fLine() || ds.fNoLineDrawDash()) {
         if (client) {

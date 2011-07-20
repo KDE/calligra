@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Four Point Star
+Name[bg]=Четирилъчна звезда
 Name[de]=Stern mit vier Zacken
 Name[el]=Τετράκτινο αστέρι
 Name[es]=Estrella de cuatro puntas
@@ -10,6 +11,7 @@ Name[nds]=Veerpünktsteern
 Name[nl]=Vierpuntige ster
 Name[pt]=Estrela de Quatro Pontas
 Name[pt_BR]=Estrela de Quatro Pontas
+Name[ru]=Звезда с четырьмя лучами
 Name[sv]=Fyruddig stjärna
 Name[uk]=Зірка з чотирма променями
 Name[x-test]=xxFour Point Starxx

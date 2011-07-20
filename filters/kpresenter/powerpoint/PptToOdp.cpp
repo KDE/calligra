@@ -1027,13 +1027,9 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
 }
 
 void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
-    const TextPFException9* pf9 = 0;
     if (p->documentContainer) {
         const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
                 p->documentContainer);
-        if (pp9 && pp9->textDefaultsAtom) {
-            pf9 = &pp9->textDefaultsAtom->pf9;
-        }
     }
     PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);

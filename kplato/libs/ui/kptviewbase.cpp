@@ -849,12 +849,32 @@ void TreeViewBase::updateSelection( const QModelIndex &oldidx, const QModelIndex
         else if (modifiers & Qt::ShiftModifier)
             command = QItemSelectionModel::Select | selectionBehaviorFlags();
         else
-            command = QItemSelectionModel::Clear | selectionBehaviorFlags();
+            command = QItemSelectionModel::ClearAndSelect | selectionBehaviorFlags();
         break;
     default:
         break;
     }
     selectionModel()->setCurrentIndex( newidx, command );
+}
+
+void TreeViewBase::mousePressEvent(QMouseEvent *event)
+{
+    // If  the mouse is pressed outside any item, the current item should be/remain selected
+    QPoint pos = event->pos();
+    QModelIndex index = indexAt(pos);
+    kDebug()<<index<<event->pos();
+    if ( ! index.isValid() ) {
+        index = selectionModel()->currentIndex();
+        if ( index.isValid() && ! selectionModel()->isSelected( index ) ) {
+            pos = visualRect( index ).center();
+            QMouseEvent e( event->type(), pos, mapToGlobal( pos ), event->button(), event->buttons(), event->modifiers() );
+            QTreeView::mousePressEvent( &e );
+            event->setAccepted( e.isAccepted() );
+            kDebug()<<index<<e.pos();
+        }
+        return;
+    }
+    QTreeView::mousePressEvent( event );
 }
 
 void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)

@@ -52,6 +52,7 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
 : QWidget( parent, flags )
 , m_view( 0 )
 , m_soundCollection( 0 )
+, m_canvas(0)
 {
     setObjectName( "KPrClickActionDocker" );
     // setup widget layout
@@ -109,14 +110,16 @@ void KPrClickActionDocker::selectionChanged()
 
 void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
 {
-    m_canvas->disconnectCanvasObserver(this);
-    
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
+
     m_canvas = canvas;
 
-    if ( m_canvas ) {
-        connect( m_canvas->shapeManager(), SIGNAL( selectionChanged() ),
-                this, SLOT( selectionChanged() ) );
-   }
+    if (m_canvas) {
+        connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()),
+                this, SLOT(selectionChanged()));
+    }
 
     selectionChanged();
 }

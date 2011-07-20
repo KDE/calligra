@@ -251,8 +251,6 @@ long double Calligra::Tables::yearFrac(const QDate& refDate, const QDate& startD
     // calculation
     //
 
-    QDate date0 = refDate; // referenceDate
-
     if (date2 < date1) {
         // exchange dates
         QDate Temp1 = date1;

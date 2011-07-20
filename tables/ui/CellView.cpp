@@ -388,6 +388,12 @@ void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter,
     if (sheetView->isObscured(cell.cellPosition()))
         return;
 
+    // somehow sometimes the obscured cell info in SheetView and the one stored in the
+    // actual cell views gets out of sync... for now this hack will do to fix that
+    if (d->obscuredCellsX || d->obscuredCellsY) {
+        sheetView->obscureCells(cell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
+    }
+
     // ----------------  Start the actual painting.  ----------------
 
     // If the rect of this cell doesn't intersect the rect that should

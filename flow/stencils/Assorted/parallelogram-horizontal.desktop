@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Horizontal Parallelogram
+Name[bg]=Хоризонтален успоредник
 Name[de]=Waagerechtes Parallelogramm
 Name[el]=Οριζόντιο παραλληλόγραμμο
 Name[es]=Paralelogramo horizontal
@@ -10,6 +11,7 @@ Name[nds]=Kimmrecht Parallelogramm
 Name[nl]=Horizontale parallelogram
 Name[pt]=Paralelograma Horizontal
 Name[pt_BR]=Paralelogramo Horizontal
+Name[ru]=Горизонтальный параллелограмм
 Name[sv]=Horisontellt parallellogram
 Name[uk]=Горизонтальний паралелограм
 Name[x-test]=xxHorizontal Parallelogramxx

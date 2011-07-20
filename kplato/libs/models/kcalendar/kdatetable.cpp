@@ -876,7 +876,7 @@ KDateTable::mousePressEvent(QMouseEvent *e)
     }
 
   // -----
-  int row, col, pos, temp;
+  int row, col, pos;
   QPoint mouseCoord;
   // -----
   mouseCoord = e->pos();
@@ -901,7 +901,6 @@ KDateTable::mousePressEvent(QMouseEvent *e)
   // the row with the days of the week in the calculation.
 
   // old selected date:
-  temp = posFromDate( d->mDate );
   // new position and date
   pos = (7 * (row - 1)) + col;
   QDate clickedDate = dateFromPos( pos );
@@ -1391,7 +1390,6 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
     const KCalendarSystem * calendar = KGlobal::locale()->calendar();
     QRectF r;
     bool paintRect=true;
-    QColor textColor = KGlobalSettings::activeTextColor();
     QBrush bg(option.palette.base());
 
     if( (option.state & QStyle::State_Active) == 0 )
