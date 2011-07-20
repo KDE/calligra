@@ -435,9 +435,27 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:wrap-contour-mode
     // style:wrap-dynamic-treshold
     // svg:fill-rule
-    if (shapeType == msosptDonut) {
-        // don't save default rule here "nonzero" for other shapes
+    switch (shapeType) {
+    case msosptDonut:
+    case msosptActionButtonBlank:
+    case msosptActionButtonHome:
+    case msosptActionButtonHelp:
+    case msosptActionButtonInformation:
+    case msosptActionButtonForwardNext:
+    case msosptActionButtonBackPrevious:
+    case msosptActionButtonEnd:
+    case msosptActionButtonBeginning:
+    case msosptActionButtonReturn:
+    case msosptActionButtonDocument:
+    case msosptActionButtonSound:
+    case msosptActionButtonMovie:
+    {
         style.addProperty("svg:fill-rule" ,"evenodd");
+        break;
+    }
+    default:
+        // don't save default rule here "nonzero" for other shapes
+        break;
     }
     // svg:height
     if (ds.fLine() || ds.fNoLineDrawDash()) {
