@@ -463,7 +463,9 @@ public:
 
     int numExternalAppointments() const { return m_externalAppointments.count(); }
     QList<Appointment*> externalAppointmentList() const { return m_externalAppointments.values(); }
-    
+    /// return a map of project id, project name
+    QMap<QString, QString> externalProjects() const;
+
     /// Return a measure of how suitable the resource is for allocation
     long allocationSuitability( const DateTime &time, const Duration &duration, bool backward );
 

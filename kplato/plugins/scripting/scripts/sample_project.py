@@ -132,6 +132,19 @@ def printChildCalendars( calendar ):
         printChildCalendars( calendar.childAt ( c ) )
 
 
+def printExternalProjects( proj ):
+    projects = proj.externalProjects()
+    if len(projects) == 0:
+        print "No external project appointments"
+        return
+    if len(projects) % 2 == 1:
+        print "Illegal id/name pair in list: %s" % projects
+        return
+
+    print "%-35s %s" % ( "Identity", "Name" )
+    for c in projects:
+        print "%-35s %s" % ( c[0], c[1] )
+
 #------------------------
 proj = Plan.project()
 
@@ -231,5 +244,6 @@ print "Print Task status:"
 printStates( proj, sid )
 print
 
-print testBit( 8, 1 ) is False, testBit( 7, 1) is True, testBit( 7, 2 ) is True
+print "Print external projects:"
+printExternalProjects( proj )
 print
