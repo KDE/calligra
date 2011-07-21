@@ -28,7 +28,6 @@
 
 class QPolygon;
 
-#define DEBUG_WMFPAINT 0
 
 /**
    Namespace for Windows Metafile (WMF) classes

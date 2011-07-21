@@ -30,6 +30,8 @@
 #include "WmfParser.h"
 
 
+#define DEBUG_WMFPAINT 0
+
 /**
    Namespace for Windows Metafile (WMF) classes
 */
@@ -487,12 +489,13 @@ void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
 
 void WmfPainterBackend::drawRect(WmfDeviceContext &context, int x, int y, int w, int h)
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
 
-    updateFromDeviceContext(context);
     mPainter->drawRect(x, y, w, h);
 }
 
@@ -758,19 +761,31 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
 
         if (dynamic_cast<QPrinter *>(mTarget)) {
             width = 0;
-        } else {
+        }
+        else  if (width == 1)
+            // I'm unsure of this, but it seems that WMF uses line
+            // width == 1 as cosmetic pen.  Or it could just be that
+            // any line width < 1 should be drawn as width == 1.  The
+            // WMF spec doesn't mention the term "cosmetic pen"
+            // anywhere so we don't get any clue there.
+            //
+            // For an example where this is shown clearly, see
+            // wmf_tests.doc, in the colored rectangles and the polypolygon.
+            width = 0;
+#if 0
+        else {
             // WMF spec: width of pen in logical coordinate
             // => width of pen proportional with device context width
-#if 0
             QRect rec = mPainter->window();
             // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
+
             QRect devRec = rec * mPainter->matrix();
             if (rec.width() != 0)
                 width = (width * devRec.width()) / rec.width() ;
             else
                 width = 0;
-#endif
         }
+#endif
 
         p.setWidth(width);
         mPainter->setPen(p);
