@@ -523,6 +523,9 @@ public:
 
     bool stopcalculation;
 
+    /// return a <id, name> map of all external projects
+    QMap<QString, QString> externalProjects() const;
+
 public slots:
     /// Sets m_progress to @p progress and emits signal sigProgress()
     /// If @p sm is not 0, progress is also set for the schedule manager

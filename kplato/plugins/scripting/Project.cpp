@@ -236,6 +236,19 @@ QObject *Scripting::Project::findResource( const QString &id )
     return r == 0 ? 0 : resource( r );
 }
 
+QVariantList Scripting::Project::externalProjects()
+{
+    QVariantList lst;
+    QMap<QString, QString> map = project()->externalProjects();
+    for ( QMapIterator<QString, QString> it( map ); it.hasNext(); ) {
+        it.next();
+        QVariantList m;
+        m << it.key() << it.value();
+        lst << QVariant(m);
+    }
+    return lst;
+}
+
 void Scripting::Project::clearExternalAppointments( const QString &id )
 {
     foreach ( KPlato::Resource *r, project()->resourceList() ) {
