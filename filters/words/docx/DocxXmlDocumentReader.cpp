@@ -3414,7 +3414,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     qreal lineSpace = line.toDouble(&ok);
 
     if (ok) {
-        if (lineRule == "atLeast" || lineRule == "exact") {
+        if (lineRule == "atLeast") {
+            lineSpace = TWIP_TO_POINT(lineSpace);
+            m_currentParagraphStyle.addPropertyPt("fo:line-height-at-least", lineSpace);
+        } else if (lineRule == "exact") {
             lineSpace = TWIP_TO_POINT(lineSpace);
             m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
         }

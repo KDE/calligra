@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os, datetime, sys, traceback, pickle
-import Kross, KPlato
+import Kross, Plan
 
 #TODO some ui
-KPlato.project().clearAllExternalAppointments();
+Plan.project().clearAllExternalAppointments();
 

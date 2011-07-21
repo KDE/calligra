@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
    Copyright (c) 1998 Stefan Taferner
-                    2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+                 2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+                 2011 Inge Wallin (inge@lysator.liu.se)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,7 +33,7 @@ namespace Libwmf
 {
 
 class WmfAbstractBackend;
-
+class WmfDeviceContext;
 
 /**
  * WMF file allows manipulation on a stack of object.
@@ -42,27 +43,27 @@ class KoWmfHandle
 {
 public:
     virtual ~KoWmfHandle() {}
-    virtual void apply(WmfAbstractBackend *) = 0;
+    virtual void apply(WmfDeviceContext *) = 0;
 };
 
 class KoWmfBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *);
+    virtual void apply(WmfDeviceContext *);
     QBrush brush;
 };
 
 class KoWmfPenHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *);
+    virtual void apply(WmfDeviceContext *);
     QPen pen;
 };
 
 class KoWmfPatternBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *);
+    virtual void apply(WmfDeviceContext *);
     QBrush brush;
     QPixmap image;
 };
@@ -70,9 +71,10 @@ public:
 class KoWmfFontHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(WmfAbstractBackend *);
+    virtual void apply(WmfDeviceContext *);
     QFont font;
-    int rotation;
+    int escapement;
+    int orientation;
     int height;                 // Can be negative. In 'font' above, we store the absolute value.
 };
 

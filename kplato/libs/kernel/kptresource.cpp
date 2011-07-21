@@ -1377,6 +1377,19 @@ AppointmentIntervalList Resource::externalAppointments( const DateTimeInterval &
     return app.intervals();
 }
 
+QMap<QString, QString> Resource::externalProjects() const
+{
+    QMap<QString, QString> map;
+    for ( QMapIterator<QString, Appointment*> it( m_externalAppointments ); it.hasNext(); ) {
+        it.next();
+        if ( ! map.contains( it.key() ) ) {
+            map[ it.key() ] = it.value()->auxcilliaryInfo();
+        }
+    }
+//     kDebug()<<map;
+    return map;
+}
+
 long Resource::allocationSuitability( const DateTime &time, const Duration &duration, bool backward )
 {
     // FIXME: This is not *very* intelligent...
