@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, datetime, sys, traceback, pickle
-import Kross, KPlato
+import Kross, Plan
 
 T = Kross.module("kdetranslation")
 def i18n(text, args = []):
@@ -18,7 +18,7 @@ class ResourcesImporter:
     def __init__(self, scriptaction):
         self.scriptaction = scriptaction
 
-        self.proj = KPlato.project()
+        self.proj = Plan.project()
         
         self.forms = Kross.module("forms")
         self.dialog = self.forms.createDialog(i18n("Resources Import"))
@@ -30,7 +30,7 @@ class ResourcesImporter:
         openpage = self.dialog.addPage(i18n("Open"),i18n("Plan Resources"),"document-open")
         self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kplatresourcesimportopen")
         self.openwidget.setMode("Opening")
-        self.openwidget.setFilter("*.kplato|%(1)s\n*|%(2)s" % { '1' : i18n("Resource Busy Information"), '2' : i18n("All Files") } )
+        self.openwidget.setFilter("*.plan|%(1)s\n*|%(2)s" % { '1' : i18n("Plan"), '2' : i18n("All Files") } )
 
         if self.dialog.exec_loop():
             try:
@@ -43,7 +43,7 @@ class ResourcesImporter:
         if not os.path.isfile(filename):
             raise Exception, i18n("No file selected")
 
-        Other = KPlato.openDocument("Other", filename)
+        Other = Plan.openDocument("Other", filename)
         if Other is None:
             self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Could not open document: %1", [filename]))
             return
@@ -83,7 +83,7 @@ class ResourcesImporter:
                 return
         else:
             #TODO update?
-            print "Resource already exists: %s %s" % ( r.id(), KPlato.data( r, 'ResourceName' ) )
+            print "Resource already exists: %s %s" % ( r.id(), Plan.data( r, 'ResourceName' ) )
     
     def doImportCalendar( self, project, calendar, parent = None ):
         cal = project.findCalendar( calendar.id() )

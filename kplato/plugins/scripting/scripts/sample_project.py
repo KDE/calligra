@@ -3,7 +3,7 @@
 
 import os, sys, traceback, tempfile, zipfile
 import Kross
-import KPlato
+import Plan
 
 State_Started = 0
 State_StartedLate = 1
@@ -56,10 +56,10 @@ def printStates( node, schedule ):
 
 def printState( node, schedule ):
     if node.type() in [ 'Task' ]:
-        st = KPlato.data( node, 'NodeStatus', 'EditRole', schedule )
+        st = Plan.data( node, 'NodeStatus', 'EditRole', schedule )
         print "%-30s %-20s %20s" % ( 
-            KPlato.data( node, 'NodeName', 'DisplayRole', schedule ),
-            KPlato.data( node, 'NodeStatus', 'DisplayRole', schedule ),
+            Plan.data( node, 'NodeName', 'DisplayRole', schedule ),
+            Plan.data( node, 'NodeStatus', 'DisplayRole', schedule ),
             state( int( st ) ) )
 
 def printNodes( node, props, schedule, types = None ):
@@ -70,19 +70,19 @@ def printNodes( node, props, schedule, types = None ):
 def printNode( node, props, schedule, types = None ):
     if types is None or node.type() in types:
         for prop in props:
-            print "%-25s" % ( KPlato.data( node, prop[0], prop[1], schedule ) ),
+            print "%-25s" % ( Plan.data( node, prop[0], prop[1], schedule ) ),
         print
 
 def printGroup( group, props ):
     for prop in props:
-        print "%-25s" % ( KPlato.data( group, prop ) ),
+        print "%-25s" % ( Plan.data( group, prop ) ),
     print
     for i in range( group.resourceCount() ):
         printResource( group.resourceAt( i ), props )
 
 def printResource( resource, props ):
     for prop in props:
-        print "%-25s" % ( KPlato.data( resource, prop ) ),
+        print "%-25s" % ( Plan.data( resource, prop ) ),
     print
 
 def printSchedules():
@@ -117,7 +117,7 @@ def printProjectBusyinfo( proj ):
     print
 
 def printBusyinfo( res, lst ):
-    name = KPlato.data( res, 'ResourceName' )
+    name = Plan.data( res, 'ResourceName' )
     for interval in lst:
         print "%-20s %-30s %-30s %8s" % ( name, interval[0], interval[1], interval[2] )
         name = ""
@@ -132,8 +132,21 @@ def printChildCalendars( calendar ):
         printChildCalendars( calendar.childAt ( c ) )
 
 
+def printExternalProjects( proj ):
+    projects = proj.externalProjects()
+    if len(projects) == 0:
+        print "No external project appointments"
+        return
+    if len(projects) % 2 == 1:
+        print "Illegal id/name pair in list: %s" % projects
+        return
+
+    print "%-35s %s" % ( "Identity", "Name" )
+    for c in projects:
+        print "%-35s %s" % ( c[0], c[1] )
+
 #------------------------
-proj = KPlato.project()
+proj = Plan.project()
 
 sid = -1;
 # get a schedule id
@@ -180,13 +193,13 @@ print "Print Effort/Cost for each node:"
 print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
 for i in range( proj.nodeCount() ):
     node = proj.nodeAt( i )
-    name = KPlato.data( node, 'NodeName' )
+    name = Plan.data( node, 'NodeName' )
     printEffortCost( name, node.plannedEffortCostPrDay( "2007-09-12", "2007-09-18", sid ) )
 
 print "Print Effort/Cost for the project:"
 
 print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
-name = KPlato.data( proj, 'NodeName' )
+name = Plan.data( proj, 'NodeName' )
 printEffortCost( name, proj.plannedEffortCostPrDay( "2007-09-12", "2007-09-17", sid ) )
 
 print "Print Busy information for all resources in the project:"
@@ -201,7 +214,7 @@ print "Print planned Effort/Cost for each account:"
 print "%-20s %-15s %20s %20s" % ( 'Name', 'Date', 'Effort', 'Cost' )
 for i in range( proj.accountCount() ):
     account = proj.accountAt( i )
-    name = KPlato.data( account, 'Name' )
+    name = Plan.data( account, 'Name' )
     printEffortCost( name, account.plannedEffortCostPrDay( sid ) )
 print
 
@@ -209,7 +222,7 @@ print "Print actual Effort/Cost for each account:"
 print "%-20s %-15s %20s %20s" % ( 'Name', 'Date', 'Effort', 'Cost' )
 for i in range( proj.accountCount() ):
     account = proj.accountAt( i )
-    name = KPlato.data( account, 'Name' )
+    name = Plan.data( account, 'Name' )
     printEffortCost( name, account.actualEffortCostPrDay( sid ) )
 print
 
@@ -231,5 +244,6 @@ print "Print Task status:"
 printStates( proj, sid )
 print
 
-print testBit( 8, 1 ) is False, testBit( 7, 1) is True, testBit( 7, 2 ) is True
+print "Print external projects:"
+printExternalProjects( proj )
 print
