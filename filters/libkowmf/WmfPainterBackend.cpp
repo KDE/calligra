@@ -431,6 +431,7 @@ void WmfPainterBackend::setViewportExt( int width, int height )
 
 void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, bool combine)
 {
+    Q_UNUSED(context);
 #if DEBUG_WMFPAINT
     kDebug(31000) << wm << " " << combine;
 #endif
@@ -462,6 +463,7 @@ void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, QColor
 
 void WmfPainterBackend::moveTo(WmfDeviceContext &context, int x, int y)
 {
+    Q_UNUSED(context);
 #if DEBUG_WMFPAINT
     kDebug(31000)<< x << ", " << y;
 #endif
@@ -759,9 +761,9 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
         } else {
             // WMF spec: width of pen in logical coordinate
             // => width of pen proportional with device context width
+#if 0
             QRect rec = mPainter->window();
             // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
-#if 0
             QRect devRec = rec * mPainter->matrix();
             if (rec.width() != 0)
                 width = (width * devRec.width()) / rec.width() ;

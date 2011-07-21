@@ -3,7 +3,7 @@
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
    Copyright (C) 2005, 2006 Sven Lüppken <sven@kde.org>
-   Copyright (C) 2008 - 2009 Dag Andersen <kplato@kde.org>
+   Copyright (C) 2008 - 2009 Dag Andersen <danders@get2net.dk>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -164,7 +164,7 @@ void KPlatoWork_MainWindow::slotFileSave()
 
 void KPlatoWork_MainWindow::slotFileOpen()
 {
-    QString file = KFileDialog::getOpenFileName( KUrl(), "*.kplatowork" );
+    QString file = KFileDialog::getOpenFileName( KUrl(), "*.planwork" );
     if ( ! file.isEmpty() ) {
         openDocument( file );
     }

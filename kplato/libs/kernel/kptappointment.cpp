@@ -742,7 +742,7 @@ void Appointment::saveXML(QDomElement &element) const {
 // Returns the total planned effort for this appointment
 Duration Appointment::plannedEffort(EffortCostCalculationType type) const {
     Duration d;
-    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+    if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
         foreach (const AppointmentInterval &i, m_intervals.map() ) {
             d += i.effort();
         }
@@ -753,7 +753,7 @@ Duration Appointment::plannedEffort(EffortCostCalculationType type) const {
 // Returns the planned effort on the date
 Duration Appointment::plannedEffort(const QDate &date, EffortCostCalculationType type) const {
     Duration d;
-    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+    if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
         QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().constFind( date );
         for ( ; it != m_intervals.map().constEnd() && it.key() == date; ++it ) {
             d += it.value().effort();
@@ -766,7 +766,7 @@ Duration Appointment::plannedEffort(const QDate &date, EffortCostCalculationType
 Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationType type) const {
     Duration d;
     QDate e(date.addDays(1));
-    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+    if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
         foreach (const AppointmentInterval &i, m_intervals.map() ) {
             d += i.effort(e, true); // upto e, not including
         }
@@ -781,7 +781,7 @@ EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend, 
     QDate start = pstart.isValid() ? pstart : startTime().date();
     QDate end = pend.isValid() ? pend : endTime().date();
     double rate = m_resource ? m_resource->normalRatePrHour() : 0.0;
-    Resource::Type rt = m_resource->resource()->type();
+    Resource::Type rt = m_resource ? m_resource->resource()->type() : Resource::Type_Work;
     Duration zero;
     //kDebug()<<rate<<m_intervals.count();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().lowerBound( start );
@@ -883,7 +883,7 @@ void Appointment::detach() {
 // Returns the effort from start to end
 Duration Appointment::effort(const DateTime &start, const DateTime &end, EffortCostCalculationType type) const {
     Duration e;
-    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+    if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
         e = m_intervals.effort( start, end );
     }
     return e;
@@ -891,7 +891,7 @@ Duration Appointment::effort(const DateTime &start, const DateTime &end, EffortC
 // Returns the effort from start for the duration
 Duration Appointment::effort(const DateTime &start, const Duration &duration, EffortCostCalculationType type) const {
     Duration d;
-    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+    if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
         foreach (const AppointmentInterval &i, m_intervals.map() ) {
             d += i.effort(start, start+duration);
         }
