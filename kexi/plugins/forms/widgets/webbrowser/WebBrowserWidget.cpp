@@ -100,7 +100,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     connect(m_toolbar,SIGNAL(goBack()),SLOT(loadPreviousPage()));
     connect(m_toolbar,SIGNAL(goForward()),SLOT(loadNextPage())); 
     connect(m_toolbar,SIGNAL(doreload()),SLOT(onreload()));
-    connect(m_view,SIGNAL(urlChanged(QUrl)),this,SLOT(setUrl(QString)));
+    connect(m_view,SIGNAL(urlChanged(QUrl)),this,SLOT(setUrl(QUrl)));
 
 
 };
@@ -150,10 +150,14 @@ void WebBrowserWidget::onreload()
 
 void WebBrowserWidget::setUrl(const QString& url)
 {
-     m_url=QUrl(url);
-     m_view->load(m_url);
-}//ok
+    setUrl(QUrl(url));
+}
 
+void WebBrowserWidget::setUrl(const QUrl& url)
+{
+    m_url=url;
+    m_view->load(m_url);
+}
 
 bool WebBrowserWidget::cursorAtStart()
 {
