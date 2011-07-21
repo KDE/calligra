@@ -182,6 +182,7 @@ KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
 {
     //save zoom value
     saveZoomConfig(zoom());
+    delete m_centralWidget;
 }
 
 void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*painter*/, const QRectF &/*paintRect*/)
@@ -275,7 +276,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    //m_slidesSorter->hide();
     m_centralWidget->hide();
     // Give the ressources back to the canvas
     m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
