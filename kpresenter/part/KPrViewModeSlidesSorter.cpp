@@ -182,6 +182,7 @@ KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
 {
     //save zoom value
     saveZoomConfig(zoom());
+    delete m_centralWidget;
 }
 
 void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*painter*/, const QRectF &/*paintRect*/)
