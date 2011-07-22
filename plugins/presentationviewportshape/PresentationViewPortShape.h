@@ -49,7 +49,9 @@ public:
     
     /**Others */
     QString pathShapeId() const;
-        
+        /// reimplemented
+    virtual QPainterPath outline() const;
+     virtual QSizeF size() const;
 private:
     qreal m_cornerRadiusX; ///< in percent of half of the rectangle width (a number between 0 and 100)
     qreal m_cornerRadiusY; ///< in percent of half of the rectangle height (a number between 0 and 100)

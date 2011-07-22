@@ -19,7 +19,7 @@ PresentationViewPortTool::PresentationViewPortTool( KoCanvasBase* canvas )
     : KoToolBase( canvas ),
       m_shape(0)
 {
-  qDebug() << "PresentationViewPortTool created";
+  //qDebug() << "PresentationViewPortTool created";
 }
 
 void PresentationViewPortTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
