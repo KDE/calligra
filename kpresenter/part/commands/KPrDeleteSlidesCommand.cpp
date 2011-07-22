@@ -112,7 +112,3 @@ void KPrDeleteSlidesCommand::undo()
 
     m_deletePages = false;
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> master
