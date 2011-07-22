@@ -173,7 +173,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
 {
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KPlato::Part::loadXML");
+        updater = progressUpdater()->startSubtask(1, "Plan::Part::loadXML");
         updater->setProgress(0);
     }
 
@@ -285,7 +285,7 @@ QDomDocument Part::saveXML()
                               "xml",
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement doc = document.createElement( "kplato" );
+    QDomElement doc = document.createElement( "plan" );
     doc.setAttribute( "editor", "Plan" );
     doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
     doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
@@ -300,15 +300,15 @@ QDomDocument Part::saveXML()
 QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *resource )
 {
     kDebug();
-    QDomDocument document( "kplato" );
+    QDomDocument document( "plan" );
 
     document.appendChild( document.createProcessingInstruction(
                 "xml",
     "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement doc = document.createElement( "kplatowork" );
-    doc.setAttribute( "editor", "KPlato" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
+    QDomElement doc = document.createElement( "planwork" );
+    doc.setAttribute( "editor", "Plan" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.plan.work" );
     doc.setAttribute( "version", PLANWORK_FILE_SYNTAX_VERSION );
     doc.setAttribute( "plan-version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
@@ -353,7 +353,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
     }*/
 #endif
 
-    QByteArray mimeType = "application/x-vnd.kde.kplato.work";
+    QByteArray mimeType = "application/x-vnd.kde.plan.work";
     kDebug() <<"MimeType=" << mimeType;
 
     KoStore *store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
@@ -406,6 +406,7 @@ bool Part::saveWorkPackageUrl( const KUrl &_url, const Node *node, long id, Reso
 
 bool Part::loadWorkPackage( Project &project, const KUrl &url )
 {
+    kDebug()<<url;
     if ( ! url.isLocalFile() ) {
         kDebug()<<"TODO: download if url not local";
         return false;
@@ -494,10 +495,10 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
                 return false;
             }
         }
-        m_xmlLoader.setVersion( plan.attribute( "kplato-version", PLAN_FILE_SYNTAX_VERSION ) );
+        m_xmlLoader.setVersion( plan.attribute( "plan-version", PLAN_FILE_SYNTAX_VERSION ) );
         m_xmlLoader.startLoad();
-        Project *proj = new Project();
-        Package *package = new Package();
+        proj = new Project();
+        package = new Package();
         package->project = proj;
         KoXmlNode n = plan.firstChild();
         for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -555,6 +556,7 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         delete package;
         return 0;
     }
+    Q_ASSERT( package );
     m_workpackages.insert( package, url );
     return proj;
 }
@@ -565,7 +567,7 @@ void Part::checkForWorkPackages()
         QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
         return;
     }
-    QDir dir( m_config.retrieveUrl().path(), "*.kplatowork" );
+    QDir dir( m_config.retrieveUrl().path(), "*.planwork" );
     m_infoList = dir.entryInfoList( QDir::Files | QDir::Readable, QDir::Time );
     checkForWorkPackage();
     return;
@@ -786,7 +788,7 @@ bool Part::completeLoading( KoStore *store )
         m_project->setConstraintEndTime( m_project->constraintStartTime().addYears( 2 ) );
     } else if ( isImporting() ) {
         // NOTE: I don't think this is a good idea.
-        // Let the filter generate ids for non-kplato files.
+        // Let the filter generate ids for non-plan files.
         // If the user wants to create a new project from an old one,
         // he should use Tools -> Insert Project File
 

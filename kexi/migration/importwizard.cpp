@@ -674,7 +674,6 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 
     // Set up destination connection data
     KexiDB::ConnectionData *cdata;
-    bool cdataOwned = false;
     QString dbname;
     if (!result.error()) {
         if (m_dstConn->selectedConnectionData()) {
@@ -686,7 +685,6 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
             //file-based project
             kDebug() << "File Destination...";
             cdata = new KexiDB::ConnectionData();
-            cdataOwned = true;
             cdata->caption = m_dstNewDBNameLineEdit->text();
             cdata->driverName = KexiDB::defaultFileBasedDriverName();
             dbname = m_dstConn->selectedFileName();

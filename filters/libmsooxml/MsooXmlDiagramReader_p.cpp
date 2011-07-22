@@ -2850,16 +2850,12 @@ void SnakeAlgorithm::virtualDoLayout() {
     const qreal h = layout()->finalValues()["h"];
     qreal x = 0;
     qreal y = 0;
-    enum { TopLeft, TopRight, BottomLeft, BottomRight } direction = TopLeft;
 
     if (growDirection == "tR") {
-        direction = TopRight;
         x = w - childs.first()->finalValues()["w"];
     } else if (growDirection == "bL") {
-        direction = BottomLeft;
         y = h - childs.first()->finalValues()["h"];
     } else if (growDirection == "bR") {
-        direction = BottomRight;
         x = w - childs.first()->finalValues()["w"];
         y = h - childs.first()->finalValues()["h"];
     }

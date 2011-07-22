@@ -268,7 +268,7 @@ int KarbonCalligraphicShape::ccw(const QPointF &p1,
 
 void KarbonCalligraphicShape::setSize(const QSizeF &newSize)
 {
-    QSizeF oldSize = size();
+    // QSizeF oldSize = size();
     // TODO: check
     KoParameterShape::setSize(newSize);
 }

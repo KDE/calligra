@@ -1156,7 +1156,6 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
     int oldRow = m_curRow;
     int oldCol = m_curCol;
     kDebug() << "oldRow=" << oldRow << " oldCol=" << oldCol;
-    bool onInsertItem = false;
 
     int newrow, newcol;
     //compute clicked row nr
@@ -1172,7 +1171,6 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
             }
             newrow++;
             kDebug() << "Clicked just on 'insert' row.";
-            onInsertItem = true;
         } else {
             // get new focus cell
             newrow = rowAt(e->pos().y());

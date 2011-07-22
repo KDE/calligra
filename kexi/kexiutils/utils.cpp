@@ -399,9 +399,9 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //! and performing detailed painting later (using QTimer)
 //    QPixmap pixmapBuffer;
 //    QPainter p2;
-    QPainter *target;
+//    QPainter *target;
 //    if (fast) {
-        target = p;
+//       target = p;
 //    } else {
 //moved  pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
 //moved  p2.begin(&pm, p.device());

@@ -28,6 +28,7 @@
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
 
+class KUndo2Command;
 class QMimeData;
 class QModelIndex;
 
@@ -143,7 +144,7 @@ public:
     long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }
     
     QVariant data( const Node *node, int property, int role = Qt::DisplayRole ) const; 
-    static bool setData( Node *node, int property, const QVariant & value, int role = Qt::EditRole );
+    KUndo2Command *setData( Node *node, int property, const QVariant & value, int role = Qt::EditRole );
     
     static QVariant headerData( int section, int role = Qt::DisplayRole );
 
@@ -240,6 +241,31 @@ public:
     QVariant wpTransmitionStatus( const Node *node, int role ) const;
     QVariant wpTransmitionTime( const Node *node, int role ) const;
 
+    KUndo2Command *setName( Node *node, const QVariant &value, int role );
+    KUndo2Command *setLeader( Node *node, const QVariant &value, int role );
+    KUndo2Command *setAllocation( Node *node, const QVariant &value, int role );
+    KUndo2Command *setDescription( Node *node, const QVariant &value, int role );
+    KUndo2Command *setType( Node *node, const QVariant &value, int role );
+    KUndo2Command *setConstraint( Node *node, const QVariant &value, int role );
+    KUndo2Command *setConstraintStartTime( Node *node, const QVariant &value, int role );
+    KUndo2Command *setConstraintEndTime( Node *node, const QVariant &value, int role );
+    KUndo2Command *setEstimateType( Node *node, const QVariant &value, int role );
+    KUndo2Command *setEstimateCalendar( Node *node, const QVariant &value, int role );
+    KUndo2Command *setEstimate( Node *node, const QVariant &value, int role );
+    KUndo2Command *setOptimisticRatio( Node *node, const QVariant &value, int role );
+    KUndo2Command *setPessimisticRatio( Node *node, const QVariant &value, int role );
+    KUndo2Command *setRiskType( Node *node, const QVariant &value, int role );
+    KUndo2Command *setRunningAccount( Node *node, const QVariant &value, int role );
+    KUndo2Command *setStartupAccount( Node *node, const QVariant &value, int role );
+    KUndo2Command *setStartupCost( Node *node, const QVariant &value, int role );
+    KUndo2Command *setShutdownAccount( Node *node, const QVariant &value, int role );
+    KUndo2Command *setShutdownCost( Node *node, const QVariant &value, int role );
+    KUndo2Command *setCompletion( Node *node, const QVariant &value, int role );
+    KUndo2Command *setActualEffort( Node *node, const QVariant &value, int role );
+    KUndo2Command *setRemainingEffort( Node *node, const QVariant &value, int role );
+    KUndo2Command *setStartedTime( Node *node, const QVariant &value, int role );
+    KUndo2Command *setFinishedTime( Node *node, const QVariant &value, int role );
+
 private:
     Project *m_project;
     ScheduleManager *m_manager;
@@ -297,7 +323,8 @@ public:
 
 signals:
     void nodeInserted( Node *node );
-    
+    void projectShownChanged( bool );
+
 public slots:
     virtual void setScheduleManager( ScheduleManager *sm );
     void setShowProject( bool on );
@@ -311,33 +338,11 @@ protected slots:
     virtual void slotNodeRemoved( Node *node );
 
     void slotLayoutChanged();
-    
+
 protected:
-    bool setName( Node *node, const QVariant &value, int role );
-    bool setLeader( Node *node, const QVariant &value, int role );
-    QVariant allocation( const Node *node, int role ) const;
-    bool setAllocation( Node *node, const QVariant &value, int role );
-    bool setDescription( Node *node, const QVariant &value, int role );
     virtual bool setType( Node *node, const QVariant &value, int role );
-    bool setConstraint( Node *node, const QVariant &value, int role );
-    bool setConstraintStartTime( Node *node, const QVariant &value, int role );
-    bool setConstraintEndTime( Node *node, const QVariant &value, int role );
-    bool setEstimateType( Node *node, const QVariant &value, int role );
-    bool setEstimateCalendar( Node *node, const QVariant &value, int role );
-    bool setEstimate( Node *node, const QVariant &value, int role );
-    bool setOptimisticRatio( Node *node, const QVariant &value, int role );
-    bool setPessimisticRatio( Node *node, const QVariant &value, int role );
-    bool setRiskType( Node *node, const QVariant &value, int role );
-    bool setRunningAccount( Node *node, const QVariant &value, int role );
-    bool setStartupAccount( Node *node, const QVariant &value, int role );
-    bool setStartupCost( Node *node, const QVariant &value, int role );
-    bool setShutdownAccount( Node *node, const QVariant &value, int role );
-    bool setShutdownCost( Node *node, const QVariant &value, int role );
     bool setCompletion( Node *node, const QVariant &value, int role );
-    bool setActualEffort( Node *node, const QVariant &value, int role );
-    bool setRemainingEffort( Node *node, const QVariant &value, int role );
-    bool setStartedTime( Node *node, const QVariant &value, int role );
-    bool setFinishedTime( Node *node, const QVariant &value, int role );
+    bool setAllocation( Node *node, const QVariant &value, int role );
 
 protected:
     Node *m_node; // for sanety check
@@ -481,27 +486,6 @@ protected slots:
 
     void slotLayoutChanged();
     void slotWbsDefinitionChanged();
-
-protected:
-    bool setName( Node *node, const QVariant &value, int role );
-    bool setLeader( Node *node, const QVariant &value, int role );
-    QVariant allocation( const Node *node, int role ) const;
-    bool setAllocation( Node *node, const QVariant &value, int role );
-    bool setDescription( Node *node, const QVariant &value, int role );
-    bool setType( Node *node, const QVariant &value, int role );
-    bool setConstraint( Node *node, const QVariant &value, int role );
-    bool setConstraintStartTime( Node *node, const QVariant &value, int role );
-    bool setConstraintEndTime( Node *node, const QVariant &value, int role );
-    bool setEstimateType( Node *node, const QVariant &value, int role );
-    bool setEstimate( Node *node, const QVariant &value, int role );
-    bool setOptimisticRatio( Node *node, const QVariant &value, int role );
-    bool setPessimisticRatio( Node *node, const QVariant &value, int role );
-    bool setRiskType( Node *node, const QVariant &value, int role );
-    bool setRunningAccount( Node *node, const QVariant &value, int role );
-    bool setStartupAccount( Node *node, const QVariant &value, int role );
-    bool setStartupCost( Node *node, const QVariant &value, int role );
-    bool setShutdownAccount( Node *node, const QVariant &value, int role );
-    bool setShutdownCost( Node *node, const QVariant &value, int role );
 
 protected:
     bool resetData();

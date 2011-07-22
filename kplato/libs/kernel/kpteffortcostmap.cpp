@@ -60,9 +60,7 @@ EffortCostMap &EffortCostMap::operator+=(const EffortCostMap &ec) {
         return *this;
     }
     EffortCostMap other = ec;
-    QDate osd = other.startDate();
     QDate oed = other.endDate();
-    QDate sd = startDate();
     QDate ed = endDate();
     // get bcwp of the last entries
     EffortCost last_oec = other.m_days[oed];

@@ -976,11 +976,8 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
 
     // thousands separator
     if (formatString[lastPos] == '#') {
-        bool sep = true;
         if (formatString[lastPos + 1] == ',')
             lastPos += 2;
-        else
-            sep = false;
         // since KSpread 1.3
         // kspread_cell.setThousandsSeparator( sep );
     }

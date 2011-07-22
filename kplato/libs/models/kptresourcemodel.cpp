@@ -294,7 +294,7 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
-            if ( res->availableFrom().isValid() ) {
+            if ( res->availableUntil().isValid() ) {
                 return i18nc( "infor:tooltip", "Available until: %1", KGlobal::locale()->formatDateTime( res->availableUntil(), KLocale::LongDate, KLocale::TimeZone ) );
             }
             return i18nc( "infor:tooltip", "Available from project target finish time: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone ) );
@@ -445,8 +445,24 @@ QVariant ResourceModel::headerData( int section, int role )
         }
     } else if ( role == Qt::TextAlignmentRole ) {
         switch (section) {
-            case 0: return QVariant();
-            default: return Qt::AlignCenter;
+            case ResourceName:
+            case ResourceType:
+            case ResourceInitials:
+            case ResourceEmail:
+            case ResourceCalendar:
+                return QVariant();
+            case ResourceLimit:
+                return (int)(Qt::AlignRight|Qt::AlignVCenter);
+            case ResourceAvailableFrom:
+            case ResourceAvailableUntil:
+                return QVariant();
+            case ResourceNormalRate:
+            case ResourceOvertimeRate:
+                return (int)(Qt::AlignRight|Qt::AlignVCenter);
+            case ResourceAccount: return i18n( "Account" );
+                return QVariant();
+            default:
+                return QVariant();
         }
     } else if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
@@ -1072,15 +1088,8 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
 QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole ) {
+        if ( role == Qt::DisplayRole || role == Qt::TextAlignmentRole ) {
             return m_model.headerData( section, role );
-        }
-        if ( role == Qt::TextAlignmentRole ) {
-            switch (section) {
-                case 0: return QVariant();
-                default: return Qt::AlignCenter;
-            }
-            return Qt::AlignCenter;
         }
     }
     if ( role == Qt::ToolTipRole ) {

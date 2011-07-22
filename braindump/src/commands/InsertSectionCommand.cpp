@@ -22,27 +22,27 @@
 #include "Section.h"
 #include <SectionsIO.h>
 
-InsertSectionCommand::InsertSectionCommand( SectionsIO* _sectionIO, Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above ) : m_sectionIO(_sectionIO), m_section(_section), m_parent(_parent), m_model(_model), m_above(_above), m_idx(-1)
+InsertSectionCommand::InsertSectionCommand(SectionsIO* _sectionIO, Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above) : m_sectionIO(_sectionIO), m_section(_section), m_parent(_parent), m_model(_model), m_above(_above), m_idx(-1)
 {
-  Q_ASSERT( _above == 0 || _parent == _above->sectionParent());
+    Q_ASSERT(_above == 0 || _parent == _above->sectionParent());
 }
 
-InsertSectionCommand::InsertSectionCommand( SectionsIO* _sectionIO, Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx ) : m_sectionIO(_sectionIO), m_section(_section), m_parent(_parent), m_model(_model), m_above(0), m_idx(_idx)
+InsertSectionCommand::InsertSectionCommand(SectionsIO* _sectionIO, Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx) : m_sectionIO(_sectionIO), m_section(_section), m_parent(_parent), m_model(_model), m_above(0), m_idx(_idx)
 {
-  Q_ASSERT( _idx >= 0 && _idx <= _parent->sections().count());
+    Q_ASSERT(_idx >= 0 && _idx <= _parent->sections().count());
 }
 
 void InsertSectionCommand::undo()
 {
-  m_model->removeSection(m_section);
+    m_model->removeSection(m_section);
 }
 
 void InsertSectionCommand::redo()
 {
-  m_sectionIO->push(m_section, SectionsIO::RecursivePush);
-  if(m_above || m_idx == -1) {
-    m_model->insertSection(m_section, m_parent, m_above);
-  } else {
-    m_model->insertSection(m_section, m_parent, m_idx);
-  }
+    m_sectionIO->push(m_section, SectionsIO::RecursivePush);
+    if(m_above || m_idx == -1) {
+        m_model->insertSection(m_section, m_parent, m_above);
+    } else {
+        m_model->insertSection(m_section, m_parent, m_idx);
+    }
 }

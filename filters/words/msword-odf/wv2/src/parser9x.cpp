@@ -308,8 +308,6 @@ void Parser9x::parseTableRow( const TableRowData& data )
 
 void Parser9x::parseTextBox(uint index, bool stylesxml)
 {
-    wvlog << "Parser9x::parseTextBox" << endl;
-
     const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
     if (stylesxml) {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
@@ -317,6 +315,7 @@ void Parser9x::parseTextBox(uint index, bool stylesxml)
         plcftxbxTxt =  m_drawings->getTxbxTxt();
     }
     if (!plcftxbxTxt) {
+        wvlog << "plcftxbxTxt MISSING!";
         return;
     }
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D

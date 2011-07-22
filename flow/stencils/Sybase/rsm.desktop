@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Replication Server Manager
+Name[bg]=Управление на репликиращ сървър
 Name[el]=Διαχειριστής εξυπηρετητή αντιγράφων
 Name[es]=Gestor de servidor de replicación
 Name[et]=Replikatsiooniserveri haldur
@@ -9,3 +10,4 @@ Name[pt_BR]=Gerenciador de servidor de replicação
 Name[sv]=Replikeringsserverhantering
 Name[uk]=Менеджер сервера реплікації
 Name[x-test]=xxReplication Server Managerxx
+Name[zh_TW]=複製伺服器管理員

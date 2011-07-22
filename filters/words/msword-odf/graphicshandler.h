@@ -91,6 +91,7 @@ private:
     {
     private:
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
+        virtual QRectF getReserveRect(void);
         virtual QString getPicturePath(const quint32 pib);
         virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
         virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
@@ -111,7 +112,6 @@ private:
 
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer();
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
@@ -179,9 +179,10 @@ private:
     void init(void);
 
     /**
-     * Parse the OfficeArtDggContainer data from the Table stream.
+     * Parse the OfficeArtDggContainer data and OfficeArtDgContainer data for
+     * both the body and the header document from the Table stream.
      */
-    void parseOfficeArtContainer(void);
+    void parseOfficeArtContainers(void);
 
     /**
      * Parse floating pictures data from the WordDocument stream.
@@ -309,10 +310,6 @@ private:
 
     // Specifies the type, size and border information for an inline picture.
     wvWare::SharedPtr<const wvWare::Word97::PICF> m_picf;
-
-    //TODO: It seems that both inline and floating objects have placement and
-    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
-    //the index into plcfSpa.
 
     //structure that specifies placement of a floating object
     wvWare::Word97::FSPA* m_pSpa;

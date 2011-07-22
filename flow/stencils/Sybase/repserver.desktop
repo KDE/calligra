@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Replication Server
+Name[bg]=Репликиращ сървър
 Name[el]=Εξυπηρετητής αντιγράφων
 Name[es]=Servidor de replicación
 Name[et]=Replikatsiooniserver
@@ -9,3 +10,4 @@ Name[pt_BR]=Servidor de replicação
 Name[sv]=Replikeringsserver
 Name[uk]=Сервер реплікації
 Name[x-test]=xxReplication Serverxx
+Name[zh_TW]=複製伺服器

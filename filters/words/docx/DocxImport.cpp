@@ -250,6 +250,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             QString footnotePath, footnoteFile;
             MSOOXML::Utils::splitPathAndFile(footnotePathAndFile, &footnotePath, &footnoteFile);
             DocxXmlDocumentReaderContext context(*this, footnotePath, footnoteFile, *relationships, &themes);
+            context.m_tableStyles = mainContext.m_tableStyles;
+            context.m_bulletStyles = mainContext.m_bulletStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 footnotePathAndFile, &footnoteReader, writers, errorMessage, &context) )
@@ -266,6 +268,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             QString commentPath, commentFile;
             MSOOXML::Utils::splitPathAndFile(commentPathAndFile, &commentPath, &commentFile);
             DocxXmlDocumentReaderContext context(*this, commentPath, commentFile, *relationships, &themes);
+            context.m_tableStyles = mainContext.m_tableStyles;
+            context.m_bulletStyles = mainContext.m_bulletStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 commentPathAndFile, &commentReader, writers, errorMessage, &context) )
@@ -282,6 +286,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             QString endnotePath, endnoteFile;
             MSOOXML::Utils::splitPathAndFile(endnotePathAndFile, &endnotePath, &endnoteFile);
             DocxXmlDocumentReaderContext context(*this, endnotePath, endnoteFile, *relationships, &themes);
+            context.m_tableStyles = mainContext.m_tableStyles;
+            context.m_bulletStyles = mainContext.m_bulletStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 endnotePathAndFile, &endnoteReader, writers, errorMessage, &context) )

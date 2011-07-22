@@ -22,6 +22,7 @@
 
 #include "generated/simpleParser.h"
 #include "writer.h"
+#include "msodraw.h"
 
 class DrawStyle;
 class QColor;
@@ -35,10 +36,18 @@ public:
     public:
         virtual ~Client() {}
         /**
-         * Get the bounding rect that defines the position of the diagram
-         * in the hosting document.
+         * Get the bounding rect that defines the position and dimensions of
+         * the shape in the hosting document.
          **/
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&) = 0;
+
+        /**
+         * Get the bounding rect that defines the position and dimensions of
+         * the shape in the hosting document if OfficeArtClientAnchor is
+         * missing.
+         */
+        virtual QRectF getReserveRect(void) = 0;
+
         /**
          * Get the path in the ODF document that corresponds to the
          * image generated from the image with the given pib.
@@ -95,13 +104,6 @@ public:
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
 
         /**
-         * Retrieve OfficeArtDgContainer.shape, which seems to contain
-         * additional properties to check before the default properties in the
-         * OfficeArtDggContainer are checked (MS Office 2003 specific).
-         **/
-        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer() = 0;
-
-        /**
          * Convert the OfficeArtCOLORREF to a QColor.
          * This conversion requires color scheme information.
          **/
@@ -141,17 +143,18 @@ private:
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer& out);
 
-    typedef void (ODrawToOdf::*PathArtist)(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, QPainterPath &shapePath) const;
-    void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);    
-    
+    typedef void (ODrawToOdf::*PathArtist)(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawStraightConnector1(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
+    void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);
+
     // shapes2.cpp
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -308,7 +311,7 @@ public:
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles, MSOSPT shapeType = msosptRectangle);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
     QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
