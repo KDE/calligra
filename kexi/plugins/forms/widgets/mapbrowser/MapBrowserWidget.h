@@ -35,6 +35,7 @@ class MapBrowserWidget : public Marble::MarbleWidget,
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 public:
     MapBrowserWidget(QWidget *parent=0);
     virtual ~MapBrowserWidget();
@@ -54,7 +55,8 @@ public:
     virtual void clear();
     
     virtual void setInvalidState(const QString&);
-    virtual void setReadOnly(bool);
+    
+    virtual bool isReadOnly() const;
 public slots:
     //! Sets the datasource to \a ds
     inline void setDataSource(const QString &ds) {
@@ -64,6 +66,7 @@ public slots:
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
     void slotMapChanged();
+    virtual void setReadOnly(bool);
     
 protected:
     QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
@@ -73,6 +76,7 @@ private:
     QString m_serializedData;
     //! Used in slotTextChanged()
     bool m_slotMapChanged_enabled;///TODO: do we need this to be 1 bit? As in some other widgets
+    bool m_internalReadOnly;
     
 };
 
