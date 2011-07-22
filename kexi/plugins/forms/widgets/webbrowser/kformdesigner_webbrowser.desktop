@@ -6,7 +6,6 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Web Browser
 
-Name[en_GB]=Web Browser
 
 X-KDE-Library=kformdesigner_webbrowser
 
