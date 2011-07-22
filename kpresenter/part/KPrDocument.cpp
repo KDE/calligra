@@ -35,7 +35,7 @@
 #include "KPrPageSelectStrategyActive.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
-#include "commands/KPrSetCustomSlideShowsCommand.h"
+#include "commands/KPrDeleteSlidesCommand.h"
 #include <KoPACanvas.h>
 #include <KoPACanvasItem.h>
 #include <KoPAViewModeNormal.h>
@@ -259,15 +259,10 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     }
 }
 
-void KPrDocument::pageRemoved( KoPAPageBase * page, KUndo2Command * parent )
+void KPrDocument::removePages(QList<KoPAPageBase *> &pages)
 {
-    // only normal pages can be part of a slide show
-    if ( dynamic_cast<KPrPage *>( page ) ) {
-        KPrCustomSlideShows * slideShows = new KPrCustomSlideShows( *customSlideShows() );
-        slideShows->removeSlideFromAll( page );
-        // maybe we should check if old and new are different and only than create the command
-        new KPrSetCustomSlideShowsCommand( this, slideShows, parent );
-    }
+    KPrDeleteSlidesCommand *command = new KPrDeleteSlidesCommand(this, pages);
+    addCommand(command);
 }
 
 void KPrDocument::loadKPrConfig()

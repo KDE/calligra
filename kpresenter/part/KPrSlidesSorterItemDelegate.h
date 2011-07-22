@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2011 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,30 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRSETCUSTOMSLIDESHOWSCOMMAND_H
-#define KPRSETCUSTOMSLIDESHOWSCOMMAND_H
+#ifndef KPRSLIDESSORTERITEMDELEGATE_H
+#define KPRSLIDESSORTERITEMDELEGATE_H
 
-#include <kundo2command.h>
+#include <QStyledItemDelegate>
 
-class KPrCustomSlideShows;
-class KPrDocument;
-
-class KPrSetCustomSlideShowsCommand : public KUndo2Command
+class KPrSlidesSorterItemDelegate: public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
-    KPrSetCustomSlideShowsCommand( KPrDocument * doc, KPrCustomSlideShows * newSlideShows, KUndo2Command *parent = 0 );
-    virtual ~KPrSetCustomSlideShowsCommand();
+    explicit KPrSlidesSorterItemDelegate(QObject *parent = 0);
 
-    /// redo the command
-    virtual void redo();
-    /// revert the actions done in redo
-    virtual void undo();
+    ~KPrSlidesSorterItemDelegate();
 
-private:
-    KPrDocument * m_doc;
-    KPrCustomSlideShows * m_oldSlideShows;
-    KPrCustomSlideShows * m_newSlideShows;
-    bool m_deleteNewSlideShows;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-#endif /* KPRSETCUSTOMSLIDESHOWSCOMMAND_H */
+#endif // KPRSLIDESSORTERITEMDELEGATE_H

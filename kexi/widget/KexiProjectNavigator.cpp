@@ -216,6 +216,7 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
 {
     kDebug() << itemsPartClass << ".";
     m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
+    
     m_list->expandAll();
     if (itemsPartClass.isEmpty()) {
 	m_list->setRootIsDecorated(true);
@@ -581,10 +582,10 @@ bool KexiProjectNavigator::isReadOnly() const
     return m_readOnly;
 }
 
-// void KexiProjectNavigator::clear()
-// {
-//     m_list->setModel(0);
-// }
+void KexiProjectNavigator::clear()
+{
+    m_model->clear();
+}
 
 KexiProjectModel* KexiProjectNavigator::model() const
 {
