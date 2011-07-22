@@ -148,7 +148,7 @@ public:
      * @brief Insert a new Custom SlideShow
      *
      * @param name The name of the new SlideShow
-      */
+     */
     void addNewCustomShow(const QString &name);
 
     /**

@@ -34,7 +34,6 @@ KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
 
 KPrEditCustomSlideShowsCommand::~KPrEditCustomSlideShowsCommand()
 {
-
 }
 
 void KPrEditCustomSlideShowsCommand::redo()

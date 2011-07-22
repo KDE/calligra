@@ -323,16 +323,22 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
         updated = true;
     }
     else if (action == KPrCustomSlideShowsModel::SlidesMove) {
-       //move the slides on the current custom show
-       // slides order within the slides list is important to get the expected behaviour
-       if (beginRow >= selectedSlideShow.count()) {
-           beginRow = selectedSlideShow.count() - 1;
-       }
-
+        //move the slides on the current custom show
+        // slides order within the slides list is important to get the expected behaviour
+        if (beginRow >= selectedSlideShow.count()) {
+           beginRow = selectedSlideShow.count();
+        }
+        int i = 0;
         foreach(KoPAPageBase *page, slides)
         {
             int from = selectedSlideShow.indexOf(page);
-            selectedSlideShow.move(from, beginRow);
+            if (from < beginRow) {
+                selectedSlideShow.move(from, beginRow - 1);
+            }
+            else {
+                selectedSlideShow.move(from, beginRow + i);
+                i++;
+            }
         }
         updated = true;
     }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2011 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,20 +21,16 @@
 #define KPRSLIDESSORTERITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
-class KoPADocument;
 
 class KPrSlidesSorterItemDelegate: public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit KPrSlidesSorterItemDelegate(KoPADocument *document, QObject *parent = 0);
+    explicit KPrSlidesSorterItemDelegate(QObject *parent = 0);
 
     ~KPrSlidesSorterItemDelegate();
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-private:
-    KoPADocument *m_document;
 };
 
 #endif // KPRSLIDESSORTERITEMDELEGATE_H

@@ -174,7 +174,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     new KPrSelectionManager(m_customSlideShowView);
 
     //install delegate for Slides Sorter View
-    KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(view->kopaDocument(), m_slidesSorterView);
+    KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
     m_slidesSorterView->setItemDelegate(slidesSorterDelegate);
 }
 
@@ -276,7 +276,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    //m_slidesSorter->hide();
     m_centralWidget->hide();
     // Give the ressources back to the canvas
     m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
@@ -578,7 +577,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     if (panelVisible != m_editCustomSlideShow) {
         const bool animate = KGlobalSettings::graphicEffectsLevel() && KGlobalSettings::SimpleAnimationEffects;
         const int duration = animate ? 250 : 1;
-        QPropertyAnimation *animation = new QPropertyAnimation (m_customSlideShowView, "maximumHeight");
+        QPropertyAnimation *animation = new QPropertyAnimation(m_customSlideShowView, "maximumHeight");
 
         if (!panelVisible) {
             animation->setDuration(duration);
@@ -591,7 +590,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
         else {
             animation->setDuration(duration);
             animation->setStartValue(0);
-            animation->setEndValue(m_slidesSorterView->height()/2);
+            animation->setEndValue(m_slidesSorterView->height() / 2);
             //Activate tool buttons and edition
             enableEditCustomShowButtons();
             m_slidesSorterView->setAutoScroll(false);
