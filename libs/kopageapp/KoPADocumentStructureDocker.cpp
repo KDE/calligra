@@ -46,6 +46,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
 #include <KoShapePaste.h>
+#include <KoSelectionManager.h>
 
 #include <KMenu>
 #include <klocale.h>
@@ -173,6 +174,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     m_sectionView->setSelectionBehavior( QAbstractItemView::SelectRows );
     m_sectionView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
+    new KoSelectionManager(m_sectionView);
 
     connect( m_sectionView, SIGNAL(pressed(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
     connect( m_sectionView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),

@@ -471,12 +471,12 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
     }
 
     // dropping to root, only page(s) is allowed
-    if ( !parent.isValid() ) {
+    if (!parent.isValid()) {
         if ( !pages.isEmpty() ) {
             if ( row < 0 ) {
                 return false;
             }
-            KoPAPageBase *after = ( row != 0 ) ? m_document->pageByIndex( row - 1, false ) : 0;
+            KoPAPageBase *after = (row != 0) ? m_document->pageByIndex(row - 1, false) : 0;
             KoPAPageMoveCommand *command = new KoPAPageMoveCommand( m_document, pages, after );
             m_document->addCommand( command );
             kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping page(s) as root, moving page(s)";
@@ -486,6 +486,21 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping non-page as root, returning false";
             return false;
         }
+    }
+    else if (parent.isValid() && !pages.isEmpty()){
+        if (parent.row() < 0) {
+            return false;
+        }
+        KoPAPageBase *after;
+        if ((m_document->pageIndex(pages.first()) - 1) == parent.row()) {
+            after = (parent.row() != 0) ? m_document->pageByIndex(parent.row() - 1, false) : 0;
+        }
+        else {
+            after = (parent.row() > -1) ? m_document->pageByIndex(parent.row(), false) : 0;
+        }
+        KoPAPageMoveCommand *command = new KoPAPageMoveCommand( m_document, pages, after );
+        m_document->addCommand( command );
+        return true;
     }
 
     KoShape *shape = static_cast<KoShape*>( parent.internalPointer() );

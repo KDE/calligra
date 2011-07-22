@@ -112,4 +112,3 @@ void KPrDeleteSlidesCommand::undo()
 
     m_deletePages = false;
 }
-
