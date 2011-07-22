@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2 of the License, or ( at your option ) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,33 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRCONFIGURESLIDESHOWDIALOG_H
-#define KPRCONFIGURESLIDESHOWDIALOG_H
+#ifndef PAMOCK_H
+#define PAMOCK_H
 
-#include <KDialog>
-class KPrView;
+#include "KPrDocument.h"
 
-#include "ui_KPrConfigureSlideShow.h"
+#include <KoOdf.h>
 
-class KPrDocument;
+class KoView;
 
-class KPrConfigureSlideShowDialog : public KDialog
+class MockDocument : public KPrDocument
 {
-    Q_OBJECT
-
 public:
-    explicit KPrConfigureSlideShowDialog( KPrDocument *document, KPrView *parent=0 );
-
-    QString activeCustomSlideShow() const;
-
-private slots:
-    void editCustomSlideShow();
-
-private:
-    Ui::KPrConfigureSlideShow ui;
-    KPrDocument *m_document;
-    KPrView *m_view;
+    MockDocument()
+    : KPrDocument(0, 0)
+    {}
+    KoView *createViewInstance(QWidget * /* parent */) {return 0;}
+    const char *odfTagName(bool b) {return KoOdf::bodyContentElement(KoOdf::Presentation, b);}
+    virtual KoOdf::DocumentType documentType() const {return KoOdf::Presentation;}
+protected:
+    virtual QGraphicsItem *createCanvasItem() {return 0;}
 };
 
-#endif // KPRCONFIGUREPRESENTERVIEWDIALOG_H
 
+#endif // PAMOCK_H
