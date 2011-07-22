@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 20011 Paul Mendez <paulestebanms@gmail.com>
+ * Copyright (C) 2011 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -112,4 +112,7 @@ void KPrDeleteSlidesCommand::undo()
 
     m_deletePages = false;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> master

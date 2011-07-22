@@ -174,7 +174,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     new KPrSelectionManager(m_customSlideShowView);
 
     //install delegate for Slides Sorter View
-    KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(view->kopaDocument(), m_slidesSorterView);
+    KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
     m_slidesSorterView->setItemDelegate(slidesSorterDelegate);
 }
 
@@ -470,6 +470,10 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     //KPrSlidesSorterDocumentModel uses iconSize function in decorate Role.
     setIconSize(QSize(qRound(zoom*200),qRound(zoom*200)));
     m_slidesSorterView->setIconSize(iconSize());
+<<<<<<< HEAD
+=======
+    m_customSlideShowModel->setIconSize(iconSize());
+>>>>>>> master
     m_customSlideShowView->setIconSize(iconSize());
 
     //update item size
@@ -518,7 +522,11 @@ int KPrViewModeSlidesSorter::zoom()
 
 void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
+<<<<<<< HEAD
     QMenu menu(m_slidesSorterView);   
+=======
+    QMenu menu(m_slidesSorterView);
+>>>>>>> master
     menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
@@ -576,7 +584,11 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     if (panelVisible != m_editCustomSlideShow) {
         const bool animate = KGlobalSettings::graphicEffectsLevel() && KGlobalSettings::SimpleAnimationEffects;
         const int duration = animate ? 250 : 1;
+<<<<<<< HEAD
         QPropertyAnimation *animation = new QPropertyAnimation (m_customSlideShowView, "maximumHeight");
+=======
+        QPropertyAnimation *animation = new QPropertyAnimation(m_customSlideShowView, "maximumHeight");
+>>>>>>> master
 
         if (!panelVisible) {
             animation->setDuration(duration);
@@ -589,7 +601,11 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
         else {
             animation->setDuration(duration);
             animation->setStartValue(0);
+<<<<<<< HEAD
             animation->setEndValue(m_slidesSorterView->height()/2);
+=======
+            animation->setEndValue(m_slidesSorterView->height() / 2);
+>>>>>>> master
             //Activate tool buttons and edition
             enableEditCustomShowButtons();
             m_slidesSorterView->setAutoScroll(false);

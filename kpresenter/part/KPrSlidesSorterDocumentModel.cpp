@@ -230,7 +230,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return true;
     }
 
-    if (!data->hasFormat("application/x-calligra-sliderssorter") | (column > 0)) {
+    if (!data->hasFormat("application/x-calligra-sliderssorter") || (column > 0)) {
         return false;
     }
 
