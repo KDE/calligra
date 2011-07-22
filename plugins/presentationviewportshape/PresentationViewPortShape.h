@@ -34,7 +34,7 @@ public:
      */
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
 
-    virtual void update() const;
+   // virtual void update() const;
 
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
@@ -45,7 +45,7 @@ public:
     /**
      * @return a default path in the shape of '[ ]'
      */
-    QPainterPath createShapePath() const;
+    QPainterPath createShapePath(const QSizeF& size) const;
     
     /**Others */
     QString pathShapeId() const;

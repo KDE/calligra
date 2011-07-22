@@ -9,7 +9,6 @@ PresentationViewPortShape::PresentationViewPortShape()
  // qDebug() << "PresentationViewPortShape created";
   setShapeId(PresentationViewPortShapeId);
 //TODO: Initialise a basic  [ ]
-QPainterPath viewPortPath = createShapePath();
 
 //setShapeId to PVPS id
 }
@@ -26,39 +25,42 @@ QString PresentationViewPortShape::pathShapeId() const
 
 void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
+  
     //QPainterPath viewPortpath;
   
      //viewPortpath = createShapePath();
     applyConversion( painter, converter );
     //viewPortpath.setFillRule(Qt::OddEvenFill);
     
-    if(background()) {
-      qDebug() << "background() == true"; 
-      background()->paint(painter, outline());
-    }
-
-    painter.setPen(QPen(QColor(79, 106, 25), 1, Qt::SolidLine,
+    painter.setPen(QPen(QColor(79, 106, 25), 1, Qt::DashLine,
                      Qt::FlatCap, Qt::MiterJoin));
-    painter.setBrush(QColor(122, 163, 39));
+    painter.setBrush(QColor(122, 163, 39));// Needed?
     
-    painter.drawPath(createShapePath());
+    painter.drawPath(createShapePath(outline().boundingRect().size()));
     }
 
 QPainterPath PresentationViewPortShape::outline() const
 {
-    //return KoShape::outline();
-    return createShapePath();
+    return KoShape::outline();
+    //return createShapePath();
 }
 
-QPainterPath PresentationViewPortShape::createShapePath() const
+//TODO re-factor code
+//make a function with specific points to be joined to make this path
+//check if QPainterPath has it
+//TODO Remove shearing
+//TODO remove other functions not applicable to this shape
+QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size) const
 {
     QPainterPath viewPortPath;
     qreal xCoOrdinate = 0.0;
     qreal yCoOrdinate = 0.0;
     
-    qreal unit = 50.0;
+    qreal unit = 15.0;
+    qreal heightUnit = size.height();
+    //qreal unit = 50.0;
     
-    viewPortPath.setFillRule(Qt::OddEvenFill);
+    //viewPortPath.setFillRule(Qt::WindingFill);
     
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
     xCoOrdinate += unit;
@@ -69,16 +71,17 @@ QPainterPath PresentationViewPortShape::createShapePath() const
     xCoOrdinate = 0.0;
     yCoOrdinate = 0.0;
     
-    yCoOrdinate += unit * 2;
+    yCoOrdinate += heightUnit;
     viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
     
     xCoOrdinate += unit;
     
-    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
+    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate); // Left bracket complete
     //25, 50
     
-    xCoOrdinate += unit * 2;
+    
+    xCoOrdinate += (size.width() - (2 * unit)); //Leave space between the 2 brackets
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
     //75, 50
     
@@ -87,7 +90,7 @@ QPainterPath PresentationViewPortShape::createShapePath() const
     //100 50
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
     //100 50
-    yCoOrdinate -= unit * 2;
+    yCoOrdinate -= heightUnit;
     viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
     //100 0
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
@@ -95,26 +98,23 @@ QPainterPath PresentationViewPortShape::createShapePath() const
     xCoOrdinate -= unit;
     viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
     //75 0
+    
+    //viewPortPath.boundingRect()
     return viewPortPath;
 }
 
 QSizeF PresentationViewPortShape::size() const
 {
-    return outline().boundingRect().size();
+    //return createShapePath().boundingRect().size();
+    return KoShape::size();
 }
 
 
 void PresentationViewPortShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    Q_UNUSED(painter);
-    
+    Q_UNUSED(painter);    
    }
-
-void PresentationViewPortShape::update() const
-{
-    KoShape::update();
-}
 
 //TODO: What will be done in this?
 // Neccessary to write to and from an ODF
