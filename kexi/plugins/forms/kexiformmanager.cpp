@@ -246,10 +246,13 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << ":library_widget_Line"
             << ":library_widget_KexiFrame"
             << ":library_widget_QGroupBox"
+             << ":library_widget_WebBrowserWidget"
             << ":library_widget_KFDTabWidget"
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
             << ":library_widget_Spring"
+
 #endif
+           
             << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();
@@ -550,3 +553,4 @@ void KexiFormManager::slotPointerClicked()
 }
 
 #include "kexiformmanager.moc"
+
