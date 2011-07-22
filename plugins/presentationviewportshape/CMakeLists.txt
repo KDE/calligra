@@ -5,6 +5,7 @@ SET (presentationviewportshape_LIB_SRCS
     PresentationViewPortShapeFactory.cpp
     PresentationViewPortShapePlugin.cpp
     PresentationViewPortTool.cpp
+    PresentationViewPortToolFactory.cpp
     )
 
 kde4_add_plugin(presentationviewportshape ${presentationviewportshape_LIB_SRCS})

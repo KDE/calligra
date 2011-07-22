@@ -3,9 +3,10 @@
 
 #include <KoToolBase.h>
 #include <KJob>
+#include <KoInteractionTool.h>
 
 class PresentationViewPortShape;
-
+  
 class PresentationViewPortTool : public KoToolBase
 {
     Q_OBJECT
@@ -15,7 +16,7 @@ public:
     /// reimplemented from KoToolBase
     virtual void paint(QPainter&, const KoViewConverter&) {}
     /// reimplemented from KoToolBase
-    virtual void mousePressEvent(KoPointerEvent*) {}
+    virtual void mousePressEvent(KoPointerEvent*);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from KoToolBase

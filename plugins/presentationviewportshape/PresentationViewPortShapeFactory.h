@@ -4,9 +4,10 @@
 class PresentationViewPortShapeFactory : public KoShapeFactoryBase 
 {
 public:
-    PresentationViewPortShapeFactory();
+  PresentationViewPortShapeFactory(QObject* parent);
+    //PresentationViewPortShapeFactory();
  
-    KoShape* createDefaultShape() const;
+     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     //KoShape* createShape(const KoProperties* params) const;
     bool supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const;
-};
+    };

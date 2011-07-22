@@ -10,32 +10,31 @@
 
 #include <klocale.h>
 
-PresentationViewPortShapeFactory::PresentationViewPortShapeFactory()
-    : KoShapeFactoryBase(PresentationViewPortShapeId, i18n("PresentationViewPort"))
+PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * parent)
+    : KoShapeFactoryBase("PresentationViewPortShape", i18n("PresentationViewPort"))
 {
-    setToolTip(i18n("A PresentationViewPort"));
+  //qDebug() <<"PresentationViewPortShapeFactory created";
+    setToolTip(i18n("A Presentation View Port"));
     setIcon("rectangle-shape");
-    setFamily("geometric");
-    setOdfElementNames(KoXmlNS::draw, QStringList("rect"));
+    setFamily("geometric"); //FIXME Where to put this?
+    //setOdfElementNames(KoXmlNS::draw, QStringList("rect"));
     setLoadingPriority(1);
 }
 
-KoShape *PresentationViewPortShapeFactory::createDefaultShape() const
+KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager *) const
 {
-    PresentationViewPortShape *rect = new PresentationViewPortShape();
-
-    rect->setBorder(new KoLineBorder(4.0)); //Thick border
-    rect->setShapeId(PresentationViewPortShapeId);
-
-    //No gradient
-    
-    return rect;
+   // qDebug() << "PresentationViewPortShapeFactory::createDefaultShape() called.";
+  
+    PresentationViewPortShape *viewport = new PresentationViewPortShape();
+ 
+    return viewport;
 }
 
 bool PresentationViewPortShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const
 {
     Q_UNUSED(e);
-    return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);
+    return true;
+    //return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);
 }
 
 /*QList<KoShapeConfigWidgetBase*> PresentationViewPortShapeFactory::createShapeOptionPanels()

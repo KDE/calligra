@@ -19,6 +19,7 @@ PresentationViewPortTool::PresentationViewPortTool( KoCanvasBase* canvas )
     : KoToolBase( canvas ),
       m_shape(0)
 {
+  qDebug() << "PresentationViewPortTool created";
 }
 
 void PresentationViewPortTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -51,8 +52,7 @@ QWidget * PresentationViewPortTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton(optionWidget);
-    button->setIcon(SmallIcon("open"));
-    button->setToolTip(i18n( "Open EMF/WMF Shape"));
+
     layout->addWidget(button, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
 
@@ -67,8 +67,19 @@ void PresentationViewPortTool::changeUrlPressed()
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+	//copied from PictureShape. To be changed ofcourse
         connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
     }
+
+}
+
+void PresentationViewPortTool::mousePressEvent(KoPointerEvent* event)
+{
+        KoSelection *selection = canvas()->shapeManager()->selection();
+            selection->select( m_shape );
+    
+    
+    event->ignore();
 
 }
 
@@ -83,15 +94,8 @@ void PresentationViewPortTool::mouseDoubleClickEvent( KoPointerEvent *event )
 
 void PresentationViewPortTool::setImageData(KJob *job)
 {
-    if (m_shape == 0) {
-        return;
-    }
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
-    Q_ASSERT(transferJob);
-
-    QByteArray newData = qCompress(transferJob->data());
-//    ChangeVectorDataCommand *cmd = new ChangeVectorDataCommand(m_shape, newData);
-  //  canvas()->addCommand(cmd);
+  //TODO
 }
+
 
 #include <PresentationViewPortTool.moc>
