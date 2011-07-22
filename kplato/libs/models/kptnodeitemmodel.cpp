@@ -2387,12 +2387,12 @@ KUndo2Command *NodeModel::setName( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->name() ) {
                 return false;
             }
-            QString s = i18n( "Modify Name" );
+            QString s = i18nc( "(qtundo-format)", "Modify name" );
             switch ( node->type() ) {
-                case Node::Type_Task: s = i18n( "Modify Task Name" ); break;
-                case Node::Type_Milestone: s = i18n( "Modify Milestone Name" ); break;
-                case Node::Type_Summarytask: s = i18n( "Modify Summarytask Name" ); break;
-                case Node::Type_Project: s = i18n( "Modify Project Name" ); break;
+                case Node::Type_Task: s = i18nc( "(qtundo-format)", "Modify task Name" ); break;
+                case Node::Type_Milestone: s = i18nc( "(qtundo-format)", "Modify milestone name" ); break;
+                case Node::Type_Summarytask: s = i18nc( "(qtundo-format)", "Modify summarytask name" ); break;
+                case Node::Type_Project: s = i18nc( "(qtundo-format)", "Modify project name" ); break;
             }
             return new NodeModifyNameCmd( *node, value.toString(), s );
         }
@@ -2404,18 +2404,13 @@ KUndo2Command *NodeModel::setLeader( Node *node, const QVariant &value, int role
 {
     switch ( role ) {
         case Qt::EditRole: {
-            if ( value.toString() == node->leader() ) {
-                return false;
+            if ( value.toString() != node->leader() ) {
+                return new NodeModifyLeaderCmd( *node, value.toString(), i18nc( "(qtundo-format)", "Modify responsible" ) );
             }
-            QString s = i18n( "Modify name" );
-            switch ( node->type() ) {
-                case Node::Type_Task: s = i18n( "Modify task name" ); break;
-                case Node::Type_Milestone: s = i18n( "Modify milestone name" ); break;
-                case Node::Type_Summarytask: s = i18n( "Modify summarytask name" ); break;
-                case Node::Type_Project: s = i18n( "Modify project name" ); break;
-            }
-            return new NodeModifyLeaderCmd( *node, value.toString(), s );
+            break;
         }
+        default:
+            break;
     }
     return 0;
 }
@@ -2432,7 +2427,7 @@ KUndo2Command *NodeModel::setDescription( Node *node, const QVariant &value, int
             if ( value.toString() == node->description() ) {
                 return false;
             }
-            return new NodeModifyDescriptionCmd( *node, value.toString(), "Modify task description" );
+            return new NodeModifyDescriptionCmd( *node, value.toString(), i18nc( "(qtundo-format)", "Modify task description" ) );
     }
     return 0;
 }
@@ -2449,7 +2444,7 @@ KUndo2Command *NodeModel::setConstraint( Node *node, const QVariant &value, int 
             Node::ConstraintType v = Node::ConstraintType( value.toInt() );
             //kDebug()<<v;
             if ( v != node->constraint() ) {
-                return new NodeModifyConstraintCmd( *node, v, "Modify constraint type" );
+                return new NodeModifyConstraintCmd( *node, v, i18nc( "(qtundo-format)", "Modify constraint type" ) );
             }
             break;
         }
@@ -2466,7 +2461,7 @@ KUndo2Command *NodeModel::setConstraintStartTime( Node *node, const QVariant &va
             QDateTime dt = value.toDateTime();
             dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
             if ( dt != node->constraintStartTime() ) {
-                return new NodeModifyConstraintStartTimeCmd( *node, dt, "Modify constraint start time" );
+                return new NodeModifyConstraintStartTimeCmd( *node, dt, i18nc( "(qtundo-format)", "Modify constraint start time" ) );
             }
             break;
         }
@@ -2483,7 +2478,7 @@ KUndo2Command *NodeModel::setConstraintEndTime( Node *node, const QVariant &valu
             QDateTime dt = value.toDateTime();
             dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
             if ( dt != node->constraintEndTime() ) {
-                return new NodeModifyConstraintEndTimeCmd( *node, dt, "Modify constraint end time" );
+                return new NodeModifyConstraintEndTimeCmd( *node, dt, i18nc( "(qtundo-format)", "Modify constraint end time" ) );
             }
             break;
         }
@@ -2499,7 +2494,7 @@ KUndo2Command *NodeModel::setEstimateType( Node *node, const QVariant &value, in
         case Qt::EditRole: {
             Estimate::Type v = Estimate::Type( value.toInt() );
             if ( v != node->estimate()->type() ) {
-                return new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, "Modify estimate type" );
+                return new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, i18nc( "(qtundo-format)", "Modify estimate type" ) );
             }
             break;
         }
@@ -2522,7 +2517,7 @@ KUndo2Command *NodeModel::setEstimateCalendar( Node *node, const QVariant &value
                 }
             }
             if ( c != old ) {
-                return new ModifyEstimateCalendarCmd( *node, old, c, "Modify estimate calendar" );
+                return new ModifyEstimateCalendarCmd( *node, old, c, i18nc( "(qtundo-format)", "Modify estimate calendar" ) );
             }
             break;
         }
@@ -2592,7 +2587,7 @@ KUndo2Command *NodeModel::setRiskType( Node *node, const QVariant &value, int ro
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->risktype() ) {
                 Estimate::Risktype v = Estimate::Risktype( value.toInt() );
-                return new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, "Modify risk type" );
+                return new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, i18nc( "(qtundo-format)", "Modify risk type" ) );
             }
         default:
             break;
