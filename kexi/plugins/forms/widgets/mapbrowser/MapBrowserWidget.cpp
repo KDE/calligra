@@ -27,7 +27,8 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
     KFormDesigner::FormWidgetInterface(),
     KexiFormDataItemInterface(),
-    m_slotMapChanged_enabled(true)
+    m_slotMapChanged_enabled(true),
+    m_internalReadOnly(false)
 {
 #warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
   //Marble::GeoSceneDocument::head()->mapThemeId()
@@ -50,13 +51,16 @@ QVariant MapBrowserWidget::value()
 
 void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld )
 {
+    
+    //if(isReadOnly())
+    //    return;
     m_slotMapChanged_enabled = false;
-    if(isReadOnly())
-        return;
     //disable change editing
     //if(removeOld);
-    kDebug() << add;
-    deserializeData(add);
+    kDebug() << "add:" << add;
+    kDebug() << "m_origValue:" << m_origValue;
+    //deserializeData((removeOld ? QVariant() : m_origValue));
+    deserializeData(m_origValue);
     m_slotMapChanged_enabled = true;
     
 }
@@ -71,10 +75,18 @@ bool MapBrowserWidget::valueIsEmpty()
     return false;
 }
 
-void MapBrowserWidget::setReadOnly(bool )
+void MapBrowserWidget::setReadOnly(bool readOnly)
 {
-    
+    m_internalReadOnly = readOnly;
+    //setDisabled(readOnly);
+    //setInputEnabled(!readOnly);
 }
+
+bool MapBrowserWidget::isReadOnly() const
+{
+    return m_internalReadOnly;
+}
+
 
 void MapBrowserWidget::clear()
 {
@@ -114,10 +126,6 @@ void MapBrowserWidget::deserializeData(const QVariant& serialized)
     QStringList dataList = m_serializedData.split(";");
     kDebug() << "splited:" << dataList;
     if(dataList.length()==3){
-        double x = dataList[0].toDouble();
-        double y = dataList[1].toDouble();
-        int z = dataList[2].toInt();
-        kDebug() << x << ";" << y << ";" << z;
         setCenterLatitude(dataList[0].toDouble());
         setCenterLongitude(dataList[1].toDouble());
         zoomView(dataList[2].toInt());
