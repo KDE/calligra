@@ -49,7 +49,9 @@ public:
     virtual QPainterPath outline() const;
     virtual QSizeF size() const;
        
-   
+    QString toString();
+    QString m_path;
+    
 private:
    /**
      * @return a default path in the shape of '[ ]'
@@ -72,6 +74,7 @@ private:
     int m_noOfPoints;
     QVector< QVector<int> >* m_adjMatrix;
     
+    //QString m_path;
     //int m_adjMatrix[8][8];
       //QPainterPath viewPortPath;
   

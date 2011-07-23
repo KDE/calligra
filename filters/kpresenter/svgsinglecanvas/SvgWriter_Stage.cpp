@@ -53,13 +53,25 @@ SvgWriter_Stage::~SvgWriter_Stage()
 
 void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body)
 {
-    getID(shape);
-    qDebug() << "ID created for this PVPShape: " << m_shapeIds[shape];
+    //getID(shape);
+    //qDebug() << "ID created for this PVPShape: " << m_shapeIds[shape];
     
     //Writing dummy data for a rectangle instead of a PVPShape to see how to write to the stream m_body
     //Writes fine
    // *body << "<rect id=\"" << m_shapeIds[shape] <<"\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" width=\"426.981pt\" height=\"343.998pt\"/>\"" << endl();
-     *body << "<path id=\"" << m_shapeIds[shape] <<"\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" d=\"M0 0L280.054 0L140.027 267.985C93.3513 178.657 110.817 217.612 0 0Z\"  transform=\"translate(321.567, 399.823)\"   />\"" << endl;
+     //*body << "<path id=\"" << m_shapeIds[shape] <<"\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" d=\"M0 0L280.054 0L140.027 267.985C93.3513 178.657 110.817 217.612 0 0Z\"  transform=\"translate(321.567, 399.823)\"   />\"" << endl;
+         //printIndentation(m_body, m_indent);
+    *body << "<path" << getID(shape);
+
+    getStyle(shape, body);
+    //fill wriiten to SVG
+    //TODO other attributes - stroke, etc. ?
+    
+    //*body << " d=\"" << shape->toString()<< "\" "; //TODO
+    *body << getTransform(shape->transformation(), " transform");//transform being written to SVG
+
+    *body << " />" << endl;
+
 }
 
 //TODO PVPShape should have the animation data, not Frame.

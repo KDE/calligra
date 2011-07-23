@@ -3,19 +3,20 @@
 #include <qpainter.h>
 #include <KoShapeBackground.h>
 
-
 PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
  setShapeId(PresentationViewPortShapeId);
  createAdjMatrix();
-//TODO: Initialise a basic  [ ]
-
-//setShapeId to PVPS id
-}
+ }
 
 PresentationViewPortShape::~PresentationViewPortShape()
 {
 
+}
+
+QString PresentationViewPortShape::toString()
+{
+   return m_path;
 }
 
 void PresentationViewPortShape::createAdjMatrix()
@@ -136,16 +137,29 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
     createListOfPoints(size);
   
     QPainterPath viewPortPath;
+    m_path.clear();
     
     for(int row = 0; row < m_noOfPoints; row++){
       viewPortPath.moveTo(m_pointsOfShape.at(row + 1));
+      //m_path << "M" << m_pointsOfShape.at(row + 1).x() << " " << m_pointsOfShape.at(row + 1).y();
+      m_path.arg("M");
+      m_path.arg(m_pointsOfShape.at(row + 1).x());
+      m_path.arg(" ");
+      m_path.arg(m_pointsOfShape.at(row + 1).y());
       
       for(int col = 0; col < m_noOfPoints; col++){
-	if(m_adjMatrix->at(row).at(col))
+	if(m_adjMatrix->at(row).at(col)){
 	  viewPortPath.lineTo(m_pointsOfShape.at(col + 1));
+	  //m_path << "L" << m_pointsOfShape.at(col + 1).x() << " " << m_pointsOfShape.at(col + 1).y();
+	  m_path.arg("L");
+	  m_path.arg(m_pointsOfShape.at(col + 1).x());
+	  m_path.arg(" ");
+	  m_path.arg(m_pointsOfShape.at(col + 1).y());
+	}
       }
     }
-      
+    m_path.append("Z");
+
     return viewPortPath;
 }
 
