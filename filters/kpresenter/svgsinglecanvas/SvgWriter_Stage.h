@@ -21,6 +21,7 @@
 #define SVG_WRITER_STAGE_H
 
 #include "SvgWriter_generic.h"
+#include <plugins/presentationviewportshape/PresentationViewPortShape.h>
 
 class Frame;
 class KoShape;
@@ -50,10 +51,13 @@ public:
      * @param shape saves app data conatined in this to a stream
      */
     void saveAppData(KoShape *shape);
+    //void saveAppData_temp(KoShape *shape);
  
 private:
     //Workin on this still
     void savePlainText();
+    void saveViewPortShape(PresentationViewPortShape* shape);
+    void saveAnimationTags(PresentationViewPortShape* shape);
     /**
      * Saves javascript to the SVG doc
      */

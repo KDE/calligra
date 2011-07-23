@@ -6,8 +6,7 @@
 
 PresentationViewPortShape::PresentationViewPortShape()
 {
- // qDebug() << "PresentationViewPortShape created";
-  setShapeId(PresentationViewPortShapeId);
+ setShapeId(PresentationViewPortShapeId);
 //TODO: Initialise a basic  [ ]
 
 //setShapeId to PVPS id
@@ -25,15 +24,10 @@ QString PresentationViewPortShape::pathShapeId() const
 
 void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
-  
-    //QPainterPath viewPortpath;
-  
-     //viewPortpath = createShapePath();
     applyConversion( painter, converter );
-    //viewPortpath.setFillRule(Qt::OddEvenFill);
-    
-    painter.setPen(QPen(QColor(79, 106, 25), 1, Qt::DashLine,
-                     Qt::FlatCap, Qt::MiterJoin));
+        
+    painter.setPen(QPen(QColor(Qt::black), 1, Qt::DashLine,
+                     Qt::FlatCap, Qt::MiterJoin)); 
     painter.setBrush(QColor(122, 163, 39));// Needed?
     
     painter.drawPath(createShapePath(outline().boundingRect().size()));
@@ -42,8 +36,7 @@ void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& 
 QPainterPath PresentationViewPortShape::outline() const
 {
     return KoShape::outline();
-    //return createShapePath();
-}
+    }
 
 //TODO re-factor code
 //make a function with specific points to be joined to make this path
@@ -56,11 +49,8 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size) cons
     qreal xCoOrdinate = 0.0;
     qreal yCoOrdinate = 0.0;
     
-    qreal unit = 15.0;
+    qreal unit = 15.0; //TODO change according to 'size' and keep a minimum value
     qreal heightUnit = size.height();
-    //qreal unit = 50.0;
-    
-    //viewPortPath.setFillRule(Qt::WindingFill);
     
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
     xCoOrdinate += unit;
@@ -78,28 +68,23 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size) cons
     xCoOrdinate += unit;
     
     viewPortPath.lineTo(xCoOrdinate, yCoOrdinate); // Left bracket complete
-    //25, 50
-    
-    
+        
     xCoOrdinate += (size.width() - (2 * unit)); //Leave space between the 2 brackets
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-    //75, 50
-    
+        
     xCoOrdinate += unit;
     viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
-    //100 50
+    
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-    //100 50
+    
     yCoOrdinate -= heightUnit;
     viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
-    //100 0
+    
     viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-    //100 0
+    
     xCoOrdinate -= unit;
     viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
-    //75 0
     
-    //viewPortPath.boundingRect()
     return viewPortPath;
 }
 

@@ -76,11 +76,13 @@ protected:
      * virtual method to be implemented by a child class 
      * To save application specific data in the correct format
      */
+    //virtual void saveAppData_temp(KoShape *shape) =0;
     virtual void saveAppData(KoShape *shape) =0;
     QString getID(const KoShape *obj);
     
     bool m_hasAppData;
     QString m_appData;
+    QString m_appDataId;
     QMap<const KoShape*, QString> m_shapeIds;
       
 private:

@@ -44,10 +44,13 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+
 #include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <plugins/artistictextshape/ArtisticTextRange.h>
 #include <plugins/pathshapes/rectangle/RectangleShape.h>
 #include <plugins/pathshapes/ellipse/EllipseShape.h>
+#include <plugins/presentationviewportshape/PresentationViewPortShape.h>
+
 #include <KoImageData.h>
 #include <KoFilterEffect.h>
 #include <KoFilterEffectStack.h>
@@ -241,9 +244,9 @@ void SvgWriter_generic::saveGroup(KoShapeGroup * group)
     printIndentation(m_body, --m_indent);
     *m_body << "</g>" << endl;
      
-    if(m_hasAppData) {
-         saveAppData(dynamic_cast<KoShape*>(group)); //virtual fucntion. Do be defined by the child class
-         }    
+   /* if(m_hasAppData) {
+         saveAppData_temp(dynamic_cast<KoShape*>(group)); //virtual fucntion. Do be defined by the child class
+         }    */
 }
 
 void SvgWriter_generic::saveShape(KoShape * shape)
@@ -264,17 +267,14 @@ void SvgWriter_generic::saveShape(KoShape * shape)
               saveText(static_cast<ArtisticTextShape*>(shape));
           } else if (shape->shapeId() == "PictureShape") {
               saveImage(shape);
-          }
-          else 
-      {
-        savePlainText();// Saving plain text
-      //TODO: Still doesn't save text correctly.
-       }
-    }
+              } else if(shape->shapeId() == m_appDataId){
+	       saveAppData(shape);
+	          }
+	   }
          
-      if(m_hasAppData) {
-         saveAppData(shape); //virtual fucntion. Do be defined by the child class
-         }
+    /*  if(m_hasAppData) {
+         saveAppData_temp(shape); //virtual fucntion. Do be defined by the child class
+         }*/
  }
       
 void SvgWriter_generic::savePath(KoPathShape * path)
@@ -353,6 +353,7 @@ static int count(const QString element, bool inc)
      static unsigned int shapeCount = 0;
      static unsigned int layerCount = 0;
      static unsigned int imageCount = 0;
+     static unsigned int viewPortCount = 0;
  
      if (element == "group") {
        if(inc)
@@ -379,7 +380,12 @@ static int count(const QString element, bool inc)
          return imageCount++;
        else
          return imageCount;
-     }
+     } else if(element == "viewport") {
+       if(inc)
+         return viewPortCount++;
+       else
+         return viewPortCount;
+     } 
      return -1;
 }
 QString SvgWriter_generic::createUID(const KoShape * obj)
@@ -419,8 +425,14 @@ QString SvgWriter_generic::createUID(const KoShape * obj)
                  
                           return "Image" + QString().setNum(count("image", false) - 1);
                
-                      } 
-                      else {
+                      } else if(obj->shapeId() == PresentationViewPortShapeId) {
+                        do{
+                            refId = "ViewPort" + QString().setNum(count("viewport", true));
+                          }while(m_shapeIds.key(refId, noKey) != noKey);
+                 
+                          return "ViewPort" + QString().setNum(count("viewport", false) - 1);
+               
+                      } else {
                           do{
                           refId = "Shape" + QString().setNum(count("shape", true));
                           }while(m_shapeIds.key(refId, noKey) != noKey);

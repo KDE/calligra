@@ -23,6 +23,7 @@ set(LIBSVG_SOURCES
 set(STAGE_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgAnimationData.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp
     )
 
 set(karbonsvgexport_PART_SRCS 
