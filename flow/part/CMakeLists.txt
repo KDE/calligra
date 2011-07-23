@@ -40,7 +40,7 @@ target_link_libraries(kdeinit_calligraflow komain)
 
 install(TARGETS kdeinit_calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries(flow kdeinit_calligraflow)
+target_link_libraries(calligraflow kdeinit_calligraflow)
 install(TARGETS calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
