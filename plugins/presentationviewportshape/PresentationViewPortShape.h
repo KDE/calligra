@@ -42,20 +42,37 @@ public:
 
     /**Properties of the Rectanglular viewport */
     
-    /**
-     * @return a default path in the shape of '[ ]'
-     */
-    QPainterPath createShapePath(const QSizeF& size) const;
     
     /**Others */
     QString pathShapeId() const;
         /// reimplemented
     virtual QPainterPath outline() const;
-     virtual QSizeF size() const;
+    virtual QSizeF size() const;
+       
+   
 private:
-    qreal m_cornerRadiusX; ///< in percent of half of the rectangle width (a number between 0 and 100)
+   /**
+     * @return a default path in the shape of '[ ]'
+     */
+     QPainterPath createShapePath(const QSizeF& size);
+     
+     void createAdjMatrix();
+     void setAdjMatrix(QVector< QVector < int > >* matrix);
+     QVector< QVector< int > >* adjMatrix(); 
+     
+     void createListOfPoints(const QSizeF& size);
+     void setListOfPoints(QList<QPointF> points);
+     QList< QPointF > listOfPoints();
+     
+     QList<QPointF> m_pointsOfShape;
+    
+     qreal m_cornerRadiusX; ///< in percent of half of the rectangle width (a number between 0 and 100)
     qreal m_cornerRadiusY; ///< in percent of half of the rectangle height (a number between 0 and 100)
 
+    int m_noOfPoints;
+    QVector< QVector<int> >* m_adjMatrix;
+    
+    //int m_adjMatrix[8][8];
       //QPainterPath viewPortPath;
   
 };

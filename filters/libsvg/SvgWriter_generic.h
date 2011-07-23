@@ -77,7 +77,7 @@ protected:
      * To save application specific data in the correct format
      */
     //virtual void saveAppData_temp(KoShape *shape) =0;
-    virtual void saveAppData(KoShape *shape) =0;
+    virtual void saveAppData(KoShape *shape, QTextStream* body) =0;
     QString getID(const KoShape *obj);
     
     bool m_hasAppData;

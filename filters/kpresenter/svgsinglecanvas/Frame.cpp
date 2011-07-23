@@ -145,12 +145,12 @@ void Frame::setDefaultValues()
     m_title = "No Title";
     m_refId = "No Ref ID"; 
     m_transitionProfile = "linear";
-    m_hide = false;
+    m_hide = true;
     m_clip = true;
     m_timeoutEnable = false;
 
     m_sequence = 0;
-    m_transitionZoomPercent = 100;
+    m_transitionZoomPercent = 1;
     m_transitionDurationMs = 1000; 
     m_timeoutMs = 5000;
 }

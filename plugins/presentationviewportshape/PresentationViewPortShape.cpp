@@ -4,9 +4,10 @@
 #include <KoShapeBackground.h>
 
 
-PresentationViewPortShape::PresentationViewPortShape()
+PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
  setShapeId(PresentationViewPortShapeId);
+ createAdjMatrix();
 //TODO: Initialise a basic  [ ]
 
 //setShapeId to PVPS id
@@ -15,6 +16,67 @@ PresentationViewPortShape::PresentationViewPortShape()
 PresentationViewPortShape::~PresentationViewPortShape()
 {
 
+}
+
+void PresentationViewPortShape::createAdjMatrix()
+{
+  m_noOfPoints = 8;
+  QVector< QVector < int > > adjMatrix(0);
+  
+  QVector< int > intVector(m_noOfPoints);
+     
+      intVector.insert(2, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(1, 1);    
+      intVector.insert(3, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(2, 1);
+      intVector.insert(4, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(3, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(6, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(5, 1);
+      intVector.insert(7, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(6, 1);
+      intVector.insert(8, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(7, 1);
+      adjMatrix.append(intVector);
+            
+      for(int i = 0; i < m_noOfPoints; i++)
+	for(int j = 0; j < m_noOfPoints; j++){
+	 qDebug() << "Value at " << i << "," << j << ": " << adjMatrix.at(i).at(j) << "\t";
+	}
+	qDebug() << endl;
+  
+    setAdjMatrix(&adjMatrix);
+}
+
+void PresentationViewPortShape::setAdjMatrix(QVector< QVector< int > >* matrix)
+{
+    m_adjMatrix = matrix;
+}
+
+QVector< QVector< int > >* PresentationViewPortShape::adjMatrix()
+{
+    return m_adjMatrix;
 }
 
 QString PresentationViewPortShape::pathShapeId() const
@@ -38,53 +100,52 @@ QPainterPath PresentationViewPortShape::outline() const
     return KoShape::outline();
     }
 
-//TODO re-factor code
-//make a function with specific points to be joined to make this path
-//check if QPainterPath has it
-//TODO Remove shearing
-//TODO remove other functions not applicable to this shape
-QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size) const
+void PresentationViewPortShape::createListOfPoints(const QSizeF& size)
 {
-    QPainterPath viewPortPath;
-    qreal xCoOrdinate = 0.0;
-    qreal yCoOrdinate = 0.0;
-    
     qreal unit = 15.0; //TODO change according to 'size' and keep a minimum value
     qreal heightUnit = size.height();
     
-    viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-    xCoOrdinate += unit;
-    
-    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
-    
-    viewPortPath.closeSubpath();
-    xCoOrdinate = 0.0;
-    yCoOrdinate = 0.0;
-    
-    yCoOrdinate += heightUnit;
-    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
-    viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-    
-    xCoOrdinate += unit;
-    
-    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate); // Left bracket complete
+    QList<QPointF> pointsOfShape;
+    pointsOfShape.append(QPointF(unit, 0.0));
+    pointsOfShape.append(QPointF(0.0, 0.0));
+    pointsOfShape.append(QPointF(0.0, heightUnit));
+    pointsOfShape.append(QPointF(unit, heightUnit));
+    pointsOfShape.append(QPointF((size.width() - unit), heightUnit));
+    pointsOfShape.append(QPointF(size.width(), heightUnit));
+    pointsOfShape.append(QPointF(size.width(), 0.0));
+    pointsOfShape.append(QPointF((size.width() - unit), 0.0));
+  
+    setListOfPoints(pointsOfShape);
         
-    xCoOrdinate += (size.width() - (2 * unit)); //Leave space between the 2 brackets
-    viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-        
-    xCoOrdinate += unit;
-    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
+  }
+
+void PresentationViewPortShape::setListOfPoints(QList< QPointF > points)
+{
+    m_pointsOfShape = points;
+}
+
+QList< QPointF > PresentationViewPortShape::listOfPoints()
+{
+    return m_pointsOfShape;
+}
+
+//TODO Remove shearing
+//TODO remove other functions not applicable to this shape
+QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size) 
+{
+    createListOfPoints(size);
+  
+    QPainterPath viewPortPath;
     
-    viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-    
-    yCoOrdinate -= heightUnit;
-    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
-    
-    viewPortPath.moveTo(xCoOrdinate, yCoOrdinate);
-    
-    xCoOrdinate -= unit;
-    viewPortPath.lineTo(xCoOrdinate, yCoOrdinate);
-    
+    for(int row = 0; row < m_noOfPoints; row++){
+      viewPortPath.moveTo(m_pointsOfShape.at(row + 1));
+      
+      for(int col = 0; col < m_noOfPoints; col++){
+	if(m_adjMatrix->at(row).at(col))
+	  viewPortPath.lineTo(m_pointsOfShape.at(col + 1));
+      }
+    }
+      
     return viewPortPath;
 }
 

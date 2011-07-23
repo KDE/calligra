@@ -268,7 +268,7 @@ void SvgWriter_generic::saveShape(KoShape * shape)
           } else if (shape->shapeId() == "PictureShape") {
               saveImage(shape);
               } else if(shape->shapeId() == m_appDataId){
-	       saveAppData(shape);
+	       saveAppData(shape, m_body);
 	          }
 	   }
          

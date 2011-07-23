@@ -51,10 +51,15 @@ SvgWriter_Stage::~SvgWriter_Stage()
 
 }
 
-void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape)
+void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body)
 {
     getID(shape);
     qDebug() << "ID created for this PVPShape: " << m_shapeIds[shape];
+    
+    //Writing dummy data for a rectangle instead of a PVPShape to see how to write to the stream m_body
+    //Writes fine
+   // *body << "<rect id=\"" << m_shapeIds[shape] <<"\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" width=\"426.981pt\" height=\"343.998pt\"/>\"" << endl();
+     *body << "<path id=\"" << m_shapeIds[shape] <<"\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" d=\"M0 0L280.054 0L140.027 267.985C93.3513 178.657 110.817 217.612 0 0Z\"  transform=\"translate(321.567, 399.823)\"   />\"" << endl;
 }
 
 //TODO PVPShape should have the animation data, not Frame.
@@ -72,9 +77,9 @@ void SvgWriter_Stage::saveAnimationTags(PresentationViewPortShape* shape)
 
 }
 
-void SvgWriter_Stage::saveAppData(KoShape* shape)
+void SvgWriter_Stage::saveAppData(KoShape* shape, QTextStream* body)
 {
-  saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape));
+  saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
   saveAnimationTags(dynamic_cast<PresentationViewPortShape*>(shape));   
 }
 
