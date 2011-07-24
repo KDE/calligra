@@ -5,8 +5,8 @@
 
 PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
- setShapeId(PresentationViewPortShapeId);
- createAdjMatrix();
+    setShapeId(PresentationViewPortShapeId);
+    m_adjMatrix = createAdjMatrix();
  }
 
 PresentationViewPortShape::~PresentationViewPortShape()
@@ -19,31 +19,37 @@ QString PresentationViewPortShape::toString()
    return m_path;
 }
 
-void PresentationViewPortShape::createAdjMatrix()
+QVector< QVector < int > > PresentationViewPortShape::createAdjMatrix()
 {
   m_noOfPoints = 8;
   QVector< QVector < int > > adjMatrix(0);
   
   QVector< int > intVector(m_noOfPoints);
      
+      intVector.fill(0);
+      intVector.insert(1, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(0, 1);    
       intVector.insert(2, 1);
       adjMatrix.append(intVector);
       
       intVector.fill(0);
-      intVector.insert(1, 1);    
+      intVector.insert(1, 1);
       intVector.insert(3, 1);
       adjMatrix.append(intVector);
       
       intVector.fill(0);
       intVector.insert(2, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
+      intVector.insert(5, 1);
+      adjMatrix.append(intVector);
+      
+      intVector.fill(0);
       intVector.insert(4, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(3, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
       intVector.insert(6, 1);
       adjMatrix.append(intVector);
       
@@ -54,28 +60,23 @@ void PresentationViewPortShape::createAdjMatrix()
       
       intVector.fill(0);
       intVector.insert(6, 1);
-      intVector.insert(8, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(7, 1);
       adjMatrix.append(intVector);
             
       for(int i = 0; i < m_noOfPoints; i++)
 	for(int j = 0; j < m_noOfPoints; j++){
-	 qDebug() << "Value at " << i << "," << j << ": " << adjMatrix.at(i).at(j) << "\t";
+	 qDebug() << adjMatrix.at(i).at(j) ;
 	}
 	qDebug() << endl;
-  
-    setAdjMatrix(&adjMatrix);
+  return adjMatrix;
+    //setAdjMatrix(&adjMatrix);
 }
 
 void PresentationViewPortShape::setAdjMatrix(QVector< QVector< int > >* matrix)
 {
-    m_adjMatrix = matrix;
+    //m_adjMatrix = matrix;
 }
 
-QVector< QVector< int > >* PresentationViewPortShape::adjMatrix()
+QVector< QVector< int > > PresentationViewPortShape::adjMatrix()
 {
     return m_adjMatrix;
 }
@@ -91,8 +92,7 @@ void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& 
         
     painter.setPen(QPen(QColor(Qt::black), 1, Qt::DashLine,
                      Qt::FlatCap, Qt::MiterJoin)); 
-    painter.setBrush(QColor(122, 163, 39));// Needed?
-    
+      
     painter.drawPath(createShapePath(outline().boundingRect().size()));
     }
 
@@ -140,21 +140,22 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
     m_path.clear();
     
     for(int row = 0; row < m_noOfPoints; row++){
-      viewPortPath.moveTo(m_pointsOfShape.at(row + 1));
-      //m_path << "M" << m_pointsOfShape.at(row + 1).x() << " " << m_pointsOfShape.at(row + 1).y();
-      m_path.arg("M");
-      m_path.arg(m_pointsOfShape.at(row + 1).x());
-      m_path.arg(" ");
-      m_path.arg(m_pointsOfShape.at(row + 1).y());
+      if(row == 0 || row == 4)
+      viewPortPath.moveTo(m_pointsOfShape.at(row));
       
-      for(int col = 0; col < m_noOfPoints; col++){
-	if(m_adjMatrix->at(row).at(col)){
-	  viewPortPath.lineTo(m_pointsOfShape.at(col + 1));
-	  //m_path << "L" << m_pointsOfShape.at(col + 1).x() << " " << m_pointsOfShape.at(col + 1).y();
-	  m_path.arg("L");
-	  m_path.arg(m_pointsOfShape.at(col + 1).x());
-	  m_path.arg(" ");
-	  m_path.arg(m_pointsOfShape.at(col + 1).y());
+      m_path.append("M");
+      m_path.setNum(m_pointsOfShape.at(row).x());
+      m_path.append(" ");
+      m_path.setNum(m_pointsOfShape.at(row).y());
+      
+      for(int col = row + 1; col < m_noOfPoints ; col++){
+	if(m_adjMatrix.at(row).at(col)){
+	  viewPortPath.lineTo(m_pointsOfShape.at(col));
+	
+	  m_path.append("L");
+	  m_path.setNum(m_pointsOfShape.at(col).x());
+	  m_path.append(" ");
+	  m_path.setNum(m_pointsOfShape.at(col).y());
 	}
       }
     }

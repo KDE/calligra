@@ -58,9 +58,9 @@ private:
      */
      QPainterPath createShapePath(const QSizeF& size);
      
-     void createAdjMatrix();
+     QVector< QVector< int > > createAdjMatrix();
      void setAdjMatrix(QVector< QVector < int > >* matrix);
-     QVector< QVector< int > >* adjMatrix(); 
+     QVector< QVector< int > > adjMatrix(); 
      
      void createListOfPoints(const QSizeF& size);
      void setListOfPoints(QList<QPointF> points);
@@ -72,7 +72,7 @@ private:
     qreal m_cornerRadiusY; ///< in percent of half of the rectangle height (a number between 0 and 100)
 
     int m_noOfPoints;
-    QVector< QVector<int> >* m_adjMatrix;
+    QVector< QVector<int> > m_adjMatrix;
     
     //QString m_path;
     //int m_adjMatrix[8][8];

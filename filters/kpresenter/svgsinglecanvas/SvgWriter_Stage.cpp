@@ -67,7 +67,7 @@ void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextS
     //fill wriiten to SVG
     //TODO other attributes - stroke, etc. ?
     
-    //*body << " d=\"" << shape->toString()<< "\" "; //TODO
+    *body << " d=\"" << shape->toString()<< "\" "; //TODO
     *body << getTransform(shape->transformation(), " transform");//transform being written to SVG
 
     *body << " />" << endl;
