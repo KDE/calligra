@@ -71,6 +71,5 @@ MimeType=application/x-vnd.kde.plan.work;application/x-vnd.kde.kplato.work;
 Type=Application
 Icon=planwork
 X-KDE-ServiceTypes=Calligra/Application
-X-DocPath=planwork/index.html
 Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true
