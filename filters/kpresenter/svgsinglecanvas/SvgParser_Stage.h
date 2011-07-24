@@ -53,8 +53,8 @@ public:
     
 private:
    
-    QList<QPointF> parsePathPoints(const KoXmlElement& e);  
-    QTransform parseTransformation(const KoXmlElement& e);  
+    //QList<QPointF> parsePathPoints(const KoXmlElement& e);  
+    //QTransform parseTransformation(const KoXmlElement& e);  
   /**
      * @brief m_frameList - 
      * Contains all the Frame objects created from the data 

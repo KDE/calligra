@@ -34,7 +34,6 @@ SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):Svg
     m_hasAppData = true;
     m_appData_elementName = PresentationViewPortShapeId;
     
-    NS = new QString("calligra:");
     m_frameList.begin();
     }
 
@@ -70,13 +69,13 @@ KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
     
     //sets all the properties to draw the shape
     shape->setName(e.attribute("id"));
-    shape->setListOfPoints(parsePathPoints(e));
-    shape->setTransformation(parseTransformation(e));
+   // shape->setListOfPoints(parsePathPoints(e));
+    //shape->setTransformation(parseTransformation(e));
     
     return shape;
 }
     
-QList< QPointF > SvgParser_Stage::parsePathPoints(const KoXmlElement& e)
+/*QList< QPointF > SvgParser_Stage::parsePathPoints(const KoXmlElement& e)
 {
     QList<QPointF> pathPoints;
     return pathPoints;
@@ -87,3 +86,4 @@ QTransform SvgParser_Stage::parseTransformation(const KoXmlElement& e)
     QTransform transformation;
     return transformation;
 }
+*/

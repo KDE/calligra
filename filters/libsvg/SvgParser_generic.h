@@ -155,6 +155,7 @@ protected:
     bool m_hasAppData;
     QList<KoShape*> m_shapes;
     
+    
 private:
   
     QSizeF m_documentSize;
@@ -166,7 +167,7 @@ private:
     QMap<QString, SvgClipPathHelper> m_clipPaths;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes
-    KoResourceManager *m_documentResourceManager;
+    KoResourceManager *m_documentResourceManager; 
     //QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
     SvgCssHelper m_cssStyles;
