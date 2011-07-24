@@ -1,24 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Flow
-Name[cs]=Proud
-Name[de]=Flow
-Name[el]=Flow
-Name[en_GB]=Flow
-Name[es]=Flow
-Name[et]=Flow
-Name[it]=Flow
-Name[nb]=Flow
-Name[nds]=Flow
-Name[nl]=Flow
-Name[pt]=Flow
-Name[pt_BR]=Flow
-Name[ru]=Flow
-Name[sv]=Flow
-Name[ug]=ئېقىن
-Name[uk]=Flow
-Name[x-test]=xxFlowxx
-Name[zh_TW]=Flow
 Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
 GenericName[ca]=Editor de diagrames de fluxos
