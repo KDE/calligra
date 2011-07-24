@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+   /* This file is part of the KDE project
     * Copyright (C) 2011 Aakriti Gupta <aakriti.a.gupta@gmail.com>
     *
     * This library is free software; you can redistribute it and/or
@@ -18,20 +18,25 @@
     */
 
 #include "SvgParser_Stage.h"
+
 #include <KoShape.h>
 #include <KoShapeGroup.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeRegistry.h>
+
 #include "SvgAnimationData.h"
+#include "plugins/presentationviewportshape/PresentationViewPortShape.h"
 
 SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):SvgParser_generic(documentResourceManager)
 {
-    setAppDataTag();
-    NS = new QString("calligra:");
-    //m_frame = new Frame();
-    m_frameList.begin();
-    //m_frame = new Frame();
+ 
+    m_appData_tagName = "calligra:frame";
+    m_hasAppData = true;
+    m_appData_elementName = PresentationViewPortShapeId;
     
-   // m_attributes = m_frame->attributes();
-}
+    NS = new QString("calligra:");
+    m_frameList.begin();
+    }
 
 SvgParser_Stage::~SvgParser_Stage()
 {
@@ -43,15 +48,9 @@ void SvgParser_Stage::parseAppData(const KoXmlElement& e)
    m_frameList.append(frame);
    }
 
-void SvgParser_Stage::setAppDataTag()
+void SvgParser_Stage::setAppData()
 {
-    m_appData_tagName = "calligra:frame";
-    m_hasAppData = true;
-}
-
-void SvgParser_Stage::createAppData()
-{
-   foreach(KoShape *shape, m_shapes){
+    foreach(KoShape *shape, m_shapes){
       foreach(Frame * frame, m_frameList){
           
         if(shape->name() == frame->refId()){
@@ -62,4 +61,29 @@ void SvgParser_Stage::createAppData()
          }
       }
     }
+}
+
+KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
+{
+    //creates the basic [ ] shape
+    PresentationViewPortShape* shape = static_cast<PresentationViewPortShape*> (createShape(PresentationViewPortShapeId));
+    
+    //sets all the properties to draw the shape
+    shape->setName(e.attribute("id"));
+    shape->setListOfPoints(parsePathPoints(e));
+    shape->setTransformation(parseTransformation(e));
+    
+    return shape;
+}
+    
+QList< QPointF > SvgParser_Stage::parsePathPoints(const KoXmlElement& e)
+{
+    QList<QPointF> pathPoints;
+    return pathPoints;
+}
+
+QTransform SvgParser_Stage::parseTransformation(const KoXmlElement& e)
+{
+    QTransform transformation;
+    return transformation;
 }

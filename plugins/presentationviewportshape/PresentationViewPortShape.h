@@ -44,12 +44,15 @@ public:
     
     
     /**Others */
-    QString pathShapeId() const;
+    QString ShapeId() const;
         /// reimplemented
     virtual QPainterPath outline() const;
     virtual QSizeF size() const;
-       
+     
+    
     QString toString();
+    void setListOfPoints(QList<QPointF> points);
+    
     QString m_path;
     
 private:
@@ -63,7 +66,7 @@ private:
      QVector< QVector< int > > adjMatrix(); 
      
      void createListOfPoints(const QSizeF& size);
-     void setListOfPoints(QList<QPointF> points);
+     
      QList< QPointF > listOfPoints();
      
      QList<QPointF> m_pointsOfShape;

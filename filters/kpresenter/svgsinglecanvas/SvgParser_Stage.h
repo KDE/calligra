@@ -42,17 +42,20 @@ public:
      * @param e The XMl element with attributes for Frames
      */
     void parseAppData(const KoXmlElement& e);
-    /**
-     * Sets the tage name to be searched for to find app data
-     */
-    void setAppDataTag();
+    
+    KoShape* createAppData(const KoXmlElement& e);
+    
     /**
      * Adds a Frame object to each shape that had contained Frame data
      */
-    void createAppData();
+    void setAppData();
+    
     
 private:
-    /**
+   
+    QList<QPointF> parsePathPoints(const KoXmlElement& e);  
+    QTransform parseTransformation(const KoXmlElement& e);  
+  /**
      * @brief m_frameList - 
      * Contains all the Frame objects created from the data 
      * parsed from the SVG document

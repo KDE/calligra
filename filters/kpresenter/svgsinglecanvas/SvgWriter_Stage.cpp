@@ -56,7 +56,7 @@ void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextS
     *body << "<path" << getID(shape);
     qDebug() << "Shape ID = " << m_shapeIds[shape];
 
-    getStyle(shape, body);
+//    getStyle(shape, body);
     //fill wriiten to SVG
     //TODO other attributes - stroke, etc. ?
     

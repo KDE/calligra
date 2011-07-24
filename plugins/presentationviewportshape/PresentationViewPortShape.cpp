@@ -81,7 +81,7 @@ QVector< QVector< int > > PresentationViewPortShape::adjMatrix()
     return m_adjMatrix;
 }
 
-QString PresentationViewPortShape::pathShapeId() const
+QString PresentationViewPortShape::ShapeId() const
 {
     return PresentationViewPortShapeId;
 }

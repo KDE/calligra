@@ -147,10 +147,11 @@ protected:
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
     virtual void parseAppData(const KoXmlElement &) =0;
-    virtual void setAppDataTag() =0;
-    virtual void createAppData() =0;
+    virtual KoShape* createAppData(const KoXmlElement &) =0;
+    virtual void setAppData() =0;
     
     QString m_appData_tagName;
+    QString m_appData_elementName;
     bool m_hasAppData;
     QList<KoShape*> m_shapes;
     
