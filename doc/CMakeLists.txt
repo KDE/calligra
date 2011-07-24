@@ -1,6 +1,3 @@
-if(BUILD_karbon)
-	add_subdirectory(karbon)
-endif(BUILD_karbon)
 if(BUILD_kexi)
         add_subdirectory(kexi)
 endif(BUILD_kexi)
