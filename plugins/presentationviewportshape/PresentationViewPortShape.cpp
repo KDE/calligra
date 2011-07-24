@@ -62,11 +62,11 @@ QVector< QVector < int > > PresentationViewPortShape::createAdjMatrix()
       intVector.insert(6, 1);
       adjMatrix.append(intVector);
             
-      for(int i = 0; i < m_noOfPoints; i++)
+      /*for(int i = 0; i < m_noOfPoints; i++)
 	for(int j = 0; j < m_noOfPoints; j++){
 	 qDebug() << adjMatrix.at(i).at(j) ;
 	}
-	qDebug() << endl;
+	qDebug() << endl;*/
   return adjMatrix;
     //setAdjMatrix(&adjMatrix);
 }
@@ -140,22 +140,22 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
     m_path.clear();
     
     for(int row = 0; row < m_noOfPoints; row++){
-      if(row == 0 || row == 4)
+      if(row == 0 || row == 4){
       viewPortPath.moveTo(m_pointsOfShape.at(row));
       
       m_path.append("M");
-      m_path.setNum(m_pointsOfShape.at(row).x());
+      m_path.append(QString("%1").arg(m_pointsOfShape.at(row).x()));
       m_path.append(" ");
-      m_path.setNum(m_pointsOfShape.at(row).y());
-      
+      m_path.append(QString("%1").arg(m_pointsOfShape.at(row).y()));
+       }
       for(int col = row + 1; col < m_noOfPoints ; col++){
 	if(m_adjMatrix.at(row).at(col)){
 	  viewPortPath.lineTo(m_pointsOfShape.at(col));
 	
 	  m_path.append("L");
-	  m_path.setNum(m_pointsOfShape.at(col).x());
+	  m_path.append(QString("%1").arg(m_pointsOfShape.at(col).x()));
 	  m_path.append(" ");
-	  m_path.setNum(m_pointsOfShape.at(col).y());
+	  m_path.append(QString("%1").arg(m_pointsOfShape.at(col).y()));
 	}
       }
     }
