@@ -87,6 +87,7 @@ protected:
       
      void getStyle(KoShape * shape, QTextStream * stream);
       QString getTransform(const QTransform &matrix, const QString &attributeName);
+       QTransform m_userSpaceMatrix;
 private:
       
     void saveLayer(KoShapeLayer * layer);
@@ -133,7 +134,7 @@ private:
     unsigned int m_indent2;
 
     QList<KoShape*> m_toplevelShapes;
-    QTransform m_userSpaceMatrix;
+   // QTransform m_userSpaceMatrix;
     QSizeF m_pageSize;
     bool m_writeInlineImages;
     QString m_filename;

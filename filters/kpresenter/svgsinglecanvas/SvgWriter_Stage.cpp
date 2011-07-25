@@ -59,8 +59,8 @@ void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextS
     //getStyle(shape, body);
     //fill wriiten to SVG
     //TODO other attributes - stroke, etc. ?
-    
-    *body << " d=\"" << shape->toString()<< "\" "; //TODO
+    *body << " fill=\"none\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" ";
+    *body << " d=\"" << shape->toString() << "\"";
     *body << getTransform(shape->transformation(), " transform");//transform being written to SVG
 
     *body << " />" << endl;
@@ -84,7 +84,7 @@ void SvgWriter_Stage::saveAnimationTags(PresentationViewPortShape* shape)
 
 void SvgWriter_Stage::saveAppData(KoShape* shape, QTextStream* body)
 {
-  saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
+  //saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
   saveAnimationTags(dynamic_cast<PresentationViewPortShape*>(shape));   
 }
 

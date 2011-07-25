@@ -1957,11 +1957,11 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
             obj = path;
         }
     } else if (b.tagName() == "path") {
-      if(b.attribute("id").startsWith(m_appData_elementName, Qt::CaseInsensitive))  {
-	qDebug() << "Found a path element whose id starts with " << m_appData_elementName;
-	obj = createAppData(b);
-	}
-         else {
+      //if(b.attribute("id").startsWith(m_appData_elementName, Qt::CaseInsensitive))  {
+	//qDebug() << "Found a path element whose id starts with " << m_appData_elementName;
+	//obj = createAppData(b);
+	//}
+         //else {
           KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
         if (path) {
             path->clear();
@@ -1980,7 +1980,7 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 
             obj = path;
         }
-    }
+    //}
     } else if (b.tagName() == "image") {
         double x = b.hasAttribute("x") ? parseUnitX(b.attribute("x")) : 0;
         double y = b.hasAttribute("x") ? parseUnitY(b.attribute("y")) : 0;

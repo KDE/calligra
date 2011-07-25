@@ -64,26 +64,39 @@ void SvgParser_Stage::setAppData()
 
 KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
 {
+  QString shapeID = PresentationViewPortShapeId;
+  
+  KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
+    if (! factory) {
+        kWarning(30514) << "Could not find factory for shape id" << shapeID;
+        return 0;
+    }
+
+    KoShape *shape = factory->createDefaultShape(m_documentResourceManager);
+    if (shape && shape->shapeId().isEmpty())
+        shape->setShapeId(factory->id());
+
+    /*
+     // reset tranformation that might come from the default shape
+    shape->setTransformation(QTransform());
+
+    // reset border
+    KoShapeBorderModel *oldBorder = shape->border();
+    shape->setBorder(0);
+    delete oldBorder;
+
+    // reset fill
+    KoShapeBackground *oldFill = shape->background();
+    shape->setBackground(0);
+    delete oldFill;
+*/
     //creates the basic [ ] shape
-    PresentationViewPortShape* shape = static_cast<PresentationViewPortShape*> (createShape(PresentationViewPortShapeId));
+    PresentationViewPortShape* PVPshape = static_cast<PresentationViewPortShape*> (shape);
     
     //sets all the properties to draw the shape
-    shape->setName(e.attribute("id"));
-   // shape->setListOfPoints(parsePathPoints(e));
-    //shape->setTransformation(parseTransformation(e));
-    
-    return shape;
+    PVPshape->setName(e.attribute("id"));
+   
+    //TODO FIll?
+    return PVPshape;
 }
     
-/*QList< QPointF > SvgParser_Stage::parsePathPoints(const KoXmlElement& e)
-{
-    QList<QPointF> pathPoints;
-    return pathPoints;
-}
-
-QTransform SvgParser_Stage::parseTransformation(const KoXmlElement& e)
-{
-    QTransform transformation;
-    return transformation;
-}
-*/
