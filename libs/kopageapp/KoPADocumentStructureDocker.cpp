@@ -180,6 +180,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     connect( m_sectionView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
              this, SLOT (itemSelected( const QItemSelection&, const QItemSelection& ) ) );
 
+    connect(m_model, SIGNAL(requestPageSelection(int,int)), this, SLOT(selectPages(int,int)));
     connect( m_model, SIGNAL( modelReset()), this, SIGNAL( dockerReset() ) );
 
     KConfigGroup configGroup = KGlobal::config()->group( "KoPageApp/DocumentStructureDocker" );
@@ -705,6 +706,20 @@ void KoPADocumentStructureDocker::editPaste()
         // Paste Pages
         KoPACanvas * canvas = dynamic_cast<KoPACanvas *>( KoToolManager::instance()->activeCanvasController()->canvas() );
         canvas->koPAView()->pagePaste();
+    }
+}
+
+void KoPADocumentStructureDocker::selectPages(int start, int count)
+{
+    if ((start < 0) || (count < 1)) {
+        return;
+    }
+    m_sectionView->clearSelection();
+    for (int i = start; i < (start + count); i++) {
+        QModelIndex index = m_model->index(i, 0, QModelIndex());
+        if (index.isValid()) {
+            m_sectionView->selectionModel()->select(index, QItemSelectionModel::Select);
+        }
     }
 }
 #include <KoPADocumentStructureDocker.moc>

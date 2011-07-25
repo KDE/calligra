@@ -67,6 +67,9 @@ public slots:
     /// Triggers an update of the complete model
     void update();
 
+signals:
+    void requestPageSelection(int start, int count);
+
 private:
     /// Returns properties of the given shape
     PropertyList properties( KoShape* shape ) const;

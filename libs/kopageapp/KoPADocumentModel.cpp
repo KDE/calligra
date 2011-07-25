@@ -705,6 +705,7 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
    case Qt::MoveAction: {
        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, pages, pageAfter);
        m_document->addCommand( command );
+       emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, pages.count());
        return true;
    }
    case Qt::CopyAction: {
@@ -725,6 +726,7 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
                break;
            }
        }
+       emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, sizeof(documentTypes) / sizeof(KoOdf::DocumentType));
        return true;
    }
    default:
