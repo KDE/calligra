@@ -84,7 +84,7 @@ bool KexiDBReportData::open()
         
         if ( m_cursor )
         {
-            kDebug() << "Moving to first row..";
+            kDebug() << "Moving to first record..";
             return m_cursor->moveFirst();
         }
         else

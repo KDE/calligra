@@ -239,7 +239,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
         if (m_verticalHeader)
             m_verticalHeader->setEditRow(m_curRow);
         if (isInsertingEnabled() && m_currentItem == m_insertItem) {
-            //we should know that we are in state "new row editing"
+            //we should know that we are in state "new record editing"
             m_newRowEditing = true;
             //'insert' row editing: show another row after that:
             m_data->append(m_insertItem);

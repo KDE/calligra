@@ -588,7 +588,7 @@ QVariant MySQLMigrate::drv_value(uint i)
     if (m_dataRow) {
         val = m_dataRow[i];
     }else {
-        kDebug() << "No row";
+        kDebug() << "No record";
     }
     
     return val;

@@ -83,8 +83,8 @@ void KexiDataAwareView::initActions()
     QList<QAction*> viewActions;
     KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
     viewActions
-        << ac->action("data_save_row")
-        << ac->action("data_cancel_row_changes");
+        << ac->action("data_save_record")
+        << ac->action("data_cancel_record_changes");
     
     KAction *a = new KAction(this);
     a->setSeparator(true);
@@ -102,8 +102,8 @@ void KexiDataAwareView::initActions()
         << ac->action("edit_find");
     setViewActions(viewActions);
 
-    plugSharedAction("edit_delete_row", this, SLOT(deleteCurrentRow()));
-    m_actionClient->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
+    plugSharedAction("edit_delete_record", this, SLOT(deleteCurrentRow()));
+    m_actionClient->plugSharedAction(sharedAction("edit_delete_record")); //for proper shortcut
 
     plugSharedAction("edit_delete", this, SLOT(deleteAndStartEditCurrentCell()));
     m_actionClient->plugSharedAction(sharedAction("edit_delete")); //for proper shortcut
@@ -111,11 +111,11 @@ void KexiDataAwareView::initActions()
     plugSharedAction("edit_edititem", this, SLOT(startEditOrToggleValue()));
     m_actionClient->plugSharedAction(sharedAction("edit_edititem")); //for proper shortcut
 
-    plugSharedAction("data_save_row", this, SLOT(acceptRowEdit()));
-    m_actionClient->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
+    plugSharedAction("data_save_record", this, SLOT(acceptRowEdit()));
+    m_actionClient->plugSharedAction(sharedAction("data_save_record")); //for proper shortcut
 
-    plugSharedAction("data_cancel_row_changes", this, SLOT(cancelRowEdit()));
-    m_actionClient->plugSharedAction(sharedAction("data_cancel_row_changes")); //for proper shortcut
+    plugSharedAction("data_cancel_record_changes", this, SLOT(cancelRowEdit()));
+    m_actionClient->plugSharedAction(sharedAction("data_cancel_record_changes")); //for proper shortcut
 
 // if (m_dataAwareObject->isSortingEnabled()) {
 //moved up  plugSharedAction("data_sort_az", this, SLOT(sortAscending()));
@@ -183,11 +183,11 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
     setAvailable("edit_copy", !insertRowFocusedWithoutEditing);
     setAvailable("edit_paste", !ro);
     setAvailable("edit_delete", !ro && !insertRowFocusedWithoutEditing);
-    setAvailable("edit_delete_row", !ro && !(deleting && row == rows));
+    setAvailable("edit_delete_record", !ro && !(deleting && row == rows));
     setAvailable("edit_insert_empty_row", !ro && emptyInserting);
     setAvailable("edit_clear_table", !ro && deleting && rows > 0);
-    setAvailable("data_save_row", editing);
-    setAvailable("data_cancel_row_changes", editing);
+    setAvailable("data_save_record", editing);
+    setAvailable("data_cancel_record_changes", editing);
     setAvailable("data_sort_az", sorting);
     setAvailable("data_sort_za", sorting);
 }
@@ -254,10 +254,10 @@ void KexiDataAwareView::reloadActions()
         if (separatorNeeded)
             m_dataAwareObject->contextMenu()->addSeparator();
         plugSharedAction("edit_delete", m_dataAwareObject->contextMenu());
-        plugSharedAction("edit_delete_row", m_dataAwareObject->contextMenu());
+        plugSharedAction("edit_delete_record", m_dataAwareObject->contextMenu());
     } else {
-        unplugSharedAction("edit_delete_row", m_dataAwareObject->contextMenu());
-        unplugSharedAction("edit_delete_row", m_dataAwareObject->contextMenu());
+        unplugSharedAction("edit_delete_record", m_dataAwareObject->contextMenu());
+        unplugSharedAction("edit_delete_record", m_dataAwareObject->contextMenu());
     }
     //if (!m_view->isSortingEnabled()) {
 //  unplugSharedAction("data_sort_az");

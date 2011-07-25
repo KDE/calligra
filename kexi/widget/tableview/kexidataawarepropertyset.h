@@ -106,7 +106,7 @@ public slots:
     /*! Inserts \a set property set at \a row position.
      If there was a buffer at this position before, it will be destroyed.
      If \a newOne is true, the property set will be marked as newly created,
-     simply by adding "newrow" property.
+     simply by adding "newrecord" property.
 
      The property set \a set will be owned by this object, so you should not
      delete this property set by hand but call removeCurrentPropertySet()
