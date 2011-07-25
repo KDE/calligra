@@ -375,6 +375,22 @@ void KPrViewModeSlidesSorter::selectSlides(const QList<KoPAPageBase *> &slides)
     }
 }
 
+void KPrViewModeSlidesSorter::selectCustomShowPages(int start, int count)
+{
+    if ((start < 0) || (count < 1)) {
+        return;
+    }
+
+    m_customSlideShowView->clearSelection();
+
+    for (int i = start; i < (start + count); i++) {
+        QModelIndex index = m_customSlideShowModel->index(i, 0, QModelIndex());
+        if (index.isValid()) {
+            m_customSlideShowView->selectionModel()->select(index, QItemSelectionModel::Select);
+        }
+    }
+}
+
 void KPrViewModeSlidesSorter::activateNormalViewMode()
 {
     KPrView *view = static_cast<KPrView *>(m_view);
@@ -714,20 +730,4 @@ void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
     customShowChanged(m_customSlideShowsList->currentIndex());
 
     connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
-}
-
-void KPrViewModeSlidesSorter::selectCustomShowPages(int start, int count)
-{
-    if ((start < 0) || (count < 1)) {
-        return;
-    }
-
-    m_customSlideShowView->clearSelection();
-
-    for (int i = start; i < (start + count); i++) {
-        QModelIndex index = m_customSlideShowModel->index(i, 0, QModelIndex());
-        if (index.isValid()) {
-            m_customSlideShowView->selectionModel()->select(index, QItemSelectionModel::Select);
-        }
-    }
 }

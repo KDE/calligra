@@ -181,6 +181,10 @@ signals:
     /** Notify a change of the active custom slide show */
     void customSlideShowsChanged();
 
+<<<<<<< HEAD
+=======
+    /** Notify a need of page slection after coping or moving pages */
+>>>>>>> exp-select
     void selectPages(int start, int number);
 
 private slots:
