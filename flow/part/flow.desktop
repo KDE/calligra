@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Flow
+Name[pt]=Calligra Flow
+Name[pt_BR]=Calligra Flow
+Name[sv]=Calligra Flow
+Name[uk]=Calligra Flow
+Name[x-test]=xxCalligra Flowxx
 Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
 GenericName[ca]=Editor de diagrames de fluxos
