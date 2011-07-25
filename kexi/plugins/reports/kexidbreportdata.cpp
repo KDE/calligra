@@ -315,13 +315,13 @@ QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& l
 
                 if (! parsed) {
                     kDebug() << "XML parsing error";
-                    return false;
+                    return QString();
                 }
 
                 QDomElement scriptelem = domdoc.namedItem("script").toElement();
                 if (scriptelem.isNull()) {
                     kDebug() << "script domelement is null";
-                    return false;
+                    return QString();
                 }
 
                 QString interpretername = scriptelem.attribute("language");
