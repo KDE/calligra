@@ -643,7 +643,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left;
 
                     stream >> top >> left;
-                    m_backend->moveTo(mDeviceContext, left, top);
+                    mDeviceContext.currentPosition = QPoint(left, top);
                 }
                 break;
             case (META_EXCLUDECLIPRECT & 0xff):

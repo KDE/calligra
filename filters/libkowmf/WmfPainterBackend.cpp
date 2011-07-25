@@ -30,6 +30,8 @@
 #include "WmfParser.h"
 
 
+#define DEBUG_WMFPAINT 0
+
 /**
    Namespace for Windows Metafile (WMF) classes
 */
@@ -461,15 +463,6 @@ void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, QColor
     mPainter->setPen(oldPen);
 }
 
-void WmfPainterBackend::moveTo(WmfDeviceContext &context, int x, int y)
-{
-    Q_UNUSED(context);
-#if DEBUG_WMFPAINT
-    kDebug(31000)<< x << ", " << y;
-#endif
-    mLastPos = QPoint(x, y);
-}
-
 
 void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
 {
@@ -480,19 +473,20 @@ void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
 #endif
 
     QPoint newPoint(x, y);
-    mPainter->drawLine(mLastPos, newPoint);
-    mLastPos = newPoint;
+    mPainter->drawLine(context.currentPosition, newPoint);
+    context.currentPosition = newPoint;
 }
 
 
 void WmfPainterBackend::drawRect(WmfDeviceContext &context, int x, int y, int w, int h)
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
 
-    updateFromDeviceContext(context);
     mPainter->drawRect(x, y, w, h);
 }
 
@@ -666,8 +660,8 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     // The TA_UPDATECP flag tells us to use the current position
     if (context.textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
-        x = mLastPos.x();
-        y = mLastPos.y();
+        x = context.currentPosition.x();
+        y = context.currentPosition.y();
 #if DEBUG_WMFPAINT
         kDebug(31000) << "Using current position:" << x << y;
 #endif
@@ -758,19 +752,31 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
 
         if (dynamic_cast<QPrinter *>(mTarget)) {
             width = 0;
-        } else {
+        }
+        else  if (width == 1)
+            // I'm unsure of this, but it seems that WMF uses line
+            // width == 1 as cosmetic pen.  Or it could just be that
+            // any line width < 1 should be drawn as width == 1.  The
+            // WMF spec doesn't mention the term "cosmetic pen"
+            // anywhere so we don't get any clue there.
+            //
+            // For an example where this is shown clearly, see
+            // wmf_tests.doc, in the colored rectangles and the polypolygon.
+            width = 0;
+#if 0
+        else {
             // WMF spec: width of pen in logical coordinate
             // => width of pen proportional with device context width
-#if 0
             QRect rec = mPainter->window();
             // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
+
             QRect devRec = rec * mPainter->matrix();
             if (rec.width() != 0)
                 width = (width * devRec.width()) / rec.width() ;
             else
                 width = 0;
-#endif
         }
+#endif
 
         p.setWidth(width);
         mPainter->setPen(p);
