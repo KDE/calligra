@@ -463,15 +463,6 @@ void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, QColor
     mPainter->setPen(oldPen);
 }
 
-void WmfPainterBackend::moveTo(WmfDeviceContext &context, int x, int y)
-{
-    Q_UNUSED(context);
-#if DEBUG_WMFPAINT
-    kDebug(31000)<< x << ", " << y;
-#endif
-    mLastPos = QPoint(x, y);
-}
-
 
 void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
 {
@@ -482,8 +473,8 @@ void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
 #endif
 
     QPoint newPoint(x, y);
-    mPainter->drawLine(mLastPos, newPoint);
-    mLastPos = newPoint;
+    mPainter->drawLine(context.currentPosition, newPoint);
+    context.currentPosition = newPoint;
 }
 
 
@@ -669,8 +660,8 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     // The TA_UPDATECP flag tells us to use the current position
     if (context.textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
-        x = mLastPos.x();
-        y = mLastPos.y();
+        x = context.currentPosition.x();
+        y = context.currentPosition.y();
 #if DEBUG_WMFPAINT
         kDebug(31000) << "Using current position:" << x << y;
 #endif

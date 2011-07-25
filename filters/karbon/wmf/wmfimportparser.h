@@ -128,8 +128,6 @@ private:
     QPoint    mCurrentOrg;
     double    mScaleX;
     double    mScaleY;
-    // current position in WMF coordinate (INT16)
-    QPoint    mCurrentPoint;
 };
 
 #endif

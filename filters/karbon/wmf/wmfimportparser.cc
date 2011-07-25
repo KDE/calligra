@@ -176,28 +176,22 @@ void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, 
     // Not Yet Implemented
 }
 
-void WMFImportParser::moveTo(Libwmf::WmfDeviceContext &context, int left, int top)
-{
-    mCurrentPoint.setX(left);
-    mCurrentPoint.setY(top);
-}
-
-
 void WMFImportParser::lineTo(Libwmf::WmfDeviceContext &context, int left, int top)
 {
     KoPathShape * line = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! line)
         return;
 
-    line->moveTo(QPointF(coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y())));
+    line->moveTo(QPointF(coordX(context.currentPosition.x()),
+                         coordY(context.currentPosition.y())));
     line->lineTo(QPointF(coordX(left), coordY(top)));
     line->normalize();
 
     appendPen(context, *line);
 
     mDoc->add(line);
-    mCurrentPoint.setX(left);
-    mCurrentPoint.setY(top);
+    context.currentPosition.setX(left);
+    context.currentPosition.setY(top);
 }
 
 
@@ -433,8 +427,8 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
 
     if (context.textAlign & CurrentPosition) {
         // (left, top) position = current logical position
-        x = mCurrentPoint.x();
-        y = mCurrentPoint.y();
+        x = context.currentPosition.x();
+        y = context.currentPosition.y();
     }
 
     // adjust font size
