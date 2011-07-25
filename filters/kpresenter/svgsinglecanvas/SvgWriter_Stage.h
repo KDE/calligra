@@ -56,7 +56,7 @@ public:
 private:
     //Workin on this still
     void savePlainText();
-    void saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body);
+//    void saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body);
     void saveAnimationTags(PresentationViewPortShape* shape);
     /**
      * Saves javascript to the SVG doc
