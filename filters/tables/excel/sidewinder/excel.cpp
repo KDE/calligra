@@ -709,7 +709,7 @@ void FormulaRecord::writeData(XlsRecordOutputStream &o) const
     for (unsigned i = 0; i < d->tokens.size(); i++) {
         o.writeUnsigned(8, d->tokens[i].id()); // ptg
         std::vector<unsigned char> data = d->tokens[i].data();
-        o.writeBlob(QByteArray::fromRawData(reinterpret_cast<char*>(data.data()), data.size()));
+        o.writeBlob(QByteArray::fromRawData(reinterpret_cast<char*>(&data[0]), data.size()));
     }
 }
 
