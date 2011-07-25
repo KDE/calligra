@@ -43,7 +43,7 @@ public:
      */
     void parseAppData(const KoXmlElement& e);
     
-    KoShape* createAppData(const KoXmlElement& e);
+  //  KoShape* createAppData(const KoXmlElement& e);
     
     /**
      * Adds a Frame object to each shape that had contained Frame data

@@ -32,7 +32,7 @@ SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):Svg
  
     m_appData_tagName = "calligra:frame";
     m_hasAppData = true;
-    m_appData_elementName = PresentationViewPortShapeId;
+   // m_appData_elementName = PresentationViewPortShapeId;
     
     m_frameList.begin();
     }
@@ -62,7 +62,7 @@ void SvgParser_Stage::setAppData()
     }
 }
 
-KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
+/*KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
 {
   QString shapeID = PresentationViewPortShapeId;
   
@@ -76,7 +76,7 @@ KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
     if (shape && shape->shapeId().isEmpty())
         shape->setShapeId(factory->id());
 
-    /*
+    
      // reset tranformation that might come from the default shape
     shape->setTransformation(QTransform());
 
@@ -89,7 +89,7 @@ KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
     KoShapeBackground *oldFill = shape->background();
     shape->setBackground(0);
     delete oldFill;
-*/
+
     //creates the basic [ ] shape
     PresentationViewPortShape* PVPshape = static_cast<PresentationViewPortShape*> (shape);
     
@@ -98,5 +98,5 @@ KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
    
     //TODO FIll?
     return PVPshape;
-}
+}*/
     
