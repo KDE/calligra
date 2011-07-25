@@ -156,6 +156,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_buttonAddSlideToCurrentShow, SIGNAL(clicked()), this, SLOT(addSlideToCustomShow()));
     connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlidesFromCustomShow()));
     connect(m_customSlideShowModel, SIGNAL(customSlideShowsChanged()), this, SLOT(updateCustomSlideShowsList()));
+    connect(m_customSlideShowModel, SIGNAL(selectPages(int,int)), this, SLOT(selectCustomShowPages(int, int)));
 
     //setup signals for manage edit actions
     connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
@@ -713,4 +714,20 @@ void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
     customShowChanged(m_customSlideShowsList->currentIndex());
 
     connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+}
+
+void KPrViewModeSlidesSorter::selectCustomShowPages(int start, int count)
+{
+    if ((start < 0) || (count < 1)) {
+        return;
+    }
+
+    m_customSlideShowView->clearSelection();
+
+    for (int i = start; i < (start + count); i++) {
+        QModelIndex index = m_customSlideShowModel->index(i, 0, QModelIndex());
+        if (index.isValid()) {
+            m_customSlideShowView->selectionModel()->select(index, QItemSelectionModel::Select);
+        }
+    }
 }
