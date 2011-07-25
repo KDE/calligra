@@ -136,7 +136,7 @@ void Frame::writeToStream(QTextStream * stream)
     printIndentation(stream, indent);
     *stream << "calligra:" << "transition-duration-ms=\"" << transitionDuration() << "\"" << endl;
               
-    *stream << "/>" << endl;
+    //*stream << "/>" << endl; because transform needs to be added
      
 }
    

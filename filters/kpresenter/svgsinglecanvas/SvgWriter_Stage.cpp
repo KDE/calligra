@@ -64,7 +64,8 @@ void SvgWriter_Stage::saveAnimationTags(PresentationViewPortShape* shape)
     frameObj = &(appData->frame());
           
     frameObj->writeToStream(m_frames);       
-
+    *m_frames << getTransform(shape->transformation(), " transform");//transform being written to SVG
+    *m_frames << "/>" << endl;
 }
 
 void SvgWriter_Stage::saveAppData(KoShape* shape, QTextStream* body)
