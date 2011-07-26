@@ -1002,7 +1002,7 @@ public:
     action_open_recent_connections_title_id;
 
     //! edit menu
-    KAction *action_edit_delete, *action_edit_delete_row,
+    KAction *action_edit_delete, *action_edit_delete_record,
     *action_edit_cut, *action_edit_copy, *action_edit_paste,
     *action_edit_find, *action_edit_findnext, *action_edit_findprev,
     *action_edit_replace, *action_edit_replace_all,
@@ -1024,8 +1024,8 @@ public:
     KToggleAction *action_show_helper;
 #endif
     //! data menu
-    KAction *action_data_save_row;
-    KAction *action_data_cancel_row_changes;
+    KAction *action_data_save_record;
+    KAction *action_data_cancel_record_changes;
     KAction *action_data_execute;
 
     //! format menu

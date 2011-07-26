@@ -37,7 +37,7 @@ public:
     /*! Plugs action \a a for a widget. The action will be later looked up (by name)
      on key press event, to get proper shortcut. If found, we know that the action is already
      performed at main window's level, so we should give up. Otherwise - default shortcut
-     will be used (example: Shift+Enter key for "data_save_row" action). \sa KexiTableView::shortCutPressed()
+     will be used (example: Shift+Enter key for "data_save_record" action). \sa KexiTableView::shortCutPressed()
     */
     void plugSharedAction(QAction* a);
 

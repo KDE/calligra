@@ -124,7 +124,6 @@ public:
 
     // Graphics drawing functions
     virtual void  setPixel(WmfDeviceContext &context, int x, int y, QColor color) = 0;
-    virtual void  moveTo(WmfDeviceContext &context, int x, int y) = 0;
     virtual void  lineTo(WmfDeviceContext &context, int x, int y) = 0;
     virtual void  drawRect(WmfDeviceContext &context, int x, int y, int w, int h) = 0;
     virtual void  drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h, int = 25, int = 25) = 0;

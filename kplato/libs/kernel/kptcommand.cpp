@@ -2385,7 +2385,7 @@ NodeModifyShutdownCostCmd::NodeModifyShutdownCostCmd( Node &node, double value, 
         : NamedCommand( name ),
         m_node( node )
 {
-    m_oldvalue = node.startupCost();
+    m_oldvalue = node.shutdownCost();
     m_newvalue = value;
 }
 

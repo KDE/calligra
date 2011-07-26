@@ -43,11 +43,11 @@ void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWrite
 
     if (KexiWebForms::Model::Database::deleteRow(requestedTable, pkeyName, pkeyValue)) {
         m_dict->ShowSection("SUCCESS");
-        setValue("MESSAGE", "Row deleted successfully");
+        setValue("MESSAGE", "Record deleted successfully");
     } else {
         m_dict->ShowSection("ERROR");
         /// @todo retrieve proper error message
-        setValue("MESSAGE", "Error while trying to delete row!");
+        setValue("MESSAGE", "Error while trying to delete record!");
     }
 
     renderTemplate(m_dict, writer);

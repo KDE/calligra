@@ -52,7 +52,7 @@ public slots:
     void assignPropertySet(KoProperty::Set* propertySet);
 
 signals:
-    //! Signal emitted when helper button 'Go to selected row sourcesource' is clicked.
+    //! Signal emitted when helper button 'Go to selected record sourcesource' is clicked.
     void jumpToObjectRequested(const QString& mime, const QString& name);
 
 //  /*! Signal emitted when current bound column has been changed. */
