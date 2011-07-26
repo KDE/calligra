@@ -662,7 +662,7 @@ public:
      field's value. Requirements: field must be of integer type, there must be a
      record inserted in current database session (whatever this means).
      On error (quint64)-1 is returned.
-     Last inserted record is identified by magical row identifier, usually called
+     Last inserted record is identified by magical record identifier, usually called
      ROWID (PostgreSQL has it as well as SQLite;
      see DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE).
      ROWID's value will be assigned back to \a ROWID if this pointer is not null.

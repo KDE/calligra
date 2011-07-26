@@ -87,7 +87,7 @@ public:
     /*! @internal Used by KexiFormView in view switching. */
     void beforeSwitchView();
 
-    /*! \return last row visible on the screen (counting from 0).
+    /*! \return last record visible on the screen (counting from 0).
      The returned value is guaranteed to be smaller or equal to currentRow() or -1
      if there are no rows.
      Implemented for KexiDataAwareObjectInterface. */
@@ -273,7 +273,7 @@ protected:
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Reimplemented from KexiFormDataProvider.
-     \return information whether we're currently at new row or now.
+     \return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
@@ -287,13 +287,13 @@ protected:
     virtual void initDataContents();
 
     /*! @internal
-     Updates row appearance after canceling row edit.
+     Updates record appearance after canceling record edit.
      Reimplemented from KexiDataAwareObjectInterface: just undoes changes for every data item.
      Used by cancelRowEdit(). */
     virtual void updateAfterCancelRowEdit();
 
     /*! @internal
-     Updates row appearance after accepting row edit.
+     Updates record appearance after accepting record edit.
      Reimplemented from KexiDataAwareObjectInterface: just clears 'edit' indicator.
      Used by cancelRowEdit(). */
     virtual void updateAfterAcceptRowEdit();

@@ -228,12 +228,12 @@ void KexiWindow::createSubwidgets()
       d->topBarLyr->add(d->saveDesignButton);
       d->topBarLyr->addWidget( d->saveDesignButtonSeparator = new KexiToolBarSeparator(this));
 
-      a = sharedAction("data_save_record");
+      a = sharedAction("data_save_row");
       btn = new KexiSmallToolButton(a, this);
       btn->setToolButtonStyle( Qt::ToolButtonIconOnly );
       d->topBarLyr->add(btn);
 
-      a = sharedAction("data_cancel_record_changes");
+      a = sharedAction("data_cancel_row_changes");
       btn = new KexiSmallToolButton(a, this);
       btn->setToolButtonStyle( Qt::ToolButtonIconOnly );
       d->topBarLyr->add(btn);

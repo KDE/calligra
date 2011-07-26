@@ -228,10 +228,10 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
     }
 
     //! @todo
-    const bool startRowEdit = !m_rowEditing; //remember if we're starting row edit
+    const bool startRowEdit = !m_rowEditing; //remember if we're starting record edit
 
     if (!m_rowEditing) {
-        //we're starting row editing session
+        //we're starting record editing session
         m_data->clearRowEditBuffer();
 
         m_rowEditing = true;
@@ -241,7 +241,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
         if (isInsertingEnabled() && m_currentItem == m_insertItem) {
             //we should know that we are in state "new record editing"
             m_newRowEditing = true;
-            //'insert' row editing: show another row after that:
+            //'insert' record editing: show another row after that:
             m_data->append(m_insertItem);
             //new empty insert item
             m_insertItem = m_data->createItem();
@@ -446,7 +446,7 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
 {
     if (!item)
         return;
-    //only signal start editing when no row editing was started already
+    //only signal start editing when no record editing was started already
     kDebug() << "** editedItem="
         << (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString())
         << ", "
