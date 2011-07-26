@@ -152,11 +152,11 @@ void KoSelectionManager::slotEntered(const QModelIndex &index)
         m_toggle->setIndex(index);
 
         // Increase the size of the toggle for large items
-        const int iconHeight = m_view->iconSize().height();
+        const int iconHeight = m_view->visualRect(index).height();
 
         int toggleSize = KIconLoader::SizeSmall;
         if (iconHeight >= KIconLoader::SizeEnormous) {
-            toggleSize = KIconLoader::SizeMedium;
+            toggleSize = KIconLoader::SizeLarge/2;
         }
         else if (iconHeight >= KIconLoader::SizeLarge) {
             toggleSize = KIconLoader::SizeSmallMedium;

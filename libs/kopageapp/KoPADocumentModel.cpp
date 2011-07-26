@@ -726,7 +726,7 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
                break;
            }
        }
-       emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, sizeof(documentTypes) / sizeof(KoOdf::DocumentType));
+       emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, sizeof(documentTypes) / sizeof(KoOdf::DocumentType) - 1);
        return true;
    }
    default:

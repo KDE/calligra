@@ -22,7 +22,6 @@
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrFactory.h"
 #include "KPrSlidesManagerView.h"
-#include "KPrSelectionManager.h"
 #include "KPrCustomSlideShowsModel.h"
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
@@ -52,6 +51,7 @@
 #include <KoCanvasController.h>
 #include <KoCopyController.h>
 #include <KoCutController.h>
+#include <KoSelectionManager.h>
 
 //KDE Headers
 #include <klocale.h>
@@ -171,8 +171,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 
     //install selection manager for Slides Sorter View and Custom Shows View
-    new KPrSelectionManager(m_slidesSorterView);
-    new KPrSelectionManager(m_customSlideShowView);
+    new KoSelectionManager(m_slidesSorterView);
+    new KoSelectionManager(m_customSlideShowView);
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
