@@ -146,7 +146,7 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
 
 QString Kexi::msgYouCanImproveData()
 {
-    return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
+    return i18n("You can correct data in this row or use \"Cancel record changes\" function.");
 }
 
 //--------------------------------------------------------------------------------

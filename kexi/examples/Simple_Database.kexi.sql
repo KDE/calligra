@@ -351,7 +351,7 @@ INSERT INTO "kexi__objectdata" VALUES(65,'<!DOCTYPE UI>
 <enum>NoFocus</enum>
 </property>
 <property name="onClickAction">
-<string>currentForm:data_save_row</string>
+<string>currentForm:data_save_record</string>
 </property>
 <property name="text">
 <string>Save Changes</string>

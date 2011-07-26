@@ -137,7 +137,7 @@ public slots:
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 //! @todo unused for now, will be used for continuous forms
 /*    virtual void vScrollBarSliderReleased() {
         KexiDataAwareObjectInterface::vScrollBarSliderReleased();

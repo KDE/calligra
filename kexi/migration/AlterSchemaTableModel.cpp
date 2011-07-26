@@ -69,7 +69,7 @@ QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientat
         }
         return QString("Column %1").arg(section);
     }
-    return QString("Row %1").arg(section);
+    return QString("Record %1").arg(section);
 }
 
 int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const

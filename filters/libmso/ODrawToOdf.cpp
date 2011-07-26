@@ -437,6 +437,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // svg:fill-rule
     switch (shapeType) {
     case msosptDonut:
+    case msosptNoSmoking:
     case msosptActionButtonBlank:
     case msosptActionButtonHome:
     case msosptActionButtonHelp:
