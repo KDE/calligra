@@ -153,9 +153,6 @@ private slots:
     /** Changes the view active page to match the slides sorter current index*/
     void updateActivePageToCurrentIndex();
 
-    /** Update the slides sorter document model*/
-    void updateSlidesSorterDocumentModel();
-
     /** Updates custom slide Shows list */
     void updateCustomSlideShowsList();
 

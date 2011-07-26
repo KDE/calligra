@@ -259,8 +259,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     connect(m_slidesSorterView,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
-    connect(m_view->kopaDocument(),SIGNAL(pageAdded(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
-    connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
 
     //change zoom saving slot
     connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
@@ -304,12 +302,6 @@ void KPrViewModeSlidesSorter::deactivate()
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
     disableEditActions();
-}
-
-void KPrViewModeSlidesSorter::updateSlidesSorterDocumentModel()
-{
-    m_slidesSorterModel->update();
-    updateToActivePageIndex();
 }
 
 void KPrViewModeSlidesSorter::updateActivePage( KoPAPageBase *page )
