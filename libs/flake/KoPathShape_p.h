@@ -21,6 +21,8 @@
 
 #include "KoTosContainer_p.h"
 
+class KoMarker;
+
 class KoPathShapePrivate : public KoTosContainerPrivate
 {
 public:
@@ -87,6 +89,9 @@ public:
     Qt::FillRule fillRule;
 
     Q_DECLARE_PUBLIC(KoPathShape)
+
+    KoMarker *beginMarker;
+    KoMarker *endMarker;
 };
 
 #endif

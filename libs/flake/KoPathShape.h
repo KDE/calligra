@@ -34,6 +34,7 @@
 class KoPathShape;
 class KoPathPoint;
 class KoPathShapePrivate;
+class KoMarker;
 
 typedef QPair<int, int> KoPathPointIndex;
 
@@ -72,6 +73,12 @@ typedef QList<KoSubpath *> KoSubpathList;
 class FLAKE_EXPORT KoPathShape : public KoTosContainer
 {
 public:
+    /// Property enum
+    enum MarkerPosition{
+        MarkerBegin = 0, ///< it is the marker where the Path begins
+        MarkerEnd = 1 ///< it is the marker where the Path ends
+    };
+    
     /**
      * @brief constructor
      */
@@ -435,6 +442,12 @@ public:
 
     /// Returns the viewbox from the given xml element.
     static QRectF loadOdfViewbox(const KoXmlElement &element);
+
+    /// Marker setter
+    void setMarker(KoMarker *marker, MarkerPosition position);
+
+    /// returns the list of all the markers of the path
+    KoMarker *marker(MarkerPosition position);
 
 protected:
     /// constructor \internal

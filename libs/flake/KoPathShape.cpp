@@ -33,6 +33,7 @@
 #include "KoShapeBackground.h"
 #include "KoShapeContainer.h"
 #include "KoFilterEffectStack.h"
+#include "KoMarker.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -54,7 +55,9 @@ static bool qIsNaNPoint(const QPointF &p) {
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoTosContainerPrivate(q),
-    fillRule(Qt::OddEvenFill)
+    fillRule(Qt::OddEvenFill),
+    beginMarker(0),
+    endMarker(0)
 {
 }
 
@@ -1354,4 +1357,28 @@ bool KoPathShape::hitTest(const QPointF &position) const
     point = absoluteTransformation(0).inverted().map(position - shadow()->offset());
 
     return outlinePath.contains(point);
+}
+
+void KoPathShape::setMarker(KoMarker *marker, KoPathShape::MarkerPosition position)
+{
+    Q_D(KoPathShape);
+    
+    if (position == MarkerBegin) {
+        d->beginMarker = marker;
+    } else if (position == MarkerEnd) {
+        d->endMarker = marker;
+    }
+}
+
+KoMarker *KoPathShape::marker(KoPathShape::MarkerPosition position)
+{
+    Q_D(KoPathShape);
+    
+    if (position == MarkerBegin) {
+        return d->beginMarker;
+    } else if (position == MarkerEnd) {
+        return d->endMarker;
+    }
+    
+    return 0;
 }
