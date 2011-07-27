@@ -21,8 +21,7 @@
 #ifndef ANIMATED_LAYER_H
 #define ANIMATED_LAYER_H
 
-#include <kis_group_layer.h>
-
+#include "kis_group_layer.h"
 #include "kis_node_manager.h"
 
 class AnimatedLayer : public KisGroupLayer
@@ -39,64 +38,49 @@ public:
 //     virtual bool needProjection() const;
     
     // Animation interface
+    // NEW
 public:
-    virtual KisNode* getFrameLayer(int num);
-    virtual KisNode* getOldFrameLayer(int num);
-    virtual KisNode* getKeyFrameLayer(int num) = 0;
+    virtual KisNode* getUpdatedFrame(int num);
+    virtual KisNode* getCachedFrame(int num) const = 0;
     
-    virtual KisNode* getPreviousKeyFrame(int num);
-    virtual KisNode* getNextKeyFrame(int num);
+    virtual KisNode* getKeyFrame(int num) const = 0;
+    virtual KisNode* getNextKeyFrame(int num) const;
+    virtual KisNode* getPreviousKeyFrame(int num) const;
     
-    virtual int getPreviousKey(int num) = 0;
-    virtual int getNextKey(int num) = 0;
-    virtual int getCurrentKey(int num) = 0;
+    virtual bool isKeyFrame(int num) const = 0;
+    virtual int getNextKey(int num) const = 0;
+    virtual int getPreviousKey(int num) const = 0;
     
-    virtual bool isFrameChanged() = 0;
+    virtual void loadFrames() = 0;
     
-    virtual KisNode* getCachedFrame();
+public:
+//     virtual const QString& getNameForFrame(int num) const;
+    virtual const QString& getNameForFrame(int num, bool iskey) const = 0;
     
-    virtual void clearJunk() = 0;
+protected:
+    virtual int getFrameFromName(const QString& name, bool &iskey) const = 0;
     
+public:
     /**
      * @return number of first frame with some info
      */
-    virtual int firstFrame() = 0;
+    virtual int dataStart() const = 0;
     
     /**
      * @return number of last frame with some info+1 [firstFrame; lastFrame)
      */
-    virtual int lastFrame() = 0;
-    
-    KisNode* setFrameNumber(int num);
-    int getFrameNumber();
-    
-    int getOldFrame();
-    
-public slots:
-    virtual void update() = 0;
-    virtual KisNode* frameUpdate() = 0;
-    
-public:
-    bool isValid();
-    
-public:
+    virtual int dataEnd() const = 0;
+
+    // May be this should be removed
     void setNodeManager(KisNodeManager* nodeman);
-    KisNodeManager* getNodeManager();
-//     KisNode* source();          // This is temporary function; should be deprecated after full moving to AnimatedLayer
-    
+    KisNodeManager* getNodeManager() const;
+
 protected:
+    virtual void updateFrame(int num);
     
-    virtual KisNode* getFrameAt(int num) = 0;
-    
-    void setValid(bool valid);
-//     void frameChange(bool ch);
+    virtual void insertFrame(int num, KisNode* frame, bool iskey) = 0;
     
 private:
-    int m_old_frame;
-    int m_frame;
-    
-    bool m_valid;
-    
     KisNodeManager* m_nodeman;
     
 //     bool m_frame_changed;

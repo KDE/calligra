@@ -23,98 +23,40 @@
 
 AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source)
 {
-//     m_source = const_cast<KisGroupLayer*>( &source );
-    
-    m_frame = 0;
-    m_old_frame = 0;
-//     setFrameNumber(0);
-//     setFrameNumber(0);
-    
-//     connect(this, SIGNAL(requireRedraw()), this, SLOT(frameUpdate()));
 }
-
-// bool AnimatedLayer::needProjection() const
-// {
-//     bool t = m_frame_changed;
-//     const_cast<AnimatedLayer*>(this)->frameChange(false);
-//     return KisLayer::needProjection() || t;
-// }
-// 
-// void AnimatedLayer::frameUpdate()
-// {
-//     frameChange(true);
-// }
-
-KisNode* AnimatedLayer::setFrameNumber(int num)
-{
-    m_old_frame = m_frame;
-    m_frame = num;
-//     emit requireRedraw();
-    return frameUpdate();
-}
-
-int AnimatedLayer::getFrameNumber()
-{
-    return m_frame;
-}
-
-int AnimatedLayer::getOldFrame()
-{
-    std::cout << "oldFrame: " << m_old_frame << std::endl;
-    return m_old_frame;
-}
-
-bool AnimatedLayer::isValid()
-{
-    return m_valid;
-}
-
-void AnimatedLayer::setValid(bool valid)
-{
-    m_valid = valid;
-}
-
-// void AnimatedLayer::frameChange(bool ch)
-// {
-//     m_frame_changed = ch;
-// }
-
-// KisNode* AnimatedLayer::source()
-// {
-//     return m_source;
-// }
 
 void AnimatedLayer::setNodeManager(KisNodeManager* nodeman)
 {
     m_nodeman = nodeman;
 }
 
-KisNodeManager* AnimatedLayer::getNodeManager()
+KisNodeManager* AnimatedLayer::getNodeManager() const
 {
     return m_nodeman;
 }
 
-KisNode* AnimatedLayer::getNextKeyFrame(int num)
+KisNode* AnimatedLayer::getNextKeyFrame(int num) const
 {
-    return getFrameAt(getNextKey(num));
+    return getKeyFrame(getNextKey(num));
 }
 
-KisNode* AnimatedLayer::getPreviousKeyFrame(int num)
+KisNode* AnimatedLayer::getPreviousKeyFrame(int num) const
 {
-    return getFrameAt(getPreviousKey(num));
+    return getKeyFrame(getPreviousKey(num));
 }
 
-KisNode* AnimatedLayer::getFrameLayer(int num)
+KisNode* AnimatedLayer::getUpdatedFrame(int num)
 {
-    return getOldFrameLayer(num);
+    updateFrame(num);
+    return getCachedFrame(num);
 }
 
-KisNode* AnimatedLayer::getOldFrameLayer(int num)
+void AnimatedLayer::updateFrame(int num)
 {
-    return getFrameAt(getCurrentKey(num));
+    Q_UNUSED(num);
 }
 
-KisNode* AnimatedLayer::getCachedFrame()
-{
-    return getOldFrameLayer(getOldFrame());
-}
+// const QString& AnimatedLayer::getNameForFrame(int num) const
+// {
+//     return getNameForFrame(num, true);
+// }

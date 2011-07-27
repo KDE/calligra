@@ -36,27 +36,22 @@ public:
     InterpolatedAnimatedLayer(const KisGroupLayer& source);
     
 public:
-    virtual void update();
-//     virtual void frameUpdate();
-    virtual KisNode* getKeyFrameLayer(int num);
-    virtual KisNode* getFrameLayer(int num);
-    
-    virtual KisNode* getCachedFrame();
-    
-    virtual KisNode* setFrameNumber(int num);
-    
+    virtual bool isKeyFrame(int num) const;
+//     virtual void loadFrames();
+
 protected:
-    virtual KisCloneLayer* interpolate(KisNode* from, KisCloneLayer* to, double percent);
-    virtual int getSCurrentKey(int num);
+    virtual void updateFrame(int num);
+
+protected:
+    virtual KisCloneLayer* interpolate(KisNode* from, KisCloneLayer* to, double percent) = 0;
+    
+    virtual const QString& getNameForFrame(int num, bool iskey) const;
+    virtual int getFrameFromName(const QString& name, bool& iskey) const;
+    
+    virtual void insertFrame(int num, KisNode* frame, bool iskey);
     
 private:
-    QSet<int> m_keys;
     QSet<int> m_non_keys;
-    
-    int m_to_cache;
-    KisCloneLayer* m_cached_frame;
-    
-    bool m_gfl_works;
 };
 
 #endif // INTERPOLATED_ANIMATED_LAYER_H

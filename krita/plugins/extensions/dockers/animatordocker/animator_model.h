@@ -47,11 +47,56 @@ public:
     void init();
     
 public:
+    // ok
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    // ok
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     
+    // ok
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    // ok
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+
+public slots:
+    // ok, +review
+    virtual void updateImage();
+
+    // ok, +review
+    virtual void loadLayers();
+    // ok
+    virtual void forceFramesNumber(int num);
+    // ok
+    virtual void setEnabled(bool val);
+    // ok, +todo
+    virtual void goNext();
+    // ok
+    virtual void goFirst();
+    // ok, +review
+    virtual void goFrame(int num);
+
+    // ok
+    virtual bool isLast();
+
+protected:
+    // ok
+    int previousFrame();
+
+    // later
+    void lightTableUpdate();
+
+    
+    // ok
+    virtual bool isKey(const QModelIndex& index) const;
+    // ok
+    virtual bool isKey(int l, int f) const;
+
+    
+    virtual void setFramesNumber(int frames);
+    virtual void setFramesNumber(int frames, bool up);
+    
+    
+    // later
+    virtual void visibleAll(bool v);
 
 // public slots:
 //     void testSlot();
@@ -63,21 +108,13 @@ public slots:
     void setLightTable(AnimatorLightTable* table);
     void toggleExtLTable(bool val);
     
-    void update();
-    
     void nodeDestroyed(QObject* node);
 
-    void setFrame(int frame);
-    void setFramesNumber(int frames, bool up = true);
-    
-    void activateLayer(QModelIndex index);
-    
-    void frameUpdate();
-    void lightTableUpdate();
+    void activateLayer(const QModelIndex &index);
     
     void setNodeManager(KisNodeManager* nodeman);
     
-    void updateCanvas();
+//    void updateCanvas();
 
     // Create layers at current frame
     void createFrame(QModelIndex index, char* layer_type);
@@ -93,10 +130,6 @@ public slots:
     
     void renameLayer(QModelIndex index, QString& name);
     void renameLayer(int l_num, QString& name);
-    
-//     void visibleAll();
-    
-    void setEnabled(bool en);
     
     // Working with frames
     void framesInsert(int n, unsigned int dst);
@@ -116,26 +149,19 @@ public:
     KisNodeModel* sourceModel() const;
     void setSourceModel(KisNodeModel* model);
     
-    /**
-     * Differs from nodeFromIndex: just gives node from index, no any search for other ways
-     */
-    const KisNode* nodeAtIndex(const QModelIndex& index) const;
+//     /**
+//      * Differs from nodeFromIndex: just gives node from index, no any search for other ways
+//      */
+//     const KisNode* nodeAtIndex(const QModelIndex& index) const;
     
     /**
-     * Returns node from given index or extrapolates previous nodes in this row
-     * TODO: real extropolation
+     * Returns node from given index or interpolates previous nodes in this row
      */
     const KisNode* nodeFromIndex(const QModelIndex& index) const;
     
     const KisNode* previousFrame(const QModelIndex& index) const;
     const KisNode* nextFrame(const QModelIndex& index) const;
 
-public:
-    void goNext();
-    void goFirst();
-    
-    bool isLast();
-    
 public:
     void setOnionNext(int n);
     void setOnionPrevious(int n);
@@ -144,15 +170,21 @@ public:
     void enableOnion();
     void disableOnion();
     
+public:
+    AnimatedLayer* getAnimatedLayer(quint32 num);
+    AnimatedLayer* getAnimatedLayerByChild(const KisNode* node);
+    
+    AnimatedLayer* getActiveAnimatedLayer();
+    
+    KisNode* getCachedFrame(quint32 l, quint32 f) const;
+    KisNode* getCachedFrame(const QModelIndex& index) const;
     
 protected:
-    /**
-     * This functions gets info about layers and update info about animation layers
-     */
-    void realUpdate();
-    void afterUpdate();
-    
-    KisNode* getAnimatedLayerByChild(const KisNode* node);
+//     /**
+//      * This functions gets info about layers and update info about animation layers
+//      */
+//     void realUpdate();
+//     void afterUpdate();
     
     bool activateAtIndex(QModelIndex index);
     bool activateBeforeIndex(QModelIndex index);
@@ -176,7 +208,9 @@ private:
     const QModelIndex& indexFromNode(KisNode* node) const;
      
     qint32 m_frame;
-    qint32 m_frame_num;
+    qint32 m_previous_frame;
+    quint32 m_frame_num;
+    quint32 m_forced_frame_num;
     
     KisNodeModel* m_source;
     KisNodeManager* m_nodeman;  // Is it necessary?

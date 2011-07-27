@@ -69,8 +69,8 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     m_frame_spinbox->setMaximum(9999);                                  // MAXIMUM FRAMES NUMBER -- FIXME: move the constant
 
     connect(m_frame_spinbox, SIGNAL(editingFinished()), this, SLOT(slotSetFrame()));
-    connect(this, SIGNAL(setFrame(int)), m_model, SLOT(setFrame(int)));
-    connect(m_model, SIGNAL(frameChanged(int)), m_frame_spinbox, SLOT(setValue(int)));
+    connect(this, SIGNAL(setFrame(int)), m_model, SLOT(goFrame(int)));
+//     connect(m_model, SIGNAL(frameChanged(int)), m_frame_spinbox, SLOT(setValue(int)));
     
     // Spinbox -- frames number
     m_frame_number_spinbox = new QSpinBox;
@@ -78,7 +78,7 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     m_frame_number_spinbox->setMaximum(9999);                           // MAXIMUM FRAMES NUMBER
 
     connect(m_frame_number_spinbox, SIGNAL(editingFinished()), this, SLOT(slotSetFNumber()));
-    connect(this, SIGNAL(setFNumber(int)), m_model, SLOT(setFramesNumber(int)));
+    connect(this, SIGNAL(setFNumber(int)), m_model, SLOT(forceFramesNumber(int)));
     connect(m_model, SIGNAL(framesNumberChanged(int)), m_frame_number_spinbox, SLOT(setValue(int)));
     
     // Spinbox -- fps
@@ -208,14 +208,14 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
     connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), m_model, SLOT(setImage(KisImageWSP)));
     
 
-    connect(m_nodemodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), m_model, SLOT(update()));
-    connect(m_nodemodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), m_model, SLOT(update()));
-    connect(m_nodemodel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), m_model, SLOT(update()));
-    connect(m_nodemodel, SIGNAL(modelReset()), m_model, SLOT(update()));
+    connect(m_nodemodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), m_model, SLOT(loadLayers()));
+    connect(m_nodemodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), m_model, SLOT(loadLayers()));
+    connect(m_nodemodel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), m_model, SLOT(loadLayers()));
+    connect(m_nodemodel, SIGNAL(modelReset()), m_model, SLOT(loadLayers()));
     
 //     m_model->setFrame(1);
     
-    m_model->update();
+    m_model->loadLayers();
     
     
     // Exporter

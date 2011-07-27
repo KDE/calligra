@@ -23,80 +23,29 @@
 
 InterpolatedAnimatedLayer::InterpolatedAnimatedLayer(const KisGroupLayer& source): SimpleAnimatedLayer(source)
 {
-    m_keys.clear();
     m_non_keys.clear();
 }
 
-void InterpolatedAnimatedLayer::update()
-{
-    SimpleAnimatedLayer::update();
-//     clearJunk();
-    
-    m_cached_frame = 0;
-    m_to_cache = 0;
-}
-
-// void InterpolatedAnimatedLayer::frameUpdate()
+// void InterpolatedAnimatedLayer::loadFrames()
 // {
-//     SimpleAnimatedLayer::frameUpdate();
+//     SimpleAnimatedLayer::loadFrames();
+//     
 // }
 
-KisNode* InterpolatedAnimatedLayer::getKeyFrameLayer(int num)
+void InterpolatedAnimatedLayer::updateFrame(int num)
 {
-    if (!m_non_keys.contains(num)/* || result && !result->inherits("KisCloneLayer")*/)
-        return SimpleAnimatedLayer::getKeyFrameLayer(num);
-    return 0;
-}
-
-int InterpolatedAnimatedLayer::getSCurrentKey(int num)
-{
-    // this is SimpleAnimatedLayer::getCurrentKey actually
-    if (getFrameAt(num))
-        return num;
-    return SimpleAnimatedLayer::getPreviousKey(num);
-}
-
-KisNode* InterpolatedAnimatedLayer::getFrameLayer(int num)
-{
-    if (m_gfl_works)
+    if (isKeyFrame(num))
     {
-        std::cout << "This is probably a bug... (ial~63)" << std::endl;
-        return SimpleAnimatedLayer::getFrameLayer(num);
-    }
-    
-    m_gfl_works = true;
-    
-    KisNode* current;
-    if (current = getKeyFrameLayer(num))
-    {
-        m_gfl_works = false;
-        return current;
-    }
-    
-    current = SimpleAnimatedLayer::getFrameLayer(num);
-    if (!current)
-    {
-        m_gfl_works = false;
-        return 0;
+        return;
     }
     
     int inxt = getNextKey(num);
-    KisNode* next = getFrameAt(inxt);
-    while (next && next->inherits("KisCloneLayer") && m_non_keys.contains(inxt))
-    {
-        inxt = getNextKey(inxt);
-        next = getFrameAt(inxt);
-    }
+    KisNode* next = getKeyFrame(inxt);
     
-    int ipre = getSCurrentKey(num);
-    current = getFrameAt(ipre);
-    while (current && current->inherits("KisCloneLayer") && m_non_keys.contains(ipre))
-    {
-        ipre = getPreviousKey(ipre);
-        current = getFrameAt(ipre);
-    }
+    int ipre = getPreviousKey(num);
+    KisNode* prev = getKeyFrame(ipre);
 
-    if (current && next && next->inherits("KisCloneLayer"))
+    if (prev && next && next->inherits("KisCloneLayer"))
     {
         // interpolation here!
         double cur = num;
@@ -104,55 +53,65 @@ KisNode* InterpolatedAnimatedLayer::getFrameLayer(int num)
         double nxt = inxt;
         double p = (cur-pre) / (nxt-pre);
         
-        KisNode* to_delete = getFrameAt(num);
+        KisNode* result = dynamic_cast<KisNode*>(interpolate(prev, dynamic_cast<KisCloneLayer*>(next), p));
         
-        KisCloneLayer* result = interpolate(current, dynamic_cast<KisCloneLayer*>(next), p);
+        KisNode* old = getFrameAt(num);
         
-        result->setName("_frame_"+QString::number(num));
-        m_non_keys.insert(num);
-        
-        current = dynamic_cast<KisNode*>(result);
-        getNodeManager()->insertNode(current, this, 0);
-        
-        if (to_delete)
-            getNodeManager()->removeNode(to_delete);
-        
-        update();
-        
-        if (m_to_cache == num)
+        if (result)
         {
-            m_cached_frame = dynamic_cast<KisCloneLayer*>( getFrameAt(num) );
+            insertFrame(num, result, false);
+            
+            // Clear previous
+            if (old)
+            {
+//                 std::cout << "removing" << std::endl;
+                getNodeManager()->removeNode(old);
+            }
+            loadFrames();
         }
     }
-    
-    m_gfl_works = false;
-    
-    return current;
 }
 
-KisCloneLayer* InterpolatedAnimatedLayer::interpolate(KisNode* from, KisCloneLayer* to, double percent)
+// KisCloneLayer* InterpolatedAnimatedLayer::interpolate(KisNode* from, KisCloneLayer* to, double percent)
+// {
+//     // Position
+//     double x = from->x()*(1.0-percent)+to->x()*percent;
+//     double y = from->y()*(1.0-percent)+to->y()*percent;
+//     qint32 ix = x;
+//     qint32 iy = y;
+//     
+//     KisCloneLayer* result = new KisCloneLayer(*to);
+//     result->setX(ix);
+//     result->setY(iy);
+//     result->setVisible(false);
+//     
+//     return result;
+// }
+
+const QString& InterpolatedAnimatedLayer::getNameForFrame(int num, bool iskey) const
 {
-    // Position
-    double x = from->x()*(1.0-percent)+to->x()*percent;
-    double y = from->y()*(1.0-percent)+to->y()*percent;
-    qint32 ix = x;
-    qint32 iy = y;
-    
-    KisCloneLayer* result = new KisCloneLayer(*to);
-    result->setX(ix);
-    result->setY(iy);
-    result->setVisible(false);
-    
+    QString *t = const_cast<QString*>( &SimpleAnimatedLayer::getNameForFrame(num, iskey) );
+    if (iskey)
+        return *t;
+    else
+        return * ( new QString (*t+QString("_")) );
+}
+
+int InterpolatedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) const
+{
+    int result = SimpleAnimatedLayer::getFrameFromName(name, iskey);
+    iskey = !name.endsWith("_");
     return result;
 }
 
-KisNode* InterpolatedAnimatedLayer::setFrameNumber(int num)
+bool InterpolatedAnimatedLayer::isKeyFrame(int num) const
 {
-    m_to_cache = num;
-    return AnimatedLayer::setFrameNumber(num);
+    return SimpleAnimatedLayer::isKeyFrame(num) && !m_non_keys.contains(num);
 }
 
-KisNode* InterpolatedAnimatedLayer::getCachedFrame()
+void InterpolatedAnimatedLayer::insertFrame(int num, KisNode* frame, bool iskey)
 {
-    return m_cached_frame;
+    SimpleAnimatedLayer::insertFrame(num, frame, iskey);
+    if (!iskey)
+        m_non_keys.insert(num);
 }

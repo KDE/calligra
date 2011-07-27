@@ -1,0 +1,67 @@
+UI <-----> model <-----> layers
+
+AnimatedLayer
+    |- SimpleAnimatedLayer
+    |   |- InterpolatedAnimatedLayer
+    |   |   |- ... 
+    |   |   |- ... (much children with interpolation methods)
+    |   |   |- ... 
+    |   |       |- NormalAnimatedLayer
+    |
+    |- ControlAnimatedLayer
+    |   |- LoopAnimatedLayer
+    |   |- Interpolating control layer?..
+
+AnimatedLayer:
+* - to be defined in animatedLayer
+# - pure virtual in animatedLayer
+Others can be redefined in children
+% - protected
+
+    getUpdatedFrame(int num)         *  |
+    getCachedFrame(int num)          #  | For any frame
+    updateFrame(int num)            %   |
+    
+    getKeyFrame(int num)             #  |
+    getNextKeyFrame(int num)         *  | For key frames
+    getPreviousKeyFrame(int num)     *  |
+
+    isKeyFrame(int num)                 | bool
+    getNextKey(int num)              #  | Returning numbers
+    getPreviousKey(int num)          #  |
+    
+    loadFrames()
+
+SimpleAnimatedLayer:
+    getCachedFrame(int num)             |
+    
+    getKeyFrame(int num)             *  |
+    getNextKey(int num)              *  |
+    getPreviousKey(int num)          *  |
+
+InterpolatedAnimatedLayer:
+    getCachedFrame(int num)          *  | 
+    updateFrame(int num)             *  |
+    
+    interpolate(from, to, position)  #  |
+
+
+FrameLayer:
+    isKeyFrame()
+    
+AnimatorModel:
+    loadLayers()
+    updateImage()
+    
+    goNext()
+    goFirst()
+    goFrame()
+    
+    previousFrame()
+    
+    setEnabled(bool enabled)
+    
+    ...lightTable stuff...
+
+
+

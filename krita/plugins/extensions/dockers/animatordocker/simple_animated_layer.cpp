@@ -23,43 +23,41 @@
 
 #include "simple_animated_layer.h"
 
+#include <sstream>
+
 #include <iostream>
+#include <iomanip>
 
 SimpleAnimatedLayer::SimpleAnimatedLayer(const KisGroupLayer& source) : AnimatedLayer(source)
 {
-//     if (!source)
-//     {
-//         setValid(false);
-//         return;
-//     }
-    
     m_frames.clear();
-    
-    update();
-    
-    setValid(true);
 }
 
-void SimpleAnimatedLayer::update()
+void SimpleAnimatedLayer::loadFrames()
 {
     m_frames.clear();
+    m_first_frame = 0;
     for ( qint32 i = 0; i < childCount(); ++i )
     {
         const KisNode* chsource = childNodes(QStringList(),  KoProperties())[i];
-        if (chsource->name().startsWith("_frame_"))
+        bool iskey;
+        int fnum = getFrameFromName(chsource->name(), iskey);
+        if (fnum >= 0)
+//         if (chsource->name().startsWith("_frame_"))
         {
-            KisNode* mchsource = const_cast<KisNode*>(chsource);
-            QString ts = chsource->name();
             
-            qint32 fnum = ts.mid(7).toLong();
-            
-//                 if (fnum+1 > columnCount()) {
-//                     setFramesNumber(fnum+1, false);
-//                 }
+            KisNode* frame = const_cast<KisNode*>(chsource);
+//             QString ts = chsource->name();
+//             
+//             qint32 fnum = ts.mid(7).toLong();
+//             
+//             KisNode* frame = mchsource;
+//             getNodeManager()->insertNode(frame, this, fnum);
+//             getNodeManager()->removeNode(mchsource);
             
             if (fnum == m_frames.size())
             {
-                m_frames.append(mchsource);
+                m_frames.append(frame);
             } else {
                 if (fnum > m_frames.size())
                 {
@@ -68,138 +66,114 @@ void SimpleAnimatedLayer::update()
                         m_frames.append(0);
                     }
                 }
-                m_frames[fnum] = mchsource;
+                m_frames[fnum] = dynamic_cast<KisNode*>(frame);
             }
+            if (fnum < m_first_frame)
+                m_first_frame = fnum;
         }
     }
 }
 
-KisNode* SimpleAnimatedLayer::frameUpdate()
+KisNode* SimpleAnimatedLayer::getFrameAt(int num) const
 {
-    return frameUpdate(false);
-}
-
-KisNode* SimpleAnimatedLayer::frameUpdate(bool do_all)
-{
-//     if (do_all)
-        visibleAll(false);
-//     else
-//         visibleFrame(getOldFrame(), false);
-    
-    KisNode* node = getFrameLayer(getFrameNumber());
-    if (node)
-    {
-        node->setVisible(true);
-        node->setOpacity(255);
-//         node->
-    }
-    
-    return node;
-//     AnimatedLayer::frameUpdate();
-}
-
-// KisNode* SimpleAnimatedLayer::getFrameLayer(int num)
-// {
-//     KisNode* r = getKeyFrameLayer(num);
-//     if (!r)
-//         r = getPreviousKeyFrame(num);
-//     return r;
-// }
-
-int SimpleAnimatedLayer::getCurrentKey(int num)
-{
-    if (getKeyFrameLayer(num))
-        return num;
-    return getPreviousKey(num);
-}
-
-KisNode* SimpleAnimatedLayer::getKeyFrameLayer(int num)
-{
-    return getFrameAt(num);
-}
-
-KisNode* SimpleAnimatedLayer::getFrameAt(int num)
-{
-    if (num >= 0 && num < m_frames.size())
+    if (num >= dataStart() && num < dataEnd())
         return m_frames[num];
     return 0;
 }
 
-int SimpleAnimatedLayer::getNextKey(int num)
+KisNode* SimpleAnimatedLayer::getKeyFrame(int num) const
 {
-    if (num < 0)
-        num = -1;
-    if (num >= m_frames.size())
-        return 0;
-    while (++num < m_frames.size())
+    if (isKeyFrame(num))
     {
-        if (m_frames[num])
-            return num;
+        return m_frames[num];
     }
-    return -1;
-}
 
-int SimpleAnimatedLayer::getPreviousKey(int num)
-{
-    if (num < 0)
-        return 0;
-    if (num >= m_frames.size())
-        num = m_frames.size();
-    while (--num >= 0)
-    {
-        if (m_frames[num])
-            return num;
-    }
-    return -1;
-}
-
-bool SimpleAnimatedLayer::isFrameChanged()
-{
-    bool ch = getOldFrameLayer(getFrameNumber()) != getCachedFrame();
-    return ch;
-}
-
-
-
-int SimpleAnimatedLayer::firstFrame()
-{
     return 0;
 }
 
-int SimpleAnimatedLayer::lastFrame()
+KisNode* SimpleAnimatedLayer::getCachedFrame(int num) const
+{
+    KisNode* frame = getFrameAt(num);
+    if (frame)
+    {
+        return frame;
+    }
+
+    return getPreviousKeyFrame(num);
+}
+
+int SimpleAnimatedLayer::getNextKey(int num) const
+{
+    if (num < dataStart())
+        num = -1;
+    if (num >= dataEnd())
+        return 0;
+    while (++num < dataEnd())
+    {
+        if (isKeyFrame(num))
+            return num;
+    }
+    return -1;
+}
+
+int SimpleAnimatedLayer::getPreviousKey(int num) const
+{
+    if (num < dataStart())
+        return 0;
+    if (num >= dataEnd())
+        num = dataEnd();
+    while (--num >= dataStart())
+    {
+        if (isKeyFrame(num))
+            return num;
+    }
+    return -1;
+}
+
+bool SimpleAnimatedLayer::isKeyFrame(int num) const
+{
+    return num >= dataStart() && num < dataEnd() && m_frames[num]; // && m_frames[num]->isKeyFrame();
+}
+
+int SimpleAnimatedLayer::dataStart() const
+{
+    return m_first_frame;
+}
+
+int SimpleAnimatedLayer::dataEnd() const
 {
     return m_frames.size();
 }
 
-void SimpleAnimatedLayer::clearJunk()
+const QString& SimpleAnimatedLayer::getNameForFrame(int num, bool iskey) const
 {
-    int n = childCount();
-    for (int i = 0; i < n; ++i)
-    {
-        const KisNode* hn = at(i);
-        KisNode* here = const_cast<KisNode*>(hn);
-        if (!m_frames.contains(here))
-            getNodeManager()->removeNode(here);
-    }
-}
-
-// PROTECTED
-void SimpleAnimatedLayer::visibleFrame(int f, bool v)
-{
-    if (f < 0 || f >= m_frames.size())
-        return;
+    Q_UNUSED(iskey);
     
-    KisNode* node = getFrameLayer(f);
-    if (node)
-        node->setVisible(v);
+    std::stringstream ns;
+    ns << "_frame_";
+    ns << std::setfill('0') << std::setw(4) << num;
+    std::string s;
+    ns >> s;
+    
+    QString* t = new QString(s.c_str());
+    return *t;
 }
 
-void SimpleAnimatedLayer::visibleAll(bool v)
+int SimpleAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) const
 {
-    foreach (KisNode* node, m_frames)
+    if (name.startsWith("_frame_"))
     {
-//         KisNode* node = const_cast<KisNode*>( cn );
-        if (node)
-            node->setVisible(v);
+        std::stringstream ns;
+        ns << (name.mid(7).toAscii().data());
+        int fnum;
+        ns >> fnum;
+        return fnum;
     }
+    return -1;
+}
+
+void SimpleAnimatedLayer::insertFrame(int num, KisNode* frame, bool iskey)
+{
+    frame->setName(getNameForFrame(num, iskey));
+    getNodeManager()->insertNode(frame, this, num);
 }

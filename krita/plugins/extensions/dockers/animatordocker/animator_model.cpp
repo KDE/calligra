@@ -30,13 +30,14 @@
 #include "animator_model.h"
 
 #include <iostream>
-#include "interpolated_animated_layer.h"
+
+#include "normal_animated_layer.h"
 
 AnimatorModel::AnimatorModel(QObject* parent): QAbstractTableModel(parent)
 {
     init();
     setLightTable(0);
-    connect(this, SIGNAL(frameChanged(int)), SLOT(frameUpdate()));
+    connect(this, SIGNAL(frameChanged(int)), SLOT(updateImage()));
 }
 
 void AnimatorModel::init()
@@ -44,8 +45,7 @@ void AnimatorModel::init()
     m_enabled = false;
     
     this->blockSignals(true);
-    setFramesNumber(12, false);
-    setFrame(0);
+    goFrame(0);
     
     setOnionNext(0);
     setOnionPrevious(0);
@@ -60,10 +60,12 @@ void AnimatorModel::init()
     
     m_layers.clear();
     
+    forceFramesNumber(12);
+    
     this->blockSignals(false);
     
 //     std::cout << m_frame << std::endl;
-//     connect(this, SIGNAL(frameChanged(int)), SLOT(frameUpdate()));
+//     connect(this, SIGNAL(frameChanged(int)), SLOT(updateImage()));
 }
 
 AnimatorModel::~AnimatorModel()
@@ -71,7 +73,7 @@ AnimatorModel::~AnimatorModel()
 //     delete m_source;
 }
 
-void AnimatorModel::realUpdate()
+void AnimatorModel::loadLayers()
 {
 //     blockSignals(true);
     
@@ -98,24 +100,20 @@ void AnimatorModel::realUpdate()
         
         AnimatedLayer* lay = 0;
         
-        if (node->inherits("AnimatedLayer") && dynamic_cast<AnimatedLayer*>(node)->isValid())
+        if (node->inherits("AnimatedLayer")) // && dynamic_cast<AnimatedLayer*>(node)->isValid())
         {
             lay = dynamic_cast<AnimatedLayer*>(node);
         } else if (node->inherits("KisGroupLayer") && node->name().startsWith("_ani"))
         {
-            if (node->name().startsWith("_ani_"))       // Simple
+            if (node->name().startsWith("_ani_"))       // Normal
             {
                 KisGroupLayer* gnode = dynamic_cast<KisGroupLayer*>(node);
 //                 lay = new SimpleAnimatedLayer(*gnode);
-                lay = new InterpolatedAnimatedLayer(*gnode);
-                
-                if (!lay->isValid())
-                {
-                    continue;
-                }
+                lay = new NormalAnimatedLayer(*gnode);
                 
                 lay->setName(gnode->name());
                 
+                // CHECK
                 lay->setNodeManager(m_nodeman);
                 
                 const KisNode* pn = gnode->parent();
@@ -125,7 +123,8 @@ void AnimatorModel::realUpdate()
                 
                 m_nodeman->removeNode(gnode);
                 m_nodeman->insertNode(lay, const_cast<KisNode*>( pn ), nindex);
-                
+               
+                // TODO: move to AnimatedLayer constructor
                 for (int i = 0; i < lay->childCount(); ++i)
                 {
                     const KisNode* nnode = lay->at(i);
@@ -138,12 +137,12 @@ void AnimatorModel::realUpdate()
         
         if (lay)
         {
-            lay->update();
+            lay->loadFrames();
             m_layers.append(lay);
             
-            if (lay->lastFrame() > fnum)
+            if (lay->dataEnd() > fnum)
             {
-                fnum = lay->lastFrame();
+                fnum = lay->dataEnd();
             }
             
             connect(lay, SIGNAL(destroyed(QObject*)), this, SLOT(nodeDestroyed(QObject*)));
@@ -152,27 +151,30 @@ void AnimatorModel::realUpdate()
     
     setFramesNumber(fnum);
     
-    m_updating = false;
-}
-
-void AnimatorModel::afterUpdate()
-{
+    
+    // CHECK if this is necessary
     emit frameChanged(m_frame);
     emit framesNumberChanged(m_frame_num);
     
     emit layoutChanged();
+    
+    m_updating = false;
 }
 
-void AnimatorModel::update()
+// void AnimatorModel::setFramesNumber(int num)
+// {
+//     m_frame_num = num;
+// }
+
+int AnimatorModel::previousFrame()
 {
-    realUpdate();
-    afterUpdate();
+    return m_previous_frame;
 }
 
 void AnimatorModel::setSourceModel(KisNodeModel* model)
 {
     m_source = model;
-//     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(loadLayers()));
 }
 
 KisNodeModel* AnimatorModel::sourceModel() const
@@ -188,21 +190,22 @@ void AnimatorModel::setLightTable(AnimatorLightTable* table)
     connect(m_light_table, SIGNAL(opacityChanged()), this, SLOT(lightTableUpdate()));
 }
 
+void AnimatorModel::forceFramesNumber(int num)
+{
+    m_forced_frame_num = num;
+    if (m_frame_num < m_forced_frame_num)
+        setFramesNumber(num);
+    
+//     emit 
+//     loadLayers();
+}
+
 QVariant AnimatorModel::data(const QModelIndex& index, int role) const
 {
+    // TODO: ask frame layers for this
     QVariant t;
 
-    if (role == Qt::DisplayRole)
-    {
-        if (nodeAtIndex(index))
-        {
-//             t = "x";
-        }
-//         else if (extrapolated(index))
-//         {
-//              t = "-";
-//         }
-    } else if (role == Qt::BackgroundRole)
+    if (role == Qt::BackgroundRole)
     {
         // TODO: use constants and colors, not manually rgb...
         int r = 127, g = 127, b = 127;
@@ -215,20 +218,20 @@ QVariant AnimatorModel::data(const QModelIndex& index, int role) const
 //             if (m_)
         }
         
-        if (nodeAtIndex(index))
+        if (isKey(index))
         {
-            if (nodeAtIndex(index)->inherits("KisPaintLayer"))
+            if (nodeFromIndex(index) /*->inherits("KisPaintLayer")*/)
             {
                 g += 64;
                 b -= 32;
                 r -= 32;
             }
-            else
-            {
-                b += 64;
-                g -= 32;
-                r -= 32;
-            }
+//             else
+//             {
+//                 b += 64;
+//                 g -= 32;
+//                 r -= 32;
+//             }
         }
         
         return QBrush(QColor(r, g, b, 127));
@@ -301,25 +304,9 @@ void AnimatorModel::setNodeManager(KisNodeManager* nodeman)
     m_nodeman = nodeman;
 }
 
-void AnimatorModel::setFrame(int frame)
+void AnimatorModel::setFramesNumber(int frames)
 {
-//     std::cout << "setFrame(" << frame << ")" << std::endl;
-    int old_f = m_frame;
-    if (frame == m_frame)
-        return;
-    
-    if ((frame >= 0 && frame < columnCount()) || frame == 0)
-    {
-        m_frame = frame;
-//         std::cout << "HHHH" << std::endl;
-        emit frameChanged(m_frame);
-        emit dataChanged(createIndex(old_f, 0), createIndex(old_f, rowCount()));
-        emit dataChanged(createIndex(m_frame, 0), createIndex(m_frame, rowCount()));
-        
-        // NOTE: THIS CAUSES *MUCH* SLOWNESS
-//         emit headerDataChanged(Qt::Horizontal, old_f, old_f);
-//         emit headerDataChanged(Qt::Horizontal, m_frame, m_frame);
-    }
+    setFramesNumber(frames, true);
 }
 
 void AnimatorModel::setFramesNumber(int frames, bool up)
@@ -330,43 +317,42 @@ void AnimatorModel::setFramesNumber(int frames, bool up)
     if (up)
     {
         emit layoutChanged();
-//         update();
     }
     emit framesNumberChanged(frames);
 }
 
 
-void AnimatorModel::frameUpdate()
+void AnimatorModel::updateImage()
 {
     if (!m_enabled)
         return;
     
-    if (m_updating)
-        return;
+//     if (m_updating)
+//         return;
     
     m_updating = true;
     
     for (qint32 i = 0; i < rowCount(); ++i)
     {
-        KisNode* frame = m_layers[i]->setFrameNumber(m_frame);
-//         KisNode* old_frame = m_layers[i]->getOldFrameLayer(m_layers[i]->getOldFrame());
-        KisNode* old_frame = m_layers[i]->getCachedFrame();
+        KisNode* frame = getAnimatedLayer(i)->getUpdatedFrame(m_frame);
+        KisNode* old_frame = getAnimatedLayer(i)->getCachedFrame(m_previous_frame);
         
-        if (m_layers[i]->isFrameChanged() || frame != old_frame)
+        if (frame == old_frame)
+            continue;
+        
+        if (old_frame)
         {
-            if (old_frame)
-            {
-                old_frame->setVisible(false);
-                m_image->updateProjection(old_frame, old_frame->exactBounds());
-            }
-	    if (frame)
-            {
-                frame->setVisible(true);
-                m_image->updateProjection(frame, /*m_image->bounds()*/ /*old_frame?*/ frame->exactBounds() /*| old_frame->exactBounds() : frame->exactBounds()*/);
-            }
+            old_frame->setVisible(false);
+            m_image->updateProjection(old_frame, old_frame->exactBounds());
+        }
+        if (frame)
+        {
+            frame->setOpacity(255);
+            frame->setVisible(true);
+            m_image->updateProjection(frame, /*m_image->bounds()*/ /*old_frame?*/ frame->exactBounds() /*| old_frame->exactBounds() : frame->exactBounds()*/);
         }
         
-        if (m_onion_en && !m_ext_lighttable)
+        if (m_onion_en && !m_ext_lighttable && 0)
         {
             // Onion support --> move to animator_light_table
             int nxt = m_onion_nxt;
@@ -429,7 +415,7 @@ void AnimatorModel::frameUpdate()
 //     if (rec)
 //     updateCanvas();
     
-    m_updating = false;
+//     m_updating = false;
 }
 
 void AnimatorModel::lightTableUpdate()
@@ -442,24 +428,24 @@ void AnimatorModel::lightTableUpdate()
     
     for (int i = 0; i < rowCount(); ++i)
     {
-        // New extended lighttable
         for (int fnum = -m_light_table->getNear(); fnum <= m_light_table->getNear(); ++fnum)
         {
-//             if (fnum == 0)
-//                 continue;
-            int old_f = m_layers[i]->getOldFrame();
+            int old_f = previousFrame();
             
             // Clear old
-            KisNode* ofnode = const_cast<KisNode*>( nodeAtIndex(createIndex(i, old_f+fnum)) );
-            if (ofnode)
+            KisNode* ofnode = const_cast<KisNode*>( nodeFromIndex(createIndex(i, old_f+fnum)) );
+            if (ofnode && isKey(i, old_f+fnum))
             {
                 ofnode->setVisible(false);
                 m_image->updateProjection(ofnode, ofnode->exactBounds());
             }
-            
-            // Show new
-            KisNode* fnode = const_cast<KisNode*>( nodeAtIndex(createIndex(i, m_frame+fnum)) );
-            if (fnode)
+        }
+        
+        for (int fnum = -m_light_table->getNear(); fnum <= m_light_table->getNear(); ++fnum)
+        {
+//          // Show new
+            KisNode* fnode = const_cast<KisNode*>( nodeFromIndex(createIndex(i, m_frame+fnum)) );
+            if (fnode && isKey(i, m_frame+fnum))
             {
                 double dop = m_light_table->getOpacity(fnum);
                 quint8 op = dop*255.0;
@@ -493,39 +479,35 @@ void AnimatorModel::setImage(KisImageWSP image)
 }
 
 
-void AnimatorModel::activateLayer(QModelIndex index)
+void AnimatorModel::activateLayer(const QModelIndex& index)
 {
-    setFrame(index.column());
+    goFrame(index.column());
     
     if (nodeFromIndex(index))
         m_nodeman->activateNode( const_cast<KisNode*>( nodeFromIndex(index) ) );
     
     // DO NOT DO THIS!!!
-//     afterUpdate();
         
 //     emit dataChanged(createIndex(0, 0), createIndex(rowCount(), columnCount()));
 //     emit headerDataChanged(Qt::Horizontal, 0, columnCount());
 }
 
-void AnimatorModel::updateCanvas()
-{
-    if (!m_image || !m_canvas)
-        return;
-    
-    m_canvas->startUpdateCanvasProjection(m_image->bounds());
-}
+//void AnimatorModel::updateCanvas()
+//{
+//    if (!m_image || !m_canvas)
+//        return;
+//    
+//    m_canvas->startUpdateCanvasProjection(m_image->bounds());
+//}
 
 const KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
 {
-//     const KisNode* result = nodeAtIndex(index);
-//     if (!result)
-//         result = previousFrame(index);
-    if (m_layers.size() > index.row())
-    {
-        return m_layers[index.row()]->getOldFrameLayer(index.column());
-    }
-//     return result;
-    return 0;
+    return dynamic_cast<KisNode*>(getCachedFrame(index));
+//     if (m_layers.size() > index.row())
+//     {
+//         return m_layers[index.row()]->getCachedFrame(index.column());
+//     }
+//     return 0;
 }
 
 const KisNode* AnimatorModel::nextFrame(const QModelIndex& index) const
@@ -533,24 +515,19 @@ const KisNode* AnimatorModel::nextFrame(const QModelIndex& index) const
     return m_layers[index.row()]->getNextKeyFrame(index.column());
 }
 
-const KisNode* AnimatorModel::previousFrame(const QModelIndex& index) const
-{
-    return m_layers[index.row()]->getPreviousKeyFrame(index.column());
-}
-
-const KisNode* AnimatorModel::nodeAtIndex(const QModelIndex& index) const
-{
-    return m_layers[index.row()]->getKeyFrameLayer(index.column());
-}
+//const KisNode* AnimatorModel::getCachedFrame(const QModelIndex& index) const
+//{
+//    return m_layers[index.row()]->getKeyKisNode(index.column());
+//}
 
 bool AnimatorModel::activateAtIndex(QModelIndex index)
 {
-    if (nodeAtIndex(index))
+    if (isKey(index))
     {
         return false;
     }
     
-    KisNode* node = const_cast<KisNode*>( previousFrame(index) );
+    KisNode* node = dynamic_cast<KisNode*>(getCachedFrame(index.row(), index.column()));
     if (node)
     {
         m_nodeman->activateNode(node);
@@ -564,12 +541,12 @@ bool AnimatorModel::activateAtIndex(QModelIndex index)
 
 bool AnimatorModel::activateBeforeIndex(QModelIndex index)
 {
-    if (nodeAtIndex(index))
+    if (isKey(index))
     {
         return false;
     }
     
-    KisNode* node = const_cast<KisNode*>( previousFrame(index) );
+    KisNode* node = dynamic_cast<KisNode*>(getCachedFrame(index));
     if (node)
     {
         m_nodeman->activateNode(node);
@@ -585,7 +562,7 @@ bool AnimatorModel::activateBeforeIndex(QModelIndex index)
 
 bool AnimatorModel::activateAfterIndex(QModelIndex index)
 {
-    if (nodeAtIndex(index))
+    if (isKey(index))
         return false;
     
     KisNode* node = const_cast<KisNode*>( nextFrame(index) );
@@ -612,10 +589,10 @@ void AnimatorModel::createFrame(QModelIndex index, char* layer_type)
         
         m_nodeman->createNode(layer_type);
         
-        m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));                  // TODO: Set name with zero-leading
+        m_nodeman->activeNode()->setName(getAnimatedLayer(index.row())->getNameForFrame(index.column(), true));
         
-        update();
-        frameUpdate();
+        loadLayers();
+        updateImage();
     } else
     {
         std::cout << "Has node already: may be clear instead?" << std::endl;
@@ -641,8 +618,8 @@ void AnimatorModel::copyFramePrevious(QModelIndex index)
         
         m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
         
-        update();
-        frameUpdate();
+        loadLayers();
+        updateImage();
     } else
     {
         std::cout << "Has node already or no frames: can't copy" << std::endl;
@@ -667,8 +644,8 @@ void AnimatorModel::copyFrameNext(QModelIndex index)
         
         m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
         
-        update();
-        frameUpdate();
+        loadLayers();
+        updateImage();
     } else
     {
         std::cout << "Has node already or no frames: can't copy" << std::endl;
@@ -677,12 +654,12 @@ void AnimatorModel::copyFrameNext(QModelIndex index)
 
 void AnimatorModel::clearFrame(QModelIndex index)
 {
-    KisNode* node = const_cast<KisNode*>( nodeAtIndex(index) );
+    KisNode* node = dynamic_cast<KisNode*>( getCachedFrame(index) );
     if (node)
     {
         m_nodeman->removeNode(node);
-        update();
-        frameUpdate();
+        loadLayers();
+        updateImage();
     } else
     {
         std::cout << "Already clear" << std::endl;
@@ -701,11 +678,16 @@ void AnimatorModel::nodeDestroyed(QObject* node)
     }
 }
 
+AnimatedLayer* AnimatorModel::getActiveAnimatedLayer()
+{
+    return getAnimatedLayerByChild(dynamic_cast<KisNode*>( m_nodeman->activeNode().data() ));
+}
+
 void AnimatorModel::createLayer()
 {
     int pos = 0;
     
-    KisNode* current = getAnimatedLayerByChild(m_nodeman->activeNode());
+    KisNode* current = getActiveAnimatedLayer();
     if (current)
     {
         for (int i = 0; i < rowCount(); ++i)
@@ -724,14 +706,14 @@ void AnimatorModel::createLayer()
 
 void AnimatorModel::deleteLayer()
 {
-    KisNode* current = getAnimatedLayerByChild(m_nodeman->activeNode());
+    KisNode* current = getActiveAnimatedLayer();
     if (current)
         m_nodeman->removeNode(current);
 }
 
 void AnimatorModel::layerDown()
 {
-    KisNode* current = getAnimatedLayerByChild(m_nodeman->activeNode());
+    KisNode* current = getActiveAnimatedLayer();
     if (current)
     {
         m_nodeman->activateNode(current);
@@ -741,7 +723,7 @@ void AnimatorModel::layerDown()
 
 void AnimatorModel::layerUp()
 {
-    KisNode* current = getAnimatedLayerByChild(m_nodeman->activeNode());
+    KisNode* current = getActiveAnimatedLayer();
     if (current)
     {
         m_nodeman->activateNode(current);
@@ -763,7 +745,26 @@ void AnimatorModel::renameLayer(int l_num, QString& name)
     }
 }
 
-KisNode* AnimatorModel::getAnimatedLayerByChild(const KisNode* node)
+KisNode* AnimatorModel::getCachedFrame(const QModelIndex& index) const
+{
+    return getCachedFrame(index.row(), index.column());
+}
+
+KisNode* AnimatorModel::getCachedFrame(quint32 l, quint32 f) const
+{
+    AnimatedLayer* al = const_cast<AnimatorModel*>(this)->getAnimatedLayer(l);
+    KisNode* fl = al->getCachedFrame(f);
+    return fl;
+}
+
+AnimatedLayer* AnimatorModel::getAnimatedLayer(quint32 num)
+{
+    if (num < rowCount())
+        return m_layers[num];
+    return 0;
+}
+
+AnimatedLayer* AnimatorModel::getAnimatedLayerByChild(const KisNode* node)
 {
     if (rowCount() == 0)
     {
@@ -774,12 +775,12 @@ KisNode* AnimatorModel::getAnimatedLayerByChild(const KisNode* node)
     const KisNode* tnode;
 //     KisNode* current_layer = const_cast<KisNode*>( tnode );
 
-    KisNode* current_layer = const_cast<KisNode*>( node );
+    KisNode* current_layer = dynamic_cast<KisNode*>( const_cast<KisNode*>( node ) );
     
     bool node_ok = false;
     
     // Check node, than parents
-    while (current_layer->parent() != 0 && !node_ok)
+    while (current_layer && current_layer->parent() != 0 && !node_ok)
     {
         AnimatedLayer* lay;
         foreach (lay, m_layers)
@@ -797,12 +798,12 @@ KisNode* AnimatorModel::getAnimatedLayerByChild(const KisNode* node)
             current_layer = const_cast<KisNode*>(tnode);
         }
     }
-    if (current_layer->parent() == 0)
+    if (!current_layer || current_layer->parent() == 0)
     {
         current_layer = m_layers[0];
 //         return 0;
     }
-    return current_layer;
+    return dynamic_cast<AnimatedLayer*>( current_layer );
 }
 
 void AnimatorModel::setOnionNext(int n)
@@ -856,13 +857,33 @@ const QModelIndex& AnimatorModel::indexFromNode(KisNode* node) const
 // For player
 void AnimatorModel::goNext()
 {
-    setFrame(m_frame+1);
+    // TODO: check for control layers
+    goFrame(m_frame+1);
 }
 
 void AnimatorModel::goFirst()
 {
-    setFrame(0);
+    goFrame(0);
 }
+
+void AnimatorModel::goFrame(int num)
+{
+    m_previous_frame = m_frame;
+    if (num == m_frame)
+        return;
+    
+    int old_f = previousFrame();
+    
+    if ((num >= 0 && num < columnCount()) || num == 0)
+    {
+        m_frame = num;
+        emit frameChanged(m_frame);
+        emit dataChanged(createIndex(old_f, 0), createIndex(old_f, rowCount()));
+        emit dataChanged(createIndex(m_frame, 0), createIndex(m_frame, rowCount()));
+    }
+
+}
+
 
 bool AnimatorModel::isLast()
 {
@@ -872,7 +893,7 @@ bool AnimatorModel::isLast()
 void AnimatorModel::toggleExtLTable(bool val)
 {
     m_ext_lighttable = val;
-    frameUpdate();
+    updateImage();
 }
 
 void AnimatorModel::setEnabled(bool en)
@@ -880,8 +901,9 @@ void AnimatorModel::setEnabled(bool en)
     m_enabled = en;
     if (en)
     {
-        update();
-        frameUpdate();
+        loadLayers();
+        visibleAll(false);
+        updateImage();
     } //else
 //         visibleAll();
 }
@@ -892,7 +914,7 @@ void AnimatorModel::framesDelete(unsigned int src, int n)
     framesClear(src, n);
     framesMove(src+n, -1, src);
     
-    update();
+    loadLayers();
 }
 
 void AnimatorModel::framesInsert(int n, unsigned int dst)
@@ -900,7 +922,7 @@ void AnimatorModel::framesInsert(int n, unsigned int dst)
     if (n <= 0)
         return;
     
-    update();
+    loadLayers();
 }
 
 void AnimatorModel::framesMove(unsigned int src, int n, unsigned int dst)
@@ -927,7 +949,7 @@ void AnimatorModel::framesMove(unsigned int src, int n, unsigned int dst)
         }
     }
     
-    update();
+    loadLayers();
 }
 
 void AnimatorModel::framesClear(unsigned int src, int n)
@@ -944,7 +966,7 @@ void AnimatorModel::framesClear(unsigned int src, int n)
         }
     }
     
-    update();
+    loadLayers();
 }
 
 
@@ -954,11 +976,30 @@ void AnimatorModel::frameLeft()
     if (m_frame == 0)
         return;
     framesMove(m_frame, 1, m_frame-1);
-    setFrame(m_frame-1);
+    goFrame(m_frame-1);
 }
 
 void AnimatorModel::frameRight()
 {
     framesMove(m_frame, 1, m_frame+1);
-    setFrame(m_frame+1);
+    goFrame(m_frame+1);
+}
+
+
+
+
+bool AnimatorModel::isKey(const QModelIndex& index) const
+{
+    return isKey(index.row(), index.column());
+}
+
+bool AnimatorModel::isKey(int l, int f) const
+{
+    return const_cast<AnimatorModel*>(this)->getAnimatedLayer(l)->isKeyFrame(f);
+}
+
+
+void AnimatorModel::visibleAll(bool v)
+{
+    // TODO
 }

@@ -51,7 +51,7 @@ AnimatorExporter::~AnimatorExporter()
 
 void AnimatorExporter::exportFrame(int num)
 {
-    m_model->setFrame(num);
+    m_model->goFrame(num);
     QByteArray* mime = new QByteArray("image/png");
     KoFilter::ConversionStatus status =  m_filter_manager->exportDocument(getName(num), *mime);
 }

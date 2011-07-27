@@ -31,37 +31,37 @@ class SimpleAnimatedLayer : public AnimatedLayer
     
 public:
     SimpleAnimatedLayer(const KisGroupLayer& source);
-    
-public slots:
-    virtual void update();
-    virtual KisNode* frameUpdate();
-    virtual KisNode* frameUpdate(bool do_all);
+
+public:
+    virtual void loadFrames();
+
+public:
+    virtual KisNode* getCachedFrame(int num) const;
+    virtual KisNode* getKeyFrame(int num) const;
     
 public:
-//     virtual KisNode* getFrameLayer(int num);
-    virtual KisNode* getKeyFrameLayer(int num);
-//     virtual KisNode* getPreviousKeyFrame(int num);
-//     virtual KisNode* getNextKeyFrame(int num);
-    
-    virtual int getNextKey(int num);
-    virtual int getPreviousKey(int num);
-    virtual int getCurrentKey(int num);
-    
-    virtual bool isFrameChanged();
-    
-    virtual void clearJunk();
+    virtual bool isKeyFrame(int num) const;
+
+    virtual int getNextKey(int num) const;
+    virtual int getPreviousKey(int num) const;
+
+public:
+    virtual int dataStart() const;
+    virtual int dataEnd() const;
     
 public:
-    virtual int firstFrame();
-    virtual int lastFrame();
+    const QString& getNameForFrame(int num, bool iskey) const;
 
 protected:
-    virtual KisNode* getFrameAt(int num);
+    virtual int getFrameFromName(const QString& name, bool& iskey) const;
     
-    virtual void visibleFrame(int f, bool v);
-    virtual void visibleAll(bool v);
+    virtual void insertFrame(int num, KisNode* frame, bool iskey);
+    
+    virtual KisNode* getFrameAt(int num) const;
     
 private:
+    int m_first_frame;
+
     QList< KisNode* > m_frames;
 };
 
