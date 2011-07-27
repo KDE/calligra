@@ -1593,7 +1593,8 @@ QList<KoShape*> SvgParser_generic::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         }else if(b.tagName() == m_appData_tagName) {
-            shapes.append(parseAppData(b, shapes));   
+            //shapes.append(parseAppData(b, shapes));   
+            parseAppData(b);
 	      
           } else {
             continue;

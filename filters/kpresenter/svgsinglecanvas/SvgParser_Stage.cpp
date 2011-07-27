@@ -38,16 +38,31 @@ SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):Svg
 SvgParser_Stage::~SvgParser_Stage()
 {
 }
-
+/*
 PresentationViewPortShape* SvgParser_Stage::parseAppData(const KoXmlElement& e, QList< KoShape* > shapes)
 {
    Frame *frame = new Frame(e);
    return setAppData(frame, shapes);
    }
-
-void SvgParser_Stage::setAppData()
+*/
+void SvgParser_Stage::parseAppData(const KoXmlElement& e)
 {
+    Frame *frame = new Frame(e);
+    setAppData(frame);
+}
 
+void SvgParser_Stage::setAppData(Frame * frame)
+{
+    foreach(KoShape* shape, m_shapes){
+     if(shape->name() == frame->refId()) {
+           
+	 SvgAnimationData * appData = new SvgAnimationData();
+       
+           appData->setFrame(frame);
+           shape->setApplicationData(appData);
+          
+    }
+    }
 }
 
 KoShape* SvgParser_Stage::removeShape()
@@ -55,6 +70,7 @@ KoShape* SvgParser_Stage::removeShape()
     return temp;
 }
 
+/*
 PresentationViewPortShape* SvgParser_Stage::setAppData(Frame* frame, QList<KoShape*>& shapeList)
 {
   PresentationViewPortShape* temp;
