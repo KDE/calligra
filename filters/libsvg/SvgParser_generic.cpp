@@ -1593,22 +1593,15 @@ QList<KoShape*> SvgParser_generic::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         }else if(b.tagName() == m_appData_tagName) {
-            //shapes.append(parseAppData(b, shapes));   
             parseAppData(b);
-	      
-          } else {
+	    } else {
             continue;
         }
         // if we are parsing a switch, stop after the first supported element
         if (isSwitch)
             break;
     }
-   // setAppData();
-    
-    qDebug() << "List of shapes created so far:" << endl;
-    foreach(KoShape* shape, shapes)
-      qDebug() << "Shape ID = " << shape->shapeId() << endl;
-    
+   
     return shapes;
 }
 

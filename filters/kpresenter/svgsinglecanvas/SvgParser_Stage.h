@@ -42,23 +42,18 @@ public:
     /**
      * @param e The XMl element with attributes for Frames
      */
-  //  PresentationViewPortShape* parseAppData(const KoXmlElement& e, QList< KoShape* > shapes);
+  
     void parseAppData(const KoXmlElement& e);
     PresentationViewPortShape* createPVPShape(KoShape* shape, Frame* frame);
-  //  KoShape* createAppData(const KoXmlElement& e);
+  
     
     /**
      * Adds a Frame object to each shape that had contained Frame data
      */
     void setAppData(Frame* frame);
-    //PresentationViewPortShape* setAppData(Frame* frame, QList< KoShape* >& shapeList);
-    KoShape* removeShape();
     
 private:
    
-  KoShape* temp;
-    //QList<QPointF> parsePathPoints(const KoXmlElement& e);  
-    //QTransform parseTransformation(const KoXmlElement& e);  
   /**
      * @brief m_frameList - 
      * Contains all the Frame objects created from the data 

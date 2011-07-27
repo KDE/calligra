@@ -65,14 +65,12 @@ void SvgWriter_Stage::saveAnimationTags(PresentationViewPortShape* shape)
     frameObj = &(appData->frame());
           
     frameObj->writeToStream(m_frames);       
-  //  *m_frames << getTransform(shape->transformation(), " transform");//transform being written to SVG
+  
     *m_frames << "/>" << endl;
 }
 
 void SvgWriter_Stage::saveAppData(KoShape* shape, QTextStream* body)
 {
-  //KoPathShape* path = dynamic_cast<KoPathShape*>(shape);
-  
   saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
   saveAnimationTags(dynamic_cast<PresentationViewPortShape*>(shape));   
 }
@@ -96,33 +94,18 @@ void SvgWriter_Stage::forTesting(KoShape * shape)
     obj->addNewFrame(shape, frame);
 }
 
-
 void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body)
 {
+  
     *body << "<path" << getID(shape);
     qDebug() << "Shape ID = " << m_shapeIds[shape];
 
     //getStyle(shape, body);
     //fill wriiten to SVG
     //TODO other attributes - stroke, etc. ?
-    *body << " fill=\"none\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" ";
+    *body << " fill=\"none\" fill-rule=\"evenodd\" stroke=\"#000000\" stroke-width=\"1.25\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" stroke-miterlimit=\"2\" ";
     *body << " d=\"" << shape->toString() << "\"";
     *body << getTransform(shape->transformation(), " transform");//transform being written to SVG
 
     *body << " />" << endl;
 }
-/*
-void SvgWriter_Stage::saveAppData_temp(KoShape *shape)
-{
-  
-    if(shape->applicationData() == 0){
-      forTesting(shape);// Adds a frame object to this shape
-    }
-        
-    SvgAnimationData * appData = dynamic_cast<SvgAnimationData*>(shape->applicationData());
-    Frame *frameObj;// = new Frame();
-    frameObj = &(appData->frame());
-          
-    frameObj->writeToStream(m_frames);       
-    }
-  */    

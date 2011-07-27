@@ -4,6 +4,7 @@
 #include <KoShapeContainer.h>
 #include <qpainterpath.h>
 #include <KoShape.h>
+#include <KoPathShape.h>
 
 #define PresentationViewPortShapeId "PresentationViewPortShape"
 
@@ -18,7 +19,7 @@ public:
    */
     PresentationViewPortShape();
     ~PresentationViewPortShape();
-    void initialize();
+    
     /** Reimplemented methods */
     
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -44,7 +45,7 @@ public:
     
     
     /**Others */
-    QString shapeId() const;
+    //QString shapeId() const;
         /// reimplemented
     virtual QPainterPath outline() const;
     virtual QSizeF size() const;
@@ -76,6 +77,9 @@ private:
 
     int m_noOfPoints;
     QVector< QVector<int> > m_adjMatrix;
+    
+    KoPathShape* m_pathShape;
+    
     
     //QString m_path;
     //int m_adjMatrix[8][8];

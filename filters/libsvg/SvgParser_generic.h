@@ -147,17 +147,14 @@ protected:
     /// Returns inherited attribute value for specified element
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
-   // virtual PresentationViewPortShape* parseAppData(const KoXmlElement &, QList<KoShape*> shapes) =0;
     virtual void parseAppData(const KoXmlElement& e) =0;
-   // virtual KoShape* createAppData(const KoXmlElement &) =0;
-    //virtual void setAppData(Fr) =0;
-    
+   
     QString m_appData_tagName;
-  //  QString m_appData_elementName;
     bool m_hasAppData;
+  
     QList<KoShape*> m_shapes;
     KoResourceManager *m_documentResourceManager; 
-    virtual KoShape* removeShape() =0;
+    
 private:
   
     QSizeF m_documentSize;

@@ -38,13 +38,7 @@ SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):Svg
 SvgParser_Stage::~SvgParser_Stage()
 {
 }
-/*
-PresentationViewPortShape* SvgParser_Stage::parseAppData(const KoXmlElement& e, QList< KoShape* > shapes)
-{
-   Frame *frame = new Frame(e);
-   return setAppData(frame, shapes);
-   }
-*/
+
 void SvgParser_Stage::parseAppData(const KoXmlElement& e)
 {
     Frame *frame = new Frame(e);
@@ -65,112 +59,4 @@ void SvgParser_Stage::setAppData(Frame * frame)
     }
 }
 
-KoShape* SvgParser_Stage::removeShape()
-{
-    return temp;
-}
-
-/*
-PresentationViewPortShape* SvgParser_Stage::setAppData(Frame* frame, QList<KoShape*>& shapeList)
-{
-  PresentationViewPortShape* temp;
-    foreach(KoShape *shape, m_shapes)
-    {
-      if(shape->name() == frame->refId())
-      {
-	PresentationViewPortShape* pvpShape = createPVPShape(shape, frame);
-        qDebug() << "Removed old shape: " << m_shapes.removeOne(shape);
-    //TODO shape not removed still
-      
-      return pvpShape;
-       }
-    }
-    return temp;
-} 
-
-PresentationViewPortShape* SvgParser_Stage::createPVPShape(KoShape* shape, Frame * frame)
-{
-    QString shapeID = PresentationViewPortShapeId;
-    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
-    if (! factory) {
-        kWarning(30514) << "Could not find factory for shape id" << shapeID;
-        return 0;
-    }
-
-    PresentationViewPortShape *pvpShape = static_cast<PresentationViewPortShape*>(factory->createDefaultShape(m_documentResourceManager));
-    if (pvpShape){
-      qDebug() << "New PVPShape created.";
-    }
-     if (pvpShape->shapeId().isEmpty())
-        pvpShape->setShapeId(factory->id());
-
-         pvpShape->setName(QString());
-         //pvpShape->setShapeId(PresentationViewPortShapeId);
-	 pvpShape->setTransformation(shape->transformation());
-	 pvpShape->setBorder(shape->border());
-	 pvpShape->setBackground(shape->background());
-         //pvpShape->setName(frame->refId());//e.attribute("id"));
-         
-	 SvgAnimationData * appData = new SvgAnimationData();
-       
-           appData->setFrame(frame);
-           pvpShape->setApplicationData(appData);
-    
-	 return pvpShape;
-}
-/*
-void SvgParser_Stage::setAppData()
-{
-    
-  foreach(KoShape *shape, m_shapes){
-      foreach(Frame * frame, m_frameList){
-          
-        if(shape->name() == frame->refId()){
-           SvgAnimationData * appData = new SvgAnimationData();
-       
-           appData->setFrame(frame);
-           shape->setApplicationData(appData);
-         }
-      }
-    }
-    
-}
-
-/*KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)
-{
-  QString shapeID = PresentationViewPortShapeId;
-  
-  KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
-    if (! factory) {
-        kWarning(30514) << "Could not find factory for shape id" << shapeID;
-        return 0;
-    }
-
-    KoShape *shape = factory->createDefaultShape(m_documentResourceManager);
-    if (shape && shape->shapeId().isEmpty())
-        shape->setShapeId(factory->id());
-
-    
-     // reset tranformation that might come from the default shape
-    shape->setTransformation(QTransform());
-
-    // reset border
-    KoShapeBorderModel *oldBorder = shape->border();
-    shape->setBorder(0);
-    delete oldBorder;
-
-    // reset fill
-    KoShapeBackground *oldFill = shape->background();
-    shape->setBackground(0);
-    delete oldFill;
-
-    //creates the basic [ ] shape
-    PresentationViewPortShape* PVPshape = static_cast<PresentationViewPortShape*> (shape);
-    
-    //sets all the properties to draw the shape
-    
-   
-    //TODO FIll?
-    return PVPshape;
-}*/
     

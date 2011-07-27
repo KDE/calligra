@@ -5,7 +5,7 @@
 
 PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
-    setShapeId(PresentationViewPortShapeId);
+//    setShapeId(PresentationViewPortShapeId);
     m_adjMatrix = createAdjMatrix();
     }
 
@@ -15,10 +15,6 @@ PresentationViewPortShape::~PresentationViewPortShape()
 
 }
 
-void PresentationViewPortShape::initialize()
-{
-    PresentationViewPortShape();
-}
 
 QString PresentationViewPortShape::toString()
 {
@@ -85,12 +81,12 @@ QVector< QVector< int > > PresentationViewPortShape::adjMatrix()
 {
     return m_adjMatrix;
 }
-
+/*
 QString PresentationViewPortShape::shapeId() const
 {
     return PresentationViewPortShapeId;
 }
-
+*/
 void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
     applyConversion( painter, converter );
@@ -99,6 +95,7 @@ void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& 
                      Qt::FlatCap, Qt::MiterJoin)); 
       
     painter.drawPath(createShapePath(outline().boundingRect().size()));
+    //painter.drawPath(m_pathShape);
     }
 
 QPainterPath PresentationViewPortShape::outline() const
@@ -143,7 +140,8 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
   
     QPainterPath viewPortPath;
     m_path.clear();
-    
+ 
+    //creating the path
     for(int row = 0; row < m_noOfPoints; row++){
       if(row == 0 || row == 4){
       viewPortPath.moveTo(m_pointsOfShape.at(row));
