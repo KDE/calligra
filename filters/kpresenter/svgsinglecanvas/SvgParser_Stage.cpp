@@ -32,8 +32,6 @@ SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):Svg
  
     m_appData_tagName = "calligra:frame";
     m_hasAppData = true;
-   // m_appData_elementName = PresentationViewPortShapeId;
-    
     m_frameList.begin();
     }
 
@@ -44,7 +42,6 @@ SvgParser_Stage::~SvgParser_Stage()
 PresentationViewPortShape* SvgParser_Stage::parseAppData(const KoXmlElement& e, QList< KoShape* > shapes)
 {
    Frame *frame = new Frame(e);
-   //m_frameList.append(frame);
    return setAppData(frame, shapes);
    }
 
@@ -65,31 +62,19 @@ PresentationViewPortShape* SvgParser_Stage::setAppData(Frame* frame, QList<KoSha
     {
       if(shape->name() == frame->refId())
       {
-	
-	/*SvgAnimationData * appData = new SvgAnimationData();
-       
-           appData->setFrame(frame);
-           shape->setApplicationData(appData);
-      */
-      
-      PresentationViewPortShape* pvpShape = createPVPShape(shape, frame);
-      
-//      pvpShape->setShapeId(PresentationViewPortShapeId);
-      
-      //shapeList.append(pvpShape);
-    qDebug() << "Removed old shape: " << m_shapes.removeOne(shape);//true
+	PresentationViewPortShape* pvpShape = createPVPShape(shape, frame);
+        qDebug() << "Removed old shape: " << m_shapes.removeOne(shape);
     //TODO shape not removed still
-      //temp = shape;
+      
       return pvpShape;
+       }
     }
-    }
-    
     return temp;
 } 
 
 PresentationViewPortShape* SvgParser_Stage::createPVPShape(KoShape* shape, Frame * frame)
 {
-  QString shapeID = PresentationViewPortShapeId;
+    QString shapeID = PresentationViewPortShapeId;
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
     if (! factory) {
         kWarning(30514) << "Could not find factory for shape id" << shapeID;
@@ -100,19 +85,22 @@ PresentationViewPortShape* SvgParser_Stage::createPVPShape(KoShape* shape, Frame
     if (pvpShape){
       qDebug() << "New PVPShape created.";
     }
-         pvpShape->setShapeId(PresentationViewPortShapeId);
+     if (pvpShape->shapeId().isEmpty())
+        pvpShape->setShapeId(factory->id());
+
+         pvpShape->setName(QString());
+         //pvpShape->setShapeId(PresentationViewPortShapeId);
 	 pvpShape->setTransformation(shape->transformation());
 	 pvpShape->setBorder(shape->border());
 	 pvpShape->setBackground(shape->background());
-    
+         //pvpShape->setName(frame->refId());//e.attribute("id"));
+         
 	 SvgAnimationData * appData = new SvgAnimationData();
        
            appData->setFrame(frame);
            pvpShape->setApplicationData(appData);
-	   
-      
+    
 	 return pvpShape;
-
 }
 /*
 void SvgParser_Stage::setAppData()
@@ -164,7 +152,7 @@ void SvgParser_Stage::setAppData()
     PresentationViewPortShape* PVPshape = static_cast<PresentationViewPortShape*> (shape);
     
     //sets all the properties to draw the shape
-    PVPshape->setName(e.attribute("id"));
+    
    
     //TODO FIll?
     return PVPshape;

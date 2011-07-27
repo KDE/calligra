@@ -1962,18 +1962,7 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
             obj = path;
         }
     } else if (b.tagName() == "path") {
-      //if(b.attribute("id").startsWith(m_appData_elementName, Qt::CaseInsensitive))  {
-	//qDebug() << "Found a path element whose id starts with " << m_appData_elementName;
-	//obj = createAppData(b);
-	//}
-         //else {
-	   PresentationViewPortShape* pvpshape = static_cast<PresentationViewPortShape*>(createShape(PresentationViewPortShapeId));
-	   if(pvpshape){
-	    
-	     obj = pvpshape;
-	   }
-	   else{
-          KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+           KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
         if (path) {
             path->clear();
 
@@ -1989,11 +1978,23 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
             path->setSize(newSize);
             path->setPosition(newPosition);
 
-            obj = path;
-        }
-	     
-	  }
-    //}
+	    obj = path;
+	    
+	    if(b.attribute("id").contains("ViewPort"))
+	   {
+	    QSizeF newSize = QSizeF(path->size().width(), path->size().height());//TODO remove this and use fromUserSpace
+            
+	     qDebug() << "Path is a view port";
+	       PresentationViewPortShape* pvpshape = static_cast<PresentationViewPortShape*>(createShape(PresentationViewPortShapeId));
+	       if(pvpshape){
+      	          pvpshape->setSize(newSize); //Working fine
+	          pvpshape->setPosition(newPosition);//Working fine
+	          
+		  obj = pvpshape;
+	       }
+	   }
+	   }
+	 
     } else if (b.tagName() == "image") {
         double x = b.hasAttribute("x") ? parseUnitX(b.attribute("x")) : 0;
         double y = b.hasAttribute("x") ? parseUnitY(b.attribute("y")) : 0;

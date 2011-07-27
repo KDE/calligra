@@ -7,8 +7,7 @@ PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
     setShapeId(PresentationViewPortShapeId);
     m_adjMatrix = createAdjMatrix();
-    setName(PresentationViewPortShapeId);
- }
+    }
 
 
 PresentationViewPortShape::~PresentationViewPortShape()
@@ -75,8 +74,7 @@ QVector< QVector < int > > PresentationViewPortShape::createAdjMatrix()
 	}
 	qDebug() << endl;*/
   return adjMatrix;
-    //setAdjMatrix(&adjMatrix);
-}
+    }
 
 void PresentationViewPortShape::setAdjMatrix(QVector< QVector< int > >* matrix)
 {
