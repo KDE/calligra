@@ -32,6 +32,7 @@ namespace Tables
 {
 
 class Sheet;
+class SheetView;
 /**
  * Searching implementation for searching through spreadsheets.
  *
@@ -51,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    explicit Find(QObject *parent = 0);
+    explicit Find(QObject* parent = 0);
 
 public Q_SLOTS:
     /**
@@ -59,7 +60,7 @@ public Q_SLOTS:
      *
      * Currently this class only searches within the active sheet.
      */
-    void setCurrentSheet(Sheet *sheet);
+    void setCurrentSheet(Sheet *sheet, SheetView *view);
 
 protected:
     /**
@@ -71,9 +72,17 @@ protected:
      */
     virtual void findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList);
 
+    /**
+     * Overridden from KoFindBase
+     */
+    virtual void clearMatches();
+
 private:
     class Private;
     Private * const d;
+
+private Q_SLOTS:
+    void setActiveMatch(const KoFindMatch &match);
 };
 
 } //namespace Tables
