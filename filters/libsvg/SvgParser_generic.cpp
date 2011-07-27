@@ -43,9 +43,12 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
+
 #include <pathshapes/rectangle/RectangleShape.h>
 #include <pathshapes/ellipse/EllipseShape.h>
 #include <plugins/artistictextshape/ArtisticTextShape.h>
+#include <plugins/presentationviewportshape/PresentationViewPortShape.h>
+
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
@@ -1877,7 +1880,6 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 
 	if(b.attribute("id").contains("ViewPort"))
 	{
-	  qDebug() << "Rectangle element with view port found.";
 	  PresentationViewPortShape* shape = static_cast<PresentationViewPortShape*>(createShape(PresentationViewPortShapeId));
 	  if(shape)
 	  {
@@ -1987,20 +1989,7 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 
 	    obj = path;
 	    
-	    /*if(b.attribute("id").contains("ViewPort"))
-	   {
-	    QSizeF newSize = QSizeF(path->size().width(), path->size().height());//TODO remove this and use fromUserSpace
-            
-	     qDebug() << "Path is a view port";
-	       PresentationViewPortShape* pvpshape = static_cast<PresentationViewPortShape*>(createShape(PresentationViewPortShapeId));
-	       if(pvpshape){
-      	          pvpshape->setSize(newSize); //Working fine
-	          pvpshape->setPosition(newPosition);//Working fine
-	          
-		  obj = pvpshape;
-	       }
-	   }*/
-	   }
+	  }
 	 
     } else if (b.tagName() == "image") {
         double x = b.hasAttribute("x") ? parseUnitX(b.attribute("x")) : 0;

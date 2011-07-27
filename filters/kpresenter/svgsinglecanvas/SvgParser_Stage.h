@@ -42,24 +42,19 @@ public:
     /**
      * @param e The XMl element with attributes for Frames
      */
-  
     void parseAppData(const KoXmlElement& e);
-    PresentationViewPortShape* createPVPShape(KoShape* shape, Frame* frame);
-  
-    
-    /**
+        
+private:
+  /**
      * Adds a Frame object to each shape that had contained Frame data
      */
     void setAppData(Frame* frame);
     
-private:
-   
+   PresentationViewPortShape* createPVPShape(KoShape* shape, Frame* frame);
   /**
      * @brief m_frameList - 
      * Contains all the Frame objects created from the data 
      * parsed from the SVG document
      */
-    QList<Frame*> m_frameList;
-    QString *NS; //Namespace
 };
 #endif /*SVG_PARSER_STAGE_H*/

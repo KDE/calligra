@@ -73,7 +73,6 @@
 #include <QDebug>
 
 static void printIndentation(QTextStream *stream, unsigned int indent)
-//void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int indent)
 {
     static const QString INDENT("  ");
     for (unsigned int i = 0; i < indent;++i)
@@ -244,9 +243,6 @@ void SvgWriter_generic::saveGroup(KoShapeGroup * group)
     printIndentation(m_body, --m_indent);
     *m_body << "</g>" << endl;
      
-   /* if(m_hasAppData) {
-         saveAppData_temp(dynamic_cast<KoShape*>(group)); //virtual fucntion. Do be defined by the child class
-         }    */
 }
 
 void SvgWriter_generic::saveViewPort(KoShape* shape)
@@ -257,10 +253,8 @@ void SvgWriter_generic::saveViewPort(KoShape* shape)
   
     printIndentation(m_body, m_indent);
     
-    *m_body << "<rect" << getID(shape);//" id=\"ViewPort\" ";//getID(viewport); //FIXME
+    *m_body << "<rect" << getID(shape);
     *m_body << getTransform(viewport->transformation(), " transform");
-
-    //getStyle(rectangle, m_body);
 
     QSizeF size = shape->size();
     
@@ -269,19 +263,11 @@ void SvgWriter_generic::saveViewPort(KoShape* shape)
 
     *m_body << "/>" << endl;
     saveAppData(shape, m_body);
-    //qDebug() << "SvgWiter_generic::saveViewPort()";
+
 }
 
 void SvgWriter_generic::saveShape(KoShape * shape)
 {
-  PresentationViewPortShape* pvp;
-  if((shape->shapeId() == m_appDataId) || (pvp = dynamic_cast<PresentationViewPortShape*>(shape))){
-      //   qDebug() << "SvgWriter_generic::saveShape() - saveAppData called with Shape.";
-	 //saveAppData(shape, m_body);
-	 saveViewPort(shape);
-	 return;
-  }
-  
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     
        if (path) {
@@ -293,11 +279,7 @@ void SvgWriter_generic::saveShape(KoShape * shape)
           } else if (path->pathShapeId() == EllipseShapeId && isParametric) {
               saveEllipse(static_cast<EllipseShape*>(path));
            }
-           /*else if(path->shapeId() == m_appDataId){
-	     saveAppData(shape, m_body);
-	     qDebug() << "SvgWriter_generic::saveShape() - saveAppData called with pathShape.";
-	   }*/
-	   else{
+         else{
               savePath(path);
           }
       } else {
@@ -305,16 +287,11 @@ void SvgWriter_generic::saveShape(KoShape * shape)
               saveText(static_cast<ArtisticTextShape*>(shape));
           } else if (shape->shapeId() == "PictureShape") {
               saveImage(shape);
-              } /*else if(shape->shapeId() == m_appDataId){
-	       saveAppData(shape, m_body);
-	        
-	          }*/
-	   }
-         
-    /*  if(m_hasAppData) {
-         saveAppData_temp(shape); //virtual fucntion. Do be defined by the child class
-         }*/
- }
+              } else if(shape->shapeId() == PresentationViewPortShapeId){
+                  saveViewPort(shape);
+	 }
+        }
+      }
       
 void SvgWriter_generic::savePath(KoPathShape * path)
 {

@@ -32,11 +32,6 @@ void SvgParser::parseAppData(const KoXmlElement& e)
   //No app Data
 }
 
-void SvgParser::setAppDataTag()
-{
-   m_hasAppData = false;
-}
-
 void SvgParser::createAppData()
 {
   //No app Data

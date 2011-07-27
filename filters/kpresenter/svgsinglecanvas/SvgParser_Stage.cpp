@@ -31,9 +31,7 @@ SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):Svg
 {
  
     m_appData_tagName = "calligra:frame";
-    m_hasAppData = true;
-    m_frameList.begin();
-    }
+}
 
 SvgParser_Stage::~SvgParser_Stage()
 {
@@ -54,7 +52,6 @@ void SvgParser_Stage::setAppData(Frame * frame)
        
            appData->setFrame(frame);
            shape->setApplicationData(appData);
-          
     }
     }
 }

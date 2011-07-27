@@ -34,7 +34,7 @@
 
 #include <QtGui/QGradient>
 #include <QtCore/QMap>
-#include <presentationviewportshape/PresentationViewPortShape.h>
+//#include <presentationviewportshape/PresentationViewPortShape.h>
 
 class KoShape;
 class KoShapeContainer;
@@ -150,7 +150,7 @@ protected:
     virtual void parseAppData(const KoXmlElement& e) =0;
    
     QString m_appData_tagName;
-    bool m_hasAppData;
+  //  bool m_hasAppData;
   
     QList<KoShape*> m_shapes;
     KoResourceManager *m_documentResourceManager; 

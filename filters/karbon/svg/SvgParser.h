@@ -47,9 +47,7 @@ public:
      *Virtual functions from SvgParser_generic
      */
     void parseAppData(const KoXmlElement& e);
-    void setAppDataTag();
     void createAppData();
-    
 };
 
 #endif /*SVG_PARSER_H*/
