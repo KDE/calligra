@@ -781,8 +781,12 @@ const ParagraphProperties& Style::paragraphProperties() const
 const Word97::CHP& Style::chp() const
 {
     if ( !m_chp ) {
-        wvlog << "You requested the CHP of an unknown style type? Hmm..." << endl;
-        wvlog << "sti == " << m_std->sti << endl;
+        if ( !m_isEmpty ) {
+            wvlog << "You requested the CHP of an unknown style type? Hmm..." << endl;
+            wvlog << "sti == " << m_std->sti << endl;
+        } else {
+            wvlog << "You requested the CHP of an empty style slot? Hmm..." << endl;
+        }
         m_chp = new Word97::CHP(); // let's return a default CHP, better than crashing
     }
     return *m_chp;

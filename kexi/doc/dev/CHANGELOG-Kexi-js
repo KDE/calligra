@@ -3,7 +3,7 @@
  Proposed by jstaniek
 
  Copyright (C) 2003-2007 Jaroslaw Staniek @ OpenOffice Polska
- Copyright (C) 2008-2010 Jaroslaw Staniek (staniek at kde.org)
+ Copyright (C) 2008-2011 Jaroslaw Staniek (staniek at kde.org)
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
@@ -91,6 +91,13 @@ Tabbed toolbar TODOS:
 *add tab hiding to the API
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
+
+2011-07-25
+General
+*Replaced term "row" with "record" in visible places
+BUG:278418
+
+~~~~~~~~~~~~~~~~ 2.4 Alpha 3 (2.3.73) ~~~~~~~~~~~~~~~~
 
 2011-06-21
 Startup

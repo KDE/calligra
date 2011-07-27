@@ -198,7 +198,7 @@ public:
      Note for driver developers:
      If \a i is >= than m_fieldCount, null QVariant value should be returned.
      To return a value typically you can use a pointer to internal structure
-     that contain current row data (buffered or unbuffered). */
+     that contain current record data (buffered or unbuffered). */
     virtual QVariant value(uint i) = 0;
 
     /*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
@@ -293,7 +293,7 @@ public:
     void debug() const;
 
 protected:
-    //! possible results of row fetching, used for m_result
+    //! possible results of record fetching, used for m_result
     enum FetchResult { FetchError = 0, FetchOK = 1, FetchEnd = 2 };
 
     /*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
@@ -363,7 +363,7 @@ protected:
      This method has unspecified behaviour if the cursor is not at valid record.
      \return true on success.
      Note: For reimplementation in driver's code. Shortly, this method translates
-     a row data from internal representation (probably also used in buffer)
+     a record data from internal representation (probably also used in buffer)
      to simple public RecordData representation. */
     virtual bool drv_storeCurrentRow(RecordData& data) const = 0;
 
@@ -385,7 +385,7 @@ protected:
     //!< sets m_fieldCount+1 here)
     uint m_logicalFieldCount;  //!< logical field count, i.e. without intrernal values like ROWID or lookup
     uint m_options; //!< cursor options that describes its behaviour
-    char m_result; //!< result of a row fetching
+    char m_result; //!< result of a record fetching
 
     //<members related to buffering>
     int m_records_in_buf;          //!< number of records currently stored in the buffer

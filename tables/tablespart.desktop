@@ -2,6 +2,7 @@
 Name=Calligra Spreadsheet Component
 Name[et]=Calligra tabelitöötluse komponent
 Name[nb]=Calligra regnearkkomponent
+Name[pl]=Składnik arkusza kalkulacyjnego dla Calligry
 Name[pt]=Componente de Folhas de Cálculo do Calligra
 Name[pt_BR]=Componente de planilha do Calligra
 Name[sv]=Calligra-kalkylarkskomponent
@@ -42,6 +43,7 @@ GenericName[nb]=Regneark
 GenericName[nds]=Tabellenutreken
 GenericName[nl]=Spreadsheet
 GenericName[oc]=Fuèlha de calcul
+GenericName[pl]=Arkusz kalkulacyjny
 GenericName[pt]=Folha de cálculo
 GenericName[pt_BR]=Planilha
 GenericName[sl]=Preglednica

@@ -252,7 +252,7 @@ DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
     //TODO: The globalCP might be required to obtain the SPA structure for
-    //inline MS-ODRAW shapes whith missing OfficeArtClientAnchor.
+    //inline MS-ODRAW shapes with missing OfficeArtClientAnchor.
 
     //TODO: It seems that both inline and floating objects have placement and
     //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
@@ -1044,6 +1044,12 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
     definePositionAttributes(style, ds);
+
+    style.addProperty("fo:border-top", Conversion::setBorderAttributes(m_picf->brcTop));
+    style.addProperty("fo:border-left", Conversion::setBorderAttributes(m_picf->brcLeft));
+    style.addProperty("fo:border-bottom", Conversion::setBorderAttributes(m_picf->brcBottom));
+    style.addProperty("fo:border-right", Conversion::setBorderAttributes(m_picf->brcRight));
+
     styleName = out.styles.insert(style);
 
     // A diagram drawing canvas placed inline with surrounding text.
