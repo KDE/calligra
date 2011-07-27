@@ -18,7 +18,7 @@ public:
    */
     PresentationViewPortShape();
     ~PresentationViewPortShape();
-    
+    void initialize();
     /** Reimplemented methods */
     
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -44,7 +44,7 @@ public:
     
     
     /**Others */
-    QString ShapeId() const;
+    QString shapeId() const;
         /// reimplemented
     virtual QPainterPath outline() const;
     virtual QSizeF size() const;

@@ -22,6 +22,7 @@
 
 #include "SvgWriter_generic.h"
 #include <plugins/presentationviewportshape/PresentationViewPortShape.h>
+#include <KoPathShape.h>
 
 class Frame;
 class KoShape;
@@ -56,7 +57,7 @@ public:
 private:
     //Workin on this still
     void savePlainText();
-//    void saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body);
+    void saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body);
     void saveAnimationTags(PresentationViewPortShape* shape);
     /**
      * Saves javascript to the SVG doc

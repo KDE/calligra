@@ -1593,7 +1593,8 @@ QList<KoShape*> SvgParser_generic::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         }else if(b.tagName() == m_appData_tagName) {
-            parseAppData(b);                   
+            shapes.append(parseAppData(b, shapes));   
+	      
           } else {
             continue;
         }
@@ -1601,7 +1602,11 @@ QList<KoShape*> SvgParser_generic::parseContainer(const KoXmlElement &e)
         if (isSwitch)
             break;
     }
-    setAppData();
+   // setAppData();
+    
+    qDebug() << "List of shapes created so far:" << endl;
+    foreach(KoShape* shape, shapes)
+      qDebug() << "Shape ID = " << shape->shapeId() << endl;
     
     return shapes;
 }
@@ -1962,6 +1967,12 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 	//obj = createAppData(b);
 	//}
          //else {
+	   PresentationViewPortShape* pvpshape = static_cast<PresentationViewPortShape*>(createShape(PresentationViewPortShapeId));
+	   if(pvpshape){
+	    
+	     obj = pvpshape;
+	   }
+	   else{
           KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
         if (path) {
             path->clear();
@@ -1980,6 +1991,8 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 
             obj = path;
         }
+	     
+	  }
     //}
     } else if (b.tagName() == "image") {
         double x = b.hasAttribute("x") ? parseUnitX(b.attribute("x")) : 0;
@@ -2034,7 +2047,8 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 
 KoShape * SvgParser_generic::createShape(const QString &shapeID)
 {
-    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
+  
+   KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
     if (! factory) {
         kWarning(30514) << "Could not find factory for shape id" << shapeID;
         return 0;

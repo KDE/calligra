@@ -41,15 +41,84 @@ SvgParser_Stage::~SvgParser_Stage()
 {
 }
 
-void SvgParser_Stage::parseAppData(const KoXmlElement& e)
+PresentationViewPortShape* SvgParser_Stage::parseAppData(const KoXmlElement& e, QList< KoShape* > shapes)
 {
    Frame *frame = new Frame(e);
-   m_frameList.append(frame);
+   //m_frameList.append(frame);
+   return setAppData(frame, shapes);
    }
 
 void SvgParser_Stage::setAppData()
 {
-    foreach(KoShape *shape, m_shapes){
+
+}
+
+KoShape* SvgParser_Stage::removeShape()
+{
+    return temp;
+}
+
+PresentationViewPortShape* SvgParser_Stage::setAppData(Frame* frame, QList<KoShape*>& shapeList)
+{
+  PresentationViewPortShape* temp;
+    foreach(KoShape *shape, m_shapes)
+    {
+      if(shape->name() == frame->refId())
+      {
+	
+	/*SvgAnimationData * appData = new SvgAnimationData();
+       
+           appData->setFrame(frame);
+           shape->setApplicationData(appData);
+      */
+      
+      PresentationViewPortShape* pvpShape = createPVPShape(shape, frame);
+      
+//      pvpShape->setShapeId(PresentationViewPortShapeId);
+      
+      //shapeList.append(pvpShape);
+    qDebug() << "Removed old shape: " << m_shapes.removeOne(shape);//true
+    //TODO shape not removed still
+      //temp = shape;
+      return pvpShape;
+    }
+    }
+    
+    return temp;
+} 
+
+PresentationViewPortShape* SvgParser_Stage::createPVPShape(KoShape* shape, Frame * frame)
+{
+  QString shapeID = PresentationViewPortShapeId;
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
+    if (! factory) {
+        kWarning(30514) << "Could not find factory for shape id" << shapeID;
+        return 0;
+    }
+
+    PresentationViewPortShape *pvpShape = static_cast<PresentationViewPortShape*>(factory->createDefaultShape(m_documentResourceManager));
+    if (pvpShape){
+      qDebug() << "New PVPShape created.";
+    }
+         pvpShape->setShapeId(PresentationViewPortShapeId);
+	 pvpShape->setTransformation(shape->transformation());
+	 pvpShape->setBorder(shape->border());
+	 pvpShape->setBackground(shape->background());
+    
+	 SvgAnimationData * appData = new SvgAnimationData();
+       
+           appData->setFrame(frame);
+           pvpShape->setApplicationData(appData);
+	   
+      
+	 return pvpShape;
+
+}
+/*
+void SvgParser_Stage::setAppData()
+{
+    
+  foreach(KoShape *shape, m_shapes){
       foreach(Frame * frame, m_frameList){
           
         if(shape->name() == frame->refId()){
@@ -60,6 +129,7 @@ void SvgParser_Stage::setAppData()
          }
       }
     }
+    
 }
 
 /*KoShape* SvgParser_Stage::createAppData(const KoXmlElement& e)

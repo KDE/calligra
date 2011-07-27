@@ -22,6 +22,7 @@
 
 #include "SvgParser_generic.h"
 #include "SvgAnimationData.h"
+#include <plugins/presentationviewportshape/PresentationViewPortShape.h>
 
 class SvgParser_generic;
 class KoResourceManager;
@@ -41,18 +42,20 @@ public:
     /**
      * @param e The XMl element with attributes for Frames
      */
-    void parseAppData(const KoXmlElement& e);
-    
+    PresentationViewPortShape* parseAppData(const KoXmlElement& e, QList< KoShape* > shapes);
+    PresentationViewPortShape* createPVPShape(KoShape* shape, Frame* frame);
   //  KoShape* createAppData(const KoXmlElement& e);
     
     /**
      * Adds a Frame object to each shape that had contained Frame data
      */
     void setAppData();
-    
+    PresentationViewPortShape* setAppData(Frame* frame, QList< KoShape* >& shapeList);
+    KoShape* removeShape();
     
 private:
    
+  KoShape* temp;
     //QList<QPointF> parsePathPoints(const KoXmlElement& e);  
     //QTransform parseTransformation(const KoXmlElement& e);  
   /**

@@ -25,6 +25,7 @@
 
 #include "plugins/presentationviewportshape/PresentationViewPortShape.h"
 #include <QDebug>
+#include <KoPathShape.h>
 
 SvgWriter_Stage::SvgWriter_Stage(const QList<KoShapeLayer*> &layers, const QSizeF& pageSize): SvgWriter_generic(layers, pageSize)
 {
@@ -64,13 +65,15 @@ void SvgWriter_Stage::saveAnimationTags(PresentationViewPortShape* shape)
     frameObj = &(appData->frame());
           
     frameObj->writeToStream(m_frames);       
-    *m_frames << getTransform(shape->transformation(), " transform");//transform being written to SVG
+  //  *m_frames << getTransform(shape->transformation(), " transform");//transform being written to SVG
     *m_frames << "/>" << endl;
 }
 
 void SvgWriter_Stage::saveAppData(KoShape* shape, QTextStream* body)
 {
-  //saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
+  //KoPathShape* path = dynamic_cast<KoPathShape*>(shape);
+  
+  saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
   saveAnimationTags(dynamic_cast<PresentationViewPortShape*>(shape));   
 }
 
@@ -94,7 +97,7 @@ void SvgWriter_Stage::forTesting(KoShape * shape)
 }
 
 
-/*void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body)
+void SvgWriter_Stage::saveViewPortShape(PresentationViewPortShape* shape, QTextStream* body)
 {
     *body << "<path" << getID(shape);
     qDebug() << "Shape ID = " << m_shapeIds[shape];
@@ -107,8 +110,7 @@ void SvgWriter_Stage::forTesting(KoShape * shape)
     *body << getTransform(shape->transformation(), " transform");//transform being written to SVG
 
     *body << " />" << endl;
-
-}*/
+}
 /*
 void SvgWriter_Stage::saveAppData_temp(KoShape *shape)
 {

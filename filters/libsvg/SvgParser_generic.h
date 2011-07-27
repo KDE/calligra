@@ -34,6 +34,7 @@
 
 #include <QtGui/QGradient>
 #include <QtCore/QMap>
+#include <presentationviewportshape/PresentationViewPortShape.h>
 
 class KoShape;
 class KoShapeContainer;
@@ -146,7 +147,7 @@ protected:
     /// Returns inherited attribute value for specified element
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
-    virtual void parseAppData(const KoXmlElement &) =0;
+    virtual PresentationViewPortShape* parseAppData(const KoXmlElement &, QList<KoShape*> shapes) =0;
    // virtual KoShape* createAppData(const KoXmlElement &) =0;
     virtual void setAppData() =0;
     
@@ -154,8 +155,8 @@ protected:
   //  QString m_appData_elementName;
     bool m_hasAppData;
     QList<KoShape*> m_shapes;
-    
-    
+    KoResourceManager *m_documentResourceManager; 
+    virtual KoShape* removeShape() =0;
 private:
   
     QSizeF m_documentSize;
@@ -167,7 +168,7 @@ private:
     QMap<QString, SvgClipPathHelper> m_clipPaths;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes
-    KoResourceManager *m_documentResourceManager; 
+    //KoResourceManager *m_documentResourceManager; 
     //QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
     SvgCssHelper m_cssStyles;

@@ -251,15 +251,28 @@ void SvgWriter_generic::saveGroup(KoShapeGroup * group)
 
 void SvgWriter_generic::saveShape(KoShape * shape)
 {
+  PresentationViewPortShape* pvp;
+  if((shape->shapeId() == m_appDataId) || (pvp = dynamic_cast<PresentationViewPortShape*>(shape))){
+         qDebug() << "SvgWriter_generic::saveShape() - saveAppData called with Shape.";
+	 saveAppData(shape, m_body);
+	 return;
+  }
+  
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    
        if (path) {
+	 qDebug() << "KoPathShape found. ShapeId = " << path->shapeId();
           KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(path);
           bool isParametric = parameterShape && parameterShape->isParametricShape();
           if (path->pathShapeId() == RectangleShapeId && isParametric) {
               saveRectangle(static_cast<RectangleShape*>(path));
           } else if (path->pathShapeId() == EllipseShapeId && isParametric) {
               saveEllipse(static_cast<EllipseShape*>(path));
-           } else {
+           } /*else if(path->shapeId() == m_appDataId){
+	     saveAppData(shape, m_body);
+	     qDebug() << "SvgWriter_generic::saveShape() - saveAppData called with pathShape.";
+	   }*/
+	   else{
               savePath(path);
           }
       } else {
@@ -267,9 +280,10 @@ void SvgWriter_generic::saveShape(KoShape * shape)
               saveText(static_cast<ArtisticTextShape*>(shape));
           } else if (shape->shapeId() == "PictureShape") {
               saveImage(shape);
-              } else if(shape->shapeId() == m_appDataId){
+              } /*else if(shape->shapeId() == m_appDataId){
 	       saveAppData(shape, m_body);
-	          }
+	        
+	          }*/
 	   }
          
     /*  if(m_hasAppData) {

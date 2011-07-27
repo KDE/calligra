@@ -7,11 +7,18 @@ PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
     setShapeId(PresentationViewPortShapeId);
     m_adjMatrix = createAdjMatrix();
+    setName(PresentationViewPortShapeId);
  }
+
 
 PresentationViewPortShape::~PresentationViewPortShape()
 {
 
+}
+
+void PresentationViewPortShape::initialize()
+{
+    PresentationViewPortShape();
 }
 
 QString PresentationViewPortShape::toString()
@@ -81,7 +88,7 @@ QVector< QVector< int > > PresentationViewPortShape::adjMatrix()
     return m_adjMatrix;
 }
 
-QString PresentationViewPortShape::ShapeId() const
+QString PresentationViewPortShape::shapeId() const
 {
     return PresentationViewPortShapeId;
 }
