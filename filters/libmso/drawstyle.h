@@ -86,6 +86,10 @@ public:
     quint32 alignHR() const;
     qint32 dxHeightHR() const;
     qint32 dxWidthHR() const;
+    MSO::OfficeArtCOLORREF borderTopColor() const;
+    MSO::OfficeArtCOLORREF borderLeftColor() const;
+    MSO::OfficeArtCOLORREF borderBottomColor() const;
+    MSO::OfficeArtCOLORREF borderRightColor() const;
     // Group Shape Boolean Properties
     bool fPrint() const;
     bool fHidden() const;
