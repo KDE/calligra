@@ -87,6 +87,15 @@ const MSO::FixedPoint zero()
 //     tmp.msoshadeOneColor = 0;
 //     return tmp;
 // }
+} //namespace
+
+quint16 DrawStyle::shapeType() const
+{
+    if (!sp) {
+        return msosptNil;
+    } else {
+        return sp->shapeProp.rh.recInstance;
+    }
 }
 
 #define GETTER(TYPE, FOPT, NAME, DEFAULT) \

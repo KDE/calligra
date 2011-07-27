@@ -45,6 +45,16 @@ public:
                        const MSO::OfficeArtSpContainer* sp_ = 0)
             : d(d_), mastersp(mastersp_), sp(sp_) {}
 
+    /**
+     * @return the OfficeArtSpContainer record specifying the shape container.
+     */
+    const MSO::OfficeArtSpContainer* shapeContainer() const { return sp; };
+
+    /**
+     * @return the shape type that MUST be an MSOSPT enumeration value.
+     */
+    quint16 shapeType() const;
+
     // Shape property set
     quint32 hspMaster() const;
     quint32 cxstyle() const;
