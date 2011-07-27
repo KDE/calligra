@@ -42,6 +42,7 @@ namespace KPlato {
     class ResourceGroup;
     class Resource;
     class ScheduleManager;
+    class MacroCommand;
 }
 
 namespace Scripting {
@@ -79,6 +80,8 @@ namespace Scripting {
             int nodeCount() const;
             /// Return the node at @p index
             QObject *nodeAt( int index );
+            QObject *findNode( const QString &id );
+            QObject *createTaskCopy( const QObject *copy, QObject *parent, QObject *after = 0 );
             
             /// Returns resource header data for @p property
             QVariant resourceHeaderData( const QString &property );
@@ -119,11 +122,18 @@ namespace Scripting {
             /// Find account with identity @p id
             QObject *findAccount( const QString &id );
 
+            /// Add all commands created since last addCommand() to the undo stack. The command is named @p name.
+            void addCommand( const QString &name );
+            /// Revert all commands that is not yet added with addCommand()
+            void revertCommand();
+
         public:
             /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)
-            QObject *node( KPlato::Node *node );
+            Node *node( KPlato::Node *node );
             /// Return the data of @p node
             QVariant nodeData( const KPlato::Node *node, const QString &property, const QString &role, long schedule );
+            /// Set node data
+            bool setNodeData( KPlato::Node *node, const QString &property, const QVariant &data, const QString &role );
             
             /// Return ResourceGroup that interfaces the @p group (create if necessary)
             QObject *resourceGroup( KPlato::ResourceGroup *group );
@@ -175,6 +185,8 @@ namespace Scripting {
             
             KPlato::AccountModel m_accountModel;
             QMap<KPlato::Account*, Account*> m_accounts;
+
+            KPlato::MacroCommand *m_command;
     };
 
 }

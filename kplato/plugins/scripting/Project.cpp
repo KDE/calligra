@@ -31,11 +31,12 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptresource.h"
+#include "kptcommand.h"
 
 #include <QMetaEnum>
 
 Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project )
-    : Node( this, project, module ), m_module( module )
+    : Node( this, project, module ), m_module( module ), m_command( new MacroCommand( QString() ) )
 {
     kDebug()<<this<<"KPlato::"<<project;
     m_nodeModel.setProject( project );
@@ -45,6 +46,7 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
 Scripting::Project::~Project()
 {
     kDebug()<<this;
+    delete m_command;
     qDeleteAll( m_nodes );
     qDeleteAll( m_groups );
     qDeleteAll( m_resources );
@@ -98,8 +100,11 @@ int Scripting::Project::resourceColumnNumber( const QString &property ) const
     return m_resourceModel.columnMap().keyToValue( property.toUtf8() );
 }
 
-QObject *Scripting::Project::node( KPlato::Node *node )
+Scripting::Node *Scripting::Project::node( KPlato::Node *node )
 {
+    if ( node == 0 ) {
+        return 0;
+    }
     if ( ! m_nodes.contains( node ) ) {
         m_nodes[ node ] = new Node( this, node, parent() );
     }
@@ -120,6 +125,68 @@ QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &
 {
     m_nodeModel.setManager( project()->scheduleManager( schedule ) );
     return m_nodeModel.data( node, nodeColumnNumber( property ), stringToRole( role ) ).toString();
+}
+
+bool Scripting::Project::setNodeData( KPlato::Node *node, const QString &property, const QVariant &data, const QString &role )
+{
+    KUndo2Command *cmd = m_nodeModel.setData( node, nodeColumnNumber( property ), data, stringToRole( role ) );
+    if ( ! cmd ) {
+        kDebug()<<"Failed:"<<node->name()<<property<<data<<role;
+        kDebug()<<"Failed:"<<node->name()<<nodeColumnNumber(property)<<data<<stringToRole(role);
+        return false;
+    }
+    cmd->redo();
+    m_command->addCommand( cmd );
+    return true;
+}
+
+
+QObject *Scripting::Project::findNode( const QString &id )
+{
+    return node( project()->findNode( id ) );
+}
+
+QObject *Scripting::Project::createTaskCopy(const QObject* copy, QObject* parent, QObject* after)
+{
+    const Node *cpy = static_cast<const Node*>( copy );
+    KPlato::Node *t = 0;
+    if ( cpy ) {
+        t = project()->createTask( static_cast<KPlato::Task&>( *( cpy->kplatoNode() ) ) );
+    } else {
+        t = project()->createTask();
+    }
+    KPlato::NamedCommand *cmd;
+    if ( parent ) {
+        KPlato::Node *par = static_cast<Node*>( parent )->kplatoNode();
+        cmd = new SubtaskAddCmd( project(), t, par, i18nc( "(qtundo_format)", "Add task" ) );
+    } else {
+        KPlato::Node *aft = after ? static_cast<Node*>( after )->kplatoNode() : 0;
+        cmd = new TaskAddCmd( project(), t, aft, i18nc( "(qtundo_format)", "Add task" ) );
+    }
+    cmd->execute();
+    m_command->addCommand( cmd );
+    return node( t );
+}
+
+void Scripting::Project::addCommand( const QString &name )
+{
+    if ( m_command->isEmpty() ) {
+        return;
+    }
+    if ( ! name.isEmpty() ) {
+        m_command->setText( name );
+    }
+    m_module->addCommand( m_command );
+    m_command = new KPlato::MacroCommand( QString() );
+}
+
+void Scripting::Project::revertCommand()
+{
+    if ( m_command ) {
+        m_command->undo();
+    }
+    delete m_command;
+    m_command = new KPlato::MacroCommand( QString() );
 }
 
 int Scripting::Project::resourceGroupCount() const

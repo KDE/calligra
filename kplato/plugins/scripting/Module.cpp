@@ -35,10 +35,11 @@
 // kde
 #include <kdebug.h>
 // kplato
-#include <kptpart.h>
-#include <kptview.h>
-#include <kptproject.h>
-#include <kptnode.h>
+#include "kptpart.h"
+#include "kptview.h"
+#include "kptproject.h"
+#include "kptnode.h"
+#include "kptcommand.h"
 
 extern "C"
 {
@@ -176,6 +177,31 @@ QVariant Module::data( QObject *object, const QString &property, const QString &
     return QVariant();
 }
 
+bool Module::setData( QObject *object, const QString &property, const QVariant &data, const QString &role )
+{
+    Project *p = qobject_cast<Project*>( project() );
+    if ( object == 0 || p == 0) {
+        return false;
+    }
+    Node *n = qobject_cast<Node*>( object );
+    if ( n ) {
+        return p->setNodeData( n->kplatoNode(), property, data, role );
+    }
+/*    Resource *r = qobject_cast<Resource*>( object );
+    if ( r ) {
+        return p->resourceData( r->kplatoResource(), property, role, scheduleId );
+    }
+    ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
+    if ( g ) {
+        return p->resourceGroupData( g->kplatoResourceGroup(), property, role );
+    }
+    Account *a = qobject_cast<Account*>( object );
+    if ( a ) {
+        return p->accountData( a->kplatoAccount(), property, role );
+    }*/
+    return false;
+}
+
 QVariant Module::headerData( int objectType, const QString &property )
 {
     Project *p = qobject_cast<Project*>( project() );
@@ -189,6 +215,15 @@ QVariant Module::headerData( int objectType, const QString &property )
         default: break;
     }
     return QVariant();
+}
+
+void Module::addCommand( KUndo2Command *cmd )
+{
+    KPlato::MacroCommand *m = new MacroCommand( cmd->text().isEmpty()
+            ? i18nc( "(qtundo-format)", "Scripting command" )
+            : cmd->text() );
+    doc()->addCommand( m );
+    m->addCommand( cmd );
 }
 
 } //namespace Scripting
