@@ -5,8 +5,9 @@
 
 PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
-//    setShapeId(PresentationViewPortShapeId);
+    setShapeId(PresentationViewPortShapeId);
     m_adjMatrix = createAdjMatrix();
+    setName("ViewPort");
     }
 
 
@@ -170,7 +171,8 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
 QSizeF PresentationViewPortShape::size() const
 {
     //return createShapePath().boundingRect().size();
-    return KoShape::size();
+    //return KoShape::size();
+    return (outline().boundingRect().size());
 }
 
 

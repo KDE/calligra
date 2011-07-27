@@ -1875,6 +1875,18 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
         if (! hasRx && hasRy)
             rx = ry;
 
+	if(b.attribute("id").contains("ViewPort"))
+	{
+	  qDebug() << "Rectangle element with view port found.";
+	  PresentationViewPortShape* shape = static_cast<PresentationViewPortShape*>(createShape(PresentationViewPortShapeId));
+	  if(shape)
+	  {
+	    shape->setSize(QSizeF(w, h));
+	    shape->setPosition(QPointF(x, y));
+	  }
+	  obj = shape;
+	}
+	else{
         RectangleShape *rect = static_cast<RectangleShape*>(createShape(RectangleShapeId));
         if (rect) {
             rect->setSize(QSizeF(w, h));
@@ -1888,6 +1900,7 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
             if (w == 0.0 || h == 0.0)
                 obj->setVisible(false);
         }
+	}
     } else if (b.tagName() == "ellipse") {
         obj = createShape(EllipseShapeId);
         if (obj) {
@@ -1974,7 +1987,7 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 
 	    obj = path;
 	    
-	    if(b.attribute("id").contains("ViewPort"))
+	    /*if(b.attribute("id").contains("ViewPort"))
 	   {
 	    QSizeF newSize = QSizeF(path->size().width(), path->size().height());//TODO remove this and use fromUserSpace
             
@@ -1986,7 +1999,7 @@ KoShape * SvgParser_generic::createObject(const KoXmlElement &b, const SvgStyles
 	          
 		  obj = pvpshape;
 	       }
-	   }
+	   }*/
 	   }
 	 
     } else if (b.tagName() == "image") {

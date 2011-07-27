@@ -249,26 +249,51 @@ void SvgWriter_generic::saveGroup(KoShapeGroup * group)
          }    */
 }
 
+void SvgWriter_generic::saveViewPort(KoShape* shape)
+{
+  PresentationViewPortShape* viewport = dynamic_cast<PresentationViewPortShape*>(shape);
+  
+  shape->setName("");//TODO find where the name is being set to the shape id
+  
+    printIndentation(m_body, m_indent);
+    
+    *m_body << "<rect" << getID(shape);//" id=\"ViewPort\" ";//getID(viewport); //FIXME
+    *m_body << getTransform(viewport->transformation(), " transform");
+
+    //getStyle(rectangle, m_body);
+
+    QSizeF size = shape->size();
+    
+    *m_body << " width=\"" << size.width() << "pt\"";
+    *m_body << " height=\"" << size.height() << "pt\"";
+
+    *m_body << "/>" << endl;
+    saveAppData(shape, m_body);
+    //qDebug() << "SvgWiter_generic::saveViewPort()";
+}
+
 void SvgWriter_generic::saveShape(KoShape * shape)
 {
   PresentationViewPortShape* pvp;
   if((shape->shapeId() == m_appDataId) || (pvp = dynamic_cast<PresentationViewPortShape*>(shape))){
-         qDebug() << "SvgWriter_generic::saveShape() - saveAppData called with Shape.";
-	 saveAppData(shape, m_body);
+      //   qDebug() << "SvgWriter_generic::saveShape() - saveAppData called with Shape.";
+	 //saveAppData(shape, m_body);
+	 saveViewPort(shape);
 	 return;
   }
   
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     
        if (path) {
-	 qDebug() << "KoPathShape found. ShapeId = " << path->shapeId();
+	
           KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(path);
           bool isParametric = parameterShape && parameterShape->isParametricShape();
           if (path->pathShapeId() == RectangleShapeId && isParametric) {
               saveRectangle(static_cast<RectangleShape*>(path));
           } else if (path->pathShapeId() == EllipseShapeId && isParametric) {
               saveEllipse(static_cast<EllipseShape*>(path));
-           } /*else if(path->shapeId() == m_appDataId){
+           }
+           /*else if(path->shapeId() == m_appDataId){
 	     saveAppData(shape, m_body);
 	     qDebug() << "SvgWriter_generic::saveShape() - saveAppData called with pathShape.";
 	   }*/
@@ -471,6 +496,7 @@ QString SvgWriter_generic::createID(const KoShape * obj)
     QString id;
     if (! m_shapeIds.contains(obj)) {
         id = obj->name().isEmpty() ? createUID(obj) : obj->name();
+      //id = createUID(obj);
         m_shapeIds.insert(obj, id);
         
         QList<const KoShape *> list = m_shapeIds.keys(); 

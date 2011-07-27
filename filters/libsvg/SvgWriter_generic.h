@@ -32,6 +32,7 @@
 #include <KoFilter.h>
 #include <QVariantList>
 #include <QtGui/QGradient>
+#include <plugins/presentationviewportshape/PresentationViewPortShape.h>
   
 
 class KoShapeLayer;
@@ -96,6 +97,7 @@ private:
     void savePath(KoPathShape * path);
     void saveEllipse(EllipseShape * ellipse);
     void saveRectangle(RectangleShape * rectangle);
+    void saveViewPort(KoShape* viewport);
     void saveImage(KoShape *picture);
     void saveText(ArtisticTextShape * text);
 

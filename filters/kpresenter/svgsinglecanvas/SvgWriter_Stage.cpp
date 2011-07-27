@@ -71,8 +71,9 @@ void SvgWriter_Stage::saveAnimationTags(PresentationViewPortShape* shape)
 
 void SvgWriter_Stage::saveAppData(KoShape* shape, QTextStream* body)
 {
-  saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
+ // saveViewPortShape(dynamic_cast<PresentationViewPortShape*>(shape), body);
   saveAnimationTags(dynamic_cast<PresentationViewPortShape*>(shape));   
+  //saveAnimationTags(shape);
 }
 
 void SvgWriter_Stage::saveScript()
