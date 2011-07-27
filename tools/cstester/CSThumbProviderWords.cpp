@@ -25,10 +25,13 @@
 
 #include <KWDocument.h>
 #include <KWPage.h>
+#include <KWCanvasItem.h>
+
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
 #include <frames/KWTextFrameSet.h>
 
+#include <KoShapeManager.h>
 #include <KoTextShapeData.h>
 #include <KoZoomHandler.h>
 #include <KoShapePainter.h>
@@ -48,48 +51,45 @@ CSThumbProviderWords::~CSThumbProviderWords()
 
 QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
+    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->canvasItem());
     KoZoomHandler zoomHandler;
-
+    
     while (!m_doc->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
 
         if (!QCoreApplication::hasPendingEvents())
             break;
     }
-
-    KWPageManager *manager = m_doc->pageManager();
-
-    // recreate the shape list as they are only created when the shape when the frames are added during first layout
-    QList<KoShape*> shapes;
-    foreach(KWFrameSet* frameSet, m_doc->frameSets()) {
-        foreach(KWFrame *frame, frameSet->frames()) {
-            shapes.append(frame->shape());
-        }
-    }
-
-    qDebug() << "Shapes" << shapes.size();
-
+    
+    KWPageManager *pageManager = m_doc->pageManager();
+    KoShapeManager *shapeManager = canvasItem->shapeManager();
+            
     QList<QPixmap> thumbnails;
 
-    KoShapePainter shapePainter;
-    shapePainter.setShapes(shapes);
-    foreach(KWPage page, manager->pages()) {
+    foreach(KWPage page, pageManager->pages()) {
+
         QRectF pRect(page.rect());
         KoPageLayout layout;
         layout.width = pRect.width();
         layout.height = pRect.height();
 
         KoPAUtil::setZoom(layout, thumbSize, zoomHandler);
+        QRect pageRect = KoPAUtil::pageRect(layout, thumbSize, zoomHandler);
 
         QPixmap thumbnail(thumbSize);
         thumbnail.fill(Qt::white);
         QPainter p(&thumbnail);
+
+        QImage img = page.thumbnail(pageRect.size(), shapeManager);
+        p.drawImage(pageRect, img);
+
         p.setPen(Qt::black);
-        p.drawRect(KoPAUtil::pageRect(layout, thumbSize, zoomHandler));
-        shapePainter.paint(p, QRect(QPoint(0,0), thumbSize), pRect);
+        p.drawRect(pageRect);
 
         thumbnails.append(thumbnail);
     }
 
     return thumbnails;
 }
+
+

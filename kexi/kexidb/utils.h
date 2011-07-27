@@ -63,7 +63,7 @@ inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
                            + keyname + "=" + conn.driver()->valueToSQL(Field::Integer, QVariant(keyval)));
 }
 
-/*! Delete row with two generic criterias. */
+/*! Delete record with two generic criterias. */
 inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
                                      const QString &keyname1, Field::Type keytype1, const QVariant& keyval1,
                                      const QString &keyname2, Field::Type keytype2, const QVariant& keyval2)
