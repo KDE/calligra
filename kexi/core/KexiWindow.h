@@ -169,7 +169,7 @@ public:
      This may or not be used, depending if changes in the dialog
      are saved immediately (e.g. like in datatableview) or saved by hand (by user)
      (e.g. like in alter-table dialog).
-     \return true if at least on "dirty" flag is set for one of the dialog's view. */
+     \return true if at least one "dirty" flag is set for one of the dialog's view. */
     bool isDirty() const;
 
     /*! \return a pointer to view that has recently set dirty flag.
