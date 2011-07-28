@@ -23,13 +23,6 @@
 #include "KWView.h"
 #include "KWGui.h"
 #include "KWDocument.h"
-#include <rdf/KoDocumentRdfBase.h>
-#ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#include <rdf/KoSemanticStylesheetsEditor.h>
-#include "dockers/KWRdfDocker.h"
-#include "dockers/KWRdfDockerFactory.h"
-#endif
 #include "KWCanvas.h"
 #include "KWViewMode.h"
 #include "KWFactory.h"
@@ -47,7 +40,6 @@
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWInsertPageDialog.h"
 #include "dialogs/KWInsertInlineNoteDialog.h"
-#include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
@@ -83,6 +75,12 @@
 #include <KoBookmark.h>
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
+#include <rdf/KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#include <rdf/KoSemanticStylesheetsEditor.h>
+#endif
+
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -162,19 +160,6 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     layout->addWidget(toolbar);
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
-
-    if (shell()) {
-        KWStatisticsDockerFactory statisticsFactory(this);
-        KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(shell()->createDockWidget(&statisticsFactory));
-        if (docker && docker->view() != this) docker->setView(this);
-
-#ifdef SHOULD_BUILD_RDF
-        KWRdfDockerFactory factory(this);
-        KWRdfDocker *rdfDdocker = dynamic_cast<KWRdfDocker *>(shell()->createDockWidget(&factory));
-        if (rdfDdocker) rdfDdocker->setCanvas(this->canvasBase());
-#endif
-    }
-
     if (statusBar())
         KWStatusBar::addViewControls(statusBar(), this);
 
