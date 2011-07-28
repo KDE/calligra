@@ -75,21 +75,27 @@ KoDocument* openFile(const QString &filename)
     return document;
 }
 
-QString saveFile(KoDocument *document, const QString &filename)
+QString saveFile(KoDocument *document, const QString &filename, const QString &outname)
 {
-    QString saveAs = filename;
-    int dotPos = saveAs.lastIndexOf('.');
-    if (dotPos != -1) {
-        saveAs.truncate(dotPos);
+    QString saveAs = outname;
+    // use the name and add -roundtrip
+    if (outname.isEmpty()) {
+        saveAs = filename;
+        int dotPos = saveAs.lastIndexOf('.');
+        if (dotPos != -1) {
+            saveAs.truncate(dotPos);
+        }
+        saveAs += "-roundtrip";
     }
+
     QByteArray mimetype = document->nativeFormatMimeType();
     KMimeType::Ptr mime = KMimeType::mimeType(mimetype);
     Q_ASSERT(mime);
     QString extension = mime->mainExtension();
-
     saveAs += extension;
-    KUrl url("file:" + saveAs);
-    kDebug(31000) << "saveAs" << url << extension << mimetype << mime->propertyNames() << mime->mainExtension();
+
+    KUrl url;
+    url.setPath(saveAs);
     document->setOutputMimeType(mimetype, 0);
     document->saveAs(url);
     kDebug(31000) << "save done";
@@ -98,8 +104,6 @@ QString saveFile(KoDocument *document, const QString &filename)
 
 QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
-    QList<QPixmap> thumbnails;
-
     CSThumbProvider *tp = 0;
 
     if (KoPADocument *doc = qobject_cast<KoPADocument*>(document)) {
@@ -225,8 +229,6 @@ int main(int argc, char *argv[])
     if (args->isSet("roundtrip")) {
         roundtrip = true;
         optionCount++;
-        kError() << "roundtrip does not work yet";
-        exit(1);
     }
     if (args->isSet("verify")) {
         verify = true;
@@ -314,10 +316,15 @@ int main(int argc, char *argv[])
             }
         }
         else if (roundtrip) {
-            saveFile(document, filename);
+            QString rFilename = saveFile(document, filename, "cstester-roundtrip");
             delete document;
-            document = openFile(file.absoluteFilePath());
+            QFileInfo rFile(rFilename);
+            qDebug() << roundtrip << "rFilename" << rFilename << rFile.absoluteFilePath();
+            document = openFile(rFile.absoluteFilePath());
             QList<QPixmap> others(createThumbnails(document, QSize(800,800)));
+            if (args->isSet("outdir")) {
+                saveThumbnails(file, others, outDir);
+            }
             if (checkThumbnails(thumbnails, others, verbose)) {
                 ++successful;
             }

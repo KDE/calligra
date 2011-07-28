@@ -1558,7 +1558,7 @@ void QuerySchema::computeFieldsExpanded()
                     ci->setIndexForVisibleLookupValue(d->fieldsExpanded->size() + index);
             }
         } else {
-            KexiDBWarn << "QuerySchema::computeFieldsExpanded(): unsupported row source type "
+            KexiDBWarn << "QuerySchema::computeFieldsExpanded(): unsupported record source type "
             << rowSource.typeName();
         }
     }

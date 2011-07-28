@@ -100,7 +100,9 @@ namespace Scripting {
             void clearExternalAppointments( const QString &id );
             /// Clear all resources external appointments to any project
             void clearAllExternalAppointments();
-            
+            /// Return a <id, name> map of external projects
+            QVariantList externalProjects();
+
             /// Number of calendars
             int calendarCount() const;
             /// Return the calendar at @p index

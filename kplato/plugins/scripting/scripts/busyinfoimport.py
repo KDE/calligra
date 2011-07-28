@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, datetime, sys, traceback, pickle
-import Kross, KPlato
+import Kross, Plan
 
 T = Kross.module("kdetranslation")
 def i18n(text, args = []):
@@ -19,7 +19,7 @@ class BusyinfoImporter:
         self.scriptaction = scriptaction
         self.currentpath = self.scriptaction.currentPath()
 
-        self.proj = KPlato.project()
+        self.proj = Plan.project()
         
         self.forms = Kross.module("forms")
         self.dialog = self.forms.createDialog(i18n("Busy Information Import"))
@@ -68,9 +68,9 @@ class BusyinfoImporter:
         if r is None:
             print "Resource is not used in this project: %s, %s" % ( data[0], data[1] )
             return
-        if KPlato.data( r, 'ResourceName' ) != data[1]:
+        if Plan.data( r, 'ResourceName' ) != data[1]:
             #TODO Warning ?
-            print "Resources has same id but different names %s - %s" % ( KPlato.data( r, 'ResourceName' ), data[1] )
+            print "Resources has same id but different names %s - %s" % ( Plan.data( r, 'ResourceName' ), data[1] )
         r.addExternalAppointment( pid, pname, data[2:5] )
 
 BusyinfoImporter( self )

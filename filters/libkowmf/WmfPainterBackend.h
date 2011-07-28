@@ -28,7 +28,6 @@
 
 class QPolygon;
 
-#define DEBUG_WMFPAINT 0
 
 /**
    Namespace for Windows Metafile (WMF) classes
@@ -100,7 +99,6 @@ private:
 
     // Graphics drawing functions
     void  setPixel(WmfDeviceContext &context, int x, int y, QColor color);
-    void  moveTo(WmfDeviceContext &context, int x, int y);
     void  lineTo(WmfDeviceContext &context, int x, int y);
     void  drawRect(WmfDeviceContext &context, int x, int y, int w, int h);
     void  drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h, int = 25, int = 25);
@@ -137,7 +135,7 @@ protected:
     QSizeF    mOutputSize;
     QPaintDevice *mTarget;
     bool  mRelativeCoord;
-    QPoint mLastPos;
+    //QPoint mLastPos;
 
     // Everything that has to do with window and viewport calculation
     QPoint        mWindowOrg;

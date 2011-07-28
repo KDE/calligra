@@ -102,12 +102,12 @@ public:
         /*! true if background altering should be enabled, true by default */
         bool backgroundAltering;
 
-        /*! true if full-row-selection mode is set,
-         what means that all cells of the current row are always selected, instead of single cell.
+        /*! true if full-record-selection mode is set,
+         what means that all cells of the current record are always selected, instead of single cell.
          This mode is usable for read-only table views, when we're interested only in navigating
-         by rows. False by default, even for read-only table views.
+         by records. False by default, even for read-only table views.
         */
-        bool fullRowSelection;
+        bool fullRecordSelection;
 
         /*! true if fullgrid is enabled. True by default.
          It is set to false for comboboxpopup table, to mimic original
@@ -118,37 +118,37 @@ public:
          True by default. */
         bool navigatorEnabled;
 
-        /*! true if "row highlight" behaviour is enabled. False by default. */
-        bool rowHighlightingEnabled;
+        /*! true if "record highlight" behaviour is enabled. False by default. */
+        bool recordHighlightingEnabled;
 
-        /*! true if "row highlight over " behaviour is enabled. False by default. */
-        bool rowMouseOverHighlightingEnabled;
+        /*! true if "record highlight over " behaviour is enabled. False by default. */
+        bool recordMouseOverHighlightingEnabled;
 
-        /*! true if selection of a row should be kept when a user moved mouse
-         pointer over other rows. Makes only sense when rowMouseOverHighlightingEnabled is true.
+        /*! true if selection of a record should be kept when a user moved mouse
+         pointer over other records. Makes only sense when recordMouseOverHighlightingEnabled is true.
          True by default. It is set to false for comboboxpopup table, to mimic original
          combobox look and feel. */
         bool persistentSelections;
 
-        /*! color for row highlight, default is intermediate (33%/60%) between
+        /*! color for record highlight, default is intermediate (33%/60%) between
          active highlight and base color. */
-        QColor rowHighlightingColor;
+        QColor recordHighlightingColor;
 
-        /*! color for text under row highlight, default is the same as textColor.
-         Used when rowHighlightingEnabled is true; */
-        QColor rowHighlightingTextColor;
+        /*! color for text under record highlight, default is the same as textColor.
+         Used when recordHighlightingEnabled is true; */
+        QColor recordHighlightingTextColor;
 
-        /*! color for row highlight for mouseover, default is intermediate (20%/80%) between
-         active highlight and base color. Used when rowMouseOverHighlightingEnabled is true. */
-        QColor rowMouseOverHighlightingColor;
+        /*! color for record highlight for mouseover, default is intermediate (20%/80%) between
+         active highlight and base color. Used when recordMouseOverHighlightingEnabled is true. */
+        QColor recordMouseOverHighlightingColor;
 
-        /*! color for text under row highlight for mouseover, default is the same as textColor.
-         Used when rowMouseOverHighlightingEnabled is true; */
-        QColor rowMouseOverHighlightingTextColor;
+        /*! color for text under record highlight for mouseover, default is the same as textColor.
+         Used when recordMouseOverHighlightingEnabled is true; */
+        QColor recordMouseOverHighlightingTextColor;
 
-        /*! Like rowMouseOverHighlightingColor but for areas painted with alternate color.
+        /*! Like recordMouseOverHighlightingColor but for areas painted with alternate color.
          This is computed using active highlight color and alternateBackgroundColor. */
-        QColor rowMouseOverAlternateHighlightingColor;
+        QColor recordMouseOverAlternateHighlightingColor;
     };
 
     KexiTableView(KexiTableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
@@ -181,7 +181,7 @@ public:
     /*! Enables or disables vertical scrollbar's. */
 //moved void setScrollbarToolTipsEnabled(bool set);
 
-    /*! \return maximum number of rows that can be displayed per one "page"
+    /*! \return maximum number of records that can be displayed per one "page"
      for current table view's size. */
     virtual int rowsPerPage() const;
 
@@ -255,10 +255,10 @@ public:
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 
-    /*! \return highlighted row number or -1 if no row is highlighted.
-     Makes sense if row highlighting is enabled.
-     @see Appearance::rowHighlightingEnabled setHighlightedRow() */
-    int highlightedRow() const;
+    /*! \return highlighted record number or -1 if no record is highlighted.
+     Makes sense if record highlighting is enabled.
+     @see Appearance::recordHighlightingEnabled setHighlightedRecord() */
+    int highlightedRecord() const;
 
     KexiDB::RecordData *highlightedItem() const;
 
@@ -298,14 +298,14 @@ public slots:
      \sa setColumnStretchEnabled() QHeader::adjustHeaderSize() */
     void adjustHorizontalHeaderSize();
 
-    /*! Sets highlighted row number or -1 if no row has to be highlighted.
-     Makes sense if row highlighting is enabled.
-     @see Appearance::rowHighlightingEnabled */
-    void setHighlightedRow(int row);
+    /*! Sets highlighted record number or -1 if no record has to be highlighted.
+     Makes sense if record highlighting is enabled.
+     @see Appearance::recordHighlightingEnabled */
+    void setHighlightedRecord(int record);
 
-    /*! Sets no row that will be highlighted. Equivalent to setHighlightedRow(-1). */
-    inline void clearHighlightedRow() {
-        setHighlightedRow(-1);
+    /*! Sets no record that will be highlighted. Equivalent to setHighlightedRecord(-1). */
+    inline void clearHighlightedRecord() {
+        setHighlightedRecord(-1);
     }
 
     /*! Ensures that cell at \a row and \a col is visible.
@@ -345,7 +345,7 @@ public slots:
     }
 
     /*! Deletes currently selected cell's contents, if allowed.
-     In most cases delete is not accepted immediately but "row editing" mode is just started. */
+     In most cases delete is not accepted immediately but "record editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell() {
         KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell();
     }
@@ -486,7 +486,7 @@ protected slots:
     }
 
 #if 0 // 2.0
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 /*replaced by QToolTip    virtual void vScrollBarSliderReleased() {
         KexiDataAwareObjectInterface::vScrollBarSliderReleased();
     }*/

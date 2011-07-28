@@ -480,7 +480,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         || key == Qt::Key_End || key == Qt::Key_Down || key == Qt::Key_Up))
                         /* ^^ home/end/down/up are already handled by widgets */
                         && d->dataAwareObject->handleKeyPress(
-                            ke, curRow, curCol, false/*!fullRowSelection*/, &moveToFirstField, &moveToLastField)) {
+                            ke, curRow, curCol, false/*!fullRecordSelection*/, &moveToFirstField, &moveToLastField)) {
                     if (ke->isAccepted())
                         return true;
                     QWidget* widgetToFocus;

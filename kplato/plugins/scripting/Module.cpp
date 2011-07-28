@@ -60,7 +60,7 @@ namespace Scripting {
     };
 
 Module::Module(QObject* parent)
-    : KoScriptingModule(parent, "KPlato")
+    : KoScriptingModule(parent, "Plan")
     , d( new Private() )
 {
     d->doc = 0;

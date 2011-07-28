@@ -34,14 +34,14 @@ install(TARGETS flowpart DESTINATION ${PLUGIN_INSTALL_DIR})
 ### kdeinit flow ###
 set(flow_KDEINIT_SRCS main.cpp )
 
-kde4_add_kdeinit_executable( flow ${flow_KDEINIT_SRCS})
+kde4_add_kdeinit_executable(calligraflow ${flow_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_flow komain)
+target_link_libraries(kdeinit_calligraflow komain)
 
-install(TARGETS kdeinit_flow ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries(flow kdeinit_flow)
-install(TARGETS flow ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries(calligraflow kdeinit_calligraflow)
+install(TARGETS calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
 install( FILES flowpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})

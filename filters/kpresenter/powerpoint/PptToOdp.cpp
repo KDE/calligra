@@ -1005,7 +1005,8 @@ void PptToOdp::defineDefaultChartStyle(KoGenStyles& styles)
     styles.insert(style);
 }
 
-void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
+void PptToOdp::defineDefaultTextProperties(KoGenStyle& style)
+{
     const PptTextCFRun cf(p->documentContainer);
     const TextCFException9* cf9 = 0;
     const TextCFException10* cf10 = 0;
@@ -1026,16 +1027,14 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
     defineTextProperties(style, cf, cf9, cf10, si);
 }
 
-void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
-    if (p->documentContainer) {
-        const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
-                p->documentContainer);
-    }
+void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style)
+{
     PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);
 }
 
-void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles) {
+void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles)
+{
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     style.addProperty("svg:stroke-width", "0.75pt", gt); // 2.3.8.15
     style.addProperty("draw:fill", "none", gt); // 2.3.8.38

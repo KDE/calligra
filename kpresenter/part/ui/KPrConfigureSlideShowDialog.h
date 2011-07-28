@@ -21,6 +21,7 @@
 #define KPRCONFIGURESLIDESHOWDIALOG_H
 
 #include <KDialog>
+class KPrView;
 
 #include "ui_KPrConfigureSlideShow.h"
 
@@ -29,8 +30,9 @@ class KPrDocument;
 class KPrConfigureSlideShowDialog : public KDialog
 {
     Q_OBJECT
+
 public:
-    explicit KPrConfigureSlideShowDialog( KPrDocument *document, QWidget *parent=0 );
+    explicit KPrConfigureSlideShowDialog( KPrDocument *document, KPrView *parent=0 );
 
     QString activeCustomSlideShow() const;
 
@@ -40,6 +42,7 @@ private slots:
 private:
     Ui::KPrConfigureSlideShow ui;
     KPrDocument *m_document;
+    KPrView *m_view;
 };
 
 #endif // KPRCONFIGUREPRESENTERVIEWDIALOG_H
