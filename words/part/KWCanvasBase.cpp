@@ -398,7 +398,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     // we cannot wait for the updateCanvas calls to actually tell us which parts
                     // need painting, because updateCanvas is not called when a page is done
                     // layouting.
-                    qDebug() << __PRETTY_FUNCTION__ << "expose" << pageCache->allExposed << pageCache->exposed.size();
                     if (pageCache->allExposed)  {
 
                         pageCache->exposed.clear();
@@ -429,7 +428,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     // There is stuff to be repainted, so collect all the repaintable
                     // rects that are in view and paint them.
                     if (!pageCache->exposed.isEmpty()) {
-                        qDebug() << __PRETTY_FUNCTION__ << "paint to cache";
                         QRegion paintRegion;
                         QVector<QRect> remainingUnExposed;
                         const QVector<QRect> &exposed = pageCache->exposed;
@@ -463,7 +461,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                         }
                         pageCache->exposed = remainingUnExposed;
                         if (!paintRegion.isEmpty()) {
-                            qDebug() << __PRETTY_FUNCTION__ << "paint";
                             // paint the exposed regions of the page
 
                             QRect r = paintRegion.boundingRect();
@@ -831,9 +828,11 @@ KoViewConverter *KWCanvasBase::viewConverter() const
 
 void KWCanvasBase::setCacheEnabled(bool enabled, int cacheSize, qreal maxZoom)
 {
+    if ((!m_pageCacheManager && enabled) || (m_cacheSize != cacheSize)) {
+        delete m_pageCacheManager;
+        m_pageCacheManager = new KWPageCacheManager(cacheSize);
+    }
     m_cacheEnabled = enabled;
     m_cacheSize = cacheSize;
     m_maxZoom = maxZoom;
-    if (m_pageCacheManager) delete m_pageCacheManager;
-    m_pageCacheManager = new KWPageCacheManager(m_cacheSize);
 }
