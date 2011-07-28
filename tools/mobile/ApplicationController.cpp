@@ -3217,7 +3217,7 @@ void ApplicationController::collabSaveFile(const QString &filename) {
 void ApplicationController::collabOpenFile(const QString &filename) {
     openDocument(filename);
     qDebug() << "============================================";
-    m_collabEditor = new KoTextEditor(textEditor()->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(document()->createView(m_mainWindow))->kwcanvas()->toolProxy()->selection());
+    m_collabEditor = new KoTextEditor(textEditor()->document());
     qDebug() << "::::::::::::::::::::::::::::::::::::::::::::";
 }
 
