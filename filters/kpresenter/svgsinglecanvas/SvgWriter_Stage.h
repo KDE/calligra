@@ -51,11 +51,9 @@ public:
     /**
      * @param shape saves app data conatined in this to a stream
      */
-    void saveAppData(KoShape *shape, QTextStream* body);
+    void saveAppData(KoShape *shape);
     
 private:
-    //Workin on this still
-    void savePlainText();
     void saveAnimationTags(PresentationViewPortShape* shape);
     /**
      * Saves javascript to the SVG doc

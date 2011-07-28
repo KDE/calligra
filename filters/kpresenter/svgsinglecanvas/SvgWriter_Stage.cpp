@@ -18,7 +18,6 @@
     */
 
 #include "SvgWriter_Stage.h"
-//#include "SvgWriter.h"
 #include "SvgWriter_generic.h"
 #include "SvgAnimationData.h"
 #include "KoShape.h"
@@ -35,8 +34,7 @@ SvgWriter_Stage::SvgWriter_Stage(const QList<KoShapeLayer*> &layers, const QSize
   m_frames = new QTextStream(&m_appData, QIODevice::ReadWrite);
           
   saveScript();
-  //addAppData(m_framesString);
-  }
+}
 
 
 SvgWriter_Stage::SvgWriter_Stage(const QList< KoShape* >& toplevelShapes, const QSizeF& pageSize): SvgWriter_generic(toplevelShapes, pageSize)
@@ -68,7 +66,7 @@ void SvgWriter_Stage::saveAnimationTags(PresentationViewPortShape* shape)
     *m_frames << "/>" << endl;
 }
 
-void SvgWriter_Stage::saveAppData(KoShape* shape, QTextStream* body)
+void SvgWriter_Stage::saveAppData(KoShape* shape)
 {
     saveAnimationTags(dynamic_cast<PresentationViewPortShape*>(shape));   
 }

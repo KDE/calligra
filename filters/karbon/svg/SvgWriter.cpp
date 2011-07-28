@@ -36,7 +36,8 @@ SvgWriter::~SvgWriter()
 
 void SvgWriter::saveAppData(KoShape *shape)
 {
-  //No extra app data to be written
+    Q_UNUSED(shape);
+  
 }
     
 

@@ -77,18 +77,15 @@ protected:
      * virtual method to be implemented by a child class 
      * To save application specific data in the correct format
      */
-    //virtual void saveAppData_temp(KoShape *shape) =0;
-    virtual void saveAppData(KoShape *shape, QTextStream* body) =0;
-    QString getID(const KoShape *obj);
+    virtual void saveAppData(KoShape *shape) =0;
+    
     
     bool m_hasAppData;
     QString m_appData;
     QString m_appDataId;
+   
     QMap<const KoShape*, QString> m_shapeIds;
-      
-     void getStyle(KoShape * shape, QTextStream * stream);
-      QString getTransform(const QTransform &matrix, const QString &attributeName);
-       QTransform m_userSpaceMatrix;
+     
 private:
       
     void saveLayer(KoShapeLayer * layer);
@@ -101,7 +98,7 @@ private:
     void saveImage(KoShape *picture);
     void saveText(ArtisticTextShape * text);
 
-   // void getStyle(KoShape * shape, QTextStream * stream);
+    void getStyle(KoShape * shape, QTextStream * stream);
     void getFill(KoShape * shape, QTextStream *stream);
     void getStroke(KoShape * shape, QTextStream *stream);
     void getEffects(KoShape *shape, QTextStream *stream);
@@ -109,10 +106,11 @@ private:
     void getColorStops(const QGradientStops & colorStops);
     void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
     void getPattern(KoPatternBackground * pattern, KoShape * shape);
-   // QString getTransform(const QTransform &matrix, const QString &attributeName);
+    QString getTransform(const QTransform &matrix, const QString &attributeName);
     void saveFont(const QFont &font, QTextStream *stream);
     void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
+    QString getID(const KoShape *obj);
     QString createID(const KoShape * obj);
     QString createUID(const KoShape * shape);
     QString createUID();
@@ -125,9 +123,7 @@ private:
      */
     void startDocument();
     void saveToplevelShapes();
-    //Not working yet
-    void savePlainText();
-           
+               
     QTextStream* m_stream;
     QTextStream* m_defs;
     QTextStream* m_body;
@@ -136,7 +132,7 @@ private:
     unsigned int m_indent2;
 
     QList<KoShape*> m_toplevelShapes;
-   // QTransform m_userSpaceMatrix;
+    QTransform m_userSpaceMatrix;
     QSizeF m_pageSize;
     bool m_writeInlineImages;
     QString m_filename;

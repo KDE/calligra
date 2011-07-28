@@ -46,15 +46,11 @@ public:
         
 private:
   /**
-     * Adds a Frame object to each shape that had contained Frame data
+     * Adds a Frame object to the PVPshape that had contained Frame data
      */
     void setAppData(Frame* frame);
     
    PresentationViewPortShape* createPVPShape(KoShape* shape, Frame* frame);
-  /**
-     * @brief m_frameList - 
-     * Contains all the Frame objects created from the data 
-     * parsed from the SVG document
-     */
+  
 };
 #endif /*SVG_PARSER_STAGE_H*/

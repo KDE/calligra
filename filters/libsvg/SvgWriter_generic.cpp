@@ -262,8 +262,7 @@ void SvgWriter_generic::saveViewPort(KoShape* shape)
     *m_body << " height=\"" << size.height() << "pt\"";
 
     *m_body << "/>" << endl;
-    saveAppData(shape, m_body);
-
+    saveAppData(shape);
 }
 
 void SvgWriter_generic::saveShape(KoShape * shape)
@@ -304,17 +303,6 @@ void SvgWriter_generic::savePath(KoPathShape * path)
     *m_body << getTransform(path->transformation(), " transform");
 
     *m_body << " />" << endl;
-    }
-
-//Not working yet.
-//Will be fixed when SvgWriter is re-written using KoXmlWriter
-void SvgWriter_generic::savePlainText() 
-{ 
-    printIndentation(m_body, m_indent++);
-      
-    *m_body << "<text" << "Here comes the text";
-    //printIndentation(m_body, m_indent);
-    *m_body << "</text>" << endl;
     }
 
 void SvgWriter_generic::saveEllipse(EllipseShape * ellipse)
