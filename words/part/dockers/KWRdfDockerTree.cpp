@@ -30,7 +30,6 @@
 
 #include <rdf/KoDocumentRdf.h>
 
-#include "KWView.h"
 #include "KWCanvas.h"
 
 #include "KoRdfSemanticTreeWidgetItem.h"

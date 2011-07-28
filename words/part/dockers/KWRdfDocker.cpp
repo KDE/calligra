@@ -22,7 +22,6 @@
 #include "KWRdfDocker.h"
 
 #include "KWCanvas.h"
-#include "KWView.h"
 #include "Words.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
@@ -45,11 +44,11 @@
 
 KWRdfDocker::KWRdfDocker()
     : m_canvas(0),
-    m_lastCursorPosition(-1),
-    m_autoUpdate(false),
-    m_document(0),
-    m_timer(new QTimer(this)),
-    m_textDocument(0)
+      m_lastCursorPosition(-1),
+      m_autoUpdate(false),
+      m_document(0),
+      m_timer(new QTimer(this)),
+      m_textDocument(0)
 {
     setWindowTitle(i18n("RDF"));
     m_timer->setInterval(300);
@@ -101,7 +100,7 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
                 this, SLOT(semanticObjectUpdated(KoRdfSemanticItem*)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
-
+    setAutoUpdate(widgetDocker.autoRefresh->checkState());
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant&)),
             this, SLOT(resourceChanged(int,const QVariant&)));
 }
@@ -190,17 +189,18 @@ void KWRdfDocker::updateData()
 
 void KWRdfDocker::setAutoUpdate(int state)
 {
-    //kDebug(30015) << "m_textDocument:" << m_textDocument;
-
-    if (state == Qt::Checked) {
-        KoDocumentRdf::ensureTextTool();
-        m_autoUpdate = true;
-        m_timer->start();
-    } else {
-        m_autoUpdate = false;
-        m_timer->stop();
+    if (m_canvas) {
+        //kDebug(30015) << "m_textDocument:" << m_textDocument;
+        if (state == Qt::Checked) {
+            KoDocumentRdf::ensureTextTool();
+            m_autoUpdate = true;
+            m_timer->start();
+        } else {
+            m_autoUpdate = false;
+            m_timer->stop();
+        }
+        widgetDocker.refresh->setVisible(!m_autoUpdate);
     }
-    widgetDocker.refresh->setVisible(!m_autoUpdate);
 }
 
 void KWRdfDocker::resourceChanged(int key, const QVariant &value)
