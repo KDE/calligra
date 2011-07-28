@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KFormula
 Name[af]=Kformula
+Name[bg]=KFormula
 Name[br]=KFormula
 Name[ca]=KFormula
 Name[ca@valencia]=KFormula
@@ -59,6 +60,7 @@ Name[zh_TW]=KFormula
 Exec=kformula %u
 GenericName=Formula Editor
 GenericName[af]=Formule Redigeerder
+GenericName[bg]=Редактор на формули
 GenericName[br]=Un aozer formulennoù
 GenericName[ca]=Editor de fórmules
 GenericName[ca@valencia]=Editor de fórmules

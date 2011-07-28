@@ -1309,9 +1309,9 @@ bool KexiTableView::shortCutPressed(QKeyEvent *e, const QString &action_name)
 
     //check default shortcut (when user app has no action shortcuts defined
     // but we want these shortcuts to still work)
-    if (action_name == "data_save_record")
+    if (action_name == "data_save_row")
         return (k == Qt::Key_Return || k == Qt::Key_Enter) && e->modifiers() == Qt::ShiftModifier;
-    if (action_name == "edit_delete_record")
+    if (action_name == "edit_delete_row")
         return k == Qt::Key_Delete && e->modifiers() == Qt::ControlModifier;
     if (action_name == "edit_delete")
         return k == Qt::Key_Delete && e->modifiers() == Qt::NoModifier;
@@ -1375,7 +1375,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
             return;
         }
     } else if (m_rowEditing) {// if a row is in edit mode, do some special stuff
-        if (shortCutPressed(e, "data_save_record")) {
+        if (shortCutPressed(e, "data_save_row")) {
             kDebug() << "shortCutPressed!!!";
             acceptRowEdit();
             return;
@@ -1394,7 +1394,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 
     //check shared shortcuts
     if (!ro) {
-        if (shortCutPressed(e, "edit_delete_record")) {
+        if (shortCutPressed(e, "edit_delete_row")) {
             deleteCurrentRow();
             e->accept();
             return;

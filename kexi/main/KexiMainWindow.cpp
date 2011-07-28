@@ -901,10 +901,10 @@ void KexiMainWindow::setupActions()
     d->action_edit_delete->setToolTip(i18n("Delete selected object"));
     d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
-    d->action_edit_delete_record = createSharedAction(i18n("Delete Record"), "delete_table_row",
-                                KShortcut(Qt::CTRL + Qt::Key_Delete), "edit_delete_record");
-    d->action_edit_delete_record->setToolTip(i18n("Delete currently selected record"));
-    d->action_edit_delete_record->setWhatsThis(i18n("Deletes currently selected record."));
+    d->action_edit_delete_row = createSharedAction(i18n("Delete Record"), "delete_table_row",
+                                KShortcut(Qt::CTRL + Qt::Key_Delete), "edit_delete_row");
+    d->action_edit_delete_row->setToolTip(i18n("Delete currently selected record"));
+    d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected record."));
 
     d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"),
                                  "clear_table_contents", KShortcut(), "edit_clear_table");
@@ -1010,19 +1010,19 @@ void KexiMainWindow::setupActions()
         d->action_view_propeditor = 0;
 
     //DATA MENU
-    d->action_data_save_record = createSharedAction(i18n("&Save Record"), "dialog-ok",
-                              KShortcut(Qt::SHIFT | Qt::Key_Return), "data_save_record");
-    d->action_data_save_record->setToolTip(i18n("Save changes made to the current record"));
-    d->action_data_save_record->setWhatsThis(i18n("Saves changes made to the current record."));
-//temp. disable because of problems with volatile actions setActionVolatile( d->action_data_save_record, true );
+    d->action_data_save_row = createSharedAction(i18n("&Save Record"), "dialog-ok",
+                              KShortcut(Qt::SHIFT | Qt::Key_Return), "data_save_row");
+    d->action_data_save_row->setToolTip(i18n("Save changes made to the current record"));
+    d->action_data_save_row->setWhatsThis(i18n("Saves changes made to the current record."));
+//temp. disable because of problems with volatile actions setActionVolatile( d->action_data_save_row, true );
 
-    d->action_data_cancel_record_changes = createSharedAction(i18n("&Cancel Record Changes"),
-                                        "dialog-cancel", KShortcut(), "data_cancel_record_changes");
-    d->action_data_cancel_record_changes->setToolTip(
+    d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Record Changes"),
+                                        "dialog-cancel", KShortcut(), "data_cancel_row_changes");
+    d->action_data_cancel_row_changes->setToolTip(
         i18n("Cancel changes made to the current record"));
-    d->action_data_cancel_record_changes->setWhatsThis(
+    d->action_data_cancel_row_changes->setWhatsThis(
         i18n("Cancels changes made to the current record."));
-//temp. disable because of problems with volatile actions setActionVolatile( d->action_data_cancel_record_changes, true );
+//temp. disable because of problems with volatile actions setActionVolatile( d->action_data_cancel_row_changes, true );
 
     d->action_data_execute = createSharedAction(
                                  i18n("&Execute"), "media-playback-start", KShortcut(), "data_execute");
@@ -1209,13 +1209,13 @@ void KexiMainWindow::setupActions()
     acat->addWindowAction("data_filter",
                           KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
-    acat->addWindowAction("data_save_record",
+    acat->addWindowAction("data_save_row",
                           KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
-    acat->addWindowAction("data_cancel_record_changes",
+    acat->addWindowAction("data_cancel_row_changes",
                           KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
-    acat->addWindowAction("delete_table_record",
+    acat->addWindowAction("delete_table_row",
                           KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
     //! @todo support this in KexiPart::FormObjectType as well
@@ -1244,7 +1244,7 @@ void KexiMainWindow::setupActions()
     acat->addAction("edit_delete", Kexi::GlobalActionCategory | Kexi::PartItemActionCategory | Kexi::WindowActionCategory,
                     KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
-    acat->addAction("edit_delete_record", Kexi::GlobalActionCategory | Kexi::WindowActionCategory,
+    acat->addAction("edit_delete_row", Kexi::GlobalActionCategory | Kexi::WindowActionCategory,
                     KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
     acat->addAction("edit_edititem", Kexi::PartItemActionCategory | Kexi::WindowActionCategory,
@@ -5113,7 +5113,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
         // accept record changes
         QWidget *prevFocusWidget = focusWidget();
         window->setFocus();
-        d->action_data_save_record->activate(QAction::Trigger);
+        d->action_data_save_row->activate(QAction::Trigger);
         if (prevFocusWidget)
             prevFocusWidget->setFocus();
 
