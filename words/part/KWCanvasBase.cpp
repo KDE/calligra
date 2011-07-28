@@ -3,6 +3,7 @@
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Marijn Kruisselbrink <mkruisselbrink@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -335,8 +336,12 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
         }
         else {
 
+#if 0
+    // at the moment we're always caching at the actual zoomlevel anyway, but if we want to
+    // re-enable this distinction, the massive code duplication between these two code paths
+    // should first be removed
             if (viewConverter()->zoom() <= m_maxZoom) { // we cache at the actual zoom level
-
+#endif
                 QList<KWViewMode::ViewMap> map =
                         m_viewMode->mapExposedRects(paintRect.translated(m_documentOffset),
                                                     viewConverter());
@@ -434,9 +439,23 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 
                             if (rc.intersects(clipRectOnPage.toRect())) {
                                 paintRegion += rc;
-                                QPainter gc(pageCache->cache);
-                                gc.eraseRect(rc);
-                                gc.end();
+                                int tilex = 0, tiley = 0;
+                                for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                                    int dx = pageCache->cache[i].width();
+                                    for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                                        QImage& img = pageCache->cache[i];
+                                        QRect tile(tilex, tiley, img.width(), img.height());
+                                        QRect toClear = tile.intersected(rc);
+                                        if (!toClear.isEmpty()) {
+                                            QPainter gc(&img);
+                                            gc.eraseRect(toClear.translated(-tilex, -tiley));
+                                            gc.end();
+                                        }
+                                        tiley += img.height();
+                                    }
+                                    tilex += dx;
+                                    tiley = 0;
+                                }
                             }
                             else {
                                 remainingUnExposed << rc;
@@ -457,24 +476,40 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             tilePainter.translate(-r.left(), -pageTopView - r.top());
                             shapeManager()->paint(tilePainter, *viewConverter(), false);
 
-                            QPainter imagePainter(pageCache->cache);
-                            imagePainter.drawImage(r.topLeft(), img);
+                            int tilex = 0, tiley = 0;
+                            for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                                int dx = pageCache->cache[i].width();
+                                for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                                    QImage& tileImg = pageCache->cache[i];
+                                    QRect tile(tilex, tiley, tileImg.width(), tileImg.height());
+                                    QRect toPaint = tile.intersected(r);
+                                    if (!toPaint.isEmpty()) {
+                                        QPainter imagePainter(&tileImg);
+                                        imagePainter.drawImage(r.topLeft() - QPoint(tilex, tiley), img);
+                                    }
+                                    tiley += tileImg.height();
+                                }
+                                tilex += dx;
+                                tiley = 0;
+                            }
                         }
                     }
                     // paint from the cached page image on the original painter
 
-                    QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
-                                      pageRectView.y() + clipRectOnPage.y(),
-                                      clipRectOnPage.width(),
-                                      clipRectOnPage.height());
-
-                    //painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
-                    const QImage & cacheImage = *pageCache->cache;
-                    if (cacheImage.height() > 2000 || cacheImage.width() > 2000) {
-                        painter.drawImage(dst, cacheImage.copy(clipRectOnPage.toRect()));
-                    }
-                    else {
-                        painter.drawImage(dst, cacheImage, clipRectOnPage);
+                    int tilex = 0, tiley = 0;
+                    for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                        int dx = pageCache->cache[i].width();
+                        for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                            const QImage& cacheImage = pageCache->cache[i];
+                            QRectF tile(tilex, tiley, cacheImage.width(), cacheImage.height());
+                            QRectF toPaint = tile.intersected(clipRectOnPage);
+                            QRectF dst = toPaint.translated(pageRectView.topLeft());
+                            QRectF src = toPaint.translated(-tilex, -tiley);
+                            painter.drawImage(dst, cacheImage, src);
+                            tiley += cacheImage.height();
+                        }
+                        tilex += dx;
+                        tiley = 0;
                     }
 
                     // put the cache back
@@ -494,6 +529,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                         pageContentArea = contentArea;
                     }
                 }
+#if 0
             }
             else { // we cache at 100%, but paint at the actual zoom level
 
@@ -648,6 +684,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     }
                 }
             }
+#endif
         }
     } else {
         // TODO paint the main-text-flake directly

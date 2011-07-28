@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Marijn Kruisselbrink <mkruisselbrink@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,13 +39,15 @@ public:
 
     /// create a pagecache object with the existing
     /// QImage.
-    KWPageCache(KWPageCacheManager *manager, QImage *img);
+    //KWPageCache(KWPageCacheManager *manager, QImage *img);
     /// create a new pagecache object with a new QImage
     KWPageCache(KWPageCacheManager *manager, int w, int h);
     ~KWPageCache();
 
     KWPageCacheManager* m_manager;
-    QImage *cache;
+    QList<QImage> cache;
+    int m_tilesx, m_tilesy;
+    QSize m_size;
     // List of logical exposed rects in view coordinates
     // These are the rects that are queued for updating, not
     // the rects that have already been painted.
@@ -71,7 +74,6 @@ public:
 
 private:
     QCache<KWPage, KWPageCache> m_cache;
-    QQueue<QImage*> m_imageQueue;
     friend class KWPageCache;
 };
 
