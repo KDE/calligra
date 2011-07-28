@@ -251,6 +251,7 @@ typedef enum
     sprmCDttmRMarkDel = 0x6864,
     sprmCBrc = 0x6865,
     sprmCCv = 0x6870,
+    sprmCCvUl = 0x6877,
     sprmCPicLocation = 0x6A03,
     sprmCSymbol = 0x6A09,
     sprmPicBrcTop = 0x6C02,
@@ -1437,6 +1438,20 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             k=readU8(ptr);
             ptr+=sizeof(U8);
             cv=(k<<24)|(r<<16)|(g<<8)|(b);
+            break;
+        }
+        case SPRM::sprmCCvUl: {
+            U8 r,g,b,k;
+
+            r=readU8(ptr);
+            ptr+=sizeof(U8);
+            g=readU8(ptr);
+            ptr+=sizeof(U8);
+            b=readU8(ptr);
+            ptr+=sizeof(U8);
+            k=readU8(ptr);
+            ptr+=sizeof(U8);
+            cvUl=(k<<24)|(r<<16)|(g<<8)|(b);
             break;
         }
         case SPRM::sprmCHps:

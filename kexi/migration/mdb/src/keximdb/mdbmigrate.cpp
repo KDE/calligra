@@ -281,7 +281,7 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
 
     //! Copy each row into vals
     mdb_rewind_table(tableDef);
-    kDebug() << "Fetching " << tableDef->num_rows << " rows";
+    kDebug() << "Fetching " << tableDef->num_rows << " records";
 
 #ifdef KEXI_MIGRATION_MAX_ROWS_TO_IMPORT
     qulonglong rows = 0;

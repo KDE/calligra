@@ -588,7 +588,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //QTextBlockFormat format = block.blockFormat();
 
     int dropCapsAffectsNMoreLines = 0;
-    qreal dropCapsPositionAdjust;
+    qreal dropCapsPositionAdjust = 0.0;
 
     KoText::Direction dir = format.textProgressionDirection();
     if (dir == KoText::InheritDirection)
@@ -688,10 +688,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // we'll do it all afresh now.
     QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
     for (QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
-            iter != formatRanges.end();
-        ++iter) {
+            iter != formatRanges.end(); ) {
         if (iter->format.boolProperty(DropCapsAdditionalFormattingId)) {
-            formatRanges.erase(iter);
+            iter = formatRanges.erase(iter);
+        } else {
+            ++iter;
         }
     }
     if (formatRanges.count() != layout->additionalFormats().count())
@@ -699,6 +700,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     bool dropCaps = format.dropCaps();
     int dropCapsLength = format.dropCapsLength();
     int dropCapsLines = format.dropCapsLines();
+
     if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1
             && dropCapsAffectsNMoreLines == 0 // first line of this para is not affected by a previous drop-cap
             && block.length() > 1) {
@@ -1015,7 +1017,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         // line fitted so try and do the next one
         line = layout->createLine();
-        cursor->lineTextStart = line.isValid() ? line.textStart() : 0;
+        if (!line.isValid()) {
+            break;
+        }
+        cursor->lineTextStart = line.textStart();
         if (softBreak) {
             return false;
         }
@@ -1070,7 +1075,7 @@ qreal KoTextLayoutArea::x() const
 qreal KoTextLayoutArea::width() const
 {
     if (m_dropCapsNChars > 0) {
-        return m_dropCapsWidth + 10;
+        return m_dropCapsWidth;
     }
     qreal width = m_width;
     if (m_maximumAllowedWidth > 0) {
@@ -1214,7 +1219,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (lineSpacing == 0.0) { // unset
             int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
             if (percent != 0) {
+                qreal prevHeight = height;
                 height *= percent / 100.0;
+                lineAdjust = height - prevHeight;
             } else
                 height *= 1.2; // default
         }
@@ -1233,6 +1240,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
     if (lineAdjust) {
         line.setPosition(QPointF(line.x(), line.y() + lineAdjust));
+        m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
     }
 
     return height;

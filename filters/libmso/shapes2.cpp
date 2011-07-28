@@ -734,7 +734,15 @@ void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o,
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 270<< 0);
+
+    // custom way for processing modifieres as this shape
+    // return the AdjustValue, AdjustValue2 16-bit shifted
+    const AdjustValue* val1 = get<AdjustValue>(o);
+    const Adjust2Value* val2 = get<Adjust2Value>(o);
+    QString modifiers = QString::number(val1 ? val1->adjustvalue >> 16 : 270);
+    modifiers += QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0);
+    out.xml.addAttribute("draw:modifiers", modifiers);
+
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "W 0 0 21600 21600 ?f3 ?f1 ?f7 ?f5 S L 10800 10800 Z N W 0 0 21600 21600 ?f3 ?f1 ?f7 ?f5 F N");
     out.xml.addAttribute("draw:type", "mso-spt100");

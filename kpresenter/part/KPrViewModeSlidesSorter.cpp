@@ -22,7 +22,6 @@
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrFactory.h"
 #include "KPrSlidesManagerView.h"
-#include "KPrSelectionManager.h"
 #include "KPrCustomSlideShowsModel.h"
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
@@ -52,6 +51,7 @@
 #include <KoCanvasController.h>
 #include <KoCopyController.h>
 #include <KoCutController.h>
+#include <KoSelectionManager.h>
 
 //KDE Headers
 #include <klocale.h>
@@ -156,6 +156,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_buttonAddSlideToCurrentShow, SIGNAL(clicked()), this, SLOT(addSlideToCustomShow()));
     connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlidesFromCustomShow()));
     connect(m_customSlideShowModel, SIGNAL(customSlideShowsChanged()), this, SLOT(updateCustomSlideShowsList()));
+    connect(m_customSlideShowModel, SIGNAL(selectPages(int,int)), this, SLOT(selectCustomShowPages(int, int)));
 
     //setup signals for manage edit actions
     connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
@@ -170,8 +171,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 
     //install selection manager for Slides Sorter View and Custom Shows View
-    new KPrSelectionManager(m_slidesSorterView);
-    new KPrSelectionManager(m_customSlideShowView);
+    new KoSelectionManager(m_slidesSorterView);
+    new KoSelectionManager(m_customSlideShowView);
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
@@ -258,8 +259,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     connect(m_slidesSorterView,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
-    connect(m_view->kopaDocument(),SIGNAL(pageAdded(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
-    connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
 
     //change zoom saving slot
     connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
@@ -303,12 +302,6 @@ void KPrViewModeSlidesSorter::deactivate()
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
     disableEditActions();
-}
-
-void KPrViewModeSlidesSorter::updateSlidesSorterDocumentModel()
-{
-    m_slidesSorterModel->update();
-    updateToActivePageIndex();
 }
 
 void KPrViewModeSlidesSorter::updateActivePage( KoPAPageBase *page )
@@ -370,6 +363,22 @@ void KPrViewModeSlidesSorter::selectSlides(const QList<KoPAPageBase *> &slides)
         QModelIndex index = m_slidesSorterModel->index(row, 0, QModelIndex());
         if (index.isValid()) {
             m_slidesSorterView->selectionModel()->select(index, QItemSelectionModel::Select);
+        }
+    }
+}
+
+void KPrViewModeSlidesSorter::selectCustomShowPages(int start, int count)
+{
+    if ((start < 0) || (count < 1)) {
+        return;
+    }
+
+    m_customSlideShowView->clearSelection();
+
+    for (int i = start; i < (start + count); i++) {
+        QModelIndex index = m_customSlideShowModel->index(i, 0, QModelIndex());
+        if (index.isValid()) {
+            m_customSlideShowView->selectionModel()->select(index, QItemSelectionModel::Select);
         }
     }
 }
