@@ -2859,6 +2859,12 @@ struct CHP : public Shared {
     U32 cv;
 
     /**
+     * A COLORREF value that specifies the color of the text underline.  The
+     * default underline color is cvAuto.
+     */
+    U32 cvUl;
+
+    /**
      * LID language identification code (no longer stored here, see rglid
      * below):
      * 0x0400 No Proofing
