@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2011 Aakriti Gupta <aakriti.a.gupta@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #include "PresentationViewPortShape.h"
 #include <KoPathPoint.h>
 #include <qpainter.h>
@@ -114,30 +133,18 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
     createListOfPoints(size);
   
     QPainterPath viewPortPath;
-    //m_path.clear();
- 
+
     //creating the path
     for(int row = 0; row < m_noOfPoints; row++){
       if(row == 0 || row == 4){
       viewPortPath.moveTo(m_pointsOfShape.at(row));
-      
- /*     m_path.append("M");
-      m_path.append(QString("%1").arg(m_pointsOfShape.at(row).x()));
-      m_path.append(" ");
-      m_path.append(QString("%1").arg(m_pointsOfShape.at(row).y()));*/
        }
       for(int col = row + 1; col < m_noOfPoints ; col++){
 	if(m_adjMatrix.at(row).at(col)){
 	  viewPortPath.lineTo(m_pointsOfShape.at(col));
-	
-/*	  m_path.append("L");
-	  m_path.append(QString("%1").arg(m_pointsOfShape.at(col).x()));
-	  m_path.append(" ");
-	  m_path.append(QString("%1").arg(m_pointsOfShape.at(col).y()));*/
 	}
       }
     }
-//    m_path.append("Z");
 
     return viewPortPath;
 }
