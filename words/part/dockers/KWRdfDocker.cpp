@@ -69,7 +69,7 @@ KWRdfDocker::KWRdfDocker()
     connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 
-    widgetDocker.autoRefresh->setCheckState( Qt::Checked );
+    widgetDocker.autoRefresh->setCheckState( Qt::Unchecked );
 }
 
 KWRdfDocker::~KWRdfDocker()
@@ -189,10 +189,11 @@ void KWRdfDocker::updateData()
 
 void KWRdfDocker::setAutoUpdate(int state)
 {
+    // XXX: autoupdate should probably not use a timer, but the text editor plugin
+    //      functionality, like the statistics docker.
     if (m_canvas) {
         //kDebug(30015) << "m_textDocument:" << m_textDocument;
         if (state == Qt::Checked) {
-            KoDocumentRdf::ensureTextTool();
             m_autoUpdate = true;
             m_timer->start();
         } else {
