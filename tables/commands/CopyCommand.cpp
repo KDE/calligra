@@ -74,7 +74,7 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
 
             // TODO Stefan: Inefficient, use cluster functionality
             // Save the row formats if there are any
-            const RowFormat* format;
+            //const RowFormat* format;
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 if (!sheet->rowFormats()->isDefaultRow(row)) {
                     QDomElement e = RowFormat(sheet->rowFormats(), row).save(xmlDoc, top - 1);

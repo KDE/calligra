@@ -24,7 +24,6 @@
 #include <KoCanvasObserverBase.h>
 
 class KoDocumentRdf;
-class KWView;
 class KoTextEditor;
 
 /**

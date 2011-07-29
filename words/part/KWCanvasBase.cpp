@@ -379,7 +379,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                                                     viewConverter()->documentToViewY(vm.page.height())));
                     }
 
-                    Q_ASSERT(pageCache->cache);
+                    Q_ASSERT(!pageCache->cache.isEmpty());
 
                     // vm.page is in points, not view units
                     QSizeF pageSizeDocument(vm.page.width(), vm.page.height());

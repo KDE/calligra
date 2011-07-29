@@ -1,5 +1,6 @@
-    /* This file is part of the KDE project
+/* This file is part of the KDE project
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +30,6 @@
 
 #include <rdf/KoDocumentRdf.h>
 
-#include "KWView.h"
 #include "KWCanvas.h"
 
 #include "KoRdfSemanticTreeWidgetItem.h"

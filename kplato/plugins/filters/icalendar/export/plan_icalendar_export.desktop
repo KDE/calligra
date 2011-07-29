@@ -6,6 +6,7 @@ X-KDE-Import=application/x-vnd.kde.plan
 X-KDE-Weight=1
 ImportDescription=Plan
 Name=Plan iCalendar Export Filter
+Name[bg]=Филтър за изнасяне от Plan в iCalendar
 Name[el]=Φίλτρο εξαγωγής Plan iCalendar
 Name[es]=Filtro de Plan de exportación a iCalendar
 Name[et]=Plani iCalendari ekspordifilter
