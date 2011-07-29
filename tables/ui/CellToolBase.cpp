@@ -2987,13 +2987,21 @@ bool CellToolBase::paste()
     }
 
     if (!editor()) {
-        //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
-        PasteCommand *const command = new PasteCommand();
-        command->setSheet(selection()->activeSheet());
-        command->add(*selection());
-        command->setMimeData(QApplication::clipboard()->mimeData());
-        command->setPasteFC(true);
-        command->execute(canvas());
+        const QMimeData* mimedata = QApplication::clipboard()->mimeData();
+        if (!mimedata->hasFormat("application/x-kspread-snippet") &&
+            !mimedata->hasHtml() && mimedata->hasText() &&
+            mimeData->text().split('\n').count() >= 2 )
+        {
+            insertFromClipboard();
+       } else {
+            //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
+            PasteCommand *const command = new PasteCommand();
+            command->setSheet(selection()->activeSheet());
+            command->add(*selection());
+            command->setMimeData(mimedata);
+            command->setPasteFC(true);
+            command->execute(canvas());
+        }
         d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
     } else {
         editor()->paste();
