@@ -21,12 +21,14 @@
 #include <KoPathPoint.h>
 #include <qpainter.h>
 #include <KoShapeBackground.h>
+#include <KoXmlReader.h>
 
 PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8)
 {
     setShapeId(PresentationViewPortShapeId);
     m_adjMatrix = createAdjMatrix();
     setName("ViewPort");//TODO remove this?
+    initializeAnimationProperties();
 }
 
 
@@ -85,88 +87,46 @@ void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
 
 void PresentationViewPortShape::initializeAnimationProperties()
 {
-    m_attributes.append("title");
-    m_attributes.append("refid");
-    m_attributes.append("transition-profile");
-    m_attributes.append("hide");
-    m_attributes.append("clip");
-    m_attributes.append("timeout-enable");
-    m_attributes.append("sequence");
-    m_attributes.append("transition-zoom-percent");
-    m_attributes.append("timeout-ms");
-    m_attributes.append("transition-duration-ms");
-        
-    setDefaultValues();
+    //Initializing the map with default values of all attributes
+    m_animationAttributes.insert("title", "No title");
+    m_animationAttributes.insert("refid", "null");
+    m_animationAttributes.insert("transition-profile", "linear");
+    m_animationAttributes.insert("hide", "true");
+    m_animationAttributes.insert("clip", "true");
+    m_animationAttributes.insert("timeout-enable", "false");
+    m_animationAttributes.insert("sequence", QString("%1").arg(0));
+    m_animationAttributes.insert("transition-zoom-percent", QString("%1").arg(1));
+    m_animationAttributes.insert("transition-duration-ms", QString("%1").arg(5000));
+    m_animationAttributes.insert("timeout-ms", QString("%1").arg(1000));
 }
 
-static void printIndentation(QTextStream *stream, unsigned int indent)
-//void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int indent)
+static void printIndentation(QString& stream, unsigned int indent)
 {
     static const QString INDENT("  ");
-    for (unsigned int i = 0; i < indent;++i)
-    *stream << INDENT;
+    for (unsigned int i = 0; i < indent;++i){
+        stream.append(INDENT);
+    }
 }
 
-void PresentationViewPortShape::setDefaultValues()
+QString PresentationViewPortShape::toString()
 {
-    m_title = "No Title";
-    m_refId = "No Ref ID"; 
-    m_transitionProfile = "linear";
-    m_hide = true;
-    m_clip = true;
-    m_timeoutEnable = false;
-
-    m_sequence = 0;
-    m_transitionZoomPercent = 1;
-    m_transitionDurationMs = 1000; 
-    m_timeoutMs = 5000;    
-}
-
-void PresentationViewPortShape::writeToStream(QTextStream* stream)
-{
-        unsigned indent = 1;
-    //QTextStream * stream;
-    
+    unsigned indent = 1;
+    QString stream;
+    QString ns("calligra:");
+        
     printIndentation(stream, indent++);
-    *stream << "<calligra:frame" << endl;
-       
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "title=\"" << title() << "\"" << endl;
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "refid=\"" << refId() << "\"" << endl;
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "transition-profile=\"" << transitionProfile() << "\"" << endl;
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "hide=\"";
-    if(isHide())
-      *stream << "true";
-    else
-     *stream << "false";
-    *stream << "\"" << endl;
-     
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "clip=\"";
-    if(isClip())
-      *stream << "true";
-    else
-      *stream << "false";
-    *stream << "\"" << endl;
+    stream.append("<calligra:frame");
+    stream.append("\n");
     
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "timeout-enable=\"" << isEnableTimeout() << "\"" << endl;
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "sequence=\"" << sequence() << "\"" << endl;
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "transition-zoom-percent=\"" << zoomPercent() << "\"" << endl;
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "timeout-ms=\"" << timeout() << "\"" << endl;
-    printIndentation(stream, indent);
-    *stream << "calligra:" << "transition-duration-ms=\"" << transitionDuration() << "\"" << endl;
-              
-    //*stream << "/>" << endl; because transform needs to be added
-
+    foreach(QString key, m_animationAttributes.keys()){
+      printIndentation(stream, indent);
+      stream.append(ns).append(key).append("=\"").append(m_animationAttributes.value(key)).append("\"");
+      stream.append("\n");
+    }
+    stream.append("/>\n");
+    
+    return stream;
 }
-
 QVector< QVector < int > > PresentationViewPortShape::createAdjMatrix()
 {
   m_noOfPoints = 8;
@@ -385,11 +345,6 @@ int PresentationViewPortShape::transitionDuration() const
     return m_transitionDurationMs;
 }
           
-QList< QString > PresentationViewPortShape::attributes() const
-{
-    return m_attributes;
-}
-
 //TODO: What will be done in this?
 // Neccessary to write to and from an ODF
 bool PresentationViewPortShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)

@@ -262,8 +262,8 @@ void SvgWriter_generic::saveViewPort(KoShape* shape)
     *m_body << " height=\"" << size.height() << "pt\"";
 
     *m_body << "/>" << endl;
-    saveAppData(shape);//TODO Make the PVPShape save all the animation data too instead of adding it as custom data.
-                       //IMPORTANT   
+    
+    m_appData.append(viewport->toString()); //Saving animation data
 }
 
 void SvgWriter_generic::saveShape(KoShape * shape)

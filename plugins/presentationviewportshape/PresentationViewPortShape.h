@@ -62,11 +62,12 @@ public:
     /**
      * Sets the default values for all frame attrbutes
      */
-    void setDefaultValues();
+    //void setDefaultValues();
     /**
      * @param stream QTextStream to which all frame data is written in specific format.
      */
-    void writeToStream(QTextStream * stream);
+    //QTextStream* writeToStream();
+    QString toString();
     
     void setTitle(const QString& title);
     void setRefId(const QString& refId); 
@@ -95,10 +96,6 @@ public:
     int transitionDuration() const;
      
      
-    /**
-     * @return m_attributes 
-     */
-    QList<QString> attributes() const; 
     
 private:     
     void setListOfPoints(QList<QPointF> points);
@@ -128,10 +125,7 @@ private:
      int m_transitionDurationMs;
      int m_timeoutMs;
         
-     /**
-      * @brief m_attributes List of all attributes a frame can have
-      */
-     QList<QString> m_attributes;
+     QMap<QString, QString> m_animationAttributes;
   
 };
 #endif
