@@ -73,9 +73,9 @@ void KWInsertInlineNoteDialog::doIt()
 
     //note->setText(...);
 
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (m_view->canvasBase()->toolProxy()->selection());
-    Q_ASSERT(handler);
-    QTextCursor *cursor = const_cast<QTextCursor*>(handler->cursor());
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_view->canvasBase());
+    Q_ASSERT(editor);
+    QTextCursor *cursor = const_cast<QTextCursor*>(editor->cursor());
 
     /*
     Q_ASSERT(m_document->mainFrameSet());

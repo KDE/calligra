@@ -83,8 +83,9 @@ void KWRdfDockerTree::dragMoveEvent(QDragMoveEvent *e)
 
 KoTextEditor* KWRdfDockerTree::editor()
 {
-    if (m_canvas)
-        return qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
+    if (m_canvas) {
+        return KoTextEditor::getTextEditorFromCanvas(m_canvas);
+    }
     return 0;
 }
 

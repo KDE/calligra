@@ -159,19 +159,19 @@ void KWRdfDocker::updateData()
 
     kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
 
-    // TODO try to get rid of 'handler' here by remembering the position in the resourceChanged()
-    KoTextEditor *handler = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
+    // TODO try to get rid of 'editor' here by remembering the position in the resourceChanged()
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
     KoDocumentRdf *rdf = m_document->documentRdf();
-    if (handler && rdf)
+    if (editor && rdf)
     {
         //kDebug(30015) << "m_lastCursorPosition:" << m_lastCursorPosition;
         //kDebug(30015) << " currentpos:" << handler->position();
 
         // If the cursor hasn't moved, there is no work to do.
-        if (m_lastCursorPosition == handler->position())
+        if (m_lastCursorPosition == editor->position())
             return;
-        m_lastCursorPosition = handler->position();
-        Soprano::Model* model = rdf->findStatements(handler);
+        m_lastCursorPosition = editor->position();
+        Soprano::Model* model = rdf->findStatements(editor);
         //kDebug(30015) << "----- current Rdf ----- sz:" << model->statementCount();
 
         //
