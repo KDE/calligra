@@ -56,6 +56,7 @@ Name[x-test]=xxText Document...xx
 Name[zh_CN]=文本文档...
 Name[zh_TW]=文字文件...
 Comment=New Words document:
+Comment[bg]=Нов документ на Words:
 Comment[cs]=Nový dokument aplikace Words:
 Comment[et]=Uus Wordsi dokument:
 Comment[it]=Nuovo documento di Words:

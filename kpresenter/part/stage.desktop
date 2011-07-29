@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Stage
+Name[bg]=Calligra Stage
 Name[el]=Calligra Stage
 Name[et]=Calligra Stage
 Name[it]=Stage di Calligra
@@ -57,6 +58,7 @@ GenericName[x-test]=xxPresentationxx
 GenericName[zh_CN]=幻灯片演示
 GenericName[zh_TW]=簡報
 Comment=Write presentation documents
+Comment[bg]=Създаване на документи за презентации
 Comment[ca]=Escriu documents de presentació
 Comment[ca@valencia]=Escriu documents de presentació
 Comment[da]=Skriv præsentationsdokumenter

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Words WML Export Filter
+Name[bg]=Филтър за изнасяне от Words в WML
 Name[cs]=Exportní filtr formátu WML pro Words
 Name[es]=Filtro de Words de exportación a WML
 Name[et]=Wordsi WML-i ekspordifilter

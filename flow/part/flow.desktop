@@ -8,6 +8,7 @@ Name[uk]=Calligra Flow
 Name[x-test]=xxCalligra Flowxx
 Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
+GenericName[bg]=Редактиране на блоксхеми и диаграми
 GenericName[ca]=Editor de diagrames de fluxos
 GenericName[ca@valencia]=Editor de diagrames de fluxos
 GenericName[cs]=Editor nákresů a diagramů
