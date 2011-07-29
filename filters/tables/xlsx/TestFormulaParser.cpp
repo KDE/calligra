@@ -54,7 +54,7 @@ void TestFormulaParser::testConvertFormula_data()
         << "=IF(A1=A2; 2; \" IF(1,2) \")";
     QTest::newRow("mixing union and intersection")
         << "AREAS((A1:C5 B2:B3,C2:C3))"
-        << "=AREAS((A1:C5!B2:B2~C2:C3))";
+        << "=AREAS((A1:C5!B2:B3~C2:C3))";
 }
 
 void TestFormulaParser::testConvertFormula()
