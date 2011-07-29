@@ -78,13 +78,10 @@ protected:
      * To save application specific data in the correct format
      */
     virtual void saveAppData(KoShape *shape) =0;
-    
-    
+        
     bool m_hasAppData;
     QString m_appData;
-    QString m_appDataId;
    
-    QMap<const KoShape*, QString> m_shapeIds;
      
 private:
       
@@ -136,7 +133,7 @@ private:
     QSizeF m_pageSize;
     bool m_writeInlineImages;
     QString m_filename;
-
+    QMap<const KoShape*, QString> m_shapeIds;
 };
 
 #endif /*SVGWRITER_GENERIC_H */

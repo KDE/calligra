@@ -51,18 +51,15 @@ public:
     /**
      * @param shape saves app data conatined in this to a stream
      */
-    void saveAppData(KoShape *shape);
+   void saveAppData(KoShape *shape);
     
 private:
-    void saveAnimationTags(PresentationViewPortShape* shape);
+  
     /**
      * Saves javascript to the SVG doc
      */
     void saveScript();
-    //Temporary function, since UI still not ready to test adding of frame data
-    void forTesting(KoShape *shape);
-
-    QTextStream* m_frames;
+  
     QString m_script;
 };  
 #endif /*SVG_dWRITER_STAGE_H*/

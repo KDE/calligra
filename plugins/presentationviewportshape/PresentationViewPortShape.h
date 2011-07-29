@@ -52,51 +52,15 @@ public:
     virtual QSizeF size() const;
 
     //Methods for the frame object
-    void initializeAnimationProperties(); //Frame()
+    void initializeAnimationProperties(); 
     /**
      * Parses frame information from a KoXmlElement,
      * And saves it into this frame.
      */
-    void parseAnimationProperties(const KoXmlElement& e); //Frame(e)
+    void parseAnimationProperties(const KoXmlElement& e); 
         
-    /**
-     * Sets the default values for all frame attrbutes
-     */
-    //void setDefaultValues();
-    /**
-     * @param stream QTextStream to which all frame data is written in specific format.
-     */
-    //QTextStream* writeToStream();
     QString toString();
-    
-    void setTitle(const QString& title);
-    void setRefId(const QString& refId); 
-    void setTransitionProfile(const QString& transProfile);
-
-    void setHide(bool condition);
-    void setClip(bool condition);
-    void enableTimeout(bool condition);
-
-    void setSequence(int seq);
-    void setZoomPercent(int zoomPercent);
-    void setTimeout(int timeoutMs);
-    void setTransitionDuration(int timeMs);
-      
-    QString title() const;
-    QString refId() const; 
-    QString transitionProfile() const;
-      
-    bool isHide() const;
-    bool isClip() const;
-    bool isEnableTimeout() const;
-      
-    int sequence() const;
-    int zoomPercent() const;
-    int timeout() const;
-    int transitionDuration() const;
-     
-     
-    
+        
 private:     
     void setListOfPoints(QList<QPointF> points);
 
@@ -111,21 +75,11 @@ private:
      int m_noOfPoints;
      QVector< QVector<int> > m_adjMatrix;
      
+     QString m_ns;
     //Animation properties
-     QString m_title;
-     QString m_refId;
-     QString m_transitionProfile;
-      
-     bool m_hide;
-     bool m_clip;
-     bool m_timeoutEnable;
-
-     int m_sequence;
-     int m_transitionZoomPercent;
-     int m_transitionDurationMs;
-     int m_timeoutMs;
-        
      QMap<QString, QString> m_animationAttributes;
   
 };
 #endif
+
+    
