@@ -154,10 +154,10 @@ void KWRdfDocker::updateDataForced()
 
 void KWRdfDocker::updateData()
 {
-    kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
     if (!m_document || !m_canvas || !isVisible())
         return;
-    kDebug(30015) << "updating docker...";
+
+    kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
 
     // TODO try to get rid of 'handler' here by remembering the position in the resourceChanged()
     KoTextEditor *handler = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
