@@ -5,9 +5,6 @@ set(LIBSVG_SOURCES
   ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
   ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgUtil.cpp
   )
-#set(KARBON_SOURCES
-  #${CMAKE_SOURCE_DIR}/filters/karbon/svg/SvgUtil.cpp
-#)
 
 set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/ellipse/EllipseShape.cpp
@@ -16,20 +13,14 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp
 )
 
 set(svgsinglecanvasexport_PART_SRCS 
     ${CMAKE_SOURCE_DIR}/karbon/ui/KarbonPart.h
-    SvgAnimationData.cpp
-    Frame.cpp 
     ${LIBSVG_SOURCES}
     ${SHAPES_SOURCES}
-    #${KARBON_SOURCES}
 )
-
-#kde4_add_ui_files(rectpathshape_PART_SRCS
- #   ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/RectangleShapeConfigWidget.ui
-  #  )
 
 kde4_add_plugin(svgsinglecanvasexport ${svgsinglecanvasexport_PART_SRCS})
 
