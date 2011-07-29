@@ -375,7 +375,7 @@ void KPrViewModeSlidesSorter::selectCustomShowPages(int start, int count)
 
     m_customSlideShowView->clearSelection();
 
-    for (int i = start; i < (start + count); i++) {
+    for (int i = start; i < (start + count); ++i) {
         QModelIndex index = m_customSlideShowModel->index(i, 0, QModelIndex());
         if (index.isValid()) {
             m_customSlideShowView->selectionModel()->select(index, QItemSelectionModel::Select);

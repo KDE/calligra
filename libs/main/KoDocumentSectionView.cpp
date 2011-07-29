@@ -213,13 +213,9 @@ void KoDocumentSectionView::startDrag(Qt::DropActions supportedActions)
             if (!data) {
                 return;
             }
-
             QDrag *drag = new QDrag(this);
-
-                drag->setPixmap(createDragPixmap());
-
+            drag->setPixmap(createDragPixmap());
             drag->setMimeData(data);
-
             //m_dragSource = this;
             drag->exec(supportedActions);
         }
@@ -248,8 +244,7 @@ QPixmap KoDocumentSectionView::createDragPixmap() const
         xCount = 3;
         size = KIconLoader::SizeHuge;
     }
-
-    if (itemCount < xCount) {
+    else if (itemCount < xCount) {
         xCount = itemCount;
     }
 

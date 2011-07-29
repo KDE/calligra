@@ -716,10 +716,9 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
        drag.addToClipboard();
        //Paste Pages
        const QMimeData * data = QApplication::clipboard()->mimeData();
-       KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+       static const KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
 
-       for (unsigned int i = 0; i < sizeof(documentTypes) / sizeof(KoOdf::DocumentType); ++i)
-       {
+       for (unsigned int i = 0; i < sizeof(documentTypes) / sizeof(KoOdf::DocumentType); ++i) {
            if (data->hasFormat( KoOdf::mimeType(documentTypes[i]))) {
                KoPAPastePage paste(m_document, pageAfter);
                paste.paste(documentTypes[i], data);
