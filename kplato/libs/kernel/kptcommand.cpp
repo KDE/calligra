@@ -3434,4 +3434,75 @@ void ModifyNegativeMonetarySignPositionCmd ::unexecute()
     m_locale->setNegativeMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
 }
 
+AddExternalAppointmentCmd::AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const QString& name )
+    : NamedCommand( name ),
+    m_resource( resource ),
+    m_pid( pid ),
+    m_pname( pname ),
+    m_start( start ),
+    m_end( end ),
+    m_load( load )
+{
+}
+
+void AddExternalAppointmentCmd::execute()
+{
+    m_resource->addExternalAppointment( m_pid, m_pname, m_start, m_end, m_load );
+}
+
+void AddExternalAppointmentCmd::unexecute()
+{
+    m_resource->subtractExternalAppointment( m_pid, m_start, m_end, m_load );
+}
+
+ClearExternalAppointmentCmd::ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &name )
+    : NamedCommand( name ),
+    m_resource( resource ),
+    m_pid( pid ),
+    m_appointments( new Appointment() )
+{
+    m_appointments->setIntervals( resource->externalAppointments( pid ) );
+    m_mine = true;
+}
+
+ClearExternalAppointmentCmd::~ClearExternalAppointmentCmd()
+{
+    if ( m_mine ) {
+        delete m_appointments;
+    }
+}
+
+void ClearExternalAppointmentCmd::execute()
+{
+    m_resource->clearExternalAppointments( m_pid );
+    m_mine = true;
+}
+
+void ClearExternalAppointmentCmd::unexecute()
+{
+    m_resource->addExternalAppointment( m_pid, m_appointments );
+    m_mine = false;
+}
+
+ClearAllExternalAppointmentsCmd::ClearAllExternalAppointmentsCmd( Project *project, const QString &name )
+    : NamedCommand( name ),
+    m_project( project )
+{
+    foreach ( Resource *r, project->resourceList() ) {
+        foreach ( const QString &id, r->externalProjects().keys() ) {
+            m_cmd.addCommand( new ClearExternalAppointmentCmd( r, id ) );
+        }
+    }
+}
+
+void ClearAllExternalAppointmentsCmd::execute()
+{
+    m_cmd.redo();
+}
+
+void ClearAllExternalAppointmentsCmd::unexecute()
+{
+    m_cmd.undo();
+}
+
 }  //KPlato namespace

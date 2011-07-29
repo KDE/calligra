@@ -456,6 +456,8 @@ public:
     void addExternalAppointment( const QString &id, Appointment *a );
 
     void addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load = 100 );
+    void subtractExternalAppointment( const QString &id, const DateTime &from, const DateTime &end, double load );
+
     void clearExternalAppointments();
     void clearExternalAppointments( const QString id );
     AppointmentIntervalList externalAppointments( const QString &id );

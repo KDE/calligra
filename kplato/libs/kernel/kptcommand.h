@@ -1895,6 +1895,49 @@ private:
     int m_oldvalue;
 };
 
+class  KPLATOKERNEL_EXPORT AddExternalAppointmentCmd : public NamedCommand
+{
+public:
+    AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    QString m_pid;
+    QString m_pname;
+    QDateTime m_start;
+    QDateTime m_end;
+    double m_load;
+};
+
+class  KPLATOKERNEL_EXPORT ClearExternalAppointmentCmd : public NamedCommand
+{
+public:
+    ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const QString& name = QString() );
+    ~ClearExternalAppointmentCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    QString m_pid;
+    Appointment *m_appointments;
+    bool m_mine;
+};
+
+class  KPLATOKERNEL_EXPORT ClearAllExternalAppointmentsCmd : public NamedCommand
+{
+public:
+    ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    MacroCommand m_cmd;
+};
+
 }  //KPlato namespace
 
 #endif //COMMAND_H

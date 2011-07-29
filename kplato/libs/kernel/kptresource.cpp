@@ -1341,6 +1341,18 @@ void Resource::addExternalAppointment( const QString &id, const QString &name, c
     }
 }
 
+void Resource::subtractExternalAppointment( const QString &id, const DateTime &start, const DateTime &end, double load )
+{
+    Appointment *a = m_externalAppointments.value( id );
+    if ( a ) {
+        //kDebug()<<m_name<<name<<"new interval:"<<a<<from<<end<<load;
+        Appointment app;
+        app.addInterval( start, end, load );
+        *a -= app;
+        emit externalAppointmentChanged( this, a );
+    }
+}
+
 void Resource::clearExternalAppointments()
 {
     foreach ( const QString &id, m_externalAppointments.keys() ) {

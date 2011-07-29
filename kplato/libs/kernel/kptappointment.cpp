@@ -915,6 +915,11 @@ Appointment Appointment::operator+(const Appointment &app) {
     return a;
 }
 
+Appointment &Appointment::operator-=(const Appointment &app) {
+    m_intervals -= app.m_intervals;
+    return *this;
+}
+
 void Appointment::copy(const Appointment &app) {
     m_resource = 0; //app.resource(); // NOTE: Don't copy, the new appointment
     m_node = 0; //app.node();         // NOTE: doesn't belong to anyone yet.
