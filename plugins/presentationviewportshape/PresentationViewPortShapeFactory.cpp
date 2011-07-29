@@ -34,8 +34,6 @@ PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * par
 {
     setToolTip(i18n("A Presentation View Port"));
     setIcon("rectangle-shape");
-    //setFamily("geometric"); //FIXME Where to put this?
-    //setFamily("defaul");
     setLoadingPriority(1);
 }
 

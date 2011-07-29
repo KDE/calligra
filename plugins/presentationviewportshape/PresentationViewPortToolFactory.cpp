@@ -26,7 +26,6 @@ PresentationViewPortToolFactory::PresentationViewPortToolFactory()
 {
     setToolTip( i18n("Presentation View Port Tool") );
     setToolType( dynamicToolType() );
-    //setIcon ("artistictext-tool");
     setPriority( 1 );
     setActivationShapeId("PresentationViewPortShape");
 }

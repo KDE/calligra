@@ -151,8 +151,7 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
 
 QSizeF PresentationViewPortShape::size() const
 {
- //   return (outline().boundingRect().size());
- return KoShape::size();
+    return KoShape::size();
 }
 
 //TODO: What will be done in this?
