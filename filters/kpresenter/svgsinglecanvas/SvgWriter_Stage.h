@@ -21,15 +21,11 @@
 #define SVG_WRITER_STAGE_H
 
 #include "SvgWriter_generic.h"
-#include <plugins/presentationviewportshape/PresentationViewPortShape.h>
-#include <KoPathShape.h>
 
-class Frame;
 class KoShape;
 class QTextStream;
 class SvgWriter;
 class KoShapeLayer;
-class SvgAnimationData;
 
 class SvgWriter_Stage : public SvgWriter_generic
 {
