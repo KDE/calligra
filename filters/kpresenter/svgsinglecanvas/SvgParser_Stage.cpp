@@ -20,11 +20,7 @@
 #include "SvgParser_Stage.h"
 
 #include <KoShape.h>
-#include <KoShapeGroup.h>
-#include <KoShapeFactoryBase.h>
-#include <KoShapeRegistry.h>
 
-#include "SvgAnimationData.h"
 #include "plugins/presentationviewportshape/PresentationViewPortShape.h"
 
 SvgParser_Stage::SvgParser_Stage(KoResourceManager* documentResourceManager):SvgParser_generic(documentResourceManager)
@@ -39,10 +35,14 @@ SvgParser_Stage::~SvgParser_Stage()
 
 void SvgParser_Stage::parseAppData(const KoXmlElement& e)
 {
-    Frame *frame = new Frame(e);
-    setAppData(frame);
+    foreach(KoShape* shape, m_shapes){
+        if(shape->name() == e.attribute("id")){
+	  PresentationViewPortShape* pvpShape = dynamic_cast<PresentationViewPortShape*>(shape);
+	  pvpShape->parseAnimationProperties(e);
+	}
+      }
 }
-
+/*
 void SvgParser_Stage::setAppData(Frame * frame)
 {
     foreach(KoShape* shape, m_shapes){
@@ -55,4 +55,4 @@ void SvgParser_Stage::setAppData(Frame * frame)
     }
 }
 
-    
+  */  

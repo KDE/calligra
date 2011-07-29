@@ -43,14 +43,5 @@ public:
      * @param e The XMl element with attributes for Frames
      */
     void parseAppData(const KoXmlElement& e);
-        
-private:
-  /**
-     * Adds a Frame object to the PVPshape that had contained Frame data
-     */
-    void setAppData(Frame* frame);
-    
-   PresentationViewPortShape* createPVPShape(KoShape* shape, Frame* frame);
-  
 };
 #endif /*SVG_PARSER_STAGE_H*/
