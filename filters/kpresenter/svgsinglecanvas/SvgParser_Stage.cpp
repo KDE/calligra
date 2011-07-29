@@ -42,17 +42,4 @@ void SvgParser_Stage::parseAppData(const KoXmlElement& e)
 	}
       }
 }
-/*
-void SvgParser_Stage::setAppData(Frame * frame)
-{
-    foreach(KoShape* shape, m_shapes){
-     if(shape->name() == frame->refId()) {
-         SvgAnimationData * appData = new SvgAnimationData();
-       
-         appData->setFrame(frame);
-         shape->setApplicationData(appData);
-    }
-    }
-}
-
-  */  
+  

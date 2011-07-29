@@ -18,46 +18,29 @@
  */
 
 #include "PresentationViewPortShape.h"
-#include <KoPathPoint.h>
+
 #include <qpainter.h>
 #include <KoShapeBackground.h>
 #include <KoXmlReader.h>
 
-PresentationViewPortShape::PresentationViewPortShape() : m_noOfPoints(8), m_ns("calligra")
+///////////////Helper functions
+//TODO Move the path specific ones to another file
+QList<QPointF> createListOfPoints(const QSizeF& size)
 {
-    setShapeId(PresentationViewPortShapeId);
-    m_adjMatrix = createAdjMatrix();
-    setName("ViewPort");//TODO remove this?
-    initializeAnimationProperties();
-}
-
-
-PresentationViewPortShape::~PresentationViewPortShape()
-{
-
-}
-
-void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
-{
-    foreach(QString key, m_animationAttributes){
-      if(e.hasAttribute(m_ns + ":" + key))
-        m_animationAttributes.insert(key, e.attribute(m_ns + key));
-  }
-}
-
-void PresentationViewPortShape::initializeAnimationProperties()
-{
-    //Initializing the map with default values of all attributes
-    m_animationAttributes.insert("title", "No title");
-    m_animationAttributes.insert("refid", "null");
-    m_animationAttributes.insert("transition-profile", "linear");
-    m_animationAttributes.insert("hide", "true");
-    m_animationAttributes.insert("clip", "true");
-    m_animationAttributes.insert("timeout-enable", "false");
-    m_animationAttributes.insert("sequence", QString("%1").arg(0));
-    m_animationAttributes.insert("transition-zoom-percent", QString("%1").arg(1));
-    m_animationAttributes.insert("transition-duration-ms", QString("%1").arg(5000));
-    m_animationAttributes.insert("timeout-ms", QString("%1").arg(1000));
+    qreal unit = 15.0; //TODO change according to 'size' and keep a minimum value
+    qreal heightUnit = size.height();
+    
+    QList<QPointF> pointsOfShape;
+    pointsOfShape.append(QPointF(unit, 0.0));
+    pointsOfShape.append(QPointF(0.0, 0.0));
+    pointsOfShape.append(QPointF(0.0, heightUnit));
+    pointsOfShape.append(QPointF(unit, heightUnit));
+    pointsOfShape.append(QPointF((size.width() - unit), heightUnit));
+    pointsOfShape.append(QPointF(size.width(), heightUnit));
+    pointsOfShape.append(QPointF(size.width(), 0.0));
+    pointsOfShape.append(QPointF((size.width() - unit), 0.0));
+  
+    return pointsOfShape;
 }
 
 static void printIndentation(QString& stream, unsigned int indent)
@@ -68,30 +51,11 @@ static void printIndentation(QString& stream, unsigned int indent)
     }
 }
 
-QString PresentationViewPortShape::toString()
+QVector< QVector < int > > createAdjMatrix(int noOfPoints)
 {
-    unsigned indent = 1;
-    QString stream;
-            
-    printIndentation(stream, indent++);
-    stream.append("<calligra:frame");
-    stream.append("\n");
-    
-    foreach(QString key, m_animationAttributes.keys()){
-      printIndentation(stream, indent);
-      stream.append(m_ns + ":").append(key).append("=\"").append(m_animationAttributes.value(key)).append("\"");
-      stream.append("\n");
-    }
-    stream.append("/>\n");
-    
-    return stream;
-}
-QVector< QVector < int > > PresentationViewPortShape::createAdjMatrix()
-{
-  m_noOfPoints = 8;
   QVector< QVector < int > > adjMatrix(0);
   
-  QVector< int > intVector(m_noOfPoints);
+  QVector< int > intVector(noOfPoints);
      
       intVector.fill(0);
       intVector.insert(1, 1);
@@ -135,7 +99,65 @@ QVector< QVector < int > > PresentationViewPortShape::createAdjMatrix()
 	}
 	qDebug() << endl;*/
   return adjMatrix;
+}
+/////////////////////
+
+PresentationViewPortShape::PresentationViewPortShape() : m_ns("calligra")
+{
+    setShapeId(PresentationViewPortShapeId);
+    setName("ViewPort");//TODO remove this?
+    initializeAnimationProperties();
+}
+
+
+PresentationViewPortShape::~PresentationViewPortShape()
+{
+
+}
+
+void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
+{
+    foreach(QString key, m_animationAttributes){
+      if(e.hasAttribute(m_ns + ":" + key))
+        m_animationAttributes.insert(key, e.attribute(m_ns + key));
+  }
+}
+
+void PresentationViewPortShape::initializeAnimationProperties()
+{
+    //Initializing the map with default values of all attributes
+    m_animationAttributes.insert("title", "No title");
+    m_animationAttributes.insert("refid", "null");
+    m_animationAttributes.insert("transition-profile", "linear");
+    m_animationAttributes.insert("hide", "true");
+    m_animationAttributes.insert("clip", "true");
+    m_animationAttributes.insert("timeout-enable", "false");
+    m_animationAttributes.insert("sequence", QString("%1").arg(0));
+    m_animationAttributes.insert("transition-zoom-percent", QString("%1").arg(1));
+    m_animationAttributes.insert("transition-duration-ms", QString("%1").arg(5000));
+    m_animationAttributes.insert("timeout-ms", QString("%1").arg(1000));
+}
+
+
+QString PresentationViewPortShape::toString()
+{
+    unsigned indent = 1;
+    QString stream;
+            
+    printIndentation(stream, indent++);
+    stream.append("<calligra:frame");
+    stream.append("\n");
+    
+    foreach(QString key, m_animationAttributes.keys()){
+      printIndentation(stream, indent);
+      stream.append(m_ns + ":").append(key).append("=\"").append(m_animationAttributes.value(key)).append("\"");
+      stream.append("\n");
     }
+    stream.append("/>\n");
+    
+    return stream;
+}
+
 
 void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
@@ -150,48 +172,28 @@ void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& 
 QPainterPath PresentationViewPortShape::outline() const
 {
     return KoShape::outline();
-    }
-
-void PresentationViewPortShape::createListOfPoints(const QSizeF& size)
-{
-    qreal unit = 15.0; //TODO change according to 'size' and keep a minimum value
-    qreal heightUnit = size.height();
-    
-    QList<QPointF> pointsOfShape;
-    pointsOfShape.append(QPointF(unit, 0.0));
-    pointsOfShape.append(QPointF(0.0, 0.0));
-    pointsOfShape.append(QPointF(0.0, heightUnit));
-    pointsOfShape.append(QPointF(unit, heightUnit));
-    pointsOfShape.append(QPointF((size.width() - unit), heightUnit));
-    pointsOfShape.append(QPointF(size.width(), heightUnit));
-    pointsOfShape.append(QPointF(size.width(), 0.0));
-    pointsOfShape.append(QPointF((size.width() - unit), 0.0));
-  
-    setListOfPoints(pointsOfShape);
-        
-  }
-
-void PresentationViewPortShape::setListOfPoints(QList< QPointF > points)
-{
-    m_pointsOfShape = points;
 }
 
 //TODO Remove shearing
 //TODO remove other functions not applicable to this shape
 QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size) 
 {
-    createListOfPoints(size);
-  
+    //createListOfPoints(size);
+    int noOfPoints = 8;
+    QList<QPointF> pointsOfShape = createListOfPoints(size);
+    QVector< QVector<int> > adjMatrix = createAdjMatrix(noOfPoints);
+    
+    
     QPainterPath viewPortPath;
 
     //creating the path
-    for(int row = 0; row < m_noOfPoints; row++){
+    for(int row = 0; row < noOfPoints; row++){
       if(row == 0 || row == 4){
-      viewPortPath.moveTo(m_pointsOfShape.at(row));
+      viewPortPath.moveTo(pointsOfShape.at(row));
        }
-      for(int col = row + 1; col < m_noOfPoints ; col++){
-	if(m_adjMatrix.at(row).at(col)){
-	  viewPortPath.lineTo(m_pointsOfShape.at(col));
+      for(int col = row + 1; col < noOfPoints ; col++){
+	if(adjMatrix.at(row).at(col)){
+	  viewPortPath.lineTo(pointsOfShape.at(col));
 	}
       }
     }

@@ -62,23 +62,13 @@ public:
     QString toString();
         
 private:     
-    void setListOfPoints(QList<QPointF> points);
-
-   /**
+     /**
      * @return a default path in the shape of '[ ]'
      */
      QPainterPath createShapePath(const QSizeF& size);
-     QVector< QVector< int > > createAdjMatrix();
-     void createListOfPoints(const QSizeF& size);
 
-     QList<QPointF> m_pointsOfShape;
-     int m_noOfPoints;
-     QVector< QVector<int> > m_adjMatrix;
-     
      QString m_ns;
-    //Animation properties
      QMap<QString, QString> m_animationAttributes;
-  
 };
 #endif
 
