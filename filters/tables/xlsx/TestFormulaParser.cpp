@@ -40,6 +40,9 @@ void TestFormulaParser::testConvertFormula_data()
     QTest::newRow("argument delimiter")
         << "IF(A1=A2,1,2)"
         << "=IF(A1=A2;1;2)";
+    QTest::newRow("string")
+        << "LEFT(\" Some   ~text \",3)"
+        << "=LEFT(\" Some   ~text \";3)";
     QTest::newRow("union operator")
         << "AREAS((A1:A3,B3:C5))"
         << "=AREAS((A1:A3~B3:C5))";
