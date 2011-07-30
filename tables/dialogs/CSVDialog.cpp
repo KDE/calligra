@@ -191,7 +191,7 @@ void CSVDialog::accept()
         mimedata->text().split('\n').count() >= 2 )
     {
         QRect r = m_selection->lastRange();
-        r.setSize(QSize(numRows, numCols));
+        r.setSize(QSize(numCols, numRows));
         command->add(r);
     } else
         command->add(m_selection->lastRange());
@@ -199,8 +199,8 @@ void CSVDialog::accept()
         delete command;
 
     QRect range = m_selection->lastRange();
-    range.setWidth(qMax(range.width(), numRows));
-    range.setHeight(qMax(range.height(), numCols));
+    range.setWidth(qMax(range.width(), numCols));
+    range.setHeight(qMax(range.height(), numRows));
     const CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Value | CellDamage::Formula;
     sheet->map()->addDamage(new CellDamage(sheet, Region(range, sheet), changes));
     m_selection->emitModified();

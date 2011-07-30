@@ -2761,8 +2761,11 @@ void CellToolBase::insertFromClipboard()
     QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
     dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
+    QString oldDelimiter = dialog->delimiter();
+    dialog->setDelimiter(QString());
     if (!dialog->canceled())
         dialog->exec();
+    dialog->setDelimiter(oldDelimiter);
     delete dialog;
 }
 
