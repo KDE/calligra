@@ -780,8 +780,8 @@ EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend, 
     EffortCostMap ec;
     QDate start = pstart.isValid() ? pstart : startTime().date();
     QDate end = pend.isValid() ? pend : endTime().date();
-    double rate = m_resource ? m_resource->normalRatePrHour() : 0.0;
-    Resource::Type rt = m_resource ? m_resource->resource()->type() : Resource::Type_Work;
+    double rate = m_resource && m_resource->resource() ? m_resource->normalRatePrHour() : 0.0;
+    Resource::Type rt = m_resource && m_resource->resource() ? m_resource->resource()->type() : Resource::Type_Work;
     Duration zero;
     //kDebug()<<rate<<m_intervals.count();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().lowerBound( start );
