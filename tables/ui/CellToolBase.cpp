@@ -3172,6 +3172,13 @@ void CellToolBase::findNext()
             }
         }
     }
+    else if (!cell.isNull()) {
+        // move to the cell
+        if (cell.sheet() != selection()->activeSheet())
+            selection()->emitVisibleSheetRequested(cell.sheet());
+        selection()->initialize (Region (cell.column(), cell.row(), cell.sheet()), cell.sheet());
+        scrollToCell (selection()->cursor());
+    }
 }
 
 Cell CellToolBase::nextFindValidCell(int col, int row)
