@@ -286,18 +286,20 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
     kDebug(32001) << "afterPageNumber=" << afterIndex+1;
 
-    bool atLeastOnePageRemove = false;
-    KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
+//     bool atLeastOnePageRemove = false;
+//     KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
     if (afterIndex >= 0) {
         for(int i = m_pages.count() - 1; i > afterIndex; --i) {
             KWRootAreaPage *page = m_pages.takeLast();
             foreach(KoTextLayoutRootArea *area, page->rootAreas)
                 m_pageHash.remove(area);
             delete page;
+            /*
             if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
                 pageManager->removePage(i+1);
                 atLeastOnePageRemove = true;
             }
+            */
         }
 
         /*FIXME
@@ -323,8 +325,8 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
         m_dependentProviders.clear();
         */
     }
-    if (atLeastOnePageRemove)
-        m_textFrameSet->wordsDocument()->firePageSetupChanged();
+//     if (atLeastOnePageRemove)
+//         m_textFrameSet->wordsDocument()->firePageSetupChanged();
 }
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)

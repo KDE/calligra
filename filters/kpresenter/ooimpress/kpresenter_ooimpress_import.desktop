@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=OpenOffice.org Impress Import Filter for KPresenter
-Name[bg]=Филтър за импортиране от OpenOffice.org Impress в KPresenter
+Name[bg]=Филтър за внасяне от OpenOffice.org Impress в KPresenter
 Name[br]=Sil enporzh OpenOffice.org Impress evit KPresenter
 Name[ca]=Filtre d'importació OpenOffice.org Impress per al KPresenter
 Name[ca@valencia]=Filtre d'importació OpenOffice.org Impress per al KPresenter
@@ -36,7 +36,7 @@ Name[nb]=OpenOffice.org Impress-importfilter for KPresenter
 Name[nds]="OpenOffice.org Impress"-Importfilter för KPresenter
 Name[ne]=केडीई प्रस्तुतकर्ताका लागि ओपनअफिस डट अर्ग इम्प्रेस आयात फिल्टर
 Name[nl]=OpenOffice.org Impress-importfilter voor KPresenter
-Name[pl]=Filtr importu z OpenOffice.org Impress dla KSpread
+Name[pl]=Filtr importu OpenOffice.org Impress dla KPresenter
 Name[pt]=Filtro de Importação de OpenOffice.org Impress para o KPresenter
 Name[pt_BR]=Filtro de importação de OpenOffice.org Impress para o KPresenter
 Name[ru]=Фильтр импорта презентаций OpenOffice.org Impress в KPresenter

@@ -301,7 +301,7 @@ bool WorkPackage::saveNativeFormat( Part */*part*/, const QString &path )
         return false;
     }
     kDebug()<<node()->name()<<path;
-    KoStore* store = KoStore::createStore(path, KoStore::Write, "application/x-vnd.kde.kplato.work", KoStore::Auto );
+    KoStore* store = KoStore::createStore(path, KoStore::Write, "application/x-vnd.kde.plan.work", KoStore::Auto );
     if (store->bad()) {
         KMessageBox::error( 0, i18n("Could not create the file for saving") );
         delete store;
@@ -381,7 +381,7 @@ QString WorkPackage::fileName( const Part *part ) const
     KStandardDirs *sd = part->componentData().dirs();
     QString projectName = m_project->name().remove( ' ' );
     QString path = sd->saveLocation( "projects", projectName + '/' );
-    QString wpName = QString( n->name().remove( ' ' ) + '_' + n->id() + ".kplatowork" );
+    QString wpName = QString( n->name().remove( ' ' ) + '_' + n->id() + ".planwork" );
     return path + wpName;
 }
 
@@ -452,17 +452,17 @@ bool WorkPackage::copyFile( KoStore *from, KoStore *to, const QString &filename 
 QDomDocument WorkPackage::saveXML()
 {
     kDebug();
-    QDomDocument document( "kplato-workpackage" );
+    QDomDocument document( "plan-workpackage" );
 
     document.appendChild( document.createProcessingInstruction(
                               "xml",
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement doc = document.createElement( "kplatowork" );
-    doc.setAttribute( "editor", "KPlatoWork" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
+    QDomElement doc = document.createElement( "planwork" );
+    doc.setAttribute( "editor", "PlanWork" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.plan.work" );
     doc.setAttribute( "version", PLANWORK_FILE_SYNTAX_VERSION );
-    doc.setAttribute( "kplato-version", PLAN_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "plan-version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Work package info

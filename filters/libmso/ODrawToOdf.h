@@ -153,7 +153,7 @@ private:
     void drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);
-    
+
     // shapes2.cpp
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -334,6 +334,7 @@ inline qreal toQReal(const MSO::FixedPoint& f)
     return f.integral + f.fractional / 65536.0;
 }
 
+const char* getFillRule(quint16 shapeType);
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);

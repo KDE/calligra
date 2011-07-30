@@ -39,6 +39,7 @@ WebShapeFactory::WebShapeFactory()
 
 KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
+    Q_UNUSED(documentResources);
     WebShape* fooShape = new WebShape();
     fooShape->setShapeId(WEBSHAPEID);
     // set defaults
@@ -47,6 +48,7 @@ KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResource
 
 KoShape *WebShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
 {
+    Q_UNUSED(documentResources);
     WebShape* fooShape = new WebShape();
     if(params->contains("url")) {
         fooShape->setUrl(params->property("url").toUrl());

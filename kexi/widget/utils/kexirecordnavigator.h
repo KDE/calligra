@@ -160,7 +160,7 @@ public slots:
     void updateGeometry(int leftMargin);
 
     /*! Sets label text at the left of the for record navigator's button.
-     By default this label contains translated "Row:" text. */
+     By default this label contains translated "Record:" text. */
     void setLabelText(const QString& text);
 
     void setButtonToolTipText(KexiRecordNavigator::Button, const QString&);

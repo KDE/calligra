@@ -398,7 +398,7 @@ public:
     virtual void startEditCurrentCell(const QString& setText = QString());
 
     /*! Deletes currently selected cell's contents, if allowed.
-     In most cases delete is not accepted immediately but "row editing" mode is just started. */
+     In most cases delete is not accepted immediately but "record editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell();
 
     inline KexiDB::RecordData *itemAt(int pos) const;
@@ -581,7 +581,7 @@ public:
      can be other than the very first field in the form.
 
      Used by KexiTableView::keyPressEvent() and KexiTableView::keyPressEvent(). */
-    virtual bool handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, bool fullRowSelection,
+    virtual bool handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, bool fullRecordSelection,
                                 bool *moveToFirstField = 0, bool *moveToLastField = 0);
 
 protected:
@@ -749,7 +749,7 @@ protected:
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 //replaced by QToolTip    virtual void vScrollBarSliderReleased();
 
     /* Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
@@ -959,7 +959,7 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
     if (!record)
         kDebug() << "pos:" << pos << "- NO ITEM!!";
     else {
-        /*  kDebug() << "row:" << row;
+        /*  kDebug() << "record:" << row;
             int i=1;
             for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
               kDebug() << i<<": " << (*it).toString();*/
