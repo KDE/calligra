@@ -1923,7 +1923,6 @@ private:
     Resource *m_resource;
     QString m_pid;
     Appointment *m_appointments;
-    bool m_mine;
 };
 
 class  KPLATOKERNEL_EXPORT ClearAllExternalAppointmentsCmd : public NamedCommand

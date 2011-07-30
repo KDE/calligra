@@ -1314,10 +1314,21 @@ void Resource::setProject( Project *project )
 
 void Resource::addExternalAppointment(const QString& id, Appointment* a)
 {
+    int row = -1;
     if ( m_externalAppointments.contains( id ) ) {
+        int row = m_externalAppointments.keys().indexOf( id );
+        emit externalAppointmentToBeRemoved( this, row );
         delete m_externalAppointments.take( id );
+        emit externalAppointmentRemoved();
     }
+    if ( row == -1 ) {
+        m_externalAppointments[ id ] = a;
+        row = m_externalAppointments.keys().indexOf( id );
+        m_externalAppointments.remove( id );
+    }
+    emit externalAppointmentToBeAdded( this, row );
     m_externalAppointments[ id ] = a;
+    emit externalAppointmentAdded( this, a );
 }
 
 void Resource::addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load )
@@ -1369,6 +1380,18 @@ void Resource::clearExternalAppointments( const QString projectId )
         emit externalAppointmentRemoved();
         delete a;
     }
+}
+
+Appointment *Resource::takeExternalAppointment( const QString &id )
+{
+    Appointment *a = 0;
+    if ( m_externalAppointments.contains( id ) ) {
+        int row = m_externalAppointments.keys().indexOf( id );
+        emit externalAppointmentToBeRemoved( this, row );
+        a = m_externalAppointments.take( id );
+        emit externalAppointmentRemoved();
+    }
+    return a;
 }
 
 AppointmentIntervalList Resource::externalAppointments( const QString &id )

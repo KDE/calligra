@@ -3459,29 +3459,28 @@ ClearExternalAppointmentCmd::ClearExternalAppointmentCmd( Resource *resource, co
     : NamedCommand( name ),
     m_resource( resource ),
     m_pid( pid ),
-    m_appointments( new Appointment() )
+    m_appointments( 0 )
 {
-    m_appointments->setIntervals( resource->externalAppointments( pid ) );
-    m_mine = true;
 }
 
 ClearExternalAppointmentCmd::~ClearExternalAppointmentCmd()
 {
-    if ( m_mine ) {
-        delete m_appointments;
-    }
+    delete m_appointments;
 }
 
 void ClearExternalAppointmentCmd::execute()
 {
-    m_resource->clearExternalAppointments( m_pid );
-    m_mine = true;
+//     kDebug()<<text()<<":"<<m_resource->name()<<m_pid;
+    m_appointments = m_resource->takeExternalAppointment( m_pid );
 }
 
 void ClearExternalAppointmentCmd::unexecute()
 {
-    m_resource->addExternalAppointment( m_pid, m_appointments );
-    m_mine = false;
+//     kDebug()<<text()<<":"<<m_resource->name()<<m_pid;
+    if ( m_appointments ) {
+        m_resource->addExternalAppointment( m_pid, m_appointments );
+    }
+    m_appointments = 0;
 }
 
 ClearAllExternalAppointmentsCmd::ClearAllExternalAppointmentsCmd( Project *project, const QString &name )

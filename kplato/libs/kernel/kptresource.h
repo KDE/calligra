@@ -460,6 +460,9 @@ public:
 
     void clearExternalAppointments();
     void clearExternalAppointments( const QString id );
+    /// Take the external appointments with identity @p id from the list of external appointments
+    Appointment *takeExternalAppointment( const QString &id );
+    /// Return external appointments with identity @p id
     AppointmentIntervalList externalAppointments( const QString &id );
     AppointmentIntervalList externalAppointments( const DateTimeInterval &interval = DateTimeInterval() ) const;
 
