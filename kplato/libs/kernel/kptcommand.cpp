@@ -3453,6 +3453,10 @@ void AddExternalAppointmentCmd::execute()
 void AddExternalAppointmentCmd::unexecute()
 {
     m_resource->subtractExternalAppointment( m_pid, m_start, m_end, m_load );
+    // FIXME do this smarter
+    if ( ! m_resource->externalAppointments( m_pid ).isEmpty() ) {
+        m_resource->takeExternalAppointment( m_pid );
+    }
 }
 
 ClearExternalAppointmentCmd::ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &name )
