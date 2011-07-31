@@ -31,9 +31,11 @@
 #include <kptpart.h>
 
 class QWidget;
+class KUndo2Command;
 
 namespace KPlato {
     class Part;
+    class NamedCommand;
 }
 
 namespace Scripting {
@@ -62,7 +64,9 @@ namespace Scripting {
 
             KPlato::Part* part();
             virtual KoDocument* doc();
-            
+
+            void addCommand( KUndo2Command *cmd );
+
         public Q_SLOTS:
 
             /// Open another KPlato document
@@ -79,6 +83,8 @@ namespace Scripting {
             QVariant data( QObject *object, const QString &property );
             /// Return data
             QVariant data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId );
+            /// Set the @p object @p property to @p data for @p role. Default @p role is Qt::EditRole
+            bool setData( QObject *object, const QString &property, const QVariant &data, const QString &role = "Qt::EditRole" );
             /// Return header text
             QVariant headerData( int objectType, const QString &property );
         private:

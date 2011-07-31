@@ -42,6 +42,7 @@ namespace KPlato {
     class ResourceGroup;
     class Resource;
     class ScheduleManager;
+    class MacroCommand;
 }
 
 namespace Scripting {
@@ -79,6 +80,8 @@ namespace Scripting {
             int nodeCount() const;
             /// Return the node at @p index
             QObject *nodeAt( int index );
+            QObject *findNode( const QString &id );
+            QObject *createTaskCopy( const QObject *copy, QObject *parent, QObject *after = 0 );
             
             /// Returns resource header data for @p property
             QVariant resourceHeaderData( const QString &property );
@@ -96,10 +99,14 @@ namespace Scripting {
             QObject *findResource( const QString &id );
             /// Create a copy of @p resource and add to @p group
             QObject *createResource( QObject *group, QObject *resource );
-            /// Clear all resources external appointments to project with @p id
+            /// Add an external appointment to @p resource
+            void addExternalAppointment( QObject *resource, const QVariant &id, const QString &name, const QVariantList &lst );
+            /// Clear the resources @p resource external appointments to project with identity @p id
+            void clearExternalAppointments( QObject *resource, const QString &id );
+            /// Clear all the resources external appointments to project with identity @p id
             void clearExternalAppointments( const QString &id );
-            /// Clear all resources external appointments to any project
-            void clearAllExternalAppointments();
+            /// Clear all the resources external appointments to all projects
+            void clearExternalAppointments();
             /// Return a <id, name> map of external projects
             QVariantList externalProjects();
 
@@ -119,24 +126,39 @@ namespace Scripting {
             /// Find account with identity @p id
             QObject *findAccount( const QString &id );
 
+            /// Add all commands created since last addCommand() to the undo stack. The command is named @p name.
+            void addCommand( const QString &name );
+            /// Revert all commands that is not yet added with addCommand()
+            void revertCommand();
+
         public:
             /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)
-            QObject *node( KPlato::Node *node );
+            Node *node( KPlato::Node *node );
             /// Return the data of @p node
             QVariant nodeData( const KPlato::Node *node, const QString &property, const QString &role, long schedule );
+            /// Set node data
+            bool setNodeData( KPlato::Node *node, const QString &property, const QVariant &data, const QString &role );
             
             /// Return ResourceGroup that interfaces the @p group (create if necessary)
             QObject *resourceGroup( KPlato::ResourceGroup *group );
             /// Return the data of resource group @p group
             QVariant resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role, long schedule = -1 );
+            /// Set resource group data
+            bool setResourceGroupData( KPlato::ResourceGroup *group, const QString &property, const QVariant &data, const QString &role );
             
             /// Return Resource that interfaces the @p resource (create if necessary)
             QObject *resource( KPlato::Resource *resource );
             /// Return the data of @p resource
             QVariant resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, long schedule );
+            /// Set resource data
+            bool setResourceData( KPlato::Resource *resource, const QString &property, const QVariant &data, const QString &role );
 
             /// Return the Scripting::Calendar that interfaces the KPlato::Calendar @p cal
-            QObject *calendar( KPlato::Calendar *cal );
+            Calendar *calendar( KPlato::Calendar *cal );
+            /// Return the data of @p account
+            QVariant calendarData( const KPlato::Calendar *calendar, const QString &property, const QString &role, long = -1 );
+            /// Set calendar data
+            bool setCalendarData( KPlato::Calendar *calendar, const QString &property, const QVariant &data, const QString &role );
 
             /// Return the Scripting::Schedule that interfaces the KPlato::ScheuleManager @p sch
             QObject *schedule( KPlato::ScheduleManager *sch );
@@ -147,6 +169,8 @@ namespace Scripting {
             QVariant accountHeaderData( const QString &property );
             /// Return the data of @p account
             QVariant accountData( const KPlato::Account *account, const QString &property, const QString &role, long = -1 );
+            /// Set account data
+            bool setAccountData( KPlato::Account *account, const QString &property, const QVariant &data, const QString &role );
 
         protected:
             inline KPlato::Project *project() { return m_nodeModel.project(); }
@@ -156,7 +180,12 @@ namespace Scripting {
             
             int resourceColumnNumber( const QString &property ) const;
             
+            int calendarColumnNumber( const QString &property ) const;
+
             int accountColumnNumber( const QString &property ) const;
+
+        private slots:
+            void slotAddCommand( KUndo2Command* );
 
         private:
             int stringToRole( const QString &role ) const;
@@ -175,6 +204,8 @@ namespace Scripting {
             
             KPlato::AccountModel m_accountModel;
             QMap<KPlato::Account*, Account*> m_accounts;
+
+            KPlato::MacroCommand *m_command;
     };
 
 }

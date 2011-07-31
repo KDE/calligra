@@ -287,7 +287,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     kDebug(32001) << "afterPageNumber=" << afterIndex+1;
 
 //     bool atLeastOnePageRemove = false;
-    KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
+//     KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
     if (afterIndex >= 0) {
         for(int i = m_pages.count() - 1; i > afterIndex; --i) {
             KWRootAreaPage *page = m_pages.takeLast();
