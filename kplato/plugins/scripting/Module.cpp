@@ -22,6 +22,7 @@
 #include "Module.h"
 #include "Project.h"
 #include "Account.h"
+#include "Calendar.h"
 #include "Node.h"
 #include "Resource.h"
 #include "ResourceGroup.h"
@@ -173,6 +174,10 @@ QVariant Module::data( QObject *object, const QString &property, const QString &
     if ( a ) {
         return p->accountData( a->kplatoAccount(), property, role );
     }
+    Calendar *c = qobject_cast<Calendar*>( object );
+    if ( c ) {
+        return p->calendarData( c->kplatoCalendar(), property, role );
+    }
     // TODO Schedule (if needed)
     return QVariant();
 }
@@ -187,18 +192,22 @@ bool Module::setData( QObject *object, const QString &property, const QVariant &
     if ( n ) {
         return p->setNodeData( n->kplatoNode(), property, data, role );
     }
-/*    Resource *r = qobject_cast<Resource*>( object );
+    Resource *r = qobject_cast<Resource*>( object );
     if ( r ) {
-        return p->resourceData( r->kplatoResource(), property, role, scheduleId );
+        return p->setResourceData( r->kplatoResource(), property, data, role );
     }
     ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
     if ( g ) {
-        return p->resourceGroupData( g->kplatoResourceGroup(), property, role );
+        return p->setResourceGroupData( g->kplatoResourceGroup(), property, data, role );
     }
     Account *a = qobject_cast<Account*>( object );
     if ( a ) {
-        return p->accountData( a->kplatoAccount(), property, role );
-    }*/
+        return p->setAccountData( a->kplatoAccount(), property, data, role );
+    }
+    Calendar *c = qobject_cast<Calendar*>( object );
+    if ( c ) {
+        return p->setCalendarData( c->kplatoCalendar(), property, data, role );
+    }
     return false;
 }
 
