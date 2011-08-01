@@ -61,6 +61,7 @@ class BusyinfoImporter:
                 self.loadAppointment( project, pid, pname, data )
 
         except:
+            project.addCommand( i18nc( "(qtundoformat)", "Import external appointments" ) )
             file.close()
 
     def loadAppointment( self, project, pid, pname, data ):

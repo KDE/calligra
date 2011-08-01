@@ -116,6 +116,11 @@ PasteCommand::~PasteCommand()
     delete m_xmlDocument;
 }
 
+const QMimeData* PasteCommand::mimeData() const
+{
+    return m_mimeData;
+}
+
 bool PasteCommand::setMimeData(const QMimeData *mimeData)
 {
     if (!mimeData) {
@@ -562,12 +567,12 @@ bool PasteCommand::processTextPlain(Element *element)
 
     // Put the lines into an array value.
     Value value(Value::Array);
-    for (int i = 0; i < list.count(); ++i) {
+    for (int i = 0; i < my; ++i) {
         value.setElement(0, i, Value(list[i]));
     }
 
     // FIXME Determine and tile the destination area.
-    Region range(mx, my, 1, list.size());
+//     Region range(mx, my, 1, list.size());
 
     // create a command, configure it and execute it
     DataManipulator *command = new DataManipulator(this);

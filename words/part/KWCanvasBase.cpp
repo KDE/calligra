@@ -714,9 +714,6 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                                 (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
                                 vm.clipRect.width(), vm.clipRect.height());
 
-                QRectF pageRectDocument = vm.page.rect();
-                QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
-
                 if (!m_pageCacheManager) {
                     // no pageCacheManager, so create one for the current view. This happens only once!
                     // so on zoom change, we don't re-pre-generate weight/zoom images.
@@ -738,6 +735,8 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                     else {
                         qreal  pageTopDocument = vm.page.offsetInDocument();
                         qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
+                        QRectF pageRectDocument = vm.page.rect();
+                        QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
 
                         // translated from the page topleft to 0,0 for our cache image
                         QRect clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
@@ -781,9 +780,6 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                                         actualVm.clipRect.width(),
                                         actualVm.clipRect.height());
 
-                QRectF pageRectDocument = vm.page.rect();
-                QRectF pageRectView = localViewConverter.documentToView(pageRectDocument);
-
                 if (!m_pageCacheManager) {
                     // no pageCacheManager, so create one for the current view. This happens only once!
                     // so on zoom change, we don't re-pre-generate weight/zoom images.
@@ -805,6 +801,8 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                     else {
                         qreal pageTopDocument = vm.page.offsetInDocument();
                         qreal pageTopView = localViewConverter.documentToViewY(pageTopDocument);
+                        QRectF pageRectDocument = vm.page.rect();
+                        QRectF pageRectView = localViewConverter.documentToView(pageRectDocument);
 
                         // translated from the page topleft to 0,0 for our cache image
                         QRect clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);

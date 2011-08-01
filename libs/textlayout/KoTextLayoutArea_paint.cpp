@@ -49,7 +49,6 @@
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
-#include <KoImageCollection.h>
 #include <KoInlineNote.h>
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
@@ -108,7 +107,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
         QTextBlockFormat format = block.blockFormat();
-        qDebug() << it.currentBlock().isValid() << table;
+        //qDebug() << it.currentBlock().isValid() << table;
 
         if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border
@@ -211,7 +210,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             paintStrategy->applyStrategy(painter);
             painter->save();
-            drawListItem(painter, block, context.imageCollection);
+            drawListItem(painter, block);
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
@@ -300,7 +299,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->restore();
 }
 
-void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection)
+void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
 {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (data == 0)
@@ -367,16 +366,16 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
         }
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
-        if (listStyle == KoListStyle::ImageItem && imageCollection) {
+        if (listStyle == KoListStyle::ImageItem) {
             QFontMetricsF fm(data->labelFormat().font(), m_documentLayout->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);
             qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
-            qint64 key = listFormat.property(KoListStyle::BulletImageKey).value<qint64>();
-            KoImageData idata;
-            imageCollection->fillFromKey(idata, key);
-            painter->drawPixmap(x, y, width, height, idata.pixmap());
+            KoImageData *idata = listFormat.property(KoListStyle::BulletImage).value<KoImageData *>();
+            if (idata) {
+                painter->drawPixmap(x, y, width, height, idata->pixmap());
+            }
         }
     }
 }
@@ -540,13 +539,14 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
                     - startOfBlock).lineNumber();
             int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
-            Q_ASSERT_X(firstLine <= lastLine, __FUNCTION__, QString("Invalid lines first=%1 last=%2").arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
-            for (int i = firstLine ; i <= lastLine ; i++) {
+            for (int i = firstLine ; i <= lastLine ; ++i) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
                     int p1 = currentFragment.position() - startOfBlock;
                     if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
                         Q_ASSERT_X(line.isValid(), __FUNCTION__, QString("Invalid line=%1 first=%2 last=%3").arg(i).arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
+                        if (!line.isValid())
+                            continue;
                         int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
                         int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
                         qreal x1 = line.cursorToX(p1);

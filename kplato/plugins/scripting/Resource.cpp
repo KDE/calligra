@@ -20,13 +20,15 @@
 #include <QObject>
 #include <QVariant>
 
-#include <Resource.h>
-#include <Project.h>
+#include "Resource.h"
+#include "Project.h"
+
+#include "kptresource.h"
+#include "kptappointment.h"
+#include "kptdatetime.h"
+#include "kptcommand.h"
 
 #include <kglobal.h>
-#include <kptresource.h>
-#include <kptappointment.h>
-#include <kptdatetime.h>
 
 Scripting::Resource::Resource( Scripting::Project *project, KPlato::Resource *resource, QObject *parent )
     : QObject( parent ), m_project( project ), m_resource( resource )
@@ -55,14 +57,7 @@ QVariantList Scripting::Resource::appointmentIntervals( qlonglong schedule ) con
 
 void Scripting::Resource::addExternalAppointment( const QVariant &id, const QString &name, const QVariantList &lst )
 {
-    //kDebug()<<id<<name<<lst;
-    KPlato::DateTime st = KPlato::DateTime::fromString( lst[0].toString() );
-    KPlato::DateTime et = KPlato::DateTime::fromString( lst[1].toString() );
-    double load = lst[2].toDouble();
-    if ( ! st.isValid() || ! et.isValid() ) {
-        return;
-    }
-    m_resource->addExternalAppointment( id.toString(), name, st, et, load );
+    m_project->addExternalAppointment( this, id, name, lst );
 }
 
 QVariantList Scripting::Resource::externalAppointments() const
@@ -77,7 +72,7 @@ QVariantList Scripting::Resource::externalAppointments() const
 
 void Scripting::Resource::clearExternalAppointments( const QString &id )
 {
-    m_resource->clearExternalAppointments( id );
+    m_project->clearExternalAppointments( this, id );
 }
 
 int Scripting::Resource::childCount() const
