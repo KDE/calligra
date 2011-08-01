@@ -69,6 +69,7 @@ KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
 
 KWRootAreaProvider::~KWRootAreaProvider()
 {
+    qDeleteAll(m_pages);
 }
 
 void KWRootAreaProvider::clearPages(int pageNumber)
