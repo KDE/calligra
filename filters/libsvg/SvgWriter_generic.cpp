@@ -263,6 +263,7 @@ void SvgWriter_generic::saveViewPort(KoShape* shape)
 
     *m_body << "/>" << endl;
     
+    viewport->setRefId(m_shapeIds[shape]);
     m_appData.append(viewport->toString()); //Saving animation data
 }
 

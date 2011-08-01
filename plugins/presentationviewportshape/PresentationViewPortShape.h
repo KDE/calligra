@@ -60,6 +60,7 @@ public:
     void parseAnimationProperties(const KoXmlElement& e); 
         
     QString toString();
+    void setRefId(const QString& refId);
         
 private:     
      /**

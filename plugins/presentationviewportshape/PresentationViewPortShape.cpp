@@ -139,6 +139,11 @@ void PresentationViewPortShape::initializeAnimationProperties()
 }
 
 
+void PresentationViewPortShape::setRefId(const QString& refId)
+{
+    m_animationAttributes["refid"] = refId;
+}
+
 QString PresentationViewPortShape::toString()
 {
     unsigned indent = 1;
