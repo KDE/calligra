@@ -19,7 +19,7 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrSelectionToggle.h"
+#include "KoSelectionToggle.h"
 
 //KDE Headers
 #include <KGlobalSettings>
@@ -35,7 +35,7 @@
 #include <QRect>
 #include <QTimeLine>
 
-KPrSelectionToggle::KPrSelectionToggle(QWidget *parent)
+KoSelectionToggle::KoSelectionToggle(QWidget *parent)
     : QAbstractButton(parent)
     , m_isHovered(false)
     , m_leftMouseButtonPressed(false)
@@ -54,22 +54,22 @@ KPrSelectionToggle::KPrSelectionToggle(QWidget *parent)
             this, SLOT(refreshIcon()));
 }
 
-KPrSelectionToggle::~KPrSelectionToggle()
+KoSelectionToggle::~KoSelectionToggle()
 {
 }
 
-QSize KPrSelectionToggle::sizeHint() const
+QSize KoSelectionToggle::sizeHint() const
 {
     return QSize(16, 16);
 }
 
-void KPrSelectionToggle::reset()
+void KoSelectionToggle::reset()
 {
     m_index = QModelIndex();
     hide();
 }
 
-void KPrSelectionToggle::setIndex(const QModelIndex &index)
+void KoSelectionToggle::setIndex(const QModelIndex &index)
 {
     m_index = index;
     if (m_index.isValid()) {
@@ -77,7 +77,7 @@ void KPrSelectionToggle::setIndex(const QModelIndex &index)
     }
 }
 
-void KPrSelectionToggle::setMargin(int margin)
+void KoSelectionToggle::setMargin(int margin)
 {
     if (margin != m_margin) {
         m_margin = margin;
@@ -85,17 +85,17 @@ void KPrSelectionToggle::setMargin(int margin)
     }
 }
 
-int KPrSelectionToggle::margin() const
+int KoSelectionToggle::margin() const
 {
     return m_margin;
 }
 
-QModelIndex KPrSelectionToggle::index() const
+QModelIndex KoSelectionToggle::index() const
 {
     return m_index;
 }
 
-void KPrSelectionToggle::setVisible(bool visible)
+void KoSelectionToggle::setVisible(bool visible)
 {
     QAbstractButton::setVisible(visible);
 
@@ -106,7 +106,7 @@ void KPrSelectionToggle::setVisible(bool visible)
 
 }
 
-bool KPrSelectionToggle::eventFilter(QObject *obj, QEvent *event)
+bool KoSelectionToggle::eventFilter(QObject *obj, QEvent *event)
 {
     if ((obj == parent()) && (event->type() == QEvent::MouseMove) && m_leftMouseButtonPressed) {
         // Don't forward mouse move events to the viewport,
@@ -119,7 +119,7 @@ bool KPrSelectionToggle::eventFilter(QObject *obj, QEvent *event)
     return QAbstractButton::eventFilter(obj, event);
 }
 
-void KPrSelectionToggle::enterEvent(QEvent *event)
+void KoSelectionToggle::enterEvent(QEvent *event)
 {
     QAbstractButton::enterEvent(event);
 
@@ -135,7 +135,7 @@ void KPrSelectionToggle::enterEvent(QEvent *event)
     update();
 }
 
-void KPrSelectionToggle::leaveEvent(QEvent *event)
+void KoSelectionToggle::leaveEvent(QEvent *event)
 {
     QAbstractButton::leaveEvent(event);
 
@@ -143,25 +143,25 @@ void KPrSelectionToggle::leaveEvent(QEvent *event)
     update();
 }
 
-void KPrSelectionToggle::mousePressEvent(QMouseEvent *event)
+void KoSelectionToggle::mousePressEvent(QMouseEvent *event)
 {
     QAbstractButton::mousePressEvent(event);
     m_leftMouseButtonPressed = (event->buttons() & Qt::LeftButton);
 }
 
-void KPrSelectionToggle::mouseReleaseEvent(QMouseEvent *event)
+void KoSelectionToggle::mouseReleaseEvent(QMouseEvent *event)
 {
     QAbstractButton::mouseReleaseEvent(event);
     m_leftMouseButtonPressed = (event->buttons() & Qt::LeftButton);
 }
 
-void KPrSelectionToggle::resizeEvent(QResizeEvent *event)
+void KoSelectionToggle::resizeEvent(QResizeEvent *event)
 {
     QAbstractButton::resizeEvent(event);
     setIconOverlay(isChecked());
 }
 
-void KPrSelectionToggle::paintEvent(QPaintEvent *event)
+void KoSelectionToggle::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setClipRect(event->rect());
@@ -191,7 +191,7 @@ void KPrSelectionToggle::paintEvent(QPaintEvent *event)
 
 }
 
-void KPrSelectionToggle::setFadingValue(int value)
+void KoSelectionToggle::setFadingValue(int value)
 {
     m_fadingValue = value;
     if (m_fadingValue >= 255) {
@@ -201,7 +201,7 @@ void KPrSelectionToggle::setFadingValue(int value)
     update();
 }
 
-void KPrSelectionToggle::setIconOverlay(bool checked)
+void KoSelectionToggle::setIconOverlay(bool checked)
 {
     const char *icon = checked ? "list-remove" : "list-add";
     const int size = qMin(width() - 2 * m_margin, height() - 2 * m_margin);
@@ -211,12 +211,12 @@ void KPrSelectionToggle::setIconOverlay(bool checked)
     update();
 }
 
-void KPrSelectionToggle::refreshIcon()
+void KoSelectionToggle::refreshIcon()
 {
     setIconOverlay(isChecked());
 }
 
-void KPrSelectionToggle::startFading()
+void KoSelectionToggle::startFading()
 {
     Q_ASSERT(!m_fadingTimeLine);
 
@@ -231,7 +231,7 @@ void KPrSelectionToggle::startFading()
     m_fadingValue = 0;
 }
 
-void KPrSelectionToggle::stopFading()
+void KoSelectionToggle::stopFading()
 {
     if (m_fadingTimeLine) {
         m_fadingTimeLine->stop();
@@ -241,4 +241,4 @@ void KPrSelectionToggle::stopFading()
     m_fadingValue = 0;
 }
 
-#include "KPrSelectionToggle.moc"
+#include "KoSelectionToggle.moc"

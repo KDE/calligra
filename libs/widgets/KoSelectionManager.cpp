@@ -19,10 +19,10 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrSelectionManager.h"
+#include "KoSelectionManager.h"
 
 //Calligra headers
-#include "KPrSelectionToggle.h"
+#include "KoSelectionToggle.h"
 
 //KDE headers
 #include <KGlobalSettings>
@@ -33,7 +33,7 @@
 #include <QModelIndex>
 #include <QApplication>
 
-KPrSelectionManager::KPrSelectionManager(QAbstractItemView *parent)
+KoSelectionManager::KoSelectionManager(QAbstractItemView *parent)
     : QObject(parent)
     , m_view(parent)
     , m_toggle(0)
@@ -46,7 +46,7 @@ KPrSelectionManager::KPrSelectionManager(QAbstractItemView *parent)
             this, SLOT(slotViewportEntered()));
 
     //TODO: Setting to enable selectiontoggle
-    m_toggle = new KPrSelectionToggle(m_view->viewport());
+    m_toggle = new KoSelectionToggle(m_view->viewport());
     m_toggle->setCheckable(true);
     m_toggle->hide();
     connect(m_toggle, SIGNAL(clicked(bool)),
@@ -57,11 +57,11 @@ KPrSelectionManager::KPrSelectionManager(QAbstractItemView *parent)
     m_view->setMouseTracking(true);
 }
 
-KPrSelectionManager::~KPrSelectionManager()
+KoSelectionManager::~KoSelectionManager()
 {
 }
 
-bool KPrSelectionManager::eventFilter(QObject *watched, QEvent *event)
+bool KoSelectionManager::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_view->viewport()) {
         switch (event->type()) {
@@ -105,14 +105,14 @@ bool KPrSelectionManager::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
-void KPrSelectionManager::reset()
+void KoSelectionManager::reset()
 {
     if (m_toggle) {
         m_toggle->reset();
     }
 }
 
-void KPrSelectionManager::slotEntered(const QModelIndex &index)
+void KoSelectionManager::slotEntered(const QModelIndex &index)
 {
     const bool isSelectionCandidate = index.isValid() &&
                                       (QApplication::mouseButtons() == Qt::NoButton);
@@ -152,11 +152,11 @@ void KPrSelectionManager::slotEntered(const QModelIndex &index)
         m_toggle->setIndex(index);
 
         // Increase the size of the toggle for large items
-        const int iconHeight = m_view->iconSize().height();
+        const int iconHeight = m_view->visualRect(index).height();
 
         int toggleSize = KIconLoader::SizeSmall;
         if (iconHeight >= KIconLoader::SizeEnormous) {
-            toggleSize = KIconLoader::SizeMedium;
+            toggleSize = KIconLoader::SizeLarge/2;
         }
         else if (iconHeight >= KIconLoader::SizeLarge) {
             toggleSize = KIconLoader::SizeSmallMedium;
@@ -183,7 +183,7 @@ void KPrSelectionManager::slotEntered(const QModelIndex &index)
     }
 }
 
-void KPrSelectionManager::slotViewportEntered()
+void KoSelectionManager::slotViewportEntered()
 {
     if (m_toggle) {
         m_toggle->hide();
@@ -191,7 +191,7 @@ void KPrSelectionManager::slotViewportEntered()
     restoreCursor();
 }
 
-void KPrSelectionManager::setItemSelected(bool selected)
+void KoSelectionManager::setItemSelected(bool selected)
 {
     emit selectionChanged();
 
@@ -210,7 +210,7 @@ void KPrSelectionManager::setItemSelected(bool selected)
     }
 }
 
-void KPrSelectionManager::slotRowsRemoved(const QModelIndex &parent, int start, int end)
+void KoSelectionManager::slotRowsRemoved(const QModelIndex &parent, int start, int end)
 {
     Q_UNUSED(parent);
     Q_UNUSED(start);
@@ -221,7 +221,7 @@ void KPrSelectionManager::slotRowsRemoved(const QModelIndex &parent, int start, 
     restoreCursor();
 }
 
-void KPrSelectionManager::slotSelectionChanged(const QItemSelection &selected,
+void KoSelectionManager::slotSelectionChanged(const QItemSelection &selected,
                                             const QItemSelection &deselected)
 {
     // The selection has been changed outside the scope of the selection manager
@@ -241,7 +241,7 @@ void KPrSelectionManager::slotSelectionChanged(const QItemSelection &selected,
     }
 }
 
-void KPrSelectionManager::applyPointingHandCursor()
+void KoSelectionManager::applyPointingHandCursor()
 {
     if (!m_appliedPointingHandCursor) {
         QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
@@ -249,7 +249,7 @@ void KPrSelectionManager::applyPointingHandCursor()
     }
 }
 
-void KPrSelectionManager::restoreCursor()
+void KoSelectionManager::restoreCursor()
 {
     if (m_appliedPointingHandCursor) {
         QApplication::restoreOverrideCursor();
@@ -257,4 +257,4 @@ void KPrSelectionManager::restoreCursor()
     }
 }
 
-#include "KPrSelectionManager.moc"
+#include "KoSelectionManager.moc"

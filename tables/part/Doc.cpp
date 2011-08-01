@@ -75,6 +75,8 @@
 #include <KoShapeSavingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
+#include <KoToolManager.h>
+#include <KoInteractionTool.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -218,7 +220,11 @@ void Doc::initConfig()
 
 KoView* Doc::createViewInstance(QWidget* parent)
 {
-    return new View(parent, this);
+    View *view = new View(parent, this);
+    // explicit switch tool to be sure that the list of option-widgets (CellToolOptionWidget
+    // as returned by KoToolBase::optionWidgets) is updated to prevent crashes like bug 278896.
+    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+    return view;
 }
 
 QGraphicsItem *Doc::createCanvasItem()

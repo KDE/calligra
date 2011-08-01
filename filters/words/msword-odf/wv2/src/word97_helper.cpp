@@ -2454,7 +2454,8 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTSetBrc:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
         U8 itcFirst = *myPtr;
         U8 itcLim = *( myPtr + 1 );
         cropIndices( itcFirst, itcLim, rgtc.size() );
@@ -2486,7 +2487,8 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTBrcTopCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
         for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcTop.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
@@ -2494,7 +2496,8 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTBrcLeftCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
         for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcLeft.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
@@ -2502,7 +2505,8 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTBrcRightCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
         for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcRight.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
@@ -2510,8 +2514,9 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTBrcBottomCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
+        for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcBottom.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
         break;

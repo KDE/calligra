@@ -19,15 +19,16 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSELECTIONMANAGER_H
-#define KPRSELECTIONMANAGER_H
+#ifndef KOSELECTIONMANAGER_H
+#define KOSELECTIONMANAGER_H
 
 #include <QObject>
+#include "kowidgets_export.h"
 
 class QAbstractItemView;
 class QModelIndex;
 class QItemSelection;
-class KPrSelectionToggle;
+class KoSelectionToggle;
 
 /**
  * @brief Allows to select and deselect items for item views.
@@ -35,13 +36,13 @@ class KPrSelectionToggle;
  * Whenever an item is hovered by the mouse, a toggle button is shown
  * which allows to select/deselect the current item.
  */
-class KPrSelectionManager : public QObject
+class KOWIDGETS_EXPORT KoSelectionManager : public QObject
 {
     Q_OBJECT
 
 public:
-    KPrSelectionManager(QAbstractItemView *parent);
-    virtual ~KPrSelectionManager();
+    KoSelectionManager(QAbstractItemView *parent);
+    virtual ~KoSelectionManager();
     virtual bool eventFilter(QObject *watched, QEvent *event);
 
 public slots:
@@ -66,8 +67,8 @@ private:
     void applyPointingHandCursor();
     void restoreCursor();
     QAbstractItemView *m_view;
-    KPrSelectionToggle *m_toggle;
+    KoSelectionToggle *m_toggle;
     bool m_connected;
     bool m_appliedPointingHandCursor;
 };
-#endif // KPRSELECTIONMANAGER_H
+#endif // KOSELECTIONMANAGER_H
