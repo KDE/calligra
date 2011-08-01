@@ -272,7 +272,6 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
             } else {
                 kWarning() << "Could not find Normal style, numbering not added!";
             }
-
         }
     }
 } //end sectionStart()
