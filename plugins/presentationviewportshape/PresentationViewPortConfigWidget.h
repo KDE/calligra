@@ -1,13 +1,23 @@
 #include <KoShapeConfigWidgetBase.h>
 
+#include <QLabel>
+#include "PresentationViewPortTool.h"
+#include "ui_PresentationViewPortConfigWidget.h"
+
 class PresentationViewPortConfigWidget : public KoShapeConfigWidgetBase
 {
-    PresentationViewPortConfigWidget();
-    ~PresentationViewPortConfigWidget();
-    
-    //Reomplemented methods
+  
+  //Reimplemented methods
     void open(KoShape *shape);
     void save();
     bool showOnShapeCreate();
     bool showOnShapeSelect();
+    
+    Ui::PresentationViewPortConfigWidget m_widget;
+    
+public:
+    PresentationViewPortConfigWidget(QWidget* parent = 0);
+    ~PresentationViewPortConfigWidget();
+    
+
 };

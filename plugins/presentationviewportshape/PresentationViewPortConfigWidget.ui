@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PresentationViewPortConfigWidget</class>
+ <widget class="QWidget" name="PresentationViewPortConfigWidget">
+   <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>291</width>
+    <height>113</height>
+   </rect>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Profile:</string>
+     </property>
+     <property name="buddy">
+      <cstring>comboBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="comboBox">
+     <property name="linear" stdset="0">
+      <string/>
+     </property>
+     <item>
+      <property name="text">
+       <string>Linear</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Accelerate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Strong Accelerate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Decelerate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Strong decelerate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Accelerate-decelerate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Strong accelerate-decelerate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Decelerate-accelerate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Strong decelerate-accelerate</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Zoom (%):</string>
+     </property>
+     <property name="buddy">
+      <cstring>spinBox_2</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="spinBox_2"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Duration (ms):</string>
+     </property>
+     <property name="buddy">
+      <cstring>spinBox_3</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QSpinBox" name="spinBox_3"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Sequence:</string>
+     </property>
+     <property name="buddy">
+      <cstring>spinBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QSpinBox" name="spinBox"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

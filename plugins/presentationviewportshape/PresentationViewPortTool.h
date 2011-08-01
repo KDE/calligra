@@ -50,7 +50,7 @@ public:
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
-
+    virtual QList<QWidget *> createOptionWidgets();
 private slots:
     void changeUrlPressed();
     void setImageData(KJob *job);

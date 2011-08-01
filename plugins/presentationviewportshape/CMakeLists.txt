@@ -6,6 +6,11 @@ SET (presentationviewportshape_LIB_SRCS
     PresentationViewPortShapePlugin.cpp
     PresentationViewPortTool.cpp
     PresentationViewPortToolFactory.cpp
+    PresentationViewPortConfigWidget.cpp 
+    )
+
+kde4_add_ui_files( presentationviewportshape_LIB_SRCS
+    PresentationViewPortConfigWidget.ui
     )
 
 kde4_add_plugin(presentationviewportshape ${presentationviewportshape_LIB_SRCS})

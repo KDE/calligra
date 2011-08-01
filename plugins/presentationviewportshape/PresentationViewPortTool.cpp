@@ -18,6 +18,7 @@
  */
 #include "PresentationViewPortTool.h"
 #include "PresentationViewPortShape.h"
+#include "PresentationViewPortConfigWidget.h"
 
 #include <QToolButton>
 #include <QGridLayout>
@@ -34,8 +35,8 @@
 #include <KoPointerEvent.h>
 
 PresentationViewPortTool::PresentationViewPortTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas ),
-      m_shape(0)
+   : KoToolBase(canvas) , m_shape(0)
+    
 {
   
 }
@@ -64,17 +65,17 @@ void PresentationViewPortTool::deactivate()
 
 QWidget * PresentationViewPortTool::createOptionWidget()
 {
-    QWidget *optionWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout(optionWidget);
+    PresentationViewPortConfigWidget* configWidget = new PresentationViewPortConfigWidget();
+    
+    return configWidget;
+}
 
-    QToolButton *button = 0;
-
-    button = new QToolButton(optionWidget);
-
-    layout->addWidget(button, 0, 0);
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
-
-    return optionWidget;
+QList< QWidget* > PresentationViewPortTool::createOptionWidgets()
+{
+    QList< QWidget* > ow;
+    ow.append(createOptionWidget());
+    
+    return ow;    
 }
 
 void PresentationViewPortTool::changeUrlPressed()
