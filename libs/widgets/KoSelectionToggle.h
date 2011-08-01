@@ -19,12 +19,13 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSELECTIONTOGGLE_H
-#define KPRSELECTIONTOGGLE_H
+#ifndef KOSELECTIONTOGGLE_H
+#define KOSELECTIONTOGGLE_H
 
 #include <QAbstractButton>
 #include <QPixmap>
 #include <QModelIndex>
+#include "kowidgets_export.h"
 
 class QTimeLine;
 
@@ -36,13 +37,13 @@ class QTimeLine;
  *
  * @see SelectionManager
  */
-class KPrSelectionToggle : public QAbstractButton
+class KOWIDGETS_EXPORT KoSelectionToggle : public QAbstractButton
 {
     Q_OBJECT
 
 public:
-    explicit KPrSelectionToggle(QWidget *parent);
-    virtual ~KPrSelectionToggle();
+    explicit KoSelectionToggle(QWidget *parent);
+    virtual ~KoSelectionToggle();
     virtual QSize sizeHint() const;
 
     /**
@@ -97,4 +98,4 @@ private:
     QModelIndex m_index;
 };
 
-#endif // KPRSELECTIONTOGGLE_H
+#endif // KOSELECTIONTOGGLE_H
