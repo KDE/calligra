@@ -27,16 +27,18 @@
 #include <kis_processing_information.h>
 #include <kis_iterator_ng.h>
 #include <kis_math_toolbox.h>
-#include <QTimer>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+
 #include <qclcontext.h>
-#include <QTime>
 
 KritaOpenCLFilter::KritaOpenCLFilter() : KisFilter(id(), categoryOther(), i18n("&OpenCL..."))
 {
     setSupportsPainting(false);
     setSupportsIncrementalPainting(false);
     setSupportsAdjustmentLayers(false);
-    setSupportsThreading(true);
+    setSupportsThreading(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -59,8 +61,14 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
                            ) const
 {
     /* VARIABLES */
-    int numberOfPixels = rect.height() * rect.width();
-  
+    // Basic
+    int width = rect.width();
+    int height = rect.height();
+    int numberOfPixels = width * height;
+    
+    // Pixels
+    QVector<quint8 *> pixels = device->readPlanarBytes(0, 0, width, height);
+    
     /* GET KERNEL CODE */
     QVariant text;
     config->getProperty("kernel", text);
@@ -78,64 +86,23 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
     
     QCLProgram program = context.buildProgramFromSourceCode(qPrintable(kernelCode));
     QCLKernel kritaKernel = program.createKernel("kritaKernel");
-    kritaKernel.setGlobalWorkSize(numberOfPixels);
     
     /* CREATE DATA STRUCTURES FOR KERNEL */
-    // Input
-    QCLVector<double> blue  = context.createVector<double>(numberOfPixels);
-    QCLVector<double> green = context.createVector<double>(numberOfPixels);
-    QCLVector<double> red   = context.createVector<double>(numberOfPixels);
-    QCLVector<double> alpha = context.createVector<double>(numberOfPixels);
+    QCLBuffer blue  = context.createBufferCopy(pixels[0], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
+    QCLBuffer green = context.createBufferCopy(pixels[1], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
+    QCLBuffer red   = context.createBufferCopy(pixels[2], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
+    QCLBuffer alpha = context.createBufferCopy(pixels[3], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
     
-    // Output
-    QCLVector<double> blue_output  = context.createVector<double>(numberOfPixels);
-    QCLVector<double> green_output = context.createVector<double>(numberOfPixels);
-    QCLVector<double> red_output   = context.createVector<double>(numberOfPixels);
-    QCLVector<double> alpha_output = context.createVector<double>(numberOfPixels);
+    /* RUN KERNEL */
+    kritaKernel.setGlobalWorkSize(numberOfPixels);
+    //kritaKernel.setLocalWorkSize();
+    kritaKernel(blue, green, red, alpha);
     
-    /* SUPPLY THE DATA TO KERNEL */
-    // MathToolbox: change rawData to doubles
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
-    QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
-    if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
-      return;
-    }
+    /* RETRIEVE DATA FROM KERNEL */
+    blue.read (pixels[0], numberOfPixels * sizeof(quint8));
+    green.read(pixels[1], numberOfPixels * sizeof(quint8));
+    red.read  (pixels[2], numberOfPixels * sizeof(quint8));
+    alpha.read(pixels[3], numberOfPixels * sizeof(quint8));
     
-    // Read pixels  
-    KisRectIteratorSP readIterator = device->createRectIteratorNG(rect);
-    int currentPixel = 0;
-    do {
-      const quint8* pixel = readIterator->rawData();
-      
-      blue[currentPixel]  = toDoubleFuncPtr[0](pixel, device->colorSpace()->channels()[0]->pos());
-      green[currentPixel] = toDoubleFuncPtr[1](pixel, device->colorSpace()->channels()[1]->pos());
-      red[currentPixel]   = toDoubleFuncPtr[2](pixel, device->colorSpace()->channels()[2]->pos());
-      alpha[currentPixel] = toDoubleFuncPtr[3](pixel, device->colorSpace()->channels()[3]->pos());
-      
-      ++currentPixel;
-    } while (readIterator->nextPixel());
-    
-    /* APPLY KERNEL */
-    kritaKernel(blue, green, red, alpha, blue_output, green_output, red_output, alpha_output);
-    
-    /* WRITE THE RESULT*/
-    //MathToolbox: change doubles back to rawData
-    QVector<PtrFromDouble> fromDoubleFuncPtr(device->colorSpace()->channels().count());
-    if (!mathToolbox->getFromDoubleChannelPtr(device->colorSpace()->channels(), fromDoubleFuncPtr)) {
-      return;
-    }
-    
-    // Write Pixels
-    KisRectIteratorSP writeIterator = device->createRectIteratorNG(rect);
-    currentPixel = 0;
-    do {
-      quint8* pixel = writeIterator->rawData();
-      
-      fromDoubleFuncPtr[0](pixel, device->colorSpace()->channels()[0]->pos(), blue_output[currentPixel]);
-      fromDoubleFuncPtr[1](pixel, device->colorSpace()->channels()[1]->pos(), green_output[currentPixel]);
-      fromDoubleFuncPtr[2](pixel, device->colorSpace()->channels()[2]->pos(), red_output[currentPixel]);
-      fromDoubleFuncPtr[3](pixel, device->colorSpace()->channels()[3]->pos(), alpha_output[currentPixel]);
-      
-      ++currentPixel;
-    } while (writeIterator->nextPixel());
+    device->writePlanarBytes(pixels, 0, 0, width, height);
 }
