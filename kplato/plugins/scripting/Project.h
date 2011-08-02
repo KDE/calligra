@@ -72,6 +72,9 @@ namespace Scripting {
             QVariant data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId );
             /// Set the @p object @p property to @p data for @p role. Default @p role is Qt::EditRole
             bool setData( QObject *object, const QString &property, const QVariant &data, const QString &role = "Qt::EditRole" );
+            /// Return header text
+            QVariant headerData( int objectType, const QString &property );
+
             /// Return number of schedule managers
             int scheduleCount() const;
             /// Return schedule manager at @p index
@@ -167,6 +170,8 @@ namespace Scripting {
             QVariant calendarData( const KPlato::Calendar *calendar, const QString &property, const QString &role, long = -1 );
             /// Set calendar data
             bool setCalendarData( KPlato::Calendar *calendar, const QString &property, const QVariant &data, const QString &role );
+            /// Return the header data of calendars
+            QVariant calendarHeaderData( const QString &property );
 
             /// Return the Scripting::Schedule that interfaces the KPlato::ScheuleManager @p sch
             QObject *schedule( KPlato::ScheduleManager *sch );

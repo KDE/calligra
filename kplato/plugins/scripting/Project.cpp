@@ -111,6 +111,18 @@ bool Scripting::Project::setData( QObject *object, const QString &property, cons
     return false;
 }
 
+QVariant Scripting::Project::headerData( int objectType, const QString &property )
+{
+    switch ( objectType ) {
+        case 0: return nodeHeaderData( property );
+        case 1: return resourceHeaderData( property );
+        case 2: return accountHeaderData( property );
+        case 3: return calendarHeaderData( property );
+        default: break;
+    }
+    return QVariant();
+}
+
 int Scripting::Project::scheduleCount() const
 {
     return project()->numScheduleManagers();
@@ -540,6 +552,12 @@ bool Scripting::Project::setCalendarData( KPlato::Calendar *calendar, const QStr
 int Scripting::Project::calendarColumnNumber(const QString& property) const
 {
     return m_calendarModel.columnMap().keyToValue( property.toUtf8() );
+}
+
+QVariant Scripting::Project::calendarHeaderData( const QString &property )
+{
+    int col = calendarColumnNumber( property );
+    return m_calendarModel.headerData( col, Qt::Horizontal );
 }
 
 //-----------------------
