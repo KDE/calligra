@@ -55,6 +55,62 @@ Scripting::Project::~Project()
     qDeleteAll( m_accounts );
 }
 
+QVariant Scripting::Project::data( QObject *object, const QString &property )
+{
+    return data( object, property, "DisplayRole", -1 );
+}
+
+QVariant Scripting::Project::data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId )
+{
+    Node *n = qobject_cast<Node*>( object );
+    if ( n ) {
+        return nodeData( n->kplatoNode(), property, role, scheduleId );
+    }
+    Resource *r = qobject_cast<Resource*>( object );
+    if ( r ) {
+        return resourceData( r->kplatoResource(), property, role, scheduleId );
+    }
+    ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
+    if ( g ) {
+        return resourceGroupData( g->kplatoResourceGroup(), property, role );
+    }
+    Account *a = qobject_cast<Account*>( object );
+    if ( a ) {
+        return accountData( a->kplatoAccount(), property, role );
+    }
+    Calendar *c = qobject_cast<Calendar*>( object );
+    if ( c ) {
+        return calendarData( c->kplatoCalendar(), property, role );
+    }
+    // TODO Schedule (if needed)
+    return QVariant();
+}
+
+bool Scripting::Project::setData( QObject *object, const QString &property, const QVariant &data, const QString &role )
+{
+    Node *n = qobject_cast<Node*>( object );
+    if ( n ) {
+        return setNodeData( n->kplatoNode(), property, data, role );
+    }
+    Resource *r = qobject_cast<Resource*>( object );
+    if ( r ) {
+        return setResourceData( r->kplatoResource(), property, data, role );
+    }
+    ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
+    if ( g ) {
+        return setResourceGroupData( g->kplatoResourceGroup(), property, data, role );
+    }
+    Account *a = qobject_cast<Account*>( object );
+    if ( a ) {
+        return setAccountData( a->kplatoAccount(), property, data, role );
+    }
+    Calendar *c = qobject_cast<Calendar*>( object );
+    if ( c ) {
+        return setCalendarData( c->kplatoCalendar(), property, data, role );
+    }
+    return false;
+}
+
 int Scripting::Project::scheduleCount() const
 {
     return project()->numScheduleManagers();
@@ -92,11 +148,19 @@ QVariant Scripting::Project::nodeHeaderData( const QString &property )
 
 int Scripting::Project::nodeColumnNumber( const QString &property ) const
 {
-    return m_nodeModel.columnMap().keyToValue( property.toUtf8() );
+    QString prop = property;
+    if ( prop.left( 4 ) != "Node" ) {
+        prop.prepend( "Node" );
+    }
+    return m_nodeModel.columnMap().keyToValue( prop.toUtf8() );
 }
 
 int Scripting::Project::resourceColumnNumber( const QString &property ) const
 {
+    QString prop = property;
+    if ( prop.left( 8 ) != "Resource" ) {
+        prop.prepend( "Resource" );
+    }
     return m_resourceModel.columnMap().keyToValue( property.toUtf8() );
 }
 
@@ -163,8 +227,22 @@ QObject *Scripting::Project::createTaskCopy(const QObject* copy, QObject* parent
         KPlato::Node *aft = after ? static_cast<Node*>( after )->kplatoNode() : 0;
         cmd = new TaskAddCmd( project(), t, aft, i18nc( "(qtundo_format)", "Add task" ) );
     }
-    cmd->redo();
-    m_command->addCommand( cmd );
+    slotAddCommand( cmd );
+    return node( t );
+}
+
+QObject *Scripting::Project::createTask( QObject* parent, QObject* after )
+{
+    KPlato::Task *t = project()->createTask();
+    KPlato::NamedCommand *cmd;
+    if ( parent ) {
+        KPlato::Node *par = static_cast<Node*>( parent )->kplatoNode();
+        cmd = new SubtaskAddCmd( project(), t, par, i18nc( "(qtundo_format)", "Add task" ) );
+    } else {
+        KPlato::Node *aft = after ? static_cast<Node*>( after )->kplatoNode() : 0;
+        cmd = new TaskAddCmd( project(), t, aft, i18nc( "(qtundo_format)", "Add task" ) );
+    }
+    slotAddCommand( cmd );
     return node( t );
 }
 
@@ -457,6 +535,11 @@ QVariant Scripting::Project::calendarData(const KPlato::Calendar* calendar, cons
 bool Scripting::Project::setCalendarData( KPlato::Calendar *calendar, const QString &property, const QVariant &data, const QString &role )
 {
     return false;
+}
+
+int Scripting::Project::calendarColumnNumber(const QString& property) const
+{
+    return m_calendarModel.columnMap().keyToValue( property.toUtf8() );
 }
 
 //-----------------------
