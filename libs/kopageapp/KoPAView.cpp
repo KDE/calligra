@@ -30,6 +30,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QLabel>
+#include <QTabBar>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoResourceManager.h>
@@ -222,10 +223,16 @@ void KoPAView::initGUI()
             d->horizontalRuler, SLOT(setUnit(const KoUnit&)));
     connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
             d->verticalRuler, SLOT(setUnit(const KoUnit&)));
+    //Layout a tool bar on top of normal view
+    m_tabBar = new QTabBar();
 
-    gridLayout->addWidget(d->horizontalRuler, 0, 1);
-    gridLayout->addWidget(d->verticalRuler, 1, 0);
-    gridLayout->addWidget(canvasController, 1, 1 );
+    gridLayout->addWidget(m_tabBar, 0, 0, 1, 2);
+    gridLayout->addWidget(d->horizontalRuler, 2, 1);
+    gridLayout->addWidget(d->verticalRuler, 2, 0);
+    gridLayout->addWidget(canvasController, 2, 1 );
+
+    //tab bar is hidden by default a method is provided to acces to the tab bar
+    m_tabBar->hide();
 
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
             this, SLOT(pageOffsetChanged()));
@@ -1106,6 +1113,11 @@ void KoPAView::centerPage()
     d->canvasController->setPreferredCenter(documentCenter);
     d->canvasController->recenterPreferred();
 
+}
+
+QTabBar * KoPAView::tabBar() const
+{
+    return m_tabBar;
 }
 
 #include <KoPAView.moc>

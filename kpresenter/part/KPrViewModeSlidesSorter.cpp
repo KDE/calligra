@@ -107,6 +107,12 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
 
     QSplitter *viewsSplitter = new QSplitter(Qt::Vertical);
 
+    //Create tab bar and sync with normal view tab bar
+    m_tabBar = new QTabBar();
+    for (int i = 0; i < view->tabBar()->count(); ++i) {
+        m_tabBar->addTab(view->tabBar()->tabText(i));
+    }
+
     //hide Custom Shows View
     m_customSlideShowView->setMaximumHeight(0);
 
@@ -121,6 +127,11 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
 
     viewsSplitter->addWidget(m_slidesSorterView);
     viewsSplitter->addWidget(m_customSlideShowView);
+
+    QMargins margins = centralWidgetLayout->contentsMargins();
+    margins.setTop(0);
+    centralWidgetLayout->setContentsMargins(margins);
+    centralWidgetLayout->addWidget(m_tabBar);
     centralWidgetLayout->addWidget(viewsSplitter);
     centralWidgetLayout->addWidget(m_customShowsToolBar);
 
@@ -251,6 +262,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
     if (view) {
         view->hide();
+        m_tabBar->setCurrentIndex(view->tabBar()->currentIndex());
     }
     m_centralWidget->show();
     m_slidesSorterView->setFocus(Qt::ActiveWindowFocusReason);
@@ -271,6 +283,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
         loadZoomConfig();
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
         connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
+        connect(m_tabBar, SIGNAL(currentChanged(int)), kPrview, SLOT(changeViewByIndex(int)));
     }
 }
 
@@ -297,10 +310,12 @@ void KPrViewModeSlidesSorter::deactivate()
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
+        kPrview->tabBar()->setCurrentIndex(m_tabBar->currentIndex());
         kPrview->restoreZoomConfig();
         connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
         connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
+        disconnect(m_tabBar, SIGNAL(currentChanged(int)), kPrview, SLOT(changeViewByIndex(int)));
     }
     disableEditActions();
 }

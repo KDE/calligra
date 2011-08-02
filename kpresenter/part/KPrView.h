@@ -125,6 +125,9 @@ public slots:
 
     void showNormal();
 
+    /** Change current view mode using a given index */
+    void changeViewByIndex(int index);
+
 protected:
     void initGUI();
     void initActions();

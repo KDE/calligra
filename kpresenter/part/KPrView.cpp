@@ -189,6 +189,13 @@ void KPrView::initGUI()
         group.writeEntry( "State", state );
     }
     initZoomConfig();
+
+    //unhide tab bar and populate with view modes
+    tabBar()->show();
+    tabBar()->addTab("Normal");
+    tabBar()->addTab("Notes");
+    tabBar()->addTab("Slides Sorter");
+    tabBar()->setCurrentIndex(0);
 }
 
 void KPrView::initActions()
@@ -293,6 +300,8 @@ void KPrView::initActions()
     actionCollection()->addAction( "black_presentation", m_actionBlackPresentation );
     connect( m_actionBlackPresentation, SIGNAL( activated() ), this, SLOT( blackPresentation() ) );
     m_actionBlackPresentation->setEnabled(false);
+
+    connect(tabBar(), SIGNAL(currentChanged(int)), this, SLOT(changeViewByIndex(int)));
 }
 
 void KPrView::startPresentation()
@@ -344,6 +353,7 @@ void KPrView::showNormal()
 {
     setViewMode(m_normalMode);
     KAction *action = (KAction*) actionCollection()->action("view_normal");
+    tabBar()->setCurrentIndex(0);
     if (action){
         action-> setChecked(true);
     }
@@ -357,6 +367,7 @@ void KPrView::showNotes()
         actionCollection()->action( "view_masterpages" )->setChecked( false );
         setMasterMode( false );
     }
+    tabBar()->setCurrentIndex(1);
     setViewMode(m_notesMode);
 }
 
@@ -368,7 +379,25 @@ void KPrView::showSlidesSorter()
         actionCollection()->action( "view_masterpages" )->setChecked( false );
         setMasterMode( false );
     }
+    tabBar()->setCurrentIndex(2);
     setViewMode(m_slidesSorterMode);
+}
+
+
+void KPrView::changeViewByIndex(int index)
+{
+    if (index == 0) {
+        showNormal();
+    }
+    else if (index == 1) {
+        showNotes();
+    }
+    else if (index == 2) {
+        showSlidesSorter();
+    }
+    else {
+        return;
+    }
 }
 
 void KPrView::editCustomSlideShows()

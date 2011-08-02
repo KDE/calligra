@@ -45,6 +45,7 @@ class KToggleAction;
 class KUrl;
 class QTextDocument;
 class QLabel;
+class QTabBar;
 class KoCopyController;
 class KoCutController;
 
@@ -160,6 +161,9 @@ public:
 
     void centerPage();
 
+    /// return a pointer to the tab bar
+    QTabBar *tabBar() const;
+
 signals:
     /// emited when select All action is triggered and the view is not visible
     void selectAllRequested();
@@ -181,6 +185,9 @@ protected:
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
+
+    /// This tab bar hidden by default. It could be used to alternate between view modes
+    QTabBar *m_tabBar;
 
 public slots:
 
