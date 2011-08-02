@@ -54,6 +54,11 @@ const QMetaEnum AccountModel::columnMap() const
     return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
 }
 
+int AccountModel::propertyCount() const
+{
+    return columnMap().keyCount();
+}
+
 QVariant AccountModel::data( const Account *a, int property, int role ) const
 {
     QVariant result;
@@ -306,7 +311,7 @@ QModelIndex AccountItemModel::index( const Account *account ) const
 
 int AccountItemModel::columnCount( const QModelIndex & ) const
 {
-    return 2;
+    return m_model.propertyCount();
 }
 
 int AccountItemModel::rowCount( const QModelIndex &parent ) const
