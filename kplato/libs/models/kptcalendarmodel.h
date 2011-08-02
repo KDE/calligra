@@ -71,9 +71,16 @@ protected:
 class KPLATOMODELS_EXPORT CalendarItemModel : public ItemModelBase
 {
     Q_OBJECT
+    Q_ENUMS( Properties )
 public:
     explicit CalendarItemModel( QObject *parent = 0 );
     ~CalendarItemModel();
+
+    enum Properties {
+        Name = 0,
+        TimeZone
+    };
+    const QMetaEnum columnMap() const;
 
     virtual void setProject( Project *project );
 

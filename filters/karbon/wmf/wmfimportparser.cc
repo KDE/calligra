@@ -143,14 +143,14 @@ void WMFImportParser::setWindowExt(int width, int height)
     }
 }
 
-void WMFImportParser::setViewportOrg(int left, int top)
+void WMFImportParser::setViewportOrg(int /*left*/, int /*top*/)
 {
     // FIXME: Not Yet Implemented
     //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
 }
 
 
-void WMFImportParser::setViewportExt(int width, int height)
+void WMFImportParser::setViewportExt(int /*width*/, int /*height*/)
 {
     // FIXME: Not Yet Implemented
     //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
@@ -158,7 +158,7 @@ void WMFImportParser::setViewportExt(int width, int height)
 
 
 
-void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &context, const QMatrix &matrix,
+void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &/*context*/, const QMatrix &matrix,
                                 bool combine)
 {
     kDebug(30504) << "matrix =" << matrix;
@@ -382,7 +382,7 @@ void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<Q
 }
 
 
-void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &context, int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
+void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &/*context*/, int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
 {
     KoImageData * data = mDoc->imageCollection()->createImageData(image);
     if (! data)
@@ -409,7 +409,7 @@ void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &context, int x, int y,
 }
 
 
-void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &context, int x, int y, int width, int height, quint32 rasterOperation)
+void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &/*context*/, int x, int y, int width, int height, quint32 rasterOperation)
 {
     // Not Yet Implemented
     Q_UNUSED(x);

@@ -721,7 +721,9 @@ void WordsTableHandler::tableCellEnd()
     if (!color.isNull()) {
         KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName);
         Q_ASSERT(cellStyle);
-        cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);
+        if (cellStyle) {
+            cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);
+        }
         m_cellStyleName.clear();
 
         //add the current background-color to stack

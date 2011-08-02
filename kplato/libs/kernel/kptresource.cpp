@@ -149,6 +149,7 @@ bool ResourceGroup::isScheduled() const
 
 bool ResourceGroup::isBaselined( long id ) const
 {
+    Q_UNUSED(id);
     foreach ( const Resource *r, m_resources ) {
         if ( r->isBaselined() ) {
             return true;
@@ -815,6 +816,7 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end, int load, const QList<Resource*> &required ) {
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
     KLocale *locale = KGlobal::locale();
+    Q_UNUSED(locale);
     if (!from.isValid() || !end.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
         return;

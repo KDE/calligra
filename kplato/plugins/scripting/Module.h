@@ -22,6 +22,8 @@
 #ifndef SCRIPTING_MODULE_H
 #define SCRIPTING_MODULE_H
 
+#include "kplatoscripting_export.h"
+
 #include <QString>
 #include <QStringList>
 #include <QObject>
@@ -55,7 +57,7 @@ namespace Scripting {
     * print KPlato.project().name()
     * \endcode
     */
-    class Module : public KoScriptingModule
+    class KPLATOSCRIPTING_TEST_EXPORT Module : public KoScriptingModule
     {
             Q_OBJECT
         public:
@@ -79,14 +81,6 @@ namespace Scripting {
             /// Return a node property list view
             QWidget *createDataQueryView( QWidget *parent );
             
-            /// Return data, default role and schedule
-            QVariant data( QObject *object, const QString &property );
-            /// Return data
-            QVariant data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId );
-            /// Set the @p object @p property to @p data for @p role. Default @p role is Qt::EditRole
-            bool setData( QObject *object, const QString &property, const QVariant &data, const QString &role = "Qt::EditRole" );
-            /// Return header text
-            QVariant headerData( int objectType, const QString &property );
         private:
             /// \internal d-pointer class.
             class Private;

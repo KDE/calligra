@@ -143,7 +143,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
 #endif
-
+#ifndef QT_NO_DEBUG // these checks are just sanity checks in development mode
     KoTextDocument doc(m_document);
     KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(doc.styleManager() == styleManager);
@@ -151,6 +151,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     Q_ASSERT(doc.changeTracker() == changeTracker);
     Q_ASSERT(doc.inlineTextObjectManager() == m_wordsDocument->inlineTextObjectManager());
     Q_ASSERT(doc.undoStack() == m_wordsDocument->resourceManager()->undoStack());
+#endif
 }
 
 void KWTextFrameSet::setupDocument()

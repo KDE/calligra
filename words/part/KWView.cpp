@@ -1069,6 +1069,7 @@ void KWView::selectBookmark()
 
 void KWView::deleteBookmark(const QString &name)
 {
+    Q_UNUSED(name);
 #if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
     KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
