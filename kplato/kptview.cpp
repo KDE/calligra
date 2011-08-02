@@ -1805,13 +1805,13 @@ void View::slotDefineWBSFinished( int result )
 void View::slotConfigure()
 {
     //kDebug();
-    if( KConfigDialog::showDialog("KPlato Settings") ) {
+    if( KConfigDialog::showDialog("Plan Settings") ) {
         return;
     }
-    KConfigDialog *dialog = new KConfigDialog( this, "KPlato Settings", KPlatoSettings::self() );
+    KConfigDialog *dialog = new KConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "view-task" );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), "fill-color" );
-    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "kplatowork" );
+    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "planwork" );
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
     dialog->show();
@@ -2855,7 +2855,7 @@ void View::slotMailWorkpackage( Node *node, Resource *resource )
     kDebug();
     KTemporaryFile tmpfile;
     tmpfile.setAutoRemove( false );
-    tmpfile.setSuffix( ".kplatowork" );
+    tmpfile.setSuffix( ".planwork" );
     if ( ! tmpfile.open() ) {
         kDebug()<<"Failed to open file";
         KMessageBox::error(0, i18n("Failed to open temporary file" ) );
@@ -2895,7 +2895,7 @@ void View::slotMailWorkpackages( QList<Node*> &nodes, Resource *resource )
     foreach ( Node *n, nodes ) {
         KTemporaryFile tmpfile;
         tmpfile.setAutoRemove( false );
-        tmpfile.setSuffix( ".kplatowork" );
+        tmpfile.setSuffix( ".planwork" );
         if ( ! tmpfile.open() ) {
             kDebug()<<"Failed to open file";
             KMessageBox::error(0, i18n("Failed to open temporary file" ) );

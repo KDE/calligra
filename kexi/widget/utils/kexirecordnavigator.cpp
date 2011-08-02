@@ -101,7 +101,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
 
     d->textLabel = new QLabel(this);
     d->lyr->addWidget(d->textLabel);
-    setLabelText(i18n("Row:"));
+    setLabelText(i18n("Record:"));
 
     setFont( KexiUtils::smallFont() );
     QFontMetrics fm(font());
@@ -129,9 +129,9 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
     d->navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
     d->navRecordNumber->setValidator(d->navRecordNumberValidator);
     d->navRecordNumber->installEventFilter(this);
-    d->navRecordNumber->setToolTip(i18n("Current row number"));
+    d->navRecordNumber->setToolTip(i18n("Current record number"));
 
-    QLabel *lbl_of = new QLabel(i18nc("\"of\" in row number information: N of M", "of"), this);
+    QLabel *lbl_of = new QLabel(i18nc("\"of\" in record number information: N of M", "of"), this);
     lbl_of->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     lbl_of->setFixedWidth(fm.width(lbl_of->text()) + d->nav1DigitWidth);
     lbl_of->setAlignment(Qt::AlignCenter);
@@ -152,7 +152,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
     d->navRecordCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->navRecordCount->setFocusPolicy(Qt::NoFocus);
-    d->navRecordCount->setToolTip(i18n("Number of rows"));
+    d->navRecordCount->setToolTip(i18n("Number of records"));
 
     d->navBtnNext = createAction(KexiRecordNavigator::Actions::moveToNextRecord());
     d->navBtnNext->setAutoRepeat(true);
@@ -302,7 +302,7 @@ void KexiRecordNavigator::setRecordCount(uint count)
             resize(width() + (n.length() - d->navRecordCount->text().length())*d->nav1DigitWidth, height());
         }
     }
-    //update row number widget's width
+    //update record number widget's width
     const int w = d->nav1DigitWidth * qMax(qMax(n.length(), 2) + 1, d->navRecordNumber->text().length() + 1) + 2;
     if (d->navRecordNumber->width() != w) //resize
         d->navRecordNumber->setFixedWidth(w);
@@ -512,16 +512,16 @@ class KexiRecordNavigatorActionsInternal
 {
 public:
     KexiRecordNavigatorActionsInternal()
-            : moveToFirstRecord(i18n("First row"), "go-first-view", i18n("Go to first row"))
-            , moveToPreviousRecord(i18n("Previous row"), "go-previous-view", i18n("Go to previous row"))
-            , moveToNextRecord(i18n("Next row"), "go-next-view", i18n("Go to next row"))
-            , moveToLastRecord(i18n("Last row"), "go-last-view", i18n("Go to last row"))
-            , moveToNewRecord(i18n("New row"), "list-add", i18n("Go to new row")) {
-        moveToFirstRecord.setWhatsThis(i18n("Moves cursor to first row."));
-        moveToPreviousRecord.setWhatsThis(i18n("Moves cursor to previous row."));
-        moveToNextRecord.setWhatsThis(i18n("Moves cursor to next row."));
-        moveToLastRecord.setWhatsThis(i18n("Moves cursor to last row."));
-        moveToNewRecord.setWhatsThis(i18n("Moves cursor to new row and allows inserting."));
+            : moveToFirstRecord(i18n("First record"), "go-first-view", i18n("Go to first record"))
+            , moveToPreviousRecord(i18n("Previous record"), "go-previous-view", i18n("Go to previous record"))
+            , moveToNextRecord(i18n("Next record"), "go-next-view", i18n("Go to next record"))
+            , moveToLastRecord(i18n("Last record"), "go-last-view", i18n("Go to last record"))
+            , moveToNewRecord(i18n("New record"), "list-add", i18n("Go to new record")) {
+        moveToFirstRecord.setWhatsThis(i18n("Moves cursor to first record."));
+        moveToPreviousRecord.setWhatsThis(i18n("Moves cursor to previous record."));
+        moveToNextRecord.setWhatsThis(i18n("Moves cursor to next record."));
+        moveToLastRecord.setWhatsThis(i18n("Moves cursor to last record."));
+        moveToNewRecord.setWhatsThis(i18n("Moves cursor to new record and allows inserting."));
     }
     KGuiItem moveToFirstRecord;
     KGuiItem moveToPreviousRecord;

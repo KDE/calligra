@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KChart PNG Export Filter
-Name[bg]=Филтър за експортиране от KChart в PNG
+Name[bg]=Филтър за изнасяне от KChart в PNG
 Name[br]=Sil ezporzh PNG evit KChart
 Name[ca]=Filtre d'exportació PNG per al KChart
 Name[ca@valencia]=Filtre d'exportació PNG per al KChart
@@ -37,7 +37,7 @@ Name[nb]=PNG-eksportfilter for KChart
 Name[nds]=PNG-Exportfilter för KChart
 Name[ne]=केडीई चित्रपट पीएनजी निर्यात फिल्टर
 Name[nl]=PNG-exportfilter voor KChart
-Name[pl]=Filtr eksportu do formatu PNG z KChart
+Name[pl]=Filtr eksportu PNG z KChart
 Name[pt]=Filtro de Exportação de PNG para o KChart
 Name[pt_BR]=Filtro de exportação de PNG para o KChart
 Name[ro]=Filtru exportare KChart pentru PNG

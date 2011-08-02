@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=PPT Import Filter for KPresenter
-Name[bg]=Филтър за импортиране от PPT в KPresenter
+Name[bg]=Филтър за внасяне от PPT в KPresenter
 Name[ca]=Filtre d'importació PPT per al KPresenter
 Name[ca@valencia]=Filtre d'importació PPT per al KPresenter
 Name[cs]=Importní filtr PPT pro KPresenter
@@ -21,6 +21,7 @@ Name[kk]=PPT -> KPresenter импорт сүзгісі
 Name[nb]=PPT-importfilter for KPresenter
 Name[nds]=PPT-Importfilter för KPresenter
 Name[nl]=PPT-importfilter voor KPresenter
+Name[pl]=Filtr importu PPT dla KPresenter
 Name[pt]=Filtro de Importação de PPT para o KPresenter
 Name[pt_BR]=Filtro de importação de PPT para o KPresenter
 Name[ru]=Фильтр импорта презентаций PPT в KPresenter

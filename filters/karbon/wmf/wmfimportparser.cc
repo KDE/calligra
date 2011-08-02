@@ -32,6 +32,9 @@
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 
+#include <WmfEnums.h>
+#include <WmfDeviceContext.h>
+
 #include <pathshapes/rectangle/RectangleShape.h>
 #include <pathshapes/ellipse/EllipseShape.h>
 #include <artistictextshape/ArtisticTextShape.h>
@@ -80,7 +83,6 @@ bool WMFImportParser::play(KarbonDocument& doc)
 
 bool WMFImportParser::begin(const QRect &boundingBox)
 {
-    mBackgroundMode = Qt::TransparentMode;
     mCurrentOrg.setX(boundingBox.left());
     mCurrentOrg.setY(boundingBox.top());
 
@@ -125,51 +127,6 @@ void WMFImportParser::restore()
 }
 
 
-void WMFImportParser::setFont(const QFont &font, int rotation, int fontHeight)
-{
-    mFont = font;
-    Q_UNUSED(rotation);
-    Q_UNUSED(fontHeight);
-}
-
-
-void WMFImportParser::setPen(const QPen &pen)
-{
-    mPen = pen;
-}
-
-
-void WMFImportParser::setTextPen(const QPen &pen)
-{
-    mTextPen = pen;
-}
-
-
-const QPen &WMFImportParser::pen() const
-{
-    return mPen;
-}
-
-
-void WMFImportParser::setBrush(const QBrush &brush)
-{
-    mBrush = brush;
-}
-
-
-void WMFImportParser::setBackgroundColor(const QColor &c)
-{
-    mBackgroundColor = c;
-}
-
-
-void WMFImportParser::setBackgroundMode(Qt::BGMode mode)
-{
-    mBackgroundMode = mode;
-}
-
-
-
 void WMFImportParser::setWindowOrg(int left, int top)
 {
     mCurrentOrg.setX(left);
@@ -186,14 +143,14 @@ void WMFImportParser::setWindowExt(int width, int height)
     }
 }
 
-void WMFImportParser::setViewportOrg(int left, int top)
+void WMFImportParser::setViewportOrg(int /*left*/, int /*top*/)
 {
     // FIXME: Not Yet Implemented
     //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
 }
 
 
-void WMFImportParser::setViewportExt(int width, int height)
+void WMFImportParser::setViewportExt(int /*width*/, int /*height*/)
 {
     // FIXME: Not Yet Implemented
     //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
@@ -201,50 +158,44 @@ void WMFImportParser::setViewportExt(int width, int height)
 
 
 
-void WMFImportParser::setMatrix(const QMatrix &matrix, bool combine)
+void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &/*context*/, const QMatrix &matrix,
+                                bool combine)
 {
     kDebug(30504) << "matrix =" << matrix;
     kDebug(30504) << "combine =" << combine;
 }
 
 
-void WMFImportParser::setClipRegion(const QRegion &)
+void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, QColor color)
 {
+    Q_UNUSED(context);
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(color);
+
+    // Not Yet Implemented
 }
 
-
-QRegion WMFImportParser::clipRegion()
-{
-    return mClippingRegion;
-}
-
-
-void WMFImportParser::moveTo(int left, int top)
-{
-    mCurrentPoint.setX(left);
-    mCurrentPoint.setY(top);
-}
-
-
-void WMFImportParser::lineTo(int left, int top)
+void WMFImportParser::lineTo(Libwmf::WmfDeviceContext &context, int left, int top)
 {
     KoPathShape * line = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! line)
         return;
 
-    line->moveTo(QPointF(coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y())));
+    line->moveTo(QPointF(coordX(context.currentPosition.x()),
+                         coordY(context.currentPosition.y())));
     line->lineTo(QPointF(coordX(left), coordY(top)));
     line->normalize();
 
-    appendPen(*line);
+    appendPen(context, *line);
 
     mDoc->add(line);
-    mCurrentPoint.setX(left);
-    mCurrentPoint.setY(top);
+    context.currentPosition.setX(left);
+    context.currentPosition.setY(top);
 }
 
 
-void WMFImportParser::drawRect(int left, int top, int width, int height)
+void WMFImportParser::drawRect(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
@@ -255,14 +206,14 @@ void WMFImportParser::drawRect(int left, int top, int width, int height)
     rectangle->setPosition(bound.topLeft());
     rectangle->setSize(bound.size());
 
-    appendPen(*rectangle);
-    appendBrush(*rectangle);
+    appendPen(context, *rectangle);
+    appendBrush(context, *rectangle);
 
     mDoc->add(rectangle);
 }
 
 
-void WMFImportParser::drawRoundRect(int left, int top, int width, int height, int roundw, int roundh)
+void WMFImportParser::drawRoundRect(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height, int roundw, int roundh)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
@@ -275,14 +226,14 @@ void WMFImportParser::drawRoundRect(int left, int top, int width, int height, in
     rectangle->setCornerRadiusX(2.0 * qAbs(roundw));
     rectangle->setCornerRadiusY(2.0 * qAbs(roundh));
 
-    appendPen(*rectangle);
-    appendBrush(*rectangle);
+    appendPen(context, *rectangle);
+    appendBrush(context, *rectangle);
 
     mDoc->add(rectangle);
 }
 
 
-void WMFImportParser::drawEllipse(int left, int top, int width, int height)
+void WMFImportParser::drawEllipse(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
@@ -293,14 +244,14 @@ void WMFImportParser::drawEllipse(int left, int top, int width, int height)
     ellipse->setPosition(bound.topLeft());
     ellipse->setSize(bound.size());
 
-    appendPen(*ellipse);
-    appendBrush(*ellipse);
+    appendPen(context, *ellipse);
+    appendBrush(context, *ellipse);
 
     mDoc->add(ellipse);
 }
 
 
-void WMFImportParser::drawArc(int x, int y, int w, int h, int aStart, int aLen)
+void WMFImportParser::drawArc(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
@@ -318,14 +269,14 @@ void WMFImportParser::drawArc(int x, int y, int w, int h, int aStart, int aLen)
     arc->setPosition(bound.topLeft());
     arc->setSize(bound.size());
 
-    appendPen(*arc);
-    //appendBrush( *arc );
+    appendPen(context, *arc);
+    //appendBrush(context,  *arc );
 
     mDoc->add(arc);
 }
 
 
-void WMFImportParser::drawPie(int x, int y, int w, int h, int aStart, int aLen)
+void WMFImportParser::drawPie(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
@@ -343,14 +294,14 @@ void WMFImportParser::drawPie(int x, int y, int w, int h, int aStart, int aLen)
     pie->setPosition(bound.topLeft());
     pie->setSize(bound.size());
 
-    appendPen(*pie);
-    appendBrush(*pie);
+    appendPen(context, *pie);
+    appendBrush(context, *pie);
 
     mDoc->add(pie);
 }
 
 
-void WMFImportParser::drawChord(int x, int y, int w, int h, int aStart, int aLen)
+void WMFImportParser::drawChord(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
@@ -368,54 +319,54 @@ void WMFImportParser::drawChord(int x, int y, int w, int h, int aStart, int aLen
     chord->setPosition(bound.topLeft());
     chord->setSize(bound.size());
 
-    appendPen(*chord);
-    appendBrush(*chord);
+    appendPen(context, *chord);
+    appendBrush(context, *chord);
 
     mDoc->add(chord);
 }
 
 
-void WMFImportParser::drawPolyline(const QPolygon &pa)
+void WMFImportParser::drawPolyline(Libwmf::WmfDeviceContext &context, const QPolygon &pa)
 {
     KoPathShape *polyline = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! polyline)
         return;
 
-    appendPen(*polyline);
+    appendPen(context, *polyline);
     appendPoints(*polyline, pa);
 
     mDoc->add(polyline);
 }
 
 
-void WMFImportParser::drawPolygon(const QPolygon &pa, bool winding)
+void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPolygon &pa)
 {
     KoPathShape *polygon = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! polygon)
         return;
 
-    appendPen(*polygon);
-    appendBrush(*polygon);
+    appendPen(context, *polygon);
+    appendBrush(context, *polygon);
     appendPoints(*polygon, pa);
 
     polygon->close();
-    polygon->setFillRule(winding ? Qt::WindingFill : Qt::OddEvenFill);
+    polygon->setFillRule((context.polyFillMode == Libwmf::WINDING) ? Qt::WindingFill : Qt::OddEvenFill);
     mDoc->add(polygon);
 }
 
 
-void WMFImportParser::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
+void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa)
 {
     KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! path)
         return;
 
     if (listPa.count() > 0) {
-        appendPen(*path);
-        appendBrush(*path);
+        appendPen(context, *path);
+        appendBrush(context, *path);
         appendPoints(*path, listPa.first());
         path->close();
-        path->setFillRule(winding ? Qt::WindingFill : Qt::OddEvenFill);
+        path->setFillRule(context.polyFillMode ? Qt::WindingFill : Qt::OddEvenFill);
         foreach(const QPolygon & pa, listPa) {
             KoPathShape *newPath = static_cast<KoPathShape*>(createShape(KoPathShapeId));
             if (! newPath)
@@ -431,7 +382,7 @@ void WMFImportParser::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 }
 
 
-void WMFImportParser::drawImage(int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
+void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &/*context*/, int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
 {
     KoImageData * data = mDoc->imageCollection()->createImageData(image);
     if (! data)
@@ -458,7 +409,7 @@ void WMFImportParser::drawImage(int x, int y, const QImage &image, int sx, int s
 }
 
 
-void WMFImportParser::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
+void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &/*context*/, int x, int y, int width, int height, quint32 rasterOperation)
 {
     // Not Yet Implemented
     Q_UNUSED(x);
@@ -470,19 +421,19 @@ void WMFImportParser::patBlt(int x, int y, int width, int height, quint32 raster
 
 
 
-void WMFImportParser::drawText(int x, int y, int , int , int flags, const QString& text, double rotation)
+void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, const QString& text)
 {
     enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
 
-    if (flags & CurrentPosition) {
+    if (context.textAlign & CurrentPosition) {
         // (left, top) position = current logical position
-        x = mCurrentPoint.x();
-        y = mCurrentPoint.y();
+        x = context.currentPosition.x();
+        y = context.currentPosition.y();
     }
 
     // adjust font size
-    QFont font = mFont;
-    font.setPointSizeF(coordY(mFont.pointSize()));
+    QFont font = context.font;
+    font.setPointSizeF(coordY(context.font.pointSize()));
 
     ArtisticTextShape * textShape = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
     if (! textShape)
@@ -493,29 +444,31 @@ void WMFImportParser::drawText(int x, int y, int , int , int flags, const QStrin
 
     // determine y-offset from given baseline position
     qreal yOffset = 0.0;
-    if (flags & AlignBottom)
+    if (context.textAlign & AlignBottom)
         yOffset -= textShape->baselineOffset();
 
     textShape->setPosition(QPointF(coordX(x), coordY(y) + yOffset));
 
     // set text anchor
     qreal xOffset = 0.0;
-    if (flags & AlignHCenter) {
+    if (context.textAlign & AlignHCenter) {
         textShape->setTextAnchor(ArtisticTextShape::AnchorMiddle);
         xOffset = -0.5 * textShape->size().width();
     }
 
-    if (rotation) {
+    if (context.escapement) {
         // we rotate around the anchor point
         QPointF anchor(-xOffset, -yOffset);
         QTransform matrix;
         matrix.translate(anchor.x(), anchor.y());
-        matrix.rotate(rotation);
+        matrix.rotate(qreal(context.escapement) * M_PI / qreal(1800.0));  // rotation is in 1/10th of a degree
         matrix.translate(-anchor.x(), -anchor.y());
         textShape->applyTransformation(matrix);
     }
 
-    textShape->setBackground(new KoColorBackground(mTextPen.color()));
+    // FIXME: This must be wrong. The text pen is supposed to be used
+    //        for the foreground, not the background.  /iw
+    textShape->setBackground(new KoColorBackground(context.foregroundTextColor));
 
     mDoc->add(textShape);
 }
@@ -524,22 +477,22 @@ void WMFImportParser::drawText(int x, int y, int , int , int flags, const QStrin
 //-----------------------------------------------------------------------------
 // Utilities
 
-void WMFImportParser::appendPen(KoShape& obj)
+void WMFImportParser::appendPen(Libwmf::WmfDeviceContext &context, KoShape& obj)
 {
-    double width = mPen.width() * mScaleX;
+    double width = context.pen.width() * mScaleX;
 
-    KoLineBorder * border = new KoLineBorder(((width < 0.99) ? 1 : width), mPen.color());
-    border->setLineStyle(mPen.style(), mPen.dashPattern());
-    border->setCapStyle(mPen.capStyle());
-    border->setJoinStyle(mPen.joinStyle());
+    KoLineBorder * border = new KoLineBorder(((width < 0.99) ? 1 : width), context.pen.color());
+    border->setLineStyle(context.pen.style(), context.pen.dashPattern());
+    border->setCapStyle(context.pen.capStyle());
+    border->setJoinStyle(context.pen.joinStyle());
 
     obj.setBorder(border);
 }
 
 
-void WMFImportParser::appendBrush(KoShape& obj)
+void WMFImportParser::appendBrush(Libwmf::WmfDeviceContext &context, KoShape& obj)
 {
-    switch (mBrush.style()) {
+    switch (context.brush.style()) {
     case Qt::NoBrush:
         obj.setBackground(0);
         break;
@@ -547,8 +500,8 @@ void WMFImportParser::appendBrush(KoShape& obj)
         KoImageCollection * imageCollection = mDoc->imageCollection();
         if (imageCollection) {
             KoPatternBackground * bg = new KoPatternBackground(imageCollection);
-            bg->setPattern(mBrush.textureImage());
-            bg->setTransform(mBrush.transform());
+            bg->setPattern(context.brush.textureImage());
+            bg->setTransform(context.brush.transform());
             obj.setBackground(bg);
         }
         break;
@@ -556,13 +509,13 @@ void WMFImportParser::appendBrush(KoShape& obj)
     case Qt::LinearGradientPattern:
     case Qt::RadialGradientPattern:
     case Qt::ConicalGradientPattern: {
-        KoGradientBackground * bg = new KoGradientBackground(*mBrush.gradient());
-        bg->setTransform(mBrush.transform());
+        KoGradientBackground * bg = new KoGradientBackground(*context.brush.gradient());
+        bg->setTransform(context.brush.transform());
         obj.setBackground(bg);
         break;
     }
     default:
-        obj.setBackground(new KoColorBackground(mBrush.color(), mBrush.style()));
+        obj.setBackground(new KoColorBackground(context.brush.color(), context.brush.style()));
     }
 }
 

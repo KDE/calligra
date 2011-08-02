@@ -2,57 +2,50 @@
 # -*- coding: utf-8 -*-
 
 import os, datetime, sys, traceback, pickle
-import Kross, KPlato
+import Kross, Plan
 
 T = Kross.module("kdetranslation")
-def i18n(text, args = []):
-    if T is not None:
-        return T.i18n(text, args).decode('utf-8')
-    # No translation module, return the untranslated string
-    for a in range( len(args) ):
-        text = text.replace( ("%" + "%d" % ( a + 1 )), str(args[a]) )
-    return text
 
 class ResourcesImporter:
 
     def __init__(self, scriptaction):
         self.scriptaction = scriptaction
 
-        self.proj = KPlato.project()
+        self.proj = Plan.project()
         
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog(i18n("Resources Import"))
+        self.dialog = self.forms.createDialog(T.i18n("Resources Import"))
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         #TODO add options page ( import Calendars? Select calendars, Select resources... )
         
-        openpage = self.dialog.addPage(i18n("Open"),i18n("Plan Resources"),"document-open")
+        openpage = self.dialog.addPage(T.i18n("Open"),T.i18n("Plan Resources"),"document-open")
         self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kplatresourcesimportopen")
         self.openwidget.setMode("Opening")
-        self.openwidget.setFilter("*.kplato|%(1)s\n*|%(2)s" % { '1' : i18n("Resource Busy Information"), '2' : i18n("All Files") } )
+        self.openwidget.setFilter("*.plan|%(1)s\n*|%(2)s" % { '1' : T.i18n("Plan"), '2' : T.i18n("All Files") } )
 
         if self.dialog.exec_loop():
             try:
                 self.doImport( self.proj )
             except:
-                self.forms.showMessageBox("Error", i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
+                self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doImport( self, project ):
         filename = self.openwidget.selectedFile()
         if not os.path.isfile(filename):
-            raise Exception, i18n("No file selected")
+            raise Exception, T.i18n("No file selected")
 
-        Other = KPlato.openDocument("Other", filename)
+        Other = Plan.openDocument("Other", filename)
         if Other is None:
-            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Could not open document: %1", [filename]))
+            self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Could not open document: %1", [filename]))
             return
         otherproj = Other.project()
         if otherproj is None:
-            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("No project to import from"))
+            self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("No project to import from"))
             return
         if project.id() == otherproj.id():
-            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Project identities are identical"))
+            self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Project identities are identical"))
             return
 
         for ci in range( otherproj.calendarCount() ):
@@ -65,31 +58,33 @@ class ResourcesImporter:
             if gr is None:
                 gr = project.createResourceGroup( othergroup )
                 if gr is None:
-                    self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Unable to create copy of resource group: %1", [othergroup.name()]))
+                    self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Unable to create copy of resource group: %1", [othergroup.name()]))
                     return
             for ri in range( othergroup.resourceCount() ):
                 otherresource = othergroup.resourceAt( ri )
                 if otherresource is None:
-                    self.forms.showMessageBox("Sorry", i18n("Error"), i18n("No resource to copy from"))
+                    self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("No resource to copy from"))
                     return
                 self.doImportResource( project, gr, otherresource )
+
+        project.addCommand( T.i18nc( "(qtundoformat)", "Import resources" ) );
 
     def doImportResource( self, project, group, resource ):
         r = project.findResource( resource.id() )
         if r is None:
             r = project.createResource( group, resource )
             if r is None:
-                self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Unable to create copy of resource: %1", [resource.name()]))
+                self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Unable to create copy of resource: %1", [resource.name()]))
                 return
         else:
             #TODO update?
-            print "Resource already exists: %s %s" % ( r.id(), KPlato.data( r, 'ResourceName' ) )
+            print "Resource already exists: %s %s" % ( r.id(), project.data( r, 'ResourceName' ) )
     
     def doImportCalendar( self, project, calendar, parent = None ):
         cal = project.findCalendar( calendar.id() )
         if cal is not None:
             #TODO let user decide
-            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Calendar already exists: %1", [cal.name()]))
+            self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Calendar already exists: %1", [cal.name()]))
             return
         # python doesn't seem to give a 0 pointer for a None object
         if parent is None:
@@ -97,7 +92,7 @@ class ResourcesImporter:
         else:
             cal = project.createCalendar( calendar, parent )
         if cal is None:
-            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Unable to create copy of calendar: %1", [calendar.name()]))
+            self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Unable to create copy of calendar: %1", [calendar.name()]))
             return
         for ci in range( calendar.childCount() ):
             self.doImportCalendar( project, calendar.childAt( ci ), cal )

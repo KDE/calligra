@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os, datetime, sys, traceback, pickle
-import Kross, KPlato
+import Kross, Plan
+
+T = Kross.module("kdetranslation")
 
 #TODO some ui
-KPlato.project().clearAllExternalAppointments();
+Plan.project().clearExternalAppointments()
+Plan.project().addCommand( T.i18nc( "(qtundoformat)", "Clear all external appointments" ) )
 

@@ -53,12 +53,10 @@
 #include "KPrPicturesImport.h"
 #include "KPrFactory.h"
 #include "commands/KPrAnimationCreateCommand.h"
-#include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
 #include "dockers/KPrPageLayoutDocker.h"
 #include "KPrHtmlExport.h"
 #include "KPrCustomSlideShows.h"
-#include "ui/KPrCustomSlideShowsDialog.h"
 #include "ui/KPrConfigureSlideShowDialog.h"
 #include "ui/KPrConfigurePresenterViewDialog.h"
 #include "ui/KPrHtmlExportDialog.h"
@@ -133,6 +131,12 @@ KPrViewAdaptor * KPrView::dbusObject() const
 KPrViewModePresentation * KPrView::presentationMode() const
 {
     return m_presentationMode;
+}
+
+
+KPrViewModeSlidesSorter * KPrView::slidesSorter() const
+{
+    return m_slidesSorterMode;
 }
 
 bool KPrView::isPresentationRunning() const
@@ -234,9 +238,9 @@ void KPrView::initActions()
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
     connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
 
-    m_actionCreateCustomSlideShowsDialog = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
-    actionCollection()->addAction( "edit_customslideshows", m_actionCreateCustomSlideShowsDialog );
-    connect( m_actionCreateCustomSlideShowsDialog, SIGNAL( activated() ), this, SLOT( dialogCustomSlideShows() ) );
+    m_actionEditCustomSlideShows = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
+    actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
+    connect( m_actionEditCustomSlideShows, SIGNAL( activated() ), this, SLOT( editCustomSlideShows() ) );
 
     m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
@@ -367,24 +371,16 @@ void KPrView::showSlidesSorter()
     setViewMode(m_slidesSorterMode);
 }
 
-void KPrView::dialogCustomSlideShows()
+void KPrView::editCustomSlideShows()
 {
-    KPrDocument *doc = static_cast<KPrDocument *>( kopaDocument() );
-    KPrCustomSlideShows *finalSlideShows;
-    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), doc, finalSlideShows );
-    dialog.setModal( true );
-    if ( dialog.exec() == QDialog::Accepted ) {
-        kopaCanvas()->addCommand( new KPrSetCustomSlideShowsCommand( doc, finalSlideShows ) );
-    }
-    else {
-        delete finalSlideShows;
-    }
+    slidesSorter()->setActiveCustomSlideShow(1);
+    showSlidesSorter();
 }
 
 void KPrView::configureSlideShow()
 {
     KPrDocument *doc = static_cast<KPrDocument *>( kopaDocument() );
-    KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog( doc, this );
+    KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog(doc, this);
 
     if ( dialog->exec() == QDialog::Accepted ) {
         doc->setActiveCustomSlideShow( dialog->activeCustomSlideShow() );

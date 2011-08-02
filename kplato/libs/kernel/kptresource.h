@@ -456,14 +456,21 @@ public:
     void addExternalAppointment( const QString &id, Appointment *a );
 
     void addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load = 100 );
+    void subtractExternalAppointment( const QString &id, const DateTime &from, const DateTime &end, double load );
+
     void clearExternalAppointments();
     void clearExternalAppointments( const QString id );
+    /// Take the external appointments with identity @p id from the list of external appointments
+    Appointment *takeExternalAppointment( const QString &id );
+    /// Return external appointments with identity @p id
     AppointmentIntervalList externalAppointments( const QString &id );
     AppointmentIntervalList externalAppointments( const DateTimeInterval &interval = DateTimeInterval() ) const;
 
     int numExternalAppointments() const { return m_externalAppointments.count(); }
     QList<Appointment*> externalAppointmentList() const { return m_externalAppointments.values(); }
-    
+    /// return a map of project id, project name
+    QMap<QString, QString> externalProjects() const;
+
     /// Return a measure of how suitable the resource is for allocation
     long allocationSuitability( const DateTime &time, const Duration &duration, bool backward );
 

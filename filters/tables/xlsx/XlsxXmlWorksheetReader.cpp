@@ -1269,6 +1269,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 {
     Row* row = m_context->sheet->row(m_currentRow, false);
     Q_ASSERT(row);
+    Q_UNUSED(row);
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());

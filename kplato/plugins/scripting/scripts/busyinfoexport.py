@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, datetime, sys, traceback, csv, pickle
-import Kross, KPlato
+import Kross, Plan
 
 T = Kross.module("kdetranslation")
 
@@ -20,7 +20,7 @@ class BusyinfoExporter:
         self.scriptaction = scriptaction
         self.currentpath = self.scriptaction.currentPath()
 
-        self.proj = KPlato.project()
+        self.proj = Plan.project()
         
         self.forms = Kross.module("forms")
         self.dialog = self.forms.createDialog(i18n("Busy Information Export"))
@@ -28,7 +28,7 @@ class BusyinfoExporter:
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         datapage = self.dialog.addPage(i18n("Schedules"),i18n("Export Selected Schedule"),"document-export")
-        self.scheduleview = KPlato.createScheduleListView(datapage)
+        self.scheduleview = Plan.createScheduleListView(datapage)
         
         savepage = self.dialog.addPage(i18n("Save"),i18n("Export Busy Info File"),"document-save")
         self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kplatobusyinfoexportsave")
@@ -53,7 +53,7 @@ class BusyinfoExporter:
         file = open( filename, 'wb' )
         p = []
         p.append( project.id() )
-        p.append( KPlato.data( project, 'NodeName' ) )
+        p.append( project.data( project, 'NodeName' ) )
         pickle.dump( p, file )
         for i in range( project.resourceGroupCount() ):
             g = project.resourceGroupAt( i )
@@ -62,7 +62,7 @@ class BusyinfoExporter:
                 lst = r.appointmentIntervals( schId )
                 for iv in lst:
                     iv.insert( 0, r.id() )
-                    iv.insert( 1, KPlato.data( r, 'ResourceName' ) )
+                    iv.insert( 1, project.data( r, 'ResourceName' ) )
                     pickle.dump( iv, file )
 
         file.close()

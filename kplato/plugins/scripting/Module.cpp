@@ -22,6 +22,7 @@
 #include "Module.h"
 #include "Project.h"
 #include "Account.h"
+#include "Calendar.h"
 #include "Node.h"
 #include "Resource.h"
 #include "ResourceGroup.h"
@@ -35,10 +36,11 @@
 // kde
 #include <kdebug.h>
 // kplato
-#include <kptpart.h>
-#include <kptview.h>
-#include <kptproject.h>
-#include <kptnode.h>
+#include "kptpart.h"
+#include "kptview.h"
+#include "kptproject.h"
+#include "kptnode.h"
+#include "kptcommand.h"
 
 extern "C"
 {
@@ -60,7 +62,7 @@ namespace Scripting {
     };
 
 Module::Module(QObject* parent)
-    : KoScriptingModule(parent, "KPlato")
+    : KoScriptingModule(parent, "Plan")
     , d( new Private() )
 {
     d->doc = 0;
@@ -144,51 +146,13 @@ QWidget *Module::createDataQueryView( QWidget *parent )
     return v;
 }
 
-
-QVariant Module::data( QObject *object, const QString &property )
+void Module::addCommand( KUndo2Command *cmd )
 {
-    return data( object, property, "DisplayRole", -1 );
-}
-
-QVariant Module::data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId )
-{
-    Project *p = qobject_cast<Project*>( project() );
-    if ( object == 0 || p == 0) {
-        return QVariant();
-    }
-    Node *n = qobject_cast<Node*>( object );
-    if ( n ) {
-        return p->nodeData( n->kplatoNode(), property, role, scheduleId );
-    }
-    Resource *r = qobject_cast<Resource*>( object );
-    if ( r ) {
-        return p->resourceData( r->kplatoResource(), property, role, scheduleId );
-    }
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
-    if ( g ) {
-        return p->resourceGroupData( g->kplatoResourceGroup(), property, role );
-    }
-    Account *a = qobject_cast<Account*>( object );
-    if ( a ) {
-        return p->accountData( a->kplatoAccount(), property, role );
-    }
-    // TODO Schedule (if needed)
-    return QVariant();
-}
-
-QVariant Module::headerData( int objectType, const QString &property )
-{
-    Project *p = qobject_cast<Project*>( project() );
-    if ( p == 0 ) {
-        return QVariant();
-    }
-    switch ( objectType ) {
-        case 0: return p->nodeHeaderData( property );
-        case 1: return p->resourceHeaderData( property );
-        case 2: return p->accountHeaderData( property );
-        default: break;
-    }
-    return QVariant();
+    KPlato::MacroCommand *m = new MacroCommand( cmd->text().isEmpty()
+            ? i18nc( "(qtundo-format)", "Scripting command" )
+            : cmd->text() );
+    doc()->addCommand( m );
+    m->addCommand( cmd );
 }
 
 } //namespace Scripting

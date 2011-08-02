@@ -294,7 +294,7 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
-            if ( res->availableFrom().isValid() ) {
+            if ( res->availableUntil().isValid() ) {
                 return i18nc( "infor:tooltip", "Available until: %1", KGlobal::locale()->formatDateTime( res->availableUntil(), KLocale::LongDate, KLocale::TimeZone ) );
             }
             return i18nc( "infor:tooltip", "Available from project target finish time: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone ) );

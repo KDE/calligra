@@ -272,7 +272,6 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
             } else {
                 kWarning() << "Could not find Normal style, numbering not added!";
             }
-
         }
     }
 } //end sectionStart()
@@ -1891,36 +1890,37 @@ QString WordsTextHandler::createBulletStyle(const QString& textStyleName) const
         return QString();
     }
 
+    const KoGenStyle::PropertyType tt = KoGenStyle::TextType;
     KoGenStyle style(KoGenStyle::TextStyle, "text");
     QString prop, value;
 
     //copy only selected properties
 
     prop = QString("fo:color");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     prop = QString("fo:font-size");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     prop = QString("fo:font-weight");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     prop = QString("style:font-name");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (value.isEmpty()) {
         const KoGenStyle* normal = m_mainStyles->style("Normal");
         if (normal) {
-            value = normal->property(prop, KoGenStyle::TextType);
+            value = normal->property(prop, tt);
         }
     }
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     //insert style into styles collection
     return m_mainStyles->insert(style, QString("T"));
