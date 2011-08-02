@@ -31,8 +31,10 @@
 #include <KoUnit.h>
 #include <KoCanvasObserverBase.h>
 #include <QtGui/QDockWidget>
+#include <KoPathShape.h>
 
 class KoShapeBorderModel;
+class KoPathShape;
 
 /// A docker for setting properties of a line border
 class StrokeDocker : public QDockWidget, public KoCanvasObserverBase
@@ -61,7 +63,11 @@ private slots:
     void slotJoinChanged( int ID );
     /// miter limit has changed
     void miterLimitChanged();
-
+    /// begin marker has changed
+    void beginMarkerChanged();
+    /// end marker has changed
+    void endMarkerChanged();
+    
     void resourceChanged(int key, const QVariant & value);
     void locationChanged(Qt::DockWidgetArea area);
 
@@ -71,6 +77,9 @@ private slots:
 private:
     /// apply line changes to the selected shape
     void applyChanges();
+
+    /// apply begin marker changes to the selected shape
+    void applyMarkerChanges(KoPathShape::MarkerPosition position);
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );

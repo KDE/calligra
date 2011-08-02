@@ -73,8 +73,9 @@ public:
     KoUnitDoubleSpinBox *miterLimit;
     QButtonGroup        *capGroup;
     QButtonGroup        *joinGroup;
-    KoMarkerSelector    *markerSelector;
-
+    KoMarkerSelector    *beginMarkerSelector;
+    KoMarkerSelector    *endMarkerSelector;
+    
     QSpacerItem *spacer;
     QGridLayout *layout;
 };
@@ -172,8 +173,9 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->addWidget(d->miterLimit, 4, 1, 1, 3);
 
 #if 1
-    d->markerSelector = new KoMarkerSelector(this);
-
+    d->beginMarkerSelector = new KoMarkerSelector(this);
+    d->endMarkerSelector = new KoMarkerSelector(this);
+    
     KoXmlDocument doc;
     QString errorMsg;
     int errorLine;
@@ -200,8 +202,11 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     marker->loadOdf( element, shapeContext );
     QList<KoMarker*> markers;
     markers << marker;
-    d->markerSelector->updateMarkers( markers );
-    mainLayout->addWidget(d->markerSelector, 5, 0, 1, 4);
+    d->beginMarkerSelector->updateMarkers( markers );
+    mainLayout->addWidget(d->beginMarkerSelector, 5, 0, 1, 4);
+    
+    d->endMarkerSelector->updateMarkers( markers );
+    mainLayout->addWidget(d->endMarkerSelector, 6, 0, 1, 4);
 #endif
 
     // Spacer
@@ -217,6 +222,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SIGNAL(capChanged(int)));
     connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SIGNAL(joinChanged(int)));
     connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SIGNAL(miterLimitChanged()));
+    connect(d->beginMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentBeginMarkerChanged()));
+    connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentEndMarkerChanged()));
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()
@@ -249,6 +256,15 @@ qreal KoStrokeConfigWidget::miterLimit() const
     return d->miterLimit->value();
 }
 
+KoMarker *KoStrokeConfigWidget::beginMarker() const
+{
+    return d->beginMarkerSelector->marker();
+}
+
+KoMarker *KoStrokeConfigWidget::endMarker() const
+{
+    return d->endMarkerSelector->marker();
+}
 
 // ----------------------------------------------------------------
 //                         Other public functions
@@ -283,6 +299,8 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
     d->joinGroup->blockSignals(block);
     d->miterLimit->blockSignals(block);
     d->lineStyle->blockSignals(block);
+    d->beginMarkerSelector->blockSignals(block);
+    d->endMarkerSelector->blockSignals(block);
 }
 
 void KoStrokeConfigWidget::locationChanged(Qt::DockWidgetArea area)

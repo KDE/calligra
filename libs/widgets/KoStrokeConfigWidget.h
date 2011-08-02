@@ -34,6 +34,7 @@
 
 class KoUnit;
 class KoLineBorder;
+class KoMarker;
 
 /// A widget for configuring the stroke of a shape
 class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
@@ -48,6 +49,8 @@ public:
     QVector<qreal> lineDashes() const;
     qreal lineWidth() const;
     qreal miterLimit() const;
+    KoMarker *beginMarker() const;
+    KoMarker *endMarker() const;
 
     void updateControls(KoLineBorder &border);
 
@@ -71,6 +74,12 @@ signals:
 
     /// Emitted when the line miter limit changes.
     void miterLimitChanged();
+    
+    /// Emitted when the begin marker changes.
+    void currentBeginMarkerChanged();
+
+    /// Emitted when the end marker changes.
+    void currentEndMarkerChanged();
 
 private:
     void blockChildSignals(bool block);
