@@ -37,6 +37,7 @@ public:
     virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
     virtual void processClientData(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData &o, Writer &out);
     virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out);
+    virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
     virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, const DrawStyle& ds, Writer &out);
     virtual void addTextStyles(const quint16 msospt, const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
     virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();

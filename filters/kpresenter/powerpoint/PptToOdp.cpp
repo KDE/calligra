@@ -235,6 +235,7 @@ private:
     void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                               const MSO::OfficeArtClientData* cd,
                               Writer& out);
+    bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
             const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
@@ -357,6 +358,16 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
 	    }
         }
         ppttoodp->processTextForBody(out, cd, textContainer, textRuler);
+    }
+}
+
+bool PptToOdp::DrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+{
+    const PptOfficeArtClientData* pcd = cd.anon.get<PptOfficeArtClientData>();
+    if (pcd && pcd->placeholderAtom) {
+        return true;
+    } else {
+        return false;
     }
 }
 
