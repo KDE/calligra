@@ -2502,10 +2502,13 @@ PptToOdp::processParagraph(Writer& out,
         pcd = clientData->anon.get<PptOfficeArtClientData>();
     }
 
-    //Get the main master slide's MasterOrSlideContainer, common shapes like
-    //textbox do not inherit from master's TextMasterStyleAtom.
+    quint32 textType = tc->textHeaderAtom.textType;
     const MasterOrSlideContainer* m = 0;
-    if (m_currentMaster && isPlaceHolder) {
+
+    //Get the main master slide's MasterOrSlideContainer.  A common shape
+    //(opposite of a placeholder) SHOULD contain text of type Tx_TYPE_OTHER,
+    //but MS Office 2003 does not follow this rule.
+    if (m_currentMaster && (isPlaceHolder || (textType != Tx_TYPE_OTHER))) {
         m  = m_currentMaster;
         while (m->anon.is<SlideContainer>()) {
             m = p->getMaster(m->anon.get<SlideContainer>());
