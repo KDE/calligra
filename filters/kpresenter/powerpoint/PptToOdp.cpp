@@ -44,39 +44,6 @@
 
 using namespace MSO;
 
-namespace Text
-{
-//TextTypeEnum, MS-PPT 2.13.33
-enum {
-    Title       = 0,  // title text
-    Body        = 1,
-    Notes       = 2,
-    NotUsed     = 3,
-    Other       = 4,  // text in a shape
-    CenterBody  = 5,  // subtitle in title slide
-    CenterTitle = 6,  // title in title slide
-    HalfBody    = 7,  // body in two-column slide
-    QuarterBody = 8   // body in four-body slide
-};
-}
-
-namespace Color
-{
-//ColorSchemeEnum, MS-PPT 2.12.2
-enum {
-    Background  = 0,
-    Text        = 1,
-    Shadow      = 2,
-    TitleText   = 3,
-    Fill        = 4,
-    Accent1     = 5,
-    Accent2     = 6,
-    Accent3     = 7,
-    sRGB        = 0xFE,
-    Undefined   = 0xFF
-};
-}
-
 namespace
 {
     QString format(double v) {
@@ -2693,7 +2660,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     // look for a title on the slide
     if (nameStr.isEmpty()) {
         foreach(const TextContainer& tc, p->documentContainer->slideList->rgChildRec[slideNo].atoms) {
-            if (tc.textHeaderAtom.textType == Text::Title) {
+            if (tc.textHeaderAtom.textType == Tx_TYPE_TITLE) {
                 nameStr = getText(&tc);
                 break;
             }
