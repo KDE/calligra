@@ -26,6 +26,7 @@
 #include "commands/KPrDelCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
+#include <qtest_kde.h>
 
 void TestDelCustomSlideShowCommand::delCustomSlideShow()
 {
