@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,12 +23,12 @@
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiStandardAction.h>
-#include <KActionCollection>
+#include <kexidb/roweditbuffer.h>
 
-#include <qlayout.h>
 #include <QVBoxLayout>
 
-#include <kmenu.h>
+#include <KActionCollection>
+#include <KMenu>
 
 KexiDataAwareView::KexiDataAwareView(QWidget *parent)
         : KexiView(parent)
@@ -305,9 +305,9 @@ void KexiDataAwareView::slotClosing(bool& cancel)
         cancel = true;
 }
 
-void KexiDataAwareView::cancelRowEdit()
+bool KexiDataAwareView::cancelRowEdit()
 {
-    m_dataAwareObject->cancelRowEdit();
+    return m_dataAwareObject->cancelRowEdit();
 }
 
 void KexiDataAwareView::sortAscending()
@@ -410,6 +410,29 @@ tristate KexiDataAwareView::findNextAndReplace(const QVariant& valueToFind,
         return cancelled;
 
     return dataAwareObject()->findNextAndReplace(valueToFind, replacement, options, replaceAll);
+}
+
+bool KexiDataAwareView::isDataEditingInProgress() const
+{
+    if (!m_dataAwareObject->rowEditing()
+        || !m_dataAwareObject->data()
+        || !m_dataAwareObject->data()->rowEditBuffer())
+    {
+        return false;
+    }
+    // true if edit buffer is not empty or at least there is editor with changed value
+    return !m_dataAwareObject->data()->rowEditBuffer()->isEmpty()
+           || (m_dataAwareObject->editor() && m_dataAwareObject->editor()->valueChanged());
+}
+
+tristate KexiDataAwareView::saveDataChanges()
+{
+    return acceptRowEdit();
+}
+
+tristate KexiDataAwareView::cancelDataChanges()
+{
+    return cancelRowEdit();
 }
 
 /*
