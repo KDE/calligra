@@ -81,13 +81,6 @@ void KWRdfDockerTree::dragMoveEvent(QDragMoveEvent *e)
     e->accept();
 }
 
-KoTextEditor* KWRdfDockerTree::editor()
-{
-    if (m_canvas)
-        return qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
-    return 0;
-}
-
 bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
         const QMimeData *data, Qt::DropAction action)
 {

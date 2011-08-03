@@ -69,7 +69,7 @@ KWRdfDocker::KWRdfDocker()
     connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 
-    widgetDocker.autoRefresh->setCheckState( Qt::Checked );
+    widgetDocker.autoRefresh->setCheckState( Qt::Unchecked );
 }
 
 KWRdfDocker::~KWRdfDocker()
@@ -159,19 +159,19 @@ void KWRdfDocker::updateData()
 
     kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
 
-    // TODO try to get rid of 'handler' here by remembering the position in the resourceChanged()
-    KoTextEditor *handler = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
+    // TODO try to get rid of 'editor' here by remembering the position in the resourceChanged()
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
     KoDocumentRdf *rdf = m_document->documentRdf();
-    if (handler && rdf)
+    if (editor && rdf)
     {
         //kDebug(30015) << "m_lastCursorPosition:" << m_lastCursorPosition;
         //kDebug(30015) << " currentpos:" << handler->position();
 
         // If the cursor hasn't moved, there is no work to do.
-        if (m_lastCursorPosition == handler->position())
+        if (m_lastCursorPosition == editor->position())
             return;
-        m_lastCursorPosition = handler->position();
-        Soprano::Model* model = rdf->findStatements(handler);
+        m_lastCursorPosition = editor->position();
+        Soprano::Model* model = rdf->findStatements(editor);
         //kDebug(30015) << "----- current Rdf ----- sz:" << model->statementCount();
 
         //
@@ -189,10 +189,11 @@ void KWRdfDocker::updateData()
 
 void KWRdfDocker::setAutoUpdate(int state)
 {
+    // XXX: autoupdate should probably not use a timer, but the text editor plugin
+    //      functionality, like the statistics docker.
     if (m_canvas) {
         //kDebug(30015) << "m_textDocument:" << m_textDocument;
         if (state == Qt::Checked) {
-            KoDocumentRdf::ensureTextTool();
             m_autoUpdate = true;
             m_timer->start();
         } else {

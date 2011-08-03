@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
  * Copyright (C) 2005-2007, 2009, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -980,10 +980,10 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::insertFrameBreak()
 {
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
-    if (handler) {
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    if (editor) {
         // this means we have the text tool selected right now.
-        handler->insertFrameBreak();
+        editor->insertFrameBreak();
     } else if (m_document->mainFrameSet()) { // lets just add one to the main text frameset
         KoTextDocument doc(m_document->mainFrameSet()->document());
         doc.textEditor()->insertFrameBreak();
@@ -1006,23 +1006,25 @@ void KWView::addBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
-    Q_ASSERT(handler);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    Q_ASSERT(editor);
 
     KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
-    if (handler->hasSelection())
-        suggestedName = handler->selectedText();
+    if (editor->hasSelection()) {
+        suggestedName = editor->selectedText();
+    }
 
     KWCreateBookmarkDialog *dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
-    if (dia->exec() == QDialog::Accepted)
+    if (dia->exec() == QDialog::Accepted) {
         name = dia->newBookmarkName();
+    }
     else {
         delete dia;
         return;
     }
     delete dia;
 
-    handler->addBookmark(name);
+    editor->addBookmark(name);
 }
 
 void KWView::selectBookmark()
@@ -1225,12 +1227,12 @@ void KWView::inlineFrame()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
-    Q_ASSERT(handler);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    Q_ASSERT(editor);
     KoTextAnchor *anchor = new KoTextAnchor(targetShape);
     anchor->setOffset(QPointF(0, -targetShape->size().height()));
     // TODO move caret
-    handler->insertInlineObject(anchor);
+    editor->insertInlineObject(anchor);
 }
 
 void KWView::anchorAsChar()
@@ -1571,7 +1573,7 @@ void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QStrin
 {
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
-    KoTextEditor *editor = qobject_cast<KoTextEditor*>(canvasBase()->toolProxy()->selection());
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {
         kDebug(30015) << "no editor, not reflowing rdf semantic item.";
         return;
