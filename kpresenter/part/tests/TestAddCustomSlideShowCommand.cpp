@@ -26,6 +26,7 @@
 #include "commands/KPrAddCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
+#include <qtest_kde.h>
 
 void TestAddCustomSlideShowCommand::addCustomSlideShow()
 {

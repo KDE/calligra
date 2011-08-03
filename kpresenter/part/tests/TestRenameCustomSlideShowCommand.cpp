@@ -26,6 +26,7 @@
 #include "commands/KPrRenameCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
+#include <qtest_kde.h>
 
 void TestRenameCustomSlideShowCommand::renameCustomShow()
 {
