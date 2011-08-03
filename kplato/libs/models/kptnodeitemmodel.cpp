@@ -3231,7 +3231,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
             }
         }
     }
-    return 0;
+    return false;
 }
 
 bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
