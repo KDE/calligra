@@ -2531,8 +2531,19 @@ KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int ro
 {
     switch ( role ) {
         case Qt::EditRole: {
-            double d( value.toList()[0].toDouble() );
-            Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+            double d;
+            Duration::Unit unit;
+            if ( value.toList().count() == 2 ) {
+                d =  value.toList()[0].toDouble();
+                unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+            } else if ( value.canConvert<QString>() ) {
+                bool ok = Duration::valueFromString( value.toString(), d, unit );
+                if ( ! ok ) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
             //kDebug()<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
             if ( d != node->estimate()->expectedEstimate() ) {
