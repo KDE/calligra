@@ -464,15 +464,14 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
-            if ( node->type() == Node::Type_Task ) {
+            if ( node->type() == Node::Type_Task && node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
                 QString s = QString::number( node->estimate()->optimisticRatio() );
-                if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
-                    s = '(' + s + ')';
-                }
+                s = '(' + s + ')';
                 return s;
             }
-            return QString();
+            return node->estimate()->optimisticRatio();
+        case Qt::EditRole:
+            return node->estimate()->optimisticRatio();
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
@@ -503,15 +502,14 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
-            if ( node->type() == Node::Type_Task ) {
+            if ( node->type() == Node::Type_Task && node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
                 QString s = QString::number( node->estimate()->pessimisticRatio() );
-                if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
-                    s = '(' + s + ')';
-                }
+                s = '(' + s + ')';
                 return s;
             }
-            return QString();
+            return node->estimate()->pessimisticRatio();
+        case Qt::EditRole:
+            return node->estimate()->pessimisticRatio();
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
