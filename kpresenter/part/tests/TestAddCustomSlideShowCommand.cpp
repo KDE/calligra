@@ -57,5 +57,5 @@ void TestAddCustomSlideShowCommand::addCustomSlideShow()
     QCOMPARE(doc.customSlideShows()->names().count(), 0);
 }
 
-QTEST_MAIN(TestAddCustomSlideShowCommand)
+QTEST_KDEMAIN(TestAddCustomSlideShowCommand, GUI)
 #include "TestAddCustomSlideShowCommand.moc"

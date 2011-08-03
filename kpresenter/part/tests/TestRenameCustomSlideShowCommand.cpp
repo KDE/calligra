@@ -76,5 +76,5 @@ void TestRenameCustomSlideShowCommand::renameCustomShow()
     QVERIFY(!doc.customSlideShows()->names().contains(customShowNewName));
 }
 
-QTEST_MAIN(TestRenameCustomSlideShowCommand)
+QTEST_KDEMAIN(TestRenameCustomSlideShowCommand, GUI)
 #include "TestRenameCustomSlideShowCommand.moc"
