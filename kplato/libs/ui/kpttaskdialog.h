@@ -61,6 +61,7 @@ public:
 protected slots:
     void slotButtonClicked(int button);
     void slotTaskRemoved( Node *node );
+    void slotCurrentChanged( KPageWidgetItem*, KPageWidgetItem* );
 
 protected:
     Project &m_project;

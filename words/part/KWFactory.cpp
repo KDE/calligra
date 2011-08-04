@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,16 @@
 #include <kstandarddirs.h>
 
 #include <kiconloader.h>
+
+#include <KoDockRegistry.h>
+#include <rdf/KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#include <rdf/KoSemanticStylesheetsEditor.h>
+#include "dockers/KWRdfDocker.h"
+#include "dockers/KWRdfDockerFactory.h"
+#endif
+#include "dockers/KWStatisticsDocker.h"
 
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
@@ -77,6 +88,14 @@ const KComponentData &KWFactory::componentData()
         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
         KIconLoader::global()->addAppDir("calligra");
+
+
+        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+        dockRegistry->add(new KWStatisticsDockerFactory());
+#ifdef SHOULD_BUILD_RDF
+        dockRegistry->add(new KWRdfDockerFactory());
+#endif
+
     }
     return *s_instance;
 }

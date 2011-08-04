@@ -68,7 +68,7 @@ public:
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Implementation for KexiDataItemChangesListener.
-     Implement this to return information whether we're currently at new row or now.
+     Implement this to return information whether we're currently at new record or now.
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. Returns false here. */
     virtual bool cursorAtNewRow() const;

@@ -61,7 +61,8 @@ namespace Scripting {
             /// Return the child node at @p index
             QObject *childAt( int index );
             /// Return the data
-            
+            QObject *parentNode();
+
             /// Return a map of planed effort and cost pr day
             QVariant plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule );
 

@@ -67,6 +67,11 @@ QObject *Scripting::Node::childAt( int index )
     return m_project->node( m_node->childNode( index ) );
 }
 
+QObject *Scripting::Node::parentNode()
+{
+    return m_project->node( m_node->parentNode() );
+}
+
 QVariant Scripting::Node::plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule )
 {
     //kDebug()<<start<<end<<schedule;

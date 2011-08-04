@@ -247,7 +247,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
-    KGlobal::locale()->insertCatalog("calligra");
+    KGlobal::locale()->insertCatalog("koffice");
     KGlobal::locale()->insertCatalog("koproperty");
 
 #ifdef CUSTOM_VERSION
@@ -901,10 +901,10 @@ void KexiMainWindow::setupActions()
     d->action_edit_delete->setToolTip(i18n("Delete selected object"));
     d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
-    d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
+    d->action_edit_delete_row = createSharedAction(i18n("Delete Record"), "delete_table_row",
                                 KShortcut(Qt::CTRL + Qt::Key_Delete), "edit_delete_row");
-    d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row"));
-    d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row."));
+    d->action_edit_delete_row->setToolTip(i18n("Delete currently selected record"));
+    d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected record."));
 
     d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"),
                                  "clear_table_contents", KShortcut(), "edit_clear_table");
@@ -1010,18 +1010,18 @@ void KexiMainWindow::setupActions()
         d->action_view_propeditor = 0;
 
     //DATA MENU
-    d->action_data_save_row = createSharedAction(i18n("&Save Row"), "dialog-ok",
+    d->action_data_save_row = createSharedAction(i18n("&Save Record"), "dialog-ok",
                               KShortcut(Qt::SHIFT | Qt::Key_Return), "data_save_row");
-    d->action_data_save_row->setToolTip(i18n("Save changes made to the current row"));
-    d->action_data_save_row->setWhatsThis(i18n("Saves changes made to the current row."));
+    d->action_data_save_row->setToolTip(i18n("Save changes made to the current record"));
+    d->action_data_save_row->setWhatsThis(i18n("Saves changes made to the current record."));
 //temp. disable because of problems with volatile actions setActionVolatile( d->action_data_save_row, true );
 
-    d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Row Changes"),
+    d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Record Changes"),
                                         "dialog-cancel", KShortcut(), "data_cancel_row_changes");
     d->action_data_cancel_row_changes->setToolTip(
-        i18n("Cancel changes made to the current row"));
+        i18n("Cancel changes made to the current record"));
     d->action_data_cancel_row_changes->setWhatsThis(
-        i18n("Cancels changes made to the current row."));
+        i18n("Cancels changes made to the current record."));
 //temp. disable because of problems with volatile actions setActionVolatile( d->action_data_cancel_row_changes, true );
 
     d->action_data_execute = createSharedAction(
@@ -4984,7 +4984,7 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
     if (!item)
         return false;
 //! @todo: check if changes to this are saved, if not: ask for saving
-//! @todo: accept row changes...
+//! @todo: accept record changes...
 
     QMap<QString, QString> args;
     args.insert("destinationType", "file");
@@ -5031,7 +5031,7 @@ bool KexiMainWindow::printPreviewForItem(KexiPart::Item* item, const QString& ti
 tristate KexiMainWindow::printPreviewForItem(KexiPart::Item* item)
 {
     return printPreviewForItem(item, QString(),
-//! @todo store cached row data?
+//! @todo store cached record data?
                                true/*reload*/);
 }
 
@@ -5039,7 +5039,7 @@ tristate KexiMainWindow::showPageSetupForItem(KexiPart::Item* item)
 {
     Q_UNUSED(item)
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
-//! @todo: accept row changes...
+//! @todo: accept record changes...
 #ifdef __GNUC__
 #warning TODO printActionForItem(item, PageSetupForItem);
 #else
@@ -5058,7 +5058,7 @@ bool KexiMainWindow::printItem(KexiPart::Item* item, const KexiSimplePrintingSet
                                const QString& titleText)
 {
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
-//! @todo: accept row changes...
+//! @todo: accept record changes...
     KexiSimplePrintingCommand cmd(this, item->identifier());
     //modal
     return cmd.print(settings, titleText);
@@ -5068,7 +5068,7 @@ bool KexiMainWindow::printPreviewForItem(KexiPart::Item* item,
         const KexiSimplePrintingSettings& settings, const QString& titleText, bool reload)
 {
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
-//! @todo: accept row changes...
+//! @todo: accept record changes...
     KexiSimplePrintingCommand* cmd = d->openedCustomObjectsForItem<KexiSimplePrintingCommand>(
                                          item, "KexiSimplePrintingCommand");
     if (!cmd) {
@@ -5110,7 +5110,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
 #endif
 
     if (window) {
-        // accept row changes
+        // accept record changes
         QWidget *prevFocusWidget = focusWidget();
         window->setFocus();
         d->action_data_save_row->activate(QAction::Trigger);

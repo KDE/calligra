@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Cable Modem
+Name[bg]=Кабелен модем
 Name[de]=Kabelmodem
 Name[el]=Καλωδιακό μόντεμ
 Name[es]=Cable Módem
@@ -7,6 +8,7 @@ Name[et]=Kaablimodem
 Name[nb]=Kabelmodem
 Name[nds]=Kavelmodem
 Name[nl]=Kabelmodem
+Name[pl]=Modem kablowy
 Name[pt]=Modem por Cabo
 Name[pt_BR]=Modem por cabo
 Name[sv]=Kabelmodem

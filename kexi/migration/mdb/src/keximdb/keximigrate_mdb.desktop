@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=MS Access
+Name[bg]=MS Access
 Name[ca]=MS Access
 Name[ca@valencia]=MS Access
 Name[cs]=MS Access
@@ -25,6 +26,7 @@ Name[nb]=MS Access
 Name[nds]=MS-Access
 Name[nl]=MS Access
 Name[oc]=MS Access
+Name[pl]=MS Access
 Name[pt]=MS Access
 Name[pt_BR]=MS Access
 Name[ro]=MS Access
@@ -59,6 +61,7 @@ Comment[lv]=MS Access (MDB) datu migrācijas draiveris priekš Kexi
 Comment[nb]=MS Access (MDB) migreringsdriver for Kexi
 Comment[nds]="MS Access"- (MDB-) Datenutlagerndriever för Kexi
 Comment[nl]=MS Access (MDB)-migratiestuurprogramma voor Kexi
+Comment[pl]=Wtyczka migracji danych z MS Access (MDB) dla Kexi
 Comment[pt]=Controlador de Migração do MS Access (MDB) para o Kexi
 Comment[pt_BR]=Driver de Migração MS Access (MDB) para o Kexi
 Comment[sv]=MS Access (MDB)-övergångsdrivrutin för Kexi

@@ -24,7 +24,6 @@
 #include <KoCanvasObserverBase.h>
 
 class KoDocumentRdf;
-class KWView;
 class KoTextEditor;
 
 /**
@@ -71,8 +70,6 @@ protected:
 
     // for dragging
     void mouseMoveEvent(QMouseEvent *event);
-
-    KoTextEditor *editor();
 
 private:
     KoDocumentRdf *m_rdf;

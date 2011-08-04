@@ -903,7 +903,7 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
     return true;
 }
 
-bool KPlatoXmlLoaderBase::load( Schedule *schedule, const KoXmlElement& element, XMLLoaderObject& status )
+bool KPlatoXmlLoaderBase::load( Schedule *schedule, const KoXmlElement& element, XMLLoaderObject& /*status*/ )
 {
     kDebug(kplatoXmlDebugArea())<<"schedule";
     schedule->setName( element.attribute( "name" ) );
@@ -913,7 +913,7 @@ bool KPlatoXmlLoaderBase::load( Schedule *schedule, const KoXmlElement& element,
     return true;
 }
 
-MainSchedule* KPlatoXmlLoaderBase::loadMainSchedule( ScheduleManager* manager, const KoXmlElement& element, XMLLoaderObject& status )
+MainSchedule* KPlatoXmlLoaderBase::loadMainSchedule( ScheduleManager* /*manager*/, const KoXmlElement& element, XMLLoaderObject& status )
 {
     kDebug(kplatoXmlDebugArea())<<"main-schedule";
     MainSchedule *sch = new MainSchedule();
@@ -1053,7 +1053,7 @@ bool KPlatoXmlLoaderBase::loadNodeSchedule(NodeSchedule* schedule, const KoXmlEl
     return true;
 }
 
-bool KPlatoXmlLoaderBase::load( WBSDefinition &def, const KoXmlElement &element, XMLLoaderObject &status )
+bool KPlatoXmlLoaderBase::load( WBSDefinition &def, const KoXmlElement &element, XMLLoaderObject &/*status*/ )
 {
     kDebug(kplatoXmlDebugArea())<<"wbs-def";
     def.setProjectCode( element.attribute( "project-code" ) );
@@ -1297,7 +1297,7 @@ bool KPlatoXmlLoaderBase::load( Completion &completion, const KoXmlElement& elem
     return true;
 }
 
-bool KPlatoXmlLoaderBase::load( Completion::UsedEffort* ue, const KoXmlElement& element, XMLLoaderObject& status)
+bool KPlatoXmlLoaderBase::load( Completion::UsedEffort* ue, const KoXmlElement& element, XMLLoaderObject& /*status*/)
 {
     kDebug(kplatoXmlDebugArea())<<"used-effort";
     KoXmlElement e;

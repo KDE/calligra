@@ -54,6 +54,8 @@ QString MSOOXML::convertFormula(const QString& formula)
         case InParenthesizedArgument:
             if (ch == ',')
                 result[i] = '~'; // union operator
+            else if (ch == ' ')
+                result[i] = '!'; // intersection operator
             else if (ch == ')')
                 state = InArguments;
             break;

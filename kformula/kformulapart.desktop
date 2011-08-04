@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Calligra Formula Component
 Name[et]=Calligra valemikomponent
+Name[it]=Componente di Calligra Formula
 Name[nb]=Calligra formel-komponent
+Name[pl]=Składnik Formula dla Calligry
 Name[pt]=Componente de Fórmulas do Calligra
 Name[pt_BR]=Componente de fórmula do Calligra
 Name[sv]=Calligra Formula-komponent
@@ -17,6 +19,7 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.formula
 X-KDE-ExtraNativeMimeTypes=application/x-kformula,application/vnd.oasis.opendocument.formula-template,text/mathml
 GenericName=Formula Editor
 GenericName[af]=Formule Redigeerder
+GenericName[bg]=Редактор на формули
 GenericName[br]=Un aozer formulennoù
 GenericName[ca]=Editor de fórmules
 GenericName[ca@valencia]=Editor de fórmules

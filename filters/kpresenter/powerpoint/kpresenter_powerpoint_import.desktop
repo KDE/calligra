@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft PowerPoint Import Filter for KPresenter
-Name[bg]=Филтър за импортиране от Microsoft PowerPoint в KPresenter
+Name[bg]=Филтър за внасяне от Microsoft PowerPoint в KPresenter
 Name[br]=Sil enporzh Microsoft PowerPoint evit KPresenter
 Name[ca]=Filtre d'importació Microsoft PowerPoint per al KPresenter
 Name[ca@valencia]=Filtre d'importació Microsoft PowerPoint per al KPresenter
@@ -34,7 +34,7 @@ Name[nb]=Microsoft PowerPoint-importfilter for KPresenter
 Name[nds]="Microsoft PowerPoint"-Importfilter för KPresenter
 Name[ne]=केडीई प्रस्तुतकर्ताका लागि माइक्रोसफ्ट पावरपोइन्ट आयात फिल्टर
 Name[nl]= Microsoft Powerpoint importfilter voor KPresenter
-Name[pl]=Filtr importu formatu Microsoft PowerPoint dla KPresenter
+Name[pl]=Filtr importu Microsoft PowerPoint dla KPresenter
 Name[pt]=Filtro de Importação do Microsoft PowerPoint para o KPresenter
 Name[pt_BR]=Filtro de importação de Microsoft PowerPoint para o KPresenter
 Name[ru]=Фильтр импорта презентаций Microsoft PowerPoint в KPresenter

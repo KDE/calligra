@@ -1328,6 +1328,19 @@ void Project::moveResource( ResourceGroup *group, Resource *resource )
     return;
 }
 
+QMap< QString, QString > Project::externalProjects() const
+{
+    QMap< QString, QString > map;
+    foreach ( Resource *r, resourceList() ) {
+        for( QMapIterator<QString, QString> it( r->externalProjects() ); it.hasNext(); ) {
+            it.next();
+            if ( ! map.contains( it.key() ) ) {
+                map[ it.key() ] = it.value();
+            }
+        }
+    }
+    return map;
+}
 
 bool Project::addTask( Node* task, Node* position )
 {

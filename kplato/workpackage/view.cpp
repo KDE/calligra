@@ -360,7 +360,7 @@ void View::slotSendPackage()
         }
     }*/
     KTemporaryFile temp;
-    temp.setSuffix( ".kplatowork" );
+    temp.setSuffix( ".planwork" );
     temp.setAutoRemove( false );
     if ( ! temp.open() ) {
         KMessageBox::error( 0, i18n("Could not open temporary file. Sending is aborted." ) );

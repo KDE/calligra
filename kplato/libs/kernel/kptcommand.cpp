@@ -2385,7 +2385,7 @@ NodeModifyShutdownCostCmd::NodeModifyShutdownCostCmd( Node &node, double value, 
         : NamedCommand( name ),
         m_node( node )
 {
-    m_oldvalue = node.startupCost();
+    m_oldvalue = node.shutdownCost();
     m_newvalue = value;
 }
 
@@ -3432,6 +3432,80 @@ void ModifyNegativeMonetarySignPositionCmd ::execute()
 void ModifyNegativeMonetarySignPositionCmd ::unexecute()
 {
     m_locale->setNegativeMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
+}
+
+AddExternalAppointmentCmd::AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const QString& name )
+    : NamedCommand( name ),
+    m_resource( resource ),
+    m_pid( pid ),
+    m_pname( pname ),
+    m_start( start ),
+    m_end( end ),
+    m_load( load )
+{
+}
+
+void AddExternalAppointmentCmd::execute()
+{
+    m_resource->addExternalAppointment( m_pid, m_pname, m_start, m_end, m_load );
+}
+
+void AddExternalAppointmentCmd::unexecute()
+{
+    m_resource->subtractExternalAppointment( m_pid, m_start, m_end, m_load );
+    // FIXME do this smarter
+    if ( ! m_resource->externalAppointments( m_pid ).isEmpty() ) {
+        m_resource->takeExternalAppointment( m_pid );
+    }
+}
+
+ClearExternalAppointmentCmd::ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &name )
+    : NamedCommand( name ),
+    m_resource( resource ),
+    m_pid( pid ),
+    m_appointments( 0 )
+{
+}
+
+ClearExternalAppointmentCmd::~ClearExternalAppointmentCmd()
+{
+    delete m_appointments;
+}
+
+void ClearExternalAppointmentCmd::execute()
+{
+//     kDebug()<<text()<<":"<<m_resource->name()<<m_pid;
+    m_appointments = m_resource->takeExternalAppointment( m_pid );
+}
+
+void ClearExternalAppointmentCmd::unexecute()
+{
+//     kDebug()<<text()<<":"<<m_resource->name()<<m_pid;
+    if ( m_appointments ) {
+        m_resource->addExternalAppointment( m_pid, m_appointments );
+    }
+    m_appointments = 0;
+}
+
+ClearAllExternalAppointmentsCmd::ClearAllExternalAppointmentsCmd( Project *project, const QString &name )
+    : NamedCommand( name ),
+    m_project( project )
+{
+    foreach ( Resource *r, project->resourceList() ) {
+        foreach ( const QString &id, r->externalProjects().keys() ) {
+            m_cmd.addCommand( new ClearExternalAppointmentCmd( r, id ) );
+        }
+    }
+}
+
+void ClearAllExternalAppointmentsCmd::execute()
+{
+    m_cmd.redo();
+}
+
+void ClearAllExternalAppointmentsCmd::unexecute()
+{
+    m_cmd.undo();
 }
 
 }  //KPlato namespace

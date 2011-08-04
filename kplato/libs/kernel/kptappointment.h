@@ -241,6 +241,7 @@ public:
     Appointment &operator=(const Appointment &app);
     Appointment &operator+=(const Appointment &app);
     Appointment operator+(const Appointment &app);
+    Appointment &operator-=(const Appointment &app);
     
     void setCalculationMode( int mode ) { m_calculationMode = mode; }
     int calculationMode() const { return m_calculationMode; }
