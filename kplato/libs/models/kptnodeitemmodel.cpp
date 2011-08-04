@@ -3228,6 +3228,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
             }
             if ( cmd ) {
                 emit executeCommand( cmd );
+                return true;
             }
         }
     }
