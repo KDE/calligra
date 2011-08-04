@@ -2761,8 +2761,11 @@ void CellToolBase::insertFromClipboard()
     QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
     dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
+    QString oldDelimiter = dialog->delimiter();
+    dialog->setDelimiter(QString());
     if (!dialog->canceled())
         dialog->exec();
+    dialog->setDelimiter(oldDelimiter);
     delete dialog;
 }
 
@@ -2987,13 +2990,21 @@ bool CellToolBase::paste()
     }
 
     if (!editor()) {
-        //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
-        PasteCommand *const command = new PasteCommand();
-        command->setSheet(selection()->activeSheet());
-        command->add(*selection());
-        command->setMimeData(QApplication::clipboard()->mimeData());
-        command->setPasteFC(true);
-        command->execute(canvas());
+        const QMimeData* mimedata = QApplication::clipboard()->mimeData();
+        if (!mimedata->hasFormat("application/x-kspread-snippet") &&
+            !mimedata->hasHtml() && mimedata->hasText() &&
+            mimeData->text().split('\n').count() >= 2 )
+        {
+            insertFromClipboard();
+       } else {
+            //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
+            PasteCommand *const command = new PasteCommand();
+            command->setSheet(selection()->activeSheet());
+            command->add(*selection());
+            command->setMimeData(mimedata);
+            command->setPasteFC(true);
+            command->execute(canvas());
+        }
         d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
     } else {
         editor()->paste();
@@ -3163,6 +3174,13 @@ void CellToolBase::findNext()
                 d->replace->closeReplaceNextDialog();
             }
         }
+    }
+    else if (!cell.isNull()) {
+        // move to the cell
+        if (cell.sheet() != selection()->activeSheet())
+            selection()->emitVisibleSheetRequested(cell.sheet());
+        selection()->initialize (Region (cell.column(), cell.row(), cell.sheet()), cell.sheet());
+        scrollToCell (selection()->cursor());
     }
 }
 

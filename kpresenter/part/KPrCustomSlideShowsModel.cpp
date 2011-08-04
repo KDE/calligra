@@ -309,6 +309,7 @@ void KPrCustomSlideShowsModel::addSlides(const QList<KoPAPageBase *> &pages, con
 bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &action, const QList<KoPAPageBase *> &slides, QList<int> indexes, int beginRow)
 {
     bool updated = false;
+    int start = beginRow;
 
     //get the slideshow
     QList<KoPAPageBase*> selectedSlideShow = m_customSlideShows->getByName(m_activeCustomSlideShowName);
@@ -334,6 +335,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
             int from = selectedSlideShow.indexOf(page);
             if (from < beginRow) {
                 selectedSlideShow.move(from, beginRow - 1);
+                start--;
             }
             else {
                 selectedSlideShow.move(from, beginRow + i);
@@ -363,8 +365,8 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
         KPrEditCustomSlideShowsCommand *command = new KPrEditCustomSlideShowsCommand(
                     m_document, m_activeCustomSlideShowName, selectedSlideShow);
         m_document->addCommand(command);
+        emit selectPages(start, slides.count());
     }
-
     return updated;
 }
 

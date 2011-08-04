@@ -185,6 +185,13 @@ WordsGraphicsHandler::DrawClient::formatPos(qreal v)
 //ignored.  [MS-DOC] — v20100926
 
 bool
+WordsGraphicsHandler::DrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+{
+    Q_UNUSED(cd);
+    return false;
+}
+
+bool
 WordsGraphicsHandler::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
 {
     Q_UNUSED(o);

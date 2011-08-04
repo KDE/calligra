@@ -272,7 +272,6 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
             } else {
                 kWarning() << "Could not find Normal style, numbering not added!";
             }
-
         }
     }
 } //end sectionStart()
@@ -751,8 +750,7 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     const wvWare::Style* paragraphStyle = 0;
 
     // Check list information, because that's bigger than a paragraph, and
-    // we'll track that here in the TextHandler.  NOT TRUE any more according
-    // to [MS-DOC] - v20100926
+    // we'll track that here in the TextHandler.
     //
     //TODO: <text:numbered-paragraph>
 
@@ -797,25 +795,20 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         }
     }
 
-    //lists related logic
+    //Lists related logic
     qint16 ilfo = paragraphProperties->pap().ilfo;
     if (ilfo == 0) {
-
-        // Not in a list at all in the word document, so check if we need to
-        // close one in the odt.
-
-        //kDebug(30513) << "Not in a list, so we may need to close a list.";
+        // This paragraph is not in a list.
         if (listIsOpen()) {
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
     } else if (ilfo > 0) {
-
         // We're in a list in the word document.
         //
         // At the moment <text:numbered-paragraph> is not supported, we process
         // the paragraph as an list-item instead.
-        kDebug(30513) << "we're in a list or numbered paragraph";
+        kDebug(30513) << "Paragraph in a list or a numbered paragraph";
 
         // listInfo is our list properties object.
         const wvWare::ListInfo* listInfo = paragraphProperties->listInfo();
@@ -823,15 +816,13 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         //error (or currently unknown case)
         if (!listInfo) {
             kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
-
             // Try to make it a heading for now.
-            isHeading = true;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
+            isHeading = true;
         } else if (listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
-            kDebug(30513) << "found heading, pap().ilvl="
-                    << paragraphProperties->pap().ilvl;
-            isHeading = true;
+            kDebug(30513) << "Found a heading, pap().ilvl=" << paragraphProperties->pap().ilvl;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
+            isHeading = true;
         } else {
             // List processing
             // This takes care of all the cases:
@@ -840,7 +831,10 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             //  - A list with lower level than before
             writeListInfo(writer, paragraphProperties->pap(), listInfo);
         }
-    } //end pap.ilfo > 0 (ie. we're in a list or heading)
+    } else if (ilfo < 0) {
+        //TODO: support required
+        kDebug(30513) << "Unable to determine which list contains the paragraph";
+    }
 
     // Now that the bookkeeping is taken care of for old paragraphs, then
     // actually create the new one.
@@ -880,15 +874,11 @@ void WordsTextHandler::paragraphEnd()
 
     bool chck_dropcaps = false;
 
-    // If the last paragraph was a drop cap paragraph, combine it with
-    // this one.
+    // If the last paragraph was a drop cap paragraph, combine with this one.
     if (m_hasStoredDropCap) {
         kDebug(30513) << "combine paragraphs for drop cap" << m_dropCapString;
         m_paragraph->addDropCap(m_dropCapString, m_dcs_fdct, m_dcs_lines, m_dropCapDistance, m_dropCapStyleName);
     }
-
-    //clear our paragraph flag
-    //m_bInParagraph = false;
 
     //write some debug messages
     if (m_insideFootnote) {
@@ -1795,8 +1785,8 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     m_listLevelStyleRequired = false;
     int nfc = listInfo->numberFormat();
 
-    //check to see if we're in a heading instead of a list
-    //if so, just return false so writeLayout can process the heading
+    //check to see if we're in a heading instead of a list if so, just return
+    //false so writeLayout can process the heading
     if (listInfo->lsid() == 1 && nfc == 255) {
         return false;
     }
@@ -1826,27 +1816,25 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             //need to create a style for this list
             KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
 
-            // If writing to styles.xml, the list style needs to go there as well.
-            if (document()->writingHeader())
+            if (document()->writingHeader()) {
                 listStyle.setAutoStyleInStylesDotXml(true);
-
-            // Write styleName to the text:list tag.
+            }
             m_listStyleName = m_mainStyles->insert(listStyle);
             writer->addAttribute("text:style-name", m_listStyleName);
         }
         //set the list ID - now is safe as we are done using the old value
         m_currentListID = listInfo->lsid();
-
-        //a new list-level-style is required
-        m_listLevelStyleRequired = true;
-
         m_currentListDepth = pap.ilvl;
+
         if (m_currentListDepth > 0) {
             for (int i = 0; i < m_currentListDepth; i++) {
                 writer->startElement("text:list-item");
                 writer->startElement("text:list");
             }
         }
+        //a new list-level-style is required
+        m_listLevelStyleRequired = true;
+
     }
     else if (pap.ilvl > m_currentListDepth) {
         //we're going to a new level in the list
@@ -1860,20 +1848,21 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         }
         //a new list-level-style is required
         m_listLevelStyleRequired = true;
+
+        //FIXME: list-level-style might be already created
     }
     else {
-        qDebug() << "HMMM" << m_currentListDepth << pap.ilvl;
         // We're backing out one or more levels in the list.
         kDebug(30513) << "backing out one or more levels in list" << m_currentListID;
         while (m_currentListDepth > pap.ilvl) {
+            writer->endElement(); //text:list-item
+            writer->endElement(); //text:list
             m_currentListDepth--;
-            //close the last <text:list-item of the level
-            writer->endElement();
-            //close <text:list> for the level
-            writer->endElement();
         }
         //close the <text:list-item> from the surrounding level
-        writer->endElement();
+        writer->endElement(); //text:list-item
+
+        //TODO: new list-level-style might be required
     }
 
     //we always want to open this tag
@@ -1891,36 +1880,37 @@ QString WordsTextHandler::createBulletStyle(const QString& textStyleName) const
         return QString();
     }
 
+    const KoGenStyle::PropertyType tt = KoGenStyle::TextType;
     KoGenStyle style(KoGenStyle::TextStyle, "text");
     QString prop, value;
 
     //copy only selected properties
 
     prop = QString("fo:color");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     prop = QString("fo:font-size");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     prop = QString("fo:font-weight");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     prop = QString("style:font-name");
-    value = textStyle->property(prop, KoGenStyle::TextType);
+    value = textStyle->property(prop, tt);
     if (value.isEmpty()) {
         const KoGenStyle* normal = m_mainStyles->style("Normal");
         if (normal) {
-            value = normal->property(prop, KoGenStyle::TextType);
+            value = normal->property(prop, tt);
         }
     }
     if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+        style.addProperty(prop, value, tt);
     }
     //insert style into styles collection
     return m_mainStyles->insert(style, QString("T"));
@@ -1942,6 +1932,7 @@ void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter listStyleWriter(&buf);
     KoGenStyle* listStyle = 0;
+
     //text() returns a struct consisting of a UString text string (called text)
     //& a pointer to a CHP (called chp)
     wvWare::UString text = listInfo->text().text;
@@ -1955,6 +1946,27 @@ void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
     if (textStyleName.contains('T')) {
         bulletStyleName = createBulletStyle(textStyleName);
     }
+
+    // FIXME: At the moment fo:margin-left, fo:text-indent and
+    // text:list-tab-stop-position are set to wrong values!  The comment that
+    // text:list-tab-stop-position SHOULD not be set because fo:margin-left is
+    // already set is WRONG.
+    //
+    // TEXT POSITION:
+    //
+    // fo:margin-left - Specifies the left margin for the paragraph, so it
+    // controls position of the 2nd line of the paragraph from the left page
+    // margin.
+    //
+    // text:list-tab-stop-position - Specifies the Tab space from the left page
+    // margin, so it controls position of the text of the 1st line of the
+    // paragraph.
+    //
+    // BULLET POSITION:
+    //
+    // fo:text-indent - Specifies indent for the 1st line of the paragraph, so
+    // it controls position of the bullet from the left page margin.
+    //
 
     //bulleted list
     if (nfc == 23) {
@@ -2010,6 +2022,7 @@ void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         case 0:
             listStyleWriter.addAttribute("text:label-followed-by", "listtab");
             //text:list-tab-stop-position
+
 #if 0 // as we already save the fo:margin-left this is wrong and should not be used.
             listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
 #endif

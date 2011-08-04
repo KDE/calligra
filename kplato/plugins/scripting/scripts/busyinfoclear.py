@@ -4,6 +4,9 @@
 import os, datetime, sys, traceback, pickle
 import Kross, Plan
 
+T = Kross.module("kdetranslation")
+
 #TODO some ui
-Plan.project().clearAllExternalAppointments();
+Plan.project().clearExternalAppointments()
+Plan.project().addCommand( T.i18nc( "(qtundoformat)", "Clear all external appointments" ) )
 

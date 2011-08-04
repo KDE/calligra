@@ -4,6 +4,7 @@ X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Queries
 GenericName[be]=Запыты
+GenericName[bg]=Заявки
 GenericName[ca]=Consultes
 GenericName[ca@valencia]=Consultes
 GenericName[cs]=Dotazy
@@ -60,6 +61,7 @@ GenericName[x-test]=xxQueriesxx
 GenericName[zh_CN]=查询
 GenericName[zh_TW]=查詢
 Name=Query
+Name[bg]=Заявка
 Name[el]=Ερώτηση
 Name[et]=Päring
 Name[it]=Interrogazione

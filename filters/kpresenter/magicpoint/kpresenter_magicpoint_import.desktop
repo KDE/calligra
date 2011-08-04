@@ -2,7 +2,7 @@
 Type=Service
 Exec=mgp2kpr.py
 Name=Magicpoint Import Filter for KPresenter
-Name[bg]=Филтър за импортиране от Magicpoint в KPresenter
+Name[bg]=Филтър за внасяне от Magicpoint в KPresenter
 Name[br]=Sil enporzh Magicpoint evit KPresenter
 Name[ca]=Filtre d'importació Magicpoint per al KPresenter
 Name[ca@valencia]=Filtre d'importació Magicpoint per al KPresenter

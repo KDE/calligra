@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calligra Flowchart & Diagram Editing Component
+Name[bg]=Компонент за блоксхеми и диаграми в Calligra
 Name[cs]=Komponenta editoru nákresů a diagramů Calligra
 Name[es]=Componente de edición de de diagramas de flujos y esquemas de Calligra
 Name[et]=Calligra skeemide redigeerimise komponent
@@ -23,6 +24,7 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template,application/x-flow
 Categories=Qt;KDE;Office;
 GenericName=Flowchart & Diagram
+GenericName[bg]=Блоксхеми и диаграми
 GenericName[ca]=Editor de diagrames de fluxos i diagrames
 GenericName[ca@valencia]=Editor de diagrames de fluxos i diagrames
 GenericName[cs]=Nákresy a diagramy

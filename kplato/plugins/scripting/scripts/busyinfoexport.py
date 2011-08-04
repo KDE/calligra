@@ -53,7 +53,7 @@ class BusyinfoExporter:
         file = open( filename, 'wb' )
         p = []
         p.append( project.id() )
-        p.append( Plan.data( project, 'NodeName' ) )
+        p.append( project.data( project, 'NodeName' ) )
         pickle.dump( p, file )
         for i in range( project.resourceGroupCount() ):
             g = project.resourceGroupAt( i )
@@ -62,7 +62,7 @@ class BusyinfoExporter:
                 lst = r.appointmentIntervals( schId )
                 for iv in lst:
                     iv.insert( 0, r.id() )
-                    iv.insert( 1, Plan.data( r, 'ResourceName' ) )
+                    iv.insert( 1, project.data( r, 'ResourceName' ) )
                     pickle.dump( iv, file )
 
         file.close()

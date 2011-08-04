@@ -6,6 +6,7 @@ X-KDE-Import=application/x-kformula
 X-KDE-Weight=1
 ImportDescription=KFormula
 Name=KFormula SVG Export Filter
+Name[bg]=Филтър за изнасяне от KFormula в SVG
 Name[br]=Sil ezporzh SVG evit KFormula
 Name[ca]=Filtre d'exportació SVG per al KFormula
 Name[ca@valencia]=Filtre d'exportació SVG per al KFormula

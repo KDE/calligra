@@ -63,12 +63,14 @@ void Find::setCurrentSheet( Sheet* sheet, SheetView* view)
 void Find::replaceImplementation(const KoFindMatch &match, const QVariant &value)
 {
     //No implementation yet.
+    Q_UNUSED(match);
+    Q_UNUSED(value);
 }
 
 void Find::findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList)
 {
-    int row = 1;
-    int column = 1;
+    //int row = 1;
+    //int column = 1;
 
     const ValueStorage *values = d->currentSheet->valueStorage();
     Qt::CaseSensitivity sensitivity = options()->option("caseSensitive")->value().toBool() ? Qt::CaseSensitive : Qt::CaseInsensitive;

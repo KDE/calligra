@@ -230,7 +230,7 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
      // If more than one item is dragged, align the items inside a
      // rectangular grid. The maximum grid size is limited to 4 x 4 items.
      int xCount = 2;
-     int size = KIconLoader::SizeHuge;
+     int size = (KIconLoader::SizeHuge + KIconLoader::SizeEnormous) / 2;
      if (itemCount > 9) {
          xCount = 4;
          size = KIconLoader::SizeMedium;
