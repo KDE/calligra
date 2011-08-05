@@ -40,6 +40,10 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
 {
     kDebug()<<this<<"KPlato::"<<project;
     m_nodeModel.setProject( project );
+    m_nodeModel.setShowProject( true );
+    m_nodeModel.setReadWrite( true );
+    m_nodeModel.setReadOnly( NodeModel::NodeDescription, false );
+    connect(&m_nodeModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
     m_resourceModel.setProject( project );
 }
 
@@ -155,7 +159,7 @@ QStringList Scripting::Project::nodePropertyList()
 QVariant Scripting::Project::nodeHeaderData( const QString &property )
 {
     int col = nodeColumnNumber( property );
-    return m_nodeModel.headerData( col );
+    return m_nodeModel.headerData( col, Qt::Horizontal );
 }
 
 int Scripting::Project::nodeColumnNumber( const QString &property ) const
@@ -199,21 +203,46 @@ QObject *Scripting::Project::nodeAt( int index )
 
 QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &property, const QString &role, long schedule )
 {
-    m_nodeModel.setManager( project()->scheduleManager( schedule ) );
-    return m_nodeModel.data( node, nodeColumnNumber( property ), stringToRole( role ) ).toString();
+    m_nodeModel.setScheduleManager( project()->scheduleManager( schedule ) );
+    int col = nodeColumnNumber( property );
+    int r = stringToRole( role );
+    QModelIndex idx = m_nodeModel.index( node );
+    idx = m_nodeModel.index( idx.row(), col, idx.parent() );
+    if ( ! idx.isValid() ) {
+        kDebug()<<"Failed"<<node<<property<<idx;
+        return QVariant();
+    }
+    if ( col == NodeModel::NodeDescription && r == Qt::DisplayRole ) {
+        r = Qt::EditRole; // cannot use displayrole here
+    }
+    QVariant value = m_nodeModel.data( idx, r );
+    if ( r == Qt::EditRole ) {
+        switch ( col ) {
+            case NodeModel::NodeType:
+                value = QVariant( node->typeToString( KPlato::Node::NodeTypes( value.toInt() ), false ) );
+                break;
+            case NodeModel::NodeConstraint:
+                // ASAP, ALAP, MustStartOn, MustFinishOn, StartNotEarlier, FinishNotLater, FixedInterval
+                value = QVariant( node->constraintList( false ).value( value.toInt() ) );
+                break;
+            default:
+                break;
+        }
+    }
+
+    return value;
 }
 
 bool Scripting::Project::setNodeData( KPlato::Node *node, const QString &property, const QVariant &data, const QString &role )
 {
-    KUndo2Command *cmd = m_nodeModel.setData( node, nodeColumnNumber( property ), data, stringToRole( role ) );
-    if ( ! cmd ) {
-        kDebug()<<"Failed:"<<node->name()<<property<<data<<role;
-        kDebug()<<"Failed:"<<node->name()<<nodeColumnNumber(property)<<data<<stringToRole(role);
+    QModelIndex idx = m_nodeModel.index( node );
+    int col = nodeColumnNumber( property );
+    idx = m_nodeModel.index( idx.row(), col, idx.parent() );
+    if ( ! idx.isValid() ) {
         return false;
     }
-    cmd->redo();
-    m_command->addCommand( cmd );
-    return true;
+    return m_nodeModel.setData( idx, data, stringToRole( role ) );
+
 }
 
 

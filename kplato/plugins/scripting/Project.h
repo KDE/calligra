@@ -206,7 +206,7 @@ namespace Scripting {
         private:
             Module *m_module;
             
-            KPlato::NodeModel m_nodeModel;
+            KPlato::NodeItemModel m_nodeModel;
             QMap<KPlato::Node*, Node*> m_nodes;
             
             KPlato::ResourceModel m_resourceModel;

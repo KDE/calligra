@@ -1,7 +1,6 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
 import traceback
 import Kross
 import Plan
@@ -9,13 +8,14 @@ import TestResult
 
 
 TestResult.setResult( True )
-asserttext = "Test of property '{0}' failed: '{1}' != '{2}'"
+asserttext = "Test of property '{0}' failed:\n   Expected: '{2}'\n        Got: '{1}'"
+
 try:
     project = Plan.project()
     assert project is not None
     
-    data = "Project name"
     property = 'Name'
+    data = "Project name"
     before = project.data(project, property)
     project.setData(project, property, data)
     result = project.data(project, property)
@@ -26,8 +26,8 @@ try:
     text = asserttext.format(property, result, before)
     assert result == before, text
     
-    data = "Project responsible"
     property = 'Responsible'
+    data = "Project responsible"
     before = project.data(project, property)
     project.setData(project, property, data)
     result = project.data(project, property)
@@ -38,11 +38,11 @@ try:
     text = asserttext.format(property, result, before)
     assert result == before, text
 
-    data = "2011-08-01T10:00:00"
     property = 'ConstraintStart'
+    data = "2011-08-01T10:00:00"
     before = project.data(project, property)
     project.setData(project, property, data)
-    result = project.data(project, property, 'Qt::EditRole', -1)
+    result = project.data(project, property, 'EditRole', -1)
     text = asserttext.format(property, result, data)
     assert result == data, text
     project.revertCommand()
@@ -50,11 +50,11 @@ try:
     text = asserttext.format(property, result, before)
     assert result == before, text
 
-    data = "2011-08-01T11:00:00"
     property = 'ConstraintEnd'
+    data = "2011-08-01T11:00:00"
     before = project.data(project, property)
     project.setData(project, property, data)
-    result = project.data(project, property, 'Qt::EditRole', -1)
+    result = project.data(project, property, 'EditRole', -1)
     text = asserttext.format(property, result, data)
     assert result == data, text
     project.revertCommand()
