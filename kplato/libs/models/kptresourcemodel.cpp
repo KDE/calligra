@@ -118,9 +118,10 @@ QVariant ResourceModel::type( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
+        case Qt::EditRole:
+            return res->typeToString( false );
         case Role::EnumList:
             return res->typeToStringList( true );
         case Role::EnumListValue:
@@ -138,9 +139,10 @@ QVariant ResourceModel::type( const ResourceGroup *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
+        case Qt::EditRole:
+            return res->typeToString( false );
         case Role::EnumList:
             return res->typeToStringList( true );
         case Role::EnumListValue:
@@ -825,9 +827,10 @@ QVariant ResourceItemModel::type( const ResourceGroup *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
+        case Qt::EditRole:
+            return res->typeToString( false );
         case Role::EnumList:
             return res->typeToStringList( true );
         case Role::EnumListValue:
@@ -844,13 +847,20 @@ QVariant ResourceItemModel::type( const ResourceGroup *res, int role ) const
 bool ResourceItemModel::setType( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            Resource::Type v = static_cast<Resource::Type>( value.toInt() );
+        case Qt::EditRole: {
+            Resource::Type v;
+            QStringList lst = res->typeToStringList( false );
+            if ( lst.contains( value.toString() ) ) {
+                v = static_cast<Resource::Type>( lst.indexOf( value.toString() ) );
+            } else {
+                v = static_cast<Resource::Type>( value.toInt() );
+            }
             if ( v == res->type() ) {
                 return false;
             }
             emit executeCommand( new ModifyResourceTypeCmd( res, v, "Modify resource type" ) );
             return true;
+        }
     }
     return false;
 }
@@ -858,13 +868,20 @@ bool ResourceItemModel::setType( Resource *res, const QVariant &value, int role 
 bool ResourceItemModel::setType( ResourceGroup *res, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            ResourceGroup::Type v = static_cast<ResourceGroup::Type>( value.toInt() );
+        case Qt::EditRole: {
+            ResourceGroup::Type v;
+            QStringList lst = res->typeToStringList( false );
+            if ( lst.contains( value.toString() ) ) {
+                v = static_cast<ResourceGroup::Type>( lst.indexOf( value.toString() ) );
+            } else {
+                v = static_cast<ResourceGroup::Type>( value.toInt() );
+            }
             if ( v == res->type() ) {
                 return false;
             }
             emit executeCommand( new ModifyResourceGroupTypeCmd( res, v, "Modify resourcegroup type" ) );
             return true;
+        }
     }
     return false;
 }
