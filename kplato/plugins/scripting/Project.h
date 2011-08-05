@@ -209,7 +209,7 @@ namespace Scripting {
             KPlato::NodeItemModel m_nodeModel;
             QMap<KPlato::Node*, Node*> m_nodes;
             
-            KPlato::ResourceModel m_resourceModel;
+            KPlato::ResourceItemModel m_resourceModel;
             QMap<KPlato::ResourceGroup*, ResourceGroup*> m_groups;
             QMap<KPlato::Resource*, Resource*> m_resources;
 
