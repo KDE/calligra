@@ -682,21 +682,26 @@ void PAP::apply( const U8* grpprl, U16 count, const Style* style, const StyleShe
 // Helper methods for the more complex sprms
 namespace
 {
-    // Adds the tabs of the sprmPChgTabs* sprms. Pass a pointer to the
-    // itbdAddMax and the vector
-    // Returns the number of tabs added
+    /**
+     * Adds the tabs of the sprmPChgTabs* sprms.  Pass a pointer to the
+     * itbdAddMax and the vector.
+     *
+     * @return the number of tabs added
+     */
     typedef std::vector<Word97::TabDescriptor> TabDescVector;
     U8 addTabs( const U8* ptr, TabDescVector& rgdxaTab )
     {
         //wvlog << "Before adding the tabs: " << (int)rgdxaTab.size() << endl;
         // Remember where the end was
         const TabDescVector::size_type oldSize = rgdxaTab.size();
-        // Now append the new ones, we'll then sort the vector using inplace_merge
+        // Now append the new ones, we'll then sort the vector using
+        // inplace_merge
         const U8 itbdAddMax = *ptr++;
         //wvlog << "                           itbdAddMax=" << (int)itbdAddMax << endl;
         for ( U8 i = 0 ; i < itbdAddMax ; ++i )
         {
-            // #### We should probably add a proper constructor to TabDescriptor (Werner)
+            // #### We should probably add a proper constructor to
+            // #### TabDescriptor (Werner)
             TabDescriptor descr;
             descr.dxaTab = readS16( ptr + sizeof( S16 ) * i );
             //wvlog << "                           dxaPos=" << descr.dxaTab << endl;
@@ -860,7 +865,10 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             U8 itbdAddMax = addTabs( myPtr, rgdxaTab );
             itbdMac += itbdAddMax;
 
-            //wvlog << "After applying sprmPChgTabsPapx : " << (int)rgdxaTab.size() << endl;
+//             wvlog << "After applying sprmPChgTabsPapx : " << (int)rgdxaTab.size() << endl;
+//             for (uint i = 0; i < rgdxaTab.size(); i++) {
+//                 wvlog << "rgdxaTab[" << i << "].dxaTab" << rgdxaTab[i].dxaTab;
+//             }
 
             if ( cch != 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax )
                 wvlog << "Offset problem in sprmPChgTabsPapx. cch=" << static_cast<int>( cch ) << " data size=" << 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
@@ -908,6 +916,10 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             myPtr += itbdDelMax * 4;
             U8 itbdAddMax = addTabs( myPtr, rgdxaTab );
             itbdMac += itbdAddMax;
+
+//             for (uint i = 0; i < rgdxaTab.size(); i++) {
+//                 wvlog << "rgdxaTab[" << i << "].dxaTab" << rgdxaTab[i].dxaTab;
+//             }
 
             if ( cch != 255 && cch != 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax )
                 wvlog << "Offset problem in sprmPChgTabs. cch=" << static_cast<int>( cch ) << " data size=" << 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
