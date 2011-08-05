@@ -1,5 +1,6 @@
 add_subdirectory( defaulttools )
 add_subdirectory( selectiontools )
+add_subdirectory( sioxselection )
 add_subdirectory( tool_crop )
 add_subdirectory( tool_polygon )
 add_subdirectory( tool_polyline )
