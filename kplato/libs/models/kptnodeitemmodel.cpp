@@ -639,7 +639,7 @@ QVariant NodeModel::startupCost( const Node *node, int role ) const
             }
             break;
         case Qt::EditRole:
-            return m_project->locale()->formatMoney( node->startupCost() );
+            return node->startupCost();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -690,7 +690,7 @@ QVariant NodeModel::shutdownCost( const Node *node, int role ) const
             }
             break;
         case Qt::EditRole:
-            return m_project->locale()->formatMoney( node->shutdownCost() );
+            return node->shutdownCost();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -2423,7 +2423,7 @@ KUndo2Command *NodeModel::setDescription( Node *node, const QVariant &value, int
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() == node->description() ) {
-                return false;
+                return 0;
             }
             return new NodeModifyDescriptionCmd( *node, value.toString(), i18nc( "(qtundo-format)", "Modify task description" ) );
     }
@@ -2439,7 +2439,13 @@ KUndo2Command *NodeModel::setConstraint( Node *node, const QVariant &value, int 
 {
     switch ( role ) {
         case Qt::EditRole: {
-            Node::ConstraintType v = Node::ConstraintType( value.toInt() );
+            Node::ConstraintType v;
+            QStringList lst = node->constraintList( false );
+            if ( lst.contains( value.toString() ) ) {
+                v = Node::ConstraintType( lst.indexOf( value.toString() ) );
+            } else {
+                v = Node::ConstraintType( value.toInt() );
+            }
             //kDebug()<<v;
             if ( v != node->constraint() ) {
                 return new NodeModifyConstraintCmd( *node, v, i18nc( "(qtundo-format)", "Modify constraint type" ) );
@@ -2490,7 +2496,13 @@ KUndo2Command *NodeModel::setEstimateType( Node *node, const QVariant &value, in
 {
     switch ( role ) {
         case Qt::EditRole: {
-            Estimate::Type v = Estimate::Type( value.toInt() );
+            Estimate::Type v;
+            QStringList lst = node->estimate()->typeToStringList( false );
+            if ( lst.contains( value.toString() ) ) {
+                v = Estimate::Type( lst.indexOf( value.toString() ) );
+            } else {
+                v = Estimate::Type( value.toInt() );
+            }
             if ( v != node->estimate()->type() ) {
                 return new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, i18nc( "(qtundo-format)", "Modify estimate type" ) );
             }
@@ -2593,11 +2605,20 @@ KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value
 KUndo2Command *NodeModel::setRiskType( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            if ( value.toInt() != node->estimate()->risktype() ) {
-                Estimate::Risktype v = Estimate::Risktype( value.toInt() );
+        case Qt::EditRole: {
+            int val = 0;
+            QStringList lst = node->estimate()->risktypeToStringList( false );
+            if ( lst.contains( value.toString() ) ) {
+                val = lst.indexOf( value.toString() );
+            } else {
+                val = value.toInt();
+            }
+            if ( val != node->estimate()->risktype() ) {
+                Estimate::Risktype v = Estimate::Risktype( val );
                 return new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, i18nc( "(qtundo-format)", "Modify risk type" ) );
             }
+            break;
+        }
         default:
             break;
     }
@@ -2793,6 +2814,7 @@ NodeItemModel::NodeItemModel( QObject *parent )
     m_node( 0 ),
     m_projectshown( false )
 {
+    setReadOnly( NodeModel::NodeDescription, true );
 }
 
 NodeItemModel::~NodeItemModel()
@@ -3018,6 +3040,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case NodeModel::NodeDescription: // description
+                flags |= Qt::ItemIsEditable;
                 break;
             default:
                 break;
