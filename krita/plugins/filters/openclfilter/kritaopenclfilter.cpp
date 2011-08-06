@@ -61,15 +61,24 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
                            ) const
 {
     /* VARIABLES */
-    // Basic
+    // OpenCL specific
+    QCLContext context;
+    QCLProgram program;
+    QCLKernel kernel;
+    QCLImage2D sourceImageBuffer;
+    QCLImage2D destinationImageBuffer;
+    
+    // Image specific
     int width = rect.width();
     int height = rect.height();
-    int numberOfPixels = width * height;
+    int size = width * height;
     
     // Pixels
-    QVector<quint8 *> pixels = device->readPlanarBytes(0, 0, width, height);
+   quint8 *inputPixels  = new quint8[size * 4];
+   quint8 *outputPixels = new quint8[size * 4];
+   device->readBytes(inputPixels, 0, 0, width, height);
     
-    /* GET KERNEL CODE */
+    // kernel code
     QVariant text;
     config->getProperty("kernel", text);
     QString kernelCode = text.toString();
@@ -78,31 +87,26 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
       return;
     }
 
-    /* CREATE A KERNEL */
-    QCLContext context;
-    if(!context.create(QCLDevice::GPU)) {
+    /* OPENCL */
+    // create context
+    if (!context.create(QCLDevice::GPU))
       qFatal("Could not create OpenCL context");
-    }
+
+    program = context.buildProgramFromSourceCode(qPrintable(kernelCode));
+
+    // initialize buffers
+    QCLImageFormat format(QCLImageFormat::Order_BGRA, QCLImageFormat::Type_Normalized_UInt8);
+    sourceImageBuffer      = context.createImage2DCopy  (format, inputPixels, QSize(width, height), QCLMemoryObject::ReadOnly);
+    destinationImageBuffer = context.createImage2DDevice(format, QSize(width, height), QCLMemoryObject::WriteOnly);
+
+    // kernel
+    kernel = program.createKernel("kritaKernel");
+    kernel.setGlobalWorkSize(QSize(width, height));
+    kernel.setLocalWorkSize(8, 8);
+
+    // run
+    kernel(sourceImageBuffer, destinationImageBuffer);
+    destinationImageBuffer.read(outputPixels, QRect(0, 0, width, height));
     
-    QCLProgram program = context.buildProgramFromSourceCode(qPrintable(kernelCode));
-    QCLKernel kritaKernel = program.createKernel("kritaKernel");
-    
-    /* CREATE DATA STRUCTURES FOR KERNEL */
-    QCLBuffer blue  = context.createBufferCopy(pixels[0], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
-    QCLBuffer green = context.createBufferCopy(pixels[1], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
-    QCLBuffer red   = context.createBufferCopy(pixels[2], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
-    QCLBuffer alpha = context.createBufferCopy(pixels[3], numberOfPixels * sizeof(quint8), QCLMemoryObject::ReadWrite);
-    
-    /* RUN KERNEL */
-    kritaKernel.setGlobalWorkSize(numberOfPixels);
-    //kritaKernel.setLocalWorkSize();
-    kritaKernel(blue, green, red, alpha);
-    
-    /* RETRIEVE DATA FROM KERNEL */
-    blue.read (pixels[0], numberOfPixels * sizeof(quint8));
-    green.read(pixels[1], numberOfPixels * sizeof(quint8));
-    red.read  (pixels[2], numberOfPixels * sizeof(quint8));
-    alpha.read(pixels[3], numberOfPixels * sizeof(quint8));
-    
-    device->writePlanarBytes(pixels, 0, 0, width, height);
+    device->writeBytes(outputPixels, 0, 0, width, height);
 }
