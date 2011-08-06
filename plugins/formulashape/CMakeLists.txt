@@ -1,5 +1,5 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kformula/flake
-                     ${CMAKE_SOURCE_DIR}/kformula/flake/elements
+include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
+                     ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
                      ${QT_INCLUDES}
                      ${KOMAIN_INCLUDES}
 )
@@ -77,7 +77,7 @@ kde4_add_ui_files( formulashape_PART_SRCS
 
 kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
 
-target_link_libraries(formulashape kformulaprivate kformulalib)
+target_link_libraries(formulashape kformulalib)
 
 
 #set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
