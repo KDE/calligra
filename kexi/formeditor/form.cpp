@@ -1506,6 +1506,7 @@ void Form::autoAssignTabStops()
 
         ++it;
         QWidget *nextw = it==list.constEnd() ? 0 : *it;
+        Q_UNUSED(nextw);
         QObject *page_w = 0;
         KFormDesigner::TabWidget *tab_w = KFormDesigner::findParent<KFormDesigner::TabWidget>(w, "KFormDesigner::TabWidget", page_w);
         

@@ -188,7 +188,7 @@ protected:
     virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
 
     /// reimplemented
-    virtual void pageRemoved( KoPAPageBase * page, KUndo2Command * parent );
+    virtual void removePages(QList<KoPAPageBase*> &pages);
 
     /// load configuration specific to KPresenter
     void loadKPrConfig();

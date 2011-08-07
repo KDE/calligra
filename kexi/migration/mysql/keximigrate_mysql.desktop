@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=MySQL
 Name[ast]=MySQL
+Name[bg]=MySQL
 Name[br]=MySQL
 Name[ca]=MySQL
 Name[ca@valencia]=MySQL
@@ -88,7 +89,7 @@ Comment[nb]=MySQL-migreringsdriver for Kexi
 Comment[nds]=MySQL-Datenutlagerndriever för Kexi
 Comment[ne]=केक्सीका लागि MySQL माइग्रेसन ड्राइभर
 Comment[nl]=MySQL-migratiestuurprogramma voor Kexi
-Comment[pl]=Wtyczka migracji danych z serwera MySQL dla Kexi
+Comment[pl]=Sterownik migracji z MySQL dla Kexi
 Comment[pt]=Controlador de Migração de MySQL do Kexi
 Comment[pt_BR]=Driver de Migração MySQL do Kexi
 Comment[ru]=Драйвер миграции MySQL для Kexi

@@ -54,6 +54,11 @@ const QMetaEnum AccountModel::columnMap() const
     return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
 }
 
+int AccountModel::propertyCount() const
+{
+    return columnMap().keyCount();
+}
+
 QVariant AccountModel::data( const Account *a, int property, int role ) const
 {
     QVariant result;
@@ -134,10 +139,7 @@ QVariant AccountModel::headerData( int property, int role ) const
         }
     }
     if ( role == Qt::TextAlignmentRole ) {
-        switch (property) {
-            case AccountModel::Description: return Qt::AlignLeft;
-            default: return QVariant();
-        }
+        return QVariant();
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( property ) {
@@ -309,7 +311,7 @@ QModelIndex AccountItemModel::index( const Account *account ) const
 
 int AccountItemModel::columnCount( const QModelIndex & ) const
 {
-    return 2;
+    return m_model.propertyCount();
 }
 
 int AccountItemModel::rowCount( const QModelIndex &parent ) const
@@ -1077,7 +1079,7 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
             switch ( section ) {
                 case 0: return QVariant();
                 case 1: return QVariant();
-                default: return Qt::AlignRight;
+                default: return (int)(Qt::AlignRight|Qt::AlignVCenter);
             }
             return QVariant();
         }

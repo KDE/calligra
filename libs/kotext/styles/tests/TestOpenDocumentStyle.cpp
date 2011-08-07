@@ -27,6 +27,8 @@
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
@@ -59,6 +61,11 @@ QString Attribute::name()
 QStringList Attribute::listValues()
 {
     return m_values;
+}
+
+bool Attribute::hasReference (const QString &ref)
+{
+    return m_references.contains(ref);
 }
 
 QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
@@ -102,10 +109,10 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;
                                 foreach (QString knownValue, mergedAllowedValues) {
-                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + " ")) || (knownValue.contains(" " + baseValue))) {
+                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + ' ')) || (knownValue.contains(' ' + baseValue))) {
                                         continue;
                                     }
-                                    QString builtValue = knownValue + " " + baseValue;
+                                    QString builtValue = knownValue + ' ' + baseValue;
                                     if (!mergedAllowedValues.contains(builtValue))
                                         mergedAllowedValues << builtValue;
                                 }
@@ -142,6 +149,19 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             kFatal() << "Unhandled attribute value node " << content.tagName();
         }
     }
+    
+    if (m_name == "fo:line-height") {
+        // Here, the OpenDocument specification has problems.
+        // A line height can obviously not be zero...
+        // Still, they used nonNegativeLength instead of positiveLength ?
+        m_references.removeOne("nonNegativeLength");
+        m_references << "positiveLength";
+    }
+    if ((m_references.contains("string")) && ((m_name == "fo:border") || (m_name == "fo:border-top") || (m_name == "fo:border-bottom") || (m_name == "fo:border-right") || (m_name == "fo:border-left") || (m_name == "style:diagonal-tl-br") || (m_name == "style:diagonal-bl-tr"))) {
+        m_references.removeOne("string");
+        m_references << "__border";
+    }
+    
     foreach (QString reference, m_references) {
         if (reference == "boolean") {
             result << "true" << "false";
@@ -154,8 +174,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "relativeLength") {
             result << "42*";
         } else if (reference == "shadowType") {
-            kWarning() << "Not fully supported : shadowType.";
-            result << "none";
+            result << "none" << "red" << "#fff 1px 2pt 3pt" << "4pt 3px" /* is this one valid ? */ << "white 42px 23pt, red -3pt -5px 3px" << "red -3pt -5px";
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {
@@ -170,6 +189,8 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "5deg" << "1rad" << "400grad" << "3.14159265rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "zeroToHundredPercent") {
             result << "0%" << "10%" << "100%" << "13.37%" << "42.73%";
+        } else if (reference == "__border") {
+            result << "12px" << "42px solid" << "24px red" << "32px double red" << "solid black" << "dashed"  << "#ABCDEF";
         } else if (reference == "string") {
             // Now, that sucks !
             kWarning() << "Found a string reference in " << m_name;
@@ -355,8 +376,13 @@ void saveOdf(T* genStyle, KoGenStyle *styleWriter)
 template<>
 void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWriter)
 {
+    QByteArray array;
+    QBuffer buffer(&array);
+    KoXmlWriter xmlWriter(&buffer);
     KoGenStyles styles;
-    genStyle->saveOdf(*styleWriter, styles);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, styles, embeddedSaver);
+    genStyle->saveOdf(*styleWriter, context);
 }
 
 template<class T>
@@ -395,6 +421,14 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     {
         kWarning(32500) << "Warning : got more than one attribute !";
     }
+    if (attribute->hasReference("__border")) {
+        KoBorder original, output;
+	original.loadOdf(mainElement);
+	output.loadOdf(properties);
+	return (original == output);
+    }
+    if (!attribute->compare(value, outputPropertyValue))
+        kWarning(32500) << generatedXmlOutput;
     return attribute->compare(value, outputPropertyValue);
 }
 

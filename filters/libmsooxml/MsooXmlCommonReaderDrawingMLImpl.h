@@ -1717,6 +1717,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
+#else
+Q_UNUSED(pprRead);
 #endif
 
     body = textPBuf.originalWriter();
@@ -2922,15 +2924,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
             int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
             int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
 
-            QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
-                m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
-             QImage image;
-            m_context->import->imageFromFile(m_recentDestName, image);
-            image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+            QString fileName = m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+            fileName = fileName.left(fileName.lastIndexOf('.'));
 
-            if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
-                // Todo, here we should delete the generated black area(s)
-            }
+            QString destinationName = QLatin1String("Pictures/") + fileName + QString("_cropped_%1_%2.png").arg(rectWidth).arg(rectHeight);
+
+            QImage image;
+            m_context->import->imageFromFile(m_recentDestName, image);
+
+            image = image.convertToFormat(QImage::Format_ARGB32);
+            image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
 
             RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
             addManifestEntryForFile(destinationName);
@@ -5854,6 +5857,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     // text in shape
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+#else
+  Q_UNUSED(spAutoFit);
 #endif
     READ_EPILOGUE
 }

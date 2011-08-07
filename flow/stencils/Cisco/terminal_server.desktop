@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Terminal Server
+Name[bg]=Терминален сървър
 Name[el]=Τερματικός εξυπηρετητής
 Name[et]=Terminalserver
 Name[nb]=Terminaltjener
 Name[nl]=Terminal-server
+Name[pl]=Serwer terminala
 Name[pt]=Servidor de Terminal
 Name[pt_BR]=Servidor de terminais
 Name[sv]=Terminalserver

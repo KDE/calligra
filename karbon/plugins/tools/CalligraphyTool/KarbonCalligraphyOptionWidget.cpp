@@ -149,7 +149,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     detailsLayout->addWidget(m_dragBox, 6, 3);
 
     layout->addLayout(detailsLayout, 1, 0, 1, 3);
-    //layout->setRowStretch( 2, 1 );
+    layout->setRowStretch(2, 1);
 
     createConnections();
     addDefaultProfiles(); // if they are already added does nothing

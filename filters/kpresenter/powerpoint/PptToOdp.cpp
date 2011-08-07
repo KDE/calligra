@@ -44,39 +44,6 @@
 
 using namespace MSO;
 
-namespace Text
-{
-//TextTypeEnum, MS-PPT 2.13.33
-enum {
-    Title       = 0,  // title text
-    Body        = 1,
-    Notes       = 2,
-    NotUsed     = 3,
-    Other       = 4,  // text in a shape
-    CenterBody  = 5,  // subtitle in title slide
-    CenterTitle = 6,  // title in title slide
-    HalfBody    = 7,  // body in two-column slide
-    QuarterBody = 8   // body in four-body slide
-};
-}
-
-namespace Color
-{
-//ColorSchemeEnum, MS-PPT 2.12.2
-enum {
-    Background  = 0,
-    Text        = 1,
-    Shadow      = 2,
-    TitleText   = 3,
-    Fill        = 4,
-    Accent1     = 5,
-    Accent2     = 6,
-    Accent3     = 7,
-    sRGB        = 0xFE,
-    Undefined   = 0xFF
-};
-}
-
 namespace
 {
     QString format(double v) {
@@ -235,6 +202,7 @@ private:
     void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                               const MSO::OfficeArtClientData* cd,
                               Writer& out);
+    bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
             const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
@@ -357,6 +325,16 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
 	    }
         }
         ppttoodp->processTextForBody(out, cd, textContainer, textRuler);
+    }
+}
+
+bool PptToOdp::DrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+{
+    const PptOfficeArtClientData* pcd = cd.anon.get<PptOfficeArtClientData>();
+    if (pcd && pcd->placeholderAtom) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -1005,7 +983,8 @@ void PptToOdp::defineDefaultChartStyle(KoGenStyles& styles)
     styles.insert(style);
 }
 
-void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
+void PptToOdp::defineDefaultTextProperties(KoGenStyle& style)
+{
     const PptTextCFRun cf(p->documentContainer);
     const TextCFException9* cf9 = 0;
     const TextCFException10* cf10 = 0;
@@ -1026,20 +1005,14 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
     defineTextProperties(style, cf, cf9, cf10, si);
 }
 
-void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
-    const TextPFException9* pf9 = 0;
-    if (p->documentContainer) {
-        const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
-                p->documentContainer);
-        if (pp9 && pp9->textDefaultsAtom) {
-            pf9 = &pp9->textDefaultsAtom->pf9;
-        }
-    }
+void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style)
+{
     PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);
 }
 
-void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles) {
+void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles)
+{
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     style.addProperty("svg:stroke-width", "0.75pt", gt); // 2.3.8.15
     style.addProperty("draw:fill", "none", gt); // 2.3.8.38
@@ -2507,10 +2480,13 @@ PptToOdp::processParagraph(Writer& out,
         pcd = clientData->anon.get<PptOfficeArtClientData>();
     }
 
-    //Get the main master slide's MasterOrSlideContainer, common shapes like
-    //textbox do not inherit from master's TextMasterStyleAtom.
+    quint32 textType = tc->textHeaderAtom.textType;
     const MasterOrSlideContainer* m = 0;
-    if (m_currentMaster && isPlaceHolder) {
+
+    //Get the main master slide's MasterOrSlideContainer.  A common shape
+    //(opposite of a placeholder) SHOULD contain text of type Tx_TYPE_OTHER,
+    //but MS Office 2003 does not follow this rule.
+    if (m_currentMaster && (isPlaceHolder || (textType != Tx_TYPE_OTHER))) {
         m  = m_currentMaster;
         while (m->anon.is<SlideContainer>()) {
             m = p->getMaster(m->anon.get<SlideContainer>());
@@ -2684,7 +2660,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     // look for a title on the slide
     if (nameStr.isEmpty()) {
         foreach(const TextContainer& tc, p->documentContainer->slideList->rgChildRec[slideNo].atoms) {
-            if (tc.textHeaderAtom.textType == Text::Title) {
+            if (tc.textHeaderAtom.textType == Tx_TYPE_TITLE) {
                 nameStr = getText(&tc);
                 break;
             }

@@ -37,6 +37,7 @@ class KoPAPageBase;
 class STAGE_EXPORT KPrView : public KoPAView
 {
     Q_OBJECT
+    friend class KPrConfigureSlideShowDialog;
 public:
     explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
     ~KPrView();
@@ -58,6 +59,11 @@ public:
      * Get the presentation view mode
      */
     KPrViewModePresentation * presentationMode() const;
+
+    /**
+     * Get the slides sorter view mode
+     */
+    KPrViewModeSlidesSorter *slidesSorter() const;
 
     /**
      * Find whether the presentation view mode is active
@@ -127,7 +133,7 @@ protected slots:
     void createAnimation();
     void showNotes();
     void showSlidesSorter();
-    void dialogCustomSlideShows();
+    void editCustomSlideShows();
     void configureSlideShow();
     void configurePresenterView();
     void exportToHtml();
@@ -145,7 +151,7 @@ private:
     KAction *m_actionViewModeNormal;
     KAction *m_actionViewModeNotes;
     KAction *m_actionViewModeSlidesSorter;
-    KAction *m_actionCreateCustomSlideShowsDialog;
+    KAction *m_actionEditCustomSlideShows;
     KAction *m_actionExportHtml;
     KAction *m_actionInsertPictures;
     KAction *m_actionDrawOnPresentation;

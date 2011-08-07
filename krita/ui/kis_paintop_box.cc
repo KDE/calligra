@@ -52,7 +52,6 @@
 
 #include "kis_canvas2.h"
 #include "kis_node_manager.h"
-#include "kis_layer_manager.h"
 #include "kis_view2.h"
 #include "kis_factory2.h"
 #include "kis_canvas_resource_provider.h"
@@ -641,8 +640,8 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         if(flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) { setWidgetState(ENABLE_COMPOSITEOP|ENABLE_OPACITY);   }
         else                                              { setWidgetState(DISABLE_COMPOSITEOP|DISABLE_OPACITY); }
         
-        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) { setWidgetState(ENABLE_PRESETS|ENABLE_SIZE);   }
-        else                                         { setWidgetState(DISABLE_PRESETS|DISABLE_SIZE); }
+        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) { setWidgetState(ENABLE_PRESETS|ENABLE_SIZE|ENABLE_FLOW);    }
+        else                                         { setWidgetState(DISABLE_PRESETS|DISABLE_SIZE|DISABLE_FLOW); }
     }
     else setWidgetState(DISABLE_ALL);
 }

@@ -44,6 +44,7 @@ void KPrCustomSlideShows::insert( const QString &name, const QList<KoPAPageBase*
 {
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.find( name );
     Q_ASSERT( it == m_customSlideShows.end() );
+    Q_UNUSED( it ); // only used in the above Q_ASSERT.
     m_customSlideShows.insert( name, slideShow );
 }
 
@@ -58,7 +59,9 @@ void KPrCustomSlideShows::update( const QString &name, const QList<KoPAPageBase*
 {
     QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.constFind( name );
     Q_ASSERT( it != m_customSlideShows.constEnd() );
+    Q_UNUSED( it ); // only used in the above Q_ASSERT.
     m_customSlideShows.insert( name, slideShow );
+    emit updated();
 }
 void KPrCustomSlideShows::rename( const QString &oldName, const QString &newName )
 {
@@ -84,7 +87,20 @@ QList<KoPAPageBase*> KPrCustomSlideShows::getByName( const QString &name ) const
     return it.value();
 }
 
-void KPrCustomSlideShows::addSlideToAll( KoPAPageBase* page, unsigned int position )
+KoPAPageBase *KPrCustomSlideShows::pageByIndex(const QString &name, int index) const
+{
+    QList<KoPAPageBase*> pages = getByName(name);
+    return pages.value(index);
+}
+
+
+int KPrCustomSlideShows::indexByPage(const QString &name, KoPAPageBase *page) const
+{
+    QList<KoPAPageBase*> pages = getByName(name);
+    return pages.indexOf(page);
+}
+
+void KPrCustomSlideShows::addSlideToAll( KoPAPageBase *page, unsigned int position )
 {
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
     //FIXME: should we allow negative index?
@@ -94,6 +110,7 @@ void KPrCustomSlideShows::addSlideToAll( KoPAPageBase* page, unsigned int positi
         it.value().insert( (position<=size)? position : size, page );
         ++it;
     }
+    emit updated();
 }
 
 void KPrCustomSlideShows::addSlidesToAll( const QList<KoPAPageBase*> &slideShow, unsigned int position )
@@ -112,6 +129,7 @@ void KPrCustomSlideShows::removeSlideFromAll( KoPAPageBase* page )
         it.value().removeAll( page );
         ++it;
     }
+    emit updated();
 }
 
 void KPrCustomSlideShows::removeSlidesFromAll( const QList<KoPAPageBase*> &slideShow )
@@ -176,4 +194,17 @@ void KPrCustomSlideShows::loadOdf( const KoXmlElement & presentationSettings, Ko
             }
         }
     }
+}
+
+QStringList KPrCustomSlideShows::namesByPage(KoPAPageBase *page)
+{
+    QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
+    QStringList names;
+    while(it != m_customSlideShows.end()) {
+        if (it.value().contains(page)) {
+            names.append(it.key());
+        }
+        ++it;
+    }
+    return names;
 }

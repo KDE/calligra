@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KPresenter PNG Export Filter
-Name[bg]=Филтър за експортиране от Kpresenter в PNG
+Name[bg]=Филтър за изнасяне от KPresenter в PNG
 Name[br]=Sil ezporzh PNG evit KPresenter
 Name[ca]=Filtre d'exportació PNG per al KPresenter
 Name[ca@valencia]=Filtre d'exportació PNG per al KPresenter
@@ -35,7 +35,7 @@ Name[nb]=PNG-eksportfilter for KPresenter
 Name[nds]=PNG-Exportfilter för KPresenter
 Name[ne]=केडीई प्रस्तुतकर्ता पीएनजी निर्यात फिल्टर
 Name[nl]=PNG-exportfilter voor KPresenter 
-Name[pl]=Filtr eksportu do formatu PNG dla KPresenter
+Name[pl]=Filtr eksportu PNG dla KPresenter
 Name[pt]=Filtro de Exportação de PNG para o KPresenter
 Name[pt_BR]=Filtro de exportação de PNG para o KPresenter
 Name[ru]=Фильтр экспорта презентаций KPresenter в PNG

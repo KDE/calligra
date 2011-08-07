@@ -372,7 +372,7 @@ void Cursor::clearBuffer()
 
 bool Cursor::getNextRecord()
 {
-    m_result = -1; //by default: invalid result of row fetching
+    m_result = -1; //by default: invalid result of record fetching
 
     if ((m_options & Buffered)) {//this cursor is buffered:
 //  KexiDBDbg << "m_at < m_records_in_buf :: " << (long)m_at << " < " << m_records_in_buf;

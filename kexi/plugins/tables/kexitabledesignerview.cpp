@@ -453,12 +453,12 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
     KexiDB::LookupFieldSchema *lookupFieldSchema
     = field.table() ? field.table()->lookupFieldSchema(field) : 0;
     set->addProperty(prop = new KoProperty::Property("rowSource",
-            lookupFieldSchema ? lookupFieldSchema->rowSource().name() : QString(), i18n("Row Source")));
+            lookupFieldSchema ? lookupFieldSchema->rowSource().name() : QString(), i18n("Record Source")));
     prop->setVisible(false);
 
     set->addProperty(prop = new KoProperty::Property("rowSourceType",
             lookupFieldSchema ? lookupFieldSchema->rowSource().typeName() : QString(),
-            i18n("Row Source\nType")));
+            i18n("Record Source\nType")));
     prop->setVisible(false);
 
     set->addProperty(prop
@@ -908,7 +908,7 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
 //moved
         //add a special property indicating that this is brand new buffer,
         //not just changed
-//  KoProperty::Property* prop = new KoProperty::Property("newrow", QVariant());
+//  KoProperty::Property* prop = new KoProperty::Property("newrecord", QVariant());
 //  prop->setVisible(false);
 //  newbuff->addProperty( prop );
 
@@ -921,7 +921,7 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
                                   false /* !execute */);
             }
         } else {
-            kWarning() << "row # not found  !";
+            kWarning() << "record # not found  !";
         }
     }
 }
@@ -1276,7 +1276,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             const QString name((*b)["name"].value().toString());
             if (name.isEmpty()) {
                 if (beSilent) {
-                    kWarning() << QString("no field caption entered at row %1...").arg(i + 1);
+                    kWarning() << QString("no field caption entered at record %1...").arg(i + 1);
                 } else {
                     d->view->setCursorPosition(i, COLUMN_ID_CAPTION);
                     d->view->startEditCurrentCell();

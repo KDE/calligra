@@ -841,6 +841,7 @@ void NodeSchedule::addAppointment( Schedule *resource, const DateTime &start, co
     Q_ASSERT ( result );
     result = resource->add( a );
     Q_ASSERT ( result );
+    Q_UNUSED ( result ); // cheating the compiler in release mode to not warn about unused-but-set-variable
     //kDebug()<<"Added interval to new"<<a;
 }
 
@@ -975,6 +976,7 @@ void ResourceSchedule::addAppointment( Schedule *node, const DateTime &start, co
     Q_ASSERT ( result == true );
     result = node->add( a );
     Q_ASSERT ( result == true );
+    Q_UNUSED ( result );  //don't warn about unused-but-set-variable in release mode
     //kDebug()<<"Added interval to new"<<a;
 }
 
@@ -1170,6 +1172,7 @@ void ResourceSchedule::logDebug( const QString &msg, int phase )
 //--------------------------------------
 MainSchedule::MainSchedule()
     : NodeSchedule(),
+
     m_manager( 0 )
 {
     //kDebug()<<"("<<this<<")";
@@ -1178,9 +1181,9 @@ MainSchedule::MainSchedule()
 
 MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type, long id )
     : NodeSchedule( node, name, type, id ),
-    m_manager( 0 ),
-    criticalPathListCached( false ),
-    m_currentCriticalPath( 0 )
+      criticalPathListCached( false ),
+      m_manager( 0 ),
+      m_currentCriticalPath( 0 )
 {
     //kDebug()<<"node name:"<<node->name();
     init();
@@ -1906,6 +1909,7 @@ void ScheduleManager::slotAddLog( const QList<KPlato::Schedule::Log> &log )
     if ( expected() && ! log.isEmpty() ) {
         int first = expected()->logs().count();
         int last = first + log.count() - 1;
+        Q_UNUSED(last);
         foreach ( KPlato::Schedule::Log l, log ) {
             expected()->addLog( l );
         }

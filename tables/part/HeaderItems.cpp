@@ -102,6 +102,8 @@ RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
             //this, SLOT(slotAutoScroll(const QPoint &)));
     connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
             this, SLOT(toolChanged(const QString&)));
+
+    setFlag(ItemClipsToShape, true);
 }
 
 
@@ -262,6 +264,8 @@ ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
             //this, SLOT(slotAutoScroll(const QPoint &)));
     connect(_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
             this, SLOT(toolChanged(const QString&)));
+
+    setFlag(ItemClipsToShape, true);
 }
 
 

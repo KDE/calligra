@@ -94,10 +94,8 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setShowGrid(interface.readEntry("ShowGrid" , false));
 //    setSnapToGrid(interface.readEntry("SnapToGrid", false));
 
-    int undo = 30;
     KConfigGroup misc = config->group("Misc");
     if (misc.exists()) {
-        undo = misc.readEntry("UndoRedo", -1);
 
         //load default unit setting - this is only used for new files (from templates) or empty files
         if (document && misc.hasKey("Units"))

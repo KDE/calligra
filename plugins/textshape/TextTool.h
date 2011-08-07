@@ -53,6 +53,7 @@ class FontSizeAction;
 class KUndo2Command;
 
 class MockCanvas;
+class TextToolSelection;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -159,6 +160,8 @@ signals:
     void blockChanged(const QTextBlock &block);
 
 private slots:
+    /// paste text from the clipboard without formatting
+    void pasteAsText();
     /// make the selected text bold or not
     void bold(bool);
     /// make the selected text italic or not
@@ -201,7 +204,7 @@ private slots:
     void setFontSize(qreal size);
     /// Default Format
     void setDefaultFormat();
-    /// see KoTextSelectionHandler::insertIndexMarker
+    /// see KoTextEditor::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to insert a table
     void insertTable();
@@ -314,9 +317,11 @@ private:
     bool m_trackChanges;
     bool m_allowResourceManagerUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
+    int m_prevMouseSelectionStart, m_prevMouseSelectionEnd;
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
+    KAction *m_actionPasteAsText;
     KAction *m_actionFormatBold;
     KAction *m_actionFormatItalic;
     KAction *m_actionFormatUnderline;
@@ -363,6 +368,8 @@ private:
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
     bool m_delayedEnsureVisible;
+    
+    TextToolSelection *m_toolSelection;
 };
 
 #endif
