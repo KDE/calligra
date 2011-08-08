@@ -2103,8 +2103,12 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
             }
             kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix;
             out.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
-            out.addAttribute("style:num-prefix", prefix);
-            out.addAttribute("style:num-suffix", suffix);
+            if (!prefix.isEmpty()) {
+                out.addAttribute("style:num-prefix", prefix);
+            }
+            if (!suffix.isEmpty()) {
+                out.addAttribute("style:num-suffix", suffix);
+            }
             if (displayLevels > 1) {
                 out.addAttribute("text:display-levels", displayLevels);
             }
