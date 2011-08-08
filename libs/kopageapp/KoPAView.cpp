@@ -189,8 +189,8 @@ void KoPAView::initGUI()
     d->outsideGridLayout->setSpacing(0);
     d->insideWidget = new QWidget();
     d->gridLayout = new QGridLayout(d->insideWidget);
-    d->gridLayout->setMargin( 0 );
-    d->gridLayout->setSpacing( 0 );
+    d->gridLayout->setMargin(0);
+    d->gridLayout->setSpacing(0);
     setLayout(d->outsideGridLayout);
 
     d->canvas = new KoPACanvas( this, d->doc, this );
