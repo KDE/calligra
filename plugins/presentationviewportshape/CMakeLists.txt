@@ -7,6 +7,7 @@ SET (presentationviewportshape_LIB_SRCS
     PresentationViewPortTool.cpp
     PresentationViewPortToolFactory.cpp
     PresentationViewPortConfigWidget.cpp 
+    PresentationViewPortShapeUtil.cpp
     )
 
 kde4_add_ui_files( presentationviewportshape_LIB_SRCS

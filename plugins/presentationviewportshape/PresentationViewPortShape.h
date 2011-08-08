@@ -61,7 +61,9 @@ public:
         
     QString toString();
     void setRefId(const QString& refId);
-        
+    void setSequence(int s);
+    
+    int sequence();
 private:     
      /**
      * @return a default path in the shape of '[ ]'

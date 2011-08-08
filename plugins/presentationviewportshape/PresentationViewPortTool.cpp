@@ -39,6 +39,21 @@ PresentationViewPortTool::PresentationViewPortTool( KoCanvasBase* canvas )
     
 {
   
+    connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ),
+             this, SLOT( shapeSelectionChanged() ) );
+}
+
+void PresentationViewPortTool::shapeSelectionChanged()
+{
+    if ( m_shape ) {
+            foreach ( QWidget *w, optionWidgets() ) {
+                KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
+                Q_ASSERT( widget );
+                if ( widget )
+                    widget->open( m_shape );
+            }
+	    }
+
 }
 
 void PresentationViewPortTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -60,12 +75,12 @@ void PresentationViewPortTool::activate(ToolActivation toolActivation, const QSe
 
 void PresentationViewPortTool::deactivate()
 {
-  m_shape = 0;
+    m_shape = 0;
 }
 
 QWidget * PresentationViewPortTool::createOptionWidget()
 {
-    PresentationViewPortConfigWidget* configWidget = new PresentationViewPortConfigWidget();
+    PresentationViewPortConfigWidget* configWidget = new PresentationViewPortConfigWidget(this);
     
     return configWidget;
 }
@@ -77,31 +92,23 @@ QList< QWidget* > PresentationViewPortTool::createOptionWidgets()
     
     return ow;    
 }
-
+/*
 void PresentationViewPortTool::changeUrlPressed()
 {
     if (m_shape == 0)
         return;
-    KUrl url = KFileDialog::getOpenUrl();
-    if (!url.isEmpty()) {
-        // TODO move this to an action in the libs, with a nice dialog or something.
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-	//copied from PictureShape. To be changed ofcourse
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
-    }
-
-}
+}*/
 
 void PresentationViewPortTool::mousePressEvent(KoPointerEvent* event)
 {
         KoSelection *selection = canvas()->shapeManager()->selection();
             selection->select( m_shape );
+	    
     
-    
-    event->ignore();
+//    event->ignore();
 
 }
-
+/*
 void PresentationViewPortTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
     if(canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
@@ -115,6 +122,6 @@ void PresentationViewPortTool::setImageData(KJob *job)
 {
   //TODO
 }
-
+*/
 
 #include <PresentationViewPortTool.moc>

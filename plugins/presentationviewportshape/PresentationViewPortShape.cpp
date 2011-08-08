@@ -22,85 +22,7 @@
 #include <qpainter.h>
 #include <KoShapeBackground.h>
 #include <KoXmlReader.h>
-
-///////////////Helper functions
-//TODO Move the path specific ones to another file
-QList<QPointF> createListOfPoints(const QSizeF& size)
-{
-    qreal unit = 15.0; //TODO change according to 'size' and keep a minimum value
-    qreal heightUnit = size.height();
-    
-    QList<QPointF> pointsOfShape;
-    pointsOfShape.append(QPointF(unit, 0.0));
-    pointsOfShape.append(QPointF(0.0, 0.0));
-    pointsOfShape.append(QPointF(0.0, heightUnit));
-    pointsOfShape.append(QPointF(unit, heightUnit));
-    pointsOfShape.append(QPointF((size.width() - unit), heightUnit));
-    pointsOfShape.append(QPointF(size.width(), heightUnit));
-    pointsOfShape.append(QPointF(size.width(), 0.0));
-    pointsOfShape.append(QPointF((size.width() - unit), 0.0));
-  
-    return pointsOfShape;
-}
-
-static void printIndentation(QString& stream, unsigned int indent)
-{
-    static const QString INDENT("  ");
-    for (unsigned int i = 0; i < indent;++i){
-        stream.append(INDENT);
-    }
-}
-
-QVector< QVector < int > > createAdjMatrix(int noOfPoints)
-{
-  QVector< QVector < int > > adjMatrix(0);
-  
-  QVector< int > intVector(noOfPoints);
-     
-      intVector.fill(0);
-      intVector.insert(1, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(0, 1);    
-      intVector.insert(2, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(1, 1);
-      intVector.insert(3, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(2, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(5, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(4, 1);
-      intVector.insert(6, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(5, 1);
-      intVector.insert(7, 1);
-      adjMatrix.append(intVector);
-      
-      intVector.fill(0);
-      intVector.insert(6, 1);
-      adjMatrix.append(intVector);
-            
-      /*for(int i = 0; i < m_noOfPoints; i++)
-	for(int j = 0; j < m_noOfPoints; j++){
-	 qDebug() << adjMatrix.at(i).at(j) ;
-	}
-	qDebug() << endl;*/
-  return adjMatrix;
-}
-/////////////////////
+#include "PresentationViewPortShapeUtil.h"
 
 PresentationViewPortShape::PresentationViewPortShape() : m_ns("calligra")
 {
@@ -113,6 +35,16 @@ PresentationViewPortShape::PresentationViewPortShape() : m_ns("calligra")
 PresentationViewPortShape::~PresentationViewPortShape()
 {
 
+}
+
+void PresentationViewPortShape::setSequence(int s)
+{
+    m_animationAttributes["sequence"] = s;
+}
+
+int PresentationViewPortShape::sequence()
+{
+    return m_animationAttributes["sequence"].toInt();
 }
 
 void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
@@ -131,7 +63,7 @@ void PresentationViewPortShape::initializeAnimationProperties()
     m_animationAttributes.insert("transition-profile", "linear");
     m_animationAttributes.insert("hide", "true");
     m_animationAttributes.insert("clip", "true");
-    m_animationAttributes.insert("timeout-enable", "false");
+    m_animationAttributes.insert("timeout-enable", "0");
     m_animationAttributes.insert("sequence", QString("%1").arg(0));
     m_animationAttributes.insert("transition-zoom-percent", QString("%1").arg(1));
     m_animationAttributes.insert("transition-duration-ms", QString("%1").arg(5000));
@@ -149,12 +81,12 @@ QString PresentationViewPortShape::toString()
     unsigned indent = 1;
     QString stream;
             
-    printIndentation(stream, indent++);
+   PresentationViewPortShapeUtil::printIndentation(stream, indent++);
     stream.append("<calligra:frame");
     stream.append("\n");
     
     foreach(QString key, m_animationAttributes.keys()){
-      printIndentation(stream, indent);
+      PresentationViewPortShapeUtil::printIndentation(stream, indent);
       stream.append(m_ns + ":").append(key).append("=\"").append(m_animationAttributes.value(key)).append("\"");
       stream.append("\n");
     }
@@ -185,8 +117,8 @@ QPainterPath PresentationViewPortShape::createShapePath(const QSizeF& size)
 {
     //createListOfPoints(size);
     int noOfPoints = 8;
-    QList<QPointF> pointsOfShape = createListOfPoints(size);
-    QVector< QVector<int> > adjMatrix = createAdjMatrix(noOfPoints);
+    QList<QPointF> pointsOfShape = PresentationViewPortShapeUtil::createListOfPoints(size);
+    QVector< QVector<int> > adjMatrix = PresentationViewPortShapeUtil::createAdjMatrix(noOfPoints);
     
     
     QPainterPath viewPortPath;

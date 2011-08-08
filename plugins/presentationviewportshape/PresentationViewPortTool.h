@@ -36,7 +36,7 @@ public:
     /// reimplemented from KoToolBase
     virtual void mousePressEvent(KoPointerEvent*);
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+  //  virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from KoToolBase
     virtual void mouseMoveEvent(KoPointerEvent*) {}
     /// reimplemented from KoToolBase
@@ -51,10 +51,7 @@ protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
     virtual QList<QWidget *> createOptionWidgets();
-private slots:
-    void changeUrlPressed();
-    void setImageData(KJob *job);
-
+    void shapeSelectionChanged();
 private:
     PresentationViewPortShape *m_shape;
 };
