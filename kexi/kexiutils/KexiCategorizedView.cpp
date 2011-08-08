@@ -24,7 +24,7 @@ KexiCategoryDrawer::KexiCategoryDrawer()
 {
 }
 
-#if KDE_IS_VERSION(4,5,0)
+#if 0
 void KexiCategoryDrawer::mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event)
 {
     event->accept();

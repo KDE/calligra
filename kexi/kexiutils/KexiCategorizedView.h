@@ -44,7 +44,7 @@ public:
     KexiCategoryDrawer();
 
 protected:
-#if KDE_IS_VERSION(4,5,0)
+#if 0
     void mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event);
 
     void mouseButtonReleased(const QModelIndex&, const QRect&, QMouseEvent *event);
