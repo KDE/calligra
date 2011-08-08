@@ -26,6 +26,7 @@
 #include "commands/KPrDelCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
+#include <qtest_kde.h>
 
 void TestDelCustomSlideShowCommand::delCustomSlideShow()
 {
@@ -73,5 +74,5 @@ void TestDelCustomSlideShowCommand::delCustomSlideShow()
 }
 
 
-QTEST_MAIN(TestDelCustomSlideShowCommand)
+QTEST_KDEMAIN(TestDelCustomSlideShowCommand, GUI)
 #include "TestDelCustomSlideShowCommand.moc"

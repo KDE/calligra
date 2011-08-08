@@ -994,10 +994,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);

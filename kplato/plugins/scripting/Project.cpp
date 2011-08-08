@@ -40,7 +40,14 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
 {
     kDebug()<<this<<"KPlato::"<<project;
     m_nodeModel.setProject( project );
+    m_nodeModel.setShowProject( true );
+    m_nodeModel.setReadWrite( true );
+    m_nodeModel.setReadOnly( NodeModel::NodeDescription, false );
+    connect(&m_nodeModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
+
     m_resourceModel.setProject( project );
+    m_resourceModel.setReadWrite( true );
+    connect(&m_resourceModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
 }
 
 Scripting::Project::~Project()
@@ -155,7 +162,7 @@ QStringList Scripting::Project::nodePropertyList()
 QVariant Scripting::Project::nodeHeaderData( const QString &property )
 {
     int col = nodeColumnNumber( property );
-    return m_nodeModel.headerData( col );
+    return m_nodeModel.headerData( col, Qt::Horizontal );
 }
 
 int Scripting::Project::nodeColumnNumber( const QString &property ) const
@@ -173,7 +180,7 @@ int Scripting::Project::resourceColumnNumber( const QString &property ) const
     if ( prop.left( 8 ) != "Resource" ) {
         prop.prepend( "Resource" );
     }
-    return m_resourceModel.columnMap().keyToValue( property.toUtf8() );
+    return m_resourceModel.columnMap().keyToValue( prop.toUtf8() );
 }
 
 Scripting::Node *Scripting::Project::node( KPlato::Node *node )
@@ -199,21 +206,46 @@ QObject *Scripting::Project::nodeAt( int index )
 
 QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &property, const QString &role, long schedule )
 {
-    m_nodeModel.setManager( project()->scheduleManager( schedule ) );
-    return m_nodeModel.data( node, nodeColumnNumber( property ), stringToRole( role ) ).toString();
+    m_nodeModel.setScheduleManager( project()->scheduleManager( schedule ) );
+    int col = nodeColumnNumber( property );
+    int r = stringToRole( role );
+    QModelIndex idx = m_nodeModel.index( node );
+    idx = m_nodeModel.index( idx.row(), col, idx.parent() );
+    if ( ! idx.isValid() ) {
+        kDebug()<<"Failed"<<node<<property<<idx;
+        return QVariant();
+    }
+    if ( col == NodeModel::NodeDescription && r == Qt::DisplayRole ) {
+        r = Qt::EditRole; // cannot use displayrole here
+    }
+    QVariant value = m_nodeModel.data( idx, r );
+    if ( r == Qt::EditRole ) {
+        switch ( col ) {
+            case NodeModel::NodeType:
+                value = QVariant( node->typeToString( KPlato::Node::NodeTypes( value.toInt() ), false ) );
+                break;
+            case NodeModel::NodeConstraint:
+                // ASAP, ALAP, MustStartOn, MustFinishOn, StartNotEarlier, FinishNotLater, FixedInterval
+                value = QVariant( node->constraintList( false ).value( value.toInt() ) );
+                break;
+            default:
+                break;
+        }
+    }
+
+    return value;
 }
 
 bool Scripting::Project::setNodeData( KPlato::Node *node, const QString &property, const QVariant &data, const QString &role )
 {
-    KUndo2Command *cmd = m_nodeModel.setData( node, nodeColumnNumber( property ), data, stringToRole( role ) );
-    if ( ! cmd ) {
-        kDebug()<<"Failed:"<<node->name()<<property<<data<<role;
-        kDebug()<<"Failed:"<<node->name()<<nodeColumnNumber(property)<<data<<stringToRole(role);
+    QModelIndex idx = m_nodeModel.index( node );
+    int col = nodeColumnNumber( property );
+    idx = m_nodeModel.index( idx.row(), col, idx.parent() );
+    if ( ! idx.isValid() ) {
         return false;
     }
-    cmd->redo();
-    m_command->addCommand( cmd );
-    return true;
+    return m_nodeModel.setData( idx, data, stringToRole( role ) );
+
 }
 
 
@@ -298,22 +330,18 @@ QObject *Scripting::Project::findResourceGroup( const QString &id )
 QObject *Scripting::Project::createResourceGroup( QObject *group )
 {
     //kDebug()<<this<<group;
+    KPlato::ResourceGroup *g = 0;
     const ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
-    if ( gr == 0 ) {
-        kDebug()<<"No group specified";
-        return 0;
+    if ( gr != 0 ) {
+        KPlato::ResourceGroup *copyfrom = gr->kplatoResourceGroup();
+        if ( copyfrom == 0 ) {
+            kDebug()<<"Nothing to copy from";
+            return 0;
+        }
+        g = new KPlato::ResourceGroup( copyfrom );
+    } else {
+        g = new KPlato::ResourceGroup();
     }
-    KPlato::ResourceGroup *copyfrom = gr->kplatoResourceGroup();
-    if ( copyfrom == 0 ) {
-        kDebug()<<"Nothing to copy from";
-        return 0;
-    }
-    KPlato::ResourceGroup *g = project()->findResourceGroup( copyfrom->id() );
-    if ( g ) {
-        kDebug()<<"Resource group already exists";
-        return 0; // ???
-    }
-    g = new KPlato::ResourceGroup( copyfrom );
     AddResourceGroupCmd *cmd = new AddResourceGroupCmd( project(), g, i18nc( "(qtundo_format)", "Add resource group" ) );
     cmd->redo();
     m_command->addCommand( cmd );
@@ -330,20 +358,22 @@ QObject *Scripting::Project::resourceGroup( KPlato::ResourceGroup *group )
 
 bool Scripting::Project::setResourceGroupData( KPlato::ResourceGroup *resource, const QString &property, const QVariant &data, const QString &role )
 {
-    KPlato::ResourceItemModel m;
-    connect(&m, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
-    QModelIndex idx = m.index( resource );
-    idx = m.index( idx.row(), resourceColumnNumber( property ), idx.parent() );
+    QModelIndex idx = m_resourceModel.index( resource );
+    idx = m_resourceModel.index( idx.row(), resourceColumnNumber( property ), idx.parent() );
     if ( ! idx.isValid() ) {
         return false;
     }
-    return m.setData( idx, data, stringToRole( role ) );
+    return m_resourceModel.setData( idx, data, stringToRole( role ) );
 }
 
 QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role, long /*schedule*/ )
 {
-//    m.setManager( project()->scheduleManager( schedule ) );
-    return m_resourceModel.data( group, resourceColumnNumber( property ), stringToRole( role ) );
+    QModelIndex idx = m_resourceModel.index( group );
+    idx = m_resourceModel.index( idx.row(), resourceColumnNumber( property ), idx.parent() );
+    if ( ! idx.isValid() ) {
+        return QVariant();
+    }
+    return m_resourceModel.data( idx, stringToRole( role ) );
 }
 
 QObject *Scripting::Project::createResource( QObject *group, QObject *res )
@@ -358,22 +388,23 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *res )
         kDebug()<<"Could not find group";
         return 0;
     }
+    KPlato::Resource *r = 0;
     const Resource *rs = qobject_cast<Resource*>( res );
-    if ( rs == 0 ) {
-        kDebug()<<"No resource to copy from";
-        return 0; // or create empty?
+    if ( rs != 0 ) {
+        r = project()->findResource( rs->kplatoResource()->id() );
+        if ( r ) {
+            kDebug()<<"Resource already exists";
+            return 0;
+        }
+        r = new KPlato::Resource( rs->kplatoResource() );
+        KPlato::Calendar *c = rs->kplatoResource()->calendar( true );
+        if ( c ) {
+            c = project()->calendar( c->id() );
+        }
+        r->setCalendar( c );
+    } else {
+        r = new KPlato::Resource();
     }
-    KPlato::Resource *r = project()->findResource( rs->kplatoResource()->id() );
-    if ( r ) {
-        kDebug()<<"Resource already exists";
-        return 0;
-    }
-    r = new KPlato::Resource( rs->kplatoResource() );
-    KPlato::Calendar *c = rs->kplatoResource()->calendar( true );
-    if ( c ) {
-        c = project()->calendar( c->id() );
-    }
-    r->setCalendar( c );
     AddResourceCmd *cmd = new AddResourceCmd( g, r, i18nc( "(qtundo_format)", "Add resource" ) );
     cmd->redo();
     m_command->addCommand( cmd );
@@ -391,26 +422,31 @@ QObject *Scripting::Project::resource( KPlato::Resource *resource )
 
 bool Scripting::Project::setResourceData( KPlato::Resource *resource, const QString &property, const QVariant &data, const QString &role )
 {
-    KPlato::ResourceItemModel m;
-    connect(&m, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
-    QModelIndex idx = m.index( resource );
-    idx = m.index( idx.row(), resourceColumnNumber( property ), idx.parent() );
+    QModelIndex idx = m_resourceModel.index( resource );
+    idx = m_resourceModel.index( idx.row(), resourceColumnNumber( property ), idx.parent() );
     if ( ! idx.isValid() ) {
+        kDebug()<<"Invalid index"<<resource;
         return false;
     }
-    return m.setData( idx, data, stringToRole( role ) );
+    Q_ASSERT( m_resourceModel.flags( idx ) & Qt::ItemIsEditable );
+    return m_resourceModel.setData( idx, data, stringToRole( role ) );
 }
 
 QVariant Scripting::Project::resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, long /*schedule*/ )
 {
-    //m_resourceModel.setManager( project()->scheduleManager( schedule.toLong() ) );
-    return m_resourceModel.data( resource, resourceColumnNumber( property ), stringToRole( role ) ).toString();
+    QModelIndex idx = m_resourceModel.index( resource );
+    idx = m_resourceModel.index( idx.row(), resourceColumnNumber( property ), idx.parent() );
+    if ( ! idx.isValid() ) {
+        kDebug()<<"Invalid index"<<resource;
+        return QVariant();
+    }
+    return m_resourceModel.data( idx, stringToRole( role ) );
 }
 
 QVariant Scripting::Project::resourceHeaderData( const QString &property )
 {
     int col = resourceColumnNumber( property );
-    return m_resourceModel.headerData( col );
+    return m_resourceModel.headerData( col, Qt::Horizontal );
 }
 
 QObject *Scripting::Project::findResource( const QString &id )

@@ -27,7 +27,6 @@
 #include <Kross/Manager>
 #include <kdebug.h>
 
-
 namespace KPlato
 {
 
@@ -35,7 +34,10 @@ namespace KPlato
 QStringList ScriptingTester::initTestList()
 {
     QStringList scripts;
-    scripts << "project_access.py";
+    scripts << "project_access.py"
+        << "task_access.py"
+        << "resource_access.py"
+        ;
     return scripts;
 }
 
@@ -71,6 +73,7 @@ void ScriptingTester::test()
         m_result->message = QString( "%1: Failed to run test" ).arg( a->objectName() );
         a->trigger();
         QVERIFY2( m_result->isOk(), m_result->message.toLocal8Bit() );
+        qDebug() << "PASS: " << a->objectName();
     }
 }
 
