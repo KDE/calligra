@@ -184,9 +184,9 @@ KoPAView::~KoPAView()
 
 void KoPAView::initGUI()
 {
-    d->outsideGridLayout = new QGridLayout( this );
-    d->outsideGridLayout->setMargin( 0 );
-    d->outsideGridLayout->setSpacing( 0 );
+    d->outsideGridLayout = new QGridLayout(this);
+    d->outsideGridLayout->setMargin(0);
+    d->outsideGridLayout->setSpacing(0);
     d->insideWidget = new QWidget();
     d->gridLayout = new QGridLayout(d->insideWidget);
     d->gridLayout->setMargin( 0 );
