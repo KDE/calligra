@@ -136,6 +136,14 @@ public:
 
     KoPAViewMode *viewModeNormal;
 
+    // This tab bar hidden by default. It could be used to alternate between view modes
+    QTabBar *m_hTabBar;
+    QTabBar *m_vTabBar;
+
+    QGridLayout *outsideGridLayout;
+    QGridLayout *gridLayout;
+    QWidget *insideWidget;
+
     // status bar
     QLabel *status;       ///< ordinary status
     QWidget *zoomActionWidget;
@@ -176,10 +184,14 @@ KoPAView::~KoPAView()
 
 void KoPAView::initGUI()
 {
-    QGridLayout * gridLayout = new QGridLayout( this );
-    gridLayout->setMargin( 0 );
-    gridLayout->setSpacing( 0 );
-    setLayout( gridLayout );
+    d->outsideGridLayout = new QGridLayout( this );
+    d->outsideGridLayout->setMargin( 0 );
+    d->outsideGridLayout->setSpacing( 0 );
+    d->insideWidget = new QWidget();
+    d->gridLayout = new QGridLayout(d->insideWidget);
+    d->gridLayout->setMargin( 0 );
+    d->gridLayout->setSpacing( 0 );
+    setLayout(d->outsideGridLayout);
 
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
@@ -224,15 +236,23 @@ void KoPAView::initGUI()
     connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
             d->verticalRuler, SLOT(setUnit(const KoUnit&)));
     //Layout a tool bar on top of normal view
-    m_tabBar = new QTabBar();
+    d->m_hTabBar = new QTabBar();
+    //Layout a tool bar at normal view left
+    d->m_vTabBar = new QTabBar();
+    d->m_vTabBar->setShape(QTabBar::RoundedWest);
+    d->m_vTabBar->setExpanding(true);
 
-    gridLayout->addWidget(m_tabBar, 0, 0, 1, 2);
-    gridLayout->addWidget(d->horizontalRuler, 2, 1);
-    gridLayout->addWidget(d->verticalRuler, 2, 0);
-    gridLayout->addWidget(canvasController, 2, 1 );
+    d->outsideGridLayout->addWidget(d->m_hTabBar, 0, 1);
+    d->outsideGridLayout->addWidget(d->insideWidget, 1, 1);
+    d->outsideGridLayout->addWidget(d->m_vTabBar, 1, 0, 2, 1, Qt::AlignTop);
+
+    d->gridLayout->addWidget(d->horizontalRuler, 0, 1);
+    d->gridLayout->addWidget(d->verticalRuler, 1, 0);
+    d->gridLayout->addWidget(canvasController, 1, 1 );
 
     //tab bar is hidden by default a method is provided to acces to the tab bar
-    m_tabBar->hide();
+    d->m_hTabBar->hide();
+    d->m_vTabBar->hide();
 
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
             this, SLOT(pageOffsetChanged()));
@@ -1115,9 +1135,26 @@ void KoPAView::centerPage()
 
 }
 
-QTabBar * KoPAView::tabBar() const
+QTabBar *KoPAView::htabBar() const
 {
-    return m_tabBar;
+    return d->m_hTabBar;
+}
+
+QTabBar *KoPAView::vtabBar() const
+{
+    return d->m_vTabBar;
+}
+
+void KoPAView::replaceCentralWidget(QWidget *newWidget)
+{
+    d->insideWidget->hide();
+    d->outsideGridLayout->addWidget(newWidget, 2, 1);
+}
+
+void KoPAView::restoreCentralWidget()
+{
+    d->outsideGridLayout->removeItem(d->outsideGridLayout->itemAtPosition(2, 1));
+    d->insideWidget->show();
 }
 
 #include <KoPAView.moc>

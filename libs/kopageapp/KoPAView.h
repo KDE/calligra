@@ -46,6 +46,7 @@ class KUrl;
 class QTextDocument;
 class QLabel;
 class QTabBar;
+class QTabWidget;
 class KoCopyController;
 class KoCutController;
 
@@ -161,8 +162,14 @@ public:
 
     void centerPage();
 
-    /// return a pointer to the tab bar
-    QTabBar *tabBar() const;
+    /// return a pointer to the horizontal tab bar
+    QTabBar *htabBar() const;
+
+    /// return a pointer to the vertical tab bar
+    QTabBar *vtabBar() const;
+
+    void replaceCentralWidget(QWidget *newWidget);
+    void restoreCentralWidget();
 
 signals:
     /// emited when select All action is triggered and the view is not visible
@@ -185,9 +192,6 @@ protected:
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
-
-    /// This tab bar hidden by default. It could be used to alternate between view modes
-    QTabBar *m_tabBar;
 
 public slots:
 

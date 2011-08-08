@@ -72,6 +72,11 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 //   , m_slidesSorterMode( new KPrViewModeSlidesSorter( this, kopaCanvas() ))
   , m_dbus( new KPrViewAdaptor( this ) )
 {
+    KoPACanvas * canvas = dynamic_cast<KoPACanvas*>(kopaCanvas());
+    if (canvas) {
+        m_slidesSorterMode = new KPrViewModeSlidesSorter(this, canvas);
+    }
+
     initGUI();
     initActions();
 
@@ -97,10 +102,6 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
                                                    new KPrPageSelectStrategyActive( kopaCanvas() ) ) );
 
-    KoPACanvas * canvas = dynamic_cast<KoPACanvas*>(kopaCanvas());
-    if (canvas) {
-        m_slidesSorterMode = new KPrViewModeSlidesSorter(this, canvas);
-    }
     connect(zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
 }
 
@@ -190,12 +191,16 @@ void KPrView::initGUI()
     }
     initZoomConfig();
 
+    m_normalMode->setName(i18n("Normal"));
+    m_notesMode->setName(i18n("Notes"));
+    m_slidesSorterMode->setName(i18n("Slides Sorter"));
+
     //unhide tab bar and populate with view modes
-    tabBar()->show();
-    tabBar()->addTab("Normal");
-    tabBar()->addTab("Notes");
-    tabBar()->addTab("Slides Sorter");
-    tabBar()->setCurrentIndex(0);
+    vtabBar()->show();
+    vtabBar()->addTab(m_normalMode->name());
+    vtabBar()->addTab(m_notesMode->name());
+    vtabBar()->addTab(m_slidesSorterMode->name());
+    vtabBar()->setCurrentIndex(0);
 }
 
 void KPrView::initActions()
@@ -210,20 +215,20 @@ void KPrView::initActions()
     actionCollection()->addAction("file_export_html", m_actionExportHtml);
     connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
 
-    m_actionViewModeNormal = new KAction(i18n("Normal"), this);
+    m_actionViewModeNormal = new KAction(m_normalMode->name(), this);
     m_actionViewModeNormal->setCheckable(true);
     m_actionViewModeNormal->setChecked(true);
     m_actionViewModeNormal->setShortcut(QKeySequence("CTRL+F5"));
     actionCollection()->addAction("view_normal", m_actionViewModeNormal);
     connect(m_actionViewModeNormal, SIGNAL(triggered()), this, SLOT(showNormal()));
 
-    m_actionViewModeNotes = new KAction(i18n("Notes"), this);
+    m_actionViewModeNotes = new KAction(m_notesMode->name(), this);
     m_actionViewModeNotes->setCheckable(true);
     m_actionViewModeNotes->setShortcut(QKeySequence("CTRL+F6"));
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
     connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
 
-    m_actionViewModeSlidesSorter = new KAction(i18n("Slides Sorter"), this);
+    m_actionViewModeSlidesSorter = new KAction(m_slidesSorterMode->name(), this);
     m_actionViewModeSlidesSorter->setCheckable(true);
     m_actionViewModeSlidesSorter->setShortcut(QKeySequence("CTRL+F7"));
     actionCollection()->addAction("view_slides_sorter", m_actionViewModeSlidesSorter);
@@ -301,7 +306,7 @@ void KPrView::initActions()
     connect( m_actionBlackPresentation, SIGNAL( activated() ), this, SLOT( blackPresentation() ) );
     m_actionBlackPresentation->setEnabled(false);
 
-    connect(tabBar(), SIGNAL(currentChanged(int)), this, SLOT(changeViewByIndex(int)));
+    connect(vtabBar(), SIGNAL(currentChanged(int)), this, SLOT(changeViewByIndex(int)));
 }
 
 void KPrView::startPresentation()
@@ -353,7 +358,7 @@ void KPrView::showNormal()
 {
     setViewMode(m_normalMode);
     KAction *action = (KAction*) actionCollection()->action("view_normal");
-    tabBar()->setCurrentIndex(0);
+    vtabBar()->setCurrentIndex(0);
     if (action){
         action-> setChecked(true);
     }
@@ -367,7 +372,7 @@ void KPrView::showNotes()
         actionCollection()->action( "view_masterpages" )->setChecked( false );
         setMasterMode( false );
     }
-    tabBar()->setCurrentIndex(1);
+    vtabBar()->setCurrentIndex(1);
     setViewMode(m_notesMode);
 }
 
@@ -379,25 +384,33 @@ void KPrView::showSlidesSorter()
         actionCollection()->action( "view_masterpages" )->setChecked( false );
         setMasterMode( false );
     }
-    tabBar()->setCurrentIndex(2);
+    vtabBar()->setCurrentIndex(2);
     setViewMode(m_slidesSorterMode);
 }
 
 
 void KPrView::changeViewByIndex(int index)
 {
-    if (index == 0) {
-        showNormal();
-    }
-    else if (index == 1) {
-        showNotes();
-    }
-    else if (index == 2) {
-        showSlidesSorter();
-    }
-    else {
-        return;
-    }
+    switch (index)
+    {
+        case 0:
+        {
+            showNormal();
+            break;
+        }
+        case 1:
+        {
+            showNotes();
+            break;
+        }
+        case 2:
+        {
+            showSlidesSorter();
+            break;
+        }
+        default:
+            break;
+        }
 }
 
 void KPrView::editCustomSlideShows()

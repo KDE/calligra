@@ -148,7 +148,6 @@ private:
     QToolButton *m_buttonAddSlideToCurrentShow;
     QToolButton *m_buttonDelSlideFromCurrentShow;
     QComboBox *m_customSlideShowsList;
-    QTabBar *m_tabBar;
 
 private slots:
     /** Changes the view active page to match the slides sorter current index*/
