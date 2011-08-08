@@ -590,7 +590,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
-
+    Q_UNUSED(status);
     reportProgress(5);
 
     // 2. parse styles

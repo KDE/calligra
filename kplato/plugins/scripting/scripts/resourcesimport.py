@@ -78,7 +78,7 @@ class ResourcesImporter:
                 return
         else:
             #TODO update?
-            print "Resource already exists: %s %s" % ( r.id(), Plan.data( r, 'ResourceName' ) )
+            print "Resource already exists: %s %s" % ( r.id(), project.data( r, 'ResourceName' ) )
     
     def doImportCalendar( self, project, calendar, parent = None ):
         cal = project.findCalendar( calendar.id() )

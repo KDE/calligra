@@ -273,9 +273,9 @@ public:
     }
 
 private:
-    Calendar *m_calendar;
     QDate m_date; //NOTE: inValid if used for weekdays
     int m_state;
+    Calendar *m_calendar;
     QList<TimeInterval*> m_timeIntervals;
 
 #ifndef NDEBUG

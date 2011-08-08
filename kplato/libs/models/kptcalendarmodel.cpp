@@ -98,6 +98,11 @@ CalendarItemModel::~CalendarItemModel()
 {
 }
 
+const QMetaEnum CalendarItemModel::columnMap() const
+{
+    return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
+}
+
 void CalendarItemModel::slotCalendarToBeInserted( const Calendar *parent, int row )
 {
     //kDebug()<<(parent?parent->name():"Top level")<<","<<row;
@@ -168,10 +173,10 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
     flags |= Qt::ItemIsDragEnabled;
     if ( calendar ( index ) ) {
         switch ( index.column() ) {
-            case 0:/*Name*/
+            case Name:
                 flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
                 break;
-            case 1:
+            case TimeZone:
                 if ( parent( index ).isValid() ) {
                     flags &= ~Qt::ItemIsEditable;
                 } else {
@@ -250,7 +255,7 @@ QModelIndex CalendarItemModel::index( const Calendar *calendar) const
 
 int CalendarItemModel::columnCount( const QModelIndex & ) const
 {
-    return 2;
+    return columnMap().keyCount();
 }
 
 int CalendarItemModel::rowCount( const QModelIndex &parent ) const
@@ -378,8 +383,8 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
         return QVariant();
     }
     switch ( index.column() ) {
-        case 0: result = name( a, role ); break;
-        case 1: result = timeZone( a, role ); break;
+        case Name: result = name( a, role ); break;
+        case TimeZone: result = timeZone( a, role ); break;
         default:
             kDebug()<<"data: invalid display value column"<<index.column();
             return QVariant();

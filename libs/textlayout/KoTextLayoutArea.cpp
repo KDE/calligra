@@ -592,7 +592,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextBlock block(cursor->it.currentBlock());
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
     KoParagraphStyle format(block.blockFormat(), block.charFormat());
-    //QTextBlockFormat format = block.blockFormat();
 
     int dropCapsAffectsNMoreLines = 0;
     qreal dropCapsPositionAdjust = 0.0;

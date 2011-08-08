@@ -89,6 +89,11 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-08-04
+General
+*Ask for confirmation when going to Design View and have pending record changes in Data View of table or form
+BUG:278417
+
 2011-07-25
 General
 *Replaced term "row" with "record" in visible places

@@ -238,8 +238,8 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
     case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
     case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
 
-    case KoBorder::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine); break;
+    case KoBorder::BorderDashDot: pen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDot: pen.setStyle(Qt::DashDotDotLine); break;
     }
 
     if (borderData.style == KoBorder::BorderDouble) {
