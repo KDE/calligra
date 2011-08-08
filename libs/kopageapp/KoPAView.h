@@ -46,7 +46,6 @@ class KUrl;
 class QTextDocument;
 class QLabel;
 class QTabBar;
-class QTabWidget;
 class KoCopyController;
 class KoCutController;
 
