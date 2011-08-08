@@ -248,7 +248,7 @@ void KoPAView::initGUI()
 
     d->gridLayout->addWidget(d->horizontalRuler, 0, 1);
     d->gridLayout->addWidget(d->verticalRuler, 1, 0);
-    d->gridLayout->addWidget(canvasController, 1, 1 );
+    d->gridLayout->addWidget(canvasController, 1, 1);
 
     //tab bar is hidden by default a method is provided to acces to the tab bar
     d->m_hTabBar->hide();

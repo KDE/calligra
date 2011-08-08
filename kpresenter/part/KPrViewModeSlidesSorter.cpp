@@ -118,7 +118,6 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     toolBarLayout->addStretch();
     toolBarLayout->addWidget(m_buttonAddSlideToCurrentShow);
     toolBarLayout->addWidget(m_buttonDelSlideFromCurrentShow);
-
     viewsSplitter->addWidget(m_slidesSorterView);
     viewsSplitter->addWidget(m_customSlideShowView);
 
@@ -253,7 +252,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     if (view) {
         view->replaceCentralWidget(m_centralWidget);
     }
-
     m_centralWidget->show();
     m_slidesSorterView->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
