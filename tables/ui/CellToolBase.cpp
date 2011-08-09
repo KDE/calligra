@@ -2761,8 +2761,11 @@ void CellToolBase::insertFromClipboard()
     QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
     dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
+    QString oldDelimiter = dialog->delimiter();
+    dialog->setDelimiter(QString());
     if (!dialog->canceled())
         dialog->exec();
+    dialog->setDelimiter(oldDelimiter);
     delete dialog;
 }
 
@@ -3171,6 +3174,13 @@ void CellToolBase::findNext()
                 d->replace->closeReplaceNextDialog();
             }
         }
+    }
+    else if (!cell.isNull()) {
+        // move to the cell
+        if (cell.sheet() != selection()->activeSheet())
+            selection()->emitVisibleSheetRequested(cell.sheet());
+        selection()->initialize (Region (cell.column(), cell.row(), cell.sheet()), cell.sheet());
+        scrollToCell (selection()->cursor());
     }
 }
 

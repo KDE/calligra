@@ -48,7 +48,8 @@ public:
         Description
     };
     const QMetaEnum columnMap() const;
-    
+    int propertyCount() const;
+
     virtual QVariant data( const Account *a, int property, int role = Qt::DisplayRole ) const; 
     virtual QVariant headerData( int property, int role = Qt::DisplayRole ) const; 
 

@@ -562,7 +562,7 @@ bool PasteCommand::processTextPlain(Element *element)
     // Split the text into lines.
     const QStringList list = text.split('\n');
 
-    const int mx = 1; // always one column
+//    const int mx = 1; // always one column
     const int my = list.count();
 
     // Put the lines into an array value.

@@ -20,7 +20,7 @@ class BusyinfoCheck:
                 lst = r.externalAppointments()
                 for iv in lst:
                     iv.insert( 0, r.id() )
-                    iv.insert( 1, Plan.data( r, 'ResourceName' ) )
+                    iv.insert( 1, project.data( r, 'ResourceName' ) )
                 print lst
 
 BusyinfoCheck( self )

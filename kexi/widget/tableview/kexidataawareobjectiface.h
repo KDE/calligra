@@ -365,7 +365,7 @@ public:
 
     /*! Cancels row editing All changes made to the editing
      row during this current session will be undone.
-     \return true on success or false on failure (e.g. when editor does not exist) */
+     \return true on success or false on failure. */
     virtual bool cancelRowEdit();
 
     /*! Accepts row editing. All changes made to the editing

@@ -159,21 +159,20 @@ QString CopyCommand::saveAsPlainText(const Region &region)
         return cell.displayText();
     }
 
-    QRect lastRange(region.lastRange());
-
-    // Find area
-    int top = lastRange.bottom();
-    int bottom = lastRange.top();
-    int left = lastRange.right();
-    int right = lastRange.left();
-
     QString result;
-    for (int row = top; row <= bottom; ++row) {
-        for (int col = left; col <= right; ++col) {
-            Cell cell(region.lastSheet(), col, row);
-            result += cellAsText(cell, col != right);
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
+      if (result.length()) result += "\n";
+      Region::Element *el = *it;
+      QRect used = el->sheet()->usedArea (true);
+      QRect rect = el->rect().intersected (used);
+      for (int row = rect.top(); row <= rect.bottom(); ++row) {
+        for (int col = rect.left(); col <= rect.right(); ++col) {
+          Cell cell (el->sheet(), col, row);
+          result += cellAsText (cell, col != rect.right());
         }
-        result += '\n';
+        result += "\n";
+      }
     }
     return result;
 }

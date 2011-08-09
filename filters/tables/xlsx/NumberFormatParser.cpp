@@ -595,7 +595,7 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
         const bool isLong = i < numberFormat.length() - 1 && numberFormat[ i + 1 ] == c;
         const bool isLonger = isLong && i < numberFormat.length() - 2 && numberFormat[ i + 2 ] == c;
         const bool isLongest = isLonger && i < numberFormat.length() - 3 && numberFormat[ i + 3 ] == c;
-
+        Q_UNUSED(isLongest);
         switch (c) {
             // condition or color or locale...
         case '[': {

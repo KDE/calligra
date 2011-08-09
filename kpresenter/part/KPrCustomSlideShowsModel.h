@@ -181,6 +181,9 @@ signals:
     /** Notify a change of the active custom slide show */
     void customSlideShowsChanged();
 
+    /** Notify a need of page slection after coping or moving pages */
+    void selectPages(int start, int number);
+
 private slots:
     /** emit signals indicating a change in the model layout or items */
     void updateModel();

@@ -7,6 +7,7 @@ include_directories(
 )
 
 add_subdirectory( scripts )
+add_subdirectory( tests )
 
 set(krossmodulekplato_PART_SRCS
     Account.cpp
