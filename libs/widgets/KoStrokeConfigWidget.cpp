@@ -200,13 +200,22 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 
     KoMarker *marker = new KoMarker();
     marker->loadOdf( element, shapeContext );
+    
     QList<KoMarker*> markers;
     markers << marker;
+    markers << marker;
+    markers << marker;
+    markers << marker;
+    markers << marker;
+    markers << marker;
+    markers << marker;
+    markers << marker;
+    
     d->beginMarkerSelector->updateMarkers( markers );
-    mainLayout->addWidget(d->beginMarkerSelector, 5, 0, 1, 4);
+    mainLayout->addWidget(d->beginMarkerSelector, 5, 0, 1, 2);
     
     d->endMarkerSelector->updateMarkers( markers );
-    mainLayout->addWidget(d->endMarkerSelector, 6, 0, 1, 4);
+    mainLayout->addWidget(d->endMarkerSelector, 5, 2, 1, 2);
 #endif
 
     // Spacer

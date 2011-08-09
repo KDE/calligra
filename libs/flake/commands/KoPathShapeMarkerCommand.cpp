@@ -25,63 +25,29 @@
 
 #include <klocale.h>
 
-class KoPathShapeMarkerCommand::Private
-{
-public:
-    Private() {}
-    ~Private()
-    {
-    }
-    
-    void addoldMarker(KoMarker * oldMarker)
-    {
-        oldMarkers.append(oldMarker);
-        
-    }
-    
-    void setMarker(KoMarker * newMarker)
-    {
-        marker = newMarker;
-    }
-
-    void setPosition(KoPathShape::MarkerPosition newPosition)
-    {
-        position = newPosition;
-    }
-    
-    QList<KoPathShape*> shapes;  ///< the shapes to set marker for
-    QList<KoMarker*> oldMarkers; ///< the old markers, one for each shape
-    KoMarker* marker; ///< the new marker to set
-    KoPathShape::MarkerPosition position;
-};
-
 KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoPathShape::MarkerPosition position, KUndo2Command *parent)
 : KUndo2Command(parent)
-, d(new Private())
+, m_shapes(shapes)
+, m_marker(marker)
+, m_position(position)
 {
     setText(i18n("Set marker"));
 
-    d->shapes = shapes;
-    
     // save old markers
-    foreach(KoPathShape *shape, d->shapes) {
-        d->addoldMarker(shape->marker(position));
+    foreach(KoPathShape *shape, m_shapes) {
+        m_oldMarkers.append(shape->marker(position));
     }
-
-    d->setMarker(marker);
-    d->setPosition(position);
 }
 
 KoPathShapeMarkerCommand::~KoPathShapeMarkerCommand()
 {
-    delete d;
 }
 
 void KoPathShapeMarkerCommand::redo()
 {
     KUndo2Command::redo();
-    foreach(KoPathShape *shape, d->shapes) {
-        shape->setMarker(d->marker, d->position);
+    foreach(KoPathShape *shape, m_shapes) {
+        shape->setMarker(m_marker, m_position);
         shape->update();
     }
 }
@@ -89,9 +55,9 @@ void KoPathShapeMarkerCommand::redo()
 void KoPathShapeMarkerCommand::undo()
 {
     KUndo2Command::undo();
-    QList<KoMarker*>::iterator markerIt = d->oldMarkers.begin();
-    foreach(KoPathShape *shape, d->shapes) {
-        shape->setMarker(*markerIt, d->position);
+    QList<KoMarker*>::iterator markerIt = m_oldMarkers.begin();
+    foreach(KoPathShape *shape, m_shapes) {
+        shape->setMarker(*markerIt, m_position);
         shape->update();
         ++markerIt;
     }

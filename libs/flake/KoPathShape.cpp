@@ -187,6 +187,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
 QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     Q_D(const KoPathShape);
+    
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
     return KoShape::saveStyle(style, context);
@@ -247,8 +248,9 @@ void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter)
     QPainterPath path(outline());
     path.setFillRule(d->fillRule);
 
-    if (background())
+    if (background()) {
         background()->paint(painter, path);
+    }
     //paintDebug(painter);
 }
 
@@ -319,6 +321,8 @@ void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converte
 
 QPainterPath KoPathShape::outline() const
 {
+    Q_D(const KoPathShape);
+    
     QPainterPath path;
     foreach(KoSubpath * subpath, m_subpaths) {
 //qDebug() << "Inside foreach in KoPathShape::outline()";
@@ -377,6 +381,14 @@ QPainterPath KoPathShape::outline() const
             lastPoint = currPoint;
         }
     }
+    if(d->beginMarker && m_subpaths.size()){
+        path = d->beginMarker->path().united(path);
+    }
+    
+    if(d->endMarker && m_subpaths.size()){
+        path = path.united(d->endMarker->path());
+    }
+    
     return path;
 }
 

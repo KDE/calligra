@@ -48,10 +48,12 @@ public:
     void redo();
     /// revert the actions done in redo
     void undo();
-    
-private:
-    class Private;
-    Private * const d;
+
+private:    
+    QList<KoPathShape*> m_shapes;  ///< the shapes to set marker for
+    QList<KoMarker*> m_oldMarkers; ///< the old markers, one for each shape
+    KoMarker* m_marker; ///< the new marker to set
+    KoPathShape::MarkerPosition m_position;
 };
 
 #endif // KoPathShapeMarkerCommand_H

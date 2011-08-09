@@ -34,12 +34,7 @@ class KoMarker::Private
 {
 public:
     Private()
-    {
-    }
-
-    ~Private()
-    {
-    }
+    {}
 
     QString name;
     QString d;

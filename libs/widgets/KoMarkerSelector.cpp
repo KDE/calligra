@@ -23,6 +23,9 @@
 #include "KoMarkerModel.h"
 #include "KoMarkerItemDelegate.h"
 
+#include <QList>
+#include <QComboBox>
+
 class KoMarkerSelector::Private
 {
 public:
