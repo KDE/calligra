@@ -48,14 +48,15 @@ CSThumbProviderKarbon::~CSThumbProviderKarbon()
 
 QList<QPixmap> CSThumbProviderKarbon::createThumbnails(const QSize &thumbSize)
 {
-    // make sure all is rendered before painting
+    // make sure everything is rendered before painting
     processEvents();
 
     QPixmap thumbnail(thumbSize);
+    thumbnail.fill(Qt::white);
     QPainter thumbPainter(&thumbnail);
     m_doc->paintContent(thumbPainter, QRect(QPoint(0, 0), thumbSize));
 
-    // make sure there are no events this fixes a crash on shutdown
+    // make sure there are no events; this fixes a crash on shutdown
     processEvents();
 
     return QList<QPixmap>() << thumbnail;
