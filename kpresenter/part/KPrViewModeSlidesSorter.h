@@ -153,9 +153,6 @@ private slots:
     /** Changes the view active page to match the slides sorter current index*/
     void updateActivePageToCurrentIndex();
 
-    /** Update the slides sorter document model*/
-    void updateSlidesSorterDocumentModel();
-
     /** Updates custom slide Shows list */
     void updateCustomSlideShowsList();
 
@@ -227,6 +224,9 @@ private slots:
 
     /** Enable/Disable add and remove slides buttons for Custom Slide Show View */
     void manageAddRemoveSlidesButtons();
+
+    /** Select pages on custom slide show view */
+    void selectCustomShowPages(int start, int count);
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

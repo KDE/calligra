@@ -821,9 +821,9 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 bool KexiDataAwareObjectInterface::cancelRowEdit()
 {
     if (!hasData())
-        return false;
+        return true;
     if (!m_rowEditing)
-        return false;
+        return true;
     cancelEditor();
     m_rowEditing = false;
     //indicate on the vheader that we are not editing
@@ -889,7 +889,7 @@ bool KexiDataAwareObjectInterface::cancelEditor()
         m_errorMessagePopup->close();
     }
     if (!m_editor)
-        return false;
+        return true;
     removeEditor();
     return true;
 }

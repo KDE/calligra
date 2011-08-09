@@ -1442,12 +1442,12 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         const unsigned long colL = chart->m_colL;
         const unsigned long dxL = chart->m_dxL;
-        const unsigned long colR = chart->m_colR;
-        const unsigned long dxR = chart->m_dxR;
-        const unsigned long rwB = chart->m_rwB;
+        //const unsigned long colR = chart->m_colR;
+        //const unsigned long dxR = chart->m_dxR;
+        //const unsigned long rwB = chart->m_rwB;
         const unsigned long dyT = chart->m_dyT;
         const unsigned long rwT = chart->m_rwT;
-        const unsigned long dyB = chart->m_dyB;
+        //const unsigned long dyB = chart->m_dyB;
 
         c->m_x = offset(columnWidth(sheet, colL), dxL, 1024);
         c->m_y = offset(rowHeight(sheet, rwT), dyT, 256);

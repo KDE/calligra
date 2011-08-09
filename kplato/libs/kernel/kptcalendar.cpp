@@ -781,6 +781,7 @@ int Calendar::indexOf( const Calendar *calendar ) const
 
 bool Calendar::loadCacheVersion( KoXmlElement &element, XMLLoaderObject &status )
 {
+    Q_UNUSED(status);
     m_cacheversion = element.attribute( "version", 0 ).toInt();
     kDebug()<<m_name<<m_cacheversion;
     return true;

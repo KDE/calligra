@@ -26,6 +26,7 @@
 #include "commands/KPrRenameCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
+#include <qtest_kde.h>
 
 void TestRenameCustomSlideShowCommand::renameCustomShow()
 {
@@ -75,5 +76,5 @@ void TestRenameCustomSlideShowCommand::renameCustomShow()
     QVERIFY(!doc.customSlideShows()->names().contains(customShowNewName));
 }
 
-QTEST_MAIN(TestRenameCustomSlideShowCommand)
+QTEST_KDEMAIN(TestRenameCustomSlideShowCommand, GUI)
 #include "TestRenameCustomSlideShowCommand.moc"

@@ -23,6 +23,9 @@
 
 #include "generated/simpleParser.h"
 
+/**
+ * Specifies the types of text.  [MS-PPT] — v20101219
+ */
 enum TextTypeEnum {
     Tx_TYPE_TITLE = 0,
     Tx_TYPE_BODY,

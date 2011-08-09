@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Words SGML DocBook Export Filter
+Name[bg]=Филтър за изнасяне от Words в SGML DocBook
 Name[cs]=Exportní filtr SGML Docbook pro Words
 Name[es]=Filtro de Words de exportación a SGML DocBook
 Name[et]=Wordsi SGML DocBooki ekspordifilter

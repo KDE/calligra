@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calligra Spreadsheet Component
+Name[bg]=Компонент за електронни таблици в Calligra
 Name[et]=Calligra tabelitöötluse komponent
 Name[nb]=Calligra regnearkkomponent
 Name[pl]=Składnik arkusza kalkulacyjnego dla Calligry
@@ -17,7 +18,7 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread
 GenericName=Spreadsheet
-GenericName[bg]=Таблици
+GenericName[bg]=Електронни таблици
 GenericName[ca]=Full de càlcul
 GenericName[ca@valencia]=Full de càlcul
 GenericName[cs]=Sešit

@@ -106,7 +106,7 @@ QStringList ExportDialog::sheets() const
 {
     QListWidget* view = m_mainwidget->mSheets;
     QStringList list;
-    for (uint i = 0; i < view->count() ; i++) {
+    for (uint i = 0; i < (uint)view->count() ; i++) {
         QListWidgetItem* item = view->item(i);
         if (item->isSelected()) {
             list.append(item->text());

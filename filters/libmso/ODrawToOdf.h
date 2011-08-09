@@ -66,6 +66,13 @@ public:
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
                                           Writer& out) = 0;
+
+        /**
+         * Ask the host application whether to process an msosptRectangle type
+         * shape container as an msosptTextBox.
+         */
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd) = 0;
+
         /**
          * Create a fitting style for the current object.
          * This will be a style that can contain graphic style elements. So the
@@ -137,6 +144,7 @@ private:
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processTextBox(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);

@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraPlugin
 Comment=Calligra Plugin
+Comment[bg]=Приставка за Calligra
 Comment[et]=Calligra plugin
 Comment[it]=Estensione di Calligra
 Comment[nb]=Programtillegg for Calligra
