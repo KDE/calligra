@@ -705,7 +705,8 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentMaster(0),
   m_currentSlide(0),
   m_processingMasters(false),
-  m_isList(false)
+  m_isList(false),
+  m_continueList(false)
 {
 }
 
@@ -2174,28 +2175,32 @@ void writeTextObjectDeIndent(KoXmlWriter& xmlWriter, const int count,
         levels.pop();
     }
 }
-void addListElement(KoXmlWriter& xmlWriter, const QString& listStyle,
+void addListElement(KoXmlWriter& out, const QString& listStyle,
                     QStack<QString>& levels, int depth,
-                    const PptTextPFRun &pf)
+                    const PptTextPFRun &pf, bool continueList)
 {
     levels.push(listStyle);
-    xmlWriter.startElement("text:list");
+    out.startElement("text:list");
     if (!listStyle.isEmpty()) {
-        xmlWriter.addAttribute("text:style-name", listStyle);
+        out.addAttribute("text:style-name", listStyle);
     } else {
         qDebug() << "Warning: list style name not provided!";
     }
-    xmlWriter.startElement("text:list-item");
+    //required by stage
+    if (continueList) {
+        out.addAttribute("text:continue-numbering", "true");
+    }
+    out.startElement("text:list-item");
 
-    //kpresenter requires the start-value here!
-    if (pf.fBulletHasAutoNumber()) {
-        xmlWriter.addAttribute("text:start-value", pf.startNum());
+    //required by stage
+    if (pf.fBulletHasAutoNumber() && !continueList) {
+        out.addAttribute("text:start-value", pf.startNum());
     }
 
     // add styleless levels to get the right level of indentation
     while (levels.size() < depth) {
-        xmlWriter.startElement("text:list");
-        xmlWriter.startElement("text:list-item");
+        out.startElement("text:list");
+        out.startElement("text:list-item");
         levels.push("");
     }
 }
@@ -2527,13 +2532,15 @@ PptToOdp::processParagraph(Writer& out,
             writeTextObjectDeIndent(out.xml, 0, levels);
         }
         if (levels.isEmpty()) {
-            addListElement(out.xml, listStyle, levels, depth, pf);
+            addListElement(out.xml, listStyle, levels, depth, pf, m_continueList);
         } else {
             out.xml.endElement(); //text:list-item
             out.xml.startElement("text:list-item");
         }
+        m_continueList = true;
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
+        m_continueList = false;
     }
 
     out.xml.startElement("text:p");
