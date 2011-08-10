@@ -162,12 +162,15 @@ public:
     void centerPage();
 
     /// return a pointer to the horizontal tab bar
-    QTabBar *htabBar() const;
+    QTabBar *tabBar() const;
 
-    /// return a pointer to the vertical tab bar
-    QTabBar *vtabBar() const;
+    /// set view Tab Bar position (left / top)
+    void setTabBarPosition(Qt::Orientation orientation);
 
+    /// Show a custom central widget and hides the standard one.
     void replaceCentralWidget(QWidget *newWidget);
+
+    /// hides any custom central widget and shows the standard widget.
     void restoreCentralWidget();
 
 signals:
@@ -191,6 +194,8 @@ protected:
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
+
+    void hideCustomCentralWidget();
 
 public slots:
 

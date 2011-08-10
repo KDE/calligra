@@ -63,7 +63,7 @@
 #include <KMessageBox>
 #include <KActionCollection>
 
-KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas)
+KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
     , m_slidesSorterView(new KPrSlidesManagerView())
     , m_customSlideShowView(new KPrSlidesManagerView())
@@ -73,6 +73,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     , m_iconSize(QSize(200, 200))
     , m_editCustomSlideShow(false)
 {
+    setName(i18n("Slides Sorter"));
     //Create customSlideShow GUI
     QWidget *m_customShowsToolBar = new QWidget();
 
@@ -252,7 +253,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     if (view) {
         view->replaceCentralWidget(m_centralWidget);
     }
-    m_centralWidget->show();
     m_slidesSorterView->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
 
@@ -276,7 +276,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    m_centralWidget->hide();
     // Give the ressources back to the canvas
     m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
     // Active the view as a basic but active one

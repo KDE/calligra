@@ -137,11 +137,9 @@ public:
     KoPAViewMode *viewModeNormal;
 
     // This tab bar hidden by default. It could be used to alternate between view modes
-    QTabBar *m_hTabBar;
-    QTabBar *m_vTabBar;
+    QTabBar *tabBar;
 
-    QGridLayout *outsideGridLayout;
-    QGridLayout *gridLayout;
+    QGridLayout *tabBarLayout;
     QWidget *insideWidget;
 
     // status bar
@@ -184,14 +182,14 @@ KoPAView::~KoPAView()
 
 void KoPAView::initGUI()
 {
-    d->outsideGridLayout = new QGridLayout(this);
-    d->outsideGridLayout->setMargin(0);
-    d->outsideGridLayout->setSpacing(0);
+    d->tabBarLayout = new QGridLayout(this);
+    d->tabBarLayout->setMargin(0);
+    d->tabBarLayout->setSpacing(0);
     d->insideWidget = new QWidget();
-    d->gridLayout = new QGridLayout(d->insideWidget);
-    d->gridLayout->setMargin(0);
-    d->gridLayout->setSpacing(0);
-    setLayout(d->outsideGridLayout);
+    QGridLayout *gridLayout = new QGridLayout(d->insideWidget);
+    gridLayout->setMargin(0);
+    gridLayout->setSpacing(0);
+    setLayout(d->tabBarLayout);
 
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
@@ -235,24 +233,17 @@ void KoPAView::initGUI()
             d->horizontalRuler, SLOT(setUnit(const KoUnit&)));
     connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
             d->verticalRuler, SLOT(setUnit(const KoUnit&)));
-    //Layout a tool bar on top of normal view
-    d->m_hTabBar = new QTabBar();
-    //Layout a tool bar at normal view left
-    d->m_vTabBar = new QTabBar();
-    d->m_vTabBar->setShape(QTabBar::RoundedWest);
-    d->m_vTabBar->setExpanding(true);
+    //Layout a tab bar
+    d->tabBar = new QTabBar();
+    d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
+    setTabBarPosition(Qt::Horizontal);
 
-    d->outsideGridLayout->addWidget(d->m_hTabBar, 0, 1);
-    d->outsideGridLayout->addWidget(d->insideWidget, 1, 1);
-    d->outsideGridLayout->addWidget(d->m_vTabBar, 1, 0, 2, 1, Qt::AlignTop);
-
-    d->gridLayout->addWidget(d->horizontalRuler, 0, 1);
-    d->gridLayout->addWidget(d->verticalRuler, 1, 0);
-    d->gridLayout->addWidget(canvasController, 1, 1);
+    gridLayout->addWidget(d->horizontalRuler, 0, 1);
+    gridLayout->addWidget(d->verticalRuler, 1, 0);
+    gridLayout->addWidget(canvasController, 1, 1);
 
     //tab bar is hidden by default a method is provided to acces to the tab bar
-    d->m_hTabBar->hide();
-    d->m_vTabBar->hide();
+    d->tabBar->hide();
 
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
             this, SLOT(pageOffsetChanged()));
@@ -1135,26 +1126,56 @@ void KoPAView::centerPage()
 
 }
 
-QTabBar *KoPAView::htabBar() const
+QTabBar *KoPAView::tabBar() const
 {
-    return d->m_hTabBar;
-}
-
-QTabBar *KoPAView::vtabBar() const
-{
-    return d->m_vTabBar;
+    return d->tabBar;
 }
 
 void KoPAView::replaceCentralWidget(QWidget *newWidget)
 {
+    // hide standard central widget
     d->insideWidget->hide();
-    d->outsideGridLayout->addWidget(newWidget, 2, 1);
+    // If there is already a custom central widget, it's hided and removed from the layout
+    hideCustomCentralWidget();
+    // layout and show new custom widget
+    d->tabBarLayout->addWidget(newWidget, 2, 1);
+    newWidget->show();
 }
 
 void KoPAView::restoreCentralWidget()
 {
-    d->outsideGridLayout->removeItem(d->outsideGridLayout->itemAtPosition(2, 1));
+    //hide custom central widget
+    hideCustomCentralWidget();
+    //show standard central widget
     d->insideWidget->show();
+}
+
+void KoPAView::hideCustomCentralWidget()
+{
+    if (d->tabBarLayout->itemAtPosition(2, 1)) {
+        if (d->tabBarLayout->itemAtPosition(2, 1)->widget()) {
+            d->tabBarLayout->itemAtPosition(2, 1)->widget()->hide();
+        }
+        d->tabBarLayout->removeItem(d->tabBarLayout->itemAtPosition(2, 1));
+    }
+}
+
+void KoPAView::setTabBarPosition(Qt::Orientation orientation)
+{
+    switch (orientation) {
+    case Qt::Horizontal:
+        qDebug("horizontal");
+        d->tabBarLayout->removeWidget(d->tabBar);
+        d->tabBar->setShape(QTabBar::RoundedNorth);
+        d->tabBarLayout->addWidget(d->tabBar, 0, 1);
+        break;
+    case Qt::Vertical:
+        qDebug("vertical");
+        d->tabBarLayout->removeWidget(d->tabBar);
+        d->tabBar->setShape(QTabBar::RoundedWest);
+        d->tabBarLayout->addWidget(d->tabBar, 1, 0, 2, 1, Qt::AlignTop);
+        break;
+    }
 }
 
 #include <KoPAView.moc>
