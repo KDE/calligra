@@ -1173,6 +1173,8 @@ void KoPAView::setTabBarPosition(Qt::Orientation orientation)
         d->tabBar->setShape(QTabBar::RoundedWest);
         d->tabBarLayout->addWidget(d->tabBar, 1, 0, 2, 1, Qt::AlignTop);
         break;
+    default:
+        break;
     }
 }
 
