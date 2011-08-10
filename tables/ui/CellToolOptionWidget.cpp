@@ -150,6 +150,7 @@ void CellToolOptionWidget::resizeEvent(QResizeEvent *event)
         if (newWidth <= 2 *(minWidth - itemWidth) + margin) {
             d->layout->removeItem(item);
             d->layout->addItem(item, 1, 0, 1, column + 1);
+            d->layout->setRowStretch(1, 1);
         }
     } else { /* two rows */
         if (newWidth > 2 * minWidth + margin) {

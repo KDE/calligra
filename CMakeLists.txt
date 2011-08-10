@@ -32,7 +32,7 @@ option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction i
 option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
-
+option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
@@ -122,6 +122,10 @@ option(GHNS "support Get Hot New Stuff" ON)
 if(KDE_VERSION LESS "4.4.0")
     set(GHNS FALSE)
 endif(KDE_VERSION LESS "4.4.0")
+
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
+  set(NEPOMUK FALSE)
+endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
@@ -266,7 +270,17 @@ if(LCMS2_FOUND)
     set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
-    
+##
+## Test for Nepomuk
+##
+if(NEPOMUK)
+    macro_optional_find_package(Nepomuk)
+    if(NOT NEPOMUK_FOUND)
+        set(NEPOMUK FALSE)
+    endif(NOT NEPOMUK_FOUND)
+    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
+endif(NEPOMUK)
+
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
