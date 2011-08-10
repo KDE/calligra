@@ -26,6 +26,7 @@ class KoImageData;
 class QIODevice;
 class QString;
 class QTransform;
+class QImage;
 
 #include "flake_export.h"
 
@@ -59,6 +60,12 @@ public:
 
     /// Create a filename suitable for saving external data
     QString createFileName(const QString &extension);
+
+    /// Saves given image and returns the href used
+    QString saveImage(const QImage &image);
+
+    /// Saves given image and returns the href used
+    QString saveImage(KoImageData *image);
 
 private:
     class Private;

@@ -43,6 +43,7 @@
 #include <KoShapeGroup.h>
 #include <KoPathShape.h>
 #include <KoXmlWriter.h>
+#include <KoShapePainter.h>
 
 #include <QtCore/QFile>
 #include <QtCore/QString>
@@ -178,10 +179,10 @@ void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path) {
         savePath(path, context);
-        return;
+    } else {
+        // generic saving of shape via a switch element
+        saveGeneric(shape, context);
     }
-
-    // TODO: implement generic saving of shape via a switch element
 }
 
 void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
@@ -194,4 +195,33 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("d", path->toString(context.userSpaceTransform()));
     context.shapeWriter().endElement();
+}
+
+void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
+{
+    const QRectF bbox = shape->boundingRect();
+
+    // prepare a transparent image, make it twice as big as the original size
+    QImage image(2*bbox.size().toSize(), QImage::Format_ARGB32);
+    image.fill(0);
+
+    // paint shape to the image
+    KoShapePainter painter;
+    painter.setShapes(QList<KoShape*>()<< shape);
+    painter.paint(image);
+
+    context.shapeWriter().startElement("switch");
+
+    // TODO: use QSvgGenerator to save an svg element or even write a flat odf file
+
+    context.shapeWriter().startElement("image");
+    context.shapeWriter().addAttribute("id", context.getID(shape));
+    context.shapeWriter().addAttributePt("x", bbox.x());
+    context.shapeWriter().addAttributePt("y", bbox.y());
+    context.shapeWriter().addAttributePt("width", bbox.width());
+    context.shapeWriter().addAttributePt("height", bbox.height());
+    context.shapeWriter().addAttribute("xlink:href", context.saveImage(image));
+    context.shapeWriter().endElement(); // image
+
+    context.shapeWriter().endElement(); // switch
 }

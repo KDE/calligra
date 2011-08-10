@@ -67,6 +67,7 @@ private:
     void saveGroup(KoShapeGroup *group, SvgSavingContext &context);
     void saveShape(KoShape *shape, SvgSavingContext &context);
     void savePath(KoPathShape *path, SvgSavingContext &context);
+    void saveGeneric(KoShape *shape, SvgSavingContext &context);
 
     QList<KoShape*> m_toplevelShapes;
     QSizeF m_pageSize;
