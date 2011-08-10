@@ -31,16 +31,12 @@
 #include "KoShapeGroup.h"
 #include "KoShapeLayer.h"
 #include "KoUnavailShape.h"
-#include "commands/KoShapeGroupCommand.h"
-#include "svg/SvgParser.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
 
 #include <QString>
 #include <QHash>
@@ -236,10 +232,6 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
                                                        KoShapeLoadingContext &context,
                                                        const KoXmlElement &element) const
 {
-    KoShape *svgShape = createShapeFromSvg(fullElement, context, element);
-    if (svgShape)
-        return svgShape;
-
     // Pair of namespace, tagname
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
 
@@ -253,7 +245,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 #ifndef NDEBUG
     kDebug(30006) << "Supported factories for=" << p;
     foreach (KoShapeFactoryBase *f, factories)
-        kDebug(30006) << f->id() << f->name();
+        kDebug(30006) << f->id() << f->name() << f->loadingPriority();
 #endif
 
     // Loop through all shape factories. If any of them supports this
@@ -271,16 +263,8 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
     for (int i = factories.size() - 1; i >= 0; --i) {
         KoShapeFactoryBase * factory = factories[i];
         if (factory->supports(element, context)) {
-            KoShape *shape = factory->createDefaultShape(context.documentResourceManager());
-
-            if (shape->shapeId().isEmpty())
-                shape->setShapeId(factory->id());
-
-            context.odfLoadingContext().styleStack().save();
-            bool loaded = shape->loadOdf(fullElement, context);
-            context.odfLoadingContext().styleStack().restore();
-
-            if (loaded) {
+            KoShape *shape = factory->createShapeFromOdf(fullElement, context);
+            if (shape) {
                 kDebug(30006) << "Shape found for factory " << factory->id() << factory->name();
                 // we return the top-level most shape as thats the one that we'll have to
                 // add to the KoShapeManager for painting later (and also to avoid memory leaks)
@@ -291,70 +275,9 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
                 return shape;
             }
-
             // Maybe a shape with a lower priority can load our
             // element, but this attempt has failed.
-            delete shape;
         }
-    }
-
-    return 0;
-}
-
-KoShape *KoShapeRegistry::Private::createShapeFromSvg(const KoXmlElement &fullElement,
-                                                       KoShapeLoadingContext &context,
-                                                       const KoXmlElement &element) const
-{
-    kDebug(30006) << fullElement.tagName() << "-" << element.tagName();
-
-    if (fullElement.tagName() == "frame" && element.tagName() == "image") {
-        kDebug(30006) << "trying to create shapes form svg image";
-        QString href = element.attribute("href");
-        if (href.isEmpty())
-            return 0;
-
-        // check the mimetype
-        if (href.startsWith("./")) {
-            href.remove(0,2);
-        }
-        QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
-        kDebug(30006) << mimetype;
-        if (mimetype != "image/svg+xml")
-            return 0;
-
-        if (!context.odfLoadingContext().store()->open(href))
-            return 0;
-
-        KoStoreDevice dev(context.odfLoadingContext().store());
-        KoXmlDocument xmlDoc;
-
-        int line, col;
-        QString errormessage;
-
-        const bool parsed = xmlDoc.setContent(&dev, &errormessage, &line, &col);
-
-        context.odfLoadingContext().store()->close();
-
-        if (! parsed) {
-            kError(30006) << "Error while parsing file: "
-            << "at line " << line << " column: " << col
-            << " message: " << errormessage << endl;
-            return 0;
-        }
-
-        SvgParser parser(context.documentResourceManager());
-
-        QList<KoShape*> shapes = parser.parseSvg(xmlDoc.documentElement());
-        if (shapes.isEmpty())
-            return 0;
-        if (shapes.count() == 1)
-            return shapes.first();
-
-        KoShapeGroup *svgGroup = new KoShapeGroup;
-        KoShapeGroupCommand cmd(svgGroup, shapes);
-        cmd.redo();
-
-        return svgGroup;
     }
 
     return 0;
