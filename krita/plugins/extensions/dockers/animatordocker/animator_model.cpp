@@ -330,7 +330,7 @@ void AnimatorModel::updateImage()
 //     if (m_updating)
 //         return;
     
-    m_updating = true;
+//     m_updating = true;
     
     for (qint32 i = 0; i < rowCount(); ++i)
     {
