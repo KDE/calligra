@@ -161,7 +161,7 @@ public:
 
     void centerPage();
 
-    /// return a pointer to the tab bar
+    /// return a pointer to the tab bar (horizontal by default)
     QTabBar *tabBar() const;
 
     /// set view Tab Bar position (vertical / horizontal)

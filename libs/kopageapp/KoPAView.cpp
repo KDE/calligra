@@ -1164,13 +1164,11 @@ void KoPAView::setTabBarPosition(Qt::Orientation orientation)
 {
     switch (orientation) {
     case Qt::Horizontal:
-        qDebug("horizontal");
         d->tabBarLayout->removeWidget(d->tabBar);
         d->tabBar->setShape(QTabBar::RoundedNorth);
         d->tabBarLayout->addWidget(d->tabBar, 0, 1);
         break;
     case Qt::Vertical:
-        qDebug("vertical");
         d->tabBarLayout->removeWidget(d->tabBar);
         d->tabBar->setShape(QTabBar::RoundedWest);
         d->tabBarLayout->addWidget(d->tabBar, 1, 0, 2, 1, Qt::AlignTop);
