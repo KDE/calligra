@@ -161,10 +161,10 @@ public:
 
     void centerPage();
 
-    /// return a pointer to the horizontal tab bar
+    /// return a pointer to the tab bar
     QTabBar *tabBar() const;
 
-    /// set view Tab Bar position (left / top)
+    /// set view Tab Bar position (vertical / horizontal)
     void setTabBarPosition(Qt::Orientation orientation);
 
     /// Show a custom central widget and hides the standard one.
