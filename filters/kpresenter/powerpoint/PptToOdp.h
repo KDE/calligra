@@ -644,6 +644,7 @@ private:
     QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
     QString notesMasterName;
     bool m_isList; //true - processing a list, false - processing a paragraph
+    bool m_continueList; //true - continue previous list, false - restart numbering
 
     /**
     * @brief An usedDeclaration.
