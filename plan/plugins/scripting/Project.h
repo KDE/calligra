@@ -136,6 +136,8 @@ namespace Scripting {
             QObject *accountAt( int index );
             /// Find account with identity @p id
             QObject *findAccount( const QString &id );
+            /// Create account
+            QObject *createAccount( QObject *parent );
 
             /// Add all commands created since last addCommand() to the undo stack. The command is named @p name.
             void addCommand( const QString &name );
@@ -218,7 +220,7 @@ namespace Scripting {
 
             QMap<KPlato::ScheduleManager*, Schedule*> m_schedules;
             
-            KPlato::AccountModel m_accountModel;
+            KPlato::AccountItemModel m_accountModel;
             QMap<KPlato::Account*, Account*> m_accounts;
 
             KPlato::MacroCommand *m_command;
