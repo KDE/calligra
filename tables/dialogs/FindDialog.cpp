@@ -114,7 +114,7 @@ bool FindOption::searchInAllSheet() const
     return m_searchInAllSheet->isChecked();
 }
 
-FindDlg::FindDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, bool hasSelection)
+FindDlg::FindDlg(QWidget *parent, const QString &name, long options, const QStringList &findStrings, bool hasSelection)
         : KFindDialog(parent, options, findStrings, hasSelection)
 {
     setObjectName(name);
@@ -139,7 +139,7 @@ bool FindDlg::searchInAllSheet() const
 }
 
 
-SearchDlg::SearchDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection)
+SearchDlg::SearchDlg(QWidget *parent, const QString &name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection)
         : KReplaceDialog(parent, options, findStrings, replaceStrings, hasSelection)
 {
     setObjectName(name);

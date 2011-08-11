@@ -68,7 +68,7 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
         : KPageDialog(parent)
         , d(new Private)
 {
-    setObjectName("DocumentSettingsDialog");
+    setObjectName(QLatin1String("DocumentSettingsDialog"));
     setCaption(i18n("Document Settings"));
 //     setFaceType(List);
     setButtons(Ok | Cancel/* | Default | Reset*/);
