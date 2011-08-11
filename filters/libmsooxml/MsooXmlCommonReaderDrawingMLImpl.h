@@ -4831,6 +4831,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
         }
     }
 
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
+    m_currentAlpha = 0;
+
     //TODO: all the color transformations
     while (!atEnd()) {
         readNext();
