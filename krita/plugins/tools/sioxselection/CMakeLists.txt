@@ -3,6 +3,7 @@
 set(kritatoolsioxselection_PART_SRCS
     tool_sioxselection.cc
     kis_tool_sioxselection.cc
+    kisSioxSegmentator.cpp
     )
 
 kde4_add_plugin(kritatoolsioxselection ${kritatoolsioxselection_PART_SRCS})
