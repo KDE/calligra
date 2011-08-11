@@ -69,6 +69,7 @@ public:
     explicit AccountItemModel( QObject *parent = 0 );
     ~AccountItemModel();
 
+    const QMetaEnum columnMap() const;
     virtual void setProject( Project *project );
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;

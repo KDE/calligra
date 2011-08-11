@@ -162,6 +162,11 @@ AccountItemModel::~AccountItemModel()
 {
 }
 
+const QMetaEnum AccountItemModel::columnMap() const
+{
+    return m_model.columnMap();
+}
+
 void AccountItemModel::slotAccountToBeInserted( const Account *parent, int row )
 {
     //kDebug()<<parent->name();

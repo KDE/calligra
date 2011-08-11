@@ -48,6 +48,11 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
     m_resourceModel.setProject( project );
     m_resourceModel.setReadWrite( true );
     connect(&m_resourceModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
+
+    m_accountModel.setProject( project );
+    m_accountModel.setReadWrite( true );
+    connect(&m_accountModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
+
 }
 
 Scripting::Project::~Project()
@@ -625,10 +630,21 @@ QObject *Scripting::Project::account( KPlato::Account *account )
     return m_accounts[ account ];
 }
 
+QObject *Scripting::Project::createAccount( QObject *parent )
+{
+    Account *par = qobject_cast<Account*>( parent );
+    KPlato::Account *p = par ? par->kplatoAccount() : 0;
+    KPlato::Account *a = new KPlato::Account();
+    AddAccountCmd *cmd = new AddAccountCmd( *kplatoProject(), a, p );
+    cmd->redo();
+    m_command->addCommand( cmd );
+    return account( a );
+}
+
 QVariant Scripting::Project::accountHeaderData( const QString &property )
 {
     int col = accountColumnNumber( property );
-    return m_accountModel.headerData( col );
+    return m_accountModel.headerData( col, Qt::Horizontal );
 }
 
 int Scripting::Project::accountColumnNumber( const QString &property ) const
@@ -638,19 +654,23 @@ int Scripting::Project::accountColumnNumber( const QString &property ) const
 
 bool Scripting::Project::setAccountData( KPlato::Account *account, const QString &property, const QVariant &data, const QString &role )
 {
-    KPlato::AccountItemModel m;
-    connect(&m, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
-    QModelIndex idx = m.index( account );
-    idx = m.index( idx.row(), accountColumnNumber( property ), idx.parent() );
+    QModelIndex idx = m_accountModel.index( account );
+    idx = m_accountModel.index( idx.row(), accountColumnNumber( property ), idx.parent() );
     if ( ! idx.isValid() ) {
         return false;
     }
-    return m.setData( idx, data, stringToRole( role ) );
+    Q_ASSERT( m_accountModel.flags( idx ) & Qt::ItemIsEditable );
+    return m_accountModel.setData( idx, data, stringToRole( role ) );
 }
 
 QVariant Scripting::Project::accountData( const KPlato::Account *account, const QString &property, const QString &role, long /*schedule*/ )
 {
-    return m_accountModel.data( account, accountColumnNumber( property ), stringToRole( role ) ).toString();
+    QModelIndex idx = m_accountModel.index( account );
+    idx = m_accountModel.index( idx.row(), accountColumnNumber( property ), idx.parent() );
+    if ( ! idx.isValid() ) {
+        return QVariant();
+    }
+    return m_accountModel.data( idx, stringToRole( role ) );
 }
 
 int Scripting::Project::stringToRole( const QString &role ) const
@@ -672,6 +692,7 @@ int Scripting::Project::stringToRole( const QString &role ) const
 
 void Scripting::Project::slotAddCommand( KUndo2Command *cmd )
 {
+    qDebug()<<"slotAddCommand"<<cmd->text();
     cmd->redo();
     m_command->addCommand( cmd );
 }
