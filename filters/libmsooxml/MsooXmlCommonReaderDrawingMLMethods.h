@@ -76,6 +76,7 @@ KoFilter::ConversionStatus read_stretch();
 KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_grayscl();
 KoFilter::ConversionStatus read_lum();
+KoFilter::ConversionStatus read_duotone();
 KoFilter::ConversionStatus read_tint();
 KoFilter::ConversionStatus read_alpha();
 
