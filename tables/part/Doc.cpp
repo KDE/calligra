@@ -602,20 +602,11 @@ bool Doc::configLoadFromFile() const
 void Doc::sheetAdded(Sheet* sheet)
 {
     new SheetAdaptor(sheet);
-    QString dbusPath('/' + sheet->map()->objectName() + '/' + objectName());
-    if (sheet->parent()) {
-        QString parent = sheet->parent()->objectName();
-        if (parent.isEmpty()) {
-            // if no objectName was provided then use the class-name which is at least some kind of identifier for the parent object.
-            parent = sheet->parent()->metaObject()->className();
-        }
-        if (!parent.isEmpty()) {
-            // should not be empty but you never know and we don't like to assert in QDBus (bug 279725).
-            dbusPath.prepend('/' + parent);
-        }
+    QString dbusPath('/' + sheet->map()->objectName() + '/' + sheet->objectName());
+    if (sheet->parent() && !sheet->parent()->objectName().isEmpty()) {
+        dbusPath.prepend('/' + sheet->parent()->objectName());
     }
     QDBusConnection::sessionBus().registerObject(dbusPath, sheet);
-
 }
 
 void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
