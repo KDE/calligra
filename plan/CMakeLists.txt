@@ -145,7 +145,7 @@ install(FILES
     about/intro.html
     about/tips.html
     about/tutorial.html
-    about/plan.css
+    about/kplato.css
     DESTINATION ${DATA_INSTALL_DIR}/plan/about
 )
 
