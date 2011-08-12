@@ -47,7 +47,7 @@ class KPrViewModeSlidesSorter : public KoPAViewMode
 {
     Q_OBJECT
 public:
-    KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas);
+    KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase *canvas);
     ~KPrViewModeSlidesSorter();
 
     void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);

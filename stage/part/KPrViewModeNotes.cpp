@@ -47,6 +47,7 @@
 KPrViewModeNotes::KPrViewModeNotes(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode( view, canvas )
 {
+    setName(i18n("Notes"));
 }
 
 KPrViewModeNotes::~KPrViewModeNotes()

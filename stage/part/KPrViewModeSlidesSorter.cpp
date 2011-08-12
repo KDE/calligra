@@ -63,16 +63,17 @@
 #include <KMessageBox>
 #include <KActionCollection>
 
-KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas)
+KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
     , m_slidesSorterView(new KPrSlidesManagerView())
     , m_customSlideShowView(new KPrSlidesManagerView())
     , m_slidesSorterModel(new KPrSlidesSorterDocumentModel(this, view->parentWidget()))
-    , m_centralWidget(new QWidget(view->parentWidget()))
+    , m_centralWidget(new QWidget())
     , m_customSlideShowModel(new KPrCustomSlideShowsModel(static_cast<KPrDocument *>(view->kopaDocument()), view->parentWidget()))
     , m_iconSize(QSize(200, 200))
     , m_editCustomSlideShow(false)
 {
+    setName(i18n("Slides Sorter"));
     //Create customSlideShow GUI
     QWidget *m_customShowsToolBar = new QWidget();
 
@@ -118,9 +119,9 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     toolBarLayout->addStretch();
     toolBarLayout->addWidget(m_buttonAddSlideToCurrentShow);
     toolBarLayout->addWidget(m_buttonDelSlideFromCurrentShow);
-
     viewsSplitter->addWidget(m_slidesSorterView);
     viewsSplitter->addWidget(m_customSlideShowView);
+
     centralWidgetLayout->addWidget(viewsSplitter);
     centralWidgetLayout->addWidget(m_customShowsToolBar);
 
@@ -250,9 +251,8 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     populate();
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
     if (view) {
-        view->hide();
+        view->replaceCentralWidget(m_centralWidget);
     }
-    m_centralWidget->show();
     m_slidesSorterView->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
 
@@ -276,7 +276,6 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    m_centralWidget->hide();
     // Give the ressources back to the canvas
     m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
     // Active the view as a basic but active one
@@ -284,7 +283,7 @@ void KPrViewModeSlidesSorter::deactivate()
     m_view->doUpdateActivePage(m_view->activePage());
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
     if (view) {
-        view->show();
+        view->restoreCentralWidget();
     }
 
     //save zoom value
