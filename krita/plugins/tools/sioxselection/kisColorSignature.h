@@ -31,26 +31,26 @@ private:
     /**
      * Stage one of clustering.
      */
-    void stageOne(const Type& points, int depth, QVector< Type >& clusters,
-        PixelT limits[], int length);
+    void stageOne(const QVector< PixelT >& points, int depth, QVector< Type >& clusters,
+        float lLimit, float aLimit, float bLimit, int length);
 
     /**
      * Stage two of clustering.
      */
-    void stagetwo(const Type& points, int depth, QVector< Type >& clusters,
-        PixelT limits[], int total, float threshold);
+    void stagetwo(const QVector< PixelT >& points, int depth, QVector< Type >& clusters,
+        float lLimit, float aLimit, float bLimit, int total, float threshold);
 
 public:
     /**
      * Create a color signature for the given set of pixels.
      */
-    Type createSignature(const Type& input, int length, PixelT limits[],
-        float threshold);
+    Type createSignature(const QVector< PixelT >& input, int length, float lLimit,
+        float aLimit, float bLimit, float threshold);
 };
 
 template < typename PixelT >
-void ColorSignature< PixelT >::stageOne(const Type& points, int depth, QVector< Type >& clusters,
-    PixelT limits[], int length)
+void ColorSignature< PixelT >::stageOne(const QVector< PixelT >& points, int depth, QVector< Type >& clusters,
+    float lLimit, float aLimit, float bLimit, int length)
 {
     if (length < 1) {
         return;
@@ -71,7 +71,9 @@ void ColorSignature< PixelT >::stageOne(const Type& points, int depth, QVector< 
         }
     }
 
-    if (max - min > limits[curdim]) { // Split according to Rubner-Rule
+    float limit = curdim == 0 ? lLimit : curdim == 1 ? aLimit : bLimit;
+
+    if (max - min > limit) { // Split according to Rubner-Rule
         // split
         float pivotvalue = ((max - min) / 2.0f) + min;
 
@@ -101,8 +103,10 @@ void ColorSignature< PixelT >::stageOne(const Type& points, int depth, QVector< 
         }
 
         // create subtrees
-        stageOne(smallerpoints, depth + 1, clusters, limits, smallerpoints.length);
-        stageOne(biggerpoints, depth + 1, clusters, limits, biggerpoints.length);
+        stageOne(smallerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
+             smallerpoints.length);
+        stageOne(biggerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
+             biggerpoints.length);
 
     } else {
         // create leave
@@ -111,8 +115,9 @@ void ColorSignature< PixelT >::stageOne(const Type& points, int depth, QVector< 
 }
 
 template < typename PixelT >
-void ColorSignature< PixelT >::stagetwo(const Type& points, int depth, QVector< Type >& clusters,
-    PixelT limits[], int total, float threshold)
+void ColorSignature< PixelT >::stagetwo(const QVector< PixelT >& points, int depth,
+    QVector< Type >& clusters, float lLimit, float aLimit, float bLimit, int total,
+    float threshold)
 {
     if (points.size() < 1) {
         return;
@@ -133,7 +138,9 @@ void ColorSignature< PixelT >::stagetwo(const Type& points, int depth, QVector< 
         }
     }
 
-    if (max - min > limits[curdim]) { // Split according to Rubner-Rule
+    float limit = curdim == 0 ? lLimit : curdim == 1 ? aLimit : bLimit;
+
+    if (max - min > limit) { // Split according to Rubner-Rule
         // split
         float pivotvalue = ((max - min) / 2.0f) + min;
 
@@ -163,8 +170,10 @@ void ColorSignature< PixelT >::stagetwo(const Type& points, int depth, QVector< 
         }
 
         // create subtrees
-        stagetwo(smallerpoints, depth + 1, clusters, limits, total, threshold);
-        stagetwo(biggerpoints, depth + 1, clusters, limits, total, threshold);
+        stagetwo(smallerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
+             total, threshold);
+        stagetwo(biggerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
+             total, threshold);
 
     } else {
         // create leave
@@ -193,12 +202,12 @@ void ColorSignature< PixelT >::stagetwo(const Type& points, int depth, QVector< 
 }
 
 template < typename PixelT >
-typename ColorSignature< PixelT >::Type ColorSignature< PixelT >::createSignature(const Type& input,
-    int length, PixelT limits[], float threshold)
+typename ColorSignature< PixelT >::Type ColorSignature< PixelT >::createSignature(const QVector< PixelT >& input,
+    int length, float lLimit, float aLimit, float bLimit, float threshold)
 {
     QVector< Type > clusters1, clusters2;
 
-    stageOne(input, 0, clusters1, limits, length);
+    stageOne(input, 0, clusters1, lLimit, aLimit, bLimit, length);
 
     Type centroids(clusters1.size());
 
@@ -207,21 +216,21 @@ typename ColorSignature< PixelT >::Type ColorSignature< PixelT >::createSignatur
         // +1 for the cardinality
         QVector< PixelT > centroid(cluster[0].size() + 1);
 
-        for (int k = 0; k < cluster.length; k++) {
-            for (int j = 0; j < cluster[k].length; j++) {
+        for (int k = 0; k < cluster.size(); k++) {
+            for (int j = 0; j < cluster[k].size(); j++) {
                 centroid[j] += cluster[k][j];
             }
         }
 
-        for (int j = 0; j < cluster[0].length; j++) {
-            centroid[j] /= cluster.length;
+        for (int j = 0; j < cluster[0].size(); j++) {
+            centroid[j] /= cluster.size();
         }
 
         centroid[cluster[0].size()] = cluster.size();
         centroids[i] = centroid;
     }
 
-    stagetwo(centroids, 0, clusters2, limits, length, threshold);
+    stagetwo(centroids, 0, clusters2, lLimit, aLimit, bLimit, length, threshold);
 
     return clusters2;
 }
