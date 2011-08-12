@@ -3264,6 +3264,7 @@ void CHP::clear() {
     shd.clear();
     brc.clear();
     cv=cvAuto;
+    cvUl=cvAuto;
     fTNY=0;
     fTNYCompress=0;
 }
@@ -3485,6 +3486,7 @@ bool operator==(const CHP &lhs, const CHP &rhs) {
            lhs.kul==rhs.kul &&
            lhs.fSpecSymbol==rhs.fSpecSymbol &&
            lhs.cv==rhs.cv &&
+           lhs.cvUl==rhs.cvUl &&
            lhs.unused23_5==rhs.unused23_5 &&
            lhs.fSysVanish==rhs.fSysVanish &&
            lhs.hpScript==rhs.hpScript &&
@@ -7287,7 +7289,8 @@ std::string PAP::toString() const
     s += "\n{" + numrm.toString() + "}\n";
     s += "\nitbdMac=";
     s += int2string( itbdMac );
-    s += "\nrgdxaTab=";
+    s += "\nrgdxaTab.size()=";
+    s += int2string( rgdxaTab.size() );
     // skipping the std::vector rgdxaTab
     s += "\n------------------------------";
     s += "\nfInTable=";

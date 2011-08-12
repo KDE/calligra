@@ -45,7 +45,7 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
         : QWidget(parent)
         , d(new Private)
 {
-    setObjectName("SheetsEditor");
+    setObjectName(QLatin1String("SheetsEditor"));
     d->tableShape = tableShape;
 
     QHBoxLayout* layout = new QHBoxLayout(this);

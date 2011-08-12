@@ -56,6 +56,7 @@
 #include "KarbonFactory.h"
 #include "KarbonPart.h"
 #include "KarbonCanvas.h"
+#include "KarbonDocument.h"
 #include "KarbonPrintJob.h"
 #include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"

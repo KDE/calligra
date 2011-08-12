@@ -256,7 +256,8 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     //TODO: It seems that both inline and floating objects have placement and
     //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
-    //the index into plcfSpa.
+    //the index into plcfSpa.  However the border information for inline
+    //msosptPictureFrame shapes is stored in the PICF struture.
 
     kDebug(30513) ;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);

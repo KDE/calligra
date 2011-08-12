@@ -93,7 +93,7 @@ void NamedAreaManager::remove(const QString& name)
     if (!d->namedAreas.contains(name))
         return;
     NamedArea namedArea = d->namedAreas.value(name);
-    namedArea.sheet->cellStorage()->setNamedArea(Region(namedArea.range, namedArea.sheet), QString());
+    namedArea.sheet->cellStorage()->removeNamedArea(Region(namedArea.range, namedArea.sheet), name);
     d->namedAreas.remove(name);
     emit namedAreaRemoved(name);
     const QList<Sheet*> sheets = namedArea.sheet->map()->sheetList();

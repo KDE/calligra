@@ -289,6 +289,32 @@ enum IPAT
 };
 
 /**
+ * The Kul enumeration specifies the style of underlining for text.  [MS-DOC] —
+ * v20101219
+ */
+enum KUL
+{
+    kulNone,                //0x00 No underlining.
+    kulSingle,              //0x01 Normal single underline.
+    kulWords,               //0x02 Underline words only.
+    kulDouble,              //0x03 Double underline.
+    kulDotted,              //0x04 Dotted underline.
+    kulThick = 0x06,        //0x06 Heavy underline.
+    kulDash,                //0x07 Dashed underline.
+    kulDotDash = 0x09,      //0x09 Dot-dash underline.
+    kulDotDotDash,          //0x0A Dot-dot-dash underline.
+    kulWavy,                //0x0B Wavy underline.
+    kulDottedHeavy = 0x14,  //0x14 Heavy dotted underline.
+    kulDashHeavy = 0x17,    //0x17 Heavy dashed underline.
+    kulDotDashHeavy = 0x19, //0x19 Heavy dot-dash underline.
+    kulDotDotDashHeavy,     //0x1A Heavy dot-dot-dash underline.
+    kulWavyHeavy,           //0x1B Heavy wavy underline.
+    kulDashLong = 0x27,     //0x27 Long-dash underline.
+    kulWavyDouble = 0x2B,   //0x2B Wavy double underline.
+    kulDashLongHeavy = 0x37 //0x37 Heavy long-dash underline.
+};
+
+/**
  * Specifies the list of numbering formats that can be used for a group of
  * automatically numbered objects.  [MS-OSHARED] — v20101219
  */

@@ -76,7 +76,7 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
         , d(new Private())
 {
     setCaption(i18n("Sheet Style"));
-    setObjectName("AutoAutoFormatDialog");
+    setObjectName(QLatin1String("AutoAutoFormatDialog"));
     setModal(true);
     setButtons(Ok | Cancel);
 

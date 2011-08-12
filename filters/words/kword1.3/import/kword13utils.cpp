@@ -25,7 +25,7 @@ QString EscapeXmlDump(const QString& strIn)
     QString strReturn;
     QChar ch;
 
-    for (uint i = 0; i < strIn.length(); i++) {
+    for (int i = 0; i < strIn.length(); i++) {
         ch = strIn[i];
         switch (ch.unicode()) {
         case 38: { // &

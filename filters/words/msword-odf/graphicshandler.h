@@ -100,6 +100,7 @@ private:
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
                                           Writer& out);
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
         virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                               const MSO::OfficeArtClientData* cd,
                                               const DrawStyle& ds,

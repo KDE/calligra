@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -603,6 +603,32 @@ tristate KexiWindow::switchToViewMode(
 
     if (view) {
         res = true;
+        if (view->isDataEditingInProgress()) {
+            KGuiItem saveItem(KStandardGuiItem::save());
+            saveItem.setText(i18n("Save Changes"));
+            KGuiItem dontSaveItem(KStandardGuiItem::dontSave());
+            KGuiItem cancelItem(KStandardGuiItem::cancel());
+            cancelItem.setText(i18n("Do Not Switch"));
+            const int res = KMessageBox::questionYesNoCancel(
+                selectedView(),
+                i18n("There are unsaved changes in object \"%1\". "
+                     "Do you want to save these changes before switching to other view?")
+                    .arg(partItem()->captionOrName()),
+                    i18n("Confirm Saving Changes"),
+                    saveItem, dontSaveItem, cancelItem
+            );
+            if (res == KMessageBox::Yes) {
+                if (true != view->saveDataChanges())
+                    return cancelled;
+            }
+            else if (res == KMessageBox::No) {
+                if (true != view->cancelDataChanges())
+                    return cancelled;
+            }
+            else { // Cancel:
+                return cancelled;
+            }
+        }
         if (!designModePreloadedForTextModeHack) {
             res = view->beforeSwitchTo(newViewMode, dontStore);
         }

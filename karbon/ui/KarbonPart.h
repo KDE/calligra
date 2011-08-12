@@ -38,11 +38,11 @@
 
 #include <KoDocument.h>
 #include <KoUnit.h>
-#include <KarbonDocument.h>
 
 #include <karbonui_export.h>
 
 class QRect;
+class KarbonDocument;
 class KoDataCenterBase;
 
 /**

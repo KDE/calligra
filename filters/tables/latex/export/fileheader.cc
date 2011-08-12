@@ -193,6 +193,9 @@ void FileHeader::generateLatinPreamble(QTextStream &out)
         break;
     case TC_MORE:
         out << "";
+        break;
+    case TC_NONE:
+        break;
     }
 
     out << Config::instance()->getDefaultFontSize() << "pt";
@@ -260,6 +263,9 @@ void FileHeader::generateUnicodePreamble(QTextStream &out)
         break;
     case TC_MORE:
         out << "";
+        break;
+    case TC_NONE:
+        break;
     }
 
     out << Config::instance()->getDefaultFontSize() << "pt";
