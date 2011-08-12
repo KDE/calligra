@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1363,6 +1363,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     if (m_editor) {// if a cell is edited, do some special stuff
         if (k == Qt::Key_Escape) {
             cancelEditor();
+            emit updateSaveCancelActions();
             e->accept();
             return;
         } else if (k == Qt::Key_Return || k == Qt::Key_Enter) {
@@ -1374,7 +1375,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
             e->accept();
             return;
         }
-    } else if (m_rowEditing) {// if a row is in edit mode, do some special stuff
+    } else if (rowEditing()) {// if a row is in edit mode, do some special stuff
         if (shortCutPressed(e, "data_save_row")) {
             kDebug() << "shortCutPressed!!!";
             acceptRowEdit();
@@ -1437,7 +1438,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
                 printable = true; //just space key
         }
     } else if (k == Qt::Key_Escape) {
-        if (nobtn && m_rowEditing) {
+        if (nobtn && rowEditing()) {
             cancelRowEdit();
             return;
         }
@@ -1605,13 +1606,13 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
         return;
     }
 
-    const bool startRowEdit = !m_rowEditing; //remember if we're starting row edit
+    const bool startRowEdit = !rowEditing(); //remember if we're starting row edit
 
-    if (!m_rowEditing) {
+    if (!rowEditing()) {
         //we're starting row editing session
         m_data->clearRowEditBuffer();
 
-        m_rowEditing = true;
+        setRowEditing(true);
         //indicate on the vheader that we are editing:
         m_verticalHeader->setEditRow(m_curRow);
         if (isInsertingEnabled() && m_currentItem == m_insertItem) {
@@ -1654,6 +1655,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 //  m_navPanel->updateButtons(rows()); //refresh 'next' btn
         emit rowEditStarted(m_curRow);
     }
+    m_editor->installListener(this);
 }
 
 void KexiTableView::focusInEvent(QFocusEvent* e)
@@ -2021,7 +2023,7 @@ QSize KexiTableView::tableSize() const
 //-2*d->rowHeight
         );
 
-//  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s;
+//  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
 #ifdef KEXITABLEVIEW_DEBUG
 kDebug() << s;
 #endif
@@ -2523,7 +2525,7 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
     } else if (e->type() == QEvent::Leave) {
         if (o == viewport() && d->appearance.recordMouseOverHighlightingEnabled
                 && d->appearance.persistentSelections) {
-            if (d->highlightedRecord = -1) {
+            if (d->highlightedRecord == -1) {
                 int oldRow = d->highlightedRecord;
                 d->highlightedRecord = -1;
                 updateRow(oldRow);
@@ -2654,6 +2656,18 @@ KexiDB::RecordData *KexiTableView::highlightedItem() const
 int KexiTableView::lastVisibleRow() const
 {
     return rowAt(contentsY());
+}
+
+void KexiTableView::valueChanged(KexiDataItemInterface* item)
+{
+    kDebug() << item->field()->name() << item->value();
+    // force reload editing-related actions
+    emit updateSaveCancelActions();
+}
+
+bool KexiTableView::cursorAtNewRow() const
+{
+    return m_newRowEditing;
 }
 
 /* not needed after #2010-01-05 fix

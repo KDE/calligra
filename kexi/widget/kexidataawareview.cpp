@@ -58,9 +58,14 @@ void KexiDataAwareView::init(QWidget* viewWidget, KexiSharedActionClient* action
         connect(this, SIGNAL(closing(bool&)), this, SLOT(slotClosing(bool&)));
 
         //! updating actions on start/stop editing
-        m_dataAwareObject->connectRowEditStartedSignal(this, SLOT(slotUpdateRowActions(int)));
-        m_dataAwareObject->connectRowEditTerminatedSignal(this, SLOT(slotUpdateRowActions(int)));
-        m_dataAwareObject->connectReloadActionsSignal(this, SLOT(reloadActions()));
+        m_dataAwareObject->connectRowEditStartedSignal(
+            this, SLOT(slotUpdateRowActions(int)));
+        m_dataAwareObject->connectRowEditTerminatedSignal(
+            this, SLOT(slotUpdateRowActions(int)));
+        m_dataAwareObject->connectUpdateSaveCancelActionsSignal(
+            this, SLOT(slotUpdateSaveCancelActions()));
+        m_dataAwareObject->connectReloadActionsSignal(
+            this, SLOT(reloadActions()));
     }
 
 //2.0 Q3VBoxLayout *box = new Q3VBoxLayout(this);
@@ -174,7 +179,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 // const bool inserting = m_dataAwareObject->isInsertingEnabled();
     const bool deleting = m_dataAwareObject->isDeleteEnabled();
     const bool emptyInserting = m_dataAwareObject->isEmptyRowInsertingEnabled();
-    const bool editing = m_dataAwareObject->rowEditing();
+    const bool editing = isDataEditingInProgress();
     const bool sorting = m_dataAwareObject->isSortingEnabled();
     const int rows = m_dataAwareObject->rows();
     const bool insertRowFocusedWithoutEditing = !editing && row == rows;
@@ -186,10 +191,19 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
     setAvailable("edit_delete_row", !ro && !(deleting && row == rows));
     setAvailable("edit_insert_empty_row", !ro && emptyInserting);
     setAvailable("edit_clear_table", !ro && deleting && rows > 0);
-    setAvailable("data_save_row", editing);
-    setAvailable("data_cancel_row_changes", editing);
     setAvailable("data_sort_az", sorting);
     setAvailable("data_sort_za", sorting);
+    slotUpdateSaveCancelActions();
+}
+
+void KexiDataAwareView::slotUpdateSaveCancelActions()
+{
+    kDebug() << ":::::::::" << isDataEditingInProgress();
+    // 'save row' enabled when editing and there's anything to save
+    const bool editing = isDataEditingInProgress();
+    setAvailable("data_save_row", editing);
+    // 'cancel row changes' enabled when editing
+    setAvailable("data_cancel_row_changes", m_dataAwareObject->rowEditing());
 }
 
 QWidget* KexiDataAwareView::mainWidget() const
