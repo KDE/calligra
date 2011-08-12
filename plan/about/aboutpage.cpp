@@ -70,7 +70,7 @@ QString KPlatoAboutPage::main()
     .arg( icon_path ).arg( i18n( "Tips on how to manipulate and inspect data." ) )
     .arg( icon_path ).arg( i18n( "A small tutorial to get you started." ) )
     .arg( i18n(
-        "<em>Note:</em> To view these pages when you are in other parts of Plan, choose the menu option <em>Help -> Plan Introduction</em>."
+        "<em>Note:</em> To view these pages when you are in other parts of Plan, choose the menu option <em>Help ->  Introduction to Plan</em>."
         ) )
     ;
 

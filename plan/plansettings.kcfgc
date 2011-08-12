@@ -1,4 +1,4 @@
-File=kplatosettings.kcfg 
+File=plansettings.kcfg 
 ClassName=KPlatoSettings
 Singleton=true 
 Mutators=true
