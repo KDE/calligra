@@ -251,8 +251,9 @@ void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter)
     if (background()) {
         background()->paint(painter, path);
     }
-    //paintDebug(painter);
+    //d->paintDebug(painter);
 }
+
 
 #ifndef NDEBUG
 void KoPathShapePrivate::paintDebug(QPainter &painter)
@@ -382,13 +383,45 @@ QPainterPath KoPathShape::outline() const
         }
     }
     if(d->beginMarker && m_subpaths.size()){
-        path = d->beginMarker->path().united(path);
+        KoPathPoint * firstPoint = m_subpaths.first()->first();
+        
+        QTransform markerTransform;
+        int halfWidth = (d->beginMarker->path().boundingRect().width())/2;
+        int angle = 0;
+        if(firstPoint != 0){
+            angle = computeAngle(firstPoint) + 90;
+        }
+
+        qreal dx = firstPoint->point().x();
+        qreal dy = firstPoint->point().y();
+        
+        markerTransform.translate(dx, dy).rotate(angle).translate(-halfWidth, 0);
+
+        QPainterPath tempPath = markerTransform.map(d->beginMarker->path());
+
+        tempPath.connectPath(path);
+        path = tempPath;
     }
-    
+
     if(d->endMarker && m_subpaths.size()){
-        path = path.united(d->endMarker->path());
+        KoPathPoint * lastPoint = m_subpaths.first()->last();
+        
+        QTransform markerTransform;
+        int halfWidth = (d->endMarker->path().boundingRect().width())/2;
+        int angle = 0;
+        if(lastPoint != 0){
+            angle = computeAngle(lastPoint) + 90;
+        }
+
+        qreal dx = lastPoint->point().x();
+        qreal dy = lastPoint->point().y();
+        markerTransform.translate(dx, dy).rotate(angle).translate(-halfWidth, 0);
+        
+        QPainterPath tempPath = markerTransform.map(d->endMarker->path());
+        
+        path.connectPath(tempPath);
     }
-    
+
     return path;
 }
 
@@ -1393,4 +1426,54 @@ KoMarker *KoPathShape::marker(KoPathShape::MarkerPosition position)
     }
     
     return 0;
+}
+
+int KoPathShape::computeAngle(KoPathPoint* point) const
+{
+    KoPathPointIndex index = pathPointIndex(point);
+    QPointF vectorPoint;
+    /// check if it is a start point
+    if (point->properties() & KoPathPoint::StartSubpath) {
+        if (point->activeControlPoint2()) {
+            vectorPoint = point->point() - point->controlPoint2();
+        } else {
+            KoPathPoint * next = pointByIndex(KoPathPointIndex(index.first, index.second + 1));
+            if (! next){
+                vectorPoint = QPointF();
+            }else if (next->activeControlPoint1()){
+                vectorPoint = point->point() - next->controlPoint1();
+            }else{
+                while(point->point() == next->point()){
+                    next = pointByIndex(KoPathPointIndex(pathPointIndex(next).first, pathPointIndex(next).second + 1));
+                    if (! next){
+                        return 0;
+                    }
+                }
+                vectorPoint = point->point() - next->point();
+            }
+        }
+    } else {
+        if (point->activeControlPoint1()) {
+            vectorPoint = point->point() - point->controlPoint1();
+        } else {
+            KoPathPoint * prev = pointByIndex(KoPathPointIndex(index.first, index.second - 1));
+            if (! prev){
+                vectorPoint = QPointF();
+            }else if (prev->activeControlPoint2()){
+                vectorPoint = point->point() - prev->controlPoint2();
+            }else{
+                while(point->point() == prev->point()){
+                    prev = pointByIndex(KoPathPointIndex(pathPointIndex(prev).first, pathPointIndex(prev).second - 1));
+                    if (! prev){
+                        return 0;
+                    }
+                }
+                vectorPoint = point->point() - prev->point();
+            }
+        }
+    }
+
+    vectorPoint.ry() *= -1;
+    QLineF vector(QPointF(0,0), vectorPoint);
+    return vector.angle();
 }

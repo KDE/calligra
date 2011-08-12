@@ -482,6 +482,17 @@ protected:
      */
     QTransform resizeMatrix( const QSizeF &newSize ) const;
 
+    /**
+     * @brief Compute an angle of the tangent of the curve.
+     * 
+     * Compute the angle with a given point, used for a marker.
+     * 
+     * @param point a KoPathPoint on the pathShape
+     * 
+     * @return the angle
+     */
+    int computeAngle(KoPathPoint* point) const;
+    
     KoSubpathList m_subpaths;
 
 private:
