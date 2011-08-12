@@ -4,11 +4,11 @@ include (${CMAKE_SOURCE_DIR}/kdgantt/CMakeLists.txt)
 include_directories(
     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
 
-    ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
-    ${CMAKE_SOURCE_DIR}/kplato/libs/models
-    ${CMAKE_BINARY_DIR}/kplato/libs/models
-    ${CMAKE_SOURCE_DIR}/kplato/libs/ui/reports/odt
-    ${CMAKE_BINARY_DIR}/kplato/libs/ui
+    ${CMAKE_SOURCE_DIR}/plan/libs/kernel
+    ${CMAKE_SOURCE_DIR}/plan/libs/models
+    ${CMAKE_BINARY_DIR}/plan/libs/models
+    ${CMAKE_SOURCE_DIR}/plan/libs/ui/reports/odt
+    ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
 

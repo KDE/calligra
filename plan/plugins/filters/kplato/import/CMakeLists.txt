@@ -1,8 +1,8 @@
 
 include_directories(
-    ${CMAKE_BINARY_DIR}/kplato/plugins/filters/kplato/import
-    ${CMAKE_SOURCE_DIR}/kplato
-    ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
+    ${CMAKE_BINARY_DIR}/plan/plugins/filters/plan/import
+    ${CMAKE_SOURCE_DIR}/plan
+    ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${KOMAIN_INCLUDES}
 )
 

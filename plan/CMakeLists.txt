@@ -10,12 +10,12 @@ if(KDE4_BUILD_TESTS)
 endif(KDE4_BUILD_TESTS)
 
 set( KPLATO_INCLUDES
-    ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
-    ${CMAKE_SOURCE_DIR}/kplato/libs/models
-    ${CMAKE_BINARY_DIR}/kplato/libs/models
-    ${CMAKE_SOURCE_DIR}/kplato/libs/ui
-    ${CMAKE_BINARY_DIR}/kplato/libs/ui
-    ${CMAKE_BINARY_DIR}/kplato
+    ${CMAKE_SOURCE_DIR}/plan/libs/kernel
+    ${CMAKE_SOURCE_DIR}/plan/libs/models
+    ${CMAKE_BINARY_DIR}/plan/libs/models
+    ${CMAKE_SOURCE_DIR}/plan/libs/ui
+    ${CMAKE_BINARY_DIR}/plan/libs/ui
+    ${CMAKE_BINARY_DIR}/plan
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
@@ -145,7 +145,7 @@ install(FILES
     about/intro.html
     about/tips.html
     about/tutorial.html
-    about/kplato.css
+    about/plan.css
     DESTINATION ${DATA_INSTALL_DIR}/plan/about
 )
 
