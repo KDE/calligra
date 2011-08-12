@@ -1,6 +1,6 @@
 
 include_directories( 
-    ${CMAKE_SOURCE_DIR}/kplato
+    ${CMAKE_SOURCE_DIR}/plan
     ${KPLATO_INCLUDES}
     
     ${KOKROSS_INCLUDES}
