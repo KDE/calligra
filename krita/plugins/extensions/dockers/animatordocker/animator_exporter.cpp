@@ -37,7 +37,7 @@ AnimatorExporter::AnimatorExporter(AnimatorModel* model, KisDoc2* document)
 
 void AnimatorExporter::setDocument(KisDoc2* document)
 {
-    if (document != m_document)
+    if (document && document != m_document)
     {
         m_document = document;
         m_filter_manager = new KoFilterManager(m_document);
