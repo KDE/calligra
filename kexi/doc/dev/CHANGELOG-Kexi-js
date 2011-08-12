@@ -93,10 +93,6 @@ Tabbed toolbar TODOS:
 General
 *Cleanups in API of the data-aware view
 *Disable "Save Record Changes" action when user cancels editing or reverts edited text to the original value. "Cancel Record Changes" action is not disabled though, so user is still able to exit from record editing mode.
-CCBUG:278417
-
-2011-08-04
-General
 *Ask for confirmation when going to Design View and have pending record changes in Data View of table or form
 BUG:278417
 
