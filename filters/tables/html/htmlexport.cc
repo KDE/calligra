@@ -297,6 +297,7 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 line += " align=\"" + html_center + "\"";
                 break;
             case Style::HAlignUndefined:
+            case Style::Justified:
                 break;
             }
             switch ((Style::VAlign) style.valign()) {
@@ -310,6 +311,8 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 line += " valign=\"" + html_bottom + "\"";
                 break;
             case Style::VAlignUndefined:
+            case Style::VJustified:
+            case Style::VDistributed:
                 break;
             }
             line += " width=\"" + QString::number(cell.width()) + "\"";

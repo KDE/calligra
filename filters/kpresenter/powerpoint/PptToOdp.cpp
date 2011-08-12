@@ -44,39 +44,6 @@
 
 using namespace MSO;
 
-namespace Text
-{
-//TextTypeEnum, MS-PPT 2.13.33
-enum {
-    Title       = 0,  // title text
-    Body        = 1,
-    Notes       = 2,
-    NotUsed     = 3,
-    Other       = 4,  // text in a shape
-    CenterBody  = 5,  // subtitle in title slide
-    CenterTitle = 6,  // title in title slide
-    HalfBody    = 7,  // body in two-column slide
-    QuarterBody = 8   // body in four-body slide
-};
-}
-
-namespace Color
-{
-//ColorSchemeEnum, MS-PPT 2.12.2
-enum {
-    Background  = 0,
-    Text        = 1,
-    Shadow      = 2,
-    TitleText   = 3,
-    Fill        = 4,
-    Accent1     = 5,
-    Accent2     = 6,
-    Accent3     = 7,
-    sRGB        = 0xFE,
-    Undefined   = 0xFF
-};
-}
-
 namespace
 {
     QString format(double v) {
@@ -235,6 +202,7 @@ private:
     void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                               const MSO::OfficeArtClientData* cd,
                               Writer& out);
+    bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
             const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
@@ -357,6 +325,16 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
 	    }
         }
         ppttoodp->processTextForBody(out, cd, textContainer, textRuler);
+    }
+}
+
+bool PptToOdp::DrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+{
+    const PptOfficeArtClientData* pcd = cd.anon.get<PptOfficeArtClientData>();
+    if (pcd && pcd->placeholderAtom) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -727,7 +705,8 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentMaster(0),
   m_currentSlide(0),
   m_processingMasters(false),
-  m_isList(false)
+  m_isList(false),
+  m_continueList(false)
 {
 }
 
@@ -1005,7 +984,8 @@ void PptToOdp::defineDefaultChartStyle(KoGenStyles& styles)
     styles.insert(style);
 }
 
-void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
+void PptToOdp::defineDefaultTextProperties(KoGenStyle& style)
+{
     const PptTextCFRun cf(p->documentContainer);
     const TextCFException9* cf9 = 0;
     const TextCFException10* cf10 = 0;
@@ -1026,16 +1006,14 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
     defineTextProperties(style, cf, cf9, cf10, si);
 }
 
-void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
-    if (p->documentContainer) {
-        const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
-                p->documentContainer);
-    }
+void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style)
+{
     PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);
 }
 
-void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles) {
+void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles)
+{
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     style.addProperty("svg:stroke-width", "0.75pt", gt); // 2.3.8.15
     style.addProperty("draw:fill", "none", gt); // 2.3.8.38
@@ -2197,28 +2175,32 @@ void writeTextObjectDeIndent(KoXmlWriter& xmlWriter, const int count,
         levels.pop();
     }
 }
-void addListElement(KoXmlWriter& xmlWriter, const QString& listStyle,
+void addListElement(KoXmlWriter& out, const QString& listStyle,
                     QStack<QString>& levels, int depth,
-                    const PptTextPFRun &pf)
+                    const PptTextPFRun &pf, bool continueList)
 {
     levels.push(listStyle);
-    xmlWriter.startElement("text:list");
+    out.startElement("text:list");
     if (!listStyle.isEmpty()) {
-        xmlWriter.addAttribute("text:style-name", listStyle);
+        out.addAttribute("text:style-name", listStyle);
     } else {
         qDebug() << "Warning: list style name not provided!";
     }
-    xmlWriter.startElement("text:list-item");
+    //required by stage
+    if (continueList) {
+        out.addAttribute("text:continue-numbering", "true");
+    }
+    out.startElement("text:list-item");
 
-    //kpresenter requires the start-value here!
-    if (pf.fBulletHasAutoNumber()) {
-        xmlWriter.addAttribute("text:start-value", pf.startNum());
+    //required by stage
+    if (pf.fBulletHasAutoNumber() && !continueList) {
+        out.addAttribute("text:start-value", pf.startNum());
     }
 
     // add styleless levels to get the right level of indentation
     while (levels.size() < depth) {
-        xmlWriter.startElement("text:list");
-        xmlWriter.startElement("text:list-item");
+        out.startElement("text:list");
+        out.startElement("text:list-item");
         levels.push("");
     }
 }
@@ -2503,10 +2485,13 @@ PptToOdp::processParagraph(Writer& out,
         pcd = clientData->anon.get<PptOfficeArtClientData>();
     }
 
-    //Get the main master slide's MasterOrSlideContainer, common shapes like
-    //textbox do not inherit from master's TextMasterStyleAtom.
+    quint32 textType = tc->textHeaderAtom.textType;
     const MasterOrSlideContainer* m = 0;
-    if (m_currentMaster && isPlaceHolder) {
+
+    //Get the main master slide's MasterOrSlideContainer.  A common shape
+    //(opposite of a placeholder) SHOULD contain text of type Tx_TYPE_OTHER,
+    //but MS Office 2003 does not follow this rule.
+    if (m_currentMaster && (isPlaceHolder || (textType != Tx_TYPE_OTHER))) {
         m  = m_currentMaster;
         while (m->anon.is<SlideContainer>()) {
             m = p->getMaster(m->anon.get<SlideContainer>());
@@ -2547,13 +2532,15 @@ PptToOdp::processParagraph(Writer& out,
             writeTextObjectDeIndent(out.xml, 0, levels);
         }
         if (levels.isEmpty()) {
-            addListElement(out.xml, listStyle, levels, depth, pf);
+            addListElement(out.xml, listStyle, levels, depth, pf, m_continueList);
         } else {
             out.xml.endElement(); //text:list-item
             out.xml.startElement("text:list-item");
         }
+        m_continueList = true;
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
+        m_continueList = false;
     }
 
     out.xml.startElement("text:p");
@@ -2680,7 +2667,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     // look for a title on the slide
     if (nameStr.isEmpty()) {
         foreach(const TextContainer& tc, p->documentContainer->slideList->rgChildRec[slideNo].atoms) {
-            if (tc.textHeaderAtom.textType == Text::Title) {
+            if (tc.textHeaderAtom.textType == Tx_TYPE_TITLE) {
                 nameStr = getText(&tc);
                 break;
             }

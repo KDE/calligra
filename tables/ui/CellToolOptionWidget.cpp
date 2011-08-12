@@ -53,7 +53,7 @@ CellToolOptionWidget::CellToolOptionWidget(CellToolBase *parent)
         : QWidget(parent->canvas()->canvasWidget())
         , d(new Private)
 {
-    setObjectName("CellToolOptionWidget");
+    setObjectName(QLatin1String("CellToolOptionWidget"));
 
     d->cellTool = parent;
 
@@ -82,7 +82,7 @@ CellToolOptionWidget::CellToolOptionWidget(CellToolBase *parent)
 //     d->editor->setMinimumHeight(d->locationComboBox->height());
 
     d->layout = new QGridLayout(this);
-    d->layout->setObjectName("CellToolOptionWidget::Layout");
+    d->layout->setObjectName(QLatin1String("CellToolOptionWidget::Layout"));
     d->layout->addWidget(d->locationComboBox, 0, 0);
     d->layout->addWidget(d->formulaButton, 0, 1);
     d->layout->addWidget(d->applyButton, 0, 2);
@@ -150,6 +150,7 @@ void CellToolOptionWidget::resizeEvent(QResizeEvent *event)
         if (newWidth <= 2 *(minWidth - itemWidth) + margin) {
             d->layout->removeItem(item);
             d->layout->addItem(item, 1, 0, 1, column + 1);
+            d->layout->setRowStretch(1, 1);
         }
     } else { /* two rows */
         if (newWidth > 2 * minWidth + margin) {

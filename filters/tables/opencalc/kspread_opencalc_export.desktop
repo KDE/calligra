@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=OpenOffice.org Calc Export Filter for KSpread
-Name[bg]=Филтър за експортиране от KSpread в OpenOffice.org Calc
+Name[bg]=Филтър за изнасяне от KSpread в OpenOffice.org Calc
 Name[br]=Sil ezporzh OpenOffice.org Calc evit KSpread
 Name[ca]=Filtre d'exportació OpenOffice.org Calc per al KSpread
 Name[ca@valencia]=Filtre d'exportació OpenOffice.org Calc per al KSpread
@@ -37,7 +37,7 @@ Name[nb]=OpenOffice.org Calc-eksportfilter for KSpread
 Name[nds]="OpenOffice.org Calc"-Exportfilter för KSpread
 Name[ne]=केडीई स्प्रेडका लागि ओपनअफिस डट अर्ग क्याल्क निर्यात फिल्टर
 Name[nl]=OpenOffice.org Calc-exportfilter voor KSpread
-Name[pl]=Filtr eksportu do formatu OpenOffice.org Calc dla KSpread
+Name[pl]=Filtr eksportu OpenOffice.org Calc dla KSpread
 Name[pt]=Filtro de Exportação de OpenOffice.org Calc para o KSpread
 Name[pt_BR]=Filtro de exportação de OpenOffice.org Calc para o KSpread
 Name[ru]=Фильтр экспорта таблиц KSpread в OpenOffice.org Calc

@@ -2651,7 +2651,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     - blur (Blur Effect) §20.1.8.15
     - clrChange (Color Change Effect) §20.1.8.16
     - clrRepl (Solid Color Replacement) §20.1.8.18
-    - duotone (Duotone Effect) §20.1.8.23
+    - [done] duotone (Duotone Effect) §20.1.8.23
     - [done] extLst (Extension List) §20.1.2.2.15
     - fillOverlay (Fill Overlay Effect) §20.1.8.29
     - [done] grayscl (Gray Scale Effect) §20.1.8.34
@@ -2685,7 +2685,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             return KoFilter::FileNotFound;
         }
         QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+
         RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+
         addManifestEntryForFile(destinationName);
         m_recentDestName = sourceName;
         addManifestEntryForPicturesDir();
@@ -2701,10 +2703,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
             ELSE_TRY_READ_IF(lum)
+            ELSE_TRY_READ_IF(duotone)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
     READ_EPILOGUE
 }
 
@@ -2851,6 +2855,99 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lum()
     READ_EPILOGUE
 }
 
+
+#undef CURRENT_EL
+#define CURRENT_EL duotone
+//! duotone handler (Duotone effect)
+/*! ECMA-376, 20.1.8.23, p 3214
+
+  This element specifies a duotone effect. For each pixel,
+  combines clr1 and clr2 through a linear interpolation to
+  determine the new color for that pixel.
+
+  In Office, the interpolation is based on the luminance of the pixel.
+  http://msdn.microsoft.com/en-us/library/ff534294%28v=office.12%29.aspx
+
+ Parent elements:
+ - [done] blip (§20.1.8.13)
+ - cont (§20.1.8.20)
+ - effectDag (§20.1.8.25)
+
+ Child elements:
+    - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+    - [done] prstClr (Preset Color) §20.1.2.3.22
+    - [done] schemeClr (Scheme Color) §20.1.2.3.29
+    - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+    - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+    - [done] sysClr (System Color) §20.1.2.3.33
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_duotone()
+{
+    READ_PROLOGUE
+
+    int colorCount = 0;
+    QColor clr1;
+    QColor clr2;
+
+    while (!atEnd()) {
+        readNext();
+
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(hslClr)
+            ELSE_TRY_READ_IF(prstClr)
+            ELSE_TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            SKIP_UNKNOWN
+
+            if (colorCount == 0) {
+                clr1 = m_currentColor;
+            } else {
+                clr2 = m_currentColor;
+            }
+            colorCount++;
+        }
+    }
+
+    QImage image;
+    m_context->import->imageFromFile(m_recentDestName, image);
+    // don't apply duotone to unsupported picture formats in QImage like emf, wmf case
+    if (!image.isNull()) {
+
+        QColor c1 = clr1.isValid() ? clr1 : Qt::black;
+        QColor c2 = clr2.isValid() ? clr2 : Qt::white;
+
+        image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        for (int y = 0; y < image.height(); y++) {
+            QRgb *scanline = reinterpret_cast<QRgb *>(image.scanLine(y));
+            for (int x = 0; x < image.width(); x++) {
+                QRgb c = scanline[x];
+                int luminosity = (5036060U * quint32(qRed(c)) + 9886846U * quint32(qGreen(c)) + 1920103U * quint32(qBlue(c))) >> 24;
+                qreal grayF = (255 - luminosity) / 255.0;
+                int r = grayF * c1.red()     + (1.0 - grayF) * c2.red();
+                int g = grayF * c1.green()   + (1.0 - grayF) * c2.green();
+                int b = grayF * c1.blue()    + (1.0 - grayF) * c2.blue();
+                scanline[x] = qRgba(r,g,b,qAlpha(c));
+            }
+        }
+
+        QString fileName = m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+        fileName = fileName.left(fileName.lastIndexOf('.'));
+        QString destinationName = QLatin1String("Pictures/") + fileName + QString("_duotoned_%1_%2.png").arg(c1.name().mid(1)).arg(c2.name().mid(1));
+
+        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+        addManifestEntryForFile(destinationName);
+        m_xlinkHref = destinationName;
+    }
+
+    READ_EPILOGUE
+}
+
+
 #undef CURRENT_EL
 #define CURRENT_EL tile
 //! tile handler (Placeholder Shape)
@@ -2924,15 +3021,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
             int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
             int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
 
-            QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
-                m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
-             QImage image;
-            m_context->import->imageFromFile(m_recentDestName, image);
-            image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+            QString fileName = m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+            fileName = fileName.left(fileName.lastIndexOf('.'));
 
-            if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
-                // Todo, here we should delete the generated black area(s)
-            }
+            QString destinationName = QLatin1String("Pictures/") + fileName + QString("_cropped_%1_%2.png").arg(rectWidth).arg(rectHeight);
+
+            QImage image;
+            m_context->import->imageFromFile(m_recentDestName, image);
+
+            image = image.convertToFormat(QImage::Format_ARGB32);
+            image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
 
             RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
             addManifestEntryForFile(destinationName);
@@ -4732,6 +4830,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
             m_currentColor = QColor(154, 205, 50);
         }
     }
+
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
+    m_currentAlpha = 0;
 
     //TODO: all the color transformations
     while (!atEnd()) {

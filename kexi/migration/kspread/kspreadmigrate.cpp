@@ -35,8 +35,7 @@ KSpreadMigrate::~KSpreadMigrate()
 {
   if (m_KSDoc) {
     m_KSDoc->closeUrl();
-    delete m_KSDoc;
-    m_KSDoc = 0;
+    m_KSDoc->deleteLater();
   }
 }
 
@@ -49,7 +48,7 @@ bool KSpreadMigrate::drv_connect()
     return false;
   
   if (!m_KSDoc) {
-    m_KSDoc = new KSpread::Doc();
+      m_KSDoc = new Calligra::Tables::Doc();
   }
   kDebug();
   return m_KSDoc->openUrl(m_FileName);
@@ -67,20 +66,20 @@ bool KSpreadMigrate::drv_disconnect()
 
 bool KSpreadMigrate::drv_tableNames(QStringList& tablenames)
 {
-  QList<KSpread::Sheet*> sheets = m_KSDoc->map()->sheetList();
+    QList<Calligra::Tables::Sheet*> sheets = m_KSDoc->map()->sheetList();
   
-  kDebug() << sheets.size() << "sheets" << m_KSDoc->map()->sheetList().size();
+    kDebug() << sheets.size() << "sheets" << m_KSDoc->map()->sheetList().size();
   
-  foreach(KSpread::Sheet *sheet, sheets) {
-    tablenames << sheet->sheetName();
-  }
+    foreach(Calligra::Tables::Sheet *sheet, sheets) {
+        tablenames << sheet->sheetName();
+    }
   
   return true;
 }
 
 bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
-  KSpread::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
+  Calligra::Tables::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
   
   if (!sheet)
   {
@@ -91,14 +90,14 @@ bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::Ta
   int row=1, col = 1;
   QString fieldname;
   
-  KSpread::Cell *cell;
+  Calligra::Tables::Cell *cell;
   KexiDB::Field *fld;
   tableSchema.setName(QString(originalName).replace(' ', '_').toLower());
   tableSchema.setCaption(originalName);
   
   do
   {
-      cell = new KSpread::Cell(sheet, col, row);
+      cell = new Calligra::Tables::Cell(sheet, col, row);
 
       fieldname = cell->displayText();
       col++;
@@ -128,7 +127,7 @@ bool KSpreadMigrate::drv_moveNext()
   if (!m_CurSheet)
     return false;
   
-  KSpread::Cell cell = KSpread::Cell(m_CurSheet, 1, m_Row + 1);
+  Calligra::Tables::Cell cell = Calligra::Tables::Cell(m_CurSheet, 1, m_Row + 1);
   
   if (!cell.isEmpty())
   {
@@ -173,9 +172,9 @@ bool KSpreadMigrate::drv_moveLast()
 
 QVariant KSpreadMigrate::drv_value(uint i)
 {
-  QString str = KSpread::Cell(m_CurSheet, i+1, m_Row).displayText();
+    QString str = Calligra::Tables::Cell(m_CurSheet, i+1, m_Row).displayText();
   
-  return str;
+    return str;
 }
 
 }

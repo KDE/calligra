@@ -963,7 +963,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
                     record = d->data->at(columnPosition);
                     rowPropertySet = d->sets->at(columnPosition);
                     kDebug() << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
-                    "Setting \"" << orderByColumn->debugString() << "\" sorting for row #"
+                    "Setting \"" << orderByColumn->debugString() << "\" sorting for record #"
                     << columnPosition;
                 }
             }
@@ -1585,7 +1585,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *recor
                 result->msg = i18n("Could not set criteria for \"%1\"",
                                    table == "*" ? table : field);
             else
-                result->msg = i18n("Could not set criteria for empty row");
+                result->msg = i18n("Could not set criteria for empty record");
             //moved to result->allowToDiscardChanges handler //d->dataTable->dataAwareObject()->cancelEditor(); //prevents further editing of this cell
         } else if (str.isEmpty() || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/))) {
             if (e) {

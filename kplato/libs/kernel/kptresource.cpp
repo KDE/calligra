@@ -149,6 +149,7 @@ bool ResourceGroup::isScheduled() const
 
 bool ResourceGroup::isBaselined( long id ) const
 {
+    Q_UNUSED(id);
     foreach ( const Resource *r, m_resources ) {
         if ( r->isBaselined() ) {
             return true;
@@ -815,6 +816,7 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end, int load, const QList<Resource*> &required ) {
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
     KLocale *locale = KGlobal::locale();
+    Q_UNUSED(locale);
     if (!from.isValid() || !end.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
         return;
@@ -1314,10 +1316,21 @@ void Resource::setProject( Project *project )
 
 void Resource::addExternalAppointment(const QString& id, Appointment* a)
 {
+    int row = -1;
     if ( m_externalAppointments.contains( id ) ) {
+        int row = m_externalAppointments.keys().indexOf( id );
+        emit externalAppointmentToBeRemoved( this, row );
         delete m_externalAppointments.take( id );
+        emit externalAppointmentRemoved();
     }
+    if ( row == -1 ) {
+        m_externalAppointments[ id ] = a;
+        row = m_externalAppointments.keys().indexOf( id );
+        m_externalAppointments.remove( id );
+    }
+    emit externalAppointmentToBeAdded( this, row );
     m_externalAppointments[ id ] = a;
+    emit externalAppointmentAdded( this, a );
 }
 
 void Resource::addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load )
@@ -1341,6 +1354,18 @@ void Resource::addExternalAppointment( const QString &id, const QString &name, c
     }
 }
 
+void Resource::subtractExternalAppointment( const QString &id, const DateTime &start, const DateTime &end, double load )
+{
+    Appointment *a = m_externalAppointments.value( id );
+    if ( a ) {
+        //kDebug()<<m_name<<name<<"new interval:"<<a<<from<<end<<load;
+        Appointment app;
+        app.addInterval( start, end, load );
+        *a -= app;
+        emit externalAppointmentChanged( this, a );
+    }
+}
+
 void Resource::clearExternalAppointments()
 {
     foreach ( const QString &id, m_externalAppointments.keys() ) {
@@ -1359,6 +1384,18 @@ void Resource::clearExternalAppointments( const QString projectId )
     }
 }
 
+Appointment *Resource::takeExternalAppointment( const QString &id )
+{
+    Appointment *a = 0;
+    if ( m_externalAppointments.contains( id ) ) {
+        int row = m_externalAppointments.keys().indexOf( id );
+        emit externalAppointmentToBeRemoved( this, row );
+        a = m_externalAppointments.take( id );
+        emit externalAppointmentRemoved();
+    }
+    return a;
+}
+
 AppointmentIntervalList Resource::externalAppointments( const QString &id )
 {
     if ( ! m_externalAppointments.contains( id ) ) {
@@ -1375,6 +1412,19 @@ AppointmentIntervalList Resource::externalAppointments( const DateTimeInterval &
         app += interval.isValid() ? a->extractIntervals( interval ) : *a;
     }
     return app.intervals();
+}
+
+QMap<QString, QString> Resource::externalProjects() const
+{
+    QMap<QString, QString> map;
+    for ( QMapIterator<QString, Appointment*> it( m_externalAppointments ); it.hasNext(); ) {
+        it.next();
+        if ( ! map.contains( it.key() ) ) {
+            map[ it.key() ] = it.value()->auxcilliaryInfo();
+        }
+    }
+//     kDebug()<<map;
+    return map;
 }
 
 long Resource::allocationSuitability( const DateTime &time, const Duration &duration, bool backward )

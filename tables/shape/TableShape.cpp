@@ -82,7 +82,7 @@ void TableShape::Private::adjustRowDimensions(Sheet* sheet, double factor)
 TableShape::TableShape(int columns, int rows)
         : d(new Private)
 {
-    setObjectName("TableShape");
+    setObjectName(QLatin1String("TableShape"));
     d->columns = columns;
     d->rows = rows;
     d->sheetView = 0;

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=PostgreSQL
+Name[bg]=PostgreSQL
 Name[br]=PostgreSQL
 Name[ca]=PostgreSQL
 Name[ca@valencia]=PostgreSQL
@@ -85,7 +86,7 @@ Comment[nb]=PostgreSQL-migreringsdriver for Kexi
 Comment[nds]=PostgreSQL-Datenutlagerndriever för Kexi
 Comment[ne]=केक्सीका लागि पोस्टग्रे SQL माइग्रेसन ड्राइभर
 Comment[nl]=PostgreSQL-migratiestuurprogramma voor Kexi
-Comment[pl]=Wtyczka migracji danych z serwera PostgreSQL dla Kexi
+Comment[pl]=Wtyczka migracji z PostgreSQL dla Kexi
 Comment[pt]=Controlador de Migração de PostgreSQL do Kexi
 Comment[pt_BR]=Driver de Migração PostgreSQL do Kexi
 Comment[ru]=Драйвер миграции PostrgeSQL для Kexi

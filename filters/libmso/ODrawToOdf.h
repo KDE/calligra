@@ -66,6 +66,13 @@ public:
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
                                           Writer& out) = 0;
+
+        /**
+         * Ask the host application whether to process an msosptRectangle type
+         * shape container as an msosptTextBox.
+         */
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd) = 0;
+
         /**
          * Create a fitting style for the current object.
          * This will be a style that can contain graphic style elements. So the
@@ -137,6 +144,7 @@ private:
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processTextBox(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -153,7 +161,7 @@ private:
     void drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);
-    
+
     // shapes2.cpp
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -334,6 +342,7 @@ inline qreal toQReal(const MSO::FixedPoint& f)
     return f.integral + f.fractional / 65536.0;
 }
 
+const char* getFillRule(quint16 shapeType);
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);

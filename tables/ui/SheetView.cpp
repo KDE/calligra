@@ -76,7 +76,7 @@ public:
     // The maximum accessed cell range used for the scrollbar ranges.
     QSize accessedCellRange;
     FusionStorage* obscuredInfo;
-    QSize obscuredRange; // size of the bonuding box of obscuredInfo
+    QSize obscuredRange; // size of the bounding box of obscuredInfo
 #ifdef CALLIGRA_TABLES_MT
     QReadWriteLock obscuredLock;
 #endif
@@ -279,6 +279,9 @@ void SheetView::invalidate()
     d->defaultCellView = createDefaultCellView();
     d->cache.clear();
     d->cachedArea = QRegion();
+    delete d->obscuredInfo;
+    d->obscuredInfo = new FusionStorage(d->sheet->map());
+    d->obscuredRange = QSize(0, 0);
 }
 
 void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase*, const QRect& visibleRect)
@@ -679,13 +682,16 @@ void SheetView::setHighlighted(const QPoint &cell, bool isHighlighted)
 #ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->highlightLock);
 #endif
+    bool oldHadHighlights = d->highlightedCells.count() > 0;
     bool oldVal;
     if (isHighlighted) {
         oldVal = d->highlightedCells.insert(cell.x(), cell.y(), true);
     } else {
         oldVal = d->highlightedCells.take(cell.x(), cell.y());
     }
-    if (oldVal != isHighlighted) {
+    if (oldHadHighlights != (d->highlightedCells.count() > 0)) {
+        invalidate();
+    } else if (oldVal != isHighlighted) {
         invalidateRegion(Region(cell));
     }
 }

@@ -899,6 +899,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const Calligra::Tables::Tokens &
                                         syntaxStack.pop();
                                         syntaxStack.push(arg);
                                         const int rowCount = argStack.pop();
+                                        Q_UNUSED(rowCount);
                                         // TODO:
                                         codes.append(FormulaToken(FormulaToken::MissArg));
                                         //d->constants.append(Value((int)argCount));     // cols

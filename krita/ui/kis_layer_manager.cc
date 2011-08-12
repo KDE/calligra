@@ -593,21 +593,6 @@ void KisLayerManager::layerBack()
     layer->parent()->setDirty();
 }
 
-void KisLayerManager::rotateLayer180()
-{
-    rotateLayer(M_PI);
-}
-
-void KisLayerManager::rotateLayerLeft90()
-{
-    rotateLayer(M_PI / 2 - 2*M_PI);
-}
-
-void KisLayerManager::rotateLayerRight90()
-{
-    rotateLayer(M_PI / 2);
-}
-
 void KisLayerManager::mirrorLayerX()
 {
     KisLayerSP layer = activeLayer();
@@ -781,7 +766,7 @@ void KisLayerManager::mergeLayer()
     const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
     if (!strategy) return;
 
-    KisLayerSP  newLayer = image->mergeLayer(layer, strategy);
+    KisLayerSP  newLayer = image->mergeDown(layer, strategy);
     if (newLayer) {
         newLayer->setDirty();
     }
