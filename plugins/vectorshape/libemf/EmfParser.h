@@ -83,7 +83,7 @@ public:
 
 private:
     // read a single EMF record
-    bool readRecord( QDataStream &stream );
+    bool readRecord(QDataStream &stream, EmfDeviceContext &context);
 
     // temporary function to soak up unneeded bytes
     void soakBytes( QDataStream &stream, int numBytes );

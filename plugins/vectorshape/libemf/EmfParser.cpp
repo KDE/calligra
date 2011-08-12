@@ -1,6 +1,6 @@
 /*
   Copyright 2008        Brad Hards <bradh@frogmouth.net>
-  Copyright 2009 - 2010 Inge Wallin <inge@lysator.liu.se>
+  Copyright 2009 - 2011 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@
 #include <KDebug>
 
 // LibEmf
+#include "EmfDeviceContext.h"
 #include "EmfRecords.h"
 #include "EmfObjects.h"
 
@@ -113,6 +114,8 @@ bool Parser::loadFromStream( QDataStream &stream )
 
     mOutput->init( header );
 
+    EmfDeviceContext  deviceContext;
+
 #if DEBUG_EMFPARSER
     kDebug(31000) << "========================================================== Starting EMF";
 #endif
@@ -120,7 +123,7 @@ bool Parser::loadFromStream( QDataStream &stream )
     int numRecords = header->recordCount();
     for ( int i = 1; i < numRecords; ++i ) {
         // kDebug(33100) << "Record" << i << "of" << numRecords;
-        if ( ! readRecord( stream ) ) {
+        if ( !readRecord(stream, deviceContext) ) {
             break;
         }
     }
@@ -357,7 +360,7 @@ static const struct {
     { 0x0000007A, "EMR_CREATECOLORSPACEW" }
 };
 
-bool Parser::readRecord( QDataStream &stream )
+bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 {
     if ( ! mOutput ) {
         qWarning() << "Output device not set";
@@ -396,7 +399,7 @@ bool Parser::readRecord( QDataStream &stream )
                 stream >> point;
                 aPoints.append( point );
             }
-            mOutput->polyLine( bounds, aPoints );
+            mOutput->polyLine(context, bounds, aPoints );
         }
         break;
         case EMR_SETWINDOWEXTEX:
@@ -407,28 +410,28 @@ bool Parser::readRecord( QDataStream &stream )
             stream >> width >> height;
             //kDebug(31000) << "SETWINDOWEXTEX" << width << height;
             size = QSize(width, height);
-            mOutput->setWindowExtEx( size );
+            mOutput->setWindowExtEx(context, size );
         }
         break;
         case EMR_SETWINDOWORGEX:
         {
             QPoint origin;
             stream >> origin;
-            mOutput->setWindowOrgEx( origin );
+            mOutput->setWindowOrgEx(context, origin );
         }
         break;
         case EMR_SETVIEWPORTEXTEX:
         {
             QSize size;
             stream >> size;
-            mOutput->setViewportExtEx( size );
+            mOutput->setViewportExtEx(context, size );
         }
         break;
         case EMR_SETVIEWPORTORGEX:
         {
             QPoint origin;
             stream >> origin;
-            mOutput->setViewportOrgEx( origin );
+            mOutput->setViewportOrgEx(context, origin );
         }
         break;
         case EMR_SETBRUSHORGEX:
@@ -453,28 +456,28 @@ bool Parser::readRecord( QDataStream &stream )
             quint8 red, green, blue, reserved;
             stream >> point;
             stream >> red >> green >> blue >> reserved;
-            mOutput->setPixelV( point, red, green, blue, reserved );
+            mOutput->setPixelV(context, point, red, green, blue, reserved );
         }
         break;
     case EMR_SETMAPMODE:
 	{
 	    quint32 mapMode;
 	    stream >> mapMode;
-	    mOutput->setMapMode( mapMode );
+	    mOutput->setMapMode(context, mapMode );
 	}
         break;
     case EMR_SETBKMODE:
 	{
 	    quint32 backgroundMode;
 	    stream >> backgroundMode;
-            mOutput->setBkMode( backgroundMode );
+            mOutput->setBkMode(context, backgroundMode );
 	}
         break;
     case EMR_SETPOLYFILLMODE:
 	{
 	    quint32 PolygonFillMode;
 	    stream >> PolygonFillMode;
-	    mOutput->setPolyFillMode( PolygonFillMode );
+	    mOutput->setPolyFillMode(context, PolygonFillMode );
 	}
 	break;
         case EMR_SETROP2:
@@ -488,7 +491,7 @@ bool Parser::readRecord( QDataStream &stream )
         {
             quint32 stretchMode;
             stream >> stretchMode;
-            mOutput->setStretchBltMode( stretchMode );
+            mOutput->setStretchBltMode(context, stretchMode );
 
         }
         break;
@@ -496,35 +499,35 @@ bool Parser::readRecord( QDataStream &stream )
         {
             quint32 textAlignMode;
             stream >> textAlignMode;
-            mOutput->setTextAlign( textAlignMode );
+            mOutput->setTextAlign(context, textAlignMode );
         }
         break;
     case EMR_SETTEXTCOLOR:
 	{
 	    quint8 red, green, blue, reserved;
 	    stream >> red >> green >> blue >> reserved;
-	    mOutput->setTextColor( red, green, blue, reserved );
+	    mOutput->setTextColor(context, red, green, blue, reserved );
 	}
 	break;
     case EMR_SETBKCOLOR:
 	{
 	    quint8 red, green, blue, reserved;
 	    stream >> red >> green >> blue >> reserved;
-            mOutput->setBkColor( red, green, blue, reserved );
+            mOutput->setBkColor(context, red, green, blue, reserved );
 	}
         break;
     case EMR_MOVETOEX:
 	{
 	    qint32 x, y;
 	    stream >> x >> y;
-	    mOutput->moveToEx( x, y );
+	    mOutput->moveToEx(context, x, y );
             //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
 	}
 	break;
         case EMR_SETMETARGN:
         {
             // Takes no arguments
-            mOutput->setMetaRgn();
+            mOutput->setMetaRgn(context);
         }
         break;
     case EMR_INTERSECTCLIPRECT:
@@ -536,14 +539,14 @@ bool Parser::readRecord( QDataStream &stream )
     break;
     case EMR_SAVEDC:
     {
-        mOutput->saveDC();
+        mOutput->saveDC(context);
     }
     break;
     case EMR_RESTOREDC:
     {
         qint32 savedDC;
         stream >> savedDC;
-        mOutput->restoreDC( savedDC );
+        mOutput->restoreDC(context, savedDC );
     }
     break;
     case EMR_SETWORLDTRANSFORM:
@@ -557,7 +560,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> Dx;
 	    stream >> Dy;
             //kDebug(31000) << "Set world transform" << M11 << M12 << M21 << M22 << Dx << Dy;
-	    mOutput->setWorldTransform( M11, M12, M21, M22, Dx, Dy );
+	    mOutput->setWorldTransform(context, M11, M12, M21, M22, Dx, Dy );
 	}
 	break;
     case EMR_MODIFYWORLDTRANSFORM:
@@ -573,14 +576,14 @@ bool Parser::readRecord( QDataStream &stream )
             //kDebug(31000) << "stream position after the matrix: " << stream.device()->pos();
 	    quint32 ModifyWorldTransformMode;
 	    stream >> ModifyWorldTransformMode;
-	    mOutput->modifyWorldTransform( ModifyWorldTransformMode, M11, M12,
+	    mOutput->modifyWorldTransform(context, ModifyWorldTransformMode, M11, M12,
 					   M21, M22, Dx, Dy );
 	}
 	break;
     case EMR_SELECTOBJECT:
 	quint32 ihObject;
 	stream >> ihObject;
-	mOutput->selectObject( ihObject );
+	mOutput->selectObject(context, ihObject );
         break;
     case EMR_CREATEPEN:
 	{
@@ -598,7 +601,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> red >> green >> blue;
 	    stream >> reserved; // unused;
 
-	    mOutput->createPen( ihPen, penStyle, x, y, red, green, blue, reserved );
+	    mOutput->createPen(context, ihPen, penStyle, x, y, red, green, blue, reserved );
 
 	    break;
 	}
@@ -617,7 +620,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    quint32 BrushHatch;
 	    stream >> BrushHatch;
 
-	    mOutput->createBrushIndirect( ihBrush, BrushStyle, red, green, blue, reserved, BrushHatch );
+	    mOutput->createBrushIndirect(context, ihBrush, BrushStyle, red, green, blue, reserved, BrushHatch );
 
 	    break;
 	}
@@ -625,21 +628,21 @@ bool Parser::readRecord( QDataStream &stream )
 	{
 	    quint32 ihObject;
 	    stream >> ihObject;
-	    mOutput->deleteObject( ihObject );
+	    mOutput->deleteObject(context, ihObject );
 	}
         break;
     case EMR_ELLIPSE:
         {
             QRect box;
             stream >> box;
-            mOutput->ellipse( box );
+            mOutput->ellipse(context, box );
         }
         break;
     case EMR_RECTANGLE:
         {
             QRect box;
             stream >> box;
-            mOutput->rectangle( box );
+            mOutput->rectangle(context, box );
             //kDebug(33100) << "xx EMR_RECTANGLE" << box;
         }
         break;
@@ -649,7 +652,7 @@ bool Parser::readRecord( QDataStream &stream )
             QPoint start, end;
             stream >> box;
             stream >> start >> end;
-            mOutput->arc( box, start, end );
+            mOutput->arc(context, box, start, end );
         }
         break;
     case EMR_CHORD:
@@ -658,7 +661,7 @@ bool Parser::readRecord( QDataStream &stream )
             QPoint start, end;
             stream >> box;
             stream >> start >> end;
-            mOutput->chord( box, start, end );
+            mOutput->chord(context, box, start, end );
         }
         break;
      case EMR_PIE:
@@ -667,7 +670,7 @@ bool Parser::readRecord( QDataStream &stream )
             QPoint start, end;
             stream >> box;
             stream >> start >> end;
-            mOutput->pie( box, start, end );
+            mOutput->pie(context, box, start, end );
         }
         break;
     case EMR_SELECTPALLETTE:
@@ -690,19 +693,19 @@ bool Parser::readRecord( QDataStream &stream )
         }
 	break;
     case EMR_BEGINPATH:
-	mOutput->beginPath();
+	mOutput->beginPath(context);
 	break;
     case EMR_ENDPATH:
-	mOutput->endPath();
+	mOutput->endPath(context);
 	break;
     case EMR_CLOSEFIGURE:
-	mOutput->closeFigure();
+	mOutput->closeFigure(context);
 	break;
     case EMR_FILLPATH:
 	{
 	    QRect bounds;
 	    stream >> bounds;
-	    mOutput->fillPath( bounds );
+	    mOutput->fillPath(context, bounds );
             //kDebug(33100) << "xx EMR_FILLPATH" << bounds;
 	}
 	break;
@@ -710,7 +713,7 @@ bool Parser::readRecord( QDataStream &stream )
         {
             QRect bounds;
             stream >> bounds;
-            mOutput->strokeAndFillPath( bounds );
+            mOutput->strokeAndFillPath(context, bounds );
             //kDebug(33100) << "xx EMR_STROKEANDFILLPATHPATH" << bounds;
         }
         break;
@@ -718,7 +721,7 @@ bool Parser::readRecord( QDataStream &stream )
 	{
 	    QRect bounds;
 	    stream >> bounds;
-	    mOutput->strokePath( bounds );
+	    mOutput->strokePath(context, bounds );
             //kDebug(33100) << "xx EMR_STROKEPATH" << bounds;
 	}
 	break;
@@ -726,7 +729,7 @@ bool Parser::readRecord( QDataStream &stream )
         {
             quint32 regionMode;
             stream >> regionMode;
-            mOutput->setClipPath( regionMode );
+            mOutput->setClipPath(context, regionMode );
         }
         break;
     case EMR_LINETO:
@@ -734,7 +737,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    quint32 x, y;
 	    stream >> x >> y;
 	    QPoint finishPoint( x, y );
-	    mOutput->lineTo( finishPoint );
+	    mOutput->lineTo(context, finishPoint );
             //kDebug(33100) << "xx EMR_LINETO" << x << y;
 	}
 	break;
@@ -746,7 +749,7 @@ bool Parser::readRecord( QDataStream &stream )
             stream >> start;
             QPoint end;
             stream >> end;
-            mOutput->arcTo( box, start, end );
+            mOutput->arcTo(context, box, start, end );
         }
         break;
         case EMR_COMMENT:
@@ -791,19 +794,19 @@ bool Parser::readRecord( QDataStream &stream )
 	{
             //kDebug(31000) << "Found BitBlt record";
 	    BitBltRecord bitBltRecord( stream, size );
-	    mOutput->bitBlt( bitBltRecord );
+	    mOutput->bitBlt(context, bitBltRecord );
 	}
 	break;
     case EMR_STRETCHDIBITS:
 	{
 	    StretchDiBitsRecord stretchDiBitsRecord( stream, size );
-	    mOutput->stretchDiBits( stretchDiBitsRecord );
+	    mOutput->stretchDiBits(context, stretchDiBitsRecord );
 	}
 	break;
     case EMR_EXTCREATEFONTINDIRECTW:
 	{
 	    ExtCreateFontIndirectWRecord extCreateFontIndirectWRecord( stream, size );
-	    mOutput->extCreateFontIndirectW( extCreateFontIndirectWRecord );
+	    mOutput->extCreateFontIndirectW(context, extCreateFontIndirectWRecord );
 	}
 	break;
     case EMR_EXTTEXTOUTA:
@@ -845,14 +848,14 @@ bool Parser::readRecord( QDataStream &stream )
             EmrTextObject emrText(stream, size,
                                   (type == EMR_EXTTEXTOUTA) ? EmrTextObject::EightBitChars
                                                             : EmrTextObject::SixteenBitChars);
-            mOutput->extTextOut( bounds, emrText );
+            mOutput->extTextOut(context, bounds, emrText );
 	}
 	break;
         case EMR_SETLAYOUT:
         {
             quint32 layoutMode;
             stream >> layoutMode;
-            mOutput->setLayout( layoutMode );
+            mOutput->setLayout(context, layoutMode );
         }
         break;
     case EMR_POLYBEZIER16:
@@ -868,7 +871,7 @@ bool Parser::readRecord( QDataStream &stream )
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyBezier16( bounds, aPoints );
+	    mOutput->polyBezier16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYGON16:
@@ -884,7 +887,7 @@ bool Parser::readRecord( QDataStream &stream )
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polygon16( bounds, aPoints );
+	    mOutput->polygon16(context, bounds, aPoints );
 	}
 	break;
     case EMR_POLYLINE16:
@@ -900,7 +903,7 @@ bool Parser::readRecord( QDataStream &stream )
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyLine16( bounds, aPoints );
+	    mOutput->polyLine16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYBEZIERTO16:
@@ -916,7 +919,7 @@ bool Parser::readRecord( QDataStream &stream )
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyBezierTo16( bounds, aPoints );
+	    mOutput->polyBezierTo16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYLINETO16:
@@ -932,7 +935,7 @@ bool Parser::readRecord( QDataStream &stream )
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyLineTo16( bounds, aPoints );
+	    mOutput->polyLineTo16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYPOLYLINE16:
@@ -957,7 +960,7 @@ bool Parser::readRecord( QDataStream &stream )
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }
             }
-            mOutput->polyPolyLine16( bounds, aPoints );
+            mOutput->polyPolyLine16(context, bounds, aPoints );
         }
         break;
     case EMR_POLYPOLYGON16:
@@ -982,7 +985,7 @@ bool Parser::readRecord( QDataStream &stream )
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }
             }
-            mOutput->polyPolygon16( bounds, aPoints );
+            mOutput->polyPolygon16(context, bounds, aPoints );
         }
         break;
     case EMR_CREATEMONOBRUSH:
@@ -1018,7 +1021,7 @@ bool Parser::readRecord( QDataStream &stream )
             Bitmap bitmap(stream, size, 8 + 6 * 4, // header + 6 ints
                           offBmi, cbBmi, offBits, cbBits);
 
-	    mOutput->createMonoBrush(ihBrush, &bitmap);
+	    mOutput->createMonoBrush(context, ihBrush, &bitmap);
 
         }
         break;
@@ -1046,7 +1049,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    // TODO: There is more stuff to parse here
 
 	    // TODO: this needs to go to an extCreatePen() output method
-	    mOutput->createPen( ihPen, penStyle, width, 0, red, green, blue, reserved );
+	    mOutput->createPen(context, ihPen, penStyle, width, 0, red, green, blue, reserved );
 	    soakBytes( stream, size-44 );
 	}
         break;
