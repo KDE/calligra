@@ -28,8 +28,8 @@ SET ( VectorShape_SRCS
     libemf/Bitmap.cpp
     libemf/EmfParser.cpp
     libemf/EmfAbstractBackend.cpp
-    libemf/EmfOutputDebugStrategy.cpp
-    libemf/EmfOutputPainterStrategy.cpp
+    libemf/EmfDebugBackend.cpp
+    libemf/EmfPainterBackend.cpp
 
     libsvm/SvmStructs.cpp
     libsvm/SvmGraphicsContext.cpp

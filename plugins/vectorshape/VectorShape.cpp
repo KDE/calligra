@@ -55,8 +55,8 @@
 
 // Vector shape
 #include "libemf/EmfParser.h"
-#include "libemf/EmfOutputPainterStrategy.h"
-#include "libemf/EmfOutputDebugStrategy.h"
+#include "libemf/EmfPainterBackend.h"
+#include "libemf/EmfDebugBackend.h"
 #include "libsvm/SvmParser.h"
 #include "libsvm/SvmPainterBackend.h"
 
@@ -222,7 +222,7 @@ void RenderThread::drawEmf(QPainter &painter) const
 
 #if 1  // Set to 0 to get debug output
     // Create a new painter output strategy.  Last param = true means keep aspect ratio.
-    Libemf::OutputPainterStrategy  emfPaintOutput( painter, shapeSizeInt, true );
+    Libemf::EmfPainterBackend  emfPaintOutput( painter, shapeSizeInt, true );
     emfParser.setOutput( &emfPaintOutput );
 #else
     Libemf::OutputDebugStrategy  emfDebugOutput;

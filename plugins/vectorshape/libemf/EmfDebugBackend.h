@@ -16,8 +16,8 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EMFOUTPUTDEBUGSTRATEGY_H
-#define EMFOUTPUTDEBUGSTRATEGY_H
+#ifndef EMFDEBUGBACKEND_H
+#define EMFDEBUGBACKEND_H
 
 #include "emf_export.h"
 
@@ -36,7 +36,7 @@
 /**
    \file
 
-   Contains definitions for an EMF debug output strategy
+   Contains definitions for an EMF debug backend
 */
 
 /**
@@ -47,13 +47,13 @@ namespace Libemf
 
 
 /**
-    Debug (text dump) output strategy for EMF Parser
+    Debug (text dump) backend for EMF Parser
 */
-class EMF_EXPORT OutputDebugStrategy : public EmfAbstractBackend
+class EMF_EXPORT EmfDebugBackend : public EmfAbstractBackend
 {
 public:
-    OutputDebugStrategy();
-    ~OutputDebugStrategy();
+    EmfDebugBackend();
+    ~EmfDebugBackend();
 
     void init( const Header *header );
     void cleanup( const Header *header );

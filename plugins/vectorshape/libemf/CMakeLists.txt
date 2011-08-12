@@ -14,9 +14,9 @@ set(libemf_LIB_SRCS
      EmfHeader.cpp
      BitmapHeader.cpp
      EmfParser.cpp
-     EmfOutput.cpp
-     EmfOutputDebugStrategy.cpp
-     EmfOutputPainterStrategy.cpp
+     EmfAbstractBackend.cpp
+     EmfDebugBackend.cpp
+     EmfPainterBackend.cpp
 )
 
 #kde4_add_library(libemf SHARED ${libemf_LIB_SRCS})
@@ -39,9 +39,9 @@ set(libemf_LIB_SRCS
 #    EmfHeader.h
 #    Bitmap.h
 #    EmfParser.h
-#    EmfOutput.h
-#    EmfOutputDebugStrategy.h
-#    EmfOutputPainterStrategy.h
+#    EmfAbstractBackend.h
+#    EmfDebugBackend.h
+#    EmfPainterBackend.h
 #    emf_export.h
 #    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 #)

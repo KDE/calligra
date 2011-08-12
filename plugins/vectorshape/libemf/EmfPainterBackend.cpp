@@ -16,7 +16,7 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "EmfOutputPainterStrategy.h"
+#include "EmfPainterBackend.h"
 
 #include <math.h>
 
@@ -35,10 +35,10 @@ namespace Libemf
 static QPainter::CompositionMode  rasteropToQtComposition(long rop);
 
 // ================================================================
-//                         Class OutputPainterStrategy
+//                         Class EmfPainterBackend
 
 
-OutputPainterStrategy::OutputPainterStrategy()
+EmfPainterBackend::EmfPainterBackend()
     : m_header( 0 )
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
@@ -53,7 +53,7 @@ OutputPainterStrategy::OutputPainterStrategy()
     m_keepAspectRatio = true;
 }
 
-OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
+EmfPainterBackend::EmfPainterBackend(QPainter &painter, QSize &size,
                                              bool keepAspectRatio)
     : m_header( 0 )
     , m_path( 0 )
@@ -72,13 +72,13 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
     m_keepAspectRatio = keepAspectRatio;
 }
 
-OutputPainterStrategy::~OutputPainterStrategy()
+EmfPainterBackend::~EmfPainterBackend()
 {
     delete m_header;
     delete m_path;
 }
 
-void OutputPainterStrategy::paintBounds(const Header *header)
+void EmfPainterBackend::paintBounds(const Header *header)
 {
     // The rectangle is in device coordinates.
     QRectF  rect(header->bounds());
@@ -93,7 +93,7 @@ void OutputPainterStrategy::paintBounds(const Header *header)
     m_painter->restore();
 }
 
-void OutputPainterStrategy::init( const Header *header )
+void EmfPainterBackend::init( const Header *header )
 {
     // Save the header since we need the frame and bounds inside the drawing.
     m_header = new Header(*header);
@@ -172,7 +172,7 @@ void OutputPainterStrategy::init( const Header *header )
 #endif
 }
 
-void OutputPainterStrategy::cleanup( const Header *header )
+void EmfPainterBackend::cleanup( const Header *header )
 {
     Q_UNUSED( header );
 
@@ -191,11 +191,11 @@ void OutputPainterStrategy::cleanup( const Header *header )
 }
 
 
-void OutputPainterStrategy::eof()
+void EmfPainterBackend::eof()
 {
 }
 
-void OutputPainterStrategy::setPixelV(EmfDeviceContext &context,
+void EmfPainterBackend::setPixelV(EmfDeviceContext &context,
                                       QPoint &point, quint8 red, quint8 green, quint8 blue,
                                       quint8 reserved )
 {
@@ -216,7 +216,7 @@ void OutputPainterStrategy::setPixelV(EmfDeviceContext &context,
 }
 
 
-void OutputPainterStrategy::beginPath(EmfDeviceContext &context)
+void EmfPainterBackend::beginPath(EmfDeviceContext &context)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000);
@@ -227,7 +227,7 @@ void OutputPainterStrategy::beginPath(EmfDeviceContext &context)
     m_currentlyBuildingPath = true;
 }
 
-void OutputPainterStrategy::closeFigure(EmfDeviceContext &context)
+void EmfPainterBackend::closeFigure(EmfDeviceContext &context)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000);
@@ -236,7 +236,7 @@ void OutputPainterStrategy::closeFigure(EmfDeviceContext &context)
     m_path->closeSubpath();
 }
 
-void OutputPainterStrategy::endPath(EmfDeviceContext &context)
+void EmfPainterBackend::endPath(EmfDeviceContext &context)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000);
@@ -246,7 +246,7 @@ void OutputPainterStrategy::endPath(EmfDeviceContext &context)
     m_currentlyBuildingPath = false;
 }
 
-void OutputPainterStrategy::saveDC(EmfDeviceContext &context)
+void EmfPainterBackend::saveDC(EmfDeviceContext &context)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000);
@@ -267,7 +267,7 @@ void OutputPainterStrategy::saveDC(EmfDeviceContext &context)
     m_painter->setWorldTransform(savedTransform);
 }
 
-void OutputPainterStrategy::restoreDC(EmfDeviceContext &context, const qint32 savedDC )
+void EmfPainterBackend::restoreDC(EmfDeviceContext &context, const qint32 savedDC )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << savedDC;
@@ -292,7 +292,7 @@ void OutputPainterStrategy::restoreDC(EmfDeviceContext &context, const qint32 sa
     m_painter->setWorldTransform( newMatrix );
 }
 
-void OutputPainterStrategy::setMetaRgn(EmfDeviceContext &context)
+void EmfPainterBackend::setMetaRgn(EmfDeviceContext &context)
 {
     kDebug(33100) << "EMR_SETMETARGN not yet implemented";
 }
@@ -353,7 +353,7 @@ void OutputPainterStrategy::setMetaRgn(EmfDeviceContext &context)
 
 
 // Set Window and Viewport
-void OutputPainterStrategy::recalculateWorldTransform()
+void EmfPainterBackend::recalculateWorldTransform()
 {
     m_worldTransform = QTransform();
 
@@ -408,7 +408,7 @@ void OutputPainterStrategy::recalculateWorldTransform()
 }
 
 
-void OutputPainterStrategy::setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin )
+void EmfPainterBackend::setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << origin;
@@ -425,7 +425,7 @@ void OutputPainterStrategy::setWindowOrgEx(EmfDeviceContext &context, const QPoi
     recalculateWorldTransform();
 }
 
-void OutputPainterStrategy::setWindowExtEx(EmfDeviceContext &context, const QSize &size )
+void EmfPainterBackend::setWindowExtEx(EmfDeviceContext &context, const QSize &size )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << size;
@@ -443,7 +443,7 @@ void OutputPainterStrategy::setWindowExtEx(EmfDeviceContext &context, const QSiz
     recalculateWorldTransform();
 }
 
-void OutputPainterStrategy::setViewportOrgEx(EmfDeviceContext &context, const QPoint &origin )
+void EmfPainterBackend::setViewportOrgEx(EmfDeviceContext &context, const QPoint &origin )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << origin;
@@ -460,7 +460,7 @@ void OutputPainterStrategy::setViewportOrgEx(EmfDeviceContext &context, const QP
     recalculateWorldTransform();
 }
 
-void OutputPainterStrategy::setViewportExtEx(EmfDeviceContext &context, const QSize &size )
+void EmfPainterBackend::setViewportExtEx(EmfDeviceContext &context, const QSize &size )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << size;
@@ -480,7 +480,7 @@ void OutputPainterStrategy::setViewportExtEx(EmfDeviceContext &context, const QS
 
 
 
-void OutputPainterStrategy::modifyWorldTransform(EmfDeviceContext &context,
+void EmfPainterBackend::modifyWorldTransform(EmfDeviceContext &context,
                                                  const quint32 mode, float M11, float M12,
                                                  float M21, float M22, float Dx, float Dy )
 {
@@ -510,7 +510,7 @@ void OutputPainterStrategy::modifyWorldTransform(EmfDeviceContext &context,
     m_painter->setWorldTransform( newMatrix );
 }
 
-void OutputPainterStrategy::setWorldTransform(EmfDeviceContext &context,
+void EmfPainterBackend::setWorldTransform(EmfDeviceContext &context,
                                               float M11, float M12, float M21,
                                               float M22, float Dx, float Dy )
 {
@@ -531,7 +531,7 @@ void OutputPainterStrategy::setWorldTransform(EmfDeviceContext &context,
 // ----------------------------------------------------------------
 
 
-void OutputPainterStrategy::createPen(EmfDeviceContext &context,
+void EmfPainterBackend::createPen(EmfDeviceContext &context,
                                       quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
                                       quint8 red, quint8 green, quint8 blue, quint8 reserved )
 {
@@ -607,7 +607,7 @@ void OutputPainterStrategy::createPen(EmfDeviceContext &context,
     m_objectTable.insert( ihPen,  pen );
 }
 
-void OutputPainterStrategy::createBrushIndirect(EmfDeviceContext &context,
+void EmfPainterBackend::createBrushIndirect(EmfDeviceContext &context,
                                                 quint32 ihBrush, quint32 brushStyle,
                                                 quint8 red, quint8 green, quint8 blue,
                                                 quint8 reserved,
@@ -665,7 +665,7 @@ void OutputPainterStrategy::createBrushIndirect(EmfDeviceContext &context,
     m_objectTable.insert( ihBrush, brush );
 }
 
-void OutputPainterStrategy::createMonoBrush(EmfDeviceContext &context,
+void EmfPainterBackend::createMonoBrush(EmfDeviceContext &context,
                                             quint32 ihBrush, Bitmap *bitmap )
 {
 
@@ -676,7 +676,7 @@ void OutputPainterStrategy::createMonoBrush(EmfDeviceContext &context,
 }
 
 
-void OutputPainterStrategy::extCreateFontIndirectW(EmfDeviceContext &context,
+void EmfPainterBackend::extCreateFontIndirectW(EmfDeviceContext &context,
                                                    const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
 {
     QFont font( extCreateFontIndirectW.fontFace() );
@@ -701,7 +701,7 @@ void OutputPainterStrategy::extCreateFontIndirectW(EmfDeviceContext &context,
     m_objectTable.insert( extCreateFontIndirectW.ihFonts(), font );
 }
 
-void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
+void EmfPainterBackend::selectStockObject( const quint32 ihObject )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << ihObject;
@@ -771,7 +771,7 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
     }
 }
 
-void OutputPainterStrategy::selectObject(EmfDeviceContext &context, const quint32 ihObject )
+void EmfPainterBackend::selectObject(EmfDeviceContext &context, const quint32 ihObject )
 {
 #if DEBUG_EMFPAINT
     kDebug(33100) << hex << ihObject << dec;
@@ -798,12 +798,12 @@ void OutputPainterStrategy::selectObject(EmfDeviceContext &context, const quint3
     }
 }
 
-void OutputPainterStrategy::deleteObject(EmfDeviceContext &context, const quint32 ihObject )
+void EmfPainterBackend::deleteObject(EmfDeviceContext &context, const quint32 ihObject )
 {
     m_objectTable.take( ihObject );
 }
 
-void OutputPainterStrategy::arc(EmfDeviceContext &context,
+void EmfPainterBackend::arc(EmfDeviceContext &context,
                                 const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
@@ -819,7 +819,7 @@ void OutputPainterStrategy::arc(EmfDeviceContext &context,
     m_painter->drawArc( box, startAngle*16, spanAngle*16 );
 }
 
-void OutputPainterStrategy::chord(EmfDeviceContext &context,
+void EmfPainterBackend::chord(EmfDeviceContext &context,
                                   const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
@@ -835,7 +835,7 @@ void OutputPainterStrategy::chord(EmfDeviceContext &context,
     m_painter->drawChord( box, startAngle*16, spanAngle*16 );
 }
 
-void OutputPainterStrategy::pie(EmfDeviceContext &context,
+void EmfPainterBackend::pie(EmfDeviceContext &context,
                                 const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
@@ -851,7 +851,7 @@ void OutputPainterStrategy::pie(EmfDeviceContext &context,
     m_painter->drawPie( box, startAngle*16, spanAngle*16 );
 }
 
-void OutputPainterStrategy::ellipse(EmfDeviceContext &context, const QRect &box )
+void EmfPainterBackend::ellipse(EmfDeviceContext &context, const QRect &box )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << box;
@@ -860,7 +860,7 @@ void OutputPainterStrategy::ellipse(EmfDeviceContext &context, const QRect &box 
     m_painter->drawEllipse( box );
 }
 
-void OutputPainterStrategy::rectangle(EmfDeviceContext &context, const QRect &box )
+void EmfPainterBackend::rectangle(EmfDeviceContext &context, const QRect &box )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << box;
@@ -869,7 +869,7 @@ void OutputPainterStrategy::rectangle(EmfDeviceContext &context, const QRect &bo
     m_painter->drawRect( box );
 }
 
-void OutputPainterStrategy::setMapMode(EmfDeviceContext &context, const quint32 mapMode )
+void EmfPainterBackend::setMapMode(EmfDeviceContext &context, const quint32 mapMode )
 {
 #if DEBUG_EMFPAINT
     kDebug(33100) << "Set map mode:" << mapMode;
@@ -878,7 +878,7 @@ void OutputPainterStrategy::setMapMode(EmfDeviceContext &context, const quint32 
     m_mapMode = (MapMode)mapMode;
 }
 
-void OutputPainterStrategy::setBkMode(EmfDeviceContext &context, const quint32 backgroundMode )
+void EmfPainterBackend::setBkMode(EmfDeviceContext &context, const quint32 backgroundMode )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << backgroundMode;
@@ -894,7 +894,7 @@ void OutputPainterStrategy::setBkMode(EmfDeviceContext &context, const quint32 b
     }
 }
 
-void OutputPainterStrategy::setPolyFillMode(EmfDeviceContext &context, const quint32 polyFillMode )
+void EmfPainterBackend::setPolyFillMode(EmfDeviceContext &context, const quint32 polyFillMode )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << polyFillMode;
@@ -910,7 +910,7 @@ void OutputPainterStrategy::setPolyFillMode(EmfDeviceContext &context, const qui
     }
 }
 
-void OutputPainterStrategy::setLayout(EmfDeviceContext &context, const quint32 layoutMode )
+void EmfPainterBackend::setLayout(EmfDeviceContext &context, const quint32 layoutMode )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << layoutMode;
@@ -926,7 +926,7 @@ void OutputPainterStrategy::setLayout(EmfDeviceContext &context, const quint32 l
     }
 }
 
-void OutputPainterStrategy::setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode )
+void EmfPainterBackend::setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << textAlignMode;
@@ -935,7 +935,7 @@ void OutputPainterStrategy::setTextAlign(EmfDeviceContext &context, const quint3
     m_textAlignMode = textAlignMode;
 }
 
-void OutputPainterStrategy::setTextColor(EmfDeviceContext &context,
+void EmfPainterBackend::setTextColor(EmfDeviceContext &context,
                                          const quint8 red, const quint8 green, const quint8 blue,
                                          const quint8 reserved )
 {
@@ -948,7 +948,7 @@ void OutputPainterStrategy::setTextColor(EmfDeviceContext &context,
     m_textPen.setColor( QColor( red, green, blue ) );
 }
 
-void OutputPainterStrategy::setBkColor(EmfDeviceContext &context,
+void EmfPainterBackend::setBkColor(EmfDeviceContext &context,
                                        const quint8 red, const quint8 green, const quint8 blue,
                                        const quint8 reserved )
 {
@@ -964,7 +964,7 @@ void OutputPainterStrategy::setBkColor(EmfDeviceContext &context,
 
 #define DEBUG_TEXTOUT 0
 
-void OutputPainterStrategy::extTextOut(EmfDeviceContext &context,
+void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
                                        const QRect &bounds, const EmrTextObject &textObject )
 {
     const QPoint  &referencePoint = textObject.referencePoint();
@@ -1065,7 +1065,7 @@ void OutputPainterStrategy::extTextOut(EmfDeviceContext &context,
     m_painter->restore();
 }
 
-void OutputPainterStrategy::moveToEx(EmfDeviceContext &context, const qint32 x, const qint32 y )
+void EmfPainterBackend::moveToEx(EmfDeviceContext &context, const qint32 x, const qint32 y )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << x << y;
@@ -1077,7 +1077,7 @@ void OutputPainterStrategy::moveToEx(EmfDeviceContext &context, const qint32 x, 
         m_currentCoords = QPoint( x, y );
 }
 
-void OutputPainterStrategy::lineTo(EmfDeviceContext &context, const QPoint &finishPoint )
+void EmfPainterBackend::lineTo(EmfDeviceContext &context, const QPoint &finishPoint )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << finishPoint;
@@ -1091,7 +1091,7 @@ void OutputPainterStrategy::lineTo(EmfDeviceContext &context, const QPoint &fini
     }
 }
 
-void OutputPainterStrategy::arcTo(EmfDeviceContext &context,
+void EmfPainterBackend::arcTo(EmfDeviceContext &context,
                                   const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
@@ -1107,7 +1107,7 @@ void OutputPainterStrategy::arcTo(EmfDeviceContext &context,
     m_path->arcTo( box, startAngle, spanAngle );
 }
 
-void OutputPainterStrategy::polygon16(EmfDeviceContext &context,
+void EmfPainterBackend::polygon16(EmfDeviceContext &context,
                                       const QRect &bounds, const QList<QPoint> points )
 {
     Q_UNUSED( bounds );
@@ -1120,7 +1120,7 @@ void OutputPainterStrategy::polygon16(EmfDeviceContext &context,
     m_painter->drawPolygon( pointVector.constData(), pointVector.size(), m_fillRule );
 }
 
-void OutputPainterStrategy::polyLine(EmfDeviceContext &context,
+void EmfPainterBackend::polyLine(EmfDeviceContext &context,
                                      const QRect &bounds, const QList<QPoint> points )
 {
     Q_UNUSED( bounds );
@@ -1133,7 +1133,7 @@ void OutputPainterStrategy::polyLine(EmfDeviceContext &context,
     m_painter->drawPolyline( pointVector.constData(), pointVector.size() );
 }
 
-void OutputPainterStrategy::polyLine16(EmfDeviceContext &context,
+void EmfPainterBackend::polyLine16(EmfDeviceContext &context,
                                        const QRect &bounds, const QList<QPoint> points )
 {
 #if DEBUG_EMFPAINT
@@ -1143,7 +1143,7 @@ void OutputPainterStrategy::polyLine16(EmfDeviceContext &context,
     polyLine(context, bounds, points );
 }
 
-void OutputPainterStrategy::polyPolygon16(EmfDeviceContext &context,
+void EmfPainterBackend::polyPolygon16(EmfDeviceContext &context,
                                           const QRect &bounds, const QList< QVector< QPoint > > &points )
 {
     Q_UNUSED( bounds );
@@ -1157,7 +1157,7 @@ void OutputPainterStrategy::polyPolygon16(EmfDeviceContext &context,
     }
 }
 
-void OutputPainterStrategy::polyPolyLine16(EmfDeviceContext &context,
+void EmfPainterBackend::polyPolyLine16(EmfDeviceContext &context,
                                            const QRect &bounds, const QList< QVector< QPoint > > &points )
 {
     Q_UNUSED( bounds );
@@ -1171,7 +1171,7 @@ void OutputPainterStrategy::polyPolyLine16(EmfDeviceContext &context,
     }
 }
 
-void OutputPainterStrategy::polyLineTo16(EmfDeviceContext &context,
+void EmfPainterBackend::polyLineTo16(EmfDeviceContext &context,
                                          const QRect &bounds, const QList<QPoint> points )
 {
     Q_UNUSED( bounds );
@@ -1185,7 +1185,7 @@ void OutputPainterStrategy::polyLineTo16(EmfDeviceContext &context,
     }
 }
 
-void OutputPainterStrategy::polyBezier16(EmfDeviceContext &context,
+void EmfPainterBackend::polyBezier16(EmfDeviceContext &context,
                                          const QRect &bounds, const QList<QPoint> points )
 {
 #if DEBUG_EMFPAINT
@@ -1201,7 +1201,7 @@ void OutputPainterStrategy::polyBezier16(EmfDeviceContext &context,
     m_painter->drawPath( path );
 }
 
-void OutputPainterStrategy::polyBezierTo16(EmfDeviceContext &context,
+void EmfPainterBackend::polyBezierTo16(EmfDeviceContext &context,
                                            const QRect &bounds, const QList<QPoint> points )
 {
 #if DEBUG_EMFPAINT
@@ -1214,7 +1214,7 @@ void OutputPainterStrategy::polyBezierTo16(EmfDeviceContext &context,
     }
 }
 
-void OutputPainterStrategy::fillPath(EmfDeviceContext &context, const QRect &bounds )
+void EmfPainterBackend::fillPath(EmfDeviceContext &context, const QRect &bounds )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
@@ -1224,7 +1224,7 @@ void OutputPainterStrategy::fillPath(EmfDeviceContext &context, const QRect &bou
     m_painter->fillPath( *m_path, m_painter->brush() );
 }
 
-void OutputPainterStrategy::strokeAndFillPath(EmfDeviceContext &context, const QRect &bounds )
+void EmfPainterBackend::strokeAndFillPath(EmfDeviceContext &context, const QRect &bounds )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
@@ -1234,7 +1234,7 @@ void OutputPainterStrategy::strokeAndFillPath(EmfDeviceContext &context, const Q
     m_painter->drawPath( *m_path );
 }
 
-void OutputPainterStrategy::strokePath(EmfDeviceContext &context, const QRect &bounds )
+void EmfPainterBackend::strokePath(EmfDeviceContext &context, const QRect &bounds )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
@@ -1244,7 +1244,7 @@ void OutputPainterStrategy::strokePath(EmfDeviceContext &context, const QRect &b
     m_painter->strokePath( *m_path, m_painter->pen() );
 }
 
-void OutputPainterStrategy::setClipPath(EmfDeviceContext &context, const quint32 regionMode )
+void EmfPainterBackend::setClipPath(EmfDeviceContext &context, const quint32 regionMode )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << hex << regionMode << dec;
@@ -1266,7 +1266,7 @@ void OutputPainterStrategy::setClipPath(EmfDeviceContext &context, const quint32
     }
 }
 
-void OutputPainterStrategy::bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord )
+void EmfPainterBackend::bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bitBltRecord.xDest() << bitBltRecord.yDest()
@@ -1292,7 +1292,7 @@ void OutputPainterStrategy::bitBlt(EmfDeviceContext &context, BitBltRecord &bitB
     }
 }
 
-void OutputPainterStrategy::setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode )
+void EmfPainterBackend::setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << hex << stretchMode << dec;
@@ -1316,7 +1316,7 @@ void OutputPainterStrategy::setStretchBltMode(EmfDeviceContext &context, const q
     }
 }
 
-void OutputPainterStrategy::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &record )
+void EmfPainterBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &record )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << "Bounds:    " << record.bounds();
@@ -1393,7 +1393,7 @@ void OutputPainterStrategy::stretchDiBits(EmfDeviceContext &context, StretchDiBi
 //                         Private functions
 
 
-void OutputPainterStrategy::printPainterTransform(const char *leadText)
+void EmfPainterBackend::printPainterTransform(const char *leadText)
 {
     QTransform  transform;
 
@@ -1404,7 +1404,7 @@ void OutputPainterStrategy::printPainterTransform(const char *leadText)
 }
 
 
-qreal OutputPainterStrategy::angleFromArc( const QPoint &centrePoint, const QPoint &radialPoint )
+qreal EmfPainterBackend::angleFromArc( const QPoint &centrePoint, const QPoint &radialPoint )
 {
     double dX = radialPoint.x() - centrePoint.x();
     double dY = centrePoint.y() - radialPoint.y();
@@ -1412,7 +1412,7 @@ qreal OutputPainterStrategy::angleFromArc( const QPoint &centrePoint, const QPoi
     return ( atan2( dY, dX ) * 180 / M_PI );
 }
 
-qreal OutputPainterStrategy::angularSpan( const qreal startAngle, const qreal endAngle )
+qreal EmfPainterBackend::angularSpan( const qreal startAngle, const qreal endAngle )
 {
     qreal spanAngle = endAngle - startAngle;
 
@@ -1423,7 +1423,7 @@ qreal OutputPainterStrategy::angularSpan( const qreal startAngle, const qreal en
     return spanAngle;
 }
 
-int OutputPainterStrategy::convertFontWeight( quint32 emfWeight )
+int EmfPainterBackend::convertFontWeight( quint32 emfWeight )
 {
     // FIXME: See how it's done in the wmf library and check if this is suitable here.
 

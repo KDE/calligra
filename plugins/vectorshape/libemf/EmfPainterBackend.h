@@ -16,8 +16,8 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EMFOUTPUTPAINTERSTRATEGY_H
-#define EMFOUTPUTPAINTERSTRATEGY_H
+#ifndef EMFPAINTERBACKEND_H
+#define EMFPAINTERBACKEND_H
 
 #include "emf_export.h"
 
@@ -37,7 +37,7 @@
 /**
    \file
 
-   Primary definitions for EMF output strategies
+   Primary definitions for EMF backend
 */
 
 /**
@@ -49,11 +49,11 @@ namespace Libemf
 class EmrTextObject;
 
 /**
-    QPainter based output strategy for EMF Parser.
+    QPainter based backend for EMF Parser.
 
     This class allows rendering of an EMF file to a QPixmap or any other QPaintDevice.
 */
-class EMF_EXPORT OutputPainterStrategy : public EmfAbstractBackend
+class EMF_EXPORT EmfPainterBackend : public EmfAbstractBackend
 {
 public:
     /**
@@ -62,10 +62,9 @@ public:
        This will probably need to take an enum to say what sort of output
        we want.
     */
-    OutputPainterStrategy();
-    OutputPainterStrategy( QPainter &painter, QSize &size, 
-                           bool keepAspectRatio = false );
-    ~OutputPainterStrategy();
+    EmfPainterBackend();
+    EmfPainterBackend(QPainter &painter, QSize &size, bool keepAspectRatio = false);
+    ~EmfPainterBackend();
 
     void init( const Header *header );
     void cleanup( const Header *header );
