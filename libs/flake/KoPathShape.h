@@ -491,7 +491,19 @@ protected:
      * 
      * @return the angle
      */
-    int computeAngle(KoPathPoint* point) const;
+    int computeAngle(KoPathPoint* point, MarkerPosition position) const;
+
+    /**
+     * @brief Return the marker transformed and moved to the given point.
+     *
+     * Return the marker transformed and moved to the given point. It's the compositon of a move and rotate.
+     *
+     * @param path the QPainterPath of the marker we to transform
+     * @param point where the marker should go
+     *
+     * @return the QPainterPath of the marker ready to be added to the point
+     */
+    QPainterPath transformedMarker(QPainterPath path, KoPathPoint* point, MarkerPosition position) const;
     
     KoSubpathList m_subpaths;
 
