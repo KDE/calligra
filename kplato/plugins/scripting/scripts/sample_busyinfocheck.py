@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import os, datetime, sys, traceback, csv, pickle
-import Kross, KPlato
+import Kross, Plan
 
 
 class BusyinfoCheck:
 
     def __init__(self, scriptaction):
-        proj = KPlato.project()
+        proj = Plan.project()
         self.check( proj)
         
     def check(self, project ):
@@ -20,7 +20,7 @@ class BusyinfoCheck:
                 lst = r.externalAppointments()
                 for iv in lst:
                     iv.insert( 0, r.id() )
-                    iv.insert( 1, KPlato.data( r, 'ResourceName' ) )
+                    iv.insert( 1, project.data( r, 'ResourceName' ) )
                 print lst
 
 BusyinfoCheck( self )

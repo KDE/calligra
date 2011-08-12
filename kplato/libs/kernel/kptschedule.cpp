@@ -1172,6 +1172,7 @@ void ResourceSchedule::logDebug( const QString &msg, int phase )
 //--------------------------------------
 MainSchedule::MainSchedule()
     : NodeSchedule(),
+
     m_manager( 0 )
 {
     //kDebug()<<"("<<this<<")";
@@ -1180,9 +1181,9 @@ MainSchedule::MainSchedule()
 
 MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type, long id )
     : NodeSchedule( node, name, type, id ),
-    m_manager( 0 ),
-    criticalPathListCached( false ),
-    m_currentCriticalPath( 0 )
+      criticalPathListCached( false ),
+      m_manager( 0 ),
+      m_currentCriticalPath( 0 )
 {
     //kDebug()<<"node name:"<<node->name();
     init();
@@ -1908,6 +1909,7 @@ void ScheduleManager::slotAddLog( const QList<KPlato::Schedule::Log> &log )
     if ( expected() && ! log.isEmpty() ) {
         int first = expected()->logs().count();
         int last = first + log.count() - 1;
+        Q_UNUSED(last);
         foreach ( KPlato::Schedule::Log l, log ) {
             expected()->addLog( l );
         }

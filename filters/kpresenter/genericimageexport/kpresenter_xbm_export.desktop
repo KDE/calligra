@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KPresenter XBM Export Filter
-Name[bg]=Филтър за експортиране от KPresenter в XBM
+Name[bg]=Филтър за изнасяне от KPresenter в XBM
 Name[br]=Sil ezporzh XBM evit KPresenter
 Name[ca]=Filtre d'exportació XBM per al KPresenter
 Name[ca@valencia]=Filtre d'exportació XBM per al KPresenter
@@ -34,7 +34,7 @@ Name[nb]=XBM-eksportfilter for KPresenter
 Name[nds]=XBM-Exportfilter för KPresenter
 Name[ne]=केडीई प्रस्तुतकर्ता एक्सबीएम निर्यात फिल्टर
 Name[nl]=XBM-exportfilter voor KPresenter
-Name[pl]=Filtr eksportu do formatu XBM dla KPresenter
+Name[pl]=Filtr eksportu XBM dla KPresenter
 Name[pt]=Filtro de Exportação de XBM para o KPresenter
 Name[pt_BR]=Filtro de exportação de XBM para o KPresenter
 Name[ru]=Фильтр экспорта презентаций KPresenter в XBM

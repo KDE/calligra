@@ -136,7 +136,7 @@ protected:
 
     virtual QVariant visibleValueForLookupField();
 
-    void updateTextForHighlightedRow();
+    void updateTextForHighlightedRecord();
 
     bool handleKeyPressForPopup(QKeyEvent *ke);
 

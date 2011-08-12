@@ -32,17 +32,17 @@ Scripting::Schedule::Schedule( Scripting::Project *project, KPlato::ScheduleMana
 
 qlonglong Scripting::Schedule::id() const
 {
-    return (qlonglong)m_schedule->scheduleId();
+    return (qlonglong)m_schedule ? m_schedule->scheduleId() : -1;
 }
 
 QString Scripting::Schedule::name() const
 {
-    return m_schedule->name();
+    return m_schedule ? m_schedule->name() : "";
 }
 
 bool Scripting::Schedule::isScheduled() const
 {
-    return m_schedule->isScheduled();
+    return m_schedule ? m_schedule->isScheduled() : false;
 }
 
 QDate Scripting::Schedule::startDate()
@@ -57,12 +57,15 @@ QDate Scripting::Schedule::endDate()
 
 int Scripting::Schedule::childCount() const
 {
-    return m_schedule->childCount();
+    return m_schedule ? m_schedule->childCount() : 0;
 }
 
 QObject *Scripting::Schedule::childAt( int index )
 {
-    return m_project->schedule( m_schedule->childAt( index ) );
+    if ( m_schedule && m_project ) {
+        return m_project->schedule( m_schedule->childAt( index ) );
+    }
+    return 0;
 }
 
 #include "Schedule.moc"

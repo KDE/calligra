@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KPresenter SVG Export Filter
-Name[bg]=Филтър за експортиране от KPresenter в SVG
+Name[bg]=Филтър за изнасяне от KPresenter в SVG
 Name[br]=Sil ezporzh SVG evit KPresenter
 Name[ca]=Filtre d'exportació SVG per al KPresenter
 Name[ca@valencia]=Filtre d'exportació SVG per al KPresenter
@@ -35,7 +35,7 @@ Name[nb]=SVG-eksportfilter for KPresenter
 Name[nds]=SVG-Exportfilter för KPresenter
 Name[ne]=केडीई प्रस्तुतकर्ता एसभीजी निर्यात फिल्टर
 Name[nl]=SVG-exportfilter voor KPresenter
-Name[pl]=Filtr eksportu do formatu SVG dla KPresenter
+Name[pl]=Filtr eksportu SVG dla KPresenter
 Name[pt]=Filtro de Exportação de SVG para o KPresenter
 Name[pt_BR]=Filtro de exportação de SVG para o KPresenter
 Name[ru]=Фильтр экспорта презентаций KPresenter в SVG

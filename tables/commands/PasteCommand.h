@@ -54,6 +54,7 @@ public:
         ShiftCellsDown   ///< Shift cells to the bottom.
     };
 
+    const QMimeData* mimeData() const;
     bool setMimeData(const QMimeData *mimeData);
     void setInsertionMode(InsertionMode mode);
     void setMode(Paste::Mode mode);

@@ -220,7 +220,8 @@ void KPrViewModePresentation::deactivate()
     KoPAPageBase * page = m_view->activePage();
     if ( m_endOfSlideShowPage ) {
         if ( page == m_endOfSlideShowPage ) {
-            page = m_view->kopaDocument()->pages().last();
+            KPrDocument *document = static_cast<KPrDocument *>( m_view->kopaDocument() );
+            page = document->slideShow().last();
         }
     }
     m_tool->deactivate();

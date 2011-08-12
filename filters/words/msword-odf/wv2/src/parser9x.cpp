@@ -732,6 +732,10 @@ void Parser9x::processParagraph( U32 fc )
         // belongs to a list.
         props->createListInfo( *m_lists );
 
+#ifdef WV2_DEBUG_LIST_PROCESSING
+        props->pap().dump();
+#endif
+
         // Get the appropriate style for this paragraph.
         const Style* style = m_properties->styleByIndex( props->pap().istd );
         if ( !style ) {

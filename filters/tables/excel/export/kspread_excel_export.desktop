@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KSpread Microsoft Excel Export Filter
+Name[bg]=Филтър за изнасяне от KSpread в Microsoft Excel
 Name[ca]=Filtre d'importació Microsoft Excel per al KSpread
 Name[ca@valencia]=Filtre d'importació Microsoft Excel per al KSpread
 Name[cs]=Exportní filtr Microsoft Excel pro KSpread
@@ -17,6 +18,7 @@ Name[kk]=KSpread -> Microsoft Excel экспорт сүзгісі
 Name[nb]=Microsoft Excel-eksportfilter for KSpread
 Name[nds]=Microsoft Excel-Exportfilter för KSpread
 Name[nl]=Microsoft Excell-exportfilter voor KSpread
+Name[pl]=Filtr importu Microsoft Excel do KSpread
 Name[pt]=Filtro de Exportação de Microsoft Excel para o KSpread
 Name[pt_BR]=Filtro de exportação de Microsoft Excel para o KSpread
 Name[ru]=Фильтр экспорта таблиц Microsoft Excel в KSpread

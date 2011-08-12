@@ -22,9 +22,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <kspread/part/Doc.h>
-#include <kspread/Map.h>
-#include <kspread/Sheet.h>
+#include <tables/part/Doc.h>
+#include <tables/Map.h>
+#include <tables/Sheet.h>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
@@ -80,9 +80,9 @@ public:
 
   private:
     QString m_FileName;
-    KSpread::Sheet *m_CurSheet;
+    Calligra::Tables::Sheet *m_CurSheet;
     
-    KSpread::Doc *m_KSDoc;
+    Calligra::Tables::Doc *m_KSDoc;
 
     QStringList m_FieldNames;
 
