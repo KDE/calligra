@@ -31,7 +31,7 @@
 #include "EmfEnums.h"
 #include "EmfHeader.h"
 #include "EmfRecords.h"
-#include "EmfOutput.h"
+#include "EmfAbstractBackend.h"
 
 /**
    \file
@@ -49,7 +49,7 @@ namespace Libemf
 /**
     Debug (text dump) output strategy for EMF Parser
 */
-class EMF_EXPORT OutputDebugStrategy : public AbstractOutput
+class EMF_EXPORT OutputDebugStrategy : public EmfAbstractBackend
 {
 public:
     OutputDebugStrategy();

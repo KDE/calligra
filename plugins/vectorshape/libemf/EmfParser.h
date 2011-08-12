@@ -1,6 +1,6 @@
 /*
   Copyright 2008 Brad Hards  <bradh@frogmouth.net>
-  Copyright 2009 Inge Wallin <inge@lysator.liu.se>
+  Copyright 2009, 2011 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@
 
 #include "emf_export.h"
 
-#include "EmfOutput.h"
+#include "EmfAbstractBackend.h"
 
 #include <QString>
 #include <QRect> // also provides QSize
@@ -79,7 +79,7 @@ public:
 
        \param output pointer to a strategy implementation
     */
-    void setOutput( AbstractOutput *output );
+    void setOutput( EmfAbstractBackend *output );
 
 private:
     // read a single EMF record
@@ -92,7 +92,7 @@ private:
     void outputBytes( QDataStream &stream, int numBytes );
 
     // Pointer to the output strategy
-    AbstractOutput *mOutput;
+    EmfAbstractBackend *mOutput;
 };
 
 }

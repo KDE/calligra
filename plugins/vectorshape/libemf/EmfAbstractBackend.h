@@ -16,8 +16,8 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EMFOUTPUT_H
-#define EMFOUTPUT_H
+#ifndef EMFABSTRACTBACKEND_H
+#define EMFABSTRACTBACKEND_H
 
 #include "emf_export.h"
 
@@ -35,7 +35,7 @@
 /**
    \file
 
-   Primary definitions for EMF output strategies
+   Primary definitions for EMF backends
 */
 
 /**
@@ -47,13 +47,13 @@ namespace Libemf
 class EmfDeviceContext;
 
 /**
-    Abstract output strategy for EMF Parser
+    Abstract backend for EMF Parser
 */
-class EMF_EXPORT AbstractOutput
+class EMF_EXPORT EmfAbstractBackend
 {
 public:
-    AbstractOutput() {};
-    virtual ~AbstractOutput() {};
+    EmfAbstractBackend() {};
+    virtual ~EmfAbstractBackend() {};
 
     /**
        Initialisation routine

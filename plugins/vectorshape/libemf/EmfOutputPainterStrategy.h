@@ -31,7 +31,7 @@
 #include "EmfEnums.h"
 #include "EmfHeader.h"
 #include "EmfRecords.h"
-#include "EmfOutput.h"
+#include "EmfAbstractBackend.h"
 
 
 /**
@@ -53,7 +53,7 @@ class EmrTextObject;
 
     This class allows rendering of an EMF file to a QPixmap or any other QPaintDevice.
 */
-class EMF_EXPORT OutputPainterStrategy : public AbstractOutput
+class EMF_EXPORT OutputPainterStrategy : public EmfAbstractBackend
 {
 public:
     /**

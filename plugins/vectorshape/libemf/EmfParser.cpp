@@ -135,7 +135,7 @@ bool Parser::loadFromStream( QDataStream &stream )
     return true;
 }
 
-void Parser::setOutput( AbstractOutput *output )
+void Parser::setOutput( EmfAbstractBackend *output )
 {
     mOutput = output;
 }
