@@ -95,12 +95,12 @@ private:
     QVector< const quint16* > knownFg;
 
     /**
-      Holds background signature (a characteristic subset of the bg.)
+      Holds background signature (a characteristic subset of the background).
      */
     ColorSignature< const quint16* >::Type bgSignature;
 
     /**
-      Holds foreground signature (a characteristic subset of the fg).
+      Holds foreground signature (a characteristic subset of the foreground).
      */
     ColorSignature< const quint16* >::Type fgSignature;
 
@@ -119,11 +119,6 @@ private:
      */
     NearestPixelsMap nearestPixels;
 
-    /**
-      A flag that stores if the segmentation algorithm has already ran.
-     */
-    bool segmentated;
-
 public:
     /**
       Constructs a SioxSegmentator Object to be used for image segmentation.
@@ -134,6 +129,8 @@ public:
         float plimitB = B_DEFAULT_CLUSTER_SIZE);
 
     ~KisSioxSegmentator() {}
+
+    bool segmentate(float cm[], int smoothness, double sizeFactorToKeep);
 
 private:
 

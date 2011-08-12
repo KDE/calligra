@@ -1,14 +1,17 @@
 #include <kis_iterator_ng.h>
 #include <kis_paint_device.h>
 #include <kis_types.h>
+#include "kisColorSignature.h"
 #include "kisSioxSegmentator.h"
 
 namespace {
+
 
 /**
   Returns the squared euclidian distance between two Lab color pixels.
  */
 inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/);
+
 
 }
 
@@ -21,8 +24,7 @@ KisSioxSegmentator::KisSioxSegmentator(const KisPaintDeviceSP& pimage, float pli
     knownFg(pimage->exactBounds().width() * pimage->exactBounds().height()),
     limitL(plimitL),
     limitA(plimitA),
-    limitB(plimitB),
-    segmentated(false)
+    limitB(plimitB)
 {
     const KoColorSpace* labCS = KoColorSpaceRegistry::instance()->lab16();
     KUndo2Command* cmd = labImage->convertTo(labCS);
@@ -111,7 +113,46 @@ void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
     } while (labImageIterator->nextPixel());
 }
 
+bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int smoothness, double sizeFactorToKeep) {
+    nearestPixels.clear();
+
+    // Create color signatures
+    quint64 knownBgCount = 0;
+    quint64 knownFgCount = 0;
+
+    // Accumulate knownBg, and knownFg from labImage based
+
+    // TODO - make ColorSignature receive the information in the ctor.
+    // - change class name to, possibly, KisColorSigner.
+    // - receive signatures as parameter to fill up (optimization)
+//    ColorSignature< const quint16* > bgColorSign;
+//    ColorSignature< const quint16* > fgColorSign;
+//    bgSignature = bgColorSign.createSignature(knownBg, knownBgCount, limitL,
+//        limitA, limitB, BACKGROUND_CONFIDENCE);
+//    fgSignature = fgColorSign.createSignature(knownFg, knownFgCount, limitL,
+//        limitA, limitB, BACKGROUND_CONFIDENCE);
+
+    // It is not possible to segmentate de image in this case.
+//    if (bgSignature.size() < 1) {
+//        return false;
+//    }
+
+    // classify using color signatures,
+    // classification cached in hashmap for drb and speedup purposes
+    // postprocessing
+    // - Smooth confidence matrix (at least one time).
+    // - Normalize matrix (at least one time).
+    // - Erode.
+    // - Remove small components.
+    // - Fill color regions.
+    // - Dilate.
+
+    return true;
+}
+
+
 namespace {
+
 
 inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/) {
     float euclid = 0;
@@ -123,5 +164,6 @@ inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/) {
 
     return euclid;
 }
+
 
 }
