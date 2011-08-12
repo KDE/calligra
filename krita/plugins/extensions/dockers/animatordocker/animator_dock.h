@@ -55,6 +55,10 @@ public slots:
     void slotSetFrame();
     void slotSetFNumber();
     
+    void framesLeft();
+    void framesRight();
+    void framesMove(int move);
+    
     void enableOnionNext(bool ch);
     void enableOnionPrevious(bool ch);
     
@@ -97,6 +101,7 @@ private:
     QToolBar* m_onion_toolbar;
     
     QToolBar* m_player_toolbar;
+    QToolBar* m_frames_toolbar;
 };
 
 
