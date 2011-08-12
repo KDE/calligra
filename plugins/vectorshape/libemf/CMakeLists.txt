@@ -8,6 +8,7 @@ add_subdirectory(demo)
 ########### library target ###############
 
 set(libemf_LIB_SRCS 
+     EmfDeviceContext.cpp
      EmfRecords.cpp
      EmfObjects.cpp
      EmfHeader.cpp
@@ -32,6 +33,7 @@ set(libemf_LIB_SRCS
 #install(
 #    FILES
 #    EmfEnums.h
+#    EmfDeviceContext.h
 #    EmfRecords.h
 #    EmfObjects.h
 #    EmfHeader.h

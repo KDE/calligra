@@ -20,6 +20,7 @@ SET ( VectorShape_SRCS
     VectorToolFactory.cpp
     ChangeVectorDataCommand.cpp
 
+    libemf/EmfDeviceContext.cpp
     libemf/EmfRecords.cpp
     libemf/EmfObjects.cpp
     libemf/EmfHeader.cpp
