@@ -68,7 +68,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     setButtonText(KDialog::User3, i18n("&New..."));
     setCaption(i18n("Named Areas"));
     setModal(true);
-    setObjectName("NamedAreaDialog");
+    setObjectName(QLatin1String("NamedAreaDialog"));
 
     QWidget* widget = new QWidget(this);
     setMainWidget(widget);
@@ -219,7 +219,7 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
 {
     setButtons(Ok | Cancel);
     setModal(true);
-    setObjectName("EditNamedAreaDialog");
+    setObjectName(QLatin1String("EditNamedAreaDialog"));
     enableButtonOk(false);
 
     QWidget *page = new QWidget();

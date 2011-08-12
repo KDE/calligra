@@ -18,3 +18,56 @@ While the both commands above are running you can execute following command in a
   tail -f ~/processing.txt 2>/dev/null
 
 Once the verification is done in the ~/failed.txt file you will have a list of documents that changed between the both cstester runs.
+
+
+
+
+
+
+
+Use the scripts provided with cstester
+--------------------------------------
+
+To use the scripts it is of advantage to create a directory structure like the following:
+tester/
+  checkdocs.sh
+  verifydocs.sh
+  documents/
+    document1.odt
+    ...
+    document10000.xsl
+  results/
+    sha-of-commit1
+    sha-of-commit2
+
+This explanation of the tools expects the directories to be there.
+
+How to create the basis for the tests and see if regressions in painting/loading (crashes)
+> cd tester/documents
+> mkdir ../result/sha-of-commit1
+> ../checkdocs.sh ../result/sha-of-commit1
+
+Look at the result
+> cat tester/error-sha-of-commit1.log
+
+All files in there had a problems. Either they crashed or got killed by the script as they used to much CPU or RAM
+
+To check for changes between different versions do
+
+> cd tester/documents
+> mkdir ../result/sha-of-commit2
+> ./verifydocs.sh ../result/sha-of-commit1 ../result/sha-of-commit2
+
+Look at the result
+
+> cat tester/verify-sha-of-commit1-sha-of-commit2.log 
+
+The file contains documents and the pages which have changed between the 2 directories
+This can be used as a input file to visualimagecompare
+
+The format is 
+filename page_number page_number
+
+It contains a line with the filename and the pages that have changed between the 2 tested versions.
+
+
