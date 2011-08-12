@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -513,6 +513,9 @@ public:
     virtual void connectRowEditTerminatedSignal(const QObject* receiver,
             const char* voidMember) = 0;
 
+    virtual void connectUpdateSaveCancelActionsSignal(const QObject* receiver,
+            const char* voidMember) = 0;
+
     virtual void connectReloadActionsSignal(const QObject* receiver,
                                             const char* voidMember) = 0;
 
@@ -663,6 +666,12 @@ protected:
     /*! for implementation as a signal */
     virtual void rowEditTerminated(int row) = 0;
 
+    /*! for implementation as a signal */
+    virtual void updateSaveCancelActions() = 0;
+    
+    /*! Prototype for signal rowEditStarted(int), implemented by KexiFormScrollView. */
+    virtual void rowEditStarted(int row) = 0;
+
     /*! Clear temporary members like the pointer to current editor.
      If you reimplement this method, don't forget to call this one. */
     virtual void clearVariables();
@@ -749,6 +758,13 @@ protected:
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
+    /*! Changes 'row editing' flag, true if currently selected row is edited.
+     * Can be reimplemented with calling superclass setRowEditing()
+     * Sends rowEditStarted(int) signal.
+     * @see rowEditing() rowEditStarted().
+     */
+    void setRowEditing(bool set);
+
     /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 //replaced by QToolTip    virtual void vScrollBarSliderReleased();
 
@@ -774,8 +790,11 @@ protected:
     //! data structure displayed for this object
     KexiTableViewData *m_data;
 
-    //! cursor position
-    int m_curRow, m_curCol;
+    //! current row (cursor)
+    int m_curRow;
+
+    //! current column (cursor)
+    int m_curCol;
 
     //! current record's data
     KexiDB::RecordData *m_currentItem;
@@ -791,9 +810,6 @@ protected:
 
     //! true if m_data member is owned by this object
     bool m_owner;
-
-    /*! true if currently selected row is edited */
-    bool m_rowEditing;
 
     /*! true if new row is edited; implies: rowEditing==true. */
     bool m_newRowEditing;
@@ -944,6 +960,9 @@ protected:
 
     //! Setup by updateIndicesForVisibleValues() and used by find()
     QVector<uint> m_indicesForVisibleValues;
+private:
+    /*! true if currently selected row is edited */
+    bool m_rowEditing;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const
@@ -978,6 +997,10 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
     } \
     void connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember) { \
         connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
+    } \
+    void connectUpdateSaveCancelActionsSignal(const QObject* receiver, \
+                                              const char* voidMember) { \
+        connect(this, SIGNAL(updateSaveCancelActions()), receiver, voidMember); \
     } \
     void connectReloadActionsSignal(const QObject* receiver, const char* voidMember) { \
         connect(this, SIGNAL(reloadActions()), receiver, voidMember); \

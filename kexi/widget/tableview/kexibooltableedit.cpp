@@ -117,6 +117,7 @@ void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
 
 void KexiBoolTableEdit::clickedOnContents()
 {
+    const QVariant oldValue = m_currentValue;
     if (field()->isNotNull())
         m_currentValue = QVariant(!m_currentValue.toBool());
     else {
@@ -125,6 +126,10 @@ void KexiBoolTableEdit::clickedOnContents()
             m_currentValue = QVariant(true);
         else
             m_currentValue = m_currentValue.toBool() ? QVariant(false) : QVariant();
+    }
+    kDebug() << m_origValue << m_currentValue;
+    if (oldValue != m_currentValue) {
+        signalValueChanged();
     }
 }
 

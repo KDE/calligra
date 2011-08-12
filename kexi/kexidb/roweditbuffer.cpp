@@ -92,6 +92,33 @@ const QVariant* RowEditBuffer::at(const QString& fname) const
     return &(*m_simpleBufferIt).value();
 }
 
+void RowEditBuffer::removeAt(QueryColumnInfo& ci)
+{
+    if (!m_dbBuffer) {
+        KexiDBWarn << "not db-aware buffer!";
+        return;
+    }
+    m_dbBuffer->remove(&ci);
+}
+
+void RowEditBuffer::removeAt(Field& f)
+{
+    if (!m_simpleBuffer) {
+        KexiDBWarn << "this is db-aware buffer!";
+        return;
+    }
+    m_simpleBuffer->remove(f.name());
+}
+
+void RowEditBuffer::removeAt(const QString& fname)
+{
+    if (!m_simpleBuffer) {
+        KexiDBWarn << "this is db-aware buffer!";
+        return;
+    }
+    m_simpleBuffer->remove(fname);
+}
+
 void RowEditBuffer::clear()
 {
     if (m_dbBuffer) {
