@@ -319,7 +319,6 @@ void KoDocumentSectionView::dropEvent(QDropEvent *ev)
         }
 
         int newIndex = cursorPageIndex();
-        qDebug("-new index: %d", newIndex);
         model()->dropMimeData(ev->mimeData(), ev->dropAction(), newIndex, -1, QModelIndex());
         return;
     }
