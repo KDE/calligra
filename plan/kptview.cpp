@@ -622,7 +622,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
 
 void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
 {
-    if ( url.url().startsWith( QLatin1String( "about:kplato" ) ) ) {
+    if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
         getPart()->aboutPage().generatePage( v->htmlPart(), url );
         return;
     }
@@ -642,7 +642,7 @@ ViewBase *View::createWelcomeView()
     v->htmlPart().setMetaRefreshEnabled(false);
     v->htmlPart().setPluginsEnabled(false);
 
-    slotOpenUrlRequest( v, KUrl( "about:kplato/main" ) );
+    slotOpenUrlRequest( v, KUrl( "about:plan/main" ) );
 
     connect( v, SIGNAL( openUrlRequest( HtmlView*, const KUrl& ) ), SLOT( slotOpenUrlRequest( HtmlView*, const KUrl& ) ) );
 

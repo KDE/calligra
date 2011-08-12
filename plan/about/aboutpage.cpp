@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Dag Andersen <kplato@kde.org>
+   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -45,7 +45,7 @@ KPlatoAboutPage::~KPlatoAboutPage()
 QString KPlatoAboutPage::main()
 {
     KIconLoader *iconloader = KIconLoader::global();
-    QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/main.html" ));
+    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/main.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -80,7 +80,7 @@ QString KPlatoAboutPage::main()
 QString KPlatoAboutPage::intro()
 {
     KIconLoader *iconloader = KIconLoader::global();
-    QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/intro.html" ));
+    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/intro.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -95,8 +95,8 @@ QString KPlatoAboutPage::intro()
     res = res.arg( i18n("Plan is a Project Planning and Management application.") )
     .arg( i18n( 
         "Plan is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, Plan offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
-        "<p>You can find more information in the <a href=\"help:kplato\">documentation</a> "
-        "or online at <a href=\"http://www.calligra-suite.org/kplato\">http://www.calligra-suite.org/kplato</a></p>"
+        "<p>You can find more information in the <a href=\"help:plan\">documentation</a> "
+        "or online at <a href=\"http://www.calligra-suite.org/plan\">http://www.calligra-suite.org/plan</a></p>"
         ) )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
     .arg( i18n( "Next: Tips" ) )
@@ -108,7 +108,7 @@ QString KPlatoAboutPage::intro()
 QString KPlatoAboutPage::tips()
 {
     
-    QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/tips.html" ));
+    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/tips.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -152,7 +152,7 @@ QString KPlatoAboutPage::tips()
 
 QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, const QString &nextpage, const QString &nexttext )
 {
-    QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/tutorial.html" ));
+    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/tutorial.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -168,7 +168,7 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
 
     res = res.arg( header )
     .arg( text )
-    .arg( "about:kplato/" + nextpage )
+    .arg( "about:plan/" + nextpage )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( next_icon_path )
     .arg( nexttext )
     ;
@@ -228,15 +228,15 @@ QString KPlatoAboutPage::tutorial2()
 void KPlatoAboutPage::generatePage( KHTMLPart &part, const KUrl &url)
 {
     QString html;
-    if (url.url() == "about:kplato/main")
+    if (url.url() == "about:plan/main")
         html = main();
-    else if (url.url() == "about:kplato/intro")
+    else if (url.url() == "about:plan/intro")
         html = intro();
-    else if (url.url() == "about:kplato/tips")
+    else if (url.url() == "about:plan/tips")
         html = tips();
-    else if (url.url() == "about:kplato/tutorial")
+    else if (url.url() == "about:plan/tutorial")
         html = tutorial1();
-    else if (url.url() == "about:kplato/tutorial2")
+    else if (url.url() == "about:plan/tutorial2")
         html = tutorial2();
     else
         html = main();
