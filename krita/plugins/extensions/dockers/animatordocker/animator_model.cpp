@@ -925,28 +925,48 @@ void AnimatorModel::framesInsert(int n, unsigned int dst)
     loadLayers();
 }
 
+void AnimatorModel::frameMoveTo(QModelIndex& index, QModelIndex& moveto)
+{
+    frameMoveTo(index.row(), index.column(), moveto.row(), moveto.column());
+}
+
+void AnimatorModel::frameMoveTo(int l, int f, int tl, int tf)
+{
+    if (l == tl)
+    {
+        if (isKey(l, f))
+            getAnimatedLayer(l)->getKeyFrame(f)->setName(getAnimatedLayer(l)->getNameForFrame(tf, true));
+        if (isKey(tl, tf))
+            getAnimatedLayer(l)->getKeyFrame(tf)->setName(getAnimatedLayer(l)->getNameForFrame(f, true));
+    }
+    else
+    {
+        // Moving between layers is not implemented yet
+    }
+}
+
 void AnimatorModel::framesMove(unsigned int src, int n, unsigned int dst)
 {
-    if (n < 0)
+    // generate list
+//     framesMove(list, dst-src);
+}
+
+void AnimatorModel::framesMove(QItemSelectionModel& frames, int move)
+{
+    if (frames.selection().empty())
     {
-        n = columnCount()-src;
+        return ;
     }
-    for (int l = 0; l < m_layers.size(); ++l)
+    
+    QModelIndex frame;
+    QModelIndexList fl = frames.selectedIndexes();
+    
+    foreach (frame, fl)
     {
-        for (int i = src, j = dst; i < src+n; ++i, ++j)
-        {
-//             printf("Hello l = %d, i = %d, j = %d\n", l, i, j);
-            if (j < m_layers[l]->childCount() && m_layers[l]->at(j))
-            {
-//                 printf("way1\n");
-                m_layers[l]->at(j)->setName("_frame_" + QString::number(i));
-            }
-            if (i < m_layers[l]->childCount() && m_layers[l]->at(i))
-            {
-//                 printf("way2\n");
-                m_layers[l]->at(i)->setName("_frame_" + QString::number(j));
-            }
-        }
+        QModelIndex mvto = createIndex(frame.row(), frame.column()+move);
+        // FIXME: be sure to not swap with already moving frame
+        if (!fl.contains(mvto))
+            frameMoveTo(frame, mvto);
     }
     
     loadLayers();
@@ -973,6 +993,7 @@ void AnimatorModel::framesClear(unsigned int src, int n)
 
 void AnimatorModel::frameLeft()
 {
+    // cant move left
     if (m_frame == 0)
         return;
     framesMove(m_frame, 1, m_frame-1);
@@ -984,7 +1005,6 @@ void AnimatorModel::frameRight()
     framesMove(m_frame, 1, m_frame+1);
     goFrame(m_frame+1);
 }
-
 
 
 

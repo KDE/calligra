@@ -101,10 +101,10 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     addAction( m_lays_toolbar->addAction(SmallIcon("go-up"), i18n("Move layer up"), m_model, SLOT(layerUp())) );
     
     // Frames toolbar
-    QToolBar* m_frames_toolbar = new QToolBar(this);
+    m_frames_toolbar = new QToolBar(this);
     
-    addAction( m_frames_toolbar->addAction(SmallIcon("go-previous"), i18n("Move frame left"), m_model, SLOT(frameLeft())) );
-    addAction( m_frames_toolbar->addAction(SmallIcon("go-next"), i18n("Move frame right"), m_model, SLOT(frameRight())) );
+    addAction( m_frames_toolbar->addAction(SmallIcon("go-previous"), i18n("Move frame left"), this, SLOT(framesLeft())) );
+    addAction( m_frames_toolbar->addAction(SmallIcon("go-next"), i18n("Move frame right"), this, SLOT(framesRight())) );
     
     // Onion toolbar
     m_onion_toolbar = new QToolBar(this);
@@ -257,6 +257,22 @@ void AnimatorDock::slotSetFrame()
     int value = m_frame_spinbox->value();
     std::cout << "slotSetFrame(" << value << ")" << std::endl;
     emit setFrame(value);
+}
+
+
+void AnimatorDock::framesLeft()
+{
+    framesMove(-1);
+}
+
+void AnimatorDock::framesRight()
+{
+    framesMove(1);
+}
+
+void AnimatorDock::framesMove(int move)
+{
+    m_model->framesMove(*m_view->selectionModel(), move);
 }
 
 
