@@ -89,7 +89,7 @@ kde4_add_ui_files(planprivate_LIB_SRCS
     kptinsertfilepanel.ui
 )
 
-kde4_add_kcfg_files(plansettings_SRCS kplatosettings.kcfgc)
+kde4_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
@@ -137,15 +137,15 @@ install( FILES  planpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  plan.rc plan_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/plan)
 install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
-install(FILES kplatosettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install(FILES plansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 install(FILES
-    about/top-left-kplato.png
+    about/top-left-plan.png
     about/main.html
     about/intro.html
     about/tips.html
     about/tutorial.html
-    about/kplato.css
+    about/plan.css
     DESTINATION ${DATA_INSTALL_DIR}/plan/about
 )
 

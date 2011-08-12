@@ -21,7 +21,7 @@
 
 #include "kptduration.h"
 #include "kptmycombobox_p.h"
-#include "kplatosettings.h"
+#include "plansettings.h"
 
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>

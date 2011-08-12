@@ -125,7 +125,7 @@
 #include "kptviewlist.h"
 #include "kptschedulesdocker.h"
 
-#include "kplatosettings.h"
+#include "plansettings.h"
 
 #include "KPtViewAdaptor.h"
 

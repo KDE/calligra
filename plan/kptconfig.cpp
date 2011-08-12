@@ -20,7 +20,7 @@
 
 #include "kptconfig.h"
 
-#include "kplatosettings.h"
+#include "plansettings.h"
 #include "kptconfigskeleton.h"
 #include "kptfactory.h"
 

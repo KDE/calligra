@@ -18,7 +18,7 @@
 */
 
 #include "kptcolorsconfigpanel.h"
-#include "kplatosettings.h"
+#include "plansettings.h"
 
 #include <kdebug.h>
 
