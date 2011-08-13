@@ -506,7 +506,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	{
 	    quint8 red, green, blue, reserved;
 	    stream >> red >> green >> blue >> reserved;
-	    mOutput->setTextColor(context, red, green, blue, reserved );
+            context.foregroundTextColor = QColor(red, green, blue);
+            context.changedItems |= DCFgTextColor;
 	}
 	break;
     case EMR_SETBKCOLOR:

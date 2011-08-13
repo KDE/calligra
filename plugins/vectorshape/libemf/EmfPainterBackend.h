@@ -105,8 +105,6 @@ public:
     void extCreateFontIndirectW(EmfDeviceContext &context,
                                 const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
     void setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode );
-    void setTextColor(EmfDeviceContext &context, const quint8 red, const quint8 green, const quint8 blue,
-		       const quint8 reserved );
     void setBkColor(EmfDeviceContext &context,
                     const quint8 red, const quint8 green, const quint8 blue,
                      const quint8 reserved );
@@ -229,11 +227,6 @@ private:
     //  - drawing mode
     //  - mapping mode
     // FIXME: what more?  textalign?  textpen?
-
-    /**
-       The current text pen
-    */
-    QPen m_textPen;
 
     /**
        The current fill rule

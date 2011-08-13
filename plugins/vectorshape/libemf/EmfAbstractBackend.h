@@ -312,18 +312,6 @@ public:
     virtual void setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode) = 0;
 
     /**
-      Handler for the EMR_SETTEXTCOLOR record type
-
-      \param red the red component of the text color
-      \param green the blue component of the text color
-      \param blue the blue component of the text color
-      \param reserved an unused value - ignore this
-    */
-    virtual void setTextColor(EmfDeviceContext &context,
-                              const quint8 red, const quint8 green, const quint8 blue,
-                              const quint8 reserved) = 0;
-
-    /**
       Handler for the EMR_SETBKCOLOR record type
 
       \param red the red component of the background color

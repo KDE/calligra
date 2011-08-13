@@ -23,6 +23,7 @@
 #include <KDebug>
 
 #include "EmfObjects.h"
+#include "EmfDeviceContext.h"
 
 
 #define DEBUG_EMFPAINT 0
@@ -935,19 +936,6 @@ void EmfPainterBackend::setTextAlign(EmfDeviceContext &context, const quint32 te
     m_textAlignMode = textAlignMode;
 }
 
-void EmfPainterBackend::setTextColor(EmfDeviceContext &context,
-                                         const quint8 red, const quint8 green, const quint8 blue,
-                                         const quint8 reserved )
-{
-    Q_UNUSED( reserved );
-
-#if DEBUG_EMFPAINT
-    kDebug(31000) << red << green << blue << reserved;
-#endif
-
-    m_textPen.setColor( QColor( red, green, blue ) );
-}
-
 void EmfPainterBackend::setBkColor(EmfDeviceContext &context,
                                        const quint8 red, const quint8 green, const quint8 blue,
                                        const quint8 reserved )
@@ -1057,7 +1045,7 @@ void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
 
     // Use the special pen defined by mTextPen for text.
     QPen  savePen = m_painter->pen();
-    m_painter->setPen(m_textPen);
+    m_painter->setPen(context.foregroundTextColor);
     m_painter->drawText(int(x / scaleX), int(y / scaleY), textWidth, textHeight,
                         Qt::AlignLeft|Qt::AlignTop, text);
     m_painter->setPen(savePen);
