@@ -21,14 +21,16 @@
 #define KOMARKERSELECTOR_H
 
 #include <QComboBox>
+#include <KoPathShape.h>
 
 class KoMarker;
+
 
 class KoMarkerSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    KoMarkerSelector(QWidget *parent = 0);
+    KoMarkerSelector(QWidget *parent = 0, KoPathShape::MarkerPosition position = KoPathShape::MarkerBegin);
     virtual ~KoMarkerSelector();
 
     // set the current marker style

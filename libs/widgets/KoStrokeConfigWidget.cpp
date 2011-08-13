@@ -59,6 +59,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoMarker.h>
+#include <KoPathShape.h>
 
 
 class KoStrokeConfigWidget::Private
@@ -173,8 +174,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->addWidget(d->miterLimit, 4, 1, 1, 3);
 
 #if 1
-    d->beginMarkerSelector = new KoMarkerSelector(this);
-    d->endMarkerSelector = new KoMarkerSelector(this);
+    d->beginMarkerSelector = new KoMarkerSelector(this, KoPathShape::MarkerBegin);
+    d->endMarkerSelector = new KoMarkerSelector(this, KoPathShape::MarkerEnd);
     
     KoXmlDocument doc;
     QString errorMsg;

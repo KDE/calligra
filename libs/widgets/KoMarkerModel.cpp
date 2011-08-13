@@ -19,16 +19,15 @@
 
 #include "KoMarkerModel.h"
 
-
 #include <KoMarker.h>
-#include <KoPathShape.h>
 
 #include <QPointF>
 #include <QSize>
 
-KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, QObject *parent)
+KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoPathShape::MarkerPosition position, QObject *parent)
 : QAbstractListModel(parent)
 , m_markers(markers)
+, m_markerPosition(position)
 {
 }
 
@@ -54,7 +53,7 @@ QVariant KoMarkerModel::data(const QModelIndex &index, int role) const
             KoPathShape *pathShape = new KoPathShape();
             pathShape->moveTo(QPointF(10, 15));
             pathShape->lineTo(QPointF(70, 15));
-            pathShape->setMarker(m_markers.at(index.row()), KoPathShape::MarkerBegin);
+            pathShape->setMarker(m_markers.at(index.row()), m_markerPosition);
             return QVariant::fromValue<KoPathShape*>(pathShape);
         }
         return QVariant();
@@ -87,4 +86,9 @@ QVariant KoMarkerModel::marker(int index, int role) const
         default:
             return QVariant();
     }
+}
+
+KoPathShape::MarkerPosition KoMarkerModel::position() const
+{
+    return m_markerPosition;
 }

@@ -29,16 +29,16 @@
 class KoMarkerSelector::Private
 {
 public:
-    Private(QWidget *parent)
-    : model(new KoMarkerModel(QList<KoMarker*>(), parent))
+    Private(QWidget *parent, KoPathShape::MarkerPosition position)
+    : model(new KoMarkerModel(QList<KoMarker*>(), position, parent))
     {}
 
     KoMarkerModel *model;
 };
 
-KoMarkerSelector::KoMarkerSelector(QWidget *parent)
+KoMarkerSelector::KoMarkerSelector(QWidget *parent, KoPathShape::MarkerPosition position)
 : QComboBox(parent)
-, d(new Private(this))
+, d(new Private(this, position))
 {
     setModel(d->model);
     setItemDelegate(new KoMarkerItemDelegate(this));
@@ -64,7 +64,7 @@ KoMarker *KoMarkerSelector::marker() const
 
 void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
 {
-    KoMarkerModel *model = new KoMarkerModel(markers, this);
+    KoMarkerModel *model = new KoMarkerModel(markers,d->model->position(), this);
     d->model = model;
     // this deletes the old model
     setModel(model);
