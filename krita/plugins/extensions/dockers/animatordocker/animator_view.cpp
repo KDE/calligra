@@ -55,9 +55,13 @@ AnimatorView::AnimatorView()
     
     m_itemContextMenu->addSeparator();
     
-    addAction(m_itemContextMenu->addAction(KIcon("edit-copy"), i18n("&Copy previous frame"), this, SLOT(slotCopyPrevious())));
-    addAction(m_itemContextMenu->addAction(KIcon("edit-copy"), i18n("&Copy next frame"), this, SLOT(slotCopyNext())));
+    addAction(m_itemContextMenu->addAction(KIcon("edit-copy"), i18n("Copy p&revious frame"), this, SLOT(slotCopyPrevious())));
+    addAction(m_itemContextMenu->addAction(KIcon("edit-copy"), i18n("Copy &next frame"), this, SLOT(slotCopyNext())));
     
+    m_itemContextMenu->addSeparator();
+
+    addAction(m_itemContextMenu->addAction(KIcon("tools-wizard"), i18n("Interpolate"), this, SLOT(slotInterpolate())));
+
     m_itemContextMenu->addSeparator();
     
     addAction(m_itemContextMenu->addAction(KIcon("edit-delete"), i18n("Clear frame"), this, SLOT(slotClearFrame())));
@@ -137,6 +141,11 @@ void AnimatorView::slotCopyPrevious()
 void AnimatorView::slotCopyNext()
 {
     amodel()->copyFrameNext(m_menuIndex);
+}
+
+void AnimatorView::slotInterpolate()
+{
+    amodel()->clonePrevious(m_menuIndex);
 }
 
 void AnimatorView::slotClearFrame()

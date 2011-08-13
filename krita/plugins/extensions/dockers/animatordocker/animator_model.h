@@ -121,6 +121,9 @@ public slots:
     void createFrame(QModelIndex index, char* layer_type);
     void copyFramePrevious(QModelIndex index);
     void copyFrameNext(QModelIndex index);
+
+    void clonePrevious(QModelIndex index);
+
     void clearFrame(QModelIndex index);
     
     void createLayer();

@@ -52,6 +52,7 @@ public slots:
     void slotNewGroup();
     void slotCopyPrevious();
     void slotCopyNext();
+    void slotInterpolate();
     
     void slotClearFrame();
     

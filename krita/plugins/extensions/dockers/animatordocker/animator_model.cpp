@@ -652,6 +652,18 @@ void AnimatorModel::copyFrameNext(QModelIndex index)
     }
 }
 
+void AnimatorModel::clonePrevious(QModelIndex index)
+{
+    if (activateBeforeIndex(index))
+    {
+        m_nodeman->createNode("KisCloneLayer");
+	m_nodeman->activeNode()->setName(getAnimatedLayer(index.row())->getNameForFrame(index.column(), true));
+        
+        loadLayers();
+        updateImage();
+    }
+}
+
 void AnimatorModel::clearFrame(QModelIndex index)
 {
     KisNode* node = dynamic_cast<KisNode*>( getCachedFrame(index) );

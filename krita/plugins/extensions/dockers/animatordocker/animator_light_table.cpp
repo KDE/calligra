@@ -25,6 +25,7 @@
 
 AnimatorLightTable::AnimatorLightTable()
 {
+    setNear(0);
     setNear(1);         // Create vars
     setNear(0);
     setOpacity(0, 1.0);
