@@ -60,6 +60,7 @@ public slots:
     void framesMove(int move);
 
     void slotFrameInsert();
+    void slotFrameDelete();
     
     void enableOnionNext(bool ch);
     void enableOnionPrevious(bool ch);

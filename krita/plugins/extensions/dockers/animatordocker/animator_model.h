@@ -145,6 +145,7 @@ public slots:
     void framesInsert(int n, unsigned int dst);
     void framesInsert(int n);
     void framesDelete(unsigned int src, int n);
+    void framesDelete(int n);
     
     void framesClear(unsigned int src, int n);
     

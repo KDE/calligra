@@ -928,13 +928,15 @@ void AnimatorModel::setEnabled(bool en)
 //         visibleAll();
 }
 
+void AnimatorModel::framesDelete(int n)
+{
+    framesDelete(m_frame, n);
+}
 
 void AnimatorModel::framesDelete(unsigned int src, int n)
 {
     framesClear(src, n);
     framesMove(src+n, -1, src);
-    
-    loadLayers();
 }
 
 void AnimatorModel::framesInsert(int n)
