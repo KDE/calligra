@@ -52,14 +52,14 @@ QVariant KoMarkerModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
         if (index.row() < m_markers.size()) {
             KoPathShape *pathShape = new KoPathShape();
-            pathShape->moveTo(QPointF(0, 0));
-            pathShape->lineTo(QPointF(20, 0));
+            pathShape->moveTo(QPointF(10, 15));
+            pathShape->lineTo(QPointF(70, 15));
             pathShape->setMarker(m_markers.at(index.row()), KoPathShape::MarkerBegin);
             return QVariant::fromValue<KoPathShape*>(pathShape);
         }
         return QVariant();
     case Qt::SizeHintRole:
-        return QSize(100, 30);
+        return QSize(80, 30);
     default:
         return QVariant();
     }

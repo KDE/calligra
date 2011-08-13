@@ -19,7 +19,7 @@
 
 #include "KoMarkerItemDelegate.h"
 
-#include <KoMarker.h>
+#include <KoPathShape.h>
 
 #include <QPainter>
 #include <QPen>
@@ -36,8 +36,8 @@ KoMarkerItemDelegate::~KoMarkerItemDelegate()
 void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 
-    KoMarker *marker = index.data(Qt::DecorationRole).value<KoMarker*>();
-    if (marker) {
+    KoPathShape *pathShape = index.data(Qt::DecorationRole).value<KoPathShape*>();
+    if (pathShape) {
         painter->save();
         bool anitaliasing = painter->testRenderHint(QPainter::Antialiasing);
         if (!anitaliasing) {
@@ -46,7 +46,7 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         // paint marker
         QPen pen(option.palette.text(), 1);
         painter->setPen(pen);
-        QPainterPath path = marker->path();
+        QPainterPath path = pathShape->outline();
         painter->drawPath(path);
         if (!anitaliasing) {
             painter->setRenderHint(QPainter::Antialiasing, false);
@@ -58,5 +58,5 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
 QSize KoMarkerItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const
 {
-    return QSize(100, 15);
+    return QSize(80, 30);
 }
