@@ -664,6 +664,14 @@ void AnimatorModel::clonePrevious(QModelIndex index)
     }
 }
 
+void AnimatorModel::clearFrames(QModelIndexList frames)
+{
+    foreach(QModelIndex frame, frames)
+    {
+        clearFrame(frame);
+    }
+}
+
 void AnimatorModel::clearFrame(QModelIndex index)
 {
     KisNode* node = dynamic_cast<KisNode*>( getCachedFrame(index) );

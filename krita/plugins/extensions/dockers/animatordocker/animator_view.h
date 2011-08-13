@@ -54,7 +54,7 @@ public slots:
     void slotCopyNext();
     void slotInterpolate();
     
-    void slotClearFrame();
+    void slotClearFrames();
     
     void slotRenameLayer();
     

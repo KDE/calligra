@@ -64,7 +64,7 @@ AnimatorView::AnimatorView()
 
     m_itemContextMenu->addSeparator();
     
-    addAction(m_itemContextMenu->addAction(KIcon("edit-delete"), i18n("Clear frame"), this, SLOT(slotClearFrame())));
+    addAction(m_itemContextMenu->addAction(KIcon("edit-delete"), i18n("Clear selected frames"), this, SLOT(slotClearFrames())));
     
     m_itemContextMenu->addSeparator();
     
@@ -148,9 +148,15 @@ void AnimatorView::slotInterpolate()
     amodel()->clonePrevious(m_menuIndex);
 }
 
-void AnimatorView::slotClearFrame()
+void AnimatorView::slotClearFrames()
 {
-    amodel()->clearFrame(m_menuIndex);
+    if (selectionModel()->selection().isEmpty())
+    {
+        amodel()->clearFrame(m_menuIndex);
+    } else
+    {
+        amodel()->clearFrames(selectionModel()->selectedIndexes());
+    }
 }
 
 void AnimatorView::slotRenameLayer()

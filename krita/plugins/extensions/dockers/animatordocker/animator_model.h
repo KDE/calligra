@@ -123,6 +123,7 @@ public slots:
 
     void clonePrevious(QModelIndex index);
 
+    void clearFrames(QModelIndexList frames);
     void clearFrame(QModelIndex index);
     
     void createLayer();
