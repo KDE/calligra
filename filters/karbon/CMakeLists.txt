@@ -5,6 +5,7 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextLoadingContext.cpp
 )
 
 
@@ -39,8 +40,8 @@ add_subdirectory( svg )
 if (WPD_FOUND AND LIBWPG_FOUND)
   add_subdirectory( wpg )
 endif (WPD_FOUND AND LIBWPG_FOUND)
-#add_subdirectory( wmf )
-#add_subdirectory( karbon1.x )
+add_subdirectory( wmf )
+add_subdirectory( karbon1.x )
 add_subdirectory( eps )
 if (POPPLER_FOUND)
     add_subdirectory( pdf )
