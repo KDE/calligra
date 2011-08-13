@@ -703,7 +703,7 @@ AnimatedLayer* AnimatorModel::getActiveAnimatedLayer()
     return getAnimatedLayerByChild(dynamic_cast<KisNode*>( m_nodeman->activeNode().data() ));
 }
 
-void AnimatorModel::createLayer()
+QModelIndex AnimatorModel::createLayer()
 {
     int pos = 0;
     
@@ -720,8 +720,12 @@ void AnimatorModel::createLayer()
         }
     }
 
-    KisNode* node = new KisGroupLayer(m_image, "_ani_NNN", 255);                // TODO: ask for name
-    m_nodeman->insertNode(node, m_image->root(), pos);
+    KisNode* node = new KisGroupLayer(m_image, "_ani_New Animated Layer", 255);
+    m_nodeman->insertNode(node, m_image->root(), 0);
+
+    loadLayers();
+
+    return createIndex(rowCount()-1, 0);
 }
 
 void AnimatorModel::deleteLayer()
@@ -751,17 +755,28 @@ void AnimatorModel::layerUp()
     }
 }
 
-void AnimatorModel::renameLayer(QModelIndex index, QString& name)
+QString& AnimatorModel::getLayerName(QModelIndex index)
 {
-    renameLayer(index.row(), name);
+    return getLayerName(index.row());
 }
 
-void AnimatorModel::renameLayer(int l_num, QString& name)
+QString& AnimatorModel::getLayerName(int l_num)
+{
+    QString* s = new QString(getAnimatedLayer(l_num)->name().mid(5));
+    return *s;
+}
+
+void AnimatorModel::setLayerName(QModelIndex index, QString& name)
+{
+    setLayerName(index.row(), name);
+}
+
+void AnimatorModel::setLayerName(int l_num, QString& name)
 {
     if (l_num < m_layers.size() && l_num >= 0)
     {
-        m_layers[l_num]->setName(QString("_ani_")+name);
-//         m_layers[l_num]->source()->setName(QString("_ani_")+name);
+        // TODO: move this to *AnimatedLayer classes
+        getAnimatedLayer(l_num)->setName(QString("_ani_")+name);
     }
 }
 

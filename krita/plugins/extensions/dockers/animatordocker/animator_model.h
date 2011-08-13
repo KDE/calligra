@@ -126,14 +126,17 @@ public slots:
     void clearFrames(QModelIndexList frames);
     void clearFrame(QModelIndex index);
     
-    void createLayer();
+    QModelIndex createLayer();
     void deleteLayer();
     
     void layerUp();
     void layerDown();
     
-    void renameLayer(QModelIndex index, QString& name);
-    void renameLayer(int l_num, QString& name);
+    QString& getLayerName(QModelIndex index);
+    QString& getLayerName(int l_num);
+    
+    void setLayerName(QModelIndex index, QString& name);
+    void setLayerName(int l_num, QString& name);
     
     // Working with frames
     void frameMoveTo(QModelIndex& index, QModelIndex& moveto);

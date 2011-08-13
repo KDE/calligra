@@ -91,7 +91,7 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     // Layers toolbar
     m_lays_toolbar = new QToolBar(this);
     
-    addAction( m_lays_toolbar->addAction(SmallIcon("list-add"), i18n("Add layer"), m_model, SLOT(createLayer())) );
+    addAction( m_lays_toolbar->addAction(SmallIcon("list-add"), i18n("Add layer"), this, SLOT(slotCreateLayer())/*m_model, SLOT(createLayer())*/) );
     addAction( m_lays_toolbar->addAction(SmallIcon("list-remove"), i18n("Delete layer"), m_model, SLOT(deleteLayer())) );
     addAction( m_lays_toolbar->addAction(SmallIcon("go-down"), i18n("Move layer down"), m_model, SLOT(layerDown())) );
     addAction( m_lays_toolbar->addAction(SmallIcon("go-up"), i18n("Move layer up"), m_model, SLOT(layerUp())) );
@@ -271,6 +271,13 @@ void AnimatorDock::slotFrameInsert()
 void AnimatorDock::slotFrameDelete()
 {
     m_model->framesDelete(1);
+}
+
+
+void AnimatorDock::slotCreateLayer()
+{
+    QModelIndex nlayer = m_model->createLayer();
+    m_view->renameLayer(nlayer);
 }
 
 

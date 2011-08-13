@@ -23,7 +23,6 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-// #include <QtGui>                // replace later
 #include <QTableWidget>
 #include <QLabel>
 #include <KMenu>
@@ -42,6 +41,8 @@ public:
 
 public:
     AnimatorModel* amodel();
+
+    void renameLayer(QModelIndex& index);
     
 public slots:
     void slotNewPaint();
@@ -77,6 +78,7 @@ protected:
     QModelIndex m_menuIndex;
     
     QString m_rename_str;
+    QModelIndex m_rename_index;
     
 };
 

@@ -161,8 +161,14 @@ void AnimatorView::slotClearFrames()
 
 void AnimatorView::slotRenameLayer()
 {
+    renameLayer(m_menuIndex);
+}
+
+void AnimatorView::renameLayer(QModelIndex& index)
+{
 //     QString* name;
-    
+    m_rename_index = index;
+
     KDialog* renameDialog = new KDialog(this);
     renameDialog->setModal(true);
     renameDialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -175,7 +181,7 @@ void AnimatorView::slotRenameLayer()
     KLineEdit* ledit = new KLineEdit(main_widget);
     ledit->setClearButtonShown(true);
     
-//     ledit->setText(amodel()->getName);
+    ledit->setText(amodel()->getLayerName(index));
     ledit->setFocus();
     
     layout->addWidget(label);
@@ -200,14 +206,8 @@ void AnimatorView::setRenameName(QString s)
 
 void AnimatorView::slotRenameDo()
 {
-    amodel()->renameLayer(m_menuIndex, m_rename_str);
-//     slotRenameDone();
+    amodel()->setLayerName(m_rename_index, m_rename_str);
 }
-
-// void AnimatorView::slotRenameDone()
-// {
-// 
-// }
 
 // void AnimatorView::columnCountChanged(int old_count, int new_count)
 // {

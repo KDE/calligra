@@ -61,6 +61,8 @@ public slots:
 
     void slotFrameInsert();
     void slotFrameDelete();
+
+    void slotCreateLayer();
     
     void enableOnionNext(bool ch);
     void enableOnionPrevious(bool ch);
