@@ -48,7 +48,7 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     setCaption(i18n("Show Sheet"));
     setModal(true);
     setButtons(Ok | Cancel);
-    setObjectName("ShowDialog");
+    setObjectName(QLatin1String("ShowDialog"));
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);

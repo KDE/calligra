@@ -76,7 +76,7 @@ class FindDlg : public KFindDialog
 
 public:
     explicit FindDlg(QWidget *parent = 0,
-                     const char *name = 0,
+                     const QString &name = 0,
                      long options = 0,
                      const QStringList &findStrings = QStringList(),
                      bool hasSelection = false);
@@ -106,7 +106,7 @@ class SearchDlg : public KReplaceDialog
 
 public:
     explicit SearchDlg(QWidget *parent = 0,
-                       const char *name = 0,
+                       const QString &name = 0,
                        long options = 0,
                        const QStringList &findStrings = QStringList(),
                        const QStringList &replaceStrings = QStringList(),

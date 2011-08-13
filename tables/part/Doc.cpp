@@ -602,12 +602,11 @@ bool Doc::configLoadFromFile() const
 void Doc::sheetAdded(Sheet* sheet)
 {
     new SheetAdaptor(sheet);
-    QString dbusPath('/' + sheet->map()->objectName() + '/' + objectName());
-    if (sheet->parent()) {
+    QString dbusPath('/' + sheet->map()->objectName() + '/' + sheet->objectName());
+    if (sheet->parent() && !sheet->parent()->objectName().isEmpty()) {
         dbusPath.prepend('/' + sheet->parent()->objectName());
     }
     QDBusConnection::sessionBus().registerObject(dbusPath, sheet);
-
 }
 
 void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)

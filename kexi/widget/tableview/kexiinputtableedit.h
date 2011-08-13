@@ -96,6 +96,7 @@ public slots:
 protected slots:
     void setRestrictedCompletion();
     void completed(const QString &);
+    void slotTextEdited(const QString&);
 
 protected:
     //! initializes this editor with \a add value

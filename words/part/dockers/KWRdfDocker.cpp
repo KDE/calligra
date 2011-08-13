@@ -105,6 +105,13 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
             this, SLOT(resourceChanged(int,const QVariant&)));
 }
 
+void KWRdfDocker::unsetCanvas()
+{
+    m_canvas = 0;
+    m_document = 0;
+    widgetDocker.semanticView->unsetCanvas();
+}
+
 KoCanvasBase* KWRdfDocker::canvas()
 {
     return m_canvas;

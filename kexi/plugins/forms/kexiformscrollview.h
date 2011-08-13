@@ -162,8 +162,9 @@ signals:
     void itemSelected(KexiDB::RecordData*);
     void cellSelected(int col, int row);
     void sortedColumnChanged(int col);
-    void rowEditStarted(int row);
-    void rowEditTerminated(int row);
+    virtual void rowEditStarted(int row);
+    virtual void rowEditTerminated(int row);
+    virtual void updateSaveCancelActions();
     void reloadActions();
 
 protected slots:

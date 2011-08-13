@@ -7289,7 +7289,8 @@ std::string PAP::toString() const
     s += "\n{" + numrm.toString() + "}\n";
     s += "\nitbdMac=";
     s += int2string( itbdMac );
-    s += "\nrgdxaTab=";
+    s += "\nrgdxaTab.size()=";
+    s += int2string( rgdxaTab.size() );
     // skipping the std::vector rgdxaTab
     s += "\n------------------------------";
     s += "\nfInTable=";
