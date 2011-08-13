@@ -19,8 +19,12 @@
 
 #include "KoMarkerModel.h"
 
-#include <QSize>
+
 #include <KoMarker.h>
+#include <KoPathShape.h>
+
+#include <QPointF>
+#include <QSize>
 
 KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, QObject *parent)
 : QAbstractListModel(parent)
@@ -47,11 +51,15 @@ QVariant KoMarkerModel::data(const QModelIndex &index, int role) const
     switch(role) {
     case Qt::DecorationRole:
         if (index.row() < m_markers.size()) {
-            return QVariant::fromValue<KoMarker*>(m_markers.at(index.row()));
+            KoPathShape *pathShape = new KoPathShape();
+            pathShape->moveTo(QPointF(0, 0));
+            pathShape->lineTo(QPointF(20, 0));
+            pathShape->setMarker(m_markers.at(index.row()), KoPathShape::MarkerBegin);
+            return QVariant::fromValue<KoPathShape*>(pathShape);
         }
         return QVariant();
     case Qt::SizeHintRole:
-        return QSize(100, 15);
+        return QSize(100, 30);
     default:
         return QVariant();
     }
@@ -60,4 +68,23 @@ QVariant KoMarkerModel::data(const QModelIndex &index, int role) const
 int KoMarkerModel::markerIndex(KoMarker *marker) const
 {
     return m_markers.indexOf(marker);
+}
+
+QVariant KoMarkerModel::marker(int index, int role) const
+{
+    if (index < 0){
+        return QVariant();
+    }
+    
+    switch(role) {
+        case Qt::DecorationRole:
+            if (index< m_markers.size()) {
+                return QVariant::fromValue<KoMarker*>(m_markers.at(index));
+            }
+            return QVariant();
+        case Qt::SizeHintRole:
+            return QSize(100, 30);
+        default:
+            return QVariant();
+    }
 }

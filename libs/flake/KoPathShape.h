@@ -24,6 +24,7 @@
 
 #include "flake_export.h"
 
+#include <QMetaType>
 #include <QMap>
 
 #include "KoTosContainer.h"
@@ -510,5 +511,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoPathShape)
 };
+
+Q_DECLARE_METATYPE(KoPathShape*)
 
 #endif /* KOPATHSHAPE_H */

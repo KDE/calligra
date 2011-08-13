@@ -69,3 +69,8 @@ void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
     // this deletes the old model
     setModel(model);
 }
+
+QVariant KoMarkerSelector::itemData(int index, int role) const
+{
+    return d->model->marker(index, role);
+}

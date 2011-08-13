@@ -36,6 +36,9 @@ public:
     // return the current marker style
     KoMarker *marker() const;
 
+    /// reimplement
+    QVariant itemData(int index, int role = Qt::UserRole) const;
+
     /**
      * Set the available markers in the document.
      */

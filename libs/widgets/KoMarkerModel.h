@@ -34,6 +34,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     int markerIndex(KoMarker *marker) const;
+    QVariant marker(int index, int role = Qt::UserRole) const;
 
 private:
     QList<KoMarker*> m_markers;
