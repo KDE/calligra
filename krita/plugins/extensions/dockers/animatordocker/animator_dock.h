@@ -95,8 +95,6 @@ private:
     QSpinBox* m_frame_number_spinbox;
     QSpinBox* m_fps_spinbox;            // Not used now
     
-    QPushButton* m_export_button;
-    
     QToolBar* m_lays_toolbar;
     QToolBar* m_onion_toolbar;
     

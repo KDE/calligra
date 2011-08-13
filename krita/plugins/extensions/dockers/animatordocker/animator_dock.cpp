@@ -88,10 +88,6 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     connect(m_fps_spinbox, SIGNAL(valueChanged(int)), m_player, SLOT(setFps(int)));
     m_fps_spinbox->setValue(12);
     
-    // Export all button
-    m_export_button = new QPushButton(KIcon("document-export"), i18n("Export all frames"), this);
-    connect(m_export_button, SIGNAL(clicked(bool)), m_exporter, SLOT(exportAll()));
-    
     // Layers toolbar
     m_lays_toolbar = new QToolBar(this);
     
@@ -142,20 +138,10 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     loop_act->setCheckable(true);
     connect(loop_act, SIGNAL(toggled(bool)), m_player, SLOT(setLoop(bool)));
     addAction( loop_act );
-    
-//     // Create new button
-//     m_new_button = new QToolButton(this);
-//     
-//     m_new_button->addAction();
-//     
-//     m_del_button = new QToolButton(this);
+
+    addAction( m_player_toolbar->addAction(SmallIcon("document-export"), i18n("Export all frames"), m_exporter, SLOT(exportAll())) );
     
     // Add widgets to layout
-//     m_lay_acts_layout->addWidget(m_new_button);
-//     m_lay_acts_layout->addWidget(m_del_button);
-    
-    m_acts_layout->addWidget(m_export_button);
-    
     m_acts_layout->addWidget(m_frame_spinbox);
     m_acts_layout->addWidget(m_frame_number_spinbox);
     m_acts_layout->addWidget(m_fps_spinbox);
