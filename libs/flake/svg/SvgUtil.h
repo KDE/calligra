@@ -42,6 +42,15 @@ public:
      */
     static double toUserSpace(double value);
 
+    /// Converts given point from points to userspace units.
+    static QPointF toUserSpace(const QPointF &point);
+
+    /// Converts given rectangle from points to userspace units.
+    static QRectF toUserSpace(const QRectF &rect);
+
+    /// Converts given rectangle from points to userspace units.
+    static QSizeF toUserSpace(const QSizeF &size);
+
     /**
      * Parses the given string containing a percentage number.
      * @param s the input string containing the percentage

@@ -42,6 +42,21 @@ double SvgUtil::toUserSpace(double value)
     return (value * 90.0) / DPI;
 }
 
+QPointF SvgUtil::toUserSpace(const QPointF &point)
+{
+    return QPointF(toUserSpace(point.x()), toUserSpace(point.y()));
+}
+
+QRectF SvgUtil::toUserSpace(const QRectF &rect)
+{
+    return QRectF(toUserSpace(rect.topLeft()), toUserSpace(rect.size()));
+}
+
+QSizeF SvgUtil::toUserSpace(const QSizeF &size)
+{
+    return QSizeF(toUserSpace(size.width()), toUserSpace(size.height()));
+}
+
 double SvgUtil::toPercentage(QString s)
 {
     if (s.endsWith('%'))
