@@ -24,7 +24,6 @@
 #include <QModelIndex>
 #include <QAbstractTableModel>
 #include <QAbstractItemModel>
-#include <QItemSelectionModel>
 
 #include "kis_layer.h"
 #include "kis_node_model.h"
@@ -140,9 +139,10 @@ public slots:
     void frameMoveTo(int l, int f, int tl, int tf);
     
     void framesMove(unsigned int src, int n, unsigned int dst);
-    void framesMove(QItemSelectionModel& frames, int move);
+    void framesMove(QModelIndexList fl, int move);
     
     void framesInsert(int n, unsigned int dst);
+    void framesInsert(int n);
     void framesDelete(unsigned int src, int n);
     
     void framesClear(unsigned int src, int n);

@@ -58,6 +58,8 @@ public slots:
     void framesLeft();
     void framesRight();
     void framesMove(int move);
+
+    void slotFrameInsert();
     
     void enableOnionNext(bool ch);
     void enableOnionPrevious(bool ch);

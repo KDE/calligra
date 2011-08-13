@@ -616,7 +616,7 @@ void AnimatorModel::copyFramePrevious(QModelIndex index)
             }
         }
         
-        m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
+        m_nodeman->activeNode()->setName(getAnimatedLayer(index.row())->getNameForFrame(index.column(), true));
         
         loadLayers();
         updateImage();
@@ -642,7 +642,7 @@ void AnimatorModel::copyFrameNext(QModelIndex index)
             }
         }
         
-        m_nodeman->activeNode()->setName("_frame_" + QString::number(index.column()));
+        m_nodeman->activeNode()->setName(getAnimatedLayer(index.row())->getNameForFrame(index.column(), true));
         
         loadLayers();
         updateImage();
@@ -929,12 +929,19 @@ void AnimatorModel::framesDelete(unsigned int src, int n)
     loadLayers();
 }
 
+void AnimatorModel::framesInsert(int n)
+{
+    framesInsert(n, m_frame);
+}
+
 void AnimatorModel::framesInsert(int n, unsigned int dst)
 {
-    if (n <= 0)
-        return;
-    
-    loadLayers();
+//    if (n <= 0)
+//        return;
+
+    framesMove(dst, -1, dst+n);
+
+//    loadLayers();
 }
 
 void AnimatorModel::frameMoveTo(QModelIndex& index, QModelIndex& moveto)
@@ -948,8 +955,8 @@ void AnimatorModel::frameMoveTo(int l, int f, int tl, int tf)
     {
         if (isKey(l, f))
             getAnimatedLayer(l)->getKeyFrame(f)->setName(getAnimatedLayer(l)->getNameForFrame(tf, true));
-        if (isKey(tl, tf))
-            getAnimatedLayer(l)->getKeyFrame(tf)->setName(getAnimatedLayer(l)->getNameForFrame(f, true));
+//        if (isKey(tl, tf))
+//            getAnimatedLayer(l)->getKeyFrame(tf)->setName(getAnimatedLayer(l)->getNameForFrame(f, true));
     }
     else
     {
@@ -959,26 +966,37 @@ void AnimatorModel::frameMoveTo(int l, int f, int tl, int tf)
 
 void AnimatorModel::framesMove(unsigned int src, int n, unsigned int dst)
 {
-    // generate list
-//     framesMove(list, dst-src);
+    QModelIndexList list;
+    for (int i = 0; n != 0 && src+i < columnCount(); ++i)
+    {
+        for (int row = 0; row < rowCount(); ++row)
+        {
+            list.append(createIndex(row, src+i));
+        }
+        if (n != -1)        // Move all frames
+            --n;
+    }
+    framesMove(list, dst-src);
 }
 
-void AnimatorModel::framesMove(QItemSelectionModel& frames, int move)
+void AnimatorModel::framesMove(QModelIndexList fl, int move)
 {
-    if (frames.selection().empty())
+//    if (frames.selection().empty())
+    if (fl.empty())
     {
         return ;
     }
     
     QModelIndex frame;
-    QModelIndexList fl = frames.selectedIndexes();
+//    QModelIndexList fl = frames.selectedIndexes();
     
     foreach (frame, fl)
     {
         QModelIndex mvto = createIndex(frame.row(), frame.column()+move);
         // FIXME: be sure to not swap with already moving frame
         if (!fl.contains(mvto))
-            frameMoveTo(frame, mvto);
+            frameMoveTo(mvto, frame);
+        frameMoveTo(frame, mvto);
     }
     
     loadLayers();
