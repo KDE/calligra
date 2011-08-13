@@ -53,8 +53,6 @@ public:
     void init(KoShapeRegistry *q);
 
     KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
-    KoShape *createShapeFromSvg(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
-
 
     // Map namespace,tagname to priority:factory
     QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactoryBase*> > factoryMap;
