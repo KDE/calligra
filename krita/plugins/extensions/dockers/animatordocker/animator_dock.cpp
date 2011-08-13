@@ -101,7 +101,7 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     
     addAction( m_frames_toolbar->addAction(SmallIcon("go-previous"), i18n("Move frame left"), this, SLOT(framesLeft())) );
     addAction( m_frames_toolbar->addAction(SmallIcon("go-next"), i18n("Move frame right"), this, SLOT(framesRight())) );
-//    addAction( m_frames_toolbar->addAction(SmallIcon("insert-columns"), i18n("Insert frame column"), this, SLOT(slotInsertFrame())) );
+    addAction( m_frames_toolbar->addAction(SmallIcon("edit-table-insert-column-left"), i18n("Insert frame column"), this, SLOT(slotFrameInsert())) );
     
     // Onion toolbar
     m_onion_toolbar = new QToolBar(this);

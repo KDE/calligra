@@ -130,7 +130,7 @@ void AnimatorModel::loadLayers()
                     const KisNode* nnode = lay->at(i);
                     KisNode* ncnode = const_cast<KisNode*>(nnode);
                     QString tmp = ncnode->name();
-                    ncnode->setName(tmp.mid(14, tmp.size()-15));        // This means: delete Duplicate of from name
+                    ncnode->setName(tmp.mid(14, tmp.size()-15));        // This means: delete "Duplicate of " from name
                 }
             }
         }
@@ -938,7 +938,6 @@ void AnimatorModel::framesInsert(int n, unsigned int dst)
 {
 //    if (n <= 0)
 //        return;
-
     framesMove(dst, -1, dst+n);
 
 //    loadLayers();
@@ -967,11 +966,11 @@ void AnimatorModel::frameMoveTo(int l, int f, int tl, int tf)
 void AnimatorModel::framesMove(unsigned int src, int n, unsigned int dst)
 {
     QModelIndexList list;
-    for (int i = 0; n != 0 && src+i < columnCount(); ++i)
+    for (int i = src; n != 0 && i < columnCount(); ++i)
     {
         for (int row = 0; row < rowCount(); ++row)
         {
-            list.append(createIndex(row, src+i));
+            list.append(createIndex(row, i));
         }
         if (n != -1)        // Move all frames
             --n;
@@ -993,7 +992,7 @@ void AnimatorModel::framesMove(QModelIndexList fl, int move)
     foreach (frame, fl)
     {
         QModelIndex mvto = createIndex(frame.row(), frame.column()+move);
-        // FIXME: be sure to not swap with already moving frame
+        // be sure to not swap with already moving frame
         if (!fl.contains(mvto))
             frameMoveTo(mvto, frame);
         frameMoveTo(frame, mvto);
