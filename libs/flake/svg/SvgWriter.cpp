@@ -48,6 +48,9 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QTextStream>
+#include <QtCore/QBuffer>
+#include <QtGui/QPainter>
+#include <QtSvg/QSvgGenerator>
 
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     : m_pageSize(pageSize)
@@ -210,9 +213,27 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
     painter.setShapes(QList<KoShape*>()<< shape);
     painter.paint(image);
 
+    // generate svg from shape
+    QBuffer svgBuffer;
+    QSvgGenerator svgGenerator;
+    svgGenerator.setOutputDevice(&svgBuffer);
+
+    QPainter svgPainter;
+    svgPainter.begin(&svgGenerator);
+    painter.paint(svgPainter, SvgUtil::toUserSpace(bbox).toRect(), bbox);
+    svgPainter.end();
+
+    // remove anything before the start of the svg element from the buffer
+    int startOfContent = svgBuffer.buffer().indexOf("<svg");
+    if(startOfContent>0) {
+        svgBuffer.buffer().remove(0, startOfContent);
+    }
+
     context.shapeWriter().startElement("switch");
 
-    // TODO: use QSvgGenerator to save an svg element or even write a flat odf file
+    // TODO: once we support saving single (flat) odf files
+    // we can embed these here to have full support for generic shapes
+    context.shapeWriter().addCompleteElement(&svgBuffer);
 
     context.shapeWriter().startElement("image");
     context.shapeWriter().addAttribute("id", context.getID(shape));
