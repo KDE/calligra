@@ -53,6 +53,9 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
     m_accountModel.setReadWrite( true );
     connect(&m_accountModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
 
+    m_calendarModel.setProject( project );
+    m_calendarModel.setReadWrite( true );
+    connect(&m_calendarModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
 }
 
 Scripting::Project::~Project()
@@ -535,23 +538,23 @@ QObject *Scripting::Project::findCalendar( const QString &id )
     return c == 0 ? 0 : calendar( c );
 }
 
-QObject *Scripting::Project::createCalendar( QObject *calendar, QObject *parent )
+QObject *Scripting::Project::createCalendar( QObject *copy, QObject *parent )
 {
-    kDebug()<<this<<calendar<<parent;
-    if ( calendar == 0 ) {
-        kDebug()<<"No calendar specified";
-        return 0;
-    }
-    const Calendar *cal = qobject_cast<Calendar*>( calendar );
-    const KPlato::Calendar *copyfrom = cal->kplatoCalendar();
-    if ( copyfrom == 0 ) {
-        kDebug()<<"Nothing to copy from";
-        return 0;
-    }
-    KPlato::Calendar *c = project()->calendar( copyfrom->id() );
-    if ( c ) {
-        kDebug()<<"Calendar already exists";
-        return this->calendar( c );
+    kDebug()<<this<<copy<<parent;
+    const KPlato::Calendar *copyfrom = 0;
+    KPlato::Calendar *c = 0;
+    if ( copy != 0 ) {
+        const Calendar *cal = qobject_cast<Calendar*>( copy );
+        copyfrom = cal->kplatoCalendar();
+        if ( copyfrom == 0 ) {
+            kDebug()<<"Nothing to copy from";
+            return 0;
+        }
+        c = project()->calendar( copyfrom->id() );
+        if ( c ) {
+            kDebug()<<"Calendar already exists";
+            return this->calendar( c );
+        }
     }
     Calendar *par = qobject_cast<Calendar*>( parent );
     KPlato::Calendar *p = 0;
@@ -559,11 +562,11 @@ QObject *Scripting::Project::createCalendar( QObject *calendar, QObject *parent 
         p = project()->calendar( par->id() );
     }
     c = new KPlato::Calendar();
-    *c = *copyfrom;
-    c->setId( copyfrom->id() ); // NOTE: id is not copied
-    CalendarAddCmd *cmd = new CalendarAddCmd( project(), c, -1, p, i18nc( "(qtundoformat)", "Add calendar" ) );
-    cmd->redo();
-    m_command->addCommand( cmd );
+    if ( copyfrom ) {
+        *c = *copyfrom;
+        c->setId( copyfrom->id() ); // NOTE: id is not copied
+    }
+    m_calendarModel.insertCalendar( c, -1, p );
     Calendar *call = this->calendar( c );
     kDebug()<<call;
     return call;
@@ -582,17 +585,29 @@ Scripting::Calendar *Scripting::Project::calendar( KPlato::Calendar *calendar )
 
 QVariant Scripting::Project::calendarData(const KPlato::Calendar* calendar, const QString& property, const QString& role, long int )
 {
-    return QVariant();
+    QModelIndex idx = m_calendarModel.index( calendar );
+    idx = m_calendarModel.index( idx.row(), calendarColumnNumber( property ), idx.parent() );
+    if ( ! idx.isValid() ) {
+        return QVariant();
+    }
+    qDebug()<<"data:"<<calendar<<property<<role<<":"<<idx<<m_calendarModel.data( idx, stringToRole( role ) );
+    return m_calendarModel.data( idx, stringToRole( role ) );
 }
 
 bool Scripting::Project::setCalendarData( KPlato::Calendar *calendar, const QString &property, const QVariant &data, const QString &role )
 {
-    return false;
+    QModelIndex idx = m_calendarModel.index( calendar );
+    idx = m_calendarModel.index( idx.row(), calendarColumnNumber( property ), idx.parent() );
+    if ( ! idx.isValid() ) {
+        return false;
+    }
+    Q_ASSERT( m_calendarModel.flags( idx ) & Qt::ItemIsEditable );
+    return m_calendarModel.setData( idx, data, stringToRole( role ) );
 }
 
 int Scripting::Project::calendarColumnNumber(const QString& property) const
 {
-    return m_calendarModel.columnMap().keyToValue( property.toUtf8() );
+    return m_calendarModel.columnNumber( property );
 }
 
 QVariant Scripting::Project::calendarHeaderData( const QString &property )
@@ -685,6 +700,9 @@ int Scripting::Project::stringToRole( const QString &role ) const
     }
     if ( r == "EditRole" ) {
         return Qt::EditRole;
+    }
+    if ( r == "CheckStateRole" ) {
+        return Qt::CheckStateRole;
     }
     kDebug()<<"Role is not handled:"<<role;
     return -1;

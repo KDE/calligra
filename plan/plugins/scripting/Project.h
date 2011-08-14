@@ -215,7 +215,7 @@ namespace Scripting {
             QMap<KPlato::ResourceGroup*, ResourceGroup*> m_groups;
             QMap<KPlato::Resource*, Resource*> m_resources;
 
-            KPlato::CalendarItemModel m_calendarModel;
+            KPlato::CalendarExtendedItemModel m_calendarModel;
             QMap<KPlato::Calendar*, Calendar*> m_calendars;
 
             QMap<KPlato::ScheduleManager*, Schedule*> m_schedules;
