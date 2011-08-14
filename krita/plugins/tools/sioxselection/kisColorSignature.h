@@ -22,7 +22,7 @@
 template < typename PixelT >
 class ColorSignature {
 public:
-    typedef QVector< QVector < PixelT > > Type;
+    typedef QVector< PixelT > Type;
 
     ColorSignature() {}
 
@@ -44,7 +44,7 @@ public:
     /**
      * Create a color signature for the given set of pixels.
      */
-    Type createSignature(const QVector< PixelT >& input, int length, float lLimit,
+    Type createSignature(const QVector< PixelT >& input, float lLimit,
         float aLimit, float bLimit, float threshold);
 };
 
@@ -203,16 +203,17 @@ void ColorSignature< PixelT >::stagetwo(const QVector< PixelT >& points, int dep
 
 template < typename PixelT >
 typename ColorSignature< PixelT >::Type ColorSignature< PixelT >::createSignature(const QVector< PixelT >& input,
-    int length, float lLimit, float aLimit, float bLimit, float threshold)
+    float lLimit, float aLimit, float bLimit, float threshold)
 {
     QVector< Type > clusters1, clusters2;
 
-    stageOne(input, 0, clusters1, lLimit, aLimit, bLimit, length);
+    stageOne(input, 0 /* Recursion depth for kd-tree */, clusters1, lLimit,
+         aLimit, bLimit, input.size());
 
     Type centroids(clusters1.size());
 
     for (int i = 0; i < clusters1.size(); i++) {
-        Type cluster(clusters1[i]);
+        Type& cluster = clusters1[i];
         // +1 for the cardinality
         QVector< PixelT > centroid(cluster[0].size() + 1);
 
@@ -230,7 +231,8 @@ typename ColorSignature< PixelT >::Type ColorSignature< PixelT >::createSignatur
         centroids[i] = centroid;
     }
 
-    stagetwo(centroids, 0, clusters2, lLimit, aLimit, bLimit, length, threshold);
+    stagetwo(centroids, 0  /* Recursion depth for kd-tree */, clusters2, lLimit,
+         aLimit, bLimit, input.size(), threshold);
 
     return clusters2;
 }
