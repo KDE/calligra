@@ -20,8 +20,6 @@ KisSioxSegmentator::KisSioxSegmentator(const KisPaintDeviceSP& pimage, float pli
     : image(pimage),
     labImage(new KisPaintDevice(*pimage)),
     labelField(pimage->exactBounds().width() * pimage->exactBounds().height(), -1),
-    knownBg(pimage->exactBounds().width() * pimage->exactBounds().height()),
-    knownFg(pimage->exactBounds().width() * pimage->exactBounds().height()),
     limitL(plimitL),
     limitA(plimitA),
     limitB(plimitB)
@@ -116,19 +114,34 @@ void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
 bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int smoothness, double sizeFactorToKeep) {
     nearestPixels.clear();
 
+    QVector< const quint16* > knownBg, knownFg;
+
+    KisRectConstIteratorSP labImageIterator = labImage->createRectConstIteratorNG(
+        labImage->exactBounds());
+    quint64 i = 0;
+    do {
+        const quint16* data = reinterpret_cast<const quint16*>(
+            labImageIterator->oldRawData());
+
+        if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE)
+            knownBg.push_back(data);
+        else if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE)
+            knownFg.push_back(data);;
+
+        ++i;
+    }  while (labImageIterator->nextPixel());
+
     // Create color signatures
-    quint64 knownBgCount = 0;
-    quint64 knownFgCount = 0;
 
-    // Accumulate knownBg, and knownFg from labImage based
-
-    // TODO - make ColorSignature receive the information in the ctor.
+    // TODO
+    // - make ColorSignature receive the information in the ctor.
     // - change class name to, possibly, KisColorSigner.
     // - receive signatures as parameter to fill up (optimization)
-//    ColorSignature< const quint16* > bgColorSign;
-//    ColorSignature< const quint16* > fgColorSign;
+//    ColorSignature< const quint16* > bgColorSign, fgColorSign;
+
 //    bgSignature = bgColorSign.createSignature(knownBg, knownBgCount, limitL,
 //        limitA, limitB, BACKGROUND_CONFIDENCE);
+
 //    fgSignature = fgColorSign.createSignature(knownFg, knownFgCount, limitL,
 //        limitA, limitB, BACKGROUND_CONFIDENCE);
 

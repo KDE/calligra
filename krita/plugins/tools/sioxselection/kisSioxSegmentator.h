@@ -83,18 +83,6 @@ private:
     QVector< qint64 > labelField;
 
     /**
-      LAB color values of pixels that are definitly known background.
-      Entries are of form {l,a,b}.
-     */
-    QVector< const quint16* > knownBg;
-
-    /**
-      LAB color values of pixels that are definitly known foreground.
-      Entries are of form {l,a,b}.
-     */
-    QVector< const quint16* > knownFg;
-
-    /**
       Holds background signature (a characteristic subset of the background).
      */
     ColorSignature< const quint16* >::Type bgSignature;
