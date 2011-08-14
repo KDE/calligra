@@ -25,7 +25,6 @@ DESCRIPTION
 #include <KoFilter.h>
 #include <QVariantList>
 
-
 class WMFImport : public KoFilter
 {
     Q_OBJECT
@@ -35,7 +34,6 @@ public:
     virtual ~WMFImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-
 };
 
-#endif
+#endif // WMFIMPORT_H

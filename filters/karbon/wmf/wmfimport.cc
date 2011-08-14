@@ -23,13 +23,12 @@ DESCRIPTION
 #include "wmfimport.h"
 #include "wmfimportparser.h"
 
-#include <KarbonPart.h>
-#include <KarbonDocument.h>
-
 #include <KoFilterChain.h>
+#include <KoXmlWriter.h>
 
-#include <KDebug>
 #include <KPluginFactory>
+
+#include <QtCore/QFile>
 
 K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
 K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))
@@ -46,25 +45,29 @@ WMFImport::~WMFImport()
 
 KoFilter::ConversionStatus WMFImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (to != "application/vnd.oasis.opendocument.graphics" || from != "image/x-wmf")
+    if (to != "image/svg+xml" || from != "image/x-wmf")
         return KoFilter::NotImplemented;
 
-    WMFImportParser wmfParser;
+    QFile svgFile(m_chain->outputFile());
+    if (!svgFile.open(QIODevice::WriteOnly)) {
+        return KoFilter::CreationError;
+    }
+
+    KoXmlWriter svgWriter(&svgFile);
+
+    WMFImportParser wmfParser(svgWriter);
     if (!wmfParser.load(QString(m_chain->inputFile()))) {
         return KoFilter::WrongFormat;
     }
 
-    KarbonPart * part = dynamic_cast<KarbonPart*>(m_chain->outputDocument());
-    if (! part)
-        return KoFilter::CreationError;
-
     // Do the conversion!
-    if (!wmfParser.play(part->document())) {
+    if (!wmfParser.play()) {
         return KoFilter::WrongFormat;
     }
 
+    svgFile.close();
+
     return KoFilter::OK;
 }
-
 
 #include <wmfimport.moc>
