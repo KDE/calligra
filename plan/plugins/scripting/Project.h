@@ -105,11 +105,15 @@ namespace Scripting {
             QObject *findResourceGroup( const QString &id );
             /// Create a copy of resource group @p group and insert it into the project
             QObject *createResourceGroup( QObject *group );
+            /// Create a new resource group and insert it into the project
+            QObject *createResourceGroup();
 
             /// Find resource with identity @p id
             QObject *findResource( const QString &id );
             /// Create a copy of @p resource and add to @p group
             QObject *createResource( QObject *group, QObject *resource );
+            /// Create a new resource and add to @p group
+            QObject *createResource( QObject *group );
             /// Add an external appointment to @p resource
             void addExternalAppointment( QObject *resource, const QVariant &id, const QString &name, const QVariantList &lst );
             /// Clear the resources @p resource external appointments to project with identity @p id

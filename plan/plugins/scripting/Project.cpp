@@ -356,6 +356,15 @@ QObject *Scripting::Project::createResourceGroup( QObject *group )
     return resourceGroup( g );
 }
 
+QObject *Scripting::Project::createResourceGroup()
+{
+    KPlato::ResourceGroup *g = new KPlato::ResourceGroup();
+    AddResourceGroupCmd *cmd = new AddResourceGroupCmd( project(), g, i18nc( "(qtundo_format)", "Add resource group" ) );
+    cmd->redo();
+    m_command->addCommand( cmd );
+    return resourceGroup( g );
+}
+
 QObject *Scripting::Project::resourceGroup( KPlato::ResourceGroup *group )
 {
     if ( ! m_groups.contains( group ) ) {
@@ -384,7 +393,7 @@ QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *gro
     return m_resourceModel.data( idx, stringToRole( role ) );
 }
 
-QObject *Scripting::Project::createResource( QObject *group, QObject *res )
+QObject *Scripting::Project::createResource( QObject *group, QObject *copy )
 {
     ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
     if ( gr == 0 ) {
@@ -397,7 +406,7 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *res )
         return 0;
     }
     KPlato::Resource *r = 0;
-    const Resource *rs = qobject_cast<Resource*>( res );
+    const Resource *rs = qobject_cast<Resource*>( copy );
     if ( rs != 0 ) {
         r = project()->findResource( rs->kplatoResource()->id() );
         if ( r ) {
@@ -414,8 +423,25 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *res )
         r = new KPlato::Resource();
     }
     AddResourceCmd *cmd = new AddResourceCmd( g, r, i18nc( "(qtundo_format)", "Add resource" ) );
-    cmd->redo();
-    m_command->addCommand( cmd );
+    slotAddCommand( cmd );
+    return resource( r );
+}
+
+QObject *Scripting::Project::createResource( QObject *group )
+{
+    ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
+    if ( gr == 0 ) {
+        kDebug()<<"No group specified";
+        return 0;
+    }
+    KPlato::ResourceGroup *g = project()->findResourceGroup( gr->kplatoResourceGroup()->id() );
+    if ( g == 0 ) {
+        kDebug()<<"Could not find group";
+        return 0;
+    }
+    KPlato::Resource *r = new KPlato::Resource();
+    AddResourceCmd *cmd = new AddResourceCmd( g, r, i18nc( "(qtundo_format)", "Add resource" ) );
+    slotAddCommand( cmd );
     return resource( r );
 }
 
