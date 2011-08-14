@@ -10,6 +10,7 @@
  * Copyright (C) 2006 Peter Simonsson <psn@linux.se>
  * Copyright (C) 2006 Laurent Montel <montel@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
