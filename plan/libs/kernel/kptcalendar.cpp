@@ -44,7 +44,7 @@ namespace KPlato
 /////   CalendarDay   ////
 CalendarDay::CalendarDay()
     : m_date(),
-      m_state(0),
+      m_state(Undefined),
       m_calendar( 0 )
 {
 
@@ -587,6 +587,18 @@ bool CalendarWeekdays::hasInterval() const
 
 CalendarDay *CalendarWeekdays::weekday( int day ) const {
     return m_weekdays.value( day );
+}
+
+//static
+int CalendarWeekdays::dayOfWeek(const QString& name)
+{
+    QStringList lst;
+    lst << "Monday" << "Tuesday" << "Wednesday" << "Thursday" << "Friday" << "Saturday" << "Sunday";
+    int idx = -1;
+    if ( lst.contains( name ) ) {
+        idx = lst.indexOf( name ) + 1;
+    }
+    return idx;
 }
 
 Duration CalendarWeekdays::duration() const {
