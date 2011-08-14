@@ -229,13 +229,6 @@ void EmfDebugBackend::setTextAlign(EmfDeviceContext &context, const quint32 text
     kDebug(33100) << "EMR_SETTEXTALIGN:" << textAlignMode;
 }
 
-void EmfDebugBackend::setBkColor(EmfDeviceContext &context, const quint8 red, const quint8 green, const quint8 blue,
-                              const quint8 reserved )
-{
-    Q_UNUSED( reserved );
-    kDebug(33100) << "EMR_SETBKCOLOR" << QColor( red, green, blue );
-}
-
 void EmfDebugBackend::createPen(EmfDeviceContext &context, quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
 			       quint8 red, quint8 green, quint8 blue, quint8 reserved )
 {

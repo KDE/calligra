@@ -105,9 +105,6 @@ public:
     void extCreateFontIndirectW(EmfDeviceContext &context,
                                 const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
     void setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode );
-    void setBkColor(EmfDeviceContext &context,
-                    const quint8 red, const quint8 green, const quint8 blue,
-                     const quint8 reserved );
     void setPixelV(EmfDeviceContext &context,
                    QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved );
     void modifyWorldTransform(EmfDeviceContext &context,
@@ -179,6 +176,8 @@ private:
        700 is bold.
     */
     int convertFontWeight( quint32 emfWeight );
+
+    void updateFromDeviceContext(EmfDeviceContext &context);
 
 
     Header                  *m_header;   // Save to be able to retain scaling.

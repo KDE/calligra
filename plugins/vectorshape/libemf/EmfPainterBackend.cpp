@@ -936,19 +936,6 @@ void EmfPainterBackend::setTextAlign(EmfDeviceContext &context, const quint32 te
     m_textAlignMode = textAlignMode;
 }
 
-void EmfPainterBackend::setBkColor(EmfDeviceContext &context,
-                                       const quint8 red, const quint8 green, const quint8 blue,
-                                       const quint8 reserved )
-{
-    Q_UNUSED( reserved );
-
-#if DEBUG_EMFPAINT
-    kDebug(31000) << red << green << blue << reserved;
-#endif
-
-    m_painter->setBackground( QBrush( QColor( red, green, blue ) ) );
-}
-
 
 #define DEBUG_TEXTOUT 0
 
@@ -1474,6 +1461,135 @@ static QPainter::CompositionMode  rasteropToQtComposition(long rop)
         return opTab[i].qtRasterOp;
     else
         return QPainter::CompositionMode_Source;
+}
+
+
+// ----------------------------------------------------------------
+//                         Private functions
+
+
+// If anything has changed in the device context that is relevant to
+// the QPainter, then update the painter with the corresponding data.
+//
+void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
+{
+    // Graphic objects
+    if (context.changedItems & DCBrush) {
+        m_painter->setBrush(context.brush);
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "*** Setting fill brush to" << context.brush;
+#endif
+    }
+    // FIXME: context.image
+    if (context.changedItems & DCFont) {
+        m_painter->setFont(context.font);
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "*** Setting font to" << context.font;
+#endif
+    }
+    if (context.changedItems & DCPalette) {
+        // NYI
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "*** Setting palette (NYI)";
+#endif
+    }
+    if (context.changedItems & DCPen) {
+        QPen p = context.pen;
+        int width = p.width();
+
+#if 0 // Check if this code from WMF can also be used for EMF
+        if (dynamic_cast<QPrinter *>(mTarget)) {
+            width = 0;
+        }
+        else 
+#endif
+        if (width == 1)
+            // I'm unsure of this, but it seems that EMF uses line
+            // width == 1 as cosmetic pen.  Or it could just be that
+            // any line width < 1 should be drawn as width == 1.  The
+            // EMF spec doesn't mention the term "cosmetic pen"
+            // anywhere so we don't get any clue there.
+            //
+            // For an example where this is shown clearly, see
+            // wmf_tests.doc, in the colored rectangles and the polypolygon.
+            width = 0;
+#if 0
+        else {
+            // EMF spec: width of pen in logical coordinate
+            // => width of pen proportional with device context width
+            QRect rec = m_painter->window();
+            // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
+
+            QRect devRec = rec * m_painter->matrix();
+            if (rec.width() != 0)
+                width = (width * devRec.width()) / rec.width() ;
+            else
+                width = 0;
+        }
+#endif
+
+        p.setWidth(width);
+        m_painter->setPen(p);
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "*** Setting pen to" << p;
+#endif
+    }
+    if (context.changedItems & DCClipRegion) {
+        // Not used until SETCLIPREGION is used
+#if DEBUG_EMFPAINT
+        //kDebug(31000) << "*** region changed to" << context.region;
+#endif
+    }
+
+    // Structure objects
+    if (context.changedItems & DCBgColor) {
+        m_painter->setBackground(QBrush(context.backgroundColor));
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "*** Setting background text color to" << context.backgroundColor;
+#endif
+    }
+    //----------------------------------------------------------------
+    // Output surface not supported
+    //DCViewportExt
+    //DCViewportorg
+    //DCWindowExt  
+    //DCWindoworg  
+
+    //----------------------------------------------------------------
+    // Graphic Properties
+
+    if (context.changedItems & DCBgMixMode) {
+        // FIXME: Check the default value for this.
+        m_painter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
+                                                                     : Qt::OpaqueMode);
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
+#endif
+    }
+    //Break extra space NYI
+    //Font mapping mode NYI
+#if 0 // Fix when we do the MixMode in the device context
+    if (context.changedItems & DCFgMixMode) {
+        // FIXME: Check the default value for this.
+        QPainter::CompositionMode  compMode = QPainter::CompositionMode_Source;
+        if (context.rop < 17)
+            compMode = koWmfOpTab16[context.rop];
+        m_painter->setCompositionMode(compMode);
+
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "*** Setting composition mode to" << context.rop;
+#endif
+    }
+#endif
+    //layoutMode not necessary to handle here
+    //Mapping mode NYI
+    //PolyFillMode not necessary to handle here
+    //Stretchblt mode NYI
+    //textAlign not necessary to handle here
+    //Text extra space NYI
+
+    // Reset all changes until next time.
+    context.changedItems = 0;
 }
 
 } // xnamespace...

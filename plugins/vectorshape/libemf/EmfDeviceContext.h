@@ -57,7 +57,7 @@ enum DeviceContextMembers {
     DCClipRegion     = 0x00000010,
 
     // Structure objects
-    DCBgTextColor    = 0x00000020,
+    DCBgColor        = 0x00000020,
     DCCurrentPos     = 0x00000040,
     DCFgTextColor    = 0x00000080,
     // Output surface not supported
@@ -100,7 +100,7 @@ public:
     QRegion   clipRegion;       // Region
 
     // Structure Objects
-    QColor  backgroundColor;    // Background text color
+    QColor  backgroundColor;    // Background color
     QPoint  currentPosition;    // Drawing position (Current point)
     QColor  foregroundTextColor; // Foreground text color
     ;    //Output Surface**  (what is this good for?  Mixing colors?)
