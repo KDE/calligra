@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2003 thierry lorthiois <lorthioist@wanadoo.fr>
- * Copyright (c) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2007-2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,153 +18,145 @@
 */
 
 #include "wmfimportparser.h"
-
-#include <KarbonDocument.h>
-
-#include <KoPathShape.h>
-#include <KoLineBorder.h>
-#include <KoShapeLayer.h>
-#include <KoImageData.h>
-#include <KoImageCollection.h>
-#include <KoColorBackground.h>
-#include <KoGradientBackground.h>
-#include <KoPatternBackground.h>
-#include <KoShapeFactoryBase.h>
-#include <KoShapeRegistry.h>
-
 #include <WmfEnums.h>
 #include <WmfDeviceContext.h>
-
-#include <pathshapes/rectangle/RectangleShape.h>
-#include <pathshapes/ellipse/EllipseShape.h>
-#include <artistictextshape/ArtisticTextShape.h>
-#include <kdebug.h>
+#include <KoXmlWriter.h>
+#include <KoUnit.h>
+#include <KDebug>
+#include <QtCore/QBuffer>
+#include <math.h>
 
 /*
 bug : see motar.wmf
 */
 
-WMFImportParser::WMFImportParser() : WmfAbstractBackend()
+#define DEG2RAD(angle) angle * M_PI / 180.0
+#define RAD2DEG(angle) angle / M_PI * 180.0
+
+WMFImportParser::WMFImportParser(KoXmlWriter &svgWriter)
+    : WmfAbstractBackend(), m_svgWriter(svgWriter)
 {
 }
 
-
-bool WMFImportParser::play(KarbonDocument& doc)
+WMFImportParser::~WMFImportParser()
 {
-    mDoc = &doc;
-    mScaleX = mScaleY = 1;
-
-    // Play the wmf file
-    if (! WmfAbstractBackend::play())
-        return false;
-
-    KoShapeLayer * layer = 0;
-    // check if we have to insert a default layer
-    if (mDoc->layers().count() == 0) {
-        layer = new KoShapeLayer();
-        mDoc->insertLayer(layer);
-    } else
-        layer = mDoc->layers().first();
-
-    uint zIndex = 0;
-    // add all toplevel shapes to the layer
-    foreach(KoShape * shape, mDoc->shapes()) {
-        shape->setZIndex(zIndex++);
-        if (! shape->parent())
-            layer->addShape(shape);
-    }
-
-    return true;
 }
-
 
 //-----------------------------------------------------------------------------
 // Virtual Painter
 
 bool WMFImportParser::begin(const QRect &boundingBox)
 {
-    mCurrentOrg.setX(boundingBox.left());
-    mCurrentOrg.setY(boundingBox.top());
+    m_scaleX = m_scaleY = 1;
 
-    if (isStandard()) {
-        //mDoc->setUnit(KoUnit(KoUnit::Point));
-        mDoc->setPageSize(boundingBox.size());
-    } else {
+    m_pageSize = boundingBox.size();
+
+    if (!isStandard()) {
         // Placeable Wmf store the boundingRect() in pixel and the default DPI
-        // The placeable format doesn't have information on which Unit to use
-        // so we choose millimeters by default
-        //mDoc->setUnit(KoUnit(KoUnit::Millimeter));
-        mDoc->setPageSize(QSizeF(INCH_TO_POINT((double)boundingBox.width() / defaultDpi()),
-                                 INCH_TO_POINT((double)boundingBox.height() / defaultDpi())));
+        m_pageSize.rwidth() = INCH_TO_POINT((double)boundingBox.width() / defaultDpi());
+        m_pageSize.rheight() = INCH_TO_POINT((double)boundingBox.height() / defaultDpi());
     }
     if ((boundingBox.width() != 0) && (boundingBox.height() != 0)) {
-        mScaleX = mDoc->pageSize().width() / (double)boundingBox.width();
-        mScaleY = mDoc->pageSize().height() / (double)boundingBox.height();
+        m_scaleX = m_pageSize.width() / (double)boundingBox.width();
+        m_scaleY = m_pageSize.height() / (double)boundingBox.height();
     }
 
+    // standard header:
+    m_svgWriter.addCompleteElement("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+    m_svgWriter.addCompleteElement("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " \
+                                   "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
+
+    // add some PR.  one line is more than enough.
+    m_svgWriter.addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->\n");
+    m_svgWriter.startElement("svg");
+    m_svgWriter.addAttribute("xmlns", "http://www.w3.org/2000/svg");
+    m_svgWriter.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    m_svgWriter.addAttribute("width", m_pageSize.width());
+    m_svgWriter.addAttribute("height", m_pageSize.height());
+
     kDebug(30504) << "bounding rect =" << boundingBox;
-    kDebug(30504) << "page size =" << mDoc->pageSize();
-    kDebug(30504) << "scale x =" << mScaleX;
-    kDebug(30504) << "scale y =" << mScaleY;
+    kDebug(30504) << "page size =" << m_pageSize;
+    kDebug(30504) << "scale x =" << m_scaleX;
+    kDebug(30504) << "scale y =" << m_scaleY;
+
+    m_window.org = boundingBox.topLeft();
+    //m_viewport.org = boundingBox.topLeft();
+    m_window.ext = boundingBox.size();
+    m_window.extIsValid = true;
+    m_viewport.ext = m_pageSize;
+    m_viewport.extIsValid = true;
+
+    updateTransform();
 
     return true;
 }
-
 
 bool WMFImportParser::end()
 {
+    m_svgWriter.endElement(); // svg
     return true;
 }
-
 
 void WMFImportParser::save()
 {
 }
 
-
 void WMFImportParser::restore()
 {
 }
 
-
 void WMFImportParser::setWindowOrg(int left, int top)
 {
-    mCurrentOrg.setX(left);
-    mCurrentOrg.setY(top);
-}
-
-
-void WMFImportParser::setWindowExt(int width, int height)
-{
-    // the wmf file can change width/height during the drawing
-    if ((width != 0) && (height != 0)) {
-        mScaleX = mDoc->pageSize().width() / (double)width;
-        mScaleY = mDoc->pageSize().height() / (double)height;
+    kDebug(30504) << left << top;
+    if (QPoint(left, top) != m_window.org) {
+        m_window.org.setX(left);
+        m_window.org.setY(top);
+        updateTransform();
     }
 }
 
-void WMFImportParser::setViewportOrg(int /*left*/, int /*top*/)
+void WMFImportParser::setWindowExt(int width, int height)
 {
-    // FIXME: Not Yet Implemented
-    //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
+    kDebug(30504) << width << height;
+    // the wmf file can change width/height during the drawing
+    if (QSize(width, height) != m_window.ext) {
+        m_window.ext = QSizeF(width, height);
+        m_window.extIsValid = true;
+        updateTransform();
+    }
 }
 
-
-void WMFImportParser::setViewportExt(int /*width*/, int /*height*/)
+void WMFImportParser::setViewportOrg(int left, int top)
 {
-    // FIXME: Not Yet Implemented
-    //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
+    kDebug(30504) << left << top;
+    if (QPoint(left, top) != m_viewport.org) {
+        m_viewport.org.setX(left);
+        m_viewport.org.setY(top);
+        updateTransform();
+    }
 }
 
-
+void WMFImportParser::setViewportExt(int width, int height)
+{
+    kDebug(30504) << width << height;
+    if ((width != 0) && (height != 0)) {
+        m_viewport.ext = QSizeF(width, height);
+        m_viewport.extIsValid = true;
+        updateTransform();
+    }
+}
 
 void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &/*context*/, const QMatrix &matrix,
                                 bool combine)
 {
+    if (combine)
+        m_matrix = matrix * m_matrix;
+    else
+        m_matrix = matrix;
+
     kDebug(30504) << "matrix =" << matrix;
     kDebug(30504) << "combine =" << combine;
 }
-
 
 void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, QColor color)
 {
@@ -178,236 +170,290 @@ void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, 
 
 void WMFImportParser::lineTo(Libwmf::WmfDeviceContext &context, int left, int top)
 {
-    KoPathShape * line = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-    if (! line)
-        return;
+    const QString strokeStyle = saveStroke(context);
 
-    line->moveTo(QPointF(coordX(context.currentPosition.x()),
-                         coordY(context.currentPosition.y())));
-    line->lineTo(QPointF(coordX(left), coordY(top)));
-    line->normalize();
+    static int lineIndex = 0;
 
-    appendPen(context, *line);
+    const QPointF p1 = coord(context.currentPosition);
+    const QPointF p2 = coord(QPoint(left, top));
 
-    mDoc->add(line);
-    context.currentPosition.setX(left);
-    context.currentPosition.setY(top);
+    m_svgWriter.startElement("line");
+    m_svgWriter.addAttribute("id", QString("line%1").arg(++lineIndex));
+    m_svgWriter.addAttribute("x1", p1.x());
+    m_svgWriter.addAttribute("y1", p1.y());
+    m_svgWriter.addAttribute("x2", p2.x());
+    m_svgWriter.addAttribute("y2", p2.y());
+    m_svgWriter.addAttribute("style", strokeStyle+"fill:none");
+    m_svgWriter.endElement(); // line
+
+    context.currentPosition = QPoint(left, top);
 }
-
 
 void WMFImportParser::drawRect(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height)
 {
-    QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
+    QRectF bound = boundBox(left, top, width, height);
 
-    RectangleShape * rectangle = static_cast<RectangleShape*>(createShape(RectangleShapeId));
-    if (! rectangle)
-        return;
+    const QString fillStyle = saveFill(context);
+    const QString strokeStyle = saveStroke(context);
 
-    rectangle->setPosition(bound.topLeft());
-    rectangle->setSize(bound.size());
+    static int rectIndex = 0;
 
-    appendPen(context, *rectangle);
-    appendBrush(context, *rectangle);
-
-    mDoc->add(rectangle);
+    m_svgWriter.startElement("rect");
+    m_svgWriter.addAttribute("id", QString("rect%1").arg(++rectIndex));
+    m_svgWriter.addAttribute("x", bound.x());
+    m_svgWriter.addAttribute("y", bound.y());
+    m_svgWriter.addAttribute("width", bound.width());
+    m_svgWriter.addAttribute("height", bound.height());
+    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.endElement(); // rect
 }
-
 
 void WMFImportParser::drawRoundRect(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height, int roundw, int roundh)
 {
-    QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
+    QRectF bound = boundBox(left, top, width, height);
+    // roundw and roundh are in percent of width and height
+    const qreal rx = qAbs(roundw)/100. * bound.width();
+    const qreal ry = qAbs(roundh)/100. * bound.height();
 
-    RectangleShape * rectangle = static_cast<RectangleShape*>(createShape(RectangleShapeId));
-    if (! rectangle)
-        return;
+    const QString fillStyle = saveFill(context);
+    const QString strokeStyle = saveStroke(context);
 
-    rectangle->setPosition(bound.topLeft());
-    rectangle->setSize(bound.size());
-    rectangle->setCornerRadiusX(2.0 * qAbs(roundw));
-    rectangle->setCornerRadiusY(2.0 * qAbs(roundh));
+    static int roundRectIndex = 0;
 
-    appendPen(context, *rectangle);
-    appendBrush(context, *rectangle);
-
-    mDoc->add(rectangle);
+    m_svgWriter.startElement("rect");
+    m_svgWriter.addAttribute("id", QString("roundRect%1").arg(++roundRectIndex));
+    m_svgWriter.addAttribute("x", bound.x());
+    m_svgWriter.addAttribute("y", bound.y());
+    m_svgWriter.addAttribute("width", bound.width());
+    m_svgWriter.addAttribute("height", bound.height());
+    m_svgWriter.addAttribute("rx", 0.5*rx);
+    m_svgWriter.addAttribute("ry", 0.5*ry);
+    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.endElement(); // rect
 }
-
 
 void WMFImportParser::drawEllipse(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height)
 {
-    QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
+    QRectF bound = boundBox(left, top, width, height);
 
-    EllipseShape *ellipse = static_cast<EllipseShape*>(createShape(EllipseShapeId));
-    if (! ellipse)
-        return;
+    const QString fillStyle = saveFill(context);
+    const QString strokeStyle = saveStroke(context);
 
-    ellipse->setPosition(bound.topLeft());
-    ellipse->setSize(bound.size());
+    static int ellipseIndex = 0;
 
-    appendPen(context, *ellipse);
-    appendBrush(context, *ellipse);
-
-    mDoc->add(ellipse);
+    m_svgWriter.startElement("ellipse");
+    m_svgWriter.addAttribute("id", QString("ellipse%1").arg(++ellipseIndex));
+    m_svgWriter.addAttribute("cx", bound.center().x());
+    m_svgWriter.addAttribute("cy", bound.center().y());
+    m_svgWriter.addAttribute("rx", 0.5*bound.width());
+    m_svgWriter.addAttribute("ry", 0.5*bound.height());
+    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.endElement(); // ellipse
 }
-
 
 void WMFImportParser::drawArc(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
-    double start = (aStart * 180) / 2880.0;
-    double end = (aLen * 180) / 2880.0;
-    end += start;
+    const qreal a1 = DEG2RAD((aStart * 180) / 2880.0);
+    const qreal a2 = DEG2RAD((aLen * 180) / 2880.0);
+    const int largeArc = a2 > M_PI ? 1 : 0;
 
-    QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
+    QRectF bound = boundBox(x, y, w, h);
 
-    EllipseShape * arc = static_cast<EllipseShape*>(createShape(EllipseShapeId));
-    if (! arc)
-        return;
+    const qreal rx = 0.5*bound.width();
+    const qreal ry = 0.5*bound.height();
+    const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
+    const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
 
-    arc->setType(EllipseShape::Arc);
-    arc->setStartAngle(start);
-    arc->setEndAngle(end);
-    arc->setPosition(bound.topLeft());
-    arc->setSize(bound.size());
+    QString path;
+    path += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
+    path += QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
 
-    appendPen(context, *arc);
-    //appendBrush(context,  *arc );
+    const QString strokeStyle = saveStroke(context);
 
-    mDoc->add(arc);
+    static int arcIndex = 0;
+
+    m_svgWriter.startElement("path");
+    m_svgWriter.addAttribute("id", QString("arc%1").arg(++arcIndex));
+    m_svgWriter.addAttribute("d", path);
+    m_svgWriter.addAttribute("style", strokeStyle+"fill:none");
+    m_svgWriter.endElement(); // path
 }
-
 
 void WMFImportParser::drawPie(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
-    double start = (aStart * 180) / 2880.0;
-    double end = (aLen * 180) / 2880.0;
-    end += start;
+    const qreal a1 = DEG2RAD((aStart * 180) / 2880.0);
+    const qreal a2 = DEG2RAD((aLen * 180) / 2880.0);
+    const int largeArc = a2 > M_PI ? 1 : 0;
 
-    QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
+    QRectF bound = boundBox(x, y, w, h);
 
-    EllipseShape * pie = static_cast<EllipseShape*>(createShape(EllipseShapeId));
-    if (! pie)
-        return;
+    const qreal rx = 0.5*bound.width();
+    const qreal ry = 0.5*bound.height();
+    const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
+    const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
 
-    pie->setType(EllipseShape::Pie);
-    pie->setStartAngle(start);
-    pie->setEndAngle(end);
-    pie->setPosition(bound.topLeft());
-    pie->setSize(bound.size());
+    QString path;
+    path += QString("M%1,%2 ").arg(bound.center().x()).arg(bound.center().y());
+    path += QString("L%1,%2 ").arg(p1.x()).arg(p1.y());
+    path += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
+    path += QString("L%1,%2").arg(bound.center().x()).arg(bound.center().y());
 
-    appendPen(context, *pie);
-    appendBrush(context, *pie);
+    const QString fillStyle = saveFill(context);
+    const QString strokeStyle = saveStroke(context);
 
-    mDoc->add(pie);
+    static int pieIndex = 0;
+
+    m_svgWriter.startElement("path");
+    m_svgWriter.addAttribute("id", QString("pie%1").arg(++pieIndex));
+    m_svgWriter.addAttribute("d", path);
+    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.endElement(); // path
 }
-
 
 void WMFImportParser::drawChord(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
-    double start = (aStart * 180) / 2880.0;
-    double end = (aLen * 180) / 2880.0;
-    end += start;
+    const qreal a1 = DEG2RAD((aStart * 180) / 2880.0);
+    const qreal a2 = DEG2RAD((aLen * 180) / 2880.0);
+    const int largeArc = a2 > M_PI ? 1 : 0;
 
-    QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
+    QRectF bound = boundBox(x, y, w, h);
 
-    EllipseShape * chord = static_cast<EllipseShape*>(createShape(EllipseShapeId));
-    if (! chord)
-        return;
+    const qreal rx = 0.5*bound.width();
+    const qreal ry = 0.5*bound.height();
+    const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
+    const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
 
-    chord->setType(EllipseShape::Chord);
-    chord->setStartAngle(start);
-    chord->setEndAngle(end);
-    chord->setPosition(bound.topLeft());
-    chord->setSize(bound.size());
+    QString path;
+    path += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
+    path += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
+    path += QString("L%1,%2").arg(p1.x()).arg(p1.y());
 
-    appendPen(context, *chord);
-    appendBrush(context, *chord);
+    const QString fillStyle = saveFill(context);
+    const QString strokeStyle = saveStroke(context);
 
-    mDoc->add(chord);
+    static int chordKIndex = 0;
+
+    m_svgWriter.startElement("path");
+    m_svgWriter.addAttribute("id", QString("chord%1").arg(++chordKIndex));
+    m_svgWriter.addAttribute("d", path);
+    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.endElement(); // path
 }
-
 
 void WMFImportParser::drawPolyline(Libwmf::WmfDeviceContext &context, const QPolygon &pa)
 {
-    KoPathShape *polyline = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-    if (! polyline)
+    QString points;
+    const int pointCount = pa.size();
+    if (pointCount <= 1)
         return;
 
-    appendPen(context, *polyline);
-    appendPoints(*polyline, pa);
+    QPointF p;
+    foreach(const QPoint &point, pa) {
+        p = coord(point);
+        points += QString("%1,%2 ").arg(p.x()).arg(p.y());
+    }
 
-    mDoc->add(polyline);
+    const QString strokeStyle = saveStroke(context);
+
+    static int polylineIndex = 0;
+
+    m_svgWriter.startElement("polyline");
+    m_svgWriter.addAttribute("id", QString("polyline%1").arg(++polylineIndex));
+    m_svgWriter.addAttribute("points", points);
+    m_svgWriter.addAttribute("style", strokeStyle+"fill:none");
+    m_svgWriter.endElement(); // polyline
 }
-
 
 void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPolygon &pa)
 {
-    KoPathShape *polygon = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-    if (! polygon)
+    QString points;
+    const int pointCount = pa.size();
+    if (pointCount <= 1)
         return;
 
-    appendPen(context, *polygon);
-    appendBrush(context, *polygon);
-    appendPoints(*polygon, pa);
+    QPointF p;
+    foreach(const QPoint &point, pa) {
+        p = coord(point);
+        points += QString("%1,%2 ").arg(p.x()).arg(p.y());
+    }
 
-    polygon->close();
-    polygon->setFillRule((context.polyFillMode == Libwmf::WINDING) ? Qt::WindingFill : Qt::OddEvenFill);
-    mDoc->add(polygon);
+    const QString fillStyle = saveFill(context);
+    const QString strokeStyle = saveStroke(context);
+
+    static int polygonIndex = 0;
+
+    m_svgWriter.startElement("polygon");
+    m_svgWriter.addAttribute("id", QString("polygon%1").arg(++polygonIndex));
+    m_svgWriter.addAttribute("points", points);
+    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.endElement(); // polygon
 }
-
 
 void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa)
 {
-    KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-    if (! path)
+    if (listPa.isEmpty())
         return;
 
-    if (listPa.count() > 0) {
-        appendPen(context, *path);
-        appendBrush(context, *path);
-        appendPoints(*path, listPa.first());
-        path->close();
-        path->setFillRule(context.polyFillMode ? Qt::WindingFill : Qt::OddEvenFill);
-        foreach(const QPolygon & pa, listPa) {
-            KoPathShape *newPath = static_cast<KoPathShape*>(createShape(KoPathShapeId));
-            if (! newPath)
-                continue;
-
-            appendPoints(*newPath, pa);
-            newPath->close();
-            path->combine(newPath);
+    QString path;
+    QPointF p;
+    foreach(const QPolygon &poly, listPa) {
+        int pointCount = poly.size();
+        if(pointCount <= 1)
+            continue;
+        p = coord(poly[0]);
+        path += QString("M%1,%2 L").arg(p.x()).arg(p.y());
+        for(int i = 1; i < pointCount; ++i) {
+            p = coord(poly[i]);
+            path += QString("%1,%2 ").arg(p.x()).arg(p.y());
         }
-
-        mDoc->add(path);
+        path.append("Z ");
     }
+
+    const QString fillStyle = saveFill(context);
+    const QString strokeStyle = saveStroke(context);
+
+    static int polyPolygonIndex = 0;
+
+    m_svgWriter.startElement("path");
+    m_svgWriter.addAttribute("id", QString("polyPolygon%1").arg(++polyPolygonIndex));
+    m_svgWriter.addAttribute("d", path);
+    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.endElement(); // path
 }
 
-
-void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &/*context*/, int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
+void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &/*context*/, int x, int y, const QImage &rawImage, int sx, int sy, int sw, int sh)
 {
-    KoImageData * data = mDoc->imageCollection()->createImageData(image);
-    if (! data)
+    QPoint imgOrg(qMax(sx, 0), qMax(sy, 0));
+    QSize imgExt = QSize(rawImage.width()-imgOrg.x(), rawImage.height()-imgOrg.y());
+    if (sw > 0) {
+        imgExt.rwidth() = qMin(imgExt.width(), sw);
+    }
+    if (sh > 0) {
+        imgExt.rheight() = qMin(imgExt.height(), sh);
+    }
+    QImage image = rawImage.copy(QRect(imgOrg, imgExt));
+
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    if(!buffer.open(QIODevice::WriteOnly))
+        return;
+    if (!image.save(&buffer, "PNG"))
         return;
 
-    KoShape * pic = createShape("PictureShape");
-    if (! pic)
-        return;
+    static int imageIndex = 0;
 
-    pic->setUserData(data);
-    pic->setPosition(QPointF(x, y));
-    if (sw < 0)
-        sw = image.width();
-    if (sh < 0)
-        sh = image.height();
-    pic->setSize(QSizeF(sw, sh));
+    const QPointF pos = coord(QPoint(x, y));
+    const QSizeF s = size(image.size());
 
-    kDebug(30504) << "image data size =" << data->pixmap().size();
-    kDebug(30504) << "source image size =" << image.size();
-    kDebug(30504) << "source position =" << QPointF(sx, sy);
-    kDebug(30504) << "source size =" << QPointF(scaleW(sw), scaleH(sh));
-
-    mDoc->add(pic);
+    m_svgWriter.startElement("image");
+    m_svgWriter.addAttribute("id", QString("image%1").arg(++imageIndex));
+    m_svgWriter.addAttribute("x", pos.x());
+    m_svgWriter.addAttribute("y", pos.y());
+    m_svgWriter.addAttribute("width", s.width());
+    m_svgWriter.addAttribute("height", s.height());
+    m_svgWriter.addAttribute("xlink:href", "data:image/png;base64," + ba.toBase64());
+    m_svgWriter.endElement(); // image
 }
-
 
 void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &/*context*/, int x, int y, int width, int height, quint32 rasterOperation)
 {
@@ -419,104 +465,258 @@ void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &/*context*/, int x, int y
     Q_UNUSED(rasterOperation);
 }
 
-
-
 void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, const QString& text)
 {
-    enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
-
-    if (context.textAlign & CurrentPosition) {
+    if (context.textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
         x = context.currentPosition.x();
         y = context.currentPosition.y();
     }
 
-    // adjust font size
-    QFont font = context.font;
-    font.setPointSizeF(coordY(context.font.pointSize()));
+    QFontMetrics metrics(context.font);
 
-    ArtisticTextShape * textShape = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
-    if (! textShape)
-        return;
-
-    textShape->setPlainText(text);
-    textShape->setFont(font);
-
-    // determine y-offset from given baseline position
-    qreal yOffset = 0.0;
-    if (context.textAlign & AlignBottom)
-        yOffset -= textShape->baselineOffset();
-
-    textShape->setPosition(QPointF(coordX(x), coordY(y) + yOffset));
-
-    // set text anchor
-    qreal xOffset = 0.0;
-    if (context.textAlign & AlignHCenter) {
-        textShape->setTextAnchor(ArtisticTextShape::AnchorMiddle);
-        xOffset = -0.5 * textShape->size().width();
+    if (context.textAlign & TA_BOTTOM) {
+        y -= metrics.descent();
+    } else if(context.textAlign & TA_BASELINE) {
+        // nothing to do here
+    } else { // TA_TOP
+        // this the is the default
+        y += metrics.ascent();
     }
+
+    static int textIndex = 0;
+
+    const QPointF pos = coord(QPoint(x, y));
+
+    m_svgWriter.startElement("text");
+    m_svgWriter.addAttribute("id", QString("text%1").arg(++textIndex));
+    m_svgWriter.addAttribute("x", pos.x());
+    m_svgWriter.addAttribute("y", pos.y());
+    if (context.textAlign & TA_CENTER)
+        m_svgWriter.addAttribute("text-anchor", "middle");
+    else if (context.textAlign & TA_RIGHT)
+        m_svgWriter.addAttribute("text-anchor", "end");
+    m_svgWriter.addAttribute("font-family", context.font.family());
+    // adjust font size
+    m_svgWriter.addAttributePt("font-size", size(QSize(0, context.font.pointSize())).height());
+    if (context.font.bold())
+        m_svgWriter.addAttribute("font-weight", "bold");
+    if (context.font.italic())
+        m_svgWriter.addAttribute("font-style", "italic");
+    if (context.font.underline())
+        m_svgWriter.addAttribute("text-decoration", "underline");
+    m_svgWriter.addAttribute("stroke", context.foregroundTextColor.name());
 
     if (context.escapement) {
         // we rotate around the anchor point
-        QPointF anchor(-xOffset, -yOffset);
-        QTransform matrix;
-        matrix.translate(anchor.x(), anchor.y());
-        matrix.rotate(qreal(context.escapement) * M_PI / qreal(1800.0));  // rotation is in 1/10th of a degree
-        matrix.translate(-anchor.x(), -anchor.y());
-        textShape->applyTransformation(matrix);
+        // rotation is in 1/10th of a degree
+        QString transform;
+        transform += QString("translate(%1,%2) ").arg(pos.x()).arg(pos.y());
+        transform += QString("rotate(%1) ").arg(qreal(context.escapement) / -10.0);
+        transform += QString("translate(%1,%2)").arg(-pos.x()).arg(-pos.y());
+        m_svgWriter.addAttribute("transform", transform);
     }
 
-    // FIXME: This must be wrong. The text pen is supposed to be used
-    //        for the foreground, not the background.  /iw
-    textShape->setBackground(new KoColorBackground(context.foregroundTextColor));
+    m_svgWriter.addTextNode(text);
 
-    mDoc->add(textShape);
+    m_svgWriter.endElement(); // text
 }
-
 
 //-----------------------------------------------------------------------------
 // Utilities
 
-void WMFImportParser::appendPen(Libwmf::WmfDeviceContext &context, KoShape& obj)
+QString WMFImportParser::saveStroke(Libwmf::WmfDeviceContext &context)
 {
-    double width = context.pen.width() * mScaleX;
+    if(context.pen.style() == Qt::NoPen) {
+        return "stroke:none;";
+    }
 
-    KoLineBorder * border = new KoLineBorder(((width < 0.99) ? 1 : width), context.pen.color());
-    border->setLineStyle(context.pen.style(), context.pen.dashPattern());
-    border->setCapStyle(context.pen.capStyle());
-    border->setJoinStyle(context.pen.joinStyle());
+    const qreal width = context.pen.width() > 1.0 ? qMax(1.0, context.pen.width() * m_scaleX) : 1.0;
 
-    obj.setBorder(border);
+    QString strokeStyle;
+
+    strokeStyle += QString("stroke:%1;").arg(context.pen.color().name());
+    strokeStyle += QString("stroke-width:%1;").arg(width);
+    if (context.pen.capStyle() == Qt::FlatCap)
+        strokeStyle += "stroke-linecap:butt;";
+    else if (context.pen.capStyle() == Qt::RoundCap)
+        strokeStyle += "stroke-linecap:round;";
+    else if (context.pen.capStyle() == Qt::SquareCap)
+        strokeStyle += "stroke-linecap:square;";
+
+    if (context.pen.joinStyle() == Qt::MiterJoin) {
+        strokeStyle += "stroke-linejoin:miter;";
+        strokeStyle += QString("stroke-miterlimit:%1;").arg(context.pen.miterLimit());
+    } else if (context.pen.joinStyle() == Qt::RoundJoin)
+        strokeStyle += "stroke-linejoin:round;";
+    else if (context.pen.joinStyle() == Qt::BevelJoin)
+        strokeStyle += "stroke-linejoin:bevel;";
+
+    // dash
+    if (context.pen.style() > Qt::SolidLine) {
+        qreal dashFactor = width;
+
+        if (context.pen.dashOffset() != 0)
+            strokeStyle += QString("stroke-dashoffset:%1;").arg(dashFactor * context.pen.dashOffset());
+
+        QString dashStr;
+        const QVector<qreal> dashes = context.pen.dashPattern();
+        int dashCount = dashes.size();
+        for (int i = 0; i < dashCount; ++i) {
+            if (i > 0)
+                dashStr += ",";
+            dashStr += QString("%1").arg(dashes[i] * dashFactor);
+        }
+        strokeStyle += QString("stroke-dasharray:%1;").arg(dashStr);
+    }
+
+    return strokeStyle;
 }
 
-
-void WMFImportParser::appendBrush(Libwmf::WmfDeviceContext &context, KoShape& obj)
+QString WMFImportParser::saveFill(Libwmf::WmfDeviceContext &context)
 {
+    if (context.brush.style() == Qt::NoBrush) {
+        return "fill:none;";
+    }
+
+    QString fillStyle;
+
+    if (context.brush.style() == Qt::SolidPattern) {
+        fillStyle = QString("fill:%1;").arg(context.brush.color().name());
+        if (context.brush.color().alphaF() < 1.0)
+            fillStyle += QString("fill-opacity:%1;").arg(context.brush.color().alphaF());
+
+        return fillStyle;
+    }
+
+    static int fillIndex = 0;
+    QString fillId = QString("fill%1").arg(++fillIndex);
+
     switch (context.brush.style()) {
-    case Qt::NoBrush:
-        obj.setBackground(0);
-        break;
     case Qt::TexturePattern: {
-        KoImageCollection * imageCollection = mDoc->imageCollection();
-        if (imageCollection) {
-            KoPatternBackground * bg = new KoPatternBackground(imageCollection);
-            bg->setPattern(context.brush.textureImage());
-            bg->setTransform(context.brush.transform());
-            obj.setBackground(bg);
+        QImage texture = context.brush.textureImage();
+        m_svgWriter.startElement("pattern");
+        m_svgWriter.addAttribute("id", fillId);
+        m_svgWriter.addAttribute("x", 0);
+        m_svgWriter.addAttribute("y", 0);
+        m_svgWriter.addAttribute("width", texture.size().width());
+        m_svgWriter.addAttribute("height", texture.size().height());
+        m_svgWriter.addAttribute("patternUnits", "userSpaceOnUse");
+
+        m_svgWriter.addAttribute("viewBox", QString("0 0 %1 %2").arg(texture.size().width()).arg(texture.size().height()));
+
+        m_svgWriter.startElement("image");
+        m_svgWriter.addAttribute("x", "0");
+        m_svgWriter.addAttribute("y", "0");
+        m_svgWriter.addAttribute("width", QString("%1px").arg(texture.size().width()));
+        m_svgWriter.addAttribute("height", QString("%1px").arg(texture.size().height()));
+
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        if (texture.save(&buffer, "PNG")) {
+            m_svgWriter.addAttribute("xlink:href", "data:image/png;base64," + ba.toBase64());
         }
+
+        m_svgWriter.endElement(); // image
+        m_svgWriter.endElement(); // pattern
         break;
     }
-    case Qt::LinearGradientPattern:
-    case Qt::RadialGradientPattern:
-    case Qt::ConicalGradientPattern: {
-        KoGradientBackground * bg = new KoGradientBackground(*context.brush.gradient());
-        bg->setTransform(context.brush.transform());
-        obj.setBackground(bg);
+    case Qt::HorPattern:
+        m_svgWriter.startElement("pattern");
+        m_svgWriter.addAttribute("id", fillId);
+        m_svgWriter.addAttribute("x", 0);
+        m_svgWriter.addAttribute("y", 0);
+        m_svgWriter.addAttribute("width", 30);
+        m_svgWriter.addAttribute("height", 30);
+        m_svgWriter.addAttribute("patternUnits", "userSpaceOnUse");
+        m_svgWriter.startElement("path");
+        m_svgWriter.addAttribute("d", "M0,5 L30,5 M0,15 L30,15 M0,25 L30,25");
+        m_svgWriter.addAttribute("style", "stroke:black;stroke-width:1");
+        m_svgWriter.endElement(); // path
+        m_svgWriter.endElement(); // pattern
         break;
-    }
+    case Qt::VerPattern:
+        m_svgWriter.startElement("pattern");
+        m_svgWriter.addAttribute("id", fillId);
+        m_svgWriter.addAttribute("x", 0);
+        m_svgWriter.addAttribute("y", 0);
+        m_svgWriter.addAttribute("width", 30);
+        m_svgWriter.addAttribute("height", 30);
+        m_svgWriter.addAttribute("patternUnits", "userSpaceOnUse");
+        m_svgWriter.startElement("path");
+        m_svgWriter.addAttribute("d", "M5,0 L5,30 M15,0 L15,30 M25,0 L25,30");
+        m_svgWriter.addAttribute("style", "stroke:black;stroke-width:1");
+        m_svgWriter.endElement(); // path
+        m_svgWriter.endElement(); // pattern
+        break;
+    case Qt::CrossPattern:
+        m_svgWriter.startElement("pattern");
+        m_svgWriter.addAttribute("id", fillId);
+        m_svgWriter.addAttribute("x", 0);
+        m_svgWriter.addAttribute("y", 0);
+        m_svgWriter.addAttribute("width", 30);
+        m_svgWriter.addAttribute("height", 30);
+        m_svgWriter.addAttribute("patternUnits", "userSpaceOnUse");
+        m_svgWriter.startElement("path");
+        m_svgWriter.addAttribute("d", "M5,0 L5,30 M15,0 L15,30 M25,0 L25,30 M0,5 L30,5 M0,15 L30,15 M0,25 L30,25");
+        m_svgWriter.addAttribute("style", "stroke:black;stroke-width:1");
+        m_svgWriter.endElement(); // path
+        m_svgWriter.endElement(); // pattern
+        break;
+    case Qt::BDiagPattern:
+        m_svgWriter.startElement("pattern");
+        m_svgWriter.addAttribute("id", fillId);
+        m_svgWriter.addAttribute("x", 0);
+        m_svgWriter.addAttribute("y", 0);
+        m_svgWriter.addAttribute("width", 30);
+        m_svgWriter.addAttribute("height", 30);
+        m_svgWriter.addAttribute("patternUnits", "userSpaceOnUse");
+        m_svgWriter.startElement("path");
+        m_svgWriter.addAttribute("d", "M0,30 L30,0 M0,15 L15,0 M15,30 L30,15");
+        m_svgWriter.addAttribute("style", "stroke:black;stroke-width:1");
+        m_svgWriter.endElement(); // path
+        m_svgWriter.endElement(); // pattern
+        break;
+    case Qt::FDiagPattern:
+        m_svgWriter.startElement("pattern");
+        m_svgWriter.addAttribute("id", fillId);
+        m_svgWriter.addAttribute("x", 0);
+        m_svgWriter.addAttribute("y", 0);
+        m_svgWriter.addAttribute("width", 30);
+        m_svgWriter.addAttribute("height", 30);
+        m_svgWriter.addAttribute("patternUnits", "userSpaceOnUse");
+        m_svgWriter.startElement("path");
+        m_svgWriter.addAttribute("d", "M0,00 L30,30 M0,15 L15,30 M15,0 L30,15");
+        m_svgWriter.addAttribute("style", "stroke:black;stroke-width:1");
+        m_svgWriter.endElement(); // path
+        m_svgWriter.endElement(); // pattern
+        break;
+    case Qt::DiagCrossPattern:
+        m_svgWriter.startElement("pattern");
+        m_svgWriter.addAttribute("id", fillId);
+        m_svgWriter.addAttribute("x", 0);
+        m_svgWriter.addAttribute("y", 0);
+        m_svgWriter.addAttribute("width", 30);
+        m_svgWriter.addAttribute("height", 30);
+        m_svgWriter.addAttribute("patternUnits", "userSpaceOnUse");
+        m_svgWriter.startElement("path");
+        m_svgWriter.addAttribute("d", "M0,30 L30,0 M0,15 L15,0 M15,30 L30,15 M0,00 L30,30 M0,15 L15,30 M15,0 L30,15");
+        m_svgWriter.addAttribute("style", "stroke:black;stroke-width:1");
+        m_svgWriter.endElement(); // path
+        m_svgWriter.endElement(); // pattern
+        break;
     default:
-        obj.setBackground(new KoColorBackground(context.brush.color(), context.brush.style()));
+        kDebug(30504) << "unsupported brush style:" << context.brush.style();
+        return QString();
     }
+
+    fillStyle = QString("fill:url(#%1);").arg(fillId);
+
+    if (context.polyFillMode == Libwmf::ALTERNATE)
+        fillStyle += "fill-rule:evenodd;";
+
+    return fillStyle;
 }
 
 void  WMFImportParser::setCompositionMode(QPainter::CompositionMode)
@@ -524,55 +724,37 @@ void  WMFImportParser::setCompositionMode(QPainter::CompositionMode)
     //TODO
 }
 
-void WMFImportParser::appendPoints(KoPathShape &path, const QPolygon& pa)
+QRectF WMFImportParser::boundBox(int left, int top, int width, int height)
 {
-    // list of point array
-    if (pa.size() > 0) {
-        path.moveTo(QPointF(coordX(pa.point(0).x()), coordY(pa.point(0).y())));
+    const int l = qMin(left, left+width);
+    const int t = qMin(top, top+height);
+    const int w = qAbs(width);
+    const int h = qAbs(height);
+
+    return QRectF(coord(QPoint(l,t)), size(QSize(w, h)));
+}
+
+QPointF WMFImportParser::coord(const QPoint &p)
+{
+    const qreal dx = m_viewport.org.x()-m_window.org.x();
+    const qreal dy = m_viewport.org.y()-m_window.org.y();
+    const qreal x = (p.x() + dx) * m_scaleX;
+    const qreal y = (p.y() + dy) * m_scaleY;
+    return QPointF(x, y);
+}
+
+QSizeF WMFImportParser::size(const QSize &s)
+{
+    return QSizeF(m_scaleX *s.width(), m_scaleY*s.height());
+}
+
+void WMFImportParser::updateTransform()
+{
+    if (m_window.extIsValid && m_viewport.extIsValid) {
+        m_scaleX = m_viewport.ext.width() / m_window.ext.width();
+        m_scaleY = m_viewport.ext.height() / m_window.ext.height();
     }
-    for (int i = 1 ; i < pa.size() ; i++) {
-        path.lineTo(QPointF(coordX(pa.point(i).x()), coordY(pa.point(i).y())));
-    }
-    path.normalize();
-}
-
-double WMFImportParser::coordX(int left)
-{
-    return ((double)(left - mCurrentOrg.x()) * mScaleX);
-}
-
-double WMFImportParser::coordY(int top)
-{
-    return ((double)(top - mCurrentOrg.y()) * mScaleY);
-}
-
-double WMFImportParser::scaleW(int width)
-{
-    return (width * mScaleX);
-}
-
-double WMFImportParser::scaleH(int height)
-{
-    return (height * mScaleY);
-}
-
-KoShape * WMFImportParser::createShape(const QString &shapeID)
-{
-    KoShapeFactoryBase * factory = KoShapeRegistry::instance()->get(shapeID);
-    if (! factory) {
-        kWarning(30514) << "Could not find factory for shape id" << shapeID;
-        return 0;
-    }
-
-    KoShape * shape = factory->createDefaultShape(mDoc->resourceManager());
-    if (shape && shape->shapeId().isEmpty())
-        shape->setShapeId(factory->id());
-
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (path && shapeID == KoPathShapeId)
-        path->clear();
-    // reset tranformation that might come from the default shape
-    shape->setTransformation(QTransform());
-
-    return shape;
+    kDebug(30504) << "window:" << QRectF(m_window.org, m_window.ext);
+    kDebug(30504) << "viewport:" << QRectF(m_viewport.org, m_viewport.ext);
+    kDebug(30504) << "scale:" << m_scaleX << m_scaleY;
 }
