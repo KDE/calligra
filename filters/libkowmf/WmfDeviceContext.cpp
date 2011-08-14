@@ -18,6 +18,7 @@
 
 
 #include "WmfDeviceContext.h"
+#include "WmfEnums.h"
 
 #include <qglobal.h>
 
@@ -67,7 +68,7 @@ void WmfDeviceContext::reset()
     rop = 0;// FIXME: Check the real default
     layoutMode = 0;// FIXME: Check the real default
     //Mapping mode
-    polyFillMode = 0;// FIXME: Check the real default
+    polyFillMode = Libwmf::ALTERNATE;
     //Stretchblt mode
     textAlign = 0;// FIXME: Check the real default
     //Text extra space
