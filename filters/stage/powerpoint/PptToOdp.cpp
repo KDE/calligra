@@ -2207,7 +2207,7 @@ void addListElement(KoXmlWriter& out, const QString& listStyle,
 }
 
 void
-getMeta(const TextContainerMeta& m, KoXmlWriter& out)
+writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
 {
     const SlideNumberMCAtom* a = m.meta.get<SlideNumberMCAtom>();
     const DateTimeMCAtom* b = m.meta.get<DateTimeMCAtom>();
@@ -2226,7 +2226,11 @@ getMeta(const TextContainerMeta& m, KoXmlWriter& out)
     }
     if (c) {
         // TODO: datetime format
-        out.startElement("text:date");
+        if (master) {
+            out.startElement("presentation:date-time");
+        } else {
+            out.startElement("text:date");
+        }
         out.endElement();
     }
     if (d) {
@@ -2415,7 +2419,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     }
 
     if (meta) {
-        getMeta(*meta, out.xml);
+        writeMeta(*meta, m_processingMasters, out.xml);
     } else {
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
