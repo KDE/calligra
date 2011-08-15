@@ -22,161 +22,142 @@
 template < typename PixelT >
 class ColorSignature {
 public:
-    typedef QVector< PixelT > Type;
+    typedef QVector< const PixelT* > Type;
 
     ColorSignature() {}
 
 private:
+    // TODO - change to template paramenter.
+    static const int POINT_LENGTH = 3;
 
     /**
-     * Stage one of clustering.
+      Stage one of clustering.
      */
-    void stageOne(const QVector< PixelT >& points, int depth, QVector< Type >& clusters,
-        float lLimit, float aLimit, float bLimit, int length);
+    void stageOne(QVector< Type >& clusters, const QVector< const PixelT* >& points,
+        float lLimit, float aLimit, float bLimit, quint32 depth);
 
     /**
-     * Stage two of clustering.
+      Stage two of clustering.
      */
-    void stagetwo(const QVector< PixelT >& points, int depth, QVector< Type >& clusters,
-        float lLimit, float aLimit, float bLimit, int total, float threshold);
+    void stageTwo(QVector< QVector< PixelT > >& clusters,
+        const QVector< QVector< PixelT > >& points, float lLimit, float aLimit,
+        float bLimit, int total, float threshold, int depth);
 
 public:
     /**
-     * Create a color signature for the given set of pixels.
+      Create a color signature for the given set of pixels.
      */
-    Type createSignature(const QVector< PixelT >& input, float lLimit,
-        float aLimit, float bLimit, float threshold);
+    void createSignature(QVector< QVector< PixelT > >& signature,
+        const QVector< const PixelT* >& input, float lLimit, float aLimit,
+        float bLimit, float threshold);
 };
 
 template < typename PixelT >
-void ColorSignature< PixelT >::stageOne(const QVector< PixelT >& points, int depth, QVector< Type >& clusters,
-    float lLimit, float aLimit, float bLimit, int length)
+void ColorSignature< PixelT >::stageOne(QVector< Type >& clusters,
+    const QVector< const PixelT* >& points, float lLimit, float aLimit,
+    float bLimit, quint32 depth)
 {
-    if (length < 1) {
+    if (points.size() < 1)
         return;
-    }
 
-    int dims = points[0].length;
-    int curdim = depth % dims;
-    float min = points[0][curdim];
-    float max = points[0][curdim];
+    const int currentDimension = depth % POINT_LENGTH;
+    PixelT min = points[0][currentDimension];
+    PixelT max = points[0][currentDimension];
 
     // find maximum and minimum
-    for (int i = 1; i < length; i++) {
-        if (min > points[i][curdim]) {
-            min = points[i][curdim];
+    for (int i = 1; i < points.size(); i++) {
+        if (min > points[i][currentDimension]) {
+            min = points[i][currentDimension];
         }
-        if (max < points[i][curdim]) {
-            max = points[i][curdim];
+
+        if (max < points[i][currentDimension]) {
+            max = points[i][currentDimension];
         }
     }
 
-    float limit = curdim == 0 ? lLimit : curdim == 1 ? aLimit : bLimit;
+    // TODO - the limit must be PixelT
+    float limit = currentDimension == 0 ?
+        lLimit : currentDimension == 1 ?
+        aLimit : bLimit;
 
-    if (max - min > limit) { // Split according to Rubner-Rule
-        // split
-        float pivotvalue = ((max - min) / 2.0f) + min;
+    // Split according to Rubner-Rule.
+    if (max - min > limit) {
+        PixelT pivotvalue = ((max - min) / 2.0f) + min;
 
-        int countsm = 0;
-        int countgr = 0;
+        QVector< const PixelT* > smallerpoints, biggerpoints;
 
-        for (int i = 0; i < length; i++) { // find out cluster sizes
-            if (points[i][curdim] <= pivotvalue) {
-                countsm++;
+        for (int i = 0; i < points.size(); i++) {
+            if (points[i][currentDimension] <= pivotvalue) {
+                smallerpoints.push_back(points[i]);
             } else {
-                countgr++;
+                biggerpoints.push_back(points[i]);
             }
         }
 
-        Type smallerpoints[countsm][dims];
-        Type biggerpoints[countgr][dims];
-
-        int smallc = 0;
-        int bigc = 0;
-
-        for (int i = 0; i < length; i++) { // do actual split
-            if (points[i][curdim] <= pivotvalue) {
-                smallerpoints[smallc++] = points[i];
-            } else {
-                biggerpoints[bigc++] = points[i];
-            }
-        }
-
-        // create subtrees
-        stageOne(smallerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
-             smallerpoints.length);
-        stageOne(biggerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
-             biggerpoints.length);
+        // Create subtrees.
+        stageOne(clusters, smallerpoints, lLimit, aLimit, bLimit, depth + 1);
+        stageOne(clusters, biggerpoints, lLimit, aLimit, bLimit, depth + 1);
 
     } else {
-        // create leave
-        clusters.add(points);
+        // Create leave.
+        clusters.push_back(points);
     }
 }
 
 template < typename PixelT >
-void ColorSignature< PixelT >::stagetwo(const QVector< PixelT >& points, int depth,
-    QVector< Type >& clusters, float lLimit, float aLimit, float bLimit, int total,
-    float threshold)
+void ColorSignature< PixelT >::stageTwo(QVector< QVector< PixelT > >& clusters,
+    const QVector< QVector< PixelT > >& points, float lLimit, float aLimit,
+    float bLimit, int total, float threshold, int depth)
 {
-    if (points.size() < 1) {
-        return;
-    }
+    // TODO - here, points has cardinality of each cluster. It must be moved to
+    // another structure.
+    // - points here are centroids. points type should be better defined.
 
-    int dims = points[0].size() - 1; // without cardinality
-    int curdim = depth % dims;
-    float min = points[0][curdim];
-    float max = points[0][curdim];
+    if (points.size() < 1)
+        return;
+
+    int currentDimension = depth % POINT_LENGTH;
+    PixelT min = points[0][currentDimension];
+    PixelT max = points[0][currentDimension];
 
     // find maximum and minimum
     for (int i = 1; i < points.size(); i++) {
-        if (min > points[i][curdim]) {
-            min = points[i][curdim];
+        if (min > points[i][currentDimension]) {
+            min = points[i][currentDimension];
         }
-        if (max < points[i][curdim]) {
-            max = points[i][curdim];
+
+        if (max < points[i][currentDimension]) {
+            max = points[i][currentDimension];
         }
     }
 
-    float limit = curdim == 0 ? lLimit : curdim == 1 ? aLimit : bLimit;
+    float limit = currentDimension == 0 ?
+        lLimit : currentDimension == 1 ?
+        aLimit : bLimit;
 
-    if (max - min > limit) { // Split according to Rubner-Rule
-        // split
+    // Split according to Rubner-Rule.
+    if (max - min > limit) {
         float pivotvalue = ((max - min) / 2.0f) + min;
 
-        int countsm = 0;
-        int countgr = 0;
+        QVector< QVector< PixelT > > smallerpoints, biggerpoints;
 
-        for (int i = 0; i < points.size(); i++) { // find out cluster sizes
-            if (points[i][curdim] <= pivotvalue) {
-                countsm++;
+        for (int i = 0; i < points.size(); i++) {
+            if (points[i][currentDimension] <= pivotvalue) {
+                smallerpoints.push_back(points[i]);
             } else {
-                countgr++;
+                biggerpoints.push_back(points[i]);
             }
         }
 
-        Type smallerpoints[countsm][dims];
-        Type biggerpoints[countgr][dims];
-
-        int smallc = 0;
-        int bigc = 0;
-
-        for (int i = 0; i < points.size(); i++) { // do actual split
-            if (points[i][curdim] <= pivotvalue) {
-                smallerpoints[smallc++] = points[i];
-            } else {
-                biggerpoints[bigc++] = points[i];
-            }
-        }
-
-        // create subtrees
-        stagetwo(smallerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
-             total, threshold);
-        stagetwo(biggerpoints, depth + 1, clusters, lLimit, aLimit, bLimit,
-             total, threshold);
+        // Create subtrees.
+        stageTwo(clusters, smallerpoints, lLimit, aLimit, bLimit, total,
+             threshold, depth + 1);
+        stageTwo(clusters, biggerpoints, lLimit, aLimit, bLimit, total,
+             threshold, depth + 1);
 
     } else {
-        // create leave
+        // Create leave.
+        // TODO - cardinality is important here.
         int sum = 0;
 
         for (int i = 0; i < points.size(); i++) {
@@ -184,57 +165,59 @@ void ColorSignature< PixelT >::stagetwo(const QVector< PixelT >& points, int dep
         }
 
         if (((sum * 100.0) / total) >= threshold) {
-            QVector< PixelT > point(points[0].size());
+            QVector< PixelT > point(POINT_LENGTH + 1);
+            point.fill(0);
 
             for (int i = 0; i < points.size(); i++) {
-                for (int j = 0; j < points[0].size(); j++) {
+                for (int j = 0; j < point.size(); j++) {
                     point[j] += points[i][j];
                 }
             }
 
-            for (int j = 0; j < points[0].size() - 1; j++) {
+            for (int j = 0; j < point.size() - 1; j++) {
                 point[j] /= points.size();
             }
 
-            clusters.add(point);
+            clusters.push_back(point);
         }
     }
 }
 
 template < typename PixelT >
-typename ColorSignature< PixelT >::Type ColorSignature< PixelT >::createSignature(const QVector< PixelT >& input,
-    float lLimit, float aLimit, float bLimit, float threshold)
+void ColorSignature< PixelT >::createSignature(QVector< QVector< PixelT > >& signature,
+    const QVector< const PixelT* >& input, float lLimit, float aLimit,
+    float bLimit, float threshold)
 {
-    QVector< Type > clusters1, clusters2;
+    QVector< Type > clusters1;
 
-    stageOne(input, 0 /* Recursion depth for kd-tree */, clusters1, lLimit,
-         aLimit, bLimit, input.size());
+    // Zero is the recursion depth for kd-tree.
+    stageOne(clusters1, input, lLimit, aLimit, bLimit, 0);
 
-    Type centroids(clusters1.size());
+    // TODO - move cardinality to another structure
+    // +1 for the cardinality
+    QVector< QVector< PixelT > > centroidSet(clusters1.size());
 
     for (int i = 0; i < clusters1.size(); i++) {
         Type& cluster = clusters1[i];
-        // +1 for the cardinality
-        QVector< PixelT > centroid(cluster[0].size() + 1);
+
+        QVector< PixelT >& centroid = centroidSet[i];
+        centroid.fill(0, POINT_LENGTH + 1);
 
         for (int k = 0; k < cluster.size(); k++) {
-            for (int j = 0; j < cluster[k].size(); j++) {
+            for (int j = 0; j < POINT_LENGTH; j++) {
                 centroid[j] += cluster[k][j];
             }
         }
 
-        for (int j = 0; j < cluster[0].size(); j++) {
+        for (int j = 0; j < POINT_LENGTH; j++) {
             centroid[j] /= cluster.size();
         }
 
-        centroid[cluster[0].size()] = cluster.size();
-        centroids[i] = centroid;
+        centroid[POINT_LENGTH] = cluster.size();
     }
 
-    stagetwo(centroids, 0  /* Recursion depth for kd-tree */, clusters2, lLimit,
-         aLimit, bLimit, input.size(), threshold);
-
-    return clusters2;
+    // Zero is the recursion depth for kd-tree.
+    stageTwo(signature, centroidSet, lLimit, aLimit, bLimit, input.size(), threshold, 0);
 }
 
 #endif /* _KIS_COLOR_SIGNATURE_H_ */

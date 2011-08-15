@@ -111,7 +111,9 @@ void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
     } while (labImageIterator->nextPixel());
 }
 
-bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int smoothness, double sizeFactorToKeep) {
+bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/,
+    double /*sizeFactorToKeep*/)
+{
     nearestPixels.clear();
 
     QVector< const quint16* > knownBg, knownFg;
@@ -137,13 +139,13 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int smoothness, do
     // - make ColorSignature receive the information in the ctor.
     // - change class name to, possibly, KisColorSigner.
     // - receive signatures as parameter to fill up (optimization)
-//    ColorSignature< const quint16* > bgColorSign, fgColorSign;
+    ColorSignature< quint16 > bgColorSign, fgColorSign;
 
-//    bgSignature = bgColorSign.createSignature(knownBg, knownBgCount, limitL,
-//        limitA, limitB, BACKGROUND_CONFIDENCE);
-
-//    fgSignature = fgColorSign.createSignature(knownFg, knownFgCount, limitL,
-//        limitA, limitB, BACKGROUND_CONFIDENCE);
+    QVector< QVector< quint16 > > bgSignature, fgSignature;
+    bgColorSign.createSignature(bgSignature, knownBg, limitL, limitA, limitB,
+        BACKGROUND_CONFIDENCE);
+    fgColorSign.createSignature(fgSignature, knownFg, limitL, limitA, limitB,
+        BACKGROUND_CONFIDENCE);
 
     // It is not possible to segmentate de image in this case.
 //    if (bgSignature.size() < 1) {
