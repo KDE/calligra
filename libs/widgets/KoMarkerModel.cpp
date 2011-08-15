@@ -119,7 +119,7 @@ QVariant KoMarkerModel::data(const QModelIndex &index, int role) const
         }
         return QVariant();
     case Qt::SizeHintRole:
-        return QSize(80, 30);
+        return QSize(100, 15);
     default:
         return QVariant();
     }
@@ -143,7 +143,7 @@ QVariant KoMarkerModel::marker(int index, int role) const
             }
             return QVariant();
         case Qt::SizeHintRole:
-            return QSize(100, 30);
+            return QSize(80, 30);
         default:
             return QVariant();
     }

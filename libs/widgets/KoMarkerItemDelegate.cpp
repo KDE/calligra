@@ -35,28 +35,25 @@ KoMarkerItemDelegate::~KoMarkerItemDelegate()
 
 void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    painter->save();
+    
+    if (option.state & QStyle::State_Selected)
+        painter->fillRect(option.rect, option.palette.highlight());
 
+    painter->translate(option.rect.topLeft());
+    
     KoPathShape *pathShape = index.data(Qt::DecorationRole).value<KoPathShape*>();
-    if (pathShape) {
-        painter->save();
-        bool anitaliasing = painter->testRenderHint(QPainter::Antialiasing);
-        if (!anitaliasing) {
-            painter->setRenderHint(QPainter::Antialiasing, true);
-        }
-        // paint marker
-        QPen pen(option.palette.text(), 1);
-        painter->setPen(pen);
-        QPainterPath path = pathShape->outline();
-        painter->drawPath(path);
-        if (!anitaliasing) {
-            painter->setRenderHint(QPainter::Antialiasing, false);
-        }
 
-        painter->restore();
-    }
+    // paint marker
+    QPen pen(option.palette.text(), 1);
+    painter->setPen(pen);
+    QPainterPath path = pathShape->outline();
+    painter->drawPath(path);
+
+    painter->restore();
 }
 
 QSize KoMarkerItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const
 {
-    return QSize(80, 30);
+    return QSize(80,30);
 }
