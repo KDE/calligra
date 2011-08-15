@@ -29,6 +29,7 @@ class ResourcesImporter:
             try:
                 self.doImport( self.proj )
             except:
+                self.proj.revertCommand() # play safe in case parts where loaded
                 self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doImport( self, project ):

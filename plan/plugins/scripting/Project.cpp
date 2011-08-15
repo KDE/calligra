@@ -162,6 +162,9 @@ QObject *Scripting::Project::scheduleAt( int index )
 
 QObject *Scripting::Project::schedule( KPlato::ScheduleManager *sch )
 {
+    if ( sch == 0 ) {
+        return 0;
+    }
     if ( ! m_schedules.contains( sch ) ) {
         m_schedules[ sch ] = new Schedule( this, sch, parent() );
     }
@@ -380,6 +383,9 @@ QObject *Scripting::Project::createResourceGroup()
 
 QObject *Scripting::Project::resourceGroup( KPlato::ResourceGroup *group )
 {
+    if ( group == 0 ) {
+        return 0;
+    }
     if ( ! m_groups.contains( group ) ) {
         m_groups[ group ] = new ResourceGroup( this, group, parent() );
     }
@@ -460,6 +466,9 @@ QObject *Scripting::Project::createResource( QObject *group )
 
 QObject *Scripting::Project::resource( KPlato::Resource *resource )
 {
+    if ( resource == 0 ) {
+        return 0;
+    }
     if ( ! m_resources.contains( resource ) ) {
         m_resources[ resource ] = new Resource( this, resource, parent() );
     }
