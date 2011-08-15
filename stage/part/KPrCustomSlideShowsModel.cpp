@@ -312,6 +312,9 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
     int start = beginRow;
 
     //get the slideshow
+    if (m_activeCustomSlideShowName.isEmpty()) {
+        return false;
+    }
     QList<KoPAPageBase*> selectedSlideShow = m_customSlideShows->getByName(m_activeCustomSlideShowName);
 
     if (action == KPrCustomSlideShowsModel::SlidesAdd) {
