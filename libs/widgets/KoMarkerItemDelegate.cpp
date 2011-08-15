@@ -43,13 +43,14 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->translate(option.rect.topLeft());
     
     KoPathShape *pathShape = index.data(Qt::DecorationRole).value<KoPathShape*>();
-
-    // paint marker
-    QPen pen(option.palette.text(), 1);
-    painter->setPen(pen);
-    QPainterPath path = pathShape->outline();
-    painter->drawPath(path);
-
+    if(pathShape != 0){
+        // paint marker
+        QPen pen(option.palette.text(), 1);
+        painter->setPen(pen);
+        QPainterPath path = pathShape->outline();
+        painter->drawPath(path);
+    }
+    
     painter->restore();
 }
 
