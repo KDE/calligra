@@ -117,6 +117,8 @@ protected slots:
     void slotCellSelected(int col, int row);
     void reloadActions();
     void slotUpdateRowActions(int row);
+    //! Updates 'save/cancel record changes' actions
+    void slotUpdateSaveCancelActions();
     void slotClosing(bool& cancel);
 
 protected:

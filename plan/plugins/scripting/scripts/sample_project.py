@@ -56,10 +56,10 @@ def printStates( node, schedule ):
 
 def printState( node, schedule ):
     if node.type() in [ 'Task' ]:
-        st = Plan.project().data( node, 'NodeStatus', 'EditRole', schedule )
+        st = Plan.project().data( node, 'Status', 'EditRole', schedule )
         print "%-30s %-20s %20s" % ( 
-            Plan.project().data( node, 'NodeName', 'DisplayRole', schedule ),
-            Plan.project().data( node, 'NodeStatus', 'DisplayRole', schedule ),
+            Plan.project().data( node, 'Name', 'DisplayRole', schedule ),
+            Plan.project().data( node, 'Status', 'DisplayRole', schedule ),
             state( int( st ) ) )
 
 def printNodes( node, props, schedule, types = None ):
@@ -117,7 +117,7 @@ def printProjectBusyinfo( proj ):
     print
 
 def printBusyinfo( res, lst ):
-    name = Plan.project().data( res, 'ResourceName' )
+    name = Plan.project().data( res, 'Name' )
     for interval in lst:
         print "%-20s %-30s %-30s %8s" % ( name, interval[0], interval[1], interval[2] )
         name = ""
@@ -145,6 +145,12 @@ def printExternalProjects( proj ):
     for c in projects:
         print "%-35s %s" % ( c[0], c[1] )
 
+def printTaskEffortCost( parent ):
+    for i in range( parent.childCount() ):
+        node = parent.childAt( i )
+        name = Plan.project().data( node, 'Name' )
+        printEffortCost( name, node.plannedEffortCostPrDay( "2007-09-12", "2007-09-18", sid ) )
+
 #------------------------
 proj = Plan.project()
 
@@ -156,24 +162,24 @@ if proj.scheduleCount() > 0:
 print "Using schedule id: %-3s" % ( sid )
 print
 
-nodeprops = [['NodeWBSCode', 'DisplayRole'], ['NodeName', 'DisplayRole'], ['NodeType', 'DisplayRole'], ['NodeResponsible', 'DisplayRole'], ['NodeStatus', 'EditRole'] ]
+nodeprops = [['WBSCode', 'DisplayRole'], ['Name', 'DisplayRole'], ['Type', 'DisplayRole'], ['Responsible', 'DisplayRole'], ['Status', 'EditRole'] ]
 print "Print tasks and milestones in arbitrary order:"
 # print the localized headers
 for prop in nodeprops:
-    print "%-25s" % (proj.nodeHeaderData( prop ) ),
+    print "%-25s" % (proj.taskHeaderData( prop ) ),
 print
 printNodes( proj, nodeprops, sid, [ 'Task', 'Milestone' ] )
 print
 
 print "Print all nodes including project:"
 for prop in nodeprops:
-    print "%-25s" % (proj.nodeHeaderData( prop ) ),
+    print "%-25s" % (proj.taskHeaderData( prop ) ),
 print
 printNodes( proj, nodeprops, sid )
 print
 
 print "Print Resources:"
-resprops = [ 'ResourceName', 'ResourceType', 'ResourceEmail', 'ResourceCalendar' ]
+resprops = [ 'Name', 'Type', 'Email', 'Calendar' ]
 # print the localized headers
 for prop in resprops:
     print "%-25s" % (proj.resourceHeaderData( prop ) ),
@@ -189,19 +195,14 @@ printSchedules()
 print
 
 
-print "Print Effort/Cost for each node:"
+print "Print Effort/Cost for each task:"
 print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
-for i in range( proj.nodeCount() ):
-    node = proj.nodeAt( i )
-    name = Plan.project().data( node, 'NodeName' )
-    printEffortCost( name, node.plannedEffortCostPrDay( "2007-09-12", "2007-09-18", sid ) )
-
+printTaskEffortCost( proj )
+print
 print "Print Effort/Cost for the project:"
-
 print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
-name = Plan.project().data( proj, 'NodeName' )
-printEffortCost( name, proj.plannedEffortCostPrDay( "2007-09-12", "2007-09-17", sid ) )
-
+printEffortCost( proj.name(), proj.plannedEffortCostPrDay( "2007-09-12", "2007-09-17", sid ) )
+print
 print "Print Busy information for all resources in the project:"
 printProjectBusyinfo( proj )
 print

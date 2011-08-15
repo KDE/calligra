@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -2108,4 +2108,15 @@ tristate KexiDataAwareObjectInterface::findNextAndReplace(
         return cancelled;
     //! @todo implement KexiDataAwareObjectInterface::findAndReplace()
     return false;
+}
+
+void KexiDataAwareObjectInterface::setRowEditing(bool set)
+{
+    if (set == m_rowEditing)
+        return;
+    m_rowEditing = set;
+    if (m_rowEditing)
+        emit rowEditStarted(m_curRow);
+    else
+        emit rowEditTerminated(m_curRow);
 }

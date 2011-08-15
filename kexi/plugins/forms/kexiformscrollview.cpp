@@ -228,13 +228,13 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
     }
 
     //! @todo
-    const bool startRowEdit = !m_rowEditing; //remember if we're starting record edit
+    const bool startRowEdit = !rowEditing(); //remember if we're starting record edit
 
-    if (!m_rowEditing) {
+    if (!rowEditing()) {
         //we're starting record editing session
         m_data->clearRowEditBuffer();
 
-        m_rowEditing = true;
+        setRowEditing(true);
         //indicate on the vheader that we are editing:
         if (m_verticalHeader)
             m_verticalHeader->setEditRow(m_curRow);
