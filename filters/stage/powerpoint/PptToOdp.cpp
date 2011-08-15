@@ -1205,7 +1205,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     // fo:margin
     // fo:margin-bottom
     style.addProperty("fo:margin-bottom", processParaSpacing(pf.spaceAfter(), fs, false), para);
-    // fo:margin-left - pf.leftMargin() is relevant only for a list (at the moment at least)
+    // fo:margin-left
     if (m_isList) {
         style.addProperty("fo:margin-left", "0cm", para);
     } else {
@@ -1227,11 +1227,11 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     }
     // fo:text-align-last
     // fo:text-indent
-    if (m_isList || pf.leftMargin()) {
+    if (!m_isList && pf.indent()) {
+        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.leftMargin() - pf.indent()), para);
+    } else {
         //text:space-before already set in style:list-level-properties
         style.addProperty("fo:text-indent", "0cm", para);
-    } else {
-        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.indent()), para);
     }
     // fo:widows
     // style:auto-text-indent
