@@ -226,7 +226,7 @@ QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags KarbonLayerModel::flags(const QModelIndex &index) const
 {
     if (! index.isValid())
-        return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+        return 0;
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
