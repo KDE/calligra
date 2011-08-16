@@ -38,6 +38,7 @@ QStringList ScriptingTester::initTestList()
         << "task_access.py"
         << "resource_access.py"
         << "account_access.py"
+        << "calendar_access.py"
         ;
     return scripts;
 }

@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=CalligraStage/PageEffect
 Comment=Page effect plugin for Calligra Stage
 Comment[bg]=Приставка за ефекти в страниците на Calligra Stage
+Comment[de]=Seiteneffektmodul für Calligra Stage
 Comment[el]=Πρόσθετο εφέ σελίδας για το Calligra Stage
 Comment[et]=Calligra Stage'i leheküljeefektide plugin
 Comment[it]=Estensione per gli effetti di pagina per Callgra Stage

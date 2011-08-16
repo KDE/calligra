@@ -1205,7 +1205,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     // fo:margin
     // fo:margin-bottom
     style.addProperty("fo:margin-bottom", processParaSpacing(pf.spaceAfter(), fs, false), para);
-    // fo:margin-left - pf.leftMargin() is relevant only for a list (at the moment at least)
+    // fo:margin-left
     if (m_isList) {
         style.addProperty("fo:margin-left", "0cm", para);
     } else {
@@ -1227,11 +1227,11 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     }
     // fo:text-align-last
     // fo:text-indent
-    if (m_isList || pf.leftMargin()) {
+    if (!m_isList && pf.indent()) {
+        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.leftMargin() - pf.indent()), para);
+    } else {
         //text:space-before already set in style:list-level-properties
         style.addProperty("fo:text-indent", "0cm", para);
-    } else {
-        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.indent()), para);
     }
     // fo:widows
     // style:auto-text-indent
@@ -2207,7 +2207,7 @@ void addListElement(KoXmlWriter& out, const QString& listStyle,
 }
 
 void
-getMeta(const TextContainerMeta& m, KoXmlWriter& out)
+writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
 {
     const SlideNumberMCAtom* a = m.meta.get<SlideNumberMCAtom>();
     const DateTimeMCAtom* b = m.meta.get<DateTimeMCAtom>();
@@ -2226,7 +2226,11 @@ getMeta(const TextContainerMeta& m, KoXmlWriter& out)
     }
     if (c) {
         // TODO: datetime format
-        out.startElement("text:date");
+        if (master) {
+            out.startElement("presentation:date-time");
+        } else {
+            out.startElement("text:date");
+        }
         out.endElement();
     }
     if (d) {
@@ -2415,7 +2419,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     }
 
     if (meta) {
-        getMeta(*meta, out.xml);
+        writeMeta(*meta, m_processingMasters, out.xml);
     } else {
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');

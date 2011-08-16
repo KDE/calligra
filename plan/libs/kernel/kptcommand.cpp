@@ -373,7 +373,9 @@ CalendarModifyDayCmd::~CalendarModifyDayCmd()
 void CalendarModifyDayCmd::execute()
 {
     //kDebug();
-    m_cal->takeDay( m_oldvalue );
+    if ( m_oldvalue ) {
+        m_cal->takeDay( m_oldvalue );
+    }
     m_cal->addDay( m_newvalue );
     m_mine = false;
 }
@@ -381,7 +383,9 @@ void CalendarModifyDayCmd::unexecute()
 {
     //kDebug();
     m_cal->takeDay( m_newvalue );
-    m_cal->addDay( m_oldvalue );
+    if ( m_oldvalue ) {
+        m_cal->addDay( m_oldvalue );
+    }
     m_mine = true;
 }
 
