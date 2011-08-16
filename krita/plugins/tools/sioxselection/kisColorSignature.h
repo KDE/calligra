@@ -193,14 +193,14 @@ void ColorSignature< PixelT >::createSignature(QVector< QVector< PixelT > >& sig
     // Zero is the recursion depth for kd-tree.
     stageOne(clusters1, input, lLimit, aLimit, bLimit, 0);
 
-    // TODO - move cardinality to another structure
-    // +1 for the cardinality
     QVector< QVector< PixelT > > centroidSet(clusters1.size());
 
     for (int i = 0; i < clusters1.size(); i++) {
         Type& cluster = clusters1[i];
 
         QVector< PixelT >& centroid = centroidSet[i];
+        // TODO - move cardinality to another structure
+        // +1 for the cardinality
         centroid.fill(0, POINT_LENGTH + 1);
 
         for (int k = 0; k < cluster.size(); k++) {
