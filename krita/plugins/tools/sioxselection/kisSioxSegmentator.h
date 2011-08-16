@@ -103,7 +103,7 @@ private:
     float clusterSize;
 
     /**
-      Stores Tupels for fast access to nearest background/foreground pixels.
+      Stores tuples for fast access to nearest background/foreground pixels.
      */
     NearestPixelsMap nearestPixels;
 

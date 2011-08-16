@@ -118,27 +118,29 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
 
     QVector< const quint16* > knownBg, knownFg;
 
-    KisRectConstIteratorSP labImageIterator = labImage->createRectConstIteratorNG(
-        labImage->exactBounds());
-    quint64 i = 0;
-    do {
-        const quint16* data = reinterpret_cast<const quint16*>(
-            labImageIterator->oldRawData());
+    { // Collect known background and foreground.
+        KisRectConstIteratorSP labImageIterator = labImage->createRectConstIteratorNG(
+            labImage->exactBounds());
+        quint64 i = 0;
+        do {
+            const quint16* data = reinterpret_cast<const quint16*>(
+                labImageIterator->oldRawData());
 
-        if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE)
-            knownBg.push_back(data);
-        else if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE)
-            knownFg.push_back(data);;
+            if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE)
+                knownBg.push_back(data);
+            else if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE)
+                knownFg.push_back(data);;
 
-        ++i;
-    }  while (labImageIterator->nextPixel());
+            ++i;
+        }  while (labImageIterator->nextPixel());
+    }
 
     // Create color signatures
 
     // TODO
     // - make ColorSignature receive the information in the ctor.
     // - change class name to, possibly, KisColorSigner.
-    // - receive signatures as parameter to fill up (optimization)
+    // - possibly, the signatures would be better manipulated in floats
     ColorSignature< quint16 > bgColorSign, fgColorSign;
 
     QVector< QVector< quint16 > > bgSignature, fgSignature;
@@ -148,9 +150,44 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
         BACKGROUND_CONFIDENCE);
 
     // It is not possible to segmentate de image in this case.
-//    if (bgSignature.size() < 1) {
-//        return false;
-//    }
+    // TODO - throw a specific exception
+    if (bgSignature.size() < 1) {
+        return false;
+    }
+
+    // Classify using color signatures.
+    const quint64 labImageSize = labImage->exactBounds().height() *
+        labImage->exactBounds().width();
+    for (quint64 i = 0; i < labImageSize; i++) {
+
+        if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE) {
+            confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
+            continue;
+        }
+
+        if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE) {
+            confidenceMatrix[i] = CERTAIN_BACKGROUND_CONFIDENCE;
+        } else {
+            NearestPixelsMap::iterator nearestIterator = nearestPixels.find(0/*image[i]*/);
+            bool isBackground = true;
+
+            if (nearestIterator != nearestPixels.end()) {
+                ClusterDistance& tuple = *nearestIterator;
+                //isBackground = tuple.minBgDist <= tuple.minFgDist;
+            } else {
+                ClusterDistance& tuple =
+                    (nearestPixels[0/*image[i]*/] = ClusterDistance(0, 0, 0, 0));
+                //...
+            }
+
+            if (isBackground) {
+                confidenceMatrix[i] = CERTAIN_BACKGROUND_CONFIDENCE;
+            } else {
+                confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
+            }
+
+        }
+    }
 
     // classify using color signatures,
     // classification cached in hashmap for drb and speedup purposes
