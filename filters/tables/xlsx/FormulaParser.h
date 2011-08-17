@@ -43,6 +43,6 @@ QString convertFormula(const QString& formula);
  */
 QString convertFormulaReference(Cell* referencedCell, Cell* thisCell);
 
-};
+}
 
 #endif // FORMULAPARSER_H
