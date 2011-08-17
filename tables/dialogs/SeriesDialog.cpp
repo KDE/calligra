@@ -134,8 +134,6 @@ void SeriesDialog::slotButtonClicked(int button)
 
     QString tmp;
     double dstep, dend, dstart;
-    Sheet * m_pSheet;
-    m_pSheet = m_selection->activeSheet();
 
     dstart = start->value();
     dend = end->value();

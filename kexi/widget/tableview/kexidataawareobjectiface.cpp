@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -714,7 +714,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     if (!acceptEditor()) {
         return false;
     }
-    kDebug() << "EDIT ROW ACCEPTING...";
+    kDebug() << "EDIT RECORD ACCEPTING...";
 
     bool success = true;
 // bool allow = true;
@@ -776,7 +776,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 
         updateAfterAcceptRowEdit();
 
-        kDebug() << "EDIT ROW ACCEPTED:";
+        kDebug() << "EDIT RECORD ACCEPTED:";
 //  /*debug*/itemAt(m_curRow);
 
         if (inserting) {
@@ -790,10 +790,10 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         /*emit*/ rowEditTerminated(m_curRow);
     } else {
 //  if (!allow) {
-//   kDebug() << "INSERT/EDIT ROW - DISALLOWED by signal!";
+//   kDebug() << "INSERT/EDIT RECORD - DISALLOWED by signal!";
 //  }
 //  else {
-//   kDebug() << "EDIT ROW - ERROR!";
+//   kDebug() << "EDIT RECORD - ERROR!";
 //  }
         int faultyColumn = -1;
         if (m_data->result().column >= 0 && m_data->result().column < columns())
@@ -821,9 +821,9 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 bool KexiDataAwareObjectInterface::cancelRowEdit()
 {
     if (!hasData())
-        return false;
+        return true;
     if (!m_rowEditing)
-        return false;
+        return true;
     cancelEditor();
     m_rowEditing = false;
     //indicate on the vheader that we are not editing
@@ -856,7 +856,7 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
     updateAfterCancelRowEdit();
 
 //! \todo (js): cancel changes for this row!
-    kDebug() << "EDIT ROW CANCELLED.";
+    kDebug() << "EDIT RECORD CANCELLED.";
 
     /*emit*/ rowEditTerminated(m_curRow);
     return true;
@@ -889,7 +889,7 @@ bool KexiDataAwareObjectInterface::cancelEditor()
         m_errorMessagePopup->close();
     }
     if (!m_editor)
-        return false;
+        return true;
     removeEditor();
     return true;
 }
@@ -916,13 +916,11 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 // const bool autoIncColumnCanBeOmitted = m_newRowEditing && m_editor->columnInfo()->field->isAutoIncrement();
 
     bool valueChanged = m_editor->valueChanged();
-    bool editCurrentCellAgain = false;
 
     if (valueChanged) {
         if (!m_editor->valueIsValid()) {
             //used e.g. for date or time values - the value can be null but not necessary invalid
             res = Validator::Error;
-            editCurrentCellAgain = true;
             QWidget *par = dynamic_cast<QScrollArea*>(this) ? dynamic_cast<QScrollArea*>(this)->widget() :
                            dynamic_cast<QWidget*>(this);
             QWidget *edit = dynamic_cast<QWidget*>(m_editor);
@@ -949,7 +947,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                       + "\n\n" + Kexi::msgYouCanImproveData();
                 desc = i18n("The column's constraint is declared as NOT NULL.");
-                editCurrentCellAgain = true;
                 //   allow = false;
                 //   removeEditor();
                 //   return true;
@@ -969,7 +966,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + Kexi::msgYouCanImproveData();
                     desc = i18n("The column's constraint is declared as NOT EMPTY.");
-                    editCurrentCellAgain = true;
                     //    allow = false;
                     //    removeEditor();
                     //    return true;
@@ -985,7 +981,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + Kexi::msgYouCanImproveData();
                     desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
-                    editCurrentCellAgain = true;
 //    allow = false;
                     //    removeEditor();
                     //    return true;
@@ -1053,12 +1048,10 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             else
                 KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), msg, desc);
         }
-        editCurrentCellAgain = true;
 //  allow = false;
     } else if (res == Validator::Warning) {
         //js: todo: message!!!
         KMessageBox::messageBox(dynamic_cast<QWidget*>(this), KMessageBox::Sorry, msg + "\n" + desc);
-        editCurrentCellAgain = true;
     }
 
     if (res == Validator::Ok) {
@@ -1194,8 +1187,8 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
     case AskDelete:
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
                     dynamic_cast<QWidget*>(this),
-                    i18n("Do you want to delete selected row?"), QString(),
-                    KGuiItem(i18n("&Delete Row"), "edit-delete"), KStandardGuiItem::cancel(),
+                    i18n("Do you want to delete selected record?"), QString(),
+                    KGuiItem(i18n("&Delete Record"), "edit-delete"), KStandardGuiItem::cancel(),
                     "dontAskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
         {
@@ -1642,7 +1635,7 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
 }
 
 bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int &curCol,
-        bool fullRowSelection, bool *moveToFirstField, bool *moveToLastField)
+        bool fullRecordSelection, bool *moveToFirstField, bool *moveToLastField)
 {
     if (moveToFirstField)
         *moveToFirstField = false;
@@ -1670,7 +1663,7 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
         selectNextPage();
         e->accept();
     } else if (k == Qt::Key_Home) {
-        if (fullRowSelection) {
+        if (fullRecordSelection) {
             //we're in row-selection mode: home key always moves to 1st row
             curRow = 0;//to 1st row
         } else {//cell selection mode: different actions depending on ctrl and shift keys mods
@@ -1687,7 +1680,7 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
         //do not accept yet
         e->ignore();
     } else if (k == Qt::Key_End) {
-        if (fullRowSelection) {
+        if (fullRecordSelection) {
             //we're in row-selection mode: home key always moves to last row
             curRow = m_data->count() - 1 + (isInsertingEnabled() ? 1 : 0);//to last row
         } else {//cell selection mode: different actions depending on ctrl and shift keys mods
@@ -1733,7 +1726,7 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
         QWidget* thisWidget = dynamic_cast<QWidget*>(this);
 //        const QRect r( verticalScrollBar()->sliderRect() );
         const int row = lastVisibleRow() + 1;
-        const QString toolTipText( i18n("Row: %1", row) );
+        const QString toolTipText( i18n("Record: %1", row) );
         QToolTip::showText(
             QPoint(
                 thisWidget->mapToGlobal(verticalScrollBar()->pos()).x()
@@ -1767,7 +1760,7 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
             m_scrollBarTip->hide();
             return;
         }
-        m_scrollBarTip->setText(i18n("Row: ") + QString::number(row));
+        m_scrollBarTip->setText(i18n("Record: ") + QString::number(row));
         m_scrollBarTip->adjustSize();
         QWidget* thisWidget = dynamic_cast<QWidget*>(this);
         m_scrollBarTip->move(
@@ -2000,10 +1993,10 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
     const bool startFromLastRowAndCol =
            (   !m_positionOfRecentlyFoundValue.exists && !next
             && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)
-        || (m_curRow >= rows() && !forward); //we're at "insert" row, and searching backwards: move to the last cell
+        || (m_curRow >= rows() && !forward); //we're at "insert" record, and searching backwards: move to the last cell
 
     if (!startFrom1stRowAndCol && !startFromLastRowAndCol && m_curRow >= rows()) {
-        //we're at "insert" row, and searching forward: no chances to find something
+        //we're at "insert" record, and searching forward: no chances to find something
         return false;
     }
     KexiTableViewData::Iterator it((startFrom1stRowAndCol || startFromLastRowAndCol)
@@ -2115,4 +2108,15 @@ tristate KexiDataAwareObjectInterface::findNextAndReplace(
         return cancelled;
     //! @todo implement KexiDataAwareObjectInterface::findAndReplace()
     return false;
+}
+
+void KexiDataAwareObjectInterface::setRowEditing(bool set)
+{
+    if (set == m_rowEditing)
+        return;
+    m_rowEditing = set;
+    if (m_rowEditing)
+        emit rowEditStarted(m_curRow);
+    else
+        emit rowEditTerminated(m_curRow);
 }

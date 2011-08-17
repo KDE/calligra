@@ -89,7 +89,7 @@ using namespace Calligra::Tables;
 RowHeader::RowHeader(CanvasBase *_canvas)
         : m_pCanvas(_canvas), m_bSelection(false),
         m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
-        m_cellToolIsActive(true)
+        m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
 {
 }
 
@@ -208,14 +208,10 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
         // Remove size indicator painted by paintSizeIndicator
         removeSizeIndicator();
 
-        int start = m_iResizedRow;
-        int end = m_iResizedRow;
         QRect rect;
         rect.setCoords(1, m_iResizedRow, KS_colMax, m_iResizedRow);
         if (m_pCanvas->selection()->isRowSelected()) {
             if (m_pCanvas->selection()->contains(QPoint(1, m_iResizedRow))) {
-                start = m_pCanvas->selection()->lastRange().top();
-                end = m_pCanvas->selection()->lastRange().bottom();
                 rect = m_pCanvas->selection()->lastRange();
             }
         }
@@ -407,7 +403,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
-    QFont normalFont(KoGlobal::defaultFont());
+    QFont normalFont(m_font);
     QFont boldFont(normalFont);
     boldFont.setBold(true);
 
@@ -518,6 +514,11 @@ void RowHeader::doToolChanged(const QString& toolId)
     update();
 }
 
+void RowHeader::setFont(const QFont &font)
+{
+    m_font = font;
+    update();
+}
 
 /****************************************************************
  *
@@ -528,7 +529,7 @@ void RowHeader::doToolChanged(const QString& toolId)
 ColumnHeader::ColumnHeader(CanvasBase *_canvas)
     : m_pCanvas(_canvas), m_bSelection(false),
     m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
-    m_cellToolIsActive(true)
+    m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
 {
 }
 
@@ -700,14 +701,10 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
         // Remove size indicator painted by paintSizeIndicator
         removeSizeIndicator();
 
-        int start = m_iResizedColumn;
-        int end   = m_iResizedColumn;
         QRect rect;
         rect.setCoords(m_iResizedColumn, 1, m_iResizedColumn, KS_rowMax);
         if (m_pCanvas->selection()->isColumnSelected()) {
             if (m_pCanvas->selection()->contains(QPoint(m_iResizedColumn, 1))) {
-                start = m_pCanvas->selection()->lastRange().left();
-                end   = m_pCanvas->selection()->lastRange().right();
                 rect  = m_pCanvas->selection()->lastRange();
             }
         }
@@ -958,7 +955,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
-    QFont normalFont(KoGlobal::defaultFont());
+    QFont normalFont(m_font);
     QFont boldFont(normalFont);
     boldFont.setBold(true);
 
@@ -1094,6 +1091,11 @@ void ColumnHeader::doToolChanged(const QString& toolId)
     update();
 }
 
+void ColumnHeader::setFont(const QFont &font)
+{
+    m_font = font;
+    update();
+}
 
 /****************************************************************
  *

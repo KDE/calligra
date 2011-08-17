@@ -22,11 +22,9 @@
 #include "kis_node.h"
 #include "kis_paint_device.h"
 #include "kis_shared_ptr.h"
-#include "kra/kis_kra_savexml_visitor.h"
-#include "kra/kis_kra_save_visitor.h"
+#include "kis_doc2.h"
 
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -35,6 +33,7 @@
 #include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QTemporaryFile>
 
 KisMimeData::KisMimeData() :
     QMimeData()
@@ -55,8 +54,7 @@ QStringList KisMimeData::formats () const
 {
     QStringList f = QMimeData::formats();
     if (m_node) {
-        f << "application/x-krita-node-pointer"
-          << "application/x-krita-node"
+        f << "application/x-krita-node"
           << "application/x-qt-image";
     }
     return f;
@@ -70,36 +68,37 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         const KoColorProfile *monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
         return m_node->paintDevice()->convertToQImage(monitorProfile);
     }
-    else if (mimetype == "application/x-krita-node") {
-
+    else if (mimetype == "application/x-krita-node"
+             || mimetype == "application/zip") {
+        
         KisNode *node = const_cast<KisNode*>(m_node.constData());
-
+        
         QByteArray ba;
         QBuffer buf(&ba);
         KoStore *store = KoStore::createStore(&buf, KoStore::Write);
 
-        store->open("layer.xml");
-        KoStoreDevice dev(store);
+        Q_ASSERT(!store->bad());
 
-        QDomDocument layerdoc;
-        QDomElement nodeElement = layerdoc.createElement("NODE");
-        quint32 count = 1;
-        KisSaveXmlVisitor vxml(layerdoc, nodeElement, count, true);
-        node->accept(vxml);
+        KisDoc2 doc;
 
-        QByteArray s = layerdoc.toByteArray();
-        dev.write(s.constData(), s.size());
-        store->close();
+        QRect rc = node->exactBounds();
+        
+        KisImageSP image = new KisImage(0, rc.width(), rc.height(), node->colorSpace(), node->name(), false);
+        image->addNode(node->clone());
+        doc.setCurrentImage(image);
 
-        KisKraSaveVisitor vbinary(store, count, node->name(), vxml.nodeFileNames());
-        node->accept(vbinary);
-        delete store;
+        doc.saveNativeFormatCalligra(store);
 
+#if 0        
+        QFile f("./KRITA_DROP_FILE.kra");
+        f.open(QFile::WriteOnly);
+        f.write(ba);
+        f.flush();
+        f.close();
+#endif
+        
         return ba;
 
-    }
-    else if (mimetype == "application/x-krita-node-pointer") {
-        return qVariantFromValue(qulonglong(m_node.constData()));
     }
     else {
         return QMimeData::retrieveData(mimetype, preferredType);

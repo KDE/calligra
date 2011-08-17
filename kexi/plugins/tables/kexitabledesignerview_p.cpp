@@ -114,7 +114,7 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
     history = new CommandHistory(historyActionCollection, true);
 
     internalPropertyNames
-    << "subType" << "uid" << "newrow" << "rowSource" << "rowSourceType"
+    << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
     << "boundColumn" << "visibleColumn";
 }
 

@@ -327,8 +327,7 @@ bool KoAbstractApplicationController::openDocuments(
         setCentralWidget(tablesView);
     }
     else if(m_type == TextDocument && isTextDocumentExtension(ext)) {
-        m_editor = qobject_cast<KoTextEditor *>(wordsView()->canvasBase()->toolProxy()->selection());
-
+        m_editor = KoTextEditor::getTextEditorFromCanvas(wordsView()->canvasBase());
         if (canvasControllerWidget()) {
             setCentralWidget(canvasControllerWidget());
         }

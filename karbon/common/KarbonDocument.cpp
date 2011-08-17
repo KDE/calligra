@@ -416,7 +416,7 @@ void KarbonDocument::saveOdfStyles(KoShapeSavingContext & context)
     if (! styleManager)
         return;
 
-    styleManager->saveOdf(context.mainStyles());
+    styleManager->saveOdf(context);
 }
 
 void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenterBase* dataCenter)

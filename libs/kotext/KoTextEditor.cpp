@@ -92,10 +92,11 @@ static bool isRightToLeft(const QString &text)
 /*Private*/
 
 KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
-    : q(qq),
-    document (document),
-    headCommand(0),
-    isBidiDocument(false)
+    : q(qq)
+    , document (document)
+    , headCommand(0)
+    , isBidiDocument(false)
+    , editProtectionCached(false)
 {
     caret = QTextCursor(document);
     editorState = NoOp;
@@ -296,7 +297,7 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
 
 
 KoTextEditor::KoTextEditor(QTextDocument *document)
-    : KoToolSelection(document),
+    : QObject(document),
     d (new Private(this, document))
 {
     connect (d->document, SIGNAL (undoCommandAdded()), this, SLOT (documentCommandAdded()));
@@ -305,6 +306,20 @@ KoTextEditor::KoTextEditor(QTextDocument *document)
 KoTextEditor::~KoTextEditor()
 {
     delete d;
+}
+
+KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
+{
+    KoSelection *selection = canvas->shapeManager()->selection();
+    if (selection) {
+        foreach(KoShape *shape, selection->selectedShapes()) {
+            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                KoTextDocument doc(textData->document());
+                return doc.textEditor();
+            }
+        }
+    }
+    return 0;
 }
 
 void KoTextEditor::updateDefaultTextDirection(KoText::Direction direction)
@@ -437,20 +452,18 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             QTextBlock startBlock = selection.document()->findBlock(selection.anchor());
             QTextBlock endBlock = selection.document()->findBlock(selection.position());
 
-            if (startBlock != endBlock) {
-                do {
-                    startBlock = startBlock.next();
-                    QTextCursor cursor(startBlock);
-                    QTextBlockFormat blockFormat;
-                    blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                    cursor.mergeBlockFormat(blockFormat);
+            while (startBlock.isValid() && startBlock != endBlock) {
+                startBlock = startBlock.next();
+                QTextCursor cursor(startBlock);
+                QTextBlockFormat blockFormat;
+                blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                cursor.mergeBlockFormat(blockFormat);
 
-                    QTextCharFormat blockCharFormat = cursor.blockCharFormat();
-                    if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-                        blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                        cursor.setBlockCharFormat(blockCharFormat);
-                    }
-                } while(startBlock != endBlock);
+                QTextCharFormat blockCharFormat = cursor.blockCharFormat();
+                if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                    blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    cursor.setBlockCharFormat(blockCharFormat);
+                }
             }
         }
     }
@@ -458,6 +471,10 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
 
 void KoTextEditor::bold(bool bold)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Bold"));
     QTextCharFormat format;
     format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
@@ -470,6 +487,10 @@ void KoTextEditor::bold(bool bold)
 
 void KoTextEditor::italic(bool italic)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Italic"));
     QTextCharFormat format;
     format.setFontItalic(italic);
@@ -482,6 +503,10 @@ void KoTextEditor::italic(bool italic)
 
 void KoTextEditor::underline(bool underline)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Underline"));
     QTextCharFormat format;
     if (underline) {
@@ -500,6 +525,10 @@ void KoTextEditor::underline(bool underline)
 
 void KoTextEditor::strikeOut(bool strikeout)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Strike Out"));
     QTextCharFormat format;
     if (strikeout) {
@@ -517,6 +546,10 @@ void KoTextEditor::strikeOut(bool strikeout)
 
 void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     class Aligner : public BlockFormatVisitor
     {
     public:
@@ -535,6 +568,10 @@ void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
 
 void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextCharFormat::VerticalAlignment charAlign = QTextCharFormat::AlignNormal;
     if (align == Qt::AlignTop)
         charAlign = QTextCharFormat::AlignSuperScript;
@@ -552,6 +589,10 @@ void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
 
 void KoTextEditor::decreaseIndent()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     class Indenter : public BlockFormatVisitor
     {
     public:
@@ -570,6 +611,10 @@ void KoTextEditor::decreaseIndent()
 
 void KoTextEditor::increaseIndent()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     class Indenter : public BlockFormatVisitor
     {
     public:
@@ -612,6 +657,10 @@ public:
 
 void KoTextEditor::decreaseFontSize()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Decrease font size"));
     FontResizer sizer(FontResizer::Shrink);
     CharFormatVisitor::visitSelection(this, sizer, i18n("Decrease font size"));
@@ -620,6 +669,10 @@ void KoTextEditor::decreaseFontSize()
 
 void KoTextEditor::increaseFontSize()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Increase font size"));
     FontResizer sizer(FontResizer::Grow);
     CharFormatVisitor::visitSelection(this, sizer, i18n("Increase font size"));
@@ -628,6 +681,10 @@ void KoTextEditor::increaseFontSize()
 
 void KoTextEditor::setFontFamily(const QString &font)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Set Font"));
     QTextCharFormat format;
     format.setFontFamily(font);
@@ -639,6 +696,10 @@ void KoTextEditor::setFontFamily(const QString &font)
 
 void KoTextEditor::setFontSize(qreal size)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Set Font Size"));
     QTextCharFormat format;
     format.setFontPointSize(size);
@@ -650,6 +711,10 @@ void KoTextEditor::setFontSize(qreal size)
 
 void KoTextEditor::setTextBackgroundColor(const QColor &color)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Set Background Color"));
     QTextCharFormat format;
     format.setBackground(QBrush(color));
@@ -661,6 +726,10 @@ void KoTextEditor::setTextBackgroundColor(const QColor &color)
 
 void KoTextEditor::setTextColor(const QColor &color)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Set Text Color"));
     QTextCharFormat format;
     format.setForeground(QBrush(color));
@@ -672,6 +741,10 @@ void KoTextEditor::setTextColor(const QColor &color)
 
 void KoTextEditor::setStyle(KoCharacterStyle *style)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_ASSERT(style);
     d->updateState(KoTextEditor::Private::Format, i18n("Set Character Style"));
     QTextCharFormat format;
@@ -684,6 +757,10 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
 
 void KoTextEditor::setStyle(KoParagraphStyle *style)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Format, i18n("Set Paragraph Style"));
     const int start = qMin(position(), anchor());
     const int end = qMax(position(), anchor());
@@ -718,6 +795,10 @@ void KoTextEditor::setDefaultFormat()
 
 void KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bookmark"));
     KoBookmark *bookmark = new KoBookmark(d->document);
     bookmark->setName(name);
@@ -755,23 +836,31 @@ void KoTextEditor::addBookmark(const QString &name)
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
-bool KoTextEditor::insertIndexMarker()
+KoInlineObject *KoTextEditor::insertIndexMarker()
 {//TODO changeTracking
+    if (isEditProtected()) {
+        return 0;
+    }
+
     QTextBlock block = d->caret.block();
     if (d->caret.position() >= block.position() + block.length() - 1)
-        return false; // can't insert one at end of text
+        return 0; // can't insert one at end of text
     if (block.text()[ d->caret.position() - block.position()].isSpace())
-        return false; // can't insert one on a whitespace as that does not indicate a word.
+        return 0; // can't insert one on a whitespace as that does not indicate a word.
 
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
     KoTextLocator *tl = new KoTextLocator();
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, tl);
     d->updateState(KoTextEditor::Private::NoOp);
-    return true;
+    return tl;
 }
 
 void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Variable"));
 
     int startPosition = d->caret.position();
@@ -781,6 +870,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     }
 
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
+    inliner->updatePosition(d->document, d->caret.position(), format);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
@@ -794,6 +884,10 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
 
 void KoTextEditor::insertFrameBreak()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Insert Break"));
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
@@ -815,6 +909,10 @@ void KoTextEditor::insertFrameBreak()
 
 bool KoTextEditor::deleteInlineObjects(bool backward)
 {
+    if (isEditProtected()) {
+        return false;
+    }
+
     return d->deleteInlineObjects(backward);
 }
 
@@ -880,6 +978,10 @@ int KoTextEditor::columnNumber() const
 
 void KoTextEditor::deleteChar()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     if (!d->caret.hasSelection() && d->caret.atEnd())
         return;
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
@@ -894,6 +996,10 @@ void KoTextEditor::deleteChar()
 
 void KoTextEditor::deletePreviousChar()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     if (!d->caret.hasSelection() && d->caret.atStart())
         return;
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
@@ -921,19 +1027,127 @@ bool KoTextEditor::hasSelection()
     return d->caret.hasSelection();
 }
 
+// To figure out if a selection is write protected we need to traverse the entire document
+// as sections build up the protectiveness recursively.
+bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
+{
+    do {
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
+        if (table) {
+            // There are 4 ways this table can be selected:
+            //  - "before to mid"
+            //  - "mid to after"
+            //  - "complex mid to mid"
+            //  - "simple mid to mid"
+            // The 3 first are entire cells, the fourth is within a cell
+
+            if (d->caret.selectionStart() <= table->lastPosition()
+                && d->caret.selectionEnd() >= table->firstPosition()) {
+                // We have a selection somewhere 
+                QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
+                QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
+                if (cell1 != cell2) {
+                    // And the selection is complex or entire table
+                    int selectionRow;
+                    int selectionColumn;
+                    int selectionRowSpan;
+                    int selectionColumnSpan;
+                    if (!cell1.isValid() || !cell2.isValid()) {
+                        // entire table
+                        selectionRow = selectionColumn = 0;
+                        selectionRowSpan = table->rows();
+                        selectionColumnSpan = table->columns();
+                    } else {
+                        d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                    }
+
+                    for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
+                        for (int c = selectionColumn; c < selectionColumn + 
+                                    selectionColumnSpan; c++) {
+                            QTextTableCell cell = table->cellAt(r,c);
+                            if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                                return true;
+                            }
+
+                            if (recursiveProtectionCheck(cell.begin())) {
+                                return true;
+                            }
+                        }
+                    }
+                } else {
+                    // And the selection is simple
+                    if (cell1.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                        return true;
+                    }
+                    return recursiveProtectionCheck(cell1.begin());
+                }
+            }
+            if (d->caret.selectionEnd() <= table->lastPosition()) {
+                return false;
+            }
+        } if (subFrame) {
+        } else {
+            // TODO build up the section stack 
+
+            if (d->caret.selectionStart() < block.position() + block.length()
+                && d->caret.selectionEnd() >= block.position()) {
+                // We have a selection somewhere 
+                // TODO return true if block is protected by section
+            }
+
+            // TODO tear down the section stack 
+
+            if (d->caret.selectionEnd() < block.position() + block.length()) {
+                return false;
+            }
+        }
+        if (!it.atEnd()) {
+            ++it;
+        }
+    } while (!it.atEnd());
+    return false;
+}
+
+bool KoTextEditor::isEditProtected(bool useCached)
+{
+    if (useCached) {
+        if (! d->editProtectionCached) {
+            d->editProtected = recursiveProtectionCheck(d->document->rootFrame()->begin());
+            d->editProtectionCached = true;
+        }
+        return d->editProtected;
+    }
+    d->editProtectionCached = false;
+    return recursiveProtectionCheck(d->document->rootFrame()->begin());
+}
+
 void KoTextEditor::insertBlock()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
 //TODO
 }
 
 void KoTextEditor::insertBlock(const QTextBlockFormat &format)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(format)
 //TODO
 }
 
 void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(format)
     Q_UNUSED(charFormat)
 //TODO
@@ -941,12 +1155,20 @@ void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFo
 
 void KoTextEditor::insertFragment(const QTextDocumentFragment &fragment)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(fragment)
 //TODO
 }
 
 void KoTextEditor::insertTable(int rows, int columns)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table"));
     QTextTableFormat tableFormat;
 
@@ -981,10 +1203,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -998,6 +1220,10 @@ void KoTextEditor::insertTable(int rows, int columns)
 
 void KoTextEditor::insertTableRowAbove()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
@@ -1012,6 +1238,10 @@ void KoTextEditor::insertTableRowAbove()
 
 void KoTextEditor::insertTableRowBelow()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
@@ -1026,6 +1256,10 @@ void KoTextEditor::insertTableRowBelow()
 
 void KoTextEditor::insertTableColumnLeft()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
@@ -1040,6 +1274,10 @@ void KoTextEditor::insertTableColumnLeft()
 
 void KoTextEditor::insertTableColumnRight()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
@@ -1054,6 +1292,10 @@ void KoTextEditor::insertTableColumnRight()
 
 void KoTextEditor::deleteTableColumn()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
@@ -1069,6 +1311,10 @@ void KoTextEditor::deleteTableColumn()
 
 void KoTextEditor::deleteTableRow()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
@@ -1083,6 +1329,10 @@ void KoTextEditor::deleteTableRow()
 
 void KoTextEditor::mergeTableCells()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Merge Cells"));
 
     QTextTable *table = d->caret.currentTable();
@@ -1096,6 +1346,10 @@ void KoTextEditor::mergeTableCells()
 
 void KoTextEditor::splitTableCells()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Split Cells"));
 
     QTextTable *table = d->caret.currentTable();
@@ -1110,6 +1364,10 @@ void KoTextEditor::splitTableCells()
 
 void KoTextEditor::insertTableOfContents()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
 
     QTextBlockFormat tocFormat;
@@ -1148,6 +1406,10 @@ void KoTextEditor::insertTableOfContents()
 
 void KoTextEditor::insertText(const QString &text)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Key Press"));
 
     //first we make sure that we clear the inlineObject charProperty, if we have no selection
@@ -1183,6 +1445,10 @@ void KoTextEditor::insertText(const QString &text)
 
 void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(text)
     Q_UNUSED(format)
 //TODO
@@ -1190,24 +1456,37 @@ void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format
 
 void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(modifier)
 //TODO
 }
 
 void KoTextEditor::mergeBlockFormat(const QTextBlockFormat &modifier)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(modifier)
 //TODO
 }
 
 void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(modifier)
 //TODO
 }
 
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
+    d->editProtectionCached = false;
     bool b = d->caret.movePosition (operation, mode, n);
     emit cursorPositionChanged();
     return b;
@@ -1215,11 +1494,15 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
 
 void KoTextEditor::newLine()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Line Break"));
     if (d->caret.hasSelection())
         d->deleteInlineObjects();
-    KoTextDocument koDocument(d->document);
-    KoStyleManager *styleManager = koDocument.styleManager();
+    KoTextDocument textDocument(d->document);
+    KoStyleManager *styleManager = textDocument.styleManager();
     KoParagraphStyle *nextStyle = 0;
     KoParagraphStyle *currentStyle = 0;
     if (styleManager) {
@@ -1291,6 +1574,10 @@ int KoTextEditor::position() const
 
 void KoTextEditor::removeSelectedText()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->caret.removeSelectedText();
     emit cursorPositionChanged();
 }
@@ -1323,30 +1610,47 @@ int KoTextEditor::selectionStart() const
 
 void KoTextEditor::setBlockCharFormat(const QTextCharFormat &format)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(format)
 //TODO
 }
 
 void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(format)
 //TODO
 }
 
 void KoTextEditor::setCharFormat(const QTextCharFormat &format)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(format)
 //TODO
 }
 
 void KoTextEditor::setTableFormat(const QTextTableFormat &format)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     Q_UNUSED(format)
 //TODO
 }
 
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
 {
+    d->editProtectionCached = false;
     d->caret.setPosition (pos, m);
     emit cursorPositionChanged();
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,12 +23,12 @@
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiStandardAction.h>
-#include <KActionCollection>
+#include <kexidb/roweditbuffer.h>
 
-#include <qlayout.h>
 #include <QVBoxLayout>
 
-#include <kmenu.h>
+#include <KActionCollection>
+#include <KMenu>
 
 KexiDataAwareView::KexiDataAwareView(QWidget *parent)
         : KexiView(parent)
@@ -58,9 +58,14 @@ void KexiDataAwareView::init(QWidget* viewWidget, KexiSharedActionClient* action
         connect(this, SIGNAL(closing(bool&)), this, SLOT(slotClosing(bool&)));
 
         //! updating actions on start/stop editing
-        m_dataAwareObject->connectRowEditStartedSignal(this, SLOT(slotUpdateRowActions(int)));
-        m_dataAwareObject->connectRowEditTerminatedSignal(this, SLOT(slotUpdateRowActions(int)));
-        m_dataAwareObject->connectReloadActionsSignal(this, SLOT(reloadActions()));
+        m_dataAwareObject->connectRowEditStartedSignal(
+            this, SLOT(slotUpdateRowActions(int)));
+        m_dataAwareObject->connectRowEditTerminatedSignal(
+            this, SLOT(slotUpdateRowActions(int)));
+        m_dataAwareObject->connectUpdateSaveCancelActionsSignal(
+            this, SLOT(slotUpdateSaveCancelActions()));
+        m_dataAwareObject->connectReloadActionsSignal(
+            this, SLOT(reloadActions()));
     }
 
 //2.0 Q3VBoxLayout *box = new Q3VBoxLayout(this);
@@ -174,7 +179,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 // const bool inserting = m_dataAwareObject->isInsertingEnabled();
     const bool deleting = m_dataAwareObject->isDeleteEnabled();
     const bool emptyInserting = m_dataAwareObject->isEmptyRowInsertingEnabled();
-    const bool editing = m_dataAwareObject->rowEditing();
+    const bool editing = isDataEditingInProgress();
     const bool sorting = m_dataAwareObject->isSortingEnabled();
     const int rows = m_dataAwareObject->rows();
     const bool insertRowFocusedWithoutEditing = !editing && row == rows;
@@ -186,10 +191,19 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
     setAvailable("edit_delete_row", !ro && !(deleting && row == rows));
     setAvailable("edit_insert_empty_row", !ro && emptyInserting);
     setAvailable("edit_clear_table", !ro && deleting && rows > 0);
-    setAvailable("data_save_row", editing);
-    setAvailable("data_cancel_row_changes", editing);
     setAvailable("data_sort_az", sorting);
     setAvailable("data_sort_za", sorting);
+    slotUpdateSaveCancelActions();
+}
+
+void KexiDataAwareView::slotUpdateSaveCancelActions()
+{
+    kDebug() << ":::::::::" << isDataEditingInProgress();
+    // 'save row' enabled when editing and there's anything to save
+    const bool editing = isDataEditingInProgress();
+    setAvailable("data_save_row", editing);
+    // 'cancel row changes' enabled when editing
+    setAvailable("data_cancel_row_changes", m_dataAwareObject->rowEditing());
 }
 
 QWidget* KexiDataAwareView::mainWidget() const
@@ -305,9 +319,9 @@ void KexiDataAwareView::slotClosing(bool& cancel)
         cancel = true;
 }
 
-void KexiDataAwareView::cancelRowEdit()
+bool KexiDataAwareView::cancelRowEdit()
 {
-    m_dataAwareObject->cancelRowEdit();
+    return m_dataAwareObject->cancelRowEdit();
 }
 
 void KexiDataAwareView::sortAscending()
@@ -410,6 +424,29 @@ tristate KexiDataAwareView::findNextAndReplace(const QVariant& valueToFind,
         return cancelled;
 
     return dataAwareObject()->findNextAndReplace(valueToFind, replacement, options, replaceAll);
+}
+
+bool KexiDataAwareView::isDataEditingInProgress() const
+{
+    if (!m_dataAwareObject->rowEditing()
+        || !m_dataAwareObject->data()
+        || !m_dataAwareObject->data()->rowEditBuffer())
+    {
+        return false;
+    }
+    // true if edit buffer is not empty or at least there is editor with changed value
+    return !m_dataAwareObject->data()->rowEditBuffer()->isEmpty()
+           || (m_dataAwareObject->editor() && m_dataAwareObject->editor()->valueChanged());
+}
+
+tristate KexiDataAwareView::saveDataChanges()
+{
+    return acceptRowEdit();
+}
+
+tristate KexiDataAwareView::cancelDataChanges()
+{
+    return cancelRowEdit();
 }
 
 /*

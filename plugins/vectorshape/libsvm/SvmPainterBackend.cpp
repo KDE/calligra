@@ -125,14 +125,37 @@ void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &po
     m_painter->drawPolygon(polygon);
 }
 
+void SvmPainterBackend::polyPolygon(SvmGraphicsContext &context,
+                                    const QList<QPolygon> &polyPolygon)
+{
+    updateFromGraphicscontext(context);
+
+    QPainterPath  path;
+
+    path.setFillRule(Qt::OddEvenFill);
+    //path.setFillRule(Qt::WindingFill);
+    foreach (const QPolygon &polygon, polyPolygon) {
+        path.addPolygon(polygon);
+    }
+    m_painter->drawPath(path);
+}
+
 void SvmPainterBackend::textArray(SvmGraphicsContext &context,
-                                  const QPoint &point, const QString &string)
+                                  const QPoint &point, const QString &string,
+                                  quint16 startIndex, quint16 len,
+                                  quint32 dxArrayLen, qint32 *dxArray)
 {
     updateFromGraphicscontext(context);
 
     m_painter->save();
     m_painter->setPen(context.textColor);
-    m_painter->drawText(point, string);
+    // FIXME: Handle text background color.  How do we get the area? A testfile would be nice.
+    m_painter->drawText(point, string.mid(startIndex, len));
+
+    // FIXME: DxArray not handled yet.
+    Q_UNUSED(dxArrayLen);
+    Q_UNUSED(dxArray);
+
     m_painter->restore();
 }
 

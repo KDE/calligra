@@ -78,7 +78,7 @@ GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
     enableButtonOk(false);
     setModal(false);
 
-    setObjectName("GoalSeekDialog");
+    setObjectName(QLatin1String("GoalSeekDialog"));
 
     setWindowTitle(i18n("Goal Seek"));
 

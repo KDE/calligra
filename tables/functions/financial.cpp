@@ -626,7 +626,6 @@ static double xirrResultDerive(valVector& args, ValueCalc *calc, double& rate)
 Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QDate maturity = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate firstInterest = calc->conv()->asDate(args[1]).asDate(calc->settings());
     QDate settlement = calc->conv()->asDate(args[2]).asDate(calc->settings());
 
     Value rate = args[3];

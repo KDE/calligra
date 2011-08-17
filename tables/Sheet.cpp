@@ -1918,10 +1918,8 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     for (int i = 0; i < number; ++i) {
         //kDebug(36003) << " insert new column: pos :" << indexCol << " width :" << width << " hidden ?" << visibility;
 
-        const ColumnFormat* columnFormat;
         if (isNonDefaultColumn) {
             ColumnFormat* cf = nonDefaultColumnFormat(indexCol);
-            columnFormat = cf;
 
             if (width != -1.0)   //safe
                 cf->setWidth(width);
@@ -1934,8 +1932,6 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
                 cf->setFiltered(true);
 
             cf->setPageBreak(insertPageBreak);
-        } else {
-            columnFormat = this->columnFormat(indexCol);
         }
         ++indexCol;
     }
@@ -2923,7 +2919,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
         sname = testName;
 
         kDebug(36001) << "Sheet::loadXML: table name =" << sname;
-        setObjectName(sname.toUtf8());
+        setObjectName(sname);
         setSheetName(sname, true);
     }
 
@@ -3309,7 +3305,7 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
     map()->addDamage(new SheetDamage(this, SheetDamage::Name));
 
-    setObjectName(name.toUtf8());
+    setObjectName(name);
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return true;

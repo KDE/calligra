@@ -26,7 +26,6 @@
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "dialogs/SimpleStylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/InsertCharacter.h"
@@ -89,6 +88,26 @@
 
 #include <rdf/KoDocumentRdfBase.h>
 
+class TextToolSelection : public KoToolSelection
+{
+public:
+
+    TextToolSelection(QWeakPointer<KoTextEditor> editor)
+        : m_editor(editor)
+    {
+    }
+
+    bool hasSelection()
+    {
+        if (!m_editor.isNull()) {
+            return m_editor.data()->hasSelection();
+        }
+        return false;
+    }
+
+    QWeakPointer<KoTextEditor> m_editor;
+};
+
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
     foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
@@ -108,16 +127,19 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_trackChanges(false),
         m_allowResourceManagerUpdates(true),
         m_prevCursorPosition(-1),
+        m_prevMouseSelectionStart(-1),
+        m_prevMouseSelectionEnd(-1),
         m_caretTimer(this),
-        m_caretTimerState(true)
-        , m_currentCommand(0),
+        m_caretTimerState(true),
+        m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
         m_textDeleting(false),
         m_changeTipTimer(this),
-        m_changeTipCursorPos(0)
-        , m_delayedEnsureVisible(false)
+        m_changeTipCursorPos(0),
+        m_delayedEnsureVisible(false),
+        m_toolSelection(0)
 {
     setTextMode(true);
 
@@ -174,6 +196,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
+    m_actionPasteAsText  = new KAction(KIcon("paste"), i18n("Paste As Text"), this);
+    addAction("edit_paste_text", m_actionPasteAsText);
+    m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
+    connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));
+
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
@@ -508,6 +535,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
     m_textEditor = new KoTextEditor(document);
     KoTextDocument(document).setTextEditor(m_textEditor.data());
+    m_toolSelection = new TextToolSelection(m_textEditor);
 
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
@@ -623,22 +651,38 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
             QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
             if (tl.isValid()) {
-                painter.setRenderHint(QPainter::Antialiasing,false);
+                painter.setRenderHint(QPainter::Antialiasing, false);
                 QRectF rect = caretRect(m_textEditor.data()->cursor());
+                QPointF baselinePoint;
                 if (tl.ascent() > 0) {
                     QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
                     rect.setY(rect.y() + tl.ascent() - qMin(tl.ascent(), fm.ascent()));
                     rect.setHeight(qMin(tl.ascent(), fm.ascent()) + qMin(tl.descent(), fm.descent()));
+                    baselinePoint = QPoint(rect.x(), rect.y() + tl.ascent());
                 } else {
                     //line only filled with characters-without-size (eg anchors)
                     // layout will make sure line has height of block font
                     QFontMetricsF fm(block.charFormat().font(), painter.device());
                     rect.setHeight(fm.ascent() + fm.descent());
+                    baselinePoint = QPoint(rect.x(), rect.y() + fm.ascent());
                 }
                 QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
                 drawRect.setWidth(2);
                 painter.fillRect(drawRect, QColor(Qt::white));
                 painter.fillRect(drawRect, QBrush(Qt::black, Qt::Dense3Pattern));
+                if (m_textEditor.data()->isEditProtected(true)) {
+                    QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
+                    circleRect.translate(-7.5, -7.5);
+                    QPen pen(Qt::red);
+                    pen.setWidthF(2.0);
+                    painter.setPen(Qt::NoPen);
+                    painter.setPen(pen);
+                    painter.setBrush(QBrush(QColor(255, 255, 255, 192)));
+                    painter.setRenderHint(QPainter::Antialiasing, true);
+                    painter.drawEllipse(circleRect);
+                    painter.drawLine(circleRect.topLeft() + QPointF(2,2),
+                                    circleRect.bottomRight() - QPointF(2,2));
+                }
             }
         }
     }
@@ -749,10 +793,17 @@ void TextTool::setShapeData(KoTextShapeData *data)
         return;
     connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
-        if (!m_textEditor.isNull())
+        if (!m_textEditor.isNull()) {
             disconnect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+        }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
+        if (!m_toolSelection) {
+            m_toolSelection = new TextToolSelection(m_textEditor.data());
+        }
+        else {
+            m_toolSelection->m_editor = m_textEditor.data();
+        }
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
@@ -854,12 +905,23 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         event->ignore(); // allow the event to be used by another
         return;
     }
-    m_textEditor.data()->clearSelection();
+
     int pos = m_textEditor.data()->position();
     m_textEditor.data()->movePosition(QTextCursor::WordLeft);
     m_textEditor.data()->movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
-    if (qAbs(pos - m_textEditor.data()->position()) <= 1) // clicked between two words
+
+    // clicked between two words
+    if (qAbs(pos - m_textEditor.data()->position()) <= 1)
         m_textEditor.data()->movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+
+    // switch between select single words or whole line
+    if (m_prevMouseSelectionStart == m_textEditor.data()->selectionStart() && m_prevMouseSelectionEnd == m_textEditor.data()->selectionEnd()) {
+        m_textEditor.data()->clearSelection();
+        m_textEditor.data()->movePosition(QTextCursor::StartOfLine);
+        m_textEditor.data()->movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    }
+    m_prevMouseSelectionStart = m_textEditor.data()->selectionStart();
+    m_prevMouseSelectionEnd = m_textEditor.data()->selectionEnd();
 
     repaintSelection();
     updateSelectionHandler();
@@ -1258,7 +1320,7 @@ void TextTool::updateActions()
     }
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
-    m_actionFormatFontSize->setFontSize(cf.fontPointSize());
+    m_actionFormatFontSize->setFontSize(cf.font().pointSizeF());
     m_actionFormatFontFamily->setFont(cf.font().family());
 
     KoTextShapeData::ResizeMethod resizemethod = KoTextShapeData::AutoResize;
@@ -1436,6 +1498,14 @@ void TextTool::repaintCaret()
         repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
         if (repaintRect.isValid()) {
             repaintRect = textShape->absoluteTransformation(0).mapRect(repaintRect);
+
+            // Make sure there is enough space to show an icon
+            QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
+            repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
+            repaintRect.setWidth(iconSize.width());
+            repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
+            repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
+
             canvas()->updateCanvas(repaintRect);
         }
     }
@@ -1492,7 +1562,7 @@ QRectF TextTool::textRect(QTextCursor &cursor) const
 
 KoToolSelection* TextTool::selection()
 {
-    return m_textEditor.data();
+    return m_toolSelection;
 }
 
 QList<QWidget *> TextTool::createOptionWidgets()
@@ -1500,12 +1570,13 @@ QList<QWidget *> TextTool::createOptionWidgets()
     QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
-    SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(harFormatChanged(const QTextCharFormat &format)), scw, SLOT(setCurrentFormat(const QTextCharFormat &)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
 
 
     // Connect to/with simple paragraph widget (docker)
@@ -1513,14 +1584,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
-
-    // Connect to/with simple styles widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), ssw, SLOT(setCurrentFormat(QTextBlockFormat)));
-    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), ssw, SLOT(setCurrentFormat(QTextCharFormat)));
-    connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
 
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
@@ -1533,8 +1597,6 @@ QList<QWidget *> TextTool::createOptionWidgets()
     widgets.append(scw);
     spw->setWindowTitle(i18n("Paragraph"));
     widgets.append(spw);
-    ssw->setWindowTitle(i18n("Styles"));
-    widgets.append(ssw);
     stw->setWindowTitle(i18n("Table"));
     widgets.append(stw);
     return widgets;
@@ -1626,6 +1688,20 @@ void TextTool::stopEditing()
     m_currentCommandHasChildren = false;
 }
 
+void TextTool::pasteAsText()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    // on windows we do not have data if we try to paste this selection
+    if (!data) return;
+
+    m_prevCursorPosition = m_textEditor.data()->position();
+    textEditor->addCommand(new TextPasteCommand(QClipboard::Clipboard, this, 0, true));
+    editingPluginEvents();
+}
+
 void TextTool::bold(bool bold)
 {
     m_textEditor.data()->bold(bold);
@@ -1673,19 +1749,13 @@ void TextTool::lineBreak()
 void TextTool::alignLeft()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    Qt::Alignment align = Qt::AlignLeading;
-    if (m_textEditor.data()->block().layout()->textOption().textDirection() != Qt::LeftToRight)
-        align |= Qt::AlignTrailing;
-    m_textEditor.data()->setHorizontalTextAlignment(align);
+    m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
 }
 
 void TextTool::alignRight()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    Qt::Alignment align = Qt::AlignTrailing;
-    if (m_textEditor.data()->block().layout()->textOption().textDirection() == Qt::RightToLeft)
-        align = Qt::AlignLeading;
-    m_textEditor.data()->setHorizontalTextAlignment(align);
+    m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignRight | Qt::AlignAbsolute);
 }
 
 void TextTool::alignCenter()

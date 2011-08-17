@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008,2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -226,7 +226,7 @@ QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags KarbonLayerModel::flags(const QModelIndex &index) const
 {
     if (! index.isValid())
-        return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+        return 0;
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
@@ -464,36 +464,43 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(container);
-        if (group) {
-            kDebug(38000) << "KarbonLayerModel::dropMimeData parent = group";
+        KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>(container);
+        if (layer && layers.count()) {
+            kDebug(38000) << "dropping layer on a layer (not implemented yet)";
+            // TODO layers are dropped on a layer, so change layer ordering
+            return false;
+        } else if (group || layer) {
+            kDebug(38000) << "dropping on group or layer";
             if (! toplevelShapes.count())
                 return false;
 
             emit layoutAboutToBeChanged();
 
-            beginInsertRows(parent, group->shapeCount(), group->shapeCount() + toplevelShapes.count());
+            beginInsertRows(parent, container->shapeCount(), container->shapeCount() + toplevelShapes.count());
 
             KUndo2Command * cmd = new KUndo2Command();
             cmd->setText(i18nc("(qtundo-format)", "Reparent shapes"));
 
-            foreach(KoShape * shape, toplevelShapes)
-            new KoShapeUngroupCommand(shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd);
+            QList<bool> clipped, inheritTransform;
+            foreach(KoShape * shape, toplevelShapes) {
+                new KoShapeUngroupCommand(shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd);
+                clipped.append(false);
+                inheritTransform.append(false);
+            }
 
-            new KoShapeGroupCommand(group, toplevelShapes, cmd);
+            if (group) {
+                new KoShapeGroupCommand(group, toplevelShapes, cmd);
+            } else if (layer) {
+                new KoShapeGroupCommand(layer, toplevelShapes, clipped, inheritTransform, cmd);
+            }
             KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
             canvasController->canvas()->addCommand(cmd);
 
             endInsertRows();
 
             emit layoutChanged();
-        } else if (layers.count()) {
-            KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>(container);
-            if (! layer)
-                return false;
-
-            // TODO layers are dropped on a layer, so change layer ordering
-            return false;
         } else {
+            kDebug(38000) << "dropping on unhandled container (" << container->shapeId() << ")";
             // every other container we don't want to handle
             return false;
         }

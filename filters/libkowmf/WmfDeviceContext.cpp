@@ -18,6 +18,7 @@
 
 
 #include "WmfDeviceContext.h"
+#include "WmfEnums.h"
 
 #include <qglobal.h>
 
@@ -32,40 +33,49 @@ namespace Libwmf
 
 
 WmfDeviceContext::WmfDeviceContext()
+{
+    reset();
+}
+
+
+void WmfDeviceContext::reset()
+{
     // Graphics Objects
-    : brush()
-    , image()
-    , font()
-    , rotation()
-    , height()
-      //Palette
-    , pen()
-    , region()
+    brush = QBrush(Qt::NoBrush);
+    image = QImage();
+    font = QFont();
+    escapement = 0;
+    orientation = 0;
+    height = 0;
+    //Palette
+    pen = QPen(Qt::black);
+    clipRegion = QRegion();
 
     // Structure Objects
-    , backgroundColor(Qt::white)
-    , currentPosition(0, 0)
-    , foregroundTextColor(Qt::black)
-      //Output Surface**  (what is this good for?  Mixing colors?)
-    , viewportExt()
-    , viewportOrg()
-    , windowExt()
-    , windowOrg()
+    backgroundColor = QColor(Qt::white);
+    currentPosition = QPoint(0, 0);
+    foregroundTextColor = QColor(Qt::black);
+    //Output Surface**  (what is this good for?  Mixing colors?)
+    viewportExt = QSize();
+    viewportOrg = QPoint();
+    windowExt = QSize();
+    windowOrg = QPoint();
 
     // Graphic Properties
-    , bgMixMode()
-      //Break extra space
+    bgMixMode = 0;// FIXME: Check the real default
+    //Break extra space
     //Font mapping mode
-    , rop()
-    , layoutMode()
-      //Mapping mode
-    , polyFillMode()
-      //Stretchblt mode
-    , textAlign()
-      //Text extra space
+    rop = 0;// FIXME: Check the real default
+    layoutMode = 0;// FIXME: Check the real default
+    //Mapping mode
+    polyFillMode = Libwmf::ALTERNATE;
+    //Stretchblt mode
+    textAlign = 0;// FIXME: Check the real default
+    //Text extra space
 
-    , changedItems(0xffffffff)  // Everything changed the first time.
-{
+    changedItems = 0xffffffff;  // Everything changed the first time.
+
+    // Derivative values.
     m_windowExtIsSet = false;
     m_viewportExtIsSet = false;
     m_worldTransform.reset();
@@ -173,8 +183,6 @@ void WmfDeviceContext::recalculateWorldTransform()
     }
     //kDebug(31000) << "After window viewport calculation" << m_worldTransform;
 }
-
-
 
 
 }

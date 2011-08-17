@@ -30,6 +30,8 @@
 #include "WmfParser.h"
 
 
+#define DEBUG_WMFPAINT 0
+
 /**
    Namespace for Windows Metafile (WMF) classes
 */
@@ -41,7 +43,6 @@ WmfPainterBackend::WmfPainterBackend(QPainter *painter, const QSizeF &outputSize
     : WmfAbstractBackend()
     , mPainter(painter)
     , mOutputSize(outputSize)
-    , mTextPen()
     , mSaveCount(0)
 {
     mTarget = painter->device();
@@ -110,7 +111,7 @@ bool WmfPainterBackend::begin(const QRect &boundingBox)
     mOutputTransform = mPainter->transform();
     mWorldTransform = QTransform();
 
-    mPainter->setBrush(QBrush(Qt::NoBrush));
+    //mPainter->setBrush(QBrush(Qt::NoBrush));
 
 #if DEBUG_WMFPAINT
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
@@ -181,91 +182,6 @@ void WmfPainterBackend::restore()
     // the painter.  Now restore the full transformation.
     mWorldTransform = mPainter->worldTransform();
     recalculateWorldTransform();
-}
-
-
-void WmfPainterBackend::setFont(const QFont &font, int rotation, int fontHeight)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << font << rotation << fontHeight;
-#endif
-    mPainter->setFont(font);
-    mFontRotation = rotation;
-    mFontHeight = fontHeight;
-}
-
-
-void WmfPainterBackend::setTextPen(const QPen &pen)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << pen;
-#endif
-
-    mTextPen = pen;
-}
-
-void WmfPainterBackend::setPen(const QPen &pen)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << pen;
-#endif
-
-    QPen p = pen;
-    int width = pen.width();
-
-    if (dynamic_cast<QPrinter *>(mTarget)) {
-        width = 0;
-    } else {
-        // WMF spec: width of pen in logical coordinate
-        // => width of pen proportional with device context width
-        QRect rec = mPainter->window();
-        // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
-#if 0
-        QRect devRec = rec * mPainter->matrix();
-        if (rec.width() != 0)
-            width = (width * devRec.width()) / rec.width() ;
-        else
-            width = 0;
-#endif
-    }
-
-    p.setWidth(width);
-    mPainter->setPen(p);
-}
-
-
-const QPen &WmfPainterBackend::pen() const
-{
-    return mPainter->pen();
-}
-
-
-void WmfPainterBackend::setBrush(const QBrush &brush)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << brush;
-#endif
-    mPainter->setBrush(brush);
-}
-
-
-void WmfPainterBackend::setBackgroundColor(const QColor &c)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << c;
-#endif
-
-    mPainter->setBackground(QBrush(c));
-}
-
-
-void WmfPainterBackend::setBackgroundMode(Qt::BGMode mode)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << mode << "(ignored)";
-#endif
-
-    mPainter->setBackgroundMode(mode);
 }
 
 
@@ -515,8 +431,9 @@ void WmfPainterBackend::setViewportExt( int width, int height )
 }
 
 
-void WmfPainterBackend::setMatrix(const QMatrix &wm, bool combine)
+void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, bool combine)
 {
+    Q_UNUSED(context);
 #if DEBUG_WMFPAINT
     kDebug(31000) << wm << " " << combine;
 #endif
@@ -530,42 +447,41 @@ void WmfPainterBackend::setMatrix(const QMatrix &wm, bool combine)
 //                         Drawing
 
 
-void WmfPainterBackend::setClipRegion(const QRegion &rec)
-{
-    mPainter->setClipRegion(rec);
-}
-
-
-QRegion WmfPainterBackend::clipRegion()
-{
-    return mPainter->clipRegion();
-}
-
-
-void WmfPainterBackend::moveTo(int x, int y)
+void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, QColor color)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000)<< x << ", " << y;
+    kDebug(31000) << x << y << color;
 #endif
-    mLastPos = QPoint(x, y);
+
+    updateFromDeviceContext(context);
+
+    QPen oldPen = mPainter->pen();
+    QPen pen = oldPen;
+    pen.setColor(color);
+    mPainter->setPen(pen);
+    mPainter->drawLine(x, y, x, y);
+    mPainter->setPen(oldPen);
 }
 
 
-void WmfPainterBackend::lineTo(int x, int y)
+void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << " using " << mPainter->pen()
-                  << "linewidth: " << mPainter->pen().width();
+    kDebug(31000) << x << ", " << y << " using " << mPainter->pen();
 #endif
 
     QPoint newPoint(x, y);
-    mPainter->drawLine(mLastPos, newPoint);
-    mLastPos = newPoint;
+    mPainter->drawLine(context.currentPosition, newPoint);
+    context.currentPosition = newPoint;
 }
 
 
-void WmfPainterBackend::drawRect(int x, int y, int w, int h)
+void WmfPainterBackend::drawRect(WmfDeviceContext &context, int x, int y, int w, int h)
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
@@ -575,80 +491,94 @@ void WmfPainterBackend::drawRect(int x, int y, int w, int h)
 }
 
 
-void WmfPainterBackend::drawRoundRect(int x, int y, int w, int h, int roudw, int roudh)
+void WmfPainterBackend::drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h,
+                                      int roudw, int roudh)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
 #endif
+
+    updateFromDeviceContext(context);
     mPainter->drawRoundRect(x, y, w, h, roudw, roudh);
 }
 
 
-void WmfPainterBackend::drawEllipse(int x, int y, int w, int h)
+void WmfPainterBackend::drawEllipse(WmfDeviceContext &context, int x, int y, int w, int h)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
 #endif
+    updateFromDeviceContext(context);
     mPainter->drawEllipse(x, y, w, h);
 }
 
 
-void WmfPainterBackend::drawArc(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawArc(WmfDeviceContext &context, int x, int y, int w, int h,
+                                int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
 #endif
+    updateFromDeviceContext(context);
     mPainter->drawArc(x, y, w, h, a, alen);
 }
 
 
-void WmfPainterBackend::drawPie(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawPie(WmfDeviceContext &context, int x, int y, int w, int h,
+                                int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
 #endif
+    updateFromDeviceContext(context);
     mPainter->drawPie(x, y, w, h, a, alen);
 }
 
 
-void WmfPainterBackend::drawChord(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawChord(WmfDeviceContext &context, int x, int y, int w, int h,
+                                  int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h
                   << ", " << a << ", " << alen;
 #endif
+    updateFromDeviceContext(context);
     mPainter->drawChord(x, y, w, h, a, alen);
 }
 
 
-void WmfPainterBackend::drawPolyline(const QPolygon &pa)
+void WmfPainterBackend::drawPolyline(WmfDeviceContext &context, const QPolygon &pa)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << pa;
 #endif
+    updateFromDeviceContext(context);
     mPainter->drawPolyline(pa);
 }
 
 
-void WmfPainterBackend::drawPolygon(const QPolygon &pa, bool winding)
+void WmfPainterBackend::drawPolygon(WmfDeviceContext &context, const QPolygon &pa)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << pa << winding;
+    kDebug(31000) << pa;
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
 
-    if (winding)
+    updateFromDeviceContext(context);
+    if (context.polyFillMode)
         mPainter->drawPolygon(pa, Qt::WindingFill);
     else
         mPainter->drawPolygon(pa, Qt::OddEvenFill);
 }
 
 
-void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
+void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000);
 #endif
+
+    updateFromDeviceContext(context);
 
     mPainter->save();
     QBrush brush = mPainter->brush();
@@ -674,7 +604,7 @@ void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 #if DEBUG_WMFPAINT
             kDebug(31000) << pa;
 #endif
-            if (winding)
+            if (context.polyFillMode == WINDING)
                 mPainter->drawPolygon(pa, Qt::WindingFill);
             else
                 mPainter->drawPolygon(pa, Qt::OddEvenFill);
@@ -686,20 +616,25 @@ void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 }
 
 
-void WmfPainterBackend::drawImage(int x, int y, const QImage &img, int sx, int sy, int sw, int sh)
+void WmfPainterBackend::drawImage(WmfDeviceContext &context, int x, int y, const QImage &img,
+                                  int sx, int sy, int sw, int sh)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << " " << y << " " << sx << " " << sy << " " << sw << " " << sh;
 #endif
+    updateFromDeviceContext(context);
     mPainter->drawImage(x, y, img, sx, sy, sw, sh);
 }
 
 
-void WmfPainterBackend::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
+void WmfPainterBackend::patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
+                               quint32 rasterOperation)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << y << width << height << hex << rasterOperation << dec;
 #endif
+
+    updateFromDeviceContext(context);
 
     // 0x00f00021 is the PatCopy raster operation which just fills a rectangle with a brush.
     // This seems to be the most common one.
@@ -714,18 +649,19 @@ void WmfPainterBackend::patBlt(int x, int y, int width, int height, quint32 rast
 }
 
 
-void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, const QString& text,
-                                 double textRotation)
+void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const QString& text)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text << textRotation;
+    kDebug(31000) << x << y << hex << dec << text;
 #endif
 
+    updateFromDeviceContext(context);
+
     // The TA_UPDATECP flag tells us to use the current position
-    if (textAlign & TA_UPDATECP) {
+    if (context.textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
-        x = mLastPos.x();
-        y = mLastPos.y();
+        x = context.currentPosition.x();
+        y = context.currentPosition.y();
 #if DEBUG_WMFPAINT
         kDebug(31000) << "Using current position:" << x << y;
 #endif
@@ -736,15 +672,15 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
     int height = fm.height();
 
     // Horizontal align.  These flags are supposed to be mutually exclusive.
-    if ((textAlign & TA_CENTER) == TA_CENTER)
+    if ((context.textAlign & TA_CENTER) == TA_CENTER)
         x -= (width / 2);
-    else if ((textAlign & TA_RIGHT) == TA_RIGHT)
+    else if ((context.textAlign & TA_RIGHT) == TA_RIGHT)
         x -= width;
 
     // Vertical align. 
-    if ((textAlign & TA_BASELINE) == TA_BASELINE)
+    if ((context.textAlign & TA_BASELINE) == TA_BASELINE)
         y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
-    else if ((textAlign & TA_BOTTOM) == TA_BOTTOM) {
+    else if ((context.textAlign & TA_BOTTOM) == TA_BOTTOM) {
         y -= height;
     }
 
@@ -754,15 +690,15 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
                   << "leading = " << fm.leading();
 #endif
 
-    // Use the special pen defined by mTextPen for text.
+    // Use the special pen defined by the foregroundTextColor in the device context for text.
     mPainter->save();
-    mPainter->setPen(mTextPen);
+    mPainter->setPen(context.foregroundTextColor);
 
     // If the actual height is < 0, we should use device units.  This
     // means that if the text is currently upside-down due to some
     // transformations, we should un-upside-down it before painting.
-    //kDebug(31000) << "fontheight:" << mFontHeight << "height:" << height << "y" << y;
-    if (mFontHeight < 0 && mPainter->worldTransform().m22() < 0) {
+    //kDebug(31000) << "fontheight:" << context.height << "height:" << height << "y" << y;
+    if (context.height < 0 && mPainter->worldTransform().m22() < 0) {
         mPainter->translate(0, -(y - height / 2));
         mPainter->scale(qreal(1.0), qreal(-1.0));
         mPainter->translate(0, +(y - height / 2));
@@ -771,14 +707,11 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
         y = -3 * y;
     }
 
-    // Sometimes it happens that w and/or h == -1, and then the bounding box
-    // isn't valid any more.  In that case, use our own calculated values.
-    if (w == -1 || h == -1) {
-        mPainter->drawText(x, y, width, height, Qt::AlignLeft|Qt::AlignTop, text);
+    mPainter->translate(x, y);
+    if (context.escapement != 0) {
+        mPainter->rotate(qreal(context.escapement) / qreal(-10.0));
     }
-    else {
-        mPainter->drawText(x, y, w, h, Qt::AlignLeft|Qt::AlignTop, text);
-    }
+    mPainter->drawText(0, 0, width, height, Qt::AlignLeft|Qt::AlignTop, text);
 
     mPainter->restore();
 }
@@ -788,17 +721,19 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
 //                         Private functions
 
 
-void WmfPainterBackend::updateFromGraphicscontext(WmfDeviceContext &context)
+// If anything has changed in the device context that is relevant to
+// the QPainter, then update the painter with the corresponding data.
+//
+void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
 {
     // Graphic objects
-
     if (context.changedItems & DCBrush) {
         mPainter->setBrush(context.brush);
 #if DEBUG_WMFPAINT
         kDebug(31000) << "*** Setting fill brush to" << context.brush;
 #endif
-        // FIXME: context.image
     }
+    // FIXME: context.image
     if (context.changedItems & DCFont) {
         mPainter->setFont(context.font);
 #if DEBUG_WMFPAINT
@@ -812,33 +747,57 @@ void WmfPainterBackend::updateFromGraphicscontext(WmfDeviceContext &context)
 #endif
     }
     if (context.changedItems & DCPen) {
-        mPainter->setPen(context.pen);
+        QPen p = context.pen;
+        int width = p.width();
+
+        if (dynamic_cast<QPrinter *>(mTarget)) {
+            width = 0;
+        }
+        else  if (width == 1)
+            // I'm unsure of this, but it seems that WMF uses line
+            // width == 1 as cosmetic pen.  Or it could just be that
+            // any line width < 1 should be drawn as width == 1.  The
+            // WMF spec doesn't mention the term "cosmetic pen"
+            // anywhere so we don't get any clue there.
+            //
+            // For an example where this is shown clearly, see
+            // wmf_tests.doc, in the colored rectangles and the polypolygon.
+            width = 0;
+#if 0
+        else {
+            // WMF spec: width of pen in logical coordinate
+            // => width of pen proportional with device context width
+            QRect rec = mPainter->window();
+            // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
+
+            QRect devRec = rec * mPainter->matrix();
+            if (rec.width() != 0)
+                width = (width * devRec.width()) / rec.width() ;
+            else
+                width = 0;
+        }
+#endif
+
+        p.setWidth(width);
+        mPainter->setPen(p);
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting pen to" << context.pen;
+        kDebug(31000) << "*** Setting pen to" << p;
 #endif
     }
-    if (context.changedItems & DCRegion) {
+    if (context.changedItems & DCClipRegion) {
         // Not used until SETCLIPREGION is used
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** region changed to" << context.region;
+        //kDebug(31000) << "*** region changed to" << context.region;
 #endif
     }
 
     // Structure objects
-
     if (context.changedItems & DCBgTextColor) {
-        mPainter->setPen(context.backgroundColor);
+        mPainter->setBackground(QBrush(context.backgroundColor));
 #if DEBUG_WMFPAINT
         kDebug(31000) << "*** Setting background text color to" << context.backgroundColor;
 #endif
     }
-    if (context.changedItems & DCFgTextColor) {
-        mPainter->setPen(context.foregroundTextColor);
-#if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting foreground text color to" << context.foregroundColor;
-#endif
-    }
-
     //----------------------------------------------------------------
     // Output surface not supported
     //DCViewportExt
@@ -852,7 +811,7 @@ void WmfPainterBackend::updateFromGraphicscontext(WmfDeviceContext &context)
     if (context.changedItems & DCBgMixMode) {
         // FIXME: Check the default value for this.
         mPainter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
-                                                                      : Qt::OpaqueMode);
+                                                                     : Qt::OpaqueMode);
 #if DEBUG_WMFPAINT
         kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
 #endif

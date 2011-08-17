@@ -65,7 +65,6 @@ void Map::analyze(const QDomNode node)
 /*******************************************/
 void Map::generate(QTextStream &out)
 {
-    Table *table = NULL;
     kDebug(30522) << "  MAP GENERATION";
     foreach(Table* table, _tables) {
         table->generate(out);

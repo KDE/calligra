@@ -168,13 +168,11 @@ void KisLayerManager::updateGUI()
 
     KisLayerSP layer;
     qint32 nlayers = 0;
-    qint32 nvisible = 0;
 
 
     if (image) {
         layer = m_activeLayer;
         nlayers = image->nlayers();
-        nvisible = nlayers - image->nHiddenLayers();
     }
 
     bool enable = image && layer && layer->visible() && !layer->userLocked() && !layer->systemLocked();
@@ -218,14 +216,6 @@ void KisLayerManager::layerProperties()
     KisLayerSP layer = m_activeLayer;
 
     if (!layer) return;
-
-    const KoColorSpace * cs = 0;
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-    if (pl) {
-        cs = pl->paintDevice()->colorSpace();
-    } else {
-        cs = layer->image()->colorSpace();
-    }
 
 
     if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()))) {
@@ -603,21 +593,6 @@ void KisLayerManager::layerBack()
     layer->parent()->setDirty();
 }
 
-void KisLayerManager::rotateLayer180()
-{
-    rotateLayer(M_PI);
-}
-
-void KisLayerManager::rotateLayerLeft90()
-{
-    rotateLayer(M_PI / 2 - 2*M_PI);
-}
-
-void KisLayerManager::rotateLayerRight90()
-{
-    rotateLayer(M_PI / 2);
-}
-
 void KisLayerManager::mirrorLayerX()
 {
     KisLayerSP layer = activeLayer();
@@ -791,7 +766,7 @@ void KisLayerManager::mergeLayer()
     const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
     if (!strategy) return;
 
-    KisLayerSP  newLayer = image->mergeLayer(layer, strategy);
+    KisLayerSP  newLayer = image->mergeDown(layer, strategy);
     if (newLayer) {
         newLayer->setDirty();
     }

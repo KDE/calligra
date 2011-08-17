@@ -62,6 +62,10 @@ QString Paragraph::m_fontColor;
 
 //definition of local functions
 const char* getStrokeValue(const uint brcType);
+const char* getTextUnderlineMode(const uint kul);
+const char* getTextUnderlineStyle(const uint kul);
+const char* getTextUnderlineType(const uint kul);
+const char* getTextUnderlineWidth(const uint kul);
 
 
 Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
@@ -745,7 +749,8 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         for (int i = 0 ; i < pap.itbdMac ; ++i) {
             tmpWriter.startElement("style:tab-stop");
 
-            //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64.
+            //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac
+            //tab descriptors } itbdMax == 64.
             const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
             //td.dxaTab = position in twips
             //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
@@ -807,6 +812,8 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //TODO: Also compare against the CHPs of the paragraph style.  At the
     //moment comparing against CHPs of the referred built-in character style.
 
+    const KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;
     if (parentStyle) {
@@ -832,7 +839,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         } else {
             color = QString('#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper());
         }
-        style->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
+        style->addProperty(QString("fo:color"), color, tt);
         m_fontColor = color;
     }
 
@@ -847,7 +854,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             color = Conversion::color(chp->icoHighlight, -1);
             addBgColor(color);
         }
-        style->addProperty("fo:background-color", color, KoGenStyle::TextType);
+        style->addProperty("fo:background-color", color, tt);
     }
 
     if (!refChp ||
@@ -860,79 +867,54 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         } else {
             color = "transparent";
         }
-        style->addProperty("fo:background-color", color, KoGenStyle::TextType);
+        style->addProperty("fo:background-color", color, tt);
     }
 
     //hps = font size in half points
     if (!suppressFontSize && (!refChp || refChp->hps != chp->hps)) {
-        style->addPropertyPt(QString("fo:font-size"), ((qreal) chp->hps / 2), KoGenStyle::TextType);
+        style->addPropertyPt(QString("fo:font-size"), ((qreal) chp->hps / 2), tt);
     }
 
     //fBold = bold text if 1
     if (!refChp || (refChp->fBold != chp->fBold)) {
-        style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
+        style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), tt);
     }
 
     //fItalic = italic text if 1
     if (!refChp || refChp->fItalic != chp->fItalic)
-        style->addProperty(QString("fo:font-style"), chp->fItalic ? QString("italic") : QString("normal"), KoGenStyle::TextType);
+        style->addProperty(QString("fo:font-style"), chp->fItalic ? QString("italic") : QString("normal"), tt);
 
-    //kul: underline code
+    // ********************
+    // style of underline
+    // ********************
     if (!refChp || refChp->kul != chp->kul) {
-        switch (chp->kul) {
-        case 0: //none
-            style->addProperty(QString("style:text-underline-style"), QString("none") , KoGenStyle::TextType);
-            break;
-        case 1: // single
-            style->addProperty("style:text-underline-style", "solid" , KoGenStyle::TextType);
-            break;
-        case 2: // by word
-            style->addProperty("style:text-underline-style", "solid" , KoGenStyle::TextType);
-            style->addProperty("style:text-underline-mode", "skip-white-space" , KoGenStyle::TextType);
-            break;
-        case 3: // double
-            style->addProperty("style:text-underline-style", "solid" , KoGenStyle::TextType);
-            style->addProperty("style:text-underline-type", "double", KoGenStyle::TextType);
-            break;
-        case 4: // dotted
-            style->addProperty("style:text-underline-style", "dotted", KoGenStyle::TextType);
-            break;
-        case 5: // hidden - This makes no sense as an underline property!
-            //I guess we could change this to have an underline the same color
-            //as the background?
-            style->addProperty("style:text-underline-type", "none", KoGenStyle::TextType);
-            break;
-        case 6: // thick
-            style->addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
-            style->addProperty("style:text-underline-weight", "thick", KoGenStyle::TextType);
-            break;
-        case 7: //dash
-            style->addProperty("style:text-underline-style", "dash", KoGenStyle::TextType);
-            break;
-        case 8: //dot (not used, says the docu)
-            break;
-        case 9: //dot dash
-            style->addProperty("style:text-underline-style", "dot-dash", KoGenStyle::TextType);
-            break;
-        case 10: //dot dot dash
-            style->addProperty("style:text-underline-style", "dot-dot-dash", KoGenStyle::TextType);
-            break;
-        case 11: //wave
-            style->addProperty("style:text-underline-style", "wave", KoGenStyle::TextType);
-            break;
-        default:
-            style->addProperty("style:text-underline-style", "none", KoGenStyle::TextType);
-        };
+        // style:text-underline-color
+        QString color("font-color");
+        if (chp->cvUl != wvWare::Word97::cvAuto) {
+            color = QString('#' + QString::number(chp->cvUl | 0xff000000, 16).right(6).toUpper());
+        }
+        style->addProperty("style:text-underline-color", color, tt);
+        // style:text-underline-mode
+        style->addProperty("style:text-underline-mode", getTextUnderlineMode(chp->kul), tt);
+        // style:text-underline-style
+        QString ustyle(getTextUnderlineStyle(chp->kul));
+        if (!ustyle.isEmpty()) {
+            style->addProperty("style:text-underline-style", ustyle, tt);
+        }
+        // style:text-underline-type
+        style->addProperty("style:text-underline-type", getTextUnderlineType(chp->kul), tt);
+        // style:text-underline-width
+        style->addProperty("style:text-underline-width", getTextUnderlineWidth(chp->kul), tt);
     }
     //fstrike = use strikethrough if 1
     //fDStrike = use double strikethrough if 1
     if (!refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike) {
         if (chp->fStrike)
-            style->addProperty("style:text-line-through-type", "single", KoGenStyle::TextType);
+            style->addProperty("style:text-line-through-type", "single", tt);
         else if (chp->fDStrike)
-            style->addProperty("style:text-line-through-type", "double", KoGenStyle::TextType);
+            style->addProperty("style:text-line-through-type", "double", tt);
         else
-            style->addProperty("style:text-line-through-type", "none", KoGenStyle::TextType);
+            style->addProperty("style:text-line-through-type", "none", tt);
     }
 
     //font attribute (uppercase, lowercase (not in MSWord), small caps)
@@ -940,36 +922,36 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //fSmallCaps = displayed with small caps when 1, no small caps when 0
     if (!refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps) {
         if (chp->fCaps)
-            style->addProperty("fo:text-transform", "uppercase", KoGenStyle::TextType);
+            style->addProperty("fo:text-transform", "uppercase", tt);
         if (chp->fSmallCaps)
-            style->addProperty("fo:font-variant", "small-caps", KoGenStyle::TextType);
+            style->addProperty("fo:font-variant", "small-caps", tt);
     }
 
     //iss = superscript/subscript indices
     if (!refChp || refChp->iss != chp->iss) {
         if (chp->iss == 1)   //superscript
-            style->addProperty("style:text-position", "super", KoGenStyle::TextType);
+            style->addProperty("style:text-position", "super", tt);
         else if (chp->iss == 2)   //subscript
-            style->addProperty("style:text-position", "sub", KoGenStyle::TextType);
+            style->addProperty("style:text-position", "sub", tt);
         else   //no superscript or subscript
-            style->addProperty("style:text-position", "0% 100%", KoGenStyle::TextType);
+            style->addProperty("style:text-position", "0% 100%", tt);
     }
 
     //fShadow = text has shadow if 1
     //fImprint = text engraved if 1
     if (!refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint) {
         if (chp->fShadow)
-            style->addProperty("style:text-shadow", "1pt", KoGenStyle::TextType);
+            style->addProperty("style:text-shadow", "1pt", tt);
         if (chp->fImprint)
-            style->addProperty("style:font-relief", "engraved", KoGenStyle::TextType);
+            style->addProperty("style:font-relief", "engraved", tt);
     }
 
     //fOutline = text is outline if 1
     if (!refChp || refChp->fOutline != chp->fOutline) {
         if (chp->fOutline)
-            style->addProperty("style:text-outline", "true", KoGenStyle::TextType);
+            style->addProperty("style:text-outline", "true", tt);
         else
-            style->addProperty("style:text-outline", "false", KoGenStyle::TextType);
+            style->addProperty("style:text-outline", "false", tt);
     }
 
     // if the characters are combined, add proper style
@@ -980,7 +962,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //dxaSpace = letterspacing in twips
     if (!refChp || refChp->dxaSpace != chp->dxaSpace) {
         double value =  chp->dxaSpace / 20.0; // twips -> pt
-        style->addPropertyPt("fo:letter-spacing", value, KoGenStyle::TextType);
+        style->addPropertyPt("fo:letter-spacing", value, tt);
     }
     //pctCharwidth = pct stretch doesn't seem to have an ODF ccounterpart but Qt could support it
 
@@ -1143,5 +1125,91 @@ const char* getStrokeValue(const uint brcType)
 	return "solid";
     default:
         return "none";
+    }
+}
+
+const char* getTextUnderlineMode(const uint kul)
+{
+    switch (kul) {
+    case kulWords:
+        return "skip-white-space";
+    default:
+        return "continuous";
+    }
+}
+
+const char* getTextUnderlineStyle(const uint kul)
+{
+    // The values are none, solid, dotted, dash, long-dash, dot-dash,
+    // dot-dot-dash or wave.  The defined value for the
+    // style:text-underline-style attribute is none: text has no underlining.
+    switch (kul) {
+    case kulSingle:
+    case kulWords:
+    case kulDouble:
+        return "solid";
+    case kulDotted:
+    case kulDottedHeavy:
+        return "dotted";
+    case kulThick:
+	return "solid";
+    case kulDash:
+    case kulDashHeavy:
+        return "dash";
+    case kulDashLong:
+    case kulDashLongHeavy:
+        return "long-dash";
+    case kulDotDash:
+    case kulDotDashHeavy:
+        return "dot-dash";
+    case kulDotDotDash:
+    case kulDotDotDashHeavy:
+        return "dot-dot-dash";
+    case kulWavy:
+    case kulWavyDouble:
+    case kulWavyHeavy:
+        return "wave";
+    case 5: // hidden - This makes no sense as an underline property!
+    case 8:
+        //NOTE: Styles of underline not specified in [MS-DOC] - v20101219
+        kDebug(30513) << "Unknown style of underline detected!";
+        return "";
+    case kulNone:
+    default:
+        return "";
+    };
+}
+
+const char* getTextUnderlineType(const uint kul)
+{
+    //The values are none, single or double.
+    switch (kul) {
+    case kulNone:
+        return "none";
+    case kulDouble:
+    case kulWavyDouble:
+        return "double";
+    default:
+        return "single";
+    }
+}
+
+const char* getTextUnderlineWidth(const uint kul)
+{
+    // The values are auto, normal, bold, thin, medium, thick, a value of type
+    // positiveInteger, a value of type percent or a value of type
+    // positiveLength.
+    switch (kul) {
+    case kulThick:
+        return "thick";
+    case kulDottedHeavy:
+    case kulDashHeavy:
+    case kulDashLongHeavy:
+    case kulDotDashHeavy:
+    case kulDotDotDashHeavy:
+    case kulWavyHeavy:
+        return "bold";
+    default:
+        return "auto";
     }
 }
