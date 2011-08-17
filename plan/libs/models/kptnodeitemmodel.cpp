@@ -270,12 +270,17 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
     }
     switch ( role ) {
         case Qt::DisplayRole: {
-            int c = node->constraint();
-            if ( ! ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) ) {
-                return QVariant();
+            QString s = KGlobal::locale()->formatDateTime( node->constraintStartTime() );
+            switch ( node->constraint() ) {
+                case Node::StartNotEarlier:
+                case Node::MustStartOn:
+                case Node::FixedInterval:
+                    return s;
+                default:
+                    break;
             }
-            return KGlobal::locale()->formatDateTime( node->constraintStartTime() );
-        }
+            return QString( "(%1)" ).arg( s );
+    }
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
@@ -312,11 +317,16 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
     }
     switch ( role ) {
         case Qt::DisplayRole: {
-            int c = node->constraint();
-            if ( ! ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) ) {
-                return QVariant();
+            QString s = KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+            switch ( node->constraint() ) {
+                case Node::FinishNotLater:
+                case Node::MustFinishOn:
+                case Node::FixedInterval:
+                    return s;
+                default:
+                    break;
             }
-            return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+            return QString( "(%1)" ).arg( s );
         }
         case Qt::ToolTipRole: {
             int c = node->constraint();
@@ -3005,10 +3015,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
-                int c = n->constraint();
-                if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval ) {
-                    flags |= Qt::ItemIsEditable;
-                }
+                flags |= Qt::ItemIsEditable;
                 break;
             }
             case NodeModel::NodeConstraintEnd: { // constraint end
@@ -3019,10 +3026,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
-                int c = n->constraint();
-                if ( c == Node::MustFinishOn || c == Node::FinishNotLater || c ==  Node::FixedInterval ) {
-                    flags |= Qt::ItemIsEditable;
-                }
+                flags |= Qt::ItemIsEditable;
                 break;
             }
             case NodeModel::NodeRunningAccount: // running account
