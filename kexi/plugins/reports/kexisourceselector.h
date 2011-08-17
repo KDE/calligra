@@ -45,7 +45,7 @@ public:
 
 private:
     KexiDB::Connection *m_conn;
-    QStringList queryList();
+
     QVBoxLayout *m_layout;
     QComboBox *m_sourceType;
     QComboBox *m_internalSource;
