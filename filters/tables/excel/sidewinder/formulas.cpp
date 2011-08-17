@@ -977,6 +977,22 @@ unsigned long FormulaToken::nameXIndex() const
     return ni;
 }
 
+static QString escapeSheetName(const QString& sheetName)
+{
+    bool hasSpecial = false;
+    for (int i = 0; i < sheetName.length(); i++) {
+        if (!sheetName[i].isLetterOrNumber()) {
+            hasSpecial = true;
+            break;
+        }
+    }
+
+    if (!hasSpecial) return sheetName;
+
+    QString res = sheetName;
+    return "$'" + res.replace('\'', QLatin1String("\'\'")) + "'";
+}
+
 QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
 {
     // FIXME check data size !
@@ -1122,7 +1138,7 @@ QString FormulaToken::area3d(const std::vector<QString>& externSheets, unsigned 
     if (sheetRef >= externSheets.size())
         result.append(QString("Error"));
     else
-        result.append(externSheets[sheetRef]);
+        result.append(escapeSheetName(externSheets[sheetRef]));
     result.append(QString("."));
 
     if (!col1Relative)
@@ -1356,7 +1372,7 @@ QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /
     if (sheetRef >= externSheets.size())
         result.append(QString("Error"));
     else
-        result.append(externSheets[sheetRef]);
+        result.append(escapeSheetName(externSheets[sheetRef]));
     result.append(QString("."));
 
     if (!colRelative)
