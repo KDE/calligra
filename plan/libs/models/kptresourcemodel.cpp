@@ -461,7 +461,7 @@ QVariant ResourceModel::headerData( int section, int role )
             case ResourceNormalRate:
             case ResourceOvertimeRate:
                 return (int)(Qt::AlignRight|Qt::AlignVCenter);
-            case ResourceAccount: return i18n( "Account" );
+            case ResourceAccount:
                 return QVariant();
             default:
                 return QVariant();
@@ -1003,17 +1003,28 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
 bool ResourceItemModel::setAccount( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            QStringList lst = m_model.account( res, Role::EnumList ).toStringList();
-            if ( value.toInt() >= lst.count() ) {
+        case Qt::EditRole: {
+            Account *a = 0;
+            if ( value.type() == QVariant::Int ) {
+                QStringList lst = m_model.account( res, Role::EnumList ).toStringList();
+                if ( value.toInt() >= lst.count() ) {
+                    return false;
+                }
+                a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            } else if ( value.type() == QVariant::String ) {
+                a = m_project->accounts().findAccount( value.toString() );
+            }
+            if ( a == 0 ) {
                 return false;
             }
-            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = res->account();
             if ( old != a ) {
                 emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18nc( "(qtundo-format)", "Modify resource account" ) ) );
                 return true;
             }
+        }
+        default:
+            break;
     }
     return false;
 }
