@@ -115,7 +115,6 @@ QImage CompareView::difference(const QImage &image1, const QImage &image2)
 
 void CompareView::keyPressEvent(QKeyEvent * event)
 {
-    qDebug() << __PRETTY_FUNCTION__ << event->key();
     switch (event->key()) {
     case Qt::Key_Space:
         m_tabBar->setCurrentIndex((m_tabBar->currentIndex() + 1) % 2);
