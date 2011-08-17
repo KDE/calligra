@@ -731,10 +731,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 
     m_currentDrawStyle->addProperty("draw:textarea-vertical-align", m_shapeTextPosition);
-    m_currentDrawStyle->addProperty("fo:margin-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
