@@ -42,16 +42,24 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->fillRect(option.rect, option.palette.highlight());
 
     painter->translate(option.rect.topLeft());
+    bool antialiasing = painter->testRenderHint(QPainter::Antialiasing);
+    if (!antialiasing) {
+        painter->setRenderHint(QPainter::Antialiasing, true);
+    }
     
     KoPathShape *pathShape = index.data(Qt::DecorationRole).value<KoPathShape*>();
     if(pathShape != 0){
         // paint marker
-        QPen pen(option.palette.text(), 1);
+        QPen pen(option.palette.text(), 2);
         painter->setPen(pen);
         QPainterPath path = pathShape->outline();
         painter->drawPath(path);
     }
-    
+
+    if (!antialiasing) {
+        painter->setRenderHint(QPainter::Antialiasing, false);
+    }
+
     painter->restore();
 }
 

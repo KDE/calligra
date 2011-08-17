@@ -46,6 +46,9 @@ public:
      */
     void updateMarkers(const QList<KoMarker*> markers);
 
+protected:
+    void paintEvent(QPaintEvent *pe);
+
 private:
     class Private;
     Private * const d;

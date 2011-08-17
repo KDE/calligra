@@ -22,9 +22,13 @@
 #include "KoMarker.h"
 #include "KoMarkerModel.h"
 #include "KoMarkerItemDelegate.h"
+#include "KoPathShape.h"
 
 #include <QList>
 #include <QComboBox>
+#include <QPainter>
+#include <QPainterPath>
+#include <QTransform>
 
 class KoMarkerSelector::Private
 {
@@ -47,6 +51,39 @@ KoMarkerSelector::KoMarkerSelector(QWidget *parent, KoPathShape::MarkerPosition 
 KoMarkerSelector::~KoMarkerSelector()
 {
     delete d;
+}
+
+void KoMarkerSelector::paintEvent(QPaintEvent *pe)
+{
+    QComboBox::paintEvent(pe);
+    
+    QStyleOptionComboBox option;
+    option.initFrom(this);
+    option.frame = hasFrame();
+    QRect r = style()->subControlRect(QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, this);
+    if (!option.frame) // frameless combo boxes have smaller margins but styles do not take this into account
+        r.adjust(-14, 0, 14, 1);
+    
+    QPainter painter(this);
+    bool antialiasing = painter.testRenderHint(QPainter::Antialiasing);
+    if (!antialiasing) {
+        painter.setRenderHint(QPainter::Antialiasing, true);
+    }
+    
+    KoPathShape *pathShape = itemData(currentIndex(), Qt::DisplayRole).value<KoPathShape*>();
+    if(pathShape != 0){
+        // paint marker
+        QPen pen(option.palette.text(), 2);
+        painter.setPen(pen);
+        QPainterPath path = pathShape->outline();
+        QTransform pathScale;
+        pathScale.scale(1,0.5);
+        painter.drawPath(pathScale.map(path));
+    }
+
+    if (!antialiasing) {
+        painter.setRenderHint(QPainter::Antialiasing, false);
+    }
 }
 
 void KoMarkerSelector::setMarker(KoMarker *marker)
@@ -72,5 +109,13 @@ void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
 
 QVariant KoMarkerSelector::itemData(int index, int role) const
 {
+    if(role == Qt::DisplayRole) {
+        KoMarker *marker = d->model->marker(index, role).value<KoMarker*>();
+        KoPathShape *pathShape = new KoPathShape();
+        pathShape->moveTo(QPointF(10, 15));
+        pathShape->lineTo(QPointF(70, 15));
+        pathShape->setMarker(marker, d->model->position());
+        return QVariant::fromValue<KoPathShape*>(pathShape);
+    }
     return d->model->marker(index, role);
 }
