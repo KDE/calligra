@@ -19,6 +19,13 @@ While the both commands above are running you can execute following command in a
 
 Once the verification is done in the ~/failed.txt file you will have a list of documents that changed between the both cstester runs.
 
+If you like to compare the screenshots of 2 directories to and determinate which of the screenshots changed you can use
+
+  find ~/dir1 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" >dir1.txt
+  find ~/dir2 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" >dir2.txt
+  diff -u dir1.txt dir2.txt | grep "^+" | sed -e "s/[^ ]* //" -e "s/.check\/thumb_/ /" -e "s/\.png$//" | awk '{if (a==$1) {printf(" %d", $2)} else {printf "\n"$0}; a=$1} END{printf("\n")}' > dirdiff.txt
+
+
 
 
 Use the scripts provided with cstester
