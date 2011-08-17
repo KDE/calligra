@@ -16,7 +16,7 @@ if (SHOULD_BUILD_KCHART)
 endif (SHOULD_BUILD_KCHART)
 
 #build a shared library
-set(kexihandler_report_SRCS
+set(kexihandler_report_SRCS 
     kexireports.cpp
     kexireportpart.cpp
     kexireportview.cpp
@@ -25,6 +25,7 @@ set(kexihandler_report_SRCS
     keximigratereportdata.cpp
     kexisourceselector.cpp
     krscriptfunctions.cpp
+    InternalSourceSelector.cpp
 )
 
 qt4_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)

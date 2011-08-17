@@ -91,7 +91,6 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
 
 void CSTCompareView::keyPressEvent(QKeyEvent * event)
 {
-    qDebug() << __PRETTY_FUNCTION__ << event->key() << Qt::Key_Down << Qt::Key_Up << m_currentIndex << m_result.size();
     switch (event->key()) {
     case Qt::Key_B:
         if (m_dataIndex > 1) {
@@ -125,7 +124,6 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
 int CSTCompareView::updateResult(int index)
 {
     QString result(m_result[index]);
-    qDebug() << __PRETTY_FUNCTION__ << result << index;
 
     m_data = result.split(' ');
     if (m_data.size()) {
