@@ -1490,7 +1490,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
-            cell->formula = MSOOXML::convertFormula(text().toString());
+            cell->formula = Calligra::Tables::MSOOXML::convertFormula(text().toString());
         }
     }
 

@@ -167,6 +167,14 @@ CALLIGRA_TABLES_ODF_EXPORT QString convertRefToBase(const QString & sheet, const
 CALLIGRA_TABLES_ODF_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
 }
 
+namespace MSOOXML
+{
+/**
+ * Convert the MSOOXML \p formula into a ODF formula and return that ODF formula.
+ */
+CALLIGRA_TABLES_ODF_EXPORT QString convertFormula(const QString& formula);
+}
+
 } // namespace Tables
 } // namespace Calligra
 

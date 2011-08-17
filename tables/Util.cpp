@@ -354,10 +354,15 @@ bool Calligra::Tables::Util::localReferenceAnchor(const QString &_ref)
 }
 
 
-QString Calligra::Tables::Odf::decodeFormula(const QString& expression, const KLocale* locale, QString namespacePrefix)
+QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const KLocale* locale, QString namespacePrefix)
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
+
+    QString expression = expression_;
+    if (namespacePrefix == "msoxl:") {
+        expression = MSOOXML::convertFormula(expression);
+    }
 
     // use locale settings
     QString decimal = locale ? locale->decimalSymbol() : ".";
@@ -659,5 +664,50 @@ QString Calligra::Tables::Util::adjustFormulaReference(const QString& formula, i
     if(state == InCellReference) {
         replaceFormulaReference(referencedRow, referencedColumn, thisRow, thisColumn, result, cellReferenceStart, result.length() - cellReferenceStart);
     }
+    return result;
+}
+
+QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
+{
+    if (formula.isEmpty())
+        return QString();
+    enum { Start, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName } state;
+    state = Start;
+    QString result = formula.startsWith('=') ? formula : '=' + formula;
+    for(int i = 1; i < result.length(); ++i) {
+        QChar ch = result[i];
+        switch (state) {
+        case Start:
+            if(ch == '(')
+                state = InArguments;
+            break;
+        case InArguments:
+            if (ch == '"')
+                state = InString;
+            else if (ch.unicode() == '\'')
+                state = InSheetOrAreaName;
+            else if (ch == ',')
+                result[i] = ';'; // replace argument delimiter
+            else if (ch == '(' && !result[i-1].isLetterOrNumber())
+                state = InParenthesizedArgument;
+            break;
+        case InParenthesizedArgument:
+            if (ch == ',')
+                result[i] = '~'; // union operator
+            else if (ch == ' ')
+                result[i] = '!'; // intersection operator
+            else if (ch == ')')
+                state = InArguments;
+            break;
+        case InString:
+            if (ch == '"')
+                state = InArguments;
+            break;
+        case InSheetOrAreaName:
+            if (ch == '\'')
+                state = InArguments;
+            break;
+        };
+    };
     return result;
 }

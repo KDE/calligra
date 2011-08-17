@@ -28,6 +28,7 @@
 
 #include "FormulaParser.h"
 #include "XlsxXmlWorksheetReader_p.h"
+#include <tables/Util.h>
 
 void TestFormulaParser::testConvertFormula_data()
 {
@@ -65,7 +66,7 @@ void TestFormulaParser::testConvertFormula()
     QFETCH(QString, xlsx);
     QFETCH(QString, odf);
 
-    QCOMPARE(MSOOXML::convertFormula(xlsx), odf);
+    QCOMPARE(Calligra::Tables::MSOOXML::convertFormula(xlsx), odf);
 }
 
 void TestFormulaParser::testSharedFormulaReferences()
