@@ -55,6 +55,8 @@ public:
     virtual void scroll(qreal dx, qreal dy) = 0;
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
+
+    void setFont(const QFont& font);
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
@@ -117,6 +119,8 @@ protected:
     bool m_bMousePressed;
 
     bool m_cellToolIsActive;
+
+    QFont m_font;
 };
 
 
@@ -143,6 +147,8 @@ public:
     virtual void scroll(qreal dx, qreal dy) = 0;
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
+
+    void setFont(const QFont& font);
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
@@ -173,6 +179,8 @@ protected:
     bool m_bMousePressed;
 
     bool m_cellToolIsActive;
+
+    QFont m_font;
 };
 
 
