@@ -467,7 +467,11 @@ void KarbonLayerDocker::thumbnailView()
 
 void KarbonLayerDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
 {
-    bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+    const bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+
+    // collapse all layers if in thumbnail mode
+    if (!expandable)
+        m_layerView->collapseAll();
 
     m_layerView->setDisplayMode(mode);
     m_layerView->setItemsExpandable(expandable);
