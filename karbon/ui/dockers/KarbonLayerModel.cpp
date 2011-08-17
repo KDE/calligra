@@ -186,11 +186,14 @@ QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
             else
                 name = i18n("Shape");
         }
-        return name;// + QString(" (%1)").arg( shape->zIndex() );
+        return name;
     }
-    case Qt::DecorationRole: return QVariant();//return shape->icon();
-    case Qt::EditRole: return shape->name();
-    case Qt::SizeHintRole: return shape->size();
+    case Qt::DecorationRole:
+        return QVariant();
+    case Qt::EditRole:
+        return shape->name();
+    case Qt::SizeHintRole:
+        return shape->size();
     case ActiveRole: {
         KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
         KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
@@ -203,15 +206,17 @@ QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
         else
             return selection->isSelected(shape);
     }
-    case PropertiesRole: return QVariant::fromValue(properties(shape));
+    case PropertiesRole:
+        return QVariant::fromValue(properties(shape));
     case AspectRatioRole: {
         QTransform matrix = shape->absoluteTransformation(0);
         QRectF bbox = matrix.mapRect(shape->outline().boundingRect());
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
         if (container) {
             bbox = QRectF();
-            foreach(KoShape* shape, container->shapes())
-            bbox = bbox.united(shape->outline().boundingRect());
+            foreach(KoShape* shape, container->shapes()) {
+                bbox = bbox.united(shape->outline().boundingRect());
+            }
         }
         return qreal(bbox.width()) / bbox.height();
     }
