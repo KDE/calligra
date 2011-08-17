@@ -25,6 +25,9 @@ If you like to compare the screenshots of 2 directories to and determinate which
   find ~/dir2 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" >dir2.txt
   diff -u dir1.txt dir2.txt | grep "^+" | sed -e "s/[^ ]* //" -e "s/.check\/thumb_/ /" -e "s/\.png$//" | awk '{if (a==$1) {printf(" %d", $2)} else {printf "\n"$0}; a=$1} END{printf("\n")}' > dirdiff.txt
 
+Then you can use the visualimagecompare-tool to control the changes using
+
+  visualimagecompare ~/dir1 ~/dir2 dirdiff.txt
 
 
 
