@@ -72,7 +72,9 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
         char buf[10000];
         lineLength = file.readLine(buf, sizeof(buf));
         if (lineLength != -1) {
-            m_result.append(QString::fromUtf8(buf).trimmed());
+            QString line = QString::fromUtf8(buf).trimmed();
+            if (!line.isEmpty())
+                m_result.append(line);
         }
     } while (lineLength != -1);
 
