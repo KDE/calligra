@@ -112,6 +112,9 @@ public slots:
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
 
+    /// turns the border display on/off
+    void toggleViewFrameBorders(bool on);
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
@@ -149,8 +152,6 @@ private slots:
     void bringToFront();
     /** Move the selected frame(s) to be behind all other frames */
     void sendToBack();
-    /// turns the border display on/off
-    void toggleViewFrameBorders(bool on);
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
     /// convert current frame to an inline frame

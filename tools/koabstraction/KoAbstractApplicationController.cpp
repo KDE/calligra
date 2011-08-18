@@ -277,6 +277,9 @@ bool KoAbstractApplicationController::openDocuments(
     KoToolRegistry::instance()->add(m_cellToolFactory);
 
     m_view = m_doc->createView();
+    if (KWView *v = dynamic_cast<KWView*>(m_view)) {
+        v->toggleViewFrameBorders(false);
+    }
     QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
     if (controllers.isEmpty()) {
         setProgressIndicatorVisible(false);
@@ -766,11 +769,15 @@ bool KoAbstractApplicationController::setEditingMode(bool set)
         default:
             KoToolManager::instance()->switchToolRequested(textToolFactoryId());
         }
+
     }
     else {
         KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     }
     m_editingMode = set;
+    if (KWView *v = dynamic_cast<KWView*>(m_view)) {
+        v->toggleViewFrameBorders(set);
+    }
     return true;
 }
 
