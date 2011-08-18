@@ -56,8 +56,8 @@ public:
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
 
-    void setFont(const QFont& font);
-    QFont font() const;
+    void setHeaderFont(const QFont& font);
+    QFont headerFont() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
@@ -149,8 +149,8 @@ public:
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
 
-    void setFont(const QFont& font);
-    QFont font() const;
+    void setHeaderFont(const QFont& font);
+    QFont headerFont() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
