@@ -520,6 +520,11 @@ void RowHeader::setFont(const QFont &font)
     update();
 }
 
+QFont RowHeader::font() const
+{
+    return m_font;
+}
+
 /****************************************************************
  *
  * ColumnHeader
@@ -1095,6 +1100,11 @@ void ColumnHeader::setFont(const QFont &font)
 {
     m_font = font;
     update();
+}
+
+QFont ColumnHeader::font() const
+{
+    return m_font;
 }
 
 /****************************************************************

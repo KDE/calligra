@@ -57,6 +57,7 @@ public:
     virtual void update() = 0;
 
     void setFont(const QFont& font);
+    QFont font() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
@@ -149,6 +150,7 @@ public:
     virtual void update() = 0;
 
     void setFont(const QFont& font);
+    QFont font() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
