@@ -12,6 +12,14 @@ namespace {
  */
 inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/);
 
+/**
+  Blurs confidence matrix with a given symmetrically weighted kernel. In the
+  standard case confidence matrix entries are between 0...1 and the weight
+  factors sum up to 1.
+ */
+void smoothCondidenceMatrix(float matrix[], int xres, int yres, float weight1,
+    float weight2, float weight3);
+
 
 }
 
@@ -215,6 +223,42 @@ inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/) {
 //    }
 
     return euclid;
+}
+
+void smoothCondidenceMatrix(float matrix[], int xres, int yres, float weight1,
+    float weight2, float weight3) {
+
+    for (int y = 0; y < yres; y++) {
+        for (int x = 0; x < xres - 2; x++) {
+            int idx = (y * xres) + x;
+            matrix[idx] = weight1 * matrix[idx] + weight2 * matrix[idx + 1] +
+                weight3 * matrix[idx + 2];
+        }
+    }
+
+    for (int y = 0; y < yres; y++) {
+        for (int x = xres - 1; x >= 2; x--) {
+            int idx = (y * xres) + x;
+            matrix[idx] = weight3 * matrix[idx - 2] + weight2 * matrix[idx - 1] +
+                weight1 * matrix[idx];
+        }
+    }
+
+    for (int y = 0; y < yres - 2; y++) {
+        for (int x = 0; x < xres; x++) {
+            int idx = (y * xres) + x;
+            matrix[idx] = weight1 * matrix[idx] + weight2 * matrix[((y + 1) * xres) + x] +
+                weight3 * matrix[((y + 2) * xres) + x];
+        }
+    }
+
+    for (int y = yres - 1; y >= 2; y--) {
+        for (int x = 0; x < xres; x++) {
+            int idx = (y * xres) + x;
+            matrix[idx] = weight3 * matrix[((y - 2) * xres) + x] + weight2 *
+                matrix[((y - 1) * xres) + x] + weight1 * matrix[idx];
+        }
+    }
 }
 
 
