@@ -99,6 +99,8 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
                                                    new KPrPageSelectStrategyActive( kopaCanvas() ) ) );
 
     connect(zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
+
+    setAcceptDrops(true);
 }
 
 KPrView::~KPrView()
