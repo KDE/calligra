@@ -29,9 +29,19 @@
 class KisSioxSegmentator
 {
 private:
+    /**
+      ClusterDistance tuple indexes.
+     */
+    enum ClusterDistanceIndexes {
+        MIN_BG_DIST = 0,
+        MIN_BG_INDX = 1,
+        MIN_FG_DIST = 2,
+        MIN_FG_INDX = 3
+    };
+
     typedef boost::tuple< float, int, float, int > ClusterDistance;
 
-    typedef QHash< int, ClusterDistance > NearestPixelsMap;
+    typedef QHash< const quint16*, ClusterDistance > NearestPixelsMap;
 
 public:
     /**

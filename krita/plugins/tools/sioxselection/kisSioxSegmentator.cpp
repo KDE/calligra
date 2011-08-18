@@ -1,8 +1,14 @@
+#include <cfloat>
+#include <boost/tuple/tuple.hpp>
 #include <kis_iterator_ng.h>
 #include <kis_paint_device.h>
 #include <kis_types.h>
 #include "kisColorSignature.h"
 #include "kisSioxSegmentator.h"
+
+
+using boost::tuples::get;
+
 
 namespace {
 
@@ -131,7 +137,7 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
             labImage->exactBounds());
         quint64 i = 0;
         do {
-            const quint16* data = reinterpret_cast<const quint16*>(
+            const quint16* data = reinterpret_cast< const quint16* >(
                 labImageIterator->oldRawData());
 
             if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE)
@@ -146,8 +152,6 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
     // Create color signatures
 
     // TODO
-    // - make ColorSignature receive the information in the ctor.
-    // - change class name to, possibly, KisColorSigner.
     // - possibly, the signatures would be better manipulated in floats
     ColorSignature< quint16 > bgColorSign, fgColorSign;
 
@@ -164,43 +168,96 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
     }
 
     // Classify using color signatures.
-    const quint64 labImageSize = labImage->exactBounds().height() *
-        labImage->exactBounds().width();
-    for (quint64 i = 0; i < labImageSize; i++) {
+    {
+        KisRectConstIteratorSP labImageIterator = labImage->createRectConstIteratorNG(
+            labImage->exactBounds());
+        KisRectConstIteratorSP imageIterator = image->createRectConstIteratorNG(
+            labImage->exactBounds());
+        quint64 i = 0;
+        do {
 
-        if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE) {
-            confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
-            continue;
-        }
-
-        if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE) {
-            confidenceMatrix[i] = CERTAIN_BACKGROUND_CONFIDENCE;
-        } else {
-            NearestPixelsMap::iterator nearestIterator = nearestPixels.find(0/*image[i]*/);
-            bool isBackground = true;
-
-            if (nearestIterator != nearestPixels.end()) {
-                ClusterDistance& tuple = *nearestIterator;
-                //isBackground = tuple.minBgDist <= tuple.minFgDist;
-            } else {
-                ClusterDistance& tuple =
-                    (nearestPixels[0/*image[i]*/] = ClusterDistance(0, 0, 0, 0));
-                //...
+            if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE) {
+                confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
+                continue;
             }
 
-            if (isBackground) {
+            if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE) {
                 confidenceMatrix[i] = CERTAIN_BACKGROUND_CONFIDENCE;
             } else {
-                confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
+                const quint16* data = reinterpret_cast< const quint16* >(
+                    imageIterator->oldRawData());
+
+                NearestPixelsMap::iterator nearestIterator = nearestPixels.find(data);
+
+                bool isBackground = true;
+
+                if (nearestIterator != nearestPixels.end()) {
+                    ClusterDistance& tuple = *nearestIterator;
+                    isBackground = get< MIN_BG_DIST >(tuple) <= get< MIN_FG_DIST >(tuple);
+
+                } else {
+                    ClusterDistance& tuple =
+                        (nearestPixels[data] = ClusterDistance(0, 0, 0, 0));
+
+                    const quint16* labData = reinterpret_cast< const quint16* >(
+                        labImageIterator->oldRawData());
+                    float minBg;// = getLabColorDiffSquared(labData, bgSignature[0]);
+                    int minIndex = 0;
+
+                    for (int j = 1; j < bgSignature.size(); j++) {
+                        float distace;// = getLabColorDiffSquared(labData, bgSignature[j]);
+
+                        if (distace < minBg) {
+                            minBg = distace;
+                            minIndex = j;
+                        }
+                    }
+
+                    get< MIN_BG_DIST >(tuple) = minBg;
+                    get< MIN_BG_INDX >(tuple) = minIndex;
+                    float minFg = FLT_MAX;
+                    minIndex = -1;
+
+                    for (int j = 0; j < fgSignature.size(); j++) {
+                        float distace;// = getLabColorDiffSquared(labData, fgSignature[j]);
+
+                        if (distace < minFg) {
+                            minFg = distace;
+                            minIndex = j;
+                        }
+                    }
+
+                    get< MIN_FG_DIST >(tuple) = minFg;
+                    get< MIN_FG_INDX >(tuple) = minIndex;
+
+                    if (fgSignature.size() == 0) {
+                        isBackground;// = (minBg <= clusterSize);
+                        // Impossible to segmentate.
+                        //throw IllegalStateException: "Foreground signature does not exists.;
+                    } else {
+                        isBackground = minBg < minFg;
+                    }
+                }
+
+                if (isBackground) {
+                    confidenceMatrix[i] = CERTAIN_BACKGROUND_CONFIDENCE;
+                } else {
+                    confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
+                }
+
             }
 
-        }
+            ++i;
+         }  while (labImageIterator->nextPixel() && imageIterator->nextPixel());
     }
 
-    // classify using color signatures,
-    // classification cached in hashmap for drb and speedup purposes
+    // TODO - try other weights values.
+    smoothCondidenceMatrix(confidenceMatrix, image->exactBounds().width(),
+        image->exactBounds().height(), 0.33f, 0.33f, 0.33f);
+
+    // TODO
     // postprocessing
-    // - Smooth confidence matrix (at least one time).
+    // V Smooth confidence matrix (at least one time).
     // - Normalize matrix (at least one time).
     // - Erode.
     // - Remove small components.
