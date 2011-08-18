@@ -26,6 +26,11 @@ inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/);
 void smoothCondidenceMatrix(float matrix[], int xres, int yres, float weight1,
     float weight2, float weight3);
 
+/**
+  Normalizes the matrix to values to [0..1].
+ */
+void normalizeConfidenceMatrix(float confidenceMatrix[], int length);
+
 
 }
 
@@ -251,9 +256,11 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
          }  while (labImageIterator->nextPixel() && imageIterator->nextPixel());
     }
 
+    int width = image->exactBounds().width();
+    int height =  image->exactBounds().height();
     // TODO - try other weights values.
-    smoothCondidenceMatrix(confidenceMatrix, image->exactBounds().width(),
-        image->exactBounds().height(), 0.33f, 0.33f, 0.33f);
+    smoothCondidenceMatrix(confidenceMatrix, width, height, 0.33f, 0.33f, 0.33f);
+    normalizeConfidenceMatrix(confidenceMatrix, width * height);
 
     // TODO
     // postprocessing
@@ -315,6 +322,23 @@ void smoothCondidenceMatrix(float matrix[], int xres, int yres, float weight1,
             matrix[idx] = weight3 * matrix[((y - 2) * xres) + x] + weight2 *
                 matrix[((y - 1) * xres) + x] + weight1 * matrix[idx];
         }
+    }
+}
+
+void normalizeConfidenceMatrix(float confidenceMatrix[], int length) {
+    float max = 0.0f;
+    for (int i = 0; i < length; i++) {
+        if (max < confidenceMatrix[i])
+            max = confidenceMatrix[i];
+    }
+
+    if (max <= 0.0 || max == 1.00)
+        return;
+
+    float alpha = 1.00f / max;
+
+    for (int i = 0; i < length; i++) {
+        confidenceMatrix[i] = alpha * confidenceMatrix[i];
     }
 }
 
