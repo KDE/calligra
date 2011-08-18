@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+#include "calligra_tables_export.h"
+
 class QLabel;
 class KoPointerEvent;
 
@@ -36,7 +38,7 @@ class View;
 /**
  * Base class for the widget above the cells showing the column headers.
  */
-class ColumnHeader
+class CALLIGRA_TABLES_COMMON_EXPORT ColumnHeader
 {
 public:
     ColumnHeader(CanvasBase *_canvas);
@@ -129,7 +131,7 @@ protected:
 /**
  * Base class for the widget left to the cells showing the row headers.
  */
-class RowHeader
+class CALLIGRA_TABLES_COMMON_EXPORT RowHeader
 {
 public:
     RowHeader(CanvasBase *_canvas);
