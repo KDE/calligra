@@ -2611,6 +2611,22 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
     return KoFilter::OK;
 }
 
+qreal
+PptxXmlSlideReader::processParagraphSpacing(const qreal margin, const qreal fontSize)
+{
+    // MS PowerPoint specific: font-independent-line-spacing is used, which
+    // means that line height is calculated only from the font height as
+    // specified by the font size properties.  If a number of font sizes are
+    // used in a paragraph, then use the minimum.
+    //
+    // lineHeight = fontSize + (1/4 * fontSize);
+    //
+    // margin-top/margin-bottom are calculated based on the lineHeight.
+    //
+    qreal lineHeight = fontSize + (0.25 * fontSize);
+    return (margin * lineHeight) / 100;
+}
+
 #define blipFill_NS "a"
 
 // END NAMESPACE p
