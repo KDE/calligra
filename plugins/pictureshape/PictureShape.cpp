@@ -347,10 +347,10 @@ bool PictureShape::saveSvg(SvgSavingContext &context)
 
 bool PictureShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
-    const qreal x = element.hasAttribute("x") ? SvgUtil::parseUnitX(context.currentGC(), element.attribute("x")) : 0;
-    const qreal y = element.hasAttribute("x") ? SvgUtil::parseUnitY(context.currentGC(), element.attribute("y")) : 0;
-    const qreal w = element.hasAttribute("width") ? SvgUtil::parseUnitX(context.currentGC(), element.attribute("width")) : 0;
-    const qreal h = element.hasAttribute("height") ? SvgUtil::parseUnitY(context.currentGC(), element.attribute("height")) : 0;
+    const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x", "0"));
+    const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y", "0"));
+    const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width", "0"));
+    const qreal h = SvgUtil::parseUnitY(context.currentGC(), element.attribute("height", "0"));
 
     // zero width of height disables rendering this image (see svg spec)
     if (w == 0.0 || h == 0.0)
