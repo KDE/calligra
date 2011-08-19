@@ -362,7 +362,7 @@ QString SvgStyleWriter::saveSvgPattern(KoPatternBackground *pattern, KoShape *sh
     }
 
     context.styleWriter().endElement(); // image
-    context.styleWriter().endDocument(); // pattern
+    context.styleWriter().endElement(); // pattern
 
     return uid;
 }
