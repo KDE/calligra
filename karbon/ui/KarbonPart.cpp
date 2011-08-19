@@ -137,7 +137,7 @@ KarbonPart::KarbonPart(QWidget* parentWidget, const char* widgetName, QObject* p
 
     initConfig();
 
-    KoShapeRegistry::instance()->addFactory(new SvgShapeFactory());
+    SvgShapeFactory::addToRegistry();
 
     // set as default paper
     KoPageLayout pl = pageLayout();

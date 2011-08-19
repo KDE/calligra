@@ -34,6 +34,9 @@ public:
     virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
     // reimplemented from KoShapeFactoryBase
     virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /// Adds an instance of this factory to the shape registry, if not already registered
+    static void addToRegistry();
 };
 
 #endif // SVGSHAPEFACTORY_H

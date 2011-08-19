@@ -22,14 +22,17 @@
 #include "KoShapeGroup.h"
 #include "KoShapeGroupCommand.h"
 #include "KoShapeLoadingContext.h"
+#include "KoShapeRegistry.h"
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KLocale>
 
+#define SVGSHAPEFACTORYID "SvgShapeFactory"
+
 SvgShapeFactory::SvgShapeFactory()
-    : KoShapeFactoryBase("", i18n("Embedded svg shape"))
+    : KoShapeFactoryBase(SVGSHAPEFACTORYID, i18n("Embedded svg shape"))
 {
     setLoadingPriority(10);
     setXmlElementNames(QString(KoXmlNS::draw), QStringList("image"));
@@ -38,6 +41,14 @@ SvgShapeFactory::SvgShapeFactory()
 SvgShapeFactory::~SvgShapeFactory()
 {
 
+}
+
+void SvgShapeFactory::addToRegistry()
+{
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
+    if (!registry->contains(QString(SVGSHAPEFACTORYID))) {
+        registry->addFactory(new SvgShapeFactory);
+    }
 }
 
 bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
