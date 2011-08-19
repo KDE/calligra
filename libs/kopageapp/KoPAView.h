@@ -43,8 +43,12 @@ class KoZoomAction;
 class KoZoomController;
 class KToggleAction;
 class KUrl;
+
+class QDragEnterEvent;
+class QDropEvent;
 class QTextDocument;
 class QLabel;
+class QTabBar;
 class KoCopyController;
 class KoCutController;
 
@@ -70,6 +74,13 @@ public:
      */
     explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
     virtual ~KoPAView();
+
+// QWidget overrides
+
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
+
+//  KoPAViewBase/KoView overrides
 
     KoZoomController* zoomController() const;
 
@@ -160,6 +171,18 @@ public:
 
     void centerPage();
 
+    /// return a pointer to the tab bar (horizontal by default)
+    QTabBar *tabBar() const;
+
+    /// set view Tab Bar position (vertical / horizontal)
+    void setTabBarPosition(Qt::Orientation orientation);
+
+    /// Show a custom central widget and hides the standard one.
+    void replaceCentralWidget(QWidget *newWidget);
+
+    /// hides any custom central widget and shows the standard widget.
+    void restoreCentralWidget();
+
 signals:
     /// emited when select All action is triggered and the view is not visible
     void selectAllRequested();
@@ -181,6 +204,8 @@ protected:
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
+
+    void hideCustomCentralWidget();
 
 public slots:
 

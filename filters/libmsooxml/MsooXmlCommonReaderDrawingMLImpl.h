@@ -30,6 +30,9 @@
 #define M_PI 3.1415926535897932384626
 #endif
 
+//ECMA-376, 20.1.10.68, p.3431 - ST_TextFontSize (Text Font Size)
+#define FONTSIZE_MAX 4000
+
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
 #endif
@@ -731,10 +734,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 
     m_currentDrawStyle->addProperty("draw:textarea-vertical-align", m_shapeTextPosition);
-    m_currentDrawStyle->addProperty("fo:margin-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
@@ -1610,6 +1613,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     READ_PROLOGUE2(DrawingML_p)
 
     m_largestParaFont = 0;
+    m_minParaFont = FONTSIZE_MAX;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1704,6 +1708,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                     qreal realSize = fontSize.toDouble();
                     if (realSize > m_largestParaFont) {
                         m_largestParaFont = realSize;
+                    }
+                    if (realSize < m_minParaFont) {
+                        m_minParaFont = realSize;
                     }
                 }
             }
@@ -1825,19 +1832,34 @@ Q_UNUSED(pprRead);
 
      body->startElement("text:p", false);
 
-     // OOxml sometimes defines margins as percentages, however percentages in odf mean a bit different
-     // thing, so here we transform them to points
+     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
+     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
+     // refers to the corresponding margin of a parent style.  Let's convert
+     // the percentage value into points to keep it simple.
+     //
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
          spcBef.remove("%");
-         qreal percentage = spcBef.toDouble() / 100.0;
-         m_currentParagraphStyle.addPropertyPt("fo:margin-top", percentage * m_largestParaFont);
+         qreal percentage = spcBef.toDouble();
+         qreal margin = 0;
+#ifdef PPTXXMLSLIDEREADER_CPP
+         margin = processParagraphSpacing(percentage, m_minParaFont);
+#else
+         margin = (percentage * m_largestParaFont) / 100.0;
+#endif
+     m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
      }
      QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
      if (spcAft.contains("%")) {
          spcAft.remove("%");
-         qreal percentage = spcAft.toDouble() / 100.0;
-         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
+         qreal percentage = spcAft.toDouble();
+         qreal margin = 0;
+#ifdef PPTXXMLSLIDEREADER_CPP
+         margin = processParagraphSpacing(percentage, m_minParaFont);
+#else
+         margin = (percentage * m_largestParaFont) / 100.0;
+#endif
+         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
      }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1945,6 +1967,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         qreal realSize = fontSize.toDouble();
         if (realSize > m_largestParaFont) {
             m_largestParaFont = realSize;
+        }
+        if (realSize < m_minParaFont) {
+            m_minParaFont = realSize;
         }
     }
 
@@ -2651,7 +2676,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     - blur (Blur Effect) §20.1.8.15
     - clrChange (Color Change Effect) §20.1.8.16
     - clrRepl (Solid Color Replacement) §20.1.8.18
-    - duotone (Duotone Effect) §20.1.8.23
+    - [done] duotone (Duotone Effect) §20.1.8.23
     - [done] extLst (Extension List) §20.1.2.2.15
     - fillOverlay (Fill Overlay Effect) §20.1.8.29
     - [done] grayscl (Gray Scale Effect) §20.1.8.34
@@ -2685,7 +2710,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             return KoFilter::FileNotFound;
         }
         QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+
         RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+
         addManifestEntryForFile(destinationName);
         m_recentDestName = sourceName;
         addManifestEntryForPicturesDir();
@@ -2701,10 +2728,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
             ELSE_TRY_READ_IF(lum)
+            ELSE_TRY_READ_IF(duotone)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
     READ_EPILOGUE
 }
 
@@ -2850,6 +2879,99 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lum()
     readNext();
     READ_EPILOGUE
 }
+
+
+#undef CURRENT_EL
+#define CURRENT_EL duotone
+//! duotone handler (Duotone effect)
+/*! ECMA-376, 20.1.8.23, p 3214
+
+  This element specifies a duotone effect. For each pixel,
+  combines clr1 and clr2 through a linear interpolation to
+  determine the new color for that pixel.
+
+  In Office, the interpolation is based on the luminance of the pixel.
+  http://msdn.microsoft.com/en-us/library/ff534294%28v=office.12%29.aspx
+
+ Parent elements:
+ - [done] blip (§20.1.8.13)
+ - cont (§20.1.8.20)
+ - effectDag (§20.1.8.25)
+
+ Child elements:
+    - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+    - [done] prstClr (Preset Color) §20.1.2.3.22
+    - [done] schemeClr (Scheme Color) §20.1.2.3.29
+    - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+    - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+    - [done] sysClr (System Color) §20.1.2.3.33
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_duotone()
+{
+    READ_PROLOGUE
+
+    int colorCount = 0;
+    QColor clr1;
+    QColor clr2;
+
+    while (!atEnd()) {
+        readNext();
+
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(hslClr)
+            ELSE_TRY_READ_IF(prstClr)
+            ELSE_TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            SKIP_UNKNOWN
+
+            if (colorCount == 0) {
+                clr1 = m_currentColor;
+            } else {
+                clr2 = m_currentColor;
+            }
+            colorCount++;
+        }
+    }
+
+    QImage image;
+    m_context->import->imageFromFile(m_recentDestName, image);
+    // don't apply duotone to unsupported picture formats in QImage like emf, wmf case
+    if (!image.isNull()) {
+
+        QColor c1 = clr1.isValid() ? clr1 : Qt::black;
+        QColor c2 = clr2.isValid() ? clr2 : Qt::white;
+
+        image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        for (int y = 0; y < image.height(); y++) {
+            QRgb *scanline = reinterpret_cast<QRgb *>(image.scanLine(y));
+            for (int x = 0; x < image.width(); x++) {
+                QRgb c = scanline[x];
+                int luminosity = (5036060U * quint32(qRed(c)) + 9886846U * quint32(qGreen(c)) + 1920103U * quint32(qBlue(c))) >> 24;
+                qreal grayF = (255 - luminosity) / 255.0;
+                int r = grayF * c1.red()     + (1.0 - grayF) * c2.red();
+                int g = grayF * c1.green()   + (1.0 - grayF) * c2.green();
+                int b = grayF * c1.blue()    + (1.0 - grayF) * c2.blue();
+                scanline[x] = qRgba(r,g,b,qAlpha(c));
+            }
+        }
+
+        QString fileName = m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+        fileName = fileName.left(fileName.lastIndexOf('.'));
+        QString destinationName = QLatin1String("Pictures/") + fileName + QString("_duotoned_%1_%2.png").arg(c1.name().mid(1)).arg(c2.name().mid(1));
+
+        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+        addManifestEntryForFile(destinationName);
+        m_xlinkHref = destinationName;
+    }
+
+    READ_EPILOGUE
+}
+
 
 #undef CURRENT_EL
 #define CURRENT_EL tile
@@ -4733,6 +4855,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
             m_currentColor = QColor(154, 205, 50);
         }
     }
+
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
+    m_currentAlpha = 0;
 
     //TODO: all the color transformations
     while (!atEnd()) {

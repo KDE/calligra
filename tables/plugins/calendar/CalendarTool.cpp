@@ -43,7 +43,7 @@ CalendarTool::CalendarTool(KoCanvasBase* canvas)
         : CellTool(canvas)
         , d(new Private)
 {
-    setObjectName("CalendarTool");
+    setObjectName(QLatin1String("CalendarTool"));
     /*
         KAction* importAction = new KAction(KIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
         importAction->setIconText(i18n("Import"));
