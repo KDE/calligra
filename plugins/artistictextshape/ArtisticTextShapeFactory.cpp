@@ -44,5 +44,7 @@ KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
 
 bool ArtisticTextShapeFactory::supports(const KoXmlElement &/*element*/, KoShapeLoadingContext &/*context*/) const
 {
+    // the artistic text shape is embedded as svg into an odf file
+    // so we tell the caller we do not support any element
     return false;
 }

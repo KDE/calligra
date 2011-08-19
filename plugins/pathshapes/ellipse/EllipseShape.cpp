@@ -398,6 +398,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
 
         context.shapeWriter().endElement();
     } else {
+        // the svg writer takes care of saving this shape as a path shape
         return false;
     }
 
