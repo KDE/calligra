@@ -27,9 +27,11 @@ class ResourcesImporter:
 
         if self.dialog.exec_loop():
             try:
+                Plan.beginCommand( T.i18nc( "(qtundo_format )", "Import resources" ) )
                 self.doImport( self.proj )
+                Plan.endCommand()
             except:
-                self.proj.revertCommand() # play safe in case parts where loaded
+                Plan.revertCommand() # play safe in case parts where loaded
                 self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doImport( self, project ):
@@ -72,8 +74,6 @@ class ResourcesImporter:
                     self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("No resource to copy from"))
                     return
                 self.doImportResource( project, gr, otherresource )
-
-        project.addCommand( T.i18nc( "(qtundoformat)", "Import resources" ) );
 
     def doImportResource( self, project, group, resource ):
         r = project.findResource( resource.id() )

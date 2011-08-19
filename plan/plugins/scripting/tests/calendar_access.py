@@ -17,18 +17,18 @@ try:
     
     calendar = project.createCalendar( 0 )
     assert calendar is not None, "Could not create calendar"
-    project.addCommand( "Create calendar" );
 
     property = 'Name'
     data = "Calendar name"
     before = calendar.name()
+    Plan.beginCommand("Set data")
     res = project.setData(calendar, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = calendar.name()
     text = asserttext.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = calendar.name()
     text = asserttext.format(property, result, before)
     assert result == before, text
@@ -36,13 +36,14 @@ try:
     property = 'Name'
     data = "Calendar name"
     before = project.data(calendar, property)
+    Plan.beginCommand("Set data")
     res = project.setData(calendar, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(calendar, property)
     text = asserttext.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(calendar, property)
     text = asserttext.format(property, result, before)
     assert result == before, text
@@ -50,13 +51,14 @@ try:
     property = 'Name'
     data = 2 # Checked
     before = project.data(calendar, property)
+    Plan.beginCommand("Set data")
     res = project.setData(calendar, property, data, 'CheckStateRole')
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text + " role = CheckStateRole"
     result = project.data(calendar, property, 'CheckStateRole', -1)
     text = asserttext.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(calendar, property)
     text = asserttext.format(property, result, before)
     assert result == before, text

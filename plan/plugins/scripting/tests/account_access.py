@@ -17,18 +17,18 @@ try:
     
     account = project.createAccount( 0 )
     assert account is not None, "Could not create account"
-    project.addCommand( "Create account" );
 
     property = 'Name'
     data = "Account name"
     before = account.name()
+    Plan.beginCommand("Set data")
     res = project.setData(account, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = account.name()
     text = asserttext.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = account.name()
     text = asserttext.format(property, result, before)
     assert result == before, text
@@ -36,13 +36,15 @@ try:
     property = 'Name'
     data = "Account name"
     before = project.data(account, property)
+    Plan.beginCommand("Set data")
+
     res = project.setData(account, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(account, property)
     text = asserttext.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(account, property)
     text = asserttext.format(property, result, before)
     assert result == before, text
@@ -50,13 +52,14 @@ try:
     property = 'Description'
     data = "Account description"
     before = project.data(account, property)
+    Plan.beginCommand("Set data")
     res = project.setData(account, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(account, property)
     text = asserttext.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(account, property)
     text = asserttext.format(property, result, before)
     assert result == before, text

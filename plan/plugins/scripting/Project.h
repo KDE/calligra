@@ -198,11 +198,6 @@ namespace Scripting {
             /// Create account
             QObject *createAccount( QObject *parent );
 
-            /// Add all commands created since last addCommand() to the undo stack. The command is named @p name.
-            void addCommand( const QString &name );
-            /// Revert all commands that is not yet added with addCommand()
-            void revertCommand();
-
         public:
             /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)
             Node *node( KPlato::Node *node );
@@ -253,8 +248,8 @@ namespace Scripting {
 
             int accountColumnNumber( const QString &property ) const;
 
-        private slots:
-            void slotAddCommand( KUndo2Command* );
+        private Q_SLOTS:
+            void slotAddCommand(KUndo2Command*);
 
         private:
             int stringToRole( const QString &role, int programrole = Qt::DisplayRole ) const;

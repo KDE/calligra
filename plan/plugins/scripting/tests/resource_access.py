@@ -17,19 +17,19 @@ try:
     
     group = project.createResourceGroup()
     assert group is not None, "Failed to create resource group"
-    project.addCommand( "Create resource group" );
     
     #Resource group does not have a name() method: should it?
     #property = 'Name'
     #data = "G1"
     #before = group.name()
+    #Plan.beginCommand("Set data")
     #res = project.setData(group, property, data)
     #text = asserttext2.format(property, data, res)
     #assert res == 'Success', text
     #result = group.name()
     #text = asserttext1.format(property, result, data)
     #assert result == data, text
-    #project.revertCommand()
+    #Plan.revertCommand()
     #result = group.name()
     #text = asserttext1.format(property, result, before)
     #assert result == before, text
@@ -37,13 +37,14 @@ try:
     property = 'Name'
     data = "G1"
     before = project.data(group, property)
+    Plan.beginCommand("Set data")
     res = project.setData(group, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(group, property)
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(group, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -51,6 +52,7 @@ try:
     property = 'Type'
     data = "Material"
     before = project.data(group, property)
+    Plan.beginCommand("Set data")
     res = project.setData(group, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
@@ -66,26 +68,26 @@ try:
     result = project.data(group, property)
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(group, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
 
     resource = project.createResource( group )
     assert resource is not None, "Failed to create resource"
-    project.addCommand( "Create resource" );
 
     #Should resource have name() method?
     #property = 'Name'
     #data = "R1"
     #before = resource.name()
+    #Plan.beginCommand("Set data")
     #res = project.setData(resource, property, data)
     #text = asserttext2.format(property, data, res)
     #assert res == 'Success', text
     #result = resource.name()
     #text = asserttext1.format(property, result, data)
     #assert result == data, text
-    #project.revertCommand()
+    #Plan.revertCommand()
     #result = resource.name()
     #text = asserttext1.format(property, result, before)
     #assert result == before, text
@@ -93,13 +95,14 @@ try:
     property = 'Name'
     data = "R1"
     before = project.data(resource, property)
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property)
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -107,7 +110,7 @@ try:
     property = 'Type'
     data = "Material"
     before = project.data(resource, property)
-    
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
@@ -131,7 +134,7 @@ try:
     text = asserttext1.format(property, result, data)
     assert result == data, text
 
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -139,13 +142,14 @@ try:
     property = 'Initials'
     data = "RR"
     before = project.data(resource, property)
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property)
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -153,13 +157,14 @@ try:
     property = 'Email'
     data = "R1@work.org"
     before = project.data(resource, property)
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property)
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -167,13 +172,14 @@ try:
     property = 'Email'
     data = "R1@work.org"
     before = project.data(resource, property)
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property)
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -183,13 +189,14 @@ try:
     property = 'Limit'
     data = 10
     before = project.data(resource, property)
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property)
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property)
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -197,13 +204,14 @@ try:
     property = 'AvailableFrom'
     data = "2011-07-01T08:00:00"
     before = project.data(resource, property, 'EditRole')
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -211,13 +219,14 @@ try:
     property = 'AvailableUntil'
     data = "2011-07-02T08:00:00"
     before = project.data(resource, property, 'EditRole')
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -225,13 +234,14 @@ try:
     property = 'NormalRate'
     data = 111
     before = project.data(resource, property, 'EditRole')
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, before)
     assert result == before, text
@@ -239,13 +249,14 @@ try:
     property = 'OvertimeRate'
     data = 222
     before = project.data(resource, property, 'EditRole')
+    Plan.beginCommand("Set data")
     res = project.setData(resource, property, data)
     text = asserttext2.format(property, data, res)
     assert res == 'Success', text
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
+    Plan.revertCommand()
     result = project.data(resource, property, 'EditRole')
     text = asserttext1.format(property, result, before)
 
@@ -266,7 +277,6 @@ try:
     result = project.data(resource, property, 'ProgramRole')
     text = asserttext1.format(property, result, data)
     assert result == data, text
-    project.revertCommand()
 
 except:
     TestResult.setResult( False )
