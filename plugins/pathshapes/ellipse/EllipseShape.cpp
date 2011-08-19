@@ -406,26 +406,22 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
 
 bool EllipseShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
+    qreal rx = 0, ry = 0;
     if (element.tagName() == "ellipse") {
-        const qreal rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("rx"));
-        const qreal ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute("ry"));
-        const qreal cx = element.attribute("cx").isEmpty() ? 0.0 : SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx"));
-        const qreal cy = element.attribute("cy").isEmpty() ? 0.0 : SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy"));
-        setSize(QSizeF(2*rx, 2*ry));
-        setPosition(QPointF(cx - rx, cy - ry));
-        if (rx == 0.0 || ry == 0.0)
-            setVisible(false);
+        rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("rx"));
+        ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute("ry"));
     } else if (element.tagName() == "circle") {
-        const qreal r  = SvgUtil::parseUnitXY(context.currentGC(), element.attribute("r"));
-        const qreal cx = element.attribute("cx").isEmpty() ? 0.0 : SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx"));
-        const qreal cy = element.attribute("cy").isEmpty() ? 0.0 : SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy"));
-        setSize(QSizeF(2*r, 2*r));
-        setPosition(QPointF(cx - r, cy - r));
-        if (r == 0.0)
-            setVisible(false);
+        rx = ry = SvgUtil::parseUnitXY(context.currentGC(), element.attribute("r"));
     } else {
         return false;
     }
+
+    const qreal cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
+    const qreal cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
+    setSize(QSizeF(2*rx, 2*ry));
+    setPosition(QPointF(cx - rx, cy - ry));
+    if (rx == 0.0 || ry == 0.0)
+        setVisible(false);
 
     return true;
 }
