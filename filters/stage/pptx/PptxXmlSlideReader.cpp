@@ -140,9 +140,14 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     colorMap = masterColorMap;
 }
 
-void PptxXmlSlideReaderContext::initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
-        const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
-        const QVector<QString>& _defaultBulletColors, const QVector<QString>& _defaultTextColors, const QVector<QString>& _defaultLatinFonts)
+void PptxXmlSlideReaderContext::initializeContext(
+        const MSOOXML::DrawingMLTheme& theme,
+        const QVector<KoGenStyle>& _defaultParagraphStyles,
+        const QVector<KoGenStyle>& _defaultTextStyles,
+        const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
+        const QVector<QString>& _defaultBulletColors,
+        const QVector<QString>& _defaultTextColors,
+        const QVector<QString>& _defaultLatinFonts)
 {
     // Only now, we can fully prepare default text styles, as we know the theme we are using
     // And we have the mapping available
@@ -1972,15 +1977,15 @@ void PptxXmlSlideReader::inheritBodyPropertiesHelper(QString id, PptxSlideProper
         }
         right = slideProperties->textRightBorders.value(id);
         if (!right.isEmpty()) {
-            m_shapeTextLeftOff = right;
+            m_shapeTextRightOff = right;
         }
         top = slideProperties->textTopBorders.value(id);
         if (!top.isEmpty()) {
-            m_shapeTextLeftOff = top;
+            m_shapeTextTopOff = top;
         }
         bottom = slideProperties->textBottomBorders.value(id);
         if (!bottom.isEmpty()) {
-            m_shapeTextLeftOff = bottom;
+            m_shapeTextBottomOff = bottom;
         }
         if (slideProperties->m_textAutoFit.value(id) != MSOOXML::Utils::autoFitUnUsed) {
              if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
@@ -2015,6 +2020,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
     // In all non notes cases, we take them first from masterslide
     inheritBodyPropertiesHelper(d->phIdx, m_context->slideMasterProperties);
     inheritBodyPropertiesHelper(d->phType, m_context->slideMasterProperties);
+
 
     if (m_context->type == SlideLayout) {
         return; // No futher actions needed for layout
