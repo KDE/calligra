@@ -50,8 +50,13 @@ class ResourcesImporter:
 
         for ci in range( otherproj.calendarCount() ):
             self.doImportCalendar( project, otherproj.calendarAt( ci ) )
-        #TODO Default calendar
-
+        
+        defcal = otherproj.defaultCalendar()
+        if defcal is not None:
+            dc = project.findCalendar( defcal.id() )
+            if dc is not None:
+                project.setDefaultCalendar( dc )
+        
         for gi in range( otherproj.resourceGroupCount() ):
             othergroup = otherproj.resourceGroupAt( gi )
             gr = project.findResourceGroup( othergroup.id() )
@@ -86,11 +91,7 @@ class ResourcesImporter:
             #TODO let user decide
             self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Calendar already exists: %1", [cal.name()]))
             return
-        # python doesn't seem to give a 0 pointer for a None object
-        if parent is None:
-            cal = project.createCalendar( calendar )
-        else:
-            cal = project.createCalendar( calendar, parent )
+        cal = project.createCalendar( calendar, parent )
         if cal is None:
             self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Unable to create copy of calendar: %1", [calendar.name()]))
             return

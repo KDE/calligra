@@ -53,6 +53,9 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
     m_accountModel.setReadWrite( true );
     connect(&m_accountModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
 
+    m_calendarModel.setProject( project );
+    m_calendarModel.setReadWrite( true );
+    connect(&m_calendarModel, SIGNAL(executeCommand(KUndo2Command*)), SLOT(slotAddCommand(KUndo2Command*)));
 }
 
 Scripting::Project::~Project()
@@ -65,6 +68,18 @@ Scripting::Project::~Project()
     qDeleteAll( m_calendars );
     qDeleteAll( m_schedules );
     qDeleteAll( m_accounts );
+}
+
+QObject *Scripting::Project::defaultCalendar()
+{
+    return calendar( project()->defaultCalendar() );
+}
+
+void Scripting::Project::setDefaultCalendar(Scripting::Calendar* calendar)
+{
+    if ( calendar ) {
+        setCalendarData( calendar->kplatoCalendar(), "Name", Qt::Checked, "CheckStateRole" );
+    }
 }
 
 QVariant Scripting::Project::data( QObject *object, const QString &property )
@@ -126,7 +141,7 @@ bool Scripting::Project::setData( QObject *object, const QString &property, cons
 QVariant Scripting::Project::headerData( int objectType, const QString &property )
 {
     switch ( objectType ) {
-        case 0: return nodeHeaderData( property );
+        case 0: return taskHeaderData( property );
         case 1: return resourceHeaderData( property );
         case 2: return accountHeaderData( property );
         case 3: return calendarHeaderData( property );
@@ -154,7 +169,7 @@ QObject *Scripting::Project::schedule( KPlato::ScheduleManager *sch )
 }
 
 
-QStringList Scripting::Project::nodePropertyList()
+QStringList Scripting::Project::taskPropertyList()
 {
     QStringList lst;
     QMetaEnum e = m_nodeModel.columnMap();
@@ -164,7 +179,7 @@ QStringList Scripting::Project::nodePropertyList()
     return lst;
 }
 
-QVariant Scripting::Project::nodeHeaderData( const QString &property )
+QVariant Scripting::Project::taskHeaderData( const QString &property )
 {
     int col = nodeColumnNumber( property );
     return m_nodeModel.headerData( col, Qt::Horizontal );
@@ -199,14 +214,14 @@ Scripting::Node *Scripting::Project::node( KPlato::Node *node )
     return m_nodes[ node ];
 }
 
-int Scripting::Project::nodeCount() const
+int Scripting::Project::taskCount() const
 {
-    return project()->nodeCount();
+    return childCount();
 }
 
-QObject *Scripting::Project::nodeAt( int index )
+QObject *Scripting::Project::taskAt( int index )
 {
-    return node( project()->allNodes().value( index ) );
+    return childAt( index );
 }
 
 QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &property, const QString &role, long schedule )
@@ -254,12 +269,12 @@ bool Scripting::Project::setNodeData( KPlato::Node *node, const QString &propert
 }
 
 
-QObject *Scripting::Project::findNode( const QString &id )
+QObject *Scripting::Project::findTask( const QString &id )
 {
     return node( project()->findNode( id ) );
 }
 
-QObject *Scripting::Project::createTaskCopy(const QObject* copy, QObject* parent, QObject* after)
+QObject *Scripting::Project::createTask(const QObject* copy, QObject* parent, QObject* after)
 {
     const Node *cpy = static_cast<const Node*>( copy );
     KPlato::Node *t = 0;
@@ -337,19 +352,29 @@ QObject *Scripting::Project::createResourceGroup( QObject *group )
     //kDebug()<<this<<group;
     KPlato::ResourceGroup *g = 0;
     const ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
-    if ( gr != 0 ) {
-        KPlato::ResourceGroup *copyfrom = gr->kplatoResourceGroup();
-        if ( copyfrom == 0 ) {
-            kDebug()<<"Nothing to copy from";
-            return 0;
-        }
-        g = new KPlato::ResourceGroup( copyfrom );
-    } else {
-        g = new KPlato::ResourceGroup();
+    if ( gr == 0 ) {
+        return createResourceGroup();
     }
+    KPlato::ResourceGroup *copyfrom = gr->kplatoResourceGroup();
+    if ( copyfrom == 0 ) {
+        kDebug()<<"Nothing to copy from";
+        return 0;
+    }
+    if ( project()->findResourceGroup( copyfrom->id() ) ) {
+        kDebug()<<"Group with id already exists";
+        return 0;
+    }
+    g = new KPlato::ResourceGroup( copyfrom );
     AddResourceGroupCmd *cmd = new AddResourceGroupCmd( project(), g, i18nc( "(qtundo_format)", "Add resource group" ) );
-    cmd->redo();
-    m_command->addCommand( cmd );
+    slotAddCommand( cmd );
+    return resourceGroup( g );
+}
+
+QObject *Scripting::Project::createResourceGroup()
+{
+    KPlato::ResourceGroup *g = new KPlato::ResourceGroup();
+    AddResourceGroupCmd *cmd = new AddResourceGroupCmd( project(), g, i18nc( "(qtundo_format)", "Add resource group" ) );
+    slotAddCommand( cmd );
     return resourceGroup( g );
 }
 
@@ -381,7 +406,7 @@ QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *gro
     return m_resourceModel.data( idx, stringToRole( role ) );
 }
 
-QObject *Scripting::Project::createResource( QObject *group, QObject *res )
+QObject *Scripting::Project::createResource( QObject *group, QObject *copy )
 {
     ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
     if ( gr == 0 ) {
@@ -394,25 +419,41 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *res )
         return 0;
     }
     KPlato::Resource *r = 0;
-    const Resource *rs = qobject_cast<Resource*>( res );
-    if ( rs != 0 ) {
-        r = project()->findResource( rs->kplatoResource()->id() );
-        if ( r ) {
-            kDebug()<<"Resource already exists";
-            return 0;
-        }
-        r = new KPlato::Resource( rs->kplatoResource() );
-        KPlato::Calendar *c = rs->kplatoResource()->calendar( true );
-        if ( c ) {
-            c = project()->calendar( c->id() );
-        }
-        r->setCalendar( c );
-    } else {
-        r = new KPlato::Resource();
+    const Resource *rs = qobject_cast<Resource*>( copy );
+    if ( rs == 0 ) {
+        return createResource( group );
     }
+    r = project()->findResource( rs->kplatoResource()->id() );
+    if ( r ) {
+        kDebug()<<"Resource already exists";
+        return 0;
+    }
+    r = new KPlato::Resource( rs->kplatoResource() );
+    KPlato::Calendar *c = rs->kplatoResource()->calendar( true );
+    if ( c ) {
+        c = project()->calendar( c->id() );
+    }
+    r->setCalendar( c );
     AddResourceCmd *cmd = new AddResourceCmd( g, r, i18nc( "(qtundo_format)", "Add resource" ) );
-    cmd->redo();
-    m_command->addCommand( cmd );
+    slotAddCommand( cmd );
+    return resource( r );
+}
+
+QObject *Scripting::Project::createResource( QObject *group )
+{
+    ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
+    if ( gr == 0 ) {
+        kDebug()<<"No group specified";
+        return 0;
+    }
+    KPlato::ResourceGroup *g = project()->findResourceGroup( gr->kplatoResourceGroup()->id() );
+    if ( g == 0 ) {
+        kDebug()<<"Could not find group";
+        return 0;
+    }
+    KPlato::Resource *r = new KPlato::Resource();
+    AddResourceCmd *cmd = new AddResourceCmd( g, r, i18nc( "(qtundo_format)", "Add resource" ) );
+    slotAddCommand( cmd );
     return resource( r );
 }
 
@@ -532,26 +573,27 @@ QObject *Scripting::Project::findCalendar( const QString &id )
 {
     KPlato::Calendar *c = project()->calendar( id );
     kDebug()<<id<<c;
-    return c == 0 ? 0 : calendar( c );
+    return calendar( c );
 }
 
-QObject *Scripting::Project::createCalendar( QObject *calendar, QObject *parent )
+QObject *Scripting::Project::createCalendar( QObject *copy, QObject *parent )
 {
-    kDebug()<<this<<calendar<<parent;
-    if ( calendar == 0 ) {
-        kDebug()<<"No calendar specified";
-        return 0;
+    kDebug()<<this<<copy<<parent;
+    const KPlato::Calendar *copyfrom = 0;
+    KPlato::Calendar *c = 0;
+    if ( copy == 0 ) {
+        return createCalendar( parent );
     }
-    const Calendar *cal = qobject_cast<Calendar*>( calendar );
-    const KPlato::Calendar *copyfrom = cal->kplatoCalendar();
+    const Calendar *cal = qobject_cast<Calendar*>( copy );
+    copyfrom = cal->kplatoCalendar();
     if ( copyfrom == 0 ) {
         kDebug()<<"Nothing to copy from";
         return 0;
     }
-    KPlato::Calendar *c = project()->calendar( copyfrom->id() );
+    c = project()->calendar( copyfrom->id() );
     if ( c ) {
         kDebug()<<"Calendar already exists";
-        return this->calendar( c );
+        return 0;
     }
     Calendar *par = qobject_cast<Calendar*>( parent );
     KPlato::Calendar *p = 0;
@@ -559,14 +601,27 @@ QObject *Scripting::Project::createCalendar( QObject *calendar, QObject *parent 
         p = project()->calendar( par->id() );
     }
     c = new KPlato::Calendar();
-    *c = *copyfrom;
-    c->setId( copyfrom->id() ); // NOTE: id is not copied
-    CalendarAddCmd *cmd = new CalendarAddCmd( project(), c, -1, p, i18nc( "(qtundoformat)", "Add calendar" ) );
-    cmd->redo();
-    m_command->addCommand( cmd );
+    if ( copyfrom ) {
+        *c = *copyfrom;
+        c->setId( copyfrom->id() ); // NOTE: id is not copied
+    }
+    m_calendarModel.insertCalendar( c, -1, p );
     Calendar *call = this->calendar( c );
     kDebug()<<call;
     return call;
+}
+
+QObject *Scripting::Project::createCalendar( QObject *parent )
+{
+    kDebug()<<this<<parent;
+    Calendar *par = qobject_cast<Calendar*>( parent );
+    KPlato::Calendar *p = 0;
+    if ( par ) {
+        p = project()->calendar( par->id() );
+    }
+    KPlato::Calendar *c = new KPlato::Calendar();
+    m_calendarModel.insertCalendar( c, -1, p );
+    return this->calendar( c );
 }
 
 Scripting::Calendar *Scripting::Project::calendar( KPlato::Calendar *calendar )
@@ -582,17 +637,29 @@ Scripting::Calendar *Scripting::Project::calendar( KPlato::Calendar *calendar )
 
 QVariant Scripting::Project::calendarData(const KPlato::Calendar* calendar, const QString& property, const QString& role, long int )
 {
-    return QVariant();
+    QModelIndex idx = m_calendarModel.index( calendar );
+    idx = m_calendarModel.index( idx.row(), calendarColumnNumber( property ), idx.parent() );
+    if ( ! idx.isValid() ) {
+        return QVariant();
+    }
+    qDebug()<<"data:"<<calendar<<property<<role<<":"<<idx<<m_calendarModel.data( idx, stringToRole( role ) );
+    return m_calendarModel.data( idx, stringToRole( role ) );
 }
 
 bool Scripting::Project::setCalendarData( KPlato::Calendar *calendar, const QString &property, const QVariant &data, const QString &role )
 {
-    return false;
+    QModelIndex idx = m_calendarModel.index( calendar );
+    idx = m_calendarModel.index( idx.row(), calendarColumnNumber( property ), idx.parent() );
+    if ( ! idx.isValid() ) {
+        return false;
+    }
+    Q_ASSERT( m_calendarModel.flags( idx ) & Qt::ItemIsEditable );
+    return m_calendarModel.setData( idx, data, stringToRole( role ) );
 }
 
 int Scripting::Project::calendarColumnNumber(const QString& property) const
 {
-    return m_calendarModel.columnMap().keyToValue( property.toUtf8() );
+    return m_calendarModel.columnNumber( property );
 }
 
 QVariant Scripting::Project::calendarHeaderData( const QString &property )
@@ -685,6 +752,9 @@ int Scripting::Project::stringToRole( const QString &role ) const
     }
     if ( r == "EditRole" ) {
         return Qt::EditRole;
+    }
+    if ( r == "CheckStateRole" ) {
+        return Qt::CheckStateRole;
     }
     kDebug()<<"Role is not handled:"<<role;
     return -1;

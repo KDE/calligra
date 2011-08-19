@@ -384,6 +384,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     setAcceptDrops(true);
     setupActions();
     setupMainWidget();
+    updateAppCaption();
 //2.0: unused  createShellGUI(true);
     //}
 

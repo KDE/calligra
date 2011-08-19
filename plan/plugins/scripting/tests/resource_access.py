@@ -15,7 +15,7 @@ try:
     project = Plan.project()
     assert project is not None, "Project not found"
     
-    group = project.createResourceGroup( 0 )
+    group = project.createResourceGroup()
     assert group is not None, "Could not create resource group"
     project.addCommand( "Create resource group" );
     
@@ -56,7 +56,7 @@ try:
     text = asserttext1.format(property, result, before)
     assert result == before, text
 
-    resource = project.createResource( group, 0 )
+    resource = project.createResource( group )
     assert group is not None, "Could not create resource"
     project.addCommand( "Create resource" );
 

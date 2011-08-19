@@ -66,6 +66,11 @@ namespace Scripting {
             KPlato::Project *kplatoProject() const { return static_cast<KPlato::Project*>( m_node ); }
             
         public Q_SLOTS:
+            /// Return the default calendar, 0 if no default calendar is set
+            QObject *defaultCalendar();
+            /// Set default calendar to @p calendar
+            void setDefaultCalendar( Calendar *calendar );
+
             /// Return data, default role and schedule
             QVariant data( QObject *object, const QString &property );
             /// Return data
@@ -80,18 +85,21 @@ namespace Scripting {
             /// Return schedule manager at @p index
             QObject *scheduleAt( int index );
             
-            /// Returns the names of all node properties
-            QStringList nodePropertyList();
+            /// Returns the names of all task properties
+            QStringList taskPropertyList();
             
-            /// Returns node header data for @p property
-            QVariant nodeHeaderData( const QString &property );
-        
-            /// Number of nodes in the project (excluding the project itself)
-            int nodeCount() const;
-            /// Return the node at @p index
-            QObject *nodeAt( int index );
-            QObject *findNode( const QString &id );
-            QObject *createTaskCopy( const QObject *copy, QObject *parent, QObject *after = 0 );
+            /// Returns task header data for @p property
+            QVariant taskHeaderData( const QString &property );
+
+            /// Number of tasks
+            int taskCount() const;
+            /// Return the task at @p index
+            QObject *taskAt( int index );
+            /// Find task with identity @p id
+            QObject *findTask( const QString &id );
+            /// Create a copy of @p copy, add the new task to @p parent after the task @p after
+            QObject *createTask( const QObject *copy, QObject *parent, QObject *after );
+            /// Create a new task and add it to @p parent after the task @p after
             QObject *createTask( QObject *parent, QObject *after = 0 );
             
             /// Returns resource header data for @p property
@@ -104,12 +112,18 @@ namespace Scripting {
             /// Find resource group with identity @p id
             QObject *findResourceGroup( const QString &id );
             /// Create a copy of resource group @p group and insert it into the project
+            /// If a group with the same identy as the @p group already exixts, 0 is returned
             QObject *createResourceGroup( QObject *group );
+            /// Create a new resource group and insert it into the project
+            QObject *createResourceGroup();
 
             /// Find resource with identity @p id
             QObject *findResource( const QString &id );
             /// Create a copy of @p resource and add to @p group
+            /// If a resource with the same identy as the @p resource already exixts, 0 is returned
             QObject *createResource( QObject *group, QObject *resource );
+            /// Create a new resource and add to @p group
+            QObject *createResource( QObject *group );
             /// Add an external appointment to @p resource
             void addExternalAppointment( QObject *resource, const QVariant &id, const QString &name, const QVariantList &lst );
             /// Clear the resources @p resource external appointments to project with identity @p id
@@ -128,7 +142,12 @@ namespace Scripting {
             /// Find calendar with identity @p id
             QObject *findCalendar( const QString &id );
             /// Create a copy of @p calendar and add to @p parent
-            QObject *createCalendar( QObject *calendar, QObject *parent = 0 );
+            /// If a calendar with the same id as @p calendar, 0 is returned
+            /// If parent is 0 it is added to the project
+            QObject *createCalendar( QObject *calendar, QObject *parent );
+            /// Create a calendar and add it to @p parent
+            /// If parent is 0 it is added to the project
+            QObject *createCalendar( QObject *parent = 0 );
 
             /// Number of accounts
             int accountCount() const;
@@ -215,7 +234,7 @@ namespace Scripting {
             QMap<KPlato::ResourceGroup*, ResourceGroup*> m_groups;
             QMap<KPlato::Resource*, Resource*> m_resources;
 
-            KPlato::CalendarItemModel m_calendarModel;
+            KPlato::CalendarExtendedItemModel m_calendarModel;
             QMap<KPlato::Calendar*, Calendar*> m_calendars;
 
             QMap<KPlato::ScheduleManager*, Schedule*> m_schedules;
