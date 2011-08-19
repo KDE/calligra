@@ -30,6 +30,11 @@ Scripting::Account::Account( Scripting::Project *project, KPlato::Account *accou
 {
 }
 
+QObject *Scripting::Account::project()
+{
+    return m_project;
+}
+
 QString Scripting::Account::name() const
 {
     return m_account->name();

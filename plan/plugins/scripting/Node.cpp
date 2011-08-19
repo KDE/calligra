@@ -32,6 +32,11 @@ Scripting::Node::Node( Scripting::Project *project, KPlato::Node *node, QObject 
 {
 }
 
+QObject *Scripting::Node::project()
+{
+    return m_project;
+}
+
 QString Scripting::Node::name()
 {
     return m_node->name();

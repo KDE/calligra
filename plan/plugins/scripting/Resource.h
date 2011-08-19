@@ -47,6 +47,8 @@ namespace Scripting {
             KPlato::Resource *kplatoResource() const { return m_resource; }
 
         public Q_SLOTS:
+            /// Return the project this resource is part of
+            QObject* project();
             /// Return type of resource
             QVariant type();
             /// Return type of resource

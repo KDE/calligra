@@ -47,6 +47,8 @@ namespace Scripting {
             KPlato::ResourceGroup *kplatoResourceGroup() const { return m_group; }
         
         public Q_SLOTS:
+            /// Return the project this resource group is part of
+            QObject* project();
             /// Return the identity of resource group
             QString id();
             /// Return type of resource group

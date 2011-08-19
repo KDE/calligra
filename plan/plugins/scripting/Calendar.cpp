@@ -30,6 +30,11 @@ Scripting::Calendar::Calendar( Scripting::Project *project, KPlato::Calendar *ca
 {
 }
 
+QObject *Scripting::Calendar::project()
+{
+    return m_project;
+}
+
 QString Scripting::Calendar::id() const
 {
     return m_calendar->id();

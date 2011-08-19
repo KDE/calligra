@@ -35,6 +35,11 @@ Scripting::Resource::Resource( Scripting::Project *project, KPlato::Resource *re
 {
 }
 
+QObject *Scripting::Resource::project()
+{
+    return m_project;
+}
+
 QVariant Scripting::Resource::type()
 {
     return m_resource->typeToString();

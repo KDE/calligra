@@ -30,6 +30,11 @@ Scripting::ResourceGroup::ResourceGroup( Scripting::Project *project, KPlato::Re
 {
 }
 
+QObject *Scripting::ResourceGroup::project()
+{
+    return m_project;
+}
+
 QString Scripting::ResourceGroup::id()
 {
     return m_group->id();

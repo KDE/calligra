@@ -8,7 +8,8 @@ import TestResult
 
 
 TestResult.setResult( True )
-asserttext = "Test of property '{0}' failed:\n   Expected: '{2}'\n        Got: '{1}'"
+asserttext = "Test of property '{0}' failed:\n   Expected: '{2}'\n     Result: '{1}'"
+asserttext2 = "Failed to set property '{0}' to '{1}'. Result: {2}"
 
 try:
     project = Plan.project()
@@ -20,8 +21,24 @@ try:
 
     property = 'Name'
     data = "Account name"
+    before = account.name()
+    res = project.setData(account, property, data)
+    text = asserttext2.format(property, data, res)
+    assert res == 'Success', text
+    result = account.name()
+    text = asserttext.format(property, result, data)
+    assert result == data, text
+    project.revertCommand()
+    result = account.name()
+    text = asserttext.format(property, result, before)
+    assert result == before, text
+
+    property = 'Name'
+    data = "Account name"
     before = project.data(account, property)
-    project.setData(account, property, data)
+    res = project.setData(account, property, data)
+    text = asserttext2.format(property, data, res)
+    assert res == 'Success', text
     result = project.data(account, property)
     text = asserttext.format(property, result, data)
     assert result == data, text
@@ -33,7 +50,9 @@ try:
     property = 'Description'
     data = "Account description"
     before = project.data(account, property)
-    project.setData(account, property, data)
+    res = project.setData(account, property, data)
+    text = asserttext2.format(property, data, res)
+    assert res == 'Success', text
     result = project.data(account, property)
     text = asserttext.format(property, result, data)
     assert result == data, text
