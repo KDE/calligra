@@ -294,7 +294,7 @@ QModelIndex AccountItemModel::index( int row, int column, const QModelIndex &par
     return QModelIndex();
 }
 
-QModelIndex AccountItemModel::index( const Account *account ) const
+QModelIndex AccountItemModel::index( const Account *account, int column ) const
 {
     Account *a = const_cast<Account*>(account);
     if ( m_project == 0 || account == 0 ) {
@@ -310,7 +310,7 @@ QModelIndex AccountItemModel::index( const Account *account ) const
     if ( row == -1 ) {
         return QModelIndex();
     }
-    return createIndex( row, 0, a );
+    return createIndex( row, column, a );
 
 }
 

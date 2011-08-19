@@ -101,8 +101,8 @@ public:
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    QModelIndex index( const ResourceGroup *group ) const;
-    QModelIndex index( const Resource *resource ) const;
+    QModelIndex index( const ResourceGroup *group, int column = 0 ) const;
+    QModelIndex index( const Resource *resource, int column = 0 ) const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 

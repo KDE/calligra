@@ -233,7 +233,7 @@ QModelIndex CalendarItemModel::index( int row, int column, const QModelIndex &pa
     return QModelIndex();
 }
 
-QModelIndex CalendarItemModel::index( const Calendar *calendar) const
+QModelIndex CalendarItemModel::index( const Calendar *calendar, int column ) const
 {
     if ( m_project == 0 || calendar == 0 ) {
         return QModelIndex();
@@ -249,7 +249,7 @@ QModelIndex CalendarItemModel::index( const Calendar *calendar) const
     if ( row == -1 ) {
         return QModelIndex();
     }
-    return createIndex( row, 0, a );
+    return createIndex( row, column, a );
 
 }
 

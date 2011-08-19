@@ -734,7 +734,7 @@ QModelIndex ResourceItemModel::index( int row, int column, const QModelIndex &pa
     return QModelIndex();
 }
 
-QModelIndex ResourceItemModel::index( const Resource *resource ) const
+QModelIndex ResourceItemModel::index( const Resource *resource, int column ) const
 {
     if ( m_project == 0 || resource == 0 ) {
         return QModelIndex();
@@ -744,19 +744,19 @@ QModelIndex ResourceItemModel::index( const Resource *resource ) const
     ResourceGroup *par = r->parentGroup();
     if ( par ) {
         row = par->indexOf( r );
-        return createIndex( row, 0, r );
+        return createIndex( row, column, r );
     }
     return QModelIndex();
 }
 
-QModelIndex ResourceItemModel::index( const ResourceGroup *group ) const
+QModelIndex ResourceItemModel::index( const ResourceGroup *group, int column ) const
 {
     if ( m_project == 0 || group == 0 ) {
         return QModelIndex();
     }
     ResourceGroup *g = const_cast<ResourceGroup*>(group);
     int row = m_project->indexOf( g );
-    return createIndex( row, 0, g );
+    return createIndex( row, column, g );
 
 }
 

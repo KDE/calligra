@@ -3135,7 +3135,7 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     return idx;
 }
 
-QModelIndex NodeItemModel::index( const Node *node ) const
+QModelIndex NodeItemModel::index( const Node *node, int column ) const
 {
     if ( m_project == 0 || node == 0 ) {
         return QModelIndex();
@@ -3143,10 +3143,10 @@ QModelIndex NodeItemModel::index( const Node *node ) const
     Node *par = node->parentNode();
     if ( par ) {
         //kDebug()<<par<<"-->"<<node;
-        return createIndex( par->indexOf( node ), 0, const_cast<Node*>(node) );
+        return createIndex( par->indexOf( node ), column, const_cast<Node*>(node) );
     }
     if ( m_projectshown && node == m_project ) {
-        return createIndex( 0, 0, m_project );
+        return createIndex( 0, column, m_project );
     }
     //kDebug()<<node;
     return QModelIndex();
@@ -3856,14 +3856,14 @@ QModelIndex GeneralNodeItemModel::index( int row, int column, const QModelIndex 
     return QModelIndex();
 }
 
-QModelIndex GeneralNodeItemModel::index( const Node *node ) const
+QModelIndex GeneralNodeItemModel::index( const Node *node, int column ) const
 {
     if ( m_modus == 0 ) {
-        return NodeItemModel::index( node );
+        return NodeItemModel::index( node, column );
     }
     Object *obj = findNodeObject( node );
     if ( obj ) {
-        return createIndex( nodeObjects().indexOf( obj ), 0, obj );
+        return createIndex( nodeObjects().indexOf( obj ), column, obj );
     }
     return QModelIndex();
 }
