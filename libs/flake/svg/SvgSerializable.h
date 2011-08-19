@@ -37,10 +37,6 @@ public:
 
     /// Loads data from specified svg element
     virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
-
-protected:
-    /// Saves the style of the specified shape
-    void saveSvgStyle(KoShape *shape, SvgSavingContext &context);
 };
 
 #endif // SVGSERIALIAZBLE_H

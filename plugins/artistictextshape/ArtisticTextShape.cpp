@@ -38,6 +38,7 @@
 #include <SvgUtil.h>
 #include <SvgStyleParser.h>
 #include <SvgWriter.h>
+#include <SvgStyleWriter.h>
 
 #include <KLocale>
 #include <KDebug>
@@ -983,7 +984,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().startElement("text");
     context.shapeWriter().addAttribute("id", context.getID(this));
 
-    saveSvgStyle(this, context);
+    SvgStyleWriter::saveSvgStyle(this, context);
 
     const QList<ArtisticTextRange> formattedText = text();
 

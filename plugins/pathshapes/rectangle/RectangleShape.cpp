@@ -30,6 +30,7 @@
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
+#include <SvgStyleWriter.h>
 
 RectangleShape::RectangleShape()
 : m_cornerRadiusX(0)
@@ -304,7 +305,7 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().addAttribute("id", context.getID(this));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
 
-    saveSvgStyle(this, context);
+    SvgStyleWriter::saveSvgStyle(this, context);
 
     const QSizeF size = this->size();
     context.shapeWriter().addAttributePt("width", size.width());

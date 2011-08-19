@@ -30,6 +30,7 @@
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
+#include <SvgStyleWriter.h>
 
 #include <math.h>
 
@@ -394,7 +395,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().addAttributePt("cx", 0.5 * size.width());
         context.shapeWriter().addAttributePt("cy", 0.5 * size.height());
 
-        saveSvgStyle(this, context);
+        SvgStyleWriter::saveSvgStyle(this, context);
 
         context.shapeWriter().endElement();
     } else {
