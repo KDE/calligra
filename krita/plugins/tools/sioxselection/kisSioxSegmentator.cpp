@@ -3,6 +3,7 @@
 #include <kis_iterator_ng.h>
 #include <kis_paint_device.h>
 #include <kis_types.h>
+#include <KoColorSpaceMaths.h>
 #include "kisColorSignature.h"
 #include "kisSioxSegmentator.h"
 
@@ -34,10 +35,13 @@ void normalizeConfidenceMatrix(float confidenceMatrix[], int length);
 
 }
 
-KisSioxSegmentator::KisSioxSegmentator(const KisPaintDeviceSP& pimage, float plimitL,
-    float plimitA, float plimitB)
+KisSioxSegmentator::KisSioxSegmentator(const KisPaintDeviceSP& pimage,
+    const KisPaintDeviceSP& puserConfidenceMatrix, float plimitL, float plimitA,
+    float plimitB)
     : image(pimage),
     labImage(new KisPaintDevice(*pimage)),
+    userConfidenceMatrix(puserConfidenceMatrix),
+    confidenceMatrix(new KisPaintDevice(*puserConfidenceMatrix)),
     labelField(pimage->exactBounds().width() * pimage->exactBounds().height(), -1),
     limitL(plimitL),
     limitA(plimitA),
@@ -130,28 +134,29 @@ void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
     } while (labImageIterator->nextPixel());
 }
 
-bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/,
-    double /*sizeFactorToKeep*/)
+bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKeep*/)
 {
     nearestPixels.clear();
 
     QVector< const quint16* > knownBg, knownFg;
 
     { // Collect known background and foreground.
-        KisRectConstIteratorSP labImageIterator = labImage->createRectConstIteratorNG(
-            labImage->exactBounds());
-        quint64 i = 0;
+        KisRectConstIteratorSP labImageIter =
+            labImage->createRectConstIteratorNG(labImage->exactBounds());
+        KisRectConstIteratorSP confidenceMatrixIter =
+            confidenceMatrix->createRectConstIteratorNG( confidenceMatrix->exactBounds());
         do {
             const quint16* data = reinterpret_cast< const quint16* >(
-                labImageIterator->oldRawData());
+                labImageIter->oldRawData());
+            const quint8* confidenceMatrixData = reinterpret_cast< const quint8* >(
+                confidenceMatrixIter->oldRawData());
 
-            if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE)
+            if (*confidenceMatrixData <= BACKGROUND_CONFIDENCE * ALPHA8_RANGE)
                 knownBg.push_back(data);
-            else if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE)
-                knownFg.push_back(data);;
+            else if (*confidenceMatrixData >= FOREGROUND_CONFIDENCE * ALPHA8_RANGE)
+                knownFg.push_back(data);
 
-            ++i;
-        }  while (labImageIterator->nextPixel());
+        }  while (labImageIter->nextPixel() & confidenceMatrixIter->nextPixel());
     }
 
     // Create color signatures
@@ -172,25 +177,27 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
         return false;
     }
 
-    // Classify using color signatures.
-    {
-        KisRectConstIteratorSP labImageIterator = labImage->createRectConstIteratorNG(
+    { // Classify using color signatures.
+        KisRectConstIteratorSP labImageIter = labImage->createRectConstIteratorNG(
             labImage->exactBounds());
-        KisRectConstIteratorSP imageIterator = image->createRectConstIteratorNG(
-            labImage->exactBounds());
-        quint64 i = 0;
+        KisRectConstIteratorSP imageIter = image->createRectConstIteratorNG(
+            image->exactBounds());
+        KisRectIteratorSP confidenceMatrixIter = confidenceMatrix->createRectIteratorNG(
+            confidenceMatrix->exactBounds());
         do {
+            quint8* confidenceMatrixData = reinterpret_cast< quint8* >(
+                confidenceMatrixIter->rawData());
 
-            if (confidenceMatrix[i] >= FOREGROUND_CONFIDENCE) {
-                confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
+            if (*confidenceMatrixData >= FOREGROUND_CONFIDENCE * ALPHA8_RANGE) {
+                confidenceMatrixData[0] = CERTAIN_FOREGROUND_CONFIDENCE * ALPHA8_RANGE;
                 continue;
             }
 
-            if (confidenceMatrix[i] <= BACKGROUND_CONFIDENCE) {
-                confidenceMatrix[i] = CERTAIN_BACKGROUND_CONFIDENCE;
+            if (*confidenceMatrixData <= BACKGROUND_CONFIDENCE * ALPHA8_RANGE) {
+                confidenceMatrixData[0] = CERTAIN_BACKGROUND_CONFIDENCE * ALPHA8_RANGE;
             } else {
                 const quint16* data = reinterpret_cast< const quint16* >(
-                    imageIterator->oldRawData());
+                    imageIter->oldRawData());
 
                 NearestPixelsMap::iterator nearestIterator = nearestPixels.find(data);
 
@@ -205,7 +212,15 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
                         (nearestPixels[data] = ClusterDistance(0, 0, 0, 0));
 
                     const quint16* labData = reinterpret_cast< const quint16* >(
-                        labImageIterator->oldRawData());
+                        labImageIter->oldRawData());
+
+                    // Convert Lab data to float.
+                    float realLabData[SOURCE_COLOR_DIMENSIONS];
+                    for (int i = 0; i < SOURCE_COLOR_DIMENSIONS; i++) {
+                        realLabData[i] = KoColorSpaceMaths<quint16, float>::scaleToA(
+                            labData[i]);
+                    }
+
                     float minBg;// = getLabColorDiffSquared(labData, bgSignature[0]);
                     int minIndex = 0;
 
@@ -245,26 +260,18 @@ bool KisSioxSegmentator::segmentate(float confidenceMatrix[], int /*smoothness*/
                 }
 
                 if (isBackground) {
-                    confidenceMatrix[i] = CERTAIN_BACKGROUND_CONFIDENCE;
+                    confidenceMatrixData[0] = CERTAIN_BACKGROUND_CONFIDENCE * ALPHA8_RANGE;
                 } else {
-                    confidenceMatrix[i] = CERTAIN_FOREGROUND_CONFIDENCE;
+                    confidenceMatrixData[0] = CERTAIN_FOREGROUND_CONFIDENCE * ALPHA8_RANGE;
                 }
-
             }
-
-            ++i;
-         }  while (labImageIterator->nextPixel() && imageIterator->nextPixel());
+        }  while (labImageIter->nextPixel() & imageIter->nextPixel() &
+            confidenceMatrixIter->nextPixel());
     }
-
-    int width = image->exactBounds().width();
-    int height =  image->exactBounds().height();
-    // TODO - try other weights values.
-    smoothCondidenceMatrix(confidenceMatrix, width, height, 0.33f, 0.33f, 0.33f);
-    normalizeConfidenceMatrix(confidenceMatrix, width * height);
 
     // TODO
     // postprocessing
-    // V Smooth confidence matrix (at least one time).
+    // - Smooth confidence matrix (at least one time).
     // - Normalize matrix (at least one time).
     // - Erode.
     // - Remove small components.

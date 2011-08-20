@@ -13,7 +13,6 @@
 #include "kisColorSignature.h"
 #include "kis_types.h"
 
-//#if 0
 /**
   SIOX image segmentator.
 
@@ -43,7 +42,20 @@ private:
 
     typedef QHash< const quint16*, ClusterDistance > NearestPixelsMap;
 
+private:
+    /**
+      Alpha8 colorspace range. Necessary to compare the values of the confidence
+      matrix.
+     */
+    static const quint8 ALPHA8_RANGE = 255;
+
 public:
+    /**
+      Color dimensions of the image where the segmentation is actually applied.
+      For now it is the LAB colorspace.
+     */
+    static const int SOURCE_COLOR_DIMENSIONS = 3;
+
     /**
       Confidence corresponding to a certain foreground region (equals one).
      */
@@ -88,6 +100,17 @@ private:
     KisPaintDeviceSP labImage;
 
     /**
+      The user defined confidence matrix before the segmentation.
+     */
+    KisPaintDeviceSP userConfidenceMatrix;
+
+    /**
+      Confidence matrix where the segmentation happens. Initially it is a clone
+      of the userConfidenceMatrix.
+     */
+    KisPaintDeviceSP confidenceMatrix;
+
+    /**
       Stores component label (index) by pixel it belongs to.
      */
     QVector< qint64 > labelField;
@@ -122,13 +145,14 @@ public:
       Constructs a SioxSegmentator Object to be used for image segmentation.
      */
     KisSioxSegmentator(const KisPaintDeviceSP& pimage,
+        const KisPaintDeviceSP& userConfidenceMatrix,
         float plimitL = L_DEFAULT_CLUSTER_SIZE,
         float plimitA = A_DEFAULT_CLUSTER_SIZE,
         float plimitB = B_DEFAULT_CLUSTER_SIZE);
 
     ~KisSioxSegmentator() {}
 
-    bool segmentate(float cm[], int smoothness, double sizeFactorToKeep);
+    bool segmentate(int smoothness, double sizeFactorToKeep);
 
 private:
 
@@ -144,6 +168,5 @@ private:
     void fillColorRegions(float confidenceMatrix[]);
 
 };
-//#endif
 
 #endif /* _KIS_SIOX_SEGMENTATOR_H_ */
