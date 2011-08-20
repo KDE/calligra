@@ -128,6 +128,7 @@ void PerformanceTester::init()
     t1->completion().setStarted( true );
     t1->completion().setStartTime( t1->startTime() );
 
+    Debug::print( p1, "Project data", true );
     QCOMPARE( t1->startTime(), p1->mustStartOn() );
     QCOMPARE( t1->endTime(), t1->startTime() + Duration( 4, 8, 0 ) );
 }
@@ -142,6 +143,7 @@ void PerformanceTester::bcwsPrDayTask()
     
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
+    qDebug()<<ecm;
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) ); // work+materal resource
     QCOMPARE( ecm.costOnDate( d ), 8.0 ); //material resource cost == 0
     
