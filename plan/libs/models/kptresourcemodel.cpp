@@ -1065,9 +1065,6 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
             result = m_model.data( g, index.column(), role );
         }
     }
-    if ( role == Qt::DisplayRole && ! result.isValid() ) {
-        result = " "; // HACK to show focus in empty cells
-    }
     return result;
 }
 

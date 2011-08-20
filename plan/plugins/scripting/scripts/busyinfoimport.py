@@ -26,7 +26,7 @@ class BusyinfoImporter:
 
         if self.dialog.exec_loop():
             try:
-                Plan.beginCommand( T.i18nc("(qtundo_format)", "Import resource busy information")
+                Plan.beginCommand( T.i18nc("(qtundo_format)", "Import resource busy information") )
                 self.doImport( self.proj )
                 Plan.endCommand()
             except:

@@ -72,16 +72,7 @@ QVariant AccountModel::data( const Account *a, int property, int role ) const
             kDebug()<<"data: invalid display value column"<<property;
             return QVariant();
     }
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
-        }
-        return result;
-    }
-    // define default action
-
-    return QVariant();
+    return result;
 }
 
 QVariant AccountModel::name( const Account *a, int role ) const
@@ -381,12 +372,6 @@ QVariant AccountItemModel::data( const QModelIndex &index, int role ) const
         return QVariant();
     }
     result = m_model.data( a, index.column(), role );
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
-        }
-    }
     return result;
 }
 

@@ -3336,9 +3336,6 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
             break;
         }
     }
-    if ( role == Qt::DisplayRole && ! result.isValid() ) {
-        result = " "; // HACK to show focus in empty cells
-    }
     return result;
 }
 
@@ -4400,9 +4397,6 @@ QVariant MilestoneItemModel::data( const QModelIndex &index, int role ) const
         }
     }
     result = m_nodemodel.data( n, index.column(), role );
-    if ( role == Qt::DisplayRole && ! result.isValid() ) {
-        result = " "; // HACK to show focus in empty cells
-    }
     return result;
 }
 
