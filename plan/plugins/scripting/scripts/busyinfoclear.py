@@ -7,6 +7,6 @@ import Kross, Plan
 T = Kross.module("kdetranslation")
 
 #TODO some ui
-Plan.project().beginCommand( T.i18nc( "(qtundoformat)", "Clear all external appointments" ) )
+Plan.beginCommand( T.i18nc( "(qtundoformat)", "Clear all external appointments" ) )
 Plan.project().clearExternalAppointments()
-Plan.project().endCommand()
+Plan.endCommand()
