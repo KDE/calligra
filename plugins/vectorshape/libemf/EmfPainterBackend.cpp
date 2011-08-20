@@ -196,27 +196,6 @@ void EmfPainterBackend::eof()
 {
 }
 
-void EmfPainterBackend::setPixelV(EmfDeviceContext &context,
-                                      QPoint &point, quint8 red, quint8 green, quint8 blue,
-                                      quint8 reserved )
-{
-    Q_UNUSED( reserved );
-
-#if DEBUG_EMFPAINT
-    kDebug(31000) << point << red << green << blue;
-#endif
-
-    m_painter->save();
-
-    QPen pen;
-    pen.setColor( QColor( red, green, blue ) );
-    m_painter->setPen( pen );
-    m_painter->drawPoint( point );
-
-    m_painter->restore();
-}
-
-
 void EmfPainterBackend::beginPath(EmfDeviceContext &context)
 {
 #if DEBUG_EMFPAINT
@@ -804,9 +783,39 @@ void EmfPainterBackend::deleteObject(EmfDeviceContext &context, const quint32 ih
     m_objectTable.take( ihObject );
 }
 
+
+// ----------------------------------------------------------------
+//                         Drawing operations
+
+
+void EmfPainterBackend::setPixelV(EmfDeviceContext &context,
+                                      QPoint &point, quint8 red, quint8 green, quint8 blue,
+                                      quint8 reserved )
+{
+    Q_UNUSED( reserved );
+
+    updateFromDeviceContext(context);
+
+#if DEBUG_EMFPAINT
+    kDebug(31000) << point << red << green << blue;
+#endif
+
+    m_painter->save();
+
+    QPen pen;
+    pen.setColor( QColor( red, green, blue ) );
+    m_painter->setPen( pen );
+    m_painter->drawPoint( point );
+
+    m_painter->restore();
+}
+
+
 void EmfPainterBackend::arc(EmfDeviceContext &context,
                                 const QRect &box, const QPoint &start, const QPoint &end )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << box << start << end;
 #endif
@@ -823,6 +832,8 @@ void EmfPainterBackend::arc(EmfDeviceContext &context,
 void EmfPainterBackend::chord(EmfDeviceContext &context,
                                   const QRect &box, const QPoint &start, const QPoint &end )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << box << start << end;
 #endif
@@ -839,6 +850,8 @@ void EmfPainterBackend::chord(EmfDeviceContext &context,
 void EmfPainterBackend::pie(EmfDeviceContext &context,
                                 const QRect &box, const QPoint &start, const QPoint &end )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << box << start << end;
 #endif
@@ -854,6 +867,8 @@ void EmfPainterBackend::pie(EmfDeviceContext &context,
 
 void EmfPainterBackend::ellipse(EmfDeviceContext &context, const QRect &box )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << box;
 #endif
@@ -863,12 +878,18 @@ void EmfPainterBackend::ellipse(EmfDeviceContext &context, const QRect &box )
 
 void EmfPainterBackend::rectangle(EmfDeviceContext &context, const QRect &box )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << box;
 #endif
 
     m_painter->drawRect( box );
 }
+
+
+// ----------------------------------------------------------------
+
 
 void EmfPainterBackend::setMapMode(EmfDeviceContext &context, const quint32 mapMode )
 {
@@ -942,6 +963,8 @@ void EmfPainterBackend::setTextAlign(EmfDeviceContext &context, const quint32 te
 void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
                                        const QRect &bounds, const EmrTextObject &textObject )
 {
+    updateFromDeviceContext(context);
+
     const QPoint  &referencePoint = textObject.referencePoint();
     const QString &text = textObject.textString();
 
@@ -1042,6 +1065,8 @@ void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
 
 void EmfPainterBackend::moveToEx(EmfDeviceContext &context, const qint32 x, const qint32 y )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << x << y;
 #endif
@@ -1054,6 +1079,8 @@ void EmfPainterBackend::moveToEx(EmfDeviceContext &context, const qint32 x, cons
 
 void EmfPainterBackend::lineTo(EmfDeviceContext &context, const QPoint &finishPoint )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << finishPoint;
 #endif
@@ -1069,6 +1096,8 @@ void EmfPainterBackend::lineTo(EmfDeviceContext &context, const QPoint &finishPo
 void EmfPainterBackend::arcTo(EmfDeviceContext &context,
                                   const QRect &box, const QPoint &start, const QPoint &end )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << box << start << end;
 #endif
@@ -1085,6 +1114,8 @@ void EmfPainterBackend::arcTo(EmfDeviceContext &context,
 void EmfPainterBackend::polygon16(EmfDeviceContext &context,
                                       const QRect &bounds, const QList<QPoint> points )
 {
+    updateFromDeviceContext(context);
+
     Q_UNUSED( bounds );
 
 #if DEBUG_EMFPAINT
@@ -1100,6 +1131,8 @@ void EmfPainterBackend::polyLine(EmfDeviceContext &context,
 {
     Q_UNUSED( bounds );
 
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
@@ -1111,6 +1144,8 @@ void EmfPainterBackend::polyLine(EmfDeviceContext &context,
 void EmfPainterBackend::polyLine16(EmfDeviceContext &context,
                                        const QRect &bounds, const QList<QPoint> points )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
@@ -1122,6 +1157,8 @@ void EmfPainterBackend::polyPolygon16(EmfDeviceContext &context,
                                           const QRect &bounds, const QList< QVector< QPoint > > &points )
 {
     Q_UNUSED( bounds );
+
+    updateFromDeviceContext(context);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
@@ -1137,6 +1174,8 @@ void EmfPainterBackend::polyPolyLine16(EmfDeviceContext &context,
 {
     Q_UNUSED( bounds );
 
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
@@ -1151,6 +1190,8 @@ void EmfPainterBackend::polyLineTo16(EmfDeviceContext &context,
 {
     Q_UNUSED( bounds );
 
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
@@ -1163,11 +1204,14 @@ void EmfPainterBackend::polyLineTo16(EmfDeviceContext &context,
 void EmfPainterBackend::polyBezier16(EmfDeviceContext &context,
                                          const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED( bounds );
+
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    Q_UNUSED( bounds );
     QPainterPath path;
     path.moveTo( points[0] );
     for ( int i = 1; i < points.count(); i+=3 ) {
@@ -1179,11 +1223,14 @@ void EmfPainterBackend::polyBezier16(EmfDeviceContext &context,
 void EmfPainterBackend::polyBezierTo16(EmfDeviceContext &context,
                                            const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED( bounds );
+
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    Q_UNUSED( bounds );
     for ( int i = 0; i < points.count(); i+=3 ) {
 	m_path->cubicTo( points[i], points[i+1], points[i+2] );
     }
@@ -1191,6 +1238,8 @@ void EmfPainterBackend::polyBezierTo16(EmfDeviceContext &context,
 
 void EmfPainterBackend::fillPath(EmfDeviceContext &context, const QRect &bounds )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
 #endif
@@ -1201,6 +1250,8 @@ void EmfPainterBackend::fillPath(EmfDeviceContext &context, const QRect &bounds 
 
 void EmfPainterBackend::strokeAndFillPath(EmfDeviceContext &context, const QRect &bounds )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
 #endif
@@ -1211,6 +1262,8 @@ void EmfPainterBackend::strokeAndFillPath(EmfDeviceContext &context, const QRect
 
 void EmfPainterBackend::strokePath(EmfDeviceContext &context, const QRect &bounds )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
 #endif
@@ -1243,6 +1296,8 @@ void EmfPainterBackend::setClipPath(EmfDeviceContext &context, const quint32 reg
 
 void EmfPainterBackend::bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << bitBltRecord.xDest() << bitBltRecord.yDest()
                   << bitBltRecord.cxDest() << bitBltRecord.cyDest()
@@ -1269,6 +1324,8 @@ void EmfPainterBackend::bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRe
 
 void EmfPainterBackend::setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << hex << stretchMode << dec;
 #endif
@@ -1293,6 +1350,8 @@ void EmfPainterBackend::setStretchBltMode(EmfDeviceContext &context, const quint
 
 void EmfPainterBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &record )
 {
+    updateFromDeviceContext(context);
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << "Bounds:    " << record.bounds();
     kDebug(31000) << "Dest rect: "
