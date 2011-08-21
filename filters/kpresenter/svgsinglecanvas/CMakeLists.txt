@@ -14,6 +14,7 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
     ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShapeUtil.cpp
 )
 
 set(svgsinglecanvasexport_PART_SRCS 
@@ -35,5 +36,6 @@ install(TARGETS svgsinglecanvasexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  svg_singlecanvas_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
 
 

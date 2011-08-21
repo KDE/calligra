@@ -84,10 +84,10 @@ bool PresentationViewPortShape::setAttribute(const QString& attrName, const QStr
 
 void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
 {
-    foreach(QString key, m_animationAttributes){
+    foreach(QString key, m_animationAttributes.keys()){
       if(e.hasAttribute(m_ns + ":" + key))
-        m_animationAttributes.insert(key, e.attribute(m_ns + key));
-  }
+      	m_animationAttributes.insert(key, e.attribute(m_ns + ":" + key));
+	}
 }
 
 void PresentationViewPortShape::initializeAnimationProperties()
