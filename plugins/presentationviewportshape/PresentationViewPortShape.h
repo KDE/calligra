@@ -62,6 +62,7 @@ public:
         
     QString toString();
     void setRefId(const QString& refid);
+    
     int sequence();
     QString attribute(const QString& attrName);
     int transitionProfileIndex(const QString& profile);
