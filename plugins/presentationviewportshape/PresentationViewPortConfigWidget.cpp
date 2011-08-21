@@ -26,7 +26,7 @@ PresentationViewPortConfigWidget::~PresentationViewPortConfigWidget()
 
 void PresentationViewPortConfigWidget::updateWidget()
 {
-    m_widget.sequence->setValue(m_shape->sequence());
+    //m_widget.sequence->setValue(m_shape->attribute("sequence"));
   
 }
 
@@ -57,14 +57,14 @@ void PresentationViewPortConfigWidget::open(KoShape* shape)
     if(!m_shape)
       return;
     m_widget.sequence->blockSignals(true);
-    m_widget.sequence->setValue(m_shape->sequence());
+    //m_widget.sequence->setValue(m_shape->sequence());
     m_widget.sequence->blockSignals(false);
     qDebug() << "PVPConfigWidget::open()";
 }
 
 void PresentationViewPortConfigWidget::save()
 {
-    m_shape->setSequence(m_widget.sequence->value());
+    //m_shape->setSequence(m_widget.sequence->value());
 }
 
 

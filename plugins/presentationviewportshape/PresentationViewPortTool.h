@@ -54,7 +54,7 @@ signals:
     void zoomChanged(int);
     void durationChanged(int);
     void transitionProfileChanged(QString);
-
+    
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
@@ -70,6 +70,7 @@ private slots:
     void setZoom(int newZoom);
     void setDuration(int newDuration);
     void setTransitionProfile(const QString profile);
+    void setChangedProperty(QString attrName, QString attrValue);
 };
 
 #endif

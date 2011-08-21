@@ -84,7 +84,7 @@ QWidget * PresentationViewPortTool::createOptionWidget()
     connect(this, SIGNAL(zoomChanged(int)), this, SLOT(setZoom(int)));
     connect(this, SIGNAL(durationChanged(int)), this, SLOT(setDuration(int)));
     connect(this, SIGNAL(transitionProfileChanged(QString)), this, SLOT(setTransitionProfile(const QString)));
-    
+       
     connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
     connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
@@ -100,27 +100,29 @@ QList< QWidget* > PresentationViewPortTool::createOptionWidgets()
     return ow;    
 }
 
+void PresentationViewPortTool::setChangedProperty(const QString attrName, QString attrValue)
+{
+    m_shape->setAttribute(attrName, attrValue);
+}
+
 void PresentationViewPortTool::setSequence(int newSeq)
 {
-    //qDebug() << "in setSequence() \n newSeq = " << newSeq;
-    //m_shape->setSequence(newSeq);
-    m_shape->setAttribute("sequence", QString("%1").arg(newSeq));
-    //qDebug() << "m_shape->sequence = " << m_shape->sequence();
+    setChangedProperty("sequence", QString("%1").arg(newSeq));
 }
 
 void PresentationViewPortTool::setZoom(int newZoom)
 {
-    m_shape->setZoom(newZoom);
+    setChangedProperty("transition-zoom-percent", QString("%1").arg(newZoom));
 }
 
 void PresentationViewPortTool::setDuration(int newDuration)
 {
-    m_shape->setDuration(newDuration); 
+    setChangedProperty("transition-duration-ms", QString("%1").arg(newDuration));
 }
 
 void PresentationViewPortTool::setTransitionProfile(const QString profile)
 {
-    m_shape->setTransitionProfile(profile);
+    setChangedProperty("transition-profile", profile);
 }
 
 void PresentationViewPortTool::mousePressEvent(KoPointerEvent* event)

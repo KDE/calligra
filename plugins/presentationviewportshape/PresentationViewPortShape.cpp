@@ -36,11 +36,10 @@ PresentationViewPortShape::~PresentationViewPortShape()
 {
 
 }
-
+/*
 void PresentationViewPortShape::setSequence(int s)
 {
     m_animationAttributes["sequence"] = QString("%1").arg(s);
-    //qDebug() << "animation attribute sequence set to " << s;
 }
 
 void PresentationViewPortShape::setDuration(int duration)
@@ -62,7 +61,7 @@ int PresentationViewPortShape::sequence()
 {
     return m_animationAttributes["sequence"].toInt();
 }
-
+*/
 QString PresentationViewPortShape::attribute(const QString& attrName)
 {
     return m_animationAttributes[attrName];
@@ -73,7 +72,7 @@ bool PresentationViewPortShape::setAttribute(const QString& attrName, const QStr
     if(m_animationAttributes.contains(attrName))
     {
       m_animationAttributes[attrName] = attrValue;
-      qDebug() <<"attrName" << "set to " << attrValue;
+  //    qDebug() <<"attrName" << "set to " << attrValue;
       return true;
     }
     else
