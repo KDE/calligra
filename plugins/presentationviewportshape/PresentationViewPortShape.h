@@ -53,6 +53,7 @@ public:
 
     //Methods for the frame object
     void initializeAnimationProperties(); 
+    void initializeTransitionProfiles();
     /**
      * Parses frame information from a KoXmlElement,
      * And saves it into this frame.
@@ -68,6 +69,8 @@ public:
     
     int sequence();
     QString attribute(const QString& attrName);
+    int transitionProfileIndex(const QString& profile);
+    
     bool setAttribute(const QString& attrName, const QString& attrValue);
     
 private:     
@@ -78,6 +81,7 @@ private:
 
      QString m_ns;
      QMap<QString, QString> m_animationAttributes;
+     QMap<QString, int> m_transitionProfiles;
 };
 #endif
 

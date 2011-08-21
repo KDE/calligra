@@ -29,6 +29,7 @@ PresentationViewPortShape::PresentationViewPortShape() : m_ns("calligra")
     setShapeId(PresentationViewPortShapeId);
     setName("ViewPort");//TODO remove this?
     initializeAnimationProperties();
+    initializeTransitionProfiles();
 }
 
 
@@ -62,6 +63,24 @@ void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
       if(e.hasAttribute(m_ns + ":" + key))
       	m_animationAttributes.insert(key, e.attribute(m_ns + ":" + key));
 	}
+}
+
+void PresentationViewPortShape::initializeTransitionProfiles()
+{
+    m_transitionProfiles.insert("linear", 1);
+    m_transitionProfiles.insert("accelerate", 2);
+    m_transitionProfiles.insert("strong-accelerate", 3);
+    m_transitionProfiles.insert("decelerate", 4);
+    m_transitionProfiles.insert("strong-decelerate", 5);
+    m_transitionProfiles.insert("accelerate-decelerate", 6);
+    m_transitionProfiles.insert("strong accelerate-decelerate", 7);
+    m_transitionProfiles.insert("decelerate-accelerate", 8);
+    m_transitionProfiles.insert("strong decelerate-accelerate", 9);
+}
+
+int PresentationViewPortShape::transitionProfileIndex(const QString& profile)
+{
+    return m_transitionProfiles[profile];
 }
 
 void PresentationViewPortShape::initializeAnimationProperties()
