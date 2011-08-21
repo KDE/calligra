@@ -67,6 +67,9 @@ public:
     void setTransitionProfile(const QString& profile);
     
     int sequence();
+    QString attribute(const QString& attrName);
+    bool setAttribute(const QString& attrName, const QString& attrValue);
+    
 private:     
      /**
      * @return a default path in the shape of '[ ]'

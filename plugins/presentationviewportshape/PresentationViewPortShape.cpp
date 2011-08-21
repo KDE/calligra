@@ -63,6 +63,26 @@ int PresentationViewPortShape::sequence()
     return m_animationAttributes["sequence"].toInt();
 }
 
+QString PresentationViewPortShape::attribute(const QString& attrName)
+{
+    return m_animationAttributes[attrName];
+}
+
+bool PresentationViewPortShape::setAttribute(const QString& attrName, const QString& attrValue)
+{
+    if(m_animationAttributes.contains(attrName))
+    {
+      m_animationAttributes[attrName] = attrValue;
+      qDebug() <<"attrName" << "set to " << attrValue;
+      return true;
+    }
+    else
+    {
+      qDebug() << "Attribute not found.";
+      return false;
+    }
+}
+
 void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
 {
     foreach(QString key, m_animationAttributes){

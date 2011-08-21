@@ -103,7 +103,8 @@ QList< QWidget* > PresentationViewPortTool::createOptionWidgets()
 void PresentationViewPortTool::setSequence(int newSeq)
 {
     //qDebug() << "in setSequence() \n newSeq = " << newSeq;
-    m_shape->setSequence(newSeq);
+    //m_shape->setSequence(newSeq);
+    m_shape->setAttribute("sequence", QString("%1").arg(newSeq));
     //qDebug() << "m_shape->sequence = " << m_shape->sequence();
 }
 

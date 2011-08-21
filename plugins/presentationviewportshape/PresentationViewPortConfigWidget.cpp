@@ -11,7 +11,7 @@ PresentationViewPortConfigWidget::PresentationViewPortConfigWidget(PresentationV
   Q_ASSERT(m_tool);
   
   m_widget.setupUi(this);
-  //connect(m_widget.sequence, SIGNAL(valueChanged(int)), this, SIGNAL(sequenceChanged(int)));
+  
   connect(m_widget.sequence, SIGNAL(valueChanged(int)), m_tool, SIGNAL(sequenceChanged(int)));
   connect(m_widget.duration, SIGNAL(valueChanged(int)), m_tool, SIGNAL(durationChanged(int)));
   connect(m_widget.zoom, SIGNAL(valueChanged(int)), m_tool, SIGNAL(zoomChanged(int)));
@@ -26,9 +26,7 @@ PresentationViewPortConfigWidget::~PresentationViewPortConfigWidget()
 
 void PresentationViewPortConfigWidget::updateWidget()
 {
-    //TODO
-    qDebug() << "in PVPConfigWidget::updateWidget()";
-    
+    m_widget.sequence->setValue(m_shape->sequence());
   
 }
 
