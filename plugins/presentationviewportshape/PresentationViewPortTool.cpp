@@ -30,30 +30,8 @@
 PresentationViewPortTool::PresentationViewPortTool( KoCanvasBase* canvas )
    : KoToolBase(canvas) , m_shape(0)
 {
-    }
-
-/*void PresentationViewPortTool::shapeSelectionChanged()
-{
-   KoSelection *selection = canvas()->shapeManager()->selection();
-    if (selection->isSelected(m_shape))
-        return;
-
-   foreach (KoShape *shape, selection->selectedShapes()) {
-        PresentationViewPortShape* viewport = dynamic_cast<PresentationViewPortShape*>(shape);
-        if(viewport) {
-            m_shape = viewport;
-            break;
-        }
-    }
-
 }
 
-/*void PresentationViewPortTool::setSequence(int newSeq)
-{
-    m_shape->setSequence(newSeq);
-    emit  sequenceChanged(newSeq);
-}
-*/
 void PresentationViewPortTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);
@@ -88,7 +66,8 @@ QWidget * PresentationViewPortTool::createOptionWidget()
        
     KoShapeManager* manager = canvas()->shapeManager();
     connect(manager, SIGNAL(selectionChanged()), this, SLOT(setCurrentShape()));
-     
+    
+    m_widget->updateWidget();
     return configWidget;
 }
 

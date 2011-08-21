@@ -39,7 +39,6 @@ void SvgParser_Stage::parseAppData(const KoXmlElement& e)
         if(shape->name() == e.attribute("calligra:refid")){
 	  PresentationViewPortShape* pvpShape = dynamic_cast<PresentationViewPortShape*>(shape);
 	  pvpShape->parseAnimationProperties(e);
-	  qDebug() <<"Parsed PVPShape has sequence = " << pvpShape->attribute("sequence");
 	}
       }
 }

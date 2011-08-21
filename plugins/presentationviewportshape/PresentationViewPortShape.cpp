@@ -36,32 +36,7 @@ PresentationViewPortShape::~PresentationViewPortShape()
 {
 
 }
-/*
-void PresentationViewPortShape::setSequence(int s)
-{
-    m_animationAttributes["sequence"] = QString("%1").arg(s);
-}
 
-void PresentationViewPortShape::setDuration(int duration)
-{
-    m_animationAttributes["transition-duration-ms"] = QString("%1").arg(duration);
-}
-
-void PresentationViewPortShape::setTransitionProfile(const QString& profile)
-{
-    m_animationAttributes["transition-profile"] = profile;
-}
-
-void PresentationViewPortShape::setZoom(int zoom)
-{
-    m_animationAttributes["transition-zoom-percent"] = QString("%1").arg(zoom);
-}
-
-int PresentationViewPortShape::sequence()
-{
-    return m_animationAttributes["sequence"].toInt();
-}
-*/
 QString PresentationViewPortShape::attribute(const QString& attrName)
 {
     return m_animationAttributes[attrName];
@@ -72,7 +47,6 @@ bool PresentationViewPortShape::setAttribute(const QString& attrName, const QStr
     if(m_animationAttributes.contains(attrName))
     {
       m_animationAttributes[attrName] = attrValue;
-  //    qDebug() <<"attrName" << "set to " << attrValue;
       return true;
     }
     else
