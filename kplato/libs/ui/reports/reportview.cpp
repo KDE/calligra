@@ -71,6 +71,7 @@
 #include <QModelIndex>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <libs/koreport/common/renderobjects.h>
 
 namespace KPlato
 {
@@ -454,6 +455,7 @@ void ReportView::refresh()
     m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
 
     m_reportDocument = m_preRenderer->generate();
+    m_reportDocument->setReportView(this);
     m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
     m_pageSelector->setCurrentPage( 1 );
 
