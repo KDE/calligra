@@ -24,6 +24,7 @@ set(karbonsvgexport_PART_SRCS
     SvgWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgWriter_Stage.cpp #for testing in Karbon
     ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShapeUtil.cpp
     ${SHAPES_SOURCES} 
     ${LIBSVG_SOURCES}
     )
@@ -43,6 +44,7 @@ set(karbonsvgimport_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgParser_Stage.cpp
     ${SHAPES_SOURCES} 
     ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp
+${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShapeUtil.cpp
     ${LIBSVG_SOURCES}
 )
 

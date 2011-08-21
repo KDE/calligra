@@ -7,6 +7,19 @@
 class PresentationViewPortConfigWidget : public KoShapeConfigWidgetBase
 {
   
+public:
+    PresentationViewPortConfigWidget(PresentationViewPortTool* tool, QWidget* parent = 0);
+    ~PresentationViewPortConfigWidget();
+    
+signals:
+  void sequenceChanged(int);
+  
+private slots:
+    void updateWidget();
+  
+private:
+  void blockChildSignals(bool block);
+  
   //Reimplemented methods
     void open(KoShape *shape);
     void save();
@@ -15,9 +28,5 @@ class PresentationViewPortConfigWidget : public KoShapeConfigWidgetBase
     
     Ui::PresentationViewPortConfigWidget m_widget;
     PresentationViewPortShape* m_shape;
-public:
-    PresentationViewPortConfigWidget(PresentationViewPortTool* tool, QWidget* parent = 0);
-    ~PresentationViewPortConfigWidget();
-    
-
+    PresentationViewPortTool* m_tool;
 };

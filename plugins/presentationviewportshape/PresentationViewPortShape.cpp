@@ -39,7 +39,23 @@ PresentationViewPortShape::~PresentationViewPortShape()
 
 void PresentationViewPortShape::setSequence(int s)
 {
-    m_animationAttributes["sequence"] = s;
+    m_animationAttributes["sequence"] = QString("%1").arg(s);
+    //qDebug() << "animation attribute sequence set to " << s;
+}
+
+void PresentationViewPortShape::setDuration(int duration)
+{
+    m_animationAttributes["transition-duration-ms"] = QString("%1").arg(duration);
+}
+
+void PresentationViewPortShape::setTransitionProfile(const QString& profile)
+{
+    m_animationAttributes["transition-profile"] = profile;
+}
+
+void PresentationViewPortShape::setZoom(int zoom)
+{
+    m_animationAttributes["transition-zoom-percent"] = QString("%1").arg(zoom);
 }
 
 int PresentationViewPortShape::sequence()

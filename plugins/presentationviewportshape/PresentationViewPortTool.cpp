@@ -21,52 +21,49 @@
 #include "PresentationViewPortConfigWidget.h"
 
 #include <QToolButton>
-#include <QGridLayout>
-#include <KLocale>
-#include <KIconLoader>
-#include <KUrl>
-#include <KFileDialog>
-#include <KIO/Job>
 
 #include <KoCanvasBase.h>
-#include <KoImageCollection.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 
 PresentationViewPortTool::PresentationViewPortTool( KoCanvasBase* canvas )
    : KoToolBase(canvas) , m_shape(0)
-    
 {
-  
-    connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ),
-             this, SLOT( shapeSelectionChanged() ) );
+    }
+
+/*void PresentationViewPortTool::shapeSelectionChanged()
+{
+   KoSelection *selection = canvas()->shapeManager()->selection();
+    if (selection->isSelected(m_shape))
+        return;
+
+   foreach (KoShape *shape, selection->selectedShapes()) {
+        PresentationViewPortShape* viewport = dynamic_cast<PresentationViewPortShape*>(shape);
+        if(viewport) {
+            m_shape = viewport;
+            break;
+        }
+    }
+
 }
 
-void PresentationViewPortTool::shapeSelectionChanged()
+/*void PresentationViewPortTool::setSequence(int newSeq)
 {
-    if ( m_shape ) {
-            foreach ( QWidget *w, optionWidgets() ) {
-                KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
-                Q_ASSERT( widget );
-                if ( widget )
-                    widget->open( m_shape );
-            }
-	    }
-
+    m_shape->setSequence(newSeq);
+    emit  sequenceChanged(newSeq);
 }
-
+*/
 void PresentationViewPortTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
         m_shape = dynamic_cast<PresentationViewPortShape*>( shape );
-        if ( m_shape )
+        if (m_shape)
             break;
     }
-    if ( !m_shape )
-    {
+    if (!m_shape){
         emit done();
         return;
     }
@@ -82,6 +79,16 @@ QWidget * PresentationViewPortTool::createOptionWidget()
 {
     PresentationViewPortConfigWidget* configWidget = new PresentationViewPortConfigWidget(this);
     
+    //connect(configWidget, SIGNAL(sequenceChanged(int)), this, SLOT(setSequence(int)));
+    connect(this, SIGNAL(sequenceChanged(int)), this, SLOT(setSequence(int)));
+    connect(this, SIGNAL(zoomChanged(int)), this, SLOT(setZoom(int)));
+    connect(this, SIGNAL(durationChanged(int)), this, SLOT(setDuration(int)));
+    connect(this, SIGNAL(transitionProfileChanged(QString)), this, SLOT(setTransitionProfile(const QString)));
+    
+    connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
+    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
+            configWidget, SLOT(updateWidget()));
+    
     return configWidget;
 }
 
@@ -92,36 +99,33 @@ QList< QWidget* > PresentationViewPortTool::createOptionWidgets()
     
     return ow;    
 }
-/*
-void PresentationViewPortTool::changeUrlPressed()
+
+void PresentationViewPortTool::setSequence(int newSeq)
 {
-    if (m_shape == 0)
-        return;
-}*/
+    //qDebug() << "in setSequence() \n newSeq = " << newSeq;
+    m_shape->setSequence(newSeq);
+    //qDebug() << "m_shape->sequence = " << m_shape->sequence();
+}
+
+void PresentationViewPortTool::setZoom(int newZoom)
+{
+    m_shape->setZoom(newZoom);
+}
+
+void PresentationViewPortTool::setDuration(int newDuration)
+{
+    m_shape->setDuration(newDuration); 
+}
+
+void PresentationViewPortTool::setTransitionProfile(const QString profile)
+{
+    m_shape->setTransitionProfile(profile);
+}
 
 void PresentationViewPortTool::mousePressEvent(KoPointerEvent* event)
 {
         KoSelection *selection = canvas()->shapeManager()->selection();
-            selection->select( m_shape );
-	    
-    
-//    event->ignore();
-
+            selection->select(m_shape);
 }
-/*
-void PresentationViewPortTool::mouseDoubleClickEvent( KoPointerEvent *event )
-{
-    if(canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
-        event->ignore(); // allow the event to be used by another
-        return;
-    }
-    changeUrlPressed();
-}
-
-void PresentationViewPortTool::setImageData(KJob *job)
-{
-  //TODO
-}
-*/
 
 #include <PresentationViewPortTool.moc>

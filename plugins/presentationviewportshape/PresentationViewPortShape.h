@@ -62,6 +62,9 @@ public:
     QString toString();
     void setRefId(const QString& refId);
     void setSequence(int s);
+    void setZoom(int zoom);
+    void setDuration(int duration);
+    void setTransitionProfile(const QString& profile);
     
     int sequence();
 private:     

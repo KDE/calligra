@@ -3,41 +3,54 @@
 
 #include <QLayout>
 #include "PresentationViewPortShape.h"
+#include <KoToolSelection.h>
 
 PresentationViewPortConfigWidget::PresentationViewPortConfigWidget(PresentationViewPortTool * tool, QWidget* parent)
+:m_tool(tool)
 {
-  Q_ASSERT(tool);
+  Q_ASSERT(m_tool);
+  
   m_widget.setupUi(this);
+  //connect(m_widget.sequence, SIGNAL(valueChanged(int)), this, SIGNAL(sequenceChanged(int)));
+  connect(m_widget.sequence, SIGNAL(valueChanged(int)), m_tool, SIGNAL(sequenceChanged(int)));
+  connect(m_widget.duration, SIGNAL(valueChanged(int)), m_tool, SIGNAL(durationChanged(int)));
+  connect(m_widget.zoom, SIGNAL(valueChanged(int)), m_tool, SIGNAL(zoomChanged(int)));
+  connect(m_widget.transitionProfile, SIGNAL(currentIndexChanged(QString)), m_tool, SIGNAL(transitionProfileChanged(QString)));
   
-  connect(m_widget.sequence, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
-  
-   
-    /*QGridLayout *g = new QGridLayout(this);
-    
-    m_title = new QLabel;
-    m_title->setText("View Port");
-    
-    g->addWidget(m_title);
-    
-    setLayout(g);
-    qDebug()<<"In here";*/
-    
-    
 }
 
 PresentationViewPortConfigWidget::~PresentationViewPortConfigWidget()
 {
 
 }
-/*
-bool PresentationViewPortConfigWidget::showOnShapeCreate()
+
+void PresentationViewPortConfigWidget::updateWidget()
 {
-    return true;
+    //TODO
+    qDebug() << "in PVPConfigWidget::updateWidget()";
+    
+  
 }
 
-bool PresentationViewPortConfigWidget::showOnShapeSelect()
+void PresentationViewPortConfigWidget::blockChildSignals(bool block)
 {
-    return true;
+    m_widget.sequence->blockSignals(block);
+}
+
+/*void PresentationViewPortConfigWidget::updateWidget()
+{
+    KoToolSelection* selection = m_tool->selection();
+    if(!selection)
+      return;
+    
+    blockChildSignals(true);    
+    
+    qDebug() << "Value in widget = " << m_widget.sequence->value();
+    m_shape->setSequence(m_widget.sequence->value());
+    qDebug() << m_shape->sequence();
+    
+    blockChildSignals(false);
+  
 }
 */
 void PresentationViewPortConfigWidget::open(KoShape* shape)
@@ -55,4 +68,5 @@ void PresentationViewPortConfigWidget::save()
 {
     m_shape->setSequence(m_widget.sequence->value());
 }
+
 
