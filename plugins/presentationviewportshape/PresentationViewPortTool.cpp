@@ -78,17 +78,17 @@ void PresentationViewPortTool::deactivate()
 QWidget * PresentationViewPortTool::createOptionWidget()
 {
     PresentationViewPortConfigWidget* configWidget = new PresentationViewPortConfigWidget(this);
-    
-    //connect(configWidget, SIGNAL(sequenceChanged(int)), this, SLOT(setSequence(int)));
+ 
+    m_widget = configWidget;//TODO Not a good fix. shapeSelected signal should be connected to configWidget->updateWidget instead
+  
     connect(this, SIGNAL(sequenceChanged(int)), this, SLOT(setSequence(int)));
     connect(this, SIGNAL(zoomChanged(int)), this, SLOT(setZoom(int)));
     connect(this, SIGNAL(durationChanged(int)), this, SLOT(setDuration(int)));
     connect(this, SIGNAL(transitionProfileChanged(QString)), this, SLOT(setTransitionProfile(const QString)));
        
-    connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
-    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
-            configWidget, SLOT(updateWidget()));
-    
+    KoShapeManager* manager = canvas()->shapeManager();
+    connect(manager, SIGNAL(selectionChanged()), this, SLOT(setCurrentShape()));
+     
     return configWidget;
 }
 
@@ -97,7 +97,31 @@ QList< QWidget* > PresentationViewPortTool::createOptionWidgets()
     QList< QWidget* > ow;
     ow.append(createOptionWidget());
     
+    
     return ow;    
+}
+
+void PresentationViewPortTool::setCurrentShape()
+{
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (selection->isSelected(m_shape))
+        return;
+
+    foreach (KoShape *shape, selection->selectedShapes()) {
+        PresentationViewPortShape* viewport = dynamic_cast<PresentationViewPortShape*>(shape);
+        if(viewport) {
+            m_shape = viewport;
+	    qDebug() << "Current shape changed.";
+	    m_widget->updateWidget();    
+	    
+	    break;
+        }
+    }
+}
+
+PresentationViewPortShape* PresentationViewPortTool::currentShape()
+{
+    return m_shape;
 }
 
 void PresentationViewPortTool::setChangedProperty(const QString attrName, QString attrValue)

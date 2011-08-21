@@ -23,15 +23,18 @@
 #include <KJob>
 #include <KoInteractionTool.h>
 #include <qvarlengtharray.h>
+//#include "PresentationViewPortConfigWidget.h"
 
 class PresentationViewPortShape;
-  
+class PresentationViewPortConfigWidget;
+
 class PresentationViewPortTool : public KoToolBase
 {
     Q_OBJECT
 public:
     explicit PresentationViewPortTool(KoCanvasBase* canvas);
 
+    
     /// reimplemented from KoToolBase
     virtual void paint(QPainter&, const KoViewConverter&) {}
     /// reimplemented from KoToolBase
@@ -48,12 +51,15 @@ public:
     /// reimplemented from KoToolBase
     virtual void deactivate();
 
+    PresentationViewPortShape* currentShape();
 signals:
     void shapeSelected();
     void sequenceChanged(int);
     void zoomChanged(int);
     void durationChanged(int);
     void transitionProfileChanged(QString);
+    void widgetDataChanged();
+    void shapeSelectionChanged();
     
 protected:
     /// reimplemented from KoToolBase
@@ -62,15 +68,19 @@ protected:
     
     
 private:
-    PresentationViewPortShape *m_shape;
-
+    PresentationViewPortShape* m_shape;
+    PresentationViewPortConfigWidget* m_widget;
   
 private slots:
     void setSequence(int newSeq);
     void setZoom(int newZoom);
     void setDuration(int newDuration);
     void setTransitionProfile(const QString profile);
+
     void setChangedProperty(QString attrName, QString attrValue);
+    
+    void setCurrentShape();
+
 };
 
 #endif
