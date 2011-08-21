@@ -67,15 +67,16 @@ void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
 
 void PresentationViewPortShape::initializeTransitionProfiles()
 {
-    m_transitionProfiles.insert("linear", 1);
-    m_transitionProfiles.insert("accelerate", 2);
-    m_transitionProfiles.insert("strong-accelerate", 3);
-    m_transitionProfiles.insert("decelerate", 4);
-    m_transitionProfiles.insert("strong-decelerate", 5);
-    m_transitionProfiles.insert("accelerate-decelerate", 6);
-    m_transitionProfiles.insert("strong accelerate-decelerate", 7);
-    m_transitionProfiles.insert("decelerate-accelerate", 8);
-    m_transitionProfiles.insert("strong decelerate-accelerate", 9);
+  int count = -1;
+    m_transitionProfiles.insert("linear", ++count);
+    m_transitionProfiles.insert("accelerate", ++count);
+    m_transitionProfiles.insert("strong-accelerate", ++count);
+    m_transitionProfiles.insert("decelerate", ++count);
+    m_transitionProfiles.insert("strong-decelerate", ++count);
+    m_transitionProfiles.insert("accelerate-decelerate", ++count);
+    m_transitionProfiles.insert("strong accelerate-decelerate", ++count);
+    m_transitionProfiles.insert("decelerate-accelerate", ++count);
+    m_transitionProfiles.insert("strong decelerate-accelerate", ++count);
 }
 
 int PresentationViewPortShape::transitionProfileIndex(const QString& profile)

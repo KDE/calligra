@@ -125,7 +125,7 @@ void PresentationViewPortTool::setDuration(int newDuration)
 
 void PresentationViewPortTool::setTransitionProfile(const QString profile)
 {
-    setChangedProperty("transition-profile", profile);
+    setChangedProperty("transition-profile", profile.toLower());
 }
 
 void PresentationViewPortTool::mousePressEvent(KoPointerEvent* event)
