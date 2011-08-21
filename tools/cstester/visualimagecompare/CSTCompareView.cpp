@@ -127,7 +127,28 @@ int CSTCompareView::updateResult(int index)
 {
     QString result(m_result[index]);
 
-    m_data = result.split(' ');
+    QStringList list = result.split(' ');
+    QStringList filename;
+    QList<int> pageNumbers;
+    for(int i = list.count() - 1 ; i >= 0; --i) {
+        bool ok;
+        int n = list[i].toInt(&ok);
+        if (i >= 1 && ok) {
+            if (!pageNumbers.contains(n))
+                pageNumbers.append(n);
+        } else {
+            for(int j = 0; j <= i; ++j)
+                filename.append(list[j]);
+            break;
+        }
+    }
+
+    m_data.clear();
+    m_data.append(filename.join(" "));
+    qSort(pageNumbers);
+    foreach(int n, pageNumbers)
+        m_data.append(QString::number(n));
+
     if (m_data.size()) {
         m_current->setText(m_data[0]);
     }
