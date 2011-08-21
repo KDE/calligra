@@ -61,12 +61,7 @@ public:
     void parseAnimationProperties(const KoXmlElement& e); 
         
     QString toString();
-    void setRefId(const QString& refId);
-    void setSequence(int s);
-    void setZoom(int zoom);
-    void setDuration(int duration);
-    void setTransitionProfile(const QString& profile);
-    
+    void setRefId(const QString& refid);
     int sequence();
     QString attribute(const QString& attrName);
     int transitionProfileIndex(const QString& profile);

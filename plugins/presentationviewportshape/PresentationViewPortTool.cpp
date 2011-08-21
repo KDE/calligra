@@ -90,12 +90,13 @@ void PresentationViewPortTool::setCurrentShape()
         PresentationViewPortShape* viewport = dynamic_cast<PresentationViewPortShape*>(shape);
         if(viewport) {
             m_shape = viewport;
-	    qDebug() << "Current shape changed.";
+	    //qDebug() << "Current shape changed.";
 	    m_widget->updateWidget();    
 	    
 	    break;
         }
     }
+    
 }
 
 PresentationViewPortShape* PresentationViewPortTool::currentShape()

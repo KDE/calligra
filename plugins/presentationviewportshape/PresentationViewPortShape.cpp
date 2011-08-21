@@ -92,7 +92,7 @@ void PresentationViewPortShape::initializeAnimationProperties()
     m_animationAttributes.insert("transition-profile", "linear");
     m_animationAttributes.insert("hide", "true");
     m_animationAttributes.insert("clip", "true");
-    m_animationAttributes.insert("timeout-enable", "0");
+    m_animationAttributes.insert("timeout-enable", "false");
     m_animationAttributes.insert("sequence", QString("%1").arg(0));
     m_animationAttributes.insert("transition-zoom-percent", QString("%1").arg(1));
     m_animationAttributes.insert("transition-duration-ms", QString("%1").arg(5000));
