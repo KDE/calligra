@@ -30,7 +30,6 @@ PresentationViewPortConfigWidget::~PresentationViewPortConfigWidget()
 void PresentationViewPortConfigWidget::updateWidget()
 {
     PresentationViewPortShape* currShape = m_tool->currentShape();
-//    qDebug() << "Sequence in current shape = " << (currShape->attribute("sequence")).toInt();
    
     m_widget.sequence->setValue((currShape->attribute("sequence")).toInt());
     m_widget.duration->setValue((currShape->attribute("transition-duration-ms").toInt()));
@@ -56,7 +55,3 @@ void PresentationViewPortConfigWidget::updateWidget()
   
 }
 
-void PresentationViewPortConfigWidget::blockChildSignals(bool block)
-{
-    m_widget.sequence->blockSignals(block);
-}
