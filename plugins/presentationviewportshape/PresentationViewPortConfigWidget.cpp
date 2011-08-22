@@ -39,6 +39,20 @@ void PresentationViewPortConfigWidget::updateWidget()
     int index = currShape->transitionProfileIndex(currShape->attribute("transition-profile"));
     m_widget.transitionProfile->setCurrentIndex(index);
     
+    if(currShape->attribute("clip") == "true")
+      m_widget.clip->setCheckState(Qt::Checked);
+    else
+      m_widget.clip->setCheckState(Qt::Unchecked);
+    
+    
+    if(currShape->attribute("timeout-enable") == "true")
+      m_widget.timeoutenable->setCheckState(Qt::Checked);
+    else
+      m_widget.timeoutenable->setCheckState(Qt::Unchecked);
+    
+    m_widget.timeoutms->setValue((currShape->attribute("timeout-ms")).toInt());
+    m_widget.title->setText(currShape->attribute("title"));
+    
   
 }
 
