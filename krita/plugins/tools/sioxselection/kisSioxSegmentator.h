@@ -21,9 +21,6 @@
   TODO
   - Document the class
   - Document the functions
-  - Change confidence matrix input to a krita type
-  - Implement the distance calculation function
-  - Find a relation between quint16 and float Lab types
  */
 class KisSioxSegmentator
 {
@@ -38,9 +35,9 @@ private:
         MIN_FG_INDX = 3
     };
 
-    typedef boost::tuple< float, int, float, int > ClusterDistance;
+    typedef boost::tuple<float, int, float, int> ClusterDistance;
 
-    typedef QHash< const quint16*, ClusterDistance > NearestPixelsMap;
+    typedef QHash<const quint16*, ClusterDistance> NearestPixelsMap;
 
 private:
     /**
@@ -50,6 +47,11 @@ private:
     static const quint8 ALPHA8_RANGE = 255;
 
 public:
+    /**
+      Threshold for cluster keeping in color signature creation.
+     */
+    static const float THRESHOLD = 0.1f;
+
     /**
       Color dimensions of the image where the segmentation is actually applied.
       For now it is the LAB colorspace.
@@ -113,27 +115,23 @@ private:
     /**
       Stores component label (index) by pixel it belongs to.
      */
-    QVector< qint64 > labelField;
+    QVector<qint64> labelField;
 
     /**
-      Holds background signature (a characteristic subset of the background).
+      Number of smoothing steps in the post processing.
      */
-    ColorSignature< const quint16* >::Type bgSignature;
+    int smoothness;
 
     /**
-      Holds foreground signature (a characteristic subset of the foreground).
+      Segmentation retains the largest connected foreground component plus any
+      component with size at least sizeOfLargestComponent/sizeFactorToKeep.
      */
-    ColorSignature< const quint16* >::Type fgSignature;
+    float sizeFactorToKeep;
 
     /** Size of cluster on lab axis. */
     float limitL;
     float limitA;
     float limitB;
-
-    /**
-      Maximum distance of two lab values.
-     */
-    float clusterSize;
 
     /**
       Stores tuples for fast access to nearest background/foreground pixels.
@@ -145,14 +143,17 @@ public:
       Constructs a SioxSegmentator Object to be used for image segmentation.
      */
     KisSioxSegmentator(const KisPaintDeviceSP& pimage,
-        const KisPaintDeviceSP& userConfidenceMatrix,
-        float plimitL = L_DEFAULT_CLUSTER_SIZE,
+        const KisPaintDeviceSP& userConfidenceMatrix, int psmoothness,
+        float psizeFactorToKeep, float plimitL = L_DEFAULT_CLUSTER_SIZE,
         float plimitA = A_DEFAULT_CLUSTER_SIZE,
         float plimitB = B_DEFAULT_CLUSTER_SIZE);
 
     ~KisSioxSegmentator() {}
 
-    bool segmentate(int smoothness, double sizeFactorToKeep);
+    /**
+      Apply the SIOX segmentation algorithm.
+      */
+    bool segmentate();
 
 private:
 
@@ -161,9 +162,7 @@ private:
       algorithm. It sets <CODE>CERTAIN_FOREGROUND_CONFIDENCE</CODE> for
       corresponding areas of equal colors.
 
-      \attention confidenceMatrix type is naive just for a first
-      implementation abstraction. Is necessary to change to a compatible API
-      type.
+      TODO - use an api function
     */
     void fillColorRegions(float confidenceMatrix[]);
 

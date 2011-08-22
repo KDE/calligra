@@ -17,7 +17,8 @@ namespace {
 /**
   Returns the squared euclidian distance between two Lab color pixels.
  */
-inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/);
+template<typename Point1T, typename Point2T>
+inline float getLabColorDiffSquared(const Point1T& point1, const Point2T& point2);
 
 /**
   Blurs confidence matrix with a given symmetrically weighted kernel. In the
@@ -36,13 +37,16 @@ void normalizeConfidenceMatrix(float confidenceMatrix[], int length);
 }
 
 KisSioxSegmentator::KisSioxSegmentator(const KisPaintDeviceSP& pimage,
-    const KisPaintDeviceSP& puserConfidenceMatrix, float plimitL, float plimitA,
+    const KisPaintDeviceSP& puserConfidenceMatrix, int psmoothness,
+    float psizeFactorToKeep, float plimitL, float plimitA,
     float plimitB)
     : image(pimage),
     labImage(new KisPaintDevice(*pimage)),
     userConfidenceMatrix(puserConfidenceMatrix),
     confidenceMatrix(new KisPaintDevice(*puserConfidenceMatrix)),
     labelField(pimage->exactBounds().width() * pimage->exactBounds().height(), -1),
+    smoothness(psmoothness),
+    sizeFactorToKeep(psizeFactorToKeep),
     limitL(plimitL),
     limitA(plimitA),
     limitB(plimitB)
@@ -134,11 +138,11 @@ void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
     } while (labImageIterator->nextPixel());
 }
 
-bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKeep*/)
+bool KisSioxSegmentator::segmentate()
 {
     nearestPixels.clear();
 
-    QVector< const quint16* > knownBg, knownFg;
+    QVector<const quint16*> knownBg, knownFg;
 
     { // Collect known background and foreground.
         KisRectConstIteratorSP labImageIter =
@@ -146,9 +150,9 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
         KisRectConstIteratorSP confidenceMatrixIter =
             confidenceMatrix->createRectConstIteratorNG( confidenceMatrix->exactBounds());
         do {
-            const quint16* data = reinterpret_cast< const quint16* >(
+            const quint16* data = reinterpret_cast<const quint16*>(
                 labImageIter->oldRawData());
-            const quint8* confidenceMatrixData = reinterpret_cast< const quint8* >(
+            const quint8* confidenceMatrixData = reinterpret_cast<const quint8*>(
                 confidenceMatrixIter->oldRawData());
 
             if (*confidenceMatrixData <= BACKGROUND_CONFIDENCE * ALPHA8_RANGE)
@@ -177,6 +181,10 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
         return false;
     }
 
+    float limits[] = {limitL, limitA, limitB};
+    float origin[] = {0, 0, 0};
+    float clusterSizeSquared = 4 * getLabColorDiffSquared(limits, origin);
+
     { // Classify using color signatures.
         KisRectConstIteratorSP labImageIter = labImage->createRectConstIteratorNG(
             labImage->exactBounds());
@@ -185,7 +193,7 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
         KisRectIteratorSP confidenceMatrixIter = confidenceMatrix->createRectIteratorNG(
             confidenceMatrix->exactBounds());
         do {
-            quint8* confidenceMatrixData = reinterpret_cast< quint8* >(
+            quint8* confidenceMatrixData = reinterpret_cast<quint8*>(
                 confidenceMatrixIter->rawData());
 
             if (*confidenceMatrixData >= FOREGROUND_CONFIDENCE * ALPHA8_RANGE) {
@@ -196,7 +204,7 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
             if (*confidenceMatrixData <= BACKGROUND_CONFIDENCE * ALPHA8_RANGE) {
                 confidenceMatrixData[0] = CERTAIN_BACKGROUND_CONFIDENCE * ALPHA8_RANGE;
             } else {
-                const quint16* data = reinterpret_cast< const quint16* >(
+                const quint16* data = reinterpret_cast<const quint16*>(
                     imageIter->oldRawData());
 
                 NearestPixelsMap::iterator nearestIterator = nearestPixels.find(data);
@@ -205,13 +213,13 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
 
                 if (nearestIterator != nearestPixels.end()) {
                     ClusterDistance& tuple = *nearestIterator;
-                    isBackground = get< MIN_BG_DIST >(tuple) <= get< MIN_FG_DIST >(tuple);
+                    isBackground = tuple.get<MIN_BG_DIST>() <= tuple.get<MIN_FG_DIST>();
 
                 } else {
                     ClusterDistance& tuple =
                         (nearestPixels[data] = ClusterDistance(0, 0, 0, 0));
 
-                    const quint16* labData = reinterpret_cast< const quint16* >(
+                    const quint16* labData = reinterpret_cast<const quint16*>(
                         labImageIter->oldRawData());
 
                     // Convert Lab data to float.
@@ -221,11 +229,11 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
                             labData[i]);
                     }
 
-                    float minBg;// = getLabColorDiffSquared(labData, bgSignature[0]);
+                    float minBg = getLabColorDiffSquared(realLabData, bgSignature[0]);
                     int minIndex = 0;
 
                     for (int j = 1; j < bgSignature.size(); j++) {
-                        float distace;// = getLabColorDiffSquared(labData, bgSignature[j]);
+                        float distace = getLabColorDiffSquared(realLabData, bgSignature[j]);
 
                         if (distace < minBg) {
                             minBg = distace;
@@ -233,13 +241,13 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
                         }
                     }
 
-                    get< MIN_BG_DIST >(tuple) = minBg;
-                    get< MIN_BG_INDX >(tuple) = minIndex;
+                    tuple.get<MIN_BG_DIST>() = minBg;
+                    tuple.get<MIN_BG_INDX>() = minIndex;
                     float minFg = FLT_MAX;
                     minIndex = -1;
 
                     for (int j = 0; j < fgSignature.size(); j++) {
-                        float distace;// = getLabColorDiffSquared(labData, fgSignature[j]);
+                        float distace = getLabColorDiffSquared(realLabData, fgSignature[j]);
 
                         if (distace < minFg) {
                             minFg = distace;
@@ -247,11 +255,11 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
                         }
                     }
 
-                    get< MIN_FG_DIST >(tuple) = minFg;
-                    get< MIN_FG_INDX >(tuple) = minIndex;
+                    tuple.get<MIN_FG_DIST>() = minFg;
+                    tuple.get<MIN_FG_INDX>() = minIndex;
 
                     if (fgSignature.size() == 0) {
-                        isBackground;// = (minBg <= clusterSize);
+                        isBackground = (minBg <= clusterSizeSquared);
                         // Impossible to segmentate.
                         //throw IllegalStateException: "Foreground signature does not exists.;
                     } else {
@@ -285,13 +293,14 @@ bool KisSioxSegmentator::segmentate(int /*smoothness*/, double /*sizeFactorToKee
 namespace {
 
 
-inline float getLabColorDiffSquared(/*const quint16* c0, const quint16* c1*/) {
+template<typename Point1T, typename Point2T>
+inline float getLabColorDiffSquared(const Point1T& point1, const Point2T& point2) {
     float euclid = 0;
 
-    // TODO Convert c0 and c1 to float
-//    for (int k = 0; k < 3; k++) {
-//        euclid += (c0[k] - c1[k]) * (c0[k] - c1[k]);
-//    }
+    for (int i = 0; i < KisSioxSegmentator::SOURCE_COLOR_DIMENSIONS; i++) {
+        float diff = (point1[i] - point2[i]);
+        euclid += diff * diff;
+    }
 
     return euclid;
 }
