@@ -62,7 +62,7 @@ To check for changes between different versions do
 
 > cd tester/documents
 > mkdir ../results/sha-of-commit2
-> ./verifydocs.sh ../results/sha-of-commit1 ../results/sha-of-commit2
+> ../verifydocs.sh ../results/sha-of-commit1 ../results/sha-of-commit2
 
 Look at the result
 
