@@ -1227,8 +1227,14 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     }
     // fo:text-align-last
     // fo:text-indent
-    if (!m_isList && pf.indent()) {
-        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.leftMargin() - pf.indent()), para);
+    quint16 indent = pf.indent();
+    // NOTE: MS PowerPoint UI - Setting the indent value for the paragraph at
+    // level ZERO has no effect, however the set vale is stored.
+    if (!pf.level()) {
+        indent = 0;
+    }
+    if (!m_isList) {
+        style.addProperty("fo:text-indent", pptMasterUnitToCm(indent - pf.leftMargin()), para);
     } else {
         //text:space-before already set in style:list-level-properties
         style.addProperty("fo:text-indent", "0cm", para);
@@ -2795,7 +2801,7 @@ QString PptToOdp::processParaSpacing(const int value,
     }
 }
 
-QString PptToOdp::pptMasterUnitToCm(unsigned int value) const
+QString PptToOdp::pptMasterUnitToCm(qint16 value) const
 {
     qreal result = value;
     result *= 2.54;
