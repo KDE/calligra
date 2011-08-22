@@ -2000,7 +2000,9 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
             // With bullets, text can only be one character, which tells us
             // what kind of bullet to use
             unsigned int code = text[0].unicode();
-            // unicode: private use area (0xf000 - 0xf0ff)
+            // unicode: private use area (0xf000 - 0xf0ff).  FIXME: What does
+            // the previous comment mean, is it an interval or is it a minus
+            // sign?  Private use area is in <0xE000, 0xF8FF>
             if ((code & 0xFF00) == 0xF000) {
                 if (code >= 0x20) {
                     // microsoft symbol charset shall apply here.

@@ -72,7 +72,9 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
         char buf[10000];
         lineLength = file.readLine(buf, sizeof(buf));
         if (lineLength != -1) {
-            m_result.append(QString::fromUtf8(buf).trimmed());
+            QString line = QString::fromUtf8(buf).trimmed();
+            if (!line.isEmpty())
+                m_result.append(line);
         }
     } while (lineLength != -1);
 
@@ -91,7 +93,6 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
 
 void CSTCompareView::keyPressEvent(QKeyEvent * event)
 {
-    qDebug() << __PRETTY_FUNCTION__ << event->key() << Qt::Key_Down << Qt::Key_Up << m_currentIndex << m_result.size();
     switch (event->key()) {
     case Qt::Key_B:
         if (m_dataIndex > 1) {
@@ -125,9 +126,29 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
 int CSTCompareView::updateResult(int index)
 {
     QString result(m_result[index]);
-    qDebug() << __PRETTY_FUNCTION__ << result << index;
 
-    m_data = result.split(' ');
+    QStringList list = result.split(' ');
+    QStringList filename;
+    QList<int> pageNumbers;
+    for(int i = list.count() - 1 ; i >= 0; --i) {
+        bool ok;
+        int n = list[i].toInt(&ok);
+        if (i >= 1 && ok) {
+            if (!pageNumbers.contains(n))
+                pageNumbers.append(n);
+        } else {
+            for(int j = 0; j <= i; ++j)
+                filename.append(list[j]);
+            break;
+        }
+    }
+
+    m_data.clear();
+    m_data.append(filename.join(" "));
+    qSort(pageNumbers);
+    foreach(int n, pageNumbers)
+        m_data.append(QString::number(n));
+
     if (m_data.size()) {
         m_current->setText(m_data[0]);
     }

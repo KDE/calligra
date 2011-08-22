@@ -233,7 +233,7 @@ QModelIndex CalendarItemModel::index( int row, int column, const QModelIndex &pa
     return QModelIndex();
 }
 
-QModelIndex CalendarItemModel::index( const Calendar *calendar) const
+QModelIndex CalendarItemModel::index( const Calendar *calendar, int column ) const
 {
     if ( m_project == 0 || calendar == 0 ) {
         return QModelIndex();
@@ -249,7 +249,7 @@ QModelIndex CalendarItemModel::index( const Calendar *calendar) const
     if ( row == -1 ) {
         return QModelIndex();
     }
-    return createIndex( row, 0, a );
+    return createIndex( row, column, a );
 
 }
 
@@ -389,16 +389,7 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
             kDebug()<<"data: invalid display value column"<<index.column();
             return QVariant();
     }
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
-        }
-        return result;
-    }
-    // define default action
-
-    return QVariant();
+    return result;
 }
 
 bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
@@ -412,8 +403,8 @@ bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value
     }
     Calendar *a = calendar( index );
     switch (index.column()) {
-        case 0: return setName( a, value, role );
-        case 1: return setTimeZone( a, value, role );
+        case Name: return setName( a, value, role );
+        case TimeZone: return setTimeZone( a, value, role );
         default:
             kWarning()<<"data: invalid display value column "<<index.column();
             return false;
@@ -426,8 +417,8 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "Timezone" );
+                case Name: return i18nc( "@title:column", "Name" );
+                case TimeZone: return i18nc( "@title:column", "Timezone" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -438,8 +429,8 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::calendarName();
-            case 1: return ToolTip::calendarTimeZone();
+            case Name: return ToolTip::calendarName();
+            case TimeZone: return ToolTip::calendarTimeZone();
             default: return QVariant();
         }
     }
@@ -905,12 +896,6 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
             break;
         }
     }
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
-        }
-    }
     return result;
 }
 
@@ -1139,6 +1124,221 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
 
     painter->restore();
     return r;
+}
+
+//-------------------------------------
+CalendarExtendedItemModel::CalendarExtendedItemModel( QObject *parent )
+    : CalendarItemModel( parent )
+{
+}
+
+Qt::ItemFlags CalendarExtendedItemModel::flags( const QModelIndex &index ) const
+{
+    Qt::ItemFlags flags = CalendarItemModel::flags( index );
+    if ( ! m_readWrite || ! index.isValid() || calendar( index ) == 0 ) {
+        return flags;
+    }
+    return flags |=  Qt::ItemIsEditable;
+}
+
+
+QModelIndex CalendarExtendedItemModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+        return QModelIndex();
+    }
+    Calendar *par = calendar( parent );
+    if ( par == 0 ) {
+        if ( row < m_project->calendars().count() ) {
+            return createIndex( row, column, m_project->calendars().at( row ) );
+        }
+    } else if ( row < par->calendars().count() ) {
+        return createIndex( row, column, par->calendars().at( row ) );
+    }
+    return QModelIndex();
+}
+
+int CalendarExtendedItemModel::columnCount( const QModelIndex & ) const
+{
+    return CalendarItemModel::columnCount() + 2; // weekdays + date
+}
+
+QVariant CalendarExtendedItemModel::data( const QModelIndex &index, int role ) const
+{
+    QVariant result;
+    Calendar *a = calendar( index );
+    if ( a == 0 ) {
+        return QVariant();
+    }
+    int col = index.column() - CalendarItemModel::columnCount( index );
+    if ( col < 0 ) {
+        return CalendarItemModel::data( index, role );
+    }
+    switch ( col ) {
+        default:
+            kDebug()<<"Fetching data from weekdays and date is not supported";
+            break;
+    }
+    return result;
+}
+
+bool CalendarExtendedItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
+{
+    int col = index.column() - CalendarItemModel::columnCount( index );
+    if ( col < 0 ) {
+        return CalendarItemModel::setData( index, value, role );
+    }
+    if ( ( flags( index ) &( Qt::ItemIsEditable ) ) == 0 ) {
+        return false;
+    }
+    Calendar *cal = calendar( index );
+    if ( cal == 0 || col > 2 ) {
+        return false;
+    }
+    switch ( col ) {
+        case 0: { // weekday
+            if ( ! value.type() == QVariant::List ) {
+                return false;
+            }
+            QVariantList lst = value.toList();
+            if ( lst.count() < 2 ) {
+                return false;
+            }
+            int wd = CalendarWeekdays::dayOfWeek( lst.at( 0 ).toString() );
+            if ( wd < 1 || wd > 7 ) {
+                return false;
+            }
+            CalendarDay *day = new CalendarDay();
+            if ( lst.count() == 2 ) {
+                QString state = lst.at( 1 ).toString();
+                if ( state == "NonWorking" ) {
+                    day->setState( CalendarDay::NonWorking );
+                } else if ( state == "Undefined" ) {
+                    day->setState( CalendarDay::Undefined );
+                } else {
+                    delete day;
+                    return false;
+                }
+                CalendarModifyWeekdayCmd *cmd = new CalendarModifyWeekdayCmd( cal, wd, day, i18nc( "(qtundo_format)", "Modify calendar weekday" ) );
+                emit executeCommand( cmd );
+                return true;
+            }
+            if ( lst.count() % 2 == 0 ) {
+                delete day;
+                return false;
+            }
+            day->setState( CalendarDay::Working );
+            for ( int i = 1; i < lst.count(); i = i + 2 ) {
+                QTime t1 = lst.at( i ).toTime();
+                QTime t2 = lst.at( i + 1 ).toTime();
+                int length = t1.msecsTo( t2 );
+                if ( t1 == QTime( 0, 0, 0 ) && t2 == t1 ) {
+                    length = 24 * 60 * 60 *1000;
+                } else if ( length < 0 && t2 == QTime( 0, 0, 0 ) ) {
+                    length += 24 * 60 * 60 *1000;
+                } else if ( length == 0 || ( length < 0 && t2 != QTime( 0, 0, 0 ) ) ) {
+                    delete day;
+                    return false;
+                }
+                length = qAbs( length );
+                day->addInterval( t1, length );
+            }
+            CalendarModifyWeekdayCmd *cmd = new CalendarModifyWeekdayCmd( cal, wd, day, i18nc( "(qtundo_format)", "Modify calendar weekday" ) );
+            emit executeCommand( cmd );
+            return true;
+        }
+        case 1: { // day
+            if ( ! value.type() == QVariant::List ) {
+                return false;
+            }
+            CalendarDay *day = new CalendarDay();
+            QVariantList lst = value.toList();
+            if ( lst.count() < 2 ) {
+                return false;
+            }
+            day->setDate( lst.at( 0 ).toDate() );
+            if ( ! day->date().isValid() ) {
+                delete day;
+                return false;
+            }
+            if ( lst.count() == 2 ) {
+                QString state = lst.at( 1 ).toString();
+                if ( state == "NonWorking" ) {
+                    day->setState( CalendarDay::NonWorking );
+                } else if ( state == "Undefined" ) {
+                    day->setState( CalendarDay::Undefined );
+                } else {
+                    delete day;
+                    return false;
+                }
+                CalendarModifyDayCmd *cmd = new CalendarModifyDayCmd( cal, day, i18nc( "(qtundo_format)", "Modify calendar date" ) );
+                emit executeCommand( cmd );
+                return true;
+            }
+            if ( lst.count() % 2 == 0 ) {
+                delete day;
+                return false;
+            }
+            day->setState( CalendarDay::Working );
+            for ( int i = 1; i < lst.count(); i = i + 2 ) {
+                QTime t1 = lst.at( i ).toTime();
+                QTime t2 = lst.at( i + 1 ).toTime();
+                int length = t1.msecsTo( t2 );
+                if ( t1 == QTime( 0, 0, 0 ) && t2 == t1 ) {
+                    length = 24 * 60 * 60 *1000;
+                } else if ( length < 0 && t2 == QTime( 0, 0, 0 ) ) {
+                    length += 24 * 60 * 60 *1000;
+                } else if ( length == 0 || ( length < 0 && t2 != QTime( 0, 0, 0 ) ) ) {
+                    delete day;
+                    return false;
+                }
+                length = qAbs( length );
+                day->addInterval( t1, length );
+            }
+            CalendarModifyDayCmd *cmd = new CalendarModifyDayCmd( cal, day, i18nc( "(qtundo_format)", "Modify calendar date" ) );
+            emit executeCommand( cmd );
+            return true;
+        }
+    }
+    return false;
+}
+
+QVariant CalendarExtendedItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    int col = section - CalendarItemModel::columnCount();
+    if ( col < 0 ) {
+        return CalendarItemModel::headerData( section, orientation, role );
+    }
+    if ( orientation == Qt::Horizontal ) {
+        if ( role == Qt::DisplayRole ) {
+            switch ( col ) {
+                case 0: return i18nc( "@title:column", "Weekday" );
+                case 1: return i18nc( "@title:column", "Date" );
+                default: return QVariant();
+            }
+        } else if ( role == Qt::TextAlignmentRole ) {
+            switch ( col ) {
+                default: return QVariant();
+            }
+        }
+    }
+    if ( role == Qt::ToolTipRole ) {
+        switch ( section ) {
+            default: return QVariant();
+        }
+    }
+    return QVariant();
+}
+
+int CalendarExtendedItemModel::columnNumber(const QString& name) const
+{
+    QStringList lst;
+    lst << "Weekday"
+        << "Date";
+    if ( lst.contains( name ) ) {
+        return lst.indexOf( name ) + CalendarItemModel::columnCount();
+    }
+    return CalendarItemModel::columnMap().keyToValue( name.toUtf8() );
 }
 
 } // namespace KPlato

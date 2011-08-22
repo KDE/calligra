@@ -46,6 +46,8 @@ namespace Scripting {
             KPlato::Calendar *kplatoCalendar() const { return m_calendar; }
             
         public Q_SLOTS:
+            /// Return the project this calendar is part of
+            QObject* project();
             /// Return the calendars id
             QString id() const;
             /// Return the calendars id

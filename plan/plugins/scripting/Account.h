@@ -47,6 +47,8 @@ namespace Scripting {
             KPlato::Account *kplatoAccount() const { return static_cast<KPlato::Account*>( m_account ); }
             
         public Q_SLOTS:
+            /// Return the project this account is part of
+            QObject* project();
             /// Return the accounts name
             QString name() const;
             

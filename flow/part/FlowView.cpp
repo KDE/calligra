@@ -40,6 +40,8 @@ FlowView::FlowView(FlowDocument* document, QWidget* parent)
     initializeGUI();
 
     connect(m_document, SIGNAL(updateGui()), this, SLOT(updateGui()));
+
+    setAcceptDrops(true);
 }
 
 FlowView::~FlowView()

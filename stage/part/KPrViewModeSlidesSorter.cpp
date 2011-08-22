@@ -707,7 +707,7 @@ void KPrViewModeSlidesSorter::disableEditCustomShowButtons()
 
 void KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons()
 {
-    m_buttonAddSlideToCurrentShow->setEnabled(m_slidesSorterView->hasFocus());
+    m_buttonAddSlideToCurrentShow->setEnabled(m_slidesSorterView->hasFocus() && m_editCustomSlideShow);
     m_buttonDelSlideFromCurrentShow->setEnabled(m_customSlideShowView->hasFocus());
     KActionCollection *ac = canvas()->canvasController()->actionCollection();
     ac->action("edit_delete")->setEnabled(m_customSlideShowView->hasFocus() ||

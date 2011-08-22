@@ -47,6 +47,9 @@ namespace Scripting {
             KPlato::Node *kplatoNode() const { return m_node; }
             
         public Q_SLOTS:
+            /// Return the project this task is part of
+            QObject* project();
+            /// Return the tasks name
             QString name();
 
             QDate startDate();

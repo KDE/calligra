@@ -30,6 +30,9 @@
 #define M_PI 3.1415926535897932384626
 #endif
 
+//ECMA-376, 20.1.10.68, p.3431 - ST_TextFontSize (Text Font Size)
+#define FONTSIZE_MAX 4000
+
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
 #endif
@@ -731,10 +734,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 
     m_currentDrawStyle->addProperty("draw:textarea-vertical-align", m_shapeTextPosition);
-    m_currentDrawStyle->addProperty("fo:margin-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
@@ -1610,6 +1613,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     READ_PROLOGUE2(DrawingML_p)
 
     m_largestParaFont = 0;
+    m_minParaFont = FONTSIZE_MAX;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1704,6 +1708,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                     qreal realSize = fontSize.toDouble();
                     if (realSize > m_largestParaFont) {
                         m_largestParaFont = realSize;
+                    }
+                    if (realSize < m_minParaFont) {
+                        m_minParaFont = realSize;
                     }
                 }
             }
@@ -1825,19 +1832,34 @@ Q_UNUSED(pprRead);
 
      body->startElement("text:p", false);
 
-     // OOxml sometimes defines margins as percentages, however percentages in odf mean a bit different
-     // thing, so here we transform them to points
+     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
+     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
+     // refers to the corresponding margin of a parent style.  Let's convert
+     // the percentage value into points to keep it simple.
+     //
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
          spcBef.remove("%");
-         qreal percentage = spcBef.toDouble() / 100.0;
-         m_currentParagraphStyle.addPropertyPt("fo:margin-top", percentage * m_largestParaFont);
+         qreal percentage = spcBef.toDouble();
+         qreal margin = 0;
+#ifdef PPTXXMLSLIDEREADER_CPP
+         margin = processParagraphSpacing(percentage, m_minParaFont);
+#else
+         margin = (percentage * m_largestParaFont) / 100.0;
+#endif
+     m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
      }
      QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
      if (spcAft.contains("%")) {
          spcAft.remove("%");
-         qreal percentage = spcAft.toDouble() / 100.0;
-         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
+         qreal percentage = spcAft.toDouble();
+         qreal margin = 0;
+#ifdef PPTXXMLSLIDEREADER_CPP
+         margin = processParagraphSpacing(percentage, m_minParaFont);
+#else
+         margin = (percentage * m_largestParaFont) / 100.0;
+#endif
+         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
      }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1945,6 +1967,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         qreal realSize = fontSize.toDouble();
         if (realSize > m_largestParaFont) {
             m_largestParaFont = realSize;
+        }
+        if (realSize < m_minParaFont) {
+            m_minParaFont = realSize;
         }
     }
 
@@ -4929,19 +4954,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     inheritTextStyle(m_currentTextStyle);
 #endif
 
-    // Following settings are only applied if defined so they don't overwrite defaults
-    // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    // NOTE: marL and indent are stored into <style:list-level-label-alignment>
+    // element to control position of the 2nd line of the list-item and
+    // position of it's label.
+    m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
+
+    // Following settings are only applied if defined so they don't overwrite
+    // defaults previous defined either in the slideLayoutm SlideMaster or the
+    // defaultStyles.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
-        // value added to left marginal
-        if (!indent.isEmpty()) {
-            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        }
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-    } else if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+        m_currentBulletProperties.setMargin(realMarginal);
+    }
+    if (!indent.isEmpty()) {
+        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentBulletProperties.setIndent(firstInd);
     }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));

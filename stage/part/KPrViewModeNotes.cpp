@@ -22,6 +22,7 @@
 
 #include <QtCore/QEvent>
 #include <QtGui/QPainter>
+#include <QGraphicsWidget>
 
 #include <KDebug>
 
@@ -34,6 +35,7 @@
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomController.h>
+#include <KoInteractionTool.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
@@ -195,6 +197,11 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     selection->select(notes->textShape());
     selection->setActiveLayer( layer );
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
+    // we need to make sue to switch to the default tool so that the text tool does notice the selection chane
+    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+    // we need to set the focus to the text tool again so that we can start typing 
+    // otherwise you need to click on the shape again
+    m_canvas->canvasWidget() ? canvas()->canvasWidget()->setFocus() : canvas()->canvasItem()->setFocus();
     KoToolManager::instance()->switchToolRequested(tool);
 }
 

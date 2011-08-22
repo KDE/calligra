@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plan
+Name[de]=Plan
 Name[el]=Plan
 Name[es]=Plan
 Name[et]=Plan
@@ -63,6 +64,7 @@ GenericName[sv]=Projekthantering
 GenericName[ta]=திட்ட மேலாண்மை
 GenericName[tg]=Идоракунии лоиҳа
 GenericName[tr]=Proje Yönetimi
+GenericName[ug]=قۇرۇلۇش باشقۇرۇش
 GenericName[uk]=Керування проектами
 GenericName[uz]=Loyiha boshqaruvi
 GenericName[uz@cyrillic]=Лойиҳа бошқаруви
@@ -77,7 +79,7 @@ Icon=calligraplan
 X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=application/x-vnd.kde.plan
 X-KDE-NativeMimeType=application/x-vnd.kde.plan
-X-DocPath=http://userbase.kde.org/Plan
+X-DocPath=http://userbase.kde.org/Plan/Manual
 Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true
 X-KDE-NOTKoDocumentEmbeddable=true

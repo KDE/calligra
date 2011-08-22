@@ -140,9 +140,14 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     colorMap = masterColorMap;
 }
 
-void PptxXmlSlideReaderContext::initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
-        const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
-        const QVector<QString>& _defaultBulletColors, const QVector<QString>& _defaultTextColors, const QVector<QString>& _defaultLatinFonts)
+void PptxXmlSlideReaderContext::initializeContext(
+        const MSOOXML::DrawingMLTheme& theme,
+        const QVector<KoGenStyle>& _defaultParagraphStyles,
+        const QVector<KoGenStyle>& _defaultTextStyles,
+        const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
+        const QVector<QString>& _defaultBulletColors,
+        const QVector<QString>& _defaultTextColors,
+        const QVector<QString>& _defaultLatinFonts)
 {
     // Only now, we can fully prepare default text styles, as we know the theme we are using
     // And we have the mapping available
@@ -1972,15 +1977,15 @@ void PptxXmlSlideReader::inheritBodyPropertiesHelper(QString id, PptxSlideProper
         }
         right = slideProperties->textRightBorders.value(id);
         if (!right.isEmpty()) {
-            m_shapeTextLeftOff = right;
+            m_shapeTextRightOff = right;
         }
         top = slideProperties->textTopBorders.value(id);
         if (!top.isEmpty()) {
-            m_shapeTextLeftOff = top;
+            m_shapeTextTopOff = top;
         }
         bottom = slideProperties->textBottomBorders.value(id);
         if (!bottom.isEmpty()) {
-            m_shapeTextLeftOff = bottom;
+            m_shapeTextBottomOff = bottom;
         }
         if (slideProperties->m_textAutoFit.value(id) != MSOOXML::Utils::autoFitUnUsed) {
              if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
@@ -2015,6 +2020,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
     // In all non notes cases, we take them first from masterslide
     inheritBodyPropertiesHelper(d->phIdx, m_context->slideMasterProperties);
     inheritBodyPropertiesHelper(d->phType, m_context->slideMasterProperties);
+
 
     if (m_context->type == SlideLayout) {
         return; // No futher actions needed for layout
@@ -2603,6 +2609,22 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
 
     m_currentShapeProperties = 0; // Making sure that nothing uses them.
     return KoFilter::OK;
+}
+
+qreal
+PptxXmlSlideReader::processParagraphSpacing(const qreal margin, const qreal fontSize)
+{
+    // MS PowerPoint specific: font-independent-line-spacing is used, which
+    // means that line height is calculated only from the font height as
+    // specified by the font size properties.  If a number of font sizes are
+    // used in a paragraph, then use the minimum.
+    //
+    // lineHeight = fontSize + (1/4 * fontSize);
+    //
+    // margin-top/margin-bottom are calculated based on the lineHeight.
+    //
+    qreal lineHeight = fontSize + (0.25 * fontSize);
+    return (margin * lineHeight) / 100;
 }
 
 #define blipFill_NS "a"

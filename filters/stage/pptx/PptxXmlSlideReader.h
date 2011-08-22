@@ -265,6 +265,13 @@ protected:
     // Inherits shapes geometry, fill color etc. from slideLayout/slideMaster
     void inheritShapeGeometry();
 
+    /**
+     * MS PowerPoint specifc calculation of the paragraph margin.
+     * @param spcAft/spcBef (paragraph spacing) as provided in pptx [%]
+     * @param minimum font size detected in the paragraph [point]
+     * @return paragraph margin [point]
+     */
+    qreal processParagraphSpacing(const qreal margin, const qreal fontSize);
 private:
 
     void saveBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
@@ -286,7 +293,9 @@ public:
     //! Creates the context object.
     /*! @param _slideProperties is written for SlideMaster type and read for Slide type. */
     PptxXmlSlideReaderContext(
-        PptxImport& _import, const QString& _path, const QString& _file,
+        PptxImport& _import,
+        const QString& _path,
+        const QString& _file,
         uint _slideNumber,
         MSOOXML::DrawingMLTheme* _themes,
         PptxXmlSlideReader::Type _type,

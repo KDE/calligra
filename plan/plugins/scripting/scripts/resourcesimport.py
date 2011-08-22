@@ -27,8 +27,11 @@ class ResourcesImporter:
 
         if self.dialog.exec_loop():
             try:
+                Plan.beginCommand( T.i18nc( "(qtundo_format )", "Import resources" ) )
                 self.doImport( self.proj )
+                Plan.endCommand()
             except:
+                Plan.revertCommand() # play safe in case parts where loaded
                 self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doImport( self, project ):
@@ -50,8 +53,13 @@ class ResourcesImporter:
 
         for ci in range( otherproj.calendarCount() ):
             self.doImportCalendar( project, otherproj.calendarAt( ci ) )
-        #TODO Default calendar
-
+        
+        defcal = otherproj.defaultCalendar()
+        if defcal is not None:
+            dc = project.findCalendar( defcal.id() )
+            if dc is not None:
+                project.setDefaultCalendar( dc )
+        
         for gi in range( otherproj.resourceGroupCount() ):
             othergroup = otherproj.resourceGroupAt( gi )
             gr = project.findResourceGroup( othergroup.id() )
@@ -66,8 +74,6 @@ class ResourcesImporter:
                     self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("No resource to copy from"))
                     return
                 self.doImportResource( project, gr, otherresource )
-
-        project.addCommand( T.i18nc( "(qtundoformat)", "Import resources" ) );
 
     def doImportResource( self, project, group, resource ):
         r = project.findResource( resource.id() )
@@ -86,11 +92,7 @@ class ResourcesImporter:
             #TODO let user decide
             self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Calendar already exists: %1", [cal.name()]))
             return
-        # python doesn't seem to give a 0 pointer for a None object
-        if parent is None:
-            cal = project.createCalendar( calendar )
-        else:
-            cal = project.createCalendar( calendar, parent )
+        cal = project.createCalendar( calendar, parent )
         if cal is None:
             self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Unable to create copy of calendar: %1", [calendar.name()]))
             return

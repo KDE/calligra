@@ -175,7 +175,7 @@ public:
     
     CalendarDay();
     CalendarDay(int state);
-    explicit CalendarDay(const QDate& date, int state=0);
+    explicit CalendarDay(const QDate& date, int state=Undefined);
     CalendarDay(CalendarDay *day);
     ~CalendarDay();
 
@@ -302,7 +302,9 @@ public:
      */
     CalendarDay *weekday(int day) const;
     CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }
-    
+
+    static int dayOfWeek( const QString &name );
+
     const QMap<int, CalendarDay*> &weekdayMap() const;
     
     IntMap stateMap() const;

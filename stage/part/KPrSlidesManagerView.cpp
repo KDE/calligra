@@ -205,9 +205,9 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
 
             //Left button is used to deselect, but rigth button needs a selected item for
             //context menu actions
-            if ((item.row() < 0) & (mouseEv->button() != Qt::LeftButton)) {
+            if ((item.row() < 0) && (mouseEv->button() != Qt::LeftButton)) {
                 // Selects the last item of the row
-                QModelIndex last_index = model()->index(cursorSlideIndex() - 1, 0, QModelIndex());
+                QModelIndex last_index = model()->index(cursorSlideIndex(), 0, QModelIndex());
                 setCurrentIndex(last_index);
                 emit indexChanged(last_index);
             }
@@ -282,13 +282,15 @@ int KPrSlidesManagerView::cursorSlideIndex() const
     QPair <int, int> m_pair = cursorRowAndColumn();
     int slidesNumber = qFloor((contentsRect().width() - (margin + spacing() - contentsMargins().right())) /
                               (itemSize().width() + spacing()));
-    return (m_pair.first + m_pair.second * slidesNumber);
+    slidesNumber = qMax(slidesNumber, 1);
+    return (m_pair.first + (m_pair.second > 0 ? ((m_pair.second - 1) * slidesNumber) + 1: 0));
 }
 
 QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
 {
     QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
     int slidesNumber = qFloor((contentsRect().width() - (margin + spacing() - contentsMargins().right())) / size.width());
+    slidesNumber = qMax(slidesNumber, 1);
     int scrollBarValue = verticalScrollBar()->value();
     QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
     int numberColumn = qFloor(cursorPosition.x() / size.width());

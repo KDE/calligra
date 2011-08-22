@@ -88,7 +88,7 @@ public:
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    QModelIndex index( const Calendar* calendar ) const;
+    QModelIndex index( const Calendar *calendar, int column = 0 ) const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -236,6 +236,28 @@ public:
 
     virtual QRectF paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date,  KDateTableDataModel *model );
     
+};
+
+class KPLATOMODELS_EXPORT CalendarExtendedItemModel : public CalendarItemModel
+{
+    Q_OBJECT
+public:
+    explicit CalendarExtendedItemModel( QObject *parent = 0 );
+
+    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+
+    using CalendarItemModel::index;
+    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+
+    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
+
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+
+
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    int columnNumber( const QString &name ) const;
 };
 
 
