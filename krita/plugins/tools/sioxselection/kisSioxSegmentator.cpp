@@ -163,17 +163,13 @@ bool KisSioxSegmentator::segmentate()
         }  while (labImageIter->nextPixel() & confidenceMatrixIter->nextPixel());
     }
 
-    // Create color signatures
+    // Create color signatures.
+    QVector< QVector<float> > bgSignature, fgSignature;
 
-    // TODO
-    // - possibly, the signatures would be better manipulated in floats
-    ColorSignature< quint16 > bgColorSign, fgColorSign;
-
-    QVector< QVector< quint16 > > bgSignature, fgSignature;
-    bgColorSign.createSignature(bgSignature, knownBg, limitL, limitA, limitB,
-        BACKGROUND_CONFIDENCE);
-    fgColorSign.createSignature(fgSignature, knownFg, limitL, limitA, limitB,
-        BACKGROUND_CONFIDENCE);
+    ColorSignature<quint16, float>::createSignature(bgSignature, knownBg, limitL,
+        limitA, limitB, THRESHOLD);
+    ColorSignature<quint16, float>::createSignature(fgSignature, knownFg, limitL,
+        limitA, limitB, THRESHOLD);
 
     // It is not possible to segmentate de image in this case.
     // TODO - throw a specific exception
