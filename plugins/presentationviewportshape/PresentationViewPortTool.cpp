@@ -63,7 +63,11 @@ QWidget * PresentationViewPortTool::createOptionWidget()
     connect(this, SIGNAL(zoomChanged(int)), this, SLOT(setZoom(int)));
     connect(this, SIGNAL(durationChanged(int)), this, SLOT(setDuration(int)));
     connect(this, SIGNAL(transitionProfileChanged(QString)), this, SLOT(setTransitionProfile(const QString)));
-       
+    connect(this, SIGNAL(titleChanged(QString)), this, SLOT(setTitle(QString)));
+    connect(this, SIGNAL(clipChanged(int)), this, SLOT(setClip(int)));
+    connect(this, SIGNAL(timeoutenableChanged(int)), this, SLOT(setTimeoutEnable(int)));
+    connect(this, SIGNAL(timeoutMsChanged(int)), this, SLOT(setTimeoutMs(int)));
+    
     KoShapeManager* manager = canvas()->shapeManager();
     connect(manager, SIGNAL(selectionChanged()), this, SLOT(setCurrentShape()));
     
@@ -127,6 +131,32 @@ void PresentationViewPortTool::setDuration(int newDuration)
 void PresentationViewPortTool::setTransitionProfile(const QString profile)
 {
     setChangedProperty("transition-profile", profile.toLower());
+}
+
+void PresentationViewPortTool::setClip(int clip)
+{
+  if(clip)
+    setChangedProperty("clip", "true");
+  else
+    setChangedProperty("clip", "false");
+}
+
+void PresentationViewPortTool::setTimeoutEnable(int enable)
+{
+    if(enable)
+      setChangedProperty("timeout-enable", "true");
+    else
+      setChangedProperty("timeout-enable", "false");
+}
+
+void PresentationViewPortTool::setTimeoutMs(int timeout)
+{
+    setChangedProperty("timeout-ms", QString("%1").arg(timeout));
+}
+
+void PresentationViewPortTool::setTitle(const QString title)
+{
+    setChangedProperty("title", title);
 }
 
 void PresentationViewPortTool::mousePressEvent(KoPointerEvent* event)

@@ -16,6 +16,10 @@ PresentationViewPortConfigWidget::PresentationViewPortConfigWidget(PresentationV
   connect(m_widget.duration, SIGNAL(valueChanged(int)), m_tool, SIGNAL(durationChanged(int)));
   connect(m_widget.zoom, SIGNAL(valueChanged(int)), m_tool, SIGNAL(zoomChanged(int)));
   connect(m_widget.transitionProfile, SIGNAL(currentIndexChanged(QString)), m_tool, SIGNAL(transitionProfileChanged(QString)));
+  connect(m_widget.timeoutenable, SIGNAL(stateChanged(int)), m_tool, SIGNAL(timeoutenableChanged(int)));
+  connect(m_widget.clip, SIGNAL(stateChanged(int)), m_tool, SIGNAL(clipChanged(bool)));
+  connect(m_widget.title, SIGNAL(textChanged(QString)), m_tool, SIGNAL(titleChanged(QString)));
+  connect(m_widget.timeoutms, SIGNAL(valueChanged(int)), m_tool, SIGNAL(timeoutMsChanged(int)));
 }
 
 PresentationViewPortConfigWidget::~PresentationViewPortConfigWidget()

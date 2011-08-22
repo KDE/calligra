@@ -54,10 +54,16 @@ public:
     PresentationViewPortShape* currentShape();
 signals:
     void shapeSelected();
+    
     void sequenceChanged(int);
     void zoomChanged(int);
     void durationChanged(int);
     void transitionProfileChanged(QString);
+    void titleChanged(QString);
+    void clipChanged(int);
+    void timeoutenableChanged(int);
+    void timeoutMsChanged(int);
+    
     void widgetDataChanged();
     void shapeSelectionChanged();
     
@@ -76,7 +82,11 @@ private slots:
     void setZoom(int newZoom);
     void setDuration(int newDuration);
     void setTransitionProfile(const QString profile);
-
+    void setTitle(const QString title);
+    void setClip(int clip);
+    void setTimeoutEnable(int enable);
+    void setTimeoutMs(int timeout);
+    
     void setChangedProperty(QString attrName, QString attrValue);
     
     void setCurrentShape();
