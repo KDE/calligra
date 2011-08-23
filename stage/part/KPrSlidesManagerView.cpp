@@ -207,7 +207,13 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
             //context menu actions
             if ((item.row() < 0) && (mouseEv->button() != Qt::LeftButton)) {
                 // Selects the last item of the row
-                QModelIndex last_index = model()->index(cursorSlideIndex(), 0, QModelIndex());
+                QModelIndex last_index;
+                if (cursorSlideIndex() >= model()->rowCount(QModelIndex())) {
+                    last_index= model()->index(cursorSlideIndex() - 1, 0, QModelIndex());
+                }
+                else {
+                    last_index = model()->index(cursorSlideIndex(), 0, QModelIndex());
+                }
                 setCurrentIndex(last_index);
                 emit indexChanged(last_index);
             }
