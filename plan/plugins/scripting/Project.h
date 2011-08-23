@@ -84,7 +84,8 @@ namespace Scripting {
             virtual ~Project();
 
             KPlato::Project *kplatoProject() const { return static_cast<KPlato::Project*>( m_node ); }
-            
+            void addCommand( KUndo2Command *cmd );
+
         public Q_SLOTS:
             /// Return the default calendar, 0 if no default calendar is set
             QObject *defaultCalendar();
@@ -148,6 +149,7 @@ namespace Scripting {
             /// Find resource with identity @p id
             QObject *findResource( const QString &id );
             /// Create a copy of @p resource and add to @p group
+            /// If @p resource is a Team resource, the team members must exist.
             /// If a resource with the same identy as the @p resource already exixts, 0 is returned
             QObject *createResource( QObject *group, QObject *resource );
             /// Create a new resource and add to @p group

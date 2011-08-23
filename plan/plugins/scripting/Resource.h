@@ -70,10 +70,12 @@ namespace Scripting {
             /// Clear appointments with identity @p id
             void clearExternalAppointments( const QString &id );
 
-            /// Number of child resources. Child resources is not supported. Always returns 0.
+            /// Number of child resources. Only team resources has children (team members)
             int childCount() const;
-            /// Return resource at @index. Child resources is not supported. Always returns 0.
+            /// Return resource at @index.  Only team resources has children (team members)
             QObject *childAt( int index ) const;
+            /// Set list of children. The list of existing children is cleared
+            void setChildren( const QList<QObject*> &members );
 
         private:
             Project *m_project;
