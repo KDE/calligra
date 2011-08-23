@@ -1,5 +1,5 @@
 [Desktop Entry]
-X-KDE-ServiceTypes=KPlato/SchedulerPlugin
+X-KDE-ServiceTypes=Plan/SchedulerPlugin
 Type=Service
 X-KDE-Library=kplatorcpsscheduler
 

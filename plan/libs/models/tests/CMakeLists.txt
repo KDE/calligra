@@ -6,7 +6,7 @@ include_directories( .. ../../kernel ${KOODF_INCLUDES} ${KUNDO2_INCLUDES})
 set(ResourceModelTester_SRCS ResourceModelTester.cpp )
  
  
-kde4_add_unit_test(ResourceModelTester TESTNAME KPlato-ResourceModelTester  ${ResourceModelTester_SRCS})
+kde4_add_unit_test(ResourceModelTester TESTNAME Plan-ResourceModelTester  ${ResourceModelTester_SRCS})
  
 target_link_libraries(ResourceModelTester  ${KDE4_KDECORE_LIBS} kplatomodels kplatokernel ${QT_QTTEST_LIBRARY})
  
@@ -16,7 +16,7 @@ target_link_libraries(ResourceModelTester  ${KDE4_KDECORE_LIBS} kplatomodels kpl
 set(FlatProxyModelTester_SRCS FlatProxyModelTester.cpp)
  
  
-kde4_add_unit_test(FlatProxyModelTester TESTNAME KPlato-FlatProxyModelTester  ${FlatProxyModelTester_SRCS})
+kde4_add_unit_test(FlatProxyModelTester TESTNAME Plan-FlatProxyModelTester  ${FlatProxyModelTester_SRCS})
  
 target_link_libraries(FlatProxyModelTester  ${KDE4_KDEUI_LIBS} kplatomodels ${QT_QTTEST_LIBRARY})
  

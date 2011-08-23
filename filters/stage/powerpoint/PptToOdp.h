@@ -479,7 +479,7 @@ private:
     * @param value master unit value to convert
     * @return value as centimeters with cm appended to the end
     */
-    QString pptMasterUnitToCm(unsigned int value) const;
+    QString pptMasterUnitToCm(qint16 value) const;
 
     /**
      * @brief Converts ColorIndexStruct to QColor
