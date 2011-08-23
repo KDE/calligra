@@ -1212,6 +1212,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
         style.addProperty("fo:margin-left", pptMasterUnitToCm(pf.leftMargin()), para);
     }
     // fo:margin-right
+    style.addProperty("fo:margin-right", "0cm", para);
     // fo:margin-top
     style.addProperty("fo:margin-top", processParaSpacing(pf.spaceBefore(), fs, false), para);
     // fo:orphans
@@ -2547,7 +2548,9 @@ PptToOdp::processParagraph(Writer& out,
             out.xml.endElement(); //text:list-item
             out.xml.startElement("text:list-item");
         }
-        m_continueList = true;
+        if (pf.fBulletHasAutoNumber()) {
+            m_continueList = true;
+        }
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
         m_continueList = false;

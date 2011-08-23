@@ -737,9 +737,9 @@ GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
 #define GETTER(TYPE, TR_VAL, NAME, TEST, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
-    for (int i = 0; i < TR_VAL.size(); i++) { \
-        if (TR_VAL[i] > 0) { \
-            return TR_VAL[i]; \
+    if (TR_VAL.size() > 1) { \
+        if (TR_VAL[0] > -1) { \
+            return TR_VAL[0]; \
         } \
     } \
     for (int i = 0; i < pfs.size(); i++) { \
@@ -747,6 +747,11 @@ TYPE PptTextPFRun::NAME() const \
             if ((pfs[i])->masks.TEST) { \
                 return (pfs[i])->NAME; \
             } \
+        } \
+    } \
+    if (!TR_VAL.isEmpty()) { \
+        if (TR_VAL.last() > -1) { \
+            return TR_VAL.last(); \
         } \
     } \
     return DEFAULT; \
