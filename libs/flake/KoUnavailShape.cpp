@@ -215,8 +215,10 @@ void KoUnavailShape::draw(QPainter &painter) const
         QRect bounds(0, 0, boundingRect().width(), boundingRect().height());
         painter.drawPixmap(bounds, d->pixmapPreview);
     }
-    else {
-        // Draw a nice question mark with a frame around it.
+    else if (shapes().isEmpty()) {
+        // Draw a nice question mark with a frame around it if there
+        // is no other preview image. If there is a contained image
+        // shape, we don't need to draw anything.
 
         painter.save();
 
