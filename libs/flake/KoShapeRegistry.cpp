@@ -199,8 +199,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
 #if 1
                 KoUnavailShape *uShape = new KoUnavailShape();
                 uShape->setShapeId(KoUnavailShape_SHAPEID);
-                //FIXME: Add creating/setting the collection here.
-
+                //FIXME: Add creating/setting the collection here(?)
                 uShape->loadOdf(e, context);
 
                 // Check whether we can load a shape to fit the current object.
