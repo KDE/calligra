@@ -213,6 +213,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                     if (childShape) {
                         kDebug(30006) << "Shape was found! Adding as child of unavail shape and stopping search";
                         uShape->addShape(childShape);
+                        childShape->setPosition(QPointF(qreal(0.0), qreal(0.0)));
                         break;
                     }
                 }
