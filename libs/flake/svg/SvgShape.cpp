@@ -17,31 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SVGSAVINGCONTEXT_H
-#define SVGSAVINGCONTEXT_H
+#include "SvgShape.h"
+#include "SvgSavingContext.h"
+#include "SvgStyleWriter.h"
 
-class KoXmlWriter;
-class QIODevice;
-
-/// Context for saving svg files
-class SvgSavingContext
+SvgShape::~SvgShape()
 {
-public:
-    /// Creates a new svg svaing context on the specified output device
-    SvgSavingContext(QIODevice &outputDevice);
+}
 
-    /// Virtual destructor
-    virtual ~SvgSavingContext();
+bool SvgShape::saveSvg(SvgSavingContext &/*context*/)
+{
+    return false;
+}
 
-    /// Provides access to the style writer
-    KoXmlWriter &styleWriter();
-
-    /// Provides access to the shape writer
-    KoXmlWriter &shapeWriter();
-
-private:
-    class Private;
-    Private * const d;
-};
-
-#endif // SVGSAVINGCONTEXT_H
+bool SvgShape::loadSvg(const KoXmlElement &/*element*/, SvgLoadingContext &/*context*/)
+{
+    return false;
+}

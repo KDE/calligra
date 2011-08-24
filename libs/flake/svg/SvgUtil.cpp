@@ -20,8 +20,6 @@
 #include "SvgUtil.h"
 #include "SvgGraphicContext.h"
 
-#include <KarbonGlobal.h>
-
 #include <KoUnit.h>
 
 #include <QtCore/QString>
@@ -32,6 +30,8 @@
 
 #define DPI 72.0
 
+#define DEG2RAD(degree) degree*180.0/M_PI
+
 double SvgUtil::fromUserSpace(double value)
 {
     return (value * DPI) / 90.0;
@@ -40,6 +40,21 @@ double SvgUtil::fromUserSpace(double value)
 double SvgUtil::toUserSpace(double value)
 {
     return (value * 90.0) / DPI;
+}
+
+QPointF SvgUtil::toUserSpace(const QPointF &point)
+{
+    return QPointF(toUserSpace(point.x()), toUserSpace(point.y()));
+}
+
+QRectF SvgUtil::toUserSpace(const QRectF &rect)
+{
+    return QRectF(toUserSpace(rect.topLeft()), toUserSpace(rect.size()));
+}
+
+QSizeF SvgUtil::toUserSpace(const QSizeF &size)
+{
+    return QSizeF(toUserSpace(size.width()), toUserSpace(size.height()));
 }
 
 double SvgUtil::toPercentage(QString s)
@@ -136,9 +151,9 @@ QTransform SvgUtil::parseTransform(const QString &transform)
                 result.scale(params[0].toDouble(), params[0].toDouble());
             }
         } else if (subtransform[0].toLower() == "skewx") {
-            result.shear(tan(params[0].toDouble() * KarbonGlobal::pi_180), 0.0F);
+            result.shear(tan(DEG2RAD(params[0].toDouble())), 0.0F);
         } else if (subtransform[0].toLower() == "skewy") {
-            result.shear(0.0F, tan(params[0].toDouble() * KarbonGlobal::pi_180));
+            result.shear(0.0F, tan(DEG2RAD(params[0].toDouble())));
         } else if (subtransform[0] == "matrix") {
             if (params.count() >= 6) {
                 result.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,

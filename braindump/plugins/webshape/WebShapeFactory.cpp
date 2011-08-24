@@ -34,7 +34,7 @@ WebShapeFactory::WebShapeFactory()
 {
     setToolTip(i18n("A web shape"));
     setIcon("applications-internet");
-    setOdfElementNames("http://kde.org/braindump", QStringList("web"));
+    setXmlElementNames("http://kde.org/braindump", QStringList("web"));
 }
 
 KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
