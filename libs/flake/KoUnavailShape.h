@@ -24,8 +24,8 @@
 
 
 // Calligra
-#include <KoShape.h>
 #include <KoFrameShape.h>
+#include <KoShapeContainer.h>
 
 
 class QPainter;
@@ -49,7 +49,7 @@ class QPainter;
  * The KoUnavailShape always has to be present, and is the only shape
  * that is not implemented as a plugin.
  */
-class KoUnavailShape : public KoShape, public KoFrameShape {
+class KoUnavailShape : public KoFrameShape, public KoShapeContainer {
 public:
     KoUnavailShape();
     virtual ~KoUnavailShape();
@@ -58,6 +58,8 @@ public:
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented from KoShapeContainer
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented
