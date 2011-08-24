@@ -2352,8 +2352,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
-        // value added to left marginal
+        m_currentBulletProperties.setMargin(realMarginal);
+        m_listStylePropertiesAltered = true;
+
+        // NOTE: indent is not the same as fo:text-indent in odf, but rather an
+        // additional value added to left marginal.
+        //
+        // FIXME: This looks very suspicious and I don't understand the
+        // previous note.  Indent on the 1st level has to be ignored for
+        // PowerPoint (in case we do not consider the paragraph as a
+        // list-item).  For a list-item, both fo:margin-left and fo:text-indent
+        // should be ZERO.  Positioning of list-items is defined by
+        // the style:list-level-properties element.
         if (!indent.isEmpty()) {
             realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         }
@@ -2362,6 +2372,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
     }
+    if (!indent.isEmpty()) {
+        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentBulletProperties.setIndent(firstInd);
+        m_listStylePropertiesAltered = true;
+    }
+
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
@@ -2407,6 +2423,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+/*     m_currentCombinedBulletProperties[m_currentListLevel] = m_currentBulletProperties; */
 
     READ_EPILOGUE
 }
@@ -4960,8 +4977,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
 
     // Following settings are only applied if defined so they don't overwrite
-    // defaults previous defined either in the slideLayoutm SlideMaster or the
-    // defaultStyles.
+    // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
         m_currentBulletProperties.setMargin(realMarginal);
