@@ -71,11 +71,11 @@
 // 
 // In an ODF frame, only the first line, i.e. the first object
 // contains the real contents.  All the rest of the objects are used /
-// shown if we cannot handle the first one.  The most common case is
+// shown if we cannot handle the first one.  The most common cases are
 // that there is only one object inside the frame OR that there are 2
 // and the 2nd is a picture.
 //
-// Sometimes, e.g. in the case of embededd documents, the reference
+// Sometimes, e.g. in the case of an embedded document, the reference
 // points not to a file but to a directory structure inside the ODF
 // store. 
 //
