@@ -57,106 +57,146 @@ void EmfDebugBackend::eof()
 }
 
 void EmfDebugBackend::setPixelV(EmfDeviceContext &context,
-                                    QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved )
+                                QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved )
 {
-    Q_UNUSED( reserved );
+    Q_UNUSED(context);
+    Q_UNUSED(reserved);
+
     kDebug(33100) << "EMR_SETPIXELV:" << point << QColor( red, green, blue );
 }
 
 void EmfDebugBackend::beginPath(EmfDeviceContext &context)
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_BEGINPATH";
 }
 
 void EmfDebugBackend::closeFigure(EmfDeviceContext &context)
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_CLOSEFIGURE";
 }
 
 void EmfDebugBackend::endPath(EmfDeviceContext &context)
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_ENDPATH";
 }
 
 void EmfDebugBackend::saveDC(EmfDeviceContext &context)
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SAVEDC";
 }
 
 void EmfDebugBackend::restoreDC(EmfDeviceContext &context, qint32 savedDC )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_RESTOREDC" << savedDC;
 }
 
 void EmfDebugBackend::setMetaRgn(EmfDeviceContext &context)
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETMETARGN";
 }
 
 void EmfDebugBackend::setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETWINDOWORGEX" << origin;
 }
 
 void EmfDebugBackend::setWindowExtEx(EmfDeviceContext &context, const QSize &size )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETWINDOWEXTEX" << size;
 }
 
 void EmfDebugBackend::setViewportOrgEx(EmfDeviceContext &context, const QPoint &origin )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETVIEWPORTORGEX" << origin;
 }
 
 void EmfDebugBackend::setViewportExtEx(EmfDeviceContext &context, const QSize &size )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETVIEWPORTEXTEX" << size;
 }
 
 void EmfDebugBackend::deleteObject(EmfDeviceContext &context, const quint32 ihObject )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_DELETEOBJECT:" << ihObject;
 }
 
 void EmfDebugBackend::arc(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_ARC" << box << start << end;
 }
 
 void EmfDebugBackend::chord(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_CHORD" << box << start << end;
 }
 
 void EmfDebugBackend::pie(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_PIE" << box << start << end;
 }
 
 void EmfDebugBackend::ellipse(EmfDeviceContext &context, const QRect &box )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_ELLIPSE:" << box;
 }
 
 void EmfDebugBackend::rectangle(EmfDeviceContext &context, const QRect &box )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_RECTANGLE:" << box;
 }
 
 void EmfDebugBackend::modifyWorldTransform(EmfDeviceContext &context, quint32 mode, float M11, float M12,
 					float M21, float M22, float Dx, float Dy )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_MODIFYWORLDTRANSFORM:" << mode << QTransform ( M11, M12, M21, M22, Dx, Dy );
 }
 
 void EmfDebugBackend::setWorldTransform(EmfDeviceContext &context, float M11, float M12, float M21,
 				     float M22, float Dx, float Dy )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETWORLDTRANSFORM:" << QTransform ( M11, M12, M21, M22, Dx, Dy );
 }
 
 void EmfDebugBackend::setMapMode(EmfDeviceContext &context, quint32 mapMode )
 {
+    Q_UNUSED(context);
+
     QString modeAsText;
     switch ( mapMode ) {
     case MM_TEXT:
@@ -192,6 +232,8 @@ void EmfDebugBackend::setMapMode(EmfDeviceContext &context, quint32 mapMode )
 
 void EmfDebugBackend::setBkMode(EmfDeviceContext &context, const quint32 backgroundMode )
 {
+    Q_UNUSED(context);
+
     if ( backgroundMode == TRANSPARENT ) {
         kDebug(33100) << "EMR_SETBKMODE: Transparent";
     } else if ( backgroundMode == OPAQUE ) {
@@ -204,6 +246,8 @@ void EmfDebugBackend::setBkMode(EmfDeviceContext &context, const quint32 backgro
 
 void EmfDebugBackend::setPolyFillMode(EmfDeviceContext &context, const quint32 polyFillMode )
 {
+    Q_UNUSED(context);
+
     if ( polyFillMode == ALTERNATE ) {
 	kDebug(33100) << "EMR_SETPOLYFILLMODE: OddEvenFill";
     } else if ( polyFillMode == WINDING ) {
@@ -216,24 +260,32 @@ void EmfDebugBackend::setPolyFillMode(EmfDeviceContext &context, const quint32 p
 
 void EmfDebugBackend::setLayout(EmfDeviceContext &context, const quint32 layoutMode )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETLAYOUT:" << layoutMode;
 }
 
-void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context, const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
+void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context,
+                                             const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_CREATEFONTINDIRECTW:" << extCreateFontIndirectW.fontFace();
 }
 
 void EmfDebugBackend::setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SETTEXTALIGN:" << textAlignMode;
 }
 
 void EmfDebugBackend::createPen(EmfDeviceContext &context, quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
 			       quint8 red, quint8 green, quint8 blue, quint8 reserved )
 {
-    Q_UNUSED( y );
-    Q_UNUSED( reserved );
+    Q_UNUSED(context);
+    Q_UNUSED(y);
+    Q_UNUSED(reserved);
 
     kDebug(33100) << "EMR_CREATEPEN" << "ihPen:" << ihPen << ", penStyle:" << penStyle
                   << "width:" << x << "color:" << QColor( red, green, blue );
@@ -243,7 +295,8 @@ void EmfDebugBackend::createBrushIndirect(EmfDeviceContext &context, quint32 ihB
 				       quint8 green, quint8 blue, quint8 reserved,
 				       quint32 BrushHatch )
 {
-    Q_UNUSED( reserved );
+    Q_UNUSED(context);
+    Q_UNUSED(reserved);
 
     kDebug(33100) << "EMR_CREATEBRUSHINDIRECT:" << ihBrush << "style:" << BrushStyle
              << "Colour:" << QColor( red, green, blue ) << ", Hatch:" << BrushHatch;
@@ -251,16 +304,22 @@ void EmfDebugBackend::createBrushIndirect(EmfDeviceContext &context, quint32 ihB
 
 void EmfDebugBackend::createMonoBrush(EmfDeviceContext &context, quint32 ihBrush, Bitmap *bitmap )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_CREATEMONOBRUSH:" << ihBrush << "bitmap:" << bitmap;
 }
 
 void EmfDebugBackend::selectObject(EmfDeviceContext &context, const quint32 ihObject )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_SELECTOBJECT" << ihObject;
 }
 
 void EmfDebugBackend::extTextOut(EmfDeviceContext &context, const QRect &bounds, const EmrTextObject &textObject )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_EXTTEXTOUTW:" << bounds
                   << textObject.referencePoint()
                   << textObject.textString();
@@ -268,86 +327,125 @@ void EmfDebugBackend::extTextOut(EmfDeviceContext &context, const QRect &bounds,
 
 void EmfDebugBackend::moveToEx(EmfDeviceContext &context, const qint32 x, const qint32 y )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_MOVETOEX" << QPoint( x, y );
 }
 
 void EmfDebugBackend::lineTo(EmfDeviceContext &context, const QPoint &finishPoint )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_LINETO" << finishPoint;
 }
 
 void EmfDebugBackend::arcTo(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_ARCTO" << box << start << end;
 }
 
 void EmfDebugBackend::polygon16(EmfDeviceContext &context, const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYGON16" << bounds << points;
 }
 
 void EmfDebugBackend::polyLine(EmfDeviceContext &context, const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYLINE" << bounds << points;
 }
 
 void EmfDebugBackend::polyLine16(EmfDeviceContext &context, const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYLINE16" << bounds << points;
 }
 
-void EmfDebugBackend::polyPolyLine16(EmfDeviceContext &context, const QRect &bounds, const QList< QVector< QPoint > > &points )
+void EmfDebugBackend::polyPolyLine16(EmfDeviceContext &context,
+                                     const QRect &bounds, const QList< QVector< QPoint > > &points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYPOLYLINE16" << bounds << points;
 }
 
-void EmfDebugBackend::polyPolygon16(EmfDeviceContext &context, const QRect &bounds, const QList< QVector< QPoint > > &points )
+void EmfDebugBackend::polyPolygon16(EmfDeviceContext &context,
+                                    const QRect &bounds, const QList< QVector< QPoint > > &points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYPOLYGON16" << bounds << points;
 }
 
-void EmfDebugBackend::polyLineTo16(EmfDeviceContext &context, const QRect &bounds, const QList<QPoint> points )
+void EmfDebugBackend::polyLineTo16(EmfDeviceContext &context,
+                                   const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYLINETO16" << bounds << points;
 }
 
-void EmfDebugBackend::polyBezier16(EmfDeviceContext &context, const QRect &bounds, const QList<QPoint> points )
+void EmfDebugBackend::polyBezier16(EmfDeviceContext &context,
+                                   const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYBEZIER16" << bounds << points;
 }
 
-void EmfDebugBackend::polyBezierTo16(EmfDeviceContext &context, const QRect &bounds, const QList<QPoint> points )
+void EmfDebugBackend::polyBezierTo16(EmfDeviceContext &context,
+                                     const QRect &bounds, const QList<QPoint> points )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_POLYBEZIERTO16" << bounds << points;
 }
 
 void EmfDebugBackend::fillPath(EmfDeviceContext &context, const QRect &bounds )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_FILLPATH" << bounds;
 }
 
 void EmfDebugBackend::strokeAndFillPath(EmfDeviceContext &context, const QRect &bounds )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_STROKEANDFILLPATH" << bounds;
 }
 
 void EmfDebugBackend::strokePath(EmfDeviceContext &context, const QRect &bounds )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_STROKEPATH" << bounds;
 }
 
 void EmfDebugBackend::setClipPath(EmfDeviceContext &context, quint32 regionMode )
 {
+    Q_UNUSED(context);
+
    kDebug(33100) << "EMR_SETCLIPPATH:" << regionMode;
 }
 
 void EmfDebugBackend::bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_BITBLT:" << bitBltRecord.destinationRectangle();
 }
 
 void EmfDebugBackend::setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode )
 {
+    Q_UNUSED(context);
+
     switch ( stretchMode ) {
     case 0x01:
         kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
@@ -368,6 +466,8 @@ void EmfDebugBackend::setStretchBltMode(EmfDeviceContext &context, const quint32
 
 void EmfDebugBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord )
 {
+    Q_UNUSED(context);
+
     kDebug(33100) << "EMR_STRETCHDIBITS:" << stretchDiBitsRecord.sourceRectangle()
                   << "," << stretchDiBitsRecord.destinationRectangle();
 }
