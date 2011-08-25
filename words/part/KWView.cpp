@@ -1702,8 +1702,18 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         params.setProperty("qimage", v);
 
         KoShape *shape = factory->createShape(&params, kwdocument()->resourceManager());
-        // XXX: calculate to fit in the document.
-        shape->setSize(shape->size() * 0.5);
+
+        // resize the shape so it will fit in the document, with some nice
+        // hard-coded constants.
+        qreal pageWidth = currentPage().width();
+        qreal pageHeight = currentPage().height();
+        if (shape->size().width() > pageWidth * 0.8 ||
+                shape->size().height() > pageHeight)
+        {
+            QSizeF sz = shape->size();
+            sz.scale(QSizeF(pageWidth * 0.6, pageHeight *.6), Qt::KeepAspectRatio);
+            shape->setSize(sz);
+        }
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
