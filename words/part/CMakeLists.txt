@@ -1,7 +1,7 @@
 project(wordspart)
 
 #TODO port to textlayout-rework
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
