@@ -4,6 +4,8 @@
 #include <utility>
 #include <QVector>
 
+#include <KoColorSpaceMaths.h>
+
 /**
  * Color signature based on clusterization of an image area.
  *
@@ -13,8 +15,6 @@
  * subintervals.
  *
  * TODO
- * - receive inputs in constructor
- * - define a tuple type for limits in stageOne and stageTwo
  * - document stageOne and stageTwo
  */
 template<typename PixelT, typename SignatureT>
@@ -25,22 +25,21 @@ private:
 
     typedef QVector<CentroidPair> CentroidSet;
 
-    // TODO - change to template paramenter.
     static const int POINT_LENGTH = 3;
 
     /**
       Stage one of clustering.
      */
     static void stageOne(QVector< QVector<const PixelT*> >& clusters,
-        const QVector<const PixelT*>& points, float lLimit, float aLimit,
-        float bLimit, quint32 depth);
+        const QVector<const PixelT*>& points, const SignatureT lLimit,
+        const SignatureT aLimit, const SignatureT bLimit, const quint32 depth);
 
     /**
       Stage two of clustering.
      */
     static void stageTwo(QVector< QVector<SignatureT> >& signature,
-        const CentroidSet& points, float lLimit, float aLimit, float bLimit,
-        int total, float threshold, int depth);
+        const CentroidSet& points, const SignatureT lLimit, const SignatureT aLimit,
+        const SignatureT bLimit, const int total, const float threshold, const quint32 depth);
 
 public:
     /**
@@ -53,33 +52,32 @@ public:
 
 template<typename PixelT, typename SignatureT>
 void ColorSignature<PixelT, SignatureT>::stageOne(QVector< QVector<const PixelT*> >& clusters,
-    const QVector<const PixelT*>& points, float lLimit, float aLimit,
-    float bLimit, quint32 depth)
+    const QVector<const PixelT*>& points, const SignatureT lLimit, const SignatureT aLimit,
+    const SignatureT bLimit, const quint32 depth)
 {
     if (points.size() < 1)
         return;
 
     const int currentDimension = depth % POINT_LENGTH;
     PixelT min = points[0][currentDimension];
-    PixelT max = points[0][currentDimension];
+    PixelT max = min;
 
     for (int i = 1; i < points.size(); i++) {
-        if (min > points[i][currentDimension])
-            min = points[i][currentDimension];
+        PixelT currentPixelXCoord = points[i][currentDimension];
+        if (min > currentPixelXCoord)
+            min = currentPixelXCoord;
 
-        if (max < points[i][currentDimension])
-            max = points[i][currentDimension];
+        if (max < currentPixelXCoord)
+            max = currentPixelXCoord;
     }
 
     // TODO - verify correct type
-    SignatureT limit = currentDimension == 0 ?
-        lLimit : currentDimension == 1 ?
-        aLimit : bLimit;
+    const SignatureT limit = currentDimension == 0 ?
+        lLimit : currentDimension == 1 ? aLimit : bLimit;
 
     // Split according to Rubner-Rule.
-    // TODO - verify correct type
-    if (max - min > limit) {
-        // TODO - verify correct type
+    SignatureT range = KoColorSpaceMaths<PixelT, SignatureT>::scaleToA(max - min);
+    if (range > limit) {
         PixelT pivotvalue = (max + min) / 2;
 
         QVector<const PixelT*> smallerpoints, biggerpoints;
@@ -104,32 +102,32 @@ void ColorSignature<PixelT, SignatureT>::stageOne(QVector< QVector<const PixelT*
 
 template<typename PixelT, typename SignatureT>
 void ColorSignature<PixelT, SignatureT>::stageTwo(QVector< QVector<SignatureT> >& signature,
-    const CentroidSet& points, float lLimit, float aLimit,
-    float bLimit, int total, float threshold, int depth)
+    const CentroidSet& points, const SignatureT lLimit, const SignatureT aLimit,
+    const SignatureT bLimit, const int total, const float threshold, const quint32 depth)
 {
     if (points.size() < 1)
         return;
 
-    int currentDimension = depth % POINT_LENGTH;
+    const int currentDimension = depth % POINT_LENGTH;
     PixelT min = points[0].first[currentDimension];
-    PixelT max = points[0].first[currentDimension];
+    PixelT max = min;
 
     for (int i = 1; i < points.size(); i++) {
-        if (min > points[i].first[currentDimension])
-            min = points[i].first[currentDimension];
+        PixelT currentPixelXCoord = points[i].first[currentDimension];
+        if (min > currentPixelXCoord)
+            min = currentPixelXCoord;
 
-        if (max < points[i].first[currentDimension])
-            max = points[i].first[currentDimension];
+        if (max < currentPixelXCoord)
+            max = currentPixelXCoord;
     }
 
-    float limit = currentDimension == 0 ?
-        lLimit : currentDimension == 1 ?
-        aLimit : bLimit;
+    const SignatureT limit = currentDimension == 0 ?
+        lLimit : currentDimension == 1 ? aLimit : bLimit;
 
     // Split according to Rubner-Rule.
-    // TODO - convert types before compare
-    if (max - min > limit) {
-        float pivotvalue = ((max - min) / 2.0f) + min;
+    SignatureT range = KoColorSpaceMaths<PixelT, SignatureT>::scaleToA(max - min);
+    if (range > limit) {
+        PixelT pivotvalue = (max + min) / 2;
 
         CentroidSet smallerpoints, biggerpoints;
 
@@ -184,7 +182,7 @@ void ColorSignature<PixelT, SignatureT>::createSignature(QVector< QVector<Signat
         QVector<const PixelT*>& cluster = clusterSet[i];
 
         QVector<PixelT>& centroid = centroidSet[i].first;
-        centroid.fill(0, POINT_LENGTH);
+        centroid.fill(0, POINT_LENGTH); // Important to set centroid size.
 
         for (int k = 0; k < cluster.size(); k++) {
             for (int j = 0; j < POINT_LENGTH; j++)
