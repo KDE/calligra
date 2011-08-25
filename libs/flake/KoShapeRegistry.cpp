@@ -214,6 +214,13 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                         kDebug(30006) << "Shape was found! Adding as child of unavail shape and stopping search";
                         uShape->addShape(childShape);
                         childShape->setPosition(QPointF(qreal(0.0), qreal(0.0)));
+
+                        // The embedded shape is just there to show the preview image.
+                        // We don't want the user to be able to manipulate the picture
+                        // in any way, so we disable the tools of the shape. This can
+                        // be done in a hacky way (courtesy of Jaham) by setting its
+                        // shapeID to "".
+                        childShape->setShapeId("");
                         break;
                     }
                 }
