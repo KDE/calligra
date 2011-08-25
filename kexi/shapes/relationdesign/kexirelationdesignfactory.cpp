@@ -27,7 +27,7 @@ KexiRelationDesignFactory::KexiRelationDesignFactory()
                            i18n ( "Kexi Relation Design" ) ) {
     setToolTip ( i18n ( "A kexi relation design shape" ) );
     setIcon( "kexi" );
-    setOdfElementNames("http://www.calligra-suite.org/kexirelationdesign", QStringList("shape") );
+    setXmlElementNames("http://www.calligra-suite.org/kexirelationdesign", QStringList("shape") );
     setLoadingPriority( 1 );
 }
 

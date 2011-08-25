@@ -749,7 +749,8 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         for (int i = 0 ; i < pap.itbdMac ; ++i) {
             tmpWriter.startElement("style:tab-stop");
 
-            //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64.
+            //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac
+            //tab descriptors } itbdMax == 64.
             const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
             //td.dxaTab = position in twips
             //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );

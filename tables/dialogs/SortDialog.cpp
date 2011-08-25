@@ -318,7 +318,7 @@ SortDialog::SortDialog(QWidget* parent, Selection* selection)
 
     setCaption(i18n("Sort"));
     setButtons(Ok | Cancel | Details | Reset);
-    setObjectName("SortDialog");
+    setObjectName(QLatin1String("SortDialog"));
 
     QWidget *widget = new QWidget(this);
     d->mainWidget.setupUi(widget);

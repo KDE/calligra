@@ -56,6 +56,8 @@
 
 #include "NumberFormatParser.h"
 
+#define XLSXXMLWORKSHEETREADER_CPP
+
 #define UNICODE_EUR 0x20AC
 #define UNICODE_GBP 0x00A3
 #define UNICODE_JPY 0x00A5
@@ -68,7 +70,15 @@
 
 #include <math.h>
 
+// ----------------------------------------------------------------
+// Include implementation of common tags
+
 #include <MsooXmlCommonReaderImpl.h> // this adds p, pPr, t, r, etc.
+
+#undef  MSOOXML_CURRENT_NS // tags without namespace
+#define MSOOXML_CURRENT_NS
+
+// ----------------------------------------------------------------
 
 #define NO_DRAWINGML_NS
 #define NO_DRAWINGML_PIC_NS // DrawingML/Picture
@@ -1490,7 +1500,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
-            cell->formula = MSOOXML::convertFormula(text().toString());
+            cell->formula = Calligra::Tables::MSOOXML::convertFormula(text().toString());
         }
     }
 
@@ -2154,6 +2164,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
         BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() ) {
             TRY_READ_IF(oleObject)
+            // It seems that MSO 2010 has a concept of Alternate
+            // Content, which it throws in at unexpected times.
+            // This is one such time.  So let's try to find the
+            // oleObject inside an mc:AlternateContent tag if possible.
+            ELSE_TRY_READ_IF_NS(mc, AlternateContent)   // Should be more specialized what we are looking for
             ELSE_WRONG_FORMAT
         }
     }

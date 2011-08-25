@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -110,6 +110,35 @@ public:
      Reimplement this if you e.g. want reuse other "dirty"
      flag from internal structures that may be changed. */
     virtual bool isDirty() const;
+
+    /*! @return true if data editing is in progress. This is useful to indicate
+     * to the master window that the view should save the before switching to 
+     * other view. This information is used in KexiWindow::switchToViewMode().
+     * Implement this in view that supports data editing, typically
+     * of mode Kexi::DataViewMode. If you do this, also implement
+     * saveDataChanges() and cancelDataChanges().
+     * Default implementation just returns false. */
+    virtual bool isDataEditingInProgress() const;
+
+    /*! Saves changes that are currently made to the associated data.
+     * Implement this in view that supports data editing, typically
+     * of mode Kexi::DataViewMode. If you do this, also implement
+     * isDataEditingInProgress() and cancelDataChanges().
+     * This method is used by KexiWindow::switchToViewMode().
+     * Default implementation just returns true.
+     * @return true on success, false on failure and cancelled if the operation
+     * has been cancelled. */
+    virtual tristate saveDataChanges();
+
+    /*! Cancel changes that are currently made to the associated data.
+     * Implement this in view that supports data editing, typically
+     * of mode Kexi::DataViewMode. If you do this, also implement
+     * isDataEditingInProgress() and saveDataChanges().
+     * This method is used by KexiWindow::switchToViewMode().
+     * Default implementation just returns true.
+     * @return true on success, false on failure and cancelled if the operation
+     * has been cancelled. */
+    virtual tristate cancelDataChanges();
 
     /*! \return the view mode for this view. */
     Kexi::ViewMode viewMode() const;

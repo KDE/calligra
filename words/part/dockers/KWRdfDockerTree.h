@@ -71,8 +71,6 @@ protected:
     // for dragging
     void mouseMoveEvent(QMouseEvent *event);
 
-    KoTextEditor *editor();
-
 private:
     KoDocumentRdf *m_rdf;
     KoCanvasBase *m_canvas;

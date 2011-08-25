@@ -7024,21 +7024,48 @@ struct PAP : public Shared {
     U8 unused9;
 
     /**
-     * when non-zero, list level for this paragraph (0-based index! Look at the sprmPIlvl docu (Werner))
+     * An unsigned 8-bit integer that specifies the list level of the
+     * paragraph.  This value MUST be ignored if this paragraph is not in a
+     * list (see sprmPIlfo).  This value MUST be one of the following:
+     *
+     * <0x0, 0x8> - The value specifies the zero-based level of the list that
+     * contains this paragraph.  For example, a value of 0x0 means that the
+     * paragraph is in the first level of the list.
+     *
+     * 0xC - The list skips this paragraph and does not include it in its
+     * numbering.
+     *
+     * By default, a paragraph is in the first level of the list.
      */
     U8 ilvl;
+
+    /**
+     * A 16-bit signed integer value that is used to determine which list
+     * contains the paragraph.  This value MUST be one of the following:
+     *
+     * 0x0000 - This paragraph is not in a list, and any list formatting on the
+     * paragraph is removed.
+     *
+     * <0x0001, 0x07FE> - The value is a 1-based index into PlfLfo.rgLfo.  The
+     * LFO at this index defines the list that this paragraph is in.
+     *
+     * 0xF801 - This paragraph is not in a list.
+     *
+     * <0xF802, 0xFFFF> - The value is the negation of a 1-based index into
+     * PlfLfo.rgLfo.  The LFO at this index defines the list that this
+     * paragraph is in.  The logical left indentation (see sprmPDxaLeft) and
+     * the logical left first line indentation (see sprmPDxaLeft1) of the
+     * paragraph MUST be preserved despite any list formatting.
+     *
+     * By default, a paragraph is not in a list.
+     */
+    S16 ilfo;
 
     /**
      * no line numbering for this paragraph. (makes this an exception to the
      * section property of line numbering)
      */
     U8 fNoLnn;
-
-    /**
-     * when non-zero, (1-based) index into the pllfo identifying the list
-     * to which the paragraph belongs
-     */
-    S16 ilfo;
 
     /**
      * no longer used
@@ -7370,8 +7397,17 @@ struct PAP : public Shared {
      */
     S8 lvl;
 
+    /**
+     * A Bool8 value that specifies whether the paragraph uses right-to- left
+     * layout.  By default, a paragraph does not use right-to-left layout.
+     */
     S8 fBiDi;
 
+    /**
+     * A Bool8 value that specifies whether a numbered list was applied to this
+     * paragraph after the previous revision.  By default, paragraphs do not
+     * have numbered lists applied.
+     */
     S8 fNumRMIns;
 
     /**

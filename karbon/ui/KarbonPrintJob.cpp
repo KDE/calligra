@@ -22,6 +22,7 @@
 #include "KarbonView.h"
 #include "KarbonCanvas.h"
 #include "KarbonPart.h"
+#include "KarbonDocument.h"
 
 #include <KoShapeManager.h>
 

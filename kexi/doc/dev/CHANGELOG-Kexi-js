@@ -89,6 +89,13 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-08-04
+General
+*Cleanups in API of the data-aware view
+*Disable "Save Record Changes" action when user cancels editing or reverts edited text to the original value. "Cancel Record Changes" action is not disabled though, so user is still able to exit from record editing mode.
+*Ask for confirmation when going to Design View and have pending record changes in Data View of table or form
+BUG:278417
+
 2011-07-25
 General
 *Replaced term "row" with "record" in visible places

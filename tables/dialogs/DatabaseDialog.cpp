@@ -72,7 +72,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
         m_selection(selection),
         m_targetRect(selection->lastRange())
 {
-    setObjectName("DatabaseDialog");
+    setObjectName(QLatin1String("DatabaseDialog"));
     setWindowTitle(i18n("Insert Data From Database"));
 
     // database page

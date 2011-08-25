@@ -66,8 +66,8 @@ public:
         insert("double", KoBorder::BorderDouble);
         insert("dotted", KoBorder::BorderDotted);
         insert("dashed", KoBorder::BorderDashed);
-        insert("dotDash", KoBorder::BorderDashDotPattern);
-        insert("dotDotDash", KoBorder::BorderDashDotDotPattern);
+        insert("dotDash", KoBorder::BorderDashDot);
+        insert("dotDotDash", KoBorder::BorderDashDotDot);
         insert("triple", KoBorder::BorderDouble); //FIXME
         insert("thinThickSmallGap", KoBorder::BorderSolid); //FIXME
         insert("thickThinSmallGap", KoBorder::BorderSolid); //FIXME
@@ -3385,17 +3385,25 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(after)
-    bool ok;
-    const int marginBottom = (TWIP_TO_POINT(after.toDouble(&ok)));
 
+    bool ok = true;
+    int marginBottom = 10;
+    bool afterAutospacing = MSOOXML::Utils::convertBooleanAttr(attrs.value("w:afterAutospacing").toString());
+    if (!afterAutospacing) {
+        TRY_READ_ATTR(after)
+        marginBottom = TWIP_TO_POINT(after.toDouble(&ok));
+    }
     if (ok) {
         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", marginBottom);
     }
 
-    TRY_READ_ATTR(before)
-    const int marginTop = (TWIP_TO_POINT(before.toDouble(&ok)));
-
+    ok = true;
+    int marginTop = 5;
+    bool beforeAutospacing = MSOOXML::Utils::convertBooleanAttr(attrs.value("w:beforeAutospacing").toString());
+    if (!beforeAutospacing) {
+        TRY_READ_ATTR(before)
+        marginTop = TWIP_TO_POINT(before.toDouble(&ok));
+    }
     if (ok) {
         m_currentParagraphStyle.addPropertyPt("fo:margin-top", marginTop);
     }

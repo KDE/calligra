@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=CalligraStage/PageEffect
+Comment=Page effect plugin for Calligra Stage
+Comment[bg]=Приставка за ефекти в страниците на Calligra Stage
+Comment[de]=Seiteneffektmodul für Calligra Stage
+Comment[el]=Πρόσθετο εφέ σελίδας για το Calligra Stage
+Comment[et]=Calligra Stage'i leheküljeefektide plugin
+Comment[it]=Estensione per gli effetti di pagina per Callgra Stage
+Comment[nb]=Calligra Stage programtillegg for sideeffekter
+Comment[pl]=Wtyczka efektu strony dla Calligra Stage
+Comment[pt]='Plugin' de efeitos das páginas do Calligra Stage
+Comment[pt_BR]=Plugin de efeitos das páginas do Calligra Stage
+Comment[sv]=Insticksprogram med sideffekter för Calligra Stage
+Comment[uk]=Додаток ефектів сторінки для Calligra Stage
+Comment[x-test]=xxPage effect plugin for Calligra Stagexx
+Comment[zh_TW]=Calligra Stage 頁面效果外掛程式
+[PropertyDef::X-KPresenter-Version]
+Type=int

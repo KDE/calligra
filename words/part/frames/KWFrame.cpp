@@ -61,7 +61,9 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
             }
         } else {
             shape->setGeometryProtected(true);
-            shape->setCollisionDetection(false);
+            // we need to keep collision detection on or we will not relayout when
+            // page anchored shapes are moved
+            //shape->setCollisionDetection(false);
         }
     }
 

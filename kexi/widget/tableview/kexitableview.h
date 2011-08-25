@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -69,7 +69,8 @@ class KEXIDATATABLE_EXPORT KexiTableView :
             public Q3ScrollView,
             public KexiRecordNavigatorHandler,
             public KexiSharedActionClient,
-            public KexiDataAwareObjectInterface
+            public KexiDataAwareObjectInterface,
+            public KexiDataItemChangesListener
 {
     Q_OBJECT
     KEXI_DATAAWAREOBJECTINTERFACE
@@ -422,6 +423,9 @@ signals:
     //! no matter if accepted or not
     void rowEditTerminated(int row);
 
+    //! emmited when state of 'save/cancel record changes' actions should be updated.
+    void updateSaveCancelActions();
+    
     //! Emitted in initActions() to force reload actions
     //! You should remove existing actions and add them again.
     void reloadActions();
@@ -676,6 +680,13 @@ protected:
 
 // //! Called to repaint contents after a row is deleted.
 // void repaintAfterDelete();
+
+    /*! Implementation for KexiDataItemChangesListener.
+     Reaction for change of \a item. */
+    virtual void valueChanged(KexiDataItemInterface* item);
+
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual bool cursorAtNewRow() const;
 
     KexiTableViewPrivate * const d;
 

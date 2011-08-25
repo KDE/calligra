@@ -237,9 +237,10 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
     case KoBorder::BorderRidge: pen.setStyle(Qt::SolidLine); break; // FIXME
     case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
     case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
-
-    case KoBorder::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine); break;
+    case KoBorder::BorderDashDot: pen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDot: pen.setStyle(Qt::DashDotDotLine); break;
+    default:
+        pen.setStyle(Qt::SolidLine);
     }
 
     if (borderData.style == KoBorder::BorderDouble) {
@@ -833,4 +834,9 @@ void KWCanvasBase::setCacheEnabled(bool enabled, int cacheSize, qreal maxZoom)
     m_cacheEnabled = enabled;
     m_cacheSize = cacheSize;
     m_maxZoom = maxZoom;
+}
+
+QPoint KWCanvasBase::documentOffset() const
+{
+    return m_documentOffset;
 }

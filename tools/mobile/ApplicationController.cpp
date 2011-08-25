@@ -3100,7 +3100,7 @@ void ApplicationController::startCollaborating() {
                                     m_collabDialog->getPort(),
                                     this);
         connect(m_collab, SIGNAL(saveFile(const QString&)), this, SLOT(collabSaveFile(const QString&)));
-        m_collabEditor = new KoTextEditor(textEditor()->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(document()->createView(this))->kwcanvas()->toolProxy()->selection());
+        m_collabEditor = new KoTextEditor(textEditor()->document());
 
     } else {
         return closeCollabDialog();
