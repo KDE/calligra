@@ -1692,6 +1692,8 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         params.setProperty("qimage", v);
 
         KoShape *shape = factory->createShape(&params, kwdocument()->resourceManager());
+        // XXX: calculate to fit in the document.
+        shape->setSize(shape->size() * 0.5);
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
@@ -1699,15 +1701,43 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         }
 
         if (textShapeData) {
+
+            // Create the anchor
+            QTextDocument *qdoc = textShapeData->document();
+            KoTextAnchor *anchor = new KoTextAnchor(shape);
+
+            // XXX: set the options for the anchor correctly
+            anchor->setVerticalPos(KoTextAnchor::VBottom);
+            anchor->setVerticalRel(KoTextAnchor::VParagraph);
+            anchor->setHorizontalRel(KoTextAnchor::HParagraph);
+            anchor->setHorizontalPos(KoTextAnchor::HCenter);
+            anchor->setBehavesAsCharacter(false);
+            anchor->setOffset(QPointF(0, -shape->size().height()));
+            // insert the anchor into the text document
+            KoTextEditor editor(qdoc);
+            editor.insertInlineObject(anchor);
+
+            // create the undo step.
+            KoShapeCreateCommand *cmd = new KoShapeCreateCommand(kwdocument(), shape);
+            KoSelection *selection = m_canvas->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+            m_canvas->addCommand(cmd);
+
         }
         else {
             shape->setPosition(pos);
             pos += QPointF(25,25); // increase the position for each shape we insert so the
                                    // user can see them all.
             // add the shape floating, like in stage
-
+            KUndo2Command *cmd = m_canvas->shapeController()->addShapeDirect(shape);
+            if (cmd) {
+                KoSelection *selection = m_canvas->shapeManager()->selection();
+                selection->deselectAll();
+                selection->select(shape);
+            }
+            m_canvas->addCommand(cmd);
         }
     }
-
 }
 

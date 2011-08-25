@@ -170,6 +170,9 @@
         <property name="text">
          <string>Run on both sides of this shape</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
