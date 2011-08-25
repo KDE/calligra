@@ -1442,13 +1442,13 @@ void PptToOdp::defineListStyle(KoGenStyle& style,
 }
 
 QChar
-getBulletChar(const PptTextPFRun& pf) {
-
+getBulletChar(const PptTextPFRun& pf)
+{
     quint16 v = (quint16) pf.bulletChar();
-    if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from windings is similar to ●
+    if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from "Windings" is similar to ●
         return QChar(0x25cf); //  "●"
     }
-    if (v == 0xf02d) { // 0xF02D from symbol is similar to –
+    if (v == 0xf02d) { // 0xF02D from "Symbol" is similar to –
         return QChar(0x2013);
     }
     if (v == 0xf0e8) { // 0xF0E8 is similar to ➔
