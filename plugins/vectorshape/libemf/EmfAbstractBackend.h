@@ -268,17 +268,6 @@ public:
     virtual void rectangle(EmfDeviceContext &context, const QRect &box) = 0;
 
     /**
-       Handler for the EMR_SETTEXTALIGN record type
-
-      The textAlignMode is a bit mask, see [MS-WMF] Section 2.1.2.3 for
-      values if the text has a horizontal baseline, [MS-WMF] Section
-      2.1.2.4 if the text has a vertical baseline.
-
-       \param textAlignMode the text alignment mode
-    */
-    virtual void setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode) = 0;
-
-    /**
        Handler for the EMR_EXTCREATEFONTINDIRECTW record type
 
        \param extCreateFontIndirectWRecord the contents of the

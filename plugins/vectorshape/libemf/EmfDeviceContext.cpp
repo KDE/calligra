@@ -71,7 +71,7 @@ void EmfDeviceContext::reset()
     mapMode = MM_TEXT;
     polyFillMode = 0;// FIXME: Check the real default
     //Stretchblt mode
-    textAlign = 0;// FIXME: Check the real default
+    textAlignMode = TA_NOUPDATECP; // == TA_TOP == TA_LEFT
     //Text extra space
 
     changedItems = 0xffffffff;  // Everything changed the first time.

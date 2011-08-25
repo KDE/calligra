@@ -236,13 +236,6 @@ void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context,
     kDebug(33100) << "EMR_CREATEFONTINDIRECTW:" << extCreateFontIndirectW.fontFace();
 }
 
-void EmfDebugBackend::setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SETTEXTALIGN:" << textAlignMode;
-}
-
 void EmfDebugBackend::createPen(EmfDeviceContext &context, quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
 			       quint8 red, quint8 green, quint8 blue, quint8 reserved )
 {

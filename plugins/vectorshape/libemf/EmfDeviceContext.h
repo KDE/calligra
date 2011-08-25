@@ -118,7 +118,7 @@ public:
     quint32  mapMode;           // Mapping mode
     quint16  polyFillMode;      // Polygon fill mode
     //Stretchblt mode NYI
-    quint16  textAlign;         // Text alignment mode
+    quint32  textAlignMode;     // Text alignment mode
     //Text extra space NYI
 
     // ----------------------------------------------------------------

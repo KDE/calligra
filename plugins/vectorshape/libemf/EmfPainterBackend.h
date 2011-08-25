@@ -103,7 +103,6 @@ public:
     void setLayout(EmfDeviceContext &context, const quint32 layoutMode );
     void extCreateFontIndirectW(EmfDeviceContext &context,
                                 const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
-    void setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode );
     void setPixelV(EmfDeviceContext &context,
                    QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved );
     void modifyWorldTransform(EmfDeviceContext &context,
@@ -230,11 +229,6 @@ private:
        The current fill rule
     */
     enum Qt::FillRule m_fillRule;
-
-    /**
-        The current text alignment mode
-    */
-    quint32 m_textAlignMode;
 
     /**
        The current coordinates

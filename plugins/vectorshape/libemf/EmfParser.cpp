@@ -496,9 +496,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
         case EMR_SETTEXTALIGN:
         {
-            quint32 textAlignMode;
-            stream >> textAlignMode;
-            mOutput->setTextAlign(context, textAlignMode );
+            stream >> context.textAlignMode;
+            context.changedItems |= DCTextAlignMode;
         }
         break;
     case EMR_SETTEXTCOLOR:

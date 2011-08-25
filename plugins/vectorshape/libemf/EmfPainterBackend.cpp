@@ -44,7 +44,6 @@ EmfPainterBackend::EmfPainterBackend()
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
     , m_fillRule(Qt::OddEvenFill)
-    , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
 {
     m_painter         = 0;
@@ -62,7 +61,6 @@ EmfPainterBackend::EmfPainterBackend(QPainter &painter, QSize &size,
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
     , m_fillRule(Qt::OddEvenFill)
-    , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
 {
     m_painter         = &painter;
@@ -937,20 +935,11 @@ void EmfPainterBackend::setLayout(EmfDeviceContext &context, const quint32 layou
     }
 }
 
-void EmfPainterBackend::setTextAlign(EmfDeviceContext &context, const quint32 textAlignMode )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << textAlignMode;
-#endif
-
-    m_textAlignMode = textAlignMode;
-}
-
 
 #define DEBUG_TEXTOUT 0
 
 void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
-                                       const QRect &bounds, const EmrTextObject &textObject )
+                                   const QRect &bounds, const EmrTextObject &textObject )
 {
     updateFromDeviceContext(context);
 
@@ -968,7 +957,7 @@ void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
     int  y = referencePoint.y();
 
     // The TA_UPDATECP flag tells us to use the current position
-    if (m_textAlignMode & TA_UPDATECP) {
+    if (context.textAlignMode & TA_UPDATECP) {
         // (left, top) position = current logical position
 #if DEBUG_EMFPAINT
         kDebug(31000) << "TA_UPDATECP: use current logical position";
@@ -987,15 +976,15 @@ void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
     // FIXME: Handle RTL text.
 
     // Horizontal align.  Default is TA_LEFT.
-    if ((m_textAlignMode & TA_HORZMASK) == TA_CENTER)
+    if ((context.textAlignMode & TA_HORZMASK) == TA_CENTER)
         x -= (textWidth / 2);
-    else if ((m_textAlignMode & TA_HORZMASK) == TA_RIGHT)
+    else if ((context.textAlignMode & TA_HORZMASK) == TA_RIGHT)
         x -= textWidth;
 
     // Vertical align.  Default is TA_TOP
-    if ((m_textAlignMode & TA_VERTMASK) == TA_BASELINE)
+    if ((context.textAlignMode & TA_VERTMASK) == TA_BASELINE)
         y -= (textHeight - fm.descent());
-    else if ((m_textAlignMode & TA_VERTMASK) == TA_BOTTOM) {
+    else if ((context.textAlignMode & TA_VERTMASK) == TA_BOTTOM) {
         y -= textHeight;
     }
 
@@ -1633,7 +1622,7 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
     //Mapping mode NYI
     //PolyFillMode not necessary to handle here
     //Stretchblt mode NYI
-    //textAlign not necessary to handle here
+    //textAlignMode not necessary to handle here
     //Text extra space NYI
 
     // Reset all changes until next time.
