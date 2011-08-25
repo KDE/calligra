@@ -20,6 +20,10 @@
 #include "SvgLoadingContext.h"
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
+#include "SvgCssHelper.h"
+#include "SvgStyleParser.h"
+
+#include <KoResourceManager.h>
 
 #include <KDebug>
 
@@ -31,7 +35,7 @@ class SvgLoadingContext::Private
 {
 public:
     Private()
-        : zIndex(0)
+        : zIndex(0), styleParser(0)
     {
 
     }
@@ -42,16 +46,24 @@ public:
             kWarning() << "the context stack is not empty (current count" << gcStack.size() << ", expected 0)";
         qDeleteAll(gcStack);
         gcStack.clear();
+        delete styleParser;
     }
     QStack<SvgGraphicsContext*> gcStack;
     QString initialXmlBaseDir;
     int zIndex;
+    KoResourceManager *documentResourceManager;
+    QHash<QString, KoShape*> loadedShapes;
+    QHash<QString, KoXmlElement> definitions;
+    SvgCssHelper cssStyles;
+    SvgStyleParser *styleParser;
 };
 
-SvgLoadingContext::SvgLoadingContext()
+SvgLoadingContext::SvgLoadingContext(KoResourceManager *documentResourceManager)
     : d(new Private())
 {
-
+    d->documentResourceManager = documentResourceManager;
+    d->styleParser = new SvgStyleParser(*this);
+    Q_ASSERT(d->documentResourceManager);
 }
 
 SvgLoadingContext::~SvgLoadingContext()
@@ -59,7 +71,7 @@ SvgLoadingContext::~SvgLoadingContext()
     delete d;
 }
 
-SvgGraphicsContext *SvgLoadingContext::currentGC()
+SvgGraphicsContext *SvgLoadingContext::currentGC() const
 {
     if (d->gcStack.isEmpty())
         return 0;
@@ -107,7 +119,7 @@ void SvgLoadingContext::setInitialXmlBaseDir(const QString &baseDir)
     d->initialXmlBaseDir = baseDir;
 }
 
-QString SvgLoadingContext::xmlBaseDir()
+QString SvgLoadingContext::xmlBaseDir() const
 {
     SvgGraphicsContext *gc = currentGC();
     return (gc && !gc->xmlBaseDir.isEmpty()) ? gc->xmlBaseDir : d->initialXmlBaseDir;
@@ -145,3 +157,51 @@ int SvgLoadingContext::nextZIndex()
     return d->zIndex++;
 }
 
+KoImageCollection* SvgLoadingContext::imageCollection()
+{
+    return d->documentResourceManager->imageCollection();
+}
+
+void SvgLoadingContext::registerShape(const QString &id, KoShape *shape)
+{
+    if (!id.isEmpty())
+        d->loadedShapes.insert(id, shape);
+}
+
+KoShape* SvgLoadingContext::shapeById(const QString &id)
+{
+    return d->loadedShapes.value(id);
+}
+
+void SvgLoadingContext::addDefinition(const KoXmlElement &element)
+{
+    const QString id = element.attribute("id");
+    if (id.isEmpty() || d->definitions.contains(id))
+        return;
+    d->definitions.insert(id, element);
+}
+
+KoXmlElement SvgLoadingContext::definition(const QString &id) const
+{
+    return d->definitions.value(id);
+}
+
+bool SvgLoadingContext::hasDefinition(const QString &id) const
+{
+    return d->definitions.contains(id);
+}
+
+void SvgLoadingContext::addStyleSheet(const KoXmlElement &styleSheet)
+{
+    d->cssStyles.parseStylesheet(styleSheet);
+}
+
+QStringList SvgLoadingContext::matchingStyles(const KoXmlElement &element) const
+{
+    return d->cssStyles.matchStyles(element);
+}
+
+SvgStyleParser &SvgLoadingContext::styleParser()
+{
+    return *d->styleParser;
+}

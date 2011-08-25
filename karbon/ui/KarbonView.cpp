@@ -110,6 +110,10 @@
 #include <KoShapeRegistry.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
+#include <KoZoomController.h>
 
 // kde header
 #include <kaction.h>
@@ -199,6 +203,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         : KoView(p, parent), d(new Private(p))
 {
     setComponentData(KarbonFactory::componentData(), true);
+    setAcceptDrops(true);
 
     if (!p->isReadWrite())
         setXMLFile(QString::fromLatin1("karbon_readonly.rc"));
@@ -359,8 +364,18 @@ void KarbonView::resizeEvent(QResizeEvent* /*event*/)
     reorganizeGUI();
 }
 
+void KarbonView::dragEnterEvent(QDragEnterEvent * event)
+{
+    QColor color = KColorMimeData::fromMimeData(event->mimeData());
+    if (color.isValid()) {
+        event->accept();
+    }
+    KoView::dragEnterEvent(event);
+}
+
 void KarbonView::dropEvent(QDropEvent *e)
 {
+
     //Accepts QColor - from Color Manager's KColorPatch
     QColor color = KColorMimeData::fromMimeData(e->mimeData());
     if (color.isValid()) {
@@ -391,7 +406,50 @@ void KarbonView::dropEvent(QDropEvent *e)
             d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
         }
     }
+
+    KoView::dropEvent(e);
 }
+
+void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+{
+    // get position from event and convert to document coordinates
+    QPointF pos = canvasWidget()->viewConverter()->viewToDocument(insertAt)
+            + canvasWidget()->documentOffset() - canvasWidget()->documentOrigin();
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    foreach(const QImage image, imageList) {
+
+        KoProperties params;
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
+
+        KoShape *shape = factory->createShape(&params, canvasWidget()->resourceManager());
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            return;
+        }
+        shape->setPosition(pos);
+        pos += QPointF(25,25); // increase the position for each shape we insert so the
+                               // user can see them all.
+        KUndo2Command *cmd = canvasWidget()->shapeController()->addShapeDirect(shape);
+        if (cmd) {
+            KoSelection *selection = canvasWidget()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+        }
+        canvasWidget()->addCommand(cmd);
+    }
+}
+
+
 
 void KarbonView::fileImportGraphic()
 {

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
+ *
+ * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,31 +18,37 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SVGSAVINGCONTEXT_H
-#define SVGSAVINGCONTEXT_H
 
-class KoXmlWriter;
-class QIODevice;
 
-/// Context for saving svg files
-class SvgSavingContext
+#ifndef RDF_TEST_H
+#define RDF_TEST_H
+
+#include <QtCore/QObject>
+
+class QTextDocument;
+class KoTextEditor;
+class KoDocumentRdf;
+class QString;
+
+class RdfTest : public QObject
 {
-public:
-    /// Creates a new svg svaing context on the specified output device
-    SvgSavingContext(QIODevice &outputDevice);
+    Q_OBJECT
 
-    /// Virtual destructor
-    virtual ~SvgSavingContext();
+private slots:
 
-    /// Provides access to the style writer
-    KoXmlWriter &styleWriter();
-
-    /// Provides access to the shape writer
-    KoXmlWriter &shapeWriter();
+    void testCreateMarkers();
+    void testFindMarkers();
+    void testFindByName();
+    void testEditAndFindMarkers(); // XXX: implement
+    void testRemoveMarkers();
 
 private:
-    class Private;
-    Private * const d;
+
+    // @return the xml id for the inserted item
+    QString insertSemItem(KoTextEditor &editor,
+                          KoDocumentRdf &rdfDoc,
+                          QObject &parent,
+                          const QString name);
 };
 
-#endif // SVGSAVINGCONTEXT_H
+#endif // RDF_TEST_H

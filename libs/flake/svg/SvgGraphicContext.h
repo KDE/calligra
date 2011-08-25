@@ -21,37 +21,20 @@
 #ifndef SVGGRAPHICCONTEXT_H
 #define SVGGRAPHICCONTEXT_H
 
+#include "flake_export.h"
 #include <KoLineBorder.h>
 
-class SvgGraphicsContext
+class FLAKE_EXPORT SvgGraphicsContext
 {
 public:
-    enum StyleType { None, Solid, Gradient, Pattern };
+    // Fill/stroke styles
+    enum StyleType {
+        None,     ///< no style
+        Solid,    ///< solid style
+        Complex   ///< gradient or pattern style
+    };
 
-    SvgGraphicsContext() {
-        strokeType = None;
-        stroke.setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
-        stroke.setLineWidth(1.0);
-        stroke.setCapStyle(Qt::FlatCap);
-        stroke.setJoinStyle(Qt::MiterJoin);
-
-        fillType = Solid;
-        fillRule = Qt::WindingFill;
-        fillColor = QColor(Qt::black);   // default is black fill as per svg spec
-
-        opacity = 1.0;
-
-        currentColor = Qt::black;
-        forcePercentage = false;
-
-        display = true;
-        
-        clipRule = Qt::WindingFill;
-        preserveWhitespace = false;
-
-        letterSpacing = 0.0;
-        wordSpacing = 0.0;
-    }
+    SvgGraphicsContext();
 
     StyleType    fillType;  ///< the current fill type
     Qt::FillRule fillRule;  ///< the current fill rule

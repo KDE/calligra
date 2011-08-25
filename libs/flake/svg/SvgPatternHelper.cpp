@@ -20,7 +20,7 @@
 #include "SvgPatternHelper.h"
 #include "SvgUtil.h"
 
-#include <KoZoomHandler.h>
+#include <KoViewConverter.h>
 #include <KoShapePainter.h>
 #include <KoShape.h>
 
@@ -115,7 +115,7 @@ void SvgPatternHelper::setPatternContentViewbox(const QRectF &viewBox)
 
 QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<KoShape*> content)
 {
-    KoZoomHandler zoomHandler;
+    KoViewConverter zoomHandler;
 
     QSizeF patternSize = size(objectBound);
     if (patternSize.isEmpty())

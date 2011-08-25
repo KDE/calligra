@@ -44,9 +44,13 @@
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
 #include <KoShapeReorderCommand.h>
+#include "ui_KWInsertImage.h"
 
 // calligra libs includes
 #include <calligraversion.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
@@ -80,6 +84,8 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+#include <KoFindText.h>
+#include <KoFindToolbar.h>
 
 
 // KDE + Qt includes
@@ -89,6 +95,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kdialog.h>
 #include <KToggleAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -97,8 +104,6 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <KParts/PartManager>
-#include <KoFindText.h>
-#include <KoFindToolbar.h>
 
 static KWFrame *frameForShape(KoShape *shape)
 {
@@ -125,6 +130,8 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         : KoView(document, parent)
         , m_canvas(0), m_actionMenu(0)
 {
+    setAcceptDrops(true);
+
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(viewMode, this);
@@ -378,7 +385,7 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
 
     action = new KAction(i18n("As Character"), this);
-    action->setToolTip(i18n("Insert the current shape as a character in the text"));
+    action->setToolTip(i18n("Anchor the current shape as a character in the text"));
     actionCollection()->addAction("anchor_as_character", action);
     connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
 
@@ -1634,3 +1641,196 @@ void KWView::loadingCompleted()
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
     m_find->addDocuments(texts);
 }
+
+void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+{
+    if (!m_canvas) {
+        // now canvas because we're not on the desktop?
+        return;
+    }
+    // get position from event and convert to document coordinates
+    QPointF pos = m_canvas->viewConverter()->viewToDocument(insertAt)
+            + m_canvas->documentOffset()- m_canvas->documentOrigin();
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    // get the textshape at this point
+    QList<KoShape*> possibleTextShapes = canvasBase()->shapeManager()->shapesAt(QRectF(pos.x() - 10, pos.y() -10, 20, 20));
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape* shape, possibleTextShapes) {
+        KoShapeUserData *userData = shape->userData();
+        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+            // We've found the top-level text shape.
+            break;
+        }
+    }
+
+    KDialog dlg;
+    dlg.setCaption(i18n("Insert Image Options"));
+    QWidget *page = new QWidget(&dlg);
+    dlg.setMainWidget(page);
+    Ui_KWInsertImage uiInsertImage;
+    uiInsertImage.setupUi(page);
+
+    if (textShapeData) {
+        // ask the user what kind of anchoring and run-around to use
+        if (dlg.exec() == QDialog::Rejected) {
+            return;
+        }
+    }
+    else {
+        // ask the user what kind of run-around to use
+        uiInsertImage.grpAnchor->setVisible(false);
+        uiInsertImage.grpHAlign->setVisible(false);
+        uiInsertImage.grpVAlign->setVisible(false);
+
+        if (dlg.exec() == KDialog::QDialog::Rejected) {
+            return;
+        }
+    }
+
+    foreach(const QImage image, imageList) {
+
+        KoProperties params;
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
+
+        KoShape *shape = factory->createShape(&params, kwdocument()->resourceManager());
+
+        // resize the shape so it will fit in the document, with some nice
+        // hard-coded constants.
+        qreal pageWidth = currentPage().width();
+        qreal pageHeight = currentPage().height();
+        if (shape->size().width() > pageWidth * 0.8 ||
+                shape->size().height() > pageHeight)
+        {
+            QSizeF sz = shape->size();
+            sz.scale(QSizeF(pageWidth * 0.6, pageHeight *.6), Qt::KeepAspectRatio);
+            shape->setSize(sz);
+        }
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            return;
+        }
+
+        // Set the wraparound
+        if (uiInsertImage.noRunaround->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::NoRunAround);
+        }
+        else if (uiInsertImage.left->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::LeftRunAroundSide);
+        }
+        else if (uiInsertImage.right->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::RightRunAroundSide);
+        }
+        else if (uiInsertImage.longest->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::BiggestRunAroundSide);
+        }
+        else if (uiInsertImage.both->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::BothRunAroundSide);
+        }
+        else if (uiInsertImage.enough->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::EnoughRunAroundSide);
+            double threshold = uiInsertImage.threshold->value();
+            shape->setTextRunAroundThreshold(threshold);
+        }
+
+        double distance = uiInsertImage.distance->value();
+        shape->setTextRunAroundDistance(distance);
+
+        // only if we have a text shape, we will anchor to the text inside.
+        if (textShapeData) {
+
+            // Create the anchor
+            QTextDocument *qdoc = textShapeData->document();
+            KoTextAnchor *anchor = new KoTextAnchor(shape);
+
+            // anchor
+            // XXX: What about: HFrame, HFrameContent, HFrameEndMargin, HFrameStartMargin?
+            anchor->setBehavesAsCharacter(false);
+            if (uiInsertImage.rAnchorPage->isChecked()) {
+                // XXX: or: VPageContent?
+                anchor->setVerticalRel(KoTextAnchor::VPage);
+                // XXX: or: HPageContent or HPageStartMargin or HPageEndMargin?
+                anchor->setHorizontalRel(KoTextAnchor::HPage);
+
+            }
+            else if (uiInsertImage.rAnchorParagraph->isChecked()) {
+                // XXX: or: VParagraphContent?
+                anchor->setVerticalRel(KoTextAnchor::VParagraph);
+                // XXX: or HParagraphContent, HParagraphEndMargin, HParagraphStartMargin?
+                anchor->setHorizontalRel(KoTextAnchor::HParagraph);
+
+            }
+            else if (uiInsertImage.rAnchorToCharacter->isChecked()) {
+                // XXX: or VBaseline, VLine?
+                anchor->setVerticalRel(KoTextAnchor::VChar);
+                anchor->setHorizontalRel(KoTextAnchor::HChar);
+
+            }
+            else if (uiInsertImage.rAnchorAsCharacter->isChecked()) {
+                anchor->setVerticalRel(KoTextAnchor::VBaseline);
+                anchor->setHorizontalRel(KoTextAnchor::HChar);
+                anchor->setBehavesAsCharacter(true);
+            }
+
+            // horizontal alignment
+            // XXX: what about HFromInside, HFromLeft, HInside, HOutside?
+            if (uiInsertImage.rAlignLeft->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HLeft);
+            }
+            else if (uiInsertImage.rAlignCenter->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HCenter);
+            }
+            else if (uiInsertImage.rAlignRight->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HRight);
+            }
+
+            // vertical alignment
+            if (uiInsertImage.rAlignTop->isChecked()) {
+                // XXX: or VFromTop?
+                anchor->setVerticalPos(KoTextAnchor::VTop);
+            }
+            else if (uiInsertImage.rAlignMiddle->isChecked()) {
+                anchor->setVerticalPos(KoTextAnchor::VMiddle);
+            }
+            else if (uiInsertImage.rAlignBottom->isChecked()) {
+                anchor->setVerticalPos(KoTextAnchor::VBottom);
+            }
+
+            anchor->setOffset(QPointF(0, -shape->size().height()));
+            // insert the anchor into the text document
+            KoTextEditor editor(qdoc);
+            editor.insertInlineObject(anchor);
+
+            // create the undo step.
+            KoShapeCreateCommand *cmd = new KoShapeCreateCommand(kwdocument(), shape);
+            KoSelection *selection = m_canvas->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+            m_canvas->addCommand(cmd);
+
+        }
+        else {
+            shape->setPosition(pos);
+            pos += QPointF(25,25); // increase the position for each shape we insert so the
+                                   // user can see them all.
+            // add the shape floating, like in stage
+            KUndo2Command *cmd = m_canvas->shapeController()->addShapeDirect(shape);
+            if (cmd) {
+                KoSelection *selection = m_canvas->shapeManager()->selection();
+                selection->deselectAll();
+                selection->select(shape);
+            }
+            m_canvas->addCommand(cmd);
+        }
+    }
+}
+

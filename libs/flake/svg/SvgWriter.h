@@ -29,29 +29,22 @@
 #ifndef SVGWRITER_H
 #define SVGWRITER_H
 
-#include <KoFilter.h>
-#include <QVariantList>
-#include <QtGui/QGradient>
+#include "flake_export.h"
+#include <QtCore/QList>
+#include <QtCore/QSizeF>
 
 class SvgSavingContext;
 class KoShapeLayer;
 class KoShapeGroup;
 class KoShape;
 class KoPathShape;
-class KoShapeBorderModel;
-class ArtisticTextShape;
-class ArtisticTextRange;
-class EllipseShape;
-class RectangleShape;
-class KoPatternBackground;
 class QTextStream;
-class QPixmap;
-class QImage;
-class QColor;
-class QBrush;
+class QIODevice;
+class QFont;
+class QString;
 
 /// Implements exporting shapes to SVG
-class SvgWriter
+class FLAKE_EXPORT SvgWriter
 {
 public:
     /// Creates svg writer to export specified layers
@@ -74,33 +67,11 @@ private:
     void saveGroup(KoShapeGroup *group, SvgSavingContext &context);
     void saveShape(KoShape *shape, SvgSavingContext &context);
     void savePath(KoPathShape *path, SvgSavingContext &context);
-    void saveEllipse(EllipseShape *ellipse, SvgSavingContext &context);
-    void saveRectangle(RectangleShape *rectangle, SvgSavingContext &context);
+    void saveGeneric(KoShape *shape, SvgSavingContext &context);
 
-    void saveImage(KoShape *picture, SvgSavingContext &context);
-    void saveText(ArtisticTextShape *text, SvgSavingContext &context);
-
-    void saveStyle(KoShape *shape, SvgSavingContext &context);
-    void saveFill(KoShape * shape, SvgSavingContext &context);
-    void saveStroke(KoShape * shape, SvgSavingContext &context);
-    void saveEffects(KoShape *shape, SvgSavingContext &context);
-    void saveClipping(KoShape *shape, SvgSavingContext &context);
-    void saveColorStops(const QGradientStops &colorStops, SvgSavingContext &context);
-    QString saveGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
-    QString savePattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context);
-    void saveFont(const QFont &font, SvgSavingContext &context);
-    void saveTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveFont, qreal baselineOffset);
-
-    QString getID(const KoShape *obj);
-    QString createUID(const QString &base);
-
-    QHash<const KoShape*, QString> m_shapeIds;
-    QHash<QString, int> m_uniqueNames;
     QList<KoShape*> m_toplevelShapes;
-    QTransform m_userSpaceMatrix;
     QSizeF m_pageSize;
     bool m_writeInlineImages;
-    QString m_filename;
 };
 
 #endif // SVGWRITER_H
