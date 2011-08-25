@@ -461,9 +461,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EMR_SETMAPMODE:
 	{
-	    quint32 mapMode;
-	    stream >> mapMode;
-	    mOutput->setMapMode(context, mapMode );
+	    stream >> context.mapMode;
+            context.changedItems |= DCMapMode;
 	}
         break;
     case EMR_SETBKMODE:

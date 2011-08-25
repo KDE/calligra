@@ -90,7 +90,6 @@ public:
     void pie(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
     void ellipse(EmfDeviceContext &context, const QRect &box );
     void rectangle(EmfDeviceContext &context, const QRect &box );
-    void setMapMode(EmfDeviceContext &context, const quint32 mapMode );
     void setMetaRgn(EmfDeviceContext &context);
     void setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin );
     void setWindowExtEx(EmfDeviceContext &context, const QSize &size );
@@ -232,10 +231,6 @@ private:
     */
     enum Qt::FillRule m_fillRule;
 
-    /**
-       The current map mode
-    */
-    MapMode  m_mapMode;
     /**
         The current text alignment mode
     */

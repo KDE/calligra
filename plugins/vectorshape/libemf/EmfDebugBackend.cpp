@@ -193,43 +193,6 @@ void EmfDebugBackend::setWorldTransform(EmfDeviceContext &context, float M11, fl
     kDebug(33100) << "EMR_SETWORLDTRANSFORM:" << QTransform ( M11, M12, M21, M22, Dx, Dy );
 }
 
-void EmfDebugBackend::setMapMode(EmfDeviceContext &context, quint32 mapMode )
-{
-    Q_UNUSED(context);
-
-    QString modeAsText;
-    switch ( mapMode ) {
-    case MM_TEXT:
-	modeAsText = QString( "map mode - text" );
-	break;
-    case MM_LOMETRIC:
-	modeAsText = QString( "map mode - lometric" );
-	break;
-    case MM_HIMETRIC:
-	modeAsText = QString( "map mode - himetric" );
-	break;
-    case MM_LOENGLISH:
-	modeAsText = QString( "map mode - loenglish" );
-	break;
-    case MM_HIENGLISH:
-	modeAsText = QString( "map mode - hienglish" );
-	break;
-    case MM_TWIPS:
-	modeAsText = QString( "map mode - twips" );
-	break;
-    case MM_ISOTROPIC:
-	modeAsText = QString( "map mode - isotropic" );
-	break;
-    case MM_ANISOTROPIC:
-	modeAsText = QString( "map mode - anisotropic" );
-	break;
-    default:
-	modeAsText = QString( "unexpected map mode: %1").arg( mapMode );
-    }
-    kDebug(33100) << "EMR_SETMAPMODE:" << modeAsText;
-
-}
-
 void EmfDebugBackend::setBkMode(EmfDeviceContext &context, const quint32 backgroundMode )
 {
     Q_UNUSED(context);

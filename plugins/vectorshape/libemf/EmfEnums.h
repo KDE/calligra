@@ -89,7 +89,35 @@ namespace Libemf
        MapModes
 
        See [MS-EMF] Section 2.1.21
+
+       <em>The EMR_SETMAPMODE record specifies the mapping mode of the
+       playback device context. The mapping mode specifies the unit of
+       measure used to transform page-space units into device-space
+       units, and also specifies the orientation of the device's x and
+       y axes.</em>
+
+       The valid mapping modes are:
+       - 0x01 (MM_TEXT): Each logical unit is mapped to one device pixel.
+       - 0x02 (MM_LOMETRIC): Each logical unit is mapped to 0.1 millimeter
+       - 0x03 (MM_HIMETRIC): Each logical unit is mapped to 0.01 millimeter.
+       - 0x04 (MM_LOENGLISH): Each logical unit is mapped to 0.01 inch.
+       - 0x05 (MM_HIENGLISH): Each logical unit is mapped to 0.001 inch.
+       - 0x06 (MM_TWIPS): Each logical unit is mapped to one twentieth of a printer's point (1/1440 inch).
+       - 0x07 (MM_ISOTROPIC): Logical units are mapped to arbitrary units with equally-scaled axes; that is, one unit along the x-axis is equal to one unit along the y-axis.
+       - 0x08 (MM_ANISOTROPIC): Logical units are mapped to arbitrary units with arbitrarily scaled axes.
+
+       Note that increasing x is to the right, and increasing y is up,
+       except for MM_TEXT, where it is down.
+
+       You can expect to get several calls to this function
+       (e.g. MM_ANISOTROPIC, followed by MM_HIMETRIC). If you maintain
+       state based on this call, you probably need to maintain the
+       dimensions / direction separate from the isotropic /
+       anisotropic state.
+
+       \param mapMode the mapping mode value
     */
+
     typedef enum {
         MM_TEXT        = 0x01,
         MM_LOMETRIC    = 0x02,

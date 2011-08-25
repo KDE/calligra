@@ -23,6 +23,8 @@
 
 #include <kdebug.h>
 
+#include "EmfEnums.h"
+
 
 /**
    Namespace for Windows Metafile (EMF) classes
@@ -66,7 +68,7 @@ void EmfDeviceContext::reset()
     //Font mapping mode
     rop = 0;// FIXME: Check the real default
     layoutMode = 0;// FIXME: Check the real default
-    //Mapping mode
+    mapMode = MM_TEXT;
     polyFillMode = 0;// FIXME: Check the real default
     //Stretchblt mode
     textAlign = 0;// FIXME: Check the real default

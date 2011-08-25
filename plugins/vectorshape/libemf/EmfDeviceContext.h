@@ -115,7 +115,7 @@ public:
     //Font mapping mode NYI
     quint16  rop;               // Foreground mix mode
     quint16  layoutMode;        // Layout mode
-    //Mapping mode NYI
+    quint32  mapMode;           // Mapping mode
     quint16  polyFillMode;      // Polygon fill mode
     //Stretchblt mode NYI
     quint16  textAlign;         // Text alignment mode

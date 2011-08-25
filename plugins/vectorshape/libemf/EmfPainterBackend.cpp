@@ -44,7 +44,6 @@ EmfPainterBackend::EmfPainterBackend()
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
     , m_fillRule(Qt::OddEvenFill)
-    , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
 {
@@ -63,7 +62,6 @@ EmfPainterBackend::EmfPainterBackend(QPainter &painter, QSize &size,
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
     , m_fillRule(Qt::OddEvenFill)
-    , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
 {
@@ -491,8 +489,8 @@ void EmfPainterBackend::modifyWorldTransform(EmfDeviceContext &context,
 }
 
 void EmfPainterBackend::setWorldTransform(EmfDeviceContext &context,
-                                              float M11, float M12, float M21,
-                                              float M22, float Dx, float Dy )
+                                          float M11, float M12, float M21,
+                                          float M22, float Dx, float Dy )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
@@ -512,8 +510,8 @@ void EmfPainterBackend::setWorldTransform(EmfDeviceContext &context,
 
 
 void EmfPainterBackend::createPen(EmfDeviceContext &context,
-                                      quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-                                      quint8 red, quint8 green, quint8 blue, quint8 reserved )
+                                  quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
+                                  quint8 red, quint8 green, quint8 blue, quint8 reserved )
 {
     Q_UNUSED( y );
     Q_UNUSED( reserved );
@@ -588,10 +586,10 @@ void EmfPainterBackend::createPen(EmfDeviceContext &context,
 }
 
 void EmfPainterBackend::createBrushIndirect(EmfDeviceContext &context,
-                                                quint32 ihBrush, quint32 brushStyle,
-                                                quint8 red, quint8 green, quint8 blue,
-                                                quint8 reserved,
-                                                quint32 brushHatch )
+                                            quint32 ihBrush, quint32 brushStyle,
+                                            quint8 red, quint8 green, quint8 blue,
+                                            quint8 reserved,
+                                            quint32 brushHatch )
 {
     Q_UNUSED( reserved );
     Q_UNUSED( brushHatch );
@@ -646,7 +644,7 @@ void EmfPainterBackend::createBrushIndirect(EmfDeviceContext &context,
 }
 
 void EmfPainterBackend::createMonoBrush(EmfDeviceContext &context,
-                                            quint32 ihBrush, Bitmap *bitmap )
+                                        quint32 ihBrush, Bitmap *bitmap )
 {
 
     QImage  pattern(bitmap->image());
@@ -657,7 +655,7 @@ void EmfPainterBackend::createMonoBrush(EmfDeviceContext &context,
 
 
 void EmfPainterBackend::extCreateFontIndirectW(EmfDeviceContext &context,
-                                                   const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
+                                               const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
 {
     QFont font( extCreateFontIndirectW.fontFace() );
 
@@ -890,15 +888,6 @@ void EmfPainterBackend::rectangle(EmfDeviceContext &context, const QRect &box )
 
 // ----------------------------------------------------------------
 
-
-void EmfPainterBackend::setMapMode(EmfDeviceContext &context, const quint32 mapMode )
-{
-#if DEBUG_EMFPAINT
-    kDebug(33100) << "Set map mode:" << mapMode;
-#endif
-
-    m_mapMode = (MapMode)mapMode;
-}
 
 void EmfPainterBackend::setBkMode(EmfDeviceContext &context, const quint32 backgroundMode )
 {
