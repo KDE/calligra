@@ -1932,9 +1932,11 @@ void setListLevelProperties(KoXmlWriter& out, const wvWare::Word97::PAP& pap, co
         out.addAttribute("text:label-followed-by", "listtab");
         //TODO: text:list-tab-stop-position - Fine tuning on complex files required!
 //         Q_ASSERT(pap.itbdMac == 1);
+        qreal position = 0;
         if (pap.itbdMac) {
-            out.addAttributePt("text:list-tab-stop-position", Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab));
+            position = Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab);
         }
+        out.addAttributePt("text:list-tab-stop-position", position);
         break;
     }
     case 1: //A space follows the number text.
