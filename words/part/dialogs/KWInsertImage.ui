@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="grpAnchor">
      <property name="title">
       <string>Anchor to...</string>
      </property>
@@ -57,7 +57,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="grpHAlign">
        <property name="title">
         <string>Horizontal Alignment</string>
        </property>
@@ -90,7 +90,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="grpVAlign">
        <property name="title">
         <string>Vertical Alignment</string>
        </property>
@@ -125,7 +125,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="grpWrap">
      <property name="title">
       <string>Text Wrap-around</string>
      </property>

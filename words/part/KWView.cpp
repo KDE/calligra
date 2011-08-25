@@ -44,6 +44,7 @@
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
 #include <KoShapeReorderCommand.h>
+#include "ui_KWInsertImage.h"
 
 // calligra libs includes
 #include <calligraversion.h>
@@ -83,6 +84,8 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+#include <KoFindText.h>
+#include <KoFindToolbar.h>
 
 
 // KDE + Qt includes
@@ -92,6 +95,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kdialog.h>
 #include <KToggleAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -100,8 +104,6 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <KParts/PartManager>
-#include <KoFindText.h>
-#include <KoFindToolbar.h>
 
 static KWFrame *frameForShape(KoShape *shape)
 {
@@ -1642,10 +1644,13 @@ void KWView::loadingCompleted()
 
 void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 {
-/*
+    if (!m_canvas) {
+        // now canvas because we're not on the desktop?
+        return;
+    }
     // get position from event and convert to document coordinates
-    QPointF pos = zoomHandler()->viewToDocument(insertAt)
-            + canvasBase()->documentOffset() - canvasBase()->documentOrigin();
+    QPointF pos = m_canvas->viewConverter()->viewToDocument(insertAt)
+            + m_canvas->documentOffset()- m_canvas->documentOrigin();
 
     // create a factory
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
@@ -1654,7 +1659,30 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    // ask the user which kind of anchoring to use
+    // get the textshape at this point
+    QList<KoShape*> possibleTextShapes = canvasBase()->shapeManager()->shapesAt(QRectF(pos.x() - 10, pos.y() -10, 20, 20));
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape* shape, possibleTextShapes) {
+        KoShapeUserData *userData = shape->userData();
+        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+            // We've found the top-level text shape.
+            break;
+        }
+    }
+
+    KDialog dlg;
+    dlg.setCaption(i18n("Insert Image Options"));
+    QWidget *page = new QWidget(&dlg);
+    dlg.setMainWidget(page);
+    Ui_KWInsertImage uiInsertImage;
+    uiInsertImage.setupUi(page);
+
+    if (textShapeData) {
+        // ask the user what kind of anchoring to use
+        if (dlg.exec() == KDialog::Cancel) {
+            return;
+        }
+    }
 
     foreach(const QImage image, imageList) {
 
@@ -1663,18 +1691,23 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         v.setValue<QImage>(image);
         params.setProperty("qimage", v);
 
-        KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
+        KoShape *shape = factory->createShape(&params, kwdocument()->resourceManager());
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
-            delete shape;
             return;
         }
-        shape->setPosition(pos);
-        pos += QPointF(25,25); // increase the position for each shape we insert so the
-                               // user can see them all.
 
+        if (textShapeData) {
+        }
+        else {
+            shape->setPosition(pos);
+            pos += QPointF(25,25); // increase the position for each shape we insert so the
+                                   // user can see them all.
+            // add the shape floating, like in stage
+
+        }
     }
-*/
+
 }
 

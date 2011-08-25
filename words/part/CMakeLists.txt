@@ -85,6 +85,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertPageDialog.ui
     dialogs/KWInsertInlineNoteDialog.ui
+    dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
 )
 if( Soprano_FOUND )
