@@ -1830,6 +1830,13 @@ Q_UNUSED(pprRead);
 #endif
      }
 
+     // Positioning of list-items defined by fo:margin-left and fo:text-indent
+     // in the style:list-level-properties element.
+     if (m_currentListLevel > 0) {
+         m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
+         m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+     }
+
      body->startElement("text:p", false);
 
      // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
@@ -2352,28 +2359,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
         m_currentBulletProperties.setMargin(realMarginal);
         m_listStylePropertiesAltered = true;
 
-        // NOTE: indent is not the same as fo:text-indent in odf, but rather an
-        // additional value added to left marginal.
+        // NOTE: No idea to which format the disabled logic applied, looks very
+        // suspicious, started to use fo:text-indent instead.
         //
-        // FIXME: This looks very suspicious and I don't understand the
-        // previous note.  Indent on the 1st level has to be ignored for
-        // PowerPoint (in case we do not consider the paragraph as a
-        // list-item).  For a list-item, both fo:margin-left and fo:text-indent
-        // should be ZERO.  Positioning of list-items is defined by
-        // the style:list-level-properties element.
-        if (!indent.isEmpty()) {
-            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        }
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-    } else if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
-    }
+/*         if (!indent.isEmpty()) { */
+/*             realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
+/*         } */
+/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal); */
+    }/*  else if (!indent.isEmpty()) { */
+/*         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
+/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd); */
+/*     } */
     if (!indent.isEmpty()) {
         qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
         m_listStylePropertiesAltered = true;
     }
@@ -4971,19 +4974,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     inheritTextStyle(m_currentTextStyle);
 #endif
 
-    // NOTE: marL and indent are stored into <style:list-level-label-alignment>
-    // element to control position of the 2nd line of the list-item and
-    // position of it's label.
-    m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
-
     // Following settings are only applied if defined so they don't overwrite
     // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
         m_currentBulletProperties.setMargin(realMarginal);
     }
     if (!indent.isEmpty()) {
         qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
     }
     if (!marR.isEmpty()) {
