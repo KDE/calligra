@@ -1678,8 +1678,18 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
     uiInsertImage.setupUi(page);
 
     if (textShapeData) {
-        // ask the user what kind of anchoring to use
-        if (dlg.exec() == KDialog::Cancel) {
+        // ask the user what kind of anchoring and run-around to use
+        if (dlg.exec() == QDialog::Rejected) {
+            return;
+        }
+    }
+    else {
+        // ask the user what kind of run-around to use
+        uiInsertImage.grpAnchor->setVisible(false);
+        uiInsertImage.grpHAlign->setVisible(false);
+        uiInsertImage.grpVAlign->setVisible(false);
+
+        if (dlg.exec() == KDialog::QDialog::Rejected) {
             return;
         }
     }
@@ -1700,18 +1710,91 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             return;
         }
 
+        // Set the wraparound
+        if (uiInsertImage.noRunaround->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::NoRunAround);
+        }
+        else if (uiInsertImage.left->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::LeftRunAroundSide);
+        }
+        else if (uiInsertImage.right->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::RightRunAroundSide);
+        }
+        else if (uiInsertImage.longest->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::BiggestRunAroundSide);
+        }
+        else if (uiInsertImage.both->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::BothRunAroundSide);
+        }
+        else if (uiInsertImage.enough->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::EnoughRunAroundSide);
+            double threshold = uiInsertImage.threshold->value();
+            shape->setTextRunAroundThreshold(threshold);
+        }
+
+        double distance = uiInsertImage.distance->value();
+        shape->setTextRunAroundDistance(distance);
+
+        // only if we have a text shape, we will anchor to the text inside.
         if (textShapeData) {
 
             // Create the anchor
             QTextDocument *qdoc = textShapeData->document();
             KoTextAnchor *anchor = new KoTextAnchor(shape);
 
-            // XXX: set the options for the anchor correctly
-            anchor->setVerticalPos(KoTextAnchor::VBottom);
-            anchor->setVerticalRel(KoTextAnchor::VParagraph);
-            anchor->setHorizontalRel(KoTextAnchor::HParagraph);
-            anchor->setHorizontalPos(KoTextAnchor::HCenter);
+            // anchor
+            // XXX: What about: HFrame, HFrameContent, HFrameEndMargin, HFrameStartMargin?
             anchor->setBehavesAsCharacter(false);
+            if (uiInsertImage.rAnchorPage->isChecked()) {
+                // XXX: or: VPageContent?
+                anchor->setVerticalRel(KoTextAnchor::VPage);
+                // XXX: or: HPageContent or HPageStartMargin or HPageEndMargin?
+                anchor->setHorizontalRel(KoTextAnchor::HPage);
+
+            }
+            else if (uiInsertImage.rAnchorParagraph->isChecked()) {
+                // XXX: or: VParagraphContent?
+                anchor->setVerticalRel(KoTextAnchor::VParagraph);
+                // XXX: or HParagraphContent, HParagraphEndMargin, HParagraphStartMargin?
+                anchor->setHorizontalRel(KoTextAnchor::HParagraph);
+
+            }
+            else if (uiInsertImage.rAnchorToCharacter->isChecked()) {
+                // XXX: or VBaseline, VLine?
+                anchor->setVerticalRel(KoTextAnchor::VChar);
+                anchor->setHorizontalRel(KoTextAnchor::HChar);
+
+            }
+            else if (uiInsertImage.rAnchorAsCharacter->isChecked()) {
+                anchor->setVerticalRel(KoTextAnchor::VBaseline);
+                anchor->setHorizontalRel(KoTextAnchor::HChar);
+                anchor->setBehavesAsCharacter(true);
+            }
+
+            // horizontal alignment
+            // XXX: what about HFromInside, HFromLeft, HInside, HOutside?
+            if (uiInsertImage.rAlignLeft->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HLeft);
+            }
+            else if (uiInsertImage.rAlignCenter->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HCenter);
+            }
+            else if (uiInsertImage.rAlignRight->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HRight);
+            }
+
+            // vertical alignment
+            if (uiInsertImage.rAlignTop->isChecked()) {
+                // XXX: or VFromTop?
+                anchor->setVerticalPos(KoTextAnchor::VTop);
+            }
+            else if (uiInsertImage.rAlignMiddle->isChecked()) {
+                anchor->setVerticalPos(KoTextAnchor::VMiddle);
+            }
+            else if (uiInsertImage.rAlignBottom->isChecked()) {
+                anchor->setVerticalPos(KoTextAnchor::VBottom);
+            }
+
             anchor->setOffset(QPointF(0, -shape->size().height()));
             // insert the anchor into the text document
             KoTextEditor editor(qdoc);

@@ -103,7 +103,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="RAlignBottom">
+         <widget class="QRadioButton" name="rAlignMiddle">
           <property name="text">
            <string>&amp;Middle</string>
           </property>
@@ -113,7 +113,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_10">
+         <widget class="QRadioButton" name="rAlignBottom">
           <property name="text">
            <string>&amp;Bottom</string>
           </property>
