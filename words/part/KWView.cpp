@@ -47,6 +47,9 @@
 
 // calligra libs includes
 #include <calligraversion.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
@@ -125,6 +128,8 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         : KoView(document, parent)
         , m_canvas(0), m_actionMenu(0)
 {
+    setAcceptDrops(true);
+
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(viewMode, this);
@@ -378,7 +383,7 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
 
     action = new KAction(i18n("As Character"), this);
-    action->setToolTip(i18n("Insert the current shape as a character in the text"));
+    action->setToolTip(i18n("Anchor the current shape as a character in the text"));
     actionCollection()->addAction("anchor_as_character", action);
     connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
 
@@ -1634,3 +1639,42 @@ void KWView::loadingCompleted()
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
     m_find->addDocuments(texts);
 }
+
+void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+{
+/*
+    // get position from event and convert to document coordinates
+    QPointF pos = zoomHandler()->viewToDocument(insertAt)
+            + canvasBase()->documentOffset() - canvasBase()->documentOrigin();
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    // ask the user which kind of anchoring to use
+
+    foreach(const QImage image, imageList) {
+
+        KoProperties params;
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
+
+        KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            delete shape;
+            return;
+        }
+        shape->setPosition(pos);
+        pos += QPointF(25,25); // increase the position for each shape we insert so the
+                               // user can see them all.
+
+    }
+*/
+}
+
