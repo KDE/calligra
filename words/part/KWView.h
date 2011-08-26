@@ -73,6 +73,9 @@ public:
         return m_document;
     }
 
+    /// reimplemented from superclass
+    void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+
     // interface KoView
     /// reimplemented method from superclass
     virtual void updateReadWrite(bool readWrite);

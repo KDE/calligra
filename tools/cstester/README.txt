@@ -50,8 +50,8 @@ This explanation of the tools expects the directories to be there.
 
 How to create the basis for the tests and see if regressions in painting/loading (crashes)
 > cd tester/documents
-> mkdir ../result/sha-of-commit1
-> ../checkdocs.sh ../result/sha-of-commit1
+> mkdir ../results/sha-of-commit1
+> ../checkdocs.sh ../results/sha-of-commit1
 
 Look at the result
 > cat tester/error-sha-of-commit1.log
@@ -61,8 +61,8 @@ All files in there had a problems. Either they crashed or got killed by the scri
 To check for changes between different versions do
 
 > cd tester/documents
-> mkdir ../result/sha-of-commit2
-> ./verifydocs.sh ../result/sha-of-commit1 ../result/sha-of-commit2
+> mkdir ../results/sha-of-commit2
+> ../verifydocs.sh ../results/sha-of-commit1 ../results/sha-of-commit2
 
 Look at the result
 

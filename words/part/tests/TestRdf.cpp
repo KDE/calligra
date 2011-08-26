@@ -39,6 +39,8 @@
 #include <KWDocument.h>
 #include <frames/KWTextFrameSet.h>
 #include <rdf/KoDocumentRdf.h>
+#include <rdf/KoRdfLocation.h>
+#include <rdf/KoRdfFoaF.h>
 #include <rdf/KoRdfPrefixMapping.h>
 #include <rdf/KoSopranoTableModel.h>
 #include <KoStore.h>

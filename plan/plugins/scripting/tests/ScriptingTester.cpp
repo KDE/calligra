@@ -43,6 +43,7 @@ QStringList ScriptingTester::initTestList()
         << "task_readwrite.py"
         << "resource_access.py"
         << "resource_readwrite.py"
+        << "resource_team.py"
         ;
     return scripts;
 }

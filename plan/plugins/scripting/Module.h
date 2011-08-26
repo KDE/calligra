@@ -1,8 +1,8 @@
 /*
- * This file is part of KPlato
+ * This file is part of Calligra project
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008, 2011 Dag Andersen <danders@get2net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published by

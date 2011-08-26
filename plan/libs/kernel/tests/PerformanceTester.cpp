@@ -49,8 +49,8 @@ void PerformanceTester::init()
     p1->setId( p1->uniqueNodeId() );
     p1->registerNodeId( p1 );
     p1->setName( "PerformanceTester" );
-    p1->setConstraintStartTime( DateTime::fromString( "2010-11-19T08:00:00Z" ) );
-    p1->setConstraintEndTime( DateTime::fromString( "2010-11-29T16:00:00Z" ) );
+    p1->setConstraintStartTime( DateTime( QDateTime::fromString( "2010-11-19T08:00:00", Qt::ISODate ) ) );
+    p1->setConstraintEndTime( DateTime( QDateTime::fromString( "2010-11-29T16:00:00", Qt::ISODate ) ) );
 
     Calendar *c = new Calendar();
     c->setDefault( true );

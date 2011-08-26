@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008, 2011 Dag Andersen <danders@get2net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -82,12 +82,39 @@ void Scripting::Resource::clearExternalAppointments( const QString &id )
 
 int Scripting::Resource::childCount() const
 {
+    return kplatoResource()->type() == KPlato::Resource::Type_Team ? kplatoResource()->teamMembers().count() : 0;
+}
+
+QObject *Scripting::Resource::childAt( int index ) const
+{
+    if ( kplatoResource()->type() == KPlato::Resource::Type_Team ) {
+        return m_project->resource( kplatoResource()->teamMembers().value( index ) );
+    }
     return 0;
 }
 
-QObject *Scripting::Resource::childAt( int /*index*/ ) const
+void Scripting::Resource::setChildren( const QList<QObject*> &children )
 {
-    return 0;
+    qDebug()<<"setTeamMembers:"<<children;
+    KPlato::Resource *team = kplatoResource();
+    // atm. only teams have children
+    if ( team->type() != KPlato::Resource::Type_Team ) {
+        return;
+    }
+    KPlato::MacroCommand *cmd = new KPlato::MacroCommand( i18nc( "(qtundo_format)", "Set resource team members" ) );
+    foreach ( KPlato::Resource *r, team->teamMembers() ) {
+       cmd->addCommand( new KPlato::RemoveResourceTeamCmd( team, r ) );
+    }
+    foreach ( QObject *o, children ) {
+       Resource *r = qobject_cast<Resource*>( o );
+       if ( r && r->kplatoResource() ) {
+        cmd->addCommand( new KPlato::AddResourceTeamCmd( team, r->kplatoResource() ) );
+        }
+    }
+    if ( ! cmd->isEmpty() ) {
+        m_project->addCommand( cmd );
+    }
+    qDebug()<<"setTeamMembers:"<<team->teamMembers();
 }
 
 #include "Resource.moc"

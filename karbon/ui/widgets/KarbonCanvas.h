@@ -108,6 +108,9 @@ public:
     /// Sets the canvas background color to the given color
     void setBackgroundColor(const QColor &color);
 
+    /// @return the offset of the document in canvas position.
+    const QPoint &documentOffset() const;
+
 public slots:
 
     /**

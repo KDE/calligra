@@ -103,6 +103,9 @@ public: // KoCanvasBase interface methods.
      */
     virtual void setCacheEnabled(bool enabled, int cacheSize = 50, qreal maxZoom = 2.0);
 
+    /// @return the offset of the document in this canvas
+    QPoint documentOffset() const;
+
 protected:
 
     void paint(QPainter &painter, const QRectF &paintRect);

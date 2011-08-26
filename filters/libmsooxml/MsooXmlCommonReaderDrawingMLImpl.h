@@ -1830,6 +1830,13 @@ Q_UNUSED(pprRead);
 #endif
      }
 
+     // Positioning of list-items defined by fo:margin-left and fo:text-indent
+     // in the style:list-level-properties element.
+     if (m_currentListLevel > 0) {
+         m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
+         m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+     }
+
      body->startElement("text:p", false);
 
      // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
@@ -2352,16 +2359,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
-        // value added to left marginal
-        if (!indent.isEmpty()) {
-            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        }
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-    } else if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+        m_currentBulletProperties.setMargin(realMarginal);
+        m_listStylePropertiesAltered = true;
+
+        // NOTE: No idea to which format the disabled logic applied, looks very
+        // suspicious, started to use fo:text-indent instead.
+        //
+/*         if (!indent.isEmpty()) { */
+/*             realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
+/*         } */
+/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal); */
+    }/*  else if (!indent.isEmpty()) { */
+/*         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
+/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd); */
+/*     } */
+    if (!indent.isEmpty()) {
+        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+        m_currentBulletProperties.setIndent(firstInd);
+        m_listStylePropertiesAltered = true;
     }
+
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
@@ -2407,6 +2426,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+/*     m_currentCombinedBulletProperties[m_currentListLevel] = m_currentBulletProperties; */
 
     READ_EPILOGUE
 }
@@ -4954,19 +4974,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     inheritTextStyle(m_currentTextStyle);
 #endif
 
-    // Following settings are only applied if defined so they don't overwrite defaults
-    // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    // Following settings are only applied if defined so they don't overwrite
+    // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
-        // value added to left marginal
-        if (!indent.isEmpty()) {
-            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        }
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-    } else if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+        m_currentBulletProperties.setMargin(realMarginal);
+    }
+    if (!indent.isEmpty()) {
+        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+        m_currentBulletProperties.setIndent(firstInd);
     }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));

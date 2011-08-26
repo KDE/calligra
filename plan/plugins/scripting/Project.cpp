@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008, 2011 Dag Andersen <danders@get2net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -507,6 +507,16 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *copy )
         return 0;
     }
     r = new KPlato::Resource( rs->kplatoResource() );
+    r->clearTeamMembers(); // NOTE: also copies team members, so clear to be safe
+    if ( r->type() == KPlato::Resource::Type_Team ) {
+        // assemble team
+        foreach ( KPlato::Resource *tr, rs->kplatoResource()->teamMembers() ) {
+            KPlato::Resource *m = kplatoProject()->findResource( tr->id() );
+            if ( m ) {
+                r->addTeamMember( m );
+            }
+        }
+    }
     KPlato::Calendar *c = rs->kplatoResource()->calendar( true );
     if ( c ) {
         c = kplatoProject()->calendar( c->id() );
@@ -896,7 +906,12 @@ int Scripting::Project::stringToRole( const QString &role, int programrole ) con
     return e.keyToValue( role.toUtf8() );
 }
 
-void Scripting::Project::slotAddCommand(KUndo2Command *cmd )
+void Scripting::Project::addCommand( KUndo2Command *cmd )
+{
+    slotAddCommand( cmd );
+}
+
+void Scripting::Project::slotAddCommand( KUndo2Command *cmd )
 {
     m_module->addCommand( cmd );
 }

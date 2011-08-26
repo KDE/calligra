@@ -31,7 +31,7 @@ StateShapeFactory::StateShapeFactory()
 {
     setToolTip(i18n("A state shape"));
     setIcon("stateshape");
-    setOdfElementNames("http://kde.org/braindump", QStringList("state"));
+    setXmlElementNames("http://kde.org/braindump", QStringList("state"));
 }
 
 KoShape *StateShapeFactory::createDefaultShape(KoResourceManager */*documentResources*/) const
