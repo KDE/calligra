@@ -430,7 +430,7 @@ void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertA
         v.setValue<QImage>(image);
         params.setProperty("qimage", v);
 
-        KoShape *shape = factory->createShape(&params, canvasWidget()->resourceManager());
+        KoShape *shape = factory->createShape(&params, part()->document().resourceManager());
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
