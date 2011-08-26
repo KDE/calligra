@@ -1,0 +1,8 @@
+[Desktop Entry]
+X-KDE-ServiceTypes=Plan/SchedulerPlugin
+Type=Service
+X-KDE-Library=plantjscheduler
+
+Name=TJ Scheduler
+Comment=The TaskJuggler scheduler
+Comment[x-test]=xxThe TaskJuggler schedulerxx
