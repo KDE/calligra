@@ -281,31 +281,31 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
     // See also loadOdf() in loadOdfAttributes.
     saveOdfAttributes( context, OdfAllAttributes );
 
-#if 0   // Enable to get more detailed debug messages
-    kDebug(30006) << "Object names: " << d->objectNames.size();
-    for (int i = 0; i < d->objectNames.size(); ++i) {
-        kDebug(30006) << i << ':' << d->objectNames.value(i);
-    }
-    kDebug(30006) << "Object manifest entries: " << d->manifestEntries.size();
-    for (int i = 0; i < d->manifestEntries.size(); ++i) {
-        KoOdfManifestEntry *entry = d->manifestEntries.value(i);
-        kDebug(30006) << i << ":" << entry;
-        if (entry)
-            kDebug(30006) << entry->fullPath() << entry->mediaType() << entry->version();
-        else
-            kDebug(30006) << "--";
-    }
-#endif
-
     // Write the stored XML to the file, but don't reuse object names.
+    int lap = 0;
+    QString newName;
     foreach (const ObjectEntry *object, d->objectEntries) {
         QByteArray xmlArray(object->objectXmlContents);
-        QString objectName(object->objectName); // Possibly empty.
+        QString    objectName(object->objectName); // Possibly empty.
         KoOdfManifestEntry *manifestEntry(object->manifestEntry);
 
-        QString newName = objectName;
-        if (!objectName.isEmpty()) {
+        // Create a name for this object. If this is not the first
+        // object, i.e. a replacement object (most likely a picture),
+        // then reuse the name but put it in ReplacementObjects.
+        if (++lap == 1) {
+            // The first lap in the loop is the actual object.  All
+            // other laps are replacement objects.
             newName = fileSaver.getFilename("Object ");
+        }
+        else if (lap == 2) {
+            newName = "ObjectReplacements/" + newName;
+        }
+        else
+            // FIXME: what should replacement 2 and onwards be called?
+            newName = newName + "_";
+
+        // If there was a previous object name, replace it with the new one.
+        if (!objectName.isEmpty()) {
             // FIXME: We must make a copy of the byte array here because
             //        otherwise we won't be able to save > 1 time.
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
@@ -321,25 +321,27 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         // Save embedded files for this object.
         for (int j = 0; j < d->embeddedFiles.size(); ++j) {
             QString  fileName(d->embeddedFiles.value(j)->path);
-            //kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
 
             // If we found a file for this object, we need to write it
             // but with the new object name instead of the old one.
-            if (fileName.startsWith(objectName)) {
-                fileName.replace(objectName, newName);
-                fileName.prepend("./");
-                //kDebug(30006) << "New filename: " << fileName;
-                fileSaver.saveFile(fileName, d->embeddedFiles.value(j)->mimeType.toLatin1(),
-                                   d->embeddedFiles.value(j)->contents);
-            }
+            if (!fileName.startsWith(objectName))
+                continue;
+
+            kDebug(30006) << "Object name: " << objectName << "newName: " << newName
+                          << "filename: " << fileName;
+
+            fileName.replace(objectName, newName);
+            fileName.prepend("./");
+            kDebug(30006) << "New filename: " << fileName;
+            fileSaver.saveFile(fileName, d->embeddedFiles.value(j)->mimeType.toLatin1(),
+                               d->embeddedFiles.value(j)->contents);
         }
 
         // Write the manifest entry for the object itself.  If it's a
         // file, the manifest is already written by saveFile, so skip
         // it here.
         if (object->isDir) {
-            newName += '/';
-            fileSaver.saveManifestEntry(newName, manifestEntry->mediaType(),
+            fileSaver.saveManifestEntry(newName + '/', manifestEntry->mediaType(),
                                         manifestEntry->version());
         }
     }
