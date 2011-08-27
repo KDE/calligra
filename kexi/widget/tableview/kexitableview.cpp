@@ -268,7 +268,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     // Create headers
     m_horizontalHeader = new KexiTableViewHeader(this);
     m_horizontalHeader->setObjectName("m_horizontalHeader");
-    m_horizontalHeader->setSelectionBackgroundColor(palette().active().highlight());
+    m_horizontalHeader->setSelectionBackgroundColor(palette().color(QPalette::Highlight));
     m_horizontalHeader->setOrientation(Qt::Horizontal);
     m_horizontalHeader->setTracking(false);
     m_horizontalHeader->setMovingEnabled(false);
@@ -893,7 +893,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
              && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
              && usesSelectedTextColor)
     {
-        defaultPen = colorGroup().highlightedText(); //selected text
+        defaultPen = palette().color(QPalette::HighlightedText); //selected text
     } else if (   d->appearance.recordHighlightingEnabled && row == m_curRow
                && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
                && usesSelectedTextColor)
@@ -933,7 +933,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
            )
         {
             edit->paintSelectionBackground(p, isEnabled(), txt, align, x, y_offset, w, h,
-                                           isEnabled() ? colorGroup().highlight() : QColor(200, 200, 200),//d->grayColor,
+                                           isEnabled() ? palette().color(QPalette::Highlight) : QColor(200, 200, 200),//d->grayColor,
                                            p->fontMetrics(), columnReadOnly, d->appearance.fullRecordSelection);
         }
     }
@@ -2579,7 +2579,7 @@ void KexiTableView::paletteChange(const QPalette &oldPalette)
     if (m_verticalHeader)
         m_verticalHeader->setSelectionBackgroundBrush(palette().brush(QPalette::Highlight));
     if (m_horizontalHeader)
-        m_horizontalHeader->setSelectionBackgroundColor(palette().active().highlight());
+        m_horizontalHeader->setSelectionBackgroundColor(palette().color(QPalette::Highlight));
 }
 
 const KexiTableView::Appearance& KexiTableView::appearance() const
