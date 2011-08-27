@@ -5,6 +5,7 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextLoadingContext.cpp
 )
 
 

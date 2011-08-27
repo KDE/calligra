@@ -541,14 +541,7 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
             break;
         }
     }
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
-        }
-        return result;
-    }
-    return QVariant();
+    return result;
 }
 
 

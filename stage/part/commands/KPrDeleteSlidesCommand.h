@@ -27,11 +27,13 @@
 class KPrDocument;
 class KoPAPageBase;
 
+#include "stage_export.h"
+
 /**
  * Command for deleting a slide from a document
  * It deletes also a slide from all custom shows
  */
-class KPrDeleteSlidesCommand : public KUndo2Command
+class STAGE_TEST_EXPORT KPrDeleteSlidesCommand : public KUndo2Command
 {
 public:
     /**

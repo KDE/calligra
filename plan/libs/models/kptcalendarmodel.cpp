@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2007 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -389,16 +389,7 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
             kDebug()<<"data: invalid display value column"<<index.column();
             return QVariant();
     }
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
-        }
-        return result;
-    }
-    // define default action
-
-    return QVariant();
+    return result;
 }
 
 bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
@@ -903,12 +894,6 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
                 }
             }
             break;
-        }
-    }
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
         }
     }
     return result;

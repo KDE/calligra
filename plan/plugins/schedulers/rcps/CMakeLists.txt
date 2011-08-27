@@ -24,4 +24,4 @@ install( TARGETS kplatorcpsscheduler DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kplatorcpsscheduler.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES planrcpsscheduler.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

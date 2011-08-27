@@ -388,13 +388,13 @@ void KPrView::changeViewByIndex(int index)
 {
     switch (index) {
     case 0:
-        showNormal();
+        m_actionViewModeNormal->trigger();
         break;
     case 1:
-        showNotes();
+        m_actionViewModeNotes->trigger();
         break;
     case 2:
-        showSlidesSorter();
+        m_actionViewModeSlidesSorter->trigger();
         break;
     default:
         break;
