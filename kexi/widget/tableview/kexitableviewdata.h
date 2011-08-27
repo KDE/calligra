@@ -216,7 +216,7 @@ public:
      Clears internal row structures. Row-edit buffer is cleared.
      Does not touch data @ database backend.
      Use deleteAllRows() to safely delete all rows. */
-    virtual void clearInternal();
+    virtual void clearInternal(bool processEvents = true);
 
     /*! Inserts new \a record at index \a index.
      \a record will be owned by this data object.
