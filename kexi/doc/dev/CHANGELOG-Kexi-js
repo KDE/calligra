@@ -89,9 +89,15 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-08-28
+Table View
+*fix posible crashe because rnning 'process events' in table view data's destructor
+
 2011-08-26
 Table View
 *fix regression in displaying record editing indicators
+
+~~~~~~~~~~~~~~~~ 2.4 Alpha 4 (2.3.74) ~~~~~~~~~~~~~~~~
 
 2011-08-04
 General
