@@ -57,6 +57,7 @@ class KToggleAction;
 
 class KoCanvasController;
 class KoRuler;
+class KoColor;
 
 class KarbonLayerDocker;
 class KarbonZoomController;
@@ -152,6 +153,7 @@ protected slots:
 
     void applyFillToSelection();
     void applyStrokeToSelection();
+    void applyPaletteColor(const KoColor &color);
 
 protected:
     virtual void updateReadWrite(bool readwrite);
