@@ -161,6 +161,7 @@ public:
             , deleteSelectionAction(0), clipObjects(0), unclipObjects(0)
             , flipVertical(0), flipHorizontal(0), viewAction(0), showRulerAction(0)
             , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
+            , showPaletteAction(0)
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
 
@@ -193,6 +194,7 @@ public:
     KToggleAction * snapGridAction;
     KToggleAction * showPageMargins;
     KToggleAction * showGuidesAction;
+    KToggleAction * showPaletteAction;
 
     //Status Bar
     QLabel * status;       ///< ordinary status
@@ -314,6 +316,10 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
             d->horizRuler->setVisible(true);
             d->vertRuler->setVisible(true);
             d->showRulerAction->setChecked(true);
+        }
+        if (!interfaceGroup.readEntry<bool>("ShowPalette", true)) {
+            d->colorBar->setVisible(false);
+            d->showPaletteAction->setChecked(false);
         }
     }
 
@@ -1071,6 +1077,13 @@ void KarbonView::initActions()
     actionCollection()->addAction(KoStandardAction::name(KoStandardAction::ShowGuides), d->showGuidesAction);
     d->showGuidesAction->setChecked(d->part->guidesData().showGuideLines());
 
+    d->showPaletteAction = new KToggleAction(i18n("Show Color Palette"), this);
+    actionCollection()->addAction("view_show_palette", d->showPaletteAction);
+    d->showPaletteAction->setCheckedState(KGuiItem(i18n("Hide Color Palette")));
+    d->showPaletteAction->setToolTip(i18n("Show or hide color palette"));
+    d->showPaletteAction->setChecked(true);
+    connect(d->showPaletteAction, SIGNAL(triggered()), this, SLOT(showPalette()));
+
     d->snapGridAction  = new KToggleAction(i18n("Snap to Grid"), this);
     actionCollection()->addAction("view_snap_to_grid", d->snapGridAction);
     d->snapGridAction->setToolTip(i18n("Snaps to grid"));
@@ -1262,6 +1275,22 @@ void KarbonView::snapToGrid()
 {
     d->part->gridData().setSnapToGrid(d->snapGridAction->isChecked());
     d->canvas->update();
+}
+
+void KarbonView::showPalette()
+{
+    if(!shell())
+        return;
+
+    const bool showPalette = d->showPaletteAction->isChecked();
+    d->colorBar->setVisible(showPalette);
+
+    // this will make the last setting of the ruler visibility persistent
+    KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+    if (showPalette && !interfaceGroup.hasDefault("ShowPalette"))
+        interfaceGroup.revertToDefault("ShowPalette");
+    else
+        interfaceGroup.writeEntry("ShowPalette", showPalette);
 }
 
 void KarbonView::configure()

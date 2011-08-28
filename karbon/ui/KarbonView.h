@@ -137,6 +137,7 @@ public slots:
     void showGuides();
     void editGuides();
     void snapToGrid();
+    void showPalette();
 
 protected slots:
     // Object related operations.
