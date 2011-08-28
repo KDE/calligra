@@ -439,7 +439,8 @@ EditListViewDialog::newChildRow()
     item->setText(0, i18n("Sub Item"));
 
     m_listview->setCurrentItem(item);
-    parent->setOpen(true);
+    if (parent)
+        parent->setOpen(true);
 }
 
 void
