@@ -1632,7 +1632,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     QString bulletColor = QString();
 
     // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
     int index = 0;
     while (i.hasNext()) {
@@ -1763,7 +1763,7 @@ Q_UNUSED(pprRead);
     }*/
 
     if (m_listStylePropertiesAltered) {
-        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
 
         // For now we take a stand that any altered style makes its own list.
         m_currentBulletProperties.m_level = m_currentListLevel;
@@ -1802,7 +1802,7 @@ Q_UNUSED(pprRead);
                      QString listStyleName = mainStyles->insert(m_currentListStyle);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
-                     m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
+                     m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
                 }
                 body->startElement("text:list-item");
              }
@@ -3417,7 +3417,7 @@ void MSOOXML_CURRENT_CLASS::readWrap()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 {
     READ_PROLOGUE
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
 
     m_currentCombinedBulletProperties.clear();
     m_currentBulletProperties.clear();
