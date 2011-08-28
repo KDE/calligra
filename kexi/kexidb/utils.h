@@ -137,7 +137,7 @@ Constructs an sql string like "fielname = value" for specific \a drv driver,
  field type \a t, \a fieldName and \a value. If \a value is null, "fieldname is NULL"
  string is returned. */
 inline KEXI_DB_EXPORT QString sqlWhere(Driver *drv, Field::Type t,
-                                       const QString fieldName, const QVariant value)
+                                       const QString &fieldName, const QVariant &value)
 {
     if (value.isNull())
         return fieldName + " is NULL";
