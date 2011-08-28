@@ -21,6 +21,7 @@
 #include "KarbonPaletteWidget.h"
 #include <KoResourceServerProvider.h>
 #include <KLocale>
+#include <KGlobal>
 #include <QtGui/QToolButton>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
@@ -61,7 +62,16 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
 
     QList<KoResource*> resources = m_palettes.resources();
     if (resources.count()) {
-        m_colorBar->setPalette(dynamic_cast<KoColorSet*>(resources.first()));
+        KConfigGroup paletteGroup = KGlobal::mainComponent().config()->group("PaletteBar");
+        QString lastPalette = paletteGroup.readEntry("LastPalette", "SVG Colors");
+        KoResource * r = resources.first();
+        foreach(KoResource *res, resources) {
+            if (res->name() == lastPalette) {
+                r = res;
+                break;
+            }
+        }
+        m_colorBar->setPalette(dynamic_cast<KoColorSet*>(r));
         updateButtons();
     }
 }
@@ -133,6 +143,8 @@ void KarbonPaletteBarWidget::selectPalette()
         KoColorSet *colorSet = dynamic_cast<KoColorSet*>(resources.at(selectedIndex));
         if (colorSet) {
             m_colorBar->setPalette(colorSet);
+            KConfigGroup paletteGroup = KGlobal::mainComponent().config()->group("PaletteBar");
+            paletteGroup.writeEntry("LastPalette", colorSet->name());
             updateButtons();
         }
     }
