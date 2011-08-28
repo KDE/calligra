@@ -309,7 +309,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup(KexiMainWindow *mainWin
 {
     // object to print
     bool ok = args;
-    int objectId;
+    int objectId = 0;
     if (ok)
         objectId = (*args)["identifier"].toInt();
     ok = objectId <= 0;

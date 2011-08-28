@@ -107,9 +107,9 @@ bool OracleConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
   QString connectStr=("//"+hostName+":"+port+"/"+sid).latin1();
   try{
     oraconn = env->createConnection(data.userName.latin1(),
-																		data.password.latin1(),
-																		connectStr.latin1());
-	  stmt=oraconn->createStatement();
+    data.password.latin1(),
+    connectStr.latin1());
+    stmt=oraconn->createStatement();
   }
   catch (const oracle::occi::SQLException &ea)
   {
