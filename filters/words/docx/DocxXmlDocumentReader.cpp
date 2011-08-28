@@ -384,31 +384,32 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
         QString val = m_context->import->documentSettings()["evenAndOddHeaders"].toString();
         useEvenAndOddHeaders = (val != "off" && val != "0" && val != "false");
     }
+    // the numbering in addChildElement is needed to correctly sort the element when writing out the values.
     if (!m_headers.isEmpty()) {
         bool odd = false;
         if (useEvenAndOddHeaders && m_headers["even"] != "") {
-            m_masterPageStyle.addChildElement("style:header-left", m_headers["even"]);
+            m_masterPageStyle.addChildElement("2 style:header-left", m_headers["even"]);
         }
         if (m_headers["default"] != "") {
             odd = true;
-            m_masterPageStyle.addChildElement("style:header", m_headers["default"]);
+            m_masterPageStyle.addChildElement("1 style:header", m_headers["default"]);
         }
         if (!odd) {
-            m_masterPageStyle.addChildElement("style:header", m_headers["first"]);
+            m_masterPageStyle.addChildElement("1 style:header", m_headers["first"]);
         }
     }
 
     if (!m_footers.isEmpty()) {
         bool odd = false;
         if (useEvenAndOddHeaders && m_footers["even"] != "") {
-            m_masterPageStyle.addChildElement("style:footer-left", m_footers["even"]);
+            m_masterPageStyle.addChildElement("4 style:footer-left", m_footers["even"]);
         }
         if (m_footers["default"] != "") {
             odd = true;
-            m_masterPageStyle.addChildElement("style:footer", m_footers["default"]);
+            m_masterPageStyle.addChildElement("3 style:footer", m_footers["default"]);
         }
         if (!odd) {
-           m_masterPageStyle.addChildElement("style:footer", m_footers["first"]);
+           m_masterPageStyle.addChildElement("3 style:footer", m_footers["first"]);
         }
     }
 
@@ -573,7 +574,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     headerWriter.endElement(); // style:header-footer-properties
     headerWriter.endElement(); // style:header-style
     QString headerContents = QString::fromUtf8(headerBuffer.buffer(), headerBuffer.buffer().size() );
-    m_currentPageStyle.addStyleChildElement("header-style", headerContents);
+    // the style elements need to be sorted correctly so that the created odf is valid
+    // therefore we use footer-header-style-1 and footer-header-style-2 to sort header before footer
+    m_currentPageStyle.addStyleChildElement("footer-header-style-1", headerContents);
 
     QBuffer footerBuffer;
     footerBuffer.open( QIODevice::WriteOnly );
@@ -589,7 +592,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     footerWriter.endElement(); // style:header-footer-properties
     footerWriter.endElement(); // style:footer-style
     QString footerContents = QString::fromUtf8(footerBuffer.buffer(), footerBuffer.buffer().size() );
-    m_currentPageStyle.addStyleChildElement("footer-style", footerContents);
+    m_currentPageStyle.addStyleChildElement("footer-header-style-2", footerContents);
 
     readNext();
     READ_EPILOGUE
@@ -2001,7 +2004,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             body = textPBuf.originalWriter();
             if (!m_createSectionToNext) { // In ooxml it seems that nothing should be created if sectPr was present
                 if (m_listFound) {
-                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
                     if (m_moveToStylesXml) {
                         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
                     }
