@@ -1802,7 +1802,7 @@ Q_UNUSED(pprRead);
                      QString listStyleName = mainStyles->insert(m_currentListStyle);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
-                     m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
+                     m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
                 }
                 body->startElement("text:list-item");
              }

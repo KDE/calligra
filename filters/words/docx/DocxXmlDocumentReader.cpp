@@ -2611,7 +2611,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     }
 
     if (m_listFound) {
-        m_currentParagraphStyle.addProperty("style:list-style-name", m_currentListStyleName);
+        m_currentParagraphStyle.addAttribute("style:list-style-name", m_currentListStyleName);
     }
 
     READ_EPILOGUE
