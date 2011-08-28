@@ -173,7 +173,7 @@ QString SybaseConnection::serverErrorMsg()
 
 bool SybaseConnection::drv_containsTable(const QString &tableName)
 {
-    bool success;
+    bool success=false;
     return resultExists(QString("select name from sysobjects where type='U' and name=%1")
                         .arg(driver()->escapeString(tableName)), success) && success;
 }
