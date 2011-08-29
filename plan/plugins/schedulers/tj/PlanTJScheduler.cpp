@@ -251,6 +251,9 @@ AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji ) {
 void PlanTJScheduler::kplatoFromTJ()
 {
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
+    m_project->setStartTime( m_project->constraintStartTime() );
+    m_project->setEndTime( m_project->constraintEndTime() );
+
     for ( QMap<TJ::Task*, Task*>::ConstIterator it = m_taskmap.constBegin(); it != m_taskmap.constEnd(); ++it ) {
         taskFromTJ( it.key(), it.value() );
     }
@@ -275,6 +278,7 @@ void PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     qDebug()<<"taskFromTJ:"<<task<<task->name()<<cs->id();
     task->setStartTime( DateTime( QDateTime::fromTime_t( job->getStart( 0 ) ) ) );
     task->setEndTime( DateTime( QDateTime::fromTime_t( job->getEnd( 0 ) ).addSecs( 1 ) ) );
+    task->setDuration( task->endTime() - task->startTime() );
     Q_ASSERT( task->startTime().isValid() );
     Q_ASSERT( task->endTime().isValid() );
     if ( locale() ) cs->logDebug( "TJ project scheduled: " + TJ::time2ISO( job->getStart( 0 ) ) + " - " + TJ::time2ISO( job->getEnd( 0 ) ) );
@@ -289,8 +293,13 @@ void PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
             if ( locale() ) cs->logDebug( "'" + res->name() + "' added appointment: " +  ai.startTime().toString( Qt::ISODate ) + " - " + ai.endTime().toString( Qt::ISODate ) );
         }
     }
+    if ( task->startTime().isValid() && m_project->startTime() > task->startTime() ) {
+        m_project->setStartTime( task->startTime() );
+    }
+    if ( task->endTime().isValid() && task->endTime() > m_project->endTime() ) {
+        m_project->setEndTime( task->endTime() );
+    }
     cs->setScheduled( true );
-    task->setDuration( task->endTime() - task->startTime() );
     if ( locale() ) {
         cs->logInfo( i18n( "Scheduled task to start at %1 and finish at %2", locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ), 1 );
     }
