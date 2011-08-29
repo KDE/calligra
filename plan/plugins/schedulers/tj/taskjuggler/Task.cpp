@@ -861,7 +861,7 @@ Task::createCandidateList(int sc, time_t date, Allocation* a)
     if (a->getLockedResource())
     {
         cl.append(a->getLockedResource());
-        candidates.remove(a->getLockedResource());
+        candidates.removeAll(a->getLockedResource());
         /* When an allocation is booked the resource is saved as locked
          * resource. */
         a->setLockedResource(0);

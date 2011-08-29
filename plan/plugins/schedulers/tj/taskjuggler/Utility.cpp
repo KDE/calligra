@@ -59,7 +59,7 @@ isRichText(const QString& str)
 
     bool hasTags = false;
     bool inTag = false;
-    for (uint i = 0; i < str.length(); ++i)
+    for (int i = 0; i < str.length(); ++i)
     {
         if (str[i] == '<')
         {
@@ -825,7 +825,7 @@ date2time(const QString& date)
     }
     else
     {
-        qFatal(QString("Illegal date: %1").arg(date).toLocal8Bit());
+        qFatal("%s", QString("Illegal date: %1").arg(date).toLocal8Bit().constData());
         return 0;
     }
 
