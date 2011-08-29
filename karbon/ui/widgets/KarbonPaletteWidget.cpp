@@ -23,6 +23,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWheelEvent>
+#include <QtGui/QToolTip>
 
 KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     : QWidget(parent)
@@ -85,12 +86,8 @@ void KarbonPaletteWidget::setPalette(KoColorSet *colorSet)
 {
     m_palette = colorSet;
     m_scrollOffset = 0;
-    if (m_palette) {
-        setToolTip(QString(i18n("Color Palette: %1").arg(m_palette->name())));
-    } else {
-        setToolTip(i18n("No color palette available"));
-    }
     update();
+    emit scrollOffsetChanged();
 }
 
 void KarbonPaletteWidget::paintEvent(QPaintEvent *event)
@@ -130,10 +127,8 @@ void KarbonPaletteWidget::mouseReleaseEvent(QMouseEvent *event)
         return;
 
     const int releasedIndex = indexFromPosition(event->pos());
-    if (releasedIndex == m_pressedIndex) {
-        if (releasedIndex < m_palette->nColors()) {
-            emit colorSelected(m_palette->getColor(releasedIndex).color);
-        }
+    if (releasedIndex == m_pressedIndex && releasedIndex != -1) {
+        emit colorSelected(m_palette->getColor(releasedIndex).color);
     }
 }
 
@@ -142,21 +137,53 @@ void KarbonPaletteWidget::wheelEvent(QWheelEvent *event)
     applyScrolling(-event->delta()/10);
 }
 
+bool KarbonPaletteWidget::event(QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+         int index = indexFromPosition(helpEvent->pos());
+         if (index != -1) {
+             KoColorSetEntry entry = m_palette->getColor(index);
+             QString text;
+             if (!entry.name.isEmpty())
+                text += "<center><b>" + entry.name + "</b></center>";
+             QColor color = entry.color.toQColor();
+             text += QString("%1 (%2 %3 %4)").arg(color.name())
+                     .arg(color.red()).arg(color.green()).arg(color.blue());
+
+             QToolTip::showText(helpEvent->globalPos(), text);
+         } else {
+             QToolTip::hideText();
+             event->ignore();
+         }
+
+         return true;
+     }
+     return QWidget::event(event);
+}
+
 int KarbonPaletteWidget::indexFromPosition(const QPoint &position)
 {
+    if (!m_palette)
+        return -1;
+
     QSize colorSize = patchSize();
+    int index = -1;
     if (m_orientation == Qt::Horizontal) {
-        return position.x() / colorSize.width() + m_scrollOffset;
+        index = position.x() / colorSize.width() + m_scrollOffset;
     } else {
-        return position.y() / colorSize.height() + m_scrollOffset;
+        index = position.y() / colorSize.height() + m_scrollOffset;
     }
+    if (index < 0 || index >= m_palette->nColors())
+        return -1;
+
+    return index;
 }
 
 QSize KarbonPaletteWidget::patchSize() const
 {
     const int patchSize = m_orientation == Qt::Horizontal ? height() : width();
     return QSize(patchSize-1, patchSize-1);
-
 }
 
 void KarbonPaletteWidget::applyScrolling(int delta)

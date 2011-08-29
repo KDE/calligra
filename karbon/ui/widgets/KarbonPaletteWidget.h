@@ -62,6 +62,7 @@ protected:
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void wheelEvent(QWheelEvent *event);
+    virtual bool event(QEvent *event);
 
 private:
     /// Returns color index from given position
