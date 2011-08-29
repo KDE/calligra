@@ -22,6 +22,7 @@
 #include <KLocale>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QWheelEvent>
 
 KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     : QWidget(parent)
@@ -72,14 +73,12 @@ int KarbonPaletteWidget::currentScrollOffset() const
 
 void KarbonPaletteWidget::scrollForward()
 {
-    m_scrollOffset = qMin(m_scrollOffset+1, maximalScrollOffset());
-    update();
+    applyScrolling(+1);
 }
 
 void KarbonPaletteWidget::scrollBackward()
 {
-    m_scrollOffset = qMin(qMax(0, m_scrollOffset-1), maximalScrollOffset());
-    update();
+    applyScrolling(-1);
 }
 
 void KarbonPaletteWidget::setPalette(KoColorSet *colorSet)
@@ -138,6 +137,11 @@ void KarbonPaletteWidget::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+void KarbonPaletteWidget::wheelEvent(QWheelEvent *event)
+{
+    applyScrolling(-event->delta()/10);
+}
+
 int KarbonPaletteWidget::indexFromPosition(const QPoint &position)
 {
     QSize colorSize = patchSize();
@@ -154,4 +158,15 @@ QSize KarbonPaletteWidget::patchSize() const
     return QSize(patchSize-1, patchSize-1);
 
 }
+
+void KarbonPaletteWidget::applyScrolling(int delta)
+{
+    int newScrollOffset = qBound(0, m_scrollOffset+delta, maximalScrollOffset());
+    if (newScrollOffset != m_scrollOffset) {
+        m_scrollOffset = newScrollOffset;
+        update();
+        emit scrollOffsetChanged();
+    }
+}
+
 #include "KarbonPaletteWidget.moc"

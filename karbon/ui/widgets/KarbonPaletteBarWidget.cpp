@@ -53,6 +53,7 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
     connect(m_prevButton, SIGNAL(clicked()), this, SLOT(updateButtons()));
     connect(m_nextButton, SIGNAL(clicked()), this, SLOT(updateButtons()));
     connect(m_colorBar, SIGNAL(colorSelected(const KoColor&)), this, SIGNAL(colorSelected(const KoColor&)));
+    connect(m_colorBar, SIGNAL(scrollOffsetChanged()), this, SLOT(updateButtons()));
     connect(m_choosePalette, SIGNAL(clicked()), this, SLOT(selectPalette()));
 
     setMinimumSize(FixedWidgetSize, FixedWidgetSize);

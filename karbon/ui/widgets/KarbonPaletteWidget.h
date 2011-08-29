@@ -54,16 +54,22 @@ signals:
     /// Emitted whenever a color was clicked
     void colorSelected(const KoColor &color);
 
+    /// Emitted whenever the scroll offset changed
+    void scrollOffsetChanged();
+
 protected:
     virtual void paintEvent(QPaintEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void wheelEvent(QWheelEvent *event);
 
 private:
     /// Returns color index from given position
     int indexFromPosition(const QPoint &position);
     /// Returns patch size
     QSize patchSize() const;
+    /// Apply scrolling
+    void applyScrolling(int delta);
 
     Qt::Orientation m_orientation;
     int m_scrollOffset;
