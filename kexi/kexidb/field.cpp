@@ -197,6 +197,7 @@ QString Field::typeGroupName(uint typeGroup)
 
 QStringList Field::typeGroupNames()
 {
+    m_typeGroupNames.init();
     return m_typeGroupNames.names;
 }
 
