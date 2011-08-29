@@ -105,22 +105,23 @@ bool FloatingAnchorStrategy::moveSubject()
     checkPageBorder(newPosition, containerBoundingRect);
 
     if (newPosition == m_anchor->shape()->position()) {
-        if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
-            updateObstruction(data->documentOffset());
-        }
+//         if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+//             updateObstruction(data->documentOffset());
+//         }
         return true;
     }
 
     // set the shape to the proper position based on the data
-    m_anchor->shape()->update();
+//     m_anchor->shape()->update();
     m_anchor->shape()->setPosition(newPosition);
-    m_anchor->shape()->update();
 
     if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
         updateObstruction(data->documentOffset());
     }
 
-    return true;
+    m_anchor->shape()->update();
+
+    return false;
 }
 
 bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, QTextBlock &block, QTextLayout *layout)

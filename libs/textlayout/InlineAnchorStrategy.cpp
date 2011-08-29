@@ -68,7 +68,7 @@ bool InlineAnchorStrategy::moveSubject()
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->update();
 
-    return true; // fake no move as we don't wrap around inline so no need to waste cpu
+    return false; // fake no move as we don't wrap around inline so no need to waste cpu
 }
 
 bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout)

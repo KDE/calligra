@@ -410,7 +410,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
 
-            if (strategy->moveSubject()) {
+            if (strategy->moveSubject() == false) {
                 d->anchoringState = Private::AnchoringMovingState;
                 if (d->anchoringCycle <= 10) // loop-protection
                     d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
