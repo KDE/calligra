@@ -132,6 +132,10 @@ void KarbonPaletteBarWidget::selectPalette()
     int index = 0;
     foreach(KoResource* r, resources) {
         QAction *a = palletteMenu.addAction(r->name());
+        if (r == m_colorBar->palette()) {
+            a->setCheckable(true);
+            a->setChecked(true);
+        }
         a->setData(QVariant(index++));
     }
 

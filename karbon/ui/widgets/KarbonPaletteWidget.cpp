@@ -91,6 +91,11 @@ void KarbonPaletteWidget::setPalette(KoColorSet *colorSet)
     emit scrollOffsetChanged();
 }
 
+KoColorSet *KarbonPaletteWidget::palette() const
+{
+    return m_palette;
+}
+
 void KarbonPaletteWidget::paintEvent(QPaintEvent *event)
 {
     if (!m_palette) {

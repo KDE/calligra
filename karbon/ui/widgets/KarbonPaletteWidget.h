@@ -46,6 +46,9 @@ public:
     /// Sets the color palette to display
     void setPalette(KoColorSet *colorSet);
 
+    /// Returns the current palette
+    KoColorSet *palette() const;
+
 public slots:
     void scrollForward();
     void scrollBackward();
