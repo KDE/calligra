@@ -106,7 +106,7 @@ Project::Project() :
     scenarioList.createIndex(true);
     scenarioList.createIndex(false);
     foreach(CoreAttributes *s, scenarioList) {
-        qDebug()<<"Project:"<<static_cast<CoreAttributes*>(s)<<static_cast<CoreAttributes*>(s)->getId()<<static_cast<CoreAttributes*>(s)->getSequenceNo();
+        qDebug()<<"Project:"<<static_cast<CoreAttributes*>(s)<<static_cast<CoreAttributes*>(s)->getName()<<static_cast<CoreAttributes*>(s)->getSequenceNo();
     }
     setNow(time(0));
 
@@ -482,7 +482,7 @@ Project::pass2(bool noDepCheck)
     qDebug()<<"pass2 task info:";
     foreach ( CoreAttributes *a, taskList ) {
         Task *t = static_cast<Task*>( a );
-        qDebug()<<t->getId()<<t->getDuration( 0 )<<t->getPrecedes()<<t->getDepends();
+        qDebug()<<t->getName()<<t->getDuration( 0 )<<t->getPrecedes()<<t->getDepends();
     }
     QMap<QString, Task*> idHash;
 
@@ -582,7 +582,7 @@ Project::scheduleScenario(Scenario* sc)
 {
     int oldErrors = TJMH.getErrors();
 
-//     setProgressInfo(QString("Scheduling scenario %1...").arg(sc->getId()));
+//     setProgressInfo(QString("Scheduling scenario %1...").arg(sc->getName()));
 
     int scIdx = sc->getSequenceNo() - 1;
     prepareScenario(scIdx);
@@ -682,13 +682,13 @@ Project::prepareScenario(int sc)
         tjDebug("Allocation probabilities for the resources:");
         foreach (CoreAttributes *r, resourceList) {
             qDebug()<<QString("Resource %1: %2%")
-                   .arg(static_cast<Resource*>(r)->getId())
+                   .arg(static_cast<Resource*>(r)->getName())
                    .arg(static_cast<Resource*>(r)->getAllocationProbability(sc));
         }
         tjDebug("Criticalnesses of the tasks with respect to resource "
                "availability:");
         foreach (CoreAttributes *t, taskList) {
-            qDebug()<<QString("Task %1: %2 %3").arg(static_cast<Task*>(t)->getId())
+            qDebug()<<QString("Task %1: %2 %3").arg(static_cast<Task*>(t)->getName())
                    .arg(static_cast<Task*>(t)->getCriticalness(sc))
                    .arg(static_cast<Task*>(t)->getPathCriticalness(sc));
         }
@@ -799,7 +799,7 @@ Project::schedule(int sc)
 
                 if (DEBUGPS(4))
                     qDebug()<<QString("Task '%1' (Prio %2, Direction: %3) requests slot %4")
-                           .arg(static_cast<Task*>(t)->getId()).arg(static_cast<Task*>(t)->getPriority())
+                           .arg(static_cast<Task*>(t)->getName()).arg(static_cast<Task*>(t)->getPriority())
                            .arg(static_cast<Task*>(t)->getScheduling())
                            .arg(time2ISO(slot));
                 /* If the task wants a time slot outside of the project time
@@ -830,7 +830,7 @@ Project::schedule(int sc)
                 if (DEBUGPS(4))
                     qDebug()<<QString("Changing scheduling direction to %1 due to task '%2'")
                             .arg(static_cast<Task*>(t)->getScheduling())
-                            .arg(static_cast<Task*>(t)->getId());
+                            .arg(static_cast<Task*>(t)->getName());
                 break;
             }
             /* We must avoid that lower priority tasks get resources even
@@ -881,11 +881,11 @@ Project::schedule(int sc)
                     static_cast<Task*>(t)->errorMessage(QString("End of task '%1' does not fit into the "
                               "project time frame. Try using a later project "
                               "end date.")
-                         .arg(static_cast<Task*>(t)->getId()));
+                         .arg(static_cast<Task*>(t)->getName()));
                 } else {
                     static_cast<Task*>(t)->errorMessage(QString("Start of task '%1' does not fit into the "
                               "project time frame. Try using an earlier "
-                              "project start date.").arg(static_cast<Task*>(t)->getId()));
+                              "project start date.").arg(static_cast<Task*>(t)->getName()));
                 }
             }
         }

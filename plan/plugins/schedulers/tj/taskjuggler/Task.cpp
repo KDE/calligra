@@ -243,7 +243,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
         return false;
 
     if (DEBUGTS(15))
-        qDebug()<<QString("Trying to schedule %1 at %2").arg(id).arg(time2tjp(date));
+        qDebug()<<QString("Trying to schedule %1 at %2").arg(name).arg(time2tjp(date));
 
     if (scheduling == Task::ASAP)
     {
@@ -414,7 +414,7 @@ Task::scheduleContainer(int sc)
         propagateEnd(sc, nEnd);
 
     if (DEBUGTS(4))
-        qDebug()<<QString("Scheduling of task %1 completed").arg(id);
+        qDebug()<<QString("Scheduling of task %1 completed").arg(name);
     schedulingDone = true;
 
     return false;
@@ -1313,7 +1313,7 @@ bool
 Task::xRef(QMap<QString, Task*>& hash)
 {
     if (DEBUGPF(5))
-        qDebug()<<QString("Creating cross references for task %1 ...").arg(id);
+        qDebug()<<QString("Creating cross references for task %1 ...").arg(name);
     int errors = 0;
 
     QList<TaskDependency*> brokenDeps;
@@ -1345,13 +1345,13 @@ Task::xRef(QMap<QString, Task*>& hash)
                 if (t == this)
                 {
                     errorMessage(QString("Task '%1' cannot depend on self.")
-                                 .arg(id));
+                                 .arg(name));
                     break;
                 }
                 if (t->isDescendantOf(this))
                 {
                     errorMessage(QString("Task '%1' cannot depend on child.")
-                                 .arg(id));
+                                 .arg(name));
                     break;
                 }
                 if (isDescendantOf(t))
@@ -1403,13 +1403,13 @@ Task::xRef(QMap<QString, Task*>& hash)
                 if (t == this)
                 {
                     errorMessage(QString("Task '%1' cannot precede self.")
-                                 .arg(id));
+                                 .arg(name));
                     break;
                 }
                 if (t->isDescendantOf(this))
                 {
                     errorMessage(QString("Task '%1' cannot precede a child.")
-                                 .arg(id));
+                                 .arg(name));
                     break;
                 }
                 if (isDescendantOf(t))
@@ -1425,7 +1425,7 @@ Task::xRef(QMap<QString, Task*>& hash)
                 t->previous.append(this);
                 if (DEBUGPF(11))
                     qDebug()<<QString("Registering predecessor %1 with task %2")
-                           .arg(id).arg(t->getId());
+                           .arg(name).arg(t->getId());
             }
         }
     }
@@ -1788,7 +1788,7 @@ Task::checkPathForLoops(LDIList& list, bool atEnd) const
                 .arg(it->getTask()->getId())
                 .arg(it->getAtEnd() ? "End" : "Start");
         }
-        loopChain += QString("%1 (%2)").arg(id)
+        loopChain += QString("%1 (%2)").arg(name)
             .arg(atEnd ? "End" : "Start");
         delete thisTask;
         errorMessage(QString("Dependency loop detected: %1").arg(loopChain));
@@ -1818,7 +1818,7 @@ Task::checkDetermination(int sc) const
                       "underspecified. This is caused by underspecified "
                       "dependent tasks. You must use more fixed dates to "
                       "solve this problem.")
-                 .arg(id).arg(project->getScenarioId(sc)));
+                 .arg(name).arg(project->getScenarioId(sc)));
         return false;
     }
 
@@ -1831,7 +1831,7 @@ Task::checkDetermination(int sc) const
                 (QString("The end of task '%1' (scenario '%2') is underspecified. "
                       "This is caused by underspecified dependent tasks. You "
                       "must use more fixed dates to solve this problem.")
-                 .arg(id).arg(project->getScenarioId(sc)));
+                 .arg(name).arg(project->getScenarioId(sc)));
         return false;
     }
 
@@ -2081,7 +2081,7 @@ Task::preScheduleOk(int sc)
 //         errorMessage(QString
 //                      ("Task '%1' must not have an account group ('%2') "
 //                       "assigned to it.")
-//                      .arg(id).arg(account->getId()));
+//                      .arg(name).arg(account->getId()));
 //         return false;
 //     }
 
@@ -2089,7 +2089,7 @@ Task::preScheduleOk(int sc)
     {
         errorMessage(QString
                      ("Task '%1' is a container task and must not have "
-                      "bookings assigned to it.").arg(id));
+                      "bookings assigned to it.").arg(name));
         return false;
     }
 
@@ -2097,7 +2097,7 @@ Task::preScheduleOk(int sc)
     {
         errorMessage(QString
                      ("Task '%1' is a milestone task and must not have "
-                      "bookings assigned to it.").arg(id));
+                      "bookings assigned to it.").arg(name));
         return false;
     }
 
@@ -2107,7 +2107,7 @@ Task::preScheduleOk(int sc)
     {
         errorMessage(QString
                      ("Task '%1' is marked as scheduled but does not have "
-                      "a fixed start and end date.").arg(id));
+                      "a fixed start and end date.").arg(name));
         return false;
     }
 
@@ -2117,7 +2117,7 @@ Task::preScheduleOk(int sc)
         errorMessage(QString
                      ("No allocations specified for effort based task '%1' "
                       "in '%2' scenario")
-                     .arg(id).arg(project->getScenarioId(sc)));
+                     .arg(name).arg(project->getScenarioId(sc)));
         return false;
     }
 
@@ -2140,7 +2140,7 @@ Task::preScheduleOk(int sc)
     if (durationSpec > 1)
     {
         errorMessage(QString("Task '%1' may only have one duration "
-                          "criteria in '%2' scenario.").arg(id)
+                          "criteria in '%2' scenario.").arg(name)
                      .arg(project->getScenarioId(sc)));
         return false;
     }
@@ -2163,7 +2163,7 @@ Task::preScheduleOk(int sc)
         {
             errorMessage(QString
                          ("Container task '%1' may not have a duration "
-                          "criteria in '%2' scenario").arg(id)
+                          "criteria in '%2' scenario").arg(name)
                          .arg(project->getScenarioId(sc)));
             return false;
         }
@@ -2171,7 +2171,7 @@ Task::preScheduleOk(int sc)
         {
             errorMessage(QString
                          ("The container task '%1' may not be a "
-                          "milestone.").arg(id));
+                          "milestone.").arg(name));
             return false;
         }
     }
@@ -2181,7 +2181,7 @@ Task::preScheduleOk(int sc)
         {
             errorMessage(QString
                          ("Milestone '%1' may not have a duration "
-                          "criteria in '%2' scenario").arg(id)
+                          "criteria in '%2' scenario").arg(name)
                          .arg(project->getScenarioId(sc)));
             return false;
         }
@@ -2198,7 +2198,7 @@ Task::preScheduleOk(int sc)
         {
             errorMessage(QString("Milestone '%1' must have a start or end "
                               "specification in '%2' scenario.")
-                         .arg(id).arg(project->getScenarioId(sc)));
+                         .arg(name).arg(project->getScenarioId(sc)));
             return false;
         }
         /* err2: different start and end
@@ -2214,7 +2214,7 @@ Task::preScheduleOk(int sc)
             errorMessage(QString
                          ("Milestone '%1' may not have both a start "
                           "and an end specification that do not "
-                          "match in the '%2' scenario.").arg(id)
+                          "match in the '%2' scenario.").arg(name)
                          .arg(project->getScenarioId(sc)));
             return false;
         }
@@ -2266,7 +2266,7 @@ Task::preScheduleOk(int sc)
         {
             errorMessage(QString("Task '%1' has a start, an end and a "
                               "duration specification for '%2' scenario.")
-                         .arg(id).arg(project->getScenarioId(sc)));
+                         .arg(name).arg(project->getScenarioId(sc)));
             return false;
         }
         /*
@@ -2283,7 +2283,7 @@ Task::preScheduleOk(int sc)
             errorMessage(QString
                          ("Task '%1' has only a start or end specification "
                           "but no duration for the '%2' scenario.")
-                         .arg(id).arg(project->getScenarioId(sc)));
+                         .arg(name).arg(project->getScenarioId(sc)));
             return false;
         }
         /*
@@ -2302,7 +2302,7 @@ Task::preScheduleOk(int sc)
             errorMessage(QString
                          ("Task '%1' needs a start specification to be "
                           "scheduled in ASAP mode in the '%2' scenario.")
-                         .arg(id).arg(project->getScenarioId(sc)));
+                         .arg(name).arg(project->getScenarioId(sc)));
             return false;
         }
         /*
@@ -2321,7 +2321,7 @@ Task::preScheduleOk(int sc)
             errorMessage(QString
                          ("Task '%1' needs an end specification to be "
                           "scheduled in ALAP mode in the '%2' scenario.")
-                         .arg(id).arg(project->getScenarioId(sc)));
+                         .arg(name).arg(project->getScenarioId(sc)));
             return false;
         }
     }
@@ -2332,7 +2332,7 @@ Task::preScheduleOk(int sc)
 //         errorMessage(QString
 //                      ("Task '%1' has a specified start- or endcredit "
 //                       "but no account assigned in scenario '%2'.")
-//                      .arg(id).arg(project->getScenarioId(sc)));
+//                      .arg(name).arg(project->getScenarioId(sc)));
 //         return false;
 //     }
 
@@ -2347,7 +2347,7 @@ Task::preScheduleOk(int sc)
                   "'precedes' or 'end' implicitly set the scheduling mode "
                   "to ALAP. Put 'scheduling asap' at the end of the task "
                   "definition to avoid the problem.")
-             .arg(id).arg(project->getScenarioId(sc)));
+             .arg(name).arg(project->getScenarioId(sc)));
         return false;
     }
 
@@ -2370,7 +2370,7 @@ Task::scheduleOk(int sc) const
     {
         if (DEBUGPS(2))
             tjDebug(QString("Scheduling errors in sub tasks of '%1'.")
-                   .arg(id));
+                   .arg(name));
         return false;
     }
 
@@ -2398,7 +2398,7 @@ Task::scheduleOk(int sc) const
     {
         errorMessage(QString("Task '%1' has no start time for the '%2'"
                           "scenario.")
-                     .arg(id).arg(scenario));
+                     .arg(name).arg(scenario));
         return false;
     }
     if (start < project->getStart() || start > project->getEnd())
@@ -2406,7 +2406,7 @@ Task::scheduleOk(int sc) const
         errorMessage(QString("Start time '%1' of task '%2' is outside of the "
                           "project interval (%3 - %4) in '%5' scenario.")
                      .arg(time2tjp(start))
-                     .arg(id)
+                     .arg(name)
                      .arg(time2tjp(project->getStart()))
                      .arg(time2tjp(project->getEnd()))
                      .arg(scenario));
@@ -2417,7 +2417,7 @@ Task::scheduleOk(int sc) const
         warningMessage(QString("'%1' start time of task '%2' is too early\n"
                             "Date is:  %3\n"
                             "Limit is: %4")
-                       .arg(scenario).arg(id).arg(time2tjp(start))
+                       .arg(scenario).arg(name).arg(time2tjp(start))
                        .arg(time2tjp(scenarios[sc].minStart)));
         return false;
     }
@@ -2426,7 +2426,7 @@ Task::scheduleOk(int sc) const
         warningMessage(QString("'%1' start time of task '%2' is too late\n"
                             "Date is:  %3\n"
                             "Limit is: %4")
-                       .arg(scenario).arg(id)
+                       .arg(scenario).arg(name)
                        .arg(time2tjp(start))
                        .arg(time2tjp(scenarios[sc].maxStart)));
         return false;
@@ -2434,7 +2434,7 @@ Task::scheduleOk(int sc) const
     if (end == 0)
     {
         errorMessage(QString("Task '%1' has no '%2' end time.")
-                     .arg(id).arg(scenario.lower()));
+                     .arg(name).arg(scenario.lower()));
         return false;
     }
     if ((end + 1) < project->getStart() || (end > project->getEnd()))
@@ -2442,7 +2442,7 @@ Task::scheduleOk(int sc) const
         errorMessage(QString("End time '%1' of task '%2' is outside of the "
                           "project interval (%3 - %4) in '%5' scenario.")
                      .arg(time2tjp(end + 1))
-                     .arg(id)
+                     .arg(name)
                      .arg(time2tjp(project->getStart()))
                      .arg(time2tjp(project->getEnd() + 1))
                      .arg(scenario));
@@ -2453,7 +2453,7 @@ Task::scheduleOk(int sc) const
         warningMessage(QString("'%1' end time of task '%2' is too early\n"
                             "Date is:  %3\n"
                             "Limit is: %4")
-                       .arg(scenario).arg(id)
+                       .arg(scenario).arg(name)
                        .arg(time2tjp(end + 1))
                        .arg(time2tjp(scenarios[sc].minEnd + 1)));
         return false;
@@ -2463,7 +2463,7 @@ Task::scheduleOk(int sc) const
         warningMessage(QString("'%1' end time of task '%2' is too late\n"
                             "Date is:  %2\n"
                             "Limit is: %3")
-                       .arg(scenario).arg(id)
+                       .arg(scenario).arg(name)
                        .arg(time2tjp(end + 1))
                        .arg(time2tjp(scenarios[sc].maxEnd + 1)));
         return false;
@@ -2483,7 +2483,7 @@ Task::scheduleOk(int sc) const
                                       "%3 start date: %4\n"
                                       "%5 start date: %6")
                                  .arg(t->getId()).arg(scenario)
-                                 .arg(id)
+                                 .arg(name)
                                  .arg(time2ISO(start))
                                  .arg(t->getId())
                                  .arg(time2ISO(t->start)));
@@ -2496,7 +2496,7 @@ Task::scheduleOk(int sc) const
                 {
                     errorMessage(QString("Task '%1' has later '%2' end than "
                                       "parent")
-                                 .arg(id).arg(scenario));
+                                 .arg(name).arg(scenario));
                 }
                 return false;
             }
@@ -2512,7 +2512,7 @@ Task::scheduleOk(int sc) const
                               "Task '%1' ends at %2 but needs to precede\n"
                               "task '%3' which has a '%4' start time of %5")
                          .arg(t->id).arg(time2tjp(t->end))
-                         .arg(id).arg(scenario).arg(time2tjp(start)));
+                         .arg(name).arg(scenario).arg(time2tjp(start)));
             return false;
         }
     }
@@ -2525,7 +2525,7 @@ Task::scheduleOk(int sc) const
                               "Task '%1' starts at %2 but needs to follow\n"
                               "task %3 which has a '%4' end time of %5")
                          .arg(t->id).arg(time2tjp(t->start))
-                         .arg(id).arg(scenario).arg(time2tjp(end + 1)));
+                         .arg(name).arg(scenario).arg(time2tjp(end + 1)));
             return false;
         }
     }
@@ -2534,7 +2534,7 @@ Task::scheduleOk(int sc) const
         errorMessage(QString("Task '%1' has not been marked completed.\n"
                           "It is scheduled to last from %2 to %3.\n"
                           "This might be a bug in the TaskJuggler scheduler.")
-                     .arg(id).arg(time2tjp(start)).arg(time2tjp(end + 1)));
+                     .arg(name).arg(time2tjp(start)).arg(time2tjp(end + 1)));
         return false;
     }
 
@@ -2751,7 +2751,7 @@ Task::prepareScenario(int sc)
                                             "%1 in scenario %2\n"
                                             "Reported Bookings: %3d (%4h)\n"
                                             "Specified Effort: %5d (%6h)\n")
-                                       .arg(id)
+                                       .arg(name)
                                        .arg(project->getScenarioId(sc))
                                        .arg(doneEffort)
                                        .arg(doneEffort *
@@ -3104,7 +3104,7 @@ Task::analyzePath(int sc, double minSlack, time_t pathStart, long busyTime,
                 if (scenarios[sc].criticalLinks.indexOf(t) < 0)
                 {
                     if (DEBUGPA(5))
-                        qDebug()<<QString("  +++ Critical link %1 -> %2").arg(id).arg(t->id);
+                        qDebug()<<QString("  +++ Critical link %1 -> %2").arg(name).arg(t->id);
                     scenarios[sc].criticalLinks.append(t);
                 }
 

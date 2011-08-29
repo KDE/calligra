@@ -373,9 +373,10 @@ Resource::isAvailable(time_t date)
                 reason = "UNDEFINED";
             else
                 reason = "allocated to " +
-                    scoreboard[sbIdx]->getTask()->getId();
-            qDebug("  Resource %s is busy (%s)", qPrintable(id),
-                   qPrintable(reason));
+                    scoreboard[sbIdx]->getTask()->getName();
+
+            qDebug("  Resource %s is busy (%s)", id.latin1(),
+                   reason.latin1());
         }
         int result = scoreboard[sbIdx] < ((SbBooking*) 4) ? 1 : 4;
         switch(result) {
@@ -534,8 +535,8 @@ Resource::bookInterval(Booking* nb, int sc, int sloppy, int overtime)
                           "%2 has no duty hours at %3 "
                           "to be assigned to %4.")
                      .arg(project->getScenarioId(sc))
-                     .arg(id).arg(time2ISO(index2start(i)))
-                     .arg(nb->getTask()->getId()));
+                     .arg(name).arg(time2ISO(index2start(i)))
+                     .arg(nb->getTask()->getName()));
             }
             else if (scoreboard[i] == (SbBooking*) 2)
             {
@@ -549,8 +550,8 @@ Resource::bookInterval(Booking* nb, int sc, int sloppy, int overtime)
                           "%2 is on vacation at %3. "
                           "It cannot be assigned to %4.")
                      .arg(project->getScenarioId(sc))
-                     .arg(id).arg(time2ISO(index2start(i)))
-                     .arg(nb->getTask()->getId()));
+                     .arg(name).arg(time2ISO(index2start(i)))
+                     .arg(nb->getTask()->getName()));
             }
             else
             {
@@ -564,9 +565,9 @@ Resource::bookInterval(Booking* nb, int sc, int sloppy, int overtime)
                           "Allocation conflict for %2 at %3. "
                           "Conflicting tasks are %4 and %5.")
                      .arg(project->getScenarioId(sc))
-                     .arg(id).arg(time2ISO(index2start(i)))
-                     .arg(scoreboard[i]->getTask()->getId())
-                     .arg(nb->getTask()->getId()));
+                     .arg(name).arg(time2ISO(index2start(i)))
+                     .arg(scoreboard[i]->getTask()->getName())
+                     .arg(nb->getTask()->getName()));
             }
 
             conflict = true;
@@ -1315,7 +1316,7 @@ Resource::bookingsOk(int sc)
     if (hasSubs())
     {
        TJMH.errorMessage
-          (QString("Group resource '%1' may not have bookings") .arg(id));
+          (QString("Group resource '%1' may not have bookings") .arg(name));
        return false;
     }
 
