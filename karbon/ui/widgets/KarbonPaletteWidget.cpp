@@ -31,6 +31,7 @@ KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     , m_scrollOffset(0)
     , m_palette(0)
     , m_pressedIndex(-1)
+    , m_hasDragged(false)
 {
 }
 
@@ -121,15 +122,29 @@ void KarbonPaletteWidget::mousePressEvent(QMouseEvent *event)
     m_pressedIndex = indexFromPosition(event->pos());
 }
 
+void KarbonPaletteWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_pressedIndex != -1) {
+        int index = indexFromPosition(event->pos());
+        if (index != m_pressedIndex) {
+            m_hasDragged = true;
+            applyScrolling(m_pressedIndex-index);
+            m_pressedIndex = indexFromPosition(event->pos());
+        }
+    }
+}
+
 void KarbonPaletteWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     if (!m_palette)
         return;
 
     const int releasedIndex = indexFromPosition(event->pos());
-    if (releasedIndex == m_pressedIndex && releasedIndex != -1) {
+    if (!m_hasDragged && releasedIndex == m_pressedIndex && releasedIndex != -1) {
         emit colorSelected(m_palette->getColor(releasedIndex).color);
     }
+    m_pressedIndex = -1;
+    m_hasDragged = false;
 }
 
 void KarbonPaletteWidget::wheelEvent(QWheelEvent *event)
