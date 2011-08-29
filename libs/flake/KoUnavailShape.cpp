@@ -112,6 +112,7 @@ struct ObjectEntry {
 struct FileEntry {
     QString path;           // Normalized filename, i.e. without "./".
     QString mimeType;
+    bool  isDir;
     QByteArray contents;
 };
 
@@ -319,8 +320,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             continue;
 
         // Save embedded files for this object.
-        for (int j = 0; j < d->embeddedFiles.size(); ++j) {
-            QString  fileName(d->embeddedFiles.value(j)->path);
+        foreach (FileEntry *entry, d->embeddedFiles) {
+            QString  fileName(entry->path);
 
             // If we found a file for this object, we need to write it
             // but with the new object name instead of the old one.
@@ -328,13 +329,14 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
                 continue;
 
             kDebug(30006) << "Object name: " << objectName << "newName: " << newName
-                          << "filename: " << fileName;
+                          << "filename: " << fileName << "isDir: " << entry->isDir;
 
             fileName.replace(objectName, newName);
             fileName.prepend("./");
             kDebug(30006) << "New filename: " << fileName;
-            fileSaver.saveFile(fileName, d->embeddedFiles.value(j)->mimeType.toLatin1(),
-                               d->embeddedFiles.value(j)->contents);
+            
+            // FIXME: Check if we need special treatment of directories.
+            fileSaver.saveFile(fileName, entry->mimeType.toLatin1(), entry->contents);
         }
 
         // Write the manifest entry for the object itself.  If it's a
@@ -412,7 +414,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
         QString dirName = objectName + '/';
         bool isDir = !context.odfLoadingContext().mimeTypeForPath(dirName).isEmpty();
         if (isDir) {
-            // The files can be found in the manifest.
+            // A directory: the files can be found in the manifest.
             foreach (KoOdfManifestEntry *entry, manifest) {
                 if (entry->fullPath() == dirName)
                     continue;
@@ -580,9 +582,14 @@ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingC
 {
     kDebug(30006) << "Saving file: " << fileName;
 
-    // For now, don't handle directories.
-    if (fileName.endsWith('/'))
-        return;
+    // Directories need to be saved too, but they don't have any file contents.
+    if (fileName.endsWith('/')) {
+        FileEntry *entry = new FileEntry;
+        entry->path = fileName;
+        entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
+        entry->isDir = true;
+        embeddedFiles.append(entry);
+    }
 
     QByteArray fileContent = loadFile(fileName, context);
     if (fileContent.isNull())
@@ -594,6 +601,7 @@ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingC
     if (entry->path.startsWith("./"))
         entry->path = entry->path.mid(2);
     entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
+    entry->isDir = false;
     entry->contents = fileContent;
     embeddedFiles.append(entry);
 
