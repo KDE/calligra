@@ -374,8 +374,8 @@ Resource::isAvailable(time_t date)
             else
                 reason = "allocated to " +
                     scoreboard[sbIdx]->getTask()->getId();
-            qDebug("  Resource %s is busy (%s)", id.latin1(),
-                   reason.latin1());
+            qDebug("  Resource %s is busy (%s)", qPrintable(id),
+                   qPrintable(reason));
         }
         int result = scoreboard[sbIdx] < ((SbBooking*) 4) ? 1 : 4;
         switch(result) {
@@ -411,7 +411,7 @@ Resource::isAvailable(time_t date)
             bookedSlots > limits->getDailyMax())
         {
             if (DEBUGRS(6))
-                qDebug("  Resource %s overloaded today (%d)", id.latin1(),
+                qDebug("  Resource %s overloaded today (%d)", qPrintable(id),
                        bookedSlots);
 
             TJMH.debugMessage(QString("'%1' resource is overloaded today (%2) ").arg(name).arg(time2ISO(date)));
@@ -436,7 +436,7 @@ Resource::isAvailable(time_t date)
             bookedSlots > limits->getWeeklyMax())
         {
             if (DEBUGRS(6))
-                qDebug("  Resource %s overloaded this week (%d)", id.latin1(),
+                qDebug("  Resource %s overloaded this week (%d)", qPrintable(id),
                        bookedSlots);
             return 2;
         }
@@ -459,7 +459,7 @@ Resource::isAvailable(time_t date)
             bookedSlots > limits->getMonthlyMax())
         {
             if (DEBUGRS(6))
-                qDebug("  Resource %s overloaded this month (%d)", id.latin1(),
+                qDebug("  Resource %s overloaded this month (%d)", qPrintable(id),
                        bookedSlots);
             return 2;
         }
