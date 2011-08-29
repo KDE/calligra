@@ -699,7 +699,6 @@ Field::FieldTypeNames::FieldTypeNames()
 
 void Field::FieldTypeNames::init()
 {
-    kDebug() << "=======================================================================";
     if (m_initialized)
         return;
     m_initialized = true;
