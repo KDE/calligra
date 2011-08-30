@@ -68,6 +68,8 @@ using namespace Soprano;
 #include <iostream>
 using namespace std;
 
+
+
 static KoDocumentRdf *loadDocument(const QString &odt)
 {
     if (!QFile(odt).exists()) {
@@ -607,7 +609,7 @@ void TestRdf::expandStatementsReferencingSubject()
     }
 }
 
-void TestRdf::serailizeRDFLists()
+void TestRdf::serializeRDFLists()
 {
     Soprano::Model *m = Soprano::createModel();
     Soprano::Node context = Node();

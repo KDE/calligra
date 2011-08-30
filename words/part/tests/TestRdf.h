@@ -42,7 +42,7 @@ private slots:
     void expandStatementsToIncludeRdfLists();
     void expandStatementsToIncludeOtherPredicates();
     void expandStatementsReferencingSubject();
-    void serailizeRDFLists();
+    void serializeRDFLists();
     void removeStatementsIfTheyExist();
     void KoTextRdfCoreTripleFunctions();
     void createUserStylesheet();
