@@ -101,8 +101,11 @@ protected:
 
     bool taskFromTJ( TJ::Task *job, Task *task );
 
+    static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
     static DateTime fromTime_t( time_t );
     AppointmentInterval fromTJInterval( const TJ::Interval &tji );
+    static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end );
+    static TJ::Interval toTJInterval( const QTime &start, const QTime &end );
 
 private:
     KLocale *locale() const;

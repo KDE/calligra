@@ -254,6 +254,20 @@ AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji ) {
     return a;
 }
 
+// static
+TJ::Interval PlanTJScheduler::toTJInterval( const QDateTime &start, const QDateTime &end ) {
+    TJ::Interval ti( start.toTime_t(), end.addSecs( - 1).toTime_t() );
+    return ti;
+}
+
+// static
+TJ::Interval PlanTJScheduler::toTJInterval( const QTime &start, const QTime &end ) {
+    time_t s = QTime( 0, 0, 0 ).secsTo( start );
+    time_t e = ( end == QTime( 0, 0, 0 ) ) ? 86399 : QTime( 0, 0, 0 ).secsTo( end );
+    TJ::Interval ti( s, e );
+    return ti;
+}
+
 bool PlanTJScheduler::kplatoFromTJ()
 {
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
@@ -343,6 +357,15 @@ void PlanTJScheduler::adjustSummaryTasks( const QList<Node*> &nodes )
     }
 }
 
+bool PlanTJScheduler::exists( QList<CalendarDay*> &lst, CalendarDay *day )
+{
+    foreach ( CalendarDay *d, lst ) {
+        if ( d->date() == day->date() && day->state() != CalendarDay::Undefined && d->state() != CalendarDay::Undefined ) {
+            return true;
+        }
+    }
+    return false;
+}
 
 TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 {
@@ -375,6 +398,30 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
             qDeleteAll( lst );
         }
     }
+    QList<CalendarDay*> lst;
+    for ( Calendar *c = cal; c; c = c->parentCal() ) {
+        foreach ( CalendarDay *day, c->days() ) {
+            if ( ! exists( lst, day ) ) {
+                lst << day;
+            }
+        }
+    }
+    foreach ( CalendarDay *day, lst ) {
+        if ( day->state() == CalendarDay::NonWorking ) {
+            res->addVacation( new TJ::Interval( toTJInterval( QDateTime( day->date() ), QDateTime( day->date().addDays( 1 ) ) ) ) );
+        } else if ( day->state() == CalendarDay::Working ) {
+            TJ::Shift *shift = new TJ::Shift( m_tjProject, r->id() + day->date().toString( Qt::ISODate ), r->name(), 0, QString(), 0 );
+            foreach ( TimeInterval *ti, day->timeIntervals() ) {
+                QList<TJ::Interval*> ivs;
+                ivs << new TJ::Interval( toTJInterval( ti->startTime(), ti->endTime() ) );
+                shift->setWorkingHours( day->date().dayOfWeek() - 1, ivs );
+            }
+            TJ::Interval period = toTJInterval( day->start(), day->end() );
+            TJ::ShiftSelection *sl = new TJ::ShiftSelection( period, shift );
+            res->addShift( sl );
+        }
+    }
+
     m_resourcemap[res] = r;
     if ( locale() ) { m_schedule->logDebug( "Added resource: " + r->name() ); }
     return res;
