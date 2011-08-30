@@ -29,6 +29,7 @@
 #include "Scenario.h"
 #include "CustomAttributeDefinition.h"
 #include "UsageLimits.h"
+#include <QExplicitlySharedDataPointer>
 
 namespace TJ
 {
@@ -204,6 +205,11 @@ Task::inheritValues()
 TaskDependency*
 Task::addDepends(const QString& rid)
 {
+    foreach ( TaskDependency *d, depends ) {
+        if ( rid == d->getTaskRefId() ) {
+            return d;
+        }
+    }
     TaskDependency* td = new TaskDependency(rid, project->getMaxScenarios());
     depends.append(td);
     return td;
@@ -212,6 +218,11 @@ Task::addDepends(const QString& rid)
 TaskDependency*
 Task::addPrecedes(const QString& rid)
 {
+    foreach ( TaskDependency *d, precedes ) {
+        if ( rid == d->getTaskRefId() ) {
+            return d;
+        }
+    }
     TaskDependency* td = new TaskDependency(rid, project->getMaxScenarios());
     precedes.append(td);
     return td;
@@ -261,9 +272,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
                 qDebug()<<"Scheduling of ASAP task"<<id<<"starts at"<<time2tjp(start)<<"("<<time2tjp(date)<<")";
         }
         /* Do not schedule anything if the time slot is not directly
-         * following the time slot that was previously scheduled. */
+         * following the time slot that was previously scheduled.
+         * The project should get back to us later */
         if (!((date - slotDuration <= lastSlot) && (lastSlot < date))) {
-            TJMH.warningMessage(QString("'%1' cannot schedule: not continous slots").arg(name));
             return false;
         }
 
@@ -2511,7 +2522,7 @@ Task::scheduleOk(int sc) const
             errorMessage(QString("Impossible dependency:\n"
                               "Task '%1' ends at %2 but needs to precede\n"
                               "task '%3' which has a '%4' start time of %5")
-                         .arg(t->id).arg(time2tjp(t->end))
+                         .arg(t->getName()).arg(time2tjp(t->end))
                          .arg(name).arg(scenario).arg(time2tjp(start)));
             return false;
         }
@@ -2524,7 +2535,7 @@ Task::scheduleOk(int sc) const
             errorMessage(QString("Impossible dependency:\n"
                               "Task '%1' starts at %2 but needs to follow\n"
                               "task %3 which has a '%4' end time of %5")
-                         .arg(t->id).arg(time2tjp(t->start))
+                         .arg(t->getName()).arg(time2tjp(t->start))
                          .arg(name).arg(scenario).arg(time2tjp(end + 1)));
             return false;
         }
@@ -2655,6 +2666,7 @@ Task::prepareScenario(int sc)
 {
     start = scenarios[sc].start = scenarios[sc].specifiedStart;
     end = scenarios[sc].end = scenarios[sc].specifiedEnd;
+    TJMH.debugMessage(QString("'%1' Initial values: start=%2, end=%3").arg(name).arg(time2tjp(start)).arg(time2time(end)));
     schedulingDone = scenarios[sc].scheduled = scenarios[sc].specifiedScheduled;
     scenarios[sc].isOnCriticalPath = false;
     scenarios[sc].pathCriticalness = -1.0;

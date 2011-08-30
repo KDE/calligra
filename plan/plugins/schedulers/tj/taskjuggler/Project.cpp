@@ -784,6 +784,7 @@ Project::schedule(int sc)
          * will be scheduled during this run for all subsequent tasks as well.
          */
         foreach (CoreAttributes *t, workItems) {
+            TJMH.debugMessage(QString("'%1' schedule for slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
             if (slot == 0)
             {
                 /* No time slot has been set yet. Check if this task can be
@@ -831,6 +832,9 @@ Project::schedule(int sc)
                     qDebug()<<QString("Changing scheduling direction to %1 due to task '%2'")
                             .arg(static_cast<Task*>(t)->getScheduling())
                             .arg(static_cast<Task*>(t)->getName());
+                TJMH.debugMessage(QString("Changing scheduling direction to %1 due to task '%2'")
+                            .arg(static_cast<Task*>(t)->getScheduling())
+                            .arg(static_cast<Task*>(t)->getName()));
                 break;
             }
             /* We must avoid that lower priority tasks get resources even
@@ -845,6 +849,7 @@ Project::schedule(int sc)
             // Schedule this task for the current time slot.
             if (static_cast<Task*>(t)->schedule(sc, slot, scheduleGranularity))
             {
+                TJMH.debugMessage(QString("'%1' schedule finished, slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
                 workItems.clear();
                 int oldSortedTasks = sortedTasks;
                 sortedTasks = 0;
