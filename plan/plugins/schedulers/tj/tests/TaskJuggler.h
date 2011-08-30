@@ -36,9 +36,9 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void list();
     void projectTest();
     void oneTask();
-    void list();
     void oneResource();
     void allocation();
     void dependency();
