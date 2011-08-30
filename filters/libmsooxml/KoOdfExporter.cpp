@@ -175,16 +175,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     settings->startElement("office:settings");
     settings->startElement("config:config-item-set");
     settings->addAttribute("config:name", "ooo:configuration-settings");
-    settings->startElement("config:config-item");
-    settings->addAttribute("config:name", "UseFormerLineSpacing");
-    settings->addAttribute("config:type", "boolean");
-    settings->addTextSpan("false");
-    settings->endElement(); // config:config-item
-    settings->startElement("config:config-item");
-    settings->addAttribute("config:name", "TabsRelativeToIndent");
-    settings->addAttribute("config:type", "boolean");
-    settings->addTextSpan("false"); // ODF=true, MSOffice=false
-    settings->endElement(); // config:config-item
+    writeConfigurationSettings(settings);
     settings->endElement(); // config:config-item-set
     settings->endElement(); // office:settings
     settings->endElement(); // office:document-settings
