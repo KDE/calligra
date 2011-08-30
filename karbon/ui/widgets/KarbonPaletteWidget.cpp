@@ -33,6 +33,7 @@ KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     , m_pressedIndex(-1)
     , m_hasDragged(false)
 {
+    setFocusPolicy(Qt::ClickFocus);
 }
 
 KarbonPaletteWidget::~KarbonPaletteWidget()
@@ -155,6 +156,40 @@ void KarbonPaletteWidget::mouseReleaseEvent(QMouseEvent *event)
 void KarbonPaletteWidget::wheelEvent(QWheelEvent *event)
 {
     applyScrolling(-event->delta()/10);
+}
+
+void KarbonPaletteWidget::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key()) {
+    case Qt::Key_Left:
+        if (m_orientation == Qt::Horizontal)
+            applyScrolling(-1);
+        break;
+    case Qt::Key_Right:
+        if (m_orientation == Qt::Horizontal)
+            applyScrolling(1);
+        break;
+    case Qt::Key_Up:
+        if (m_orientation == Qt::Vertical)
+            applyScrolling(-1);
+        break;
+    case Qt::Key_Down:
+        if (m_orientation == Qt::Vertical)
+            applyScrolling(1);
+        break;
+    case Qt::Key_PageDown:
+        if (m_orientation == Qt::Vertical)
+            applyScrolling(height()/patchSize().height());
+        else
+            applyScrolling(width()/patchSize().width());
+        break;
+    case Qt::Key_PageUp:
+        if (m_orientation == Qt::Vertical)
+            applyScrolling(-height()/patchSize().height());
+        else
+            applyScrolling(-width()/patchSize().width());
+        break;
+    }
 }
 
 bool KarbonPaletteWidget::event(QEvent *event)
