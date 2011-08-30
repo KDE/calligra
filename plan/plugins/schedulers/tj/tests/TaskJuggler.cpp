@@ -116,7 +116,7 @@ void TaskJuggler::removeDir(const QString &subdir)
 
 void TaskJuggler::initTestCase()
 {
-    DebugCtrl.setDebugLevel(100);
+    DebugCtrl.setDebugLevel(0);
     DebugCtrl.setDebugMode(0xffff);
 
     initTimezone();
@@ -225,9 +225,13 @@ void TaskJuggler::list()
 
     QStringList s; foreach(TJ::CoreAttributes *a, lst) s << a->getId();
     qDebug()<<s;
-    QCOMPARE( lst.at(0)->getId(), QString( "A3" ) ); 
-    QCOMPARE( lst.at(1)->getId(), QString( "A2" ) ); 
-    QCOMPARE( lst.at(2)->getId(), QString( "A1" ) ); 
+    QCOMPARE( lst.at(0)->getId(), QString( "A3" ) );
+    QCOMPARE( lst.at(1)->getId(), QString( "A2" ) );
+    QCOMPARE( lst.at(2)->getId(), QString( "A1" ) );
+
+    while ( ! lst.isEmpty() ) {
+        delete lst.takeFirst();
+    }
 }
 
 void TaskJuggler::oneResource()
@@ -269,10 +273,7 @@ void TaskJuggler::dependency()
     TJ::Task *t = project->getTask( "T1" );
     QVERIFY( t != 0 );
 
-    TJ::TaskDependency *d = m->addPrecedes( t->getId() );
-    QVERIFY( d != 0 );
-
-    d = t->addDepends( m->getId() );
+    TJ::TaskDependency *d = t->addDepends( m->getId() );
     QVERIFY( d != 0 );
 }
 
