@@ -54,9 +54,14 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
 {
     Q_ASSERT(m_wordsDocument);
     setName(Words::frameSetTypeName(m_textFrameSetType));
-    setupDocument();
+
+    KoTextDocument doc(m_document);
+    doc.setRelativeTabs(true);
+    doc.setParaTableSpacingAtStart(true);
 
     kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
+
+    setupDocument();
 }
 
 KWTextFrameSet::~KWTextFrameSet()
