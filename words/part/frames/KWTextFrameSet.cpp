@@ -54,14 +54,9 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
 {
     Q_ASSERT(m_wordsDocument);
     setName(Words::frameSetTypeName(m_textFrameSetType));
-
-    KoTextDocument doc(m_document);
-    doc.setRelativeTabs(true);
-    doc.setParaTableSpacingAtStart(true);
+    setupDocument();
 
     kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
-
-    setupDocument();
 }
 
 KWTextFrameSet::~KWTextFrameSet()
@@ -170,6 +165,9 @@ void KWTextFrameSet::setupDocument()
     KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
     doc.setChangeTracker(changeTracker);
     doc.setUndoStack(m_wordsDocument->resourceManager()->undoStack());
+
+    doc.setRelativeTabs(true);
+    doc.setParaTableSpacingAtStart(true);
 
     // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
