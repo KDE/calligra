@@ -45,7 +45,7 @@ GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)
 {
     setCaption(i18n("Goto Cell"));
-    setObjectName("GotoDialog");
+    setObjectName(QLatin1String("GotoDialog"));
     setModal(true);
     setButtons(Ok | Cancel);
 

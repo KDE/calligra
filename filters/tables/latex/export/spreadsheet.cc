@@ -62,7 +62,7 @@ void Spreadsheet::analyze(const QDomNode node)
 /*******************************************/
 /* AnalyzePixmaps                          */
 /*******************************************/
-void Spreadsheet::analyze_attr(const QDomNode node)
+void Spreadsheet::analyze_attr(const QDomNode /*node*/)
 {
 
 }
@@ -136,7 +136,7 @@ void Spreadsheet::generatePreamble(QTextStream &out)
 /*******************************************/
 /* GenerateTypeHeader                      */
 /*******************************************/
-void Spreadsheet::generateTypeHeader(QTextStream &out)
+void Spreadsheet::generateTypeHeader(QTextStream &/*out*/)
 {
     /*kDebug(30522) <<"generate header";
     if((_fileHeader->getHeadType() == TH_ALL ||
@@ -182,7 +182,7 @@ void Spreadsheet::generateTypeHeader(QTextStream &out)
 /*******************************************/
 /* GenerateTypeFooter                      */
 /*******************************************/
-void Spreadsheet::generateTypeFooter(QTextStream &out)
+void Spreadsheet::generateTypeFooter(QTextStream &/*out*/)
 {
     /*if(_fileHeader->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
     {

@@ -111,8 +111,24 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
     return rect;
 }
 
-
 void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
+{
+    if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
+        processTextBox(o, out);
+    } else {
+        out.xml.startElement("draw:custom-shape");
+        processStyleAndText(o, out);
+        out.xml.startElement("draw:enhanced-geometry");
+        out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+        out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N");
+        out.xml.addAttribute("draw:type", "rectangle");
+        setShapeMirroring(o, out);
+        out.xml.endElement(); // draw:enhanced-geometry
+        out.xml.endElement(); // draw:custom-shape
+    }
+}
+
+void ODrawToOdf::processTextBox(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:frame");
     processStyle(o, out);
@@ -121,7 +137,6 @@ void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:text-box
     out.xml.endElement(); // draw:frame
 }
-
 
 void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -434,11 +449,9 @@ void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer&
 {
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
-
     out.xml.startElement("draw:enhanced-geometry");
     setEnhancedGeometry(o, out);
     out.xml.endElement(); //draw:enhanced-geometry
-
     out.xml.endElement(); //draw:custom-shape
 }
 
@@ -932,10 +945,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     case msosptHostControl:
         processPictureFrame(o, out);
         break;
-    // TODO: Implement processTextBox, do not process msosptTextBox as
-    // msosptRectangle.
     case msosptTextBox:
-        processRectangle(o, out);
+        processTextBox(o, out);
         break;
     default:
         qDebug() << "Cannot handle shape 0x" << hex << shapeType;

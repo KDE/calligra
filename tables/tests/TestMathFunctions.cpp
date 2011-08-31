@@ -313,6 +313,10 @@ void TestMathFunctions::testCEILING()
     // different sign does not make sense
     CHECK_EVAL("CEILING(-1; 2)", Value::errorNUM());
     CHECK_EVAL("CEILING(1; -2)", Value::errorNUM());
+
+    // mode param
+    CHECK_EVAL("CEILING(-5.4; -4.0; 0)", Value(-4.0));
+    CHECK_EVAL("CEILING(-5.4; -4.0; 1)", Value(-8.0));
 }
 
 void TestMathFunctions::testCOMBIN()

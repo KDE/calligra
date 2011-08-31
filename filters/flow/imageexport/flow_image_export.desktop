@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Flow Image Export Filter
+Name[bg]=Филтър за изнасяне на изображения от Flow
 Name[cs]=Exportní filtr do formátu obrázků Proud
 Name[de]=Flow-Bild-Exportfilter
 Name[el]=Φίλτρο εξαγωγής εικόνας Flow
@@ -11,6 +12,7 @@ Name[it]=Filtro di esportazione delle immagini di Flow
 Name[nb]=Flow bilde-eksportfilter
 Name[nds]=Bild-Exportfilter för Flow
 Name[nl]=Afbeeldingexportfilter voor Flow
+Name[pl]=Filtr eksportu obrazów z Flow
 Name[pt]=Filtro de Exportação de Imagem para o Flow
 Name[pt_BR]=Filtro de exportação de imagens para o Flow
 Name[ru]=Фильтр экспорта изображений для Flow

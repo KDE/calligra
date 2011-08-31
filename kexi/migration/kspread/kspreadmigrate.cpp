@@ -172,9 +172,7 @@ bool KSpreadMigrate::drv_moveLast()
 
 QVariant KSpreadMigrate::drv_value(uint i)
 {
-    QString str = Calligra::Tables::Cell(m_CurSheet, i+1, m_Row).displayText();
-  
-    return str;
+    return Calligra::Tables::Cell(m_CurSheet, i+1, m_Row).value().asVariant();
 }
 
 }

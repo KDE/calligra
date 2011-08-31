@@ -1426,7 +1426,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
 
     // stores count of elements in array
     // int count_Y = 0;
-    int count_X = 0;
+    // int count_X = 0;
 
     //
     int nCase = 0;

@@ -853,12 +853,17 @@
             <Comment>Significance (optional)</Comment>
             <Type>Float</Type>
         </Parameter>
+        <Parameter>
+            <Comment>Mode (optional)</Comment>
+            <Type>Float</Type>
+        </Parameter>
         <Help>
-            <Text>The CEILING() function rounds x up (away from zero) to the nearest multiple of Significance. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. Note that this does not match the normal mathematical definition of a ceiling function.</Text>
+            <Text>The CEILING() function rounds x up (away from zero) to the nearest multiple of Significance. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. If the Mode parameter is non-zero, the function rounds away from zero, instead of up towards the positive infinity.</Text>
             <Syntax>CEILING(x)</Syntax>
             <Example>CEILING(12.5) equals 13</Example>
             <Example>CEILING(6.43; 4) equals 8</Example>
-            <Example>CEILING(-6.43; -4) equals -8</Example>
+            <Example>CEILING(-6.43; -4; 1) equals -8</Example>
+            <Example>CEILING(-6.43; -4; 0) equals -4</Example>
             <Related>CEIL</Related>
             <Related>FLOOR</Related>
         </Help>

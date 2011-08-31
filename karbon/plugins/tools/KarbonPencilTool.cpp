@@ -315,7 +315,7 @@ QWidget * KarbonPencilTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QVBoxLayout * layout = new QVBoxLayout(optionWidget);
 
-    QHBoxLayout *modeLayout = new QHBoxLayout(optionWidget);
+    QHBoxLayout *modeLayout = new QHBoxLayout;
     modeLayout->setSpacing(3);
     QLabel *modeLabel = new QLabel(i18n("Precision:"), optionWidget);
     KComboBox * modeBox = new KComboBox(optionWidget);
@@ -354,7 +354,7 @@ QWidget * KarbonPencilTool::createOptionWidget()
     stackedWidget->addWidget(rawBox);
     stackedWidget->addWidget(curveBox);
     stackedWidget->addWidget(straightBox);
-    layout->addWidget(stackedWidget, 1);
+    layout->addWidget(stackedWidget);
     layout->addStretch(1);
 
     connect(modeBox, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));

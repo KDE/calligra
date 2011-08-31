@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Web browser
 Name[bg]=Уеб-браузър
+Name[de]=Webbrowser
 Name[el]=Περιηγητής ιστού
 Name[es]=Navegador web
 Name[et]=Veebibrauser
@@ -8,6 +9,7 @@ Name[it]=Browser web
 Name[nb]=Nettleser
 Name[nds]=Nettkieker
 Name[nl]=Webbrowser
+Name[pl]=Przeglądarka sieciowa
 Name[pt]=Navegador Web
 Name[pt_BR]=Navegador Web
 Name[sv]=Webbläsare

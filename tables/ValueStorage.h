@@ -20,6 +20,8 @@
 #ifndef KSPREAD_VALUE_STORAGE
 #define KSPREAD_VALUE_STORAGE
 
+#include "PointStorage.h"
+
 namespace Calligra
 {
 namespace Tables

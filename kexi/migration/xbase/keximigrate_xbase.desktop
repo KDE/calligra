@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=xBase
+Name[bg]=xBase
 Name[ca]=xBase
 Name[ca@valencia]=xBase
 Name[cs]=xBase
@@ -22,6 +23,7 @@ Name[lv]=xBase
 Name[nb]=xBase
 Name[nds]=xBase
 Name[nl]=xBase
+Name[pl]=xBase
 Name[pt]=xBase
 Name[pt_BR]=xBase
 Name[ro]=xBase
@@ -56,6 +58,7 @@ Comment[lv]=xBase datu migrācijas draiveris priekš Kexi
 Comment[nb]=xBase-migreringsdriver for Kexi
 Comment[nds]=xBase-Utlagerndriever för Kexi
 Comment[nl]=xBase-migratiestuurprogramma voor Kexi
+Comment[pl]=Sterownik migracji z xBase dla Kexi
 Comment[pt]=Controlador de Migração de xBase do Kexi
 Comment[pt_BR]=Driver de Migração do xBase para o Kexi
 Comment[sv]=xBase-övergångsdrivrutin för Kexi

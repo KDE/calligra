@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Kexi
+Name[bg]=Kexi
 Name[br]=Kexi
 Name[ca]=Kexi
 Name[ca@valencia]=Kexi
@@ -59,6 +60,7 @@ Icon=kexi
 MimeType=application/x-kexiproject-sqlite;application/x-kexiproject-shortcut;application/x-kexiproject-sqlite3;application/x-sqlite3;application/x-kexi-connectiondata;application/x-msaccess;
 Terminal=false
 GenericName=Database Creator
+GenericName[bg]=Създаване на бази от данни
 GenericName[br]=Aozer ar stlennvon
 GenericName[ca]=Creador de bases de dades
 GenericName[ca@valencia]=Creador de bases de dades

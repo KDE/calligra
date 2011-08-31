@@ -63,7 +63,7 @@ inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
                            + keyname + "=" + conn.driver()->valueToSQL(Field::Integer, QVariant(keyval)));
 }
 
-/*! Delete row with two generic criterias. */
+/*! Delete record with two generic criterias. */
 inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
                                      const QString &keyname1, Field::Type keytype1, const QVariant& keyval1,
                                      const QString &keyname2, Field::Type keytype2, const QVariant& keyval2)
@@ -137,7 +137,7 @@ Constructs an sql string like "fielname = value" for specific \a drv driver,
  field type \a t, \a fieldName and \a value. If \a value is null, "fieldname is NULL"
  string is returned. */
 inline KEXI_DB_EXPORT QString sqlWhere(Driver *drv, Field::Type t,
-                                       const QString fieldName, const QVariant value)
+                                       const QString &fieldName, const QVariant &value)
 {
     if (value.isNull())
         return fieldName + " is NULL";

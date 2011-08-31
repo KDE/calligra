@@ -1029,7 +1029,7 @@ void ApplicationController::activeFormatOptionCheck()
     if (documentType() == PresentationDocument) {
         KoCanvasBase *canvasForChecking = canvasController()->canvas();
         Q_CHECK_PTR(canvasForChecking);
-        if (canvasForChecking->toolProxy()->selection()->hasSelection()) {
+        if (canvasForChecking->toolProxy()->hasSelection()) {
             KoPAView *kopaview = qobject_cast<KoPAView *>(view());
             KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
             KoTextShapeDataBase *currentSelectedTextShapeData = qobject_cast<KoTextShapeDataBase*>(currentShapeSelected->userData());
@@ -1104,7 +1104,7 @@ void ApplicationController::activeFontOptionCheck()
     if (documentType() == PresentationDocument) {
         KoCanvasBase *canvasForChecking = canvasController()->canvas();
         Q_CHECK_PTR(canvasForChecking);
-        if(canvasForChecking->toolProxy()->selection()->hasSelection())
+        if(canvasForChecking->toolProxy()->hasSelection())
         {
           KoPAView *kopaview = qobject_cast<KoPAView *>(view());
           KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
@@ -1620,7 +1620,7 @@ void ApplicationController::doRedo()
 void ApplicationController::copy()
 {
     if(   documentType() != PresentationDocument && documentType() != SpreadsheetDocument
-       && !canvasController()->canvas()->toolProxy()->selection()->hasSelection())
+       && !canvasController()->canvas()->toolProxy()->hasSelection())
     {
         return;
     }
@@ -1635,7 +1635,7 @@ void ApplicationController::copy()
 void ApplicationController::cut()
 {
     if(   documentType() != PresentationDocument && documentType() != SpreadsheetDocument
-       && !canvasController()->canvas()->toolProxy()->selection()->hasSelection())
+       && !canvasController()->canvas()->toolProxy()->hasSelection())
     {
         return;
     }
@@ -3100,7 +3100,7 @@ void ApplicationController::startCollaborating() {
                                     m_collabDialog->getPort(),
                                     this);
         connect(m_collab, SIGNAL(saveFile(const QString&)), this, SLOT(collabSaveFile(const QString&)));
-        m_collabEditor = new KoTextEditor(textEditor()->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(document()->createView(this))->kwcanvas()->toolProxy()->selection());
+        m_collabEditor = new KoTextEditor(textEditor()->document());
 
     } else {
         return closeCollabDialog();
@@ -3217,7 +3217,7 @@ void ApplicationController::collabSaveFile(const QString &filename) {
 void ApplicationController::collabOpenFile(const QString &filename) {
     openDocument(filename);
     qDebug() << "============================================";
-    m_collabEditor = new KoTextEditor(textEditor()->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(document()->createView(m_mainWindow))->kwcanvas()->toolProxy()->selection());
+    m_collabEditor = new KoTextEditor(textEditor()->document());
     qDebug() << "::::::::::::::::::::::::::::::::::::::::::::";
 }
 
@@ -3371,8 +3371,8 @@ void ApplicationController::insertNewTable()
 {
     KoCanvasBase *canvasForChecking = canvasController()->canvas();
     Q_CHECK_PTR(canvasForChecking);
-    qDebug()<<"selection:"<<canvasForChecking->toolProxy()->selection()->hasSelection();
-    if(canvasForChecking->toolProxy()->selection()->hasSelection())
+    qDebug()<<"selection:"<<canvasForChecking->toolProxy()->hasSelection();
+    if(canvasForChecking->toolProxy()->hasSelection())
     {
         KoPAView *kopaview = qobject_cast<KoPAView *>(view());
         kopaview->kopaCanvas()->toolProxy()->actions()["insert_table"]->trigger();

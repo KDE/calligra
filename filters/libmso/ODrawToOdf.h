@@ -22,7 +22,6 @@
 
 #include "generated/simpleParser.h"
 #include "writer.h"
-#include "msodraw.h"
 
 class DrawStyle;
 class QColor;
@@ -67,6 +66,13 @@ public:
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
                                           Writer& out) = 0;
+
+        /**
+         * Ask the host application whether to process an msosptRectangle type
+         * shape container as an msosptTextBox.
+         */
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd) = 0;
+
         /**
          * Create a fitting style for the current object.
          * This will be a style that can contain graphic style elements. So the
@@ -138,6 +144,7 @@ private:
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processTextBox(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -311,7 +318,7 @@ public:
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles, MSOSPT shapeType = msosptRectangle);
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
     QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
@@ -335,6 +342,7 @@ inline qreal toQReal(const MSO::FixedPoint& f)
     return f.integral + f.fractional / 65536.0;
 }
 
+const char* getFillRule(quint16 shapeType);
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);

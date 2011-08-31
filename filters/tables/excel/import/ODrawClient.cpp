@@ -116,6 +116,12 @@ QString ODrawClient::getPicturePath(const quint32 pib)
     return QString();
 }
 
+bool ODrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+{
+    Q_UNUSED(cd);
+    return false;
+}
+
 bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;

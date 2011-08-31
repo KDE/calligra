@@ -84,7 +84,7 @@ bool KexiDBReportData::open()
         
         if ( m_cursor )
         {
-            kDebug() << "Moving to first row..";
+            kDebug() << "Moving to first record..";
             return m_cursor->moveFirst();
         }
         else
@@ -315,13 +315,13 @@ QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& l
 
                 if (! parsed) {
                     kDebug() << "XML parsing error";
-                    return false;
+                    return QString();
                 }
 
                 QDomElement scriptelem = domdoc.namedItem("script").toElement();
                 if (scriptelem.isNull()) {
                     kDebug() << "script domelement is null";
-                    return false;
+                    return QString();
                 }
 
                 QString interpretername = scriptelem.attribute("language");

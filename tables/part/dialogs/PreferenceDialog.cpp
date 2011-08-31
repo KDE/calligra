@@ -293,7 +293,7 @@ PreferenceDialog::PreferenceDialog(View* view)
         : KPageDialog(view)
         , d(new Private)
 {
-    setObjectName("PreferenceDialog");
+    setObjectName(QLatin1String("PreferenceDialog"));
     setCaption(i18n("Configure KSpread"));
     setFaceType(List);
     setButtons(Ok | Cancel | Default | Reset);

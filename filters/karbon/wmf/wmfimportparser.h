@@ -19,35 +19,21 @@
 #ifndef _WMFIMPORTPARSER_H_
 #define _WMFIMPORTPARSER_H_
 
-#include <QPainter>
-
 #include <WmfAbstractBackend.h>
-
-class KoShape;
-class KoPathShape;
-class KarbonDocument;
+#include <QtGui/QPainter>
+#include <QtGui/QMatrix>
 
 class WmfDeviceContext;
-
+class KoXmlWriter;
 
 /**
- * WMFImportParser inherit WmfAbstractBackend
- * and translate WMF functions
- *
+ * WMFImportParser inherits WmfAbstractBackend and translates WMF functions
  */
-
 class WMFImportParser : public Libwmf::WmfAbstractBackend
 {
 public:
-    WMFImportParser();
-    ~WMFImportParser() { }
-
-    /**
-     * play WMF file on a KarbonDocument. Return true on success.
-     */
-    using WmfAbstractBackend::play;
-    bool play(KarbonDocument& doc);
-
+    WMFImportParser(KoXmlWriter &svgWriter);
+    virtual ~WMFImportParser();
 
 private:
     // -------------------------------------------------------------------------
@@ -110,26 +96,33 @@ private:
     //-----------------------------------------------------------------------------
     // Utilities
     // Add pen, brush and points to a path
-    void appendPen(Libwmf::WmfDeviceContext &context, KoShape& obj);
-    void appendBrush(Libwmf::WmfDeviceContext &context, KoShape& obj);
-    void appendPoints(KoPathShape& path, const QPolygon& pa);
+    QString saveStroke(Libwmf::WmfDeviceContext &context);
+    QString saveFill(Libwmf::WmfDeviceContext &context);
+
     // coordinate transformation
-    // translate wmf to (0,0) -> scale to document size
-    double coordX(int left);
-    double coordY(int top);
-    double scaleW(int width);
-    double scaleH(int height);
+    QRectF boundBox(int left, int top, int width, int height);
+    QPointF coord(const QPoint &p);
+    QSizeF size(const QSize &s);
 
 private:
-    KoShape * createShape(const QString &shapeID);
+    void updateTransform();
 
-    KarbonDocument *mDoc;
-    // current origin of WMF logical coordinate
-    QPoint    mCurrentOrg;
-    double    mScaleX;
-    double    mScaleY;
-    // current position in WMF coordinate (INT16)
-    QPoint    mCurrentPoint;
+    KoXmlWriter &m_svgWriter;
+
+    QSizeF m_pageSize;
+
+    struct CoordData {
+        CoordData() : org(0,0), ext(0,0), extIsValid(false) {}
+        QPointF org;
+        QSizeF ext;
+        bool extIsValid;
+    };
+
+    CoordData m_window;
+    CoordData m_viewport;
+    qreal m_scaleX;
+    qreal m_scaleY;
+    QMatrix m_matrix;
 };
 
-#endif
+#endif // _WMFIMPORTPARSER_H_

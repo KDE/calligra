@@ -1357,7 +1357,7 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
                     s_additional_fields += expression;
 //subqueries_for_lookup_data.append(lookupQuery);
                 } else {
-                    KexiDBWarn << "Connection::selectStatement(): unsupported row source type "
+                    KexiDBWarn << "Connection::selectStatement(): unsupported record source type "
                     << rowSource.typeName();
                     return QString();
                 }
@@ -3230,14 +3230,14 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
     if (!mt) {
         KexiDBWarn << " -- NO MASTER TABLE!";
         setError(ERR_UPDATE_NO_MASTER_TABLE,
-                 i18n("Could not update row because there is no master table defined."));
+                 i18n("Could not update record because there is no master table defined."));
         return false;
     }
     IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
     if (!useROWID && !pkey) {
         KexiDBWarn << " -- NO MASTER TABLE's PKEY!";
         setError(ERR_UPDATE_NO_MASTER_TABLES_PKEY,
-                 i18n("Could not update row because master table has no primary key defined."));
+                 i18n("Could not update record because master table has no primary key defined."));
 //! @todo perhaps we can try to update without using PKEY?
         return false;
     }
@@ -3266,7 +3266,7 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
         if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
             KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!";
             setError(ERR_UPDATE_NO_ENTIRE_MASTER_TABLES_PKEY,
-                     i18n("Could not update row because it does not contain entire master table's primary key."));
+                     i18n("Could not update record because it does not contain entire master table's primary key."));
             return false;
         }
         if (!pkey->fields()->isEmpty()) {
@@ -3304,7 +3304,7 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
         return false;
 
     if (!res) {
-        setError(ERR_UPDATE_SERVER_ERROR, i18n("Row updating on the server failed."));
+        setError(ERR_UPDATE_SERVER_ERROR, i18n("Record updating on the server failed."));
         return false;
     }
     //success: now also assign new values in memory:
@@ -3327,7 +3327,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
     if (!mt) {
         KexiDBWarn << " -- NO MASTER TABLE!";
         setError(ERR_INSERT_NO_MASTER_TABLE,
-                 i18n("Could not insert row because there is no master table defined."));
+                 i18n("Could not insert record because there is no master table defined."));
         return false;
     }
     IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
@@ -3360,11 +3360,11 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
     FieldList affectedFields;
 
     if (b.isEmpty()) {
-        // empty row inserting requested:
+        // empty record inserting requested:
         if (!getROWID && !pkey) {
-            KexiDBWarn << "MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED";
+            KexiDBWarn << "MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY RECORDS: INSERT CANCELLED";
             setError(ERR_INSERT_NO_MASTER_TABLES_PKEY,
-                     i18n("Could not insert row because master table has no primary key defined."));
+                     i18n("Could not insert record because master table has no primary key defined."));
             return false;
         }
         if (pkey) {
@@ -3373,7 +3373,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
             if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
                 KexiDBWarn << "NO ENTIRE MASTER TABLE's PKEY SPECIFIED!";
                 setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY,
-                         i18n("Could not insert row because it does not contain entire master table's primary key."));
+                         i18n("Could not insert record because it does not contain entire master table's primary key."));
                 return false;
             }
         }
@@ -3392,7 +3392,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
         sqlvals += m_driver->valueToSQL(anyField, QVariant()/*NULL*/);
         affectedFields.addField(anyField);
     } else {
-        // non-empty row inserting requested:
+        // non-empty record inserting requested:
         for (KexiDB::RowEditBuffer::DBMap::ConstIterator it = b.constBegin();it != b.constEnd();++it) {
             if (it.key()->field->table() != mt)
                 continue; // skip values for fields outside of the master table (e.g. a "visible value" of the lookup field)
@@ -3420,7 +3420,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
         return false;
 
     if (!res) {
-        setError(ERR_INSERT_SERVER_ERROR, i18n("Row inserting on the server failed."));
+        setError(ERR_INSERT_SERVER_ERROR, i18n("Record inserting on the server failed."));
         return false;
     }
     //success: now also assign a new value in memory:
@@ -3438,7 +3438,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
                               id_columnInfo->field->name(), id_columnInfo->field->table()->name(), &ROWID);
         if (last_id == (quint64) - 1 || last_id <= 0) {
             //! @todo show error
-//! @todo remove just inserted row. How? Using ROLLBACK?
+//! @todo remove just inserted record. How? Using ROLLBACK?
             return false;
         }
         RecordData aif_data;
@@ -3484,7 +3484,7 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
     if (!mt) {
         KexiDBWarn << " -- NO MASTER TABLE!";
         setError(ERR_DELETE_NO_MASTER_TABLE,
-                 i18n("Could not delete row because there is no master table defined."));
+                 i18n("Could not delete record because there is no master table defined."));
         return false;
     }
     IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
@@ -3493,7 +3493,7 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
     if (!useROWID && !pkey) {
         KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY";
         setError(ERR_DELETE_NO_MASTER_TABLES_PKEY,
-                 i18n("Could not delete row because there is no primary key for master table defined."));
+                 i18n("Could not delete record because there is no primary key for master table defined."));
         return false;
     }
 
@@ -3508,7 +3508,7 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
         if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
             KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!";
             setError(ERR_DELETE_NO_ENTIRE_MASTER_TABLES_PKEY,
-                     i18n("Could not delete row because it does not contain entire master table's primary key."));
+                     i18n("Could not delete record because it does not contain entire master table's primary key."));
             return false;
         }
         uint i = 0;
@@ -3534,7 +3534,7 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
     KexiDBDbg << " -- SQL == " << m_sql;
 
     if (!executeSQL(m_sql)) {
-        setError(ERR_DELETE_SERVER_ERROR, i18n("Row deletion on the server failed."));
+        setError(ERR_DELETE_SERVER_ERROR, i18n("Record deletion on the server failed."));
         return false;
     }
     return true;
@@ -3557,7 +3557,7 @@ bool Connection::deleteAllRows(QuerySchema &query)
     KexiDBDbg << " -- SQL == " << m_sql;
 
     if (!executeSQL(m_sql)) {
-        setError(ERR_DELETE_SERVER_ERROR, i18n("Row deletion on the server failed."));
+        setError(ERR_DELETE_SERVER_ERROR, i18n("Record deletion on the server failed."));
         return false;
     }
     return true;

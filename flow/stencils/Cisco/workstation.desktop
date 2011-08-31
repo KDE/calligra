@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Workstation
 Name[bg]=Работна станция
+Name[de]=Workstation
 Name[el]=Σταθμός εργασίας
 Name[es]=Estación de trabajo
 Name[et]=Tööjaam
@@ -8,6 +9,7 @@ Name[it]=Workstation
 Name[nb]=Arbeidsstasjon
 Name[nds]=Arbeitreekner
 Name[nl]=Werkstation
+Name[pl]=Stacja robocza
 Name[pt]=Estação trabalho
 Name[pt_BR]=Estação de trabalho
 Name[sv]=Arbetsstation

@@ -520,6 +520,19 @@ void CellStorage::setNamedArea(const Region& region, const QString& namedArea)
     d->namedAreaStorage->insert(region, namedArea);
 }
 
+void CellStorage::removeNamedArea(const Region& region, const QString& namedArea)
+{
+#ifdef CALLIGRA_TABLES_MT
+    QWriteLocker(&d->bigUglyLock);
+#endif
+    // recording undo?
+    if (d->undoData)
+        d->undoData->namedAreas << d->namedAreaStorage->undoData(region);
+
+    d->namedAreaStorage->remove(region, namedArea);
+}
+
+
 void CellStorage::emitInsertNamedArea(const Region &region, const QString &namedArea)
 {
     emit insertNamedArea(region, namedArea);

@@ -28,6 +28,7 @@
 
 #include "FormulaParser.h"
 #include "XlsxXmlWorksheetReader_p.h"
+#include <tables/Util.h>
 
 void TestFormulaParser::testConvertFormula_data()
 {
@@ -40,6 +41,9 @@ void TestFormulaParser::testConvertFormula_data()
     QTest::newRow("argument delimiter")
         << "IF(A1=A2,1,2)"
         << "=IF(A1=A2;1;2)";
+    QTest::newRow("string")
+        << "LEFT(\" Some   ~text \",3)"
+        << "=LEFT(\" Some   ~text \";3)";
     QTest::newRow("union operator")
         << "AREAS((A1:A3,B3:C5))"
         << "=AREAS((A1:A3~B3:C5))";
@@ -54,7 +58,7 @@ void TestFormulaParser::testConvertFormula_data()
         << "=IF(A1=A2; 2; \" IF(1,2) \")";
     QTest::newRow("mixing union and intersection")
         << "AREAS((A1:C5 B2:B3,C2:C3))"
-        << "=AREAS((A1:C5!B2:B2~C2:C3))";
+        << "=AREAS((A1:C5!B2:B3~C2:C3))";
 }
 
 void TestFormulaParser::testConvertFormula()
@@ -62,7 +66,7 @@ void TestFormulaParser::testConvertFormula()
     QFETCH(QString, xlsx);
     QFETCH(QString, odf);
 
-    QCOMPARE(MSOOXML::convertFormula(xlsx), odf);
+    QCOMPARE(Calligra::Tables::MSOOXML::convertFormula(xlsx), odf);
 }
 
 void TestFormulaParser::testSharedFormulaReferences()

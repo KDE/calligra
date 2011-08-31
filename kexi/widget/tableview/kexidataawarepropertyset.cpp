@@ -112,7 +112,7 @@ void KexiDataAwarePropertySet::slotReloadRequested()
 void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
 {
     if (!set || row >= (uint)m_sets.size()) {
-        kWarning() << "invalid args: rew=" << row << "propertyset=" << set;
+        kWarning() << "invalid args: record=" << row << "propertyset=" << set;
         return;
     }
     if (set->parent() && set->parent() != this) {
@@ -127,7 +127,7 @@ void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
     if (newOne) {
         //add a special property indicating that this is brand new set,
         //not just changed
-        KoProperty::Property* prop = new KoProperty::Property("newrow");
+        KoProperty::Property* prop = new KoProperty::Property("newrecord");
         prop->setVisible(false);
         set->addProperty(prop);
         m_view->setDirty();

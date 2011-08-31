@@ -1265,7 +1265,7 @@ unsigned long StorageIO::loadBigBlock(unsigned long block,
 unsigned long StorageIO::loadSmallBlocks(const std::vector<unsigned long>& blocks,
         unsigned char* data, unsigned long maxlen)
 {
-    return loadSmallBlocks(blocks.data(), blocks.size(), data, maxlen);
+    return loadSmallBlocks(&blocks[0], blocks.size(), data, maxlen);
 }
 
 unsigned long StorageIO::loadSmallBlocks(const unsigned long *blocks, unsigned blockCount,

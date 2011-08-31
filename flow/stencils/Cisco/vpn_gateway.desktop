@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=VPN Gateway
 Name[bg]=Шлюз VPN
+Name[de]=VPN-Gateway
 Name[el]=Πύλη VPN
 Name[et]=VPN lüüs
-Name[it]=VPN Gateway
+Name[it]=Gateway VPN
 Name[nb]=VPN-portner
 Name[nds]=VPN-Döörreekner
 Name[nl]=VPN-gateway
+Name[pl]=Bramka VPN
 Name[pt]='Gateway' VPN
 Name[pt_BR]=Gateway de VPN
 Name[sv]=Förmedlingsnod för virtuellt privat nätverk

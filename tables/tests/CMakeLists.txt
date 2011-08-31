@@ -46,6 +46,12 @@ target_link_libraries(TestRTree ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
+set(TestSort_SRCS TestSort.cpp)
+kde4_add_unit_test(TestSort TESTNAME kspread-Sort ${TestSort_SRCS})
+target_link_libraries(TestSort calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestSelection_SRCS TestSelection.cpp)
 kde4_add_unit_test(TestSelection TESTNAME kspread-Selection ${TestSelection_SRCS})
 target_link_libraries(TestSelection calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})

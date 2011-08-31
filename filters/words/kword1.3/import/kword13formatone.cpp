@@ -38,7 +38,7 @@ void Words13FormatOneData::xmldump(QTextStream& iostream)
     for (QMap<QString, QString>::ConstIterator it = m_properties.constBegin();
             it != m_properties.constEnd();
             ++it) {
-        iostream << "       <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump(it.data()) << "\"/>\n";
+        iostream << "       <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump(it.value()) << "\"/>\n";
     }
 
     iostream << "    </formatone>\n";

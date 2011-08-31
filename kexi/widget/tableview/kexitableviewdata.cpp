@@ -326,7 +326,7 @@ KexiTableViewData::KexiTableViewData(
 KexiTableViewData::~KexiTableViewData()
 {
     emit destroying();
-    clearInternal();
+    clearInternal(false /* !processEvents */);
     qDeleteAll(m_columns);
     delete d;
 }
@@ -617,7 +617,7 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
         if (insert) {
             if (!d->cursor->insertRow(record, *d->pRowEditBuffer,
                                       d->containsROWIDInfo/*also retrieve ROWID*/)) {
-                d->result.msg = i18n("Row inserting failed.") + "\n\n"
+                d->result.msg = i18n("Record inserting failed.") + "\n\n"
                                 + Kexi::msgYouCanImproveData();
                 KexiDB::getHTMLErrorMesage(d->cursor, &d->result);
 
@@ -635,7 +635,7 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
 //    ROWID = record[columns.count()].toULongLong();
             if (!d->cursor->updateRow(static_cast<KexiDB::RecordData&>(record), *d->pRowEditBuffer,
                                       d->containsROWIDInfo/*use ROWID*/)) {
-                d->result.msg = i18n("Row changing failed.") + "\n\n" + Kexi::msgYouCanImproveData();
+                d->result.msg = i18n("Record changing failed.") + "\n\n" + Kexi::msgYouCanImproveData();
 //! @todo set d->result.column if possible
                 KexiDB::getHTMLErrorMesage(d->cursor, d->result.desc);
                 return false;
@@ -703,7 +703,7 @@ bool KexiTableViewData::deleteRow(KexiDB::RecordData& record, bool repaint)
     if (d->cursor) {//db-aware
         d->result.success = false;
         if (!d->cursor->deleteRow(static_cast<KexiDB::RecordData&>(record), d->containsROWIDInfo/*use ROWID*/)) {
-            d->result.msg = i18n("Row deleting failed.");
+            d->result.msg = i18n("Record deleting failed.");
             /*js: TODO: use KexiDB::errorMessage() for description (desc) as in KexiTableViewData::saveRow() */
             KexiDB::getHTMLErrorMesage(d->cursor, &d->result);
             d->result.success = false;
@@ -748,7 +748,7 @@ void KexiTableViewData::insertRow(KexiDB::RecordData& record, uint index, bool r
     emit rowInserted(&record, index, repaint);
 }
 
-void KexiTableViewData::clearInternal()
+void KexiTableViewData::clearInternal(bool processEvents)
 {
     clearRowEditBuffer();
 // qApp->processEvents( 1 );
@@ -756,12 +756,12 @@ void KexiTableViewData::clearInternal()
 // KexiTableViewDataBase::clear();
     const uint c = count();
 #ifndef KEXI_NO_PROCESS_EVENTS
-    const bool processEvents = !qApp->closingDown();
+    const bool _processEvents = processEvents && !qApp->closingDown();
 #endif
     for (uint i = 0; i < c; i++) {
         removeLast();
 #ifndef KEXI_NO_PROCESS_EVENTS
-        if (processEvents && i % 1000 == 0)
+        if (_processEvents && i % 1000 == 0)
             qApp->processEvents(QEventLoop::AllEvents, 1);
 #endif
     }

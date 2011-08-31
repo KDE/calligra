@@ -89,7 +89,7 @@ using namespace Calligra::Tables;
 RowHeader::RowHeader(CanvasBase *_canvas)
         : m_pCanvas(_canvas), m_bSelection(false),
         m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
-        m_cellToolIsActive(true)
+        m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
 {
 }
 
@@ -403,7 +403,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
-    QFont normalFont(KoGlobal::defaultFont());
+    QFont normalFont(m_font);
     QFont boldFont(normalFont);
     boldFont.setBold(true);
 
@@ -514,6 +514,16 @@ void RowHeader::doToolChanged(const QString& toolId)
     update();
 }
 
+void RowHeader::setHeaderFont(const QFont &font)
+{
+    m_font = font;
+    update();
+}
+
+QFont RowHeader::headerFont() const
+{
+    return m_font;
+}
 
 /****************************************************************
  *
@@ -524,7 +534,7 @@ void RowHeader::doToolChanged(const QString& toolId)
 ColumnHeader::ColumnHeader(CanvasBase *_canvas)
     : m_pCanvas(_canvas), m_bSelection(false),
     m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
-    m_cellToolIsActive(true)
+    m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
 {
 }
 
@@ -950,7 +960,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
-    QFont normalFont(KoGlobal::defaultFont());
+    QFont normalFont(m_font);
     QFont boldFont(normalFont);
     boldFont.setBold(true);
 
@@ -1086,6 +1096,16 @@ void ColumnHeader::doToolChanged(const QString& toolId)
     update();
 }
 
+void ColumnHeader::setHeaderFont(const QFont &font)
+{
+    m_font = font;
+    update();
+}
+
+QFont ColumnHeader::headerFont() const
+{
+    return m_font;
+}
 
 /****************************************************************
  *

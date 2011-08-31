@@ -76,6 +76,7 @@ KoFilter::ConversionStatus read_stretch();
 KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_grayscl();
 KoFilter::ConversionStatus read_lum();
+KoFilter::ConversionStatus read_duotone();
 KoFilter::ConversionStatus read_tint();
 KoFilter::ConversionStatus read_alpha();
 
@@ -96,7 +97,8 @@ enum blipFillCaller {
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
 bool m_insideTable;
-qreal m_largestParaFont; // Largest font used in the paragraph
+qreal m_largestParaFont; // Largest font size used in the paragraph
+qreal m_minParaFont;     // minimum font size used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 

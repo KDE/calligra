@@ -31,6 +31,8 @@
 #include <QXmlStreamReader>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeSavingContext.h>
 
 
 #define MSOOXML_CURRENT_NS "dgm"
@@ -1791,7 +1793,12 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
                 llp.setBulletCharacter(QChar(0x2022));
                 listStyle.setLevelProperties(llp);
                 KoGenStyle style(KoGenStyle::ListAutoStyle);
-                listStyle.saveOdf(style);
+                QByteArray array;
+                QBuffer buffer(&array);
+                KoXmlWriter tmpXmlWriter(&buffer);
+                KoEmbeddedDocumentSaver embeddedSaver;
+                KoShapeSavingContext context(tmpXmlWriter, *styles, embeddedSaver);
+                listStyle.saveOdf(style, context);
                 xmlWriter->addAttribute("text:style-name", styles->insert(style));
                 xmlWriter->startElement("text:list-item");
             }

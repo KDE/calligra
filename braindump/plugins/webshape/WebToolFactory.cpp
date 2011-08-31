@@ -41,5 +41,3 @@ KoToolBase* WebToolFactory::createTool(KoCanvasBase * canvas)
 {
     return new WebTool(canvas);
 }
-
-#include "WebToolFactory.moc"
