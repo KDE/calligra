@@ -1,6 +1,6 @@
-/*
-    <one line to give the library's name and an idea of what it does.>
+/* This file is part of the KDE project
     Copyright (C) 2011  Adam Pigg <piggz1@gmail.com>
+    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -50,11 +50,6 @@ void AutoForm::addHeaderColumn(const QString& caption, const QString& descriptio
 
 }
 
-void AutoForm::cellSelected(int col, int row)
-{
-
-}
-
 void AutoForm::clearColumnsInternal(bool repaint)
 {
 
@@ -70,19 +65,14 @@ void AutoForm::createEditor(int row, int col, const QString& addText, bool remov
 
 }
 
-void AutoForm::currentItemDeleteRequest()
-{
-
-}
-
 int AutoForm::currentLocalSortColumn() const
 {
-return 0;
+    return 0;
 }
 
 int AutoForm::currentLocalSortingOrder() const
 {
-return 0;
+    return 0;
 }
 
 void AutoForm::cutSelection()
@@ -90,18 +80,9 @@ void AutoForm::cutSelection()
 
 }
 
-void AutoForm::dataRefreshed()
-{
-
-}
-
-void AutoForm::dataSet(KexiTableViewData* data)
-{
-}
-
 KexiDataItemInterface* AutoForm::editor(int col, bool ignoreMissingEditor)
 {
-return 0;
+    return 0;
 }
 
 void AutoForm::editorShowFocus(int row, int col)
@@ -110,26 +91,6 @@ void AutoForm::editorShowFocus(int row, int col)
 }
 
 void AutoForm::ensureCellVisible(int row, int col)
-{
-
-}
-
-void AutoForm::itemChanged(KexiDB::RecordData* , int row, int col)
-{
-
-}
-
-void AutoForm::itemChanged(KexiDB::RecordData* , int row, int col, QVariant oldValue)
-{
-
-}
-
-void AutoForm::itemDeleteRequest(KexiDB::RecordData* , int row, int col)
-{
-
-}
-
-void AutoForm::itemSelected(KexiDB::RecordData* )
 {
 
 }
@@ -153,22 +114,7 @@ int AutoForm::lastVisibleRow() const
     return 0;
 }
 
-void AutoForm::newItemAppendedForAfterDeletingInSpreadSheetMode()
-{
-
-}
-
 void AutoForm::paste()
-{
-
-}
-
-void AutoForm::reloadActions()
-{
-
-}
-
-void AutoForm::rowEditTerminated(int row)
 {
 
 }
@@ -211,11 +157,6 @@ void AutoForm::selectCellInternal()
     } else {
         m_previousRecord = 0;
     }
-}
-
-void AutoForm::sortedColumnChanged(int col)
-{
-
 }
 
 void AutoForm::updateCell(int row, int col)
@@ -297,7 +238,7 @@ void AutoForm::valueChanged(KexiDataItemInterface* item)
        
         if (m_editor != item) {
         kDebug() << "Editing Item Started";
-        m_rowEditing = true;
+        setRowEditing(true);
         m_editor = item;
         startEditCurrentCell();
     }
