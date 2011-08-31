@@ -36,7 +36,7 @@ private slots:
 #endif
     void locations();
     void prefixMapping();
-    void addAndSage();
+    void addAndSave();
     void semanticItemViewSite();
     void sopranoTableModel();
     void expandStatementsToIncludeRdfLists();
@@ -46,6 +46,8 @@ private slots:
     void removeStatementsIfTheyExist();
     void KoTextRdfCoreTripleFunctions();
     void createUserStylesheet();
+    // test creating, saving and loading a words document with semantic data and markers in the text
+    void testRoundtrip();
 };
 
 #endif

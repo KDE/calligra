@@ -35,17 +35,22 @@
 
 #include <QDebug>
 #include <QtGui>
+#include <QTemporaryFile>
 
 #include <KWDocument.h>
+#include "KWAboutData.h"
 #include <frames/KWTextFrameSet.h>
+
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoRdfLocation.h>
 #include <rdf/KoRdfFoaF.h>
 #include <rdf/KoRdfPrefixMapping.h>
 #include <rdf/KoSopranoTableModel.h>
+
+#include <KoBookmark.h>
+#include <KoTextInlineRdf.h>
 #include <KoStore.h>
 #include <KoTextDocument.h>
-#include "KWAboutData.h"
 #include <KoApplication.h>
 #include <KoXmlWriter.h>
 #include <KoShapeRegistry.h>
@@ -54,13 +59,21 @@
 #include <KoOdfWriteStore.h>
 #include <KoStyleManager.h>
 #include <KoXmlNS.h>
-#include <kcomponentdata.h>
-#include <QTemporaryFile>
 #include <KoTextRdfCore.h>
+#include <KoDocument.h>
+#include <KoTextShapeDataBase.h>
+#include <KoTextDocument.h>
 
-#include <KFileItem>
+#include <kfileitem.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
+#include <kmimetype.h>
+#include <kparts/part.h>
+#include <kservice.h>
+#include <ktemporaryfile.h>
+#include <kurl.h>
+#include <kcomponentdata.h>
+
 
 using namespace Soprano;
 #define RDEBUG if (0) qDebug()
@@ -386,7 +399,7 @@ static Soprano::Model *loadRDFXMLFromODT(const QString &odt)
     return ret;
 }
 
-void TestRdf::addAndSage()
+void TestRdf::addAndSave()
 {
     RDEBUG;
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
@@ -802,6 +815,116 @@ void TestRdf::createUserStylesheet()
     QVERIFY (z);
     QVERIFY (z->uuid() == ss->uuid());
 
+}
+
+
+void TestRdf::testRoundtrip()
+{
+    const QString lorem(
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
+                "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud"
+                "exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n"
+                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla"
+                "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
+                "deserunt mollit anim id est laborum.\n"
+                );
+
+    {
+        // Get the words part and create a document
+        KWDocument *doc = new KWDocument();
+        Q_ASSERT(doc);
+        doc->setAutoSave(0);
+        doc->initEmpty();
+
+        KoDocumentRdf *rdfDoc = doc->documentRdf();
+        Q_ASSERT(rdfDoc);
+
+        // get the main text frame
+        KWTextFrameSet *mainFrameSet = doc->mainFrameSet();
+        Q_ASSERT(mainFrameSet);
+
+        QTextDocument *textDocument = mainFrameSet->document();
+        Q_ASSERT(textDocument);
+
+        // Insert some text and some rdf
+        KoTextDocument koTextDocument(textDocument);
+        KoTextEditor *editor = koTextDocument.textEditor();
+        editor->insertText(lorem);
+
+        editor->insertTable(5,10);
+        QTextTable *table = editor->cursor()->currentTable();
+
+        KoBookmark *startmark = new KoBookmark(editor->document());
+        startmark->setType(KoBookmark::StartBookmark);
+
+        KoTextInlineRdf *inlineRdf(new KoTextInlineRdf(editor->document(), startmark));
+        QString newId = inlineRdf->createXmlId();
+        inlineRdf->setXmlId(newId);
+
+        startmark->setName(newId);
+        startmark->setInlineRdf(inlineRdf);
+
+        editor->setPosition(table->firstPosition());
+        editor->movePosition(QTextCursor::PreviousCharacter);
+        editor->insertInlineObject(startmark);
+
+        KoRdfLocation *location = new KoRdfLocation(this, rdfDoc);
+        location->setName("testlocation");
+        location->setDlat(5.0);
+        location->setDlong(10.0);
+
+        Soprano::Statement st(
+                    location->linkingSubject(), // subject
+                    Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
+                    Soprano::Node::createLiteralNode(newId), // object
+                    rdfDoc->manifestRdfNode()); // manifest datastore
+
+        const_cast<Soprano::Model*>(rdfDoc->model())->addStatement(st);
+        rdfDoc->rememberNewInlineRdfObject(inlineRdf);
+
+        Q_ASSERT(rdfDoc->model()->statementCount() > 0);
+
+        KoBookmark *endmark = new KoBookmark(editor->document());
+        endmark->setName(newId);
+        endmark->setType(KoBookmark::EndBookmark);
+        startmark->setEndBookmark(endmark);
+
+        editor->setPosition(table->lastPosition());
+        editor->movePosition(QTextCursor::NextCharacter);
+        editor->insertInlineObject(endmark);
+
+        // Save the document
+        KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
+        doc->saveAs(url);
+        delete doc;
+    }
+    {
+        // Load the document
+        KWDocument *doc = new KWDocument();
+        Q_ASSERT(doc);
+        doc->setAutoSave(0);
+        KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
+        // this also creates a view...
+        bool result = doc->openUrl(url);
+        Q_ASSERT(result);
+
+        KoDocumentRdf *rdfDoc = doc->documentRdf();
+
+        // Check for the rdf statements and spans
+        QList<KoRdfLocation*> locations = rdfDoc->locations();
+        Q_ASSERT(locations.size() == 1);
+        KoRdfLocation *location = locations[0];
+        Q_ASSERT(location->name() == "10,5");
+        Q_ASSERT(location->dlat() == 5.0);
+        Q_ASSERT(location->dlong() == 10.0);
+        Q_ASSERT(location->xmlIdList().length() == 1);
+        QString xmlid = location->xmlIdList()[0];
+        QPair<int,int> position = rdfDoc->findExtent(xmlid);
+        Q_ASSERT(position.first == 443);
+        Q_ASSERT(position.second == 545);
+
+        delete doc;
+    }
 }
 
 QTEST_KDEMAIN(TestRdf, GUI)
