@@ -1,7 +1,7 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44021)
 
 add_subdirectory( reports )
-add_subdirectory(autoforms)
+#add_subdirectory(autoforms)
 
 if (KEXI_MOBILE)
   
