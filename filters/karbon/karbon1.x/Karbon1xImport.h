@@ -24,6 +24,7 @@
 #include <KoXmlReader.h>
 #include <QtCore/QVariant>
 #include <QtGui/QTransform>
+#include <QtCore/QStack>
 
 class KoXmlWriter;
 
@@ -72,6 +73,7 @@ private:
     KoXmlWriter *m_svgWriter;
     QHash<QString, int> m_uniqueNames;
     QString m_lastId;
+    QStack<QTransform> m_transformation;
 };
 
 #endif // KARBON_IMPORT_H
