@@ -31,6 +31,8 @@
 #include <QXmlStreamReader>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeSavingContext.h>
 
 
 #define MSOOXML_CURRENT_NS "dgm"
@@ -1791,7 +1793,12 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
                 llp.setBulletCharacter(QChar(0x2022));
                 listStyle.setLevelProperties(llp);
                 KoGenStyle style(KoGenStyle::ListAutoStyle);
-                listStyle.saveOdf(style);
+                QByteArray array;
+                QBuffer buffer(&array);
+                KoXmlWriter tmpXmlWriter(&buffer);
+                KoEmbeddedDocumentSaver embeddedSaver;
+                KoShapeSavingContext context(tmpXmlWriter, *styles, embeddedSaver);
+                listStyle.saveOdf(style, context);
                 xmlWriter->addAttribute("text:style-name", styles->insert(style));
                 xmlWriter->startElement("text:list-item");
             }
@@ -2850,16 +2857,12 @@ void SnakeAlgorithm::virtualDoLayout() {
     const qreal h = layout()->finalValues()["h"];
     qreal x = 0;
     qreal y = 0;
-    enum { TopLeft, TopRight, BottomLeft, BottomRight } direction = TopLeft;
 
     if (growDirection == "tR") {
-        direction = TopRight;
         x = w - childs.first()->finalValues()["w"];
     } else if (growDirection == "bL") {
-        direction = BottomLeft;
         y = h - childs.first()->finalValues()["h"];
     } else if (growDirection == "bR") {
-        direction = BottomRight;
         x = w - childs.first()->finalValues()["w"];
         y = h - childs.first()->finalValues()["h"];
     }

@@ -852,8 +852,6 @@ void DirTree::load(unsigned char* buffer, unsigned size)
     for (unsigned i = 0; i < (size / 128); i++) {
         unsigned p = i * 128;
 
-        // would be < 32 if first char in the name isn't printable
-        unsigned prefix = 32;
 
         // parse name of this entry, which stored as Unicode 16-bit
         int name_len = readU16(buffer + 0x40 + p);
@@ -868,7 +866,6 @@ void DirTree::load(unsigned char* buffer, unsigned size)
 
         // first char isn't printable ? remove it...
         if (buffer[p] < 32) {
-            prefix = buffer[0];
             name.erase(0, 1);
         }
 
@@ -1268,7 +1265,7 @@ unsigned long StorageIO::loadBigBlock(unsigned long block,
 unsigned long StorageIO::loadSmallBlocks(const std::vector<unsigned long>& blocks,
         unsigned char* data, unsigned long maxlen)
 {
-    return loadSmallBlocks(blocks.data(), blocks.size(), data, maxlen);
+    return loadSmallBlocks(&blocks[0], blocks.size(), data, maxlen);
 }
 
 unsigned long StorageIO::loadSmallBlocks(const unsigned long *blocks, unsigned blockCount,

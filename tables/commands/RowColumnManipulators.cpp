@@ -513,6 +513,15 @@ double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
             indent = cell.style().indentation();
         long_max = indent + size.width()
                    + style.leftBorderPen().width() + style.rightBorderPen().width();
+        // if this cell has others merged into it, we'll subtract the width of those columns
+        // this is not perfect, but at least should work in 90% of the cases
+        const int mergedXCount = cell.mergedXCells();
+        if (mergedXCount > 0) {
+            for (int col = 1; col <= mergedXCount; col++) {
+                double cw = cell.sheet()->columnFormat(cell.column() + col)->width();
+                long_max -= cw;
+            }
+        }
     }
     // add 4 because long_max is the length of the text
     // but column has borders

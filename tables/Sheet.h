@@ -499,7 +499,7 @@ public:
      *
      * \return the row for the given position \p _ypos
      */
-    int topRow(double _ypos, double &_top) const;
+    int topRow(qreal _ypos, qreal &_top) const;
 
     /**
      * \ingroup Coordinates
@@ -523,7 +523,7 @@ public:
      *
      * \return the column for the given position \p _xpos
      */
-    int leftColumn(double _xpos, double &_left) const;
+    int leftColumn(qreal _xpos, qreal &_left) const;
 
     /**
      * \ingroup Coordinates

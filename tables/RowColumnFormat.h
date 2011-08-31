@@ -147,7 +147,7 @@ public:
     double width() const;
 
     /**
-     * The visible column height, respecting hiding and filtering attributes.
+     * The visible column width, respecting hiding and filtering attributes.
      * \return the visible column width
      */
     double visibleWidth() const;

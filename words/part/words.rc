@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="132">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="133">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -12,6 +12,7 @@
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
+  <Action name="edit_paste_text"/>
   <Action name="edit_select_all"/>
   <Action name="edit_selectallframes"/>
   <Action name="edit_selectcurrentframe"/>

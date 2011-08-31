@@ -1,0 +1,17 @@
+[Desktop Entry]
+X-KDE-ServiceTypes=Plan/SchedulerPlugin
+Type=Service
+X-KDE-Library=plantjscheduler
+
+Name=TJ Scheduler
+Name[pt]=Calendarização TJ
+Name[pt_BR]=Calendarização TJ
+Name[sv]=TJ-schemaläggning
+Name[uk]=Засіб планування TJ
+Name[x-test]=xxTJ Schedulerxx
+Comment=The TaskJuggler scheduler
+Comment[pt]=O escalonamento do TaskJuggler
+Comment[pt_BR]=O calendarizador da TaskJuggler
+Comment[sv]=Taskjuggler-schemaläggning
+Comment[uk]=Засіб планування TaskJuggler
+Comment[x-test]=xxThe TaskJuggler schedulerxx

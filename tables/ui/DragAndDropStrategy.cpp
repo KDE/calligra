@@ -61,8 +61,8 @@ DragAndDropStrategy::DragAndDropStrategy(CellToolBase *cellTool,
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // In which cell did the user click?
-    double xpos;
-    double ypos;
+    qreal xpos;
+    qreal ypos;
     int col = selection->activeSheet()->leftColumn(position.x(), xpos);
     int row = selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
@@ -88,8 +88,8 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // In which cell did the user click?
-    double xpos;
-    double ypos;
+    qreal xpos;
+    qreal ypos;
     int col = selection()->activeSheet()->leftColumn(position.x(), xpos);
     int row = selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
@@ -124,8 +124,8 @@ KUndo2Command* DragAndDropStrategy::createCommand()
     const QPointF position = d->lastPoint - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // In which cell did the user click?
-    double xpos;
-    double ypos;
+    qreal xpos;
+    qreal ypos;
     int col = selection()->activeSheet()->leftColumn(position.x(), xpos);
     int row = selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.

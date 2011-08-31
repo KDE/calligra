@@ -1,13 +1,17 @@
 [Desktop Entry]
 Name=Circuit
+Name[bg]=Верига
 Name[de]=Schaltkreis
 Name[el]=Κύκλωμα
 Name[et]=Vooluring
+Name[it]=Circuito
 Name[nb]=Krets
 Name[nl]=Elektrisch schema
+Name[pl]=Obwód
 Name[pt]=Circuito
 Name[pt_BR]=Circuito
 Name[sv]=Krets
+Name[ug]=توك يولى
 Name[uk]=Електричні схеми
 Name[x-test]=xxCircuitxx
 Name[zh_CN]=电路

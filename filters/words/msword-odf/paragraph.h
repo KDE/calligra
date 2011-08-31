@@ -161,10 +161,10 @@ private:
 
     //std::vector<QString> m_textStrings; // list of text strings within a paragraph
     //std::vector<QString> m_textStrings2; // original list when in inner paragraph
-    QList<QString> m_textStrings; // list of text strings within a paragraph
+    QList<QString> m_textStrings;  // list of text strings within a paragraph
     QList<QString> m_textStrings2; // original list when in inner paragraph
-    std::vector<const KoGenStyle*> m_textStyles; // list of styles for text within a paragraph
-    std::vector<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
+    QList<const KoGenStyle*> m_textStyles;  // list of styles for text within a paragraph
+    QList<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
     std::vector<bool> m_addCompleteElement;         // list of flags if we should output the complete parahraph instead of processing it
     std::vector<bool> m_addCompleteElement2;        // original list when in inner paragraph
 

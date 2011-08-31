@@ -416,7 +416,6 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             QString fieldName = (*set)["field"].value().toString();
             QString fieldAndTableName = fieldName;
             KexiDB::Field *currentField = 0; // will be set if this column is a single field
-            KexiDB::QueryColumnInfo* currentColumn = 0;
             if (!tableName.isEmpty())
                 fieldAndTableName.prepend(tableName + ".");
             const bool fieldVisible = (*set)["visible"].value().toBool();
@@ -489,8 +488,6 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                         continue;
                     }
                     temp->query()->addField(currentField, fieldVisible);
-                    currentColumn = temp->query()->expandedOrInternalField(
-                                        temp->query()->fieldsExpanded().count() - 1);
                     if (fieldVisible)
                         fieldsFound = true;
                     if (!alias.isEmpty())
@@ -966,7 +963,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
                     record = d->data->at(columnPosition);
                     rowPropertySet = d->sets->at(columnPosition);
                     kDebug() << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
-                    "Setting \"" << orderByColumn->debugString() << "\" sorting for row #"
+                    "Setting \"" << orderByColumn->debugString() << "\" sorting for record #"
                     << columnPosition;
                 }
             }
@@ -1588,7 +1585,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *recor
                 result->msg = i18n("Could not set criteria for \"%1\"",
                                    table == "*" ? table : field);
             else
-                result->msg = i18n("Could not set criteria for empty row");
+                result->msg = i18n("Could not set criteria for empty record");
             //moved to result->allowToDiscardChanges handler //d->dataTable->dataAwareObject()->cancelEditor(); //prevents further editing of this cell
         } else if (str.isEmpty() || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/))) {
             if (e) {

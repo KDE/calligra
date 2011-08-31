@@ -76,7 +76,7 @@ void TablePageManager::insertPage(int page)
     shape->KoShape::setSize(shape->sheet()->cellCoordinatesToDocument(cellRange).size());
 }
 
-void TablePageManager::preparePage(int page)
+void TablePageManager::preparePage(int /*page*/)
 {
 #if 0
     // The first page is the master page, which always exists.

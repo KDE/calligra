@@ -33,11 +33,11 @@ public:
     virtual bool load(const char* filename);
     virtual bool save(const char* filename);
 
-    int result() {
+    int result() const {
         return m_result;
     }
 
-    QString text() {
+    QString text() const {
         return m_text;
     }
     void setText(const QString& t) {

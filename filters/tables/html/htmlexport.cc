@@ -242,12 +242,10 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
         QString separators;
         QString line;
         unsigned int nonempty_cells = 0;
-        unsigned int colspan_cells = 0;
 
         for (int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++) {
             Cell cell(sheet, currentcolumn, currentrow);
             const Style style = cell.effectiveStyle();
-            colspan_cells = cell.mergedXCells();
             if (cell.needsPrinting())
                 nonempty_cells++;
             QString text;
@@ -299,6 +297,7 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 line += " align=\"" + html_center + "\"";
                 break;
             case Style::HAlignUndefined:
+            case Style::Justified:
                 break;
             }
             switch ((Style::VAlign) style.valign()) {
@@ -312,6 +311,8 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 line += " valign=\"" + html_bottom + "\"";
                 break;
             case Style::VAlignUndefined:
+            case Style::VJustified:
+            case Style::VDistributed:
                 break;
             }
             line += " width=\"" + QString::number(cell.width()) + "\"";

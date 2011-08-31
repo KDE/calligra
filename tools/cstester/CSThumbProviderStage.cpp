@@ -49,7 +49,7 @@ QList<QPixmap> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 
     QList<QPixmap> thumbnails;
     foreach(KoPAPageBase *page, m_doc->pages(false)) {
-        thumbnails.append(page->thumbnail(thumbSize));
+        thumbnails.append(m_doc->pageThumbnail(page, thumbSize));
     }
 
     // make sure there are no events this fixes a crash on shutdown

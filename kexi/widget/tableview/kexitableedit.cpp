@@ -184,9 +184,9 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
 
 void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
         const QString& txt, int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-        const QFontMetrics &fm, bool readOnly, bool fullRowSelection)
+        const QFontMetrics &fm, bool readOnly, bool fullRecordSelection)
 {
-    if (!readOnly && !fullRowSelection && !txt.isEmpty()) {
+    if (!readOnly && !fullRecordSelection && !txt.isEmpty()) {
         QRect bound = fm.boundingRect(x, y_offset, w - (x + x), h, align, txt);
         bound.setY(0);
         bound.setWidth(qMin(bound.width() + 2, w - (x + x) + 1));
@@ -198,7 +198,7 @@ void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
 //TODO align center
         bound.setHeight(h - 1);
         p->fillRect(bound, fillColor);
-    } else if (fullRowSelection) {
+    } else if (fullRecordSelection) {
         p->fillRect(0, 0, w, h, fillColor);
     }
 }

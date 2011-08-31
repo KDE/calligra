@@ -1526,6 +1526,9 @@ void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
     Q_ASSERT(mode == KoZoomMode::ZOOM_CONSTANT);
     selection()->emitCloseEditor(true); // save changes
     setHeaderMinima();
+    d->columnHeader->update();
+    d->rowHeader->update();
+    d->selectAllButton->update();
 }
 
 void View::showColumnHeader(bool enable)
@@ -1668,11 +1671,13 @@ void View::setHeaderMinima()
     if (d->loading)   // "View Loading" not finished yet
         return;
     QFont font(KoGlobal::defaultFont());
-    QFontMetricsF fm(font);
-    d->columnHeader->setMinimumHeight(qRound(zoomHandler()->zoomItY(fm.ascent() + fm.descent())));
-    d->rowHeader->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
-    d->selectAllButton->setMinimumHeight(qRound(zoomHandler()->zoomItY(font.pointSizeF() + 3)));
-    d->selectAllButton->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
+    QFontMetricsF fm(font, 0);
+    qreal h = fm.height() + 3;
+    qreal w = fm.width(QString::fromLatin1("99999")) + 3;
+    d->columnHeader->setMinimumHeight(qRound(h));
+    d->rowHeader->setMinimumWidth(qRound(w));
+    d->selectAllButton->setMinimumHeight(qRound(h));
+    d->selectAllButton->setMinimumWidth(qRound(w));
 }
 
 void View::paperLayoutDlg()
@@ -1693,8 +1698,6 @@ void View::paperLayoutDlg()
     hf.footRight = headerFooter->localizeHeadFootLine(headerFooter->footRight());
     hf.footMid   = headerFooter->localizeHeadFootLine(headerFooter->footMid());
 */
-    KoUnit unit = doc()->unit();
-
     PageLayoutDialog dialog(this, d->activeSheet);
     dialog.exec();
 }

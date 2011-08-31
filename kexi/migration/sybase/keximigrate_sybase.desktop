@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Sybase
+Name[bg]=Sybase
 Name[ca]=Sybase
 Name[ca@valencia]=Sybase
 Name[cs]=Sybase
@@ -25,6 +26,7 @@ Name[lv]=Sybase
 Name[nb]=Sybase
 Name[nds]=Sybase
 Name[nl]=Sybase
+Name[pl]=Sybase
 Name[pt]=Sybase
 Name[pt_BR]=Sybase
 Name[ro]=Sybase
@@ -62,6 +64,7 @@ Comment[lv]=Sybase datu migrācijas draiveris priekš Kexi
 Comment[nb]=Sybase-migreringsdriver for Kexi
 Comment[nds]=Sybase-Datenutlagerndriever för Kexi
 Comment[nl]=Sybase-migratiestuurprogramma voor Kexi
+Comment[pl]=Sterownik migracji z Sybase dla Kexi
 Comment[pt]=Controlador de Migração de Sybase do Kexi
 Comment[pt_BR]=Driver de Migração Sybase do Kexi
 Comment[sv]=MySQL-övergångsdrivrutin för Kexi

@@ -19,8 +19,9 @@
 
 #include "KoShapeFactoryBase.h"
 
-class WebShapeFactory : public KoShapeFactoryBase {
-  public:
+class WebShapeFactory : public KoShapeFactoryBase
+{
+public:
     WebShapeFactory();
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

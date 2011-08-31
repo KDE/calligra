@@ -24,17 +24,9 @@
 #ifndef DOCXXMLNUMBERINGREADER_H
 #define DOCXXMLNUMBERINGREADER_H
 
-#include <KoGenStyle.h>
-#include <KoListLevelProperties.h>
 #include <QMap>
 
 #include "DocxXmlDocumentReader.h"
-
-//! A context structure for DocxXmlNumberingReader
-class DocxXmlNumberingReaderContext : public MSOOXML::MsooXmlReaderContext
-{
-public:
-};
 
 //! A class reading MSOOXML numbering markup - numbering.xml part.
 class DocxXmlNumberingReader : public DocxXmlDocumentReader
@@ -69,10 +61,8 @@ protected:
 
     bool m_bulletStyle;
 
-    QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
     QMap<QString, QList<MSOOXML::Utils::ParagraphBulletProperties> > m_abstractListStyles;
     QMap<QString, QString> m_picBulletPaths;
-    QMap<QString, QSize> m_picBulletSizes;
 
     QString m_bulletCharacter;
     QString m_currentAbstractId;

@@ -927,7 +927,6 @@ KoShape * KarbonImport::loadSpiral(const KoXmlElement &element)
         startAngle += adv_ang;
     }
 
-    QPointF topLeft = spiral->outline().boundingRect().topLeft();
     spiral->normalize();
 
     QTransform m;

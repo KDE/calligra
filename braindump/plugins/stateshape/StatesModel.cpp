@@ -28,62 +28,60 @@
 #include "StateCategory.h"
 #include "StatesRegistry.h"
 
-StatesModel::StatesModel() {
-  foreach( const QString& catId, StatesRegistry::instance()->categorieIds())
-  {
-    foreach( const QString& stateId, StatesRegistry::instance()->stateIds(catId)) {
-      const State* state = StatesRegistry::instance()->state(catId, stateId);
-      Q_ASSERT(state);
-      m_states.push_back(state);
-      QImage image( 32, 32, QImage::Format_ARGB32);
-      QPainter p(&image);
-      state->renderer()->render(&p, QRectF(0,0, 32,32));
-      m_icons.push_back(image);
-    }
-  }
-  Q_ASSERT(m_states.size() == m_icons.size());
-}
-
-int StatesModel::rowCount(const QModelIndex & parent ) const
+StatesModel::StatesModel()
 {
-  Q_UNUSED(parent);
-  return m_states.size();
+    foreach(const QString & catId, StatesRegistry::instance()->categorieIds()) {
+        foreach(const QString & stateId, StatesRegistry::instance()->stateIds(catId)) {
+            const State* state = StatesRegistry::instance()->state(catId, stateId);
+            Q_ASSERT(state);
+            m_states.push_back(state);
+            QImage image(32, 32, QImage::Format_ARGB32);
+            QPainter p(&image);
+            state->renderer()->render(&p, QRectF(0, 0, 32, 32));
+            m_icons.push_back(image);
+        }
+    }
+    Q_ASSERT(m_states.size() == m_icons.size());
 }
 
-QVariant StatesModel::data(const QModelIndex & index, int role ) const
+int StatesModel::rowCount(const QModelIndex & parent) const
 {
-  if(index.isValid())
-  {
-    switch(role)
-    {
-      case Qt::DisplayRole:
-        return m_states[index.row()]->name();
-      case Qt::DecorationRole:
-        return m_icons[index.row()];
-      case SortRole:
-        return m_states[index.row()]->priority();
-      case KCategorizedSortFilterProxyModel::CategorySortRole:
-          return QString::number(m_states[index.row()]->category()->priority()) + m_states[index.row()]->category()->id();
-      case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
-          return m_states[index.row()]->category()->name();
-    }
-  }
-  return QVariant();
+    Q_UNUSED(parent);
+    return m_states.size();
 }
 
-const State* StatesModel::stateAt(int index) const {
-  Q_ASSERT(index >= 0 && index < m_states.count());
-  return m_states[index];
+QVariant StatesModel::data(const QModelIndex & index, int role) const
+{
+    if(index.isValid()) {
+        switch(role) {
+        case Qt::DisplayRole:
+            return m_states[index.row()]->name();
+        case Qt::DecorationRole:
+            return m_icons[index.row()];
+        case SortRole:
+            return m_states[index.row()]->priority();
+        case KCategorizedSortFilterProxyModel::CategorySortRole:
+            return QString::number(m_states[index.row()]->category()->priority()) + m_states[index.row()]->category()->id();
+        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+            return m_states[index.row()]->category()->name();
+        }
+    }
+    return QVariant();
 }
 
-QModelIndex StatesModel::indexFor(const QString& catId, const QString& stateId) const {
-  for(int i = 0; i < m_states.count(); ++i)
-  {
-    const State* state = m_states[i];
-    if( state->category()->id() == catId && state->id() == stateId)
-    {
-      return index(i, 0, QModelIndex());
+const State* StatesModel::stateAt(int index) const
+{
+    Q_ASSERT(index >= 0 && index < m_states.count());
+    return m_states[index];
+}
+
+QModelIndex StatesModel::indexFor(const QString& catId, const QString& stateId) const
+{
+    for(int i = 0; i < m_states.count(); ++i) {
+        const State* state = m_states[i];
+        if(state->category()->id() == catId && state->id() == stateId) {
+            return index(i, 0, QModelIndex());
+        }
     }
-  }
-  return QModelIndex();
+    return QModelIndex();
 }

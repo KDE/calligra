@@ -629,81 +629,80 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 
     //set the border width
     qreal w;
-    if (brc.brcType < 0x40) // this is according to http://msdn.microsoft.com/en-us/library/dd907496.aspx
+    // this is according to http://msdn.microsoft.com/en-us/library/dd907496.aspx
+    if (brc.brcType < 0x40) {
         w = brc.dptLineWidth / 8.0;
-    else
+    } else {
         w = brc.dptLineWidth;
+    }
 
     QString style("solid");   //reasonable default
     QString color = '#' + QString::number(brc.cv | 0xff000000, 16).right(6).toUpper();
 
     switch (brc.brcType) {
-    case 0: // none
+    case BorderNone:
         //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise words will show a border!
         style = "none";
         break;
-    case 11: // thin-thick small gap
-    case 12: // thick-thin small gap
+    case BorderThinThickSmallGap:
+    case BorderThickThinSmallGap:
         style = "double";
         w *= 1.5;
         break;
-    case 17: // thin-thick large gap
-    case 18: //  thick-thin large gap
+    case BorderThinThickLargeGap:
+    case BorderThickThinLargeGap:
         style = "double";
         w *= 1.75;
         break;
-    case 14: // thin-thick medium gap
-    case 15: // thick-thin medium gap
+    case BorderThinThickMediumGap:
+    case BorderThickThinMediumGap:
         style = "double";
         w *= 2.0;
         break;
-    case 3: // double
+    case BorderDouble:
         style = "double";
         w *= 3;
         break;
-    case 5: //"hairline"
+    case BorderThin: //"hairline"
         w = 0.01;
         break;
 
         //ODF doesn't support dot dashed or wavy borders???
 
-    case 7: // dash large gap
-    case 22: // dash small gap
-        style = "dashed"; // Words: dashes //FIXME
+    case BorderDashed:
+    case BorderDashSmallGap:
+        style = "dashed"; // Words: dashes //FIXME:
         break;
-    case 6: // dot
+    case BorderDotted:
         style = "dotted";
         break;
-    case 8: // dot dash
-        style = "dashed"; //FIXME
+    case BorderDotDash:
+        style = "dashed"; //FIXME:
         break;
-    case 9: // dot dot dash
-        style = "dashed"; //FIXME
+    case BorderDotDotDash:
+        style = "dashed"; //FIXME:
         break;
-
-    case 20: // wave
+    case BorderWave:
         w *= 4; // Note: we can't make a wave but at least we can make it just as wide
         break;
-    case 21: // double wave
+    case BorderDoubleWave:
         w *= 6.25;
         style = "double"; // Note: we can't make a wave but at least we can make it just as wide
         break;
-
-    case 10: // triple
+    case BorderTriple:
         w *= 5;
         style = "double"; //Note: odf only support double so that will have to do
         break;
-
+    //FIXME: BorderInset = 0x1B (27)
     case 25: // inset
         style = "inset";
         break;
-
-    case 13: // thin-thick-thin small gap
-    case 16: // thin-thick-thin medium gap
-    case 19: // thin-thick-thin large gap
+    case BorderThinThickThinSmallGap:
+    case BorderThinThickThinMediumGap:
+    case BorderThinThickThinLargeGap:
     default:
-        //if a fancy unsupported border is specified -> better a normal border than none
-        //so just leave values as defaults
+        //if a fancy unsupported border is specified -> better a normal border
+        //than none so just leave values as defaults
         break;
     }
 
@@ -929,5 +928,73 @@ QString Conversion::rncToStartNumberingAt(int rnc)
     case 2:
     default:
         return "page";
+    }
+}
+
+const char* Conversion::getHorizontalPos(qint16 dxaAbs)
+{
+    // [MS-DOC] — v20101219: (-4) - center, (-8) - right, (-12) - inside, (-16)
+    // - outside
+    switch (dxaAbs) {
+    case (-4):
+        return "center";
+    case (-8):
+        return "right";
+    case (-12):
+        return "inside";
+    case (-16):
+        return "outside";
+    default:
+        return "from-left";
+    }
+}
+
+const char* Conversion::getHorizontalRel(uint pcHorz)
+{
+    // [MS-DOC] — v20101219: 0 - current column, 1 - margin, 2 - page
+    switch (pcHorz) {
+    case 0:
+        return "paragraph";
+    case 1:
+        return "page-content";
+    case 2:
+        return "page";
+    default:
+        return "";
+    }
+}
+
+const char* Conversion::getVerticalPos(qint16 dyaAbs)
+{
+    // [MS-DOC] — v20101219: (-4) - top, (-8) - middle, (-12) - bottom, (-16) -
+    // inside, (-20) - outside
+    switch (dyaAbs) {
+    case (-4):
+        return "top";
+    case (-8):
+        return "middle";
+    case (-12):
+        return "bottom";
+    case (-16):
+        return "inline";
+    case (-20):
+        return "inline";
+    default:
+        return "from-top";
+    }
+}
+
+const char* Conversion::getVerticalRel(uint pcVert)
+{
+    // [MS-DOC] — v20101219: 0 - margin, 1 - page, 2 - paragraph
+    switch (pcVert) {
+    case 0:
+        return "page-content";
+    case 1:
+        return "page";
+    case 2:
+        return "paragraph";
+    default:
+        return "";
     }
 }

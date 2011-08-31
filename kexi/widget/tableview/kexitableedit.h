@@ -135,7 +135,7 @@ public:
      setupContents(). */
     virtual void paintSelectionBackground(QPainter *p, bool focused, const QString& txt,
                                           int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-                                          const QFontMetrics &fm, bool readOnly, bool fullRowSelection);
+                                          const QFontMetrics &fm, bool readOnly, bool fullRecordSelection);
 
     /*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
      dropdown button at the right side. \return left margin's size;

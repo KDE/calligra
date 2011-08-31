@@ -69,7 +69,7 @@ public:
     void setEditing(bool on);
 
     /// checks if strategy is in editing mode
-    bool isEditing() {
+    bool isEditing() const {
         return m_editing;
     }
 

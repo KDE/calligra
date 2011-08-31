@@ -2,7 +2,7 @@
 Type=Service
 Name=GNUmeric Export Filter for KSpread
 Name[af]=Gnumeric Voer uit Filter vir Kspread
-Name[bg]=Филтър за експортиране от KSpread в GNUmeric
+Name[bg]=Филтър за изнасяне от KSpread в GNUmeric
 Name[br]=Sil ezporzh GNUMERIC evit KSpread
 Name[ca]=Filtre d'exportació GNUmeric per al KSpread
 Name[ca@valencia]=Filtre d'exportació GNUmeric per al KSpread
@@ -38,7 +38,7 @@ Name[nb]=GNUmeric-eksportfilter for KSpread
 Name[nds]=GNUmeric-Exportfilter för KSpread
 Name[ne]=केडीई स्प्रेडका लागि जिन्यूमेरिक निर्यात फिल्टर
 Name[nl]=GNUmeric-exportfilter voor KSpread
-Name[pl]=Filtr eksportu do formatu GNUmeric dla KSpread
+Name[pl]=Filtr eksportu GNUmeric dla KSpread
 Name[pt]=Filtro de Exportação de GNUmeric para o KSpread
 Name[pt_BR]=Filtro de exportação de Gnumeric para o KSpread
 Name[ro]=Filtru exportare KSpread pentru GNUMERIC

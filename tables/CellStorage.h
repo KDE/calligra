@@ -164,6 +164,7 @@ public:
     QList< QPair<QRectF, QString> > namedAreas(const Region& region) const;
     void setNamedArea(const Region& region, const QString& namedArea);
     void emitInsertNamedArea(const Region &region, const QString &namedArea);
+    void removeNamedArea(const Region& region, const QString& namedArea);
 
     /**
      * \return the Style associated with the Cell at \p column , \p row .

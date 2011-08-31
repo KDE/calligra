@@ -25,45 +25,45 @@
 
 #include "StateShape.h"
 
-StateShapeFactory::StateShapeFactory() 
-   : KoShapeFactoryBase( STATESHAPEID,
-                     i18n("State Shape") )
+StateShapeFactory::StateShapeFactory()
+    : KoShapeFactoryBase(STATESHAPEID,
+                         i18n("State Shape"))
 {
-  setToolTip( i18n("A state shape") );
-  setIcon( "stateshape" );
-  setOdfElementNames( "http://kde.org/braindump", QStringList( "state" ) );
+    setToolTip(i18n("A state shape"));
+    setIcon("stateshape");
+    setXmlElementNames("http://kde.org/braindump", QStringList("state"));
 }
 
-KoShape *StateShapeFactory::createDefaultShape(KoResourceManager */*documentResources*/ ) const
+KoShape *StateShapeFactory::createDefaultShape(KoResourceManager */*documentResources*/) const
 {
-  StateShape* fooShape = new StateShape();
-  fooShape->setShapeId(STATESHAPEID);
-  // set defaults
-  return fooShape;
+    StateShape* fooShape = new StateShape();
+    fooShape->setShapeId(STATESHAPEID);
+    // set defaults
+    return fooShape;
 }
 
-KoShape *StateShapeFactory::createShape(const KoProperties *params, KoResourceManager */*documentResources*/ ) const
+KoShape *StateShapeFactory::createShape(const KoProperties *params, KoResourceManager */*documentResources*/) const
 {
-  Q_UNUSED(params);
-  StateShape* fooShape = new StateShape();
-  fooShape->setShapeId(STATESHAPEID);
-  if(params->contains("state")) {
-    fooShape->setStateId(params->stringProperty("state"));
-  }
-  if(params->contains("category")) {
-    fooShape->setCategoryId(params->stringProperty("category"));
-  }
-  // use the params
-  return fooShape;
+    Q_UNUSED(params);
+    StateShape* fooShape = new StateShape();
+    fooShape->setShapeId(STATESHAPEID);
+    if(params->contains("state")) {
+        fooShape->setStateId(params->stringProperty("state"));
+    }
+    if(params->contains("category")) {
+        fooShape->setCategoryId(params->stringProperty("category"));
+    }
+    // use the params
+    return fooShape;
 }
 
 bool StateShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext& /*context*/) const
 {
-  return ( e.localName() == "state" && e.namespaceURI() == "http://kde.org/braindump" );
+    return (e.localName() == "state" && e.namespaceURI() == "http://kde.org/braindump");
 }
 
 QList<KoShapeConfigWidgetBase*> StateShapeFactory::createShapeOptionPanels()
 {
-  QList<KoShapeConfigWidgetBase*> answer;
-  return answer;
+    QList<KoShapeConfigWidgetBase*> answer;
+    return answer;
 }

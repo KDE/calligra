@@ -102,6 +102,15 @@ public:
         if (m_simpleBuffer) m_simpleBuffer->insert(fname, val);
     }
 
+    //! Removes value from db-aware buffer's column \a ci
+    void removeAt(QueryColumnInfo& ci);
+
+    //! Removes value from not-db-aware buffer's column \a fname
+    void removeAt(Field& f);
+
+    //! Removes value from not-db-aware buffer's column \a fname
+    void removeAt(const QString& fname);
+
     /*! Useful only for db-aware buffer. \return value for column \a ci
      If there is no value assigned for the buffer, this method tries to remember and return
      default value obtained from \a ci if \a useDefaultValueIfPossible is true.

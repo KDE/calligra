@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KSpread Microsoft Excel Import Filter
-Name[bg]=Филтър за импортиране от Microsoft Excel в KSpread
+Name[bg]=Филтър за внасяне от Microsoft Excel в KSpread
 Name[br]=Sil enporzh Microsoft Excel evit KSpread
 Name[ca]=Filtre d'importació Microsoft Excel per al KSpread
 Name[ca@valencia]=Filtre d'importació Microsoft Excel per al KSpread
@@ -37,7 +37,7 @@ Name[nb]=Microsoft Excel-importfilter for KSpread
 Name[nds]=Microsoft Excel-Importfilter för KSpread
 Name[ne]=केडीई स्प्रेड माइक्रोसफ्ट एक्सल आयात फिल्टर
 Name[nl]=Microsoft Excell-importfilter voor KSpread
-Name[pl]=Filtr importu formatu Microsoft Excel do KSpread
+Name[pl]=Filtr importu Microsoft Excel do KSpread
 Name[pt]=Filtro de Importação de Microsoft Excel para o KSpread
 Name[pt_BR]=Filtro de importação de Microsoft Excel para o KSpread
 Name[ru]=Фильтр импорта таблиц Microsoft Excel в KSpread

@@ -581,10 +581,14 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
 {
     READ_PROLOGUE
+#if 0
+    //this code just reads the count out of the attributes and convert it to a integer. 
+    //it is currently not needed, but maybe we will need it later on.
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS( count )
     int countNumber = 0;
     STRING_TO_INT( count, countNumber, "styleSheet/numFmts@count" );
+#endif
 
     while( !atEnd() )
     {

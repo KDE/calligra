@@ -206,7 +206,7 @@ int Workbook::addFormat(const Format& format)
 
 Format* Workbook::format(int index) const
 {
-    Q_ASSERT(index >= 0 && index < d->formats.size());
+    Q_ASSERT(index >= 0 && uint(index) < d->formats.size());
     return d->formats[index];
 }
 

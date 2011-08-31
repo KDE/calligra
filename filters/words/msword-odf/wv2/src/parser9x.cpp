@@ -308,8 +308,6 @@ void Parser9x::parseTableRow( const TableRowData& data )
 
 void Parser9x::parseTextBox(uint index, bool stylesxml)
 {
-    wvlog << "Parser9x::parseTextBox" << endl;
-
     const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
     if (stylesxml) {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
@@ -317,6 +315,7 @@ void Parser9x::parseTextBox(uint index, bool stylesxml)
         plcftxbxTxt =  m_drawings->getTxbxTxt();
     }
     if (!plcftxbxTxt) {
+        wvlog << "plcftxbxTxt MISSING!";
         return;
     }
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
@@ -730,38 +729,36 @@ void Parser9x::processParagraph( U32 fc )
         }
 
         // Now that we have the complete PAP, let's see if this paragraph
-        // belongs to a list
+        // belongs to a list.
         props->createListInfo( *m_lists );
 
-        // Get the appropriate style for this paragraph
+#ifdef WV2_DEBUG_LIST_PROCESSING
+        props->pap().dump();
+#endif
+
+        // Get the appropriate style for this paragraph.
         const Style* style = m_properties->styleByIndex( props->pap().istd );
         if ( !style ) {
             wvlog << "Warning: Huh, really obscure error, couldn't find the Style for the current PAP -- skipping" << endl;
             return;
         }
 
-        std::list<Chunk>::const_iterator it = m_currentParagraph->begin();
-        std::list<Chunk>::const_iterator end = m_currentParagraph->end();
+        // Get the CHP for the paragraph.
+        Word97::CHP* paragraphChp = new Word97::CHP( style->chp() );
+        m_properties->fullSavedChp( fc, paragraphChp, style );
 
-        //CHPs for empty paragraphs.
-        Word97::CHP* paragraphChp = 0;
-
-        //A paragraph having one empty chunk of text.
-        if ( m_currentParagraph->size() == 1 &&
-	     (( *it ).m_text.length() == 0))
-        {
-            paragraphChp = new Word97::CHP( style->chp() );
-            m_properties->fullSavedChp( ( *it ).m_startFC, paragraphChp, style );
 #ifdef WV2_DEBUG_PARAGRAPHS
-            paragraphChp->dump();
+        paragraphChp->dump();
 #endif
-        }
 
         // keep it that way, else the variables get deleted!
         SharedPtr<const ParagraphProperties> sharedPap( props );
-        SharedPtr<const Word97::CHP> sharedPChp( paragraphChp );
+        SharedPtr<const Word97::CHP> sharedParagraphChp( paragraphChp );
 
-        m_textHandler->paragraphStart( sharedPap, sharedPChp );
+        m_textHandler->paragraphStart( sharedPap, sharedParagraphChp );
+
+        std::list<Chunk>::const_iterator it = m_currentParagraph->begin();
+        std::list<Chunk>::const_iterator end = m_currentParagraph->end();
 
         // Now walk the paragraph, chunk for chunk
         for ( ; it != end; ++it ) {
@@ -770,10 +767,10 @@ void Parser9x::processParagraph( U32 fc )
             const PLCFIterator<Word97::PCD> pcdIt( m_plcfpcd->at( ( *it ).m_position.piece ) );
 
             while ( index < limit ) {
-                //A temp character style initialized to CHPs of the paragraph
-                //style.  On top of it's CHPs both CHPX and the built-in
-                //character style referred by the istd are applied, while
-                //comparing with it's the current CHPs.
+                // A temporary character style initialized to CHP of the
+                // paragraph style.  Both CHPX and the built-in character style
+                // referred by the istd are applied on top of it, while
+                // comparing with the current CHP.
                 Style charStyle( style->chp() );
 
                 U32 fc = ( *it ).m_startFC + index * ( ( *it ).m_isUnicode ? 2 : 1 );
@@ -795,7 +792,7 @@ void Parser9x::processParagraph( U32 fc )
                 processChunk( *it, sharedChp, length, index, pcdIt.currentStart() );
                 index += length;
             }
-            //bookmark check for the next to last CP (paragraph mark)
+            // Bookmark check for the next to last CP (paragraph mark).
             if ( m_bookmarks ) {
                 emitBookmark( ( *it ).m_position.offset + limit );
             }
@@ -982,10 +979,12 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
 
         // It has to be one of the very special characters...
     case TextHandler::Picture:
-        emitPictureData( chp );
+        // PictureData are required to process inline MS-ODRAW objects.
+        emitPictureData( globalCP, chp );
         break;
     case TextHandler::DrawnObject:
-        emitDrawnObject( globalCP );
+        // Only globalCP is required to process floating MS-ODRAW objects.
+        m_textHandler->msodrawObjectFound( globalCP, 0 );
         break;
     case TextHandler::FootnoteAuto:
         if ( m_subDocument == Footnote || m_subDocument == Endnote )
@@ -1137,13 +1136,10 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
     m_textHandler->headersFound( make_functor( *this, &Parser9x::parseHeaders, data ) );
 }
 
-void Parser9x::emitDrawnObject( U32 globalCP )
+void Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp )
 {
-    m_textHandler->floatingObjectFound(globalCP);
-}
+    //NOTE: No need for the globalCP argument at the moment.
 
-void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
-{
 #ifdef WV2_DEBUG_PICTURES
     wvlog << "Found a picture; fcPic: " << chp->fcPic_fcObj_lTagObj;
 #endif
@@ -1182,11 +1178,11 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     picf->dump();
 #endif
 
-    //offset into the Data stream for the GraphicsHandler, position of the
-    //OfficeArtInlineSpContainer to parse with libmso
+    // Offset into the Data stream for the GraphicsHandler, position of the
+    // OfficeArtInlineSpContainer to parse with libmso.
     int offset = chp->fcPic_fcObj_lTagObj + picf->cbHeader;
 
-    //read cchPicName and stPicName in case of a shape file, MS-DOC p.422/609
+    // Read cchPicName and stPicName in case of a shape file, MS-DOC p.422/609.
     if ( picf->mfp.mm == 0x0066 )
     {
         U8 cchPicName = stream->readU8();
@@ -1207,13 +1203,7 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );
     PictureData data( offset, sharedPicf );
-    m_textHandler->inlineObjectFound(data);
-
-    //NOTE: the depreciated approach to parse an inline object follows
-//     PictureFunctor fnct = make_functor( *this, &Parser9x::parsePicture,
-//				 PictureData( static_cast<U32>( chp->fcPic_fcObj_lTagObj ),
-//					     sharedPicf ) );
-//     m_textHandler->pictureFound( fnct, sharedPicf, chp );
+    m_textHandler->msodrawObjectFound(globalCP, &data);
 }
 
 void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )

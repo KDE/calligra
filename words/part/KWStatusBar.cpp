@@ -446,15 +446,14 @@ void KWStatusBar::setCurrentView(KWView *view)
 
     KoResourceManager *resourceManager = view->canvasBase()->resourceManager();
     Q_ASSERT(resourceManager);
-    connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
-        this, SLOT(resourceChanged(int, QVariant)));
+    connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)), Qt::QueuedConnection);
 
     KWTextFrameSet *fs = m_currentView->kwdocument()->mainFrameSet();
     if (fs) {
         KoTextDocument doc(fs->document());
         KoTextEditor *editor = doc.textEditor();
         if (editor) {
-            connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()));
+            connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()), Qt::QueuedConnection);
         }
     }
 }

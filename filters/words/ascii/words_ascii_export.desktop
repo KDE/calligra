@@ -1,8 +1,18 @@
 [Desktop Entry]
 Type=Service
 Name=Words Ascii Export Filter
+Name[bg]=Филтър за изнасяне от Words в ASCII
+Name[de]=Words ASCII-Exportfilter
+Name[es]=Filtro de Words de exportación a ASCII
+Name[et]=Wordsi ASCII ekspordifilter
+Name[it]=Filtro di esportazione ASCII per Words
+Name[nb]=Ascii-eksportfilter for Words
+Name[nds]=ASCII-Exportfilter för Words
+Name[nl]=ASCII-exportfilter voor Words
+Name[pl]=Filtr eksportu ASCII z Words
 Name[pt]=Filtro de Exportação de Ascii para o Words
 Name[pt_BR]=Filtro de exportação de ASCII para o Words
+Name[ru]=Фильтр экспорта документов Words в ASCII
 Name[sv]=Words ASCII-exportfilter
 Name[uk]=Фільтр експорту ASCII для Words
 Name[x-test]=xxWords Ascii Export Filterxx

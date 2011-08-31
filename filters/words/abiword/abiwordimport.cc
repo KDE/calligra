@@ -587,8 +587,6 @@ bool StructureParser::EndElementD(StackItem* stackItem)
         return false;
     }
 
-    bool isSvg = false;  // SVG ?
-
     QString extension;
 
     // stackItem->strTemp1 contains the mime type
@@ -598,7 +596,6 @@ bool StructureParser::EndElementD(StackItem* stackItem)
         extension = ".jpeg";
     } else if (stackItem->strTemp1 == "image/svg-xml") { //Yes it is - not +
         extension = ".svg";
-        isSvg = true;
     } else {
         kWarning(30506) << "Unknown or unsupported mime type: "
         << stackItem->strTemp1;

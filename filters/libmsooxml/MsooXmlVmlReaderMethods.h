@@ -73,6 +73,8 @@ protected:
     //writer where style:background-image is stored for style:page-layout-properties
     KoXmlWriter* m_pDocBkgImageWriter;
 
+public:
+
     struct VMLShapeProperties {
         QString currentEl;
 
@@ -123,6 +125,11 @@ protected:
         qreal real_groupWidth, real_groupHeight;
     };
 
+    // Elements defined by v:shapeType
+    QMap<QString, VMLShapeProperties> m_definedShapeTypes;
+
+protected:
+
     VMLShapeProperties m_currentVMLProperties;
 
     // Using stack to make sure correct properties are handled in a case when
@@ -130,6 +137,3 @@ protected:
     QStack<VMLShapeProperties> m_VMLShapeStack;
 
     bool m_outputFrames; // Whether read_shape should output something to shape
-
-    // Elements defined by v:shapeType
-    QMap<QString, VMLShapeProperties> m_definedShapeTypes;

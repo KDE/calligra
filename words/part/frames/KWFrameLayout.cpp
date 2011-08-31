@@ -312,6 +312,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
+    if (!page.isValid())
+        return;
 
     /* +-----------------+
        |  0              | <- pageStyle->pageLayout()->topMargin + layout->topPadding
@@ -552,20 +554,31 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, Words:
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    switch (header ? page.pageStyle().headerPolicy() : page.pageStyle().footerPolicy()) {
-    case Words::HFTypeNone:
-        return false;
-    case Words::HFTypeEvenOdd:
-        if (header)
-            *origin = pageNumber % 2 == 0 ? Words::EvenPagesHeaderTextFrameSet :
-                      Words::OddPagesHeaderTextFrameSet;
-        else
-            *origin = pageNumber % 2 == 0 ? Words::EvenPagesFooterTextFrameSet :
-                      Words::OddPagesFooterTextFrameSet;
-        break;
-    case Words::HFTypeUniform:
-        *origin = header ? Words::OddPagesHeaderTextFrameSet : Words::OddPagesFooterTextFrameSet;
-        break;
+    KWPageStyle pagestyle = page.pageStyle();
+    Words::HeaderFooterType type = header ? pagestyle.headerPolicy() : pagestyle.footerPolicy();
+    switch (pagestyle.pageUsage()) {
+        case KWPageStyle::MirroredPages:
+        case KWPageStyle::AllPages: {
+            switch (type) {
+                case Words::HFTypeNone:
+                    return false;
+                case Words::HFTypeEvenOdd:
+                    if (header)
+                        *origin = pageNumber % 2 == 0 ? Words::EvenPagesHeaderTextFrameSet : Words::OddPagesHeaderTextFrameSet;
+                    else
+                        *origin = pageNumber % 2 == 0 ? Words::EvenPagesFooterTextFrameSet : Words::OddPagesFooterTextFrameSet;
+                    break;
+                case Words::HFTypeUniform:
+                    *origin = header ? Words::OddPagesHeaderTextFrameSet : Words::OddPagesFooterTextFrameSet;
+                    break;
+            }
+        } break;
+        case KWPageStyle::LeftPages:
+            *origin = Words::EvenPagesHeaderTextFrameSet;
+            break;
+        case KWPageStyle::RightPages:
+            *origin = Words::OddPagesHeaderTextFrameSet;
+            break;
     }
     return true;
 }

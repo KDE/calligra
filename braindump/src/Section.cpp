@@ -27,28 +27,34 @@ Section::Section(RootSection* _rootSection) : SectionGroup(0), m_layout(LayoutFa
 {
 }
 
-Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_layout( LayoutFactoryRegistry::instance()->createLayout(_rhs.m_layout->id()) ), m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this)) {
-  setName(_rhs.name());
+Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_layout(LayoutFactoryRegistry::instance()->createLayout(_rhs.m_layout->id())), m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this))
+{
+    setName(_rhs.name());
 }
 
-SectionContainer* Section::sectionContainer() {
-  return m_sectionContainer;
+SectionContainer* Section::sectionContainer()
+{
+    return m_sectionContainer;
 }
 
-const QString& Section::name() const {
-  return m_name;
+const QString& Section::name() const
+{
+    return m_name;
 }
 
-void Section::setName(const QString& _name) {
-  m_name = _name;
+void Section::setName(const QString& _name)
+{
+    m_name = _name;
 }
 
-Layout* Section::layout() {
-  return m_layout;
+Layout* Section::layout()
+{
+    return m_layout;
 }
 
-void Section::setLayout(Layout* layout) {
-  layout->replaceLayout(m_layout);
-  delete m_layout;
-  m_layout = layout;
+void Section::setLayout(Layout* layout)
+{
+    layout->replaceLayout(m_layout);
+    delete m_layout;
+    m_layout = layout;
 }

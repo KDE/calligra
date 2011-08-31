@@ -172,7 +172,7 @@ private:
             delete [] m_data;
         }
 
-        WRIObject operator= (const WRIObject &rhs) {
+        WRIObject& operator= (const WRIObject &rhs) {
             delete [] m_data;
 
             m_dataLength = rhs.m_dataLength;

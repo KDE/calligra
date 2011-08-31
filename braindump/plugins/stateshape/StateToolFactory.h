@@ -24,11 +24,11 @@
 
 class StateToolFactory : public KoToolFactoryBase
 {
-    public:
-        explicit StateToolFactory( );
-        ~StateToolFactory();
+public:
+    explicit StateToolFactory();
+    ~StateToolFactory();
 
-        KoToolBase * createTool( KoCanvasBase *canvas );
+    KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif

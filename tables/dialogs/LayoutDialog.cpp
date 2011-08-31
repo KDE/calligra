@@ -743,7 +743,6 @@ void CellFormatDialog::init()
 {
     // Did we initialize the bitmaps ?
     if (formatOnlyNegSignedPixmap == 0) {
-        QColor black = QApplication::palette().text().color(); // not necessarily black :)
         formatOnlyNegSignedPixmap    = paintFormatPixmap("123.456", Qt::black, "-123.456", Qt::black);
         formatRedOnlyNegSignedPixmap = paintFormatPixmap("123.456", Qt::black, "-123.456", Qt::red);
         formatRedNeverSignedPixmap   = paintFormatPixmap("123.456", Qt::black, "123.456", Qt::red);
@@ -1917,7 +1916,6 @@ void CellFormatPageFont::setCombos()
     QString string;
     KComboBox* combo;
     int number_of_entries;
-    bool found;
 
     if (dlg->bTextColor)
         textColor = dlg->textColor;
@@ -1936,12 +1934,10 @@ void CellFormatPageFont::setCombos()
         selFont.setPointSize(dlg->fontSize);
         number_of_entries = size_combo->count();
         string.setNum(dlg->fontSize);
-        found = false;
 
         for (int i = 0; i < number_of_entries ; i++) {
             if (string == (QString) combo->itemText(i)) {
                 combo->setCurrentIndex(i);
-                found = true;
                 // kDebug(36001) <<"Found Size" << string.data() <<" setting to item" i;
                 break;
             }

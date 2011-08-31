@@ -251,7 +251,8 @@ Value ValueParser::tryParseNumber(const QString& str, bool *ok) const
                 real = readNumber(str.left(sepPos).trimmed(), ok).asFloat();
         } else {
             // imaginary part
-            imag = readImaginary(str.trimmed(), ok);
+            if (str.trimmed().length() > 1)   // but don't parse a stand-alone 'i'
+              imag = readImaginary(str.trimmed(), ok);
             // real part
             if (*ok)
                 real = 0.0;

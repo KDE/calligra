@@ -27,15 +27,16 @@ class QString;
 class Layout;
 class LayoutFactory;
 
-class LayoutFactoryRegistry {
+class LayoutFactoryRegistry
+{
     LayoutFactoryRegistry();
     ~LayoutFactoryRegistry();
-  public:
+public:
     static LayoutFactoryRegistry* instance();
     void addFactory(LayoutFactory* _factory);
     Layout* createLayout(const QString& id) const;
     QList< QPair<QString, QString> > factories() const;
-  private:
+private:
     struct Private;
     Private* const d;
 };

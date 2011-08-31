@@ -46,8 +46,7 @@ namespace wvWare
         /**
          * If this paragraph belongs to a list, the ListInfo object will be
          * valid and contain useful information about the formatting of the
-         * list counter. If the paragraph is not inside a list, this method
-         * will return 0.
+         * list counter. @return 0 if the paragraph is not inside of a list
          */
         const ListInfo* listInfo() const;
 

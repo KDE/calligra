@@ -102,8 +102,7 @@ public:
     virtual void bookmarkStart( const wvWare::BookmarkData& data );
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
-    virtual void inlineObjectFound(const wvWare::PictureData& data);
-    virtual void floatingObjectFound(unsigned int globalCP);
+    virtual void msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data);
 
     ///////// Our own interface
 
@@ -266,19 +265,20 @@ private:
     // ************************************************
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
+    void updateListStyle() throw(InvalidFormatException);
     QString createBulletStyle(const QString& textStyleName) const;
-    void updateListStyle(const QString& textStyleName) throw(InvalidFormatException);
 
-    QString m_listSuffixes[9]; // The suffix for every list level seen so far
-    QString m_listStyleName; //track the name of the list style
-    bool m_listLevelStyleRequired; //track if a list-level-style is required for current paragraph
-    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
-    int m_currentListID; //tracks the id of the current list - 0 if no list
-    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
+    QString m_listSuffixes[9];     // The suffix for every list level seen so far
+    QString m_listStyleName;       // track the name of the list style
+    bool m_listLevelStyleRequired; // track if a list-level-style is required for current paragraph
+    int m_currentListDepth;        // tells us which list level we're on (-1 if not in a list)
+    int m_currentListID;           // tracks the id of the current list - 0 if no list
 
-    //int m_previousListID; //track previous list, in case we need to continue the numbering
-    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
     QStack <KoXmlWriter*> m_usedListWriters;
+    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
+    //int m_previousListID; //track previous list, in case we need to continue the numbering
+
+    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
 
     // ************************************************
     //  Field related

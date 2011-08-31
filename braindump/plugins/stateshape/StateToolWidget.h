@@ -30,19 +30,19 @@ class StateTool;
 class StateToolWidget : public QWidget
 {
     Q_OBJECT
-  public:
-    StateToolWidget(StateTool* );
-  public slots:
+public:
+    StateToolWidget(StateTool*);
+public slots:
     /// reimplemented
     virtual void open(StateShape *shape);
     /// reimplemented
     virtual void save();
-  private:
+private:
     /// reimplemented
     virtual KUndo2Command * createCommand();
-  private:
-    void blockChildSignals( bool block );
-  private:
+private:
+    void blockChildSignals(bool block);
+private:
     StateTool* m_tool;
     StateShape *m_shape;
     StatesModel* m_model;

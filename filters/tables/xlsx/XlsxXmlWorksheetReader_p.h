@@ -174,10 +174,10 @@ public:
     int maxColumn() const { return m_maxColumn; }
     int maxCellsInRow(int rowIndex) const { return m_maxCellsInRow[rowIndex]; }
 
-    bool visible() { return m_visible; }
+    bool visible() const { return m_visible; }
     void setVisible(bool visible) { m_visible = visible; }
 
-    QString pictureBackgroundPath() { return m_pictureBackgroundPath; }
+    QString pictureBackgroundPath() const { return m_pictureBackgroundPath; }
     void setPictureBackgroundPath(const QString& path) { m_pictureBackgroundPath = path; }
 
 private:

@@ -575,7 +575,7 @@ void Sheet::adjustDocumentHeight(double deltaHeight)
     emit documentSizeChanged(d->documentSize);
 }
 
-int Sheet::leftColumn(double _xpos, double &_left) const
+int Sheet::leftColumn(qreal _xpos, qreal &_left) const
 {
     _left = 0.0;
     int col = 1;
@@ -596,7 +596,7 @@ int Sheet::rightColumn(double _xpos) const
     return col;
 }
 
-int Sheet::topRow(double _ypos, double & _top) const
+int Sheet::topRow(qreal _ypos, qreal & _top) const
 {
     qreal top;
     int row = rowFormats()->rowForPosition(_ypos, &top);
@@ -1918,10 +1918,8 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     for (int i = 0; i < number; ++i) {
         //kDebug(36003) << " insert new column: pos :" << indexCol << " width :" << width << " hidden ?" << visibility;
 
-        const ColumnFormat* columnFormat;
         if (isNonDefaultColumn) {
             ColumnFormat* cf = nonDefaultColumnFormat(indexCol);
-            columnFormat = cf;
 
             if (width != -1.0)   //safe
                 cf->setWidth(width);
@@ -1934,8 +1932,6 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
                 cf->setFiltered(true);
 
             cf->setPageBreak(insertPageBreak);
-        } else {
-            columnFormat = this->columnFormat(indexCol);
         }
         ++indexCol;
     }
@@ -2505,7 +2501,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     // Create a dict of cell anchored shapes with the cell as key.
     foreach(KoShape* shape, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell()) {
-            double dummy;
+            qreal dummy;
             const QPointF position = shape->position();
             const int col = leftColumn(position.x(), dummy);
             const int row = topRow(position.y(), dummy);
@@ -2923,7 +2919,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
         sname = testName;
 
         kDebug(36001) << "Sheet::loadXML: table name =" << sname;
-        setObjectName(sname.toUtf8());
+        setObjectName(sname);
         setSheetName(sname, true);
     }
 
@@ -3309,7 +3305,7 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
     map()->addDamage(new SheetDamage(this, SheetDamage::Name));
 
-    setObjectName(name.toUtf8());
+    setObjectName(name);
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return true;

@@ -399,9 +399,9 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //! and performing detailed painting later (using QTimer)
 //    QPixmap pixmapBuffer;
 //    QPainter p2;
-    QPainter *target;
+//    QPainter *target;
 //    if (fast) {
-        target = p;
+//       target = p;
 //    } else {
 //moved  pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
 //moved  p2.begin(&pm, p.device());
@@ -716,11 +716,12 @@ void KexiUtils::setMargins(QLayout *layout, int value)
 QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
 {
     QPixmap dest(original);
-    dest.fill(color);
     {
         QPainter p(&dest);
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.drawPixmap(0, 0, original);
+        QPixmap colorize(original.size());
+        colorize.fill(color);
+        p.drawPixmap(0, 0, colorize);
     }
     return dest;
 }

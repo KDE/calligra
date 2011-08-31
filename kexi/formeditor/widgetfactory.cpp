@@ -29,7 +29,7 @@
 #include <klineedit.h>
 //#endif
 #include <kdialog.h>
-#include <keditlistbox.h>
+#include <keditlistwidget.h>
 //2.0#include <kxmlguiclient.h>
 #include <kactioncollection.h>
 
@@ -125,11 +125,10 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
     KDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
-    dialog.setWindowTitle(i18n("Edit List of Items"));
+    dialog.setWindowTitle(i18n("Edit Contents of %1", w->objectName()));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
 
-    KEditListBox *edit = new KEditListBox(
-        i18n("Contents of %1", w->objectName()), &dialog);
+    KEditListWidget *edit = new KEditListWidget(&dialog);
     edit->setObjectName("editlist");
     dialog.setMainWidget(edit);
     edit->insertStringList(list);

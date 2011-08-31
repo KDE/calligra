@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,7 +81,7 @@ public slots:
     void deleteAndStartEditCurrentCell();
     void startEditOrToggleValue();
     bool acceptRowEdit();
-    void cancelRowEdit();
+    bool cancelRowEdit();
     void sortAscending();
     void sortDescending();
     void copySelection();
@@ -98,11 +98,27 @@ public slots:
         void editFindPrevious();
         void editReplace();*/
 
+    /*! @return true if data editing is in progress.
+     * Implemented for KexiView. */
+    bool isDataEditingInProgress() const;
+
+    /*! Identical to acceptRowEdit()
+     * @todo replace acceptRowEdit() with this method
+     * Implemented for KexiView. */
+    virtual tristate saveDataChanges();
+
+    /*! Identical to cancelRowEdit()
+     * @todo replace cancelRowEdit() with this method
+     * Implemented for KexiView. */
+    virtual tristate cancelDataChanges();
+
 protected slots:
 //  void slotCellSelected(const QVariant& v); //!< @internal
     void slotCellSelected(int col, int row);
     void reloadActions();
     void slotUpdateRowActions(int row);
+    //! Updates 'save/cancel record changes' actions
+    void slotUpdateSaveCancelActions();
     void slotClosing(bool& cancel);
 
 protected:

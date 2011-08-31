@@ -26,15 +26,16 @@
 
 class State;
 
-class BRAINDUMPCORE_EXPORT StatesRegistry {
+class BRAINDUMPCORE_EXPORT StatesRegistry
+{
     StatesRegistry();
-  public:
+public:
     static const StatesRegistry* instance();
     QList<QString> categorieIds() const;
     QList<QString> stateIds(const QString& _id) const;
     const State* state(const QString& _category, const QString& _id) const;
     const State* nextState(const State* _state) const;
-  private:
+private:
     struct Private;
     Private* const d;
 };

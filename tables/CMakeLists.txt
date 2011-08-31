@@ -135,6 +135,7 @@ SET (part_DIR_SRCS
     #part/Digest.cpp
     part/Doc.cpp
     part/Factory.cpp
+    part/Find.cpp
     part/Headers.cpp
     part/HeaderWidgets.cpp
     part/HeaderItems.cpp
@@ -188,7 +189,6 @@ SET (calligratablescommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
-    Find.cpp
     tests/inspector.cpp
     ${chart_DIR_SRCS}
     ${commands_DIR_SRCS}
@@ -259,7 +259,6 @@ set (calligratablesodf_LIB_SRCS
     # TODO: move HeaderFooter from SheetPrint to PrintSettings, and replace SheetPrint with PrintSettings in Sheet to get rid of this dependency
     SheetPrint.cpp
     SheetPrint_p.cpp
-
     )
 
 
@@ -358,19 +357,21 @@ install( FILES
     ProtectableObject.h
     RectStorage.h
     Region.h
+    RowColumnFormat.h
+    RowFormatStorage.h
     RTree.h
     Sheet.h
     Style.h
     Value.h
     ValueConverter.h
     ValueStorage.h
-    Find.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
     part/CanvasBase.h
     part/CanvasItem.h
     part/CellTool.h
     part/Doc.h
+    part/Find.h
     part/HeaderItems.h
     part/Headers.h
     part/ToolRegistry.h

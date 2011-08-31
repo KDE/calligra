@@ -459,9 +459,7 @@ void WordsTableHandler::tableCellStart()
 
 #ifdef DEBUG_TABLEHANDLER
     kDebug(30513) << "left edge = " << leftEdgePos << ", right edge = " << rightEdgePos;
-
-    kDebug(30513) << "leftCellNumber = " << leftCellNumber
-    << ", rightCellNumber = " << rightCellNumber;
+    kDebug(30513) << "leftCellNumber = " << leftCellNumber << ", rightCellNumber = " << rightCellNumber;
 #endif
 
     //NOTE: The cacheCellEdge f. took care of unsorted tap->rgdxaCenter values.
@@ -471,10 +469,8 @@ void WordsTableHandler::tableCellStart()
     // the resulting number of merged cells horizontally
     int colSpan = rightCellNumber - leftCellNumber;
 
-    // Put a filler in for cells that are part of a merged cell.
-    //
-    // The MSWord spec says they must be empty anyway (and we'll get a
-    // warning if not).
+    // Put a filler in for cells that are part of a merged cell.  According to
+    // the [MS-DOC] spec. those must be empty (we'll get a warning if not).
     //
     if (tc.fVertMerge && !tc.fVertRestart) {
         m_cellOpen = true;
@@ -490,11 +486,11 @@ void WordsTableHandler::tableCellStart()
                     rowHeight());  // height
     // I can pass these sizes to ODF now...
 #ifdef DEBUG_TABLEHANDLER
-    kDebug(30513) << " tableCellStart row=" << m_row << " WordColumn="
-                  << m_column << " colSpan="
-                  << colSpan << " (from" << leftCellNumber
-                  << " to" << rightCellNumber << " for Words) rowSpan="
-                  << rowSpan << " cellRect=" << cellRect;
+    kDebug(30513) << " tableCellStart row=" << m_row << ", column=" << m_column <<
+                     " colSpan=" << colSpan <<
+                     " (from" << leftCellNumber << " to" << rightCellNumber << " for Words)" <<
+                     " rowSpan=" << rowSpan <<
+                     " cellRect=" << cellRect;
 #endif
 
     // Sort out the borders.
@@ -654,7 +650,7 @@ void WordsTableHandler::tableCellStart()
     cellStyle.addPropertyPt("fo:padding-left", padHorz);
     cellStyle.addPropertyPt("fo:padding-right", padHorz);
 
-    QString cellStyleName = m_mainStyles->insert(cellStyle, QLatin1String("cell"));
+    QString cellStyleName = m_mainStyles->insert(cellStyle, "cell");
 
 //     emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name,
 //                             brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
@@ -710,18 +706,26 @@ void WordsTableHandler::tableCellEnd()
     }
     m_colSpan = 1;
 
-    if (!m_tap) return;
+    //Leaving out the table:style-name attribute and creation of the
+    //corresponding style for covered table cells in the tableCellStart f.
+    if (!m_tap || m_cellStyleName.isEmpty()) {
+        return;
+    }
 
     //process shading information
     const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
     QString color = Conversion::shdToColorStr(shd,
                                               document()->textHandler()->paragraphBgColor(),
                                               document()->textHandler()->paragraphBaseFontColorBkp());
+
     if (!color.isNull()) {
         KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName);
         Q_ASSERT(cellStyle);
-        cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);
+        if (cellStyle) {
+            cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);
+        }
         m_cellStyleName.clear();
+
         //add the current background-color to stack
 //         document()->addBgColor(color);
     }

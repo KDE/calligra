@@ -30,6 +30,9 @@
 #define M_PI 3.1415926535897932384626
 #endif
 
+//ECMA-376, 20.1.10.68, p.3431 - ST_TextFontSize (Text Font Size)
+#define FONTSIZE_MAX 4000
+
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
 #endif
@@ -731,10 +734,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 
     m_currentDrawStyle->addProperty("draw:textarea-vertical-align", m_shapeTextPosition);
-    m_currentDrawStyle->addProperty("fo:margin-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
-    m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:padding-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
@@ -868,7 +871,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
                 QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
                 // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
-                if (m_contentAvLstExists && false) {
+                if (m_contentAvLstExists) {
                     QMapIterator<QString, QString> i(m_avModifiers);
                     while (i.hasNext()) {
                         i.next();
@@ -1610,6 +1613,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     READ_PROLOGUE2(DrawingML_p)
 
     m_largestParaFont = 0;
+    m_minParaFont = FONTSIZE_MAX;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1628,7 +1632,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     QString bulletColor = QString();
 
     // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
     int index = 0;
     while (i.hasNext()) {
@@ -1705,6 +1709,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                     if (realSize > m_largestParaFont) {
                         m_largestParaFont = realSize;
                     }
+                    if (realSize < m_minParaFont) {
+                        m_minParaFont = realSize;
+                    }
                 }
             }
             ELSE_WRONG_FORMAT
@@ -1717,6 +1724,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
+#else
+Q_UNUSED(pprRead);
 #endif
 
     body = textPBuf.originalWriter();
@@ -1754,7 +1763,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }*/
 
     if (m_listStylePropertiesAltered) {
-        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
 
         // For now we take a stand that any altered style makes its own list.
         m_currentBulletProperties.m_level = m_currentListLevel;
@@ -1793,7 +1802,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                      QString listStyleName = mainStyles->insert(m_currentListStyle);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
-                     m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
+                     m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
                 }
                 body->startElement("text:list-item");
              }
@@ -1821,21 +1830,43 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
      }
 
+     // Positioning of list-items defined by fo:margin-left and fo:text-indent
+     // in the style:list-level-properties element.
+     if (m_currentListLevel > 0) {
+         m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
+         m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+     }
+
      body->startElement("text:p", false);
 
-     // OOxml sometimes defines margins as percentages, however percentages in odf mean a bit different
-     // thing, so here we transform them to points
+     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
+     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
+     // refers to the corresponding margin of a parent style.  Let's convert
+     // the percentage value into points to keep it simple.
+     //
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
          spcBef.remove("%");
-         qreal percentage = spcBef.toDouble() / 100.0;
-         m_currentParagraphStyle.addPropertyPt("fo:margin-top", percentage * m_largestParaFont);
+         qreal percentage = spcBef.toDouble();
+         qreal margin = 0;
+#ifdef PPTXXMLSLIDEREADER_CPP
+         margin = processParagraphSpacing(percentage, m_minParaFont);
+#else
+         margin = (percentage * m_largestParaFont) / 100.0;
+#endif
+     m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
      }
      QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
      if (spcAft.contains("%")) {
          spcAft.remove("%");
-         qreal percentage = spcAft.toDouble() / 100.0;
-         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
+         qreal percentage = spcAft.toDouble();
+         qreal margin = 0;
+#ifdef PPTXXMLSLIDEREADER_CPP
+         margin = processParagraphSpacing(percentage, m_minParaFont);
+#else
+         margin = (percentage * m_largestParaFont) / 100.0;
+#endif
+         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
      }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1943,6 +1974,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         qreal realSize = fontSize.toDouble();
         if (realSize > m_largestParaFont) {
             m_largestParaFont = realSize;
+        }
+        if (realSize < m_minParaFont) {
+            m_minParaFont = realSize;
         }
     }
 
@@ -2325,16 +2359,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
-        // value added to left marginal
-        if (!indent.isEmpty()) {
-            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        }
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-    } else if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+        m_currentBulletProperties.setMargin(realMarginal);
+        m_listStylePropertiesAltered = true;
+
+        // NOTE: No idea to which format the disabled logic applied, looks very
+        // suspicious, started to use fo:text-indent instead.
+        //
+/*         if (!indent.isEmpty()) { */
+/*             realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
+/*         } */
+/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal); */
+    }/*  else if (!indent.isEmpty()) { */
+/*         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
+/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd); */
+/*     } */
+    if (!indent.isEmpty()) {
+        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+        m_currentBulletProperties.setIndent(firstInd);
+        m_listStylePropertiesAltered = true;
     }
+
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
@@ -2380,6 +2426,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+/*     m_currentCombinedBulletProperties[m_currentListLevel] = m_currentBulletProperties; */
 
     READ_EPILOGUE
 }
@@ -2649,7 +2696,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     - blur (Blur Effect) §20.1.8.15
     - clrChange (Color Change Effect) §20.1.8.16
     - clrRepl (Solid Color Replacement) §20.1.8.18
-    - duotone (Duotone Effect) §20.1.8.23
+    - [done] duotone (Duotone Effect) §20.1.8.23
     - [done] extLst (Extension List) §20.1.2.2.15
     - fillOverlay (Fill Overlay Effect) §20.1.8.29
     - [done] grayscl (Gray Scale Effect) §20.1.8.34
@@ -2683,7 +2730,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             return KoFilter::FileNotFound;
         }
         QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+
         RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+
         addManifestEntryForFile(destinationName);
         m_recentDestName = sourceName;
         addManifestEntryForPicturesDir();
@@ -2699,10 +2748,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
             ELSE_TRY_READ_IF(lum)
+            ELSE_TRY_READ_IF(duotone)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
     READ_EPILOGUE
 }
 
@@ -2849,6 +2900,99 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lum()
     READ_EPILOGUE
 }
 
+
+#undef CURRENT_EL
+#define CURRENT_EL duotone
+//! duotone handler (Duotone effect)
+/*! ECMA-376, 20.1.8.23, p 3214
+
+  This element specifies a duotone effect. For each pixel,
+  combines clr1 and clr2 through a linear interpolation to
+  determine the new color for that pixel.
+
+  In Office, the interpolation is based on the luminance of the pixel.
+  http://msdn.microsoft.com/en-us/library/ff534294%28v=office.12%29.aspx
+
+ Parent elements:
+ - [done] blip (§20.1.8.13)
+ - cont (§20.1.8.20)
+ - effectDag (§20.1.8.25)
+
+ Child elements:
+    - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+    - [done] prstClr (Preset Color) §20.1.2.3.22
+    - [done] schemeClr (Scheme Color) §20.1.2.3.29
+    - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+    - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+    - [done] sysClr (System Color) §20.1.2.3.33
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_duotone()
+{
+    READ_PROLOGUE
+
+    int colorCount = 0;
+    QColor clr1;
+    QColor clr2;
+
+    while (!atEnd()) {
+        readNext();
+
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(hslClr)
+            ELSE_TRY_READ_IF(prstClr)
+            ELSE_TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            SKIP_UNKNOWN
+
+            if (colorCount == 0) {
+                clr1 = m_currentColor;
+            } else {
+                clr2 = m_currentColor;
+            }
+            colorCount++;
+        }
+    }
+
+    QImage image;
+    m_context->import->imageFromFile(m_recentDestName, image);
+    // don't apply duotone to unsupported picture formats in QImage like emf, wmf case
+    if (!image.isNull()) {
+
+        QColor c1 = clr1.isValid() ? clr1 : Qt::black;
+        QColor c2 = clr2.isValid() ? clr2 : Qt::white;
+
+        image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        for (int y = 0; y < image.height(); y++) {
+            QRgb *scanline = reinterpret_cast<QRgb *>(image.scanLine(y));
+            for (int x = 0; x < image.width(); x++) {
+                QRgb c = scanline[x];
+                int luminosity = (5036060U * quint32(qRed(c)) + 9886846U * quint32(qGreen(c)) + 1920103U * quint32(qBlue(c))) >> 24;
+                qreal grayF = (255 - luminosity) / 255.0;
+                int r = grayF * c1.red()     + (1.0 - grayF) * c2.red();
+                int g = grayF * c1.green()   + (1.0 - grayF) * c2.green();
+                int b = grayF * c1.blue()    + (1.0 - grayF) * c2.blue();
+                scanline[x] = qRgba(r,g,b,qAlpha(c));
+            }
+        }
+
+        QString fileName = m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+        fileName = fileName.left(fileName.lastIndexOf('.'));
+        QString destinationName = QLatin1String("Pictures/") + fileName + QString("_duotoned_%1_%2.png").arg(c1.name().mid(1)).arg(c2.name().mid(1));
+
+        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+        addManifestEntryForFile(destinationName);
+        m_xlinkHref = destinationName;
+    }
+
+    READ_EPILOGUE
+}
+
+
 #undef CURRENT_EL
 #define CURRENT_EL tile
 //! tile handler (Placeholder Shape)
@@ -2910,30 +3054,33 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
 
-    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
-        qreal bReal = b.toDouble() / 100000;
-        qreal tReal = t.toDouble() / 100000;
-        qreal lReal = l.toDouble() / 100000;
-        qreal rReal = r.toDouble() / 100000;
+    if (!m_recentDestName.endsWith("wmf") && !m_recentDestName.endsWith("emf")) {
+        if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
+            qreal bReal = b.toDouble() / 100000;
+            qreal tReal = t.toDouble() / 100000;
+            qreal lReal = l.toDouble() / 100000;
+            qreal rReal = r.toDouble() / 100000;
 
-        int rectLeft = m_imageSize.rwidth() * lReal;
-        int rectTop = m_imageSize.rheight() * tReal;
-        int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
-        int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
+            int rectLeft = m_imageSize.rwidth() * lReal;
+            int rectTop = m_imageSize.rheight() * tReal;
+            int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
+            int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
 
-        QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
-            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
-        QImage image;
-        m_context->import->imageFromFile(m_recentDestName, image);
-        image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+            QString fileName = m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+            fileName = fileName.left(fileName.lastIndexOf('.'));
 
-        if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
-            // Todo, here we should delete the generated black area(s)
+            QString destinationName = QLatin1String("Pictures/") + fileName + QString("_cropped_%1_%2.png").arg(rectWidth).arg(rectHeight);
+
+            QImage image;
+            m_context->import->imageFromFile(m_recentDestName, image);
+
+            image = image.convertToFormat(QImage::Format_ARGB32);
+            image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+
+            RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+            addManifestEntryForFile(destinationName);
+            m_xlinkHref = destinationName;
         }
-
-        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
-        addManifestEntryForFile(destinationName);
-        m_xlinkHref = destinationName;
     }
 
     readNext();
@@ -3270,7 +3417,7 @@ void MSOOXML_CURRENT_CLASS::readWrap()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 {
     READ_PROLOGUE
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
 
     m_currentCombinedBulletProperties.clear();
     m_currentBulletProperties.clear();
@@ -3659,6 +3806,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFillRpr()
         m_currentColor = gradPositions.at(exactIndex).second;
     }
     else {
+        if (beforeIndex < 0) {
+            beforeIndex = 0; // It is possible that the stops are only listed for aread 50+
+        }
+        if (afterIndex < 0) {
+            afterIndex = beforeIndex; // It is possible that the stops are only listed for areas -50
+        }
         int firstDistance = 50 - gradPositions.at(beforeIndex).first;
         int secondDistance = gradPositions.at(afterIndex).first - 50;
         qreal multiplier = 0;
@@ -3891,8 +4044,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gd()
 
     // In theory we should interpret all possible values here, not just "val"
     // in practise it does not happen
-    if (fmla.startsWith("val")) {
-        fmla = fmla.mid(3);
+    if (fmla.startsWith("val ")) {
+        fmla = fmla.mid(4);
     }
 
     m_avModifiers[name] = fmla;
@@ -4723,6 +4876,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
         }
     }
 
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
+    m_currentAlpha = 0;
+
     //TODO: all the color transformations
     while (!atEnd()) {
         readNext();
@@ -4816,19 +4974,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     inheritTextStyle(m_currentTextStyle);
 #endif
 
-    // Following settings are only applied if defined so they don't overwrite defaults
-    // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    // Following settings are only applied if defined so they don't overwrite
+    // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
         qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
-        // value added to left marginal
-        if (!indent.isEmpty()) {
-            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        }
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-    } else if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+        m_currentBulletProperties.setMargin(realMarginal);
+    }
+    if (!indent.isEmpty()) {
+        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+        m_currentBulletProperties.setIndent(firstInd);
     }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
@@ -5473,13 +5629,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
     if (ok) {
         switch (m_currentSpacingType) {
             case (spacingMarginTop):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100.0);
                 break;
             case (spacingMarginBottom):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100.0);
                 break;
             case (spacingLines):
-                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100);
+                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100.0);
                 break;
         }
     }
@@ -5846,6 +6002,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     // text in shape
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+#else
+  Q_UNUSED(spAutoFit);
 #endif
     READ_EPILOGUE
 }

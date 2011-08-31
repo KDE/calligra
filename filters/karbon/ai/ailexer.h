@@ -67,10 +67,10 @@ public:
     void append(char c);
     void clear();
     QString toString() const;
-    uint length();
+    uint length() const;
     double toFloat();
     int toInt();
-    const char *toLatin1();
+    const char *toLatin1() const;
     QString mid(uint index, uint len = 0xffffffff) const;
 private:
     char *m_buffer;

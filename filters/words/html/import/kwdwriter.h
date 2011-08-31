@@ -179,7 +179,7 @@ public:
     /**
      * returns the 'main' frameset of this document.
      **/
-    QDomElement mainFrameset();
+    QDomElement mainFrameset() const;
 
     /**
      * mark document as being written by author, and having title title

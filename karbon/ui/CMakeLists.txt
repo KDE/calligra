@@ -28,6 +28,8 @@ set(karbonui_SRCS
     widgets/KarbonGradientEditWidget.cpp
     widgets/KarbonSmallStylePreview.cpp
     widgets/KarbonPatternOptionsWidget.cpp
+    widgets/KarbonPaletteBarWidget.cpp
+    widgets/KarbonPaletteWidget.cpp
 )
 
 kde4_add_ui_files(karbonui_SRCS

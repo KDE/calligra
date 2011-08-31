@@ -49,7 +49,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 //moved scrollBarTip = 0;
     ensureCellVisibleOnShow = QPoint(-1, -1);
     internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height() / 2;
-    highlightedRow = -1;
+    highlightedRecord = -1;
     moveCursorOnMouseRelease = false;
     horizontalHeaderVisible = true;
     recentCellWithToolTip = QPoint(-1, -1);

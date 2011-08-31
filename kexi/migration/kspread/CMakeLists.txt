@@ -17,7 +17,7 @@ target_link_libraries(keximigrate_kspread
     keximigrate
     kexidb
     kexiutils
-    kspreadcommon
+    calligratablescommon
 )
 
 install(TARGETS keximigrate_kspread DESTINATION ${PLUGIN_INSTALL_DIR})

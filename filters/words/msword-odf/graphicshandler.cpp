@@ -149,6 +149,14 @@ void DrawingWriter::setChildRectangle(MSO::OfficeArtChildAnchor& anchor)
     yBottom = anchor.yBottom;
 }
 
+void DrawingWriter::setRect(const QRect& rect)
+{
+    xLeft = rect.left();
+    xRight = rect.right();
+    yTop = rect.top();
+    yBottom = rect.bottom();
+}
+
 /*
  * ************************************************
  * Graphics Handler
@@ -194,7 +202,7 @@ void WordsGraphicsHandler::init()
 {
     kDebug(30513);
 
-    parseOfficeArtContainer();
+    parseOfficeArtContainers();
 
     //create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
@@ -243,6 +251,14 @@ DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 
 void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
+    //TODO: The globalCP might be required to obtain the SPA structure for
+    //inline MS-ODRAW shapes with missing OfficeArtClientAnchor.
+
+    //TODO: It seems that both inline and floating objects have placement and
+    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
+    //the index into plcfSpa.  However the border information for inline
+    //msosptPictureFrame shapes is stored in the PICF struture.
+
     kDebug(30513) ;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);
 
@@ -372,8 +388,10 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 
     PLCFIterator<Word97::FSPA> it(plcfSpa->at(0));
     for (size_t i = 0; i < plcfSpa->count(); i++, ++it) {
+#ifdef DEBUG_GHANDLER
         kDebug(30513) << "FSPA start:" << it.currentStart();
         kDebug(30513) << "FSPA spid:" << it.current()->spid;
+#endif
 
         if ((it.currentStart() + threshold) == globalCP) {
             bool inStylesXml = m_document->writingHeader();
@@ -385,13 +403,17 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
             m_zIndex = 1;
 
             locateDrawing((dg->groupShape).data(), it.current(), (uint)it.current()->spid, out);
+
+            //reset global attributes
+            m_pSpa = 0;
             return;
         }
     }
 }
 
 void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr,
-                                         wvWare::Word97::FSPA* spa, uint spid,
+                                         wvWare::Word97::FSPA* spa,
+                                         uint spid,
                                          DrawingWriter& out)
 {
     if (!spgr) {
@@ -417,8 +439,8 @@ void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
         if (co.anon.is<OfficeArtSpgrContainer>()) {
             sp = (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
             if (sp && sp->shapeProp.spid == spid) {
-                out.setRectangle(*spa);
                 processGroupShape(*co.anon.get<OfficeArtSpgrContainer>(), out);
+                m_processingGroup = false;
                 break;
             } else {
                 m_zIndex = m_zIndex + (*co.anon.get<OfficeArtSpgrContainer>()).rgfb.size();
@@ -435,19 +457,55 @@ void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
     }
 }
 
+QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
+{
+    if (o.clientAnchor) {
+        const DocOfficeArtClientAnchor* a = o.clientAnchor->anon.get<DocOfficeArtClientAnchor>();
+        if (!a) {
+            return QRect();
+        }
+        const PLCF<wvWare::Word97::FSPA>* plcfSpa = 0;
+        if (m_document->writingHeader()) {
+            plcfSpa = m_drawings->getSpaHdr();
+        } else {
+            plcfSpa = m_drawings->getSpaMom();
+        }
+        PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
+        const wvWare::Word97::FSPA* spa = it.current();
+	Q_ASSERT(m_pSpa == spa);
+        return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);
+    }
+    else if (o.childAnchor) {
+        const MSO::OfficeArtChildAnchor& r = *o.childAnchor;
+        return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+    } else {
+        return QRect();
+    }
+}
+
 void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
 {
     if (o.rgfb.size() < 2) {
         return;
     }
+
     const OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+
+    if (sp && sp->shapeGroup) {
+        QRect oldCoords = getRect(*sp);
+        if (oldCoords.isValid()) {
+            out.setRect(oldCoords);
+            //process shape information for the group
+            out.setGroupRectangle(*sp->shapeGroup);
+	}
+    }
 
     //create graphic style for the group shape
     QString styleName;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, sp);
+    DrawStyle ds(&m_officeArtDggContainer, 0, sp);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -461,11 +519,6 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     setZIndexAttribute(out);
     m_processingGroup = true;
 
-    if (sp && sp->shapeGroup) {
-        //process shape information for the group
-        out.setGroupRectangle(*sp->shapeGroup);
-    }
-
     for (int i = 1; i < o.rgfb.size(); ++i) {
         if (o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
             OfficeArtSpContainer sp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
@@ -474,19 +527,17 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
             }
             processDrawingObject(sp, out);
         } else {
-            kDebug(30513) << "Nested group shapes not supported!";
-            //TODO: nested group shape!
+            processGroupShape(*o.rgfb[i].anon.get<OfficeArtSpgrContainer>(), out);
         }
     }
     out.xml.endElement(); // draw:g
-    m_processingGroup = false;
 }
 
 void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     kDebug(30513);
 
-    DrawStyle ds(0, &o);
+    DrawStyle ds(0, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
@@ -536,7 +587,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     }
 }
 
-void WordsGraphicsHandler::parseOfficeArtContainer()
+void WordsGraphicsHandler::parseOfficeArtContainers()
 {
     kDebug(30513);
 
@@ -939,8 +990,8 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
         out.xml.addAttribute("svg:width", mm(out.vLength()));
         out.xml.addAttribute("svg:height", mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 -1 1 0 " +
-               mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
-         break;
+                mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
+        break;
     default : //standard text flow
         out.xml.addAttribute("svg:width", mm(out.hLength()));
         out.xml.addAttribute("svg:height", mm(out.vLength()));
@@ -950,16 +1001,25 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
+    // OfficeArtClientTextBox.
+    quint32 textId = 0;
     if (o.clientTextbox) {
         const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
         if (tb) {
-            uint index = (tb->clientTextBox / 0x10000) - 1;
-            emit textBoxFound(index, out.stylesxml);
+            textId = tb->clientTextBox;
         } else {
             kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         }
     } else {
-        kDebug(30513) << "OfficeArtClientTextBox missing!";
+        if (ds.iTxid() < 0) {
+            kDebug(30513) << "lTxid property - negative text identifier!";
+        } else {
+            textId = (quint32)ds.iTxid();
+        }
+    }
+    if (textId) {
+        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
     }
 
     out.xml.endElement(); //draw:text-box
@@ -985,6 +1045,12 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
     definePositionAttributes(style, ds);
+
+    style.addProperty("fo:border-top", Conversion::setBorderAttributes(m_picf->brcTop));
+    style.addProperty("fo:border-left", Conversion::setBorderAttributes(m_picf->brcLeft));
+    style.addProperty("fo:border-bottom", Conversion::setBorderAttributes(m_picf->brcBottom));
+    style.addProperty("fo:border-right", Conversion::setBorderAttributes(m_picf->brcRight));
+
     styleName = out.styles.insert(style);
 
     // A diagram drawing canvas placed inline with surrounding text.

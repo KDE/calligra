@@ -257,8 +257,8 @@ namespace wvWare
         void emitBookmark( U32 globalCP );
 
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
-        void emitPictureData( SharedPtr<const Word97::CHP> chp );
-        void emitDrawnObject( U32 globalCP );
+
+        void emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp );
 
         void parseHeader( const HeaderData& data, unsigned char mask );
 

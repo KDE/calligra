@@ -50,22 +50,32 @@ public:
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit View( RootSection* document, MainWindow* parent );
+    explicit View(RootSection* document, MainWindow* parent);
     virtual ~View();
 
-    KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
+    KoZoomHandler* zoomHandler() {
+        return &m_zoomHandler;
+    }
 
-    KoZoomController *zoomController() { return m_zoomController; }
+    KoZoomController *zoomController() {
+        return m_zoomController;
+    }
 
-    Canvas* canvas() { return m_canvas; }
-    Canvas* canvas() const { return m_canvas; }
+    Canvas* canvas() {
+        return m_canvas;
+    }
+    Canvas* canvas() const {
+        return m_canvas;
+    }
 
-    RootSection* rootSection() { return m_doc; }
+    RootSection* rootSection() {
+        return m_doc;
+    }
     /// @return Page that is shown in the canvas
     Section* activeSection() const;
 
     /// Set page shown in the canvas to @p page
-    void setActiveSection( Section * page );
+    void setActiveSection(Section * page);
 
 private:
     /// creates the widgets (called from the constructor)
@@ -74,7 +84,7 @@ private:
     void initActions();
     void loadExtensions();
 protected slots:
-    void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
+    void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
     void editPaste();
     void editDeleteSelection();
@@ -86,18 +96,18 @@ protected slots:
 
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();
-    
-  private slots:
+
+private slots:
     void canvasReceivedFocus();
     void documentRectChanged(const QRectF& rect);
     void selectionDuplicate();
     void groupSelection();
     void ungroupSelection();
-  protected:
+protected:
     virtual void focusInEvent(QFocusEvent * event);
-  private:
+private:
     void createCanvas(Section* _currentSection);
-  private:
+private:
     RootSection* m_doc;
     Canvas* m_canvas;
     Section* m_activeSection;
@@ -115,7 +125,7 @@ protected slots:
     KoCopyController* m_copyController;
     KAction* m_editCopy;
     KAction* m_editCut;
-    
+
     KAction *m_editPaste;
     KAction *m_deleteSelectionAction;
     KAction* m_groupShapes;

@@ -121,8 +121,18 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString hor_pos_rel(m_currentVMLProperties.vmlStyle.value("mso-position-horizontal-relative"));
     QString ver_pos_rel(m_currentVMLProperties.vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_currentVMLProperties.vmlStyle.value("v-text-anchor"));
-    const QString rotation(m_currentVMLProperties.vmlStyle.value("rotation"));
+    QString rotation(m_currentVMLProperties.vmlStyle.value("rotation"));
     const QString z_index(m_currentVMLProperties.vmlStyle.value("z-index"));
+    qreal rotationAngle = 0;
+    if (!rotation.isEmpty()) {
+        if (rotation.endsWith("fd")) {
+            rotationAngle = rotation.left(rotation.length()-2).toDouble() / 65536.0;
+        }
+        else {
+            rotationAngle = rotation.toDouble();
+        }
+        rotationAngle = rotationAngle / 180.0 * M_PI;
+    }
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -223,11 +233,28 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else {
         if (startType != GroupStart) {
-            if (!x_pos_string.isEmpty()) {
-                body->addAttribute("svg:x", x_pos_string);
+            if (rotationAngle != 0) {
+                changeToPoints(widthString);
+                changeToPoints(heightString);
+                changeToPoints(x_pos_string);
+                changeToPoints(y_pos_string);
+                qreal width_rot = widthString.left(widthString.length()-2).toDouble();
+                qreal height_rot = heightString.left(heightString.length()-2).toDouble();
+                qreal left_rot = x_pos_string.left(x_pos_string.length()-2).toDouble();
+                qreal top_rot = y_pos_string.left(y_pos_string.length()-2).toDouble();
+                qreal xDiff = width_rot/2 - cos(rotationAngle)*width_rot/2 + sin(rotationAngle)*height_rot/2;
+                qreal yDiff = height_rot/2 - sin(rotationAngle)*width_rot/2 - cos(rotationAngle)*height_rot/2;
+                QString rotString = QString("rotate(%1) translate(%2pt %3pt)")
+                                .arg(-rotationAngle).arg(left_rot + xDiff).arg(top_rot + yDiff);
+                body->addAttribute("draw:transform", rotString);
             }
-            if (!y_pos_string.isEmpty()) {
-                body->addAttribute("svg:y", y_pos_string);
+            else {
+                if (!x_pos_string.isEmpty()) {
+                    body->addAttribute("svg:x", x_pos_string);
+                }
+                if (!y_pos_string.isEmpty()) {
+                    body->addAttribute("svg:y", y_pos_string);
+                }
             }
             body->addAttribute("svg:width", widthString);
             body->addAttribute("svg:height", heightString);

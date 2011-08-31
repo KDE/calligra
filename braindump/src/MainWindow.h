@@ -30,24 +30,25 @@ class KoDockFactoryBase;
 class View;
 class KActionMenu;
 
-class MainWindow : public KXmlGuiWindow, public KoCanvasSupervisor {
+class MainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
+{
     Q_OBJECT
-  public:
+public:
     MainWindow(RootSection* document, const KComponentData &componentData);
     ~MainWindow();
-  public:
+public:
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
     DockerManager* dockerManager();
     void addStatusBarItem(QWidget* _widget, int _stretch, View* _view);
     void removeStatusBarItem(QWidget*);
-  private:
+private:
     void setupActions();
-  public:
+public:
     void activateView(View* view);
     QList<KoCanvasObserverBase*> canvasObservers();
-  public slots:
+public slots:
     void forceDockTabFonts();
-  private:
+private:
     RootSection* m_doc;
     View* view;
     View* m_activeView;

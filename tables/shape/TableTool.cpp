@@ -72,7 +72,7 @@ TableTool::TableTool(KoCanvasBase* canvas)
         : CellToolBase(canvas)
         , d(new Private)
 {
-    setObjectName("TableTool");
+    setObjectName(QLatin1String("TableTool"));
 
     d->selection = new Selection(canvas);
     d->tableShape = 0;
@@ -241,7 +241,7 @@ void TableTool::sheetsBtnClicked()
 QList<QWidget*> TableTool::createOptionWidgets()
 {
     QWidget* optionWidget = new QWidget();
-    optionWidget->setObjectName("TableTool/Table Options");
+    optionWidget->setObjectName(QLatin1String("TableTool/Table Options"));
 
     QVBoxLayout* l = new QVBoxLayout(optionWidget);
     l->setMargin(0);

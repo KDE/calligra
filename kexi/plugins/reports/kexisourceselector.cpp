@@ -22,6 +22,7 @@
 #include <KLocale>
 #include <KDebug>
 #include <QDomElement>
+#include "InternalSourceSelector.h"
 
 //#define NO_EXTERNAL_SOURCES
 
@@ -33,6 +34,7 @@
 #endif
 #endif
 
+
 KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn) : QWidget(parent)
 {
 
@@ -42,7 +44,7 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 
     m_layout = new QVBoxLayout(this);
     m_sourceType = new QComboBox(this);
-    m_internalSource = new QComboBox(this);
+    m_internalSource = new InternalSourceSelector(this, conn);
     m_externalSource = new KLineEdit(this);
     m_setData = new KPushButton(i18n("Set Data"));
 
@@ -50,8 +52,6 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 
     m_sourceType->addItem(i18n("Internal"), QVariant("internal"));
     m_sourceType->addItem(i18n("External"), QVariant("external"));
-
-    m_internalSource->addItems(queryList());
 
 #ifndef NO_EXTERNAL_SOURCES
 
@@ -83,31 +83,6 @@ KexiSourceSelector::~KexiSourceSelector()
 {
     delete m_kexiDBData;
     delete m_kexiMigrateData;
-}
-
-QStringList KexiSourceSelector::queryList()
-{
-    //Get the list of queries in the database
-    QStringList qs;
-    if (m_conn && m_conn->isConnected()) {
-        QList<int> tids = m_conn->tableIds();
-        qs << "";
-        for (int i = 0; i < tids.size(); ++i) {
-            KexiDB::TableSchema* tsc = m_conn->tableSchema(tids[i]);
-            if (tsc)
-                qs << tsc->name();
-        }
-
-        QList<int> qids = m_conn->queryIds();
-        qs << "";
-        for (int i = 0; i < qids.size(); ++i) {
-            KexiDB::QuerySchema* qsc = m_conn->querySchema(qids[i]);
-            if (qsc)
-                qs << qsc->name();
-        }
-    }
-
-    return qs;
 }
 
 void KexiSourceSelector::setConnectionData(QDomElement c)

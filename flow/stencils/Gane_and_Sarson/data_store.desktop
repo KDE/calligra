@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=Data Store
+Name[bg]=Хранилище на данни
+Name[de]=Datenspeicher
 Name[el]=Αποθήκη δεδομένων
 Name[et]=Andmesalvesti
 Name[nb]=Datalager
+Name[nds]=Datenspieker
 Name[nl]=Gegevensopslag
+Name[pl]=Składnica danych
 Name[pt]=Armazém de Dados
 Name[pt_BR]=Armazenamento de dados
 Name[sv]=Datalagring

@@ -20,12 +20,8 @@
 #include "KWRdfDockerFactory.h"
 #include "KWRdfDocker.h"
 
-#include "KWView.h"
-#include "KWCanvas.h"
-
-KWRdfDockerFactory::KWRdfDockerFactory(KWView *view)
+KWRdfDockerFactory::KWRdfDockerFactory()
 {
-    m_view = view;
 }
 
 QString KWRdfDockerFactory::id() const

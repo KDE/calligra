@@ -19,9 +19,10 @@
 
 #include "KoShapeFactoryBase.h"
 
-class StateShapeFactory : public KoShapeFactoryBase {
-  public:
-    StateShapeFactory( );
+class StateShapeFactory : public KoShapeFactoryBase
+{
+public:
+    StateShapeFactory();
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;

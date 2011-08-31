@@ -30,6 +30,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 
+#include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -209,9 +210,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     KoGenChanges changes;
 
+    KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
+
     // Save the named styles
     KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-    styleManager->saveOdf(mainStyles);
+    styleManager->saveOdf(context);
 
     // TODO get the pagestyle for the first page and store that as 'style:default-page-layout'
 
@@ -223,8 +226,6 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
-
-    KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
@@ -376,6 +377,24 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
 
     settingsWriter->endElement(); // config:config-item-map-entry
     settingsWriter->endElement(); // config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+    KoTextDocument doc(m_document->mainFrameSet()->document());
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.relativeTabs() ? "true" : "false");
+    settingsWriter->endElement();
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.paraTableSpacingAtStart() ? "true" : "false");
+    settingsWriter->endElement();
+
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->endElement(); // office:settings

@@ -25,32 +25,31 @@
 #include "Section.h"
 #include "SectionContainer.h"
 
-void Utils::containerBoundRec( QList<KoShape*> shapes, QRectF& b)
+void Utils::containerBoundRec(QList<KoShape*> shapes, QRectF& b)
 {
-  foreach(KoShape* shape, shapes)
-  {
-    containerBoundRec(shape, b);
-  }
+    foreach(KoShape * shape, shapes) {
+        containerBoundRec(shape, b);
+    }
 }
 
-void Utils::containerBoundRec( KoShape* shape, QRectF& b) {
-  b |= shape->boundingRect();
-  KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
-  if(cont)
-  {
-    containerBoundRec(cont->shapes(), b);
-  }
+void Utils::containerBoundRec(KoShape* shape, QRectF& b)
+{
+    b |= shape->boundingRect();
+    KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
+    if(cont) {
+        containerBoundRec(cont->shapes(), b);
+    }
 }
 
-Section* Utils::sectionForLayer(KoShapeLayer* _layer, SectionGroup* _sectionGroup) {
-  foreach(Section* section, _sectionGroup->sections()) {
-    if(section->sectionContainer()->layer() == _layer) {
-      return section;
+Section* Utils::sectionForLayer(KoShapeLayer* _layer, SectionGroup* _sectionGroup)
+{
+    foreach(Section * section, _sectionGroup->sections()) {
+        if(section->sectionContainer()->layer() == _layer) {
+            return section;
+        }
+        if(Section* ls = sectionForLayer(_layer, section)) {
+            return ls;
+        }
     }
-    if(Section* ls = sectionForLayer(_layer, section))
-    {
-      return ls;
-    }
-  }
-  return 0;
+    return 0;
 }

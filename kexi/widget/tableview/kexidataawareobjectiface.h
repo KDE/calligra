@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -365,7 +365,7 @@ public:
 
     /*! Cancels row editing All changes made to the editing
      row during this current session will be undone.
-     \return true on success or false on failure (e.g. when editor does not exist) */
+     \return true on success or false on failure. */
     virtual bool cancelRowEdit();
 
     /*! Accepts row editing. All changes made to the editing
@@ -398,7 +398,7 @@ public:
     virtual void startEditCurrentCell(const QString& setText = QString());
 
     /*! Deletes currently selected cell's contents, if allowed.
-     In most cases delete is not accepted immediately but "row editing" mode is just started. */
+     In most cases delete is not accepted immediately but "record editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell();
 
     inline KexiDB::RecordData *itemAt(int pos) const;
@@ -513,6 +513,9 @@ public:
     virtual void connectRowEditTerminatedSignal(const QObject* receiver,
             const char* voidMember) = 0;
 
+    virtual void connectUpdateSaveCancelActionsSignal(const QObject* receiver,
+            const char* voidMember) = 0;
+
     virtual void connectReloadActionsSignal(const QObject* receiver,
                                             const char* voidMember) = 0;
 
@@ -581,7 +584,7 @@ public:
      can be other than the very first field in the form.
 
      Used by KexiTableView::keyPressEvent() and KexiTableView::keyPressEvent(). */
-    virtual bool handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, bool fullRowSelection,
+    virtual bool handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, bool fullRecordSelection,
                                 bool *moveToFirstField = 0, bool *moveToLastField = 0);
 
 protected:
@@ -662,6 +665,12 @@ protected:
 
     /*! for implementation as a signal */
     virtual void rowEditTerminated(int row) = 0;
+
+    /*! for implementation as a signal */
+    virtual void updateSaveCancelActions() = 0;
+    
+    /*! Prototype for signal rowEditStarted(int), implemented by KexiFormScrollView. */
+    virtual void rowEditStarted(int row) = 0;
 
     /*! Clear temporary members like the pointer to current editor.
      If you reimplement this method, don't forget to call this one. */
@@ -749,7 +758,14 @@ protected:
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+    /*! Changes 'row editing' flag, true if currently selected row is edited.
+     * Can be reimplemented with calling superclass setRowEditing()
+     * Sends rowEditStarted(int) signal.
+     * @see rowEditing() rowEditStarted().
+     */
+    void setRowEditing(bool set);
+
+    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 //replaced by QToolTip    virtual void vScrollBarSliderReleased();
 
     /* Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
@@ -774,8 +790,11 @@ protected:
     //! data structure displayed for this object
     KexiTableViewData *m_data;
 
-    //! cursor position
-    int m_curRow, m_curCol;
+    //! current row (cursor)
+    int m_curRow;
+
+    //! current column (cursor)
+    int m_curCol;
 
     //! current record's data
     KexiDB::RecordData *m_currentItem;
@@ -791,9 +810,6 @@ protected:
 
     //! true if m_data member is owned by this object
     bool m_owner;
-
-    /*! true if currently selected row is edited */
-    bool m_rowEditing;
 
     /*! true if new row is edited; implies: rowEditing==true. */
     bool m_newRowEditing;
@@ -944,6 +960,9 @@ protected:
 
     //! Setup by updateIndicesForVisibleValues() and used by find()
     QVector<uint> m_indicesForVisibleValues;
+private:
+    /*! true if currently selected row is edited */
+    bool m_rowEditing;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const
@@ -959,7 +978,7 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
     if (!record)
         kDebug() << "pos:" << pos << "- NO ITEM!!";
     else {
-        /*  kDebug() << "row:" << row;
+        /*  kDebug() << "record:" << row;
             int i=1;
             for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
               kDebug() << i<<": " << (*it).toString();*/
@@ -978,6 +997,10 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
     } \
     void connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember) { \
         connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
+    } \
+    void connectUpdateSaveCancelActionsSignal(const QObject* receiver, \
+                                              const char* voidMember) { \
+        connect(this, SIGNAL(updateSaveCancelActions()), receiver, voidMember); \
     } \
     void connectReloadActionsSignal(const QObject* receiver, const char* voidMember) { \
         connect(this, SIGNAL(reloadActions()), receiver, voidMember); \

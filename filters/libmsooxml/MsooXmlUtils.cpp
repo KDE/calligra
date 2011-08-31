@@ -1513,12 +1513,12 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
         }
         ending = "</text:list-level-style-bullet>";
     }
-    if (m_align != "UNUSED") {
-        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
-    }
     returnValue += ">";
 
     returnValue += "<style:list-level-properties ";
+    if (m_align != "UNUSED") {
+        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
+    }
 
     returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
 
@@ -1530,6 +1530,10 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
 
     if (m_margin != "UNUSED") {
         returnValue += "<style:list-level-label-alignment ";
+        // the text:label-followed-by is a required attribute
+        // TODO check if there is something to get the value from.
+        // For now add the default we use in calligra
+        returnValue += "text:label-followed-by=\"space\" ";
         returnValue += QString("fo:margin-left=\"%1pt\" ").arg(m_margin);
         if (m_indent != "UNUSED") {
             returnValue += QString("fo:text-indent=\"%1pt\" ").arg(m_indent);

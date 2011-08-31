@@ -1,8 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=Words's KWord 1.3 Import Filter
+Name[bg]=Филтър за внасяне от KWord 1.3 в Words
+Name[cs]=Importní filtr formátu KWord 1.3 pro Words
+Name[de]=Words „KWord 1.3“-Importfilter
+Name[es]=Filtro de Words de importación de KWord 1.3
+Name[et]=Wordsi KWord 1.3 impordifilter
+Name[it]=Filtro di importazione KWord 1.3 per Words
+Name[nb]=KWord 1.3-importfilter for Words
+Name[nds]="KWord 1.3"-Importfilter för Words
+Name[nl]=Kword 1.3-importfilter voor Words
+Name[pl]=Filtr importu KWord 1.3 do Words
 Name[pt]=Filtro de importação do KWord 1.3 para o Words
 Name[pt_BR]=Filtro de importação de KWord 1.3 para o Words
+Name[ru]=Фильтр импорта документов KWord 1.3 в Words
 Name[sv]=Words importfilter för KWord 1.3
 Name[uk]=Фільтр імпорту KWord 1.3 для Words
 Name[x-test]=xxWords's KWord 1.3 Import Filterxx

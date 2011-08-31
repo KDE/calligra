@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Five Point Star
+Name[bg]=Петолъчка
 Name[cs]=Pěticípá hvězda
 Name[de]=Stern mit fünf Zacken
 Name[el]=Πεντάκτινο αστέρι
@@ -7,9 +8,12 @@ Name[es]=Estrella de cinco puntas
 Name[et]=Viieharuline täht
 Name[it]=Stella a cinque punte
 Name[nb]=Femtakket stjerne
+Name[nds]=Fiefpünktsteern
 Name[nl]=Vijfpuntige ster
+Name[pl]=Pięcioramienna gwiazda
 Name[pt]=Estrela de Cinco Pontas
 Name[pt_BR]=Estrela de Cinco Pontas
+Name[ru]=Звезда с пятью лучами
 Name[sv]=Femuddig stjärna
 Name[uk]=Зірка з п’ятьма променями
 Name[x-test]=xxFive Point Starxx

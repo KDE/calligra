@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon 1.x Import Filter
-Name[bg]=Филтър за импортиране от Karbon 1.x
+Name[bg]=Филтър за внасяне от Karbon 1.x
 Name[ca]=Filtre d'importació Karbon 1.x
 Name[ca@valencia]=Filtre d'importació Karbon 1.x
 Name[cs]=Importní filtr Karbon 1.x
@@ -27,6 +27,7 @@ Name[lv]=Karbon 1.x importa filtrs
 Name[nb]=Karbon 1.x importfilter
 Name[nds]=Importfilter för Karbon 1.x
 Name[nl]=1.x-importfilter voor Karbon
+Name[pl]=Filtr importu 1.x do Karbon
 Name[pt]=Filtro de Importação do Karbon 1.x
 Name[pt_BR]=Filtro de importação do Karbon 1.x
 Name[ro]=Filtru importare Karbon1x

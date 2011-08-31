@@ -26,6 +26,7 @@
 #include <QPen>
 #include <QFont>
 #include <QPolygon>
+#include <QRegion>
 #include <QTransform>
 
 
@@ -49,7 +50,7 @@ enum DeviceContextMembers {
     DCFont           = 0x00000002,
     DCPalette        = 0x00000004,
     DCPen            = 0x00000008,
-    DCRegion         = 0x00000010,
+    DCClipRegion     = 0x00000010,
 
     // Structure objects
     DCBgTextColor    = 0x00000020,
@@ -83,16 +84,18 @@ class WmfDeviceContext
 {
 public:
     WmfDeviceContext();
+    void reset();
 
     // Graphic Objects
     QBrush    brush;            // Brush
     QImage    image;            //   - extra image
     QFont     font;             // Font
-    int       rotation;         //   - rotation of characters
+    int       escapement;       //   - rotation of the text in 1/10th of a degree
+    int       orientation;      //   - rotation of characters in 1/10th of a degree
     int       height;           //   - original font height; can be negative
     //Palette                   // Palette not supported yet
     QPen      pen;              // Pen
-    QPolygon  region;           // Region
+    QRegion   clipRegion;       // Region
 
     // Structure Objects
     QColor  backgroundColor;    // Background text color
