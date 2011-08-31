@@ -33,6 +33,8 @@
 #include <QtCore/QBuffer>
 #include <QtGui/QImage>
 #include <QtGui/QColor>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
 
 #include <math.h>
 
@@ -192,7 +194,6 @@ void KarbonImport::loadGroup(const KoXmlElement &element)
 {
     KoXmlElement e;
     forEachElement(e, element) {
-        qDebug() << "loading element" << e.tagName();
         if (e.tagName() == "COMPOSITE" || e.tagName() == "PATH") {
             loadPath(e);
         } else if (e.tagName() == "ELLIPSE") {
@@ -215,7 +216,6 @@ void KarbonImport::loadGroup(const KoXmlElement &element)
             m_transformation.push(m_transformation.top()*m);
             loadGroup(e);
             m_transformation.pop();
-            qDebug() << m_transformation.size();
             loadCommon(e, true);
             m_svgWriter->endElement(); // g
         }
@@ -547,7 +547,6 @@ QString KarbonImport::loadFill(const KoXmlElement &element)
 
     KoXmlElement e;
     forEachElement(e, element) {
-        qDebug() << "load fill:" << e.tagName();
         if (e.tagName() == "COLOR") {
             fill += QString("fill:%1;").arg(loadColor(e).name());
         }
@@ -1184,11 +1183,48 @@ void KarbonImport::loadText(const KoXmlElement &element)
     */
     QString text = element.attribute("text", "");
 
+    // catch path of the form Mx1 y1Lx2 y2 indicating a single line segment
+    QRegExp exp("M[-+]?[0-9]*\\.?[0-9]+ [-+]?[0-9]*\\.?[0-9]+L[-+]?[0-9]*\\.?[0-9]+ [-+]?[0-9]*\\.?[0-9]+");
+
     KoXmlElement e = element.firstChild().toElement();
     const bool isOnPath = e.tagName() == "PATH";
     if (isOnPath) {
+        QString data = e.attribute("d");
+        // check if we have a single line path
+        if (exp.exactMatch(data)) {
+            QStringList coords = data.split(QRegExp("[M\\sL]"), QString::SkipEmptyParts);
+            if (coords.size() == 4) {
+                // in old karbon a single line text path was used to specify the direction
+                // of the text, however the length of the path was not required to match
+                // the length of the text, so we need to extend the path in ta have our
+                // text not cut off after importing from svg
+                QPointF p1(coords[0].toDouble(), coords[1].toDouble());
+                QPointF p2(coords[2].toDouble(), coords[3].toDouble());
+                // calculate length of line
+                const qreal dx = p2.x()-p1.x();
+                const qreal dy = p2.y()-p1.y();
+                const qreal currLength = sqrt(dx*dx+dy*dy);
+                // read the font properties
+                QFont font;
+                font.setFamily(element.attribute("family", "Times"));
+                font.setPointSizeF(element.attribute("size", "12").toDouble());
+                font.setBold(element.attribute("bold").toInt() == 1);
+                font.setItalic(element.attribute("italic").toInt() == 1);
+                // calculate the required font length
+                QFontMetrics metrics(font);
+                qreal requiredLength = metrics.width(text);
+                if (requiredLength > currLength) {
+                    // extend the text path with the required text length to be safe
+                    p2 = p1 + requiredLength * QPointF(dx/currLength, dy/currLength);
+                    data = QString("M%1 %2L%3 %4").arg(p1.x()).arg(p1.y()).arg(p2.x()).arg(p2.y());
+                }
+            }
+        }
         m_svgWriter->startElement("defs");
-        loadPath(e);
+        m_svgWriter->startElement("path");
+        loadCommon(element);
+        m_svgWriter->addAttribute("d", data);
+        m_svgWriter->endElement(); // path
         m_svgWriter->endElement(); // defs
     }
 
