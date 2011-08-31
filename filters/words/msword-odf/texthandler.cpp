@@ -931,7 +931,7 @@ void WordsTextHandler::paragraphEnd()
     }
     //add the list-level-style information to the list-style if required
     if (m_listLevelStyleRequired) {
-        updateListStyle(styleName);
+        updateListStyle();
         m_listLevelStyleRequired = false;
     }
 
@@ -1871,86 +1871,12 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     return true;
 } //end writeListInfo()
 
-
-QString WordsTextHandler::createBulletStyle(const QString& textStyleName) const
+/**
+ * A helper function to add the <style:list-level-properties> child element to
+ * the <text:list-level-style-*> element.
+ */
+void setListLevelProperties(KoXmlWriter& out, const wvWare::Word97::PAP& pap, const wvWare::ListInfo& listInfo)
 {
-    const KoGenStyle* textStyle = m_mainStyles->style(textStyleName);
-
-    if (!textStyle) {
-        return QString();
-    }
-
-    const KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-    KoGenStyle style(KoGenStyle::TextStyle, "text");
-    QString prop, value;
-
-    //copy only selected properties
-
-    prop = QString("fo:color");
-    value = textStyle->property(prop, tt);
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, tt);
-    }
-    prop = QString("fo:font-size");
-    value = textStyle->property(prop, tt);
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, tt);
-    }
-    prop = QString("fo:font-weight");
-    value = textStyle->property(prop, tt);
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, tt);
-    }
-    prop = QString("style:font-name");
-    value = textStyle->property(prop, tt);
-    if (value.isEmpty()) {
-        const KoGenStyle* normal = m_mainStyles->style("Normal");
-        if (normal) {
-            value = normal->property(prop, tt);
-        }
-    }
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, tt);
-    }
-    //insert style into styles collection
-    return m_mainStyles->insert(style, QString("T"));
-}
-
-void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(InvalidFormatException)
-{
-    kDebug(30513) << "writing the list-level-style";
-
-    const wvWare::Word97::PAP& pap = m_currentPPs->pap();
-    const wvWare::ListInfo* listInfo = m_currentPPs->listInfo();
-    if (!listInfo) {
-	return;
-    }
-    int nfc = listInfo->numberFormat();
-
-    //create writer for this list
-    QBuffer buf;
-    buf.open(QIODevice::WriteOnly);
-    KoXmlWriter listStyleWriter(&buf);
-    KoGenStyle* listStyle = 0;
-
-    //text() returns a struct consisting of a UString text string (called text)
-    //& a pointer to a CHP (called chp)
-    wvWare::UString text = listInfo->text().text;
-
-    //NOTE: Reuse the automatic style of the text until we manage to process
-    //and store the bullet/number style.  The style will be placed into
-    //office:styles.  Only selected properties are copied.
-    QString bulletStyleName;
-
-    //check the styleName, we expect a text style
-    if (textStyleName.contains('T')) {
-        bulletStyleName = createBulletStyle(textStyleName);
-    }
-
-    // FIXME: At the moment fo:margin-left, fo:text-indent and
-    // text:list-tab-stop-position are set to wrong values!  The comment that
-    // text:list-tab-stop-position SHOULD not be set because fo:margin-left is
-    // already set is WRONG.
     //
     // TEXT POSITION:
     //
@@ -1964,116 +1890,171 @@ void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
     //
     // BULLET POSITION:
     //
-    // fo:text-indent - Specifies indent for the 1st line of the paragraph, so
-    // it controls position of the bullet from the left page margin.
+    // fo:text-indent - Specifies indent for the 1st line of the paragraph,
+    // relative to the rest of the paragraph, so it controls position of the
+    // bullet from the left margin specified by fo:margin-left.
+    //
+    // fo:text-align - Specifies the horizontal alignment of the list label at
+    // the alignment position.  The alignment position is specified by the
+    // fo:margin-left and fo:text-indent attributes.
     //
 
-    //bulleted list
+    out.startElement("style:list-level-properties");
+    //fo:text-align
+    switch (listInfo.alignment()) {
+    case 0: //Left justified - OOo seems to treat this value as DEFAULT
+        out.addAttribute("fo:text-align", "start");
+        break;
+    case 1: //Center justified
+        out.addAttribute("fo:text-align", "center");
+        break;
+    case 2: //Right justified
+        out.addAttribute("fo:text-align", "end");
+        break;
+    case 3: //TODO: Not documented in [MS-DOC] - v20101219, any test files?
+        out.addAttribute("fo:text-align", "justify");
+        break;
+    default:
+        break;
+    }
+    //text:list-level-position-and-space-mode
+    out.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
+    //style:list-level-label-alignment
+    out.startElement("style:list-level-label-alignment");
+    //fo:margin-left
+    out.addAttributePt("fo:margin-left", Conversion::twipsToPt(pap.dxaLeft));
+    //fo:text-indent
+    out.addAttributePt("fo:text-indent", Conversion::twipsToPt(pap.dxaLeft1));
+    //text:label-followed-by
+    switch (listInfo.followingChar()) {
+    case 0: //A tab follows the number text.
+    {
+        out.addAttribute("text:label-followed-by", "listtab");
+        //TODO: text:list-tab-stop-position - Fine tuning on complex files required!
+//         Q_ASSERT(pap.itbdMac == 1);
+        qreal position = 0;
+        if (pap.itbdMac) {
+            position = Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab);
+        }
+        out.addAttributePt("text:list-tab-stop-position", position);
+        break;
+    }
+    case 1: //A space follows the number text.
+        out.addAttribute("text:label-followed-by", "space");
+        break;
+    case 2: //Nothing follows the number text.
+        out.addAttribute("text:label-followed-by", "nothing");
+        break;
+    default:
+        break;
+    }
+    out.endElement(); //style:list-level-label-alignment
+    out.endElement(); //style:list-level-properties
+}
+
+void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
+{
+    kDebug(30513) << "writing the list-level-style-*";
+
+    const wvWare::ListInfo* listInfo = m_currentPPs->listInfo();
+    if (!listInfo) {
+	return;
+    }
+    const wvWare::Word97::PAP& pap = m_currentPPs->pap();
+    wvWare::UString text = listInfo->text().text;
+    int nfc = listInfo->numberFormat();
+
+    // ------------------------
+    // Text Style
+    // ------------------------
+    QString fontName = getFont(listInfo->text().chp->ftcAscii);
+    if (!fontName.isEmpty()) {
+        m_mainStyles->insertFontFace(KoFontFace(fontName));
+    }
+    //text style to format the bullet
+    KoGenStyle textStyle(KoGenStyle::TextAutoStyle, "text");
+    if (document()->writingHeader()) {
+        textStyle.setAutoStyleInStylesDotXml(true);
+    }
+    if (!fontName.isEmpty()) {
+        textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
+    }
+    m_paragraph->applyCharacterProperties(listInfo->text().chp, &textStyle, m_paragraph->paragraphStyle());
+
+    QString textStyleName('T');
+    textStyleName = m_mainStyles->insert(textStyle, textStyleName);
+
+    // ------------------------
+    // Writer
+    // ------------------------
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter out(&buf);
+
+    // ------------------------
+    // Bulleted List
+    // ------------------------
     if (nfc == 23) {
         kDebug(30513) << "bullets...";
-        listStyleWriter.startElement("text:list-level-style-bullet");
-        listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
+        out.startElement("text:list-level-style-bullet");
+        out.addAttribute("text:style-name", textStyleName);
+        out.addAttribute("text:level", pap.ilvl + 1);
         if (text.length() == 1) {
-            // With bullets, text can only be one character, which
-            // tells us what kind of bullet to use
+            // With bullets, text can only be one character, which tells us
+            // what kind of bullet to use
             unsigned int code = text[0].unicode();
-            // unicode: private use area (0xf000 - 0xf0ff)
-            if ((code & 0xFF00) == 0xF000) {
-                if (code >= 0x20) {
-                    // microsoft symbol charset shall apply here.
-                    code = Conversion::MS_SYMBOL_ENCODING[code%256];
-                } else {
-                    code &= 0x00FF;
-                }
-            }
-            listStyleWriter.addAttribute("text:bullet-char", QString(code).toUtf8());
+            kDebug(30513) << "Bullet code: 0x" << hex << code << "id:" << code%256;
+
+            // NOTE: What does the next comment mean, private use area is in
+            // <0xE000, 0xF8FF>, disabled the conversion code.
+
+            // unicode: private use area (0xf000 - 0xf0ff).
+//             if ((code & 0xFF00) == 0xF000) {
+//                 if (code >= 0x20) {
+//                     // microsoft symbol charset shall apply here.
+//                     code = Conversion::MS_SYMBOL_ENCODING[code%256];
+// 		    kDebug(30513) << "Changed the symbol encoding: new code: 0x" << hex << code <<
+//                                       dec << "("<< code << ")";
+//                 } else {
+//                     code &= 0x00FF;
+//                 }
+//             }
+            out.addAttribute("text:bullet-char", QChar(code));
         } else {
             kWarning(30513) << "Bullet with more than one character, not supported";
         }
+        //style:list-level-properties
+        setListLevelProperties(out, pap, *listInfo);
 
-        if (!bulletStyleName.isEmpty()) {
-            listStyleWriter.addAttribute("text:style-name", bulletStyleName);
-        }
+        //NOTE: helping the layout, the approach based on the text:style-name
+        //attribute does not work at the moment.
+        textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
 
-        listStyleWriter.startElement("style:list-level-properties");
-        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
-        listStyleWriter.startElement("style:list-level-label-alignment");
-        //fo:margin-left
-        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
-        //fo:text-indent
-        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
-
-//         if (listInfo->indent()) {
-            // NOTE: According to lists.h, this should be the indent before the
-            // label. Sounds like fo:margin-left.
-//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-//         }
-//         if (listInfo->space()) {
-            // NOTE: This produces wrong results (see the document attached to KDE
-            // bug 244411 and it's not clear why that is so. The specs say that
-            // the dxaSpace is the "minimum space between number and paragraph"
-            // and as such following should be right but it is not. So, we
-            // disabled it for now till someone has an idea why that is so.
-//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-//         }
-
-        //text:label-followed-by
-        switch (listInfo->followingChar()) {
-        case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
-            //text:list-tab-stop-position
-
-#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
-            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
-#endif
-            break;
-        case 1:
-            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
-            break;
-        case 2:
-            listStyleWriter.addAttribute("text:label-followed-by", "space");
-            break;
-        default:
-            break;
-        }
-
-        listStyleWriter.endElement(); //style:list-level-label-alignment
-        listStyleWriter.endElement(); //style:list-level-properties
-        //close element
-        listStyleWriter.endElement(); //text:list-level-style-bullet
+        out.endElement(); //text:list-level-style-bullet
     }
-    //numbered/outline list
+    // ------------------------
+    // Numbered/Outline List
+    // ------------------------
     else {
         kDebug(30513) << "numbered/outline... nfc = " << nfc;
-        listStyleWriter.startElement("text:list-level-style-number");
-        listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
-
-        if (!bulletStyleName.isEmpty()) {
-            listStyleWriter.addAttribute("text:style-name", bulletStyleName);
-        }
+        out.startElement("text:list-level-style-number");
+        out.addAttribute("text:style-name", textStyleName);
+        out.addAttribute("text:level", pap.ilvl + 1);
 
         //*************************************
         int depth = pap.ilvl; //both are 0 based
-        //int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
-        // Heading styles don't set the ilvl, but must have a depth coming
-        // from their heading level (the style's STI)
-        //bool isHeading = style->sti() >= 1 && style->sti() <= 9;
-        //if ( depth == 0 && isHeading )
-        //{
-        //    depth = style->sti() - 1;
-        //}
 
-        // Now we need to parse the text, to try and convert msword's powerful list template stuff
+        // Now we need to parse the text, to try and convert msword's powerful
+        // list template stuff
         QString prefix, suffix;
         bool depthFound = false;
         bool anyLevelFound = false;
         int displayLevels = 1;
 
-        // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
-        // But "Section <0>.<1>)" has both prefix and suffix.
-        // The common case is <0>.<1>.<2> (display-levels=3)
-        //loop through all of text
-        //this just sets depthFound & displayLevels & the suffix & prefix
+        // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix).  But
+        // "Section <0>.<1>)" has both prefix and suffix.  The common case is
+        // <0>.<1>.<2> (display-levels=3) loop through all of text this just
+        // sets depthFound & displayLevels & the suffix & prefix
         for (int i = 0 ; i < text.length() ; ++i) {
             short ch = text[i].unicode();
             //kDebug(30513) << i <<":" << ch;
@@ -2085,17 +2066,18 @@ void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
                     else {
                         depthFound = true;
                     }
-                    suffix.clear(); // really should never do anthing so why is it here??
+                    // really should never do anthing so why is it here??
+                    suffix.clear();
                 } else {
-                    Q_ASSERT(ch < pap.ilvl);   // Can't see how level 1 would have a <0> in it...
+                    // Can't see how level 1 would have a <0> in it...
+                    Q_ASSERT(ch < pap.ilvl);
                     if (ch < pap.ilvl) {
-                        ++displayLevels; // we found a 'parent level', to be displayed
+                        // we found a 'parent level', to be displayed
+                        ++displayLevels;
                     }
                 }
                 anyLevelFound = true;
-            }
-            //if it's not a number < 10
-            else {
+            } else {
                 //add it to suffix if we've found the level that we're at
                 if (depthFound) {
                     suffix += QChar(ch);
@@ -2108,103 +2090,73 @@ void WordsTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         }
         if (displayLevels > 1) {
             // This is a hierarchical list numbering e.g. <0>.<1>.
-            // (unless this is about a heading, in which case we've set numberingtype to 1 already
-            // so it will indeed look like that).
-            // The question is whether the '.' is the suffix of the parent level already..
-            //do I still need to keep the m_listSuffixes stuff?
+            //
+            // Unless this is about a heading, in that case we've set numbering
+            // type to 1 already, so it will indeed look like that.  The
+            // question is whether the '.' is the suffix of the parent level
+            // already.  Do I still need to keep the m_listSuffixes stuff?
             if (depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix) {
-                prefix.clear(); // it's already the parent's suffix -> remove it
+                 // it's already the parent's suffix -> remove it
+                prefix.clear();
                 kDebug(30513) << "depth=" << depth << " parent suffix is" << prefix << " -> clearing";
             }
         }
-        //if ( isHeading )
-        //    numberingType = 1;
-        //this is where we actually write the information
+        // Heading styles don't set the ilvl, but must have a depth coming from
+        // their heading level (the style's STI)
+
+//         bool isHeading = style->sti() >= 1 && style->sti() <= 9;
+//         if ( depth == 0 && isHeading ) {
+//             depth = style->sti() - 1;
+//         }
+
+//         int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
+//         if ( isHeading ) numberingType = 1;
         if (depthFound) {
             // Word6 models "1." as nfc=5
-            if (nfc == 5 && suffix.isEmpty())
+            if (nfc == 5 && suffix.isEmpty()) {
                 suffix = '.';
+            }
             kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix;
-            listStyleWriter.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
-            listStyleWriter.addAttribute("style:num-prefix", prefix);
-            listStyleWriter.addAttribute("style:num-suffix", suffix);
+            out.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
+            if (!prefix.isEmpty()) {
+                out.addAttribute("style:num-prefix", prefix);
+            }
+            if (!suffix.isEmpty()) {
+                out.addAttribute("style:num-suffix", suffix);
+            }
             if (displayLevels > 1) {
-                listStyleWriter.addAttribute("text:display-levels", displayLevels);
+                out.addAttribute("text:display-levels", displayLevels);
             }
             kDebug(30513) << "storing suffix" << suffix << " for depth" << depth;
             m_listSuffixes[ depth ] = suffix;
         } else {
             kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text);
         }
-
-        if (listInfo->startAtOverridden())   //||
-            //( numberingType == 1 && m_previousOutlineLSID != 0 && m_previousOutlineLSID != listInfo->lsid() ) ||
-            //( numberingType == 0 &&m_previousEnumLSID != 0 && m_previousEnumLSID != listInfo->lsid() ) )
-        {
-            //counterElement.setAttribute( "restart", "true" );
-        }
+//         if (listInfo->startAtOverridden())   //||
+//             ( numberingType == 1 && m_previousOutlineLSID != 0 && m_previousOutlineLSID != listInfo->lsid() ) ||
+//             ( numberingType == 0 &&m_previousEnumLSID != 0 && m_previousEnumLSID != listInfo->lsid() ) )
+//         {
+//             counterElement.setAttribute( "restart", "true" );
+//         }
 
         //listInfo->isLegal() hmm
         //listInfo->notRestarted() [by higher level of lists] not supported
         //listInfo->followingchar() ignored, it's always a space in Words currently
         //*************************************
-        listStyleWriter.startElement("style:list-level-properties");
-        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
-        switch (listInfo->alignment()) {
-        case 1:
-            listStyleWriter.addAttribute("fo:text-align", "center");
-            break;
-        case 2:
-            listStyleWriter.addAttribute("fo:text-align", "end");
-            break;
-        case 3:
-            listStyleWriter.addAttribute("fo:text-align", "justify");
-            break;
-        default:
-            break;
-        }
 
-        listStyleWriter.startElement("style:list-level-label-alignment");
-        //fo:margin-left
-        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
-        //fo:text-indent
-        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
-        //text:label-followed-by
-        switch (listInfo->followingChar()) {
-        case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
-            //text:list-tab-stop-position
-#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
-            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
-#endif
-            break;
-        case 1:
-            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
-            break;
-        case 2:
-            listStyleWriter.addAttribute("text:label-followed-by", "space");
-            break;
-        default:
-            break;
-        }
+        //style:list-level-properties
+        setListLevelProperties(out, pap, *listInfo);
 
-        //NOTE: Disabled for now. Have a look at the comment at the other
-        //text:min-label-distance and text-indent above to see why.
-//         if (listInfo->space()) {
-//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-//         }
-//         if (listInfo->indent()) {
-//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-//         }
-        listStyleWriter.endElement(); //style:list-level-label-alignment
-        listStyleWriter.endElement(); //style:list-level-properties
-        //close element
-        listStyleWriter.endElement(); //text:list-level-style-number
-    } //end numbered list stuff
+        //NOTE: helping the layout, the approach based on the text:style-name
+        //attribute does not work at the moment.
+        textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
+
+        out.endElement(); //text:list-level-style-number
+    } //end numbered list
 
     //now add this info to our list style
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-    listStyle = m_mainStyles->styleForModification(m_listStyleName);
+    KoGenStyle* listStyle = m_mainStyles->styleForModification(m_listStyleName);
 
     // It's secure to end with KoFilter::InvalidFormat.
     if (!listStyle) {

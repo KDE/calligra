@@ -4909,12 +4909,13 @@ void KexiMainWindow::slotToolsCompactDatabase()
     }
 
     if (!drv->adminTools().vacuum(*data->connectionData(), data->databaseName())) {
-        //err msg
-        showErrorMessage(&drv->adminTools());
+      //err msg
+      showErrorMessage(&drv->adminTools());
     }
 
-    if (data && projectWasOpened)
-        openProject(*data);
+    if (projectWasOpened)
+      openProject(*data);
+
     delete data;
 }
 

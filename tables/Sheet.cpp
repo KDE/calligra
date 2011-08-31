@@ -2919,7 +2919,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
         sname = testName;
 
         kDebug(36001) << "Sheet::loadXML: table name =" << sname;
-        setObjectName(sname.toUtf8());
+        setObjectName(sname);
         setSheetName(sname, true);
     }
 
@@ -3305,7 +3305,7 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
     map()->addDamage(new SheetDamage(this, SheetDamage::Name));
 
-    setObjectName(name.toUtf8());
+    setObjectName(name);
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return true;

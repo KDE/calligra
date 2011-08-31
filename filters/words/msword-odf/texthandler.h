@@ -265,7 +265,7 @@ private:
     // ************************************************
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    void updateListStyle(const QString& textStyleName) throw(InvalidFormatException);
+    void updateListStyle() throw(InvalidFormatException);
     QString createBulletStyle(const QString& textStyleName) const;
 
     QString m_listSuffixes[9];     // The suffix for every list level seen so far

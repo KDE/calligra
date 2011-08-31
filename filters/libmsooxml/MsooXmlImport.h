@@ -105,6 +105,8 @@ protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
                                                       KoOdfWriters *writers);
 
+    virtual void writeConfigurationSettings(KoXmlWriter* settings) const;
+
     bool isPasswordProtectedFile(QString &filename);
     KTemporaryFile* tryDecryptFile(QString &filename);
 

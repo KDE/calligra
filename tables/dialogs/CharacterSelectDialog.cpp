@@ -43,7 +43,7 @@ public:
 /* class CharacterSelectDialog                                           */
 /******************************************************************/
 
-CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _modal)
+CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &name, const QChar &_chr, const QString &_font, bool _modal)
         : KDialog(parent),
         d(new Private())
 {
@@ -61,7 +61,7 @@ CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const char *name, 
     setButtonGuiItem(KDialog::Ok, okItem);
 }
 
-CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal)
+CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &name, const QString &_font, const QChar &_chr, bool _modal)
         : KDialog(parent),
         d(new Private())
 {

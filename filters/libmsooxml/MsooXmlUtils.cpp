@@ -1530,6 +1530,10 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
 
     if (m_margin != "UNUSED") {
         returnValue += "<style:list-level-label-alignment ";
+        // the text:label-followed-by is a required attribute
+        // TODO check if there is something to get the value from.
+        // For now add the default we use in calligra
+        returnValue += "text:label-followed-by=\"space\" ";
         returnValue += QString("fo:margin-left=\"%1pt\" ").arg(m_margin);
         if (m_indent != "UNUSED") {
             returnValue += QString("fo:text-indent=\"%1pt\" ").arg(m_indent);

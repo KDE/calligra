@@ -319,7 +319,7 @@ quint64 pqxxSqlConnection::drv_lastInsertRowID()
 //<queries taken from pqxxMigrate>
 bool pqxxSqlConnection::drv_containsTable(const QString &tableName)
 {
-    bool success;
+    bool success=false;
     return resultExists(QString("select 1 from pg_class where relkind='r' and relname LIKE %1")
                         .arg(driver()->escapeString(tableName)), success) && success;
 }

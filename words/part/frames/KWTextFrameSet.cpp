@@ -56,12 +56,12 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
     setName(Words::frameSetTypeName(m_textFrameSetType));
     setupDocument();
 
-    kDebug () << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
+    kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
 }
 
 KWTextFrameSet::~KWTextFrameSet()
 {
-    kDebug () << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
+    kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
     delete m_rootAreaProvider;
 #if 0
     // first remove the doc from all our frames so they won't try to use it after we delete it.
@@ -166,6 +166,9 @@ void KWTextFrameSet::setupDocument()
     doc.setChangeTracker(changeTracker);
     doc.setUndoStack(m_wordsDocument->resourceManager()->undoStack());
 
+    doc.setRelativeTabs(true);
+    doc.setParaTableSpacingAtStart(true);
+
     // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     m_document->setDocumentLayout(lay);
@@ -174,7 +177,7 @@ void KWTextFrameSet::setupDocument()
     
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
-    kDebug () << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
+    kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
     m_pageStyle = style;
     if (style.isValid()) {
         foreach(KWFrame* frame, frames()) {

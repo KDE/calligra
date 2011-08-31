@@ -41,7 +41,7 @@
 #include <KoPAView.h>
 #include <KoPADocument.h>
 #include <KoPAViewBase.h>
-#include <kpresenter/part/KPrDocument.h>
+#include <stage/part/KPrDocument.h>
 
 #include <QPoint>
 #include <QSize>
