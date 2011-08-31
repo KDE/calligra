@@ -15,10 +15,11 @@ Splitting Calligra into packages:
 Table Of Contents
 -----------------
 1. Kexi
-1.1. Kexi database and migration drivers
+1.1. Kexi database and migration drivers to package separately
 1.2. Kexi default database driver: SQLite
-1.3. Kexi development files
-1.4. Quick command-line tests of Kexi installation
+1.4. Other Kexi plugins to package separately
+1.4. Kexi development files
+1.5. Quick command-line tests of Kexi installation
 2. Krita
 2.1. Krita development files
 3. Debug information
@@ -27,53 +28,116 @@ Table Of Contents
 1. Kexi
 =======
 
-1.1. Kexi database and migration drivers
-----------------------------------------
+1.1. Kexi database and migration drivers to package separately
+--------------------------------------------------------------
 
 Kexi provides database drivers and migration drivers for a number of
-database types or data sources. The following matrix lists them:
+database types or data sources.
 
- Name         Database driver files            Migration driver files
- ------------------------------------------------------------------------
- MySQL        kexidb_mysqldriver.so            keximigrate_mysql.so
-              kexidb_mysqldriver.desktop       keximigrate_mysql.desktop
- PostgreSQL   kexidb_pqxxsqldriver.so          keximigrate_pqxx.so
-              kexidb_pqxxsqldriver.desktop     keximigrate_pqxx.desktop
- Sybase & MS SQL Server
-              kexidb_sybasedriver.so           keximigrate_sybase.so
-              kexidb_sybasedriver.desktop      keximigrate_sybase.desktop
- XBase
-              kexidb_xbasedriver.so            keximigrate_xbase.so
-              kexidb_xbasedriver.desktop       keximigrate_xbase.desktop
-
-(Oracle driver is not currently distributed)
-
-Plugin .so files typically go to $KDEDIR/lib/kde4,
-and .desktop service files go to $KDEDIR/share/services/.
-
-We suggest putting each driver in a separate package, and that installation of
+We encourage to put each driver in a separate package, and that installation of
 these packages be optional.  Each driver package may then depend on the corresponding
 'native' libraries. For example libmysqlclient for MySQL and libpqxx for PostgreSQL
 (libpqxx in turn depends on libpq).
 
-TODO: add dependencies to the table above and minimal versions of them
+The following matrix lists the packages and dependencies.
+
+ Suggested Name            Details
+ ------------------------------------------------------------------------
+ kexi-mysql-driver         Description: Kexi MySQL driver
+                           Database driver files:
+                               kexidb_mysqldriver.so
+                               kexidb_mysqldriver.desktop
+                           Migration driver files:
+                               keximigrate_mysql.so
+                               keximigrate_mysql.desktop
+                           Dependencies:
+                               libmysqlclient
+ ------------------------------------------------------------------------
+ kexi-postgresql-driver    Description: Kexi PostgreSQL Driver
+                           Database driver files:
+                               kexidb_pqxxsqldriver.so
+                               kexidb_pqxxsqldriver.desktop
+                           Migration driver files:
+                               keximigrate_pqxx.so
+                               keximigrate_pqxx.desktop
+                           Dependencies:
+                               libpq
+                               libpqxx
+ ------------------------------------------------------------------------
+ kexi-mssql-driver         Description: Kexi MS SQL & Sybase Server
+                           Database driver files:
+                               kexidb_sybasedriver.so
+                               kexidb_sybasedriver.desktop
+                           Migration driver files:
+                               keximigrate_sybase.so
+                               keximigrate_sybase.desktop
+                           Dependencies:
+                               libsybdb (FreeTDS)
+ ------------------------------------------------------------------------
+ kexi-xbase-driver         Description: Kexi XBase Driver
+                           Database driver files:
+                               kexidb_xbasedriver.so
+                               kexidb_xbasedriver.desktop
+                           Migration driver files:
+                               keximigrate_xbase.so
+                               keximigrate_xbase.desktop
+                           Dependencies:
+                               libxbase
+ ------------------------------------------------------------------------
+
+Plugin .so files are typically installed to $KDEDIR/lib/kde4/,
+and .desktop service files are installed to $KDEDIR/share/services/.
+
+Notes:
+* Oracle driver is not currently distributed.
+
+TODOs:
+* Add minimal versions of dependencies.
 
 1.2. Kexi default database driver: SQLite
 -----------------------------------------
 
-In contrast to the other database drivers, SQLite 3 driver should be part
-of the main Kexi package. Thus, Kexi main package should depend on SQLite 3 package.
+In contrast to the other database drivers, SQLite 3 driver SHOULD BE PART
+of the main Kexi package, so it SOULD NOT be in optional.
+Thus, Kexi main package should depend on SQLite 3 package.
 
-TODO: explain minimal SQLite version, and its features (http://kdedevelopers.org/node/4156)
+Recommended version of SQLite package is defined in the source code and can
+be obtained by executing this command in calligra/ directory:
+ % grep SQLITE_RECOMMENDED_VERSION CMakeLists.txt
+
+Minimal version of SQLite package is defined in the source code and can
+be obtained by executing this command in calligra/ directory:
+ % grep CalligraSqlite CMakeLists.txt
+Without SQLite in at least this version Kexi will not compile and run.
 
 
-1.3. Kexi development files
+1.3. Other Kexi plugins to package separately
+---------------------------------------------
+
+Kexi provides less a number of plugin types that are optional either because 
+are less frequently used or because have larger dependencies. We encourage 
+to put each driver in a separate package, and that installation of these
+packages be optional. 
+
+The following matrix lists the packages and dependencies.
+
+ Suggested Name            Details
+ ------------------------------------------------------------------------
+ kexi-web-form-widget      Description: Kexi web form widget
+                           Contents:
+                               kformdesigner_webbrowser.so
+                               kformdesigner_webbrowser.desktop
+                           Dependencies:
+                               libqt4-webkit or libQtWebKit4 (QtWebKit)
+
+
+1.4. Kexi development files
 ---------------------------
 
 Kexi ships no development files at the moment, so -devel packages are not needed.
 
 
-1.4. Quick command-line tests of Kexi installation
+1.5. Quick command-line tests of Kexi installation
 --------------------------------------------------
 
 If you don't want to click through Kexi interface but still want
