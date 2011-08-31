@@ -85,6 +85,8 @@ TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cp
 TODO: remove color utils from KexiUtils, use KColorUtils directly
 TODO: remove contrasting-color creation code from KexiUtils, and use KColorScheme::shade() instead
 
+TODO: support 'kexi http://foobar.com/db.kexi' commands (and for other protocols)
+
 ===================== Kexi 2.4  =====================
 
 Tabbed toolbar TODOS:
