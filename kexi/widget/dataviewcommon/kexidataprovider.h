@@ -41,7 +41,7 @@ class RecordData;
  return ("name", "surname") list, so the cursor's query can be simplified
  and thus more effective.
 */
-class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesListener
+class KEXIDATAVIEWCOMMON_EXPORT KexiFormDataProvider : public KexiDataItemChangesListener
 {
 public:
     KexiFormDataProvider();

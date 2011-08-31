@@ -24,13 +24,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <widget/tableview/kexitableviewdata.h>
-#include <widget/tableview/kexicomboboxbase.h>
+#include "kexitableviewdata.h"
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
-
-#include "widgets/kexidbform.h"
 
 KexiFormDataProvider::KexiFormDataProvider()
         : KexiDataItemChangesListener()
@@ -69,7 +66,9 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
             continue;
 #else
         //tmp: reject widgets within subforms
-        if (KexiUtils::findParent<const KexiDBForm*>(widget, "KexiDBSubForm"))
+        //if (KexiUtils::findParent<const KexiDBForm*>(widget, "KexiDBSubForm"))
+        //    continue;
+        if (KexiUtils::parentIs(widget, "KexiDBSubForm"))
             continue;
 #endif
         QString dataSource(formDataItem->dataSource().toLower());
@@ -291,13 +290,13 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
                 KexiDB::QueryColumnInfo *visibleColumnInfo = fieldsExpanded[ indexForVisibleLookupValue ];
                 if (visibleColumnInfo) {
                     item->setVisibleColumnInfo(visibleColumnInfo);
-                    if (dynamic_cast<KexiComboBoxBase*>(item) && m_mainWidget
-                            && dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()) {
+
+                    if (item->isComboBox() && m_mainWidget && item->internalEditor()) {
                         // m_mainWidget (dbform) should filter the (just created using setVisibleColumnInfo())
                         // combo box' internal editor (actually, only if the combo is in 'editable' mode)
-                        dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()
-                        ->installEventFilter(m_mainWidget);
+                        item->internalEditor()->installEventFilter(m_mainWidget);
                     }
+
                     kDebug() << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString()
                         << "\n at position " << indexForVisibleLookupValue;
                 }

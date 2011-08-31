@@ -42,12 +42,13 @@
 
 #include <kdebug.h>
 
-#include "kexitableviewdata.h"
+#include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexitableedit.h"
 #include <kexiutils/tristate.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include "kexidataawareobjectiface.h"
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 class QPrinter;
 class QPrintDialog;
@@ -688,6 +689,8 @@ protected:
     /*! Implementation for KexiDataItemChangesListener. */
     virtual bool cursorAtNewRow() const;
 
+    QWidget* navPanelWidget() const;
+    
     KexiTableViewPrivate * const d;
 
     class WhatsThis;

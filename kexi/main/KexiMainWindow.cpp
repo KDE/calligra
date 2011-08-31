@@ -108,6 +108,7 @@
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
+
 //2.x #include "printing/kexisimpleprintingpart.h"
 //2.x #include "printing/kexisimpleprintingpagesetup.h"
 
