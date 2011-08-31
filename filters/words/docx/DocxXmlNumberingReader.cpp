@@ -440,7 +440,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 
     TRY_READ_ATTR(numId)
 
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle);
 
     while (!atEnd()) {
         readNext();

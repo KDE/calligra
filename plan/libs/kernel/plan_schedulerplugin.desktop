@@ -2,6 +2,7 @@
 Name=Plan Scheduler Plugin
 Name[pt]='Plugin' de Calendarização do Plan
 Name[pt_BR]=Plugin de Calendário do Plan
+Name[sv]=Plan insticksprogram för schemaläggning
 Name[uk]=Додаток планування Plan
 Name[x-test]=xxPlan Scheduler Pluginxx
 Type=ServiceType

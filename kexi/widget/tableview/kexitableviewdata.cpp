@@ -326,7 +326,7 @@ KexiTableViewData::KexiTableViewData(
 KexiTableViewData::~KexiTableViewData()
 {
     emit destroying();
-    clearInternal();
+    clearInternal(false /* !processEvents */);
     qDeleteAll(m_columns);
     delete d;
 }
@@ -748,7 +748,7 @@ void KexiTableViewData::insertRow(KexiDB::RecordData& record, uint index, bool r
     emit rowInserted(&record, index, repaint);
 }
 
-void KexiTableViewData::clearInternal()
+void KexiTableViewData::clearInternal(bool processEvents)
 {
     clearRowEditBuffer();
 // qApp->processEvents( 1 );
@@ -756,12 +756,12 @@ void KexiTableViewData::clearInternal()
 // KexiTableViewDataBase::clear();
     const uint c = count();
 #ifndef KEXI_NO_PROCESS_EVENTS
-    const bool processEvents = !qApp->closingDown();
+    const bool _processEvents = processEvents && !qApp->closingDown();
 #endif
     for (uint i = 0; i < c; i++) {
         removeLast();
 #ifndef KEXI_NO_PROCESS_EVENTS
-        if (processEvents && i % 1000 == 0)
+        if (_processEvents && i % 1000 == 0)
             qApp->processEvents(QEventLoop::AllEvents, 1);
 #endif
     }

@@ -81,6 +81,21 @@ void MsooXmlImport::reportProgress(unsigned progress)
     emit sigProgress(progress);
 }
 
+void MsooXmlImport::writeConfigurationSettings(KoXmlWriter* settings) const
+{
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "UseFormerLineSpacing");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false");
+    settings->endElement();
+
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "TabsRelativeToIndent");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false"); // ODF=true, MSOffice=false
+    settings->endElement();
+}
+
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
                                                          KoOdfWriters *writers)
 {

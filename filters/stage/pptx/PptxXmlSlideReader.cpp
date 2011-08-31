@@ -1317,8 +1317,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ_IF_NS(a, solidFill)
-                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                if (m_currentColor != QColor()) {
+                    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                }
                 if (m_currentAlpha > 0) {
                     m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
                 }
