@@ -899,6 +899,20 @@ void TestRdf::testRoundtrip()
         QCOMPARE(position.first, 444);
         QCOMPARE(position.second, 496);
 
+        // search for locations and check the position
+        // Find the location object
+        QList<KoRdfLocation*> locations = rdfDoc->locations();
+        Q_ASSERT(locations.size() == 1);
+        KoRdfLocation *location2 = locations[0];
+        QCOMPARE(location2->dlat(), location->dlat());
+        QCOMPARE(location2->dlong(), location->dlong());
+
+        // check the position for the location object we've just found,
+        // and which should be the same as the other one...
+        position = rdfDoc->findExtent(location2->xmlIdList()[0]);
+        QCOMPARE(position.first, 444);
+        QCOMPARE(position.second, 496);
+
         // Save the document
         KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
         doc->saveAs(url);
@@ -909,19 +923,15 @@ void TestRdf::testRoundtrip()
         QCOMPARE(position.second, 496);
 
         // Find the location object
-        QList<KoRdfLocation*> locations = rdfDoc->locations();
+        locations = rdfDoc->locations();
         Q_ASSERT(locations.size() == 1);
-        KoRdfLocation *location2 = locations[0];
-        QCOMPARE(location2->dlat(), location->dlat());
-        QCOMPARE(location2->dlong(), location->dlong());
-
-        //qDebug() << location2->xmlIdList()[0] << xmlid;
-        //QCOMPARE(location2->xmlIdList()[0], xmlid);
-
+        KoRdfLocation *location3 = locations[0];
+        QCOMPARE(location3->dlat(), location->dlat());
+        QCOMPARE(location3->dlong(), location->dlong());
 
         // check the position for the location object we've just found,
         // and which should be the same as the other one...
-        position = rdfDoc->findExtent(location2->xmlIdList()[0]);
+        position = rdfDoc->findExtent(location3->xmlIdList()[0]);
         QCOMPARE(position.first, 444);
         QCOMPARE(position.second, 496);
 }
