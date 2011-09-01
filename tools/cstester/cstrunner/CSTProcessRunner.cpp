@@ -1,0 +1,116 @@
+#include "CSTProcessRunner.h"
+
+#include <QCoreApplication>
+#include <QDir>
+#include <QString>
+#include <QDebug>
+
+static const char * PROGRAM = "cstwrapper";
+
+CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses)
+: m_resultDir(resultDir)
+, m_concurrentProcesses(concurrentProcesses)
+{
+    QDir docDir(documentDir);
+    QFileInfoList list = docDir.entryInfoList(QDir::Files, QDir::Name);
+    foreach(const QFileInfo &entry, list) {
+        m_documents.append(entry.fileName());
+    }
+}
+
+CSTProcessRunner::~CSTProcessRunner()
+{
+    qDeleteAll(m_processes.keys());
+}
+
+void CSTProcessRunner::start()
+{
+    for (int i = 0; i < m_concurrentProcesses; ++i) {
+        QProcess *process = new QProcess();
+        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
+        startCstester(process);
+    }
+}
+
+void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    QProcess *process = qobject_cast<QProcess *>(sender());
+    if (process) {
+        QString &document = m_processes[process];
+        if (!document.isEmpty()) {
+            qDebug() << "finished:" << process << document << exitCode << exitStatus;
+            if (exitCode != 0) {
+                if (exitCode & 127) {
+                    int signal = exitCode & 127;
+                    m_killed[signal].append(document);
+                    //qDebug() << "exit with signal" << signal;
+                }
+                startCstester(process);
+            }
+            else {
+                QString tmp(document);
+                document = QString();
+                startMd5(process, tmp);
+            }
+        }
+        else {
+            //qDebug() << "md5 done";
+            startCstester(process);
+        }
+    }
+    else {
+        qWarning("processFinished but progress not there");
+    }
+}
+
+void CSTProcessRunner::startCstester(QProcess *process)
+{
+    if (m_documents.isEmpty()) {
+        QMap<QProcess *, QString>::iterator it = m_processes.begin();
+        bool finished = true;
+        for (; it != m_processes.end(); ++it) {
+            if (it.key()->state() != QProcess::NotRunning) {
+                finished = false;
+            }
+        }
+
+        if (finished) {
+            logResult();
+
+            QCoreApplication::exit(0);
+        }
+    }
+    else {
+        //TODO check if result is already there and then do nothing
+        QString document = m_documents.takeFirst();
+        //qDebug() << "start:" << process << document;
+        QStringList arguments;
+        arguments << "--graphicssystem" << "raster" << "--outdir" << m_resultDir << "--create" << document;
+        m_processes[process] = document;
+        process->start(PROGRAM, arguments, QIODevice::NotOpen);
+    }
+}
+
+void CSTProcessRunner::startMd5(QProcess *process, const QString &document)
+{
+    QString dir = m_resultDir + "/" + document + ".check";
+    QStringList arguments;
+    arguments << dir;
+    process->start("cstmd5gen", arguments, QIODevice::NotOpen);
+}
+
+void CSTProcessRunner::logResult()
+{
+    QMap<int, QList<QString> >::const_iterator it = m_killed.constBegin();
+
+    QTextStream out(stdout);
+    out << "Documents resulted in a signal\n";
+    for (; it != m_killed.constEnd(); ++it) {
+        out << "Signal " << it.key() << ", " << it.value().size() << " documents\n";
+        QList<QString>::const_iterator lIt = it.value().constBegin();
+        for (; lIt != it.value().constEnd(); ++lIt)
+        {
+            out << *lIt << "\n";
+        }
+    }
+}
