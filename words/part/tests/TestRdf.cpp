@@ -820,6 +820,7 @@ void TestRdf::createUserStylesheet()
 
 void TestRdf::testRoundtrip()
 {
+    KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
     const QString lorem(
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
                 "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud"
@@ -914,7 +915,7 @@ void TestRdf::testRoundtrip()
         QCOMPARE(position.second, 496);
 
         // Save the document
-        KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
+
         doc->saveAs(url);
 
         // Check the position again
@@ -942,7 +943,6 @@ void TestRdf::testRoundtrip()
         KWDocument *doc = new KWDocument();
         Q_ASSERT(doc);
         doc->setAutoSave(0);
-        KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
         // this also creates a view...
         bool result = doc->openUrl(url);
         Q_ASSERT(result);
