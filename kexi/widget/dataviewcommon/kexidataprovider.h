@@ -41,7 +41,7 @@ class RecordData;
  return ("name", "surname") list, so the cursor's query can be simplified
  and thus more effective.
 */
-class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesListener
+class KEXIDATAVIEWCOMMON_EXPORT KexiFormDataProvider : public KexiDataItemChangesListener
 {
 public:
     KexiFormDataProvider();
@@ -68,7 +68,7 @@ public:
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Implementation for KexiDataItemChangesListener.
-     Implement this to return information whether we're currently at new record or now.
+     Implement this to return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. Returns false here. */
     virtual bool cursorAtNewRow() const;

@@ -29,7 +29,7 @@
 #include <formeditor/form.h>
 #include <formeditor/FormWidget.h>
 #include <formeditor/FormWidgetInterface.h>
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
 class KexiDataAwareObjectInterface;
 class KexiFormScrollView;

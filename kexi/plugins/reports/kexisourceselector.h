@@ -53,7 +53,10 @@ private:
     KPushButton *m_setData;
 
     KexiDBReportData *m_kexiDBData;
+
+#ifndef KEXI_MOBILE
     KexiMigrateReportData *m_kexiMigrateData;
+#endif
 
 private slots:
     void setDataClicked();

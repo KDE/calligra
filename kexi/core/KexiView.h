@@ -27,6 +27,7 @@
 #include "kexiactionproxy.h"
 
 class KexiWindow;
+class KexiRecordNavigatorHandler;
 
 namespace KoProperty
 {

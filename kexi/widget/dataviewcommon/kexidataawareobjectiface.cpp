@@ -41,7 +41,7 @@
 #include <widget/utils/kexirecordmarker.h>
 #include <kexidb/roweditbuffer.h>
 
-#include "kexitableviewheader.h"
+//#include "kexitableviewheader.h"
 
 #include <limits.h>
 
@@ -65,7 +65,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_initDataContentsOnShow = false;
     m_cursorPositionSetExplicityBeforeShow = false;
     m_verticalHeader = 0;
-    m_horizontalHeader = 0;
+//    m_horizontalHeader = 0;
     m_insertItem = 0;
 // m_rowEditBuffer = 0;
     m_spreadSheetMode = false;
@@ -155,14 +155,16 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
             }
         }
     }
+    
     if (m_verticalHeader) {
         m_verticalHeader->clear();
         if (m_data)
             m_verticalHeader->addLabels(m_data->count());
     }
-    if (m_data && m_data->count() == 0)
+//!Change the following:
+    if (m_data && m_data->count() == 0 && m_navPanel)
         m_navPanel->setCurrentRecordNumber(0 + 1);
-
+    
     if (m_data && !theSameData) {
 //! @todo: store sorting settings?
         setSorting(-1);
@@ -206,7 +208,8 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
     }
 
     //update gui mode
-    m_navPanel->setInsertingEnabled(m_data && isInsertingEnabled());
+    if (m_navPanel)
+        m_navPanel->setInsertingEnabled(m_data && isInsertingEnabled());
     if (m_verticalHeader)
         m_verticalHeader->showInsertRow(m_data && isInsertingEnabled());
 
@@ -223,7 +226,8 @@ void KexiDataAwareObjectInterface::initDataContents()
 // QSize s(tableSize());
 // resizeContents(s.width(),s.height());
 
-    m_navPanel->setRecordCount(rows());
+    if (m_navPanel)
+        m_navPanel->setRecordCount(rows());
 
     if (m_data && !m_cursorPositionSetExplicityBeforeShow) {
         //set current row:
@@ -323,8 +327,9 @@ bool KexiDataAwareObjectInterface::sort()
     editorShowFocus(m_curRow, m_curCol);
     if (m_verticalHeader)
         m_verticalHeader->setCurrentRow(m_curRow);
-    if (m_horizontalHeader)
-        m_horizontalHeader->setSelectedSection(m_curCol);
+//!TEMP HACK
+//    if (m_horizontalHeader)
+//        m_horizontalHeader->setSelectedSection(m_curCol);
     if (m_navPanel)
         m_navPanel->setCurrentRecordNumber(m_curRow + 1);
     return true;
@@ -421,7 +426,8 @@ void KexiDataAwareObjectInterface::setInsertingEnabled(bool set)
     if (isInsertingEnabled() == set || (m_data && !m_data->isInsertingEnabled() && set))
         return; //not allowed!
     m_insertingEnabled = (set ? 1 : 0);
-    m_navPanel->setInsertingEnabled(set);
+    if (m_navPanel)
+        m_navPanel->setInsertingEnabled(set);
     if (m_verticalHeader)
         m_verticalHeader->showInsertRow(set);
     if (set)
@@ -496,7 +502,8 @@ void KexiDataAwareObjectInterface::clearSelection()
     m_curCol = -1;
     m_currentItem = 0;
     updateRow(oldRow);
-    m_navPanel->setCurrentRecordNumber(0);
+    if (m_navPanel)
+        m_navPanel->setCurrentRecordNumber(0);
 // setNavRowNumber(-1);
 }
 
@@ -508,8 +515,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
     if (rows() <= 0) {
         if (m_verticalHeader)
             m_verticalHeader->setCurrentRow(-1);
-        if (m_horizontalHeader)
-            m_horizontalHeader->setSelectedSection(-1);
+//!TEMP HACK
+//        if (m_horizontalHeader)
+//           m_horizontalHeader->setSelectedSection(-1);
         if (isInsertingEnabled()) {
             m_currentItem = m_insertItem;
             newrow = 0;
@@ -556,7 +564,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             m_errorMessagePopup->close();
         }
 
-        if (m_curRow != newrow || forceSet)  {//update current row info
+        if ((m_curRow != newrow || forceSet) && m_navPanel)  {//update current row info
             m_navPanel->setCurrentRecordNumber(newrow + 1);
 //   setNavRowNumber(newrow);
 //   d->navBtnPrev->setEnabled(newrow>0);
@@ -576,7 +584,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             //update row number, because number of rows changed
             newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
-            m_navPanel->setCurrentRecordNumber(newrow + 1); //refresh
+            if (m_navPanel)
+                m_navPanel->setCurrentRecordNumber(newrow + 1); //refresh
         }
 
         //change position
@@ -681,8 +690,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         //quite clever: ensure the cell is visible:
         ensureCellVisible(m_curRow, m_curCol);
 
-        if (m_horizontalHeader && (oldCol != m_curCol || forceSet))
-            m_horizontalHeader->setSelectedSection(m_curCol);
+        //!TEMP HACK
+//        if (m_horizontalHeader && (oldCol != m_curCol || forceSet))
+//            m_horizontalHeader->setSelectedSection(m_curCol);
 
         /*emit*/ itemSelected(m_currentItem);
         /*emit*/ cellSelected(m_curCol, m_curRow);
@@ -782,7 +792,8 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         if (inserting) {
 //   emit rowInserted(d->pCurrentItem);
             //update navigator's data
-            m_navPanel->setRecordCount(rows());
+            if (m_navPanel)
+                m_navPanel->setRecordCount(rows());
         } else {
 //   emit rowUpdated(d->pCurrentItem);
         }
@@ -1285,7 +1296,8 @@ void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record
             m_verticalHeaderAlreadyAdded = false;
 
         //update navigator's data
-        m_navPanel->setRecordCount(rows());
+        if (m_navPanel)
+            m_navPanel->setRecordCount(rows());
 
         if (m_curRow >= (int)pos) {
             //update
@@ -1490,7 +1502,8 @@ void KexiDataAwareObjectInterface::slotRowDeleted()
         updateAllVisibleRowsBelow(m_curRow); //needed for KexiTableView
 
         //update navigator's data
-        m_navPanel->setRecordCount(rows());
+        if (m_navPanel)
+            m_navPanel->setRecordCount(rows());
 
         m_rowWillBeDeleted = -1;
     }

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Kexi/Handler
+GenericName=AutoForm
+Name=AutoForm
+X-KDE-Library=kexihandler_autoform
+X-KDE-ParentApp=kexi
+X-Kexi-PartVersion=2
+X-Kexi-TypeName=autoform
+X-Kexi-Class=org.kexi-project.autoform
+X-Kexi-ItemIcon=form
+X-Kexi-SupportsDataExport=false
+X-Kexi-SupportsPrinting=false

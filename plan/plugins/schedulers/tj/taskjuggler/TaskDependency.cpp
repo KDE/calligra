@@ -79,5 +79,6 @@ QDebug operator<<( QDebug dbg, const TJ::TaskDependency &dep )
     } else {
         dbg.nospace()<<"id="<<dep.getTaskRefId();
     }
+    dbg << ']';
     return dbg;
 }

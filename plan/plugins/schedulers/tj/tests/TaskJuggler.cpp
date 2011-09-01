@@ -123,11 +123,11 @@ void TaskJuggler::initTestCase()
     qDebug()<<"Time zone initiated";
     project = new TJ::Project();
     qDebug()<<"Project created:"<<project;
-    project->setScheduleGranularity( 60 ); // seconds
+    project->setScheduleGranularity( TJ::ONEHOUR ); // seconds
 
     QDateTime dt = QDateTime::fromString( "2011-07-01 08:00:00", Qt::ISODate );
-    project->setStart(dt.toTime_t());
-    project->setEnd(dt.addDays(7).toTime_t());
+    project->setStart( dt.toTime_t() );
+    project->setEnd( dt.addDays(7).addSecs( -1 ).toTime_t() );
 
     qDebug()<<project->getStart()<<project->getEnd();
 
@@ -277,7 +277,7 @@ void TaskJuggler::dependency()
     QVERIFY( d != 0 );
 }
 
-void TaskJuggler::schedule()
+void TaskJuggler::scheduleResource()
 {
     QCOMPARE( project->getMaxScenarios(), 1 );
 
@@ -301,6 +301,125 @@ void TaskJuggler::schedule()
 
     qDebug()<<QDateTime::fromTime_t( t->getStart( 0 ) )<<QDateTime::fromTime_t( t->getEnd( 0 ) );
     
+}
+
+void TaskJuggler::scheduleConstraints()
+{
+    QString s = "Test one ALAP milestone --------------------";
+    qDebug()<<s;
+    TJ::Project *proj = new TJ::Project();
+    proj->setScheduleGranularity( TJ::ONEHOUR ); // seconds
+
+    QDateTime pstart = QDateTime::fromString( "2011-07-01 00:00:00", Qt::ISODate );
+    QDateTime pend = pstart.addDays(1);
+    proj->setStart( pstart.toTime_t() );
+    proj->setEnd( pend.toTime_t() );
+
+    TJ::Task *m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+    m->setMilestone( true );
+    m->setScheduling( TJ::Task::ALAP );
+    m->setSpecifiedEnd( 0, proj->getEnd() - 1 );
+
+    QVERIFY( proj->pass2( true ) );
+    QVERIFY( proj->scheduleAllScenarios() );
+
+    QDateTime mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+    QDateTime mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+    QCOMPARE( mstart, pend );
+    QCOMPARE( mend, pend.addSecs( -1 ) );
+
+    delete proj;
+
+    s = "Test one ALAP milestone + one ASAP task --------------------";
+    qDebug()<<s;
+    proj = new TJ::Project();
+    proj->setScheduleGranularity( TJ::ONEHOUR ); // seconds
+
+    proj->setStart( pstart.toTime_t() );
+    proj->setEnd( pend.toTime_t() );
+
+    m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+    m->setMilestone( true );
+    m->setScheduling( TJ::Task::ALAP );
+    m->setSpecifiedEnd( 0, proj->getEnd() - 1 );
+
+    TJ::Task *t = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+    t->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t->setSpecifiedStart( 0, proj->getStart() );
+
+    QVERIFY( proj->pass2( true ) );
+    QVERIFY( proj->scheduleAllScenarios() );
+
+    QDateTime tstart = QDateTime::fromTime_t( t->getStart( 0 ) );
+    QDateTime tend = QDateTime::fromTime_t( t->getEnd( 0 ) );
+    QCOMPARE( tstart, pstart );
+    QCOMPARE( tend, pstart.addSecs( TJ::ONEHOUR - 1 ) );
+
+    mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+    mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+    QCOMPARE( mstart, pend );
+    QCOMPARE( mend, pend.addSecs( -1 ) );
+
+    delete proj;
+
+    s = "Test combination of ASAP/ALAP tasks and milestones --------------------";
+    qDebug()<<s;
+    proj = new TJ::Project();
+    proj->setScheduleGranularity( 300 ); // seconds
+
+    proj->setStart( pstart.toTime_t() );
+    proj->setEnd( pend.toTime_t() );
+
+    TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+    t1->setScheduling( TJ::Task::ASAP );
+    t1->setSpecifiedStart( 0, proj->getStart() );
+    t1->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+
+    TJ::Task *t2 = new TJ::Task(proj, "T2", "T2", 0, QString(), 0);
+    t2->setScheduling( TJ::Task::ALAP );
+    t2->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t2->setSpecifiedEnd( 0, proj->getEnd() - 1 );
+//     m->addPrecedes( t->getId() );
+
+    TJ::Task *m1 = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+    m1->setMilestone( true );
+    m1->setScheduling( TJ::Task::ASAP );
+    m1->addDepends( t1->getId() );
+    m1->addPrecedes( t2->getId() );
+
+    TJ::Task *m2 = new TJ::Task(proj, "M2", "M2", 0, QString(), 0);
+    m2->setMilestone( true );
+    m2->setScheduling( TJ::Task::ALAP );
+    m2->addDepends( t1->getId() );
+    m2->addPrecedes( t2->getId() );
+
+    TJ::Task *t3 = new TJ::Task(proj, "T3", "T3", 0, QString(), 0);
+    t3->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t3->addPrecedes( m2->getId() );
+    t3->setScheduling( TJ::Task::ALAP ); // since t4 is ALAP, this must be ALAP too
+
+    TJ::Task *t4 = new TJ::Task(proj, "T4", "T4", 0, QString(), 0);
+    t4->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t4->addPrecedes( t3->getId() );
+    t4->setScheduling( TJ::Task::ALAP );
+
+    QVERIFY( proj->pass2( true ) );
+    QVERIFY( proj->scheduleAllScenarios() );
+
+    QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+    QDateTime t2start = QDateTime::fromTime_t( t2->getStart( 0 ) );
+    QDateTime t3start = QDateTime::fromTime_t( t3->getStart( 0 ) );
+    QDateTime t3end = QDateTime::fromTime_t( t3->getEnd( 0 ) );
+    QDateTime t4end = QDateTime::fromTime_t( t4->getEnd( 0 ) );
+    QDateTime m1end = QDateTime::fromTime_t( m1->getEnd( 0 ) );
+    QDateTime m2start = QDateTime::fromTime_t( m2->getStart( 0 ) );
+    QDateTime m2end = QDateTime::fromTime_t( m2->getEnd( 0 ) );
+
+    QCOMPARE( m1end, t1end );
+    QCOMPARE( m2start, t2start );
+    QCOMPARE( m2end, t3end );
+    QCOMPARE( t3start, t4end.addSecs(1) );
+
 }
 
 } //namespace KPlato
