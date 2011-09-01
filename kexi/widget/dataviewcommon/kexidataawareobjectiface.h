@@ -42,7 +42,7 @@ class KMenu;
 class KexiTableViewData;
 class KexiRecordMarker;
 class KexiTableViewHeader;
-class KexiRecordNavigator;
+class KexiRecordNavigatorIface;
 #include <core/kexidataiteminterface.h>
 
 namespace KexiDB
@@ -68,7 +68,7 @@ class RecordData;
  This is not performed in KexiDataAwareObjectInterface because you may need
  to access m_data in your desctructor.
 */
-class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
+class KEXIDATAVIEWCOMMON_EXPORT KexiDataAwareObjectInterface
 {
 public:
     KexiDataAwareObjectInterface();
@@ -365,7 +365,7 @@ public:
 
     /*! Cancels row editing All changes made to the editing
      row during this current session will be undone.
-     \return true on success or false on failure. */
+     \return true on success or false on failure (e.g. when editor does not exist) */
     virtual bool cancelRowEdit();
 
     /*! Accepts row editing. All changes made to the editing
@@ -886,7 +886,7 @@ protected:
 //  KexiTableEdit *m_editor;
 
     /*! Navigation panel, used if navigationPanelEnabled is true. */
-    KexiRecordNavigator *m_navPanel; //!< main navigation widget
+    KexiRecordNavigatorIface *m_navPanel; //!< main navigation widget
 
     bool m_navPanelEnabled;
 

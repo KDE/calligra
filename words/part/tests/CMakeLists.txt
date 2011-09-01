@@ -66,4 +66,9 @@ if( Soprano_FOUND )
   target_link_libraries(TestRdf wordsprivate ${QT_QTTEST_LIBRARY})
 endif( Soprano_FOUND )
 
-########### end ###############
+########### next target ###############
+
+set(TestKoBookmark_test_SRCS TestKoBookmark.cpp)
+kde4_add_unit_test(TestKoBookmark TESTNAME words-part-TestKoBookmark  ${TestKoBookmark_test_SRCS})
+target_link_libraries(TestKoBookmark wordsprivate ${QT_QTTEST_LIBRARY})
+

@@ -21,13 +21,13 @@
 #ifndef KEXIFORMSCROLLVIEW_H
 #define KEXIFORMSCROLLVIEW_H
 
-#include "kexidataprovider.h"
+#include <widget/dataviewcommon/kexidataprovider.h>
 #include <formeditor/kexiformeventhandler.h>
 #include "widgets/kexidbform.h"
 #include <widget/kexiscrollview.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include <widget/tableview/kexidataawareobjectiface.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
 /*! This class also implements:
@@ -38,6 +38,9 @@
 
     @see KexiTableView
 */
+
+#include <core/KexiRecordNavigatorHandler.h>
+
 class KEXIFORMUTILS_EXPORT KexiFormScrollView :
             public KexiScrollView,
             public KexiRecordNavigatorHandler,
@@ -162,9 +165,9 @@ signals:
     void itemSelected(KexiDB::RecordData*);
     void cellSelected(int col, int row);
     void sortedColumnChanged(int col);
-    virtual void rowEditStarted(int row);
-    virtual void rowEditTerminated(int row);
-    virtual void updateSaveCancelActions();
+    void rowEditStarted(int row);
+    void rowEditTerminated(int row);
+    void updateSaveCancelActions();
     void reloadActions();
 
 protected slots:

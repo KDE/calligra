@@ -26,7 +26,7 @@
 #include <QResizeEvent>
 #include <QDropEvent>
 
-#include <widget/kexidataawareview.h>
+#include <widget/dataviewcommon/kexidataawareview.h>
 
 #include <core/KexiWindow.h>
 #include <core/KexiWindowData.h>

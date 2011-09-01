@@ -18,7 +18,7 @@
  */
 
 #include "kexiformdataiteminterface.h"
-#include "kexiformscrollview.h"
+#include <kexidataawareobjectiface.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
 
@@ -59,12 +59,22 @@ void KexiFormDataItemInterface::setDisplayDefaultValue(QWidget* widget, bool dis
     }
 }
 
+#if 0
 void KexiFormDataItemInterface::cancelEditor()
 {
     QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
     KexiFormScrollView* view = KexiUtils::findParent<KexiFormScrollView*>(parentWidget);
     if (view)
         view->cancelEditor();
+}
+#endif
+
+void KexiFormDataItemInterface::cancelEditor()
+{
+    QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
+    KexiDataAwareObjectInterface *dataAwareObject = KexiUtils::findParentByType<KexiDataAwareObjectInterface*>(parentWidget);
+    if (dataAwareObject)
+        dataAwareObject->cancelEditor();
 }
 
 void KexiFormDataItemInterface::selectAllOnFocusIfNeeded()

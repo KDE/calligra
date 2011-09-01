@@ -39,7 +39,7 @@ class KexiSharedActionClient;
  The view also implements KexiSearchAndReplaceViewInterface to support search/replace features
  used by shared KexiFindDialog.
 */
-class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView,
+class KEXIDATAVIEWCOMMON_EXPORT KexiDataAwareView : public KexiView,
             public KexiSearchAndReplaceViewInterface
 {
     Q_OBJECT

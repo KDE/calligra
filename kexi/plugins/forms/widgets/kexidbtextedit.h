@@ -21,7 +21,7 @@
 #ifndef KexiDBTextEdit_H
 #define KexiDBTextEdit_H
 
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
 #include <formeditor/FormWidgetInterface.h>

@@ -40,7 +40,10 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 
     m_conn = conn;
     m_kexiDBData = 0;
+
+#ifndef KEXI_MOBILE
     m_kexiMigrateData = 0;
+#endif
 
     m_layout = new QVBoxLayout(this);
     m_sourceType = new QComboBox(this);
@@ -82,7 +85,9 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 KexiSourceSelector::~KexiSourceSelector()
 {
     delete m_kexiDBData;
+#ifndef KEXI_MOBILE
     delete m_kexiMigrateData;
+#endif
 }
 
 void KexiSourceSelector::setConnectionData(QDomElement c)
@@ -130,10 +135,12 @@ KoReportData* KexiSourceSelector::sourceData()
         m_kexiDBData = 0;
     }
 
+#ifndef KEXI_MOBILE
     if (m_kexiMigrateData) {
         delete m_kexiMigrateData;
         m_kexiMigrateData = 0;
     }
+#endif
 
 //!@TODO Fix when enable external data
 #ifndef NO_EXTERNAL_SOURCES
@@ -141,10 +148,14 @@ KoReportData* KexiSourceSelector::sourceData()
         m_kexiDBData = new KexiDBReportData(m_internalSource->currentText(), m_conn);
         return m_kexiDBData;
     }
+
+#ifndef KEXI_MOBILE
     if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "external") {
         m_kexiMigrateData = new KexiMigrateReportData(m_externalSource->text());
         return m_kexiMigrateData;
     }
+#endif
+
 #else
     m_kexiDBData = new KexiDBReportData(m_internalSource->currentText(), m_conn);
     return m_kexiDBData;
