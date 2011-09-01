@@ -23,10 +23,10 @@
 #include <QDebug>
 #include <QString>
 #include <QTextDocument>
+#include <QTextTable>
 #include <QList>
 
 #include <KoBookmark.h>
-#include <KoTextInlineRdf.h>
 #include <KoStore.h>
 #include <KoTextDocument.h>
 #include <KoApplication.h>
@@ -37,7 +37,6 @@
 #include <KoOdfWriteStore.h>
 #include <KoStyleManager.h>
 #include <KoXmlNS.h>
-#include <KoTextRdfCore.h>
 #include <KoDocument.h>
 #include <KoTextShapeDataBase.h>
 #include <KoTextDocument.h>
@@ -103,7 +102,6 @@ void TestKoBookmark::testInsertion()
         KoInlineObject *obj = inlineObjectManager.inlineTextObject(fmt);
         KoBookmark *bm = dynamic_cast<KoBookmark*>(obj);
         if (bm) {
-            qDebug() << "found bookmark" << bm->name() << bm->type() << cursor.position();
             bookmarksFound++;
         }
         cursor = doc.find(QString(QChar::ObjectReplacementCharacter), cursor.position());
@@ -181,7 +179,6 @@ void TestKoBookmark::testRoundtrip()
             KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
             KoBookmark *bm = dynamic_cast<KoBookmark*>(obj);
             if (bm) {
-                qDebug() << "found bookmark" << bm->name() << cursor.position();
                 bookmarksFound++;
             }
             cursor = textDocument->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
@@ -195,7 +192,7 @@ void TestKoBookmark::testRoundtrip()
         KWDocument *doc = new KWDocument();
         Q_ASSERT(doc);
         doc->setAutoSave(0);
-        KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
+        KUrl url(QString(FILES_OUTPUT_DIR) + "/bookmark_roundtrip.odt");
         // this also creates a view...
         bool result = doc->openUrl(url);
         Q_ASSERT(result);
@@ -221,7 +218,7 @@ void TestKoBookmark::testRoundtrip()
             KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
             KoBookmark *bm = dynamic_cast<KoBookmark*>(obj);
             if (bm) {
-                qDebug() << "found bookmark" << bm->name() << cursor.position();
+
                 bookmarksFound++;
             }
             cursor = textDocument->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
