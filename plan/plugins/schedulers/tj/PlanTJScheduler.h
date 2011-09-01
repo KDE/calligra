@@ -98,7 +98,7 @@ protected:
     void setConstraint( TJ::Task *job, KPlato::Task *task );
     void addRequests();
     void addRequest( TJ::Task *job, Task *task );
-
+    void addStartEndJob();
     bool taskFromTJ( TJ::Task *job, Task *task );
 
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
@@ -116,9 +116,7 @@ private:
     bool m_usePert;
     bool m_backward;
     TJ::Project *m_tjProject;
-    DateTime m_starttime;
-    DateTime m_targettime;
-    qint64 m_timeunit;
+//     Task *m_backwardTask;
 
     QMap<TJ::Task*, Task*> m_taskmap;
     QMap<TJ::Resource*, Resource*> m_resourcemap;
