@@ -869,7 +869,6 @@ void TestRdf::testRoundtrip()
         editor->insertInlineObject(startmark);
 
         KoRdfLocation *location = new KoRdfLocation(this, rdfDoc);
-        location->setName("testlocation");
         location->setDlat(5.0);
         location->setDlong(10.0);
 
@@ -893,11 +892,39 @@ void TestRdf::testRoundtrip()
         editor->movePosition(QTextCursor::NextCharacter);
         editor->insertInlineObject(endmark);
 
+        // Check the position of the object
+        Q_ASSERT(location->xmlIdList().length() == 1);
+        QString xmlid = location->xmlIdList()[0];
+        QPair<int,int> position = rdfDoc->findExtent(location->xmlIdList()[0]);
+        QCOMPARE(position.first, 444);
+        QCOMPARE(position.second, 496);
+
         // Save the document
         KUrl url(QString(FILES_OUTPUT_DIR) + "/rdf_roundtrip.odt");
         doc->saveAs(url);
-        delete doc;
-    }
+
+        // Check the position again
+        position = rdfDoc->findExtent(xmlid);
+        QCOMPARE(position.first, 444);
+        QCOMPARE(position.second, 496);
+
+        // Find the location object
+        QList<KoRdfLocation*> locations = rdfDoc->locations();
+        Q_ASSERT(locations.size() == 1);
+        KoRdfLocation *location2 = locations[0];
+        QCOMPARE(location2->dlat(), location->dlat());
+        QCOMPARE(location2->dlong(), location->dlong());
+
+        //qDebug() << location2->xmlIdList()[0] << xmlid;
+        //QCOMPARE(location2->xmlIdList()[0], xmlid);
+
+
+        // check the position for the location object we've just found,
+        // and which should be the same as the other one...
+        position = rdfDoc->findExtent(location2->xmlIdList()[0]);
+        QCOMPARE(position.first, 444);
+        QCOMPARE(position.second, 496);
+}
     {
         // Load the document
         KWDocument *doc = new KWDocument();
@@ -909,6 +936,17 @@ void TestRdf::testRoundtrip()
         Q_ASSERT(result);
 
         KoDocumentRdf *rdfDoc = doc->documentRdf();
+        // get the main text frame
+        KWTextFrameSet *mainFrameSet = doc->mainFrameSet();
+        Q_ASSERT(mainFrameSet);
+
+        QTextDocument *textDocument = mainFrameSet->document();
+        Q_ASSERT(textDocument);
+
+        // Insert some text and some rdf
+        KoTextDocument koTextDocument(textDocument);
+        KoTextEditor *editor = koTextDocument.textEditor();
+        editor->updateInlineObjectPosition();
 
         // Check for the rdf statements and spans
         QList<KoRdfLocation*> locations = rdfDoc->locations();
@@ -920,9 +958,15 @@ void TestRdf::testRoundtrip()
         Q_ASSERT(location->xmlIdList().length() == 1);
         QString xmlid = location->xmlIdList()[0];
         QPair<int,int> position = rdfDoc->findExtent(xmlid);
+        qDebug() << position;
         Q_ASSERT(position.first == 443);
         Q_ASSERT(position.second == 545);
 
+
+        editor->setPosition(position.first + 1);
+        Q_ASSERT(editor->cursor()->currentTable());
+        editor->setPosition(position.second + 1);
+        Q_ASSERT(!editor->cursor()->currentTable());
         delete doc;
     }
 }
