@@ -2,9 +2,7 @@
 Type=Service
 ServiceTypes=Kexi/Handler
 GenericName=AutoForm
-GenericName[x-test]=xxAutoFormsxx
 Name=AutoForm
-Name[x-test]=xxAutoFormsxx
 X-KDE-Library=kexihandler_autoform
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2
