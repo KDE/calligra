@@ -22,7 +22,7 @@
 #ifndef KEXIDATATABLE_H
 #define KEXIDATATABLE_H
 
-#include "kexidataawareview.h"
+#include <widget/dataviewcommon/kexidataawareview.h>
 
 class KexiDataTableView;
 class KexiTableView;
@@ -39,7 +39,7 @@ class Cursor;
  or from KexiDB-compatible database source.
  @see KexiFormView
 */
-class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDataAwareView
+class KEXIDATATABLE_EXPORT KexiDataTable : public KexiDataAwareView
 {
     Q_OBJECT
 

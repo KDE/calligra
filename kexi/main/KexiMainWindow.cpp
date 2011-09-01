@@ -108,6 +108,7 @@
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
+
 //2.x #include "printing/kexisimpleprintingpart.h"
 //2.x #include "printing/kexisimpleprintingpagesetup.h"
 
@@ -247,7 +248,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
-    KGlobal::locale()->insertCatalog("koffice");
+    KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
 
 #ifdef CUSTOM_VERSION

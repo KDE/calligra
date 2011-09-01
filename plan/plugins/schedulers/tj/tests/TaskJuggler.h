@@ -42,7 +42,9 @@ private slots:
     void oneResource();
     void allocation();
     void dependency();
-    void schedule();
+    void scheduleResource();
+
+    void scheduleConstraints();
 
 private:
     void initTimezone();

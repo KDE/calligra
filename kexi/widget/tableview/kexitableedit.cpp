@@ -19,7 +19,7 @@
  */
 
 #include "kexitableedit.h"
-#include "kexidataawareobjectiface.h"
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 
@@ -33,16 +33,28 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#ifdef KEXI_MOBILE
 KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
-        : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
+        : QWidget(parent)
         , m_column(&column)
 // ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
-        , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
         , m_usesSelectedTextColor(true)
         , m_view(0)
 // ,m_hasFocusableWidget(true)
 // ,m_acceptEditorAfterDeleteContents(false)
+#else
+        KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
+        : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
+        , m_column(&column)
+        // ,m_field(&f)
+        // ,m_type(f.type()) //copied because the rest of code uses m_type
+        , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
+        , m_usesSelectedTextColor(true)
+        , m_view(0)
+        // ,m_hasFocusableWidget(true)
+        // ,m_acceptEditorAfterDeleteContents(false)   
+#endif
 {
 //    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
@@ -97,8 +109,10 @@ void KexiTableEdit::setViewWidget(QWidget *v)
 
 void KexiTableEdit::moveChild(QWidget * child, int x, int y)
 {
+#ifndef KEXI_MOBILE
     if (m_scrollView)
         m_scrollView->moveChild(child, x, y);
+#endif
 }
 
 void KexiTableEdit::resize(int w, int h)
@@ -210,8 +224,10 @@ int KexiTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm)
 
 void KexiTableEdit::repaintRelatedCell()
 {
+#ifndef KEXI_MOBILE
     if (dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView))
         dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
+#endif
 }
 
 bool KexiTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,

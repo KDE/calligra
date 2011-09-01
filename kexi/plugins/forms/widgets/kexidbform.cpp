@@ -41,7 +41,7 @@
 #include <formeditor/objecttree.h>
 //2.0 #include <formeditor/formmanager.h>
 #include <formeditor/widgetlibrary.h>
-#include <widget/tableview/kexidataawareobjectiface.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <widget/kexiscrollview.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>

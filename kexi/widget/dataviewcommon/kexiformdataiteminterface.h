@@ -30,7 +30,7 @@ class Field;
 }
 
 //! An interface for declaring form widgets to be data-aware.
-class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterface
+class KEXIDATAVIEWCOMMON_EXPORT KexiFormDataItemInterface : public KexiDataItemInterface
 {
 public:
     KexiFormDataItemInterface();
