@@ -934,6 +934,8 @@ void TestRdf::testRoundtrip()
         position = rdfDoc->findExtent(location3->xmlIdList()[0]);
         QCOMPARE(position.first, 444);
         QCOMPARE(position.second, 496);
+
+        delete doc;
     }
     {
         // Load the document

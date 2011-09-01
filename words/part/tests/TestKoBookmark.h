@@ -20,6 +20,8 @@
 #define TEST_KO_BOOKMARK_H
 
 #include <QtCore/QObject>
+#include <QtTest/QtTest>
+#include <qtest_kde.h>
 
 class TestKoBookmark: public QObject
 {
@@ -28,6 +30,7 @@ class TestKoBookmark: public QObject
 private slots:
 
     void testInsertion();
+    void testRoundtrip();
 };
 
 #endif // TEST_KO_BOOKMARK_H
