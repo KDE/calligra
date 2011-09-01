@@ -69,7 +69,7 @@ public:
     KexiItemMenu(QWidget *parent, KActionCollection *collection);
     ~KexiItemMenu();
 
-    //! Rebuilds the menu entirely using infromation obtained from \a partInfo
+    //! Rebuilds the menu entirely using information obtained from \a partInfo
     //! and \a partItem.
     void update(KexiPart::Info* partInfo, KexiPart::Item* partItem);
 };
@@ -81,7 +81,7 @@ public:
     KexiGroupMenu(QWidget *parent, KActionCollection *collection);
     ~KexiGroupMenu();
 
-    //! Rebuilds the menu entirely using infromation obtained from \a partInfo.
+    //! Rebuilds the menu entirely using information obtained from \a partInfo.
     void update(KexiPart::Info* partInfo);
 };
 
