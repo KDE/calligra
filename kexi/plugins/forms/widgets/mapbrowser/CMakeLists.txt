@@ -22,6 +22,7 @@ target_link_libraries(
     kexidatatable
     kexiextendedwidgets
     kexiformutils
+    kexidataviewcommon
     ${MARBLE_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}

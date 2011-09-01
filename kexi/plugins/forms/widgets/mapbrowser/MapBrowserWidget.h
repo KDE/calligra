@@ -26,7 +26,7 @@
 #include "widgetfactory.h"
 #include "container.h"
 #include "FormWidgetInterface.h"
-#include <kexi/plugins/forms/kexiformdataiteminterface.h>
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
 class MapBrowserWidget : public Marble::MarbleWidget, 
 			 public KFormDesigner::FormWidgetInterface,
