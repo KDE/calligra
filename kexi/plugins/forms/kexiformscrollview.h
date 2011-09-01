@@ -27,7 +27,6 @@
 #include <widget/kexiscrollview.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include <widget/tableview/kexidataawareobjectiface.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
@@ -166,9 +165,9 @@ signals:
     void itemSelected(KexiDB::RecordData*);
     void cellSelected(int col, int row);
     void sortedColumnChanged(int col);
-    virtual void rowEditStarted(int row);
-    virtual void rowEditTerminated(int row);
-    virtual void updateSaveCancelActions();
+    void rowEditStarted(int row);
+    void rowEditTerminated(int row);
+    void updateSaveCancelActions();
     void reloadActions();
 
 protected slots:

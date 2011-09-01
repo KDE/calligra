@@ -1,6 +1,6 @@
-/*
-    <one line to give the library's name and an idea of what it does.>
+/* This file is part of the KDE project
     Copyright (C) 2011  Adam Pigg <piggz1@gmail.com>
+    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -50,33 +50,22 @@ protected:
     
 //Reimplement functions from KexiDataAwareObjectInterface
     virtual void addHeaderColumn(const QString& caption, const QString& description, const QIcon& icon, int size);
-    virtual void cellSelected(int col, int row);
     virtual void clearColumnsInternal(bool repaint);
     virtual void copySelection();
     virtual void createEditor(int row, int col, const QString& addText = QString(), bool removeOld = false);
-    virtual void currentItemDeleteRequest();
     virtual int currentLocalSortColumn() const;
     virtual int currentLocalSortingOrder() const;
     virtual void cutSelection();
-    virtual void dataRefreshed();
-    virtual void dataSet(KexiTableViewData* data);
+    
     virtual KexiDataItemInterface* editor(int col, bool ignoreMissingEditor = false);
     virtual void editorShowFocus(int row, int col);
     virtual void ensureCellVisible(int row, int col);
-    virtual void itemChanged(KexiDB::RecordData* , int row, int col);
-    virtual void itemChanged(KexiDB::RecordData* , int row, int col, QVariant oldValue);
-    virtual void itemDeleteRequest(KexiDB::RecordData* , int row, int col);
-    virtual void itemSelected(KexiDB::RecordData* );
     virtual void initDataContents();
     virtual int lastVisibleRow() const;
-    virtual void newItemAppendedForAfterDeletingInSpreadSheetMode();
     virtual void paste();
-    virtual void reloadActions();
-    virtual void rowEditTerminated(int row);
     virtual int rowsPerPage() const;
     virtual void setLocalSortingOrder(int col, int order);
     virtual void selectCellInternal();
-    virtual void sortedColumnChanged(int col);
     virtual void updateCell(int row, int col);
     virtual void updateCurrentCell();
     virtual void updateGUIAfterSorting();
@@ -88,7 +77,48 @@ protected:
     
     //Reimplement from KexiFormDataProvider
     virtual void valueChanged(KexiDataItemInterface* item);
+
     
+signals:
+    void dataSet(KexiTableViewData *data);
+
+    void itemSelected(KexiDB::RecordData *);
+    void cellSelected(int col, int row);
+
+    void itemReturnPressed(KexiDB::RecordData *, int row, int col);
+    void itemDblClicked(KexiDB::RecordData *, int row, int col);
+    void itemMouseReleased(KexiDB::RecordData *, int row, int col);
+
+    void dragOverRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
+    void droppedAtRow(KexiDB::RecordData *record, int row, QDropEvent *e, KexiDB::RecordData*& newRecord);
+
+    /*! Data has been refreshed on-screen - emitted from initDataContents(). */
+    void dataRefreshed();
+
+    void itemChanged(KexiDB::RecordData *, int row, int col);
+    void itemChanged(KexiDB::RecordData *, int row, int col, QVariant oldValue);
+    void itemDeleteRequest(KexiDB::RecordData *, int row, int col);
+    void currentItemDeleteRequest();
+    //! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
+    void newItemAppendedForAfterDeletingInSpreadSheetMode();
+// void addRecordRequest();
+// void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
+    void sortedColumnChanged(int col);
+
+    //! emitted when row editing is started (for updating or inserting)
+    void rowEditStarted(int row);
+
+    //! emitted when row editing is terminated (for updating or inserting)
+    //! no matter if accepted or not
+    void rowEditTerminated(int row);
+
+    //! emitted when state of 'save/cancel record changes' actions should be updated.
+    void updateSaveCancelActions();
+    
+    //! Emitted in initActions() to force reload actions
+    //! You should remove existing actions and add them again.
+    void reloadActions();
+
 private:
     QLabel *m_title;
     QGridLayout *m_layout;

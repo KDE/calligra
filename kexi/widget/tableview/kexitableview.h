@@ -417,14 +417,14 @@ signals:
 // void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
     void sortedColumnChanged(int col);
 
-    //! emmited when row editing is started (for updating or inserting)
+    //! emitted when row editing is started (for updating or inserting)
     void rowEditStarted(int row);
 
-    //! emmited when row editing is terminated (for updating or inserting)
+    //! emitted when row editing is terminated (for updating or inserting)
     //! no matter if accepted or not
     void rowEditTerminated(int row);
 
-    //! emmited when state of 'save/cancel record changes' actions should be updated.
+    //! emitted when state of 'save/cancel record changes' actions should be updated.
     void updateSaveCancelActions();
     
     //! Emitted in initActions() to force reload actions
@@ -622,7 +622,7 @@ protected:
 
     /*! Shows context menu at \a pos for selected cell
      if menu is configured,
-     else: contextMenuRequested() signal is emmited.
+     else: contextMenuRequested() signal is emitted.
      Method used in contentsMousePressEvent() (for right button)
      and keyPressEvent() for Qt::Key_Menu key.
      If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.

@@ -108,7 +108,7 @@ public slots:
 signals:
     void openItem(KexiPart::Item*, Kexi::ViewMode viewMode);
 
-    /*! this signal is emmited when user double clicked (or single -depending on settings)
+    /*! this signal is emitted when user double clicked (or single -depending on settings)
      or pressed return ky on the part item.
      This signal differs from openItem() signal in that if the object is already opened
      in view mode other than \a viewMode, the mode is not changed. */
