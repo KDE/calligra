@@ -22,40 +22,24 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
-#include "KarbonFactory.h"
+#include "KarbonConfigInterfacePage.h"
 
-#include <KoGridData.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigDocumentPage.h>
 #include <KoConfigMiscPage.h>
 
-#include <klocale.h>
-#include <knuminput.h>
-#include <kcolorbutton.h>
-#include <kcomponentdata.h>
-#include <kicon.h>
-#include <kvbox.h>
-#include <kconfig.h>
-#include <kcombobox.h>
-
-#include <QtGui/QCheckBox>
-#include <QtGui/QLabel>
-#include <QtGui/QGroupBox>
-#include <QtGui/QGridLayout>
-
-#include <float.h>
-
+#include <KLocale>
+#include <KIcon>
 
 KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
-        : KPageDialog(parent)
+    : KPageDialog(parent)
 {
     setFaceType(List);
     setCaption(i18n("Configure"));
     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
     setDefaultButton(KDialog::Ok);
 
-    m_interfacePage = new ConfigInterfacePage(parent);
+    m_interfacePage = new KarbonConfigInterfacePage(parent);
     KPageWidgetItem* item = addPage(m_interfacePage, i18n("Interface"));
     item->setHeader(i18n("Interface"));
     item->setIcon(KIcon(BarIcon("preferences-desktop-theme", KIconLoader::SizeMedium)));
@@ -103,107 +87,5 @@ void KarbonConfigureDialog::slotDefault()
     else if (curr == m_defaultDocPage)
         m_defaultDocPage->slotDefault();
 }
-
-
-ConfigInterfacePage::ConfigInterfacePage(KarbonView* view, char* name)
-{
-    setObjectName(name);
-
-    m_view = view;
-    m_config = KarbonFactory::componentData().config();
-
-    m_oldRecentFiles = 10;
-    m_oldDockerFontSize = 8;
-    m_oldCanvasColor = QColor(Qt::white);
-    bool oldShowStatusBar = true;
-
-    QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Interface"), this);
-
-    KConfigGroup emptyGroup = m_config->group("GUI");
-    m_oldDockerFontSize = emptyGroup.readEntry("palettefontsize", m_oldDockerFontSize);
-
-    if (m_config->hasGroup("Interface")) {
-        KConfigGroup interfaceGroup = m_config->group("Interface");
-
-        m_oldRecentFiles = interfaceGroup.readEntry("NbRecentFile", m_oldRecentFiles);
-        oldShowStatusBar = interfaceGroup.readEntry("ShowStatusBar", true);
-        m_oldCanvasColor = interfaceGroup.readEntry("CanvasColor", m_oldCanvasColor);
-    }
-
-    QGridLayout *grpLayout = new QGridLayout(tmpQGroupBox);
-
-    grpLayout->addWidget(new QLabel(i18n("Show status bar:"), tmpQGroupBox), 0, 0);
-    m_showStatusBar = new QCheckBox("", tmpQGroupBox);
-    m_showStatusBar->setChecked(oldShowStatusBar);
-    grpLayout->addWidget(m_showStatusBar, 0, 1);
-
-    grpLayout->addWidget(new QLabel(i18n("Number of recent files:"), tmpQGroupBox), 1, 0);
-    m_recentFiles = new KIntNumInput(tmpQGroupBox);
-    m_recentFiles->setRange(1, 20, 1);
-    m_recentFiles->setValue(m_oldRecentFiles);
-    grpLayout->addWidget(m_recentFiles, 1, 1);
-
-    grpLayout->addWidget(new QLabel(i18n("Palette font size:"), tmpQGroupBox), 2, 0);
-    m_dockerFontSize = new KIntNumInput(tmpQGroupBox);
-    m_dockerFontSize->setRange(5, 20, 1);
-    m_dockerFontSize->setValue(m_oldDockerFontSize);
-    grpLayout->addWidget(m_dockerFontSize, 2, 1);
-
-    grpLayout->addWidget(new QLabel(i18n("Canvas color:"), tmpQGroupBox), 3, 0);
-    m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
-    grpLayout->addWidget(m_canvasColor, 3, 1);
-
-    grpLayout->setRowStretch(4, 1);
-}
-
-void ConfigInterfacePage::apply()
-{
-    bool showStatusBar = m_showStatusBar->isChecked();
-
-    KarbonPart* part = m_view->part();
-
-    KConfigGroup interfaceGroup = m_config->group("Interface");
-
-    int recent = m_recentFiles->value();
-
-    if (recent != m_oldRecentFiles) {
-        interfaceGroup.writeEntry("NbRecentFile", recent);
-        m_view->setNumberOfRecentFiles(recent);
-        m_oldRecentFiles = recent;
-    }
-
-    bool refreshGUI = false;
-
-    if (showStatusBar != part->showStatusBar()) {
-        interfaceGroup.writeEntry("ShowStatusBar", showStatusBar);
-        part->setShowStatusBar(showStatusBar);
-        refreshGUI = true;
-    }
-
-    int dockerFontSize = m_dockerFontSize->value();
-
-    if (dockerFontSize != m_oldDockerFontSize) {
-        m_config->group("GUI").writeEntry("palettefontsize", dockerFontSize);
-        m_oldDockerFontSize = dockerFontSize;
-        refreshGUI = true;
-    }
-
-    QColor canvasColor = m_canvasColor->color();
-    if (canvasColor != m_oldCanvasColor) {
-        interfaceGroup.writeEntry("CanvasColor", canvasColor);
-        refreshGUI = true;
-    }
-
-    if (refreshGUI)
-        part->reorganizeGUI();
-}
-
-void ConfigInterfacePage::slotDefault()
-{
-    m_recentFiles->setValue(10);
-    m_dockerFontSize->setValue(8);
-    m_showStatusBar->setChecked(true);
-}
-
 
 #include "KarbonConfigureDialog.moc"

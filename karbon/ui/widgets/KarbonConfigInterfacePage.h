@@ -18,34 +18,45 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONCONFIGUREDIALOG_H
-#define KARBONCONFIGUREDIALOG_H
+#ifndef KARBONCONFIGINTERFACEPAGE_H
+#define KARBONCONFIGINTERFACEPAGE_H
 
 #include <KoUnit.h>
-#include <KPageDialog>
+#include <KVBox>
+#include <KSharedConfig>
 
 class KarbonView;
-class KarbonConfigInterfacePage;
-class KoConfigMiscPage;
-class KoConfigGridPage;
-class KoConfigDocumentPage;
+class KIntNumInput;
+class KColorButton;
+class QCheckBox;
 
-class KarbonConfigureDialog : public KPageDialog
+class KarbonConfigInterfacePage : public KVBox
 {
     Q_OBJECT
 
 public:
-    KarbonConfigureDialog(KarbonView* parent);
+    explicit KarbonConfigInterfacePage(KarbonView* view, char* name = 0L);
+
+    void apply();
 
 public slots:
-    void slotApply();
     void slotDefault();
 
 private:
-    KarbonConfigInterfacePage* m_interfacePage;
-    KoConfigMiscPage* m_miscPage;
-    KoConfigGridPage* m_gridPage;
-    KoConfigDocumentPage* m_defaultDocPage;
+    KarbonView* m_view;
+    KSharedConfigPtr m_config;
+
+    KIntNumInput* m_recentFiles;
+    int m_oldRecentFiles;
+
+    QCheckBox* m_showStatusBar;
+
+    KIntNumInput* m_dockerFontSize;
+    int m_oldDockerFontSize;
+
+    KColorButton* m_canvasColor;
+    QColor m_oldCanvasColor;
 };
 
-#endif // KARBONCONFIGUREDIALOG_H
+
+#endif // KARBONCONFIGINTERFACEPAGE_H
