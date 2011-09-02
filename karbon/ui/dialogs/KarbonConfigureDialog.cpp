@@ -130,31 +130,30 @@ ConfigInterfacePage::ConfigInterfacePage(KarbonView* view, char* name)
         m_oldCanvasColor = interfaceGroup.readEntry("CanvasColor", m_oldCanvasColor);
     }
 
-    QVBoxLayout *grpLayout = new QVBoxLayout(tmpQGroupBox);
+    QGridLayout *grpLayout = new QGridLayout(tmpQGroupBox);
 
-    m_showStatusBar = new QCheckBox(i18n("Show status bar"), tmpQGroupBox);
+    grpLayout->addWidget(new QLabel(i18n("Show status bar:"), tmpQGroupBox), 0, 0);
+    m_showStatusBar = new QCheckBox("", tmpQGroupBox);
     m_showStatusBar->setChecked(oldShowStatusBar);
-    grpLayout->addWidget(m_showStatusBar);
+    grpLayout->addWidget(m_showStatusBar, 0, 1);
 
+    grpLayout->addWidget(new QLabel(i18n("Number of recent files:"), tmpQGroupBox), 1, 0);
     m_recentFiles = new KIntNumInput(tmpQGroupBox);
     m_recentFiles->setRange(1, 20, 1);
     m_recentFiles->setValue(m_oldRecentFiles);
-    m_recentFiles->setLabel(i18n("Number of recent files:"));
-    grpLayout->addWidget(m_recentFiles);
+    grpLayout->addWidget(m_recentFiles, 1, 1);
 
+    grpLayout->addWidget(new QLabel(i18n("Palette font size:"), tmpQGroupBox), 2, 0);
     m_dockerFontSize = new KIntNumInput(tmpQGroupBox);
     m_dockerFontSize->setRange(5, 20, 1);
     m_dockerFontSize->setValue(m_oldDockerFontSize);
-    m_dockerFontSize->setLabel(i18n("Palette font size:"));
-    grpLayout->addWidget(m_dockerFontSize);
+    grpLayout->addWidget(m_dockerFontSize, 2, 1);
 
-    QLabel* canvasColorLbl = new QLabel(i18n("Canvas color:"), tmpQGroupBox);
+    grpLayout->addWidget(new QLabel(i18n("Canvas color:"), tmpQGroupBox), 3, 0);
     m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
-    canvasColorLbl->setBuddy(m_canvasColor);
-    grpLayout->addWidget(canvasColorLbl);
-    grpLayout->addWidget(m_canvasColor);
+    grpLayout->addWidget(m_canvasColor, 3, 1);
 
-    grpLayout->addStretch();
+    grpLayout->setRowStretch(4, 1);
 }
 
 void ConfigInterfacePage::apply()
