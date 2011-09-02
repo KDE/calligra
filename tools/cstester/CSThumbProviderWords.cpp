@@ -53,17 +53,17 @@ QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
     KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->canvasItem());
     KoZoomHandler zoomHandler;
-    
+
     while (!m_doc->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
 
         if (!QCoreApplication::hasPendingEvents())
             break;
     }
-    
+
     KWPageManager *pageManager = m_doc->pageManager();
     KoShapeManager *shapeManager = canvasItem->shapeManager();
-            
+
     QList<QPixmap> thumbnails;
 
     foreach(KWPage page, pageManager->pages()) {
@@ -88,6 +88,9 @@ QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 
         thumbnails.append(thumbnail);
     }
+
+    // make sure to clean up
+    delete canvasItem;
 
     return thumbnails;
 }
