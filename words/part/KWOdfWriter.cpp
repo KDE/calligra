@@ -227,9 +227,9 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
 
-    KoTextSharedSavingData sharedData;
-    sharedData.setGenChanges(changes);
-    context.addSharedData(KOTEXT_SHARED_SAVING_ID, &sharedData);
+    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
+    sharedData->setGenChanges(changes);
+    context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
 
     calculateZindexOffsets();
 
@@ -339,7 +339,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     // update references to xml:id to be to new xml:id
     // in the external Rdf
     if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
-        QMap<QString, QString> m = sharedData.getRdfIdMapping();
+        QMap<QString, QString> m = sharedData->getRdfIdMapping();
         rdf->updateXmlIdReferences(m);
     }
     // save the styles.xml
