@@ -3,7 +3,6 @@ Type=Service
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Map Browser
-Name[en_GB]=Map Browser
 
 X-KDE-Library=kformdesigner_mapbrowser
 X-KFormDesigner-FactoryGroup=kexi
