@@ -41,7 +41,7 @@
 #include <KoTextSharedSavingData.h>
 
 #include <KoStoreDevice.h>
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 #include <QBuffer>
 #include <QTextCursor>

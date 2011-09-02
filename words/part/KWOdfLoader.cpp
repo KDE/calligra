@@ -49,7 +49,7 @@
 #include <QTextCursor>
 #include <KDebug>
 
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(document),
