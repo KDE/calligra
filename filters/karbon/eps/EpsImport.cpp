@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "epsimport.h"
-#include "pscommentlexer.h"
+#include "EpsImport.h"
+#include "PsCommentLexer.h"
 
 #include <QString>
 #include <QFile>
@@ -117,5 +117,5 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
     return KoFilter::NotImplemented;
 }
 
-#include "epsimport.moc"
+#include "EpsImport.moc"
 

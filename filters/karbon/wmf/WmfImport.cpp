@@ -20,8 +20,8 @@
 DESCRIPTION
 */
 
-#include "wmfimport.h"
-#include "wmfimportparser.h"
+#include "WmfImport.h"
+#include "WmfImportParser.h"
 
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
@@ -70,4 +70,4 @@ KoFilter::ConversionStatus WMFImport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
-#include <wmfimport.moc>
+#include <WmfImport.moc>

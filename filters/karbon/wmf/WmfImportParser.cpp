@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "wmfimportparser.h"
+#include "WmfImportParser.h"
 #include <WmfEnums.h>
 #include <WmfDeviceContext.h>
 #include <KoXmlWriter.h>

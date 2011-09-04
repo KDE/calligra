@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <QStringList>
-#include "pscommentlexer.h"
+#include "PsCommentLexer.h"
 
 #define CATEGORY_WHITESPACE -1
 #define CATEGORY_ALPHA -2

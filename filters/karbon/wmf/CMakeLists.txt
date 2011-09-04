@@ -4,8 +4,8 @@ include_directories( ${KWMF_INCLUDES} )
 ########### next target ###############
 
 set(wmfimport_PART_SRCS 
-    wmfimport.cc 
-    wmfimportparser.cc
+    WmfImport.cpp 
+    WmfImportParser.cpp
 )
 
 kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
@@ -16,7 +16,7 @@ install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(wmfexport_PART_SRCS wmfexport.cc)
+set(wmfexport_PART_SRCS WmfExport.cpp)
 
 kde4_add_plugin(wmfexport ${wmfexport_PART_SRCS})
 
