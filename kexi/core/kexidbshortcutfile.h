@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,24 +42,6 @@ public:
     KexiDBShortcutFile(const QString& fileName);
 
     ~KexiDBShortcutFile();
-
-    /*! Loads project data (with connection data) into \a data.
-     Database name and caption can be set there but these are optional.
-     \a groupKey, if provided will be set to a group key,
-     so you can later use it in saveConnectionData().
-     \return true on success. */
-    bool loadProjectData(KexiProjectData& data, QString* groupKey = 0);
-
-    /*! Saves project data \a data (with connection data) to a shortcut file.
-     If \a storePassword is true, password will be saved in the file,
-     even if data.connectionData()->savePassword is false.
-     Existing data is merged with new data. \a groupKey is reused, if specified.
-     If \a overwriteFirstGroup is true (the default) first found group will be overwritten
-     instead of creating of a new unique group. This mode is usable for updating .kexic files
-     containing single connection data, what's used for storing connections repository.
-     \return true on success. */
-    bool saveProjectData(const KexiProjectData& data, bool savePassword,
-                         QString* groupKey = 0, bool overwriteFirstGroup = true);
 
     //! \return filename provided on this object's construction. */
     QString fileName() const;

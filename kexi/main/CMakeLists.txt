@@ -11,8 +11,11 @@ ADD_DEFINITIONS(
 
 ########### next target ###############
 
+find_package(QImageBlitz REQUIRED)
+
 set(keximain_LIB_SRCS 
 KexiMainWindow.cpp 
+KexiMenuWidget.cpp
 kexifinddialog.cpp
 kexistatusbar.cpp 
 kexinamewidget.cpp 
@@ -20,13 +23,18 @@ kexinamedialog.cpp
 kexinewstuff.cpp
 
 startup/KexiConnSelector.cpp
-startup/KexiNewProjectWizard.cpp
+startup/KexiNewProjectAssistant.cpp
+startup/KexiOpenProjectAssistant.cpp
+startup/KexiRecentProjectsAssistant.cpp
 startup/KexiProjectSelector.cpp
 startup/KexiStartupFileWidget.cpp
+startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
 startup/KexiDBTitlePage.cpp
 startup/KexiStartupDialogTemplatesPage.cpp
+startup/KexiTemplatesModel.cpp
+startup/KexiRecentProjectsModel.cpp
 
 #todo printing/kexisimpleprintingengine.cpp
 #todo printing/kexisimpleprintingpagesetup.cpp
@@ -35,12 +43,11 @@ startup/KexiStartupDialogTemplatesPage.cpp
 
 )
 
-
 kde4_add_ui_files(keximain_LIB_SRCS
   kexifinddialog.ui
   startup/KexiConnSelector.ui
   startup/KexiDBTitlePage.ui
-  startup/KexiNewPrjTypeSelector.ui
+  startup/KexiProjectStorageTypeSelectionPage.ui
   startup/KexiOpenExistingFile.ui
   startup/KexiProjectSelector.ui
   startup/KexiServerDBNamePage.ui
@@ -61,7 +68,8 @@ target_link_libraries(
     ${KDE4_KFILE_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
-    )
+    ${QIMAGEBLITZ_LIBRARIES}
+)
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})

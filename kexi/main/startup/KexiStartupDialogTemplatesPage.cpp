@@ -25,6 +25,7 @@
 #include "KexiConnSelector.h"
 
 #include <QPixmap>
+#include <Q3Header>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_TEMPLATES
@@ -48,12 +49,13 @@ class TemplateItem : public K3ListViewItem
 {
 public:
     TemplateItem(Q3ListView* parent, const QString& aFilename,
-                 const QString& name, const QString& description, const QPixmap& icon,
+                 const QString& name, const QString& description, const KIcon& icon,
                  const KexiProjectData::AutoOpenObjects& aAutoopenObjects)
             : K3ListViewItem(parent, name + "\n" + description)
             , autoopenObjects(&aAutoopenObjects)
-            , filename(aFilename) {
-        setPixmap(0, icon);
+            , filename(aFilename)
+    {
+        setPixmap(0, icon.pixmap(32, 32));
     }
     ~TemplateItem() {}
 
@@ -99,7 +101,7 @@ void KexiStartupDialogTemplatesPage::populate()
     if (d->popuplated)
         return;
     d->popuplated = true;
-    KexiTemplateInfo::List list = KexiTemplateLoader::loadListInfo();
+    KexiTemplateInfoList list = KexiTemplateLoader::loadListInfo();
     foreach(const KexiTemplateInfo& info, list) {
         new TemplateItem(this, info.filename, info.name,
                          info.description, info.icon, info.autoopenObjects);

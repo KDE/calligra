@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,29 +20,52 @@
 #ifndef KEXI_TEMPLLOADER_H
 #define KEXI_TEMPLLOADER_H
 
-#include <QPixmap>
 #include <QList>
+#include <KIcon>
 #include "kexiprojectdata.h"
 
-//! A structure providing information about single kexi database template file
+//! A structure providing information about single kexi database template
 class KEXICORE_EXPORT KexiTemplateInfo
 {
 public:
-    typedef QList<KexiTemplateInfo> List;
-
     KexiTemplateInfo();
     ~KexiTemplateInfo();
 
-    QString filename, name, description;
-    QPixmap icon;
+    QString name;
+    QString caption;
+    QString description;
+    QString category;
+    QString filename;
+    bool enabled;
+    KIcon icon;
     KexiProjectData::AutoOpenObjects autoopenObjects;
 };
+
+typedef QList<KexiTemplateInfo> KexiTemplateInfoList;
+
+//! A structure providing information about single category for kexi database template
+class KEXICORE_EXPORT KexiTemplateCategoryInfo
+{
+public:
+    KexiTemplateCategoryInfo();
+    ~KexiTemplateCategoryInfo();
+
+    QString name;
+    QString caption;
+    bool enabled;
+    KexiTemplateInfoList templates() const { return m_templates; }
+    void addTemplate(const KexiTemplateInfo& t);
+private:
+    KexiTemplateInfoList m_templates;
+};
+
+typedef QList<KexiTemplateCategoryInfo> KexiTemplateCategoryInfoList;
 
 //! Handles retrieving information about templates
 class KEXICORE_EXPORT KexiTemplateLoader
 {
 public:
-    static KexiTemplateInfo::List loadListInfo();
+    static KexiTemplateInfoList loadListInfo();
     static KexiTemplateInfo loadInfo(const QString& directory);
 };
 
