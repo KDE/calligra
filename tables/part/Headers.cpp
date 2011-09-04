@@ -514,10 +514,15 @@ void RowHeader::doToolChanged(const QString& toolId)
     update();
 }
 
-void RowHeader::setFont(const QFont &font)
+void RowHeader::setHeaderFont(const QFont &font)
 {
     m_font = font;
     update();
+}
+
+QFont RowHeader::headerFont() const
+{
+    return m_font;
 }
 
 /****************************************************************
@@ -1091,10 +1096,15 @@ void ColumnHeader::doToolChanged(const QString& toolId)
     update();
 }
 
-void ColumnHeader::setFont(const QFont &font)
+void ColumnHeader::setHeaderFont(const QFont &font)
 {
     m_font = font;
     update();
+}
+
+QFont ColumnHeader::headerFont() const
+{
+    return m_font;
 }
 
 /****************************************************************

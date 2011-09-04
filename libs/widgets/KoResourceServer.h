@@ -119,43 +119,34 @@ public:
      */
     void loadResources(QStringList filenames) {
         kDebug(30009) << "loading  resources for type " << type();
-        QStringList uniqueFiles;
-
         while (!filenames.empty() && !m_cancelled)
         {
             QString front = filenames.first();
             filenames.pop_front();
 
             QString fname = QFileInfo(front).fileName();
+            m_loadLock.lock();
+            QList<T*> resources = createResources(front);
+            foreach(T* resource, resources) {
+                Q_CHECK_PTR(resource);
+                if (resource->load() && resource->valid()) {
 
-            //kDebug(30009) << "Loading " << fname << " of type " << type();
-            // XXX: Don't load resources with the same filename. Actually, we should look inside
-            //      the resource to find out whether they are really the same, but for now this
-            //      will prevent the same brush etc. showing up twice.
-            if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
-                m_loadLock.lock();
-                uniqueFiles.append(fname);
-                QList<T*> resources = createResources(front);
-                foreach(T* resource, resources) {
-                    Q_CHECK_PTR(resource);
-                    if (resource->load() && resource->valid()) {
+                    m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        m_resourcesByFilename[resource->shortFilename()] = resource;
-
-                        if ( resource->name().isNull() ) {
-                            resource->setName( fname );
-                        }
-                        m_resourcesByName[resource->name()] = resource;
-                        m_resources.append(resource);
-
-                        notifyResourceAdded(resource);
+                    if ( resource->name().isNull() ) {
+                        resource->setName( fname );
                     }
-                    else {
-                        delete resource;
-                    }
+                    m_resourcesByName[resource->name()] = resource;
+                    m_resources.append(resource);
+
+                    notifyResourceAdded(resource);
                 }
-                m_loadLock.unlock();
+                else {
+                    delete resource;
+                }
             }
+            m_loadLock.unlock();
+
         }
         kDebug(30009) << "done loading  resources for type " << type();
     }
@@ -217,11 +208,10 @@ public:
        m_resourcesByFilename.remove(resource->shortFilename());
        m_resources.removeAt(m_resources.indexOf(resource));
        notifyRemovingResource(resource);
-       if (m_deleteResource) {
+       writeBlackListFile(resource->filename());
+       if (m_deleteResource && resource) {
           delete resource;
        }
-
-       writeBlackListFile(resource->filename());
        return true;
     }
 
@@ -475,35 +465,50 @@ protected:
     void writeBlackListFile(QString fileName)
     {
        QFile f(blackListFile);
-       if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+       bool fileExists = f.exists();
+
+       if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
             kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
             return;
        }
 
-       QDomDocument doc("blackListFile");
-       doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-       QDomElement root = doc.createElement("resourceFilesList");
-       doc.appendChild(root);
+       QDomDocument doc;
+       QDomElement root;
 
-       if(!blackListFileNames.contains(fileName)){
-           blackListFileNames.append(fileName);
+       if (!fileExists) {
+           QDomDocument docTemp("blackListFile");
+           doc = docTemp;
+           doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+           root = doc.createElement("resourceFilesList");
+           doc.appendChild(root);
+       }
+       else {
+           if (!doc.setContent(&f)) {
+               kWarning() << "The file could not be parsed.";
+               return;
+           }
+
+           root = doc.documentElement();
+           if (root.tagName() != "resourceFilesList") {
+               kWarning() << "The file doesn't seem to be of interest.";
+               return;
+           }
        }
 
-       foreach(QString file, blackListFileNames) {
+       QDomElement fileEl = doc.createElement("file");
+       QDomElement nameEl = doc.createElement("name");
+       QDomText nameText = doc.createTextNode(fileName);
+       nameEl.appendChild(nameText);
+       fileEl.appendChild(nameEl);
+       root.appendChild(fileEl);
 
-           QDomElement fileEl = doc.createElement("file");
-           QDomElement nameEl = doc.createElement("name");
-           QDomText nameText = doc.createTextNode(file);
-           nameEl.appendChild(nameText);
-           fileEl.appendChild(nameEl);
-           root.appendChild(fileEl);
+       f.remove();
+       if(!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+             kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
        }
-
        QTextStream metastream(&f);
        metastream << doc.toByteArray();
-
        f.close();
-
     }
 private:
 

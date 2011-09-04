@@ -2,7 +2,7 @@
  * This file is part of KPlato
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008, 2011 Dag Andersen <danders@get2net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published by
@@ -42,6 +42,7 @@
 #include "kptnode.h"
 #include "kptcommand.h"
 
+
 extern "C"
 {
     KDE_EXPORT QObject* krossmodule()
@@ -59,6 +60,7 @@ namespace Scripting {
             QPointer<KPlato::Part> doc;
             Project *project;
             QMap<QString, Module*> modules;
+            KPlato::MacroCommand *command; // used for beginCommand()/endCommand()
     };
 
 Module::Module(QObject* parent)
@@ -67,6 +69,7 @@ Module::Module(QObject* parent)
 {
     d->doc = 0;
     d->project = 0;
+    d->command = 0;
 
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
@@ -79,6 +82,7 @@ Module::Module(QObject* parent)
 
 Module::~Module()
 {
+    endCommand();
     qDeleteAll( d->modules );
     delete d->project;
     delete d;
@@ -113,6 +117,37 @@ QObject *Module::openDocument( const QString tag, const QString &url )
     return m;
 }
 
+void Module::beginCommand( const QString &name )
+{
+    endCommand();
+    d->command = new KPlato::MacroCommand( name );
+}
+
+void Module::endCommand()
+{
+    if ( d->command && ! d->command->isEmpty() ) {
+        KPlato::MacroCommand *c = new KPlato::MacroCommand( "" );
+        doc()->addCommand( c );
+        doc()->endMacro(); // executes c and enables undo/redo
+        c->addCommand( d->command ); // this command is already exectued
+        d->command = 0;
+    } else {
+        delete d->command;
+        d->command = 0;
+    }
+}
+
+void Module::revertCommand()
+{
+    if ( d->command ) {
+        if ( ! d->command->isEmpty() ) {
+            endCommand();
+            doc()->undoStack()->undo();
+        } else {
+            endCommand();
+        }
+    }
+}
 
 QObject *Module::project()
 {
@@ -146,13 +181,22 @@ QWidget *Module::createDataQueryView( QWidget *parent )
     return v;
 }
 
+void Module::slotAddCommand( KUndo2Command *cmd )
+{
+    if ( d->command ) {
+        if ( d->command->isEmpty() ) {
+            doc()->beginMacro( d->command->text() ); // used to disable undo/redo
+        }
+        cmd->redo();
+        d->command->addCommand( cmd );
+    } else {
+        doc()->addCommand( cmd );
+    }
+}
+
 void Module::addCommand( KUndo2Command *cmd )
 {
-    KPlato::MacroCommand *m = new MacroCommand( cmd->text().isEmpty()
-            ? i18nc( "(qtundo-format)", "Scripting command" )
-            : cmd->text() );
-    doc()->addCommand( m );
-    m->addCommand( cmd );
+    slotAddCommand( cmd );
 }
 
 } //namespace Scripting

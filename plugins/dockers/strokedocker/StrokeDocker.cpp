@@ -112,6 +112,8 @@ void StrokeDocker::applyChanges()
 
     canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
 
+    d->mainWidget->updateControls(d->border);
+
     if (!selection || !selection->count())
         return;
 
@@ -229,7 +231,6 @@ void StrokeDocker::setUnit(KoUnit unit)
     d->mainWidget->setUnit(unit);
 }
 
-
 void StrokeDocker::selectionChanged()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
@@ -259,7 +260,7 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
 void StrokeDocker::unsetCanvas()
 {
     d->canvas = 0;
-}  
+}
 
 void StrokeDocker::resourceChanged(int key, const QVariant &value)
 {

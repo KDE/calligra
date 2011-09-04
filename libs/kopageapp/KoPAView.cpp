@@ -32,6 +32,9 @@
 #include <QLabel>
 #include <QTabBar>
 
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoResourceManager.h>
 #include <KoColorBackground.h>
@@ -163,6 +166,8 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 
     if ( d->doc->pageCount() > 0 )
         doUpdateActivePage( d->doc->pageByIndex( 0, false ) );
+
+    setAcceptDrops(true);
 }
 
 KoPAView::~KoPAView()
@@ -179,6 +184,46 @@ KoPAView::~KoPAView()
 
     delete d;
 }
+
+void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+{
+    // get position from event and convert to document coordinates
+    QPointF pos = zoomHandler()->viewToDocument(insertAt)
+            + kopaCanvas()->documentOffset() - kopaCanvas()->documentOrigin();
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    foreach(const QImage image, imageList) {
+
+        KoProperties params;
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
+
+        KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            return;
+        }
+        shape->setPosition(pos);
+        pos += QPointF(25,25); // increase the position for each shape we insert so the
+                               // user can see them all.
+        KUndo2Command *cmd = kopaCanvas()->shapeController()->addShapeDirect(shape);
+        if (cmd) {
+            KoSelection *selection = kopaCanvas()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+        }
+        kopaCanvas()->addCommand(cmd);
+    }
+}
+
 
 void KoPAView::initGUI()
 {
@@ -229,10 +274,7 @@ void KoPAView::initGUI()
 
     new KoRulerController(d->horizontalRuler, d->canvas->resourceManager());
 
-    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
-            d->horizontalRuler, SLOT(setUnit(const KoUnit&)));
-    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
-            d->verticalRuler, SLOT(setUnit(const KoUnit&)));
+    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
     //Layout a tab bar
     d->tabBar = new QTabBar();
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
@@ -1176,6 +1218,13 @@ void KoPAView::setTabBarPosition(Qt::Orientation orientation)
     default:
         break;
     }
+}
+
+void KoPAView::updateUnit(const KoUnit &unit)
+{
+    d->horizontalRuler->setUnit(unit);
+    d->verticalRuler->setUnit(unit);
+    d->canvas->resourceManager()->setResource(KoCanvasResource::Unit, unit);
 }
 
 #include <KoPAView.moc>

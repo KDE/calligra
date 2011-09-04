@@ -61,7 +61,14 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
             }
         } else {
             shape->setGeometryProtected(true);
-            shape->setCollisionDetection(false);
+
+            // We need to keep collision detection on or we will not relayout when page anchored shapes are
+            // moved. For page anchored shapes (which are different from anchored shapes which are usually
+            // children of the shape they are anchored too and therefore the ShapeManager filters collision
+            // events for them out) the KoTextRootAreaProvider::relevantObstructions method is used to produce
+            // obstructions whereas for anchored shapes the KoTextDocumentLayout::registerAnchoredObstruction
+            // is used to explicit register the obstructions.
+            //shape->setCollisionDetection(false);
         }
     }
 

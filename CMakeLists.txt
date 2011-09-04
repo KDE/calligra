@@ -234,7 +234,7 @@ endif( Soprano_FOUND )
 ## Test for marble
 ##
 macro_optional_find_package(Marble)
-macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required to show locations on a map")
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 if(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE FALSE)
     set(MARBLE_INCLUDE_DIR "")
@@ -385,6 +385,7 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
+                   ${CMAKE_SOURCE_DIR}/libs/flake/svg
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
 # KoText depends on koplugin, odf
@@ -459,6 +460,13 @@ endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_PLAN FALSE)
 endif(NOT KdepimLibs_FOUND)
+
+### Active needs tables, stage and words
+if (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+
+
 
 ### Active: only build with Qt 4.7.0 or better 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

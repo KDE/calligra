@@ -42,12 +42,13 @@
 
 #include <kdebug.h>
 
-#include "kexitableviewdata.h"
+#include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexitableedit.h"
 #include <kexiutils/tristate.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include "kexidataawareobjectiface.h"
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 class QPrinter;
 class QPrintDialog;
@@ -416,14 +417,14 @@ signals:
 // void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
     void sortedColumnChanged(int col);
 
-    //! emmited when row editing is started (for updating or inserting)
+    //! emitted when row editing is started (for updating or inserting)
     void rowEditStarted(int row);
 
-    //! emmited when row editing is terminated (for updating or inserting)
+    //! emitted when row editing is terminated (for updating or inserting)
     //! no matter if accepted or not
     void rowEditTerminated(int row);
 
-    //! emmited when state of 'save/cancel record changes' actions should be updated.
+    //! emitted when state of 'save/cancel record changes' actions should be updated.
     void updateSaveCancelActions();
     
     //! Emitted in initActions() to force reload actions
@@ -621,7 +622,7 @@ protected:
 
     /*! Shows context menu at \a pos for selected cell
      if menu is configured,
-     else: contextMenuRequested() signal is emmited.
+     else: contextMenuRequested() signal is emitted.
      Method used in contentsMousePressEvent() (for right button)
      and keyPressEvent() for Qt::Key_Menu key.
      If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.
@@ -688,6 +689,8 @@ protected:
     /*! Implementation for KexiDataItemChangesListener. */
     virtual bool cursorAtNewRow() const;
 
+    QWidget* navPanelWidget() const;
+    
     KexiTableViewPrivate * const d;
 
     class WhatsThis;

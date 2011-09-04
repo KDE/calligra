@@ -49,8 +49,8 @@ void PerformanceTester::init()
     p1->setId( p1->uniqueNodeId() );
     p1->registerNodeId( p1 );
     p1->setName( "PerformanceTester" );
-    p1->setConstraintStartTime( DateTime::fromString( "2010-11-19T08:00:00Z" ) );
-    p1->setConstraintEndTime( DateTime::fromString( "2010-11-29T16:00:00Z" ) );
+    p1->setConstraintStartTime( DateTime( QDateTime::fromString( "2010-11-19T08:00:00", Qt::ISODate ) ) );
+    p1->setConstraintEndTime( DateTime( QDateTime::fromString( "2010-11-29T16:00:00", Qt::ISODate ) ) );
 
     Calendar *c = new Calendar();
     c->setDefault( true );
@@ -128,6 +128,7 @@ void PerformanceTester::init()
     t1->completion().setStarted( true );
     t1->completion().setStartTime( t1->startTime() );
 
+    Debug::print( p1, "Project data", true );
     QCOMPARE( t1->startTime(), p1->mustStartOn() );
     QCOMPARE( t1->endTime(), t1->startTime() + Duration( 4, 8, 0 ) );
 }
@@ -142,6 +143,7 @@ void PerformanceTester::bcwsPrDayTask()
     
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
+    qDebug()<<ecm;
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) ); // work+materal resource
     QCOMPARE( ecm.costOnDate( d ), 8.0 ); //material resource cost == 0
     

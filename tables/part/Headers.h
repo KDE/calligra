@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+#include "calligra_tables_export.h"
+
 class QLabel;
 class KoPointerEvent;
 
@@ -36,7 +38,7 @@ class View;
 /**
  * Base class for the widget above the cells showing the column headers.
  */
-class ColumnHeader
+class CALLIGRA_TABLES_COMMON_EXPORT ColumnHeader
 {
 public:
     ColumnHeader(CanvasBase *_canvas);
@@ -56,7 +58,8 @@ public:
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
 
-    void setFont(const QFont& font);
+    void setHeaderFont(const QFont& font);
+    QFont headerFont() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
@@ -128,7 +131,7 @@ protected:
 /**
  * Base class for the widget left to the cells showing the row headers.
  */
-class RowHeader
+class CALLIGRA_TABLES_COMMON_EXPORT RowHeader
 {
 public:
     RowHeader(CanvasBase *_canvas);
@@ -148,7 +151,8 @@ public:
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
 
-    void setFont(const QFont& font);
+    void setHeaderFont(const QFont& font);
+    QFont headerFont() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);

@@ -25,7 +25,6 @@
 #include <KoGenChange.h>
 #include "KoText.h"
 #include <KoToolSelection.h>
-
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>
@@ -34,6 +33,8 @@
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
+class KoInlineCite;
+class KoBibliographyInfo;
 class KoCanvasBase;
 
 class QTextBlock;
@@ -144,10 +145,17 @@ public slots:
     void setStyle(KoCharacterStyle *style);
 
     /**
-    * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
-    * @param inliner the object to insert.
-    */
+     * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
+     * @param inliner the object to insert.
+     */
     void insertInlineObject(KoInlineObject *inliner);
+
+    /**
+     * update the position of all inline objects from the given start point to the given end point.
+     * @param start start position for updating. If 0, we update from the start of the document
+     * @param end end position for updating. If -1, we update to the end of the document
+     */
+    void updateInlineObjectPosition(int start = 0, int end = -1);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
@@ -266,6 +274,10 @@ public slots:
      */
     void insertTableOfContents();
 
+    void insertBibliography();
+
+    KoInlineCite *insertCitation();
+
     void insertText(const QString &text);
 
     void insertText(const QString &text, const QTextCharFormat &format);
@@ -328,5 +340,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoTextEditor*)
-
+Q_DECLARE_METATYPE(bool *)
 #endif // KOTEXTEDITOR_H

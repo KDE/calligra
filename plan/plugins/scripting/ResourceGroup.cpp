@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008 Dag Andersen <danders@get2net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,11 @@
 Scripting::ResourceGroup::ResourceGroup( Scripting::Project *project, KPlato::ResourceGroup *group, QObject *parent )
     : QObject( parent ), m_project( project ), m_group( group )
 {
+}
+
+QObject *Scripting::ResourceGroup::project()
+{
+    return m_project;
 }
 
 QString Scripting::ResourceGroup::id()

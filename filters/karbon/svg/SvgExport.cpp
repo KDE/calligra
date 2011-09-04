@@ -34,7 +34,7 @@
 */
 
 #include "SvgExport.h"
-#include "SvgWriter.h"
+#include <SvgWriter.h>
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>

@@ -1932,9 +1932,11 @@ void setListLevelProperties(KoXmlWriter& out, const wvWare::Word97::PAP& pap, co
         out.addAttribute("text:label-followed-by", "listtab");
         //TODO: text:list-tab-stop-position - Fine tuning on complex files required!
 //         Q_ASSERT(pap.itbdMac == 1);
+        qreal position = 0;
         if (pap.itbdMac) {
-            out.addAttributePt("text:list-tab-stop-position", Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab));
+            position = Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab);
         }
+        out.addAttributePt("text:list-tab-stop-position", position);
         break;
     }
     case 1: //A space follows the number text.
@@ -1976,8 +1978,9 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     }
     if (!fontName.isEmpty()) {
         textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
-        m_paragraph->applyCharacterProperties(listInfo->text().chp, &textStyle, m_paragraph->paragraphStyle());
     }
+    m_paragraph->applyCharacterProperties(listInfo->text().chp, &textStyle, m_paragraph->paragraphStyle());
+
     QString textStyleName('T');
     textStyleName = m_mainStyles->insert(textStyle, textStyleName);
 
@@ -2000,21 +2003,33 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
             // With bullets, text can only be one character, which tells us
             // what kind of bullet to use
             unsigned int code = text[0].unicode();
-            // unicode: private use area (0xf000 - 0xf0ff)
-            if ((code & 0xFF00) == 0xF000) {
-                if (code >= 0x20) {
-                    // microsoft symbol charset shall apply here.
-                    code = Conversion::MS_SYMBOL_ENCODING[code%256];
-                } else {
-                    code &= 0x00FF;
-                }
-            }
-            out.addAttribute("text:bullet-char", QString(code).toUtf8());
+            kDebug(30513) << "Bullet code: 0x" << hex << code << "id:" << code%256;
+
+            // NOTE: What does the next comment mean, private use area is in
+            // <0xE000, 0xF8FF>, disabled the conversion code.
+
+            // unicode: private use area (0xf000 - 0xf0ff).
+//             if ((code & 0xFF00) == 0xF000) {
+//                 if (code >= 0x20) {
+//                     // microsoft symbol charset shall apply here.
+//                     code = Conversion::MS_SYMBOL_ENCODING[code%256];
+// 		    kDebug(30513) << "Changed the symbol encoding: new code: 0x" << hex << code <<
+//                                       dec << "("<< code << ")";
+//                 } else {
+//                     code &= 0x00FF;
+//                 }
+//             }
+            out.addAttribute("text:bullet-char", QChar(code));
         } else {
             kWarning(30513) << "Bullet with more than one character, not supported";
         }
         //style:list-level-properties
         setListLevelProperties(out, pap, *listInfo);
+
+        //NOTE: helping the layout, the approach based on the text:style-name
+        //attribute does not work at the moment.
+        textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
+
         out.endElement(); //text:list-level-style-bullet
     }
     // ------------------------
@@ -2131,6 +2146,11 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
 
         //style:list-level-properties
         setListLevelProperties(out, pap, *listInfo);
+
+        //NOTE: helping the layout, the approach based on the text:style-name
+        //attribute does not work at the moment.
+        textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
+
         out.endElement(); //text:list-level-style-number
     } //end numbered list
 

@@ -20,7 +20,9 @@
 
 #include <QLabel>
 #include <QIntValidator>
+
 #include <Q3ScrollView>
+
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QKeyEvent>
@@ -39,6 +41,7 @@
 #include "kexirecordmarker.h"
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/utils.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 //! @internal
 class KexiRecordNavigator::Private
@@ -73,16 +76,6 @@ public:
     bool editingIndicatorVisible;
     bool isInsertingEnabled;
 };
-
-//--------------------------------------------------
-
-KexiRecordNavigatorHandler::KexiRecordNavigatorHandler()
-{
-}
-
-KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
-{
-}
 
 //--------------------------------------------------
 

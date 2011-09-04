@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008 Dag Andersen <danders@get2net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,11 @@
 Scripting::Calendar::Calendar( Scripting::Project *project, KPlato::Calendar *calendar, QObject *parent )
     : QObject( parent ), m_project( project ), m_calendar( calendar )
 {
+}
+
+QObject *Scripting::Calendar::project()
+{
+    return m_project;
 }
 
 QString Scripting::Calendar::id() const

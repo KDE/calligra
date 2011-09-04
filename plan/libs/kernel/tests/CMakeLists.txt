@@ -6,7 +6,7 @@ include_directories( .. ${KOODF_INCLUDES} ${KUNDO2_INCLUDES})
 set(DateTimeTester_SRCS DateTimeTester.cpp )
  
  
-kde4_add_unit_test(DateTimeTester TESTNAME KPlato-DateTimeTester  ${DateTimeTester_SRCS})
+kde4_add_unit_test(DateTimeTester TESTNAME Plan-DateTimeTester  ${DateTimeTester_SRCS})
  
 target_link_libraries(DateTimeTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
@@ -16,7 +16,7 @@ target_link_libraries(DateTimeTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTT
 set(DurationTester_SRCS DurationTester.cpp )
  
  
-kde4_add_unit_test(DurationTester TESTNAME KPlato-DurationTester  ${DurationTester_SRCS})
+kde4_add_unit_test(DurationTester TESTNAME Plan-DurationTester  ${DurationTester_SRCS})
  
 target_link_libraries(DurationTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
@@ -25,7 +25,7 @@ target_link_libraries(DurationTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTT
 set(AppointmentIntervalTester_SRCS AppointmentIntervalTester.cpp )
  
 
-kde4_add_unit_test(AppointmentIntervalTester TESTNAME KPlato-AppointmentIntervalTester ${AppointmentIntervalTester_SRCS})
+kde4_add_unit_test(AppointmentIntervalTester TESTNAME Plan-AppointmentIntervalTester ${AppointmentIntervalTester_SRCS})
  
 target_link_libraries(AppointmentIntervalTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
@@ -34,7 +34,7 @@ target_link_libraries(AppointmentIntervalTester  ${KDE4_KDECORE_LIBS} kplatokern
 set(EstimateTester_SRCS EstimateTester.cpp )
  
  
-kde4_add_unit_test(EstimateTester TESTNAME KPlato-EstimateTester  ${EstimateTester_SRCS})
+kde4_add_unit_test(EstimateTester TESTNAME Plan-EstimateTester  ${EstimateTester_SRCS})
  
 target_link_libraries(EstimateTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
@@ -44,7 +44,7 @@ target_link_libraries(EstimateTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTT
 set(CalendarTester_SRCS CalendarTester.cpp )
  
  
-kde4_add_unit_test(CalendarTester TESTNAME KPlato-CalendarTester  ${CalendarTester_SRCS})
+kde4_add_unit_test(CalendarTester TESTNAME Plan-CalendarTester  ${CalendarTester_SRCS})
  
 target_link_libraries(CalendarTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
@@ -53,7 +53,7 @@ target_link_libraries(CalendarTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTT
 set(ResourceTester_SRCS ResourceTester.cpp )
  
 
-kde4_add_unit_test(ResourceTester TESTNAME KPlato-ResourceTester ${ResourceTester_SRCS})
+kde4_add_unit_test(ResourceTester TESTNAME Plan-ResourceTester ${ResourceTester_SRCS})
  
 target_link_libraries(ResourceTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
 target_link_libraries(ResourceTester kundo2)
@@ -63,7 +63,7 @@ target_link_libraries(ResourceTester kundo2)
 set(ScheduleTester_SRCS ScheduleTester.cpp )
  
  
-kde4_add_unit_test(ScheduleTester TESTNAME KPlato-ScheduleTester  ${ScheduleTester_SRCS})
+kde4_add_unit_test(ScheduleTester TESTNAME Plan-ScheduleTester  ${ScheduleTester_SRCS})
  
 target_link_libraries(ScheduleTester  ${KDE4_KDECORE_LIBS} kplatokernel ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
  
@@ -73,7 +73,7 @@ target_link_libraries(ScheduleTester  ${KDE4_KDECORE_LIBS} kplatokernel ${KDE4_K
 set(ProjectTester_SRCS ProjectTester.cpp )
  
  
-kde4_add_unit_test(ProjectTester TESTNAME KPlato-ProjectTester  ${ProjectTester_SRCS})
+kde4_add_unit_test(ProjectTester TESTNAME Plan-ProjectTester  ${ProjectTester_SRCS})
  
 target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
  
@@ -83,7 +83,7 @@ target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} planprivate kplatokern
 set(AccountTester_SRCS AccountsTester.cpp )
  
  
-kde4_add_unit_test(AccountsTester TESTNAME KPlato-AccountsTester  ${AccountTester_SRCS})
+kde4_add_unit_test(AccountsTester TESTNAME Plan-AccountsTester  ${AccountTester_SRCS})
  
 target_link_libraries(AccountsTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTTEST_LIBRARY})
  
@@ -92,7 +92,7 @@ target_link_libraries(AccountsTester  ${KDE4_KDECORE_LIBS} planprivate kplatoker
 
 set(PerformanceTester_SRCS PerformanceTester.cpp )
  
-kde4_add_unit_test(PerformanceTester TESTNAME KPlato-PerformanceTester  ${PerformanceTester_SRCS})
+kde4_add_unit_test(PerformanceTester TESTNAME Plan-PerformanceTester  ${PerformanceTester_SRCS})
  
 target_link_libraries(PerformanceTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
 
@@ -100,6 +100,6 @@ target_link_libraries(PerformanceTester  ${KDE4_KDECORE_LIBS} planprivate kplato
 
 set(CommandsTester_SRCS CommandsTester.cpp )
 
-kde4_add_unit_test(CommandsTester TESTNAME KPlato-CommandsTester  ${CommandsTester_SRCS})
+kde4_add_unit_test(CommandsTester TESTNAME Plan-CommandsTester  ${CommandsTester_SRCS})
 
 target_link_libraries(CommandsTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
