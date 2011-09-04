@@ -1,6 +1,5 @@
 project(karbon)
 
-
 #Set the correct compiler options
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
    # 32 bit
@@ -10,9 +9,6 @@ ELSE(CMAKE_SIZEOF_VOID_P EQUAL 4)
    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
    MESSAGE(STATUS "Karbon detected that you use a 64 bit processor. Added -fPIC to the CXX_FLAGS.")
 ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-karbon.h )
 
 include_directories(
     ${QT_INCLUDES}
