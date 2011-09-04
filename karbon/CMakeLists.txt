@@ -15,8 +15,8 @@ ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-karbon.h )
 
 include_directories(
-    ${QT_INCLUDES} 
-    ${KDE4_INCLUDE_DIR} 
+    ${QT_INCLUDES}
+    ${KDE4_INCLUDE_DIR}
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
@@ -36,7 +36,7 @@ add_subdirectory( templates )
 
 ########### next target ###############
 
-set(karbonpart_PART_SRCS karbon_factory_init.cc )
+set(karbonpart_PART_SRCS KarbonFactoryInit.cpp )
 
 kde4_add_plugin(karbonpart ${karbonpart_PART_SRCS})
 
@@ -46,7 +46,7 @@ install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(karbon_KDEINIT_SRCS main.cc )
+set(karbon_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-karbon.png" )
 kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
