@@ -50,7 +50,7 @@ public:
     /**
       Threshold for cluster keeping in color signature creation.
      */
-    static const float THRESHOLD = 0.1f;
+    static const float THRESHOLD = 0.001f;
 
     /**
       Color dimensions of the image where the segmentation is actually applied.
@@ -85,10 +85,13 @@ public:
 
     /**
       Default values for cluster size in Lab axis.
+
+      It is reranged from the default Lab range to the quint16 that is the Lab
+      range in Krita.
      */
-    static const float L_DEFAULT_CLUSTER_SIZE = 0.64f;
-    static const float A_DEFAULT_CLUSTER_SIZE = 1.28f;
-    static const float B_DEFAULT_CLUSTER_SIZE = 2.56f;
+    static const quint16 L_DEFAULT_CLUSTER_SIZE = 0.64f / 100.0f * 65535;
+    static const quint16 A_DEFAULT_CLUSTER_SIZE = 1.28f / 128.0f * 65535;
+    static const quint16 B_DEFAULT_CLUSTER_SIZE = 2.56f / 128.0f * 65535;
 
 private:
     /**
@@ -135,6 +138,8 @@ private:
 
     /**
       Stores tuples for fast access to nearest background/foreground pixels.
+
+      It is stored to a refinement after segmentation if the user wants to.
      */
     NearestPixelsMap nearestPixels;
 
@@ -154,6 +159,12 @@ public:
       Apply the SIOX segmentation algorithm.
       */
     bool segmentate();
+
+    /**
+      Returns the confidence matrix, segmentation result. It is an alpha channel
+      to be applied to the segmented image.
+     */
+    KisPaintDeviceSP getSegmentedConfidenceMatrix();
 
 private:
 

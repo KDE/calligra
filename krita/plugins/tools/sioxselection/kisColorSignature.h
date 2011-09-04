@@ -46,8 +46,8 @@ public:
       Create a color signature for the given set of pixels.
      */
     static void createSignature(QVector< QVector<SignatureT> >& signature,
-        const QVector<const PixelT*>& input, float lLimit, float aLimit,
-        float bLimit, float threshold);
+        const QVector<const PixelT*>& input, const SignatureT lLimit,
+        const SignatureT aLimit, const SignatureT bLimit, float threshold);
 };
 
 template<typename PixelT, typename SignatureT>
@@ -71,23 +71,21 @@ void ColorSignature<PixelT, SignatureT>::stageOne(QVector< QVector<const PixelT*
             max = currentPixelXCoord;
     }
 
-    // TODO - verify correct type
     const SignatureT limit = currentDimension == 0 ?
         lLimit : currentDimension == 1 ? aLimit : bLimit;
 
     // Split according to Rubner-Rule.
-    SignatureT range = KoColorSpaceMaths<PixelT, SignatureT>::scaleToA(max - min);
+    SignatureT range = max - min;
     if (range > limit) {
         PixelT pivotvalue = (max + min) / 2;
 
         QVector<const PixelT*> smallerpoints, biggerpoints;
 
         for (int i = 0; i < points.size(); i++) {
-            if (points[i][currentDimension] <= pivotvalue) {
+            if (points[i][currentDimension] <= pivotvalue)
                 smallerpoints.push_back(points[i]);
-            } else {
+            else
                 biggerpoints.push_back(points[i]);
-            }
         }
 
         // Create subtrees.
@@ -125,10 +123,9 @@ void ColorSignature<PixelT, SignatureT>::stageTwo(QVector< QVector<SignatureT> >
         lLimit : currentDimension == 1 ? aLimit : bLimit;
 
     // Split according to Rubner-Rule.
-    SignatureT range = KoColorSpaceMaths<PixelT, SignatureT>::scaleToA(max - min);
+    SignatureT range = max - min;
     if (range > limit) {
         PixelT pivotvalue = (max + min) / 2;
-
         CentroidSet smallerpoints, biggerpoints;
 
         for (int i = 0; i < points.size(); i++) {
@@ -146,20 +143,21 @@ void ColorSignature<PixelT, SignatureT>::stageTwo(QVector< QVector<SignatureT> >
 
     } else {
         // Create leave.
-        int sum = 0;
+        quint64 sum = 0;
         for (int i = 0; i < points.size(); i++)
             sum += points[i].second;
 
-        if (((sum * 100.0) / total) >= threshold) {
+        if ((sum / (double)total) >= threshold) {
             QVector<SignatureT> signaturePoint(POINT_LENGTH, 0);
 
+            QVector<quint64> acc(POINT_LENGTH, 0);
             for (int i = 0; i < points.size(); i++) {
                 for (int j = 0; j < POINT_LENGTH; j++)
-                    signaturePoint[j] += points[i].first[j];
+                    acc[j] += points[i].first[j];
             }
 
             for (int j = 0; j < POINT_LENGTH; j++)
-                signaturePoint[j] /= points.size();
+                signaturePoint[j] = acc[j] / points.size();
 
             signature.push_back(signaturePoint);
         }
@@ -168,8 +166,8 @@ void ColorSignature<PixelT, SignatureT>::stageTwo(QVector< QVector<SignatureT> >
 
 template<typename PixelT, typename SignatureT>
 void ColorSignature<PixelT, SignatureT>::createSignature(QVector< QVector<SignatureT> >& signature,
-    const QVector<const PixelT*>& input, float lLimit, float aLimit,
-    float bLimit, float threshold)
+    const QVector<const PixelT*>& input, const SignatureT lLimit, const SignatureT aLimit,
+    const SignatureT bLimit, float threshold)
 {
     QVector< QVector<const PixelT*> > clusterSet;
 
@@ -178,21 +176,25 @@ void ColorSignature<PixelT, SignatureT>::createSignature(QVector< QVector<Signat
 
     CentroidSet centroidSet(clusterSet.size());
 
+    QVector<quint64> sum(POINT_LENGTH);
+
     for (int i = 0; i < clusterSet.size(); i++) {
         QVector<const PixelT*>& cluster = clusterSet[i];
 
         QVector<PixelT>& centroid = centroidSet[i].first;
         centroid.fill(0, POINT_LENGTH); // Important to set centroid size.
 
+        sum.fill(0);
         for (int k = 0; k < cluster.size(); k++) {
             for (int j = 0; j < POINT_LENGTH; j++)
-                centroid[j] += cluster[k][j];
+                sum[j] += cluster[k][j];
         }
 
-        for (int j = 0; j < POINT_LENGTH; j++)
-            centroid[j] /= cluster.size();
+        for (int j = 0; j < POINT_LENGTH; j++) {
+            centroid[j] = sum[j] / cluster.size();
+        }
 
-        centroidSet[i].second = cluster.size();
+        centroidSet[i].second = cluster.size(); // Cardinality.
     }
 
     // Zero is the recursion depth for kd-tree.

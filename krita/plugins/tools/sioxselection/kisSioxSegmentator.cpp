@@ -8,9 +8,6 @@
 #include "kisSioxSegmentator.h"
 
 
-using boost::tuples::get;
-
-
 namespace {
 
 
@@ -18,7 +15,7 @@ namespace {
   Returns the squared euclidian distance between two Lab color pixels.
  */
 template<typename Point1T, typename Point2T>
-inline float getLabColorDiffSquared(const Point1T& point1, const Point2T& point2);
+inline quint64 getLabColorDiffSquared(const Point1T& point1, const Point2T& point2);
 
 /**
   Blurs confidence matrix with a given symmetrically weighted kernel. In the
@@ -164,12 +161,13 @@ bool KisSioxSegmentator::segmentate()
     }
 
     // Create color signatures.
-    QVector< QVector<float> > bgSignature, fgSignature;
+    typedef quint32 SignatureType;
+    QVector< QVector<SignatureType> > bgSignature, fgSignature;
 
-    ColorSignature<quint16, float>::createSignature(bgSignature, knownBg, limitL,
-        limitA, limitB, THRESHOLD);
-    ColorSignature<quint16, float>::createSignature(fgSignature, knownFg, limitL,
-        limitA, limitB, THRESHOLD);
+    ColorSignature<quint16, SignatureType>::createSignature(bgSignature, knownBg,
+        limitL, limitA, limitB, THRESHOLD);
+    ColorSignature<quint16, SignatureType>::createSignature(fgSignature, knownFg,
+        limitL, limitA, limitB, THRESHOLD);
 
     // It is not possible to segmentate de image in this case.
     // TODO - throw a specific exception
@@ -177,9 +175,10 @@ bool KisSioxSegmentator::segmentate()
         return false;
     }
 
-    float limits[] = {limitL, limitA, limitB};
-    float origin[] = {0, 0, 0};
-    float clusterSizeSquared = 4 * getLabColorDiffSquared(limits, origin);
+    if (fgSignature.size() == 0) {
+        // Impossible to segmentate. - TODO
+        //throw IllegalStateException: "Foreground signature does not exists.;
+    }
 
     { // Classify using color signatures.
         KisRectConstIteratorSP labImageIter = labImage->createRectConstIteratorNG(
@@ -218,18 +217,11 @@ bool KisSioxSegmentator::segmentate()
                     const quint16* labData = reinterpret_cast<const quint16*>(
                         labImageIter->oldRawData());
 
-                    // Convert Lab data to float.
-                    float realLabData[SOURCE_COLOR_DIMENSIONS];
-                    for (int i = 0; i < SOURCE_COLOR_DIMENSIONS; i++) {
-                        realLabData[i] = KoColorSpaceMaths<quint16, float>::scaleToA(
-                            labData[i]);
-                    }
-
-                    float minBg = getLabColorDiffSquared(realLabData, bgSignature[0]);
+                    quint64 minBg = getLabColorDiffSquared(labData, bgSignature[0]);
                     int minIndex = 0;
 
                     for (int j = 1; j < bgSignature.size(); j++) {
-                        float distace = getLabColorDiffSquared(realLabData, bgSignature[j]);
+                        quint64 distace = getLabColorDiffSquared(labData, bgSignature[j]);
 
                         if (distace < minBg) {
                             minBg = distace;
@@ -239,11 +231,11 @@ bool KisSioxSegmentator::segmentate()
 
                     tuple.get<MIN_BG_DIST>() = minBg;
                     tuple.get<MIN_BG_INDX>() = minIndex;
-                    float minFg = FLT_MAX;
-                    minIndex = -1;
+                    quint64 minFg = getLabColorDiffSquared(labData, fgSignature[0]);
+                    minIndex = 0;
 
-                    for (int j = 0; j < fgSignature.size(); j++) {
-                        float distace = getLabColorDiffSquared(realLabData, fgSignature[j]);
+                    for (int j = 1; j < fgSignature.size(); j++) {
+                        quint64 distace = getLabColorDiffSquared(labData, fgSignature[j]);
 
                         if (distace < minFg) {
                             minFg = distace;
@@ -254,13 +246,7 @@ bool KisSioxSegmentator::segmentate()
                     tuple.get<MIN_FG_DIST>() = minFg;
                     tuple.get<MIN_FG_INDX>() = minIndex;
 
-                    if (fgSignature.size() == 0) {
-                        isBackground = (minBg <= clusterSizeSquared);
-                        // Impossible to segmentate.
-                        //throw IllegalStateException: "Foreground signature does not exists.;
-                    } else {
-                        isBackground = minBg < minFg;
-                    }
+                    isBackground = (minBg < minFg);
                 }
 
                 if (isBackground) {
@@ -285,16 +271,21 @@ bool KisSioxSegmentator::segmentate()
     return true;
 }
 
+KisPaintDeviceSP KisSioxSegmentator::getSegmentedConfidenceMatrix()
+{
+    return confidenceMatrix;
+}
+
 
 namespace {
 
 
 template<typename Point1T, typename Point2T>
-inline float getLabColorDiffSquared(const Point1T& point1, const Point2T& point2) {
-    float euclid = 0;
+inline quint64 getLabColorDiffSquared(const Point1T& point1, const Point2T& point2) {
+    quint64 euclid = 0;
 
     for (int i = 0; i < KisSioxSegmentator::SOURCE_COLOR_DIMENSIONS; i++) {
-        float diff = (point1[i] - point2[i]);
+        quint32 diff = (point1[i] - point2[i]);
         euclid += diff * diff;
     }
 
