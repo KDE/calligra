@@ -2,7 +2,17 @@
 Type=Service
 ServiceTypes=Kexi/Handler
 GenericName=AutoForm
+GenericName[pt]=Formulário Automático
+GenericName[pt_BR]=Formulário automático
+GenericName[sv]=Automatisk form
+GenericName[uk]=Автоформа
+GenericName[x-test]=xxAutoFormxx
 Name=AutoForm
+Name[pt]=Formulário Automático
+Name[pt_BR]=Formulário automático
+Name[sv]=Automatisk form
+Name[uk]=Автоформа
+Name[x-test]=xxAutoFormxx
 X-KDE-Library=kexihandler_autoform
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

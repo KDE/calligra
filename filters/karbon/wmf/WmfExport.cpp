@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "wmfexport.h"
+#include "WmfExport.h"
 #include <WmfWriter.h>
 
 #include <KarbonDocument.h>
@@ -180,5 +180,5 @@ int WmfExport::coordY(double top)
     return (int)(top * mScaleY);
 }
 
-#include <wmfexport.moc>
+#include <WmfExport.moc>
 
