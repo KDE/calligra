@@ -2,6 +2,15 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES}  )
 
 
+
+########### next target ###############
+
+if(MARBLE_FOUND)
+  add_subdirectory(widgets/mapbrowser)
+endif(MARBLE_FOUND)
+
+
+
 ########### next target ###############
 
 set(kexihandler_form_PART_SRCS kexiforms.cpp )
@@ -39,7 +48,9 @@ target_link_libraries(
     kexidb
     kexicore
     kexiguiutils
+    kexidataviewcommon
 	kexidatatable
+	kexiextendedwidgets
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY}
@@ -52,9 +63,8 @@ install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(kexiformutils_LIB_SRCS 
-   kexiformdataiteminterface.cpp 
-   kexidataawarewidgetinfo.cpp 
-   kexidataprovider.cpp 
+ #  kexiformdataiteminterface.cpp 
+   kexidataawarewidgetinfo.cpp  
    kexiformscrollview.cpp 
    kexidbtextwidgetinterface.cpp 
    kexiformmanager.cpp 
@@ -92,6 +102,7 @@ target_link_libraries(
     kformdesigner
     kexidb
     kexiutils
+    kexidataviewcommon
     kexidatatable
     kexiguiutils
     ${KOPROPERTY_LIBS}

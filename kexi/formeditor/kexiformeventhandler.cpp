@@ -26,7 +26,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
-#include <tableview/kexitableviewdata.h>
+#include <dataviewcommon/kexitableviewdata.h>
 #include <kexidb/queryschema.h>
 #include <KexiMainWindowIface.h>
 #include <kexipart.h>

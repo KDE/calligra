@@ -27,6 +27,8 @@
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QSettings>
+#include <QFileDialog>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent)
 {
@@ -60,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_view->rootContext()->setContextProperty("recentTextDocsModel", QVariant::fromValue(recentTextDocs));
     m_view->rootContext()->setContextProperty("recentSpreadsheetsModel", QVariant::fromValue(recentSpreadsheets));
     m_view->rootContext()->setContextProperty("recentPresentationsModel", QVariant::fromValue(recentPresentations));
+    m_view->rootContext()->setContextProperty("mainwindow",this);
 
     m_view->setSource(QUrl::fromLocalFile(CalligraActive::Global::installPrefix()
                         + "/share/calligraactive/qml/HomeScreen.qml"));
@@ -82,6 +85,16 @@ void MainWindow::openFile(const QString &path)
 void MainWindow::adjustWindowSize (QSize size)
 {
     resize(size);
+}
+
+void MainWindow::openFileDialog() {
+   const QString path = QFileDialog::getOpenFileName(this,"Open File", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+   if(!path.isEmpty()) {
+    QObject *object = m_view->rootObject();
+    Q_ASSERT(object);
+    QMetaObject::invokeMethod(object, "openDocument", Q_ARG(QVariant, QVariant(path)));
+   }
+
 }
 
 MainWindow::~MainWindow()

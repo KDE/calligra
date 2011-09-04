@@ -250,6 +250,9 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
             << ":library_widget_Spring"
 #endif
+#ifdef CAN_USE_MARBLE
+            << ":library_widget_MapBrowserWidget"
+#endif
             << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();

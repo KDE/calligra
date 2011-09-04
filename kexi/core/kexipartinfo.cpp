@@ -129,7 +129,10 @@ Info::Info(KService::Ptr ptr)
     KexiNewObjectAction *act = new KexiNewObjectAction(
         this,
         KexiMainWindowIface::global()->actionCollection());
-    KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
+    
+    if (KexiMainWindowIface::global()->actionCollection()) {
+        KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
+    }
 }
 
 Info::Info(const QString& partClass, const QString& itemIcon,
