@@ -122,9 +122,9 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
         else if (e->key() == Qt::Key_Tab)
             focusNextPrevChild(true);
         else if (e->key() == Qt::Key_PageUp)
-            m_view->goToPreviousPage();
+            m_view->goToPreviousPage(e->modifiers());
         else if (e->key() == Qt::Key_PageDown)
-            m_view->goToNextPage();
+            m_view->goToNextPage(e->modifiers());
     }
 }
 

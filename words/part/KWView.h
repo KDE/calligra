@@ -118,9 +118,9 @@ public slots:
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
     /// go to previous page
-    void goToPreviousPage();
+    void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
-    void goToNextPage();
+    void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
 protected:
     /// reimplemented method from superclass

@@ -1504,7 +1504,7 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     }
 }
 
-void KWView::goToPreviousPage()
+void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
 {
     // Scroll display
     qreal moveDistance = m_canvas->canvasController()->visibleHeight() * 0.8;
@@ -1531,7 +1531,7 @@ void KWView::goToPreviousPage()
                      pos += QPointF(0.0, textShapeData->documentOffset());
 
                     int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
-                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos);
+                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
                     return;
                 }
             }
@@ -1539,7 +1539,7 @@ void KWView::goToPreviousPage()
     }
 }
 
-void KWView::goToNextPage()
+void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
 {
     // Scroll display
     qreal moveDistance = m_canvas->canvasController()->visibleHeight() * 0.8;
@@ -1568,7 +1568,7 @@ void KWView::goToNextPage()
                     pos += QPointF(0.0, textShapeData->documentOffset());
 
                     int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
-                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos);
+                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
                     return;
                 }
             }
