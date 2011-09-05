@@ -2499,8 +2499,14 @@ KexiMainWindow::restoreSettings()
         setGeometry(geometry);
     else if (maximize)
         setWindowState(windowState() | Qt::WindowMaximized);
-//    return;
-
+    else {
+        QRect desk = QApplication::desktop()->screenGeometry(
+            QApplication::desktop()->screenNumber(this));
+        if (desk.width() <= 1024 || desk.height() < 768)
+            setWindowState(windowState() | Qt::WindowMaximized);
+        else
+            resize(1024, 768);
+    }
     // Saved settings
 #ifdef __GNUC__
 #warning TODO applyMainWindowSettings()
