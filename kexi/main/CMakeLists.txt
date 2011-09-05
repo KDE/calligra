@@ -11,7 +11,7 @@ ADD_DEFINITIONS(
 
 ########### next target ###############
 
-find_package(QImageBlitz REQUIRED)
+#find_package(QImageBlitz REQUIRED)
 
 set(keximain_LIB_SRCS 
 KexiMainWindow.cpp 
@@ -68,7 +68,7 @@ target_link_libraries(
     ${KDE4_KFILE_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
-    ${QIMAGEBLITZ_LIBRARIES}
+#    ${QIMAGEBLITZ_LIBRARIES}
 )
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

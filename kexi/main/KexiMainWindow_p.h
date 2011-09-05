@@ -121,7 +121,7 @@ private:
     QVBoxLayout *lyr;
 };
 
-#include <qimageblitz/qimageblitz.h>
+//#include <qimageblitz/qimageblitz.h>
 #include <KFadeWidgetEffect>
 #include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
