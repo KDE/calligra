@@ -48,6 +48,7 @@
 
 // calligra libs includes
 #include <calligraversion.h>
+#include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -86,7 +87,7 @@
 #endif
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
-
+#include <KoTextLayoutRootArea.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -409,13 +410,9 @@ void KWView::setupActions()
     actionCollection()->addAction("set_shape_floating", action);
     connect(action, SIGNAL(triggered()), this, SLOT(setFloating()));
 
-    action = new KAction(i18n("Previous Page"), this);
-    actionCollection()->addAction("page_previous", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(goToPreviousPage()));
+    action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
-    action = new KAction(i18n("Next Page"), this);
-    actionCollection()->addAction("page_next", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(goToNextPage()));
+    action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
 
     // -------------- Edit actions
     action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
@@ -1507,26 +1504,84 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     }
 }
 
-void KWView::goToNextPage()
+void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
 {
-    KWPage page = currentPage().next();
-    if (page.isValid())
-        goToPage(page);
+    // Scroll display
+    qreal moveDistance = m_canvas->canvasController()->visibleHeight() * 0.8;
+    m_canvas->canvasController()->pan(QPoint(0, -moveDistance));
+
+    // Find current frameset, FIXME for now assume main
+    KWTextFrameSet *currentFrameSet = kwdocument()->mainFrameSet();
+
+    // Since we move _up_ calculate the position where a frame would _start_ if
+    // we were scrolled to the _first_ page
+    QPointF pos = currentFrameSet->frames().first()->shape()->absoluteTransformation(0).map(QPointF(0, 5));
+
+    pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset(), viewConverter());
+
+    // Find textshape under that position and from current frameset
+    QList<KoShape*> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() -20, 40, 40));
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape* shape, possibleTextShapes) {
+        KoShapeUserData *userData = shape->userData();
+        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+            foreach (KWFrame *frame, currentFrameSet->frames()) {
+                if (frame->shape() == shape) {
+                    pos = shape->absoluteTransformation(0).inverted().map(pos);
+                     pos += QPointF(0.0, textShapeData->documentOffset());
+
+                    int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
+                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    return;
+                }
+            }
+        }
+    }
 }
 
-void KWView::goToPreviousPage()
+void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
 {
-    KWPage page = currentPage().previous();
-    if (page.isValid())
-        goToPage(page);
+    // Scroll display
+    qreal moveDistance = m_canvas->canvasController()->visibleHeight() * 0.8;
+    m_canvas->canvasController()->pan(QPoint(0, moveDistance));
+
+    // Find current frameset, FIXME for now assume main
+    KWTextFrameSet *currentFrameSet = kwdocument()->mainFrameSet();
+
+    // Since we move _down_ calculate the position where a frame would _end_ if
+    // we were scrolled to the _lasst_ page
+    KoShape *shape = currentFrameSet->frames().last()->shape();
+    QPointF pos = shape->absoluteTransformation(0).map(QPointF(0, shape->size().height() - 5));
+    pos.setY(pos.y() - m_document->pageManager()->page(qreal(pos.y())).rect().bottom());
+
+    pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset() + QPointF(0, m_canvas->canvasController()->visibleHeight()), viewConverter());
+
+    // Find textshape under that position and from current frameset
+    QList<KoShape*> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() -20, 40, 40));
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape* shape, possibleTextShapes) {
+        KoShapeUserData *userData = shape->userData();
+        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+            foreach (KWFrame *frame, currentFrameSet->frames()) {
+                if (frame->shape() == shape) {
+                    pos = shape->absoluteTransformation(0).inverted().map(pos);
+                    pos += QPointF(0.0, textShapeData->documentOffset());
+
+                    int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
+                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()),
-                                                       m_canvas->viewConverter());
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, 
+                            page.offsetInDocument()), m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);
 }
