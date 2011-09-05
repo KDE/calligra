@@ -733,7 +733,7 @@ void KexiMainWindow::setupActions()
 
     ac->addAction("project_close",
         action = d->action_close = new KexiMenuWidgetAction(
-            KIcon("window-close"), i18n("&Close Project..."), this));
+            KIcon("window-close"), i18n("&Close Project"), this));
     action->setToolTip(i18n("Close the current project"));
     action->setWhatsThis(i18n("Closes the current project."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectClose()));
