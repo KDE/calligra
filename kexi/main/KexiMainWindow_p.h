@@ -1330,7 +1330,9 @@ void KexiTabbedToolBar::selectMainMenuItem(const char *actionName)
     if (actionName) {
         KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
         KexiMenuWidgetAction *a = qobject_cast<KexiMenuWidgetAction*>(ac->action(actionName));
-        d->mainMenu->setPersistentlySelectedAction(a, true);
+        if (a) {
+            d->mainMenu->setPersistentlySelectedAction(a, true);
+        }
 //        a->setPersistentlySelected(true);
     }
 }
