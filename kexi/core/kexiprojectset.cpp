@@ -33,7 +33,16 @@
 class KexiProjectSetPrivate
 {
 public:
-    KexiProjectSetPrivate() {
+    KexiProjectSetPrivate()
+    {
+    }
+    ~KexiProjectSetPrivate()
+    {
+        //qDeleteAll(list);
+        foreach (KexiProjectData* data, list) {
+            kDebug() << "deleting" << data;
+            delete data;
+        }
     }
     KexiProjectData::List list;
 // KexiDB::MessageHandler* msgHandler;
@@ -91,6 +100,11 @@ KexiProjectSet::~KexiProjectSet()
 void KexiProjectSet::addProjectData(KexiProjectData *data)
 {
     d->list.append(data);
+}
+
+KexiProjectData* KexiProjectSet::takeProjectData(KexiProjectData *data)
+{
+    return d->list.removeOne(data) ? data : 0;
 }
 
 KexiProjectData::List KexiProjectSet::list() const

@@ -30,6 +30,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 
+#include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -40,7 +41,7 @@
 #include <KoTextSharedSavingData.h>
 
 #include <KoStoreDevice.h>
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 #include <QBuffer>
 #include <QTextCursor>
@@ -376,6 +377,24 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
 
     settingsWriter->endElement(); // config:config-item-map-entry
     settingsWriter->endElement(); // config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+    KoTextDocument doc(m_document->mainFrameSet()->document());
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.relativeTabs() ? "true" : "false");
+    settingsWriter->endElement();
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.paraTableSpacingAtStart() ? "true" : "false");
+    settingsWriter->endElement();
+
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->endElement(); // office:settings

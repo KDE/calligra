@@ -21,6 +21,7 @@
 #define KPlato_CalendarTester_h
 
 #include <QtTest/QtTest>
+#include <KTempDir>
 
 namespace KPlato
 {
@@ -40,8 +41,7 @@ private slots:
     void workIntervalsFullDays();
 
 private:
-    void removeDir(const QString &subdir);
-    QString mDataDir;
+    KTempDir m_tmp;
 };
 
 } //namespace KPlato

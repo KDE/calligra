@@ -774,7 +774,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
 KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
 {
     READ_PROLOGUE
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle);
 
     while (!atEnd()) {
         readNext();

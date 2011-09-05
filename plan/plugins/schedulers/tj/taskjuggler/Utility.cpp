@@ -59,7 +59,7 @@ isRichText(const QString& str)
 
     bool hasTags = false;
     bool inTag = false;
-    for (uint i = 0; i < str.length(); ++i)
+    for (int i = 0; i < str.length(); ++i)
     {
         if (str[i] == '<')
         {
@@ -211,21 +211,22 @@ clocaltime(const time_t* t)
 {
     /* In some cases we haven't initialized the module yet. So we do not use
      * the cache. */
+    time_t tt = *t < 0 ? 0 : *t;
     if (!LtHashTab)
-        return localtime(t);
+        return localtime(&tt);
 
-    long index = *t % LTHASHTABSIZE;
+    long index = tt % LTHASHTABSIZE;
     if (LtHashTab[index])
         for (LtHashTabEntry* htep = LtHashTab[index]; htep;
              htep = htep->next)
-            if (htep->t == *t)
+            if (htep->t == tt)
                 return htep->tms;
 
     LtHashTabEntry* htep = new LtHashTabEntry;
     htep->next = LtHashTab[index];
-    htep->t = *t;
+    htep->t = tt;
     htep->tms = new struct tm;
-    memcpy(htep->tms, localtime(t), sizeof(struct tm));
+    memcpy(htep->tms, localtime(&tt), sizeof(struct tm));
     LtHashTab[index] = htep;
     return htep->tms;
 }
@@ -825,7 +826,7 @@ date2time(const QString& date)
     }
     else
     {
-        qFatal(QString("Illegal date: %1").arg(date).toLocal8Bit());
+        qFatal("%s", QString("Illegal date: %1").arg(date).toLocal8Bit().constData());
         return 0;
     }
 

@@ -49,7 +49,7 @@
 #include <QTextCursor>
 #include <KDebug>
 
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(document),
@@ -271,6 +271,8 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
         kDebug(32001) << "Ignorelist:" << ignorelist;
 
         KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
+
+        KoTextDocument(textDoc).setParaTableSpacingAtStart(configurationSettings.parseConfigItemBool("AddParaTableSpacingAtStart", true));
     }
     //1.6: m_document->variableCollection()->variableSetting()->loadOasis(settings);
 }

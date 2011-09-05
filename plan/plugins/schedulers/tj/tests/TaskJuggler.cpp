@@ -58,76 +58,56 @@ namespace KPlato
 
 void TaskJuggler::initTimezone()
 {
-    cleanupTimezone();
-    mDataDir = QDir::homePath() + "/.tj-unit-test/projecttest";
-    QVERIFY(QDir().mkpath(mDataDir));
+    QVERIFY( m_tmp.exists() );
+
     QFile f;
-    f.setFileName(mDataDir + QLatin1String("/zone.tab"));
+    f.setFileName( m_tmp.name() + QLatin1String( "zone.tab" ) );
     f.open(QIODevice::WriteOnly);
     QTextStream fStream(&f);
-    fStream << "DE      +5230+01322     Europe/Berlin\n"
+    fStream << "DE  +5230+01322 Europe/Berlin\n"
                "EG  +3003+03115 Africa/Cairo\n"
                "FR  +4852+00220 Europe/Paris\n"
                "GB  +512830-0001845 Europe/London   Great Britain\n"
                "US  +340308-1181434 America/Los_Angeles Pacific Time\n";
     f.close();
-    QDir dir(mDataDir);
+    QDir dir(m_tmp.name());
     QVERIFY(dir.mkdir("Africa"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), mDataDir + QLatin1String("/Africa/Cairo"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), m_tmp.name() + QLatin1String("Africa/Cairo"));
     QVERIFY(dir.mkdir("America"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), mDataDir + QLatin1String("/America/Los_Angeles"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), m_tmp.name() + QLatin1String("America/Los_Angeles"));
     QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), mDataDir + QLatin1String("/Europe/Berlin"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), mDataDir + QLatin1String("/Europe/London"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), mDataDir + QLatin1String("/Europe/Paris"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), m_tmp.name() + QLatin1String("Europe/London"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), m_tmp.name() + QLatin1String("Europe/Paris"));
 
+    // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
+    //       and hence, this is common to all unit tests
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
-    group.writeEntry("ZoneinfoDir", mDataDir);
-    group.writeEntry("Zonetab", mDataDir + QString::fromLatin1("/zone.tab"));
+    group.writeEntry("ZoneinfoDir", m_tmp.name());
+    group.writeEntry("Zonetab", m_tmp.name() + QString::fromLatin1("zone.tab"));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 }
 
 void TaskJuggler::cleanupTimezone()
 {
-    removeDir(QLatin1String("projecttest/Africa"));
-    removeDir(QLatin1String("projecttest/America"));
-    removeDir(QLatin1String("projecttest/Europe"));
-    removeDir(QLatin1String("projecttest"));
-    removeDir(QLatin1String("share/config"));
-    QDir().rmpath(QDir::homePath() + "/.tj-unit-test/share");
-}
-
-void TaskJuggler::removeDir(const QString &subdir)
-{
-    QDir local = QDir::homePath() + QLatin1String("/.tj-unit-test/") + subdir;
-    foreach(const QString &file, local.entryList(QDir::Files)) {
-        if(!local.remove(file)) {
-            qWarning("%s: removing failed", qPrintable( file ));
-        }
-    }
-    QCOMPARE((int)local.entryList(QDir::Files).count(), 0);
-    local.cdUp();
-    QString subd = subdir;
-    subd.remove(QRegExp("^.*/"));
-    local.rmpath(subd);
 }
 
 void TaskJuggler::initTestCase()
 {
-    DebugCtrl.setDebugLevel(100);
+    DebugCtrl.setDebugLevel(0);
     DebugCtrl.setDebugMode(0xffff);
 
     initTimezone();
     qDebug()<<"Time zone initiated";
     project = new TJ::Project();
     qDebug()<<"Project created:"<<project;
-    project->setScheduleGranularity( 60 ); // seconds
+    project->setScheduleGranularity( TJ::ONEHOUR ); // seconds
 
     QDateTime dt = QDateTime::fromString( "2011-07-01 08:00:00", Qt::ISODate );
-    project->setStart(dt.toTime_t());
-    project->setEnd(dt.addDays(7).toTime_t());
+    project->setStart( dt.toTime_t() );
+    project->setEnd( dt.addDays(7).addSecs( -1 ).toTime_t() );
 
     qDebug()<<project->getStart()<<project->getEnd();
 
@@ -225,9 +205,13 @@ void TaskJuggler::list()
 
     QStringList s; foreach(TJ::CoreAttributes *a, lst) s << a->getId();
     qDebug()<<s;
-    QCOMPARE( lst.at(0)->getId(), QString( "A3" ) ); 
-    QCOMPARE( lst.at(1)->getId(), QString( "A2" ) ); 
-    QCOMPARE( lst.at(2)->getId(), QString( "A1" ) ); 
+    QCOMPARE( lst.at(0)->getId(), QString( "A3" ) );
+    QCOMPARE( lst.at(1)->getId(), QString( "A2" ) );
+    QCOMPARE( lst.at(2)->getId(), QString( "A1" ) );
+
+    while ( ! lst.isEmpty() ) {
+        delete lst.takeFirst();
+    }
 }
 
 void TaskJuggler::oneResource()
@@ -269,14 +253,11 @@ void TaskJuggler::dependency()
     TJ::Task *t = project->getTask( "T1" );
     QVERIFY( t != 0 );
 
-    TJ::TaskDependency *d = m->addPrecedes( t->getId() );
-    QVERIFY( d != 0 );
-
-    d = t->addDepends( m->getId() );
+    TJ::TaskDependency *d = t->addDepends( m->getId() );
     QVERIFY( d != 0 );
 }
 
-void TaskJuggler::schedule()
+void TaskJuggler::scheduleResource()
 {
     QCOMPARE( project->getMaxScenarios(), 1 );
 
@@ -300,6 +281,125 @@ void TaskJuggler::schedule()
 
     qDebug()<<QDateTime::fromTime_t( t->getStart( 0 ) )<<QDateTime::fromTime_t( t->getEnd( 0 ) );
     
+}
+
+void TaskJuggler::scheduleConstraints()
+{
+    QString s = "Test one ALAP milestone --------------------";
+    qDebug()<<s;
+    TJ::Project *proj = new TJ::Project();
+    proj->setScheduleGranularity( TJ::ONEHOUR ); // seconds
+
+    QDateTime pstart = QDateTime::fromString( "2011-07-01 00:00:00", Qt::ISODate );
+    QDateTime pend = pstart.addDays(1);
+    proj->setStart( pstart.toTime_t() );
+    proj->setEnd( pend.toTime_t() );
+
+    TJ::Task *m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+    m->setMilestone( true );
+    m->setScheduling( TJ::Task::ALAP );
+    m->setSpecifiedEnd( 0, proj->getEnd() - 1 );
+
+    QVERIFY( proj->pass2( true ) );
+    QVERIFY( proj->scheduleAllScenarios() );
+
+    QDateTime mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+    QDateTime mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+    QCOMPARE( mstart, pend );
+    QCOMPARE( mend, pend.addSecs( -1 ) );
+
+    delete proj;
+
+    s = "Test one ALAP milestone + one ASAP task --------------------";
+    qDebug()<<s;
+    proj = new TJ::Project();
+    proj->setScheduleGranularity( TJ::ONEHOUR ); // seconds
+
+    proj->setStart( pstart.toTime_t() );
+    proj->setEnd( pend.toTime_t() );
+
+    m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+    m->setMilestone( true );
+    m->setScheduling( TJ::Task::ALAP );
+    m->setSpecifiedEnd( 0, proj->getEnd() - 1 );
+
+    TJ::Task *t = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+    t->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t->setSpecifiedStart( 0, proj->getStart() );
+
+    QVERIFY( proj->pass2( true ) );
+    QVERIFY( proj->scheduleAllScenarios() );
+
+    QDateTime tstart = QDateTime::fromTime_t( t->getStart( 0 ) );
+    QDateTime tend = QDateTime::fromTime_t( t->getEnd( 0 ) );
+    QCOMPARE( tstart, pstart );
+    QCOMPARE( tend, pstart.addSecs( TJ::ONEHOUR - 1 ) );
+
+    mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+    mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+    QCOMPARE( mstart, pend );
+    QCOMPARE( mend, pend.addSecs( -1 ) );
+
+    delete proj;
+
+    s = "Test combination of ASAP/ALAP tasks and milestones --------------------";
+    qDebug()<<s;
+    proj = new TJ::Project();
+    proj->setScheduleGranularity( 300 ); // seconds
+
+    proj->setStart( pstart.toTime_t() );
+    proj->setEnd( pend.toTime_t() );
+
+    TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+    t1->setScheduling( TJ::Task::ASAP );
+    t1->setSpecifiedStart( 0, proj->getStart() );
+    t1->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+
+    TJ::Task *t2 = new TJ::Task(proj, "T2", "T2", 0, QString(), 0);
+    t2->setScheduling( TJ::Task::ALAP );
+    t2->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t2->setSpecifiedEnd( 0, proj->getEnd() - 1 );
+//     m->addPrecedes( t->getId() );
+
+    TJ::Task *m1 = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+    m1->setMilestone( true );
+    m1->setScheduling( TJ::Task::ASAP );
+    m1->addDepends( t1->getId() );
+    m1->addPrecedes( t2->getId() );
+
+    TJ::Task *m2 = new TJ::Task(proj, "M2", "M2", 0, QString(), 0);
+    m2->setMilestone( true );
+    m2->setScheduling( TJ::Task::ALAP );
+    m2->addDepends( t1->getId() );
+    m2->addPrecedes( t2->getId() );
+
+    TJ::Task *t3 = new TJ::Task(proj, "T3", "T3", 0, QString(), 0);
+    t3->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t3->addPrecedes( m2->getId() );
+    t3->setScheduling( TJ::Task::ALAP ); // since t4 is ALAP, this must be ALAP too
+
+    TJ::Task *t4 = new TJ::Task(proj, "T4", "T4", 0, QString(), 0);
+    t4->setDuration( 0, (double)(TJ::ONEHOUR) / TJ::ONEDAY );
+    t4->addPrecedes( t3->getId() );
+    t4->setScheduling( TJ::Task::ALAP );
+
+    QVERIFY( proj->pass2( true ) );
+    QVERIFY( proj->scheduleAllScenarios() );
+
+    QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+    QDateTime t2start = QDateTime::fromTime_t( t2->getStart( 0 ) );
+    QDateTime t3start = QDateTime::fromTime_t( t3->getStart( 0 ) );
+    QDateTime t3end = QDateTime::fromTime_t( t3->getEnd( 0 ) );
+    QDateTime t4end = QDateTime::fromTime_t( t4->getEnd( 0 ) );
+    QDateTime m1end = QDateTime::fromTime_t( m1->getEnd( 0 ) );
+    QDateTime m2start = QDateTime::fromTime_t( m2->getStart( 0 ) );
+    QDateTime m2end = QDateTime::fromTime_t( m2->getEnd( 0 ) );
+
+    QCOMPARE( m1end, t1end );
+    QCOMPARE( m2start, t2start );
+    QCOMPARE( m2end, t3end );
+    QCOMPARE( t3start, t4end.addSecs(1) );
+
 }
 
 } //namespace KPlato

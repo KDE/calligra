@@ -48,7 +48,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 #include <kexidb/preparedstatement.h>
-#include <tableview/kexitableviewdata.h>
+#include <dataviewcommon/kexitableviewdata.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>
@@ -474,7 +474,8 @@ void KexiFormView::updateValuesForSubproperties()
 static void setUnsavedBLOBIdsForDataViewMode(
     QWidget* widget, const QHash<QByteArray, KexiBLOBBuffer::Id_t>& unsavedLocalBLOBsByName)
 {
-    if (widget && -1 != widget->metaObject()->indexOfProperty("pixmapId")) {
+  if (widget) {
+    if (-1 != widget->metaObject()->indexOfProperty("pixmapId")) {
         const KexiBLOBBuffer::Id_t blobID
             = unsavedLocalBLOBsByName.value(widget->objectName().toLatin1());
         if (blobID > 0)
@@ -488,6 +489,7 @@ static void setUnsavedBLOBIdsForDataViewMode(
     foreach(QWidget *w, list) {
         setUnsavedBLOBIdsForDataViewMode(w, unsavedLocalBLOBsByName);
     }
+  }
 }
 
 void

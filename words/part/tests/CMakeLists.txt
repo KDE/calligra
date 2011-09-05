@@ -9,6 +9,7 @@ include_directories(${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
 )
 
 add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}/\\"")
 
 ########### next target ###############
 
@@ -65,4 +66,9 @@ if( Soprano_FOUND )
   target_link_libraries(TestRdf wordsprivate ${QT_QTTEST_LIBRARY})
 endif( Soprano_FOUND )
 
-########### end ###############
+########### next target ###############
+
+set(TestKoBookmark_test_SRCS TestKoBookmark.cpp)
+kde4_add_unit_test(TestKoBookmark TESTNAME words-part-TestKoBookmark  ${TestKoBookmark_test_SRCS})
+target_link_libraries(TestKoBookmark wordsprivate ${QT_QTTEST_LIBRARY})
+

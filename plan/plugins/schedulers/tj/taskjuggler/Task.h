@@ -161,14 +161,14 @@ public:
         qDebug()<<"Task::setSpecifiedStart:"<<id<<":"<<sc<<s<<scenarios[sc].specifiedStart;
     }
     void setStart(int sc, time_t s) { scenarios[sc].start = s; }
-    const time_t getStart(int sc) const { return scenarios[sc].start; }
+    time_t getStart(int sc) const { return scenarios[sc].start; }
 
     void setSpecifiedEnd(int sc, time_t s)
     {
         scenarios[sc].specifiedEnd = s;
     }
     void setEnd(int sc, time_t s) { scenarios[sc].end = s; }
-    const time_t getEnd(int sc) const { return scenarios[sc].end; }
+    time_t getEnd(int sc) const { return scenarios[sc].end; }
 
     void setSpecifiedPeriod(int sc, const Interval& iv)
     {
