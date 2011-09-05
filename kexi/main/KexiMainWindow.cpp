@@ -679,7 +679,6 @@ void KexiMainWindow::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(slotGetNewStuff()));
 #endif
 
-#ifndef KEXI_NO_UNFINISHED
     {
         ac->addAction("project_open_recent",
             action = d->action_open_recent = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
@@ -690,9 +689,6 @@ void KexiMainWindow::setupActions()
         action->setWhatsThis(
             i18n("Opens one of the recently opened project. Currently opened project is not affected."));
     }
-#else
-    d->action_open_recent = d->dummy_action;
-#endif
 
     ac->addAction("project_save",
                   d->action_save = KStandardAction::save(this, SLOT(slotProjectSave()), this));
