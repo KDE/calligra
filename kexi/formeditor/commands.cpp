@@ -531,9 +531,11 @@ void AlignWidgetsCommand::undo()
     for (QHash<QByteArray, QPoint>::ConstIterator it = d->pos.constBegin(); it != endIt; ++it) {
         ObjectTreeItem *item = d->form->objectTree()->lookup(it.key());
         if (item && item->widget())
+        {
             item->widget()->move(d->pos.value(item->widget()->objectName().toLatin1().constData()));
-        // we restore selection
-        d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection | Form::Raise);
+            // we restore selection
+            d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection | Form::Raise);
+        }
     }
 }
 

@@ -79,7 +79,7 @@
 #include <KoBookmark.h>
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>

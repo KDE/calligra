@@ -21,6 +21,7 @@
 #define KPlato_ProjectTester_h
 
 #include <QtTest/QtTest>
+#include <KTempDir>
 
 #include "kptproject.h"
 #include "kptdatetime.h"
@@ -46,9 +47,8 @@ private slots:
 private:
     void initTimezone();
     void cleanupTimezone();
-    void removeDir(const QString &subdir);
-    QString mDataDir;
 
+    KTempDir m_tmp;
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;

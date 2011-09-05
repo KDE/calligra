@@ -61,6 +61,7 @@
 #include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"
 #include "KarbonDocumentMergeCommand.h"
+#include "KarbonPaletteBarWidget.h"
 
 #include <KoMainWindow.h>
 #include <KoLineBorder.h>
@@ -154,12 +155,13 @@ class KarbonView::Private
 public:
     Private(KarbonPart * p)
             : part(p), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
-            , closePath(0), combinePath(0)
+            , colorBar(0), closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
             , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
             , deleteSelectionAction(0), clipObjects(0), unclipObjects(0)
             , flipVertical(0), flipHorizontal(0), viewAction(0), showRulerAction(0)
             , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
+            , showPaletteAction(0)
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
 
@@ -168,6 +170,7 @@ public:
     KoCanvasController * canvasController;
     KoRuler * horizRuler;
     KoRuler * vertRuler;
+    KarbonPaletteBarWidget *colorBar;
 
     // actions:
     KAction * closePath;
@@ -191,6 +194,7 @@ public:
     KToggleAction * snapGridAction;
     KToggleAction * showPageMargins;
     KToggleAction * showGuidesAction;
+    KToggleAction * showPaletteAction;
 
     //Status Bar
     QLabel * status;       ///< ordinary status
@@ -255,11 +259,6 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     connect(d->smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()));
     addStatusBarItem(d->smallPreview, 0);
 
-    // layout:
-    QGridLayout *layout = new QGridLayout();
-    layout->setMargin(0);
-    layout->addWidget(canvasController, 1, 1);
-
     KoToolManager::instance()->addController(d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
 
@@ -276,14 +275,12 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->horizRuler->setVisible(false);
     new KoRulerController(d->horizRuler, d->canvas->resourceManager());
 
-    layout->addWidget(d->horizRuler, 0, 1);
     connect(p, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
 
     d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
     d->vertRuler->setShowMousePosition(true);
     d->vertRuler->setUnit(p->unit());
     d->vertRuler->setVisible(false);
-    layout->addWidget(d->vertRuler, 1, 0);
 
     connect(d->canvas, SIGNAL(documentOriginChanged(const QPoint &)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
@@ -294,6 +291,9 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->horizRuler->createGuideToolConnection(d->canvas);
 
     updateRuler();
+
+    d->colorBar = new KarbonPaletteBarWidget(Qt::Horizontal, this);
+    connect(d->colorBar, SIGNAL(colorSelected(const KoColor&)), this, SLOT(applyPaletteColor(const KoColor&)));
 
     if (shell()) {
         // set the first layer active
@@ -317,8 +317,19 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
             d->vertRuler->setVisible(true);
             d->showRulerAction->setChecked(true);
         }
+        if (!interfaceGroup.readEntry<bool>("ShowPalette", true)) {
+            d->colorBar->setVisible(false);
+            d->showPaletteAction->setChecked(false);
+        }
     }
 
+    // layout:
+    QGridLayout *layout = new QGridLayout();
+    layout->setMargin(0);
+    layout->addWidget(d->horizRuler, 0, 1);
+    layout->addWidget(d->vertRuler, 1, 0);
+    layout->addWidget(canvasController, 1, 1);
+    layout->addWidget(d->colorBar, 2, 1);
     setLayout(layout);
 
     reorganizeGUI();
@@ -430,7 +441,7 @@ void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertA
         v.setValue<QImage>(image);
         params.setProperty("qimage", v);
 
-        KoShape *shape = factory->createShape(&params, canvasWidget()->resourceManager());
+        KoShape *shape = factory->createShape(&params, part()->document().resourceManager());
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
@@ -1066,6 +1077,13 @@ void KarbonView::initActions()
     actionCollection()->addAction(KoStandardAction::name(KoStandardAction::ShowGuides), d->showGuidesAction);
     d->showGuidesAction->setChecked(d->part->guidesData().showGuideLines());
 
+    d->showPaletteAction = new KToggleAction(i18n("Show Color Palette"), this);
+    actionCollection()->addAction("view_show_palette", d->showPaletteAction);
+    d->showPaletteAction->setCheckedState(KGuiItem(i18n("Hide Color Palette")));
+    d->showPaletteAction->setToolTip(i18n("Show or hide color palette"));
+    d->showPaletteAction->setChecked(true);
+    connect(d->showPaletteAction, SIGNAL(triggered()), this, SLOT(showPalette()));
+
     d->snapGridAction  = new KToggleAction(i18n("Snap to Grid"), this);
     actionCollection()->addAction("view_snap_to_grid", d->snapGridAction);
     d->snapGridAction->setToolTip(i18n("Snaps to grid"));
@@ -1259,6 +1277,22 @@ void KarbonView::snapToGrid()
     d->canvas->update();
 }
 
+void KarbonView::showPalette()
+{
+    if(!shell())
+        return;
+
+    const bool showPalette = d->showPaletteAction->isChecked();
+    d->colorBar->setVisible(showPalette);
+
+    // this will make the last setting of the ruler visibility persistent
+    KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+    if (showPalette && !interfaceGroup.hasDefault("ShowPalette"))
+        interfaceGroup.revertToDefault("ShowPalette");
+    else
+        interfaceGroup.writeEntry("ShowPalette", showPalette);
+}
+
 void KarbonView::configure()
 {
     QPointer<KarbonConfigureDialog> dialog = new KarbonConfigureDialog(this);
@@ -1424,6 +1458,35 @@ void KarbonView::applyStrokeToSelection()
 
     KoShape * shape = selection->firstSelectedShape();
     d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), shape->border()));
+}
+
+void KarbonView::applyPaletteColor(const KoColor &color)
+{
+    KoSelection *selection = d->canvas->shapeManager()->selection();
+    if (! selection->count())
+        return;
+
+    int style = d->canvas->resourceManager()->intResource(KoCanvasResource::ActiveStyleType);
+    if (style == KoFlake::Foreground) {
+        QList<KoShapeBorderModel*> newStrokes;
+        foreach(KoShape *shape, selection->selectedShapes()) {
+            KoLineBorder *stroke = dynamic_cast<KoLineBorder*>(shape->border());
+            if (stroke) {
+                // preserve border properties
+                KoLineBorder *newStroke = new KoLineBorder(*stroke);
+                newStroke->setColor(color.toQColor());
+                newStrokes << newStroke;
+            } else {
+                newStrokes << new KoLineBorder(1.0, color.toQColor());
+            }
+        }
+        d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), newStrokes));
+        d->canvas->resourceManager()->setForegroundColor(color);
+    } else {
+        KoShapeBackground *fill = new KoColorBackground(color.toQColor());
+        d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill));
+        d->canvas->resourceManager()->setBackgroundColor(color);
+    }
 }
 
 #include "KarbonView.moc"

@@ -125,6 +125,9 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
 
 int CSTCompareView::updateResult(int index)
 {
+    if (index < 0 || index >= m_result.count())
+        return 0;
+
     QString result(m_result[index]);
 
     QStringList list = result.split(' ');
