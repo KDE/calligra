@@ -374,6 +374,11 @@ public:
 
     QDomElement xmlElement( QDomDocument& doc, bool absId = true );
 
+    TaskList getSuccessors() const { return successors; }
+    TaskList getPredecessors() const { return predecessors; }
+
+    bool hasAlapPredecessor() const;
+
 private:
     void propagateStart(int sc, time_t date);
     void propagateEnd(int sc, time_t date);
@@ -572,6 +577,7 @@ private:
 
 } // namespace TJ
 
+KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::Task* t );
 KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::Task& t );
 
 #endif

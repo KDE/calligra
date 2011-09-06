@@ -431,13 +431,24 @@ Task::scheduleContainer(int sc)
     return false;
 }
 
+bool
+Task::hasAlapPredecessor() const
+{
+    foreach ( const CoreAttributes *t, predecessors ) {
+        if ( static_cast<const Task*>( t )->getScheduling() == TJ::Task::ALAP || static_cast<const Task*>( t )->hasAlapPredecessor() ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void
 Task::propagateStart(int sc, time_t date)
 {
     start = date;
 
     if (DEBUGTS(11))
-        qDebug()<<"PS1: Setting start of"<<id<<"to"<<time2tjp(start);
+        qDebug()<<"PS1: Setting start of"<<name<<"to"<<time2tjp(start);
 
     TJMH.debugMessage(QString("%1: Propagates start to %2 ").arg(name).arg(time2ISO(start)));
 
@@ -455,13 +466,17 @@ Task::propagateStart(int sc, time_t date)
     for (TaskListIterator tli(previous); tli.hasNext();) {
         Task *t = static_cast<Task*>(tli.next());
         if (t->end == 0 && t->latestEnd(sc) != 0 &&
-            !t->schedulingDone &&
-            (t->scheduling == ALAP ||
+            !t->schedulingDone ||
              (t->effort == 0.0 && t->length == 0.0 &&
-              t->duration == 0.0 && !t->milestone)))
+              t->duration == 0.0 && !t->milestone))
         {
-            /* Recursively propagate the end date */
-            t->propagateEnd(sc, t->latestEnd(sc));
+            if (t->hasAlapPredecessor() ) {
+                t->setScheduling(ALAP);
+            }
+            if ( t->scheduling == ALAP ) {
+                /* Recursively propagate the end date */
+                t->propagateEnd(sc, t->latestEnd(sc));
+            }
         }
     }
     /* Propagate start time to sub tasks which have only an implicit
@@ -3755,7 +3770,21 @@ Task::isOrHasDescendantOnCriticalPath(int sc) const
 
 } // namespace TJ
 
+QDebug operator<<( QDebug dbg, const TJ::Task* t )
+{
+    return operator<<( dbg, *t );
+}
+
 QDebug operator<<( QDebug dbg, const TJ::Task& t )
 {
-    return dbg << "task[" << t.getId() << "]";
+    dbg << (t.isMilestone() ? "Milestone[" : "Task[");
+    dbg << t.getName() << (t.getScheduling() == TJ::Task::ASAP ? "(ASAP)" : "(ALAP)");
+    if ( t.isSchedulingDone() ) {
+        dbg << "Scheduled";
+    } else if ( t.isReadyForScheduling() ) {
+        dbg << "ReadyForScheduling";
+    } else {
+    }
+    dbg << "]";
+    return dbg;
 }
