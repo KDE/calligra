@@ -62,7 +62,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     clear();
     d->itemsPartClass = itemsPartClass;
 
-    d->rootItem = new KexiProjectModelItem(prj->data()->databaseName());
+    d->rootItem = new KexiProjectModelItem(prj ? prj->data()->databaseName() : QString());
     
     KexiPart::PartInfoList* plist = Kexi::partManager().infoList();
     if (!plist)
@@ -95,7 +95,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
           
             //lookup project's objects (part items)
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
-            KexiPart::ItemDict *item_dict = prj->items(info);
+            KexiPart::ItemDict *item_dict = prj ? prj->items(info) : 0;
             if (!item_dict) {
                 continue;
             }
@@ -131,7 +131,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     if (partManagerErrorMessages && !partManagerErrorMessages->isEmpty())
         partManagerErrorMessages->append("</ul></p>");
 
-   d-> rootItem->debugPrint();
+   //d->rootItem->debugPrint();
 }
 
 KexiProjectModel::~KexiProjectModel()

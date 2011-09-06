@@ -3,13 +3,13 @@
  Proposed by jstaniek
 
  Copyright (C) 2003-2007 Jaroslaw Staniek @ OpenOffice Polska
- Copyright (C) 2008-2010 Jaroslaw Staniek (staniek at kde.org)
+ Copyright (C) 2008-2011 Jaroslaw Staniek (staniek at kde.org)
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
 TIP: For most important commits use: CCMAIL:kexi-devel@kde.org
 TIP: For interesting commits use
-FEATURE: <desctiption>
+FEATURE: <description>
 CCMAIL:danny@commit-digest.org
 TIP: For bugfixes use CCMAIL:###-done@bugs.kde.org
 TIP: Use "QT_FLUSH_PAINT=10 kexi" (or "set QT_FLUSH_PAINT=10; kexi" on Windows) to debug painting.
@@ -82,12 +82,21 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cpp/fid005249EAAF7BE50E0DF5B02243622557BCE5A466.aspx) and use for any recursion guard
 
+TODO: remove color utils from KexiUtils, use KColorUtils directly
+TODO: remove contrasting-color creation code from KexiUtils, and use KColorScheme::shade() instead
+
+TODO: support 'kexi http://foobar.com/db.kexi' commands (and for other protocols)
+
 ===================== Kexi 2.4  =====================
 
 Tabbed toolbar TODOS:
 *add tab hiding to the API
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
+
+2011-09-05
+Main Window
+*Set sane default size for the first run, for <=1024 maximize the window
 
 2011-08-28
 Table View
@@ -112,11 +121,75 @@ General
 BUG:278418
 
 ~~~~~~~~~~~~~~~~ 2.4 Alpha 3 (2.3.73) ~~~~~~~~~~~~~~~~
+
+2011-06-21
+Startup
+*items in "Recent Projects" sort by date descending
+
+2011-06-15
+Main
+*Main window starts smoother
+
+2011-06-09..14
+Core, Startup
+*Shortcut files
+**bumped version to v3: "name" for shortcuts to file-based databases is a full file path now. If the file is within the user's home directory, the dir is replaced with $HOME, e.g. name=$HOME/mydb.kexi. Not compatible with earlier versions but in these versions only filename was stored so the file was generally inaccessible anyway. "lastOpened" field added of type date/time (ISO format).
+**saving and loading code moved to KexiProjectData
+*Information about recent projects now saved, loaded and displayed properly
+*Show "Recent files" screen as welcome screen, disable old welcome dialog
+
+TODO: make KexiProjectData not derived from QObject
+TODO: security: for saved server-based recent project add [Connection] group and name=<connectionfile> in it; then saved password can be found in connection data if any, and recent data would not save passwords at all
+TODO: "recent projects view": improve look of items; group by date, type/server...
+
 ~~~~~~~~~~~~~~~~ 2.4 Alpha 2 (2.3.72) ~~~~~~~~~~~~~~~~
 
 2011-06-08
 Core
 *Fix regression added with the delayed loading of plugins: "Create" toolbar works now
+Startup
+*initial functionality for "Recent Projects" assistant
+
+2011-06-06..07
+Startup
+*"Recent Projects" assistant
+
+2011-06-05
+Main
+*Fix opening projects in new process: start the process in detached mode
+*use delayed deletion of Kexi menu to avoid crashes
+
+2011-06-02
+Startup
+*"Open Project" assistant: opening files works
+
+2011-06-01
+Startup
+*Message Widget: fixes for positioning callout pointer
+*"Open Project" assistant added
+
+TODO: display db connection error properly
+
+2011-05-27..31
+Startup
+*Message Widget: added KexiLinkWidget for better supported 'link' buttons with proper colors in active and disabled modes
+
+2011-05-26
+Startup
+*Message Widget: add positioning of the callout pointer at specified point to the API
+*New Project assistant: warning about connection error is now positioned properly
+
+2011-05-25
+Startup
+*Message Widget: improve layouts and introduce API for setting direction for callout pointer
+
+2011-05-18
+Startup
+*New Project assistant: display connection errors as inline messages
+
+2011-05-12
+Startup
+*New Project assistant: ask for overwriting existing databases
 
 2011-05-11
 Core
@@ -142,11 +215,94 @@ Forms
 **backported to 2.3.x
 **backported to 2.2.x
 
+2011-05-05
+*New Project assistant: server-based project creation works
+
+2011-05-04
+Startup
+*New Project assistant: initial port of server-based project creation pages
+*project selector and connection selector ported to Qt4
+
+2011-05-03
+Startup
+*"Database Connection" page added to the New Project assistant
+
+2011-05-02
+Startup
+*Message Widget: merged with kdelibs changes, fixed problem with margins and arrow painting
+*New database properly created using the new assistant
+
+2011-04-29
+Startup
+*Assistants: Cancel button added
+
+2011-04-27..28
+Startup
+*Assistants:
+**proper painting of context arrow
+**fixed crash in event loop
+**merged with agateau/kmessagewidget
+**KexiContextMessage* API extended
+**two remaining error messages of 'DB Title Page' ported to KexiContextMessage* API
+**Fixed focusing widget after message is closed
+
+2011-04-14..26
+Startup
+*Assistant Framework added for the Modern Menu
+*"New blank database" assistant implemented; reused previous code
+*KexiAnimatedLayout introduced, used in the modern assistant
+*KexiContextMessage introduced and KexiContextMessageWidget, extends KMessageWidget to remove modal KMessageBox use in assistant dialogs
+**the message widget is displayed inline within the layout, context sensitive
+**current page is displayed as disabled when the message widget is displayed
+**it's first use in the DB Title Page of "New Project" assistant
+
+
+TODO: add operationMode property to KUrlRequester: enum OperationMode { Other = 0, Opening, Saving }
+
+2011-04-11..13
+Main Window
+*Modern Menu
+**Escape key closes the contents area, then second press closes the main menu
+**enable Alt+F as accelerator for the main menu
+**menu is focused after opening and first menu item is highlighted
+**set contents area Window brush to Base and WindowText brush to Text
+***this web-like style harmonizes the with some white pages like 'open recent' (http://community.kde.org/File:Calligra_startup_words_simplified_menu_mockup_jstaniek.png)
+*Tabbed toolbar
+**focusing removed to fix usability with the main menu (arrows)
+*Help menu added to drop-down button
+*"Search" entry added
+
+2011-04-10
+Main Window
+*Modern Menu
+**All actions in main menu have at least a placeholder
+**Only hide menu if clicked outside
+
+2011-04-08..09
+Main Window
+*Modern Menu
+**display lighter gradient, make clicking on persistent items possible only once per item
+**improve gradient, make empty menu mostly transparent
+**make shortcuts work - menu is displayed and contents appear
+**added fades when switching between contents
+**proper selecting/deselecting persistent items
+TODO: still conflicts when menu is visible
+
+2011-03-29
+Main Window
+*Initial implementation of the Modern Menu
+TODO: fix keyboard-support
+
 2011-03-28
 KexiDB
 *fix possible crash when handling queries with lookup columns
 **backported to 2.3.x
+Forms
+*fix possible crash in the "assign action" feature
+**backported to 2.3.x
+**backported to 2.2.x
 
+2011-03-10
 Forms
 *added --hide-menu command line option: Hides the main menu (the tabbed toolbar) completely.
  A number of commands from the main menu is always visible. This option is useful in User Mode.

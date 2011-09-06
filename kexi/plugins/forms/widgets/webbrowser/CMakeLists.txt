@@ -17,8 +17,9 @@ target_link_libraries(
     kexidatatable
     kexiextendedwidgets
     kformdesigner
-    ${KOPROPERTY_LIBS}
+    kexidataviewcommon
     kexiformutils
+    ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}

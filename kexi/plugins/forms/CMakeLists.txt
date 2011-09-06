@@ -13,7 +13,9 @@ endif(MARBLE_FOUND)
 
 ########### next target ###############
 
-add_subdirectory(widgets/webbrowser)
+if(QT_QTWEBKIT_FOUND)
+  add_subdirectory(widgets/webbrowser)
+endif(QT_QTWEBKIT_FOUND)
 
 set(kexihandler_form_PART_SRCS kexiforms.cpp )
 

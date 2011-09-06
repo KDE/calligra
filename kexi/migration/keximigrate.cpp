@@ -215,7 +215,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     // - create copies of KexiDB-compat tables
     // - create copies of non-KexiDB tables
     delete m_destPrj;
-    m_destPrj = new KexiProject(m_migrateData->destination,
+    m_destPrj = new KexiProject(*m_migrateData->destination,
                                 result ? (KexiDB::MessageHandler*)*result : 0);
     bool ok = true == m_destPrj->create(true /*forceOverwrite*/);
 

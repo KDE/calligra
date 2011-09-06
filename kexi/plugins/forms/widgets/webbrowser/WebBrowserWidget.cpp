@@ -77,7 +77,6 @@ void ToolBar::onBackPressed()
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
         ,KFormDesigner::FormWidgetInterface()
-        //,m_url
 	,m_readOnly(false)
 	,m_urlChanged_enabled(false)
 {
@@ -88,9 +87,8 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     m_softkeyAction = new QAction( tr("Options"), this );
     m_softkeyAction->setSoftKeyRole(QAction::PositiveSoftKey);
     addAction(m_softkeyAction);
- //   m_url=new Qurl();
     m_view = new QWebView(this);
-    m_view->load(QUrl("http://www.kde.org"));
+    //m_view->load(QUrl("http://www.kde.org"));
     v_layout = new QVBoxLayout();
     v_layout->addWidget(m_view);
     m_toolbar = new ToolBar(this);
