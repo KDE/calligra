@@ -53,6 +53,7 @@ namespace KPlato
     class ResourceRequest;
     class Task;
     class Node;
+    class Relation;
 }
 using namespace KPlato;
 
@@ -93,6 +94,8 @@ protected:
     void addTasks();
     TJ::Task *addTask( KPlato::Task *task );
     void addDependencies();
+    void addPrecedes( const Relation *rel );
+    void addDepends( const Relation *rel );
     void addDependencies( TJ::Task *job, Task *task );
     void setConstraints();
     void setConstraint( TJ::Task *job, KPlato::Task *task );
