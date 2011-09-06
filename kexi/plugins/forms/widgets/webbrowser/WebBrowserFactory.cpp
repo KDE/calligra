@@ -19,8 +19,8 @@
 
 
 #include "WebBrowserFactory.h"
-#include "WidgetInfo.h"
-#include "formIO.h"
+#include <formeditor/WidgetInfo.h>
+#include <formeditor/formIO.h>
 #include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
 
@@ -29,11 +29,9 @@
 #include <KDebug>
 #include <KLocale>
 #include <KPluginFactory>
-//using namespace KFormDesigner;
-//the web browser factory
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
-  :WidgetFactory(parent, "webbrowser")
+  : KexiDBFactoryBase(parent, "webbrowser")
 {
     KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
     webBrowser->setPixmap("internet-web-browser");

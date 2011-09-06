@@ -21,11 +21,10 @@
 #ifndef WEBBROWSERFACTORY_H
 #define WEBBROWSERFACTORY_H
 
-#include "widgetfactory.h"
-#include "container.h"
-#include "FormWidgetInterface.h"
+#include "kexidbfactorybase.h"
 
-class WebBrowserFactory: public KFormDesigner::WidgetFactory
+//! Factory providing web browser widget
+class WebBrowserFactory: public KexiDBFactoryBase
 {
   Q_OBJECT
 public:
