@@ -1,0 +1,8 @@
+- Use KoShapePainter to paint the KoPathShape with a marker
+- If the point and the control point for the marker are the same use the last control point
+- add support for different sized markers. This needs to be a property of the path shape.
+- add support for centered markers
+- load/save markers
+- have a bunch of default markers
+- Resize the repaint rect when the marker goes out of the existing one
+- make the actual path that is painted a bit shorter to avoid artefacts in case there is a marker set
