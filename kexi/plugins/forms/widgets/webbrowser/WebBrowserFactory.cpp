@@ -42,6 +42,9 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
     webBrowser->setDescription(i18n("Web widget with browsing features."));
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
+
+    m_propDesc["zoomFactor"] = i18n("Zoom Factor");
+    m_propDesc["url"] = i18n("Url");
 }
 
 
