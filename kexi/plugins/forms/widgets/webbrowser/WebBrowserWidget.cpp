@@ -50,6 +50,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     h_layout->addWidget(m_reload);
     h_layout->addWidget(m_stop);
     h_layout->addStretch();
+
     v_layout = new QVBoxLayout();
     v_layout->addWidget(m_view);
     v_layout->addLayout(h_layout);
