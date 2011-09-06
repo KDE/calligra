@@ -68,7 +68,6 @@ QRectF KoPathShapePrivate::handleRect(const QPointF &p, qreal radius) const
 
 void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
 {
-    Q_Q(KoPathShape);
     // apply viewbox transformation
     QRectF viewBox = KoPathShape::loadOdfViewbox(element);
     if (! viewBox.isEmpty()) {
@@ -319,8 +318,6 @@ void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converte
 
 QPainterPath KoPathShape::outline() const
 {
-    Q_D(const KoPathShape);
-    
     QPainterPath path;
     foreach(KoSubpath * subpath, m_subpaths) {
 //qDebug() << "Inside foreach in KoPathShape::outline()";
@@ -378,16 +375,6 @@ QPainterPath KoPathShape::outline() const
             }
             lastPoint = currPoint;
         }
-    }
-
-    if(d->beginMarker && m_subpaths.size()){
-        QPainterPath tempPath = transformedMarker(d->beginMarker->path(), m_subpaths.first()->first(), MarkerBegin);
-        tempPath.connectPath(path);
-        path = tempPath;
-    }
-
-    if(d->endMarker && m_subpaths.size()){
-        path.connectPath(transformedMarker(d->endMarker->path(), m_subpaths.first()->last(), MarkerEnd));
     }
 
     return path;
@@ -1367,7 +1354,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
 void KoPathShape::setMarker(KoMarker *marker, KoPathShape::MarkerPosition position)
 {
     Q_D(KoPathShape);
-    
+
     if (position == MarkerBegin) {
         d->beginMarker = marker;
     } else if (position == MarkerEnd) {
@@ -1378,14 +1365,25 @@ void KoPathShape::setMarker(KoMarker *marker, KoPathShape::MarkerPosition positi
 KoMarker *KoPathShape::marker(KoPathShape::MarkerPosition position)
 {
     Q_D(KoPathShape);
-    
+
     if (position == MarkerBegin) {
         return d->beginMarker;
     } else if (position == MarkerEnd) {
         return d->endMarker;
     }
-    
+
     return 0;
+}
+
+QPainterPath KoPathShape::markerOutline(MarkerPosition position)
+{
+    KoMarker *m = marker(position);
+    if (m) {
+        return QPainterPath(transformedMarker(m->path(),
+                                position == MarkerBegin ? m_subpaths.first()->first() : m_subpaths.first()->last(),
+                                position));
+    }
+    return QPainterPath();
 }
 
 int KoPathShape::computeAngle(KoPathPoint* point, MarkerPosition position) const
@@ -1440,18 +1438,16 @@ int KoPathShape::computeAngle(KoPathPoint* point, MarkerPosition position) const
 
 QPainterPath KoPathShape::transformedMarker(QPainterPath path, KoPathPoint* point, MarkerPosition position) const
 {
-    Q_D(const KoPathShape);
-    
     QTransform markerTransform;
     int halfWidth = (path.boundingRect().width())/2;
     int angle = 0;
-    if(point != 0){
+    if (point != 0){
         angle = computeAngle(point, position) + 90;
     }
-    
+
     qreal dx = point->point().x();
     qreal dy = point->point().y();
-    
+
     markerTransform.translate(dx, dy).rotate(angle).translate(-halfWidth, 0);
 
     return markerTransform.map(path);

@@ -24,6 +24,8 @@
 #include "KoShape.h"
 #include "KoShapeSavingContext.h"
 
+#include "KoPathShape.h"
+
 #include <QPainterPath>
 
 #include <KoGenStyle.h>
@@ -127,8 +129,7 @@ void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverte
     else
         pen.setColor(d->color);
 
-    if (!pen.isCosmetic())
-        painter.strokePath(shape->outline(), pen);
+    paintBorder(shape, painter, pen);
 }
 
 void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color)
@@ -138,7 +139,46 @@ void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverte
     QPen pen = d->pen;
     pen.setColor(color);
 
+    paintBorder(shape, painter, pen);
+}
+
+void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const QPen &pen)
+{
     if (!pen.isCosmetic()) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        if (pathShape) {
+            QPainterPath markerBegin = pathShape->markerOutline(KoPathShape::MarkerBegin);
+            QPainterPath markerEnd = pathShape->markerOutline(KoPathShape::MarkerEnd);
+            QPainterPath pathOutline;
+            QPainterPathStroker stroker;
+            stroker.setWidth(pen.widthF());
+            stroker.setJoinStyle(Qt::MiterJoin);
+
+            if (!markerBegin.isEmpty()) {
+                QPainterPath beginOutline = stroker.createStroke(markerBegin);
+                beginOutline = beginOutline.united(markerBegin);
+                pathOutline.addPath(beginOutline);
+            }
+            if (!markerEnd.isEmpty()) {
+                QPainterPath endOutline = stroker.createStroke(markerEnd);
+                endOutline = endOutline.united(markerEnd);
+                pathOutline.addPath(endOutline);
+            }
+
+            if (!pathOutline.isEmpty()) {
+                stroker.setJoinStyle(pen.joinStyle());
+                stroker.setMiterLimit(pen.miterLimit());
+                stroker.setCapStyle(pen.capStyle());
+                stroker.setDashOffset(pen.dashOffset());
+                stroker.setDashPattern(pen.dashPattern());
+                // TODO use a shortent version of the path to make it look nicer
+                QPainterPath path = stroker.createStroke(shape->outline());
+                pathOutline.addPath(path);
+                pathOutline.setFillRule(Qt::WindingFill);
+                painter.fillPath(pathOutline, pen.brush());
+                return;
+            }
+        }
         painter.strokePath(shape->outline(), pen);
     }
 }

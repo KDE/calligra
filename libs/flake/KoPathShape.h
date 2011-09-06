@@ -451,6 +451,9 @@ public:
     /// returns the list of all the markers of the path
     KoMarker *marker(MarkerPosition position);
 
+    /// return the outline of the marker at the position or an empty path it there is none
+    QPainterPath markerOutline(MarkerPosition position);
+
 protected:
     /// constructor \internal
     KoPathShape(KoPathShapePrivate &);
