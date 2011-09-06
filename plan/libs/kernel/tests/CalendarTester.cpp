@@ -45,61 +45,41 @@ namespace KPlato
 
 void CalendarTester::initTestCase()
 {
-    cleanupTestCase();
+    QVERIFY( m_tmp.exists() );
 
-    mDataDir = QDir::homePath() + "/.kde-unit-test/kdatetimetest";
-    QVERIFY(QDir().mkpath(mDataDir));
     QFile f;
-    f.setFileName(mDataDir + QLatin1String("/zone.tab"));
+    f.setFileName( m_tmp.name() + QLatin1String( "zone.tab" ) );
     f.open(QIODevice::WriteOnly);
     QTextStream fStream(&f);
-    fStream << "DE      +5230+01322     Europe/Berlin\n"
+    fStream << "DE  +5230+01322 Europe/Berlin\n"
                "EG  +3003+03115 Africa/Cairo\n"
                "FR  +4852+00220 Europe/Paris\n"
                "GB  +512830-0001845 Europe/London   Great Britain\n"
                "US  +340308-1181434 America/Los_Angeles Pacific Time\n";
     f.close();
-    QDir dir(mDataDir);
+    QDir dir(m_tmp.name());
     QVERIFY(dir.mkdir("Africa"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), mDataDir + QLatin1String("/Africa/Cairo"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), m_tmp.name() + QLatin1String("Africa/Cairo"));
     QVERIFY(dir.mkdir("America"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), mDataDir + QLatin1String("/America/Los_Angeles"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), m_tmp.name() + QLatin1String("America/Los_Angeles"));
     QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), mDataDir + QLatin1String("/Europe/Berlin"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), mDataDir + QLatin1String("/Europe/London"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), mDataDir + QLatin1String("/Europe/Paris"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), m_tmp.name() + QLatin1String("Europe/London"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), m_tmp.name() + QLatin1String("Europe/Paris"));
 
+    // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
+    //       and hence, this is common to all unit tests
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
-    group.writeEntry("ZoneinfoDir", mDataDir);
-    group.writeEntry("Zonetab", mDataDir + QString::fromLatin1("/zone.tab"));
+    group.writeEntry("ZoneinfoDir", m_tmp.name());
+    group.writeEntry("Zonetab", m_tmp.name() + QString::fromLatin1("zone.tab"));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 }
 
 void CalendarTester::cleanupTestCase()
 {
-    removeDir(QLatin1String("kdatetimetest/Africa"));
-    removeDir(QLatin1String("kdatetimetest/America"));
-    removeDir(QLatin1String("kdatetimetest/Europe"));
-    removeDir(QLatin1String("kdatetimetest"));
-    removeDir(QLatin1String("share/config"));
-    QDir().rmpath(QDir::homePath() + "/.kde-unit-test/share");
 }
-
-void CalendarTester::removeDir(const QString &subdir)
-{
-    QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/") + subdir;
-    foreach(const QString &file, local.entryList(QDir::Files))
-        if(!local.remove(file))
-            qWarning("%s: removing failed", qPrintable( file ));
-    QCOMPARE((int)local.entryList(QDir::Files).count(), 0);
-    local.cdUp();
-    QString subd = subdir;
-    subd.remove(QRegExp("^.*/"));
-    local.rmpath(subd);
-}
-
 
 void CalendarTester::testSingleDay() {
     Calendar t("Test");

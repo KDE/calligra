@@ -39,8 +39,6 @@ namespace KexiDB
 class ConnectionDataBase
 {
 public:
-    ConnectionDataBase();
-
     /*!
     \brief The caption of the connection.
 
@@ -83,10 +81,10 @@ public:
     */
     QString hostName;
 
-
     /*!
     \brief Server name of the server to be connected to
 
+    @todo only used in Sybase driver, will be replaced by options after port to Predicate
     */
     QString serverName;
 
@@ -141,6 +139,8 @@ public:
     QString userName;
 
 protected:
+    ConnectionDataBase();
+
     /*!
     \brief The filename for file-based databases
 
@@ -162,6 +162,8 @@ protected:
     Will be empty if database is not file-based
     */
     QString m_dbFileName;
+    
+    friend class ConnectionData;
 };
 
 //! Database specific connection data, e.g. host, port.

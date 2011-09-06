@@ -27,8 +27,8 @@
 #include "widgetfactory.h"	
 #include "container.h"
 #include <formeditor/FormWidgetInterface.h>
-#include <kexi/widget/dataviewcommon/kexiformdataiteminterface.h>
-#include <QtGui/QHBoxLayout>	
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
+#include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtCore/QUrl>
 #include<QWebView>

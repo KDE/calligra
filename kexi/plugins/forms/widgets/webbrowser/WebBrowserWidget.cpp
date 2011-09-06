@@ -25,7 +25,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
-include <QtGui/QAction>
+#include <QtGui/QAction>
 #include <QtGui/QWidget>
 #include <QtGui/QApplication>
 
@@ -40,11 +40,10 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     setMinimumHeight(sizeHint().height());
     setMinimumWidth(minimumHeight());
     m_view = new QWebView(this);
-    m_view->load(QUrl("http://www.kde.org"));
-    m_backButton = new QPushButton("Back",this);
-    m_forward= new QPushButton("Forward",this);
-    m_reload=new QPushButton("Reload",this);
-    m_stop=new QPushButton("Stop",this);
+    m_backButton = new QPushButton(i18n("Back"),this);
+    m_forward= new QPushButton(i18n("Forward"),this);
+    m_reload=new QPushButton(i18n("Reload"),this);
+    m_stop=new QPushButton(i18n("Stop"),this);
     h_layout = new QHBoxLayout;
     h_layout->addWidget(m_backButton);
     h_layout->addWidget(m_forward);
@@ -158,7 +157,7 @@ bool WebBrowserWidget::valueIsNull()
 }
 void WebBrowserWidget::clear()
 {
-    setUrl("www.google.com");
+    setUrl(QString());
 }
 
 

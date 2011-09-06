@@ -117,6 +117,10 @@ public slots:
 
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
+    /// go to previous page
+    void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    /// go to next page
+    void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
 protected:
     /// reimplemented method from superclass
@@ -203,10 +207,6 @@ private slots:
     void insertFootEndNote();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
-    /// go to previous page
-    void goToPreviousPage();
-    /// go to next page
-    void goToNextPage();
     /// A semantic item was updated and should have it's text refreshed.
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
     /// A match was found when searching.

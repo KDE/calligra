@@ -52,13 +52,19 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
     if (parentFrameSet) {
         if (Words::isHeaderFooter(parentFrameSet)) {
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                // header and footer are always auto-grow-height independent of whatever
+                // was defined for them in the document.
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
         if (parentFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            /* NoResize should be default this days. Setting it here would overwrite any value
+              read in TextShape::loadStyle what is not what we want.
+
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
                 data->setResizeMethod(KoTextShapeDataBase::NoResize);
             }
+            */
         } else {
             shape->setGeometryProtected(true);
 
