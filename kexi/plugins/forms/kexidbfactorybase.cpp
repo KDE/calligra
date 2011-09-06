@@ -62,6 +62,8 @@ KexiDBFactoryBase::KexiDBFactoryBase(QObject *parent, const char *name)
 
     //used in labels, frames...
     m_propDesc["frameColor"] = i18n("Frame Color");
+
+    m_propDesc["readOnly"] = i18n("Read Only");
 }
 
 KexiDBFactoryBase::~KexiDBFactoryBase()
