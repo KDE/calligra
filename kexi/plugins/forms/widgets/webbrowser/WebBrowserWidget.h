@@ -1,4 +1,4 @@
-/* <This file is part of the KDE project>
+/* <The basic code for the web widget in Kexi forms>
     Copyright (C) 2011  Shreya Pandit <shreya@shreyapandit.com>
 
 
@@ -21,7 +21,6 @@
 
 #ifndef WEBBROWSERWIDGET_H
 #define WEBBROWSERWIDGET_H
-#include <QProgressBar>
 #include <QtGui/QWidget>
 #include <QtGui/QPushButton>
 #include "widgetfactory.h"	
@@ -32,18 +31,17 @@
 #include <QtGui/QVBoxLayout>
 #include <QtCore/QUrl>
 #include<QWebView>
-  
-class QLineEdit;
+
+class QWebView;
 class QVBoxLayout;
 class QLabel;
 class QAction;
 class QWebHistory;
-class ToolBar;
+class ToolBar; //added
 class QHBoxLayout;
 class QLabel;
 class QUrl;
-class QProgressBar;
-class KUrlComboBox;
+
 
 class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget, 
 					       public KexiFormDataItemInterface,
@@ -53,8 +51,7 @@ class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget,
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(QString url READ url WRITE setUrl)
-    Q_PROPERTY(qreal zoomFactor READ zoomFactor WRITE setZoomFactor)
-    Q_PROPERTY(QString title READ title)
+
     
 public:
     WebBrowserWidget();    
@@ -73,17 +70,6 @@ public:
 	return m_url.toString();
       
     }
-    
-    inline QString title() const {
-	
- 	return m_view->title();
-    }
-
-    inline qreal zoomFactor() const {
-	
-	return m_view->zoomFactor();
-    }
-    
     virtual QVariant value();
     virtual void setInvalidState(const QString& displayText);
     virtual bool valueIsNull();
@@ -94,14 +80,11 @@ public:
     bool isReadOnly() const ;
     virtual void setReadOnly(bool readOnly);  
     QWebView* m_view;
-    void updateToolBar(); 
 
 public slots:
     void setDataSource(const QString &ds);
     void setDataSourcePartClass(const QString &ds);
     void setUrl(const QString& url);
-    void setZoomFactor(qreal factor);
-    void hide_bar();
     
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld); 
@@ -125,6 +108,54 @@ private:
   
 };
 
+    void loadPreviousPage();
+    void loadNextPage(); 
+    void onreload(); 
+
+protected:
+    virtual void setValueInternal(const QVariant& add, bool removeOld); 
+    void setUrl(const QUrl& url);
+  //  void updateUrl();
+    bool m_readOnly;
+    QUrl m_url;
+
+
+private:
+    QAction* m_softkeyAction;
+    QWebView* m_view;
+    QLineEdit* m_lineEdit;
+    QLabel *m_label;
+    QVBoxLayout* v_layout;
+    ToolBar* m_toolbar;
+    bool m_urlChanged_enabled;   
+    QWebHistory* m_history;
+   
+};
+
+class ToolBar : public QWidget
+{
+    Q_OBJECT
+
+public:
+    ToolBar(QWidget *parent = 0);
+
+signals: 
+    void goBack();
+    void goForward();
+    void  doreload();
+    
+private slots:
+    void onBackPressed(); 
+    void onForward();
+    void onReload();
+    
+private:
+
+    QPushButton* m_backButton;
+    QPushButton* m_forward;
+    QHBoxLayout* m_layout;
+    QPushButton* m_reload;  
+};
 #endif 
 
 
