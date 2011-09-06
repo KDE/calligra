@@ -66,7 +66,7 @@ public:
 
     inline QString url() const {
 	
-	return m_url.toString();
+	return m_view->url().toString();
     }
     
     inline QString title() const {
@@ -79,7 +79,6 @@ public:
 	return m_view->zoomFactor();
     }
   
-    QWebView* m_view;
     virtual QVariant value();
     virtual void setInvalidState(const QString& displayText);
     virtual bool valueIsNull();
@@ -102,12 +101,11 @@ protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld); 
     void setUrl(const QUrl& url);
     bool m_readOnly;
-    QUrl m_url;
 
 private:
+    QWebView* m_view;
     QVBoxLayout* v_layout;
     QWebHistory* m_history;
-    qreal m_zoomFactor; 
     QProgressBar* m_pbar;
     bool  m_urlChanged_enabled;
     QPushButton* m_backButton;

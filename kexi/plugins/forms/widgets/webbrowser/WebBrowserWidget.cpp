@@ -28,7 +28,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QWidget>
 #include <QtGui/QApplication>
-
+#include <KLocale>
 
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
@@ -50,6 +50,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     h_layout->addWidget(m_reload);
     h_layout->addWidget(m_stop);
     h_layout->addStretch();
+
     v_layout = new QVBoxLayout();
     v_layout->addWidget(m_view);
     v_layout->addLayout(h_layout);
@@ -100,13 +101,12 @@ m_pbar->setVisible(false);
 
 void WebBrowserWidget::setUrl(const QString& url)
 {
-    setUrl(QUrl(url));
+    setUrl(url.isEmpty() ? QUrl() : QUrl(url));
 }
 
 void WebBrowserWidget::setUrl(const QUrl& url)
 {
-    m_url=url;
-    m_view->load(m_url);
+    m_view->setUrl(url);
 }
 
 void WebBrowserWidget::updateToolBar()
@@ -122,16 +122,16 @@ void WebBrowserWidget::updateToolBar()
 
 void WebBrowserWidget::setZoomFactor(qreal factor)
 {
-    m_zoomFactor=factor; //! \todo ?
+    m_view->setZoomFactor(factor);
 }
 bool WebBrowserWidget::cursorAtStart()
 {
-    return true; //! \todo ?
+    return false;
 }
 
 bool WebBrowserWidget::cursorAtEnd()
 {
-    return true; //! \todo ?
+    return false;
 }
 
 
@@ -140,24 +140,22 @@ QVariant WebBrowserWidget::value()
     if (dataSource().isEmpty()) {
 
       return QVariant();
-        //not db-aware
-        return QVariant();
     }
     //db-aware mode
     
-    return m_url;
+    return m_view->url();
 
 
 }
 
 bool WebBrowserWidget::valueIsNull()
 {
-    return (m_url).isEmpty();
+    return m_view->url().isValid();
 
 }
 void WebBrowserWidget::clear()
 {
-    setUrl(QString());
+    setUrl(QUrl());
 }
 
 
@@ -167,7 +165,7 @@ void WebBrowserWidget::setInvalidState(const QString& displayText)
     Q_UNUSED(displayText);
 
     if (!dataSource().isEmpty()) {
-        m_url.clear();
+        m_view->setUrl(QUrl());
     }
     setReadOnly(true);
 }
@@ -188,8 +186,6 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
         setUrl(m_origValue.toString() + add.toString());
      	
     }
-
-    m_urlChanged_enabled= false;		
 
     if (removeOld)
         { 			

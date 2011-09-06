@@ -18,21 +18,20 @@
 */
 
 
-#include "MapBrowserFactory.h"
-#include "WidgetInfo.h"
-#include "formIO.h"
-#include "klocalizedstring.h"
 #include "MapBrowserWidget.h"
-#include <QVariant>
-#include <QVariantList>
+#include "MapBrowserFactory.h"
 
+#include <formeditor/WidgetInfo.h>
+#include <formeditor/formIO.h>
+#include <KLocalizedString>
 #include <KDebug>
 #include <KLocale>
 #include <KPluginFactory>
-//using namespace KFormDesigner;
+#include <QVariant>
+#include <QVariantList>
 
 MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
-  :WidgetFactory(parent, "mapbrowser")
+  : KexiDBFactoryBase(parent, "mapbrowser")
 {
     Q_UNUSED(args);
     KFormDesigner::WidgetInfo *mapBrowser = new KFormDesigner::WidgetInfo(this);

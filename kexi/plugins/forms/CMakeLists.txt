@@ -75,6 +75,7 @@ set(kexiformutils_LIB_SRCS
    kexidatasourcepage.cpp 
    kexiformpart.cpp 
    kexiformview.cpp
+   kexidbfactorybase.cpp
 
   widgets/kexidbutils.cpp
   widgets/kexidbautofield.cpp
