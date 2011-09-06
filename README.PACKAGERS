@@ -128,8 +128,30 @@ The following matrix lists the packages and dependencies.
                                kformdesigner_webbrowser.so
                                kformdesigner_webbrowser.desktop
                            Dependencies:
-                               libqt4-webkit or libQtWebKit4 (QtWebKit)
-
+                               libqt4-webkit or libQtWebKit4 (provides QtWebKit)
+ ------------------------------------------------------------------------
+ calligra-reports-web-element Description: Web element for Calligra Reports
+                           Contents:
+                               koreport_webplugin.so
+                               koreport_webplugin.desktop
+                           Dependencies:
+                               libqt4-webkit or libQtWebKit4 (provides QtWebKit)
+ ------------------------------------------------------------------------
+ kexi-map-form-widget      Description: Kexi map form widget
+                           Contents:
+                               kformdesigner_mapbrowser.so
+                               kformdesigner_mapbrowser.desktop
+                           Dependencies:
+                               libmarble4-kde4 or marble
+                                                      (provides libmarblewidget)
+ ------------------------------------------------------------------------
+ calligra-reports-map-element Description: Map element for Calligra Reports
+                           Contents:
+                               koreport_mapsplugin.so
+                               koreport_mapsplugin.desktop
+                           Dependencies:
+                               libmarble4-kde4 or marble
+                                                      (provides libmarblewidget)
 
 1.4. Kexi development files
 ---------------------------
@@ -178,9 +200,9 @@ A significant performance increase will be the result.
 4. Calligra libraries
 ====================
 
-Calligra share common functionality within libraries, placed in libs/ subdirectory.
-Calligra libraries should be placed in a single package, separate from Calligra applications.
-Below is the list of the libraries.
+Calligra share common functionality within libraries, placed in libs/
+subdirectory. Calligra libraries should be placed in a single package,
+separate from Calligra applications. Below is the list of the libraries.
 
 Name       Conditional compilation flag    Globally used in Calligra?   Public API
                                                                        (headers installed)
