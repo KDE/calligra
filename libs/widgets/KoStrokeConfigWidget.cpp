@@ -77,7 +77,7 @@ public:
     QButtonGroup        *joinGroup;
     KoMarkerSelector    *beginMarkerSelector;
     KoMarkerSelector    *endMarkerSelector;
-    
+
     QSpacerItem *spacer;
     QGridLayout *layout;
 };
