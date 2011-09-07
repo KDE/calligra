@@ -228,8 +228,9 @@ private:
 /*     KoFilterChain* m_chain; */
 
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+
     std::queue<SubDocument> m_subdocQueue;
-    std::queue<Words::Table> m_tableQueue;
+/*     std::queue<Words::Table> m_tableQueue; */
 
     bool m_bodyFound;
 

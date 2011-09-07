@@ -70,8 +70,6 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_tocNumber(0)
     , m_footNoteNumber(0)
     , m_endNoteNumber(0)
-    , m_currentTable(0)
-    , m_paragraph(0)
     , m_hasStoredDropCap(false)
     , m_breakBeforePage(false)
     , m_insideFootnote(false)
@@ -82,6 +80,10 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_annotationBuffer(0)
     , m_insideDrawing(false)
     , m_drawingWriter(0)
+    , m_paragraph(0)
+    , m_currentTable(0)
+    , m_tableWriter(0)
+    , m_tableBuffer(0)
     , m_listLevelStyleRequired(false)
     , m_currentListDepth(-1)
     , m_currentListID(0)
@@ -123,6 +125,9 @@ KoXmlWriter* WordsTextHandler::currentWriter() const
 
     if (m_insideDrawing) {
         writer = m_drawingWriter;
+    }
+    else if (m_currentTable && m_currentTable->floating) {
+        writer = m_tableWriter;
     }
     else if (document()->writingHeader()) {
         writer = document()->headerWriter();
@@ -613,6 +618,11 @@ void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
         m_currentTable->tap = tap;
         //insertAnchor( m_currentTable->name );
+
+        //check if the table is inside of an absolutely positioned frame
+        if ( (tap->dxaAbs != 0) || (tap->dyaAbs != 0) ) {
+            m_currentTable->floating = true;
+        }
     }
 //     kDebug(30513) << "tap->itcMac:" << tap->itcMac << "tap->rgdxaCenter.size():" << tap->rgdxaCenter.size();
 
@@ -650,25 +660,35 @@ void WordsTextHandler::tableEndFound()
     if (m_insideAnnotation) {
         return;
     }
-
     if (!m_currentTable) {
         kWarning(30513) << "Looks like we lost a table somewhere: return";
         return;
     }
-
     //TODO: FIX THE OPEN LIST PROBLEM !!!!!!
     //we cant have an open list when entering a table
     if (listIsOpen()) {
         //kDebug(30513) << "closing list " << m_currentListID;
         closeList();
     }
+    bool floating = m_currentTable->floating;
 
-    Words::Table* table = m_currentTable;
-    //reset m_currentTable
-    m_currentTable = 0L;
+    if (floating) {
+        m_tableBuffer = new QBuffer();
+        m_tableBuffer->open(QIODevice::WriteOnly);
+        m_tableWriter = new KoXmlWriter(m_tableBuffer);
+    }
+
     //must delete table in Document!
+    emit tableFound(m_currentTable);
+    m_currentTable = 0L;
 
-    emit tableFound(table);
+    if (floating) {
+        m_floatingTable = QString::fromUtf8(m_tableBuffer->buffer(), m_tableBuffer->buffer().size());
+        delete m_tableWriter;
+        m_tableWriter = 0;
+        delete m_tableBuffer;
+        m_tableBuffer = 0;
+    }
 }
 
 void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data)
@@ -739,9 +759,9 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     m_currentPPs = paragraphProperties;
 
     //check for a table to be parsed and processed
-    if (m_currentTable) {
-        kWarning(30513) << "==> WOW, unprocessed table: ignoring";
-    }
+//     if (m_currentTable) {
+//         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
+//     }
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
     bool inStylesDotXml = document()->writingHeader();
@@ -864,6 +884,12 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     {
         style->addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
         m_breakBeforePage = false;
+    }
+
+    //insert the floating table at the beginning
+    if (!m_floatingTable.isEmpty()) {
+        m_paragraph->addRunOfText(m_floatingTable, 0, QString(""), m_parser->styleSheet());
+        m_floatingTable.clear();
     }
 
 } //end paragraphStart()

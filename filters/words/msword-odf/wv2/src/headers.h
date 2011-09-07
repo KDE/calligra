@@ -41,7 +41,8 @@ namespace wvWare
     class Headers
     {
     public:
-        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version ) throw(InvalidFormatException);
+        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed,
+                 OLEStreamReader* tableStream, WordVersion version );
         virtual ~Headers();
 
         /**
@@ -64,7 +65,7 @@ namespace wvWare
 
     protected:
         QList<U32> m_headers;
-        static const int headerTypes;
+        static const uint headerTypes;
     };
 
 } // namespace wvWare
