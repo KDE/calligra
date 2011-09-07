@@ -87,7 +87,7 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
 
     //Check num. of sections based on the num. of header/footer stories.
     if ( version == Word8 ) {
-        uint m = (n - 6) / headerTypes;
+        uint m = (strsCPs.size() - 2) / headerTypes;
         Q_ASSERT(m = plcfsed.count());
     }
 
