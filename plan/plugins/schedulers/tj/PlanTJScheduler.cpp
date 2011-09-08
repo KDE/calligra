@@ -264,9 +264,10 @@ void PlanTJScheduler::addStartEndJob()
     }
     TJ::Task *end = new TJ::Task( m_tjProject, "TJ::EndJob", "TJ::EndJob", 0, QString(), 0);
     end->setMilestone( true );
-    end->setSpecifiedEnd( 0, m_tjProject->getEnd() - 1 );
-    end->setScheduling( TJ::Task::ALAP );
-
+    if ( m_backward ) {
+        end->setSpecifiedEnd( 0, m_tjProject->getEnd() - 1 );
+        end->setScheduling( TJ::Task::ALAP );
+    }
     for ( QMap<TJ::Task*, Task*>::ConstIterator it = m_taskmap.constBegin(); it != m_taskmap.constEnd(); ++it ) {
         if ( it.value()->isStartNode() ) {
             it.key()->addDepends( start->getId() );

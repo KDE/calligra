@@ -380,6 +380,7 @@ public:
     bool hasAlapPredecessor() const;
 
 private:
+    friend class Project;
     void propagateStart(int sc, time_t date);
     void propagateEnd(int sc, time_t date);
     /**

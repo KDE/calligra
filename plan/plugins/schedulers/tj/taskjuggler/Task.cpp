@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -332,6 +333,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             (duration > 0.0 &&
              qRound(doneDuration * 2048) >= qRound(duration * 2048)))
         {
+            TJMH.infoMessage(QString("'%1' Scheduling completed: %2").arg(name).arg(time2tjp(date+slotDuration)));
             if (scheduling == ASAP)
                 propagateEnd(sc, date + slotDuration - 1);
             else
@@ -472,28 +474,19 @@ Task::propagateStart(int sc, time_t date)
             }
         }
     }
-
-    /* Set start date to all previous that have no start date yet, but have
-     * ALAP predecessor task or have no duration. */
-    for (TaskListIterator tli(previous); tli.hasNext();) {
-        Task *t = static_cast<Task*>(tli.next());
-        if ((t->end == 0 && t->latestEnd(sc) != 0 &&
-            !t->schedulingDone) ||
-             (t->effort == 0.0 && t->length == 0.0 &&
-              t->duration == 0.0 && !t->milestone))
+    /* Set start date to all previous that have no start date yet, but are
+     * ALAP task or have no duration. */
+    for (TaskListIterator tli(previous); *tli != 0; ++tli) {
+        if ((*tli)->end == 0 && (*tli)->latestEnd(sc) != 0 &&
+            !(*tli)->schedulingDone &&
+            ((*tli)->scheduling == ALAP ||
+             ((*tli)->effort == 0.0 && (*tli)->length == 0.0 &&
+              (*tli)->duration == 0.0 && !(*tli)->milestone)))
         {
-            // NOTE: review this: why need to set scheduling = ALAP?
-            if (t->hasAlapPredecessor() ) {
-                t->setScheduling(ALAP);
-            }
-            if ( t->scheduling == ALAP ) {
-                /* Recursively propagate the end date */
-//                 qDebug()<<"propagateStart:"<<this<<"propagates end to:"<<t;
-                t->propagateEnd(sc, t->latestEnd(sc));
-            }
+            /* Recursively propagate the end date */
+            (*tli)->propagateEnd(sc, (*tli)->latestEnd(sc));
         }
     }
-
     /* Propagate start time to sub tasks which have only an implicit
      * dependancy on the parent task. Do not touch container tasks. */
     for (TaskListIterator tli(*sub); tli.hasNext();)
@@ -3844,7 +3837,8 @@ QDebug operator<<( QDebug dbg, const TJ::Task& t )
         dbg << "Scheduled";
     } else if ( t.isReadyForScheduling() ) {
         dbg << "ReadyForScheduling";
-    } else {
+    } else if ( t.isRunaway() ) {
+        dbg << "Runaway";
     }
     dbg << "]";
     return dbg;

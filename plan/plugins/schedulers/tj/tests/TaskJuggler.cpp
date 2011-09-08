@@ -539,14 +539,18 @@ void TaskJuggler::scheduleConstraints()
         m4->setScheduling( TJ::Task::ALAP );
         m4->setSpecifiedEnd( 0, proj->getEnd() - 1 );
 
+        m1->addPrecedes( m2->getId() );
         m2->addDepends( m1->getId() );
+        m2->addPrecedes( t2->getId() );
         t2->addDepends( m2->getId() ); // t2 (ALAP) depends on ASAP milestone
         t2->addPrecedes( m4->getId() );
         m4->addDepends( t2->getId() );
 
+        m1->addPrecedes( m3->getId() );
         m3->addDepends( m1->getId() );
         m3->addPrecedes( t1->getId() ); // m3 ALAP
         t1->addDepends( m3->getId() ); // t1 (ASAP) depends on ALAP milestone
+        t1->addPrecedes( m4->getId() );
         m4->addDepends( t1->getId() );
 
         QVERIFY2( proj->pass2( true ), s.toLatin1() );

@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -948,6 +949,44 @@ Project::schedule(int sc)
                                    sortedTasks);
                     setProgressInfo(QString("Scheduling scenario %1 at %2")
                          .arg(getScenarioId(sc)).arg(time2tjp(slot)));
+                }
+                // we may end up with non-scheduled tasks
+                if (workItems.isEmpty()) {
+                    allLeafTasks.clear();
+                    foreach (CoreAttributes *t, taskList) {
+                        if (!static_cast<Task*>(t)->hasSubs() && !static_cast<Task*>(t)->isSchedulingDone()) {
+                            allLeafTasks.append(static_cast<Task*>(t));
+                        }
+                    }
+                    foreach (CoreAttributes *c, allLeafTasks) {
+                        Task *t = static_cast<Task*>(c);
+                        if (!t->isSchedulingDone() /*&& !t->isRunaway()*/) {
+                            if (t->getScheduling() == Task::ASAP) {
+                                time_t es = t->earliestStart(sc);
+                                //qDebug()<<"schedule rest: earliest start"<<time2ISO(es)<<time2ISO(time_t(1));
+                                if (es > 1) { // NOTE: es is 1 if predecessor is not scheduled!
+                                    t->propagateStart(sc, es);
+                                } else if (t->hasAlapPredecessor()) {
+                                    time_t le = t->latestEnd(sc);
+                                    if (le > time_t(0) ) {
+                                        t->setScheduling(Task::ALAP);
+                                        t->propagateEnd(sc, le );
+                                    }// else qDebug()<<"schedule rest: no end time"<<t;
+                                } //else qDebug()<<"schedule rest: no start time"<<t;
+                            } else {
+                                time_t le = t->latestEnd(sc);
+                                if (le > time_t(0) ) {
+                                    t->propagateEnd(sc, le );
+                                }// else qDebug()<<"schedule rest: no end time"<<t;
+                            }
+                            if (t->isReadyForScheduling()) {
+                                workItems.append(t);
+                            }
+                        }
+                    }
+                    if (DEBUGPS(15) && !workItems.isEmpty()) {
+                        qDebug()<<"These tasks where not ready to be scheduled on last run:"<<workItems;
+                    }
                 }
             }
         }
