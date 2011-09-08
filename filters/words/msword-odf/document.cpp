@@ -367,7 +367,7 @@ void Document::processStyles()
         } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
-            KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");
+            KoGenStyle userStyle(KoGenStyle::TextStyle, "text");
             userStyle.addAttribute("style:display-name", displayName);
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
