@@ -41,6 +41,8 @@ namespace TJ
     class Task;
     class Resource;
     class Interval;
+    class CoreAttributes;
+
 }
 
 namespace KPlato
@@ -83,6 +85,7 @@ signals:
     const char* taskname();
 
 public slots:
+    void slotMessage( int type, const QString &msg, TJ::CoreAttributes *object );
 
 protected:
     void run();

@@ -816,6 +816,7 @@ bool
 Project::schedule(int sc)
 {
     int oldErrors = TJMH.getErrors();
+    int maxProgress = 0;
 
     // The scheduling function only cares about leaf tasks. Container tasks
     // are scheduled automatically when all their childern are scheduled. So
@@ -830,7 +831,7 @@ Project::schedule(int sc)
     allLeafTasks.setSorting(CoreAttributesList::PathCriticalnessDown, 1);
     allLeafTasks.setSorting(CoreAttributesList::SequenceUp, 2);
     allLeafTasks.sort();
-
+    maxProgress = allLeafTasks.count();
     /* The workItems list contains all tasks that are ready to be scheduled at
      * any given iteration. When a tasks has been scheduled completely, this
      * list needs to be updated again as some tasks may now have become ready
@@ -945,8 +946,7 @@ Project::schedule(int sc)
                 // Update the progress bar after every 10th completed tasks.
                 if (oldSortedTasks / 10 != sortedTasks / 10)
                 {
-                    setProgressBar(sortedTasks - allLeafTasks.count(),
-                                   sortedTasks);
+                    setProgressBar(100 * ( (double)sortedTasks / maxProgress ), sortedTasks);
                     setProgressInfo(QString("Scheduling scenario %1 at %2")
                          .arg(getScenarioId(sc)).arg(time2tjp(slot)));
                 }
