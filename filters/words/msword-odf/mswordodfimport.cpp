@@ -37,7 +37,7 @@
 #include "exceptions.h"
 #include "msdoc.h"
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "pole.h"
 
 //function prototypes of local functions

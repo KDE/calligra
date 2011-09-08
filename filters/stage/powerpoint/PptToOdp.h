@@ -24,7 +24,7 @@
 #ifndef PPTTOODP_H
 #define PPTTOODP_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "pptstyle.h"
 #include "drawstyle.h"
 #include "writer.h"
@@ -320,10 +320,10 @@ private:
     const MSO::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
                                                  quint32 textType, quint8 pp9rt);
 
-    const MSO::TextContainer* getTextContainer(const MSO::PptOfficeArtClientTextBox* ctb,
-                                               const MSO::PptOfficeArtClientData* cd) const;
-    quint32 getTextType(const MSO::PptOfficeArtClientTextBox* ctb,
-                        const MSO::PptOfficeArtClientData* cd) const;
+    MSONullable<MSO::TextContainer> getTextContainer(const MSONullable<MSO::PptOfficeArtClientTextBox>& ctb,
+                                               const MSONullable<MSO::PptOfficeArtClientData>& cd) const;
+    quint32 getTextType(const MSONullable<MSO::PptOfficeArtClientTextBox>& ctb,
+                        const MSONullable<MSO::PptOfficeArtClientData>& cd) const;
 
     void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
 
@@ -346,9 +346,9 @@ private:
      * @return 0 (OK), -1 (TextContainer missing)
      */
     int processTextForBody(Writer& out,
-                           const MSO::OfficeArtClientData* cd,
-                           const MSO::TextContainer* tc,
-                           const MSO::TextRuler* tr);
+                           const MSONullable<MSO::OfficeArtClientData>& cd,
+                           const MSONullable<MSO::TextContainer>& tc,
+                           const MSONullable<MSO::TextRuler>& tr);
 
     /**
      * Process a span or the smallest run of text having it's own formatting.
@@ -510,8 +510,8 @@ private:
      * @return QColor value, may be undefined
      */
     QColor toQColor(const MSO::OfficeArtCOLORREF& color,
-                    const MSO::StreamOffset* master = NULL,
-                    const MSO::StreamOffset* common = NULL);
+                    const MSO::MasterOrSlideContainer* master,
+                    const MSO::SlideContainer* common);
 
     /**
     * @brief processTextAutoNumberScheme : process the Textautoscheme to display the Bullet and numbering.
@@ -552,46 +552,54 @@ private:
      * @param spid identifier of the master shape
      * @return pointer to the OfficeArtSpContainer
      */
-    const MSO::OfficeArtSpContainer* retrieveMasterShape(quint32 spid) const;
+    MSONullable<MSO::OfficeArtSpContainer> retrieveMasterShape(quint32 spid) const;
 
     /**
      * There is at most one SlideHeadersFootersContainer, but for some slides
      * it is in a strange positions. This convenience function returns a pointer
      * to the SlideHeadersFootersContainer or NULL if there is none.
      **/
-    const MSO::SlideHeadersFootersContainer* getSlideHF() const
+    MSONullable<MSO::SlideHeadersFootersContainer> getSlideHF() const
     {
-        return (p->documentContainer->slideHF)
-               ? p->documentContainer->slideHF.data()
-               : p->documentContainer->slideHF2.data();
+        return (p->documentContainer.slideHF().isPresent())
+               ? p->documentContainer.slideHF()
+               : p->documentContainer.slideHF2();
     }
-    const MSO::PerSlideHeadersFootersContainer*
+    MSONullable<MSO::PerSlideHeadersFootersContainer>
     getPerSlideHF(const MSO::SlideContainer* slide) const
     {
-        const MSO::PerSlideHeadersFootersContainer* hf = 0;
-        const MSO::MasterOrSlideContainer* master = p->getMaster(slide);
-        const MSO::MainMasterContainer* m1 =
-                (master) ?master->anon.get<MSO::MainMasterContainer>() :0;
-        const MSO::SlideContainer* m2 =
-                (master) ?master->anon.get<MSO::SlideContainer>() :0;
-        if (slide && slide->perSlideHFContainer) {
-            hf = slide->perSlideHFContainer.data();
-        } else if (m1 && m1->perSlideHeadersFootersContainer) {
-            hf = m1->perSlideHeadersFootersContainer.data();
-        } else if (m2 && m2->perSlideHFContainer) {
-            hf = m2->perSlideHFContainer.data();
+        MSONullable<MSO::PerSlideHeadersFootersContainer> hf;
+        MSONullable<MSO::MasterOrSlideContainer> master;
+        if (slide) {
+            master = p->getMaster(*slide);
+        }
+        MSO::MainMasterContainer m1;
+        MSO::SlideContainer m2;
+        if (master.isPresent()) {
+            const MSO::MasterOrSlideContainer m = *master;
+            m1 = m.anon().get<MSO::MainMasterContainer>();
+            m2 = m.anon().get<MSO::SlideContainer>();
+        }
+        if (slide) {
+            hf = slide->perSlideHFContainer();
+        } else if (m1.isValid()) {
+            hf = m1.perSlideHeadersFootersContainer();
+        } else if (m2.isValid()) {
+            hf = m2.perSlideHFContainer();
         }
         return hf;
     }
 
-    const MSO::FontEntityAtom* getFont(quint16 fontRef)
+    MSONullable<MSO::FontEntityAtom> getFont(quint16 fontRef)
     {
-        const MSO::FontCollectionContainer* f =
-            p->documentContainer->documentTextInfo.fontCollection.data();
-        if (f && f->rgFontCollectionEntry.size() > fontRef) {
-            return &f->rgFontCollectionEntry[fontRef].fontEntityAtom;
+        if (p->documentContainer.documentTextInfo().fontCollection().isPresent()) {
+            MSO::FontCollectionContainer f
+                    = *p->documentContainer.documentTextInfo().fontCollection();
+            if (fontRef < f.rgFontCollectionEntry().getCount()) {
+                return f.rgFontCollectionEntry()[fontRef].fontEntityAtom();
+            }
         }
-        return 0;
+        return MSO::FontEntityAtom();
     }
 
     /**

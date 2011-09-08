@@ -20,9 +20,10 @@
 #ifndef PARSEDPRESENTATION_H
 #define PARSEDPRESENTATION_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "pole.h"
 #include <QtCore/QMap>
+#include <QtCore/QVector>
 
 class ParsedPresentation
 {
@@ -32,20 +33,17 @@ public:
     MSO::PicturesStream pictures;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
-    const MSO::DocumentContainer* documentContainer;
-    const MSO::NotesContainer* notesMaster;
-    const MSO::HandoutContainer* handoutMaster;
+    MSONullable<MSO::DocumentContainer> documentContainer;
+    MSO::NotesContainer notesMaster;
+    MSO::HandoutContainer handoutMaster;
     QVector<const MSO::MasterOrSlideContainer*> masters;
     QVector<const MSO::SlideContainer*> slides;
     QVector<const MSO::NotesContainer*> notes;
 
     ParsedPresentation() {
-        documentContainer = 0;
-        notesMaster = 0;
-        handoutMaster = 0;
     }
 
-    const MSO::MasterOrSlideContainer* getMaster(const MSO::SlideContainer* slide) const;
+    const MSONullable<MSO::MasterOrSlideContainer> getMaster(const MSO::SlideContainer& slide) const;
     bool parse(POLE::Storage& storage);
 };
 

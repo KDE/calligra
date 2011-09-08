@@ -24,7 +24,7 @@
 #include "cell.h"
 #include <QtCore/QString>
 #include <QtGui/QImage>
-#include <generated/simpleParser.h>
+#include <generated/api.h>
 
 class QPoint;
 

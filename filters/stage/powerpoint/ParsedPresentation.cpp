@@ -128,7 +128,7 @@ parsePictures(POLE::Storage& storage, PicturesStream& pps)
   * return 0 if it is not present.
   **/
 template <typename T>
-const T*
+const MSONullable<T>
 get(const PowerPointStructs& pps, quint32 offset)
 {
     foreach(const PowerPointStruct& p, pps.anon) {
@@ -142,7 +142,7 @@ get(const PowerPointStructs& pps, quint32 offset)
             }
         }
     }
-    return 0;
+    return T();
 }
 void
 parsePersistDirectory(const PowerPointStructs& pps, const UserEditAtom* userEditAtom,
@@ -311,17 +311,16 @@ ParsedPresentation::parse(POLE::Storage& storage)
 // Part 11: Identify the VBA project persist object
     return true;
 }
-const MSO::MasterOrSlideContainer*
-ParsedPresentation::getMaster(const SlideContainer* slide) const
+MSONullable<MSO::MasterOrSlideContainer>
+ParsedPresentation::getMaster(const SlideContainer& slide) const
 {
     //masterIdRef MUST be 0x00000000 if the record that contains this SlideAtom
     //record is a MainMasterContainer record (MS-PPT 2.5.10)
-    if (!slide) return 0;
     foreach(const MasterPersistAtom& m, documentContainer->masterList.rgMasterPersistAtom) {
         if (m.masterId == slide->slideAtom.masterIdRef) {
             quint32 offset = persistDirectory[m.persistIdRef];
             return get<MasterOrSlideContainer>(presentation, offset);
         }
     }
-    return 0;
+    return MasterOrSlideContainer();
 }

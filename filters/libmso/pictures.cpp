@@ -132,14 +132,13 @@ const char* getSuffix(quint16 type)
     return "";
 }
 
-template<class T> void savePicture(PictureReference& ref, const T* a, KoStore* out)
+template<class T> void savePicture(PictureReference& ref, const T& a, KoStore* out)
 {
-    if (!a) return;
-    ref.uid = a->rgbUid1 + a->rgbUid2;
+    ref.uid = a.rgbUid1() + a.rgbUid2();
     ref.name.clear();
 
-    QByteArray imagePixelBytes = a->BLIPFileData;
-    if (a->rh.recType == officeArtBlipDIB) {
+    QByteArray imagePixelBytes = a.BLIPFileData();
+    if (a.rh().recType() == officeArtBlipDIB) {
         // convert to QImage
         QImage image;
         bool result = dibToBmp(image, imagePixelBytes.data(), imagePixelBytes.size());
@@ -161,8 +160,8 @@ template<class T> void savePicture(PictureReference& ref, const T* a, KoStore* o
         ref.name = ref.uid.toHex() + getSuffix(officeArtBlipPNG);
         ref.mimetype = getMimetype(officeArtBlipPNG);
     } else {
-        ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
-        ref.mimetype = getMimetype(a->rh.recType);
+        ref.name = ref.uid.toHex() + getSuffix(a.rh().recType());
+        ref.mimetype = getMimetype(a.rh().recType());
     }
 
     if (!out->open(ref.name.toLocal8Bit())) {
@@ -175,15 +174,13 @@ template<class T> void savePicture(PictureReference& ref, const T* a, KoStore* o
     out->close();
 }
 
-template<class T> void saveDecompressedPicture(PictureReference& ref, const T* a, KoStore* store)
+template<class T> void saveDecompressedPicture(PictureReference& ref, const T& a, KoStore* store)
 {
-    if (!a) return;
-
-    QByteArray buff = a->BLIPFileData;
-    bool compressed = a->metafileHeader.compression == 0;
+    QByteArray buff = a.BLIPFileData();
+    bool compressed = a.metafileHeader().compression() == 0;
 
     if (compressed) {
-        quint32 cbSize = a->metafileHeader.cbSize;
+        quint32 cbSize = a.metafileHeader().cbSize();
         char tmp[4];
 
         //big-endian byte order required
@@ -199,15 +196,15 @@ template<class T> void saveDecompressedPicture(PictureReference& ref, const T* a
         }
     }
     //reuse the savePicture code
-    ref.uid = a->rgbUid1 + a->rgbUid2;
-    ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
+    ref.uid = a.rgbUid1() + a.rgbUid2();
+    ref.name = ref.uid.toHex() + getSuffix(a.rh().recType());
     if (!store->open(ref.name.toLocal8Bit())) {
         ref.name.clear();
         ref.uid.clear();
         return; // empty name reports an error
     }
     store->write(buff.data(), buff.size());
-    ref.mimetype = getMimetype(a->rh.recType);
+    ref.mimetype = getMimetype(a.rh().recType());
     store->close();
 }
 
@@ -215,13 +212,21 @@ PictureReference savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
 {
     PictureReference ref;
     // only one of these calls will actually save a picture
-    saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipEMF>(), store);
-    saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipWMF>(), store);
-    saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipPICT>(), store);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipJPEG>(), store);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipPNG>(), store);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipDIB>(), store);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipTIFF>(), store);
+    if (a.anon().is<MSO::OfficeArtBlipEMF>()) {
+        saveDecompressedPicture(ref, a.anon().get<MSO::OfficeArtBlipEMF>(), store);
+    } else if (a.anon().is<MSO::OfficeArtBlipWMF>()) {
+        saveDecompressedPicture(ref, a.anon().get<MSO::OfficeArtBlipWMF>(), store);
+    } else if (a.anon().is<MSO::OfficeArtBlipPICT>()) {
+        saveDecompressedPicture(ref, a.anon().get<MSO::OfficeArtBlipPICT>(), store);
+    } else if (a.anon().is<MSO::OfficeArtBlipJPEG>()) {
+        savePicture(ref, a.anon().get<MSO::OfficeArtBlipJPEG>(), store);
+    } else if (a.anon().is<MSO::OfficeArtBlipPNG>()) {
+        savePicture(ref, a.anon().get<MSO::OfficeArtBlipPNG>(), store);
+    } else if (a.anon().is<MSO::OfficeArtBlipDIB>()) {
+        savePicture(ref, a.anon().get<MSO::OfficeArtBlipDIB>(), store);
+    } else if (a.anon().is<MSO::OfficeArtBlipTIFF>()) {
+        savePicture(ref, a.anon().get<MSO::OfficeArtBlipTIFF>(), store);
+    }
     return ref;
 }
 } //namespace
@@ -298,13 +303,15 @@ PictureReference savePicture(POLE::Stream& stream, KoStore* out)
 
 PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
 {
-    const MSO::OfficeArtBlip* blip = a.anon.get<MSO::OfficeArtBlip>();
-    const MSO::OfficeArtFBSE* fbse = a.anon.get<MSO::OfficeArtFBSE>();
-    if (blip) {
-        return savePicture(*blip, store);
+
+    if (a.anon().is<MSO::OfficeArtBlip>()) {
+        return savePicture(a.anon().get<MSO::OfficeArtBlip>(), store);
     }
-    if (fbse && fbse->embeddedBlip) {
-        return savePicture(*fbse->embeddedBlip, store);
+    if (a.anon().is<MSO::OfficeArtFBSE>()) {
+        const MSO::OfficeArtFBSE fbse = a.anon().get<MSO::OfficeArtFBSE>();
+        if (fbse.embeddedBlip().isPresent()) {
+            return savePicture(*fbse.embeddedBlip(), store);
+        }
     }
     return PictureReference();
 }
@@ -313,12 +320,12 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
 {
     quint32 n = pib - 1;
     // return 16 byte rgbuid for this given blip id
-    if (dgg.blipStore) {
-        const MSO::OfficeArtBStoreContainer* b = dgg.blipStore.data();
-        if (n < (quint32) b->rgfb.size() &&
-            b->rgfb[n].anon.is<MSO::OfficeArtFBSE>())
+    if (dgg.blipStore().isPresent()) {
+        const MSO::OfficeArtBStoreContainer b = *dgg.blipStore();
+        if (n < (quint32) b.rgfb().getCount() &&
+            b.rgfb()[n].anon().is<MSO::OfficeArtFBSE>())
         {
-            const MSO::OfficeArtFBSE* fbse = b->rgfb[n].anon.get<MSO::OfficeArtFBSE>();
+            const MSO::OfficeArtFBSE fbse = b.rgfb()[n].anon().get<MSO::OfficeArtFBSE>();
 #ifdef DEBUG_PICTURES
             qDebug() << "rgfb.size():" << b->rgfb.size();
             qDebug() << "pib:" << pib;
@@ -329,8 +336,8 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
             qDebug() << "foDelay:" << fbse->foDelay;
             qDebug() << "embeddeBlip:" << fbse->embeddedBlip;
 #endif
-            offset = fbse->foDelay;
-            return fbse->rgbUid;
+            offset = fbse.foDelay();
+            return fbse.rgbUid();
         }
     }
     if (pib != 0xFFFF && pib != 0) {
@@ -341,14 +348,12 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
     return QByteArray();
 }
 
-QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb)
+QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const MSOArray<MSO::OfficeArtBStoreContainerFileBlock>& rgfb)
 {
     PictureReference ref;
     QMap<QByteArray, QString> fileNames;
 
-    if (!rgfb) return fileNames;
-
-    foreach (const MSO::OfficeArtBStoreContainerFileBlock& block, *rgfb) {
+    foreach (const MSO::OfficeArtBStoreContainerFileBlock& block, rgfb) {
         ref = savePicture(block, store);
 
         if (ref.name.length() == 0) {
@@ -358,10 +363,10 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
             continue;
         }
         //check if the MD4 digest is up2date
-        if (block.anon.is<MSO::OfficeArtFBSE>()) {
-            const MSO::OfficeArtFBSE* fbse = block.anon.get<MSO::OfficeArtFBSE>();
-            if (fbse->rgbUid != ref.uid) {
-                ref.uid = fbse->rgbUid;
+        if (block.anon().is<MSO::OfficeArtFBSE>()) {
+            const MSO::OfficeArtFBSE fbse = block.anon().get<MSO::OfficeArtFBSE>();
+            if (fbse.rgbUid() != ref.uid) {
+                ref.uid = fbse.rgbUid();
             }
         }
         manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);

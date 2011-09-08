@@ -71,12 +71,12 @@ ODrawToOdf::normalizeRotation(qreal rotation)
 QRectF
 ODrawToOdf::getRect(const OfficeArtSpContainer &o)
 {
-    if (o.childAnchor) {
-        const OfficeArtChildAnchor& r = *o.childAnchor;
-        return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
-    } else if (o.clientAnchor && client) {
-        return client->getRect(*o.clientAnchor);
-    } else if (o.shapeProp.fHaveAnchor && client) {
+    if (o.childAnchor().isPresent()) {
+        const OfficeArtChildAnchor r = *o.childAnchor();
+        return QRect(r.xLeft(), r.yTop(), r.xRight() - r.xLeft(), r.yBottom() - r.yTop());
+    } else if (o.clientAnchor().isPresent() && client) {
+        return client->getRect(*o.clientAnchor());
+    } else if (o.shapeProp().fHaveAnchor() && client) {
         return client->getReserveRect();
     } else {
         return QRectF();
@@ -113,7 +113,7 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
 
 void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
-    if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
+    if (o.clientData().isPresent() && client->processRectangleAsTextBox(*o.clientData())) {
         processTextBox(o, out);
     } else {
         out.xml.startElement("draw:custom-shape");
@@ -147,10 +147,10 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
     qreal y2 = rect.y() + rect.height();
 
     // shape mirroring
-    if (o.shapeProp.fFlipV) {
+    if (o.shapeProp().fFlipV()) {
         qSwap(y1, y2);
     }
-    if (o.shapeProp.fFlipH) {
+    if (o.shapeProp().fFlipH()) {
         qSwap(x1, x2);
     }
 
@@ -321,13 +321,13 @@ void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Wr
  */
 void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
 {
-    const OfficeArtDggContainer * drawingGroup = 0;
+    MSONullable<OfficeArtDggContainer> drawingGroup;
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
     }
 
-    const OfficeArtSpContainer* master = 0;
-    const DrawStyle ds(drawingGroup, master, &o);
+    MSONullable<OfficeArtSpContainer> master;
+    const DrawStyle ds(drawingGroup, master, o);
     qreal rotation = toQReal( ds.rotation() );
 
     const QRectF rect = getRect(o);
@@ -361,11 +361,11 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     m.translate( -shapeRect.center().x(), -shapeRect.center().y() );
 
     // Mirroring
-    if (o.shapeProp.fFlipH){
+    if (o.shapeProp().fFlipH()){
         m.scale(-1,1);
     }
 
-    if (o.shapeProp.fFlipV){
+    if (o.shapeProp().fFlipV()){
         m.scale(1,-1);
     }
 
@@ -419,7 +419,7 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
 
 void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
 {
-    DrawStyle ds(0, &o);
+    DrawStyle ds(OfficeArtDggContainer(), o, OfficeArtSpContainer());
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -458,7 +458,7 @@ void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer&
 
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
-    quint16 shapeType = o.shapeProp.rh.recInstance;
+    quint16 shapeType = o.shapeProp().rh().recInstance();
     switch (shapeType) {
     case msosptNotPrimitive:
         processNotPrimitive(o, out);
@@ -971,40 +971,40 @@ void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
 void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
-    if (o.clientData && client && client->onlyClientData(*o.clientData)) {
-        client->processClientData(o.clientTextbox.data(), *o.clientData, out);
-    } else if (o.clientTextbox) {
-        client->processClientTextBox(*o.clientTextbox, o.clientData.data(), out);
+    if (o.clientData().isPresent() && client && client->onlyClientData(*o.clientData())) {
+        client->processClientData(o.clientTextbox(), *o.clientData(), out);
+    } else if (o.clientTextbox().isPresent()) {
+        client->processClientTextBox(*o.clientTextbox(), o.clientData(), out);
     }
 }
 
 void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &out, const QList<int>& defaults)
 {
-    const AdjustValue* val1 = get<AdjustValue>(o);
-    if (!val1 && defaults.isEmpty()) return;
-    const Adjust2Value* val2 = get<Adjust2Value>(o);
-    const Adjust3Value* val3 = get<Adjust3Value>(o);
-    const Adjust4Value* val4 = get<Adjust4Value>(o);
-    const Adjust5Value* val5 = get<Adjust5Value>(o);
-    const Adjust6Value* val6 = get<Adjust6Value>(o);
-    const Adjust7Value* val7 = get<Adjust7Value>(o);
-    const Adjust8Value* val8 = get<Adjust8Value>(o);
+    const AdjustValue val1 = get<AdjustValue>(o);
+    if (!val1.isValid() && defaults.isEmpty()) return;
+    const Adjust2Value val2 = get<Adjust2Value>(o);
+    const Adjust3Value val3 = get<Adjust3Value>(o);
+    const Adjust4Value val4 = get<Adjust4Value>(o);
+    const Adjust5Value val5 = get<Adjust5Value>(o);
+    const Adjust6Value val6 = get<Adjust6Value>(o);
+    const Adjust7Value val7 = get<Adjust7Value>(o);
+    const Adjust8Value val8 = get<Adjust8Value>(o);
 
-    QString modifiers = QString::number(val1 ? val1->adjustvalue : defaults[0]);
-    if (val2 || defaults.size() > 1) {
-        modifiers += QString(" %1").arg(val2 ? val2->adjust2value : defaults[1]);
-        if (val3 || defaults.size() > 2) {
-            modifiers += QString(" %1").arg(val3 ? val3->adjust3value : defaults[2]);
-            if (val4 || defaults.size() > 3) {
-                modifiers += QString(" %1").arg(val4 ? val4->adjust4value : defaults[3]);
-                if (val5 || defaults.size() > 4) {
-                    modifiers += QString(" %1").arg(val5 ? val5->adjust5value : defaults[4]);
-                    if (val6 || defaults.size() > 5) {
-                        modifiers += QString(" %1").arg(val6 ? val6->adjust6value : defaults[5]);
-                        if (val7 || defaults.size() > 6) {
-                            modifiers += QString(" %1").arg(val7 ? val7->adjust7value : defaults[6]);
-                            if (val8 || defaults.size() > 7) {
-                                modifiers += QString(" %1").arg(val8 ? val8->adjust8value : defaults[7]);
+    QString modifiers = QString::number(val1.isValid() ? val1.adjustvalue() : defaults[0]);
+    if (val2.isValid() || defaults.size() > 1) {
+        modifiers += QString(" %1").arg(val2.isValid() ? val2.adjust2value() : defaults[1]);
+        if (val3.isValid() || defaults.size() > 2) {
+            modifiers += QString(" %1").arg(val3.isValid() ? val3.adjust3value() : defaults[2]);
+            if (val4.isValid() || defaults.size() > 3) {
+                modifiers += QString(" %1").arg(val4.isValid() ? val4.adjust4value() : defaults[3]);
+                if (val5.isValid() || defaults.size() > 4) {
+                    modifiers += QString(" %1").arg(val5.isValid() ? val5.adjust5value() : defaults[4]);
+                    if (val6.isValid() || defaults.size() > 5) {
+                        modifiers += QString(" %1").arg(val6.isValid() ? val6.adjust6value() : defaults[5]);
+                        if (val7.isValid() || defaults.size() > 6) {
+                            modifiers += QString(" %1").arg(val7.isValid() ? val7.adjust7value() : defaults[6]);
+                            if (val8.isValid() || defaults.size() > 7) {
+                                modifiers += QString(" %1").arg(val8.isValid() ? val8.adjust8value() : defaults[7]);
                             }
                         }
                     }
@@ -1019,9 +1019,9 @@ void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &ou
 // Position the shape into the slide or into a group shape
 void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 {
-    const OfficeArtDggContainer* dgg = 0;
-    const OfficeArtSpContainer* master = 0;
-    const DrawStyle ds(dgg, master, &o);
+    OfficeArtDggContainer dgg;
+    OfficeArtSpContainer master;
+    const DrawStyle ds(dgg, master, o);
     const qreal rotation = toQReal(ds.rotation());
 
     //transform the rectangle into the coordinate system of the group shape
@@ -1042,7 +1042,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //draw:transform
     if (rotation) {
 
-        const quint16 shapeType = o.shapeProp.rh.recInstance;
+        const quint16 shapeType = o.shapeProp().rh().recInstance();
         const quint16 nrotation = normalizeRotation(rotation);
         const qreal angle = (nrotation / (qreal)180) * M_PI;
 
@@ -1080,9 +1080,9 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
-    const OfficeArtDggContainer* drawingGroup = 0;
-    const OfficeArtSpContainer* master = 0;
-    const DrawStyle ds(drawingGroup, master, &o);
+    OfficeArtDggContainer drawingGroup;
+    OfficeArtSpContainer master;
+    const DrawStyle ds(drawingGroup, master, o);
 
     IMsoArray _v = ds.pVertices_complex();
     IMsoArray _c = ds.pSegmentInfo_complex();
@@ -1229,11 +1229,11 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         //draw:glue-points
         //draw:glue-point-type
         //draw:mirror-horizontal
-        if (o.shapeProp.fFlipH) {
+        if (o.shapeProp().fFlipH()) {
             out.xml.addAttribute("draw:mirror-horizontal", "true");
         }
         //draw:mirror-vertical
-        if (o.shapeProp.fFlipV) {
+        if (o.shapeProp().fFlipV()) {
             out.xml.addAttribute("draw:mirror-vertical", "true");
         }
         //draw:modifiers
@@ -1283,10 +1283,10 @@ QString ODrawToOdf::path2svg(const QPainterPath &path)
 
 void ODrawToOdf::setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
-    if (o.shapeProp.fFlipV) {
+    if (o.shapeProp().fFlipV()) {
         out.xml.addAttribute("draw:mirror-vertical", "true");
     }
-    if (o.shapeProp.fFlipH) {
+    if (o.shapeProp().fFlipH()) {
         out.xml.addAttribute("draw:mirror-horizontal", "true");
     }
 }

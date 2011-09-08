@@ -20,7 +20,7 @@
 #ifndef ODRAWTOODF_H
 #define ODRAWTOODF_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "writer.h"
 
 class DrawStyle;
@@ -60,11 +60,11 @@ public:
          * Process the client data into ODF in a host application specific
          * manner.
          **/
-        virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
+        virtual void processClientData(const MSONullable<MSO::OfficeArtClientTextBox>& ct,
                                        const MSO::OfficeArtClientData& o,
                                        Writer& out) = 0;
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
-                                          const MSO::OfficeArtClientData* cd,
+                                          const MSONullable<MSO::OfficeArtClientData>& cd,
                                           Writer& out) = 0;
 
         /**
@@ -80,8 +80,8 @@ public:
          * or 'chart'.
          **/
         virtual KoGenStyle createGraphicStyle(
-            const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd,
+            const MSONullable<MSO::OfficeArtClientTextBox>& ct,
+            const MSONullable<MSO::OfficeArtClientData>& cd,
             const DrawStyle& ds,
             Writer& out) = 0;
 
@@ -93,21 +93,21 @@ public:
          **/
         virtual void addTextStyles(
             const quint16 msospt,
-            const MSO::OfficeArtClientTextBox* clientTextbox,
-            const MSO::OfficeArtClientData* clientData,
+            const  MSONullable<MSO::OfficeArtClientTextBox>& clientTextbox,
+            const MSONullable<MSO::OfficeArtClientData>& clientData,
             KoGenStyle& style,
             Writer& out) = 0;
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
          **/
-        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer() = 0;
+        virtual MSONullable<MSO::OfficeArtDggContainer> getOfficeArtDggContainer() = 0;
 
         /**
          * Retrieve the OfficeArtSpContainer of the master shape.
          * @param spid identifier of the master shape.
          **/
-        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
+        virtual MSONullable<MSO::OfficeArtSpContainer> getMasterShapeContainer(quint32 spid) = 0;
 
         /**
          * Convert the OfficeArtCOLORREF to a QColor.
@@ -339,7 +339,7 @@ public:
  */
 inline qreal toQReal(const MSO::FixedPoint& f)
 {
-    return f.integral + f.fractional / 65536.0;
+    return f.integral() + f.fractional() / 65536.0;
 }
 
 const char* getFillRule(quint16 shapeType);

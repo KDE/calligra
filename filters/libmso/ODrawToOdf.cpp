@@ -37,47 +37,47 @@ using namespace MSO;
 QRectF
 ODrawToOdf::getRect(const OfficeArtFSPGR &r)
 {
-    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+    return QRect(r.xLeft(), r.yTop(), r.xRight() - r.xLeft(), r.yBottom() - r.yTop());
 }
 
 void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out)
 {
-    if (o.rgfb.size() < 2) return;
+    if (o.rgfb().getCount() < 2) return;
 
     //The first container MUST be an OfficeArtSpContainer record, which
     //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
-    const OfficeArtSpContainer* sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    const OfficeArtSpContainer sp = o.rgfb()[0].anon().get<OfficeArtSpContainer>();
 
     //An OfficeArtFSPGR record specifies the coordinate system of the group
     //shape.  The anchors of the child shape are expressed in this coordinate
     //system.  This record’s container MUST be a group shape.
-    if (sp && sp->shapeProp.fGroup) {
+    if (sp.isValid() && sp.shapeProp().fGroup()) {
         QRectF oldCoords;
-        if (!sp->shapeProp.fPatriarch) {
+        if (!sp.shapeProp().fPatriarch()) {
             out.xml.startElement("draw:g");
 
             //TODO: rotation and flipping of group shapes
-            const DrawStyle ds(0, 0, sp);
+            const DrawStyle ds(MSO::OfficeArtDggContainer(), MSO::OfficeArtSpContainer(), sp);
             qreal rotation = toQReal(ds.rotation());
             out.g_rotation += rotation;
-            out.g_flipH = sp->shapeProp.fFlipH;
-            out.g_flipV = sp->shapeProp.fFlipV;
+            out.g_flipH = sp.shapeProp().fFlipH();
+            out.g_flipV = sp.shapeProp().fFlipV();
 
-            if (sp->clientAnchor && sp->shapeGroup) {
-                oldCoords = client->getRect(*sp->clientAnchor);
+            if (sp.clientAnchor().isPresent() && sp.shapeGroup().isPresent()) {
+                oldCoords = client->getRect(*sp.clientAnchor());
             }
         }
         if (oldCoords.isValid()) {
-            Writer out_trans = out.transform(oldCoords, getRect(*sp->shapeGroup));
-            for (int i = 1; i < o.rgfb.size(); ++i) {
-                processDrawing(o.rgfb[i], out_trans);
+            Writer out_trans = out.transform(oldCoords, getRect(*sp.shapeGroup()));
+            for (quint32 i = 1; i < o.rgfb().getCount(); ++i) {
+                processDrawing(o.rgfb()[i], out_trans);
             }
         } else {
-            for (int i = 1; i < o.rgfb.size(); ++i) {
-                processDrawing(o.rgfb[i], out);
+            for (quint32 i = 1; i < o.rgfb().getCount(); ++i) {
+                processDrawing(o.rgfb()[i], out);
             }
         }
-        if (!sp->shapeProp.fPatriarch) {
+        if (!sp.shapeProp().fPatriarch()) {
             out.xml.endElement(); //draw:g
         }
     }
@@ -86,40 +86,40 @@ void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer&
 void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock& of,
                                 Writer& out)
 {
-    if (of.anon.is<OfficeArtSpgrContainer>()) {
-        processGroupShape(*of.anon.get<OfficeArtSpgrContainer>(), out);
+    if (of.anon().is<OfficeArtSpgrContainer>()) {
+        processGroupShape(of.anon().get<OfficeArtSpgrContainer>(), out);
     } else {
-        processDrawingObject(*of.anon.get<OfficeArtSpContainer>(), out);
+        processDrawingObject(of.anon().get<OfficeArtSpContainer>(), out);
     }
 }
 void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
         const OfficeArtSpContainer& o)
 {
     KoGenStyle style;
-    const OfficeArtDggContainer* drawingGroup = 0;
-    const OfficeArtSpContainer* master = 0;
+    MSONullable<OfficeArtDggContainer> drawingGroup;
+    MSONullable<OfficeArtSpContainer> master;
 
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
 
         //locate the OfficeArtSpContainer of the master shape
-        if (o.shapeProp.fHaveMaster) {
-            const DrawStyle tmp(0, &o);
+        if (o.shapeProp().fHaveMaster()) {
+            const DrawStyle tmp(drawingGroup, o, master);
             quint32 spid = tmp.hspMaster();
             master = client->getMasterShapeContainer(spid);
         }
     }
-    const DrawStyle ds(drawingGroup, master, &o);
+    const DrawStyle ds(drawingGroup, master, o);
     if (client) {
-        style = client->createGraphicStyle(o.clientTextbox.data(),
-                                           o.clientData.data(), ds, out);
+        style = client->createGraphicStyle(*o.clientTextbox(),
+                                           *o.clientData(), ds, out);
     }
     defineGraphicProperties(style, ds, out.styles);
 
     if (client) {
-        client->addTextStyles(o.shapeProp.rh.recInstance,
-                              o.clientTextbox.data(),
-                              o.clientData.data(), style, out);
+        client->addTextStyles(o.shapeProp().rh().recInstance(),
+                              *o.clientTextbox(),
+                              *o.clientData(), style, out);
     }
 }
 
@@ -556,31 +556,19 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
         IMsoArray a = ds.fillShadeColors_complex();
 
-        QBuffer streamBuffer(&a.data);
-        streamBuffer.open(QIODevice::ReadOnly);
-        LEInputStream in(&streamBuffer);
+        const char* data = a.data;
+        quint32 datasize = a.data.size();
+        quint32 dataoffset = 0;
 
         OfficeArtCOLORREF color;
         FixedPoint fixedPoint;
         for (int i = 0; i < a.nElems; i++) {
-            try {
-                parseOfficeArtCOLORREF(in,color);
-            } catch (const IOException& e) {
-                qDebug() << e.msg;
-                break;
-            } catch (...) {
-                qDebug() << "Warning: Caught an unknown exception!";
-                break;
-            }
-            try {
-                parseFixedPoint(in,fixedPoint);
-            } catch (const IOException& e) {
-                qDebug() << e.msg;
-                break;
-            } catch (...) {
-                qDebug() << "Warning: Caught an unknown exception!";
-                break;
-            }
+            color = OfficeArtCOLORREF(data + dataoffset, datasize - dataoffset);
+            if (!color.isValid()) break;
+            dataoffset += color.getSize();
+            fixedPoint = FixedPoint(data + dataoffset, datasize - dataoffset);
+            if (!fixedPoint.isValid()) break;
+            dataoffset += fixedPoint.getSize();
 
             qreal offset = toQReal(fixedPoint);
             elementWriter.startElement("svg:stop");
@@ -592,7 +580,6 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
             }
             elementWriter.endElement();
         }
-        streamBuffer.close();
     } else {
         QColor fillColor = processOfficeArtCOLORREF(ds.fillColor(), ds);
         QColor backColor = processOfficeArtCOLORREF(ds.fillBackColor(), ds);
@@ -718,9 +705,9 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     // unsigned 16-bit index into the system color table.  Values less than
     // 0x00F0 map directly to system colors.  Table [1] specifies values that
     // have special meaning, [1] MS-ODRAW 2.2.2
-    if (c.fSysIndex) {
-        if (c.red >= 0xF0) {
-            switch (c.red) {
+    if (c.fSysIndex()) {
+        if (c.red() >= 0xF0) {
+            switch (c.red()) {
             // Use the fill color of the shape.
             case 0xF0:
                 tmp = ds.fillColor();
@@ -768,26 +755,26 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
                 break;
             }
             default:
-                qWarning() << "red: Unhandled fSysIndex!" << c.red;
+                qWarning() << "red: Unhandled fSysIndex!" << c.red();
                 break;
             }
-        } else if (c.green == 0) {
+        } else if (c.green() == 0) {
             tmp = c;
             // system colors
-            if (c.red < 25) {
-                const QRgb& col = systemColors[c.red];
-                tmp.red = qRed(col);
-                tmp.green = qGreen(col);
-                tmp.blue = qBlue(col);
+            if (c.red() < 25) {
+                const QRgb& col = systemColors[c.red()];
+                //tmp.red = qRed(col);
+                //tmp.green = qGreen(col);
+                //tmp.blue = qBlue(col);
             } else {
-                qWarning() << "red: Unhandled system color" << c.red;
+                qWarning() << "red: Unhandled system color" << c.red();
             }
         }
 
         ret = client->toQColor(tmp);
-        qreal p = c.blue / (qreal) 255;
+        qreal p = c.blue() / (qreal) 255;
 
-        switch (c.green & 0xF) {
+        switch (c.green() & 0xF) {
         case 0x00: break; // do nothing
         // Darken the color by the value that is specified in the blue field.
         // A blue value of 0xFF specifies that the color is to be left
@@ -795,9 +782,9 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         // to be completely darkened.
         case 0x01:
         {
-            if (c.blue == 0x00) {
+            if (c.blue() == 0x00) {
                 ret = ret.darker(800);
-            } else if (c.blue != 0xFF) {
+            } else if (c.blue() != 0xFF) {
                 ret.setRed(ceil(p * ret.red()));
                 ret.setGreen(ceil(p * ret.green()));
                 ret.setBlue(ceil(p * ret.blue()));
@@ -810,9 +797,9 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         // to be completely lightened.
         case 0x02:
         {
-            if (c.blue == 0x00) {
+            if (c.blue() == 0x00) {
                 ret = ret.lighter(150);
-            } else if (c.blue != 0xFF) {
+            } else if (c.blue() != 0xFF) {
                 ret.setRed(ret.red() + ceil(p * ret.red()));
                 ret.setGreen(ret.green() + ceil(p * ret.green()));
                 ret.setBlue(ret.blue() + ceil(p * ret.blue()));
@@ -825,17 +812,17 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         case 0x05:
         case 0x06:
         default:
-            qWarning() << "green: Unhandled fSysIndex!" << c.green;
+            qWarning() << "green: Unhandled fSysIndex!" << c.green();
             break;
         }
         // TODO
-        if (c.green & 0x20) {
+        if (c.green() & 0x20) {
             qWarning() << "green: unhandled 0x20";
         }
-        if (c.green & 0x40) {
+        if (c.green() & 0x40) {
             qWarning() << "green: unhandled 0x40";
         }
-        if (c.green & 0x80) {
+        if (c.green() & 0x80) {
             qWarning() << "green: unhandled 0x80";
         }
     } else {

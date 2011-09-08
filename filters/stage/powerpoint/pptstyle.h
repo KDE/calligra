@@ -21,7 +21,8 @@
 #ifndef PPTSTYLE_H
 #define PPTSTYLE_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
+#include <QtCore/QList>
 
 /**
  * Specifies the types of text.  [MS-PPT] — v20101219
@@ -244,44 +245,45 @@ getTextMasterStyleAtom(const MSO::MasterOrSlideContainer* m, quint16 textType);
 
 
 template<class T>
-const T*
-getPP(const MSO::DocumentContainer* dc)
+const MSONullable<T>
+getPP(const MSO::DocumentContainer& dc)
 {
-    if (dc == 0 || dc->docInfoList == 0) return 0;
-    foreach (const MSO::DocInfoListSubContainerOrAtom& a,
-                 dc->docInfoList->rgChildRec) {
-        const MSO::DocProgTagsContainer* d
-                = a.anon.get<MSO::DocProgTagsContainer>();
-        if (d) {
+    if (!dc.docInfoList().isPresent()) return T();
+    const MSO::DocInfoListContainer dil = *dc.docInfoList();
+    foreach (const MSO::DocInfoListSubContainerOrAtom& a, dil.rgChildRec()) {
+        if (a.anon().is<MSO::DocProgTagsContainer>()) {
+            const MSO::DocProgTagsContainer d
+                    = a.anon().get<MSO::DocProgTagsContainer>();
             foreach (const MSO::DocProgTagsSubContainerOrAtom& da,
-                     d->rgChildRec) {
-                const MSO::DocProgBinaryTagContainer* c
-                        = da.anon.get<MSO::DocProgBinaryTagContainer>();
-                if (c) {
-                    const T* t = c->rec.anon.get<T>();
-                    if (t) return t;
+                     d.rgChildRec()) {
+                if (da.anon().is<MSO::DocProgBinaryTagContainer>()) {
+                    const MSO::DocProgBinaryTagContainer c
+                            = da.anon().get<MSO::DocProgBinaryTagContainer>();
+                    if (c.rec().anon().get<T>()) {
+                        return c.rec().anon().get<T>();
+                    }
                 }
             }
         }
     }
-    return 0;
+    return T();
 }
 
 template<class T>
-const T*
+const MSONullable<T>
 getPP(const MSO::PptOfficeArtClientData& o)
 {
     foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom& s,
-             o.rgShapeClientRoundtripData) {
+             o.rgShapeClientRoundtripData()) {
         const MSO::ShapeProgsTagContainer* p
-                = s.anon.get<MSO::ShapeProgsTagContainer>();
+                = s.anon().get<MSO::ShapeProgsTagContainer>();
         if (p) {
             foreach (const MSO::ShapeProgTagsSubContainerOrAtom& s,
-                     p->rgChildRec) {
+                     p->rgChildRec()) {
                 const MSO::ShapeProgBinaryTagContainer* a
-                        = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
+                        = s.anon().get<MSO::ShapeProgBinaryTagContainer>();
                 if (a) {
-                    const T* pp = a->rec.anon.get<T>();
+                    const T* pp = a->rec().anon().get<T>();
                     if (pp) {
                         return pp;
                     }
@@ -290,16 +292,16 @@ getPP(const MSO::PptOfficeArtClientData& o)
         }
     }
     foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom& s,
-             o.rgShapeClientRoundtripData0) {
+             o.rgShapeClientRoundtripData0()) {
         const MSO::ShapeProgsTagContainer* p
-                = s.anon.get<MSO::ShapeProgsTagContainer>();
+                = s.anon().get<MSO::ShapeProgsTagContainer>();
         if (p) {
             foreach (const MSO::ShapeProgTagsSubContainerOrAtom& s,
-                     p->rgChildRec) {
+                     p->rgChildRec()) {
                 const MSO::ShapeProgBinaryTagContainer* a
-                        = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
+                        = s.anon().get<MSO::ShapeProgBinaryTagContainer>();
                 if (a) {
-                    const T* pp = a->rec.anon.get<T>();
+                    const T* pp = a->rec().anon().get<T>();
                     if (pp) {
                         return pp;
                     }
@@ -317,23 +319,28 @@ getPP(const C* c)
     if (!c) return 0;
     const MSO::SlideProgTagsContainer* sc = c->slideProgTagsContainer.data();
     if (!sc) return 0;
-    foreach (const MSO::SlideProgTagsSubContainerOrAtom& a , sc->rgTypeRec) {
+    foreach (const MSO::SlideProgTagsSubContainerOrAtom& a , sc->rgTypeRec()) {
         const MSO::SlideProgBinaryTagContainer* bt
-                = a.anon.get<MSO::SlideProgBinaryTagContainer>();
+                = a.anon().get<MSO::SlideProgBinaryTagContainer>();
         if (bt) {
-            const T* t = bt->rec.anon.get<T>();
+            const T* t = bt->rec().anon().get<T>();
             if (t) return t;
         }
     }
     return 0;
 }
 template<class T>
-const T*
-getPP(const MSO::MasterOrSlideContainer* m) {
-    if (!m) return 0;
-    const MSO::MainMasterContainer* mm = m->anon.get<MSO::MainMasterContainer>();
-    if (mm) return getPP<T>(mm);
-    return getPP<T>(m->anon.get<MSO::SlideContainer>());
+MSONullable<T>
+getPP(const MSONullable<MSO::MasterOrSlideContainer>& m) {
+    if (!m.isPresent()) return T();
+    const MSO::MasterOrSlideContainer mm = *m;
+    if (mm.anon().is<MSO::MainMasterContainer>()) {
+        return getPP<T>(mm.anon().get<MSO::MainMasterContainer>());
+    }
+    if (mm.anon().is<MSO::SlideContainer>()) {
+        return getPP<T>(mm.anon().get<MSO::SlideContainer>());
+    }
+    return T();
 }
 
 #endif //PPTSTYLE_H

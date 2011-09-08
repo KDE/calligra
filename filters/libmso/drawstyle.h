@@ -21,7 +21,9 @@
 #ifndef DRAWSTYLE_H
 #define DRAWSTYLE_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 class IMsoArray
 {
@@ -36,19 +38,19 @@ public:
 class DrawStyle
 {
 private:
-    const MSO::OfficeArtDggContainer* d;
-    const MSO::OfficeArtSpContainer* mastersp;
-    const MSO::OfficeArtSpContainer* sp;
+    const MSONullable<MSO::OfficeArtDggContainer> d;
+    const MSONullable<MSO::OfficeArtSpContainer> mastersp;
+    const MSONullable<MSO::OfficeArtSpContainer> sp;
 public:
-    explicit DrawStyle(const MSO::OfficeArtDggContainer* d_ = 0,
-                       const MSO::OfficeArtSpContainer* mastersp_ = 0,
-                       const MSO::OfficeArtSpContainer* sp_ = 0)
+    explicit DrawStyle(const MSONullable<MSO::OfficeArtDggContainer>& d_,
+                       const MSONullable<MSO::OfficeArtSpContainer>& mastersp_ = MSO::OfficeArtSpContainer(),
+                       const MSONullable<MSO::OfficeArtSpContainer>& sp_ = MSO::OfficeArtSpContainer())
             : d(d_), mastersp(mastersp_), sp(sp_) {}
 
     /**
      * @return the OfficeArtSpContainer record specifying the shape container.
      */
-    const MSO::OfficeArtSpContainer* shapeContainer() const { return sp; };
+    MSONullable<MSO::OfficeArtSpContainer> shapeContainer() const { return sp; }
 
     /**
      * @return the shape type that MUST be an MSOSPT enumeration value.
@@ -279,14 +281,14 @@ public:
  * @return pointer to the option of type A or 0 if there is none.
  */
 template <typename A, typename B>
-const A*
+A
 get(const B& b)
 {
-    foreach(const MSO::OfficeArtFOPTEChoice& a, b.fopt) {
-        const A *ptr = a.anon.get<A>();
-        if (ptr) return ptr;
+    foreach(const MSO::OfficeArtFOPTEChoice& a, b.fopt()) {
+        const A ptr = a.anon().get<A>();
+        if (ptr.isValid()) return ptr;
     }
-    return 0;
+    return A();
 }
 /**
  * Retrieve an option from an OfficeArtSpContainer
@@ -296,15 +298,15 @@ get(const B& b)
  * @return pointer to the option of type A or 0 if there is none.
  */
 template <typename A>
-const A*
+A
 get(const MSO::OfficeArtSpContainer& o)
 {
-    const A* a = 0;
-    if (o.shapePrimaryOptions) a = get<A>(*o.shapePrimaryOptions);
-    if (!a && o.shapeSecondaryOptions1) a = get<A>(*o.shapeSecondaryOptions1);
-    if (!a && o.shapeSecondaryOptions2) a = get<A>(*o.shapeSecondaryOptions2);
-    if (!a && o.shapeTertiaryOptions1) a = get<A>(*o.shapeTertiaryOptions1);
-    if (!a && o.shapeTertiaryOptions2) a = get<A>(*o.shapeTertiaryOptions2);
+    A a;
+    if (o.shapePrimaryOptions().isPresent()) a = get<A>(*o.shapePrimaryOptions());
+    if (!a.isValid() && o.shapeSecondaryOptions1().isPresent()) a = get<A>(*o.shapeSecondaryOptions1());
+    if (!a.isValid() && o.shapeSecondaryOptions2().isPresent()) a = get<A>(*o.shapeSecondaryOptions2());
+    if (!a.isValid() && o.shapeTertiaryOptions1().isPresent()) a = get<A>(*o.shapeTertiaryOptions1());
+    if (!a.isValid() && o.shapeTertiaryOptions2().isPresent()) a = get<A>(*o.shapeTertiaryOptions2());
     return a;
 }
 /**
@@ -315,14 +317,16 @@ get(const MSO::OfficeArtSpContainer& o)
  * @return pointer to the option of type A or 0 if there is none.
  */
 template <typename A>
-const A*
+const A
 get(const MSO::OfficeArtDggContainer& o)
 {
-    const A* a = 0;
-    if (o.drawingPrimaryOptions) {
-        a = get<A>(*o.drawingPrimaryOptions);
+    A a;
+    if (o.drawingPrimaryOptions().isPresent()) {
+        a = get<A>(*o.drawingPrimaryOptions());
     }
-    if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
+    if (!a.isValid() && o.drawingTertiaryOptions().isPresent()) {
+        a = get<A>(*o.drawingTertiaryOptions());
+    }
     return a;
 }
 /**
@@ -332,12 +336,14 @@ get(const MSO::OfficeArtDggContainer& o)
  * @param o OfficeArtDggContainer instance which contains options.
  * @return pointer to the option of type A or 0 if there is none.
  */
-template <typename A, typename T>
-const A*
-get(const T* o)
+/*
+template <typename A, typename B>
+const A&
+get(const B& o)
 {
     return (o) ?get<A>(*o) :0;
 }
+*/
 /**
  * Retrieve the complex data from an options containing class B
  *
@@ -352,39 +358,40 @@ template <typename A, typename B>
 IMsoArray
 getComplexData(const B& b)
 {
-    MSO::OfficeArtFOPTE* p = NULL;
+    MSO::OfficeArtFOPTE p;
     IMsoArray a;
-    const char* pData = b.complexData.data();
+    const char* pData = b.complexData().data();
     uint offset = 0;
 
-    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
-        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
-        if (p->opid.fComplex) {
+    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt()) {
+        p = _c.anon().get<MSO::OfficeArtFOPTE>();
+        if (p.opid().fComplex()) {
 
             // there is wrong offset inside PVertices
-            if (_c.anon.is<MSO::PVertices>()) {
-                if (_c.anon.get<A>()) {
-                    if (b.complexData.size() - offset >= 6) {
+            if (_c.anon().is<MSO::PVertices>()) {
+                if (_c.anon().is<A>()) {
+                    if (b.complexData().size() - offset >= 6) {
                         a.nElems = *(quint16 *)(pData + offset);
                         a.nElemsAlloc = *(quint16 *)(pData + offset +2);
                         a.cbElem = *(quint16 *)(pData + offset + 4);
-                        a.data = b.complexData.mid(offset+6, p->op);
+                        a.data = b.complexData().mid(offset+6, p.op());
                         break;
                     }
                 } else {
-                    offset += p->op +6;
+                    offset += p.op() + 6;
                 }
             } else {
-                if (_c.anon.get<A>()) {
-                    if (b.complexData.size() - offset >= 6) {
+                if (_c.anon().is<A>()) {
+                    const MSOCastArray<char> c(b.complexData());
+                    if (c.size() - offset >= 6) {
                         a.nElems = *(quint16 *)(pData + offset);
                         a.nElemsAlloc = *(quint16 *)(pData + offset +2);
                         a.cbElem = *(quint16 *)(pData + offset + 4);
-                        a.data = b.complexData.mid(offset+6, p->op-6);
+                        a.data = c.mid(offset+6, p.op() - 6);
                         break;
                     }
                 } else {
-                    offset += p->op;
+                    offset += p.op();
                 }
             }
         }
@@ -406,11 +413,11 @@ IMsoArray
 getComplexData(const MSO::OfficeArtSpContainer& o)
 {
     IMsoArray a;
-    if (o.shapePrimaryOptions) a = getComplexData<A>(*o.shapePrimaryOptions);
-    if (!a.data.size() && o.shapeSecondaryOptions1) a = getComplexData<A>(*o.shapeSecondaryOptions1);
-    if (!a.data.size() && o.shapeSecondaryOptions2) a = getComplexData<A>(*o.shapeSecondaryOptions2);
-    if (!a.data.size() && o.shapeTertiaryOptions1) a = getComplexData<A>(*o.shapeTertiaryOptions1);
-    if (!a.data.size() && o.shapeTertiaryOptions2) a = getComplexData<A>(*o.shapeTertiaryOptions2);
+    if (o.shapePrimaryOptions().isPresent()) a = getComplexData<A>(*o.shapePrimaryOptions());
+    if (!a.data.size() && o.shapeSecondaryOptions1().isPresent()) a = getComplexData<A>(*o.shapeSecondaryOptions1());
+    if (!a.data.size() && o.shapeSecondaryOptions2().isPresent()) a = getComplexData<A>(*o.shapeSecondaryOptions2());
+    if (!a.data.size() && o.shapeTertiaryOptions1().isPresent()) a = getComplexData<A>(*o.shapeTertiaryOptions1());
+    if (!a.data.size() && o.shapeTertiaryOptions2().isPresent()) a = getComplexData<A>(*o.shapeTertiaryOptions2());
     return a;
 }
 
@@ -429,18 +436,18 @@ template <typename A, typename B>
 QString
 getComplexName(const B& b)
 {
-    MSO::OfficeArtFOPTE* p = NULL;
+    MSO::OfficeArtFOPTE p;
     uint offset = 0;
     QString a;
 
-    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
-        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
-        if (p->opid.fComplex) {
-            if (_c.anon.get<A>()) {
-                a.append(b.complexData.mid(offset, p->op));
+    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt()) {
+        p = _c.anon().get<MSO::OfficeArtFOPTE>();
+        if (p.opid().fComplex()) {
+            if (_c.anon().is<A>()) {
+                a.append(b.complexData().mid(offset, p.op()));
                 break;
             } else {
-                offset += p->op;
+                offset += p.op();
             }
         }
     }
@@ -461,11 +468,11 @@ QString
 getComplexName(const MSO::OfficeArtSpContainer& o)
 {
     QString a;
-    if (o.shapePrimaryOptions) a = getComplexName<A>(*o.shapePrimaryOptions);
-    if (!a.isEmpty() && o.shapeSecondaryOptions1) a = getComplexName<A>(*o.shapeSecondaryOptions1);
-    if (!a.isEmpty() && o.shapeSecondaryOptions2) a = getComplexName<A>(*o.shapeSecondaryOptions2);
-    if (!a.isEmpty() && o.shapeTertiaryOptions1) a = getComplexName<A>(*o.shapeTertiaryOptions1);
-    if (!a.isEmpty() && o.shapeTertiaryOptions2) a = getComplexName<A>(*o.shapeTertiaryOptions2);
+    if (o.shapePrimaryOptions().isPresent()) a = getComplexName<A>(*o.shapePrimaryOptions());
+    if (!a.isEmpty() && o.shapeSecondaryOptions1().isPresent()) a = getComplexName<A>(*o.shapeSecondaryOptions1());
+    if (!a.isEmpty() && o.shapeSecondaryOptions2().isPresent()) a = getComplexName<A>(*o.shapeSecondaryOptions2());
+    if (!a.isEmpty() && o.shapeTertiaryOptions1().isPresent()) a = getComplexName<A>(*o.shapeTertiaryOptions1());
+    if (!a.isEmpty() && o.shapeTertiaryOptions2().isPresent()) a = getComplexName<A>(*o.shapeTertiaryOptions2());
     return a;
 }
 

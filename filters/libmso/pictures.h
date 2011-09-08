@@ -22,7 +22,7 @@
 #include <pole.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 
 struct PictureReference {
     QString name;
@@ -75,7 +75,7 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
  * either part of the OfficeArtBStoreContainer or OfficeArtBStoreDelay.
  * @return map of picture names vs. MD4 digests of the picture data.
  **/
-QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb);
+QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const MSOArray<MSO::OfficeArtBStoreContainerFileBlock>& rgfb);
 
 /**
  * Note: Copied from filters/libkowmf/qwmf.cc, the name is confusing as

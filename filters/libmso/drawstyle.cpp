@@ -24,58 +24,33 @@ namespace
 {
 const MSO::OfficeArtCOLORREF ignore()
 {
-    MSO::OfficeArtCOLORREF w;
-    w.red = w.green = w.blue = 0xFF;
-    w.fPaletteIndex = w.fPaletteRGB = w.fSystemRGB = w.fSchemeIndex
-                                      = w.fSysIndex = true;
-    return w;
+    return MSO::OfficeArtCOLORREF("\xff\xff\xff\xff");
 }
 const MSO::OfficeArtCOLORREF white()
 {
-    MSO::OfficeArtCOLORREF w;
-    w.red = w.green = w.blue = 0xFF;
-    w.fPaletteIndex = w.fPaletteRGB = w.fSystemRGB = w.fSchemeIndex
-                                      = w.fSysIndex = false;
-    return w;
+    return MSO::OfficeArtCOLORREF("\xff\xff\xff\x00");
 }
 // The default value for this property is 0x20000000
 const MSO::OfficeArtCOLORREF crmodDefault()
 {
-    MSO::OfficeArtCOLORREF w;
-    w.red = w.green = w.blue = 0x00;
-    w.fPaletteIndex = w.fPaletteRGB = w.fSchemeIndex = w.fSysIndex = false;
-    w.fSystemRGB = true;
-    return w;
+    // fSystemRGB = true
+    return MSO::OfficeArtCOLORREF("\x00\x00\x00\x20");
 }
 const MSO::OfficeArtCOLORREF black()
 {
-    MSO::OfficeArtCOLORREF b;
-    b.red = b.green = b.blue = 0;
-    b.fPaletteIndex = b.fPaletteRGB = b.fSystemRGB = b.fSchemeIndex
-                                      = b.fSysIndex = false;
-    return b;
+    return MSO::OfficeArtCOLORREF("\x00\x00\x00\x00");
 }
 const MSO::OfficeArtCOLORREF gray()
 {
-    MSO::OfficeArtCOLORREF b;
-    b.red = b.green = b.blue = 0x80;
-    b.fPaletteIndex = b.fPaletteRGB = b.fSystemRGB = b.fSchemeIndex
-                                      = b.fSysIndex = false;
-    return b;
+    return MSO::OfficeArtCOLORREF("\x80\x80\x80\x80");
 }
 const MSO::FixedPoint one()
 {
-    MSO::FixedPoint one;
-    one.integral = 1;
-    one.fractional = 0;
-    return one;
+    return MSO::FixedPoint("\x00\x00\x00\x01");
 }
 const MSO::FixedPoint zero()
 {
-    MSO::FixedPoint zero;
-    zero.integral = 0;
-    zero.fractional = 0;
-    return zero;
+    return MSO::FixedPoint("\0\0\0\0");
 }
 //NOTE: msohadeDefault is not defined in MS-ODRAW, just guessing
 // const MSO::MSOSHADETYPE msoshadeDefault() {
@@ -91,28 +66,28 @@ const MSO::FixedPoint zero()
 
 quint16 DrawStyle::shapeType() const
 {
-    if (!sp) {
+    if (!sp.isPresent()) {
         return msosptNil;
     } else {
-        return sp->shapeProp.rh.recInstance;
+        return (*sp).shapeProp().rh().recInstance();
     }
 }
 
 #define GETTER(TYPE, FOPT, NAME, DEFAULT) \
     TYPE DrawStyle::NAME() const \
     { \
-        const MSO::FOPT* p = 0; \
-        if (sp) { \
+        MSO::FOPT p; \
+        if (sp.isPresent()) { \
             p = get<MSO::FOPT>(*sp); \
         } \
-        if (!p && mastersp) { \
+        if (!p.isValid() && mastersp.isPresent()) { \
             p = get<MSO::FOPT>(*mastersp); \
         } \
-        if (!p && d) { \
+        if (!p.isValid() && d.isPresent()) { \
             p = get<MSO::FOPT>(*d); \
         } \
-        if (p) { \
-            return p->NAME; \
+        if (p.isValid()) { \
+            return p.NAME(); \
         } \
         return DEFAULT; \
     }
@@ -223,23 +198,23 @@ GETTER(qint32,                 PictureBrightness,    pictureBrightness,    0)   
 #define GETTER(NAME, TEST, DEFAULT) \
     bool DrawStyle::NAME() const \
     { \
-        const MSO::FOPT* p = 0; \
-        if (sp) { \
+        MSO::FOPT p; \
+        if (sp.isPresent()) { \
             p = get<MSO::FOPT>(*sp); \
-            if (p && p->TEST) { \
-                return p->NAME; \
+                if (p.isValid() && p.TEST()) { \
+                return p.NAME(); \
             } \
         } \
-        if (mastersp) { \
+        if (mastersp.isPresent()) { \
             p = get<MSO::FOPT>(*mastersp); \
-            if (p && p->TEST) { \
-                return p->NAME; \
+            if (p.isValid() && p.TEST()) { \
+                return p.NAME(); \
             } \
         } \
-        if (d) { \
-            p = get<MSO::FOPT>(d); \
-            if (p && p->TEST) { \
-                return p->NAME; \
+        if (d.isPresent()) { \
+            p = get<MSO::FOPT>(*d); \
+            if (p.isValid() && p.TEST()) { \
+                return p.NAME(); \
             } \
         } \
         return DEFAULT; \
@@ -334,20 +309,20 @@ GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
 // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a1cf51a7-fb93-4028-b3ac-3ed2fd77a94b
 bool DrawStyle::fLine() const
 {
-    const MSO::LineStyleBooleanProperties* p = 0;
+    MSO::LineStyleBooleanProperties p;
     quint16 shapeType = msosptNil;
 
-    if (sp) {
-        shapeType = sp->shapeProp.rh.recInstance;
+    if (sp.isPresent()) {
+        shapeType = (*sp).shapeProp().rh().recInstance();
         p = get<MSO::LineStyleBooleanProperties>(*sp);
-        if (p && p->fUsefLine) {
-            return p->fLine;
+        if (p.isValid() && p.fUsefLine()) {
+            return p.fLine();
         }
     }
-    if (mastersp) {
+    if (mastersp.isPresent()) {
         p = get<MSO::LineStyleBooleanProperties>(*mastersp);
-        if (p && p->fUsefLine) {
-            return p->fLine;
+        if (p.isValid() && p.fUsefLine()) {
+            return p.fLine();
         }
     }
     if (shapeType == msosptPictureFrame) {
@@ -361,11 +336,11 @@ bool DrawStyle::fLine() const
     IMsoArray DrawStyle::NAME() const \
     { \
         IMsoArray a;\
-        if (sp) { \
+        if (sp.isPresent()) { \
             a = getComplexData<MSO::FOPT>(*sp); \
             return a;\
         } \
-        if (mastersp) { \
+        if (mastersp.isPresent()) { \
             a = getComplexData<MSO::FOPT>(*mastersp); \
             return a;\
         } \
@@ -382,11 +357,11 @@ COMPLEX(PWrapPolygonVertices, pWrapPolygonVertices_complex)
     QString DrawStyle::NAME() const \
     { \
         QString a;\
-        if (sp) { \
+        if (sp.isPresent()) { \
             a = getComplexName<MSO::FOPT>(*sp); \
             if (!a.isNull()) return a; \
         } \
-        if (mastersp) { \
+        if (mastersp.isPresent()) { \
             a = getComplexName<MSO::FOPT>(*mastersp); \
             if (!a.isNull()) return a; \
         } \
