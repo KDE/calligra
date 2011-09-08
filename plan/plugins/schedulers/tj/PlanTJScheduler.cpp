@@ -650,7 +650,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
     Schedule * cs = task->currentSchedule();
     switch ( task->constraint() ) {
         case Node::ASAP:
-            job->setScheduling( TJ::Task::ASAP);
+            job->setScheduling( m_backward ? TJ::Task::ALAP : TJ::Task::ASAP );
             break;
         case Node::ALAP:
             job->setScheduling( TJ::Task::ALAP);
