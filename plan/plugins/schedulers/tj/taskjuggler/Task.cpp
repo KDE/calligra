@@ -705,7 +705,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
         }
     }
     if ( ! allMandatoriesAvailables ) {
-        TJMH.debugMessage(QString("'%1' All mandatory resourcea are not available").arg(name));
+        TJMH.debugMessage(QString("'%1' All mandatory resourcea are not available").arg(name), this);
     }
     for (QListIterator<Allocation*> ali(allocations);
          ali.hasNext() && allMandatoriesAvailables &&
@@ -720,7 +720,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
             if (DEBUGRS(15))
                 qDebug()<<"Allocation not on shift at"<<time2tjp(date);
 
-            TJMH.debugMessage(QString("'%1' Allocation not on shift at: %2").arg(name).arg(time2tjp(date)));
+            TJMH.debugMessage(QString("'%1' Allocation not on shift at: %2").arg(name).arg(time2tjp(date)), this);
             continue;
         }
 
@@ -801,7 +801,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                     qDebug()<<"Resource"<<a->getLockedResource()->getId()<<"is not available for task '"<<id<<"'"
                         <<"from"<<time2ISO(a->getConflictStart())<<"to"<<time2ISO(date);
 
-                TJMH.debugMessage(QString("%1: Resource %2 is not available from %3 to %4").arg(name).arg(a->getLockedResource()->getName()).arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)));
+                TJMH.debugMessage(QString("%1: Resource %2 is not available from %2 to %3").arg(name).arg(a->getLockedResource()->getName()).arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)), this);
                 a->setConflictStart(0);
             }
         }
@@ -836,7 +836,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                     }
 //                     qDebug()<<"No resource of the allocation ("<<candidates<<") is available for task '"<<id<<"' from"<<time2ISO(a->getConflictStart())<<"to"<<time2ISO(date);
                 }
-                TJMH.warningMessage(QString("%1: No resource is available for task from %3 to %4").arg(name).arg(a->getLockedResource()->getName()).arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)));
+                TJMH.warningMessage(QString("%1: No resource is available for task from %2 to %3").arg(name).arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)), this);
 
                 a->setConflictStart(0);
             }
