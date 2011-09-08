@@ -6,6 +6,8 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Web Browser
 Name[pt]=Navegação Web
+Name[pt_BR]=Navegador Web
+Name[ru]=Веб-браузер
 Name[sv]=Webbläsare
 Name[uk]=Переглядач інтернету
 Name[x-test]=xxWeb Browserxx
