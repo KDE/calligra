@@ -28,6 +28,7 @@
 #include "kptcalendar.h"
 
 #include "taskjuggler/Project.h"
+#include "taskjuggler/Scenario.h"
 #include "taskjuggler/Resource.h"
 #include "taskjuggler/Task.h"
 #include "taskjuggler/Interval.h"
@@ -38,6 +39,7 @@
 #include <QString>
 #include <QTimer>
 #include <QMutexLocker>
+#include <QMap>
 
 #include <KGlobal>
 #include <KLocale>
@@ -206,6 +208,8 @@ void PlanTJScheduler::run()
 
 bool PlanTJScheduler::check()
 {
+    DebugCtrl.setDebugMode( PSDEBUG + TSDEBUG );
+    DebugCtrl.setDebugLevel( 1000 );
     return m_tjProject->pass2( true );
 }
 
@@ -229,6 +233,7 @@ bool PlanTJScheduler::kplatoToTJ()
     m_tjProject->setStart( m_project->constraintStartTime().toTime_t() );
     m_tjProject->setEnd( m_project->constraintEndTime().toTime_t() );
     m_tjProject->setScheduleGranularity( 300 ); //5 minutes
+    m_tjProject->getScenario( 0 )->setMinSlackRate( 0.01 );
 
     addResources();
     addTasks();
@@ -326,6 +331,8 @@ bool PlanTJScheduler::kplatoFromTJ()
     }
     adjustSummaryTasks( m_schedule->summaryTasks() );
 
+    calcPertValues();
+
     cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( fromTime_t( m_tjProject->getStart() ) ), locale()->formatDateTime( fromTime_t( m_tjProject->getEnd() ) ) ) );
 
     if ( m_manager ) {
@@ -381,8 +388,6 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     return true;
 }
 
-
-
 void PlanTJScheduler::adjustSummaryTasks( const QList<Node*> &nodes )
 {
     foreach ( Node *n, nodes ) {
@@ -398,6 +403,59 @@ void PlanTJScheduler::adjustSummaryTasks( const QList<Node*> &nodes )
             if ( ! pt.isValid() || pt < nt ) {
                 n->parentNode()->setEndTime( nt );
             }
+        }
+    }
+}
+
+Duration PlanTJScheduler::calcPositiveFloat( Task *task )
+{
+    Duration x;
+    foreach ( const Relation *r, task->dependChildNodes() + task->childProxyRelations() ) {
+        if ( ! r->child()->inCriticalPath() ) {
+            Duration f = calcPositiveFloat( static_cast<Task*>( r->child() ) );
+            if ( x == 0 || f < x ) {
+                x = f;
+            }
+        }
+    }
+    Duration totfloat = task->freeFloat() + x;
+    task->setPositiveFloat( totfloat );
+    return totfloat;
+}
+
+void PlanTJScheduler::calcPertValues()
+{
+    foreach ( Task* t, m_taskmap ) {
+        qDebug()<<"calcPertValues:"<<t->name()<<t->startTime()<<t->endTime();
+        qint64 startfloat = 0, freefloat = 0, negativefloat = 0;
+        foreach ( const Relation *r, t->dependParentNodes() + t->parentProxyRelations() ) {
+            qint64 f = r->parent()->endTime().msecsTo( t->startTime() ) - r->lag().milliseconds();
+            if ( f < negativefloat ) {
+                negativefloat = f;
+            }
+            if ( f > 0 && ( startfloat == 0 || startfloat > f ) ) {
+                startfloat = f;
+            }
+        }
+        foreach ( const Relation *r, t->dependChildNodes() + t->childProxyRelations() ) {
+            qint64 f = t->endTime().msecsTo( r->child()->startTime() ) - r->lag().milliseconds();
+            if ( f > 0 && ( freefloat == 0 || freefloat > f ) ) {
+                freefloat = f;
+            }
+        }
+        t->setFreeFloat( Duration( freefloat ) );
+        t->setNegativeFloat( Duration( negativefloat ) );
+        // TODO calculate real values dependent on resources
+        t->setEarlyStart( t->startTime().addMSecs( -startfloat ) );
+        t->setLateStart( t->startTime().addMSecs( freefloat ) );
+        t->setEarlyFinish( t->endTime().addMSecs( -startfloat ) );
+        t->setLateFinish( t->endTime().addMSecs( freefloat ) );
+    }
+    m_project->calcCriticalPathList( m_schedule );
+    // calculate positive float
+    foreach ( Task* t, m_taskmap ) {
+        if ( ! t->inCriticalPath() && t->isStartNode() ) {
+            calcPositiveFloat( t );
         }
     }
 }

@@ -103,6 +103,8 @@ protected:
     void addRequest( TJ::Task *job, Task *task );
     void addStartEndJob();
     bool taskFromTJ( TJ::Task *job, Task *task );
+    void calcPertValues();
+    Duration calcPositiveFloat( Task *task );
 
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
     static DateTime fromTime_t( time_t );
