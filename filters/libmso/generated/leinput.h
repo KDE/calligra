@@ -90,7 +90,7 @@ private:
     const char* data;
     quint32 size;
 public:
-    MSONullable() {}
+    MSONullable() :data(0), size(0) {}
     MSONullable(const T& data) :data(data.getData()), size(data.getSize()) {}
     inline bool isPresent() const { return data; }
     inline quint32 getSize() const { return size; }

@@ -988,8 +988,12 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style)
                 p->documentContainer);
         const PP10DocBinaryTagExtension pp10 = getPP<PP10DocBinaryTagExtension>(
                 p->documentContainer);
-        cf9 = (*pp9.textDefaultsAtom()).cf9();
-        cf10 = (*pp10.textDefaultsAtom()).cf10();
+        if (pp9.isValid()) {
+            cf9 = (*pp9.textDefaultsAtom()).cf9();
+        }
+        if (pp10.isValid()) {
+            cf10 = (*pp10.textDefaultsAtom()).cf10();
+        }
         si = p->documentContainer.documentTextInfo().textSIDefaultsAtom().textSIException();
     }
     defineTextProperties(style, cf, toPtr(cf9), toPtr(cf10), toPtr(si));
@@ -1379,32 +1383,40 @@ void PptToOdp::defineListStyle(KoGenStyle& style,
     TextMasterStyle9Level l9;
     TextMasterStyle10Level l10;
     if (levels.lstLvl1().isPresent()) {
-        if (levels9) l9 = *levels9->lstLvl1();
-        if (levels10) l10 = *levels10->lstLvl1();
+        if (levels9 && levels9->lstLvl1().isPresent()) l9 = *levels9->lstLvl1();
+        if (levels10 && levels10->lstLvl1().isPresent()) l10 = *levels10->lstLvl1();
         defineListStyle(style, 0, textType,
                         toPtr(*levels.lstLvl1()), toPtr(l9), toPtr(l10));
     }
     if (levels.lstLvl2().isPresent()) {
-        if (levels9) l9 = *levels9->lstLvl1();
-        if (levels10) l10 = *levels10->lstLvl1();
+        l9 = TextMasterStyle9Level();
+        l10 = TextMasterStyle10Level();
+        if (levels9 && levels9->lstLvl2().isPresent()) l9 = *levels9->lstLvl1();
+        if (levels10 && levels10->lstLvl2().isPresent()) l10 = *levels10->lstLvl1();
         defineListStyle(style, 1, textType,
                         toPtr(*levels.lstLvl2()), toPtr(l9), toPtr(l10));
     }
     if (levels.lstLvl3().isPresent()) {
-        if (levels9) l9 = *levels9->lstLvl3();
-        if (levels10) l10 = *levels10->lstLvl3();
+        l9 = TextMasterStyle9Level();
+        l10 = TextMasterStyle10Level();
+        if (levels9 && levels9->lstLvl3().isPresent()) l9 = *levels9->lstLvl3();
+        if (levels10 && levels10->lstLvl3().isPresent()) l10 = *levels10->lstLvl3();
         defineListStyle(style, 2, textType,
                         toPtr(*levels.lstLvl3()), toPtr(l9), toPtr(l10));
     }
     if (levels.lstLvl4().isPresent()) {
-        if (levels9) l9 = *levels9->lstLvl4();
-        if (levels10) l10 = *levels10->lstLvl4();
+        l9 = TextMasterStyle9Level();
+        l10 = TextMasterStyle10Level();
+        if (levels9 && levels9->lstLvl4().isPresent()) l9 = *levels9->lstLvl4();
+        if (levels10 && levels10->lstLvl4().isPresent()) l10 = *levels10->lstLvl4();
         defineListStyle(style, 3, textType,
                         toPtr(*levels.lstLvl4()), toPtr(l9), toPtr(l10));
     }
     if (levels.lstLvl5().isPresent()) {
-        if (levels9) l9 = *levels9->lstLvl5();
-        if (levels10) l10 = *levels10->lstLvl5();
+        l9 = TextMasterStyle9Level();
+        l10 = TextMasterStyle10Level();
+        if (levels9 && levels9->lstLvl5().isPresent()) l9 = *levels9->lstLvl5();
+        if (levels10 && levels10->lstLvl5().isPresent()) l10 = *levels10->lstLvl5();
         defineListStyle(style, 4, textType,
                         toPtr(*levels.lstLvl5()), toPtr(l9), toPtr(l10));
     }
@@ -1417,8 +1429,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style,
                                const TextMasterStyle9Level* level9,
                                const TextMasterStyle10Level* level10)
 {
-    PptTextPFRun pf(&p->documentContainer, level, level9, textType, indentLevel);
-    PptTextCFRun cf(&p->documentContainer, level, level9, indentLevel);
+    PptTextPFRun pf(toPtr(p->documentContainer), level, level9, textType, indentLevel);
+    PptTextCFRun cf(toPtr(p->documentContainer), level, level9, indentLevel);
     ListStyleInput info(pf, cf);
 
     if (level9) info.cf9 = level9->cf9();
@@ -1787,7 +1799,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
             const SlideHeadersFootersContainer dhfc = getSlideHF();
             if (dhfc.isValid()) {
                 hf = dhfc.hfAtom();
-                memcpy(hfdata, hfc.getData(), HeadersFootersAtom::getSize());
+                memcpy(hfdata, hf.getData(), HeadersFootersAtom::getSize());
                 if (hf.fHasUserDate() && !dhfc.userDateAtom().isPresent()) {
                     //hf.fHasUserDate() = false;
                 }
@@ -2899,13 +2911,13 @@ QString PptToOdp::textAlignmentToString(unsigned int value) const
 QColor PptToOdp::toQColor(const ColorIndexStruct &color)
 {
     QColor ret;
+    if (!color.isValid() || color.index() == 0xFF) { // color is undefined
+        return ret;
+    }
 
     // MS-PPT 2.12.2 ColorIndexStruct
     if (color.index() == 0xFE) {
         return QColor(color.red(), color.green(), color.blue());
-    }
-    if (color.index() == 0xFF) { // color is undefined
-        return ret;
     }
 
     MSOArray<ColorStruct> colorScheme;

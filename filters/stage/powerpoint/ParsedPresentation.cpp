@@ -118,7 +118,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
     picturesData = parseStream("/Pictures", storage, pictures);
     if (!pictures.isValid()) {
         qDebug() << "error parsing PicturesStream";
-        return false;
+        //return false;
     }
 // Part 1: Construct the persist object directory
     const UserEditAtom userEditAtom = get<UserEditAtom>(presentation,

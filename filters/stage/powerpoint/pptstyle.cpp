@@ -546,7 +546,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     for (int i = 0; i < 6; ++i) {
         pf9s[i] = TextPFException9();
     }
-    if (level9->isValid()) {
+    if (level9) {
         addStyle(pf9s, level9->pf9());
     }
     processPFDefaults(d);
@@ -840,32 +840,32 @@ bool PptTextPFRun::isList() const {
     return ret;
 }
 
-#define GETTER(TYPE, POST, PRE, NAME, TEST, DEFAULT) \
+#define GETTER(TYPE, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextCFRun::NAME() const \
 { \
     foreach (const TextCFException& c, cfs) { \
         if (!c.isValid()) continue; \
         if (c TEST()) { \
-            return POST NAME(); \
+            return PRE NAME(); \
         } \
     } \
     return DEFAULT; \
 }
 
-//     TYPE             POST     PRE NAME           TEST              DEFAULT
-GETTER(bool,            (*c.fontStyle()).,,  bold,          .masks().bold,        false)
-GETTER(bool,            (*c.fontStyle()).,,  italic,        .masks().italic,      false)
-GETTER(bool,            (*c.fontStyle()).,,  underline,     .masks().underline,   false)
-GETTER(bool,            (*c.fontStyle()).,,  shadow,        .masks().shadow,      false)
-GETTER(bool,            (*c.fontStyle()).,,  fehint,        .masks().fehint,      false)
-GETTER(bool,            (*c.fontStyle()).,,  kumi,          .masks().kumi,        false)
-GETTER(bool,            (*c.fontStyle()).,,  emboss,        .masks().emboss,      false)
-GETTER(quint8,          (*c.fontStyle()).,,  pp9rt,         .fontStyle().isPresent,             0)
-GETTER(quint16,         ,           ,  fontRef,       .masks().typeface,        0)
-GETTER(quint16,         ,           ,  oldEAFontRef,  .masks().oldEATypeface,   0)
-GETTER(quint16,         ,           ,  ansiFontRef,   .masks().ansiTypeface,    0)
-GETTER(quint16,         ,           ,  symbolFontRef, .masks().symbolTypeface,  0)
-GETTER(quint16,         ,           ,  fontSize,      .masks().size,            0)
-GETTER(ColorIndexStruct,,           *, color,   .masks().color, ColorIndexStruct())
-GETTER(qint16,          ,           ,  position,      .masks().position,        0)
+//     TYPE             PRE               NAME          TEST                   DEFAULT
+GETTER(bool,            (*c.fontStyle()).,bold,         .masks().bold,         false)
+GETTER(bool,            (*c.fontStyle()).,italic,       .masks().italic,       false)
+GETTER(bool,            (*c.fontStyle()).,underline,    .masks().underline,    false)
+GETTER(bool,            (*c.fontStyle()).,shadow,       .masks().shadow,       false)
+GETTER(bool,            (*c.fontStyle()).,fehint,       .masks().fehint,       false)
+GETTER(bool,            (*c.fontStyle()).,kumi,         .masks().kumi,         false)
+GETTER(bool,            (*c.fontStyle()).,emboss,       .masks().emboss,       false)
+GETTER(quint8,          (*c.fontStyle()).,pp9rt,        .fontStyle().isPresent,0)
+GETTER(quint16,         *c.,              fontRef,      .masks().typeface,     0)
+GETTER(quint16,         *c.,              oldEAFontRef, .masks().oldEATypeface,0)
+GETTER(quint16,         *c.,              ansiFontRef,  .masks().ansiTypeface, 0)
+GETTER(quint16,         *c.,              symbolFontRef,.masks().symbolTypeface,0)
+GETTER(quint16,         *c.,              fontSize,     .masks().size,         0)
+GETTER(ColorIndexStruct,*c.,              color,        .masks().color, ColorIndexStruct())
+GETTER(qint16,          *c.,              position,     .masks().position,     0)
 #undef GETTER
