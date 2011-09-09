@@ -662,7 +662,7 @@ void TaskJuggler::scheduleDependencies()
 
 void TaskJuggler::scheduleConstraints()
 {
-    DebugCtrl.setDebugMode( PSDEBUG + TSDEBUG + RSDEBUG );
+    DebugCtrl.setDebugMode( 0 );
     DebugCtrl.setDebugLevel( 100 );
 
     QString s;
@@ -824,7 +824,7 @@ void TaskJuggler::scheduleConstraints()
 
 void TaskJuggler::resourceConflict()
 {
-    DebugCtrl.setDebugLevel( PSDEBUG + TSDEBUG );
+    DebugCtrl.setDebugLevel( 0 );
     DebugCtrl.setDebugMode( 0xffff );
 
     QString s;
