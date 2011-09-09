@@ -35,16 +35,16 @@ void addStyle(const Style** list, const Style* style)
     }
 }
 
-const TextMasterStyleAtom*
+TextMasterStyleAtom
 getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 textType)
 {
-    if (!m) return 0;
-    const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-    if (!mm) return 0;
-    const TextMasterStyleAtom* textstyle = 0;
-    foreach (const TextMasterStyleAtom& ma, mm->rgTextMasterStyle) {
+    if (!m) return TextMasterStyleAtom();
+    const MainMasterContainer mm = m->anon().get<MainMasterContainer>();
+    if (!mm.isValid()) return TextMasterStyleAtom();
+    TextMasterStyleAtom textstyle;
+    foreach (const TextMasterStyleAtom& ma, mm->rgTextMasterStyle()) {
         if (ma.rh.recInstance == textType) {
-            textstyle = &ma;
+            textstyle = ma;
         }
     }
     return textstyle;

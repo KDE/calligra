@@ -3,6 +3,12 @@
 
 #include <QtCore/QtEndian>
 
+template <typename T>
+const T*
+toPtr(const T& t) {
+    return (t.isValid()) ?&t :0;
+}
+
 class FixedSizeParsedObject {
 private:
     const char* _data;
@@ -14,6 +20,9 @@ protected:
 public:
     inline const char* getData() const { return _data; }
     inline bool isValid() const { return _data; }
+    inline bool operator==(const FixedSizeParsedObject& o) {
+        return _data && o._data && _data == o._data;
+    }
 };
 
 class ParsedObject : public FixedSizeParsedObject {
@@ -37,9 +46,9 @@ private:
 public:
     explicit MSOCastArray() :_data(0), _count(0) {}
     explicit MSOCastArray(const T* data, qint32 count) :_data(data), _count(count) {}
-    const T* data() const;
+    const T* getData() const;
     QByteArray mid(int pos, int len = -1) const;
-    int size() const;
+    int getCount() const;
     T operator[](int pos) const { return _data[pos]; }
     bool operator!=(const QByteArray&);
     operator QByteArray() const;
@@ -139,7 +148,7 @@ public:
         T t(ParsedObject::getData(), ParsedObject::getSize());
         quint32 i = 0;
         quint32 offset = 0;
-        while (i < pos) {
+        while (i < pos && t.isValid()) {
             offset += t.getSize();
             t = T(ParsedObject::getData() + offset,
                   ParsedObject::getSize() - offset);

@@ -245,7 +245,7 @@ getTextMasterStyleAtom(const MSO::MasterOrSlideContainer* m, quint16 textType);
 
 
 template<class T>
-const MSONullable<T>
+const T
 getPP(const MSO::DocumentContainer& dc)
 {
     if (!dc.docInfoList().isPresent()) return T();
@@ -259,7 +259,7 @@ getPP(const MSO::DocumentContainer& dc)
                 if (da.anon().is<MSO::DocProgBinaryTagContainer>()) {
                     const MSO::DocProgBinaryTagContainer c
                             = da.anon().get<MSO::DocProgBinaryTagContainer>();
-                    if (c.rec().anon().get<T>()) {
+                    if (c.rec().anon().is<T>()) {
                         return c.rec().anon().get<T>();
                     }
                 }
@@ -270,7 +270,7 @@ getPP(const MSO::DocumentContainer& dc)
 }
 
 template<class T>
-const MSONullable<T>
+const T
 getPP(const MSO::PptOfficeArtClientData& o)
 {
     foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom& s,
@@ -330,15 +330,14 @@ getPP(const C* c)
     return 0;
 }
 template<class T>
-MSONullable<T>
-getPP(const MSONullable<MSO::MasterOrSlideContainer>& m) {
-    if (!m.isPresent()) return T();
-    const MSO::MasterOrSlideContainer mm = *m;
-    if (mm.anon().is<MSO::MainMasterContainer>()) {
-        return getPP<T>(mm.anon().get<MSO::MainMasterContainer>());
+T
+getPP(const MSO::MasterOrSlideContainer* m) {
+    if (!m) return T();
+    if (m->anon().is<MSO::MainMasterContainer>()) {
+        return getPP<T>(m->anon().get<MSO::MainMasterContainer>());
     }
-    if (mm.anon().is<MSO::SlideContainer>()) {
-        return getPP<T>(mm.anon().get<MSO::SlideContainer>());
+    if (m->anon().is<MSO::SlideContainer>()) {
+        return getPP<T>(m->anon().get<MSO::SlideContainer>());
     }
     return T();
 }

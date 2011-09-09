@@ -96,8 +96,8 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
         const OfficeArtSpContainer& o)
 {
     KoGenStyle style;
-    MSONullable<OfficeArtDggContainer> drawingGroup;
-    MSONullable<OfficeArtSpContainer> master;
+    OfficeArtDggContainer drawingGroup;
+    OfficeArtSpContainer master;
 
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
@@ -111,15 +111,15 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
     }
     const DrawStyle ds(drawingGroup, master, o);
     if (client) {
-        style = client->createGraphicStyle(*o.clientTextbox(),
-                                           *o.clientData(), ds, out);
+        style = client->createGraphicStyle(toPtr(*o.clientTextbox()),
+                                           toPtr(*o.clientData()), ds, out);
     }
     defineGraphicProperties(style, ds, out.styles);
 
     if (client) {
         client->addTextStyles(o.shapeProp().rh().recInstance(),
-                              *o.clientTextbox(),
-                              *o.clientData(), style, out);
+                              toPtr(*o.clientTextbox()),
+                              toPtr(*o.clientData()), style, out);
     }
 }
 

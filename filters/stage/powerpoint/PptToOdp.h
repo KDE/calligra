@@ -144,13 +144,13 @@ private:
     public:
         const PptTextPFRun& pf;
         const PptTextCFRun& cf;
-        const MSO::TextCFException* cf_; //deprecated
-        const MSO::TextCFException9* cf9;
-        const MSO::TextCFException10* cf10;
-        const MSO::TextSIException* si;
+        MSONullable<MSO::TextCFException> cf_; //deprecated
+        MSONullable<MSO::TextCFException9> cf9;
+        MSONullable<MSO::TextCFException10> cf10;
+        MSONullable<MSO::TextSIException> si;
 
         ListStyleInput(const PptTextPFRun& pf, const PptTextCFRun& cf)
-            :pf(pf), cf(cf), cf_(0), cf9(0), cf10(0), si(0) {}
+            :pf(pf), cf(cf) {}
     };
 
     /**
@@ -320,10 +320,10 @@ private:
     const MSO::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
                                                  quint32 textType, quint8 pp9rt);
 
-    MSONullable<MSO::TextContainer> getTextContainer(const MSONullable<MSO::PptOfficeArtClientTextBox>& ctb,
-                                               const MSONullable<MSO::PptOfficeArtClientData>& cd) const;
-    quint32 getTextType(const MSONullable<MSO::PptOfficeArtClientTextBox>& ctb,
-                        const MSONullable<MSO::PptOfficeArtClientData>& cd) const;
+    MSO::TextContainer getTextContainer(const MSO::PptOfficeArtClientTextBox& ctb,
+                                               const MSO::PptOfficeArtClientData& cd) const;
+    quint32 getTextType(const MSO::PptOfficeArtClientTextBox& ctb,
+                        const MSO::PptOfficeArtClientData& cd) const;
 
     void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
 
@@ -346,9 +346,9 @@ private:
      * @return 0 (OK), -1 (TextContainer missing)
      */
     int processTextForBody(Writer& out,
-                           const MSONullable<MSO::OfficeArtClientData>& cd,
-                           const MSONullable<MSO::TextContainer>& tc,
-                           const MSONullable<MSO::TextRuler>& tr);
+                           const MSO::OfficeArtClientData* cd,
+                           const MSO::TextContainer* tc,
+                           const MSO::TextRuler* tr);
 
     /**
      * Process a span or the smallest run of text having it's own formatting.
@@ -411,7 +411,7 @@ private:
       * @param data Vector to convert
       * @return data as string
       */
-    inline QString utf16ToString(const QVector<quint16> &data);
+    inline QString utf16ToString(const MSOCastArray<quint16> &data);
 
     /**
       * @brief Find hyperlink with specified id
@@ -552,45 +552,44 @@ private:
      * @param spid identifier of the master shape
      * @return pointer to the OfficeArtSpContainer
      */
-    MSONullable<MSO::OfficeArtSpContainer> retrieveMasterShape(quint32 spid) const;
+    MSO::OfficeArtSpContainer retrieveMasterShape(quint32 spid) const;
 
     /**
      * There is at most one SlideHeadersFootersContainer, but for some slides
      * it is in a strange positions. This convenience function returns a pointer
      * to the SlideHeadersFootersContainer or NULL if there is none.
      **/
-    MSONullable<MSO::SlideHeadersFootersContainer> getSlideHF() const
+    MSO::SlideHeadersFootersContainer getSlideHF() const
     {
         return (p->documentContainer.slideHF().isPresent())
-               ? p->documentContainer.slideHF()
-               : p->documentContainer.slideHF2();
+               ? *p->documentContainer.slideHF()
+               : *p->documentContainer.slideHF2();
     }
-    MSONullable<MSO::PerSlideHeadersFootersContainer>
+    MSO::PerSlideHeadersFootersContainer
     getPerSlideHF(const MSO::SlideContainer* slide) const
     {
-        MSONullable<MSO::PerSlideHeadersFootersContainer> hf;
-        MSONullable<MSO::MasterOrSlideContainer> master;
+        MSO::PerSlideHeadersFootersContainer hf;
+        MSO::MasterOrSlideContainer master;
         if (slide) {
             master = p->getMaster(*slide);
         }
         MSO::MainMasterContainer m1;
         MSO::SlideContainer m2;
-        if (master.isPresent()) {
-            const MSO::MasterOrSlideContainer m = *master;
-            m1 = m.anon().get<MSO::MainMasterContainer>();
-            m2 = m.anon().get<MSO::SlideContainer>();
+        if (master.isValid()) {
+            m1 = master.anon().get<MSO::MainMasterContainer>();
+            m2 = master.anon().get<MSO::SlideContainer>();
         }
-        if (slide) {
-            hf = slide->perSlideHFContainer();
-        } else if (m1.isValid()) {
-            hf = m1.perSlideHeadersFootersContainer();
-        } else if (m2.isValid()) {
-            hf = m2.perSlideHFContainer();
+        if (slide && slide->perSlideHFContainer().isPresent()) {
+            hf = *slide->perSlideHFContainer();
+        } else if (m1.isValid() && m1.perSlideHeadersFootersContainer().isPresent()) {
+            hf = *m1.perSlideHeadersFootersContainer();
+        } else if (m2.isValid() && m2.perSlideHFContainer().isPresent()) {
+            hf = *m2.perSlideHFContainer();
         }
         return hf;
     }
 
-    MSONullable<MSO::FontEntityAtom> getFont(quint16 fontRef)
+    MSO::FontEntityAtom getFont(quint16 fontRef)
     {
         if (p->documentContainer.documentTextInfo().fontCollection().isPresent()) {
             MSO::FontCollectionContainer f
@@ -634,9 +633,9 @@ private:
     QString notesPageLayoutName;
 
     //Pointers to ppt specific information, try to avoid using those.
-    const MSO::SlideListWithTextSubContainerOrAtom* m_currentSlideTexts;
-    const MSO::MasterOrSlideContainer* m_currentMaster;
-    const MSO::SlideContainer* m_currentSlide;
+    MSO::SlideListWithTextSubContainerOrAtom m_currentSlideTexts;
+    MSO::MasterOrSlideContainer m_currentMaster;
+    MSO::SlideContainer m_currentSlide;
     bool m_processingMasters; //false - processing presentation slides
 
     QMap<QByteArray, QString> pictureNames;
@@ -644,12 +643,12 @@ private:
     DateTimeFormat dateTime;
     QString declarationStyleName;
 
-    QMap<const void*, QString> presentationPageLayouts;
-    QMap<const void*, QString> drawingPageStyles;
-    typedef QMap<const MSO::MasterOrSlideContainer*, QMap<int, QString> > MasterStyles;
+    QMap<const char*, QString> presentationPageLayouts;
+    QMap<const char*, QString> drawingPageStyles;
+    typedef QMap<const char*, QMap<int, QString> > MasterStyles;
     MasterStyles masterGraphicStyles;
     MasterStyles masterPresentationStyles;
-    QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
+    QMap<const char*, QString> masterNames;
     QString notesMasterName;
     bool m_isList; //true - processing a list, false - processing a paragraph
     bool m_continueList; //true - continue previous list, false - restart numbering

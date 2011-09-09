@@ -33,17 +33,17 @@ public:
     MSO::PicturesStream pictures;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
-    MSONullable<MSO::DocumentContainer> documentContainer;
+    MSO::DocumentContainer documentContainer;
     MSO::NotesContainer notesMaster;
     MSO::HandoutContainer handoutMaster;
-    QVector<const MSO::MasterOrSlideContainer*> masters;
-    QVector<const MSO::SlideContainer*> slides;
-    QVector<const MSO::NotesContainer*> notes;
+    QVector<MSO::MasterOrSlideContainer> masters;
+    QVector<MSO::SlideContainer> slides;
+    QVector<MSO::NotesContainer> notes;
 
     ParsedPresentation() {
     }
 
-    const MSONullable<MSO::MasterOrSlideContainer> getMaster(const MSO::SlideContainer& slide) const;
+    const MSO::MasterOrSlideContainer getMaster(const MSO::SlideContainer& slide) const;
     bool parse(POLE::Storage& storage);
 };
 

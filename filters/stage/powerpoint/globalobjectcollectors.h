@@ -29,7 +29,7 @@ template <typename C, typename T>
 void collectGlobalObjects(C& collector, const MSO::DrawingGroupContainer& c,
                           const T& fopt)
 {
-    foreach(const MSO::OfficeArtFOPTEChoice& f, fopt.fopt) {
+    foreach(const MSO::OfficeArtFOPTEChoice& f, fopt.fopt()) {
         collector.add(c, f);
     }
 }
@@ -40,23 +40,23 @@ template <typename C, typename T>
 void collectGlobalObjects(C& collector, const MSO::OfficeArtSpContainer& sp,
                           const T& fopt)
 {
-    foreach(const MSO::OfficeArtFOPTEChoice& f, fopt.fopt) {
+    foreach(const MSO::OfficeArtFOPTEChoice& f, fopt.fopt()) {
         collector.add(sp, f);
     }
 }
 template <typename C>
 void collectGlobalObjects(C& collector, const MSO::OfficeArtSpContainer& sp)
 {
-    if (sp.shapePrimaryOptions())
-        collectGlobalObjects(collector, sp, sp.shapePrimaryOptions());
-    if (sp.shapeSecondaryOptions1())
-        collectGlobalObjects(collector, sp, sp.shapeSecondaryOptions1());
-    if (sp.shapeSecondaryOptions2())
-        collectGlobalObjects(collector, sp, sp.shapeSecondaryOptions2());
-    if (sp.shapeTertiaryOptions1())
-        collectGlobalObjects(collector, sp, sp.shapeTertiaryOptions1());
-    if (sp.shapeTertiaryOptions2())
-        collectGlobalObjects(collector, sp, sp.shapeTertiaryOptions2());
+    if (sp.shapePrimaryOptions().isPresent())
+        collectGlobalObjects(collector, sp, *sp.shapePrimaryOptions());
+    if (sp.shapeSecondaryOptions1().isPresent())
+        collectGlobalObjects(collector, sp, *sp.shapeSecondaryOptions1());
+    if (sp.shapeSecondaryOptions2().isPresent())
+        collectGlobalObjects(collector, sp, *sp.shapeSecondaryOptions2());
+    if (sp.shapeTertiaryOptions1().isPresent())
+        collectGlobalObjects(collector, sp, *sp.shapeTertiaryOptions1());
+    if (sp.shapeTertiaryOptions2().isPresent())
+        collectGlobalObjects(collector, sp, *sp.shapeTertiaryOptions2());
 }
 template <typename C>
 void collectGlobalObjects(C& collector,
@@ -72,11 +72,11 @@ void collectGlobalObjects(C& collector,
 template <typename C>
 void collectGlobalObjects(C& collector, const MSO::OfficeArtDgContainer& dg)
 {
-    if (dg.groupShape()) {
-        collectGlobalObjects(collector, dg.groupShape());
+    if (dg.groupShape().isPresent()) {
+        collectGlobalObjects(collector, *dg.groupShape());
     }
-    if (dg.shape()) {
-        collectGlobalObjects(collector, dg.shape());
+    if (dg.shape().isPresent()) {
+        collectGlobalObjects(collector, *dg.shape());
     }
     foreach(const MSO::OfficeArtSpgrContainerFileBlock& o, dg.deletedShapes()) {
         collectGlobalObjects(collector, o);
@@ -96,23 +96,23 @@ void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
     // loop over all objects to find all OfficeArtFOPTE instances and feed them
     // into the collector
     // get object from default options
-    const MSO::DrawingGroupContainer& dg = p.documentContainer.drawingGroup;
-    if (dg.OfficeArtDgg().drawingPrimaryOptions())
+    const MSO::DrawingGroupContainer dg = p.documentContainer.drawingGroup();
+    if (dg.OfficeArtDgg().drawingPrimaryOptions().isPresent())
         collectGlobalObjects(collector, dg,
-                             dg.OfficeArtDgg().drawingPrimaryOptions());
-    if (dg.OfficeArtDgg().drawingTertiaryOptions)
+                             *dg.OfficeArtDgg().drawingPrimaryOptions());
+    if (dg.OfficeArtDgg().drawingTertiaryOptions().isPresent())
         collectGlobalObjects(collector, dg,
-                             dg.OfficeArtDgg().drawingTertiaryOptions());
+                             *dg.OfficeArtDgg().drawingTertiaryOptions());
     // get objects from masters
-    foreach(const MSO::MasterOrSlideContainer* master, p.masters) {
-        const MSO::SlideContainer* sc = master->anon().get<MSO::SlideContainer>();
-        const MSO::MainMasterContainer* sm
-                = master->anon().get<MSO::MainMasterContainer>();
-        if (sc) {
-            collectGlobalObjects(collector, sc->drawing().OfficeArtDg());
+    foreach(const MSO::MasterOrSlideContainer& master, p.masters) {
+        const MSO::SlideContainer sc = master.anon().get<MSO::SlideContainer>();
+        const MSO::MainMasterContainer sm
+                = master.anon().get<MSO::MainMasterContainer>();
+        if (sc.isValid()) {
+            collectGlobalObjects(collector, sc.drawing().OfficeArtDg());
         }
-        if (sm) {
-            collectGlobalObjects(collector, sm->drawing().OfficeArtDg());
+        if (sm.isValid()) {
+            collectGlobalObjects(collector, sm.drawing().OfficeArtDg());
         }
     }
     // get objects from slides
@@ -121,7 +121,7 @@ void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
     }
     // get objects from notes
     foreach(const MSO::NotesContainer& notes, p.notes) {
-        if (notes) {
+        if (notes.isValid()) {
             collectGlobalObjects(collector, notes.drawing().OfficeArtDg());
         }
     }

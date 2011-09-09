@@ -60,11 +60,11 @@ public:
          * Process the client data into ODF in a host application specific
          * manner.
          **/
-        virtual void processClientData(const MSONullable<MSO::OfficeArtClientTextBox>& ct,
+        virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
                                        const MSO::OfficeArtClientData& o,
                                        Writer& out) = 0;
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
-                                          const MSONullable<MSO::OfficeArtClientData>& cd,
+                                          const MSO::OfficeArtClientData* cd,
                                           Writer& out) = 0;
 
         /**
@@ -80,8 +80,8 @@ public:
          * or 'chart'.
          **/
         virtual KoGenStyle createGraphicStyle(
-            const MSONullable<MSO::OfficeArtClientTextBox>& ct,
-            const MSONullable<MSO::OfficeArtClientData>& cd,
+            const MSO::OfficeArtClientTextBox* ct,
+            const MSO::OfficeArtClientData* cd,
             const DrawStyle& ds,
             Writer& out) = 0;
 
@@ -93,21 +93,21 @@ public:
          **/
         virtual void addTextStyles(
             const quint16 msospt,
-            const  MSONullable<MSO::OfficeArtClientTextBox>& clientTextbox,
-            const MSONullable<MSO::OfficeArtClientData>& clientData,
+            const  MSO::OfficeArtClientTextBox* clientTextbox,
+            const MSO::OfficeArtClientData* clientData,
             KoGenStyle& style,
             Writer& out) = 0;
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
          **/
-        virtual MSONullable<MSO::OfficeArtDggContainer> getOfficeArtDggContainer() = 0;
+        virtual MSO::OfficeArtDggContainer getOfficeArtDggContainer() = 0;
 
         /**
          * Retrieve the OfficeArtSpContainer of the master shape.
          * @param spid identifier of the master shape.
          **/
-        virtual MSONullable<MSO::OfficeArtSpContainer> getMasterShapeContainer(quint32 spid) = 0;
+        virtual MSO::OfficeArtSpContainer getMasterShapeContainer(quint32 spid) = 0;
 
         /**
          * Convert the OfficeArtCOLORREF to a QColor.

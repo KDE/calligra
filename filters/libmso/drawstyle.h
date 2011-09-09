@@ -38,19 +38,19 @@ public:
 class DrawStyle
 {
 private:
-    const MSONullable<MSO::OfficeArtDggContainer> d;
-    const MSONullable<MSO::OfficeArtSpContainer> mastersp;
-    const MSONullable<MSO::OfficeArtSpContainer> sp;
+    const MSO::OfficeArtDggContainer d;
+    const MSO::OfficeArtSpContainer mastersp;
+    const MSO::OfficeArtSpContainer sp;
 public:
-    explicit DrawStyle(const MSONullable<MSO::OfficeArtDggContainer>& d_,
-                       const MSONullable<MSO::OfficeArtSpContainer>& mastersp_ = MSO::OfficeArtSpContainer(),
-                       const MSONullable<MSO::OfficeArtSpContainer>& sp_ = MSO::OfficeArtSpContainer())
+    explicit DrawStyle(const MSO::OfficeArtDggContainer& d_,
+                       const MSO::OfficeArtSpContainer& mastersp_ = MSO::OfficeArtSpContainer(),
+                       const MSO::OfficeArtSpContainer& sp_ = MSO::OfficeArtSpContainer())
             : d(d_), mastersp(mastersp_), sp(sp_) {}
 
     /**
      * @return the OfficeArtSpContainer record specifying the shape container.
      */
-    MSONullable<MSO::OfficeArtSpContainer> shapeContainer() const { return sp; }
+    MSO::OfficeArtSpContainer shapeContainer() const { return sp; }
 
     /**
      * @return the shape type that MUST be an MSOSPT enumeration value.
@@ -360,7 +360,7 @@ getComplexData(const B& b)
 {
     MSO::OfficeArtFOPTE p;
     IMsoArray a;
-    const char* pData = b.complexData().data();
+    const char* pData = b.complexData().getData();
     uint offset = 0;
 
     foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt()) {
@@ -370,7 +370,7 @@ getComplexData(const B& b)
             // there is wrong offset inside PVertices
             if (_c.anon().is<MSO::PVertices>()) {
                 if (_c.anon().is<A>()) {
-                    if (b.complexData().size() - offset >= 6) {
+                    if (b.complexData().getCount() - offset >= 6) {
                         a.nElems = *(quint16 *)(pData + offset);
                         a.nElemsAlloc = *(quint16 *)(pData + offset +2);
                         a.cbElem = *(quint16 *)(pData + offset + 4);
@@ -383,7 +383,7 @@ getComplexData(const B& b)
             } else {
                 if (_c.anon().is<A>()) {
                     const MSOCastArray<char> c(b.complexData());
-                    if (c.size() - offset >= 6) {
+                    if (c.getCount() - offset >= 6) {
                         a.nElems = *(quint16 *)(pData + offset);
                         a.nElemsAlloc = *(quint16 *)(pData + offset +2);
                         a.cbElem = *(quint16 *)(pData + offset + 4);

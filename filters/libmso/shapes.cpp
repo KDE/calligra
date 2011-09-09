@@ -321,12 +321,12 @@ void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Wr
  */
 void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
 {
-    MSONullable<OfficeArtDggContainer> drawingGroup;
+    OfficeArtDggContainer drawingGroup;
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
     }
 
-    MSONullable<OfficeArtSpContainer> master;
+    OfficeArtSpContainer master;
     const DrawStyle ds(drawingGroup, master, o);
     qreal rotation = toQReal( ds.rotation() );
 
@@ -972,9 +972,9 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
     if (o.clientData().isPresent() && client && client->onlyClientData(*o.clientData())) {
-        client->processClientData(o.clientTextbox(), *o.clientData(), out);
+        client->processClientData(toPtr(*o.clientTextbox()), *o.clientData(), out);
     } else if (o.clientTextbox().isPresent()) {
-        client->processClientTextBox(*o.clientTextbox(), o.clientData(), out);
+        client->processClientTextBox(*o.clientTextbox(), toPtr(*o.clientData()), out);
     }
 }
 

@@ -66,10 +66,10 @@ const MSO::FixedPoint zero()
 
 quint16 DrawStyle::shapeType() const
 {
-    if (!sp.isPresent()) {
+    if (!sp.isValid()) {
         return msosptNil;
     } else {
-        return (*sp).shapeProp().rh().recInstance();
+        return sp.shapeProp().rh().recInstance();
     }
 }
 
@@ -77,14 +77,14 @@ quint16 DrawStyle::shapeType() const
     TYPE DrawStyle::NAME() const \
     { \
         MSO::FOPT p; \
-        if (sp.isPresent()) { \
-            p = get<MSO::FOPT>(*sp); \
+        if (sp.isValid()) { \
+            p = get<MSO::FOPT>(sp); \
         } \
-        if (!p.isValid() && mastersp.isPresent()) { \
-            p = get<MSO::FOPT>(*mastersp); \
+        if (!p.isValid() && mastersp.isValid()) { \
+            p = get<MSO::FOPT>(mastersp); \
         } \
-        if (!p.isValid() && d.isPresent()) { \
-            p = get<MSO::FOPT>(*d); \
+        if (!p.isValid() && d.isValid()) { \
+            p = get<MSO::FOPT>(d); \
         } \
         if (p.isValid()) { \
             return p.NAME(); \
@@ -199,20 +199,20 @@ GETTER(qint32,                 PictureBrightness,    pictureBrightness,    0)   
     bool DrawStyle::NAME() const \
     { \
         MSO::FOPT p; \
-        if (sp.isPresent()) { \
-            p = get<MSO::FOPT>(*sp); \
+        if (sp.isValid()) { \
+            p = get<MSO::FOPT>(sp); \
                 if (p.isValid() && p.TEST()) { \
                 return p.NAME(); \
             } \
         } \
-        if (mastersp.isPresent()) { \
-            p = get<MSO::FOPT>(*mastersp); \
+        if (mastersp.isValid()) { \
+            p = get<MSO::FOPT>(mastersp); \
             if (p.isValid() && p.TEST()) { \
                 return p.NAME(); \
             } \
         } \
-        if (d.isPresent()) { \
-            p = get<MSO::FOPT>(*d); \
+        if (d.isValid()) { \
+            p = get<MSO::FOPT>(d); \
             if (p.isValid() && p.TEST()) { \
                 return p.NAME(); \
             } \
@@ -312,15 +312,15 @@ bool DrawStyle::fLine() const
     MSO::LineStyleBooleanProperties p;
     quint16 shapeType = msosptNil;
 
-    if (sp.isPresent()) {
-        shapeType = (*sp).shapeProp().rh().recInstance();
-        p = get<MSO::LineStyleBooleanProperties>(*sp);
+    if (sp.isValid()) {
+        shapeType = sp.shapeProp().rh().recInstance();
+        p = get<MSO::LineStyleBooleanProperties>(sp);
         if (p.isValid() && p.fUsefLine()) {
             return p.fLine();
         }
     }
-    if (mastersp.isPresent()) {
-        p = get<MSO::LineStyleBooleanProperties>(*mastersp);
+    if (mastersp.isValid()) {
+        p = get<MSO::LineStyleBooleanProperties>(mastersp);
         if (p.isValid() && p.fUsefLine()) {
             return p.fLine();
         }
@@ -336,12 +336,12 @@ bool DrawStyle::fLine() const
     IMsoArray DrawStyle::NAME() const \
     { \
         IMsoArray a;\
-        if (sp.isPresent()) { \
-            a = getComplexData<MSO::FOPT>(*sp); \
+        if (sp.isValid()) { \
+            a = getComplexData<MSO::FOPT>(sp); \
             return a;\
         } \
-        if (mastersp.isPresent()) { \
-            a = getComplexData<MSO::FOPT>(*mastersp); \
+        if (mastersp.isValid()) { \
+            a = getComplexData<MSO::FOPT>(mastersp); \
             return a;\
         } \
         return a;\
@@ -357,12 +357,12 @@ COMPLEX(PWrapPolygonVertices, pWrapPolygonVertices_complex)
     QString DrawStyle::NAME() const \
     { \
         QString a;\
-        if (sp.isPresent()) { \
-            a = getComplexName<MSO::FOPT>(*sp); \
+        if (sp.isValid()) { \
+            a = getComplexName<MSO::FOPT>(sp); \
             if (!a.isNull()) return a; \
         } \
-        if (mastersp.isPresent()) { \
-            a = getComplexName<MSO::FOPT>(*mastersp); \
+        if (mastersp.isValid()) { \
+            a = getComplexName<MSO::FOPT>(mastersp); \
             if (!a.isNull()) return a; \
         } \
         return a;\
