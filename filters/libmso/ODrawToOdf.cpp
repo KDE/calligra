@@ -25,7 +25,6 @@
 #include <QtCore/QtDebug>
 #include <QtGui/QColor>
 #include <qbuffer.h>
-#include "generated/leinputstream.h"
 
 #include <cmath>
 

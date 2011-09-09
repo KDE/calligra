@@ -389,10 +389,10 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
 
     if (out.stylesxml) {
         const MasterOrSlideContainer m = dc_data->masterSlide;
-        const TextMasterStyleAtom* msa = getTextMasterStyleAtom(toPtr(m), textType);
-        if (msa) {
+        const TextMasterStyleAtom msa = getTextMasterStyleAtom(toPtr(m), textType);
+        if (msa.isValid()) {
             KoGenStyle list(KoGenStyle::ListStyle);
-            ppttoodp->defineListStyle(list, textType, *msa);
+            ppttoodp->defineListStyle(list, textType, msa);
             QString listStyleName;
             listStyleName = out.styles.insert(list);
         }

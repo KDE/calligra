@@ -24,12 +24,16 @@
 #include "pole.h"
 #include <QtCore/QMap>
 #include <QtCore/QVector>
+#include <QByteArray>
 
 class ParsedPresentation
 {
 public:
+    QByteArray currentUserStreamData;
     MSO::CurrentUserStream currentUserStream;
+    QByteArray presentationData;
     MSO::PowerPointStructs presentation;
+    QByteArray picturesData;
     MSO::PicturesStream pictures;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
@@ -43,7 +47,7 @@ public:
     ParsedPresentation() {
     }
 
-    const MSO::MasterOrSlideContainer getMaster(const MSO::SlideContainer& slide) const;
+    MSO::MasterOrSlideContainer getMaster(const MSO::SlideContainer& slide) const;
     bool parse(POLE::Storage& storage);
 };
 

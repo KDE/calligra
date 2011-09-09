@@ -31,7 +31,6 @@
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 #include "msodraw.h"
-#include "generated/leinputstream.h"
 
 #include <KoXmlWriter.h>
 #include <kdebug.h>

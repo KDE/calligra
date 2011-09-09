@@ -25,13 +25,13 @@ using namespace MSO;
 
 // NOTE: Deprecated !!!
 template <class Style>
-void addStyle(const Style** list, const Style* style)
+void addStyle(Style* list, const Style& style)
 {
-    if (style) {
-        while (*list) ++list;
+    if (style.isValid()) {
+        while ((*list).isValid()) ++list;
         *list = style;
-        *list++;
-        *list = 0;
+        list++;
+        *list = Style();
     }
 }
 
@@ -42,8 +42,8 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 textType)
     const MainMasterContainer mm = m->anon().get<MainMasterContainer>();
     if (!mm.isValid()) return TextMasterStyleAtom();
     TextMasterStyleAtom textstyle;
-    foreach (const TextMasterStyleAtom& ma, mm->rgTextMasterStyle()) {
-        if (ma.rh.recInstance == textType) {
+    foreach (const TextMasterStyleAtom& ma, mm.rgTextMasterStyle()) {
+        if (ma.rh().recInstance() == textType) {
             textstyle = ma;
         }
     }
@@ -73,107 +73,109 @@ const Run* getRun(const QList<Run> &runs, quint32 start, quint32& num)
     return run;
 }
 
-const TextPFRun*
+TextPFRun
 getPFRun(const TextContainer* tc, quint32 start)
 {
     //TODO: make use of the num variable if required!
     quint32 num;
-    if (tc && tc->style) {
-        return getRun<TextPFRun>(tc->style->rgTextPFRun, start, num);
+    if (tc && tc->style().isPresent()) {
+        StyleTextPropAtom style = *tc->style();
+        return getRun<TextPFRun>(style.rgTextPFRun(), start, num);
     }
-    return 0;
+    return TextPFRun();
 }
-const TextCFRun*
+TextCFRun
 getCFRun(const TextContainer* tc, const quint32 start, quint32& num)
 {
-    if (tc && tc->style) {
-        return getRun<TextCFRun>(tc->style->rgTextCFRun, start, num);
+    if (tc && tc->style().isPresent()) {
+        StyleTextPropAtom style = *tc->style();
+        return getRun<TextCFRun>(style.rgTextCFRun(), start, num);
     }
-    return 0;
+    return TextCFRun();
 }
-const TextCFException*
+TextCFException
 getTextCFException(const MSO::TextContainer* tc, const int start)
 {
-    if (!tc || !tc->style) return 0;
-    const QList<TextCFRun> &cfs = tc->style->rgTextCFRun;
-    int i = 0;
+    if (!tc || !tc->style().isPresent()) return TextCFException();
+    const MSOArray<TextCFRun> cfs = (*tc->style()).rgTextCFRun();
+    quint32 i = 0;
     int cfend = 0;
-    while (i < cfs.size()) {
-        cfend += cfs[i].count;
+    while (i < cfs.getCount()) {
+        cfend += cfs[i].count();
         if (cfend > start) {
             break;
         }
         i++;
     }
-    if (i >= cfs.size()) {
-        return 0;
+    if (i >= cfs.getCount()) {
+        return TextCFException();
     }
-    return &cfs[i].cf;
+    return cfs[i].cf();
 }
 // ************************************************
 //  Master Style - Level (PF/CF)
 // ************************************************
 
-const TextMasterStyleLevel *
+TextMasterStyleLevel
 getTextMasterStyleLevel(const TextMasterStyleAtom* ms, quint16 level)
 {
-    if (!ms) return 0;
-    const TextMasterStyleLevel *l = 0;
-    if (ms->rh.recInstance < 5) {
+    if (!ms) return TextMasterStyleLevel();
+    TextMasterStyleLevel l;
+    if (ms->rh().recInstance() < 5) {
         switch (level) {
-        case 0: if (ms->lstLvl1) l = ms->lstLvl1.data();break;
-        case 1: if (ms->lstLvl2) l = ms->lstLvl2.data();break;
-        case 2: if (ms->lstLvl3) l = ms->lstLvl3.data();break;
-        case 3: if (ms->lstLvl4) l = ms->lstLvl4.data();break;
-        case 4: if (ms->lstLvl5) l = ms->lstLvl5.data();break;
+        case 0: if (ms->lstLvl1().isPresent()) l = *ms->lstLvl1();break;
+        case 1: if (ms->lstLvl2().isPresent()) l = *ms->lstLvl2();break;
+        case 2: if (ms->lstLvl3().isPresent()) l = *ms->lstLvl3();break;
+        case 3: if (ms->lstLvl4().isPresent()) l = *ms->lstLvl4();break;
+        case 4: if (ms->lstLvl5().isPresent()) l = *ms->lstLvl5();break;
         }
     } else {
-        if (ms->cLevels > 0 && level == ms->lstLvl1level) {
-            l =  ms->lstLvl1.data();
-        } else if (ms->cLevels > 1 && level == ms->lstLvl2level) {
-            l =  ms->lstLvl2.data();
-        } else if (ms->cLevels > 2 && level == ms->lstLvl3level) {
-            l =  ms->lstLvl3.data();
-        } else if (ms->cLevels > 3 && level == ms->lstLvl4level) {
-            l =  ms->lstLvl4.data();
-        } else if (ms->cLevels > 4 && level == ms->lstLvl5level) {
-            l =  ms->lstLvl5.data();
+        if (ms->cLevels() > 0 && level == *ms->lstLvl1level()) {
+            l =  *ms->lstLvl1();
+        } else if (ms->cLevels() > 1 && level == *ms->lstLvl2level()) {
+            l =  *ms->lstLvl2();
+        } else if (ms->cLevels() > 2 && level == *ms->lstLvl3level()) {
+            l =  *ms->lstLvl3();
+        } else if (ms->cLevels() > 3 && level == *ms->lstLvl4level()) {
+            l =  *ms->lstLvl4();
+        } else if (ms->cLevels() > 4 && level == *ms->lstLvl5level()) {
+            l =  *ms->lstLvl5();
         }
     }
     return l;
 }
 
 
-const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
+TextPFException getLevelPF(const MasterOrSlideContainer* m,
                                   const TextContainer* tc, quint16 level)
 {
-    if (!tc) return 0;
-    quint32 textType = tc->textHeaderAtom.textType;
-    const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
-    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
-    return (ml) ?&ml->pf :0;
+    if (!tc) return TextPFException();
+    quint32 textType = tc->textHeaderAtom().textType();
+    const TextMasterStyleAtom ms = getTextMasterStyleAtom(m, textType);
+    const TextMasterStyleLevel ml = getTextMasterStyleLevel(toPtr(ms), level);
+    return (ml.isValid()) ?ml.pf() :TextPFException();
 }
-const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
+TextCFException getLevelCF(const MasterOrSlideContainer* m,
                                   const TextContainer* tc, quint16 level)
 {
-    if (!tc) return 0;
-    quint32 textType = tc->textHeaderAtom.textType;
-    const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
-    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
-    return (ml) ?&ml->cf :0;
+    if (!tc) return TextCFException();
+    quint32 textType = tc->textHeaderAtom().textType();
+    const TextMasterStyleAtom ms = getTextMasterStyleAtom(m, textType);
+    const TextMasterStyleLevel ml = getTextMasterStyleLevel(toPtr(ms), level);
+    return (ml.isValid()) ?ml.cf() :TextCFException();
 }
 // ************************************************
 //  Master Style - Base Levels (PF/CF)
 // ************************************************
 
-QList<const TextMasterStyleLevel*>
+QList<TextMasterStyleLevel>
 getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, const quint16 level)
 {
-    QList<const TextMasterStyleLevel*> lst;
+    QList<TextMasterStyleLevel> lst;
     if (!tc) return lst;
 
-    quint32 textType = tc->textHeaderAtom.textType;
-    const TextMasterStyleAtom* ms = 0;
+    quint32 textType = tc->textHeaderAtom().textType();
+    TextMasterStyleAtom ms;
 
     //NOTE: some of the following rules were discussed at the Office File
     //Formats Forum, fine tuning is still required!  Tx_TYPE_OTHER does not
@@ -182,12 +184,12 @@ getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, const qu
     switch (textType) {
     case Tx_TYPE_CENTERTITLE:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_TITLE);
-        lst.append(getTextMasterStyleLevel(ms, level));
+        lst.append(getTextMasterStyleLevel(toPtr(ms), level));
         break;
     case Tx_TYPE_BODY:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
         for (int i = level - 1; i >= 0; i--) {
-            lst.append(getTextMasterStyleLevel(ms, i));
+            lst.append(getTextMasterStyleLevel(toPtr(ms), i));
         }
         break;
     case Tx_TYPE_CENTERBODY:
@@ -195,7 +197,7 @@ getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, const qu
     case Tx_TYPE_QUARTERBODY:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
         for (int i = level; i >= 0; i--) {
-            lst.append(getTextMasterStyleLevel(ms, i));
+            lst.append(getTextMasterStyleLevel(toPtr(ms), i));
         }
         break;
     //TODO: Tx_TYPE_NOTES do not inherit at the moment
@@ -205,26 +207,26 @@ getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, const qu
 
     return lst;
 }
-QList<const TextPFException*>
+QList<TextPFException>
 getBaseLevelsPF(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 level)
 {
-    QList<const TextMasterStyleLevel*> mls = getBaseLevels(m, tc, level);
-    QList<const TextPFException*> pfs;
+    QList<TextMasterStyleLevel> mls = getBaseLevels(m, tc, level);
+    QList<TextPFException> pfs;
     for (int i = 0; i < mls.size(); i++) {
-        if (mls[i]) {
-            pfs.append(&mls[i]->pf);
+        if (mls[i].isValid()) {
+            pfs.append(mls[i].pf());
         }
     }
     return pfs;
 }
-QList<const TextCFException*>
+QList<TextCFException>
 getBaseLevelsCF(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 level)
 {
-    QList<const TextMasterStyleLevel*> mls = getBaseLevels(m, tc, level);
-    QList<const TextCFException*> cfs;
+    QList<TextMasterStyleLevel> mls = getBaseLevels(m, tc, level);
+    QList<TextCFException> cfs;
     for (int i = 0; i < mls.size(); i++) {
-        if (mls[i]) {
-            cfs.append(&mls[i]->cf);
+        if (mls[i].isValid()) {
+            cfs.append(mls[i].cf());
         }
     }
     return cfs;
@@ -233,37 +235,37 @@ getBaseLevelsCF(const MasterOrSlideContainer* m, const TextContainer* tc, quint1
 //  Default - Base Levels (PF/CF)
 // ************************************************
 
-QList<const TextMasterStyleLevel*>
+QList<TextMasterStyleLevel>
 getDefaultBaseLevels(const MSO::DocumentContainer* d, quint16 level)
 {
-    QList<const TextMasterStyleLevel*> mls;
+    QList<TextMasterStyleLevel> mls;
     if (!d) return mls;
     while (level > 0) {
         mls.append(getTextMasterStyleLevel(
-                      &d->documentTextInfo.textMasterStyleAtom, --level));
+                       toPtr(d->documentTextInfo().textMasterStyleAtom()), --level));
     }
     return mls;
 }
-QList<const TextPFException*>
+QList<TextPFException>
 getDefaultBaseLevelsPF(const MSO::DocumentContainer* d, quint16 level)
 {
-    QList<const TextMasterStyleLevel*> mls = getDefaultBaseLevels(d, level);
-    QList<const TextPFException*> pfs;
+    QList<TextMasterStyleLevel> mls = getDefaultBaseLevels(d, level);
+    QList<TextPFException> pfs;
     for (int i = 0; i < mls.size(); i++) {
-        if (mls[i]) {
-            pfs.append(&mls[i]->pf);
+        if (mls[i].isValid()) {
+            pfs.append(mls[i].pf());
         }
     }
     return pfs;
 }
-QList<const TextCFException*>
+QList<TextCFException>
 getDefaultBaseLevelsCF(const MSO::DocumentContainer* d, quint16 level)
 {
-    QList<const TextMasterStyleLevel*> mls = getDefaultBaseLevels(d, level);
-    QList<const TextCFException*> cfs;
+    QList<TextMasterStyleLevel> mls = getDefaultBaseLevels(d, level);
+    QList<TextCFException> cfs;
     for (int i = 0; i < mls.size(); i++) {
-        if (mls[i]) {
-            cfs.append(&mls[i]->cf);
+        if (mls[i].isValid()) {
+            cfs.append(mls[i].cf());
         }
     }
     return cfs;
@@ -272,112 +274,111 @@ getDefaultBaseLevelsCF(const MSO::DocumentContainer* d, quint16 level)
 //  Default - Level (PF/CF)
 // ************************************************
 
-const TextMasterStyleLevel*
+TextMasterStyleLevel
 getDefaultLevel(const MSO::DocumentContainer* d, quint16 level)
 {
-    if (!d) return 0;
-    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(
-            &d->documentTextInfo.textMasterStyleAtom, level);
-    if (!ml) {
+    if (!d) return TextMasterStyleLevel();
+    TextMasterStyleLevel ml = getTextMasterStyleLevel(
+                toPtr(d->documentTextInfo().textMasterStyleAtom()), level);
+    if (!ml.isValid()) {
         ml = getTextMasterStyleLevel(
-                d->documentTextInfo.textMasterStyleAtom2.data(), level);
+                    toPtr(*d->documentTextInfo().textMasterStyleAtom2()), level);
     }
     return ml;
 }
-const TextPFException*
+TextPFException
 getDefaultLevelPF(const MSO::DocumentContainer* d, quint16 level)
 {
-    const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
-    return (ml) ?&ml->pf :0;
+    const TextMasterStyleLevel ml = getDefaultLevel(d, level);
+    return (ml.isValid()) ?ml.pf() :TextPFException();
 }
-const TextCFException*
+TextCFException
 getDefaultLevelCF(const MSO::DocumentContainer* d, quint16 level)
 {
-    const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
-    return (ml) ?&ml->cf :0;
+    const TextMasterStyleLevel ml = getDefaultLevel(d, level);
+    return (ml.isValid()) ?ml.cf() :TextCFException();
 }
 
 // ************************************************
 //  Default (PF/CF)
 // ************************************************
 
-const TextPFException*
+TextPFException
 getDefaultPF(const MSO::DocumentContainer* d)
 {
-    if (d && d->documentTextInfo.textPFDefaultsAtom) {
-        return &d->documentTextInfo.textPFDefaultsAtom->pf;
+    if (d && d->documentTextInfo().textPFDefaultsAtom().isPresent()) {
+        return (*d->documentTextInfo().textPFDefaultsAtom()).pf();
     }
-    return 0;
+    return TextPFException();
 }
-const TextCFException*
+TextCFException
 getDefaultCF(const MSO::DocumentContainer* d)
 {
-    if (d && d->documentTextInfo.textCFDefaultsAtom) {
-        return &d->documentTextInfo.textCFDefaultsAtom->cf;
+    if (d && d->documentTextInfo().textCFDefaultsAtom().isPresent()) {
+        return (*d->documentTextInfo().textCFDefaultsAtom()).cf();
     }
-    return 0;
+    return TextCFException();
 }
 
 // ************************************************
 //  Master Style 9
 // ************************************************
-const TextMasterStyle9Atom*
+TextMasterStyle9Atom
 getTextMasterStyle9Atom(const PP9SlideBinaryTagExtension* m, quint16 texttype)
 {
-    if (!m) return 0;
-    const TextMasterStyle9Atom* textstyle = 0;
-    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyleAtom) {
-        if (ma.rh.recInstance == texttype) {
-            textstyle = &ma;
+    if (!m) return TextMasterStyle9Atom();
+    TextMasterStyle9Atom textstyle;
+    foreach (const TextMasterStyle9Atom& ma, m->rgTextMasterStyleAtom()) {
+        if (ma.rh().recInstance() == texttype) {
+            textstyle = ma;
         }
     }
     return textstyle;
 }
-const TextMasterStyle9Atom*
+TextMasterStyle9Atom
 getTextMasterStyle9Atom(const PP9DocBinaryTagExtension* m, quint16 texttype)
 {
-    if (!m) return 0;
-    const TextMasterStyle9Atom* textstyle = 0;
-    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyle9) {
-        if (ma.rh.recInstance == texttype) {
-            textstyle = &ma;
+    if (!m) return TextMasterStyle9Atom();
+    TextMasterStyle9Atom textstyle;
+    foreach (const TextMasterStyle9Atom& ma, m->rgTextMasterStyle9()) {
+        if (ma.rh().recInstance() == texttype) {
+            textstyle = ma;
         }
     }
     return textstyle;
 }
-
-const MSO::StyleTextProp9*
+MSO::StyleTextProp9
 getStyleTextProp9(const MSO::DocumentContainer* d, quint32 slideIdRef,
                   quint32 textType, quint8 pp9rt)
 {
-    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(d);
-    if (pp9 && pp9->outlineTextPropsContainer) {
-        foreach (const OutlineTextProps9Entry& o,
-                 pp9->outlineTextPropsContainer->rgOutlineTextProps9Entry) {
-            if (o.outlineTextHeaderAtom.slideIdRef == slideIdRef
-                    && o.outlineTextHeaderAtom.txType == textType) {
+    PP9DocBinaryTagExtension pp9 = getPP<PP9DocBinaryTagExtension>(d);
+    if (pp9.isValid() && pp9.outlineTextPropsContainer().isPresent()) {
+        OutlineTextProps9Container c = *pp9.outlineTextPropsContainer();
+        foreach (const OutlineTextProps9Entry& o, c.rgOutlineTextProps9Entry()) {
+            if (o.outlineTextHeaderAtom().slideIdRef() == slideIdRef
+                    && o.outlineTextHeaderAtom().txType() == textType) {
                 // we assume that pp9rt is the index in this array
-                if (o.styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
-                    return &o.styleTextProp9Atom.rgStyleTextProp9[pp9rt];
+                if (o.styleTextProp9Atom().rgStyleTextProp9().getCount() > pp9rt) {
+                    return o.styleTextProp9Atom().rgStyleTextProp9()[pp9rt];
                 }
             }
         }
     }
-    return 0;
+    return StyleTextProp9();
 }
-const MSO::StyleTextProp9*
+MSO::StyleTextProp9
 getStyleTextProp9(const PptOfficeArtClientData* pcd, quint8 pp9rt)
 {
-    const PP9ShapeBinaryTagExtension* p = 0;
+    PP9ShapeBinaryTagExtension p;
     if (pcd) {
         p = getPP<PP9ShapeBinaryTagExtension>(*pcd);
     }
-    if (p && p->styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
-        return &p->styleTextProp9Atom.rgStyleTextProp9[pp9rt];
+    if (p.isValid() && p.styleTextProp9Atom().rgStyleTextProp9().getCount() > pp9rt) {
+        return p.styleTextProp9Atom().rgStyleTextProp9()[pp9rt];
     }
-    return 0;
+    return StyleTextProp9();
 }
-const TextPFException9* getPF9(const MSO::DocumentContainer* d,
+TextPFException9 getPF9(const MSO::DocumentContainer* d,
                                const MSO::SlideListWithTextSubContainerOrAtom* texts,
                                const PptOfficeArtClientData* pcd,
                                const MSO::TextContainer* tc,
@@ -385,87 +386,87 @@ const TextPFException9* getPF9(const MSO::DocumentContainer* d,
 {
     // to find the pf9, the cf has to be obtained which contains a pp9rt
     quint8 pp9rt = 0;
-    const TextCFException* cf = getTextCFException(tc, start);
-    if (cf && cf->fontStyle) {
-        pp9rt = cf->fontStyle->pp9rt;
+    const TextCFException cf = getTextCFException(tc, start);
+    if (cf.isValid() && cf.fontStyle().isPresent()) {
+        pp9rt = (*cf.fontStyle()).pp9rt();
     }
-    const StyleTextProp9* stp9 = 0;
-    if (tc) {
-        quint32 textType = tc->textHeaderAtom.textType;
+    StyleTextProp9 stp9;
+    if (tc->isValid()) {
+        quint32 textType = tc->textHeaderAtom().textType();
         stp9 = getStyleTextProp9(pcd, pp9rt);
-        if (!stp9 && texts) {
-            stp9 = getStyleTextProp9(d, texts->slidePersistAtom.slideId.slideId,
+        if (!stp9.isValid() && texts) {
+            stp9 = getStyleTextProp9(d, texts->slidePersistAtom().slideId().slideId(),
                                      textType, pp9rt);
         }
     }
-    return (stp9) ?&stp9->pf9 :0;
+    return (stp9.isValid()) ?stp9.pf9() :TextPFException9();
 }
-const TextMasterStyle9Level* getMaster9Level(const MasterOrSlideContainer* m,
+TextMasterStyle9Level getMaster9Level(const MasterOrSlideContainer* m,
                                               quint32 textType,
                                               quint16 level)
 {
-    const PP9SlideBinaryTagExtension* pp9 = getPP<PP9SlideBinaryTagExtension>(m);
-    if (!pp9) return 0;
-    const TextMasterStyle9Atom* ms = getTextMasterStyle9Atom(pp9, textType);
-    const TextMasterStyle9Level *l = 0;
-    if (!ms) return l;
+    PP9SlideBinaryTagExtension pp9 = getPP<PP9SlideBinaryTagExtension>(m);
+    if (!pp9.isValid()) return TextMasterStyle9Level();
+    const TextMasterStyle9Atom ms = getTextMasterStyle9Atom(toPtr(pp9), textType);
+    TextMasterStyle9Level l;
+    if (!ms.isValid()) return l;
     switch (level) {
-    case 0: if (ms->lstLvl1) l = ms->lstLvl1.data();break;
-    case 1: if (ms->lstLvl2) l = ms->lstLvl2.data();break;
-    case 2: if (ms->lstLvl3) l = ms->lstLvl3.data();break;
-    case 3: if (ms->lstLvl4) l = ms->lstLvl4.data();break;
-    case 4: if (ms->lstLvl5) l = ms->lstLvl5.data();break;
+    case 0: if (ms.lstLvl1().isPresent()) l = *ms.lstLvl1();break;
+    case 1: if (ms.lstLvl2().isPresent()) l = *ms.lstLvl2();break;
+    case 2: if (ms.lstLvl3().isPresent()) l = *ms.lstLvl3();break;
+    case 3: if (ms.lstLvl4().isPresent()) l = *ms.lstLvl4();break;
+    case 4: if (ms.lstLvl5().isPresent()) l = *ms.lstLvl5();break;
     }
     return l;
 }
-const TextPFException9* getLevelPF9(const MasterOrSlideContainer* m,
+TextPFException9 getLevelPF9(const MasterOrSlideContainer* m,
                                     quint32 textType,
                                     quint16 level)
 {
-    const TextMasterStyle9Level* ml = getMaster9Level(m, textType, level);
-    return (ml) ?&ml->pf9 :0;
+    const TextMasterStyle9Level ml = getMaster9Level(m, textType, level);
+    return (ml.isValid()) ?ml.pf9() :TextPFException9();
 }
-const TextPFException9* getLevelPF9(const MasterOrSlideContainer* m,
+TextPFException9 getLevelPF9(const MasterOrSlideContainer* m,
                                     const TextContainer* tc,
                                     quint16 level)
 {
-    return (tc) ?getLevelPF9(m, tc->textHeaderAtom.textType, level) :0;
+    return (tc) ?getLevelPF9(m, tc->textHeaderAtom().textType(), level) :TextPFException9();
 }
-const TextMasterStyle9Level* getDefault9Level(const MSO::DocumentContainer* d,
+TextMasterStyle9Level getDefault9Level(const MSO::DocumentContainer* d,
                                               quint32 textType,
                                               quint16 level)
 {
-    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(d);
-    if (!pp9) return 0;
-    const TextMasterStyle9Atom* ms = getTextMasterStyle9Atom(pp9, textType);
-    if (!ms) return 0;
-    const TextMasterStyle9Level *l = 0;
+    const PP9DocBinaryTagExtension pp9 = getPP<PP9DocBinaryTagExtension>(d);
+    if (!pp9.isValid()) return TextMasterStyle9Level();
+    const TextMasterStyle9Atom ms = getTextMasterStyle9Atom(toPtr(pp9), textType);
+    if (!ms.isValid()) return TextMasterStyle9Level();
+    TextMasterStyle9Level l;
     switch (level) {
-    case 0: if (ms->lstLvl1) l = ms->lstLvl1.data();break;
-    case 1: if (ms->lstLvl2) l = ms->lstLvl2.data();break;
-    case 2: if (ms->lstLvl3) l = ms->lstLvl3.data();break;
-    case 3: if (ms->lstLvl4) l = ms->lstLvl4.data();break;
-    case 4: if (ms->lstLvl5) l = ms->lstLvl5.data();break;
+    case 0: if (ms.lstLvl1().isPresent()) l = *ms.lstLvl1();break;
+    case 1: if (ms.lstLvl2().isPresent()) l = *ms.lstLvl2();break;
+    case 2: if (ms.lstLvl3().isPresent()) l = *ms.lstLvl3();break;
+    case 3: if (ms.lstLvl4().isPresent()) l = *ms.lstLvl4();break;
+    case 4: if (ms.lstLvl5().isPresent()) l = *ms.lstLvl5();break;
     }
     return l;
 }
-const TextPFException9* getDefaultLevelPF9(const MSO::DocumentContainer* d,
+TextPFException9 getDefaultLevelPF9(const MSO::DocumentContainer* d,
                                            quint32 textType,
                                            quint16 level)
 {
-    const TextMasterStyle9Level* ml = getDefault9Level(d, textType, level);
-    return (ml) ?&ml->pf9 :0;
+    const TextMasterStyle9Level ml = getDefault9Level(d, textType, level);
+    return (ml.isValid()) ?ml.pf9() :TextPFException9();
 }
-const TextPFException9* getDefaultLevelPF9(const MSO::DocumentContainer* d,
+TextPFException9 getDefaultLevelPF9(const MSO::DocumentContainer* d,
                                            const MSO::TextContainer* tc,
                                            quint16 level)
 {
-    return (tc) ?getDefaultLevelPF9(d, tc->textHeaderAtom.textType, level) :0;
+    return (tc) ?getDefaultLevelPF9(d, tc->textHeaderAtom().textType(), level) :TextPFException9();
 }
-const TextPFException9* getDefaultPF9(const MSO::DocumentContainer* d)
+TextPFException9 getDefaultPF9(const MSO::DocumentContainer* d)
 {
-    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(d);
-    return (pp9 && pp9->textDefaultsAtom) ?&pp9->textDefaultsAtom->pf9 :0;
+    const PP9DocBinaryTagExtension pp9 = getPP<PP9DocBinaryTagExtension>(d);
+    return (pp9.isValid() && pp9.textDefaultsAtom().isPresent()) ?(*pp9.textDefaultsAtom()).pf9() :TextPFException9();
 }
 // ************************************************
 //  LeftMargin + Indent
@@ -478,20 +479,20 @@ qint16 getLeftMargin(const TextRuler* tr, quint16 level)
     }
     qint16 m = -1;
     switch (level) {
-    case 0: if (tr->fLeftMargin1) m = tr->leftMargin1; break;
-    case 1: if (tr->fLeftMargin2) m = tr->leftMargin2; break;
-    case 2: if (tr->fLeftMargin3) m = tr->leftMargin3; break;
-    case 3: if (tr->fLeftMargin4) m = tr->leftMargin4; break;
-    case 4: if (tr->fLeftMargin5) m = tr->leftMargin5; break;
+    case 0: if (tr->fLeftMargin1()) m = *tr->leftMargin1(); break;
+    case 1: if (tr->fLeftMargin2()) m = *tr->leftMargin2(); break;
+    case 2: if (tr->fLeftMargin3()) m = *tr->leftMargin3(); break;
+    case 3: if (tr->fLeftMargin4()) m = *tr->leftMargin4(); break;
+    case 4: if (tr->fLeftMargin5()) m = *tr->leftMargin5(); break;
     }
     return m;
 }
 
 qint16 getDefaultLeftMargin(const MSO::DocumentContainer* d, quint16 level)
 {
-    if (d && d->documentTextInfo.defaultRulerAtom) {
-        const MSO::TextRuler* tr = &d->documentTextInfo.defaultRulerAtom->defaultTextRuler;
-        return getLeftMargin(tr, level);
+    if (d && d->documentTextInfo().defaultRulerAtom().isPresent()) {
+        const MSO::TextRuler tr = (*d->documentTextInfo().defaultRulerAtom()).defaultTextRuler();
+        return getLeftMargin(toPtr(tr), level);
     }
     return -1;
 }
@@ -503,20 +504,20 @@ qint16 getIndent(const TextRuler* tr, quint16 level)
     }
     qint16 indent = -1;
     switch (level) {
-    case 0: if (tr->fIndent1) indent = tr->indent1; break;
-    case 1: if (tr->fIndent2) indent = tr->indent2; break;
-    case 2: if (tr->fIndent3) indent = tr->indent3; break;
-    case 3: if (tr->fIndent4) indent = tr->indent4; break;
-    case 4: if (tr->fIndent5) indent = tr->indent5; break;
+    case 0: if (tr->fIndent1()) indent = *tr->indent1(); break;
+    case 1: if (tr->fIndent2()) indent = *tr->indent2(); break;
+    case 2: if (tr->fIndent3()) indent = *tr->indent3(); break;
+    case 3: if (tr->fIndent4()) indent = *tr->indent4(); break;
+    case 4: if (tr->fIndent5()) indent = *tr->indent5(); break;
     }
     return indent;
 }
 
 qint16 getDefaultIndent(const MSO::DocumentContainer* d, quint16 level)
 {
-    if (d && d->documentTextInfo.defaultRulerAtom) {
-        const MSO::TextRuler* tr = &d->documentTextInfo.defaultRulerAtom->defaultTextRuler;
-        return getIndent(tr, level);
+    if (d && d->documentTextInfo().defaultRulerAtom().isPresent()) {
+        const MSO::TextRuler tr = (*d->documentTextInfo().defaultRulerAtom()).defaultTextRuler();
+        return getIndent(toPtr(tr), level);
     }
     return -1;
 }
@@ -545,11 +546,13 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     //TODO: TextRuler required!
 
     if (level) {
-        pfs.append(&level->pf);
+        pfs.append(level->pf());
     }
-    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
-    if (level9) {
-        addStyle(pf9s, &level9->pf9);
+    for (int i = 0; i < 6; ++i) {
+        pf9s[i] = TextPFException9();
+    }
+    if (level9->isValid()) {
+        addStyle(pf9s, level9->pf9());
     }
     processPFDefaults(d);
 }
@@ -565,11 +568,11 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     , m_textType(Tx_TYPE_TITLE)
     , m_fHasBullet(false)
 {
-    const TextPFRun* pfrun = getPFRun(tc, start);
+    const TextPFRun pfrun = getPFRun(tc, start);
 
-    if (pfrun) {
-        pfs.append(&pfrun->pf);
-        m_level = pfrun->indentLevel;
+    if (pfrun.isValid()) {
+        pfs.append(pfrun.pf());
+        m_level = pfrun.indentLevel();
         if (m_level > 4) {
             m_level = 4;
         }
@@ -584,7 +587,9 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     //TODO: test documents required to construct correct pf9s based on the full
     //masters hierarchy.
 
-    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
+    for (int i = 0; i < 6; ++i) {
+        pf9s[i] = TextPFException9();
+    }
     addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
     addStyle(pf9s, getLevelPF9(m, tc, m_level));
     addStyle(pf9s, getDefaultLevelPF9(d, tc, m_level));
@@ -601,7 +606,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 
     //set the default values of bullet properties
     if (tc) {
-        m_textType = tc->textHeaderAtom.textType;
+        m_textType = tc->textHeaderAtom().textType();
     }
 
     //Processing either OfficeArtClientTextbox or a SlideListWithTextContainer.
@@ -656,7 +661,7 @@ PptTextCFRun::PptTextCFRun(const DocumentContainer* d,
     , m_cfrun_rm(false)
 {
     if (level) {
-        cfs.append(&level->cf);
+        cfs.append(level->cf());
     }
     processCFDefaults(d);
 }
@@ -693,45 +698,44 @@ int PptTextCFRun::addCurrentCFRun(const TextContainer* tc, quint32 start, quint3
         m_cfrun_rm = false;
     }
 
-    const TextCFRun* cfrun = getCFRun(tc, start, num);
-    if (cfrun) {
-        cfs.prepend(&cfrun->cf);
-        n = cfrun->count;
+    const TextCFRun cfrun = getCFRun(tc, start, num);
+    if (cfrun.isValid()) {
+        cfs.prepend(cfrun.cf());
+        n = cfrun.count();
         num = n - num;
         m_cfrun_rm = true;
     }
     return n;
 }
 
-#define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
+#define GETTER(TYPE, POST, NAME, TEST, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
-    for (int i = 0; i < pfs.size(); i++) { \
-        if (pfs[i]) { \
-            if ((pfs[i])->masks.TEST) {	\
-                return PRE (pfs[i])->PARENT NAME; \
-            } \
+    foreach (const TextPFException& p, pfs) { \
+        if (!p.isValid()) continue; \
+        if (p TEST().isPresent()) { \
+            return (*p TEST())POST; \
         } \
     } \
     return DEFAULT; \
 }
-//     TYPE      PARENT       PRE NAME             TEST            DEFAULT
-GETTER(bool,     bulletFlags->,,  fHasBullet,      hasBullet,      m_fHasBullet)
-GETTER(bool,     bulletFlags->,,  fBulletHasFont,  bulletHasFont,  false)
-GETTER(bool,     bulletFlags->,,  fBulletHasColor, bulletHasColor, false)
-GETTER(bool,     bulletFlags->,,  fBulletHasSize,  bulletHasSize,  false)
-GETTER(qint16,   ,             ,  bulletChar,      bulletChar,     0)
-GETTER(quint16,  ,             ,  textAlignment,   align,          0)
-GETTER(qint16,   ,             ,  lineSpacing,     lineSpacing,    0)
-GETTER(qint16,   ,             ,  spaceBefore,     spaceBefore,    0)
-GETTER(qint16,   ,             ,  spaceAfter,      spaceAfter,     0)
-GETTER(quint16,  ,             ,  defaultTabSize,  defaultTabSize, 0)
-GETTER(TabStops, ,             *, tabStops,        tabStops,       0)
-GETTER(quint16,  ,             ,  fontAlign,       fontAlign,      0)
-GETTER(bool,     wrapFlags->,  ,  charWrap,        wordWrap,       false)
-GETTER(bool,     wrapFlags->,  ,  wordWrap,        wordWrap,       false)
-GETTER(bool,     wrapFlags->,  ,  overflow,        overflow,       false)
-GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
+//     TYPE      POST               NAME             TEST            DEFAULT
+GETTER(bool,     .fHasBullet(),     fHasBullet,      .bulletFlags, m_fHasBullet)
+GETTER(bool,     .fBulletHasFont(), fBulletHasFont,  .bulletFlags, false)
+GETTER(bool,     .fBulletHasColor(),fBulletHasColor, .bulletFlags, false)
+GETTER(bool,     .fBulletHasSize(), fBulletHasSize,  .bulletFlags, false)
+GETTER(qint16,   ,               bulletChar,      .bulletChar,     0)
+GETTER(quint16,  ,               textAlignment,   .textAlignment,  0)
+GETTER(qint16,   ,               lineSpacing,     .lineSpacing,    0)
+GETTER(qint16,   ,               spaceBefore,     .spaceBefore,    0)
+GETTER(qint16,   ,               spaceAfter,      .spaceAfter,     0)
+GETTER(quint16,  ,               defaultTabSize,  .defaultTabSize, 0)
+GETTER(TabStops, ,               tabStops,        .tabStops,       TabStops())
+GETTER(quint16,  ,               fontAlign,       .fontAlign,      0)
+GETTER(bool,     .charWrap(),    charWrap,        .wrapFlags,      false)
+GETTER(bool,     .charWrap(),    wordWrap,        .wrapFlags,      false)
+GETTER(bool,     .overflow(),    overflow,        .wrapFlags,      false)
+GETTER(quint16,  ,               textDirection,   .textDirection,  0)
 #undef GETTER
 
 #define GETTER(TYPE, TR_VAL, NAME, TEST, DEFAULT) \
@@ -742,11 +746,10 @@ TYPE PptTextPFRun::NAME() const \
             return TR_VAL[0]; \
         } \
     } \
-    for (int i = 0; i < pfs.size(); i++) { \
-        if (pfs[i]) { \
-            if ((pfs[i])->masks.TEST) { \
-                return (pfs[i])->NAME; \
-            } \
+    foreach (const TextPFException& p, pfs) { \
+        if (!p.isValid()) continue; \
+        if (p TEST().isPresent()) { \
+            return (*p TEST()); \
         } \
     } \
     if (!TR_VAL.isEmpty()) { \
@@ -757,46 +760,43 @@ TYPE PptTextPFRun::NAME() const \
     return DEFAULT; \
 }
 //     TYPE      TEXTRULER_VALUE   NAME             TEST            DEFAULT
-GETTER(quint16,  m_leftMargin,     leftMargin,      leftMargin,     0)
-GETTER(quint16,  m_indent,         indent,          indent,         0)
+GETTER(quint16,  m_leftMargin,     leftMargin,      .leftMargin,     0)
+GETTER(quint16,  m_indent,         indent,          .indent,         0)
 #undef GETTER
 
 
-#define GETTER(TYPE, PRE, NAME, TEST, VALID, DEFAULT) \
+#define GETTER(TYPE, NAME, TEST, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
-    for (int i = 0; i < pfs.size(); i++) { \
-        if (pfs[i]) { \
-            if ((pfs[i])->masks.TEST) {	\
-                if (VALID()) { \
-                    return PRE (pfs[i])->NAME; \
-                } \
-            } \
+    foreach (const TextPFException& p, pfs) { \
+        if (!p.isValid()) continue; \
+        if (p TEST().isPresent()) { \
+            return (*p TEST()); \
         } \
     } \
     return DEFAULT; \
 }
-//     TYPE             PRE NAME             TEST         VALID            DEFAULT
-GETTER(quint16,          ,  bulletFontRef,   bulletFont,  fBulletHasFont,  0)
-GETTER(qint16,           ,  bulletSize,      bulletSize,  fBulletHasSize,  0)
-GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, fBulletHasColor, ColorIndexStruct())
+//     TYPE             NAME             TEST           DEFAULT
+GETTER(quint16,         bulletFontRef,   .bulletFontRef,0)
+GETTER(qint16,          bulletSize,      .bulletSize,   0)
+GETTER(ColorIndexStruct,bulletColor,     .bulletColor,  ColorIndexStruct())
 #undef GETTER
 
 qint32 PptTextPFRun::bulletBlipRef() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletBlip) {
-            return (*p)->bulletBlipRef;
+    const MSO::TextPFException9* p = pf9s;
+    while (p->isValid()) {
+        if (p->masks().bulletBlip()) {
+            return *p->bulletBlipRef();
         }
         ++p;
     }
     return 65535;
 }
 qint16 PptTextPFRun::fBulletHasAutoNumber() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletHasScheme) {
-            return (*p)->fBulletHasAutoNumber;
+    const MSO::TextPFException9* p = pf9s;
+    while (p->isValid()) {
+        if (p->masks().bulletHasScheme()) {
+            return *p->fBulletHasAutoNumber();
         }
         ++p;
     }
@@ -805,10 +805,10 @@ qint16 PptTextPFRun::fBulletHasAutoNumber() const {
 
 #define ANM_Default 3
 quint16 PptTextPFRun::scheme() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletScheme) {
-            return (*p)->bulletAutoNumberScheme->scheme;
+    const MSO::TextPFException9* p = pf9s;
+    while (p->isValid()) {
+        if (p->masks().bulletScheme()) {
+            return (*p->bulletAutoNumberScheme()).scheme();
         }
         ++p;
     }
@@ -816,10 +816,10 @@ quint16 PptTextPFRun::scheme() const {
     return ANM_Default;
 }
 qint16 PptTextPFRun::startNum() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletScheme) {
-            return (*p)->bulletAutoNumberScheme->startNum;
+    const MSO::TextPFException9* p = pf9s;
+    while (p->isValid()) {
+        if (p->masks().bulletScheme()) {
+            return (*p->bulletAutoNumberScheme()).startNum();
         }
         ++p;
     }
@@ -845,33 +845,32 @@ bool PptTextPFRun::isList() const {
     return ret;
 }
 
-#define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
+#define GETTER(TYPE, POST, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextCFRun::NAME() const \
 { \
-    for (int i = 0; i < cfs.size(); i++) { \
-        if (cfs[i]) { \
-            if ((cfs[i])->TEST) { \
-                return PRE (cfs[i])->PARENT NAME; \
-            } \
+    foreach (const TextCFException& c, cfs) { \
+        if (!c.isValid()) continue; \
+        if (c TEST()) { \
+            return POST NAME(); \
         } \
     } \
     return DEFAULT; \
 }
 
-//     TYPE             PARENT     PRE NAME           TEST              DEFAULT
-GETTER(bool,            fontStyle->,,  bold,          masks.bold,        false)
-GETTER(bool,            fontStyle->,,  italic,        masks.italic,      false)
-GETTER(bool,            fontStyle->,,  underline,     masks.underline,   false)
-GETTER(bool,            fontStyle->,,  shadow,        masks.shadow,      false)
-GETTER(bool,            fontStyle->,,  fehint,        masks.fehint,      false)
-GETTER(bool,            fontStyle->,,  kumi,          masks.kumi,        false)
-GETTER(bool,            fontStyle->,,  emboss,        masks.emboss,      false)
-GETTER(quint8,          fontStyle->,,  pp9rt,         fontStyle,             0)
-GETTER(quint16,         ,           ,  fontRef,       masks.typeface,        0)
-GETTER(quint16,         ,           ,  oldEAFontRef,  masks.oldEATypeface,   0)
-GETTER(quint16,         ,           ,  ansiFontRef,   masks.ansiTypeface,    0)
-GETTER(quint16,         ,           ,  symbolFontRef, masks.symbolTypeface,  0)
-GETTER(quint16,         ,           ,  fontSize,      masks.size,            0)
-GETTER(ColorIndexStruct,,           *, color,   masks.color, ColorIndexStruct())
-GETTER(qint16,          ,           ,  position,      masks.position,        0)
+//     TYPE             POST     PRE NAME           TEST              DEFAULT
+GETTER(bool,            (*c.fontStyle()).,,  bold,          .masks().bold,        false)
+GETTER(bool,            (*c.fontStyle()).,,  italic,        .masks().italic,      false)
+GETTER(bool,            (*c.fontStyle()).,,  underline,     .masks().underline,   false)
+GETTER(bool,            (*c.fontStyle()).,,  shadow,        .masks().shadow,      false)
+GETTER(bool,            (*c.fontStyle()).,,  fehint,        .masks().fehint,      false)
+GETTER(bool,            (*c.fontStyle()).,,  kumi,          .masks().kumi,        false)
+GETTER(bool,            (*c.fontStyle()).,,  emboss,        .masks().emboss,      false)
+GETTER(quint8,          (*c.fontStyle()).,,  pp9rt,         .fontStyle().isPresent,             0)
+GETTER(quint16,         ,           ,  fontRef,       .masks().typeface,        0)
+GETTER(quint16,         ,           ,  oldEAFontRef,  .masks().oldEATypeface,   0)
+GETTER(quint16,         ,           ,  ansiFontRef,   .masks().ansiTypeface,    0)
+GETTER(quint16,         ,           ,  symbolFontRef, .masks().symbolTypeface,  0)
+GETTER(quint16,         ,           ,  fontSize,      .masks().size,            0)
+GETTER(ColorIndexStruct,,           *, color,   .masks().color, ColorIndexStruct())
+GETTER(qint16,          ,           ,  position,      .masks().position,        0)
 #undef GETTER
