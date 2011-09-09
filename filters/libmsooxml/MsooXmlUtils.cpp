@@ -1500,20 +1500,13 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     else {
         returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
 
-        //NOTE: Let the host application decide what to do in case Microsoft
-        //fonts are not installed, don't alter the information.
-//         if ((m_bulletFont.startsWith("Wingdings") || m_bulletFont.startsWith("Symbol")) && m_bulletChar != "") {
-//             // In case of wingdings we replace with 'best guess'
-//             returnValue += QString("text:bullet-char=\"%1\" ").arg("-");
-//         }
-//         else {
         if (m_bulletChar == UNUSED) {
             returnValue += QString("text:bullet-char=\"\" ");
         }
         else {
             returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
         }
-//         }
+
         ending = "</text:list-level-style-bullet>";
     }
     returnValue += ">";
@@ -1534,7 +1527,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     if (m_margin != "UNUSED") {
         returnValue += "<style:list-level-label-alignment ";
         // the text:label-followed-by is a required attribute
-        // TODO check if there is something to get the value from.
+        // TODO: check if there is something to get the value from.
         // For now add the default we use in calligra
         returnValue += "text:label-followed-by=\"space\" ";
         returnValue += QString("fo:margin-left=\"%1pt\" ").arg(m_margin);
@@ -1555,7 +1548,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
         returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
     }
     if (m_bulletFont != "UNUSED") {
-        returnValue += QString("style:font-name=\"%1\" ").arg(m_bulletFont);
+        returnValue += QString("fo:font-family=\"%1\" ").arg(m_bulletFont);
     }
 
     returnValue += "/>";
