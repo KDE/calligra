@@ -139,11 +139,11 @@ void TaskJuggler::initTestCase()
 
 void TaskJuggler::cleanupTestCase()
 {
-    qDebug()<<this<<project;
+    DebugCtrl.setDebugLevel(0);
+    DebugCtrl.setDebugMode(0);
+
     delete project;
-    qDebug()<<"project deleted";
     cleanupTimezone();
-    qDebug()<<"finished";
 }
 
 void TaskJuggler::projectTest()
@@ -283,7 +283,7 @@ void TaskJuggler::scheduleResource()
     
 }
 
-void TaskJuggler::scheduleConstraints()
+void TaskJuggler::scheduleDependencies()
 {
     QString s;
     QDateTime pstart = QDateTime::fromString( "2011-07-01 00:00:00", Qt::ISODate );
@@ -660,8 +660,238 @@ void TaskJuggler::scheduleConstraints()
     }
 }
 
+void TaskJuggler::scheduleConstraints()
+{
+    DebugCtrl.setDebugMode( PSDEBUG + TSDEBUG + RSDEBUG );
+    DebugCtrl.setDebugLevel( 100 );
+
+    QString s;
+    QDateTime pstart = QDateTime::fromString( "2011-07-01 09:00:00", Qt::ISODate );
+    QDateTime pend = pstart.addDays(1);
+    {
+        s = "Test MustStartOn --------------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR / 2 );
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        r->setEfficiency( 1.0 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+        m->setMilestone( true );
+        m->setScheduling( TJ::Task::ASAP );
+        m->setSpecifiedStart( 0, proj->getStart() );
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setSpecifiedStart( 0, proj->getStart() + TJ::ONEHOUR );
+        t1->setEffort( 0, 1.0/24.0 );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        t1->addAllocation( a );
+
+        QVERIFY( proj->pass2( true ) );
+        QVERIFY( proj->scheduleAllScenarios() );
+
+        QDateTime mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+        QDateTime mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+        QCOMPARE( mstart, pstart );
+        QCOMPARE( t1start, mstart.addSecs( TJ::ONEHOUR ) );
+
+        delete proj;
+    }
+    {
+        s = "Test one MustStartOn + StartNotEarlier on same time -------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR / 2 );
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        r->setEfficiency( 1.0 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+        m->setMilestone( true );
+        m->setScheduling( TJ::Task::ASAP );
+        m->setSpecifiedStart( 0, proj->getStart() );
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setPriority( 600 ); // high prio so it is likely it will be scheduled on time
+        t1->setSpecifiedStart( 0, proj->getStart() + TJ::ONEHOUR );
+        t1->setEffort( 0, 1.0/24.0 );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        t1->addAllocation( a );
+
+        TJ::Task *t2 = new TJ::Task(proj, "T2", "T2", 0, QString(), 0);
+        t2->setPriority( 500 ); // less than t1
+        t2->setSpecifiedStart( 0, proj->getStart() + TJ::ONEHOUR );
+        t2->setEffort( 0, 1.0/24.0 );
+        a = new TJ::Allocation();
+        a->addCandidate( r );
+        t2->addAllocation( a );
+
+        m->addPrecedes( t1->getId() );
+        t1->addDepends( m->getId() );
+        m->addPrecedes( t2->getId() );
+        t2->addDepends( m->getId() );
+
+        QVERIFY2( proj->pass2( true ), s.toLatin1() );
+        QVERIFY2( proj->scheduleAllScenarios(), s.toLatin1() );
+
+        QDateTime mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+        QDateTime mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+        QDateTime t2start = QDateTime::fromTime_t( t2->getStart( 0 ) );
+        QDateTime t2end = QDateTime::fromTime_t( t2->getEnd( 0 ) );
+        QCOMPARE( mstart, pstart );
+        QCOMPARE( t1start, mstart.addSecs( TJ::ONEHOUR ) );
+        QCOMPARE( t2start, t1end.addSecs( 1 ) );
+
+        delete proj;
+    }
+    {
+        s = "Test one MustStartOn + StartNotEarlier overlapping -------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR / 4 );
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        r->setEfficiency( 1.0 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+        m->setMilestone( true );
+        m->setScheduling( TJ::Task::ASAP );
+        m->setSpecifiedStart( 0, proj->getStart() );
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setPriority( 600 ); // high prio so it is likely it will be scheduled on time
+        t1->setSpecifiedStart( 0, proj->getStart() + TJ::ONEHOUR );
+        t1->setEffort( 0, 1.0 / proj->getDailyWorkingHours() );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        t1->addAllocation( a );
+
+        TJ::Task *t2 = new TJ::Task(proj, "T2", "T2", 0, QString(), 0);
+        t2->setPriority( 500 ); // less than t1
+        t2->setSpecifiedStart( 0, proj->getStart() + TJ::ONEHOUR / 2 );
+        t2->setEffort( 0, 1.0 / proj->getDailyWorkingHours() );
+        a = new TJ::Allocation();
+        a->addCandidate( r );
+        t2->addAllocation( a );
+
+        m->addPrecedes( t1->getId() );
+        t1->addDepends( m->getId() );
+        m->addPrecedes( t2->getId() );
+        t2->addDepends( m->getId() );
+
+        QVERIFY2( proj->pass2( true ), s.toLatin1() );
+        QVERIFY2( proj->scheduleAllScenarios(), s.toLatin1() );
+
+        QDateTime mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+        QDateTime mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+        QDateTime t2start = QDateTime::fromTime_t( t2->getStart( 0 ) );
+        QDateTime t2end = QDateTime::fromTime_t( t2->getEnd( 0 ) );
+        QCOMPARE( mstart, pstart );
+        QCOMPARE( t1start, mstart.addSecs( TJ::ONEHOUR ) );
+        QCOMPARE( t2start, mstart.addSecs( TJ::ONEHOUR / 2 ) );
+        QCOMPARE( t2end, t1end.addSecs( TJ::ONEHOUR / 2 ) );
+
+        delete proj;
+    }
+}
+
+void TaskJuggler::resourceConflict()
+{
+    DebugCtrl.setDebugLevel( PSDEBUG + TSDEBUG );
+    DebugCtrl.setDebugMode( 0xffff );
+
+    QString s;
+    QDateTime pstart = QDateTime::fromString( "2011-07-04 09:00:00", Qt::ISODate );
+    QDateTime pend = pstart.addDays(1);
+    {
+        s = "Test 2 tasks, allocate same resource --------------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR ); // seconds
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        QCOMPARE( QDateTime::fromTime_t( proj->getStart() ), pstart );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        r->setEfficiency( 1.0 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+        m->setMilestone( true );
+        m->setScheduling( TJ::Task::ASAP );
+        m->setSpecifiedStart( 0, proj->getStart() );
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setPriority( 100 ); // this should be scheduled before t2
+        t1->setEffort( 0, 1.0/24.0 );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        t1->addAllocation( a );
+
+        TJ::Task *t2 = new TJ::Task(proj, "T2", "T2", 0, QString(), 0);
+        t2->setPriority( 10 );
+        t2->setEffort( 0, 1.0/24.0 );
+        a = new TJ::Allocation();
+        a->addCandidate( r );
+        t2->addAllocation( a );
+
+        m->addPrecedes( t1->getId() );
+        t1->addDepends( m->getId() );
+        m->addPrecedes( t2->getId() );
+        t2->addDepends( m->getId() );
+
+        QVERIFY2( proj->pass2( true ), s.toLatin1() );
+        QVERIFY2( proj->scheduleAllScenarios(), s.toLatin1() );
+
+        QDateTime mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+        QDateTime mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+        QDateTime t2start = QDateTime::fromTime_t( t2->getStart( 0 ) );
+        QDateTime t2end = QDateTime::fromTime_t( t2->getEnd( 0 ) );
+        QCOMPARE( mstart, pstart );
+        QCOMPARE( t1start, mstart );
+        QCOMPARE( t2start, t1end.addSecs( 1 ) );
+
+        delete proj;
+    }
+}
+
+
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::TaskJuggler )
 
 #include "TaskJuggler.moc"
+

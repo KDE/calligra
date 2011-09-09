@@ -45,7 +45,9 @@ private slots:
     void dependency();
     void scheduleResource();
 
+    void scheduleDependencies();
     void scheduleConstraints();
+    void resourceConflict();
 
 private:
     void initTimezone();
