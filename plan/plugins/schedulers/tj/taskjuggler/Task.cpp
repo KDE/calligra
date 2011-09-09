@@ -276,6 +276,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
          * following the time slot that was previously scheduled.
          * The project should get back to us later */
         if (!((date - slotDuration <= lastSlot) && (lastSlot < date))) {
+            if (DEBUGTS(20)) {
+                qDebug()<<"Scheduling of ASAP task"<<name<<"not continous slots:"<<time2tjp(date)<<"last:"<<time2tjp(lastSlot);
+            }
             return false;
         }
 
@@ -339,8 +342,11 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             else
                 propagateStart(sc, date);
             schedulingDone = true;
-            if (DEBUGTS(4))
+            if (DEBUGTS(4)) {
                 qDebug()<<"Scheduling of task"<<name<<"completed";
+                if (length > 0.0) qDebug()<<"Length estimate:"<<length<<"done:"<<doneLength;
+                if (duration > 0.0) qDebug()<<"Duration estimate:"<<duration<<"done:"<<doneDuration;
+            }
             return true;
         }
     }
@@ -360,8 +366,10 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             else
                 propagateStart(sc, tentativeStart);
             schedulingDone = true;
-            if (DEBUGTS(4))
-                qDebug()<<"Scheduling of task"<<name<<"completed";
+            if (DEBUGTS(4)) {
+                qDebug()<<"Scheduling of task"<<name<<"completed:"<<time2ISO(start)<<"-"<<time2ISO(end);
+                qDebug()<<"Effort estimate:"<<effort<<"done:"<<doneEffort;
+            }
             TJMH.infoMessage(QString("%1 task scheduled, effort=%2, booked=%3").arg(name).arg(effort).arg(doneEffort));
             return true;
         }
@@ -615,7 +623,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
     if (!shifts.isOnShift(Interval(date, date + slotDuration - 1)))
     {
         if (DEBUGRS(15))
-            qDebug()<<"Task"<<id<<"is not active at"<<time2tjp(date);
+            qDebug()<<"Task"<<name<<"is not active at"<<time2tjp(date);
         
         TJMH.debugMessage(QString("%1 task is not active at %2").arg(name).arg(time2tjp(date)));
         return;
