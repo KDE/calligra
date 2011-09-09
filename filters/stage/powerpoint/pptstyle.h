@@ -346,4 +346,10 @@ getPP(const MSO::MasterOrSlideContainer* m) {
     return T();
 }
 
+quint32 countChars(const MSO::TextContainer& tc);
+
+MSO::TextPFRun findTextPFRun(const MSO::StyleTextPropAtom& style, unsigned int pos, quint32 maxCount, quint32& num);
+
+MSO::TextCFRun findTextCFRun(const MSO:: StyleTextPropAtom& style, unsigned int pos, quint32 maxCount, quint32& num);
+
 #endif //PPTSTYLE_H

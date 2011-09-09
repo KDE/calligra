@@ -82,14 +82,14 @@ void collectGlobalObjects(C& collector, const MSO::OfficeArtDgContainer& dg)
         collectGlobalObjects(collector, o);
     }
 }
-template <class C>
+template <typename C>
 void collectGlobalObjects(C& collector,
-                          MSO::OfficeArtSpgrContainerFileBlock& spgr)
+                          const MSO::OfficeArtSpgrContainerFileBlock& spgr)
 {
     if (spgr.anon().is<MSO::OfficeArtSpContainer>())
-        collectGlobalObjects(*collector, spgr.anon().get<MSO::OfficeArtSpContainer>());
+        collectGlobalObjects(collector, spgr.anon().get<MSO::OfficeArtSpContainer>());
     if (spgr.anon().is<MSO::OfficeArtSpgrContainer>())
-        collectGlobalObjects(*collector, spgr.anon().get<MSO::OfficeArtSpgrContainer>());
+        collectGlobalObjects(collector, spgr.anon().get<MSO::OfficeArtSpgrContainer>());
 }
 template <class C>
 void collectGlobalObjects(C& collector, const ParsedPresentation& p) {

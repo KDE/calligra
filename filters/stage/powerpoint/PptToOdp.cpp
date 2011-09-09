@@ -2139,49 +2139,53 @@ countChars(const TextContainer& tc) {
     return tc.text().get<TextBytesAtom>().textChars().getCount();
 }
 
-TextPFRun findTextPFRun(const StyleTextPropAtom& style, unsigned int pos, quint32 maxCount)
+TextPFRun findTextPFRun(const StyleTextPropAtom& style, unsigned int pos, quint32 maxCount, quint32& num)
 {
     quint32 count = 0;
     const char* data = style.getData() + RecordHeader::getSize();
     quint32 maxSize = style.getSize() - RecordHeader::getSize();
+    TextPFRun pf;
     do {
-        TextPFRun pf(data, maxSize);
-        if (!pf.isValid() || (pos >= count && pos < count + pf.count())) {
-            return pf;
+        pf = TextPFRun(data, maxSize);
+        count += pf.count();
+        if (!pf.isValid() || pos < pf.count()) {
+            break;
         }
         data += pf.getSize();
         maxSize -= (maxSize > pf.getSize()) ?pf.getSize() : maxSize;
-        count += pf.count();
     } while (count < maxCount && maxSize > 0);
-    return TextPFRun();
+    num = count - pos;
+    return pf;
 }
 
-TextCFRun findTextCFRun(const StyleTextPropAtom& style, unsigned int pos, quint32 maxCount)
+TextCFRun findTextCFRun(const StyleTextPropAtom& style, unsigned int pos, quint32 maxCount, quint32& num)
 {
     quint32 count = 0;
     const char* data = style.getData() + RecordHeader::getSize();
     quint32 maxSize = style.getSize() - RecordHeader::getSize();
     // loop through the PFRun items
+    TextCFRun cf;
     do {
         TextPFRun pf(data, maxSize);
+        count += pf.count();
         if (!pf.isValid()) {
-            return TextCFRun();
+            return cf;
         }
         data += pf.getSize();
         maxSize -= (maxSize > pf.getSize()) ?pf.getSize() : maxSize;
-        count += pf.count();
     } while (count < maxCount && maxSize > 0);
     count = 0;
     do {
-        TextCFRun cf(data, maxSize);
-        if (!cf.isValid() || (pos >= count && pos < count + cf.count())) {
-            return cf;
+        cf = TextCFRun(data, maxSize);
+        count += cf.count();
+        if (!cf.isValid() || pos < count) {
+            break;
         }
         data += cf.getSize();
         maxSize -= (maxSize > cf.getSize()) ?cf.getSize() : maxSize;
-        count += cf.count();
     } while (count < maxCount && maxSize > 0);
-    return TextCFRun();
+    num = count - pos;
+    return cf;
 }
 
 namespace

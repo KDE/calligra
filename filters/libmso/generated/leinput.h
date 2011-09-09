@@ -2,6 +2,7 @@
 #define LEINPUT_H
 
 #include <QtCore/QtEndian>
+#include <QtCore/QByteArray>
 
 template <typename T>
 const T*
@@ -46,12 +47,20 @@ private:
 public:
     explicit MSOCastArray() :_data(0), _count(0) {}
     explicit MSOCastArray(const T* data, qint32 count) :_data(data), _count(count) {}
-    const T* getData() const;
-    QByteArray mid(int pos, int len = -1) const;
-    int getCount() const;
-    T operator[](int pos) const { return _data[pos]; }
-    bool operator!=(const QByteArray&);
-    operator QByteArray() const;
+    inline const T* getData() const { return _data; }
+    QByteArray mid(int pos, int len = -1) const {
+        if (pos > _count) return QByteArray();
+        if (len < 0 || len > _count - pos) {
+            len = _count - pos;
+        }
+        return QByteArray(_data + pos, len);
+    }
+    inline int getCount() const { return _count; }
+    inline T operator[](int pos) const { return _data[pos]; }
+    inline bool operator!=(const QByteArray& b) {
+        return QByteArray::fromRawData(_data, _count) != b;
+    }
+    inline operator QByteArray() const { return QByteArray(_data, _count); }
 };
 template <typename T> class MSOArray;
 template <typename T>

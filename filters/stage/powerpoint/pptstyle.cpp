@@ -79,8 +79,10 @@ getPFRun(const TextContainer* tc, quint32 start)
     //TODO: make use of the num variable if required!
     quint32 num;
     if (tc && tc->style().isPresent()) {
-        StyleTextPropAtom style = *tc->style();
-        return getRun<TextPFRun>(style.rgTextPFRun(), start, num);
+        const StyleTextPropAtom style = *tc->style();
+        quint32 maxCount = countChars(*tc);
+        return findTextPFRun(style, start, maxCount, num);
+        //return getRun<TextPFRun>(style.rgTextPFRun(), start, num);
     }
     return TextPFRun();
 }
@@ -88,29 +90,22 @@ TextCFRun
 getCFRun(const TextContainer* tc, const quint32 start, quint32& num)
 {
     if (tc && tc->style().isPresent()) {
-        StyleTextPropAtom style = *tc->style();
-        return getRun<TextCFRun>(style.rgTextCFRun(), start, num);
+        const StyleTextPropAtom style = *tc->style();
+        quint32 maxCount = countChars(*tc);
+        return findTextCFRun(style, start, maxCount, num);
+        //return getRun<TextCFRun>(style.rgTextCFRun(), start, num);
     }
     return TextCFRun();
 }
 TextCFException
 getTextCFException(const MSO::TextContainer* tc, const int start)
 {
-    if (!tc || !tc->style().isPresent()) return TextCFException();
-    const MSOArray<TextCFRun> cfs = (*tc->style()).rgTextCFRun();
-    quint32 i = 0;
-    int cfend = 0;
-    while (i < cfs.getCount()) {
-        cfend += cfs[i].count();
-        if (cfend > start) {
-            break;
-        }
-        i++;
+    quint32 num;
+    const TextCFRun cf = getCFRun(tc, start, num);
+    if (cf.isValid()) {
+        return cf.cf();
     }
-    if (i >= cfs.getCount()) {
-        return TextCFException();
-    }
-    return cfs[i].cf();
+    return TextCFException();
 }
 // ************************************************
 //  Master Style - Level (PF/CF)
