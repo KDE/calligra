@@ -301,7 +301,7 @@ public:
      * @param day The weekday number, must be between 1 (monday) and 7 (sunday)
      */
     CalendarDay *weekday(int day) const;
-    CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }
+    CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()); }
 
     static int dayOfWeek( const QString &name );
 
