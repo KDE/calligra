@@ -3834,6 +3834,9 @@ Task::isOrHasDescendantOnCriticalPath(int sc) const
 
 QDebug operator<<( QDebug dbg, const TJ::Task* t )
 {
+    if ( t == 0 ) {
+        return dbg << (void*)t;
+    }
     return operator<<( dbg, *t );
 }
 
