@@ -364,7 +364,7 @@ getComplexData(const B& b)
     uint offset = 0;
 
     foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt()) {
-        p = _c.anon().get<MSO::OfficeArtFOPTE>();
+        p = MSO::OfficeArtFOPTE(_c.getData(), _c.getSize());
         if (p.opid().fComplex()) {
 
             // there is wrong offset inside PVertices

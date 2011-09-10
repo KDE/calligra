@@ -49,7 +49,7 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
 }
 template<class T>
 QByteArray
-parseStream(const char* path, POLE::Storage& storage, T& cus)
+parseStream(const char* path, POLE::Storage& storage, T& t)
 {
     QBuffer buffer;
     QByteArray data;
@@ -57,15 +57,16 @@ parseStream(const char* path, POLE::Storage& storage, T& cus)
         return QByteArray();
     }
     data = buffer.buffer();
-    cus = T(data.data(), data.size());
-    if (!cus.isValid()) {
+    t = T(data.data(), data.size());
+    if (!t.isValid()) {
         qDebug() << "caught unknown error while parsing " << path;
         return QByteArray();
     }
-    if (cus.getSize() != data.size()) {
-        qDebug() << (data.size() - cus.getSize())
-            << "bytes left at the end of " << path;
-        return QByteArray();
+    if (t.getSize() != data.size()) {
+        qDebug() << (data.size() - t.getSize())
+                 << "bytes left at the end of " << path << " of length "
+                    << data.size();
+        //return QByteArray();
     }
     return data;
 }
@@ -77,6 +78,9 @@ template <typename T>
 T
 get(const PowerPointStructs& pps, quint32 offset)
 {
+    if (offset > pps.getSize()) {
+        return T();
+    }
     return T(pps.getData() + offset, pps.getSize() - offset);
 }
 void
@@ -110,6 +114,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
         qDebug() << "error parsing PowerPointStructs";
         return false;
     }
+    qDebug() << "PRESENTATION " << presentation.getSize();
     currentUserStreamData = parseStream("/Current User", storage, currentUserStream);
     if (!currentUserStream.isValid()) {
         qDebug() << "error parsing CurrentUserStream";
@@ -124,7 +129,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
     const UserEditAtom userEditAtom = get<UserEditAtom>(presentation,
                                                          currentUserStream.anon1().offsetToCurrentEdit());
     if (!userEditAtom.isValid()) {
-        qDebug() << "no userEditAtom";
+        qDebug() << "no userEditAtom " << currentUserStream.anon1().offsetToCurrentEdit() << " " << presentation.getSize() << " " << presentationData.size();
         return false;
     }
     parsePersistDirectory(presentation, userEditAtom, persistDirectory);

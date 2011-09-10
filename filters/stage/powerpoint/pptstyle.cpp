@@ -386,7 +386,7 @@ TextPFException9 getPF9(const MSO::DocumentContainer* d,
         pp9rt = (*cf.fontStyle()).pp9rt();
     }
     StyleTextProp9 stp9;
-    if (tc->isValid()) {
+    if (tc) {
         quint32 textType = tc->textHeaderAtom().textType();
         stp9 = getStyleTextProp9(pcd, pp9rt);
         if (!stp9.isValid() && texts) {
