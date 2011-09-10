@@ -820,6 +820,62 @@ void TaskJuggler::scheduleConstraints()
 
         delete proj;
     }
+    {
+        s = "Fixed interval with/without allocation-------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR / 4 );
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        r->setEfficiency( 1.0 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *m = new TJ::Task(proj, "M1", "M1", 0, QString(), 0);
+        m->setMilestone( true );
+        m->setScheduling( TJ::Task::ASAP );
+        m->setSpecifiedStart( 0, proj->getStart() );
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setPriority( 600 ); // high prio so it is likely it will be scheduled on time
+        t1->setSpecifiedStart( 0, proj->getStart() + TJ::ONEHOUR );
+        t1->setSpecifiedEnd( 0, proj->getStart() + ( 2*TJ::ONEHOUR) -1 );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        t1->addAllocation( a );
+
+        TJ::Task *t2 = new TJ::Task(proj, "T2", "T2", 0, QString(), 0);
+        t2->setPriority( 500 ); // less than t1
+        t2->setSpecifiedStart( 0, proj->getStart() + TJ::ONEHOUR );
+        t1->setSpecifiedEnd( 0, proj->getStart() + ( 2*TJ::ONEHOUR) -1 );
+        a = new TJ::Allocation();
+        a->addCandidate( r );
+        t2->addAllocation( a );
+
+        m->addPrecedes( t1->getId() );
+        t1->addDepends( m->getId() );
+        m->addPrecedes( t2->getId() );
+        t2->addDepends( m->getId() );
+
+        QVERIFY2( proj->pass2( true ), s.toLatin1() );
+        QVERIFY2( proj->scheduleAllScenarios(), s.toLatin1() );
+
+        QDateTime mstart = QDateTime::fromTime_t( m->getStart( 0 ) );
+        QDateTime mend = QDateTime::fromTime_t( m->getEnd( 0 ) );
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+        QDateTime t2start = QDateTime::fromTime_t( t2->getStart( 0 ) );
+        QDateTime t2end = QDateTime::fromTime_t( t2->getEnd( 0 ) );
+        QCOMPARE( mstart, pstart );
+        QCOMPARE( t1start, mstart.addSecs( TJ::ONEHOUR ) );
+        QCOMPARE( t2start, mstart.addSecs( TJ::ONEHOUR ) );
+
+        delete proj;
+    }
 }
 
 void TaskJuggler::resourceConflict()
