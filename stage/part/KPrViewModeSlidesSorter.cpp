@@ -431,6 +431,24 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
     return slides;
 }
 
+void KPrViewModeSlidesSorter::duplicateSlide()
+{
+    // separate selected layers and selected shapes
+    QList<KoPAPageBase*> slides = extractSelectedSlides();
+    m_slidesSorterModel->copySlides(slides);
+    //paste after the last selected slide
+    if (!slides.isEmpty()) {
+        m_view->setActivePage(slides.last());
+        m_slidesSorterModel->pasteSlides();
+        int lastPageIndex = m_view->kopaDocument()->pageIndex(slides.last());
+        //Select Copied slides
+        m_view->setActivePage(m_view->kopaDocument()->pageByIndex(lastPageIndex + 1, false));
+        const QItemSelection newSelection(m_slidesSorterModel->index(lastPageIndex + 1, 0, QModelIndex()),
+                                    m_slidesSorterModel->index(lastPageIndex + slides.count(), 0, QModelIndex()));
+        m_slidesSorterView->selectionModel()->select(newSelection, QItemSelectionModel::ClearAndSelect);
+    }
+}
+
 void KPrViewModeSlidesSorter::deleteSlide()
 {
     if (m_slidesSorterView->hasFocus()) {
@@ -530,6 +548,7 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_slidesSorterView);
     menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
+    menu.addAction(KIcon("edit-copy"), i18n("Duplicate selected slides"), this, SLOT(duplicateSlide()));
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
     QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();

@@ -159,6 +159,8 @@ private slots:
     /** Changes the view active page to match the slides sorter item selected*/
     void itemClicked(const QModelIndex);
 
+    void duplicateSlide();
+
     /** delete the current selected slides*/
     void deleteSlide();
 
