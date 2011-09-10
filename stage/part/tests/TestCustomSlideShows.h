@@ -21,10 +21,15 @@
 #define TESTCUSTOMSLIDESHOWS_H
 
 #include <QtTest/QtTest>
+class MockDocument;
+class KoPAPageBase;
 
 class TestCustomSlideShows : public QObject
 {
     Q_OBJECT
+private:
+    void populateDoc(MockDocument &doc, QList<KoPAPageBase*> &slideList1, QList<KoPAPageBase*> &slideList2,
+                     QString &customShowName1, QString &customShowName2);
 private slots:
     void insertCustomSlideShow();
     void removeCustomSlideShow();

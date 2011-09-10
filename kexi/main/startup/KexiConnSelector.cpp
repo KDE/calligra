@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003,2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,10 +43,6 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
-#include <q3textedit.h>
-#include <q3groupbox.h>
-#include <q3widgetstack.h>
-#include <q3buttongroup.h>
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QFrame>
@@ -65,8 +61,8 @@ KexiConnSelectorBase::~KexiConnSelectorBase()
 /*================================================================*/
 
 ConnectionDataLVItem::ConnectionDataLVItem(KexiDB::ConnectionData *data,
-        const KexiDB::Driver::Info& info, Q3ListView *list)
-        : Q3ListViewItem(list)
+        const KexiDB::Driver::Info& info, QTreeWidget* list)
+        : QTreeWidgetItem(list)
         , m_data(data)
 {
     update(info);
@@ -79,7 +75,7 @@ ConnectionDataLVItem::~ConnectionDataLVItem()
 void ConnectionDataLVItem::update(const KexiDB::Driver::Info& info)
 {
     setText(0, m_data->caption + "  ");
-    const QString &sfile = i18n("File");
+    const QString sfile = i18n("File");
     QString drvname = info.caption.isEmpty() ? m_data->driverName : info.caption;
     if (info.fileBased)
         setText(1, sfile + " (" + drvname + ")  ");
@@ -97,7 +93,8 @@ public:
     Private()
             : conn_sel_shown(false)
             , file_sel_shown(false)
-            , confirmOverwrites(true) {
+            , confirmOverwrites(true)
+    {
     }
 
     QWidget* openExistingWidget;
@@ -110,6 +107,7 @@ public:
     bool conn_sel_shown; //!< helper
     bool file_sel_shown;
     bool confirmOverwrites;
+    KexiUtils::PaintBlocker* descGroupBoxPaintBlocker;
 };
 
 /*================================================================*/
@@ -131,14 +129,15 @@ KexiConnSelectorWidget::KexiConnSelectorWidget(KexiDBConnectionSet& conn_set,
     d->openExistingWidget = new QWidget(this);
     d->openExistingWidget->setObjectName("openExistingWidget");
     QVBoxLayout* openExistingWidgetLyr = new QVBoxLayout(d->openExistingWidget);
-    openExistingWidgetLyr->setMargin(0);
+    openExistingWidgetLyr->setContentsMargins(0, 0, 0, 0);
 // QLabel* lbl = new QLabel(i18n("<b>Select existing Kexi project to open:</b>"), openExistingWidget);
 // openExistingWidgetLyr->addWidget( lbl );
     d->prjTypeSelector = new KexiPrjTypeSelector(d->openExistingWidget);
     connect(d->prjTypeSelector->buttonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotPrjTypeSelected(int)));
     openExistingWidgetLyr->addWidget(d->prjTypeSelector);
-    openExistingWidgetLyr->addSpacing(KDialog::spacingHint());
+    d->prjTypeSelector->setContentsMargins(0, 0, 0, KDialog::spacingHint());
+    //openExistingWidgetLyr->addSpacing(KDialog::spacingHint());
     QFrame* line = new QFrame(d->openExistingWidget);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
@@ -171,12 +170,15 @@ KexiConnSelectorWidget::KexiConnSelectorWidget(KexiDBConnectionSet& conn_set,
     if (m_remote->layout())
         m_remote->layout()->setMargin(0);
 // connect(m_remote->btn_back,SIGNAL(clicked()),this,SLOT(showSimpleConn()));
-    connect(m_remote->list, SIGNAL(doubleClicked(Q3ListViewItem*)),
-            this, SLOT(slotConnectionItemExecuted(Q3ListViewItem*)));
-    connect(m_remote->list, SIGNAL(returnPressed(Q3ListViewItem*)),
-            this, SLOT(slotConnectionItemExecuted(Q3ListViewItem*)));
-    connect(m_remote->list, SIGNAL(selectionChanged()),
+    connect(m_remote->list, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotConnectionItemExecuted(QTreeWidgetItem*)));
+    //connect(m_remote->list, SIGNAL(returnPressed(QTreeWidgetItem*)),
+//            this, SLOT(slotConnectionItemExecuted(QTreeWidgetItem*)));
+    connect(m_remote->list, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotConnectionSelectionChanged()));
+    m_remote->list->installEventFilter(this);
+    d->descGroupBoxPaintBlocker = new KexiUtils::PaintBlocker(m_remote->descGroupBox);
+    d->descGroupBoxPaintBlocker->setEnabled(false);
 }
 
 KexiConnSelectorWidget::~KexiConnSelectorWidget()
@@ -212,8 +214,8 @@ void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
                 //    kWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!";
                 //   }
             }
-            if (m_remote->list->firstChild()) {
-                m_remote->list->setSelected(m_remote->list->firstChild(), true);
+            if (m_remote->list->topLevelItemCount() > 0) {
+                m_remote->list->topLevelItem(0)->setSelected(true);
             }
             m_remote->descGroupBox->layout()->setMargin(2);
             m_remote->list->setFocus();
@@ -260,7 +262,7 @@ void KexiConnSelectorWidget::showSimpleConn()
     d->stack->setCurrentWidget(fileWidget);
 }
 
-int KexiConnSelectorWidget::selectedConnectionType() const
+KexiConnSelectorWidget::ConnectionType KexiConnSelectorWidget::selectedConnectionType() const
 {
     return (d->stack->currentWidget() == fileWidget) ? FileBased : ServerBased;
 }
@@ -282,7 +284,10 @@ int KexiConnSelectorWidget::selectedConnectionType() const
 
 KexiDB::ConnectionData* KexiConnSelectorWidget::selectedConnectionData() const
 {
-    ConnectionDataLVItem *item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem()); //ConnectionDataItem();
+    QList<QTreeWidgetItem *> items = m_remote->list->selectedItems();
+    if (items.isEmpty())
+        return 0;
+    ConnectionDataLVItem *item = static_cast<ConnectionDataLVItem*>(items.first());
     if (!item)
         return 0;
     return item->data();
@@ -302,14 +307,25 @@ void KexiConnSelectorWidget::setSelectedFileName(const QString& fileName)
     return fileWidget->setSelection(fileName);
 }
 
-void KexiConnSelectorWidget::slotConnectionItemExecuted(Q3ListViewItem *item)
+void KexiConnSelectorWidget::slotConnectionItemExecuted(QTreeWidgetItem* item)
 {
     emit connectionItemExecuted(static_cast<ConnectionDataLVItem*>(item));
 }
 
+void KexiConnSelectorWidget::slotConnectionItemExecuted()
+{
+    QList<QTreeWidgetItem *> items = m_remote->list->selectedItems();
+    if (items.isEmpty())
+        return;
+    slotConnectionItemExecuted(items.first());
+}
+
 void KexiConnSelectorWidget::slotConnectionSelectionChanged()
 {
-    ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem());
+    QList<QTreeWidgetItem *> items = m_remote->list->selectedItems();
+    if (items.isEmpty())
+        return;
+    ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(items.first());
     //update buttons availability
     /* ConnectionDataLVItem *singleItem = 0;
       bool multi = false;
@@ -326,11 +342,15 @@ void KexiConnSelectorWidget::slotConnectionSelectionChanged()
       }*/
     m_remote->btn_edit->setEnabled(item);
     m_remote->btn_remove->setEnabled(item);
-    m_remote->descriptionLabel->setText(item ? item->data()->description : QString());
+    QString desc;
+    if (item)
+        desc = item->data()->description;
+    d->descGroupBoxPaintBlocker->setEnabled(desc.isEmpty());
+    m_remote->descriptionLabel->setText(desc);
     emit connectionItemHighlighted(item);
 }
 
-Q3ListView* KexiConnSelectorWidget::connectionsList() const
+QTreeWidget* KexiConnSelectorWidget::connectionsList() const
 {
     return m_remote->list;
 }
@@ -390,13 +410,16 @@ void KexiConnSelectorWidget::slotRemoteAddBtnClicked()
 
     ConnectionDataLVItem* item = addConnectionData(newData);
 // m_remote->list->clearSelection();
-    m_remote->list->setSelected(item, true);
+    item->setSelected(true);
     slotConnectionSelectionChanged();
 }
 
 void KexiConnSelectorWidget::slotRemoteEditBtnClicked()
 {
-    ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem());
+    QList<QTreeWidgetItem *> items = m_remote->list->selectedItems();
+    if (items.isEmpty())
+        return;
+    ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(items.first());
     if (!item)
         return;
     KexiDBConnectionDialog dlg(this, *item->data(), QString(),
@@ -419,7 +442,10 @@ void KexiConnSelectorWidget::slotRemoteEditBtnClicked()
 
 void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
 {
-    ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem());
+    QList<QTreeWidgetItem *> items = m_remote->list->selectedItems();
+    if (items.isEmpty())
+        return;
+    ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(items.first());
     if (!item)
         return;
     if (KMessageBox::Continue != KMessageBox::warningContinueCancel(this,
@@ -433,15 +459,16 @@ void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
         return;
     }
 
-    Q3ListViewItem* nextItem = item->itemBelow();
+    QTreeWidgetItem* nextItem = m_remote->list->itemBelow(item);
     if (!nextItem)
-        nextItem = item->itemAbove();
+        nextItem = m_remote->list->itemAbove(item);
     if (!d->conn_set->removeConnectionData(item->data()))
         return;
 
-    m_remote->list->removeItem(item);
+    item->parent()->removeChild(item);
+    delete item;
     if (nextItem)
-        m_remote->list->setSelected(nextItem, true);
+        nextItem->setSelected(true);
     slotConnectionSelectionChanged();
 }
 
@@ -449,6 +476,26 @@ void KexiConnSelectorWidget::hideConnectonIcon()
 {
     m_remote->lblIcon->setFixedWidth(0);
     m_remote->lblIcon->setPixmap(QPixmap());
+}
+
+void KexiConnSelectorWidget::hideDescription()
+{
+    m_remote->lblIcon->hide();
+    m_remote->label->hide();
+}
+
+bool KexiConnSelectorWidget::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *ke = static_cast<QKeyEvent*>(event);
+        if ((ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return)
+            && ke->modifiers() == Qt::NoModifier)
+        {
+            slotConnectionItemExecuted();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 #include "KexiConnSelector.moc"

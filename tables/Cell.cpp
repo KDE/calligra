@@ -118,8 +118,8 @@ Cell::Cell(const Sheet* sheet, int col, int row)
         : d(new Private)
 {
     Q_ASSERT(sheet != 0);
-    Q_ASSERT(1 <= col && col <= KS_colMax);
-    Q_ASSERT(1 <= row && row <= KS_rowMax);
+    Q_ASSERT_X(1 <= col && col <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(col).toLocal8Bit());
+    Q_ASSERT_X(1 <= row && row <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(row).toLocal8Bit());
     d->sheet = const_cast<Sheet*>(sheet);
     d->column = col;
     d->row = row;
@@ -129,8 +129,8 @@ Cell::Cell(const Sheet* sheet, const QPoint& pos)
         : d(new Private)
 {
     Q_ASSERT(sheet != 0);
-    Q_ASSERT(1 <= pos.x() && pos.x() <= KS_colMax);
-    Q_ASSERT(1 <= pos.y() && pos.y() <= KS_rowMax);
+    Q_ASSERT_X(1 <= pos.x() && pos.x() <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.x()).toLocal8Bit());
+    Q_ASSERT_X(1 <= pos.y() && pos.y() <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.y()).toLocal8Bit());
     d->sheet = const_cast<Sheet*>(sheet);
     d->column = pos.x();
     d->row = pos.y();

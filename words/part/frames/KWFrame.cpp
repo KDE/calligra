@@ -52,16 +52,29 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
     if (parentFrameSet) {
         if (Words::isHeaderFooter(parentFrameSet)) {
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                // header and footer are always auto-grow-height independent of whatever
+                // was defined for them in the document.
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
         if (parentFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            /* NoResize should be default this days. Setting it here would overwrite any value
+              read in TextShape::loadStyle what is not what we want.
+
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
                 data->setResizeMethod(KoTextShapeDataBase::NoResize);
             }
+            */
         } else {
             shape->setGeometryProtected(true);
-            shape->setCollisionDetection(false);
+
+            // We need to keep collision detection on or we will not relayout when page anchored shapes are
+            // moved. For page anchored shapes (which are different from anchored shapes which are usually
+            // children of the shape they are anchored too and therefore the ShapeManager filters collision
+            // events for them out) the KoTextRootAreaProvider::relevantObstructions method is used to produce
+            // obstructions whereas for anchored shapes the KoTextDocumentLayout::registerAnchoredObstruction
+            // is used to explicit register the obstructions.
+            //shape->setCollisionDetection(false);
         }
     }
 

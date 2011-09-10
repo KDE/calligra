@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +33,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+class QLabel;
 class KAboutData;
+class KexiRecentProjects;
 
 namespace Kexi
 {
@@ -61,7 +63,7 @@ KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
 KEXICORE_EXPORT KexiDBConnectionSet& connset();
 
 //! A set available of project information
-KEXICORE_EXPORT KexiProjectSet& recentProjects();
+KEXICORE_EXPORT KexiRecentProjects* recentProjects();
 
 //! shared driver manager
 KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
@@ -142,6 +144,10 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 
 //! Displays information that feature "feature_name" is not availabe in the current application version
 KEXICORE_EXPORT void KEXI_UNFINISHED(
+    const QString& feature_name, const QString& extra_text = QString());
+
+//! Like KEXI_UNFINISHED but returns new label instance with expected text
+KEXICORE_EXPORT QLabel *KEXI_UNFINISHED_LABEL(
     const QString& feature_name, const QString& extra_text = QString());
 
 //! Like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text

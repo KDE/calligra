@@ -52,8 +52,25 @@ Rectangle {
         anchors.left: parent.horizontalCenter
         anchors.top: parent.top
         anchors.right: parent.right
+        anchors.bottom: openFileDialogButton.top
+        anchors.margins: 10
+    }
+
+    Button {
+        id: openFileDialogButton
+
+        imageSource: "qrc:///images/words.png"
+	textPosition: "right"
+	text: "Open Document"
+        width: homeScreen.width/2.1;
+	height: 100;
+
+        anchors.left: parent.left
+        anchors.right: parent.horizontalCenter
         anchors.bottom: progressBar.top
         anchors.margins: 10
+
+        onClicked: mainwindow.openFileDialog()
     }
 
     Rectangle {

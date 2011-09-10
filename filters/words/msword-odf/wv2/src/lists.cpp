@@ -603,7 +603,7 @@ ListText::~ListText()
 }
 
 
-ListInfo::ListInfo( Word97::PAP& pap, ListInfoProvider& listInfoProvider ) :
+ListInfo::ListInfo( Word97::PAP& pap, const Word97::CHP& chp, ListInfoProvider& listInfoProvider ) :
     m_linkedIstd( istdNil ), m_restartingCounter( false ), m_numberFormat( 0 ),
     m_alignment( 0 ), m_isLegal( false ), m_notRestarted( false ), m_prev( false ),
     m_prevSpace( false ), m_isWord6( false ), m_followingChar( 0 ), m_lsid( 0 ),
@@ -632,7 +632,7 @@ ListInfo::ListInfo( Word97::PAP& pap, ListInfoProvider& listInfoProvider ) :
         m_prev = level->prev();
         m_prevSpace = level->prevSpace();
         m_isWord6 = level->isWord6();
-        m_text = listInfoProvider.text();
+        m_text = listInfoProvider.text(chp);
         m_followingChar = level->followingChar();
         m_space = level->space();
         m_indent = level->indent();
@@ -943,20 +943,21 @@ std::pair<S32, bool> ListInfoProvider::startAt()
     return start;
 }
 
-ListText ListInfoProvider::text() const
+ListText ListInfoProvider::text(const Word97::CHP& chp) const
 {
     ListText ret;
     ret.text = formattingListLevel()->text();
+    ret.chp = new Word97::CHP( chp );
+    Style style( chp );
 
     // Get the appropriate style for this paragraph
-    const Style* style = m_styleSheet->styleByIndex( m_pap->istd );
-    if ( !style ) {
-        wvlog << "Bug: Huh, really obscure error, couldn't find the Style for the current PAP" << endl;
-        ret.chp = new Word97::CHP;
-    }
-    else
-        ret.chp = new Word97::CHP( style->chp() );
-
-    formattingListLevel()->applyGrpprlChpx( ret.chp, style, m_styleSheet );
+//     const Style* style = m_styleSheet->styleByIndex( m_pap->istd );
+//     if ( !style ) {
+//         wvlog << "Bug: Huh, really obscure error, couldn't find the Style for the current PAP" << endl;
+//         ret.chp = new Word97::CHP;
+//     } else {
+//         ret.chp = new Word97::CHP( style->chp() );
+//     }
+    formattingListLevel()->applyGrpprlChpx( ret.chp, &style, m_styleSheet );
     return ret;
 }

@@ -323,6 +323,9 @@ public slots:
     tristate openProject(const QString& aFileName,
                          const QString& fileNameForConnectionData, const QString& dbName = QString());
 
+    /*! Helper. Opens project pointed by \a aFileName. */
+    tristate openProject(const QString& aFileName);
+
     /*! Creates a new project usign template pointed by \a projectData.
      Application state (e.g. actions) is updated.
      New project data is copied into a project structures.
@@ -384,6 +387,8 @@ protected:
 
     void setupPropertyEditor();
 
+    void setupMainMenuActionShortcut(KAction* action, const char* slot);
+
     /*! Creates standard actions like new, open, save ... */
     void setupActions();
 
@@ -413,13 +418,13 @@ protected:
          (KexiView derived object) within this window.
         void invalidateViewModeActions();*/
 
-    /*! Shows dialog for creating new blank project,
-     and creates one. The dialog is not shown if option for automatic creation
+    /*! Shows dialog for creating new project, and creates one.
+     The dialog is not shown if option for automatic creation
      is checked or Kexi::startupHandler().projectData() was provided from command line.
      \a cancelled is set to true if creation has been cancelled (e.g. user answered
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
-    tristate createBlankProject();
+    void createNewProject();
 
     /*! Shows dialog for creating new blank project,
      and return a data describing it. If the dialog was cancelled,
@@ -497,6 +502,8 @@ protected:
 
 protected slots:
 
+    tristate createNewProject(KexiProjectData* projectData);
+    
     /*! Called once after timeout (after ctors are executed). */
     void slotAutoOpenObjectsLater();
 
@@ -525,7 +532,7 @@ protected slots:
         void slotChildViewIsDetachedNow(QWidget*);*/
 
     //! internal - creates and initializes kexi project
-    void createKexiProject(KexiProjectData* new_data);
+    void createKexiProject(const KexiProjectData& new_data);
 
     /*! Handles event when user double clicked (or single -depending on settings)
      or pressed Return key on the part item in the navigator.
@@ -587,15 +594,14 @@ protected slots:
 
     void slotProjectNew();
     void slotProjectOpen();
-    void slotProjectOpenRecentAboutToShow();
-    void slotProjectOpenRecent(int id);
-    void slotProjectOpenRecentMore();
+    void slotProjectOpenRecent();
     void slotProjectSave();
     void slotProjectSaveAs();
     void slotProjectPrint();
     void slotProjectPrintPreview();
     void slotProjectPageSetup();
     void slotProjectProperties();
+    void slotProjectImportExportOrSend();
     void slotProjectClose();
     void slotProjectRelations();
     void slotProjectImportDataTable();
@@ -617,7 +623,7 @@ protected slots:
     void slotViewDataMode();
     void slotViewDesignMode();
     void slotViewTextMode(); //!< sometimes called "SQL View"
-    void slotShowSettings();
+    void slotSettings();
     void slotConfigureKeys();
     void slotConfigureToolbars();
     void slotToolsProjectMigration();

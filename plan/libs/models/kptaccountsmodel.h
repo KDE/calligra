@@ -76,7 +76,7 @@ public:
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    QModelIndex index( const Account* account ) const;
+    QModelIndex index( const Account* account, int column = 0 ) const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 

@@ -19,7 +19,6 @@
 */
 
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 #include "KoRdfPrefixMapping.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
@@ -56,6 +55,10 @@
 #include <klocale.h>
 #include <kuser.h>
 
+
+#include <QWeakPointer>
+
+
 #define DEBUG_RDF
 
 #ifdef DEBUG_RDF
@@ -66,20 +69,36 @@
 
 using namespace Soprano;
 
-KoDocumentRdfPrivate::KoDocumentRdfPrivate()
-        : model(Soprano::createModel())
-        , prefixMapping(0)
+
+class KoDocumentRdfPrivate
 {
-}
+public:
 
-KoDocumentRdfPrivate::~KoDocumentRdfPrivate()
-{
-    delete prefixMapping;
-    delete model;
-}
+    KoDocumentRdfPrivate()
+            : model(Soprano::createModel())
+            , prefixMapping(0)
+    {
+    }
+
+    ~KoDocumentRdfPrivate()
+    {
+        delete prefixMapping;
+        delete model;
+    }
+
+    Soprano::Model *model; ///< Main Model containing all Rdf for doc
+    QMap<QString, QWeakPointer<KoTextInlineRdf> > inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
+    KoRdfPrefixMapping *prefixMapping;     ///< prefix -> URI mapping
+
+    QList<KoRdfFoaF*> foafObjects;
+    QList<KoRdfCalendarEvent*> calObjects;
+    QList<KoRdfLocation*> locObjects;
+
+    QMap<QString,QList<KoSemanticStylesheet*> > userStylesheets;
+};
 
 
-KoDocumentRdf::KoDocumentRdf(KoDocument *parent)
+KoDocumentRdf::KoDocumentRdf(QObject *parent)
         : KoDocumentRdfBase(parent)
         , d (new KoDocumentRdfPrivate())
 {
@@ -105,13 +124,6 @@ KoDocumentRdf *KoDocumentRdf::fromResourceManager(KoCanvasBase *host)
     }
     return static_cast<KoDocumentRdf*>(rm->resource(KoText::DocumentRdf).value<void*>());
 }
-
-
-KoDocument *KoDocumentRdf::document() const
-{
-    return qobject_cast<KoDocument *>(parent());
-}
-
 
 KoRdfPrefixMapping *KoDocumentRdf::prefixMapping() const
 {
@@ -313,8 +325,6 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const S
     }
     RDEBUG << "saving external file:" << fileName;
     if (!store->open(fileName)) {
-        document()->setErrorMessage(
-            i18n("Not able to write '%1'. Partition full?", (fileName)));
         return false;
     }
     KoStoreDevice dev(store);
@@ -360,10 +370,12 @@ bool KoDocumentRdf::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
         return false;
     }
     bool ok = true;
-    NodeIterator contextier = model()->listContexts();
-    QList<Node> contexts = contextier.allElements();
+    NodeIterator contextIter = model()->listContexts();
+    QList<Node> contexts = contextIter.allElements();
     foreach (Soprano::Node n, contexts) {
-        saveRdf(store, manifestWriter, n);
+        if (!saveRdf(store, manifestWriter, n)) {
+            ok = false;
+        }
     }
     return ok;
 }
@@ -380,6 +392,9 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
                                Node(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
                                Node(),
                                Node());
+    if (!it.isValid())
+        return;
+
     QList<Statement> allStatements = it.allElements();
     foreach (Soprano::Statement s, allStatements) {
         RDEBUG << "seeking obj:" << s.object();
@@ -1316,11 +1331,13 @@ Soprano::Model *KoDocumentRdf::findStatements(KoTextEditor *handler, int depth)
 
 KoTextInlineRdf *KoDocumentRdf::findInlineRdfByID(const QString &xmlid) const
 {
-    RDEBUG << "xxx xmlid:" << xmlid;
-    foreach (KoTextInlineRdf *sp, d->inlineRdfObjects) {
-        RDEBUG << "sp:" << (void*)sp;
-        if (sp->xmlId() == xmlid) {
-            return sp;
+    if (d->inlineRdfObjects.contains(xmlid)) {
+        QWeakPointer<KoTextInlineRdf> inlineRdf = d->inlineRdfObjects[xmlid];
+        if (!inlineRdf.isNull()) {
+            return inlineRdf.data();
+        }
+        else {
+            d->inlineRdfObjects.remove(xmlid);
         }
     }
     return 0;
@@ -1332,7 +1349,7 @@ void KoDocumentRdf::rememberNewInlineRdfObject(KoTextInlineRdf *inlineRdf)
     if (!inlineRdf) {
         return;
     }
-    d->inlineRdfObjects << inlineRdf;
+    d->inlineRdfObjects[inlineRdf->xmlId()] = inlineRdf;
 }
 
 void KoDocumentRdf::updateInlineRdfStatements(QTextDocument *qdoc)
@@ -1369,11 +1386,18 @@ void KoDocumentRdf::updateInlineRdfStatements(QTextDocument *qdoc)
     // delete all inline Rdf statements from model
     d->model->removeAllStatements(Soprano::Node(), Soprano::Node(), Soprano::Node(), context);
     RDEBUG << "adding, count:" << d->inlineRdfObjects.size();
+
     // add statements from inlineRdfObjects to model
-    foreach (KoTextInlineRdf *sp, d->inlineRdfObjects) {
-        Soprano::Statement st = toStatement(sp);
-        if (st.isValid()) {
-            d->model->addStatement(st);
+    foreach (const QString &xmlid, d->inlineRdfObjects.keys()) {
+        QWeakPointer<KoTextInlineRdf> sp = d->inlineRdfObjects[xmlid];
+        if (sp.isNull()) {
+            d->inlineRdfObjects.remove(xmlid);
+        }
+        else {
+            Soprano::Statement st = toStatement(sp.data());
+            if (st.isValid()) {
+                d->model->addStatement(st);
+            }
         }
     }
     RDEBUG << "done";
@@ -1467,9 +1491,6 @@ void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *
 
 void KoDocumentRdf::applyReflow(const QMap<int, reflowItem> &col)
 {
-    if (!document()) {
-        return;
-    }
     QMapIterator< int, reflowItem > i(col);
     i.toBack();
     while (i.hasPrevious()) {

@@ -99,6 +99,8 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
                                                    new KPrPageSelectStrategyActive( kopaCanvas() ) ) );
 
     connect(zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
+
+    setAcceptDrops(true);
 }
 
 KPrView::~KPrView()
@@ -198,6 +200,7 @@ void KPrView::initGUI()
 
 void KPrView::initActions()
 {
+    setComponentData(KPrFactory::componentData());
     if ( !kopaDocument()->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
@@ -386,13 +389,13 @@ void KPrView::changeViewByIndex(int index)
 {
     switch (index) {
     case 0:
-        showNormal();
+        m_actionViewModeNormal->trigger();
         break;
     case 1:
-        showNotes();
+        m_actionViewModeNotes->trigger();
         break;
     case 2:
-        showSlidesSorter();
+        m_actionViewModeSlidesSorter->trigger();
         break;
     default:
         break;

@@ -53,6 +53,10 @@ public:
     \a data will be owned by this object. */
     void addProjectData(KexiProjectData *data);
 
+    /*! Takes \a data project data from the set without deleting it.
+        @return 0 if there is no such data in this set. */
+    KexiProjectData* takeProjectData(KexiProjectData *data);
+
     //! \return list object
     KexiProjectData::List list() const;
 
@@ -64,5 +68,5 @@ private:
     KexiProjectSetPrivate * const d;
 };
 
-#endif // KEXINEWDBCONNDIALOG_H
+#endif // KEXIPROJECTSET_H
 

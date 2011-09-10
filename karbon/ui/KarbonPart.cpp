@@ -65,6 +65,7 @@
 #include <KoResourceManager.h>
 #include <KoStoreDevice.h>
 #include <KoShapePainter.h>
+#include <SvgShapeFactory.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -135,6 +136,8 @@ KarbonPart::KarbonPart(QWidget* parentWidget, const char* widgetName, QObject* p
     resourceManager()->setUndoStack(undoStack());
 
     initConfig();
+
+    SvgShapeFactory::addToRegistry();
 
     // set as default paper
     KoPageLayout pl = pageLayout();

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,9 +58,13 @@ KAboutData* Kexi::createAboutData()
     aboutData->addAuthor(
         ki18n("OpenOffice Polska LLC"), ki18n("Sponsoring and support (employer of Jarosław Staniek in 2003-2007)"), "it@openoffice.com.pl");
     aboutData->addAuthor(
-        ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
-    aboutData->addAuthor(
         ki18n("Adam Pigg"), ki18n("PostgreSQL database driver, Migration and Reporting modules"), "adam@piggz.co.uk");
+    aboutData->addAuthor(
+        ki18n("Radosław Wicik"), ki18n("Map elements for forms and reports, map flake shape"), "radoslaw@wicik.pl");
+    aboutData->addAuthor(
+        ki18n("Shreya Pandit"), ki18n("Web elements for forms and reports"), "shreya.pandit25@gmail.com");
+    aboutData->addAuthor(
+        ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
     aboutData->addAuthor(
         ki18n("Sharan Rao"), ki18n("Sybase/MS SQL Server database drivers, xBase migration plugin, improvements for KexiDB"), "sharanrao@gmail.com");
     aboutData->addAuthor(

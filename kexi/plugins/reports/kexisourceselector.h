@@ -45,7 +45,7 @@ public:
 
 private:
     KexiDB::Connection *m_conn;
-    QStringList queryList();
+
     QVBoxLayout *m_layout;
     QComboBox *m_sourceType;
     QComboBox *m_internalSource;
@@ -53,7 +53,10 @@ private:
     KPushButton *m_setData;
 
     KexiDBReportData *m_kexiDBData;
+
+#ifndef KEXI_MOBILE
     KexiMigrateReportData *m_kexiMigrateData;
+#endif
 
 private slots:
     void setDataClicked();

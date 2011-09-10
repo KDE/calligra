@@ -310,7 +310,7 @@ void KexiStartupDialog::reject()
 void KexiStartupDialog::setupPageTemplates()
 {
     QFrame *pageTemplatesFrame = new QFrame(this);
-    d->pageTemplates = addPage(pageTemplatesFrame, i18n("&Create Project"));
+    d->pageTemplates = addPage(pageTemplatesFrame, i18n("Create Project"));
     QVBoxLayout *lyr = new QVBoxLayout(pageTemplatesFrame);
     lyr->setSpacing(KDialog::spacingHint());
     lyr->setMargin(0);
@@ -595,7 +595,7 @@ void KexiStartupDialog::setupPageOpenExisting()
 {
 // if (d->singlePage)
     QWidget *pageOpenExistingWidget = new QFrame(this);
-    d->pageOpenExisting = addPage(pageOpenExistingWidget, i18n("Open &Existing Project"));
+    d->pageOpenExisting = addPage(pageOpenExistingWidget, i18n("Open Existing Project"));
 
     QVBoxLayout *lyr = new QVBoxLayout(pageOpenExistingWidget);
     lyr->setSpacing(KDialog::spacingHint());
@@ -706,7 +706,7 @@ void KexiStartupDialog::setupPageOpenRecent()
 {
 #ifdef KEXI_STARTUP_SHOW_RECENT
     QWidget *pageOpenRecentWidget = new QFrame(this);
-    d->pageOpenRecent = addPage(pageOpenRecentWidget, i18n("Open &Recent Project"));
+    d->pageOpenRecent = addPage(pageOpenRecentWidget, i18n("Open Recent Project"));
     QVBoxLayout *lyr = new QVBoxLayout(pageOpenRecentWidget);
     lyr->setSpacing(KDialog::spacingHint());
     lyr->addWidget(d->prj_selector

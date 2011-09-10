@@ -35,11 +35,11 @@ ulimit -t 60
 # make sure not to eat all available memory
 ulimit -v 1269760
 
-for file in $(ls | grep -v "check$")
+ls -b | grep -v "check$" | while read file
 do
     if [ -e "${1}/${file}.check" ]
     then
-        if ! cstester --graphicssystem raster --indir $1 --outdir $2 --verify $file 1>$OUT 2>&1
+        if ! cstester --graphicssystem raster --indir $1 --outdir $2 --verify "$file" 1>$OUT 2>&1
 	then
 	    echo -n "-"
             PAGES=$(grep "^Check failed:" ../output.log | sed "s/.*Page \([0-9]\+\) differ/\1/" | awk '{printf("%d ",$1)}')

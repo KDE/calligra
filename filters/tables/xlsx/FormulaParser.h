@@ -33,16 +33,11 @@ namespace MSOOXML
 {
 
 /**
- * Convert the MSOOXML \p formula into a ODF formula and return that ODF formula.
- */
-QString convertFormula(const QString& formula);
-
-/**
  * Generate and return the ODF formula for \p thisCell based on the formula in the
  * defined \p referencedCell . This is used for formula groups.
  */
 QString convertFormulaReference(Cell* referencedCell, Cell* thisCell);
 
-};
+}
 
 #endif // FORMULAPARSER_H

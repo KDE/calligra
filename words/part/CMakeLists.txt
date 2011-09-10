@@ -1,7 +1,7 @@
 project(wordspart)
 
 #TODO port to textlayout-rework
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
@@ -85,6 +85,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertPageDialog.ui
     dialogs/KWInsertInlineNoteDialog.ui
+    dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
 )
 if( Soprano_FOUND )
