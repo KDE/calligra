@@ -39,7 +39,7 @@ public:
     bool passwordProtected;
     unsigned long passwd;
     std::vector<Format*> formats;
-    MSO::OfficeArtDggContainer* dggContainer;
+    MSO::OfficeArtDggContainer dggContainer;
     QList<QColor> colorTable;
     Version version;
 };
@@ -52,7 +52,6 @@ Workbook::Workbook(KoStore* store)
     d->passwordProtected = false;
     d->activeTab = -1;
     d->passwd = 0; // password protection disabled
-    d->dggContainer = 0;
 
     // initialize palette
     static const char *const default_palette[64-8] = { // default palette for all but the first 8 colors
@@ -92,7 +91,6 @@ void Workbook::clear()
         delete s;
     }
     d->sheets.clear();
-    delete d->dggContainer; d->dggContainer = 0;
 }
 
 bool Workbook::load(const char* filename)
@@ -217,10 +215,10 @@ int Workbook::formatCount() const
 
 void Workbook::setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer)
 {
-    d->dggContainer = new MSO::OfficeArtDggContainer(dggContainer);
+    d->dggContainer = dggContainer;
 }
 
-MSO::OfficeArtDggContainer* Workbook::officeArtDggContainer() const
+MSO::OfficeArtDggContainer Workbook::officeArtDggContainer() const
 {
     return d->dggContainer;
 }

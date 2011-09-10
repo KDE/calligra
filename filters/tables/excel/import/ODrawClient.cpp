@@ -45,7 +45,7 @@ static qreal columnWidth(Swinder::Sheet* sheet, unsigned long col) {
 }
 
 static qreal rowHeight(Swinder::Sheet* sheet, unsigned long row) {
-    if( sheet->row(row, false) )
+    if(sheet->row(row, false) )
         return sheet->row(row)->height();
 
     return sheet->defaultRowHeight();
@@ -53,31 +53,40 @@ static qreal rowHeight(Swinder::Sheet* sheet, unsigned long row) {
 
 QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
 {
-    const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
-    if (anchor) {
+    const MSO::XlsOfficeArtClientAnchor anchor = clientAnchor.anon().get<MSO::XlsOfficeArtClientAnchor>();
+    if (anchor.isValid()) {
+        // obtain values or use defaults: TODO find out defaults
+        const quint16 colL = (anchor.colL().isPresent()) ?*anchor.colL() :0;
+        const quint16 colR = (anchor.colR().isPresent()) ?*anchor.colR() :0;
+        const qint16 dxL = (anchor.dxL().isPresent()) ?*anchor.dxL() :0;
+        const qint16 dxR = (anchor.dxR().isPresent()) ?*anchor.dxR() :0;
+        const quint16 rwT = (anchor.rwT().isPresent()) ?*anchor.rwT() :0;
+        const quint16 rwB = (anchor.rwB().isPresent()) ?*anchor.rwB() :0;
+        const qint16 dyT = (anchor.dyT().isPresent()) ?*anchor.dyT() :0;
+        const qint16 dyB = (anchor.dyB().isPresent()) ?*anchor.dyB() :0;
         QRectF r;
-        qreal colWidth = columnWidth(m_sheet, anchor->colL);
-        r.setLeft(offset(colWidth, anchor->dxL, 1024));
-        if (anchor->colR == anchor->colL) {
-            r.setRight(offset(colWidth, anchor->dxR, 1024));
+        qreal colWidth = columnWidth(m_sheet, colL);
+        r.setLeft(offset(colWidth, dxL, 1024));
+        if (colR == colL) {
+            r.setRight(offset(colWidth, dxR, 1024));
         } else {
             qreal width = colWidth - r.left();
-            for (int col = anchor->colL + 1; col < anchor->colR; ++col) {
+            for (int col = colL + 1; col < colR; ++col) {
                 width += columnWidth(m_sheet, col);
             }
-            width += offset(columnWidth(m_sheet, anchor->colR), anchor->dxR, 1024);
+            width += offset(columnWidth(m_sheet, colR), dxR, 1024);
             r.setWidth(width);
         }
-        qreal rowHgt = rowHeight(m_sheet, anchor->rwT);
-        r.setTop(offset(rowHgt, anchor->dyT, 256));
-        if (anchor->rwT == anchor->rwB) {
-            r.setBottom(offset(rowHgt, anchor->dyB, 256));
+        qreal rowHgt = rowHeight(m_sheet, rwT);
+        r.setTop(offset(rowHgt, dyT, 256));
+        if (rwT == rwB) {
+            r.setBottom(offset(rowHgt, dyB, 256));
         } else {
             qreal height = rowHgt - r.top();
-            for (int row = anchor->rwT + 1; row < anchor->rwB; ++row) {
+            for (int row = rwT + 1; row < rwB; ++row) {
                 height += rowHeight(m_sheet, row);
             }
-            height += offset(rowHeight(m_sheet, anchor->rwB), anchor->dyB, 256);
+            height += offset(rowHeight(m_sheet, rwB), dyB, 256);
             r.setHeight(height);
         }
         return r;
@@ -95,14 +104,14 @@ QRectF ODrawClient::getReserveRect(void)
 
 QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor)
 {
-    const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
-    if (!anchor) return QRectF();
+    const MSO::XlsOfficeArtClientAnchor anchor = clientAnchor.anon().get<MSO::XlsOfficeArtClientAnchor>();
+    if (!anchor.isValid() || !anchor.rwT().isPresent() || !anchor.colL().isPresent()) return QRectF();
     QRectF r = getRect(clientAnchor);
     qreal x = 0, y = 0;
-    for (int row = 0; row < anchor->rwT; row++) {
+    for (int row = 0; row < *anchor.rwT(); row++) {
         y += rowHeight(m_sheet, row);
     }
-    for (int col = 0; col < anchor->colL; col++) {
+    for (int col = 0; col < *anchor.colL(); col++) {
         x += columnWidth(m_sheet, col);
     }
     return r.adjusted(x, y, x, y);
@@ -206,24 +215,24 @@ void ODrawClient::addTextStyles(const quint16 msospt,
     out.xml.addAttribute("draw:style-name", styleName);
 }
 
-const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
+MSO::OfficeArtDggContainer ODrawClient::getOfficeArtDggContainer()
 {
     return m_sheet->workbook()->officeArtDggContainer();
 }
 
-const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
+MSO::OfficeArtSpContainer ODrawClient::getMasterShapeContainer(quint32 spid)
 {
     //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
-    MSO::OfficeArtSpContainer* sp = NULL;
+    MSO::OfficeArtSpContainer sp;
     return sp;
 }
 
 QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
 {
-    if (c.fSchemeIndex) {
-        return m_sheet->workbook()->color(c.red);
+    if (c.fSchemeIndex()) {
+        return m_sheet->workbook()->color(c.red());
     }
-    return QColor(c.red, c.green, c.blue);
+    return QColor(c.red(), c.green(), c.blue());
 }
 
 QString ODrawClient::formatPos(qreal v)

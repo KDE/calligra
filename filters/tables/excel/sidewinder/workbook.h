@@ -130,7 +130,7 @@ public:
     int formatCount() const;
 
     void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
-    MSO::OfficeArtDggContainer* officeArtDggContainer() const;
+    MSO::OfficeArtDggContainer officeArtDggContainer() const;
 
     void setColorTable(const QList<QColor>& colorTable);
     QList< QColor > colorTable() const;

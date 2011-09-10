@@ -63,8 +63,8 @@ public:
     int noteCount;
 
     // The last drawing object we got.
-    MSO::OfficeArtDgContainer* lastDrawingObject;
-    MSO::OfficeArtSpgrContainer* lastGroupObject;
+    MSO::OfficeArtDgContainer lastDrawingObject;
+    MSO::OfficeArtSpgrContainer lastGroupObject;
     OfficeArtObject* lastOfficeArtObject;
 
     // list of id's with ChartObject's.
@@ -82,8 +82,6 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->lastFormulaCell = 0;
     d->formulaStringCell = 0;
     d->noteCount = 0;
-    d->lastDrawingObject = 0;
-    d->lastGroupObject = 0;
     d->lastOfficeArtObject = 0;
     d->curConditionalFormat = 0;
 }
@@ -96,8 +94,6 @@ WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
     //    delete (*it).second;
     //for(std::map<std::pair<unsigned, unsigned>, FormulaTokens*>::iterator it = d->sharedFormulas.begin(); it != d->sharedFormulas.end(); ++it)
     //    delete it.second.second;
-    delete d->lastDrawingObject;
-    delete d->lastGroupObject;
     delete d;
 }
 
@@ -770,7 +766,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     d->lastOfficeArtObject = 0;
 
     bool handled = false;
-    if (record->m_object && d->lastDrawingObject && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
+    if (record->m_object && d->lastDrawingObject.isValid() && record->m_object->applyDrawing(d->lastDrawingObject)) {
         handled = true;
         switch (record->m_object->type()) {
             case Object::Picture: {
@@ -796,32 +792,31 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                 handled = false;
         }
     }
-    if (!handled && d->lastDrawingObject) {
+    if (!handled && d->lastDrawingObject.isValid()) {
         //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
-        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->groupShape->rgfb) {
-            if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
-                delete d->lastGroupObject;
-                d->lastGroupObject = new MSO::OfficeArtSpgrContainer(*fb.anon.get<MSO::OfficeArtSpgrContainer>());
+        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, (*d->lastDrawingObject.groupShape()).rgfb()) {
+            if (fb.anon().is<MSO::OfficeArtSpgrContainer>()) {
+                d->lastGroupObject = fb.anon().get<MSO::OfficeArtSpgrContainer>();
             } else {
-                const MSO::OfficeArtSpContainer& o = *fb.anon.get<MSO::OfficeArtSpContainer>();
-                if (o.clientAnchor) {
-                    MSO::XlsOfficeArtClientAnchor* anchor = o.clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>();
-                    if (!anchor) {
+                const MSO::OfficeArtSpContainer o = fb.anon().get<MSO::OfficeArtSpContainer>();
+                if (o.clientAnchor().isPresent()) {
+                    MSO::XlsOfficeArtClientAnchor anchor = (*o.clientAnchor()).anon().get<MSO::XlsOfficeArtClientAnchor>();
+                    if (!anchor.isValid()) {
                         qDebug() << "invalid client anchor";
                     } else {
-                        Cell *cell = d->sheet->cell(anchor->colL, anchor->rwT);
+                        Cell *cell = d->sheet->cell(*anchor.colL(), *anchor.rwT());
                         OfficeArtObject* obj = new OfficeArtObject(o);
                         cell->addDrawObject(obj);
                         d->lastOfficeArtObject = obj;
                     }
                 } else {
                     OfficeArtObject* obj = new OfficeArtObject(o);
-                    d->sheet->addDrawObject(obj, d->lastGroupObject);
+                    d->sheet->addDrawObject(obj, toPtr(d->lastGroupObject));
                     d->lastOfficeArtObject = obj;
 
-                    if (d->lastGroupObject) {
-                        if (!o.shapeProp.fChild) {
-                            delete d->lastGroupObject; d->lastGroupObject = 0;
+                    if (d->lastGroupObject.isValid()) {
+                        if (!o.shapeProp().fChild()) {
+                            d->lastGroupObject = MSO::OfficeArtSpgrContainer();
                         }
                     }
                 }
@@ -832,8 +827,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     if (record->m_object) d->sharedObjects[id] = record->m_object;
     record->m_object = 0; // take over ownership
      
-    delete d->lastDrawingObject;
-    d->lastDrawingObject = 0;
+    d->lastDrawingObject = MSO::OfficeArtDgContainer();
 }
 
 void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* record)
@@ -880,8 +874,7 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
     if (!record || !record->isValid() || !d->sheet) return;
 
     // remember the MsoDrawingRecord for the ObjRecord that is expected to follow and to proper handle the drawing object.
-    delete d->lastDrawingObject;
-    d->lastDrawingObject = new MSO::OfficeArtDgContainer(record->dgContainer());
+    d->lastDrawingObject = record->dgContainer();
 }
 
 void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)

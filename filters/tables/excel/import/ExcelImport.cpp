@@ -522,7 +522,7 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
 
 static QRectF getRect(const MSO::OfficeArtFSPGR &r)
 {
-    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+    return QRect(r.xLeft(), r.yTop(), r.xRight() - r.xLeft(), r.yBottom() - r.yTop());
 }
 
 void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
@@ -590,10 +590,10 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
             shapesXml->startElement("draw:g");
 
             const MSO::OfficeArtSpgrContainer& group = is->drawObjectsGroup(i);
-            const MSO::OfficeArtSpContainer* first = group.rgfb.first().anon.get<MSO::OfficeArtSpContainer>();
-            if (first && first->clientAnchor && first->shapeGroup) {
-                QRectF oldCoords = client.getGlobalRect(*first->clientAnchor);
-                QRectF newCoords = getRect(*first->shapeGroup);
+            const MSO::OfficeArtSpContainer first = group.rgfb()[0].anon().get<MSO::OfficeArtSpContainer>();
+            if (first.isValid() && first.clientAnchor().isPresent() && first.shapeGroup().isPresent()) {
+                QRectF oldCoords = client.getGlobalRect(*first.clientAnchor());
+                QRectF newCoords = getRect(*first.shapeGroup());
                 Writer transw = writer.transform(oldCoords, newCoords);
                 const QList<OfficeArtObject*> gobjs = is->drawObjects(i);
                 for (int j = gobjs.size()-1; j >= 0; --j) {

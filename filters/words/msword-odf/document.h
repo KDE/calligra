@@ -25,7 +25,6 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include "generated/leinputstream.h"
 #include "pole.h"
 #include "tablehandler.h"
 
@@ -74,7 +73,7 @@ public:
 /*              KoFilterChain* chain, */
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
-             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data);
+             const QByteArray& wordDocument, POLE::Stream& table, const QByteArray& data);
     virtual ~Document();
 
     virtual void setProgress(int percent);
@@ -166,9 +165,9 @@ public:
 
     // Provide access to POLE/LEInput streams to other handlers.
     POLE::Stream& poleTableStream(void) const { return m_tblstm_pole; }
-    LEInputStream& wdocumentStream(void) const { return m_wdstm; }
-    LEInputStream* tableStream(void) const { return m_tblstm; }
-    LEInputStream* dataStream(void) const { return m_datastm; }
+    QByteArray wdocumentStream(void) const { return m_wdstm; }
+    QByteArray tableStream(void) const { return m_tblstm; }
+    QByteArray dataStream(void) const { return m_datastm; }
 
     // get the style name used for line numbers
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
@@ -269,9 +268,9 @@ private:
     QString m_lastMasterPageName;
 
     //pointers to streams
-    LEInputStream& m_wdstm;
-    LEInputStream* m_tblstm;
-    LEInputStream* m_datastm;
+    const QByteArray m_wdstm;
+    QByteArray m_tblstm;
+    const QByteArray m_datastm;
     POLE::Stream& m_tblstm_pole;
 
     //A stack for backgroud-colors, which represets a background color context

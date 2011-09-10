@@ -21,8 +21,6 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include "generated/leinputstream.h"
-
 #include <QString>
 #include <qdom.h>
 #include <QObject>

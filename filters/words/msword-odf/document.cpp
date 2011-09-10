@@ -22,7 +22,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "generated/leinputstream.h"
 #include "drawstyle.h"
 
 #include "document.h"
@@ -60,7 +59,7 @@ Document::Document(const std::string& fileName,
 //                    KoFilterChain* chain,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
+                   const QByteArray& wordDocument, POLE::Stream& table, const QByteArray& data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new WordsReplacementHandler)
@@ -1001,7 +1000,10 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     {
         // PptToOdp::toQColor helper function can be used instead of this conversion
         MSO::OfficeArtCOLORREF clr = ds.fillColor();
-        QColor color(clr.red, clr.green, clr.blue);
+        QColor color;
+        if (clr.isValid()) {
+            color = QColor(clr.red(), clr.green(), clr.blue());
+        }
         QString tmp = color.name();
         pageLayoutStyle->addProperty("fo:background-color", tmp);
 

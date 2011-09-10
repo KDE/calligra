@@ -590,7 +590,9 @@ QList<OfficeArtObject*> Sheet::drawObjects(int groupId) const
 
 static int shapeGroupId(const MSO::OfficeArtSpgrContainer& group)
 {
-    return group.rgfb.first().anon.get<MSO::OfficeArtSpContainer>()->shapeProp.spid;
+    // TODO: check that this actually is a OfficeArtSpContainer and handle
+    // the case that it is not
+    return group.rgfb()[0].anon().get<MSO::OfficeArtSpContainer>().shapeProp().spid();
 }
 
 void Sheet::addDrawObject(OfficeArtObject* drawObject, const MSO::OfficeArtSpgrContainer* group )

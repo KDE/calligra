@@ -20,7 +20,6 @@
 #include "objects.h"
 
 #include "generated/api.h"
-#include "generated/leinputstream.h"
 //#include "drawstyle.h"
 //#include "ODrawToOdf.h"
 //#include "pictures.h"
@@ -49,54 +48,54 @@ bool Object::applyDrawing(const MSO::OfficeArtDgContainer &container)
 {
     bool ok = false;
 
-    foreach(MSO::OfficeArtSpgrContainerFileBlock b, container.groupShape->rgfb) {
-        std::cout << "Object(" << m_type << ") isOfficeArtSpContainer=" << b.anon.is<MSO::OfficeArtSpContainer>() << " isOfficeArtSpgrContainer=" << b.anon.is<MSO::OfficeArtSpgrContainer>() << " isOfficeArtFSP=" << b.anon.is<MSO::OfficeArtFSP>() << " isOfficeArtFSPGR=" << b.anon.is<MSO::OfficeArtFSPGR>() << " isOfficeArtClientAnchor=" << b.anon.is<MSO::OfficeArtClientAnchor>() << " isOfficeArtClientData=" << b.anon.is<MSO::OfficeArtClientData>() << std::endl;
-        MSO::OfficeArtSpContainer* spc = b.anon.get<MSO::OfficeArtSpContainer>();
-        if(spc && spc->shapePrimaryOptions) {
+    foreach(const MSO::OfficeArtSpgrContainerFileBlock& b, (*container.groupShape()).rgfb()) {
+        std::cout << "Object(" << m_type << ") isOfficeArtSpContainer=" << b.anon().is<MSO::OfficeArtSpContainer>() << " isOfficeArtSpgrContainer=" << b.anon().is<MSO::OfficeArtSpgrContainer>() << " isOfficeArtFSP=" << b.anon().is<MSO::OfficeArtFSP>() << " isOfficeArtFSPGR=" << b.anon().is<MSO::OfficeArtFSPGR>() << " isOfficeArtClientAnchor=" << b.anon().is<MSO::OfficeArtClientAnchor>() << " isOfficeArtClientData=" << b.anon().is<MSO::OfficeArtClientData>() << std::endl;
+        const MSO::OfficeArtSpContainer spc = b.anon().get<MSO::OfficeArtSpContainer>();
+        if(spc.isValid() && spc.shapePrimaryOptions().isPresent()) {
 
             // Extract the unique identifier for the drawing to be able to access the drawing again from outside.
-            foreach(MSO::OfficeArtFOPTEChoice c, spc->shapePrimaryOptions->fopt) {
-                if(c.anon.is<MSO::Pib>())
-                    m_id = c.anon.get<MSO::Pib>()->pib;
-                else if(c.anon.is<MSO::ITxid>())
-                    m_id = c.anon.get<MSO::ITxid>()->iTxid;
+            foreach(const MSO::OfficeArtFOPTEChoice& c, (*spc.shapePrimaryOptions()).fopt()) {
+                if(c.anon().is<MSO::Pib>())
+                    m_id = c.anon().get<MSO::Pib>().pib();
+                else if(c.anon().is<MSO::ITxid>())
+                    m_id = c.anon().get<MSO::ITxid>().iTxid();
             }
 
             // The drawing may attached to an anchor which contains the informations where our drawing will be located.
-            MSO::XlsOfficeArtClientAnchor* anchor = spc->clientAnchor ? spc->clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>() : 0;
-            if(anchor) {
-                m_colL = anchor->colL;
-                m_dxL = anchor->dxL;
-                m_rwT = anchor->rwT;
-                m_dyT = anchor->dyT;
-                m_colR = anchor->colR;
-                m_dxR = anchor->dxR;
-                m_rwB = anchor->rwB;
-                m_dyB = anchor->dyB;
+            const MSO::XlsOfficeArtClientAnchor anchor = spc.clientAnchor().isPresent() ? (*spc.clientAnchor()).anon().get<MSO::XlsOfficeArtClientAnchor>() : MSO::XlsOfficeArtClientAnchor();
+            if(anchor.isValid()) {
+                m_colL = (anchor.colL().isPresent()) ?*anchor.colL() :0;
+                m_dxL = (anchor.dxL().isPresent()) ?*anchor.dxL() :0;
+                m_rwT = (anchor.rwT().isPresent()) ?*anchor.rwT() :0;
+                m_dyT = (anchor.dyT().isPresent()) ?*anchor.dyT() :0;
+                m_colR = (anchor.colR().isPresent()) ?*anchor.colR() :0;
+                m_dxR = (anchor.dxR().isPresent()) ?*anchor.dxR() :0;
+                m_rwB = (anchor.rwB().isPresent()) ?*anchor.rwB() :0;
+                m_dyB = (anchor.dyB().isPresent()) ?*anchor.dyB() :0;
             }
 
             ok = true;
             continue;
         }
 
-        MSO::OfficeArtSpgrContainer* spgr = b.anon.get<MSO::OfficeArtSpgrContainer>();
-        if(spgr) {
-            foreach(MSO::OfficeArtSpgrContainerFileBlock b, spgr->rgfb) {
-                std::cout << "  spgr isOfficeArtSpContainer=" << b.anon.is<MSO::OfficeArtSpContainer>() << " isOfficeArtSpgrContainer=" << b.anon.is<MSO::OfficeArtSpgrContainer>() << " isOfficeArtFSP=" << b.anon.is<MSO::OfficeArtFSP>() << " isOfficeArtFSPGR=" << b.anon.is<MSO::OfficeArtFSPGR>() << " isOfficeArtClientAnchor=" << b.anon.is<MSO::OfficeArtClientAnchor>() << " isOfficeArtClientData=" << b.anon.is<MSO::OfficeArtClientData>() << std::endl;
-                MSO::OfficeArtSpContainer* spc2 = b.anon.get<MSO::OfficeArtSpContainer>();
-                if(spc2) {
+        const MSO::OfficeArtSpgrContainer spgr = b.anon().get<MSO::OfficeArtSpgrContainer>();
+        if(spgr.isValid()) {
+            foreach(const MSO::OfficeArtSpgrContainerFileBlock& b, spgr.rgfb()) {
+                std::cout << "  spgr isOfficeArtSpContainer=" << b.anon().is<MSO::OfficeArtSpContainer>() << " isOfficeArtSpgrContainer=" << b.anon().is<MSO::OfficeArtSpgrContainer>() << " isOfficeArtFSP=" << b.anon().is<MSO::OfficeArtFSP>() << " isOfficeArtFSPGR=" << b.anon().is<MSO::OfficeArtFSPGR>() << " isOfficeArtClientAnchor=" << b.anon().is<MSO::OfficeArtClientAnchor>() << " isOfficeArtClientData=" << b.anon().is<MSO::OfficeArtClientData>() << std::endl;
+                const MSO::OfficeArtSpContainer spc2 = b.anon().get<MSO::OfficeArtSpContainer>();
+                if(spc2.isValid()) {
                     std::cout << "     sp"
-                              << " shapeGroup=" << (spc2->shapeGroup?1:0)
-                              << " deletedshape=" << (spc2->deletedshape?1:0)
-                              << " shapePrimaryOptions=" << (spc2->shapePrimaryOptions?1:0)
-                              << " shapeSecondaryOptions1=" << (spc2->shapeSecondaryOptions1?1:0)
-                              << " shapeTertiaryOptions1=" << (spc2->shapeTertiaryOptions1?1:0)
-                              << " childAnchor=" << (spc2->childAnchor?1:0)
-                              << " clientAnchor=" << (spc2->clientAnchor?1:0)
-                              << " clientData=" << (spc2->clientData?1:0)
-                              << " clientTextbox=" << (spc2->clientTextbox?1:0)
-                              << " shapeSecondaryOptions2=" << (spc2->shapeSecondaryOptions2?1:0)
-                              << " shapeTertiaryOptions2=" << (spc2->shapeTertiaryOptions2?1:0)
+                              << " shapeGroup=" << (spc2.shapeGroup().isPresent()?1:0)
+                              << " deletedshape=" << (spc2.deletedshape().isPresent()?1:0)
+                              << " shapePrimaryOptions=" << (spc2.shapePrimaryOptions().isPresent()?1:0)
+                              << " shapeSecondaryOptions1=" << (spc2.shapeSecondaryOptions1().isPresent()?1:0)
+                              << " shapeTertiaryOptions1=" << (spc2.shapeTertiaryOptions1().isPresent()?1:0)
+                              << " childAnchor=" << (spc2.childAnchor().isPresent()?1:0)
+                              << " clientAnchor=" << (spc2.clientAnchor().isPresent()?1:0)
+                              << " clientData=" << (spc2.clientData().isPresent()?1:0)
+                              << " clientTextbox=" << (spc2.clientTextbox().isPresent()?1:0)
+                              << " shapeSecondaryOptions2=" << (spc2.shapeSecondaryOptions2().isPresent()?1:0)
+                              << " shapeTertiaryOptions2=" << (spc2.shapeTertiaryOptions2().isPresent()?1:0)
                               << std:: endl;
                 }
             }

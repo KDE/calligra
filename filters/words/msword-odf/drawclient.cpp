@@ -49,8 +49,8 @@ QString mm(double v) {
 QRectF
 WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 {
-    const DocOfficeArtClientAnchor* a = ca.anon.get<DocOfficeArtClientAnchor>();
-    if (!a || (a->clientAnchor == -1)) {
+    const DocOfficeArtClientAnchor a = ca.anon().get<DocOfficeArtClientAnchor>();
+    if (!a.isValid() || (a.clientAnchor() == -1)) {
         kDebug(30513) << "INVALID DocOfficeArtClientAnchor, returning QRect(0, 0, 1, 1)";
         return QRect(0, 0, 1, 1);
     }
@@ -64,7 +64,7 @@ WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
         kDebug(30513) << "MISSING plcfSpa, returning QRectF()";
         return QRectF();
     }
-    PLCFIterator<Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
+    PLCFIterator<Word97::FSPA> it(plcfSpa->at(a.clientAnchor()));
     Word97::FSPA* spa = it.current();
     return QRectF(spa->xaLeft, spa->yaTop, (spa->xaRight - spa->xaLeft), (spa->yaBottom - spa->yaTop));
 }
@@ -95,8 +95,8 @@ WordsGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClien
 {
     Q_UNUSED(cd);
     Q_UNUSED(out);
-    const DocOfficeArtClientTextBox* tb = ct.anon.get<DocOfficeArtClientTextBox>();
-    if (!tb) {
+    const DocOfficeArtClientTextBox tb = ct.anon().get<DocOfficeArtClientTextBox>();
+    if (!tb.isValid()) {
         kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         return;
     }
@@ -105,7 +105,7 @@ WordsGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClien
     //located.  The low 2 bytes specify the zero-based index in the textbox
     //chain that the textbox occupies.  [MS-DOC] — v20101219
 
-    uint index = (tb->clientTextBox / 0x10000) - 1;
+    uint index = (tb.clientTextBox() / 0x10000) - 1;
     gh->emitTextBoxFound(index, out.stylesxml);
 }
 
@@ -147,28 +147,28 @@ WordsGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
     gh->setZIndexAttribute(*static_cast<DrawingWriter*>(&out));
 }
 
-const MSO::OfficeArtDggContainer*
+MSO::OfficeArtDggContainer
 WordsGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
 {
 #ifdef USE_OFFICEARTDGG_CONTAINER
-    return &gh->m_officeArtDggContainer;
+    return gh->m_officeArtDggContainer;
 #else
-    return 0;
+    return OfficeArtDggContainer();
 #endif
 }
 
-const MSO::OfficeArtSpContainer*
+MSO::OfficeArtSpContainer
 WordsGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
 {
     //TODO: No supoort for master shapes at the moment.
     Q_UNUSED(spid);
-    return 0;
+    return OfficeArtSpContainer();
 }
 
 QColor
 WordsGraphicsHandler::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
-    return QColor(c.red, c.green, c.blue);
+    return QColor(c.red(), c.green(), c.blue());
 }
 
 QString

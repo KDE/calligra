@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 
 */
-#include "generated/leinputstream.h"
 #include "document.h"
 #include "drawstyle.h"
 

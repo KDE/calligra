@@ -69,8 +69,8 @@ public:
 
     void setRect(const QRect& rect);
     void setRectangle(wvWare::Word97::FSPA& spa);
-    void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
-    void setChildRectangle(MSO::OfficeArtChildAnchor& anchor);
+    void setGroupRectangle(const MSO::OfficeArtFSPGR& fspgr);
+    void setChildRectangle(const MSO::OfficeArtChildAnchor& anchor);
 };
 
 /*
@@ -111,8 +111,8 @@ private:
                                    KoGenStyle& style, Writer& out);
 
 
-        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+        virtual MSO::OfficeArtDggContainer getOfficeArtDggContainer();
+        virtual MSO::OfficeArtSpContainer getMasterShapeContainer(quint32 spid);
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
@@ -193,7 +193,7 @@ private:
      *
      * @return 0 - success, 1 - failed
      */
-    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer* blipStore);
+    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer& blipStore);
 
     /**
      * Process the default properties for all drawing objects stored in
@@ -291,9 +291,10 @@ private:
     const wvWare::Drawings* m_drawings;
     const wvWare::Word97::FIB& m_fib;
 
+    QByteArray m_officeArtData;
     MSO::OfficeArtDggContainer m_officeArtDggContainer;
-    MSO::OfficeArtDgContainer* m_pOfficeArtHeaderDgContainer;
-    MSO::OfficeArtDgContainer* m_pOfficeArtBodyDgContainer;
+    MSO::OfficeArtDgContainer m_pOfficeArtHeaderDgContainer;
+    MSO::OfficeArtDgContainer m_pOfficeArtBodyDgContainer;
 
     QMap<QByteArray, QString> m_picNames; //picture names
 

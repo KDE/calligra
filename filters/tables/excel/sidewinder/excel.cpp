@@ -1740,6 +1740,7 @@ const unsigned MsoDrawingRecord::id = 0xEC;
 class MsoDrawingRecord::Private
 {
 public:
+    QByteArray containerData;
     MSO::OfficeArtDgContainer container;
 };
 
@@ -1767,44 +1768,29 @@ void MsoDrawingRecord::dump(std::ostream& out) const
 void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
     Q_UNUSED(continuePositions);
-    QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
-    QBuffer buff(&byteArr);
-    buff.open(QIODevice::ReadOnly);
-    LEInputStream in(&buff);
-
-    MSO::OfficeArtDgContainer container;
 
     // First try to parse a OfficeArtDgContainer and if that fails try to parse a single OfficeArtSpgrContainerFileBlock. Note
     // that the xls-specs say that the rgChildRec of a MsoDrawing-record always is a OfficeArtDgContainer but that's just wrong
     // since at some documents it's direct the OfficeArtSpContainer we are interested in.
-    LEInputStream::Mark _m = in.setMark();
-    try {
-        MSO::parseOfficeArtDgContainer(in, container);
-    } catch(const IOException&) {
-        in.rewind(_m);
-        container.groupShape = QSharedPointer<MSO::OfficeArtSpgrContainer>(new MSO::OfficeArtSpgrContainer(&container));
-        container.groupShape->rgfb.append(MSO::OfficeArtSpgrContainerFileBlock(&container));
-        try {
-            parseOfficeArtSpgrContainerFileBlock(in, container.groupShape->rgfb.last());
-        } catch(const IOException& e) {
-            std::cerr << "Invalid MsoDrawingRecord record: " << qPrintable(e.msg) << std::endl;
-            setIsValid(false);
-            return;
-        } catch(...) {
-            std::cerr << "Invalid MsoDrawingRecord record: Unexpected error" << std::endl;
-            setIsValid(false);
-            return;
-        }
+    // for those cases, TODO, put a custom RecordHeader in front an parse as
+    // a OfficeArtDgContainer
+    const QByteArray array = QByteArray(reinterpret_cast<const char*>(data), size);
+    MSO::OfficeArtDgContainer container(array.data(), array.size());
+    setIsValid(container.isValid());
+    if (!container.isValid()) {
+        std::cerr << "Invalid MsoDrawingRecord record: Unexpected error" << std::endl;
+        return;
     }
 
     // Be sure we got at least something useful we can work with.
-    if(!container.groupShape) {
+    if(!container.groupShape().isPresent()) {
         std::cerr << "Invalid MsoDrawingRecord record: Expected groupShape missing in the container." << std::endl;
         setIsValid(false);
         return;
     }
     
     // Finally remember the container to be able to extract later content out of it.
+    d->containerData = array;
     d->container = container;
 }
 
@@ -1815,6 +1801,7 @@ const unsigned MsoDrawingGroupRecord::id = 0xEB;
 class MsoDrawingGroupRecord::Private
 {
 public:
+    QByteArray containerData;
     MSO::OfficeArtDggContainer container;
     QList< MsoDrawingBlibItem* > items;
 };
@@ -1852,23 +1839,19 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         return;
     }
     
-    QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
-    QBuffer buff(&byteArr);
-    buff.open(QIODevice::ReadOnly);
-    LEInputStream lei(&buff);
-    
-    try {
-        MSO::parseOfficeArtDggContainer(lei, d->container);
-    } catch (const IOException& e) {
-        std::cerr << "Invalid MsoDrawingGroup record:" << qPrintable(e.msg) << std::endl;
+    const QByteArray array = QByteArray(reinterpret_cast<const char*>(data), size);
+    d->container = MSO::OfficeArtDggContainer(array.data(), array.size());
+    if (d->container.isValid()) {
+        std::cerr << "Invalid MsoDrawingGroup record." << std::endl;
         setIsValid(false);
         return;
     }
+    d->containerData = array;
     
-    if(d->container.blipStore.data() && m_workbook->store()) {
+    if(d->container.blipStore().isPresent() && m_workbook->store()) {
         m_workbook->store()->enterDirectory("Pictures");
     
-        foreach(MSO::OfficeArtBStoreContainerFileBlock fb, d->container.blipStore->rgfb) {
+        foreach(const MSO::OfficeArtBStoreContainerFileBlock& fb, (*d->container.blipStore()).rgfb()) {
             PictureReference ref = savePicture(fb, m_workbook->store());
             if (ref.name.length() == 0) {
                 std::cerr << "Empty name in picture reference for picture with uid=" << ref.uid << " mimetype=" << ref.mimetype << std::endl;
