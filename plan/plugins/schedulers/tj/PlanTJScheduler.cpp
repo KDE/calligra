@@ -39,7 +39,7 @@
 #include "taskjuggler/TjMessageHandler.h"
 
 #include <QString>
-#include <QTimer>
+#include <QTime>
 #include <QMutexLocker>
 #include <QMap>
 
@@ -215,7 +215,6 @@ bool PlanTJScheduler::kplatoToTJ()
     m_tjProject->setEnd( m_project->constraintEndTime().toTime_t() );
     m_tjProject->setScheduleGranularity( 300 ); //5 minutes
 
-    addResources();
     addTasks();
     setConstraints();
     addDependencies();
@@ -295,21 +294,23 @@ bool PlanTJScheduler::kplatoFromTJ()
 {
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
     // FIXME calculate real start/end
-    m_project->setStartTime( m_project->constraintStartTime() );
-    m_project->setEndTime( m_project->constraintEndTime() );
 
-/*    if ( m_backward ) {
-        TJ::Task *key = m_taskmap.key( m_backwardTask );
-        if ( key ) {
-            m_taskmap.remove( key );
-        }
-        delete m_backwardTask;
-    }*/
+    QDateTime start;
+    QDateTime end;
     for ( QMap<TJ::Task*, Task*>::ConstIterator it = m_taskmap.constBegin(); it != m_taskmap.constEnd(); ++it ) {
         if ( ! taskFromTJ( it.key(), it.value() ) ) {
             return false;
         }
+        if ( ! start.isValid() || it.value()->startTime() < start ) {
+            start = it.value()->startTime();
+        }
+        if ( ! end.isValid() || it.value()->endTime() > end ) {
+            end = it.value()->endTime();
+        }
     }
+    m_project->setStartTime( start.isValid() ? start : m_project->constraintStartTime() );
+    m_project->setEndTime( end.isValid() ? end : m_project->constraintEndTime() );
+
     adjustSummaryTasks( m_schedule->summaryTasks() );
 
     calcPertValues();
@@ -454,19 +455,24 @@ bool PlanTJScheduler::exists( QList<CalendarDay*> &lst, CalendarDay *day )
 TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 {
     if ( m_resourcemap.values().contains( r ) ) {
-        kWarning()<<r->name()<<"already exist";
-        return 0;
+        kDebug()<<r->name()<<"already exist";
+        return m_resourcemap.key( r );
     }
-
     TJ::Resource *res = new TJ::Resource( m_tjProject, r->id(), r->name(), 0 );
+    if ( r->type() == Resource::Type_Material ) {
+        res->setEfficiency( 0.0 );
+    }
     res->setEfficiency( (double)(r->units()) / 100. );
     Calendar *cal = r->calendar();
     int days[ 7 ] = { Qt::Sunday, Qt::Monday, Qt::Tuesday, Qt::Wednesday, Qt::Thursday, Qt::Friday, Qt::Saturday };
     for ( int i = 0; i < 7; ++i ) {
+        int count = 0;
         CalendarDay *d = 0;
         for ( Calendar *c = cal; c; c = c->parentCal() ) {
+            QTime t; t.start();
             d = c->weekday( days[ i ] );
-            if ( d->state() != CalendarDay::Undefined ) {
+            Q_ASSERT( d );
+            if ( d == 0 || d->state() != CalendarDay::Undefined ) {
                 break;
             }
         }
@@ -505,19 +511,15 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
             res->addShift( sl );
         }
     }
-
+    if ( m_project->startTime() < r->availableFrom() ) {
+        res->addVacation( new TJ::Interval( toTJInterval( m_project->startTime(), r->availableFrom() ) ) );
+    }
+    if ( m_project->endTime() > r->availableUntil() ) {
+        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->startTime() ) ) );
+    }
     m_resourcemap[res] = r;
     if ( locale() ) { logDebug( m_project, 0, "Added resource: " + r->name() ); }
     return res;
-}
-
-void PlanTJScheduler::addResources()
-{
-    kDebug();
-    QList<Resource*> list = m_project->resourceList();
-    for (int i = 0; i < list.count(); ++i) {
-        addResource( list.at(i) );
-    }
 }
 
 TJ::Task *PlanTJScheduler::addTask( KPlato::Task *task )
@@ -684,45 +686,58 @@ void PlanTJScheduler::addRequests()
 void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
 {
     kDebug();
-    if ( task->constraint() == Node::FixedInterval ) {
-        job->setDuration( 0, ( task->constraintEndTime() - task->constraintStartTime() ).toDouble( Duration::Unit_d ) );
-        if ( locale() ) { logDebug( m_project, 0, task->name() + ": fixed duration set to " + QString::number( job->getDuration( 0 ) ) ); }
-        return;
-    }
     if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_recalculate && task->completion().isFinished() ) ) {
         job->setMilestone( true );
         job->setDuration( 0, 0.0 );
-        if ( locale() ) { logDebug( m_project, 0, task->name() + ": set to milestone, duration set to 0" ); }
         return;
     }
     if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() == 0 ) {
         job->setDuration( 0, task->estimate()->value( Estimate::Use_Expected, m_usePert ).toDouble( Duration::Unit_d ) );
-        if ( locale() ) { logDebug( m_project, 0, task->name() + ": duration set to " + QString::number( job->getDuration( 0 ) ) ); }
         return;
     }
     if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() != 0 ) {
         job->setLength( 0, task->estimate()->value( Estimate::Use_Expected, m_usePert ).toDouble( Duration::Unit_d ) );
-        if ( locale() ) { logDebug( m_project, 0, task->name() + ": length set to " + QString::number( job->getLength( 0 ) ) ); }
         return;
+    }
+    if ( task->constraint() == Node::FixedInterval ) {
+        job->setSpecifiedPeriod( 0, toTJInterval( task->constraintStartTime(), task->constraintEndTime() ) );
     }
     if ( m_recalculate && task->completion().isStarted() ) {
         job->setEffort( 0, task->completion().remainingEffort().toDouble( Duration::Unit_d ) );
-        if ( locale() ) { logDebug( m_project, 0, task->name() + ": (started) effort set to " + QString::number( job->getEffort( 0 ) ) ); }
     } else {
         Estimate *estimate = task->estimate();
         double e = estimate->scale( estimate->value( Estimate::Use_Expected, m_usePert ), Duration::Unit_d, estimate->scales() );
         job->setEffort( 0, e );
-        if ( locale() ) { logDebug( m_project, 0, task->name() + ": effort set to " + QString::number( job->getEffort( 0 ) ) ); }
     }
     if ( task->requests().isEmpty() ) {
         return;
     }
+    // NOTE the required resource concept does not exist in TJ
+    // NOTE make all working resources mandatatory for now
+    // TODO usage limit/units
+    QList<Resource*> required;
     foreach ( ResourceRequest *rr, task->requests().resourceRequests( true /*resolveTeam*/ ) ) {
+        required += rr->requiredResources();
+    }
+    foreach ( ResourceRequest *rr, task->requests().resourceRequests( true /*resolveTeam*/ ) ) {
+        if ( required.contains( rr->resource() ) ) {
+            continue;
+        }
+        TJ::Resource *tjr = addResource( rr->resource() );
         TJ::Allocation *a = new TJ::Allocation();
-        a->addCandidate( m_tjProject->getResource( rr->resource()->id() ) );
-        a->setMandatory( true );
-        if ( locale() ) { logDebug( m_project, 0, task->name() + ": add candidate " + rr->resource()->name() ); }
+        a->addCandidate( tjr );
         job->addAllocation( a );
+        if ( rr->resource()->type() == Resource::Type_Work ) {
+            a->setMandatory( true );
+        }
+        if ( locale() ) { logDebug( task, 0, "Add resource candidate: " + rr->resource()->name() ); }
+        foreach ( Resource *r, rr->requiredResources() ) {
+            TJ::Resource *tjr = addResource( r );
+            a = new TJ::Allocation();
+            a->setMandatory( true );
+            a->addCandidate( tjr );
+            if ( locale() ) { logDebug( task, 0, "Add required resource: " + r->name() ); }
+        }
     }
 }
 

@@ -787,12 +787,13 @@ Project::finishScenario(int sc)
     foreach (CoreAttributes *t, taskList) {
         static_cast<Task*>(t)->finishScenario(sc);
     }
+#if 0
     /* We need to have finished the scenario for all tasks before we can
      * calculate the completion degree. */
     foreach (CoreAttributes *t, taskList) {
         static_cast<Task*>(t)->calcCompletionDegree(sc);
     }
-
+#endif
     /* If the user has not set the minSlackRate to 0 we look for critical
      * pathes. */
     if (getScenario(sc)->getMinSlackRate() > 0.0)

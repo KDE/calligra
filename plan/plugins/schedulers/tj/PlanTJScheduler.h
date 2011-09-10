@@ -92,7 +92,6 @@ protected:
 
     void adjustSummaryTasks( const QList<Node*> &nodes );
 
-    void addResources();
     TJ::Resource *addResource( KPlato::Resource *resource );
     void addTasks();
     TJ::Task *addTask( KPlato::Task *task );
