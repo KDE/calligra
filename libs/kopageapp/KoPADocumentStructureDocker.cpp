@@ -643,12 +643,13 @@ void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
     QMenu menu( this );
 
     // Not connected yet
-    menu.addAction( SmallIcon( "document-new" ), i18n("Add a new slide"), this, SLOT( addPage() ) );
-    menu.addAction( i18n("Delete selected objects"), this, SLOT( deleteItem() ));
+    menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addPage()));
+    menu.addAction(KIcon("edit-delete"), i18n("Delete selected objects"), this, SLOT(deleteItem()));
 
-    menu.addAction( i18n( "Cut" ) ,this,  SLOT( editCut() ) );
-    menu.addAction( i18n( "Copy" ), this,  SLOT( editCopy() ));
-    menu.addAction( i18n( "Paste" ), this, SLOT( editPaste() ) );
+    menu.addSeparator();
+    menu.addAction(KIcon("edit-cut"), i18n("Cut"), this, SLOT(editCut()));
+    menu.addAction(KIcon("edit-copy"), i18n("Copy"), this, SLOT(editCopy()));
+    menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
 
     menu.exec(event->globalPos());
 }
@@ -723,6 +724,7 @@ void KoPADocumentStructureDocker::selectPages(int start, int count)
         }
     }
 }
+
 #include <KoPADocumentStructureDocker.moc>
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;
