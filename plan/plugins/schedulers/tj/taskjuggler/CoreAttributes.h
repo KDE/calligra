@@ -156,4 +156,7 @@ protected:
 
 } // namespace TJ
 
+KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::CoreAttributes* t );
+KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::CoreAttributes& t );
+
 #endif

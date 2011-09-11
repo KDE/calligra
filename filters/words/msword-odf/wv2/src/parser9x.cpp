@@ -728,14 +728,6 @@ void Parser9x::processParagraph( U32 fc )
             m_textHandler->tableEndFound();
         }
 
-        // Now that we have the complete PAP, let's see if this paragraph
-        // belongs to a list.
-        props->createListInfo( *m_lists );
-
-#ifdef WV2_DEBUG_LIST_PROCESSING
-        props->pap().dump();
-#endif
-
         // Get the appropriate style for this paragraph.
         const Style* style = m_properties->styleByIndex( props->pap().istd );
         if ( !style ) {
@@ -749,6 +741,14 @@ void Parser9x::processParagraph( U32 fc )
 
 #ifdef WV2_DEBUG_PARAGRAPHS
         paragraphChp->dump();
+#endif
+
+        // Now that we have the complete PAP and CHP, let's see if this
+        // paragraph belongs to a list.
+        props->createListInfo( *m_lists, *paragraphChp );
+
+#ifdef WV2_DEBUG_LIST_PROCESSING
+        props->pap().dump();
 #endif
 
         // keep it that way, else the variables get deleted!

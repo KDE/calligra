@@ -27,6 +27,9 @@ namespace TJ
  * @short Handles all error or warning messages.
  * @author Chris Schlaeger <cs@kde.org>
  */
+
+class CoreAttributes;
+
 class TjMessageHandler : public QObject
 {
     Q_OBJECT
@@ -39,18 +42,21 @@ public:
     { }
     virtual ~TjMessageHandler() { }
 
-    void warningMessage(const QString& msg, const QString& file = QString::null,
+    void warningMessage( const QString& msg, CoreAttributes *object = 0 );
+    void warningMessage(const QString& msg, const QString& file,
                         int line = -1);
-    void errorMessage(const QString& msg, const QString& file = QString::null,
+
+    void errorMessage(const QString& msg, CoreAttributes *object = 0 );
+    void errorMessage(const QString& msg, const QString& file,
                       int line = -1);
+
     void fatalMessage(const QString& msg, const QString& file = QString::null,
                       int line = -1);
 
     void setConsoleMode(bool cm) { consoleMode = cm; }
 
     void resetCounters() { warnings = errors = infos = debugs = 0; }
-    void reset() { resetCounters(); messages.clear();
-    }
+    void reset() { resetCounters(); messages.clear(); }
 
     bool isWarning( int messagePos ) const { return warningPositions.contains( messagePos ); }
     int getWarnings() const { return warnings; }
@@ -61,12 +67,12 @@ public:
     QString getErrorMessage( int pos ) const { return getMessage( errorPositions.value( pos ) ); }
 
     bool isInfo( int messagePos ) const { return infoPositions.contains( messagePos ); }
-    void infoMessage( const QString &msg ) { ++infos; infoPositions << messages.count(); messages << msg; }
+    void infoMessage( const QString &msg, CoreAttributes *object = 0 );
     int getInfos() const { return infos; }
     QString getInfoMessage( int pos ) const { return getMessage( infoPositions.value( pos ) ); }
 
     bool isDebug( int messagePos ) const { return debugPositions.contains( messagePos ); }
-    void debugMessage( const QString &msg ) { ++debugs; debugPositions << messages.count(); messages << msg; }
+    void debugMessage( const QString &msg, CoreAttributes *object = 0 );
     int getDebugs() const { return debugs; }
     QString getDebugMessage( int pos ) const { return getMessage( debugPositions.value( pos ) ); }
 
@@ -77,6 +83,8 @@ signals:
     void printWarning(const QString& msg, const QString& file, int line);
     void printError(const QString& msg, const QString& file, int line);
     void printFatal(const QString& msg, const QString& file, int line);
+
+    void message( int type, const QString &msg, TJ::CoreAttributes *object );
 
 private:
     bool consoleMode;

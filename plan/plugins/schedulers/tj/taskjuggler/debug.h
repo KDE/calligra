@@ -18,6 +18,16 @@
 #define DEBUGMODE DebugCtrl.getDebugMode()
 #define DEBUGLEVEL DebugCtrl.getDebugLevel()
 
+#define PFDEBUG 1 // Project File Reader
+#define PSDEBUG 2 // Project Scheduler
+#define TSDEBUG 4 // Task Scheduler
+#define RSDEBUG 8 // Resource Scheduler
+#define EXDEBUG 16 // Expression Tree Ev.
+#define MADEBUG 32  // Macro Expander
+#define XXDEBUG 64 // Unused
+#define PADEBUG 128 // Critical Path
+                                                          // Analyzer
+
 #define DEBUGPF(l) ((DEBUGMODE & 1) && DEBUGLEVEL >= l) // Project File Reader
 #define DEBUGPS(l) ((DEBUGMODE & 2) && DEBUGLEVEL >= l) // Project Scheduler
 #define DEBUGTS(l) ((DEBUGMODE & 4) && DEBUGLEVEL >= l) // Task Scheduler

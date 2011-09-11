@@ -67,7 +67,7 @@ namespace wvWare
     class ListInfo
     {
     public:
-        ListInfo( Word97::PAP& pap, ListInfoProvider& listInfoProvider );
+        ListInfo( Word97::PAP& pap, const Word97::CHP& chp, ListInfoProvider& listInfoProvider );
 
         /**
          * The istd linked to the current list/level, istdNil (4095) if none (LSTF::rgistd)
@@ -243,7 +243,7 @@ namespace wvWare
 
         const ListLevel* formattingListLevel() const;
         std::pair<S32, bool> startAt();
-        ListText text() const;
+        ListText text(const Word97::CHP& chp) const;
 
         std::vector<ListData*> m_listData;
         std::vector<ListFormatOverride*> m_listFormatOverride;

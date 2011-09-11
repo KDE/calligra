@@ -112,20 +112,17 @@ void MapBrowserWidget::setInvalidState(const QString& )
 
 QVariant MapBrowserWidget::serializeData(qreal lat, qreal lon, int zoomLevel)
 {
-    QString data("%1;%2;%3");
-    m_serializedData = data.arg(lat).arg(lon).arg(zoomLevel);
-    return QVariant(m_serializedData);
+    return QString("%1;%2;%3").arg(lat).arg(lon).arg(zoomLevel);
 }
 
 void MapBrowserWidget::deserializeData(const QVariant& serialized)
 {
     kDebug() << "seting new data";
-    m_serializedData = serialized.toString();
-    kDebug() << "serializedData:" << m_serializedData << ";" << serialized;
-    //QStringList dataList(m_serializedData.split(";"));
-    QStringList dataList = m_serializedData.split(";");
+    QString serializedData = serialized.toString();
+    kDebug() << "serializedData:" << serializedData << ";" << serialized;
+    QStringList dataList = serializedData.split(";");
     kDebug() << "splited:" << dataList;
-    if(dataList.length()==3){
+    if (dataList.length()>=3) {
         setCenterLatitude(dataList[0].toDouble());
         setCenterLongitude(dataList[1].toDouble());
         zoomView(dataList[2].toInt());

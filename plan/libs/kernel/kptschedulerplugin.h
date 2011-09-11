@@ -160,6 +160,15 @@ public:
     /// Load the @p project from @p document
     static bool loadProject( Project *project, const KoXmlDocument &document );
 
+    ///Add a scheduling error log message
+    void logError( Node *n, Resource *r, const QString &msg, int phase = -1 );
+    ///Add a scheduling warning log message
+    void logWarning( Node *n, Resource *r, const QString &msg, int phase = -1 );
+    ///Add a scheduling information log message
+    void logInfo( Node *n, Resource *r, const QString &msg, int phase = -1 );
+    ///Add a scheduling debug log message
+    void logDebug( Node *n, Resource *r, const QString &msg, int phase = -1 );
+
 signals:
     /// Job has started
     void jobStarted( SchedulerThread *job );

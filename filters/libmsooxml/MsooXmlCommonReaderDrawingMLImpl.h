@@ -5030,13 +5030,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         }
     }
 
-    if (m_currentBulletProperties.bulletFont() == "Wingdings" && m_currentBulletProperties.bulletChar() != "") {
-        // Ooxml files have very often wingdings fonts, but usually they are not installed
-        // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentBulletProperties.setBulletChar("-");
-        m_listStylePropertiesAltered = true;
-    }
-
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
     m_currentCombinedParagraphStyles[m_currentListLevel] = m_currentParagraphStyle;
