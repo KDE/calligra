@@ -507,80 +507,80 @@ public:
     static inline quint32 getSize() { return _size; }
     RecordHeader() {}
     RecordHeader(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    quint8 recVer() const { return m_recVer; }
 private:
     quint8 m_recVer;
 public:
-    quint16 recInstance() const { return m_recInstance; }
+    inline quint8 recVer() const { return m_recVer; }
 private:
     quint16 m_recInstance;
 public:
-    quint16 recType() const { return m_recType; }
+    inline quint16 recInstance() const { return m_recInstance; }
 private:
     quint16 m_recType;
 public:
-    quint32 recLen() const { return m_recLen; }
+    inline quint16 recType() const { return m_recType; }
 private:
     quint32 m_recLen;
+public:
+    inline quint32 recLen() const { return m_recLen; }
 };
 class CurrentUserAtom : public ParsedObject {
 private:
 public:
     CurrentUserAtom() {}
     explicit CurrentUserAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 size() const { return m_size; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_size;
 public:
-    quint32 headerToken() const { return m_headerToken; }
+    inline quint32 size() const { return m_size; }
 private:
     quint32 m_headerToken;
 public:
-    quint32 offsetToCurrentEdit() const { return m_offsetToCurrentEdit; }
+    inline quint32 headerToken() const { return m_headerToken; }
 private:
     quint32 m_offsetToCurrentEdit;
 public:
-    quint16 lenUserName() const { return m_lenUserName; }
+    inline quint32 offsetToCurrentEdit() const { return m_offsetToCurrentEdit; }
 private:
     quint16 m_lenUserName;
 public:
-    quint16 docFileVersion() const { return m_docFileVersion; }
+    inline quint16 lenUserName() const { return m_lenUserName; }
 private:
     quint16 m_docFileVersion;
 public:
-    quint8 majorVersion() const { return m_majorVersion; }
+    inline quint16 docFileVersion() const { return m_docFileVersion; }
 private:
     quint8 m_majorVersion;
 public:
-    quint8 minorVersion() const { return m_minorVersion; }
+    inline quint8 majorVersion() const { return m_majorVersion; }
 private:
     quint8 m_minorVersion;
 public:
-    quint16 unused() const { return m_unused; }
+    inline quint8 minorVersion() const { return m_minorVersion; }
 private:
     quint16 m_unused;
+public:
+    inline quint16 unused() const { return m_unused; }
 private:
     MSOCastArray<char> m_ansiUserName;
 public:
-    MSOCastArray<char> ansiUserName() const { return m_ansiUserName; }
-public:
-    quint32 relVersion() const { return m_relVersion; }
+    const MSOCastArray<char>& ansiUserName() const { return m_ansiUserName; }
 private:
     quint32 m_relVersion;
+public:
+    inline quint32 relVersion() const { return m_relVersion; }
 private:
     MSOCastArray<quint16> m_unicodeUserName;
 public:
-    MSOCastArray<quint16> unicodeUserName() const { return m_unicodeUserName; }
+    const MSOCastArray<quint16>& unicodeUserName() const { return m_unicodeUserName; }
 private:
     MSOCastArray<char> m_unknown;
 public:
-    MSOCastArray<char> unknown() const { return m_unknown; }
+    const MSOCastArray<char>& unknown() const { return m_unknown; }
 };
 class TODOS : public ParsedObject {
 private:
@@ -590,7 +590,7 @@ public:
 private:
     MSOArray<Byte> m_anon;
 public:
-    MSOArray<Byte> anon() const { return m_anon; }
+    inline const MSOArray<Byte>& anon() const { return m_anon; }
 };
 class Byte : public FixedSizeParsedObject {
 private:
@@ -599,10 +599,10 @@ public:
     static inline quint32 getSize() { return _size; }
     Byte() {}
     Byte(const char* data, quint32/*ignored*/ = 0);// 1 bytes
-public:
-    quint8 b() const { return m_b; }
 private:
     quint8 m_b;
+public:
+    inline quint8 b() const { return m_b; }
 };
 class ZeroByte : public FixedSizeParsedObject {
 private:
@@ -611,24 +611,24 @@ public:
     static inline quint32 getSize() { return _size; }
     ZeroByte() {}
     ZeroByte(const char* data, quint32/*ignored*/ = 0);// 1 bytes
-public:
-    quint8 b() const { return m_b; }
 private:
     quint8 m_b;
+public:
+    inline quint8 b() const { return m_b; }
 };
 class CurrentUserStream : public ParsedObject {
 private:
 public:
     CurrentUserStream() {}
     explicit CurrentUserStream(const char* data, const quint32 maxsize);
-public:
-    CurrentUserAtom anon1() const { return m_anon1; }
 private:
     CurrentUserAtom m_anon1;
+public:
+    inline const CurrentUserAtom& anon1() const { return m_anon1; }
 private:
     MSOArray<Byte> m_trailing;
 public:
-    MSOArray<Byte> trailing() const { return m_trailing; }
+    inline const MSOArray<Byte>& trailing() const { return m_trailing; }
 };
 class OfficeArtBStoreDelay : public ParsedObject {
 private:
@@ -638,7 +638,7 @@ public:
 private:
     MSOArray<OfficeArtBStoreContainerFileBlock> m_rgfb;
 public:
-    MSOArray<OfficeArtBStoreContainerFileBlock> rgfb() const { return m_rgfb; }
+    inline const MSOArray<OfficeArtBStoreContainerFileBlock>& rgfb() const { return m_rgfb; }
 };
 class OfficeArtRecordHeader : public FixedSizeParsedObject {
 private:
@@ -647,126 +647,126 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtRecordHeader() {}
     OfficeArtRecordHeader(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    quint8 recVer() const { return m_recVer; }
 private:
     quint8 m_recVer;
 public:
-    quint16 recInstance() const { return m_recInstance; }
+    inline quint8 recVer() const { return m_recVer; }
 private:
     quint16 m_recInstance;
 public:
-    quint16 recType() const { return m_recType; }
+    inline quint16 recInstance() const { return m_recInstance; }
 private:
     quint16 m_recType;
 public:
-    quint32 recLen() const { return m_recLen; }
+    inline quint16 recType() const { return m_recType; }
 private:
     quint32 m_recLen;
+public:
+    inline quint32 recLen() const { return m_recLen; }
 };
 class OfficeArtBlipJPEG : public ParsedObject {
 private:
 public:
     OfficeArtBlipJPEG() {}
     explicit OfficeArtBlipJPEG(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_rgbUid1;
 public:
-    MSOCastArray<char> rgbUid1() const { return m_rgbUid1; }
+    const MSOCastArray<char>& rgbUid1() const { return m_rgbUid1; }
 private:
     MSOCastArray<char> m_rgbUid2;
 public:
-    MSOCastArray<char> rgbUid2() const { return m_rgbUid2; }
-public:
-    quint8 tag() const { return m_tag; }
+    const MSOCastArray<char>& rgbUid2() const { return m_rgbUid2; }
 private:
     quint8 m_tag;
+public:
+    inline quint8 tag() const { return m_tag; }
 private:
     MSOCastArray<char> m_BLIPFileData;
 public:
-    MSOCastArray<char> BLIPFileData() const { return m_BLIPFileData; }
+    const MSOCastArray<char>& BLIPFileData() const { return m_BLIPFileData; }
 };
 class OfficeArtBlipPNG : public ParsedObject {
 private:
 public:
     OfficeArtBlipPNG() {}
     explicit OfficeArtBlipPNG(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_rgbUid1;
 public:
-    MSOCastArray<char> rgbUid1() const { return m_rgbUid1; }
+    const MSOCastArray<char>& rgbUid1() const { return m_rgbUid1; }
 private:
     MSOCastArray<char> m_rgbUid2;
 public:
-    MSOCastArray<char> rgbUid2() const { return m_rgbUid2; }
-public:
-    quint8 tag() const { return m_tag; }
+    const MSOCastArray<char>& rgbUid2() const { return m_rgbUid2; }
 private:
     quint8 m_tag;
+public:
+    inline quint8 tag() const { return m_tag; }
 private:
     MSOCastArray<char> m_BLIPFileData;
 public:
-    MSOCastArray<char> BLIPFileData() const { return m_BLIPFileData; }
+    const MSOCastArray<char>& BLIPFileData() const { return m_BLIPFileData; }
 };
 class OfficeArtBlipDIB : public ParsedObject {
 private:
 public:
     OfficeArtBlipDIB() {}
     explicit OfficeArtBlipDIB(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_rgbUid1;
 public:
-    MSOCastArray<char> rgbUid1() const { return m_rgbUid1; }
+    const MSOCastArray<char>& rgbUid1() const { return m_rgbUid1; }
 private:
     MSOCastArray<char> m_rgbUid2;
 public:
-    MSOCastArray<char> rgbUid2() const { return m_rgbUid2; }
-public:
-    quint8 tag() const { return m_tag; }
+    const MSOCastArray<char>& rgbUid2() const { return m_rgbUid2; }
 private:
     quint8 m_tag;
+public:
+    inline quint8 tag() const { return m_tag; }
 private:
     MSOCastArray<char> m_BLIPFileData;
 public:
-    MSOCastArray<char> BLIPFileData() const { return m_BLIPFileData; }
+    const MSOCastArray<char>& BLIPFileData() const { return m_BLIPFileData; }
 };
 class OfficeArtBlipTIFF : public ParsedObject {
 private:
 public:
     OfficeArtBlipTIFF() {}
     explicit OfficeArtBlipTIFF(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_rgbUid1;
 public:
-    MSOCastArray<char> rgbUid1() const { return m_rgbUid1; }
+    const MSOCastArray<char>& rgbUid1() const { return m_rgbUid1; }
 private:
     MSOCastArray<char> m_rgbUid2;
 public:
-    MSOCastArray<char> rgbUid2() const { return m_rgbUid2; }
-public:
-    quint8 tag() const { return m_tag; }
+    const MSOCastArray<char>& rgbUid2() const { return m_rgbUid2; }
 private:
     quint8 m_tag;
+public:
+    inline quint8 tag() const { return m_tag; }
 private:
     MSOCastArray<char> m_BLIPFileData;
 public:
-    MSOCastArray<char> BLIPFileData() const { return m_BLIPFileData; }
+    const MSOCastArray<char>& BLIPFileData() const { return m_BLIPFileData; }
 };
 class RECT : public FixedSizeParsedObject {
 private:
@@ -775,22 +775,22 @@ public:
     static inline quint32 getSize() { return _size; }
     RECT() {}
     RECT(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    qint32 left() const { return m_left; }
 private:
     qint32 m_left;
 public:
-    qint32 top() const { return m_top; }
+    inline qint32 left() const { return m_left; }
 private:
     qint32 m_top;
 public:
-    qint32 right() const { return m_right; }
+    inline qint32 top() const { return m_top; }
 private:
     qint32 m_right;
 public:
-    qint32 bottom() const { return m_bottom; }
+    inline qint32 right() const { return m_right; }
 private:
     qint32 m_bottom;
+public:
+    inline qint32 bottom() const { return m_bottom; }
 };
 class POINT : public FixedSizeParsedObject {
 private:
@@ -799,14 +799,14 @@ public:
     static inline quint32 getSize() { return _size; }
     POINT() {}
     POINT(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    qint32 x() const { return m_x; }
 private:
     qint32 m_x;
 public:
-    qint32 y() const { return m_y; }
+    inline qint32 x() const { return m_x; }
 private:
     qint32 m_y;
+public:
+    inline qint32 y() const { return m_y; }
 };
 class PowerPointStructs : public ParsedObject {
 private:
@@ -816,7 +816,7 @@ public:
 private:
     MSOArray<PowerPointStruct> m_anon;
 public:
-    MSOArray<PowerPointStruct> anon() const { return m_anon; }
+    inline const MSOArray<PowerPointStruct>& anon() const { return m_anon; }
 };
 class SoundCollectionAtom : public FixedSizeParsedObject {
 private:
@@ -825,14 +825,14 @@ public:
     static inline quint32 getSize() { return _size; }
     SoundCollectionAtom() {}
     SoundCollectionAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 soundIdSeed() const { return m_soundIdSeed; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_soundIdSeed;
+public:
+    inline quint32 soundIdSeed() const { return m_soundIdSeed; }
 };
 class HeadersFootersAtom : public FixedSizeParsedObject {
 private:
@@ -841,118 +841,118 @@ public:
     static inline quint32 getSize() { return _size; }
     HeadersFootersAtom() {}
     HeadersFootersAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint16 formatId() const { return m_formatId; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint16 m_formatId;
 public:
-    bool fHasDate() const { return m_fHasDate; }
+    inline qint16 formatId() const { return m_formatId; }
 private:
     bool m_fHasDate;
 public:
-    bool fHasTodayDate() const { return m_fHasTodayDate; }
+    inline bool fHasDate() const { return m_fHasDate; }
 private:
     bool m_fHasTodayDate;
 public:
-    bool fHasUserDate() const { return m_fHasUserDate; }
+    inline bool fHasTodayDate() const { return m_fHasTodayDate; }
 private:
     bool m_fHasUserDate;
 public:
-    bool fHasSlideNumber() const { return m_fHasSlideNumber; }
+    inline bool fHasUserDate() const { return m_fHasUserDate; }
 private:
     bool m_fHasSlideNumber;
 public:
-    bool fHasHeader() const { return m_fHasHeader; }
+    inline bool fHasSlideNumber() const { return m_fHasSlideNumber; }
 private:
     bool m_fHasHeader;
 public:
-    bool fHasFooter() const { return m_fHasFooter; }
+    inline bool fHasHeader() const { return m_fHasHeader; }
 private:
     bool m_fHasFooter;
 public:
-    quint8 reserved1() const { return m_reserved1; }
+    inline bool fHasFooter() const { return m_fHasFooter; }
 private:
     quint8 m_reserved1;
 public:
-    quint8 reserved2() const { return m_reserved2; }
+    inline quint8 reserved1() const { return m_reserved1; }
 private:
     quint8 m_reserved2;
+public:
+    inline quint8 reserved2() const { return m_reserved2; }
 };
 class UserDateAtom : public ParsedObject {
 private:
 public:
     UserDateAtom() {}
     explicit UserDateAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_userDate;
 public:
-    MSOCastArray<quint16> userDate() const { return m_userDate; }
+    const MSOCastArray<quint16>& userDate() const { return m_userDate; }
 };
 class HeaderAtom : public ParsedObject {
 private:
 public:
     HeaderAtom() {}
     explicit HeaderAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_header;
 public:
-    MSOCastArray<quint16> header() const { return m_header; }
+    const MSOCastArray<quint16>& header() const { return m_header; }
 };
 class FooterAtom : public ParsedObject {
 private:
 public:
     FooterAtom() {}
     explicit FooterAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_footer;
 public:
-    MSOCastArray<quint16> footer() const { return m_footer; }
+    const MSOCastArray<quint16>& footer() const { return m_footer; }
 };
 class PerSlideHeadersFootersContainer : public ParsedObject {
 private:
 public:
     PerSlideHeadersFootersContainer() {}
     explicit PerSlideHeadersFootersContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    HeadersFootersAtom hfAtom() const { return m_hfAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     HeadersFootersAtom m_hfAtom;
 public:
-    MSONullable<UserDateAtom> userDateAtom() const { return m_userDateAtom; }
+    inline const HeadersFootersAtom& hfAtom() const { return m_hfAtom; }
 private:
     MSONullable<UserDateAtom> m_userDateAtom;
 public:
-    MSONullable<HeaderAtom> headerAtom() const { return m_headerAtom; }
+    inline const MSONullable<UserDateAtom>& userDateAtom() const { return m_userDateAtom; }
 private:
     MSONullable<HeaderAtom> m_headerAtom;
 public:
-    MSONullable<FooterAtom> footerAtom() const { return m_footerAtom; }
+    inline const MSONullable<HeaderAtom>& headerAtom() const { return m_headerAtom; }
 private:
     MSONullable<FooterAtom> m_footerAtom;
 public:
-    MSONullable<UserDateAtom> userDateAtom2() const { return m_userDateAtom2; }
+    inline const MSONullable<FooterAtom>& footerAtom() const { return m_footerAtom; }
 private:
     MSONullable<UserDateAtom> m_userDateAtom2;
+public:
+    inline const MSONullable<UserDateAtom>& userDateAtom2() const { return m_userDateAtom2; }
 };
 class EndDocumentAtom : public FixedSizeParsedObject {
 private:
@@ -961,24 +961,24 @@ public:
     static inline quint32 getSize() { return _size; }
     EndDocumentAtom() {}
     EndDocumentAtom(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 };
 class DocInfoListContainer : public ParsedObject {
 private:
 public:
     DocInfoListContainer() {}
     explicit DocInfoListContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<DocInfoListSubContainerOrAtom> m_rgChildRec;
 public:
-    MSOArray<DocInfoListSubContainerOrAtom> rgChildRec() const { return m_rgChildRec; }
+    inline const MSOArray<DocInfoListSubContainerOrAtom>& rgChildRec() const { return m_rgChildRec; }
 };
 class SlideViewInfoAtom : public FixedSizeParsedObject {
 private:
@@ -987,22 +987,22 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideViewInfoAtom() {}
     SlideViewInfoAtom(const char* data, quint32/*ignored*/ = 0);// 11 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint8 unused1() const { return m_unused1; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint8 m_unused1;
 public:
-    quint8 fSnapToGrid() const { return m_fSnapToGrid; }
+    inline quint8 unused1() const { return m_unused1; }
 private:
     quint8 m_fSnapToGrid;
 public:
-    quint8 fSnapToShape() const { return m_fSnapToShape; }
+    inline quint8 fSnapToGrid() const { return m_fSnapToGrid; }
 private:
     quint8 m_fSnapToShape;
+public:
+    inline quint8 fSnapToShape() const { return m_fSnapToShape; }
 };
 class GuideAtom : public FixedSizeParsedObject {
 private:
@@ -1011,32 +1011,32 @@ public:
     static inline quint32 getSize() { return _size; }
     GuideAtom() {}
     GuideAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 type() const { return m_type; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_type;
 public:
-    qint32 pos() const { return m_pos; }
+    inline quint32 type() const { return m_type; }
 private:
     qint32 m_pos;
+public:
+    inline qint32 pos() const { return m_pos; }
 };
 class DocProgTagsContainer : public ParsedObject {
 private:
 public:
     DocProgTagsContainer() {}
     explicit DocProgTagsContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<DocProgTagsSubContainerOrAtom> m_rgChildRec;
 public:
-    MSOArray<DocProgTagsSubContainerOrAtom> rgChildRec() const { return m_rgChildRec; }
+    inline const MSOArray<DocProgTagsSubContainerOrAtom>& rgChildRec() const { return m_rgChildRec; }
 };
 class TextAutoNumberScheme : public FixedSizeParsedObject {
 private:
@@ -1045,28 +1045,28 @@ public:
     static inline quint32 getSize() { return _size; }
     TextAutoNumberScheme() {}
     TextAutoNumberScheme(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint16 scheme() const { return m_scheme; }
 private:
     quint16 m_scheme;
 public:
-    quint16 startNum() const { return m_startNum; }
+    inline quint16 scheme() const { return m_scheme; }
 private:
     quint16 m_startNum;
+public:
+    inline quint16 startNum() const { return m_startNum; }
 };
 class BlipCollection9Container : public ParsedObject {
 private:
 public:
     BlipCollection9Container() {}
     explicit BlipCollection9Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<BlipEntityAtom> m_rgBlipEntityAtom;
 public:
-    MSOArray<BlipEntityAtom> rgBlipEntityAtom() const { return m_rgBlipEntityAtom; }
+    inline const MSOArray<BlipEntityAtom>& rgBlipEntityAtom() const { return m_rgBlipEntityAtom; }
 };
 class Kinsoku9Atom : public FixedSizeParsedObject {
 private:
@@ -1075,48 +1075,48 @@ public:
     static inline quint32 getSize() { return _size; }
     Kinsoku9Atom() {}
     Kinsoku9Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint8 korLevel() const { return m_korLevel; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint8 m_korLevel;
 public:
-    quint8 scLevel() const { return m_scLevel; }
+    inline quint8 korLevel() const { return m_korLevel; }
 private:
     quint8 m_scLevel;
 public:
-    quint8 tcLevel() const { return m_tcLevel; }
+    inline quint8 scLevel() const { return m_scLevel; }
 private:
     quint8 m_tcLevel;
 public:
-    quint8 jpnLevel() const { return m_jpnLevel; }
+    inline quint8 tcLevel() const { return m_tcLevel; }
 private:
     quint8 m_jpnLevel;
 public:
-    quint8 reserveda() const { return m_reserveda; }
+    inline quint8 jpnLevel() const { return m_jpnLevel; }
 private:
     quint8 m_reserveda;
 public:
-    quint32 reservedb() const { return m_reservedb; }
+    inline quint8 reserveda() const { return m_reserveda; }
 private:
     quint32 m_reservedb;
+public:
+    inline quint32 reservedb() const { return m_reservedb; }
 };
 class ExHyperlink9Container : public ParsedObject {
 private:
 public:
     ExHyperlink9Container() {}
     explicit ExHyperlink9Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class PresAdvisorFlags9Atom : public FixedSizeParsedObject {
 private:
@@ -1125,76 +1125,76 @@ public:
     static inline quint32 getSize() { return _size; }
     PresAdvisorFlags9Atom() {}
     PresAdvisorFlags9Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    bool fDisableCaseStyleTitleRule() const { return m_fDisableCaseStyleTitleRule; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     bool m_fDisableCaseStyleTitleRule;
 public:
-    bool fDisableCaseStyleBodyRule() const { return m_fDisableCaseStyleBodyRule; }
+    inline bool fDisableCaseStyleTitleRule() const { return m_fDisableCaseStyleTitleRule; }
 private:
     bool m_fDisableCaseStyleBodyRule;
 public:
-    bool fDisableEndPunctuationTitleRule() const { return m_fDisableEndPunctuationTitleRule; }
+    inline bool fDisableCaseStyleBodyRule() const { return m_fDisableCaseStyleBodyRule; }
 private:
     bool m_fDisableEndPunctuationTitleRule;
 public:
-    bool fDisableEndPunctuationBodyRule() const { return m_fDisableEndPunctuationBodyRule; }
+    inline bool fDisableEndPunctuationTitleRule() const { return m_fDisableEndPunctuationTitleRule; }
 private:
     bool m_fDisableEndPunctuationBodyRule;
 public:
-    bool fDisableTooManyBulletsRule() const { return m_fDisableTooManyBulletsRule; }
+    inline bool fDisableEndPunctuationBodyRule() const { return m_fDisableEndPunctuationBodyRule; }
 private:
     bool m_fDisableTooManyBulletsRule;
 public:
-    bool fDisableFontSizeTitleRule() const { return m_fDisableFontSizeTitleRule; }
+    inline bool fDisableTooManyBulletsRule() const { return m_fDisableTooManyBulletsRule; }
 private:
     bool m_fDisableFontSizeTitleRule;
 public:
-    bool fDisableFontSizeBodyRule() const { return m_fDisableFontSizeBodyRule; }
+    inline bool fDisableFontSizeTitleRule() const { return m_fDisableFontSizeTitleRule; }
 private:
     bool m_fDisableFontSizeBodyRule;
 public:
-    bool fDisableNumberOfLinesTitleRule() const { return m_fDisableNumberOfLinesTitleRule; }
+    inline bool fDisableFontSizeBodyRule() const { return m_fDisableFontSizeBodyRule; }
 private:
     bool m_fDisableNumberOfLinesTitleRule;
 public:
-    bool fDisableNumberOfLinesBodyRule() const { return m_fDisableNumberOfLinesBodyRule; }
+    inline bool fDisableNumberOfLinesTitleRule() const { return m_fDisableNumberOfLinesTitleRule; }
 private:
     bool m_fDisableNumberOfLinesBodyRule;
 public:
-    bool fDisableTooManyFontsRule() const { return m_fDisableTooManyFontsRule; }
+    inline bool fDisableNumberOfLinesBodyRule() const { return m_fDisableNumberOfLinesBodyRule; }
 private:
     bool m_fDisableTooManyFontsRule;
 public:
-    bool fDisablePrintTip() const { return m_fDisablePrintTip; }
+    inline bool fDisableTooManyFontsRule() const { return m_fDisableTooManyFontsRule; }
 private:
     bool m_fDisablePrintTip;
 public:
-    quint8 reserveda() const { return m_reserveda; }
+    inline bool fDisablePrintTip() const { return m_fDisablePrintTip; }
 private:
     quint8 m_reserveda;
 public:
-    quint16 reservedb() const { return m_reservedb; }
+    inline quint8 reserveda() const { return m_reserveda; }
 private:
     quint16 m_reservedb;
+public:
+    inline quint16 reservedb() const { return m_reservedb; }
 };
 class EnvelopeData9Atom : public ParsedObject {
 private:
 public:
     EnvelopeData9Atom() {}
     explicit EnvelopeData9Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class EnvelopeFlags9Atom : public FixedSizeParsedObject {
 private:
@@ -1203,38 +1203,38 @@ public:
     static inline quint32 getSize() { return _size; }
     EnvelopeFlags9Atom() {}
     EnvelopeFlags9Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    bool fHasEnvelope() const { return m_fHasEnvelope; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     bool m_fHasEnvelope;
 public:
-    bool fEnvelopeVisible() const { return m_fEnvelopeVisible; }
+    inline bool fHasEnvelope() const { return m_fHasEnvelope; }
 private:
     bool m_fEnvelopeVisible;
 public:
-    quint8 reserved1() const { return m_reserved1; }
+    inline bool fEnvelopeVisible() const { return m_fEnvelopeVisible; }
 private:
     quint8 m_reserved1;
 public:
-    bool fEnvelopeDirty() const { return m_fEnvelopeDirty; }
+    inline quint8 reserved1() const { return m_reserved1; }
 private:
     bool m_fEnvelopeDirty;
 public:
-    quint8 reserved2a() const { return m_reserved2a; }
+    inline bool fEnvelopeDirty() const { return m_fEnvelopeDirty; }
 private:
     quint8 m_reserved2a;
 public:
-    quint8 reserved2b() const { return m_reserved2b; }
+    inline quint8 reserved2a() const { return m_reserved2a; }
 private:
     quint8 m_reserved2b;
 public:
-    quint16 reserved2c() const { return m_reserved2c; }
+    inline quint8 reserved2b() const { return m_reserved2b; }
 private:
     quint16 m_reserved2c;
+public:
+    inline quint16 reserved2c() const { return m_reserved2c; }
 };
 class HTMLDocInfo9Atom : public FixedSizeParsedObject {
 private:
@@ -1243,112 +1243,112 @@ public:
     static inline quint32 getSize() { return _size; }
     HTMLDocInfo9Atom() {}
     HTMLDocInfo9Atom(const char* data, quint32/*ignored*/ = 0);// 24 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 unused1() const { return m_unused1; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_unused1;
 public:
-    quint32 encoding() const { return m_encoding; }
+    inline quint32 unused1() const { return m_unused1; }
 private:
     quint32 m_encoding;
 public:
-    quint16 frameColorType() const { return m_frameColorType; }
+    inline quint32 encoding() const { return m_encoding; }
 private:
     quint16 m_frameColorType;
 public:
-    quint8 screenSize() const { return m_screenSize; }
+    inline quint16 frameColorType() const { return m_frameColorType; }
 private:
     quint8 m_screenSize;
 public:
-    quint8 unused2() const { return m_unused2; }
+    inline quint8 screenSize() const { return m_screenSize; }
 private:
     quint8 m_unused2;
 public:
-    quint8 outputType() const { return m_outputType; }
+    inline quint8 unused2() const { return m_unused2; }
 private:
     quint8 m_outputType;
 public:
-    bool fShowFrame() const { return m_fShowFrame; }
+    inline quint8 outputType() const { return m_outputType; }
 private:
     bool m_fShowFrame;
 public:
-    bool fResizeGraphics() const { return m_fResizeGraphics; }
+    inline bool fShowFrame() const { return m_fShowFrame; }
 private:
     bool m_fResizeGraphics;
 public:
-    bool fOrganizeInFolder() const { return m_fOrganizeInFolder; }
+    inline bool fResizeGraphics() const { return m_fResizeGraphics; }
 private:
     bool m_fOrganizeInFolder;
 public:
-    bool fUseLongFileNames() const { return m_fUseLongFileNames; }
+    inline bool fOrganizeInFolder() const { return m_fOrganizeInFolder; }
 private:
     bool m_fUseLongFileNames;
 public:
-    bool fRelyOnVML() const { return m_fRelyOnVML; }
+    inline bool fUseLongFileNames() const { return m_fUseLongFileNames; }
 private:
     bool m_fRelyOnVML;
 public:
-    bool fAllowPNG() const { return m_fAllowPNG; }
+    inline bool fRelyOnVML() const { return m_fRelyOnVML; }
 private:
     bool m_fAllowPNG;
 public:
-    bool fShowSlideAnimation() const { return m_fShowSlideAnimation; }
+    inline bool fAllowPNG() const { return m_fAllowPNG; }
 private:
     bool m_fShowSlideAnimation;
 public:
-    bool reserved1() const { return m_reserved1; }
+    inline bool fShowSlideAnimation() const { return m_fShowSlideAnimation; }
 private:
     bool m_reserved1;
 public:
-    quint16 unused3() const { return m_unused3; }
+    inline bool reserved1() const { return m_reserved1; }
 private:
     quint16 m_unused3;
+public:
+    inline quint16 unused3() const { return m_unused3; }
 };
 class HTMLPublishInfo9Container : public ParsedObject {
 private:
 public:
     HTMLPublishInfo9Container() {}
     explicit HTMLPublishInfo9Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class BroadcastDocInfo9Container : public ParsedObject {
 private:
 public:
     BroadcastDocInfo9Container() {}
     explicit BroadcastDocInfo9Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class OutlineTextProps9Container : public ParsedObject {
 private:
 public:
     OutlineTextProps9Container() {}
     explicit OutlineTextProps9Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OutlineTextProps9Entry> m_rgOutlineTextProps9Entry;
 public:
-    MSOArray<OutlineTextProps9Entry> rgOutlineTextProps9Entry() const { return m_rgOutlineTextProps9Entry; }
+    inline const MSOArray<OutlineTextProps9Entry>& rgOutlineTextProps9Entry() const { return m_rgOutlineTextProps9Entry; }
 };
 class OutlineTextPropsHeaderExAtom : public FixedSizeParsedObject {
 private:
@@ -1357,46 +1357,46 @@ public:
     static inline quint32 getSize() { return _size; }
     OutlineTextPropsHeaderExAtom() {}
     OutlineTextPropsHeaderExAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 slideIdRef() const { return m_slideIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_slideIdRef;
 public:
-    quint32 txType() const { return m_txType; }
+    inline quint32 slideIdRef() const { return m_slideIdRef; }
 private:
     quint32 m_txType;
+public:
+    inline quint32 txType() const { return m_txType; }
 };
 class StyleTextProp9Atom : public ParsedObject {
 private:
 public:
     StyleTextProp9Atom() {}
     explicit StyleTextProp9Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<StyleTextProp9> m_rgStyleTextProp9;
 public:
-    MSOArray<StyleTextProp9> rgStyleTextProp9() const { return m_rgStyleTextProp9; }
+    inline const MSOArray<StyleTextProp9>& rgStyleTextProp9() const { return m_rgStyleTextProp9; }
 };
 class FontCollection10Container : public ParsedObject {
 private:
 public:
     FontCollection10Container() {}
     explicit FontCollection10Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<FontCollectionEntry> m_rgFontCollectionEntry;
 public:
-    MSOArray<FontCollectionEntry> rgFontCollectionEntry() const { return m_rgFontCollectionEntry; }
+    inline const MSOArray<FontCollectionEntry>& rgFontCollectionEntry() const { return m_rgFontCollectionEntry; }
 };
 class GridSpacing10Atom : public FixedSizeParsedObject {
 private:
@@ -1405,32 +1405,32 @@ public:
     static inline quint32 getSize() { return _size; }
     GridSpacing10Atom() {}
     GridSpacing10Atom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 x() const { return m_x; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_x;
 public:
-    quint32 y() const { return m_y; }
+    inline quint32 x() const { return m_x; }
 private:
     quint32 m_y;
+public:
+    inline quint32 y() const { return m_y; }
 };
 class AuthorNameAtom : public ParsedObject {
 private:
 public:
     AuthorNameAtom() {}
     explicit AuthorNameAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_authorName;
 public:
-    MSOCastArray<char> authorName() const { return m_authorName; }
+    const MSOCastArray<char>& authorName() const { return m_authorName; }
 };
 class CommentIndex10Atom : public FixedSizeParsedObject {
 private:
@@ -1439,18 +1439,18 @@ public:
     static inline quint32 getSize() { return _size; }
     CommentIndex10Atom() {}
     CommentIndex10Atom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 colorIndex() const { return m_colorIndex; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_colorIndex;
 public:
-    qint32 commentIndexSeed() const { return m_commentIndexSeed; }
+    inline qint32 colorIndex() const { return m_colorIndex; }
 private:
     qint32 m_commentIndexSeed;
+public:
+    inline qint32 commentIndexSeed() const { return m_commentIndexSeed; }
 };
 class FontEmbedFlags10Atom : public FixedSizeParsedObject {
 private:
@@ -1459,54 +1459,54 @@ public:
     static inline quint32 getSize() { return _size; }
     FontEmbedFlags10Atom() {}
     FontEmbedFlags10Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    bool fSubset() const { return m_fSubset; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     bool m_fSubset;
 public:
-    bool fSubsetOptionConfirmed() const { return m_fSubsetOptionConfirmed; }
+    inline bool fSubset() const { return m_fSubset; }
 private:
     bool m_fSubsetOptionConfirmed;
 public:
-    quint16 unuseda() const { return m_unuseda; }
+    inline bool fSubsetOptionConfirmed() const { return m_fSubsetOptionConfirmed; }
 private:
     quint16 m_unuseda;
 public:
-    quint16 unusedb() const { return m_unusedb; }
+    inline quint16 unuseda() const { return m_unuseda; }
 private:
     quint16 m_unusedb;
+public:
+    inline quint16 unusedb() const { return m_unusedb; }
 };
 class CopyrightAtom : public ParsedObject {
 private:
 public:
     CopyrightAtom() {}
     explicit CopyrightAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_copyright;
 public:
-    MSOCastArray<char> copyright() const { return m_copyright; }
+    const MSOCastArray<char>& copyright() const { return m_copyright; }
 };
 class KeywordsAtom : public ParsedObject {
 private:
 public:
     KeywordsAtom() {}
     explicit KeywordsAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_keywords;
 public:
-    MSOCastArray<char> keywords() const { return m_keywords; }
+    const MSOCastArray<char>& keywords() const { return m_keywords; }
 };
 class FilterPrivacyFlags10Atom : public FixedSizeParsedObject {
 private:
@@ -1515,54 +1515,54 @@ public:
     static inline quint32 getSize() { return _size; }
     FilterPrivacyFlags10Atom() {}
     FilterPrivacyFlags10Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    bool fRemovePII() const { return m_fRemovePII; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     bool m_fRemovePII;
 public:
-    quint8 reserved2a() const { return m_reserved2a; }
+    inline bool fRemovePII() const { return m_fRemovePII; }
 private:
     quint8 m_reserved2a;
 public:
-    quint8 reserved2b() const { return m_reserved2b; }
+    inline quint8 reserved2a() const { return m_reserved2a; }
 private:
     quint8 m_reserved2b;
 public:
-    quint16 reserved2c() const { return m_reserved2c; }
+    inline quint8 reserved2b() const { return m_reserved2b; }
 private:
     quint16 m_reserved2c;
+public:
+    inline quint16 reserved2c() const { return m_reserved2c; }
 };
 class OutlineTextProps10Container : public ParsedObject {
 private:
 public:
     OutlineTextProps10Container() {}
     explicit OutlineTextProps10Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OutlineTextProps10Entry> m_rgOutlineTextProps10Entry;
 public:
-    MSOArray<OutlineTextProps10Entry> rgOutlineTextProps10Entry() const { return m_rgOutlineTextProps10Entry; }
+    inline const MSOArray<OutlineTextProps10Entry>& rgOutlineTextProps10Entry() const { return m_rgOutlineTextProps10Entry; }
 };
 class StyleTextProp10Atom : public ParsedObject {
 private:
 public:
     StyleTextProp10Atom() {}
     explicit StyleTextProp10Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<TextCFException10> m_rgStyleTextProp10;
 public:
-    MSOArray<TextCFException10> rgStyleTextProp10() const { return m_rgStyleTextProp10; }
+    inline const MSOArray<TextCFException10>& rgStyleTextProp10() const { return m_rgStyleTextProp10; }
 };
 class DocToolbarStates10Atom : public FixedSizeParsedObject {
 private:
@@ -1571,64 +1571,64 @@ public:
     static inline quint32 getSize() { return _size; }
     DocToolbarStates10Atom() {}
     DocToolbarStates10Atom(const char* data, quint32/*ignored*/ = 0);// 9 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    bool fShowReviewingToolbar() const { return m_fShowReviewingToolbar; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     bool m_fShowReviewingToolbar;
 public:
-    bool fShowReviewingGallery() const { return m_fShowReviewingGallery; }
+    inline bool fShowReviewingToolbar() const { return m_fShowReviewingToolbar; }
 private:
     bool m_fShowReviewingGallery;
 public:
-    quint8 reserved() const { return m_reserved; }
+    inline bool fShowReviewingGallery() const { return m_fShowReviewingGallery; }
 private:
     quint8 m_reserved;
+public:
+    inline quint8 reserved() const { return m_reserved; }
 };
 class SlideListTable10Container : public ParsedObject {
 private:
 public:
     SlideListTable10Container() {}
     explicit SlideListTable10Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class DiffTree10Container : public ParsedObject {
 private:
 public:
     DiffTree10Container() {}
     explicit DiffTree10Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ModifyPasswordAtom : public ParsedObject {
 private:
 public:
     ModifyPasswordAtom() {}
     explicit ModifyPasswordAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_modifyPassword;
 public:
-    MSOCastArray<char> modifyPassword() const { return m_modifyPassword; }
+    const MSOCastArray<char>& modifyPassword() const { return m_modifyPassword; }
 };
 class PhotoAlbumInfo10Atom : public FixedSizeParsedObject {
 private:
@@ -1637,108 +1637,108 @@ public:
     static inline quint32 getSize() { return _size; }
     PhotoAlbumInfo10Atom() {}
     PhotoAlbumInfo10Atom(const char* data, quint32/*ignored*/ = 0);// 14 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint8 fUseBlackWhite() const { return m_fUseBlackWhite; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint8 m_fUseBlackWhite;
 public:
-    quint8 fHasCaption() const { return m_fHasCaption; }
+    inline quint8 fUseBlackWhite() const { return m_fUseBlackWhite; }
 private:
     quint8 m_fHasCaption;
 public:
-    quint8 layout() const { return m_layout; }
+    inline quint8 fHasCaption() const { return m_fHasCaption; }
 private:
     quint8 m_layout;
 public:
-    quint8 unused() const { return m_unused; }
+    inline quint8 layout() const { return m_layout; }
 private:
     quint8 m_unused;
 public:
-    quint16 frameShape() const { return m_frameShape; }
+    inline quint8 unused() const { return m_unused; }
 private:
     quint16 m_frameShape;
+public:
+    inline quint16 frameShape() const { return m_frameShape; }
 };
 class SmartTagStore11Container : public ParsedObject {
 private:
 public:
     SmartTagStore11Container() {}
     explicit SmartTagStore11Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class OutlineTextProps11Container : public ParsedObject {
 private:
 public:
     OutlineTextProps11Container() {}
     explicit OutlineTextProps11Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class BinaryTagDataBlob : public ParsedObject {
 private:
 public:
     BinaryTagDataBlob() {}
     explicit BinaryTagDataBlob(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class PP12DocBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP12DocBinaryTagExtension() {}
     explicit PP12DocBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_tagName;
 public:
-    MSOCastArray<char> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<char>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
+public:
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class SorterViewInfoContainer : public ParsedObject {
 private:
 public:
     SorterViewInfoContainer() {}
     explicit SorterViewInfoContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class VBAInfoAtom : public FixedSizeParsedObject {
 private:
@@ -1747,36 +1747,36 @@ public:
     static inline quint32 getSize() { return _size; }
     VBAInfoAtom() {}
     VBAInfoAtom(const char* data, quint32/*ignored*/ = 0);// 20 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 persistIdRef() const { return m_persistIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_persistIdRef;
 public:
-    quint32 fHasMacros() const { return m_fHasMacros; }
+    inline quint32 persistIdRef() const { return m_persistIdRef; }
 private:
     quint32 m_fHasMacros;
 public:
-    quint32 version() const { return m_version; }
+    inline quint32 fHasMacros() const { return m_fHasMacros; }
 private:
     quint32 m_version;
+public:
+    inline quint32 version() const { return m_version; }
 };
 class MasterListWithTextContainer : public ParsedObject {
 private:
 public:
     MasterListWithTextContainer() {}
     explicit MasterListWithTextContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<MasterPersistAtom> m_rgMasterPersistAtom;
 public:
-    MSOArray<MasterPersistAtom> rgMasterPersistAtom() const { return m_rgMasterPersistAtom; }
+    inline const MSOArray<MasterPersistAtom>& rgMasterPersistAtom() const { return m_rgMasterPersistAtom; }
 };
 class MasterPersistAtom : public FixedSizeParsedObject {
 private:
@@ -1785,74 +1785,74 @@ public:
     static inline quint32 getSize() { return _size; }
     MasterPersistAtom() {}
     MasterPersistAtom(const char* data, quint32/*ignored*/ = 0);// 28 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 persistIdRef() const { return m_persistIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_persistIdRef;
 public:
-    quint8 reserved1() const { return m_reserved1; }
+    inline quint32 persistIdRef() const { return m_persistIdRef; }
 private:
     quint8 m_reserved1;
 public:
-    bool fNonOutLineData() const { return m_fNonOutLineData; }
+    inline quint8 reserved1() const { return m_reserved1; }
 private:
     bool m_fNonOutLineData;
 public:
-    quint8 reserved2() const { return m_reserved2; }
+    inline bool fNonOutLineData() const { return m_fNonOutLineData; }
 private:
     quint8 m_reserved2;
 public:
-    quint8 reserved3() const { return m_reserved3; }
+    inline quint8 reserved2() const { return m_reserved2; }
 private:
     quint8 m_reserved3;
 public:
-    quint16 reserved4() const { return m_reserved4; }
+    inline quint8 reserved3() const { return m_reserved3; }
 private:
     quint16 m_reserved4;
 public:
-    quint32 reserved5() const { return m_reserved5; }
+    inline quint16 reserved4() const { return m_reserved4; }
 private:
     quint32 m_reserved5;
 public:
-    quint32 masterId() const { return m_masterId; }
+    inline quint32 reserved5() const { return m_reserved5; }
 private:
     quint32 m_masterId;
 public:
-    quint32 reserved6() const { return m_reserved6; }
+    inline quint32 masterId() const { return m_masterId; }
 private:
     quint32 m_reserved6;
+public:
+    inline quint32 reserved6() const { return m_reserved6; }
 };
 class SlideListWithTextContainer : public ParsedObject {
 private:
 public:
     SlideListWithTextContainer() {}
     explicit SlideListWithTextContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<SlideListWithTextSubContainerOrAtom> m_rgChildRec;
 public:
-    MSOArray<SlideListWithTextSubContainerOrAtom> rgChildRec() const { return m_rgChildRec; }
+    inline const MSOArray<SlideListWithTextSubContainerOrAtom>& rgChildRec() const { return m_rgChildRec; }
 };
 class NotesListWithTextContainer : public ParsedObject {
 private:
 public:
     NotesListWithTextContainer() {}
     explicit NotesListWithTextContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<NotesPersistAtom> m_rgNotesPersistAtom;
 public:
-    MSOArray<NotesPersistAtom> rgNotesPersistAtom() const { return m_rgNotesPersistAtom; }
+    inline const MSOArray<NotesPersistAtom>& rgNotesPersistAtom() const { return m_rgNotesPersistAtom; }
 };
 class NotesPersistAtom : public FixedSizeParsedObject {
 private:
@@ -1861,46 +1861,46 @@ public:
     static inline quint32 getSize() { return _size; }
     NotesPersistAtom() {}
     NotesPersistAtom(const char* data, quint32/*ignored*/ = 0);// 28 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 persistIdRef() const { return m_persistIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_persistIdRef;
 public:
-    quint8 reserved1() const { return m_reserved1; }
+    inline quint32 persistIdRef() const { return m_persistIdRef; }
 private:
     quint8 m_reserved1;
 public:
-    bool fNonOutlineData() const { return m_fNonOutlineData; }
+    inline quint8 reserved1() const { return m_reserved1; }
 private:
     bool m_fNonOutlineData;
 public:
-    quint8 reserved2a() const { return m_reserved2a; }
+    inline bool fNonOutlineData() const { return m_fNonOutlineData; }
 private:
     quint8 m_reserved2a;
 public:
-    quint8 reserved2b() const { return m_reserved2b; }
+    inline quint8 reserved2a() const { return m_reserved2a; }
 private:
     quint8 m_reserved2b;
 public:
-    quint16 reserved2c() const { return m_reserved2c; }
+    inline quint8 reserved2b() const { return m_reserved2b; }
 private:
     quint16 m_reserved2c;
 public:
-    quint32 reserved3() const { return m_reserved3; }
+    inline quint16 reserved2c() const { return m_reserved2c; }
 private:
     quint32 m_reserved3;
 public:
-    quint32 notesId() const { return m_notesId; }
+    inline quint32 reserved3() const { return m_reserved3; }
 private:
     quint32 m_notesId;
 public:
-    quint32 reserved4() const { return m_reserved4; }
+    inline quint32 notesId() const { return m_notesId; }
 private:
     quint32 m_reserved4;
+public:
+    inline quint32 reserved4() const { return m_reserved4; }
 };
 class TextHeaderAtom : public FixedSizeParsedObject {
 private:
@@ -1909,56 +1909,56 @@ public:
     static inline quint32 getSize() { return _size; }
     TextHeaderAtom() {}
     TextHeaderAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 textType() const { return m_textType; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_textType;
+public:
+    inline quint32 textType() const { return m_textType; }
 };
 class TextCharsAtom : public ParsedObject {
 private:
 public:
     TextCharsAtom() {}
     explicit TextCharsAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_textChars;
 public:
-    MSOCastArray<quint16> textChars() const { return m_textChars; }
+    const MSOCastArray<quint16>& textChars() const { return m_textChars; }
 };
 class TextBytesAtom : public ParsedObject {
 private:
 public:
     TextBytesAtom() {}
     explicit TextBytesAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_textChars;
 public:
-    MSOCastArray<char> textChars() const { return m_textChars; }
+    const MSOCastArray<char>& textChars() const { return m_textChars; }
 };
 class MasterTextPropAtom : public ParsedObject {
 private:
 public:
     MasterTextPropAtom() {}
     explicit MasterTextPropAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<MasterTextPropRun> m_rgMasterTextPropRun;
 public:
-    MSOArray<MasterTextPropRun> rgMasterTextPropRun() const { return m_rgMasterTextPropRun; }
+    inline const MSOArray<MasterTextPropRun>& rgMasterTextPropRun() const { return m_rgMasterTextPropRun; }
 };
 class MasterTextPropRun : public FixedSizeParsedObject {
 private:
@@ -1967,28 +1967,28 @@ public:
     static inline quint32 getSize() { return _size; }
     MasterTextPropRun() {}
     MasterTextPropRun(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    quint32 count() const { return m_count; }
 private:
     quint32 m_count;
 public:
-    quint16 indentLevel() const { return m_indentLevel; }
+    inline quint32 count() const { return m_count; }
 private:
     quint16 m_indentLevel;
+public:
+    inline quint16 indentLevel() const { return m_indentLevel; }
 };
 class StyleTextPropAtom : public ParsedObject {
 private:
 public:
     StyleTextPropAtom() {}
     explicit StyleTextPropAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class SlideNumberMCAtom : public FixedSizeParsedObject {
 private:
@@ -1997,14 +1997,14 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideNumberMCAtom() {}
     SlideNumberMCAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 position() const { return m_position; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_position;
+public:
+    inline qint32 position() const { return m_position; }
 };
 class DateTimeMCAtom : public FixedSizeParsedObject {
 private:
@@ -2013,22 +2013,22 @@ public:
     static inline quint32 getSize() { return _size; }
     DateTimeMCAtom() {}
     DateTimeMCAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 position() const { return m_position; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_position;
 public:
-    quint8 index() const { return m_index; }
+    inline qint32 position() const { return m_position; }
 private:
     quint8 m_index;
+public:
+    inline quint8 index() const { return m_index; }
 private:
     MSOCastArray<char> m_unused;
 public:
-    MSOCastArray<char> unused() const { return m_unused; }
+    const MSOCastArray<char>& unused() const { return m_unused; }
 };
 class GenericDateMCAtom : public FixedSizeParsedObject {
 private:
@@ -2037,14 +2037,14 @@ public:
     static inline quint32 getSize() { return _size; }
     GenericDateMCAtom() {}
     GenericDateMCAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 position() const { return m_position; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_position;
+public:
+    inline qint32 position() const { return m_position; }
 };
 class HeaderMCAtom : public FixedSizeParsedObject {
 private:
@@ -2053,14 +2053,14 @@ public:
     static inline quint32 getSize() { return _size; }
     HeaderMCAtom() {}
     HeaderMCAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 position() const { return m_position; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_position;
+public:
+    inline qint32 position() const { return m_position; }
 };
 class FooterMCAtom : public FixedSizeParsedObject {
 private:
@@ -2069,14 +2069,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FooterMCAtom() {}
     FooterMCAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 position() const { return m_position; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_position;
+public:
+    inline qint32 position() const { return m_position; }
 };
 class RTFDateTimeMCAtom : public FixedSizeParsedObject {
 private:
@@ -2085,18 +2085,18 @@ public:
     static inline quint32 getSize() { return _size; }
     RTFDateTimeMCAtom() {}
     RTFDateTimeMCAtom(const char* data, quint32/*ignored*/ = 0);// 140 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 position() const { return m_position; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_position;
+public:
+    inline qint32 position() const { return m_position; }
 private:
     MSOCastArray<char> m_format;
 public:
-    MSOCastArray<char> format() const { return m_format; }
+    const MSOCastArray<char>& format() const { return m_format; }
 };
 class TextBookmarkAtom : public FixedSizeParsedObject {
 private:
@@ -2105,22 +2105,22 @@ public:
     static inline quint32 getSize() { return _size; }
     TextBookmarkAtom() {}
     TextBookmarkAtom(const char* data, quint32/*ignored*/ = 0);// 20 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 begin() const { return m_begin; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_begin;
 public:
-    qint32 end() const { return m_end; }
+    inline qint32 begin() const { return m_begin; }
 private:
     qint32 m_end;
 public:
-    qint32 bookmarkID() const { return m_bookmarkID; }
+    inline qint32 end() const { return m_end; }
 private:
     qint32 m_bookmarkID;
+public:
+    inline qint32 bookmarkID() const { return m_bookmarkID; }
 };
 class TextRange : public FixedSizeParsedObject {
 private:
@@ -2129,14 +2129,14 @@ public:
     static inline quint32 getSize() { return _size; }
     TextRange() {}
     TextRange(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    qint32 begin() const { return m_begin; }
 private:
     qint32 m_begin;
 public:
-    qint32 end() const { return m_end; }
+    inline qint32 begin() const { return m_begin; }
 private:
     qint32 m_end;
+public:
+    inline qint32 end() const { return m_end; }
 };
 class MouseClickTextInteractiveInfoAtom : public FixedSizeParsedObject {
 private:
@@ -2145,14 +2145,14 @@ public:
     static inline quint32 getSize() { return _size; }
     MouseClickTextInteractiveInfoAtom() {}
     MouseClickTextInteractiveInfoAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextRange range() const { return m_range; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextRange m_range;
+public:
+    inline const TextRange& range() const { return m_range; }
 };
 class MouseOverTextInteractiveInfoAtom : public FixedSizeParsedObject {
 private:
@@ -2161,14 +2161,14 @@ public:
     static inline quint32 getSize() { return _size; }
     MouseOverTextInteractiveInfoAtom() {}
     MouseOverTextInteractiveInfoAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextRange range() const { return m_range; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextRange m_range;
+public:
+    inline const TextRange& range() const { return m_range; }
 };
 class SlideId : public FixedSizeParsedObject {
 private:
@@ -2177,24 +2177,24 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideId() {}
     SlideId(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint32 slideId() const { return m_slideId; }
 private:
     quint32 m_slideId;
+public:
+    inline quint32 slideId() const { return m_slideId; }
 };
 class TabStops : public ParsedObject {
 private:
 public:
     TabStops() {}
     explicit TabStops(const char* data, const quint32 maxsize);
-public:
-    quint16 count() const { return m_count; }
 private:
     quint16 m_count;
+public:
+    inline quint16 count() const { return m_count; }
 private:
     MSOArray<TabStop> m_rgTabStop;
 public:
-    MSOArray<TabStop> rgTabStop() const { return m_rgTabStop; }
+    inline const MSOArray<TabStop>& rgTabStop() const { return m_rgTabStop; }
 };
 class TabStop : public FixedSizeParsedObject {
 private:
@@ -2203,14 +2203,14 @@ public:
     static inline quint32 getSize() { return _size; }
     TabStop() {}
     TabStop(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    qint16 position() const { return m_position; }
 private:
     qint16 m_position;
 public:
-    quint16 type() const { return m_type; }
+    inline qint16 position() const { return m_position; }
 private:
     quint16 m_type;
+public:
+    inline quint16 type() const { return m_type; }
 };
 class PFWrapFlags : public FixedSizeParsedObject {
 private:
@@ -2219,26 +2219,26 @@ public:
     static inline quint32 getSize() { return _size; }
     PFWrapFlags() {}
     PFWrapFlags(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    bool charWrap() const { return m_charWrap; }
 private:
     bool m_charWrap;
 public:
-    bool wordWrap() const { return m_wordWrap; }
+    inline bool charWrap() const { return m_charWrap; }
 private:
     bool m_wordWrap;
 public:
-    bool overflow() const { return m_overflow; }
+    inline bool wordWrap() const { return m_wordWrap; }
 private:
     bool m_overflow;
 public:
-    quint8 reserved1() const { return m_reserved1; }
+    inline bool overflow() const { return m_overflow; }
 private:
     quint8 m_reserved1;
 public:
-    quint8 reserved2() const { return m_reserved2; }
+    inline quint8 reserved1() const { return m_reserved1; }
 private:
     quint8 m_reserved2;
+public:
+    inline quint8 reserved2() const { return m_reserved2; }
 };
 class ColorIndexStruct : public FixedSizeParsedObject {
 private:
@@ -2247,22 +2247,22 @@ public:
     static inline quint32 getSize() { return _size; }
     ColorIndexStruct() {}
     ColorIndexStruct(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint8 red() const { return m_red; }
 private:
     quint8 m_red;
 public:
-    quint8 green() const { return m_green; }
+    inline quint8 red() const { return m_red; }
 private:
     quint8 m_green;
 public:
-    quint8 blue() const { return m_blue; }
+    inline quint8 green() const { return m_green; }
 private:
     quint8 m_blue;
 public:
-    quint8 index() const { return m_index; }
+    inline quint8 blue() const { return m_blue; }
 private:
     quint8 m_index;
+public:
+    inline quint8 index() const { return m_index; }
 };
 class BulletFlags : public FixedSizeParsedObject {
 private:
@@ -2271,26 +2271,26 @@ public:
     static inline quint32 getSize() { return _size; }
     BulletFlags() {}
     BulletFlags(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    bool fHasBullet() const { return m_fHasBullet; }
 private:
     bool m_fHasBullet;
 public:
-    bool fBulletHasFont() const { return m_fBulletHasFont; }
+    inline bool fHasBullet() const { return m_fHasBullet; }
 private:
     bool m_fBulletHasFont;
 public:
-    bool fBulletHasColor() const { return m_fBulletHasColor; }
+    inline bool fBulletHasFont() const { return m_fBulletHasFont; }
 private:
     bool m_fBulletHasColor;
 public:
-    bool fBulletHasSize() const { return m_fBulletHasSize; }
+    inline bool fBulletHasColor() const { return m_fBulletHasColor; }
 private:
     bool m_fBulletHasSize;
 public:
-    quint16 reserved() const { return m_reserved; }
+    inline bool fBulletHasSize() const { return m_fBulletHasSize; }
 private:
     quint16 m_reserved;
+public:
+    inline quint16 reserved() const { return m_reserved; }
 };
 class PFMasks : public FixedSizeParsedObject {
 private:
@@ -2299,114 +2299,114 @@ public:
     static inline quint32 getSize() { return _size; }
     PFMasks() {}
     PFMasks(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    bool hasBullet() const { return m_hasBullet; }
 private:
     bool m_hasBullet;
 public:
-    bool bulletHasFont() const { return m_bulletHasFont; }
+    inline bool hasBullet() const { return m_hasBullet; }
 private:
     bool m_bulletHasFont;
 public:
-    bool bulletHasColor() const { return m_bulletHasColor; }
+    inline bool bulletHasFont() const { return m_bulletHasFont; }
 private:
     bool m_bulletHasColor;
 public:
-    bool bulletHasSize() const { return m_bulletHasSize; }
+    inline bool bulletHasColor() const { return m_bulletHasColor; }
 private:
     bool m_bulletHasSize;
 public:
-    bool bulletFont() const { return m_bulletFont; }
+    inline bool bulletHasSize() const { return m_bulletHasSize; }
 private:
     bool m_bulletFont;
 public:
-    bool bulletColor() const { return m_bulletColor; }
+    inline bool bulletFont() const { return m_bulletFont; }
 private:
     bool m_bulletColor;
 public:
-    bool bulletSize() const { return m_bulletSize; }
+    inline bool bulletColor() const { return m_bulletColor; }
 private:
     bool m_bulletSize;
 public:
-    bool bulletChar() const { return m_bulletChar; }
+    inline bool bulletSize() const { return m_bulletSize; }
 private:
     bool m_bulletChar;
 public:
-    bool leftMargin() const { return m_leftMargin; }
+    inline bool bulletChar() const { return m_bulletChar; }
 private:
     bool m_leftMargin;
 public:
-    bool unused() const { return m_unused; }
+    inline bool leftMargin() const { return m_leftMargin; }
 private:
     bool m_unused;
 public:
-    bool indent() const { return m_indent; }
+    inline bool unused() const { return m_unused; }
 private:
     bool m_indent;
 public:
-    bool align() const { return m_align; }
+    inline bool indent() const { return m_indent; }
 private:
     bool m_align;
 public:
-    bool lineSpacing() const { return m_lineSpacing; }
+    inline bool align() const { return m_align; }
 private:
     bool m_lineSpacing;
 public:
-    bool spaceBefore() const { return m_spaceBefore; }
+    inline bool lineSpacing() const { return m_lineSpacing; }
 private:
     bool m_spaceBefore;
 public:
-    bool spaceAfter() const { return m_spaceAfter; }
+    inline bool spaceBefore() const { return m_spaceBefore; }
 private:
     bool m_spaceAfter;
 public:
-    bool defaultTabSize() const { return m_defaultTabSize; }
+    inline bool spaceAfter() const { return m_spaceAfter; }
 private:
     bool m_defaultTabSize;
 public:
-    bool fontAlign() const { return m_fontAlign; }
+    inline bool defaultTabSize() const { return m_defaultTabSize; }
 private:
     bool m_fontAlign;
 public:
-    bool charWrap() const { return m_charWrap; }
+    inline bool fontAlign() const { return m_fontAlign; }
 private:
     bool m_charWrap;
 public:
-    bool wordWrap() const { return m_wordWrap; }
+    inline bool charWrap() const { return m_charWrap; }
 private:
     bool m_wordWrap;
 public:
-    bool overflow() const { return m_overflow; }
+    inline bool wordWrap() const { return m_wordWrap; }
 private:
     bool m_overflow;
 public:
-    bool tabStops() const { return m_tabStops; }
+    inline bool overflow() const { return m_overflow; }
 private:
     bool m_tabStops;
 public:
-    bool textDirection() const { return m_textDirection; }
+    inline bool tabStops() const { return m_tabStops; }
 private:
     bool m_textDirection;
 public:
-    bool reserved() const { return m_reserved; }
+    inline bool textDirection() const { return m_textDirection; }
 private:
     bool m_reserved;
 public:
-    bool bulletBlip() const { return m_bulletBlip; }
+    inline bool reserved() const { return m_reserved; }
 private:
     bool m_bulletBlip;
 public:
-    bool bulletScheme() const { return m_bulletScheme; }
+    inline bool bulletBlip() const { return m_bulletBlip; }
 private:
     bool m_bulletScheme;
 public:
-    bool bulletHasScheme() const { return m_bulletHasScheme; }
+    inline bool bulletScheme() const { return m_bulletScheme; }
 private:
     bool m_bulletHasScheme;
 public:
-    quint8 reserved2() const { return m_reserved2; }
+    inline bool bulletHasScheme() const { return m_bulletHasScheme; }
 private:
     quint8 m_reserved2;
+public:
+    inline quint8 reserved2() const { return m_reserved2; }
 };
 class CFMasks : public FixedSizeParsedObject {
 private:
@@ -2415,102 +2415,102 @@ public:
     static inline quint32 getSize() { return _size; }
     CFMasks() {}
     CFMasks(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    bool bold() const { return m_bold; }
 private:
     bool m_bold;
 public:
-    bool italic() const { return m_italic; }
+    inline bool bold() const { return m_bold; }
 private:
     bool m_italic;
 public:
-    bool underline() const { return m_underline; }
+    inline bool italic() const { return m_italic; }
 private:
     bool m_underline;
 public:
-    bool unused1() const { return m_unused1; }
+    inline bool underline() const { return m_underline; }
 private:
     bool m_unused1;
 public:
-    bool shadow() const { return m_shadow; }
+    inline bool unused1() const { return m_unused1; }
 private:
     bool m_shadow;
 public:
-    bool fehint() const { return m_fehint; }
+    inline bool shadow() const { return m_shadow; }
 private:
     bool m_fehint;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool fehint() const { return m_fehint; }
 private:
     bool m_unused2;
 public:
-    bool kumi() const { return m_kumi; }
+    inline bool unused2() const { return m_unused2; }
 private:
     bool m_kumi;
 public:
-    bool unused3() const { return m_unused3; }
+    inline bool kumi() const { return m_kumi; }
 private:
     bool m_unused3;
 public:
-    bool emboss() const { return m_emboss; }
+    inline bool unused3() const { return m_unused3; }
 private:
     bool m_emboss;
 public:
-    quint8 fHasStyle() const { return m_fHasStyle; }
+    inline bool emboss() const { return m_emboss; }
 private:
     quint8 m_fHasStyle;
 public:
-    quint8 unused4() const { return m_unused4; }
+    inline quint8 fHasStyle() const { return m_fHasStyle; }
 private:
     quint8 m_unused4;
 public:
-    bool typeface() const { return m_typeface; }
+    inline quint8 unused4() const { return m_unused4; }
 private:
     bool m_typeface;
 public:
-    bool size() const { return m_size; }
+    inline bool typeface() const { return m_typeface; }
 private:
     bool m_size;
 public:
-    bool color() const { return m_color; }
+    inline bool size() const { return m_size; }
 private:
     bool m_color;
 public:
-    bool position() const { return m_position; }
+    inline bool color() const { return m_color; }
 private:
     bool m_position;
 public:
-    bool pp10ext() const { return m_pp10ext; }
+    inline bool position() const { return m_position; }
 private:
     bool m_pp10ext;
 public:
-    bool oldEATypeface() const { return m_oldEATypeface; }
+    inline bool pp10ext() const { return m_pp10ext; }
 private:
     bool m_oldEATypeface;
 public:
-    bool ansiTypeface() const { return m_ansiTypeface; }
+    inline bool oldEATypeface() const { return m_oldEATypeface; }
 private:
     bool m_ansiTypeface;
 public:
-    bool symbolTypeface() const { return m_symbolTypeface; }
+    inline bool ansiTypeface() const { return m_ansiTypeface; }
 private:
     bool m_symbolTypeface;
 public:
-    bool newEATypeface() const { return m_newEATypeface; }
+    inline bool symbolTypeface() const { return m_symbolTypeface; }
 private:
     bool m_newEATypeface;
 public:
-    bool csTypeface() const { return m_csTypeface; }
+    inline bool newEATypeface() const { return m_newEATypeface; }
 private:
     bool m_csTypeface;
 public:
-    bool pp11ext() const { return m_pp11ext; }
+    inline bool csTypeface() const { return m_csTypeface; }
 private:
     bool m_pp11ext;
 public:
-    quint8 reserved() const { return m_reserved; }
+    inline bool pp11ext() const { return m_pp11ext; }
 private:
     quint8 m_reserved;
+public:
+    inline quint8 reserved() const { return m_reserved; }
 };
 class CFStyle : public FixedSizeParsedObject {
 private:
@@ -2519,68 +2519,68 @@ public:
     static inline quint32 getSize() { return _size; }
     CFStyle() {}
     CFStyle(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    bool bold() const { return m_bold; }
 private:
     bool m_bold;
 public:
-    bool italic() const { return m_italic; }
+    inline bool bold() const { return m_bold; }
 private:
     bool m_italic;
 public:
-    bool underline() const { return m_underline; }
+    inline bool italic() const { return m_italic; }
 private:
     bool m_underline;
 public:
-    bool unused1() const { return m_unused1; }
+    inline bool underline() const { return m_underline; }
 private:
     bool m_unused1;
 public:
-    bool shadow() const { return m_shadow; }
+    inline bool unused1() const { return m_unused1; }
 private:
     bool m_shadow;
 public:
-    bool fehint() const { return m_fehint; }
+    inline bool shadow() const { return m_shadow; }
 private:
     bool m_fehint;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool fehint() const { return m_fehint; }
 private:
     bool m_unused2;
 public:
-    bool kumi() const { return m_kumi; }
+    inline bool unused2() const { return m_unused2; }
 private:
     bool m_kumi;
 public:
-    bool unused3() const { return m_unused3; }
+    inline bool kumi() const { return m_kumi; }
 private:
     bool m_unused3;
 public:
-    bool emboss() const { return m_emboss; }
+    inline bool unused3() const { return m_unused3; }
 private:
     bool m_emboss;
 public:
-    quint8 pp9rt() const { return m_pp9rt; }
+    inline bool emboss() const { return m_emboss; }
 private:
     quint8 m_pp9rt;
 public:
-    quint8 unused4() const { return m_unused4; }
+    inline quint8 pp9rt() const { return m_pp9rt; }
 private:
     quint8 m_unused4;
+public:
+    inline quint8 unused4() const { return m_unused4; }
 };
 class FontCollectionContainer : public ParsedObject {
 private:
 public:
     FontCollectionContainer() {}
     explicit FontCollectionContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<FontCollectionEntry> m_rgFontCollectionEntry;
 public:
-    MSOArray<FontCollectionEntry> rgFontCollectionEntry() const { return m_rgFontCollectionEntry; }
+    inline const MSOArray<FontCollectionEntry>& rgFontCollectionEntry() const { return m_rgFontCollectionEntry; }
 };
 class FontEntityAtom : public FixedSizeParsedObject {
 private:
@@ -2589,64 +2589,64 @@ public:
     static inline quint32 getSize() { return _size; }
     FontEntityAtom() {}
     FontEntityAtom(const char* data, quint32/*ignored*/ = 0);// 76 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_lfFaceName;
 public:
-    MSOCastArray<quint16> lfFaceName() const { return m_lfFaceName; }
-public:
-    quint8 lfCharSet() const { return m_lfCharSet; }
+    const MSOCastArray<quint16>& lfFaceName() const { return m_lfFaceName; }
 private:
     quint8 m_lfCharSet;
 public:
-    bool fEmbedSubsetted() const { return m_fEmbedSubsetted; }
+    inline quint8 lfCharSet() const { return m_lfCharSet; }
 private:
     bool m_fEmbedSubsetted;
 public:
-    quint8 unused() const { return m_unused; }
+    inline bool fEmbedSubsetted() const { return m_fEmbedSubsetted; }
 private:
     quint8 m_unused;
 public:
-    bool rasterFontType() const { return m_rasterFontType; }
+    inline quint8 unused() const { return m_unused; }
 private:
     bool m_rasterFontType;
 public:
-    bool deviceFontType() const { return m_deviceFontType; }
+    inline bool rasterFontType() const { return m_rasterFontType; }
 private:
     bool m_deviceFontType;
 public:
-    bool truetypeFontType() const { return m_truetypeFontType; }
+    inline bool deviceFontType() const { return m_deviceFontType; }
 private:
     bool m_truetypeFontType;
 public:
-    bool fNoFontSubstitution() const { return m_fNoFontSubstitution; }
+    inline bool truetypeFontType() const { return m_truetypeFontType; }
 private:
     bool m_fNoFontSubstitution;
 public:
-    quint8 reserved() const { return m_reserved; }
+    inline bool fNoFontSubstitution() const { return m_fNoFontSubstitution; }
 private:
     quint8 m_reserved;
 public:
-    quint8 lfPitchAndFamily() const { return m_lfPitchAndFamily; }
+    inline quint8 reserved() const { return m_reserved; }
 private:
     quint8 m_lfPitchAndFamily;
+public:
+    inline quint8 lfPitchAndFamily() const { return m_lfPitchAndFamily; }
 };
 class FontEmbedDataBlob : public ParsedObject {
 private:
 public:
     FontEmbedDataBlob() {}
     explicit FontEmbedDataBlob(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class KinsokuAtom : public FixedSizeParsedObject {
 private:
@@ -2655,70 +2655,70 @@ public:
     static inline quint32 getSize() { return _size; }
     KinsokuAtom() {}
     KinsokuAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 level() const { return m_level; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_level;
+public:
+    inline quint32 level() const { return m_level; }
 };
 class KinsokuLeadingAtom : public ParsedObject {
 private:
 public:
     KinsokuLeadingAtom() {}
     explicit KinsokuLeadingAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_kinsokuLeading;
 public:
-    MSOCastArray<quint16> kinsokuLeading() const { return m_kinsokuLeading; }
+    const MSOCastArray<quint16>& kinsokuLeading() const { return m_kinsokuLeading; }
 };
 class KinsokuFollowingAtom : public ParsedObject {
 private:
 public:
     KinsokuFollowingAtom() {}
     explicit KinsokuFollowingAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_kinsokuFollowing;
 public:
-    MSOCastArray<quint16> kinsokuFollowing() const { return m_kinsokuFollowing; }
+    const MSOCastArray<quint16>& kinsokuFollowing() const { return m_kinsokuFollowing; }
 };
 class TextSpecialInfoAtom : public ParsedObject {
 private:
 public:
     TextSpecialInfoAtom() {}
     explicit TextSpecialInfoAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<TextSIRun> m_rgSIRun;
 public:
-    MSOArray<TextSIRun> rgSIRun() const { return m_rgSIRun; }
+    inline const MSOArray<TextSIRun>& rgSIRun() const { return m_rgSIRun; }
 };
 class SmartTags : public ParsedObject {
 private:
 public:
     SmartTags() {}
     explicit SmartTags(const char* data, const quint32 maxsize);
-public:
-    quint32 count() const { return m_count; }
 private:
     quint32 m_count;
+public:
+    inline quint32 count() const { return m_count; }
 private:
     MSOCastArray<quint32> m_rgSmartTagIndex;
 public:
-    MSOCastArray<quint32> rgSmartTagIndex() const { return m_rgSmartTagIndex; }
+    const MSOCastArray<quint32>& rgSmartTagIndex() const { return m_rgSmartTagIndex; }
 };
 class ExOleEmbedAtom : public FixedSizeParsedObject {
 private:
@@ -2727,30 +2727,30 @@ public:
     static inline quint32 getSize() { return _size; }
     ExOleEmbedAtom() {}
     ExOleEmbedAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 exColorFollow() const { return m_exColorFollow; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_exColorFollow;
 public:
-    quint8 fCantLockServer() const { return m_fCantLockServer; }
+    inline quint32 exColorFollow() const { return m_exColorFollow; }
 private:
     quint8 m_fCantLockServer;
 public:
-    quint8 fNoSizeToServer() const { return m_fNoSizeToServer; }
+    inline quint8 fCantLockServer() const { return m_fCantLockServer; }
 private:
     quint8 m_fNoSizeToServer;
 public:
-    quint8 fIsTable() const { return m_fIsTable; }
+    inline quint8 fNoSizeToServer() const { return m_fNoSizeToServer; }
 private:
     quint8 m_fIsTable;
 public:
-    quint8 unused() const { return m_unused; }
+    inline quint8 fIsTable() const { return m_fIsTable; }
 private:
     quint8 m_unused;
+public:
+    inline quint8 unused() const { return m_unused; }
 };
 class PointStruct : public FixedSizeParsedObject {
 private:
@@ -2759,14 +2759,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PointStruct() {}
     PointStruct(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    qint32 x() const { return m_x; }
 private:
     qint32 m_x;
 public:
-    qint32 y() const { return m_y; }
+    inline qint32 x() const { return m_x; }
 private:
     qint32 m_y;
+public:
+    inline qint32 y() const { return m_y; }
 };
 class RatioStruct : public FixedSizeParsedObject {
 private:
@@ -2775,102 +2775,102 @@ public:
     static inline quint32 getSize() { return _size; }
     RatioStruct() {}
     RatioStruct(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    qint32 numer() const { return m_numer; }
 private:
     qint32 m_numer;
 public:
-    qint32 denom() const { return m_denom; }
+    inline qint32 numer() const { return m_numer; }
 private:
     qint32 m_denom;
+public:
+    inline qint32 denom() const { return m_denom; }
 };
 class PersistDirectoryAtom : public ParsedObject {
 private:
 public:
     PersistDirectoryAtom() {}
     explicit PersistDirectoryAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<PersistDirectoryEntry> m_rgPersistDirEntry;
 public:
-    MSOArray<PersistDirectoryEntry> rgPersistDirEntry() const { return m_rgPersistDirEntry; }
+    inline const MSOArray<PersistDirectoryEntry>& rgPersistDirEntry() const { return m_rgPersistDirEntry; }
 };
 class UnknownDocumentContainerChild : public ParsedObject {
 private:
 public:
     UnknownDocumentContainerChild() {}
     explicit UnknownDocumentContainerChild(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_unknown;
 public:
-    MSOCastArray<char> unknown() const { return m_unknown; }
+    const MSOCastArray<char>& unknown() const { return m_unknown; }
 };
 class UnknownOfficeArtClientDataChild : public ParsedObject {
 private:
 public:
     UnknownOfficeArtClientDataChild() {}
     explicit UnknownOfficeArtClientDataChild(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_unknown;
 public:
-    MSOCastArray<char> unknown() const { return m_unknown; }
+    const MSOCastArray<char>& unknown() const { return m_unknown; }
 };
 class UnknownSlideContainerChild : public ParsedObject {
 private:
 public:
     UnknownSlideContainerChild() {}
     explicit UnknownSlideContainerChild(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_unknown;
 public:
-    MSOCastArray<char> unknown() const { return m_unknown; }
+    const MSOCastArray<char>& unknown() const { return m_unknown; }
 };
 class UnknownTextContainerChild : public ParsedObject {
 private:
 public:
     UnknownTextContainerChild() {}
     explicit UnknownTextContainerChild(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_unknown;
 public:
-    MSOCastArray<char> unknown() const { return m_unknown; }
+    const MSOCastArray<char>& unknown() const { return m_unknown; }
 };
 class PersistDirectoryEntry : public ParsedObject {
 private:
 public:
     PersistDirectoryEntry() {}
     explicit PersistDirectoryEntry(const char* data, const quint32 maxsize);
-public:
-    quint32 persistId() const { return m_persistId; }
 private:
     quint32 m_persistId;
 public:
-    quint16 cPersist() const { return m_cPersist; }
+    inline quint32 persistId() const { return m_persistId; }
 private:
     quint16 m_cPersist;
+public:
+    inline quint16 cPersist() const { return m_cPersist; }
 private:
     MSOCastArray<quint32> m_rgPersistOffset;
 public:
-    MSOCastArray<quint32> rgPersistOffset() const { return m_rgPersistOffset; }
+    const MSOCastArray<quint32>& rgPersistOffset() const { return m_rgPersistOffset; }
 };
 class PersistIdRef : public FixedSizeParsedObject {
 private:
@@ -2879,116 +2879,116 @@ public:
     static inline quint32 getSize() { return _size; }
     PersistIdRef() {}
     PersistIdRef(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint32 anon() const { return m_anon; }
 private:
     quint32 m_anon;
+public:
+    inline quint32 anon() const { return m_anon; }
 };
 class SchemeListElementColorSchemeAtom : public ParsedObject {
 private:
 public:
     SchemeListElementColorSchemeAtom() {}
     explicit SchemeListElementColorSchemeAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<ColorStruct> m_rgSchemeColor;
 public:
-    MSOArray<ColorStruct> rgSchemeColor() const { return m_rgSchemeColor; }
+    inline const MSOArray<ColorStruct>& rgSchemeColor() const { return m_rgSchemeColor; }
 };
 class RoundTripOArtTextStyles12Atom : public ParsedObject {
 private:
 public:
     RoundTripOArtTextStyles12Atom() {}
     explicit RoundTripOArtTextStyles12Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class SlideNameAtom : public ParsedObject {
 private:
 public:
     SlideNameAtom() {}
     explicit SlideNameAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_slideName;
 public:
-    MSOCastArray<quint16> slideName() const { return m_slideName; }
+    const MSOCastArray<quint16>& slideName() const { return m_slideName; }
 };
 class SlideProgTagsContainer : public ParsedObject {
 private:
 public:
     SlideProgTagsContainer() {}
     explicit SlideProgTagsContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<SlideProgTagsSubContainerOrAtom> m_rgTypeRec;
 public:
-    MSOArray<SlideProgTagsSubContainerOrAtom> rgTypeRec() const { return m_rgTypeRec; }
+    inline const MSOArray<SlideProgTagsSubContainerOrAtom>& rgTypeRec() const { return m_rgTypeRec; }
 };
 class PP9SlideBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP9SlideBinaryTagExtension() {}
     explicit PP9SlideBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagName;
 public:
-    MSOCastArray<quint16> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<quint16>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
+public:
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSOArray<TextMasterStyle9Atom> m_rgTextMasterStyleAtom;
 public:
-    MSOArray<TextMasterStyle9Atom> rgTextMasterStyleAtom() const { return m_rgTextMasterStyleAtom; }
+    inline const MSOArray<TextMasterStyle9Atom>& rgTextMasterStyleAtom() const { return m_rgTextMasterStyleAtom; }
 };
 class Comment10Container : public ParsedObject {
 private:
 public:
     Comment10Container() {}
     explicit Comment10Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class Comment10Atom : public ParsedObject {
 private:
 public:
     Comment10Atom() {}
     explicit Comment10Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class LinkedSlide10Atom : public FixedSizeParsedObject {
 private:
@@ -2997,18 +2997,18 @@ public:
     static inline quint32 getSize() { return _size; }
     LinkedSlide10Atom() {}
     LinkedSlide10Atom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 linkedSlideIdRef() const { return m_linkedSlideIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_linkedSlideIdRef;
 public:
-    qint32 clinkedShapes() const { return m_clinkedShapes; }
+    inline quint32 linkedSlideIdRef() const { return m_linkedSlideIdRef; }
 private:
     qint32 m_clinkedShapes;
+public:
+    inline qint32 clinkedShapes() const { return m_clinkedShapes; }
 };
 class LinkedShape10Atom : public FixedSizeParsedObject {
 private:
@@ -3017,18 +3017,18 @@ public:
     static inline quint32 getSize() { return _size; }
     LinkedShape10Atom() {}
     LinkedShape10Atom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 shapeIdRef() const { return m_shapeIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_shapeIdRef;
 public:
-    quint32 linkedShapeIdRef() const { return m_linkedShapeIdRef; }
+    inline quint32 shapeIdRef() const { return m_shapeIdRef; }
 private:
     quint32 m_linkedShapeIdRef;
+public:
+    inline quint32 linkedShapeIdRef() const { return m_linkedShapeIdRef; }
 };
 class SlideFlags10Atom : public FixedSizeParsedObject {
 private:
@@ -3037,26 +3037,26 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideFlags10Atom() {}
     SlideFlags10Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    bool fPreserveMaster() const { return m_fPreserveMaster; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     bool m_fPreserveMaster;
 public:
-    bool fOverrideMasterAnimatino() const { return m_fOverrideMasterAnimatino; }
+    inline bool fPreserveMaster() const { return m_fPreserveMaster; }
 private:
     bool m_fOverrideMasterAnimatino;
 public:
-    quint16 unuseda() const { return m_unuseda; }
+    inline bool fOverrideMasterAnimatino() const { return m_fOverrideMasterAnimatino; }
 private:
     quint16 m_unuseda;
 public:
-    quint16 unusedb() const { return m_unusedb; }
+    inline quint16 unuseda() const { return m_unuseda; }
 private:
     quint16 m_unusedb;
+public:
+    inline quint16 unusedb() const { return m_unusedb; }
 };
 class HashCode10Atom : public FixedSizeParsedObject {
 private:
@@ -3065,42 +3065,42 @@ public:
     static inline quint32 getSize() { return _size; }
     HashCode10Atom() {}
     HashCode10Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 hash() const { return m_hash; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_hash;
+public:
+    inline quint32 hash() const { return m_hash; }
 };
 class ExtTimeNodeContainer : public ParsedObject {
 private:
 public:
     ExtTimeNodeContainer() {}
     explicit ExtTimeNodeContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class BuildListContainer : public ParsedObject {
 private:
 public:
     BuildListContainer() {}
     explicit BuildListContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class RoundTripHeaderFooterDefaults12Atom : public FixedSizeParsedObject {
 private:
@@ -3109,100 +3109,100 @@ public:
     static inline quint32 getSize() { return _size; }
     RoundTripHeaderFooterDefaults12Atom() {}
     RoundTripHeaderFooterDefaults12Atom(const char* data, quint32/*ignored*/ = 0);// 9 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    bool fIncludeDate() const { return m_fIncludeDate; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     bool m_fIncludeDate;
 public:
-    bool fIncludeFooter() const { return m_fIncludeFooter; }
+    inline bool fIncludeDate() const { return m_fIncludeDate; }
 private:
     bool m_fIncludeFooter;
 public:
-    bool fIncludeHeader() const { return m_fIncludeHeader; }
+    inline bool fIncludeFooter() const { return m_fIncludeFooter; }
 private:
     bool m_fIncludeHeader;
 public:
-    bool fIncludeSlideNumber() const { return m_fIncludeSlideNumber; }
+    inline bool fIncludeHeader() const { return m_fIncludeHeader; }
 private:
     bool m_fIncludeSlideNumber;
 public:
-    quint8 reserved() const { return m_reserved; }
+    inline bool fIncludeSlideNumber() const { return m_fIncludeSlideNumber; }
 private:
     quint8 m_reserved;
+public:
+    inline quint8 reserved() const { return m_reserved; }
 };
 class TagNameAtom : public ParsedObject {
 private:
 public:
     TagNameAtom() {}
     explicit TagNameAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagName;
 public:
-    MSOCastArray<quint16> tagName() const { return m_tagName; }
+    const MSOCastArray<quint16>& tagName() const { return m_tagName; }
 };
 class TagValueAtom : public ParsedObject {
 private:
 public:
     TagValueAtom() {}
     explicit TagValueAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagValue;
 public:
-    MSOCastArray<quint16> tagValue() const { return m_tagValue; }
+    const MSOCastArray<quint16>& tagValue() const { return m_tagValue; }
 };
 class RoundTripMainMasterRecord : public ParsedObject {
 private:
 public:
     RoundTripMainMasterRecord() {}
     explicit RoundTripMainMasterRecord(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class TemplateNameAtom : public ParsedObject {
 private:
 public:
     TemplateNameAtom() {}
     explicit TemplateNameAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_templateName;
 public:
-    MSOCastArray<quint16> templateName() const { return m_templateName; }
+    const MSOCastArray<quint16>& templateName() const { return m_templateName; }
 };
 class RoundTripSlideSyncInfo12Container : public ParsedObject {
 private:
 public:
     RoundTripSlideSyncInfo12Container() {}
     explicit RoundTripSlideSyncInfo12Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class SlideFlags : public FixedSizeParsedObject {
 private:
@@ -3211,154 +3211,154 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideFlags() {}
     SlideFlags(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    bool fMasterObjects() const { return m_fMasterObjects; }
 private:
     bool m_fMasterObjects;
 public:
-    bool fMasterScheme() const { return m_fMasterScheme; }
+    inline bool fMasterObjects() const { return m_fMasterObjects; }
 private:
     bool m_fMasterScheme;
 public:
-    bool fMasterBackground() const { return m_fMasterBackground; }
+    inline bool fMasterScheme() const { return m_fMasterScheme; }
 private:
     bool m_fMasterBackground;
 public:
-    quint8 unused1() const { return m_unused1; }
+    inline bool fMasterBackground() const { return m_fMasterBackground; }
 private:
     quint8 m_unused1;
 public:
-    quint8 unused2() const { return m_unused2; }
+    inline quint8 unused1() const { return m_unused1; }
 private:
     quint8 m_unused2;
+public:
+    inline quint8 unused2() const { return m_unused2; }
 };
 class NotesRoundTripAtom : public ParsedObject {
 private:
 public:
     NotesRoundTripAtom() {}
     explicit NotesRoundTripAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class HandoutContainer : public ParsedObject {
 private:
 public:
     HandoutContainer() {}
     explicit HandoutContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExControlStg : public ParsedObject {
 private:
 public:
     ExControlStg() {}
     explicit ExControlStg(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExOleObjStg : public ParsedObject {
 private:
 public:
     ExOleObjStg() {}
     explicit ExOleObjStg(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class UserEditAtom : public ParsedObject {
 private:
 public:
     UserEditAtom() {}
     explicit UserEditAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 lastSlideIdRef() const { return m_lastSlideIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_lastSlideIdRef;
 public:
-    quint16 version() const { return m_version; }
+    inline quint32 lastSlideIdRef() const { return m_lastSlideIdRef; }
 private:
     quint16 m_version;
 public:
-    quint8 minorVersion() const { return m_minorVersion; }
+    inline quint16 version() const { return m_version; }
 private:
     quint8 m_minorVersion;
 public:
-    quint8 majorVersion() const { return m_majorVersion; }
+    inline quint8 minorVersion() const { return m_minorVersion; }
 private:
     quint8 m_majorVersion;
 public:
-    quint32 offsetLastEdit() const { return m_offsetLastEdit; }
+    inline quint8 majorVersion() const { return m_majorVersion; }
 private:
     quint32 m_offsetLastEdit;
 public:
-    quint32 offsetPersistDirectory() const { return m_offsetPersistDirectory; }
+    inline quint32 offsetLastEdit() const { return m_offsetLastEdit; }
 private:
     quint32 m_offsetPersistDirectory;
 public:
-    quint32 docPersistIdRef() const { return m_docPersistIdRef; }
+    inline quint32 offsetPersistDirectory() const { return m_offsetPersistDirectory; }
 private:
     quint32 m_docPersistIdRef;
 public:
-    quint32 persistIdSeed() const { return m_persistIdSeed; }
+    inline quint32 docPersistIdRef() const { return m_docPersistIdRef; }
 private:
     quint32 m_persistIdSeed;
 public:
-    quint16 lastView() const { return m_lastView; }
+    inline quint32 persistIdSeed() const { return m_persistIdSeed; }
 private:
     quint16 m_lastView;
 public:
-    quint16 unused() const { return m_unused; }
+    inline quint16 lastView() const { return m_lastView; }
 private:
     quint16 m_unused;
 public:
-    MSOBasicNullable<quint32> encryptSessionPersistIdRef() const { return m_encryptSessionPersistIdRef; }
+    inline quint16 unused() const { return m_unused; }
 private:
     MSOBasicNullable<quint32> m_encryptSessionPersistIdRef;
+public:
+    inline const MSOBasicNullable<quint32>& encryptSessionPersistIdRef() const { return m_encryptSessionPersistIdRef; }
 private:
     MSOArray<ZeroByte> m_zeroPadding;
 public:
-    MSOArray<ZeroByte> zeroPadding() const { return m_zeroPadding; }
+    inline const MSOArray<ZeroByte>& zeroPadding() const { return m_zeroPadding; }
 };
 class VbaProjectStg : public ParsedObject {
 private:
 public:
     VbaProjectStg() {}
     explicit VbaProjectStg(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class SlideAtom : public FixedSizeParsedObject {
 private:
@@ -3367,34 +3367,34 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideAtom() {}
     SlideAtom(const char* data, quint32/*ignored*/ = 0);// 32 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 geom() const { return m_geom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_geom;
+public:
+    inline quint32 geom() const { return m_geom; }
 private:
     MSOCastArray<char> m_rgPlaceholderTypes;
 public:
-    MSOCastArray<char> rgPlaceholderTypes() const { return m_rgPlaceholderTypes; }
-public:
-    quint32 masterIdRef() const { return m_masterIdRef; }
+    const MSOCastArray<char>& rgPlaceholderTypes() const { return m_rgPlaceholderTypes; }
 private:
     quint32 m_masterIdRef;
 public:
-    quint32 notesIdRef() const { return m_notesIdRef; }
+    inline quint32 masterIdRef() const { return m_masterIdRef; }
 private:
     quint32 m_notesIdRef;
 public:
-    SlideFlags slideFlags() const { return m_slideFlags; }
+    inline quint32 notesIdRef() const { return m_notesIdRef; }
 private:
     SlideFlags m_slideFlags;
 public:
-    quint16 unused() const { return m_unused; }
+    inline const SlideFlags& slideFlags() const { return m_slideFlags; }
 private:
     quint16 m_unused;
+public:
+    inline quint16 unused() const { return m_unused; }
 };
 class SlideShowSlideInfoAtom : public FixedSizeParsedObject {
 private:
@@ -3403,90 +3403,90 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideShowSlideInfoAtom() {}
     SlideShowSlideInfoAtom(const char* data, quint32/*ignored*/ = 0);// 24 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 slidetime() const { return m_slidetime; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_slidetime;
 public:
-    quint32 slideIdRef() const { return m_slideIdRef; }
+    inline quint32 slidetime() const { return m_slidetime; }
 private:
     quint32 m_slideIdRef;
 public:
-    quint8 effectDirection() const { return m_effectDirection; }
+    inline quint32 slideIdRef() const { return m_slideIdRef; }
 private:
     quint8 m_effectDirection;
 public:
-    quint8 effectType() const { return m_effectType; }
+    inline quint8 effectDirection() const { return m_effectDirection; }
 private:
     quint8 m_effectType;
 public:
-    bool fManualAdvance() const { return m_fManualAdvance; }
+    inline quint8 effectType() const { return m_effectType; }
 private:
     bool m_fManualAdvance;
 public:
-    bool reserved() const { return m_reserved; }
+    inline bool fManualAdvance() const { return m_fManualAdvance; }
 private:
     bool m_reserved;
 public:
-    bool fHidden() const { return m_fHidden; }
+    inline bool reserved() const { return m_reserved; }
 private:
     bool m_fHidden;
 public:
-    bool reserved2() const { return m_reserved2; }
+    inline bool fHidden() const { return m_fHidden; }
 private:
     bool m_reserved2;
 public:
-    bool fSound() const { return m_fSound; }
+    inline bool reserved2() const { return m_reserved2; }
 private:
     bool m_fSound;
 public:
-    bool reserved3() const { return m_reserved3; }
+    inline bool fSound() const { return m_fSound; }
 private:
     bool m_reserved3;
 public:
-    bool fLoopSound() const { return m_fLoopSound; }
+    inline bool reserved3() const { return m_reserved3; }
 private:
     bool m_fLoopSound;
 public:
-    bool reserved4() const { return m_reserved4; }
+    inline bool fLoopSound() const { return m_fLoopSound; }
 private:
     bool m_reserved4;
 public:
-    bool fStopSound() const { return m_fStopSound; }
+    inline bool reserved4() const { return m_reserved4; }
 private:
     bool m_fStopSound;
 public:
-    bool freserved5() const { return m_freserved5; }
+    inline bool fStopSound() const { return m_fStopSound; }
 private:
     bool m_freserved5;
 public:
-    bool fAutoAdvance() const { return m_fAutoAdvance; }
+    inline bool freserved5() const { return m_freserved5; }
 private:
     bool m_fAutoAdvance;
 public:
-    bool reserved6() const { return m_reserved6; }
+    inline bool fAutoAdvance() const { return m_fAutoAdvance; }
 private:
     bool m_reserved6;
 public:
-    bool fCursorVisible() const { return m_fCursorVisible; }
+    inline bool reserved6() const { return m_reserved6; }
 private:
     bool m_fCursorVisible;
 public:
-    quint8 reserved7() const { return m_reserved7; }
+    inline bool fCursorVisible() const { return m_fCursorVisible; }
 private:
     quint8 m_reserved7;
 public:
-    quint8 speed() const { return m_speed; }
+    inline quint8 reserved7() const { return m_reserved7; }
 private:
     quint8 m_speed;
+public:
+    inline quint8 speed() const { return m_speed; }
 private:
     MSOCastArray<char> m_unused;
 public:
-    MSOCastArray<char> unused() const { return m_unused; }
+    const MSOCastArray<char>& unused() const { return m_unused; }
 };
 class SlideShowDocInfoAtom : public FixedSizeParsedObject {
 private:
@@ -3495,172 +3495,172 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideShowDocInfoAtom() {}
     SlideShowDocInfoAtom(const char* data, quint32/*ignored*/ = 0);// 88 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    ColorIndexStruct penColor() const { return m_penColor; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     ColorIndexStruct m_penColor;
 public:
-    qint32 restartTime() const { return m_restartTime; }
+    inline const ColorIndexStruct& penColor() const { return m_penColor; }
 private:
     qint32 m_restartTime;
 public:
-    qint16 startSlide() const { return m_startSlide; }
+    inline qint32 restartTime() const { return m_restartTime; }
 private:
     qint16 m_startSlide;
 public:
-    qint16 endSlide() const { return m_endSlide; }
+    inline qint16 startSlide() const { return m_startSlide; }
 private:
     qint16 m_endSlide;
+public:
+    inline qint16 endSlide() const { return m_endSlide; }
 private:
     MSOCastArray<char> m_namedShow;
 public:
-    MSOCastArray<char> namedShow() const { return m_namedShow; }
-public:
-    bool fAutoAdvance() const { return m_fAutoAdvance; }
+    const MSOCastArray<char>& namedShow() const { return m_namedShow; }
 private:
     bool m_fAutoAdvance;
 public:
-    bool fWillSkipBuilds() const { return m_fWillSkipBuilds; }
+    inline bool fAutoAdvance() const { return m_fAutoAdvance; }
 private:
     bool m_fWillSkipBuilds;
 public:
-    bool fUseSlideRange() const { return m_fUseSlideRange; }
+    inline bool fWillSkipBuilds() const { return m_fWillSkipBuilds; }
 private:
     bool m_fUseSlideRange;
 public:
-    bool fDocUseNamedShow() const { return m_fDocUseNamedShow; }
+    inline bool fUseSlideRange() const { return m_fUseSlideRange; }
 private:
     bool m_fDocUseNamedShow;
 public:
-    bool fShowBrowseMode() const { return m_fShowBrowseMode; }
+    inline bool fDocUseNamedShow() const { return m_fDocUseNamedShow; }
 private:
     bool m_fShowBrowseMode;
 public:
-    bool fKioskMode() const { return m_fKioskMode; }
+    inline bool fShowBrowseMode() const { return m_fShowBrowseMode; }
 private:
     bool m_fKioskMode;
 public:
-    bool fWillSkipNarration() const { return m_fWillSkipNarration; }
+    inline bool fKioskMode() const { return m_fKioskMode; }
 private:
     bool m_fWillSkipNarration;
 public:
-    bool fLoopContinuously() const { return m_fLoopContinuously; }
+    inline bool fWillSkipNarration() const { return m_fWillSkipNarration; }
 private:
     bool m_fLoopContinuously;
 public:
-    bool fHideScrollBar() const { return m_fHideScrollBar; }
+    inline bool fLoopContinuously() const { return m_fLoopContinuously; }
 private:
     bool m_fHideScrollBar;
 public:
-    quint8 reserved() const { return m_reserved; }
+    inline bool fHideScrollBar() const { return m_fHideScrollBar; }
 private:
     quint8 m_reserved;
 public:
-    quint16 unused() const { return m_unused; }
+    inline quint8 reserved() const { return m_reserved; }
 private:
     quint16 m_unused;
+public:
+    inline quint16 unused() const { return m_unused; }
 };
 class SlideSchemeColorSchemeAtom : public ParsedObject {
 private:
 public:
     SlideSchemeColorSchemeAtom() {}
     explicit SlideSchemeColorSchemeAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<ColorStruct> m_rgSchemeColor;
 public:
-    MSOArray<ColorStruct> rgSchemeColor() const { return m_rgSchemeColor; }
+    inline const MSOArray<ColorStruct>& rgSchemeColor() const { return m_rgSchemeColor; }
 };
 class RoundTripSlideRecord : public ParsedObject {
 private:
 public:
     RoundTripSlideRecord() {}
     explicit RoundTripSlideRecord(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class NamedShowsContainer : public ParsedObject {
 private:
 public:
     NamedShowsContainer() {}
     explicit NamedShowsContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class SummaryContainer : public ParsedObject {
 private:
 public:
     SummaryContainer() {}
     explicit SummaryContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class DocRoutingSlipAtom : public ParsedObject {
 private:
 public:
     DocRoutingSlipAtom() {}
     explicit DocRoutingSlipAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class PrintOptionsAtom : public ParsedObject {
 private:
 public:
     PrintOptionsAtom() {}
     explicit PrintOptionsAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class RoundTripCustomTableStyles12Atom : public ParsedObject {
 private:
 public:
     RoundTripCustomTableStyles12Atom() {}
     explicit RoundTripCustomTableStyles12Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class RoundTripCompositeMasterId12Atom : public FixedSizeParsedObject {
 private:
@@ -3669,14 +3669,14 @@ public:
     static inline quint32 getSize() { return _size; }
     RoundTripCompositeMasterId12Atom() {}
     RoundTripCompositeMasterId12Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 compositeMasterId() const { return m_compositeMasterId; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_compositeMasterId;
+public:
+    inline quint32 compositeMasterId() const { return m_compositeMasterId; }
 };
 class ColorStruct : public FixedSizeParsedObject {
 private:
@@ -3685,22 +3685,22 @@ public:
     static inline quint32 getSize() { return _size; }
     ColorStruct() {}
     ColorStruct(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint8 red() const { return m_red; }
 private:
     quint8 m_red;
 public:
-    quint8 green() const { return m_green; }
+    inline quint8 red() const { return m_red; }
 private:
     quint8 m_green;
 public:
-    quint8 blue() const { return m_blue; }
+    inline quint8 green() const { return m_green; }
 private:
     quint8 m_blue;
 public:
-    quint8 unused() const { return m_unused; }
+    inline quint8 blue() const { return m_blue; }
 private:
     quint8 m_unused;
+public:
+    inline quint8 unused() const { return m_unused; }
 };
 class ExObjListAtom : public FixedSizeParsedObject {
 private:
@@ -3709,42 +3709,42 @@ public:
     static inline quint32 getSize() { return _size; }
     ExObjListAtom() {}
     ExObjListAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint32 exObjIdSeed() const { return m_exObjIdSeed; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_exObjIdSeed;
+public:
+    inline qint32 exObjIdSeed() const { return m_exObjIdSeed; }
 };
 class ExAviMovieContainer : public ParsedObject {
 private:
 public:
     ExAviMovieContainer() {}
     explicit ExAviMovieContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExCDAudioContainer : public ParsedObject {
 private:
 public:
     ExCDAudioContainer() {}
     explicit ExCDAudioContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExControlAtom : public FixedSizeParsedObject {
 private:
@@ -3753,14 +3753,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ExControlAtom() {}
     ExControlAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 slideIdRef() const { return m_slideIdRef; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_slideIdRef;
+public:
+    inline quint32 slideIdRef() const { return m_slideIdRef; }
 };
 class ExHyperlinkAtom : public FixedSizeParsedObject {
 private:
@@ -3769,126 +3769,126 @@ public:
     static inline quint32 getSize() { return _size; }
     ExHyperlinkAtom() {}
     ExHyperlinkAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 exHyperLinkId() const { return m_exHyperLinkId; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_exHyperLinkId;
+public:
+    inline quint32 exHyperLinkId() const { return m_exHyperLinkId; }
 };
 class FriendlyNameAtom : public ParsedObject {
 private:
 public:
     FriendlyNameAtom() {}
     explicit FriendlyNameAtom(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_friendlyName;
 public:
-    MSOCastArray<quint16> friendlyName() const { return m_friendlyName; }
+    const MSOCastArray<quint16>& friendlyName() const { return m_friendlyName; }
 };
 class TargetAtom : public ParsedObject {
 private:
 public:
     TargetAtom() {}
     explicit TargetAtom(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_target;
 public:
-    MSOCastArray<quint16> target() const { return m_target; }
+    const MSOCastArray<quint16>& target() const { return m_target; }
 };
 class LocationAtom : public ParsedObject {
 private:
 public:
     LocationAtom() {}
     explicit LocationAtom(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_location;
 public:
-    MSOCastArray<quint16> location() const { return m_location; }
+    const MSOCastArray<quint16>& location() const { return m_location; }
 };
 class ExMCIMovieContainer : public ParsedObject {
 private:
 public:
     ExMCIMovieContainer() {}
     explicit ExMCIMovieContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExMIDIAudioContainer : public ParsedObject {
 private:
 public:
     ExMIDIAudioContainer() {}
     explicit ExMIDIAudioContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExWAVAudioEmbeddedContainer : public ParsedObject {
 private:
 public:
     ExWAVAudioEmbeddedContainer() {}
     explicit ExWAVAudioEmbeddedContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExWAVAudioLinkContainer : public ParsedObject {
 private:
 public:
     ExWAVAudioLinkContainer() {}
     explicit ExWAVAudioLinkContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class UnknownExObjListSubContainerChild : public ParsedObject {
 private:
 public:
     UnknownExObjListSubContainerChild() {}
     explicit UnknownExObjListSubContainerChild(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExOleLinkAtom : public FixedSizeParsedObject {
 private:
@@ -3897,22 +3897,22 @@ public:
     static inline quint32 getSize() { return _size; }
     ExOleLinkAtom() {}
     ExOleLinkAtom(const char* data, quint32/*ignored*/ = 0);// 20 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 slideIdRef() const { return m_slideIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_slideIdRef;
 public:
-    quint32 oleUpdateMode() const { return m_oleUpdateMode; }
+    inline quint32 slideIdRef() const { return m_slideIdRef; }
 private:
     quint32 m_oleUpdateMode;
 public:
-    quint32 unused() const { return m_unused; }
+    inline quint32 oleUpdateMode() const { return m_oleUpdateMode; }
 private:
     quint32 m_unused;
+public:
+    inline quint32 unused() const { return m_unused; }
 };
 class ExOleObjAtom : public FixedSizeParsedObject {
 private:
@@ -3921,102 +3921,102 @@ public:
     static inline quint32 getSize() { return _size; }
     ExOleObjAtom() {}
     ExOleObjAtom(const char* data, quint32/*ignored*/ = 0);// 32 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 drawAspect() const { return m_drawAspect; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_drawAspect;
 public:
-    quint32 type() const { return m_type; }
+    inline quint32 drawAspect() const { return m_drawAspect; }
 private:
     quint32 m_type;
 public:
-    quint32 exObjId() const { return m_exObjId; }
+    inline quint32 type() const { return m_type; }
 private:
     quint32 m_exObjId;
 public:
-    quint32 subType() const { return m_subType; }
+    inline quint32 exObjId() const { return m_exObjId; }
 private:
     quint32 m_subType;
 public:
-    quint32 persistIdRef() const { return m_persistIdRef; }
+    inline quint32 subType() const { return m_subType; }
 private:
     quint32 m_persistIdRef;
 public:
-    quint32 unused() const { return m_unused; }
+    inline quint32 persistIdRef() const { return m_persistIdRef; }
 private:
     quint32 m_unused;
+public:
+    inline quint32 unused() const { return m_unused; }
 };
 class MenuNameAtom : public ParsedObject {
 private:
 public:
     MenuNameAtom() {}
     explicit MenuNameAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_menuName;
 public:
-    MSOCastArray<char> menuName() const { return m_menuName; }
+    const MSOCastArray<char>& menuName() const { return m_menuName; }
 };
 class ProgIDAtom : public ParsedObject {
 private:
 public:
     ProgIDAtom() {}
     explicit ProgIDAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_progId;
 public:
-    MSOCastArray<char> progId() const { return m_progId; }
+    const MSOCastArray<char>& progId() const { return m_progId; }
 };
 class ClipboardNameAtom : public ParsedObject {
 private:
 public:
     ClipboardNameAtom() {}
     explicit ClipboardNameAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_clipboardName;
 public:
-    MSOCastArray<char> clipboardName() const { return m_clipboardName; }
+    const MSOCastArray<char>& clipboardName() const { return m_clipboardName; }
 };
 class MetafileBlob : public ParsedObject {
 private:
 public:
     MetafileBlob() {}
     explicit MetafileBlob(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    qint16 mm() const { return m_mm; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     qint16 m_mm;
 public:
-    qint16 xExt() const { return m_xExt; }
+    inline qint16 mm() const { return m_mm; }
 private:
     qint16 m_xExt;
 public:
-    qint16 yExt() const { return m_yExt; }
+    inline qint16 xExt() const { return m_xExt; }
 private:
     qint16 m_yExt;
+public:
+    inline qint16 yExt() const { return m_yExt; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class OfficeArtFDGG : public FixedSizeParsedObject {
 private:
@@ -4025,22 +4025,22 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFDGG() {}
     OfficeArtFDGG(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    quint32 spidMax() const { return m_spidMax; }
 private:
     quint32 m_spidMax;
 public:
-    quint32 cidcl() const { return m_cidcl; }
+    inline quint32 spidMax() const { return m_spidMax; }
 private:
     quint32 m_cidcl;
 public:
-    quint32 cspSaved() const { return m_cspSaved; }
+    inline quint32 cidcl() const { return m_cidcl; }
 private:
     quint32 m_cspSaved;
 public:
-    quint32 cdgSaved() const { return m_cdgSaved; }
+    inline quint32 cspSaved() const { return m_cspSaved; }
 private:
     quint32 m_cdgSaved;
+public:
+    inline quint32 cdgSaved() const { return m_cdgSaved; }
 };
 class OfficeArtFDG : public FixedSizeParsedObject {
 private:
@@ -4049,32 +4049,32 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFDG() {}
     OfficeArtFDG(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 csp() const { return m_csp; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_csp;
 public:
-    quint32 spidCur() const { return m_spidCur; }
+    inline quint32 csp() const { return m_csp; }
 private:
     quint32 m_spidCur;
+public:
+    inline quint32 spidCur() const { return m_spidCur; }
 };
 class OfficeArtFRITContainer : public ParsedObject {
 private:
 public:
     OfficeArtFRITContainer() {}
     explicit OfficeArtFRITContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OfficeArtFRIT> m_rgfrit;
 public:
-    MSOArray<OfficeArtFRIT> rgfrit() const { return m_rgfrit; }
+    inline const MSOArray<OfficeArtFRIT>& rgfrit() const { return m_rgfrit; }
 };
 class OfficeArtFRIT : public FixedSizeParsedObject {
 private:
@@ -4083,56 +4083,56 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFRIT() {}
     OfficeArtFRIT(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint16 fridNew() const { return m_fridNew; }
 private:
     quint16 m_fridNew;
 public:
-    quint16 fridOld() const { return m_fridOld; }
+    inline quint16 fridNew() const { return m_fridNew; }
 private:
     quint16 m_fridOld;
+public:
+    inline quint16 fridOld() const { return m_fridOld; }
 };
 class OfficeArtBStoreContainer : public ParsedObject {
 private:
 public:
     OfficeArtBStoreContainer() {}
     explicit OfficeArtBStoreContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OfficeArtBStoreContainerFileBlock> m_rgfb;
 public:
-    MSOArray<OfficeArtBStoreContainerFileBlock> rgfb() const { return m_rgfb; }
+    inline const MSOArray<OfficeArtBStoreContainerFileBlock>& rgfb() const { return m_rgfb; }
 };
 class OfficeArtSpgrContainer : public ParsedObject {
 private:
 public:
     OfficeArtSpgrContainer() {}
     explicit OfficeArtSpgrContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OfficeArtSpgrContainerFileBlock> m_rgfb;
 public:
-    MSOArray<OfficeArtSpgrContainerFileBlock> rgfb() const { return m_rgfb; }
+    inline const MSOArray<OfficeArtSpgrContainerFileBlock>& rgfb() const { return m_rgfb; }
 };
 class OfficeArtSolverContainer : public ParsedObject {
 private:
 public:
     OfficeArtSolverContainer() {}
     explicit OfficeArtSolverContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OfficeArtSolverContainerFileBlock> m_rgfb;
 public:
-    MSOArray<OfficeArtSolverContainerFileBlock> rgfb() const { return m_rgfb; }
+    inline const MSOArray<OfficeArtSolverContainerFileBlock>& rgfb() const { return m_rgfb; }
 };
 class OfficeArtFConnectorRule : public FixedSizeParsedObject {
 private:
@@ -4141,34 +4141,34 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFConnectorRule() {}
     OfficeArtFConnectorRule(const char* data, quint32/*ignored*/ = 0);// 32 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 ruid() const { return m_ruid; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_ruid;
 public:
-    quint32 spidA() const { return m_spidA; }
+    inline quint32 ruid() const { return m_ruid; }
 private:
     quint32 m_spidA;
 public:
-    quint32 spidB() const { return m_spidB; }
+    inline quint32 spidA() const { return m_spidA; }
 private:
     quint32 m_spidB;
 public:
-    quint32 spidC() const { return m_spidC; }
+    inline quint32 spidB() const { return m_spidB; }
 private:
     quint32 m_spidC;
 public:
-    quint32 cptiA() const { return m_cptiA; }
+    inline quint32 spidC() const { return m_spidC; }
 private:
     quint32 m_cptiA;
 public:
-    quint32 cptiB() const { return m_cptiB; }
+    inline quint32 cptiA() const { return m_cptiA; }
 private:
     quint32 m_cptiB;
+public:
+    inline quint32 cptiB() const { return m_cptiB; }
 };
 class OfficeArtFArcRule : public FixedSizeParsedObject {
 private:
@@ -4177,18 +4177,18 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFArcRule() {}
     OfficeArtFArcRule(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 ruid() const { return m_ruid; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_ruid;
 public:
-    quint32 spid() const { return m_spid; }
+    inline quint32 ruid() const { return m_ruid; }
 private:
     quint32 m_spid;
+public:
+    inline quint32 spid() const { return m_spid; }
 };
 class OfficeArtFCalloutRule : public FixedSizeParsedObject {
 private:
@@ -4197,18 +4197,18 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFCalloutRule() {}
     OfficeArtFCalloutRule(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 ruid() const { return m_ruid; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_ruid;
 public:
-    quint32 spid() const { return m_spid; }
+    inline quint32 ruid() const { return m_ruid; }
 private:
     quint32 m_spid;
+public:
+    inline quint32 spid() const { return m_spid; }
 };
 class OfficeArtFSPGR : public FixedSizeParsedObject {
 private:
@@ -4217,26 +4217,26 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFSPGR() {}
     OfficeArtFSPGR(const char* data, quint32/*ignored*/ = 0);// 24 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    qint32 xLeft() const { return m_xLeft; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_xLeft;
 public:
-    qint32 yTop() const { return m_yTop; }
+    inline qint32 xLeft() const { return m_xLeft; }
 private:
     qint32 m_yTop;
 public:
-    qint32 xRight() const { return m_xRight; }
+    inline qint32 yTop() const { return m_yTop; }
 private:
     qint32 m_xRight;
 public:
-    qint32 yBottom() const { return m_yBottom; }
+    inline qint32 xRight() const { return m_xRight; }
 private:
     qint32 m_yBottom;
+public:
+    inline qint32 yBottom() const { return m_yBottom; }
 };
 class OfficeArtFSP : public FixedSizeParsedObject {
 private:
@@ -4245,120 +4245,120 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFSP() {}
     OfficeArtFSP(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 spid() const { return m_spid; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_spid;
 public:
-    bool fGroup() const { return m_fGroup; }
+    inline quint32 spid() const { return m_spid; }
 private:
     bool m_fGroup;
 public:
-    bool fChild() const { return m_fChild; }
+    inline bool fGroup() const { return m_fGroup; }
 private:
     bool m_fChild;
 public:
-    bool fPatriarch() const { return m_fPatriarch; }
+    inline bool fChild() const { return m_fChild; }
 private:
     bool m_fPatriarch;
 public:
-    bool fDeleted() const { return m_fDeleted; }
+    inline bool fPatriarch() const { return m_fPatriarch; }
 private:
     bool m_fDeleted;
 public:
-    bool fOleShape() const { return m_fOleShape; }
+    inline bool fDeleted() const { return m_fDeleted; }
 private:
     bool m_fOleShape;
 public:
-    bool fHaveMaster() const { return m_fHaveMaster; }
+    inline bool fOleShape() const { return m_fOleShape; }
 private:
     bool m_fHaveMaster;
 public:
-    bool fFlipH() const { return m_fFlipH; }
+    inline bool fHaveMaster() const { return m_fHaveMaster; }
 private:
     bool m_fFlipH;
 public:
-    bool fFlipV() const { return m_fFlipV; }
+    inline bool fFlipH() const { return m_fFlipH; }
 private:
     bool m_fFlipV;
 public:
-    bool fConnector() const { return m_fConnector; }
+    inline bool fFlipV() const { return m_fFlipV; }
 private:
     bool m_fConnector;
 public:
-    bool fHaveAnchor() const { return m_fHaveAnchor; }
+    inline bool fConnector() const { return m_fConnector; }
 private:
     bool m_fHaveAnchor;
 public:
-    bool fBackground() const { return m_fBackground; }
+    inline bool fHaveAnchor() const { return m_fHaveAnchor; }
 private:
     bool m_fBackground;
 public:
-    bool fHaveSpt() const { return m_fHaveSpt; }
+    inline bool fBackground() const { return m_fBackground; }
 private:
     bool m_fHaveSpt;
 public:
-    quint32 unused1() const { return m_unused1; }
+    inline bool fHaveSpt() const { return m_fHaveSpt; }
 private:
     quint32 m_unused1;
+public:
+    inline quint32 unused1() const { return m_unused1; }
 };
 class OfficeArtFOPT : public ParsedObject {
 private:
 public:
     OfficeArtFOPT() {}
     explicit OfficeArtFOPT(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OfficeArtFOPTEChoice> m_fopt;
 public:
-    MSOArray<OfficeArtFOPTEChoice> fopt() const { return m_fopt; }
+    inline const MSOArray<OfficeArtFOPTEChoice>& fopt() const { return m_fopt; }
 private:
     MSOCastArray<char> m_complexData;
 public:
-    MSOCastArray<char> complexData() const { return m_complexData; }
+    const MSOCastArray<char>& complexData() const { return m_complexData; }
 };
 class OfficeArtSecondaryFOPT : public ParsedObject {
 private:
 public:
     OfficeArtSecondaryFOPT() {}
     explicit OfficeArtSecondaryFOPT(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OfficeArtFOPTEChoice> m_fopt;
 public:
-    MSOArray<OfficeArtFOPTEChoice> fopt() const { return m_fopt; }
+    inline const MSOArray<OfficeArtFOPTEChoice>& fopt() const { return m_fopt; }
 private:
     MSOCastArray<char> m_complexData;
 public:
-    MSOCastArray<char> complexData() const { return m_complexData; }
+    const MSOCastArray<char>& complexData() const { return m_complexData; }
 };
 class OfficeArtTertiaryFOPT : public ParsedObject {
 private:
 public:
     OfficeArtTertiaryFOPT() {}
     explicit OfficeArtTertiaryFOPT(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<OfficeArtFOPTEChoice> m_fopt;
 public:
-    MSOArray<OfficeArtFOPTEChoice> fopt() const { return m_fopt; }
+    inline const MSOArray<OfficeArtFOPTEChoice>& fopt() const { return m_fopt; }
 private:
     MSOCastArray<char> m_complexData;
 public:
-    MSOCastArray<char> complexData() const { return m_complexData; }
+    const MSOCastArray<char>& complexData() const { return m_complexData; }
 };
 class MSOPATHINFO : public FixedSizeParsedObject {
 private:
@@ -4367,14 +4367,14 @@ public:
     static inline quint32 getSize() { return _size; }
     MSOPATHINFO() {}
     MSOPATHINFO(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    quint8 type() const { return m_type; }
 private:
     quint8 m_type;
 public:
-    quint16 segments() const { return m_segments; }
+    inline quint8 type() const { return m_type; }
 private:
     quint16 m_segments;
+public:
+    inline quint16 segments() const { return m_segments; }
 };
 class FixedPoint : public FixedSizeParsedObject {
 private:
@@ -4383,102 +4383,102 @@ public:
     static inline quint32 getSize() { return _size; }
     FixedPoint() {}
     FixedPoint(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint16 fractional() const { return m_fractional; }
 private:
     quint16 m_fractional;
 public:
-    qint16 integral() const { return m_integral; }
+    inline quint16 fractional() const { return m_fractional; }
 private:
     qint16 m_integral;
+public:
+    inline qint16 integral() const { return m_integral; }
 };
 class PVertices_complex : public ParsedObject {
 private:
 public:
     PVertices_complex() {}
     explicit PVertices_complex(const char* data, const quint32 maxsize);
-public:
-    quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElems;
 public:
-    quint16 nElemsAlloc() const { return m_nElemsAlloc; }
+    inline quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElemsAlloc;
 public:
-    quint16 cbElem() const { return m_cbElem; }
+    inline quint16 nElemsAlloc() const { return m_nElemsAlloc; }
 private:
     quint16 m_cbElem;
+public:
+    inline quint16 cbElem() const { return m_cbElem; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class PSegmentInfo_complex : public ParsedObject {
 private:
 public:
     PSegmentInfo_complex() {}
     explicit PSegmentInfo_complex(const char* data, const quint32 maxsize);
-public:
-    quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElems;
 public:
-    quint16 nElemsAlloc() const { return m_nElemsAlloc; }
+    inline quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElemsAlloc;
 public:
-    quint16 cbElem() const { return m_cbElem; }
+    inline quint16 nElemsAlloc() const { return m_nElemsAlloc; }
 private:
     quint16 m_cbElem;
+public:
+    inline quint16 cbElem() const { return m_cbElem; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class FillShadeColors_complex : public ParsedObject {
 private:
 public:
     FillShadeColors_complex() {}
     explicit FillShadeColors_complex(const char* data, const quint32 maxsize);
-public:
-    quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElems;
 public:
-    quint16 nElemsAlloc() const { return m_nElemsAlloc; }
+    inline quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElemsAlloc;
 public:
-    quint16 cbElem() const { return m_cbElem; }
+    inline quint16 nElemsAlloc() const { return m_nElemsAlloc; }
 private:
     quint16 m_cbElem;
+public:
+    inline quint16 cbElem() const { return m_cbElem; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class PWrapPolygonVertices_complex : public ParsedObject {
 private:
 public:
     PWrapPolygonVertices_complex() {}
     explicit PWrapPolygonVertices_complex(const char* data, const quint32 maxsize);
-public:
-    quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElems;
 public:
-    quint16 nElemsAlloc() const { return m_nElemsAlloc; }
+    inline quint16 nElems() const { return m_nElems; }
 private:
     quint16 m_nElemsAlloc;
 public:
-    quint16 cbElem() const { return m_cbElem; }
+    inline quint16 nElemsAlloc() const { return m_nElemsAlloc; }
 private:
     quint16 m_cbElem;
+public:
+    inline quint16 cbElem() const { return m_cbElem; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class OfficeArtCOLORREF : public FixedSizeParsedObject {
 private:
@@ -4487,50 +4487,50 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtCOLORREF() {}
     OfficeArtCOLORREF(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint8 red() const { return m_red; }
 private:
     quint8 m_red;
 public:
-    quint8 green() const { return m_green; }
+    inline quint8 red() const { return m_red; }
 private:
     quint8 m_green;
 public:
-    quint8 blue() const { return m_blue; }
+    inline quint8 green() const { return m_green; }
 private:
     quint8 m_blue;
 public:
-    bool fPaletteIndex() const { return m_fPaletteIndex; }
+    inline quint8 blue() const { return m_blue; }
 private:
     bool m_fPaletteIndex;
 public:
-    bool fPaletteRGB() const { return m_fPaletteRGB; }
+    inline bool fPaletteIndex() const { return m_fPaletteIndex; }
 private:
     bool m_fPaletteRGB;
 public:
-    bool fSystemRGB() const { return m_fSystemRGB; }
+    inline bool fPaletteRGB() const { return m_fPaletteRGB; }
 private:
     bool m_fSystemRGB;
 public:
-    bool fSchemeIndex() const { return m_fSchemeIndex; }
+    inline bool fSystemRGB() const { return m_fSystemRGB; }
 private:
     bool m_fSchemeIndex;
 public:
-    bool fSysIndex() const { return m_fSysIndex; }
+    inline bool fSchemeIndex() const { return m_fSchemeIndex; }
 private:
     bool m_fSysIndex;
 public:
-    bool unused1() const { return m_unused1; }
+    inline bool fSysIndex() const { return m_fSysIndex; }
 private:
     bool m_unused1;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool unused1() const { return m_unused1; }
 private:
     bool m_unused2;
 public:
-    bool unused3() const { return m_unused3; }
+    inline bool unused2() const { return m_unused2; }
 private:
     bool m_unused3;
+public:
+    inline bool unused3() const { return m_unused3; }
 };
 class OfficeArtChildAnchor : public FixedSizeParsedObject {
 private:
@@ -4539,26 +4539,26 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtChildAnchor() {}
     OfficeArtChildAnchor(const char* data, quint32/*ignored*/ = 0);// 24 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    qint32 xLeft() const { return m_xLeft; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_xLeft;
 public:
-    qint32 yTop() const { return m_yTop; }
+    inline qint32 xLeft() const { return m_xLeft; }
 private:
     qint32 m_yTop;
 public:
-    qint32 xRight() const { return m_xRight; }
+    inline qint32 yTop() const { return m_yTop; }
 private:
     qint32 m_xRight;
 public:
-    qint32 yBottom() const { return m_yBottom; }
+    inline qint32 xRight() const { return m_xRight; }
 private:
     qint32 m_yBottom;
+public:
+    inline qint32 yBottom() const { return m_yBottom; }
 };
 class DocOfficeArtClientAnchor : public FixedSizeParsedObject {
 private:
@@ -4567,76 +4567,76 @@ public:
     static inline quint32 getSize() { return _size; }
     DocOfficeArtClientAnchor() {}
     DocOfficeArtClientAnchor(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    qint32 clientAnchor() const { return m_clientAnchor; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_clientAnchor;
+public:
+    inline qint32 clientAnchor() const { return m_clientAnchor; }
 };
 class XlsOfficeArtClientAnchor : public ParsedObject {
 private:
 public:
     XlsOfficeArtClientAnchor() {}
     explicit XlsOfficeArtClientAnchor(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    bool fMove() const { return m_fMove; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     bool m_fMove;
 public:
-    bool fSize() const { return m_fSize; }
+    inline bool fMove() const { return m_fMove; }
 private:
     bool m_fSize;
 public:
-    quint16 unused() const { return m_unused; }
+    inline bool fSize() const { return m_fSize; }
 private:
     quint16 m_unused;
 public:
-    MSOBasicNullable<qint32> width() const { return m_width; }
+    inline quint16 unused() const { return m_unused; }
 private:
     MSOBasicNullable<qint32> m_width;
 public:
-    MSOBasicNullable<qint32> height() const { return m_height; }
+    inline const MSOBasicNullable<qint32>& width() const { return m_width; }
 private:
     MSOBasicNullable<qint32> m_height;
 public:
-    MSOBasicNullable<quint16> colL() const { return m_colL; }
+    inline const MSOBasicNullable<qint32>& height() const { return m_height; }
 private:
     MSOBasicNullable<quint16> m_colL;
 public:
-    MSOBasicNullable<qint16> dxL() const { return m_dxL; }
+    inline const MSOBasicNullable<quint16>& colL() const { return m_colL; }
 private:
     MSOBasicNullable<qint16> m_dxL;
 public:
-    MSOBasicNullable<quint16> rwT() const { return m_rwT; }
+    inline const MSOBasicNullable<qint16>& dxL() const { return m_dxL; }
 private:
     MSOBasicNullable<quint16> m_rwT;
 public:
-    MSOBasicNullable<qint16> dyT() const { return m_dyT; }
+    inline const MSOBasicNullable<quint16>& rwT() const { return m_rwT; }
 private:
     MSOBasicNullable<qint16> m_dyT;
 public:
-    MSOBasicNullable<quint16> colR() const { return m_colR; }
+    inline const MSOBasicNullable<qint16>& dyT() const { return m_dyT; }
 private:
     MSOBasicNullable<quint16> m_colR;
 public:
-    MSOBasicNullable<qint16> dxR() const { return m_dxR; }
+    inline const MSOBasicNullable<quint16>& colR() const { return m_colR; }
 private:
     MSOBasicNullable<qint16> m_dxR;
 public:
-    MSOBasicNullable<quint16> rwB() const { return m_rwB; }
+    inline const MSOBasicNullable<qint16>& dxR() const { return m_dxR; }
 private:
     MSOBasicNullable<quint16> m_rwB;
 public:
-    MSOBasicNullable<qint16> dyB() const { return m_dyB; }
+    inline const MSOBasicNullable<quint16>& rwB() const { return m_rwB; }
 private:
     MSOBasicNullable<qint16> m_dyB;
+public:
+    inline const MSOBasicNullable<qint16>& dyB() const { return m_dyB; }
 };
 class OfficeArtFPSPL : public FixedSizeParsedObject {
 private:
@@ -4645,22 +4645,22 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFPSPL() {}
     OfficeArtFPSPL(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 spid() const { return m_spid; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_spid;
 public:
-    bool reserved1() const { return m_reserved1; }
+    inline quint32 spid() const { return m_spid; }
 private:
     bool m_reserved1;
 public:
-    bool fLast() const { return m_fLast; }
+    inline bool reserved1() const { return m_reserved1; }
 private:
     bool m_fLast;
+public:
+    inline bool fLast() const { return m_fLast; }
 };
 class RectStruct : public FixedSizeParsedObject {
 private:
@@ -4669,22 +4669,22 @@ public:
     static inline quint32 getSize() { return _size; }
     RectStruct() {}
     RectStruct(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    qint32 top() const { return m_top; }
 private:
     qint32 m_top;
 public:
-    qint32 left() const { return m_left; }
+    inline qint32 top() const { return m_top; }
 private:
     qint32 m_left;
 public:
-    qint32 right() const { return m_right; }
+    inline qint32 left() const { return m_left; }
 private:
     qint32 m_right;
 public:
-    qint32 bottom() const { return m_bottom; }
+    inline qint32 right() const { return m_right; }
 private:
     qint32 m_bottom;
+public:
+    inline qint32 bottom() const { return m_bottom; }
 };
 class SmallRectStruct : public FixedSizeParsedObject {
 private:
@@ -4693,22 +4693,22 @@ public:
     static inline quint32 getSize() { return _size; }
     SmallRectStruct() {}
     SmallRectStruct(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    qint16 top() const { return m_top; }
 private:
     qint16 m_top;
 public:
-    qint16 left() const { return m_left; }
+    inline qint16 top() const { return m_top; }
 private:
     qint16 m_left;
 public:
-    qint16 right() const { return m_right; }
+    inline qint16 left() const { return m_left; }
 private:
     qint16 m_right;
 public:
-    qint16 bottom() const { return m_bottom; }
+    inline qint16 right() const { return m_right; }
 private:
     qint16 m_bottom;
+public:
+    inline qint16 bottom() const { return m_bottom; }
 };
 class DocOfficeArtClientData : public FixedSizeParsedObject {
 private:
@@ -4717,14 +4717,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DocOfficeArtClientData() {}
     DocOfficeArtClientData(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 clientData() const { return m_clientData; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_clientData;
+public:
+    inline quint32 clientData() const { return m_clientData; }
 };
 class XlsOfficeArtClientData : public FixedSizeParsedObject {
 private:
@@ -4733,38 +4733,38 @@ public:
     static inline quint32 getSize() { return _size; }
     XlsOfficeArtClientData() {}
     XlsOfficeArtClientData(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 };
 class ShapeFlagsAtom : public ParsedObject {
 private:
 public:
     ShapeFlagsAtom() {}
     explicit ShapeFlagsAtom(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ShapeFlags10Atom : public ParsedObject {
 private:
 public:
     ShapeFlags10Atom() {}
     explicit ShapeFlags10Atom(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class ExObjRefAtom : public FixedSizeParsedObject {
 private:
@@ -4773,14 +4773,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ExObjRefAtom() {}
     ExObjRefAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 exObjIdRef() const { return m_exObjIdRef; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_exObjIdRef;
+public:
+    inline quint32 exObjIdRef() const { return m_exObjIdRef; }
 };
 class AnimationInfoAtom : public FixedSizeParsedObject {
 private:
@@ -4789,28 +4789,28 @@ public:
     static inline quint32 getSize() { return _size; }
     AnimationInfoAtom() {}
     AnimationInfoAtom(const char* data, quint32/*ignored*/ = 0);// 36 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class SoundContainer : public ParsedObject {
 private:
 public:
     SoundContainer() {}
     explicit SoundContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class InteractiveInfoAtom : public FixedSizeParsedObject {
 private:
@@ -4819,72 +4819,72 @@ public:
     static inline quint32 getSize() { return _size; }
     InteractiveInfoAtom() {}
     InteractiveInfoAtom(const char* data, quint32/*ignored*/ = 0);// 24 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 soundIdRef() const { return m_soundIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_soundIdRef;
 public:
-    quint32 exHyperlinkIdRef() const { return m_exHyperlinkIdRef; }
+    inline quint32 soundIdRef() const { return m_soundIdRef; }
 private:
     quint32 m_exHyperlinkIdRef;
 public:
-    quint8 action() const { return m_action; }
+    inline quint32 exHyperlinkIdRef() const { return m_exHyperlinkIdRef; }
 private:
     quint8 m_action;
 public:
-    quint8 oleVerb() const { return m_oleVerb; }
+    inline quint8 action() const { return m_action; }
 private:
     quint8 m_oleVerb;
 public:
-    quint8 jump() const { return m_jump; }
+    inline quint8 oleVerb() const { return m_oleVerb; }
 private:
     quint8 m_jump;
 public:
-    bool fAnimated() const { return m_fAnimated; }
+    inline quint8 jump() const { return m_jump; }
 private:
     bool m_fAnimated;
 public:
-    bool fStopSound() const { return m_fStopSound; }
+    inline bool fAnimated() const { return m_fAnimated; }
 private:
     bool m_fStopSound;
 public:
-    bool fCustomSoundReturn() const { return m_fCustomSoundReturn; }
+    inline bool fStopSound() const { return m_fStopSound; }
 private:
     bool m_fCustomSoundReturn;
 public:
-    bool fVisited() const { return m_fVisited; }
+    inline bool fCustomSoundReturn() const { return m_fCustomSoundReturn; }
 private:
     bool m_fVisited;
 public:
-    quint8 reserved() const { return m_reserved; }
+    inline bool fVisited() const { return m_fVisited; }
 private:
     quint8 m_reserved;
 public:
-    quint8 hyperlinkType() const { return m_hyperlinkType; }
+    inline quint8 reserved() const { return m_reserved; }
 private:
     quint8 m_hyperlinkType;
+public:
+    inline quint8 hyperlinkType() const { return m_hyperlinkType; }
 private:
     MSOCastArray<char> m_unused;
 public:
-    MSOCastArray<char> unused() const { return m_unused; }
+    const MSOCastArray<char>& unused() const { return m_unused; }
 };
 class MacroNameAtom : public ParsedObject {
 private:
 public:
     MacroNameAtom() {}
     explicit MacroNameAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_macroName;
 public:
-    MSOCastArray<char> macroName() const { return m_macroName; }
+    const MSOCastArray<char>& macroName() const { return m_macroName; }
 };
 class PlaceholderAtom : public FixedSizeParsedObject {
 private:
@@ -4893,40 +4893,40 @@ public:
     static inline quint32 getSize() { return _size; }
     PlaceholderAtom() {}
     PlaceholderAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    qint32 position() const { return m_position; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_position;
 public:
-    quint8 placementId() const { return m_placementId; }
+    inline qint32 position() const { return m_position; }
 private:
     quint8 m_placementId;
 public:
-    quint8 size() const { return m_size; }
+    inline quint8 placementId() const { return m_placementId; }
 private:
     quint8 m_size;
 public:
-    quint16 unused() const { return m_unused; }
+    inline quint8 size() const { return m_size; }
 private:
     quint16 m_unused;
+public:
+    inline quint16 unused() const { return m_unused; }
 };
 class RecolorInfoAtom : public ParsedObject {
 private:
 public:
     RecolorInfoAtom() {}
     explicit RecolorInfoAtom(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class OutlineTextRefAtom : public FixedSizeParsedObject {
 private:
@@ -4935,94 +4935,94 @@ public:
     static inline quint32 getSize() { return _size; }
     OutlineTextRefAtom() {}
     OutlineTextRefAtom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    qint32 index() const { return m_index; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     qint32 m_index;
+public:
+    inline qint32 index() const { return m_index; }
 };
 class ShapeProgsTagContainer : public ParsedObject {
 private:
 public:
     ShapeProgsTagContainer() {}
     explicit ShapeProgsTagContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<ShapeProgTagsSubContainerOrAtom> m_rgChildRec;
 public:
-    MSOArray<ShapeProgTagsSubContainerOrAtom> rgChildRec() const { return m_rgChildRec; }
+    inline const MSOArray<ShapeProgTagsSubContainerOrAtom>& rgChildRec() const { return m_rgChildRec; }
 };
 class PP9ShapeBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP9ShapeBinaryTagExtension() {}
     explicit PP9ShapeBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagName;
 public:
-    MSOCastArray<quint16> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<quint16>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
 public:
-    StyleTextProp9Atom styleTextProp9Atom() const { return m_styleTextProp9Atom; }
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     StyleTextProp9Atom m_styleTextProp9Atom;
+public:
+    inline const StyleTextProp9Atom& styleTextProp9Atom() const { return m_styleTextProp9Atom; }
 };
 class PP10ShapeBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP10ShapeBinaryTagExtension() {}
     explicit PP10ShapeBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagName;
 public:
-    MSOCastArray<quint16> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<quint16>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
+public:
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class PP11ShapeBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP11ShapeBinaryTagExtension() {}
     explicit PP11ShapeBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagName;
 public:
-    MSOCastArray<quint16> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<quint16>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
+public:
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class RoundTripNewPlaceHolderId12Atom : public FixedSizeParsedObject {
 private:
@@ -5031,14 +5031,14 @@ public:
     static inline quint32 getSize() { return _size; }
     RoundTripNewPlaceHolderId12Atom() {}
     RoundTripNewPlaceHolderId12Atom(const char* data, quint32/*ignored*/ = 0);// 9 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint8 newPlaceHolderId() const { return m_newPlaceHolderId; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint8 m_newPlaceHolderId;
+public:
+    inline quint8 newPlaceHolderId() const { return m_newPlaceHolderId; }
 };
 class RoundTripShapeId12Atom : public FixedSizeParsedObject {
 private:
@@ -5047,14 +5047,14 @@ public:
     static inline quint32 getSize() { return _size; }
     RoundTripShapeId12Atom() {}
     RoundTripShapeId12Atom(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 shapeId() const { return m_shapeId; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_shapeId;
+public:
+    inline quint32 shapeId() const { return m_shapeId; }
 };
 class RoundTripHFPlaceholder12Atom : public FixedSizeParsedObject {
 private:
@@ -5063,36 +5063,36 @@ public:
     static inline quint32 getSize() { return _size; }
     RoundTripHFPlaceholder12Atom() {}
     RoundTripHFPlaceholder12Atom(const char* data, quint32/*ignored*/ = 0);// 9 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint8 placeHolderId() const { return m_placeHolderId; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint8 m_placeHolderId;
+public:
+    inline quint8 placeHolderId() const { return m_placeHolderId; }
 };
 class RoundTripShapeCheckSumForCustomLayouts12Atom : public ParsedObject {
 private:
 public:
     RoundTripShapeCheckSumForCustomLayouts12Atom() {}
     explicit RoundTripShapeCheckSumForCustomLayouts12Atom(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 shapeCheckSum() const { return m_shapeCheckSum; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_shapeCheckSum;
 public:
-    quint32 textCheckSum() const { return m_textCheckSum; }
+    inline quint32 shapeCheckSum() const { return m_shapeCheckSum; }
 private:
     quint32 m_textCheckSum;
+public:
+    inline quint32 textCheckSum() const { return m_textCheckSum; }
 private:
     MSOCastArray<char> m_unknown;
 public:
-    MSOCastArray<char> unknown() const { return m_unknown; }
+    const MSOCastArray<char>& unknown() const { return m_unknown; }
 };
 class XlsOfficeArtClientTextBox : public FixedSizeParsedObject {
 private:
@@ -5101,10 +5101,10 @@ public:
     static inline quint32 getSize() { return _size; }
     XlsOfficeArtClientTextBox() {}
     XlsOfficeArtClientTextBox(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 };
 class DocOfficeArtClientTextBox : public FixedSizeParsedObject {
 private:
@@ -5113,28 +5113,28 @@ public:
     static inline quint32 getSize() { return _size; }
     DocOfficeArtClientTextBox() {}
     DocOfficeArtClientTextBox(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint32 clientTextBox() const { return m_clientTextBox; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_clientTextBox;
+public:
+    inline quint32 clientTextBox() const { return m_clientTextBox; }
 };
 class PptOfficeArtClientTextBox : public ParsedObject {
 private:
 public:
     PptOfficeArtClientTextBox() {}
     explicit PptOfficeArtClientTextBox(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<TextClientDataSubContainerOrAtom> m_rgChildRec;
 public:
-    MSOArray<TextClientDataSubContainerOrAtom> rgChildRec() const { return m_rgChildRec; }
+    inline const MSOArray<TextClientDataSubContainerOrAtom>& rgChildRec() const { return m_rgChildRec; }
 };
 class OfficeArtIDCL : public FixedSizeParsedObject {
 private:
@@ -5143,14 +5143,14 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtIDCL() {}
     OfficeArtIDCL(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    quint32 dgid() const { return m_dgid; }
 private:
     quint32 m_dgid;
 public:
-    quint32 cspidCur() const { return m_cspidCur; }
+    inline quint32 dgid() const { return m_dgid; }
 private:
     quint32 m_cspidCur;
+public:
+    inline quint32 cspidCur() const { return m_cspidCur; }
 };
 class OfficeArtFOPTEOPID : public FixedSizeParsedObject {
 private:
@@ -5159,32 +5159,32 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFOPTEOPID() {}
     OfficeArtFOPTEOPID(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    quint16 opid() const { return m_opid; }
 private:
     quint16 m_opid;
 public:
-    bool fBid() const { return m_fBid; }
+    inline quint16 opid() const { return m_opid; }
 private:
     bool m_fBid;
 public:
-    bool fComplex() const { return m_fComplex; }
+    inline bool fBid() const { return m_fBid; }
 private:
     bool m_fComplex;
+public:
+    inline bool fComplex() const { return m_fComplex; }
 };
 class OfficeArtColorMRUContainer : public ParsedObject {
 private:
 public:
     OfficeArtColorMRUContainer() {}
     explicit OfficeArtColorMRUContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<MSOCR> m_rgmsocr;
 public:
-    MSOArray<MSOCR> rgmsocr() const { return m_rgmsocr; }
+    inline const MSOArray<MSOCR>& rgmsocr() const { return m_rgmsocr; }
 };
 class MSOCR : public FixedSizeParsedObject {
 private:
@@ -5193,30 +5193,30 @@ public:
     static inline quint32 getSize() { return _size; }
     MSOCR() {}
     MSOCR(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint8 red() const { return m_red; }
 private:
     quint8 m_red;
 public:
-    quint8 green() const { return m_green; }
+    inline quint8 red() const { return m_red; }
 private:
     quint8 m_green;
 public:
-    quint8 blue() const { return m_blue; }
+    inline quint8 green() const { return m_green; }
 private:
     quint8 m_blue;
 public:
-    quint8 unused1() const { return m_unused1; }
+    inline quint8 blue() const { return m_blue; }
 private:
     quint8 m_unused1;
 public:
-    bool fSchemeIndex() const { return m_fSchemeIndex; }
+    inline quint8 unused1() const { return m_unused1; }
 private:
     bool m_fSchemeIndex;
 public:
-    quint8 unused2() const { return m_unused2; }
+    inline bool fSchemeIndex() const { return m_fSchemeIndex; }
 private:
     quint8 m_unused2;
+public:
+    inline quint8 unused2() const { return m_unused2; }
 };
 class OfficeArtSplitMenuColorContainer : public FixedSizeParsedObject {
 private:
@@ -5225,28 +5225,28 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtSplitMenuColorContainer() {}
     OfficeArtSplitMenuColorContainer(const char* data, quint32/*ignored*/ = 0);// 24 bytes
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOArray<MSOCR> m_smca;
 public:
-    MSOArray<MSOCR> smca() const { return m_smca; }
+    inline const MSOArray<MSOCR>& smca() const { return m_smca; }
 };
 class todo : public ParsedObject {
 private:
 public:
     todo() {}
     explicit todo(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_anon;
 public:
-    MSOCastArray<char> anon() const { return m_anon; }
+    const MSOCastArray<char>& anon() const { return m_anon; }
 };
 class FibBase : public FixedSizeParsedObject {
 private:
@@ -5255,130 +5255,130 @@ public:
     static inline quint32 getSize() { return _size; }
     FibBase() {}
     FibBase(const char* data, quint32/*ignored*/ = 0);// 32 bytes
-public:
-    quint16 wIdent() const { return m_wIdent; }
 private:
     quint16 m_wIdent;
 public:
-    quint16 nFib() const { return m_nFib; }
+    inline quint16 wIdent() const { return m_wIdent; }
 private:
     quint16 m_nFib;
 public:
-    quint16 unused() const { return m_unused; }
+    inline quint16 nFib() const { return m_nFib; }
 private:
     quint16 m_unused;
 public:
-    quint16 lid() const { return m_lid; }
+    inline quint16 unused() const { return m_unused; }
 private:
     quint16 m_lid;
 public:
-    quint16 pnNext() const { return m_pnNext; }
+    inline quint16 lid() const { return m_lid; }
 private:
     quint16 m_pnNext;
 public:
-    bool fDot() const { return m_fDot; }
+    inline quint16 pnNext() const { return m_pnNext; }
 private:
     bool m_fDot;
 public:
-    bool fGlsy() const { return m_fGlsy; }
+    inline bool fDot() const { return m_fDot; }
 private:
     bool m_fGlsy;
 public:
-    bool fComplex() const { return m_fComplex; }
+    inline bool fGlsy() const { return m_fGlsy; }
 private:
     bool m_fComplex;
 public:
-    bool fHasPic() const { return m_fHasPic; }
+    inline bool fComplex() const { return m_fComplex; }
 private:
     bool m_fHasPic;
 public:
-    quint8 cQuickSaves() const { return m_cQuickSaves; }
+    inline bool fHasPic() const { return m_fHasPic; }
 private:
     quint8 m_cQuickSaves;
 public:
-    bool fEncrypted() const { return m_fEncrypted; }
+    inline quint8 cQuickSaves() const { return m_cQuickSaves; }
 private:
     bool m_fEncrypted;
 public:
-    bool fWhichTblStm() const { return m_fWhichTblStm; }
+    inline bool fEncrypted() const { return m_fEncrypted; }
 private:
     bool m_fWhichTblStm;
 public:
-    bool fReadOnlyRecommended() const { return m_fReadOnlyRecommended; }
+    inline bool fWhichTblStm() const { return m_fWhichTblStm; }
 private:
     bool m_fReadOnlyRecommended;
 public:
-    bool fWriteReservation() const { return m_fWriteReservation; }
+    inline bool fReadOnlyRecommended() const { return m_fReadOnlyRecommended; }
 private:
     bool m_fWriteReservation;
 public:
-    bool fExtChar() const { return m_fExtChar; }
+    inline bool fWriteReservation() const { return m_fWriteReservation; }
 private:
     bool m_fExtChar;
 public:
-    bool fLoadOverride() const { return m_fLoadOverride; }
+    inline bool fExtChar() const { return m_fExtChar; }
 private:
     bool m_fLoadOverride;
 public:
-    bool fFarEast() const { return m_fFarEast; }
+    inline bool fLoadOverride() const { return m_fLoadOverride; }
 private:
     bool m_fFarEast;
 public:
-    bool fObfuscated() const { return m_fObfuscated; }
+    inline bool fFarEast() const { return m_fFarEast; }
 private:
     bool m_fObfuscated;
 public:
-    quint16 nFibBack() const { return m_nFibBack; }
+    inline bool fObfuscated() const { return m_fObfuscated; }
 private:
     quint16 m_nFibBack;
 public:
-    quint32 IKey() const { return m_IKey; }
+    inline quint16 nFibBack() const { return m_nFibBack; }
 private:
     quint32 m_IKey;
 public:
-    quint8 envr() const { return m_envr; }
+    inline quint32 IKey() const { return m_IKey; }
 private:
     quint8 m_envr;
 public:
-    bool fMac() const { return m_fMac; }
+    inline quint8 envr() const { return m_envr; }
 private:
     bool m_fMac;
 public:
-    bool fEmptySpecial() const { return m_fEmptySpecial; }
+    inline bool fMac() const { return m_fMac; }
 private:
     bool m_fEmptySpecial;
 public:
-    bool fLoadOverridePage() const { return m_fLoadOverridePage; }
+    inline bool fEmptySpecial() const { return m_fEmptySpecial; }
 private:
     bool m_fLoadOverridePage;
 public:
-    bool reserved1() const { return m_reserved1; }
+    inline bool fLoadOverridePage() const { return m_fLoadOverridePage; }
 private:
     bool m_reserved1;
 public:
-    bool reserved2() const { return m_reserved2; }
+    inline bool reserved1() const { return m_reserved1; }
 private:
     bool m_reserved2;
 public:
-    quint8 fSpare0() const { return m_fSpare0; }
+    inline bool reserved2() const { return m_reserved2; }
 private:
     quint8 m_fSpare0;
 public:
-    quint16 reserved3() const { return m_reserved3; }
+    inline quint8 fSpare0() const { return m_fSpare0; }
 private:
     quint16 m_reserved3;
 public:
-    quint16 reserved4() const { return m_reserved4; }
+    inline quint16 reserved3() const { return m_reserved3; }
 private:
     quint16 m_reserved4;
 public:
-    quint32 reserved5() const { return m_reserved5; }
+    inline quint16 reserved4() const { return m_reserved4; }
 private:
     quint32 m_reserved5;
 public:
-    quint32 reserved6() const { return m_reserved6; }
+    inline quint32 reserved5() const { return m_reserved5; }
 private:
     quint32 m_reserved6;
+public:
+    inline quint32 reserved6() const { return m_reserved6; }
 };
 class FibRgW97 : public FixedSizeParsedObject {
 private:
@@ -5387,62 +5387,62 @@ public:
     static inline quint32 getSize() { return _size; }
     FibRgW97() {}
     FibRgW97(const char* data, quint32/*ignored*/ = 0);// 28 bytes
-public:
-    quint16 reserved1() const { return m_reserved1; }
 private:
     quint16 m_reserved1;
 public:
-    quint16 reserved2() const { return m_reserved2; }
+    inline quint16 reserved1() const { return m_reserved1; }
 private:
     quint16 m_reserved2;
 public:
-    quint16 reserved3() const { return m_reserved3; }
+    inline quint16 reserved2() const { return m_reserved2; }
 private:
     quint16 m_reserved3;
 public:
-    quint16 reserved4() const { return m_reserved4; }
+    inline quint16 reserved3() const { return m_reserved3; }
 private:
     quint16 m_reserved4;
 public:
-    quint16 reserved5() const { return m_reserved5; }
+    inline quint16 reserved4() const { return m_reserved4; }
 private:
     quint16 m_reserved5;
 public:
-    quint16 reserved6() const { return m_reserved6; }
+    inline quint16 reserved5() const { return m_reserved5; }
 private:
     quint16 m_reserved6;
 public:
-    quint16 reserved7() const { return m_reserved7; }
+    inline quint16 reserved6() const { return m_reserved6; }
 private:
     quint16 m_reserved7;
 public:
-    quint16 reserved8() const { return m_reserved8; }
+    inline quint16 reserved7() const { return m_reserved7; }
 private:
     quint16 m_reserved8;
 public:
-    quint16 reserved9() const { return m_reserved9; }
+    inline quint16 reserved8() const { return m_reserved8; }
 private:
     quint16 m_reserved9;
 public:
-    quint16 reserved10() const { return m_reserved10; }
+    inline quint16 reserved9() const { return m_reserved9; }
 private:
     quint16 m_reserved10;
 public:
-    quint16 reserved11() const { return m_reserved11; }
+    inline quint16 reserved10() const { return m_reserved10; }
 private:
     quint16 m_reserved11;
 public:
-    quint16 reserved12() const { return m_reserved12; }
+    inline quint16 reserved11() const { return m_reserved11; }
 private:
     quint16 m_reserved12;
 public:
-    quint16 reserved13() const { return m_reserved13; }
+    inline quint16 reserved12() const { return m_reserved12; }
 private:
     quint16 m_reserved13;
 public:
-    quint16 lidFE() const { return m_lidFE; }
+    inline quint16 reserved13() const { return m_reserved13; }
 private:
     quint16 m_lidFE;
+public:
+    inline quint16 lidFE() const { return m_lidFE; }
 };
 class FibRgLw97 : public FixedSizeParsedObject {
 private:
@@ -5451,94 +5451,94 @@ public:
     static inline quint32 getSize() { return _size; }
     FibRgLw97() {}
     FibRgLw97(const char* data, quint32/*ignored*/ = 0);// 88 bytes
-public:
-    quint32 cbMac() const { return m_cbMac; }
 private:
     quint32 m_cbMac;
 public:
-    quint32 reserved1() const { return m_reserved1; }
+    inline quint32 cbMac() const { return m_cbMac; }
 private:
     quint32 m_reserved1;
 public:
-    quint32 reserved2() const { return m_reserved2; }
+    inline quint32 reserved1() const { return m_reserved1; }
 private:
     quint32 m_reserved2;
 public:
-    qint32 ccpText() const { return m_ccpText; }
+    inline quint32 reserved2() const { return m_reserved2; }
 private:
     qint32 m_ccpText;
 public:
-    qint32 ccpFtn() const { return m_ccpFtn; }
+    inline qint32 ccpText() const { return m_ccpText; }
 private:
     qint32 m_ccpFtn;
 public:
-    qint32 ccpHdd() const { return m_ccpHdd; }
+    inline qint32 ccpFtn() const { return m_ccpFtn; }
 private:
     qint32 m_ccpHdd;
 public:
-    quint32 reserved3() const { return m_reserved3; }
+    inline qint32 ccpHdd() const { return m_ccpHdd; }
 private:
     quint32 m_reserved3;
 public:
-    qint32 ccpAtn() const { return m_ccpAtn; }
+    inline quint32 reserved3() const { return m_reserved3; }
 private:
     qint32 m_ccpAtn;
 public:
-    qint32 ccpEdn() const { return m_ccpEdn; }
+    inline qint32 ccpAtn() const { return m_ccpAtn; }
 private:
     qint32 m_ccpEdn;
 public:
-    qint32 ccpTxbx() const { return m_ccpTxbx; }
+    inline qint32 ccpEdn() const { return m_ccpEdn; }
 private:
     qint32 m_ccpTxbx;
 public:
-    qint32 ccpHdrTxbx() const { return m_ccpHdrTxbx; }
+    inline qint32 ccpTxbx() const { return m_ccpTxbx; }
 private:
     qint32 m_ccpHdrTxbx;
 public:
-    quint32 reserved4() const { return m_reserved4; }
+    inline qint32 ccpHdrTxbx() const { return m_ccpHdrTxbx; }
 private:
     quint32 m_reserved4;
 public:
-    quint32 reserved5() const { return m_reserved5; }
+    inline quint32 reserved4() const { return m_reserved4; }
 private:
     quint32 m_reserved5;
 public:
-    quint32 reserved6() const { return m_reserved6; }
+    inline quint32 reserved5() const { return m_reserved5; }
 private:
     quint32 m_reserved6;
 public:
-    quint32 reserved7() const { return m_reserved7; }
+    inline quint32 reserved6() const { return m_reserved6; }
 private:
     quint32 m_reserved7;
 public:
-    quint32 reserved8() const { return m_reserved8; }
+    inline quint32 reserved7() const { return m_reserved7; }
 private:
     quint32 m_reserved8;
 public:
-    quint32 reserved9() const { return m_reserved9; }
+    inline quint32 reserved8() const { return m_reserved8; }
 private:
     quint32 m_reserved9;
 public:
-    quint32 reserved10() const { return m_reserved10; }
+    inline quint32 reserved9() const { return m_reserved9; }
 private:
     quint32 m_reserved10;
 public:
-    quint32 reserved11() const { return m_reserved11; }
+    inline quint32 reserved10() const { return m_reserved10; }
 private:
     quint32 m_reserved11;
 public:
-    quint32 reserved12() const { return m_reserved12; }
+    inline quint32 reserved11() const { return m_reserved11; }
 private:
     quint32 m_reserved12;
 public:
-    quint32 reserved13() const { return m_reserved13; }
+    inline quint32 reserved12() const { return m_reserved12; }
 private:
     quint32 m_reserved13;
 public:
-    quint32 reserved14() const { return m_reserved14; }
+    inline quint32 reserved13() const { return m_reserved13; }
 private:
     quint32 m_reserved14;
+public:
+    inline quint32 reserved14() const { return m_reserved14; }
 };
 class FibRgFcLcb97 : public FixedSizeParsedObject {
 private:
@@ -5547,750 +5547,750 @@ public:
     static inline quint32 getSize() { return _size; }
     FibRgFcLcb97() {}
     FibRgFcLcb97(const char* data, quint32/*ignored*/ = 0);// 744 bytes
-public:
-    quint32 fcStshfOrig() const { return m_fcStshfOrig; }
 private:
     quint32 m_fcStshfOrig;
 public:
-    quint32 lcbStshfOrig() const { return m_lcbStshfOrig; }
+    inline quint32 fcStshfOrig() const { return m_fcStshfOrig; }
 private:
     quint32 m_lcbStshfOrig;
 public:
-    quint32 fcStshf() const { return m_fcStshf; }
+    inline quint32 lcbStshfOrig() const { return m_lcbStshfOrig; }
 private:
     quint32 m_fcStshf;
 public:
-    quint32 lcbStshf() const { return m_lcbStshf; }
+    inline quint32 fcStshf() const { return m_fcStshf; }
 private:
     quint32 m_lcbStshf;
 public:
-    quint32 fcPlcffndRef() const { return m_fcPlcffndRef; }
+    inline quint32 lcbStshf() const { return m_lcbStshf; }
 private:
     quint32 m_fcPlcffndRef;
 public:
-    quint32 lcbPlcffndRef() const { return m_lcbPlcffndRef; }
+    inline quint32 fcPlcffndRef() const { return m_fcPlcffndRef; }
 private:
     quint32 m_lcbPlcffndRef;
 public:
-    quint32 fcPlcffndTxt() const { return m_fcPlcffndTxt; }
+    inline quint32 lcbPlcffndRef() const { return m_lcbPlcffndRef; }
 private:
     quint32 m_fcPlcffndTxt;
 public:
-    quint32 lcbPlcffndTxt() const { return m_lcbPlcffndTxt; }
+    inline quint32 fcPlcffndTxt() const { return m_fcPlcffndTxt; }
 private:
     quint32 m_lcbPlcffndTxt;
 public:
-    quint32 fcPlcfandRef() const { return m_fcPlcfandRef; }
+    inline quint32 lcbPlcffndTxt() const { return m_lcbPlcffndTxt; }
 private:
     quint32 m_fcPlcfandRef;
 public:
-    quint32 lcbPlcfandRef() const { return m_lcbPlcfandRef; }
+    inline quint32 fcPlcfandRef() const { return m_fcPlcfandRef; }
 private:
     quint32 m_lcbPlcfandRef;
 public:
-    quint32 fcPlcfandTxt() const { return m_fcPlcfandTxt; }
+    inline quint32 lcbPlcfandRef() const { return m_lcbPlcfandRef; }
 private:
     quint32 m_fcPlcfandTxt;
 public:
-    quint32 lcbPlcfandTxt() const { return m_lcbPlcfandTxt; }
+    inline quint32 fcPlcfandTxt() const { return m_fcPlcfandTxt; }
 private:
     quint32 m_lcbPlcfandTxt;
 public:
-    quint32 fcPlcfSed() const { return m_fcPlcfSed; }
+    inline quint32 lcbPlcfandTxt() const { return m_lcbPlcfandTxt; }
 private:
     quint32 m_fcPlcfSed;
 public:
-    quint32 lcbPlcfSed() const { return m_lcbPlcfSed; }
+    inline quint32 fcPlcfSed() const { return m_fcPlcfSed; }
 private:
     quint32 m_lcbPlcfSed;
 public:
-    quint32 fcPlcPad() const { return m_fcPlcPad; }
+    inline quint32 lcbPlcfSed() const { return m_lcbPlcfSed; }
 private:
     quint32 m_fcPlcPad;
 public:
-    quint32 lcbPlcPad() const { return m_lcbPlcPad; }
+    inline quint32 fcPlcPad() const { return m_fcPlcPad; }
 private:
     quint32 m_lcbPlcPad;
 public:
-    quint32 fcPlcfPhe() const { return m_fcPlcfPhe; }
+    inline quint32 lcbPlcPad() const { return m_lcbPlcPad; }
 private:
     quint32 m_fcPlcfPhe;
 public:
-    quint32 lcbPlcfPhe() const { return m_lcbPlcfPhe; }
+    inline quint32 fcPlcfPhe() const { return m_fcPlcfPhe; }
 private:
     quint32 m_lcbPlcfPhe;
 public:
-    quint32 fcSttbfGlsy() const { return m_fcSttbfGlsy; }
+    inline quint32 lcbPlcfPhe() const { return m_lcbPlcfPhe; }
 private:
     quint32 m_fcSttbfGlsy;
 public:
-    quint32 lcbSttbfGlsy() const { return m_lcbSttbfGlsy; }
+    inline quint32 fcSttbfGlsy() const { return m_fcSttbfGlsy; }
 private:
     quint32 m_lcbSttbfGlsy;
 public:
-    quint32 fcPlcfGlsy() const { return m_fcPlcfGlsy; }
+    inline quint32 lcbSttbfGlsy() const { return m_lcbSttbfGlsy; }
 private:
     quint32 m_fcPlcfGlsy;
 public:
-    quint32 lcbPlcfGlsy() const { return m_lcbPlcfGlsy; }
+    inline quint32 fcPlcfGlsy() const { return m_fcPlcfGlsy; }
 private:
     quint32 m_lcbPlcfGlsy;
 public:
-    quint32 fcPlcfHdd() const { return m_fcPlcfHdd; }
+    inline quint32 lcbPlcfGlsy() const { return m_lcbPlcfGlsy; }
 private:
     quint32 m_fcPlcfHdd;
 public:
-    quint32 lcbPlcfHdd() const { return m_lcbPlcfHdd; }
+    inline quint32 fcPlcfHdd() const { return m_fcPlcfHdd; }
 private:
     quint32 m_lcbPlcfHdd;
 public:
-    quint32 fcPlcfBteChpx() const { return m_fcPlcfBteChpx; }
+    inline quint32 lcbPlcfHdd() const { return m_lcbPlcfHdd; }
 private:
     quint32 m_fcPlcfBteChpx;
 public:
-    quint32 lcbPlcfBteChpx() const { return m_lcbPlcfBteChpx; }
+    inline quint32 fcPlcfBteChpx() const { return m_fcPlcfBteChpx; }
 private:
     quint32 m_lcbPlcfBteChpx;
 public:
-    quint32 fcPlcfBtePapx() const { return m_fcPlcfBtePapx; }
+    inline quint32 lcbPlcfBteChpx() const { return m_lcbPlcfBteChpx; }
 private:
     quint32 m_fcPlcfBtePapx;
 public:
-    quint32 lcbPlcfBtePapx() const { return m_lcbPlcfBtePapx; }
+    inline quint32 fcPlcfBtePapx() const { return m_fcPlcfBtePapx; }
 private:
     quint32 m_lcbPlcfBtePapx;
 public:
-    quint32 fcPlcfSea() const { return m_fcPlcfSea; }
+    inline quint32 lcbPlcfBtePapx() const { return m_lcbPlcfBtePapx; }
 private:
     quint32 m_fcPlcfSea;
 public:
-    quint32 lcbPlcfSea() const { return m_lcbPlcfSea; }
+    inline quint32 fcPlcfSea() const { return m_fcPlcfSea; }
 private:
     quint32 m_lcbPlcfSea;
 public:
-    quint32 fcSttbfFfn() const { return m_fcSttbfFfn; }
+    inline quint32 lcbPlcfSea() const { return m_lcbPlcfSea; }
 private:
     quint32 m_fcSttbfFfn;
 public:
-    quint32 lcbSttbfFfn() const { return m_lcbSttbfFfn; }
+    inline quint32 fcSttbfFfn() const { return m_fcSttbfFfn; }
 private:
     quint32 m_lcbSttbfFfn;
 public:
-    quint32 fcPlcfFldMom() const { return m_fcPlcfFldMom; }
+    inline quint32 lcbSttbfFfn() const { return m_lcbSttbfFfn; }
 private:
     quint32 m_fcPlcfFldMom;
 public:
-    quint32 lcbPlcfFldMom() const { return m_lcbPlcfFldMom; }
+    inline quint32 fcPlcfFldMom() const { return m_fcPlcfFldMom; }
 private:
     quint32 m_lcbPlcfFldMom;
 public:
-    quint32 fcPlcfFldHdr() const { return m_fcPlcfFldHdr; }
+    inline quint32 lcbPlcfFldMom() const { return m_lcbPlcfFldMom; }
 private:
     quint32 m_fcPlcfFldHdr;
 public:
-    quint32 lcbPlcfFldHdr() const { return m_lcbPlcfFldHdr; }
+    inline quint32 fcPlcfFldHdr() const { return m_fcPlcfFldHdr; }
 private:
     quint32 m_lcbPlcfFldHdr;
 public:
-    quint32 fcPlcfFldFtn() const { return m_fcPlcfFldFtn; }
+    inline quint32 lcbPlcfFldHdr() const { return m_lcbPlcfFldHdr; }
 private:
     quint32 m_fcPlcfFldFtn;
 public:
-    quint32 lcbPlcfFldFtn() const { return m_lcbPlcfFldFtn; }
+    inline quint32 fcPlcfFldFtn() const { return m_fcPlcfFldFtn; }
 private:
     quint32 m_lcbPlcfFldFtn;
 public:
-    quint32 fcPlcfFldAtn() const { return m_fcPlcfFldAtn; }
+    inline quint32 lcbPlcfFldFtn() const { return m_lcbPlcfFldFtn; }
 private:
     quint32 m_fcPlcfFldAtn;
 public:
-    quint32 lcbPlcfFldAtn() const { return m_lcbPlcfFldAtn; }
+    inline quint32 fcPlcfFldAtn() const { return m_fcPlcfFldAtn; }
 private:
     quint32 m_lcbPlcfFldAtn;
 public:
-    quint32 fcPlcfFldMcr() const { return m_fcPlcfFldMcr; }
+    inline quint32 lcbPlcfFldAtn() const { return m_lcbPlcfFldAtn; }
 private:
     quint32 m_fcPlcfFldMcr;
 public:
-    quint32 lcbPlcfFldMcr() const { return m_lcbPlcfFldMcr; }
+    inline quint32 fcPlcfFldMcr() const { return m_fcPlcfFldMcr; }
 private:
     quint32 m_lcbPlcfFldMcr;
 public:
-    quint32 fcSttbfBkmk() const { return m_fcSttbfBkmk; }
+    inline quint32 lcbPlcfFldMcr() const { return m_lcbPlcfFldMcr; }
 private:
     quint32 m_fcSttbfBkmk;
 public:
-    quint32 lcbSttbfBkmk() const { return m_lcbSttbfBkmk; }
+    inline quint32 fcSttbfBkmk() const { return m_fcSttbfBkmk; }
 private:
     quint32 m_lcbSttbfBkmk;
 public:
-    quint32 fcPlcfBkf() const { return m_fcPlcfBkf; }
+    inline quint32 lcbSttbfBkmk() const { return m_lcbSttbfBkmk; }
 private:
     quint32 m_fcPlcfBkf;
 public:
-    quint32 lcbPlcfBkf() const { return m_lcbPlcfBkf; }
+    inline quint32 fcPlcfBkf() const { return m_fcPlcfBkf; }
 private:
     quint32 m_lcbPlcfBkf;
 public:
-    quint32 fcPlcfBkl() const { return m_fcPlcfBkl; }
+    inline quint32 lcbPlcfBkf() const { return m_lcbPlcfBkf; }
 private:
     quint32 m_fcPlcfBkl;
 public:
-    quint32 lcbPlcfBkl() const { return m_lcbPlcfBkl; }
+    inline quint32 fcPlcfBkl() const { return m_fcPlcfBkl; }
 private:
     quint32 m_lcbPlcfBkl;
 public:
-    quint32 fcCmds() const { return m_fcCmds; }
+    inline quint32 lcbPlcfBkl() const { return m_lcbPlcfBkl; }
 private:
     quint32 m_fcCmds;
 public:
-    quint32 lcbCmds() const { return m_lcbCmds; }
+    inline quint32 fcCmds() const { return m_fcCmds; }
 private:
     quint32 m_lcbCmds;
 public:
-    quint32 fcUnused1() const { return m_fcUnused1; }
+    inline quint32 lcbCmds() const { return m_lcbCmds; }
 private:
     quint32 m_fcUnused1;
 public:
-    quint32 lcbUnused1() const { return m_lcbUnused1; }
+    inline quint32 fcUnused1() const { return m_fcUnused1; }
 private:
     quint32 m_lcbUnused1;
 public:
-    quint32 fcSttbfMcr() const { return m_fcSttbfMcr; }
+    inline quint32 lcbUnused1() const { return m_lcbUnused1; }
 private:
     quint32 m_fcSttbfMcr;
 public:
-    quint32 lcbSttbfMcr() const { return m_lcbSttbfMcr; }
+    inline quint32 fcSttbfMcr() const { return m_fcSttbfMcr; }
 private:
     quint32 m_lcbSttbfMcr;
 public:
-    quint32 fcPrDrvr() const { return m_fcPrDrvr; }
+    inline quint32 lcbSttbfMcr() const { return m_lcbSttbfMcr; }
 private:
     quint32 m_fcPrDrvr;
 public:
-    quint32 lcbPrDrvr() const { return m_lcbPrDrvr; }
+    inline quint32 fcPrDrvr() const { return m_fcPrDrvr; }
 private:
     quint32 m_lcbPrDrvr;
 public:
-    quint32 fcPrEnvPort() const { return m_fcPrEnvPort; }
+    inline quint32 lcbPrDrvr() const { return m_lcbPrDrvr; }
 private:
     quint32 m_fcPrEnvPort;
 public:
-    quint32 lcbPrEnvPort() const { return m_lcbPrEnvPort; }
+    inline quint32 fcPrEnvPort() const { return m_fcPrEnvPort; }
 private:
     quint32 m_lcbPrEnvPort;
 public:
-    quint32 fcPrEnvLand() const { return m_fcPrEnvLand; }
+    inline quint32 lcbPrEnvPort() const { return m_lcbPrEnvPort; }
 private:
     quint32 m_fcPrEnvLand;
 public:
-    quint32 lcbPrEnvLand() const { return m_lcbPrEnvLand; }
+    inline quint32 fcPrEnvLand() const { return m_fcPrEnvLand; }
 private:
     quint32 m_lcbPrEnvLand;
 public:
-    quint32 fcWss() const { return m_fcWss; }
+    inline quint32 lcbPrEnvLand() const { return m_lcbPrEnvLand; }
 private:
     quint32 m_fcWss;
 public:
-    quint32 lcbWss() const { return m_lcbWss; }
+    inline quint32 fcWss() const { return m_fcWss; }
 private:
     quint32 m_lcbWss;
 public:
-    quint32 fcDop() const { return m_fcDop; }
+    inline quint32 lcbWss() const { return m_lcbWss; }
 private:
     quint32 m_fcDop;
 public:
-    quint32 lcbDop() const { return m_lcbDop; }
+    inline quint32 fcDop() const { return m_fcDop; }
 private:
     quint32 m_lcbDop;
 public:
-    quint32 fcSttbfAssoc() const { return m_fcSttbfAssoc; }
+    inline quint32 lcbDop() const { return m_lcbDop; }
 private:
     quint32 m_fcSttbfAssoc;
 public:
-    quint32 lcbSttbfAssoc() const { return m_lcbSttbfAssoc; }
+    inline quint32 fcSttbfAssoc() const { return m_fcSttbfAssoc; }
 private:
     quint32 m_lcbSttbfAssoc;
 public:
-    quint32 fcClx() const { return m_fcClx; }
+    inline quint32 lcbSttbfAssoc() const { return m_lcbSttbfAssoc; }
 private:
     quint32 m_fcClx;
 public:
-    quint32 lcbClx() const { return m_lcbClx; }
+    inline quint32 fcClx() const { return m_fcClx; }
 private:
     quint32 m_lcbClx;
 public:
-    quint32 fcPlcfPgdFtn() const { return m_fcPlcfPgdFtn; }
+    inline quint32 lcbClx() const { return m_lcbClx; }
 private:
     quint32 m_fcPlcfPgdFtn;
 public:
-    quint32 lcbPlcfPgdFtn() const { return m_lcbPlcfPgdFtn; }
+    inline quint32 fcPlcfPgdFtn() const { return m_fcPlcfPgdFtn; }
 private:
     quint32 m_lcbPlcfPgdFtn;
 public:
-    quint32 fcAutosaveSource() const { return m_fcAutosaveSource; }
+    inline quint32 lcbPlcfPgdFtn() const { return m_lcbPlcfPgdFtn; }
 private:
     quint32 m_fcAutosaveSource;
 public:
-    quint32 lcbAutosaveSource() const { return m_lcbAutosaveSource; }
+    inline quint32 fcAutosaveSource() const { return m_fcAutosaveSource; }
 private:
     quint32 m_lcbAutosaveSource;
 public:
-    quint32 fcGrpXstAtnOwners() const { return m_fcGrpXstAtnOwners; }
+    inline quint32 lcbAutosaveSource() const { return m_lcbAutosaveSource; }
 private:
     quint32 m_fcGrpXstAtnOwners;
 public:
-    quint32 lcbGrpXstAtnOwners() const { return m_lcbGrpXstAtnOwners; }
+    inline quint32 fcGrpXstAtnOwners() const { return m_fcGrpXstAtnOwners; }
 private:
     quint32 m_lcbGrpXstAtnOwners;
 public:
-    quint32 fcSttbfAtnBkmk() const { return m_fcSttbfAtnBkmk; }
+    inline quint32 lcbGrpXstAtnOwners() const { return m_lcbGrpXstAtnOwners; }
 private:
     quint32 m_fcSttbfAtnBkmk;
 public:
-    quint32 lcbSttbfAtnBkmk() const { return m_lcbSttbfAtnBkmk; }
+    inline quint32 fcSttbfAtnBkmk() const { return m_fcSttbfAtnBkmk; }
 private:
     quint32 m_lcbSttbfAtnBkmk;
 public:
-    quint32 fcUnused2() const { return m_fcUnused2; }
+    inline quint32 lcbSttbfAtnBkmk() const { return m_lcbSttbfAtnBkmk; }
 private:
     quint32 m_fcUnused2;
 public:
-    quint32 lcbUnused2() const { return m_lcbUnused2; }
+    inline quint32 fcUnused2() const { return m_fcUnused2; }
 private:
     quint32 m_lcbUnused2;
 public:
-    quint32 fcUnused3() const { return m_fcUnused3; }
+    inline quint32 lcbUnused2() const { return m_lcbUnused2; }
 private:
     quint32 m_fcUnused3;
 public:
-    quint32 lcbUnused3() const { return m_lcbUnused3; }
+    inline quint32 fcUnused3() const { return m_fcUnused3; }
 private:
     quint32 m_lcbUnused3;
 public:
-    quint32 fcPlcSpaMom() const { return m_fcPlcSpaMom; }
+    inline quint32 lcbUnused3() const { return m_lcbUnused3; }
 private:
     quint32 m_fcPlcSpaMom;
 public:
-    quint32 lcbPlcSpaMom() const { return m_lcbPlcSpaMom; }
+    inline quint32 fcPlcSpaMom() const { return m_fcPlcSpaMom; }
 private:
     quint32 m_lcbPlcSpaMom;
 public:
-    quint32 fcPlcSpaHdr() const { return m_fcPlcSpaHdr; }
+    inline quint32 lcbPlcSpaMom() const { return m_lcbPlcSpaMom; }
 private:
     quint32 m_fcPlcSpaHdr;
 public:
-    quint32 lcbPlcSpaHdr() const { return m_lcbPlcSpaHdr; }
+    inline quint32 fcPlcSpaHdr() const { return m_fcPlcSpaHdr; }
 private:
     quint32 m_lcbPlcSpaHdr;
 public:
-    quint32 fcPlcfAtnBkf() const { return m_fcPlcfAtnBkf; }
+    inline quint32 lcbPlcSpaHdr() const { return m_lcbPlcSpaHdr; }
 private:
     quint32 m_fcPlcfAtnBkf;
 public:
-    quint32 lcbPlcfAtnBkf() const { return m_lcbPlcfAtnBkf; }
+    inline quint32 fcPlcfAtnBkf() const { return m_fcPlcfAtnBkf; }
 private:
     quint32 m_lcbPlcfAtnBkf;
 public:
-    quint32 fcPlcfAtnBkl() const { return m_fcPlcfAtnBkl; }
+    inline quint32 lcbPlcfAtnBkf() const { return m_lcbPlcfAtnBkf; }
 private:
     quint32 m_fcPlcfAtnBkl;
 public:
-    quint32 lcbPlcfAtnBkl() const { return m_lcbPlcfAtnBkl; }
+    inline quint32 fcPlcfAtnBkl() const { return m_fcPlcfAtnBkl; }
 private:
     quint32 m_lcbPlcfAtnBkl;
 public:
-    quint32 fcPms() const { return m_fcPms; }
+    inline quint32 lcbPlcfAtnBkl() const { return m_lcbPlcfAtnBkl; }
 private:
     quint32 m_fcPms;
 public:
-    quint32 lcbPms() const { return m_lcbPms; }
+    inline quint32 fcPms() const { return m_fcPms; }
 private:
     quint32 m_lcbPms;
 public:
-    quint32 fcFormFldSttbs() const { return m_fcFormFldSttbs; }
+    inline quint32 lcbPms() const { return m_lcbPms; }
 private:
     quint32 m_fcFormFldSttbs;
 public:
-    quint32 lcbFormFldSttbs() const { return m_lcbFormFldSttbs; }
+    inline quint32 fcFormFldSttbs() const { return m_fcFormFldSttbs; }
 private:
     quint32 m_lcbFormFldSttbs;
 public:
-    quint32 fcPlcfendRef() const { return m_fcPlcfendRef; }
+    inline quint32 lcbFormFldSttbs() const { return m_lcbFormFldSttbs; }
 private:
     quint32 m_fcPlcfendRef;
 public:
-    quint32 lcbPlcfendRef() const { return m_lcbPlcfendRef; }
+    inline quint32 fcPlcfendRef() const { return m_fcPlcfendRef; }
 private:
     quint32 m_lcbPlcfendRef;
 public:
-    quint32 fcPlcfendTxt() const { return m_fcPlcfendTxt; }
+    inline quint32 lcbPlcfendRef() const { return m_lcbPlcfendRef; }
 private:
     quint32 m_fcPlcfendTxt;
 public:
-    quint32 lcbPlcfendTxt() const { return m_lcbPlcfendTxt; }
+    inline quint32 fcPlcfendTxt() const { return m_fcPlcfendTxt; }
 private:
     quint32 m_lcbPlcfendTxt;
 public:
-    quint32 fcPlcfFldEdn() const { return m_fcPlcfFldEdn; }
+    inline quint32 lcbPlcfendTxt() const { return m_lcbPlcfendTxt; }
 private:
     quint32 m_fcPlcfFldEdn;
 public:
-    quint32 lcbPlcfFldEdn() const { return m_lcbPlcfFldEdn; }
+    inline quint32 fcPlcfFldEdn() const { return m_fcPlcfFldEdn; }
 private:
     quint32 m_lcbPlcfFldEdn;
 public:
-    quint32 fcUnused4() const { return m_fcUnused4; }
+    inline quint32 lcbPlcfFldEdn() const { return m_lcbPlcfFldEdn; }
 private:
     quint32 m_fcUnused4;
 public:
-    quint32 lcbUnused4() const { return m_lcbUnused4; }
+    inline quint32 fcUnused4() const { return m_fcUnused4; }
 private:
     quint32 m_lcbUnused4;
 public:
-    quint32 fcDggInfo() const { return m_fcDggInfo; }
+    inline quint32 lcbUnused4() const { return m_lcbUnused4; }
 private:
     quint32 m_fcDggInfo;
 public:
-    quint32 lcbDggInfo() const { return m_lcbDggInfo; }
+    inline quint32 fcDggInfo() const { return m_fcDggInfo; }
 private:
     quint32 m_lcbDggInfo;
 public:
-    quint32 fcSttbfRMark() const { return m_fcSttbfRMark; }
+    inline quint32 lcbDggInfo() const { return m_lcbDggInfo; }
 private:
     quint32 m_fcSttbfRMark;
 public:
-    quint32 lcbSttbfRMark() const { return m_lcbSttbfRMark; }
+    inline quint32 fcSttbfRMark() const { return m_fcSttbfRMark; }
 private:
     quint32 m_lcbSttbfRMark;
 public:
-    quint32 fcSttbfCaption() const { return m_fcSttbfCaption; }
+    inline quint32 lcbSttbfRMark() const { return m_lcbSttbfRMark; }
 private:
     quint32 m_fcSttbfCaption;
 public:
-    quint32 lcbSttbfCaption() const { return m_lcbSttbfCaption; }
+    inline quint32 fcSttbfCaption() const { return m_fcSttbfCaption; }
 private:
     quint32 m_lcbSttbfCaption;
 public:
-    quint32 fcSttbfAutoCaption() const { return m_fcSttbfAutoCaption; }
+    inline quint32 lcbSttbfCaption() const { return m_lcbSttbfCaption; }
 private:
     quint32 m_fcSttbfAutoCaption;
 public:
-    quint32 lcbSttbfAutoCaption() const { return m_lcbSttbfAutoCaption; }
+    inline quint32 fcSttbfAutoCaption() const { return m_fcSttbfAutoCaption; }
 private:
     quint32 m_lcbSttbfAutoCaption;
 public:
-    quint32 fcPlcfWkb() const { return m_fcPlcfWkb; }
+    inline quint32 lcbSttbfAutoCaption() const { return m_lcbSttbfAutoCaption; }
 private:
     quint32 m_fcPlcfWkb;
 public:
-    quint32 lcbPlcfWkb() const { return m_lcbPlcfWkb; }
+    inline quint32 fcPlcfWkb() const { return m_fcPlcfWkb; }
 private:
     quint32 m_lcbPlcfWkb;
 public:
-    quint32 fcPlcfSpl() const { return m_fcPlcfSpl; }
+    inline quint32 lcbPlcfWkb() const { return m_lcbPlcfWkb; }
 private:
     quint32 m_fcPlcfSpl;
 public:
-    quint32 lcbPlcfSpl() const { return m_lcbPlcfSpl; }
+    inline quint32 fcPlcfSpl() const { return m_fcPlcfSpl; }
 private:
     quint32 m_lcbPlcfSpl;
 public:
-    quint32 fcPlcftxbxTxt() const { return m_fcPlcftxbxTxt; }
+    inline quint32 lcbPlcfSpl() const { return m_lcbPlcfSpl; }
 private:
     quint32 m_fcPlcftxbxTxt;
 public:
-    quint32 lcbPlcftxbxTxt() const { return m_lcbPlcftxbxTxt; }
+    inline quint32 fcPlcftxbxTxt() const { return m_fcPlcftxbxTxt; }
 private:
     quint32 m_lcbPlcftxbxTxt;
 public:
-    quint32 fcPlcfFldTxbx() const { return m_fcPlcfFldTxbx; }
+    inline quint32 lcbPlcftxbxTxt() const { return m_lcbPlcftxbxTxt; }
 private:
     quint32 m_fcPlcfFldTxbx;
 public:
-    quint32 lcbPlcfFldTxbx() const { return m_lcbPlcfFldTxbx; }
+    inline quint32 fcPlcfFldTxbx() const { return m_fcPlcfFldTxbx; }
 private:
     quint32 m_lcbPlcfFldTxbx;
 public:
-    quint32 fcPlcfHdrtxbxTxt() const { return m_fcPlcfHdrtxbxTxt; }
+    inline quint32 lcbPlcfFldTxbx() const { return m_lcbPlcfFldTxbx; }
 private:
     quint32 m_fcPlcfHdrtxbxTxt;
 public:
-    quint32 lcbPlcfHdrtxbxTxt() const { return m_lcbPlcfHdrtxbxTxt; }
+    inline quint32 fcPlcfHdrtxbxTxt() const { return m_fcPlcfHdrtxbxTxt; }
 private:
     quint32 m_lcbPlcfHdrtxbxTxt;
 public:
-    quint32 fcPlcffldHdrTxbx() const { return m_fcPlcffldHdrTxbx; }
+    inline quint32 lcbPlcfHdrtxbxTxt() const { return m_lcbPlcfHdrtxbxTxt; }
 private:
     quint32 m_fcPlcffldHdrTxbx;
 public:
-    quint32 lcbPlcffldHdrTxbx() const { return m_lcbPlcffldHdrTxbx; }
+    inline quint32 fcPlcffldHdrTxbx() const { return m_fcPlcffldHdrTxbx; }
 private:
     quint32 m_lcbPlcffldHdrTxbx;
 public:
-    quint32 fcStwUser() const { return m_fcStwUser; }
+    inline quint32 lcbPlcffldHdrTxbx() const { return m_lcbPlcffldHdrTxbx; }
 private:
     quint32 m_fcStwUser;
 public:
-    quint32 lcbStwUser() const { return m_lcbStwUser; }
+    inline quint32 fcStwUser() const { return m_fcStwUser; }
 private:
     quint32 m_lcbStwUser;
 public:
-    quint32 fcSttbTtmbd() const { return m_fcSttbTtmbd; }
+    inline quint32 lcbStwUser() const { return m_lcbStwUser; }
 private:
     quint32 m_fcSttbTtmbd;
 public:
-    quint32 lcbSttbTtmbd() const { return m_lcbSttbTtmbd; }
+    inline quint32 fcSttbTtmbd() const { return m_fcSttbTtmbd; }
 private:
     quint32 m_lcbSttbTtmbd;
 public:
-    quint32 fcCookieData() const { return m_fcCookieData; }
+    inline quint32 lcbSttbTtmbd() const { return m_lcbSttbTtmbd; }
 private:
     quint32 m_fcCookieData;
 public:
-    quint32 lcbCookieData() const { return m_lcbCookieData; }
+    inline quint32 fcCookieData() const { return m_fcCookieData; }
 private:
     quint32 m_lcbCookieData;
 public:
-    quint32 fcPgdMotherOldOld() const { return m_fcPgdMotherOldOld; }
+    inline quint32 lcbCookieData() const { return m_lcbCookieData; }
 private:
     quint32 m_fcPgdMotherOldOld;
 public:
-    quint32 lcbPgdMotherOldOld() const { return m_lcbPgdMotherOldOld; }
+    inline quint32 fcPgdMotherOldOld() const { return m_fcPgdMotherOldOld; }
 private:
     quint32 m_lcbPgdMotherOldOld;
 public:
-    quint32 fcBkdMotherOldOld() const { return m_fcBkdMotherOldOld; }
+    inline quint32 lcbPgdMotherOldOld() const { return m_lcbPgdMotherOldOld; }
 private:
     quint32 m_fcBkdMotherOldOld;
 public:
-    quint32 lcbBkdMotherOldOld() const { return m_lcbBkdMotherOldOld; }
+    inline quint32 fcBkdMotherOldOld() const { return m_fcBkdMotherOldOld; }
 private:
     quint32 m_lcbBkdMotherOldOld;
 public:
-    quint32 fcPgdFtnOldOld() const { return m_fcPgdFtnOldOld; }
+    inline quint32 lcbBkdMotherOldOld() const { return m_lcbBkdMotherOldOld; }
 private:
     quint32 m_fcPgdFtnOldOld;
 public:
-    quint32 lcbPgdFtnOldOld() const { return m_lcbPgdFtnOldOld; }
+    inline quint32 fcPgdFtnOldOld() const { return m_fcPgdFtnOldOld; }
 private:
     quint32 m_lcbPgdFtnOldOld;
 public:
-    quint32 fcBkdFtnOldOld() const { return m_fcBkdFtnOldOld; }
+    inline quint32 lcbPgdFtnOldOld() const { return m_lcbPgdFtnOldOld; }
 private:
     quint32 m_fcBkdFtnOldOld;
 public:
-    quint32 lcbBkdFtnOldOld() const { return m_lcbBkdFtnOldOld; }
+    inline quint32 fcBkdFtnOldOld() const { return m_fcBkdFtnOldOld; }
 private:
     quint32 m_lcbBkdFtnOldOld;
 public:
-    quint32 fcPgdEdnOldOld() const { return m_fcPgdEdnOldOld; }
+    inline quint32 lcbBkdFtnOldOld() const { return m_lcbBkdFtnOldOld; }
 private:
     quint32 m_fcPgdEdnOldOld;
 public:
-    quint32 lcbPgdEdnOldOld() const { return m_lcbPgdEdnOldOld; }
+    inline quint32 fcPgdEdnOldOld() const { return m_fcPgdEdnOldOld; }
 private:
     quint32 m_lcbPgdEdnOldOld;
 public:
-    quint32 fcBkdEdnOldOld() const { return m_fcBkdEdnOldOld; }
+    inline quint32 lcbPgdEdnOldOld() const { return m_lcbPgdEdnOldOld; }
 private:
     quint32 m_fcBkdEdnOldOld;
 public:
-    quint32 lcbBkdEdnOldOld() const { return m_lcbBkdEdnOldOld; }
+    inline quint32 fcBkdEdnOldOld() const { return m_fcBkdEdnOldOld; }
 private:
     quint32 m_lcbBkdEdnOldOld;
 public:
-    quint32 fcSttbfIntlFld() const { return m_fcSttbfIntlFld; }
+    inline quint32 lcbBkdEdnOldOld() const { return m_lcbBkdEdnOldOld; }
 private:
     quint32 m_fcSttbfIntlFld;
 public:
-    quint32 lcbSttbfIntlFld() const { return m_lcbSttbfIntlFld; }
+    inline quint32 fcSttbfIntlFld() const { return m_fcSttbfIntlFld; }
 private:
     quint32 m_lcbSttbfIntlFld;
 public:
-    quint32 fcRouteSlip() const { return m_fcRouteSlip; }
+    inline quint32 lcbSttbfIntlFld() const { return m_lcbSttbfIntlFld; }
 private:
     quint32 m_fcRouteSlip;
 public:
-    quint32 lcbRouteSlip() const { return m_lcbRouteSlip; }
+    inline quint32 fcRouteSlip() const { return m_fcRouteSlip; }
 private:
     quint32 m_lcbRouteSlip;
 public:
-    quint32 fcSttbSavedBy() const { return m_fcSttbSavedBy; }
+    inline quint32 lcbRouteSlip() const { return m_lcbRouteSlip; }
 private:
     quint32 m_fcSttbSavedBy;
 public:
-    quint32 lcbSttbSavedBy() const { return m_lcbSttbSavedBy; }
+    inline quint32 fcSttbSavedBy() const { return m_fcSttbSavedBy; }
 private:
     quint32 m_lcbSttbSavedBy;
 public:
-    quint32 fcSttbFnm() const { return m_fcSttbFnm; }
+    inline quint32 lcbSttbSavedBy() const { return m_lcbSttbSavedBy; }
 private:
     quint32 m_fcSttbFnm;
 public:
-    quint32 lcbSttbFnm() const { return m_lcbSttbFnm; }
+    inline quint32 fcSttbFnm() const { return m_fcSttbFnm; }
 private:
     quint32 m_lcbSttbFnm;
 public:
-    quint32 fcPlfLst() const { return m_fcPlfLst; }
+    inline quint32 lcbSttbFnm() const { return m_lcbSttbFnm; }
 private:
     quint32 m_fcPlfLst;
 public:
-    quint32 lcbPlfLst() const { return m_lcbPlfLst; }
+    inline quint32 fcPlfLst() const { return m_fcPlfLst; }
 private:
     quint32 m_lcbPlfLst;
 public:
-    quint32 fcPlfLfo() const { return m_fcPlfLfo; }
+    inline quint32 lcbPlfLst() const { return m_lcbPlfLst; }
 private:
     quint32 m_fcPlfLfo;
 public:
-    quint32 lcbPlfLfo() const { return m_lcbPlfLfo; }
+    inline quint32 fcPlfLfo() const { return m_fcPlfLfo; }
 private:
     quint32 m_lcbPlfLfo;
 public:
-    quint32 fcPlcfTxbxBkd() const { return m_fcPlcfTxbxBkd; }
+    inline quint32 lcbPlfLfo() const { return m_lcbPlfLfo; }
 private:
     quint32 m_fcPlcfTxbxBkd;
 public:
-    quint32 lcbPlcfTxbxBkd() const { return m_lcbPlcfTxbxBkd; }
+    inline quint32 fcPlcfTxbxBkd() const { return m_fcPlcfTxbxBkd; }
 private:
     quint32 m_lcbPlcfTxbxBkd;
 public:
-    quint32 fcPlcfTxbxHdrBkd() const { return m_fcPlcfTxbxHdrBkd; }
+    inline quint32 lcbPlcfTxbxBkd() const { return m_lcbPlcfTxbxBkd; }
 private:
     quint32 m_fcPlcfTxbxHdrBkd;
 public:
-    quint32 lcbPlcfTxbxHdrBkd() const { return m_lcbPlcfTxbxHdrBkd; }
+    inline quint32 fcPlcfTxbxHdrBkd() const { return m_fcPlcfTxbxHdrBkd; }
 private:
     quint32 m_lcbPlcfTxbxHdrBkd;
 public:
-    quint32 fcDocUndoWord9() const { return m_fcDocUndoWord9; }
+    inline quint32 lcbPlcfTxbxHdrBkd() const { return m_lcbPlcfTxbxHdrBkd; }
 private:
     quint32 m_fcDocUndoWord9;
 public:
-    quint32 lcbDocUndoWord9() const { return m_lcbDocUndoWord9; }
+    inline quint32 fcDocUndoWord9() const { return m_fcDocUndoWord9; }
 private:
     quint32 m_lcbDocUndoWord9;
 public:
-    quint32 fcRgbUse() const { return m_fcRgbUse; }
+    inline quint32 lcbDocUndoWord9() const { return m_lcbDocUndoWord9; }
 private:
     quint32 m_fcRgbUse;
 public:
-    quint32 lcbRgbUse() const { return m_lcbRgbUse; }
+    inline quint32 fcRgbUse() const { return m_fcRgbUse; }
 private:
     quint32 m_lcbRgbUse;
 public:
-    quint32 fcUsp() const { return m_fcUsp; }
+    inline quint32 lcbRgbUse() const { return m_lcbRgbUse; }
 private:
     quint32 m_fcUsp;
 public:
-    quint32 lcbUsp() const { return m_lcbUsp; }
+    inline quint32 fcUsp() const { return m_fcUsp; }
 private:
     quint32 m_lcbUsp;
 public:
-    quint32 fcUskf() const { return m_fcUskf; }
+    inline quint32 lcbUsp() const { return m_lcbUsp; }
 private:
     quint32 m_fcUskf;
 public:
-    quint32 lcbUskf() const { return m_lcbUskf; }
+    inline quint32 fcUskf() const { return m_fcUskf; }
 private:
     quint32 m_lcbUskf;
 public:
-    quint32 fcPlcupcRgbUse() const { return m_fcPlcupcRgbUse; }
+    inline quint32 lcbUskf() const { return m_lcbUskf; }
 private:
     quint32 m_fcPlcupcRgbUse;
 public:
-    quint32 lcbPlcupcRgbUse() const { return m_lcbPlcupcRgbUse; }
+    inline quint32 fcPlcupcRgbUse() const { return m_fcPlcupcRgbUse; }
 private:
     quint32 m_lcbPlcupcRgbUse;
 public:
-    quint32 fcPlcupcUsp() const { return m_fcPlcupcUsp; }
+    inline quint32 lcbPlcupcRgbUse() const { return m_lcbPlcupcRgbUse; }
 private:
     quint32 m_fcPlcupcUsp;
 public:
-    quint32 lcbPlcupcUsp() const { return m_lcbPlcupcUsp; }
+    inline quint32 fcPlcupcUsp() const { return m_fcPlcupcUsp; }
 private:
     quint32 m_lcbPlcupcUsp;
 public:
-    quint32 fcSttbGlsyStyle() const { return m_fcSttbGlsyStyle; }
+    inline quint32 lcbPlcupcUsp() const { return m_lcbPlcupcUsp; }
 private:
     quint32 m_fcSttbGlsyStyle;
 public:
-    quint32 lcbSttbGlsyStyle() const { return m_lcbSttbGlsyStyle; }
+    inline quint32 fcSttbGlsyStyle() const { return m_fcSttbGlsyStyle; }
 private:
     quint32 m_lcbSttbGlsyStyle;
 public:
-    quint32 fcPlgosl() const { return m_fcPlgosl; }
+    inline quint32 lcbSttbGlsyStyle() const { return m_lcbSttbGlsyStyle; }
 private:
     quint32 m_fcPlgosl;
 public:
-    quint32 lcbPlgosl() const { return m_lcbPlgosl; }
+    inline quint32 fcPlgosl() const { return m_fcPlgosl; }
 private:
     quint32 m_lcbPlgosl;
 public:
-    quint32 fcPlcocx() const { return m_fcPlcocx; }
+    inline quint32 lcbPlgosl() const { return m_lcbPlgosl; }
 private:
     quint32 m_fcPlcocx;
 public:
-    quint32 lcbPlcocx() const { return m_lcbPlcocx; }
+    inline quint32 fcPlcocx() const { return m_fcPlcocx; }
 private:
     quint32 m_lcbPlcocx;
 public:
-    quint32 fcPlcfBteLvc() const { return m_fcPlcfBteLvc; }
+    inline quint32 lcbPlcocx() const { return m_lcbPlcocx; }
 private:
     quint32 m_fcPlcfBteLvc;
 public:
-    quint32 lcbPlcfBteLvc() const { return m_lcbPlcfBteLvc; }
+    inline quint32 fcPlcfBteLvc() const { return m_fcPlcfBteLvc; }
 private:
     quint32 m_lcbPlcfBteLvc;
 public:
-    quint32 dwLowDateTime() const { return m_dwLowDateTime; }
+    inline quint32 lcbPlcfBteLvc() const { return m_lcbPlcfBteLvc; }
 private:
     quint32 m_dwLowDateTime;
 public:
-    quint32 dwHighDateTime() const { return m_dwHighDateTime; }
+    inline quint32 dwLowDateTime() const { return m_dwLowDateTime; }
 private:
     quint32 m_dwHighDateTime;
 public:
-    quint32 fcPlcfLvcPre10() const { return m_fcPlcfLvcPre10; }
+    inline quint32 dwHighDateTime() const { return m_dwHighDateTime; }
 private:
     quint32 m_fcPlcfLvcPre10;
 public:
-    quint32 lcbPlcfLvcPre10() const { return m_lcbPlcfLvcPre10; }
+    inline quint32 fcPlcfLvcPre10() const { return m_fcPlcfLvcPre10; }
 private:
     quint32 m_lcbPlcfLvcPre10;
 public:
-    quint32 fcPlcfAsumy() const { return m_fcPlcfAsumy; }
+    inline quint32 lcbPlcfLvcPre10() const { return m_lcbPlcfLvcPre10; }
 private:
     quint32 m_fcPlcfAsumy;
 public:
-    quint32 lcbPlcfAsumy() const { return m_lcbPlcfAsumy; }
+    inline quint32 fcPlcfAsumy() const { return m_fcPlcfAsumy; }
 private:
     quint32 m_lcbPlcfAsumy;
 public:
-    quint32 fcPlcfGram() const { return m_fcPlcfGram; }
+    inline quint32 lcbPlcfAsumy() const { return m_lcbPlcfAsumy; }
 private:
     quint32 m_fcPlcfGram;
 public:
-    quint32 lcbPlcfGram() const { return m_lcbPlcfGram; }
+    inline quint32 fcPlcfGram() const { return m_fcPlcfGram; }
 private:
     quint32 m_lcbPlcfGram;
 public:
-    quint32 fcSttbListNames() const { return m_fcSttbListNames; }
+    inline quint32 lcbPlcfGram() const { return m_lcbPlcfGram; }
 private:
     quint32 m_fcSttbListNames;
 public:
-    quint32 lcbSttbListNames() const { return m_lcbSttbListNames; }
+    inline quint32 fcSttbListNames() const { return m_fcSttbListNames; }
 private:
     quint32 m_lcbSttbListNames;
 public:
-    quint32 fcSttbfUssr() const { return m_fcSttbfUssr; }
+    inline quint32 lcbSttbListNames() const { return m_lcbSttbListNames; }
 private:
     quint32 m_fcSttbfUssr;
 public:
-    quint32 lcbSttbfUssr() const { return m_lcbSttbfUssr; }
+    inline quint32 fcSttbfUssr() const { return m_fcSttbfUssr; }
 private:
     quint32 m_lcbSttbfUssr;
+public:
+    inline quint32 lcbSttbfUssr() const { return m_lcbSttbfUssr; }
 };
 class FibRgFcLcb2000 : public FixedSizeParsedObject {
 private:
@@ -6299,126 +6299,126 @@ public:
     static inline quint32 getSize() { return _size; }
     FibRgFcLcb2000() {}
     FibRgFcLcb2000(const char* data, quint32/*ignored*/ = 0);// 120 bytes
-public:
-    quint32 fcPlcfTch() const { return m_fcPlcfTch; }
 private:
     quint32 m_fcPlcfTch;
 public:
-    quint32 lcbPlcfTch() const { return m_lcbPlcfTch; }
+    inline quint32 fcPlcfTch() const { return m_fcPlcfTch; }
 private:
     quint32 m_lcbPlcfTch;
 public:
-    quint32 fcRmdThreading() const { return m_fcRmdThreading; }
+    inline quint32 lcbPlcfTch() const { return m_lcbPlcfTch; }
 private:
     quint32 m_fcRmdThreading;
 public:
-    quint32 lcbRmdThreading() const { return m_lcbRmdThreading; }
+    inline quint32 fcRmdThreading() const { return m_fcRmdThreading; }
 private:
     quint32 m_lcbRmdThreading;
 public:
-    quint32 fcMid() const { return m_fcMid; }
+    inline quint32 lcbRmdThreading() const { return m_lcbRmdThreading; }
 private:
     quint32 m_fcMid;
 public:
-    quint32 lcbMid() const { return m_lcbMid; }
+    inline quint32 fcMid() const { return m_fcMid; }
 private:
     quint32 m_lcbMid;
 public:
-    quint32 fcSttbRgtplc() const { return m_fcSttbRgtplc; }
+    inline quint32 lcbMid() const { return m_lcbMid; }
 private:
     quint32 m_fcSttbRgtplc;
 public:
-    quint32 lcbSttbRgtplc() const { return m_lcbSttbRgtplc; }
+    inline quint32 fcSttbRgtplc() const { return m_fcSttbRgtplc; }
 private:
     quint32 m_lcbSttbRgtplc;
 public:
-    quint32 fcMsoEnvelope() const { return m_fcMsoEnvelope; }
+    inline quint32 lcbSttbRgtplc() const { return m_lcbSttbRgtplc; }
 private:
     quint32 m_fcMsoEnvelope;
 public:
-    quint32 lcbMsoEnvelope() const { return m_lcbMsoEnvelope; }
+    inline quint32 fcMsoEnvelope() const { return m_fcMsoEnvelope; }
 private:
     quint32 m_lcbMsoEnvelope;
 public:
-    quint32 fcPlcfLad() const { return m_fcPlcfLad; }
+    inline quint32 lcbMsoEnvelope() const { return m_lcbMsoEnvelope; }
 private:
     quint32 m_fcPlcfLad;
 public:
-    quint32 lcbPlcfLad() const { return m_lcbPlcfLad; }
+    inline quint32 fcPlcfLad() const { return m_fcPlcfLad; }
 private:
     quint32 m_lcbPlcfLad;
 public:
-    quint32 fcRgDofr() const { return m_fcRgDofr; }
+    inline quint32 lcbPlcfLad() const { return m_lcbPlcfLad; }
 private:
     quint32 m_fcRgDofr;
 public:
-    quint32 lcbRgDofr() const { return m_lcbRgDofr; }
+    inline quint32 fcRgDofr() const { return m_fcRgDofr; }
 private:
     quint32 m_lcbRgDofr;
 public:
-    quint32 fcPlcosl() const { return m_fcPlcosl; }
+    inline quint32 lcbRgDofr() const { return m_lcbRgDofr; }
 private:
     quint32 m_fcPlcosl;
 public:
-    quint32 lcbPlcosl() const { return m_lcbPlcosl; }
+    inline quint32 fcPlcosl() const { return m_fcPlcosl; }
 private:
     quint32 m_lcbPlcosl;
 public:
-    quint32 fcPlcfCookieOld() const { return m_fcPlcfCookieOld; }
+    inline quint32 lcbPlcosl() const { return m_lcbPlcosl; }
 private:
     quint32 m_fcPlcfCookieOld;
 public:
-    quint32 lcbPlcfCookieOld() const { return m_lcbPlcfCookieOld; }
+    inline quint32 fcPlcfCookieOld() const { return m_fcPlcfCookieOld; }
 private:
     quint32 m_lcbPlcfCookieOld;
 public:
-    quint32 fcPgdMotherOld() const { return m_fcPgdMotherOld; }
+    inline quint32 lcbPlcfCookieOld() const { return m_lcbPlcfCookieOld; }
 private:
     quint32 m_fcPgdMotherOld;
 public:
-    quint32 lcbPgdMotherOld() const { return m_lcbPgdMotherOld; }
+    inline quint32 fcPgdMotherOld() const { return m_fcPgdMotherOld; }
 private:
     quint32 m_lcbPgdMotherOld;
 public:
-    quint32 fcBkdMotherOld() const { return m_fcBkdMotherOld; }
+    inline quint32 lcbPgdMotherOld() const { return m_lcbPgdMotherOld; }
 private:
     quint32 m_fcBkdMotherOld;
 public:
-    quint32 lcbBkdMotherOld() const { return m_lcbBkdMotherOld; }
+    inline quint32 fcBkdMotherOld() const { return m_fcBkdMotherOld; }
 private:
     quint32 m_lcbBkdMotherOld;
 public:
-    quint32 fcPgdFtnOld() const { return m_fcPgdFtnOld; }
+    inline quint32 lcbBkdMotherOld() const { return m_lcbBkdMotherOld; }
 private:
     quint32 m_fcPgdFtnOld;
 public:
-    quint32 lcbPgdFtnOld() const { return m_lcbPgdFtnOld; }
+    inline quint32 fcPgdFtnOld() const { return m_fcPgdFtnOld; }
 private:
     quint32 m_lcbPgdFtnOld;
 public:
-    quint32 fcBkdFtnOld() const { return m_fcBkdFtnOld; }
+    inline quint32 lcbPgdFtnOld() const { return m_lcbPgdFtnOld; }
 private:
     quint32 m_fcBkdFtnOld;
 public:
-    quint32 lcbBkdFtnOld() const { return m_lcbBkdFtnOld; }
+    inline quint32 fcBkdFtnOld() const { return m_fcBkdFtnOld; }
 private:
     quint32 m_lcbBkdFtnOld;
 public:
-    quint32 fcPgdEdnOld() const { return m_fcPgdEdnOld; }
+    inline quint32 lcbBkdFtnOld() const { return m_lcbBkdFtnOld; }
 private:
     quint32 m_fcPgdEdnOld;
 public:
-    quint32 lcbPgdEdnOld() const { return m_lcbPgdEdnOld; }
+    inline quint32 fcPgdEdnOld() const { return m_fcPgdEdnOld; }
 private:
     quint32 m_lcbPgdEdnOld;
 public:
-    quint32 fcBkdEdnOld() const { return m_fcBkdEdnOld; }
+    inline quint32 lcbPgdEdnOld() const { return m_lcbPgdEdnOld; }
 private:
     quint32 m_fcBkdEdnOld;
 public:
-    quint32 lcbBkdEdnOld() const { return m_lcbBkdEdnOld; }
+    inline quint32 fcBkdEdnOld() const { return m_fcBkdEdnOld; }
 private:
     quint32 m_lcbBkdEdnOld;
+public:
+    inline quint32 lcbBkdEdnOld() const { return m_lcbBkdEdnOld; }
 };
 class FibRgFcLcb2002 : public FixedSizeParsedObject {
 private:
@@ -6427,238 +6427,238 @@ public:
     static inline quint32 getSize() { return _size; }
     FibRgFcLcb2002() {}
     FibRgFcLcb2002(const char* data, quint32/*ignored*/ = 0);// 200 bytes
-public:
-    quint32 fcUnused1() const { return m_fcUnused1; }
 private:
     quint32 m_fcUnused1;
 public:
-    quint32 lcbUnused1() const { return m_lcbUnused1; }
+    inline quint32 fcUnused1() const { return m_fcUnused1; }
 private:
     quint32 m_lcbUnused1;
 public:
-    quint32 fcPlcfPgp() const { return m_fcPlcfPgp; }
+    inline quint32 lcbUnused1() const { return m_lcbUnused1; }
 private:
     quint32 m_fcPlcfPgp;
 public:
-    quint32 lcbPlcfPgp() const { return m_lcbPlcfPgp; }
+    inline quint32 fcPlcfPgp() const { return m_fcPlcfPgp; }
 private:
     quint32 m_lcbPlcfPgp;
 public:
-    quint32 fcPlcfuim() const { return m_fcPlcfuim; }
+    inline quint32 lcbPlcfPgp() const { return m_lcbPlcfPgp; }
 private:
     quint32 m_fcPlcfuim;
 public:
-    quint32 lcbPlcfuim() const { return m_lcbPlcfuim; }
+    inline quint32 fcPlcfuim() const { return m_fcPlcfuim; }
 private:
     quint32 m_lcbPlcfuim;
 public:
-    quint32 fcPlfguidUim() const { return m_fcPlfguidUim; }
+    inline quint32 lcbPlcfuim() const { return m_lcbPlcfuim; }
 private:
     quint32 m_fcPlfguidUim;
 public:
-    quint32 lcbPlfguidUim() const { return m_lcbPlfguidUim; }
+    inline quint32 fcPlfguidUim() const { return m_fcPlfguidUim; }
 private:
     quint32 m_lcbPlfguidUim;
 public:
-    quint32 fcAtrdExtra() const { return m_fcAtrdExtra; }
+    inline quint32 lcbPlfguidUim() const { return m_lcbPlfguidUim; }
 private:
     quint32 m_fcAtrdExtra;
 public:
-    quint32 lcbAtrdExtra() const { return m_lcbAtrdExtra; }
+    inline quint32 fcAtrdExtra() const { return m_fcAtrdExtra; }
 private:
     quint32 m_lcbAtrdExtra;
 public:
-    quint32 fcPlrsid() const { return m_fcPlrsid; }
+    inline quint32 lcbAtrdExtra() const { return m_lcbAtrdExtra; }
 private:
     quint32 m_fcPlrsid;
 public:
-    quint32 lcbPlrsid() const { return m_lcbPlrsid; }
+    inline quint32 fcPlrsid() const { return m_fcPlrsid; }
 private:
     quint32 m_lcbPlrsid;
 public:
-    quint32 fcSttbfBkmkFactoid() const { return m_fcSttbfBkmkFactoid; }
+    inline quint32 lcbPlrsid() const { return m_lcbPlrsid; }
 private:
     quint32 m_fcSttbfBkmkFactoid;
 public:
-    quint32 lcbSttbfBkmkFactoid() const { return m_lcbSttbfBkmkFactoid; }
+    inline quint32 fcSttbfBkmkFactoid() const { return m_fcSttbfBkmkFactoid; }
 private:
     quint32 m_lcbSttbfBkmkFactoid;
 public:
-    quint32 fcPlcfBkfFactoid() const { return m_fcPlcfBkfFactoid; }
+    inline quint32 lcbSttbfBkmkFactoid() const { return m_lcbSttbfBkmkFactoid; }
 private:
     quint32 m_fcPlcfBkfFactoid;
 public:
-    quint32 lcbPlcfBkfFactoid() const { return m_lcbPlcfBkfFactoid; }
+    inline quint32 fcPlcfBkfFactoid() const { return m_fcPlcfBkfFactoid; }
 private:
     quint32 m_lcbPlcfBkfFactoid;
 public:
-    quint32 fcPlcfcookie() const { return m_fcPlcfcookie; }
+    inline quint32 lcbPlcfBkfFactoid() const { return m_lcbPlcfBkfFactoid; }
 private:
     quint32 m_fcPlcfcookie;
 public:
-    quint32 lcbPlcfcookie() const { return m_lcbPlcfcookie; }
+    inline quint32 fcPlcfcookie() const { return m_fcPlcfcookie; }
 private:
     quint32 m_lcbPlcfcookie;
 public:
-    quint32 fcPlcfBklFactoid() const { return m_fcPlcfBklFactoid; }
+    inline quint32 lcbPlcfcookie() const { return m_lcbPlcfcookie; }
 private:
     quint32 m_fcPlcfBklFactoid;
 public:
-    quint32 lcbPlcfBklFactoid() const { return m_lcbPlcfBklFactoid; }
+    inline quint32 fcPlcfBklFactoid() const { return m_fcPlcfBklFactoid; }
 private:
     quint32 m_lcbPlcfBklFactoid;
 public:
-    quint32 fcFactoidData() const { return m_fcFactoidData; }
+    inline quint32 lcbPlcfBklFactoid() const { return m_lcbPlcfBklFactoid; }
 private:
     quint32 m_fcFactoidData;
 public:
-    quint32 lcbFactoidData() const { return m_lcbFactoidData; }
+    inline quint32 fcFactoidData() const { return m_fcFactoidData; }
 private:
     quint32 m_lcbFactoidData;
 public:
-    quint32 fcDocUndo() const { return m_fcDocUndo; }
+    inline quint32 lcbFactoidData() const { return m_lcbFactoidData; }
 private:
     quint32 m_fcDocUndo;
 public:
-    quint32 lcbDocUndo() const { return m_lcbDocUndo; }
+    inline quint32 fcDocUndo() const { return m_fcDocUndo; }
 private:
     quint32 m_lcbDocUndo;
 public:
-    quint32 fcSttbfBkmkFcc() const { return m_fcSttbfBkmkFcc; }
+    inline quint32 lcbDocUndo() const { return m_lcbDocUndo; }
 private:
     quint32 m_fcSttbfBkmkFcc;
 public:
-    quint32 lcbSttbfBkmkFcc() const { return m_lcbSttbfBkmkFcc; }
+    inline quint32 fcSttbfBkmkFcc() const { return m_fcSttbfBkmkFcc; }
 private:
     quint32 m_lcbSttbfBkmkFcc;
 public:
-    quint32 fcPlcfBkfFcc() const { return m_fcPlcfBkfFcc; }
+    inline quint32 lcbSttbfBkmkFcc() const { return m_lcbSttbfBkmkFcc; }
 private:
     quint32 m_fcPlcfBkfFcc;
 public:
-    quint32 lcbPlcfBkfFcc() const { return m_lcbPlcfBkfFcc; }
+    inline quint32 fcPlcfBkfFcc() const { return m_fcPlcfBkfFcc; }
 private:
     quint32 m_lcbPlcfBkfFcc;
 public:
-    quint32 fcPlcfBklFcc() const { return m_fcPlcfBklFcc; }
+    inline quint32 lcbPlcfBkfFcc() const { return m_lcbPlcfBkfFcc; }
 private:
     quint32 m_fcPlcfBklFcc;
 public:
-    quint32 lcbPlcfBklFcc() const { return m_lcbPlcfBklFcc; }
+    inline quint32 fcPlcfBklFcc() const { return m_fcPlcfBklFcc; }
 private:
     quint32 m_lcbPlcfBklFcc;
 public:
-    quint32 fcSttbfbkmkBPRepairs() const { return m_fcSttbfbkmkBPRepairs; }
+    inline quint32 lcbPlcfBklFcc() const { return m_lcbPlcfBklFcc; }
 private:
     quint32 m_fcSttbfbkmkBPRepairs;
 public:
-    quint32 lcbSttbfbkmkBPRepairs() const { return m_lcbSttbfbkmkBPRepairs; }
+    inline quint32 fcSttbfbkmkBPRepairs() const { return m_fcSttbfbkmkBPRepairs; }
 private:
     quint32 m_lcbSttbfbkmkBPRepairs;
 public:
-    quint32 fcPlcfbkfBPRepairs() const { return m_fcPlcfbkfBPRepairs; }
+    inline quint32 lcbSttbfbkmkBPRepairs() const { return m_lcbSttbfbkmkBPRepairs; }
 private:
     quint32 m_fcPlcfbkfBPRepairs;
 public:
-    quint32 lcbPlcfbkfBPRepairs() const { return m_lcbPlcfbkfBPRepairs; }
+    inline quint32 fcPlcfbkfBPRepairs() const { return m_fcPlcfbkfBPRepairs; }
 private:
     quint32 m_lcbPlcfbkfBPRepairs;
 public:
-    quint32 fcPlcfbklBPRepairs() const { return m_fcPlcfbklBPRepairs; }
+    inline quint32 lcbPlcfbkfBPRepairs() const { return m_lcbPlcfbkfBPRepairs; }
 private:
     quint32 m_fcPlcfbklBPRepairs;
 public:
-    quint32 lcbPlcfbklBPRepairs() const { return m_lcbPlcfbklBPRepairs; }
+    inline quint32 fcPlcfbklBPRepairs() const { return m_fcPlcfbklBPRepairs; }
 private:
     quint32 m_lcbPlcfbklBPRepairs;
 public:
-    quint32 fcPmsNew() const { return m_fcPmsNew; }
+    inline quint32 lcbPlcfbklBPRepairs() const { return m_lcbPlcfbklBPRepairs; }
 private:
     quint32 m_fcPmsNew;
 public:
-    quint32 lcbPmsNew() const { return m_lcbPmsNew; }
+    inline quint32 fcPmsNew() const { return m_fcPmsNew; }
 private:
     quint32 m_lcbPmsNew;
 public:
-    quint32 fcODSO() const { return m_fcODSO; }
+    inline quint32 lcbPmsNew() const { return m_lcbPmsNew; }
 private:
     quint32 m_fcODSO;
 public:
-    quint32 lcbODSO() const { return m_lcbODSO; }
+    inline quint32 fcODSO() const { return m_fcODSO; }
 private:
     quint32 m_lcbODSO;
 public:
-    quint32 fcPlcfpmiOldXP() const { return m_fcPlcfpmiOldXP; }
+    inline quint32 lcbODSO() const { return m_lcbODSO; }
 private:
     quint32 m_fcPlcfpmiOldXP;
 public:
-    quint32 lcbPlcfpmiOldXP() const { return m_lcbPlcfpmiOldXP; }
+    inline quint32 fcPlcfpmiOldXP() const { return m_fcPlcfpmiOldXP; }
 private:
     quint32 m_lcbPlcfpmiOldXP;
 public:
-    quint32 fcPlcfpmiNewXP() const { return m_fcPlcfpmiNewXP; }
+    inline quint32 lcbPlcfpmiOldXP() const { return m_lcbPlcfpmiOldXP; }
 private:
     quint32 m_fcPlcfpmiNewXP;
 public:
-    quint32 lcbPlcfpmiNewXP() const { return m_lcbPlcfpmiNewXP; }
+    inline quint32 fcPlcfpmiNewXP() const { return m_fcPlcfpmiNewXP; }
 private:
     quint32 m_lcbPlcfpmiNewXP;
 public:
-    quint32 fcPlcfpmiMixedXP() const { return m_fcPlcfpmiMixedXP; }
+    inline quint32 lcbPlcfpmiNewXP() const { return m_lcbPlcfpmiNewXP; }
 private:
     quint32 m_fcPlcfpmiMixedXP;
 public:
-    quint32 lcbPlcfpmiMixedXP() const { return m_lcbPlcfpmiMixedXP; }
+    inline quint32 fcPlcfpmiMixedXP() const { return m_fcPlcfpmiMixedXP; }
 private:
     quint32 m_lcbPlcfpmiMixedXP;
 public:
-    quint32 fcUnused2() const { return m_fcUnused2; }
+    inline quint32 lcbPlcfpmiMixedXP() const { return m_lcbPlcfpmiMixedXP; }
 private:
     quint32 m_fcUnused2;
 public:
-    quint32 lcbUnused2() const { return m_lcbUnused2; }
+    inline quint32 fcUnused2() const { return m_fcUnused2; }
 private:
     quint32 m_lcbUnused2;
 public:
-    quint32 fcPlcffactoid() const { return m_fcPlcffactoid; }
+    inline quint32 lcbUnused2() const { return m_lcbUnused2; }
 private:
     quint32 m_fcPlcffactoid;
 public:
-    quint32 lcbPlcffactoid() const { return m_lcbPlcffactoid; }
+    inline quint32 fcPlcffactoid() const { return m_fcPlcffactoid; }
 private:
     quint32 m_lcbPlcffactoid;
+public:
+    inline quint32 lcbPlcffactoid() const { return m_lcbPlcffactoid; }
 };
 class LPStshi : public ParsedObject {
 private:
 public:
     LPStshi() {}
     explicit LPStshi(const char* data, const quint32 maxsize);
-public:
-    quint16 cbSthi() const { return m_cbSthi; }
 private:
     quint16 m_cbSthi;
+public:
+    inline quint16 cbSthi() const { return m_cbSthi; }
 private:
     MSOCastArray<char> m_stshi;
 public:
-    MSOCastArray<char> stshi() const { return m_stshi; }
+    const MSOCastArray<char>& stshi() const { return m_stshi; }
 };
 class LPStd : public ParsedObject {
 private:
 public:
     LPStd() {}
     explicit LPStd(const char* data, const quint32 maxsize);
-public:
-    quint16 cbStd() const { return m_cbStd; }
 private:
     quint16 m_cbStd;
+public:
+    inline quint16 cbStd() const { return m_cbStd; }
 private:
     MSOCastArray<char> m_std;
 public:
-    MSOCastArray<char> std() const { return m_std; }
-public:
-    MSOBasicNullable<quint8> padding() const { return m_padding; }
+    const MSOCastArray<char>& std() const { return m_std; }
 private:
     MSOBasicNullable<quint8> m_padding;
+public:
+    inline const MSOBasicNullable<quint8>& padding() const { return m_padding; }
 };
 class PlcfSed : public ParsedObject {
 private:
@@ -6668,11 +6668,11 @@ public:
 private:
     MSOCastArray<quint32> m_aCP;
 public:
-    MSOCastArray<quint32> aCP() const { return m_aCP; }
+    const MSOCastArray<quint32>& aCP() const { return m_aCP; }
 private:
     MSOArray<Sed> m_aSed;
 public:
-    MSOArray<Sed> aSed() const { return m_aSed; }
+    inline const MSOArray<Sed>& aSed() const { return m_aSed; }
 };
 class Sed : public FixedSizeParsedObject {
 private:
@@ -6681,22 +6681,22 @@ public:
     static inline quint32 getSize() { return _size; }
     Sed() {}
     Sed(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    quint16 fn() const { return m_fn; }
 private:
     quint16 m_fn;
 public:
-    qint32 fcSepx() const { return m_fcSepx; }
+    inline quint16 fn() const { return m_fn; }
 private:
     qint32 m_fcSepx;
 public:
-    quint16 fnMpr() const { return m_fnMpr; }
+    inline qint32 fcSepx() const { return m_fcSepx; }
 private:
     quint16 m_fnMpr;
 public:
-    quint32 fcMpr() const { return m_fcMpr; }
+    inline quint16 fnMpr() const { return m_fnMpr; }
 private:
     quint32 m_fcMpr;
+public:
+    inline quint32 fcMpr() const { return m_fcMpr; }
 };
 class Plcfhdd : public FixedSizeParsedObject {
 private:
@@ -6708,7 +6708,7 @@ public:
 private:
     MSOCastArray<quint32> m_aCP;
 public:
-    MSOCastArray<quint32> aCP() const { return m_aCP; }
+    const MSOCastArray<quint32>& aCP() const { return m_aCP; }
 };
 class PlcBteChpx : public FixedSizeParsedObject {
 private:
@@ -6720,11 +6720,11 @@ public:
 private:
     MSOCastArray<quint32> m_aCP;
 public:
-    MSOCastArray<quint32> aCP() const { return m_aCP; }
+    const MSOCastArray<quint32>& aCP() const { return m_aCP; }
 private:
     MSOCastArray<quint32> m_aPnBteChpx;
 public:
-    MSOCastArray<quint32> aPnBteChpx() const { return m_aPnBteChpx; }
+    const MSOCastArray<quint32>& aPnBteChpx() const { return m_aPnBteChpx; }
 };
 class PlcfBtePapx : public FixedSizeParsedObject {
 private:
@@ -6736,11 +6736,11 @@ public:
 private:
     MSOCastArray<quint32> m_aCP;
 public:
-    MSOCastArray<quint32> aCP() const { return m_aCP; }
+    const MSOCastArray<quint32>& aCP() const { return m_aCP; }
 private:
     MSOCastArray<quint32> m_aPnBteChpx;
 public:
-    MSOCastArray<quint32> aPnBteChpx() const { return m_aPnBteChpx; }
+    const MSOCastArray<quint32>& aPnBteChpx() const { return m_aPnBteChpx; }
 };
 class Tcg : public FixedSizeParsedObject {
 private:
@@ -6749,28 +6749,28 @@ public:
     static inline quint32 getSize() { return _size; }
     Tcg() {}
     Tcg(const char* data, quint32/*ignored*/ = 0);// 12 bytes
-public:
-    quint8 nTcgVer() const { return m_nTcgVer; }
 private:
     quint8 m_nTcgVer;
+public:
+    inline quint8 nTcgVer() const { return m_nTcgVer; }
 private:
     MSOCastArray<char> m_todo;
 public:
-    MSOCastArray<char> todo() const { return m_todo; }
+    const MSOCastArray<char>& todo() const { return m_todo; }
 };
 class PrcData : public ParsedObject {
 private:
 public:
     PrcData() {}
     explicit PrcData(const char* data, const quint32 maxsize);
-public:
-    qint16 cbGrpprl() const { return m_cbGrpprl; }
 private:
     qint16 m_cbGrpprl;
+public:
+    inline qint16 cbGrpprl() const { return m_cbGrpprl; }
 private:
     MSOArray<Sprm> m_GrpPrl;
 public:
-    MSOArray<Sprm> GrpPrl() const { return m_GrpPrl; }
+    inline const MSOArray<Sprm>& GrpPrl() const { return m_GrpPrl; }
 };
 class Sprm : public FixedSizeParsedObject {
 private:
@@ -6779,40 +6779,40 @@ public:
     static inline quint32 getSize() { return _size; }
     Sprm() {}
     Sprm(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    quint16 ispmd() const { return m_ispmd; }
 private:
     quint16 m_ispmd;
 public:
-    bool fSpec() const { return m_fSpec; }
+    inline quint16 ispmd() const { return m_ispmd; }
 private:
     bool m_fSpec;
 public:
-    quint8 sgc() const { return m_sgc; }
+    inline bool fSpec() const { return m_fSpec; }
 private:
     quint8 m_sgc;
 public:
-    quint8 spra() const { return m_spra; }
+    inline quint8 sgc() const { return m_sgc; }
 private:
     quint8 m_spra;
+public:
+    inline quint8 spra() const { return m_spra; }
 };
 class Pcdt : public ParsedObject {
 private:
 public:
     Pcdt() {}
     explicit Pcdt(const char* data, const quint32 maxsize);
-public:
-    quint8 clxt() const { return m_clxt; }
 private:
     quint8 m_clxt;
 public:
-    quint32 lcb() const { return m_lcb; }
+    inline quint8 clxt() const { return m_clxt; }
 private:
     quint32 m_lcb;
+public:
+    inline quint32 lcb() const { return m_lcb; }
 private:
     MSOArray<Pcd> m_PlcPcd;
 public:
-    MSOArray<Pcd> PlcPcd() const { return m_PlcPcd; }
+    inline const MSOArray<Pcd>& PlcPcd() const { return m_PlcPcd; }
 };
 class FCompressed : public FixedSizeParsedObject {
 private:
@@ -6821,18 +6821,18 @@ public:
     static inline quint32 getSize() { return _size; }
     FCompressed() {}
     FCompressed(const char* data, quint32/*ignored*/ = 0);// 4 bytes
-public:
-    quint32 fc() const { return m_fc; }
 private:
     quint32 m_fc;
 public:
-    bool fCompressed() const { return m_fCompressed; }
+    inline quint32 fc() const { return m_fc; }
 private:
     bool m_fCompressed;
 public:
-    bool r1() const { return m_r1; }
+    inline bool fCompressed() const { return m_fCompressed; }
 private:
     bool m_r1;
+public:
+    inline bool r1() const { return m_r1; }
 };
 class Prm0 : public FixedSizeParsedObject {
 private:
@@ -6841,18 +6841,18 @@ public:
     static inline quint32 getSize() { return _size; }
     Prm0() {}
     Prm0(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    bool fComplex() const { return m_fComplex; }
 private:
     bool m_fComplex;
 public:
-    quint8 isprm() const { return m_isprm; }
+    inline bool fComplex() const { return m_fComplex; }
 private:
     quint8 m_isprm;
 public:
-    quint8 val() const { return m_val; }
+    inline quint8 isprm() const { return m_isprm; }
 private:
     quint8 m_val;
+public:
+    inline quint8 val() const { return m_val; }
 };
 class Prm1 : public FixedSizeParsedObject {
 private:
@@ -6861,60 +6861,60 @@ public:
     static inline quint32 getSize() { return _size; }
     Prm1() {}
     Prm1(const char* data, quint32/*ignored*/ = 0);// 2 bytes
-public:
-    bool fComplex() const { return m_fComplex; }
 private:
     bool m_fComplex;
 public:
-    quint16 igrpprl() const { return m_igrpprl; }
+    inline bool fComplex() const { return m_fComplex; }
 private:
     quint16 m_igrpprl;
+public:
+    inline quint16 igrpprl() const { return m_igrpprl; }
 };
 class SttbfFfn : public ParsedObject {
 private:
 public:
     SttbfFfn() {}
     explicit SttbfFfn(const char* data, const quint32 maxsize);
-public:
-    quint16 cData() const { return m_cData; }
 private:
     quint16 m_cData;
 public:
-    quint16 cbExtra() const { return m_cbExtra; }
+    inline quint16 cData() const { return m_cData; }
 private:
     quint16 m_cbExtra;
+public:
+    inline quint16 cbExtra() const { return m_cbExtra; }
 private:
     MSOArray<SttbfFfnEntry> m_data;
 public:
-    MSOArray<SttbfFfnEntry> data() const { return m_data; }
+    inline const MSOArray<SttbfFfnEntry>& data() const { return m_data; }
 };
 class SttbfFfnEntry : public ParsedObject {
 private:
 public:
     SttbfFfnEntry() {}
     explicit SttbfFfnEntry(const char* data, const quint32 maxsize);
-public:
-    quint8 cchData() const { return m_cchData; }
 private:
     quint8 m_cchData;
+public:
+    inline quint8 cchData() const { return m_cchData; }
 private:
     MSOCastArray<char> m_Data;
 public:
-    MSOCastArray<char> Data() const { return m_Data; }
+    const MSOCastArray<char>& Data() const { return m_Data; }
 };
 class CodePageString : public ParsedObject {
 private:
 public:
     CodePageString() {}
     explicit CodePageString(const char* data, const quint32 maxsize);
-public:
-    quint32 size() const { return m_size; }
 private:
     quint32 m_size;
+public:
+    inline quint32 size() const { return m_size; }
 private:
     MSOCastArray<char> m_characters;
 public:
-    MSOCastArray<char> characters() const { return m_characters; }
+    const MSOCastArray<char>& characters() const { return m_characters; }
 };
 class FILETIME : public FixedSizeParsedObject {
 private:
@@ -6923,32 +6923,32 @@ public:
     static inline quint32 getSize() { return _size; }
     FILETIME() {}
     FILETIME(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    quint32 dwLowDateTime() const { return m_dwLowDateTime; }
 private:
     quint32 m_dwLowDateTime;
 public:
-    quint32 dwHighDateTime() const { return m_dwHighDateTime; }
+    inline quint32 dwLowDateTime() const { return m_dwLowDateTime; }
 private:
     quint32 m_dwHighDateTime;
+public:
+    inline quint32 dwHighDateTime() const { return m_dwHighDateTime; }
 };
 class ClipboardData : public ParsedObject {
 private:
 public:
     ClipboardData() {}
     explicit ClipboardData(const char* data, const quint32 maxsize);
-public:
-    quint32 size() const { return m_size; }
 private:
     quint32 m_size;
 public:
-    quint32 format() const { return m_format; }
+    inline quint32 size() const { return m_size; }
 private:
     quint32 m_format;
+public:
+    inline quint32 format() const { return m_format; }
 private:
     MSOCastArray<char> m_data;
 public:
-    MSOCastArray<char> data() const { return m_data; }
+    const MSOCastArray<char>& data() const { return m_data; }
 };
 class PropertyIdentifierAndOffset : public FixedSizeParsedObject {
 private:
@@ -6957,162 +6957,162 @@ public:
     static inline quint32 getSize() { return _size; }
     PropertyIdentifierAndOffset() {}
     PropertyIdentifierAndOffset(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    quint32 propertyIdentifier() const { return m_propertyIdentifier; }
 private:
     quint32 m_propertyIdentifier;
 public:
-    quint32 offset() const { return m_offset; }
+    inline quint32 propertyIdentifier() const { return m_propertyIdentifier; }
 private:
     quint32 m_offset;
+public:
+    inline quint32 offset() const { return m_offset; }
 };
 class TypedPropertyValue : public ParsedObject {
 private:
 public:
     TypedPropertyValue() {}
     explicit TypedPropertyValue(const char* data, const quint32 maxsize);
-public:
-    quint16 type() const { return m_type; }
 private:
     quint16 m_type;
 public:
-    quint16 padding() const { return m_padding; }
+    inline quint16 type() const { return m_type; }
 private:
     quint16 m_padding;
 public:
-    MSOBasicNullable<quint16> vt_I2() const { return m_vt_I2; }
+    inline quint16 padding() const { return m_padding; }
 private:
     MSOBasicNullable<quint16> m_vt_I2;
 public:
-    MSOBasicNullable<quint16> paddingI2() const { return m_paddingI2; }
+    inline const MSOBasicNullable<quint16>& vt_I2() const { return m_vt_I2; }
 private:
     MSOBasicNullable<quint16> m_paddingI2;
 public:
-    MSOBasicNullable<quint32> vg_ERROR() const { return m_vg_ERROR; }
+    inline const MSOBasicNullable<quint16>& paddingI2() const { return m_paddingI2; }
 private:
     MSOBasicNullable<quint32> m_vg_ERROR;
 public:
-    MSONullable<CodePageString> vt_lpstr() const { return m_vt_lpstr; }
+    inline const MSOBasicNullable<quint32>& vg_ERROR() const { return m_vg_ERROR; }
 private:
     MSONullable<CodePageString> m_vt_lpstr;
 public:
-    MSONullable<FILETIME> vg_FILETIME() const { return m_vg_FILETIME; }
+    inline const MSONullable<CodePageString>& vt_lpstr() const { return m_vt_lpstr; }
 private:
     MSONullable<FILETIME> m_vg_FILETIME;
 public:
-    MSONullable<ClipboardData> vg_CF() const { return m_vg_CF; }
+    inline const MSONullable<FILETIME>& vg_FILETIME() const { return m_vg_FILETIME; }
 private:
     MSONullable<ClipboardData> m_vg_CF;
+public:
+    inline const MSONullable<ClipboardData>& vg_CF() const { return m_vg_CF; }
 };
 class PropertySet : public ParsedObject {
 private:
 public:
     PropertySet() {}
     explicit PropertySet(const char* data, const quint32 maxsize);
-public:
-    quint32 size() const { return m_size; }
 private:
     quint32 m_size;
 public:
-    quint32 numProperties() const { return m_numProperties; }
+    inline quint32 size() const { return m_size; }
 private:
     quint32 m_numProperties;
+public:
+    inline quint32 numProperties() const { return m_numProperties; }
 private:
     MSOArray<PropertyIdentifierAndOffset> m_propertyIdentifierAndOffset;
 public:
-    MSOArray<PropertyIdentifierAndOffset> propertyIdentifierAndOffset() const { return m_propertyIdentifierAndOffset; }
+    inline const MSOArray<PropertyIdentifierAndOffset>& propertyIdentifierAndOffset() const { return m_propertyIdentifierAndOffset; }
 private:
     MSOArray<TypedPropertyValue> m_property;
 public:
-    MSOArray<TypedPropertyValue> property() const { return m_property; }
+    inline const MSOArray<TypedPropertyValue>& property() const { return m_property; }
 };
 class PropertySetStream : public ParsedObject {
 private:
 public:
     PropertySetStream() {}
     explicit PropertySetStream(const char* data, const quint32 maxsize);
-public:
-    quint16 byteOrder() const { return m_byteOrder; }
 private:
     quint16 m_byteOrder;
 public:
-    quint16 version() const { return m_version; }
+    inline quint16 byteOrder() const { return m_byteOrder; }
 private:
     quint16 m_version;
 public:
-    quint32 systemIdentifier() const { return m_systemIdentifier; }
+    inline quint16 version() const { return m_version; }
 private:
     quint32 m_systemIdentifier;
+public:
+    inline quint32 systemIdentifier() const { return m_systemIdentifier; }
 private:
     MSOCastArray<char> m_clsID;
 public:
-    MSOCastArray<char> clsID() const { return m_clsID; }
-public:
-    quint32 numPropertySets() const { return m_numPropertySets; }
+    const MSOCastArray<char>& clsID() const { return m_clsID; }
 private:
     quint32 m_numPropertySets;
+public:
+    inline quint32 numPropertySets() const { return m_numPropertySets; }
 private:
     MSOCastArray<char> m_fmtID0;
 public:
-    MSOCastArray<char> fmtID0() const { return m_fmtID0; }
-public:
-    quint32 offset0() const { return m_offset0; }
+    const MSOCastArray<char>& fmtID0() const { return m_fmtID0; }
 private:
     quint32 m_offset0;
+public:
+    inline quint32 offset0() const { return m_offset0; }
 private:
     MSOCastArray<char> m_fmtID1;
 public:
-    MSOCastArray<char> fmtID1() const { return m_fmtID1; }
-public:
-    MSOBasicNullable<quint32> offset1() const { return m_offset1; }
+    const MSOCastArray<char>& fmtID1() const { return m_fmtID1; }
 private:
     MSOBasicNullable<quint32> m_offset1;
 public:
-    PropertySet propertySet1() const { return m_propertySet1; }
+    inline const MSOBasicNullable<quint32>& offset1() const { return m_offset1; }
 private:
     PropertySet m_propertySet1;
 public:
-    MSONullable<PropertySet> propertySet2() const { return m_propertySet2; }
+    inline const PropertySet& propertySet1() const { return m_propertySet1; }
 private:
     MSONullable<PropertySet> m_propertySet2;
+public:
+    inline const MSONullable<PropertySet>& propertySet2() const { return m_propertySet2; }
 private:
     MSOArray<Byte> m_padding;
 public:
-    MSOArray<Byte> padding() const { return m_padding; }
+    inline const MSOArray<Byte>& padding() const { return m_padding; }
 };
 class SummaryInformationPropertySetStream : public ParsedObject {
 private:
 public:
     SummaryInformationPropertySetStream() {}
     explicit SummaryInformationPropertySetStream(const char* data, const quint32 maxsize);
-public:
-    PropertySetStream propertySet() const { return m_propertySet; }
 private:
     PropertySetStream m_propertySet;
+public:
+    inline const PropertySetStream& propertySet() const { return m_propertySet; }
 };
 class DocumentSummaryInformationPropertySetStream : public ParsedObject {
 private:
 public:
     DocumentSummaryInformationPropertySetStream() {}
     explicit DocumentSummaryInformationPropertySetStream(const char* data, const quint32 maxsize);
-public:
-    PropertySetStream propertySet() const { return m_propertySet; }
 private:
     PropertySetStream m_propertySet;
+public:
+    inline const PropertySetStream& propertySet() const { return m_propertySet; }
 };
 class PicturesStream : public ParsedObject {
 private:
 public:
     PicturesStream() {}
     explicit PicturesStream(const char* data, const quint32 maxsize);
-public:
-    OfficeArtBStoreDelay anon1() const { return m_anon1; }
 private:
     OfficeArtBStoreDelay m_anon1;
+public:
+    inline const OfficeArtBStoreDelay& anon1() const { return m_anon1; }
 private:
     MSOArray<Byte> m_trailing;
 public:
-    MSOArray<Byte> trailing() const { return m_trailing; }
+    inline const MSOArray<Byte>& trailing() const { return m_trailing; }
 };
 class OfficeArtMetafileHeader : public FixedSizeParsedObject {
 private:
@@ -7121,96 +7121,96 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtMetafileHeader() {}
     OfficeArtMetafileHeader(const char* data, quint32/*ignored*/ = 0);// 34 bytes
-public:
-    quint32 cbSize() const { return m_cbSize; }
 private:
     quint32 m_cbSize;
 public:
-    RECT rcBounds() const { return m_rcBounds; }
+    inline quint32 cbSize() const { return m_cbSize; }
 private:
     RECT m_rcBounds;
 public:
-    POINT ptSize() const { return m_ptSize; }
+    inline const RECT& rcBounds() const { return m_rcBounds; }
 private:
     POINT m_ptSize;
 public:
-    quint32 cbsave() const { return m_cbsave; }
+    inline const POINT& ptSize() const { return m_ptSize; }
 private:
     quint32 m_cbsave;
 public:
-    quint8 compression() const { return m_compression; }
+    inline quint32 cbsave() const { return m_cbsave; }
 private:
     quint8 m_compression;
 public:
-    quint8 filter() const { return m_filter; }
+    inline quint8 compression() const { return m_compression; }
 private:
     quint8 m_filter;
+public:
+    inline quint8 filter() const { return m_filter; }
 };
 class SoundCollectionContainer : public ParsedObject {
 private:
 public:
     SoundCollectionContainer() {}
     explicit SoundCollectionContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    SoundCollectionAtom soundCollectionAtom() const { return m_soundCollectionAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     SoundCollectionAtom m_soundCollectionAtom;
+public:
+    inline const SoundCollectionAtom& soundCollectionAtom() const { return m_soundCollectionAtom; }
 private:
     MSOArray<SoundContainer> m_rgSoundContainer;
 public:
-    MSOArray<SoundContainer> rgSoundContainer() const { return m_rgSoundContainer; }
+    inline const MSOArray<SoundContainer>& rgSoundContainer() const { return m_rgSoundContainer; }
 };
 class SlideHeadersFootersContainer : public ParsedObject {
 private:
 public:
     SlideHeadersFootersContainer() {}
     explicit SlideHeadersFootersContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    HeadersFootersAtom hfAtom() const { return m_hfAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     HeadersFootersAtom m_hfAtom;
 public:
-    MSONullable<UserDateAtom> userDateAtom() const { return m_userDateAtom; }
+    inline const HeadersFootersAtom& hfAtom() const { return m_hfAtom; }
 private:
     MSONullable<UserDateAtom> m_userDateAtom;
 public:
-    MSONullable<FooterAtom> footerAtom() const { return m_footerAtom; }
+    inline const MSONullable<UserDateAtom>& userDateAtom() const { return m_userDateAtom; }
 private:
     MSONullable<FooterAtom> m_footerAtom;
+public:
+    inline const MSONullable<FooterAtom>& footerAtom() const { return m_footerAtom; }
 };
 class NotesHeadersFootersContainer : public ParsedObject {
 private:
 public:
     NotesHeadersFootersContainer() {}
     explicit NotesHeadersFootersContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    HeadersFootersAtom hfAtom() const { return m_hfAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     HeadersFootersAtom m_hfAtom;
 public:
-    MSONullable<UserDateAtom> userDateAtom() const { return m_userDateAtom; }
+    inline const HeadersFootersAtom& hfAtom() const { return m_hfAtom; }
 private:
     MSONullable<UserDateAtom> m_userDateAtom;
 public:
-    MSONullable<HeaderAtom> headerAtom() const { return m_headerAtom; }
+    inline const MSONullable<UserDateAtom>& userDateAtom() const { return m_userDateAtom; }
 private:
     MSONullable<HeaderAtom> m_headerAtom;
 public:
-    MSONullable<FooterAtom> footerAtom() const { return m_footerAtom; }
+    inline const MSONullable<HeaderAtom>& headerAtom() const { return m_headerAtom; }
 private:
     MSONullable<FooterAtom> m_footerAtom;
+public:
+    inline const MSONullable<FooterAtom>& footerAtom() const { return m_footerAtom; }
 };
 class ScalingStruct : public FixedSizeParsedObject {
 private:
@@ -7219,220 +7219,220 @@ public:
     static inline quint32 getSize() { return _size; }
     ScalingStruct() {}
     ScalingStruct(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RatioStruct x() const { return m_x; }
 private:
     RatioStruct m_x;
 public:
-    RatioStruct y() const { return m_y; }
+    inline const RatioStruct& x() const { return m_x; }
 private:
     RatioStruct m_y;
+public:
+    inline const RatioStruct& y() const { return m_y; }
 };
 class TextPFException9 : public ParsedObject {
 private:
 public:
     TextPFException9() {}
     explicit TextPFException9(const char* data, const quint32 maxsize);
-public:
-    PFMasks masks() const { return m_masks; }
 private:
     PFMasks m_masks;
 public:
-    MSOBasicNullable<quint16> bulletBlipRef() const { return m_bulletBlipRef; }
+    inline const PFMasks& masks() const { return m_masks; }
 private:
     MSOBasicNullable<quint16> m_bulletBlipRef;
 public:
-    MSOBasicNullable<quint16> fBulletHasAutoNumber() const { return m_fBulletHasAutoNumber; }
+    inline const MSOBasicNullable<quint16>& bulletBlipRef() const { return m_bulletBlipRef; }
 private:
     MSOBasicNullable<quint16> m_fBulletHasAutoNumber;
 public:
-    MSONullable<TextAutoNumberScheme> bulletAutoNumberScheme() const { return m_bulletAutoNumberScheme; }
+    inline const MSOBasicNullable<quint16>& fBulletHasAutoNumber() const { return m_fBulletHasAutoNumber; }
 private:
     MSONullable<TextAutoNumberScheme> m_bulletAutoNumberScheme;
+public:
+    inline const MSONullable<TextAutoNumberScheme>& bulletAutoNumberScheme() const { return m_bulletAutoNumberScheme; }
 };
 class TextCFException9 : public ParsedObject {
 private:
 public:
     TextCFException9() {}
     explicit TextCFException9(const char* data, const quint32 maxsize);
-public:
-    CFMasks masks() const { return m_masks; }
 private:
     CFMasks m_masks;
 public:
-    MSOBasicNullable<quint8> pp10runid() const { return m_pp10runid; }
+    inline const CFMasks& masks() const { return m_masks; }
 private:
     MSOBasicNullable<quint8> m_pp10runid;
 public:
-    MSOBasicNullable<quint32> unuseda() const { return m_unuseda; }
+    inline const MSOBasicNullable<quint8>& pp10runid() const { return m_pp10runid; }
 private:
     MSOBasicNullable<quint32> m_unuseda;
 public:
-    MSOBasicNullable<quint8> unusedb() const { return m_unusedb; }
+    inline const MSOBasicNullable<quint32>& unuseda() const { return m_unuseda; }
 private:
     MSOBasicNullable<quint8> m_unusedb;
+public:
+    inline const MSOBasicNullable<quint8>& unusedb() const { return m_unusedb; }
 };
 class TextDefaults9Atom : public ParsedObject {
 private:
 public:
     TextDefaults9Atom() {}
     explicit TextDefaults9Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextCFException9 cf9() const { return m_cf9; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextCFException9 m_cf9;
 public:
-    TextPFException9 pf9() const { return m_pf9; }
+    inline const TextCFException9& cf9() const { return m_cf9; }
 private:
     TextPFException9 m_pf9;
+public:
+    inline const TextPFException9& pf9() const { return m_pf9; }
 };
 class Kinsoku9Container : public ParsedObject {
 private:
 public:
     Kinsoku9Container() {}
     explicit Kinsoku9Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    Kinsoku9Atom kinsoku9Atom() const { return m_kinsoku9Atom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     Kinsoku9Atom m_kinsoku9Atom;
 public:
-    MSONullable<KinsokuLeadingAtom> kinsokuLeadingAtom() const { return m_kinsokuLeadingAtom; }
+    inline const Kinsoku9Atom& kinsoku9Atom() const { return m_kinsoku9Atom; }
 private:
     MSONullable<KinsokuLeadingAtom> m_kinsokuLeadingAtom;
 public:
-    MSONullable<KinsokuFollowingAtom> kinsokuFollowingAtom() const { return m_kinsokuFollowingAtom; }
+    inline const MSONullable<KinsokuLeadingAtom>& kinsokuLeadingAtom() const { return m_kinsokuLeadingAtom; }
 private:
     MSONullable<KinsokuFollowingAtom> m_kinsokuFollowingAtom;
+public:
+    inline const MSONullable<KinsokuFollowingAtom>& kinsokuFollowingAtom() const { return m_kinsokuFollowingAtom; }
 };
 class OutlineTextProps9Entry : public ParsedObject {
 private:
 public:
     OutlineTextProps9Entry() {}
     explicit OutlineTextProps9Entry(const char* data, const quint32 maxsize);
-public:
-    OutlineTextPropsHeaderExAtom outlineTextHeaderAtom() const { return m_outlineTextHeaderAtom; }
 private:
     OutlineTextPropsHeaderExAtom m_outlineTextHeaderAtom;
 public:
-    StyleTextProp9Atom styleTextProp9Atom() const { return m_styleTextProp9Atom; }
+    inline const OutlineTextPropsHeaderExAtom& outlineTextHeaderAtom() const { return m_outlineTextHeaderAtom; }
 private:
     StyleTextProp9Atom m_styleTextProp9Atom;
+public:
+    inline const StyleTextProp9Atom& styleTextProp9Atom() const { return m_styleTextProp9Atom; }
 };
 class TextCFException10 : public ParsedObject {
 private:
 public:
     TextCFException10() {}
     explicit TextCFException10(const char* data, const quint32 maxsize);
-public:
-    CFMasks masks() const { return m_masks; }
 private:
     CFMasks m_masks;
 public:
-    MSOBasicNullable<quint16> newEAFontRef() const { return m_newEAFontRef; }
+    inline const CFMasks& masks() const { return m_masks; }
 private:
     MSOBasicNullable<quint16> m_newEAFontRef;
 public:
-    MSOBasicNullable<quint16> csFontRef() const { return m_csFontRef; }
+    inline const MSOBasicNullable<quint16>& newEAFontRef() const { return m_newEAFontRef; }
 private:
     MSOBasicNullable<quint16> m_csFontRef;
 public:
-    MSOBasicNullable<quint32> pp11ext() const { return m_pp11ext; }
+    inline const MSOBasicNullable<quint16>& csFontRef() const { return m_csFontRef; }
 private:
     MSOBasicNullable<quint32> m_pp11ext;
+public:
+    inline const MSOBasicNullable<quint32>& pp11ext() const { return m_pp11ext; }
 };
 class TextDefaults10Atom : public ParsedObject {
 private:
 public:
     TextDefaults10Atom() {}
     explicit TextDefaults10Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextCFException10 cf10() const { return m_cf10; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextCFException10 m_cf10;
+public:
+    inline const TextCFException10& cf10() const { return m_cf10; }
 };
 class CommentIndex10Container : public ParsedObject {
 private:
 public:
     CommentIndex10Container() {}
     explicit CommentIndex10Container(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    MSONullable<AuthorNameAtom> authorNameAtom() const { return m_authorNameAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSONullable<AuthorNameAtom> m_authorNameAtom;
 public:
-    MSONullable<CommentIndex10Atom> authorIndexAtom() const { return m_authorIndexAtom; }
+    inline const MSONullable<AuthorNameAtom>& authorNameAtom() const { return m_authorNameAtom; }
 private:
     MSONullable<CommentIndex10Atom> m_authorIndexAtom;
+public:
+    inline const MSONullable<CommentIndex10Atom>& authorIndexAtom() const { return m_authorIndexAtom; }
 };
 class OutlineTextProps10Entry : public ParsedObject {
 private:
 public:
     OutlineTextProps10Entry() {}
     explicit OutlineTextProps10Entry(const char* data, const quint32 maxsize);
-public:
-    OutlineTextPropsHeaderExAtom outlineTextHeaderAtom() const { return m_outlineTextHeaderAtom; }
 private:
     OutlineTextPropsHeaderExAtom m_outlineTextHeaderAtom;
 public:
-    StyleTextProp10Atom styleTextProp10Atom() const { return m_styleTextProp10Atom; }
+    inline const OutlineTextPropsHeaderExAtom& outlineTextHeaderAtom() const { return m_outlineTextHeaderAtom; }
 private:
     StyleTextProp10Atom m_styleTextProp10Atom;
+public:
+    inline const StyleTextProp10Atom& styleTextProp10Atom() const { return m_styleTextProp10Atom; }
 };
 class PP11DocBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP11DocBinaryTagExtension() {}
     explicit PP11DocBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_tagName;
 public:
-    MSOCastArray<char> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<char>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
 public:
-    SmartTagStore11Container smartTagStore11() const { return m_smartTagStore11; }
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     SmartTagStore11Container m_smartTagStore11;
 public:
-    OutlineTextProps11Container outlineTextProps() const { return m_outlineTextProps; }
+    inline const SmartTagStore11Container& smartTagStore11() const { return m_smartTagStore11; }
 private:
     OutlineTextProps11Container m_outlineTextProps;
+public:
+    inline const OutlineTextProps11Container& outlineTextProps() const { return m_outlineTextProps; }
 };
 class UnknownBinaryTag : public ParsedObject {
 private:
 public:
     UnknownBinaryTag() {}
     explicit UnknownBinaryTag(const char* data, const quint32 maxsize);
-public:
-    TagNameAtom tagNameAtom() const { return m_tagNameAtom; }
 private:
     TagNameAtom m_tagNameAtom;
 public:
-    BinaryTagDataBlob tagData() const { return m_tagData; }
+    inline const TagNameAtom& tagNameAtom() const { return m_tagNameAtom; }
 private:
     BinaryTagDataBlob m_tagData;
+public:
+    inline const BinaryTagDataBlob& tagData() const { return m_tagData; }
 };
 class NoZoomViewInfoAtom : public FixedSizeParsedObject {
 private:
@@ -7441,34 +7441,34 @@ public:
     static inline quint32 getSize() { return _size; }
     NoZoomViewInfoAtom() {}
     NoZoomViewInfoAtom(const char* data, quint32/*ignored*/ = 0);// 60 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    ScalingStruct curScale() const { return m_curScale; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     ScalingStruct m_curScale;
+public:
+    inline const ScalingStruct& curScale() const { return m_curScale; }
 private:
     MSOCastArray<char> m_unused1;
 public:
-    MSOCastArray<char> unused1() const { return m_unused1; }
-public:
-    PointStruct origin() const { return m_origin; }
+    const MSOCastArray<char>& unused1() const { return m_unused1; }
 private:
     PointStruct m_origin;
 public:
-    quint8 unused2() const { return m_unused2; }
+    inline const PointStruct& origin() const { return m_origin; }
 private:
     quint8 m_unused2;
 public:
-    quint8 fDraftMode() const { return m_fDraftMode; }
+    inline quint8 unused2() const { return m_unused2; }
 private:
     quint8 m_fDraftMode;
 public:
-    quint16 unused3() const { return m_unused3; }
+    inline quint8 fDraftMode() const { return m_fDraftMode; }
 private:
     quint16 m_unused3;
+public:
+    inline quint16 unused3() const { return m_unused3; }
 };
 class VBAInfoContainer : public FixedSizeParsedObject {
 private:
@@ -7477,14 +7477,14 @@ public:
     static inline quint32 getSize() { return _size; }
     VBAInfoContainer() {}
     VBAInfoContainer(const char* data, quint32/*ignored*/ = 0);// 28 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    VBAInfoAtom vbaInfoAtom() const { return m_vbaInfoAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     VBAInfoAtom m_vbaInfoAtom;
+public:
+    inline const VBAInfoAtom& vbaInfoAtom() const { return m_vbaInfoAtom; }
 };
 class NormalViewSetInfoAtom : public FixedSizeParsedObject {
 private:
@@ -7493,52 +7493,52 @@ public:
     static inline quint32 getSize() { return _size; }
     NormalViewSetInfoAtom() {}
     NormalViewSetInfoAtom(const char* data, quint32/*ignored*/ = 0);// 28 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    RatioStruct leftPortion() const { return m_leftPortion; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     RatioStruct m_leftPortion;
 public:
-    RatioStruct topPortion() const { return m_topPortion; }
+    inline const RatioStruct& leftPortion() const { return m_leftPortion; }
 private:
     RatioStruct m_topPortion;
 public:
-    quint8 vertBarState() const { return m_vertBarState; }
+    inline const RatioStruct& topPortion() const { return m_topPortion; }
 private:
     quint8 m_vertBarState;
 public:
-    quint8 horizBarState() const { return m_horizBarState; }
+    inline quint8 vertBarState() const { return m_vertBarState; }
 private:
     quint8 m_horizBarState;
 public:
-    quint8 fPreferSingleSet() const { return m_fPreferSingleSet; }
+    inline quint8 horizBarState() const { return m_horizBarState; }
 private:
     quint8 m_fPreferSingleSet;
 public:
-    bool fHideThumbnails() const { return m_fHideThumbnails; }
+    inline quint8 fPreferSingleSet() const { return m_fPreferSingleSet; }
 private:
     bool m_fHideThumbnails;
 public:
-    bool fBarSnapped() const { return m_fBarSnapped; }
+    inline bool fHideThumbnails() const { return m_fHideThumbnails; }
 private:
     bool m_fBarSnapped;
 public:
-    quint8 reserved() const { return m_reserved; }
+    inline bool fBarSnapped() const { return m_fBarSnapped; }
 private:
     quint8 m_reserved;
+public:
+    inline quint8 reserved() const { return m_reserved; }
 };
 class TextContainer : public ParsedObject {
 private:
 public:
     TextContainer() {}
     explicit TextContainer(const char* data, const quint32 maxsize);
-public:
-    TextHeaderAtom textHeaderAtom() const { return m_textHeaderAtom; }
 private:
     TextHeaderAtom m_textHeaderAtom;
+public:
+    inline const TextHeaderAtom& textHeaderAtom() const { return m_textHeaderAtom; }
 public:
     class C_text {
     friend class TextContainer;
@@ -7553,38 +7553,38 @@ private:
     C_text m_text;
 public:
     C_text text() const { return m_text; }
-public:
-    MSONullable<StyleTextPropAtom> style() const { return m_style; }
 private:
     MSONullable<StyleTextPropAtom> m_style;
+public:
+    inline const MSONullable<StyleTextPropAtom>& style() const { return m_style; }
 private:
     MSOArray<TextContainerMeta> m_meta;
 public:
-    MSOArray<TextContainerMeta> meta() const { return m_meta; }
-public:
-    MSONullable<MasterTextPropAtom> master() const { return m_master; }
+    inline const MSOArray<TextContainerMeta>& meta() const { return m_meta; }
 private:
     MSONullable<MasterTextPropAtom> m_master;
+public:
+    inline const MSONullable<MasterTextPropAtom>& master() const { return m_master; }
 private:
     MSOArray<TextBookmarkAtom> m_bookmark;
 public:
-    MSOArray<TextBookmarkAtom> bookmark() const { return m_bookmark; }
-public:
-    MSONullable<UnknownTextContainerChild> unknown() const { return m_unknown; }
+    inline const MSOArray<TextBookmarkAtom>& bookmark() const { return m_bookmark; }
 private:
     MSONullable<UnknownTextContainerChild> m_unknown;
 public:
-    MSONullable<TextSpecialInfoAtom> specialinfo() const { return m_specialinfo; }
+    inline const MSONullable<UnknownTextContainerChild>& unknown() const { return m_unknown; }
 private:
     MSONullable<TextSpecialInfoAtom> m_specialinfo;
+public:
+    inline const MSONullable<TextSpecialInfoAtom>& specialinfo() const { return m_specialinfo; }
 private:
     MSOArray<TextContainerInteractiveInfo> m_interactive;
 public:
-    MSOArray<TextContainerInteractiveInfo> interactive() const { return m_interactive; }
-public:
-    MSONullable<TextSpecialInfoAtom> specialinfo2() const { return m_specialinfo2; }
+    inline const MSOArray<TextContainerInteractiveInfo>& interactive() const { return m_interactive; }
 private:
     MSONullable<TextSpecialInfoAtom> m_specialinfo2;
+public:
+    inline const MSONullable<TextSpecialInfoAtom>& specialinfo2() const { return m_specialinfo2; }
 };
 class TextContainerMeta : public ParsedObject {
 private:
@@ -7617,440 +7617,440 @@ public:
     static inline quint32 getSize() { return _size; }
     SlidePersistAtom() {}
     SlidePersistAtom(const char* data, quint32/*ignored*/ = 0);// 28 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 persistIdRef() const { return m_persistIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_persistIdRef;
 public:
-    bool reserved1() const { return m_reserved1; }
+    inline quint32 persistIdRef() const { return m_persistIdRef; }
 private:
     bool m_reserved1;
 public:
-    bool fShouldCollapse() const { return m_fShouldCollapse; }
+    inline bool reserved1() const { return m_reserved1; }
 private:
     bool m_fShouldCollapse;
 public:
-    bool fNonOutlineData() const { return m_fNonOutlineData; }
+    inline bool fShouldCollapse() const { return m_fShouldCollapse; }
 private:
     bool m_fNonOutlineData;
 public:
-    quint8 reserved2() const { return m_reserved2; }
+    inline bool fNonOutlineData() const { return m_fNonOutlineData; }
 private:
     quint8 m_reserved2;
 public:
-    quint8 reserved3() const { return m_reserved3; }
+    inline quint8 reserved2() const { return m_reserved2; }
 private:
     quint8 m_reserved3;
 public:
-    quint16 reserved4() const { return m_reserved4; }
+    inline quint8 reserved3() const { return m_reserved3; }
 private:
     quint16 m_reserved4;
 public:
-    qint32 cTexts() const { return m_cTexts; }
+    inline quint16 reserved4() const { return m_reserved4; }
 private:
     qint32 m_cTexts;
 public:
-    SlideId slideId() const { return m_slideId; }
+    inline qint32 cTexts() const { return m_cTexts; }
 private:
     SlideId m_slideId;
 public:
-    quint32 reserved5() const { return m_reserved5; }
+    inline const SlideId& slideId() const { return m_slideId; }
 private:
     quint32 m_reserved5;
+public:
+    inline quint32 reserved5() const { return m_reserved5; }
 };
 class TextRuler : public ParsedObject {
 private:
 public:
     TextRuler() {}
     explicit TextRuler(const char* data, const quint32 maxsize);
-public:
-    bool fDefaultTabSize() const { return m_fDefaultTabSize; }
 private:
     bool m_fDefaultTabSize;
 public:
-    bool fCLevels() const { return m_fCLevels; }
+    inline bool fDefaultTabSize() const { return m_fDefaultTabSize; }
 private:
     bool m_fCLevels;
 public:
-    bool fTabStops() const { return m_fTabStops; }
+    inline bool fCLevels() const { return m_fCLevels; }
 private:
     bool m_fTabStops;
 public:
-    bool fLeftMargin1() const { return m_fLeftMargin1; }
+    inline bool fTabStops() const { return m_fTabStops; }
 private:
     bool m_fLeftMargin1;
 public:
-    bool fLeftMargin2() const { return m_fLeftMargin2; }
+    inline bool fLeftMargin1() const { return m_fLeftMargin1; }
 private:
     bool m_fLeftMargin2;
 public:
-    bool fLeftMargin3() const { return m_fLeftMargin3; }
+    inline bool fLeftMargin2() const { return m_fLeftMargin2; }
 private:
     bool m_fLeftMargin3;
 public:
-    bool fLeftMargin4() const { return m_fLeftMargin4; }
+    inline bool fLeftMargin3() const { return m_fLeftMargin3; }
 private:
     bool m_fLeftMargin4;
 public:
-    bool fLeftMargin5() const { return m_fLeftMargin5; }
+    inline bool fLeftMargin4() const { return m_fLeftMargin4; }
 private:
     bool m_fLeftMargin5;
 public:
-    bool fIndent1() const { return m_fIndent1; }
+    inline bool fLeftMargin5() const { return m_fLeftMargin5; }
 private:
     bool m_fIndent1;
 public:
-    bool fIndent2() const { return m_fIndent2; }
+    inline bool fIndent1() const { return m_fIndent1; }
 private:
     bool m_fIndent2;
 public:
-    bool fIndent3() const { return m_fIndent3; }
+    inline bool fIndent2() const { return m_fIndent2; }
 private:
     bool m_fIndent3;
 public:
-    bool fIndent4() const { return m_fIndent4; }
+    inline bool fIndent3() const { return m_fIndent3; }
 private:
     bool m_fIndent4;
 public:
-    bool fIndent5() const { return m_fIndent5; }
+    inline bool fIndent4() const { return m_fIndent4; }
 private:
     bool m_fIndent5;
 public:
-    quint8 reserved1() const { return m_reserved1; }
+    inline bool fIndent5() const { return m_fIndent5; }
 private:
     quint8 m_reserved1;
 public:
-    quint16 reserved2() const { return m_reserved2; }
+    inline quint8 reserved1() const { return m_reserved1; }
 private:
     quint16 m_reserved2;
 public:
-    MSOBasicNullable<qint16> cLevels() const { return m_cLevels; }
+    inline quint16 reserved2() const { return m_reserved2; }
 private:
     MSOBasicNullable<qint16> m_cLevels;
 public:
-    MSOBasicNullable<quint16> defaultTabSize() const { return m_defaultTabSize; }
+    inline const MSOBasicNullable<qint16>& cLevels() const { return m_cLevels; }
 private:
     MSOBasicNullable<quint16> m_defaultTabSize;
 public:
-    MSONullable<TabStops> tabs() const { return m_tabs; }
+    inline const MSOBasicNullable<quint16>& defaultTabSize() const { return m_defaultTabSize; }
 private:
     MSONullable<TabStops> m_tabs;
 public:
-    MSOBasicNullable<quint16> leftMargin1() const { return m_leftMargin1; }
+    inline const MSONullable<TabStops>& tabs() const { return m_tabs; }
 private:
     MSOBasicNullable<quint16> m_leftMargin1;
 public:
-    MSOBasicNullable<quint16> indent1() const { return m_indent1; }
+    inline const MSOBasicNullable<quint16>& leftMargin1() const { return m_leftMargin1; }
 private:
     MSOBasicNullable<quint16> m_indent1;
 public:
-    MSOBasicNullable<quint16> leftMargin2() const { return m_leftMargin2; }
+    inline const MSOBasicNullable<quint16>& indent1() const { return m_indent1; }
 private:
     MSOBasicNullable<quint16> m_leftMargin2;
 public:
-    MSOBasicNullable<quint16> indent2() const { return m_indent2; }
+    inline const MSOBasicNullable<quint16>& leftMargin2() const { return m_leftMargin2; }
 private:
     MSOBasicNullable<quint16> m_indent2;
 public:
-    MSOBasicNullable<quint16> leftMargin3() const { return m_leftMargin3; }
+    inline const MSOBasicNullable<quint16>& indent2() const { return m_indent2; }
 private:
     MSOBasicNullable<quint16> m_leftMargin3;
 public:
-    MSOBasicNullable<quint16> indent3() const { return m_indent3; }
+    inline const MSOBasicNullable<quint16>& leftMargin3() const { return m_leftMargin3; }
 private:
     MSOBasicNullable<quint16> m_indent3;
 public:
-    MSOBasicNullable<quint16> leftMargin4() const { return m_leftMargin4; }
+    inline const MSOBasicNullable<quint16>& indent3() const { return m_indent3; }
 private:
     MSOBasicNullable<quint16> m_leftMargin4;
 public:
-    MSOBasicNullable<quint16> indent4() const { return m_indent4; }
+    inline const MSOBasicNullable<quint16>& leftMargin4() const { return m_leftMargin4; }
 private:
     MSOBasicNullable<quint16> m_indent4;
 public:
-    MSOBasicNullable<quint16> leftMargin5() const { return m_leftMargin5; }
+    inline const MSOBasicNullable<quint16>& indent4() const { return m_indent4; }
 private:
     MSOBasicNullable<quint16> m_leftMargin5;
 public:
-    MSOBasicNullable<quint16> indent5() const { return m_indent5; }
+    inline const MSOBasicNullable<quint16>& leftMargin5() const { return m_leftMargin5; }
 private:
     MSOBasicNullable<quint16> m_indent5;
+public:
+    inline const MSOBasicNullable<quint16>& indent5() const { return m_indent5; }
 };
 class TextPFException : public ParsedObject {
 private:
 public:
     TextPFException() {}
     explicit TextPFException(const char* data, const quint32 maxsize);
-public:
-    PFMasks masks() const { return m_masks; }
 private:
     PFMasks m_masks;
 public:
-    MSONullable<BulletFlags> bulletFlags() const { return m_bulletFlags; }
+    inline const PFMasks& masks() const { return m_masks; }
 private:
     MSONullable<BulletFlags> m_bulletFlags;
 public:
-    MSOBasicNullable<qint16> bulletChar() const { return m_bulletChar; }
+    inline const MSONullable<BulletFlags>& bulletFlags() const { return m_bulletFlags; }
 private:
     MSOBasicNullable<qint16> m_bulletChar;
 public:
-    MSOBasicNullable<quint16> bulletFontRef() const { return m_bulletFontRef; }
+    inline const MSOBasicNullable<qint16>& bulletChar() const { return m_bulletChar; }
 private:
     MSOBasicNullable<quint16> m_bulletFontRef;
 public:
-    MSOBasicNullable<qint16> bulletSize() const { return m_bulletSize; }
+    inline const MSOBasicNullable<quint16>& bulletFontRef() const { return m_bulletFontRef; }
 private:
     MSOBasicNullable<qint16> m_bulletSize;
 public:
-    MSONullable<ColorIndexStruct> bulletColor() const { return m_bulletColor; }
+    inline const MSOBasicNullable<qint16>& bulletSize() const { return m_bulletSize; }
 private:
     MSONullable<ColorIndexStruct> m_bulletColor;
 public:
-    MSOBasicNullable<quint16> textAlignment() const { return m_textAlignment; }
+    inline const MSONullable<ColorIndexStruct>& bulletColor() const { return m_bulletColor; }
 private:
     MSOBasicNullable<quint16> m_textAlignment;
 public:
-    MSOBasicNullable<qint16> lineSpacing() const { return m_lineSpacing; }
+    inline const MSOBasicNullable<quint16>& textAlignment() const { return m_textAlignment; }
 private:
     MSOBasicNullable<qint16> m_lineSpacing;
 public:
-    MSOBasicNullable<qint16> spaceBefore() const { return m_spaceBefore; }
+    inline const MSOBasicNullable<qint16>& lineSpacing() const { return m_lineSpacing; }
 private:
     MSOBasicNullable<qint16> m_spaceBefore;
 public:
-    MSOBasicNullable<qint16> spaceAfter() const { return m_spaceAfter; }
+    inline const MSOBasicNullable<qint16>& spaceBefore() const { return m_spaceBefore; }
 private:
     MSOBasicNullable<qint16> m_spaceAfter;
 public:
-    MSOBasicNullable<quint16> leftMargin() const { return m_leftMargin; }
+    inline const MSOBasicNullable<qint16>& spaceAfter() const { return m_spaceAfter; }
 private:
     MSOBasicNullable<quint16> m_leftMargin;
 public:
-    MSOBasicNullable<quint16> indent() const { return m_indent; }
+    inline const MSOBasicNullable<quint16>& leftMargin() const { return m_leftMargin; }
 private:
     MSOBasicNullable<quint16> m_indent;
 public:
-    MSOBasicNullable<quint16> defaultTabSize() const { return m_defaultTabSize; }
+    inline const MSOBasicNullable<quint16>& indent() const { return m_indent; }
 private:
     MSOBasicNullable<quint16> m_defaultTabSize;
 public:
-    MSONullable<TabStops> tabStops() const { return m_tabStops; }
+    inline const MSOBasicNullable<quint16>& defaultTabSize() const { return m_defaultTabSize; }
 private:
     MSONullable<TabStops> m_tabStops;
 public:
-    MSOBasicNullable<quint16> fontAlign() const { return m_fontAlign; }
+    inline const MSONullable<TabStops>& tabStops() const { return m_tabStops; }
 private:
     MSOBasicNullable<quint16> m_fontAlign;
 public:
-    MSONullable<PFWrapFlags> wrapFlags() const { return m_wrapFlags; }
+    inline const MSOBasicNullable<quint16>& fontAlign() const { return m_fontAlign; }
 private:
     MSONullable<PFWrapFlags> m_wrapFlags;
 public:
-    MSOBasicNullable<quint16> textDirection() const { return m_textDirection; }
+    inline const MSONullable<PFWrapFlags>& wrapFlags() const { return m_wrapFlags; }
 private:
     MSOBasicNullable<quint16> m_textDirection;
+public:
+    inline const MSOBasicNullable<quint16>& textDirection() const { return m_textDirection; }
 };
 class TextCFException : public ParsedObject {
 private:
 public:
     TextCFException() {}
     explicit TextCFException(const char* data, const quint32 maxsize);
-public:
-    CFMasks masks() const { return m_masks; }
 private:
     CFMasks m_masks;
 public:
-    MSONullable<CFStyle> fontStyle() const { return m_fontStyle; }
+    inline const CFMasks& masks() const { return m_masks; }
 private:
     MSONullable<CFStyle> m_fontStyle;
 public:
-    MSOBasicNullable<quint16> fontRef() const { return m_fontRef; }
+    inline const MSONullable<CFStyle>& fontStyle() const { return m_fontStyle; }
 private:
     MSOBasicNullable<quint16> m_fontRef;
 public:
-    MSOBasicNullable<quint16> oldEAFontRef() const { return m_oldEAFontRef; }
+    inline const MSOBasicNullable<quint16>& fontRef() const { return m_fontRef; }
 private:
     MSOBasicNullable<quint16> m_oldEAFontRef;
 public:
-    MSOBasicNullable<quint16> ansiFontRef() const { return m_ansiFontRef; }
+    inline const MSOBasicNullable<quint16>& oldEAFontRef() const { return m_oldEAFontRef; }
 private:
     MSOBasicNullable<quint16> m_ansiFontRef;
 public:
-    MSOBasicNullable<quint16> symbolFontRef() const { return m_symbolFontRef; }
+    inline const MSOBasicNullable<quint16>& ansiFontRef() const { return m_ansiFontRef; }
 private:
     MSOBasicNullable<quint16> m_symbolFontRef;
 public:
-    MSOBasicNullable<quint16> fontSize() const { return m_fontSize; }
+    inline const MSOBasicNullable<quint16>& symbolFontRef() const { return m_symbolFontRef; }
 private:
     MSOBasicNullable<quint16> m_fontSize;
 public:
-    MSONullable<ColorIndexStruct> color() const { return m_color; }
+    inline const MSOBasicNullable<quint16>& fontSize() const { return m_fontSize; }
 private:
     MSONullable<ColorIndexStruct> m_color;
 public:
-    MSOBasicNullable<qint16> position() const { return m_position; }
+    inline const MSONullable<ColorIndexStruct>& color() const { return m_color; }
 private:
     MSOBasicNullable<qint16> m_position;
+public:
+    inline const MSOBasicNullable<qint16>& position() const { return m_position; }
 };
 class FontCollectionEntry : public ParsedObject {
 private:
 public:
     FontCollectionEntry() {}
     explicit FontCollectionEntry(const char* data, const quint32 maxsize);
-public:
-    FontEntityAtom fontEntityAtom() const { return m_fontEntityAtom; }
 private:
     FontEntityAtom m_fontEntityAtom;
 public:
-    MSONullable<FontEmbedDataBlob> fontEmbedData1() const { return m_fontEmbedData1; }
+    inline const FontEntityAtom& fontEntityAtom() const { return m_fontEntityAtom; }
 private:
     MSONullable<FontEmbedDataBlob> m_fontEmbedData1;
 public:
-    MSONullable<FontEmbedDataBlob> fontEmbedData2() const { return m_fontEmbedData2; }
+    inline const MSONullable<FontEmbedDataBlob>& fontEmbedData1() const { return m_fontEmbedData1; }
 private:
     MSONullable<FontEmbedDataBlob> m_fontEmbedData2;
 public:
-    MSONullable<FontEmbedDataBlob> fontEmbedData3() const { return m_fontEmbedData3; }
+    inline const MSONullable<FontEmbedDataBlob>& fontEmbedData2() const { return m_fontEmbedData2; }
 private:
     MSONullable<FontEmbedDataBlob> m_fontEmbedData3;
 public:
-    MSONullable<FontEmbedDataBlob> fontEmbedData4() const { return m_fontEmbedData4; }
+    inline const MSONullable<FontEmbedDataBlob>& fontEmbedData3() const { return m_fontEmbedData3; }
 private:
     MSONullable<FontEmbedDataBlob> m_fontEmbedData4;
+public:
+    inline const MSONullable<FontEmbedDataBlob>& fontEmbedData4() const { return m_fontEmbedData4; }
 };
 class KinsokuContainer : public ParsedObject {
 private:
 public:
     KinsokuContainer() {}
     explicit KinsokuContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    KinsokuAtom kinsokuAtom() const { return m_kinsokuAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     KinsokuAtom m_kinsokuAtom;
 public:
-    MSONullable<KinsokuLeadingAtom> kinsokuLeadingAtom() const { return m_kinsokuLeadingAtom; }
+    inline const KinsokuAtom& kinsokuAtom() const { return m_kinsokuAtom; }
 private:
     MSONullable<KinsokuLeadingAtom> m_kinsokuLeadingAtom;
 public:
-    MSONullable<KinsokuFollowingAtom> kinsokuFollowingAtom() const { return m_kinsokuFollowingAtom; }
+    inline const MSONullable<KinsokuLeadingAtom>& kinsokuLeadingAtom() const { return m_kinsokuLeadingAtom; }
 private:
     MSONullable<KinsokuFollowingAtom> m_kinsokuFollowingAtom;
+public:
+    inline const MSONullable<KinsokuFollowingAtom>& kinsokuFollowingAtom() const { return m_kinsokuFollowingAtom; }
 };
 class TextSIException : public ParsedObject {
 private:
 public:
     TextSIException() {}
     explicit TextSIException(const char* data, const quint32 maxsize);
-public:
-    bool spell() const { return m_spell; }
 private:
     bool m_spell;
 public:
-    bool lang() const { return m_lang; }
+    inline bool spell() const { return m_spell; }
 private:
     bool m_lang;
 public:
-    bool altLang() const { return m_altLang; }
+    inline bool lang() const { return m_lang; }
 private:
     bool m_altLang;
 public:
-    bool unused1() const { return m_unused1; }
+    inline bool altLang() const { return m_altLang; }
 private:
     bool m_unused1;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool unused1() const { return m_unused1; }
 private:
     bool m_unused2;
 public:
-    bool fPp10ext() const { return m_fPp10ext; }
+    inline bool unused2() const { return m_unused2; }
 private:
     bool m_fPp10ext;
 public:
-    bool fBidi() const { return m_fBidi; }
+    inline bool fPp10ext() const { return m_fPp10ext; }
 private:
     bool m_fBidi;
 public:
-    bool unused3() const { return m_unused3; }
+    inline bool fBidi() const { return m_fBidi; }
 private:
     bool m_unused3;
 public:
-    bool reserved1() const { return m_reserved1; }
+    inline bool unused3() const { return m_unused3; }
 private:
     bool m_reserved1;
 public:
-    bool smartTag() const { return m_smartTag; }
+    inline bool reserved1() const { return m_reserved1; }
 private:
     bool m_smartTag;
 public:
-    quint8 reserved2a() const { return m_reserved2a; }
+    inline bool smartTag() const { return m_smartTag; }
 private:
     quint8 m_reserved2a;
 public:
-    quint32 reserved2b() const { return m_reserved2b; }
+    inline quint8 reserved2a() const { return m_reserved2a; }
 private:
     quint32 m_reserved2b;
 public:
-    MSOBasicNullable<quint16> spellInfo() const { return m_spellInfo; }
+    inline quint32 reserved2b() const { return m_reserved2b; }
 private:
     MSOBasicNullable<quint16> m_spellInfo;
 public:
-    MSOBasicNullable<quint16> lid() const { return m_lid; }
+    inline const MSOBasicNullable<quint16>& spellInfo() const { return m_spellInfo; }
 private:
     MSOBasicNullable<quint16> m_lid;
 public:
-    MSOBasicNullable<quint16> altLid() const { return m_altLid; }
+    inline const MSOBasicNullable<quint16>& lid() const { return m_lid; }
 private:
     MSOBasicNullable<quint16> m_altLid;
 public:
-    MSOBasicNullable<qint16> bidi() const { return m_bidi; }
+    inline const MSOBasicNullable<quint16>& altLid() const { return m_altLid; }
 private:
     MSOBasicNullable<qint16> m_bidi;
 public:
-    MSOBasicNullable<quint8> pp10runid() const { return m_pp10runid; }
+    inline const MSOBasicNullable<qint16>& bidi() const { return m_bidi; }
 private:
     MSOBasicNullable<quint8> m_pp10runid;
 public:
-    MSOBasicNullable<quint8> reserved3a() const { return m_reserved3a; }
+    inline const MSOBasicNullable<quint8>& pp10runid() const { return m_pp10runid; }
 private:
     MSOBasicNullable<quint8> m_reserved3a;
 public:
-    MSOBasicNullable<quint16> reserved3b() const { return m_reserved3b; }
+    inline const MSOBasicNullable<quint8>& reserved3a() const { return m_reserved3a; }
 private:
     MSOBasicNullable<quint16> m_reserved3b;
 public:
-    MSOBasicNullable<quint8> reserved3bc() const { return m_reserved3bc; }
+    inline const MSOBasicNullable<quint16>& reserved3b() const { return m_reserved3b; }
 private:
     MSOBasicNullable<quint8> m_reserved3bc;
 public:
-    MSOBasicNullable<bool> grammarError() const { return m_grammarError; }
+    inline const MSOBasicNullable<quint8>& reserved3bc() const { return m_reserved3bc; }
 private:
     MSOBasicNullable<bool> m_grammarError;
 public:
-    MSONullable<SmartTags> smartTags() const { return m_smartTags; }
+    inline const MSOBasicNullable<bool>& grammarError() const { return m_grammarError; }
 private:
     MSONullable<SmartTags> m_smartTags;
+public:
+    inline const MSONullable<SmartTags>& smartTags() const { return m_smartTags; }
 };
 class TextMasterStyleLevel : public ParsedObject {
 private:
 public:
     TextMasterStyleLevel() {}
     explicit TextMasterStyleLevel(const char* data, const quint32 maxsize);
-public:
-    TextPFException pf() const { return m_pf; }
 private:
     TextPFException m_pf;
 public:
-    TextCFException cf() const { return m_cf; }
+    inline const TextPFException& pf() const { return m_pf; }
 private:
     TextCFException m_cf;
+public:
+    inline const TextCFException& cf() const { return m_cf; }
 };
 class DocumentAtom : public FixedSizeParsedObject {
 private:
@@ -8059,54 +8059,54 @@ public:
     static inline quint32 getSize() { return _size; }
     DocumentAtom() {}
     DocumentAtom(const char* data, quint32/*ignored*/ = 0);// 48 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    PointStruct slideSize() const { return m_slideSize; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     PointStruct m_slideSize;
 public:
-    PointStruct notesSize() const { return m_notesSize; }
+    inline const PointStruct& slideSize() const { return m_slideSize; }
 private:
     PointStruct m_notesSize;
 public:
-    RatioStruct serverZoom() const { return m_serverZoom; }
+    inline const PointStruct& notesSize() const { return m_notesSize; }
 private:
     RatioStruct m_serverZoom;
 public:
-    quint32 notesMasterPersistIdRef() const { return m_notesMasterPersistIdRef; }
+    inline const RatioStruct& serverZoom() const { return m_serverZoom; }
 private:
     quint32 m_notesMasterPersistIdRef;
 public:
-    quint32 handoutMasterPersistIdRef() const { return m_handoutMasterPersistIdRef; }
+    inline quint32 notesMasterPersistIdRef() const { return m_notesMasterPersistIdRef; }
 private:
     quint32 m_handoutMasterPersistIdRef;
 public:
-    quint16 firstSlideNumber() const { return m_firstSlideNumber; }
+    inline quint32 handoutMasterPersistIdRef() const { return m_handoutMasterPersistIdRef; }
 private:
     quint16 m_firstSlideNumber;
 public:
-    quint16 slideSizeType() const { return m_slideSizeType; }
+    inline quint16 firstSlideNumber() const { return m_firstSlideNumber; }
 private:
     quint16 m_slideSizeType;
 public:
-    quint8 fSaveWithFonts() const { return m_fSaveWithFonts; }
+    inline quint16 slideSizeType() const { return m_slideSizeType; }
 private:
     quint8 m_fSaveWithFonts;
 public:
-    quint8 fOmitTitlePlace() const { return m_fOmitTitlePlace; }
+    inline quint8 fSaveWithFonts() const { return m_fSaveWithFonts; }
 private:
     quint8 m_fOmitTitlePlace;
 public:
-    quint8 fRightToLeft() const { return m_fRightToLeft; }
+    inline quint8 fOmitTitlePlace() const { return m_fOmitTitlePlace; }
 private:
     quint8 m_fRightToLeft;
 public:
-    quint8 fShowComments() const { return m_fShowComments; }
+    inline quint8 fRightToLeft() const { return m_fRightToLeft; }
 private:
     quint8 m_fShowComments;
+public:
+    inline quint8 fShowComments() const { return m_fShowComments; }
 };
 class SlideTime10Atom : public FixedSizeParsedObject {
 private:
@@ -8115,54 +8115,54 @@ public:
     static inline quint32 getSize() { return _size; }
     SlideTime10Atom() {}
     SlideTime10Atom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    FILETIME fileTime() const { return m_fileTime; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     FILETIME m_fileTime;
+public:
+    inline const FILETIME& fileTime() const { return m_fileTime; }
 };
 class PP12SlideBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP12SlideBinaryTagExtension() {}
     explicit PP12SlideBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagName;
 public:
-    MSOCastArray<quint16> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<quint16>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
 public:
-    MSONullable<RoundTripHeaderFooterDefaults12Atom> roundTripHeaderFooterDefaultsAtom() const { return m_roundTripHeaderFooterDefaultsAtom; }
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSONullable<RoundTripHeaderFooterDefaults12Atom> m_roundTripHeaderFooterDefaultsAtom;
+public:
+    inline const MSONullable<RoundTripHeaderFooterDefaults12Atom>& roundTripHeaderFooterDefaultsAtom() const { return m_roundTripHeaderFooterDefaultsAtom; }
 };
 class ProgStringTagContainer : public ParsedObject {
 private:
 public:
     ProgStringTagContainer() {}
     explicit ProgStringTagContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TagNameAtom tagNameAtom() const { return m_tagNameAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TagNameAtom m_tagNameAtom;
 public:
-    MSONullable<TagValueAtom> tagValueAtom() const { return m_tagValueAtom; }
+    inline const TagNameAtom& tagNameAtom() const { return m_tagNameAtom; }
 private:
     MSONullable<TagValueAtom> m_tagValueAtom;
+public:
+    inline const MSONullable<TagValueAtom>& tagValueAtom() const { return m_tagValueAtom; }
 };
 class NotesAtom : public FixedSizeParsedObject {
 private:
@@ -8171,186 +8171,186 @@ public:
     static inline quint32 getSize() { return _size; }
     NotesAtom() {}
     NotesAtom(const char* data, quint32/*ignored*/ = 0);// 16 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint32 slideIdRef() const { return m_slideIdRef; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint32 m_slideIdRef;
 public:
-    SlideFlags slideFlags() const { return m_slideFlags; }
+    inline quint32 slideIdRef() const { return m_slideIdRef; }
 private:
     SlideFlags m_slideFlags;
 public:
-    quint16 unused() const { return m_unused; }
+    inline const SlideFlags& slideFlags() const { return m_slideFlags; }
 private:
     quint16 m_unused;
+public:
+    inline quint16 unused() const { return m_unused; }
 };
 class ExObjListContainer : public ParsedObject {
 private:
 public:
     ExObjListContainer() {}
     explicit ExObjListContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    ExObjListAtom exObjListAtom() const { return m_exObjListAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     ExObjListAtom m_exObjListAtom;
+public:
+    inline const ExObjListAtom& exObjListAtom() const { return m_exObjListAtom; }
 private:
     MSOArray<ExObjListSubContainer> m_rgChildRec;
 public:
-    MSOArray<ExObjListSubContainer> rgChildRec() const { return m_rgChildRec; }
+    inline const MSOArray<ExObjListSubContainer>& rgChildRec() const { return m_rgChildRec; }
 };
 class ExControlContainer : public ParsedObject {
 private:
 public:
     ExControlContainer() {}
     explicit ExControlContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    ExControlAtom exControlAtom() const { return m_exControlAtom; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     ExControlAtom m_exControlAtom;
 public:
-    ExOleObjAtom exOleObjAtom() const { return m_exOleObjAtom; }
+    inline const ExControlAtom& exControlAtom() const { return m_exControlAtom; }
 private:
     ExOleObjAtom m_exOleObjAtom;
 public:
-    MSONullable<MenuNameAtom> menuNameAtom() const { return m_menuNameAtom; }
+    inline const ExOleObjAtom& exOleObjAtom() const { return m_exOleObjAtom; }
 private:
     MSONullable<MenuNameAtom> m_menuNameAtom;
 public:
-    MSONullable<ProgIDAtom> progIdAtom() const { return m_progIdAtom; }
+    inline const MSONullable<MenuNameAtom>& menuNameAtom() const { return m_menuNameAtom; }
 private:
     MSONullable<ProgIDAtom> m_progIdAtom;
 public:
-    MSONullable<ClipboardNameAtom> clipboardNameAtom() const { return m_clipboardNameAtom; }
+    inline const MSONullable<ProgIDAtom>& progIdAtom() const { return m_progIdAtom; }
 private:
     MSONullable<ClipboardNameAtom> m_clipboardNameAtom;
 public:
-    MSONullable<MetafileBlob> metafile() const { return m_metafile; }
+    inline const MSONullable<ClipboardNameAtom>& clipboardNameAtom() const { return m_clipboardNameAtom; }
 private:
     MSONullable<MetafileBlob> m_metafile;
+public:
+    inline const MSONullable<MetafileBlob>& metafile() const { return m_metafile; }
 };
 class ExHyperlinkContainer : public ParsedObject {
 private:
 public:
     ExHyperlinkContainer() {}
     explicit ExHyperlinkContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    ExHyperlinkAtom exHyperlinkAtom() const { return m_exHyperlinkAtom; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     ExHyperlinkAtom m_exHyperlinkAtom;
 public:
-    MSONullable<FriendlyNameAtom> friendlyNameAtom() const { return m_friendlyNameAtom; }
+    inline const ExHyperlinkAtom& exHyperlinkAtom() const { return m_exHyperlinkAtom; }
 private:
     MSONullable<FriendlyNameAtom> m_friendlyNameAtom;
 public:
-    MSONullable<TargetAtom> targetAtom() const { return m_targetAtom; }
+    inline const MSONullable<FriendlyNameAtom>& friendlyNameAtom() const { return m_friendlyNameAtom; }
 private:
     MSONullable<TargetAtom> m_targetAtom;
 public:
-    MSONullable<LocationAtom> locationAtom() const { return m_locationAtom; }
+    inline const MSONullable<TargetAtom>& targetAtom() const { return m_targetAtom; }
 private:
     MSONullable<LocationAtom> m_locationAtom;
+public:
+    inline const MSONullable<LocationAtom>& locationAtom() const { return m_locationAtom; }
 };
 class ExOleLinkContainer : public ParsedObject {
 private:
 public:
     ExOleLinkContainer() {}
     explicit ExOleLinkContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    ExOleLinkAtom exOleLinkAtom() const { return m_exOleLinkAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     ExOleLinkAtom m_exOleLinkAtom;
 public:
-    ExOleObjAtom exOleObjAtom() const { return m_exOleObjAtom; }
+    inline const ExOleLinkAtom& exOleLinkAtom() const { return m_exOleLinkAtom; }
 private:
     ExOleObjAtom m_exOleObjAtom;
 public:
-    MSONullable<MenuNameAtom> menuNameAtom() const { return m_menuNameAtom; }
+    inline const ExOleObjAtom& exOleObjAtom() const { return m_exOleObjAtom; }
 private:
     MSONullable<MenuNameAtom> m_menuNameAtom;
 public:
-    MSONullable<ProgIDAtom> progIdAtom() const { return m_progIdAtom; }
+    inline const MSONullable<MenuNameAtom>& menuNameAtom() const { return m_menuNameAtom; }
 private:
     MSONullable<ProgIDAtom> m_progIdAtom;
 public:
-    MSONullable<ClipboardNameAtom> clipboardNameAtom() const { return m_clipboardNameAtom; }
+    inline const MSONullable<ProgIDAtom>& progIdAtom() const { return m_progIdAtom; }
 private:
     MSONullable<ClipboardNameAtom> m_clipboardNameAtom;
 public:
-    MSONullable<MetafileBlob> metafile() const { return m_metafile; }
+    inline const MSONullable<ClipboardNameAtom>& clipboardNameAtom() const { return m_clipboardNameAtom; }
 private:
     MSONullable<MetafileBlob> m_metafile;
+public:
+    inline const MSONullable<MetafileBlob>& metafile() const { return m_metafile; }
 };
 class ExOleEmbedContainer : public ParsedObject {
 private:
 public:
     ExOleEmbedContainer() {}
     explicit ExOleEmbedContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    ExOleEmbedAtom exOleEmbedAtom() const { return m_exOleEmbedAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     ExOleEmbedAtom m_exOleEmbedAtom;
 public:
-    ExOleObjAtom exOleObjAtom() const { return m_exOleObjAtom; }
+    inline const ExOleEmbedAtom& exOleEmbedAtom() const { return m_exOleEmbedAtom; }
 private:
     ExOleObjAtom m_exOleObjAtom;
 public:
-    MSONullable<MenuNameAtom> menuNameAtom() const { return m_menuNameAtom; }
+    inline const ExOleObjAtom& exOleObjAtom() const { return m_exOleObjAtom; }
 private:
     MSONullable<MenuNameAtom> m_menuNameAtom;
 public:
-    MSONullable<ProgIDAtom> progIdAtom() const { return m_progIdAtom; }
+    inline const MSONullable<MenuNameAtom>& menuNameAtom() const { return m_menuNameAtom; }
 private:
     MSONullable<ProgIDAtom> m_progIdAtom;
 public:
-    MSONullable<ClipboardNameAtom> clipboardNameAtom() const { return m_clipboardNameAtom; }
+    inline const MSONullable<ProgIDAtom>& progIdAtom() const { return m_progIdAtom; }
 private:
     MSONullable<ClipboardNameAtom> m_clipboardNameAtom;
 public:
-    MSONullable<MetafileBlob> metafile() const { return m_metafile; }
+    inline const MSONullable<ClipboardNameAtom>& clipboardNameAtom() const { return m_clipboardNameAtom; }
 private:
     MSONullable<MetafileBlob> m_metafile;
+public:
+    inline const MSONullable<MetafileBlob>& metafile() const { return m_metafile; }
 };
 class OfficeArtFDGGBlock : public ParsedObject {
 private:
 public:
     OfficeArtFDGGBlock() {}
     explicit OfficeArtFDGGBlock(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    OfficeArtFDGG head() const { return m_head; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     OfficeArtFDGG m_head;
+public:
+    inline const OfficeArtFDGG& head() const { return m_head; }
 private:
     MSOArray<OfficeArtIDCL> m_Rgidcl;
 public:
-    MSOArray<OfficeArtIDCL> Rgidcl() const { return m_Rgidcl; }
+    inline const MSOArray<OfficeArtIDCL>& Rgidcl() const { return m_Rgidcl; }
 };
 class OfficeArtSolverContainerFileBlock : public ParsedObject {
 private:
@@ -8380,14 +8380,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Rotation() {}
     Rotation(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint rotation() const { return m_rotation; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_rotation;
+public:
+    inline const FixedPoint& rotation() const { return m_rotation; }
 };
 class ProtectionBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -8396,98 +8396,98 @@ public:
     static inline quint32 getSize() { return _size; }
     ProtectionBooleanProperties() {}
     ProtectionBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fLockAgainstGrouping() const { return m_fLockAgainstGrouping; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fLockAgainstGrouping;
 public:
-    bool fLockAdjustHandles() const { return m_fLockAdjustHandles; }
+    inline bool fLockAgainstGrouping() const { return m_fLockAgainstGrouping; }
 private:
     bool m_fLockAdjustHandles;
 public:
-    bool fLockText() const { return m_fLockText; }
+    inline bool fLockAdjustHandles() const { return m_fLockAdjustHandles; }
 private:
     bool m_fLockText;
 public:
-    bool fLockVertices() const { return m_fLockVertices; }
+    inline bool fLockText() const { return m_fLockText; }
 private:
     bool m_fLockVertices;
 public:
-    bool fLockCropping() const { return m_fLockCropping; }
+    inline bool fLockVertices() const { return m_fLockVertices; }
 private:
     bool m_fLockCropping;
 public:
-    bool fLockAgainstSelect() const { return m_fLockAgainstSelect; }
+    inline bool fLockCropping() const { return m_fLockCropping; }
 private:
     bool m_fLockAgainstSelect;
 public:
-    bool fLockPosition() const { return m_fLockPosition; }
+    inline bool fLockAgainstSelect() const { return m_fLockAgainstSelect; }
 private:
     bool m_fLockPosition;
 public:
-    bool fLockAspectRatio() const { return m_fLockAspectRatio; }
+    inline bool fLockPosition() const { return m_fLockPosition; }
 private:
     bool m_fLockAspectRatio;
 public:
-    bool fLockRotation() const { return m_fLockRotation; }
+    inline bool fLockAspectRatio() const { return m_fLockAspectRatio; }
 private:
     bool m_fLockRotation;
 public:
-    bool fLockAgainstUngrouping() const { return m_fLockAgainstUngrouping; }
+    inline bool fLockRotation() const { return m_fLockRotation; }
 private:
     bool m_fLockAgainstUngrouping;
 public:
-    quint8 unused6() const { return m_unused6; }
+    inline bool fLockAgainstUngrouping() const { return m_fLockAgainstUngrouping; }
 private:
     quint8 m_unused6;
 public:
-    bool fUsefLockAgainstGrouping() const { return m_fUsefLockAgainstGrouping; }
+    inline quint8 unused6() const { return m_unused6; }
 private:
     bool m_fUsefLockAgainstGrouping;
 public:
-    bool fUseLockAdjustHandles() const { return m_fUseLockAdjustHandles; }
+    inline bool fUsefLockAgainstGrouping() const { return m_fUsefLockAgainstGrouping; }
 private:
     bool m_fUseLockAdjustHandles;
 public:
-    bool fUseLockText() const { return m_fUseLockText; }
+    inline bool fUseLockAdjustHandles() const { return m_fUseLockAdjustHandles; }
 private:
     bool m_fUseLockText;
 public:
-    bool fUsefLockVertices() const { return m_fUsefLockVertices; }
+    inline bool fUseLockText() const { return m_fUseLockText; }
 private:
     bool m_fUsefLockVertices;
 public:
-    bool fUsefLockCropping() const { return m_fUsefLockCropping; }
+    inline bool fUsefLockVertices() const { return m_fUsefLockVertices; }
 private:
     bool m_fUsefLockCropping;
 public:
-    bool fUsefLockAgainstSelect() const { return m_fUsefLockAgainstSelect; }
+    inline bool fUsefLockCropping() const { return m_fUsefLockCropping; }
 private:
     bool m_fUsefLockAgainstSelect;
 public:
-    bool fUsefLockPosition() const { return m_fUsefLockPosition; }
+    inline bool fUsefLockAgainstSelect() const { return m_fUsefLockAgainstSelect; }
 private:
     bool m_fUsefLockPosition;
 public:
-    bool fUsefLockAspectRatio() const { return m_fUsefLockAspectRatio; }
+    inline bool fUsefLockPosition() const { return m_fUsefLockPosition; }
 private:
     bool m_fUsefLockAspectRatio;
 public:
-    bool fUsefLockRotation() const { return m_fUsefLockRotation; }
+    inline bool fUsefLockAspectRatio() const { return m_fUsefLockAspectRatio; }
 private:
     bool m_fUsefLockRotation;
 public:
-    bool fUsefLockAgainstUngrouping() const { return m_fUsefLockAgainstUngrouping; }
+    inline bool fUsefLockRotation() const { return m_fUsefLockRotation; }
 private:
     bool m_fUsefLockAgainstUngrouping;
 public:
-    quint8 unused2() const { return m_unused2; }
+    inline bool fUsefLockAgainstUngrouping() const { return m_fUsefLockAgainstUngrouping; }
 private:
     quint8 m_unused2;
+public:
+    inline quint8 unused2() const { return m_unused2; }
 };
 class ITxid : public FixedSizeParsedObject {
 private:
@@ -8496,14 +8496,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ITxid() {}
     ITxid(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 iTxid() const { return m_iTxid; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_iTxid;
+public:
+    inline qint32 iTxid() const { return m_iTxid; }
 };
 class DxTextLeft : public FixedSizeParsedObject {
 private:
@@ -8512,14 +8512,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxTextLeft() {}
     DxTextLeft(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dxTextLeft() const { return m_dxTextLeft; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dxTextLeft;
+public:
+    inline qint32 dxTextLeft() const { return m_dxTextLeft; }
 };
 class DyTextTop : public FixedSizeParsedObject {
 private:
@@ -8528,14 +8528,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DyTextTop() {}
     DyTextTop(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dyTextTop() const { return m_dyTextTop; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dyTextTop;
+public:
+    inline qint32 dyTextTop() const { return m_dyTextTop; }
 };
 class DxTextRight : public FixedSizeParsedObject {
 private:
@@ -8544,14 +8544,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxTextRight() {}
     DxTextRight(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dxTextRight() const { return m_dxTextRight; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dxTextRight;
+public:
+    inline qint32 dxTextRight() const { return m_dxTextRight; }
 };
 class DyTextBottom : public FixedSizeParsedObject {
 private:
@@ -8560,14 +8560,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DyTextBottom() {}
     DyTextBottom(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dyTextBottom() const { return m_dyTextBottom; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dyTextBottom;
+public:
+    inline qint32 dyTextBottom() const { return m_dyTextBottom; }
 };
 class WrapText : public FixedSizeParsedObject {
 private:
@@ -8576,14 +8576,14 @@ public:
     static inline quint32 getSize() { return _size; }
     WrapText() {}
     WrapText(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 wrapText() const { return m_wrapText; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_wrapText;
+public:
+    inline quint32 wrapText() const { return m_wrapText; }
 };
 class AnchorText : public FixedSizeParsedObject {
 private:
@@ -8592,14 +8592,14 @@ public:
     static inline quint32 getSize() { return _size; }
     AnchorText() {}
     AnchorText(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 anchorText() const { return m_anchorText; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_anchorText;
+public:
+    inline quint32 anchorText() const { return m_anchorText; }
 };
 class TxflTextFlow : public FixedSizeParsedObject {
 private:
@@ -8608,14 +8608,14 @@ public:
     static inline quint32 getSize() { return _size; }
     TxflTextFlow() {}
     TxflTextFlow(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 txflTextFlow() const { return m_txflTextFlow; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_txflTextFlow;
+public:
+    inline quint32 txflTextFlow() const { return m_txflTextFlow; }
 };
 class CdirFont : public FixedSizeParsedObject {
 private:
@@ -8624,14 +8624,14 @@ public:
     static inline quint32 getSize() { return _size; }
     CdirFont() {}
     CdirFont(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 cdirFont() const { return m_cdirFont; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_cdirFont;
+public:
+    inline quint32 cdirFont() const { return m_cdirFont; }
 };
 class HspNext : public FixedSizeParsedObject {
 private:
@@ -8640,14 +8640,14 @@ public:
     static inline quint32 getSize() { return _size; }
     HspNext() {}
     HspNext(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 hspNext() const { return m_hspNext; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_hspNext;
+public:
+    inline quint32 hspNext() const { return m_hspNext; }
 };
 class Txdir : public FixedSizeParsedObject {
 private:
@@ -8656,14 +8656,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Txdir() {}
     Txdir(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 txdir() const { return m_txdir; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_txdir;
+public:
+    inline quint32 txdir() const { return m_txdir; }
 };
 class TextBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -8672,66 +8672,66 @@ public:
     static inline quint32 getSize() { return _size; }
     TextBooleanProperties() {}
     TextBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool unused1() const { return m_unused1; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_unused1;
 public:
-    bool fFitShapeToText() const { return m_fFitShapeToText; }
+    inline bool unused1() const { return m_unused1; }
 private:
     bool m_fFitShapeToText;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool fFitShapeToText() const { return m_fFitShapeToText; }
 private:
     bool m_unused2;
 public:
-    bool fAutoTextMargin() const { return m_fAutoTextMargin; }
+    inline bool unused2() const { return m_unused2; }
 private:
     bool m_fAutoTextMargin;
 public:
-    bool fSelectText() const { return m_fSelectText; }
+    inline bool fAutoTextMargin() const { return m_fAutoTextMargin; }
 private:
     bool m_fSelectText;
 public:
-    quint8 unused3a() const { return m_unused3a; }
+    inline bool fSelectText() const { return m_fSelectText; }
 private:
     quint8 m_unused3a;
 public:
-    quint8 unused3b() const { return m_unused3b; }
+    inline quint8 unused3a() const { return m_unused3a; }
 private:
     quint8 m_unused3b;
 public:
-    bool unused4() const { return m_unused4; }
+    inline quint8 unused3b() const { return m_unused3b; }
 private:
     bool m_unused4;
 public:
-    bool fUsefFitShapeToText() const { return m_fUsefFitShapeToText; }
+    inline bool unused4() const { return m_unused4; }
 private:
     bool m_fUsefFitShapeToText;
 public:
-    bool unused5() const { return m_unused5; }
+    inline bool fUsefFitShapeToText() const { return m_fUsefFitShapeToText; }
 private:
     bool m_unused5;
 public:
-    bool fUsefAutoTextMargin() const { return m_fUsefAutoTextMargin; }
+    inline bool unused5() const { return m_unused5; }
 private:
     bool m_fUsefAutoTextMargin;
 public:
-    bool fUsefSelectText() const { return m_fUsefSelectText; }
+    inline bool fUsefAutoTextMargin() const { return m_fUsefAutoTextMargin; }
 private:
     bool m_fUsefSelectText;
 public:
-    quint8 unused6a() const { return m_unused6a; }
+    inline bool fUsefSelectText() const { return m_fUsefSelectText; }
 private:
     quint8 m_unused6a;
 public:
-    quint8 unused6b() const { return m_unused6b; }
+    inline quint8 unused6a() const { return m_unused6a; }
 private:
     quint8 m_unused6b;
+public:
+    inline quint8 unused6b() const { return m_unused6b; }
 };
 class CropFromTop : public FixedSizeParsedObject {
 private:
@@ -8740,14 +8740,14 @@ public:
     static inline quint32 getSize() { return _size; }
     CropFromTop() {}
     CropFromTop(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint cropFromTop() const { return m_cropFromTop; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_cropFromTop;
+public:
+    inline const FixedPoint& cropFromTop() const { return m_cropFromTop; }
 };
 class CropFromBottom : public FixedSizeParsedObject {
 private:
@@ -8756,14 +8756,14 @@ public:
     static inline quint32 getSize() { return _size; }
     CropFromBottom() {}
     CropFromBottom(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint cropFromBottom() const { return m_cropFromBottom; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_cropFromBottom;
+public:
+    inline const FixedPoint& cropFromBottom() const { return m_cropFromBottom; }
 };
 class CropFromLeft : public FixedSizeParsedObject {
 private:
@@ -8772,14 +8772,14 @@ public:
     static inline quint32 getSize() { return _size; }
     CropFromLeft() {}
     CropFromLeft(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint cropFromLeft() const { return m_cropFromLeft; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_cropFromLeft;
+public:
+    inline const FixedPoint& cropFromLeft() const { return m_cropFromLeft; }
 };
 class CropFromRight : public FixedSizeParsedObject {
 private:
@@ -8788,14 +8788,14 @@ public:
     static inline quint32 getSize() { return _size; }
     CropFromRight() {}
     CropFromRight(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint cropFromRight() const { return m_cropFromRight; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_cropFromRight;
+public:
+    inline const FixedPoint& cropFromRight() const { return m_cropFromRight; }
 };
 class Pib : public FixedSizeParsedObject {
 private:
@@ -8804,14 +8804,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Pib() {}
     Pib(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 pib() const { return m_pib; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_pib;
+public:
+    inline quint32 pib() const { return m_pib; }
 };
 class PibName : public FixedSizeParsedObject {
 private:
@@ -8820,14 +8820,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PibName() {}
     PibName(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 pibName() const { return m_pibName; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_pibName;
+public:
+    inline quint32 pibName() const { return m_pibName; }
 };
 class PibFlags : public FixedSizeParsedObject {
 private:
@@ -8836,14 +8836,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PibFlags() {}
     PibFlags(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 pibFlags() const { return m_pibFlags; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_pibFlags;
+public:
+    inline quint32 pibFlags() const { return m_pibFlags; }
 };
 class PictureTransparent : public FixedSizeParsedObject {
 private:
@@ -8852,14 +8852,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PictureTransparent() {}
     PictureTransparent(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF pictureTransparent() const { return m_pictureTransparent; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_pictureTransparent;
+public:
+    inline const OfficeArtCOLORREF& pictureTransparent() const { return m_pictureTransparent; }
 };
 class PictureContrast : public FixedSizeParsedObject {
 private:
@@ -8868,14 +8868,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PictureContrast() {}
     PictureContrast(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 pictureContrast() const { return m_pictureContrast; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_pictureContrast;
+public:
+    inline qint32 pictureContrast() const { return m_pictureContrast; }
 };
 class PictureBrightness : public FixedSizeParsedObject {
 private:
@@ -8884,14 +8884,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PictureBrightness() {}
     PictureBrightness(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 pictureBrightness() const { return m_pictureBrightness; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_pictureBrightness;
+public:
+    inline qint32 pictureBrightness() const { return m_pictureBrightness; }
 };
 class BlipBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -8900,82 +8900,82 @@ public:
     static inline quint32 getSize() { return _size; }
     BlipBooleanProperties() {}
     BlipBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fPictureActive() const { return m_fPictureActive; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fPictureActive;
 public:
-    bool fPictureBiLevel() const { return m_fPictureBiLevel; }
+    inline bool fPictureActive() const { return m_fPictureActive; }
 private:
     bool m_fPictureBiLevel;
 public:
-    bool fPictureGray() const { return m_fPictureGray; }
+    inline bool fPictureBiLevel() const { return m_fPictureBiLevel; }
 private:
     bool m_fPictureGray;
 public:
-    bool fNoHitTestPicture() const { return m_fNoHitTestPicture; }
+    inline bool fPictureGray() const { return m_fPictureGray; }
 private:
     bool m_fNoHitTestPicture;
 public:
-    bool fLooping() const { return m_fLooping; }
+    inline bool fNoHitTestPicture() const { return m_fNoHitTestPicture; }
 private:
     bool m_fLooping;
 public:
-    bool fRewind() const { return m_fRewind; }
+    inline bool fLooping() const { return m_fLooping; }
 private:
     bool m_fRewind;
 public:
-    bool fPicturePreserveGrays() const { return m_fPicturePreserveGrays; }
+    inline bool fRewind() const { return m_fRewind; }
 private:
     bool m_fPicturePreserveGrays;
 public:
-    bool unused1a() const { return m_unused1a; }
+    inline bool fPicturePreserveGrays() const { return m_fPicturePreserveGrays; }
 private:
     bool m_unused1a;
 public:
-    quint8 unused1b() const { return m_unused1b; }
+    inline bool unused1a() const { return m_unused1a; }
 private:
     quint8 m_unused1b;
 public:
-    bool fUsefPictureActive() const { return m_fUsefPictureActive; }
+    inline quint8 unused1b() const { return m_unused1b; }
 private:
     bool m_fUsefPictureActive;
 public:
-    bool fUsefPictureBiLevel() const { return m_fUsefPictureBiLevel; }
+    inline bool fUsefPictureActive() const { return m_fUsefPictureActive; }
 private:
     bool m_fUsefPictureBiLevel;
 public:
-    bool fUsefPictureGray() const { return m_fUsefPictureGray; }
+    inline bool fUsefPictureBiLevel() const { return m_fUsefPictureBiLevel; }
 private:
     bool m_fUsefPictureGray;
 public:
-    bool fUsefNoHitTestPicture() const { return m_fUsefNoHitTestPicture; }
+    inline bool fUsefPictureGray() const { return m_fUsefPictureGray; }
 private:
     bool m_fUsefNoHitTestPicture;
 public:
-    bool fUsefLooping() const { return m_fUsefLooping; }
+    inline bool fUsefNoHitTestPicture() const { return m_fUsefNoHitTestPicture; }
 private:
     bool m_fUsefLooping;
 public:
-    bool fUsefRewind() const { return m_fUsefRewind; }
+    inline bool fUsefLooping() const { return m_fUsefLooping; }
 private:
     bool m_fUsefRewind;
 public:
-    bool fUsefPicturePreserveGrays() const { return m_fUsefPicturePreserveGrays; }
+    inline bool fUsefRewind() const { return m_fUsefRewind; }
 private:
     bool m_fUsefPicturePreserveGrays;
 public:
-    bool unused2a() const { return m_unused2a; }
+    inline bool fUsefPicturePreserveGrays() const { return m_fUsefPicturePreserveGrays; }
 private:
     bool m_unused2a;
 public:
-    quint8 unused2b() const { return m_unused2b; }
+    inline bool unused2a() const { return m_unused2a; }
 private:
     quint8 m_unused2b;
+public:
+    inline quint8 unused2b() const { return m_unused2b; }
 };
 class GeoLeft : public FixedSizeParsedObject {
 private:
@@ -8984,14 +8984,14 @@ public:
     static inline quint32 getSize() { return _size; }
     GeoLeft() {}
     GeoLeft(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 geoLeft() const { return m_geoLeft; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_geoLeft;
+public:
+    inline qint32 geoLeft() const { return m_geoLeft; }
 };
 class GeoTop : public FixedSizeParsedObject {
 private:
@@ -9000,14 +9000,14 @@ public:
     static inline quint32 getSize() { return _size; }
     GeoTop() {}
     GeoTop(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 geoTop() const { return m_geoTop; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_geoTop;
+public:
+    inline qint32 geoTop() const { return m_geoTop; }
 };
 class GeoRight : public FixedSizeParsedObject {
 private:
@@ -9016,14 +9016,14 @@ public:
     static inline quint32 getSize() { return _size; }
     GeoRight() {}
     GeoRight(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 geoRight() const { return m_geoRight; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_geoRight;
+public:
+    inline qint32 geoRight() const { return m_geoRight; }
 };
 class GeoBottom : public FixedSizeParsedObject {
 private:
@@ -9032,14 +9032,14 @@ public:
     static inline quint32 getSize() { return _size; }
     GeoBottom() {}
     GeoBottom(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 geoBottom() const { return m_geoBottom; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_geoBottom;
+public:
+    inline qint32 geoBottom() const { return m_geoBottom; }
 };
 class ShapePath : public FixedSizeParsedObject {
 private:
@@ -9048,14 +9048,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ShapePath() {}
     ShapePath(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 shapePath() const { return m_shapePath; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_shapePath;
+public:
+    inline quint32 shapePath() const { return m_shapePath; }
 };
 class PVertices : public FixedSizeParsedObject {
 private:
@@ -9064,14 +9064,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PVertices() {}
     PVertices(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 pVertices() const { return m_pVertices; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_pVertices;
+public:
+    inline quint32 pVertices() const { return m_pVertices; }
 };
 class PSegmentInfo : public FixedSizeParsedObject {
 private:
@@ -9080,14 +9080,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PSegmentInfo() {}
     PSegmentInfo(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 pSegmentInfo() const { return m_pSegmentInfo; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_pSegmentInfo;
+public:
+    inline quint32 pSegmentInfo() const { return m_pSegmentInfo; }
 };
 class AdjustValue : public FixedSizeParsedObject {
 private:
@@ -9096,14 +9096,14 @@ public:
     static inline quint32 getSize() { return _size; }
     AdjustValue() {}
     AdjustValue(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjustvalue() const { return m_adjustvalue; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjustvalue;
+public:
+    inline qint32 adjustvalue() const { return m_adjustvalue; }
 };
 class Adjust2Value : public FixedSizeParsedObject {
 private:
@@ -9112,14 +9112,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Adjust2Value() {}
     Adjust2Value(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjust2value() const { return m_adjust2value; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjust2value;
+public:
+    inline qint32 adjust2value() const { return m_adjust2value; }
 };
 class Adjust3Value : public FixedSizeParsedObject {
 private:
@@ -9128,14 +9128,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Adjust3Value() {}
     Adjust3Value(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjust3value() const { return m_adjust3value; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjust3value;
+public:
+    inline qint32 adjust3value() const { return m_adjust3value; }
 };
 class Adjust4Value : public FixedSizeParsedObject {
 private:
@@ -9144,14 +9144,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Adjust4Value() {}
     Adjust4Value(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjust4value() const { return m_adjust4value; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjust4value;
+public:
+    inline qint32 adjust4value() const { return m_adjust4value; }
 };
 class Adjust5Value : public FixedSizeParsedObject {
 private:
@@ -9160,14 +9160,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Adjust5Value() {}
     Adjust5Value(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjust5value() const { return m_adjust5value; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjust5value;
+public:
+    inline qint32 adjust5value() const { return m_adjust5value; }
 };
 class Adjust6Value : public FixedSizeParsedObject {
 private:
@@ -9176,14 +9176,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Adjust6Value() {}
     Adjust6Value(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjust6value() const { return m_adjust6value; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjust6value;
+public:
+    inline qint32 adjust6value() const { return m_adjust6value; }
 };
 class Adjust7Value : public FixedSizeParsedObject {
 private:
@@ -9192,14 +9192,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Adjust7Value() {}
     Adjust7Value(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjust7value() const { return m_adjust7value; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjust7value;
+public:
+    inline qint32 adjust7value() const { return m_adjust7value; }
 };
 class Adjust8Value : public FixedSizeParsedObject {
 private:
@@ -9208,14 +9208,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Adjust8Value() {}
     Adjust8Value(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 adjust8value() const { return m_adjust8value; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_adjust8value;
+public:
+    inline qint32 adjust8value() const { return m_adjust8value; }
 };
 class GeometryBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -9224,82 +9224,82 @@ public:
     static inline quint32 getSize() { return _size; }
     GeometryBooleanProperties() {}
     GeometryBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fFillOk() const { return m_fFillOk; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fFillOk;
 public:
-    bool fFillShadeShapeOK() const { return m_fFillShadeShapeOK; }
+    inline bool fFillOk() const { return m_fFillOk; }
 private:
     bool m_fFillShadeShapeOK;
 public:
-    bool fGtextOK() const { return m_fGtextOK; }
+    inline bool fFillShadeShapeOK() const { return m_fFillShadeShapeOK; }
 private:
     bool m_fGtextOK;
 public:
-    bool fLineOK() const { return m_fLineOK; }
+    inline bool fGtextOK() const { return m_fGtextOK; }
 private:
     bool m_fLineOK;
 public:
-    bool f3DOK() const { return m_f3DOK; }
+    inline bool fLineOK() const { return m_fLineOK; }
 private:
     bool m_f3DOK;
 public:
-    bool fShadowOK() const { return m_fShadowOK; }
+    inline bool f3DOK() const { return m_f3DOK; }
 private:
     bool m_fShadowOK;
 public:
-    bool unuseda() const { return m_unuseda; }
+    inline bool fShadowOK() const { return m_fShadowOK; }
 private:
     bool m_unuseda;
 public:
-    bool unusedb() const { return m_unusedb; }
+    inline bool unuseda() const { return m_unuseda; }
 private:
     bool m_unusedb;
 public:
-    quint8 unused2() const { return m_unused2; }
+    inline bool unusedb() const { return m_unusedb; }
 private:
     quint8 m_unused2;
 public:
-    bool fUsefFillOK() const { return m_fUsefFillOK; }
+    inline quint8 unused2() const { return m_unused2; }
 private:
     bool m_fUsefFillOK;
 public:
-    bool fUsefFillShadeShapeOK() const { return m_fUsefFillShadeShapeOK; }
+    inline bool fUsefFillOK() const { return m_fUsefFillOK; }
 private:
     bool m_fUsefFillShadeShapeOK;
 public:
-    bool fUsefGtextOK() const { return m_fUsefGtextOK; }
+    inline bool fUsefFillShadeShapeOK() const { return m_fUsefFillShadeShapeOK; }
 private:
     bool m_fUsefGtextOK;
 public:
-    bool fUsefLineOK() const { return m_fUsefLineOK; }
+    inline bool fUsefGtextOK() const { return m_fUsefGtextOK; }
 private:
     bool m_fUsefLineOK;
 public:
-    bool fUsef3DOK() const { return m_fUsef3DOK; }
+    inline bool fUsefLineOK() const { return m_fUsefLineOK; }
 private:
     bool m_fUsef3DOK;
 public:
-    bool fUsefShadowOK() const { return m_fUsefShadowOK; }
+    inline bool fUsef3DOK() const { return m_fUsef3DOK; }
 private:
     bool m_fUsefShadowOK;
 public:
-    bool unused3a() const { return m_unused3a; }
+    inline bool fUsefShadowOK() const { return m_fUsefShadowOK; }
 private:
     bool m_unused3a;
 public:
-    bool unused3b() const { return m_unused3b; }
+    inline bool unused3a() const { return m_unused3a; }
 private:
     bool m_unused3b;
 public:
-    quint8 unused4() const { return m_unused4; }
+    inline bool unused3b() const { return m_unused3b; }
 private:
     quint8 m_unused4;
+public:
+    inline quint8 unused4() const { return m_unused4; }
 };
 class FillType : public FixedSizeParsedObject {
 private:
@@ -9308,14 +9308,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillType() {}
     FillType(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 fillType() const { return m_fillType; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_fillType;
+public:
+    inline quint32 fillType() const { return m_fillType; }
 };
 class FillColor : public FixedSizeParsedObject {
 private:
@@ -9324,14 +9324,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillColor() {}
     FillColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF fillColor() const { return m_fillColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_fillColor;
+public:
+    inline const OfficeArtCOLORREF& fillColor() const { return m_fillColor; }
 };
 class FillOpacity : public FixedSizeParsedObject {
 private:
@@ -9340,14 +9340,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillOpacity() {}
     FillOpacity(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillOpacity() const { return m_fillOpacity; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillOpacity;
+public:
+    inline const FixedPoint& fillOpacity() const { return m_fillOpacity; }
 };
 class FillBackColor : public FixedSizeParsedObject {
 private:
@@ -9356,14 +9356,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillBackColor() {}
     FillBackColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF fillBackColor() const { return m_fillBackColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_fillBackColor;
+public:
+    inline const OfficeArtCOLORREF& fillBackColor() const { return m_fillBackColor; }
 };
 class FillBackOpacity : public FixedSizeParsedObject {
 private:
@@ -9372,14 +9372,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillBackOpacity() {}
     FillBackOpacity(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillBackOpacity() const { return m_fillBackOpacity; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillBackOpacity;
+public:
+    inline const FixedPoint& fillBackOpacity() const { return m_fillBackOpacity; }
 };
 class FillCrMod : public FixedSizeParsedObject {
 private:
@@ -9388,14 +9388,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillCrMod() {}
     FillCrMod(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF fillCrMod() const { return m_fillCrMod; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_fillCrMod;
+public:
+    inline const OfficeArtCOLORREF& fillCrMod() const { return m_fillCrMod; }
 };
 class FillBlip : public FixedSizeParsedObject {
 private:
@@ -9404,14 +9404,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillBlip() {}
     FillBlip(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 fillBlip() const { return m_fillBlip; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_fillBlip;
+public:
+    inline quint32 fillBlip() const { return m_fillBlip; }
 };
 class FillBlipName : public FixedSizeParsedObject {
 private:
@@ -9420,14 +9420,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillBlipName() {}
     FillBlipName(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 fillBlipName() const { return m_fillBlipName; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_fillBlipName;
+public:
+    inline quint32 fillBlipName() const { return m_fillBlipName; }
 };
 class FillBlipFlags : public FixedSizeParsedObject {
 private:
@@ -9436,14 +9436,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillBlipFlags() {}
     FillBlipFlags(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 fillBlipFlags() const { return m_fillBlipFlags; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_fillBlipFlags;
+public:
+    inline quint32 fillBlipFlags() const { return m_fillBlipFlags; }
 };
 class FillWidth : public FixedSizeParsedObject {
 private:
@@ -9452,14 +9452,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillWidth() {}
     FillWidth(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillWidth() const { return m_fillWidth; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillWidth;
+public:
+    inline qint32 fillWidth() const { return m_fillWidth; }
 };
 class FillHeight : public FixedSizeParsedObject {
 private:
@@ -9468,14 +9468,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillHeight() {}
     FillHeight(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillHeight() const { return m_fillHeight; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillHeight;
+public:
+    inline qint32 fillHeight() const { return m_fillHeight; }
 };
 class FillAngle : public FixedSizeParsedObject {
 private:
@@ -9484,14 +9484,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillAngle() {}
     FillAngle(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillAngle() const { return m_fillAngle; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillAngle;
+public:
+    inline const FixedPoint& fillAngle() const { return m_fillAngle; }
 };
 class FillFocus : public FixedSizeParsedObject {
 private:
@@ -9500,14 +9500,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillFocus() {}
     FillFocus(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillFocus() const { return m_fillFocus; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillFocus;
+public:
+    inline qint32 fillFocus() const { return m_fillFocus; }
 };
 class FillToLeft : public FixedSizeParsedObject {
 private:
@@ -9516,14 +9516,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillToLeft() {}
     FillToLeft(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillToLeft() const { return m_fillToLeft; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillToLeft;
+public:
+    inline const FixedPoint& fillToLeft() const { return m_fillToLeft; }
 };
 class FillToTop : public FixedSizeParsedObject {
 private:
@@ -9532,14 +9532,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillToTop() {}
     FillToTop(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillToTop() const { return m_fillToTop; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillToTop;
+public:
+    inline const FixedPoint& fillToTop() const { return m_fillToTop; }
 };
 class FillToRight : public FixedSizeParsedObject {
 private:
@@ -9548,14 +9548,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillToRight() {}
     FillToRight(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillToRight() const { return m_fillToRight; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillToRight;
+public:
+    inline const FixedPoint& fillToRight() const { return m_fillToRight; }
 };
 class FillToBottom : public FixedSizeParsedObject {
 private:
@@ -9564,14 +9564,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillToBottom() {}
     FillToBottom(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillToBottom() const { return m_fillToBottom; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillToBottom;
+public:
+    inline const FixedPoint& fillToBottom() const { return m_fillToBottom; }
 };
 class FillRectLeft : public FixedSizeParsedObject {
 private:
@@ -9580,14 +9580,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillRectLeft() {}
     FillRectLeft(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillRectLeft() const { return m_fillRectLeft; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillRectLeft;
+public:
+    inline qint32 fillRectLeft() const { return m_fillRectLeft; }
 };
 class FillRectTop : public FixedSizeParsedObject {
 private:
@@ -9596,14 +9596,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillRectTop() {}
     FillRectTop(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillRectTop() const { return m_fillRectTop; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillRectTop;
+public:
+    inline qint32 fillRectTop() const { return m_fillRectTop; }
 };
 class FillRectRight : public FixedSizeParsedObject {
 private:
@@ -9612,14 +9612,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillRectRight() {}
     FillRectRight(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillRectRight() const { return m_fillRectRight; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillRectRight;
+public:
+    inline qint32 fillRectRight() const { return m_fillRectRight; }
 };
 class FillRectBottom : public FixedSizeParsedObject {
 private:
@@ -9628,14 +9628,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillRectBottom() {}
     FillRectBottom(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillRectBottom() const { return m_fillRectBottom; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillRectBottom;
+public:
+    inline qint32 fillRectBottom() const { return m_fillRectBottom; }
 };
 class FillDztype : public FixedSizeParsedObject {
 private:
@@ -9644,14 +9644,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillDztype() {}
     FillDztype(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillDztype() const { return m_fillDztype; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillDztype;
+public:
+    inline qint32 fillDztype() const { return m_fillDztype; }
 };
 class FillShadePreset : public FixedSizeParsedObject {
 private:
@@ -9660,14 +9660,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillShadePreset() {}
     FillShadePreset(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 fillShadePreset() const { return m_fillShadePreset; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_fillShadePreset;
+public:
+    inline qint32 fillShadePreset() const { return m_fillShadePreset; }
 };
 class FillShadeColors : public FixedSizeParsedObject {
 private:
@@ -9676,14 +9676,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillShadeColors() {}
     FillShadeColors(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 fillShadeColors() const { return m_fillShadeColors; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_fillShadeColors;
+public:
+    inline quint32 fillShadeColors() const { return m_fillShadeColors; }
 };
 class FillOriginX : public FixedSizeParsedObject {
 private:
@@ -9692,14 +9692,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillOriginX() {}
     FillOriginX(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillOriginX() const { return m_fillOriginX; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillOriginX;
+public:
+    inline const FixedPoint& fillOriginX() const { return m_fillOriginX; }
 };
 class FillOriginY : public FixedSizeParsedObject {
 private:
@@ -9708,14 +9708,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillOriginY() {}
     FillOriginY(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillOriginY() const { return m_fillOriginY; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillOriginY;
+public:
+    inline const FixedPoint& fillOriginY() const { return m_fillOriginY; }
 };
 class FillShapeOriginX : public FixedSizeParsedObject {
 private:
@@ -9724,14 +9724,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillShapeOriginX() {}
     FillShapeOriginX(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillShapeOriginX() const { return m_fillShapeOriginX; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillShapeOriginX;
+public:
+    inline const FixedPoint& fillShapeOriginX() const { return m_fillShapeOriginX; }
 };
 class FillShapeOriginY : public FixedSizeParsedObject {
 private:
@@ -9740,14 +9740,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillShapeOriginY() {}
     FillShapeOriginY(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint fillShapeOriginY() const { return m_fillShapeOriginY; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_fillShapeOriginY;
+public:
+    inline const FixedPoint& fillShapeOriginY() const { return m_fillShapeOriginY; }
 };
 class FillColorExt : public FixedSizeParsedObject {
 private:
@@ -9756,14 +9756,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillColorExt() {}
     FillColorExt(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF fillColorExt() const { return m_fillColorExt; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_fillColorExt;
+public:
+    inline const OfficeArtCOLORREF& fillColorExt() const { return m_fillColorExt; }
 };
 class FillBackColorExt : public FixedSizeParsedObject {
 private:
@@ -9772,14 +9772,14 @@ public:
     static inline quint32 getSize() { return _size; }
     FillBackColorExt() {}
     FillBackColorExt(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF fillBackColorExt() const { return m_fillBackColorExt; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_fillBackColorExt;
+public:
+    inline const OfficeArtCOLORREF& fillBackColorExt() const { return m_fillBackColorExt; }
 };
 class FillStyleBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -9788,82 +9788,82 @@ public:
     static inline quint32 getSize() { return _size; }
     FillStyleBooleanProperties() {}
     FillStyleBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fNoFillHitTest() const { return m_fNoFillHitTest; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fNoFillHitTest;
 public:
-    bool fillUseRect() const { return m_fillUseRect; }
+    inline bool fNoFillHitTest() const { return m_fNoFillHitTest; }
 private:
     bool m_fillUseRect;
 public:
-    bool fillShape() const { return m_fillShape; }
+    inline bool fillUseRect() const { return m_fillUseRect; }
 private:
     bool m_fillShape;
 public:
-    bool fHitTestFill() const { return m_fHitTestFill; }
+    inline bool fillShape() const { return m_fillShape; }
 private:
     bool m_fHitTestFill;
 public:
-    bool fFilled() const { return m_fFilled; }
+    inline bool fHitTestFill() const { return m_fHitTestFill; }
 private:
     bool m_fFilled;
 public:
-    bool fUseShapeAnchor() const { return m_fUseShapeAnchor; }
+    inline bool fFilled() const { return m_fFilled; }
 private:
     bool m_fUseShapeAnchor;
 public:
-    bool fRecolorFillAsPicture() const { return m_fRecolorFillAsPicture; }
+    inline bool fUseShapeAnchor() const { return m_fUseShapeAnchor; }
 private:
     bool m_fRecolorFillAsPicture;
 public:
-    bool unused1a() const { return m_unused1a; }
+    inline bool fRecolorFillAsPicture() const { return m_fRecolorFillAsPicture; }
 private:
     bool m_unused1a;
 public:
-    quint8 unused1b() const { return m_unused1b; }
+    inline bool unused1a() const { return m_unused1a; }
 private:
     quint8 m_unused1b;
 public:
-    bool fUseNoFillHitTest() const { return m_fUseNoFillHitTest; }
+    inline quint8 unused1b() const { return m_unused1b; }
 private:
     bool m_fUseNoFillHitTest;
 public:
-    bool fUseFillUseRect() const { return m_fUseFillUseRect; }
+    inline bool fUseNoFillHitTest() const { return m_fUseNoFillHitTest; }
 private:
     bool m_fUseFillUseRect;
 public:
-    bool fUseFillShape() const { return m_fUseFillShape; }
+    inline bool fUseFillUseRect() const { return m_fUseFillUseRect; }
 private:
     bool m_fUseFillShape;
 public:
-    bool fUseHitTestFill() const { return m_fUseHitTestFill; }
+    inline bool fUseFillShape() const { return m_fUseFillShape; }
 private:
     bool m_fUseHitTestFill;
 public:
-    bool fUseFilled() const { return m_fUseFilled; }
+    inline bool fUseHitTestFill() const { return m_fUseHitTestFill; }
 private:
     bool m_fUseFilled;
 public:
-    bool fUseUseShapeAnchor() const { return m_fUseUseShapeAnchor; }
+    inline bool fUseFilled() const { return m_fUseFilled; }
 private:
     bool m_fUseUseShapeAnchor;
 public:
-    bool fUsefRecolorFillAsPicture() const { return m_fUsefRecolorFillAsPicture; }
+    inline bool fUseUseShapeAnchor() const { return m_fUseUseShapeAnchor; }
 private:
     bool m_fUsefRecolorFillAsPicture;
 public:
-    bool unused2a() const { return m_unused2a; }
+    inline bool fUsefRecolorFillAsPicture() const { return m_fUsefRecolorFillAsPicture; }
 private:
     bool m_unused2a;
 public:
-    quint8 unused2b() const { return m_unused2b; }
+    inline bool unused2a() const { return m_unused2a; }
 private:
     quint8 m_unused2b;
+public:
+    inline quint8 unused2b() const { return m_unused2b; }
 };
 class LineColor : public FixedSizeParsedObject {
 private:
@@ -9872,14 +9872,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineColor() {}
     LineColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF lineColor() const { return m_lineColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_lineColor;
+public:
+    inline const OfficeArtCOLORREF& lineColor() const { return m_lineColor; }
 };
 class LineOpacity : public FixedSizeParsedObject {
 private:
@@ -9888,14 +9888,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineOpacity() {}
     LineOpacity(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 lineOpacity() const { return m_lineOpacity; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_lineOpacity;
+public:
+    inline qint32 lineOpacity() const { return m_lineOpacity; }
 };
 class LineBackColor : public FixedSizeParsedObject {
 private:
@@ -9904,14 +9904,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineBackColor() {}
     LineBackColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF lineBackColor() const { return m_lineBackColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_lineBackColor;
+public:
+    inline const OfficeArtCOLORREF& lineBackColor() const { return m_lineBackColor; }
 };
 class LineFillBlip : public FixedSizeParsedObject {
 private:
@@ -9920,14 +9920,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineFillBlip() {}
     LineFillBlip(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineFillBlip() const { return m_lineFillBlip; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineFillBlip;
+public:
+    inline quint32 lineFillBlip() const { return m_lineFillBlip; }
 };
 class LineWidth : public FixedSizeParsedObject {
 private:
@@ -9936,14 +9936,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineWidth() {}
     LineWidth(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineWidth() const { return m_lineWidth; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineWidth;
+public:
+    inline quint32 lineWidth() const { return m_lineWidth; }
 };
 class LineStyle : public FixedSizeParsedObject {
 private:
@@ -9952,14 +9952,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineStyle() {}
     LineStyle(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineStyle() const { return m_lineStyle; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineStyle;
+public:
+    inline quint32 lineStyle() const { return m_lineStyle; }
 };
 class LineDashing : public FixedSizeParsedObject {
 private:
@@ -9968,14 +9968,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineDashing() {}
     LineDashing(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineDashing() const { return m_lineDashing; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineDashing;
+public:
+    inline quint32 lineDashing() const { return m_lineDashing; }
 };
 class LineStartArrowhead : public FixedSizeParsedObject {
 private:
@@ -9984,14 +9984,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineStartArrowhead() {}
     LineStartArrowhead(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineStartArrowhead() const { return m_lineStartArrowhead; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineStartArrowhead;
+public:
+    inline quint32 lineStartArrowhead() const { return m_lineStartArrowhead; }
 };
 class LineEndArrowhead : public FixedSizeParsedObject {
 private:
@@ -10000,14 +10000,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineEndArrowhead() {}
     LineEndArrowhead(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineEndArrowhead() const { return m_lineEndArrowhead; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineEndArrowhead;
+public:
+    inline quint32 lineEndArrowhead() const { return m_lineEndArrowhead; }
 };
 class LineStartArrowWidth : public FixedSizeParsedObject {
 private:
@@ -10016,14 +10016,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineStartArrowWidth() {}
     LineStartArrowWidth(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineStartArrowWidth() const { return m_lineStartArrowWidth; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineStartArrowWidth;
+public:
+    inline quint32 lineStartArrowWidth() const { return m_lineStartArrowWidth; }
 };
 class LineStartArrowLength : public FixedSizeParsedObject {
 private:
@@ -10032,14 +10032,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineStartArrowLength() {}
     LineStartArrowLength(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineStartArrowLength() const { return m_lineStartArrowLength; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineStartArrowLength;
+public:
+    inline quint32 lineStartArrowLength() const { return m_lineStartArrowLength; }
 };
 class LineEndArrowWidth : public FixedSizeParsedObject {
 private:
@@ -10048,14 +10048,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineEndArrowWidth() {}
     LineEndArrowWidth(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineEndArrowWidth() const { return m_lineEndArrowWidth; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineEndArrowWidth;
+public:
+    inline quint32 lineEndArrowWidth() const { return m_lineEndArrowWidth; }
 };
 class LineEndArrowLength : public FixedSizeParsedObject {
 private:
@@ -10064,14 +10064,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineEndArrowLength() {}
     LineEndArrowLength(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineEndArrowLength() const { return m_lineEndArrowLength; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineEndArrowLength;
+public:
+    inline quint32 lineEndArrowLength() const { return m_lineEndArrowLength; }
 };
 class LineJoinStyle : public FixedSizeParsedObject {
 private:
@@ -10080,14 +10080,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LineJoinStyle() {}
     LineJoinStyle(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lineJoinStyle() const { return m_lineJoinStyle; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lineJoinStyle;
+public:
+    inline quint32 lineJoinStyle() const { return m_lineJoinStyle; }
 };
 class LineStyleBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -10096,98 +10096,98 @@ public:
     static inline quint32 getSize() { return _size; }
     LineStyleBooleanProperties() {}
     LineStyleBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fNoLineDrawDash() const { return m_fNoLineDrawDash; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fNoLineDrawDash;
 public:
-    bool fLineFillShape() const { return m_fLineFillShape; }
+    inline bool fNoLineDrawDash() const { return m_fNoLineDrawDash; }
 private:
     bool m_fLineFillShape;
 public:
-    bool fHitTestLine() const { return m_fHitTestLine; }
+    inline bool fLineFillShape() const { return m_fLineFillShape; }
 private:
     bool m_fHitTestLine;
 public:
-    bool fLine() const { return m_fLine; }
+    inline bool fHitTestLine() const { return m_fHitTestLine; }
 private:
     bool m_fLine;
 public:
-    bool fArrowHeadsOK() const { return m_fArrowHeadsOK; }
+    inline bool fLine() const { return m_fLine; }
 private:
     bool m_fArrowHeadsOK;
 public:
-    bool fInsetPenOK() const { return m_fInsetPenOK; }
+    inline bool fArrowHeadsOK() const { return m_fArrowHeadsOK; }
 private:
     bool m_fInsetPenOK;
 public:
-    bool fInsetPen() const { return m_fInsetPen; }
+    inline bool fInsetPenOK() const { return m_fInsetPenOK; }
 private:
     bool m_fInsetPen;
 public:
-    bool reserved1() const { return m_reserved1; }
+    inline bool fInsetPen() const { return m_fInsetPen; }
 private:
     bool m_reserved1;
 public:
-    bool reserved2() const { return m_reserved2; }
+    inline bool reserved1() const { return m_reserved1; }
 private:
     bool m_reserved2;
 public:
-    bool fLineOpaqueBackColor() const { return m_fLineOpaqueBackColor; }
+    inline bool reserved2() const { return m_reserved2; }
 private:
     bool m_fLineOpaqueBackColor;
 public:
-    quint8 unused1() const { return m_unused1; }
+    inline bool fLineOpaqueBackColor() const { return m_fLineOpaqueBackColor; }
 private:
     quint8 m_unused1;
 public:
-    bool fUseNoLineDrawDash() const { return m_fUseNoLineDrawDash; }
+    inline quint8 unused1() const { return m_unused1; }
 private:
     bool m_fUseNoLineDrawDash;
 public:
-    bool fUseLineFillShape() const { return m_fUseLineFillShape; }
+    inline bool fUseNoLineDrawDash() const { return m_fUseNoLineDrawDash; }
 private:
     bool m_fUseLineFillShape;
 public:
-    bool fUseHitTestLine() const { return m_fUseHitTestLine; }
+    inline bool fUseLineFillShape() const { return m_fUseLineFillShape; }
 private:
     bool m_fUseHitTestLine;
 public:
-    bool fUsefLine() const { return m_fUsefLine; }
+    inline bool fUseHitTestLine() const { return m_fUseHitTestLine; }
 private:
     bool m_fUsefLine;
 public:
-    bool fUsefArrowHeadsOK() const { return m_fUsefArrowHeadsOK; }
+    inline bool fUsefLine() const { return m_fUsefLine; }
 private:
     bool m_fUsefArrowHeadsOK;
 public:
-    bool fUseInsetPenOK() const { return m_fUseInsetPenOK; }
+    inline bool fUsefArrowHeadsOK() const { return m_fUsefArrowHeadsOK; }
 private:
     bool m_fUseInsetPenOK;
 public:
-    bool fUseInsetPen() const { return m_fUseInsetPen; }
+    inline bool fUseInsetPenOK() const { return m_fUseInsetPenOK; }
 private:
     bool m_fUseInsetPen;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool fUseInsetPen() const { return m_fUseInsetPen; }
 private:
     bool m_unused2;
 public:
-    bool unused3() const { return m_unused3; }
+    inline bool unused2() const { return m_unused2; }
 private:
     bool m_unused3;
 public:
-    bool fUsefLineOpaqueBackColor() const { return m_fUsefLineOpaqueBackColor; }
+    inline bool unused3() const { return m_unused3; }
 private:
     bool m_fUsefLineOpaqueBackColor;
 public:
-    quint8 unused4() const { return m_unused4; }
+    inline bool fUsefLineOpaqueBackColor() const { return m_fUsefLineOpaqueBackColor; }
 private:
     quint8 m_unused4;
+public:
+    inline quint8 unused4() const { return m_unused4; }
 };
 class ShadowType : public FixedSizeParsedObject {
 private:
@@ -10196,14 +10196,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ShadowType() {}
     ShadowType(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 shadowType() const { return m_shadowType; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_shadowType;
+public:
+    inline quint32 shadowType() const { return m_shadowType; }
 };
 class ShadowColor : public FixedSizeParsedObject {
 private:
@@ -10212,14 +10212,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ShadowColor() {}
     ShadowColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF shadowColor() const { return m_shadowColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_shadowColor;
+public:
+    inline const OfficeArtCOLORREF& shadowColor() const { return m_shadowColor; }
 };
 class ShadowOpacity : public FixedSizeParsedObject {
 private:
@@ -10228,14 +10228,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ShadowOpacity() {}
     ShadowOpacity(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    FixedPoint shadowOpacity() const { return m_shadowOpacity; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     FixedPoint m_shadowOpacity;
+public:
+    inline const FixedPoint& shadowOpacity() const { return m_shadowOpacity; }
 };
 class ShadowOffsetX : public FixedSizeParsedObject {
 private:
@@ -10244,14 +10244,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ShadowOffsetX() {}
     ShadowOffsetX(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 shadowOffsetX() const { return m_shadowOffsetX; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_shadowOffsetX;
+public:
+    inline qint32 shadowOffsetX() const { return m_shadowOffsetX; }
 };
 class ShadowOffsetY : public FixedSizeParsedObject {
 private:
@@ -10260,14 +10260,14 @@ public:
     static inline quint32 getSize() { return _size; }
     ShadowOffsetY() {}
     ShadowOffsetY(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 shadowOffsetY() const { return m_shadowOffsetY; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_shadowOffsetY;
+public:
+    inline qint32 shadowOffsetY() const { return m_shadowOffsetY; }
 };
 class ShadowStyleBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -10276,34 +10276,34 @@ public:
     static inline quint32 getSize() { return _size; }
     ShadowStyleBooleanProperties() {}
     ShadowStyleBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fShadowObscured() const { return m_fShadowObscured; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fShadowObscured;
 public:
-    bool fShadow() const { return m_fShadow; }
+    inline bool fShadowObscured() const { return m_fShadowObscured; }
 private:
     bool m_fShadow;
 public:
-    quint16 unused1() const { return m_unused1; }
+    inline bool fShadow() const { return m_fShadow; }
 private:
     quint16 m_unused1;
 public:
-    bool fUsefShadowObscured() const { return m_fUsefShadowObscured; }
+    inline quint16 unused1() const { return m_unused1; }
 private:
     bool m_fUsefShadowObscured;
 public:
-    bool fUsefShadow() const { return m_fUsefShadow; }
+    inline bool fUsefShadowObscured() const { return m_fUsefShadowObscured; }
 private:
     bool m_fUsefShadow;
 public:
-    quint16 unused2() const { return m_unused2; }
+    inline bool fUsefShadow() const { return m_fUsefShadow; }
 private:
     quint16 m_unused2;
+public:
+    inline quint16 unused2() const { return m_unused2; }
 };
 class HspMaster : public FixedSizeParsedObject {
 private:
@@ -10312,14 +10312,14 @@ public:
     static inline quint32 getSize() { return _size; }
     HspMaster() {}
     HspMaster(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 hspMaster() const { return m_hspMaster; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_hspMaster;
+public:
+    inline quint32 hspMaster() const { return m_hspMaster; }
 };
 class Cxstyle : public FixedSizeParsedObject {
 private:
@@ -10328,14 +10328,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Cxstyle() {}
     Cxstyle(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 cxstyle() const { return m_cxstyle; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_cxstyle;
+public:
+    inline quint32 cxstyle() const { return m_cxstyle; }
 };
 class BWMode : public FixedSizeParsedObject {
 private:
@@ -10344,14 +10344,14 @@ public:
     static inline quint32 getSize() { return _size; }
     BWMode() {}
     BWMode(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 bWMode() const { return m_bWMode; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_bWMode;
+public:
+    inline quint32 bWMode() const { return m_bWMode; }
 };
 class ShapeBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -10360,114 +10360,114 @@ public:
     static inline quint32 getSize() { return _size; }
     ShapeBooleanProperties() {}
     ShapeBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fBackground() const { return m_fBackground; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fBackground;
 public:
-    bool reserved1() const { return m_reserved1; }
+    inline bool fBackground() const { return m_fBackground; }
 private:
     bool m_reserved1;
 public:
-    bool fInitiator() const { return m_fInitiator; }
+    inline bool reserved1() const { return m_reserved1; }
 private:
     bool m_fInitiator;
 public:
-    bool fLockShapeType() const { return m_fLockShapeType; }
+    inline bool fInitiator() const { return m_fInitiator; }
 private:
     bool m_fLockShapeType;
 public:
-    bool fPreferRelativeResize() const { return m_fPreferRelativeResize; }
+    inline bool fLockShapeType() const { return m_fLockShapeType; }
 private:
     bool m_fPreferRelativeResize;
 public:
-    bool fOleIcon() const { return m_fOleIcon; }
+    inline bool fPreferRelativeResize() const { return m_fPreferRelativeResize; }
 private:
     bool m_fOleIcon;
 public:
-    bool fFlipVOverride() const { return m_fFlipVOverride; }
+    inline bool fOleIcon() const { return m_fOleIcon; }
 private:
     bool m_fFlipVOverride;
 public:
-    bool fFlipHOverride() const { return m_fFlipHOverride; }
+    inline bool fFlipVOverride() const { return m_fFlipVOverride; }
 private:
     bool m_fFlipHOverride;
 public:
-    bool fPolicyBarcode() const { return m_fPolicyBarcode; }
+    inline bool fFlipHOverride() const { return m_fFlipHOverride; }
 private:
     bool m_fPolicyBarcode;
 public:
-    bool fPolicyLabel() const { return m_fPolicyLabel; }
+    inline bool fPolicyBarcode() const { return m_fPolicyBarcode; }
 private:
     bool m_fPolicyLabel;
 public:
-    bool unused1() const { return m_unused1; }
+    inline bool fPolicyLabel() const { return m_fPolicyLabel; }
 private:
     bool m_unused1;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool unused1() const { return m_unused1; }
 private:
     bool m_unused2;
 public:
-    quint8 unused3() const { return m_unused3; }
+    inline bool unused2() const { return m_unused2; }
 private:
     quint8 m_unused3;
 public:
-    bool fUsefBackground() const { return m_fUsefBackground; }
+    inline quint8 unused3() const { return m_unused3; }
 private:
     bool m_fUsefBackground;
 public:
-    bool unused4() const { return m_unused4; }
+    inline bool fUsefBackground() const { return m_fUsefBackground; }
 private:
     bool m_unused4;
 public:
-    bool fUsefInitiator() const { return m_fUsefInitiator; }
+    inline bool unused4() const { return m_unused4; }
 private:
     bool m_fUsefInitiator;
 public:
-    bool fUsefLockShapeType() const { return m_fUsefLockShapeType; }
+    inline bool fUsefInitiator() const { return m_fUsefInitiator; }
 private:
     bool m_fUsefLockShapeType;
 public:
-    bool fusePreferrelativeResize() const { return m_fusePreferrelativeResize; }
+    inline bool fUsefLockShapeType() const { return m_fUsefLockShapeType; }
 private:
     bool m_fusePreferrelativeResize;
 public:
-    bool fUsefOleIcon() const { return m_fUsefOleIcon; }
+    inline bool fusePreferrelativeResize() const { return m_fusePreferrelativeResize; }
 private:
     bool m_fUsefOleIcon;
 public:
-    bool fUsefFlipVOverride() const { return m_fUsefFlipVOverride; }
+    inline bool fUsefOleIcon() const { return m_fUsefOleIcon; }
 private:
     bool m_fUsefFlipVOverride;
 public:
-    bool fUsefFlipHOverride() const { return m_fUsefFlipHOverride; }
+    inline bool fUsefFlipVOverride() const { return m_fUsefFlipVOverride; }
 private:
     bool m_fUsefFlipHOverride;
 public:
-    bool fUsefPolicyBarcode() const { return m_fUsefPolicyBarcode; }
+    inline bool fUsefFlipHOverride() const { return m_fUsefFlipHOverride; }
 private:
     bool m_fUsefPolicyBarcode;
 public:
-    bool fUsefPolicyLabel() const { return m_fUsefPolicyLabel; }
+    inline bool fUsefPolicyBarcode() const { return m_fUsefPolicyBarcode; }
 private:
     bool m_fUsefPolicyLabel;
 public:
-    bool unused5() const { return m_unused5; }
+    inline bool fUsefPolicyLabel() const { return m_fUsefPolicyLabel; }
 private:
     bool m_unused5;
 public:
-    bool unused6() const { return m_unused6; }
+    inline bool unused5() const { return m_unused5; }
 private:
     bool m_unused6;
 public:
-    quint8 unused7() const { return m_unused7; }
+    inline bool unused6() const { return m_unused6; }
 private:
     quint8 m_unused7;
+public:
+    inline quint8 unused7() const { return m_unused7; }
 };
 class DxyCalloutGap : public FixedSizeParsedObject {
 private:
@@ -10476,14 +10476,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxyCalloutGap() {}
     DxyCalloutGap(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 dxyCalloutGap() const { return m_dxyCalloutGap; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_dxyCalloutGap;
+public:
+    inline quint32 dxyCalloutGap() const { return m_dxyCalloutGap; }
 };
 class Spcoa : public FixedSizeParsedObject {
 private:
@@ -10492,14 +10492,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Spcoa() {}
     Spcoa(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 spcoa() const { return m_spcoa; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_spcoa;
+public:
+    inline quint32 spcoa() const { return m_spcoa; }
 };
 class Spcod : public FixedSizeParsedObject {
 private:
@@ -10508,14 +10508,14 @@ public:
     static inline quint32 getSize() { return _size; }
     Spcod() {}
     Spcod(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 spcod() const { return m_spcod; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_spcod;
+public:
+    inline quint32 spcod() const { return m_spcod; }
 };
 class DxyCalloutDropSpecified : public FixedSizeParsedObject {
 private:
@@ -10524,14 +10524,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxyCalloutDropSpecified() {}
     DxyCalloutDropSpecified(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 dxyCalloutDropSpecified() const { return m_dxyCalloutDropSpecified; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_dxyCalloutDropSpecified;
+public:
+    inline quint32 dxyCalloutDropSpecified() const { return m_dxyCalloutDropSpecified; }
 };
 class DxyCalloutLengthSpecified : public FixedSizeParsedObject {
 private:
@@ -10540,14 +10540,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxyCalloutLengthSpecified() {}
     DxyCalloutLengthSpecified(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 dxyCalloutLengthSpecified() const { return m_dxyCalloutLengthSpecified; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_dxyCalloutLengthSpecified;
+public:
+    inline quint32 dxyCalloutLengthSpecified() const { return m_dxyCalloutLengthSpecified; }
 };
 class CalloutBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -10556,82 +10556,82 @@ public:
     static inline quint32 getSize() { return _size; }
     CalloutBooleanProperties() {}
     CalloutBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fCalloutLengthSpecified() const { return m_fCalloutLengthSpecified; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fCalloutLengthSpecified;
 public:
-    bool fCalloutDropAuto() const { return m_fCalloutDropAuto; }
+    inline bool fCalloutLengthSpecified() const { return m_fCalloutLengthSpecified; }
 private:
     bool m_fCalloutDropAuto;
 public:
-    bool fCalloutMinusY() const { return m_fCalloutMinusY; }
+    inline bool fCalloutDropAuto() const { return m_fCalloutDropAuto; }
 private:
     bool m_fCalloutMinusY;
 public:
-    bool fCalloutMinusX() const { return m_fCalloutMinusX; }
+    inline bool fCalloutMinusY() const { return m_fCalloutMinusY; }
 private:
     bool m_fCalloutMinusX;
 public:
-    bool fCalloutTextBorder() const { return m_fCalloutTextBorder; }
+    inline bool fCalloutMinusX() const { return m_fCalloutMinusX; }
 private:
     bool m_fCalloutTextBorder;
 public:
-    bool fCalloutAccentBar() const { return m_fCalloutAccentBar; }
+    inline bool fCalloutTextBorder() const { return m_fCalloutTextBorder; }
 private:
     bool m_fCalloutAccentBar;
 public:
-    bool fCallout() const { return m_fCallout; }
+    inline bool fCalloutAccentBar() const { return m_fCalloutAccentBar; }
 private:
     bool m_fCallout;
 public:
-    bool unused1a() const { return m_unused1a; }
+    inline bool fCallout() const { return m_fCallout; }
 private:
     bool m_unused1a;
 public:
-    quint8 unused1b() const { return m_unused1b; }
+    inline bool unused1a() const { return m_unused1a; }
 private:
     quint8 m_unused1b;
 public:
-    bool fUsefCalloutLengthSpecified() const { return m_fUsefCalloutLengthSpecified; }
+    inline quint8 unused1b() const { return m_unused1b; }
 private:
     bool m_fUsefCalloutLengthSpecified;
 public:
-    bool fUsefCalloutDropAuto() const { return m_fUsefCalloutDropAuto; }
+    inline bool fUsefCalloutLengthSpecified() const { return m_fUsefCalloutLengthSpecified; }
 private:
     bool m_fUsefCalloutDropAuto;
 public:
-    bool fUsefCalloutMinusY() const { return m_fUsefCalloutMinusY; }
+    inline bool fUsefCalloutDropAuto() const { return m_fUsefCalloutDropAuto; }
 private:
     bool m_fUsefCalloutMinusY;
 public:
-    bool fUsefCalloutMinusX() const { return m_fUsefCalloutMinusX; }
+    inline bool fUsefCalloutMinusY() const { return m_fUsefCalloutMinusY; }
 private:
     bool m_fUsefCalloutMinusX;
 public:
-    bool fUsefCalloutTextBorder() const { return m_fUsefCalloutTextBorder; }
+    inline bool fUsefCalloutMinusX() const { return m_fUsefCalloutMinusX; }
 private:
     bool m_fUsefCalloutTextBorder;
 public:
-    bool fUsefCalloutAccentBar() const { return m_fUsefCalloutAccentBar; }
+    inline bool fUsefCalloutTextBorder() const { return m_fUsefCalloutTextBorder; }
 private:
     bool m_fUsefCalloutAccentBar;
 public:
-    bool fUsefCallout() const { return m_fUsefCallout; }
+    inline bool fUsefCalloutAccentBar() const { return m_fUsefCalloutAccentBar; }
 private:
     bool m_fUsefCallout;
 public:
-    bool unused2a() const { return m_unused2a; }
+    inline bool fUsefCallout() const { return m_fUsefCallout; }
 private:
     bool m_unused2a;
 public:
-    quint8 unused2b() const { return m_unused2b; }
+    inline bool unused2a() const { return m_unused2a; }
 private:
     quint8 m_unused2b;
+public:
+    inline quint8 unused2b() const { return m_unused2b; }
 };
 class PWrapPolygonVertices : public FixedSizeParsedObject {
 private:
@@ -10640,14 +10640,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PWrapPolygonVertices() {}
     PWrapPolygonVertices(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 pWrapPolygonVertices() const { return m_pWrapPolygonVertices; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_pWrapPolygonVertices;
+public:
+    inline quint32 pWrapPolygonVertices() const { return m_pWrapPolygonVertices; }
 };
 class DxWrapDistLeft : public FixedSizeParsedObject {
 private:
@@ -10656,14 +10656,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxWrapDistLeft() {}
     DxWrapDistLeft(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dxWrapDistLeft() const { return m_dxWrapDistLeft; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dxWrapDistLeft;
+public:
+    inline qint32 dxWrapDistLeft() const { return m_dxWrapDistLeft; }
 };
 class DyWrapDistTop : public FixedSizeParsedObject {
 private:
@@ -10672,14 +10672,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DyWrapDistTop() {}
     DyWrapDistTop(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dyWrapDistTop() const { return m_dyWrapDistTop; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dyWrapDistTop;
+public:
+    inline qint32 dyWrapDistTop() const { return m_dyWrapDistTop; }
 };
 class DxWrapDistRight : public FixedSizeParsedObject {
 private:
@@ -10688,14 +10688,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxWrapDistRight() {}
     DxWrapDistRight(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dxWrapDistRight() const { return m_dxWrapDistRight; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dxWrapDistRight;
+public:
+    inline qint32 dxWrapDistRight() const { return m_dxWrapDistRight; }
 };
 class DyWrapDistBottom : public FixedSizeParsedObject {
 private:
@@ -10704,14 +10704,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DyWrapDistBottom() {}
     DyWrapDistBottom(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dyWrapDistBottom() const { return m_dyWrapDistBottom; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dyWrapDistBottom;
+public:
+    inline qint32 dyWrapDistBottom() const { return m_dyWrapDistBottom; }
 };
 class LidRegroup : public FixedSizeParsedObject {
 private:
@@ -10720,14 +10720,14 @@ public:
     static inline quint32 getSize() { return _size; }
     LidRegroup() {}
     LidRegroup(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 lidRegroup() const { return m_lidRegroup; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_lidRegroup;
+public:
+    inline quint32 lidRegroup() const { return m_lidRegroup; }
 };
 class PosH : public FixedSizeParsedObject {
 private:
@@ -10736,14 +10736,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PosH() {}
     PosH(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 posH() const { return m_posH; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_posH;
+public:
+    inline quint32 posH() const { return m_posH; }
 };
 class PosRelH : public FixedSizeParsedObject {
 private:
@@ -10752,14 +10752,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PosRelH() {}
     PosRelH(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 posRelH() const { return m_posRelH; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_posRelH;
+public:
+    inline quint32 posRelH() const { return m_posRelH; }
 };
 class PosV : public FixedSizeParsedObject {
 private:
@@ -10768,14 +10768,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PosV() {}
     PosV(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 posV() const { return m_posV; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_posV;
+public:
+    inline quint32 posV() const { return m_posV; }
 };
 class PosRelV : public FixedSizeParsedObject {
 private:
@@ -10784,14 +10784,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PosRelV() {}
     PosRelV(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 posRelV() const { return m_posRelV; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_posRelV;
+public:
+    inline quint32 posRelV() const { return m_posRelV; }
 };
 class PctHR : public FixedSizeParsedObject {
 private:
@@ -10800,14 +10800,14 @@ public:
     static inline quint32 getSize() { return _size; }
     PctHR() {}
     PctHR(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 pctHR() const { return m_pctHR; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_pctHR;
+public:
+    inline quint32 pctHR() const { return m_pctHR; }
 };
 class AlignHR : public FixedSizeParsedObject {
 private:
@@ -10816,14 +10816,14 @@ public:
     static inline quint32 getSize() { return _size; }
     AlignHR() {}
     AlignHR(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    quint32 alignHR() const { return m_alignHR; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     quint32 m_alignHR;
+public:
+    inline quint32 alignHR() const { return m_alignHR; }
 };
 class DxHeightHR : public FixedSizeParsedObject {
 private:
@@ -10832,14 +10832,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxHeightHR() {}
     DxHeightHR(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dxHeightHR() const { return m_dxHeightHR; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dxHeightHR;
+public:
+    inline qint32 dxHeightHR() const { return m_dxHeightHR; }
 };
 class DxWidthHR : public FixedSizeParsedObject {
 private:
@@ -10848,14 +10848,14 @@ public:
     static inline quint32 getSize() { return _size; }
     DxWidthHR() {}
     DxWidthHR(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 dxWidthHR() const { return m_dxWidthHR; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_dxWidthHR;
+public:
+    inline qint32 dxWidthHR() const { return m_dxWidthHR; }
 };
 class BorderTopColor : public FixedSizeParsedObject {
 private:
@@ -10864,14 +10864,14 @@ public:
     static inline quint32 getSize() { return _size; }
     BorderTopColor() {}
     BorderTopColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF borderTopColor() const { return m_borderTopColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_borderTopColor;
+public:
+    inline const OfficeArtCOLORREF& borderTopColor() const { return m_borderTopColor; }
 };
 class BorderLeftColor : public FixedSizeParsedObject {
 private:
@@ -10880,14 +10880,14 @@ public:
     static inline quint32 getSize() { return _size; }
     BorderLeftColor() {}
     BorderLeftColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF borderLeftColor() const { return m_borderLeftColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_borderLeftColor;
+public:
+    inline const OfficeArtCOLORREF& borderLeftColor() const { return m_borderLeftColor; }
 };
 class BorderBottomColor : public FixedSizeParsedObject {
 private:
@@ -10896,14 +10896,14 @@ public:
     static inline quint32 getSize() { return _size; }
     BorderBottomColor() {}
     BorderBottomColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF borderBottomColor() const { return m_borderBottomColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_borderBottomColor;
+public:
+    inline const OfficeArtCOLORREF& borderBottomColor() const { return m_borderBottomColor; }
 };
 class BorderRightColor : public FixedSizeParsedObject {
 private:
@@ -10912,14 +10912,14 @@ public:
     static inline quint32 getSize() { return _size; }
     BorderRightColor() {}
     BorderRightColor(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    OfficeArtCOLORREF borderRightColor() const { return m_borderRightColor; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     OfficeArtCOLORREF m_borderRightColor;
+public:
+    inline const OfficeArtCOLORREF& borderRightColor() const { return m_borderRightColor; }
 };
 class GroupShapeBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -10928,138 +10928,138 @@ public:
     static inline quint32 getSize() { return _size; }
     GroupShapeBooleanProperties() {}
     GroupShapeBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fPrint() const { return m_fPrint; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fPrint;
 public:
-    bool fHidden() const { return m_fHidden; }
+    inline bool fPrint() const { return m_fPrint; }
 private:
     bool m_fHidden;
 public:
-    bool fOneD() const { return m_fOneD; }
+    inline bool fHidden() const { return m_fHidden; }
 private:
     bool m_fOneD;
 public:
-    bool fIsButton() const { return m_fIsButton; }
+    inline bool fOneD() const { return m_fOneD; }
 private:
     bool m_fIsButton;
 public:
-    bool fOnDblClickNotify() const { return m_fOnDblClickNotify; }
+    inline bool fIsButton() const { return m_fIsButton; }
 private:
     bool m_fOnDblClickNotify;
 public:
-    bool fBehindDocument() const { return m_fBehindDocument; }
+    inline bool fOnDblClickNotify() const { return m_fOnDblClickNotify; }
 private:
     bool m_fBehindDocument;
 public:
-    bool fEditedWrap() const { return m_fEditedWrap; }
+    inline bool fBehindDocument() const { return m_fBehindDocument; }
 private:
     bool m_fEditedWrap;
 public:
-    bool fScriptAnchor() const { return m_fScriptAnchor; }
+    inline bool fEditedWrap() const { return m_fEditedWrap; }
 private:
     bool m_fScriptAnchor;
 public:
-    bool fReallyHidden() const { return m_fReallyHidden; }
+    inline bool fScriptAnchor() const { return m_fScriptAnchor; }
 private:
     bool m_fReallyHidden;
 public:
-    bool fAllowOverlap() const { return m_fAllowOverlap; }
+    inline bool fReallyHidden() const { return m_fReallyHidden; }
 private:
     bool m_fAllowOverlap;
 public:
-    bool fUserDrawn() const { return m_fUserDrawn; }
+    inline bool fAllowOverlap() const { return m_fAllowOverlap; }
 private:
     bool m_fUserDrawn;
 public:
-    bool fHorizRule() const { return m_fHorizRule; }
+    inline bool fUserDrawn() const { return m_fUserDrawn; }
 private:
     bool m_fHorizRule;
 public:
-    bool fNoshadeHR() const { return m_fNoshadeHR; }
+    inline bool fHorizRule() const { return m_fHorizRule; }
 private:
     bool m_fNoshadeHR;
 public:
-    bool fStandardHR() const { return m_fStandardHR; }
+    inline bool fNoshadeHR() const { return m_fNoshadeHR; }
 private:
     bool m_fStandardHR;
 public:
-    bool fIsBullet() const { return m_fIsBullet; }
+    inline bool fStandardHR() const { return m_fStandardHR; }
 private:
     bool m_fIsBullet;
 public:
-    bool fLayoutInCell() const { return m_fLayoutInCell; }
+    inline bool fIsBullet() const { return m_fIsBullet; }
 private:
     bool m_fLayoutInCell;
 public:
-    bool fUsefPrint() const { return m_fUsefPrint; }
+    inline bool fLayoutInCell() const { return m_fLayoutInCell; }
 private:
     bool m_fUsefPrint;
 public:
-    bool fUsefHidden() const { return m_fUsefHidden; }
+    inline bool fUsefPrint() const { return m_fUsefPrint; }
 private:
     bool m_fUsefHidden;
 public:
-    bool fUsefOneD() const { return m_fUsefOneD; }
+    inline bool fUsefHidden() const { return m_fUsefHidden; }
 private:
     bool m_fUsefOneD;
 public:
-    bool fUsefIsButton() const { return m_fUsefIsButton; }
+    inline bool fUsefOneD() const { return m_fUsefOneD; }
 private:
     bool m_fUsefIsButton;
 public:
-    bool fUsefOnDblClickNotify() const { return m_fUsefOnDblClickNotify; }
+    inline bool fUsefIsButton() const { return m_fUsefIsButton; }
 private:
     bool m_fUsefOnDblClickNotify;
 public:
-    bool fUsefBehindDocument() const { return m_fUsefBehindDocument; }
+    inline bool fUsefOnDblClickNotify() const { return m_fUsefOnDblClickNotify; }
 private:
     bool m_fUsefBehindDocument;
 public:
-    bool fUsefEditedWrap() const { return m_fUsefEditedWrap; }
+    inline bool fUsefBehindDocument() const { return m_fUsefBehindDocument; }
 private:
     bool m_fUsefEditedWrap;
 public:
-    bool fUsefScriptAnchor() const { return m_fUsefScriptAnchor; }
+    inline bool fUsefEditedWrap() const { return m_fUsefEditedWrap; }
 private:
     bool m_fUsefScriptAnchor;
 public:
-    bool fUsefReallyHidden() const { return m_fUsefReallyHidden; }
+    inline bool fUsefScriptAnchor() const { return m_fUsefScriptAnchor; }
 private:
     bool m_fUsefReallyHidden;
 public:
-    bool fUsefAllowOverlap() const { return m_fUsefAllowOverlap; }
+    inline bool fUsefReallyHidden() const { return m_fUsefReallyHidden; }
 private:
     bool m_fUsefAllowOverlap;
 public:
-    bool fUsefUserDrawn() const { return m_fUsefUserDrawn; }
+    inline bool fUsefAllowOverlap() const { return m_fUsefAllowOverlap; }
 private:
     bool m_fUsefUserDrawn;
 public:
-    bool fUsefHorizRule() const { return m_fUsefHorizRule; }
+    inline bool fUsefUserDrawn() const { return m_fUsefUserDrawn; }
 private:
     bool m_fUsefHorizRule;
 public:
-    bool fUsefNoshadeHR() const { return m_fUsefNoshadeHR; }
+    inline bool fUsefHorizRule() const { return m_fUsefHorizRule; }
 private:
     bool m_fUsefNoshadeHR;
 public:
-    bool fUsefStandardHR() const { return m_fUsefStandardHR; }
+    inline bool fUsefNoshadeHR() const { return m_fUsefNoshadeHR; }
 private:
     bool m_fUsefStandardHR;
 public:
-    bool fUsefIsBullet() const { return m_fUsefIsBullet; }
+    inline bool fUsefStandardHR() const { return m_fUsefStandardHR; }
 private:
     bool m_fUsefIsBullet;
 public:
-    bool fUsefLayoutInCell() const { return m_fUsefLayoutInCell; }
+    inline bool fUsefIsBullet() const { return m_fUsefIsBullet; }
 private:
     bool m_fUsefLayoutInCell;
+public:
+    inline bool fUsefLayoutInCell() const { return m_fUsefLayoutInCell; }
 };
 class WzFillId : public FixedSizeParsedObject {
 private:
@@ -11068,14 +11068,14 @@ public:
     static inline quint32 getSize() { return _size; }
     WzFillId() {}
     WzFillId(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 wzFillId() const { return m_wzFillId; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_wzFillId;
+public:
+    inline qint32 wzFillId() const { return m_wzFillId; }
 };
 class DiagramBooleanProperties : public FixedSizeParsedObject {
 private:
@@ -11084,146 +11084,146 @@ public:
     static inline quint32 getSize() { return _size; }
     DiagramBooleanProperties() {}
     DiagramBooleanProperties(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    bool fPseudoInline() const { return m_fPseudoInline; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     bool m_fPseudoInline;
 public:
-    bool fDoLayout() const { return m_fDoLayout; }
+    inline bool fPseudoInline() const { return m_fPseudoInline; }
 private:
     bool m_fDoLayout;
 public:
-    bool fReverse() const { return m_fReverse; }
+    inline bool fDoLayout() const { return m_fDoLayout; }
 private:
     bool m_fReverse;
 public:
-    bool fDoFormat() const { return m_fDoFormat; }
+    inline bool fReverse() const { return m_fReverse; }
 private:
     bool m_fDoFormat;
 public:
-    bool unused1() const { return m_unused1; }
+    inline bool fDoFormat() const { return m_fDoFormat; }
 private:
     bool m_unused1;
 public:
-    bool unused2() const { return m_unused2; }
+    inline bool unused1() const { return m_unused1; }
 private:
     bool m_unused2;
 public:
-    quint8 unused3a() const { return m_unused3a; }
+    inline bool unused2() const { return m_unused2; }
 private:
     quint8 m_unused3a;
 public:
-    quint8 unused3b() const { return m_unused3b; }
+    inline quint8 unused3a() const { return m_unused3a; }
 private:
     quint8 m_unused3b;
 public:
-    bool fUsefPseudoInline() const { return m_fUsefPseudoInline; }
+    inline quint8 unused3b() const { return m_unused3b; }
 private:
     bool m_fUsefPseudoInline;
 public:
-    bool fUsefDoLayout() const { return m_fUsefDoLayout; }
+    inline bool fUsefPseudoInline() const { return m_fUsefPseudoInline; }
 private:
     bool m_fUsefDoLayout;
 public:
-    bool fUsefReverse() const { return m_fUsefReverse; }
+    inline bool fUsefDoLayout() const { return m_fUsefDoLayout; }
 private:
     bool m_fUsefReverse;
 public:
-    bool fUsefDoFormat() const { return m_fUsefDoFormat; }
+    inline bool fUsefReverse() const { return m_fUsefReverse; }
 private:
     bool m_fUsefDoFormat;
 public:
-    bool unused4() const { return m_unused4; }
+    inline bool fUsefDoFormat() const { return m_fUsefDoFormat; }
 private:
     bool m_unused4;
 public:
-    bool unused5() const { return m_unused5; }
+    inline bool unused4() const { return m_unused4; }
 private:
     bool m_unused5;
 public:
-    quint8 unused6a() const { return m_unused6a; }
+    inline bool unused5() const { return m_unused5; }
 private:
     quint8 m_unused6a;
 public:
-    quint8 unused6b() const { return m_unused6b; }
+    inline quint8 unused6a() const { return m_unused6a; }
 private:
     quint8 m_unused6b;
+public:
+    inline quint8 unused6b() const { return m_unused6b; }
 };
 class PptOfficeArtClientAnchor : public ParsedObject {
 private:
 public:
     PptOfficeArtClientAnchor() {}
     explicit PptOfficeArtClientAnchor(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    MSONullable<SmallRectStruct> rect1() const { return m_rect1; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSONullable<SmallRectStruct> m_rect1;
 public:
-    MSONullable<RectStruct> rect2() const { return m_rect2; }
+    inline const MSONullable<SmallRectStruct>& rect1() const { return m_rect1; }
 private:
     MSONullable<RectStruct> m_rect2;
+public:
+    inline const MSONullable<RectStruct>& rect2() const { return m_rect2; }
 };
 class AnimationInfoContainer : public ParsedObject {
 private:
 public:
     AnimationInfoContainer() {}
     explicit AnimationInfoContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    AnimationInfoAtom animationAtom() const { return m_animationAtom; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     AnimationInfoAtom m_animationAtom;
 public:
-    MSONullable<SoundContainer> animationSound() const { return m_animationSound; }
+    inline const AnimationInfoAtom& animationAtom() const { return m_animationAtom; }
 private:
     MSONullable<SoundContainer> m_animationSound;
+public:
+    inline const MSONullable<SoundContainer>& animationSound() const { return m_animationSound; }
 };
 class MouseClickInteractiveInfoContainer : public ParsedObject {
 private:
 public:
     MouseClickInteractiveInfoContainer() {}
     explicit MouseClickInteractiveInfoContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    InteractiveInfoAtom interactiveInfoAtom() const { return m_interactiveInfoAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     InteractiveInfoAtom m_interactiveInfoAtom;
 public:
-    MSONullable<MacroNameAtom> macroNameAtom() const { return m_macroNameAtom; }
+    inline const InteractiveInfoAtom& interactiveInfoAtom() const { return m_interactiveInfoAtom; }
 private:
     MSONullable<MacroNameAtom> m_macroNameAtom;
+public:
+    inline const MSONullable<MacroNameAtom>& macroNameAtom() const { return m_macroNameAtom; }
 };
 class MouseOverInteractiveInfoContainer : public ParsedObject {
 private:
 public:
     MouseOverInteractiveInfoContainer() {}
     explicit MouseOverInteractiveInfoContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    InteractiveInfoAtom interactiveInfoAtom() const { return m_interactiveInfoAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     InteractiveInfoAtom m_interactiveInfoAtom;
 public:
-    MSONullable<MacroNameAtom> macroNameAtom() const { return m_macroNameAtom; }
+    inline const InteractiveInfoAtom& interactiveInfoAtom() const { return m_interactiveInfoAtom; }
 private:
     MSONullable<MacroNameAtom> m_macroNameAtom;
+public:
+    inline const MSONullable<MacroNameAtom>& macroNameAtom() const { return m_macroNameAtom; }
 };
 class ShapeClientRoundtripDataSubcontainerOrAtom : public ParsedObject {
 private:
@@ -11296,14 +11296,14 @@ private:
 public:
     TextRulerAtom() {}
     explicit TextRulerAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextRuler textRuler() const { return m_textRuler; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextRuler m_textRuler;
+public:
+    inline const TextRuler& textRuler() const { return m_textRuler; }
 };
 class OfficeArtFOPTE : public FixedSizeParsedObject {
 private:
@@ -11312,82 +11312,82 @@ public:
     static inline quint32 getSize() { return _size; }
     OfficeArtFOPTE() {}
     OfficeArtFOPTE(const char* data, quint32/*ignored*/ = 0);// 6 bytes
-public:
-    OfficeArtFOPTEOPID opid() const { return m_opid; }
 private:
     OfficeArtFOPTEOPID m_opid;
 public:
-    qint32 op() const { return m_op; }
+    inline const OfficeArtFOPTEOPID& opid() const { return m_opid; }
 private:
     qint32 m_op;
+public:
+    inline qint32 op() const { return m_op; }
 };
 class Fib : public ParsedObject {
 private:
 public:
     Fib() {}
     explicit Fib(const char* data, const quint32 maxsize);
-public:
-    FibBase base() const { return m_base; }
 private:
     FibBase m_base;
 public:
-    quint16 csw() const { return m_csw; }
+    inline const FibBase& base() const { return m_base; }
 private:
     quint16 m_csw;
 public:
-    FibRgW97 fibRgW() const { return m_fibRgW; }
+    inline quint16 csw() const { return m_csw; }
 private:
     FibRgW97 m_fibRgW;
 public:
-    quint16 cslw() const { return m_cslw; }
+    inline const FibRgW97& fibRgW() const { return m_fibRgW; }
 private:
     quint16 m_cslw;
 public:
-    FibRgLw97 fibRgLw() const { return m_fibRgLw; }
+    inline quint16 cslw() const { return m_cslw; }
 private:
     FibRgLw97 m_fibRgLw;
 public:
-    quint16 cbRgFcLcb() const { return m_cbRgFcLcb; }
+    inline const FibRgLw97& fibRgLw() const { return m_fibRgLw; }
 private:
     quint16 m_cbRgFcLcb;
 public:
-    FibRgFcLcb97 fibRgFcLcbBlob() const { return m_fibRgFcLcbBlob; }
+    inline quint16 cbRgFcLcb() const { return m_cbRgFcLcb; }
 private:
     FibRgFcLcb97 m_fibRgFcLcbBlob;
 public:
-    MSONullable<FibRgFcLcb2000> fibRgFcLcbBlob2() const { return m_fibRgFcLcbBlob2; }
+    inline const FibRgFcLcb97& fibRgFcLcbBlob() const { return m_fibRgFcLcbBlob; }
 private:
     MSONullable<FibRgFcLcb2000> m_fibRgFcLcbBlob2;
 public:
-    MSONullable<FibRgFcLcb2002> fibRgFcLcbBlob3() const { return m_fibRgFcLcbBlob3; }
+    inline const MSONullable<FibRgFcLcb2000>& fibRgFcLcbBlob2() const { return m_fibRgFcLcbBlob2; }
 private:
     MSONullable<FibRgFcLcb2002> m_fibRgFcLcbBlob3;
 public:
-    quint16 cswNew() const { return m_cswNew; }
+    inline const MSONullable<FibRgFcLcb2002>& fibRgFcLcbBlob3() const { return m_fibRgFcLcbBlob3; }
 private:
     quint16 m_cswNew;
+public:
+    inline quint16 cswNew() const { return m_cswNew; }
 private:
     MSOCastArray<char> m_fibRgCswNew;
 public:
-    MSOCastArray<char> fibRgCswNew() const { return m_fibRgCswNew; }
+    const MSOCastArray<char>& fibRgCswNew() const { return m_fibRgCswNew; }
 private:
     MSOCastArray<char> m_trail;
 public:
-    MSOCastArray<char> trail() const { return m_trail; }
+    const MSOCastArray<char>& trail() const { return m_trail; }
 };
 class STSH : public ParsedObject {
 private:
 public:
     STSH() {}
     explicit STSH(const char* data, const quint32 maxsize);
-public:
-    LPStshi lpstshi() const { return m_lpstshi; }
 private:
     LPStshi m_lpstshi;
+public:
+    inline const LPStshi& lpstshi() const { return m_lpstshi; }
 private:
     MSOArray<LPStd> m_rglpstd;
 public:
-    MSOArray<LPStd> rglpstd() const { return m_rglpstd; }
+    inline const MSOArray<LPStd>& rglpstd() const { return m_rglpstd; }
 };
 class Clx : public ParsedObject {
 private:
@@ -11397,25 +11397,25 @@ public:
 private:
     MSOArray<Pcr> m_RgPrc;
 public:
-    MSOArray<Pcr> RgPrc() const { return m_RgPrc; }
-public:
-    Pcdt pcdt() const { return m_pcdt; }
+    inline const MSOArray<Pcr>& RgPrc() const { return m_RgPrc; }
 private:
     Pcdt m_pcdt;
+public:
+    inline const Pcdt& pcdt() const { return m_pcdt; }
 };
 class Pcr : public ParsedObject {
 private:
 public:
     Pcr() {}
     explicit Pcr(const char* data, const quint32 maxsize);
-public:
-    quint8 clxt() const { return m_clxt; }
 private:
     quint8 m_clxt;
 public:
-    PrcData prcData() const { return m_prcData; }
+    inline quint8 clxt() const { return m_clxt; }
 private:
     PrcData m_prcData;
+public:
+    inline const PrcData& prcData() const { return m_prcData; }
 };
 class Prm : public FixedSizeParsedObject {
 private:
@@ -11444,78 +11444,78 @@ private:
 public:
     OfficeArtBlipEMF() {}
     explicit OfficeArtBlipEMF(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_rgbUid1;
 public:
-    MSOCastArray<char> rgbUid1() const { return m_rgbUid1; }
+    const MSOCastArray<char>& rgbUid1() const { return m_rgbUid1; }
 private:
     MSOCastArray<char> m_rgbUid2;
 public:
-    MSOCastArray<char> rgbUid2() const { return m_rgbUid2; }
-public:
-    OfficeArtMetafileHeader metafileHeader() const { return m_metafileHeader; }
+    const MSOCastArray<char>& rgbUid2() const { return m_rgbUid2; }
 private:
     OfficeArtMetafileHeader m_metafileHeader;
+public:
+    inline const OfficeArtMetafileHeader& metafileHeader() const { return m_metafileHeader; }
 private:
     MSOCastArray<char> m_BLIPFileData;
 public:
-    MSOCastArray<char> BLIPFileData() const { return m_BLIPFileData; }
+    const MSOCastArray<char>& BLIPFileData() const { return m_BLIPFileData; }
 };
 class OfficeArtBlipWMF : public ParsedObject {
 private:
 public:
     OfficeArtBlipWMF() {}
     explicit OfficeArtBlipWMF(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_rgbUid1;
 public:
-    MSOCastArray<char> rgbUid1() const { return m_rgbUid1; }
+    const MSOCastArray<char>& rgbUid1() const { return m_rgbUid1; }
 private:
     MSOCastArray<char> m_rgbUid2;
 public:
-    MSOCastArray<char> rgbUid2() const { return m_rgbUid2; }
-public:
-    OfficeArtMetafileHeader metafileHeader() const { return m_metafileHeader; }
+    const MSOCastArray<char>& rgbUid2() const { return m_rgbUid2; }
 private:
     OfficeArtMetafileHeader m_metafileHeader;
+public:
+    inline const OfficeArtMetafileHeader& metafileHeader() const { return m_metafileHeader; }
 private:
     MSOCastArray<char> m_BLIPFileData;
 public:
-    MSOCastArray<char> BLIPFileData() const { return m_BLIPFileData; }
+    const MSOCastArray<char>& BLIPFileData() const { return m_BLIPFileData; }
 };
 class OfficeArtBlipPICT : public ParsedObject {
 private:
 public:
     OfficeArtBlipPICT() {}
     explicit OfficeArtBlipPICT(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
+public:
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_rgbUid1;
 public:
-    MSOCastArray<char> rgbUid1() const { return m_rgbUid1; }
+    const MSOCastArray<char>& rgbUid1() const { return m_rgbUid1; }
 private:
     MSOCastArray<char> m_rgbUid2;
 public:
-    MSOCastArray<char> rgbUid2() const { return m_rgbUid2; }
-public:
-    OfficeArtMetafileHeader metafileHeader() const { return m_metafileHeader; }
+    const MSOCastArray<char>& rgbUid2() const { return m_rgbUid2; }
 private:
     OfficeArtMetafileHeader m_metafileHeader;
+public:
+    inline const OfficeArtMetafileHeader& metafileHeader() const { return m_metafileHeader; }
 private:
     MSOCastArray<char> m_BLIPFileData;
 public:
-    MSOCastArray<char> BLIPFileData() const { return m_BLIPFileData; }
+    const MSOCastArray<char>& BLIPFileData() const { return m_BLIPFileData; }
 };
 class OfficeArtBlip : public ParsedObject {
 private:
@@ -11549,220 +11549,220 @@ public:
     static inline quint32 getSize() { return _size; }
     ZoomViewInfoAtom() {}
     ZoomViewInfoAtom(const char* data, quint32/*ignored*/ = 0);// 60 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    ScalingStruct curScale() const { return m_curScale; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     ScalingStruct m_curScale;
+public:
+    inline const ScalingStruct& curScale() const { return m_curScale; }
 private:
     MSOCastArray<char> m_unused1;
 public:
-    MSOCastArray<char> unused1() const { return m_unused1; }
-public:
-    PointStruct origin() const { return m_origin; }
+    const MSOCastArray<char>& unused1() const { return m_unused1; }
 private:
     PointStruct m_origin;
 public:
-    quint8 fUseVarScale() const { return m_fUseVarScale; }
+    inline const PointStruct& origin() const { return m_origin; }
 private:
     quint8 m_fUseVarScale;
 public:
-    quint8 fDraftMode() const { return m_fDraftMode; }
+    inline quint8 fUseVarScale() const { return m_fUseVarScale; }
 private:
     quint8 m_fDraftMode;
 public:
-    quint16 unused2() const { return m_unused2; }
+    inline quint8 fDraftMode() const { return m_fDraftMode; }
 private:
     quint16 m_unused2;
+public:
+    inline quint16 unused2() const { return m_unused2; }
 };
 class PP9DocBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP9DocBinaryTagExtension() {}
     explicit PP9DocBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_tagName;
 public:
-    MSOCastArray<char> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<char>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
+public:
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSOArray<TextMasterStyle9Atom> m_rgTextMasterStyle9;
 public:
-    MSOArray<TextMasterStyle9Atom> rgTextMasterStyle9() const { return m_rgTextMasterStyle9; }
-public:
-    MSONullable<BlipCollection9Container> blipCollectionContainer() const { return m_blipCollectionContainer; }
+    inline const MSOArray<TextMasterStyle9Atom>& rgTextMasterStyle9() const { return m_rgTextMasterStyle9; }
 private:
     MSONullable<BlipCollection9Container> m_blipCollectionContainer;
 public:
-    MSONullable<TextDefaults9Atom> textDefaultsAtom() const { return m_textDefaultsAtom; }
+    inline const MSONullable<BlipCollection9Container>& blipCollectionContainer() const { return m_blipCollectionContainer; }
 private:
     MSONullable<TextDefaults9Atom> m_textDefaultsAtom;
 public:
-    MSONullable<Kinsoku9Container> kinsokuContainer() const { return m_kinsokuContainer; }
+    inline const MSONullable<TextDefaults9Atom>& textDefaultsAtom() const { return m_textDefaultsAtom; }
 private:
     MSONullable<Kinsoku9Container> m_kinsokuContainer;
+public:
+    inline const MSONullable<Kinsoku9Container>& kinsokuContainer() const { return m_kinsokuContainer; }
 private:
     MSOArray<ExHyperlink9Container> m_rgExternalHyperlink9;
 public:
-    MSOArray<ExHyperlink9Container> rgExternalHyperlink9() const { return m_rgExternalHyperlink9; }
-public:
-    MSONullable<PresAdvisorFlags9Atom> presAdvisorFlagsAtom() const { return m_presAdvisorFlagsAtom; }
+    inline const MSOArray<ExHyperlink9Container>& rgExternalHyperlink9() const { return m_rgExternalHyperlink9; }
 private:
     MSONullable<PresAdvisorFlags9Atom> m_presAdvisorFlagsAtom;
 public:
-    MSONullable<EnvelopeData9Atom> envelopeDataAtom() const { return m_envelopeDataAtom; }
+    inline const MSONullable<PresAdvisorFlags9Atom>& presAdvisorFlagsAtom() const { return m_presAdvisorFlagsAtom; }
 private:
     MSONullable<EnvelopeData9Atom> m_envelopeDataAtom;
 public:
-    MSONullable<EnvelopeFlags9Atom> envelopeFlagsAtom() const { return m_envelopeFlagsAtom; }
+    inline const MSONullable<EnvelopeData9Atom>& envelopeDataAtom() const { return m_envelopeDataAtom; }
 private:
     MSONullable<EnvelopeFlags9Atom> m_envelopeFlagsAtom;
 public:
-    MSONullable<HTMLDocInfo9Atom> htmlDocInfoAtom() const { return m_htmlDocInfoAtom; }
+    inline const MSONullable<EnvelopeFlags9Atom>& envelopeFlagsAtom() const { return m_envelopeFlagsAtom; }
 private:
     MSONullable<HTMLDocInfo9Atom> m_htmlDocInfoAtom;
 public:
-    MSONullable<HTMLPublishInfo9Container> htmlPublishInfoAtom() const { return m_htmlPublishInfoAtom; }
+    inline const MSONullable<HTMLDocInfo9Atom>& htmlDocInfoAtom() const { return m_htmlDocInfoAtom; }
 private:
     MSONullable<HTMLPublishInfo9Container> m_htmlPublishInfoAtom;
+public:
+    inline const MSONullable<HTMLPublishInfo9Container>& htmlPublishInfoAtom() const { return m_htmlPublishInfoAtom; }
 private:
     MSOArray<BroadcastDocInfo9Container> m_rgBroadcastDocInfo9;
 public:
-    MSOArray<BroadcastDocInfo9Container> rgBroadcastDocInfo9() const { return m_rgBroadcastDocInfo9; }
-public:
-    MSONullable<OutlineTextProps9Container> outlineTextPropsContainer() const { return m_outlineTextPropsContainer; }
+    inline const MSOArray<BroadcastDocInfo9Container>& rgBroadcastDocInfo9() const { return m_rgBroadcastDocInfo9; }
 private:
     MSONullable<OutlineTextProps9Container> m_outlineTextPropsContainer;
+public:
+    inline const MSONullable<OutlineTextProps9Container>& outlineTextPropsContainer() const { return m_outlineTextPropsContainer; }
 };
 class TextMasterStyle9Level : public ParsedObject {
 private:
 public:
     TextMasterStyle9Level() {}
     explicit TextMasterStyle9Level(const char* data, const quint32 maxsize);
-public:
-    TextPFException9 pf9() const { return m_pf9; }
 private:
     TextPFException9 m_pf9;
 public:
-    TextCFException9 cf9() const { return m_cf9; }
+    inline const TextPFException9& pf9() const { return m_pf9; }
 private:
     TextCFException9 m_cf9;
+public:
+    inline const TextCFException9& cf9() const { return m_cf9; }
 };
 class StyleTextProp9 : public ParsedObject {
 private:
 public:
     StyleTextProp9() {}
     explicit StyleTextProp9(const char* data, const quint32 maxsize);
-public:
-    TextPFException9 pf9() const { return m_pf9; }
 private:
     TextPFException9 m_pf9;
 public:
-    TextCFException9 cf9() const { return m_cf9; }
+    inline const TextPFException9& pf9() const { return m_pf9; }
 private:
     TextCFException9 m_cf9;
 public:
-    TextSIException si() const { return m_si; }
+    inline const TextCFException9& cf9() const { return m_cf9; }
 private:
     TextSIException m_si;
+public:
+    inline const TextSIException& si() const { return m_si; }
 };
 class PP10DocBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP10DocBinaryTagExtension() {}
     explicit PP10DocBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<char> m_tagName;
 public:
-    MSOCastArray<char> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<char>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
 public:
-    MSONullable<FontCollection10Container> fontCollectionContainer() const { return m_fontCollectionContainer; }
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSONullable<FontCollection10Container> m_fontCollectionContainer;
+public:
+    inline const MSONullable<FontCollection10Container>& fontCollectionContainer() const { return m_fontCollectionContainer; }
 private:
     MSOArray<TextMasterStyle10Atom> m_rgTextMasterStyle10;
 public:
-    MSOArray<TextMasterStyle10Atom> rgTextMasterStyle10() const { return m_rgTextMasterStyle10; }
-public:
-    MSONullable<TextDefaults10Atom> textDefaultsAtom() const { return m_textDefaultsAtom; }
+    inline const MSOArray<TextMasterStyle10Atom>& rgTextMasterStyle10() const { return m_rgTextMasterStyle10; }
 private:
     MSONullable<TextDefaults10Atom> m_textDefaultsAtom;
 public:
-    GridSpacing10Atom gridSpacingAtom() const { return m_gridSpacingAtom; }
+    inline const MSONullable<TextDefaults10Atom>& textDefaultsAtom() const { return m_textDefaultsAtom; }
 private:
     GridSpacing10Atom m_gridSpacingAtom;
+public:
+    inline const GridSpacing10Atom& gridSpacingAtom() const { return m_gridSpacingAtom; }
 private:
     MSOArray<CommentIndex10Container> m_rgCommentIndex10;
 public:
-    MSOArray<CommentIndex10Container> rgCommentIndex10() const { return m_rgCommentIndex10; }
-public:
-    MSONullable<FontEmbedFlags10Atom> fontEmbedFlagsAtom() const { return m_fontEmbedFlagsAtom; }
+    inline const MSOArray<CommentIndex10Container>& rgCommentIndex10() const { return m_rgCommentIndex10; }
 private:
     MSONullable<FontEmbedFlags10Atom> m_fontEmbedFlagsAtom;
 public:
-    MSONullable<CopyrightAtom> copyrightAtom() const { return m_copyrightAtom; }
+    inline const MSONullable<FontEmbedFlags10Atom>& fontEmbedFlagsAtom() const { return m_fontEmbedFlagsAtom; }
 private:
     MSONullable<CopyrightAtom> m_copyrightAtom;
 public:
-    MSONullable<KeywordsAtom> keywordsAtom() const { return m_keywordsAtom; }
+    inline const MSONullable<CopyrightAtom>& copyrightAtom() const { return m_copyrightAtom; }
 private:
     MSONullable<KeywordsAtom> m_keywordsAtom;
 public:
-    MSONullable<FilterPrivacyFlags10Atom> filterPrivacyFlagsAtom() const { return m_filterPrivacyFlagsAtom; }
+    inline const MSONullable<KeywordsAtom>& keywordsAtom() const { return m_keywordsAtom; }
 private:
     MSONullable<FilterPrivacyFlags10Atom> m_filterPrivacyFlagsAtom;
 public:
-    MSONullable<OutlineTextProps10Container> outlineTextPropsContainer() const { return m_outlineTextPropsContainer; }
+    inline const MSONullable<FilterPrivacyFlags10Atom>& filterPrivacyFlagsAtom() const { return m_filterPrivacyFlagsAtom; }
 private:
     MSONullable<OutlineTextProps10Container> m_outlineTextPropsContainer;
 public:
-    MSONullable<DocToolbarStates10Atom> docToolbarStatesAtom() const { return m_docToolbarStatesAtom; }
+    inline const MSONullable<OutlineTextProps10Container>& outlineTextPropsContainer() const { return m_outlineTextPropsContainer; }
 private:
     MSONullable<DocToolbarStates10Atom> m_docToolbarStatesAtom;
 public:
-    MSONullable<SlideListTable10Container> slideListTableContainer() const { return m_slideListTableContainer; }
+    inline const MSONullable<DocToolbarStates10Atom>& docToolbarStatesAtom() const { return m_docToolbarStatesAtom; }
 private:
     MSONullable<SlideListTable10Container> m_slideListTableContainer;
 public:
-    MSONullable<DiffTree10Container> rgDiffTree10Container() const { return m_rgDiffTree10Container; }
+    inline const MSONullable<SlideListTable10Container>& slideListTableContainer() const { return m_slideListTableContainer; }
 private:
     MSONullable<DiffTree10Container> m_rgDiffTree10Container;
 public:
-    MSONullable<ModifyPasswordAtom> modifyPasswordAtom() const { return m_modifyPasswordAtom; }
+    inline const MSONullable<DiffTree10Container>& rgDiffTree10Container() const { return m_rgDiffTree10Container; }
 private:
     MSONullable<ModifyPasswordAtom> m_modifyPasswordAtom;
 public:
-    MSONullable<PhotoAlbumInfo10Atom> photoAlbumInfoAtom() const { return m_photoAlbumInfoAtom; }
+    inline const MSONullable<ModifyPasswordAtom>& modifyPasswordAtom() const { return m_modifyPasswordAtom; }
 private:
     MSONullable<PhotoAlbumInfo10Atom> m_photoAlbumInfoAtom;
+public:
+    inline const MSONullable<PhotoAlbumInfo10Atom>& photoAlbumInfoAtom() const { return m_photoAlbumInfoAtom; }
 };
 class TextMasterStyle10Level : public ParsedObject {
 private:
 public:
     TextMasterStyle10Level() {}
     explicit TextMasterStyle10Level(const char* data, const quint32 maxsize);
-public:
-    TextCFException10 cf10() const { return m_cf10; }
 private:
     TextCFException10 m_cf10;
+public:
+    inline const TextCFException10& cf10() const { return m_cf10; }
 };
 class NotesTextViewInfoContainer : public FixedSizeParsedObject {
 private:
@@ -11771,14 +11771,14 @@ public:
     static inline quint32 getSize() { return _size; }
     NotesTextViewInfoContainer() {}
     NotesTextViewInfoContainer(const char* data, quint32/*ignored*/ = 0);// 68 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    ZoomViewInfoAtom zoomViewInfo() const { return m_zoomViewInfo; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     ZoomViewInfoAtom m_zoomViewInfo;
+public:
+    inline const ZoomViewInfoAtom& zoomViewInfo() const { return m_zoomViewInfo; }
 };
 class OutlineViewInfoContainer : public FixedSizeParsedObject {
 private:
@@ -11787,14 +11787,14 @@ public:
     static inline quint32 getSize() { return _size; }
     OutlineViewInfoContainer() {}
     OutlineViewInfoContainer(const char* data, quint32/*ignored*/ = 0);// 68 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    NoZoomViewInfoAtom noZoomViewInfo() const { return m_noZoomViewInfo; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     NoZoomViewInfoAtom m_noZoomViewInfo;
+public:
+    inline const NoZoomViewInfoAtom& noZoomViewInfo() const { return m_noZoomViewInfo; }
 };
 class NormalViewSetInfoContainer : public FixedSizeParsedObject {
 private:
@@ -11803,56 +11803,56 @@ public:
     static inline quint32 getSize() { return _size; }
     NormalViewSetInfoContainer() {}
     NormalViewSetInfoContainer(const char* data, quint32/*ignored*/ = 0);// 36 bytes
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    NormalViewSetInfoAtom normalViewSetInfoAtom() const { return m_normalViewSetInfoAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     NormalViewSetInfoAtom m_normalViewSetInfoAtom;
+public:
+    inline const NormalViewSetInfoAtom& normalViewSetInfoAtom() const { return m_normalViewSetInfoAtom; }
 };
 class SlideListWithTextSubContainerOrAtom : public ParsedObject {
 private:
 public:
     SlideListWithTextSubContainerOrAtom() {}
     explicit SlideListWithTextSubContainerOrAtom(const char* data, const quint32 maxsize);
-public:
-    SlidePersistAtom slidePersistAtom() const { return m_slidePersistAtom; }
 private:
     SlidePersistAtom m_slidePersistAtom;
+public:
+    inline const SlidePersistAtom& slidePersistAtom() const { return m_slidePersistAtom; }
 private:
     MSOArray<TextContainer> m_atoms;
 public:
-    MSOArray<TextContainer> atoms() const { return m_atoms; }
+    inline const MSOArray<TextContainer>& atoms() const { return m_atoms; }
 };
 class MouseClickTextInfo : public ParsedObject {
 private:
 public:
     MouseClickTextInfo() {}
     explicit MouseClickTextInfo(const char* data, const quint32 maxsize);
-public:
-    MouseClickInteractiveInfoContainer interactive() const { return m_interactive; }
 private:
     MouseClickInteractiveInfoContainer m_interactive;
 public:
-    MouseClickTextInteractiveInfoAtom text() const { return m_text; }
+    inline const MouseClickInteractiveInfoContainer& interactive() const { return m_interactive; }
 private:
     MouseClickTextInteractiveInfoAtom m_text;
+public:
+    inline const MouseClickTextInteractiveInfoAtom& text() const { return m_text; }
 };
 class MouseOverTextInfo : public ParsedObject {
 private:
 public:
     MouseOverTextInfo() {}
     explicit MouseOverTextInfo(const char* data, const quint32 maxsize);
-public:
-    MouseOverInteractiveInfoContainer interactive() const { return m_interactive; }
 private:
     MouseOverInteractiveInfoContainer m_interactive;
 public:
-    MouseOverTextInteractiveInfoAtom text() const { return m_text; }
+    inline const MouseOverInteractiveInfoContainer& interactive() const { return m_interactive; }
 private:
     MouseOverTextInteractiveInfoAtom m_text;
+public:
+    inline const MouseOverTextInteractiveInfoAtom& text() const { return m_text; }
 };
 class TextClientDataSubContainerOrAtom : public ParsedObject {
 private:
@@ -11880,218 +11880,218 @@ private:
 public:
     TextPFRun() {}
     explicit TextPFRun(const char* data, const quint32 maxsize);
-public:
-    quint32 count() const { return m_count; }
 private:
     quint32 m_count;
 public:
-    quint16 indentLevel() const { return m_indentLevel; }
+    inline quint32 count() const { return m_count; }
 private:
     quint16 m_indentLevel;
 public:
-    TextPFException pf() const { return m_pf; }
+    inline quint16 indentLevel() const { return m_indentLevel; }
 private:
     TextPFException m_pf;
+public:
+    inline const TextPFException& pf() const { return m_pf; }
 };
 class TextCFRun : public ParsedObject {
 private:
 public:
     TextCFRun() {}
     explicit TextCFRun(const char* data, const quint32 maxsize);
-public:
-    quint32 count() const { return m_count; }
 private:
     quint32 m_count;
 public:
-    TextCFException cf() const { return m_cf; }
+    inline quint32 count() const { return m_count; }
 private:
     TextCFException m_cf;
+public:
+    inline const TextCFException& cf() const { return m_cf; }
 };
 class TextCFExceptionAtom : public ParsedObject {
 private:
 public:
     TextCFExceptionAtom() {}
     explicit TextCFExceptionAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextCFException cf() const { return m_cf; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextCFException m_cf;
+public:
+    inline const TextCFException& cf() const { return m_cf; }
 };
 class DefaultRulerAtom : public ParsedObject {
 private:
 public:
     DefaultRulerAtom() {}
     explicit DefaultRulerAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextRuler defaultTextRuler() const { return m_defaultTextRuler; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextRuler m_defaultTextRuler;
+public:
+    inline const TextRuler& defaultTextRuler() const { return m_defaultTextRuler; }
 };
 class TextPFExceptionAtom : public ParsedObject {
 private:
 public:
     TextPFExceptionAtom() {}
     explicit TextPFExceptionAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint16 reserved() const { return m_reserved; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint16 m_reserved;
 public:
-    TextPFException pf() const { return m_pf; }
+    inline quint16 reserved() const { return m_reserved; }
 private:
     TextPFException m_pf;
+public:
+    inline const TextPFException& pf() const { return m_pf; }
 };
 class TextSIRun : public ParsedObject {
 private:
 public:
     TextSIRun() {}
     explicit TextSIRun(const char* data, const quint32 maxsize);
-public:
-    quint32 count() const { return m_count; }
 private:
     quint32 m_count;
 public:
-    TextSIException si() const { return m_si; }
+    inline quint32 count() const { return m_count; }
 private:
     TextSIException m_si;
+public:
+    inline const TextSIException& si() const { return m_si; }
 };
 class TextSIExceptionAtom : public ParsedObject {
 private:
 public:
     TextSIExceptionAtom() {}
     explicit TextSIExceptionAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    TextSIException textSIException() const { return m_textSIException; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     TextSIException m_textSIException;
+public:
+    inline const TextSIException& textSIException() const { return m_textSIException; }
 };
 class TextMasterStyleAtom : public ParsedObject {
 private:
 public:
     TextMasterStyleAtom() {}
     explicit TextMasterStyleAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint16 cLevels() const { return m_cLevels; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint16 m_cLevels;
 public:
-    MSOBasicNullable<quint16> lstLvl1level() const { return m_lstLvl1level; }
+    inline quint16 cLevels() const { return m_cLevels; }
 private:
     MSOBasicNullable<quint16> m_lstLvl1level;
 public:
-    MSONullable<TextMasterStyleLevel> lstLvl1() const { return m_lstLvl1; }
+    inline const MSOBasicNullable<quint16>& lstLvl1level() const { return m_lstLvl1level; }
 private:
     MSONullable<TextMasterStyleLevel> m_lstLvl1;
 public:
-    MSOBasicNullable<quint16> lstLvl2level() const { return m_lstLvl2level; }
+    inline const MSONullable<TextMasterStyleLevel>& lstLvl1() const { return m_lstLvl1; }
 private:
     MSOBasicNullable<quint16> m_lstLvl2level;
 public:
-    MSONullable<TextMasterStyleLevel> lstLvl2() const { return m_lstLvl2; }
+    inline const MSOBasicNullable<quint16>& lstLvl2level() const { return m_lstLvl2level; }
 private:
     MSONullable<TextMasterStyleLevel> m_lstLvl2;
 public:
-    MSOBasicNullable<quint16> lstLvl3level() const { return m_lstLvl3level; }
+    inline const MSONullable<TextMasterStyleLevel>& lstLvl2() const { return m_lstLvl2; }
 private:
     MSOBasicNullable<quint16> m_lstLvl3level;
 public:
-    MSONullable<TextMasterStyleLevel> lstLvl3() const { return m_lstLvl3; }
+    inline const MSOBasicNullable<quint16>& lstLvl3level() const { return m_lstLvl3level; }
 private:
     MSONullable<TextMasterStyleLevel> m_lstLvl3;
 public:
-    MSOBasicNullable<quint16> lstLvl4level() const { return m_lstLvl4level; }
+    inline const MSONullable<TextMasterStyleLevel>& lstLvl3() const { return m_lstLvl3; }
 private:
     MSOBasicNullable<quint16> m_lstLvl4level;
 public:
-    MSONullable<TextMasterStyleLevel> lstLvl4() const { return m_lstLvl4; }
+    inline const MSOBasicNullable<quint16>& lstLvl4level() const { return m_lstLvl4level; }
 private:
     MSONullable<TextMasterStyleLevel> m_lstLvl4;
 public:
-    MSOBasicNullable<quint16> lstLvl5level() const { return m_lstLvl5level; }
+    inline const MSONullable<TextMasterStyleLevel>& lstLvl4() const { return m_lstLvl4; }
 private:
     MSOBasicNullable<quint16> m_lstLvl5level;
 public:
-    MSONullable<TextMasterStyleLevel> lstLvl5() const { return m_lstLvl5; }
+    inline const MSOBasicNullable<quint16>& lstLvl5level() const { return m_lstLvl5level; }
 private:
     MSONullable<TextMasterStyleLevel> m_lstLvl5;
+public:
+    inline const MSONullable<TextMasterStyleLevel>& lstLvl5() const { return m_lstLvl5; }
 };
 class PP10SlideBinaryTagExtension : public ParsedObject {
 private:
 public:
     PP10SlideBinaryTagExtension() {}
     explicit PP10SlideBinaryTagExtension(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
+public:
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSOCastArray<quint16> m_tagName;
 public:
-    MSOCastArray<quint16> tagName() const { return m_tagName; }
-public:
-    RecordHeader rhData() const { return m_rhData; }
+    const MSOCastArray<quint16>& tagName() const { return m_tagName; }
 private:
     RecordHeader m_rhData;
+public:
+    inline const RecordHeader& rhData() const { return m_rhData; }
 private:
     MSOArray<TextMasterStyle10Atom> m_rgTextMasterStyleAtom;
 public:
-    MSOArray<TextMasterStyle10Atom> rgTextMasterStyleAtom() const { return m_rgTextMasterStyleAtom; }
+    inline const MSOArray<TextMasterStyle10Atom>& rgTextMasterStyleAtom() const { return m_rgTextMasterStyleAtom; }
 private:
     MSOArray<Comment10Container> m_rgComment10Container;
 public:
-    MSOArray<Comment10Container> rgComment10Container() const { return m_rgComment10Container; }
-public:
-    MSONullable<LinkedSlide10Atom> linkedSlideAtom() const { return m_linkedSlideAtom; }
+    inline const MSOArray<Comment10Container>& rgComment10Container() const { return m_rgComment10Container; }
 private:
     MSONullable<LinkedSlide10Atom> m_linkedSlideAtom;
+public:
+    inline const MSONullable<LinkedSlide10Atom>& linkedSlideAtom() const { return m_linkedSlideAtom; }
 private:
     MSOArray<LinkedShape10Atom> m_rgLinkedShape10Atom;
 public:
-    MSOArray<LinkedShape10Atom> rgLinkedShape10Atom() const { return m_rgLinkedShape10Atom; }
-public:
-    MSONullable<SlideFlags10Atom> slideFlagsAtom() const { return m_slideFlagsAtom; }
+    inline const MSOArray<LinkedShape10Atom>& rgLinkedShape10Atom() const { return m_rgLinkedShape10Atom; }
 private:
     MSONullable<SlideFlags10Atom> m_slideFlagsAtom;
 public:
-    MSONullable<SlideTime10Atom> slideTimeAtom() const { return m_slideTimeAtom; }
+    inline const MSONullable<SlideFlags10Atom>& slideFlagsAtom() const { return m_slideFlagsAtom; }
 private:
     MSONullable<SlideTime10Atom> m_slideTimeAtom;
 public:
-    MSONullable<UnknownSlideContainerChild> unknown() const { return m_unknown; }
+    inline const MSONullable<SlideTime10Atom>& slideTimeAtom() const { return m_slideTimeAtom; }
 private:
     MSONullable<UnknownSlideContainerChild> m_unknown;
 public:
-    MSONullable<HashCode10Atom> hashCodeAtom() const { return m_hashCodeAtom; }
+    inline const MSONullable<UnknownSlideContainerChild>& unknown() const { return m_unknown; }
 private:
     MSONullable<HashCode10Atom> m_hashCodeAtom;
 public:
-    MSONullable<ExtTimeNodeContainer> extTimeNodeContainer() const { return m_extTimeNodeContainer; }
+    inline const MSONullable<HashCode10Atom>& hashCodeAtom() const { return m_hashCodeAtom; }
 private:
     MSONullable<ExtTimeNodeContainer> m_extTimeNodeContainer;
 public:
-    MSONullable<BuildListContainer> buildListContainer() const { return m_buildListContainer; }
+    inline const MSONullable<ExtTimeNodeContainer>& extTimeNodeContainer() const { return m_extTimeNodeContainer; }
 private:
     MSONullable<BuildListContainer> m_buildListContainer;
+public:
+    inline const MSONullable<BuildListContainer>& buildListContainer() const { return m_buildListContainer; }
 };
 class ExObjListSubContainer : public ParsedObject {
 private:
@@ -12127,42 +12127,42 @@ private:
 public:
     OfficeArtDggContainer() {}
     explicit OfficeArtDggContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    OfficeArtFDGGBlock drawingGroup() const { return m_drawingGroup; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     OfficeArtFDGGBlock m_drawingGroup;
 public:
-    MSONullable<OfficeArtBStoreContainer> blipStore() const { return m_blipStore; }
+    inline const OfficeArtFDGGBlock& drawingGroup() const { return m_drawingGroup; }
 private:
     MSONullable<OfficeArtBStoreContainer> m_blipStore;
 public:
-    MSONullable<OfficeArtFOPT> drawingPrimaryOptions() const { return m_drawingPrimaryOptions; }
+    inline const MSONullable<OfficeArtBStoreContainer>& blipStore() const { return m_blipStore; }
 private:
     MSONullable<OfficeArtFOPT> m_drawingPrimaryOptions;
 public:
-    MSONullable<OfficeArtTertiaryFOPT> drawingTertiaryOptions() const { return m_drawingTertiaryOptions; }
+    inline const MSONullable<OfficeArtFOPT>& drawingPrimaryOptions() const { return m_drawingPrimaryOptions; }
 private:
     MSONullable<OfficeArtTertiaryFOPT> m_drawingTertiaryOptions;
 public:
-    MSONullable<OfficeArtColorMRUContainer> colorMRU() const { return m_colorMRU; }
+    inline const MSONullable<OfficeArtTertiaryFOPT>& drawingTertiaryOptions() const { return m_drawingTertiaryOptions; }
 private:
     MSONullable<OfficeArtColorMRUContainer> m_colorMRU;
 public:
-    OfficeArtSplitMenuColorContainer splitColors() const { return m_splitColors; }
+    inline const MSONullable<OfficeArtColorMRUContainer>& colorMRU() const { return m_colorMRU; }
 private:
     OfficeArtSplitMenuColorContainer m_splitColors;
 public:
-    MSONullable<OfficeArtBStoreContainer> blipStore2() const { return m_blipStore2; }
+    inline const OfficeArtSplitMenuColorContainer& splitColors() const { return m_splitColors; }
 private:
     MSONullable<OfficeArtBStoreContainer> m_blipStore2;
 public:
-    MSONullable<OfficeArtTertiaryFOPT> unknown() const { return m_unknown; }
+    inline const MSONullable<OfficeArtBStoreContainer>& blipStore2() const { return m_blipStore2; }
 private:
     MSONullable<OfficeArtTertiaryFOPT> m_unknown;
+public:
+    inline const MSONullable<OfficeArtTertiaryFOPT>& unknown() const { return m_unknown; }
 };
 class OfficeArtFOPTEChoice : public FixedSizeParsedObject {
 private:
@@ -12335,124 +12335,124 @@ private:
 public:
     PptOfficeArtClientData() {}
     explicit PptOfficeArtClientData(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    MSONullable<ShapeFlagsAtom> shapeFlagsAtom() const { return m_shapeFlagsAtom; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSONullable<ShapeFlagsAtom> m_shapeFlagsAtom;
 public:
-    MSONullable<ShapeFlags10Atom> shapeFlags10Atom() const { return m_shapeFlags10Atom; }
+    inline const MSONullable<ShapeFlagsAtom>& shapeFlagsAtom() const { return m_shapeFlagsAtom; }
 private:
     MSONullable<ShapeFlags10Atom> m_shapeFlags10Atom;
 public:
-    MSONullable<ExObjRefAtom> exObjRefAtom() const { return m_exObjRefAtom; }
+    inline const MSONullable<ShapeFlags10Atom>& shapeFlags10Atom() const { return m_shapeFlags10Atom; }
 private:
     MSONullable<ExObjRefAtom> m_exObjRefAtom;
 public:
-    MSONullable<AnimationInfoContainer> animationInfo() const { return m_animationInfo; }
+    inline const MSONullable<ExObjRefAtom>& exObjRefAtom() const { return m_exObjRefAtom; }
 private:
     MSONullable<AnimationInfoContainer> m_animationInfo;
 public:
-    MSONullable<MouseClickInteractiveInfoContainer> mouseClickInteractiveInfo() const { return m_mouseClickInteractiveInfo; }
+    inline const MSONullable<AnimationInfoContainer>& animationInfo() const { return m_animationInfo; }
 private:
     MSONullable<MouseClickInteractiveInfoContainer> m_mouseClickInteractiveInfo;
 public:
-    MSONullable<MouseOverInteractiveInfoContainer> mouseOverInteractiveInfo() const { return m_mouseOverInteractiveInfo; }
+    inline const MSONullable<MouseClickInteractiveInfoContainer>& mouseClickInteractiveInfo() const { return m_mouseClickInteractiveInfo; }
 private:
     MSONullable<MouseOverInteractiveInfoContainer> m_mouseOverInteractiveInfo;
+public:
+    inline const MSONullable<MouseOverInteractiveInfoContainer>& mouseOverInteractiveInfo() const { return m_mouseOverInteractiveInfo; }
 private:
     MSOArray<ShapeClientRoundtripDataSubcontainerOrAtom> m_rgShapeClientRoundtripData0;
 public:
-    MSOArray<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData0() const { return m_rgShapeClientRoundtripData0; }
-public:
-    MSONullable<PlaceholderAtom> placeholderAtom() const { return m_placeholderAtom; }
+    inline const MSOArray<ShapeClientRoundtripDataSubcontainerOrAtom>& rgShapeClientRoundtripData0() const { return m_rgShapeClientRoundtripData0; }
 private:
     MSONullable<PlaceholderAtom> m_placeholderAtom;
 public:
-    MSONullable<RecolorInfoAtom> recolorInfoAtom() const { return m_recolorInfoAtom; }
+    inline const MSONullable<PlaceholderAtom>& placeholderAtom() const { return m_placeholderAtom; }
 private:
     MSONullable<RecolorInfoAtom> m_recolorInfoAtom;
 public:
-    MSONullable<UnknownOfficeArtClientDataChild> unknown1() const { return m_unknown1; }
+    inline const MSONullable<RecolorInfoAtom>& recolorInfoAtom() const { return m_recolorInfoAtom; }
 private:
     MSONullable<UnknownOfficeArtClientDataChild> m_unknown1;
+public:
+    inline const MSONullable<UnknownOfficeArtClientDataChild>& unknown1() const { return m_unknown1; }
 private:
     MSOArray<ShapeClientRoundtripDataSubcontainerOrAtom> m_rgShapeClientRoundtripData;
 public:
-    MSOArray<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData() const { return m_rgShapeClientRoundtripData; }
-public:
-    MSONullable<UnknownOfficeArtClientDataChild> unknown2() const { return m_unknown2; }
+    inline const MSOArray<ShapeClientRoundtripDataSubcontainerOrAtom>& rgShapeClientRoundtripData() const { return m_rgShapeClientRoundtripData; }
 private:
     MSONullable<UnknownOfficeArtClientDataChild> m_unknown2;
+public:
+    inline const MSONullable<UnknownOfficeArtClientDataChild>& unknown2() const { return m_unknown2; }
 };
 class ShapeProgBinaryTagContainer : public ParsedObject {
 private:
 public:
     ShapeProgBinaryTagContainer() {}
     explicit ShapeProgBinaryTagContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    ShapeProgBinaryTagSubContainerOrAtom rec() const { return m_rec; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     ShapeProgBinaryTagSubContainerOrAtom m_rec;
+public:
+    inline const ShapeProgBinaryTagSubContainerOrAtom& rec() const { return m_rec; }
 };
 class WordDocument : public ParsedObject {
 private:
 public:
     WordDocument() {}
     explicit WordDocument(const char* data, const quint32 maxsize);
-public:
-    Fib fib() const { return m_fib; }
 private:
     Fib m_fib;
+public:
+    inline const Fib& fib() const { return m_fib; }
 };
 class Table : public ParsedObject {
 private:
 public:
     Table() {}
     explicit Table(const char* data, const quint32 maxsize);
-public:
-    STSH stsh() const { return m_stsh; }
 private:
     STSH m_stsh;
 public:
-    PlcfSed plcfSed() const { return m_plcfSed; }
+    inline const STSH& stsh() const { return m_stsh; }
 private:
     PlcfSed m_plcfSed;
 public:
-    Plcfhdd plcfHdd() const { return m_plcfHdd; }
+    inline const PlcfSed& plcfSed() const { return m_plcfSed; }
 private:
     Plcfhdd m_plcfHdd;
 public:
-    PlcBteChpx plcfBteChpx() const { return m_plcfBteChpx; }
+    inline const Plcfhdd& plcfHdd() const { return m_plcfHdd; }
 private:
     PlcBteChpx m_plcfBteChpx;
 public:
-    PlcfBtePapx plcfBtePapx() const { return m_plcfBtePapx; }
+    inline const PlcBteChpx& plcfBteChpx() const { return m_plcfBteChpx; }
 private:
     PlcfBtePapx m_plcfBtePapx;
 public:
-    Tcg cmds() const { return m_cmds; }
+    inline const PlcfBtePapx& plcfBtePapx() const { return m_plcfBtePapx; }
 private:
     Tcg m_cmds;
 public:
-    Clx clx() const { return m_clx; }
+    inline const Tcg& cmds() const { return m_cmds; }
 private:
     Clx m_clx;
 public:
-    SttbfFfn sttbfFfn() const { return m_sttbfFfn; }
+    inline const Clx& clx() const { return m_clx; }
 private:
     SttbfFfn m_sttbfFfn;
+public:
+    inline const SttbfFfn& sttbfFfn() const { return m_sttbfFfn; }
 private:
     MSOCastArray<char> m_dop;
 public:
-    MSOCastArray<char> dop() const { return m_dop; }
+    const MSOCastArray<char>& dop() const { return m_dop; }
 };
 class Pcd : public FixedSizeParsedObject {
 private:
@@ -12461,96 +12461,96 @@ public:
     static inline quint32 getSize() { return _size; }
     Pcd() {}
     Pcd(const char* data, quint32/*ignored*/ = 0);// 8 bytes
-public:
-    bool fNoParaLast() const { return m_fNoParaLast; }
 private:
     bool m_fNoParaLast;
 public:
-    bool fR1() const { return m_fR1; }
+    inline bool fNoParaLast() const { return m_fNoParaLast; }
 private:
     bool m_fR1;
 public:
-    bool fDirtly() const { return m_fDirtly; }
+    inline bool fR1() const { return m_fR1; }
 private:
     bool m_fDirtly;
 public:
-    bool fR2() const { return m_fR2; }
+    inline bool fDirtly() const { return m_fDirtly; }
 private:
     bool m_fR2;
 public:
-    quint16 fR3() const { return m_fR3; }
+    inline bool fR2() const { return m_fR2; }
 private:
     quint16 m_fR3;
 public:
-    FCompressed fc() const { return m_fc; }
+    inline quint16 fR3() const { return m_fR3; }
 private:
     FCompressed m_fc;
 public:
-    Prm prm() const { return m_prm; }
+    inline const FCompressed& fc() const { return m_fc; }
 private:
     Prm m_prm;
+public:
+    inline const Prm& prm() const { return m_prm; }
 };
 class OfficeArtFBSE : public ParsedObject {
 private:
 public:
     OfficeArtFBSE() {}
     explicit OfficeArtFBSE(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    quint8 btWin32() const { return m_btWin32; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     quint8 m_btWin32;
 public:
-    quint8 btMacOS() const { return m_btMacOS; }
+    inline quint8 btWin32() const { return m_btWin32; }
 private:
     quint8 m_btMacOS;
+public:
+    inline quint8 btMacOS() const { return m_btMacOS; }
 private:
     MSOCastArray<char> m_rgbUid;
 public:
-    MSOCastArray<char> rgbUid() const { return m_rgbUid; }
-public:
-    quint16 tag() const { return m_tag; }
+    const MSOCastArray<char>& rgbUid() const { return m_rgbUid; }
 private:
     quint16 m_tag;
 public:
-    quint32 size() const { return m_size; }
+    inline quint16 tag() const { return m_tag; }
 private:
     quint32 m_size;
 public:
-    quint32 cRef() const { return m_cRef; }
+    inline quint32 size() const { return m_size; }
 private:
     quint32 m_cRef;
 public:
-    quint32 foDelay() const { return m_foDelay; }
+    inline quint32 cRef() const { return m_cRef; }
 private:
     quint32 m_foDelay;
 public:
-    quint8 unused1() const { return m_unused1; }
+    inline quint32 foDelay() const { return m_foDelay; }
 private:
     quint8 m_unused1;
 public:
-    quint8 cbName() const { return m_cbName; }
+    inline quint8 unused1() const { return m_unused1; }
 private:
     quint8 m_cbName;
 public:
-    quint8 unused2() const { return m_unused2; }
+    inline quint8 cbName() const { return m_cbName; }
 private:
     quint8 m_unused2;
 public:
-    quint8 unused3() const { return m_unused3; }
+    inline quint8 unused2() const { return m_unused2; }
 private:
     quint8 m_unused3;
+public:
+    inline quint8 unused3() const { return m_unused3; }
 private:
     MSOCastArray<char> m_nameData;
 public:
-    MSOCastArray<char> nameData() const { return m_nameData; }
-public:
-    MSONullable<OfficeArtBlip> embeddedBlip() const { return m_embeddedBlip; }
+    const MSOCastArray<char>& nameData() const { return m_nameData; }
 private:
     MSONullable<OfficeArtBlip> m_embeddedBlip;
+public:
+    inline const MSONullable<OfficeArtBlip>& embeddedBlip() const { return m_embeddedBlip; }
 };
 class OfficeArtBStoreContainerFileBlock : public ParsedObject {
 private:
@@ -12577,22 +12577,22 @@ private:
 public:
     SlideViewInfoInstance() {}
     explicit SlideViewInfoInstance(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    SlideViewInfoAtom slideViewInfoAtom() const { return m_slideViewInfoAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     SlideViewInfoAtom m_slideViewInfoAtom;
 public:
-    MSONullable<ZoomViewInfoAtom> zoomViewInfoAtom() const { return m_zoomViewInfoAtom; }
+    inline const SlideViewInfoAtom& slideViewInfoAtom() const { return m_slideViewInfoAtom; }
 private:
     MSONullable<ZoomViewInfoAtom> m_zoomViewInfoAtom;
+public:
+    inline const MSONullable<ZoomViewInfoAtom>& zoomViewInfoAtom() const { return m_zoomViewInfoAtom; }
 private:
     MSOArray<GuideAtom> m_rgGuideAtom;
 public:
-    MSOArray<GuideAtom> rgGuideAtom() const { return m_rgGuideAtom; }
+    inline const MSOArray<GuideAtom>& rgGuideAtom() const { return m_rgGuideAtom; }
 };
 class DocProgBinaryTagSubContainerOrAtom : public ParsedObject {
 private:
@@ -12622,110 +12622,110 @@ private:
 public:
     TextMasterStyle9Atom() {}
     explicit TextMasterStyle9Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint16 cLevels() const { return m_cLevels; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint16 m_cLevels;
 public:
-    MSONullable<TextMasterStyle9Level> lstLvl1() const { return m_lstLvl1; }
+    inline quint16 cLevels() const { return m_cLevels; }
 private:
     MSONullable<TextMasterStyle9Level> m_lstLvl1;
 public:
-    MSONullable<TextMasterStyle9Level> lstLvl2() const { return m_lstLvl2; }
+    inline const MSONullable<TextMasterStyle9Level>& lstLvl1() const { return m_lstLvl1; }
 private:
     MSONullable<TextMasterStyle9Level> m_lstLvl2;
 public:
-    MSONullable<TextMasterStyle9Level> lstLvl3() const { return m_lstLvl3; }
+    inline const MSONullable<TextMasterStyle9Level>& lstLvl2() const { return m_lstLvl2; }
 private:
     MSONullable<TextMasterStyle9Level> m_lstLvl3;
 public:
-    MSONullable<TextMasterStyle9Level> lstLvl4() const { return m_lstLvl4; }
+    inline const MSONullable<TextMasterStyle9Level>& lstLvl3() const { return m_lstLvl3; }
 private:
     MSONullable<TextMasterStyle9Level> m_lstLvl4;
 public:
-    MSONullable<TextMasterStyle9Level> lstLvl5() const { return m_lstLvl5; }
+    inline const MSONullable<TextMasterStyle9Level>& lstLvl4() const { return m_lstLvl4; }
 private:
     MSONullable<TextMasterStyle9Level> m_lstLvl5;
+public:
+    inline const MSONullable<TextMasterStyle9Level>& lstLvl5() const { return m_lstLvl5; }
 };
 class BlipEntityAtom : public ParsedObject {
 private:
 public:
     BlipEntityAtom() {}
     explicit BlipEntityAtom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint8 winBlipType() const { return m_winBlipType; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint8 m_winBlipType;
 public:
-    quint8 unused() const { return m_unused; }
+    inline quint8 winBlipType() const { return m_winBlipType; }
 private:
     quint8 m_unused;
 public:
-    OfficeArtBStoreContainerFileBlock blip() const { return m_blip; }
+    inline quint8 unused() const { return m_unused; }
 private:
     OfficeArtBStoreContainerFileBlock m_blip;
+public:
+    inline const OfficeArtBStoreContainerFileBlock& blip() const { return m_blip; }
 };
 class TextMasterStyle10Atom : public ParsedObject {
 private:
 public:
     TextMasterStyle10Atom() {}
     explicit TextMasterStyle10Atom(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    quint16 cLevels() const { return m_cLevels; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     quint16 m_cLevels;
 public:
-    MSOBasicNullable<quint16> lstLvl1level() const { return m_lstLvl1level; }
+    inline quint16 cLevels() const { return m_cLevels; }
 private:
     MSOBasicNullable<quint16> m_lstLvl1level;
 public:
-    MSONullable<TextMasterStyle10Level> lstLvl1() const { return m_lstLvl1; }
+    inline const MSOBasicNullable<quint16>& lstLvl1level() const { return m_lstLvl1level; }
 private:
     MSONullable<TextMasterStyle10Level> m_lstLvl1;
 public:
-    MSOBasicNullable<quint16> lstLvl2level() const { return m_lstLvl2level; }
+    inline const MSONullable<TextMasterStyle10Level>& lstLvl1() const { return m_lstLvl1; }
 private:
     MSOBasicNullable<quint16> m_lstLvl2level;
 public:
-    MSONullable<TextMasterStyle10Level> lstLvl2() const { return m_lstLvl2; }
+    inline const MSOBasicNullable<quint16>& lstLvl2level() const { return m_lstLvl2level; }
 private:
     MSONullable<TextMasterStyle10Level> m_lstLvl2;
 public:
-    MSOBasicNullable<quint16> lstLvl3level() const { return m_lstLvl3level; }
+    inline const MSONullable<TextMasterStyle10Level>& lstLvl2() const { return m_lstLvl2; }
 private:
     MSOBasicNullable<quint16> m_lstLvl3level;
 public:
-    MSONullable<TextMasterStyle10Level> lstLvl3() const { return m_lstLvl3; }
+    inline const MSOBasicNullable<quint16>& lstLvl3level() const { return m_lstLvl3level; }
 private:
     MSONullable<TextMasterStyle10Level> m_lstLvl3;
 public:
-    MSOBasicNullable<quint16> lstLvl4level() const { return m_lstLvl4level; }
+    inline const MSONullable<TextMasterStyle10Level>& lstLvl3() const { return m_lstLvl3; }
 private:
     MSOBasicNullable<quint16> m_lstLvl4level;
 public:
-    MSONullable<TextMasterStyle10Level> lstLvl4() const { return m_lstLvl4; }
+    inline const MSOBasicNullable<quint16>& lstLvl4level() const { return m_lstLvl4level; }
 private:
     MSONullable<TextMasterStyle10Level> m_lstLvl4;
 public:
-    MSOBasicNullable<quint16> lstLvl5level() const { return m_lstLvl5level; }
+    inline const MSONullable<TextMasterStyle10Level>& lstLvl4() const { return m_lstLvl4; }
 private:
     MSOBasicNullable<quint16> m_lstLvl5level;
 public:
-    MSONullable<TextMasterStyle10Level> lstLvl5() const { return m_lstLvl5; }
+    inline const MSOBasicNullable<quint16>& lstLvl5level() const { return m_lstLvl5level; }
 private:
     MSONullable<TextMasterStyle10Level> m_lstLvl5;
+public:
+    inline const MSONullable<TextMasterStyle10Level>& lstLvl5() const { return m_lstLvl5; }
 };
 class TextContainerInteractiveInfo : public ParsedObject {
 private:
@@ -12752,42 +12752,42 @@ private:
 public:
     DocumentTextInfoContainer() {}
     explicit DocumentTextInfoContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    MSONullable<KinsokuContainer> kinsoku() const { return m_kinsoku; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     MSONullable<KinsokuContainer> m_kinsoku;
 public:
-    MSONullable<FontCollectionContainer> fontCollection() const { return m_fontCollection; }
+    inline const MSONullable<KinsokuContainer>& kinsoku() const { return m_kinsoku; }
 private:
     MSONullable<FontCollectionContainer> m_fontCollection;
 public:
-    MSONullable<TextCFExceptionAtom> textCFDefaultsAtom() const { return m_textCFDefaultsAtom; }
+    inline const MSONullable<FontCollectionContainer>& fontCollection() const { return m_fontCollection; }
 private:
     MSONullable<TextCFExceptionAtom> m_textCFDefaultsAtom;
 public:
-    MSONullable<TextPFExceptionAtom> textPFDefaultsAtom() const { return m_textPFDefaultsAtom; }
+    inline const MSONullable<TextCFExceptionAtom>& textCFDefaultsAtom() const { return m_textCFDefaultsAtom; }
 private:
     MSONullable<TextPFExceptionAtom> m_textPFDefaultsAtom;
 public:
-    MSONullable<DefaultRulerAtom> defaultRulerAtom() const { return m_defaultRulerAtom; }
+    inline const MSONullable<TextPFExceptionAtom>& textPFDefaultsAtom() const { return m_textPFDefaultsAtom; }
 private:
     MSONullable<DefaultRulerAtom> m_defaultRulerAtom;
 public:
-    TextSIExceptionAtom textSIDefaultsAtom() const { return m_textSIDefaultsAtom; }
+    inline const MSONullable<DefaultRulerAtom>& defaultRulerAtom() const { return m_defaultRulerAtom; }
 private:
     TextSIExceptionAtom m_textSIDefaultsAtom;
 public:
-    TextMasterStyleAtom textMasterStyleAtom() const { return m_textMasterStyleAtom; }
+    inline const TextSIExceptionAtom& textSIDefaultsAtom() const { return m_textSIDefaultsAtom; }
 private:
     TextMasterStyleAtom m_textMasterStyleAtom;
 public:
-    MSONullable<TextMasterStyleAtom> textMasterStyleAtom2() const { return m_textMasterStyleAtom2; }
+    inline const TextMasterStyleAtom& textMasterStyleAtom() const { return m_textMasterStyleAtom; }
 private:
     MSONullable<TextMasterStyleAtom> m_textMasterStyleAtom2;
+public:
+    inline const MSONullable<TextMasterStyleAtom>& textMasterStyleAtom2() const { return m_textMasterStyleAtom2; }
 };
 class SlideProgBinaryTagSubContainerOrAtom : public ParsedObject {
 private:
@@ -12816,14 +12816,14 @@ private:
 public:
     DrawingGroupContainer() {}
     explicit DrawingGroupContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    OfficeArtDggContainer OfficeArtDgg() const { return m_OfficeArtDgg; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     OfficeArtDggContainer m_OfficeArtDgg;
+public:
+    inline const OfficeArtDggContainer& OfficeArtDgg() const { return m_OfficeArtDgg; }
 };
 class OfficeArtClientData : public ParsedObject {
 private:
@@ -12871,110 +12871,110 @@ private:
 public:
     DocumentContainer() {}
     explicit DocumentContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    DocumentAtom documentAtom() const { return m_documentAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     DocumentAtom m_documentAtom;
 public:
-    MSONullable<ExObjListContainer> exObjList() const { return m_exObjList; }
+    inline const DocumentAtom& documentAtom() const { return m_documentAtom; }
 private:
     MSONullable<ExObjListContainer> m_exObjList;
 public:
-    DocumentTextInfoContainer documentTextInfo() const { return m_documentTextInfo; }
+    inline const MSONullable<ExObjListContainer>& exObjList() const { return m_exObjList; }
 private:
     DocumentTextInfoContainer m_documentTextInfo;
 public:
-    MSONullable<SoundCollectionContainer> soundCollection() const { return m_soundCollection; }
+    inline const DocumentTextInfoContainer& documentTextInfo() const { return m_documentTextInfo; }
 private:
     MSONullable<SoundCollectionContainer> m_soundCollection;
 public:
-    DrawingGroupContainer drawingGroup() const { return m_drawingGroup; }
+    inline const MSONullable<SoundCollectionContainer>& soundCollection() const { return m_soundCollection; }
 private:
     DrawingGroupContainer m_drawingGroup;
 public:
-    MasterListWithTextContainer masterList() const { return m_masterList; }
+    inline const DrawingGroupContainer& drawingGroup() const { return m_drawingGroup; }
 private:
     MasterListWithTextContainer m_masterList;
 public:
-    MSONullable<DocInfoListContainer> docInfoList() const { return m_docInfoList; }
+    inline const MasterListWithTextContainer& masterList() const { return m_masterList; }
 private:
     MSONullable<DocInfoListContainer> m_docInfoList;
 public:
-    MSONullable<SlideHeadersFootersContainer> slideHF() const { return m_slideHF; }
+    inline const MSONullable<DocInfoListContainer>& docInfoList() const { return m_docInfoList; }
 private:
     MSONullable<SlideHeadersFootersContainer> m_slideHF;
 public:
-    MSONullable<NotesHeadersFootersContainer> notesHF() const { return m_notesHF; }
+    inline const MSONullable<SlideHeadersFootersContainer>& slideHF() const { return m_slideHF; }
 private:
     MSONullable<NotesHeadersFootersContainer> m_notesHF;
 public:
-    MSONullable<SlideListWithTextContainer> slideList() const { return m_slideList; }
+    inline const MSONullable<NotesHeadersFootersContainer>& notesHF() const { return m_notesHF; }
 private:
     MSONullable<SlideListWithTextContainer> m_slideList;
 public:
-    MSONullable<SlideHeadersFootersContainer> slideHF2() const { return m_slideHF2; }
+    inline const MSONullable<SlideListWithTextContainer>& slideList() const { return m_slideList; }
 private:
     MSONullable<SlideHeadersFootersContainer> m_slideHF2;
 public:
-    MSONullable<NotesListWithTextContainer> notesList() const { return m_notesList; }
+    inline const MSONullable<SlideHeadersFootersContainer>& slideHF2() const { return m_slideHF2; }
 private:
     MSONullable<NotesListWithTextContainer> m_notesList;
 public:
-    MSONullable<SlideShowDocInfoAtom> slideShowDocInfoAtom() const { return m_slideShowDocInfoAtom; }
+    inline const MSONullable<NotesListWithTextContainer>& notesList() const { return m_notesList; }
 private:
     MSONullable<SlideShowDocInfoAtom> m_slideShowDocInfoAtom;
 public:
-    MSONullable<NamedShowsContainer> namedShows() const { return m_namedShows; }
+    inline const MSONullable<SlideShowDocInfoAtom>& slideShowDocInfoAtom() const { return m_slideShowDocInfoAtom; }
 private:
     MSONullable<NamedShowsContainer> m_namedShows;
 public:
-    MSONullable<SummaryContainer> summary() const { return m_summary; }
+    inline const MSONullable<NamedShowsContainer>& namedShows() const { return m_namedShows; }
 private:
     MSONullable<SummaryContainer> m_summary;
 public:
-    MSONullable<DocRoutingSlipAtom> docRoutingSlipAtom() const { return m_docRoutingSlipAtom; }
+    inline const MSONullable<SummaryContainer>& summary() const { return m_summary; }
 private:
     MSONullable<DocRoutingSlipAtom> m_docRoutingSlipAtom;
 public:
-    MSONullable<PrintOptionsAtom> printOptionsAtom() const { return m_printOptionsAtom; }
+    inline const MSONullable<DocRoutingSlipAtom>& docRoutingSlipAtom() const { return m_docRoutingSlipAtom; }
 private:
     MSONullable<PrintOptionsAtom> m_printOptionsAtom;
+public:
+    inline const MSONullable<PrintOptionsAtom>& printOptionsAtom() const { return m_printOptionsAtom; }
 private:
     MSOArray<UnknownDocumentContainerChild> m_unknown0;
 public:
-    MSOArray<UnknownDocumentContainerChild> unknown0() const { return m_unknown0; }
-public:
-    MSONullable<RoundTripCustomTableStyles12Atom> rtCustomTableStylesAtom1() const { return m_rtCustomTableStylesAtom1; }
+    inline const MSOArray<UnknownDocumentContainerChild>& unknown0() const { return m_unknown0; }
 private:
     MSONullable<RoundTripCustomTableStyles12Atom> m_rtCustomTableStylesAtom1;
+public:
+    inline const MSONullable<RoundTripCustomTableStyles12Atom>& rtCustomTableStylesAtom1() const { return m_rtCustomTableStylesAtom1; }
 private:
     MSOArray<UnknownDocumentContainerChild> m_unknown1;
 public:
-    MSOArray<UnknownDocumentContainerChild> unknown1() const { return m_unknown1; }
-public:
-    EndDocumentAtom endDocumentAtom() const { return m_endDocumentAtom; }
+    inline const MSOArray<UnknownDocumentContainerChild>& unknown1() const { return m_unknown1; }
 private:
     EndDocumentAtom m_endDocumentAtom;
+public:
+    inline const EndDocumentAtom& endDocumentAtom() const { return m_endDocumentAtom; }
 private:
     MSOArray<UnknownDocumentContainerChild> m_unknown2;
 public:
-    MSOArray<UnknownDocumentContainerChild> unknown2() const { return m_unknown2; }
-public:
-    MSONullable<RoundTripCustomTableStyles12Atom> rtCustomTableStylesAtom2() const { return m_rtCustomTableStylesAtom2; }
+    inline const MSOArray<UnknownDocumentContainerChild>& unknown2() const { return m_unknown2; }
 private:
     MSONullable<RoundTripCustomTableStyles12Atom> m_rtCustomTableStylesAtom2;
+public:
+    inline const MSONullable<RoundTripCustomTableStyles12Atom>& rtCustomTableStylesAtom2() const { return m_rtCustomTableStylesAtom2; }
 private:
     MSOArray<UnknownDocumentContainerChild> m_unknown4;
 public:
-    MSOArray<UnknownDocumentContainerChild> unknown4() const { return m_unknown4; }
-public:
-    MSONullable<TextMasterStyle10Atom> unknown5() const { return m_unknown5; }
+    inline const MSOArray<UnknownDocumentContainerChild>& unknown4() const { return m_unknown4; }
 private:
     MSONullable<TextMasterStyle10Atom> m_unknown5;
+public:
+    inline const MSONullable<TextMasterStyle10Atom>& unknown5() const { return m_unknown5; }
 };
 class DocInfoListSubContainerOrAtom : public ParsedObject {
 private:
@@ -13006,104 +13006,104 @@ private:
 public:
     DocProgBinaryTagContainer() {}
     explicit DocProgBinaryTagContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    DocProgBinaryTagSubContainerOrAtom rec() const { return m_rec; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     DocProgBinaryTagSubContainerOrAtom m_rec;
+public:
+    inline const DocProgBinaryTagSubContainerOrAtom& rec() const { return m_rec; }
 };
 class SlideProgBinaryTagContainer : public ParsedObject {
 private:
 public:
     SlideProgBinaryTagContainer() {}
     explicit SlideProgBinaryTagContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    SlideProgBinaryTagSubContainerOrAtom rec() const { return m_rec; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     SlideProgBinaryTagSubContainerOrAtom m_rec;
+public:
+    inline const SlideProgBinaryTagSubContainerOrAtom& rec() const { return m_rec; }
 };
 class OfficeArtSpContainer : public ParsedObject {
 private:
 public:
     OfficeArtSpContainer() {}
     explicit OfficeArtSpContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    MSONullable<OfficeArtFSPGR> shapeGroup() const { return m_shapeGroup; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSONullable<OfficeArtFSPGR> m_shapeGroup;
 public:
-    OfficeArtFSP shapeProp() const { return m_shapeProp; }
+    inline const MSONullable<OfficeArtFSPGR>& shapeGroup() const { return m_shapeGroup; }
 private:
     OfficeArtFSP m_shapeProp;
 public:
-    MSONullable<OfficeArtFPSPL> deletedshape() const { return m_deletedshape; }
+    inline const OfficeArtFSP& shapeProp() const { return m_shapeProp; }
 private:
     MSONullable<OfficeArtFPSPL> m_deletedshape;
 public:
-    MSONullable<OfficeArtFOPT> shapePrimaryOptions() const { return m_shapePrimaryOptions; }
+    inline const MSONullable<OfficeArtFPSPL>& deletedshape() const { return m_deletedshape; }
 private:
     MSONullable<OfficeArtFOPT> m_shapePrimaryOptions;
 public:
-    MSONullable<OfficeArtSecondaryFOPT> shapeSecondaryOptions1() const { return m_shapeSecondaryOptions1; }
+    inline const MSONullable<OfficeArtFOPT>& shapePrimaryOptions() const { return m_shapePrimaryOptions; }
 private:
     MSONullable<OfficeArtSecondaryFOPT> m_shapeSecondaryOptions1;
 public:
-    MSONullable<OfficeArtTertiaryFOPT> shapeTertiaryOptions1() const { return m_shapeTertiaryOptions1; }
+    inline const MSONullable<OfficeArtSecondaryFOPT>& shapeSecondaryOptions1() const { return m_shapeSecondaryOptions1; }
 private:
     MSONullable<OfficeArtTertiaryFOPT> m_shapeTertiaryOptions1;
 public:
-    MSONullable<OfficeArtChildAnchor> childAnchor() const { return m_childAnchor; }
+    inline const MSONullable<OfficeArtTertiaryFOPT>& shapeTertiaryOptions1() const { return m_shapeTertiaryOptions1; }
 private:
     MSONullable<OfficeArtChildAnchor> m_childAnchor;
 public:
-    MSONullable<OfficeArtClientAnchor> clientAnchor() const { return m_clientAnchor; }
+    inline const MSONullable<OfficeArtChildAnchor>& childAnchor() const { return m_childAnchor; }
 private:
     MSONullable<OfficeArtClientAnchor> m_clientAnchor;
 public:
-    MSONullable<OfficeArtClientData> clientData() const { return m_clientData; }
+    inline const MSONullable<OfficeArtClientAnchor>& clientAnchor() const { return m_clientAnchor; }
 private:
     MSONullable<OfficeArtClientData> m_clientData;
 public:
-    MSONullable<OfficeArtClientTextBox> clientTextbox() const { return m_clientTextbox; }
+    inline const MSONullable<OfficeArtClientData>& clientData() const { return m_clientData; }
 private:
     MSONullable<OfficeArtClientTextBox> m_clientTextbox;
 public:
-    MSONullable<OfficeArtSecondaryFOPT> shapeSecondaryOptions2() const { return m_shapeSecondaryOptions2; }
+    inline const MSONullable<OfficeArtClientTextBox>& clientTextbox() const { return m_clientTextbox; }
 private:
     MSONullable<OfficeArtSecondaryFOPT> m_shapeSecondaryOptions2;
 public:
-    MSONullable<OfficeArtTertiaryFOPT> shapeTertiaryOptions2() const { return m_shapeTertiaryOptions2; }
+    inline const MSONullable<OfficeArtSecondaryFOPT>& shapeSecondaryOptions2() const { return m_shapeSecondaryOptions2; }
 private:
     MSONullable<OfficeArtTertiaryFOPT> m_shapeTertiaryOptions2;
 public:
-    MSONullable<UnknownTextContainerChild> unknown() const { return m_unknown; }
+    inline const MSONullable<OfficeArtTertiaryFOPT>& shapeTertiaryOptions2() const { return m_shapeTertiaryOptions2; }
 private:
     MSONullable<UnknownTextContainerChild> m_unknown;
+public:
+    inline const MSONullable<UnknownTextContainerChild>& unknown() const { return m_unknown; }
 };
 class OfficeArtInlineSpContainer : public ParsedObject {
 private:
 public:
     OfficeArtInlineSpContainer() {}
     explicit OfficeArtInlineSpContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtSpContainer shape() const { return m_shape; }
 private:
     OfficeArtSpContainer m_shape;
+public:
+    inline const OfficeArtSpContainer& shape() const { return m_shape; }
 private:
     MSOArray<OfficeArtBStoreContainerFileBlock> m_rgfb;
 public:
-    MSOArray<OfficeArtBStoreContainerFileBlock> rgfb() const { return m_rgfb; }
+    inline const MSOArray<OfficeArtBStoreContainerFileBlock>& rgfb() const { return m_rgfb; }
 };
 class DocProgTagsSubContainerOrAtom : public ParsedObject {
 private:
@@ -13150,34 +13150,34 @@ private:
 public:
     OfficeArtDgContainer() {}
     explicit OfficeArtDgContainer(const char* data, const quint32 maxsize);
-public:
-    OfficeArtRecordHeader rh() const { return m_rh; }
 private:
     OfficeArtRecordHeader m_rh;
 public:
-    MSONullable<OfficeArtFDG> drawingData() const { return m_drawingData; }
+    inline const OfficeArtRecordHeader& rh() const { return m_rh; }
 private:
     MSONullable<OfficeArtFDG> m_drawingData;
 public:
-    MSONullable<OfficeArtFRITContainer> regroupItems() const { return m_regroupItems; }
+    inline const MSONullable<OfficeArtFDG>& drawingData() const { return m_drawingData; }
 private:
     MSONullable<OfficeArtFRITContainer> m_regroupItems;
 public:
-    MSONullable<OfficeArtSpgrContainer> groupShape() const { return m_groupShape; }
+    inline const MSONullable<OfficeArtFRITContainer>& regroupItems() const { return m_regroupItems; }
 private:
     MSONullable<OfficeArtSpgrContainer> m_groupShape;
 public:
-    MSONullable<OfficeArtSpContainer> shape() const { return m_shape; }
+    inline const MSONullable<OfficeArtSpgrContainer>& groupShape() const { return m_groupShape; }
 private:
     MSONullable<OfficeArtSpContainer> m_shape;
+public:
+    inline const MSONullable<OfficeArtSpContainer>& shape() const { return m_shape; }
 private:
     MSOArray<OfficeArtSpgrContainerFileBlock> m_deletedShapes;
 public:
-    MSOArray<OfficeArtSpgrContainerFileBlock> deletedShapes() const { return m_deletedShapes; }
-public:
-    MSONullable<OfficeArtSolverContainer> solvers() const { return m_solvers; }
+    inline const MSOArray<OfficeArtSpgrContainerFileBlock>& deletedShapes() const { return m_deletedShapes; }
 private:
     MSONullable<OfficeArtSolverContainer> m_solvers;
+public:
+    inline const MSONullable<OfficeArtSolverContainer>& solvers() const { return m_solvers; }
 };
 class OfficeArtSpgrContainerFileBlock : public ParsedObject {
 private:
@@ -13208,176 +13208,176 @@ private:
 public:
     DrawingContainer() {}
     explicit DrawingContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    OfficeArtDgContainer OfficeArtDg() const { return m_OfficeArtDg; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     OfficeArtDgContainer m_OfficeArtDg;
+public:
+    inline const OfficeArtDgContainer& OfficeArtDg() const { return m_OfficeArtDg; }
 };
 class MainMasterContainer : public ParsedObject {
 private:
 public:
     MainMasterContainer() {}
     explicit MainMasterContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    SlideAtom slideAtom() const { return m_slideAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     SlideAtom m_slideAtom;
 public:
-    MSONullable<SlideShowSlideInfoAtom> unknown() const { return m_unknown; }
+    inline const SlideAtom& slideAtom() const { return m_slideAtom; }
 private:
     MSONullable<SlideShowSlideInfoAtom> m_unknown;
+public:
+    inline const MSONullable<SlideShowSlideInfoAtom>& unknown() const { return m_unknown; }
 private:
     MSOArray<SchemeListElementColorSchemeAtom> m_rgSchemeListElementColorScheme;
 public:
-    MSOArray<SchemeListElementColorSchemeAtom> rgSchemeListElementColorScheme() const { return m_rgSchemeListElementColorScheme; }
+    inline const MSOArray<SchemeListElementColorSchemeAtom>& rgSchemeListElementColorScheme() const { return m_rgSchemeListElementColorScheme; }
 private:
     MSOArray<TextMasterStyleAtom> m_rgTextMasterStyle;
 public:
-    MSOArray<TextMasterStyleAtom> rgTextMasterStyle() const { return m_rgTextMasterStyle; }
-public:
-    MSONullable<RoundTripOArtTextStyles12Atom> roundTripOArtTextSTyles12Atom() const { return m_roundTripOArtTextSTyles12Atom; }
+    inline const MSOArray<TextMasterStyleAtom>& rgTextMasterStyle() const { return m_rgTextMasterStyle; }
 private:
     MSONullable<RoundTripOArtTextStyles12Atom> m_roundTripOArtTextSTyles12Atom;
 public:
-    MSONullable<SlideShowSlideInfoAtom> slideShowInfoAtom() const { return m_slideShowInfoAtom; }
+    inline const MSONullable<RoundTripOArtTextStyles12Atom>& roundTripOArtTextSTyles12Atom() const { return m_roundTripOArtTextSTyles12Atom; }
 private:
     MSONullable<SlideShowSlideInfoAtom> m_slideShowInfoAtom;
 public:
-    MSONullable<PerSlideHeadersFootersContainer> perSlideHeadersFootersContainer() const { return m_perSlideHeadersFootersContainer; }
+    inline const MSONullable<SlideShowSlideInfoAtom>& slideShowInfoAtom() const { return m_slideShowInfoAtom; }
 private:
     MSONullable<PerSlideHeadersFootersContainer> m_perSlideHeadersFootersContainer;
 public:
-    DrawingContainer drawing() const { return m_drawing; }
+    inline const MSONullable<PerSlideHeadersFootersContainer>& perSlideHeadersFootersContainer() const { return m_perSlideHeadersFootersContainer; }
 private:
     DrawingContainer m_drawing;
 public:
-    SlideSchemeColorSchemeAtom slideSchemeColorSchemeAtom() const { return m_slideSchemeColorSchemeAtom; }
+    inline const DrawingContainer& drawing() const { return m_drawing; }
 private:
     SlideSchemeColorSchemeAtom m_slideSchemeColorSchemeAtom;
 public:
-    MSONullable<SlideNameAtom> slideNameAtom() const { return m_slideNameAtom; }
+    inline const SlideSchemeColorSchemeAtom& slideSchemeColorSchemeAtom() const { return m_slideSchemeColorSchemeAtom; }
 private:
     MSONullable<SlideNameAtom> m_slideNameAtom;
 public:
-    MSONullable<SlideProgTagsContainer> slideProgTagsContainer() const { return m_slideProgTagsContainer; }
+    inline const MSONullable<SlideNameAtom>& slideNameAtom() const { return m_slideNameAtom; }
 private:
     MSONullable<SlideProgTagsContainer> m_slideProgTagsContainer;
+public:
+    inline const MSONullable<SlideProgTagsContainer>& slideProgTagsContainer() const { return m_slideProgTagsContainer; }
 private:
     MSOArray<RoundTripMainMasterRecord> m_rgRoundTripMainMaster;
 public:
-    MSOArray<RoundTripMainMasterRecord> rgRoundTripMainMaster() const { return m_rgRoundTripMainMaster; }
-public:
-    MSONullable<TemplateNameAtom> templateNameAtom() const { return m_templateNameAtom; }
+    inline const MSOArray<RoundTripMainMasterRecord>& rgRoundTripMainMaster() const { return m_rgRoundTripMainMaster; }
 private:
     MSONullable<TemplateNameAtom> m_templateNameAtom;
 public:
-    MSONullable<SlideProgTagsContainer> unknown3() const { return m_unknown3; }
+    inline const MSONullable<TemplateNameAtom>& templateNameAtom() const { return m_templateNameAtom; }
 private:
     MSONullable<SlideProgTagsContainer> m_unknown3;
+public:
+    inline const MSONullable<SlideProgTagsContainer>& unknown3() const { return m_unknown3; }
 };
 class SlideContainer : public ParsedObject {
 private:
 public:
     SlideContainer() {}
     explicit SlideContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    SlideAtom slideAtom() const { return m_slideAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     SlideAtom m_slideAtom;
 public:
-    MSONullable<SlideShowSlideInfoAtom> slideShowSlideInfoAtom() const { return m_slideShowSlideInfoAtom; }
+    inline const SlideAtom& slideAtom() const { return m_slideAtom; }
 private:
     MSONullable<SlideShowSlideInfoAtom> m_slideShowSlideInfoAtom;
 public:
-    MSONullable<PerSlideHeadersFootersContainer> perSlideHFContainer() const { return m_perSlideHFContainer; }
+    inline const MSONullable<SlideShowSlideInfoAtom>& slideShowSlideInfoAtom() const { return m_slideShowSlideInfoAtom; }
 private:
     MSONullable<PerSlideHeadersFootersContainer> m_perSlideHFContainer;
 public:
-    MSONullable<RoundTripSlideSyncInfo12Container> rtSlideSyncInfo12() const { return m_rtSlideSyncInfo12; }
+    inline const MSONullable<PerSlideHeadersFootersContainer>& perSlideHFContainer() const { return m_perSlideHFContainer; }
 private:
     MSONullable<RoundTripSlideSyncInfo12Container> m_rtSlideSyncInfo12;
 public:
-    DrawingContainer drawing() const { return m_drawing; }
+    inline const MSONullable<RoundTripSlideSyncInfo12Container>& rtSlideSyncInfo12() const { return m_rtSlideSyncInfo12; }
 private:
     DrawingContainer m_drawing;
 public:
-    SlideSchemeColorSchemeAtom slideSchemeColorSchemeAtom() const { return m_slideSchemeColorSchemeAtom; }
+    inline const DrawingContainer& drawing() const { return m_drawing; }
 private:
     SlideSchemeColorSchemeAtom m_slideSchemeColorSchemeAtom;
 public:
-    MSONullable<SlideNameAtom> slideNameAtom() const { return m_slideNameAtom; }
+    inline const SlideSchemeColorSchemeAtom& slideSchemeColorSchemeAtom() const { return m_slideSchemeColorSchemeAtom; }
 private:
     MSONullable<SlideNameAtom> m_slideNameAtom;
 public:
-    MSONullable<SlideProgTagsContainer> slideProgTagsContainer() const { return m_slideProgTagsContainer; }
+    inline const MSONullable<SlideNameAtom>& slideNameAtom() const { return m_slideNameAtom; }
 private:
     MSONullable<SlideProgTagsContainer> m_slideProgTagsContainer;
 public:
-    MSONullable<UnknownSlideContainerChild> unknown() const { return m_unknown; }
+    inline const MSONullable<SlideProgTagsContainer>& slideProgTagsContainer() const { return m_slideProgTagsContainer; }
 private:
     MSONullable<UnknownSlideContainerChild> m_unknown;
+public:
+    inline const MSONullable<UnknownSlideContainerChild>& unknown() const { return m_unknown; }
 private:
     MSOArray<RoundTripSlideRecord> m_rgRoundTripSlide;
 public:
-    MSOArray<RoundTripSlideRecord> rgRoundTripSlide() const { return m_rgRoundTripSlide; }
-public:
-    MSONullable<UnknownSlideContainerChild> unknown2() const { return m_unknown2; }
+    inline const MSOArray<RoundTripSlideRecord>& rgRoundTripSlide() const { return m_rgRoundTripSlide; }
 private:
     MSONullable<UnknownSlideContainerChild> m_unknown2;
+public:
+    inline const MSONullable<UnknownSlideContainerChild>& unknown2() const { return m_unknown2; }
 };
 class NotesContainer : public ParsedObject {
 private:
 public:
     NotesContainer() {}
     explicit NotesContainer(const char* data, const quint32 maxsize);
-public:
-    RecordHeader rh() const { return m_rh; }
 private:
     RecordHeader m_rh;
 public:
-    NotesAtom notesAtom() const { return m_notesAtom; }
+    inline const RecordHeader& rh() const { return m_rh; }
 private:
     NotesAtom m_notesAtom;
 public:
-    MSONullable<PerSlideHeadersFootersContainer> perSlideHFContainer() const { return m_perSlideHFContainer; }
+    inline const NotesAtom& notesAtom() const { return m_notesAtom; }
 private:
     MSONullable<PerSlideHeadersFootersContainer> m_perSlideHFContainer;
 public:
-    DrawingContainer drawing() const { return m_drawing; }
+    inline const MSONullable<PerSlideHeadersFootersContainer>& perSlideHFContainer() const { return m_perSlideHFContainer; }
 private:
     DrawingContainer m_drawing;
 public:
-    SlideSchemeColorSchemeAtom slideSchemeColorSchemeAtom() const { return m_slideSchemeColorSchemeAtom; }
+    inline const DrawingContainer& drawing() const { return m_drawing; }
 private:
     SlideSchemeColorSchemeAtom m_slideSchemeColorSchemeAtom;
 public:
-    MSONullable<SlideNameAtom> slideNameAtom() const { return m_slideNameAtom; }
+    inline const SlideSchemeColorSchemeAtom& slideSchemeColorSchemeAtom() const { return m_slideSchemeColorSchemeAtom; }
 private:
     MSONullable<SlideNameAtom> m_slideNameAtom;
 public:
-    MSONullable<SlideProgTagsContainer> slideProgTagsContainer() const { return m_slideProgTagsContainer; }
+    inline const MSONullable<SlideNameAtom>& slideNameAtom() const { return m_slideNameAtom; }
 private:
     MSONullable<SlideProgTagsContainer> m_slideProgTagsContainer;
 public:
-    MSONullable<PerSlideHeadersFootersContainer> perSlideHFContainer2() const { return m_perSlideHFContainer2; }
+    inline const MSONullable<SlideProgTagsContainer>& slideProgTagsContainer() const { return m_slideProgTagsContainer; }
 private:
     MSONullable<PerSlideHeadersFootersContainer> m_perSlideHFContainer2;
+public:
+    inline const MSONullable<PerSlideHeadersFootersContainer>& perSlideHFContainer2() const { return m_perSlideHFContainer2; }
 private:
     MSOArray<NotesRoundTripAtom> m_rgNotesRoundTripAtom;
 public:
-    MSOArray<NotesRoundTripAtom> rgNotesRoundTripAtom() const { return m_rgNotesRoundTripAtom; }
+    inline const MSOArray<NotesRoundTripAtom>& rgNotesRoundTripAtom() const { return m_rgNotesRoundTripAtom; }
 };
 class MasterOrSlideContainer : public ParsedObject {
 private:
