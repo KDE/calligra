@@ -261,7 +261,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
     {
         if (start == 0 ||
             (effort == 0.0 && length == 0.0 && duration == 0.0 && end == 0)) {
-            TJMH.warningMessage(QString("'%1' cannot schedule: estimate is 0").arg(name));
+            TJMH.warningMessage(QString("Cannot schedule: estimate is 0"), this);
             return false;
         }
 
@@ -614,6 +614,22 @@ Task::isRunaway() const
     return runAway;
 }
 
+int
+Task::isAvailable( Allocation *allocation, Resource *resource, time_t slot ) const
+{
+    int max = resource->isAvailable(slot);
+    if (allocation->hasRequiredResources(resource)) {
+        foreach (Resource *r, allocation->getRequiredResources(resource)) {
+            int a = r->isAvailable(slot);
+            if ( a > max ) {
+                TJMH.debugMessage(QString("Required resource '%1' is not available at %2").arg(r->getName()).arg(time2ISO(slot)), this);
+                max = a;
+            }
+        }
+    }
+    return max;
+}
+
 void
 Task::bookResources(int sc, time_t date, time_t slotDuration)
 {
@@ -661,9 +677,8 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
             }
             if (a->isPersistent() && a->getLockedResource())
             {
-                int availability;
-                if ((availability = a->getLockedResource()->
-                     isAvailable(date)) > 0)
+                int availability = isAvailable(a, a->getLockedResource(), date);
+                if (availability > 0)
                 {
                     allMandatoriesAvailables = false;
                     if (availability >= 4 && !a->getConflictStart())
@@ -682,11 +697,10 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                 {
                     /* If a resource group is marked mandatory, all members
                      * of the group must be available. */
-                    int availability;
+                    int availability = 0;
                     bool allAvailable = true;
                     for (ResourceTreeIterator rti(r); *rti != 0; ++rti) {
-                        if ((availability =
-                            (*rti)->isAvailable(date)) > 0 ||
+                        if ((availability = isAvailable(a, (*rti), date)) > 0 ||
                             mandatoryResources.contains(*rti))
                         {
                             TJMH.debugMessage(QString("%1 Mandatory resource '%3' not available at: %2").arg(name).arg(time2tjp(date)).arg((*rti)->getName()));
@@ -797,7 +811,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
         int maxAvailability = 0;
         if (a->isPersistent() && a->getLockedResource())
         {
-            if (!bookResource(a->getLockedResource(), date, slotDuration,
+            if (!bookResource(a, a->getLockedResource(), date, slotDuration,
                               slotsToLimit, maxAvailability))
             {
                 if (maxAvailability >= 4 && !a->getConflictStart())
@@ -819,7 +833,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
 
             bool found = false;
             foreach (Resource *r, cl)
-                if (bookResource(r, date, slotDuration, slotsToLimit,
+                if (bookResource(a, r, date, slotDuration, slotsToLimit,
                                  maxAvailability))
                 {
                     a->setLockedResource(r);;
@@ -842,7 +856,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                             candidates += ", ";
                         candidates += r->getId();
                     }
-//                     qDebug()<<"No resource of the allocation ("<<candidates<<") is available for task '"<<id<<"' from"<<time2ISO(a->getConflictStart())<<"to"<<time2ISO(date);
+                    qDebug()<<"No resource of the allocation ("<<candidates<<") is available for task '"<<id<<"' from"<<time2ISO(a->getConflictStart())<<"to"<<time2ISO(date);
                 }
                 TJMH.warningMessage(QString("%1: No resource is available for task from %2 to %3").arg(name).arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)), this);
 
@@ -853,7 +867,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
 }
 
 bool
-Task::bookResource(Resource* r, time_t date, time_t slotDuration,
+Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slotDuration,
                    int& slotsToLimit, int& maxAvailability)
 {
     bool booked = false;
@@ -861,13 +875,33 @@ Task::bookResource(Resource* r, time_t date, time_t slotDuration,
 
     for (ResourceTreeIterator rti(r); *rti != 0; ++rti)
     {
-        int availability;
-        if ((availability =
-             (*rti)->isAvailable(date)) == 0)
+        int availability = isAvailable(allocation, (*rti), date);
+        if (availability == 0)
         {
-            (*rti)->book(new Booking(Interval(date, date + slotDuration - 1),
-                                     this));
-            addBookedResource(*rti);
+            if ((*rti)->book(new Booking(Interval(date, date + slotDuration - 1), this))) {
+                addBookedResource(*rti);
+                TJMH.debugMessage(QString("Booked resource: '%1' at %2, done=%3").arg((*rti)->getName()).arg(time2tjp(date)).arg(doneEffort), this);
+                if (DEBUGTS(6)) {
+                    qDebug()<<" Booked resource"<<(*rti)->getName()<<"( Effort:"<<doneEffort<<")";
+                }
+            } else {
+                TJMH.warningMessage(QString("Failed to book resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
+                continue;
+            }
+            if (allocation->hasRequiredResources(*rti)) {
+                foreach(Resource *r, allocation->getRequiredResources(*rti)) {
+                    if (r->book(new Booking(Interval(date, date + slotDuration - 1), this))) {
+                        addBookedResource(r);
+                        TJMH.debugMessage(QString("Booked required resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
+                        if (DEBUGTS(6)) {
+                            qDebug()<<" Booked required resource"<<r->getName()<<"( Effort:"<<doneEffort<<")";
+                        }
+                    } else {
+                        TJMH.warningMessage(QString("Failed to book required resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
+                        // NOTE: we shouldn't fail so just go on as booking the main resource worked ok
+                    }
+                }
+            }
 
             /* Move the start date to make sure that there is
              * some work going on at the start date. */
@@ -886,10 +920,7 @@ Task::bookResource(Resource* r, time_t date, time_t slotDuration,
             tentativeEnd = date + slotDuration - 1;
             doneEffort += intervalLoad * (*rti)->getEfficiency();
 
-            if (DEBUGTS(6))
-                qDebug()<<" Booked resource"<<(*rti)->getName()<<"( Effort:"<<doneEffort<<")";
             booked = true;
-            TJMH.debugMessage(QString("'%1' booked resource: '%2' at %3, done=%4").arg(name).arg((*rti)->getName()).arg(time2tjp(date)).arg(doneEffort));
 
             if (slotsToLimit > 0 && --slotsToLimit <= 0)
                 return true;

@@ -713,30 +713,17 @@ void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
     if ( task->requests().isEmpty() ) {
         return;
     }
-    // NOTE the required resource concept does not exist in TJ
-    // NOTE make all working resources mandatatory for now
     // TODO usage limit/units
-    QList<Resource*> required;
     foreach ( ResourceRequest *rr, task->requests().resourceRequests( true /*resolveTeam*/ ) ) {
-        required += rr->requiredResources();
-    }
-    foreach ( ResourceRequest *rr, task->requests().resourceRequests( true /*resolveTeam*/ ) ) {
-        if ( required.contains( rr->resource() ) ) {
-            continue;
-        }
         TJ::Resource *tjr = addResource( rr->resource() );
         TJ::Allocation *a = new TJ::Allocation();
+        a->setSelectionMode( TJ::Allocation::order );
         a->addCandidate( tjr );
         job->addAllocation( a );
-        if ( rr->resource()->type() == Resource::Type_Work ) {
-            a->setMandatory( true );
-        }
         if ( locale() ) { logDebug( task, 0, "Add resource candidate: " + rr->resource()->name() ); }
         foreach ( Resource *r, rr->requiredResources() ) {
-            TJ::Resource *tjr = addResource( r );
-            a = new TJ::Allocation();
-            a->setMandatory( true );
-            a->addCandidate( tjr );
+            TJ::Resource *tr = addResource( r );
+            a->addRequiredResource( tjr, tr );
             if ( locale() ) { logDebug( task, 0, "Add required resource: " + r->name() ); }
         }
     }
