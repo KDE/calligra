@@ -56,7 +56,6 @@
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoShapeCreateCommand.h>
-#include <KoImageSelectionWidget.h>
 #include <KoResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
@@ -227,8 +226,6 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("insert_picture");
-    if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("format_page");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("inline_frame");
@@ -346,11 +343,6 @@ void KWView::setupActions()
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
-
-    action = new KAction(i18n("Picture..."), this);
-    action->setToolTip(i18n("Insert a picture into document"));
-    actionCollection()->addAction("insert_picture", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertImage()));
 
     action = new KAction(i18n("Footnote/Endnote..."), this);
     action->setToolTip(i18n("Insert a footnote referencing the selected text"));
@@ -1383,39 +1375,6 @@ void KWView::removeFrameClipping()
     }
     if (!unClipFrames.isEmpty()) {
         KWRemoveFrameClipCommand *cmd = new KWRemoveFrameClipCommand(unClipFrames.toList(), m_document);
-        m_document->addCommand(cmd);
-    }
-}
-
-void KWView::insertImage()
-{
-    KoShape *shape = KoImageSelectionWidget::selectImageShape(m_document->resourceManager(), this);
-    if (shape) {
-        if (m_currentPage.isValid()) {
-            QRectF page = m_currentPage.rect();
-            // make the shape be on the current page, and fit inside the current page.
-            if (page.width() < shape->size().width() || page.height() < shape->size().height()) {
-                QSizeF newSize(page.width() * 0.9, page.height() * 0.9);
-                const qreal xRatio = newSize.width() / shape->size().width();
-                const qreal yRatio = newSize.height() / shape->size().height();
-                if (xRatio > yRatio) // then lets make the vertical set the size.
-                    newSize.setWidth(shape->size().width() * yRatio);
-                else
-                    newSize.setHeight(shape->size().height() * xRatio);
-                shape->setSize(newSize);
-            }
-            shape->setPosition(page.topLeft());
-
-            int zIndex = 0;
-            foreach (KoShape *s, m_canvas->shapeManager()->shapesAt(page))
-                zIndex = qMax(s->zIndex(), zIndex);
-            shape->setZIndex(zIndex+1);
-        }
-
-        KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_document, shape);
-        KoSelection *selection = m_canvas->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select(shape);
         m_document->addCommand(cmd);
     }
 }

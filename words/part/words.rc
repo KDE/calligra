@@ -77,10 +77,6 @@
   <Separator/>
   <!-- Frames - the order matches the order of the keybindings -->
   <Action name="insert_table"/>
-  <Action name="insert_picture"/>
-  <Action name="tools_createtext"/>
-  <Action name="tools_formula"/>
-  <Action name="tools_part"/>
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
   <Action name="text_default"/>

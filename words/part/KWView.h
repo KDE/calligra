@@ -201,8 +201,6 @@ private slots:
     void handleDeletePageAction();
     /// set the status of the show-statusbar action to reflect the current setting.
     void updateStatusBarAction();
-    /// insert image
-    void insertImage();
     /// insert a footnote or an endnote
     void insertFootEndNote();
     /// show guides menu option uses this
