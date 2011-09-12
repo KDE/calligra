@@ -259,7 +259,6 @@ set (calligratablesodf_LIB_SRCS
     # TODO: move HeaderFooter from SheetPrint to PrintSettings, and replace SheetPrint with PrintSettings in Sheet to get rid of this dependency
     SheetPrint.cpp
     SheetPrint_p.cpp
-
     )
 
 

@@ -26,7 +26,7 @@ void ClassName::drawFrame(QPainter *p)
         if (frameShadow() == Plain)
             qDrawPlainRect(p, frameRect(), d->frameColor, lineWidth());
         else
-            qDrawShadeRect(p, frameRect(), colorGroup(), frameShadow() == QFrame::Sunken,
+            qDrawShadeRect(p, frameRect(), palette(), frameShadow() == QFrame::Sunken,
                            lineWidth(), midLineWidth());
     } else {
         SuperClassName::drawFrame(p);
@@ -36,16 +36,15 @@ void ClassName::drawFrame(QPainter *p)
 void ClassName::setPalette(const QPalette &pal)
 {
     QPalette pal2(pal);
-    QColorGroup cg(pal2.active());
-    cg.setColor(QColorGroup::Light, KexiUtils::bleachedColor(d->frameColor, 150));
-    cg.setColor(QColorGroup::Mid, d->frameColor);
-    cg.setColor(QColorGroup::Dark, d->frameColor.dark(150));
-    pal2.setActive(cg);
-    QColorGroup cg2(pal2.inactive());
-    cg2.setColor(QColorGroup::Light, cg.light());
-    cg2.setColor(QColorGroup::Mid, cg.mid());
-    cg2.setColor(QColorGroup::Dark, cg.dark());
-    pal2.setInactive(cg2);
+    pal2.setColor(QPalette::Active, QColorGroup::Light, KexiUtils::bleachedColor(d->frameColor, 150));
+    pal2.setColor(QPalette::Active, QColorGroup::Mid, d->frameColor);
+    pal2.setColor(QPalette::Active, QColorGroup::Dark, d->frameColor.dark(150));
+    pal2.setColor(QPalette::Inactive, QColorGroup::Light,
+                  pal2.color(QPalette::Active, QColorGroup::Light));
+    pal2.setColor(QPalette::Inactive, QColorGroup::Mid,
+                  pal2.color(QPalette::Active, QColorGroup::Mid));
+    pal2.setColor(QPalette::Inactive, QColorGroup::Dark,
+                  pal2.color(QPalette::Active, QColorGroup::Dark));
     SuperClassName::setPalette(pal2);
 }
 

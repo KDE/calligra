@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,8 +33,8 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3listview.h>
 #include <QPixmap>
+#include <QKeyEvent>
 
 #include <assert.h>
 
@@ -54,13 +54,14 @@ public:
 /*================================================================*/
 
 //! helper class
-class ProjectDataLVItem : public Q3ListViewItem
+class ProjectDataLVItem : public QTreeWidgetItem
 {
 public:
     ProjectDataLVItem(KexiProjectData *d,
                       const KexiDB::Driver::Info& info, KexiProjectSelectorWidget *selector)
-            : Q3ListViewItem(selector->list)
-            , data(d) {
+            : QTreeWidgetItem(selector->list())
+            , data(d)
+    {
         int colnum = 0;
         const KexiDB::ConnectionData *cdata = data->constConnectionData();
         if (selector->d->showProjectNameColumn)
@@ -71,15 +72,19 @@ public:
         if (selector->d->showConnectionColumns) {
             QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
             if (info.fileBased) {
-                setText(colnum++, i18n("File") + " (" + drvname + ")  ");
+                setText(colnum++, i18n("File (%1)").arg(drvname));
             } else {
                 setText(colnum++, drvname + "  ");
             }
 
             QString conn;
-            if (!cdata->caption.isEmpty())
-                conn = cdata->caption + ": ";
-            conn += cdata->serverInfoString();
+            if (cdata->caption.isEmpty()) {
+                conn = cdata->serverInfoString();
+            }
+            else {
+                conn = i18nc("caption: server_info", "%1: %2")
+                        .arg(cdata->caption).arg(cdata->serverInfoString());
+            }
             setText(3, conn + "  ");
         }
     }
@@ -104,28 +109,35 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     setObjectName("KexiProjectSelectorWidget");
     d->showProjectNameColumn = showProjectNameColumn;
     d->showConnectionColumns = showConnectionColumns;
+    list()->installEventFilter(this);
+
     const QString iconname(KexiDB::defaultFileBasedDriverIcon());
     d->fileicon = KIconLoader::global()->loadMimeTypeIcon(iconname, KIconLoader::Desktop);
     setWindowIcon(KIcon(iconname));
     d->dbicon = SmallIcon("server-database");
 // list->setHScrollBarMode( QScrollView::AlwaysOn );
 
-    if (!d->showConnectionColumns) {
-        list->removeColumn(2);
-        list->removeColumn(2);
+    QTreeWidgetItem *headerItem = list()->headerItem();
+    QTreeWidgetItem *newHeaderItem = new QTreeWidgetItem;
+    int newHeaderItemIndex = 0;
+    if (d->showProjectNameColumn) {
+        newHeaderItem->setText(newHeaderItemIndex++, headerItem->text(0)); // project name
     }
-    if (!d->showProjectNameColumn) {
-        list->removeColumn(0);
+    newHeaderItem->setText(newHeaderItemIndex++, headerItem->text(1)); // database
+    if (d->showConnectionColumns) {
+        newHeaderItem->setText(newHeaderItemIndex++, headerItem->text(2)); // type
+        newHeaderItem->setText(newHeaderItemIndex++, headerItem->text(3)); // connection
     }
-    setFocusProxy(list);
+    list()->setHeaderItem(newHeaderItem);
+    setFocusProxy(list());
 
     //show projects
     setProjectSet(m_prj_set);
-    connect(list, SIGNAL(doubleClicked(Q3ListViewItem*)),
-            this, SLOT(slotItemExecuted(Q3ListViewItem*)));
-    connect(list, SIGNAL(returnPressed(Q3ListViewItem*)),
-            this, SLOT(slotItemExecuted(Q3ListViewItem*)));
-    connect(list, SIGNAL(selectionChanged()),
+    connect(list(), SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotItemExecuted(QTreeWidgetItem*)));
+    //connect(list(), SIGNAL(returnPressed(QTreeWidgetItem*)),
+    //        this, SLOT(slotItemExecuted(QTreeWidgetItem*)));
+    connect(list(), SIGNAL(itemSelectionChanged()),
             this, SLOT(slotItemSelected()));
 }
 
@@ -139,13 +151,16 @@ KexiProjectSelectorWidget::~KexiProjectSelectorWidget()
 
 KexiProjectData* KexiProjectSelectorWidget::selectedProjectData() const
 {
-    ProjectDataLVItem *item = static_cast<ProjectDataLVItem*>(list->selectedItem());
+    QList<QTreeWidgetItem *> items = list()->selectedItems();
+    if (items.isEmpty())
+        return 0;
+    ProjectDataLVItem *item = static_cast<ProjectDataLVItem*>(items.first());
     if (item)
         return item->data;
     return 0;
 }
 
-void KexiProjectSelectorWidget::slotItemExecuted(Q3ListViewItem *item)
+void KexiProjectSelectorWidget::slotItemExecuted(QTreeWidgetItem *item)
 {
     if (!d->selectable)
         return;
@@ -154,11 +169,23 @@ void KexiProjectSelectorWidget::slotItemExecuted(Q3ListViewItem *item)
         emit projectExecuted(ditem->data);
 }
 
+void KexiProjectSelectorWidget::slotItemExecuted()
+{
+    kDebug();
+    if (!d->selectable)
+        return;
+    QList<QTreeWidgetItem *> items = list()->selectedItems();
+    if (items.isEmpty())
+        return;
+    slotItemExecuted(items.first());
+}
+
 void KexiProjectSelectorWidget::slotItemSelected()
 {
     if (!d->selectable)
         return;
-    ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem*>(list->selectedItem());
+    QList<QTreeWidgetItem *> items = list()->selectedItems();
+    ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem*>(items.isEmpty() ? 0 : items.first());
     emit selectionChanged(ditem ? ditem->data : 0);
 }
 
@@ -166,7 +193,7 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
 {
     if (prj_set) {
         //old list
-        list->clear();
+        list()->clear();
     }
     m_prj_set = prj_set;
     if (!m_prj_set)
@@ -182,19 +209,26 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
         KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
         if (!info.name.isEmpty()) {
             ProjectDataLVItem *item = new ProjectDataLVItem(data, info, this);
-            if (!d->selectable)
-                item->setSelectable(false);
+            if (!d->selectable) {
+                Qt::ItemFlags flags = item->flags();
+                (flags |= Qt::ItemIsSelectable) ^= Qt::ItemIsSelectable;
+                item->setFlags(flags);
+            }
             if (info.fileBased)
-                item->setPixmap(0, d->fileicon);
+                item->setIcon(0, d->fileicon);
             else
-                item->setPixmap(0, d->dbicon);
-        } else {
+                item->setIcon(0, d->dbicon);
+        }
+        else {
             kWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '"
             << data->constConnectionData()->driverName << "'!";
         }
     }
-    if (list->firstChild()) {
-        list->setSelected(list->firstChild(), true);
+    list()->setSortingEnabled(true);
+    list()->sortItems(0, Qt::AscendingOrder);
+    list()->resizeColumnToContents(0);
+    if (list()->topLevelItemCount() > 0) {
+        list()->topLevelItem(0)->setSelected(true);
     }
 }
 
@@ -204,9 +238,13 @@ void KexiProjectSelectorWidget::setSelectable(bool set)
         return;
     d->selectable = set;
     //update items' state
-    Q3ListViewItemIterator it(list);
-    while (it.current()) {
-        it.current()->setSelectable(d->selectable);
+    QTreeWidgetItemIterator it(list());
+    while (*it) {
+        Qt::ItemFlags flags = (*it)->flags();
+        flags |= Qt::ItemIsSelectable;
+        if (!d->selectable)
+            flags ^= Qt::ItemIsSelectable;
+        (*it)->setFlags(flags);
     }
 }
 
@@ -218,6 +256,35 @@ bool KexiProjectSelectorWidget::isSelectable() const
 QLabel *KexiProjectSelectorWidget::label() const
 {
     return Ui_KexiProjectSelector::label;
+}
+
+QTreeWidget* KexiProjectSelectorWidget::list() const
+{
+    return Ui_KexiProjectSelector::list;
+}
+
+// void KexiProjectSelectorWidget::keyPressEvent(QKeyEvent* event)
+// {
+//     if (event->key() == Qt::Key_Enter && event->modifiers() == Qt::NoModifier) {
+//         event->accept();
+//         slotItemExecuted();
+//         return;
+//     }
+//     QWidget::keyPressEvent(event);
+// }
+
+bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *ke = static_cast<QKeyEvent*>(event);
+        if ((ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return)
+            && ke->modifiers() == Qt::NoModifier)
+        {
+            slotItemExecuted();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 /*================================================================*/

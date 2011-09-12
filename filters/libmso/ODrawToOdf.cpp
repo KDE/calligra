@@ -342,14 +342,15 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:start-line-spacing-vertical
     // draw:stroke ('dash', 'none' or 'solid')
 
-    // NOTE: OOo interprets solid line with width 0 as hairline, so if width ==
-    // 0, stroke *must* be none to avoid OOo from displaying a line
-    if (!ds.fLine() && ds.fNoLineDrawDash()) {
-        style.addProperty("draw:stroke", "dash", gt);
-        style.addProperty("draw:stroke-dash", defineDashStyle(msolineDashSys, styles), gt);
-    }
-    else if (ds.fLine()) {
+    // FIXME: More test files required to comprehend the logic (Bug 278545).
+//     if (!ds.fLine() && ds.fNoLineDrawDash()) {
+//         style.addProperty("draw:stroke", "dash", gt);
+//         style.addProperty("draw:stroke-dash", defineDashStyle(msolineDashSys, styles), gt);
+//     }
+    if (ds.fLine()) {
         quint32 lineDashing = ds.lineDashing();
+        // NOTE: OOo interprets solid line of width 0 as hairline, so if width
+        // == 0, stroke *must* be none to avoid OOo from displaying a line
         if (lineWidthPt == 0) {
             style.addProperty("draw:stroke", "none", gt);
         } else if (lineDashing > 0 && lineDashing < 11) {

@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+Name=KPresenter Words Filter
+Name[bg]=Филтър за KPresenter за файлове на Words
+Name[cs]=Filtr pro převod KPresenter->Words
+Name[da]=Words-filter til KPresenter
+Name[de]=KPresenter Words-Filter
+Name[es]=Filtro de Words para KPresenter
+Name[et]=KPresenteri Wordsi filter
+Name[it]=Filtro da KPresenter a Words
+Name[nb]=KPresenter Words-filter
+Name[nds]=Words-Filter för KPresenter
+Name[nl]=Words-filter voor KPresenter
+Name[pl]=Filtr Words do KPresenter
+Name[pt]=Filtro do Words para o KPresenter
+Name[pt_BR]=Filtro do Words para o KPresenter
+Name[ru]=Фильтр экспорта документов Words в KPresenter
+Name[sv]=Kpresenter Words-filter
+Name[uk]=Фільтр Words для KPresenter
+Name[x-test]=xxKPresenter Words Filterxx
+Name[zh_TW]=KPresenter Words 過濾程式
+X-KDE-Import=application/x-kpresenter
+X-KDE-Weight=1
+X-KDE-Export=application/x-words
+X-KDE-Library=kprwords
+X-KDE-ServiceTypes=CalligraFilter

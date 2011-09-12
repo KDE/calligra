@@ -49,7 +49,6 @@ QString test_name;
 int cursor_options = 0;
 bool db_name_required = true;
 
-//KexiProjectData project_data;
 QPointer<KexiProject> project;
 QPointer<KexiDB::Connection> conn;
 QPointer<KexiDB::Driver> driver;
@@ -205,12 +204,12 @@ int main(int argc, char** argv)
         if (args->isSet("buffered-cursors")) {
             cursor_options |= KexiDB::Cursor::Buffered;
         }
-        KexiProjectData *project_data = new KexiProjectData;
-        project_data->setDatabaseName(db_name);
+        KexiProjectData project_data;
+        project_data.setDatabaseName(db_name);
         if (drv_info.fileBased) {
-            project_data->connectionData()->setFileName(db_name);
+            project_data.connectionData()->setFileName(db_name);
         }
-        project_data->connectionData()->driverName = drv_name;
+        project_data.connectionData()->driverName = drv_name;
         project = new KexiProject(project_data);
         bool incompatibleWithKexi = false;
         tristate res;

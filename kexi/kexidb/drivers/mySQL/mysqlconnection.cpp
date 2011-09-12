@@ -212,7 +212,7 @@ QString MySqlConnection::serverErrorMsg()
 
 bool MySqlConnection::drv_containsTable(const QString &tableName)
 {
-    bool success;
+    bool success=false;
     return resultExists(QString("show tables like %1")
                         .arg(driver()->escapeString(tableName)), success) && success;
 }

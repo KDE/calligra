@@ -27,7 +27,7 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexidbtextwidgetinterface.h"
 #include <widget/utils/kexidisplayutils.h>
 #include <formeditor/FormWidgetInterface.h>

@@ -125,19 +125,19 @@ class KexiProject::ErrorTitle
   QString prev_err_title;
 };*/
 
-KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler)
+KexiProject::KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler)
         : QObject(), Object(handler)
         , d(new Private())
 {
-    d->data = pdata;
+    d->data = new KexiProjectData(pdata);
 }
 
-KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler,
+KexiProject::KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler,
                          KexiDB::Connection* conn)
         : QObject(), Object(handler)
         , d(new Private())
 {
-    d->data = pdata;
+    d->data = new KexiProjectData(pdata);
     if (d->data->connectionData() == d->connection->data())
         d->connection = conn;
     else
@@ -1013,11 +1013,11 @@ const char* warningNoUndo = I18N_NOOP("Warning: entire project's data will be re
 
 /*static*/
 KexiProject*
-KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
+KexiProject::createBlankProject(bool &cancelled, const KexiProjectData& data,
                                 KexiDB::MessageHandler* handler)
 {
     cancelled = false;
-    KexiProject *prj = new KexiProject(new KexiProjectData(*data), handler);
+    KexiProject *prj = new KexiProject(data, handler);
 
     tristate res = prj->create(false);
     if (~res) {
@@ -1046,15 +1046,15 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 }
 
 /*static*/
-tristate KexiProject::dropProject(KexiProjectData* data,
+tristate KexiProject::dropProject(const KexiProjectData& data,
                                   KexiDB::MessageHandler* handler, bool dontAsk)
 {
     if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0,
             i18n("Do you want to drop the project \"%1\"?",
-                 static_cast< KexiDB::SchemaData* >(data)->objectName()) + "\n" + i18n(warningNoUndo)))
+                 static_cast<const KexiDB::SchemaData*>(&data)->objectName()) + "\n" + i18n(warningNoUndo)))
         return cancelled;
 
-    KexiProject prj(new KexiProjectData(*data), handler);
+    KexiProject prj(data, handler);
     if (!prj.open())
         return false;
 

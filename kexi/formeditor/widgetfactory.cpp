@@ -21,6 +21,7 @@
 
 #include "widgetfactory.h"
 
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
 //#ifdef KEXI_KTEXTEDIT
@@ -29,7 +30,11 @@
 #include <klineedit.h>
 //#endif
 #include <kdialog.h>
-#include <keditlistbox.h>
+#if KDE_IS_VERSION(4,5,90)
+# include <keditlistwidget.h>
+#else
+# include <keditlistbox.h>
+#endif
 //2.0#include <kxmlguiclient.h>
 #include <kactioncollection.h>
 
@@ -125,11 +130,14 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
     KDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
-    dialog.setWindowTitle(i18n("Edit List of Items"));
+    dialog.setWindowTitle(i18n("Edit Contents of %1", w->objectName()));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
 
-    KEditListBox *edit = new KEditListBox(
-        i18n("Contents of %1", w->objectName()), &dialog);
+#if KDE_IS_VERSION(4,5,90)
+    KEditListWidget *edit = new KEditListWidget(&dialog);
+#else
+    KEditListBox *edit = new KEditListBox(&dialog);
+#endif
     edit->setObjectName("editlist");
     dialog.setMainWidget(edit);
     edit->insertStringList(list);

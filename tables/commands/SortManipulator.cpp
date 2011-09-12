@@ -194,8 +194,10 @@ bool SortManipulator::shouldReorder(Element *element, int first, int second)
         Value val2 = Cell(m_sheet, col2, row2).value();
         // empty values always go to the end, so if second value is empty and
         // first one is not, we don't need to reorder
-        if ((!val1.isEmpty()) && val2.isEmpty())
+        if (!val1.isEmpty() && val2.isEmpty())
             return false;
+        if (val1.isEmpty() && !val2.isEmpty())
+            return true;
 
         // custom list ?
         if (m_usecustomlist) {

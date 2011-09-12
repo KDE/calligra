@@ -24,7 +24,6 @@
 #include <KoPADocument.h>
 #include <KWDocument.h>
 #include <tables/part/Doc.h>
-#include <KarbonPart.h>
 
 #include <KMimeType>
 #include <kmimetypetrader.h>
@@ -42,7 +41,13 @@
 #include "CSThumbProviderStage.h"
 #include "CSThumbProviderTables.h"
 #include "CSThumbProviderWords.h"
+
+#include "config_cstester.h"
+
+#ifdef BUILD_KARBON
+#include <KarbonPart.h>
 #include "CSThumbProviderKarbon.h"
+#endif
 
 KoDocument* openFile(const QString &filename)
 {
@@ -117,9 +122,11 @@ QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
     else if (KWDocument *doc = qobject_cast<KWDocument*>(document)) {
         tp = new CSThumbProviderWords(doc);
     }
+#ifdef BUILD_KARBON
     else if (KarbonPart *doc = qobject_cast<KarbonPart*>(document)) {
         tp = new CSThumbProviderKarbon(doc);
     }
+#endif
 
     return tp->createThumbnails(thumbSize);
 }

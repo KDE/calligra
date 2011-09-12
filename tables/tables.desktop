@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Calligra Tables
 Name[cs]=Calligra Tables
+Name[da]=Calligra Tables
+Name[de]=Calligra Tables
 Name[el]=Πίνακες Calligra
 Name[en_GB]=Calligra Tables
 Name[et]=Calligra Tables
@@ -11,6 +13,7 @@ Name[nl]=Calligra-tabellen
 Name[pl]=Calligra Tables
 Name[pt]=Tables do Calligra
 Name[pt_BR]=Calligra Tables
+Name[ru]=Calligra Tables
 Name[sv]=Calligra Tables
 Name[uk]=Tables Calligra
 Name[x-test]=xxCalligra Tablesxx
@@ -46,6 +49,7 @@ GenericName[oc]=Fuèlha de calcul
 GenericName[pl]=Arkusz kalkulacyjny
 GenericName[pt]=Folha de cálculo
 GenericName[pt_BR]=Planilha
+GenericName[ru]=Таблица
 GenericName[sl]=Preglednica
 GenericName[sv]=Kalkylark
 GenericName[tr]=Hesap Tablosu

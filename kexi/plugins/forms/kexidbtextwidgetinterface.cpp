@@ -18,7 +18,7 @@
 */
 
 #include "kexidbtextwidgetinterface.h"
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
 #include <qpainter.h>

@@ -29,7 +29,7 @@
 #include <KoPACanvasBase.h>
 #include <libs/kopageapp/KoPAPageBase.h>
 #include <libs/kopageapp/KoPAViewModeNormal.h>
-#include <kpresenter/part/KPrDocument.h>
+#include <stage/part/KPrDocument.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoSelection.h>

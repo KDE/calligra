@@ -25,15 +25,18 @@
 #include <KoGenChange.h>
 #include "KoText.h"
 #include <KoToolSelection.h>
-
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>
+#include <QTextFrame>
 
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
+class KoInlineCite;
+class KoBibliographyInfo;
 class KoCanvasBase;
+class KoTableOfContentsGeneratorInfo;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -71,6 +74,11 @@ public: // KoToolSelection overloads
     /// returns true if the wrapped QTextCursor has a selection.
     bool hasSelection();
 
+    /** returns true if the current cursor position is protected from editing
+     * @param cached use cached value if available.
+     */
+    bool isEditProtected(bool useCached = false);
+
 public:
 
     /// Called when loading is done to check whether there's bidi text in the document.
@@ -90,7 +98,24 @@ public:
 
     bool operator>=(const QTextCursor &other) const;
 
-public slots:
+private:
+
+    friend class KoTextPaste;
+    friend class CharFormatVisitor;
+
+    // all these commands, including the ones in the textshape, should move to KoText
+    friend class DeleteTableRowCommand;
+    friend class DeleteTableColumnCommand;
+    friend class InsertTableRowCommand;
+    friend class InsertTableColumnCommand;
+    friend class ChangeTrackedDeleteCommand;
+    friend class DeleteCommand;
+
+    friend class TestKoInlineTextObjectManager;
+
+    // temporary...
+    friend class TextShape;
+    friend class TextTool;
 
     /**
      * This should be used only as read-only cursor or within a KUndo2Command sub-class which
@@ -98,6 +123,8 @@ public slots:
      * such undoCommands, see the TextShape commands.
      */
     QTextCursor* cursor();
+
+public slots:
 
     void addCommand(KUndo2Command *command, bool addCommandToStack = true);
 
@@ -138,10 +165,17 @@ public slots:
     void setStyle(KoCharacterStyle *style);
 
     /**
-    * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
-    * @param inliner the object to insert.
-    */
+     * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
+     * @param inliner the object to insert.
+     */
     void insertInlineObject(KoInlineObject *inliner);
+
+    /**
+     * update the position of all inline objects from the given start point to the given end point.
+     * @param start start position for updating. If 0, we update from the start of the document
+     * @param end end position for updating. If -1, we update to the end of the document
+     */
+    void updateInlineObjectPosition(int start = 0, int end = -1);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
@@ -194,7 +228,7 @@ public slots:
 
     void deletePreviousChar();
 
-    QTextDocument *document() const;
+    const QTextDocument *document() const;
 
     void endEditBlock();
 
@@ -260,10 +294,17 @@ public slots:
      */
     void insertTableOfContents();
 
+    void updateTableOfContents(KoTableOfContentsGeneratorInfo *info,QTextBlock block);
+
+    void insertBibliography();
+
+    KoInlineCite *insertCitation();
+
     void insertText(const QString &text);
 
     void insertText(const QString &text, const QTextCharFormat &format);
 
+    void insertHtml(const QString &html);
 //    void joinPreviousEditBlock ();
 
     void mergeBlockCharFormat( const QTextCharFormat &modifier);
@@ -306,9 +347,16 @@ public slots:
 
     bool isBidiDocument() const;
 
+    const QTextFrame *currentFrame () const;
+    const QTextList *currentList () const;
+    const QTextTable *currentTable () const;
+
 signals:
     void isBidiUpdated();
     void cursorPositionChanged();
+
+protected:
+    bool recursiveProtectionCheck(QTextFrame::iterator it);
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())
@@ -319,5 +367,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoTextEditor*)
-
+Q_DECLARE_METATYPE(bool *)
 #endif // KOTEXTEDITOR_H
