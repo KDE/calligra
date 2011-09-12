@@ -1547,7 +1547,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     if (m_type != ParagraphBulletProperties::PictureType) {
         returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
     }
-    if (m_bulletFont != "UNUSED") {
+    if (m_bulletFont != "UNUSED" && (m_type == ParagraphBulletProperties::BulletType)) {
         returnValue += QString("fo:font-family=\"%1\" ").arg(m_bulletFont);
     }
 
