@@ -407,11 +407,12 @@ Duration PlanTJScheduler::calcPositiveFloat( Task *task )
 
 void PlanTJScheduler::calcPertValues()
 {
+    // NOTE: no need for milliseconds as TJ works with seconds
     foreach ( Task* t, m_taskmap ) {
         qDebug()<<"calcPertValues:"<<t->name()<<t->startTime()<<t->endTime();
         qint64 startfloat = 0, freefloat = 0, negativefloat = 0;
         foreach ( const Relation *r, t->dependParentNodes() + t->parentProxyRelations() ) {
-            qint64 f = r->parent()->endTime().msecsTo( t->startTime() ) - r->lag().milliseconds();
+            qint64 f = (qint64)(r->parent()->endTime().secsTo( t->startTime() ) - r->lag().seconds());
             if ( f < negativefloat ) {
                 negativefloat = f;
             }
@@ -420,18 +421,18 @@ void PlanTJScheduler::calcPertValues()
             }
         }
         foreach ( const Relation *r, t->dependChildNodes() + t->childProxyRelations() ) {
-            qint64 f = t->endTime().msecsTo( r->child()->startTime() ) - r->lag().milliseconds();
+            qint64 f = t->endTime().secsTo( r->child()->startTime() ) - r->lag().seconds();
             if ( f > 0 && ( freefloat == 0 || freefloat > f ) ) {
                 freefloat = f;
             }
         }
-        t->setFreeFloat( Duration( freefloat ) );
-        t->setNegativeFloat( Duration( negativefloat ) );
+        t->setFreeFloat( Duration( freefloat, Duration::Unit_s ) );
+        t->setNegativeFloat( Duration( negativefloat, Duration::Unit_s ) );
         // TODO calculate real values dependent on resources
-        t->setEarlyStart( t->startTime().addMSecs( -startfloat ) );
-        t->setLateStart( t->startTime().addMSecs( freefloat ) );
-        t->setEarlyFinish( t->endTime().addMSecs( -startfloat ) );
-        t->setLateFinish( t->endTime().addMSecs( freefloat ) );
+        t->setEarlyStart( t->startTime().addSecs( -startfloat ) );
+        t->setLateStart( t->startTime().addSecs( freefloat ) );
+        t->setEarlyFinish( t->endTime().addSecs( -startfloat ) );
+        t->setLateFinish( t->endTime().addSecs( freefloat ) );
     }
     m_project->calcCriticalPathList( m_schedule );
     // calculate positive float
