@@ -1,6 +1,11 @@
 
 Calligra Plan current:
 
+* Improve scripting
+  Add create capability to make it possible to write importer.
+  Use undo commands so it is possible to keep ui consistent.
+  Cleaner API.
+
 * Fix bug 277074: Task description tooltip does not show full description
 
 * Fix bug 274805: Effort Estimate defaults to 8.0Y instead of 8.0h on first instance.
