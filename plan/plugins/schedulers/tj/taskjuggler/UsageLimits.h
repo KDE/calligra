@@ -31,7 +31,8 @@ class UsageLimits
         UsageLimits() :
             dailyMax(0),
             weeklyMax(0),
-            monthlyMax(0)
+            monthlyMax(0),
+            dailyUnits(0)
         { }
 
         ~UsageLimits() { }
@@ -45,10 +46,14 @@ class UsageLimits
         void setMonthlyMax(uint m) { monthlyMax = m; }
         uint getMonthlyMax() const { return monthlyMax; }
 
+        void setDailyUnits( uint units ) { dailyUnits = units; }
+        uint getDailyUnits() const { return dailyUnits; }
+
     private:
         uint dailyMax;
         uint weeklyMax;
         uint monthlyMax;
+        uint dailyUnits;
 } ;
 
 } // namespace TJ

@@ -386,8 +386,33 @@ Resource::isAvailable(time_t date)
         TJMH.debugMessage(QString("Resource is available today (%1) ").arg(time2ISO(date)), this);
         return 0;
     }
-
-    if ((limits && limits->getDailyMax() > 0))
+    if (limits && limits->getDailyUnits() > 0) {
+        int bookedSlots = 1;
+        int workSlots = 0;
+        for (uint i = DayStartIndex[sbIdx]; i <= DayEndIndex[sbIdx]; i++) {
+            SbBooking* b = scoreboard[i];
+            if (b == (SbBooking*) 0) {
+                ++workSlots;
+            } else if (b >= (SbBooking*) 4) {
+                ++workSlots;
+                ++bookedSlots;
+            }
+        }
+        if ( workSlots > 0 ) {
+            workSlots = (workSlots * limits->getDailyUnits()) / 100;
+            if (workSlots == 0) {
+                workSlots = 1;
+            }
+        }
+        if (bookedSlots > workSlots) {
+            if (DEBUGRS(2)) {
+                qDebug()<<"Resource is overloaded:"<<name<<"units="<<limits->getDailyUnits()<<"work="<<workSlots<<"booked="<<bookedSlots;
+            }
+            TJMH.debugMessage(QString("Resource is overloaded today: %1 (%2 slots)").arg(time2ISO(date)).arg(bookedSlots), this);
+            return 2; //TODO review
+        }
+    }
+    else if ((limits && limits->getDailyMax() > 0))
     {
         // Now check that the resource is not overloaded on this day.
         uint bookedSlots = 1;

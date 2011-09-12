@@ -35,6 +35,7 @@
 #include "taskjuggler/Interval.h"
 #include "taskjuggler/Allocation.h"
 #include "taskjuggler/Utility.h"
+#include "taskjuggler/UsageLimits.h"
 #include "taskjuggler/CoreAttributes.h"
 #include "taskjuggler/TjMessageHandler.h"
 
@@ -462,8 +463,18 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
     TJ::Resource *res = new TJ::Resource( m_tjProject, r->id(), r->name(), 0 );
     if ( r->type() == Resource::Type_Material ) {
         res->setEfficiency( 0.0 );
+    } else {
+        res->setEfficiency( 1.0 );
     }
-    res->setEfficiency( (double)(r->units()) / 100. );
+    if ( r->units() < 100 ) {
+        TJ::UsageLimits *l = new TJ::UsageLimits();
+        l->setDailyUnits( r->units() );
+        res->setLimits( new TJ::UsageLimits() );
+    } else if ( r->units() > 100 ) {
+        if ( locale() ) {
+            logWarning( 0, r, i18n("Units > 100% is not suppoerted: Using 100%" ) );
+        }
+    }
     Calendar *cal = r->calendar();
     int days[ 7 ] = { Qt::Sunday, Qt::Monday, Qt::Tuesday, Qt::Wednesday, Qt::Thursday, Qt::Friday, Qt::Saturday };
     for ( int i = 0; i < 7; ++i ) {

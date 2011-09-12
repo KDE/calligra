@@ -878,27 +878,32 @@ Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slot
         int availability = isAvailable(allocation, (*rti), date);
         if (availability == 0)
         {
-            if ((*rti)->book(new Booking(Interval(date, date + slotDuration - 1), this))) {
-                addBookedResource(*rti);
-                TJMH.debugMessage(QString("Booked resource: '%1' at %2, done=%3").arg((*rti)->getName()).arg(time2tjp(date)).arg(doneEffort), this);
-                if (DEBUGTS(6)) {
-                    qDebug()<<" Booked resource"<<(*rti)->getName()<<"( Effort:"<<doneEffort<<")";
-                }
-            } else {
+            if (!(*rti)->book(new Booking(Interval(date, date + slotDuration - 1), this))) {
                 TJMH.warningMessage(QString("Failed to book resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
+                if (DEBUGTS(2)) {
+                    qWarning()<<" Failed to book resource"<<(*rti)->getName()<<"( Effort:"<<doneEffort<<")";
+                }
                 continue;
+            }
+            addBookedResource(*rti);
+            TJMH.debugMessage(QString("Booked resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
+            if (DEBUGTS(20)) {
+                qDebug()<<" Booked resource"<<(*rti)->getName()<<"at"<<time2ISO(date);
             }
             if (allocation->hasRequiredResources(*rti)) {
                 foreach(Resource *r, allocation->getRequiredResources(*rti)) {
                     if (r->book(new Booking(Interval(date, date + slotDuration - 1), this))) {
                         addBookedResource(r);
                         TJMH.debugMessage(QString("Booked required resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
-                        if (DEBUGTS(6)) {
-                            qDebug()<<" Booked required resource"<<r->getName()<<"( Effort:"<<doneEffort<<")";
+                        if (DEBUGTS(20)) {
+                            qDebug()<<" Booked required resource"<<r->getName()<<"at"<<time2ISO(date);
                         }
                     } else {
-                        TJMH.warningMessage(QString("Failed to book required resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
                         // NOTE: we shouldn't fail so just go on as booking the main resource worked ok
+                        TJMH.warningMessage(QString("Failed to book required resource: '%1' at %2").arg((*rti)->getName()).arg(time2tjp(date)), this);
+                        if (DEBUGTS(2)) {
+                            qWarning()<<" Failed to book required resource"<<(*rti)->getName()<<"( Effort:"<<doneEffort<<")";
+                        }
                     }
                 }
             }
