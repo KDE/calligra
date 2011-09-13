@@ -198,7 +198,7 @@ ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
         "<item>Rename categories or views</item>"
         "<item>Configure. Move, remove, rename or edit tool tip for categories or views</item>"
         "<item>Insert categories and views</item>"
-        "</list>"
+        "</list></para>"
     ) );
 
     header() ->hide();
