@@ -755,9 +755,33 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
         {
             QList<Resource*> resources = a->getCandidates();
             QString resStr = "";
-            foreach (Resource *r, resources)
+            foreach (Resource *r, resources) {
                 resStr += r->getId() + " ";
-            if (limits->getDailyMax() > 0)
+            }
+            if (limits->getDailyUnits() > 0) {
+                uint bookedSlots = 0;
+                int workSlots = 0;
+                foreach (Resource *r, resources) {
+                    workSlots += r->getWorkSlots(date); // returns 0 if no bookings yet
+                    bookedSlots += r->getCurrentDaySlots(date, this); // booked to this task
+                }
+                if ( workSlots > 0 ) {
+                    workSlots = (workSlots * limits->getDailyUnits()) / 100;
+                    if (workSlots == 0) {
+                        workSlots = 1;
+                    }
+                }
+                int freeSlots = bookedSlots > 0 ?  workSlots - bookedSlots : 1; // allways allow one booking
+                if (freeSlots <= 0) {
+                    if (DEBUGRS(6)) {
+                        qDebug()<<"  Resource(s)"<<resStr<<"overloaded";
+                    }
+                    continue;
+                } else if (slotsToLimit < 0 || slotsToLimit > freeSlots) {
+                    slotsToLimit = freeSlots;
+                }
+            }
+            else if (limits->getDailyMax() > 0)
             {
                 uint slotCount = 0;
                 foreach (Resource *r, resources)

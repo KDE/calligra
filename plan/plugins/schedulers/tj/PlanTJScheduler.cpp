@@ -360,7 +360,8 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
         QList<TJ::Interval> lst = r->getBookedIntervals( 0, job );
         foreach ( const TJ::Interval &tji, lst ) {
             AppointmentInterval ai = fromTJInterval( tji );
-            res->addAppointment( cs, ai.startTime(), ai.endTime(), ai.load() );
+            double load = res->type() == Resource::Type_Material ? res->units() : ai.load() * r->getEfficiency();
+            res->addAppointment( cs, ai.startTime(), ai.endTime(), load );
             if ( locale() ) cs->logDebug( "'" + res->name() + "' added appointment: " +  ai.startTime().toString( Qt::ISODate ) + " - " + ai.endTime().toString( Qt::ISODate ) );
         }
     }
@@ -464,16 +465,7 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
     if ( r->type() == Resource::Type_Material ) {
         res->setEfficiency( 0.0 );
     } else {
-        res->setEfficiency( 1.0 );
-    }
-    if ( r->units() < 100 ) {
-        TJ::UsageLimits *l = new TJ::UsageLimits();
-        l->setDailyUnits( r->units() );
-        res->setLimits( new TJ::UsageLimits() );
-    } else if ( r->units() > 100 ) {
-        if ( locale() ) {
-            logWarning( 0, r, i18n("Units > 100% is not suppoerted: Using 100%" ) );
-        }
+        res->setEfficiency( (double)(r->units()) / 100. );
     }
     Calendar *cal = r->calendar();
     int days[ 7 ] = { Qt::Sunday, Qt::Monday, Qt::Tuesday, Qt::Wednesday, Qt::Thursday, Qt::Friday, Qt::Saturday };
@@ -724,11 +716,15 @@ void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
     if ( task->requests().isEmpty() ) {
         return;
     }
-    // TODO usage limit/units
     foreach ( ResourceRequest *rr, task->requests().resourceRequests( true /*resolveTeam*/ ) ) {
         TJ::Resource *tjr = addResource( rr->resource() );
         TJ::Allocation *a = new TJ::Allocation();
         a->setSelectionMode( TJ::Allocation::order );
+        if ( rr->units() != 100 ) {
+            TJ::UsageLimits *l = new TJ::UsageLimits();
+            l->setDailyUnits( rr->units() );
+            a->setLimits( l );
+        }
         a->addCandidate( tjr );
         job->addAllocation( a );
         if ( locale() ) { logDebug( task, 0, "Add resource candidate: " + rr->resource()->name() ); }

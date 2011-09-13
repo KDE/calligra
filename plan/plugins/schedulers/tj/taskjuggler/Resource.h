@@ -118,6 +118,9 @@ public:
 
     double getCurrentLoad(const Interval& i, const Task* task = 0) const;
 
+    /// Get the number of work slots for the day @p date. It includes both free and booked.
+    uint getWorkSlots(time_t date) const;
+
     uint getCurrentDaySlots(time_t date, const Task* t);
     uint getCurrentWeekSlots(time_t date, const Task* t);
     uint getCurrentMonthSlots(time_t date, const Task* t);

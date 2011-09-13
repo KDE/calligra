@@ -37,16 +37,26 @@ class UsageLimits
 
         ~UsageLimits() { }
 
+        /// Set the max number of work slots that can be allocated per day
+        /// dailyUnits has precedence over dailyMax
         void setDailyMax(uint m) { dailyMax = m; }
+        /// Get the max number of work slots that can be allocated per day
         uint getDailyMax() const { return dailyMax; }
 
+        /// Set the max number of work slots that can be allocated per week
         void setWeeklyMax(uint m) { weeklyMax = m; }
+        /// Get the max number of work slots that can be allocated per week
         uint getWeeklyMax() const { return weeklyMax; }
 
+        /// Set the max number of work slots that can be allocated per month
         void setMonthlyMax(uint m) { monthlyMax = m; }
+        /// Get the max number of work slots that can be allocated per month
         uint getMonthlyMax() const { return monthlyMax; }
 
+        /// Set percentage of how many working slots can be allocated on a day of total number of working slots
+        /// dailyUnits has precedence over dailyMax
         void setDailyUnits( uint units ) { dailyUnits = units; }
+        /// Get percentage of how many working slots can be allocated on a day of total number of working slots
         uint getDailyUnits() const { return dailyUnits; }
 
     private:

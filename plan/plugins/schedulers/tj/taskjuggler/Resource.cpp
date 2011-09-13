@@ -684,6 +684,23 @@ Resource::getCurrentLoadSub(uint startIdx, uint endIdx, const Task* task) const
 }
 
 uint
+Resource::getWorkSlots(time_t date) const
+{
+    if (!scoreboard) {
+        return 0;
+    }
+    uint workSlots = 0;
+    uint sbIdx = sbIndex(date);
+    for (uint i = DayStartIndex[sbIdx]; i <= DayEndIndex[sbIdx]; i++) {
+        SbBooking* b = scoreboard[i];
+        if (b == (SbBooking*) 0 || b >= (SbBooking*) 4) {
+            ++workSlots;
+        }
+    }
+    return workSlots;
+}
+
+uint
 Resource::getCurrentDaySlots(time_t date, const Task* t)
 {
     /* Return the number of slots this resource is allocated to in the current
