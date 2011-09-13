@@ -73,7 +73,6 @@
   <Action name="insert_comment"/>
   <Action name="insert_file"/>
   <Action name="add_bookmark"/>
-  <Action name="inline_frame"/>
   <Separator/>
   <!-- Frames - the order matches the order of the keybindings -->
   <Action name="insert_table"/>
@@ -292,6 +291,7 @@
  <ActionList name="frameset_type_action"/> <!-- Used for frameset type (picture, part...) specific actions -->
  <Action name="spelling_suggestions"/>
  <Separator/>
+ <Action name="anchor"/>
  <Action name="format_frameset"/>
 </Menu>
 </kpartgui>
