@@ -1622,8 +1622,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Note that if buNone has been specified, we don't create a list
     m_currentListLevel = 1; // By default we're in the first level
 
+    bool fileByPowerPoint = false;
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
+    fileByPowerPoint = true;
 #else
     m_prevListLevel = m_currentListLevel = 0;
 #endif
@@ -1639,7 +1641,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         index++;
         i.next();
         m_currentListStyle.addChildElement(QString("list-style-properties%1").arg(index),
-            i.value().convertToListProperties());
+            i.value().convertToListProperties(fileByPowerPoint));
     }
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
@@ -1769,7 +1771,7 @@ Q_UNUSED(pprRead);
         m_currentBulletProperties.m_level = m_currentListLevel;
 
         m_currentListStyle.addChildElement("list-style-properties",
-            m_currentBulletProperties.convertToListProperties());
+            m_currentBulletProperties.convertToListProperties(fileByPowerPoint));
         m_previousListWasAltered = true;
     }
 

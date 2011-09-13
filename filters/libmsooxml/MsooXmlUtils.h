@@ -74,7 +74,7 @@ public:
 
     void clear();
 
-    QString convertToListProperties() const;
+    QString convertToListProperties(const bool fileByPowerPoint = false) const;
 
     bool isEmpty() const;
 
