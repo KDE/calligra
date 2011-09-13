@@ -213,8 +213,8 @@ flake
 kokross    SHOULD_BUILD_SCRIPTING                                      NO
 kopageapp
 koplugin                                                               NO
-koproperty                                 Kexi, KPlato                NO
-koreports                                  Kexi, KPlato                NO
+koproperty                                 Kexi, Plan                  NO
+koreports                                  Kexi, Plan                  NO
 kotext
 main
 odf
