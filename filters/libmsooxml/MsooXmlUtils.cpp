@@ -1386,6 +1386,11 @@ void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
     m_indent = QString("%1").arg(indent);
 }
 
+void Utils::ParagraphBulletProperties::setPrefix(const QString& prefixChar)
+{
+    m_prefix = prefixChar;
+}
+
 void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
 {
     m_suffix = suffixChar;

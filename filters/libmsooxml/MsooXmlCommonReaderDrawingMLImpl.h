@@ -5760,44 +5760,75 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
     TRY_READ_ATTR_WITHOUT_NS(type)
 
     if (!type.isEmpty()) {
-        if (type == "arabicPeriod") {
+        if (type == "alphaLcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaLcPeriod") {
             m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaUcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "arabicParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("1");
         }
         else if (type == "arabicParenR") {
             m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("1");
         }
-        else if (type == "alphaUcPeriod") {
+        else if (type == "arabicPeriod") {
             m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("A");
+            m_currentBulletProperties.setNumFormat("1");
         }
-        else if (type == "alphaLcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("a");
+        else if (type == "arabicPlain") {
+            m_currentBulletProperties.setNumFormat("1");
         }
-        else if (type == "alphaUcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("A");
-        }
-        else if (type == "alphaLcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("a");
-        }
-        else if (type == "romanUcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("I");
-        }
-        else if (type == "romanLcPeriod") {
+        else if (type == "romanLcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
             m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanLcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanUcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("I");
         }
         else if (type == "romanUcParenR") {
             m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("I");
         }
-        else if (type == "romanLcParenR") {
-            m_currentBulletProperties.setSuffix(")");
+        else if (type == "romanUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("I");
+        } else {
+            m_currentBulletProperties.setSuffix(".");
             m_currentBulletProperties.setNumFormat("i");
         }
     }

@@ -80,6 +80,8 @@ public:
 
     void setBulletChar(const QString& bulletChar);
 
+    void setPrefix(const QString& prefixChar);
+
     void setSuffix(const QString& suffixChar);
 
     void setAlign(const QString& align);
@@ -123,6 +125,7 @@ private:
     QString m_bulletFont;
     QString m_bulletChar;
     QString m_numFormat;
+    QString m_prefix;
     QString m_suffix;
     QString m_align;
     QString m_indent;
