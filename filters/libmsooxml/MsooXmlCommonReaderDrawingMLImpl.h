@@ -1727,8 +1727,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
 #else
-Q_UNUSED(pprRead);
+    Q_UNUSED(pprRead);
 #endif
+
+    //check if the automatic numbering information applies
+    if ((m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) ||
+        (m_prevListLevel < m_currentListLevel))
+    {
+        m_continueListNumbering[m_currentListLevel] = false;
+    }
 
     body = textPBuf.originalWriter();
     if (m_listStylePropertiesAltered || m_previousListWasAltered) {
@@ -1755,14 +1762,23 @@ Q_UNUSED(pprRead);
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
-    /* Commented out for now, as this creates completely new lists which is not wanted
-       Maybe the correct behaviour would be to default to text color of the text in calligra instead of using this
-    if (m_currentBulletProperties.bulletColor() == "UNUSED") {
-        m_listStylePropertiesAltered = true;
-        if (!bulletColor.isEmpty()) {
-            m_currentBulletProperties.setBulletColor(bulletColor);
-        }
-    }*/
+    // NOTE: Commented out for now, as this creates completely new lists which
+    // is not wanted.  Maybe the correct behaviour would be to default to text
+    // color of the text in calligra instead of using this.
+    //
+    // FIXME: The PowerPoint UI enables to change the color of a bullet/number
+    // so we have to respect the information.  If no color for the
+    // bullet/number is provided, then the font color of the 1st text chunk
+    // MUST be used.  Help the layout a bit and provide the information here.
+    // In case of MS Word, the font color from text properties of the paragraph
+    // MUST be used.
+
+/*     if (m_currentBulletProperties.bulletColor() == "UNUSED") { */
+/*         m_listStylePropertiesAltered = true; */
+/*         if (!bulletColor.isEmpty()) { */
+/*             m_currentBulletProperties.setBulletColor(bulletColor); */
+/*         } */
+/*     } */
 
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
@@ -1775,19 +1791,24 @@ Q_UNUSED(pprRead);
         m_previousListWasAltered = true;
     }
 
+    // Making sure that if we were previously in a list and if there's an empty
+    // line, that we don't output a bullet to it.
     if (!rRead) {
-        // Making sure that if we were previously in a list and if there's an empty line, that
-        // we don't output a bullet to it
         m_currentListLevel = 0;
+        m_continueListNumbering.clear();
     }
-    else if ((m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) ||
-             (m_currentBulletProperties.isEmpty() && m_listStylePropertiesAltered)) {
+    else if ((!m_listStylePropertiesAltered &&
+              m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty()) ||
+             (m_listStylePropertiesAltered && m_currentBulletProperties.isEmpty()))
+    {
         m_currentListLevel = 0;
+        m_continueListNumbering.clear();
     }
 
-    // In MSOffice it's possible that a paragraph defines a list-style that should be used without
-    // being a list-item. We need to handle that case and need to make sure that such paragraph's
-    // end as first-level list-items in ODF.
+    // In MSOffice it's possible that a paragraph defines a list-style that
+    // should be used without being a list-item.  We need to handle that case
+    // and need to make sure that such paragraph's end as first-level
+    // list-items in ODF.
     if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_CPP
          if (m_prevListLevel < m_currentListLevel) {
@@ -1795,7 +1816,7 @@ Q_UNUSED(pprRead);
                  // Because there was an existing list, we need to start ours with list:item
                  body->startElement("text:list-item");
              }
-             for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+             for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                  body->startElement("text:list");
                  if (listDepth == 0) {
                      if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
@@ -1805,8 +1826,13 @@ Q_UNUSED(pprRead);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
                      m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
-                }
-                body->startElement("text:list-item");
+                     if (m_continueListNumbering.contains(m_currentListLevel) &&
+                         m_continueListNumbering[m_currentListLevel])
+                     {
+                         body->addAttribute("text:continue-numbering", "true");
+                     }
+                 }
+                 body->startElement("text:list-item");
              }
          } else if (m_prevListLevel > m_currentListLevel) {
              body->endElement(); // This ends the latest list text:list
@@ -1824,12 +1850,15 @@ Q_UNUSED(pprRead);
              body->startElement("text:list-item");
          }
 #else
-         for(int i = 0; i < m_currentListLevel; ++i) {
+         for (int i = 0; i < m_currentListLevel; ++i) {
              body->startElement("text:list");
-             // Todo, should most likely add the name of the current list style
+             // TODO:, should most likely add the name of the current list style
              body->startElement("text:list-item");
          }
 #endif
+         if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+             m_continueListNumbering[m_currentListLevel] = true;
+         }
      }
 
      // Positioning of list-items defined by fo:margin-left and fo:text-indent
@@ -4515,8 +4544,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
         m_currentDrawStyle->addProperty("svg:stroke-linecap", "butt");
     }
 
-    //TODO
-    //compound line type
+    //TODO: compound line type
     TRY_READ_ATTR_WITHOUT_NS(cmpd)
     //double lines
     if( cmpd.isEmpty() || cmpd == "sng" ) {
@@ -4823,7 +4851,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
 
     TRY_READ_ATTR_WITHOUT_NS(val)
 
-    // TODO support all of them..
+    // TODO: support all of them..
     if (!val.isEmpty()) {
         if (val == "aliceBlue") {
             m_currentColor = QColor(240, 248, 255);
