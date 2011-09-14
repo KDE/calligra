@@ -136,9 +136,9 @@ QString KPlatoAboutPage::tips()
 
     res = res.arg( i18n("Editing tips.") )
     .arg( i18n( 
-        "</br><b>To</b> edit project data, different views and editors can be selected in the View Selector docker."
-        "</br><b>The</b> views are generally used to inspect data after the project has been scheduled. No data will appear in the views if the project has not been scheduled. Scheduling is done in the Schedules editor."
-        "</br><b>You</b> can edit attributes in the various editors by selecting the item you want to edit (doubleclick or press F2), or open a dialog using the context menu."
+        "<br/><b>To</b> edit project data, different views and editors can be selected in the View Selector docker."
+        "<br/><b>The</b> views are generally used to inspect data after the project has been scheduled. No data will appear in the views if the project has not been scheduled. Scheduling is done in the Schedules editor."
+        "<br/><b>You</b> can edit attributes in the various editors by selecting the item you want to edit (doubleclick or press F2), or open a dialog using the context menu."
         "</ul>"
         ) )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
@@ -215,7 +215,7 @@ QString KPlatoAboutPage::tutorial2()
             "<li>Set <em>Estimate Type</em> to <em>Effort</em>.</li>"
             "</ul>"
             "Now you need to schedule the project again with the new allocation:"
-            "</br>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
+            "<br/>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
             "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>.<p>"
         , KGlobal::locale()->formatDateTime( dt, KLocale::FancyLongDate ) ),
         "main",

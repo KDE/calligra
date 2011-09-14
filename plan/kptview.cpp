@@ -2645,7 +2645,7 @@ void View::slotOpenReportFileFinished( int result )
     }
     QFile file( fn );
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:</br><filename>%1</filename>", fn ) );
+        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
     QDomDocument doc;
