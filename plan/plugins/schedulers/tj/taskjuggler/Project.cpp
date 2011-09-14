@@ -17,7 +17,11 @@
 #include "Project.h"
 
 #include <stdlib.h>
-#include <Qt>
+#include <QList>
+#include <QString>
+#include <QStringList>
+
+#include <KLocale>
 #include <KDebug>
 
 #include "TjMessageHandler.h"
@@ -477,7 +481,7 @@ Project::pass2(bool noDepCheck)
 
     if (taskList.isEmpty())
     {
-        TJMH.errorMessage(QString("The project does not contain any tasks."));
+        TJMH.errorMessage(i18nc("@info/plain", "The project does not contain any tasks."));
         return false;
     }
     qDebug()<<"pass2 task info:";
@@ -869,13 +873,13 @@ Project::schedule(int sc)
          * will be scheduled during this run for all subsequent tasks as well.
          */
         foreach (CoreAttributes *t, workItems) {
-            TJMH.debugMessage(QString("'%1' schedule for slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
+//             TJMH.debugMessage(QString("'%1' schedule for slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
             if (slot == 0)
             {
                 /* No time slot has been set yet. Check if this task can be
                  * scheduled and provides a suggestion. */
                 slot = static_cast<Task*>(t)->nextSlot(scheduleGranularity);
-                TJMH.debugMessage(QString("'%1' first slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
+//                 TJMH.debugMessage(QString("'%1' first slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)), t);
                 /* If not, try the next task. */
                 if (slot == 0)
                     continue;
@@ -896,7 +900,6 @@ Project::schedule(int sc)
                 {
                     static_cast<Task*>(t)->setRunaway();
                     runAwayFound = true;
-                    TJMH.warningMessage(QString("'%1' runaway slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
                     slot = 0;
                     continue;
                 }
@@ -917,9 +920,6 @@ Project::schedule(int sc)
                     qDebug()<<QString("Changing scheduling direction to %1 due to task '%2'")
                             .arg(static_cast<Task*>(t)->getScheduling())
                             .arg(static_cast<Task*>(t)->getName());
-                TJMH.debugMessage(QString("Changing scheduling direction to %1 due to task '%2'")
-                            .arg(static_cast<Task*>(t)->getScheduling())
-                            .arg(static_cast<Task*>(t)->getName()));
                 break;
             }
             /* We must avoid that lower priority tasks get resources even
@@ -934,7 +934,6 @@ Project::schedule(int sc)
             // Schedule this task for the current time slot.
             if (static_cast<Task*>(t)->schedule(sc, slot, scheduleGranularity))
             {
-                TJMH.debugMessage(QString("'%1' schedule finished, slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
                 workItems.clear();
                 int oldSortedTasks = sortedTasks;
                 sortedTasks = 0;
@@ -997,22 +996,16 @@ Project::schedule(int sc)
     {
         setProgressInfo("");
         setProgressBar(0, 0);
-        TJMH.errorMessage(QString("Scheduling aborted on user request"));
+        TJMH.infoMessage(i18nc("@info/plain", "Scheduling aborted on user request"));
         return false;
     }
-
     if (runAwayFound) {
         foreach (CoreAttributes *t, taskList) {
             if (static_cast<Task*>(t)->isRunaway()) {
                 if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
-                    static_cast<Task*>(t)->errorMessage(QString("End of task '%1' does not fit into the "
-                              "project time frame. Try using a later project "
-                              "end date.")
-                         .arg(static_cast<Task*>(t)->getName()));
+                    TJMH.errorMessage(i18nc("@info/plain", "End of task does not fit into the project time frame. Try using a later project end date."), t);
                 } else {
-                    static_cast<Task*>(t)->errorMessage(QString("Start of task '%1' does not fit into the "
-                              "project time frame. Try using an earlier "
-                              "project start date.").arg(static_cast<Task*>(t)->getName()));
+                    TJMH.errorMessage(i18nc("@info/plain", "Start of task does not fit into the project time frame. Try using an earlier project start date."), t);
                 }
             }
         }
@@ -1046,9 +1039,7 @@ Project::checkSchedule(int sc) const
             static_cast<Task*>(t)->scheduleOk(sc);
         if (maxErrors > 0 && TJMH.getErrors() >= maxErrors)
         {
-            TJMH.errorMessage
-                (QString("Too many errors in %1 scenario. Giving up.")
-                 .arg(getScenarioId(sc)));
+            TJMH.errorMessage(i18nc("@info/plain", "Too many errors. Giving up."));
             return false;
         }
     }
