@@ -36,6 +36,7 @@
 #include <QScrollBar>
 #include <QAbstractProxyModel>
 #include <QToolButton>
+#include <qmath.h>
 
 #include <cassert>
 
@@ -43,16 +44,42 @@
 #include "../evaldialog/evaldialog.h"
 #endif
 
-/*!\class KDGantt::HeaderWidget
+using namespace KDGantt;
+
+/*!\class KDGantt::Slider
  * \internal
  */
 
-using namespace KDGantt;
+Slider::Slider( QWidget *parent )
+    : QSlider( parent )
+{
+}
+
+void Slider::leaveEvent( QEvent *e )
+{
+    hide();
+    QSlider::leaveEvent( e );
+}
+
+/*!\class KDGantt::HeaderWidget
+ * \internal
+ */
 
 HeaderWidget::HeaderWidget( GraphicsView* parent )
     : QWidget( parent ), m_offset( 0. )
 {
     assert( parent ); // Parent must be set
+
+    m_zoomwidget = new Slider( this );
+    m_zoomwidget->hide();
+    m_zoomwidget->setOrientation( Qt::Horizontal );
+    m_zoomwidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    m_zoomwidget->setGeometry( 0, 0, 200, m_zoomwidget->minimumSizeHint().height()  );
+    m_zoomwidget->setPageStep( 1 );
+    m_zoomwidget->setMaximum( 52 );
+    connect(m_zoomwidget, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
+
+    setMouseTracking( true );
 }
 
 HeaderWidget::~HeaderWidget()
@@ -93,6 +120,9 @@ bool HeaderWidget::event( QEvent* event )
 
 void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
 {
+    if ( m_zoomwidget && m_zoomwidget->isVisible() ) {
+        return;
+    }
     QMenu contextMenu;
 
     DateTimeGrid* const grid = qobject_cast< DateTimeGrid* >( view()->grid() );
@@ -223,6 +253,33 @@ void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
     }
 
     event->accept();
+}
+
+void HeaderWidget::sliderValueChanged( int value )
+{
+    DateTimeGrid* const grid = qobject_cast< DateTimeGrid* >( view()->grid() );
+    if ( grid ) {
+        qreal dw = qPow( 1.25, value ) * 0.1;
+        grid->setDayWidth( dw );
+    }
+}
+
+void HeaderWidget::mouseMoveEvent( QMouseEvent *event )
+{
+    if ( event->pos().y() < height() / 2 && event->pos().x() < 200 ) {
+        DateTimeGrid* const grid = qobject_cast< DateTimeGrid* >( view()->grid() );
+        if ( grid ) {
+            int pos = -1; // daywidth allways >= 0.1
+            for ( qreal dw = grid->dayWidth(); dw >= 0.1 && pos < 52; ++pos ) {
+                dw *= 0.8;
+            }
+            m_zoomwidget->blockSignals( true );
+            m_zoomwidget->setValue( pos );
+            m_zoomwidget->blockSignals( false );
+            m_zoomwidget->show();
+            m_zoomwidget->setFocus();
+        }
+    }
 }
 
 GraphicsView::Private::Private( GraphicsView* _q )
