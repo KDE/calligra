@@ -203,7 +203,15 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
 
     handleDependentProviders(pageNumber);
 
-    QList<KWFrame *> frames = kwdoc->frameLayout()->framesOn(m_textFrameSet, pageNumber);
+    // Determinate the frames that are on the page. Note that the KWFrameLayout only knows
+    // about header, footer and the mainframes but not about all other framesets.
+    QList<KWFrame *> frames;
+    if (m_textFrameSet->type() == Words::OtherFrameSet || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+        if (KWFrame *f = m_textFrameSet->frames().value(pageNumber - 1))
+            frames = QList<KWFrame *>() << f;
+    } else {
+        frames = kwdoc->frameLayout()->framesOn(m_textFrameSet, pageNumber);
+    }
 
     // position OtherFrameSet's which are anchored to this page
     if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
