@@ -277,7 +277,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
          * The project should get back to us later */
         if (!((date - slotDuration <= lastSlot) && (lastSlot < date))) {
             if (DEBUGTS(20)) {
-                qDebug()<<"Scheduling of ASAP task"<<name<<"not continous slots:"<<time2tjp(date)<<"last:"<<time2tjp(lastSlot);
+                qDebug()<<"Scheduling of ASAP task"<<name<<"not continuous slots:"<<time2tjp(date)<<"last:"<<time2tjp(lastSlot);
             }
             return false;
         }
