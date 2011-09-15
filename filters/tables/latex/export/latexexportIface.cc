@@ -22,7 +22,7 @@
 #include "kspreadlatexexportdiaImpl.h"
 
 /*
- *  Constructs a KWordLatexExportDia which is a child of 'parent', with the
+ *  Constructs a WordsLatexExportDia which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to

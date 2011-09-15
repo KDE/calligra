@@ -42,7 +42,7 @@
 #include <QTime>
 #include <QVariant>
 
-// KOffice
+// Calligra
 #include "calligra_tables_export.h"
 
 // KSpread

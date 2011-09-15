@@ -27,7 +27,7 @@
 #include "calligra_tables_limits.h"
 #include "Region.h"
 
-// KOffice
+// Calligra
 #include <KoPageLayout.h>
 #include <KoUnit.h>
 
@@ -396,7 +396,7 @@ QString PrintSettings::saveOdfPageLayout(KoGenStyles &mainStyles,
         pageLayout.addProperty("style:table-centering", "both");
     } else if (d->centerHorizontally) {
         pageLayout.addProperty("style:table-centering", "horizontal");
-    } else if (d->centerHorizontally) {
+    } else if (d->centerVertically) {
         pageLayout.addProperty("style:table-centering", "vertical");
     } else {
         pageLayout.addProperty("style:table-centering", "none");

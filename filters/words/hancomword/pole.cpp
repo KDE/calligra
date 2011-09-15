@@ -662,7 +662,6 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         unsigned p = i * 128;
 
         // would be < 32 if first char in the name isn't printable
-        unsigned prefix = 32;
 
         // parse name of this entry, which stored as Unicode 16-bit
         std::string name;
@@ -673,7 +672,6 @@ void DirTree::load(unsigned char* buffer, unsigned size)
 
         // first char isn't printable ? remove it...
         if (buffer[p] < 32) {
-            prefix = buffer[0];
             name.erase(0, 1);
         }
 

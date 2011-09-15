@@ -44,6 +44,7 @@
 #include "KarbonFactory.h"
 #include "KarbonView.h"
 #include <KarbonCanvas.h>
+#include <KarbonDocument.h>
 
 #include <KoApplication.h>
 #include <KoDataCenterBase.h>
@@ -64,12 +65,13 @@
 #include <KoResourceManager.h>
 #include <KoStoreDevice.h>
 #include <KoShapePainter.h>
+#include <SvgShapeFactory.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -77,7 +79,7 @@
 #include <QtCore/QRectF>
 #include <QtGui/QPainter>
 
-// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+// Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
 
 class KarbonPart::Private
@@ -134,6 +136,8 @@ KarbonPart::KarbonPart(QWidget* parentWidget, const char* widgetName, QObject* p
     resourceManager()->setUndoStack(undoStack());
 
     initConfig();
+
+    SvgShapeFactory::addToRegistry();
 
     // set as default paper
     KoPageLayout pl = pageLayout();

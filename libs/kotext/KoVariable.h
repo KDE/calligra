@@ -20,7 +20,7 @@
 #ifndef __KOVARIABLE_H__
 #define __KOVARIABLE_H__
 
-// KOffice libs
+// Calligra libs
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
@@ -103,7 +103,7 @@ protected:
     void resize(const QTextDocument *document, QTextInlineObject object,
                 int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
 private:
-    void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    void updatePosition(const QTextDocument *document,
                         int posInDocument, const QTextCharFormat &format);
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
                const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);

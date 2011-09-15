@@ -24,7 +24,7 @@
 #define KWCANVAS_H
 
 #include "KWDocument.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include "KWCanvasBase.h"
 
@@ -45,7 +45,7 @@ class KoToolProxy;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_TEST_EXPORT KWCanvas : public QWidget, public KWCanvasBase
+class WORDS_TEST_EXPORT KWCanvas : public QWidget, public KWCanvasBase
 {
     Q_OBJECT
 

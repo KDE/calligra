@@ -705,7 +705,7 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
 
 bool Filter::operator==(const Filter& other) const
 {
-    if (d->targetRangeAddress != d->targetRangeAddress)
+    if (d->targetRangeAddress != other.d->targetRangeAddress)
         return false;
     if (d->conditionSource != other.d->conditionSource)
         return false;

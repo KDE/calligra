@@ -87,7 +87,7 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
 
     QString strBackgroundTextColor = abiPropsMap["bgcolor"].getValue();
     if (strBackgroundTextColor == "transparent") {
-        // KWord has no idea what transparency is, so we use white
+        // Words has no idea what transparency is, so we use white
         stackItem->bgColor.setRgb(255, 255, 255);
     } else if (!strBackgroundTextColor.isEmpty()) {
         // The color information is *not* lead by a hash (#)
@@ -104,7 +104,7 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
 
     QString strFontFamily = abiPropsMap["font-family"].getValue();
     if (!strFontFamily.isEmpty() && (strFontFamily != "(null)")) {
-        // TODO: transform the font-family in a font that we have on the system on which KWord runs.
+        // TODO: transform the font-family in a font that we have on the system on which Words runs.
         stackItem->fontName = strFontFamily;
     }
 }
@@ -183,7 +183,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
             followingElement.setAttribute("name", "Normal");
             layoutElement.appendChild(followingElement);
         }
-        // Else: we are a layout, so we leave the work to KWord (from the style)
+        // Else: we are a layout, so we leave the work to Words (from the style)
     } else {
         // Following style is defined
         // TODO: we should be sure that this style is defined!
@@ -199,29 +199,29 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     }
     layoutElement.appendChild(element);
 
-    int kwordDepth;
-    int kwordNumberingType;
-    int kwordType;
-    QString kwordRightText;
+    int wordsDepth;
+    int wordsNumberingType;
+    int wordsType;
+    QString wordsRightText;
     // level is 1 based like AbiWord, any value lower than 1 means no level!
     if ((level <= 0) || (level >= 15)) {
-        kwordDepth = 0;
-        kwordNumberingType = 2;
-        kwordType = 0;
+        wordsDepth = 0;
+        wordsNumberingType = 2;
+        wordsType = 0;
     } else {
-        kwordDepth = level - 1;
-        kwordNumberingType = 1;
-        kwordType = 1; // ### TEMPORARY
-        kwordRightText = ".";
+        wordsDepth = level - 1;
+        wordsNumberingType = 1;
+        wordsType = 1; // ### TEMPORARY
+        wordsRightText = ".";
     }
 
     element = mainDocument.createElement("COUNTER");
-    element.setAttribute("type", kwordType);
-    element.setAttribute("depth", kwordDepth);
+    element.setAttribute("type", wordsType);
+    element.setAttribute("depth", wordsDepth);
     element.setAttribute("start", 1);
-    element.setAttribute("numberingtype", kwordNumberingType);
+    element.setAttribute("numberingtype", wordsNumberingType);
     element.setAttribute("lefttext", "");
-    element.setAttribute("righttext", kwordRightText);
+    element.setAttribute("righttext", wordsRightText);
     element.setAttribute("bullet", 64);
     element.setAttribute("bulletfont", "Symbol");
     element.setAttribute("customdef", "");
@@ -318,7 +318,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
                 type = 2;
             else if (tabType == 'D') // decimal
                 type = 3;
-            else if (tabType == 'B') // bar (unsupported by KWord)
+            else if (tabType == 'B') // bar (unsupported by Words)
                 type = 0;
             else {
                 kWarning(30506) << "Unknown tabulator type: " << QString(tabType);

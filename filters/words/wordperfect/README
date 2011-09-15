@@ -6,7 +6,7 @@ Please take a look at this if you plan to work on this filter.
 Import filters for WordPerfect
 
 From: Pavel Pisa <pisa cmp felk cvut cz>
-To: koffice@kde.org
+To: calligra@kde.org
 Date: 2004-11-01 11:06
 
 Hello All,
@@ -25,5 +25,5 @@ WPG to EPS and equations.
 http://www.penguin.cz/~fojtik/wp2latex/wp2latex.htm
 
 It could be very helpful to use some pieces and knowledge
-from WP2LaTeX for Koffice WordPerfect import filter.
+from WP2LaTeX for Calligra WordPerfect import filter.
 

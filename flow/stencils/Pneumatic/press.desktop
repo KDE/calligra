@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=press
+Name[nb]=trykk
+Name[pl]=docisk
 Name[pt]=pressão
 Name[pt_BR]=pressão
 Name[sv]=press
@@ -7,3 +9,4 @@ Name[ug]=باس
 Name[uk]=Типове джерело тиску
 Name[x-test]=xxpressxx
 Name[zh_CN]=按下
+Name[zh_TW]=press

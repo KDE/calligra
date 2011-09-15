@@ -40,13 +40,13 @@
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 
 #include <ExportDialog.h>
 #include <asciiexport.h>
 
 K_PLUGIN_FACTORY(ASCIIExportFactory, registerPlugin<ASCIIExport>();)
-K_EXPORT_PLUGIN(ASCIIExportFactory("kwordasciiexport", "calligrafilters"))
+K_EXPORT_PLUGIN(ASCIIExportFactory("wordsasciiexport", "calligrafilters"))
 
 
 class ASCIIWorker : public KWEFBaseWorker
@@ -199,7 +199,7 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
     kDebug(30502) << "Entering ASCIIWorker::doFullParagraph";
 
 #if 0
-    // As KWord has only one depth of lists, we can process lists very simply.
+    // As Words has only one depth of lists, we can process lists very simply.
     // --
     // Not anymore - Clarence
     if (layout.counter.numbering == CounterData::NUM_LIST) {
@@ -419,7 +419,7 @@ ASCIIExport::ASCIIExport(QObject* parent, const QVariantList&)
 
 KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (to != "text/plain" || from != "application/x-kword") {
+    if (to != "text/plain" || from != "application/x-words") {
         return KoFilter::NotImplemented;
     }
     AsciiExportDialog* dialog = 0;
@@ -463,7 +463,7 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QB
 
     delete dialog;
 
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     if (!leader) {
         kError(30502) << "Cannot create Worker! Aborting!" << endl;

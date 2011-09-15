@@ -41,13 +41,13 @@
 #include <QToolButton>
 #include <QTabWidget>
 
-class ToolDocker::Private {
+class ToolDocker::Private
+{
 public:
     Private(ToolDocker *dock)
-            : q(dock)
-            ,tabbed(false)
-            ,hasTitle(false)
-    {
+        : q(dock)
+        , tabbed(false)
+        , hasTitle(false) {
         lockIcon = KIcon("object-locked");
         unlockIcon = KIcon("object-unlocked");
         tabIcon = KIcon("tab-new");
@@ -71,9 +71,8 @@ public:
     QToolButton *lockButton;
     QToolButton *tabButton;
 
-    void recreateLayout(const QList<QWidget *> &optionWidgetList)
-    {
-        foreach(QWidget* widget, currentWidgetList) {
+    void recreateLayout(const QList<QWidget *> &optionWidgetList) {
+        foreach(QWidget * widget, currentWidgetList) {
             widget->setParent(hiderWidget);
         }
         qDeleteAll(currentAuxWidgets);
@@ -81,12 +80,12 @@ public:
 
         currentWidgetList = optionWidgetList;
 
-        if (tabbed && currentWidgetList.size() > 1) {
+        if(tabbed && currentWidgetList.size() > 1) {
             QTabWidget *t;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
             currentAuxWidgets.insert(t);
-            foreach(QWidget *widget, currentWidgetList) {
-                if (widget->objectName().isEmpty()) {
+            foreach(QWidget * widget, currentWidgetList) {
+                if(widget->objectName().isEmpty()) {
                     Q_ASSERT(!(widget->objectName().isEmpty()));
                     continue; // skip this docker in release build when assert don't crash
                 }
@@ -99,18 +98,18 @@ public:
             case Qt::BottomDockWidgetArea:
                 housekeeperLayout->setHorizontalSpacing(2);
                 housekeeperLayout->setVerticalSpacing(0);
-                foreach(QWidget* widget, currentWidgetList) {
+                foreach(QWidget * widget, currentWidgetList) {
                     QFrame *s;
                     QLabel *l;
-                    if (widget->objectName().isEmpty()) {
+                    if(widget->objectName().isEmpty()) {
                         continue; // skip this docker in release build when assert don't crash
                     }
-                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2*cnt);
+                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2 * cnt);
                     currentAuxWidgets.insert(l);
-                    housekeeperLayout->addWidget(widget, 1, 2*cnt);
+                    housekeeperLayout->addWidget(widget, 1, 2 * cnt);
                     widget->show();
-                    if (widget != currentWidgetList.last()) {
-                        housekeeperLayout->addWidget(s = new QFrame(), 0, 2*cnt+1, 2, 1);
+                    if(widget != currentWidgetList.last()) {
+                        housekeeperLayout->addWidget(s = new QFrame(), 0, 2 * cnt + 1, 2, 1);
                         s->setFrameShape(QFrame::VLine);
                         currentAuxWidgets.insert(s);
                     }
@@ -122,19 +121,19 @@ public:
                 housekeeperLayout->setHorizontalSpacing(0);
                 housekeeperLayout->setVerticalSpacing(2);
                 cnt = 0;
-                foreach(QWidget *widget, currentWidgetList) {
+                foreach(QWidget * widget, currentWidgetList) {
                     QFrame *s;
                     QLabel *l;
-                    if (widget->objectName().isEmpty()) {
+                    if(widget->objectName().isEmpty()) {
                         Q_ASSERT(!(widget->objectName().isEmpty()));
                         continue; // skip this docker in release build when assert don't crash
                     }
-                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 3*cnt, 0);
+                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 3 * cnt, 0);
                     currentAuxWidgets.insert(l);
-                    housekeeperLayout->addWidget(widget, 3*cnt+1, 0);
+                    housekeeperLayout->addWidget(widget, 3 * cnt + 1, 0);
                     widget->show();
-                    if (widget != currentWidgetList.last()) {
-                        housekeeperLayout->addWidget(s = new QFrame(), 3*cnt+2, 0);
+                    if(widget != currentWidgetList.last()) {
+                        housekeeperLayout->addWidget(s = new QFrame(), 3 * cnt + 2, 0);
                         s->setFrameShape(QFrame::HLine);
                         currentAuxWidgets.insert(s);
                     }
@@ -149,15 +148,13 @@ public:
         housekeeperLayout->invalidate();
     }
 
-    void locationChanged(Qt::DockWidgetArea area)
-    {
+    void locationChanged(Qt::DockWidgetArea area) {
         dockingArea = area;
         recreateLayout(currentWidgetList);
     }
 
-    void toggleLock()
-    {
-        if (!hasTitle) {
+    void toggleLock() {
+        if(!hasTitle) {
             q->setTitleBarWidget(new KoDockWidgetTitleBar(q));
             hasTitle = true;
             lockButton->setIcon(unlockIcon);
@@ -181,9 +178,8 @@ public:
         }
         q->resizeEvent(0);
     }
-    void toggleTab()
-    {
-        if (!tabbed) {
+    void toggleTab() {
+        if(!tabbed) {
             tabbed = true;
             tabButton->setIcon(unTabIcon);
         } else {
@@ -196,7 +192,7 @@ public:
 
 ToolDocker::ToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
-    d(new Private(this))
+      d(new Private(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
@@ -205,13 +201,13 @@ ToolDocker::ToolDocker(QWidget *parent)
     d->hasTitle = cfg.readEntry("Locked", true);
 
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
-    setFeatures(DockWidgetMovable|DockWidgetFloatable);
-    if (d->hasTitle) {
+    setFeatures(DockWidgetMovable | DockWidgetFloatable);
+    if(d->hasTitle) {
         setTitleBarWidget(new KoDockWidgetTitleBar(this));
     } else {
         setTitleBarWidget(new QWidget());
     }
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
@@ -229,7 +225,7 @@ ToolDocker::ToolDocker(QWidget *parent)
     setWidget(d->scrollArea);
 
     d->lockButton = new QToolButton(this);
-    if (d->hasTitle) {
+    if(d->hasTitle) {
         d->lockButton->setIcon(d->unlockIcon);
     } else {
         d->lockButton->setIcon(d->lockIcon);

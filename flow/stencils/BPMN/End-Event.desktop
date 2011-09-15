@@ -1,10 +1,13 @@
 [Desktop Entry]
 Name=End-Event
+Name[es]=Evento final
 Name[et]=Sündmuse lõpp
 Name[nb]=Slutt-hendelse
 Name[nl]=Eindgebeurtenis
+Name[pl]=Zdarzenie-Zakończenia
 Name[pt]=Evento-Final
 Name[pt_BR]=Evento final
+Name[ru]=Завершение события
 Name[sv]=Sluthändelse
 Name[uk]=Кінцева подія
 Name[x-test]=xxEnd-Eventxx

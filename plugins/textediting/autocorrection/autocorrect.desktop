@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Autocorrection plugin
+Name[bg]=Приставка за автокорекция
 Name[ca]=Connector d'autocorrecció
 Name[ca@valencia]=Connector d'autocorrecció
 Name[cs]=Modul pro automatické opravy
@@ -22,7 +23,8 @@ Name[lv]=Autokorekcijas spraudnis
 Name[nb]=Programtillegg for autorettelse
 Name[nds]=Moduul "Automaatsche Korrektuur"
 Name[ne]=स्वत: सुधार गर्ने प्लगइन
-Name[nl]=Autocorrectieplugin
+Name[nl]=Autocorrectieplug-in
+Name[pl]=Wtyczka automatycznego poprawiania
 Name[pt]='Plugin' de correcção automática
 Name[pt_BR]=Plug-in de correção automática
 Name[sv]=Insticksprogram för automatisk korrigering
@@ -32,7 +34,7 @@ Name[wa]=Tchôke-divins di coridjaedje otomatike
 Name[x-test]=xxAutocorrection pluginxx
 Name[zh_CN]=自动更正插件
 Name[zh_TW]=自動修正外掛程式
-X-KDE-ServiceTypes=KOffice/Text-EditingPlugin
+X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KoText-MinVersion=0
 X-KoText-PluginVersion=1

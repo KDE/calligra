@@ -1,9 +1,14 @@
 [Desktop Entry]
 Name=Network
+Name[bg]=Мрежа
+Name[de]=Netzwerk
 Name[el]=Δίκτυο
 Name[es]=Red
 Name[et]=Võrk
+Name[it]=Rete
+Name[nb]=Nettverk
 Name[nl]=Netwerk
+Name[pl]=Sieć
 Name[pt]=Rede
 Name[pt_BR]=Rede
 Name[sv]=Nätverk
@@ -11,4 +16,5 @@ Name[ug]=تور
 Name[uk]=Мережа
 Name[x-test]=xxNetworkxx
 Name[zh_CN]=网络
+Name[zh_TW]=網路
 X-KDE-DirType=odg-collection

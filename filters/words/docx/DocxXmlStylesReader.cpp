@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -173,7 +173,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pPrDefault)
             ELSE_TRY_READ_IF(rPrDefault)
@@ -204,7 +204,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_pPrDefault()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pPr)
             ELSE_WRONG_FORMAT
@@ -230,7 +230,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_rPrDefault()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rPr)
             ELSE_WRONG_FORMAT
@@ -375,7 +375,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
@@ -414,7 +414,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 if (m_currentStyleProperties == 0) {
                     m_currentStyleProperties = new MSOOXML::TableStyleProperties;
                 }
+                m_tableMainStyle = KoTblStyle::create();
                 TRY_READ(tblPr)
+                m_currentStyle->mainStyle = m_tableMainStyle;
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
                 m_currentStyleProperties = 0;
             }
@@ -519,7 +521,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tcPr)
             ELSE_TRY_READ_IF(rPr)

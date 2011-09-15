@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -79,6 +79,21 @@ MsooXmlImport::~MsooXmlImport()
 void MsooXmlImport::reportProgress(unsigned progress)
 {
     emit sigProgress(progress);
+}
+
+void MsooXmlImport::writeConfigurationSettings(KoXmlWriter* settings) const
+{
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "UseFormerLineSpacing");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false");
+    settings->endElement();
+
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "TabsRelativeToIndent");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false"); // ODF=true, MSOffice=false
+    settings->endElement();
 }
 
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,

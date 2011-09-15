@@ -64,7 +64,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QByteArray& from, con
 {
     // Check for proper conversion
     // When 4.x is supported, use also: || (from != "application/x-starwriter")
-    if ((to != "application/x-kword") || (from != "application/vnd.stardivision.writer"))
+    if ((to != "application/x-words") || (from != "application/vnd.stardivision.writer"))
         return KoFilter::NotImplemented;
 
     // Read streams
@@ -96,7 +96,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QByteArray& from, con
     if (!addPageProperties()) return KoFilter::ParsingError;
     maindoc = bodyStuff + tablesStuff + picturesStuff;   // + lots of other things :)
 
-    if (!addKWordHeader()) return KoFilter::ParsingError;
+    if (!addWordsHeader()) return KoFilter::ParsingError;
 
     // Prepare storage device and return
     KoStoreDevice *out = m_chain->storageFile("maindoc.xml", KoStore::Write);
@@ -137,12 +137,12 @@ bool StarWriterImport::checkDocumentVersion()
     return true;
 }
 
-bool StarWriterImport::addKWordHeader()
+bool StarWriterImport::addWordsHeader()
 {
     // Proper prolog and epilog
     QString prolog;
     prolog = "<!DOCTYPE DOC>\n";
-    prolog.append("<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
+    prolog.append("<DOC mime=\"application/x-words\" syntaxVersion=\"2\" editor=\"Words\">\n");
     prolog.append("<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n");
     prolog.append(" <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n");
     prolog.append("</PAPER>\n");
@@ -215,7 +215,7 @@ bool StarWriterImport::addBody()
     return retval;
 }
 
-QString StarWriterImport::convertToKWordString(QByteArray s)
+QString StarWriterImport::convertToWordsString(QByteArray s)
 {
     QString result;
 
@@ -327,7 +327,7 @@ bool StarWriterImport::parseText(const QByteArray& n)
     */
 
     // Write everything to the variable
-    text = convertToKWordString(s);
+    text = convertToWordsString(s);
     bodyStuff.append("  <PARAGRAPH>\n");
     bodyStuff.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
     // FIXME: add FORMATS for pAttributes and cAttributes
@@ -381,7 +381,7 @@ bool StarWriterImport::parseTable(const QByteArray& n)
                 s.resize(len3);
                 for (quint16 k = 0x00; k < len3; k++)
                     s[k] = n[p+0x0B+k];
-                text = convertToKWordString(s);
+                text = convertToWordsString(s);
 
                 // FIXME: check this stuff
                 QString frameName = QString("%1 Cell %2,%3").arg(tableName).arg(row).arg(column);

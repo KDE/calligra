@@ -43,7 +43,7 @@ MergeStrategy::~MergeStrategy()
     delete d;
 }
 
-QUndoCommand* MergeStrategy::createCommand()
+KUndo2Command* MergeStrategy::createCommand()
 {
     if (d->initialSelection == selection()->lastRange()) {
         return 0;

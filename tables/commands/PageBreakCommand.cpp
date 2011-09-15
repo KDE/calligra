@@ -28,7 +28,7 @@
 
 using namespace Calligra::Tables;
 
-PageBreakCommand::PageBreakCommand(QUndoCommand *parent)
+PageBreakCommand::PageBreakCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mode(BreakBeforeColumn)
 {

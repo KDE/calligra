@@ -22,14 +22,14 @@
 
 #include <dcopobject.h>
 
-class KWordLatexExportDia;
+class WordsLatexExportDia;
 
 class LatexExportIface: public DCOPObject
 {
     K_DCOP
 
 public:
-    explicit LatexExportIface(KWordLatexExportDia* dia);
+    explicit LatexExportIface(WordsLatexExportDia* dia);
 
     ~LatexExportIface();
 
@@ -37,7 +37,7 @@ k_dcop:
     void useDefaultConfig();
 
 private:
-    KWordLatexExportDia* _dialog;
+    WordsLatexExportDia* _dialog;
 };
 
 #endif /* __LATEXEXPORTIFACE_H__ */

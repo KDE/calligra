@@ -32,7 +32,7 @@
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoDocumentInfo.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 #include <tables/CellStorage.h>
 #include <tables/Map.h>
@@ -183,7 +183,7 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
     str += QString("content=\"text/html; charset=%1\">\n").arg(QString(m_dialog->encoding()->name()));
     str += "<meta name=\"Generator\" ";
     str += "content=\"KSpread HTML Export Filter Version = ";
-    str += KOFFICE_VERSION_STRING;
+    str += CALLIGRA_VERSION_STRING;
     str += "\">\n";
 
     // Insert stylesheet
@@ -242,12 +242,10 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
         QString separators;
         QString line;
         unsigned int nonempty_cells = 0;
-        unsigned int colspan_cells = 0;
 
         for (int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++) {
             Cell cell(sheet, currentcolumn, currentrow);
             const Style style = cell.effectiveStyle();
-            colspan_cells = cell.mergedXCells();
             if (cell.needsPrinting())
                 nonempty_cells++;
             QString text;
@@ -299,6 +297,7 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 line += " align=\"" + html_center + "\"";
                 break;
             case Style::HAlignUndefined:
+            case Style::Justified:
                 break;
             }
             switch ((Style::VAlign) style.valign()) {
@@ -312,6 +311,8 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 line += " valign=\"" + html_bottom + "\"";
                 break;
             case Style::VAlignUndefined:
+            case Style::VJustified:
+            case Style::VDistributed:
                 break;
             }
             line += " width=\"" + QString::number(cell.width()) + "\"";

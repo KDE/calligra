@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=separator
+Name[bg]=разделител
 Name[el]=διαχωριστικό
 Name[es]=separador
 Name[et]=eraldaja
 Name[nb]=skiller
+Name[nds]=Trenner
+Name[pl]=separator
 Name[pt]=separador
 Name[pt_BR]=separador
 Name[sv]=avdelare
@@ -11,3 +14,4 @@ Name[ug]=ئايرىغۇچ
 Name[uk]=Роздільник
 Name[x-test]=xxseparatorxx
 Name[zh_CN]=分隔符
+Name[zh_TW]=分隔器

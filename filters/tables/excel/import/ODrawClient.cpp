@@ -87,6 +87,12 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
     return QRectF();
 }
 
+QRectF ODrawClient::getReserveRect(void)
+{
+    //NOTE: No XLS test files at the moment.
+    return QRectF();
+}
+
 QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor)
 {
     const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
@@ -108,6 +114,12 @@ QString ODrawClient::getPicturePath(const quint32 pib)
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
     Q_UNUSED(pib);
     return QString();
+}
+
+bool ODrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+{
+    Q_UNUSED(cd);
+    return false;
 }
 
 bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
@@ -202,13 +214,6 @@ const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
 const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
 {
     //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
-    MSO::OfficeArtSpContainer* sp = NULL;
-    return sp;
-}
-
-const MSO::OfficeArtSpContainer* ODrawClient::defaultShapeContainer()
-{
-    //TODO: provide the OfficeArtDgContainer.shape container if required
     MSO::OfficeArtSpContainer* sp = NULL;
     return sp;
 }

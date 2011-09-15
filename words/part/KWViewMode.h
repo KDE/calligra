@@ -27,7 +27,7 @@ class KoViewConverter;
 class KWDocument;
 
 #include "KWPage.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <QPointF>
 #include <QRectF>
@@ -47,10 +47,10 @@ class KWDocument;
  * the viewconverter for that.  This means that to the user of this API zooming
  * is applied just like translation is.
  *
- * This class provides a layer on top of the KoViewConverter and KWord should not use that
+ * This class provides a layer on top of the KoViewConverter and Words should not use that
  * interface directly.
  */
-class KWORD_EXPORT KWViewMode : public QObject
+class WORDS_EXPORT KWViewMode : public QObject
 {
     Q_OBJECT
 public:

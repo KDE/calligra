@@ -22,7 +22,7 @@
 #include "KoResourceManager.h"
 
 #include <QVariant>
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <KDebug>
 
 #include "KoShape.h"
@@ -146,15 +146,17 @@ KoUnit KoResourceManager::unitResource(int key) const
 
 void KoResourceManager::setGrabSensitivity(int grabSensitivity)
 {
-    // do not allow arbitrary small handles
-    if (grabSensitivity < 1)
-        grabSensitivity = 1;
+    // do not allow arbitrary small grab sensitivity
+    if (grabSensitivity < 3)
+        grabSensitivity = 3;
     setResource(KoDocumentResource::GrabSensitivity, QVariant(grabSensitivity));
 }
 
 int KoResourceManager::grabSensitivity() const
 {
-    return resource(KoDocumentResource::GrabSensitivity).toInt();
+    if (d->resources.contains(KoDocumentResource::GrabSensitivity))
+        return resource(KoDocumentResource::GrabSensitivity).toInt();
+    return 3; // default value
 }
 
 void KoResourceManager::setPasteOffset(qreal pasteOffset)
@@ -239,14 +241,14 @@ void KoResourceManager::clearResource(int key)
     emit resourceChanged(key, empty);
 }
 
-KUndoStack *KoResourceManager::undoStack() const
+KUndo2Stack *KoResourceManager::undoStack() const
 {
     if (!hasResource(KoDocumentResource::UndoStack))
         return 0;
-    return static_cast<KUndoStack*>(resource(KoDocumentResource::UndoStack).value<void*>());
+    return static_cast<KUndo2Stack*>(resource(KoDocumentResource::UndoStack).value<void*>());
 }
 
-void KoResourceManager::setUndoStack(KUndoStack *undoStack)
+void KoResourceManager::setUndoStack(KUndo2Stack *undoStack)
 {
     QVariant variant;
     variant.setValue<void*>(undoStack);

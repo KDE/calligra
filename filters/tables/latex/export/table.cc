@@ -1,5 +1,5 @@
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by Words into LATEX.
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -274,14 +274,14 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
             if (border[index]) {
                 int begin = index;
                 int end;
-                index = index + 1;
-                while (border[index] && index < getMaxColumn()) {
-                    index = index + 1;
+                index++;
+                while (index < getMaxColumn() && border[index]) {
+                    index++;
                 }
                 end = index - 1;
                 out << "\\cline{" << begin << "-" << end << "} " << endl;
             }
-            index = index + 1;
+            index++;
         }
     }
 

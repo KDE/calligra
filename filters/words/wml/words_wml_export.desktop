@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+Name=Words WML Export Filter
+Name[bg]=Филтър за изнасяне от Words в WML
+Name[cs]=Exportní filtr formátu WML pro Words
+Name[da]=WML-eksportfilter til Words
+Name[de]=Words WML-Exportfilter
+Name[es]=Filtro de Words de exportación a WML
+Name[et]=Wordsi WML-i ekspordifilter
+Name[it]=Filtro di esportazione WML per Words
+Name[nb]=WML-eksportfilter for Words
+Name[nds]=WML-Exportfilter för Words
+Name[nl]=WML-exportfilter voor Words
+Name[pl]=Filtr eksportu WML z Words
+Name[pt]=Filtro de Exportação de WML para o Words
+Name[pt_BR]=Filtro de exportação de WML para o Words
+Name[ru]=Фильтр экспорта документов Words в WML
+Name[sv]=Words WML-exportfilter
+Name[uk]=Фільтр експорту WML для Words
+Name[x-test]=xxWords WML Export Filterxx
+Name[zh_TW]=Words WML 匯出過濾程式
+X-KDE-Export=text/vnd.wap.wml
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+X-KDE-Library=wmlexport
+X-KDE-ServiceTypes=CalligraFilter

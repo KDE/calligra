@@ -23,21 +23,21 @@
 #include "kword13formatother.h"
 
 
-KWord13FormatFour::KWord13FormatFour(void)
+Words13FormatFour::Words13FormatFour(void)
 {
     m_id = 4;
 }
 
-KWord13FormatFour::~KWord13FormatFour(void)
+Words13FormatFour::~Words13FormatFour(void)
 {
 }
 
-KWord13FormatSix::KWord13FormatSix(void)
+Words13FormatSix::Words13FormatSix(void)
 {
     m_id = 6;
 }
 
-KWord13FormatSix::~KWord13FormatSix(void)
+Words13FormatSix::~Words13FormatSix(void)
 {
 }
 

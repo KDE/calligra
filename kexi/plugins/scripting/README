@@ -2,7 +2,7 @@ Kexi Scripting README
 ---------------------
 
 The code in this directory implements a scripting plugin for 
-Kexi. The Kross Scripting Framework located at koffice/libs/kross
+Kexi. The Kross Scripting Framework located at calligra/libs/kross
 is used to embed scripting interpreters and access Kexi
 functionality from within those interpreters.
 

@@ -27,25 +27,25 @@
 #include "kword13document.h"
 #include "kword13parser.h"
 
-KWord13StackItem::KWord13StackItem() : elementType(KWord13TypeUnknown), m_currentFrameset(0)
+Words13StackItem::Words13StackItem() : elementType(Words13TypeUnknown), m_currentFrameset(0)
 {
 }
 
-KWord13StackItem::~KWord13StackItem()
+Words13StackItem::~Words13StackItem()
 {
 }
 
-KWord13Parser::KWord13Parser(KWord13Document* kwordDocument)
+Words13Parser::Words13Parser(Words13Document* kwordDocument)
         : m_kwordDocument(kwordDocument), m_currentParagraph(0),
         m_currentLayout(0), m_currentFormat(0)
 {
     parserStack.setAutoDelete(true);
-    KWord13StackItem* bottom = new KWord13StackItem;
-    bottom->elementType = KWord13TypeBottom;
+    Words13StackItem* bottom = new Words13StackItem;
+    bottom->elementType = Words13TypeBottom;
     parserStack.push(bottom);   //Security item (not to empty the stack)
 }
 
-KWord13Parser::~KWord13Parser(void)
+Words13Parser::~Words13Parser(void)
 {
     parserStack.clear();
     delete m_currentParagraph;
@@ -53,10 +53,10 @@ KWord13Parser::~KWord13Parser(void)
     delete m_currentFormat;
 }
 
-bool KWord13Parser::startElementFormatOneProperty(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementFormatOneProperty(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
     // ### TODO: check status
-    if (stackItem->elementType == KWord13TypeLayoutFormatOne) {
+    if (stackItem->elementType == Words13TypeLayoutFormatOne) {
         if (! m_currentLayout) {
             kError(30520) << "No current LAYOUT for storing FORMAT property: " << name;
             return false;
@@ -68,14 +68,14 @@ bool KWord13Parser::startElementFormatOneProperty(const QString& name, const QXm
             m_currentLayout->m_format.m_properties[ attrName ] = attributes.value(i);
             kDebug(30520) << "Format Property (for LAYOUT):" << attrName << " =" << attributes.value(i);
         }
-        stackItem->elementType = KWord13TypeEmpty;
+        stackItem->elementType = Words13TypeEmpty;
         return true;
-    } else if (stackItem->elementType == KWord13TypeFormat) {
+    } else if (stackItem->elementType == Words13TypeFormat) {
         if (! m_currentFormat) {
             kError(30520) << "No current FORMAT for storing FORMAT property: " << name;
             return false;
         }
-        KWord13FormatOneData* data = m_currentFormat->getFormatOneData();
+        Words13FormatOneData* data = m_currentFormat->getFormatOneData();
 
         if (! data) {
             kError(30520) << "Current FORMAT cannot store FORMAT text property: " << name;
@@ -89,9 +89,9 @@ bool KWord13Parser::startElementFormatOneProperty(const QString& name, const QXm
             data->m_properties[ attrName ] = attributes.value(i);
             kDebug(30520) << "Format Property (for FORMATS):" << attrName << " =" << attributes.value(i);
         }
-        stackItem->elementType = KWord13TypeEmpty;
+        stackItem->elementType = Words13TypeEmpty;
         return true;
-    } else if (stackItem->elementType == KWord13TypeIgnore) {
+    } else if (stackItem->elementType == Words13TypeIgnore) {
         return true;
     } else {
         kError(30520) << "Wrong parents for FORMAT property: " << name;
@@ -99,10 +99,10 @@ bool KWord13Parser::startElementFormatOneProperty(const QString& name, const QXm
     }
 }
 
-bool KWord13Parser::startElementLayoutProperty(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementLayoutProperty(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
     // ### TODO: check status
-    if (stackItem->elementType == KWord13TypeIgnore) {
+    if (stackItem->elementType == Words13TypeIgnore) {
         return true;
     } else if (m_currentLayout) {
         for (int i = 0; i < attributes.count(); ++i) {
@@ -112,7 +112,7 @@ bool KWord13Parser::startElementLayoutProperty(const QString& name, const QXmlAt
             m_currentLayout->m_layoutProperties[ attrName ] = attributes.value(i);
             kDebug(30520) << "Layout Property:" << attrName << " =" << attributes.value(i);
         }
-        stackItem->elementType = KWord13TypeEmpty;
+        stackItem->elementType = Words13TypeEmpty;
         return true;
     } else {
         kError(30520) << "No current layout for storing property: " << name;
@@ -120,15 +120,15 @@ bool KWord13Parser::startElementLayoutProperty(const QString& name, const QXmlAt
     }
 }
 
-bool KWord13Parser::startElementName(const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementName(const QString&, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
-    if (stackItem->elementType != KWord13TypeLayout) {
+    if (stackItem->elementType != Words13TypeLayout) {
         // We have something else than a LAYOU/STYLE, so ignore for now.
-        stackItem->elementType = KWord13TypeIgnore;
+        stackItem->elementType = Words13TypeIgnore;
         return true;
     }
 
-    stackItem->elementType = KWord13TypeEmpty;
+    stackItem->elementType = Words13TypeEmpty;
 
     if (m_currentLayout) {
         m_currentLayout->m_name = attributes.value("value");
@@ -136,20 +136,20 @@ bool KWord13Parser::startElementName(const QString&, const QXmlAttributes& attri
     return  true;
 }
 
-bool KWord13Parser::startElementFormat(const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementFormat(const QString&, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
     // ### TODO: check parent?
-    if (stackItem->elementType == KWord13TypeIgnore) {
+    if (stackItem->elementType == Words13TypeIgnore) {
         return true;
-    } else if (stackItem->elementType == KWord13TypeLayout) {
-        stackItem->elementType = KWord13TypeLayoutFormatOne;
+    } else if (stackItem->elementType == Words13TypeLayout) {
+        stackItem->elementType = Words13TypeLayoutFormatOne;
         return true; // Everything is done directly on the layout
-    } else if (stackItem->elementType != KWord13TypeFormatsPlural) {
+    } else if (stackItem->elementType != Words13TypeFormatsPlural) {
         kError(30520) << "<FORMAT> is child neither of <FORMATS> nor of <LAYOUT> nor of <STYLE>! Aborting!";
         return false; // Assume parsing error!
     }
 
-    stackItem->elementType = KWord13TypeFormat;
+    stackItem->elementType = Words13TypeFormat;
 
     if (m_currentFormat) {
         kWarning(30520) << "Current format already defined!";
@@ -161,21 +161,21 @@ bool KWord13Parser::startElementFormat(const QString&, const QXmlAttributes& att
     const int id = attributes.value("id").toInt(&ok);
 
     if (id == 1 && ok) { // Normal text
-        KWord13FormatOne* one = new KWord13FormatOne;
+        Words13FormatOne* one = new Words13FormatOne;
         const int len = attributes.value("len").toInt(&ok);
         if (ok)
             one->m_length = len;
         m_currentFormat = one;
     } else if (id == 4 && ok) { // Variable
-        stackItem->elementType = KWord13TypeVariable;
-        m_currentFormat = new KWord13FormatFour;
+        stackItem->elementType = Words13TypeVariable;
+        m_currentFormat = new Words13FormatFour;
     } else if (id == 6 && ok) { // Anchor
-        stackItem->elementType = KWord13TypeAnchor;
-        m_currentFormat = new KWord13FormatSix;
+        stackItem->elementType = Words13TypeAnchor;
+        m_currentFormat = new Words13FormatSix;
     } else {
         // ### TODO: Temporary
-        stackItem->elementType = KWord13TypeIgnore;
-        m_currentFormat = new KWord13Format;
+        stackItem->elementType = Words13TypeIgnore;
+        m_currentFormat = new Words13Format;
         if (ok)
             m_currentFormat->m_id = id;
     }
@@ -192,14 +192,14 @@ bool KWord13Parser::startElementFormat(const QString&, const QXmlAttributes& att
     return true;
 }
 
-bool KWord13Parser::startElementLayout(const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementLayout(const QString&, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
     // ### TODO: check parent?
-    if (stackItem->elementType == KWord13TypeIgnore) {
+    if (stackItem->elementType == Words13TypeIgnore) {
         return true;
     }
 
-    stackItem->elementType = KWord13TypeLayout;
+    stackItem->elementType = Words13TypeLayout;
 
     if (m_currentFormat) {
         kWarning(30520) << "Current format defined! (Layout)";
@@ -212,20 +212,20 @@ bool KWord13Parser::startElementLayout(const QString&, const QXmlAttributes& att
         delete m_currentLayout;
     }
 
-    m_currentLayout = new KWord13Layout;
+    m_currentLayout = new Words13Layout;
     m_currentLayout->m_outline = (attributes.value("outline") == "true");
 
     return true;
 }
 
-bool KWord13Parser::startElementParagraph(const QString&, const QXmlAttributes&, KWord13StackItem *stackItem)
+bool Words13Parser::startElementParagraph(const QString&, const QXmlAttributes&, Words13StackItem *stackItem)
 {
-    if (stackItem->elementType == KWord13TypeUnknownFrameset) {
-        stackItem->elementType = KWord13TypeIgnore;
+    if (stackItem->elementType == Words13TypeUnknownFrameset) {
+        stackItem->elementType = Words13TypeIgnore;
         return true;
     }
 
-    stackItem->elementType = KWord13TypeParagraph;
+    stackItem->elementType = Words13TypeParagraph;
 
     if (m_currentParagraph) {
         // Delete an eventually already existing paragraph (should not happen)
@@ -233,15 +233,15 @@ bool KWord13Parser::startElementParagraph(const QString&, const QXmlAttributes&,
         delete m_currentParagraph;
     }
 
-    m_currentParagraph = new KWord13Paragraph;
+    m_currentParagraph = new Words13Paragraph;
 
     return true;
 }
 
-bool KWord13Parser::startElementFrame(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementFrame(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
-    if (stackItem->elementType == KWord13TypeFrameset || stackItem->elementType == KWord13TypePictureFrameset) {
-        stackItem->elementType = KWord13TypeEmpty;
+    if (stackItem->elementType == Words13TypeFrameset || stackItem->elementType == Words13TypePictureFrameset) {
+        stackItem->elementType = Words13TypeEmpty;
         if (stackItem->m_currentFrameset) {
             const int num = ++stackItem->m_currentFrameset->m_numFrames;
             for (int i = 0; i < attributes.count(); ++i) {
@@ -258,14 +258,14 @@ bool KWord13Parser::startElementFrame(const QString& name, const QXmlAttributes&
             kError(30520) << "Data of <FRAMESET> not found";
             return false;
         }
-    } else if (stackItem->elementType != KWord13TypeUnknownFrameset) {
+    } else if (stackItem->elementType != Words13TypeUnknownFrameset) {
         kError(30520) << "<FRAME> not child of <FRAMESET>";
         return false;
     }
     return true;
 }
 
-bool KWord13Parser::startElementFrameset(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementFrameset(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
     Q_UNUSED(name);
     const QString frameTypeStr(attributes.value("frameType"));
@@ -280,8 +280,8 @@ bool KWord13Parser::startElementFrameset(const QString& name, const QXmlAttribut
     const int frameInfo = frameInfoStr.toInt();
 
     if (frameType == 1) {
-        stackItem->elementType = KWord13TypeFrameset;
-        KWordTextFrameset* frameset = new KWordTextFrameset(frameType, frameInfo, attributes.value("name"));
+        stackItem->elementType = Words13TypeFrameset;
+        WordsTextFrameset* frameset = new WordsTextFrameset(frameType, frameInfo, attributes.value("name"));
 
         // Normal text frame (in or outside a table)
         if ((!frameInfo) && attributes.value("grpMgr").isEmpty()) {
@@ -308,19 +308,19 @@ bool KWord13Parser::startElementFrameset(const QString& name, const QXmlAttribut
         if (!frameInfo) {
             kWarning(30520) << "Unknown FrameInfo for pictures: " << frameInfo;
         }
-        stackItem->elementType = KWord13TypePictureFrameset;
-        KWord13PictureFrameset* frameset = new KWord13PictureFrameset(frameType, frameInfo, attributes.value("name"));
+        stackItem->elementType = Words13TypePictureFrameset;
+        Words13PictureFrameset* frameset = new Words13PictureFrameset(frameType, frameInfo, attributes.value("name"));
         m_kwordDocument->m_otherFramesetList.append(frameset);
         stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
     }
-    // ### frameType == 6 : horizontal line (however KWord did not save it correctly)
+    // ### frameType == 6 : horizontal line (however Words did not save it correctly)
     // ### frameType == 4 : formula
     // ### frametype == 3 : embedded (but only in <SETTINGS>)
     else {
         // Frame of unknown/unsupported type
         kWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr;
-        stackItem->elementType = KWord13TypeUnknownFrameset;
-        KWord13Frameset* frameset = new KWord13Frameset(frameType, frameInfo, attributes.value("name"));
+        stackItem->elementType = Words13TypeUnknownFrameset;
+        Words13Frameset* frameset = new Words13Frameset(frameType, frameInfo, attributes.value("name"));
         m_kwordDocument->m_otherFramesetList.append(frameset);
         stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
     }
@@ -328,8 +328,8 @@ bool KWord13Parser::startElementFrameset(const QString& name, const QXmlAttribut
 }
 
 
-bool KWord13Parser::startElementDocumentAttributes(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem,
-        const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType)
+bool Words13Parser::startElementDocumentAttributes(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem,
+        const Words13StackItemType& allowedParentType, const Words13StackItemType& newType)
 {
     if (parserStack.current()->elementType == allowedParentType) {
         stackItem->elementType = newType;
@@ -347,7 +347,7 @@ bool KWord13Parser::startElementDocumentAttributes(const QString& name, const QX
     }
 }
 
-bool KWord13Parser::startElementKey(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementKey(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
     Q_UNUSED(name);
     const QString key(calculatePictureKey(attributes.value("filename"),
@@ -356,8 +356,8 @@ bool KWord13Parser::startElementKey(const QString& name, const QXmlAttributes& a
                                           attributes.value("msec")));
     kDebug(30520) << "Picture key:" << key;
 
-    if (stackItem->elementType == KWord13TypePicturesPlural) {
-        KWord13Picture* pic = new KWord13Picture;
+    if (stackItem->elementType == Words13TypePicturesPlural) {
+        Words13Picture* pic = new Words13Picture;
         pic->m_storeName = attributes.value("name");
         if (pic->m_storeName.isEmpty()) {
             kError(30520) << "Picture defined without store name! Aborting!";
@@ -366,7 +366,7 @@ bool KWord13Parser::startElementKey(const QString& name, const QXmlAttributes& a
         }
         // ### TODO: catch duplicate keys (should not happen but who knows?)
         m_kwordDocument->m_pictureDict.insert(key, pic);
-    } else if (stackItem->elementType == KWord13TypePicture) {
+    } else if (stackItem->elementType == Words13TypePicture) {
         // ### TODO: error messages?
         if (stackItem->m_currentFrameset) {
             stackItem->m_currentFrameset->setKey(key);
@@ -379,9 +379,9 @@ bool KWord13Parser::startElementKey(const QString& name, const QXmlAttributes& a
     return true;
 }
 
-bool KWord13Parser::startElementAnchor(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
+bool Words13Parser::startElementAnchor(const QString& name, const QXmlAttributes& attributes, Words13StackItem *stackItem)
 {
-    if (stackItem->elementType == KWord13TypeAnchor) {
+    if (stackItem->elementType == Words13TypeAnchor) {
         const QString anchorType(attributes.value("type"));
         if (anchorType == "grpMgr")
             kWarning(30520) << "Anchor of type grpMgr! Not tested!"; // ### TODO
@@ -395,7 +395,7 @@ bool KWord13Parser::startElementAnchor(const QString& name, const QXmlAttributes
             return false;
         }
         if (m_currentFormat) {
-            KWord13FormatSix* six = (KWord13FormatSix*) m_currentFormat;
+            Words13FormatSix* six = (Words13FormatSix*) m_currentFormat;
             six->m_anchorName = frameset;
         }
         // add frameset name to the list of anchored framesets
@@ -410,17 +410,17 @@ bool KWord13Parser::startElementAnchor(const QString& name, const QXmlAttributes
 }
 
 
-bool KWord13Parser::startElement(const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
+bool Words13Parser::startElement(const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
     kDebug(30520) << indent << "<" << name << ">"; // DEBUG
     indent += '*'; //DEBUG
     if (parserStack.isEmpty()) {
-        kError(30520) << "Stack is empty!! Aborting! (in KWordParser::startElement)";
+        kError(30520) << "Stack is empty!! Aborting! (in WordsParser::startElement)";
         return false;
     }
 
     // Create a new stack element copying the top of the stack.
-    KWord13StackItem *stackItem = new KWord13StackItem(*parserStack.current());
+    Words13StackItem *stackItem = new Words13StackItem(*parserStack.current());
 
     if (!stackItem) {
         kError(30520) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)";
@@ -444,20 +444,20 @@ bool KWord13Parser::startElement(const QString&, const QString&, const QString& 
                || name == "TOPBORDER" || name == "BOTTOMBORDER" || name == "COUNTER") {
         success = startElementLayoutProperty(name, attributes, stackItem);
     } else if (name == "TEXT") {
-        if (stackItem->elementType == KWord13TypeParagraph && m_currentParagraph) {
-            stackItem->elementType = KWord13TypeText;
+        if (stackItem->elementType == Words13TypeParagraph && m_currentParagraph) {
+            stackItem->elementType = Words13TypeText;
             m_currentParagraph->setText(QString());
         } else {
-            stackItem->elementType = KWord13TypeIgnore;
+            stackItem->elementType = Words13TypeIgnore;
         }
         success = true;
     } else if (name == "NAME") {
         success = startElementName(name, attributes, stackItem);
     } else if (name == "FORMATS") {
-        if (stackItem->elementType == KWord13TypeParagraph && m_currentParagraph) {
-            stackItem->elementType = KWord13TypeFormatsPlural;
+        if (stackItem->elementType == Words13TypeParagraph && m_currentParagraph) {
+            stackItem->elementType = Words13TypeFormatsPlural;
         } else {
-            stackItem->elementType = KWord13TypeIgnore;
+            stackItem->elementType = Words13TypeIgnore;
         }
         success = true;
     } else if (name == "PARAGRAPH") {
@@ -468,8 +468,8 @@ bool KWord13Parser::startElement(const QString&, const QString&, const QString& 
         success = startElementLayout(name, attributes, stackItem);
     } else if (name == "TYPE") {
         // ### TEMPORARY
-        if (m_currentFormat && (stackItem->elementType == KWord13TypeVariable)) {
-            ((KWord13FormatFour*) m_currentFormat) -> m_text =  attributes.value("text");
+        if (m_currentFormat && (stackItem->elementType == Words13TypeVariable)) {
+            ((Words13FormatFour*) m_currentFormat) -> m_text =  attributes.value("text");
         }
         success = true;
     } else if (name == "KEY") {
@@ -478,8 +478,8 @@ bool KWord13Parser::startElement(const QString&, const QString&, const QString& 
         success = startElementAnchor(name, attributes, stackItem);
     } else if (name == "PICTURE" || name == "IMAGE" || name == "CLIPART") {
         // ### TODO: keepAspectRatio (but how to transform it to OASIS)
-        if (stackItem->elementType == KWord13TypePictureFrameset) {
-            stackItem->elementType = KWord13TypePicture;
+        if (stackItem->elementType == Words13TypePictureFrameset) {
+            stackItem->elementType = Words13TypePicture;
         }
         success = true;
     } else if (name == "FRAME") {
@@ -489,24 +489,24 @@ bool KWord13Parser::startElement(const QString&, const QString&, const QString& 
     } else if (name == "STYLE") {
         success = startElementLayout(name, attributes, stackItem);
     } else if (name == "DOC") {
-        success = startElementDocumentAttributes(name, attributes, stackItem, KWord13TypeBottom, KWord13TypeDocument);
+        success = startElementDocumentAttributes(name, attributes, stackItem, Words13TypeBottom, Words13TypeDocument);
     } else if (name == "PAPER") {
-        success = startElementDocumentAttributes(name, attributes, stackItem, KWord13TypeDocument, KWord13TypePaper);
+        success = startElementDocumentAttributes(name, attributes, stackItem, Words13TypeDocument, Words13TypePaper);
     } else if (name == "PAPERBORDERS") {
-        success = startElementDocumentAttributes(name, attributes, stackItem, KWord13TypePaper, KWord13TypeEmpty);
+        success = startElementDocumentAttributes(name, attributes, stackItem, Words13TypePaper, Words13TypeEmpty);
     } else if ((name == "ATTRIBUTES") || (name == "VARIABLESETTINGS")
                || (name == "FOOTNOTESETTINGS") || (name == "ENDNOTESETTINGS")) {
-        success = startElementDocumentAttributes(name, attributes, stackItem, KWord13TypeDocument, KWord13TypeEmpty);
+        success = startElementDocumentAttributes(name, attributes, stackItem, Words13TypeDocument, Words13TypeEmpty);
     } else if (name == "FRAMESTYLE") {
         // ### TODO, but some of the <STYLE> children are also children of <FRAMESTYLE>, so we have to set it to "ignore"
-        stackItem->elementType = KWord13TypeIgnore;
+        stackItem->elementType = Words13TypeIgnore;
         success = true;
     } else if (name == "PICTURES" || name == "PIXMAPS" || name == "CLIPARTS") {
         // We just need a separate "type" for the <KEY> children
-        stackItem->elementType = KWord13TypePicturesPlural;
+        stackItem->elementType = Words13TypePicturesPlural;
         success = true;
     } else {
-        stackItem->elementType = KWord13TypeUnknown;
+        stackItem->elementType = Words13TypeUnknown;
         success = true;
     }
 
@@ -519,7 +519,7 @@ bool KWord13Parser::startElement(const QString&, const QString&, const QString& 
     return success;
 }
 
-bool KWord13Parser :: endElement(const QString&, const QString& , const QString& name)
+bool Words13Parser :: endElement(const QString&, const QString& , const QString& name)
 {
     indent.remove(0, 1);   // DEBUG
     //kDebug(30520) << indent <<"</" << name <<">"; // DEBUG
@@ -530,7 +530,7 @@ bool KWord13Parser :: endElement(const QString&, const QString& , const QString&
 
     bool success = false;
 
-    KWord13StackItem *stackItem = parserStack.pop();
+    Words13StackItem *stackItem = parserStack.pop();
 
     if (name == "PARAGRAPH") {
         if (stackItem->m_currentFrameset && m_currentParagraph) {
@@ -539,13 +539,13 @@ bool KWord13Parser :: endElement(const QString&, const QString& , const QString&
             }
             // ### HACK: do not delete the data of <FORMATS>
             m_currentParagraph->m_formats.setAutoDelete(false);
-        } else if (stackItem->elementType == KWord13TypeIgnore) {
+        } else if (stackItem->elementType == Words13TypeIgnore) {
             success = true;
         }
         delete m_currentParagraph;
         m_currentParagraph = 0;
     } else if (name == "FORMAT") {
-        if (stackItem->elementType == KWord13TypeFormat) {
+        if (stackItem->elementType == Words13TypeFormat) {
             if (m_currentParagraph) {
                 m_currentParagraph->m_formats.append(m_currentFormat);
                 kDebug(30520) << "Adding to <FORMATS>:" << ((void*) m_currentFormat);
@@ -557,7 +557,7 @@ bool KWord13Parser :: endElement(const QString&, const QString& , const QString&
                 return false; // Assume parsing error!
             }
 
-        } else if (stackItem->elementType == KWord13TypeLayoutFormatOne) {
+        } else if (stackItem->elementType == Words13TypeLayoutFormatOne) {
             // Nothing to do!
         }
         success = true;
@@ -596,7 +596,7 @@ bool KWord13Parser :: endElement(const QString&, const QString& , const QString&
     return success;
 }
 
-bool KWord13Parser :: characters(const QString & ch)
+bool Words13Parser :: characters(const QString & ch)
 {
 #if 0
     // DEBUG start
@@ -618,9 +618,9 @@ bool KWord13Parser :: characters(const QString & ch)
     bool success = false;
 
     QString tmp(ch);
-    KWord13StackItem *stackItem = parserStack.current();
+    Words13StackItem *stackItem = parserStack.current();
 
-    if (stackItem->elementType == KWord13TypeText) {
+    if (stackItem->elementType == Words13TypeText) {
         // <TEXT>
         if (m_currentParagraph) {
             bool found = false; // Some unexpected control character?
@@ -633,8 +633,8 @@ bool KWord13Parser :: characters(const QString & ch)
                 else if (uni == 9 || uni == 10 || uni == 13)
                     continue; // Tabulator, Line Feed, Carriage Return
                 else if (uni == 1) {
-                    // Old KWord documents have a QChar(1) as anchor character
-                    // So replace it with the anchor character of recent KWord versions
+                    // Old Words documents have a QChar(1) as anchor character
+                    // So replace it with the anchor character of recent Words versions
                     tmp[i] = '#';
                 } else {
                     tmp[i] = '?';
@@ -649,11 +649,11 @@ bool KWord13Parser :: characters(const QString & ch)
             kError(30520) << "No current paragraph defined! Tag mismatch?";
             success = false;
         }
-    } else if (stackItem->elementType == KWord13TypeEmpty) {
+    } else if (stackItem->elementType == Words13TypeEmpty) {
         success = ch.trimmed().isEmpty();
         if (!success) {
             // We have a parsing error, so abort!
-            kError(30520) << "Empty element " << stackItem->itemName << " is not empty! Aborting! (in KWordParser::characters)";
+            kError(30520) << "Empty element " << stackItem->itemName << " is not empty! Aborting! (in WordsParser::characters)";
         }
     } else {
         success = true;
@@ -662,14 +662,14 @@ bool KWord13Parser :: characters(const QString & ch)
     return success;
 }
 
-bool KWord13Parser::warning(const QXmlParseException& exception)
+bool Words13Parser::warning(const QXmlParseException& exception)
 {
     kWarning(30520) << "XML parsing warning: line " << exception.lineNumber()
     << " col " << exception.columnNumber() << " message: " << exception.message();
     return true;
 }
 
-bool KWord13Parser::error(const QXmlParseException& exception)
+bool Words13Parser::error(const QXmlParseException& exception)
 {
     // A XML error is recoverable, so it is only a KDE warning
     kWarning(30520) << "XML parsing error: line " << exception.lineNumber()
@@ -677,7 +677,7 @@ bool KWord13Parser::error(const QXmlParseException& exception)
     return true;
 }
 
-bool KWord13Parser::fatalError(const QXmlParseException& exception)
+bool Words13Parser::fatalError(const QXmlParseException& exception)
 {
     kError(30520) << "XML parsing fatal error: line " << exception.lineNumber()
     << " col " << exception.columnNumber() << " message: " << exception.message();
@@ -685,7 +685,7 @@ bool KWord13Parser::fatalError(const QXmlParseException& exception)
     return false; // Stop parsing now, we do not need further errors.
 }
 
-QString KWord13Parser::calculatePictureKey(const QString& filename,
+QString Words13Parser::calculatePictureKey(const QString& filename,
         const QString& year,  const QString& month,  const QString& day,
         const QString& hour,  const QString& minute,  const QString& second,
         const QString& microsecond) const

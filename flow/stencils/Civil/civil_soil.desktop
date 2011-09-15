@@ -1,8 +1,15 @@
 [Desktop Entry]
 Name=Soil
+Name[bg]=Почва
+Name[de]=Erdreich
 Name[et]=Maapind
+Name[it]=Terra
+Name[nb]=Jord
+Name[nds]=Bodden
+Name[pl]=Grunt
 Name[pt]=Solo
 Name[pt_BR]=Solo
 Name[sv]=Jord
 Name[uk]=Ґрунт
 Name[x-test]=xxSoilxx
+Name[zh_TW]=土壤

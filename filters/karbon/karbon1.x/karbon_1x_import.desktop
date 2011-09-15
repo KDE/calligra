@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon 1.x Import Filter
-Name[bg]=Филтър за импортиране от Karbon 1.x
+Name[bg]=Филтър за внасяне от Karbon 1.x
 Name[ca]=Filtre d'importació Karbon 1.x
 Name[ca@valencia]=Filtre d'importació Karbon 1.x
 Name[cs]=Importní filtr Karbon 1.x
@@ -27,6 +27,7 @@ Name[lv]=Karbon 1.x importa filtrs
 Name[nb]=Karbon 1.x importfilter
 Name[nds]=Importfilter för Karbon 1.x
 Name[nl]=1.x-importfilter voor Karbon
+Name[pl]=Filtr importu 1.x do Karbon
 Name[pt]=Filtro de Importação do Karbon 1.x
 Name[pt_BR]=Filtro de importação do Karbon 1.x
 Name[ro]=Filtru importare Karbon1x
@@ -40,8 +41,8 @@ Name[wa]=Passete d' abagaedje EPS di Karbon 1.x
 Name[x-test]=xxKarbon 1.x Import Filterxx
 Name[zh_CN]=Karbon 1.x 导入过滤器
 Name[zh_TW]=Karbon 1.x 匯入過濾器
-X-KDE-Export=application/vnd.oasis.opendocument.graphics
+X-KDE-Export=image/svg+xml
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1
 X-KDE-Library=karbon1ximport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

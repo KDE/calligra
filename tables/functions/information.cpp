@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
+   Copyright (C) 1998-2002 The KSpread Team <calligra-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 
 #include "InformationModule.h"
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 #include <sys/utsname.h>
 
 #include <QDir>
@@ -182,7 +182,7 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value(QDir::currentPath());
 
     if (type == "release")
-        return Value(QString(KOFFICE_VERSION_STRING));
+        return Value(QString(CALLIGRA_VERSION_STRING));
 
     if (type == "numfile")
         return Value(KoDocument::documentList() ? KoDocument::documentList()->count() : 0);

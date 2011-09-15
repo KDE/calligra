@@ -75,6 +75,8 @@
 #include <KoShapeSavingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
+#include <KoToolManager.h>
+#include <KoInteractionTool.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -131,7 +133,7 @@ public:
     KoResourceManager *resourceManager;
 };
 
-// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+// Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
 /*****************************************************************************
@@ -159,8 +161,8 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         chartShape->setOptionPanels(panels);
     }
 
-    connect(d->map, SIGNAL(commandAdded(QUndoCommand *)),
-            this, SLOT(addCommand(QUndoCommand *)));
+    connect(d->map, SIGNAL(commandAdded(KUndo2Command *)),
+            this, SLOT(addCommand(KUndo2Command *)));
 
     setComponentData(Factory::global(), false);
     setTemplateType("tables_template");
@@ -171,7 +173,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
 
 Doc::~Doc()
 {
-    //don't save config when kword is embedded into konqueror
+    //don't save config when words is embedded into konqueror
     if (isReadWrite())
         saveConfig();
 
@@ -218,7 +220,11 @@ void Doc::initConfig()
 
 KoView* Doc::createViewInstance(QWidget* parent)
 {
-    return new View(parent, this);
+    View *view = new View(parent, this);
+    // explicit switch tool to be sure that the list of option-widgets (CellToolOptionWidget
+    // as returned by KoToolBase::optionWidgets) is updated to prevent crashes like bug 278896.
+    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+    return view;
 }
 
 QGraphicsItem *Doc::createCanvasItem()
@@ -596,12 +602,11 @@ bool Doc::configLoadFromFile() const
 void Doc::sheetAdded(Sheet* sheet)
 {
     new SheetAdaptor(sheet);
-    QString dbusPath('/' + sheet->map()->objectName() + '/' + objectName());
-    if (sheet->parent()) {
+    QString dbusPath('/' + sheet->map()->objectName() + '/' + sheet->objectName());
+    if (sheet->parent() && !sheet->parent()->objectName().isEmpty()) {
         dbusPath.prepend('/' + sheet->parent()->objectName());
     }
     QDBusConnection::sessionBus().registerObject(dbusPath, sheet);
-
 }
 
 void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)

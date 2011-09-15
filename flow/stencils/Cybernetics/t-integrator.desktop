@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=t-integrator
 Name[el]=t-integrator
+Name[nb]=t-integrator
+Name[nl]=t-integrator
+Name[pl]=t-całkowanie
 Name[pt]=integrador-t
 Name[pt_BR]=integrador-t
 Name[sv]=t-integrator
 Name[uk]=Інтегратор (вхід згори)
 Name[x-test]=xxt-integratorxx
+Name[zh_TW]=t-integrator

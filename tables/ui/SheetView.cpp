@@ -35,6 +35,7 @@
 
 #include "CellView.h"
 #include "calligra_tables_limits.h"
+#include "PointStorage.h"
 #include "RectStorage.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
@@ -75,11 +76,19 @@ public:
     // The maximum accessed cell range used for the scrollbar ranges.
     QSize accessedCellRange;
     FusionStorage* obscuredInfo;
-    QSize obscuredRange; // size of the bonuding box of obscuredInfo
+    QSize obscuredRange; // size of the bounding box of obscuredInfo
 #ifdef CALLIGRA_TABLES_MT
     QReadWriteLock obscuredLock;
 #endif
 
+    PointStorage<bool> highlightedCells;
+    QPoint activeHighlight;
+#ifdef CALLIGRA_TABLES_MT
+    QReadWriteLock highlightLock;
+#endif
+    QColor highlightColor;
+    QColor highlightMaskColor;
+    QColor activeHighlightColor;
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
 #ifdef CALLIGRA_TABLES_MT
@@ -172,6 +181,8 @@ SheetView::SheetView(const Sheet* sheet)
     d->accessedCellRange =  sheet->usedArea().size().expandedTo(QSize(256, 256));
     d->obscuredInfo = new FusionStorage(sheet->map());
     d->obscuredRange = QSize(0, 0);
+    d->highlightMaskColor = QColor(0, 0, 0, 128);
+    d->activeHighlightColor = QColor(255, 127, 0, 128);
 }
 
 SheetView::~SheetView()
@@ -268,6 +279,9 @@ void SheetView::invalidate()
     d->defaultCellView = createDefaultCellView();
     d->cache.clear();
     d->cachedArea = QRegion();
+    delete d->obscuredInfo;
+    d->obscuredInfo = new FusionStorage(d->sheet->map());
+    d->obscuredRange = QSize(0, 0);
 }
 
 void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase*, const QRect& visibleRect)
@@ -415,6 +429,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     // 4. Paint the custom borders, diagonal lines and page borders
     coordinate = startCoordinate;
     processedMergedCells.clear();
+    processedObscuredCells.clear();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -438,8 +453,16 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
                                           cell, this);
             }
             coordinate = savedCoordinate;
-            const CellView cellView = this->cellView(col, row);
-            cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
+            Cell theCell(sheet(), col, row);
+            const CellView cellView = d->cellViewToProcess(theCell, coordinate, processedObscuredCells, this, visRect);
+            if (!!theCell && (theCell.column() != col || theCell.row() != row)) {
+                cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
+                                          visRect,
+                                          theCell, this);
+            }
+            const CellView cellView2 = this->cellView(col, row);
+            coordinate = savedCoordinate;
+            cellView2.paintCellBorders(paintRect, painter, clipRect, coordinate,
                                       visRect,
                                       Cell(sheet(), col, row), this);
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
@@ -447,6 +470,39 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
         coordinate.setY(topLeft.y());
         if (!rightToLeft)
             coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
+    }
+
+    // 5. Paint cell highlighting
+    if (hasHighlightedCells()) {
+        QPointF active = activeHighlight();
+        QPainterPath p;
+        CellPaintData* activeData = 0;
+        for (QList<CellPaintData>::iterator it(cached_cells.begin()); it != cached_cells.end(); ++it) {
+            if (isHighlighted(it->cell.cellPosition())) {
+                p.addRect(it->coordinate.x(), it->coordinate.y(), it->cellView.cellWidth(), it->cellView.cellHeight());
+                if (it->cell.cellPosition() == active) {
+                    activeData = &*it;
+                }
+            }
+        }
+        painter.setPen(Qt::NoPen);
+        if (d->highlightColor.isValid()) {
+            painter.setBrush(QBrush(d->highlightColor));
+            painter.drawPath(p);
+        }
+        if (d->highlightMaskColor.isValid()) {
+            QPainterPath base;
+            base.addRect(painter.clipPath().boundingRect().adjusted(-5, -5, 5, 5));
+            p = base.subtracted(p);
+            painter.setBrush(QBrush(d->highlightMaskColor));
+            painter.drawPath(p);
+        }
+
+        if (activeData && d->activeHighlightColor.isValid()) {
+            painter.setBrush(QBrush(d->activeHighlightColor));
+            painter.setPen(QPen(Qt::black));
+            painter.drawRect(QRectF(activeData->coordinate.x(), activeData->coordinate.y(), activeData->cellView.cellWidth(), activeData->cellView.cellHeight()));
+        }
     }
 }
 
@@ -490,7 +546,8 @@ void SheetView::obscureCells(const QPoint &position, int numXCells, int numYCell
     if (numXCells != 0 || numYCells != 0)
         d->obscuredInfo->insert(Region(position.x(), position.y(), numXCells + 1, numYCells + 1), true);
 
-    QSize newObscuredRange = d->obscuredInfo->usedArea().size();
+    QRect obscuredArea = d->obscuredInfo->usedArea();
+    QSize newObscuredRange(obscuredArea.right(), obscuredArea.bottom());
     if (newObscuredRange != d->obscuredRange) {
         d->obscuredRange = newObscuredRange;
         emit obscuredRangeChanged(d->obscuredRange);
@@ -610,6 +667,94 @@ CellView* SheetView::createDefaultCellView()
 CellView* SheetView::createCellView(int col, int row)
 {
     return new CellView(this, col, row);
+}
+
+bool SheetView::isHighlighted(const QPoint &cell) const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->highlightLock);
+#endif
+    return d->highlightedCells.lookup(cell.x(), cell.y());
+}
+
+void SheetView::setHighlighted(const QPoint &cell, bool isHighlighted)
+{
+#ifdef CALLIGRA_TABLES_MT
+    QWriteLocker(&d->highlightLock);
+#endif
+    bool oldHadHighlights = d->highlightedCells.count() > 0;
+    bool oldVal;
+    if (isHighlighted) {
+        oldVal = d->highlightedCells.insert(cell.x(), cell.y(), true);
+    } else {
+        oldVal = d->highlightedCells.take(cell.x(), cell.y());
+    }
+    if (oldHadHighlights != (d->highlightedCells.count() > 0)) {
+        invalidate();
+    } else if (oldVal != isHighlighted) {
+        invalidateRegion(Region(cell));
+    }
+}
+
+bool SheetView::hasHighlightedCells() const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->highlightLock);
+#endif
+    return d->highlightedCells.count() > 0;
+}
+
+void SheetView::clearHighlightedCells()
+{
+#ifdef CALLIGRA_TABLES_MT
+    QWriteLocker(&d->highlightLock);
+#endif
+    d->activeHighlight = QPoint();
+    if (d->highlightedCells.count()) {
+        d->highlightedCells.clear();
+        invalidate();
+    }
+}
+
+QPoint SheetView::activeHighlight() const
+{
+    return d->activeHighlight;
+}
+
+void SheetView::setActiveHighlight(const QPoint &cell)
+{
+    QPoint oldVal = d->activeHighlight;
+    d->activeHighlight = cell;
+    if (oldVal != cell) {
+        Region r;
+        if (!oldVal.isNull()) r.add(oldVal);
+        if (!cell.isNull()) r.add(cell);
+        invalidateRegion(r);
+    }
+}
+
+void SheetView::setHighlightColor(const QColor &color)
+{
+    d->highlightColor = color;
+    if (hasHighlightedCells()) {
+        invalidate();
+    }
+}
+
+void SheetView::setHighlightMaskColor(const QColor &color)
+{
+    d->highlightMaskColor = color;
+    if (hasHighlightedCells()) {
+        invalidate();
+    }
+}
+
+void SheetView::setActiveHighlightColor(const QColor &color)
+{
+    d->activeHighlightColor = color;
+    if (hasHighlightedCells()) {
+        invalidate();
+    }
 }
 
 #include "SheetView.moc"

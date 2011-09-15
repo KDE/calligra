@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999- 2006 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

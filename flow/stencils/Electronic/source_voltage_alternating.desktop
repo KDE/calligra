@@ -2,8 +2,10 @@
 Name=source voltage alternating
 Name[el]=εναλλαγή τάσης πηγής
 Name[nb]=kildespenning vekselstrøm
+Name[pl]=przemienne napięcie źródłowe
 Name[pt]=tensão alternada fonte
 Name[pt_BR]=tensão alternada de fonte
 Name[sv]=källa växelspänning
 Name[uk]=Джерело змінного струму
 Name[x-test]=xxsource voltage alternatingxx
+Name[zh_TW]=source voltage alternating

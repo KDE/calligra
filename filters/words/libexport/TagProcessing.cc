@@ -22,7 +22,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -40,13 +40,13 @@
 
 #include "TagProcessing.h"
 
-#define DEBUG_KWORD_TAGS
-// #define DEBUG_KWORD_IGNORED_TAGS
+#define DEBUG_WORDS_TAGS
+// #define DEBUG_WORDS_IGNORED_TAGS
 
 
 void ProcessSubtags(const QDomNode             &parentNode,
                     QList<TagProcessing>  &tagProcessingList,
-                    KWEFKWordLeader            *leader)
+                    KWEFWordsLeader            *leader)
 {
     //kDebug(30508) <<"Starting ProcessSubtags for node:" << parentNode.nodeName();
 
@@ -67,7 +67,7 @@ void ProcessSubtags(const QDomNode             &parentNode,
                     if ((*tagProcessingIt).processor != NULL) {
                         ((*tagProcessingIt).processor)(childNode, (*tagProcessingIt).data, leader);
                     }
-#ifdef DEBUG_KWORD_IGNORED_TAGS
+#ifdef DEBUG_WORDS_IGNORED_TAGS
                     else {
                         kDebug(30508) << "Ignoring" << childNode.nodeName()
                         << " tag in " << parentNode.nodeName() << endl;
@@ -86,9 +86,9 @@ void ProcessSubtags(const QDomNode             &parentNode,
     //kDebug(30508) <<"Ending ProcessSubtags for node:" << parentNode.nodeName();
 }
 
-void AllowNoSubtags(const QDomNode& myNode, KWEFKWordLeader *leader)
+void AllowNoSubtags(const QDomNode& myNode, KWEFWordsLeader *leader)
 {
-#ifdef DEBUG_KWORD_TAGS
+#ifdef DEBUG_WORDS_TAGS
     QString outputText;
     QList<TagProcessing> tagProcessingList;
     ProcessSubtags(myNode, tagProcessingList, leader);
@@ -180,7 +180,7 @@ void ProcessAttributes(const QDomNode              &myNode,
                         }
                         }
                     }
-#ifdef DEBUG_KWORD_IGNORED_TAGS
+#ifdef DEBUG_WORDS_IGNORED_TAGS
                     else {
                         kDebug(30508) << "Ignoring" << myNode.nodeName()
                         << " attribute " << (*attrProcessingIt).name
@@ -202,7 +202,7 @@ void ProcessAttributes(const QDomNode              &myNode,
 
 void AllowNoAttributes(const QDomNode & myNode)
 {
-#ifdef DEBUG_KWORD_TAGS
+#ifdef DEBUG_WORDS_TAGS
     QList<AttrProcessing> attrProcessingList;
     ProcessAttributes(myNode, attrProcessingList);
 #else

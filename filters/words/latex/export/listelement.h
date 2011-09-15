@@ -1,6 +1,6 @@
 
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __KWORD_LISTELEMENT_H__
-#define __KWORD_LISTELEMENT_H__
+#ifndef __WORDS_LISTELEMENT_H__
+#define __WORDS_LISTELEMENT_H__
 
 #include "element.h"
 
@@ -126,4 +126,4 @@ public:
 //@}
 
 };
-#endif /* __KWORD_LISTELEMENT_H__ */
+#endif /* __WORDS_LISTELEMENT_H__ */

@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2001 by Frank Dekervel <Frank.Dekervel@student.kuleuven.ac.be>
  *
  * This library is free software; you can redistribute it and/or
@@ -115,7 +115,7 @@ void KHTMLReader::popState()
     /**
        the recursion trough html is somewhat clumsy still, I am working on a better method.
        popState gets called when a tag is closed, but since a closed tag doesn't mean the end
-       of a (kword) "tag" we have to copy some things over from the closed tag:
+       of a (words) "tag" we have to copy some things over from the closed tag:
         - the paragraph (after a </B>, we still are in the same paragraph, but
       inside the <B></B> , there might have been a <BR>)
        if we go back into another frameset, we start a new paragraph.
@@ -602,7 +602,7 @@ bool KHTMLReader::parse_img(DOM::Element /*e*/)
 
 bool KHTMLReader::parse_pre(DOM::Element e)
 {
-#if 0 // see Bug #74601 (normal): kword doesn't recognize PRE-tags in HTML
+#if 0 // see Bug #74601 (normal): words doesn't recognize PRE-tags in HTML
     //pushNewState();
     /// \todo set fixed width font
     DOM::HTMLElement htmlelement(e);

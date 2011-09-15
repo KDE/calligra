@@ -44,7 +44,7 @@ header () {
    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
 
    This file has been automatically generated from
-   koffice/kexi/tools/sql_keywords/$progname and
+   calligra/kexi/tools/sql_keywords/$progname and
    $inFile.
 
    Please edit the $progname, not this file!
@@ -307,8 +307,8 @@ checkTarballs () {
 }
 
 checkKexiKeywords
-src=`printf "koffice/kexi/kexidb/parser/sqlscanner.l\n"\
-" * and koffice/kexi/tools/sql_keywords/kexi_reserved"`
+src=`printf "calligra/kexi/kexidb/parser/sqlscanner.l\n"\
+" * and calligra/kexi/tools/sql_keywords/kexi_reserved"`
 header "const char* DriverPrivate::kexiSQLKeywords" "driver_p.h" "$src" "keywords.cpp"
 body "kexi.all" "keywords.cpp"
 footer "keywords.cpp"

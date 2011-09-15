@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+Name=Words AmiPro Export Filter
+Name[bg]=Филтър за изнасяне от Words в AmiPro
+Name[cs]=Exportní filtr AmiPro pro Words
+Name[da]=AmiPro-eksportfilter til Words
+Name[de]=Words AmiPro-Exportfilter
+Name[es]=Filtro de Words de exportación a AmiPro
+Name[et]=Wordsi AmiPro ekspordifilter
+Name[it]=Filtro di esportazione AmiPro per Words
+Name[nb]=AmiPro-eksportfilter for Words
+Name[nds]=AmiPro-Exportfilter för Words
+Name[nl]=AmiPro-exportfilter voor Words
+Name[pl]=Filtr eksportu AmiPro z Words
+Name[pt]=Filtro de Exportação para AmiPro do Words
+Name[pt_BR]=Filtro de exportação de AmiPro para o Words
+Name[ru]=Фильтр экспорта документов AmiPro в Words
+Name[sv]=Words-exportfilter för AmiPro
+Name[uk]=Фільтр експорту AmiPro для Words
+Name[x-test]=xxWords AmiPro Export Filterxx
+Name[zh_TW]=Words AmiPro 匯出過濾程式
+X-KDE-Export=application/x-amipro
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+X-KDE-Library=amiproexport
+X-KDE-ServiceTypes=CalligraFilter

@@ -36,7 +36,7 @@
 #include <KoFilterChain.h>
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 #include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 
@@ -739,7 +739,7 @@ KoFilter::ConversionStatus DocBookExport::convert(const QByteArray& from, const 
     kError(30507) << "to = " << to << ", from = " << from << endl;
 #endif
 
-    if ((to != "text/sgml" && to != "text/docbook") || from != "application/x-kword") {
+    if ((to != "text/sgml" && to != "text/docbook") || from != "application/x-words") {
         return KoFilter::NotImplemented;
     }
 
@@ -748,7 +748,7 @@ KoFilter::ConversionStatus DocBookExport::convert(const QByteArray& from, const 
 #endif
 
     DocBookWorker worker;
-    KWEFKWordLeader leader(&worker);
+    KWEFWordsLeader leader(&worker);
     leader.convert(m_chain, from, to);
 
 #if 1

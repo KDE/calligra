@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Octogon
+Name[bg]=Осмоъгълник
+Name[cs]=Osmiúhelník
+Name[da]=Oktogon
 Name[de]=Achteck
 Name[el]=Οκτάγωνο
 Name[es]=Octógono
@@ -7,8 +10,10 @@ Name[et]=Kaheksanurk
 Name[it]=Ottagono
 Name[nb]=Åttekant
 Name[nl]=Achthoek
+Name[pl]=Ośmiokąt
 Name[pt]=Octógono
 Name[pt_BR]=Octógono
+Name[ru]=Восьмиугольник
 Name[sv]=Oktagon
 Name[uk]=Восьмикутник
 Name[x-test]=xxOctogonxx

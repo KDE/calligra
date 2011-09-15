@@ -1,10 +1,13 @@
 [Desktop Entry]
 Name=Macro
+Name[bg]=Макрос
 Name[el]=Μακροεντολή
 Name[es]=Macro
 Name[et]=Makro
+Name[it]=Macro
 Name[nb]=Makro
 Name[nl]=Macro
+Name[pl]=Makro
 Name[pt]=Macro
 Name[pt_BR]=Macro
 Name[sv]=Makro
@@ -12,3 +15,4 @@ Name[ug]=Macro
 Name[uk]=Макрос
 Name[x-test]=xxMacroxx
 Name[zh_CN]=宏
+Name[zh_TW]=巨集

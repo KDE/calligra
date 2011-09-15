@@ -1,12 +1,12 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import KWord
+import Words
 
 idx = 0
-shapes = KWord.shapeKeys()
+shapes = Words.shapeKeys()
 for shapeId in shapes:
-    frame = KWord.addFrame("myshape", shapeId)
+    frame = Words.addFrame("myshape", shapeId)
     if frame != None:
         #frame.setTextRunAround(tableframe.RunThrough)
         frame.setPosition(idx % 6 * 80 + 20, 100 * idx + 20)

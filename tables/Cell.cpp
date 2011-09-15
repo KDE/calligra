@@ -118,8 +118,8 @@ Cell::Cell(const Sheet* sheet, int col, int row)
         : d(new Private)
 {
     Q_ASSERT(sheet != 0);
-    Q_ASSERT(1 <= col && col <= KS_colMax);
-    Q_ASSERT(1 <= row && row <= KS_rowMax);
+    Q_ASSERT_X(1 <= col && col <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(col).toLocal8Bit());
+    Q_ASSERT_X(1 <= row && row <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(row).toLocal8Bit());
     d->sheet = const_cast<Sheet*>(sheet);
     d->column = col;
     d->row = row;
@@ -129,8 +129,8 @@ Cell::Cell(const Sheet* sheet, const QPoint& pos)
         : d(new Private)
 {
     Q_ASSERT(sheet != 0);
-    Q_ASSERT(1 <= pos.x() && pos.x() <= KS_colMax);
-    Q_ASSERT(1 <= pos.y() && pos.y() <= KS_rowMax);
+    Q_ASSERT_X(1 <= pos.x() && pos.x() <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.x()).toLocal8Bit());
+    Q_ASSERT_X(1 <= pos.y() && pos.y() <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.y()).toLocal8Bit());
     d->sheet = const_cast<Sheet*>(sheet);
     d->column = pos.x();
     d->row = pos.y();
@@ -1236,8 +1236,8 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         for (int i = 0; i < shapes.count(); ++i) {
             KoShape* const shape = shapes[i];
             const QPointF bottomRight = shape->boundingRect().bottomRight();
-            double endX = 0.0;
-            double endY = 0.0;
+            qreal endX = 0.0;
+            qreal endY = 0.0;
             const int col = sheet()->leftColumn(bottomRight.x(), endX);
             const int row = sheet()->topRow(bottomRight.y(), endY);
             shape->setAdditionalAttribute("table:end-cell-address", Cell(sheet(), col, row).name());
@@ -1950,22 +1950,17 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
             if (result.hasAttribute("dataType"))
                 dataType = result.attribute("dataType");
 
-            bool clear = true;
             // boolean ?
             if (dataType == "Bool") {
                 if (t == "false")
                     setValue(Value(false));
                 else if (t == "true")
                     setValue(Value(true));
-                else
-                    clear = false;
             } else if (dataType == "Num") {
                 bool ok = false;
                 double dd = t.toDouble(&ok);
                 if (ok)
                     setValue(Value(dd));
-                else
-                    clear = false;
             } else if (dataType == "Date") {
                 bool ok = false;
                 double dd = t.toDouble(&ok);
@@ -1982,8 +1977,6 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                     QDate date(year, month, day);
                     if (date.isValid())
                         setValue(Value(date, sheet()->map()->calculationSettings()));
-                    else
-                        clear = false;
                 }
             } else if (dataType == "Time") {
                 bool ok = false;
@@ -2005,8 +1998,6 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                     QTime time(hours, minutes, second);
                     if (time.isValid())
                         setValue(Value(time, sheet()->map()->calculationSettings()));
-                    else
-                        clear = false;
                 }
             } else {
                 setValue(Value(t));

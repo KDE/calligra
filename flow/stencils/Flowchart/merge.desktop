@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=Merge
+Name[bg]=Сливане
+Name[cs]=Sloučit
 Name[el]=Συγχώνευση
 Name[nb]=Slå sammen
+Name[nds]=Tosamenföhren
 Name[nl]=Samenvoegen
+Name[pl]=Scal
 Name[pt]=Reunião
 Name[pt_BR]=Mesclar
 Name[sv]=Sammanfoga
@@ -10,3 +14,4 @@ Name[ug]=بىرىكتۈر
 Name[uk]=Об'єднання
 Name[x-test]=xxMergexx
 Name[zh_CN]=合并
+Name[zh_TW]=合併

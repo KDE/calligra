@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -36,11 +36,11 @@ Splash::Splash(QWidget *parent)
         : QSplashScreen(parent),
         m_layout(0),
         m_label(0),
-        m_kOfficeLogo(SPLASH_LOGO_KOFFICE_PATH)
+        m_calligraLogo(SPLASH_LOGO_CALLIGRA_PATH)
 {
     m_layout= new QVBoxLayout(this);
     m_label=new QLabel(this);
-    m_label->setPixmap(m_kOfficeLogo);
+    m_label->setPixmap(m_calligraLogo);
     m_layout->addWidget(m_label);
     m_label->setAlignment(Qt::AlignCenter);
     this->setLayout(m_layout);

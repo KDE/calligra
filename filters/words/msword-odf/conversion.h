@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -116,24 +116,26 @@ namespace Conversion
     /**
      * Convert the shading information to a color string.
      * @param SHD structure
-     * @param current background-color in the format "#RRGGBB"
+     * @param background color in the format "#RRGGBB"
+     * @param font color in the format "#RRGGBB"
      * @return color in the format "#RRGGBB" or an empty string.
      */
-    QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor);
+    QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor);
 
     /**
-     * @return the name of a color contrasting to the provided background color
-     * in the format "#RRGGBB".
+     * Compute a color contrasting to the provided background color.
+     * @return color in the format "#RRGGBB".
      */
     QString contrastFontColor(const QString& bgColor);
 
     /**
-     * Compute auto color
+     * Compute a color for a COLORREF set to cvAuto.
      * @param SHD shading structure
-     * @param backgroundColor in the format "#RRGGBB"
-     * @return color in the format "#RRGGBB"
+     * @param background color in the format "#RRGGBB"
+     * @param font color in the format "#RRGGBB"
+     * @return color in the format "#RRGGBB".
      */
-    QString computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor);
+    QString computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor,  const QString& fontColor);
 
 
     /**
@@ -165,32 +167,32 @@ namespace Conversion
     QString setBorderAttributes(const wvWare::Word97::BRC& brc);
 
     /**
-     * Get a koffice:borderspecial value "style".
+     * Get a calligra:borderspecial value "style".
      */
-    QString borderKOfficeAttributes(const wvWare::Word97::BRC& brc);
+    QString borderCalligraAttributes(const wvWare::Word97::BRC& brc);
 
     /**
-     * Convert wv2's Header Type to a KWord frameInfo value.
+     * Convert wv2's Header Type to a Words frameInfo value.
      */
     int headerTypeToFrameInfo(unsigned char type);
 
     /**
-     * Convert wv2's Header Type to a KWord frameset name.
+     * Convert wv2's Header Type to a Words frameset name.
      */
     QString headerTypeToFramesetName(unsigned char type);
 
     /**
-     * Convert a mask of Header Types to the hType value for KWord.
+     * Convert a mask of Header Types to the hType value for Words.
      */
     int headerMaskToHType(unsigned char mask);
 
     /**
-     * Convert a mask of Header Types to the fType value for KWord
+     * Convert a mask of Header Types to the fType value for Words
      */
     int headerMaskToFType(unsigned char mask);
 
     /**
-     * Convert wv2's FLD to KWord FIELD.subtype (or -1 if can't be handled)
+     * Convert wv2's FLD to Words FIELD.subtype (or -1 if can't be handled)
      */
     int fldToFieldType(const wvWare::FLD* fld);
 
@@ -210,6 +212,26 @@ namespace Conversion
 
 /*    // Convert alignment code to string */
 /*    QString alignment( int jc ); */
+
+    /**
+     * @return horizontal position for the anchor.
+     */
+    const char* getHorizontalPos(qint16 dxaAbs);
+
+    /**
+     * @return relative horizontal position for the anchor.
+     */
+    const char* getHorizontalRel(uint pcHorz);
+
+    /**
+     * @return vertical position for the anchor.
+     */
+    const char* getVerticalPos(qint16 dyaAbs);
+
+    /**
+     * @return relative vertical position for the anchor.
+     */
+    const char* getVerticalRel(uint pcVert);
 
 } // namespace Conversion
 

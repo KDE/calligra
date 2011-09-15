@@ -113,7 +113,7 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
             }
             if (popup()) {
                 const int rowToHighlight = rowToHighlightForLookupTable();
-                popup()->tableView()->setHighlightedRow(rowToHighlight);
+                popup()->tableView()->setHighlightedRecord(rowToHighlight);
 
                 const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnsCount());
                 if (m_setVisibleValueOnSetValueInternal && -1 != visibleColumn) {
@@ -141,14 +141,14 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
         if (popup()) {
             if (origValue().isNull()) {
                 popup()->tableView()->clearSelection();
-                popup()->tableView()->setHighlightedRow(0);
+                popup()->tableView()->setHighlightedRecord(0);
             } else {
                 if (relData) {
                     if (rowToHighlight != -1)
-                        popup()->tableView()->setHighlightedRow(rowToHighlight);
+                        popup()->tableView()->setHighlightedRecord(rowToHighlight);
                 } else if (!lookupFieldSchema) {
                     //popup()->tableView()->selectRow(origValue().toInt());
-                    popup()->tableView()->setHighlightedRow(origValue().toInt());
+                    popup()->tableView()->setHighlightedRecord(origValue().toInt());
                 }
             }
         }
@@ -223,7 +223,7 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     if (column() && column()->isRelatedDataEditable())
         return str; //new value entered and that's allowed
 
-    kWarning() << "no related row found, ID will be painted!";
+    kWarning() << "no related record found, ID will be painted!";
     if (allowNulls)
         return QString();
     return str; //for sanity but it's weird to show id to the user
@@ -369,7 +369,7 @@ void KexiComboBoxBase::createPopup(bool show)
             popup()->tableView()->clearSelection();
         else {
             popup()->tableView()->selectRow(0);
-            popup()->tableView()->setHighlightedRow(0);
+            popup()->tableView()->setHighlightedRecord(0);
         }
     }
     if (show && internalEditor() && !internalEditor()->isVisible())
@@ -404,11 +404,11 @@ void KexiComboBoxBase::createPopup(bool show)
             m_selectAllInInternalEditor_enabled = show;
             m_setValueInInternalEditor_enabled = show;
             if (rowToHighlight == -1) {
-                rowToHighlight = qMax(popup()->tableView()->highlightedRow(), 0);
+                rowToHighlight = qMax(popup()->tableView()->highlightedRecord(), 0);
                 setValueInInternalEditor(QVariant());
             }
             popup()->tableView()->selectRow(rowToHighlight);
-            popup()->tableView()->setHighlightedRow(rowToHighlight);
+            popup()->tableView()->setHighlightedRecord(rowToHighlight);
             if (rowToHighlight < popup()->tableView()->rowsPerPage())
                 popup()->tableView()->ensureCellVisible(0, -1);
 
@@ -451,7 +451,7 @@ void KexiComboBoxBase::acceptPopupSelection()
         return;
     KexiDB::RecordData *record = popup()->tableView()->highlightedItem();
     if (record) {
-        popup()->tableView()->selectRow(popup()->tableView()->highlightedRow());
+        popup()->tableView()->selectRow(popup()->tableView()->highlightedRecord());
         slotRowAccepted(record, -1);
     }
     popup()->hide();
@@ -524,7 +524,7 @@ void KexiComboBoxBase::setValueOrTextInInternalEditor(const QVariant& value)
 bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
 {
     const int k = ke->key();
-    int highlightedOrSelectedRow = popup() ? popup()->tableView()->highlightedRow() : -1;
+    int highlightedOrSelectedRow = popup() ? popup()->tableView()->highlightedRecord() : -1;
     if (popup() && highlightedOrSelectedRow < 0)
         highlightedOrSelectedRow = popup()->tableView()->currentRow();
 
@@ -539,46 +539,46 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
 
     switch (k) {
     case Qt::Key_Up:
-        popup()->tableView()->setHighlightedRow(
+        popup()->tableView()->setHighlightedRecord(
             qMax(highlightedOrSelectedRow - 1, 0));
-        updateTextForHighlightedRow();
+        updateTextForHighlightedRecord();
         return true;
     case Qt::Key_Down:
-        popup()->tableView()->setHighlightedRow(
+        popup()->tableView()->setHighlightedRecord(
             qMin(highlightedOrSelectedRow + 1, popup()->tableView()->rows() - 1));
-        updateTextForHighlightedRow();
+        updateTextForHighlightedRecord();
         return true;
     case Qt::Key_PageUp:
-        popup()->tableView()->setHighlightedRow(
+        popup()->tableView()->setHighlightedRecord(
             qMax(highlightedOrSelectedRow - popup()->tableView()->rowsPerPage(), 0));
-        updateTextForHighlightedRow();
+        updateTextForHighlightedRecord();
         return true;
     case Qt::Key_PageDown:
-        popup()->tableView()->setHighlightedRow(
+        popup()->tableView()->setHighlightedRecord(
             qMin(highlightedOrSelectedRow + popup()->tableView()->rowsPerPage(),
                  popup()->tableView()->rows() - 1));
-        updateTextForHighlightedRow();
+        updateTextForHighlightedRecord();
         return true;
     case Qt::Key_Home:
-        popup()->tableView()->setHighlightedRow(0);
-        updateTextForHighlightedRow();
+        popup()->tableView()->setHighlightedRecord(0);
+        updateTextForHighlightedRecord();
         return true;
     case Qt::Key_End:
-        popup()->tableView()->setHighlightedRow(popup()->tableView()->rows() - 1);
-        updateTextForHighlightedRow();
+        popup()->tableView()->setHighlightedRecord(popup()->tableView()->rows() - 1);
+        updateTextForHighlightedRecord();
         return true;
     case Qt::Key_Enter:
     case Qt::Key_Return: //accept
         //select row that is highlighted
-        if (popup()->tableView()->highlightedRow() >= 0)
-            popup()->tableView()->selectRow(popup()->tableView()->highlightedRow());
+        if (popup()->tableView()->highlightedRecord() >= 0)
+            popup()->tableView()->selectRow(popup()->tableView()->highlightedRecord());
         //do not return true: allow to process event
     default: ;
     }
     return false;
 }
 
-void KexiComboBoxBase::updateTextForHighlightedRow()
+void KexiComboBoxBase::updateTextForHighlightedRecord()
 {
     KexiDB::RecordData* record = popup() ? popup()->tableView()->highlightedItem() : 0;
     if (record)
@@ -591,7 +591,7 @@ void KexiComboBoxBase::undoChanges()
     if (lookupFieldSchema) {
 //  kDebug() << "m_visibleValue BEFORE=" << m_visibleValue;
         if (popup())
-            popup()->tableView()->selectRow(popup()->tableView()->highlightedRow());
+            popup()->tableView()->selectRow(popup()->tableView()->highlightedRecord());
         m_visibleValue = visibleValueForLookupField();
 //  kDebug() << "m_visibleValue AFTER=" << m_visibleValue;
         setValueOrTextInInternalEditor(m_visibleValue);

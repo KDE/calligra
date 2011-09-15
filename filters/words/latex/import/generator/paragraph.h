@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KWORD_LATEX_IMPORT_PARAGRAPH_H__
-#define __KWORD_LATEX_IMPORT_PARAGRAPH_H__
+#ifndef __WORDS_LATEX_IMPORT_PARAGRAPH_H__
+#define __WORDS_LATEX_IMPORT_PARAGRAPH_H__
 
 #include <QList>
 
@@ -49,7 +49,7 @@ public:
     bool analyze(QList<Element*>* elt);
 
     /**
-     * Generate a kword document.
+     * Generate a words document.
      *
      * @return <code>true</code> if the generation succeeded.
      */
@@ -60,4 +60,4 @@ private:
     //QPtrList<TextZone> _textzones;
 };
 
-#endif /* __KWORD_LATEX_IMPORT_PARAGRAPH_H__ */
+#endif /* __WORDS_LATEX_IMPORT_PARAGRAPH_H__ */

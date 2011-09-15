@@ -190,6 +190,8 @@ KisImage::~KisImage()
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
+
+    disconnect(); // in case Qt gets confused
 }
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
@@ -239,7 +241,7 @@ KisSelectionSP KisImage::globalSelection() const
 void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
 {
     if (globalSelection == 0)
-        m_d->globalSelection = new KisSelection(m_d->rootLayer->projection(), new KisDefaultBounds(this));
+        m_d->globalSelection = new KisSelection(new KisDefaultBounds(this));
     else
         m_d->globalSelection = globalSelection;
 }
@@ -428,11 +430,11 @@ void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrateg
 
     m_d->adapter->beginMacro(i18n("Scale Image"));
     m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    
+
     if(!scaleOnlyShapes) {
         m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
     }
-    
+
     KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy, scaleOnlyShapes);
     m_d->rootLayer->accept(visitor);
 
@@ -733,8 +735,7 @@ void KisImage::flatten()
     setModified();
 }
 
-// FIXME: Rename to Merge Down?
-KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
+KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
     if(!layer->prevSibling()) return 0;
 
@@ -990,11 +991,6 @@ void KisImage::notifyLayersChanged()
     emit sigPostLayersChanged(rootLayer());
 }
 
-void KisImage::notifyPropertyChanged(KisLayerSP layer)
-{
-    emit sigLayerPropertiesChanged(layer);
-}
-
 QRect KisImage::bounds() const
 {
     return QRect(0, 0, width(), height());
@@ -1082,7 +1078,7 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
                 annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
             }
         }
-#endif        
+#endif
     }
 
     if (annotation)

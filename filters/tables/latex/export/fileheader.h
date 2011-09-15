@@ -1,5 +1,5 @@
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000, 2002 Robert JACOLIN
 **

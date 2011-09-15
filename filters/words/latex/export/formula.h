@@ -1,6 +1,6 @@
 /* A TEXT IS A SET OF TITLES, A (SET OF) PARAGRAPHS OR LISTS */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __KWORD_LATEXFORMULA__
-#define __KWORD_LATEXFORMULA__
+#ifndef __WORDS_LATEXFORMULA__
+#define __WORDS_LATEXFORMULA__
 
 #include "element.h"
 #include <QString>
@@ -129,4 +129,4 @@ private:
     void analyzeParamFrame(const QDomNode);
 };
 
-#endif /* __KWORD_LATEXFORMULA_H__ */
+#endif /* __WORDS_LATEXFORMULA_H__ */

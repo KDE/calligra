@@ -11,7 +11,6 @@ set(docximport_PART_SRCS
     DocxXmlStylesReader.cpp
     DocxXmlFontTableReader.cpp
     DocxXmlCommentsReader.cpp
-    DocxXmlNotesReader.cpp
     DocxXmlDocumentReader.cpp
     DocxXmlHeaderReader.cpp
     DocxXmlFooterReader.cpp
@@ -62,7 +61,7 @@ ENDIF(FALSE)
 ########### install files ###############
 
 install( FILES 
-  kword_docx_import.desktop
-#todo  kword_docx_export.desktop
+  words_docx_import.desktop
+#todo  words_docx_export.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )

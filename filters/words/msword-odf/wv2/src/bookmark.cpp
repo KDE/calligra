@@ -342,7 +342,7 @@ bool Bookmarks::valid(U16 &num, const U32 ccpText)
         std::vector<UString>::const_iterator it = m_name.begin();
         while(it != m_name.end()) {
             wvlog << "bkmk name:" << (*it).ascii();
-            it++;
+            ++it;
         }
 #endif
     }

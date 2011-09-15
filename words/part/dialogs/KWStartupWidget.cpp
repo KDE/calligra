@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005, 2007-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -64,8 +64,6 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     connect(m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(sizeUpdated(const KoPageLayout&)));
     connect(widget.createButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    connect(widget.mainText, SIGNAL(toggled(bool)), m_sizeWidget, SLOT(setTextAreaAvailable(bool)));
-    connect(widget.mainText, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setTextAreaAvailable(bool)));
     connect(m_sizeWidget, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(unitChanged(const KoUnit&)));
     connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), prev, SLOT(setColumns(const KoColumns&)));
     connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), this, SLOT(columnsUpdated(const KoColumns&)));
@@ -99,9 +97,11 @@ void KWStartupWidget::buttonClicked()
     KWPageStyle style = m_doc->pageManager()->defaultPageStyle();
     Q_ASSERT(style.isValid());
     style.setColumns(m_columns);
-    style.setHasMainTextFrame(widget.mainText->isChecked());
+    style.setHasMainTextFrame(true);
     style.setPageLayout(m_layout);
     m_doc->setUnit(m_unit);
+
+    m_doc->relayout();
 
     emit documentSelected();
 }

@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Up-Down Arrow
+Name[bg]=Стрелка нагоре-надолу
+Name[da]=Pil op-ned
 Name[de]=Pfeil nach oben und unten
 Name[el]=Πάνω-κάτω βέλος
 Name[es]=Flecha arriba-abajo
@@ -7,8 +9,10 @@ Name[et]=Nool üles-alla
 Name[it]=Freccia in su e in giù
 Name[nb]=Pil opp-ned
 Name[nl]=Pijl omhoog-omlaag
+Name[pl]=Strzałka w górę-dół
 Name[pt]=Seta Cima-Baixo
 Name[pt_BR]=Seta cima-baixo
+Name[ru]=Стрелка вверх и вниз
 Name[sv]=Uppåt-neråtpil
 Name[uk]=Стрілки вгору і вниз
 Name[x-test]=xxUp-Down Arrowxx

@@ -42,11 +42,11 @@ KoFilter::ConversionStatus LATEXImport::convert(const QByteArray& from, const QB
 {
     QString config;
 
-    if (from != "text/x-tex" || to != "application/x-kword")
+    if (from != "text/x-tex" || to != "application/x-words")
         return KoFilter::NotImplemented;
 
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()),
-                                        KoStore::Write, "application/x-kword");
+                                        KoStore::Write, "application/x-words");
     /*if(!out || !out->open("root")) {
         kError(30503) << "Unable to open output file!" << endl;
     delete out;

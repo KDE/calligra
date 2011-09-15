@@ -20,13 +20,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// kword includes
+// words includes
 #include "KWCanvasItem.h"
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
@@ -71,7 +71,7 @@ void KWCanvasItem::pageSetupChanged()
 
 void KWCanvasItem::updateSize()
 {
-    resourceManager()->setResource(KWord::CurrentPageCount, m_document->pageCount());
+    resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
     emit documentSize(m_viewMode->contentsSize());
 }
 

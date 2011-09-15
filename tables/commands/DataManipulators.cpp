@@ -36,7 +36,7 @@
 
 using namespace Calligra::Tables;
 
-AbstractDataManipulator::AbstractDataManipulator(QUndoCommand* parent)
+AbstractDataManipulator::AbstractDataManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
     m_checkLock = true;
@@ -76,14 +76,12 @@ bool AbstractDataManipulator::process(Element* element)
                 }
                 cell.parseUserInput(val.asString());
             } else {
-                if (!val.isEmpty()) {
-                    cell.setValue(val);
-                    cell.setUserInput(m_sheet->map()->converter()->asString(val).asString());
-                    if (fmtType != Format::None) {
-                        Style style;
-                        style.setFormatType(fmtType);
-                        cell.setStyle(style);
-                    }
+                cell.setValue(val); // val can be empty what is perfect fine
+                cell.setUserInput(m_sheet->map()->converter()->asString(val).asString());
+                if (fmtType != Format::None) {
+                    Style style;
+                    style.setFormatType(fmtType);
+                    cell.setStyle(style);
                 }
             }
         }
@@ -103,7 +101,7 @@ bool AbstractDataManipulator::mainProcessing()
 {
     if (m_reverse) {
         // reverse - use the stored value
-        QUndoCommand::undo(); // undo child commands
+        KUndo2Command::undo(); // undo child commands
         return true;
     }
     return AbstractRegionCommand::mainProcessing();
@@ -118,7 +116,7 @@ bool AbstractDataManipulator::postProcessing()
     return true;
 }
 
-AbstractDFManipulator::AbstractDFManipulator(QUndoCommand *parent)
+AbstractDFManipulator::AbstractDFManipulator(KUndo2Command *parent)
         : AbstractDataManipulator(parent)
 {
     m_changeformat = true;
@@ -151,14 +149,14 @@ bool AbstractDFManipulator::process(Element* element)
 }
 
 
-DataManipulator::DataManipulator(QUndoCommand* parent)
+DataManipulator::DataManipulator(KUndo2Command* parent)
         : AbstractDataManipulator(parent)
         , m_format(Format::None)
         , m_parsing(false)
         , m_expandMatrix(false)
 {
     // default name for DataManipulator, can be changed using setText
-    setText(i18n("Change Value"));
+    setText(i18nc("(qtundo-format)", "Change Value"));
 }
 
 DataManipulator::~DataManipulator()
@@ -224,7 +222,7 @@ Value DataManipulator::newValue(Element *element, int col, int row,
 
 SeriesManipulator::SeriesManipulator()
 {
-    setText(i18n("Insert Series"));
+    setText(i18nc("(qtundo-format)", "Insert Series"));
 
     m_type = Linear;
     m_last = -2;
@@ -302,7 +300,7 @@ FillManipulator::FillManipulator()
 {
     m_dir = Down;
     m_changeformat = true;
-    setText(i18n("Fill Selection"));
+    setText(i18nc("(qtundo-format)", "Fill Selection"));
 }
 
 FillManipulator::~FillManipulator()
@@ -343,7 +341,7 @@ Style FillManipulator::newFormat(Element *element, int col, int row)
 CaseManipulator::CaseManipulator()
 {
     m_mode = Upper;
-    setText(i18n("Change Case"));
+    setText(i18nc("(qtundo-format)", "Change Case"));
 }
 
 CaseManipulator::~CaseManipulator()
@@ -387,12 +385,12 @@ bool CaseManipulator::wantChange(Element *element, int col, int row)
 
 
 
-ShiftManipulator::ShiftManipulator(QUndoCommand *parent)
+ShiftManipulator::ShiftManipulator(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mode(Insert)
 {
     m_checkLock = true;
-    setText(i18n("Insert Cells"));
+    setText(i18nc("(qtundo-format)", "Insert Cells"));
 }
 
 ShiftManipulator::~ShiftManipulator()
@@ -404,9 +402,9 @@ void ShiftManipulator::setReverse(bool reverse)
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
     if (!m_reverse)
-        setText(i18n("Insert Cells"));
+        setText(i18nc("(qtundo-format)", "Insert Cells"));
     else
-        setText(i18n("Remove Cells"));
+        setText(i18nc("(qtundo-format)", "Remove Cells"));
 }
 
 bool ShiftManipulator::process(Element* element)
@@ -423,7 +421,7 @@ bool ShiftManipulator::process(Element* element)
 
         // undo deletion
         if (m_mode == Delete) {
-            QUndoCommand::undo(); // undo child commands
+            KUndo2Command::undo(); // undo child commands
         }
     } else { // deletion
         if (m_direction == ShiftBottom) {
@@ -436,7 +434,7 @@ bool ShiftManipulator::process(Element* element)
 
         // undo insertion
         if (m_mode == Insert) {
-            QUndoCommand::undo(); // undo child commands
+            KUndo2Command::undo(); // undo child commands
         }
     }
     return true;
@@ -491,9 +489,9 @@ bool ShiftManipulator::mainProcessing()
 {
     if (cells().count() > 1) { // non-contiguous selection
         if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
-            QUndoCommand::undo(); // process all sub-commands
+            KUndo2Command::undo(); // process all sub-commands
         } else {
-            QUndoCommand::redo(); // process all sub-commands
+            KUndo2Command::redo(); // process all sub-commands
         }
         return true;
     }

@@ -280,8 +280,8 @@ void KarbonLayerDocker::addLayer()
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName(name);
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        QUndoCommand *cmd = new KoShapeCreateCommand(m_part, layer, 0);
-        cmd->setText(i18n("Create Layer"));
+        KUndo2Command *cmd = new KoShapeCreateCommand(m_part, layer, 0);
+        cmd->setText(i18nc("(qtundo-format)", "Create Layer"));
         canvasController->canvas()->addCommand(cmd);
         m_model->update();
     }
@@ -295,7 +295,7 @@ void KarbonLayerDocker::deleteItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedLayers, selectedShapes);
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
         if (m_part->document().layers().count() > selectedLayers.count()) {
@@ -305,7 +305,7 @@ void KarbonLayerDocker::deleteItem()
                 deleteShapes.append(layer);
             }
             cmd = new KoShapeDeleteCommand(m_part, deleteShapes);
-            cmd->setText(i18n("Delete Layer"));
+            cmd->setText(i18nc("(qtundo-format)", "Delete Layer"));
         } else {
             KMessageBox::error(0L, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
         }
@@ -330,7 +330,7 @@ void KarbonLayerDocker::raiseItem()
 
     KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
         // check if all layers could be raised
@@ -364,7 +364,7 @@ void KarbonLayerDocker::lowerItem()
 
     KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
         // check if all layers could be raised
@@ -467,7 +467,11 @@ void KarbonLayerDocker::thumbnailView()
 
 void KarbonLayerDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
 {
-    bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+    const bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+
+    // collapse all layers if in thumbnail mode
+    if (!expandable)
+        m_layerView->collapseAll();
 
     m_layerView->setDisplayMode(mode);
     m_layerView->setItemsExpandable(expandable);

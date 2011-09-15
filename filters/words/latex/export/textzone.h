@@ -3,7 +3,7 @@
  * OR FOR SPECIAL PARAG.
  */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000, 2002 Robert JACOLIN
 **
@@ -23,8 +23,8 @@
 **
 */
 
-#ifndef __KWORD_LATEX_TEXTZONE_H__
-#define __KWORD_LATEX_TEXTZONE_H__
+#ifndef __WORDS_LATEX_TEXTZONE_H__
+#define __WORDS_LATEX_TEXTZONE_H__
 
 #include <QTextStream>
 #include <QString>
@@ -109,4 +109,4 @@ private:
 
 QString convertSpecialChar(int);
 
-#endif /* __KWORD_LATEX_TEXTZONE_H__ */
+#endif /* __WORDS_LATEX_TEXTZONE_H__ */

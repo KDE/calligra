@@ -1,10 +1,18 @@
 [Desktop Entry]
 Name=WWW server
+Name[bg]=Сървър WWW
+Name[de]=WWW-Server
 Name[el]=Εξυπηρετητής WWW
 Name[es]=Servidor WWW
 Name[et]=Veebiserver
+Name[it]=Server WWW
+Name[nb]=WWW-tjener
+Name[nds]=WWW-Server
+Name[nl]=WWW-server
+Name[pl]=Serwer WWW
 Name[pt]=Servidor WWW
 Name[pt_BR]=Servidor WWW
 Name[sv]=Webbserver
 Name[uk]=Вебсервер
 Name[x-test]=xxWWW serverxx
+Name[zh_TW]=網頁伺服器

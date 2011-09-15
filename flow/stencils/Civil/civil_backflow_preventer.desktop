@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=Backflow Preventer
+Name[bg]=Предпазител срещу обратен поток
+Name[de]=Rückflussverhinderer
 Name[et]=Tagasilöögiklapp
+Name[nb]=Tilbakeslagsventil
+Name[nds]=Torüchfleet-Schuul
+Name[pl]=Element zapobiegający cofnięciu
 Name[pt]=Prevenção Refluxo
 Name[pt_BR]=Bloqueio de refluxo
 Name[sv]=Backflödesventil
 Name[uk]=Запобіжник зворотного потоку
 Name[x-test]=xxBackflow Preventerxx
+Name[zh_TW]=逆流預防裝置

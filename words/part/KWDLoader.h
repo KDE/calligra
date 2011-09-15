@@ -52,7 +52,7 @@ public:
 
     /**
      * Load a document from a xml structure.
-     * @param root the root node from an xml document of the kword file format upto 1.4
+     * @param root the root node from an xml document of the words file format upto 1.4
      * @return return true on success, false on failure
      */
     bool load(KoXmlElement &root);
@@ -65,7 +65,7 @@ signals:
     void progressUpdate(int percent);
 
 private:
-    // old kword files have a lot of fields for the image key, so we duplicate that here.
+    // old words files have a lot of fields for the image key, so we duplicate that here.
     struct ImageKey {
         QString year, month, day, hour, minute, second, milisecond;
         QString oldFilename, filename;

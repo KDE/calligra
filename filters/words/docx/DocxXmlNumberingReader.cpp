@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -25,8 +25,6 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
-#include <KoGenStyles.h>
-#include <limits.h>
 #include <MsooXmlUnits.h>
 
 #define MSOOXML_CURRENT_NS "w"
@@ -283,7 +281,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
     }
 
     m_picBulletPaths[numPicBulletId] = m_currentVMLProperties.imagedataPath;
-    m_picBulletSizes[numPicBulletId] = m_imageSize;
 
     READ_EPILOGUE
 }
@@ -407,7 +404,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlText()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         if (!m_bulletStyle) {
-            m_currentBulletProperties.setSuffix(val.right(1));
+            if (val.at(0) == '%' && val.length() == 2) {
+                m_currentBulletProperties.setSuffix("");
+            }
+            else {
+                m_currentBulletProperties.setSuffix(val.right(1));
+            }
         }
         else {
             m_bulletCharacter = val;
@@ -436,9 +438,9 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    TRY_READ_ATTR(numId);
+    TRY_READ_ATTR(numId)
 
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle);
 
     while (!atEnd()) {
         readNext();
@@ -454,19 +456,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
         }
     }
 
-    int index = 0;
-    while (index < m_currentBulletList.size()) {
-        m_currentBulletProperties = m_currentBulletList.at(index);
-        m_currentListStyle.addChildElement("list-style-properties",
-            m_currentBulletProperties.convertToListProperties());
-        ++index;
-    }
-
-    if (!numId.isEmpty()) {
-        QString name = "NumStyle" + numId;
-        KoGenStyles::InsertionFlags insertionFlags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
-        mainStyles->insert(m_currentListStyle, name, insertionFlags);
-    }
+    m_context->m_bulletStyles[numId] = m_currentBulletList;
 
     READ_EPILOGUE
 }
@@ -573,7 +563,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlPicBulletId()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_picBulletPaths.value(val));
-        m_currentBulletProperties.setBulletSize(m_picBulletSizes.value(val));
     }
 
     readNext();

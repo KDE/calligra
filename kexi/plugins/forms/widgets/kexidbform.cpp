@@ -41,7 +41,7 @@
 #include <formeditor/objecttree.h>
 //2.0 #include <formeditor/formmanager.h>
 #include <formeditor/widgetlibrary.h>
-#include <widget/tableview/kexidataawareobjectiface.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <widget/kexiscrollview.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
@@ -480,7 +480,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         || key == Qt::Key_End || key == Qt::Key_Down || key == Qt::Key_Up))
                         /* ^^ home/end/down/up are already handled by widgets */
                         && d->dataAwareObject->handleKeyPress(
-                            ke, curRow, curCol, false/*!fullRowSelection*/, &moveToFirstField, &moveToLastField)) {
+                            ke, curRow, curCol, false/*!fullRecordSelection*/, &moveToFirstField, &moveToLastField)) {
                     if (ke->isAccepted())
                         return true;
                     QWidget* widgetToFocus;

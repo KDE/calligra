@@ -20,7 +20,7 @@
 #include "StateToolWidget.h"
 
 #include <QItemDelegate>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KCategorizedSortFilterProxyModel>
 
@@ -40,55 +40,54 @@
 
 StateToolWidget::StateToolWidget(StateTool* _stateTool) : m_tool(_stateTool)
 {
-  m_widget.setupUi(this);
-  connect(m_widget.stateComboBox, SIGNAL(activated(int)), SLOT(save()));
-  connect(m_tool, SIGNAL(shapeChanged(StateShape*)),SLOT(open(StateShape*)));
-  m_model = new StatesModel();
-  m_proxyModel = new KCategorizedSortFilterProxyModel();
-  m_proxyModel->setSourceModel(m_model);
-  m_proxyModel->sort(0);
-  m_proxyModel->setSortRole(StatesModel::SortRole);
-  m_proxyModel->setCategorizedModel(true);
-  m_widget.stateComboBox->setModel(m_proxyModel);
-  m_widget.stateComboBox->setItemDelegate( new CategorizedItemDelegate(new QItemDelegate));
+    m_widget.setupUi(this);
+    connect(m_widget.stateComboBox, SIGNAL(activated(int)), SLOT(save()));
+    connect(m_tool, SIGNAL(shapeChanged(StateShape*)), SLOT(open(StateShape*)));
+    m_model = new StatesModel();
+    m_proxyModel = new KCategorizedSortFilterProxyModel();
+    m_proxyModel->setSourceModel(m_model);
+    m_proxyModel->sort(0);
+    m_proxyModel->setSortRole(StatesModel::SortRole);
+    m_proxyModel->setCategorizedModel(true);
+    m_widget.stateComboBox->setModel(m_proxyModel);
+    m_widget.stateComboBox->setItemDelegate(new CategorizedItemDelegate(new QItemDelegate));
 }
 
-void StateToolWidget::blockChildSignals( bool block )
+void StateToolWidget::blockChildSignals(bool block)
 {
-  m_widget.stateComboBox->blockSignals(block);
+    m_widget.stateComboBox->blockSignals(block);
 }
 
 void StateToolWidget::open(StateShape *shape)
 {
-  m_shape = dynamic_cast<StateShape*>( shape );
-  if( ! m_shape )
-    return;
-  blockChildSignals(true);
-  m_widget.stateComboBox->setCurrentIndex(
-          m_proxyModel->mapFromSource(
-               m_model->indexFor(m_shape->categoryId(), m_shape->stateId()) ).row() );
-  blockChildSignals(false);
+    m_shape = dynamic_cast<StateShape*>(shape);
+    if(! m_shape)
+        return;
+    blockChildSignals(true);
+    m_widget.stateComboBox->setCurrentIndex(
+        m_proxyModel->mapFromSource(
+            m_model->indexFor(m_shape->categoryId(), m_shape->stateId())).row());
+    blockChildSignals(false);
 }
 
 void StateToolWidget::save()
 {
-  if( !m_shape )
-    return;
+    if(!m_shape)
+        return;
 
 //   QString newUrl = m_widget.urlEdit->text();
-  KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-  if ( canvasController ) {
-    KoCanvasBase* canvas = canvasController->canvas();
-    const State* state = m_model->stateAt(
-            m_proxyModel->mapToSource(m_proxyModel->index( m_widget.stateComboBox->currentIndex(), 0, QModelIndex()) ).row() );
-    if( state->category()->id() != m_shape->categoryId() || state->id() != m_shape->stateId() )
-    {
-      canvas->addCommand(new StateShapeChangeStateCommand(m_shape, state->category()->id(), state->id() ));
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    if(canvasController) {
+        KoCanvasBase* canvas = canvasController->canvas();
+        const State* state = m_model->stateAt(
+                                 m_proxyModel->mapToSource(m_proxyModel->index(m_widget.stateComboBox->currentIndex(), 0, QModelIndex())).row());
+        if(state->category()->id() != m_shape->categoryId() || state->id() != m_shape->stateId()) {
+            canvas->addCommand(new StateShapeChangeStateCommand(m_shape, state->category()->id(), state->id()));
+        }
     }
-  }
 }
 
-QUndoCommand * StateToolWidget::createCommand()
+KUndo2Command * StateToolWidget::createCommand()
 {
     save();
 

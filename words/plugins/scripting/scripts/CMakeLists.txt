@@ -1,6 +1,6 @@
 install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/words/scripts)
 
-#install(FILES variable_readfile.py DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/variables)
+#install(FILES variable_readfile.py DESTINATION ${DATA_INSTALL_DIR}/words/scripts/variables)
 
 install(FILES
     importfile.py

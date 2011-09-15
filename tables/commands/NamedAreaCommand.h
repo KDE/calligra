@@ -38,7 +38,7 @@ public:
     /**
      * Constructor.
      */
-    NamedAreaCommand(QUndoCommand* parent = 0);
+    NamedAreaCommand(KUndo2Command* parent = 0);
 
     /**
      * Destructor.

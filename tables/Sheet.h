@@ -2,7 +2,7 @@
    Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
-   Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2007 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,7 +41,7 @@
 
 class QAbstractItemModel;
 class QDomElement;
-class QUndoCommand;
+class KUndo2Command;
 class QWidget;
 
 class KoDataCenterBase;
@@ -499,7 +499,7 @@ public:
      *
      * \return the row for the given position \p _ypos
      */
-    int topRow(double _ypos, double &_top) const;
+    int topRow(qreal _ypos, qreal &_top) const;
 
     /**
      * \ingroup Coordinates
@@ -523,7 +523,7 @@ public:
      *
      * \return the column for the given position \p _xpos
      */
-    int leftColumn(double _xpos, double &_left) const;
+    int leftColumn(qreal _xpos, qreal &_left) const;
 
     /**
      * \ingroup Coordinates

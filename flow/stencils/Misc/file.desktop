@@ -1,11 +1,19 @@
 [Desktop Entry]
 Name=File
+Name[bg]=Файл
+Name[de]=Datei
 Name[el]=Αρχείο
 Name[es]=Archivo
 Name[et]=Fail
+Name[it]=File
+Name[nb]=Fil
+Name[nds]=Datei
+Name[nl]=Bestand
+Name[pl]=Plik
 Name[pt]=Ficheiro
 Name[pt_BR]=Arquivo
 Name[sv]=Fil
 Name[ug]=ھۆججەت
 Name[uk]=Файл
 Name[x-test]=xxFilexx
+Name[zh_TW]=檔案

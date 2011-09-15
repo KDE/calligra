@@ -34,7 +34,7 @@ namespace Tables
 class PageBreakCommand : public AbstractRegionCommand
 {
 public:
-    PageBreakCommand(QUndoCommand *parent = 0);
+    PageBreakCommand(KUndo2Command *parent = 0);
     virtual ~PageBreakCommand();
 
     enum Mode { BreakBeforeColumn, BreakBeforeRow };

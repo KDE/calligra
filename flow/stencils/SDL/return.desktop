@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Return
+Name[bg]=Връщане
 Name[el]=Επιστροφή
 Name[nb]=Returner
+Name[pl]=Zwróć
 Name[pt]=Retorno
 Name[pt_BR]=Retorno
 Name[sv]=Retur
@@ -9,3 +11,4 @@ Name[ug]=Return
 Name[uk]=Повернення
 Name[x-test]=xxReturnxx
 Name[zh_CN]=返回
+Name[zh_TW]=傳回

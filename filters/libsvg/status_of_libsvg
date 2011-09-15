@@ -1,9 +1,0 @@
-TODO
-
-STEPS
-1. Add custom data to KoShapes using setApplicationData() - done in test program
-2. SvgAnimationData extends KoShapeApplicationData and stores a Frame object. - done
-3. Frame object carries all frame attributes and their values. It has setters and getters for each. - done
-4. SvgWriter accepts a list of top level shapes. - done, already there.
-5. SvgWriter::saveFrame() should extract and save all frame attributes to a separate stream.
-6. Finally write this stream to the file after the scripts ahve been added.

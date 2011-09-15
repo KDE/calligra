@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     KComponentData cd("graphicsview-test");
 
     Calligra::Tables::Doc doc;
-    bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/koffice/docs/oos_AMSAT-IARU_Link_Model.ods"));
+    bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/calligra/docs/oos_AMSAT-IARU_Link_Model.ods"));
     if (!ok) {
         qDebug() << "failed to load";
         return 0;
@@ -48,6 +48,7 @@ int main(int argc, char** argv)
     Calligra::Tables::CanvasItem* canvas = new Calligra::Tables::CanvasItem(&doc);
 
     QRect usedArea = canvas->activeSheet()->usedArea(true);
+    QFontMetricsF fm(font, 0);
     QSizeF size(canvas->activeSheet()->columnPosition(usedArea.right()+3), canvas->activeSheet()->rowPosition(usedArea.bottom()+5));
     canvas->setDocumentSize(size);
     size = canvas->zoomHandler()->documentToView(size);
@@ -55,11 +56,11 @@ int main(int argc, char** argv)
     canvas->setPos(0, 0);
 
     Calligra::Tables::ColumnHeaderItem* columnHeader = static_cast<Calligra::Tables::ColumnHeaderItem*>(canvas->columnHeader());
-    static_cast<QGraphicsWidget*>(columnHeader)->resize(size.width(), canvas->zoomHandler()->zoomItY(font.pointSizeF() + 3));
+    static_cast<QGraphicsWidget*>(columnHeader)->resize(size.width(), fm.height() + 3);
     columnHeader->setPos(0, -columnHeader->height());
 
     Calligra::Tables::RowHeaderItem* rowHeader = static_cast<Calligra::Tables::RowHeaderItem*>(canvas->rowHeader());
-    static_cast<QGraphicsWidget*>(rowHeader)->resize(canvas->zoomHandler()->zoomItX(YBORDER_WIDTH), size.height());
+    static_cast<QGraphicsWidget*>(rowHeader)->resize(fm.width(QString::fromLatin1("99999")) + 3, size.height());
     rowHeader->setPos(-rowHeader->width(), 0);
 
     columnHeader->toolChanged("PanTool");

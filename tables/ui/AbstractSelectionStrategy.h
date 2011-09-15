@@ -56,7 +56,7 @@ public:
     virtual ~AbstractSelectionStrategy();
 
     virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual QUndoCommand* createCommand();
+    virtual KUndo2Command* createCommand();
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
     /**

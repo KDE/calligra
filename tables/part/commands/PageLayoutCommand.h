@@ -23,7 +23,7 @@
 
 #include "PrintSettings.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace Calligra
 {
@@ -35,10 +35,10 @@ class Sheet;
  * \ingroup Commands
  * Alters the print settings.
  */
-class PageLayoutCommand : public QUndoCommand
+class PageLayoutCommand : public KUndo2Command
 {
 public:
-    explicit PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, QUndoCommand* parent = 0);
+    explicit PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, KUndo2Command* parent = 0);
 
     virtual void redo();
     virtual void undo();

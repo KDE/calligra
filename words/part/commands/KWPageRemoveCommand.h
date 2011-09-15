@@ -20,17 +20,17 @@
 #ifndef KWPAGEREMOVECOMMAND_H
 #define KWPAGEREMOVECOMMAND_H
 
-#include "kword_export.h"
+#include "words_export.h"
 #include "KWPage.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KWDocument;
 class KoShapeMoveCommand;
 class KWTextFrameSet;
 
-/// The undo / redo command for removing a page in a kword document.
-class KWORD_TEST_EXPORT KWPageRemoveCommand : public QUndoCommand
+/// The undo / redo command for removing a page in a words document.
+class WORDS_TEST_EXPORT KWPageRemoveCommand : public KUndo2Command
 {
 public:
     /**
@@ -39,7 +39,7 @@ public:
      * @param page the page to remove.
      * @param parent the parent for command macros
      */
-    explicit KWPageRemoveCommand(KWDocument *document, KWPage page, QUndoCommand *parent = 0);
+    explicit KWPageRemoveCommand(KWDocument *document, KWPage page, KUndo2Command *parent = 0);
     ~KWPageRemoveCommand();
 
     /// (re)do the command

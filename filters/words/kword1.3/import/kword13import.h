@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_1_3_IMPORT_H
-#define KWORD_1_3_IMPORT_H
+#ifndef WORDS_1_3_IMPORT_H
+#define WORDS_1_3_IMPORT_H
 
 #include <QString>
 #include <q3cstring.h>
@@ -29,21 +29,21 @@
 
 class QIODevice;
 class KoStore;
-class KWord13Document;
+class Words13Document;
 
-class KWord13Import : public KoFilter
+class Words13Import : public KoFilter
 {
 
     Q_OBJECT
 
 public:
-    KWord13Import(QObject* parent, const QVariantList &);
-    virtual ~KWord13Import() {}
+    Words13Import(QObject* parent, const QVariantList &);
+    virtual ~Words13Import() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 protected:
-    bool parseInfo(QIODevice* io, KWord13Document& kwordDocument);
-    bool parseRoot(QIODevice* io, KWord13Document& kwordDocument);
-    bool postParse(KoStore* store, KWord13Document& doc);
+    bool parseInfo(QIODevice* io, Words13Document& kwordDocument);
+    bool parseRoot(QIODevice* io, Words13Document& kwordDocument);
+    bool postParse(KoStore* store, Words13Document& doc);
 };
-#endif // KWORD_1_3_IMPORT_H
+#endif // WORDS_1_3_IMPORT_H

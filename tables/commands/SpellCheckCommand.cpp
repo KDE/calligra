@@ -47,7 +47,7 @@ public:
     ValueStorage storage;
     Sonnet::Speller speller;
     Sonnet::Dialog* dialog;
-    QUndoCommand* command;
+    KUndo2Command* command;
 };
 
 SpellCheckCommand::SpellCheckCommand(const Region &region, KoCanvasBase* canvasBase)
@@ -126,9 +126,9 @@ void SpellCheckCommand::finishedCurrentFeed()
     if (d->dialog->originalBuffer() == d->dialog->buffer()) {
         return;
     }
-    // TODO Stefan: QUndoCommand-based undo recording for CellStorage.
+    // TODO Stefan: KUndo2Command-based undo recording for CellStorage.
     if (!d->command) {
-        d->command = new QUndoCommand(i18n("Correct Misspelled Words"));
+        d->command = new KUndo2Command(i18nc("(qtundo-format)", "Correct Misspelled Words"));
     }
     DataManipulator* command = new DataManipulator(d->command);
     command->setSheet(d->currentSheet);

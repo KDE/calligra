@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
@@ -74,11 +74,13 @@ public:
 
     void clear();
 
-    QString convertToListProperties() const;
+    QString convertToListProperties(const bool fileByPowerPoint = false) const;
 
     bool isEmpty() const;
 
     void setBulletChar(const QString& bulletChar);
+
+    void setPrefix(const QString& prefixChar);
 
     void setSuffix(const QString& suffixChar);
 
@@ -114,14 +116,16 @@ public:
 
     int m_level;
 
-private:
     enum ParagraphBulletType {BulletType, NumberType, PictureType, DefaultType};
     ParagraphBulletType m_type;
+
+private:
 
     QString m_startValue;
     QString m_bulletFont;
     QString m_bulletChar;
     QString m_numFormat;
+    QString m_prefix;
     QString m_suffix;
     QString m_align;
     QString m_indent;
@@ -148,7 +152,7 @@ private:
 
 //! Helper that sets given variable to specified value on destruction
 //! Object of type Setter are supposed to be created on the stack.
-//! @todo Copied from koffice/kexi/kexiutils/utils.h; replace with a shared code
+//! @todo Copied from calligra/kexi/kexiutils/utils.h; replace with a shared code
 template <typename T>
 class Setter
 {

@@ -41,7 +41,7 @@
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
-#include <widget/tableview/kexidataawarepropertyset.h>
+#include <widget/dataviewcommon/kexidataawarepropertyset.h>
 #include <widget/kexicustompropertyfactory.h>
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
@@ -114,7 +114,7 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
     history = new CommandHistory(historyActionCollection, true);
 
     internalPropertyNames
-    << "subType" << "uid" << "newrow" << "rowSource" << "rowSourceType"
+    << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
     << "boundColumn" << "visibleColumn";
 }
 

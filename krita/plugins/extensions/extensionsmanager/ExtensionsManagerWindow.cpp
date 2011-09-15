@@ -27,6 +27,7 @@ ExtensionsManagerWindow::ExtensionsManagerWindow() : m_emWidget(new Ui_Extension
     m_emWidget->setupUi(this);
     connect(m_emWidget->pushButtonInstall, SIGNAL(released()), SLOT(installFromFile()));
     connect(m_emWidget->pushButtonClose, SIGNAL(released()), SLOT(close()));
+    m_emWidget->pushButtonClose->setGuiItem(KStandardGuiItem::Close);
 }
 
 ExtensionsManagerWindow::~ExtensionsManagerWindow()
@@ -36,7 +37,7 @@ ExtensionsManagerWindow::~ExtensionsManagerWindow()
 
 void ExtensionsManagerWindow::installFromFile()
 {
-    KUrl url = KFileDialog::getOpenFileName(KUrl(), "*.koffice-extension");
+    KUrl url = KFileDialog::getOpenFileName(KUrl(), "*.calligra-extension");
     if (!url.isEmpty()) {
         if (ExtensionsManager::instance()->installExtension(url)) {
             KMessageBox::information(this, i18n("The installation was successful, you will need to restart Krita to use the extensions"), i18n("Success"));

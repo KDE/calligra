@@ -43,7 +43,6 @@
 #include "kis_pixel_selection.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_clone_layer.h"
 #include "kis_filter_mask.h"
 
@@ -79,7 +78,7 @@ public:
     bool visit(KisExternalLayer * layer) {
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
 
-        QUndoCommand* command = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+        KUndo2Command* command = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
         if (command)
             undoAdapter->addCommand(command);
         visitAll(layer);
@@ -136,10 +135,6 @@ public:
         transformMask(mask);
         return true;
     }
-    bool visit(KisTransformationMask* mask) {
-        transformMask(mask);
-        return true;
-    }
     bool visit(KisSelectionMask* mask) {
         transformMask(mask);
         return true;
@@ -176,7 +171,7 @@ private:
             transaction.commit(m_image->undoAdapter());
         }
         if (selection->hasShapeSelection()) {
-            QUndoCommand* command = selection->shapeSelection()->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+            KUndo2Command* command = selection->shapeSelection()->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
             if (command)
                 m_image->undoAdapter()->addCommand(command);
         }

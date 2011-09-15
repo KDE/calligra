@@ -7,22 +7,22 @@ rescue LoadError
     raise "Failed to load the required QtRuby module. Please install Qt4-QtRuby."
 end
 
-# Load the KWord scripting module.
+# Load the Words scripting module.
 begin
-    require 'KWord'
+    require 'Words'
 rescue LoadError
     # If loading failed (cause the script was not executed from within
-    # a running KWord instance) we try to load the Kross module and
-    # ask it to load the KWord module for us.
+    # a running Words instance) we try to load the Kross module and
+    # ask it to load the Words module for us.
     require 'Kross'
-    KWord = Kross.module('KWord')
+    Words = Kross.module('Words')
 
-    # Testcase to fill KWord with some content. You are also able to e.g.
-    # load a document here with "KWord.document().openUrl('/path/file.odt')"
-    mytextframeset1 = KWord.addTextFrameSet("myFirstTextFrame")
+    # Testcase to fill Words with some content. You are also able to e.g.
+    # load a document here with "Words.document().openUrl('/path/file.odt')"
+    mytextframeset1 = Words.addTextFrameSet("myFirstTextFrame")
     mytextframeset1.addTextFrame()
     mytextframeset1.document().setHtml("<h1>First Header</h1><p>Some text</p><p>Some more text with <b>bold</b> and <i>italic</i> and <u>underline</u> to test the stuff.</p>")
-    mytextframeset2 = KWord.addTextFrameSet("mySecondTextFrame")
+    mytextframeset2 = Words.addTextFrameSet("mySecondTextFrame")
     mytextframeset2.addTextFrame()
     mytextframeset2.document().setHtml("<h1>Second Header</h1><h2>First Sub Header</h2><p>Some text.</p><h2>Second Sub Header</h2><p>Some text.</p>")
 end
@@ -41,7 +41,7 @@ class Dialog < Qt::Dialog
         layout = Qt::VBoxLayout.new
         setLayout(layout)
 
-#         fs = KWord.frameSet(0)
+#         fs = Words.frameSet(0)
 #         doc = fs.document()
 #         puts "doc.c() ............................"
 #         c = doc.c()
@@ -87,14 +87,14 @@ class Dialog < Qt::Dialog
 #         puts "c.anchor=%s" % c.anchor()
 #         puts "c.hasSelection=%s" % c.hasSelection()
 #         puts "c.selectedText=%s" % c.selectedText()
-#        puts "KWord.activec() ............................"
+#        puts "Words.activec() ............................"
 
-        @cursor = KWord.activeCursor()
+        @cursor = Words.activeCursor()
         if not @cursor
-            doc = KWord.mainFrameSet().document()
+            doc = Words.mainFrameSet().document()
             @cursor = doc.cursor
             if not @cursor
-                raise "Failed to get the KWord cursor."
+                raise "Failed to get the Words cursor."
             end
         end
 
@@ -250,5 +250,5 @@ end
 dialog = Dialog.new
 dialog.exec
 puts "setActiveCursor ...............1"
-KWord.setActiveCursor( dialog.cursor )
+Words.setActiveCursor( dialog.cursor )
 puts "setActiveCursor ...............2"

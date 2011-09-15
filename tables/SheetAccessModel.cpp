@@ -33,7 +33,7 @@
 #include <QAbstractItemModel>
 #include <QVariant>
 
-// KOffice
+// Calligra
 //#include <KoStore.h>
 //#include <KoXmlWriter.h>
 //#include <KoShapeSavingContext.h>

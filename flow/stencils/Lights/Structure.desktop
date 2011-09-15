@@ -1,7 +1,12 @@
 [Desktop Entry]
 Name=Structure
+Name[bg]=Структура
 Name[el]=Δομή
+Name[it]=Struttura
+Name[nb]=Struktur
+Name[nds]=Struktuur
 Name[nl]=Structuur
+Name[pl]=Struktura
 Name[pt]=Estrutura
 Name[pt_BR]=Estrutura
 Name[sv]=Struktur
@@ -9,3 +14,4 @@ Name[ug]=قۇرۇلما
 Name[uk]=Конструкція
 Name[x-test]=xxStructurexx
 Name[zh_CN]=结构
+Name[zh_TW]=結構

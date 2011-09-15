@@ -30,7 +30,7 @@
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
 #include "kexipartinfo.h"
-#include "widget/kexidatatable.h"
+#include "widget/tableview/kexidatatable.h"
 #include "widget/tableview/kexidatatableview.h"
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"
@@ -130,7 +130,7 @@ bool KexiTablePart::remove(KexiPart::Item &item)
     KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
 
     if (sch) {
-        tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
+        KexiTablePart::askForClosingObjectsUsingTableSchema(
                            KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
                            i18n(
                                "You are about to remove table \"%1\" but following objects using this table are opened:",

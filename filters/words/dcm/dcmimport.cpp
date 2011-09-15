@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2010 Arjun Asthana <arjun.kde@iiitd.com>
 
    This library is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ K_EXPORT_PLUGIN(DCMImportFactory("calligrafilters"))
 
 KoFilter::ConversionStatus DCMImport::convert(QByteArray const& from, QByteArray const& to)
 {
-    if (to != "application/x-kword" || from != "application/dicom") {
+    if (to != "application/x-words" || from != "application/dicom") {
         return KoFilter::NotImplemented;
     }
 

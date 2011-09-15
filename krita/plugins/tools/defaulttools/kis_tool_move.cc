@@ -22,7 +22,7 @@
 #include "kis_tool_move.h"
 
 #include <QPoint>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <klocale.h>
 
@@ -30,6 +30,7 @@
 #include "KoPointerEvent.h"
 #include "KoColorSpace.h"
 #include "KoColor.h"
+#include "KoProperties.h"
 #include "KoCompositeOp.h"
 
 #include "commands/kis_node_commands.h"
@@ -260,7 +261,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
             QPoint pos = convertToPixelCoord(event).toPoint();
             drag(pos);
 
-            QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition, currentImage());
+            KUndo2Command *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition, currentImage());
             Q_CHECK_PTR(cmd);
 
             canvas()->addCommand(cmd);
@@ -271,6 +272,20 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
     else {
         KisTool::mouseReleaseEvent(event);
     }
+}
+
+void KisToolMove::moveNode(KisNodeSP node, int x, int y) 
+{
+    node->setX(node->x() + x);
+    node->setY(node->y() + y);
+    if (node->childCount() > 0 ) {
+        // Move all child nodes as well
+        KoProperties props;
+        foreach(KisNodeSP node, m_selectedNode->childNodes(QStringList(), props)) {
+            moveNode(node, x, y);
+        }
+        
+    }    
 }
 
 void KisToolMove::drag(const QPoint& original)
@@ -286,8 +301,7 @@ void KisToolMove::drag(const QPoint& original)
         // FIXME: see comment in KisToolMove::mousePressEvent()
         KisImageWSP image = currentImage();
         image->lock();
-        m_selectedNode->setX(m_selectedNode->x() + pos.x());
-        m_selectedNode->setY(m_selectedNode->y() + pos.y());
+        moveNode(m_selectedNode, pos.x(), pos.y());
         image->unlock();
 
         rc = rc.unite(m_selectedNode->extent());

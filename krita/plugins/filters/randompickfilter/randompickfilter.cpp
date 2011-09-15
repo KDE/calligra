@@ -60,7 +60,6 @@ K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
 KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaRandomPickFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterRandomPick());
 }
 
@@ -82,7 +81,6 @@ void KisFilterRandomPick::process(KisPaintDeviceSP device,
                          KoUpdater* progressUpdater
                                  ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_UNUSED(config);
     Q_ASSERT(!device.isNull());
 

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -33,16 +33,11 @@ namespace MSOOXML
 {
 
 /**
- * Convert the MSOOXML \p formula into a ODF formula and return that ODF formula.
- */
-QString convertFormula(const QString& formula);
-
-/**
  * Generate and return the ODF formula for \p thisCell based on the formula in the
  * defined \p referencedCell . This is used for formula groups.
  */
 QString convertFormulaReference(Cell* referencedCell, Cell* thisCell);
 
-};
+}
 
 #endif // FORMULAPARSER_H

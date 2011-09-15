@@ -71,7 +71,7 @@ const KComponentData &FlowFactory::componentData()
     s_instance->dirs()->addResourceType("flow_template", "data", "flow/templates/");
     s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
     s_instance->dirs()->addResourceType("styles", "data", "flow/styles/");
-    KIconLoader::global()->addAppDir("koffice");
+    KIconLoader::global()->addAppDir("calligra");
   }
 
   return *s_instance;

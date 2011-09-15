@@ -3,7 +3,7 @@
  * OR FOR SPECIAL PARAG.
  */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -23,8 +23,8 @@
 **
 */
 
-#ifndef __KWORD_LATEX_EXPORT_PIXMAPFRAME_H__
-#define __KWORD_LATEX_EXPORT_PIXMAPFRAME_H__
+#ifndef __WORDS_LATEX_EXPORT_PIXMAPFRAME_H__
+#define __WORDS_LATEX_EXPORT_PIXMAPFRAME_H__
 
 #include "element.h"
 //Added by qt3to4:
@@ -129,4 +129,4 @@ private:
     void analyzeParamFrame(const QDomNode);
 };
 
-#endif /* __KWORD_LATEX_EXPORT_PIXMAPFRAME_H__ */
+#endif /* __WORDS_LATEX_EXPORT_PIXMAPFRAME_H__ */

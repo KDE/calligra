@@ -41,7 +41,7 @@ namespace Tables
 class PasteCommand : public AbstractRegionCommand
 {
 public:
-    PasteCommand(QUndoCommand *parent = 0);
+    PasteCommand(KUndo2Command *parent = 0);
     virtual ~PasteCommand();
 
     /**
@@ -54,6 +54,7 @@ public:
         ShiftCellsDown   ///< Shift cells to the bottom.
     };
 
+    const QMimeData* mimeData() const;
     bool setMimeData(const QMimeData *mimeData);
     void setInsertionMode(InsertionMode mode);
     void setMode(Paste::Mode mode);

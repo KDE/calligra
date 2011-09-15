@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2003 The KSpread Team <koffice-devel@kde.org>
+   Copyright (C) 1998-2003 The KSpread Team <calligra-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -258,7 +258,6 @@ static int func_days360_helper(const QDate& _date1, const QDate& _date2, bool eu
     int day1, day2;
     int month1, month2;
     int year1, year2;
-    bool negative = false;
     QDate date1(_date1);
     QDate date2(_date2);
 
@@ -266,7 +265,6 @@ static int func_days360_helper(const QDate& _date1, const QDate& _date2, bool eu
         QDate tmp(date1);
         date1 = date2;
         date2 = tmp;
-        negative = true;
     }
 
     day1   = date1.day();

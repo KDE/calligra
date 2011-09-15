@@ -21,8 +21,8 @@
 #include "KoFilterEffect.h"
 #include "KoShape.h"
 
-FilterRegionChangeCommand::FilterRegionChangeCommand(KoFilterEffect *effect, const QRectF &filterRegion, KoShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent), m_effect(effect), m_newRegion(filterRegion), m_shape(shape)
+FilterRegionChangeCommand::FilterRegionChangeCommand(KoFilterEffect *effect, const QRectF &filterRegion, KoShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent), m_effect(effect), m_newRegion(filterRegion), m_shape(shape)
 {
     Q_ASSERT(m_effect);
     m_oldRegion = m_effect->filterRect();
@@ -40,7 +40,7 @@ void FilterRegionChangeCommand::redo()
         m_shape->notifyChanged();
     }
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void FilterRegionChangeCommand::undo()
@@ -55,5 +55,5 @@ void FilterRegionChangeCommand::undo()
         m_shape->notifyChanged();
     }
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

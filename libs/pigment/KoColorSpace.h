@@ -30,6 +30,7 @@
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
+#include "KoCompositeOp.h"
 #include <KoChannelInfo.h>
 #include <KoID.h>
 #include "pigment_export.h"
@@ -106,7 +107,9 @@ protected:
 public:
     //========== Channels =====================================================//
 
-    /// Return a list describing all the channels this color model has.
+    /// Return a list describing all the channels this color model has. The order
+    /// of the channels in the list is the order of channels in the pixel. To find
+    /// out the preferred display position, use KoChannelInfo::displayPosition.
     virtual QList<KoChannelInfo *> channels() const;
 
     /**
@@ -499,68 +502,47 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
-                        const KoColorSpace * srcSpace,
+                        const KoColorSpace* srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
-                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
-                        const KoCompositeOp * op,
-                        const QBitArray & channelFlags) const;
-
+                        const KoCompositeOp* op,
+                        const QBitArray& channelFlags=QBitArray()) const;
+    
     /**
-     * Convenience function for the above where all channels are turned on.
-     */
-    virtual void bitBlt(quint8 *dst,
-                        qint32 dststride,
-                        const KoColorSpace * srcSpace,
-                        const quint8 *src,
-                        qint32 srcRowStride,
-                        const quint8 *srcAlphaMask,
-                        qint32 maskRowStride,
-                        quint8 opacity,
-                        quint8 flow,
-                        qint32 rows,
-                        qint32 cols,
-                        const KoCompositeOp * op) const;
+    * Compose two arrays of pixels together. If source and target
+    * are not the same color model, the source pixels will be
+    * converted to the target model. We're "dst" -- "dst" pixels are always in _this_
+    * colorspace.
+    *
+    * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
+    * @param param the information needed for blitting e.g. the source and destination pixel data,
+    *        the opacity and flow, ...
+    * @param op the composition operator to use, e.g. COPY_OVER
+    * 
+    */
+    virtual void bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op) const;
 
     /**
      * Convenience function for the above if you don't have the composite op object yet.
      */
-    virtual void bitBlt(quint8 *dst,
+    virtual void bitBlt(quint8* dst,
                         qint32 dststride,
-                        const KoColorSpace * srcSpace,
-                        const quint8 *src,
+                        const KoColorSpace* srcSpace,
+                        const quint8* src,
                         qint32 srcRowStride,
-                        const quint8 *srcAlphaMask,
+                        const quint8* srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
-                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
-                        const QString & op,
-                        const QBitArray & channelFlags) const;
-
-    /**
-     * Convenience function for the above, if you simply want all channels composited
-     */
-    virtual void bitBlt(quint8 *dst,
-                        qint32 dststride,
-                        const KoColorSpace * srcSpace,
-                        const quint8 *src,
-                        qint32 srcRowStride,
-                        const quint8 *srcAlphaMask,
-                        qint32 maskRowStride,
-                        quint8 opacity,
-                        quint8 flow,
-                        qint32 rows,
-                        qint32 cols,
-                        const QString& op) const;
-
-
+                        const QString& op,
+                        const QBitArray& channelFlags=QBitArray()) const;
+    
     /**
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format

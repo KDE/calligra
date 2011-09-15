@@ -1,4 +1,5 @@
 add_subdirectory( utils )
+add_subdirectory( dataviewcommon )
 
 IF(KEXI_MOBILE)
 
@@ -41,8 +42,6 @@ IF (KEXI_MOBILE)
 
 ELSE (KEXI_MOBILE)
   LIST(APPEND kexiextendedwidgets_LIB_SRCS
-    kexidataawareview.cpp 
-    kexidatatable.cpp 
     kexiscrollview.cpp 
     kexidbconnectionwidget.cpp 
   #   pixmapcollection.cpp 
@@ -75,6 +74,7 @@ kde4_add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
 target_link_libraries(
     kexiextendedwidgets
+    kexidataviewcommon
     kexiutils
     kexiguiutils
     kexicore
@@ -89,12 +89,10 @@ IF (KEXI_MOBILE)
 ELSE(KEXI_MOBILE)
   target_link_libraries(
     kexiextendedwidgets
-    kexidatatable
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
     )
 ENDIF(KEXI_MOBILE)
 
-set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexiextendedwidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
-

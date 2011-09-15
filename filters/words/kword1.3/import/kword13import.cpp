@@ -36,18 +36,18 @@
 #include "kword13postparsing.h"
 #include "kword13import.h"
 
-K_PLUGIN_FACTORY(KWord13ImportFactory, registerPlugin<KWord13Import>();)
-K_EXPORT_PLUGIN(KWord13ImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY(Words13ImportFactory, registerPlugin<Words13Import>();)
+K_EXPORT_PLUGIN(Words13ImportFactory("calligrafilters"))
 
 
-KWord13Import::KWord13Import(QObject* parent, const QVariantList &)
+Words13Import::Words13Import(QObject* parent, const QVariantList &)
         : KoFilter(parent)
 {
 }
 
-bool KWord13Import::parseInfo(QIODevice* io, KWord13Document& kwordDocument)
+bool Words13Import::parseInfo(QIODevice* io, Words13Document& kwordDocument)
 {
-    kDebug(30520) << "Starting KWord13Import::parseInfo";
+    kDebug(30520) << "Starting Words13Import::parseInfo";
     QDomDocument doc;
     // Error variables for QDomDocument::setContent
     QString errorMsg;
@@ -75,13 +75,13 @@ bool KWord13Import::parseInfo(QIODevice* io, KWord13Document& kwordDocument)
             kwordDocument.m_documentInfo[ nodeName2 ] = element.text();
         }
     }
-    kDebug(30520) << "Quitting KWord13Import::parseInfo";
+    kDebug(30520) << "Quitting Words13Import::parseInfo";
     return true;
 }
 
-bool KWord13Import::parseRoot(QIODevice* io, KWord13Document& kwordDocument)
+bool Words13Import::parseRoot(QIODevice* io, Words13Document& kwordDocument)
 {
-    KWord13Parser handler(&kwordDocument);
+    Words13Parser handler(&kwordDocument);
 
     QXmlSimpleReader reader;
     reader.setContentHandler(&handler);
@@ -96,13 +96,13 @@ bool KWord13Import::parseRoot(QIODevice* io, KWord13Document& kwordDocument)
     return true;
 }
 
-bool KWord13Import::postParse(KoStore* store, KWord13Document& doc)
+bool Words13Import::postParse(KoStore* store, Words13Document& doc)
 {
-    KWord13PostParsing post;
+    Words13PostParsing post;
     return post.postParse(store, doc);
 }
 
-KoFilter::ConversionStatus KWord13Import::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus Words13Import::convert(const QByteArray& from, const QByteArray& to)
 {
     if (to != "application/vnd.oasis.opendocument.text"
             || from != "application/x-kword") {
@@ -112,7 +112,7 @@ KoFilter::ConversionStatus KWord13Import::convert(const QByteArray& from, const 
     // We need KimageIO's help in OOWriterWorker::convertUnknownImage
 
 
-    KWord13Document kwordDocument;
+    Words13Document kwordDocument;
 
     const QString fileName(m_chain->inputFile());
     if (fileName.isEmpty()) {
@@ -200,7 +200,7 @@ KoFilter::ConversionStatus KWord13Import::convert(const QByteArray& from, const 
     store = 0;
     kDebug(30520) << "Input store deleted!";
 
-    KWord13OasisGenerator generator;
+    Words13OasisGenerator generator;
 
     kDebug(30520) << __FILE__ << ":" << __LINE__;
 

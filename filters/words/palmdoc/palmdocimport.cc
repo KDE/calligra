@@ -44,7 +44,7 @@ PalmDocImport::PalmDocImport(QObject* parent, const QVariantList&):
 KoFilter::ConversionStatus PalmDocImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/x-kword" || from != "application/vnd.palm")
+    if (to != "application/x-words" || from != "application/vnd.palm")
         return KoFilter::NotImplemented;
 
     PalmDoc doc;
@@ -157,7 +157,7 @@ QString PalmDocImport::processPlainDocument(const QString& plaindoc)
     }
 
     prolog = "<!DOCTYPE DOC>\n";
-    prolog.append("<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
+    prolog.append("<DOC mime=\"application/x-words\" syntaxVersion=\"2\" editor=\"Words\">\n");
 
     prolog.append("<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n");
     prolog.append(" <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n");

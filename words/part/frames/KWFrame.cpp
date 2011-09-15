@@ -36,8 +36,8 @@
 
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         : m_shape(shape),
-        m_frameBehavior(KWord::AutoExtendFrameBehavior),
-        m_newFrameBehavior(KWord::NoFollowupFrame),
+        m_frameBehavior(Words::AutoExtendFrameBehavior),
+        m_newFrameBehavior(Words::NoFollowupFrame),
         m_anchoredPageNumber(pageNumber),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
@@ -50,27 +50,40 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
 
     KWTextFrameSet* parentFrameSet = dynamic_cast<KWTextFrameSet*>(parent);
     if (parentFrameSet) {
-        if (KWord::isHeaderFooter(parentFrameSet)) {
+        if (Words::isHeaderFooter(parentFrameSet)) {
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                // header and footer are always auto-grow-height independent of whatever
+                // was defined for them in the document.
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
-        if (parentFrameSet->textFrameSetType() == KWord::OtherTextFrameSet) {
+        if (parentFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            /* NoResize should be default this days. Setting it here would overwrite any value
+              read in TextShape::loadStyle what is not what we want.
+
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
                 data->setResizeMethod(KoTextShapeDataBase::NoResize);
             }
+            */
         } else {
             shape->setGeometryProtected(true);
-            shape->setCollisionDetection(false);
+
+            // We need to keep collision detection on or we will not relayout when page anchored shapes are
+            // moved. For page anchored shapes (which are different from anchored shapes which are usually
+            // children of the shape they are anchored too and therefore the ShapeManager filters collision
+            // events for them out) the KoTextRootAreaProvider::relevantObstructions method is used to produce
+            // obstructions whereas for anchored shapes the KoTextDocumentLayout::registerAnchoredObstruction
+            // is used to explicit register the obstructions.
+            //shape->setCollisionDetection(false);
         }
     }
 
-    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << Words::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 }
 
 KWFrame::~KWFrame()
 {
-    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << Words::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 
     KoShape *ourShape = m_shape;
     m_shape = 0; // no delete is needed as the shape deletes us.
@@ -84,6 +97,9 @@ KWFrame::~KWFrame()
                                                  // copyShapes as retired
         if (justMe) {
             kDebug(32001) << "Last KWFrame removed from frameSet=" << m_frameSet;
+            // FIXME: Fix when a proper way to delete framesets have been found.
+            // The frameset is never deleted (here) because removeFrame() above results in
+            // m_frameSet to be set to 0.
             delete m_frameSet;
             m_frameSet = 0;
         }
@@ -171,13 +187,13 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
 {
     QString value;
     switch (frameBehavior()) {
-    case KWord::AutoCreateNewFrameBehavior:
+    case Words::AutoCreateNewFrameBehavior:
         value = "auto-create-new-frame";
         break;
-    case KWord::IgnoreContentFrameBehavior:
+    case Words::IgnoreContentFrameBehavior:
         value = "clip";
         break;
-    case KWord::AutoExtendFrameBehavior:
+    case Words::AutoExtendFrameBehavior:
         // the third case, AutoExtendFrame is handled by min-height
         value.clear();
         if (minimumFrameHeight() > 1)
@@ -188,12 +204,12 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
         m_shape->setAdditionalStyleAttribute("style:overflow-behavior", value);
 
     switch (newFrameBehavior()) {
-    case KWord::ReconnectNewFrame: value = "followup"; break;
-    case KWord::NoFollowupFrame: value.clear(); break; // "none" is the default
-    case KWord::CopyNewFrame: value = "copy"; break;
+    case Words::ReconnectNewFrame: value = "followup"; break;
+    case Words::NoFollowupFrame: value.clear(); break; // "none" is the default
+    case Words::CopyNewFrame: value = "copy"; break;
     }
     if (!value.isEmpty()) {
-        m_shape->setAdditionalStyleAttribute("koffice:frame-behavior-on-new-page", value);
+        m_shape->setAdditionalStyleAttribute("calligra:frame-behavior-on-new-page", value);
     }
 
     // shape properties

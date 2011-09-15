@@ -734,7 +734,15 @@ void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o,
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 270<< 0);
+
+    // custom way for processing modifieres as this shape
+    // return the AdjustValue, AdjustValue2 16-bit shifted
+    const AdjustValue* val1 = get<AdjustValue>(o);
+    const Adjust2Value* val2 = get<Adjust2Value>(o);
+    QString modifiers = QString::number(val1 ? val1->adjustvalue >> 16 : 270);
+    modifiers += QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0);
+    out.xml.addAttribute("draw:modifiers", modifiers);
+
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "W 0 0 21600 21600 ?f3 ?f1 ?f7 ?f5 S L 10800 10800 Z N W 0 0 21600 21600 ?f3 ?f1 ?f7 ?f5 F N");
     out.xml.addAttribute("draw:type", "mso-spt100");
@@ -1400,7 +1408,7 @@ void ODrawToOdf::processCurvedRightArrow(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.addAttribute("draw:glue-points", "0 ?f17 ?f2 ?f14 ?f22 ?f8 ?f2 ?f12 ?f22 ?f16");
     processModifiers(o, out, QList<int>() << 12960<< 19440<< 14400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
-    out.xml.addAttribute("draw:enhanced-path", "B 0 0 ?f23 ?f3 ?f22 0 0 ?f4 0 ?f15 ?f23 ?f1 0 ?f7 ?f2 ?f13 L ?f2 ?f14 ?f22 ?f8 ?f2 ?f12 W 0 0 ?f23 ?f3 ?f2 ?f11 ?f26 ?f17 0 ?f15 ?f23 ?f1 ?f26 ?f17 ?f22 ?f15 Z N B 0 0 ?f23 ?f3 0 ?f4 ?f26 ?f17 F N");
+    out.xml.addAttribute("draw:enhanced-path", "B 0 0 ?f23 ?f3 ?f22 0 0 ?f4 A 0 ?f15 ?f23 ?f1 0 ?f7 ?f2 ?f13 L ?f2 ?f14 ?f22 ?f8 ?f2 ?f12 W 0 0 ?f23 ?f3 ?f2 ?f11 ?f26 ?f17 0 ?f15 ?f23 ?f1 ?f26 ?f17 ?f22 ?f15 Z N B 0 0 ?f23 ?f3 0 ?f4 ?f26 ?f17 F N");
     out.xml.addAttribute("draw:type", "mso-spt102");
     out.xml.addAttribute("draw:text-areas", "?f47 ?f45 ?f48 ?f46");
     setShapeMirroring(o, out);
@@ -1487,7 +1495,7 @@ void ODrawToOdf::processCurvedLeftArrow(const MSO::OfficeArtSpContainer& o, Writ
     out.xml.addAttribute("draw:glue-points", "0 ?f15 ?f2 ?f11 0 ?f8 ?f2 ?f13 ?f21 ?f16");
     processModifiers(o, out, QList<int>() << 12960<< 19440<< 7200);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
-    out.xml.addAttribute("draw:enhanced-path", "V ?f22 0 ?f21 ?f3 0 0 ?f21 ?f4 ?f22 ?f14 ?f21 ?f1 ?f21 ?f7 ?f2 ?f12 L ?f2 ?f13 0 ?f8 ?f2 ?f11 A ?f22 0 ?f21 ?f3 ?f2 ?f10 ?f24 ?f16 ?f22 ?f14 ?f21 ?f1 ?f24 ?f16 0 ?f14 Z N B ?f22 ?f14 ?f21 ?f1 ?f21 ?f7 ?f24 ?f16 F N");
+    out.xml.addAttribute("draw:enhanced-path", "V ?f22 0 ?f21 ?f3 0 0 ?f21 ?f4 W ?f22 ?f14 ?f21 ?f1 ?f21 ?f7 ?f2 ?f12 L ?f2 ?f13 0 ?f8 ?f2 ?f11 A ?f22 0 ?f21 ?f3 ?f2 ?f10 ?f24 ?f16 ?f22 ?f14 ?f21 ?f1 ?f24 ?f16 0 ?f14 Z N B ?f22 ?f14 ?f21 ?f1 ?f21 ?f7 ?f24 ?f16 F N");
     out.xml.addAttribute("draw:type", "mso-spt103");
     out.xml.addAttribute("draw:text-areas", "?f43 ?f41 ?f44 ?f42");
     setShapeMirroring(o, out);
@@ -1570,7 +1578,7 @@ void ODrawToOdf::processCurvedUpArrow(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.addAttribute("draw:glue-points", "?f8 0 ?f11 ?f2 ?f15 0 ?f16 ?f21 ?f13 ?f2");
     processModifiers(o, out, QList<int>() << 12960<< 19440<< 7200);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
-    out.xml.addAttribute("draw:enhanced-path", "B 0 ?f22 ?f3 ?f21 0 0 ?f4 ?f21 ?f14 ?f22 ?f1 ?f21 ?f7 ?f21 ?f12 ?f2 L ?f13 ?f2 ?f8 0 ?f11 ?f2 W 0 ?f22 ?f3 ?f21 ?f10 ?f2 ?f16 ?f24 ?f14 ?f22 ?f1 ?f21 ?f16 ?f24 ?f14 0 Z N V ?f14 ?f22 ?f1 ?f21 ?f7 ?f21 ?f16 ?f24 F N");
+    out.xml.addAttribute("draw:enhanced-path", "B 0 ?f22 ?f3 ?f21 0 0 ?f4 ?f21 A ?f14 ?f22 ?f1 ?f21 ?f7 ?f21 ?f12 ?f2 L ?f13 ?f2 ?f8 0 ?f11 ?f2 W 0 ?f22 ?f3 ?f21 ?f10 ?f2 ?f16 ?f24 ?f14 ?f22 ?f1 ?f21 ?f16 ?f24 ?f14 0 Z N V ?f14 ?f22 ?f1 ?f21 ?f7 ?f21 ?f16 ?f24 F N");
     out.xml.addAttribute("draw:type", "mso-spt104");
     out.xml.addAttribute("draw:text-areas", "?f41 ?f43 ?f42 ?f44");
     setShapeMirroring(o, out);
@@ -3736,7 +3744,7 @@ void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, 
     out.xml.addAttribute("draw:glue-points", "10800 0 3160 3160 0 10800 3160 18440 10800 21600 18440 18440 21600 10800 18440 3160 ?f14 ?f15");
     processModifiers(o, out, QList<int>() << 1350<< 25920);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
-    out.xml.addAttribute("draw:enhanced-path", "W 0 0 21600 21600 ?f22 ?f23 ?f18 ?f19 L ?f14 ?f15 Z N");
+    out.xml.addAttribute("draw:enhanced-path", "V 0 0 21600 21600 ?f22 ?f23 ?f18 ?f19 L ?f14 ?f15 Z N");
     out.xml.addAttribute("draw:type", "round-callout");
     out.xml.addAttribute("draw:text-areas", "3200 3200 18400 18400");
     setShapeMirroring(o, out);

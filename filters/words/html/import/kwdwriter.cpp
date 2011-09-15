@@ -42,7 +42,7 @@ KWDWriter::KWDWriter(KoStore *store)
     insidetable = false;
     QDomElement kwdoc = _doc->createElement("DOC");
     kwdoc.setAttribute("editor", "HTML Import Filter");
-    kwdoc.setAttribute("mime", "application/x-kword");
+    kwdoc.setAttribute("mime", "application/x-words");
     _doc->appendChild(kwdoc);
 
     QDomElement paper = _doc->createElement("PAPER");
@@ -69,7 +69,7 @@ KWDWriter::KWDWriter(KoStore *store)
     docattrs.setAttribute("standardpage", 1);
     docattrs.setAttribute("hasHeader", 0);
     docattrs.setAttribute("hasFooter", 0);
-    //docattrs.setAttribute( "unit", "mm" ); // use KWord default instead
+    //docattrs.setAttribute( "unit", "mm" ); // use Words default instead
 
     QDomElement framesets = _doc->createElement("FRAMESETS");
     kwdoc.appendChild(framesets);
@@ -315,7 +315,7 @@ QDomElement KWDWriter::addParagraph(QDomElement &parent)
     return addParagraph(parent, k);
 }
 
-void KWDWriter::appendKWordVariable(QDomDocument& doc, QDomElement& format,
+void KWDWriter::appendWordsVariable(QDomDocument& doc, QDomElement& format,
                                     const QString& text, const QString& key, int type, QDomElement& child)
 {
 
@@ -340,7 +340,7 @@ QDomElement KWDWriter::createLink(const QDomElement &paragraph,
     linkElement.setAttribute("hrefName", hrefName);
     QDomElement format = currentFormat(paragraph, true);
     format.setAttribute("id", 4); // change Variable
-    appendKWordVariable(*_doc, format, linkName, "STRING", 9, linkElement);
+    appendWordsVariable(*_doc, format, linkName, "STRING", 9, linkElement);
 
     return linkElement;
 }
@@ -608,7 +608,7 @@ bool KWDWriter::writeDoc()
 }
 
 
-QDomElement KWDWriter::mainFrameset()
+QDomElement KWDWriter::mainFrameset() const
 {
     return _mainFrameset;
 }

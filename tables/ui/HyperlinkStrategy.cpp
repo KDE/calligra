@@ -52,6 +52,7 @@ HyperlinkStrategy::HyperlinkStrategy(CellToolBase *cellTool,
 {
     d->lastPoint = documentPos;
     d->textRect = textRect;
+    d->textRect.moveTo(d->lastPoint); // turn textRect which is relative to the cell to an absolute coordinate
     d->url = url;
 }
 
@@ -71,7 +72,7 @@ void HyperlinkStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboard
 
 void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
-    if (d->textRect.contains(d->lastPoint)) {
+    if (!d->textRect.contains(d->lastPoint)) {
         return;
     }
     Q_UNUSED(modifiers)

@@ -2,7 +2,7 @@
 #include <QTextStream>
 /* A TEXT IS A SET OF TITLES, A (SET OF) PARAGRAPHS OR LISTS */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -22,8 +22,8 @@
 **
 */
 
-#ifndef __KWORD_LATEXBORDER_H__
-#define __KWORD_LATEXBORDER_H__
+#ifndef __WORDS_LATEXBORDER_H__
+#define __WORDS_LATEXBORDER_H__
 
 /***********************************************************************/
 /* Class: Border                                                       */
@@ -292,5 +292,5 @@ public:
 private:
 };
 
-#endif /* __KWORD_LATEXBORDER_H__ */
+#endif /* __WORDS_LATEXBORDER_H__ */
 

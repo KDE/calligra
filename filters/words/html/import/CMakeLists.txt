@@ -13,6 +13,6 @@ install(TARGETS htmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kword_html_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_html_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

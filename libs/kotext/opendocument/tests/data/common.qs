@@ -176,7 +176,7 @@ QTextListFormat.clone = function(fmt) {
     return newFormat;
 };
 
-// KOffice specific
+// Calligra specific
 var KoListStyle = {};
 i = QTextFormat.UserProperty+1000;
 KoListStyle.ListItemPrefix = i;
@@ -199,7 +199,7 @@ KoListStyle.Indent= ++i;
 KoListStyle.MinimumDistance= ++i;
 KoListStyle.Width= ++i;
 KoListStyle.Height= ++i;
-KoListStyle.BulletImageKey = ++i;
+KoListStyle.BulletImage = ++i;
 KoListStyle.Margin = ++i;
 KoListStyle.TextIndent = ++i;
 KoListStyle.AlignmentMode = ++i;

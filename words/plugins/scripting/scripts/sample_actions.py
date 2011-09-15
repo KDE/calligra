@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import traceback, Kross, KWord
+import traceback, Kross, Words
 
 class Actions:
 
@@ -16,10 +16,10 @@ class Actions:
         self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
 
         self.objects = [
-            ('application', KWord.application()),
-            ('shell',       KWord.shell()),
-            ('mainwindow',  KWord.mainWindow()),
-            ('document',    KWord.document()),
+            ('application', Words.application()),
+            ('shell',       Words.shell()),
+            ('mainwindow',  Words.mainWindow()),
+            ('document',    Words.document()),
         ]
 
         self.actions = []

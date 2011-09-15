@@ -45,7 +45,7 @@ public:
     virtual bool doFullPaperFormat(const int format,
                                    const double width, const double height, const int orientation);
     virtual bool doFullPaperBorders(const double top, const double left,
-                                    const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
+                                    const double bottom, const double right); ///< Like Words's \<PAPERBORDERS\>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag, const LayoutData& layout,

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Name=Start-Event
+Name[es]=Evento inicial
 Name[et]=Sündmuse algus
+Name[it]=Evento-intermedio
+Name[nb]=Start-hendelse
+Name[nl]=Begin-gebeurtenis
+Name[pl]=Zdarzenie-Rozpoczynające
 Name[pt]=Evento-Inicial
 Name[pt_BR]=Evento inicial
 Name[sv]=Starthändelse

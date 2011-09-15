@@ -108,7 +108,7 @@ public:
     void setTabSpacing(qreal spacing);
 
     /// are the tabs relative to indent or not
-    bool relativeTabs() const;
+    bool relativeTabs(QTextBlock block) const;
 
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
@@ -121,6 +121,8 @@ public:
 
     /// reimplemented to always return 1
     virtual int pageCount() const;
+
+    QList<KoTextAnchor *> textAnchors() const;
 
     /**
      * Register the anchored obstruction  for run around
@@ -144,6 +146,9 @@ public:
      */
     /// remove all anchors and associated obstructions and set up for collecting new ones
     void beginAnchorCollecting(KoTextLayoutRootArea *rootArea);
+
+    /// allow  positionInlineObject() to do anything (incl saving anchors)
+    void allowPositionInlineObject(bool allow);
 
     /// Sets the paragraph rect that will be applied to anchorStrategies being created in
     /// positionInlineObject()
@@ -189,6 +194,9 @@ public:
     /// Set \a layout() to be blocked (no layouting will happen)
     void setBlockLayout(bool block);
     bool layoutBlocked() const;
+
+    KoTextDocumentLayout* referencedLayout() const;
+    void setReferencedLayout(KoTextDocumentLayout *layout);
 
 signals:
     /**

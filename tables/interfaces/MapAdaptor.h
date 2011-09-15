@@ -38,7 +38,7 @@ class Map;
 class CALLIGRA_TABLES_COMMON_EXPORT MapAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.map")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.map")
 public:
     explicit MapAdaptor(Map*);
 

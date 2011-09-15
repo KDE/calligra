@@ -23,28 +23,28 @@
 #include "kword13utils.h"
 #include "kword13formatone.h"
 
-KWord13FormatOneData::KWord13FormatOneData(void)
+Words13FormatOneData::Words13FormatOneData(void)
 {
 }
 
-KWord13FormatOneData::~KWord13FormatOneData(void)
+Words13FormatOneData::~Words13FormatOneData(void)
 {
 }
 
-void KWord13FormatOneData::xmldump(QTextStream& iostream)
+void Words13FormatOneData::xmldump(QTextStream& iostream)
 {
     iostream << "     <formatone>"  << "\">\n";
 
     for (QMap<QString, QString>::ConstIterator it = m_properties.constBegin();
             it != m_properties.constEnd();
             ++it) {
-        iostream << "       <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump(it.data()) << "\"/>\n";
+        iostream << "       <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump(it.value()) << "\"/>\n";
     }
 
     iostream << "    </formatone>\n";
 }
 
-QString KWord13FormatOneData::key(void) const
+QString Words13FormatOneData::key(void) const
 {
     QString strKey;
 
@@ -64,7 +64,7 @@ QString KWord13FormatOneData::key(void) const
     return strKey;
 }
 
-QString KWord13FormatOneData::getProperty(const QString& name) const
+QString Words13FormatOneData::getProperty(const QString& name) const
 {
     QMap<QString, QString>::ConstIterator it(m_properties.find(name));
     if (it == m_properties.end()) {
@@ -79,21 +79,21 @@ QString KWord13FormatOneData::getProperty(const QString& name) const
 //
 //
 
-KWord13FormatOne::KWord13FormatOne(void) : m_length(1)
+Words13FormatOne::Words13FormatOne(void) : m_length(1)
 {
     m_id = 1;
 }
 
-KWord13FormatOne::~KWord13FormatOne(void)
+Words13FormatOne::~Words13FormatOne(void)
 {
 }
 
-int KWord13FormatOne::length(void)
+int Words13FormatOne::length(void)
 {
     return m_length;
 }
 
-KWord13FormatOneData* KWord13FormatOne::getFormatOneData(void)
+Words13FormatOneData* Words13FormatOne::getFormatOneData(void)
 {
     return &m_formatOne;
 }

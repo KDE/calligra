@@ -1,18 +1,24 @@
 [Desktop Entry]
 Name=Flags
+Name[bg]=Знамена
 Name[cs]=Vlajky
+Name[da]=Flag
+Name[de]=Flaggen
 Name[el]=Σημαίες
 Name[en_GB]=Flags
 Name[et]=Lipud
 Name[it]=Bandiere
 Name[nb]=Flagg
+Name[nds]=Flaggen
 Name[nl]=Vlaggen
+Name[pl]=Flagi
 Name[pt]=Bandeiras
 Name[pt_BR]=Bandeiras
+Name[ru]=Флаги
 Name[sv]=Flaggor
 Name[ug]=تاللانمىلار
 Name[uk]=Прапори
 Name[x-test]=xxFlagsxx
 Name[zh_CN]=标记
-Name[zh_TW]=Flags
+Name[zh_TW]=旗幟
 X-KDE-DirType=odg-collection

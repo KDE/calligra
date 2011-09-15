@@ -98,6 +98,8 @@ void KexiInputTableEdit::init()
     //create internal editor
     m_lineedit = new MyLineEdit(this);
     m_lineedit->setObjectName("KexiInputTableEdit-MyLineEdit");
+    connect(m_lineedit, SIGNAL(textEdited(QString)),
+            this, SLOT(slotTextEdited(QString)));
     KColorScheme cs(QPalette::Active);
     QColor focus = cs.decoration(KColorScheme::FocusColor).color();
     m_lineedit->setStyleSheet(QString("QLineEdit { \
@@ -320,6 +322,12 @@ void KexiInputTableEdit::moveCursorToStart()
 void KexiInputTableEdit::selectAll()
 {
     m_lineedit->selectAll();
+}
+
+void KexiInputTableEdit::slotTextEdited(const QString& text)
+{
+    Q_UNUSED(text);
+    signalValueChanged();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -76,6 +76,7 @@ KoFilter::ConversionStatus read_stretch();
 KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_grayscl();
 KoFilter::ConversionStatus read_lum();
+KoFilter::ConversionStatus read_duotone();
 KoFilter::ConversionStatus read_tint();
 KoFilter::ConversionStatus read_alpha();
 
@@ -96,7 +97,8 @@ enum blipFillCaller {
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
 bool m_insideTable;
-qreal m_largestParaFont; // Largest font used in the paragraph
+qreal m_largestParaFont; // Largest font size used in the paragraph
+qreal m_minParaFont;     // minimum font size used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
@@ -116,6 +118,7 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
+KoFilter::ConversionStatus read_gradFillRpr();
 QString m_gradAngle;
 KoFilter::ConversionStatus read_lin();
 KoFilter::ConversionStatus read_gsLst();
@@ -125,12 +128,10 @@ KoFilter::ConversionStatus read_gd();
 bool m_contentAvLstExists; // whether avLst exists
 QMap<QString, QString> m_avModifiers;
 KoFilter::ConversionStatus read_avLst();
-enum noFillCaller {
-        noFill_rPr
-};
-KoFilter::ConversionStatus read_noFill(noFillCaller caller);
+KoFilter::ConversionStatus read_noFill();
 KoFilter::ConversionStatus read_schemeClr();
 KoFilter::ConversionStatus read_prstClr();
+KoFilter::ConversionStatus read_hslClr();
 KoFilter::ConversionStatus read_sysClr();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
@@ -176,6 +177,12 @@ QString m_shapeTextRightOff;
 bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
+int m_prevListLevel; //! set by drawingML_ppr
+int m_currentListLevel; //! set by drawingML_ppr
+
+// true - continue numbered list, false - restart numbering
+QMap<quint16, bool> m_continueListNumbering;
+
 KoFilter::ConversionStatus read_buClr();
 KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
@@ -214,9 +221,6 @@ void readWrap();
 
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
-
-int m_prevListLevel; //! set by drawingML_ppr
-int m_currentListLevel; //! set by drawingML_ppr
 
 // Shape properties
 qint64 m_svgX; //!< set by read_off()

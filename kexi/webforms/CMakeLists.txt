@@ -1,6 +1,7 @@
 #
 # Kexi Web Forms build script
 #
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/kexi/3rdparty/shttpd/src

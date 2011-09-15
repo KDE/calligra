@@ -2,8 +2,11 @@
 Name=di gate
 Name[el]=di gate
 Name[nb]=di-port
+Name[nl]=di gate
+Name[pl]=bramka di
 Name[pt]=porta-DI
 Name[pt_BR]=porta DI
 Name[sv]=dubbelgrind
 Name[uk]=DI-шлюз
 Name[x-test]=xxdi gatexx
+Name[zh_TW]=di gate

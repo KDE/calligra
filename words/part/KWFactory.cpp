@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,16 @@
 
 #include <kiconloader.h>
 
+#include <KoDockRegistry.h>
+#include <KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#include <rdf/KoSemanticStylesheetsEditor.h>
+#include "dockers/KWRdfDocker.h"
+#include "dockers/KWRdfDockerFactory.h"
+#endif
+#include "dockers/KWStatisticsDocker.h"
+
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
 
@@ -33,7 +44,7 @@ KWFactory::KWFactory(QObject *parent)
         : KPluginFactory(*aboutData(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
-    // main app is KWord.
+    // main app is Words.
     (void) componentData();
 }
 
@@ -62,7 +73,7 @@ QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *pa
 KAboutData *KWFactory::aboutData()
 {
     if (!s_aboutData) {
-        s_aboutData = newKWordAboutData();
+        s_aboutData = newWordsAboutData();
     }
     return s_aboutData;
 }
@@ -76,7 +87,15 @@ const KComponentData &KWFactory::componentData()
                                             "data", "words/templates/");
         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
-        KIconLoader::global()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("calligra");
+
+
+        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+        dockRegistry->add(new KWStatisticsDockerFactory());
+#ifdef SHOULD_BUILD_RDF
+        dockRegistry->add(new KWRdfDockerFactory());
+#endif
+
     }
     return *s_instance;
 }

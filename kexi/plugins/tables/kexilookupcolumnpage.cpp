@@ -132,7 +132,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 //todo d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
 //todo d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
 
-    //-Row Source
+    //-Record Source
 /*    QWidget *contents = new QWidget(this);
     layout()->addWidget(contents);
     QVBoxLayout *contentsVlyr = new QVBoxLayout(contents);
@@ -141,7 +141,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 
     QHBoxLayout *hlyr = new QHBoxLayout();
     mainLayout()->addLayout(hlyr);
-    d->rowSourceLabel = new QLabel(i18n("Row source:"));
+    d->rowSourceLabel = new QLabel(i18n("Record source:"));
     d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 //    d->rowSourceLabel->setMargin(2);
     d->rowSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
@@ -152,7 +152,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->gotoRowSourceButton = new KexiSmallToolButton(KIcon("go-jump"), QString());
     d->gotoRowSourceButton->setObjectName("gotoRowSourceButton");
     d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
-    d->gotoRowSourceButton->setToolTip(i18n("Go to selected row source"));
+    d->gotoRowSourceButton->setToolTip(i18n("Go to selected record source"));
     hlyr->addWidget(d->gotoRowSourceButton);
     connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
 
@@ -160,7 +160,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
         KIcon("edit-clear-locationbar-rtl"), QString(), contents);
     d->clearRowSourceButton->setObjectName("clearRowSourceButton");
     d->clearRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
-    d->clearRowSourceButton->setToolTip(i18n("Clear row source"));
+    d->clearRowSourceButton->setToolTip(i18n("Clear record source"));
     hlyr->addWidget(d->clearRowSourceButton);
     connect(d->clearRowSourceButton, SIGNAL(clicked()), this, SLOT(clearRowSourceSelection()));
 */

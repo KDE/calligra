@@ -22,7 +22,7 @@
 
 #include <QAbstractListModel>
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace Calligra
 {
@@ -60,7 +60,7 @@ public Q_SLOTS:
     bool setHidden(Sheet* sheet, bool hidden = true);
 
 Q_SIGNALS:
-    void addCommandRequested(QUndoCommand* command);
+    void addCommandRequested(KUndo2Command* command);
 
 protected:
     Map* map() const;

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Sascha Pfau <MrPeacock@gmail.com>
-   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
+   Copyright (C) 1998-2002 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -244,14 +244,13 @@ int Calligra::Tables::days360(const QDate& _date1, const QDate& _date2, bool eur
 // yearFrac
 long double Calligra::Tables::yearFrac(const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis)
 {
+    Q_UNUSED(refDate);
     QDate date1 = startDate;
     QDate date2 = endDate;
 
     //
     // calculation
     //
-
-    QDate date0 = refDate; // referenceDate
 
     if (date2 < date1) {
         // exchange dates

@@ -66,7 +66,7 @@ public:
     /// reimplemented from KoCanvasBase
     virtual KoUnit unit() const;
     /// reimplemented from KoCanvasBase
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
     /// reimplemented from KoCanvasBase
     KoShapeManager *shapeManager() const;
     /// reimplemented from KoCanvasBase
@@ -107,6 +107,9 @@ public:
 
     /// Sets the canvas background color to the given color
     void setBackgroundColor(const QColor &color);
+
+    /// @return the offset of the document in canvas position.
+    const QPoint &documentOffset() const;
 
 public slots:
 

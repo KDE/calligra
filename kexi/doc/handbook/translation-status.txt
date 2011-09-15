@@ -5,9 +5,9 @@ Kexi Handbook: README
 - For now let's leave <img> tags untouched. We will need to prepare english 
   screenshots because for now only polish version exists.
 - Development version of this handbook generated out of the docbook sources:
-  http://docs.kde.org/development/en/koffice/kexi/index.html
+  http://docs.kde.org/development/en/calligra/kexi/index.html
 - Current version from Martin:
-  http://www.ntpb.co.uk/koffice/manual/index.html
+  http://www.ntpb.co.uk/calligra/manual/index.html
 
 1. States:
 -DONE

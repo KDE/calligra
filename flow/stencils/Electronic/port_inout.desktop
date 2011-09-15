@@ -2,8 +2,11 @@
 Name=port inout
 Name[el]=θύρα εισόδου-εξόδου
 Name[nb]=inn-utgang
+Name[nl]=port inout
+Name[pl]=port we/wy
 Name[pt]=porta entrada-saída
 Name[pt_BR]=porta de entrada e saída
 Name[sv]=port in-ut
 Name[uk]=Вхідний/Вихідний порт
 Name[x-test]=xxport inoutxx
+Name[zh_TW]=port inout

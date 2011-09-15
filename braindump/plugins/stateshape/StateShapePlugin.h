@@ -21,8 +21,9 @@
 #define _STATE_SHAPE_PLUGIN_
 
 #include <QObject>
- 
-class StateShapePlugin : public QObject {
+
+class StateShapePlugin : public QObject
+{
     Q_OBJECT
 public:
     StateShapePlugin(QObject *parent, const QStringList&);

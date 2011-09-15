@@ -1,14 +1,20 @@
 [Desktop Entry]
 Name=filter
+Name[bg]=филтър
+Name[cs]=filtr
 Name[de]=Filter
 Name[el]=φίλτρο
+Name[es]=filtro
 Name[et]=filter
 Name[nb]=filter
+Name[nds]=Filter
 Name[nl]=filter
+Name[pl]=filtr
 Name[pt]=filtro
 Name[pt_BR]=filtro
+Name[ru]=Фильтр
 Name[sv]=filter
 Name[uk]=Фільтр
 Name[x-test]=xxfilterxx
 Name[zh_CN]=过滤器
-Name[zh_TW]=過濾器
+Name[zh_TW]=filter

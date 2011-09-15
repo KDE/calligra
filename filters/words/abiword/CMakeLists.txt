@@ -17,7 +17,7 @@ kde4_add_plugin(abiwordimport ${abiwordimport_PART_SRCS})
 
 
 
-target_link_libraries(abiwordimport kwordexportfilters)
+target_link_libraries(abiwordimport wordsexportfilters)
 
 install(TARGETS abiwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -30,13 +30,13 @@ kde4_add_plugin(abiwordexport ${abiwordexport_PART_SRCS})
 
 
 
-target_link_libraries( abiwordexport kwordexportfilters)
+target_link_libraries( abiwordexport wordsexportfilters)
 
 install(TARGETS abiwordexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kword_abiword_import.desktop kword_abiword_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_abiword_import.desktop words_abiword_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

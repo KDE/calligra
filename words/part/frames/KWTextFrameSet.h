@@ -25,7 +25,7 @@
 
 #include "KWFrameSet.h"
 #include "../KWPageStyle.h"
-#include "../kword_export.h"
+#include "../words_export.h"
 
 class QTextDocument;
 class KWPageManager;
@@ -36,19 +36,19 @@ class KWTextFrame;
 /**
  * A frameset with a TextDocument backing it.
  */
-class KWORD_EXPORT KWTextFrameSet : public KWFrameSet
+class WORDS_EXPORT KWTextFrameSet : public KWFrameSet
 {
 public:
     /**
      * Constructor with a type of text specified
-     * @param kwordDocument the document this frameset belongs to.
+     * @param wordsDocument the document this frameset belongs to.
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
-    explicit KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetType type = KWord::OtherTextFrameSet);
+    explicit KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetType type = Words::OtherTextFrameSet);
     ~KWTextFrameSet();
 
     /// return the type of frameSet this is
-    KWord::TextFrameSetType textFrameSetType() {
+    Words::TextFrameSetType textFrameSetType() {
         return m_textFrameSetType;
     }
 
@@ -67,8 +67,8 @@ public:
         return m_pageManager;
     }
     /// return the document for this frameset
-    KWDocument *kwordDocument() {
-        return m_kwordDocument;
+    KWDocument *wordsDocument() {
+        return m_wordsDocument;
     }
 
     void setPageStyle(const KWPageStyle &style);
@@ -85,9 +85,9 @@ private:
 
 private:
     QTextDocument *m_document;
-    KWord::TextFrameSetType m_textFrameSetType;
+    Words::TextFrameSetType m_textFrameSetType;
     KWPageManager *m_pageManager;
-    KWDocument *m_kwordDocument;
+    KWDocument *m_wordsDocument;
     KWPageStyle m_pageStyle; // the page Style this frameset is associated with.
     KWRootAreaProvider *m_rootAreaProvider;
 };

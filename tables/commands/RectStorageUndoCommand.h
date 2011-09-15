@@ -23,7 +23,7 @@
 // Qt
 #include <QList>
 #include <QPair>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 // KSpread
 #include "ModelSupport.h"
@@ -44,12 +44,12 @@ namespace Tables
  * Used for recording undo data in CellStorage.
  */
 template<typename T>
-class RectStorageUndoCommand : public QUndoCommand
+class RectStorageUndoCommand : public KUndo2Command
 {
 public:
     typedef QPair<QRectF, T> Pair;
 
-    RectStorageUndoCommand(QAbstractItemModel *const model, int role, QUndoCommand *parent = 0);
+    RectStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent = 0);
 
     virtual void undo();
 
@@ -66,8 +66,8 @@ private:
 
 template<typename T>
 RectStorageUndoCommand<T>::RectStorageUndoCommand(QAbstractItemModel *const model,
-        int role, QUndoCommand *parent)
-        : QUndoCommand(parent)
+        int role, KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_model(model)
         , m_role(role)
 {
@@ -82,7 +82,7 @@ void RectStorageUndoCommand<T>::undo()
         data.setValue(m_undoData[i].second);
         model->setData(fromRange(m_undoData[i].first.toRect(), model), data, m_role);
     }
-    QUndoCommand::undo(); // undo possible child commands
+    KUndo2Command::undo(); // undo possible child commands
 }
 
 template<typename T>

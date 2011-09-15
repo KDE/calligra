@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
@@ -46,9 +46,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     m_ui->setupUi(this);
     m_ui->label->setText(message);
-    m_ui->label_koffice->setPixmap(ABOUT_DIALOG_KOFFICE_PIXMAP);
+    m_ui->label_calligra->setPixmap(ABOUT_DIALOG_CALLIGRA_PIXMAP);
     m_ui->label_nokia->setPixmap(ABOUT_DIALOG_NOKIA_PIXMAP);
-    m_ui->label_koffice->adjustSize();
+    m_ui->label_calligra->adjustSize();
     m_ui->label_nokia->adjustSize();
 }
 

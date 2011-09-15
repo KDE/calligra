@@ -37,7 +37,7 @@ WMLImport::WMLImport(QObject* parent, const QVariantList&):
 {
 }
 
-// converts WML to KWord document
+// converts WML to Words document
 class WMLConverter: public WMLParser
 {
 public:
@@ -185,7 +185,7 @@ void WMLConverter::parse(const char* filename)
 
     QString prolog;
     prolog += "<!DOCTYPE DOC>\n";
-    prolog += "<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\" >\n";
+    prolog += "<DOC mime=\"application/x-words\" syntaxVersion=\"2\" editor=\"Words\" >\n";
     prolog += "<PAPER width=\"595\" spHeadBody=\"9\" format=\"1\" height=\"841\" fType=\"0\" orientation=\"0\" hType=\"0\" columnspacing=\"2\" spFootBody=\"9\" columns=\"1\" >\n";
     prolog += "<PAPERBORDERS right=\"28\" left=\"28\" bottom=\"42\" top=\"42\" />\n";
     prolog += "</PAPER>\n";
@@ -224,7 +224,7 @@ void WMLConverter::parse(const char* filename)
 KoFilter::ConversionStatus WMLImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/x-kword" || from != "text/vnd.wap.wml")
+    if (to != "application/x-words" || from != "text/vnd.wap.wml")
         return KoFilter::NotImplemented;
 
     // parse/convert input file

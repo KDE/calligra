@@ -1,11 +1,18 @@
 [Desktop Entry]
 Name=microphone
+Name[bg]=микрофон
+Name[de]=Mikrofon
 Name[el]=μικρόφωνο
 Name[es]=micrófono
 Name[et]=mikrofon
+Name[it]=microfono
 Name[nb]=mikrofon
+Name[nds]=Mikrofoon
+Name[nl]=microfoon
+Name[pl]=mikrofon
 Name[pt]=microfone
 Name[pt_BR]=microfone
 Name[sv]=mikrofon
 Name[uk]=Мікрофон
 Name[x-test]=xxmicrophonexx
+Name[zh_TW]=麥克風

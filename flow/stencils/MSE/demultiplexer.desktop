@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Demultiplexer
+Name[bg]=Демултиплексор
+Name[de]=Demultiplexer
 Name[el]=Απο-πολυπλέκτης
 Name[es]=Demultiplexador
 Name[et]=Süsteemist lahutaja
+Name[nb]=Demultiplekser
 Name[nl]=Demultiplexer
+Name[pl]=Demultiplekser
 Name[pt]=Desmultiplexador
 Name[pt_BR]=Desmultiplexador
 Name[sv]=Demultiplexer
 Name[uk]=Демультиплексор
 Name[x-test]=xxDemultiplexerxx
 Name[zh_CN]=信号分离器
+Name[zh_TW]=解多工器

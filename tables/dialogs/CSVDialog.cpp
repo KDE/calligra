@@ -173,24 +173,34 @@ void CSVDialog::accept()
 
     CSVDataCommand* command = new CSVDataCommand();
     if (m_mode == Clipboard)
-        command->setText(i18n("Inserting From Clipboard"));
+        command->setText(i18nc("(qtundo-format)", "Inserting From Clipboard"));
     else if (m_mode == File)
-        command->setText(i18n("Inserting Text File"));
+        command->setText(i18nc("(qtundo-format)", "Inserting Text File"));
     else
-        command->setText(i18n("Text to Columns"));
+        command->setText(i18nc("(qtundo-format)", "Text to Columns"));
     command->setSheet(sheet);
     command->setValue(value);
     command->setColumnDataTypes(dataTypes);
     command->setDecimalSymbol(decimalSymbol());
     command->setThousandsSeparator(thousandsSeparator());
-    command->add(m_selection->lastRange());
+
+    const QMimeData* mimedata = QApplication::clipboard()->mimeData();
+    if (m_mode == Clipboard &&
+        !mimedata->hasFormat("application/x-kspread-snippet") &&
+        !mimedata->hasHtml() && mimedata->hasText() &&
+        mimedata->text().split('\n').count() >= 2 )
+    {
+        QRect r = m_selection->lastRange();
+        r.setSize(QSize(numCols, numRows));
+        command->add(r);
+    } else
+        command->add(m_selection->lastRange());
     if (!command->execute(m_selection->canvas()))
         delete command;
 
     QRect range = m_selection->lastRange();
-    range.setWidth(numCols);
-    range.setHeight(numRows);
-    // TODO Stefan: Move this damaging into the model.
+    range.setWidth(qMax(range.width(), numCols));
+    range.setHeight(qMax(range.height(), numRows));
     const CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Value | CellDamage::Formula;
     sheet->map()->addDamage(new CellDamage(sheet, Region(range, sheet), changes));
     m_selection->emitModified();

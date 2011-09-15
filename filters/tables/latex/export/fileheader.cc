@@ -1,5 +1,5 @@
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by Words into LATEX.
 **
 ** Copyright (C) 2000, 2002, 2003 Robert JACOLIN
 **
@@ -148,7 +148,7 @@ void FileHeader::generateLatinPreamble(QTextStream &out)
     out << "%% Send an email to rjacolin@ifrance.com for bugs, wishes, .... Thank you." << endl;
     out << "%% Compile this file with : latex filename.tex" << endl;
     out << "%% a dvi file will be generated." << endl;
-    out << "%% The file uses the latex style (not the kword style). " << endl;
+    out << "%% The file uses the latex style (not the words style). " << endl;
     out << "\\documentclass[";
     switch (getFormat()) {
     case TF_A3:
@@ -193,6 +193,9 @@ void FileHeader::generateLatinPreamble(QTextStream &out)
         break;
     case TC_MORE:
         out << "";
+        break;
+    case TC_NONE:
+        break;
     }
 
     out << Config::instance()->getDefaultFontSize() << "pt";
@@ -213,7 +216,7 @@ void FileHeader::generateUnicodePreamble(QTextStream &out)
     out << "%% Compile this file with : lambda filename.tex" << endl;
     out << "%% a dvi file will be generated." << endl;
     out << "%% Use odvips to convert it and to see it with gv" << endl;
-    out << "%% The file uses the latex style (not the kword style). " << endl;
+    out << "%% The file uses the latex style (not the words style). " << endl;
     out << "\\ocp\\TexUTF=inutf8" << endl;
     out << "\\InputTranslation currentfile \\TexUTF" << endl;
     out << "\\documentclass[";
@@ -260,6 +263,9 @@ void FileHeader::generateUnicodePreamble(QTextStream &out)
         break;
     case TC_MORE:
         out << "";
+        break;
+    case TC_NONE:
+        break;
     }
 
     out << Config::instance()->getDefaultFontSize() << "pt";

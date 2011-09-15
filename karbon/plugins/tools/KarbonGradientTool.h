@@ -27,7 +27,7 @@
 
 class GradientStrategy;
 class KarbonGradientEditWidget;
-class QUndoCommand;
+class KUndo2Command;
 class KoShape;
 class QTableWidgetItem;
 class KoResource;
@@ -73,7 +73,7 @@ private:
     GradientStrategy * m_currentStrategy;  ///< the current editing strategy
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
     KarbonGradientEditWidget * m_gradientWidget;
-    QUndoCommand * m_currentCmd;
+    KUndo2Command * m_currentCmd;
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 

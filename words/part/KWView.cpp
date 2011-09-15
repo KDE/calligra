@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
  * Copyright (C) 2005-2007, 2009, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,17 +19,10 @@
  * Boston, MA 02110-1301, USA
  */
 
-// kword includes
+// words includes
 #include "KWView.h"
 #include "KWGui.h"
 #include "KWDocument.h"
-#include <rdf/KoDocumentRdfBase.h>
-#ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#include <rdf/KoSemanticStylesheetsEditor.h>
-#include "dockers/KWRdfDocker.h"
-#include "dockers/KWRdfDockerFactory.h"
-#endif
 #include "KWCanvas.h"
 #include "KWViewMode.h"
 #include "KWFactory.h"
@@ -47,14 +40,18 @@
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWInsertPageDialog.h"
 #include "dialogs/KWInsertInlineNoteDialog.h"
-#include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
 #include <KoShapeReorderCommand.h>
+#include "ui_KWInsertImage.h"
 
-// koffice libs includes
-#include <kofficeversion.h>
+// calligra libs includes
+#include <calligraversion.h>
+#include <KoCanvasController.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
@@ -83,6 +80,14 @@
 #include <KoBookmark.h>
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
+#include <KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#include <rdf/KoSemanticStylesheetsEditor.h>
+#endif
+#include <KoFindText.h>
+#include <KoFindToolbar.h>
+#include <KoTextLayoutRootArea.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -91,6 +96,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kdialog.h>
 #include <KToggleAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -99,8 +105,6 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <KParts/PartManager>
-#include <KoFindText.h>
-#include <KoFindToolbar.h>
 
 static KWFrame *frameForShape(KoShape *shape)
 {
@@ -127,6 +131,8 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         : KoView(document, parent)
         , m_canvas(0), m_actionMenu(0)
 {
+    setAcceptDrops(true);
+
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(viewMode, this);
@@ -162,18 +168,6 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     layout->addWidget(toolbar);
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
-
-    if (shell()) {
-        KWStatisticsDockerFactory statisticsFactory(this);
-        KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(shell()->createDockWidget(&statisticsFactory));
-        if (docker && docker->view() != this) docker->setView(this);
-
-#ifdef SHOULD_BUILD_RDF
-        KWRdfDockerFactory factory(this);
-        shell()->createDockWidget(&factory);
-#endif
-    }
-
     if (statusBar())
         KWStatusBar::addViewControls(statusBar(), this);
 
@@ -245,6 +239,8 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("edit_paste");
     if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("edit_paste_text");
+    if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("delete_page");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("edit_delete");
@@ -277,7 +273,7 @@ void KWView::setupActions()
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
     m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in Words.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
 
     m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
@@ -286,7 +282,7 @@ void KWView::setupActions()
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
     m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
@@ -390,7 +386,7 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
 
     action = new KAction(i18n("As Character"), this);
-    action->setToolTip(i18n("Insert the current shape as a character in the text"));
+    action->setToolTip(i18n("Anchor the current shape as a character in the text"));
     actionCollection()->addAction("anchor_as_character", action);
     connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
 
@@ -414,13 +410,9 @@ void KWView::setupActions()
     actionCollection()->addAction("set_shape_floating", action);
     connect(action, SIGNAL(triggered()), this, SLOT(setFloating()));
 
-    action = new KAction(i18n("Previous Page"), this);
-    actionCollection()->addAction("page_previous", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(goToPreviousPage()));
+    action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
-    action = new KAction(i18n("Next Page"), this);
-    actionCollection()->addAction("page_next", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(goToNextPage()));
+    action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
 
     // -------------- Edit actions
     action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
@@ -972,6 +964,7 @@ QList<KWFrame*> KWView::selectedFrames() const
 }
 
 // -------------------- Actions -----------------------
+
 void KWView::editFrameProperties()
 {
     KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, this);
@@ -983,18 +976,18 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(KOffice::versionMajor())
-                              .arg(KOffice::versionMinor()).arg(KOffice::versionRelease()));
+    dia->printer().setCreator(QString("Words %1.%2.%3").arg(Calligra::versionMajor())
+                              .arg(Calligra::versionMinor()).arg(Calligra::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
 
 void KWView::insertFrameBreak()
 {
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
-    if (handler) {
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    if (editor) {
         // this means we have the text tool selected right now.
-        handler->insertFrameBreak();
+        editor->insertFrameBreak();
     } else if (m_document->mainFrameSet()) { // lets just add one to the main text frameset
         KoTextDocument doc(m_document->mainFrameSet()->document());
         doc.textEditor()->insertFrameBreak();
@@ -1017,23 +1010,25 @@ void KWView::addBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
-    Q_ASSERT(handler);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    Q_ASSERT(editor);
 
     KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
-    if (handler->hasSelection())
-        suggestedName = handler->selectedText();
+    if (editor->hasSelection()) {
+        suggestedName = editor->selectedText();
+    }
 
     KWCreateBookmarkDialog *dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
-    if (dia->exec() == QDialog::Accepted)
+    if (dia->exec() == QDialog::Accepted) {
         name = dia->newBookmarkName();
+    }
     else {
         delete dia;
         return;
     }
     delete dia;
 
-    handler->addBookmark(name);
+    editor->addBookmark(name);
 }
 
 void KWView::selectBookmark()
@@ -1080,6 +1075,7 @@ void KWView::selectBookmark()
 
 void KWView::deleteBookmark(const QString &name)
 {
+    Q_UNUSED(name);
 #if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
     KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
@@ -1110,12 +1106,12 @@ void KWView::editDeleteFrame()
         KWFrame *frame = frameForShape(shape);
         if (frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-            if (fs && fs->textFrameSetType() != KWord::OtherTextFrameSet)
+            if (fs && fs->textFrameSetType() != Words::OtherTextFrameSet)
                 continue; // can't delete auto-generated frames
         }
         frames.append(shape);
     }
-    QUndoCommand *cmd = canvasBase()->shapeController()->removeShapes(frames);
+    KUndo2Command *cmd = canvasBase()->shapeController()->removeShapes(frames);
     m_document->addCommand(cmd);
 }
 
@@ -1124,7 +1120,7 @@ void KWView::toggleHeader()
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
     m_document->relayout();
 }
 
@@ -1133,7 +1129,7 @@ void KWView::toggleFooter()
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
     m_document->relayout();
 }
 
@@ -1235,12 +1231,12 @@ void KWView::inlineFrame()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
-    Q_ASSERT(handler);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    Q_ASSERT(editor);
     KoTextAnchor *anchor = new KoTextAnchor(targetShape);
     anchor->setOffset(QPointF(0, -targetShape->size().height()));
     // TODO move caret
-    handler->insertInlineObject(anchor);
+    editor->insertInlineObject(anchor);
 }
 
 void KWView::anchorAsChar()
@@ -1290,7 +1286,7 @@ void KWView::createLinkedFrame()
         return;
     selection->deselectAll();
 
-    QUndoCommand *cmd = new QUndoCommand(i18n("Create Linked Copy"));
+    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Create Linked Copy"));
     foreach (KoShape *shape, oldSelection) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);
@@ -1481,9 +1477,9 @@ void KWView::selectionChanged()
         Q_ASSERT(frame);
         QVariant variant;
         variant.setValue<void*>(frame);
-        m_canvas->resourceManager()->setResource(KWord::CurrentFrame, variant);
+        m_canvas->resourceManager()->setResource(Words::CurrentFrame, variant);
         variant.setValue<void*>(frame->frameSet());
-        m_canvas->resourceManager()->setResource(KWord::CurrentFrameSet, variant);
+        m_canvas->resourceManager()->setResource(Words::CurrentFrameSet, variant);
         break;
     }
 }
@@ -1503,31 +1499,89 @@ void KWView::setCurrentPage(const KWPage &currentPage)
             m_zoomController->setPageSize(m_maxPageSize);
         }
 
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
     }
 }
 
-void KWView::goToNextPage()
+void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
 {
-    KWPage page = currentPage().next();
-    if (page.isValid())
-        goToPage(page);
+    // Scroll display
+    qreal moveDistance = m_canvas->canvasController()->visibleHeight() * 0.8;
+    m_canvas->canvasController()->pan(QPoint(0, -moveDistance));
+
+    // Find current frameset, FIXME for now assume main
+    KWTextFrameSet *currentFrameSet = kwdocument()->mainFrameSet();
+
+    // Since we move _up_ calculate the position where a frame would _start_ if
+    // we were scrolled to the _first_ page
+    QPointF pos = currentFrameSet->frames().first()->shape()->absoluteTransformation(0).map(QPointF(0, 5));
+
+    pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset(), viewConverter());
+
+    // Find textshape under that position and from current frameset
+    QList<KoShape*> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() -20, 40, 40));
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape* shape, possibleTextShapes) {
+        KoShapeUserData *userData = shape->userData();
+        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+            foreach (KWFrame *frame, currentFrameSet->frames()) {
+                if (frame->shape() == shape) {
+                    pos = shape->absoluteTransformation(0).inverted().map(pos);
+                     pos += QPointF(0.0, textShapeData->documentOffset());
+
+                    int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
+                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    return;
+                }
+            }
+        }
+    }
 }
 
-void KWView::goToPreviousPage()
+void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
 {
-    KWPage page = currentPage().previous();
-    if (page.isValid())
-        goToPage(page);
+    // Scroll display
+    qreal moveDistance = m_canvas->canvasController()->visibleHeight() * 0.8;
+    m_canvas->canvasController()->pan(QPoint(0, moveDistance));
+
+    // Find current frameset, FIXME for now assume main
+    KWTextFrameSet *currentFrameSet = kwdocument()->mainFrameSet();
+
+    // Since we move _down_ calculate the position where a frame would _end_ if
+    // we were scrolled to the _lasst_ page
+    KoShape *shape = currentFrameSet->frames().last()->shape();
+    QPointF pos = shape->absoluteTransformation(0).map(QPointF(0, shape->size().height() - 5));
+    pos.setY(pos.y() - m_document->pageManager()->page(qreal(pos.y())).rect().bottom());
+
+    pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset() + QPointF(0, m_canvas->canvasController()->visibleHeight()), viewConverter());
+
+    // Find textshape under that position and from current frameset
+    QList<KoShape*> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() -20, 40, 40));
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape* shape, possibleTextShapes) {
+        KoShapeUserData *userData = shape->userData();
+        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+            foreach (KWFrame *frame, currentFrameSet->frames()) {
+                if (frame->shape() == shape) {
+                    pos = shape->absoluteTransformation(0).inverted().map(pos);
+                    pos += QPointF(0.0, textShapeData->documentOffset());
+
+                    int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
+                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()),
-                                                       m_canvas->viewConverter());
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, 
+                            page.offsetInDocument()), m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);
 }
@@ -1581,7 +1635,7 @@ void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QStrin
 {
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
-    KoTextEditor *editor = qobject_cast<KoTextEditor*>(canvasBase()->toolProxy()->selection());
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {
         kDebug(30015) << "no editor, not reflowing rdf semantic item.";
         return;
@@ -1601,7 +1655,7 @@ void KWView::variableChanged(){
 void adjustZOrderOfSelectedFrames(KoCanvasBase *canvasBase, KWDocument *document, KoShapeReorderCommand::MoveShapeType direction)
 {
     // TODO we should not allow any shapes to fall behind the main text frame.
-    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
+    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
                         canvasBase->shapeManager(), direction);
     if (cmd)
         document->addCommand(cmd);
@@ -1642,3 +1696,196 @@ void KWView::loadingCompleted()
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
     m_find->addDocuments(texts);
 }
+
+void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+{
+    if (!m_canvas) {
+        // now canvas because we're not on the desktop?
+        return;
+    }
+    // get position from event and convert to document coordinates
+    QPointF pos = m_canvas->viewConverter()->viewToDocument(insertAt)
+            + m_canvas->documentOffset()- m_canvas->documentOrigin();
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    // get the textshape at this point
+    QList<KoShape*> possibleTextShapes = canvasBase()->shapeManager()->shapesAt(QRectF(pos.x() - 10, pos.y() -10, 20, 20));
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape* shape, possibleTextShapes) {
+        KoShapeUserData *userData = shape->userData();
+        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+            // We've found the top-level text shape.
+            break;
+        }
+    }
+
+    KDialog dlg;
+    dlg.setCaption(i18n("Insert Image Options"));
+    QWidget *page = new QWidget(&dlg);
+    dlg.setMainWidget(page);
+    Ui_KWInsertImage uiInsertImage;
+    uiInsertImage.setupUi(page);
+
+    if (textShapeData) {
+        // ask the user what kind of anchoring and run-around to use
+        if (dlg.exec() == QDialog::Rejected) {
+            return;
+        }
+    }
+    else {
+        // ask the user what kind of run-around to use
+        uiInsertImage.grpAnchor->setVisible(false);
+        uiInsertImage.grpHAlign->setVisible(false);
+        uiInsertImage.grpVAlign->setVisible(false);
+
+        if (dlg.exec() == KDialog::QDialog::Rejected) {
+            return;
+        }
+    }
+
+    foreach(const QImage image, imageList) {
+
+        KoProperties params;
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
+
+        KoShape *shape = factory->createShape(&params, kwdocument()->resourceManager());
+
+        // resize the shape so it will fit in the document, with some nice
+        // hard-coded constants.
+        qreal pageWidth = currentPage().width();
+        qreal pageHeight = currentPage().height();
+        if (shape->size().width() > pageWidth * 0.8 ||
+                shape->size().height() > pageHeight)
+        {
+            QSizeF sz = shape->size();
+            sz.scale(QSizeF(pageWidth * 0.6, pageHeight *.6), Qt::KeepAspectRatio);
+            shape->setSize(sz);
+        }
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            return;
+        }
+
+        // Set the wraparound
+        if (uiInsertImage.noRunaround->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::NoRunAround);
+        }
+        else if (uiInsertImage.left->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::LeftRunAroundSide);
+        }
+        else if (uiInsertImage.right->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::RightRunAroundSide);
+        }
+        else if (uiInsertImage.longest->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::BiggestRunAroundSide);
+        }
+        else if (uiInsertImage.both->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::BothRunAroundSide);
+        }
+        else if (uiInsertImage.enough->isChecked()) {
+            shape->setTextRunAroundSide(KoShape::EnoughRunAroundSide);
+            double threshold = uiInsertImage.threshold->value();
+            shape->setTextRunAroundThreshold(threshold);
+        }
+
+        double distance = uiInsertImage.distance->value();
+        shape->setTextRunAroundDistance(distance);
+
+        // only if we have a text shape, we will anchor to the text inside.
+        if (textShapeData) {
+
+            // Create the anchor
+            QTextDocument *qdoc = textShapeData->document();
+            KoTextAnchor *anchor = new KoTextAnchor(shape);
+
+            // anchor
+            // XXX: What about: HFrame, HFrameContent, HFrameEndMargin, HFrameStartMargin?
+            anchor->setBehavesAsCharacter(false);
+            if (uiInsertImage.rAnchorPage->isChecked()) {
+                // XXX: or: VPageContent?
+                anchor->setVerticalRel(KoTextAnchor::VPage);
+                // XXX: or: HPageContent or HPageStartMargin or HPageEndMargin?
+                anchor->setHorizontalRel(KoTextAnchor::HPage);
+
+            }
+            else if (uiInsertImage.rAnchorParagraph->isChecked()) {
+                // XXX: or: VParagraphContent?
+                anchor->setVerticalRel(KoTextAnchor::VParagraph);
+                // XXX: or HParagraphContent, HParagraphEndMargin, HParagraphStartMargin?
+                anchor->setHorizontalRel(KoTextAnchor::HParagraph);
+
+            }
+            else if (uiInsertImage.rAnchorToCharacter->isChecked()) {
+                // XXX: or VBaseline, VLine?
+                anchor->setVerticalRel(KoTextAnchor::VChar);
+                anchor->setHorizontalRel(KoTextAnchor::HChar);
+
+            }
+            else if (uiInsertImage.rAnchorAsCharacter->isChecked()) {
+                anchor->setVerticalRel(KoTextAnchor::VBaseline);
+                anchor->setHorizontalRel(KoTextAnchor::HChar);
+                anchor->setBehavesAsCharacter(true);
+            }
+
+            // horizontal alignment
+            // XXX: what about HFromInside, HFromLeft, HInside, HOutside?
+            if (uiInsertImage.rAlignLeft->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HLeft);
+            }
+            else if (uiInsertImage.rAlignCenter->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HCenter);
+            }
+            else if (uiInsertImage.rAlignRight->isChecked()) {
+                anchor->setHorizontalPos(KoTextAnchor::HRight);
+            }
+
+            // vertical alignment
+            if (uiInsertImage.rAlignTop->isChecked()) {
+                // XXX: or VFromTop?
+                anchor->setVerticalPos(KoTextAnchor::VTop);
+            }
+            else if (uiInsertImage.rAlignMiddle->isChecked()) {
+                anchor->setVerticalPos(KoTextAnchor::VMiddle);
+            }
+            else if (uiInsertImage.rAlignBottom->isChecked()) {
+                anchor->setVerticalPos(KoTextAnchor::VBottom);
+            }
+
+            anchor->setOffset(QPointF(0, -shape->size().height()));
+            // insert the anchor into the text document
+            KoTextEditor editor(qdoc);
+            editor.insertInlineObject(anchor);
+
+            // create the undo step.
+            KoShapeCreateCommand *cmd = new KoShapeCreateCommand(kwdocument(), shape);
+            KoSelection *selection = m_canvas->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+            m_canvas->addCommand(cmd);
+
+        }
+        else {
+            shape->setPosition(pos);
+            pos += QPointF(25,25); // increase the position for each shape we insert so the
+                                   // user can see them all.
+            // add the shape floating, like in stage
+            KUndo2Command *cmd = m_canvas->shapeController()->addShapeDirect(shape);
+            if (cmd) {
+                KoSelection *selection = m_canvas->shapeManager()->selection();
+                selection->deselectAll();
+                selection->select(shape);
+            }
+            m_canvas->addCommand(cmd);
+        }
+    }
+}
+

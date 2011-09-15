@@ -25,7 +25,7 @@
 // KDE includes
 #include <kdebug.h>
 
-// KOffice includes
+// Calligra includes
 // KSpread includes
 
 using namespace Calligra::Tables;

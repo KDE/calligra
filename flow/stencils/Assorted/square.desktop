@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Perfect Square
+Name[bg]=Квадрат
+Name[cs]=Dokonalý čtverec
+Name[da]=Perfekt kvadrat
 Name[de]=Perfektes Quadrat
 Name[el]=Τέλειο τετράγωνο
 Name[es]=Cuadrado perfecto
@@ -7,8 +10,10 @@ Name[et]=Ruut
 Name[it]=Quadrato perfetto
 Name[nb]=Perfekt kvadrat
 Name[nl]=Perfect vierkant
+Name[pl]=Perfekcyjny kwadrat
 Name[pt]=Quadrado Perfeito
 Name[pt_BR]=Quadrado perfeito
+Name[ru]=Идеальный квадрат
 Name[sv]=Perfekt fyrkant
 Name[uk]=Ідеальний квадрат
 Name[x-test]=xxPerfect Squarexx

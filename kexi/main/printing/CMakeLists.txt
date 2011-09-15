@@ -46,4 +46,4 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main/prin
 #	-I$(top_srcdir)/lib/komain \
 #	-I$(top_builddir)/kexi/widget $(all_includes)
 #
-##KDE_CXXFLAGS += -DSIMPLE_KOLIBS -DKOFFICECORE_EXPORT= -DKOGUIUTILS_EXPORT=
+##KDE_CXXFLAGS += -DSIMPLE_KOLIBS -DCALLIGRACORE_EXPORT= -DKOGUIUTILS_EXPORT=

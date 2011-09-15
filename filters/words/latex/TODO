@@ -29,7 +29,7 @@ VERSION 1
 	- break lines																									DONE (must be tested)
 	- use config class everywhere (with dialog box, ...).					DONE
 	- change the default font size to 12.													DONE
-	- change the font size only in the kword mode.								DONE
+	- change the font size only in the words mode.								DONE
 	
 VERSION 2
 	- unicode																											DONE
@@ -58,4 +58,4 @@ VERSION 3
 IMPORT FILTER :
 	- lexical parser 																							DONE
 	- syntax. parser 																							DONE
-	- import filter in kword
+	- import filter in words

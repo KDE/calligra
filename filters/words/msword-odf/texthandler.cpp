@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -47,22 +47,22 @@
 #include "document.h"
 #include "msdoc.h"
 
-wvWare::U8 KWordReplacementHandler::hardLineBreak()
+wvWare::U8 WordsReplacementHandler::hardLineBreak()
 {
     return '\n';
 }
 
-wvWare::U8 KWordReplacementHandler::nonBreakingHyphen()
+wvWare::U8 WordsReplacementHandler::nonBreakingHyphen()
 {
     return '-'; // normal hyphen for now
 }
 
-wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
+wvWare::U8 WordsReplacementHandler::nonRequiredHyphen()
 {
-    return 0xad; // soft hyphen, according to kword.dtd
+    return 0xad; // soft hyphen, according to words.dtd
 }
 
-KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
+WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
     : m_mainStyles(0)
     , m_document(0)
     , m_parser(parser)
@@ -70,8 +70,6 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_tocNumber(0)
     , m_footNoteNumber(0)
     , m_endNoteNumber(0)
-    , m_currentTable(0)
-    , m_paragraph(0)
     , m_hasStoredDropCap(false)
     , m_breakBeforePage(false)
     , m_insideFootnote(false)
@@ -82,6 +80,10 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_annotationBuffer(0)
     , m_insideDrawing(false)
     , m_drawingWriter(0)
+    , m_paragraph(0)
+    , m_currentTable(0)
+    , m_tableWriter(0)
+    , m_tableBuffer(0)
     , m_listLevelStyleRequired(false)
     , m_currentListDepth(-1)
     , m_currentListID(0)
@@ -109,7 +111,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
 }
-bool KWordTextHandler::stateOk() const
+bool WordsTextHandler::stateOk() const
 {
     if (m_fldStart != m_fldEnd) {
         return false;
@@ -117,12 +119,15 @@ bool KWordTextHandler::stateOk() const
     return true;
 }
 
-KoXmlWriter* KWordTextHandler::currentWriter() const
+KoXmlWriter* WordsTextHandler::currentWriter() const
 {
     KoXmlWriter* writer = NULL;
 
     if (m_insideDrawing) {
         writer = m_drawingWriter;
+    }
+    else if (m_currentTable && m_currentTable->floating) {
+        writer = m_tableWriter;
     }
     else if (document()->writingHeader()) {
         writer = document()->headerWriter();
@@ -138,8 +143,33 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
     return writer;
 }
 
+QString WordsTextHandler::paragraphBaseFontColor() const
+{
+    if (!m_paragraph) return QString();
+
+    const wvWare::StyleSheet& styles = m_parser->styleSheet();
+    const wvWare::Style* ps = m_paragraph->paragraphStyle();
+    quint16 istdBase = 0x0fff;
+    QString color;
+
+    while (!ps->isEmpty()) {
+        if (ps->chp().cv != wvWare::Word97::cvAuto) {
+            color = QString::number(ps->chp().cv | 0xff000000, 16).right(6).toUpper();
+            color.prepend('#');
+            break;
+        }
+        istdBase = ps->m_std->istdBase;
+        if (istdBase == 0x0fff) {
+            break;
+        } else {
+            ps = styles.styleByIndex(istdBase);
+        }
+    }
+    return color;
+}
+
 //increment m_sectionNumber
-void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
+void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513) ;
 
@@ -247,12 +277,11 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
             } else {
                 kWarning() << "Could not find Normal style, numbering not added!";
             }
-
         }
     }
 } //end sectionStart()
 
-void KWordTextHandler::sectionEnd()
+void WordsTextHandler::sectionEnd()
 {
     kDebug(30513);
 
@@ -269,13 +298,13 @@ void KWordTextHandler::sectionEnd()
     }
 }
 
-void KWordTextHandler::pageBreak(void)
+void WordsTextHandler::pageBreak(void)
 {
     m_breakBeforePage = true;
 }
 
 //signal that there's another subDoc to parse
-void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
+void WordsTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 {
     kDebug(30513);
 
@@ -293,7 +322,7 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
-void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
+void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
                                      wvWare::UString characters,
                                      wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
@@ -434,10 +463,10 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
     m_footnoteBuffer = 0;
 
     //bool autoNumbered = (character.unicode() == 2);
-    //QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
+    //QDomElement varElem = insertVariable( 11 /*Words code for footnotes*/, chp, "STRI" );
     //QDomElement footnoteElem = varElem.ownerDocument().createElement( "FOOTNOTE" );
     //if ( autoNumbered )
-    //    footnoteElem.setAttribute( "value", 1 ); // KWord will renumber anyway
+    //    footnoteElem.setAttribute( "value", 1 ); // Words will renumber anyway
     //else
     //    footnoteElem.setAttribute( "value", QString(QChar(character.unicode())) );
     //footnoteElem.setAttribute( "notetype", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote" );
@@ -451,7 +480,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
     //varElem.appendChild( footnoteElem );
 } //end footnoteFound()
 
-void KWordTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
+void WordsTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
 {
     KoXmlWriter* writer;
     QBuffer buf;
@@ -487,12 +516,12 @@ void KWordTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
 
     if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
+        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), true);
         delete writer;
     }
 }
 
-void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
+void WordsTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
 {
     KoXmlWriter* writer;
     QBuffer buf;
@@ -524,12 +553,12 @@ void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
 
     if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
+        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), true);
         delete writer;
     }
 }
 
-void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+void WordsTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                         const wvWare::AnnotationFunctor& parseAnnotation)
 {
     Q_UNUSED(characters);
@@ -574,7 +603,7 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationBuffer = 0;
 }
 
-void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
+void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
     kDebug(30513) ;
 
@@ -585,10 +614,15 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
 
     if (!m_currentTable) {
         static int s_tableNumber = 0;
-        m_currentTable = new KWord::Table();
+        m_currentTable = new Words::Table();
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
         m_currentTable->tap = tap;
         //insertAnchor( m_currentTable->name );
+
+        //check if the table is inside of an absolutely positioned frame
+        if ( (tap->dxaAbs != 0) || (tap->dyaAbs != 0) ) {
+            m_currentTable->floating = true;
+        }
     }
 //     kDebug(30513) << "tap->itcMac:" << tap->itcMac << "tap->rgdxaCenter.size():" << tap->rgdxaCenter.size();
 
@@ -614,11 +648,11 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
     for (int i = 0; i <= tap->itcMac; i++) {
         m_currentTable->cacheCellEdge(tap->rgdxaCenter[ i ]);
     }
-    KWord::Row row(new wvWare::TableRowFunctor(functor), tap);
+    Words::Row row(new wvWare::TableRowFunctor(functor), tap);
     m_currentTable->rows.append(row);
 }
 
-void KWordTextHandler::tableEndFound()
+void WordsTextHandler::tableEndFound()
 {
     kDebug(30513) ;
 
@@ -626,31 +660,38 @@ void KWordTextHandler::tableEndFound()
     if (m_insideAnnotation) {
         return;
     }
-
     if (!m_currentTable) {
         kWarning(30513) << "Looks like we lost a table somewhere: return";
         return;
     }
-
     //TODO: FIX THE OPEN LIST PROBLEM !!!!!!
     //we cant have an open list when entering a table
     if (listIsOpen()) {
         //kDebug(30513) << "closing list " << m_currentListID;
         closeList();
     }
+    bool floating = m_currentTable->floating;
 
-    KWord::Table* table = m_currentTable;
-    //reset m_currentTable
-    m_currentTable = 0L;
+    if (floating) {
+        m_tableBuffer = new QBuffer();
+        m_tableBuffer->open(QIODevice::WriteOnly);
+        m_tableWriter = new KoXmlWriter(m_tableBuffer);
+    }
+
     //must delete table in Document!
+    emit tableFound(m_currentTable);
+    m_currentTable = 0L;
 
-    emit tableFound(table);
+    if (floating) {
+        m_floatingTable = QString::fromUtf8(m_tableBuffer->buffer(), m_tableBuffer->buffer().size());
+        delete m_tableWriter;
+        m_tableWriter = 0;
+        delete m_tableBuffer;
+        m_tableBuffer = 0;
+    }
 }
 
-//TODO: merge inlineObjectFound with floatingObjectFound, both of them are
-//stable actually
-
-void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
+void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data)
 {
     kDebug(30513);
     //inline object should be inside of a pragraph
@@ -681,61 +722,11 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    emit inlineObjectFound(data, writer);
-
-    //TODO: we should really improve processing of lists somehow
-    if (listIsOpen()) {
-        closeList();
+    if (data) {
+        emit inlineObjectFound(*data, writer);
+    } else {
+        emit floatingObjectFound(globalCP, writer);
     }
-    if (m_fld->m_hyperLinkActive) {
-        writer->endElement();
-        m_fld->m_hyperLinkActive = false;
-    }
-    //cleanup
-    delete m_drawingWriter;
-    m_drawingWriter = 0;
-    m_insideDrawing = false;
-
-    //restore the state
-    restoreState();
-
-    //now add content to our current paragraph
-    QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
-}
-
-void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
-{
-    kDebug(30513);
-    //floating object should be inside of a pragraph (or at least it's anchor)
-    Q_ASSERT(m_paragraph);
-
-    //ignore if field instructions are processed
-    if (m_fld->m_insideField && !m_fld->m_afterSeparator) {
-        kWarning(30513) << "Warning: Object located in field instractions, Ignoring!";
-        return;
-    }
-
-    //save the state of tables/paragraphs/lists (text-box)
-    saveState();
-
-    //Create temporary writer for the picture tags.
-    KoXmlWriter* writer = 0;
-    QBuffer buf;
-
-    buf.open(QIODevice::WriteOnly);
-    writer = new KoXmlWriter(&buf);
-    m_drawingWriter = writer;
-    m_insideDrawing = true;
-
-    //frame or drawing shape acting as a hyperlink
-    if (m_fld->m_hyperLinkActive) {
-        writer->startElement("draw:a");
-        writer->addAttribute("xlink:type", "simple");
-        writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
-    }
-
-    emit floatingObjectFound(globalCP, writer);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
@@ -759,7 +750,7 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
 }
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
-void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
+void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
     kDebug(30513) << "**********************************************";
 
@@ -768,9 +759,9 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     m_currentPPs = paragraphProperties;
 
     //check for a table to be parsed and processed
-    if (m_currentTable) {
-        kWarning(30513) << "==> WOW, unprocessed table: ignoring";
-    }
+//     if (m_currentTable) {
+//         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
+//     }
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
     bool inStylesDotXml = document()->writingHeader();
@@ -779,8 +770,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     const wvWare::Style* paragraphStyle = 0;
 
     // Check list information, because that's bigger than a paragraph, and
-    // we'll track that here in the TextHandler.  NOT TRUE any more according
-    // to [MS-DOC] - v20100926
+    // we'll track that here in the TextHandler.
     //
     //TODO: <text:numbered-paragraph>
 
@@ -825,25 +815,20 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         }
     }
 
-    //lists related logic
+    //Lists related logic
     qint16 ilfo = paragraphProperties->pap().ilfo;
     if (ilfo == 0) {
-
-        // Not in a list at all in the word document, so check if we need to
-        // close one in the odt.
-
-        //kDebug(30513) << "Not in a list, so we may need to close a list.";
+        // This paragraph is not in a list.
         if (listIsOpen()) {
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
     } else if (ilfo > 0) {
-
         // We're in a list in the word document.
         //
         // At the moment <text:numbered-paragraph> is not supported, we process
         // the paragraph as an list-item instead.
-        kDebug(30513) << "we're in a list or numbered paragraph";
+        kDebug(30513) << "Paragraph in a list or a numbered paragraph";
 
         // listInfo is our list properties object.
         const wvWare::ListInfo* listInfo = paragraphProperties->listInfo();
@@ -851,15 +836,13 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         //error (or currently unknown case)
         if (!listInfo) {
             kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
-
             // Try to make it a heading for now.
-            isHeading = true;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
+            isHeading = true;
         } else if (listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
-            kDebug(30513) << "found heading, pap().ilvl="
-                    << paragraphProperties->pap().ilvl;
-            isHeading = true;
+            kDebug(30513) << "Found a heading, pap().ilvl=" << paragraphProperties->pap().ilvl;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
+            isHeading = true;
         } else {
             // List processing
             // This takes care of all the cases:
@@ -868,21 +851,25 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             //  - A list with lower level than before
             writeListInfo(writer, paragraphProperties->pap(), listInfo);
         }
-    } //end pap.ilfo > 0 (ie. we're in a list or heading)
+    } else if (ilfo < 0) {
+        //TODO: support required
+        kDebug(30513) << "Unable to determine which list contains the paragraph";
+    }
 
     // Now that the bookkeeping is taken care of for old paragraphs, then
     // actually create the new one.
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
-    //set paragraph properties
+    //set paragraph and character properties of the paragraph
     m_paragraph->setParagraphProperties(paragraphProperties);
+    m_paragraph->setCharacterProperties(chp);
     //set current named style in m_paragraph
     m_paragraph->setParagraphStyle(paragraphStyle);
     //provide the background color information
     m_paragraph->updateBgColor(m_document->currentBgColor());
 
-    KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
+    KoGenStyle* style = m_paragraph->koGenStyle();
 
     //check if the master-page-name attribute is required
     if (document()->writeMasterPageName() && !document()->writingHeader())
@@ -899,23 +886,25 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         m_breakBeforePage = false;
     }
 
+    //insert the floating table at the beginning
+    if (!m_floatingTable.isEmpty()) {
+        m_paragraph->addRunOfText(m_floatingTable, 0, QString(""), m_parser->styleSheet());
+        m_floatingTable.clear();
+    }
+
 } //end paragraphStart()
 
-void KWordTextHandler::paragraphEnd()
+void WordsTextHandler::paragraphEnd()
 {
     kDebug(30513) << "-----------------------------------------------";
 
     bool chck_dropcaps = false;
 
-    // If the last paragraph was a drop cap paragraph, combine it with
-    // this one.
+    // If the last paragraph was a drop cap paragraph, combine with this one.
     if (m_hasStoredDropCap) {
         kDebug(30513) << "combine paragraphs for drop cap" << m_dropCapString;
         m_paragraph->addDropCap(m_dropCapString, m_dcs_fdct, m_dcs_lines, m_dropCapDistance, m_dropCapStyleName);
     }
-
-    //clear our paragraph flag
-    //m_bInParagraph = false;
 
     //write some debug messages
     if (m_insideFootnote) {
@@ -968,15 +957,18 @@ void KWordTextHandler::paragraphEnd()
     }
     //add the list-level-style information to the list-style if required
     if (m_listLevelStyleRequired) {
-        updateListStyle(styleName);
+        updateListStyle();
         m_listLevelStyleRequired = false;
     }
+
+    //save the font color
+    m_paragraphBaseFontColorBkp = paragraphBaseFontColor();
 
     delete m_paragraph;
     m_paragraph = 0;
 }//end paragraphEnd()
 
-void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
+void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
 {
     //NOTE: The content between fieldStart and fieldSeparator represents field
     //instructions and the content between fieldSeparator and fieldEnd
@@ -1054,7 +1046,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     m_fldStart++;
 }//end fieldStart()
 
-void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
+void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
 {
     kDebug(30513) ;
     m_fld->m_afterSeparator = true;
@@ -1161,7 +1153,7 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
  * However, fields which do not enjoy such support are dealt with by emitting
  * the "result" text generated by Word as vanilla text in @ref runOftext.
  */
-void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
+void WordsTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
 //    Q_UNUSED(chp);
     kDebug(30513);
@@ -1457,12 +1449,24 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         bool useOutlineLevel = true;
 
         if (rx.indexIn(*inst) >= 0) {
-            useOutlineLevel = false;
+            // Most of the files contain semicolons instead of commas.
             QStringList fragments = rx.cap(1).split(QRegExp(";"));
-            levels = fragments.last().toInt();
-            for (int i = 0 ; i < fragments.size(); i += 2) {
-                customStyles.insert(Conversion::processStyleName(fragments[i]),
-                                    fragments[i + 1].toInt());
+            if (fragments.size() % 2) {
+                fragments = rx.cap(1).split(QRegExp(","));
+            }
+            if (!(fragments.size() % 2)) {
+                bool ok;
+                for (int n, i = 0 ; i < fragments.size(); i += 2) {
+                    n = fragments[i + 1].toInt(&ok);
+                    if (!ok) {
+                        continue;
+                    }
+                    else if (levels < n) {
+                        levels = n;
+                    }
+                    customStyles.insert(Conversion::processStyleName(fragments[i]), n);
+                }
+                useOutlineLevel = false;
             }
         }
         /*
@@ -1503,6 +1507,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 }
             }
         }
+        //TODO: re-order m_tocStyleNames based on the outline level
+
         /*
          * ************************************************
          * table-of-content
@@ -1635,10 +1641,10 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 /**
  * This handles a basic section of text.
  * 
- * Fields which are not supported by inline variables in @ref fieldEnd are also dealt with by 
- * emitting the "result" text generated by Word as vanilla text here.
+ * Fields which are not supported by inline variables in @ref fieldEnd are also
+ * dealt with by emitting the "result" text generated by Word as vanilla text.
  */
-void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
+void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
     bool common_flag = false;
     QString newText(Conversion::string(text));
@@ -1738,7 +1744,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 
 // Return the name of a font. We have to convert the Microsoft font names to
 // something that might just be present under X11.
-QString KWordTextHandler::getFont(unsigned ftc) const
+QString WordsTextHandler::getFont(unsigned ftc) const
 { 
     kDebug(30513) ;
     Q_ASSERT(m_parser);
@@ -1749,64 +1755,63 @@ QString KWordTextHandler::getFont(unsigned ftc) const
     const wvWare::Word97::FFN& ffn(m_parser->font(ftc));
     QString fontName(Conversion::string(ffn.xszFfn));
     return fontName;
-    /*
-    #ifdef FONT_DEBUG
-        kDebug(30513) <<"    MS-FONT:" << font;
-    #endif
 
-        static const unsigned ENTRIES = 6;
-        static const char* const fuzzyLookup[ENTRIES][2] =
-        {
-            // MS contains      X11 font family
-            // substring.       non-Xft name.
-            { "times",          "times" },
-            { "courier",        "courier" },
-            { "andale",         "monotype" },
-            { "monotype.com",   "monotype" },
-            { "georgia",        "times" },
-            { "helvetica",      "helvetica" }
-        };
+// #ifdef FONT_DEBUG
+//     kDebug(30513) <<"    MS-FONT:" << font;
+// #endif
 
-        // When Xft is available, Qt will do a good job of looking up our local
-        // equivalent of the MS font. But, we want to work even without Xft.
-        // So, first, we do a fuzzy match of some common MS font names.
-        unsigned i;
+//     static const unsigned ENTRIES = 6;
+//     static const char* const fuzzyLookup[ENTRIES][2] =
+//         {
+//             // MS contains      X11 font family
+//             // substring.       non-Xft name.
+//             { "times",          "times" },
+//             { "courier",        "courier" },
+//             { "andale",         "monotype" },
+//             { "monotype.com",   "monotype" },
+//             { "georgia",        "times" },
+//             { "helvetica",      "helvetica" }
+//         };
 
-        for (i = 0; i < ENTRIES; i++)
-        {
-            // The loop will leave unchanged any MS font name not fuzzy-matched.
-            if (font.find(fuzzyLookup[i][0], 0, false) != -1)
-            {
-                font = fuzzyLookup[i][1];
-                break;
-            }
-        }
+//     // When Xft is available, Qt will do a good job of looking up our local
+//     // equivalent of the MS font. But, we want to work even without Xft.  So,
+//     // first, we do a fuzzy match of some common MS font names.
+//     unsigned i;
 
-    #ifdef FONT_DEBUG
-        kDebug(30513) <<"    FUZZY-FONT:" << font;
-    #endif
+//     for (i = 0; i < ENTRIES; i++)
+//     {
+//         // The loop will leave unchanged any MS font name not fuzzy-matched.
+//         if (font.find(fuzzyLookup[i][0], 0, false) != -1)
+//         {
+//             font = fuzzyLookup[i][1];
+//             break;
+//         }
+//     }
 
-        // Use Qt to look up our canonical equivalent of the font name.
-        QFont xFont( font );
-        QFontInfo info( xFont );
+// #ifdef FONT_DEBUG
+//     kDebug(30513) <<"    FUZZY-FONT:" << font;
+// #endif
 
-    #ifdef FONT_DEBUG
-        kDebug(30513) <<"    QT-FONT:" << info.family();
-    #endif
+//     // Use Qt to look up our canonical equivalent of the font name.
+//     QFont xFont( font );
+//     QFontInfo info( xFont );
 
-        return info.family();
-        */
+// #ifdef FONT_DEBUG
+//     kDebug(30513) <<"    QT-FONT:" << info.family();
+// #endif
+//     return info.family();
+
 }//end getFont()
 
-bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo)
+bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo)
 {
     kDebug(30513);
 
     m_listLevelStyleRequired = false;
     int nfc = listInfo->numberFormat();
 
-    //check to see if we're in a heading instead of a list
-    //if so, just return false so writeLayout can process the heading
+    //check to see if we're in a heading instead of a list if so, just return
+    //false so writeLayout can process the heading
     if (listInfo->lsid() == 1 && nfc == 255) {
         return false;
     }
@@ -1836,27 +1841,25 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             //need to create a style for this list
             KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
 
-            // If writing to styles.xml, the list style needs to go there as well.
-            if (document()->writingHeader())
+            if (document()->writingHeader()) {
                 listStyle.setAutoStyleInStylesDotXml(true);
-
-            // Write styleName to the text:list tag.
+            }
             m_listStyleName = m_mainStyles->insert(listStyle);
             writer->addAttribute("text:style-name", m_listStyleName);
         }
         //set the list ID - now is safe as we are done using the old value
         m_currentListID = listInfo->lsid();
-
-        //a new list-level-style is required
-        m_listLevelStyleRequired = true;
-
         m_currentListDepth = pap.ilvl;
+
         if (m_currentListDepth > 0) {
             for (int i = 0; i < m_currentListDepth; i++) {
                 writer->startElement("text:list-item");
                 writer->startElement("text:list");
             }
         }
+        //a new list-level-style is required
+        m_listLevelStyleRequired = true;
+
     }
     else if (pap.ilvl > m_currentListDepth) {
         //we're going to a new level in the list
@@ -1870,20 +1873,21 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         }
         //a new list-level-style is required
         m_listLevelStyleRequired = true;
+
+        //FIXME: list-level-style might be already created
     }
     else {
-        qDebug() << "HMMM" << m_currentListDepth << pap.ilvl;
         // We're backing out one or more levels in the list.
         kDebug(30513) << "backing out one or more levels in list" << m_currentListID;
         while (m_currentListDepth > pap.ilvl) {
+            writer->endElement(); //text:list-item
+            writer->endElement(); //text:list
             m_currentListDepth--;
-            //close the last <text:list-item of the level
-            writer->endElement();
-            //close <text:list> for the level
-            writer->endElement();
         }
         //close the <text:list-item> from the surrounding level
-        writer->endElement();
+        writer->endElement(); //text:list-item
+
+        //TODO: new list-level-style might be required
     }
 
     //we always want to open this tag
@@ -1892,185 +1896,191 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     return true;
 } //end writeListInfo()
 
-
-QString KWordTextHandler::createBulletStyle(const QString& textStyleName) const
+/**
+ * A helper function to add the <style:list-level-properties> child element to
+ * the <text:list-level-style-*> element.
+ */
+void setListLevelProperties(KoXmlWriter& out, const wvWare::Word97::PAP& pap, const wvWare::ListInfo& listInfo)
 {
-    const KoGenStyle* textStyle = m_mainStyles->style(textStyleName);
+    //
+    // TEXT POSITION:
+    //
+    // fo:margin-left - Specifies the left margin for the paragraph, so it
+    // controls position of the 2nd line of the paragraph from the left page
+    // margin.
+    //
+    // text:list-tab-stop-position - Specifies the Tab space from the left page
+    // margin, so it controls position of the text of the 1st line of the
+    // paragraph.
+    //
+    // BULLET POSITION:
+    //
+    // fo:text-indent - Specifies indent for the 1st line of the paragraph,
+    // relative to the rest of the paragraph, so it controls position of the
+    // bullet from the left margin specified by fo:margin-left.
+    //
+    // fo:text-align - Specifies the horizontal alignment of the list label at
+    // the alignment position.  The alignment position is specified by the
+    // fo:margin-left and fo:text-indent attributes.
+    //
 
-    if (!textStyle) {
-        return QString();
+    out.startElement("style:list-level-properties");
+    //fo:text-align
+    switch (listInfo.alignment()) {
+    case 0: //Left justified - OOo seems to treat this value as DEFAULT
+        out.addAttribute("fo:text-align", "start");
+        break;
+    case 1: //Center justified
+        out.addAttribute("fo:text-align", "center");
+        break;
+    case 2: //Right justified
+        out.addAttribute("fo:text-align", "end");
+        break;
+    case 3: //TODO: Not documented in [MS-DOC] - v20101219, any test files?
+        out.addAttribute("fo:text-align", "justify");
+        break;
+    default:
+        break;
     }
-
-    KoGenStyle style(KoGenStyle::TextStyle, "text");
-    QString prop, value;
-
-    //copy only selected properties
-
-    prop = QString("fo:color");
-    value = textStyle->property(prop, KoGenStyle::TextType);
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
-    }
-    prop = QString("fo:font-size");
-    value = textStyle->property(prop, KoGenStyle::TextType);
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
-    }
-    prop = QString("fo:font-weight");
-    value = textStyle->property(prop, KoGenStyle::TextType);
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
-    }
-    prop = QString("style:font-name");
-    value = textStyle->property(prop, KoGenStyle::TextType);
-    if (value.isEmpty()) {
-        const KoGenStyle* normal = m_mainStyles->style("Normal");
-        if (normal) {
-            value = normal->property(prop, KoGenStyle::TextType);
+    //text:list-level-position-and-space-mode
+    out.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
+    //style:list-level-label-alignment
+    out.startElement("style:list-level-label-alignment");
+    //fo:margin-left
+    out.addAttributePt("fo:margin-left", Conversion::twipsToPt(pap.dxaLeft));
+    //fo:text-indent
+    out.addAttributePt("fo:text-indent", Conversion::twipsToPt(pap.dxaLeft1));
+    //text:label-followed-by
+    switch (listInfo.followingChar()) {
+    case 0: //A tab follows the number text.
+    {
+        out.addAttribute("text:label-followed-by", "listtab");
+        //TODO: text:list-tab-stop-position - Fine tuning on complex files required!
+//         Q_ASSERT(pap.itbdMac == 1);
+        qreal position = 0;
+        if (pap.itbdMac) {
+            position = Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab);
         }
+        out.addAttributePt("text:list-tab-stop-position", position);
+        break;
     }
-    if (!value.isEmpty()) {
-        style.addProperty(prop, value, KoGenStyle::TextType);
+    case 1: //A space follows the number text.
+        out.addAttribute("text:label-followed-by", "space");
+        break;
+    case 2: //Nothing follows the number text.
+        out.addAttribute("text:label-followed-by", "nothing");
+        break;
+    default:
+        break;
     }
-    //insert style into styles collection
-    return m_mainStyles->insert(style, QString("T"));
+    out.endElement(); //style:list-level-label-alignment
+    out.endElement(); //style:list-level-properties
 }
 
-void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(InvalidFormatException)
+void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
 {
-    kDebug(30513) << "writing the list-level-style";
+    kDebug(30513) << "writing the list-level-style-*";
 
-    const wvWare::Word97::PAP& pap = m_currentPPs->pap();
     const wvWare::ListInfo* listInfo = m_currentPPs->listInfo();
     if (!listInfo) {
 	return;
     }
+    const wvWare::Word97::PAP& pap = m_currentPPs->pap();
+    wvWare::UString text = listInfo->text().text;
     int nfc = listInfo->numberFormat();
 
-    //create writer for this list
+    // ------------------------
+    // Text Style - bullet
+    // ------------------------
+    const wvWare::SharedPtr<wvWare::Word97::CHP> chp = listInfo->text().chp;
+    KoGenStyle textStyle(KoGenStyle::TextAutoStyle, "text");
+    if (document()->writingHeader()) {
+        textStyle.setAutoStyleInStylesDotXml(true);
+    }
+//     QString textStyleName('T');
+    if (chp) {
+        QString fontName = getFont(chp->ftcAscii);
+        if (!fontName.isEmpty()) {
+            m_mainStyles->insertFontFace(KoFontFace(fontName));
+            textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
+        }
+        m_paragraph->applyCharacterProperties(chp, &textStyle, 0);
+//         m_mainStyles->insert(textStyle, textStyleName);
+    } else {
+        kDebug(30513) << "Missing CHPs for the bullet/number!";
+    }
+    // ------------------------
+    // Writer
+    // ------------------------
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
-    KoXmlWriter listStyleWriter(&buf);
-    KoGenStyle* listStyle = 0;
-    //text() returns a struct consisting of a UString text string (called text)
-    //& a pointer to a CHP (called chp)
-    wvWare::UString text = listInfo->text().text;
+    KoXmlWriter out(&buf);
 
-    //NOTE: Reuse the automatic style of the text until we manage to process
-    //and store the bullet/number style.  The style will be placed into
-    //office:styles.  Only selected properties are copied.
-    QString bulletStyleName;
-
-    //check the styleName, we expect a text style
-    if (textStyleName.contains('T')) {
-        bulletStyleName = createBulletStyle(textStyleName);
-    }
-
-    //bulleted list
+    // ------------------------
+    // Bulleted List
+    // ------------------------
     if (nfc == 23) {
         kDebug(30513) << "bullets...";
-        listStyleWriter.startElement("text:list-level-style-bullet");
-        listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
+        out.startElement("text:list-level-style-bullet");
+//         out.addAttribute("text:style-name", textStyleName);
+        out.addAttribute("text:level", pap.ilvl + 1);
         if (text.length() == 1) {
-            // With bullets, text can only be one character, which
-            // tells us what kind of bullet to use
+            // With bullets, text can only be one character, which tells us
+            // what kind of bullet to use
             unsigned int code = text[0].unicode();
-            // unicode: private use area (0xf000 - 0xf0ff)
-            if ((code & 0xFF00) == 0xF000) {
-                if (code >= 0x20) {
-                    // microsoft symbol charset shall apply here.
-                    code = Conversion::MS_SYMBOL_ENCODING[code%256];
-                } else {
-                    code &= 0x00FF;
-                }
-            }
-            listStyleWriter.addAttribute("text:bullet-char", QString(code).toUtf8());
+            kDebug(30513) << "Bullet code: 0x" << hex << code << "id:" << code%256;
+
+            // NOTE: What does the next comment mean, private use area is in
+            // <0xE000, 0xF8FF>, disabled the conversion code.
+
+            // unicode: private use area (0xf000 - 0xf0ff).
+//             if ((code & 0xFF00) == 0xF000) {
+//                 if (code >= 0x20) {
+//                     // microsoft symbol charset shall apply here.
+//                     code = Conversion::MS_SYMBOL_ENCODING[code%256];
+// 		    kDebug(30513) << "Changed the symbol encoding: new code: 0x" << hex << code <<
+//                                       dec << "("<< code << ")";
+//                 } else {
+//                     code &= 0x00FF;
+//                 }
+//             }
+            out.addAttribute("text:bullet-char", QChar(code));
         } else {
             kWarning(30513) << "Bullet with more than one character, not supported";
         }
+        //style:list-level-properties
+        setListLevelProperties(out, pap, *listInfo);
 
-        if (!bulletStyleName.isEmpty()) {
-            listStyleWriter.addAttribute("text:style-name", bulletStyleName);
+        //NOTE: helping the layout, the approach based on the text:style-name
+        //attribute does not work at the moment.
+        if (!textStyle.isEmpty()) {
+            textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
         }
-
-        listStyleWriter.startElement("style:list-level-properties");
-        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
-        listStyleWriter.startElement("style:list-level-label-alignment");
-        //fo:margin-left
-        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
-        //fo:text-indent
-        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
-
-//         if (listInfo->indent()) {
-            // NOTE: According to lists.h, this should be the indent before the
-            // label. Sounds like fo:margin-left.
-//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-//         }
-//         if (listInfo->space()) {
-            // NOTE: This produces wrong results (see the document attached to KDE
-            // bug 244411 and it's not clear why that is so. The specs say that
-            // the dxaSpace is the "minimum space between number and paragraph"
-            // and as such following should be right but it is not. So, we
-            // disabled it for now till someone has an idea why that is so.
-//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-//         }
-
-        //text:label-followed-by
-        switch (listInfo->followingChar()) {
-        case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
-            //text:list-tab-stop-position
-#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
-            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
-#endif
-            break;
-        case 1:
-            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
-            break;
-        case 2:
-            listStyleWriter.addAttribute("text:label-followed-by", "space");
-            break;
-        default:
-            break;
-        }
-
-        listStyleWriter.endElement(); //style:list-level-label-alignment
-        listStyleWriter.endElement(); //style:list-level-properties
-        //close element
-        listStyleWriter.endElement(); //text:list-level-style-bullet
+        out.endElement(); //text:list-level-style-bullet
     }
-    //numbered/outline list
+    // ------------------------
+    // Numbered/Outline List
+    // ------------------------
     else {
         kDebug(30513) << "numbered/outline... nfc = " << nfc;
-        listStyleWriter.startElement("text:list-level-style-number");
-        listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
-
-        if (!bulletStyleName.isEmpty()) {
-            listStyleWriter.addAttribute("text:style-name", bulletStyleName);
-        }
+        out.startElement("text:list-level-style-number");
+//         out.addAttribute("text:style-name", textStyleName);
+        out.addAttribute("text:level", pap.ilvl + 1);
 
         //*************************************
         int depth = pap.ilvl; //both are 0 based
-        //int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
-        // Heading styles don't set the ilvl, but must have a depth coming
-        // from their heading level (the style's STI)
-        //bool isHeading = style->sti() >= 1 && style->sti() <= 9;
-        //if ( depth == 0 && isHeading )
-        //{
-        //    depth = style->sti() - 1;
-        //}
 
-        // Now we need to parse the text, to try and convert msword's powerful list template stuff
+        // Now we need to parse the text, to try and convert msword's powerful
+        // list template stuff
         QString prefix, suffix;
         bool depthFound = false;
         bool anyLevelFound = false;
         int displayLevels = 1;
 
-        // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
-        // But "Section <0>.<1>)" has both prefix and suffix.
-        // The common case is <0>.<1>.<2> (display-levels=3)
-        //loop through all of text
-        //this just sets depthFound & displayLevels & the suffix & prefix
+        // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix).  But
+        // "Section <0>.<1>)" has both prefix and suffix.  The common case is
+        // <0>.<1>.<2> (display-levels=3) loop through all of text this just
+        // sets depthFound & displayLevels & the suffix & prefix
         for (int i = 0 ; i < text.length() ; ++i) {
             short ch = text[i].unicode();
             //kDebug(30513) << i <<":" << ch;
@@ -2082,17 +2092,18 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
                     else {
                         depthFound = true;
                     }
-                    suffix.clear(); // really should never do anthing so why is it here??
+                    // really should never do anthing so why is it here??
+                    suffix.clear();
                 } else {
-                    Q_ASSERT(ch < pap.ilvl);   // Can't see how level 1 would have a <0> in it...
+                    // Can't see how level 1 would have a <0> in it...
+                    Q_ASSERT(ch < pap.ilvl);
                     if (ch < pap.ilvl) {
-                        ++displayLevels; // we found a 'parent level', to be displayed
+                        // we found a 'parent level', to be displayed
+                        ++displayLevels;
                     }
                 }
                 anyLevelFound = true;
-            }
-            //if it's not a number < 10
-            else {
+            } else {
                 //add it to suffix if we've found the level that we're at
                 if (depthFound) {
                     suffix += QChar(ch);
@@ -2105,103 +2116,74 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         }
         if (displayLevels > 1) {
             // This is a hierarchical list numbering e.g. <0>.<1>.
-            // (unless this is about a heading, in which case we've set numberingtype to 1 already
-            // so it will indeed look like that).
-            // The question is whether the '.' is the suffix of the parent level already..
-            //do I still need to keep the m_listSuffixes stuff?
+            //
+            // Unless this is about a heading, in that case we've set numbering
+            // type to 1 already, so it will indeed look like that.  The
+            // question is whether the '.' is the suffix of the parent level
+            // already.  Do I still need to keep the m_listSuffixes stuff?
             if (depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix) {
-                prefix.clear(); // it's already the parent's suffix -> remove it
+                 // it's already the parent's suffix -> remove it
+                prefix.clear();
                 kDebug(30513) << "depth=" << depth << " parent suffix is" << prefix << " -> clearing";
             }
         }
-        //if ( isHeading )
-        //    numberingType = 1;
-        //this is where we actually write the information
+        // Heading styles don't set the ilvl, but must have a depth coming from
+        // their heading level (the style's STI)
+
+//         bool isHeading = style->sti() >= 1 && style->sti() <= 9;
+//         if ( depth == 0 && isHeading ) {
+//             depth = style->sti() - 1;
+//         }
+
+//         int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
+//         if ( isHeading ) numberingType = 1;
         if (depthFound) {
             // Word6 models "1." as nfc=5
-            if (nfc == 5 && suffix.isEmpty())
+            if (nfc == 5 && suffix.isEmpty()) {
                 suffix = '.';
+            }
             kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix;
-            listStyleWriter.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
-            listStyleWriter.addAttribute("style:num-prefix", prefix);
-            listStyleWriter.addAttribute("style:num-suffix", suffix);
+            out.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
+            if (!prefix.isEmpty()) {
+                out.addAttribute("style:num-prefix", prefix);
+            }
+            if (!suffix.isEmpty()) {
+                out.addAttribute("style:num-suffix", suffix);
+            }
             if (displayLevels > 1) {
-                listStyleWriter.addAttribute("text:display-levels", displayLevels);
+                out.addAttribute("text:display-levels", displayLevels);
             }
             kDebug(30513) << "storing suffix" << suffix << " for depth" << depth;
             m_listSuffixes[ depth ] = suffix;
         } else {
             kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text);
         }
-
-        if (listInfo->startAtOverridden())   //||
-            //( numberingType == 1 && m_previousOutlineLSID != 0 && m_previousOutlineLSID != listInfo->lsid() ) ||
-            //( numberingType == 0 &&m_previousEnumLSID != 0 && m_previousEnumLSID != listInfo->lsid() ) )
-        {
-            //counterElement.setAttribute( "restart", "true" );
-        }
+//         if (listInfo->startAtOverridden())   //||
+//             ( numberingType == 1 && m_previousOutlineLSID != 0 && m_previousOutlineLSID != listInfo->lsid() ) ||
+//             ( numberingType == 0 &&m_previousEnumLSID != 0 && m_previousEnumLSID != listInfo->lsid() ) )
+//         {
+//             counterElement.setAttribute( "restart", "true" );
+//         }
 
         //listInfo->isLegal() hmm
         //listInfo->notRestarted() [by higher level of lists] not supported
-        //listInfo->followingchar() ignored, it's always a space in KWord currently
+        //listInfo->followingchar() ignored, it's always a space in Words currently
         //*************************************
-        listStyleWriter.startElement("style:list-level-properties");
-        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
-        switch (listInfo->alignment()) {
-        case 1:
-            listStyleWriter.addAttribute("fo:text-align", "center");
-            break;
-        case 2:
-            listStyleWriter.addAttribute("fo:text-align", "end");
-            break;
-        case 3:
-            listStyleWriter.addAttribute("fo:text-align", "justify");
-            break;
-        default:
-            break;
-        }
 
-        listStyleWriter.startElement("style:list-level-label-alignment");
-        //fo:margin-left
-        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
-        //fo:text-indent
-        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
-        //text:label-followed-by
-        switch (listInfo->followingChar()) {
-        case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
-            //text:list-tab-stop-position
-#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
-            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
-#endif
-            break;
-        case 1:
-            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
-            break;
-        case 2:
-            listStyleWriter.addAttribute("text:label-followed-by", "space");
-            break;
-        default:
-            break;
-        }
+        //style:list-level-properties
+        setListLevelProperties(out, pap, *listInfo);
 
-        //NOTE: Disabled for now. Have a look at the comment at the other
-        //text:min-label-distance and text-indent above to see why.
-//         if (listInfo->space()) {
-//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-//         }
-//         if (listInfo->indent()) {
-//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-//         }
-        listStyleWriter.endElement(); //style:list-level-label-alignment
-        listStyleWriter.endElement(); //style:list-level-properties
-        //close element
-        listStyleWriter.endElement(); //text:list-level-style-number
-    } //end numbered list stuff
+        //NOTE: helping the layout, the approach based on the text:style-name
+        //attribute does not work at the moment.
+        if (!textStyle.isEmpty()) {
+            textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
+        }
+        out.endElement(); //text:list-level-style-number
+    } //end numbered list
 
     //now add this info to our list style
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-    listStyle = m_mainStyles->styleForModification(m_listStyleName);
+    KoGenStyle* listStyle = m_mainStyles->styleForModification(m_listStyleName);
 
     // It's secure to end with KoFilter::InvalidFormat.
     if (!listStyle) {
@@ -2213,7 +2195,7 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
     listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);
 } //end updateListStyle()
 
-void KWordTextHandler::closeList()
+void WordsTextHandler::closeList()
 {
     kDebug(30513);
     // Set the correct XML writer, get the last used writer from stack
@@ -2235,12 +2217,12 @@ void KWordTextHandler::closeList()
     m_listStyleName = "";
 }
 
-bool KWordTextHandler::listIsOpen()
+bool WordsTextHandler::listIsOpen()
 {
     return m_currentListID != 0;
 }
 
-void KWordTextHandler::saveState()
+void WordsTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
@@ -2257,7 +2239,7 @@ void KWordTextHandler::saveState()
     m_insideDrawing = false;
 }
 
-void KWordTextHandler::restoreState()
+void WordsTextHandler::restoreState()
 {
     kDebug(30513);
     //if the stack is corrupt, we won't even try to set it correctly
@@ -2290,7 +2272,7 @@ void KWordTextHandler::restoreState()
     m_insideDrawing = s.insideDrawing;
 }
 
-void KWordTextHandler::fld_saveState()
+void WordsTextHandler::fld_saveState()
 {
     m_fldStates.push(m_fld);
 
@@ -2298,7 +2280,7 @@ void KWordTextHandler::fld_saveState()
     m_fld = 0;
 }
 
-void KWordTextHandler::fld_restoreState()
+void WordsTextHandler::fld_restoreState()
 {
     //if the stack is corrupt, we won't even try to set it correctly
     if (m_fldStates.empty()) {
@@ -2325,7 +2307,7 @@ void KWordTextHandler::fld_restoreState()
 #ifdef TEXTHANDLER_OBSOLETE
 
 //create an element for the variable
-QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
+QDomElement WordsTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
 {
     Q_UNUSED(chp);
 
@@ -2346,7 +2328,7 @@ QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const w
     return varElem;
 }
 
-QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
+QDomElement WordsTextHandler::insertAnchor(const QString& fsname)
 {
     Q_UNUSED(fsname);
 

@@ -2,9 +2,12 @@
 Name=Temperature and Humidity Sensor
 Name[el]=Αισθητήρας θερμοκρασίας και υγρασίας
 Name[et]=Temperatuuri ja niiskuse mõõdik
+Name[it]=Sensore di temperatura e umidità
 Name[nb]=Temperatur- og fuktighetssensor
+Name[pl]=Czujnik temperatury i wilgotności
 Name[pt]=Sensor Temperatura/Humidade
-Name[pt_BR]=Sensor de temperatura/humidade
+Name[pt_BR]=Sensor de temperatura/umidade
 Name[sv]=Temperatur- och fuktighetssensor
 Name[uk]=Детектор температури і вологості
 Name[x-test]=xxTemperature and Humidity Sensorxx
+Name[zh_TW]=溫濕度感應器

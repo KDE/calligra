@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
+   Copyright (C) 1998-2002 The KSpread Team <calligra-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
    Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
    Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
@@ -141,7 +141,7 @@ MathModule::MathModule(QObject* parent, const QVariantList&)
     f = new Function("CEIL",          func_ceil);
     add(f);
     f = new Function("CEILING",       func_ceiling);
-    f->setParamCount(1, 2);
+    f->setParamCount(1, 3);
     add(f);
     f = new Function("CUR",           func_cur);
     add(f);
@@ -421,10 +421,11 @@ Value func_ceiling(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value number = args[0];
     Value res;
-    if (args.count() == 2)
+    if (args.count() >= 2)
         res = args[1];
     else
         res = calc->gequal(number, Value(0.0)) ? Value(1.0) : Value(-1.0);
+    bool mode = (args.count() >= 3) ? calc->isZero (args[2]) : true;
 
     // short-circuit, and allow CEILING(0;0) to give 0 (which is correct)
     // instead of DIV0 error
@@ -442,7 +443,11 @@ Value func_ceiling(valVector args, ValueCalc *calc, FuncExtra *)
     if (calc->approxEqual(rud, d))
         d = calc->mul(rud, res);
     else
-        d = calc->mul(calc->roundUp(d), res);
+    {
+        // positive number or mode is 0 - round up
+        if ((!mode) || calc->gequal (number, Value(0))) rud = calc->roundUp(d);
+        d = calc->mul (rud, res);
+    }
 
     return d;
 }

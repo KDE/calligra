@@ -70,7 +70,9 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
     connect(d->uiToneMappingDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
     connect(d->uiToneMappingDialog.comboBoxPresets, SIGNAL(activated(int)), SLOT(slotBookmarkedToneMappingConfigurationSelected(int)));
     connect(d->uiToneMappingDialog.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
-
+    d->uiToneMappingDialog.pushButtonApply->setGuiItem(KStandardGuiItem::Apply);
+    d->uiToneMappingDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::Cancel);
+    d->uiToneMappingDialog.pushButtonOk->setGuiItem(KStandardGuiItem::Ok);
 
     d->operatorsModel = new KoGenericRegistryModel<KisToneMappingOperator*>(KisToneMappingOperatorsRegistry::instance());
     d->uiToneMappingDialog.comboBoxOperators->setModel(d->operatorsModel);
@@ -88,7 +90,7 @@ void KisToneMappingDialog::apply()
     undoAdapter->beginMacro(d->currentOperator->name());
 
     if (!(*d->layer->paintDevice()->colorSpace() == *colorSpace)) {
-        QUndoCommand* cmd = d->layer->paintDevice()->convertTo(colorSpace);
+        KUndo2Command* cmd = d->layer->paintDevice()->convertTo(colorSpace);
         undoAdapter->addCommand(cmd);
     }
 

@@ -55,7 +55,6 @@ K_EXPORT_PLUGIN(KritaColorGeneratorFactory("krita"))
 KritaColorGenerator::KritaColorGenerator(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaColorGeneratorFactory::componentData());
     KisGeneratorRegistry::instance()->add(new KisColorGenerator());
 }
 
@@ -93,7 +92,6 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
                                  KoUpdater* progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
 
     Q_ASSERT(!dst.isNull());
     Q_ASSERT(config);

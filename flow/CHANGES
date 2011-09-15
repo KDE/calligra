@@ -18,7 +18,7 @@ Kivio 1.2.1 -> 1.3beta1
 
 Kivio 1.3beta1 -> 1.3beta2
 ---------------------------
-- Fixed embeding of kivio in other KOffice app.
+- Fixed embeding of kivio in other Calligra app.
 - Implemented real clipboard support.
 - Added more stencils.
 - Improved diastencil support.

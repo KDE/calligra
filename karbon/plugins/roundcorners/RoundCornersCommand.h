@@ -20,7 +20,7 @@
 #ifndef ROUNDCORNERSCOMMAND_H
 #define ROUNDCORNERSCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtCore/QPointF>
 
 class KoPathShape;
@@ -28,10 +28,10 @@ class KoPathSegment;
 class KoPathPoint;
 
 /// command for rounding corners on a path shape
-class RoundCornersCommand : public QUndoCommand
+class RoundCornersCommand : public KUndo2Command
 {
 public:
-    RoundCornersCommand(KoPathShape * path, qreal radius, QUndoCommand * parent = 0);
+    RoundCornersCommand(KoPathShape * path, qreal radius, KUndo2Command * parent = 0);
     virtual ~RoundCornersCommand();
 
     /// redo the command

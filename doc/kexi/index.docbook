@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY package "koffice">
+  <!ENTITY package "calligra">
+  <!ENTITY koffice "Calligra">
   <!ENTITY kappname "&kexi;">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">

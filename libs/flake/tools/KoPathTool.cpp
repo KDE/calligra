@@ -181,8 +181,9 @@ QList<QWidget *>  KoPathTool::createOptionWidgets()
     updateOptionsWidget();
     toolOptions->setWindowTitle(i18n("Line/Curve"));
     list.append(toolOptions);
-    d->canvas->createSnapGuideConfigWidget()->setWindowTitle(i18n("Snapping"));
-    list.append(d->canvas->createSnapGuideConfigWidget());
+    QWidget* widget = d->canvas->createSnapGuideConfigWidget();
+    widget->setWindowTitle(i18n("Snapping"));
+    list.append(widget);
 
     return list;
 }
@@ -235,7 +236,7 @@ void KoPathTool::removePoints()
     Q_D(KoToolBase);
     // TODO finish current action or should this not possible during actions???
     if (m_pointSelection.size() > 0) {
-        QUndoCommand *cmd = KoPathPointRemoveCommand::createCommand(m_pointSelection.selectedPointsData(), d->canvas->shapeController());
+        KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(m_pointSelection.selectedPointsData(), d->canvas->shapeController());
         PointHandle *pointHandle = dynamic_cast<PointHandle*>(m_activeHandle);
         if (pointHandle && m_pointSelection.contains(pointHandle->activePoint())) {
             delete m_activeHandle;
@@ -618,7 +619,7 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
     if (m_currentStrategy) {
         const bool hadNoSelection = !m_pointSelection.hasSelection();
         m_currentStrategy->finishInteraction(event->modifiers());
-        QUndoCommand *command = m_currentStrategy->createCommand();
+        KUndo2Command *command = m_currentStrategy->createCommand();
         if (command)
             d->canvas->addCommand(command);
         if (hadNoSelection && dynamic_cast<KoPathPointRubberSelectStrategy*>(m_currentStrategy)

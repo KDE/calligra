@@ -40,11 +40,11 @@
 #include "abiwordimport.h"
 
 K_PLUGIN_FACTORY(ABIWORDImportFactory, registerPlugin<ABIWORDImport>();)
-K_EXPORT_PLUGIN(ABIWORDImportFactory("kwordabiwordimport", "calligrafilters"))
+K_EXPORT_PLUGIN(ABIWORDImportFactory("wordsabiwordimport", "calligrafilters"))
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.
-// Tags in upper case (e.g. <TEXT>) are KWord's ones.
+// Tags in upper case (e.g. <TEXT>) are Words's ones.
 
 // enum StackItemElementType is now in the file ImportFormatting.h
 
@@ -136,7 +136,7 @@ bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurren
 
     // <p> or <c> (not child of <a>)
     if ((stackCurrent->elementType == ElementTypeParagraph) || (stackCurrent->elementType == ElementTypeContent)) {
-        // Contents can have styles, however KWord cannot have character style.
+        // Contents can have styles, however Words cannot have character style.
         // Therefore we use the style if it exists, but we do not create it if not.
         QString strStyleProps;
         QString strStyleName = attributes.value("style").trimmed();
@@ -225,7 +225,7 @@ bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurren
         stackItem->strTemp2.clear(); // link name
 
         // We must be careful: AbiWord permits anchors to bookmarks.
-        //  However, KWord does not know what a bookmark is.
+        //  However, Words does not know what a bookmark is.
         if (stackItem->strTemp1[0] == '#') {
             kWarning(30506) << "Anchor <a> to bookmark: " << stackItem->strTemp1 << endl
             << " Processing <a> like <c>";
@@ -587,8 +587,6 @@ bool StructureParser::EndElementD(StackItem* stackItem)
         return false;
     }
 
-    bool isSvg = false;  // SVG ?
-
     QString extension;
 
     // stackItem->strTemp1 contains the mime type
@@ -598,7 +596,6 @@ bool StructureParser::EndElementD(StackItem* stackItem)
         extension = ".jpeg";
     } else if (stackItem->strTemp1 == "image/svg-xml") { //Yes it is - not +
         extension = ".svg";
-        isSvg = true;
     } else {
         kWarning(30506) << "Unknown or unsupported mime type: "
         << stackItem->strTemp1;
@@ -794,29 +791,29 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         kWarning(30506) << "Ignoring unsupported page scale: " << attributes.value("page-scale");
     }
 
-    int kwordOrientation;
+    int wordsOrientation;
     QString strOrientation = attributes.value("orientation").trimmed();
 
     if (strOrientation == "portrait") {
-        kwordOrientation = 0;
+        wordsOrientation = 0;
     } else if (strOrientation == "landscape") {
-        kwordOrientation = 1;
+        wordsOrientation = 1;
     } else {
         kWarning(30506) << "Unknown page orientation: " << strOrientation << "! Ignoring! ";
-        kwordOrientation = 0;
+        wordsOrientation = 0;
     }
 
-    double kwordHeight;
-    double kwordWidth;
+    double wordsHeight;
+    double wordsWidth;
 
     QString strPageType = attributes.value("pagetype").trimmed();
 
     // Do we know the page size or do we need to use the measures?
-    // For page formats that KWord knows, use our own values in case the values in the file would be wrong.
+    // For page formats that Words knows, use our own values in case the values in the file would be wrong.
 
-    KoPageFormat::Format kwordFormat = KoPageFormat::formatFromString(strPageType);
+    KoPageFormat::Format wordsFormat = KoPageFormat::formatFromString(strPageType);
 
-    if (kwordFormat == KoPageFormat::CustomSize) {
+    if (wordsFormat == KoPageFormat::CustomSize) {
         kDebug(30506) << "Custom or other page format found:" << strPageType;
 
         double height = attributes.value("height").toDouble();
@@ -828,34 +825,34 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         << height << " " << strUnits << " x " << width << " " << strUnits;
 
         if (strUnits == "cm") {
-            kwordHeight = CentimetresToPoints(height);
-            kwordWidth  = CentimetresToPoints(width);
+            wordsHeight = CentimetresToPoints(height);
+            wordsWidth  = CentimetresToPoints(width);
         } else if (strUnits == "inch") {
-            kwordHeight = InchesToPoints(height);
-            kwordWidth  = InchesToPoints(width);
+            wordsHeight = InchesToPoints(height);
+            wordsWidth  = InchesToPoints(width);
         } else if (strUnits == "mm") {
-            kwordHeight = MillimetresToPoints(height);
-            kwordWidth  = MillimetresToPoints(width);
+            wordsHeight = MillimetresToPoints(height);
+            wordsWidth  = MillimetresToPoints(width);
         } else {
-            kwordHeight = 0.0;
-            kwordWidth  = 0.0;
+            wordsHeight = 0.0;
+            wordsWidth  = 0.0;
             kWarning(30506) << "Unknown unit type: " << strUnits;
         }
     } else {
-        // We have a format known by KOffice, so use KOffice's functions
-        kwordHeight = MillimetresToPoints(KoPageFormat::height(kwordFormat));
-        kwordWidth  = MillimetresToPoints(KoPageFormat::width(kwordFormat));
+        // We have a format known by Calligra, so use Calligra's functions
+        wordsHeight = MillimetresToPoints(KoPageFormat::height(wordsFormat));
+        wordsWidth  = MillimetresToPoints(KoPageFormat::width(wordsFormat));
     }
 
-    if ((kwordHeight <= 1.0) || (kwordWidth <= 1.0))
+    if ((wordsHeight <= 1.0) || (wordsWidth <= 1.0))
         // At least one of the two values is ridiculous
     {
         kWarning(30506) << "Page width or height is too small: "
-        << kwordHeight << "x" << kwordWidth;
+        << wordsHeight << "x" << wordsWidth;
         // As we have no correct page size, we assume we have A4
-        kwordFormat = KoPageFormat::IsoA4Size;
-        kwordHeight = CentimetresToPoints(29.7);
-        kwordWidth  = CentimetresToPoints(21.0);
+        wordsFormat = KoPageFormat::IsoA4Size;
+        wordsHeight = CentimetresToPoints(29.7);
+        wordsWidth  = CentimetresToPoints(21.0);
     }
 
     // Now that we have gathered all the page size data, put it in the right element!
@@ -865,10 +862,10 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         return false;
     }
 
-    paperElement.setAttribute("format", kwordFormat);
-    paperElement.setAttribute("width", kwordWidth);
-    paperElement.setAttribute("height", kwordHeight);
-    paperElement.setAttribute("orientation", kwordOrientation);
+    paperElement.setAttribute("format", wordsFormat);
+    paperElement.setAttribute("width", wordsWidth);
+    paperElement.setAttribute("height", wordsHeight);
+    paperElement.setAttribute("orientation", wordsOrientation);
 
     return true;
 }
@@ -922,7 +919,7 @@ bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* /*sta
     abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
 
     // TODO: only the first main text section should change the page margins
-    // TODO;   (as KWord does not allow different page sizes/margins for the same document)
+    // TODO;   (as Words does not allow different page sizes/margins for the same document)
     if (true && (!m_paperBordersElement.isNull())) {
         QString str;
         str = abiPropsMap["page-margin-top"].getValue();
@@ -1005,7 +1002,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
                                         const QXmlAttributes& attributes)
 {
 #if 1
-    // In KWord, inline tables are inside a paragraph.
+    // In Words, inline tables are inside a paragraph.
     // In AbiWord, tables are outside any paragraph.
 
     QStringList widthList;
@@ -1179,7 +1176,7 @@ bool StructureParser :: startElement(const QString&, const QString&, const QStri
         StackItem* stackCurrent = structureStack.top();
         success = StartElementBR(stackItem, stackCurrent, mainDocument);
     } else if (name == "cbr") { // NOTE: Not sure if it only exists in lower case!
-        // We have a forced column break (not supported by KWord)
+        // We have a forced column break (not supported by Words)
         stackItem->elementType = ElementTypeEmpty;
         StackItem* stackCurrent = structureStack.top();
         if (stackCurrent->elementType == ElementTypeContent) {
@@ -1265,7 +1262,7 @@ bool StructureParser :: endElement(const QString&, const QString& , const QStrin
         success = EndElementP(stackItem);
     } else if (name == "a") {
         if (stackItem->elementType == ElementTypeContent) {
-            // Anchor to a bookmark (not supported by KWord))
+            // Anchor to a bookmark (not supported by Words))
             success = EndElementC(stackItem, structureStack.top());
         } else {
             // Normal anchor
@@ -1348,7 +1345,7 @@ void StructureParser::createDocInfo(void)
 {
     QDomImplementation implementation;
     QDomDocument doc(implementation.createDocumentType("document-info",
-                     "-//KDE//DTD document-info 1.2//EN", "http://www.koffice.org/DTD/document-info-1.2.dtd"));
+                     "-//KDE//DTD document-info 1.2//EN", "http://www.calligra-suite.org/DTD/document-info-1.2.dtd"));
 
     m_info = doc;
 
@@ -1357,7 +1354,7 @@ void StructureParser::createDocInfo(void)
             "xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
     QDomElement elementDoc(mainDocument.createElement("document-info"));
-    elementDoc.setAttribute("xmlns", "http://www.koffice.org/DTD/document-info");
+    elementDoc.setAttribute("xmlns", "http://www.calligra-suite.org/DTD/document-info");
     m_info.appendChild(elementDoc);
 
     QDomElement about(mainDocument.createElement("about"));
@@ -1446,7 +1443,7 @@ void StructureParser :: createDocument(void)
 {
     QDomImplementation implementation;
     QDomDocument doc(implementation.createDocumentType("DOC",
-                     "-//KDE//DTD kword 1.2//EN", "http://www.koffice.org/DTD/kword-1.2.dtd"));
+                     "-//KDE//DTD words 1.2//EN", "http://www.calligra-suite.org/DTD/words-1.2.dtd"));
 
     mainDocument = doc;
 
@@ -1456,9 +1453,9 @@ void StructureParser :: createDocument(void)
 
     QDomElement elementDoc;
     elementDoc = mainDocument.createElement("DOC");
-    elementDoc.setAttribute("xmlns", "http://www.koffice.org/DTD/kword");
+    elementDoc.setAttribute("xmlns", "http://www.calligra-suite.org/DTD/words");
     elementDoc.setAttribute("editor", "AbiWord Import Filter");
-    elementDoc.setAttribute("mime", "application/x-kword");
+    elementDoc.setAttribute("mime", "application/x-words");
     elementDoc.setAttribute("syntaxVersion", 3);
     mainDocument.appendChild(elementDoc);
 
@@ -1468,7 +1465,7 @@ void StructureParser :: createDocument(void)
     element.setAttribute("standardpage", 1);
     element.setAttribute("hasHeader", 0);
     element.setAttribute("hasFooter", 0);
-    //element.setAttribute("unit","mm"); // use KWord default instead
+    //element.setAttribute("unit","mm"); // use Words default instead
     element.setAttribute("tabStopValue", 36); // AbiWord has a default of 0.5 inch tab stops
     elementDoc.appendChild(element);
 
@@ -1553,10 +1550,10 @@ ABIWORDImport::ABIWORDImport(QObject* parent, const QVariantList &) :
 
 KoFilter::ConversionStatus ABIWORDImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ((to != "application/x-kword") || (from != "application/x-abiword"))
+    if ((to != "application/x-words") || (from != "application/x-abiword"))
         return KoFilter::NotImplemented;
 
-    kDebug(30506) << "AbiWord to KWord Import filter";
+    kDebug(30506) << "AbiWord to Words Import filter";
 
     StructureParser handler(m_chain);
 
@@ -1651,7 +1648,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert(const QByteArray& from, const 
     kDebug(30506) << documentOut.toString();
 #endif
 
-    kDebug(30506) << "Now importing to KWord!";
+    kDebug(30506) << "Now importing to Words!";
 
     return KoFilter::OK;
 }

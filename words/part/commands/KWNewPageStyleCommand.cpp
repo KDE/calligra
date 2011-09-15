@@ -23,8 +23,8 @@
 
 #include <KDebug>
 
-KWNewPageStyleCommand::KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, QUndoCommand *parent)
-    : QUndoCommand(i18n("Insert Page Style"), parent),
+KWNewPageStyleCommand::KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, KUndo2Command *parent)
+    : KUndo2Command(i18nc("(qtundo-format)", "Insert Page Style"), parent),
     m_newStyle(newStyle),
     m_document(document)
 {
@@ -33,12 +33,12 @@ KWNewPageStyleCommand::KWNewPageStyleCommand(KWDocument *document, const KWPageS
 
 void KWNewPageStyleCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     m_document->pageManager()->addPageStyle(m_newStyle);
 }
 
 void KWNewPageStyleCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     m_document->pageManager()->removePageStyle(m_newStyle);
 }

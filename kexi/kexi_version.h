@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (c) 2003-2009 Kexi Team <kexi@kde.org>
 
-   Version information based on kofficeversion.h,
+   Version information based on calligraversion.h,
    Copyright (c) 2003 David Faure <faure@kde.org>
    Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
    Copyright (c) 2004 Nicolas Goutte <goutte@kde.org>
@@ -26,7 +26,7 @@
 #define _KEXI_VERSION_
 
 #include "kexi_export.h"
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 #ifdef CUSTOM_VERSION /* user-friendly version info */
 # include "custom_global.h"
@@ -35,21 +35,21 @@
 #endif
 
 #ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING KOFFICE_VERSION_STRING
+# define KEXI_VERSION_STRING CALLIGRA_VERSION_STRING
 #endif
 
-#define KEXI_VERSION_MAJOR KOFFICE_VERSION_MAJOR
-#define KEXI_VERSION_MINOR KOFFICE_VERSION_MINOR
-#define KEXI_VERSION_RELEASE KOFFICE_VERSION_RELEASE
+#define KEXI_VERSION_MAJOR CALLIGRA_VERSION_MAJOR
+#define KEXI_VERSION_MINOR CALLIGRA_VERSION_MINOR
+#define KEXI_VERSION_RELEASE CALLIGRA_VERSION_RELEASE
 
-#ifdef KOFFICE_ALPHA
-#define KEXI_ALPHA KOFFICE_ALPHA
+#ifdef CALLIGRA_ALPHA
+#define KEXI_ALPHA CALLIGRA_ALPHA
 #endif
 
 #define KEXI_VERSION \
-    KOFFICE_MAKE_VERSION(KEXI_VERSION_MAJOR,KEXI_VERSION_MINOR,KEXI_VERSION_RELEASE)
+    CALLIGRA_MAKE_VERSION(KEXI_VERSION_MAJOR,KEXI_VERSION_MINOR,KEXI_VERSION_RELEASE)
 
-#define KEXI_IS_VERSION(a,b,c) ( KEXI_VERSION >= KOFFICE_MAKE_VERSION(a,b,c) )
+#define KEXI_IS_VERSION(a,b,c) ( KEXI_VERSION >= CALLIGRA_MAKE_VERSION(a,b,c) )
 
 /**
  * Namespace for general Kexi functions.

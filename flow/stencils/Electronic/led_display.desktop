@@ -1,9 +1,14 @@
 [Desktop Entry]
 Name=led display
+Name[de]=LED-Anzeige
 Name[el]=λαμπάκι led
+Name[it]=display a led
 Name[nb]=led-skjerm
+Name[nl]=led-display
+Name[pl]=wyświetlacz led
 Name[pt]=ecrã LED
 Name[pt_BR]=tela de Led
 Name[sv]=lysdiodskärm
 Name[uk]=Рідкокристалічний дисплей
 Name[x-test]=xxled displayxx
+Name[zh_TW]=LED 顯示

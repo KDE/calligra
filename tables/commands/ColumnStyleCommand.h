@@ -35,7 +35,7 @@ class ColumnFormat;
 class ColumnStyleCommand : public AbstractRegionCommand
 {
 public:
-    ColumnStyleCommand(QUndoCommand *parent = 0);
+    ColumnStyleCommand(KUndo2Command *parent = 0);
     virtual ~ColumnStyleCommand();
 
     void setWidth(double width);

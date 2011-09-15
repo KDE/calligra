@@ -1,5 +1,5 @@
 
-MS Write Import Filter for KWord - How to Perfect the Filter
+MS Write Import Filter for Words - How to Perfect the Filter
 $Date$
 Clarence Dang <dang@kde.org>
 
@@ -23,7 +23,7 @@ Problems that could be fixed in the future
 MS Write renders text with an uncommon form of linespacing (where the
 text is aligned to the bottom).
 
-This has been discussed on koffice-devel and has resulted in a
+This has been discussed on calligra-devel and has resulted in a
 work-around: use of the OFFSETS tag to "fake" space before each line.
 Unfortunately, this is not perfect esp. the trailing linespacing at the
 end of the paragraph and where paragraphs span more than one line.
@@ -56,19 +56,19 @@ The following things in an MS Write document are known:
 
 If "Word Processing" mode is selected, spHeadBody and spFootBody would have
 to be specified.  From the information given above, however, these two cannot
-be computed in advance.  If "DTP" mode is selected, we would need KWord to
+be computed in advance.  If "DTP" mode is selected, we would need Words to
 support expanding frames upwards for the footer (since we only know the bottom
 of the footer but not the top).
 
-In other words, AFAIK, the current KWord file format does not allow the
+In other words, AFAIK, the current Words file format does not allow the
 specification of the exact position of each frame.
 
-See my post "Specifying exact frame positions" to the koffice-devel mailinglist
+See my post "Specifying exact frame positions" to the calligra-devel mailinglist
 on 2002-01-27 and the number of responses I got to it.
 
 Also, the concept of Margins are different in MS Write.  In MS Write,
 the top and bottom margins of the document refer to the position of the
-body frame on the paper.  While in KWord, it refers to the position of
+body frame on the paper.  While in Words, it refers to the position of
 the topmost text frame (which could be the header) and the bottom-most
 text frame (which could be the footer).  So the import filter adjusts
 the margins of the page, based on the positions of the header and footer.
@@ -78,23 +78,23 @@ the margins of the page, based on the positions of the header and footer.
 In MS Write, the user can position an image a certain number of points
 from the left margin.
 
-In KWord, it is impossible to do this (for anchored images, which are
+In Words, it is impossible to do this (for anchored images, which are
 required to maintain the relative positions of surrounding text and the
-image), at the moment (see my post "Images and Stores" to koffice-devel on
+image), at the moment (see my post "Images and Stores" to calligra-devel on
 2002-01-26).  So at the moment, paragraph indenting is used to emulate it.
 
 
 Problems that will probably never be fixed
 ------------------------------------------
 
-1. Rendering Differences Between KWord and MS Write
+1. Rendering Differences Between Words and MS Write
 
-KWord renders with slightly more/less space than MS Write for images,
+Words renders with slightly more/less space than MS Write for images,
 text etc.  This is what I would call a fundamental difference between
 word-processors and so cannot be avoided (realistically) and the exact
 amount of spacing is not specified by MS anyway.
 
-Obviously, this would mean that KWord will read a document and produce
+Obviously, this would mean that Words will read a document and produce
 more/less pages than MS Write would with the same document, leading on
 to point (2):
 
@@ -114,7 +114,7 @@ What you can do to help
 
 1. Contribute to LibMSWrite (http://sourceforge.net/projects/libmswrite/)
 
-2. Fix something in the KOffice end of the filter (mswriteimport.*)
+2. Fix something in the Calligra end of the filter (mswriteimport.*)
 
 3. Send me an email telling me what I've done wrong
 

@@ -1,9 +1,15 @@
 [Desktop Entry]
 Name=General Printer
+Name[bg]=Обикновен принтер
+Name[de]=Allgemeiner Drucker
 Name[el]=Γενικός εκτυπωτής
 Name[et]=Tavaline printer
+Name[it]=Stampante generica
+Name[nb]=Generell skriver
+Name[pl]=Ogólna drukarka
 Name[pt]=Impressora Geral
 Name[pt_BR]=Impressora genérica
 Name[sv]=Allmän skrivare
 Name[uk]=Типовий принтер
 Name[x-test]=xxGeneral Printerxx
+Name[zh_TW]=一般印表機

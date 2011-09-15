@@ -282,7 +282,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
     Q_UNUSED(painter);
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
-    /* Since this code is not actually used (kivio is going to be the main user) lets disable instead of fix.
+    /* Since this code is not actually used (flow is going to be the main user) lets disable instead of fix.
         if (selected)
         {
             // draw connectors
@@ -485,41 +485,51 @@ QTransform KoShape::transformation() const
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
-    if(s1->runThrough() > s2->runThrough()) {
-        return false;
-    }
-    if(s1->runThrough() < s2->runThrough()) {
-        return true;
-    }
-
     bool foundCommonParent = false;
     KoShape *parentShapeS1 = s1;
     KoShape *parentShapeS2 = s2;
     int index1 = parentShapeS1->zIndex();
     int index2 = parentShapeS2->zIndex();
+    int runThrough1 = parentShapeS1->runThrough();
+    int runThrough2 = parentShapeS2->runThrough();
     while (parentShapeS1 && !foundCommonParent) {
         parentShapeS2 = s2;
         index2 = parentShapeS2->zIndex();
+        runThrough2 = parentShapeS2->runThrough();
         while (parentShapeS2) {
             if (parentShapeS2 == parentShapeS1) {
                 foundCommonParent = true;
                 break;
             }
             index2 = parentShapeS2->zIndex();
+            runThrough2 = parentShapeS2->runThrough();
             parentShapeS2 = parentShapeS2->parent();
         }
 
         if (!foundCommonParent) {
             index1 = parentShapeS1->zIndex();
+            runThrough1 = parentShapeS1->runThrough();
             parentShapeS1 = parentShapeS1->parent();
         }
     }
+
+    // If the shape runs through the foreground or background.
+    if (runThrough1 > runThrough2) {
+        return false;
+    }
+    if (runThrough1 < runThrough2) {
+        return true;
+    }
+
+    // If the one shape is a parent/child of the other then sort so.
     if (s1 == parentShapeS2) {
         return true;
     }
-    else if (s2 == parentShapeS1) {
+    if (s2 == parentShapeS1) {
         return false;
     }
+
+    // If we went that far then the z-Index is used for sorting.
     return index1 < index2;
 }
 
@@ -937,8 +947,8 @@ void KoShape::setZIndex(int zIndex)
     Q_D(KoShape);
     if (d->zIndex == zIndex)
         return;
-    notifyChanged();
     d->zIndex = zIndex;
+    notifyChanged();
 }
 
 int KoShape::runThrough()
@@ -1179,7 +1189,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         b->fillStyle(style, context);
     }
     else {
-        style.addProperty("draw:stroke", "none");
+        style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
     }
     KoShapeShadow *s = shadow();
     if (s)
@@ -1190,7 +1200,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         bg->fillStyle(style, context);
     }
     else {
-        style.addProperty("draw:fill", "none");
+        style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
     }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
@@ -1207,7 +1217,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         value += "content";
     }
     if (!value.isEmpty()) {
-        style.addProperty("style:protect", value);
+        style.addProperty("style:protect", value, KoGenStyle::GraphicType);
     }
 
     QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
@@ -1217,7 +1227,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 
     if (parent() && parent()->isClipped(this)) {
         /*
-         * In KOffice clipping is done using a parent shape which can be rotated, sheared etc
+         * In Calligra clipping is done using a parent shape which can be rotated, sheared etc
          * and even non-square.  So the ODF interoperability version we write here is really
          * just a very simple version of that...
          */
@@ -1228,7 +1238,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 
         style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
                           .arg(top, 10, 'f').arg(right, 10, 'f')
-                          .arg(bottom, 10, 'f').arg(left, 10, 'f'));
+                          .arg(bottom, 10, 'f').arg(left, 10, 'f'), KoGenStyle::GraphicType);
 
     }
 
@@ -1256,9 +1266,9 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             wrap = "run-through";
             break;
     }
-    style.addProperty("style:wrap", wrap);
-    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
-    style.addPropertyPt("fo:margin", textRunAroundDistance());
+    style.addProperty("style:wrap", wrap, KoGenStyle::GraphicType);
+    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold(), KoGenStyle::GraphicType);
+    style.addPropertyPt("fo:margin", textRunAroundDistance(), KoGenStyle::GraphicType);
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
@@ -1474,8 +1484,8 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
 
         KoLineBorder *border = new KoLineBorder();
 
-        if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
-            QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-gradient")) {
+            QString gradientName = styleStack.property(KoXmlNS::calligra, "stroke-gradient");
             QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, size());
             border->setLineBrush(brush);
         } else {
@@ -1488,22 +1498,23 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
         border->setLineWidth(pen.widthF());
         border->setJoinStyle(pen.joinStyle());
         border->setLineStyle(pen.style(), pen.dashPattern());
+        border->setCapStyle(pen.capStyle());
 
         return border;
 #ifndef NWORKAROUND_ODF_BUGS
     } else if (stroke.isEmpty()) {
-        QPen pen;
+        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
         if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
             KoLineBorder *border = new KoLineBorder();
 
-            // FIXME: (make it possible to) use a cosmetic pen
-            if (pen.widthF() == 0.0)
-                border->setLineWidth(0.5);
-            else
-                border->setLineWidth(pen.widthF());
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixPenWidth(pen, context);
+#endif
+            border->setLineWidth(pen.widthF());
             border->setJoinStyle(pen.joinStyle());
             border->setLineStyle(pen.style(), pen.dashPattern());
-            border->setLineBrush(pen.brush());
+            border->setCapStyle(pen.capStyle());
+            border->setColor(pen.color());
 
             return border;
         }
@@ -1523,7 +1534,7 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
         qreal offsetX = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-x"));
         qreal offsetY = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-y"));
         shadow->setOffset(QPointF(offsetX, offsetY));
-        qreal blur = KoUnit::parseValue(styleStack.property(KoXmlNS::koffice, "shadow-blur-radius"));
+        qreal blur = KoUnit::parseValue(styleStack.property(KoXmlNS::calligra, "shadow-blur-radius"));
         shadow->setBlur(blur);
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");

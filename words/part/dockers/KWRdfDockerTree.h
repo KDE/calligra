@@ -24,7 +24,6 @@
 #include <KoCanvasObserverBase.h>
 
 class KoDocumentRdf;
-class KWView;
 class KoTextEditor;
 
 /**
@@ -34,7 +33,7 @@ class KoTextEditor;
  * @see KoDocumentRdf
  *
  * This QTree subclass allows SemanticItems to be dragged away from
- * KOffice and accepts data dropped from other applications.
+ * Calligra and accepts data dropped from other applications.
  *
  * When data is dropped onto the QTree a new SemanticItem is added to
  * the document and will be inserted at the current cursor position.
@@ -71,8 +70,6 @@ protected:
 
     // for dragging
     void mouseMoveEvent(QMouseEvent *event);
-
-    KoTextEditor *editor();
 
 private:
     KoDocumentRdf *m_rdf;

@@ -26,7 +26,7 @@
 #include <QDebug>
 
 #include "KWDocument.h"
-#include "kword_export.h"
+#include "words_export.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 
@@ -45,7 +45,7 @@ class KoShape;
 class KoViewConverter;
 class KWPageCacheManager;
 
-class KWORD_EXPORT KWCanvasBase : public KoCanvasBase
+class WORDS_EXPORT KWCanvasBase : public KoCanvasBase
 {
 public:
     KWCanvasBase(KWDocument *document, QObject *parent = 0);
@@ -57,7 +57,7 @@ public: // KoCanvasBase interface methods.
     virtual void gridSize(qreal *horizontal, qreal *vertical) const;
 
     /// reimplemented method from superclass
-    virtual void addCommand(QUndoCommand *command);
+    virtual void addCommand(KUndo2Command *command);
 
     /// reimplemented method from superclass
     virtual KoShapeManager *shapeManager() const;
@@ -102,6 +102,9 @@ public: // KoCanvasBase interface methods.
      *  of creating a new cache
      */
     virtual void setCacheEnabled(bool enabled, int cacheSize = 50, qreal maxZoom = 2.0);
+
+    /// @return the offset of the document in this canvas
+    QPoint documentOffset() const;
 
 protected:
 

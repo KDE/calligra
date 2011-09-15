@@ -294,7 +294,7 @@ bool KarbonCanvas::snapToGrid() const
     return d->part->gridData().snapToGrid();
 }
 
-void KarbonCanvas::addCommand(QUndoCommand *command)
+void KarbonCanvas::addCommand(KUndo2Command *command)
 {
     d->part->addCommand(command);
     updateSizeAndOffset();
@@ -359,6 +359,11 @@ void KarbonCanvas::adjustOrigin()
 void KarbonCanvas::setDocumentOffset(const QPoint &offset)
 {
     d->documentOffset = offset;
+}
+
+const QPoint &KarbonCanvas::documentOffset() const
+{
+    return d->documentOffset;
 }
 
 void KarbonCanvas::enableOutlineMode(bool on)

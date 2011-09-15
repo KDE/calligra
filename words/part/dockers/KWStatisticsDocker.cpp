@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +20,6 @@
 
 #include "KWStatisticsDocker.h"
 
-#include "KWView.h"
 #include "KWCanvas.h"
 #include "dialogs/KWStatistics.h"
 
@@ -31,35 +30,42 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KWStatisticsDocker::KWStatisticsDocker(KWView *view)
+KWStatisticsDocker::KWStatisticsDocker()
 {
     setWindowTitle(i18n("Statistics"));
-    setView(view);
 }
 
 KWStatisticsDocker::~KWStatisticsDocker()
 {
 }
 
-KWView *KWStatisticsDocker::view()
+void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 {
-    return m_view;
-}
 
-void KWStatisticsDocker::setView(KWView *view)
-{
-    m_view = view;
+    KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
+
+    if (!canvas) {
+        delete widget();
+    }
+
     QWidget *wdg = widget();
-    if (wdg)
-        delete wdg;
-    KWStatistics *statistics = new KWStatistics(view->canvasBase()->resourceManager(), view->kwdocument(),
-            view->canvasBase()->shapeManager()->selection(), this);
+    delete wdg;
+
+    KWStatistics *statistics = new KWStatistics(canvas->resourceManager(),
+                                                canvas->document(),
+                                                canvas->shapeManager()->selection(),
+                                                this);
+
     setWidget(statistics);
 }
 
-KWStatisticsDockerFactory::KWStatisticsDockerFactory(KWView *view)
+void KWStatisticsDocker::unsetCanvas()
 {
-    m_view = view;
+    delete widget();
+}
+
+KWStatisticsDockerFactory::KWStatisticsDockerFactory()
+{
 }
 
 QString KWStatisticsDockerFactory::id() const
@@ -69,7 +75,7 @@ QString KWStatisticsDockerFactory::id() const
 
 QDockWidget *KWStatisticsDockerFactory::createDockWidget()
 {
-    KWStatisticsDocker *widget = new KWStatisticsDocker(m_view);
+    KWStatisticsDocker *widget = new KWStatisticsDocker();
     widget->setObjectName(id());
 
     return widget;

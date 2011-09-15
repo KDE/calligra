@@ -30,7 +30,7 @@
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -43,28 +43,28 @@
 
 #include "kword13oasisgenerator.h"
 
-KWord13OasisGenerator::KWord13OasisGenerator(void) : m_kwordDocument(0),  m_store(0), m_manifestWriter(0)
+Words13OasisGenerator::Words13OasisGenerator(void) : m_kwordDocument(0),  m_store(0), m_manifestWriter(0)
 {
 }
 
-KWord13OasisGenerator::~KWord13OasisGenerator(void)
+Words13OasisGenerator::~Words13OasisGenerator(void)
 {
     delete m_store;
 }
 
-void KWord13OasisGenerator::prepareTextFrameset(KWordTextFrameset* frameset)
+void Words13OasisGenerator::prepareTextFrameset(WordsTextFrameset* frameset)
 {
     if (! frameset) {
         kWarning(30520) << "Tried to prepare a NULL text frameset!";
         return;
     }
 
-    for (Q3ValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
+    for (Q3ValueList<Words13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
             it != frameset->m_paragraphGroup.end(); ++it) {
         declareLayout((*it).m_layout);
-        for (KWord13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next()) {
+        for (Words13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next()) {
             // ### Temporary, as it does not handle id != 1
-            KWord13FormatOneData* data = format->getFormatOneData();
+            Words13FormatOneData* data = format->getFormatOneData();
             if (data) {
                 // Inspired from KoTextParag::saveOasis, macro WRITESPAN
                 KoGenStyle gs(KoGenStyle::ParagraphAutoStyle, "text", (*it).m_layout.m_autoStyleName);
@@ -76,7 +76,7 @@ void KWord13OasisGenerator::prepareTextFrameset(KWordTextFrameset* frameset)
     }
 }
 
-void KWord13OasisGenerator::preparePageLayout(void)
+void Words13OasisGenerator::preparePageLayout(void)
 {
     // Inspired by KoPageLayout::saveOasis
     KoGenStyle style(KoGenStyle::PageLayoutStyle);
@@ -125,10 +125,10 @@ void KWord13OasisGenerator::preparePageLayout(void)
 }
 
 
-bool KWord13OasisGenerator::prepare(KWord13Document& kwordDocument)
+bool Words13OasisGenerator::prepare(Words13Document& kwordDocument)
 {
     if (m_kwordDocument && ((void*) m_kwordDocument) != ((void*) &kwordDocument)) {
-        kWarning(30520) << "KWord Document is different!";
+        kWarning(30520) << "Words Document is different!";
     }
 
     m_kwordDocument = &kwordDocument;
@@ -136,7 +136,7 @@ bool KWord13OasisGenerator::prepare(KWord13Document& kwordDocument)
     preparePageLayout();
 
     // Declare styles
-    for (Q3ValueList<KWord13Layout>::Iterator it = m_kwordDocument->m_styles.begin();
+    for (Q3ValueList<Words13Layout>::Iterator it = m_kwordDocument->m_styles.begin();
             it != m_kwordDocument->m_styles.end(); ++it) {
         declareStyle(*it);
     }
@@ -149,7 +149,7 @@ bool KWord13OasisGenerator::prepare(KWord13Document& kwordDocument)
     return true;
 }
 
-double KWord13OasisGenerator::numberOrNull(const QString& str) const
+double Words13OasisGenerator::numberOrNull(const QString& str) const
 {
     bool ok = false;
     const double d = str.toDouble(&ok);
@@ -159,7 +159,7 @@ double KWord13OasisGenerator::numberOrNull(const QString& str) const
         return 0.0;
 }
 
-double KWord13OasisGenerator::positiveNumberOrNull(const QString& str) const
+double Words13OasisGenerator::positiveNumberOrNull(const QString& str) const
 {
     bool ok = false;
     const double d = str.toDouble(&ok);
@@ -170,7 +170,7 @@ double KWord13OasisGenerator::positiveNumberOrNull(const QString& str) const
 }
 
 // Inspired by KoParagStyle::saveStyle
-void KWord13OasisGenerator::declareLayout(KWord13Layout& layout)
+void Words13OasisGenerator::declareLayout(Words13Layout& layout)
 {
     KoGenStyle gs(KoGenStyle::ParagraphAutoStyle, "paragraph", layout.m_name);
 
@@ -194,7 +194,7 @@ void KWord13OasisGenerator::declareLayout(KWord13Layout& layout)
 
 
 // Inspired by KoParagStyle::saveStyle
-void KWord13OasisGenerator::declareStyle(KWord13Layout& layout)
+void Words13OasisGenerator::declareStyle(Words13Layout& layout)
 {
     KoGenStyle gs(KoGenStyle::ParagraphStyle, "paragraph", QString());
 
@@ -218,7 +218,7 @@ void KWord13OasisGenerator::declareStyle(KWord13Layout& layout)
 
 
 // Inspired from KoTextFormat::save but we have not the same data to start with.
-void KWord13OasisGenerator::fillGenStyleWithFormatOne(const KWord13FormatOneData& one, KoGenStyle& gs, const bool style) const
+void Words13OasisGenerator::fillGenStyleWithFormatOne(const Words13FormatOneData& one, KoGenStyle& gs, const bool style) const
 {
     QString str; // helper string
 
@@ -317,7 +317,7 @@ void KWord13OasisGenerator::fillGenStyleWithFormatOne(const KWord13FormatOneData
 }
 
 // Inspired from KoParagLayout::saveOasis but we have not the same data to start with.
-void KWord13OasisGenerator::fillGenStyleWithLayout(const KWord13Layout& layout, KoGenStyle& gs, const bool style) const
+void Words13OasisGenerator::fillGenStyleWithLayout(const Words13Layout& layout, KoGenStyle& gs, const bool style) const
 {
     // ### TODO syntaxVersion < 3
 
@@ -475,14 +475,14 @@ void KWord13OasisGenerator::fillGenStyleWithLayout(const KWord13Layout& layout, 
 }
 
 // Inspired by KoTextParag::saveOasis
-void KWord13OasisGenerator::generateTextFrameset(KoXmlWriter& writer, KWordTextFrameset* frameset, bool /*main*/)
+void Words13OasisGenerator::generateTextFrameset(KoXmlWriter& writer, WordsTextFrameset* frameset, bool /*main*/)
 {
     if (! frameset) {
         kWarning(30520) << "Tried to generate a NULL text frameset!";
         return;
     }
 
-    for (Q3ValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
+    for (Q3ValueList<Words13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
             it != frameset->m_paragraphGroup.end(); ++it) {
         // Write rawly the paragrapgh (see KoTextParag::saveOasis)
         writer.startElement("text:p", false);   // No indent inside!
@@ -491,7 +491,7 @@ void KWord13OasisGenerator::generateTextFrameset(KoXmlWriter& writer, KWordTextF
         const QString paragraphText((*it).text());
         int currentPos = 0; // Current position where the next character has to be written
 
-        for (KWord13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next()) {
+        for (Words13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next()) {
             // Perhaps we have text before the format's position
             const int pos = format->m_pos;
             const int length = format->length();
@@ -500,18 +500,18 @@ void KWord13OasisGenerator::generateTextFrameset(KoXmlWriter& writer, KWordTextF
                 currentPos = pos;
             }
             // Now we have to write the text belonging to the format
-            KWord13FormatOneData* data = format->getFormatOneData();
+            Words13FormatOneData* data = format->getFormatOneData();
             if (data && format->m_id == 1) {   // Normal text
                 writer.startElement("text:span");
                 writer.addAttribute("text:style-name", data->m_autoStyleName);
                 writer.addTextSpan(paragraphText.mid(pos, length));
                 writer.endElement();
             } else if (format->m_id == 3) {   // Old tabulator
-                // ### TEMPORARY: do it with KWord13FormatOneData
+                // ### TEMPORARY: do it with Words13FormatOneData
                 writer.addTextSpan("\t"); // Tabulator
             } else if (format->m_id == 4) {   // Variable
                 // ### TEMPORARY
-                const QString text(((KWord13FormatFour*) format) -> m_text);
+                const QString text(((Words13FormatFour*) format) -> m_text);
                 if (text.isEmpty())
                     writer.addTextNode("#");   // Placeholder
                 else
@@ -534,7 +534,7 @@ void KWord13OasisGenerator::generateTextFrameset(KoXmlWriter& writer, KWordTextF
 }
 
 // Inspired by KWDocument::saveOasisDocumentStyles
-void KWord13OasisGenerator::writeStylesXml(void)
+void Words13OasisGenerator::writeStylesXml(void)
 {
     if (!m_store || !m_kwordDocument) {
         kError(30520) << "Not possible to generate style.xml";
@@ -601,7 +601,7 @@ void KWord13OasisGenerator::writeStylesXml(void)
 }
 
 // Inspired by KWDocument::saveOasis
-void KWord13OasisGenerator::writeContentXml(void)
+void Words13OasisGenerator::writeContentXml(void)
 {
     if (!m_store || !m_kwordDocument) {
         kError(30520) << "Not possible to generate content.xml";
@@ -651,7 +651,7 @@ void KWord13OasisGenerator::writeContentXml(void)
     }
 }
 
-void KWord13OasisGenerator::writeMetaXml(void)
+void Words13OasisGenerator::writeMetaXml(void)
 {
     if (!m_store || !m_kwordDocument) {
         kError(30520) << "Not possible to generate meta.xml";
@@ -670,10 +670,10 @@ void KWord13OasisGenerator::writeMetaXml(void)
     // According to OASIS spec section 3.1.1, it has to follow section 14.43 of RFC 2616
     writer->startElement("meta:generator");
     QString strVersion;
-    strVersion += "KWord-OneDotThree-Import-Filter/";
+    strVersion += "Words-OneDotThree-Import-Filter/";
     strVersion += QString("$Revision$").mid(10).remove('$').trimmed();
-    strVersion += " KOffice/";
-    strVersion += KOFFICE_VERSION_STRING;
+    strVersion += " Calligra/";
+    strVersion += CALLIGRA_VERSION_STRING;
     writer->addTextSpan(strVersion);
     writer->endElement();
 
@@ -727,7 +727,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
 
     writer->startElement("meta:document-statistic");
 
-    // KWord files coming from import filters mostly do not have any page count
+    // Words files coming from import filters mostly do not have any page count
     const int numPages = m_kwordDocument->getProperty("PAPER:pages").toInt();
     if (numPages > 0) {
         writer->addAttribute("meta:page-count", numPages);
@@ -765,7 +765,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     }
 }
 
-void KWord13OasisGenerator::writePreviewFile(void)
+void Words13OasisGenerator::writePreviewFile(void)
 {
     if (!m_store || !m_kwordDocument) {
         kError(30520) << "Not possible to generate preview file";
@@ -798,14 +798,14 @@ void KWord13OasisGenerator::writePreviewFile(void)
     // No manifest entry, as it is supposed not to be part of the document.
 }
 
-void KWord13OasisGenerator::writePictures(void)
+void Words13OasisGenerator::writePictures(void)
 {
     if (!m_store || !m_kwordDocument) {
         kError(30520) << "Not possible to generate preview file";
         return;
     }
 
-    for (Q3DictIterator<KWord13Picture> it(m_kwordDocument->m_pictureDict) ; it.current(); ++it) {
+    for (Q3DictIterator<Words13Picture> it(m_kwordDocument->m_pictureDict) ; it.current(); ++it) {
         if (!it.current()->m_valid || !it.current()->m_tempFile) {
             kDebug(30520) << "No data for picture:" << it.currentKey();
             continue;
@@ -843,10 +843,10 @@ void KWord13OasisGenerator::writePictures(void)
 
 }
 
-bool KWord13OasisGenerator::generate(const QString& fileName, KWord13Document& kwordDocument)
+bool Words13OasisGenerator::generate(const QString& fileName, Words13Document& kwordDocument)
 {
     if (m_kwordDocument && ((void*) m_kwordDocument) != ((void*) &kwordDocument)) {
-        kWarning(30520) << "KWord Document is different!";
+        kWarning(30520) << "Words Document is different!";
     }
 
     m_kwordDocument = &kwordDocument;

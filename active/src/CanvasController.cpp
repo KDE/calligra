@@ -41,7 +41,7 @@
 #include <KoPAView.h>
 #include <KoPADocument.h>
 #include <KoPAViewBase.h>
-#include <kpresenter/part/KPrDocument.h>
+#include <stage/part/KPrDocument.h>
 
 #include <QPoint>
 #include <QSize>
@@ -106,7 +106,7 @@ void CanvasController::openDocument(const QString& path)
         emit documentTypeChanged();
 
         KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
-        prDocument->openUrl(KUrl(path));
+        prDocument->openUrl(KUrl::fromPath(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
         if (m_canvasItem) {
@@ -118,16 +118,16 @@ void CanvasController::openDocument(const QString& path)
         KoToolManager::instance()->addController(this);
         KoPACanvasItem *paCanvasItem = dynamic_cast<KoPACanvasItem*>(m_canvasItem);
 
-        m_paView = new PAView(this, dynamic_cast<KoPACanvasBase*>(m_canvasItem), prDocument);
-        paCanvasItem->setView(m_paView);
-
-        m_zoomController = m_paView->zoomController();
-        m_zoomHandler = static_cast<KoZoomHandler*>(paCanvasItem->viewConverter());
-
-        m_currentSlideNum = -1;
-        nextSlide();
-
         if (paCanvasItem) {
+            m_paView = new PAView(this, dynamic_cast<KoPACanvasBase*>(m_canvasItem), prDocument);
+            paCanvasItem->setView(m_paView);
+
+            m_zoomController = m_paView->zoomController();
+            m_zoomHandler = static_cast<KoZoomHandler*>(paCanvasItem->viewConverter());
+
+            m_currentSlideNum = -1;
+            nextSlide();
+
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
             connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), paCanvasItem, SLOT(slotSetDocumentOffset(QPoint)));
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
@@ -140,7 +140,7 @@ void CanvasController::openDocument(const QString& path)
         emit documentTypeChanged();
 
         Calligra::Tables::Doc *tablesDoc = static_cast<Calligra::Tables::Doc*>(m_doc);
-        tablesDoc->openUrl(KUrl(path));
+        tablesDoc->openUrl(KUrl::fromPath(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
         if (m_canvasItem) {
@@ -173,7 +173,7 @@ void CanvasController::openDocument(const QString& path)
 
         kDebug() << "Trying to open the document";
         KWDocument *kwDoc = static_cast<KWDocument*>(m_doc);
-        kwDoc->openUrl(KUrl(path));
+        kwDoc->openUrl(KUrl::fromPath(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
         if (m_canvasItem) {
@@ -196,9 +196,9 @@ void CanvasController::openDocument(const QString& path)
         m_zoomController->setPageSize(m_currentTextDocPage.rect().size());
         m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
 
-        canvasItem->updateSize();
-
         if (canvasItem) {
+            canvasItem->updateSize();
+
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
             connect(canvasItem, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning

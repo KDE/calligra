@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import re, traceback, Kross, KWord
+import re, traceback, Kross, Words
 
 class Writer:
     """ The Writer class provides us implementations for the different file formats
@@ -11,7 +11,7 @@ class Writer:
         filtername = "Text Files"
         filtermask = "*.txt"
         def __init__(self, file):
-            doc = KWord.mainFrameSet().document()
+            doc = Words.mainFrameSet().document()
 
             f = open(file, "w")
             f.write( doc.toText() )
@@ -21,7 +21,7 @@ class Writer:
         filtername = "Html Files"
         filtermask = "*.htm *.html"
         def __init__(self, file):
-            doc = KWord.mainFrameSet().document()
+            doc = Words.mainFrameSet().document()
 
             f = open(file, "w")
             html = doc.toHtml()
@@ -44,7 +44,7 @@ class ExportFile:
 
         try:
             savepage = self.dialog.addPage("Save","Export File","document-save")
-            savewidget = forms.createFileWidget(savepage, "kfiledialog:///kwordsampleexportfile")
+            savewidget = forms.createFileWidget(savepage, "kfiledialog:///wordssampleexportfile")
             savewidget.setMode("Saving")
             #savewidget.minimumWidth = 540
             #savewidget.minimumHeight = 400

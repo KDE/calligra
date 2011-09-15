@@ -18,7 +18,7 @@ target_link_libraries(flowprivate kopageapp)
 target_link_libraries(flowprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(flowprivate PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS flowprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -34,14 +34,14 @@ install(TARGETS flowpart DESTINATION ${PLUGIN_INSTALL_DIR})
 ### kdeinit flow ###
 set(flow_KDEINIT_SRCS main.cpp )
 
-kde4_add_kdeinit_executable( flow ${flow_KDEINIT_SRCS})
+kde4_add_kdeinit_executable(calligraflow ${flow_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_flow komain)
+target_link_libraries(kdeinit_calligraflow komain)
 
-install(TARGETS kdeinit_flow ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries(flow kdeinit_flow)
-install(TARGETS flow ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries(calligraflow kdeinit_calligraflow)
+install(TARGETS calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
 install( FILES flowpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})

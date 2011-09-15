@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=Send
+Name[bg]=Изпращане
+Name[cs]=Odeslat
 Name[el]=Αποστολή
+Name[it]=Invia
 Name[nb]=Send
+Name[pl]=Wyślij
 Name[pt]=Envio
 Name[pt_BR]=Envio
 Name[sv]=Skicka
@@ -9,3 +13,4 @@ Name[ug]=ئەۋەتىش
 Name[uk]=Надсилання
 Name[x-test]=xxSendxx
 Name[zh_CN]=发送
+Name[zh_TW]=傳送

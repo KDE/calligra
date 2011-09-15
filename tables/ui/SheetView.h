@@ -32,6 +32,7 @@ class QRect;
 class QRectF;
 class QSize;
 class QSizeF;
+class QColor;
 
 class KoViewConverter;
 
@@ -123,6 +124,19 @@ public:
     bool obscuresCells(const QPoint& cell) const;
     QSize totalObscuredRange() const;
 
+    /*
+     * Highlighting cells.
+     */
+    bool isHighlighted(const QPoint& cell) const;
+    void setHighlighted(const QPoint& cell, bool isHighlighted);
+    bool hasHighlightedCells() const;
+    void clearHighlightedCells();
+    QPoint activeHighlight() const;
+    void setActiveHighlight(const QPoint& cell);
+
+    void setHighlightMaskColor(const QColor& color);
+    void setHighlightColor(const QColor& color);
+    void setActiveHighlightColor(const QColor& color);
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
 

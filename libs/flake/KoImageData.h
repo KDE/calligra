@@ -24,6 +24,7 @@
 #include "flake_export.h"
 
 #include <QSize>
+#include <QMetaType>
 
 #include <KoShapeUserData.h>
 
@@ -38,7 +39,7 @@ class KoStore;
 
 /**
  * This class is meant to represent the image data so it can be shared between image shapes.
- * In KOffice there is a picture shape and a krita shape which both can both show
+ * In Calligra there is a picture shape and a krita shape which both can both show
  * an image.  To allow smooth transition of image data between shapes, as well as allowing
  * lower-resolution data to be shown this class will actually be the backing store of
  * the image data and it can create a pre-rendered QPixmap without deminishing the backing-store
@@ -138,5 +139,7 @@ private:
     KoImageDataPrivate *d;
     Q_PRIVATE_SLOT(d, void cleanupImageCache())
 };
+
+Q_DECLARE_METATYPE(KoImageData*)
 
 #endif

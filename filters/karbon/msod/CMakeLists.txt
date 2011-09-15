@@ -29,9 +29,9 @@ install( FILES  karbon_msod_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 ######## General stuff
 #
-#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+#INCLUDES= -I$(srcdir) $(CALLIGRA_INCLUDES) $(all_includes)
 #libkarbonmsodimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
-#libkarbonmsodimport_la_LIBADD = $(KOFFICE_LIBS) $(LIBZ)
+#libkarbonmsodimport_la_LIBADD = $(CALLIGRA_LIBS) $(LIBZ)
 #
 ######## Files
 #

@@ -41,7 +41,7 @@ AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
     m_radioGroup.addButton(m_ui.radioEndOfLineCR);
 
     setButtons(Ok | Cancel);
-    setCaption(i18n("KWord's Plain Text Export Filter"));
+    setCaption(i18n("Words's Plain Text Export Filter"));
     kapp->restoreOverrideCursor();
 
     QStringList encodings;

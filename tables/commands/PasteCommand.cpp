@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007,2009 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2007 The KSpread Team <calligra-devel@kde.org>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ using namespace Calligra::Tables;
 class PasteCellCommand : public AbstractRegionCommand
 {
 public:
-    PasteCellCommand(QUndoCommand *parent = 0)
+    PasteCellCommand(KUndo2Command *parent = 0)
             : AbstractRegionCommand(parent)
             , m_pasteMode(Paste::Normal)
             , m_pasteOperation(Paste::OverWrite)
@@ -81,7 +81,7 @@ protected:
 
     bool mainProcessing() {
         if (m_reverse) {
-            QUndoCommand::undo(); // undo child commands
+            KUndo2Command::undo(); // undo child commands
             return true;
         }
         return AbstractRegionCommand::mainProcessing();
@@ -100,7 +100,7 @@ private:
 
 
 
-PasteCommand::PasteCommand(QUndoCommand *parent)
+PasteCommand::PasteCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mimeData(0)
         , m_xmlDocument(0)
@@ -114,6 +114,11 @@ PasteCommand::PasteCommand(QUndoCommand *parent)
 PasteCommand::~PasteCommand()
 {
     delete m_xmlDocument;
+}
+
+const QMimeData* PasteCommand::mimeData() const
+{
+    return m_mimeData;
 }
 
 bool PasteCommand::setMimeData(const QMimeData *mimeData)
@@ -254,9 +259,9 @@ bool PasteCommand::mainProcessing()
                 }
             }
         }
-        QUndoCommand::redo(); // redo the child commands
+        KUndo2Command::redo(); // redo the child commands
     } else { // undo
-        QUndoCommand::undo(); // undo the child commands
+        KUndo2Command::undo(); // undo the child commands
     }
     return true;
 }
@@ -557,17 +562,17 @@ bool PasteCommand::processTextPlain(Element *element)
     // Split the text into lines.
     const QStringList list = text.split('\n');
 
-    const int mx = 1; // always one column
+//    const int mx = 1; // always one column
     const int my = list.count();
 
     // Put the lines into an array value.
     Value value(Value::Array);
-    for (int i = 0; i < list.count(); ++i) {
+    for (int i = 0; i < my; ++i) {
         value.setElement(0, i, Value(list[i]));
     }
 
     // FIXME Determine and tile the destination area.
-    Region range(mx, my, 1, list.size());
+//     Region range(mx, my, 1, list.size());
 
     // create a command, configure it and execute it
     DataManipulator *command = new DataManipulator(this);

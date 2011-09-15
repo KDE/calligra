@@ -32,7 +32,7 @@
 
 class KoXmlWriter;
 
-class QUndoCommand;
+class KUndo2Command;
 
 namespace Calligra
 {
@@ -164,6 +164,7 @@ public:
     QList< QPair<QRectF, QString> > namedAreas(const Region& region) const;
     void setNamedArea(const Region& region, const QString& namedArea);
     void emitInsertNamedArea(const Region &region, const QString &namedArea);
+    void removeNamedArea(const Region& region, const QString& namedArea);
 
     /**
      * \return the Style associated with the Cell at \p column , \p row .
@@ -404,7 +405,7 @@ public:
      * for each sub-storage an undo-capable command is attached to \p parent.
      * \see startUndoRecording
      */
-    void stopUndoRecording(QUndoCommand *parent);
+    void stopUndoRecording(KUndo2Command *parent);
 
 Q_SIGNALS:
     void insertNamedArea(const Region&, const QString&);

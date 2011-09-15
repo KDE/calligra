@@ -24,7 +24,7 @@
 #include <KoShapeBackgroundCommand.h>
 
 #include <QPainter>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <math.h>
 
@@ -70,7 +70,7 @@ bool KarbonPatternEditStrategyBase::isModified() const
     return m_modified;
 }
 
-QUndoCommand * KarbonPatternEditStrategyBase::createCommand()
+KUndo2Command * KarbonPatternEditStrategyBase::createCommand()
 {
     KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>(m_shape->background());
     if (fill && isModified()) {

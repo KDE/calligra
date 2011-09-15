@@ -21,16 +21,16 @@
 #include <Section.h>
 #include <DocumentModel.h>
 
-RenameSectionCommand::RenameSectionCommand( DocumentModel* _model, Section* _section, const QString& _newName ) : m_model(_model), m_section(_section), m_newName(_newName), m_oldName(m_section->name())
+RenameSectionCommand::RenameSectionCommand(DocumentModel* _model, Section* _section, const QString& _newName) : m_model(_model), m_section(_section), m_newName(_newName), m_oldName(m_section->name())
 {
 }
 
 void RenameSectionCommand::undo()
 {
-  m_model->changeSectionName(m_section, m_oldName);
+    m_model->changeSectionName(m_section, m_oldName);
 }
 
 void RenameSectionCommand::redo()
 {
-  m_model->changeSectionName(m_section, m_newName);
+    m_model->changeSectionName(m_section, m_newName);
 }

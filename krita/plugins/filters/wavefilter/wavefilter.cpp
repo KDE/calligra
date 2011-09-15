@@ -95,7 +95,6 @@ private:
 }; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaWaveFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterWave());
 }
 
@@ -137,8 +136,6 @@ void KisFilterWave::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                            ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
-
     Q_ASSERT(device.data() != 0);
 
     int cost = (applyRect.width() * applyRect.height()) / 100;

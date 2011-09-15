@@ -47,23 +47,23 @@ connection)
 	//KexiDBDrvDbg << "OracleConnectionInternal::Constructor: ";
    try{
       env = Environment::createEnvironment();
-   }catch (oracle::occi::SQLException ea){
+   }catch (const oracle::occi::SQLException &ea){
       errno=ea.getErrorCode();
       errmsg=strdup(ea.what());
       KexiDBDrvDbg <<errmsg;
-   }	
-    
+   }
+
 }
 
 OracleConnectionInternal::~OracleConnectionInternal()
 {
  KexiDBDrvDbg;
  try{
-	 	Environment::terminateEnvironment(env);
-	 	env=0;
-	 	KexiDBDrvDbg;
+	 Environment::terminateEnvironment(env);
+	 env=0;
+	 KexiDBDrvDbg;
 	}
-	catch (oracle::occi::SQLException ea){
+	catch (const oracle::occi::SQLException &ea){
       errno=ea.getErrorCode();
       errmsg=strdup(ea.what());
       KexiDBDrvDbg <<errmsg;
@@ -107,11 +107,11 @@ bool OracleConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
   QString connectStr=("//"+hostName+":"+port+"/"+sid).latin1();
   try{
     oraconn = env->createConnection(data.userName.latin1(),
-																		data.password.latin1(),
-																		connectStr.latin1());
-	  stmt=oraconn->createStatement();
+    data.password.latin1(),
+    connectStr.latin1());
+    stmt=oraconn->createStatement();
   }
-  catch (oracle::occi::SQLException ea)
+  catch (const oracle::occi::SQLException &ea)
   {
      errno=ea.getErrorCode();
      errmsg=ea.what();
@@ -133,7 +133,7 @@ bool OracleConnectionInternal::db_disconnect()
     oraconn=0;
 	  return true;
 	  }
-	 catch (oracle::occi::SQLException ea)
+	 catch (const oracle::occi::SQLException &ea)
 	 {
 	  errmsg=ea.getMessage().c_str();
 	  KexiDBDrvDbg<<errmsg;
@@ -156,7 +156,7 @@ bool OracleConnectionInternal::useDatabase(const QString &dbName)
 		rs=0;
 		return !user.compare(dbName);
 	}
-	catch (oracle::occi::SQLException ea)
+	catch (const oracle::occi::SQLException &ea)
   {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());
@@ -176,7 +176,7 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
       rs=stmt->getResultSet();
       return true;
     }
-    catch (oracle::occi::SQLException ea)
+    catch (const oracle::occi::SQLException &ea)
     {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());
@@ -190,18 +190,18 @@ QString OracleConnectionInternal::escapeIdentifier(const QString& str) const {
 QString OracleConnectionInternal::getServerVersion()
 {
 	try
-	{ 
+	{
 		return QString(oraconn->getServerVersion().c_str());
 	}
-	catch (oracle::occi::SQLException ea)
+	catch (const oracle::occi::SQLException &ea)
   {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());
        return(NULL);
-  }	
+  }
 }
 bool OracleConnectionInternal::createSequences(){
-  KexiDBDrvDbg; 
+  KexiDBDrvDbg;
   return executeSQL("CREATE SEQUENCE KEXI__SEQ__ROW_ID")&&
          executeSQL("ALTER SEQUENCE KEXI__SEQ__ROW_ID NOCACHE");
 }

@@ -36,7 +36,7 @@ class QTextDocument;
 class QSplashScreen;
 class QCloseEvent;
 
-class KUndoStack;
+class KUndo2Stack;
 class KoView;
 class KWView;
 class KoTextEditor;
@@ -272,7 +272,7 @@ public:
     /*!
      * @return pointer to document's undo stack or 0 if there is no document.
      */
-    inline KUndoStack* undoStack() const { return m_doc ? m_doc->undoStack() : 0; }
+    inline KUndo2Stack* undoStack() const { return m_doc ? m_doc->undoStack() : 0; }
 
     /*!
      * Trigger an action from the action collection of the current KoView.

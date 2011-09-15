@@ -1,5 +1,5 @@
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2002 - 2003 Robert JACOLIN
 **
@@ -75,7 +75,7 @@ public:
     /**
      * Return the value of a tabulation.
      */
-    bool isKwordStyleUsed() const {
+    bool isWordsStyleUsed() const {
         return (_useLatexStyle == false);
     }
     bool isEmbeded() const {
@@ -135,7 +135,7 @@ public:
     void useLatexStyle() {
         _useLatexStyle = true;
     }
-    void useKwordStyle() {
+    void useWordsStyle() {
         _useLatexStyle = false;
     }
     void setEmbeded(bool emb) {

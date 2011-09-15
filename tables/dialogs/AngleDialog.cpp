@@ -77,7 +77,7 @@ AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
 
 void AngleDialog::slotOk()
 {
-    QUndoCommand* macroCommand = new QUndoCommand(i18n("Change Angle"));
+    KUndo2Command* macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Change Angle"));
 
     StyleCommand* manipulator = new StyleCommand(macroCommand);
     manipulator->setSheet(m_selection->activeSheet());

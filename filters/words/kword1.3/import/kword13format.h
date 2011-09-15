@@ -18,21 +18,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD13_FORMAT
-#define KWORD13_FORMAT
+#ifndef WORDS13_FORMAT
+#define WORDS13_FORMAT
 
-class KWord13FormatOneData;
+class Words13FormatOneData;
 
 /**
  * \brief Basic classes for all format classes
  *
  * For \<FORMAT\>
  */
-class KWord13Format
+class Words13Format
 {
 public:
-    explicit KWord13Format(void);
-    virtual ~KWord13Format(void);
+    explicit Words13Format(void);
+    virtual ~Words13Format(void);
 public:
     /// Get length of format (1 except for texts)
     virtual int length(void);
@@ -41,11 +41,11 @@ public:
      *
      * \note The returned pointer MUST NOT be deleted and also it can be NULL!
      */
-    virtual KWord13FormatOneData* getFormatOneData(void);
+    virtual Words13FormatOneData* getFormatOneData(void);
 public:
     int m_id; ///< Type of format
     int m_pos; ///< Position of format
 };
 
 
-#endif // KWORD13_FORMAT
+#endif // WORDS13_FORMAT

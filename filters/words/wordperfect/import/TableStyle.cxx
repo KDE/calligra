@@ -100,7 +100,7 @@ TableStyle::TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVe
 TableStyle::~TableStyle()
 {
 	typedef std::vector<TableCellStyle *>::iterator TCSVIter;
-	for (TCSVIter iterTableCellStyles = mTableCellStyles.begin() ; iterTableCellStyles != mTableCellStyles.end(); iterTableCellStyles++)
+	for (TCSVIter iterTableCellStyles = mTableCellStyles.begin() ; iterTableCellStyles != mTableCellStyles.end(); ++iterTableCellStyles)
 		delete(*iterTableCellStyles);
 
 }
@@ -151,10 +151,10 @@ void TableStyle::write(DocumentHandler &xHandler) const
 	}
 
 	typedef std::vector<TableRowStyle *>::const_iterator TRSVIter;
-	for (TRSVIter iterTableRow = mTableRowStyles.begin() ; iterTableRow != mTableRowStyles.end(); iterTableRow++)
+	for (TRSVIter iterTableRow = mTableRowStyles.begin() ; iterTableRow != mTableRowStyles.end(); ++iterTableRow)
 		(*iterTableRow)->write(xHandler);
 
 	typedef std::vector<TableCellStyle *>::const_iterator TCSVIter;
-	for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); iterTableCell++)
+	for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); ++iterTableCell)
 		(*iterTableCell)->write(xHandler);
 }

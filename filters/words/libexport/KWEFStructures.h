@@ -22,8 +22,8 @@
 
 /*
    The classes in this file are based on a class in the old files:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-    /home/kde/koffice/filters/kword/docbookexpert/docbookexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/docbookexpert/docbookexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -48,7 +48,7 @@
 #include <QDateTime>
 
 #include "PictureKey.h"
-#include "kword_libexport_export.h"
+#include "words_libexport_export.h"
 /**
  * TextFormatting is a container for data retrieved from the \<FORMAT\> tag
  * and its subtags to be used in the \<PARAGRAPH\> tag.
@@ -118,12 +118,12 @@ public:
     PictureData() {}
 
     PictureKey key;      ///< Picture key: where the picture came from
-    QString koStoreName;   ///< Picture store name: filename within KWord archive
+    QString koStoreName;   ///< Picture store name: filename within Words archive
 };
 
 /**
  * For \<FRAME\> Tag.
- * Look at kword.dtd for a complete description
+ * Look at words.dtd for a complete description
  * of individuals class members
  */
 class FrameData
@@ -159,7 +159,7 @@ public:
 
 struct ParaData;
 
-class KWORD_LIBEXPORT_EXPORT TableCell
+class WORDS_LIBEXPORT_EXPORT TableCell
 {
 public:
     TableCell(): col(0), row(0), m_cols(0), m_rows(0), paraList(0) {}
@@ -212,7 +212,7 @@ public:
 /**
  * Data of variables
  */
-class KWORD_LIBEXPORT_EXPORT VariableData
+class WORDS_LIBEXPORT_EXPORT VariableData
 {
 public:
     VariableData(): m_type(-1), footnotePara(0) {}
@@ -369,9 +369,9 @@ public:
 };
 
 /**
-  * Tabulator (see also \<TABULATOR\> element in KWord's DTD)
+  * Tabulator (see also \<TABULATOR\> element in Words's DTD)
   */
-class KWORD_LIBEXPORT_EXPORT TabulatorData
+class WORDS_LIBEXPORT_EXPORT TabulatorData
 {
 public:
 
@@ -474,7 +474,7 @@ struct FootnoteData {
     QList<ParaData> para;
 };
 
-/// see \<VARIABLESETTINGS\> in the KWord DTD
+/// see \<VARIABLESETTINGS\> in the Words DTD
 class VariableSettingsData
 {
 public:

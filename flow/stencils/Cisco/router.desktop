@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=Router
+Name[cs]=Router
 Name[de]=Router
 Name[el]=Δρομολογητής
+Name[es]=Enrutador
 Name[et]=Ruuter
+Name[it]=Router
 Name[nb]=Ruter
+Name[nds]=Nettweger
 Name[nl]=Router
+Name[pl]=Router
 Name[pt]=Encaminhador
 Name[pt_BR]=Roteador
+Name[ru]=Маршрутизатор
 Name[sv]=Router
 Name[uk]=Маршрутизатор
 Name[x-test]=xxRouterxx

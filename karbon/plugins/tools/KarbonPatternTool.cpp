@@ -41,7 +41,7 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QWidget>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
         : KoToolBase(canvas), m_currentStrategy(0), m_optionsWidget(0)
@@ -123,7 +123,7 @@ void KarbonPatternTool::mouseReleaseEvent(KoPointerEvent *event)
     // if we are editing, get out of edit mode and add a command to the stack
     if (m_currentStrategy && m_currentStrategy->isEditing()) {
         m_currentStrategy->setEditing(false);
-        QUndoCommand * cmd = m_currentStrategy->createCommand();
+        KUndo2Command * cmd = m_currentStrategy->createCommand();
         if (cmd)
             canvas()->addCommand(cmd);
 

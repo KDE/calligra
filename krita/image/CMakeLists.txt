@@ -171,7 +171,6 @@ set(kritaimage_LIB_SRCS
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
    kis_warptransform_worker.cc
-   kis_transformation_mask.cpp
    kis_transparency_mask.cc
    kis_undo_adapter.cc
    krita_utils.cpp
@@ -226,7 +225,7 @@ endif(FFTW3_FOUND)
 
 
 set_target_properties(kritaimage PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

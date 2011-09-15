@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,12 +27,16 @@
 #include <QUrl>
 
 #include "KoList.h"
-
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextShapeDataBase.h>
+#include <KoCanvasBase.h>
+#include <KoTextEditor.h>
 #include "KoOdfNotesConfiguration.h"
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
-class KUndoStack;
+class KUndo2Stack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
@@ -89,10 +93,10 @@ public:
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration() const;
 
     ///Sets the global undo stack
-    void setUndoStack(KUndoStack *undoStack);
+    void setUndoStack(KUndo2Stack *undoStack);
 
     ///Returns the global undo stack
-    KUndoStack *undoStack() const;
+    KUndo2Stack *undoStack() const;
 
     ///Sets the global heading list
     void setHeadingList(KoList *list);
@@ -160,6 +164,9 @@ public:
      */
     bool relativeTabs() const;
 
+    void setParaTableSpacingAtStart(bool spacingAtStart);
+    bool paraTableSpacingAtStart() const;
+
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
@@ -179,10 +186,14 @@ public:
         LineNumberingConfiguration,
         EndNotesFrame,
         FootNotesFrame,
+        CitationsFrame,
+        BibliographyFrame,
         RelativeTabs,
         HeadingList,
         Selections,
-        LayoutTextPage /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
+        IndexGeneratorManager
     };
 
     static const QUrl StyleManagerURL;
@@ -196,10 +207,13 @@ public:
     static const QUrl LineNumberingConfigurationURL;
     static const QUrl EndNotesFrameURL;
     static const QUrl FootNotesFrameURL;
+    static const QUrl CitationsFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;
     static const QUrl LayoutTextPageUrl;
+    static const QUrl ParaTableSpacingAtStartUrl;
+    static const QUrl IndexGeneratorManagerUrl;
 
 private:
     QTextDocument *m_document;

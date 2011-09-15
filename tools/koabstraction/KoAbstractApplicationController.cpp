@@ -60,7 +60,7 @@
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 #include <kmimetypetrader.h>
 
 #include <QApplication>
@@ -128,7 +128,7 @@ KoAbstractApplicationController::~KoAbstractApplicationController()
 QStringList KoAbstractApplicationController::supportedExtensions() const
 {
     if (m_supportedExtensions.isEmpty()) {
-        //Add Txt extension after adding ascii filter to koffice package
+        //Add Txt extension after adding ascii filter to calligra package
         /*extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \*/
         m_supportedExtensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT
             << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_PPS << EXT_PPSX
@@ -150,7 +150,7 @@ QStringList KoAbstractApplicationController::supportedFilters() const
 bool KoAbstractApplicationController::isSupportedExtension(const QString& extension) const
 {
     QList<QString> extensions;
-    //Add Txt extension after adding ascii filter to koffice package
+    //Add Txt extension after adding ascii filter to calligra package
     /*extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \*/
     extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT
         << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_PPS << EXT_PPSX
@@ -277,6 +277,9 @@ bool KoAbstractApplicationController::openDocuments(
     KoToolRegistry::instance()->add(m_cellToolFactory);
 
     m_view = m_doc->createView();
+    if (KWView *v = dynamic_cast<KWView*>(m_view)) {
+        v->toggleViewFrameBorders(false);
+    }
     QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
     if (controllers.isEmpty()) {
         setProgressIndicatorVisible(false);
@@ -327,8 +330,7 @@ bool KoAbstractApplicationController::openDocuments(
         setCentralWidget(tablesView);
     }
     else if(m_type == TextDocument && isTextDocumentExtension(ext)) {
-        m_editor = qobject_cast<KoTextEditor *>(wordsView()->canvasBase()->toolProxy()->selection());
-
+        m_editor = KoTextEditor::getTextEditorFromCanvas(wordsView()->canvasBase());
         if (canvasControllerWidget()) {
             setCentralWidget(canvasControllerWidget());
         }
@@ -767,11 +769,15 @@ bool KoAbstractApplicationController::setEditingMode(bool set)
         default:
             KoToolManager::instance()->switchToolRequested(textToolFactoryId());
         }
+
     }
     else {
         KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     }
     m_editingMode = set;
+    if (KWView *v = dynamic_cast<KWView*>(m_view)) {
+        v->toggleViewFrameBorders(set);
+    }
     return true;
 }
 
@@ -805,7 +811,7 @@ bool KoAbstractApplicationController::triggerAction(const char* name)
 {
     if (m_view) {
         // the cast in the next line is no longer needed for
-        // koffice revision 1004085 and newer
+        // calligra revision 1004085 and newer
         QAction* action = ((KXMLGUIClient*)m_view)->action(name);
         if (action) {
             action->activate(QAction::Trigger);
@@ -884,7 +890,7 @@ bool KoAbstractApplicationController::removeCurrentSheet()
             kspreadDoc->setModified(true);
             setDocumentModified(true);
             Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
-            QUndoCommand* command = new RemoveSheetCommand(tbl);
+            KUndo2Command* command = new RemoveSheetCommand(tbl);
             kspreadDoc->addCommand(command);
             return true;
         }

@@ -28,7 +28,7 @@
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
 
-// koffice
+// calligra
 #include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoOdfReadStore.h>
@@ -49,7 +49,7 @@
 #include <QTextCursor>
 #include <KDebug>
 
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(document),
@@ -138,7 +138,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     loadMasterPageStyles(sc, hasMainText);
 
     // add page background frame set
-    KWFrameSet *pageBackgroundFrameSet = new KWFrameSet(KWord::BackgroundFrameSet);
+    KWFrameSet *pageBackgroundFrameSet = new KWFrameSet(Words::BackgroundFrameSet);
     m_document->addFrameSet(pageBackgroundFrameSet);
 
 #if 0 //1.6:
@@ -210,7 +210,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     KoTextShapeData textShapeData;
     if (hasMainText) {
-        KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
+        KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, Words::MainTextFrameSet);
         mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
         m_document->addFrameSet(mainFs);
         textShapeData.setDocument(mainFs->document(), false);
@@ -271,6 +271,8 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
         kDebug(32001) << "Ignorelist:" << ignorelist;
 
         KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
+
+        KoTextDocument(textDoc).setParaTableSpacingAtStart(configurationSettings.parseConfigItemBool("AddParaTableSpacingAtStart", true));
     }
     //1.6: m_document->variableCollection()->variableSetting()->loadOasis(settings);
 }
@@ -305,7 +307,7 @@ void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context, bool hasM
 }
 
 // helper function to create a KWTextFrameSet for a header/footer.
-void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType)
+void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, Words::TextFrameSetType fsType)
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
@@ -333,14 +335,14 @@ void KWOdfLoader::loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
     KoXmlElement leftElem = KoXml::namedItemNS(masterPage, KoXmlNS::style, headerFooter == LoadHeader ? "header-left" : "footer-left");
     // Used in KWPageStyle to determine if, and what kind of header/footer to use.
-    KWord::HeaderFooterType hfType = elem.isNull() ? KWord::HFTypeNone : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
+    Words::HeaderFooterType hfType = elem.isNull() ? Words::HFTypeNone : leftElem.isNull() ? Words::HFTypeUniform : Words::HFTypeEvenOdd;
 
     if (! leftElem.isNull()) {   // header-left and footer-left
-        loadHeaderFooterFrame(context, pageStyle, leftElem, headerFooter == LoadHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, leftElem, headerFooter == LoadHeader ? Words::EvenPagesHeaderTextFrameSet : Words::EvenPagesFooterTextFrameSet);
     }
 
     if (! elem.isNull()) {   // header and footer
-        loadHeaderFooterFrame(context, pageStyle, elem, headerFooter == LoadHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, elem, headerFooter == LoadHeader ? Words::OddPagesHeaderTextFrameSet : Words::OddPagesFooterTextFrameSet);
     }
 
     if (headerFooter == LoadHeader) {

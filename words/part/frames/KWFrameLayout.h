@@ -23,9 +23,9 @@
 #ifndef KWFRAMELAYOUT_H
 #define KWFRAMELAYOUT_H
 
-#include "../KWord.h"
+#include "../Words.h"
 
-#include "../kword_export.h"
+#include "../words_export.h"
 
 #include <QList>
 #include <QObject>
@@ -47,7 +47,7 @@ class KoShape;
  * For normal frames this class will be able to (re)move them on page resize/deletion or create
  * followup frames for new pages.
  */
-class KWORD_TEST_EXPORT KWFrameLayout : public QObject
+class WORDS_TEST_EXPORT KWFrameLayout : public QObject
 {
     Q_OBJECT
 public:
@@ -89,7 +89,7 @@ public:
     QList<KWFrame *> framesOn(KWFrameSet *fs, int pageNumber) const;
 
     QList<KWTextFrameSet*> getFrameSets(const KWPageStyle &pageStyle) const;
-    KWTextFrameSet* getFrameSet(KWord::TextFrameSetType type, const KWPageStyle &pageStyle) const;
+    KWTextFrameSet* getFrameSet(Words::TextFrameSetType type, const KWPageStyle &pageStyle) const;
 
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
@@ -128,10 +128,10 @@ private:
      * if it did not exist yet it creates it.
      * \note the main text frameset is consistent across all pages and page styles.
      */
-    KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
+    KWTextFrameSet *getOrCreate(Words::TextFrameSetType type, const KWPage &page);
 
     void setup();
-    bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
+    bool shouldHaveHeaderOrFooter(int pageNumber, bool header, Words::TextFrameSetType *origin);
     void cleanFrameSet(KWTextFrameSet *fs);
 
     const KWPageManager *m_pageManager;

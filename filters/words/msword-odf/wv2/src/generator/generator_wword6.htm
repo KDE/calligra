@@ -1026,7 +1026,7 @@ the document. always a 4 byte quantity.
 of a file. always a 4 byte quantity.
 <p>xa used to name a variable that contains a width of an objectimaged
 on screen or on hard copy that is measured in units of 1/1440 of an inch.
-This unit which is one-twentieth of a point size (1/20 * 1/72?) is called
+This unit which is one-twentieth of a point size (1/20 * 1/72 in) is called
 a <b>twip</b> in this documentation. (eg. xaPage is the width of a page).
 <p>ya used to name a variable that contains a height of an object imaged
 on screen or on hard copy that is measured in twips.
@@ -1698,7 +1698,7 @@ containing those characters and any character style that may be tagging
 the character run. The character properties inherited from the paragraph
 style are moved into a buffer. If the chp.istd of the chp to be compressed
 is not istdNormalChar, the changes recorded for that character style are
-applied to buffer. Thenthe character properties of the character sequence
+applied to buffer. Then the character properties of the character sequence
 are compared with the character properties generated usingthe paragraph's
 style and the run?s character style. . Any properties in the paragraph's
 <b>CHP
@@ -1737,9 +1737,9 @@ describe the character properties of the entire document.
 <p>The fundamental unit of text for which paragraph properties are recorded
 is the <b>paragraph</b>. Every paragraphhas an entry recorded in a <b>PAPX
 FKP.</b>
-<p>The<b> CHPX FKP</b> and the <b>PAPX FKP</b> have similarphysical structures.
+<p>The<b> CHPX FKP</b> and the <b>PAPX FKP</b> have similar physical structures.
 An <b>FKP </b>is a 512-byte data structure that is stored in one page of
-a Word file. At offset511 is a 1-byte count named <b>crun</b>, which is
+a Word file. At offset 511 is a 1-byte count named <b>crun</b>, which is
 a count of runs of exception text for <b>CHPX FKP</b>s and which is a count
 of paragraphs in <b>PAPX FKP</b>s. Beginning at offset 0 of the <b>FKP</b>
 is an array of <b>crun+1 FC</b>s, named <b>rgfc</b>, which records the
@@ -1752,7 +1752,9 @@ of
 byte array, named <b>rgb</b>,is in 1-to-1 correspondence with the
 <b>rgfc</b>.
 The <b>ith</b> <b>rgb </b>gives the word offset of the exception property
-that belongs to the run\paragraph whose beginning
+that belongs to the run\paragraph whose beginning in <b>FC</b>
+space is <b>rgfc</b>[i] and whose limit is <b>rgfc[i+1]</b> in <b>FC</b>
+space.
 <p>For <b>PAPX FKPSs</b>, immediately following the <b>fkp.rgfc</b> is
 an array of 7 byte entries called <b>BXs</b>. This array called the <b>rgbx</b>
 is in 1-to-1 correspondence with the <b>rgfc</b>. The first byte of the

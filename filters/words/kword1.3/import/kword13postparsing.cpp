@@ -29,20 +29,20 @@
 #include "kword13document.h"
 #include "kword13postparsing.h"
 
-KWord13PostParsing::KWord13PostParsing(void) : m_kwordDocument(0)
+Words13PostParsing::Words13PostParsing(void) : m_kwordDocument(0)
 {
 }
 
-KWord13PostParsing::~KWord13PostParsing(void)
+Words13PostParsing::~Words13PostParsing(void)
 {
 }
 
-bool KWord13PostParsing::postParsePictures(KoStore* store)
+bool Words13PostParsing::postParsePictures(KoStore* store)
 {
     if (! m_kwordDocument)
         return false;
 
-    for (Q3DictIterator<KWord13Picture> it(m_kwordDocument->m_pictureDict) ; it.current(); ++it) {
+    for (Q3DictIterator<Words13Picture> it(m_kwordDocument->m_pictureDict) ; it.current(); ++it) {
         kDebug(30520) << "Loading..." << it.currentKey();
         if (! it.current()->loadPicture(store)) {
             kWarning(30520) << "Could not load picture!";
@@ -53,7 +53,7 @@ bool KWord13PostParsing::postParsePictures(KoStore* store)
 }
 
 
-bool KWord13PostParsing::postParse(KoStore* store, KWord13Document& doc)
+bool Words13PostParsing::postParse(KoStore* store, Words13Document& doc)
 {
     // ### TODO: check if it is the same document if called twice
     m_kwordDocument = &doc;

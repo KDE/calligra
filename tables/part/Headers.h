@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+#include "calligra_tables_export.h"
+
 class QLabel;
 class KoPointerEvent;
 
@@ -36,7 +38,7 @@ class View;
 /**
  * Base class for the widget above the cells showing the column headers.
  */
-class ColumnHeader
+class CALLIGRA_TABLES_COMMON_EXPORT ColumnHeader
 {
 public:
     ColumnHeader(CanvasBase *_canvas);
@@ -55,6 +57,9 @@ public:
     virtual void scroll(qreal dx, qreal dy) = 0;
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
+
+    void setHeaderFont(const QFont& font);
+    QFont headerFont() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
@@ -65,9 +70,6 @@ protected:
     void resize(const QSizeF& size, const QSizeF& oldSize);
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
-
-    void drawText(QPainter* painter, const QFont& font, const QPointF& location, const QString& text, double width) const;
-
     
     void doToolChanged(const QString& toolId);
 
@@ -120,6 +122,8 @@ protected:
     bool m_bMousePressed;
 
     bool m_cellToolIsActive;
+
+    QFont m_font;
 };
 
 
@@ -127,7 +131,7 @@ protected:
 /**
  * Base class for the widget left to the cells showing the row headers.
  */
-class RowHeader
+class CALLIGRA_TABLES_COMMON_EXPORT RowHeader
 {
 public:
     RowHeader(CanvasBase *_canvas);
@@ -146,6 +150,9 @@ public:
     virtual void scroll(qreal dx, qreal dy) = 0;
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
+
+    void setHeaderFont(const QFont& font);
+    QFont headerFont() const;
 protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* _ev);
@@ -155,8 +162,6 @@ protected:
     void focusOut(QFocusEvent* ev);
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
-
-    void drawText(QPainter* painter, const QFont& font, qreal ypos, qreal width, const QString& text) const;
 
     void doToolChanged(const QString& toolId);
 protected:
@@ -178,6 +183,8 @@ protected:
     bool m_bMousePressed;
 
     bool m_cellToolIsActive;
+
+    QFont m_font;
 };
 
 

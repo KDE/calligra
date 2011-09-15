@@ -1,6 +1,9 @@
 [Desktop Entry]
 Name=Start-Event-Message
+Name[es]=Mensaje del evento inicial
 Name[et]=Sündmuse alguse sõnum
+Name[nb]=Start-hendelse-melding
+Name[pl]=Komunikat-Zdarzenia-Rozpoczynającego
 Name[pt]=Evento-Inicial-Mensagem
 Name[pt_BR]=Mensagem do evento inicial
 Name[sv]=Starthändelse-brev

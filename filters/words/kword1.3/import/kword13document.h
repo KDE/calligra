@@ -20,12 +20,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_1_3_DOCUMENT_H
-#define KWORD_1_3_DOCUMENT_H
+#ifndef WORDS_1_3_DOCUMENT_H
+#define WORDS_1_3_DOCUMENT_H
 
 class QIODevice;
 class KTemporaryFile;
-class KWord13Picture;
+class Words13Picture;
 
 #include <QString>
 #include <QMap>
@@ -36,11 +36,11 @@ class KWord13Picture;
 
 #include "kword13frameset.h"
 
-class KWord13Document
+class Words13Document
 {
 public:
-    explicit KWord13Document(void);
-    ~KWord13Document(void);
+    explicit Words13Document(void);
+    ~Words13Document(void);
 
 public:
     void xmldump(QIODevice* io);
@@ -58,7 +58,7 @@ public:
     /**
      * Get a document property
      * \param name name of the property
-     * \param oldName alternative name of the property (in old KWord syntax)
+     * \param oldName alternative name of the property (in old Words syntax)
      */
     QString getProperty(const QString& name, const QString& oldName = QString()) const;
 protected:
@@ -67,16 +67,16 @@ protected:
 public:
     QMap<QString, QString> m_documentProperties;
     QMap<QString, QString> m_documentInfo; ///< From documentinfo.xml
-    Q3ValueList<KWord13Layout> m_styles;
-    Q3PtrList<KWordTextFrameset> m_normalTextFramesetList; ///< List of \<FRAMESET\> having normal text
-    Q3PtrList<KWordTextFrameset> m_tableFramesetList; ///< List of \<FRAMESET\> being part of tables
-    Q3PtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
-    Q3PtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
-    Q3PtrList<KWord13PictureFrameset> m_pictureFramesetList; ///< List of \<FRAMESET\> having pictures
-    Q3PtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
-    Q3Dict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures' data
+    Q3ValueList<Words13Layout> m_styles;
+    Q3PtrList<WordsTextFrameset> m_normalTextFramesetList; ///< List of \<FRAMESET\> having normal text
+    Q3PtrList<WordsTextFrameset> m_tableFramesetList; ///< List of \<FRAMESET\> being part of tables
+    Q3PtrList<WordsTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
+    Q3PtrList<WordsTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
+    Q3PtrList<Words13PictureFrameset> m_pictureFramesetList; ///< List of \<FRAMESET\> having pictures
+    Q3PtrList<Words13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
+    Q3Dict<Words13Picture> m_pictureDict; ///< "Dictionnary" of all pictures' data
     KTemporaryFile* m_previewFile;
     QStringList m_anchoredFramesetNames; ///< List of framesets that are anchored
 };
 
-#endif // KWORD_1_3_DOCUMENT_H
+#endif // WORDS_1_3_DOCUMENT_H

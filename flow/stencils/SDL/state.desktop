@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=State
+Name[bg]=Състояние
+Name[cs]=Stav
 Name[es]=Estado
 Name[et]=Olek
+Name[it]=Stato
 Name[nb]=Tilstand
+Name[pl]=Stan
 Name[pt]=Estado
 Name[pt_BR]=Estado
 Name[sv]=Tillstånd
@@ -10,3 +14,4 @@ Name[ug]=ھالەت
 Name[uk]=Стан
 Name[x-test]=xxStatexx
 Name[zh_CN]=状态
+Name[zh_TW]=狀態

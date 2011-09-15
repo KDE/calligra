@@ -40,12 +40,6 @@
 
 #include "Global.h"
 
-// Width of row header and height of column headers.  These are not
-// part of the styles.
-// FIXME: Rename to ROWHEADER_WIDTH and COLHEADER_HEIGHT?
-#define YBORDER_WIDTH  35
-#define XBORDER_HEIGHT 20
-
 class QFocusEvent;
 class QKeyEvent;
 class QMimeData;
@@ -87,7 +81,7 @@ public:
     /// reimplemented method from KoCanvasBase
     virtual bool snapToGrid() const;
     /// reimplemented method from KoCanvasBase
-    virtual void addCommand(QUndoCommand* command);
+    virtual void addCommand(KUndo2Command* command);
     /// reimplemented method from KoCanvasBase
     virtual KoShapeManager* shapeManager() const;
     /// reimplemented method from KoCanvasBase

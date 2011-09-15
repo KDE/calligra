@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Web Shape
+Name[bg]=Форма за уеб
+Name[cs]=Tvar webu
+Name[da]=Web-form
 Name[el]=Σχήμα ιστού
 Name[en_GB]=Web Shape
 Name[es]=Forma web
@@ -7,14 +10,16 @@ Name[et]=Veebikujund
 Name[it]=Forma Web
 Name[nb]=Web-form
 Name[nl]=Webvorm
+Name[pl]=Kształt sieci
 Name[pt]=Forma da Web
 Name[pt_BR]=Forma da Web
+Name[ru]=Веб-объект
 Name[sv]=Webbform
 Name[ug]=تور شەكلى
 Name[uk]=Форма мережі
 Name[x-test]=xxWeb Shapexx
 Name[zh_TW]=網頁元件
-X-KDE-ServiceTypes=KOffice/Shape
+X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=webshape
 X-Flake-MinVersion=0

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 1999-2006 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2006 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 
-// KOffice
+// Calligra
 
 // KDE
 #include <kdebug.h>
@@ -136,7 +136,7 @@ void FormulaEditorHighlighter::highlightBlock(const QString& text)
         case Token::Unknown:
         case Token::Integer:     // 14, 3, 1977
         case Token::Float:       // 3.141592, 1e10, 5.9e-7
-        case Token::String:      // "KOffice", "The quick brown fox..."
+        case Token::String:      // "Calligra", "The quick brown fox..."
         case Token::Error:
             break;
         case Token::Operator: {  // +, *, /, -

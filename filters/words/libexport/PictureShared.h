@@ -41,12 +41,12 @@ struct Shared
     uint count;
 };
 
-#include "kword_libexport_export.h"
+#include "words_libexport_export.h"
 /**
  * @internal
  * PictureShared is the class that contains the shared part for Picture
  */
-class KWORD_LIBEXPORT_EXPORT PictureShared : public Shared
+class WORDS_LIBEXPORT_EXPORT PictureShared : public Shared
 {
 public:
     /**

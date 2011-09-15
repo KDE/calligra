@@ -404,7 +404,7 @@ dialog box, which lets you choose between four types of link:</para>
 open your default browser at the &URL; entered in the 
 <guilabel>Internet address:</guilabel> text box of the <guilabel>Insert
 Link</guilabel> dialog when it is clicked. This could be, for example, 
-<userinput>http://www.koffice.org</userinput>. 
+<userinput>http://www.calligra-suite.org</userinput>. 
 </para></listitem>
 
 <listitem><para>Clicking on a cell containing a <guilabel>Mail</guilabel> 

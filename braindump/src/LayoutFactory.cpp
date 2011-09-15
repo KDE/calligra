@@ -22,23 +22,27 @@
 #include <QString>
 
 struct LayoutFactory::Private {
-  QString id;
-  QString name;
+    QString id;
+    QString name;
 };
 
-LayoutFactory::LayoutFactory( const QString& _id, const QString& _name ) : d(new Private) {
-  d->id = _id;
-  d->name = _name;
+LayoutFactory::LayoutFactory(const QString& _id, const QString& _name) : d(new Private)
+{
+    d->id = _id;
+    d->name = _name;
 }
 
-LayoutFactory::~LayoutFactory() {
-  delete d;
+LayoutFactory::~LayoutFactory()
+{
+    delete d;
 }
 
-const QString& LayoutFactory::id() const {
-  return d->id;
+const QString& LayoutFactory::id() const
+{
+    return d->id;
 }
 
-const QString& LayoutFactory::name() const {
-  return d->name;
+const QString& LayoutFactory::name() const
+{
+    return d->name;
 }

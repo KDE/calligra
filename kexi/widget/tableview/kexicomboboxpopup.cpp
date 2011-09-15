@@ -53,13 +53,13 @@ public:
         a.navigatorEnabled = false;
 //! @todo add option for backgroundAltering??
         a.backgroundAltering = false;
-        a.fullRowSelection = true;
-        a.rowHighlightingEnabled = true;
-        a.rowMouseOverHighlightingEnabled = true;
+        a.fullRecordSelection = true;
+        a.recordHighlightingEnabled = true;
+        a.recordMouseOverHighlightingEnabled = true;
         a.persistentSelections = false;
-        a.rowMouseOverHighlightingColor = palette().highlight().color();
-        a.rowMouseOverHighlightingTextColor = palette().highlightedText().color();
-        a.rowHighlightingTextColor = a.rowMouseOverHighlightingTextColor;
+        a.recordMouseOverHighlightingColor = palette().highlight().color();
+        a.recordMouseOverHighlightingTextColor = palette().highlightedText().color();
+        a.recordHighlightingTextColor = a.recordMouseOverHighlightingTextColor;
         a.gridEnabled = false;
         setAppearance(a);
         setInsertingEnabled(false);

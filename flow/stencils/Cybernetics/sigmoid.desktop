@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=sigmoid
 Name[el]=σιγμοειδής
+Name[nb]=sigmoid
+Name[nl]=sigmoid
+Name[pl]=sigmoid
 Name[pt]=sigmóide
-Name[pt_BR]=sigmóide
+Name[pt_BR]=sigmoide
 Name[sv]=sigmoid
 Name[uk]=Сігмоїд-характеристика
 Name[x-test]=xxsigmoidxx
+Name[zh_TW]=sigmoid

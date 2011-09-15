@@ -23,7 +23,7 @@
 
 #include <QHash>
 #include <QVariant>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KDebug>
 #include "utils.h"
@@ -43,7 +43,7 @@ class Container;
 class Form;
 
 //! Base class for KFormDesigner's commands
-class KFORMEDITOR_EXPORT Command : public QUndoCommand
+class KFORMEDITOR_EXPORT Command : public KUndo2Command
 {
 public:
     explicit Command(Command *parent = 0);
@@ -99,7 +99,7 @@ public:
     
     virtual void undo();
 
-    bool mergeWith(const QUndoCommand * command);
+    bool mergeWith(const KUndo2Command * command);
 
     QByteArray propertyName() const;
 
@@ -543,7 +543,7 @@ public:
      with this group. 
      @return true if number, order and names of the commands match.
      Otherwise no value is copied. */
-    virtual bool mergeWith(const QUndoCommand * command);
+    virtual bool mergeWith(const KUndo2Command * command);
 #endif
 
     virtual void execute();
@@ -570,7 +570,7 @@ public:
 
     virtual int id() const { return 14; }
 
-    virtual bool mergeWith(const QUndoCommand * command);
+    virtual bool mergeWith(const KUndo2Command * command);
 
     virtual void execute();
 

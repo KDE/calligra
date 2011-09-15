@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -63,7 +63,7 @@ Document::Document(const std::string& fileName,
                    LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
         : m_textHandler(0)
         , m_tableHandler(0)
-        , m_replacementHandler(new KWordReplacementHandler)
+        , m_replacementHandler(new WordsReplacementHandler)
         , m_graphicsHandler(0)
         , m_filter(filter)
 //         , m_chain(chain)
@@ -101,11 +101,11 @@ Document::Document(const std::string& fileName,
         m_bufferEven = 0;
         m_headerWriter = 0;
 
-        m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
+        m_textHandler  = new WordsTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
-        m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
+        m_tableHandler = new WordsTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
-        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
+        m_graphicsHandler = new WordsGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
                                                      m_parser->getDrawings(), m_parser->fib());
 
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
@@ -116,8 +116,8 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotAnnotationFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
-        connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
-                this, SLOT(slotTableFound(KWord::Table*)));
+        connect(m_textHandler, SIGNAL(tableFound(Words::Table*)),
+                this, SLOT(slotTableFound(Words::Table*)));
         connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
         connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter*)),
@@ -352,9 +352,8 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle,
-                                                false, 0, 0, currentBgColor());
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, false, false, currentBgColor(), true);
+            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle, false, 0, 0, QString());
 
             // Add style to main collection, using the name that it
             // had in the .doc.
@@ -368,7 +367,7 @@ void Document::processStyles()
         } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
-            KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");
+            KoGenStyle userStyle(KoGenStyle::TextStyle, "text");
             userStyle.addAttribute("style:display-name", displayName);
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
@@ -384,8 +383,7 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle,
-                                                false, false, currentBgColor());
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, false, false, currentBgColor());
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
@@ -531,7 +529,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     KoGenStyle* masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle);
     QString masterStyleName;
 
-    //NOTE: The first master-page-name has to be "Standard", kword has hard
+    //NOTE: The first master-page-name has to be "Standard", words has hard
     //coded that the value of fo:backgroud-color from this style is used for
     //the entire frameset.
     if (m_textHandler->sectionNumber() > 1) {
@@ -780,96 +778,100 @@ void Document::annotationEnd()
 
 //NOTE: disable this for now - we should be able to do everything in
 //TableHandler create frame for the table cell?
+// void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect,
+//                                    const QString& tableName,
+//                                    const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom,
+//                                    const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight,
+//                                    const wvWare::Word97::SHD& shd )
+// {
+//     kDebug(30513) ;
 
-//void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
-//{
-//kDebug(30513) ;
+//     //need to set up cell style here probably don't need generateFrameBorder()
+//     //<table:table-cell> tag in content.xml
 
-//need to set up cell style here
-//probably don't need generateFrameBorder()
-//<table:table-cell> tag in content.xml
+//     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
+//     framesetElement.setAttribute( "frameType", 1 /* text */ );
+//     framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
+//     framesetElement.setAttribute( "grpMgr", tableName );
+//     QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
+//     framesetElement.setAttribute( "name", name );
+//     framesetElement.setAttribute( "row", row );
+//     framesetElement.setAttribute( "col", column );
+//     framesetElement.setAttribute( "rows", rowSpan );
+//     framesetElement.setAttribute( "cols", columnSpan );
+//     m_framesetsElement.appendChild(framesetElement);
 
-//QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
-//framesetElement.setAttribute( "frameType", 1 /* text */ );
-//framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
-//framesetElement.setAttribute( "grpMgr", tableName );
-//QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
-//framesetElement.setAttribute( "name", name );
-//framesetElement.setAttribute( "row", row );
-//framesetElement.setAttribute( "col", column );
-//framesetElement.setAttribute( "rows", rowSpan );
-//framesetElement.setAttribute( "cols", columnSpan );
-//m_framesetsElement.appendChild(framesetElement);
+//     QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
+//     generateFrameBorder( frameElem, brcTop, brcBottom, brcLeft, brcRight, shd );
 
-//QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
-//generateFrameBorder( frameElem, brcTop, brcBottom, brcLeft, brcRight, shd );
-
-//m_textHandler->setFrameSetElement( framesetElement );
-//}
+//     m_textHandler->setFrameSetElement( framesetElement );
+// }
 
 //add empty element to end it?
-//void Document::slotTableCellEnd()
-//{
-//kDebug(30513) ;
-//</table:table-cell>
-
-//m_textHandler->setFrameSetElement( QDomElement() );
-//}
+// void Document::slotTableCellEnd()
+// {
+//     kDebug(30513) ;
+//     //</table:table-cell>
+//     m_textHandler->setFrameSetElement( QDomElement() );
+// }
 
 //set up frame borders (like for a table cell?)
 //set the background fill
-//void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
-//{
-//kDebug(30513) ;
-// Frame borders
+// void Document::generateFrameBorder( QDomElement& frameElementOut,
+//                                     const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom,
+//                                     const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight,
+//                                     const wvWare::Word97::SHD& shd )
+// {
+//     kDebug(30513) ;
+//     // Frame borders
+//     //figure out what this is supposed to do!
 
-//figure out what this is supposed to do!
+//     if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
+// 	Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
+//     if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
+// 	Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
+//     if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
+// 	Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
+//     if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
+// 	Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
 
-// if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
-//     Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
-// if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
-//     Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
-// if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
-//     Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
-// if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
-//     Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
+//     // Frame background brush (color and fill style)
+//     if ( shd.icoFore != 0 || shd.icoBack != 0 )
+//     {
+//         // If ipat = 0 (solid fill), icoBack is the background color.  But
+//         // otherwise, icoFore is the one we need to set as bkColor (and icoBack
+//         // is usually white; it's the other color of the pattern, something
+//         // that we can't set in Qt apparently).
+// 	int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
+// 	kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
 
-// Frame background brush (color and fill style)
-//if ( shd.icoFore != 0 || shd.icoBack != 0 )
-//{
-// If ipat = 0 (solid fill), icoBack is the background color.
-// But otherwise, icoFore is the one we need to set as bkColor
-// (and icoBack is usually white; it's the other color of the pattern,
-// something that we can't set in Qt apparently).
-//int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-//kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
-
-// Reverse-engineer MSWord's own hackery: it models various gray levels
-// using dithering. But this looks crappy with Qt. So we go back to a QColor.
-//bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
-//if ( grayHack )
-//{
-//bool ok;
-//int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
-//if ( ok )
-//{
-//QColor color( 0, 0, grayLevel, QColor::Hsv );
-//QString prefix = "bk";
-//frameElementOut.setAttribute( "bkRed", color.red() );
-//frameElementOut.setAttribute( "bkBlue", color.blue() );
-//frameElementOut.setAttribute( "bkGreen", color.green() );
-//}
-//else grayHack = false;
-//}
-//if ( !grayHack )
-//{
-//Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
-// Fill style
-//int brushStyle = Conversion::fillPatternStyle( shd.ipat );
-//frameElementOut.setAttribute( "bkStyle", brushStyle );
-//}
-//}
-//}
+//         // Reverse-engineer MSWord's own hackery: it models various gray levels
+//         // using dithering. But this looks crappy with Qt. So we go back to a
+//         // QColor.
+//         bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
+//         if ( grayHack )
+//         {
+//             bool ok;
+//             int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
+//             if ( ok )
+//             {
+//                 QColor color( 0, 0, grayLevel, QColor::Hsv );
+//                 QString prefix = "bk";
+//                 frameElementOut.setAttribute( "bkRed", color.red() );
+//                 frameElementOut.setAttribute( "bkBlue", color.blue() );
+//                 frameElementOut.setAttribute( "bkGreen", color.green() );
+//             }
+//             else grayHack = false;
+//         }
+//         if ( !grayHack )
+//         {
+//             Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
+//             //Fill style
+//             int brushStyle = Conversion::fillPatternStyle( shd.ipat );
+//             frameElementOut.setAttribute( "bkStyle", brushStyle );
+//         }
+//     }
+// }
 
 //create SubDocument object & add it to the queue
 void Document::slotSubDocFound(const wvWare::FunctorBase* functor, int data)
@@ -903,15 +905,15 @@ void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
     delete subdoc.functorPtr;
 }
 
-//add KWord::Table object to the table queue
-void Document::slotTableFound(KWord::Table* table)
+//add Words::Table object to the table queue
+void Document::slotTableFound(Words::Table* table)
 {
     kDebug(30513);
 
     m_tableHandler->tableStart(table);
-    QList<KWord::Row> &rows = table->rows;
-    for (QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it) {
-        KWord::TableRowFunctorPtr f = (*it).functorPtr;
+    QList<Words::Row> &rows = table->rows;
+    for (QList<Words::Row>::Iterator it = rows.begin(); it != rows.end(); ++it) {
+        Words::TableRowFunctorPtr f = (*it).functorPtr;
         Q_ASSERT(f);
         (*f)(); // call it
         delete f; // delete it
@@ -955,7 +957,7 @@ void Document::processSubDocQueue()
     kDebug(30513) ;
     // Table cells can contain footnotes, and footnotes can contain tables [without footnotes though]
     // This is why we need to repeat until there's nothing more do to (#79024)
-    while (!m_subdocQueue.empty() || !m_tableQueue.empty()) {
+    while (!m_subdocQueue.empty()) {// || !m_tableQueue.empty()) {
         while (!m_subdocQueue.empty()) {
             SubDocument subdoc(m_subdocQueue.front());
             Q_ASSERT(subdoc.functorPtr);
@@ -963,20 +965,20 @@ void Document::processSubDocQueue()
             delete subdoc.functorPtr; // delete it
             m_subdocQueue.pop();
         }
-        /*while ( !m_tableQueue.empty() )
-        {
-            KWord::Table& table = m_tableQueue.front();
-            m_tableHandler->tableStart( &table );
-            QList<KWord::Row> &rows = table.rows;
-            for( QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
-                KWord::TableRowFunctorPtr f = (*it).functorPtr;
-                Q_ASSERT( f );
-                (*f)(); // call it
-                delete f; // delete it
-            }
-            m_tableHandler->tableEnd();
-            m_tableQueue.pop();
-        }*/
+//         while ( !m_tableQueue.empty() )
+//         {
+//             Words::Table& table = m_tableQueue.front();
+//             m_tableHandler->tableStart( &table );
+//             QList<Words::Row> &rows = table.rows;
+//             for( QList<Words::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+//                 Words::TableRowFunctorPtr f = (*it).functorPtr;
+//                 Q_ASSERT( f );
+//                 (*f)(); // call it
+//                 delete f; // delete it
+//             }
+//             m_tableHandler->tableEnd();
+//             m_tableQueue.pop();
+//         }
     }
 }
 
@@ -1013,6 +1015,17 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         }
         break;
     }
+    //TODO:
+//     case msofillShade:
+//     case msofillShadeCenter:
+//     case msofillShadeShape:
+//     case msofillShadeScale:
+//     case msofillShadeTitle:
+//
+    //TODO:
+//     case msofillPattern:
+//     case msofillTexture:
+//
     case msofillPicture:
     {
         // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
@@ -1036,6 +1049,8 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         }
         break;
     }
+    //TODO:
+//     case msofillBackground:
     default:
         break;
     }
@@ -1121,26 +1136,26 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         if (sep->brcLeft.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-left",
                                          Conversion::setBorderAttributes(sep->brcLeft));
-            pageLayoutStyle->addProperty("koffice:specialborder-left",
-                                         Conversion::borderKOfficeAttributes(sep->brcLeft));
+            pageLayoutStyle->addProperty("calligra:specialborder-left",
+                                         Conversion::borderCalligraAttributes(sep->brcLeft));
         }
         if (sep->brcTop.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-top",
                                          Conversion::setBorderAttributes(sep->brcTop));
-            pageLayoutStyle->addProperty("koffice:specialborder-top",
-                                         Conversion::borderKOfficeAttributes(sep->brcTop));
+            pageLayoutStyle->addProperty("calligra:specialborder-top",
+                                         Conversion::borderCalligraAttributes(sep->brcTop));
         }
         if (sep->brcRight.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-right",
                                          Conversion::setBorderAttributes(sep->brcRight));
-            pageLayoutStyle->addProperty("koffice:specialborder-right",
-                                         Conversion::borderKOfficeAttributes(sep->brcRight));
+            pageLayoutStyle->addProperty("calligra:specialborder-right",
+                                         Conversion::borderCalligraAttributes(sep->brcRight));
         }
         if (sep->brcBottom.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-bottom",
                                          Conversion::setBorderAttributes(sep->brcBottom));
-            pageLayoutStyle->addProperty("koffice:specialborder-bottom",
-                                         Conversion::borderKOfficeAttributes(sep->brcBottom));
+            pageLayoutStyle->addProperty("calligra:specialborder-bottom",
+                                         Conversion::borderCalligraAttributes(sep->brcBottom));
         }
     }
     // Set default left/right margins for the case when there is no border.

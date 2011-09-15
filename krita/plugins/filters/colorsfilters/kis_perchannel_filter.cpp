@@ -67,11 +67,13 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
             m_dev->colorSpace()->colorChannelCount());
 
-    /* fill in the channel chooser */
-    QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
-    for (unsigned int ch = 0; ch < dev->colorSpace()->colorChannelCount(); ch++)
-        m_page->cmbChannel->addItem(channels.at(ch)->name());
-
+    // fill in the channel chooser, in the display order, but store the pixel index as well.
+    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels());
+    foreach(KoChannelInfo *channel, sortedChannels) {
+        QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
+                                                                         KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));
+        m_page->cmbChannel->addItem(channel->name(), pixelIndex);
+    }
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // create the horizontal and vertical gradient labels
@@ -82,15 +84,13 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     QList<QString> keys =
         KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_dev->colorSpace());
     
-    if(keys.size() > 0)
-    {
+    if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
 	m_histogram = new KisHistogram(m_dev, bounds, hpf->generate(), LINEAR);
     }
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->cbPreview, SIGNAL(stateChanged(int)), this, SLOT(setPreview(int)));
 
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
 
@@ -98,16 +98,6 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     setActiveChannel(0);
     m_page->curveWidget->blockSignals(false);
 }
-
-void KisPerChannelConfigWidget::setPreview(int state)
-{
-    if (state) {
-        connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
-        emit sigConfigurationItemChanged();
-    } else
-        disconnect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
-}
-
 
 inline QPixmap KisPerChannelConfigWidget::createGradient(Qt::Orientation orient /*, int invert (not used yet) */)
 {
@@ -236,7 +226,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     if (!cfg)
         return;
 
-    if (!cfg->m_curves.size() == 0) {
+    if (cfg->m_curves.size() == 0) {
         /**
          * HACK ALERT: our configuration factory generates
          * default configuration with nTransfers==0.

@@ -121,19 +121,19 @@ RichTextDialog::~RichTextDialog()
 QString
 RichTextDialog::text() const
 {
-    return m_edit->text();
+    return m_edit->toHtml();
 }
 
 void
 RichTextDialog::changeFont(const QString &font)
 {
-    m_edit->setFamily(font);
+    m_edit->setFontFamily(font);
 }
 
 void
 RichTextDialog::changeColor(const QColor &color)
 {
-    m_edit->setColor(color);
+    m_edit->setTextColor(color);
 }
 
 void
@@ -142,11 +142,11 @@ RichTextDialog::slotActionTriggered(QAction* action)
     const bool isChecked = action->isChecked();
 
     if (action == m_boldTextAction)
-        m_edit->setBold(isChecked);
+        m_edit->setFontWeight(isChecked ? QFont::Bold : QFont::Normal);
     else if (action == m_italicTextAction)
-        m_edit->setItalic(isChecked);
+        m_edit->setFontItalic(isChecked);
     else if (action == m_underlineTextAction)
-        m_edit->setUnderline(isChecked);
+        m_edit->setFontUnderline(isChecked);
     else if (action == m_superscriptTextAction) {
         if (isChecked && m_subscriptTextAction->isChecked()) {
             m_subscriptTextAction->setChecked(false);
@@ -155,9 +155,9 @@ RichTextDialog::slotActionTriggered(QAction* action)
                 isChecked ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
             m_edit->setCurrentCharFormat(currentCharFormat);
         }
-    } else if (action == m_superscriptTextAction) {
-        if (isChecked && m_superscriptTextAction->isChecked()) {
-            m_superscriptTextAction->setChecked(false);
+    } else if (action == m_subscriptTextAction) {
+        if (isChecked && m_subscriptTextAction->isChecked()) {
+            m_subscriptTextAction->setChecked(false);
             QTextCharFormat currentCharFormat = m_edit->currentCharFormat();
             currentCharFormat.setVerticalAlignment(
                 isChecked ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);

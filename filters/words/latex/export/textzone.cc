@@ -3,7 +3,7 @@
  * xfd -fn '-misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1'
  */
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by Words into LATEX.
 **
 ** Copyright (C) 2000 - 2003 Robert JACOLIN
 **
@@ -394,7 +394,7 @@ void TextZone::generate_format_begin(QTextStream & out)
 
     /* Size */
     if (getSize() != Config::instance()->getDefaultFontSize() &&
-            Config::instance()->isKwordStyleUsed()) {
+            Config::instance()->isWordsStyleUsed()) {
         out << "\\fontsize{" << getSize() << "}{1}%" << endl;
         Config::instance()->writeIndent(out);
         out << "\\selectfont" << endl;
@@ -458,7 +458,7 @@ void TextZone::generate_format_end(QTextStream & out)
         out << "}";
 
     /* Size */
-    if (getSize() != Config::instance()->getDefaultFontSize() && Config::instance()->isKwordStyleUsed()) {
+    if (getSize() != Config::instance()->getDefaultFontSize() && Config::instance()->isWordsStyleUsed()) {
         out << "\\fontsize{" << Config::instance()->getDefaultFontSize() << "}{1}%" << endl;
         Config::instance()->writeIndent(out);
         out << "\\selectfont" << endl;

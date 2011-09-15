@@ -27,7 +27,7 @@
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 #include <KWEFUtil.h>
 
 #include "wmlexport.h"
@@ -73,7 +73,7 @@ bool WMLWorker::doOpenDocument(void)
 {
     result = "<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\"\n";
     result += "      \"http://www.wapforum.org/DTD/wml_1.1.xml\" >\n";
-    result += "<!-- Created using KWord, see www.koffice.org/kword -->\n";
+    result += "<!-- Created using Words, see www.calligra-suite.org/words -->\n";
     result += "<wml>\n";
     result += "<card>\n";
 
@@ -140,11 +140,11 @@ KoFilter::ConversionStatus WMLExport::convert(const QByteArray& from,
         const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "text/vnd.wap.wml" || from != "application/x-kword")
+    if (to != "text/vnd.wap.wml" || from != "application/x-words")
         return KoFilter::NotImplemented;
 
     WMLWorker* worker = new WMLWorker();
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     KoFilter::ConversionStatus result;
     result = leader->convert(m_chain, from, to);

@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
@@ -65,6 +65,9 @@ private slots:
 
     /// Test first line indent of paragraphs.
     void testTextIndent();
+
+    /// Test tabs.
+    void testTabs();
 
     void testBasicTextAlignments();
     void testTextAlignments();

@@ -1,5 +1,5 @@
 /*
- * This file is part of KWord
+ * This file is part of Words
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
  *
@@ -25,15 +25,15 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-K_PLUGIN_FACTORY(KWordScriptingFactory, registerPlugin<KWScriptingPart>();)
-K_EXPORT_PLUGIN(KWordScriptingFactory("krossmodulekword"))
+K_PLUGIN_FACTORY(WordsScriptingFactory, registerPlugin<KWScriptingPart>();)
+K_EXPORT_PLUGIN(WordsScriptingFactory("krossmodulewords"))
 
 KWScriptingPart::KWScriptingPart(QObject* parent, const QVariantList& args)
         : KoScriptingPart(new Scripting::Module(parent))
 {
     Q_UNUSED(args);
     setComponentData(KWScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data", "kword/kpartplugins/scripting.rc"), true);
+    setXMLFile(KStandardDirs::locate("data", "words/kpartplugins/scripting.rc"), true);
     kDebug(32010) << "Parent:" << parent->metaObject()->className();
 
     /*

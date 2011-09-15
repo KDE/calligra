@@ -1,14 +1,19 @@
 [Desktop Entry]
 Name=Up-Down-Left Arrow
+Name[bg]=Стрелка нагоре-надолу-наляво
+Name[da]=Pil til op-ned-venstre
 Name[de]=Pfeil nach oben, unten und links
 Name[el]=Πάνω-κάτω-αριστερά βέλος
 Name[es]=Flecha arriba-abajo-izquierda
 Name[et]=Nool üles-alla-vasakule
 Name[it]=Freccia in su, in giù e a sinistra
 Name[nb]=Pil opp-ned-venstre
+Name[nds]=Piel hooch-daal-links
 Name[nl]=Pijl omhoog-omlaag-links
+Name[pl]=Strzałka w górę-dół-lewo
 Name[pt]=Seta Cima-Baixo-Esquerda
 Name[pt_BR]=Seta cima-baixo-esquerda
+Name[ru]=Стрелка вверх, вниз и влево
 Name[sv]=Uppåt-neråt-vänsterpil
 Name[uk]=Стрілки вгору, вниз і ліворуч
 Name[x-test]=xxUp-Down-Left Arrowxx

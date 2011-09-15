@@ -9,7 +9,7 @@ CHECKOUT=keximdb-tmp
 BRANCH=trunk/kdenonbeta
 
 # From release branch
-#BRANCH=branches/work/keximdb/koffice-1.6
+#BRANCH=branches/work/keximdb/calligra-1.6
 
 #########
 set -e

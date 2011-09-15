@@ -72,7 +72,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
         m_selection(selection),
         m_targetRect(selection->lastRange())
 {
-    setObjectName("DatabaseDialog");
+    setObjectName(QLatin1String("DatabaseDialog"));
     setWindowTitle(i18n("Insert Data From Database"));
 
     // database page
@@ -558,7 +558,7 @@ void DatabaseDialog::accept()
         }
     }
 
-    QUndoCommand* macroCommand = new QUndoCommand(i18n("Insert Data From Database"));
+    KUndo2Command* macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Insert Data From Database"));
 
     if (query.first()) {
         if (query.isValid()) {

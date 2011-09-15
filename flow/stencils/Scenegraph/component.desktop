@@ -1,13 +1,17 @@
 [Desktop Entry]
 Name=component
+Name[da]=komponent
 Name[el]=συστατικό
 Name[es]=componente
 Name[et]=komponent
+Name[it]=componente
 Name[nb]=komponent
 Name[nl]=component
+Name[pl]=składnik
 Name[pt]=componente
 Name[pt_BR]=componente
 Name[sv]=komponent
 Name[uk]=Компонент
 Name[x-test]=xxcomponentxx
 Name[zh_CN]=组件
+Name[zh_TW]=組件

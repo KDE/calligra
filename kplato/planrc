@@ -1,7 +1,0 @@
-[koffice]
-DockerPlugins=Scripting
-DockerPluginsDisabled=kofficedockers
-FlakePlugins=
-FlakePluginsDisabled=
-ShapePlugins=
-ShapePluginsDisabled=

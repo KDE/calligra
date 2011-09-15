@@ -73,7 +73,7 @@ public:
     Ui::ConsolidateDetailsWidget detailsWidget;
 
 public:
-    void setContent(Sheet *sheet, int row, int column, const QString &text, QUndoCommand *parent);
+    void setContent(Sheet *sheet, int row, int column, const QString &text, KUndo2Command *parent);
 };
 
 
@@ -207,7 +207,7 @@ void ConsolidateDialog::accept()
     }
 
     // Create the cumulating parent command.
-    QUndoCommand *const command = new QUndoCommand(i18n("Consolidate"));
+    KUndo2Command *const command = new KUndo2Command(i18nc("(qtundo-format)", "Consolidate"));
 
     // Create the destination cell range
     if (desc == D_NONE) {
@@ -505,7 +505,7 @@ void ConsolidateDialog::slotReturnPressed()
 }
 
 void ConsolidateDialog::Private::setContent(Sheet *sheet, int row, int column,
-                                            const QString &text, QUndoCommand *parent)
+                                            const QString &text, KUndo2Command *parent)
 {
     Value value;
     // Directly evaluate the formula, i.e. copy data, i.e. do not link to data?

@@ -4,6 +4,6 @@
 - export: fix bug when font name has an &
 - export: table (just the structure, no colspan, no rowspan)
 
-=== KWord 1.4 Alpha ===
+=== Words 1.4 Alpha ===
 - export: fix linespacing
 - import subject/keyword in docinformation

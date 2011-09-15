@@ -34,7 +34,7 @@
 
 class WRIDevice;
 class MSWrite::InternalParser;
-class KWordGenerator;
+class WordsGenerator;
 
 class MSWriteImport : public KoFilter
 {
@@ -43,7 +43,7 @@ class MSWriteImport : public KoFilter
 private:
     WRIDevice *m_device;
     MSWrite::InternalParser *m_parser;
-    KWordGenerator *m_generator;
+    WordsGenerator *m_generator;
 
 public:
     MSWriteImport(QObject *parent, const QVariantList &);

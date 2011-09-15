@@ -1,7 +1,7 @@
                           README for KSpread
 
 
-This is the source tree for KSpread, the KOffice spreadsheet program.
+This is the source tree for KSpread, the Calligra spreadsheet program.
 
 If you are a developer, you will find more information in the doc/
 directory.  Beware that at the current point of time (2.1 beta2), not
@@ -10,7 +10,7 @@ found in ./TODO.  Note that this file may also contain some out of
 date information.
 
 If you are a user, you will find more user-oriented information in
-doc/kspread in the top directory of KOffice.
+doc/kspread in the top directory of Calligra.
 
 
 What's where - where's what
@@ -46,14 +46,14 @@ interfaces/
 
 part/
     Everything, that is only needed for the KPart, i.e. for KSpread itself and
-    for the embedding into non-KOffice applications using the KPart framework.
+    for the embedding into non-Calligra applications using the KPart framework.
     Everything means document AND view/controller related.
 
 plugins/
     Functions modules, Kross scripting, tools, etc.
 
 shape/
-    The flake shape, that can be embedded into other KOffice apps, and its tool.
+    The flake shape, that can be embedded into other Calligra apps, and its tool.
 
 tests/
     Unit tests.

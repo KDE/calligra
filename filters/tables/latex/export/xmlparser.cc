@@ -1,5 +1,5 @@
 /*
-** A program to convert the XML rendered by KOffice into LATEX.
+** A program to convert the XML rendered by Calligra into LATEX.
 **
 ** Copyright (C) 2000-2002 Robert JACOLIN
 **

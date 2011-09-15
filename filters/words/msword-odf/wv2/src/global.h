@@ -45,6 +45,7 @@
 //#define WV2_DEBUG_ANNOTATIONS 1
 //#define WV2_DEBUG_BOOKMARK 1
 //#define WV2_DEBUG_SECTIONS 1
+//#define WV2_DEBUG_SHD
 
 // This define should only be commented out for releases (if at all)
 #define WV2_CHECKING 1

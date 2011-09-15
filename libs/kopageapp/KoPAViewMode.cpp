@@ -27,10 +27,11 @@
 
 #include <QCloseEvent>
 
-KoPAViewMode::KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas )
+KoPAViewMode::KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas, QString name)
 : m_canvas( canvas )
 , m_toolProxy( canvas->toolProxy() )
 , m_view( view )
+, m_name(name)
 {
 }
 
@@ -102,7 +103,7 @@ const KoPageLayout &KoPAViewMode::activePageLayout() const
     return m_view->activePage()->pageLayout();
 }
 
-void KoPAViewMode::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent )
+void KoPAViewMode::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent )
 {
     Q_UNUSED( pageLayout );
     Q_UNUSED( applyToDocument );
@@ -117,6 +118,16 @@ QPointF KoPAViewMode::origin()
 void KoPAViewMode::setOrigin(const QPointF &o)
 {
     m_origin = o;
+}
+
+void KoPAViewMode::setName(const QString &name)
+{
+    m_name = name;
+}
+
+QString KoPAViewMode::name() const
+{
+    return m_name;
 }
 
 #include <KoPAViewMode.moc>

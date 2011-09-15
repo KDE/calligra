@@ -77,7 +77,7 @@ const KComponentData &Factory::global()
         s_global = new KComponentData(aboutData());
 
         s_global->dirs()->addResourceType("tables_template", "data", "tables/templates/");
-        s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
+        s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
         s_global->dirs()->addResourceType("functions", "data", "tables/functions/");
         s_global->dirs()->addResourceType("sheet-styles", "data", "tables/sheetstyles/");
     }

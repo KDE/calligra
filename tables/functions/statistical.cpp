@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
+   Copyright (C) 1998-2002 The KSpread Team <calligra-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
    Copyright (C) 2007 Sascha Pfau <MrPeacock@gmail.com>
 
@@ -1423,11 +1423,10 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
 
     uint cols_X, cols_Y; // columns in X and Y-Matrix
     uint rows_X, rows_Y; // rows     in X and Y-Matrix
-    int M, N;
 
     // stores count of elements in array
     // int count_Y = 0;
-    int count_X = 0;
+    // int count_X = 0;
 
     //
     int nCase = 0;
@@ -1491,8 +1490,6 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
             } else {
                 kDebug() << "--> row aligned";
                 nCase = 2; // row alignment
-                N = rows_Y;
-                M = cols_X;
             }
         }
 
@@ -1506,8 +1503,6 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         } else {
             kDebug() << "--> col aligned";
             nCase = 3; // column alignment
-            N = cols_Y;
-            M = rows_X;
         }
     } else
         //
@@ -1529,13 +1524,11 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
 
     Value newX(Value::Array);
     uint cols_newX, rows_newX;
-    int count_newX;
 
     if (args.count() < 3) {
         kDebug() << "no newX-Matrix --> copy X-Matrix";
         cols_newX = cols_X;
         rows_newX = rows_X;
-        count_newX = count_X;
         newX = known_X;
     } else {
         newX = args[2];

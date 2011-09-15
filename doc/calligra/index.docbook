@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
  <!ENTITY kappname "&koffice;">
- <!ENTITY package "koffice">
+ <!ENTITY koffice "Calligra">
+ <!ENTITY package "Calligra">
  <!ENTITY % addindex "IGNORE">
  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
@@ -492,7 +493,7 @@ about &kde; or &koffice;.
 
 <itemizedlist>
 <listitem>
-<para><ulink url="http://koffice.org">The &koffice;
+<para><ulink url="http://calligra-suite.org">The &koffice;
 homepage</ulink>. Here you can find information on how to get and
 install &koffice;, news about &koffice; development, screenshots &etc;
 </para></listitem>
@@ -586,8 +587,8 @@ TO BE WRITTEN.
 of &koffice; is copyrighted by the people who wrote this particular file and 
 their names can be found at the start of each source file with the license that applies to 
 that source file. The names of the core developers can be found at
-<ulink url="http://www.koffice.org/people.php">
-http://www.koffice.org/people.php</ulink>.
+<ulink url="http://www.calligra-suite.org/people.php">
+http://www.calligra-suite.org/people.php</ulink>.
 </para>
 
 <para>
@@ -696,7 +697,7 @@ can be found by following this link:
 </para> 
 
 <note><para> Please see the <ulink
-url="http://koffice.org">&koffice; homepage</ulink> for further
+url="http://calligra-suite.org">&koffice; homepage</ulink> for further
 details. That is where you can always find the most up-to-date
 information on both source and binary distributions!  </para></note>
 
@@ -711,8 +712,8 @@ You can download the most current binaries from:
 </para>
 
 <para>
-<ulink url="http://koffice.org/download/">
-http://koffice.org/download</ulink>
+<ulink url="http://calligra-suite.org/download/">
+http://calligra-suite.org/download</ulink>
 </para>
 
 <para>
@@ -786,7 +787,7 @@ with it.  </para></note>
 
 <para>
 You can download the current source code from:
-<ulink url="http://koffice.org/">http://koffice.org/</ulink>
+<ulink url="http://calligra-suite.org/">http://calligra-suite.org/</ulink>
 or from one of many mirror sites. The current list of mirror sites
 can be found at:
 </para>

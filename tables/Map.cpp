@@ -125,7 +125,7 @@ Map::Map(DocBase* doc, int syntaxVersion)
         : QObject(doc),
         d(new Private)
 {
-    setObjectName("Map"); // necessary for D-Bus
+    setObjectName(QLatin1String("Map")); // necessary for D-Bus
     d->doc = doc;
     d->tableId = 1;
     d->overallRowCount = 0;
@@ -988,7 +988,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
     }
 }
 
-void Map::addCommand(QUndoCommand *command)
+void Map::addCommand(KUndo2Command *command)
 {
     emit commandAdded(command);
 }

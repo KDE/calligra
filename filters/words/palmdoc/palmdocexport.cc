@@ -26,7 +26,7 @@
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 
 #include "palmdoc.h"
 
@@ -111,11 +111,11 @@ KoFilter::ConversionStatus PalmDocExport::convert(const QByteArray& from,
         const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/vnd.palm" || from != "application/x-kword")
+    if (to != "application/vnd.palm" || from != "application/x-words")
         return KoFilter::NotImplemented;
 
     PalmDocWorker* worker = new PalmDocWorker();
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     KoFilter::ConversionStatus result;
     result = leader->convert(m_chain, from, to);

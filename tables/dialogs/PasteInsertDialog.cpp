@@ -43,7 +43,7 @@ PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)
 {
     setCaption(i18n("Paste Inserting Cells"));
-    setObjectName("PasteInsertDialog");
+    setObjectName(QLatin1String("PasteInsertDialog"));
     setModal(true);
     setButtons(Ok | Cancel);
     m_selection = selection;

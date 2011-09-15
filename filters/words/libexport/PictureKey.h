@@ -22,7 +22,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
-#include "kword_libexport_export.h"
+#include "words_libexport_export.h"
 /**
  * \file PictureKey.h
  * \todo correct documentation (for example: sed "s/image/picture/g")
@@ -60,9 +60,9 @@ enum Type {
  *
  * @note We use the *nix epoch (1970-01-01) as a time base because it is a valid date.
  * That way we do not depend on a behaviour of the current QDateTime that might change in future versions of Qt
- * and we are also nice to non-Qt programs wanting to read KOffice's files.
+ * and we are also nice to non-Qt programs wanting to read Calligra's files.
  *
- * @note This behaviour is also needed for re-saving KWord files having \<FORMAT id="2"\>. When saving again,
+ * @note This behaviour is also needed for re-saving Words files having \<FORMAT id="2"\>. When saving again,
  * these files get a \<KEY\> element as child of \<PIXMAPS\> but not one as child of \<FORMAT\> and \<IMAGE\>.
  * Therefore we need to be careful that the key remains compatible to default values
  * (another good reason for the *NIX epoch)
@@ -70,7 +70,7 @@ enum Type {
  * @note In case of a remote path, the "original path" is the name of the temporary file that was
  *  used to download the file.
  */
-class KWORD_LIBEXPORT_EXPORT PictureKey
+class WORDS_LIBEXPORT_EXPORT PictureKey
 {
 public:
     /**
@@ -120,12 +120,12 @@ public:
     QString toString() const;
 
     /**
-     * Save this key in XML (as %KOffice 1.3)
+     * Save this key in XML (as %Calligra 1.3)
      */
     void saveAttributes(QDomElement &elem) const;
 
     /**
-     * Load this key from XML (as %KOffice 1.3)
+     * Load this key from XML (as %Calligra 1.3)
      */
     void loadAttributes(const QDomElement &elem);
 

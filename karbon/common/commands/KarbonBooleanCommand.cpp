@@ -48,16 +48,16 @@ public:
     KoPathShape * pathB;
     KoPathShape * resultingPath;
     KoShapeContainer * resultParent;
-    QUndoCommand * resultParentCmd;
+    KUndo2Command * resultParentCmd;
     BooleanOperation operation;
     bool isExecuted;
 };
 
 KarbonBooleanCommand::KarbonBooleanCommand(
     KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB,
-    BooleanOperation operation, QUndoCommand *parent
+    BooleanOperation operation, KUndo2Command *parent
 )
-        : QUndoCommand(parent), d(new Private(controller))
+        : KUndo2Command(parent), d(new Private(controller))
 {
     Q_ASSERT(controller);
 
@@ -65,7 +65,7 @@ KarbonBooleanCommand::KarbonBooleanCommand(
     d->pathB = pathB;
     d->operation = operation;
 
-    setText(i18n("Boolean Operation"));
+    setText(i18nc("(qtundo-format)", "Boolean Operation"));
 }
 
 KarbonBooleanCommand::~KarbonBooleanCommand()
@@ -124,14 +124,14 @@ void KarbonBooleanCommand::redo()
         d->controller->addShape(d->resultingPath);
     }
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     d->isExecuted = true;
 }
 
 void KarbonBooleanCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     if (d->controller && d->resultingPath) {
         if (! d->resultParentCmd) {

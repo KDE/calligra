@@ -311,9 +311,7 @@ void KWStatusBar::updateCursorPosition()
     KWTextFrameSet *fs = m_currentView ? m_currentView->kwdocument()->mainFrameSet() : 0;
     KoTextEditor *editor = fs ? KoTextDocument(fs->document()).textEditor() : 0;
     if (editor) {
-        QTextCursor *c = editor->cursor();
-        if (c)
-            line = c->block().firstLineNumber() + 1;
+        line = editor->block().firstLineNumber() + 1;
     }
     m_lineLabel->m_label->setText(i18nLine.subs(line).toString());
     m_lineLabel->m_edit->setText(QString::number(line));
@@ -446,15 +444,14 @@ void KWStatusBar::setCurrentView(KWView *view)
 
     KoResourceManager *resourceManager = view->canvasBase()->resourceManager();
     Q_ASSERT(resourceManager);
-    connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
-        this, SLOT(resourceChanged(int, QVariant)));
+    connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)), Qt::QueuedConnection);
 
     KWTextFrameSet *fs = m_currentView->kwdocument()->mainFrameSet();
     if (fs) {
         KoTextDocument doc(fs->document());
         KoTextEditor *editor = doc.textEditor();
         if (editor) {
-            connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()));
+            connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()), Qt::QueuedConnection);
         }
     }
 }

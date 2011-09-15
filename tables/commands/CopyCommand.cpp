@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007,2009 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2007 The KSpread Team <calligra-devel@kde.org>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -74,7 +74,7 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
 
             // TODO Stefan: Inefficient, use cluster functionality
             // Save the row formats if there are any
-            const RowFormat* format;
+            //const RowFormat* format;
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 if (!sheet->rowFormats()->isDefaultRow(row)) {
                     QDomElement e = RowFormat(sheet->rowFormats(), row).save(xmlDoc, top - 1);
@@ -159,21 +159,20 @@ QString CopyCommand::saveAsPlainText(const Region &region)
         return cell.displayText();
     }
 
-    QRect lastRange(region.lastRange());
-
-    // Find area
-    int top = lastRange.bottom();
-    int bottom = lastRange.top();
-    int left = lastRange.right();
-    int right = lastRange.left();
-
     QString result;
-    for (int row = top; row <= bottom; ++row) {
-        for (int col = left; col <= right; ++col) {
-            Cell cell(region.lastSheet(), col, row);
-            result += cellAsText(cell, col != right);
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
+      if (result.length()) result += "\n";
+      Region::Element *el = *it;
+      QRect used = el->sheet()->usedArea (true);
+      QRect rect = el->rect().intersected (used);
+      for (int row = rect.top(); row <= rect.bottom(); ++row) {
+        for (int col = rect.left(); col <= rect.right(); ++col) {
+          Cell cell (el->sheet(), col, row);
+          result += cellAsText (cell, col != rect.right());
         }
-        result += '\n';
+        result += "\n";
+      }
     }
     return result;
 }

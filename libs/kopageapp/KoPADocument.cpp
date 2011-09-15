@@ -189,6 +189,8 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
 
     updatePageCount();
 
+    loadOdfSettings(odfStore.settingsDoc());
+
     if (d->odfProgressUpdater) {
         d->odfProgressUpdater->setProgress(100);
     }
@@ -432,7 +434,7 @@ void KoPADocument::saveOdfDocumentStyles( KoPASavingContext & context )
 {
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT( styleManager );
-    styleManager->saveOdf( context.mainStyles() );
+    styleManager->saveOdf(context);
 }
 
 bool KoPADocument::loadOdfDocumentStyles( KoPALoadingContext & context )
@@ -560,7 +562,14 @@ void KoPADocument::removePage( KoPAPageBase * page )
     addCommand( command );
 }
 
-void KoPADocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
+
+void KoPADocument::removePages(QList<KoPAPageBase *> &pages)
+{
+    KoPAPageDeleteCommand *command = new KoPAPageDeleteCommand(this, pages);
+    addCommand(command);
+}
+
+void KoPADocument::pageRemoved( KoPAPageBase * page, KUndo2Command * parent )
 {
     Q_UNUSED( page );
     Q_UNUSED( parent );

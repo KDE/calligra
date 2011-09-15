@@ -123,7 +123,7 @@ bool KoPACanvasBase::snapToGrid() const
     return d->doc->gridData().snapToGrid();
 }
 
-void KoPACanvasBase::addCommand( QUndoCommand *command )
+void KoPACanvasBase::addCommand( KUndo2Command *command )
 {
     d->doc->addCommand( command );
 }
@@ -182,7 +182,7 @@ KoGuidesData * KoPACanvasBase::guidesData()
     return &d->doc->guidesData();
 }
 
-void KoPACanvasBase::paint(QPainter &painter, const QRectF paintRect) {
+void KoPACanvasBase::paint(QPainter &painter, const QRectF &paintRect) {
 
     KoPAPageBase *activePage(d->view->activePage());
     if (d->view->activePage()) {

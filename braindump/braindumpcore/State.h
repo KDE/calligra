@@ -28,17 +28,18 @@ class QSvgRenderer;
 
 class StateCategory;
 
-class BRAINDUMPCORE_EXPORT State {
+class BRAINDUMPCORE_EXPORT State
+{
     friend class StatesRegistry;
-    State( const QString& _id, const QString& _name, StateCategory* _category, const QString& _fileName, int _priority);
+    State(const QString& _id, const QString& _name, StateCategory* _category, const QString& _fileName, int _priority);
     ~State();
-  public:
+public:
     const QString& name() const;
     const QString& id() const;
     const StateCategory* category() const;
     QSvgRenderer* renderer() const;
     int priority() const;
-  private:
+private:
     struct Private;
     Private* const d;
 };

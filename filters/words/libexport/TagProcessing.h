@@ -20,7 +20,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -40,7 +40,7 @@
 #include <kdemacros.h>
 #include <kdebug.h>
 
-class KWEFKWordLeader;
+class KWEFWordsLeader;
 
 /**
  * The class TagProcessing and the two functions ProcessSubtags () and
@@ -58,7 +58,7 @@ public:
     TagProcessing() {}
 
     TagProcessing(const QString& n,
-                  void (*p)(QDomNode, void *, KWEFKWordLeader*),
+                  void (*p)(QDomNode, void *, KWEFWordsLeader*),
                   void *d) : name(n), processor(p), data(d) {}
 
     /**
@@ -69,15 +69,15 @@ public:
     TagProcessing(const QString& _name) : name(_name), processor(0), data(0) {}
 
     QString  name;
-    void (*processor)(QDomNode, void *, KWEFKWordLeader*);
+    void (*processor)(QDomNode, void *, KWEFWordsLeader*);
     void    *data;
 };
 
 void ProcessSubtags(const QDomNode             &parentNode,
                     QList<TagProcessing>  &tagProcessingList,
-                    KWEFKWordLeader            *leader);
+                    KWEFWordsLeader            *leader);
 
-void AllowNoSubtags(const QDomNode& myNode, KWEFKWordLeader *leader);
+void AllowNoSubtags(const QDomNode& myNode, KWEFWordsLeader *leader);
 
 
 /**

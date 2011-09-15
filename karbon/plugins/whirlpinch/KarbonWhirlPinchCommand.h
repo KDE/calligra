@@ -20,12 +20,12 @@
 #ifndef KARBONWHIRLPINCHCOMMAND_H
 #define KARBONWHIRLPINCHCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KoPathShape;
 
 /// The undo / redo command for the whirl pinch effect on a given path
-class KarbonWhirlPinchCommand : public QUndoCommand
+class KarbonWhirlPinchCommand : public KUndo2Command
 {
 public:
     /**
@@ -37,7 +37,7 @@ public:
     * @param radius the effect radius
     * @param parent the parent command used for macro commands
      */
-    KarbonWhirlPinchCommand(KoPathShape * path, qreal angle, qreal pinch, qreal radius, QUndoCommand *parent = 0);
+    KarbonWhirlPinchCommand(KoPathShape * path, qreal angle, qreal pinch, qreal radius, KUndo2Command *parent = 0);
     virtual ~KarbonWhirlPinchCommand();
 
     /// redo the command

@@ -589,7 +589,7 @@ namespace wvWare
         U8 index() const { return m_index; }
         void setIndex( U8 index ) { if ( index < m_fkp.m_crun ) m_index = index; }
 
-        bool atEnd() { return m_index >= m_fkp.m_crun; }
+        bool atEnd() const { return m_index >= m_fkp.m_crun; }
 
     private:
         // don't copy or assign it

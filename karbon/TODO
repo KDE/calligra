@@ -10,7 +10,7 @@ Svg-Filters:
 
 Shapes/Tools:
 ---------------
-- implement something like kword/part/frames/KWCopyShape.h
+- implement something like words/part/frames/KWCopyShape.h
 - an object snap tool:
     - define a snap point on the selected object(s) which can snap to features of the selection
     - move the selection which then snaps the defined snap point to other objects
@@ -86,7 +86,7 @@ Bugs:
 - when undoing text attach/detach commands the text cursor causes some painting artifacts
 - when artistic text is grouped, one cannot edit the text
 
-- see http://techbase.kde.org/Contribute/Bugsquad/BugDays/KOfficeDay2/Karbon
+- see http://techbase.kde.org/Contribute/Bugsquad/BugDays/CalligraDay2/Karbon
 - implement pattern stretch other than tile in svg import/export
 
 - svgimport: when object bounding mode, use matrix to scale radius in both directions 

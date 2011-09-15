@@ -5,7 +5,7 @@ install(
         calligra_application.desktop
         kofilter.desktop
         koplugin.desktop
-        kofficepart.desktop
+        calligrapart.desktop
         kochart.desktop
         kofilterwrapper.desktop
         calligra_deferred_plugin.desktop

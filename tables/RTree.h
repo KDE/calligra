@@ -920,7 +920,7 @@ void RTree<T>::LeafNode::operator=(const LeafNode& other)
     this->m_childBoundingBox = other.m_childBoundingBox;
     this->m_counter = other.m_counter;
     this->m_place = other.m_place;
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
     this->m_nodeId = other.m_nodeId;
 #endif
     this->m_level = other.m_level;
@@ -1085,7 +1085,7 @@ void RTree<T>::NonLeafNode::operator=(const NonLeafNode& other)
     this->m_childBoundingBox = other.childBoundingBox();
     this->m_counter = other.m_counter;
     this->m_place = other.m_place;
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
     this->m_nodeId = other.m_nodeId;
 #endif
     this->m_level = other.m_level;

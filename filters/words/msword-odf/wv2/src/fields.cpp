@@ -84,7 +84,7 @@ using namespace wvWare;
 
 Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     m_main( 0 ), m_header( 0 ), m_footnote( 0 ), m_annotation( 0 ),
-    m_endnote( 0 ), m_textbox( 0 ), m_headerTextbox( 0 )
+    m_endnote( 0 ), m_textbox( 0 ), m_headerTextbox( 0 ), m_bookmark( 0 )
 {
     tableStream->push();
 
@@ -128,6 +128,7 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
 Fields::~Fields()
 {
+    delete m_bookmark;
     delete m_headerTextbox;
     delete m_textbox;
     delete m_endnote;

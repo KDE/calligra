@@ -47,7 +47,7 @@ AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
     setButtons(Ok | Cancel);
     setCaption(i18n("Add Named Area"));
     setModal(true);
-    setObjectName("AddNamedAreaDialog");
+    setObjectName(QLatin1String("AddNamedAreaDialog"));
 
     QWidget* widget = new QWidget();
     setMainWidget(widget);
@@ -94,7 +94,7 @@ void AddNamedAreaDialog::slotOk()
             return;
 
         command = new NamedAreaCommand();
-        command->setText(i18n("Replace Named Area"));
+        command->setText(i18nc("(qtundo-format)", "Replace Named Area"));
     } else
         command = new NamedAreaCommand();
     command->setSheet(m_selection->activeSheet());

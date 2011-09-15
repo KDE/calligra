@@ -168,7 +168,7 @@ void TextHandler::headersFound( const HeaderFunctor& parseHeaders )
     parseHeaders();
 }
 
-void TextHandler::paragraphStart( SharedPtr<const ParagraphProperties> /*paragraphProperties*/ )
+void TextHandler::paragraphStart( SharedPtr<const ParagraphProperties> /*paragraphProperties*/, SharedPtr<const Word97::CHP> /*chp*/ )
 {
 }
 
@@ -235,11 +235,7 @@ void TextHandler::tableEndFound( )
 
 }
 
-void TextHandler::inlineObjectFound(const PictureData& /*data*/)
-{
-}
-
-void TextHandler::floatingObjectFound( unsigned int /*globalCP*/ )
+void TextHandler::msodrawObjectFound(const unsigned int /*globalCP*/, const PictureData* /*data*/)
 {
 }
 

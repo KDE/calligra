@@ -1,12 +1,12 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import KWord, time, sys, os
+import Words, time, sys, os
 
-#if KWord.pageCount() < 1: KWord.insertPage(0)
-#doc = KWord.frameSet(0).document()
+#if Words.pageCount() < 1: Words.insertPage(0)
+#doc = Words.frameSet(0).document()
 
-doc = KWord.mainFrameSet().document()
+doc = Words.mainFrameSet().document()
 
 # Set the default cascading stylesheet.
 doc.setDefaultStyleSheet(
@@ -71,41 +71,41 @@ doc.setHtml(
         ' '.join(os.uname()),
         sys.version,
 
-        ','.join(KWord.application().getDocuments()),
-        ','.join(KWord.application().getViews()),
-        ','.join(KWord.application().getWindows()),
+        ','.join(Words.application().getDocuments()),
+        ','.join(Words.application().getViews()),
+        ','.join(Words.application().getWindows()),
 
-        KWord.pageCount(),
-        KWord.frameSetCount(),
-        KWord.frameCount(),
+        Words.pageCount(),
+        Words.frameSetCount(),
+        Words.frameCount(),
 
-        KWord.document().url(),
+        Words.document().url(),
 
-        KWord.document().documentInfoTitle(),
-        KWord.document().documentInfoSubject(),
-        KWord.document().documentInfoKeywords(),
-        KWord.document().documentInfoAbstract(),
+        Words.document().documentInfoTitle(),
+        Words.document().documentInfoSubject(),
+        Words.document().documentInfoKeywords(),
+        Words.document().documentInfoAbstract(),
 
-        KWord.document().documentInfoAuthorName(),
-        KWord.document().documentInfoCompanyName(),
-        KWord.document().documentInfoAuthorPostion(),
-        KWord.document().documentInfoEmail(),
-        KWord.document().documentInfoTelephone(),
-        KWord.document().documentInfoTelephoneWork(),
-        KWord.document().documentInfoTelephoneHome(),
-        KWord.document().documentInfoFax(),
-        KWord.document().documentInfoCountry(),
-        KWord.document().documentInfoPostalCode(),
-        KWord.document().documentInfoCity(),
-        KWord.document().documentInfoStreet(),
-        KWord.document().documentInfoInitial(),
+        Words.document().documentInfoAuthorName(),
+        Words.document().documentInfoCompanyName(),
+        Words.document().documentInfoAuthorPostion(),
+        Words.document().documentInfoEmail(),
+        Words.document().documentInfoTelephone(),
+        Words.document().documentInfoTelephoneWork(),
+        Words.document().documentInfoTelephoneHome(),
+        Words.document().documentInfoFax(),
+        Words.document().documentInfoCountry(),
+        Words.document().documentInfoPostalCode(),
+        Words.document().documentInfoCity(),
+        Words.document().documentInfoStreet(),
+        Words.document().documentInfoInitial(),
     )
 )
 
 # Add a list of details about the framesets and frames.
 html = "<p><b>Framesets:</b></p><ul>"
-for i in range( KWord.frameSetCount() ):
-    frameset = KWord.frameSet(i)
+for i in range( Words.frameSetCount() ):
+    frameset = Words.frameSet(i)
     html += "<li>frameset nr=%i name=%s<br><ul>" % (i,frameset.name())
     for k in range( frameset.frameCount() ):
         frame = frameset.frame(k)

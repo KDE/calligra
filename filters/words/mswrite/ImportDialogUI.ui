@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ImportDialogUI</class>
-<comment>Import dialog for KWord's MS Write import filter</comment>
+<comment>Import dialog for Words's MS Write import filter</comment>
 <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
 <widget class="QWidget">
     <property name="name">
@@ -143,7 +143,7 @@
                 <string>&amp;Advanced</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>These advanced options allow you to fine-tune the importing of formatting information. They compensate for differences between KWord and MS Write by adding extra formatting information (not found in the original document), to try to make the imported document look as close to the original as possible.&lt;br&gt;&lt;br&gt;It is safe to use the defaults, if unsure.</string>
+                <string>These advanced options allow you to fine-tune the importing of formatting information. They compensate for differences between Words and MS Write by adding extra formatting information (not found in the original document), to try to make the imported document look as close to the original as possible.&lt;br&gt;&lt;br&gt;It is safe to use the defaults, if unsure.</string>
             </property>
             <grid>
                 <property name="name">

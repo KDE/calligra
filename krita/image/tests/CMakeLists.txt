@@ -400,12 +400,6 @@ target_link_libraries(KisPaintopTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_
 
 ########### next target ###############
 
-set(kis_paintop_settings_test_SRCS kis_paintop_settings_test.cpp )
-kde4_add_unit_test(KisPaintopSettingsTest TESTNAME krita-image-KisPaintopSettingsTest ${kis_paintop_settings_test_SRCS})
-target_link_libraries(KisPaintopSettingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_pattern_test_SRCS kis_pattern_test.cpp )
 kde4_add_unit_test(KisPatternTest TESTNAME krita-image-KisPatternTest ${kis_pattern_test_SRCS})
 target_link_libraries(KisPatternTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -469,12 +463,6 @@ target_link_libraries(KisSharedPtrVectorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 set(kis_shear_visitor_test_SRCS kis_shear_visitor_test.cpp )
 kde4_add_unit_test(KisShearVisitorTest TESTNAME krita-image-KisShearVisitorTest ${kis_shear_visitor_test_SRCS})
 target_link_libraries(KisShearVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_transformation_mask_test_SRCS kis_transformation_mask_test.cpp )
-kde4_add_unit_test(KisTransformationMaskTest TESTNAME krita-image-KisTransformationMaskTest ${kis_transformation_mask_test_SRCS})
-target_link_libraries(KisTransformationMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

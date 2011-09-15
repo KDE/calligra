@@ -66,16 +66,19 @@ class KoTextEditor;
  * with the cursor and fetch back the inline Rdf if one is associated
  * with a text block.
  *
- * FIXME: createXmlId() should consult with the KOffice codebase when
+ * FIXME: createXmlId() should consult with the Calligra codebase when
  * generating new xml:id values during save.
  */
-class KOTEXT_EXPORT KoTextInlineRdf
+class KOTEXT_EXPORT KoTextInlineRdf : public QObject
 {
+
+    Q_OBJECT
+
 public:
-    KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b);
-    KoTextInlineRdf(QTextDocument *doc, KoBookmark *b);
-    KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b);
-    KoTextInlineRdf(QTextDocument *doc, const QTextTableCell &b);
+    KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b);
+    KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b);
+    KoTextInlineRdf(const QTextDocument *doc, KoTextMeta *b);
+    KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b);
 
     virtual ~KoTextInlineRdf();
 
@@ -138,7 +141,7 @@ public:
     /**
      * Create a new and unique xml:id
      */
-    QString createXmlId(KoXmlWriter *writer = 0);
+    QString createXmlId();
 
 private:
 

@@ -2,8 +2,13 @@
 Name=Decode Subsystem
 Name[el]=Αποκωδικοποίηση υποσυστήματος
 Name[es]=Subsistema de decodificación
+Name[it]=Sottosistema di decodifica
+Name[nb]=Avkodingsdelsystem
+Name[nl]=Decodeer-subsysteem
+Name[pl]=Podsystem dekodujący
 Name[pt]=Sub-sistema Descodificação
 Name[pt_BR]=Subsistema de decodificação
 Name[sv]=Avkodningsdelsystem
 Name[uk]=Підсистема декодування
 Name[x-test]=xxDecode Subsystemxx
+Name[zh_TW]=解碼子系統

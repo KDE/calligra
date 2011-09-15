@@ -1,9 +1,14 @@
 [Desktop Entry]
 Name=Function
+Name[bg]=Функция
+Name[de]=Funktion
 Name[el]=Συνάρτηση
 Name[es]=Función
 Name[et]=Funktsioon
+Name[it]=Funzione
+Name[nb]=Funksjon
 Name[nl]=Functie
+Name[pl]=Funkcja
 Name[pt]=Função
 Name[pt_BR]=Função
 Name[sv]=Funktion
@@ -11,3 +16,4 @@ Name[ug]=فۇنكسىيە
 Name[uk]=Функція
 Name[x-test]=xxFunctionxx
 Name[zh_CN]=函数
+Name[zh_TW]=函式

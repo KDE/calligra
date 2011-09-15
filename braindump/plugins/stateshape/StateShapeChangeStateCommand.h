@@ -17,17 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class StateShape;
 
-class StateShapeChangeStateCommand : public QUndoCommand {
+class StateShapeChangeStateCommand : public KUndo2Command
+{
 public:
-  StateShapeChangeStateCommand( StateShape* _shape, const QString& _newCategoryId, const QString& _newStateId );
-  virtual void undo();
-  virtual void redo();
+    StateShapeChangeStateCommand(StateShape* _shape, const QString& _newCategoryId, const QString& _newStateId);
+    virtual void undo();
+    virtual void redo();
 private:
-  StateShape *m_shape;
-  QString m_newCategoryId, m_newStateId;
-  QString m_oldCategoryId, m_oldStateId;
+    StateShape *m_shape;
+    QString m_newCategoryId, m_newStateId;
+    QString m_oldCategoryId, m_oldStateId;
 };

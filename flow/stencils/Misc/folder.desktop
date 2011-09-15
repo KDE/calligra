@@ -1,8 +1,15 @@
 [Desktop Entry]
 Name=Folder
+Name[bg]=Папка
+Name[de]=Ordner
 Name[el]=Φάκελος
 Name[es]=Carpeta
 Name[et]=Kataloog
+Name[it]=Cartella
+Name[nb]=Mappe
+Name[nds]=Orner
+Name[nl]=Map
+Name[pl]=Katalog
 Name[pt]=Pasta
 Name[pt_BR]=Pasta
 Name[sv]=Mapp
@@ -10,3 +17,4 @@ Name[ug]=قىسقۇچ
 Name[uk]=Тека
 Name[x-test]=xxFolderxx
 Name[zh_CN]=文件夹
+Name[zh_TW]=資料夾

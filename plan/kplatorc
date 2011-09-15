@@ -1,0 +1,15 @@
+[calligra]
+DockerPlugins=
+DockerPluginsDisabled=calligradockers,calligrasimpletextedit,karbondockersplugin
+FlakePlugins=
+FlakePluginsDisabled=
+ShapePlugins=
+ShapePluginsDisabled=
+
+[Task defaults]
+ConstraintType=0
+EstimateType=0
+Unit=h
+ExpectedEstimate=8.0
+OptimisticEstimate=0
+PessimisticEstimate=0

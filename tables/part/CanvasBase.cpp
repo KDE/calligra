@@ -84,7 +84,7 @@
 #include <kwordwrap.h>
 #include <kxmlguifactory.h>
 
-// KOffice
+// Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoStore.h>
@@ -165,7 +165,7 @@ bool CanvasBase::snapToGrid() const
     return false; // FIXME
 }
 
-void CanvasBase::addCommand(QUndoCommand* command)
+void CanvasBase::addCommand(KUndo2Command* command)
 {
     doc()->addCommand(command);
 }
@@ -589,7 +589,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos)
 
 #if 0 // TODO Stefan: implement drag marking rectangle
     // determine the cell position under the mouse
-    double tmp;
+    qreal tmp;
     const int col = sheet->leftColumn(eventPosX, tmp);
     const int row = sheet->topRow(eventPosY, tmp);
     dragMarkingRect.moveTo(QPoint(col, row));
@@ -636,7 +636,7 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos)
     }
 
     // The destination cell location.
-    double tmp;
+    qreal tmp;
     const int col = sheet->leftColumn(ev_PosX, tmp);
     const int row = sheet->topRow(ev_PosY, tmp);
 
@@ -671,7 +671,7 @@ QRect CanvasBase::viewToCellCoordinates(const QRectF& viewRect) const
     // NOTE Stefan: Do not consider the layout direction in this case.
     const QRectF rect = viewConverter()->viewToDocument(viewRect.normalized()).translated(offset());
 
-    double tmp;
+    qreal tmp;
     const int left = sheet->leftColumn(rect.left(), tmp);
     const int right = sheet->rightColumn(rect.right());
     const int top = sheet->topRow(rect.top(), tmp);
@@ -720,8 +720,8 @@ void CanvasBase::showToolTip(const QPoint& p)
     SheetView * const sheetView = this->sheetView(sheet);
 
     // Over which cell is the mouse ?
-    double ypos, xpos;
-    double dwidth = viewConverter()->viewToDocumentX(width());
+    qreal ypos, xpos;
+    qreal dwidth = viewConverter()->viewToDocumentX(width());
     int col;
     if (sheet->layoutDirection() == Qt::RightToLeft)
         col = sheet->leftColumn((dwidth - viewConverter()->viewToDocumentX(p.x()) +

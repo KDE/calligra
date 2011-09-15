@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Process
+Name[bg]=Процес
+Name[de]=Prozess
 Name[el]=Διεργασία
 Name[es]=Proceso
 Name[et]=Protsess 
+Name[it]=Processo
 Name[nb]=Prosess
 Name[nl]=Proces
+Name[pl]=Proces
 Name[pt]=Processo
 Name[pt_BR]=Processo
 Name[sv]=Process
@@ -12,3 +16,4 @@ Name[ug]=ئىجرا
 Name[uk]=Обробляти
 Name[x-test]=xxProcessxx
 Name[zh_CN]=处理
+Name[zh_TW]=行程

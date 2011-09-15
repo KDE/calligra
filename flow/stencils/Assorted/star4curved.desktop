@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Curved Four Point Star
+Name[bg]=Извита четирилъчна звезда
+Name[da]=Kurvet firespidset stjerne
 Name[de]=Gekurvter Stern mit vier Zacken
 Name[el]=Καμπύλο τετράκτινο αστέρι
 Name[es]=Estrella de cuatro puntas curvadas
@@ -7,8 +9,10 @@ Name[et]=Ümardatud neljaharuline täht
 Name[it]=Stella a quattro punte curvata
 Name[nb]=Krum firetakket stjerne
 Name[nl]=Gekromde vierpuntige ster
+Name[pl]=Zakrzywiona czteroramienna gwiazda
 Name[pt]=Estrela de Quatro Pontas Curvada
 Name[pt_BR]=Estrela Curvada de Quatro Pontas
+Name[ru]=Изогнутая звезда с четырьмя лучами
 Name[sv]=Rundad fyruddig stjärna
 Name[uk]=Викривлена чотирикутна зірка
 Name[x-test]=xxCurved Four Point Starxx

@@ -23,23 +23,21 @@
 
 #include <klocale.h>
 
-WebToolFactory::WebToolFactory( )
-    : KoToolFactoryBase( "WebToolFactoryID")
+WebToolFactory::WebToolFactory()
+    : KoToolFactoryBase("WebToolFactoryID")
 {
-    setToolTip( i18n("State Tool") );
-    setToolType( dynamicToolType() );
-    setIcon ("applications-internet");
-    setPriority( 1 );
-    setActivationShapeId( WEBSHAPEID );
+    setToolTip(i18n("State Tool"));
+    setToolType(dynamicToolType());
+    setIcon("applications-internet");
+    setPriority(1);
+    setActivationShapeId(WEBSHAPEID);
 }
 
 WebToolFactory::~WebToolFactory()
 {
 }
 
-KoToolBase* WebToolFactory::createTool( KoCanvasBase * canvas )
+KoToolBase* WebToolFactory::createTool(KoCanvasBase * canvas)
 {
-    return new WebTool( canvas );
+    return new WebTool(canvas);
 }
-
-#include "WebToolFactory.moc"

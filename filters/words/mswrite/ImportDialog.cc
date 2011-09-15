@@ -39,7 +39,7 @@ MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
         : KDialog(parent),
         m_dialog(new ImportDialogUI(this))
 {
-    setCaption(i18n("KWord's MS Write Import Filter"));
+    setCaption(i18n("Words's MS Write Import Filter"));
     setButtons(Ok | Cancel);
     kapp->restoreOverrideCursor();
 

@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -59,11 +59,11 @@ class BRC;
 }
 class MSWordOdfImport;
 /* class KoFilterChain; */
-class KWordReplacementHandler;
-class KWordTableHandler;
-class KWordPictureHandler;
-class KWordTextHandler;
-class KWordGraphicsHandler;
+class WordsReplacementHandler;
+class WordsTableHandler;
+class WordsPictureHandler;
+class WordsTextHandler;
+class WordsGraphicsHandler;
 
 class Document : public QObject, public wvWare::SubDocumentHandler
 {
@@ -124,7 +124,7 @@ public:
     bool useLastMasterPage(void) const { return m_useLastMasterPage; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
-    KWordTextHandler *textHandler(void) const { return m_textHandler; }
+    WordsTextHandler *textHandler(void) const { return m_textHandler; }
     bool hasParser(void) const { return m_parser != 0L; }
     bool bodyFound(void) const { return m_bodyFound; }
 
@@ -174,7 +174,7 @@ public:
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
 
 public slots:
-    // Connected to the KWordTextHandler only when parsing the body
+    // Connected to the WordsTextHandler only when parsing the body
     void slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
 
     void slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
@@ -189,7 +189,7 @@ public slots:
 
     void slotHeadersFound(const wvWare::FunctorBase* functor, int data);
 
-    void slotTableFound(KWord::Table* table);
+    void slotTableFound(Words::Table* table);
 
     void slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
 
@@ -197,7 +197,7 @@ public slots:
 
     void slotTextBoxFound(unsigned int index, bool stylesxml);
 
-    // Similar to footnoteStart/footnoteEnd but cells, connected to KWordTableHandler
+    // Similar to footnoteStart/footnoteEnd but cells, connected to WordsTableHandler
 /*     void slotTableCellStart(int row, int column, int rowSize, int columnSize, const QRectF& cellRect, */
 /*                             const QString& tableName, */
 /*                             const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, */
@@ -219,17 +219,18 @@ private:
                             bool firstPage);
 
     // Handlers for different data types in the document.
-    KWordTextHandler*        m_textHandler;
-    KWordTableHandler*       m_tableHandler;
-    KWordReplacementHandler* m_replacementHandler;
-    KWordGraphicsHandler*    m_graphicsHandler;
+    WordsTextHandler*        m_textHandler;
+    WordsTableHandler*       m_tableHandler;
+    WordsReplacementHandler* m_replacementHandler;
+    WordsGraphicsHandler*    m_graphicsHandler;
 
     MSWordOdfImport* m_filter;
 /*     KoFilterChain* m_chain; */
 
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+
     std::queue<SubDocument> m_subdocQueue;
-    std::queue<KWord::Table> m_tableQueue;
+/*     std::queue<Words::Table> m_tableQueue; */
 
     bool m_bodyFound;
 

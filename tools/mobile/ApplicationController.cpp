@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
@@ -119,7 +119,7 @@
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 #include <tables/Map.h>
 #include <tables/DocBase.h>
 #include <tables/part/View.h>
@@ -1029,7 +1029,7 @@ void ApplicationController::activeFormatOptionCheck()
     if (documentType() == PresentationDocument) {
         KoCanvasBase *canvasForChecking = canvasController()->canvas();
         Q_CHECK_PTR(canvasForChecking);
-        if (canvasForChecking->toolProxy()->selection()->hasSelection()) {
+        if (canvasForChecking->toolProxy()->hasSelection()) {
             KoPAView *kopaview = qobject_cast<KoPAView *>(view());
             KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
             KoTextShapeDataBase *currentSelectedTextShapeData = qobject_cast<KoTextShapeDataBase*>(currentShapeSelected->userData());
@@ -1104,7 +1104,7 @@ void ApplicationController::activeFontOptionCheck()
     if (documentType() == PresentationDocument) {
         KoCanvasBase *canvasForChecking = canvasController()->canvas();
         Q_CHECK_PTR(canvasForChecking);
-        if(canvasForChecking->toolProxy()->selection()->hasSelection())
+        if(canvasForChecking->toolProxy()->hasSelection())
         {
           KoPAView *kopaview = qobject_cast<KoPAView *>(view());
           KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
@@ -1124,7 +1124,7 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_subscript) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if(textchar.verticalAlignment() == QTextCharFormat::AlignSubScript) {
                 m_subscript->setChecked(true);
             } else {
@@ -1133,19 +1133,19 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_fontsizebutton) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             QFont font=textchar.font();
             m_fontsizebutton->setText(QString().setNum(font.pointSize()));
         }
 
         if(m_fontcombobox) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             QString fonttype = textchar.fontFamily();
             m_fontcombobox->setCurrentFont(QFont(fonttype));
         }
 
         if(m_bold) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if (textchar.fontWeight()==QFont::Bold) {
                 m_bold->setChecked(true);
             } else {
@@ -1154,7 +1154,7 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_italic) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if (textchar.fontItalic()) {
                 m_italic->setChecked(true);
             } else {
@@ -1163,7 +1163,7 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_underline) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if (textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
                 m_underline->setChecked(true);
             } else {
@@ -1175,7 +1175,6 @@ void ApplicationController::activeFontOptionCheck()
 
     if (documentType() == TextDocument) {
         if(m_superscript) {
-            QTextCharFormat textchar = textEditor()->charFormat();
             if (textEditor()->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript) {
                 m_superscript->setChecked(true);
             } else {
@@ -1184,7 +1183,6 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_subscript) {
-            QTextCharFormat textchar = textEditor()->charFormat();
             if (textEditor()->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript) {
                 m_subscript->setChecked(true);
             } else {
@@ -1620,7 +1618,7 @@ void ApplicationController::doRedo()
 void ApplicationController::copy()
 {
     if(   documentType() != PresentationDocument && documentType() != SpreadsheetDocument
-       && !canvasController()->canvas()->toolProxy()->selection()->hasSelection())
+       && !canvasController()->canvas()->toolProxy()->hasSelection())
     {
         return;
     }
@@ -1635,7 +1633,7 @@ void ApplicationController::copy()
 void ApplicationController::cut()
 {
     if(   documentType() != PresentationDocument && documentType() != SpreadsheetDocument
-       && !canvasController()->canvas()->toolProxy()->selection()->hasSelection())
+       && !canvasController()->canvas()->toolProxy()->hasSelection())
     {
         return;
     }
@@ -3100,7 +3098,7 @@ void ApplicationController::startCollaborating() {
                                     m_collabDialog->getPort(),
                                     this);
         connect(m_collab, SIGNAL(saveFile(const QString&)), this, SLOT(collabSaveFile(const QString&)));
-        m_collabEditor = new KoTextEditor(textEditor()->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(document()->createView(this))->kwcanvas()->toolProxy()->selection());
+        m_collabEditor = new KoTextEditor(const_cast<QTextDocument*>(textEditor()->document()));
 
     } else {
         return closeCollabDialog();
@@ -3217,7 +3215,7 @@ void ApplicationController::collabSaveFile(const QString &filename) {
 void ApplicationController::collabOpenFile(const QString &filename) {
     openDocument(filename);
     qDebug() << "============================================";
-    m_collabEditor = new KoTextEditor(textEditor()->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(document()->createView(m_mainWindow))->kwcanvas()->toolProxy()->selection());
+    m_collabEditor = new KoTextEditor(const_cast<QTextDocument*>(textEditor()->document()));
     qDebug() << "::::::::::::::::::::::::::::::::::::::::::::";
 }
 
@@ -3371,8 +3369,8 @@ void ApplicationController::insertNewTable()
 {
     KoCanvasBase *canvasForChecking = canvasController()->canvas();
     Q_CHECK_PTR(canvasForChecking);
-    qDebug()<<"selection:"<<canvasForChecking->toolProxy()->selection()->hasSelection();
-    if(canvasForChecking->toolProxy()->selection()->hasSelection())
+    qDebug()<<"selection:"<<canvasForChecking->toolProxy()->hasSelection();
+    if(canvasForChecking->toolProxy()->hasSelection())
     {
         KoPAView *kopaview = qobject_cast<KoPAView *>(view());
         kopaview->kopaCanvas()->toolProxy()->actions()["insert_table"]->trigger();

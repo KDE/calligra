@@ -1,8 +1,13 @@
 [Desktop Entry]
 Name=NetFlow router
+Name[bg]=Маршрутизатор NetFlow
 Name[el]=Δρομολογητής NetFlow
 Name[et]=NetFlow marsruuter
+Name[it]=Router NetFlow
+Name[nb]=NetFlow ruter
+Name[nds]=NetFlow-Nettweger
 Name[nl]=NetFlow router
+Name[pl]=Router NetFlow
 Name[pt]=Comutador NetFlow
 Name[pt_BR]=Roteador NetFlow
 Name[sv]=Nätflödesrouter

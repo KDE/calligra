@@ -67,7 +67,7 @@ public:
 	virtual ~ListStyle();
 	virtual void updateListLevel(const int iLevel, const WPXPropertyList &xPropList) = 0;
 	virtual void write(DocumentHandler &xHandler) const;
-	const int getListID() { return miListID; }
+	const int getListID() const { return miListID; }
 	const bool isListLevelDefined(int iLevel) const;
 
 protected:

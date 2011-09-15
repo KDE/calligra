@@ -2,8 +2,10 @@
 Name=Connector
 Name[el]=Υποδοχή
 Name[es]=Conector
+Name[it]=Connettore
 Name[nb]=Tilkobling
 Name[nl]=Connector
+Name[pl]=Łącznik
 Name[pt]=Ligação
 Name[pt_BR]=Conector
 Name[sv]=Kontakt
@@ -11,3 +13,4 @@ Name[ug]=ئۇلىغۇچ
 Name[uk]=З'єднувач
 Name[x-test]=xxConnectorxx
 Name[zh_CN]=连接器
+Name[zh_TW]=連接器

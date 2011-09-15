@@ -8,20 +8,20 @@ add_subdirectory( generator )
 
 ########### next target ###############
 
-set(kwordlateximport_PART_SRCS config.cc lateximport.cc lateximportdia.cc )
+set(wordslateximport_PART_SRCS config.cc lateximport.cc lateximportdia.cc )
 
-kde4_add_plugin(kwordlateximport ${kwordlateximport_PART_SRCS})
+kde4_add_plugin(wordslateximport ${wordslateximport_PART_SRCS})
 
 
 
-target_link_libraries(kwordlateximport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(wordslateximport  ${KDE4_KDECORE_LIBS} )
 
-install(TARGETS kwordlateximport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wordslateximport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kword_latex_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_latex_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 
@@ -33,15 +33,15 @@ install( FILES  kword_latex_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #
 ######## General stuff
 #
-#INCLUDES= -I$(srcdir) -I$(srcdir)/parser -I$(srcdir)/generator $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-#libkwordlateximport_la_LDFLAGS= $(all_libraries) -module -avoid-version -no-undefined
-#libkwordlateximport_la_LIBADD = $(KOFFICE_LIBS) parser/liblatexparser.la generator/liblatexgenerator.la
+#INCLUDES= -I$(srcdir) -I$(srcdir)/parser -I$(srcdir)/generator $(CALLIGRA_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
+#libwordslateximport_la_LDFLAGS= $(all_libraries) -module -avoid-version -no-undefined
+#libwordslateximport_la_LIBADD = $(CALLIGRA_LIBS) parser/liblatexparser.la generator/liblatexgenerator.la
 #
 ######## Files
 #
-#kde_module_LTLIBRARIES = libkwordlateximport.la
+#kde_module_LTLIBRARIES = libwordslateximport.la
 #
-#libkwordlateximport_la_SOURCES = config.cc lateximport.cc \
+#libwordslateximport_la_SOURCES = config.cc lateximport.cc \
 #																 lateximportdia.cc lateximportdia.skel
 #
 #noinst_HEADERS = config.h lateximport.h lateximportdia.h
@@ -55,5 +55,5 @@ install( FILES  kword_latex_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #
 #METASOURCES = AUTO
 #
-#service_DATA = kword_latex_import.desktop
+#service_DATA = words_latex_import.desktop
 #servicedir = $(kde_servicesdir)

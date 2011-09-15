@@ -2,7 +2,7 @@
    Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
-   Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2007 The KSpread Team <calligra-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -575,7 +575,7 @@ void Sheet::adjustDocumentHeight(double deltaHeight)
     emit documentSizeChanged(d->documentSize);
 }
 
-int Sheet::leftColumn(double _xpos, double &_left) const
+int Sheet::leftColumn(qreal _xpos, qreal &_left) const
 {
     _left = 0.0;
     int col = 1;
@@ -596,7 +596,7 @@ int Sheet::rightColumn(double _xpos) const
     return col;
 }
 
-int Sheet::topRow(double _ypos, double & _top) const
+int Sheet::topRow(qreal _ypos, qreal & _top) const
 {
     qreal top;
     int row = rowFormats()->rowForPosition(_ypos, &top);
@@ -1918,10 +1918,8 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     for (int i = 0; i < number; ++i) {
         //kDebug(36003) << " insert new column: pos :" << indexCol << " width :" << width << " hidden ?" << visibility;
 
-        const ColumnFormat* columnFormat;
         if (isNonDefaultColumn) {
             ColumnFormat* cf = nonDefaultColumnFormat(indexCol);
-            columnFormat = cf;
 
             if (width != -1.0)   //safe
                 cf->setWidth(width);
@@ -1934,8 +1932,6 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
                 cf->setFiltered(true);
 
             cf->setPageBreak(insertPageBreak);
-        } else {
-            columnFormat = this->columnFormat(indexCol);
         }
         ++indexCol;
     }
@@ -2505,7 +2501,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     // Create a dict of cell anchored shapes with the cell as key.
     foreach(KoShape* shape, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell()) {
-            double dummy;
+            qreal dummy;
             const QPointF position = shape->position();
             const int col = leftColumn(position.x(), dummy);
             const int row = topRow(position.y(), dummy);
@@ -2923,7 +2919,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
         sname = testName;
 
         kDebug(36001) << "Sheet::loadXML: table name =" << sname;
-        setObjectName(sname.toUtf8());
+        setObjectName(sname);
         setSheetName(sname, true);
     }
 
@@ -3109,7 +3105,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
             }
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
             else if (tagName == "object") {
-                EmbeddedKOfficeObject *ch = new EmbeddedKOfficeObject(doc(), this);
+                EmbeddedCalligraObject *ch = new EmbeddedCalligraObject(doc(), this);
                 if (ch->load(e))
                     insertObject(ch);
                 else {
@@ -3161,9 +3157,9 @@ bool Sheet::loadChildren(KoStore* _store)
     Q_UNUSED(_store);
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
-        if (object->sheet() == this && (object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART)) {
+        if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
             kDebug() << "Calligra::Tables::Sheet::loadChildren";
-            if (!dynamic_cast<EmbeddedKOfficeObject*>(object)->embeddedObject()->loadDocument(_store))
+            if (!dynamic_cast<EmbeddedCalligraObject*>(object)->embeddedObject()->loadDocument(_store))
                 return false;
         }
     }
@@ -3263,9 +3259,9 @@ bool Sheet::saveChildren(KoStore* _store, const QString &_path)
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
     int i = 0;
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
-        if (object->sheet() == this && (object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART)) {
+        if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
             QString path = QString("%1/%2").arg(_path).arg(i++);
-            if (!dynamic_cast<EmbeddedKOfficeObject*>(object)->embeddedObject()->document()->saveToStore(_store, path))
+            if (!dynamic_cast<EmbeddedCalligraObject*>(object)->embeddedObject()->document()->saveToStore(_store, path))
                 return false;
         }
     }
@@ -3309,7 +3305,7 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
     map()->addDamage(new SheetDamage(this, SheetDamage::Name));
 
-    setObjectName(name.toUtf8());
+    setObjectName(name);
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return true;

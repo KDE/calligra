@@ -78,12 +78,18 @@ QPixmap KoImageData::pixmap(const QSize &size)
     if (d->pixmap.isNull() || d->pixmap.size() != wantedSize) {
         switch (d->dataStoreState) {
         case KoImageDataPrivate::StateEmpty: {
+#if 0       // this is not possible as it gets called during the paint method
+            // and will crash. Therefore create a tmp pixmap and return it.
             d->pixmap = QPixmap(1, 1);
             QPainter p(&d->pixmap);
             p.setPen(QPen(Qt::gray));
             p.drawPoint(0, 0);
             p.end();
             break;
+#endif
+            QPixmap tmp(1, 1);
+            tmp.fill(Qt::gray);
+            return tmp;
         }
         case KoImageDataPrivate::StateNotLoaded:
             image(); // forces load
@@ -254,7 +260,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             Finalizer closer;
             closer.store = store;
             KoStoreDevice device(store);
-            const bool lossy =url.toLower().endsWith(".jpg");
+            const bool lossy =url.toLower().endsWith(".jpg") || url.toLower().endsWith(".gif");
             if (!lossy && device.size() < MAX_MEMORY_IMAGESIZE) {
                 QByteArray data = device.readAll();
                 if (d->image.loadFromData(data)) {
@@ -299,7 +305,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             QImage image;
             if (!image.loadFromData(imageData)) {
                 // mark the image as invalid, but keep the data in memory
-                // even if KOffice cannot handle the format, the data should
+                // even if Calligra cannot handle the format, the data should
                 // be retained
                 d->errorCode = OpenFailed;
             }

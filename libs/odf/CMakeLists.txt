@@ -31,6 +31,7 @@ set(koodf_LIB_SRCS
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
+    KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
     KoStore.cpp
@@ -70,7 +71,7 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set_target_properties(koodf PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -101,6 +102,7 @@ install( FILES
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
     KoBorder.h
+    KoShadowStyle.h
     KoPageLayout.h
     KoPageFormat.h
     KoColumns.h

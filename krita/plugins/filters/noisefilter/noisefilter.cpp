@@ -58,7 +58,6 @@ K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaNoiseFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterNoise());
 
 }
@@ -99,7 +98,6 @@ void KisFilterNoise::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                             ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
 
     if (progressUpdater) {

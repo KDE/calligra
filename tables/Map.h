@@ -43,7 +43,7 @@ class KCompletion;
 
 class QDomElement;
 class QDomDocument;
-class QUndoCommand;
+class KUndo2Command;
 
 class KoXmlWriter;
 class KoGenStyles;
@@ -368,11 +368,11 @@ public Q_SLOTS:
     void handleDamages(const QList<Damage*>& damages);
 
     /**
-     * Emits the signal commandAdded(QUndoCommand *).
+     * Emits the signal commandAdded(KUndo2Command *).
      * You have to connect the signal to the object holding the undo stack or
      * any relay object, that propagates \p command to the undo stack.
      */
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
 
 Q_SIGNALS:
     /**
@@ -381,9 +381,9 @@ Q_SIGNALS:
     void damagesFlushed(const QList<Damage*>& damages);
 
     /**
-     * Emitted, if a command was added by addCommand(QUndoCommand *).
+     * Emitted, if a command was added by addCommand(KUndo2Command *).
      */
-    void commandAdded(QUndoCommand *command);
+    void commandAdded(KUndo2Command *command);
 
     /**
      * Emitted, if a newly created sheet was added to the document.

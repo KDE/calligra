@@ -1,6 +1,6 @@
 
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __KWORD_FORMAT_H__
-#define __KWORD_FORMAT_H__
+#ifndef __WORDS_FORMAT_H__
+#define __WORDS_FORMAT_H__
 
 #include <QTextStream>
 #include <QString>
@@ -127,4 +127,4 @@ public:
 
 };
 
-#endif /* __KWORD_FORMAT_H__ */
+#endif /* __WORDS_FORMAT_H__ */

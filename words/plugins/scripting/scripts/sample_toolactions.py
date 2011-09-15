@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import traceback, Kross, KWord
+import traceback, Kross, Words
 
 class ToolActions:
 
@@ -16,7 +16,7 @@ class ToolActions:
         self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
 
         self.actions = []
-        tool = KWord.tool()
+        tool = Words.tool()
         for n in tool.actionNames():
             self.actions.append( "%s" % n )
 
@@ -49,7 +49,7 @@ class ToolActions:
     def execAction(self):
         try:
             name = self.actions[ self.widgetlist.currentRow ]
-            KWord.tool().triggerAction( name.strip() )
+            Words.tool().triggerAction( name.strip() )
         except:
             message = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
             self.forms.showMessageBox("Error", "Error", "%s" % message)

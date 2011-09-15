@@ -34,7 +34,7 @@ using namespace Calligra::Tables;
 AutoFilterCommand::AutoFilterCommand()
         : AbstractRegionCommand()
 {
-    setText(i18n("Auto-Filter"));
+    setText(i18nc("(qtundo-format)", "Auto-Filter"));
 }
 
 AutoFilterCommand::~AutoFilterCommand()

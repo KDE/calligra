@@ -2,10 +2,17 @@
 Version=1.0
 Type=Application
 Name=Calligra Active
+Name[cs]=Calligra Active
+Name[da]=Calligra Active
 Name[es]=Calligra Active
+Name[et]=Calligra Active
+Name[it]=Calligra Active
 Name[nb]=Calligra Active
+Name[nl]=Calligra-actief
+Name[pl]=Calligra Aktywna
 Name[pt]=Calligra Active
 Name[pt_BR]=Calligra Active
+Name[ru]=Calligra Active
 Name[sv]=Calligra Active
 Name[uk]=Calligra Active
 Name[x-test]=xxCalligra Activexx
@@ -17,5 +24,5 @@ X-Window-Icon-Dimmed=calligramobile
 # This line is required for the Maemo file manager to open FreOffice.
 #X-Osso-Service=com.nokia.CalligraMobile
 #X-Osso-Type=application/x-executable
-MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/plain;application/x-mswrite;application/vnd.oasis.opendocument.presentation;application/x-kpresenter;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.ms-word;
+MimeType=application/vnd.oasis.opendocument.text;application/x-words;application/msword;text/plain;application/x-mswrite;application/vnd.oasis.opendocument.presentation;application/x-kpresenter;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.ms-word;
 Categories=Qt;KDE;Office;

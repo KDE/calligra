@@ -97,12 +97,12 @@ bool OracleCursor::drv_open()
     
     m_at=0;
     m_opened=true;
-    m_records_in_buf = d->numRows; 
+    m_records_in_buf = d->numRows;
     m_buffering_completed = true;
     m_afterLast=false;
-    return true;     
+    return true;
    }
-   catch (oracle::occi::SQLException ea)
+   catch (const oracle::occi::SQLException &ea)
    {
       KexiDBDrvDbg << ea.what();
       setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
@@ -122,7 +122,7 @@ bool OracleCursor::drv_close()
 		    KexiDBDrvDbg << "Closed";
         d->rs=0;
       }
-      catch (oracle::occi::SQLException ea)
+      catch (const oracle::occi::SQLException &ea)
       {
         KexiDBDrvDbg <<ea.what();
         setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
@@ -137,9 +137,9 @@ bool OracleCursor::drv_close()
    return true;
 }
 
-bool OracleCursor::moveFirst() 
+bool OracleCursor::moveFirst()
 {
-  KexiDBDrvDbg; 
+  KexiDBDrvDbg;
   if(d->rs->next()) return true;
   return false;
 }
@@ -155,16 +155,16 @@ void OracleCursor::drv_getNextRecord()
         m_result=FetchOK;
         //KexiDBDrvDbg<<"("<<m_at+1<<"/"<<d->numRows<<") OK";
         break;
-        
+
       case ResultSet::END_OF_FETCH:
         m_result = FetchEnd;
         break;
-      
+
       default:
         m_result = FetchError;
-    } 
+    }
  }
- catch(oracle::occi::SQLException ea)
+ catch(const oracle::occi::SQLException &ea)
  {
     KexiDBDrvDbg <<ea.what();
     setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
@@ -264,13 +264,13 @@ void OracleCursor::drv_bufferMovePointerNext()
   {
     d->rs->next();
   }
-  catch ( oracle::occi::SQLException ea)
+  catch (const oracle::occi::SQLException &ea)
   {
     m_result = FetchError;
-  }   
+  }
 }
 
-void OracleCursor::drv_bufferMovePointerPrev() 
+void OracleCursor::drv_bufferMovePointerPrev()
 {
    KexiDBDrvDbg << "Operation NOT AVAILABLE";
 }

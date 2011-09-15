@@ -1,5 +1,5 @@
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by Words into LATEX.
 **
 ** Copyright (C) 2000, 2001, 2002 Robert JACOLIN
 **
@@ -305,7 +305,7 @@ void Para::analyzeFormat(const QDomNode node)
         kDebug(30522) << "Format not yet supported";
     }
 
-    if (zone->getPos() != _currentPos) {
+    if (zone != 0 && zone->getPos() != _currentPos) {
         if (_lines == 0)
             _lines = new QList<Format*>;
         /* Create first a default format */

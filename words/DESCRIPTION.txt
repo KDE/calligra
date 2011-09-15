@@ -1,0 +1,27 @@
+Loading and saving documents
+----------------------------
+The KWDocument class implements the high-level entry-point to load and save Oasis OpenDocument files. That class implements the KoDocument class which allows to load a local or remote file and fill the internal data-structures used by Words to allow displaying and editing of documents.
+
+Frames and Framesets
+--------------------
+Every displayed page is a combination of single pieces which act together. A page can consist of a header, footer, the main-text, textboxes, images or other objects displayed on the page.
+
+Each graphical piece is implementing a KoShape class. Text like those displayed at the header, footer, the main-text itself or textbox-objects are using the TextShape plugin which implements such a shape using the flake-library. Words itself puts those KoShape's in frames and combines similar frames together into a frameset. For example all headers (that belong to a certain page-style) are within one frameset. All the frames used to displayed the main-text, where we have n TextShape's and with it n KWFrame's per pages (thing of columns where every column in a page has an own TextShape), are grouped together in one frameset.
+
+Every such frame has exactly one frameset. But only those frames that share content are grouped together into the same frameset. For example images, which are not split accros different frames, have all there own frame and frameset and don't share there frameset with any other frame.
+
+Layouting
+---------
+The KWFrameLayout class is used by the KWDocument class to manage all the frames and framesets. That class is responsible for creating the frames needed for a certain page, to proper position them, adjust there sizes, etc.
+
+For the lower level layouting Words is using the Calligra textlayout-library. The KWRootAreaProvider class is the bridge to that library. It implements the functionality to create content-areas, to ask the KWFrameLayout to create it's frames and to be sure the frames are filled with live.
+
+It is important to note that frames and framesets are only a high-level abstraction to implement functionality only Words needs. All the hard work to get things displayed is done outside of Words in the textlayout-library. Those textlayout-library provides functionality to deal with pages but does not implement higher level functionality like headers and footers (which share the same content across different pages) or to handle the dependencies between pieces (e.g. the size of headers and footers define the remaining size for the main-text on a page).
+
+Displaying
+----------
+All the lower level functionality is done either by the textlayout-library or a level up by the KWFrameLayout. They do build up the pages. One more level up the KWCanvasBase and KWCanvas classes are used to provide the space for all the pages to be displayed. They paint the page borders, provide a scrollbar to allow scrolling from page to page and the functionality to zoom in or out.
+
+The canvas utilizes classes that implement the KWViewMode class like the KWViewModeNormal to offer different view modes. Think here of a normal viewmode, of a webpage view mode and of a print layout view mode which to display the pages all in a different way.
+
+Going even one more level up the KWView class implements a single view on the document. Similar to a model-view approch the KWView class allows to have one view at parts of a document. Since multiple views can be attached to one document it is possible to look at the same time at different pages of the same document.

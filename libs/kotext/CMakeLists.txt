@@ -8,6 +8,7 @@ add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
+    KoDocumentRdfBase.cpp
     KoText.cpp
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
@@ -42,6 +43,8 @@ set(kotext_LIB_SRCS
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
+    KoInlineCite.cpp
+    KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
     KoReplaceStrategy.cpp
@@ -54,7 +57,9 @@ set(kotext_LIB_SRCS
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
 
+    ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
+    KoBibliographyInfo.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -63,17 +68,15 @@ set(kotext_LIB_SRCS
     styles/KoListStyle.cpp
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
-    styles/KoTableBorderStyle.cpp
     styles/KoTableStyle.cpp
     styles/KoTableColumnStyle.cpp
     styles/KoTableRowStyle.cpp
     styles/KoTableCellStyle.cpp
-    styles/KoTableFormat.cpp
-    styles/KoTableFormat_p.cpp
     styles/KoSectionStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp
+    opendocument/KoTextWriter_p.cpp
     opendocument/KoTextWriter.cpp
 
     changetracker/KoChangeTracker.cpp
@@ -90,6 +93,8 @@ set(kotext_LIB_SRCS
     commands/DeleteTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
     commands/InsertTableColumnCommand.cpp
+    commands/InsertDeleteChangesCommand.cpp
+    commands/RemoveDeleteChangesCommand.cpp
 )
 
 if( Soprano_FOUND )
@@ -116,7 +121,7 @@ endif( FREETYPE_FOUND )
 
 
 set_target_properties(kotext PROPERTIES
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -127,6 +132,7 @@ install( FILES texteditingplugin.desktop inlinetextobject.desktop textvariablepl
 install(
     FILES
     kotext_export.h
+    KoDocumentRdfBase.h
     KoInlineObject.h
     KoTextEditor.h
     KoTextEditingFactory.h
@@ -151,6 +157,7 @@ install(
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h
+    KoTextSoftPageBreak.cpp
     KoSection.h
 
     DESTINATION
@@ -166,7 +173,6 @@ install(
     styles/KoTableColumnStyle.h
     styles/KoTableRowStyle.h
     styles/KoTableCellStyle.h
-    styles/KoTableFormat.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
     styles/KoTableBorderStyle.h

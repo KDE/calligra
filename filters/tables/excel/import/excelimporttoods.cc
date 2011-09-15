@@ -594,7 +594,7 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
     std::map<std::pair<unsigned, QString>, QString> &namedAreas = workbook->namedAreas();
     if(namedAreas.size() > 0) {
         xmlWriter->startElement("table:named-expressions");
-        for(std::map<std::pair<unsigned, QString>, QString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
+        for(std::map<std::pair<unsigned, QString>, QString>::iterator it = namedAreas.begin(); it != namedAreas.end(); ++it) {
             xmlWriter->startElement("table:named-range");
             xmlWriter->addAttribute("table:name", it->first.second ); // e.g. "My Named Range"
             QString range = it->second;
@@ -1442,12 +1442,12 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         const unsigned long colL = chart->m_colL;
         const unsigned long dxL = chart->m_dxL;
-        const unsigned long colR = chart->m_colR;
-        const unsigned long dxR = chart->m_dxR;
-        const unsigned long rwB = chart->m_rwB;
+        //const unsigned long colR = chart->m_colR;
+        //const unsigned long dxR = chart->m_dxR;
+        //const unsigned long rwB = chart->m_rwB;
         const unsigned long dyT = chart->m_dyT;
         const unsigned long rwT = chart->m_rwT;
-        const unsigned long dyB = chart->m_dyB;
+        //const unsigned long dyB = chart->m_dyB;
 
         c->m_x = offset(columnWidth(sheet, colL), dxL, 1024);
         c->m_y = offset(rowHeight(sheet, rwT), dyT, 256);
@@ -1697,11 +1697,11 @@ void ExcelImport::Private::processFormat(const Format* format, KoGenStyle& style
             break;
         case Format::VJustify:
             style.addProperty("style:vertical-align", "top");
-            style.addProperty("koffice:vertical-distributed", "distributed");
+            style.addProperty("calligra:vertical-distributed", "distributed");
             break;
         case Format::VDistributed:
             style.addProperty("style:vertical-align", "middle");
-            style.addProperty("koffice:vertical-distributed", "distributed");
+            style.addProperty("calligra:vertical-distributed", "distributed");
             break;
         }
 

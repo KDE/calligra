@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008-2010 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2010 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoOdfWorkaround.h>
 #include <KoParagraphStyle.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoSelection.h>
@@ -119,21 +120,29 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
-
     KoTextDocumentLayout::PaintContext pc;
+
     QAbstractTextDocumentLayout::Selection selection;
+    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
     selection.cursor = *(textEditor->cursor());
     QPalette palette = pc.textContext.palette;
     selection.format.setBackground(palette.brush(QPalette::Highlight));
     selection.format.setForeground(palette.brush(QPalette::HighlightedText));
-
     pc.textContext.selections.append(selection);
+
     pc.textContext.selections += KoTextDocument(doc).selections();
     pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
 
-    painter.setClipRect(outlineRect(), Qt::IntersectClip);
+    // When clipping the painter we need to make sure not to cutoff cosmetic pens which
+    // may used to draw e.g. table-borders for user convenience when on screen (but not
+    // on e.g. printing). Such cosmetic pens are special cause they will always have the
+    // same pen-width (1 pixel) independent of zoom-factor or painter transformations and
+    // are not taken into account in any border-calculations.
+    QRectF clipRect = outlineRect();
+    qreal cosmeticPenX = 1 * 72. / painter.device()->logicalDpiX();
+    qreal cosmeticPenY = 1 * 72. / painter.device()->logicalDpiY();
+    painter.setClipRect(clipRect.adjusted(-cosmeticPenX, -cosmeticPenY, cosmeticPenX, cosmeticPenY), Qt::IntersectClip);
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
@@ -162,6 +171,7 @@ QRectF TextShape::outlineRect() const
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
+    KoShapeContainer::shapeChanged(type, shape);
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->setDirty();
     }
@@ -247,6 +257,7 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     KoShape::loadStyle(element, context);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
+
     QString verticalAlign(styleStack.property(KoXmlNS::draw, "textarea-vertical-align"));
     Qt::Alignment alignment(Qt::AlignTop);
     if (verticalAlign == "bottom") {
@@ -262,19 +273,36 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
 
     m_textShapeData->setVerticalAlignment(alignment);
 
-    const QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
-    const QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
     const QString fitToSize = styleStack.property(KoXmlNS::draw, "fit-to-size");
     KoTextShapeData::ResizeMethod resize = KoTextShapeData::NoResize;
     if (fitToSize == "true" || fitToSize == "shrink-to-fit") { // second is buggy value from impress
         resize = KoTextShapeData::ShrinkToFitResize;
     }
-    else if (autoGrowWidth == "true") {
-        resize = autoGrowHeight != "false" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
+    else {
+        // An explicit svg:width or svg:height defined do change the default value (means those value
+        // used if not explicit defined otherwise) for auto-grow-height and auto-grow-height. So
+        // they are mutable exclusive.
+        // It is not clear (means we did not test and took care of it) what happens if both are
+        // defined and are in conflict with each other or how the fit-to-size is related to this.
+
+        QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
+        if (autoGrowWidth.isEmpty()) {
+            autoGrowWidth = element.hasAttributeNS(KoXmlNS::svg, "width") ? "false" : "true";
+        }
+
+        QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
+        if (autoGrowHeight.isEmpty()) {
+            autoGrowHeight = element.hasAttributeNS(KoXmlNS::svg, "height") ? "false" : "true";
+        }
+
+        if (autoGrowWidth == "true") {
+            resize = autoGrowHeight == "true" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
+        }
+        else if (autoGrowHeight == "true") {
+            resize = KoTextShapeData::AutoGrowHeight;
+        }
     }
-    else if (autoGrowHeight != "false") {
-        resize = KoTextShapeData::AutoGrowHeight;
-    }
+
     m_textShapeData->setResizeMethod(resize);
 }
 
@@ -310,7 +338,19 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
         QTextCursor cursor(document);
         QTextBlock block = cursor.block();
         paragraphStyle.applyStyle(block, false);
-
+#ifndef NWORKAROUND_ODF_BUGS
+        KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
+        if (KoOdfWorkaround::fixAutoGrow(method, context)) {
+            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+            Q_ASSERT(lay);
+            if (lay) {
+                SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
+                if (provider) {
+                    provider->m_fixAutogrow = true;
+                }
+            }
+        }
+#endif
     }
 
     bool answer = loadOdfFrame(element, context);
@@ -320,16 +360,18 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
 bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // if the loadOdfFrame from the base class for draw:text-box failes check for table:table
+    // If the loadOdfFrame from the base class for draw:text-box fails, check 
+    // for table:table, because that is a legal child of draw:frame in ODF 1.2.
     if (!KoFrameShape::loadOdfFrame(element, context)) {
-        const KoXmlElement & frameElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
-        if (frameElement.isNull()) {
+        const KoXmlElement &possibleTableElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
+        if (possibleTableElement.isNull()) {
             return false;
         }
         else {
-            return loadOdfFrameElement(frameElement, context);
+            return loadOdfFrameElement(possibleTableElement, context);
         }
     }
+
     return true;
 }
 

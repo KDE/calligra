@@ -26,6 +26,9 @@
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 
+#include <QApplication>
+#include <QEventLoop>
+
 CSThumbProviderStage::CSThumbProviderStage(KoPADocument *doc)
 : m_doc(doc)
 {
@@ -37,9 +40,23 @@ CSThumbProviderStage::~CSThumbProviderStage()
 
 QList<QPixmap> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 {
+    // make sure all is rendered before painting
+    int i = 100;
+    while (QCoreApplication::hasPendingEvents() && i > 0) {
+        --i;
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    }
+
     QList<QPixmap> thumbnails;
     foreach(KoPAPageBase *page, m_doc->pages(false)) {
-        thumbnails.append(page->thumbnail(thumbSize));
+        thumbnails.append(m_doc->pageThumbnail(page, thumbSize));
+    }
+
+    // make sure there are no events this fixes a crash on shutdown
+    i = 100;
+    while (QCoreApplication::hasPendingEvents() && i > 0) {
+        --i;
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
     return thumbnails;
 }

@@ -25,15 +25,16 @@
 #include "kis_categorized_list_model.h"
 #include "../kis_categorized_item_delegate.h"
 
+#include <QMouseEvent>
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpListWidget ------------------------------------------------------ //
 
 KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
     KisCategorizedListView(parent)
 {
-    m_model    = new KisCompositeOpListModel();
-    m_delegate = new KisCategorizedItemDelegate(m_model, true);
-    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
+    m_model    = KisCompositeOpListModel::sharedInstance();
+    m_delegate = new KisCategorizedItemDelegate(true);
     
     setModel(m_model);
     setItemDelegate(m_delegate);
@@ -42,7 +43,6 @@ KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
 
 KisCompositeOpListWidget::~KisCompositeOpListWidget()
 {
-    delete m_model;
     delete m_delegate;
 }
 
@@ -51,12 +51,11 @@ KisCompositeOpListWidget::~KisCompositeOpListWidget()
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
 KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
-    QComboBox(parent)
+    QComboBox(parent), m_allowToHidePopup(true)
 {
+    m_model    = KisCompositeOpListModel::sharedInstance();
     m_view     = new KisCategorizedListView();
-    m_model    = new KisCompositeOpListModel();
-    m_delegate = new KisCategorizedItemDelegate(m_model, true);
-    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
+    m_delegate = new KisCategorizedItemDelegate(true);
     
     setMaxVisibleItems(100);
     setSizeAdjustPolicy(AdjustToContents);
@@ -67,12 +66,12 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     setItemDelegate(m_delegate);
     
     connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
+    connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&))         , SLOT(slotEntryChecked(const QModelIndex&)));
 }
 
 KisCompositeOpComboBox::~KisCompositeOpComboBox()
 {
     delete m_view;
-    delete m_model;
     delete m_delegate;
 }
 
@@ -89,4 +88,16 @@ void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool 
     showPopup();
 }
 
-#include "kis_cmb_composite.moc"
+void KisCompositeOpComboBox::slotEntryChecked(const QModelIndex& index)
+{
+    Q_UNUSED(index);
+    m_allowToHidePopup = false;
+}
+
+void KisCompositeOpComboBox::hidePopup()
+{
+    if(m_allowToHidePopup) { QComboBox::hidePopup(); }
+    else                   { QComboBox::showPopup(); }
+    
+    m_allowToHidePopup = true;
+}

@@ -1,0 +1,27 @@
+[Desktop Entry]
+Icon=
+Name=Words StarWriter 5.x Import Filter
+Name[bg]=Филтър за внасяне от StarWriter 5.x в Words
+Name[cs]=Importní filtr StarWriter 5.x pro Words
+Name[da]=StarWriter 5.x importfilter til Words
+Name[de]=Words StarWriter 5.x Importfilter
+Name[es]=Filtro de Words de importación de StarWriter 5.x
+Name[et]=Wordsi StarWriter 5.x impordifilter
+Name[it]=Filtro di importazione StarWriter 5.x per Words
+Name[nb]=StarWriter 5.x-importfilter for Words
+Name[nds]=StarWriter 5.x Importfilter för Words
+Name[nl]=StarWriter 5.x-importfilter voor Words
+Name[pl]=Filtr importu StarWriter 5.x do Words
+Name[pt]=Filtro de Importação do StarWriter 5.x para o Words
+Name[pt_BR]=Filtro de importação de StarWriter 5.x para o Words
+Name[ru]=Фильтр импорта документов StarWriter 5.x в Words
+Name[sv]=Words-importfilter för StarWriter 5.x
+Name[uk]=Фільтр імпорту StarWriter 5.x для Words
+Name[x-test]=xxWords StarWriter 5.x Import Filterxx
+Name[zh_TW]=Words StarWriter 5.x 匯入過濾程式
+X-KDE-ServiceTypes=CalligraFilter
+Type=Service
+X-KDE-Export=application/x-words
+X-KDE-Import=application/vnd.stardivision.writer
+X-KDE-Library=starwriterimport
+X-KDE-Weight=1

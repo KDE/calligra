@@ -13,12 +13,12 @@ kde4_add_plugin(docbookexport ${docbookexport_PART_SRCS})
 
 
 
-target_link_libraries(docbookexport kwordexportfilters)
+target_link_libraries(docbookexport wordsexportfilters)
 
 install(TARGETS docbookexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kword_docbook_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_docbook_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=generator
+Name[bg]=генератор
+Name[de]=Generator
 Name[el]=γεννήτρια
 Name[et]=generaator
 Name[nb]=generator
+Name[nl]=generator
+Name[pl]=generator
 Name[pt]=gerador
 Name[pt_BR]=gerador
 Name[sv]=generator
 Name[uk]=Генератор
 Name[x-test]=xxgeneratorxx
 Name[zh_CN]=生成器
+Name[zh_TW]=產生器

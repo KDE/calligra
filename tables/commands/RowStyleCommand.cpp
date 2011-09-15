@@ -29,7 +29,7 @@
 
 using namespace Calligra::Tables;
 
-RowStyleCommand::RowStyleCommand(QUndoCommand *parent)
+RowStyleCommand::RowStyleCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_height(0.0)
         , m_hidden(false)

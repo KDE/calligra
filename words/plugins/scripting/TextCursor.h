@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -105,8 +105,8 @@ public slots:
     *
     * Python sample code;
     * \code
-    * import KWord
-    * doc = KWord.mainFrameSet().document()
+    * import Words
+    * doc = Words.mainFrameSet().document()
     * cursor = doc.rootFrame().firstCursorPosition()
     * cursor.movePosition(cursor.NextBlock, true)
     * cursor.movePosition(cursor.End)

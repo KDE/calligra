@@ -349,7 +349,37 @@ void Region::sub(const Region& region)
 
 Region Region::intersected(const Region& region) const
 {
-    Region result;
+  // Special case 1: one of the regions is empty
+  if (region.isEmpty()) return region;
+  if (isEmpty()) return Region();
+
+  // Special case 2: If the region contains more elements than this one, do this operation in reverse (optimisation)
+  if (region.cells().size() > cells().size())
+    return region.intersected (*this);
+
+  // Most common case: the region contains only one rectangle
+  Region result;
+  QVector<QRect> rects = region.rects();
+  if (rects.size() == 1) {
+    QRect rect = rects[0];
+    Sheet *s = region.cells()[0]->sheet();
+    // intersect each element with the rectangle
+    foreach(Element *element, d->cells) {
+      if (element->sheet() != s) continue;
+      if (element->type() == Element::Point) {
+        Point* point = static_cast<Point*>(element);
+        if (rect.contains (point->pos()))
+          result.add (point->pos(), s);
+      } else {
+        QRect rect2 = element->rect();
+        if (rect2.intersects (rect))
+          result.add (rect2.intersected (rect), s);
+      }
+    }
+    return result;
+  }
+
+    // Generic case. TODO: optimise this better - generating a ton of single-cell regions is slow
     ConstIterator end(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
         Element *element = *it;

@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=End-Event-Terminate
+Name[es]=Terminación del evento final
 Name[et]=Sündmuse lõpu lõpetamine
 Name[nb]=Slutt-hendelse-terminer
+Name[nl]=Einde-gebeurtenis-beëindigen
+Name[pl]=Zakończenie-Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Terminar
 Name[pt_BR]=Terminar evento final
+Name[ru]=Прерывание завершения события
 Name[sv]=Sluthändelse-avsluta
 Name[uk]=Припинення кінцевої події
 Name[x-test]=xxEnd-Event-Terminatexx

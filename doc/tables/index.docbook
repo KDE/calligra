@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kspread;">
-  <!ENTITY package "koffice">
+  <!ENTITY package "calligra">
+  <!ENTITY koffice "Calligra">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
   <!ENTITY basics SYSTEM "basics.docbook">
@@ -91,8 +92,8 @@ and graphs) among others.</para>
 
 <para>You might care to visit <ulink url="http://www.kde.org">
 http://www.kde.org</ulink> for more information about &kde; in general, or the
-&koffice; web site at <ulink url="http://www.koffice.org">
-http://www.koffice.org</ulink></para>
+&koffice; web site at <ulink url="http://www.calligra-suite.org">
+http://www.calligra-suite.org</ulink></para>
 
 </chapter>
 
@@ -180,7 +181,7 @@ general &kde; libraries.</para>
 <para>For instructions on acquiring and installing &kde;, &koffice; and
 &kspread; please visit
 <ulink url="http://www.kde.org">http://www.kde.org</ulink> and
-<ulink url="http://www.koffice.org">http://www.koffice.org</ulink>.</para>
+<ulink url="http://www.calligra-suite.org">http://www.calligra-suite.org</ulink>.</para>
 
 </appendix>
 

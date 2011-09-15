@@ -4,6 +4,7 @@ add_subdirectory( tests )
 
 ########### next target ###############
 set(textlayout_LIB_SRCS
+    KoTextLayoutCellHelper.cpp
     KoTextLayoutArea.cpp
     KoTextLayoutArea_paint.cpp
     KoTextLayoutEndNotesArea.cpp
@@ -24,6 +25,9 @@ set(textlayout_LIB_SRCS
     InlineAnchorStrategy.cpp
     AnchorStrategy.cpp
     ToCGenerator.cpp
+    BibliographyGenerator.cpp
+    DummyDocumentLayout.cpp
+    IndexGeneratorManager.cpp
 )
 
 
@@ -33,7 +37,7 @@ target_link_libraries(textlayout kotext)
 target_link_libraries(textlayout LINK_INTERFACE_LIBRARIES kotext)
 
 set_target_properties(textlayout PROPERTIES
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS textlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

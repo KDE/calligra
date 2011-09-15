@@ -148,7 +148,7 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
 
     // Unhide, if necessary.
     if (sheet->isHidden()) {
-        QUndoCommand* command = new ShowSheetCommand(sheet);
+        KUndo2Command* command = new ShowSheetCommand(sheet);
         d->canvas->addCommand(command);
     }
 

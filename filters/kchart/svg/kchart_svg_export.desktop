@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KChart SVG Export Filter
-Name[bg]=Филтър за експортиране от KChart в SVG
+Name[bg]=Филтър за изнасяне от KChart в SVG
 Name[br]=Sil ezporzh SVG evit KChart
 Name[ca]=Filtre d'exportació SVG per al KChart
 Name[ca@valencia]=Filtre d'exportació SVG per al KChart
@@ -37,7 +37,7 @@ Name[nb]=SVG-eksportfilter for KChart
 Name[nds]=SVG-Exportfilter för KChart
 Name[ne]=केडीई चित्रपट एसभीजी निर्यात फिल्टर
 Name[nl]=SVG-exportfilter voor KChart
-Name[pl]=Filtr eksportu do formatu SVG z KChart
+Name[pl]=Filtr eksportu SVG z KChart
 Name[pt]=Filtro de Exportação de SVG para o KChart
 Name[pt_BR]=Filtro de exportação de SVG para o KChart
 Name[ro]=Filtru exportare KChart pentru SVG
@@ -59,4 +59,4 @@ X-KDE-Import=application/x-kchart
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1
 X-KDE-Library=kchartsvgexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

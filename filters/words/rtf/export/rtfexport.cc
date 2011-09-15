@@ -22,7 +22,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -39,7 +39,7 @@
 #include <KoFilterChain.h>
 
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 
 #include "ExportFilter.h"
 
@@ -62,7 +62,7 @@ RTFExport::RTFExport(QObject* parent, const QVariantList &) :
 
 KoFilter::ConversionStatus RTFExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ((from != "application/x-kword") || (to != "application/rtf" && to != "application/msword")) {
+    if ((from != "application/x-words") || (to != "application/rtf" && to != "application/msword")) {
         return KoFilter::NotImplemented;
     }
 
@@ -70,7 +70,7 @@ KoFilter::ConversionStatus RTFExport::convert(const QByteArray& from, const QByt
 
     RTFWorker* worker = new RTFWorker();
 
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     if (!leader) {
         kError(30515) << "Cannot create Worker! Aborting!" << endl;

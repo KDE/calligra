@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+Name=Words RTF Export Filter
+Name[bg]=Филтър за изнасяне от Words в RTF
+Name[cs]=Exportní filtr formátu RTF pro Words
+Name[da]=RTF-eksportfilter til Words
+Name[de]=Words RTF-Exportfilter
+Name[es]=Filtro de Words de exportación a RTF
+Name[et]=Wordsi RTF-i ekspordifilter
+Name[it]=Filtro di esportazione RTF per Words
+Name[nb]=RTF-eksportfilter for Words
+Name[nds]=RTF-Exportfilter för Words
+Name[nl]=RTF-exportfilter voor Words
+Name[pl]=Filtr eksportu RTF z Words
+Name[pt]=Filtro de Exportação de RTF para o Words
+Name[pt_BR]=Filtro de exportação de RTF para o Words
+Name[ru]=Фильтр экспорта документов Words в RTF
+Name[sv]=Words RTF-exportfilter
+Name[uk]=Фільтр експорту RTF для Words
+Name[x-test]=xxWords RTF Export Filterxx
+Name[zh_TW]=Words RTF 匯出過濾程式
+X-KDE-Export=application/rtf,application/msword
+X-KDE-Import=application/x-words
+X-KDE-Weight=1
+X-KDE-Library=rtfexport
+X-KDE-ServiceTypes=CalligraFilter

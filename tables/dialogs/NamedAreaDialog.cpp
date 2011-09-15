@@ -68,7 +68,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     setButtonText(KDialog::User3, i18n("&New..."));
     setCaption(i18n("Named Areas"));
     setModal(true);
-    setObjectName("NamedAreaDialog");
+    setObjectName(QLatin1String("NamedAreaDialog"));
 
     QWidget* widget = new QWidget(this);
     setMainWidget(widget);
@@ -219,7 +219,7 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
 {
     setButtons(Ok | Cancel);
     setModal(true);
-    setObjectName("EditNamedAreaDialog");
+    setObjectName(QLatin1String("EditNamedAreaDialog"));
     enableButtonOk(false);
 
     QWidget *page = new QWidget();
@@ -297,9 +297,9 @@ void EditNamedAreaDialog::slotOk()
     if (!region.isValid())
         return;
 
-    QUndoCommand* macroCommand = 0;
+    KUndo2Command* macroCommand = 0;
     if (!m_initialAreaName.isEmpty() && m_initialAreaName != m_areaNameEdit->text()) {
-        macroCommand = new QUndoCommand(i18n("Replace Named Area"));
+        macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Replace Named Area"));
         // remove the old named area
         NamedAreaCommand* command = new NamedAreaCommand(macroCommand);
         command->setAreaName(m_initialAreaName);

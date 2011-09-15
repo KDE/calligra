@@ -1,8 +1,15 @@
 [Desktop Entry]
 Name=Container
+Name[bg]=Контейнер
+Name[de]=Container
 Name[el]=Υποδοχέας
 Name[es]=Contenedor
 Name[et]=Konteiner
+Name[it]=Container
+Name[nb]=Beholder
+Name[nds]=Gelaats
+Name[nl]=Container
+Name[pl]=Kontener
 Name[pt]=Contentor
 Name[pt_BR]=Contentor
 Name[sv]=Behållare
@@ -10,3 +17,4 @@ Name[ug]=قاچا
 Name[uk]=Контейнер
 Name[x-test]=xxContainerxx
 Name[zh_CN]=容器
+Name[zh_TW]=容器

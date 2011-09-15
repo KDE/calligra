@@ -29,7 +29,7 @@
 #include <formeditor/container.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
 #include <formeditor/FormWidgetInterface.h>
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
 class QLabel;
 

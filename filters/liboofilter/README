@@ -1,5 +1,5 @@
 This is a common lib for all OpenOffice.org import/export filters.
-See ../kword/oowriter and ../kpresenter/ooimpress for the actual filters
+See ../words/oowriter and ../kpresenter/ooimpress for the actual filters
 that use this lib.
 
 Authors:

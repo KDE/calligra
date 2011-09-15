@@ -222,13 +222,13 @@ void FilterEffectEditWidget::removeSelectedItem()
         }
     }
 
-    QUndoCommand * cmd = new QUndoCommand();
+    KUndo2Command * cmd = new KUndo2Command();
     if (changeData.count()) {
-        QUndoCommand * subCmd = new FilterInputChangeCommand(changeData, m_shape, cmd);
+        KUndo2Command * subCmd = new FilterInputChangeCommand(changeData, m_shape, cmd);
         cmd->setText(subCmd->text());
     }
     if (effectIndexToDelete >= 0) {
-        QUndoCommand * subCmd = new FilterRemoveCommand(effectIndexToDelete, m_effects, m_shape, cmd);
+        KUndo2Command * subCmd = new FilterRemoveCommand(effectIndexToDelete, m_effects, m_shape, cmd);
         cmd->setText(subCmd->text());
     }
     if (m_canvas && m_shape) {
@@ -320,7 +320,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
     }
 
     if (changeData.count()) {
-        QUndoCommand * cmd = new FilterInputChangeCommand(changeData, m_shape);
+        KUndo2Command * cmd = new FilterInputChangeCommand(changeData, m_shape);
         if (m_canvas) {
             m_canvas->addCommand(cmd);
         } else {
@@ -382,7 +382,7 @@ void FilterEffectEditWidget::presetSelected(KoResource *resource)
         return;
 
     if (m_shape) {
-        QUndoCommand * cmd = new FilterStackSetCommand(filterStack, m_shape);
+        KUndo2Command * cmd = new FilterStackSetCommand(filterStack, m_shape);
         if (m_canvas) {
             m_canvas->addCommand(cmd);
         } else {
@@ -491,7 +491,7 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
         }
         inputIndex++;
     }
-    QUndoCommand * cmd = new FilterInputChangeCommand(data, m_shape);
+    KUndo2Command * cmd = new FilterInputChangeCommand(data, m_shape);
     if (m_canvas && m_shape) {
         m_canvas->addCommand(cmd);
     } else {

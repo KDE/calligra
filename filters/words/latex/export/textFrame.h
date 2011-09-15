@@ -1,6 +1,6 @@
 /* A TEXT IS A SET OF TITLES, A (SET OF) PARAGRAPHS OR LISTS */
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __KWORD_LATEX_FRAMETEXT_H__
-#define __KWORD_LATEX_FRAMETEXT_H__
+#ifndef __WORDS_LATEX_FRAMETEXT_H__
+#define __WORDS_LATEX_FRAMETEXT_H__
 
 #include <QList>
 #include <QTextStream>
@@ -168,5 +168,5 @@ private:
 
 };
 
-#endif /* __KWORD_LATEX_FRAMETEXT_H__ */
+#endif /* __WORDS_LATEX_FRAMETEXT_H__ */
 

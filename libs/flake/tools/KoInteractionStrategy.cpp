@@ -24,7 +24,7 @@
 #include "KoShapeController.h"
 #include "KoResourceManager.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 KoInteractionStrategy::KoInteractionStrategy(KoToolBase *parent)
     : d_ptr(new KoInteractionStrategyPrivate(parent))
@@ -33,8 +33,9 @@ KoInteractionStrategy::KoInteractionStrategy(KoToolBase *parent)
 
 void KoInteractionStrategy::cancelInteraction()
 {
-    QUndoCommand *cmd = createCommand();
+    KUndo2Command *cmd = createCommand();
     if (cmd) {
+        cmd->redo(); //some applications rely an redo being called here
         cmd->undo();
         delete cmd;
     }

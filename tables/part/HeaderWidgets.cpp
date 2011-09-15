@@ -59,7 +59,7 @@
 #include <kmessagebox.h>
 #include <kwordwrap.h>
 
-// KOffice
+// Calligra
 #include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>

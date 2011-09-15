@@ -1,10 +1,16 @@
 [Desktop Entry]
 Name=Contact
+Name[de]=Kontakt
 Name[et]=Kontakt
+Name[it]=Contatto
+Name[nb]=Kontakt
+Name[nl]=Contact
+Name[pl]=Kontakt
 Name[pt]=Contacto
 Name[pt_BR]=Contato
 Name[sv]=Kontakt
 Name[ug]=ئالاقەداش
 Name[uk]=Контакт
 Name[x-test]=xxContactxx
+Name[zh_TW]=接點
 X-KDE-DirType=odg-collection

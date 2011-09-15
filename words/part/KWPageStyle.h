@@ -22,8 +22,8 @@
 #ifndef KWPAGESTYLE_H
 #define KWPAGESTYLE_H
 
-#include "KWord.h"
-#include "kword_export.h"
+#include "Words.h"
+#include "words_export.h"
 
 #include <KoPageLayout.h>
 #include <KoText.h>
@@ -41,7 +41,7 @@ class KoOdfLoadingContext;
  * For documents that have a main text auto generated we have a lot of little options
  * to do that. This class wraps all these options.
  *
- * KWord has one KWPageManager per document, the manager collects all page styles by
+ * Words has one KWPageManager per document, the manager collects all page styles by
  * name and allows pages to follow this named style. This means that changing a page
  * style will update all pages that are using that page style with the new properties.
  *
@@ -52,11 +52,11 @@ class KoOdfLoadingContext;
  * @code
  * KWPageStyle style1("mystyle");
  * KWPageStyle style2 = style1;
- * style1.setHeaderPolicy(KWord::HFTypeEvenOdd); // set it on one
- * Q_ASSERT(style2.headerPolicy() == KWord::HFTypeEvenOdd); // the other changes too
+ * style1.setHeaderPolicy(Words::HFTypeEvenOdd); // set it on one
+ * Q_ASSERT(style2.headerPolicy() == Words::HFTypeEvenOdd); // the other changes too
  * @endcode
  */
-class KWORD_TEST_EXPORT KWPageStyle
+class WORDS_TEST_EXPORT KWPageStyle
 {
 public:
     /**
@@ -110,14 +110,14 @@ public:
     void setColumns(const KoColumns &columns);
 
     /// Return the type of header the pages will get.
-    KWord::HeaderFooterType headerPolicy() const;
+    Words::HeaderFooterType headerPolicy() const;
     /// set the type of header the pages will get.
-    void setHeaderPolicy(KWord::HeaderFooterType p);
+    void setHeaderPolicy(Words::HeaderFooterType p);
 
     /// Return the type of footers the pages will get.
-    KWord::HeaderFooterType footerPolicy() const;
+    Words::HeaderFooterType footerPolicy() const;
     /// Set the type of footers the pages will get.
-    void setFooterPolicy(KWord::HeaderFooterType p);
+    void setFooterPolicy(Words::HeaderFooterType p);
 
     /**
      * This is the main toggle for all automatically generated frames.
@@ -195,9 +195,9 @@ public:
     void setFootNoteSeparatorLineType(Qt::PenStyle type);
 
     /// return the position on the page for the foot note separator line
-    KWord::FootNoteSeparatorLinePos footNoteSeparatorLinePosition() const;
+    Words::FootNoteSeparatorLinePos footNoteSeparatorLinePosition() const;
     /// set the position on the page for the foot note separator line
-    void setFootNoteSeparatorLinePosition(KWord::FootNoteSeparatorLinePos position);
+    void setFootNoteSeparatorLinePosition(Words::FootNoteSeparatorLinePos position);
 
     /// initialize to default settings
     void clear();
@@ -255,6 +255,6 @@ private:
     QExplicitlySharedDataPointer<KWPageStylePrivate> d;
 };
 
-KWORD_TEST_EXPORT uint qHash(const KWPageStyle &style);
+WORDS_TEST_EXPORT uint qHash(const KWPageStyle &style);
 
 #endif

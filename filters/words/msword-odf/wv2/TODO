@@ -23,7 +23,7 @@ particular order):
   - The parser has problems with Informatikmanagement.doc (header)
   - The generated testcases have alignment problems on Solaris
   - The helpertest fails on Solaris with some backtrace ending in UString. Weird
-  - Fields don't really work in the KOffice part of the filter... (e.g. page
+  - Fields don't really work in the Calligra part of the filter... (e.g. page
     numbers in the footer)
 
 * Build system:

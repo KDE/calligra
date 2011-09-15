@@ -52,7 +52,7 @@
 	* Safer version of the wvlog.h fix. Backported to the branch.
 
 	* Added a version header surprisingly similar to kdeversion.h to
-	  make it easier for the KOffice part of the filter.
+	  make it easier for the Calligra part of the filter.
 
 2003-11-05  Werner Trobin  <trobin@kde.org>
 

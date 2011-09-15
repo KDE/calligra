@@ -1,10 +1,13 @@
 [Desktop Entry]
 Name=End-Event-Error
+Name[es]=Error en el evento final
 Name[et]=Sündmuse lõpu tõrge
 Name[nb]=Slutt-hendelse-feil
 Name[nl]=Fout in eindgebeurtenis
+Name[pl]=Błąd--Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Erro
 Name[pt_BR]=Erro no evento final
+Name[ru]=Ошибка завершения события
 Name[sv]=Sluthändelse-fel
 Name[uk]=Помилка кінцевої події
 Name[x-test]=xxEnd-Event-Errorxx

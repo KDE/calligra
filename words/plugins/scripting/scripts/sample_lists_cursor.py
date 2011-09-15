@@ -1,11 +1,11 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-# Import the KWord module.
-import KWord
+# Import the Words module.
+import Words
 
 # Get the text document.
-doc = KWord.mainFrameSet().document()
+doc = Words.mainFrameSet().document()
 
 # Set the default cascading stylesheet.
 doc.setDefaultStyleSheet(
@@ -21,7 +21,7 @@ doc.setHtml(
     (
         "<h1>Python Sample: Lists with Cursor</h1>"
         "<p align=\"justify\">This python sample script demonstrates how to use the "
-        "KWord cursor-interface to create lists with content and how to format and "
+        "Words cursor-interface to create lists with content and how to format and "
         "style such lists."
         "<p></p>" # seems to be needed else the lastCursorPosition() is within the dl-block :-(
     )
@@ -33,14 +33,14 @@ cursor = doc.rootFrame().lastCursorPosition()
 #cursor = doc.lastCursor()
 
 def addList(text,liststyle):
-    global KWord, cursor
+    global Words, cursor
     # The block seems to be needed cause else additional insertHtml-calls don't respect the line-break whyever.
     cursor.insertDefaultBlock()
     #cursor.insertBlock()
     # We like to create a new list
     cursor.insertHtml("<br><h2>%s</h2>" % text)
     # Create a new style and set the liststyle
-    s = KWord.addParagraphStyle("My%sStyle" % text)
+    s = Words.addParagraphStyle("My%sStyle" % text)
     #s.setListStyle( getattr(s,liststyle) ) # e.g. s.setListStyle( s.SquareItem )
     # Create the list and apply the style
     l = cursor.insertList()

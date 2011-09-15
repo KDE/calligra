@@ -374,7 +374,7 @@ Bugfixes:
 Until RC1:
 ----------
 New:
-- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- Like all of Calligra: a readonly GUI for embedding into Konqueror
 - More DCOP calls
 
 Bugfixes:

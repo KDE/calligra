@@ -116,18 +116,18 @@ QObject* Module::frameSetByName(const QString& name)
 
 QObject* Module::addTextFrameSet(const QString& framesetname)
 {
-    KWord::TextFrameSetType type = KWord::OtherTextFrameSet;
+    Words::TextFrameSetType type = Words::OtherTextFrameSet;
     /*
-    type = KWord::MainTextFrameSet;
-    type = KWord::FirstPageHeaderTextFrameSet;
-    type = KWord::FirstPageHeaderTextFrameSet;
-    type = KWord::EvenPagesHeaderTextFrameSet;
-    type = KWord::OddPagesHeaderTextFrameSet;
-    type = KWord::FirstPageFooterTextFrameSet;
-    type = KWord::EvenPagesFooterTextFrameSet;
-    type = KWord::OddPagesFooterTextFrameSet;
-    type = KWord::FootNoteTextFrameSet;
-    type = KWord::OtherTextFrameSet;
+    type = Words::MainTextFrameSet;
+    type = Words::FirstPageHeaderTextFrameSet;
+    type = Words::FirstPageHeaderTextFrameSet;
+    type = Words::EvenPagesHeaderTextFrameSet;
+    type = Words::OddPagesHeaderTextFrameSet;
+    type = Words::FirstPageFooterTextFrameSet;
+    type = Words::EvenPagesFooterTextFrameSet;
+    type = Words::OddPagesFooterTextFrameSet;
+    type = Words::FootNoteTextFrameSet;
+    type = Words::OtherTextFrameSet;
     */
 
     KWTextFrameSet* frameset = new KWTextFrameSet(kwDoc(), type);
@@ -167,7 +167,7 @@ QObject* Module::frame(int frameNr)
     return 0;
 }
 
-QObject* Module::findFrameSet(KWord::TextFrameSetType type)
+QObject* Module::findFrameSet(Words::TextFrameSetType type)
 {
     foreach(KWFrameSet* set, kwDoc()->frameSets()) {
         KWTextFrameSet* textframeset = dynamic_cast< KWTextFrameSet* >(set);

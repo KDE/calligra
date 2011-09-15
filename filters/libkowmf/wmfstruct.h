@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (c) 2003 Stefan Taferner <taferner@kde.org>
  *
  * This library is free software; you can redistribute it and/or

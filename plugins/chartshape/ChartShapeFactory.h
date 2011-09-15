@@ -27,7 +27,7 @@
 // Qt
 #include <QStringList>
 
-// KOffice
+// Calligra
 #include <KoShapeFactoryBase.h>
 #include <QVariantList>
 
@@ -55,7 +55,7 @@ public:
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
+    virtual void newDocumentResourceManager(KoResourceManager *manager) const;
 
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

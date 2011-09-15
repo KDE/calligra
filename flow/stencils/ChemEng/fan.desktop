@@ -1,13 +1,18 @@
 [Desktop Entry]
 Name=fan
+Name[bg]=вентилатор
 Name[de]=Lüfter
 Name[el]=ανεμιστήρας
+Name[es]=ventilador
 Name[nb]=vifte
+Name[nds]=Püüster
 Name[nl]=ventilator
+Name[pl]=wentylator
 Name[pt]=ventoinha
 Name[pt_BR]=ventoinha
+Name[ru]=Вентилятор
 Name[sv]=fläkt
 Name[uk]=Вентилятор або розмішувач
 Name[x-test]=xxfanxx
 Name[zh_CN]=风扇
-Name[zh_TW]=風扇
+Name[zh_TW]=fan

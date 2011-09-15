@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,36 +23,33 @@
 
 #include <QDockWidget>
 #include <KoDockFactoryBase.h>
+#include <KoCanvasObserverBase.h>
+class KoCanvasBase;
 
-class KWView;
-
-class KWStatisticsDocker : public QDockWidget
+class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 
 public:
-    explicit KWStatisticsDocker(KWView *view);
+    explicit KWStatisticsDocker();
     ~KWStatisticsDocker();
-    KWView *view();
-    void setView(KWView *view);
 
-private:
-    KWView *m_view;
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+
 };
 
 class KWStatisticsDockerFactory : public KoDockFactoryBase
 {
 public:
-    KWStatisticsDockerFactory(KWView *view);
+    KWStatisticsDockerFactory();
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
     DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
-
-private:
-    KWView *m_view;
 };
 
 #endif

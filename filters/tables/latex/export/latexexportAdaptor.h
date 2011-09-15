@@ -29,7 +29,7 @@ class KSpreadLatexExportDiaImpl;
 class LatexExportAdaptor: public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.filter.kspread.latex")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.filter.kspread.latex")
 
 public:
     LatexExportAdaptor(KSpreadLatexExportDiaImpl* dia);

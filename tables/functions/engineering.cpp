@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
+   Copyright (C) 1998-2002 The KSpread Team <calligra-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
    Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
 

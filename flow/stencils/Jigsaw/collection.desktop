@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Jigsaw
+Name[bg]=Пъзел
+Name[cs]=Puzzle
 Name[et]=Pusle
 Name[nb]=Puslespill
+Name[nds]=Pussel
 Name[nl]=Puzzel
+Name[pl]=Jigsaw
 Name[pt]='Puzzle'
 Name[pt_BR]=Quebra-cabeça
 Name[sv]=Pussel
 Name[uk]=Складанка
 Name[x-test]=xxJigsawxx
 Name[zh_CN]=拼图
+Name[zh_TW]=拼圖
 X-KDE-DirType=odg-collection

@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=Wave
+Name[bg]=Вълна
+Name[de]=Welle
 Name[el]=Κύμα
 Name[es]=Onda
+Name[it]=Onda
+Name[nb]=Bølge
+Name[nds]=Bülg
+Name[pl]=Fala
 Name[pt]=Onda
 Name[pt_BR]=Onda
 Name[sv]=Våg
@@ -9,3 +15,4 @@ Name[ug]=دولقۇنسىمان سىزىق
 Name[uk]=Хвиля
 Name[x-test]=xxWavexx
 Name[zh_CN]=波形
+Name[zh_TW]=波型

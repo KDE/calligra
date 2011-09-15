@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOFFICE_XMLREADER
-#define KOFFICE_XMLREADER
+#ifndef CALLIGRA_XMLREADER
+#define CALLIGRA_XMLREADER
 
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
@@ -264,7 +264,7 @@ private:
 class KOODF_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
-    KoXmlDocument();
+    KoXmlDocument(bool stripSpaces = true);
     KoXmlDocument(const KoXmlDocument& node);
     KoXmlDocument& operator=(const KoXmlDocument& node);
     bool operator==(const KoXmlDocument&) const;
@@ -292,6 +292,12 @@ public:
     // no namespace processing
     bool setContent(const QString& text,
                     QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+     /**
+     * Change the way an XMLDocument will be read: <a> <b/> <a/>
+     * if stripSpaces = true then a will only have one child
+     * if stripSpaces = false then a will have 3 children.
+     */
+    void setWhitespaceStripping(bool stripSpaces);
 
 private:
     friend class KoXmlNode;
@@ -322,7 +328,7 @@ private:
  *
  * To find the attribute with a given name, use QDomElement::attributeNS.
  *
- * Do not use getElementsByTagNameNS, it's recursive (which is never needed in KOffice).
+ * Do not use getElementsByTagNameNS, it's recursive (which is never needed in Calligra).
  * Do not use tagName() or nodeName() or prefix(), since the prefix isn't fixed.
  *
  * @author David Faure <faure@kde.org>
@@ -404,4 +410,4 @@ KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
         if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 
-#endif // KOFFICE_XMLREADER
+#endif // CALLIGRA_XMLREADER

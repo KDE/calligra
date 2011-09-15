@@ -19,7 +19,7 @@
 
 /*
    This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/words/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -50,14 +50,14 @@
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 #include <PictureKey.h>
 
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
 K_PLUGIN_FACTORY(ABIWORDExportFactory, registerPlugin<ABIWORDExport>();)
-K_EXPORT_PLUGIN(ABIWORDExportFactory("kwordabiwordexport", "calligrafilters"))
+K_EXPORT_PLUGIN(ABIWORDExportFactory("wordsabiwordexport", "calligrafilters"))
 
 class StyleMap : public QMap<QString, LayoutData>
 {
@@ -85,7 +85,7 @@ public:
     virtual bool doFullPaperFormat(const int format,
                                    const double width, const double height, const int orientation); // Calc AbiWord's <papersize>
     virtual bool doFullPaperBorders(const double top, const double left,
-                                    const double bottom, const double right); // Like KWord's <PAPERBORDERS>
+                                    const double bottom, const double right); // Like Words's <PAPERBORDERS>
     virtual bool doCloseHead(void); // Write <papersize>
     virtual bool doOpenStyles(void); // AbiWord's <styles>
     virtual bool doCloseStyles(void); // AbiWord's </styles>
@@ -274,14 +274,14 @@ bool AbiWordWorker::doCloseDocument(void)
     // Before writing the <data> element,
     //  we must be sure that we have data and that we can retrieve it.
 
-    if (m_kwordLeader && !m_mapPictureData.isEmpty()) {
+    if (m_wordsLeader && !m_mapPictureData.isEmpty()) {
         *m_streamOut << "<data>\n";
 
         QMap<QString, PictureKey>::ConstIterator it;
         QMap<QString, PictureKey>::ConstIterator end(m_mapPictureData.constEnd());
         // all images first
         for (it = m_mapPictureData.constBegin(); it != end; ++it) {
-            // Warning: do not mix up KWord's key and the iterator's key!
+            // Warning: do not mix up Words's key and the iterator's key!
             writePictureData(it.key(), it.value().filename());
         }
 
@@ -935,7 +935,7 @@ bool AbiWordWorker::doFullPaperFormat(const int f,
     }
     outputText += "\" ";
 
-    outputText += "page-scale=\"1.0\"/>\n"; // KWord has no page scale, so assume 100%
+    outputText += "page-scale=\"1.0\"/>\n"; // Words has no page scale, so assume 100%
 
     m_pagesize = outputText;
     return true;
@@ -1068,7 +1068,7 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 
     // Say who we are (with the SVN revision number) in case we have a bug in our filter output!
     // ### TODO: as SVN does not mark a branch in the revision number, we would need another way to tell the branch
-    *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
+    *m_streamOut << "<m key=\"abiword.generator\">Words Export Filter";
 
     QString strVersion("$Revision$");
     // Remove the dollar signs
@@ -1097,7 +1097,7 @@ ABIWORDExport::ABIWORDExport(QObject* parent, const QVariantList &) :
 
 KoFilter::ConversionStatus ABIWORDExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (to != "application/x-abiword" || from != "application/x-kword") {
+    if (to != "application/x-abiword" || from != "application/x-words") {
         return KoFilter::NotImplemented;
     }
 
@@ -1109,7 +1109,7 @@ KoFilter::ConversionStatus ABIWORDExport::convert(const QByteArray& from, const 
         return KoFilter::StupidError;
     }
 
-    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader* leader = new KWEFWordsLeader(worker);
 
     if (!leader) {
         kError(30506) << "Cannot create Worker! Aborting!" << endl;

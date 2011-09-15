@@ -2,6 +2,7 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
  <!ENTITY kappname "&kthesaurus;">
  <!ENTITY wordnet "WordNet">
+ <!ENTITY koffice "Calligra">
  <!ENTITY % addindex "IGNORE">
  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
@@ -102,7 +103,7 @@ to the &wordnet; project, but to &kde;.</para>
 
 <para>By default, only the English language is supported 
 in &kthesaurus;. You can check out
-<ulink url="http://www.koffice.org/addons/#thesauri">the
+<ulink url="http://www.calligra-suite.org/addons/#thesauri">the
 &koffice; download page</ulink> to see which other languages 
 are available.</para>
 

@@ -20,14 +20,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// kword includes
+// words includes
 #include "KWCanvas.h"
 #include "KWGui.h"
 #include "KWView.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
@@ -66,7 +66,7 @@ void KWCanvas::pageSetupChanged()
 
 void KWCanvas::updateSize()
 {
-    resourceManager()->setResource(KWord::CurrentPageCount, m_document->pageCount());
+    resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
     emit documentSize(m_viewMode->contentsSize());
 }
 
@@ -121,6 +121,10 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
             focusNextPrevChild(false);
         else if (e->key() == Qt::Key_Tab)
             focusNextPrevChild(true);
+        else if (e->key() == Qt::Key_PageUp)
+            m_view->goToPreviousPage(e->modifiers());
+        else if (e->key() == Qt::Key_PageDown)
+            m_view->goToNextPage(e->modifiers());
     }
 }
 

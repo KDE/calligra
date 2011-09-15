@@ -51,7 +51,7 @@ public:
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
     ///reimplemented from superclass
-    void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
+    void setCurrentCursorPosition(const QTextDocument *document, int cursorPosition);
 
     QStringList availableBackends() const;
     QStringList availableLanguages() const;
@@ -64,8 +64,8 @@ public:
     bool skipAllUppercaseWords();
     bool skipRunTogetherWords();
 
-    //reimplemented from KOffice2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
-    void setDocument(QTextDocument *document);
+    //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
+    void setDocument(const QTextDocument *document);
 
     void replaceWordBySuggestion(const QString &word, int startPosition);  
 

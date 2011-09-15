@@ -117,7 +117,7 @@ public:
         GradientStyle,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
         LinearGradientStyle,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
         RadialGradientStyle,         ///< svg:radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
-        ConicalGradientStyle,        ///< koffice:conicalGradient koffice extension for conical gradients
+        ConicalGradientStyle,        ///< calligra:conicalGradient calligra extension for conical gradients
         FillImageStyle,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
         NumericBooleanStyle,         ///< number:boolean 14.7.6 Boolean Style
                                      ///<  @note unused
@@ -243,9 +243,9 @@ public:
         TableCellType,
         /// PresentationType is always for presentation-properties.
         PresentationType,
-        /// DrawingPageType is always for presentation-properties.
+        /// DrawingPageType is always for drawing-page-properties.
         DrawingPageType,
-        /// ChartType is always for presentation-properties.
+        /// ChartType is always for chart-properties.
         ChartType,
         Reserved1, ///< @internal for binary compatible extensions
         /// For elements that are children of the style itself, not any of the properties
@@ -349,7 +349,7 @@ public:
      * gs.addChildElement( "...", elementContents );
      * @endcode
      *
-     * The value of @p elementName isn't used, except that it must be unique.
+     * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addChildElement(const QString &elementName, const QString& elementContents) {
         m_properties[ChildElement].insertMulti(elementName, elementContents);
@@ -365,6 +365,7 @@ public:
 
     /**
      * Same like \a addChildElement above but adds a child style which is not child of any of the properties
+     * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addStyleChildElement(const QString &elementName, const QString& elementContents) {
         m_properties[StyleChildElement].insertMulti(elementName, elementContents);
@@ -373,6 +374,7 @@ public:
     /**
      * Same like \a addStyleChildElement above but with QByteArray to explicit convert from QByteArray
      * to QString using utf8 to prevent a dirty pitfall.
+     * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addStyleChildElement(const QString &elementName, const QByteArray& elementContents) {
         m_properties[StyleChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));

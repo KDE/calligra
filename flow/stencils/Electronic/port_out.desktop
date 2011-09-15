@@ -2,8 +2,11 @@
 Name=port out
 Name[el]=θύρα εξόδου
 Name[nb]=utgang
+Name[nl]=port out
+Name[pl]=port wy
 Name[pt]=porta saída
 Name[pt_BR]=porta de saída
 Name[sv]=port ut
 Name[uk]=Вихідний порт
 Name[x-test]=xxport outxx
+Name[zh_TW]=port out

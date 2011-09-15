@@ -21,7 +21,7 @@
 #ifndef KWVIEW_H
 #define KWVIEW_H
 
-#include "kword_export.h"
+#include "words_export.h"
 #include "KWPage.h"
 
 #include <KoView.h>
@@ -44,17 +44,17 @@ class KActionMenu;
 
 class KToggleAction;
 /**
- * KWords view class. Following the broad model-view-controller idea this class
+ * Words' view class. Following the broad model-view-controller idea this class
  * shows you one view on the document. There can be multiple views of the same document each
  * in with independent settings for viewMode and zoom etc.
  */
-class KWORD_EXPORT KWView : public KoView
+class WORDS_EXPORT KWView : public KoView
 {
     Q_OBJECT
 
 public:
     /**
-     * Construct a new view on the kword document.
+     * Construct a new view on the words document.
      * The view will have a canvas as a member which does all the actual painting, the view will
      * be responsible for handling the actions.  The View is technically speaking the controller
      * class in the MVC design.
@@ -72,6 +72,9 @@ public:
     KWDocument *kwdocument() const {
         return m_document;
     }
+
+    /// reimplemented from superclass
+    void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
 
     // interface KoView
     /// reimplemented method from superclass
@@ -112,6 +115,13 @@ public slots:
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
 
+    /// turns the border display on/off
+    void toggleViewFrameBorders(bool on);
+    /// go to previous page
+    void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    /// go to next page
+    void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
@@ -149,8 +159,6 @@ private slots:
     void bringToFront();
     /** Move the selected frame(s) to be behind all other frames */
     void sendToBack();
-    /// turns the border display on/off
-    void toggleViewFrameBorders(bool on);
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
     /// convert current frame to an inline frame
@@ -199,10 +207,6 @@ private slots:
     void insertFootEndNote();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
-    /// go to previous page
-    void goToPreviousPage();
-    /// go to next page
-    void goToNextPage();
     /// A semantic item was updated and should have it's text refreshed.
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
     /// A match was found when searching.

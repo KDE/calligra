@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=Or
+Name[bg]=Или
+Name[cs]=Nebo
+Name[de]=Oder
 Name[el]=Or
+Name[it]=Or
 Name[nb]=Eller
+Name[nl]=Of
+Name[pl]=Lub
 Name[pt]=Ou
 Name[pt_BR]=Ou
 Name[sv]=Eller
@@ -9,3 +15,4 @@ Name[ug]=ياكى
 Name[uk]=Або
 Name[x-test]=xxOrxx
 Name[zh_CN]=或
+Name[zh_TW]=或

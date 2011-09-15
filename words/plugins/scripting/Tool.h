@@ -1,5 +1,5 @@
 /*
- * This file is part of KWord
+ * This file is part of Words
  *
  * Copyright (c) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
@@ -47,8 +47,8 @@ namespace Scripting
 * Python sample code that walks through the actions the Tool provides
 * and executes each of them;
 * \code
-* import KWord
-* tool = KWord.tool()
+* import Words
+* tool = Words.tool()
 * def triggered(actionname):
 *     print "Action %s executed" % actionname
 * tool.connect("actionTriggered(QString)",triggered)
@@ -126,7 +126,7 @@ public slots:
 //TODO store TextEditor?
 // the above can't work;  storing a pointer to a value based object (QTextCursor).
 // I don't even think its possible to store a QTextCursor in any form in a QVarient. (TZ)
-        //r->setResource(KWord::CurrentTextCursor, variant);
+        //r->setResource(Words::CurrentTextCursor, variant);
         return true;
     }
 */

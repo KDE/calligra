@@ -62,8 +62,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     clear();
     d->itemsPartClass = itemsPartClass;
 
-    delete d->rootItem;
-    d->rootItem = new KexiProjectModelItem(prj->data()->databaseName());
+    d->rootItem = new KexiProjectModelItem(prj ? prj->data()->databaseName() : QString());
     
     KexiPart::PartInfoList* plist = Kexi::partManager().infoList();
     if (!plist)
@@ -96,7 +95,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
           
             //lookup project's objects (part items)
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
-            KexiPart::ItemDict *item_dict = prj->items(info);
+            KexiPart::ItemDict *item_dict = prj ? prj->items(info) : 0;
             if (!item_dict) {
                 continue;
             }
@@ -132,7 +131,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     if (partManagerErrorMessages && !partManagerErrorMessages->isEmpty())
         partManagerErrorMessages->append("</ul></p>");
 
-   d-> rootItem->debugPrint();
+   //d->rootItem->debugPrint();
 }
 
 KexiProjectModel::~KexiProjectModel()
@@ -175,7 +174,10 @@ int KexiProjectModel::rowCount(const QModelIndex& parent) const
      else
          parentItem = static_cast<KexiProjectModelItem*>(parent.internalPointer());
 
-     return parentItem->childCount();
+     if (parentItem)
+        return parentItem->childCount();
+     else
+         return 0;
 }
 
 QModelIndex KexiProjectModel::parent(const QModelIndex& index) const
@@ -259,7 +261,10 @@ Qt::ItemFlags KexiProjectModel::flags(const QModelIndex& index) const
 
 void KexiProjectModel::clear()
 {
-
+    beginResetModel();
+    delete(d->rootItem);
+    d->rootItem = 0;
+    endResetModel();
 }
 
 QString KexiProjectModel::itemsPartClass() const

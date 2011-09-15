@@ -35,7 +35,7 @@ RenameSheetCommand::RenameSheetCommand(Sheet* s, const QString &name)
     sheet = s;
     if (s) oldName = s->sheetName();
     newName = name;
-    setText(i18n("Rename Sheet"));
+    setText(i18nc("(qtundo-format)", "Rename Sheet"));
 }
 
 void RenameSheetCommand::redo()
@@ -79,8 +79,8 @@ void HideSheetCommand::undo()
 
 // ----- ShowSheetCommand -----
 
-ShowSheetCommand::ShowSheetCommand(Sheet* sheet, QUndoCommand* parent)
-        : QUndoCommand(parent)
+ShowSheetCommand::ShowSheetCommand(Sheet* sheet, KUndo2Command* parent)
+        : KUndo2Command(parent)
 {
     map = sheet->map();
     sheetName = sheet->sheetName();
@@ -109,7 +109,7 @@ void ShowSheetCommand::undo()
 // ----- AddSheetCommand -----
 
 AddSheetCommand::AddSheetCommand(Sheet* sheet)
-        : QUndoCommand(i18n("Add Sheet"))
+        : KUndo2Command(i18nc("(qtundo-format)", "Add Sheet"))
         , m_sheet(sheet)
         , m_firstrun(true)
 {
@@ -136,7 +136,7 @@ void AddSheetCommand::undo()
 // ----- DuplicateSheetCommand -----
 
 DuplicateSheetCommand::DuplicateSheetCommand()
-        : QUndoCommand(i18n("Duplicate Sheet"))
+        : KUndo2Command(i18nc("(qtundo-format)", "Duplicate Sheet"))
         , m_oldSheet(0)
         , m_newSheet(0)
         , m_firstrun(true)
@@ -174,7 +174,7 @@ RemoveSheetCommand::RemoveSheetCommand(Sheet* s)
 {
     sheet = s;
     map = sheet->map();
-    setText(i18n("Remove Sheet"));
+    setText(i18nc("(qtundo-format)", "Remove Sheet"));
 }
 
 void RemoveSheetCommand::redo()
@@ -204,7 +204,7 @@ SheetPropertiesCommand::SheetPropertiesCommand(Sheet* s)
     oldColumnAsNumber = newColumnAsNumber = sheet->getShowColumnNumber();
     oldLcMode = newLcMode = sheet->getLcMode();
     oldCapitalizeFirstLetter = newCapitalizeFirstLetter = sheet->getFirstLetterUpper();
-    setText(i18n("Change Sheet Properties"));
+    setText(i18nc("(qtundo-format)", "Change Sheet Properties"));
 }
 
 void SheetPropertiesCommand::setLayoutDirection(Qt::LayoutDirection dir)

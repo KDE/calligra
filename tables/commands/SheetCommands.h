@@ -22,7 +22,7 @@
 #define CALLIGRA_TABLES_SHEET_COMMANDS
 
 #include <QString>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace Calligra
 {
@@ -35,7 +35,7 @@ class Sheet;
  * \ingroup Commands
  * \brief Renames a sheet.
  */
-class RenameSheetCommand : public QUndoCommand
+class RenameSheetCommand : public KUndo2Command
 {
 public:
     RenameSheetCommand(Sheet* sheet, const QString &name);
@@ -54,7 +54,7 @@ protected:
  * \ingroup Commands
  * \brief Hides a sheet.
  */
-class HideSheetCommand : public QUndoCommand
+class HideSheetCommand : public KUndo2Command
 {
 public:
     explicit HideSheetCommand(Sheet* sheet);
@@ -72,10 +72,10 @@ protected:
  * \ingroup Commands
  * \brief Shows a hidden sheet.
  */
-class ShowSheetCommand : public QUndoCommand
+class ShowSheetCommand : public KUndo2Command
 {
 public:
-    explicit ShowSheetCommand(Sheet* sheet, QUndoCommand* parent = 0);
+    explicit ShowSheetCommand(Sheet* sheet, KUndo2Command* parent = 0);
 
     virtual void redo();
     virtual void undo();
@@ -90,7 +90,7 @@ protected:
  * \ingroup Commands
  * \brief Adds a sheet.
  */
-class AddSheetCommand : public QUndoCommand
+class AddSheetCommand : public KUndo2Command
 {
 public:
     explicit AddSheetCommand(Sheet* sheet);
@@ -108,7 +108,7 @@ protected:
  * \ingroup Commands
  * \brief Duplicates a sheet.
  */
-class DuplicateSheetCommand : public QUndoCommand
+class DuplicateSheetCommand : public KUndo2Command
 {
 public:
     explicit DuplicateSheetCommand();
@@ -129,7 +129,7 @@ protected:
  * \ingroup Commands
  * \brief Removes a sheet.
  */
-class RemoveSheetCommand : public QUndoCommand
+class RemoveSheetCommand : public KUndo2Command
 {
 public:
     explicit RemoveSheetCommand(Sheet* sheet);
@@ -147,7 +147,7 @@ protected:
  * \ingroup Commands
  * \brief Changes sheet properties.
  */
-class SheetPropertiesCommand : public QUndoCommand
+class SheetPropertiesCommand : public KUndo2Command
 {
 public:
     SheetPropertiesCommand(Sheet* sheet);

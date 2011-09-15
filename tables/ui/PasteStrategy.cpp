@@ -46,7 +46,7 @@ PasteStrategy::~PasteStrategy()
     delete d;
 }
 
-QUndoCommand* PasteStrategy::createCommand()
+KUndo2Command* PasteStrategy::createCommand()
 {
     PasteCommand *const command = new PasteCommand();
     command->setSheet(selection()->activeSheet());

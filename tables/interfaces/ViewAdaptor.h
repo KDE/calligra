@@ -45,7 +45,7 @@ class CellProxy;
 class CALLIGRA_TABLES_COMMON_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.view")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.view")
 public:
     explicit ViewAdaptor(View*);
     ~ViewAdaptor();

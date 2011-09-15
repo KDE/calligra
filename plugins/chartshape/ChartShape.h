@@ -27,7 +27,7 @@
 // Qt
 #include <Qt>
 
-// KOffice
+// Calligra
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 
@@ -88,6 +88,7 @@ class ChartTableModel;
 class ChartLayout;
 class TableSource;
 
+void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color);
 QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
 QColor defaultDataSetColor(int dataSetNum);
 const char * odfCharttype(int charttype);
@@ -95,7 +96,7 @@ const char * odfCharttype(int charttype);
 
 class CHARTSHAPELIB_EXPORT ChartShape
     : public QObject
-    , public KoChart::ChartInterface // The public interface within KOffice
+    , public KoChart::ChartInterface // The public interface within Calligra
     , public KoFrameShape            // For saving as a frame
     , public KoShapeContainer        // The chart shape embeds other shapes.
 {

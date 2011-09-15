@@ -22,21 +22,21 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
-static const char* KWORD_DESCRIPTION = I18N_NOOP("Calligra Word Processor");
+static const char* WORDS_DESCRIPTION = I18N_NOOP("Calligra Word Processor");
 // First official public release Oct 2000 version 0.8
-// KOffice-1.1-beta1: version 0.9
-// KOffice-1.1-beta2: version 1.1 (to remove confusion)
-// KOffice-1.2: version 1.2
-// From then on: always the same as the KOffice version
-static const char* KWORD_VERSION = KOFFICE_VERSION_STRING;
+// Calligra-1.1-beta1: version 0.9
+// Calligra-1.1-beta2: version 1.1 (to remove confusion)
+// Calligra-1.2: version 1.2
+// From then on: always the same as the Calligra version
+static const char* WORDS_VERSION = CALLIGRA_VERSION_STRING;
 
-KAboutData * newKWordAboutData()
+KAboutData * newWordsAboutData()
 {
     KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Words"),
-                                            KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
-                                            ki18n("(c) 1998-2010, The Words Team"), KLocalizedString(),
+                                            WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
+                                            ki18n("(c) 1998-2011, The Words Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/words/");
     aboutData->setProductName("calligra-words"); // for bugs.kde.org
     aboutData->addAuthor(ki18n("Pierre Ducroquet"), ki18n("Co maintainer"), "");
@@ -45,9 +45,12 @@ KAboutData * newKWordAboutData()
     aboutData->addAuthor(ki18n("Boudewijn Rempt"), ki18n("Notes and fixes"), "boud@kde.org");
     aboutData->addAuthor(ki18n("Inge Wallin"), ki18n("Formatting stuff"), "inge@lysator.liu.se");
     aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("<optimizations"), "zachmann@kde.org");
-    aboutData->addAuthor(ki18n("Matus Uzak"), ki18n("Filter stuff"), "matus.uzak@ixonos.com");
+    aboutData->addAuthor(ki18n("Matus Uzak"), ki18n("Filter"), "matus.uzak@ixonos.com");
     aboutData->addAuthor(ki18n("Pavol Korinek"), ki18n("Layout and Painting"), "pavol.korinek@ixonos.com");
     aboutData->addAuthor(ki18n("Pierre Stirnweiss"), ki18n("Everything"), "");
+    aboutData->addAuthor(ki18n("Lassi Nieminen"), ki18n("Filter"), "lassniem@gmail.com");
+    aboutData->addAuthor(ki18n("Hanzes Matus"), ki18n("Filter"), "matus.hanzes@ixonos.com");
+    aboutData->addAuthor(ki18n("Lukáš Tvrdý"), ki18n("Filter"), "lukast.dev@gmail.com");
     aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
     aboutData->addAuthor(ki18n("Girish Ramakrishnan"), ki18n("ODF Support"), "girish@forwardbias.in");
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");

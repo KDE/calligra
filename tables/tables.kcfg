@@ -21,11 +21,11 @@
       <whatsthis></whatsthis>
       <!-- kspread_autofill.cc:206 -->
       <!-- 	other=new QStringList(config->readListEntry("Other list")); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_list.cc:161 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_list.cc:161 -->
       <!--     QStringList other=config->readListEntry("Other list"); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_list.cc:271 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_list.cc:271 -->
       <!--         config->writeEntry("Other list",result); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_sort.cc:308 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_sort.cc:308 -->
       <!--   QStringList other = config->readListEntry("Other list"); -->
     </entry>
     <entry key="NbPage" type="Int">
@@ -38,9 +38,9 @@
       <!--     _page=config->readNumEntry( "NbPage",1 ) ; -->
       <!-- kspread_doc.cc:387 -->
       <!--         _page=config->readNumEntry( "NbPage",1 ) ; -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:227 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:227 -->
       <!--         _page=config->readNumEntry( "NbPage" ,1) ; -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:309 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:309 -->
       <!--     config->writeEntry( "NbPage", nbPage->value()); -->
     </entry>
     <entry key="Zoom" type="Int">
@@ -58,9 +58,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2092 -->
       <!--             doc()->setShowHorizontalScrollBar(config->readBoolEntry("Horiz ScrollBar",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:228 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:228 -->
       <!--         horizontal=config->readBoolEntry("Horiz ScrollBar",true); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:315 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:315 -->
       <!--         config->writeEntry( "Horiz ScrollBar",active); -->
     </entry>
     <entry key="Vert ScrollBar" type="Bool">
@@ -69,9 +69,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2094 -->
       <!--             doc()->setShowVerticalScrollBar(config->readBoolEntry("Vert ScrollBar",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:229 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:229 -->
       <!--         vertical=config->readBoolEntry("Vert ScrollBar",true); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:325 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:325 -->
       <!--         config->writeEntry( "Vert ScrollBar", active); -->
     </entry>
     <entry key="Column Header" type="Bool">
@@ -80,9 +80,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2095 -->
       <!--         doc()->setShowColHeader(config->readBoolEntry("Column Header",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:230 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:230 -->
       <!--         colHeader=config->readBoolEntry("Column Header",true); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:336 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:336 -->
       <!--         config->writeEntry( "Column Header", active); -->
     </entry>
     <entry key="Row Header" type="Bool">
@@ -91,9 +91,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2096 -->
       <!--         doc()->setShowRowHeader(config->readBoolEntry("Row Header",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:231 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:231 -->
       <!--         rowHeader=config->readBoolEntry("Row Header",true); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:347 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:347 -->
       <!--         config->writeEntry( "Row Header", active); -->
     </entry>
     <entry key="Completion Mode" type="Int">
@@ -102,11 +102,11 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2098 -->
       <!--             doc()->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto))); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:510 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:510 -->
       <!--       tmpCompletion=( KGlobalSettings::Completion)config->readNumEntry( "Completion Mode" ,KGlobalSettings::CompletionAuto) ; -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:511 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:511 -->
       <!--       config->writeEntry( "Completion Mode", (int)tmpCompletion); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:636 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:636 -->
       <!--         config->writeEntry( "Completion Mode", (int)tmpCompletion); -->
     </entry>
     <entry key="Move" type="Int">
@@ -115,7 +115,7 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2099 -->
       <!--         doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(Bottom))); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:661 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:661 -->
       <!--         config->writeEntry( "Move", (int)tmpMoveTo); -->
     </entry>
     <entry key="Indent" type="Int">
@@ -124,9 +124,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2100 -->
       <!--         doc()->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) ); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:422 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:422 -->
       <!--         _indent = config->readDoubleNumEntry( "Indent" , _indent ) ; -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:705 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:705 -->
       <!--         config->writeEntry( "Indent", KoUnit::fromUserValue( val, indentUnit ) ); -->
     </entry>
     <entry key="Method of Calc" type="Int">
@@ -135,7 +135,7 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2101 -->
       <!--         doc()->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber))); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:693 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:693 -->
       <!--         config->writeEntry( "Method of Calc", (int)tmpMethodCalc); -->
     </entry>
     <entry key="Tabbar" type="Bool">
@@ -144,9 +144,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2103 -->
       <!--             doc()->setShowTabBar(config->readBoolEntry("Tabbar",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:232 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:232 -->
       <!-- 	tabbar=config->readBoolEntry("Tabbar",true); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:358 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:358 -->
       <!--         config->writeEntry( "Tabbar", active); -->
     </entry>
     <entry key="Msg error" type="Bool">
@@ -155,9 +155,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2105 -->
       <!--   doc()->setShowMessageError(config->readBoolEntry( "Msg error" ,false) ); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:423 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:423 -->
       <!--         m_bMsgError=config->readBoolEntry( "Msg error" ,false) ; -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:712 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:712 -->
       <!--         config->writeEntry( "Msg error" ,(int)active); -->
     </entry>
     <entry key="Formula bar" type="Bool">
@@ -166,9 +166,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2107 -->
       <!--   doc()->setShowFormulaBar(config->readBoolEntry("Formula bar",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:233 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:233 -->
       <!-- 	formulaBar=config->readBoolEntry("Formula bar",true); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:369 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:369 -->
       <!--         config->writeEntry( "Formula bar",active); -->
     </entry>
     <entry key="Status bar" type="Bool">
@@ -177,9 +177,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2108 -->
       <!--         doc()->setShowStatusBar(config->readBoolEntry("Status bar",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:234 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:234 -->
       <!--         statusBar=config->readBoolEntry("Status bar",true); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:379 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:379 -->
       <!--     config->writeEntry( "Status bar",active); -->
     </entry>
     <entry key="NbRecentFile" type="Int">
@@ -188,9 +188,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2110 -->
       <!--         changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:235 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:235 -->
       <!--         oldRecent=config->readNumEntry( "NbRecentFile" ,10); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:385 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:385 -->
       <!--        config->writeEntry( "NbRecentFile",val); -->
     </entry>
     <entry key="AutoSave" type="Int">
@@ -199,9 +199,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2113 -->
       <!--         doc()->setAutoSave(config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:236 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:236 -->
       <!--         oldAutoSaveValue=config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:391 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:391 -->
       <!--         config->writeEntry( "AutoSave", val ); -->
     </entry>
     <entry key="BackupFile" type="Bool">
@@ -210,9 +210,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2114 -->
       <!--         doc()->setBackupFile( config->readBoolEntry("BackupFile",true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:237 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:237 -->
       <!--         m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:398 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:398 -->
       <!--         config->writeEntry( "BackupFile", state ); -->
     </entry>
   </group>
@@ -235,16 +235,16 @@
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:913 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:913 -->
       <!--         dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_dont_check_upper_word",false)); -->
     </entry>
     <entry key="KSpell_dont_check_title_case" type="Bool">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:914 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:914 -->
       <!--         dontCheckTitleCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:941 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:941 -->
       <!--   config->writeEntry("KSpell_dont_check_title_case",(int)state); -->
     </entry>
   </group>
@@ -257,9 +257,9 @@
       <!--       setUnit( (KoUnit)config->readNumEntry( "Default unit page" ,0)); -->
       <!-- kspread_view.cc:2139 -->
       <!--   d->activeSheet->setPaperUnit((KoUnit)config->readNumEntry("Default unit page",0)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:857 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:857 -->
       <!--         unit=config->readNumEntry( "Default unit page" ,0); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:886 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:886 -->
       <!--      config->writeEntry( "Default unit page", unitPage ); -->
     </entry>
     <entry key="Default size page" type="Int">
@@ -268,9 +268,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2136 -->
       <!--   d->activeSheet->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:855 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:855 -->
       <!--         paper=config->readNumEntry( "Default size page" ,1); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:874 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:874 -->
       <!--      config->writeEntry( "Default size page", sizePage ); -->
     </entry>
     <entry key="Default orientation page" type="Int">
@@ -279,9 +279,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2138 -->
       <!--   d->activeSheet->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:856 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:856 -->
       <!--         orientation=config->readNumEntry( "Default orientation page" ,0); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:880 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:880 -->
       <!--      config->writeEntry( "Default orientation page", orientationPage ); -->
     </entry>
   </group>
@@ -292,9 +292,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_doc.cc:480 -->
       <!--         undo=config->readNumEntry("UndoRedo",-1); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:429 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:429 -->
       <!--    m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:605 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:605 -->
       <!--         config->writeEntry("UndoRedo",newUndo); -->
     </entry>
   </group>
@@ -305,9 +305,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2121 -->
       <!--      _col = config->readColorEntry("GridColor", &_col); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:729 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:729 -->
       <!--     _gridColor = config->readColorEntry("GridColor",&_gridColor); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:766 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:766 -->
       <!--     config->writeEntry( "GridColor", _col ); -->
     </entry>
     <entry key="PageBorderColor" type="Color">
@@ -316,9 +316,9 @@
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2125 -->
       <!--      _pbCol = config->readColorEntry("PageBorderColor", &_pbCol); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:746 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:746 -->
       <!--     _pbColor = config->readColorEntry("PageBorderColor", &_pbColor); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:774 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:774 -->
       <!--     config->writeEntry( "PageBorderColor", _pbColor ); -->
     </entry>
   </group>
@@ -327,21 +327,21 @@
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_format.cc:80 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_format.cc:80 -->
       <!-- 	e.xml = cfg.readEntry( "XML" ); -->
     </entry>
     <entry key="Image" type="String">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_format.cc:81 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_format.cc:81 -->
       <!-- 	e.image = cfg.readEntry( "Image" ); -->
     </entry>
     <entry key="Name" type="String">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_format.cc:82 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_format.cc:82 -->
       <!-- 	e.name = cfg.readEntry( "Name" ); -->
     </entry>
   </group>
@@ -350,72 +350,72 @@
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:991 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:991 -->
       <!--     m_cbSpeakPointerWidget->setChecked(config->readBoolEntry("SpeakPointerWidget", false)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1022 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1022 -->
       <!--     config->writeEntry("SpeakPointerWidget", m_cbSpeakPointerWidget->isChecked()); -->
     </entry>
     <entry key="SpeakFocusWidget" type="Bool">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:992 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:992 -->
       <!--     m_cbSpeakFocusWidget->setChecked(config->readBoolEntry("SpeakFocusWidget", false)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1023 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1023 -->
       <!--     config->writeEntry("SpeakFocusWidget", m_cbSpeakFocusWidget->isChecked()); -->
     </entry>
     <entry key="SpeakTooltips" type="Bool">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:993 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:993 -->
       <!--     m_cbSpeakTooltips->setChecked(config->readBoolEntry("SpeakTooltips", true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1024 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1024 -->
       <!--     config->writeEntry("SpeakTooltips", m_cbSpeakTooltips->isChecked()); -->
     </entry>
     <entry key="SpeakWhatsThis" type="Bool">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:994 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:994 -->
       <!--     m_cbSpeakWhatsThis->setChecked(config->readBoolEntry("SpeakWhatsThis", false)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1025 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1025 -->
       <!--     config->writeEntry("SpeakWhatsThis", m_cbSpeakWhatsThis->isChecked()); -->
     </entry>
     <entry key="SpeakDisabled" type="Bool">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:995 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:995 -->
       <!--     m_cbSpeakDisabled->setChecked(config->readBoolEntry("SpeakDisabled", true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1026 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1026 -->
       <!--     config->writeEntry("SpeakDisabled", m_cbSpeakDisabled->isChecked()); -->
     </entry>
     <entry key="SpeakAccelerators" type="Bool">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:996 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:996 -->
       <!--     m_cbSpeakAccelerators->setChecked(config->readBoolEntry("SpeakAccelerators", true)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1027 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1027 -->
       <!--     config->writeEntry("SpeakAccelerators", m_cbSpeakAccelerators->isChecked()); -->
     </entry>
     <entry key="AcceleratorPrefixWord" type="String">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:997 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:997 -->
       <!--     m_leAcceleratorPrefixWord->setText(config->readEntry("AcceleratorPrefixWord", -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1028 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1028 -->
       <!--     config->writeEntry("AcceleratorPrefixWord", m_leAcceleratorPrefixWord->text()); -->
     </entry>
     <entry key="PollingInterval" type="Int">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:999 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:999 -->
       <!--     m_iniPollingInterval->setValue(config->readNumEntry("PollingInterval", 600)); -->
-      <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:1029 -->
+      <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:1029 -->
       <!--     config->writeEntry("PollingInterval", m_iniPollingInterval->value()); -->
     </entry>
   </group>

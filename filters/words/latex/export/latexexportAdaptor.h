@@ -24,15 +24,15 @@
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
 
-class KWordLatexExportDia;
+class WordsLatexExportDia;
 
 class LatexExportAdaptor: public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.filter.kword.latex")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.filter.words.latex")
 
 public:
-    explicit LatexExportAdaptor(KWordLatexExportDia* dia);
+    explicit LatexExportAdaptor(WordsLatexExportDia* dia);
 
     ~LatexExportAdaptor();
 
@@ -40,7 +40,7 @@ public Q_SLOTS: // METHODS
     Q_SCRIPTABLE void useDefaultConfig();
 
 private:
-    KWordLatexExportDia* _dialog;
+    WordsLatexExportDia* _dialog;
 };
 
 #endif /* __LATEXEXPORTADAPTOR_H__ */

@@ -23,7 +23,7 @@
 *     displays all sheets and lets the user choose 0..n of them plus specify
 *     cell-ranges for all of them.
 *
-* \see http://www.koffice.org/kspread
+* \see http://www.calligra-suite.org/kspread
 * \see http://techbase.kde.org/Development/Tutorials/KSpread_Scripting
 * \see http://kross.dipe.org
 *

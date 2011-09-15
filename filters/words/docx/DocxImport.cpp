@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -141,6 +141,8 @@ bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
 KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
         QString& errorMessage)
 {
+    writers->body->addAttribute("text:use-soft-page-breaks", "true");
+
     // 0. parse settings.xml
     {
         DocxXmlSettingsReaderContext context(d->documentSettings);
@@ -194,7 +196,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     reportProgress(15);
 
-    // Main document context, to which we collect footnotes, endnotes, comments
+    // Main document context, to which we collect footnotes, endnotes, comments, numbering, tablestyles
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
 
     // 3. parse styles
@@ -223,19 +225,18 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     reportProgress(25);
 
     // 4. parse numbering
-    {
-        const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
-            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
-        DocxXmlNumberingReader numberingReader(writers);
-        if (!numberingPathAndFile.isEmpty()) {
-            QString numberingPath, numberingFile;
-            MSOOXML::Utils::splitPathAndFile(numberingPathAndFile, &numberingPath, &numberingFile);
-            DocxXmlDocumentReaderContext context(*this, numberingPath, numberingFile, *relationships, &themes);
+    const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
+    DocxXmlNumberingReader numberingReader(writers);
+    QString numberingPath, numberingFile;
+    MSOOXML::Utils::splitPathAndFile(numberingPathAndFile, &numberingPath, &numberingFile);
+    DocxXmlDocumentReaderContext numberingContext(*this, numberingPath, numberingFile, *relationships, &themes);
 
-            RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
-                numberingPathAndFile, &numberingReader, writers, errorMessage, &context) )
-        }
+    if (!numberingPathAndFile.isEmpty()) {
+        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+            numberingPathAndFile, &numberingReader, writers, errorMessage, &numberingContext) )
     }
+    mainContext.m_bulletStyles = numberingContext.m_bulletStyles;
 
     reportProgress(30);
 
@@ -249,6 +250,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             QString footnotePath, footnoteFile;
             MSOOXML::Utils::splitPathAndFile(footnotePathAndFile, &footnotePath, &footnoteFile);
             DocxXmlDocumentReaderContext context(*this, footnotePath, footnoteFile, *relationships, &themes);
+            context.m_tableStyles = mainContext.m_tableStyles;
+            context.m_bulletStyles = mainContext.m_bulletStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 footnotePathAndFile, &footnoteReader, writers, errorMessage, &context) )
@@ -265,6 +268,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             QString commentPath, commentFile;
             MSOOXML::Utils::splitPathAndFile(commentPathAndFile, &commentPath, &commentFile);
             DocxXmlDocumentReaderContext context(*this, commentPath, commentFile, *relationships, &themes);
+            context.m_tableStyles = mainContext.m_tableStyles;
+            context.m_bulletStyles = mainContext.m_bulletStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 commentPathAndFile, &commentReader, writers, errorMessage, &context) )
@@ -281,6 +286,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             QString endnotePath, endnoteFile;
             MSOOXML::Utils::splitPathAndFile(endnotePathAndFile, &endnotePath, &endnoteFile);
             DocxXmlDocumentReaderContext context(*this, endnotePath, endnoteFile, *relationships, &themes);
+            context.m_tableStyles = mainContext.m_tableStyles;
+            context.m_bulletStyles = mainContext.m_bulletStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 endnotePathAndFile, &endnoteReader, writers, errorMessage, &context) )
@@ -291,6 +298,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
+        // It is possible that some of the templates are defined in numberingreader
+        documentReader.m_definedShapeTypes = numberingReader.m_definedShapeTypes;;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
@@ -298,6 +307,21 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     reportProgress(100);
 
     return KoFilter::OK;
+}
+
+void DocxImport::writeConfigurationSettings(KoXmlWriter* settings) const
+{
+    MsooXmlImport::writeConfigurationSettings(settings);
+
+    // The AddParaTableSpacingAtStart config-item is used in KoTextLayoutArea::handleBordersAndSpacing
+    // during layouting. The defined 'Above paragraph' and 'Below paragraph' paragraph spacing (which is
+    // written in the ODF as fo:margin-top for the KoParagraphStyle) are not applied to the first and
+    // the last paragraph if this value is true.
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("true");
+    settings->endElement();
 }
 
 #include "DocxImport.moc"

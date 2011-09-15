@@ -23,6 +23,7 @@
 #define KOODFWORKAROUND_H
 
 #include "flake_export.h"
+#include "KoTextShapeDataBase.h"
 #include <qnamespace.h>
 
 class KoXmlElement;
@@ -49,7 +50,7 @@ namespace KoOdfWorkaround
 {
     /**
      * OpenOffice handles a line with the width of 0 as a cosmetic line but in svg it makes the line invisible.
-     * To show it in koffice use a very small line width. However this is not a cosmetic line.
+     * To show it in calligra use a very small line width. However this is not a cosmetic line.
      */
     FLAKE_EXPORT void fixPenWidth(QPen &pen, KoShapeLoadingContext &context);
 
@@ -98,6 +99,13 @@ namespace KoOdfWorkaround
      * See http://www.w3.org/TR/SVG/painting.html#FillRuleProperty
      */
     FLAKE_EXPORT void fixMissingFillRule(Qt::FillRule &fillRule, KoShapeLoadingContext &context);
+
+    /**
+     * OpenOffice resizes text shapes with autogrow in both directions. If the text box is saved to 
+     * small the text will not fit and it needs to be adjusted during the first layout.
+     * This methods returns true if we need to adjust the layout. The adjusting is handled at a different place.
+     */
+    FLAKE_EXPORT bool fixAutoGrow(KoTextShapeDataBase::ResizeMethod method, KoShapeLoadingContext &context);
 }
 
 #endif /* KOODFWORKAROUND_H */

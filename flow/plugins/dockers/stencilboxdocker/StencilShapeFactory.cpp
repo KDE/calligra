@@ -63,7 +63,7 @@ KoShape *StencilShapeFactory::createDefaultShape(KoResourceManager *documentReso
         KoStore * store = KoStore::createStore( m_path, KoStore::Read );
         if(store->bad())
         {
-            //emit loadingFailed(i18n("Not a valid KOffice file: %1", m_path));
+            //emit loadingFailed(i18n("Not a valid Calligra file: %1", m_path));
             delete store;
             return shape;
         }

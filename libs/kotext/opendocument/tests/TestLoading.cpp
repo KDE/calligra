@@ -397,10 +397,10 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
         QString key, value;
         switch (id) {
         // double properties
-        case KoTableCellStyle::LeftBorderSpacing:
-        case KoTableCellStyle::RightBorderSpacing:
-        case KoTableCellStyle::TopBorderSpacing:
-        case KoTableCellStyle::BottomBorderSpacing:
+        case KoTableBorderStyle::LeftBorderSpacing:
+        case KoTableBorderStyle::RightBorderSpacing:
+        case KoTableBorderStyle::TopBorderSpacing:
+        case KoTableBorderStyle::BottomBorderSpacing:
             if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10) {
                 qDebug() << "Cell Border Spacing Mismatch";
                 qDebug() << "Expected Spacing: " << expectedProperty[id].toDouble();
@@ -414,14 +414,14 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
                 match = false;
             break;
         // pen properties
-        case KoTableCellStyle::LeftBorderOuterPen:
-        case KoTableCellStyle::LeftBorderInnerPen:
-        case KoTableCellStyle::RightBorderOuterPen:
-        case KoTableCellStyle::RightBorderInnerPen:
-        case KoTableCellStyle::TopBorderOuterPen:
-        case KoTableCellStyle::TopBorderInnerPen:
-        case KoTableCellStyle::BottomBorderOuterPen:
-        case KoTableCellStyle::BottomBorderInnerPen: {
+        case KoTableBorderStyle::LeftBorderOuterPen:
+        case KoTableBorderStyle::LeftBorderInnerPen:
+        case KoTableBorderStyle::RightBorderOuterPen:
+        case KoTableBorderStyle::RightBorderInnerPen:
+        case KoTableBorderStyle::TopBorderOuterPen:
+        case KoTableBorderStyle::TopBorderInnerPen:
+        case KoTableBorderStyle::BottomBorderOuterPen:
+        case KoTableBorderStyle::BottomBorderInnerPen: {
             QPen actualPen = qvariant_cast<QPen>(actualProperty[id]);
             QPen expectedPen = qvariant_cast<QPen>(expectedProperty[id]);
             if (actualPen != expectedPen) {
@@ -789,7 +789,7 @@ static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine 
 TestLoading::TestLoading()
 {
     componentData = new KComponentData("TestLoading");
-    componentData->dirs()->addResourceType("styles", "data", "kword/styles/");
+    componentData->dirs()->addResourceType("styles", "data", "words/styles/");
 }
 
 TestLoading::~TestLoading()
@@ -1007,6 +1007,8 @@ void TestLoading::addData(LoadSave loadSave)
 
     QTest::newRow("bookmark") << "ParagraphElements/bookmark";
     QTest::newRow("note") << "ParagraphElements/note";
+
+    QTest::newRow("dde") << "DDE/dde";
 }
 
 QTextDocument *TestLoading::documentFromScript(const QString &script)
@@ -1175,6 +1177,8 @@ void TestLoading::testLoading()
     Q_UNUSED(showDocument);
 //    showDocument(actualDocument);
 //    showDocument(expectedDocument);
+
+    /* don't fill the harddisc
     if (!documentsEqual) {
         testName.replace('/', '_');
         QFile file1("failed-loading-" + testName + "-actual");
@@ -1190,6 +1194,8 @@ void TestLoading::testLoading()
             file2.close();
         }
     }
+    */
+
     if (testcase.indexOf("Tables/") > 0)
         QEXPECT_FAIL("", "Tables not supported yet", Abort);
     delete actualDocument;
@@ -1221,6 +1227,7 @@ void TestLoading::testSaving()
 
     bool documentsEqual = compareDocuments(savedDocument, expectedDocument);
 
+    /* don't fill the harddisc
     if (!documentsEqual) {
         testName.replace('/', '_');
         QFile file1("failed-saving-" + testName + "-actual");
@@ -1236,6 +1243,8 @@ void TestLoading::testSaving()
             file2.close();
         }
     }
+    */
+
     delete actualDocument;
     delete expectedDocument;
     delete savedDocument;

@@ -30,10 +30,10 @@
 
 using namespace Calligra::Tables;
 
-NamedAreaCommand::NamedAreaCommand(QUndoCommand* parent)
+NamedAreaCommand::NamedAreaCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
-    setText(i18n("Add Named Area"));
+    setText(i18nc("(qtundo-format)", "Add Named Area"));
 }
 
 NamedAreaCommand::~NamedAreaCommand()
@@ -49,9 +49,9 @@ void NamedAreaCommand::setReverse(bool reverse)
 {
     AbstractRegionCommand::setReverse(reverse);
     if (!m_reverse)
-        setText(i18n("Add Named Area"));
+        setText(i18nc("(qtundo-format)", "Add Named Area"));
     else
-        setText(i18n("Remove Named Area"));
+        setText(i18nc("(qtundo-format)", "Remove Named Area"));
 }
 
 bool NamedAreaCommand::preProcessing()

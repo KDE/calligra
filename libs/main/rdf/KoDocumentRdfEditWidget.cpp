@@ -349,8 +349,8 @@ void KoDocumentRdfEditWidget::addTriple()
     // want to create a bnode, we change it to a URI first.
     //
     Soprano::Node obj(QUrl(const_cast<Soprano::Model*>(m_rdf->model())->createBlankNode().toString()));
-    Soprano::Statement st(Soprano::Node(QUrl("http://koffice.org/new-node")),
-                          Soprano::Node(QUrl("http://koffice.org/new-node")),
+    Soprano::Statement st(Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
+                          Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
                           obj,
                           m_rdf->manifestRdfNode());
     int newRowNumber = d->m_tripleModel->insertStatement(st);
@@ -459,7 +459,6 @@ void KoDocumentRdfEditWidget::defaultContactsSheetButton()
 {
     KoDocumentRdf *rdf = d->m_rdf;
     Q_ASSERT(rdf);
-    rdf->ensureTextTool();
     QString stylesheetName = d->m_ui->m_defaultContactsSheet->currentText();
     kDebug(30015) << "changing contact default stylesheet to:" << stylesheetName;
     KoSemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet);
@@ -479,7 +478,6 @@ void KoDocumentRdfEditWidget::defaultEventsSheetButton()
 {
     KoDocumentRdf *rdf = d->m_rdf;
     Q_ASSERT(rdf);
-    rdf->ensureTextTool();
     QString stylesheetName = d->m_ui->m_defaultEventsSheet->currentText();
     kDebug(30015) << "changing event default stylesheet to:" << stylesheetName;
     KoSemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet);
@@ -499,7 +497,6 @@ void KoDocumentRdfEditWidget::defaultLocationsSheetButton()
 {
     KoDocumentRdf *rdf = d->m_rdf;
     Q_ASSERT(rdf);
-    rdf->ensureTextTool();
     QString stylesheetName = d->m_ui->m_defaultLocationsSheet->currentText();
     kDebug(30015) << stylesheetName;
     KoSemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet);

@@ -51,6 +51,8 @@ public:
     KexiProjectModelItem *modelItemFromItem(const KexiPart::Item &item) const;
     KexiProjectModelItem *modelItemFromName(const QString &name) const;
     
+    void clear();
+    
 public slots:
     void slotAddItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);
@@ -59,8 +61,6 @@ private:
     class Private;  
     Private * const d;
     
-    void clear();
-
     KexiProjectModelItem* addGroup(KexiPart::Info& info, KexiProjectModelItem*) const;
     KexiProjectModelItem* addItem(KexiPart::Item& item, KexiPart::Info& info, KexiProjectModelItem*) const;
 

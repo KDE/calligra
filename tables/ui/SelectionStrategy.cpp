@@ -67,8 +67,8 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
 #endif // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
 
     // In which cell did the user click?
-    double xpos;
-    double ypos;
+    qreal xpos;
+    qreal ypos;
     const int col = sheet->leftColumn(position.x(), xpos);
     const int row = sheet->topRow(position.y(), ypos);
     // Check boundaries.

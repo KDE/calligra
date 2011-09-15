@@ -20,9 +20,9 @@
 */
 
 #include <latexexportAdaptor.h>
-#include "kwordlatexexportdia.h"
+#include "wordslatexexportdia.h"
 
-LatexExportAdaptor::LatexExportAdaptor(KWordLatexExportDia* dia)
+LatexExportAdaptor::LatexExportAdaptor(WordsLatexExportDia* dia)
         : QDBusAbstractAdaptor(dia)
 {
     // constructor

@@ -98,13 +98,14 @@ public:
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
     static const KoColorProfile* getScreenProfile(int screen = -1);
-    
+
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
 
     QList<KisAbstractPerspectiveGrid*> perspectiveGrids() const;
     void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
     void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
+    void clearPerspectiveGrids();
 
     void setMirrorHorizontal(bool mirrorHorizontal);
     bool mirrorHorizontal() const;
@@ -115,13 +116,14 @@ public:
     void setOpacity(qreal opacity);
     qreal opacity();
 
+    void setPaintOpPreset(const KisPaintOpPresetSP preset);
+
 public slots:
 
     void slotSetFGColor(const KoColor& c);
     void slotSetBGColor(const KoColor& c);
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
-    void slotPaintOpPresetActivated(const KisPaintOpPresetSP preset);
     void slotNodeActivated(const KisNodeSP node);
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
     void slotPainting();

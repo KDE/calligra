@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ class KoPageLayoutWidget;
 class KWDocumentColumns;
 
 /**
- * The 'Custom Document' widget in the KWord startup widget.
+ * The 'Custom Document' widget in the Words startup widget.
  * This class embeds the page size/columns tabs to allow the user to select the document
  * markup for his new empty document.
  */

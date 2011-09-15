@@ -35,7 +35,7 @@ using namespace Calligra::Tables;
 IndentationCommand::IndentationCommand()
         : AbstractRegionCommand()
 {
-    setText(i18n("Increase Indentation"));
+    setText(i18nc("(qtundo-format)", "Increase Indentation"));
 }
 
 bool IndentationCommand::mainProcessing()
@@ -61,7 +61,7 @@ void IndentationCommand::setReverse(bool reverse)
 {
     AbstractRegionCommand::setReverse(reverse);
     if (!m_reverse)
-        setText(i18n("Increase Indentation"));
+        setText(i18nc("(qtundo-format)", "Increase Indentation"));
     else
-        setText(i18n("Decrease Indentation"));
+        setText(i18nc("(qtundo-format)", "Decrease Indentation"));
 }

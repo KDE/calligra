@@ -34,7 +34,7 @@ schemas = {
 		"OpenDocument-manifest-schema-v1.0-os.rng"],
 	"1.1": ["OpenDocument-schema-v1.1.rng",
 		"OpenDocument-manifest-schema-v1.1.rng"],
-	"1.2": ["OpenDocument-v1.2-cd05-schema-koffice.rng",
+	"1.2": ["OpenDocument-v1.2-cd05-schema-calligra.rng",
 		"OpenDocument-v1.2-cd05-manifest-schema.rng"]
 }
 
@@ -43,7 +43,11 @@ class jingodfvalidator:
 		self.jingjar = jingjar;
 
 	def validate(self, odfpath):
-		zip = zipfile.ZipFile(odfpath, 'r')
+		try:
+			zip = zipfile.ZipFile(odfpath, 'r')
+		except:
+			self.validateFlatXML(odfpath)
+			return
 		odfversion = getODFVersion(zip)
 		if not odfversion in schemas:
 			return "Document has no version number"
@@ -61,17 +65,27 @@ class jingodfvalidator:
 			return err
 		return None
 
+	def validateFlatXML(self, filepath):
+		schema = schemas["1.2"][0]
+		schema = os.path.join(sys.path[0], schema)
+		r = self.validateXML(schema, filepath)
+		if r:
+			return filepath + " is not valid."
+
 	def validateFile(self, zip, filepath, schema):
 		schema = os.path.join(sys.path[0], schema)
 		suffix = "_" + filepath.replace("/", "_")
 		tmp = tempfile.NamedTemporaryFile(suffix = suffix)
 		tmp.write(zip.open(filepath, "r").read())
 		tmp.flush()
-		args = ["java", "-jar", self.jingjar, "-i", schema, tmp.name]
-		r = subprocess.call(args)
+		r = self.validateXML(schema, tmp.name)
 		tmp.close()
 		if r:
 			return filepath + " is not valid."
+
+	def validateXML(self, schema, xmlpath):
+		args = ["java", "-jar", self.jingjar, "-i", schema, xmlpath]
+		return subprocess.call(args)
 
 def createValidator(name):
 	xml = lxml.etree.parse(open(os.path.join(sys.path[0], name), "rb"))

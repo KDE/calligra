@@ -31,7 +31,7 @@
 #include "kword13picture.h"
 #include "kword13document.h"
 
-KWord13Document::KWord13Document(void) : m_previewFile(0)
+Words13Document::Words13Document(void) : m_previewFile(0)
 {
     m_normalTextFramesetList.setAutoDelete(true);
     m_tableFramesetList.setAutoDelete(true);
@@ -42,12 +42,12 @@ KWord13Document::KWord13Document(void) : m_previewFile(0)
     m_pictureDict.setAutoDelete(true);
 }
 
-KWord13Document::~KWord13Document(void)
+Words13Document::~Words13Document(void)
 {
     delete m_previewFile;
 }
 
-void KWord13Document::xmldump(QIODevice* io)
+void Words13Document::xmldump(QIODevice* io)
 {
     QTextStream iostream(io);
     iostream.setEncoding(QTextStream::UnicodeUTF8);
@@ -70,7 +70,7 @@ void KWord13Document::xmldump(QIODevice* io)
     iostream << " </documentinfo>\n";
 
     iostream << " <normalframesets>\n";
-    for (KWordTextFrameset* item = m_normalTextFramesetList.first();
+    for (WordsTextFrameset* item = m_normalTextFramesetList.first();
             item;
             item = m_normalTextFramesetList.next()) {
         item->xmldump(iostream);
@@ -78,7 +78,7 @@ void KWord13Document::xmldump(QIODevice* io)
     iostream << " </normalframesets>\n";
 
     iostream << " <tableframesets>\n";
-    for (KWordTextFrameset* item12 = m_tableFramesetList.first();
+    for (WordsTextFrameset* item12 = m_tableFramesetList.first();
             item12;
             item12 = m_tableFramesetList.next()) {
         item12->xmldump(iostream);
@@ -86,7 +86,7 @@ void KWord13Document::xmldump(QIODevice* io)
     iostream << " </tableframesets>\n";
 
     iostream << " <headerfooterframesets>\n";
-    for (KWordTextFrameset* item2 = m_headerFooterFramesetList.first();
+    for (WordsTextFrameset* item2 = m_headerFooterFramesetList.first();
             item2;
             item2 = m_headerFooterFramesetList.next()) {
         item2->xmldump(iostream);
@@ -94,7 +94,7 @@ void KWord13Document::xmldump(QIODevice* io)
     iostream << " </headerfooterframesets>\n";
 
     iostream << " <footendnoteframesets>\n";
-    for (KWordTextFrameset* item3 = m_footEndNoteFramesetList.first();
+    for (WordsTextFrameset* item3 = m_footEndNoteFramesetList.first();
             item3;
             item3 = m_footEndNoteFramesetList.next()) {
         item3->xmldump(iostream);
@@ -102,7 +102,7 @@ void KWord13Document::xmldump(QIODevice* io)
     iostream << " </footendnoteframesets>\n";
 
     iostream << " <otherframesets>\n";
-    for (KWord13Frameset* item4 = m_otherFramesetList.first();
+    for (Words13Frameset* item4 = m_otherFramesetList.first();
             item4;
             item4 = m_otherFramesetList.next()) {
         item4->xmldump(iostream);
@@ -110,7 +110,7 @@ void KWord13Document::xmldump(QIODevice* io)
     iostream << " </otherframesets>\n";
 
     iostream << " <pictureframesets>\n";
-    for (KWord13Frameset* item5 = m_pictureFramesetList.first();
+    for (Words13Frameset* item5 = m_pictureFramesetList.first();
             item5;
             item5 = m_pictureFramesetList.next()) {
         item5->xmldump(iostream);
@@ -119,7 +119,7 @@ void KWord13Document::xmldump(QIODevice* io)
 
     iostream << " <styles>\n";
 
-    for (Q3ValueList<KWord13Layout>::Iterator it2 = m_styles.begin();
+    for (Q3ValueList<Words13Layout>::Iterator it2 = m_styles.begin();
             it2 != m_styles.end();
             ++it2) {
         (*it2).xmldump(iostream);
@@ -129,7 +129,7 @@ void KWord13Document::xmldump(QIODevice* io)
 
     iostream << " <pictures>\n";
 
-    for (Q3DictIterator<KWord13Picture> it3(m_pictureDict) ; it3.current(); ++it3) {
+    for (Q3DictIterator<Words13Picture> it3(m_pictureDict) ; it3.current(); ++it3) {
         iostream << "  <key>" << it3.currentKey() << "</key>";
     }
 
@@ -138,7 +138,7 @@ void KWord13Document::xmldump(QIODevice* io)
     iostream << "</kworddocument>\n";
 }
 
-QString KWord13Document::getDocumentInfo(const QString& name) const
+QString Words13Document::getDocumentInfo(const QString& name) const
 {
     QMap<QString, QString>::ConstIterator it(m_documentInfo.find(name));
     if (it == m_documentInfo.end()) {
@@ -149,7 +149,7 @@ QString KWord13Document::getDocumentInfo(const QString& name) const
     }
 }
 
-QString KWord13Document::getProperty(const QString& name, const QString& oldName) const
+QString Words13Document::getProperty(const QString& name, const QString& oldName) const
 {
     const QString result(getPropertyInternal(name));
 
@@ -161,7 +161,7 @@ QString KWord13Document::getProperty(const QString& name, const QString& oldName
     }
 }
 
-QString KWord13Document::getPropertyInternal(const QString& name) const
+QString Words13Document::getPropertyInternal(const QString& name) const
 {
     QMap<QString, QString>::ConstIterator it(m_documentProperties.find(name));
     if (it == m_documentProperties.end()) {
@@ -172,7 +172,7 @@ QString KWord13Document::getPropertyInternal(const QString& name) const
     }
 }
 
-QDateTime KWord13Document::lastPrintingDate(void) const
+QDateTime Words13Document::lastPrintingDate(void) const
 {
     const QString strDate(getPropertyInternal("VARIABLESETTINGS:lastPrintingDate"));
 
@@ -187,7 +187,7 @@ QDateTime KWord13Document::lastPrintingDate(void) const
     return dt;
 }
 
-QDateTime KWord13Document::creationDate(void) const
+QDateTime Words13Document::creationDate(void) const
 {
     const QString strDate(getPropertyInternal("VARIABLESETTINGS:creationDate"));
 
@@ -210,7 +210,7 @@ QDateTime KWord13Document::creationDate(void) const
     return dt;
 }
 
-QDateTime KWord13Document::modificationDate(void) const
+QDateTime Words13Document::modificationDate(void) const
 {
     const QString strDate(getPropertyInternal("VARIABLESETTINGS:modificationDate"));
 

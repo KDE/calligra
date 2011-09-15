@@ -160,7 +160,7 @@ KAboutData* KoUnavailFactory::aboutData()
 {
     if ( !s_aboutData )
     {
-        static const char* description=I18N_NOOP("KoUnavail KOffice Program");
+        static const char* description=I18N_NOOP("KoUnavail Calligra Program");
         static const char* version="0.1";
         s_aboutData=new KAboutData( "kounavail", 0, ki18n("KoUnavail"),
                                     version, ki18n(description), KAboutData::License_LGPL,
@@ -175,8 +175,8 @@ const KComponentData &KoUnavailFactory::global()
     if ( !s_global )
     {
         s_global = new KComponentData( aboutData() );
-        // Tell the iconloader about share/apps/koffice/icons
-        //s_global->iconLoader()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        //s_global->iconLoader()->addAppDir("calligra");
     }
     return *s_global;
 }

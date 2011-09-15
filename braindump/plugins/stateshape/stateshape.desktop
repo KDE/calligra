@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=State Shape
+Name[bg]=Форма за състояние
+Name[cs]=Stavový tvar
+Name[da]=Tilstand-form
 Name[el]=Σχήμα κατάστασης
 Name[en_GB]=State Shape
 Name[es]=Forma de estado
@@ -7,14 +10,16 @@ Name[et]=Olekukujund
 Name[it]=Forma di stato
 Name[nb]=Statisk form
 Name[nl]=Statusvorm
+Name[pl]=Kształt stanu
 Name[pt]=Forma do Estado
 Name[pt_BR]=Forma de estados
+Name[ru]=Объект состояния
 Name[sv]=Tillståndsform
 Name[ug]=ھالەت شەكىللىرى
 Name[uk]=Форма стану
 Name[x-test]=xxState Shapexx
 Name[zh_TW]=狀態元件
-X-KDE-ServiceTypes=KOffice/Shape
+X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=stateshape
 X-Flake-MinVersion=0

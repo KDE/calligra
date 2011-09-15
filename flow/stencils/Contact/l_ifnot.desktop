@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=ifnot
+Name[it]=ifnot
+Name[nb]=hvis ikke
+Name[pl]=jeślinie
 Name[pt]=senão
 Name[pt_BR]=senão
 Name[sv]=om inte
 Name[uk]=ifnot
 Name[x-test]=xxifnotxx
+Name[zh_TW]=ifnot

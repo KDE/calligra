@@ -73,7 +73,7 @@ public:
     }
 
     // true if it's null (which is shared)
-    bool isNull() {
+    bool isNull() const {
         return this == s_null;
     }
 

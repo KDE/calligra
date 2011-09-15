@@ -69,8 +69,9 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 
 AlterSchemaWidget::~AlterSchemaWidget()
 {
-    delete m_model;
-
+    if (m_model) {
+        delete m_model;
+    }
 }
 
 void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)

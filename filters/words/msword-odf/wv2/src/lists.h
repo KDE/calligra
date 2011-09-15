@@ -67,14 +67,14 @@ namespace wvWare
     class ListInfo
     {
     public:
-        ListInfo( Word97::PAP& pap, ListInfoProvider& listInfoProvider );
+        ListInfo( Word97::PAP& pap, const Word97::CHP& chp, ListInfoProvider& listInfoProvider );
 
         /**
-         * The istd linked to the current list/level, istdNil (4095) if none (LSFT::rgistd)
+         * The istd linked to the current list/level, istdNil (4095) if none (LSTF::rgistd)
          */
         U16 linkedIstd() const { return m_linkedIstd; }
         /**
-         * Returns whether the list counter should be restarted in new sections. (LSFT::fRestartHdn)
+         * Returns whether the list counter should be restarted in new sections. (LSTF::fRestartHdn)
          */
         bool restartingCounter() const { return m_restartingCounter; }
 
@@ -143,9 +143,9 @@ namespace wvWare
         U8 followingChar() const { return m_followingChar; }
 
         /**
-         * In order to help users to detect when a new list starts
-         * we also provide access to the (internal) unique ID of a list.
-         * Returns 0 if it hasn't been initailized.
+         * In order to help users to detect when a new list starts we also
+         * provide access to the (internal) unique ID of a list.
+         * @return 0 if it hasn't been initailized.
          */
         S32 lsid() const { return m_lsid; }
 
@@ -243,7 +243,7 @@ namespace wvWare
 
         const ListLevel* formattingListLevel() const;
         std::pair<S32, bool> startAt();
-        ListText text() const;
+        ListText text(const Word97::CHP& chp) const;
 
         std::vector<ListData*> m_listData;
         std::vector<ListFormatOverride*> m_listFormatOverride;

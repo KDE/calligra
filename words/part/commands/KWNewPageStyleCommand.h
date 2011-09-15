@@ -20,16 +20,16 @@
 #ifndef KWNEWPAGESTYLECOMMAND_H
 #define KWNEWPAGESTYLECOMMAND_H
 
-#include "../kword_export.h"
+#include "../words_export.h"
 #include "../KWPageStyle.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KWPageStylePrivate;
 class KWDocument;
 
 /// The undo / redo command for adding a new page style
-class KWORD_TEST_EXPORT KWNewPageStyleCommand : public QUndoCommand
+class WORDS_TEST_EXPORT KWNewPageStyleCommand : public KUndo2Command
 {
 public:
     /**
@@ -39,7 +39,7 @@ public:
      * @param parent the parent for command macros
      * @param masterPageName the master page name for the new page
      */
-    explicit KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, QUndoCommand *parent = 0);
+    explicit KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, KUndo2Command *parent = 0);
 
     /// redo the command
     virtual void redo();

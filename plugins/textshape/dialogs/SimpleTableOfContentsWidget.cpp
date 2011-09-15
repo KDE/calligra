@@ -18,11 +18,13 @@
  */
 #include "SimpleTableOfContentsWidget.h"
 #include "ReferencesTool.h"
+#include "TableOfContentsConfigure.h"
 
 #include <KAction>
 #include <KDebug>
 
 #include <QWidget>
+#include <QMenu>
 
 SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent)
         : QWidget(parent),
@@ -30,13 +32,34 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
 {
     widget.setupUi(this);
     widget.addToC->setDefaultAction(tool->action("insert_tableofcentents"));
+    widget.configureToC->setDefaultAction(tool->action("format_tableofcentents"));
 
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.configureToC, SIGNAL(clicked(bool)), this, SIGNAL(showConfgureOptions()));
 }
 
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+}
+
+void SimpleTableOfContentsWidget::setToCConfigureMenu(QMenu *tocMenu)
+{
+    if (widget.configureToC->menu()) {
+        widget.configureToC->menu()->disconnect();
+    }
+
+    widget.configureToC->setMenu(tocMenu);
+}
+
+QMenu *SimpleTableOfContentsWidget::ToCConfigureMenu()
+{
+    return widget.configureToC->menu();
+}
+
+void SimpleTableOfContentsWidget::showMenu()
+{
+    widget.configureToC->showMenu();
 }
 
 #include <SimpleTableOfContentsWidget.moc>

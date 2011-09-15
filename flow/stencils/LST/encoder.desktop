@@ -2,9 +2,14 @@
 Name=Encoder
 Name[el]=Κωδικοποιητής
 Name[es]=Codificador
+Name[it]=Codificatore
+Name[nb]=Koder
+Name[nl]=Encoder
+Name[pl]=Enkoder
 Name[pt]=Codificador
 Name[pt_BR]=Codificador
 Name[sv]=Kodare
 Name[uk]=Кодувальник
 Name[x-test]=xxEncoderxx
 Name[zh_CN]=编码器
+Name[zh_TW]=編碼器

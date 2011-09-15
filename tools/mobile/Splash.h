@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -37,7 +37,7 @@ class Splash;
 }
 
 /*!
- * \brief Splash screen to display KOffice Icon
+ * \brief Splash screen to display Calligra Icon
  */
 class Splash : public QSplashScreen
 {
@@ -52,13 +52,13 @@ private:
      */
     QVBoxLayout *m_layout;
     /*!
-     * Label for koffice logo
+     * Label for calligra logo
      */
     QLabel *m_label;
     /*!
-     * Pixmap for KOffice png
+     * Pixmap for Calligra png
      */
-    QPixmap m_kOfficeLogo;
+    QPixmap m_calligraLogo;
 };
 
 #endif // SPLASH_H

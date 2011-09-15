@@ -1,6 +1,6 @@
 
 /*
-** Header file for inclusion with kword_xml2latex.c
+** Header file for inclusion with words_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef __KWORD_LISTEFORMAT_H__
-#define __KWORD_LISTEFORMAT_H__
+#ifndef __WORDS_LISTEFORMAT_H__
+#define __WORDS_LISTEFORMAT_H__
 
 #include "format.h"
 
@@ -239,5 +239,5 @@ public:
 
 };
 
-#endif /* __KWORD_LISTEFORMAT_H__ */
+#endif /* __WORDS_LISTEFORMAT_H__ */
 

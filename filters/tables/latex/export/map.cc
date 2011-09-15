@@ -1,5 +1,5 @@
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by Words into LATEX.
 **
 ** Copyright (C) 2000, 2001, 2002 Robert JACOLIN
 **
@@ -65,7 +65,6 @@ void Map::analyze(const QDomNode node)
 /*******************************************/
 void Map::generate(QTextStream &out)
 {
-    Table *table = NULL;
     kDebug(30522) << "  MAP GENERATION";
     foreach(Table* table, _tables) {
         table->generate(out);

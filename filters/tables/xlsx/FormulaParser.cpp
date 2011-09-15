@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -26,49 +26,6 @@
 #include "XlsxXmlWorksheetReader_p.h"
 
 #include <tables/Util.h>
-
-QString MSOOXML::convertFormula(const QString& formula)
-{
-    if (formula.isEmpty())
-        return QString();
-    enum { Start, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName } state;
-    state = Start;
-    QString result = '=' + formula;
-    for(int i = 1; i < result.length(); ++i) {
-        QChar ch = result[i];
-        switch (state) {
-        case Start:
-            if(ch == '(')
-                state = InArguments;
-            break;
-        case InArguments:
-            if (ch == '"')
-                state = InString;
-            else if (ch.unicode() == '\'')
-                state = InSheetOrAreaName;
-            else if (ch == ',')
-                result[i] = ';'; // replace argument delimiter
-            else if (ch == '(' && !result[i-1].isLetterOrNumber())
-                state = InParenthesizedArgument;
-            break;
-        case InParenthesizedArgument:
-            if (ch == ',')
-                result[i] = '~'; // union operator
-            else if (ch == ')')
-                state = InArguments;
-            break;
-        case InString:
-            if (ch == '"')
-                state = InArguments;
-            break;
-        case InSheetOrAreaName:
-            if (ch == '\'')
-                state = InArguments;
-            break;
-        };
-    };
-    return result;
-}
 
 QString MSOOXML::convertFormulaReference(Cell* referencedCell, Cell* thisCell)
 {

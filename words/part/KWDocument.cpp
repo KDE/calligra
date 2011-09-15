@@ -45,7 +45,7 @@
 #include "changetracker/KoChangeTracker.h"
 #include "KWRootAreaProvider.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
 #include <KoTextAnchor.h>
@@ -68,7 +68,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #endif
@@ -166,7 +166,7 @@ void KWDocument::addShape(KoShape *shape)
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? KWord::frameSetTypeName(frame->frameSet()) : QString());
+    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
@@ -198,7 +198,7 @@ KoView *KWDocument::createViewInstance(QWidget *parent)
         if (switchToolCalled)
             continue;
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+        if (tfs && tfs->textFrameSetType() == Words::MainTextFrameSet) {
             KoSelection *selection = view->canvasBase()->shapeManager()->selection();
             selection->select(fs->frames().first()->shape());
 
@@ -280,7 +280,7 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
         removeFrame(frame);
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
+        canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
     }
     disconnect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
@@ -297,7 +297,7 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
-        if (tfs->textFrameSetType() != KWord::MainTextFrameSet) continue;
+        if (tfs->textFrameSetType() != Words::MainTextFrameSet) continue;
         QSet<KWPage> coveredPages;
         QList<int> coveredPageNumbers;
         foreach (KWFrame *frame, tfs->frames()) {
@@ -340,7 +340,7 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
 
-        if (tfs->textFrameSetType() == KWord::MainTextFrameSet && m_layoutProgressUpdater) {
+        if (tfs->textFrameSetType() == Words::MainTextFrameSet && m_layoutProgressUpdater) {
             connect(lay, SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
             connect(lay, SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
         }
@@ -380,11 +380,11 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
     // after them so future operations iterating over that QList always handle headers and footers first.
     int insertAt = m_frameSets.count();
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-    if (tfs && KWord::isHeaderFooter(tfs)) {
+    if (tfs && Words::isHeaderFooter(tfs)) {
         insertAt = 0;
         for(int i = 0; i < m_frameSets.count(); ++i) {
             KWTextFrameSet *_tfs = dynamic_cast<KWTextFrameSet*>(m_frameSets[i]);
-            if (_tfs && !KWord::isHeaderFooter(_tfs)) {
+            if (_tfs && !Words::isHeaderFooter(_tfs)) {
                 insertAt = i;
                 break;
             }
@@ -397,7 +397,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
     if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
         Q_ASSERT(tfs->pageManager() == pageManager());
-        if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+        if (tfs->textFrameSetType() == Words::MainTextFrameSet) {
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
             Q_ASSERT(lay);
             connect(lay, SIGNAL(finishedLayout()), this, SLOT(mainTextFrameSetLayoutDone()));
@@ -415,13 +415,13 @@ void KWDocument::addFrame(KWFrame *frame)
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-        canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
+        canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
     }
     if (viewCount() == 0) {
         KoCanvasBase *canvas = dynamic_cast<KoCanvasBase *>(canvasItem(false));
         if (canvas) {
             canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-            canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
+            canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
         }
     }
     //frame->shape()->update();
@@ -733,7 +733,7 @@ QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) 
 {
     QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
     if (importExportType == KoDocument::ForExport)
-        answer.removeAll("application/x-kword"); // we can't save this, only load.
+        answer.removeAll("application/x-words"); // we can't save this, only load.
     return answer;
 }
 
@@ -806,7 +806,7 @@ void KWDocument::saveConfig()
 {
     if (!isReadWrite())
         return;
-//   KConfigGroup group(KoGlobal::kofficeConfig(), "Spelling");
+//   KConfigGroup group(KoGlobal::calligraConfig(), "Spelling");
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
     if (isEmbedded())
         return;

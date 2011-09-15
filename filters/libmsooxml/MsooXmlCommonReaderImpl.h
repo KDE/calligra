@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -55,7 +55,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -68,6 +68,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 //kDebug() << "{1}";
     READ_EPILOGUE
 }
+
+
+// ----------------------------------------------------------------
+//                     New namespace: mc
+
+// ARRRRRGH!
+
+// The way that READ_PROLOGUE is defined via QUALIFIED_NAME makes it
+// impossible to use it in files that handle tags both with and
+// without namespaces.  This means that we cannot use READ_PROLOGUE in
+// the functions below, and most likely also not the READ_IF variants.
+// The above is only true when called from XmlWorksheetReader.  For Docx,
+// there are always namespaces, so it doesn't apply.
+// Same is true for READ_EPILOGUE.
+
+
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "mc"
 
@@ -76,23 +92,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 //! Alternate content handler
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
 {
-    READ_PROLOGUE
-
     m_choiceAccepted = false;
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
+        if (isEndElement() && name() == "AlternateContent") {
+            break;
+        }
+
         if (isStartElement()) {
-            TRY_READ_IF(Choice)
+            if (name() == "Choice") {
+                TRY_READ(Choice)
+            }
             else if (!m_choiceAccepted && qualifiedName() == "mc:Fallback") {
                 TRY_READ(Fallback)
             }
-            SKIP_UNKNOWN
+            else {
+                skipCurrentElement();
+            }
         }
     }
 
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #undef CURRENT_EL
@@ -100,28 +121,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
 //! Choice handler
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Choice()
 {
-    READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(Requires)
 
+    // 'Requires="v"' means that the contents of the Choice part
+    // is VML, which we support (or something else we do support,
+    // Lassi is not sure).  For all other alternatives we
+    // don't dare try to interpret it, but instead we use the
+    // AlternateContent which is what MSO 2007 would have given us.
     if (Requires != "v") {
         skipCurrentElement();
-        READ_EPILOGUE
+        return KoFilter::OK;
     }
-    m_choiceAccepted = true;
 
+    m_choiceAccepted = true;
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
+        if (isEndElement() && name() == "Choice") {
+            break;
+        }
         if (isStartElement()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
             TRY_READ_IF_NS(p, oleObj)
 #endif
         }
     }
-
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #undef CURRENT_EL
@@ -129,19 +156,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Choice()
 //! Fallback handler
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
 {
-    READ_PROLOGUE
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
+        if (isEndElement() && name() == "Fallback") {
+            break;
+        }
+
         if (isStartElement()) {
 #ifdef DOCXXMLDOCREADER_H
             TRY_READ_IF_NS(w, pict)
 #endif
+#ifdef XLSXXMLWORKSHEETREADER_CPP
+            // FIXME: This Choice/Content/Fallback structure needs a more general treatment.
+            if (name() == "oleObject") {
+                TRY_READ(oleObject)
+            }
+#endif
         }
     }
-
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #endif

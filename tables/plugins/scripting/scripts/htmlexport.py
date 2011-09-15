@@ -25,7 +25,7 @@ The script could be used in two ways;
 
 (C)2006 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.koffice.org/kspread
+http://www.calligra-suite.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import KWord, time
+import Words, time
 
-#KWord.insertPage( KWord.pageCount() )
-#if KWord.pageCount() < 1: KWord.insertPage(0)
-doc = KWord.mainFrameSet().document()
+#Words.insertPage( Words.pageCount() )
+#if Words.pageCount() < 1: Words.insertPage(0)
+doc = Words.mainFrameSet().document()
 
 cursor = doc.rootFrame().lastCursorPosition()
 #cursor = doc.lastCursor()

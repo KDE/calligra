@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2009 Inge wallin <inge@lysator.liu.se>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,8 +28,10 @@
 
 #include <QColor>
 #include <QSharedData>
+#include <QMetaType>
 
 #include "KoXmlReaderForward.h"
+#include "KoGenStyle.h"
 
 class KoGenStyle;
 class KoBorderPrivate;
@@ -49,21 +52,27 @@ class KOODF_EXPORT KoBorder
 {
 public:
 
-    /// The type of border.  Note that some of the border types are legacies from the old KWord format.
+    /// The type of border.  Note that some of the border types are legacies from the old Words format.
     enum BorderStyle {
         BorderNone, ///< no border. This value forces the computed value of 'border-width' to be '0'.
         BorderDotted,   ///< The border is a series of dots.
         BorderDashed,   ///< The border is a series of short line segments.
         BorderSolid,    ///< The border is a single line segment.
         BorderDouble,   ///< The border is two solid lines. The sum of the two lines and the space between them equals the value of 'border-width'.
-        BorderGroove,   ///< The border looks as though it were carved into the canvas. (old kword type)
-        BorderRidge,    ///< The opposite of 'groove': the border looks as though it were coming out of the canvas. (old kword type)
-        BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas. (old kword type)
-        BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas. (old kword type)
+        BorderGroove,   ///< The border looks as though it were carved into the canvas. (old words type)
+        BorderRidge,    ///< The opposite of 'groove': the border looks as though it were coming out of the canvas. (old words type)
+        BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas. (old words type)
+        BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas. (old words type)
 
-        // kword legacy
-        BorderDashDotPattern,
-        BorderDashDotDotPattern
+        BorderDashedLong,    ///< Dashed single border with long spaces
+        BorderTriple,    ///< Triple lined border
+        BorderSlash,    ///< slash border
+        BorderWave,    ///< wave border
+        BorderDoubleWave,    ///< double wave border
+
+        // words legacy
+        BorderDashDot,
+        BorderDashDotDot
     };
 
     /// Holds data about one border line.
@@ -169,20 +178,24 @@ public:
      * Load the style from the element
      *
      * @param style  the element containing the style to read from
+     * @return true when border attributes were found
      */
-    void loadOdf(const KoXmlElement &style);
+    bool loadOdf(const KoXmlElement &style);
 
-    void saveOdf(KoGenStyle &style) const;
+    void saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type = KoGenStyle::DefaultType) const;
 
 
     // Some public functions used in other places where borders are handled.
     // Example: KoParagraphStyle
     // FIXME: These places should be made to use KoBorder instead.
-    static BorderStyle odfBorderStyle(const QString &borderstyle);
+    static BorderStyle odfBorderStyle(const QString &borderstyle, bool *converted = 0);
     static QString odfBorderStyleString(BorderStyle borderstyle);
 
 private:
     QSharedDataPointer<KoBorderPrivate> d;
 };
+
+Q_DECLARE_METATYPE(KoBorder)
+
 
 #endif

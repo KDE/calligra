@@ -28,9 +28,10 @@ class KoXmlWriter;
 class Section;
 class SectionGroup;
 
-namespace Utils {
-  void containerBoundRec( QList<KoShape*> shapes, QRectF& b);
-  void containerBoundRec( KoShape* shape, QRectF& b);
-  
-  Section* sectionForLayer(KoShapeLayer* _layer, SectionGroup* _rootSection);
+namespace Utils
+{
+void containerBoundRec(QList<KoShape*> shapes, QRectF& b);
+void containerBoundRec(KoShape* shape, QRectF& b);
+
+Section* sectionForLayer(KoShapeLayer* _layer, SectionGroup* _rootSection);
 }

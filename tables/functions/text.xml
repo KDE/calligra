@@ -143,7 +143,7 @@
        <Help>
            <Text>The T() function returns the text referred to by value. If value is, or refers to, text then T returns value. If value does not refer to text then T returns empty text.</Text>
            <Syntax>T(value)</Syntax>
-           <Example>T("KOffice") returns "KOffice"</Example>
+           <Example>T("Calligra") returns "Calligra"</Example>
            <Example>T(1.2) returns "" (empty text)</Example>
        </Help>
    </Function>
@@ -195,9 +195,9 @@
        <Help>
            <Text>The COMPARE() function returns 0 if the two strings are equal; -1 if the first one is lower in value than the second one; otherwise it returns 1.</Text>
            <Syntax>COMPARE(string1; string2; true|false)</Syntax>
-           <Example>COMPARE("KOffice"; "KOffice"; true) returns 0</Example>
-           <Example>COMPARE("koffice"; "KOffice"; true) returns 1</Example>
-           <Example>COMPARE("kspread"; "KOffice"; false) returns 1</Example>
+           <Example>COMPARE("Calligra"; "Calligra"; true) returns 0</Example>
+           <Example>COMPARE("calligra"; "Calligra"; true) returns 1</Example>
+           <Example>COMPARE("kspread"; "Calligra"; false) returns 1</Example>
            <Related>EXACT</Related>
        </Help>
    </Function>
@@ -216,8 +216,8 @@
        <Help>
            <Text>The EXACT() function returns True if these two strings are equal. Otherwise, it returns False.</Text>
            <Syntax>EXACT(string1;string2)</Syntax>
-           <Example>EXACT("KOffice";"KOffice") returns True</Example>
-           <Example>EXACT("KSpread";"KOffice") returns False</Example>
+           <Example>EXACT("Calligra";"Calligra") returns True</Example>
+           <Example>EXACT("KSpread";"Calligra") returns False</Example>
            <Related>COMPARE</Related>
        </Help>
    </Function>
@@ -302,9 +302,9 @@
            <Text>Parameter start_num specifies the character at which to start the search. The first character is character number 1. If start_num is omitted, it is assumed to be 1.</Text>
            <Text>You can also use function SEARCH, but unlike SEARCH, FIND is case-sensitive and does not allow wildcard characters.</Text>
            <Syntax>FIND(find_text;within_text;start_num)</Syntax>
-           <Example>FIND("KOf";"KOffice") returns 1</Example>
-           <Example>FIND("i";"KOffice") returns 5</Example>
-           <Example>FIND("K";"KSpread in KOffice";4) returns 12</Example>
+           <Example>FIND("Cal";"Calligra") returns 1</Example>
+           <Example>FIND("i";"Calligra") returns 5</Example>
+           <Example>FIND("a";"Tables in Calligra";4) returns 12</Example>
            <Related>FINDB</Related>
            <Related>SEARCH</Related>
            <Related>REPLACE</Related>
@@ -359,8 +359,8 @@
            <Text>The MID() function returns a substring that contains 'length' characters of the string, starting at 'position' index.</Text>
            <Syntax>MID(text;position;length)</Syntax>
            <Syntax>MID(text;position)</Syntax>
-           <Example>MID("KOffice";2;3) returns "Off"</Example>
-           <Example>MID("KOffice";2) returns "Office"</Example>
+           <Example>MID("Calligra";2;3) returns "all"</Example>
+           <Example>MID("Calligra";2) returns "alligra"</Example>
            <Related>LEFT</Related>
            <Related>RIGHT</Related>
            <Related>LEFTB</Related>
@@ -465,7 +465,7 @@
        <Help>
            <Text>The CONCATENATE() function returns a string which is the concatenation of the strings passed as parameters.</Text>
            <Syntax>CONCATENATE(value;value;...)</Syntax>
-           <Example>CONCATENATE("KSpread";"KOffice";"KDE") returns "KSpreadKOfficeKDE"</Example>
+           <Example>CONCATENATE("Tables";"Calligra";"KDE") returns "TablesCalligraKDE"</Example>
        </Help>
    </Function>
 

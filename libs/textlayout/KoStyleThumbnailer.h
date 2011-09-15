@@ -50,15 +50,8 @@ public:
     virtual ~KoStyleThumbnailer();
 
     /**
-     * Set a text document that is capable of drawing the styles
-     * The method only has any effect first time, and the document is just to generate
-     ' preview pixmaps
-     */
-    void setPixmapHelperDocument(QTextDocument *pixmapHelperDocument);
-
-    /**
      * Return a thumbnail representing the style
-     * The thunbnail is 250*48 pt.
+     * The thunbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
      * The created thumbnail is cached.
      */
     QPixmap thumbnail(KoParagraphStyle *style);
@@ -67,13 +60,13 @@ public:
      * @returns a thumbnail representing the @param style, constrained into the @param size.
      * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
      * The real font size is indicated in this case.
-     * The thumbnail is NOT cached.
+     * The created thumbnail is cached.
      */
     QPixmap thumbnail(KoParagraphStyle *style, QSize size);
 
     /**
      * Return a thumbnail representing the style
-     * The thunbnail is 250*48 pt.
+     * The thunbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
      * The created thumbnail is cached.
      */
     QPixmap thumbnail(KoCharacterStyle *style);
@@ -82,11 +75,17 @@ public:
      * @returns a thumbnail representing the @param style, constrained into the @param size.
      * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
      * The real font size is indicated in this case.
-     * The thumbnail is NOT cached.
      */
     QPixmap thumbnail(KoCharacterStyle *style, QSize size);
 
+    /**
+     * Sets the size of the thumbnails returned by the @fn thumbnail with no size arguments.
+     */
+    void setThumbnailSize(QSize size);
+
 private:
+    void layoutThumbnail(QSize size, QPixmap &pm);
+
     class Private;
     Private* const d;
 };

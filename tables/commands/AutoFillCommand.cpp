@@ -310,7 +310,7 @@ Value AutoFillSequenceItem::nextValue(int _no, Value _delta) const
         if (m_value.isBoolean()) {
             if (!_delta.asBoolean() || _delta.isEmpty()) // no change?
                 return m_value;
-            return Value(_no % 2 ? !m_value.asBoolean() : m_value.asBoolean());
+            return Value((_no % 2) ? !m_value.asBoolean() : m_value.asBoolean());
         } else if (m_value.isInteger()) {
             Value value(m_value.asInteger() + _no * _delta.asInteger());
             value.setFormat(_delta.format());
@@ -378,7 +378,7 @@ Value AutoFillSequenceItem::prevValue(int _no, Value _delta) const
         if (m_value.isBoolean()) {
             if (!_delta.asBoolean() || _delta.isEmpty()) // no change?
                 return m_value;
-            return Value(_no % 2 ? !m_value.asBoolean() : m_value.asBoolean());
+            return Value((_no % 2) ? !m_value.asBoolean() : m_value.asBoolean());
         } else if (m_value.isInteger()) {
             Value value(m_value.asInteger() - _no * _delta.asInteger());
             value.setFormat(_delta.format());
@@ -698,7 +698,7 @@ static void fillSequence(const QList<Cell>& _srcList,
 
 AutoFillCommand::AutoFillCommand()
 {
-    setText(i18n("Autofill"));
+    setText(i18nc("(qtundo-format)", "Autofill"));
 }
 
 AutoFillCommand::~AutoFillCommand()

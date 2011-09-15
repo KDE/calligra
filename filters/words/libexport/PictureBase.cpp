@@ -39,7 +39,7 @@ PictureBase::PictureBase(void)
 {
     // Slow mode can be very slow, especially at high zoom levels -> configurable
     if (s_useSlowResizeMode == -1) {
-        KConfigGroup group(KGlobal::config(), "KOfficeImage");
+        KConfigGroup group(KGlobal::config(), "CalligraImage");
         s_useSlowResizeMode = group.readEntry("HighResolution", 1);
         kDebug(30508) << "HighResolution =" << s_useSlowResizeMode;
     }

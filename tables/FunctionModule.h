@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_FUNCTION_MODULE
 #define CALLIGRA_TABLES_FUNCTION_MODULE
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 #include <QList>
 #include <QObject>
@@ -101,6 +101,6 @@ private:
 #define CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE(libname, classname) \
     K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN(factory("calligra-tables-functions-" #libname)) \
-    K_EXPORT_PLUGIN_VERSION(KOFFICE_VERSION)
+    K_EXPORT_PLUGIN_VERSION(CALLIGRA_VERSION)
 
 #endif // CALLIGRA_TABLES_FUNCTION_MODULE

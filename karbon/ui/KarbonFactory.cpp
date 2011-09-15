@@ -67,7 +67,7 @@ QObject* KarbonFactory::create(const char* iface, QWidget* parentWidget, QObject
     Q_UNUSED(args);
     Q_UNUSED(keyword);
 
-    // If classname is "KoDocument", our host is a koffice application
+    // If classname is "KoDocument", our host is a calligra application
     // otherwise, the host wants us as a simple part, so switch to readonly and
     // single view.
     bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
@@ -101,8 +101,8 @@ const KComponentData &KarbonFactory::componentData()
         s_instance->dirs()->addResourceType("karbon_clipart", "data", "karbon/cliparts/");
         s_instance->dirs()->addResourceType("karbon_template", "data", "karbon/templates/");
         s_instance->dirs()->addResourceType("karbon_effects", "data", "karbon/effects/");
-        // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
     }
 
     return *s_instance;

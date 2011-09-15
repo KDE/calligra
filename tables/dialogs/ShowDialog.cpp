@@ -48,7 +48,7 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     setCaption(i18n("Show Sheet"));
     setModal(true);
     setButtons(Ok | Cancel);
-    setObjectName("ShowDialog");
+    setObjectName(QLatin1String("ShowDialog"));
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
@@ -85,7 +85,7 @@ void ShowDialog::accept()
 
     Map *const map = m_selection->activeSheet()->map();
     Sheet *sheet;
-    QUndoCommand* macroCommand = new QUndoCommand(i18n("Show Sheet"));
+    KUndo2Command* macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Show Sheet"));
     for (int i = 0; i < items.count(); ++i) {
         sheet = map->findSheet(items[i]->text());
         if (!sheet)

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -590,7 +590,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
-
+    Q_UNUSED(status);
     reportProgress(5);
 
     // 2. parse styles

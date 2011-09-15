@@ -13,8 +13,17 @@ set(kexiutils_LIB_SRCS
   longlongvalidator.cpp 
   InternalPropertyMap.cpp
   SmallToolButton.cpp 
+  KexiCommandLinkButton.cpp
   FlowLayout.cpp
   transliteration_table.cpp
+  kmessagewidget.cpp 
+  KexiContextMessage.cpp
+  KexiTitleLabel.cpp
+  KexiLinkWidget.cpp
+  KexiAssistantPage.cpp
+  KexiAssistantWidget.cpp
+  KexiAnimatedLayout.cpp
+  KexiCategorizedView.cpp
 )
 
 IF (KEXI_MOBILE)
@@ -38,7 +47,7 @@ ELSE (KEXI_MOBILE)
 ENDIF (KEXI_MOBILE)
 
 set_target_properties(kexiutils PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kexiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -47,5 +56,7 @@ if(FALSE) # TODO: install when we move to independent place
     install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h kexiutils_global.h
     styleproxy.h longlongvalidator.h InternalPropertyMap.h 
     SmallToolButton.h FlowLayout.h
+    kmessagewidget.h KexiContextMessage.h KexiTitleLabel.h KexiAssistantPage.h 
+    KexiAssistantWidget.h KexiAnimatedLayout.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif(FALSE)

@@ -928,7 +928,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
                     m_currentBorder.style = KoBorder::BorderDashed;
                 }
                 else if(val == "dashDot") {
-                    m_currentBorder.style = KoBorder::BorderDashDotPattern;
+                    m_currentBorder.style = KoBorder::BorderDashDot;
                 }
                 else if(val == "dot") {
                     m_currentBorder.style = KoBorder::BorderDotted;

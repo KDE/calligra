@@ -1,7 +1,12 @@
 [Desktop Entry]
 Name=Misc
+Name[bg]=Разни
+Name[de]=Diverses
 Name[el]=Διάφορα
 Name[et]=Muu
+Name[it]=Varie
+Name[nb]=Div
+Name[pl]=Różne
 Name[pt]=Diversos
 Name[pt_BR]=Diversos
 Name[sv]=Diverse
@@ -9,4 +14,5 @@ Name[ug]=ئارىلاش
 Name[uk]=Різне
 Name[x-test]=xxMiscxx
 Name[zh_CN]=杂项
+Name[zh_TW]=其他
 X-KDE-DirType=odg-collection

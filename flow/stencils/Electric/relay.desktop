@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=relay
+Name[bg]=реле
+Name[de]=Relais
+Name[nb]=rele
+Name[nl]=Relais
+Name[pl]=przekaźnik
 Name[pt]=relé
 Name[pt_BR]=relé
 Name[sv]=relä
 Name[uk]=реле
 Name[x-test]=xxrelayxx
+Name[zh_TW]=繼電器

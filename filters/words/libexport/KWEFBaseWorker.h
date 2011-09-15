@@ -27,20 +27,20 @@
 #include <QList>
 
 #include <KWEFStructures.h>
-#include <kword_libexport_export.h>
+#include <words_libexport_export.h>
 #include <QImage>
-class KWEFKWordLeader;
+class KWEFWordsLeader;
 
 /**
  * Base worker of the libexport system
  */
-class KWORD_LIBEXPORT_EXPORT KWEFBaseWorker
+class WORDS_LIBEXPORT_EXPORT KWEFBaseWorker
 {
 public:
-    explicit KWEFBaseWorker(void) : m_kwordLeader(NULL) {}
+    explicit KWEFBaseWorker(void) : m_wordsLeader(NULL) {}
     virtual ~KWEFBaseWorker(void) {}
 public:
-    void registerKWordLeader(KWEFKWordLeader* leader);
+    void registerWordsLeader(KWEFWordsLeader* leader);
 public: // callbacks to Leader
     bool loadSubFile(const QString& fileName, QByteArray& array) const;
     QIODevice* getSubFileDevice(const QString& fileName) const;
@@ -64,9 +64,9 @@ public: // leader/worker functions
     virtual bool doFullPaperFormat(const int format,
                                    const double width, const double height, const int orientation); ///< Like AbiWord's \<papersize\>
     virtual bool doFullPaperBorders(const double top, const double left,
-                                    const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
+                                    const double bottom, const double right); ///< Like Words's \<PAPERBORDERS\>
     /**
-     * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
+     * Other data of Words's \<PAPER\> which are not in @see doFullPaperFormat
      */
     virtual bool doFullPaperFormatOther(const int columns, const double columnspacing, const int numPages);
     virtual bool doPageInfo(const int headerType, const int footerType);
@@ -79,12 +79,12 @@ public: // leader/worker functions
     virtual bool doOpenStyles(void);  ///< Like HTML's \<style\>
     virtual bool doCloseStyles(void);  ///< Like HTML's \</style\>
     virtual bool doFullDefineStyle(LayoutData& layout);  ///< Defines a single style
-    virtual bool doOpenSpellCheckIgnoreList(void);  ///< like AbiWord's \<ignorewords\> and KWord's \<SPELLCHECKIGNORELIST\>
-    virtual bool doCloseSpellCheckIgnoreList(void);  ///< like AbiWord's \</ignorewords\> and Kwords \</SPELLCHECKIGNORELIST\>
-    virtual bool doFullSpellCheckIgnoreWord(const QString& ignoreword);  ///< like AbiWord's \<iw\> and Kwords \</SPELLCHECKIGNOREWORD\>
+    virtual bool doOpenSpellCheckIgnoreList(void);  ///< like AbiWord's \<ignorewords\> and Words's \<SPELLCHECKIGNORELIST\>
+    virtual bool doCloseSpellCheckIgnoreList(void);  ///< like AbiWord's \</ignorewords\> and Wordss \</SPELLCHECKIGNORELIST\>
+    virtual bool doFullSpellCheckIgnoreWord(const QString& ignoreword);  ///< like AbiWord's \<iw\> and Wordss \</SPELLCHECKIGNOREWORD\>
     virtual bool doDeclareNonInlinedFramesets(QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors);
 protected:
-    KWEFKWordLeader* m_kwordLeader;
+    KWEFWordsLeader* m_wordsLeader;
 };
 
 #endif /* KWEF_BASEWORKER_H */

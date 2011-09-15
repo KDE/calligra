@@ -61,6 +61,7 @@
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
+#include <kis_mask.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <filter/kis_filter_configuration.h>
@@ -78,7 +79,6 @@ K_EXPORT_PLUGIN(KritaBumpmapFactory("krita"))
 KritaBumpmap::KritaBumpmap(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaBumpmapFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterBumpmap());
 
 }

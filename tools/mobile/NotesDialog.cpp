@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -123,7 +123,7 @@ void NotesDialog::showNotesDialog(int page)
 
     QDBusConnection bus = QDBusConnection::sessionBus();
 qDebug()<<"view number="<<viewNumber<<"\n";
-    QDBusInterface *interface = new QDBusInterface("com.nokia.CalligraMobile-"+QString::number(getpid()), "/view_"+QString::number(viewNumber), "org.kde.koffice.presentation.view");
+    QDBusInterface *interface = new QDBusInterface("com.nokia.CalligraMobile-"+QString::number(getpid()), "/view_"+QString::number(viewNumber), "org.kde.calligra.presentation.view");
 
     QString m_notesHtml = (QDBusReply<QString>)interface->call("pageNotes", currentPage, "html");
     pageNotesTextEdit->setHtml(m_notesHtml);

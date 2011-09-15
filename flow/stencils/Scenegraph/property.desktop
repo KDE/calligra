@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=property
+Name[bg]=свойство
 Name[el]=ιδιότητα
 Name[et]=omadus
+Name[it]=proprietà
 Name[nb]=egenskap
+Name[nl]=eigenschap
+Name[pl]=własność
 Name[pt]=propriedade
 Name[pt_BR]=propriedade
 Name[sv]=egenskap
 Name[uk]=Властивість
 Name[x-test]=xxpropertyxx
 Name[zh_CN]=属性
+Name[zh_TW]=屬性

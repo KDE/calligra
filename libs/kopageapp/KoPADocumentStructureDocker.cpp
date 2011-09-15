@@ -46,6 +46,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
 #include <KoShapePaste.h>
+#include <KoSelectionManager.h>
 
 #include <KMenu>
 #include <klocale.h>
@@ -173,11 +174,13 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     m_sectionView->setSelectionBehavior( QAbstractItemView::SelectRows );
     m_sectionView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
+    new KoSelectionManager(m_sectionView);
 
     connect( m_sectionView, SIGNAL(pressed(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
     connect( m_sectionView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
              this, SLOT (itemSelected( const QItemSelection&, const QItemSelection& ) ) );
 
+    connect(m_model, SIGNAL(requestPageSelection(int,int)), this, SLOT(selectPages(int,int)));
     connect( m_model, SIGNAL( modelReset()), this, SIGNAL( dockerReset() ) );
 
     KConfigGroup configGroup = KGlobal::config()->group( "KoPageApp/DocumentStructureDocker" );
@@ -338,8 +341,8 @@ void KoPADocumentStructureDocker::addLayer()
                 qSort( layers.begin(), layers.end(), KoShape::compareShapeZIndex );
                 layer->setZIndex( layers.last()->zIndex() + 1 );
             }
-            QUndoCommand *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
-            cmd->setText( i18n( "Create Layer") );
+            KUndo2Command *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
+            cmd->setText( i18nc( "(qtundo-format)", "Create Layer" ) );
             m_doc->addCommand( cmd );
             m_model->update();
         }
@@ -355,7 +358,7 @@ void KoPADocumentStructureDocker::deleteItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -368,7 +371,7 @@ void KoPADocumentStructureDocker::deleteItem()
                 deleteShapes.append( page );
             }
             cmd = new KoShapeDeleteCommand( m_doc, deleteShapes );
-            cmd->setText( i18n( "Delete Layer" ) );
+            cmd->setText( i18nc( "(qtundo-format)", "Delete Layer" ) );
         }
         else
         {
@@ -380,7 +383,7 @@ void KoPADocumentStructureDocker::deleteItem()
         cmd = new KoShapeDeleteCommand( m_doc, selectedShapes );
     }
     else if (!selectedPages.isEmpty() && selectedPages.count() < m_doc->pages().count()) {
-        cmd = new KoPAPageDeleteCommand(m_doc, selectedPages);
+        m_doc->removePages(selectedPages);
     }
 
     if( cmd )
@@ -399,7 +402,7 @@ void KoPADocumentStructureDocker::raiseItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -433,7 +436,7 @@ void KoPADocumentStructureDocker::lowerItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -703,6 +706,21 @@ void KoPADocumentStructureDocker::editPaste()
         // Paste Pages
         KoPACanvas * canvas = dynamic_cast<KoPACanvas *>( KoToolManager::instance()->activeCanvasController()->canvas() );
         canvas->koPAView()->pagePaste();
+    }
+}
+
+void KoPADocumentStructureDocker::selectPages(int start, int count)
+{
+    if ((start < 0) || (count < 1)) {
+        return;
+    }
+    emit pageChanged(m_doc->pageByIndex(start, false));
+    m_sectionView->clearSelection();
+    for (int i = start; i < (start + count); i++) {
+        QModelIndex index = m_model->index(i, 0, QModelIndex());
+        if (index.isValid()) {
+            m_sectionView->selectionModel()->select(index, QItemSelectionModel::Select);
+        }
     }
 }
 #include <KoPADocumentStructureDocker.moc>

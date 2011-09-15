@@ -2859,6 +2859,12 @@ struct CHP : public Shared {
     U32 cv;
 
     /**
+     * A COLORREF value that specifies the color of the text underline.  The
+     * default underline color is cvAuto.
+     */
+    U32 cvUl;
+
+    /**
      * LID language identification code (no longer stored here, see rglid
      * below):
      * 0x0400 No Proofing
@@ -3179,7 +3185,6 @@ struct CHP : public Shared {
      * specifies if the text is scaled to fit the line
      */
     U16 fTNYCompress:1;
-
 }; // CHP
 
 bool operator==(const CHP &lhs, const CHP &rhs);
@@ -7019,21 +7024,48 @@ struct PAP : public Shared {
     U8 unused9;
 
     /**
-     * when non-zero, list level for this paragraph (0-based index! Look at the sprmPIlvl docu (Werner))
+     * An unsigned 8-bit integer that specifies the list level of the
+     * paragraph.  This value MUST be ignored if this paragraph is not in a
+     * list (see sprmPIlfo).  This value MUST be one of the following:
+     *
+     * <0x0, 0x8> - The value specifies the zero-based level of the list that
+     * contains this paragraph.  For example, a value of 0x0 means that the
+     * paragraph is in the first level of the list.
+     *
+     * 0xC - The list skips this paragraph and does not include it in its
+     * numbering.
+     *
+     * By default, a paragraph is in the first level of the list.
      */
     U8 ilvl;
+
+    /**
+     * A 16-bit signed integer value that is used to determine which list
+     * contains the paragraph.  This value MUST be one of the following:
+     *
+     * 0x0000 - This paragraph is not in a list, and any list formatting on the
+     * paragraph is removed.
+     *
+     * <0x0001, 0x07FE> - The value is a 1-based index into PlfLfo.rgLfo.  The
+     * LFO at this index defines the list that this paragraph is in.
+     *
+     * 0xF801 - This paragraph is not in a list.
+     *
+     * <0xF802, 0xFFFF> - The value is the negation of a 1-based index into
+     * PlfLfo.rgLfo.  The LFO at this index defines the list that this
+     * paragraph is in.  The logical left indentation (see sprmPDxaLeft) and
+     * the logical left first line indentation (see sprmPDxaLeft1) of the
+     * paragraph MUST be preserved despite any list formatting.
+     *
+     * By default, a paragraph is not in a list.
+     */
+    S16 ilfo;
 
     /**
      * no line numbering for this paragraph. (makes this an exception to the
      * section property of line numbering)
      */
     U8 fNoLnn;
-
-    /**
-     * when non-zero, (1-based) index into the pllfo identifying the list
-     * to which the paragraph belongs
-     */
-    S16 ilfo;
 
     /**
      * no longer used
@@ -7065,6 +7097,22 @@ struct PAP : public Shared {
      * placed at the beginning of a page
      */
     U8 fWidowControl;
+
+    /**
+     * A Bool8 value that specifies whether the space displayed before this
+     * paragraph uses auto spacing.  A value of 1 specifies that the
+     * sprmPDyaBefore value MUST be ignored when the application supports auto
+     * spacing.  By default, auto spacing is disabled for paragraphs.
+     */
+    U8 dyaBeforeAuto;
+
+    /**
+     * A Bool8 value that specifies whether the space displayed after this
+     * paragraph uses auto spacing.  A value of 1 specifies that sprmPDyaAfter
+     * MUST be ignored if the application supports auto spacing.  By default,
+     * auto spacing is disabled for paragraphs.
+     */
+    U8 dyaAfterAuto;
 
     /**
      * indent from right margin (signed).
@@ -7349,8 +7397,17 @@ struct PAP : public Shared {
      */
     S8 lvl;
 
+    /**
+     * A Bool8 value that specifies whether the paragraph uses right-to- left
+     * layout.  By default, a paragraph does not use right-to-left layout.
+     */
     S8 fBiDi;
 
+    /**
+     * A Bool8 value that specifies whether a numbered list was applied to this
+     * paragraph after the previous revision.  By default, paragraphs do not
+     * have numbered lists applied.
+     */
     S8 fNumRMIns;
 
     /**
@@ -8809,137 +8866,6 @@ private:
 
 bool operator==(const SEPX &lhs, const SEPX &rhs);
 bool operator!=(const SEPX &lhs, const SEPX &rhs);
-
-
-/**
- * STyle Definition (STD)
- */
-/* This structure has been commented out because we can't handle it correctly
- * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
- * include that aux. file here, please change the template file.
- */
-//struct STD {
-//    /**
-//     * Creates an empty STD structure and sets the defaults
-//     */
-//    STD();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    STD(OLEStreamReader *stream, bool preservePos=false);
-//    /**
-//     * Attention: This struct allocates memory on the heap
-//     */
-//    STD(const STD &rhs);
-//    ~STD();
-
-//    STD &operator=(const STD &rhs);
-
-//    /**
-//     * This method reads the STD structure from the stream.
-//     * If  preservePos is true we push/pop the position of
-//     * the stream to save the state. If it's false the state
-//     * of stream will be changed!
-//     */
-//    bool read(OLEStreamReader *stream, bool preservePos=false);
-
-//    /**
-//     * Same as reading :)
-//     */
-//    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
-
-//    /**
-//     * Set all the fields to the inital value (default is 0)
-//     */
-//    void clear();
-
-//    // Data
-//    /**
-//     * invariant style identifier
-//     */
-//    U16 sti:12;
-
-//    /**
-//     * spare field for any temporary use, always reset back to zero!
-//     */
-//    U16 fScratch:1;
-
-//    /**
-//     * PHEs of all text with this style are wrong
-//     */
-//    U16 fInvalHeight:1;
-
-//    /**
-//     * UPEs have been generated
-//     */
-//    U16 fHasUpe:1;
-
-//    /**
-//     * std has been mass-copied; if unused at save time, style should be deleted
-//     */
-//    U16 fMassCopy:1;
-
-//    /**
-//     * style type code
-//     */
-//    U16 sgc:4;
-
-//    /**
-//     * base style
-//     */
-//    U16 istdBase:12;
-
-//    /**
-//     * # of UPXs (and UPEs)
-//     */
-//    U16 cupx:4;
-
-//    /**
-//     * next style
-//     */
-//    U16 istdNext:12;
-
-//    /**
-//     * offset to end of upx's, start of upe's
-//     */
-//    U16 bchUpe;
-
-//    /**
-//     * auto redefine style when appropriate
-//     */
-//    U16 fAutoRedef:1;
-
-//    /**
-//     * hidden from UI?
-//     */
-//    U16 fHidden:1;
-
-//    /**
-//     * unused bits
-//     */
-//    U16 unused8_3:14;
-
-//    /**
-//     * sub-names are separated by chDelimStyle
-//     */
-//    XCHAR *xstzName;   //    XCHAR xstzName[];
-
-//    U8 *grupx;   //    U8 grupx[];
-
-//    /**
-//     * the UPEs are not stored on the file; they are a cache of the based-on
-//     * chain
-//     */
-//    U8 *grupe;   //    U8 grupe[];
-
-//private:
-//    void clearInternal();
-
-//}; // STD
-
-//bool operator==(const STD &lhs, const STD &rhs);
-//bool operator!=(const STD &lhs, const STD &rhs);
 
 
 /**

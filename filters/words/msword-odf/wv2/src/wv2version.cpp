@@ -1,5 +1,5 @@
 /* This file is part of the wvWare 2 project
-   Copyright (C) 2003 KOffice Team
+   Copyright (C) 2003 Calligra Team
    Copyright (C) 2003 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or

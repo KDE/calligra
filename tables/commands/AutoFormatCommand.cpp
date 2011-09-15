@@ -32,7 +32,7 @@ using namespace Calligra::Tables;
 
 AutoFormatCommand::AutoFormatCommand()
 {
-    setText(i18n("Auto-Format"));
+    setText(i18nc("(qtundo-format)", "Auto-Format"));
 }
 
 AutoFormatCommand::~AutoFormatCommand()
@@ -62,7 +62,7 @@ bool AutoFormatCommand::preProcessing()
 bool AutoFormatCommand::mainProcessing()
 {
     if (m_reverse) {
-        QUndoCommand::undo(); // undo child commands
+        KUndo2Command::undo(); // undo child commands
         return true;
     }
     return AbstractRegionCommand::mainProcessing();

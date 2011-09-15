@@ -30,7 +30,7 @@
 #include "ImportHelpers.h"
 
 // Tags in lower case (e.g. <c>) are AbiWord's ones.
-// Tags in upper case (e.g. <TEXT>) are KWord's ones.
+// Tags in upper case (e.g. <TEXT>) are Words's ones.
 
 // Note: as we are not validating anything, we are quite tolerant about the file
 //   that we will read.
@@ -41,10 +41,10 @@
  * Tags that we do not care of:
  *  \<abiword\> (or \<awml\>), \<data\>, \<styles\>, \<ignorewords\>, \<lists\>, \<metadata\>
  *
- * Tags that we do not support (however KWord could):
+ * Tags that we do not support (however Words could):
  *  \<bookmark\>, \<l\>
  *
- * Tags that we cannot support (lack of support in KWord):
+ * Tags that we cannot support (lack of support in Words):
  *  N/A
  *
  * Properties that we do not or cannot support:
@@ -94,7 +94,7 @@ public:
     QString     strTemp1; /**< for \<d\>: mime type
                            * for \<a\>: link reference
                            * for \<m\>: key
-                           * for \<table\>: KWord's table name
+                           * for \<table\>: Words's table name
                            */
     QString     strTemp2; /**< for \<d\>: collecting the data
                            * for \<a\>: link name

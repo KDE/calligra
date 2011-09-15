@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
  *
@@ -61,7 +61,7 @@ class StencilBoxDocker : public QDockWidget
         void setViewMode(QListView::ViewMode iconMode);
 
     protected:
-        /// Load the default koffice shapes
+        /// Load the default calligra shapes
         void loadDefaultShapes();
 
         /// Load odf shape collections

@@ -32,6 +32,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoReso
     setPosition(childShape->position());
     setSize(childShape->size());
     setZIndex(childShape->zIndex());
+    setRunThrough(childShape->runThrough());
     rotate(childShape->rotation());
     //setTransformation(childShape->transformation());
 
@@ -77,7 +78,8 @@ bool ShrinkToFitShapeContainer::loadOdf(const KoXmlElement &element, KoShapeLoad
 
 void ShrinkToFitShapeContainer::saveOdf(KoShapeSavingContext &context) const
 {
-    Q_UNUSED(context);
+    Q_D(const ShrinkToFitShapeContainer);
+    d->childShape->saveOdf(context);
 }
 
 ShrinkToFitShapeContainer* ShrinkToFitShapeContainer::wrapShape(KoShape *shape, KoResourceManager *documentResourceManager)

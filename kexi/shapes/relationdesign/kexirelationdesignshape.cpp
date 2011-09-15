@@ -31,7 +31,7 @@
 #include <KoZoomHandler.h>
 #include <KoShapeLoadingContext.h>
 
-KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.koffice.org/kexirelationdesign", "shape"){
+KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.calligra-suite.org/kexirelationdesign", "shape"){
     m_connection = 0;
     m_connectionData = 0;
     m_relationSchema = 0;
@@ -51,7 +51,7 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     saveOdfAttributes(context, OdfAllAttributes);
 
     writer.startElement("kexirelationdesign:shape");
-    writer.addAttribute("xmlns:kexirelationdesign", "http://www.koffice.org/kexirelationdesign");
+    writer.addAttribute("xmlns:kexirelationdesign", "http://www.calligra-suite.org/kexirelationdesign");
     writer.startElement("kexirelationdesign:relation");
     writer.addAttribute("database", m_database);
     writer.addAttribute("relation", m_relation);
@@ -101,7 +101,7 @@ bool KexiRelationDesignShape::loadOdf ( const KoXmlElement& element, KoShapeLoad
 bool KexiRelationDesignShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
     Q_UNUSED(context);
-    KoXmlElement relation = KoXml::namedItemNS(element, "http://www.koffice.org/kexirelationdesign", "relation");
+    KoXmlElement relation = KoXml::namedItemNS(element, "http://www.calligra-suite.org/kexirelationdesign", "relation");
     if (relation.isNull()) {
         kWarning() << "no relation element as first child";
         return false;

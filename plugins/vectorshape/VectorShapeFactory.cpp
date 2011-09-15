@@ -24,7 +24,7 @@
 // VectorShape
 #include "VectorShape.h"
 
-// KOffice
+// Calligra
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
@@ -40,7 +40,7 @@ VectorShapeFactory::VectorShapeFactory()
 {
     setToolTip(i18n("A shape that shows a vector image"));
     setIcon( "vector-shape" );
-    setOdfElementNames(KoXmlNS::draw, QStringList("image"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(2);
 }
 

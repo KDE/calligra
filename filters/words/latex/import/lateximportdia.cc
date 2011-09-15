@@ -19,11 +19,11 @@
 
 /*
    This file is based on the file :
-    koffice/filters/kword/html/htmlexportdia.cc
+    calligra/filters/words/html/htmlexportdia.cc
  Copyright (C) 2001 Nicolas Goutte <goutte@kde.org>
 
    which was based on the old file:
-    /home/kde/koffice/filters/kspread/csv/csvfilterdia.cc
+    /home/kde/calligra/filters/kspread/csv/csvfilterdia.cc
 
    The old file was copyrighted by
     Copyright (C) 1999 David Faure <faure@kde.org>
@@ -41,7 +41,7 @@
 #include "latexparser.h"
 #include "config.h"
 
-#include "generator/kwordgenerator.h"
+#include "generator/wordsgenerator.h"
 
 LATEXImportDia::LATEXImportDia(KoStore* out, QWidget *parent) :
         KDialog(parent, i18n("Latex Import Filter Parameters"),
@@ -72,8 +72,8 @@ void LATEXImportDia::createDialog()
     latexStyleRBtn = new QRadioButton(i18n("Latex style"), styleBox);
     styleLayout->addWidget(latexStyleRBtn);
 
-    kwordStyleRBtn = new QRadioButton(i18n("KWord style"), styleBox);
-    styleLayout->addWidget(kwordStyleRBtn);
+    wordsStyleRBtn = new QRadioButton(i18n("Words style"), styleBox);
+    styleLayout->addWidget(wordsStyleRBtn);
 
     /*typeLabel  = new ...
     styleLayout->addWidget(typeLabel);
@@ -143,8 +143,8 @@ void LATEXImportDia::state()
 
     /*if(latexStyleRBtn == styleBox->selected())
      config.result += "LATEX";
-    else if(kwordStyleRBtn == styleBox->selected())
-     result += "KWORD";*/
+    else if(wordsStyleRBtn == styleBox->selected())
+     result += "WORDS";*/
 }
 
 void LATEXImportDia::slotOk()
@@ -160,7 +160,7 @@ void LATEXImportDia::slotOk()
     for (elt = root->first(); elt; elt = root->next()) {
         elt->print();
     }
-    KwordGenerator generator(root);
+    WordsGenerator generator(root);
     generator.convert(_out);
     kDebug(30522) << "LATEX FILTER --> END";
     reject();

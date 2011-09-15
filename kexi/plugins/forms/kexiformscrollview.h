@@ -21,13 +21,13 @@
 #ifndef KEXIFORMSCROLLVIEW_H
 #define KEXIFORMSCROLLVIEW_H
 
-#include "kexidataprovider.h"
+#include <widget/dataviewcommon/kexidataprovider.h>
 #include <formeditor/kexiformeventhandler.h>
 #include "widgets/kexidbform.h"
 #include <widget/kexiscrollview.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include <widget/tableview/kexidataawareobjectiface.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
 /*! This class also implements:
@@ -38,6 +38,9 @@
 
     @see KexiTableView
 */
+
+#include <core/KexiRecordNavigatorHandler.h>
+
 class KEXIFORMUTILS_EXPORT KexiFormScrollView :
             public KexiScrollView,
             public KexiRecordNavigatorHandler,
@@ -87,7 +90,7 @@ public:
     /*! @internal Used by KexiFormView in view switching. */
     void beforeSwitchView();
 
-    /*! \return last row visible on the screen (counting from 0).
+    /*! \return last record visible on the screen (counting from 0).
      The returned value is guaranteed to be smaller or equal to currentRow() or -1
      if there are no rows.
      Implemented for KexiDataAwareObjectInterface. */
@@ -137,7 +140,7 @@ public slots:
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 //! @todo unused for now, will be used for continuous forms
 /*    virtual void vScrollBarSliderReleased() {
         KexiDataAwareObjectInterface::vScrollBarSliderReleased();
@@ -164,6 +167,7 @@ signals:
     void sortedColumnChanged(int col);
     void rowEditStarted(int row);
     void rowEditTerminated(int row);
+    void updateSaveCancelActions();
     void reloadActions();
 
 protected slots:
@@ -273,7 +277,7 @@ protected:
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Reimplemented from KexiFormDataProvider.
-     \return information whether we're currently at new row or now.
+     \return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
@@ -287,13 +291,13 @@ protected:
     virtual void initDataContents();
 
     /*! @internal
-     Updates row appearance after canceling row edit.
+     Updates record appearance after canceling record edit.
      Reimplemented from KexiDataAwareObjectInterface: just undoes changes for every data item.
      Used by cancelRowEdit(). */
     virtual void updateAfterCancelRowEdit();
 
     /*! @internal
-     Updates row appearance after accepting row edit.
+     Updates record appearance after accepting record edit.
      Reimplemented from KexiDataAwareObjectInterface: just clears 'edit' indicator.
      Used by cancelRowEdit(). */
     virtual void updateAfterAcceptRowEdit();

@@ -31,9 +31,8 @@ SpecificColorSelectorDock::SpecificColorSelectorDock()
     : QDockWidget(i18n("Specific Color Selector"))
     , m_canvas(0)
     , m_view(0)
+    , m_colorSelector(0)
 {
-    m_colorSelector = new KisSpecificColorSelectorWidget(this);
-    setWidget(m_colorSelector);
 }
 
 void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
@@ -42,7 +41,6 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
     }
     if (m_view) {
-        m_colorSelector->disconnect(m_view->resourceProvider());
         m_view->resourceProvider()->disconnect(m_colorSelector);
         m_view->resourceProvider()->disconnect(this);
         m_view->image()->disconnect(m_colorSelector);
@@ -52,10 +50,15 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     Q_ASSERT(canvas);
     KisView2* view = kisCanvas->view();
 
+    if (m_colorSelector) {
+        m_colorSelector->disconnect(); // explicit disconnect in case Qt gets confused.
+        delete m_colorSelector;
+    }
+    m_colorSelector = new KisSpecificColorSelectorWidget(this);
+    setWidget(m_colorSelector);
+
     connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
-
-    m_colorSelector->setColor(view->resourceProvider()->fgColor());
 
     connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
     connect(view->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
@@ -64,15 +67,24 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     m_view = view;
 }
 
+void SpecificColorSelectorDock::unsetCanvas()
+{
+    m_canvas = 0;
+    m_view = 0;
+
+    delete m_colorSelector;
+    m_colorSelector = 0;
+}
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
-    if(!node) return;
-
+    if (!node) return;
+    if (!m_colorSelector) return;
     if (node->inherits("KisMask") && node->parent())
         m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node->parent().data())->colorSpace());
     else
         m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node.data())->colorSpace());
+    m_colorSelector->setColor(m_view->resourceProvider()->fgColor());
 }
 
 

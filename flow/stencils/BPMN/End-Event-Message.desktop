@@ -1,10 +1,13 @@
 [Desktop Entry]
 Name=End-Event-Message
+Name[es]=Mensaje del evento final
 Name[et]=Sündmuse lõpu sõnum
 Name[nb]=Slutt-hendelse-melding
 Name[nl]=Bericht bij eindgebeurtenis
+Name[pl]=Komunikat-Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Mensagem
 Name[pt_BR]=Mensagem do evento final
+Name[ru]=Сообщение завершения события
 Name[sv]=Sluthändelse-brev
 Name[uk]=Повідомлення кінцевої події
 Name[x-test]=xxEnd-Event-Messagexx

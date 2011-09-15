@@ -43,14 +43,14 @@
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
-#include <KWEFKWordLeader.h>
+#include <KWEFWordsLeader.h>
 
 #include "libmswrite.h"
 
 #include "mswriteexport.h"
 
 K_PLUGIN_FACTORY(MSWriteExportFactory, registerPlugin<MSWriteExport>();)
-K_EXPORT_PLUGIN(MSWriteExportFactory("kwordmswriteexport", "calligrafilters"))
+K_EXPORT_PLUGIN(MSWriteExportFactory("wordsmswriteexport", "calligrafilters"))
 
 
 class WRIDevice : public MSWrite::Device
@@ -186,7 +186,7 @@ public:
 };
 
 
-class KWordMSWriteWorker : public KWEFBaseWorker
+class WordsMSWriteWorker : public KWEFBaseWorker
 {
 private:
     WRIDevice *m_device;
@@ -216,7 +216,7 @@ private:
     } m_inWhat;
 
 public:
-    KWordMSWriteWorker() : m_device(NULL), m_generator(NULL),
+    WordsMSWriteWorker() : m_device(NULL), m_generator(NULL),
             m_pageHeight(0xFFFF), m_pageWidth(0xFFFF),
             m_topMargin(0xFFFF), m_leftMargin(0xFFFF),
             m_bottomMargin(0xFFFF), m_rightMargin(0xFFFF),
@@ -246,7 +246,7 @@ public:
         m_generator->setDevice(m_device);
     }
 
-    virtual ~KWordMSWriteWorker() {
+    virtual ~WordsMSWriteWorker() {
         delete m_generator;
         delete m_device;
         delete m_encoder;
@@ -359,7 +359,7 @@ public:
     // you can choose to not display it on the first page
     //
     // /*This filter aims to be as lossless as possible so if we can't
-    // accommodate the types of headers/footers found in KWord, we at least
+    // accommodate the types of headers/footers found in Words, we at least
     // print out the paragraphs in the body*/
     //
     //    Not anymore. Dumping headers & footers in the body didn't
@@ -542,7 +542,7 @@ public:
 
         m_inWhat = Body;
         if (!m_generator->writeBodyBegin()) return false;
-        // KWord doesn't have a PageTable but we must emit the pageNew
+        // Words doesn't have a PageTable but we must emit the pageNew
         // signal at least once
         if (!m_generator->writePageNew()) return false;
 
@@ -1088,14 +1088,14 @@ public:
         kDebug(30509) << "\tActual dimensions: width=" << imageActualWidth
         << " height=" << imageActualHeight;
 
-        kDebug(30509) << "\tKOffice position: left=" << frameAnchor.frame.left
+        kDebug(30509) << "\tCalligra position: left=" << frameAnchor.frame.left
         << " right=" << frameAnchor.frame.right
         << " top=" << frameAnchor.frame.top
         << " bottom=" << frameAnchor.frame.bottom;
 
         kDebug(30509) << "\tIndent=" << MSWrite::Word(Point2Twip(frameAnchor.frame.left)) - m_leftMargin;
         if (ignoreIndent)
-            kDebug(30509) << "\t\tIgnoring indent - already exported at least one image in a KWord paragraph";
+            kDebug(30509) << "\t\tIgnoring indent - already exported at least one image in a Words paragraph";
 
         double displayedWidth = Point2Twip(frameAnchor.frame.right - frameAnchor.frame.left + 1);
         double displayedHeight = Point2Twip(frameAnchor.frame.bottom - frameAnchor.frame.top + 1);
@@ -1353,7 +1353,7 @@ public:
 
         // Tabs are a Document Property, not a Paragraph Property, in Write, yet are stored for each paragraph.
         // It seems that Write applies the 1st paragraph's Tabulator settings to the _entire_ document
-        // Word97 and KWord, however, will treat them like a Paragraph Property
+        // Word97 and Words, however, will treat them like a Paragraph Property
         int numTabs = 0;
         for (TabulatorList::ConstIterator tabIt = layout.tabulatorList.begin();
                 tabIt != layout.tabulatorList.end();
@@ -1363,14 +1363,14 @@ public:
             // Write's UI only supports 12 as opposed to the 14 supposedly
             // supported in the file so let's play it safe and quit when
             // we reach 12
-            // Actually, KWord's UI also only supports 12 so this should never be true
+            // Actually, Words's UI also only supports 12 so this should never be true
             if (numTabs >= 12) {
                 kWarning(30509) << "Write does not support more 12 tabulators, not writing out all tabulators";
                 break;
             }
 
             // Write only supports Decimal and Left tabs
-            // TODO: KOffice 1.3 alignchar (modify libexport)
+            // TODO: Calligra 1.3 alignchar (modify libexport)
             if ((*tabIt).m_type == 3 /* && (*tabIt).m_alignchar == '.' */)
                 tab.setIsDecimal();
             else
@@ -1399,11 +1399,11 @@ public:
         MSWrite::FormatCharProperty charPropDefault;
         processFormatData(charPropDefault, layout.formatData.text);
 
-        MSWrite::DWord uptoByte = 0; // relative to start of KWord paragraph
-        MSWrite::DWord numBytes = paraText.length();  // relative to start of KWord paragraph
+        MSWrite::DWord uptoByte = 0; // relative to start of Words paragraph
+        MSWrite::DWord numBytes = paraText.length();  // relative to start of Words paragraph
 
         bool startOfWRIParagraph = true;
-        bool exportedAtLeastOneImage = false; // ...from the KWord paragraph
+        bool exportedAtLeastOneImage = false; // ...from the Words paragraph
 
         // empty paragraph
         if (numBytes == 0) {
@@ -1502,7 +1502,7 @@ public:
                     startOfWRIParagraph = false;
                     break;
                 }
-                case 5: // footnote (KOffice 1.1)
+                case 5: // footnote (Calligra 1.1)
                     m_device->error(MSWrite::Error::Warn, "Footnote unsupported\n");
                     break;
                 case 6: // anchor for frame
@@ -1611,7 +1611,7 @@ public:
         int stringUnicodeLength = stringUnicode.length();
         while (upto < stringUnicodeLength) {
             //
-            // look for KWord's special characters as defined in the DTD
+            // look for Words's special characters as defined in the DTD
             //
 
             if (softHyphen == -2) {
@@ -1727,18 +1727,18 @@ KoFilter::ConversionStatus MSWriteExport::convert(const QByteArray &from, const 
     kDebug(30509) << "MSWriteExport $Date$ using LibMSWrite"
     << MSWrite::Version;
 
-    if (to != "application/x-mswrite" || from != "application/x-kword") {
+    if (to != "application/x-mswrite" || from != "application/x-words") {
         kError(30509) << "Internal error!  Filter not implemented?";
         return KoFilter::NotImplemented;
     }
 
-    KWordMSWriteWorker *worker = new KWordMSWriteWorker;
+    WordsMSWriteWorker *worker = new WordsMSWriteWorker;
     if (!worker) {
         kError(30509) << "Could not allocate memory for worker";
         return KoFilter::OutOfMemory;
     }
 
-    KWEFKWordLeader *leader = new KWEFKWordLeader(worker);
+    KWEFWordsLeader *leader = new KWEFWordsLeader(worker);
     if (!leader) {
         kError(30509) << "Could not allocate memory for leader";
         delete worker;
@@ -1752,11 +1752,11 @@ KoFilter::ConversionStatus MSWriteExport::convert(const QByteArray &from, const 
     delete worker;
 
     // try to return somewhat more meaningful errors than KoFilter::StupidError
-    // for the day that KOffice actually reports them to the user properly
+    // for the day that Calligra actually reports them to the user properly
     switch (errorCode) {
     case MSWrite::Error::Ok:
         kDebug(30509) << "Returning error code" << ret;
-        return ret; // not KoFilter::OK in case KWEFKWordLeader wants to report something
+        return ret; // not KoFilter::OK in case KWEFWordsLeader wants to report something
 
     case MSWrite::Error::Warn:
         kDebug(30509) << "Error::Warn";
