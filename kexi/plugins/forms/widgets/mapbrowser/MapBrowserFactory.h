@@ -21,11 +21,10 @@
 #ifndef MAPBROWSERFACTORY_H
 #define MAPBROWSERFACTORY_H
 
-#include "widgetfactory.h"
-#include "container.h"
-#include "FormWidgetInterface.h"
+#include "kexidbfactorybase.h"
 
-class MapBrowserFactory: public KFormDesigner::WidgetFactory
+//! Factory providing map browser widget
+class MapBrowserFactory: public KexiDBFactoryBase
 {
   Q_OBJECT
 public:

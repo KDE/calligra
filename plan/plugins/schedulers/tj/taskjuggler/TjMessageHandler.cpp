@@ -12,12 +12,20 @@
  */
 
 #include "TjMessageHandler.h"
+#include "taskjuggler.h"
+#include "Utility.h"
 
 namespace TJ
 {
 
-TjMessageHandler TJMH(true);
+TjMessageHandler TJMH(false);
 
+void
+TjMessageHandler::warningMessage(const QString& msg, const CoreAttributes *object )
+{
+    warningMessage( msg, QString() );
+    emit message( (int)TJ::WarningMsg, msg, const_cast<CoreAttributes*>(object));
+}
 void
 TjMessageHandler::warningMessage(const QString& msg, const QString& file, int
                                  line)
@@ -35,6 +43,13 @@ TjMessageHandler::warningMessage(const QString& msg, const QString& file, int
     }
     else
         printWarning(msg, file, line);
+}
+
+void
+TjMessageHandler::errorMessage( const QString& msg, const CoreAttributes *object )
+{
+    errorMessage( msg, QString() );
+    emit message( (int)TJ::ErrorMsg, msg, const_cast<CoreAttributes*>(object) );
 }
 
 void
@@ -71,6 +86,22 @@ TjMessageHandler::fatalMessage(const QString& msg, const QString& file, int
         printFatal(msg, file, line);
 }
 
+void
+TjMessageHandler::infoMessage( const QString &msg, const CoreAttributes *object )
+{
+    ++infos;
+    infoPositions << messages.count();
+    messages << msg;
+    emit message( (int)TJ::InfoMsg, msg, const_cast<CoreAttributes*>(object) );
+}
+void
+TjMessageHandler::debugMessage( const QString &msg, const CoreAttributes *object )
+{
+    ++debugs;
+    debugPositions << messages.count();
+    messages << msg;
+    emit message( (int)TJ::DebugMsg, msg, const_cast<CoreAttributes*>(object) );
+}
 
 } // namespace TJ
 

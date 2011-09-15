@@ -145,7 +145,7 @@ Resource::~Resource()
         if (scoreboards[sc])
         {
             for (uint i = 0; i < sbSize; i++)
-                if (scoreboards[sc][i] > (SbBooking*) 3)
+                if (scoreboards[sc][i] >= (SbBooking*) 4)
                 {
                     uint j;
                     for (j = i + 1; j < sbSize &&
@@ -160,7 +160,7 @@ Resource::~Resource()
         if (specifiedBookings[sc])
         {
             for (uint i = 0; i < sbSize; i++)
-                if (specifiedBookings[sc][i] > (SbBooking*) 3)
+                if (specifiedBookings[sc][i] >= (SbBooking*) 4)
                 {
                     uint j;
                     for (j = i + 1; j < sbSize &&
@@ -288,8 +288,9 @@ Resource::initScoreboard()
     for (time_t t = project->getStart(); t < project->getEnd() + 1;
          t += project->getScheduleGranularity())
     {
-        if (isOnShift(Interval(t, t + project->getScheduleGranularity() - 1)))
+        if (isOnShift(Interval(t, t + project->getScheduleGranularity() - 1))) {
             scoreboard[sbIndex(t)] = (SbBooking*) 0;
+        }
     }
     // Then mark all resource specific vacation slots as such (2).
     for (QListIterator<Interval*> ivi(vacations); ivi.hasNext();) {
@@ -320,7 +321,9 @@ Resource::initScoreboard()
 uint
 Resource::sbIndex(time_t date) const
 {
+    if (date < project->getStart()) qDebug()<<"Resource::sbIndex:"<<time2ISO(date)<<time2ISO(project->getStart());
     assert(date >= project->getStart());
+    if (date > project->getEnd()) qDebug()<<"Resource::sbIndex:"<<time2ISO(date)<<time2ISO(project->getEnd());
     assert(date <= project->getEnd());
     // Convert date to corresponding scoreboard index.
     uint sbIdx = (date - project->getStart()) /
@@ -345,10 +348,10 @@ Resource::index2end(uint idx) const
 
 /**
  * \retval 0 { resource is available }
- * \retval 1 { resource is on vacation }
- * \retval 2 { resource is generally overloaded }
- * \retval 3 { resource is overloaded for this task }
- * \retval 4 { resource is allocated to other task }
+ * \retval 1 { resource is unavailable }
+ * \retval 2 { resource is on vacation }
+ * \retval 3 { undefined }
+ * \retval 4 { resource is allocated to a task }
  */
 int
 Resource::isAvailable(time_t date)
@@ -362,39 +365,54 @@ Resource::isAvailable(time_t date)
     uint sbIdx = sbIndex(date);
     if (scoreboard[sbIdx])
     {
-        if (DEBUGRS(6))
-        {
-            QString reason;
-            if (scoreboard[sbIdx] == ((SbBooking*) 1))
-                reason = "off-hour";
-            else if (scoreboard[sbIdx] == ((SbBooking*) 2))
-                reason = "vacation";
-            else if (scoreboard[sbIdx] == ((SbBooking*) 3))
-                reason = "UNDEFINED";
-            else
-                reason = "allocated to " +
-                    scoreboard[sbIdx]->getTask()->getName();
-
-            qDebug("  Resource %s is busy (%s)", id.latin1(),
-                   reason.latin1());
+        QString reason;
+        if (scoreboard[sbIdx] == ((SbBooking*) 1)) {
+            reason = "off-hour";
+        } else if (scoreboard[sbIdx] == ((SbBooking*) 2)) {
+            reason = "vacation";
+        } else if (scoreboard[sbIdx] == ((SbBooking*) 3)) {
+            reason = "UNDEFINED";
+        } else {
+            reason = "allocated to " + scoreboard[sbIdx]->getTask()->getName();
         }
-        int result = scoreboard[sbIdx] < ((SbBooking*) 4) ? 1 : 4;
-        switch(result) {
-            case 0: TJMH.debugMessage(QString("'%1' resource is available at %2").arg(name).arg(time2ISO(date))); break;
-            case 1: TJMH.debugMessage(QString("'%1' resource is on vacation at %2").arg(name).arg(time2ISO(date))); break;
-            case 2: TJMH.debugMessage(QString("'%1' resource is overloaded at %2").arg(name).arg(time2ISO(date))); break;
-            case 3: TJMH.debugMessage(QString("'%1' resource is overloaded for this task at %2").arg(name).arg(time2ISO(date))); break;
-            case 4: TJMH.debugMessage(QString("'%1' resource is allocated to other task at %2").arg(name).arg(time2ISO(date))); break;
+        if (DEBUGRS(6))  {
+            qDebug()<<QString("  Resource %1 is busy (%2) at: %3").arg(name).arg(reason).arg(time2ISO(date));
         }
-        return result;
+        TJMH.debugMessage(QString("Resource is busy (%2) at %1").arg(time2ISO(date)).arg(reason), this);
+        return scoreboard[sbIdx] < ((SbBooking*) 4) ? 1 : 4;;
     }
 
     if (!limits) {
-        TJMH.debugMessage(QString("'%1' resource is available today (%2) ").arg(name).arg(time2ISO(date)));
+        TJMH.debugMessage(QString("Resource is available today (%1) ").arg(time2ISO(date)), this);
         return 0;
     }
-
-    if ((limits && limits->getDailyMax() > 0))
+    if (limits && limits->getDailyUnits() > 0) {
+        int bookedSlots = 1;
+        int workSlots = 0;
+        for (uint i = DayStartIndex[sbIdx]; i <= DayEndIndex[sbIdx]; i++) {
+            SbBooking* b = scoreboard[i];
+            if (b == (SbBooking*) 0) {
+                ++workSlots;
+            } else if (b >= (SbBooking*) 4) {
+                ++workSlots;
+                ++bookedSlots;
+            }
+        }
+        if ( workSlots > 0 ) {
+            workSlots = (workSlots * limits->getDailyUnits()) / 100;
+            if (workSlots == 0) {
+                workSlots = 1;
+            }
+        }
+        if (bookedSlots > workSlots) {
+            if (DEBUGRS(2)) {
+                qDebug()<<"Resource is overloaded:"<<name<<"units="<<limits->getDailyUnits()<<"work="<<workSlots<<"booked="<<bookedSlots;
+            }
+            TJMH.debugMessage(QString("Resource is overloaded today: %1 (%2 slots)").arg(time2ISO(date)).arg(bookedSlots), this);
+            return 2; //TODO review
+        }
+    }
+    else if ((limits && limits->getDailyMax() > 0))
     {
         // Now check that the resource is not overloaded on this day.
         uint bookedSlots = 1;
@@ -412,10 +430,9 @@ Resource::isAvailable(time_t date)
             bookedSlots > limits->getDailyMax())
         {
             if (DEBUGRS(6))
-                qDebug("  Resource %s overloaded today (%d)", qPrintable(id),
-                       bookedSlots);
+                qDebug()<<QString("  Resource %1 overloaded today (%2)").arg(name).arg(bookedSlots);
 
-            TJMH.debugMessage(QString("'%1' resource is overloaded today (%2) ").arg(name).arg(time2ISO(date)));
+            TJMH.debugMessage(QString("Resource is overloaded today: %1 (%2 slots)").arg(time2ISO(date)).arg(bookedSlots), this);
             return 2;
         }
     }
@@ -437,8 +454,7 @@ Resource::isAvailable(time_t date)
             bookedSlots > limits->getWeeklyMax())
         {
             if (DEBUGRS(6))
-                qDebug("  Resource %s overloaded this week (%d)", qPrintable(id),
-                       bookedSlots);
+                qDebug()<<QString("  Resource %1 overloaded this week (%2)").arg(name).arg(bookedSlots);
             return 2;
         }
     }
@@ -460,12 +476,11 @@ Resource::isAvailable(time_t date)
             bookedSlots > limits->getMonthlyMax())
         {
             if (DEBUGRS(6))
-                qDebug("  Resource %s overloaded this month (%d)", qPrintable(id),
-                       bookedSlots);
+                qDebug()<<QString("  Resource %1 overloaded this month (%2)").arg(name).arg(bookedSlots);
             return 2;
         }
     }
-    TJMH.debugMessage(QString("'%1' resource is available today (%2) ").arg(name).arg(time2ISO(date)));
+    TJMH.debugMessage(QString("Resource is available today (%2) ").arg(time2ISO(date)), this);
     return 0;
 }
 
@@ -489,7 +504,7 @@ Resource::bookSlot(uint idx, SbBooking* nb, int overtime)
 
     SbBooking* b;
     // Try to merge the booking with the booking in the previous slot.
-    if (idx > 0 && (b = scoreboard[idx - 1]) > (SbBooking*) 3 &&
+    if (idx > 0 && (b = scoreboard[idx - 1]) >= (SbBooking*) 4 &&
         b->getTask() == nb->getTask())
     {
         scoreboard[idx] = b;
@@ -497,7 +512,7 @@ Resource::bookSlot(uint idx, SbBooking* nb, int overtime)
         return true;
     }
     // Try to merge the booking with the booking in the following slot.
-    if (idx < sbSize - 1 && (b = scoreboard[idx + 1]) > (SbBooking*) 3 &&
+    if (idx < sbSize - 1 && (b = scoreboard[idx + 1]) >= (SbBooking*) 4 &&
         b->getTask() == nb->getTask())
     {
         scoreboard[idx] = b;
@@ -666,6 +681,23 @@ Resource::getCurrentLoadSub(uint startIdx, uint endIdx, const Task* task) const
     }
 
     return bookings;
+}
+
+uint
+Resource::getWorkSlots(time_t date) const
+{
+    if (!scoreboard) {
+        return 0;
+    }
+    uint workSlots = 0;
+    uint sbIdx = sbIndex(date);
+    for (uint i = DayStartIndex[sbIdx]; i <= DayEndIndex[sbIdx]; i++) {
+        SbBooking* b = scoreboard[i];
+        if (b == (SbBooking*) 0 || b >= (SbBooking*) 4) {
+            ++workSlots;
+        }
+    }
+    return workSlots;
 }
 
 uint
@@ -1169,7 +1201,7 @@ Resource::getJobs(int sc) const
                     bl.append(new Booking(Interval(index2start(startIdx),
                                                    index2end(i - 1)),
                                           scoreboards[sc][startIdx]));
-                if (scoreboards[sc][i] > (SbBooking*) 3)
+                if (scoreboards[sc][i] >= (SbBooking*) 4)
                 {
                     b = scoreboards[sc][i];
                     startIdx = i;
@@ -1243,7 +1275,7 @@ Resource::copyBookings(int sc, SbBooking*** src, SbBooking*** dst)
      */
     if (dst[sc])
         for (uint i = 0; i < sbSize; i++)
-            if (dst[sc][i] > (SbBooking*) 3)
+            if (dst[sc][i] >= (SbBooking*) 4)
             {
                 /* Small pointers are fake bookings. We can safely ignore
                  * them. Identical pointers in successiv slots must only be
@@ -1262,7 +1294,7 @@ Resource::copyBookings(int sc, SbBooking*** src, SbBooking*** dst)
         if (!dst[sc])
             dst[sc] = new SbBooking*[sbSize];
         for (uint i = 0; i < sbSize; i++)
-            if (src[sc][i] > (SbBooking*) 3)
+            if (src[sc][i] >= (SbBooking*) 4)
             {
                 /* Small pointers can just be copied. Identical successiv
                  * pointers need to be allocated once and can then be assigned

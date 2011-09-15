@@ -853,7 +853,7 @@ void TestRdf::testRoundtrip()
         editor->insertText(lorem);
 
         editor->insertTable(5,10);
-        QTextTable *table = editor->cursor()->currentTable();
+        const QTextTable *table = editor->currentTable();
 
         KoBookmark *startmark = new KoBookmark(editor->document());
         startmark->setType(KoBookmark::StartBookmark);
@@ -976,9 +976,9 @@ void TestRdf::testRoundtrip()
 
 
         editor->setPosition(position.first + 1);
-        Q_ASSERT(editor->cursor()->currentTable());
+        Q_ASSERT(editor->currentTable());
         editor->setPosition(position.second + 1);
-        Q_ASSERT(!editor->cursor()->currentTable());
+        Q_ASSERT(!editor->currentTable());
         delete doc;
     }
 }

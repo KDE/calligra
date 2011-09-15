@@ -1,5 +1,5 @@
 /*
-    <The basic code for the web widget in Kexi forms>
+    <This file is part of the KDE project>
     Copyright (C) 2011  Shreya Pandit <shreya@shreyapandit.com>
 
     This library is free software; you can redistribute it and/or
@@ -23,56 +23,12 @@
 #include <QtWebKit/QWebHistory>
 #include <QWebView>
 #include <QtGui/QPushButton>
-#include <QtGui/QLabel>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
-#include <QtCore/QUrl>
 #include <QtGui/QAction>
-#include <QTextBrowser>
-#include <QWebPage>
 #include <QtGui/QWidget>
 #include <QtGui/QApplication>
-
-ToolBar::ToolBar(QWidget* parent):QWidget(parent)
-{	
-
-    m_backButton = new QPushButton("Back",this);
-    m_forward= new QPushButton("Forward",this);
-    m_reload=new QPushButton("Reload",this);
-
-    m_layout = new QHBoxLayout;
-    m_layout->addWidget(m_backButton);
-    m_layout->addWidget(m_forward);
-    m_layout->addWidget(m_reload);
-    setLayout(m_layout);
-    m_layout->addStretch();
-
-    connect(m_backButton,SIGNAL(clicked()),SLOT(onBackPressed()));
-    connect(m_forward,SIGNAL(clicked()),SLOT(onForward()));
-    connect(m_reload,SIGNAL(clicked()),SLOT(onReload()));
-
-
-};
-
-void ToolBar::onForward() 
-{
-    emit goForward();
-//emit signal here
-}
-
-
-void ToolBar::onReload() 
-{
-    emit doreload();
-
-}
-
-
-void ToolBar::onBackPressed() 
-{
-    emit goBack();
-
-}
+#include <KLocale>
 
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
@@ -83,51 +39,47 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMinimumHeight(sizeHint().height());
     setMinimumWidth(minimumHeight());
-
-    m_softkeyAction = new QAction( tr("Options"), this );
-    m_softkeyAction->setSoftKeyRole(QAction::PositiveSoftKey);
-    addAction(m_softkeyAction);
     m_view = new QWebView(this);
-    //m_view->load(QUrl("http://www.kde.org"));
+    m_backButton = new QPushButton(i18n("Back"),this);
+    m_forward= new QPushButton(i18n("Forward"),this);
+    m_reload=new QPushButton(i18n("Reload"),this);
+    m_stop=new QPushButton(i18n("Stop"),this);
+    h_layout = new QHBoxLayout;
+    h_layout->addWidget(m_backButton);
+    h_layout->addWidget(m_forward);
+    h_layout->addWidget(m_reload);
+    h_layout->addWidget(m_stop);
+    h_layout->addStretch();
+
     v_layout = new QVBoxLayout();
     v_layout->addWidget(m_view);
-    m_toolbar = new ToolBar(this);
-    v_layout->addWidget(m_toolbar);
+    v_layout->addLayout(h_layout);
     setLayout(v_layout);
-    v_layout->addStretch();
-    connect(m_toolbar,SIGNAL(goBack()),SLOT(loadPreviousPage()));
-    connect(m_toolbar,SIGNAL(goForward()),SLOT(loadNextPage())); 
-    connect(m_toolbar,SIGNAL(doreload()),SLOT(onreload()));
-    connect(m_view,SIGNAL(urlChanged(QUrl)),this,SLOT(setUrl(QUrl)));
+  
+    if(!designMode()){
+     m_pbar=new QProgressBar();
+     h_layout->addWidget(m_pbar);
+    }
+    else{
+      m_pbar=0;
+    }
 
-
+    connect(m_backButton,SIGNAL(clicked()),m_view,SLOT(back()));
+    connect(m_forward,SIGNAL(clicked()),m_view,SLOT(forward()));
+    connect(m_reload,SIGNAL(clicked()),m_view,SLOT(reload()));
+    connect(m_stop,SIGNAL(clicked()),m_view,SLOT(stop()));
+    connect(m_view,SIGNAL(loadProgress(int)),m_pbar,SLOT(setValue(int)));
+    connect(m_view,SIGNAL(loadFinished(bool)),SLOT(hide_bar()));
+  
 };
-
-WebBrowserWidget::~WebBrowserWidget()
-{
-
-}
-
 
 WebBrowserWidget::WebBrowserWidget()  
 {
 }
 
-void WebBrowserWidget::loadPreviousPage()
+WebBrowserWidget::~WebBrowserWidget()
 {
-    if(m_view->history()->canGoBack())
-    {
-        m_view->history()->back();
-    }
-}
 
-
-void WebBrowserWidget::loadNextPage()
-{
-    if(m_view->history()->canGoForward())
-    {
-        m_view->history()->forward();
-    }
 }
 
 void WebBrowserWidget::setDataSourcePartClass(const QString &ds) {
@@ -141,54 +93,69 @@ void WebBrowserWidget::setDataSource(const QString &ds)
     KexiFormDataItemInterface::setDataSource(ds);
     
 }
-void WebBrowserWidget::onreload()
+
+void WebBrowserWidget::hide_bar()
 {
-    m_view->reload();
+m_pbar->setVisible(false);    
 }
 
 void WebBrowserWidget::setUrl(const QString& url)
 {
-    setUrl(QUrl(url));
+    setUrl(url.isEmpty() ? QUrl() : QUrl(url));
 }
 
 void WebBrowserWidget::setUrl(const QUrl& url)
 {
-    m_url=url;
-    m_view->load(m_url);
+    m_view->setUrl(url);
 }
 
+void WebBrowserWidget::updateToolBar()
+{
+    if(m_view->history()->canGoBack()) {
+      m_backButton->setEnabled(true);
+    }
+    if(m_view->history()->canGoForward()) {
+      m_forward->setEnabled(true);
+    }
+}
+
+
+void WebBrowserWidget::setZoomFactor(qreal factor)
+{
+    m_view->setZoomFactor(factor);
+}
 bool WebBrowserWidget::cursorAtStart()
 {
-    return true; //! \todo ?
+    return false;
 }
 
 bool WebBrowserWidget::cursorAtEnd()
 {
-    return true; //! \todo ?
+    return false;
 }
 
 
 QVariant WebBrowserWidget::value()
 {
     if (dataSource().isEmpty()) {
-        //not db-aware
-        return QVariant();
+
+      return QVariant();
     }
     //db-aware mode
     
-    return m_url;
+    return m_view->url();
 
 
 }
 
 bool WebBrowserWidget::valueIsNull()
 {
-    return (m_url).isEmpty();
+    return m_view->url().isValid();
 
 }
 void WebBrowserWidget::clear()
 {
-    setUrl("www.google.com");
+    setUrl(QUrl());
 }
 
 
@@ -198,7 +165,7 @@ void WebBrowserWidget::setInvalidState(const QString& displayText)
     Q_UNUSED(displayText);
 
     if (!dataSource().isEmpty()) {
-        m_url.clear();
+        m_view->setUrl(QUrl());
     }
     setReadOnly(true);
 }
@@ -210,15 +177,23 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
 
     if (isReadOnly())
         return;
-    m_urlChanged_enabled= false;		//if removeold is true then change the Url to value of add as specified in kexidataitem interface.cpp
+    m_urlChanged_enabled= false;		
+    
+    if (removeOld) { 			
+	setUrl(add.toString());  
+    }       
+    else{
+        setUrl(m_origValue.toString() + add.toString());
+     	
+    }
 
     if (removeOld)
-        { 			//set property editor to add
+        { 			
 	 setUrl(add.toString()); 
 	}       
     else
-        { setUrl(m_origValue.toString() + add.toString()) ;//else put value of add to current value of m_origValue
-     	//setUrl(m_url);
+        { setUrl(m_origValue.toString() + add.toString()) ;
+     	
         }
 
     m_urlChanged_enabled = true;

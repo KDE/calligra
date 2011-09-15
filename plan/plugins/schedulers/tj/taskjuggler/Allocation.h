@@ -51,6 +51,15 @@ public:
     }
     QList<Resource*> getCandidates() const { return candidates; }
 
+    /// Return the list of required resources for @p resource
+    QList<Resource*> getRequiredResources(Resource *r) const { return requiredResources.value(r); }
+    /// Add the @p required resource for @p resource
+    void addRequiredResource(Resource *resource, Resource *required)
+    {
+        requiredResources[resource].append(required);
+    }
+    bool hasRequiredResources(Resource *resource) const { return requiredResources.contains(resource); }
+
     bool addShift(const Interval& i, Shift* s)
     {
         return shifts.insert(new ShiftSelection(i, s));
@@ -114,6 +123,8 @@ private:
 
     /// List of potential resources.
     QList<Resource*> candidates;
+    /// Map of required resources
+    QMap<Resource*, QList<Resource*> > requiredResources;
 
     /* The selection mode determines how the resource is selected from
      * the candidate list. */

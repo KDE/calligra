@@ -53,7 +53,7 @@ namespace wvWare
         /**
          * @internal
          */
-        void createListInfo( ListInfoProvider& listInfoProvider );
+        void createListInfo( ListInfoProvider& listInfoProvider, const Word97::CHP& chp );
 
     private:
         ParagraphProperties& operator=( const ParagraphProperties& rhs );

@@ -218,6 +218,8 @@ public:
     void setNegativeFloat( const Duration &f ) { negativeFloat = f; }
     void setFreeFloat( const Duration &f ) { freeFloat = f; }
 
+    void setInCriticalPath( bool on = true ) { inCriticalPath = on; }
+
     virtual ScheduleManager *manager() const { return 0; }
     
     class Log {

@@ -956,7 +956,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
 
     // if the characters are combined, add proper style
     if (combineCharacters) {
-        style->addProperty("style:text-combine","letters");
+        style->addProperty("style:text-combine", "letters", tt);
     }
 
     //dxaSpace = letterspacing in twips
@@ -969,11 +969,11 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //fTNY = 1 when text is vertical
     if (!refChp || refChp->fTNY != chp->fTNY) {
         if (chp->fTNY) {
-            style->addProperty("style:text-rotation-angle", 90);
+            style->addProperty("style:text-rotation-angle", 90, tt);
             if (chp->fTNYCompress) {
-                style->addProperty("style:text-rotation-scale", "fixed");
+                style->addProperty("style:text-rotation-scale", "fixed", tt);
             } else {
-                style->addProperty("style:text-rotation-scale", "line-height");
+                style->addProperty("style:text-rotation-scale", "line-height", tt);
             }
         }
     }
@@ -981,7 +981,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
     if (!refChp || refChp->wCharScale != chp->wCharScale) {
         if (chp->wCharScale) {
-            style->addProperty("style:text-scale", chp->wCharScale);
+            style->addProperty("style:text-scale", chp->wCharScale, tt);
         }
     }
 
@@ -1081,6 +1081,9 @@ QString Paragraph::string(int index) const
 
 QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet& styles)
 {
+    if (!chp) {
+        return QString();
+    }
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
     if (!msTextStyle && styles.size()) {
         msTextStyle = styles.styleByID(stiNormalChar);
@@ -1091,21 +1094,19 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
-    KoGenStyle *textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    if (m_inStylesDotXml) {
-        textStyle->setAutoStyleInStylesDotXml(true);
-    }
-
     bool suppresFontSize = false;
     if (m_paragraphProperties->pap().dcs.lines > 1) {
         suppresFontSize = true;
     }
-    applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
+    KoGenStyle textStyle(KoGenStyle::TextAutoStyle, "text");
+    if (m_inStylesDotXml) {
+        textStyle.setAutoStyleInStylesDotXml(true);
+    }
+
+    applyCharacterProperties(chp, &textStyle, msTextStyle, suppresFontSize, m_combinedCharacters);
 
     QString textStyleName('T');
-    textStyleName = m_mainStyles->insert(*textStyle, textStyleName);
-    delete textStyle;
-
+    textStyleName = m_mainStyles->insert(textStyle, textStyleName);
     return textStyleName;
 }
 

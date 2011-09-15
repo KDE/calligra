@@ -362,7 +362,16 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     if (isHeaderFooter
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+
         newSize.setHeight(rootArea->bottom() - rootArea->top());
+
+        if (m_textFrameSet->type() == Words::OtherFrameSet || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            // adjust size to have at least the defined minimum height
+            Q_ASSERT(m_textFrameSet->frameCount() > 0);
+            KWFrame *frame = static_cast<KWFrame*>(m_textFrameSet->frames().first());
+            if (frame->minimumFrameHeight() > newSize.height())
+                newSize.setHeight(frame->minimumFrameHeight());
+        }
     }
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {

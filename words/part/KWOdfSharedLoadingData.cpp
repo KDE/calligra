@@ -55,7 +55,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
         if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
             pageNumber = shape->additionalAttribute("text:anchor-page-number").toInt();
             if (pageNumber <= 0) {
-                pageNumber = -1;
+                return; // abort if the page-number is invalid (OO.org does the same)
             }
         }
     }

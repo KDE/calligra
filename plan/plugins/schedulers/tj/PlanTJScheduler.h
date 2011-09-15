@@ -41,6 +41,8 @@ namespace TJ
     class Task;
     class Resource;
     class Interval;
+    class CoreAttributes;
+
 }
 
 namespace KPlato
@@ -53,6 +55,7 @@ namespace KPlato
     class ResourceRequest;
     class Task;
     class Node;
+    class Relation;
 }
 using namespace KPlato;
 
@@ -82,17 +85,19 @@ signals:
     const char* taskname();
 
 public slots:
+    void slotMessage( int type, const QString &msg, TJ::CoreAttributes *object );
 
 protected:
     void run();
 
     void adjustSummaryTasks( const QList<Node*> &nodes );
 
-    void addResources();
     TJ::Resource *addResource( KPlato::Resource *resource );
     void addTasks();
     TJ::Task *addTask( KPlato::Task *task );
     void addDependencies();
+    void addPrecedes( const Relation *rel );
+    void addDepends( const Relation *rel );
     void addDependencies( TJ::Task *job, Task *task );
     void setConstraints();
     void setConstraint( TJ::Task *job, KPlato::Task *task );
@@ -100,6 +105,8 @@ protected:
     void addRequest( TJ::Task *job, Task *task );
     void addStartEndJob();
     bool taskFromTJ( TJ::Task *job, Task *task );
+    void calcPertValues();
+    Duration calcPositiveFloat( Task *task );
 
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
     static DateTime fromTime_t( time_t );

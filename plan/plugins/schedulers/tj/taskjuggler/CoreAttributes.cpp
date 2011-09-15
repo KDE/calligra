@@ -15,6 +15,7 @@
 #include "CustomAttributeDefinition.h"
 // #include "TextAttribute.h"
 // #include "ReferenceAttribute.h"
+#include "Task.h"
 
 namespace TJ
 {
@@ -264,3 +265,24 @@ CoreAttributes::inheritCustomAttributes
 }
 
 } // namespace TJ
+
+QDebug operator<<( QDebug dbg, const TJ::CoreAttributes* t )
+{
+    if ( t == 0 ) {
+        return dbg << (void*)t;
+    }
+    return operator<<( dbg, *t );
+}
+
+QDebug operator<<( QDebug dbg, const TJ::CoreAttributes& t )
+{
+    switch ( t.getType() ) {
+        case CA_Task: dbg << static_cast<const TJ::Task&>( t ); break;
+        case CA_Resource: dbg << "Resource[" << t.getName() << "]"; break;
+        case CA_Account: dbg << "Account[" << t.getName() << "]"; break;
+        case CA_Shift: dbg << "Shift[" << t.getName() << "]"; break;
+        case CA_Scenario: dbg << "Scenario[" << t.getName() << "]"; break;
+        default: dbg << "CoreAttribute[" << t.getName() << "]"; break;
+    }
+    return dbg;
+}

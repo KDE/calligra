@@ -38,5 +38,10 @@ typedef enum LoadUnit
     minutes = 0, hours, days, weeks, months, years, shortAuto, longAuto
 } LoadUnit;
 
+// type of log message
+namespace TJ {
+    enum LogMessageType { DebugMsg = 0, InfoMsg, WarningMsg, ErrorMsg };
+}
+
 #endif
 

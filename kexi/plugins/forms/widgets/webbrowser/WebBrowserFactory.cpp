@@ -19,8 +19,8 @@
 
 
 #include "WebBrowserFactory.h"
-#include "WidgetInfo.h"
-#include "formIO.h"
+#include <formeditor/WidgetInfo.h>
+#include <formeditor/formIO.h>
 #include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
 
@@ -29,14 +29,12 @@
 #include <KDebug>
 #include <KLocale>
 #include <KPluginFactory>
-//using namespace KFormDesigner;
-//the web browser factory
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
-  :WidgetFactory(parent, "webbrowser")
+  : KexiDBFactoryBase(parent, "webbrowser")
 {
     KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
-    webBrowser->setPixmap("internet-web-browser");
+    webBrowser->setPixmap("web-browser");
     webBrowser->setClassName("WebBrowserWidget");
     webBrowser->setName(i18n("Web Browser"));
     webBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
@@ -44,6 +42,9 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
     webBrowser->setDescription(i18n("Web widget with browsing features."));
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
+
+    m_propDesc["zoomFactor"] = i18n("Zoom Factor");
+    m_propDesc["url"] = i18n("Url");
 }
 
 
