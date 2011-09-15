@@ -1,41 +1,12 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon
-
-
-
                      ${CMAKE_SOURCE_DIR}/karbon/core
                      ${KDE4_INCLUDES} )
 
-
 ########### next target ###############
-
-#These have been added in this way temporarily, 
-#since the CMakeLists of libsvg are still not worked out correctly.
-set(LIBSVG_SOURCES
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgParser_generic.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgUtil.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgGradientHelper.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgPatternHelper.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgFilterHelper.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgCssHelper.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgClipPathHelper.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgTextHelper.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgLoadingContext.cpp
-    )
 
 set(karbonsvgexport_PART_SRCS 
     SvgExport.cpp
-
-
-
-    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShapeUtil.cpp
- 
-
-
-
-
 )
 
 
@@ -49,14 +20,6 @@ install(TARGETS karbonsvgexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonsvgimport_PART_SRCS 
     SvgImport.cpp
-
-  
-
-
-    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShape.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/presentationviewportshape/PresentationViewPortShapeUtil.cpp
-
-
 )
 
 kde4_add_plugin(karbonsvgimport ${karbonsvgimport_PART_SRCS})

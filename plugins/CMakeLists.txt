@@ -42,9 +42,7 @@ macro_optional_add_subdirectory( videoshape )
 macro_optional_add_subdirectory( textshape )
 macro_optional_add_subdirectory( pluginshape )
 macro_optional_add_subdirectory( treeshape )
-
-macro_optional_add_subdirectory(presentationviewportshape)
-
+macro_optional_add_subdirectory( presentationviewportshape )
 macro_optional_add_subdirectory( formulashape )
 
 

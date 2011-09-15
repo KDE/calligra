@@ -41,7 +41,6 @@
 #include <kfilterdev.h>
 
 #include <QtCore/QFileInfo>
-#include <SvgParser_Stage.h>
 
 K_PLUGIN_FACTORY(SvgImportFactory, registerPlugin<SvgImport>();)
 K_EXPORT_PLUGIN(SvgImportFactory("calligrafilters"))
@@ -128,7 +127,7 @@ void SvgImport::convert(const KoXmlElement &rootElement)
     // set default page size to A4
     QSizeF pageSize(550.0, 841.0);
 
-    SvgParser_Stage parser(m_document->resourceManager());
+    SvgParser parser(m_document->resourceManager());
 
     parser.setXmlBaseDir(QFileInfo(m_chain->inputFile()).filePath());
 
