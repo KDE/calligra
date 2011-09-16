@@ -855,7 +855,7 @@ void TextTool::copy() const
         return;
     int from = m_textEditor.data()->position();
     int to = m_textEditor.data()->anchor();
-    KoTextOdfSaveHelper saveHelper(m_textShapeData, from, to);
+    KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
     if (KoDocumentRdfBase *rdf = KoDocumentRdfBase::fromResourceManager(canvas())) {
