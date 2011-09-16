@@ -28,21 +28,12 @@
 #include "kdganttdatetimegrid.h"
 
 #include <QPointer>
-#include <QSlider>
 
 class QEvent;
 class QFocusEvent;
 
 namespace KDGantt {
-
-    class Slider : public QSlider {
-        Q_OBJECT
-    public:
-        explicit Slider( QWidget *parent );
-
-    protected:
-        void leaveEvent( QEvent *event );
-    };
+    class Slider;
 
     class HeaderWidget : public QWidget {
         Q_OBJECT
@@ -62,12 +53,9 @@ namespace KDGantt {
         /*reimp*/ void contextMenuEvent( QContextMenuEvent* ev );
         /*reimp*/ void mouseMoveEvent( QMouseEvent* ev );
 
-    private Q_SLOTS:
-        void sliderValueChanged( int value );
-
     private:
         qreal m_offset;
-        QSlider *m_zoomwidget;
+        Slider *m_zoomwidget;
     };
 
     class GraphicsView::Private {
