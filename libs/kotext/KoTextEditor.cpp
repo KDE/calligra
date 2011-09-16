@@ -25,6 +25,7 @@
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
+#include <KoTextOdfSaveHelper.h>
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -929,6 +930,7 @@ bool KoTextEditor::deleteInlineObjects(bool backward)
     return d->deleteInlineObjects(backward);
 }
 
+
 int KoTextEditor::anchor() const
 {
     return d->caret.anchor();
@@ -1046,14 +1048,14 @@ bool KoTextEditor::hasComplexSelection() const
     return d->caret.hasComplexSelection();
 }
 
-bool KoTextEditor::hasSelection()
+bool KoTextEditor::hasSelection() const
 {
     return d->caret.hasSelection();
 }
 
 // To figure out if a selection is write protected we need to traverse the entire document
 // as sections build up the protectiveness recursively.
-bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
+bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it) const
 {
     do {
         QTextBlock block = it.currentBlock();
@@ -1134,7 +1136,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
     return false;
 }
 
-bool KoTextEditor::isEditProtected(bool useCached)
+bool KoTextEditor::isEditProtected(bool useCached) const
 {
     if (useCached) {
         if (! d->editProtectionCached) {
