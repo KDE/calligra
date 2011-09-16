@@ -116,7 +116,7 @@ public:
     quint16  rop;               // Foreground mix mode
     quint16  layoutMode;        // Layout mode
     quint32  mapMode;           // Mapping mode
-    quint16  polyFillMode;      // Polygon fill mode
+    quint32  polyFillMode;      // Polygon fill mode
     //Stretchblt mode NYI
     quint32  textAlignMode;     // Text alignment mode
     //Text extra space NYI

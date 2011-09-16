@@ -99,7 +99,6 @@ public:
     void closeFigure(EmfDeviceContext &context);
     void endPath(EmfDeviceContext &context);
     void setBkMode(EmfDeviceContext &context, const quint32 backgroundMode );
-    void setPolyFillMode(EmfDeviceContext &context, const quint32 polyFillMode );
     void setLayout(EmfDeviceContext &context, const quint32 layoutMode );
     void extCreateFontIndirectW(EmfDeviceContext &context,
                                 const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
@@ -224,11 +223,6 @@ private:
     //  - drawing mode
     //  - mapping mode
     // FIXME: what more?  textalign?  textpen?
-
-    /**
-       The current fill rule
-    */
-    enum Qt::FillRule m_fillRule;
 
     /**
        The current coordinates

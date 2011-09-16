@@ -474,9 +474,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EMR_SETPOLYFILLMODE:
 	{
-	    quint32 PolygonFillMode;
-	    stream >> PolygonFillMode;
-	    mOutput->setPolyFillMode(context, PolygonFillMode );
+            stream >> context.polyFillMode;
+            context.changedItems |= DCPolyFillMode;
 	}
 	break;
         case EMR_SETROP2:

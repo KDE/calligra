@@ -34,6 +34,7 @@ namespace Libemf
 
 
 static QPainter::CompositionMode  rasteropToQtComposition(long rop);
+static Qt::FillRule               fillModeToQtFillRule(quint32 polyFillMode);
 
 // ================================================================
 //                         Class EmfPainterBackend
@@ -43,7 +44,6 @@ EmfPainterBackend::EmfPainterBackend()
     : m_header( 0 )
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
-    , m_fillRule(Qt::OddEvenFill)
     , m_currentCoords()
 {
     m_painter         = 0;
@@ -60,7 +60,6 @@ EmfPainterBackend::EmfPainterBackend(QPainter &painter, QSize &size,
     , m_windowExtIsSet(false)
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
-    , m_fillRule(Qt::OddEvenFill)
     , m_currentCoords()
 {
     m_painter         = &painter;
@@ -218,7 +217,7 @@ void EmfPainterBackend::endPath(EmfDeviceContext &context)
     kDebug(31000);
 #endif
 
-    m_path->setFillRule( m_fillRule );
+    m_path->setFillRule( fillModeToQtFillRule(context.polyFillMode) );
     m_currentlyBuildingPath = false;
 }
 
@@ -903,22 +902,6 @@ void EmfPainterBackend::setBkMode(EmfDeviceContext &context, const quint32 backg
     }
 }
 
-void EmfPainterBackend::setPolyFillMode(EmfDeviceContext &context, const quint32 polyFillMode )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << polyFillMode;
-#endif
-
-    if ( polyFillMode == ALTERNATE ) {
-	m_fillRule = Qt::OddEvenFill;
-    } else if ( polyFillMode == WINDING ) {
-	m_fillRule = Qt::WindingFill;
-    } else {
-	kDebug(33100) << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
-	Q_ASSERT( 0 );
-    }
-}
-
 void EmfPainterBackend::setLayout(EmfDeviceContext &context, const quint32 layoutMode )
 {
 #if DEBUG_EMFPAINT
@@ -1101,7 +1084,8 @@ void EmfPainterBackend::polygon16(EmfDeviceContext &context,
 #endif
 
     QVector<QPoint> pointVector = points.toVector();
-    m_painter->drawPolygon( pointVector.constData(), pointVector.size(), m_fillRule );
+    m_painter->drawPolygon( pointVector.constData(), pointVector.size(),
+                            fillModeToQtFillRule(context.polyFillMode) );
 }
 
 void EmfPainterBackend::polyLine(EmfDeviceContext &context,
@@ -1143,7 +1127,8 @@ void EmfPainterBackend::polyPolygon16(EmfDeviceContext &context,
 #endif
 
     for ( int i = 0; i < points.size(); ++i ) {
-        m_painter->drawPolygon( points[i].constData(), points[i].size(), m_fillRule );
+        m_painter->drawPolygon( points[i].constData(), points[i].size(),
+                                fillModeToQtFillRule(context.polyFillMode) );
     }
 }
 
@@ -1452,6 +1437,18 @@ int EmfPainterBackend::convertFontWeight( quint32 emfWeight )
     } else {
         return QFont::Black;
     }
+}
+
+static Qt::FillRule fillModeToQtFillRule(quint32 polyFillMode)
+{
+    if ( polyFillMode == ALTERNATE ) {
+	return Qt::OddEvenFill;
+    } else if ( polyFillMode == WINDING ) {
+	return Qt::WindingFill;
+    }
+
+    // Good default?
+    return Qt::OddEvenFill;
 }
 
 static QPainter::CompositionMode  rasteropToQtComposition(long rop)

@@ -207,20 +207,6 @@ void EmfDebugBackend::setBkMode(EmfDeviceContext &context, const quint32 backgro
     }
 }
 
-void EmfDebugBackend::setPolyFillMode(EmfDeviceContext &context, const quint32 polyFillMode )
-{
-    Q_UNUSED(context);
-
-    if ( polyFillMode == ALTERNATE ) {
-	kDebug(33100) << "EMR_SETPOLYFILLMODE: OddEvenFill";
-    } else if ( polyFillMode == WINDING ) {
-	kDebug(33100) << "EMR_SETPOLYFILLMODE: WindingFill";
-    } else {
-	kDebug(33100) << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
-	Q_ASSERT( 0 );
-    }
-}
-
 void EmfDebugBackend::setLayout(EmfDeviceContext &context, const quint32 layoutMode )
 {
     Q_UNUSED(context);
