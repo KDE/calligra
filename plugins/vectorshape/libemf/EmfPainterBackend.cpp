@@ -676,45 +676,56 @@ void EmfPainterBackend::extCreateFontIndirectW(EmfDeviceContext &context,
     m_objectTable.insert( extCreateFontIndirectW.ihFonts(), font );
 }
 
-void EmfPainterBackend::selectStockObject( const quint32 ihObject )
+void EmfPainterBackend::selectStockObject(EmfDeviceContext &context, const quint32 ihObject)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << ihObject;
 #endif
 
+    // FIXME: Port to device context! (See selectObject() for how to do it.)
     switch ( ihObject ) {
     case WHITE_BRUSH:
-	m_painter->setBrush( QBrush( Qt::white ) );
+        context.brush = QBrush(Qt::white);
+        context.changedItems |= DCBrush;
 	break;
     case LTGRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::lightGray ) );
+        context.brush = QBrush(Qt::lightGray);
+        context.changedItems |= DCBrush;
 	break;
     case GRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::gray ) );
+        context.brush = QBrush(Qt::gray);
+        context.changedItems |= DCBrush;
 	break;
     case DKGRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::darkGray ) );
+        context.brush = QBrush(Qt::darkGray);
+        context.changedItems |= DCBrush;
 	break;
     case BLACK_BRUSH:
-	m_painter->setBrush( QBrush( Qt::black ) );
+        context.brush = QBrush(Qt::black);
+        context.changedItems |= DCBrush;
 	break;
     case NULL_BRUSH:
-	m_painter->setBrush( QBrush() );
+        context.brush = QBrush();
+        context.changedItems |= DCBrush;
 	break;
     case WHITE_PEN:
-	m_painter->setPen( QPen( Qt::white ) );
+        context.pen = QPen(Qt::white);
+        context.changedItems |= DCPen;
 	break;
     case BLACK_PEN:
-	m_painter->setPen( QPen( Qt::black ) );
+        context.pen = QPen(Qt::black);
+        context.changedItems |= DCPen;
 	break;
     case NULL_PEN:
-	m_painter->setPen( QPen( Qt::NoPen ) );
+        context.pen = Qt::NoPen;
+        context.changedItems |= DCPen;
 	break;
     case OEM_FIXED_FONT:
     case ANSI_FIXED_FONT:
         {
             QFont  font(QString("Fixed"));
-            m_painter->setFont(font);
+            context.font = font;
+            context.changedItems |= DCFont;
             break;
         }
     case ANSI_VAR_FONT:
@@ -753,19 +764,22 @@ void EmfPainterBackend::selectObject(EmfDeviceContext &context, const quint32 ih
 #endif
 
     if ( ihObject & 0x80000000 ) {
-	selectStockObject( ihObject );
+	selectStockObject(context, ihObject);
     } else {
 	QVariant obj = m_objectTable.value( ihObject );
 
 	switch ( obj.type() ) {
 	case QVariant::Pen :
-	    m_painter->setPen( obj.value<QPen>() );
+            context.pen = obj.value<QPen>();
+            context.changedItems |= DCPen;
 	    break;
 	case QVariant::Brush :
-	    m_painter->setBrush( obj.value<QBrush>() );
+            context.brush = obj.value<QBrush>();
+            context.changedItems |= DCBrush;
 	    break;
 	case QVariant::Font :
-	    m_painter->setFont( obj.value<QFont>() );
+            context.font = obj.value<QFont>();
+            context.changedItems |= DCFont;
 	    break;
 	default:
 	    kDebug(33100) << "Unexpected type:" << obj.typeName();
@@ -1595,7 +1609,7 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
     if (context.changedItems & DCBgMixMode) {
         // FIXME: Check the default value for this.
         m_painter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
-                                                                     : Qt::OpaqueMode);
+                                                                      : Qt::OpaqueMode);
 #if DEBUG_EMFPAINT
         kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
 #endif

@@ -150,7 +150,7 @@ private:
 
        \param ihObject the stock object value
     */
-    void selectStockObject( const quint32 ihObject );
+    void selectStockObject(EmfDeviceContext &context, const quint32 ihObject);
 
 
     /**
