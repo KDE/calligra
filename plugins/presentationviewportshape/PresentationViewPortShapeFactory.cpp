@@ -31,7 +31,8 @@
 
 PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * parent)
     : KoShapeFactoryBase("PresentationViewPortShape", i18n("PresentationViewPort"))
-{
+{	
+    qDebug() << "PVPShapeFactory()\n";
     setToolTip(i18n("A Presentation View Port"));
     setIcon("rectangle-shape");
     setLoadingPriority(1);
@@ -40,7 +41,7 @@ PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * par
 KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     PresentationViewPortShape *viewport = new PresentationViewPortShape();
- 
+
     return viewport;
 }
 
