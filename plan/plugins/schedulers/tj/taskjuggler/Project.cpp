@@ -151,8 +151,12 @@ Project::~Project()
     // Remove support for 1.0 XML reports for next major release. */
 //     delete xmlreport;
 
-    for (int i = 0; i < 7; ++i)
+    for (int i = 0; i < 7; ++i) {
+        while ( ! workingHours[i]->isEmpty() ) {
+            delete workingHours[i]->takeFirst();
+        }
         delete workingHours[i];
+    }
     exitUtility();
 
     qDebug()<<"~Project:"<<this;

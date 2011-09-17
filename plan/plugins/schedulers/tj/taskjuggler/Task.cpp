@@ -110,6 +110,9 @@ Task::~Task()
 //     qDebug()<<"~Task:"<<this;
     project->deleteTask(this);
     delete [] scenarios;
+    qDeleteAll( depends );
+    qDeleteAll( precedes );
+    qDeleteAll( allocations );
 }
 
 void
