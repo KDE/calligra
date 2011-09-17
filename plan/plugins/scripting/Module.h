@@ -1,8 +1,8 @@
 /*
- * This file is part of KPlato
+ * This file is part of Calligra project
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008, 2011 Dag Andersen <danders@get2net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published by
@@ -66,21 +66,28 @@ namespace Scripting {
 
             KPlato::Part* part();
             virtual KoDocument* doc();
-
             void addCommand( KUndo2Command *cmd );
 
         public Q_SLOTS:
 
             /// Open another KPlato document
             QObject *openDocument( const QString tag, const QString &url );
-            
+            /// Start a command with @p name
+            void beginCommand( const QString &name );
+            /// End a command started with beginCommand()
+            void endCommand();
+            /// Revert a command started with beginCommand(), bit not ended with endCommand()
+            void revertCommand();
             /// Return the project
             QObject *project();
             /// Return a schedule list view
             QWidget *createScheduleListView( QWidget *parent );
             /// Return a node property list view
             QWidget *createDataQueryView( QWidget *parent );
-            
+
+        private Q_SLOTS:
+            void slotAddCommand( KUndo2Command *cmd );
+
         private:
             /// \internal d-pointer class.
             class Private;

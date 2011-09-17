@@ -479,7 +479,7 @@ private:
     * @param value master unit value to convert
     * @return value as centimeters with cm appended to the end
     */
-    QString pptMasterUnitToCm(unsigned int value) const;
+    QString pptMasterUnitToCm(qint16 value) const;
 
     /**
      * @brief Converts ColorIndexStruct to QColor
@@ -644,7 +644,8 @@ private:
     QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
     QString notesMasterName;
     bool m_isList; //true - processing a list, false - processing a paragraph
-    bool m_continueList; //true - continue previous list, false - restart numbering
+    QMap<quint16, bool> m_continueNumbering; //true - continue numbered list, false - restart numbering
+    quint16 m_previousListLevel;
 
     /**
     * @brief An usedDeclaration.

@@ -26,8 +26,11 @@ class BusyinfoImporter:
 
         if self.dialog.exec_loop():
             try:
+                Plan.beginCommand( T.i18nc("(qtundo_format)", "Import resource busy information") )
                 self.doImport( self.proj )
+                Plan.endCommand()
             except:
+                Plan.revertCommand()
                 self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doImport( self, project ):
@@ -54,7 +57,6 @@ class BusyinfoImporter:
                 self.loadAppointment( project, pid, pname, data )
 
         except:
-            project.addCommand( T.i18nc( "(qtundoformat)", "Import external appointments" ) )
             file.close()
 
     def loadAppointment( self, project, pid, pname, data ):

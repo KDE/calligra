@@ -706,7 +706,7 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentSlide(0),
   m_processingMasters(false),
   m_isList(false),
-  m_continueList(false)
+  m_previousListLevel(0)
 {
 }
 
@@ -1212,6 +1212,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
         style.addProperty("fo:margin-left", pptMasterUnitToCm(pf.leftMargin()), para);
     }
     // fo:margin-right
+    style.addProperty("fo:margin-right", "0cm", para);
     // fo:margin-top
     style.addProperty("fo:margin-top", processParaSpacing(pf.spaceBefore(), fs, false), para);
     // fo:orphans
@@ -1227,8 +1228,14 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     }
     // fo:text-align-last
     // fo:text-indent
-    if (!m_isList && pf.indent()) {
-        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.leftMargin() - pf.indent()), para);
+    quint16 indent = pf.indent();
+    // NOTE: MS PowerPoint UI - Setting the indent value for the paragraph at
+    // level ZERO has no effect, however the set vale is stored.
+    if (!pf.level()) {
+        indent = 0;
+    }
+    if (!m_isList) {
+        style.addProperty("fo:text-indent", pptMasterUnitToCm(indent - pf.leftMargin()), para);
     } else {
         //text:space-before already set in style:list-level-properties
         style.addProperty("fo:text-indent", "0cm", para);
@@ -1435,29 +1442,29 @@ void PptToOdp::defineListStyle(KoGenStyle& style,
 }
 
 QChar
-getBulletChar(const PptTextPFRun& pf) {
-
+getBulletChar(const PptTextPFRun& pf)
+{
     quint16 v = (quint16) pf.bulletChar();
-    if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from windings is similar to ●
-        return QChar(0x25cf); //  "●"
-    }
-    if (v == 0xf02d) { // 0xF02D from symbol is similar to –
-        return QChar(0x2013);
-    }
-    if (v == 0xf0e8) { // 0xF0E8 is similar to ➔
-        return QChar(0x2794);
-    }
-    if (v == 0xf0d8) { // 0xF0D8 is similar to ➢
-        return QChar(0x27a2);
-    }
-    if (v == 0xf0fb) { // 0xF0FB is similar to ✗
-        return QChar(0x2717);
-    }
-    if (v == 0xf0fc) { // 0xF0FC is similar to ✔
-        return QChar(0x2714);
-    }
+//     if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from "Windings" is similar to ●
+//         return QChar(0x25cf); //  "●"
+//     }
+//     if (v == 0xf02d) { // 0xF02D from "Symbol" is similar to –
+//         return QChar(0x2013);
+//     }
+//     if (v == 0xf0e8) { // 0xF0E8 is similar to ➔
+//         return QChar(0x2794);
+//     }
+//     if (v == 0xf0d8) { // 0xF0D8 is similar to ➢
+//         return QChar(0x27a2);
+//     }
+//     if (v == 0xf0fb) { // 0xF0FB is similar to ✗
+//         return QChar(0x2717);
+//     }
+//     if (v == 0xf0fc) { // 0xF0FC is similar to ✔
+//         return QChar(0x2714);
+//     }
     return QChar(v);
-    return QChar(0x25cf); //  "●"
+//     return QChar(0x25cf); //  "●"
 }
 
 /**
@@ -2535,16 +2542,27 @@ PptToOdp::processParagraph(Writer& out,
 	if (!levels.isEmpty() && (levels.first() != listStyle)) {
             writeTextObjectDeIndent(out.xml, 0, levels);
         }
+        if (!pf.fBulletHasAutoNumber() || (m_previousListLevel < depth)) {
+            m_continueNumbering[depth] = false;
+        }
         if (levels.isEmpty()) {
-            addListElement(out.xml, listStyle, levels, depth, pf, m_continueList);
+            bool continueNumbering = false;
+            if (m_continueNumbering.contains(depth)) {
+                continueNumbering = m_continueNumbering[depth];
+            }
+            addListElement(out.xml, listStyle, levels, depth, pf, continueNumbering);
         } else {
             out.xml.endElement(); //text:list-item
             out.xml.startElement("text:list-item");
         }
-        m_continueList = true;
+        if (pf.fBulletHasAutoNumber()) {
+            m_continueNumbering[depth] = true;
+        }
+        m_previousListLevel = depth;
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
-        m_continueList = false;
+        m_continueNumbering.clear();
+        m_previousListLevel = 0;
     }
 
     out.xml.startElement("text:p");
@@ -2795,7 +2813,7 @@ QString PptToOdp::processParaSpacing(const int value,
     }
 }
 
-QString PptToOdp::pptMasterUnitToCm(unsigned int value) const
+QString PptToOdp::pptMasterUnitToCm(qint16 value) const
 {
     qreal result = value;
     result *= 2.54;

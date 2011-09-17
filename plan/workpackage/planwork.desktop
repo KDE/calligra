@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plan WorkPackage Handler
+Name[da]=Håndtering af WorkPackage til Plan
 Name[el]=Χειριστής πακέτου εργασίας Plan
 Name[et]=Plani töösuundade käitleja
 Name[it]=Gestore dei pacchetti di lavoro di Plan
@@ -60,6 +61,7 @@ GenericName[sv]=Projekthantering
 GenericName[ta]=திட்ட மேலாண்மை
 GenericName[tg]=Идоракунии лоиҳа
 GenericName[tr]=Proje Yönetimi
+GenericName[ug]=قۇرۇلۇش باشقۇرۇش
 GenericName[uk]=Керування проектами
 GenericName[uz]=Loyiha boshqaruvi
 GenericName[uz@cyrillic]=Лойиҳа бошқаруви

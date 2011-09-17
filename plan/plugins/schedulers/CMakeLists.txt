@@ -13,3 +13,5 @@ macro_log_feature(HAVE_LIBRCPS "LibRCPS" "Resource Constrained Project Schedulin
 if(HAVE_LIBRCPS)
     add_subdirectory( rcps )
 endif(HAVE_LIBRCPS)
+
+add_subdirectory(tj)

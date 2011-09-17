@@ -40,7 +40,7 @@ SchedulerPluginLoader::~SchedulerPluginLoader()
 void SchedulerPluginLoader::loadAllPlugins()
 {
     kDebug() << "Load all plugins";
-    KService::List offers = KServiceTypeTrader::self()->query("KPlato/SchedulerPlugin");
+    KService::List offers = KServiceTypeTrader::self()->query("Plan/SchedulerPlugin");
  
     KService::List::const_iterator iter;
     for(iter = offers.constBegin(); iter < offers.constEnd(); ++iter)

@@ -716,13 +716,68 @@ void KexiUtils::setMargins(QLayout *layout, int value)
 QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
 {
     QPixmap dest(original);
-    dest.fill(color);
     {
         QPainter p(&dest);
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.drawPixmap(0, 0, original);
+        QPixmap colorize(original.size());
+        colorize.fill(color);
+        p.drawPixmap(0, 0, colorize);
     }
     return dest;
+}
+
+//---------------------
+
+void KexiUtils::installRecursiveEventFilter(QObject *object, QObject *filter)
+{
+    if (!object || !filter || !object->isWidgetType())
+        return;
+
+//    kDebug() << "Installing event filter on widget:" << object 
+//        << "directed to" << filter->objectName();
+    object->installEventFilter(filter);
+
+    const QObjectList list(object->children());
+    foreach(QObject *obj, list) {
+        installRecursiveEventFilter(obj, filter);
+    }
+}
+
+void KexiUtils::removeRecursiveEventFilter(QObject *object, QObject *filter)
+{
+    object->removeEventFilter(filter);
+    if (!object->isWidgetType())
+        return;
+
+    const QObjectList list(object->children());
+    foreach(QObject *obj, list) {
+        removeRecursiveEventFilter(obj, filter);
+    }
+}
+
+PaintBlocker::PaintBlocker(QWidget* parent)
+ : QObject(parent)
+ , m_enabled(true)
+{
+    parent->installEventFilter(this);
+}
+
+void PaintBlocker::setEnabled(bool set)
+{
+    m_enabled = set;
+}
+
+bool PaintBlocker::enabled() const
+{
+    return m_enabled;
+}
+
+bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
+{
+    if (m_enabled && watched == parent() && event->type() == QEvent::Paint) {
+        return true;
+    }
+    return false;
 }
 
 #include "utils_p.moc"

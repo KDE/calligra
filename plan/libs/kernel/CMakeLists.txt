@@ -41,4 +41,4 @@ set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VER
 
 install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES kplato_schedulerplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+install(FILES plan_schedulerplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )

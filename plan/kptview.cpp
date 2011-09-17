@@ -23,8 +23,7 @@
 #include <kmessagebox.h>
 
 #include "KoDocumentInfo.h"
-#include <KoMainWindow.h>
-#include <KoToolManager.h>
+#include "KoMainWindow.h"
 
 #include <QApplication>
 #include <QLabel>
@@ -43,6 +42,7 @@
 #include <QDomElement>
 #include <kundo2command.h>
 #include <QTimer>
+#include <QDockWidget>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -353,12 +353,27 @@ View::View( Part* part, QWidget* parent )
 
     connect( getPart(), SIGNAL( workPackageLoaded() ), SLOT( slotWorkPackageLoaded() ) );
     //kDebug()<<" end";
+    QTimer::singleShot( 0, this, SLOT( hideToolDocker() ) );
 }
 
 View::~View()
 {
 /*    removeStatusBarItem( m_estlabel );
     delete m_estlabel;*/
+}
+
+// hackish way to get rid of unused docker, but as long as no official way exists...
+void View::hideToolDocker()
+{
+    if ( shell() ) {
+        foreach ( QDockWidget *w, shell()->dockWidgets() ) {
+            if ( w->objectName() == "sharedtooldocker" ) {
+                w->setFeatures( QDockWidget::DockWidgetClosable );
+                w->hide();
+                break;
+            }
+        }
+    }
 }
 
 ViewAdaptor* View::dbusObject()
@@ -2630,7 +2645,7 @@ void View::slotOpenReportFileFinished( int result )
     }
     QFile file( fn );
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:</br><filename>%1</filename>", fn ) );
+        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
     QDomDocument doc;

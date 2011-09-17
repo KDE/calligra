@@ -156,7 +156,7 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
                 }
             }
             if ( sl.count() == 1 ) {
-                return i18nc( "@info:tooltip 1=resource name", "Allocated resource: %1", sl.first() );
+                return i18nc( "@info:tooltip 1=resource name", "Allocated resource:<nl/>%1", sl.first() );
             }
             return i18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1", sl.join( "<nl/>" ) );
         }
@@ -270,12 +270,17 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
     }
     switch ( role ) {
         case Qt::DisplayRole: {
-            int c = node->constraint();
-            if ( ! ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) ) {
-                return QVariant();
+            QString s = KGlobal::locale()->formatDateTime( node->constraintStartTime() );
+            switch ( node->constraint() ) {
+                case Node::StartNotEarlier:
+                case Node::MustStartOn:
+                case Node::FixedInterval:
+                    return s;
+                default:
+                    break;
             }
-            return KGlobal::locale()->formatDateTime( node->constraintStartTime() );
-        }
+            return QString( "(%1)" ).arg( s );
+    }
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
@@ -312,11 +317,16 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
     }
     switch ( role ) {
         case Qt::DisplayRole: {
-            int c = node->constraint();
-            if ( ! ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) ) {
-                return QVariant();
+            QString s = KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+            switch ( node->constraint() ) {
+                case Node::FinishNotLater:
+                case Node::MustFinishOn:
+                case Node::FixedInterval:
+                    return s;
+                default:
+                    break;
             }
-            return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+            return QString( "(%1)" ).arg( s );
         }
         case Qt::ToolTipRole: {
             int c = node->constraint();
@@ -3005,10 +3015,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
-                int c = n->constraint();
-                if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval ) {
-                    flags |= Qt::ItemIsEditable;
-                }
+                flags |= Qt::ItemIsEditable;
                 break;
             }
             case NodeModel::NodeConstraintEnd: { // constraint end
@@ -3019,10 +3026,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
-                int c = n->constraint();
-                if ( c == Node::MustFinishOn || c == Node::FinishNotLater || c ==  Node::FixedInterval ) {
-                    flags |= Qt::ItemIsEditable;
-                }
+                flags |= Qt::ItemIsEditable;
                 break;
             }
             case NodeModel::NodeRunningAccount: // running account
@@ -3131,7 +3135,7 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     return idx;
 }
 
-QModelIndex NodeItemModel::index( const Node *node ) const
+QModelIndex NodeItemModel::index( const Node *node, int column ) const
 {
     if ( m_project == 0 || node == 0 ) {
         return QModelIndex();
@@ -3139,10 +3143,10 @@ QModelIndex NodeItemModel::index( const Node *node ) const
     Node *par = node->parentNode();
     if ( par ) {
         //kDebug()<<par<<"-->"<<node;
-        return createIndex( par->indexOf( node ), 0, const_cast<Node*>(node) );
+        return createIndex( par->indexOf( node ), column, const_cast<Node*>(node) );
     }
     if ( m_projectshown && node == m_project ) {
-        return createIndex( 0, 0, m_project );
+        return createIndex( 0, column, m_project );
     }
     //kDebug()<<node;
     return QModelIndex();
@@ -3331,9 +3335,6 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
                 }
             break;
         }
-    }
-    if ( role == Qt::DisplayRole && ! result.isValid() ) {
-        result = " "; // HACK to show focus in empty cells
     }
     return result;
 }
@@ -3852,14 +3853,14 @@ QModelIndex GeneralNodeItemModel::index( int row, int column, const QModelIndex 
     return QModelIndex();
 }
 
-QModelIndex GeneralNodeItemModel::index( const Node *node ) const
+QModelIndex GeneralNodeItemModel::index( const Node *node, int column ) const
 {
     if ( m_modus == 0 ) {
-        return NodeItemModel::index( node );
+        return NodeItemModel::index( node, column );
     }
     Object *obj = findNodeObject( node );
     if ( obj ) {
-        return createIndex( nodeObjects().indexOf( obj ), 0, obj );
+        return createIndex( nodeObjects().indexOf( obj ), column, obj );
     }
     return QModelIndex();
 }
@@ -4396,9 +4397,6 @@ QVariant MilestoneItemModel::data( const QModelIndex &index, int role ) const
         }
     }
     result = m_nodemodel.data( n, index.column(), role );
-    if ( role == Qt::DisplayRole && ! result.isValid() ) {
-        result = " "; // HACK to show focus in empty cells
-    }
     return result;
 }
 

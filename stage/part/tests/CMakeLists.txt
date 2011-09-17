@@ -48,3 +48,11 @@ set(TestRenameCustomSlideShowCommand_test_SRCS TestRenameCustomSlideShowCommand.
 kde4_add_unit_test(TestRenameCustomSlideShowCommand TESTNAME stage-part-TestRenameCustomSlideShowCommand  ${TestRenameCustomSlideShowCommand_test_SRCS})
 
 target_link_libraries(TestRenameCustomSlideShowCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestDeleteSlidesCommand_test_SRCS TestDeleteSlidesCommand.cpp )
+
+kde4_add_unit_test(TestDeleteSlidesCommand TESTNAME stage-part-TestDeleteSlidesCommand  ${TestDeleteSlidesCommand_test_SRCS})
+
+target_link_libraries(TestDeleteSlidesCommand calligrastageprivate ${QT_QTTEST_LIBRARY})

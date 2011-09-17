@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008 Dag Andersen <danders@get2net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,6 +47,9 @@ namespace Scripting {
             KPlato::Node *kplatoNode() const { return m_node; }
             
         public Q_SLOTS:
+            /// Return the project this task is part of
+            QObject* project();
+            /// Return the tasks name
             QString name();
 
             QDate startDate();

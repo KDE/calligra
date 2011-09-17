@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
- * Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+ * Copyright (c) 2008 Dag Andersen <danders@get2net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,6 +47,8 @@ namespace Scripting {
             KPlato::ResourceGroup *kplatoResourceGroup() const { return m_group; }
         
         public Q_SLOTS:
+            /// Return the project this resource group is part of
+            QObject* project();
             /// Return the identity of resource group
             QString id();
             /// Return type of resource group

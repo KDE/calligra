@@ -279,16 +279,29 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+
     settingsWriter->startElement("config:config-item");
     settingsWriter->addAttribute("config:name", "UseFormerLineSpacing");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
+
     settingsWriter->startElement("config:config-item");
     settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
+
+    // The AddParaTableSpacingAtStart config-item is used in KoTextLayoutArea::handleBordersAndSpacing
+    // during layouting. The defined 'Above paragraph' and 'Below paragraph' paragraph spacing (which is
+    // written in the ODF as fo:margin-top for the KoParagraphStyle) are not applied to the first and
+    // the last paragraph if this value is true.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("true");
+    settingsWriter->endElement();
+
     settingsWriter->endElement(); // config-item-set
 
     settingsWriter->endElement(); // settings

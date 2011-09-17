@@ -1386,6 +1386,11 @@ void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
     m_indent = QString("%1").arg(indent);
 }
 
+void Utils::ParagraphBulletProperties::setPrefix(const QString& prefixChar)
+{
+    m_prefix = prefixChar;
+}
+
 void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
 {
     m_suffix = suffixChar;
@@ -1479,7 +1484,7 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     }
 }
 
-QString Utils::ParagraphBulletProperties::convertToListProperties() const
+QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fileByPowerPoint) const
 {
     QString returnValue;
     QString ending;
@@ -1499,18 +1504,14 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     }
     else {
         returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
-        if ((m_bulletFont.startsWith("Wingdings") || m_bulletFont.startsWith("Symbol")) && m_bulletChar != "") {
-            // In case of wingdings we replace with 'best guess'
-            returnValue += QString("text:bullet-char=\"%1\" ").arg("-");
+
+        if (m_bulletChar == UNUSED) {
+            returnValue += QString("text:bullet-char=\"\" ");
         }
         else {
-            if (m_bulletChar == UNUSED) {
-                returnValue += QString("text:bullet-char=\"\" ");
-            }
-            else {
-                returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
-            }
+            returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
         }
+
         ending = "</text:list-level-style-bullet>";
     }
     returnValue += ">";
@@ -1528,11 +1529,35 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     }
     returnValue += ">";
 
+    // The text:label-followed-by is a required attribute TODO: set proper
+    // vaule, for now add the default used by calligra.
     if (m_margin != "UNUSED") {
-        returnValue += "<style:list-level-label-alignment ";
-        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(m_margin);
+        bool ok;
+        float margin = m_margin.toFloat(&ok);
+        if (!ok) {
+            kDebug() << "Conversion failed! m_margin:" << m_margin;
+        }
+        float indent = 0;
         if (m_indent != "UNUSED") {
-            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(m_indent);
+            indent = m_indent.toFloat(&ok);
+            if (!ok) {
+                kDebug() << "Conversion failed! m_indent" << m_indent;
+            }
+        }
+        returnValue += "<style:list-level-label-alignment ";
+        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
+        if (fileByPowerPoint) {
+            if (qAbs(indent) >= qAbs(margin)) {
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+                returnValue += "text:label-followed-by=\"listtab\" ";
+                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
+            } else {
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+                returnValue += "text:label-followed-by=\"nothing\" ";
+            }
+        } else {
+            returnValue += "text:label-followed-by=\"space\" ";
+            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
         }
         returnValue += "/>";
     }
@@ -1546,6 +1571,12 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     }
     if (m_type != ParagraphBulletProperties::PictureType) {
         returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
+    }
+    //PowerPoint UI does not enable to change the font for numbered lists
+    if (m_bulletFont != "UNUSED") {
+        if (!fileByPowerPoint || (m_type == ParagraphBulletProperties::BulletType)) {
+            returnValue += QString("fo:font-family=\"%1\" ").arg(m_bulletFont);
+        }
     }
 
     returnValue += "/>";

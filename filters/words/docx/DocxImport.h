@@ -49,6 +49,8 @@ protected:
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
             QString& errorMessage);
 
+    virtual void writeConfigurationSettings(KoXmlWriter* settings) const;
+
     class Private;
     Private * const d;
 };

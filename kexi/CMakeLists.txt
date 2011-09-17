@@ -8,13 +8,28 @@ IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
   INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 
+if(KEXI_DEBUG_GUI)
+    ADD_DEFINITIONS(-DKEXI_DEBUG_GUI)
+endif(KEXI_DEBUG_GUI)
+
+if(KEXI_AUTORISE_TABBED_TOOLBAR)
+    ADD_DEFINITIONS(-DKEXI_AUTORISE_TABBED_TOOLBAR)
+endif(KEXI_AUTORISE_TABBED_TOOLBAR)
+
+if(NOT KEXI_UNFINISHED)
+  ADD_DEFINITIONS(-DKEXI_NO_UNFINISHED)
+endif(NOT KEXI_UNFINISHED)
+
+if(KEXI_SHOW_UNIMPLEMENTED)
+  ADD_DEFINITIONS(-DKEXI_SHOW_UNIMPLEMENTED)
+endif(KEXI_SHOW_UNIMPLEMENTED)
+
 ADD_DEFINITIONS(
   -DKEXI_NO_CURSOR_PROPERTY 
   -DKEXI_NO_CTXT_HELP
   -DKEXI_NO_SUBFORM
   -DKEXI_DB_COMBOBOX_WIDGET
   -DDB_TEMPLATES
-  -DKEXI_NO_UNFINISHED
   -DKEXI_SCRIPTS_SUPPORT
   -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
 # temporary for 2.2:
@@ -76,7 +91,6 @@ add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( plugins )
 add_subdirectory( tests )
-add_subdirectory( shapes )
 
 IF(KEXI_MOBILE)
 
@@ -84,12 +98,13 @@ ELSE(KEXI_MOBILE)
   add_subdirectory( main )
   add_subdirectory( formeditor )
   add_subdirectory( migration )
+  add_subdirectory( shapes )
 ENDIF(KEXI_MOBILE)
 
 ########### next target ###############
 
 IF(KEXI_MOBILE)
-  #Add Kexi mobile application subdir here
+  add_subdirectory( mobile )
 ELSE(KEXI_MOBILE)
   set(kexi_SRCS main.cpp )
   kde4_add_app_icon(kexi_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kexi.png")

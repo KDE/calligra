@@ -97,7 +97,8 @@ enum blipFillCaller {
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
 bool m_insideTable;
-qreal m_largestParaFont; // Largest font used in the paragraph
+qreal m_largestParaFont; // Largest font size used in the paragraph
+qreal m_minParaFont;     // minimum font size used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
@@ -176,6 +177,12 @@ QString m_shapeTextRightOff;
 bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
+int m_prevListLevel; //! set by drawingML_ppr
+int m_currentListLevel; //! set by drawingML_ppr
+
+// true - continue numbered list, false - restart numbering
+QMap<quint16, bool> m_continueListNumbering;
+
 KoFilter::ConversionStatus read_buClr();
 KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
@@ -214,9 +221,6 @@ void readWrap();
 
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
-
-int m_prevListLevel; //! set by drawingML_ppr
-int m_currentListLevel; //! set by drawingML_ppr
 
 // Shape properties
 qint64 m_svgX; //!< set by read_off()

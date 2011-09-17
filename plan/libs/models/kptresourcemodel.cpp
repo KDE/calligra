@@ -461,7 +461,7 @@ QVariant ResourceModel::headerData( int section, int role )
             case ResourceNormalRate:
             case ResourceOvertimeRate:
                 return (int)(Qt::AlignRight|Qt::AlignVCenter);
-            case ResourceAccount: return i18n( "Account" );
+            case ResourceAccount:
                 return QVariant();
             default:
                 return QVariant();
@@ -734,7 +734,7 @@ QModelIndex ResourceItemModel::index( int row, int column, const QModelIndex &pa
     return QModelIndex();
 }
 
-QModelIndex ResourceItemModel::index( const Resource *resource ) const
+QModelIndex ResourceItemModel::index( const Resource *resource, int column ) const
 {
     if ( m_project == 0 || resource == 0 ) {
         return QModelIndex();
@@ -744,19 +744,19 @@ QModelIndex ResourceItemModel::index( const Resource *resource ) const
     ResourceGroup *par = r->parentGroup();
     if ( par ) {
         row = par->indexOf( r );
-        return createIndex( row, 0, r );
+        return createIndex( row, column, r );
     }
     return QModelIndex();
 }
 
-QModelIndex ResourceItemModel::index( const ResourceGroup *group ) const
+QModelIndex ResourceItemModel::index( const ResourceGroup *group, int column ) const
 {
     if ( m_project == 0 || group == 0 ) {
         return QModelIndex();
     }
     ResourceGroup *g = const_cast<ResourceGroup*>(group);
     int row = m_project->indexOf( g );
-    return createIndex( row, 0, g );
+    return createIndex( row, column, g );
 
 }
 
@@ -1003,17 +1003,28 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
 bool ResourceItemModel::setAccount( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            QStringList lst = m_model.account( res, Role::EnumList ).toStringList();
-            if ( value.toInt() >= lst.count() ) {
+        case Qt::EditRole: {
+            Account *a = 0;
+            if ( value.type() == QVariant::Int ) {
+                QStringList lst = m_model.account( res, Role::EnumList ).toStringList();
+                if ( value.toInt() >= lst.count() ) {
+                    return false;
+                }
+                a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            } else if ( value.type() == QVariant::String ) {
+                a = m_project->accounts().findAccount( value.toString() );
+            }
+            if ( a == 0 ) {
                 return false;
             }
-            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = res->account();
             if ( old != a ) {
                 emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18nc( "(qtundo-format)", "Modify resource account" ) ) );
                 return true;
             }
+        }
+        default:
+            break;
     }
     return false;
 }
@@ -1053,9 +1064,6 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
         if ( g ) {
             result = m_model.data( g, index.column(), role );
         }
-    }
-    if ( role == Qt::DisplayRole && ! result.isValid() ) {
-        result = " "; // HACK to show focus in empty cells
     }
     return result;
 }

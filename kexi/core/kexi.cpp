@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #include "kexi.h"
 #include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
-//#include <config-kexi.h> //why this new KDE4 include?
+#include "KexiRecentProjects.h"
 #include <kexiutils/identifier.h>
 #include <kexidb/msghandler.h>
 
@@ -30,6 +30,7 @@
 #include <qpixmapcache.h>
 #include <qcolor.h>
 #include <qfileinfo.h>
+#include <QLabel>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -47,13 +48,15 @@ class KexiInternal
 {
 public:
     KexiInternal()
-            : connset(0) {
+            : connset(0)
+    {
     }
     ~KexiInternal() {
         delete connset;
     }
+    
     KexiDBConnectionSet* connset;
-    KexiProjectSet recentProjects;
+    KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
     KexiDB::DriverManager driverManager;
     KexiPart::Manager partManager;
@@ -72,9 +75,9 @@ KexiDBConnectionSet& Kexi::connset()
     return *_int->connset;
 }
 
-KexiProjectSet& Kexi::recentProjects()
+KexiRecentProjects* Kexi::recentProjects()
 {
-    return _int->recentProjects;
+    return &_int->recentProjects;
 }
 
 KexiDB::DriverManager& Kexi::driverManager()
@@ -306,22 +309,40 @@ void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
     KCmdLineArgs::addCmdLineOptions(kexi_options());
 }
 
-void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text)
+void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_text,
+                              QString* line1, QString* line2)
 {
-    QString msg;
     if (feature_name.isEmpty())
-        msg = i18n("This function is not available for version %1 of %2 application.",
+        *line1 = i18n("This function is not available for version %1 of %2 application.",
                    QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     else {
         QString feature_name_(feature_name);
-        msg = i18n(
+        *line1 = i18n(
                   "\"%1\" function is not available for version %2 of %3 application.",
                   feature_name_.replace("&", ""), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     }
 
-    QString extra_text_(extra_text);
-    if (!extra_text_.isEmpty())
-        extra_text_.prepend("\n");
+    *line2 = extra_text;
+}
 
-    KMessageBox::sorry(0, msg + extra_text_);
+void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text)
+{
+    QString line1, line2;
+    KEXI_UNFINISHED_INTERNAL(feature_name, extra_text, &line1, &line2);
+    if (!line2.isEmpty())
+        line2.prepend("\n");
+    KMessageBox::sorry(0, line1 + line2);
+}
+
+QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_text)
+{
+    QString line1, line2;
+    KEXI_UNFINISHED_INTERNAL(feature_name, extra_text, &line1, &line2);
+    QLabel *label = new QLabel(QLatin1String("<b>") + line1 + QLatin1String("</b><br>")
+        + line2);
+    label->setAlignment(Qt::AlignCenter);
+    label->setWordWrap(true);
+    label->setAutoFillBackground(true);
+    label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    return label;
 }

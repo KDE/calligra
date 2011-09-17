@@ -193,13 +193,6 @@ private:
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
 
-    Words::Table* m_currentTable;
-    Paragraph *m_paragraph; //pointer to paragraph object
-
-    // The 1st font color not set to cvAuto from the built-in styles hierarchy
-    // of the lately processed paragraph.
-    QString m_paragraphBaseFontColorBkp;
-
 #if 1
     bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
     int        m_dcs_fdct;
@@ -224,6 +217,41 @@ private:
 
     bool m_insideDrawing;
     KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
+
+    // ************************************************
+    //  Paragraph
+    // ************************************************
+    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
+    Paragraph *m_paragraph; //pointer to paragraph object
+
+    // The 1st font color not set to cvAuto from the built-in styles hierarchy
+    // of the lately processed paragraph.
+    QString m_paragraphBaseFontColorBkp;
+
+    // ************************************************
+    //  Table
+    // ************************************************
+    Words::Table* m_currentTable;
+    KoXmlWriter* m_tableWriter;
+    QBuffer* m_tableBuffer;
+    QString m_floatingTable;
+
+    // ************************************************
+    //  List
+    // ************************************************
+    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
+    void updateListStyle() throw(InvalidFormatException);
+    QString createBulletStyle(const QString& textStyleName) const;
+
+    QString m_listSuffixes[9];     // The suffix for every list level seen so far
+    QString m_listStyleName;       // track the name of the list style
+    bool m_listLevelStyleRequired; // track if a list-level-style is required for current paragraph
+    int m_currentListDepth;        // tells us which list level we're on (-1 if not in a list)
+    int m_currentListID;           // tracks the id of the current list - 0 if no list
+
+    QStack <KoXmlWriter*> m_usedListWriters;
+    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
+    //int m_previousListID; //track previous list, in case we need to continue the numbering
 
     // ************************************************
     //  State
@@ -259,26 +287,6 @@ private:
     std::stack<State> m_oldStates;
     void saveState();
     void restoreState();
-
-    // ************************************************
-    //  List related
-    // ************************************************
-
-    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    void updateListStyle() throw(InvalidFormatException);
-    QString createBulletStyle(const QString& textStyleName) const;
-
-    QString m_listSuffixes[9];     // The suffix for every list level seen so far
-    QString m_listStyleName;       // track the name of the list style
-    bool m_listLevelStyleRequired; // track if a list-level-style is required for current paragraph
-    int m_currentListDepth;        // tells us which list level we're on (-1 if not in a list)
-    int m_currentListID;           // tracks the id of the current list - 0 if no list
-
-    QStack <KoXmlWriter*> m_usedListWriters;
-    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
-    //int m_previousListID; //track previous list, in case we need to continue the numbering
-
-    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
 
     // ************************************************
     //  Field related

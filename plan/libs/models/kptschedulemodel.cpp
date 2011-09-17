@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen kplato@kde.org>
+  Copyright (C) 2007 Dag Andersen danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -549,16 +549,29 @@ bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVarian
 
 QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) const
 {
+    if ( m_project == 0 ) {
+        return QVariant();
+    }
     ScheduleManager *sm = manager ( index );
     if ( sm == 0 ) {
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole:
         case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            if ( sm->expected() ) {
+            if ( sm->isScheduled() ) {
+                return KGlobal::locale()->formatDateTime( sm->expected()->start() );
+            }
+            break;
+        case Qt::EditRole:
+            if ( sm->isScheduled() ) {
                 return sm->expected()->start();
+            }
+            break;
+        case Qt::ToolTipRole:
+            if ( sm->isScheduled() ) {
+                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", KGlobal::locale()->formatDateTime( sm->expected()->start() ), KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );;
+            } else {
+                return i18nc( "@info:tooltip", "Target start: %1", KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );;
             }
             break;
         case Qt::TextAlignmentRole:
@@ -572,16 +585,29 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
 
 QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) const
 {
+    if ( m_project == 0 ) {
+        return QVariant();
+    }
     ScheduleManager *sm = manager ( index );
     if ( sm == 0 ) {
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole:
         case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            if ( sm->expected() ) {
+            if ( sm->isScheduled() ) {
+                return KGlobal::locale()->formatDateTime( sm->expected()->end() );
+            }
+            break;
+        case Qt::EditRole:
+            if ( sm->isScheduled() ) {
                 return sm->expected()->end();
+            }
+            break;
+        case Qt::ToolTipRole:
+            if ( sm->isScheduled() ) {
+                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", KGlobal::locale()->formatDateTime( sm->expected()->end() ), KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );;
+            } else {
+                return i18nc( "@info:tooltip", "Target finish: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );;
             }
             break;
         case Qt::TextAlignmentRole:

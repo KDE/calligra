@@ -39,7 +39,6 @@
 #include <core/kexi.h>
 #include <KexiConnSelector.h>
 #include <KexiProjectSelector.h>
-#include <KexiNewProjectWizard.h>
 #include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
 #include <kexidbdrivercombobox.h>
