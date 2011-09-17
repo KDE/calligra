@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>354</width>
-    <height>443</height>
+    <width>503</width>
+    <height>516</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_5">
-   <item row="0" column="0" colspan="3">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Shape is:</string>
+      <string>Shape relation to text is:</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -48,48 +48,100 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QGroupBox" name="groupBox">
+   <item>
+    <widget class="QGroupBox" name="grpVert">
      <property name="title">
-      <string>Vertical Alignment</string>
+      <string>Vertical Positioning</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radioButton_2">
+       <widget class="QRadioButton" name="rTop">
         <property name="text">
-         <string>Top of:</string>
+         <string>Top align with:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cTopArea">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="radioButton_4">
+       <widget class="QRadioButton" name="rVCenter">
         <property name="text">
-         <string>Center of:</string>
+         <string>Center align with:</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cVCenterArea"/>
       </item>
       <item row="2" column="0">
-       <widget class="QRadioButton" name="radioButton_3">
+       <widget class="QRadioButton" name="rBottom">
         <property name="text">
-         <string>Bottom of</string>
+         <string>Bottom align with:</string>
         </property>
        </widget>
       </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cBottomArea"/>
+      </item>
       <item row="3" column="0">
-       <widget class="QRadioButton" name="radioButton">
+       <widget class="QRadioButton" name="rVOffset">
         <property name="text">
          <string>Offset</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox">
-        <property name="maximum">
-         <double>999.990000000000009</double>
-        </property>
-       </widget>
+      <item row="3" column="1" colspan="2">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="sVOffset">
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="lVOffset">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>from:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QComboBox" name="cVOffsetArea">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="3" column="4">
+      <item row="3" column="3">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -102,105 +154,119 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboBox"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="comboBox_2"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="comboBox_3"/>
-      </item>
-      <item row="3" column="3">
-       <widget class="QComboBox" name="comboBox_4"/>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>from:</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
+   <item>
+    <widget class="QGroupBox" name="grpHoriz">
      <property name="title">
-      <string>Horizontal Alignment</string>
+      <string>Horizontal Positioning</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radioButton_5">
+       <widget class="QRadioButton" name="rLeft">
         <property name="text">
-         <string>Left of:</string>
+         <string>Left align with:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cLeftArea">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="radioButton_6">
+       <widget class="QRadioButton" name="rHCenter">
         <property name="text">
-         <string>Center of:</string>
+         <string>Center align with:</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cHCenterArea"/>
       </item>
       <item row="2" column="0">
-       <widget class="QRadioButton" name="radioButton_7">
+       <widget class="QRadioButton" name="rRight">
         <property name="text">
-         <string>Right of:</string>
+         <string>Right align with:</string>
         </property>
        </widget>
       </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cRightArea"/>
+      </item>
       <item row="3" column="0">
-       <widget class="QRadioButton" name="radioButton_8">
+       <widget class="QRadioButton" name="rHOffset">
         <property name="text">
          <string>Offset</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="5">
-       <spacer name="horizontalSpacer_2">
+      <item row="3" column="1" colspan="2">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="sHOffset">
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="lHOffset">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>from:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QComboBox" name="cHOffsetArea">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="3">
+       <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>121</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
-      <item row="3" column="3">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>from:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboBox_5"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="comboBox_6"/>
-      </item>
-      <item row="3" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
-        <property name="maximum">
-         <double>999.990000000000009</double>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="comboBox_7"/>
-      </item>
-      <item row="3" column="4">
-       <widget class="QComboBox" name="comboBox_8"/>
-      </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

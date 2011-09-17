@@ -250,9 +250,9 @@ void KWView::updateReadWrite(bool readWrite)
 
 void KWView::setupActions()
 {
-    m_actionFormatFrameSet  = new KAction(i18n("Shape/Shapeset Properties"), this);
+    m_actionFormatFrameSet  = new KAction(i18n("Shape Properties..."), this);
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet);
-    m_actionFormatFrameSet->setToolTip(i18n("Alter how the shape/shapeset behave"));
+    m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
@@ -983,7 +983,7 @@ void KWView::anchorAsChar()
     KoTextAnchor *anchor = anchorForSelectedFrame(true);
 
     if (anchor) {
-        anchor->setBehavesAsCharacter(true);
+        anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
         anchor->shape()->notifyChanged();
     }
 }
@@ -993,7 +993,7 @@ void KWView::anchorToChar()
     KoTextAnchor *anchor = anchorForSelectedFrame(true);
 
     if (anchor) {
-        anchor->setBehavesAsCharacter(false);
+        anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
         anchor->shape()->notifyChanged();
     }
 }
@@ -1525,7 +1525,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
             // anchor
             // XXX: What about: HFrame, HFrameContent, HFrameEndMargin, HFrameStartMargin?
-            anchor->setBehavesAsCharacter(false);
+            anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
             if (uiInsertImage.rAnchorPage->isChecked()) {
                 // XXX: or: VPageContent?
                 anchor->setVerticalRel(KoTextAnchor::VPage);
@@ -1549,7 +1549,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             else if (uiInsertImage.rAnchorAsCharacter->isChecked()) {
                 anchor->setVerticalRel(KoTextAnchor::VBaseline);
                 anchor->setHorizontalRel(KoTextAnchor::HChar);
-                anchor->setBehavesAsCharacter(true);
+                anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
             }
 
             // horizontal alignment

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 KoGmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,8 +25,10 @@
 #include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
+#include <KoTextAnchor.h>
 
 #include <QList>
+#include <QPointF>
 
 class KWFrame;
 class KoShape;
@@ -51,14 +54,30 @@ public:
     }
 
 private slots:
+    void anchorTypeChanged(int anchorType);
+    void vertPosChanged(int verticalAlign, QPointF offset = QPointF());
+    void horizPosChanged(int horizontalAlign, QPointF offset = QPointF());
 
 private:
+    static const int vertRels[4][20];
+
+    static const int horizRels[4][20];
+
+
     Ui::KWAnchoringProperties widget;
     FrameConfigSharedState *m_state;
 
-    QButtonGroup *m_anchor;
+    QButtonGroup *m_anchorTypeGroup;
+    QButtonGroup *m_vertPosGroup;
+    QButtonGroup *m_horizPosGroup;
     QList<KWFrame*> m_frames;
+    QList<KoTextAnchor *> m_anchors;
     KoShape *m_shape;
+    int m_anchorType;
+    int m_vertPos;
+    int m_horizPos;
+    int m_vertRel;
+    int m_horizRel;
 };
 
 #endif

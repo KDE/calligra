@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 KoGmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,8 +27,6 @@
 #include "KWAnchoringProperties.h"
 #include "frames/KWFrame.h"
 
-#include "KWFrameGeometry.h"
-
 KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document, QWidget *parent)
         : KPageDialog(parent),
         m_frameConnectSelector(0)
@@ -37,7 +36,7 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
     m_generalFrameProperties = new KWGeneralFrameProperties(m_state);
     addPage(m_generalFrameProperties, i18n("General"));
     m_anchoringProperties = new KWAnchoringProperties(m_state);
-    addPage(m_anchoringProperties, i18n("Position"));
+    addPage(m_anchoringProperties, i18n("Smart Positioning"));
     m_runAroundProperties = new KWRunAroundProperties(m_state);
     addPage(m_runAroundProperties, i18n("Text Run Around"));
 
