@@ -46,6 +46,7 @@ private slots:
     void removeStatementsIfTheyExist();
     void KoTextRdfCoreTripleFunctions();
     void createUserStylesheet();
+
     // test creating, saving and loading a words document with semantic data and markers in the text
     void testRoundtrip();
 };

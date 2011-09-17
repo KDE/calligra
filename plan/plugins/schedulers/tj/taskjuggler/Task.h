@@ -397,7 +397,10 @@ private:
     bool scheduleContainer(int sc);
     Task* subFirst() { return 0/*(Task*) sub->first()*/; }
     Task* subNext() { return 0/*(Task*) sub->next()*/; }
-    bool bookResource(Resource* r, time_t day, time_t duration,
+    /// Returns the availability of @p resource and its required resources (if any)
+    int isAvailable(Allocation *allocation, Resource *resource, time_t slot) const;
+    /// Book resource @p r if it (and its required resources) is available
+    bool bookResource(Allocation *allocation, Resource* r, time_t day, time_t duration,
                       int& slotsToLimit, int& availability);
     void bookResources(int sc, time_t day, time_t duration);
     void addBookedResource(Resource* r)

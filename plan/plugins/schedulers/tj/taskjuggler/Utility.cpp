@@ -19,6 +19,9 @@
 #include <string>
 #include <stdlib.h>
 
+#include <KGlobal>
+#include <KLocale>
+
 #include <qmap.h>
 
 #include "TjMessageHandler.h"
@@ -880,6 +883,16 @@ date2time(const QString& date)
     }
 
     return localTime;
+}
+
+QString
+formatTime(time_t t)
+{
+    KLocale *l = KGlobal::locale();
+    if ( l ) {
+        return l->formatDateTime( QDateTime::fromTime_t(t) );
+    }
+    return QDateTime::fromTime_t(t).toString();
 }
 
 QDate

@@ -42,11 +42,11 @@ public:
     { }
     virtual ~TjMessageHandler() { }
 
-    void warningMessage( const QString& msg, CoreAttributes *object = 0 );
+    void warningMessage( const QString& msg, const CoreAttributes *object = 0 );
     void warningMessage(const QString& msg, const QString& file,
                         int line = -1);
 
-    void errorMessage(const QString& msg, CoreAttributes *object = 0 );
+    void errorMessage(const QString& msg, const CoreAttributes *object = 0 );
     void errorMessage(const QString& msg, const QString& file,
                       int line = -1);
 
@@ -67,12 +67,12 @@ public:
     QString getErrorMessage( int pos ) const { return getMessage( errorPositions.value( pos ) ); }
 
     bool isInfo( int messagePos ) const { return infoPositions.contains( messagePos ); }
-    void infoMessage( const QString &msg, CoreAttributes *object = 0 );
+    void infoMessage( const QString &msg, const CoreAttributes *object = 0 );
     int getInfos() const { return infos; }
     QString getInfoMessage( int pos ) const { return getMessage( infoPositions.value( pos ) ); }
 
     bool isDebug( int messagePos ) const { return debugPositions.contains( messagePos ); }
-    void debugMessage( const QString &msg, CoreAttributes *object = 0 );
+    void debugMessage( const QString &msg, const CoreAttributes *object = 0 );
     int getDebugs() const { return debugs; }
     QString getDebugMessage( int pos ) const { return getMessage( debugPositions.value( pos ) ); }
 

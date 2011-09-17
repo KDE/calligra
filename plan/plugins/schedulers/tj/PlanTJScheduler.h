@@ -92,21 +92,20 @@ protected:
 
     void adjustSummaryTasks( const QList<Node*> &nodes );
 
-    void addResources();
     TJ::Resource *addResource( KPlato::Resource *resource );
     void addTasks();
     TJ::Task *addTask( KPlato::Task *task );
     void addDependencies();
     void addPrecedes( const Relation *rel );
     void addDepends( const Relation *rel );
-    void addDependencies( TJ::Task *job, Task *task );
+    void addDependencies( Task *task );
     void setConstraints();
     void setConstraint( TJ::Task *job, KPlato::Task *task );
     void addRequests();
     void addRequest( TJ::Task *job, Task *task );
     void addStartEndJob();
     bool taskFromTJ( TJ::Task *job, Task *task );
-    void calcPertValues();
+    void calcPertValues( Task *task );
     Duration calcPositiveFloat( Task *task );
 
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );

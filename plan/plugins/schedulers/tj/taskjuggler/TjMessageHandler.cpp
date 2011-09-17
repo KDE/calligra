@@ -21,10 +21,10 @@ namespace TJ
 TjMessageHandler TJMH(false);
 
 void
-TjMessageHandler::warningMessage(const QString& msg, CoreAttributes *object )
+TjMessageHandler::warningMessage(const QString& msg, const CoreAttributes *object )
 {
     warningMessage( msg, QString() );
-    emit message( (int)TJ::WarningMsg, msg, object);
+    emit message( (int)TJ::WarningMsg, msg, const_cast<CoreAttributes*>(object));
 }
 void
 TjMessageHandler::warningMessage(const QString& msg, const QString& file, int
@@ -46,10 +46,10 @@ TjMessageHandler::warningMessage(const QString& msg, const QString& file, int
 }
 
 void
-TjMessageHandler::errorMessage( const QString& msg, CoreAttributes *object )
+TjMessageHandler::errorMessage( const QString& msg, const CoreAttributes *object )
 {
     errorMessage( msg, QString() );
-    emit message( (int)TJ::ErrorMsg, msg, object );
+    emit message( (int)TJ::ErrorMsg, msg, const_cast<CoreAttributes*>(object) );
 }
 
 void
@@ -87,20 +87,20 @@ TjMessageHandler::fatalMessage(const QString& msg, const QString& file, int
 }
 
 void
-TjMessageHandler::infoMessage( const QString &msg, CoreAttributes *object )
+TjMessageHandler::infoMessage( const QString &msg, const CoreAttributes *object )
 {
     ++infos;
     infoPositions << messages.count();
     messages << msg;
-    emit message( (int)TJ::InfoMsg, msg, object );
+    emit message( (int)TJ::InfoMsg, msg, const_cast<CoreAttributes*>(object) );
 }
 void
-TjMessageHandler::debugMessage( const QString &msg, CoreAttributes *object )
+TjMessageHandler::debugMessage( const QString &msg, const CoreAttributes *object )
 {
     ++debugs;
     debugPositions << messages.count();
     messages << msg;
-    emit message( (int)TJ::DebugMsg, msg, object );
+    emit message( (int)TJ::DebugMsg, msg, const_cast<CoreAttributes*>(object) );
 }
 
 } // namespace TJ

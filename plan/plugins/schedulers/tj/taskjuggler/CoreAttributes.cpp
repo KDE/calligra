@@ -268,6 +268,9 @@ CoreAttributes::inheritCustomAttributes
 
 QDebug operator<<( QDebug dbg, const TJ::CoreAttributes* t )
 {
+    if ( t == 0 ) {
+        return dbg << (void*)t;
+    }
     return operator<<( dbg, *t );
 }
 

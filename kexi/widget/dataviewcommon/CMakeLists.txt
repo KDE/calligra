@@ -29,5 +29,5 @@ target_link_libraries(
     ${QT_QT3SUPPORT_LIBRARY}
 )
 
-set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexidataviewcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -99,11 +99,13 @@ public:
         return &shifts;
     }
 
-    /***
-     * Check if the slot with the specified duration is booked already.
-     * @ret 0 slot is available, 1 vacation/off duty, 2 resource overloaded,
-     * 3 task overloaded, 4 booked for other task,
-     */
+    /**
+    * \retval 0 { resource is available }
+    * \retval 1 { resource is unavailable }
+    * \retval 2 { resource is on vacation }
+    * \retval 3 { undefined }
+    * \retval 4 { resource is allocated to a task }
+    */
     int isAvailable(time_t day);
 
     bool book(Booking* b);
@@ -115,6 +117,9 @@ public:
     QList<Interval> getBookedIntervals(int sc, const Task* task) const;
 
     double getCurrentLoad(const Interval& i, const Task* task = 0) const;
+
+    /// Get the number of work slots for the day @p date. It includes both free and booked.
+    uint getWorkSlots(time_t date) const;
 
     uint getCurrentDaySlots(time_t date, const Task* t);
     uint getCurrentWeekSlots(time_t date, const Task* t);

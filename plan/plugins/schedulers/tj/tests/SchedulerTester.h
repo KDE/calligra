@@ -17,46 +17,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPlato_TaskJuggler_h
-#define KPlato_TaskJuggler_h
+#ifndef KPlato_SchedulerTester_h
+#define KPlato_SchedulerTester_h
 
 #include <QtTest/QtTest>
 #include <KTempDir>
 
-namespace TJ {
-    class Project;
-}
+class KoXmlDocument;
 
 namespace KPlato
 {
+class Node;
 
-class TaskJuggler : public QObject
+class SchedulerTester : public QObject
 {
     Q_OBJECT
 private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void list();
-    void projectTest();
-    void oneTask();
-    void oneResource();
-    void allocation();
-    void dependency();
-    void scheduleResource();
-
-    void scheduleDependencies();
-    void scheduleConstraints();
-    void resourceConflict();
-    void units();
+    void test();
 
 private:
     void initTimezone();
     void cleanupTimezone();
+    QStringList data();
+    void testProject(const QString &fname, const KoXmlDocument &doc );
+    void compare( const QString &fname, Node *n, long id1, long id2 );
 
 private:
     KTempDir m_tmp;
-    TJ::Project *project;
 };
 
 } //namespace KPlato
