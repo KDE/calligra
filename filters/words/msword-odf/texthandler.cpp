@@ -70,8 +70,6 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_tocNumber(0)
     , m_footNoteNumber(0)
     , m_endNoteNumber(0)
-    , m_currentTable(0)
-    , m_paragraph(0)
     , m_hasStoredDropCap(false)
     , m_breakBeforePage(false)
     , m_insideFootnote(false)
@@ -82,6 +80,10 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_annotationBuffer(0)
     , m_insideDrawing(false)
     , m_drawingWriter(0)
+    , m_paragraph(0)
+    , m_currentTable(0)
+    , m_tableWriter(0)
+    , m_tableBuffer(0)
     , m_listLevelStyleRequired(false)
     , m_currentListDepth(-1)
     , m_currentListID(0)
@@ -123,6 +125,9 @@ KoXmlWriter* WordsTextHandler::currentWriter() const
 
     if (m_insideDrawing) {
         writer = m_drawingWriter;
+    }
+    else if (m_currentTable && m_currentTable->floating) {
+        writer = m_tableWriter;
     }
     else if (document()->writingHeader()) {
         writer = document()->headerWriter();
@@ -613,6 +618,11 @@ void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
         m_currentTable->tap = tap;
         //insertAnchor( m_currentTable->name );
+
+        //check if the table is inside of an absolutely positioned frame
+        if ( (tap->dxaAbs != 0) || (tap->dyaAbs != 0) ) {
+            m_currentTable->floating = true;
+        }
     }
 //     kDebug(30513) << "tap->itcMac:" << tap->itcMac << "tap->rgdxaCenter.size():" << tap->rgdxaCenter.size();
 
@@ -650,25 +660,35 @@ void WordsTextHandler::tableEndFound()
     if (m_insideAnnotation) {
         return;
     }
-
     if (!m_currentTable) {
         kWarning(30513) << "Looks like we lost a table somewhere: return";
         return;
     }
-
     //TODO: FIX THE OPEN LIST PROBLEM !!!!!!
     //we cant have an open list when entering a table
     if (listIsOpen()) {
         //kDebug(30513) << "closing list " << m_currentListID;
         closeList();
     }
+    bool floating = m_currentTable->floating;
 
-    Words::Table* table = m_currentTable;
-    //reset m_currentTable
-    m_currentTable = 0L;
+    if (floating) {
+        m_tableBuffer = new QBuffer();
+        m_tableBuffer->open(QIODevice::WriteOnly);
+        m_tableWriter = new KoXmlWriter(m_tableBuffer);
+    }
+
     //must delete table in Document!
+    emit tableFound(m_currentTable);
+    m_currentTable = 0L;
 
-    emit tableFound(table);
+    if (floating) {
+        m_floatingTable = QString::fromUtf8(m_tableBuffer->buffer(), m_tableBuffer->buffer().size());
+        delete m_tableWriter;
+        m_tableWriter = 0;
+        delete m_tableBuffer;
+        m_tableBuffer = 0;
+    }
 }
 
 void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data)
@@ -739,9 +759,9 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     m_currentPPs = paragraphProperties;
 
     //check for a table to be parsed and processed
-    if (m_currentTable) {
-        kWarning(30513) << "==> WOW, unprocessed table: ignoring";
-    }
+//     if (m_currentTable) {
+//         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
+//     }
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
     bool inStylesDotXml = document()->writingHeader();
@@ -864,6 +884,12 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     {
         style->addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
         m_breakBeforePage = false;
+    }
+
+    //insert the floating table at the beginning
+    if (!m_floatingTable.isEmpty()) {
+        m_paragraph->addRunOfText(m_floatingTable, 0, QString(""), m_parser->styleSheet());
+        m_floatingTable.clear();
     }
 
 } //end paragraphStart()
@@ -1729,53 +1755,52 @@ QString WordsTextHandler::getFont(unsigned ftc) const
     const wvWare::Word97::FFN& ffn(m_parser->font(ftc));
     QString fontName(Conversion::string(ffn.xszFfn));
     return fontName;
-    /*
-    #ifdef FONT_DEBUG
-        kDebug(30513) <<"    MS-FONT:" << font;
-    #endif
 
-        static const unsigned ENTRIES = 6;
-        static const char* const fuzzyLookup[ENTRIES][2] =
-        {
-            // MS contains      X11 font family
-            // substring.       non-Xft name.
-            { "times",          "times" },
-            { "courier",        "courier" },
-            { "andale",         "monotype" },
-            { "monotype.com",   "monotype" },
-            { "georgia",        "times" },
-            { "helvetica",      "helvetica" }
-        };
+// #ifdef FONT_DEBUG
+//     kDebug(30513) <<"    MS-FONT:" << font;
+// #endif
 
-        // When Xft is available, Qt will do a good job of looking up our local
-        // equivalent of the MS font. But, we want to work even without Xft.
-        // So, first, we do a fuzzy match of some common MS font names.
-        unsigned i;
+//     static const unsigned ENTRIES = 6;
+//     static const char* const fuzzyLookup[ENTRIES][2] =
+//         {
+//             // MS contains      X11 font family
+//             // substring.       non-Xft name.
+//             { "times",          "times" },
+//             { "courier",        "courier" },
+//             { "andale",         "monotype" },
+//             { "monotype.com",   "monotype" },
+//             { "georgia",        "times" },
+//             { "helvetica",      "helvetica" }
+//         };
 
-        for (i = 0; i < ENTRIES; i++)
-        {
-            // The loop will leave unchanged any MS font name not fuzzy-matched.
-            if (font.find(fuzzyLookup[i][0], 0, false) != -1)
-            {
-                font = fuzzyLookup[i][1];
-                break;
-            }
-        }
+//     // When Xft is available, Qt will do a good job of looking up our local
+//     // equivalent of the MS font. But, we want to work even without Xft.  So,
+//     // first, we do a fuzzy match of some common MS font names.
+//     unsigned i;
 
-    #ifdef FONT_DEBUG
-        kDebug(30513) <<"    FUZZY-FONT:" << font;
-    #endif
+//     for (i = 0; i < ENTRIES; i++)
+//     {
+//         // The loop will leave unchanged any MS font name not fuzzy-matched.
+//         if (font.find(fuzzyLookup[i][0], 0, false) != -1)
+//         {
+//             font = fuzzyLookup[i][1];
+//             break;
+//         }
+//     }
 
-        // Use Qt to look up our canonical equivalent of the font name.
-        QFont xFont( font );
-        QFontInfo info( xFont );
+// #ifdef FONT_DEBUG
+//     kDebug(30513) <<"    FUZZY-FONT:" << font;
+// #endif
 
-    #ifdef FONT_DEBUG
-        kDebug(30513) <<"    QT-FONT:" << info.family();
-    #endif
+//     // Use Qt to look up our canonical equivalent of the font name.
+//     QFont xFont( font );
+//     QFontInfo info( xFont );
 
-        return info.family();
-        */
+// #ifdef FONT_DEBUG
+//     kDebug(30513) <<"    QT-FONT:" << info.family();
+// #endif
+//     return info.family();
+
 }//end getFont()
 
 bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo)
@@ -1965,25 +1990,25 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     int nfc = listInfo->numberFormat();
 
     // ------------------------
-    // Text Style
+    // Text Style - bullet
     // ------------------------
-    QString fontName = getFont(listInfo->text().chp->ftcAscii);
-    if (!fontName.isEmpty()) {
-        m_mainStyles->insertFontFace(KoFontFace(fontName));
-    }
-    //text style to format the bullet
+    const wvWare::SharedPtr<wvWare::Word97::CHP> chp = listInfo->text().chp;
     KoGenStyle textStyle(KoGenStyle::TextAutoStyle, "text");
     if (document()->writingHeader()) {
         textStyle.setAutoStyleInStylesDotXml(true);
     }
-    if (!fontName.isEmpty()) {
-        textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
+//     QString textStyleName('T');
+    if (chp) {
+        QString fontName = getFont(chp->ftcAscii);
+        if (!fontName.isEmpty()) {
+            m_mainStyles->insertFontFace(KoFontFace(fontName));
+            textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
+        }
+        m_paragraph->applyCharacterProperties(chp, &textStyle, 0);
+//         m_mainStyles->insert(textStyle, textStyleName);
+    } else {
+        kDebug(30513) << "Missing CHPs for the bullet/number!";
     }
-    m_paragraph->applyCharacterProperties(listInfo->text().chp, &textStyle, m_paragraph->paragraphStyle());
-
-    QString textStyleName('T');
-    textStyleName = m_mainStyles->insert(textStyle, textStyleName);
-
     // ------------------------
     // Writer
     // ------------------------
@@ -1997,7 +2022,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     if (nfc == 23) {
         kDebug(30513) << "bullets...";
         out.startElement("text:list-level-style-bullet");
-        out.addAttribute("text:style-name", textStyleName);
+//         out.addAttribute("text:style-name", textStyleName);
         out.addAttribute("text:level", pap.ilvl + 1);
         if (text.length() == 1) {
             // With bullets, text can only be one character, which tells us
@@ -2028,8 +2053,9 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
 
         //NOTE: helping the layout, the approach based on the text:style-name
         //attribute does not work at the moment.
-        textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
-
+        if (!textStyle.isEmpty()) {
+            textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
+        }
         out.endElement(); //text:list-level-style-bullet
     }
     // ------------------------
@@ -2038,7 +2064,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     else {
         kDebug(30513) << "numbered/outline... nfc = " << nfc;
         out.startElement("text:list-level-style-number");
-        out.addAttribute("text:style-name", textStyleName);
+//         out.addAttribute("text:style-name", textStyleName);
         out.addAttribute("text:level", pap.ilvl + 1);
 
         //*************************************
@@ -2149,8 +2175,9 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
 
         //NOTE: helping the layout, the approach based on the text:style-name
         //attribute does not work at the moment.
-        textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
-
+        if (!textStyle.isEmpty()) {
+            textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
+        }
         out.endElement(); //text:list-level-style-number
     } //end numbered list
 

@@ -21,6 +21,7 @@
 #define KPlato_TaskJuggler_h
 
 #include <QtTest/QtTest>
+#include <KTempDir>
 
 namespace TJ {
     class Project;
@@ -44,15 +45,17 @@ private slots:
     void dependency();
     void scheduleResource();
 
+    void scheduleDependencies();
     void scheduleConstraints();
+    void resourceConflict();
+    void units();
 
 private:
     void initTimezone();
     void cleanupTimezone();
-    void removeDir(const QString &subdir);
-    QString mDataDir;
 
 private:
+    KTempDir m_tmp;
     TJ::Project *project;
 };
 

@@ -43,9 +43,14 @@ class KoShape;
 
 /**
  * This class is a controller class for frame layouting.
+ *
  * For automatically generated frames this class creates new frames and places them on a page.
  * For normal frames this class will be able to (re)move them on page resize/deletion or create
  * followup frames for new pages.
+ *
+ * NOTE This class only handles header, footer and the mainframes. It does NOT handle any
+ * other framesets (neither Words::OtherFrameSet nor Words::OtherTextFrameSet). This class
+ * doesn't even know about them.
  */
 class WORDS_TEST_EXPORT KWFrameLayout : public QObject
 {

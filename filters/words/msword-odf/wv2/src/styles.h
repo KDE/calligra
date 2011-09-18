@@ -258,11 +258,11 @@ public:
     /**
      * Additional validation of the style, which requires the whole stylesheet
      * to be loaded to check the STD structure.  You MUST call this one after
-     * loading of the stylesheet, else the isValid method informs only about
-     * the parsing errors.
+     * the stylesheet is loaded, else the isValid method informs only about the
+     * parsing errors.
      */
-    bool validate(const U16 istd, const U16 rglpstd_cnt,
-                  const std::vector<Style*>& styles);
+    void validate(const U16 istd, const U16 rglpstd_cnt,
+                  const std::vector<Style*>& styles, U16& udsNum);
 
     /**
      * Check if the style is valid.
@@ -382,8 +382,15 @@ public:
      * Return the number of styles.
      */
     unsigned int size() const;
+
+    /**
+     * @return 0 in case the style sheet does not contain the requested style.
+     */
     const Style* styleByIndex( U16 istd ) const;
 
+    /**
+     * @return 0 in case the style sheet does not contain the requested style.
+     */
     const Style* styleByID( U16 sti ) const;
 
     U16 indexByID( U16 sti, bool& ok ) const;
@@ -394,6 +401,10 @@ private:
 
     Word97::STSHI m_stsh;
     std::vector<Style*> m_styles;
+
+    //Number of user defined styles with empty style name.
+    U16 m_udsNum;
+
 }; // StyleSheet
 
 }  // namespace wvWare

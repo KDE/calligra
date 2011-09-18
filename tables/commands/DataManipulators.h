@@ -26,6 +26,9 @@
 #include "Style.h"
 #include "Value.h"
 
+#include "calligra_tables_export.h"
+
+
 namespace Calligra
 {
 namespace Tables
@@ -35,7 +38,7 @@ namespace Tables
  * \ingroup Commands
  * \brief Abstract command for setting values.
  */
-class AbstractDataManipulator : public AbstractRegionCommand
+class CALLIGRA_TABLES_COMMON_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
 public:
     AbstractDataManipulator(KUndo2Command* parent = 0);

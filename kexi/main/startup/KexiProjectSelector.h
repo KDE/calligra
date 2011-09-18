@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,8 @@
 #include "kexiprojectset.h"
 
 #include <KPageDialog>
+
+#include <QTreeWidget>
 
 /*! Widget that allows to select a kexi project (or database)
 */
@@ -70,15 +72,20 @@ public:
 
     QLabel *label() const;
 
+    QTreeWidget* list() const;
+    
 signals:
     void projectExecuted(KexiProjectData*);
     void selectionChanged(KexiProjectData*);
 
 protected slots:
-    void slotItemExecuted(Q3ListViewItem*);
+    void slotItemExecuted(QTreeWidgetItem*);
+    void slotItemExecuted();
     void slotItemSelected();
 
 protected:
+    virtual bool eventFilter(QObject* watched, QEvent* event);
+    
     KexiProjectSet *m_prj_set;
 
     class Private;

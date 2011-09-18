@@ -72,16 +72,15 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 public:
     /*! Constructor 1. Creates a new object using \a pdata.
-     \a pdata which will be then owned by KexiProject object.
      \a handler can be provided to receive error messages during
      entire KexiProject object's lifetime. */
-    KexiProject(KexiProjectData* pdata, KexiDB::MessageHandler* handler = 0);
+    KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler = 0);
 
     /*! Constructor 2. Like above but sets predefined connections \a conn.
      The connection should be created using the same connection data
      as pdata->connectionData(). The connection will become owned by created KexiProject
      object, so do not destroy it. */
-    KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler,
+    KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler,
                 KexiDB::Connection* conn);
 
 //  KexiProject(KexiDB::ConnectionData *cdata);
@@ -272,12 +271,12 @@ public:
      \a cancelled is set to true if creation has been cancelled (e.g. user answered
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
-    static KexiProject* createBlankProject(bool &cancelled, KexiProjectData* data,
+    static KexiProject* createBlankProject(bool &cancelled, const KexiProjectData& data,
                                            KexiDB::MessageHandler* handler = 0);
 
     /*! Drops project described by \a data. \return true on success.
      Use with care: Any KexiProject objects allocated for this project will become invalid! */
-    static tristate dropProject(KexiProjectData* data,
+    static tristate dropProject(const KexiProjectData& data,
                                 KexiDB::MessageHandler* handler, bool dontAsk = false);
 
     /*! @see KexiDB::Connection::setQuerySchemaObsolete( const QString& queryName ) */

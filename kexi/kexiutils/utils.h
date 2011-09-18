@@ -621,6 +621,54 @@ KEXIUTILS_EXPORT void setMargins(QLayout *layout, int value);
     { QVBoxLayout *lyr = new QVBoxLayout(where); \
         lyr->addWidget(what); }
 
+//! A tool for setting temporary value for boolean variable.
+/*! After desctruction of the instance, the variable is set back
+ to the original value. This class is useful in recursion guards.
+ To use it, declare class atrribute of type bool and block it, e.g.:
+ @code
+ bool m_myNonRecursiveFunctionEnabled;
+ // ... set m_myNonRecursiveFunctionEnabled initially to true
+ void myNonRecursiveFunctionEnabled() {
+    if (!m_myNonRecursiveFunctionEnabled)
+        return;
+    kexiUtils::BoolBlocker guard(m_myNonRecursiveFunctionEnabled, false);
+    // function's body guarded against recursion...
+ }
+ @endcode
+*/
+class KEXIUTILS_EXPORT BoolBlocker
+{
+public:
+    inline BoolBlocker(bool& var, bool tempValue)
+     : v(var), origValue(var) { var = tempValue; }
+    inline ~BoolBlocker() { v = origValue; }
+private:
+    bool& v;
+    bool origValue;
+};
+
+/*! This helper function install an event filter on @a object and all of its
+  children, directed to @a filter. */
+KEXIUTILS_EXPORT void installRecursiveEventFilter(QObject *object, QObject *filter);
+
+/*! This helper function removes an event filter installed before
+  on @a object and all of its children. */
+KEXIUTILS_EXPORT void removeRecursiveEventFilter(QObject *object, QObject *filter);
+
+//! Blocks paint events on specified widget.
+/*! Works recursively. Useful when widget should be hidden without changing
+    geometry it takes. */
+class KEXIUTILS_EXPORT PaintBlocker : public QObject
+{
+public:
+    PaintBlocker(QWidget* parent);
+    void setEnabled(bool set);
+    bool enabled() const;
+    virtual bool eventFilter(QObject* watched, QEvent* event);
+private:
+    bool m_enabled;
+};
+
 } //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H

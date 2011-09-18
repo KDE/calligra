@@ -28,6 +28,7 @@ set(kexicore_LIB_SRCS
    kexipartitem.cpp 
    kexipart.cpp 
    kexiprojectdata.cpp 
+   KexiRecentProjects.cpp 
    kexiinternalpart.cpp 
    kexidragobjects.cpp 
    kexistartupdata.cpp 

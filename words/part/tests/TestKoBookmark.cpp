@@ -144,7 +144,7 @@ void TestKoBookmark::testRoundtrip()
         startmark->setName("START");
 
         editor->insertTable(5,10);
-        QTextTable *table = editor->cursor()->currentTable();
+        const QTextTable *table = editor->currentTable();
         Q_ASSERT(table);
 
         editor->setPosition(table->firstPosition());

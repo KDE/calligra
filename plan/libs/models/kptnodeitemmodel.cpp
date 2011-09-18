@@ -156,7 +156,7 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
                 }
             }
             if ( sl.count() == 1 ) {
-                return i18nc( "@info:tooltip 1=resource name", "Allocated resource: %1", sl.first() );
+                return i18nc( "@info:tooltip 1=resource name", "Allocated resource:<nl/>%1", sl.first() );
             }
             return i18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1", sl.join( "<nl/>" ) );
         }
