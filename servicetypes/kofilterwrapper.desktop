@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=CalligraGenericFilter
 Comment=Calligra Filter Wrapper
 Comment[bg]=Обвивка за филтър на Calligra
+Comment[da]=Filteromslag til Calligra
 Comment[de]=Calligra-Filter-Wrapper
 Comment[et]=Calligra filtrikest
 Comment[it]=Adattatore per filtri di Calligra

@@ -161,6 +161,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
     }
     
     setCurrentIndex(index);
+    setEditText(d->fieldOrExpression);
 }
 
 void KexiFieldComboBox::setFieldOrExpression(int index)

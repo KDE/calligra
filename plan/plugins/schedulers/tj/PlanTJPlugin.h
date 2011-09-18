@@ -38,7 +38,7 @@ namespace KPlato
 
 using namespace KPlato;
 
-class PlanTJPlugin : public SchedulerPlugin
+class KPLATOTJ_EXPORT PlanTJPlugin : public SchedulerPlugin
 {
     Q_OBJECT
 

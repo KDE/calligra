@@ -22,6 +22,13 @@ class Task;
 /**
  * @short Booking information for a time slot of the resource.
  * @author Chris Schlaeger <cs@kde.org>
+ *
+ * Booking values:
+ * 0 : resource is available
+ * 1 : resource is unavailable
+ * 2 : resource is on vacation
+ * 3 : undefined
+ * 4 : resource is allocated to a task
  */
 class SbBooking
 {

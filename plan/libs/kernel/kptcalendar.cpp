@@ -586,6 +586,8 @@ bool CalendarWeekdays::hasInterval() const
 }
 
 CalendarDay *CalendarWeekdays::weekday( int day ) const {
+    Q_ASSERT( day >= 1 && day <= 7 );
+    Q_ASSERT( m_weekdays.keys().contains( day ) );
     return m_weekdays.value( day );
 }
 

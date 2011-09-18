@@ -49,7 +49,6 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
         wvlog << "num. of header/footer stories:" << n - 6 << endl;
     }
 #endif
-
     if ( lcbPlcfhdd % sizeof( U32 ) ) {
         wvlog << "Bug: m_fib.lcbPlcfhdd % 4 != 0!" << endl;
     }
@@ -60,8 +59,8 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
     tableStream->seek( fcPlcfhdd, G_SEEK_SET );
 
     U32 i = 0;
+    //CPs of footnote/endnote separators related stories
     if ( version == Word8 ) {
-        //CPs of footnote/endnote separators related stories
         for ( ; i < 6 * sizeof( U32 ); i += sizeof( U32 ) ) {
             tableStream->readU32();
         }
@@ -84,7 +83,6 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
             i--;
         }
     }
-
     //Check num. of sections based on the num. of header/footer stories.
     if ( version == Word8 ) {
         uint m = (strsCPs.size() - 2) / headerTypes;
@@ -110,11 +108,10 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
     wvlog << "last:" << strsCPs.last();
 #endif
 
-    //Validate CPs!
+    //Except for the last CP, each CP MUST be in <0, FibRgLw97.ccpHdd).  Each
+    //story ends immediately prior to the next CP.  Again the second-to-last CP
+    //ends the last story, the last CP must be ignored.
     if ( version == Word8 ) {
-        //Except for the last CP, each CP MUST be in <0, FibRgLw97.ccpHdd).
-        //Each story ends immediately prior to the next CP.  Again the
-        //second-to-last CP ends the last story, the last CP must be ignored.
         QList<U32> sect[plcfsed.count()];
 
         int l = 0;

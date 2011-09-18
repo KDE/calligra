@@ -257,4 +257,41 @@ CoreAttributesList::compareItems(CoreAttributes* c1, CoreAttributes* c2)
     return res;
 }
 
+//static
+QStringList CoreAttributesList::getSortCriteria()
+{
+   QStringList lst;
+   lst << "SequenceUp" << "SequenceDown"
+       << "TreeMode" << "NameUp" << "NameDown" << "FullNameUp"
+       << "FullNameDown" << "IdUp" << "IdDown" << "IndexUp" << "IndexDown"
+       << "StatusUp" << "StatusDown" << "CompletedUp" << "CompletedDown"
+       << "PrioUp" << "PrioDown"
+       << "ResponsibleUp" << "ResponsibleDown"
+       << "MinEffortUp" << "MinEffortDown"
+       << "MaxEffortUp" << "MaxEffortDown"
+       << "RateUp" << "RateDown"
+       << "StartUp" << "StartDown" << "EndUp" << "EndDown"
+       << "CriticalnessUp" << "CriticalnessDown"
+       << "PathCriticalnessUp" << "PathCriticalnessDown"
+        ;
+    return lst;
+}
+
 } // namespace TJ
+
+QDebug operator<<( QDebug dbg, const TJ::CoreAttributesList& lst )
+{
+    QStringList s;
+    for ( int i = 0; i < TJ::CoreAttributesList::maxSortingLevel; ++i ) {
+        s << TJ::CoreAttributesList::getSortCriteria().at( lst.getSorting( i ) );
+    }
+    dbg.nospace() << "CoreAttributeList{sort: " << s.join("|") << " (";
+    for( int i = 0; i < lst.count(); ++i ) {
+        dbg << lst.at( i );
+        if ( i  < lst.count() - 1 ) {
+            dbg.nospace() << ',';
+        }
+    }
+    dbg.nospace() << ")}";
+    return dbg;
+}

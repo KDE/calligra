@@ -69,6 +69,7 @@ public:
 
     static const int maxSortingLevel = 3;
     void setSorting(int s, int level);
+    int getSorting(int level) const { return level < maxSortingLevel ? sorting[ level ] : 0; }
     void sort();
     void createIndex(bool initial = false);
     int getIndex(const QString& id) const;
@@ -80,6 +81,8 @@ public:
                                   int level);
 
     int inSort(CoreAttributes *attr);
+
+    static QStringList getSortCriteria();
 
 protected:
     virtual int compareItems(CoreAttributes* c1, CoreAttributes* c2);
@@ -146,5 +149,7 @@ template<class TL, class T> int compareTreeItemsT(TL* list, T* c1, T* c2)
 }
 
 } // namespace TJ
+
+KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::CoreAttributesList& lst );
 
 #endif
