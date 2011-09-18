@@ -20,6 +20,7 @@
 #include "KoPathShape.h"
 #include "KoLineBorder.h"
 #include "KoImageCollection.h"
+#include "KoMarkerCollection.h"
 #include "KoResourceManager.h"
 #include "KoShapeLoadingContext.h"
 
@@ -76,5 +77,10 @@ void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager) 
     if (manager->imageCollection() == 0) {
         KoImageCollection *imgCol = new KoImageCollection(manager);
         manager->setImageCollection(imgCol);
+    }
+    // we also need a MarkerCollection so add if it is not there yet
+    if (!manager->hasResource(KoDocumentResource::MarkerCollection)) {
+        KoMarkerCollection *markerCollection = new KoMarkerCollection(manager);
+        manager->setResource(KoDocumentResource::MarkerCollection, qVariantFromValue(markerCollection));
     }
 }

@@ -41,6 +41,8 @@ set(flake_SRCS
     KoFrameShape.cpp
     KoUnavailShape.cpp
     KoMarker.cpp
+    KoMarkerCollection.cpp
+    KoMarkerSharedLoadingData.cpp
     #KoUnavailData.cpp
     #KoUnavailCollection.cpp
     KoToolBase.cpp
