@@ -52,7 +52,7 @@ bool KoMarkerCollection::loadOdf(KoShapeLoadingContext &context)
     for (; it != markers.constEnd(); ++it) {
         KoMarker *marker = new KoMarker();
         if (marker->loadOdf(*(it.value()), context)) {
-            d->markers.append(marker);
+            marker = addMarker(marker);
             lookupTable.insert(it.key(), marker);
         }
         else {
@@ -71,12 +71,13 @@ QList<KoMarker*> KoMarkerCollection::markers() const
     return d->markers;
 }
 
-void KoMarkerCollection::addMarker(KoMarker *marker)
+KoMarker * KoMarkerCollection::addMarker(KoMarker *marker)
 {
     if (d->markers.contains(marker)) {
-        return;
+        return marker;
     }
 
     // TODO check that the same marker (content) is not yet in the list
     d->markers.append(marker);
+    return marker;
 }

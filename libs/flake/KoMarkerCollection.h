@@ -43,7 +43,19 @@ public:
     //void saveOdf(KoShapeSavingContext &context) const;
 
     QList<KoMarker*> markers() const;
-    void addMarker(KoMarker *marker);
+
+    /**
+     * Add marker to collection
+     *
+     * The collection checks if a marker with the same content exists and if so deletes the
+     * passed marker and returns a pointer to an existing marker. If no such marker exists it
+     * adds the marker and return the same pointer as passed.
+     * Calling that function passes ownership of the marker to this class.
+     *
+     * @param marker Marker to add
+     * @return pointer to marker that should be used. This might be different to the marker passed
+     */
+    KoMarker * addMarker(KoMarker *marker);
 
 private:
     class Private;
