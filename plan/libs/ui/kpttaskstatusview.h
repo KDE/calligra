@@ -286,7 +286,6 @@ private:
             delete effortaxis;
             delete costaxis;
         }
-        bool inuse;
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;
     
