@@ -13,3 +13,10 @@ target_link_libraries(TJTester  ${KDE4_KDECORE_LIBS} plantjscheduler planprivate
  
 
 ########### next target ###############
+
+set(SchedulerTester_SRCS SchedulerTester.cpp)
+
+
+kde4_add_unit_test(SchedulerTester TESTNAME Plan-TJ-SchedulerTester  ${SchedulerTester_SRCS})
+
+target_link_libraries(SchedulerTester  ${KDE4_KDECORE_LIBS} plantjscheduler planprivate kplatokernel koodf  ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})

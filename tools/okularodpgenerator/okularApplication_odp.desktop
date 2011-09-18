@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;
 Terminal=false
 Name=okular
@@ -22,6 +21,7 @@ Name[nl]=okular
 Name[pl]=okular
 Name[pt]=okular
 Name[pt_BR]=Okular
+Name[ru]=Okular
 Name[sv]=okular
 Name[uk]=Okular
 Name[wa]=okular
@@ -49,6 +49,7 @@ GenericName[nl]=Documentenviewer
 GenericName[pl]=Przeglądarka dokumentów
 GenericName[pt]=Visualizador de Documentos
 GenericName[pt_BR]=Visualizador de documentos
+GenericName[ru]=Просмотр документов
 GenericName[sv]=Dokumentvisare
 GenericName[ug]=پۈتۈك كۆرگۈچ
 GenericName[uk]=Перегляд документів

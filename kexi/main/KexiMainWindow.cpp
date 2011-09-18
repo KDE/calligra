@@ -718,7 +718,11 @@ void KexiMainWindow::setupActions()
 #endif
 
 #ifndef KEXI_NO_UNFINISHED
+#ifdef __GNUC__
 #warning replace document-import icon with something other
+#else
+#pragma WARNING( replace document-import icon with something other )
+#endif
     ac->addAction("project_import_export_send",
         action = d->action_project_import_export_send = new KexiMenuWidgetAction(
             KIcon("document-import"), i18n("&Import, Export or Send..."), this));
@@ -1130,7 +1134,12 @@ void KexiMainWindow::setupActions()
 #pragma WARNING( setStandardToolBarMenuEnabled( true ); )
 #endif
 
+#ifdef __GNUC__
 #warning put 'configure keys' into settings view
+#else
+#pragma WARNING( put 'configure keys' into settings view )
+#endif
+
 #if 0 // moved to settings
     action = KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), this);
     ac->addAction(action->objectName(), action);
@@ -1532,7 +1541,11 @@ tristate KexiMainWindow::startup()
     switch (Kexi::startupHandler().action()) {
     case KexiStartupHandler::CreateBlankProject:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
+#ifdef __GNUC__
 #warning todo modern startup:        result = createBlankProject();
+#else
+#pragma WARNING( todo modern startup:        result = createBlankProject(); )
+#endif
         break;
     case KexiStartupHandler::CreateFromTemplate:
         result = createProjectFromTemplate(*Kexi::startupHandler().projectData());
@@ -3136,7 +3149,11 @@ KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool co
     //KexiNewProjectWizard *wiz = new KexiNewProjectWizard(Kexi::connset(), 0);
     //wiz->setConfirmOverwrites(confirmOverwrites);
 
+#ifdef __GNUC__
 #warning todo
+#else
+#pragma WARNING( todo )
+#endif
     cancelled = false;
     KexiProjectData *new_data = 0;
 #if 0 // before MODERN

@@ -3,6 +3,7 @@ Type=Service
 Name=Words RTF Import Filter
 Name[bg]=Филтър за внасяне от RTF в Words
 Name[cs]=Dialog exportního filtru RTF pro Words
+Name[da]=RTF-importfilter til Words
 Name[de]=Words RTF-Importfilter
 Name[es]=Filtro de Words de importación de RTF
 Name[et]=Wordsi RTF-i impordifilter
