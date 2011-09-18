@@ -38,8 +38,9 @@
 #include <KDebug>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
-        : m_original(original),
-        m_pageManager(pageManager)
+        : KoShape()
+        ,m_original(original)
+        ,m_pageManager(pageManager)
 {
     setSize(m_original->size());
     setSelectable(original->isSelectable());
