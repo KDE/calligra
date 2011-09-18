@@ -24,7 +24,6 @@
 PresentationViewPortToolFactory::PresentationViewPortToolFactory()
     : KoToolFactoryBase("PresentationViewPortShape")
 {
-    qDebug() << "PVPShapeToolFactory()" << endl;
     setToolTip( i18n("Presentation View Port Tool") );
     setToolType( dynamicToolType() );
     setPriority( 1 );

@@ -34,8 +34,7 @@ PresentationViewPortShapePlugin::PresentationViewPortShapePlugin( QObject * pare
 {
     KoShapeRegistry::instance()->add( new PresentationViewPortShapeFactory(parent) );
     KoToolRegistry::instance()->add( new PresentationViewPortToolFactory() );
-    qDebug() << "PVPShapePlugin() \n";
-     }
+}
 
 PresentationViewPortShapePlugin::~PresentationViewPortShapePlugin()
 {
