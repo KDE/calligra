@@ -656,6 +656,9 @@ void PerformanceStatusBase::createBarChart()
     m_barchart.costproxy.setObjectName( "Bar: Cost" );
     m_barchart.costproxy.setSourceModel( &m_chartmodel );
     costdiagram->setModel( &(m_barchart.costproxy) );
+
+    m_barchart.effortdiagram = effortdiagram;
+    m_barchart.costdiagram = costdiagram;
 }
 
 void PerformanceStatusBase::createLineChart()
@@ -706,7 +709,8 @@ void PerformanceStatusBase::createLineChart()
     m_linechart.costproxy.setSourceModel( &m_chartmodel );
     costdiagram->setModel( &(m_linechart.costproxy) );
 
-
+    m_linechart.effortdiagram = effortdiagram;
+    m_linechart.costdiagram = costdiagram;
 }
 
 void PerformanceStatusBase::setupChart()
