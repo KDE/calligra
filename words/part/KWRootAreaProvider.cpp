@@ -252,7 +252,11 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
         data->setRootArea(area);
         area->setAssociatedShape(shape);
     }
-    area->setPage(new KWPage(rootAreaPage->page));
+
+    if (m_textFrameSet->type() != Words::OtherFrameSet && m_textFrameSet->textFrameSetType() != Words::OtherTextFrameSet) {
+        // Only header, footer and main-frames have an own KoTextPage. All other frames are embedded into them and inherit the KoTextPage from them.
+        area->setPage(new KWPage(rootAreaPage->page));
+    }
 
     m_pageHash[area] = rootAreaPage;
     rootAreaPage->rootAreas.append(area);

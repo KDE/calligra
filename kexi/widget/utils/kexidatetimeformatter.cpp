@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,9 +39,9 @@ KexiDateFormatter::KexiDateFormatter()
         m_separator = "-";
     const int separatorLen = m_separator.length();
     QString yearMask("9999");
-    QString yearDateFormat("yyyy"),
-    monthDateFormat("MM"),
-    dayDateFormat("dd"); //for setting up m_dateFormat
+    QString yearDateFormat("yyyy");
+    QString monthDateFormat("MM");
+    QString dayDateFormat("dd"); //for setting up m_dateFormat
     bool ok = df.length() >= 8;
     int yearpos, monthpos, daypos; //result of df.find()
     if (ok) {//look at % variables
@@ -77,21 +77,21 @@ KexiDateFormatter::KexiDateFormatter()
             m_order = YDM;
 //! @todo use QRegExp (to replace %Y by %1, etc.) instead of hardcoded "%1%299%399"
 //!       because df may contain also other characters
-            m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
+            m_inputMask = yearMask + m_separator + QLatin1String("99") + m_separator + QLatin1String("99");
             m_qtFormat = yearDateFormat + m_separator + dayDateFormat + m_separator + monthDateFormat;
             m_yearpos = 0;
             m_daypos = yearMask.length() + separatorLen;
             m_monthpos = m_daypos + 2 + separatorLen;
         } else if (daypos < monthpos && monthpos < yearpos) {
             m_order = DMY;
-            m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
+            m_inputMask = QLatin1String("99") + m_separator + QLatin1String("99") + m_separator + yearMask;
             m_qtFormat = dayDateFormat + m_separator + monthDateFormat + m_separator + yearDateFormat;
             m_daypos = 0;
             m_monthpos = 2 + separatorLen;
             m_yearpos = m_monthpos + 2 + separatorLen;
         } else if (monthpos < daypos && daypos < yearpos) {
             m_order = MDY;
-            m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
+            m_inputMask = QLatin1String("99") + m_separator + QLatin1String("99") + m_separator + yearMask;
             m_qtFormat = monthDateFormat + m_separator + dayDateFormat + m_separator + yearDateFormat;
             m_monthpos = 0;
             m_daypos = 2 + separatorLen;
@@ -100,7 +100,7 @@ KexiDateFormatter::KexiDateFormatter()
             ok = false;
     }
     if (!ok || m_order == YMD) {//default: YMD
-        m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
+        m_inputMask = yearMask + m_separator + QLatin1String("99") + m_separator + QLatin1String("99");
         m_qtFormat = yearDateFormat + m_separator + monthDateFormat + m_separator + dayDateFormat;
         m_yearpos = 0;
         m_monthpos = yearMask.length() + separatorLen;

@@ -161,9 +161,11 @@ void TaskJuggler::oneTask()
     QCOMPARE( t->getName(), QString("T1 name") );
     qDebug()<<"finished";
     
-    int sc = project->getScenarioIndex( "Plan" );
-    t->setDuration( sc, TJ::ONEHOUR );
-    QCOMPARE( t->getDuration( sc ), (double)TJ::ONEHOUR );
+    int sc = project->getScenarioIndex( "plan" );
+    QCOMPARE( sc, 1 );
+
+    t->setDuration( sc-1, TJ::ONEHOUR );
+    QCOMPARE( t->getDuration( sc-1 ), (double)TJ::ONEHOUR );
     
     QVERIFY( ! t->isMilestone() );
 }
@@ -264,21 +266,15 @@ void TaskJuggler::scheduleResource()
 
     TJ::Task *t = project->getTask( "T1" );
     QVERIFY( t != 0 );
-    for ( int i = 0; i < project->getMaxScenarios(); ++i ) {
-        t->setEffort( i, 5 );
-        QCOMPARE( t->getEffort( i ), 5. );
-    }
-    QVERIFY( ! t->isMilestone() );
-    for ( int i = 0; i < project->getMaxScenarios(); ++i ) {
-        qDebug()<<t->getId()<<"effort="<<t->getEffort( i )<<"sc="<<i;
-    }
-    bool res = project->pass2( true );
-    QVERIFY( res );
+    t->setDuration( 0, 0.0 );
+    t->setEffort( 0, 5. );
+    QCOMPARE( t->getEffort( 0 ), 5. );
 
-    QVERIFY( ! t->isMilestone() );
+    qDebug()<<t->getId()<<"effort="<<t->getEffort( 0 );
 
-    res = project->scheduleAllScenarios();
-    QVERIFY( res );
+    QVERIFY(  project->pass2( true )  );
+
+    QVERIFY( project->scheduleAllScenarios() );
 
     qDebug()<<QDateTime::fromTime_t( t->getStart( 0 ) )<<QDateTime::fromTime_t( t->getEnd( 0 ) );
     

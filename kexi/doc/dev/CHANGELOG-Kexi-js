@@ -95,6 +95,11 @@ Tabbed toolbar TODOS:
 ===================== Kexi 2.4  =====================
 
 2011-09-09
+Table View
+*Fixed input mask for date, time and date/time data fields in table views
+BUG:272994
+
+2011-09-09
 Forms
 *Display widget's data source after selecting source
 BUG:278298
