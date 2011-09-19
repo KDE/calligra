@@ -27,6 +27,8 @@ SET ( VectorShape_SRCS
     libemf/BitmapHeader.cpp
     libemf/Bitmap.cpp
     libemf/EmfParser.cpp
+    #libemf/EmfplusDeviceContext.cpp
+    #libemf/EmfplusParser.cpp
     libemf/EmfAbstractBackend.cpp
     libemf/EmfDebugBackend.cpp
     libemf/EmfPainterBackend.cpp

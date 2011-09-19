@@ -14,6 +14,8 @@ set(libemf_LIB_SRCS
      EmfHeader.cpp
      BitmapHeader.cpp
      EmfParser.cpp
+     EmfplusDeviceContext.cpp
+     EmfplusParser.cpp
      EmfAbstractBackend.cpp
      EmfDebugBackend.cpp
      EmfPainterBackend.cpp
@@ -37,6 +39,9 @@ set(libemf_LIB_SRCS
 #    EmfRecords.h
 #    EmfObjects.h
 #    EmfHeader.h
+#    EmfplusEnums.h
+#    EmfplusDeviceContext.h
+#    EmfplusDeviceParser.h
 #    Bitmap.h
 #    EmfParser.h
 #    EmfAbstractBackend.h
