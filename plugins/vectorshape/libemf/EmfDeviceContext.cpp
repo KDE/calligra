@@ -66,7 +66,7 @@ void EmfDeviceContext::reset()
     bgMixMode = 0;// FIXME: Check the real default
     //Break extra space
     //Font mapping mode
-    rop = 0;// FIXME: Check the real default
+    rop2Mode = 0;// FIXME: Check the real default
     layoutMode = 0;// FIXME: Check the real default
     mapMode = MM_TEXT;
     polyFillMode = ALTERNATE;
