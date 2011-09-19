@@ -4303,9 +4303,15 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
             KIcon(part ? part->info()->itemIcon() : QString()),
             item->captionOrName());
         d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(*item, part));
-        d->mainWidget->tabWidget()->setTabWhatsThis(
-            tabIndex,
-            i18n("Tab for \"%1\" (%2).", item->captionOrName(), part->info()->instanceCaption()));
+        QString whatsThisText;
+        if (part) {
+            whatsThisText = i18n("Tab for \"%1\" (%2).",
+                                 item->captionOrName(), part->info()->instanceCaption());
+        }
+        else {
+            whatsThisText = i18n("Tab for \"%1\".", item->captionOrName());
+        }
+        d->mainWidget->tabWidget()->setTabWhatsThis(tabIndex, whatsThisText);
         d->mainWidget->tabWidget()->setCurrentWidget(windowContainer);
 
 #ifndef KEXI_NO_PENDING_DIALOGS
