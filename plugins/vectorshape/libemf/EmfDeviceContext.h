@@ -113,8 +113,8 @@ public:
     quint16  bgMixMode;         // Background mix mode
     //Break extra space NYI
     //Font mapping mode NYI
-    quint16  rop;               // Foreground mix mode
-    quint16  layoutMode;        // Layout mode
+    quint32  rop2Mode;          // Foreground mix mode (FIXME: Or is it?)
+    quint32  layoutMode;        // Layout mode
     quint32  mapMode;           // Mapping mode
     quint32  polyFillMode;      // Polygon fill mode
     //Stretchblt mode NYI
