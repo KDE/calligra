@@ -1120,8 +1120,9 @@ Utils::XmlWriteBuffer::~XmlWriteBuffer()
 KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
 {
     Q_ASSERT(!m_origWriter && !m_newWriter);
-    if (m_origWriter || m_newWriter)
+    if (m_origWriter || m_newWriter) {
         return 0;
+    }
     m_origWriter = writer; // remember
     m_newWriter = new KoXmlWriter(&m_buffer, m_origWriter->indentLevel() + 1);
     return m_newWriter;
@@ -1130,14 +1131,28 @@ KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
 KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter()
 {
     Q_ASSERT(m_newWriter && m_origWriter);
+    if (!m_newWriter || !m_origWriter) {
+        return 0;
+    }
+    m_origWriter->addCompleteElement(&m_buffer);
+    return releaseWriterInternal();
+}
+
+KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter(QString& bkpXmlSnippet)
+{
+    Q_ASSERT(m_newWriter && m_origWriter);
+    if (!m_newWriter || !m_origWriter) {
+        return 0;
+    }
+    bkpXmlSnippet = QString::fromUtf8(m_buffer.buffer(), m_buffer.buffer().size());
     return releaseWriterInternal();
 }
 
 KoXmlWriter* Utils::XmlWriteBuffer::releaseWriterInternal()
 {
-    if (!m_newWriter || !m_origWriter)
+    if (!m_newWriter || !m_origWriter) {
         return 0;
-    m_origWriter->addCompleteElement(&m_buffer);
+    }
     delete m_newWriter;
     m_newWriter = 0;
     KoXmlWriter* tmp = m_origWriter;
