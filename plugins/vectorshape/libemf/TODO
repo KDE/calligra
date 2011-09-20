@@ -1,11 +1,33 @@
 * Make a complete Playback Device Context
-   + The rest of the graphics state variables of the DC                 [DONE]
+   + The rest of the graphics state variables of the DC
       - backgroundMode                                                  [done]
       - text layout                                                     [done]
+      - stretchBltMode
+      - rop2
    + Move the object system (Pen, Brush, etc) to the DC
    + Move the current path to the DC
    + Move the world transform to the DC
    + Implement a real saveDC and restoreDC
+
+* Implement support for EMFPLUS
+   + Make a stream from a EMR_COMMENT_EMFPLUS record and hand that
+     to the EMF+ parser.
+   + Implement the EMF+ device context
+      - Find out what the EMF+ DC has that the EMF DC doesn't
+      - Create an EMF+ DC from an EMF DC
+   + Support EMF+ records
+      - Check which calls are basically same as EMF, and copy code for them
+      - One by one, add code to the ones that we don't support yet.
+   + Enhance backend to support EMF+
+      - Implement which backend calls we have to add to be able to support EMF+
+
+* Merge with libkowmf
+   - Rename to libwinmetafile (or wmf? But that could be confusing)
+
+
+----------------------------------------------------------------
+                              old todo's
+
 
 * Complete doxygen \mainpage
 
