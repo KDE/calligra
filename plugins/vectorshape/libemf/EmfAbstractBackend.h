@@ -126,69 +126,6 @@ public:
     virtual void setMetaRgn(EmfDeviceContext &context) = 0;
 
     /**
-       Handler for the EMR_SETWINDOWORGEX record type
-       
-       \param origin the origin of the window in logical coordinates
-    */
-    virtual void setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin) = 0;
-
-    /**
-       Handler for the EMR_SETWINDOWEXTEX record type
-
-       \param size the size of the window in logical coordinates
-    */
-    virtual void setWindowExtEx(EmfDeviceContext &context, const QSize &size) = 0;
-
-    /**
-       Handler for the EMR_SETVIEWPORTORGEX record type
-       
-       \param origin the origin of the viewport in logical coordinates
-    */
-    virtual void setViewportOrgEx(EmfDeviceContext &context, const QPoint &origin) = 0;
-
-    /**
-       Handler for the EMR_SETVIEWPORTEXTEX record type
-
-       \param size the size of the viewport in logical coordinates
-    */
-    virtual void setViewportExtEx(EmfDeviceContext &context, const QSize &size) = 0;
-
-    /**
-       Handler for the EMR_MODIFYWORLDTRANSFORM record type
-
-       There are a range of modes:
-       - 0x01 (MWT_IDENTIFY): Reset current world transform to identity matrix
-       - 0x02 (MWT_LEFTMULTIPLY): Left multiply this matrix with current matrix.
-       - 0x03 (MWT_RIGHTMULTIPLY): Right multiply current matrix with this matrix.
-       - 0x04 (MWT_SET): Set the world transform.
-
-       \param mode the mode to use.
-       \param M11
-       \param M12
-       \param M21
-       \param M22
-       \param Dx
-       \param Dy
-    */
-    virtual void modifyWorldTransform(EmfDeviceContext &context,
-                                      quint32 mode, float M11, float M12,
-				      float M21, float M22, float Dx, float Dy) = 0;
-
-    /**
-       Handler for the EMR_SETWORLDTRANSFORM record type
-
-       \param M11
-       \param M12
-       \param M21
-       \param M22
-       \param Dx
-       \param Dy
-    */
-    virtual void setWorldTransform(EmfDeviceContext &context,
-                                   float M11, float M12, float M21,
-                                   float M22, float Dx, float Dy) = 0;
-
-    /**
        Select a previously created (or stock) object
 
        \param ihObject the reference number for the object to select

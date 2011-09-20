@@ -65,6 +65,7 @@ enum DeviceContextMembers {
     DCViewportorg    = 0x00000200,
     DCWindowExt      = 0x00000400,
     DCWindoworg      = 0x00000800,
+    DCWorldTransform = 0x00000F00, // All the viewport/window bits together
 
     // Graphic properties
     DCBkMode         = 0x00001000,
@@ -104,10 +105,10 @@ public:
     QPoint  currentPosition;    // Drawing position (Current point)
     QColor  foregroundTextColor; // Foreground text color
     ;    //Output Surface**  (what is this good for?  Mixing colors?)
-    QSize  viewportExt;         // Viewport extent
     QPoint viewportOrg;         // Viewport origin
-    QSize  windowExt;           // Window extent
+    QSize  viewportExt;         // Viewport extent
     QPoint windowOrg;           // Window origin
+    QSize  windowExt;           // Window extent
 
     // Graphic Properties
     quint32  bkMode;         // Background mode
@@ -136,6 +137,15 @@ public:
     bool        m_windowExtIsSet;
     bool        m_viewportExtIsSet;
     QTransform  m_worldTransform;
+
+    // Convenience functions
+    void setWindowOrg(const QPoint &origin);
+    void setWindowExt(const QSize &size);
+    void setViewportOrg(const QPoint &origin);
+    void setViewportExt(const QSize &size);
+    void modifyWorldTransform(const quint32 mode, float M11, float M12,
+                              float M21, float M22, float Dx, float Dy);
+    void setWorldTransform(float M11, float M12, float M21, float M22, float Dx, float Dy);
 
 private:
     void recalculateWorldTransform();

@@ -277,230 +277,6 @@ void EmfPainterBackend::setMetaRgn(EmfDeviceContext &context)
 //                 World Transform, Window and Viewport
 
 
-// General note about coordinate spaces and transforms:
-//
-// There are several coordinate spaces in use when drawing an EMF file:
-//  1. The object space, in which the objects' coordinates are expressed inside the EMF.
-//     In general there are several of these.
-//  2. The page space, which is where they end up being painted in the EMF picture.
-//     The union of these form the bounding box of the EMF.
-//  3. (possibly) the output space, where the EMF picture itself is placed
-//     and/or scaled, rotated, etc
-//
-// The transform between spaces 1. and 2. is called the World Transform.
-// The world transform can be changed either through calls to change
-// the window or viewport or through calls to setWorldTransform() or
-// modifyWorldTransform().
-//
-// The transform between spaces 2. and 3. is the transform that the QPainter
-// already contains when it is given to us.  We need to save this and reapply
-// it after the world transform has changed. We call this transform the Output
-// Transform in lack of a better word. (Some sources call it the Device Transform.)
-//
-
-// An unanswered question:
-//
-// The file mp07_embedded_ppt.pptx in the test files contains the
-// following sequence of records:
-// - SetWorldTransform
-// - ModifyWorldTransform
-// - SetViewportOrg  <-- doesn't change anything
-// - SetWindowOrg    <-- doesn't change anything
-// - ExtTextOutw
-//
-// I was previously under the impression that whenever a
-// Set{Window,Viewport}{Org,Ext} record was encountered, the world
-// transform was supposed to be recalculated. But in this file, it
-// destroys the world transform. The question is which of the
-// following alternatives is true:
-// 
-// 1. The world transform should only be recalculated if the
-//    Set{Window,Viewport}{Org,Ext} record actually changes anything.
-//
-// 2. The transformations set by {Set,Modify}WorldTransform records
-//    should always be reapplied after a change in window or viewport.
-//
-// 3. Something else
-//
-// I have for now implemented option 1. See the FIXME's in
-// SetWindowOrg et al.
-//
-
-
-// Set Window and Viewport
-void EmfPainterBackend::recalculateWorldTransform()
-{
-    m_worldTransform = QTransform();
-
-    // If neither the window nor viewport extension is set, then there
-    // is no way to perform the calculation.  Just give up.
-    if (!m_windowExtIsSet && !m_viewportExtIsSet)
-        return;
-
-    // Negative window extensions mean flip the picture.  Handle this here.
-    bool  flip = false;
-    qreal midpointX = 0.0;
-    qreal midpointY = 0.0;
-    qreal scaleX = 1.0;
-    qreal scaleY = 1.0;
-    if (m_windowExt.width() < 0) {
-        midpointX = m_windowOrg.x() + m_windowExt.width() / qreal(2.0);
-        scaleX = -1.0;
-        flip = true;
-    }
-    if (m_windowExt.height() < 0) {
-        midpointY = m_windowOrg.y() + m_windowExt.height() / qreal(2.0);
-        scaleY = -1.0;
-        flip = true;
-    }
-    if (flip) {
-        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
-        m_worldTransform.translate(midpointX, midpointY);
-        m_worldTransform.scale(scaleX, scaleY);
-        m_worldTransform.translate(-midpointX, -midpointY);
-        //kDebug(31000) << "After flipping for window" << mWorldTransform;
-    }
-
-    // Update the world transform if both window and viewport are set...
-    // FIXME: Check windowExt == 0 in any direction
-    if (m_windowExtIsSet && m_viewportExtIsSet) {
-        // Both window and viewport are set.
-        qreal windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
-        qreal windowViewportScaleY = qreal(m_viewportExt.height()) / qreal(m_windowExt.height());
-
-        m_worldTransform.translate(-m_windowOrg.x(), -m_windowOrg.y());
-        m_worldTransform.scale(windowViewportScaleX, windowViewportScaleY);
-        m_worldTransform.translate(m_viewportOrg.x(), m_viewportOrg.y());
-    }
-
-    // ...and apply it to the painter
-    m_painter->setWorldTransform(m_worldTransform);
-    m_windowViewportIsSet = true;
-
-    // Apply the output transform.
-    QTransform newMatrix = m_worldTransform * m_outputTransform;
-    m_painter->setWorldTransform( newMatrix );
-}
-
-
-void EmfPainterBackend::setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << origin;
-#endif
-
-    // FIXME: See unanswered question at the start of this section.
-    if (m_windowOrg == origin) {
-        //kDebug(31000) << "same origin as before";
-        return;
-    }
-
-    m_windowOrg = origin;
-
-    recalculateWorldTransform();
-}
-
-void EmfPainterBackend::setWindowExtEx(EmfDeviceContext &context, const QSize &size )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << size;
-#endif
-
-    // FIXME: See unanswered question at the start of this section.
-    if (m_windowExt == size) {
-        //kDebug(31000) << "same extension as before";
-        return;
-    }
-
-    m_windowExt = size;
-    m_windowExtIsSet = true;
-
-    recalculateWorldTransform();
-}
-
-void EmfPainterBackend::setViewportOrgEx(EmfDeviceContext &context, const QPoint &origin )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << origin;
-#endif
-
-    // FIXME: See unanswered question at the start of this section.
-    if (m_viewportOrg == origin) {
-        //kDebug(31000) << "same origin as before";
-        return;
-    }
-
-    m_viewportOrg = origin;
-
-    recalculateWorldTransform();
-}
-
-void EmfPainterBackend::setViewportExtEx(EmfDeviceContext &context, const QSize &size )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << size;
-#endif
-
-    // FIXME: See unanswered question at the start of this section.
-    if (m_viewportExt == size) {
-        //kDebug(31000) << "same extension as before";
-        return;
-    }
-
-    m_viewportExt = size;
-    m_viewportExtIsSet = true;
-
-    recalculateWorldTransform();
-}
-
-
-
-void EmfPainterBackend::modifyWorldTransform(EmfDeviceContext &context,
-                                             const quint32 mode, float M11, float M12,
-                                             float M21, float M22, float Dx, float Dy )
-{
-#if DEBUG_EMFPAINT
-    if (mode == MWT_IDENTITY)
-        kDebug(31000) << "Identity matrix";
-    else
-        kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
-#endif
-
-    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
-
-    if ( mode == MWT_IDENTITY ) {
-        m_worldTransform = QTransform();
-    } else if ( mode == MWT_LEFTMULTIPLY ) {
-        m_worldTransform = matrix * m_worldTransform;
-    } else if ( mode == MWT_RIGHTMULTIPLY ) {
-        m_worldTransform = m_worldTransform * matrix;
-    } else if ( mode == MWT_SET ) {
-        m_worldTransform = matrix;
-    } else {
-	qWarning() << "Unimplemented transform mode" << mode;
-    }
-
-    // Apply the output transform.
-    QTransform newMatrix = m_worldTransform * m_outputTransform;
-    m_painter->setWorldTransform( newMatrix );
-}
-
-void EmfPainterBackend::setWorldTransform(EmfDeviceContext &context,
-                                          float M11, float M12, float M21,
-                                          float M22, float Dx, float Dy )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
-#endif
-
-    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
-
-    m_worldTransform = matrix;
-
-    // Apply the output transform.
-    QTransform newMatrix = m_worldTransform * m_outputTransform;
-    m_painter->setWorldTransform( newMatrix );
-}
 
 
 // ----------------------------------------------------------------
@@ -1373,12 +1149,14 @@ void EmfPainterBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRe
 
 void EmfPainterBackend::printPainterTransform(const char *leadText)
 {
+#if 0   // temporarily disabled
     QTransform  transform;
 
     recalculateWorldTransform();
 
     kDebug(31000) << leadText << "world transform " << m_worldTransform
                   << "incl output transform: " << m_painter->transform();
+#endif
 }
 
 
@@ -1569,6 +1347,11 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
     //DCViewportorg
     //DCWindowExt  
     //DCWindoworg  
+    if (context.changedItems & DCWorldTransform) {
+        // Apply the output transform.
+        QTransform newMatrix = context.m_worldTransform * m_outputTransform;
+        m_painter->setWorldTransform(newMatrix);
+    }
 
     //----------------------------------------------------------------
     // Graphic Properties

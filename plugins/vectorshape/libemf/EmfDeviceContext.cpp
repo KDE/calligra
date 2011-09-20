@@ -76,11 +76,18 @@ void EmfDeviceContext::reset()
 
     changedItems = 0xffffffff;  // Everything changed the first time.
 
-    // Derivative values.
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // Derivative values.  These are calculated from the base values above.
+
+    // World transform
     m_windowExtIsSet = false;
     m_viewportExtIsSet = false;
     m_worldTransform.reset();
 }
+
+
+// ----------------------------------------------------------------
+//                         World transform
 
 
 // General note about coordinate spaces and transforms:
@@ -114,33 +121,132 @@ void EmfDeviceContext::reset()
 // and relative/absolute coordinate
 
 
+void EmfDeviceContext::setWindowOrg(const QPoint &origin)
+{
+#if DEBUG_EMFPAINT
+    kDebug(31000) << origin;
+#endif
+
+    // FIXME: See unanswered question at the start of this section.
+    if (windowOrg == origin) {
+        //kDebug(31000) << "same origin as before";
+        return;
+    }
+
+    windowOrg = origin;
+
+    // FIXME: Only recalculate when needed. Set DCWorldTransform in changedItems instead.
+    recalculateWorldTransform();
+}
+
+void EmfDeviceContext::setWindowExt(const QSize &size)
+{
+#if DEBUG_EMFPAINT
+    kDebug(31000) << size;
+#endif
+
+    // FIXME: See unanswered question at the start of this section.
+    if (windowExt == size) {
+        //kDebug(31000) << "same extension as before";
+        return;
+    }
+
+    windowExt = size;
+    m_windowExtIsSet = true;
+
+    // FIXME: Only recalculate when needed. Set DCWorldTransform in changedItems instead.
+    recalculateWorldTransform();
+}
+
+void EmfDeviceContext::setViewportOrg(const QPoint &origin)
+{
+#if DEBUG_EMFPAINT
+    kDebug(31000) << origin;
+#endif
+
+    // FIXME: See unanswered question at the start of this section.
+    if (viewportOrg == origin) {
+        //kDebug(31000) << "same origin as before";
+        return;
+    }
+
+    viewportOrg = origin;
+
+    // FIXME: Only recalculate when needed. Set DCWorldTransform in changedItems instead.
+    recalculateWorldTransform();
+}
+
+void EmfDeviceContext::setViewportExt(const QSize &size)
+{
+#if DEBUG_EMFPAINT
+    kDebug(31000) << size;
+#endif
+
+    // FIXME: See unanswered question at the start of this section.
+    if (viewportExt == size) {
+        //kDebug(31000) << "same extension as before";
+        return;
+    }
+
+    viewportExt = size;
+    m_viewportExtIsSet = true;
+
+    // FIXME: Only recalculate when needed. Set DCWorldTransform in changedItems instead.
+    recalculateWorldTransform();
+}
+
+void EmfDeviceContext::modifyWorldTransform(const quint32 mode, float M11, float M12,
+                                            float M21, float M22, float Dx, float Dy)
+{
+#if DEBUG_EMFPAINT
+    if (mode == MWT_IDENTITY)
+        kDebug(31000) << "Identity matrix";
+    else
+        kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
+#endif
+
+    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
+
+    if ( mode == MWT_IDENTITY ) {
+        m_worldTransform = QTransform();
+    } else if ( mode == MWT_LEFTMULTIPLY ) {
+        m_worldTransform = matrix * m_worldTransform;
+    } else if ( mode == MWT_RIGHTMULTIPLY ) {
+        m_worldTransform = m_worldTransform * matrix;
+    } else if ( mode == MWT_SET ) {
+        m_worldTransform = matrix;
+    } else {
+	qWarning() << "Unimplemented transform mode" << mode;
+    }
+
+    changedItems |= DCWorldTransform;
+}
+
+void EmfDeviceContext::setWorldTransform(float M11, float M12, float M21, float M22,
+                                         float Dx, float Dy )
+{
+#if DEBUG_EMFPAINT
+    kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
+#endif
+
+    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
+
+    m_worldTransform = matrix;
+    changedItems |= DCWorldTransform;
+}
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+// Calculate the world transform from Window and Viewport
 void EmfDeviceContext::recalculateWorldTransform()
 {
     m_worldTransform = QTransform();
 
+    // If neither the window nor viewport extension is set, then there
+    // is no way to perform the calculation.  Just give up.
     if (!m_windowExtIsSet && !m_viewportExtIsSet)
         return;
-
-    // FIXME: Check windowExt == 0 in any direction
-    qreal windowViewportScaleX;
-    qreal windowViewportScaleY;
-    if (m_windowExtIsSet && m_viewportExtIsSet) {
-        // Both window and viewport are set.
-        windowViewportScaleX = qreal(viewportExt.width()) / qreal(windowExt.width());
-        windowViewportScaleY = qreal(viewportExt.height()) / qreal(windowExt.height());
-#if 0
-        kDebug(31000) << "Scale for Window -> Viewport"
-                      << windowViewportScaleX << windowViewportScaleY;
-#endif
-    }
-    else {
-        // At most one of window and viewport ext is set: Use same width for window and viewport
-        windowViewportScaleX = qreal(1.0);
-        windowViewportScaleY = qreal(1.0);
-#if 0
-        kDebug(31000) << "Only one of Window or Viewport set: scale window -> viewport = 1";
-#endif
-    }
 
     // Negative window extensions mean flip the picture.  Handle this here.
     bool  flip = false;
@@ -149,40 +255,36 @@ void EmfDeviceContext::recalculateWorldTransform()
     qreal scaleX = 1.0;
     qreal scaleY = 1.0;
     if (windowExt.width() < 0) {
-        midpointX = (windowOrg.x() + windowExt.width()) / qreal(2.0);
+        midpointX = windowOrg.x() + windowExt.width() / qreal(2.0);
         scaleX = -1.0;
         flip = true;
     }
     if (windowExt.height() < 0) {
-        midpointY = (windowOrg.y() + windowExt.height()) / qreal(2.0);
+        midpointY = windowOrg.y() + windowExt.height() / qreal(2.0);
         scaleY = -1.0;
         flip = true;
     }
     if (flip) {
-        kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
+        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
         m_worldTransform.translate(midpointX, midpointY);
         m_worldTransform.scale(scaleX, scaleY);
         m_worldTransform.translate(-midpointX, -midpointY);
-        //kDebug(31000) << "After flipping for window" << m_worldTransform;
+        //kDebug(31000) << "After flipping for window" << mWorldTransform;
     }
 
-    // Calculate the world transform.
-    m_worldTransform.translate(-windowOrg.x(), -windowOrg.y());
-    m_worldTransform.scale(windowViewportScaleX, windowViewportScaleY);
-    if (m_viewportExtIsSet) {
+    // Update the world transform if both window and viewport are set...
+    // FIXME: Check windowExt == 0 in any direction
+    if (m_windowExtIsSet && m_viewportExtIsSet) {
+        // Both window and viewport are set.
+        qreal windowViewportScaleX = qreal(viewportExt.width()) / qreal(windowExt.width());
+        qreal windowViewportScaleY = qreal(viewportExt.height()) / qreal(windowExt.height());
+
+        m_worldTransform.translate(-windowOrg.x(), -windowOrg.y());
+        m_worldTransform.scale(windowViewportScaleX, windowViewportScaleY);
         m_worldTransform.translate(viewportOrg.x(), viewportOrg.y());
-    } 
-    else {
-        // If viewport is not set, but window is *and* the window
-        // width/height is negative, then we must compensate for this.
-        // If the width/height is positive, we already did it with the
-        // first translate before the scale() above.
-        if (windowExt.width() < 0) 
-            m_worldTransform.translate(windowOrg.x() + windowExt.width(), qreal(0.0));
-        if (windowExt.height() < 0) 
-            m_worldTransform.translate(qreal(0.0), windowOrg.y() + windowExt.height());
     }
-    //kDebug(31000) << "After window viewport calculation" << m_worldTransform;
+
+    changedItems |= DCWorldTransform;
 }
 
 

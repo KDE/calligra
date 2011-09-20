@@ -107,34 +107,6 @@ void EmfDebugBackend::setMetaRgn(EmfDeviceContext &context)
     kDebug(33100) << "EMR_SETMETARGN";
 }
 
-void EmfDebugBackend::setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SETWINDOWORGEX" << origin;
-}
-
-void EmfDebugBackend::setWindowExtEx(EmfDeviceContext &context, const QSize &size )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SETWINDOWEXTEX" << size;
-}
-
-void EmfDebugBackend::setViewportOrgEx(EmfDeviceContext &context, const QPoint &origin )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SETVIEWPORTORGEX" << origin;
-}
-
-void EmfDebugBackend::setViewportExtEx(EmfDeviceContext &context, const QSize &size )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SETVIEWPORTEXTEX" << size;
-}
-
 void EmfDebugBackend::deleteObject(EmfDeviceContext &context, const quint32 ihObject )
 {
     Q_UNUSED(context);
@@ -175,22 +147,6 @@ void EmfDebugBackend::rectangle(EmfDeviceContext &context, const QRect &box )
     Q_UNUSED(context);
 
     kDebug(33100) << "EMR_RECTANGLE:" << box;
-}
-
-void EmfDebugBackend::modifyWorldTransform(EmfDeviceContext &context, quint32 mode, float M11, float M12,
-					float M21, float M22, float Dx, float Dy )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_MODIFYWORLDTRANSFORM:" << mode << QTransform ( M11, M12, M21, M22, Dx, Dy );
-}
-
-void EmfDebugBackend::setWorldTransform(EmfDeviceContext &context, float M11, float M12, float M21,
-				     float M22, float Dx, float Dy )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SETWORLDTRANSFORM:" << QTransform ( M11, M12, M21, M22, Dx, Dy );
 }
 
 void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context,

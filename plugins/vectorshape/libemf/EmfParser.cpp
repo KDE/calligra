@@ -402,39 +402,72 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             mOutput->polyLine(context, bounds, aPoints );
         }
         break;
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        // Window/Viewport
         case EMR_SETWINDOWEXTEX:
         {
-            QSize size;
-            //stream >> size;
             qint32 width, height;
             stream >> width >> height;
             //kDebug(31000) << "SETWINDOWEXTEX" << width << height;
-            size = QSize(width, height);
-            mOutput->setWindowExtEx(context, size );
+            QSize size = QSize(width, height);
+            context.setWindowExt(size);
         }
         break;
         case EMR_SETWINDOWORGEX:
         {
             QPoint origin;
             stream >> origin;
-            mOutput->setWindowOrgEx(context, origin );
+            context.setWindowOrg(origin);
         }
         break;
         case EMR_SETVIEWPORTEXTEX:
         {
             QSize size;
             stream >> size;
-            mOutput->setViewportExtEx(context, size );
+            context.setViewportExt(size);
         }
         break;
         case EMR_SETVIEWPORTORGEX:
         {
             QPoint origin;
             stream >> origin;
-            mOutput->setViewportOrgEx(context, origin );
+            context.setViewportOrg(origin);
         }
         break;
-        case EMR_SETBRUSHORGEX:
+        case EMR_SETWORLDTRANSFORM:
+	{
+            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+	    float M11, M12, M21, M22, Dx, Dy;
+	    stream >> M11;
+	    stream >> M12;
+	    stream >> M21;
+	    stream >> M22;
+	    stream >> Dx;
+	    stream >> Dy;
+            //kDebug(31000) << "Set world transform" << M11 << M12 << M21 << M22 << Dx << Dy;
+	    context.setWorldTransform(M11, M12, M21, M22, Dx, Dy);
+	}
+	break;
+        case EMR_MODIFYWORLDTRANSFORM:
+	{
+            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+	    float M11, M12, M21, M22, Dx, Dy;
+	    stream >> M11;
+	    stream >> M12;
+	    stream >> M21;
+	    stream >> M22;
+	    stream >> Dx;
+	    stream >> Dy;
+            //kDebug(31000) << "stream position after the matrix: " << stream.device()->pos();
+	    quint32 ModifyWorldTransformMode;
+	    stream >> ModifyWorldTransformMode;
+	    context.modifyWorldTransform(ModifyWorldTransformMode, M11, M12, M21, M22, Dx, Dy);
+	}
+	break;
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    case EMR_SETBRUSHORGEX:
         {
             QPoint origin;
             stream >> origin;
@@ -443,14 +476,14 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 #endif
         }
         break;
-        case EMR_EOF:
+    case EMR_EOF:
         {
             mOutput->eof();
             soakBytes( stream, size-8 ); // because we already took 8.
             return false;
         }
         break;
-        case EMR_SETPIXELV:
+    case EMR_SETPIXELV:
         {
             QPoint point;
             quint8 red, green, blue, reserved;
@@ -477,14 +510,14 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             context.changedItems |= DCPolyFillMode;
 	}
 	break;
-        case EMR_SETROP2:
+    case EMR_SETROP2:
         {
             quint32 ROP2Mode;
             stream >> ROP2Mode;
             //kDebug(33100) << "EMR_SETROP2" << ROP2Mode;
         }
         break;
-        case EMR_SETSTRETCHBLTMODE:
+    case EMR_SETSTRETCHBLTMODE:
         {
             quint32 stretchMode;
             stream >> stretchMode;
@@ -492,7 +525,7 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 
         }
         break;
-        case EMR_SETTEXTALIGN:
+    case EMR_SETTEXTALIGN:
         {
             stream >> context.textAlignMode;
             context.changedItems |= DCTextAlignMode;
@@ -522,7 +555,7 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
 	}
 	break;
-        case EMR_SETMETARGN:
+    case EMR_SETMETARGN:
         {
             // Takes no arguments
             mOutput->setMetaRgn(context);
@@ -547,37 +580,6 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         mOutput->restoreDC(context, savedDC );
     }
     break;
-    case EMR_SETWORLDTRANSFORM:
-	{
-            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-	    float M11, M12, M21, M22, Dx, Dy;
-	    stream >> M11;
-	    stream >> M12;
-	    stream >> M21;
-	    stream >> M22;
-	    stream >> Dx;
-	    stream >> Dy;
-            //kDebug(31000) << "Set world transform" << M11 << M12 << M21 << M22 << Dx << Dy;
-	    mOutput->setWorldTransform(context, M11, M12, M21, M22, Dx, Dy );
-	}
-	break;
-    case EMR_MODIFYWORLDTRANSFORM:
-	{
-            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-	    float M11, M12, M21, M22, Dx, Dy;
-	    stream >> M11;
-	    stream >> M12;
-	    stream >> M21;
-	    stream >> M22;
-	    stream >> Dx;
-	    stream >> Dy;
-            //kDebug(31000) << "stream position after the matrix: " << stream.device()->pos();
-	    quint32 ModifyWorldTransformMode;
-	    stream >> ModifyWorldTransformMode;
-	    mOutput->modifyWorldTransform(context, ModifyWorldTransformMode, M11, M12,
-					   M21, M22, Dx, Dy );
-	}
-	break;
     case EMR_SELECTOBJECT:
 	quint32 ihObject;
 	stream >> ihObject;

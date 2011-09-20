@@ -91,10 +91,6 @@ public:
     void ellipse(EmfDeviceContext &context, const QRect &box );
     void rectangle(EmfDeviceContext &context, const QRect &box );
     void setMetaRgn(EmfDeviceContext &context);
-    void setWindowOrgEx(EmfDeviceContext &context, const QPoint &origin );
-    void setWindowExtEx(EmfDeviceContext &context, const QSize &size );
-    void setViewportOrgEx(EmfDeviceContext &context, const QPoint &origin );
-    void setViewportExtEx(EmfDeviceContext &context, const QSize &size );
     void beginPath(EmfDeviceContext &context);
     void closeFigure(EmfDeviceContext &context);
     void endPath(EmfDeviceContext &context);
@@ -102,11 +98,6 @@ public:
                                 const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
     void setPixelV(EmfDeviceContext &context,
                    QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved );
-    void modifyWorldTransform(EmfDeviceContext &context,
-                              const quint32 mode, float M11, float M12, float M21, float M22,
-                              float Dx, float Dy );
-    void setWorldTransform(EmfDeviceContext &context,
-                           float M11, float M12, float M21, float M22, float Dx, float Dy );
     void extTextOut(EmfDeviceContext &context,
                     const QRect &bounds, const EmrTextObject &textObject );
     void moveToEx(EmfDeviceContext &context, const qint32 x, const qint32 y );
