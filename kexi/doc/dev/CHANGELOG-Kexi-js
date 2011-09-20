@@ -94,6 +94,11 @@ Tabbed toolbar TODOS:
 
 ===================== Kexi 2.4  =====================
 
+2011-09-20
+Main Window
+*Fixed regression: Prevent renaming objects to invalid identifiers in Project Navigator
+BUG:282444
+
 2011-09-09
 Table View
 *Fixed input mask for date, time and date/time data fields in table views

@@ -23,6 +23,7 @@ set(kexiextendedwidgets_LIB_SRCS
 
     navigator/KexiProjectModel.cpp
     navigator/KexiProjectModelItem.cpp
+    navigator/KexiProjectItemDelegate.cpp
     navigator/KexiProjectNavigator.cpp
     navigator/KexiProjectTreeView.cpp
 

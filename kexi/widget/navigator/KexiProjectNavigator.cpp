@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
 #include "KexiProjectTreeView.h"
 #include "KexiProjectModel.h"
 #include "KexiProjectModelItem.h"
+#include "KexiProjectItemDelegate.h"
 
 #include <QHeaderView>
 #include <qpoint.h>
@@ -71,8 +72,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     setWindowTitle(i18n("Project Navigator"));
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
-    m_model = new KexiProjectModel();
-    
     QVBoxLayout *lyr = new QVBoxLayout(this);
     lyr->setContentsMargins(
         KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2);
@@ -81,7 +80,11 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
 
     m_list = new KexiProjectTreeView(this);
+    m_model = new KexiProjectModel();
     m_list->setModel(m_model);
+    KexiProjectItemDelegate *delegate = new KexiProjectItemDelegate(m_list);
+    m_list->setItemDelegate(delegate);
+
     lyr->addWidget(m_list);
 
     connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(slotSettingsChanged(int)));
