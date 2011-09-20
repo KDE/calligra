@@ -193,20 +193,6 @@ void EmfDebugBackend::setWorldTransform(EmfDeviceContext &context, float M11, fl
     kDebug(33100) << "EMR_SETWORLDTRANSFORM:" << QTransform ( M11, M12, M21, M22, Dx, Dy );
 }
 
-void EmfDebugBackend::setBkMode(EmfDeviceContext &context, const quint32 backgroundMode )
-{
-    Q_UNUSED(context);
-
-    if ( backgroundMode == TRANSPARENT ) {
-        kDebug(33100) << "EMR_SETBKMODE: Transparent";
-    } else if ( backgroundMode == OPAQUE ) {
-        kDebug(33100) << "EMR_SETBKMODE: Opaque";
-    } else {
-        kDebug(33100) << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
-        Q_ASSERT( 0 );
-    }
-}
-
 void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context,
                                              const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
 {

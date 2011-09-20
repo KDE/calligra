@@ -67,7 +67,7 @@ enum DeviceContextMembers {
     DCWindoworg      = 0x00000800,
 
     // Graphic properties
-    DCBgMixMode      = 0x00001000,
+    DCBkMode         = 0x00001000,
     DCBrExtraSpace   = 0x00002000,
     DCFontMapMode    = 0x00004000,
     DCFgMixMode      = 0x00008000,
@@ -110,7 +110,7 @@ public:
     QPoint windowOrg;           // Window origin
 
     // Graphic Properties
-    quint16  bgMixMode;         // Background mix mode
+    quint32  bkMode;         // Background mode
     //Break extra space NYI
     //Font mapping mode NYI
     quint32  rop2Mode;          // Foreground mix mode (FIXME: Or is it?)

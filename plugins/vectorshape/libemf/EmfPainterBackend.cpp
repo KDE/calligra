@@ -900,23 +900,6 @@ void EmfPainterBackend::rectangle(EmfDeviceContext &context, const QRect &box )
 // ----------------------------------------------------------------
 
 
-void EmfPainterBackend::setBkMode(EmfDeviceContext &context, const quint32 backgroundMode )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << backgroundMode;
-#endif
-
-    if ( backgroundMode == TRANSPARENT ) {
-        m_painter->setBackgroundMode( Qt::TransparentMode );
-    } else if ( backgroundMode == OPAQUE ) {
-        m_painter->setBackgroundMode( Qt::OpaqueMode );
-    } else {
-        kDebug(33100) << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
-        Q_ASSERT( 0 );
-    }
-}
-
-
 #define DEBUG_TEXTOUT 0
 
 void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
@@ -1590,14 +1573,15 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
     //----------------------------------------------------------------
     // Graphic Properties
 
-    if (context.changedItems & DCBgMixMode) {
+    if (context.changedItems & DCBkMode) {
         // FIXME: Check the default value for this.
-        m_painter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
-                                                                      : Qt::OpaqueMode);
+        m_painter->setBackgroundMode(context.bkMode == TRANSPARENT ? Qt::TransparentMode
+                                                                   : Qt::OpaqueMode);
 #if DEBUG_EMFPAINT
-        kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
+        kDebug(31000) << "*** Setting background mode to" << context.bkMode;
 #endif
     }
+
     //Break extra space NYI
     //Font mapping mode NYI
 #if 0 // Fix when we do the MixMode in the device context

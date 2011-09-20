@@ -63,7 +63,7 @@ void EmfDeviceContext::reset()
     windowOrg = QPoint();
 
     // Graphic Properties
-    bgMixMode = 0;// FIXME: Check the real default
+    bkMode = 0;// FIXME: Check the real default
     //Break extra space
     //Font mapping mode
     rop2Mode = 0;// FIXME: Check the real default

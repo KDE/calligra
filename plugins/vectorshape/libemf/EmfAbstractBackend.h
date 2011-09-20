@@ -154,13 +154,6 @@ public:
     virtual void setViewportExtEx(EmfDeviceContext &context, const QSize &size) = 0;
 
     /**
-       Handler for the EMR_SETBKMODE record type
-
-       \param backgroundMode the background fill mode
-    */
-    virtual void setBkMode(EmfDeviceContext &context, const quint32 backgroundMode) = 0;
-
-    /**
        Handler for the EMR_MODIFYWORLDTRANSFORM record type
 
        There are a range of modes:

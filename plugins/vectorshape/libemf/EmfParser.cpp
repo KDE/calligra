@@ -467,9 +467,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EMR_SETBKMODE:
 	{
-	    quint32 backgroundMode;
-	    stream >> backgroundMode;
-            mOutput->setBkMode(context, backgroundMode );
+	    stream >> context.bkMode;
+            context.changedItems |= DCBkMode;
 	}
         break;
     case EMR_SETPOLYFILLMODE:

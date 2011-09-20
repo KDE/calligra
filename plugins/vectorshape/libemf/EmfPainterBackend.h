@@ -98,7 +98,6 @@ public:
     void beginPath(EmfDeviceContext &context);
     void closeFigure(EmfDeviceContext &context);
     void endPath(EmfDeviceContext &context);
-    void setBkMode(EmfDeviceContext &context, const quint32 backgroundMode );
     void extCreateFontIndirectW(EmfDeviceContext &context,
                                 const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
     void setPixelV(EmfDeviceContext &context,
