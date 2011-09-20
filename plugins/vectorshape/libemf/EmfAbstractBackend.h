@@ -161,13 +161,6 @@ public:
     virtual void setBkMode(EmfDeviceContext &context, const quint32 backgroundMode) = 0;
 
     /**
-       Handler for the EMR_SETLAYOUT record type
-
-       \param layoutMode the layout mode
-    */
-    virtual void setLayout(EmfDeviceContext &context, const quint32 layoutMode) = 0;
-
-    /**
        Handler for the EMR_MODIFYWORLDTRANSFORM record type
 
        There are a range of modes:

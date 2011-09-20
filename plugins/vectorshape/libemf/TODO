@@ -1,6 +1,6 @@
 * Make a complete Playback Device Context
    + The rest of the simple members of the DC
-      - backgroundMode
+      - backgroundMode                                                          [done]
       - text layout
       - clip path
    + Move the object system (Pen, Brush, etc) to the DC

@@ -456,8 +456,8 @@ void EmfPainterBackend::setViewportExtEx(EmfDeviceContext &context, const QSize 
 
 
 void EmfPainterBackend::modifyWorldTransform(EmfDeviceContext &context,
-                                                 const quint32 mode, float M11, float M12,
-                                                 float M21, float M22, float Dx, float Dy )
+                                             const quint32 mode, float M11, float M12,
+                                             float M21, float M22, float Dx, float Dy )
 {
 #if DEBUG_EMFPAINT
     if (mode == MWT_IDENTITY)
@@ -912,22 +912,6 @@ void EmfPainterBackend::setBkMode(EmfDeviceContext &context, const quint32 backg
         m_painter->setBackgroundMode( Qt::OpaqueMode );
     } else {
         kDebug(33100) << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
-        Q_ASSERT( 0 );
-    }
-}
-
-void EmfPainterBackend::setLayout(EmfDeviceContext &context, const quint32 layoutMode )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << layoutMode;
-#endif
-
-    if ( layoutMode == LAYOUT_LTR ) {
-        m_painter->setLayoutDirection( Qt::LeftToRight );
-    } else if ( layoutMode == LAYOUT_RTL ) {
-        m_painter->setLayoutDirection( Qt::RightToLeft );
-    } else {
-        kDebug(33100) << "EMR_SETLAYOUT: Unexpected value -" << layoutMode;
         Q_ASSERT( 0 );
     }
 }
@@ -1629,7 +1613,17 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
 #endif
     }
 #endif
-    //layoutMode not necessary to handle here
+    // layoutMode
+    if (context.changedItems & DCLayoutMode) {
+        if (context.layoutMode == LAYOUT_LTR) {
+            m_painter->setLayoutDirection(Qt::LeftToRight);
+        } else if (context.layoutMode == LAYOUT_RTL) {
+            m_painter->setLayoutDirection(Qt::RightToLeft);
+        } else {
+            kDebug(33100) << "EMR_SETLAYOUT: Unexpected value -" << context.layoutMode;
+            m_painter->setLayoutDirection(Qt::LeftToRight);
+        }
+    }
     //Mapping mode NYI
     //PolyFillMode not necessary to handle here
     //Stretchblt mode NYI

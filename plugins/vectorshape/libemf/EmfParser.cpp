@@ -852,11 +852,10 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             mOutput->extTextOut(context, bounds, emrText );
 	}
 	break;
-        case EMR_SETLAYOUT:
+    case EMR_SETLAYOUT:
         {
-            quint32 layoutMode;
-            stream >> layoutMode;
-            mOutput->setLayout(context, layoutMode );
+            stream >> context.layoutMode;
+            context.changedItems |= DCLayoutMode;
         }
         break;
     case EMR_POLYBEZIER16:

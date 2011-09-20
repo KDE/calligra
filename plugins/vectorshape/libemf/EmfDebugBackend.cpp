@@ -207,13 +207,6 @@ void EmfDebugBackend::setBkMode(EmfDeviceContext &context, const quint32 backgro
     }
 }
 
-void EmfDebugBackend::setLayout(EmfDeviceContext &context, const quint32 layoutMode )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SETLAYOUT:" << layoutMode;
-}
-
 void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context,
                                              const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
 {
