@@ -1,3 +1,13 @@
+* Make a complete Playback Device Context
+   + The rest of the simple members of the DC
+      - backgroundMode
+      - text layout
+      - clip path
+   + Move the object system (Pen, Brush, etc) to the DC
+   + Move the current path to the DC
+   + Move the world transform to the DC
+   + Implement a real saveDC and restoreDC
+
 Complete doxygen \mainpage
 
 Check that our constructor / destructor / copy constructor arrangement for AbstractOutput follows best practice.
