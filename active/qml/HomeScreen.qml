@@ -118,7 +118,7 @@ Rectangle {
         },
         State {
             name: "showTextDocs"
-            PropertyChanges { target: recentFiles; typeFilter: "TextDocument"; }
+            PropertyChanges { target: recentFiles; typeFilter: "PaginatedTextDocument"; }
         },
         State {
             name: "showSpreadsheets"
