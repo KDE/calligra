@@ -19,7 +19,7 @@
 #ifndef KEXIDATASOURCEPAGE_H
 #define KEXIDATASOURCEPAGE_H
 
-#include <widget/KexiPropertyPaneViewBase.h>
+#include <widget/properties/KexiPropertyPaneViewBase.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 #include <koproperty/Set.h>

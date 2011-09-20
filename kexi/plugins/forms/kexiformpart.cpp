@@ -37,7 +37,7 @@
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 #include <kexipartitem.h>
-#include <kexidatasourcecombobox.h>
+#include <widget/KexiDataSourceComboBox.h>
 #include <kexidb/connection.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/field.h>

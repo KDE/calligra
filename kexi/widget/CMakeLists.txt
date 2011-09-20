@@ -16,39 +16,43 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/ta
 ########### next target ###############
 
 set(kexiextendedwidgets_LIB_SRCS
+    fields/KexiFieldComboBox.cpp
+    fields/KexiFieldListModel.cpp
+    fields/KexiFieldListModelItem.cpp
+    fields/KexiFieldListView.cpp
+
+    navigator/KexiProjectModel.cpp
+    navigator/KexiProjectModelItem.cpp
+    navigator/KexiProjectNavigator.cpp
+    navigator/KexiProjectTreeView.cpp
+
+    properties/KexiCustomPropertyFactory.cpp
+    properties/KexiCustomPropertyFactory_p.cpp
+    properties/KexiPropertyEditorView.cpp
+    properties/KexiPropertyPaneViewBase.cpp
+
     kexiquerydesignersqleditor.cpp 
     kexiqueryparameters.cpp
     kexisectionheader.cpp
     kexidbdrivercombobox.cpp 
     kexieditor.cpp 
-    KexiFieldListModel.cpp
-    KexiFieldListModelItem.cpp
-    kexifieldlistview.cpp 
-    kexifieldcombobox.cpp 
-    kexidatasourcecombobox.cpp 
+    KexiDataSourceComboBox.cpp 
     KexiObjectInfoLabel.cpp
-    KexiPropertyPaneViewBase.cpp
-    KexiPropertyEditorView.cpp
-    kexicustompropertyfactory.cpp 
-    kexicustompropertyfactory_p.cpp 
     kexicharencodingcombobox.cpp
-    KexiProjectModel.cpp
-    KexiProjectModelItem.cpp
-    KexiProjectTreeView.cpp
-    KexiProjectNavigator.cpp
   )
 
 IF (KEXI_MOBILE)
 
 ELSE (KEXI_MOBILE)
   LIST(APPEND kexiextendedwidgets_LIB_SRCS
+    navigator/KexiProjectListView.cpp
+    navigator/KexiProjectListViewItem.cpp
+    
     kexiscrollview.cpp 
     kexidbconnectionwidget.cpp 
   #   pixmapcollection.cpp 
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
 #      in kexiactionselectiondialog and remove them
-    KexiProjectListView.cpp 
-    KexiProjectListViewItem.cpp
     kexiprjtypeselector.cpp
   )
 ENDIF (KEXI_MOBILE)

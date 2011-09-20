@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexicustompropertyfactory_p.h"
+#include "KexiCustomPropertyFactory_p.h"
 
 #include <qlineedit.h>
 #include <kdebug.h>
@@ -102,4 +102,4 @@ void KexiIdentifierPropertyEdit::setValue(const QString &value)
     KoProperty::StringEdit::setValue(identifier);
 }
 
-#include "kexicustompropertyfactory_p.moc"
+#include "KexiCustomPropertyFactory_p.moc"

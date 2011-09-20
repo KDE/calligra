@@ -97,12 +97,12 @@
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
-#include <widget/KexiProjectModel.h>
 
-#include <widget/KexiPropertyEditorView.h>
+#include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/KexiDockableWidget.h>
-#include <widget/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectModel.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
