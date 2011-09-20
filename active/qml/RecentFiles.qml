@@ -52,7 +52,7 @@ ListView {
         width: buttonWidth; height: buttonHeight;
         imageSource: {
             switch(typeFilter) {
-                case "TextDocument":
+                case "PaginatedTextDocument":
                     "qrc:///images/words.png"
                     break;
                 case "Spreadsheet":
