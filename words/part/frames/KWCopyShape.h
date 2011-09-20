@@ -47,6 +47,10 @@ public:
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
     /// reimplemented from KoShape
     QPainterPath outline() const;
+    /// reimplemented from KoShape
+    QRectF outlineRect() const;
+    /// reimplemented from KoShape
+    QRectF boundingRect() const;
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     /// reimplemented

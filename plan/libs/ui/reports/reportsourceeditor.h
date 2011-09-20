@@ -42,21 +42,13 @@ public:
     void setSourceData( const QDomElement &element );
     void sourceData( QDomElement &element ) const;
     /// Return the tag of the selected model
-    QString selectFromTag( const QModelIndex &parent = QModelIndex() ) const;
+    QString selectFromTag() const;
 
 signals:
-    void sourceChanged( int );
-    void selectFromChanged( int );
-    
-protected:
-    void setSourceData( const QDomElement &element, const QModelIndex &parent );
-    void sourceData( QDomElement &element, const QModelIndex &parent ) const;
-    /// Return the tag od the (first) checked child index of @p parent
-    QString checkedTag( const QModelIndex &parent ) const;
+    void selectFromChanged( const QString &tag );
 
 private slots:
-    void slotSourceChanged( int index );
-    void slotSelectFromChanged( int );
+    void slotCurrentIndexChanged();
 };
 
 }

@@ -52,6 +52,7 @@ KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QWidget *paren
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
+    kDebug() << m_formatter.inputMask();
     m_lineedit->setInputMask(m_formatter.inputMask());
 }
 

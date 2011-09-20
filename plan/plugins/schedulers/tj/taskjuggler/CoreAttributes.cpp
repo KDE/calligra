@@ -43,7 +43,7 @@ CoreAttributes::CoreAttributes(Project* p, const QString& i,
     if (parent_)
         parent_->sub->append(this);
     
-    qDebug()<<"CoreAttributes:"<<this;
+//     qDebug()<<"CoreAttributes:"<<this;
 }
 
 CoreAttributes::~CoreAttributes()
@@ -277,7 +277,7 @@ QDebug operator<<( QDebug dbg, const TJ::CoreAttributes* t )
 QDebug operator<<( QDebug dbg, const TJ::CoreAttributes& t )
 {
     switch ( t.getType() ) {
-        case CA_Task: dbg << static_cast<const TJ::Task&>( t ); break;
+        case CA_Task: dbg << "Task[" << t.getName() << "]"; break;
         case CA_Resource: dbg << "Resource[" << t.getName() << "]"; break;
         case CA_Account: dbg << "Account[" << t.getName() << "]"; break;
         case CA_Shift: dbg << "Shift[" << t.getName() << "]"; break;

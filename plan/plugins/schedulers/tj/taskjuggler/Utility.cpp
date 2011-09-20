@@ -43,12 +43,15 @@ static QString UtilityError;
 /* localtime() calls are fairly expensive, so we implement a hashtable based
  * cache to avoid redundant calls for the same value. Changing the timezone
  * invalidates the cache though. */
-struct LtHashTabEntry
+class LtHashTabEntry
 {
+public:
+    LtHashTabEntry() : tms( 0 ), next( 0 ) {}
+    ~LtHashTabEntry() { qDebug()<<"~LtHashTabEntry"; delete tms; }
     time_t t;
     struct tm* tms;
     LtHashTabEntry* next;
-} ;
+};
 
 static long LTHASHTABSIZE;
 static LtHashTabEntry** LtHashTab = 0;
@@ -155,14 +158,16 @@ void initUtility(long dictSize)
 
 void exitUtility()
 {
+    qDebug()<<"exitUtility:"<<LtHashTab;
     if (!LtHashTab)
         return;
 
+    qDebug()<<"exitUtility:"<<LTHASHTABSIZE;
     for (long i = 0; i < LTHASHTABSIZE; ++i)
         for (LtHashTabEntry* htep = LtHashTab[i]; htep; )
         {
             LtHashTabEntry* tmp = htep->next;
-            delete htep->tms;
+            delete htep;
             htep = tmp;
         }
 
