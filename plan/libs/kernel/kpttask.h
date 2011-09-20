@@ -202,7 +202,7 @@ public:
     /// Returns the total actual cost for @p resource on @p date
     double actualCost( const Resource *resource, const QDate &date ) const;
     /// Returns the total actual effort and cost upto and including @p date
-    EffortCost actualCostTo( const QDate &date ) const;
+    EffortCost actualCostTo(  long int id, const QDate &date ) const;
     
     /**
      * Returns a map of all actual effort and cost entered
@@ -434,19 +434,11 @@ public:
      * Returns the total planned cost for this task (or subtasks)
      */
     virtual EffortCost plannedCost( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
-    /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Planned cost up to and including date
     virtual double plannedCostTo(const QDate &/*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
-    /**
-     * Returns the actaually reported cost for this task (or subtasks)
-     */
-    virtual double actualCost() const;
-    /// Actual cost on @p date
-    virtual double actualCost( const QDate &date ) const;
     /// Returns actual effort and cost up to and including @p date
-    virtual EffortCost actualCostTo( const QDate &date ) const;
+    virtual EffortCost actualCostTo(  long int id, const QDate &date ) const;
 
     /**
      * Returns a list of actual effort and cost for this task
@@ -486,7 +478,7 @@ public:
     /// Schedule performance index
     virtual double schedulePerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;
     /// Cost performance index
-    virtual double costPerformanceIndex(const QDate &date, bool *error=0) const;
+    virtual double costPerformanceIndex(  long int id, const QDate &date, bool *error=0 ) const;
     
     /**
      * Return the duration that an activity's start can be delayed 
@@ -747,6 +739,7 @@ private:
 #ifndef NDEBUG
 public:
     void printDebug(bool children, const QByteArray& indent);
+    EffortCost n(long int arg1, QDate arg2);
 #endif
 
 };
