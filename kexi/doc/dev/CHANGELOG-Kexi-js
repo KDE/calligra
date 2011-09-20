@@ -94,6 +94,12 @@ Tabbed toolbar TODOS:
 
 ===================== Kexi 2.4  =====================
 
+~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
+
+General
+*Do not load and show objects with invalid metadata in project navigator. Such invalid objects include: objects with id <= 0, objects with name reserved for internal use, objects with name not being valid identifier.
+BUG:282445
+
 2011-09-20
 Main Window
 *Fixed regression: Prevent renaming objects to invalid identifiers in Project Navigator
