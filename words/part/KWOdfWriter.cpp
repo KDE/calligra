@@ -111,6 +111,8 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
 
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
+        if (!pageStyle.displayName().isEmpty() && pageStyle.displayName() != pageStyle.name())
+            masterStyle.addProperty("style:display-name", pageStyle.displayName());
         masterStyle.addProperty("style:page-layout-name", mainStyles.insert(layoutStyle, "pm"));
         QString name = mainStyles.insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
         m_masterPages.insert(pageStyle, name);

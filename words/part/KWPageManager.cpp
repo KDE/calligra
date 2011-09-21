@@ -34,9 +34,8 @@
 KWPageManagerPrivate::KWPageManagerPrivate()
         : lastId(0),
         preferPageSpread(false),
-        defaultPageStyle("Standard")
+        defaultPageStyle("Standard", "Default")
 {
-    pageStyles.insert(defaultPageStyle.name(), defaultPageStyle);
 }
 
 qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
@@ -167,6 +166,7 @@ void KWPageManagerPrivate::insertPage(const Page &newPage)
 KWPageManager::KWPageManager()
     : d (new KWPageManagerPrivate())
 {
+    addPageStyle(d->defaultPageStyle);
 }
 
 KWPageManager::~KWPageManager()
@@ -400,30 +400,27 @@ KWPageStyle KWPageManager::pageStyle(const QString &name) const
 {
     if (d->pageStyles.contains(name))
         return d->pageStyles[name];
+    if (d->pageStyleNames.contains(name))
+        return d->pageStyles[d->pageStyleNames[name]];
     return KWPageStyle();
 }
 
 void KWPageManager::addPageStyle(const KWPageStyle &pageStyle)
 {
-    Q_ASSERT(! pageStyle.name().isEmpty());
+    Q_ASSERT(!pageStyle.name().isEmpty());
     Q_ASSERT(pageStyle.isValid());
     d->pageStyles.insert(pageStyle.name(), pageStyle);
-}
-
-KWPageStyle KWPageManager::addPageStyle(const QString &name)
-{
-    if (d->pageStyles.contains(name))
-        return d->pageStyles[name];
-    KWPageStyle pagestyle(name);
-    addPageStyle(pagestyle);
-    return pagestyle;
+    if (!pageStyle.displayName().isEmpty())
+        d->pageStyleNames.insert(pageStyle.displayName(), pageStyle.name());
 }
 
 void KWPageManager::removePageStyle(const KWPageStyle &pageStyle)
 {
     KWPageStyle style = d->pageStyles.value(pageStyle.name());
-    if (style == pageStyle)
-        d->pageStyles.remove(pageStyle.name());
+    Q_ASSERT(style == pageStyle);
+    d->pageStyles.remove(pageStyle.name());
+    Q_ASSERT(!d->pageStyleNames.contains(pageStyle.displayName()) || d->pageStyleNames[pageStyle.displayName()] == pageStyle.name());
+    d->pageStyleNames.remove(pageStyle.displayName());
 }
 
 KWPageStyle KWPageManager::defaultPageStyle() const
@@ -434,7 +431,9 @@ KWPageStyle KWPageManager::defaultPageStyle() const
 void KWPageManager::clearPageStyles()
 {
     d->pageStyles.clear();
-    d->defaultPageStyle = addPageStyle("Standard");
+    d->pageStyleNames.clear();
+    d->defaultPageStyle = KWPageStyle("Standard", "Default");
+    addPageStyle(d->defaultPageStyle);
 }
 
 const KWPage KWPageManager::begin() const
