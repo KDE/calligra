@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexidatasourcecombobox.h"
+#include "KexiDataSourceComboBox.h"
 
 #include <QPixmap>
 #include <QLineEdit>
@@ -330,4 +330,4 @@ void KexiDataSourceComboBox::focusOutEvent(QFocusEvent *e)
     slotReturnPressed(currentText());
 }
 
-#include "kexidatasourcecombobox.moc"
+#include "KexiDataSourceComboBox.moc"

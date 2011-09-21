@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexifieldcombobox.h"
+#include "KexiFieldComboBox.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -237,4 +237,4 @@ void KexiFieldComboBox::focusOutEvent(QFocusEvent *e)
     }
 }
 
-#include "kexifieldcombobox.moc"
+#include "KexiFieldComboBox.moc"

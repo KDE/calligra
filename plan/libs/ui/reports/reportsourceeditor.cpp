@@ -35,8 +35,7 @@ ReportSourceEditor::ReportSourceEditor( QWidget *parent )
 {
     setupUi( this );
 
-    QTimer::singleShot( 0, ui_source, SLOT( expandAll() ) ); // HACK how else?
-
+    connect(ui_source, SIGNAL(currentIndexChanged(int)), SLOT(slotCurrentIndexChanged()));
 }
 
 void ReportSourceEditor::setModel( QAbstractItemModel *model )
@@ -44,46 +43,19 @@ void ReportSourceEditor::setModel( QAbstractItemModel *model )
     ui_source->setModel( model );
 }
 
-void ReportSourceEditor::slotSourceChanged( int index )
+void ReportSourceEditor::slotCurrentIndexChanged()
 {
-    emit sourceChanged( index );
+    emit selectFromChanged( selectFromTag() );
 }
 
-void ReportSourceEditor::slotSelectFromChanged( int index )
-{
-    emit selectFromChanged( index );
-}
-
-QString ReportSourceEditor::selectFromTag( const QModelIndex &parent ) const
+QString ReportSourceEditor::selectFromTag() const
 {
     QString tag;
-    QAbstractItemModel *m = ui_source->model();
-    for ( int row = 0; row < m->rowCount( parent ); ++row ) {
-        QModelIndex idx = m->index( row, 0, parent );
-        tag =  idx.data( Reports::TagRole ).toString();
-        if ( tag == "select-from" ) {
-            tag = checkedTag( idx );
-        } else {
-            // in case select-from is a child
-            tag = selectFromTag( idx );
-        }
-        if ( ! tag.isEmpty() ) {
-            break;
-        }
+    if ( ui_source->currentIndex() >= 0 ) {
+        QAbstractItemModel *m = ui_source->model();
+        tag = m->index( ui_source->currentIndex(), 0 ).data( Reports::TagRole ).toString();
     }
     return tag;
-}
-
-QString ReportSourceEditor::checkedTag( const QModelIndex &parent ) const
-{
-    QAbstractItemModel *m = ui_source->model();
-    for ( int row = 0; row < m->rowCount( parent ); ++row ) {
-        int r = m->index( row, 1, parent ).data( Qt::CheckStateRole ).toInt();
-        if ( r == Qt::Checked ) {
-            return m->index( row, 0, parent ).data( Reports::TagRole ).toString();
-        }
-    }
-    return QString();
 }
 
 void ReportSourceEditor::setSourceData( const QDomElement &element )
@@ -91,35 +63,13 @@ void ReportSourceEditor::setSourceData( const QDomElement &element )
     if ( element.tagName() != "data-source" ) {
         return;
     }
+    QString selectfrom = element.attribute( "select-from" );
     QAbstractItemModel *m = ui_source->model();
     for ( int row = 0; row < m->rowCount(); ++row ) {
         QString name = m->index( row, 0 ).data( Reports::TagRole ).toString();
-        if ( ! name.isEmpty() && element.hasAttribute( name ) ) {
-            QModelIndex value = m->index( row, 1 );
-            m->setData( value, element.attribute( name ) );
-            setSourceData( element.firstChildElement( name ), m->index( row, 0 ) );
-        }
-    }
-}
-
-void ReportSourceEditor::setSourceData( const QDomElement &element, const QModelIndex &parent )
-{
-    if ( element.isNull() ) {
-        return;
-    }
-    QAbstractItemModel *m = ui_source->model();
-    for ( int row = 0; row < m->rowCount( parent ); ++row ) {
-        QString name = m->index( row, 0, parent ).data( Reports::TagRole ).toString();
-        if ( ! name.isEmpty() && element.hasAttribute( name ) ) {
-            QModelIndex value = m->index( row, 1, parent );
-            if ( m->flags( value ) & Qt::ItemIsUserCheckable ) {
-                if ( element.attribute( name ) == "checked" ) {
-                    m->setData( value, Qt::Checked, Qt::CheckStateRole );
-                } // else nothing
-            } else {
-                m->setData( value, element.attribute( name ) );
-            }
-            setSourceData( element.firstChildElement( name ), m->index( row, 0, parent ) );
+        if ( ! name.isEmpty() && name == selectfrom ) {
+            ui_source->setCurrentIndex( row );
+            return;
         }
     }
 }
@@ -128,35 +78,9 @@ void ReportSourceEditor::sourceData( QDomElement &element ) const
 {
     QDomElement e = element.ownerDocument().createElement( "data-source" );
     element.appendChild( e );
+    int row = ui_source->currentIndex();
     QAbstractItemModel *m = ui_source->model();
-    for ( int row = 0; row < m->rowCount(); ++row ) {
-        QString attr = m->index( row, 0 ).data( Reports::TagRole ).toString();
-        QString value = m->index( row, 1 ).data( Reports::TagRole ).toString();
-        if ( ! attr.isEmpty() ) {
-            e.setAttribute( attr, value );
-            sourceData( e, m->index( row, 0 ) );
-        }
-    }
-}
-
-void ReportSourceEditor::sourceData( QDomElement &element, const QModelIndex &parent ) const
-{
-    QAbstractItemModel *m = ui_source->model();
-    if ( ! parent.isValid() || ! m->hasChildren( parent ) ) {
-        return;
-    }
-    QString tag = parent.data(  Reports::TagRole ).toString();
-    if ( tag.isEmpty() ) {
-        return;
-    }
-    QDomElement e = element.ownerDocument().createElement( tag );
-    element.appendChild( e );
-    for ( int row = 0; row < m->rowCount( parent ); ++row ) {
-        QString attr = m->index( row, 0, parent ).data( Reports::TagRole ).toString();
-        QModelIndex idx = m->index( row, 1, parent );
-        QString value = m->index( row, 1, parent ).data( Reports::TagRole ).toString();
-        e.setAttribute( attr, value );
-    }
+    e.setAttribute( "select-from", m->index( row, 0 ).data( Reports::TagRole ).toString() );
 }
 
 } //namespace KPlato

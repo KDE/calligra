@@ -406,6 +406,13 @@ public:
              altered by the recent use of setWriter(). */
     KoXmlWriter* releaseWriter();
 
+    //! Releases the original writer set before using setWriter(KoXmlWriter*&).
+    /*! This inserts all the XML buffered by buffer into @a bkpXmlSnippet
+     @return the original writer set in setWriter();
+             this writer usually should be assigned back to the variable
+             altered by the recent use of setWriter(). */
+    KoXmlWriter* releaseWriter(QString& bkpXmlSnippet);
+
     //! @return the original writer set in setWriter(). Does not change the state of the buffer.
     /*! Use this method when you need to access the remembered writer without releasing it. */
     KoXmlWriter* originalWriter() const {

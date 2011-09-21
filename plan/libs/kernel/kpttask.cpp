@@ -662,22 +662,6 @@ EffortCost Task::plannedCost( long id, EffortCostCalculationType typ ) const {
     return c;
 }
 
-double Task::plannedCost( const QDate &date, long id, EffortCostCalculationType typ ) const {
-    //kDebug();
-    double c = 0;
-    if (type() == Node::Type_Summarytask) {
-        foreach (const Node *n, childNodeIterator()) {
-            c += n->plannedCost( date, id, typ );
-        }
-        return c;
-    }
-    Schedule *s = schedule( id );
-    if ( s ) {
-        c = s->plannedCost( date, typ );
-    }
-    return c;
-}
-
 double Task::plannedCostTo( const QDate &date, long id, EffortCostCalculationType typ ) const {
     //kDebug();
     double c = 0;
@@ -701,40 +685,10 @@ double Task::plannedCostTo( const QDate &date, long id, EffortCostCalculationTyp
     return c;
 }
 
-double Task::actualCost() const {
+EffortCost Task::actualCostTo(  long int id, const QDate &date ) const {
     //kDebug();
-    double c = 0;
-    if (type() == Node::Type_Summarytask) {
-        foreach (const Node *n, childNodeIterator()) {
-            c += n->actualCost();
-        }
-        return c;
-    }
-    return completion().actualCost();
-}
-
-double Task::actualCost( const QDate &date ) const {
-    //kDebug();
-    double c = 0;
-    if (type() == Node::Type_Summarytask) {
-        foreach (const Node *n, childNodeIterator()) {
-            c += n->actualCost( date );
-        }
-        return c;
-    }
-    return completion().actualCost( date );
-}
-
-EffortCost Task::actualCostTo( const QDate &date ) const {
-    //kDebug();
-    EffortCost c;
-    if (type() == Node::Type_Summarytask) {
-        foreach (const Node *n, childNodeIterator()) {
-            c += n->actualCostTo( date );
-        }
-        return c;
-    }
-    return completion().actualCostTo( date );
+    EffortCostMap ecm = acwp( id );
+    return EffortCost( ecm.effortTo( date ), ecm.costTo( date ) );
 }
 
 double Task::bcws( const QDate &date, long id ) const
@@ -915,7 +869,7 @@ EffortCost Task::acwp( const QDate &date, long id ) const
         return Node::acwp( date, id );
     }
     EffortCost c;
-    c = completion().actualCostTo( date );
+    c = completion().actualCostTo( id, date );
     if ( completion().isStarted() && date >= completion().startTime().date() ) {
         c.add( Duration::zeroDuration, m_startupCost );
     }
@@ -958,16 +912,17 @@ double Task::effortPerformanceIndex( const QDate &date, long id ) const {
 
 
 //FIXME Handle summarytasks
-double Task::costPerformanceIndex(const QDate &date, bool *error) const {
+double Task::costPerformanceIndex(  long int id, const QDate &date, bool *error ) const
+{
     double res = 0.0;
-    double ac = actualCostTo(date).cost();
+    double ac = actualCostTo( id, date ).cost();
 
-    bool e = (ac == 0.0 || completion().percentFinished() == 0);
+    bool e = ( ac == 0.0 || completion().percentFinished() == 0 );
     if (error) {
         *error = e;
     }
     if (!e) {
-        res = (plannedCostTo(date) * completion().percentFinished())/(100 * ac);
+        res = ( plannedCostTo( date, id ) * completion().percentFinished() ) / ( 100 * ac );
     }
     return res;
 }
@@ -3358,30 +3313,11 @@ EffortCostMap Completion::actualEffortCost( long int id, KPlato::EffortCostCalcu
     return map;
 }
 
-EffortCost Completion::actualCostTo( const QDate &date ) const
+EffortCost Completion::actualCostTo(  long int id, const QDate &date ) const
 {
     //kDebug()<<date;
-    EffortCost c;
-    foreach ( const Resource *r, m_usedEffort.keys() ) {
-        double nc = r->normalRate();
-        //double oc = r->overtimeRate();
-        const QMap<QDate, UsedEffort::ActualEffort*> &map = usedEffort( r )->actualEffortMap();
-        QMap<QDate, UsedEffort::ActualEffort*>::const_iterator it;
-        for ( it = map.constBegin(); it != map.constEnd(); ++it ) {
-            if ( it.key() > date ) {
-                break;
-            }
-            UsedEffort::ActualEffort *a = it.value();
-            Duration eff = a->normalEffort();
-            double cost = eff.toDouble( Duration::Unit_h ) * nc;
-            c.add( Duration::zeroDuration, cost );
-            //kDebug()<<date<<r->name()<<it.key()<<c.cost();
-        }
-    }
-    Duration eff = actualEffortTo( date );
-    c.add( eff, 0.0 );
-    //kDebug()<<date<<eff.toString()<<c.effort().toString()<<c.cost();
-    return c;
+    EffortCostMap ecm = actualEffortCost( id );
+    return EffortCost( ecm.effortTo( date ), ecm.costTo( date ) );
 }
 
 QStringList Completion::entrymodeList() const
