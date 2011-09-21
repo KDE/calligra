@@ -19,7 +19,7 @@
 #ifndef KEXILOOKUPCOLUMNPAGE_H
 #define KEXILOOKUPCOLUMNPAGE_H
 
-#include <widget/KexiPropertyPaneViewBase.h>
+#include <widget/properties/KexiPropertyPaneViewBase.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 #include <koproperty/Set.h>

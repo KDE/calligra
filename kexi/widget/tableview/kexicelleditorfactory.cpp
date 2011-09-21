@@ -26,21 +26,9 @@
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
 #include <widget/dataviewcommon/kexitableviewdata.h>
-#ifdef __GNUC__
-#warning TODO reenable #include "kexidatetableedit.h"
-#else
-#pragma WARNING( TODO reenable #include "kexidatetableedit.h" )
-#endif
-#ifdef __GNUC__
-#warning TODO reenable #include "kexitimetableedit.h"
-#else
-#pragma WARNING( TODO reenable #include "kexitimetableedit.h" )
-#endif
-#ifdef __GNUC__
-#warning TODO reenable #include "kexidatetimetableedit.h"
-#else
-#pragma WARNING( TODO reenable #include "kexidatetimetableedit.h" )
-#endif
+#include "kexidatetableedit.h"
+#include "kexitimetableedit.h"
+#include "kexidatetimetableedit.h"
 #include "kexitableedit.h"
 #include "kexiinputtableedit.h"
 #include "kexicomboboxtableedit.h"
@@ -66,21 +54,9 @@ public:
     KexiCellEditorFactoryPrivate() {
         // Initialize standard editor cell editor factories
         registerItem(*new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB);
-#ifdef __GNUC__
-#warning TODO reenable  registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
-#else
-#pragma WARNING( TODO reenable  registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date ); )
-#endif
-#ifdef __GNUC__
-#warning TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
-#else
-#pragma WARNING( TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time ); )
-#endif
-#ifdef __GNUC__
-#warning TODO reenable  registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
-#else
-#pragma WARNING( TODO reenable  registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime ); )
-#endif
+        registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date);
+        registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time);
+        registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime);
         registerItem(*new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum);
         registerItem(*new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean);
         registerItem(*new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon");

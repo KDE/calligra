@@ -156,7 +156,7 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
                 }
             }
             if ( sl.count() == 1 ) {
-                return i18nc( "@info:tooltip 1=resource name", "Allocated resource: %1", sl.first() );
+                return i18nc( "@info:tooltip 1=resource name", "Allocated resource:<nl/>%1", sl.first() );
             }
             return i18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1", sl.join( "<nl/>" ) );
         }
@@ -1421,9 +1421,9 @@ QVariant NodeModel::plannedCostTo( const Node *node, int role ) const
     KLocale *l = m_project->locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatMoney( node->plannedCostTo( m_now ) );
+            return l->formatMoney( node->plannedCostTo( m_now, id() ) );
         case Qt::ToolTipRole:
-            return i18n( "Planned cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->plannedCostTo( m_now ) ) );
+            return i18n( "Planned cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->plannedCostTo( m_now, id() ) ) );
         case Qt::EditRole:
             return node->plannedCostTo( m_now );
         case Qt::StatusTipRole:
@@ -1438,11 +1438,11 @@ QVariant NodeModel::actualCostTo( const Node *node, int role ) const
     KLocale *l = m_project->locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatMoney( node->actualCostTo( m_now ).cost() );
+            return l->formatMoney( node->actualCostTo( id(), m_now ).cost() );
         case Qt::ToolTipRole:
-            return i18n( "Actual cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->actualCostTo( m_now ).cost() ) );
+            return i18n( "Actual cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->actualCostTo( id(), m_now ).cost() ) );
         case Qt::EditRole:
-            return node->actualCostTo( m_now ).cost();
+            return node->actualCostTo( id(), m_now ).cost();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

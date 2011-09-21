@@ -13,6 +13,7 @@ Name[ru]=Calligra Flow
 Name[sv]=Calligra Flow
 Name[uk]=Calligra Flow
 Name[x-test]=xxCalligra Flowxx
+Name[zh_TW]=Calligra Flow
 Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
 GenericName[bg]=Редактиране на блоксхеми и диаграми

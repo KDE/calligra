@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexicustompropertyfactory.h"
-#include "kexicustompropertyfactory_p.h"
+#include "KexiCustomPropertyFactory.h"
+#include "KexiCustomPropertyFactory_p.h"
 #include <kexiutils/identifier.h>
 
 //#include <koproperty/customproperty.h>

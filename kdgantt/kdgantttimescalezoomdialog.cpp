@@ -19,18 +19,70 @@
 
 #include "kdgantttimescalezoomdialog.h"
 
+#include "kdganttdatetimegrid.h"
+
 #include <QLocale>
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <qmath.h>
 
 namespace KDGantt {
 
+/*!\class KDGantt::Slider
+ * \internal
+ */
+
+Slider::Slider( QWidget *parent )
+    : QSlider( parent ), m_hide( false ), m_grid( 0 )
+{
+    setOrientation( Qt::Horizontal );
+    setPageStep( 5 );
+    setMaximum( 125 );
+    connect(this, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
+}
+
+void Slider::setEnableHideOnLeave( bool hide )
+{
+    m_hide = hide;
+}
+
+void Slider::setGrid( DateTimeGrid *grid )
+{
+    m_grid = grid;
+    if ( grid ) {
+        int pos = -1; // daywidth allways >= 0.1
+        for ( qreal dw = grid->dayWidth(); dw >= 0.1 && pos < maximum(); ++pos ) {
+            dw *= 1.0 / 1.1;
+        }
+        blockSignals( true );
+        setValue( pos );
+        blockSignals( false );
+    }
+}
+
+void Slider::leaveEvent( QEvent *e )
+{
+    if ( m_hide ) {
+        hide();
+    }
+    QSlider::leaveEvent( e );
+}
+
+void Slider::sliderValueChanged( int value )
+{
+    if ( m_grid ) {
+        m_grid->setDayWidth( qPow( 1.1, value ) * 0.1 );
+    }
+}
+
+/*!\class KDGantt::TimeScaleZoomDialog
+ * \internal
+ */
 TimeScaleZoomDialog::TimeScaleZoomDialog( QWidget *parent )
     : QDialog( parent )
 {
     pane.setupUi( this );
-    zoomIn = pane.zoomIn;
-    zoomOut = pane.zoomOut;
+    zoom = pane.zoom;
 }
 
 void Ui_TimeScaleZoomPane::setupUi(QDialog *KDGantt__TimeScaleZoomPane)
@@ -42,24 +94,9 @@ void Ui_TimeScaleZoomPane::setupUi(QDialog *KDGantt__TimeScaleZoomPane)
     KDGantt__TimeScaleZoomPane->setModal(true);
     horizontalLayout = new QHBoxLayout(KDGantt__TimeScaleZoomPane);
     horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-    zoomIn = new QToolButton(KDGantt__TimeScaleZoomPane);
-    zoomIn->setObjectName(QString::fromUtf8("zoomIn"));
-    zoomIn->setAutoRepeat(true);
-    zoomIn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    zoomIn->setAutoRaise(false);
-    zoomIn->setArrowType(Qt::LeftArrow);
 
-    horizontalLayout->addWidget(zoomIn);
-
-    zoomOut = new QToolButton(KDGantt__TimeScaleZoomPane);
-    zoomOut->setObjectName(QString::fromUtf8("zoomOut"));
-    zoomOut->setAutoRepeat(true);
-    zoomOut->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    zoomOut->setAutoRaise(false);
-    zoomOut->setArrowType(Qt::RightArrow);
-
-    horizontalLayout->addWidget(zoomOut);
-
+    zoom = new Slider(KDGantt__TimeScaleZoomPane);
+    horizontalLayout->addWidget(zoom);
 
     retranslateUi(KDGantt__TimeScaleZoomPane);
 
@@ -69,8 +106,6 @@ void Ui_TimeScaleZoomPane::setupUi(QDialog *KDGantt__TimeScaleZoomPane)
 void Ui_TimeScaleZoomPane::retranslateUi(QDialog *KDGantt__TimeScaleZoomPane)
 {
     KDGantt__TimeScaleZoomPane->setWindowTitle(QDialog::tr("Zoom"));
-    zoomOut->setText(QDialog::tr("Zoom out"));
-    zoomIn->setText(QDialog::tr("Zoom in"));
     Q_UNUSED(KDGantt__TimeScaleZoomPane);
 } // retranslateUi
 

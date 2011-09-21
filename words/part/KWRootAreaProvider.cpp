@@ -38,6 +38,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoParagraphStyle.h>
+#include <KoTextAnchor.h>
 
 #include <QTimer>
 #include <kdebug.h>
@@ -203,7 +204,15 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
 
     handleDependentProviders(pageNumber);
 
-    QList<KWFrame *> frames = kwdoc->frameLayout()->framesOn(m_textFrameSet, pageNumber);
+    // Determinate the frames that are on the page. Note that the KWFrameLayout only knows
+    // about header, footer and the mainframes but not about all other framesets.
+    QList<KWFrame *> frames;
+    if (m_textFrameSet->type() == Words::OtherFrameSet || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+        if (KWFrame *f = m_textFrameSet->frames().value(pageNumber - 1))
+            frames = QList<KWFrame *>() << f;
+    } else {
+        frames = kwdoc->frameLayout()->framesOn(m_textFrameSet, pageNumber);
+    }
 
     // position OtherFrameSet's which are anchored to this page
     if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
@@ -244,7 +253,11 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
         data->setRootArea(area);
         area->setAssociatedShape(shape);
     }
-    area->setPage(new KWPage(rootAreaPage->page));
+
+    if (m_textFrameSet->type() != Words::OtherFrameSet && m_textFrameSet->textFrameSetType() != Words::OtherTextFrameSet) {
+        // Only header, footer and main-frames have an own KoTextPage. All other frames are embedded into them and inherit the KoTextPage from them.
+        area->setPage(new KWPage(rootAreaPage->page));
+    }
 
     m_pageHash[area] = rootAreaPage;
     rootAreaPage->rootAreas.append(area);
@@ -362,7 +375,16 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     if (isHeaderFooter
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+
         newSize.setHeight(rootArea->bottom() - rootArea->top());
+
+        if (m_textFrameSet->type() == Words::OtherFrameSet || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            // adjust size to have at least the defined minimum height
+            Q_ASSERT(m_textFrameSet->frameCount() > 0);
+            KWFrame *frame = static_cast<KWFrame*>(m_textFrameSet->frames().first());
+            if (frame->minimumFrameHeight() > newSize.height())
+                newSize.setHeight(frame->minimumFrameHeight());
+        }
     }
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
@@ -568,7 +590,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
                 continue;
             if (! shape->isVisible(true))
                 continue;
-            if (shape->isAnchored())
+            if (frame->anchor()->anchorType() != KoTextAnchor::AnchorPage)
                 continue;
             if (shape->textRunAroundSide() == KoShape::RunThrough)
                 continue;

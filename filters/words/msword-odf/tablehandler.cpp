@@ -84,7 +84,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
             style.setAutoStyleInStylesDotXml(true);
         }
 
-        //process wrapping information
+        //style:wrap
         if (tap->textWrap) {
             if (tap->dxaAbs == -8) {
                 style.addProperty("style:wrap", "left", gt);
@@ -101,8 +101,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
         } else {
             style.addProperty("style:wrap", "none", gt);
         }
-
-        //margin information is related to wrapping of text around the table
+        //fo:margin
         style.addPropertyPt("fo:margin-left", twipsToPt(tap->dxaFromText), gt);
         style.addPropertyPt("fo:margin-right", twipsToPt(tap->dxaFromTextRight), gt);
         style.addPropertyPt("fo:margin-top", twipsToPt(tap->dyaFromText), gt);
@@ -111,37 +110,32 @@ void WordsTableHandler::tableStart(Words::Table* table)
         int dxaAbs = 0;
         int dyaAbs = 0;
 
-        //horizontal position of the anchor
+        //style:horizontal-pos - horizontal position of the anchor
         QString pos = Conversion::getHorizontalPos(tap->dxaAbs);
         style.addProperty("style:horizontal-pos", pos, gt);
         if (pos == "from-left") {
-            if (tap->dxaAbs == 0) {
-                style.addPropertyPt("fo:margin-left", 0, gt);
-            }
             dxaAbs = tap->dxaAbs;
         }
-        else if (pos == "right") {
-            style.addPropertyPt("fo:margin-right", 0, gt);
-        }
-        //vertical position of the anchor
+        //style:vertical-pos - vertical position of the anchor
         pos = Conversion::getVerticalPos(tap->dyaAbs);
         style.addProperty("style:vertical-pos", pos, gt);
         if (pos == "from-top") {
             dyaAbs = tap->dyaAbs;
         }
-        //relative vertical position of the anchor
+        //style:vertical-rel - relative vertical position of the anchor
         pos = Conversion::getVerticalRel(tap->pcVert);
 	if (!pos.isEmpty()) {
             style.addProperty("style:vertical-rel", pos, gt);
         }
-        //relative horizontal position of the anchor
+        //style:horizontal-rel - relative horizontal position of the anchor
         pos = Conversion::getHorizontalRel(tap->pcHorz);
         if (!pos.isEmpty()) {
             style.addProperty("style:horizontal-rel", pos, gt);
         }
+        //draw:auto-grow-height
+        style.addProperty("draw:auto-grow-height", "true", gt);
 
-        QString drawStyleName("fr");
-        drawStyleName = m_mainStyles->insert(style, drawStyleName);
+        const QString drawStyleName = m_mainStyles->insert(style);
 
         writer->startElement("draw:frame");
         writer->addAttribute("draw:style-name", drawStyleName.toUtf8());

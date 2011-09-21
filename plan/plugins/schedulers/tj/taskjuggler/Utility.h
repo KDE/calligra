@@ -158,6 +158,8 @@ time_t date2time( const QString& );
 
 time_t addTimeToDate(time_t day, time_t t);
 
+QString formatTime(time_t t);
+
 QDate time2qdate(time_t t);
 
 time_t qdate2time(const QDate& d);

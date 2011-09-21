@@ -74,11 +74,13 @@ public:
 
     void clear();
 
-    QString convertToListProperties() const;
+    QString convertToListProperties(const bool fileByPowerPoint = false) const;
 
     bool isEmpty() const;
 
     void setBulletChar(const QString& bulletChar);
+
+    void setPrefix(const QString& prefixChar);
 
     void setSuffix(const QString& suffixChar);
 
@@ -123,6 +125,7 @@ private:
     QString m_bulletFont;
     QString m_bulletChar;
     QString m_numFormat;
+    QString m_prefix;
     QString m_suffix;
     QString m_align;
     QString m_indent;
@@ -402,6 +405,13 @@ public:
              this writer usually should be assigned back to the variable
              altered by the recent use of setWriter(). */
     KoXmlWriter* releaseWriter();
+
+    //! Releases the original writer set before using setWriter(KoXmlWriter*&).
+    /*! This inserts all the XML buffered by buffer into @a bkpXmlSnippet
+     @return the original writer set in setWriter();
+             this writer usually should be assigned back to the variable
+             altered by the recent use of setWriter(). */
+    KoXmlWriter* releaseWriter(QString& bkpXmlSnippet);
 
     //! @return the original writer set in setWriter(). Does not change the state of the buffer.
     /*! Use this method when you need to access the remembered writer without releasing it. */

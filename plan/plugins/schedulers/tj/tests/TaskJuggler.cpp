@@ -25,6 +25,7 @@
 #include "CoreAttributesList.h"
 #include "Interval.h"
 #include "Utility.h"
+#include "UsageLimits.h"
 #include "debug.h"
 
 #include "kptcommand.h"
@@ -160,9 +161,11 @@ void TaskJuggler::oneTask()
     QCOMPARE( t->getName(), QString("T1 name") );
     qDebug()<<"finished";
     
-    int sc = project->getScenarioIndex( "Plan" );
-    t->setDuration( sc, TJ::ONEHOUR );
-    QCOMPARE( t->getDuration( sc ), (double)TJ::ONEHOUR );
+    int sc = project->getScenarioIndex( "plan" );
+    QCOMPARE( sc, 1 );
+
+    t->setDuration( sc-1, TJ::ONEHOUR );
+    QCOMPARE( t->getDuration( sc-1 ), (double)TJ::ONEHOUR );
     
     QVERIFY( ! t->isMilestone() );
 }
@@ -263,21 +266,15 @@ void TaskJuggler::scheduleResource()
 
     TJ::Task *t = project->getTask( "T1" );
     QVERIFY( t != 0 );
-    for ( int i = 0; i < project->getMaxScenarios(); ++i ) {
-        t->setEffort( i, 5 );
-        QCOMPARE( t->getEffort( i ), 5. );
-    }
-    QVERIFY( ! t->isMilestone() );
-    for ( int i = 0; i < project->getMaxScenarios(); ++i ) {
-        qDebug()<<t->getId()<<"effort="<<t->getEffort( i )<<"sc="<<i;
-    }
-    bool res = project->pass2( true );
-    QVERIFY( res );
+    t->setDuration( 0, 0.0 );
+    t->setEffort( 0, 5. );
+    QCOMPARE( t->getEffort( 0 ), 5. );
 
-    QVERIFY( ! t->isMilestone() );
+    qDebug()<<t->getId()<<"effort="<<t->getEffort( 0 );
 
-    res = project->scheduleAllScenarios();
-    QVERIFY( res );
+    QVERIFY(  project->pass2( true )  );
+
+    QVERIFY( project->scheduleAllScenarios() );
 
     qDebug()<<QDateTime::fromTime_t( t->getStart( 0 ) )<<QDateTime::fromTime_t( t->getEnd( 0 ) );
     
@@ -944,6 +941,129 @@ void TaskJuggler::resourceConflict()
     }
 }
 
+void TaskJuggler::units()
+{
+    DebugCtrl.setDebugLevel( 1000 );
+    DebugCtrl.setDebugMode( TSDEBUG + RSDEBUG );
+
+    QString s;
+    QDateTime pstart = QDateTime::fromString( "2011-07-04 09:00:00", Qt::ISODate );
+    QDateTime pend = pstart.addDays(3);
+    {
+        s = "Test one task, resource 50% using resource limit --------------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR );
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        QCOMPARE( QDateTime::fromTime_t( proj->getStart() ), pstart );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        TJ::UsageLimits *l = new TJ::UsageLimits();
+        l->setDailyUnits( 50 );
+        r->setLimits( l );
+        r->setEfficiency( 1.0 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setSpecifiedStart( 0, proj->getStart() );
+        t1->setEffort( 0, 1.0 );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        t1->addAllocation( a );
+
+        QVERIFY2( proj->pass2( true ), s.toLatin1() );
+        QVERIFY2( proj->scheduleAllScenarios(), s.toLatin1() );
+
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+
+        // working hours: 09:00 - 12:00, 13:00 - 18:00
+        QCOMPARE( t1start, pstart );
+        QCOMPARE( t1end, t1start.addDays( 1 ).addSecs( 5 * TJ::ONEHOUR - 1) ); // remember lunch
+
+        delete proj;
+    }
+    {
+        s = "Test one task, resource 50% using resource efficiency --------------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR / 2 );
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        QCOMPARE( QDateTime::fromTime_t( proj->getStart() ), pstart );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        r->setEfficiency( 0.5 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setSpecifiedStart( 0, proj->getStart() );
+        t1->setEffort( 0, 1.0 / proj->getDailyWorkingHours() );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        t1->addAllocation( a );
+
+        QVERIFY2( proj->pass2( true ), s.toLatin1() );
+        QVERIFY2( proj->scheduleAllScenarios(), s.toLatin1() );
+
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+
+        // working hours: 09:00 - 12:00, 13:00 - 18:00
+        QCOMPARE( t1start, pstart );
+        QCOMPARE( t1end, t1start.addSecs( 2 * TJ::ONEHOUR - 1) );
+
+        delete proj;
+    }
+    {
+        s = "Test one task, allocation limit 50% per day --------------------";
+        qDebug()<<s;
+        TJ::Project *proj = new TJ::Project();
+        proj->setScheduleGranularity( TJ::ONEHOUR / 2 );
+
+        proj->setStart( pstart.toTime_t() );
+        proj->setEnd( pend.toTime_t() );
+
+        QCOMPARE( QDateTime::fromTime_t( proj->getStart() ), pstart );
+
+        TJ::Resource *r = new TJ::Resource( proj, "R1", "R1", 0 );
+        r->setEfficiency( 1.0 );
+        for (int day = 0; day < 7; ++day) {
+            r->setWorkingHours( day, *(proj->getWorkingHours(day)) );
+        }
+
+        TJ::Task *t1 = new TJ::Task(proj, "T1", "T1", 0, QString(), 0);
+        t1->setSpecifiedStart( 0, proj->getStart() );
+        t1->setEffort( 0, 1.0 );
+        TJ::Allocation *a = new TJ::Allocation();
+        a->addCandidate( r );
+        TJ::UsageLimits *l = new TJ::UsageLimits();
+        l->setDailyUnits( 50 );
+        a->setLimits( l );
+        t1->addAllocation( a );
+
+        QVERIFY2( proj->pass2( true ), s.toLatin1() );
+        QVERIFY2( proj->scheduleAllScenarios(), s.toLatin1() );
+
+        QDateTime t1start = QDateTime::fromTime_t( t1->getStart( 0 ) );
+        QDateTime t1end = QDateTime::fromTime_t( t1->getEnd( 0 ) );
+
+        // working hours: 09:00 - 12:00, 13:00 - 18:00
+        QCOMPARE( t1start, pstart );
+        QCOMPARE( t1end, t1start.addDays( 1 ).addSecs( 5 * TJ::ONEHOUR - 1) ); // remember lunch
+
+        delete proj;
+    }
+}
 
 } //namespace KPlato
 

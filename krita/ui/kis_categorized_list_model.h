@@ -95,8 +95,11 @@ public:
 	}
 	
 	QModelIndex lastIndex() const {
-		int end = getCategoryBegin(m_categories.size()-1) + m_categories.last().entries.size() - 1;
-		return QAbstractListModel::index(end);
+        if(!m_categories.empty()) {
+            int end = getCategoryBegin(m_categories.size()-1) + m_categories.last().entries.size() - 1;
+            return QAbstractListModel::index(end);
+        }
+        return QAbstractListModel::index(0);
 	}
 	
 	void expandCategory(const TCategory& category, bool expand) {
@@ -206,7 +209,7 @@ public:
     void clearCategory(const TCategory& category) {
 		Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
         
-        if(itr != m_categories.end()) {
+        if(itr != m_categories.end() && !itr->entries.empty()) {
 			int pos = getCategoryBegin(itr);
 			emit beginRemoveRows(QModelIndex(), pos, pos + itr->entries.size() - 1);
 			itr->entries.clear();
@@ -312,6 +315,7 @@ public:
         if(isHeader(index)) {
             switch(role)
             {
+			case Qt::ToolTipRole:
             case Qt::DisplayRole:
                 return categoryToString(m_categories[index.first].data);
             case IsHeaderRole:
@@ -321,6 +325,7 @@ public:
         else {
             switch(role)
             {
+			case Qt::ToolTipRole:
             case Qt::DisplayRole:
                 return entryToString(m_categories[index.first].entries[index.second].data);
             case IsHeaderRole:

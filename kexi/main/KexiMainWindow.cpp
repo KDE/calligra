@@ -97,12 +97,12 @@
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
-#include <widget/KexiProjectModel.h>
 
-#include <widget/KexiPropertyEditorView.h>
+#include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/KexiDockableWidget.h>
-#include <widget/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectModel.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -718,7 +718,11 @@ void KexiMainWindow::setupActions()
 #endif
 
 #ifndef KEXI_NO_UNFINISHED
+#ifdef __GNUC__
 #warning replace document-import icon with something other
+#else
+#pragma WARNING( replace document-import icon with something other )
+#endif
     ac->addAction("project_import_export_send",
         action = d->action_project_import_export_send = new KexiMenuWidgetAction(
             KIcon("document-import"), i18n("&Import, Export or Send..."), this));
@@ -1130,7 +1134,12 @@ void KexiMainWindow::setupActions()
 #pragma WARNING( setStandardToolBarMenuEnabled( true ); )
 #endif
 
+#ifdef __GNUC__
 #warning put 'configure keys' into settings view
+#else
+#pragma WARNING( put 'configure keys' into settings view )
+#endif
+
 #if 0 // moved to settings
     action = KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), this);
     ac->addAction(action->objectName(), action);
@@ -1532,7 +1541,11 @@ tristate KexiMainWindow::startup()
     switch (Kexi::startupHandler().action()) {
     case KexiStartupHandler::CreateBlankProject:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
+#ifdef __GNUC__
 #warning todo modern startup:        result = createBlankProject();
+#else
+#pragma WARNING( todo modern startup:        result = createBlankProject(); )
+#endif
         break;
     case KexiStartupHandler::CreateFromTemplate:
         result = createProjectFromTemplate(*Kexi::startupHandler().projectData());
@@ -3136,7 +3149,11 @@ KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool co
     //KexiNewProjectWizard *wiz = new KexiNewProjectWizard(Kexi::connset(), 0);
     //wiz->setConfirmOverwrites(confirmOverwrites);
 
+#ifdef __GNUC__
 #warning todo
+#else
+#pragma WARNING( todo )
+#endif
     cancelled = false;
     KexiProjectData *new_data = 0;
 #if 0 // before MODERN
@@ -4286,9 +4303,15 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
             KIcon(part ? part->info()->itemIcon() : QString()),
             item->captionOrName());
         d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(*item, part));
-        d->mainWidget->tabWidget()->setTabWhatsThis(
-            tabIndex,
-            i18n("Tab for \"%1\" (%2).", item->captionOrName(), part->info()->instanceCaption()));
+        QString whatsThisText;
+        if (part) {
+            whatsThisText = i18n("Tab for \"%1\" (%2).",
+                                 item->captionOrName(), part->info()->instanceCaption());
+        }
+        else {
+            whatsThisText = i18n("Tab for \"%1\".", item->captionOrName());
+        }
+        d->mainWidget->tabWidget()->setTabWhatsThis(tabIndex, whatsThisText);
         d->mainWidget->tabWidget()->setCurrentWidget(windowContainer);
 
 #ifndef KEXI_NO_PENDING_DIALOGS

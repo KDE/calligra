@@ -34,4 +34,6 @@ target_link_libraries(
     ${CMAKE_THREAD_LIBS_INIT}
 )
 
+set_target_properties(librcps_plan PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+
 install(TARGETS librcps_plan ${INSTALL_TARGETS_DEFAULT_ARGS})

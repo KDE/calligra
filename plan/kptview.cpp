@@ -23,8 +23,7 @@
 #include <kmessagebox.h>
 
 #include "KoDocumentInfo.h"
-#include <KoMainWindow.h>
-#include <KoToolManager.h>
+#include "KoMainWindow.h"
 
 #include <QApplication>
 #include <QLabel>
@@ -43,6 +42,7 @@
 #include <QDomElement>
 #include <kundo2command.h>
 #include <QTimer>
+#include <QDockWidget>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -353,12 +353,27 @@ View::View( Part* part, QWidget* parent )
 
     connect( getPart(), SIGNAL( workPackageLoaded() ), SLOT( slotWorkPackageLoaded() ) );
     //kDebug()<<" end";
+    QTimer::singleShot( 0, this, SLOT( hideToolDocker() ) );
 }
 
 View::~View()
 {
 /*    removeStatusBarItem( m_estlabel );
     delete m_estlabel;*/
+}
+
+// hackish way to get rid of unused docker, but as long as no official way exists...
+void View::hideToolDocker()
+{
+    if ( shell() ) {
+        foreach ( QDockWidget *w, shell()->dockWidgets() ) {
+            if ( w->objectName() == "sharedtooldocker" ) {
+                w->setFeatures( QDockWidget::DockWidgetClosable );
+                w->hide();
+                break;
+            }
+        }
+    }
 }
 
 ViewAdaptor* View::dbusObject()
@@ -2630,7 +2645,7 @@ void View::slotOpenReportFileFinished( int result )
     }
     QFile file( fn );
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:</br><filename>%1</filename>", fn ) );
+        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
     QDomDocument doc;
@@ -2946,7 +2961,7 @@ void View::slotCurrencyConfigFinished( int result )
 QString View::standardTaskStatusReport() const
 {
     QString s;
-    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"KPlato\" >";
+    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"Plan\" >";
     s += "<data-source select-from=\"taskstatus\" >";
     s += "<select-from resourceassignments=\"unchecked\" tasks=\"unchecked\" taskstatus=\"checked\" resourcesandgroups=\"unchecked\" />";
     s += "</data-source>";
@@ -2965,11 +2980,11 @@ QString View::standardTaskStatusReport() const
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
-    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"1\" >";
+    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"1\" >";
     s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"0%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
-    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Project:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
+    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Project:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
@@ -2978,7 +2993,7 @@ QString View::standardTaskStatusReport() const
     s += "</report:line>";
     s += "</report:section>";
     s += "<report:section svg:height=\"1.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-report\" >";
-    s += "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.25cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Task Status Report" ) + "\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >";
+    s += "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.97cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Task Status Report" ) + "\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";

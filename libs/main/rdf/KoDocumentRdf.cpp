@@ -48,6 +48,7 @@
 #include "KoRdfFoaF.h"
 #include "KoRdfCalendarEvent.h"
 #include "KoRdfLocation.h"
+#include <KoShapeController.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -102,9 +103,9 @@ KoDocumentRdf::KoDocumentRdf(QObject *parent)
         : KoDocumentRdfBase(parent)
         , d (new KoDocumentRdfPrivate())
 {
-    if (!backendIsSane()) {
-        kWarning() << "Looks like the backend is not sane!";
-    }
+//    if (!backendIsSane()) {
+//        kWarning() << "Looks like the backend is not sane!";
+//    }
     d->prefixMapping = new KoRdfPrefixMapping(this);
 }
 
@@ -122,6 +123,10 @@ const Soprano::Model *KoDocumentRdf::model() const
 KoDocumentRdf *KoDocumentRdf::fromResourceManager(KoCanvasBase *host)
 {
     KoResourceManager *rm = host->resourceManager();
+    if( host->shapeController() ) 
+    {
+        rm = host->shapeController()->resourceManager();
+    }
     if (!rm->hasResource(KoText::DocumentRdf)) {
         return 0;
     }
@@ -398,6 +403,9 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
     if (!it.isValid())
         return;
 
+    // new xmlid->inlinerdfobject mapping
+    QMap<QString, QWeakPointer<KoTextInlineRdf> > inlineRdfObjects;
+
     QList<Statement> allStatements = it.allElements();
     foreach (Soprano::Statement s, allStatements) {
         RDEBUG << "seeking obj:" << s.object();
@@ -416,6 +424,7 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
                 RDEBUG << "updating the xmlid of the inline object";
                 RDEBUG << "old:" << oldID << " new:" << newID;
                 inlineRdf->setXmlId(newID);
+                inlineRdfObjects[newID] = inlineRdf;
             }
         }
     }
@@ -425,6 +434,8 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
     RDEBUG << " remove.size:" << removeList.size();
     KoTextRdfCore::removeStatementsIfTheyExist(d->model, removeList);
     d->model->addStatements(addList);
+    d->inlineRdfObjects = inlineRdfObjects;
+
 }
 
 QList<KoRdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
@@ -943,6 +954,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
                                         startPosition,
                                         QTextDocument::FindBackward);
     while(!cursor.isNull()) {
+        RDEBUG <<  "findXmlId" << cursor.position();
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
 
@@ -990,16 +1002,20 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
                                         startPosition,
                                         QTextDocument::FindBackward);
     while(!cursor.isNull()) {
+        RDEBUG << "Cursor position" << cursor.position();
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+        RDEBUG << "obj" << obj;
 
         // first check for bookmarks
         if (KoBookmark *bookmark = dynamic_cast<KoBookmark*>(obj)) {
             KoBookmark::BookmarkType type = bookmark->type();
             if (type == KoBookmark::StartBookmark) {
                 KoBookmark *endmark = bookmark->endBookmark();
-                Q_ASSERT(endmark);
-                if (endmark->position() > startPosition) {
+                // we used to assert on endmark, but we cannot keep people from
+                // inserting a startbookmark and only then creating and inserting
+                // the endmark
+                if (endmark && endmark->position() > startPosition) {
                     inlineRdf = bookmark->inlineRdf();
                 }
             }
@@ -1008,8 +1024,10 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
         else if (KoTextMeta *metamark = dynamic_cast<KoTextMeta*>(obj)) {
             if (metamark->type() == KoTextMeta::StartBookmark) {
                 KoTextMeta *endmark = metamark->endBookmark();
-                Q_ASSERT(endmark);
-                if (endmark->position() > startPosition) {
+                // we used to assert on endmark, but we cannot keep people from
+                // inserting a startbookmark and only then creating and inserting
+                // the endmark
+                if (endmark && endmark->position() > startPosition) {
                     inlineRdf = metamark->inlineRdf();
                 }
             }
@@ -1024,9 +1042,12 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
             break;
         }
 
+        if( cursor.position() <= 0 )
+            break;
+        
         // else continue with the next inline object
         cursor = document->find(QString(QChar::ObjectReplacementCharacter),
-                                cursor.position(),
+                                cursor.position()-1,
                                 QTextDocument::FindBackward);
     }
 
