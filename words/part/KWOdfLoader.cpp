@@ -293,7 +293,7 @@ void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context, bool hasM
         Q_ASSERT(masterNode);
         QString displayName = masterNode->attributeNS(KoXmlNS::style, "display-name", QString());
         KWPageStyle masterPage = m_document->pageManager()->pageStyle(it.key());
-        if (!masterPage.isValid()) // use display-name as fall-back if there is no page-style with the defined name. See bug 281922.
+        if (!masterPage.isValid()) // use display-name as fall-back if there is no page-style with the defined name. See bug 281922 and 282082.
             masterPage = m_document->pageManager()->pageStyle(displayName);
         bool alreadyExists = masterPage.isValid();
         if (!alreadyExists)
