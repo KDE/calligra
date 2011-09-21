@@ -34,7 +34,7 @@
 KWPageManagerPrivate::KWPageManagerPrivate()
         : lastId(0),
         preferPageSpread(false),
-        defaultPageStyle("Standard", "Default")
+        defaultPageStyle(QLatin1String("Standard"), QLatin1String("Default")) // don't translate cause both strings are used as identifier!
 {
 }
 
@@ -432,7 +432,7 @@ void KWPageManager::clearPageStyles()
 {
     d->pageStyles.clear();
     d->pageStyleNames.clear();
-    d->defaultPageStyle = KWPageStyle("Standard", "Default");
+    d->defaultPageStyle = KWPageStyle(QLatin1String("Standard"), QLatin1String("Default")); // don't translate cause both strings are used as identifier!
     addPageStyle(d->defaultPageStyle);
 }
 
