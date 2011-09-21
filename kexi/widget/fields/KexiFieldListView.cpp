@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexifieldlistview.h"
+#include "KexiFieldListView.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -130,4 +130,4 @@ void KexiFieldListView::slotDoubleClicked(const QModelIndex &idx)
     }
 }
 
-#include "kexifieldlistview.moc"
+#include "KexiFieldListView.moc"

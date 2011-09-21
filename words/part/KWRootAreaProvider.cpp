@@ -38,6 +38,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoParagraphStyle.h>
+#include <KoTextAnchor.h>
 
 #include <QTimer>
 #include <kdebug.h>
@@ -589,7 +590,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
                 continue;
             if (! shape->isVisible(true))
                 continue;
-            if (shape->isAnchored())
+            if (frame->anchor()->anchorType() != KoTextAnchor::AnchorPage)
                 continue;
             if (shape->textRunAroundSide() == KoShape::RunThrough)
                 continue;

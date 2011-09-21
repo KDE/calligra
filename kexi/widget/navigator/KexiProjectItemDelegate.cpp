@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,32 +17,32 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDSWELCOME_H
-#define KEXIDSWELCOME_H
+#include "KexiProjectItemDelegate.h"
+#include <kexiutils/identifier.h>
+#include <QLineEdit>
 
-#include <qwidget.h>
-
-class KexiDataSourceWizard;
-
-/**
- * This page is part of the KexiDataSourceWizard
- * it is the greeting page per default, where people
- * can choose whether they want to use the wizard or not.
- */
-class KEXIEXTWIDGETS_EXPORT KexiDSWelcome : public QWidget
+class KexiProjectItemDelegate::Private
 {
-    Q_OBJECT
-
 public:
-    KexiDSWelcome(KexiDataSourceWizard *parent);
-    ~KexiDSWelcome();
-
-protected slots:
-    void setUseWizard(bool use);
-
-private:
-    KexiDataSourceWizard *m_wiz;
+    Private() {}
 };
 
-#endif
+KexiProjectItemDelegate::KexiProjectItemDelegate(QObject *parent)
+  : QStyledItemDelegate(parent), d(new Private)
+{
+}
 
+KexiProjectItemDelegate::~KexiProjectItemDelegate()
+{
+    delete d;
+}
+
+QWidget* KexiProjectItemDelegate::createEditor(
+    QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QWidget *editor = QStyledItemDelegate::createEditor(parent, option, index);
+    if (qobject_cast<QLineEdit*>(editor)) { // sanity check
+        qobject_cast<QLineEdit*>(editor)->setValidator(new KexiUtils::IdentifierValidator(editor));
+    }
+    return editor;
+}

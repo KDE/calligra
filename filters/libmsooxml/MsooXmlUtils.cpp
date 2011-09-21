@@ -1120,8 +1120,9 @@ Utils::XmlWriteBuffer::~XmlWriteBuffer()
 KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
 {
     Q_ASSERT(!m_origWriter && !m_newWriter);
-    if (m_origWriter || m_newWriter)
+    if (m_origWriter || m_newWriter) {
         return 0;
+    }
     m_origWriter = writer; // remember
     m_newWriter = new KoXmlWriter(&m_buffer, m_origWriter->indentLevel() + 1);
     return m_newWriter;
@@ -1130,14 +1131,28 @@ KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
 KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter()
 {
     Q_ASSERT(m_newWriter && m_origWriter);
+    if (!m_newWriter || !m_origWriter) {
+        return 0;
+    }
+    m_origWriter->addCompleteElement(&m_buffer);
+    return releaseWriterInternal();
+}
+
+KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter(QString& bkpXmlSnippet)
+{
+    Q_ASSERT(m_newWriter && m_origWriter);
+    if (!m_newWriter || !m_origWriter) {
+        return 0;
+    }
+    bkpXmlSnippet = QString::fromUtf8(m_buffer.buffer(), m_buffer.buffer().size());
     return releaseWriterInternal();
 }
 
 KoXmlWriter* Utils::XmlWriteBuffer::releaseWriterInternal()
 {
-    if (!m_newWriter || !m_origWriter)
+    if (!m_newWriter || !m_origWriter) {
         return 0;
-    m_origWriter->addCompleteElement(&m_buffer);
+    }
     delete m_newWriter;
     m_newWriter = 0;
     KoXmlWriter* tmp = m_origWriter;
@@ -1529,41 +1544,46 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     }
     returnValue += ">";
 
-    // The text:label-followed-by is a required attribute TODO: set proper
-    // vaule, for now add the default used by calligra.
+    bool ok = false;
+    double margin = 0;
+    double indent = 0;
+
+    if (fileByPowerPoint) {
+        margin = EMU_TO_POINT(347663);
+        indent = EMU_TO_POINT(-342900);
+    }
     if (m_margin != "UNUSED") {
-        bool ok;
-        float margin = m_margin.toFloat(&ok);
+        margin = m_margin.toDouble(&ok);
         if (!ok) {
-            kDebug() << "Conversion failed! m_margin:" << m_margin;
+            kDebug() << "STRING_TO_DOUBLE: error converting" << m_margin << "(attribute \"marL\")";
         }
-        float indent = 0;
-        if (m_indent != "UNUSED") {
-            indent = m_indent.toFloat(&ok);
-            if (!ok) {
-                kDebug() << "Conversion failed! m_indent" << m_indent;
-            }
+    }
+    if (m_indent != "UNUSED") {
+        indent = m_indent.toDouble(&ok);
+        if (!ok) {
+            kDebug() << "STRING_TO_DOUBLE: error converting" << m_indent << "(attribute \"indent\")";
         }
-        returnValue += "<style:list-level-label-alignment ";
-        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
-        if (fileByPowerPoint) {
-            if (qAbs(indent) >= qAbs(margin)) {
-                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
-                returnValue += "text:label-followed-by=\"listtab\" ";
-                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
-            } else {
-                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
-                returnValue += "text:label-followed-by=\"nothing\" ";
-            }
-        } else {
-            returnValue += "text:label-followed-by=\"space\" ";
-            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
-        }
-        returnValue += "/>";
     }
 
+    // TODO: The text:label-followed-by is a required attribute, set the proper
+    // value, for now add the default used by calligra.
+    returnValue += "<style:list-level-label-alignment ";
+    returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
+    if (fileByPowerPoint) {
+        if (qAbs(indent) >= qAbs(margin)) {
+            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+            returnValue += "text:label-followed-by=\"listtab\" ";
+            returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
+        } else {
+            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+            returnValue += "text:label-followed-by=\"nothing\" ";
+        }
+    } else {
+        returnValue += "text:label-followed-by=\"space\" ";
+        returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+    }
+    returnValue += "/>";
     returnValue += "</style:list-level-properties>";
-
     returnValue += "<style:text-properties ";
 
     if (m_bulletColor != "UNUSED") {

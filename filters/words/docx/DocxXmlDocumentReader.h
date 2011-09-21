@@ -131,6 +131,7 @@ protected:
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
     KoFilter::ConversionStatus read_rStyle();
+    KoFilter::ConversionStatus read_tblpPr();
     KoFilter::ConversionStatus read_tblStyle();
     KoFilter::ConversionStatus read_tblBorders();
     KoFilter::ConversionStatus read_tblCellMar();
@@ -255,6 +256,15 @@ protected:
     MSOOXML::TableStyleProperties* m_currentStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
     QString m_currentTableStyleBase;
+
+    //! Name of the KoGenStyle style of type GraphicAutoStyle prepared for the
+    //! parent <draw:frame> element containing the <table:table> element
+    //! of a floating table.
+    QString m_currentDrawStyleName;
+
+    //! The complete XML snippet representing a floating table, which MUST be
+    //! inserted into the following paragraph.
+    QString m_floatingTable;
 
     QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
 

@@ -7,6 +7,7 @@ Name[pt_BR]=Plugin de Calendário do Plan
 Name[sv]=Plan insticksprogram för schemaläggning
 Name[uk]=Додаток планування Plan
 Name[x-test]=xxPlan Scheduler Pluginxx
+Name[zh_TW]=Plan 排程器外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Plan/SchedulerPlugin
 Comment=A plugin that calculates a project schedule

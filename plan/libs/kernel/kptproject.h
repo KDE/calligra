@@ -214,23 +214,8 @@ public:
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
-    /// Returns the actual effort
-    virtual Duration actualEffort() const;
-    /// Returns the actual effort on @p date
-    virtual Duration actualEffort( const QDate &date ) const;
     /// Returns the actual effort up to and including @p date
     virtual Duration actualEffortTo( const QDate &date ) const;
-    /**
-     * Returns the total planned cost for this project
-     * @param id Identity of the schedule to be used
-     */
-    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
-    /**
-     * Planned cost on date
-     * @param date The cost is calulated for this date (only)
-     * @param id Identity of the schedule to be used
-     */
-    virtual double plannedCost( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
     /**
      * Planned cost up to and including date
      * @param date The cost is calculated from the start of the project upto including date.
@@ -239,20 +224,10 @@ public:
     virtual double plannedCostTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
     /**
-     * Returns the actually reported cost for this project
-     */
-    virtual double actualCost() const;
-    /**
-     *  Actual cost on @p date
-     * @param date The cost is calulated for this date (only)
-     * @param id Identity of the schedule to be used
-     */
-    virtual double actualCost( const QDate &date ) const;
-    /**
      * Actual cost up to and including @p date
      * @param date The cost is calculated from the start of the project upto including date.
      */
-    virtual EffortCost actualCostTo( const QDate &date ) const;
+    virtual EffortCost actualCostTo(  long int id, const QDate &date ) const;
     
     virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
