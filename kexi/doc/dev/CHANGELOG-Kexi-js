@@ -96,6 +96,10 @@ Tabbed toolbar TODOS:
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
 
+2011-09-22
+Forms
+*Revert disabling "Save Record" action for editing cancelling
+
 2011-09-21
 General
 *Fixes in date, time and date/time validating code, little refactoring, simplifing API
