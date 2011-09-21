@@ -109,8 +109,9 @@ QString KexiTextFormatter::toString(const QVariant& value, const QString& add) c
                    value.toString().isEmpty() ? QDate() : value.toDate());
     case KexiDB::Field::Time:
         return d->timeFormatter->toString(
-                   //hack to avoid converting null variant to valid QTime(0,0,0)
-                   value.toString().isEmpty() ? value.toTime() : QTime(99, 0, 0));
+                   value.toString().isEmpty()
+                   ? QTime(99, 0, 0) //hack to avoid converting null variant to valid QTime(0,0,0)
+                   : value.toTime());
     case KexiDB::Field::DateTime:
         if (value.toString().isEmpty())
             return add;
