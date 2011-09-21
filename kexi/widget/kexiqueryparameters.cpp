@@ -74,7 +74,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                                            0/*validator*/, df.inputMask());
                 if (!ok)
                     return QList<QVariant>(); //cancelled
-                values.append(df.stringToDate(result));
+                values.append(df.fromString(result));
                 break;
             }
         case KexiDB::Field::DateTime: {
@@ -83,10 +83,10 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                 const QString result = KInputDialog::getText(
                                            caption, (*it).message, QString(), &ok, parent, 0/*name*/,
 //! @todo add validator
-                                           0/*validator*/, dateTimeInputMask(df, tf));
+                                           0/*validator*/, KexiDateTimeFormatter::inputMask(df, tf));
                 if (!ok)
                     return QList<QVariant>(); //cancelled
-                values.append(stringToDateTime(df, tf, result));
+                values.append(KexiDateTimeFormatter::fromString(df, tf, result));
                 break;
             }
         case KexiDB::Field::Time: {
@@ -97,7 +97,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                                            0/*validator*/, tf.inputMask());
                 if (!ok)
                     return QList<QVariant>(); //cancelled
-                values.append(tf.stringToTime(result));
+                values.append(tf.fromString(result));
                 break;
             }
         case KexiDB::Field::Float:
