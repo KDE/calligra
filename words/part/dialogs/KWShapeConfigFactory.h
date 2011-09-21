@@ -92,13 +92,13 @@ private:
     FrameConfigSharedState *m_state;
 };
 
-/// factory to create a KWFrameGeometry widget
-class KWFrameGeometryFactory : public KoShapeConfigFactoryBase
+/// factory to create a KWAnchoringProperties widget
+class KWAnchoringFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
-    explicit KWFrameGeometryFactory(FrameConfigSharedState *state) : m_state(state) {}
-    ~KWFrameGeometryFactory() {}
+    explicit KWAnchoringFactory(FrameConfigSharedState *state) : m_state(state) {}
+    ~KWAnchoringFactory() {}
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);

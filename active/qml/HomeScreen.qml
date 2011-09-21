@@ -118,15 +118,15 @@ Rectangle {
         },
         State {
             name: "showTextDocs"
-            PropertyChanges { target: recentFiles; model: recentTextDocsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "PaginatedTextDocument"; }
         },
         State {
             name: "showSpreadsheets"
-            PropertyChanges { target: recentFiles; model: recentSpreadsheetsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "Spreadsheet"; }
         },
         State {
             name: "showPresentations"
-            PropertyChanges { target: recentFiles; model: recentPresentationsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "Presentation"; }
         }
     ]
 }

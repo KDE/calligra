@@ -4995,7 +4995,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     bool ok = false;
 
-    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
