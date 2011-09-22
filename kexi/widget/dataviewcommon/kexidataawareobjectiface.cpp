@@ -1145,12 +1145,9 @@ void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
             m_editor->setFocus();
         }
     }
-// ensureVisible(columnPos(m_curCol), rowPos(m_curRow)+rowHeight(),
-//  columnWidth(m_curCol), rowHeight());
-//OK?
-    //ensureCellVisible(m_curRow+1, m_curCol);
-    if (!m_editor)
+    else {
         createEditor(m_curRow, m_curCol, setText, !setText.isEmpty());
+    }
 }
 
 void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()

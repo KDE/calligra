@@ -252,7 +252,7 @@ protected:
     virtual void signalValueChanged();
 
     /*! Used to perform some actions before signalValueChanged() call.
-     We need this because the intrface is not QObject and thus has got no real signals.
+     We need this because the interface is not QObject and thus has got no real signals.
      Used in KexiDBComboBox. */
     virtual void beforeSignalValueChanged() {}
 

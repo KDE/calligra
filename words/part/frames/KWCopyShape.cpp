@@ -60,7 +60,6 @@ KWCopyShape::~KWCopyShape()
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_ASSERT(m_original);
-    qDebug() << "originalShape=" << m_original->boundingRect()<<boundingRect();
 
     //paint all child shapes
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);

@@ -68,7 +68,8 @@ public:
 
     bool preferPageSpread;
 
-    QHash <QString, KWPageStyle> pageStyles;
+    QHash<QString, KWPageStyle> pageStyles;
+    QHash<QString, QString> pageStyleNames; // map display-name to name
     KoInsets padding;
     KWPageStyle defaultPageStyle;
     QHash<int, qreal> pageOffsets;

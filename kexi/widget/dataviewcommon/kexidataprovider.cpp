@@ -88,7 +88,9 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 
 void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow)
 {
-    kDebug() << "cnt=" << record.count();
+    kDebug() << "record.count=" << record.count()
+             << "\nRECORD=";
+    record.debug();
     for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
             = m_fieldNumbersForDataItems.constBegin();
             it != m_fieldNumbersForDataItems.constEnd(); ++it) {
