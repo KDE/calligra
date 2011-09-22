@@ -1453,6 +1453,16 @@ QString Utils::ParagraphBulletProperties::bulletFont() const
     return m_bulletFont;
 }
 
+QString Utils::ParagraphBulletProperties::margin() const
+{
+    return m_margin;
+}
+
+QString Utils::ParagraphBulletProperties::indent() const
+{
+    return m_indent;
+}
+
 QString Utils::ParagraphBulletProperties::bulletRelativeSize() const
 {
     return m_bulletRelativeSize;
@@ -1544,14 +1554,15 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     }
     returnValue += ">";
 
-    bool ok = false;
+    // NOTE: DrawingML: If indent and marL were not provided by a master slide
+    // or defaults, then according to the spec. a value of -342900 is implied
+    // for indent and a value of 347663 is implied for marL (no matter which
+    // level and which type of text).  However the result is not compliant with
+    // MS PowerPoint => using ZERO values as in the ppt filter.
     double margin = 0;
     double indent = 0;
+    bool ok = false;
 
-    if (fileByPowerPoint) {
-        margin = EMU_TO_POINT(347663);
-        indent = EMU_TO_POINT(-342900);
-    }
     if (m_margin != "UNUSED") {
         margin = m_margin.toDouble(&ok);
         if (!ok) {
@@ -1565,11 +1576,9 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
         }
     }
 
-    // TODO: The text:label-followed-by is a required attribute, set the proper
-    // value, for now add the default used by calligra.
-    returnValue += "<style:list-level-label-alignment ";
-    returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
     if (fileByPowerPoint) {
+        returnValue += "<style:list-level-label-alignment ";
+        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
         if (qAbs(indent) > qAbs(margin)) {
             returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
             returnValue += "text:label-followed-by=\"listtab\" ";
@@ -1578,11 +1587,18 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
             returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
             returnValue += "text:label-followed-by=\"nothing\" ";
         }
-    } else {
-        returnValue += "text:label-followed-by=\"space\" ";
-        returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+        returnValue += "/>";
     }
-    returnValue += "/>";
+    // TODO: The text:label-followed-by is a required attribute, set the proper
+    // value, for now add the default used by calligra.
+    else {
+        returnValue += "<style:list-level-label-alignment ";
+        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
+        returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+        returnValue += "text:label-followed-by=\"space\" ";
+        returnValue += "/>";
+    }
+
     returnValue += "</style:list-level-properties>";
     returnValue += "<style:text-properties ";
 
@@ -1598,7 +1614,6 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
             returnValue += QString("fo:font-family=\"%1\" ").arg(m_bulletFont);
         }
     }
-
     returnValue += "/>";
 
     returnValue += ending;
