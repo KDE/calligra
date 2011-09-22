@@ -975,7 +975,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     }
 
-    Q_ASSERT(editor->hasSelection());
+    if (!editor->hasComplexSelection()) return;
 
     int from = editor->position();
     int to = editor->anchor();
