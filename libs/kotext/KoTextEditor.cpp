@@ -22,9 +22,11 @@
 #include "KoTextEditor.h"
 #include "KoTextEditor_p.h"
 
+#include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
+#include <KoTextPaste.h>
 #include <KoTextOdfSaveHelper.h>
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
@@ -72,6 +74,13 @@
 #include <kundo2command.h>
 
 #include <kdebug.h>
+
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#else
+#include "KoTextSopranoRdfModel_p.h"
+#endif
+
 
 static bool isRightToLeft(const QString &text)
 {
@@ -952,9 +961,12 @@ void KoTextEditor::paste(const QMimeData *mimeData,
                                     pasteAsText));
 }
 
-bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
+bool KoTextEditor::paste(KoTextEditor *editor,
+                         KoShapeController *shapeController,
+                         KoResourceManager *resourceManager,
+                         bool pasteAsText)
 {
-#if 0
+
     Q_ASSERT(editor);
     Q_ASSERT(editor != this);
 
@@ -965,10 +977,12 @@ bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
 
     Q_ASSERT(editor->hasSelection());
 
-    from = editor->position();
-    to = editor->anchor();
+    int from = editor->position();
+    int to = editor->anchor();
     KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
     KoTextDrag drag;
+
+    KoDocumentRdfBase *rdf = dynamic_cast<KoDocumentRdfBase*>(resourceManager->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
 
     if (rdf) {
         saveHelper.setRdfModel(rdf->model());
@@ -976,12 +990,10 @@ bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
 
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
 
-
     editor->beginEditBlock();
 
-    m_first = false;
     if (hasSelection()) {
-        editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+        editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController));
     }
 
     // check for mime type
@@ -994,15 +1006,14 @@ bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
             odfType = KoOdf::OpenOfficeClipboard;
         }
 
-        if (m_pasteAsText) {
+        if (pasteAsText) {
             editor->insertText(data->text());
         } else {
-
             const Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
             bool weOwnRdfModel = true;
             rdfModel = Soprano::createModel();
-            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+            if (rdf) {
                 delete rdfModel;
                 rdfModel = rdf->model();
                 weOwnRdfModel = false;
@@ -1010,13 +1021,13 @@ bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
 #endif
 
             //kDebug() << "pasting odf text";
-            KoTextPaste paste(editor, m_tool->canvas()->resourceManager(), rdfModel);
+            KoTextPaste paste(this, resourceManager, rdfModel);
             paste.paste(odfType, data);
             //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF
-            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                rdf->updateInlineRdfStatements(editor->document());
+            if (rdf) {
+                rdf->updateInlineRdfStatements(d->document);
             }
             if (weOwnRdfModel && rdfModel) {
                 delete rdfModel;
@@ -1026,8 +1037,8 @@ bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
     }
 
     endEditBlock();
-#endif
-    return false;
+
+    return true;
 }
 
 void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShapeController *shapeController, KoResourceManager *resourceManager)
