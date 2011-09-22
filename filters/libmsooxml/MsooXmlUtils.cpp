@@ -1570,7 +1570,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     returnValue += "<style:list-level-label-alignment ";
     returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
     if (fileByPowerPoint) {
-        if (qAbs(indent) >= qAbs(margin)) {
+        if (qAbs(indent) > qAbs(margin)) {
             returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
             returnValue += "text:label-followed-by=\"listtab\" ";
             returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
