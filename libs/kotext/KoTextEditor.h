@@ -109,10 +109,13 @@ public:
 
 private:
 
+    // for the call to KoTextLoader::loadBody, which has a QTextCursor
     friend class KoTextPaste;
+
+    // from KoTextEditor_p.h
     friend class CharFormatVisitor;
 
-    // all these commands, including the ones in the textshape, should move to KoText
+    // our commands can have access to us
     friend class DeleteTableRowCommand;
     friend class DeleteTableColumnCommand;
     friend class InsertTableRowCommand;
@@ -120,6 +123,7 @@ private:
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
 
+    // for unittests
     friend class TestKoInlineTextObjectManager;
 
     // temporary...
@@ -135,6 +139,7 @@ private:
 
 public slots:
 
+    // XXX: make this private as  well
     void addCommand(KUndo2Command *command, bool addCommandToStack = true);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
@@ -230,6 +235,11 @@ public slots:
     void deleteChar(MoveOperation direction, bool trackChanges,
                     KoShapeController *shapeController,
                     KoResourceManager *resourceManager);
+
+    /**
+     * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).
+     */
+    void toggleListNumbering(bool numberingEnabled);
 
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods
