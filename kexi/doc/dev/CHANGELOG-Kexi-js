@@ -101,6 +101,7 @@ Forms
 *Revert disabling "Save Record" action for editing cancelling
 Main Window
 *Hide Project Navigator pane completely when closing project
+*Update availability of "Import Tables" action when closing project
 
 2011-09-21
 General
