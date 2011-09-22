@@ -1975,6 +1975,7 @@ tristate KexiMainWindow::closeProject()
         d->navWasVisibleBeforeProjectClosing = d->navDockWidget->isVisible();
         d->navDockWidget->hide();
         d->navigator->setProject(0);
+        slotProjectNavigatorVisibilityChanged(true); // hide side tab
         //d->navigator->clear();
     }
     
