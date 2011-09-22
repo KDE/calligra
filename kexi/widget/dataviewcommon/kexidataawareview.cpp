@@ -198,10 +198,11 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 
 void KexiDataAwareView::slotUpdateSaveCancelActions()
 {
-    kDebug() << ":::::::::" << isDataEditingInProgress();
     // 'save row' enabled when editing and there's anything to save
     const bool editing = isDataEditingInProgress();
-    setAvailable("data_save_row", editing);
+    kDebug() << "editing::::::::" << editing;
+#warning this did not work well in forms: setAvailable("data_save_row", editing);
+    setAvailable("data_save_row", m_dataAwareObject->rowEditing());
     // 'cancel row changes' enabled when editing
     setAvailable("data_cancel_row_changes", m_dataAwareObject->rowEditing());
 }

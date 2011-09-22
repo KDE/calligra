@@ -141,14 +141,14 @@ void KexiDBLineEdit::setInvalidState(const QString& displayText)
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
     m_slotTextChanged_enabled = false;
-    setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+    setText(m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString()));
     setCursorPosition(0); //ok?
     m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
 {
-    return m_textFormatter.textToValue( text() );
+    return m_textFormatter.fromString(text());
 }
 
 void KexiDBLineEdit::slotTextChanged(const QString&)

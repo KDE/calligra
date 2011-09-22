@@ -73,12 +73,12 @@ public:
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
     virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-    /*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit inside \a rect
-     for a given font metrics \a fm.
+    /*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit
+     inside \a rect for a given font metrics \a fm.
      \return true a normal tooltip should be displayed (using QToolTip,) and false if
      no tooltip should be displayed or a custom tooltip was displayed internally (not yet supported).
-     This implementation converts the value to text using valueToText() if \a calue is not string to see
-     whether it can fit inside the cell's \a rect.
+     This implementation converts the value to text using KexiTextFormatter::toString()
+     if \a value is not string to see whether it can fit inside the cell's \a rect.
      If the cell is currentl focused (selected), \a focused is true. */
     virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
                                      bool focused);
