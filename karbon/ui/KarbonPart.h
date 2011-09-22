@@ -34,7 +34,7 @@
 
 #include <QMap>
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 
 #include <KoDocument.h>
 #include <KoUnit.h>
@@ -49,7 +49,7 @@ class KoDataCenterBase;
  * Keeps track of visual per document properties.
  * It loads initial settings and applies them to the document and its views.
  */
-class KARBONUI_EXPORT KarbonPart : public KoDocument, public KoShapeControllerBase
+class KARBONUI_EXPORT KarbonPart : public KoDocument, public KoShapeBasedDocumentBase
 {
     Q_OBJECT
 public:
