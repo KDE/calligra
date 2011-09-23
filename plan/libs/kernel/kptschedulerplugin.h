@@ -76,7 +76,18 @@ public:
     QString comment() const;
     /// Comment is normally set by the plugin loader, from Comment in the desktop file
     void setComment( const QString &name );
-
+    /// A more elaborate description suitable for use in what's this
+    virtual QString description() const { return QString(); }
+    /// The schedulers capabilities
+    enum Capabilities {
+        AvoidOverbooking = 1,
+        AllowOverbooking = 2,
+        ScheduleForward = 4,
+        ScheduleBackward = 8
+    };
+    /// Return the schedulers capabilities.
+    /// By default returns all capabilites
+    virtual int capabilities() const;
     /// Stop calculation of the schedule @p sm. Current result may be used.
     void stopCalculation( ScheduleManager *sm );
     /// Terminate calculation of the schedule @p sm. No results will be available.

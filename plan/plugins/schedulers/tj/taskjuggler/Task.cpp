@@ -781,7 +781,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                         workSlots = 1;
                     }
                 }
-                int freeSlots = bookedSlots > 0 ?  workSlots - bookedSlots : 1; // allways allow one booking
+                int freeSlots = bookedSlots > 0 ?  workSlots - bookedSlots : 1; // always allow one booking
                 if (freeSlots <= 0) {
                     if (DEBUGRS(6)) {
                         qDebug()<<"  Resource(s)"<<resStr<<"overloaded";

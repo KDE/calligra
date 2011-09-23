@@ -776,13 +776,16 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
     READ_PROLOGUE
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle);
 
+    //TODO: Handle the case when default values of attributes were not
+    //provided, those are described in the spec.
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            // Initializing the default style for the level
-            // In the end, there should be 9 levels
+            // Initializing the default style for the level.  At the end, there
+            // should be 9 levels
             if (qualifiedName().toString().startsWith("a:lvl")) {
                 defaultTextColors.push_back(QString());
                 defaultLatinFonts.push_back(QString());

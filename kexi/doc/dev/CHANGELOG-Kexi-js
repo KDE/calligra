@@ -99,6 +99,9 @@ Tabbed toolbar TODOS:
 2011-09-22
 Forms
 *Revert disabling "Save Record" action for editing cancelling
+Main Window
+*Hide Project Navigator pane completely when closing project
+*Update availability of "Import Tables" action when closing project
 
 2011-09-21
 General
@@ -113,7 +116,6 @@ General
 BUG:282445
 
 2011-09-17
-
 Table View
 *Fixed input mask for date, time and date/time data fields in table views
 BUG:272994
