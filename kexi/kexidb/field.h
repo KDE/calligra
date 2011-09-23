@@ -704,7 +704,7 @@ protected:
         QHash<QString, Type> str2num;
         QStringList names;
     protected:
-    bool m_initialized : 1;
+        bool m_initialized : 1;
     };
 
     //! @internal Used in m_typeGroupNames member to handle i18n'd type group names
@@ -716,7 +716,7 @@ protected:
         QHash<QString, TypeGroup> str2num;
         QStringList names;
     protected:
-    bool m_initialized : 1;
+        bool m_initialized : 1;
     };
 
     //! real i18n'd type names (and not-i18n'd type name strings)
