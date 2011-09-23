@@ -37,6 +37,8 @@
 // This is for hunting down the bugs 264602 and 263414 and 281670
 // Remove it once the bugs got fixed cause it slows down things in debug-mode without
 // any real need except hunting down those bugs!
+// Note that if it still crashes (and not asserts) then the reason is that we need to
+// make a deep copy of the m_castRoot in the RTree assignment-operator!
 #define HUNT_DYNAMIC_CAST_BUG
 
 namespace Calligra
