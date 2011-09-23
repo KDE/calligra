@@ -79,9 +79,9 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_paragraphStyle2(0),
         m_inStylesDotXml(inStylesDotXml),
         m_isHeading(isHeading),
+        m_inHeaderFooter(inHeaderFooter),
         m_outlineLevel(0),
         m_dropCapStatus(NoDropCap),
-        m_inHeaderFooter(inHeaderFooter),
         m_containsPageNumberField(false),
         m_combinedCharacters(false)
 {
@@ -734,12 +734,11 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addChildElement("style:drop-cap", contents);
 #endif
     }
-
     //TODO: introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
 
     // Tabulators, only if not in a list.  itbdMac = number of tabs stops
-    // defined for paragraph.  Must be >= 0 and <= 64.
-    if (pap.itbdMac && (pap.ilfo == 0)) {
+    // defined for paragraph.  Must be in <0,64>.
+    if (pap.itbdMac && ((pap.ilfo == 0) || (paragraph && paragraph->isHeading()))) {
         kDebug(30513) << "processing tab stops";
         //looks like we need to write these out with an xmlwriter
         QBuffer buf;
@@ -792,7 +791,9 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             default:
                 break;
             }
-            tmpWriter.addAttribute("style:leader-text", leader);
+            if (!leader.isNull()) {
+                tmpWriter.addAttribute("style:leader-text", leader);
+            }
             tmpWriter.endElement();//style:tab-stop
 
             if (tabLeader) {
@@ -993,11 +994,6 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     if (!preserveFontColor) {
         m_fontColor = QString();
     }
-}
-
-void Paragraph::setCombinedCharacters(bool isCombined)
-{
-    m_combinedCharacters = isCombined;
 }
 
 Paragraph::DropCapStatus Paragraph::dropCapStatus() const

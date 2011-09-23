@@ -1601,8 +1601,9 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
 #endif
             fontRef = i.cf.fontRef();
         }
+        //PowerPoint UI does not enable to change the font for numbered lists
         const MSO::FontEntityAtom* font = getFont(fontRef);
-        if (font) {
+        if (font && !i.pf.fBulletHasAutoNumber()) {
             QString family = QString::fromUtf16(font->lfFaceName.data(),
                                                 font->lfFaceName.size());
             ts.addProperty("fo:font-family", family, text);

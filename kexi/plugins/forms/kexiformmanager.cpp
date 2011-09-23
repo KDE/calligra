@@ -44,7 +44,7 @@
 
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
-#include <widget/kexicustompropertyfactory.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
 #include <core/KexiMainWindowIface.h>
 #include <kexiutils/SmallToolButton.h>
 

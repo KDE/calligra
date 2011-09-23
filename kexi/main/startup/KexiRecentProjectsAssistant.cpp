@@ -168,6 +168,7 @@ KexiRecentProjectsAssistant::~KexiRecentProjectsAssistant()
 
 void KexiRecentProjectsAssistant::previousPageRequested(KexiAssistantPage* page)
 {
+    Q_UNUSED(page);
 }
 
 void KexiRecentProjectsAssistant::nextPageRequested(KexiAssistantPage* page)
@@ -193,11 +194,15 @@ void KexiRecentProjectsAssistant::cancelRequested(KexiAssistantPage* page)
 void KexiRecentProjectsAssistant::showErrorMessage(
     const QString &title, const QString &details)
 {
+    Q_UNUSED(title);
+    Q_UNUSED(details);
 }
 
 void KexiRecentProjectsAssistant::showErrorMessage(
     KexiDB::Object *obj, const QString& msg)
 {
+    Q_UNUSED(obj);
+    Q_UNUSED(msg);
     /*
     QString _msg, _details;
     if (!obj) {

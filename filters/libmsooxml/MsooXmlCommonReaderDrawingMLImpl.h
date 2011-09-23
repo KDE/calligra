@@ -1633,7 +1633,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     QString fontSize = QString();
     QString bulletColor = QString();
 
-    // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
+    // Creating a list out of what we have, note that ppr MAY overwrite the
+    // list style
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
     int index = 0;
@@ -1753,7 +1754,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }
 
     // This approach has the risk that numbered lists might have different bullet sizes -> different lists
-    //  -> numbering won't work as expected
+    // -> numbering won't work as expected
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
         if (!fontSize.isEmpty()) {
@@ -4995,7 +4996,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     bool ok = false;
 
-    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -6110,7 +6111,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
 #undef CURRENT_EL
 #define CURRENT_EL txBody
 //! txBody handler (Shape Text Body)
-/*! ECMA-376, 20.1.2.2.40, p. 3050
+/*! ECMA-376, 20.1.2.2.40, p. 3048
  This element specifies the existence of text to be contained within the corresponding cell.
  Only used for text inside a cell.
 */

@@ -361,6 +361,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         ksheet->setBackgroundImageProperties(Calligra::Tables::Sheet::BackgroundImageProperties());
     }
 
+#ifndef OUTPUT_AS_ODS_FILE
+    d->outputDoc->map()->completeLoading(store);
+#endif
+
     delete store;
 
     // ensure at least one sheet

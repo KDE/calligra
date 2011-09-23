@@ -254,11 +254,15 @@ void KexiOpenProjectAssistant::cancelRequested(KexiAssistantPage* page)
 void KexiOpenProjectAssistant::showErrorMessage(
     const QString &title, const QString &details)
 {
+    Q_UNUSED(title);
+    Q_UNUSED(details);
 }
 
 void KexiOpenProjectAssistant::showErrorMessage(
     KexiDB::Object *obj, const QString& msg)
 {
+    Q_UNUSED(obj);
+    Q_UNUSED(msg);
 #if 0
     QString _msg, _details;
     if (!obj) {

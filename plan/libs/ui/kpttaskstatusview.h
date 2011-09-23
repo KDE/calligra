@@ -278,18 +278,21 @@ protected slots:
 private:
     struct ChartContents {
         ~ChartContents() {
+            delete effortplane;
+            delete costplane;
+            delete effortdiagram;
+            delete costdiagram;
             delete dateaxis;
-            if ( ! inuse ) {
-                delete effortplane;
-                delete costplane;
-            }
+            delete effortaxis;
+            delete costaxis;
         }
-        bool inuse;
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;
     
         KDChart::CartesianCoordinatePlane *effortplane;
         KDChart::CartesianCoordinatePlane *costplane;
+        KDChart::AbstractDiagram *effortdiagram;
+        KDChart::AbstractDiagram *costdiagram;
         KDChart::CartesianAxis *effortaxis;
         KDChart::CartesianAxis *costaxis;
         KDChart::CartesianAxis *dateaxis;

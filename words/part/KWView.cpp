@@ -56,7 +56,6 @@
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoShapeCreateCommand.h>
-#include <KoImageSelectionWidget.h>
 #include <KoResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
@@ -227,11 +226,9 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("insert_picture");
-    if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("format_page");
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("inline_frame");
+    action = actionCollection()->action("anchor");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("edit_cut");
     if (action) action->setEnabled(readWrite);
@@ -253,9 +250,9 @@ void KWView::updateReadWrite(bool readWrite)
 
 void KWView::setupActions()
 {
-    m_actionFormatFrameSet  = new KAction(i18n("Frame/Frameset Properties"), this);
+    m_actionFormatFrameSet  = new KAction(i18n("Shape Properties..."), this);
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet);
-    m_actionFormatFrameSet->setToolTip(i18n("Alter frameset properties"));
+    m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
@@ -280,7 +277,7 @@ void KWView::setupActions()
     actionCollection()->addAction("format_footer", m_actionViewFooter);
     m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
-    m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
+    m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special shapes at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
         m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
@@ -290,23 +287,23 @@ void KWView::setupActions()
     m_actionViewSnapToGrid->setChecked(m_snapToGrid);
     connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
-    m_actionRaiseFrame  = new KAction(KIcon("raise"), i18n("Raise Frame"), this);
+    m_actionRaiseFrame  = new KAction(KIcon("raise"), i18n("Raise Shape"), this);
     actionCollection()->addAction("raiseframe", m_actionRaiseFrame);
     m_actionRaiseFrame->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
-    m_actionRaiseFrame->setToolTip(i18n("Raise the currently selected frame so that it appears above "
-                                        "all the other frames"));
-    m_actionRaiseFrame->setWhatsThis(i18n("Raise the currently selected frame so that it appears "
-                                          "above all the other frames. This is only useful if frames overlap each other. If multiple "
-                                          "frames are selected they are all raised in turn."));
+    m_actionRaiseFrame->setToolTip(i18n("Raise the currently selected shape so that it appears above "
+                                        "all the other shape"));
+    m_actionRaiseFrame->setWhatsThis(i18n("Raise the currently selected shape so that it appears "
+                                          "above all the other shapes. This is only useful if shapes overlap each other. If multiple "
+                                          "shapes are selected they are all raised in turn."));
     connect(m_actionRaiseFrame, SIGNAL(triggered()), this, SLOT(raiseFrame()));
 
-    m_actionLowerFrame  = new KAction(KIcon("lower"), i18n("Lower Frame"), this);
+    m_actionLowerFrame  = new KAction(KIcon("lower"), i18n("Lower Shape"), this);
     actionCollection()->addAction("lowerframe", m_actionLowerFrame);
     m_actionLowerFrame->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_L));
-    m_actionLowerFrame->setToolTip(i18n("Lower the currently selected frame so that it disappears under "
-                                        "any frame that overlaps it"));
-    m_actionLowerFrame->setWhatsThis(i18n("Lower the currently selected frame so that it disappears under "
-                                          "any frame that overlaps it. If multiple frames are selected they are all lowered in turn."));
+    m_actionLowerFrame->setToolTip(i18n("Lower the currently selected shape so that it disappears under "
+                                        "any shape that overlaps it"));
+    m_actionLowerFrame->setWhatsThis(i18n("Lower the currently selected shape so that it disappears under "
+                                          "any shape that overlaps it. If multiple shape are selected they are all lowered in turn."));
     connect(m_actionLowerFrame, SIGNAL(triggered()), this, SLOT(lowerFrame()));
 
     m_actionBringToFront = new KAction(KIcon("bring_forward"), i18n("Bring to Front"), this);
@@ -347,11 +344,6 @@ void KWView::setupActions()
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
 
-    action = new KAction(i18n("Picture..."), this);
-    action->setToolTip(i18n("Insert a picture into document"));
-    actionCollection()->addAction("insert_picture", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertImage()));
-
     action = new KAction(i18n("Footnote/Endnote..."), this);
     action->setToolTip(i18n("Insert a footnote referencing the selected text"));
     actionCollection()->addAction("insert_footendnote", action);
@@ -379,36 +371,33 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 #endif
 
-    action = new KAction(i18n("Make inline"), this);
-    action->setToolTip(i18n("Convert current frame to an inline frame"));
-    action->setWhatsThis(i18n("Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position."));
-    actionCollection()->addAction("inline_frame", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
-
-    action = new KAction(i18n("As Character"), this);
+    KActionMenu *anchorActionMenu = new KActionMenu(i18n("Anchor"), this);
+    QActionGroup *anchoringActionGroup = new QActionGroup(this);
+    anchoringActionGroup->setExclusive(true);
+    action = new KToggleAction(i18n("As Character"), this);
     action->setToolTip(i18n("Anchor the current shape as a character in the text"));
-    actionCollection()->addAction("anchor_as_character", action);
+    anchorActionMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
+    action->setActionGroup(anchoringActionGroup);
 
-    action = new KAction(i18n("To Character"), this);
+    action = new KToggleAction(i18n("To Character"), this);
     action->setToolTip(i18n("Anchor the current shape to the character at the current position"));
-    actionCollection()->addAction("anchor_to_character", action);
+    anchorActionMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(anchorToChar()));
+    action->setActionGroup(anchoringActionGroup);
 
-    action = new KAction(i18n("To Paragraph"), this);
+    action = new KToggleAction(i18n("To Paragraph"), this);
     action->setToolTip(i18n("Anchor the current shape to current paragraph"));
-    actionCollection()->addAction("anchor_to_paragraph", action);
+    anchorActionMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(anchorToParagraph()));
+    action->setActionGroup(anchoringActionGroup);
 
-    action = new KAction(i18n("To Page"), this);
+    action = new KToggleAction(i18n("To Page"), this);
     action->setToolTip(i18n("Anchor the current shape to current page"));
-    actionCollection()->addAction("anchor_to_page", action);
+    anchorActionMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(anchorToPage()));
-
-    action = new KAction(i18n("Set Floating"), this);
-    action->setToolTip(i18n("Set the current shape floating"));
-    actionCollection()->addAction("set_shape_floating", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(setFloating()));
+    action->setActionGroup(anchoringActionGroup);
+    actionCollection()->addAction("anchor", anchorActionMenu);
 
     action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
@@ -458,7 +447,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
 }
 
-    action = new KAction(i18n("Select All Frames"), this);
+    action = new KAction(i18n("Select All Shapes"), this);
 
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
@@ -555,85 +544,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
             m_actionViewPreviewMode = 0;
         }
 
-        // -------------- Insert menu
-
-
-        m_actionInsertLink = new KAction(i18n("Link..."), 0,
-                this, SLOT(insertLink()),
-                actionCollection(), "insert_link");
-        actionInsertLink->setToolTip(i18n("Insert a Web address, email address or hyperlink to a file"));
-        m_actionInsertLink->setWhatsThis(i18n("Insert a Web address, email address or hyperlink to a file."));
-
-        m_actionInsertComment = new KAction(i18n("Comment..."), 0,
-                this, SLOT(insertComment()),
-                actionCollection(), "insert_comment");
-        m_actionInsertComment->setToolTip(i18n("Insert a comment about the selected text"));
-        m_actionInsertComment->setWhatsThis(i18n("Insert a comment about the selected text. These comments are not designed to appear on the final page."));
-
-        m_actionEditComment = new KAction(i18n("Edit Comment..."), 0,
-                this,SLOT(editComment()),
-                actionCollection(), "edit_comment");
-        m_actionEditComment->setToolTip(i18n("Change the content of a comment"));
-        m_actionEditComment->setWhatsThis(i18n("Change the content of a comment."));
-
-        m_actionRemoveComment = new KAction(i18n("Remove Comment"), 0,
-                this,SLOT(removeComment()),
-                actionCollection(), "remove_comment");
-        m_actionRemoveComment->setToolTip(i18n("Remove the selected document comment"));
-        m_actionRemoveComment->setWhatsThis(i18n("Remove the selected document comment."));
-        m_actionCopyTextOfComment = new KAction(i18n("Copy Text of Comment..."), 0,
-                this,SLOT(copyTextOfComment()),
-                actionCollection(), "copy_text_comment");
-
-
-        m_actionInsertFootEndNote = new KAction(i18n("Footnote/Endnote..."), 0,
-                this, SLOT(insertFootNote()),
-                actionCollection(), "insert_footendnote");
-        m_actionInsertFootEndNote->setToolTip(i18n("Insert a footnote referencing the selected text"));
-        m_actionInsertFootEndNote->setWhatsThis(i18n("Insert a footnote referencing the selected text."));
-
-        m_actionInsertContents = new KAction(i18n("Table of Contents"), 0,
-                this, SLOT(insertContents()),
-                actionCollection(), "insert_contents");
-        m_actionInsertContents->setToolTip(i18n("Insert table of contents at the current cursor position"));
-        m_actionInsertContents->setWhatsThis(i18n("Insert table of contents at the current cursor position."));
-
-        actionInsertVariable = new KActionMenu(i18n("Variable"),
-                actionCollection(), "insert_variable");
-
-        // The last argument is only needed if a submenu is to be created
-        addVariableActions(VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("Document Information"));
-        addVariableActions(VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("Date"));
-        addVariableActions(VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("Time"));
-        addVariableActions(VT_PGNUM, KoPageVariable::actionTexts(), actionInsertVariable, i18n("Page"));
-        addVariableActions(VT_STATISTIC, KWStatisticVariable::actionTexts(), actionInsertVariable, i18n("Statistic"));
-
-        m_actionInsertCustom = new KActionMenu(i18n("Custom"),
-                actionCollection(), "insert_custom");
-        actionInsertVariable->insert(m_actionInsertCustom);
-
-        //addVariableActions(VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null);
-
-        addVariableActions(VT_MAILMERGE, KoMailMergeVariable::actionTexts(), actionInsertVariable, QString::null);
-
-        actionInsertVariable->popupMenu()->insertSeparator();
-        m_actionRefreshAllVariable = new KAction(i18n("Refresh All Variables"), 0,
-                this, SLOT(refreshAllVariable()),
-                actionCollection(), "refresh_all_variable");
-        m_actionRefreshAllVariable->setToolTip(i18n("Update all variables to current values"));
-        m_actionRefreshAllVariable->setWhatsThis(i18n("Update all variables in the document to current values.<br><br>This will update page numbers, dates or any other variables that need updating."));
-
-        actionInsertVariable->insert(m_actionRefreshAllVariable);
-
-        m_actionInsertExpression = new KActionMenu(i18n("Expression"),
-                actionCollection(), "insert_expression");
-        loadexpressionActions(m_actionInsertExpression);
-
-        m_actionInsertFile = new KAction(i18n("File..."), 0,
-                this, SLOT(insertFile()),
-                actionCollection(), "insert_file");
-
-
         // ------------------------- Format menu
         m_actionFormatFrameStylist = new KAction(i18n("Frame Style Manager"), 0,
                 this, SLOT(extraFrameStylist()),
@@ -641,146 +551,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionFormatFrameStylist->setToolTip(i18n("Change attributes of framestyles"));
         m_actionFormatFrameStylist->setWhatsThis(i18n("Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box."));
 
-        // ---------------------------- frame toolbar actions
-
-        m_actionFrameStyleMenu = new KActionMenu(i18n("Framestyle"),
-                actionCollection(), "frame_stylemenu");
-        m_actionFrameStyle = new KSelectAction(i18n("Framestyle"),
-                actionCollection(), "frame_style");
-        connect(m_actionFrameStyle, SIGNAL(activated(int)),
-                this, SLOT(frameStyleSelected(int)));
-        updateFrameStyleList();
-        m_actionBorderOutline = new KToggleAction(KIcon("borderoutline"), i18n("Border Outline"),
-                actionCollection(), "border_outline");
-        connect(m_actionBorderOutline, SIGNAL(triggered(bool)), this, SLOT(borderOutline()));
-        m_actionBorderLeft = new KToggleAction(KIcon("borderleft"), i18n("Border Left"),
-                actionCollection(), "border_left");
-        connect(m_actionBorderLeft, SIGNAL(triggered(bool)), this, SLOT(borderLeft()));
-        m_actionBorderRight = new KToggleAction(KIcon("borderright"), i18n("Border Right"),
-                actionCollection(), "border_right");
-        connect(m_actionBorderRight, SIGNAL(triggered(bool)), this, SLOT(borderRight()));
-        m_actionBorderTop = new KToggleAction(KIcon("bordertop"), i18n("Border Top"),
-                actionCollection(), "border_top");
-        connect(m_actionBorderTop, SIGNAL(triggered(bool)), this, SLOT(borderTop()));
-        m_actionBorderBottom = new KToggleAction(KIcon("borderbottom"), i18n("Border Bottom"),
-                actionCollection(), "border_bottom");
-        connect(m_actionBorderBottom, SIGNAL(triggered(bool)), this, SLOT(borderBottom()));
-        m_actionBorderStyle = new KSelectAction(i18n("Border Style"),
-                actionCollection(), "border_style");
-
-        QStringList lst;
-        lst << KoBorder::getStyle(KoBorder::SOLID);
-        lst << KoBorder::getStyle(KoBorder::DASH);
-        lst << KoBorder::getStyle(KoBorder::DOT);
-        lst << KoBorder::getStyle(KoBorder::DASH_DOT);
-        lst << KoBorder::getStyle(KoBorder::DASH_DOT_DOT);
-        lst << KoBorder::getStyle(KoBorder::DOUBLE_LINE);
-        m_actionBorderStyle->setItems(lst);
-        m_actionBorderWidth = new KSelectAction(i18n("Border Width"),
-                actionCollection(), "border_width");
-        lst.clear();
-        for (unsigned int i = 1; i < 10; i++)
-            lst << QString::number(i);
-        m_actionBorderWidth->setItems(lst);
-        m_actionBorderWidth->setCurrentItem(0);
-
-        m_actionBorderColor = new TKSelectColorAction(i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", true);
-        m_actionBorderColor->setDefaultColor(QColor());
-
-
-        // ---------------------- Table menu
-        m_actionTablePropertiesMenu = new KAction(i18n("Properties"), 0,
-                this, SLOT(tableProperties()),
-                actionCollection(), "table_propertiesmenu");
-        m_actionTablePropertiesMenu->setToolTip(i18n("Adjust properties of the current table"));
-        m_actionTablePropertiesMenu->setWhatsThis(i18n("Adjust properties of the current table."));
-
-        m_actionTableInsertRow = new KAction(i18n("Insert Row..."), "insert_table_row", 0,
-                this, SLOT(tableInsertRow()),
-                actionCollection(), "table_insrow");
-        m_actionTableInsertRow->setToolTip(i18n("Insert one or more rows at cursor location"));
-        m_actionTableInsertRow->setWhatsThis(i18n("Insert one or more rows at current cursor location."));
-
-        m_actionTableInsertCol = new KAction(i18n("Insert Column..."), "insert_table_col", 0,
-                this, SLOT(tableInsertCol()),
-                actionCollection(), "table_inscol");
-        m_actionTableInsertCol->setToolTip(i18n("Insert one or more columns into the current table"));
-        m_actionTableInsertCol->setWhatsThis(i18n("Insert one or more columns into the current table."));
-
-        m_actionTableDelRow = new KAction(0, "delete_table_row", 0,
-                this, SLOT(tableDeleteRow()),
-                actionCollection(), "table_delrow");
-        m_actionTableDelRow->setToolTip(i18n("Delete selected rows from the current table"));
-        m_actionTableDelRow->setWhatsThis(i18n("Delete selected rows from the current table."));
-
-        m_actionTableDelCol = new KAction(0, "delete_table_col", 0,
-                this, SLOT(tableDeleteCol()),
-                actionCollection(), "table_delcol");
-        m_actionTableDelCol->setToolTip(i18n("Delete selected columns from the current table"));
-        m_actionTableDelCol->setWhatsThis(i18n("Delete selected columns from the current table."));
-
-        m_actionTableResizeCol = new KAction(i18n("Resize Column..."), 0,
-                this, SLOT(tableResizeCol()),
-                actionCollection(), "table_resizecol");
-        m_actionTableResizeCol->setToolTip(i18n("Change the width of the currently selected column"));
-        m_actionTableResizeCol->setWhatsThis(i18n("Change the width of the currently selected column."));
-
-
-        m_actionTableJoinCells = new KAction(i18n("Join Cells"), 0,
-                this, SLOT(tableJoinCells()),
-                actionCollection(), "table_joincells");
-        m_actionTableJoinCells->setToolTip(i18n("Join two or more cells into one large cell"));
-        m_actionTableJoinCells->setWhatsThis(i18n("Join two or more cells into one large cell.<p>This is a good way to create titles and labels within a table."));
-
-        m_actionTableSplitCells= new KAction(i18n("Split Cell..."), 0,
-                this, SLOT(tableSplitCells()),
-                actionCollection(), "table_splitcells");
-        m_actionTableSplitCells->setToolTip(i18n("Split one cell into two or more cells"));
-        m_actionTableSplitCells->setWhatsThis(i18n("Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once."));
-
-        m_actionTableProtectCells= new KToggleAction(i18n("Protect Cells"), 0, 0, 0,
-                actionCollection(), "table_protectcells");
-        m_actionTableProtectCells->setToolTip(i18n("Prevent changes to content of selected cells"));
-        connect (m_actionTableProtectCells, SIGNAL(toggled(bool)), this,
-                SLOT(tableProtectCells(bool)));
-
-        m_actionTableProtectCells->setWhatsThis(i18n("Toggles cell protection on and off.<br><br>When cell protection is on, the user can not alter the content or formatting of the text within the cell."));
-
-        m_actionTableDelete = new KAction(i18n("Delete Table"), 0,
-                this, SLOT(tableDelete()),
-                actionCollection(), "table_delete");
-        m_actionTableDelete->setToolTip(i18n("Delete the entire table"));
-        m_actionTableDelete->setWhatsThis(i18n("Deletes all cells and the content within the cells of the currently selected table."));
-
-
-        m_actionTableStylist = new KAction(i18n("Table Style Manager"), 0,
-                this, SLOT(tableStylist()),
-                actionCollection(), "table_stylist");
-        m_actionTableStylist->setToolTip(i18n("Change attributes of tablestyles"));
-        m_actionTableStylist->setWhatsThis(i18n("Change textstyle and framestyle of the tablestyles.<p>Multiple tablestyles can be changed using the dialog box."));
-
-        m_actionTableStyleMenu = new KActionMenu(i18n("Tablestyle"),
-                actionCollection(), "table_stylemenu");
-        m_actionTableStyle = new KSelectAction(i18n("Tablestyle"),
-                actionCollection(), "table_style");
-        connect(m_actionTableStyle, SIGNAL(activated(int)),
-                this, SLOT(tableStyleSelected(int)));
-        updateTableStyleList();
-
-        m_actionConvertTableToText = new KAction(i18n("Convert Table to Text"), 0,
-                this, SLOT(convertTableToText()),
-                actionCollection(), "convert_table_to_text");
-        m_actionSortText= new KAction(i18n("Sort Text..."), 0,
-                this, SLOT(sortText()),
-                actionCollection(), "sort_text");
-
-        m_actionAddPersonalExpression= new KAction(i18n("Add Expression"), 0,
-                this, SLOT(addPersonalExpression()),
-                actionCollection(), "add_personal_expression");
-
-
         // ---------------------- Tools menu
-
 
         m_actionAllowAutoFormat = new KToggleAction(i18n("Enable Autocorrection"), 0,
                 this, SLOT(slotAllowAutoFormat()),
@@ -811,8 +582,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionChangeCase->setToolTip(i18n("Alter the capitalization of selected text"));
         m_actionChangeCase->setWhatsThis(i18n("Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from upper case to lower case and from lower case to upper case in one move."));
 
-        //------------------------ Settings menu
-        m_actionConfigure = actionCollection()->addAction(KStandardAction::Preferences,  "configure", this, SLOT(configure()));
 
         //------------------------ Menu frameSet
         QAction *actionChangePicture=new KAction(i18n("Change Picture..."),"frame_image",0,
@@ -827,36 +596,9 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionConfigureHeaderFooter->setToolTip(i18n("Configure the currently selected header or footer"));
         m_actionConfigureHeaderFooter->setWhatsThis(i18n("Configure the currently selected header or footer."));
 
-        m_actionOpenLink = new KAction(i18n("Open Link"), 0,
-                this, SLOT(openLink()),
-                actionCollection(), "open_link");
-        m_actionOpenLink->setToolTip(i18n("Open the link with the appropriate application"));
-        m_actionOpenLink->setWhatsThis(i18n("Open the link with the appropriate application.<br><br>Web addresses are opened in a browser.<br>Email addresses begin a new message addressed to the link.<br>File links are opened by the appropriate viewer or editor."));
-
-        m_actionChangeLink=new KAction(i18n("Change Link..."), 0,
-                this,SLOT(changeLink()),
-                actionCollection(), "change_link");
-        m_actionChangeLink->setToolTip(i18n("Change the content of the currently selected link"));
-        m_actionChangeLink->setWhatsThis(i18n("Change the details of the currently selected link."));
-
-        m_actionCopyLink = new KAction(i18n("Copy Link"), 0,
-                this, SLOT(copyLink()),
-                actionCollection(), "copy_link");
-
         m_actionAddLinkToBookmak = new KAction(i18n("Add to Bookmark"), 0,
                 this, SLOT(addToBookmark()),
                 actionCollection(), "add_to_bookmark");
-
-        m_actionRemoveLink = new KAction(i18n("Remove Link"), 0,
-                this, SLOT(removeLink()),
-                actionCollection(), "remove_link");
-
-        m_actionShowDocStruct = new KToggleAction(i18n("Show Doc Structure"), 0,
-                this, SLOT(showDocStructure()),
-                actionCollection(), "show_docstruct");
-        m_actionShowDocStruct->setCheckedState(i18n("Hide Doc Structure"));
-        m_actionShowDocStruct->setToolTip(i18n("Open document structure sidebar"));
-        m_actionShowDocStruct->setWhatsThis(i18n("Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc."));
 
         m_actionConfigureCompletion = new KAction(i18n("Configure Completion..."), 0,
                 this, SLOT(configureCompletion()),
@@ -866,12 +608,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
 
 
         new KAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
-
-        new KAction(i18n("Increase Numbering Level"), Qt::ALT+Qt::Key_Right,
-                this, SLOT(slotIncreaseNumberingLevel()), actionCollection(), "increase_numbering_level");
-        new KAction(i18n("Decrease Numbering Level"), Qt::ALT+Qt::Key_Left,
-                this, SLOT(slotDecreaseNumberingLevel()), actionCollection(), "decrease_numbering_level");
-
 
         // --------
         m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
@@ -933,10 +669,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionCreateFrameStyle->setToolTip(i18n("Create a new style based on the currently selected frame"));
         m_actionCreateFrameStyle->setWhatsThis(i18n("Create a new framestyle based on the currently selected frame."));
 
-        m_actionConvertToTextBox = new KAction(i18n("Convert to Text Box"), 0,
-                this, SLOT(convertToTextBox()),
-                actionCollection(), "convert_to_text_box");
-
         m_actionSpellIgnoreAll = new KAction(i18n("Ignore All"), 0,
                 this, SLOT(slotAddIgnoreAllWord()),
                 actionCollection(), "ignore_all");
@@ -944,10 +676,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionAddWordToPersonalDictionary=new KAction(i18n("Add Word to Dictionary"),0,
                 this, SLOT(addWordToDictionary()),
                 actionCollection(), "add_word_to_dictionary");
-
-        m_actionEmbeddedStoreInternal=new KToggleAction(i18n("Store Document Internally"),0,
-                this, SLOT(embeddedStoreInternal()),
-                actionCollection(), "embedded_store_internal");
 
     */
 }
@@ -1184,7 +912,7 @@ void KWView::editSemanticStylesheets()
 #endif
 }
 
-void KWView::inlineFrame()
+KoTextAnchor *KWView::anchorForSelectedFrame(bool create)
 {
     Q_ASSERT(kwdocument()->mainFrameSet());
     KoSelection *selection = canvasBase()->shapeManager()->selection();
@@ -1193,75 +921,96 @@ void KWView::inlineFrame()
     foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
         if (shape->isGeometryProtected())
             continue;
-        if (shape->parent())
-            continue;
         targetShape = shape;
         break; // TODO group before...
     }
     if (targetShape == 0) {
-        KMessageBox::error(this, i18n("Please select at least one non-locked shape and try again"));
-        return;
+        kDebug(32001) << "bailing out...no shape to anchor";
+        return 0;
     }
 
-    selection->deselectAll();
-    KWFrame *frameForAnchor = 0;
-    int area = 0;
-    QRectF br = targetShape->boundingRect();
-    // now find the frame that is closest to the frame we want to inline.
-    foreach (KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
-        QRectF intersection = br.intersected(frame->shape()->boundingRect());
-        int intersectArea = qRound(intersection.width() * intersection.height());
-        if (intersectArea > area) {
-            frameForAnchor = frame;
-            area = intersectArea;
-        } else if (frameForAnchor == 0) {
-            // TODO check distance between frames or something.
+    //try and find out if targetShape is already anchored
+    KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
+    foreach (KoInlineObject *inlineObject, manager->inlineTextObjects()) {
+        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
+        if (anchor && anchor->shape() == targetShape) {
+            return anchor;
         }
     }
 
-    if (frameForAnchor == 0) {/* can't happen later on... */
-        kDebug(32001) << "bailing out..."; return;
+    if (create) {
+        selection->deselectAll();
+        KWFrame *frameForAnchor = 0;
+        int area = 0;
+        QRectF br = targetShape->boundingRect();
+        // now find the frame that is closest to the frame we want to inline.
+        foreach (KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
+            QRectF intersection = br.intersected(frame->shape()->boundingRect());
+            int intersectArea = qRound(intersection.width() * intersection.height());
+            if (intersectArea > area) {
+                frameForAnchor = frame;
+                area = intersectArea;
+            } else if (frameForAnchor == 0) {
+                // TODO check distance between frames or something.
+            }
+        }
+
+        if (frameForAnchor == 0) {/* can't happen later on... */
+            kDebug(32001) << "bailing out...no shape to anchor to";
+            return 0;
+        }
+
+
+        QPointF absPos = targetShape->absolutePosition();
+        targetShape->setParent(static_cast<KoShapeContainer*>(frameForAnchor->shape()));
+        targetShape->setAbsolutePosition(absPos);
+
+        KoTextAnchor *anchor = new KoTextAnchor(targetShape);
+
+        selection->select(frameForAnchor->shape());
+
+        KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+        Q_ASSERT(editor);
+
+        editor->insertInlineObject(anchor);
+        return anchor;
     }
-
-    selection->select(frameForAnchor->shape());
-
-    QPointF absPos = targetShape->absolutePosition();
-    targetShape->setParent(static_cast<KoShapeContainer*>(frameForAnchor->shape()));
-    targetShape->setAbsolutePosition(absPos);
-
-    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    Q_ASSERT(editor);
-    KoTextAnchor *anchor = new KoTextAnchor(targetShape);
-    anchor->setOffset(QPointF(0, -targetShape->size().height()));
-    // TODO move caret
-    editor->insertInlineObject(anchor);
+    return 0;
 }
 
 void KWView::anchorAsChar()
 {
+    KoTextAnchor *anchor = anchorForSelectedFrame(true);
 
+    if (anchor) {
+        anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
+        anchor->shape()->notifyChanged();
+    }
 }
 
 void KWView::anchorToChar()
 {
+    KoTextAnchor *anchor = anchorForSelectedFrame(true);
 
+    if (anchor) {
+        anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
+        anchor->shape()->notifyChanged();
+    }
 }
 
 void KWView::anchorToParagraph()
 {
-
+    anchorToChar(); //FIXME library code doesn't support this fully yet so just do char
 }
 
 void KWView::anchorToPage()
 {
+    KoTextAnchor *anchor = anchorForSelectedFrame(false);
 
-}
-
-void KWView::setFloating()
-{
-
+    if (anchor) {
+        m_document->inlineTextObjectManager()->removeInlineObject(anchor);
+        anchor->shape()->notifyChanged();
+    }
 }
 
 
@@ -1387,39 +1136,6 @@ void KWView::removeFrameClipping()
     }
 }
 
-void KWView::insertImage()
-{
-    KoShape *shape = KoImageSelectionWidget::selectImageShape(m_document->resourceManager(), this);
-    if (shape) {
-        if (m_currentPage.isValid()) {
-            QRectF page = m_currentPage.rect();
-            // make the shape be on the current page, and fit inside the current page.
-            if (page.width() < shape->size().width() || page.height() < shape->size().height()) {
-                QSizeF newSize(page.width() * 0.9, page.height() * 0.9);
-                const qreal xRatio = newSize.width() / shape->size().width();
-                const qreal yRatio = newSize.height() / shape->size().height();
-                if (xRatio > yRatio) // then lets make the vertical set the size.
-                    newSize.setWidth(shape->size().width() * yRatio);
-                else
-                    newSize.setHeight(shape->size().height() * xRatio);
-                shape->setSize(newSize);
-            }
-            shape->setPosition(page.topLeft());
-
-            int zIndex = 0;
-            foreach (KoShape *s, m_canvas->shapeManager()->shapesAt(page))
-                zIndex = qMax(s->zIndex(), zIndex);
-            shape->setZIndex(zIndex+1);
-        }
-
-        KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_document, shape);
-        KoSelection *selection = m_canvas->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select(shape);
-        m_document->addCommand(cmd);
-    }
-}
-
 void KWView::insertFootEndNote()
 {
     KWInsertInlineNoteDialog *diag = new KWInsertInlineNoteDialog(m_document, this);
@@ -1469,7 +1185,7 @@ void KWView::selectionChanged()
     // actions that need at least one shape selected
     QAction *action = actionCollection()->action("create_linked_frame");
     if (action) action->setEnabled(shape);
-    action = actionCollection()->action("inline_frame");
+    action = actionCollection()->action("anchor");
     if (action) action->setEnabled(shape && kwdocument()->mainFrameSet());
 
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
@@ -1809,7 +1525,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
             // anchor
             // XXX: What about: HFrame, HFrameContent, HFrameEndMargin, HFrameStartMargin?
-            anchor->setBehavesAsCharacter(false);
+            anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
             if (uiInsertImage.rAnchorPage->isChecked()) {
                 // XXX: or: VPageContent?
                 anchor->setVerticalRel(KoTextAnchor::VPage);
@@ -1833,7 +1549,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             else if (uiInsertImage.rAnchorAsCharacter->isChecked()) {
                 anchor->setVerticalRel(KoTextAnchor::VBaseline);
                 anchor->setHorizontalRel(KoTextAnchor::HChar);
-                anchor->setBehavesAsCharacter(true);
+                anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
             }
 
             // horizontal alignment

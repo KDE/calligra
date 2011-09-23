@@ -621,18 +621,18 @@ bool KexiProject::retrieveItems()
             dict = new KexiPart::ItemDict();
             d->itemDicts.insert(partClass, dict);
         }
-        KexiPart::Item *it = new KexiPart::Item();
         int ident = cursor->value(0).toInt(&ok);
         QString objName(cursor->value(1).toString());
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
                 && KexiUtils::isIdentifier(objName))
         {
+            KexiPart::Item *it = new KexiPart::Item();
             it->setIdentifier(ident);
-            it->setPartClass(partClass); //js: may be not null???
+            it->setPartClass(partClass);
             it->setName(objName);
             it->setCaption(cursor->value(2).toString());
+            dict->insert(it->identifier(), it);
         }
-        dict->insert(it->identifier(), it);
 //  kDebug() << "ITEM ADDED == "<<objName <<" id="<<ident;
     }
 
