@@ -472,11 +472,11 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
             if ( capabilities & SchedulerPlugin::AllowOverbooking ) {
                 return sm->allowOverbooking()
                             ? i18nc( "@info:tooltip", "Allow overbooking of resources" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 allways allows overbooking of resources", sm->schedulerPlugin()->name() );
+                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", sm->schedulerPlugin()->name() );
             }
             if ( capabilities & SchedulerPlugin::AvoidOverbooking ) {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 allways avoids overbooking of resources", sm->schedulerPlugin()->name() )
+                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", sm->schedulerPlugin()->name() )
                             : i18nc( "@info:tooltip", "Avoid overbooking resources" );
             }
             break;
@@ -696,13 +696,13 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
             }
             if ( capabilities & SchedulerPlugin::ScheduleForward ) {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 allways schedules from target start time", sm->schedulerPlugin()->name() )
+                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", sm->schedulerPlugin()->name() )
                             : i18nc( "@info:tooltip", "Schedule project from target start time" );
             }
             if ( capabilities & SchedulerPlugin::ScheduleBackward ) {
                 return sm->schedulingDirection()
                             ? i18nc( "@info:tooltip", "Schedule project from target end time" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 allways schedules from target end time", sm->schedulerPlugin()->name() );
+                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", sm->schedulerPlugin()->name() );
             }
             break;
         case Role::EnumList:
