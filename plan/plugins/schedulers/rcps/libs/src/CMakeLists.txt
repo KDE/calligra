@@ -24,16 +24,16 @@ else()
 endif()
 
 if(WIN32)
-    kde4_add_library(librcps_plan STATIC ${librcps_LIB_SRCS})
+    kde4_add_library(rcps_plan STATIC ${librcps_LIB_SRCS})
 else(WIN32)
-    kde4_add_library(librcps_plan SHARED ${librcps_LIB_SRCS})
+    kde4_add_library(rcps_plan SHARED ${librcps_LIB_SRCS})
 endif(WIN32)
 
 target_link_libraries(
-    librcps_plan
+    rcps_plan
     ${CMAKE_THREAD_LIBS_INIT}
 )
 
-set_target_properties(librcps_plan PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(rcps_plan PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS librcps_plan ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS rcps_plan ${INSTALL_TARGETS_DEFAULT_ARGS})

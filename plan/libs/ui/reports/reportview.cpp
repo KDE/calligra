@@ -704,7 +704,7 @@ void ReportDesignDialog::slotSaveToView()
 void ReportDesignDialog::slotViewCreated( ViewBase *view )
 {
     m_view = dynamic_cast<ReportView*>( view );
-    saveToView(); // allways save
+    saveToView(); // always save
 }
 
 void ReportDesignDialog::saveToView()

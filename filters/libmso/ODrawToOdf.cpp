@@ -178,7 +178,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // dr3d:texture-mode
     // dr3d:vertical-segments
     // draw:auto-grow-height
-    style.addProperty("draw:auto-grow-height", "false", gt);
+    style.addProperty("draw:auto-grow-height", ds.fFitShapeToText(), gt);
     // draw:auto-grow-width
     style.addProperty("draw:auto-grow-width", "false", gt);
     // draw:blue

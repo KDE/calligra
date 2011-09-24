@@ -734,12 +734,11 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addChildElement("style:drop-cap", contents);
 #endif
     }
-
     //TODO: introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
 
     // Tabulators, only if not in a list.  itbdMac = number of tabs stops
     // defined for paragraph.  Must be in <0,64>.
-    if (pap.itbdMac && ((pap.ilfo == 0) || (paragraph->isHeading()))) {
+    if (pap.itbdMac && ((pap.ilfo == 0) || (paragraph && paragraph->isHeading()))) {
         kDebug(30513) << "processing tab stops";
         //looks like we need to write these out with an xmlwriter
         QBuffer buf;

@@ -50,7 +50,7 @@ void Slider::setGrid( DateTimeGrid *grid )
 {
     m_grid = grid;
     if ( grid ) {
-        int pos = -1; // daywidth allways >= 0.1
+        int pos = -1; // daywidth always >= 0.1
         for ( qreal dw = grid->dayWidth(); dw >= 0.1 && pos < maximum(); ++pos ) {
             dw *= 1.0 / 1.1;
         }
