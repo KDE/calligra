@@ -5757,7 +5757,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - [done] distR (Distance From Text on Right Edge) (see also: inline)
  - [done] distT (Distance From Text on Top Edge) (see also: inline)
  - hidden (Hidden)
- - layoutInCell (Layout In Table Cell)
+ - [done] layoutInCell (Layout In Table Cell)
  - locked (Lock Anchor)
  - [done] relativeHeight (Relative Z-Ordering Position)
  - simplePos (Page Positioning)
@@ -5793,6 +5793,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     if (!relativeHeight.isEmpty()) {
         m_z_index = relativeHeight.toInt();
     }
+
+    TRY_READ_ATTR_WITHOUT_NS(layoutInCell)
+    m_currentDrawStyle->addProperty("style:flow-with-text",
+                                    MSOOXML::Utils::convertBooleanAttr(layoutInCell, false));
 
     behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
     allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());
