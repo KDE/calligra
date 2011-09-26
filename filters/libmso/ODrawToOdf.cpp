@@ -29,6 +29,9 @@
 
 #include <cmath>
 
+//! Converts EMU (English Metric Unit) value (integer or double) to points
+#define EMU_TO_POINT(emu) ((emu)/12700.0)
+
 using namespace MSO;
 
 /**
@@ -283,7 +286,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:image-opacity
     // draw:line-distance
     // draw:luminance
-    qreal lineWidthPt = ds.lineWidth() / 12700.;
+    qreal lineWidthPt = EMU_TO_POINT(ds.lineWidth());
     if (ds.fLine()) {
         // draw:marker-end
         quint32 lineEndArrowhead = ds.lineEndArrowhead();
@@ -292,9 +295,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         }
         // draw:marker-end-center
         // draw:marker-end-width
-        lineWidthPt = ds.lineWidth() / 12700.;
-        style.addProperty("draw:marker-end-width",
-                          pt(lineWidthPt*4*(1+ds.lineEndArrowWidth())), gt);
+        style.addPropertyPt("draw:marker-end-width",
+                            lineWidthPt*4*(1+ds.lineEndArrowWidth()), gt);
         // draw:marker-start
         quint32 lineStartArrowhead = ds.lineStartArrowhead();
         if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
@@ -302,8 +304,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         }
         // draw:marker-start-center
         // draw:marker-start-width
-        style.addProperty("draw:marker-start-width",
-                          pt(lineWidthPt*4*(1+ds.lineStartArrowWidth())), gt);
+        style.addPropertyPt("draw:marker-start-width",
+                            lineWidthPt*4*(1+ds.lineStartArrowWidth()), gt);
     }
     // draw:measure-align
     // draw:measure-vertical-align
@@ -326,9 +328,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         quint32 type = ds.shadowType();
         if ((type == 0) || (type == 1)) {
             // draw:shadow-offset-x
-            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
+            style.addPropertyPt("draw:shadow-offset-x", EMU_TO_POINT(ds.shadowOffsetX()), gt);
             // draw:shadow-offset-y
-            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+            style.addPropertyPt("draw:shadow-offset-y", EMU_TO_POINT(ds.shadowOffsetY()), gt);
         }
         // draw:shadow-opacity
         float shadowOpacity = toQReal(ds.shadowOpacity());
@@ -388,6 +390,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:margin-left
     // fo:margin-right
     // fo:margin-top
+    style.addPropertyPt("style:margin-bottom", EMU_TO_POINT(ds.dyWrapDistBottom()), gt);
+    style.addPropertyPt("style:margin-left", EMU_TO_POINT(ds.dxWrapDistLeft()), gt);
+    style.addPropertyPt("style:margin-right", EMU_TO_POINT(ds.dxWrapDistRight()), gt);
+    style.addPropertyPt("style:margin-top", EMU_TO_POINT(ds.dyWrapDistTop()), gt);
     // fo:max-height
     // fo:max-width
     // fo:min-height
@@ -397,13 +403,14 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:padding-left
     // fo:padding-right
     // fo:padding-top
-    // TODO: Else the containing shape SHOULD use a set of default internal
-    // margins for text on shapes.  Test files required.
-    if (!ds.fAutoTextMargin()) {
-        style.addProperty("fo:padding-bottom", pt(ds.dyTextBottom()/12700.), gt);
-        style.addProperty("fo:padding-left", pt(ds.dxTextLeft()/12700.), gt);
-        style.addProperty("fo:padding-right", pt(ds.dxTextRight()/12700.), gt);
-        style.addProperty("fo:padding-top", pt(ds.dyTextTop()/12700.), gt);
+    if (!ds.fAutoTextMargin() && ds.iTxid()) {
+        // Internal margins only make sense for shapes that contain text.
+        // TODO: Else the containing shape SHOULD use a set of default internal
+        // margins for text on shapes (test files required)
+        style.addPropertyPt("fo:padding-bottom", EMU_TO_POINT(ds.dyTextBottom()), gt);
+        style.addPropertyPt("fo:padding-left", EMU_TO_POINT(ds.dxTextLeft()), gt);
+        style.addPropertyPt("fo:padding-right", EMU_TO_POINT(ds.dxTextRight()), gt);
+        style.addPropertyPt("fo:padding-top", EMU_TO_POINT(ds.dyTextTop()), gt);
     }
     // fo:wrap-option
     // style:border-line-width
