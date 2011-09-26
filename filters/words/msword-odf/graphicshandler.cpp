@@ -906,12 +906,6 @@ void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const Dra
         }
     }
 
-    if (ds.fLayoutInCell()) {
-        style.addProperty("style:flow-with-text", "true", gt);
-    } else {
-        style.addProperty("style:flow-with-text", "false", gt);
-    }
-
     // margins are related to text wrapping
     // fo:margin-bottom
     // fo:margin-left

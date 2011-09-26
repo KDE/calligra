@@ -413,9 +413,12 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:border-line-width-top
     // style:editable
     // style:flow-with-text
-    // style:horizontal-pos (NOTE: tests on PPT, XLS required)
+    style.addProperty("style:flow-with-text", ds.fLayoutInCell(), gt);
+    // style:horizontal-pos
+    // NOTE: tests on PPT, XLS required
 //     style.addProperty("style:horizontal-pos", getHorizontalPos(ds.posH()), gt);
-    // style:horizontal-rel (NOTE: tests on PPT, XLS required)
+    // style:horizontal-rel
+    // NOTE: tests on PPT, XLS required
 //     style.addProperty("style:horizontal-rel", getHorizontalRel(ds.posRelH()), gt);
     // style:mirror
     // style:number-wrapped-paragraphs
@@ -427,9 +430,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:repeat // handled for image see draw:fill-image-name
     // style:run-through
     // style:shadow
-    // style:vertical-pos (NOTE: tests on PPT, XLS required)
+    // style:vertical-pos
+    // NOTE: tests on PPT, XLS required
 //     style.addProperty("style:vertical-pos", getVerticalPos(ds.posV()), gt);
-    // style:vertical-rel (NOTE: tests on PPT, XLS required)
+    // style:vertical-rel
+    // NOTE: tests on PPT, XLS required
 //     style.addProperty("style:vertical-rel", getVerticalRel(ds.posRelV()), gt);
     // style:wrap
     // style:wrap-contour
