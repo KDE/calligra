@@ -18,7 +18,7 @@
  */
 #ifndef KRIMAGEDATA_H
 #define KRIMAGEDATA_H
-#include <KoReportItemBase.h>
+#include <KoReportASyncItemBase.h>
 #include <QRect>
 #include <QPainter>
 #include <qdom.h>
@@ -46,7 +46,7 @@ class Maps;
 /**
  @author
 */
-class KoReportItemMaps : public KoReportItemBase
+class KoReportItemMaps : public KoReportASyncItemBase
 {
     Q_OBJECT
 public:
