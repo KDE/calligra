@@ -686,4 +686,4 @@ void KoReportPreRenderer::registerScriptObject(QObject* obj, const QString& name
     m_scriptObjects[name] = obj;
 }
 
-#include <orprerenderprivate.moc>
+#include "KoReportPreRenderer.moc"

@@ -106,7 +106,7 @@ void CanvasController::openDocument(const QString& path)
         emit documentTypeChanged();
 
         KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
-        prDocument->openUrl(KUrl::fromPath(path));
+        prDocument->openUrl(KUrl::fromPathOrUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
         if (m_canvasItem) {
@@ -140,7 +140,7 @@ void CanvasController::openDocument(const QString& path)
         emit documentTypeChanged();
 
         Calligra::Tables::Doc *tablesDoc = static_cast<Calligra::Tables::Doc*>(m_doc);
-        tablesDoc->openUrl(KUrl::fromPath(path));
+        tablesDoc->openUrl(KUrl::fromPathOrUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
         if (m_canvasItem) {
@@ -173,7 +173,7 @@ void CanvasController::openDocument(const QString& path)
 
         kDebug() << "Trying to open the document";
         KWDocument *kwDoc = static_cast<KWDocument*>(m_doc);
-        kwDoc->openUrl(KUrl::fromPath(path));
+        kwDoc->openUrl(KUrl::fromPathOrUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
         if (m_canvasItem) {

@@ -78,6 +78,11 @@ QString SchedulerPlugin::comment() const
     return d->comment;
 }
 
+int SchedulerPlugin::capabilities() const
+{
+    return AvoidOverbooking | AllowOverbooking | ScheduleForward | ScheduleBackward;
+}
+
 void SchedulerPlugin::stopCalculation( ScheduleManager *sm )
 {
     foreach ( SchedulerThread *j, m_jobs ) {

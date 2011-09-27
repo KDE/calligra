@@ -77,11 +77,11 @@ public:
         Info();
         QString name, caption, comment, fileDBMimeType;
         //! true is the driver is for file-based database backend
-    bool fileBased : 1;
+        bool fileBased : 1;
         /*! true is the driver is for a backend that allows importing.
          Defined by X-Kexi-DoNotAllowProjectImportingTo in "kexidb_driver" service type.
          Used for migration. */
-    bool allowImportingTo : 1;
+        bool allowImportingTo : 1;
     };
     typedef QHash<QString, Info> InfoHash;
 

@@ -142,9 +142,6 @@ public:
     KoTextAnchor(KoShape *shape);
     virtual ~KoTextAnchor();
 
-    //make the anchor be as-char even if it's not
-    void fakeAsChar();
-
     /**
      * Return the shape that is linked to from the text anchor.
      */
@@ -175,6 +172,11 @@ public:
      */
     AnchorType anchorType() const;
 
+    /**
+     * Set how the anchor behaves
+     */
+    void setAnchorType(KoTextAnchor::AnchorType type);
+
     /// set the current vertical-pos
     void setHorizontalPos(HorizontalPos);
 
@@ -201,6 +203,9 @@ public:
 
     /// return the wrap influence on position
     QString wrapInfluenceOnPosition() const;
+
+    /// return if flow-with-text (odf attribute)
+    bool flowWithText() const;
 
     /// return the page number of the shape (valid with page anchoring, -1 indicates auto).
     int pageNumber() const;
@@ -231,19 +236,6 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     /// Save the additional attributes.
     void saveOdf(KoShapeSavingContext &context);
-
-    /**
-     * Returns true if the anchored frame is positioned as a (potentially big) character in
-     * the text layout or false when it will not take any space as an inline object.
-     * An anchor which behaves as a character in the text will potentially change the
-     * ascent/descent of the line.
-     */
-    bool behavesAsCharacter() const;
-
-    /**
-     * Set how the anchor behaves
-     */
-    void setAnchorType(KoTextAnchor::AnchorType type);
 
     /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
     void detachFromModel();

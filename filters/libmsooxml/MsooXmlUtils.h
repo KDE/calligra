@@ -106,6 +106,10 @@ public:
 
     QString bulletFont() const;
 
+    QString indent() const;
+
+    QString margin() const;
+
     void addInheritedValues(const ParagraphBulletProperties& properties);
 
     void setBulletRelativeSize(int size);
