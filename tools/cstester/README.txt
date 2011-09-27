@@ -98,3 +98,31 @@ correct exit code is returned to cstrunner.
 
 cstmd5gen - Generates md5sums for a given thumbnail directory and stores them
 into the md5.txt file.
+
+Please make sure this scripts are in the path when running cstrunner.
+
+Run cstrunner
+
+cstrunner docDir resultDir concurrentProcesses
+
+e.g.
+
+cstrunner . ../result/sha1 4
+
+To run over all documents in the current directory and put the thumbnails in to ../result/sha1 with 4 concurrent processes
+
+Do your changes and run it again
+
+cstrunner . ../result/sha2 4
+
+To create the input file for visualimagecomapre use the script 
+
+cstmd5diff.sh <documents dir> <previous result dir> <current result dir>
+
+e.g.
+
+cstmd5diff . ../sha1 ../sha2 > md5-sha1-sha2.log
+
+and then use 
+
+visualimagecomapre ../sha1 ../sha2 md5-sha1-sha2.log
