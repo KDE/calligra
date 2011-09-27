@@ -125,4 +125,4 @@ cstmd5diff.sh . ../sha1 ../sha2 > md5-sha1-sha2.log
 
 and then use 
 
-visualimagecomapre ../sha1 ../sha2 md5-sha1-sha2.log
+visualimagecompare ../sha1 ../sha2 md5-sha1-sha2.log
