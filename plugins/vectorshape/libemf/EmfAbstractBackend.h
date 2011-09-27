@@ -407,13 +407,6 @@ public:
     virtual void bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord) = 0;
 
     /**
-       Handler for the EMR_STRETCHBLTMODE record type
-
-       \param stretchMode the stretch mode
-    */
-    virtual void setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode) = 0;
-
-    /**
        Handler for the EMR_STRETCHDIBITS record type
 
        \param stretchDiBitsRecord contents of the record type

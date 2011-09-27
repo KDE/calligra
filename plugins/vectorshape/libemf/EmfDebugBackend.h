@@ -97,7 +97,6 @@ public:
     void strokePath(EmfDeviceContext &context, const QRect &bounds );
     void setClipPath(EmfDeviceContext &context, const quint32 regionMode );
     void bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord );
-    void setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode );
     void stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord );
 };
 

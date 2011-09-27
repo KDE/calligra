@@ -518,10 +518,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EMR_SETSTRETCHBLTMODE:
         {
-            quint32 stretchMode;
-            stream >> stretchMode;
-            mOutput->setStretchBltMode(context, stretchMode );
-
+            stream >> context.stretchBltMode;
+            context.changedItems |= DCStretchBltMode;
         }
         break;
     case EMR_SETTEXTALIGN:

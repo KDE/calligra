@@ -1,8 +1,8 @@
 * Make a complete Playback Device Context
-   + The rest of the graphics state variables of the DC
+   + The rest of the graphics state variables of the DC                 [DONE]
       - backgroundMode                                                  [done]
       - text layout                                                     [done]
-      - stretchBltMode
+      - stretchBltMode                                                  [done]
       - rop2                                                            [done]
    + Move the object system (Pen, Brush, etc) to the DC
    + Move the current path to the DC

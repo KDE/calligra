@@ -319,28 +319,6 @@ void EmfDebugBackend::bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltReco
     kDebug(33100) << "EMR_BITBLT:" << bitBltRecord.destinationRectangle();
 }
 
-void EmfDebugBackend::setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode )
-{
-    Q_UNUSED(context);
-
-    switch ( stretchMode ) {
-    case 0x01:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
-        break;
-    case 0x02:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ORSCANS";
-        break;
-    case 0x03:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_DELETESCANS";
-        break;
-    case 0x04:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_HALFTONE";
-        break;
-    default:
-        kDebug(33100) << "EMR_STRETCHBLTMODE - unknown stretch mode:" << stretchMode;
-    }
-}
-
 void EmfDebugBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord )
 {
     Q_UNUSED(context);

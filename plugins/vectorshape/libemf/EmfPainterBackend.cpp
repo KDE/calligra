@@ -1036,31 +1036,6 @@ void EmfPainterBackend::bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRe
     }
 }
 
-void EmfPainterBackend::setStretchBltMode(EmfDeviceContext &context, const quint32 stretchMode )
-{
-    updateFromDeviceContext(context);
-
-#if DEBUG_EMFPAINT
-    kDebug(31000) << hex << stretchMode << dec;
-#endif
-
-    switch ( stretchMode ) {
-    case 0x01:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
-        break;
-    case 0x02:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ORSCANS";
-        break;
-    case 0x03:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_DELETESCANS";
-        break;
-    case 0x04:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_HALFTONE";
-        break;
-    default:
-        kDebug(33100) << "EMR_STRETCHBLTMODE - unknown stretch mode:" << stretchMode;
-    }
-}
 
 void EmfPainterBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &record )
 {
@@ -1374,7 +1349,7 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
 #endif
     }
 #endif
-    // rop2mode: nothing to do
+    // rop2mode: not necessary to handle here
     // layoutMode
     if (context.changedItems & DCLayoutMode) {
         if (context.layoutMode == LAYOUT_LTR) {
@@ -1387,8 +1362,8 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
         }
     }
     //Mapping mode NYI
-    //PolyFillMode not necessary to handle here
-    //Stretchblt mode NYI
+    //PolyFillMode  not necessary to handle here
+    //Stretchblt    not necesseray to handle here
     //textAlignMode not necessary to handle here
     //Text extra space NYI
 
