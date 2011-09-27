@@ -1417,11 +1417,17 @@ void KexiMainWindow::invalidateProjectWideActions()
     d->action_project_properties->setEnabled(d->prj);
     d->action_close->setEnabled(d->prj);
     d->action_project_relations->setEnabled(d->prj);
+
+    //DATA MENU
     if (d->action_project_import_data_table)
         d->action_project_import_data_table->setEnabled(d->prj && !readOnly);
+    if (d->action_tools_data_import)
+        d->action_tools_data_import->setEnabled(d->prj && !readOnly);
     d->action_project_export_data_table->setEnabled(
         currentWindow() && currentWindow()->part()->info()->isDataExportSupported()
         && !currentWindow()->neverSaved());
+    if (d->action_edit_paste_special_data_table)
+        d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
 
 #ifndef KEXI_NO_QUICK_PRINTING
     const bool printingActionsEnabled =
@@ -1433,9 +1439,6 @@ void KexiMainWindow::invalidateProjectWideActions()
 #endif
 
     //EDIT MENU
-    if (d->action_edit_paste_special_data_table)
-        d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
-
 //! @todo "copy special" is currently enabled only for data view mode;
 //!  what about allowing it to enable in design view for "kexi/table" ?
     if (currentWindow() && currentWindow()->currentViewMode() == Kexi::DataViewMode) {
@@ -1975,6 +1978,7 @@ tristate KexiMainWindow::closeProject()
         d->navWasVisibleBeforeProjectClosing = d->navDockWidget->isVisible();
         d->navDockWidget->hide();
         d->navigator->setProject(0);
+        slotProjectNavigatorVisibilityChanged(true); // hide side tab
         //d->navigator->clear();
     }
     

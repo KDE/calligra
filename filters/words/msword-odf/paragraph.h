@@ -49,14 +49,35 @@ public:
      */
     QString writeToFile(KoXmlWriter* writer, QChar* tabLeader=0);
 
-    void addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles, bool addCompleteElement=false);
+    void addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName,
+                      const wvWare::StyleSheet& styles, bool addCompleteElement=false);
+
+    /**
+     * TODO:
+     */
     void openInnerParagraph();
+
+    /**
+     * TODO:
+     */
     void closeInnerParagraph();
+
+    /**
+     * TODO:
+     */
+    int strings() const;
+
+    /**
+     * TODO:
+     */
+    QString string(int index) const;
 
     /**
      * Set the paragraph properties (PAP) that apply to the paragraph.
      */
-    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> pap) { m_paragraphProperties = pap; }
+    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> pap) {
+        m_paragraphProperties = pap;
+    }
 
     /**
      * Set the character properties (CHP) that apply to the paragraph.
@@ -64,7 +85,9 @@ public:
      * @param CHPs provided by wv2 for empty paragraphs to set proper
      * font-size, line-height, etc. into text-properties.
      */
-    void setCharacterProperties(wvWare::SharedPtr<const wvWare::Word97::CHP> chp) { m_characterProperties = chp; }
+    void setCharacterProperties(wvWare::SharedPtr<const wvWare::Word97::CHP> chp) {
+        m_characterProperties = chp;
+    }
 
     /**
      * Set the built-in (named) style that applies to the paragraph.
@@ -82,23 +105,38 @@ public:
      */
     KoGenStyle* koGenStyle() const { return m_odfParagraphStyle; };
 
-    bool containsPageNumberField() const {
-        return m_containsPageNumberField;
-    }
-    void setContainsPageNumberField(bool containsPageNumberField) {
-        m_containsPageNumberField = containsPageNumberField;
-    }
+    /**
+     * @return true in case this paragraph is a heading
+     */
+    bool isHeading() const { return m_isHeading; };
 
+    // DropCaps related
     typedef enum { NoDropCap, IsDropCapPara, HasDropCapIntegrated }  DropCapStatus;
+
     DropCapStatus dropCapStatus() const;
     void getDropCapData(QString *string, int *type, int *lines, qreal *distance, QString *style) const;
     void addDropCap(QString &string, int type, int lines, qreal distance, QString style);
 
-    // debug:
-    int  strings() const;
-    QString string(int index) const;
+    /**
+     * @return true in case the current paragraph contains a field of type in
+     * {PAGE, NUMPAGES}.
+     */
+    bool containsPageNumberField() const { return m_containsPageNumberField; }
 
-    void setCombinedCharacters(bool isCombined);
+    /**
+     * Provide the information that a field of type in {PAGE, NUMPAGES} was
+     * detected in the current paragraph.
+     */
+    void setContainsPageNumberField(bool containsPageNumberField) {
+        m_containsPageNumberField = containsPageNumberField;
+    }
+
+    /**
+     * Set the combined characters flag.
+     */
+    void setCombinedCharacters(bool isCombined) {
+        m_combinedCharacters = isCombined;
+    }
 
     // Static functions which process wvWare properties and store them into
     // corresponding properties of a KoGenStyle.
@@ -170,15 +208,16 @@ private:
 
     bool m_inStylesDotXml; //let us know if we're in content.xml or styles.xml
     bool m_isHeading; //information for writing a heading instead of a paragraph
-    // (odt looks formats them similarly)
+    bool m_inHeaderFooter;
+
     int m_outlineLevel;
 
     DropCapStatus  m_dropCapStatus; // True if this paragraph has a dropcap 
-    int   m_dcs_fdct;
-    int   m_dcs_lines;
-    qreal m_dropCapDistance;
     QString m_dropCapStyleName;
-    bool m_inHeaderFooter;
+    qreal m_dropCapDistance;
+    int m_dcs_fdct;
+    int m_dcs_lines;
+
     bool m_containsPageNumberField;
     bool m_combinedCharacters;            // is true when the next characters are combined
 

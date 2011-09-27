@@ -289,12 +289,16 @@ void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context, bool hasM
     while (it.hasNext()) {
         it.next();
         Q_ASSERT(! it.key().isEmpty());
+        const KoXmlElement *masterNode = it.value();
+        Q_ASSERT(masterNode);
+        QString displayName = masterNode->attributeNS(KoXmlNS::style, "display-name", QString());
         KWPageStyle masterPage = m_document->pageManager()->pageStyle(it.key());
+        if (!masterPage.isValid()) // use display-name as fall-back if there is no page-style with the defined name. See bug 281922 and 282082.
+            masterPage = m_document->pageManager()->pageStyle(displayName);
         bool alreadyExists = masterPage.isValid();
         if (!alreadyExists)
-            masterPage = KWPageStyle(it.key());
-        const KoXmlElement *masterNode = it.value();
-        const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString())) : 0;
+            masterPage = KWPageStyle(it.key(), displayName);
+        const KoXmlElement *masterPageStyle = styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
         if (masterPageStyle) {
             masterPage.loadOdf(context.odfLoadingContext(), *masterNode, *masterPageStyle, m_document->resourceManager());
             loadHeaderFooter(context, masterPage, *masterNode, LoadHeader);

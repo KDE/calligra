@@ -34,6 +34,7 @@ public:
     KoColumns columns;
     KoPageLayout pageLayout;
     QString name;
+    QString displayName;
     bool mainFrame;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
     qreal headerMinimumHeight,footerMinimumHeight;
