@@ -121,7 +121,7 @@ cstmd5diff.sh <documents dir> <previous result dir> <current result dir>
 
 e.g.
 
-cstmd5diff . ../sha1 ../sha2 > md5-sha1-sha2.log
+cstmd5diff.sh . ../sha1 ../sha2 > md5-sha1-sha2.log
 
 and then use 
 
