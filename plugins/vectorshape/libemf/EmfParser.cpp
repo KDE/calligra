@@ -512,9 +512,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	break;
     case EMR_SETROP2:
         {
-            quint32 ROP2Mode;
-            stream >> ROP2Mode;
-            //kDebug(33100) << "EMR_SETROP2" << ROP2Mode;
+            stream >> context.rop2Mode;
+            context.changedItems |= DCRop2Mode;
         }
         break;
     case EMR_SETSTRETCHBLTMODE:

@@ -274,12 +274,6 @@ void EmfPainterBackend::setMetaRgn(EmfDeviceContext &context)
 
 
 // ----------------------------------------------------------------
-//                 World Transform, Window and Viewport
-
-
-
-
-// ----------------------------------------------------------------
 
 
 void EmfPainterBackend::createPen(EmfDeviceContext &context,
@@ -1380,6 +1374,7 @@ void EmfPainterBackend::updateFromDeviceContext(EmfDeviceContext &context)
 #endif
     }
 #endif
+    // rop2mode: nothing to do
     // layoutMode
     if (context.changedItems & DCLayoutMode) {
         if (context.layoutMode == LAYOUT_LTR) {

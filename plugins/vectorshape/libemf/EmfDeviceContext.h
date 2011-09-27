@@ -71,7 +71,7 @@ enum DeviceContextMembers {
     DCBkMode         = 0x00001000,
     DCBrExtraSpace   = 0x00002000,
     DCFontMapMode    = 0x00004000,
-    DCFgMixMode      = 0x00008000,
+    DCRop2Mode       = 0x00008000,
     DCLayoutMode     = 0x00010000,
     DCMapMode        = 0x00020000,
     DCPolyFillMode   = 0x00040000,
