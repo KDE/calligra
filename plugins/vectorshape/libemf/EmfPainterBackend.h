@@ -122,7 +122,7 @@ public:
     void stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord );
 
 private:
-    void printPainterTransform(const char *leadText);
+    void printPainterTransform(EmfDeviceContext &context, const char *leadText);
 
     /// For debugging purposes: Draw the boundary box.
     void paintBounds(const Header *header);
@@ -177,7 +177,6 @@ private:
     bool          m_currentlyBuildingPath;
 
     QPainter                *m_painter;
-    QTransform               m_worldTransform; // The transform inside the EMF.
     QTransform               m_outputTransform; // The transform that the painter already had
 
     // Everything that has to do with window and viewport calculation

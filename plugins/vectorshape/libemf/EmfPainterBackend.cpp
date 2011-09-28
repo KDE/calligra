@@ -154,7 +154,6 @@ void EmfPainterBackend::init( const Header *header )
 #endif
 
     m_outputTransform = m_painter->transform();
-    m_worldTransform = QTransform();
 
     // For calculations of window / viewport during the painting
     m_windowOrg = QPoint(0, 0);
@@ -234,7 +233,7 @@ void EmfPainterBackend::saveDC(EmfDeviceContext &context)
     // FIXME: We should collect all the parts of the DC that are not
     //        stored in the painter and save them separately.
     QTransform  savedTransform = m_painter->worldTransform();
-    m_painter->setWorldTransform(m_worldTransform);
+    m_painter->setWorldTransform(context.m_worldTransform);
 
     m_painter->save();
     ++m_painterSaves;
@@ -262,8 +261,8 @@ void EmfPainterBackend::restoreDC(EmfDeviceContext &context, const qint32 savedD
 
     // We used a trick in saveDC() and stored the worldTransform in
     // the painter.  Now restore the full transformation.
-    m_worldTransform = m_painter->worldTransform();
-    QTransform newMatrix = m_worldTransform * m_outputTransform;
+    context.m_worldTransform = m_painter->worldTransform();
+    QTransform newMatrix = context.m_worldTransform * m_outputTransform;
     m_painter->setWorldTransform( newMatrix );
 }
 
@@ -749,7 +748,7 @@ void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
     // the output rectangle.  Normally this wouldn't be necessary, but
     // when fonts are switched, the replacement fonts are sometimes
     // wider than the original fonts.
-    QRect  worldRect(m_worldTransform.mapRect(QRect(x, y, textWidth, textHeight)));
+    QRect  worldRect(context.m_worldTransform.mapRect(QRect(x, y, textWidth, textHeight)));
     //kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
     qreal  scaleX = qreal(1.0);
     qreal  scaleY = qreal(1.0);
@@ -1116,14 +1115,14 @@ void EmfPainterBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRe
 //                         Private functions
 
 
-void EmfPainterBackend::printPainterTransform(const char *leadText)
+void EmfPainterBackend::printPainterTransform(EmfDeviceContext &context, const char *leadText)
 {
 #if 0   // temporarily disabled
     QTransform  transform;
 
     recalculateWorldTransform();
 
-    kDebug(31000) << leadText << "world transform " << m_worldTransform
+    kDebug(31000) << leadText << "world transform " << context.m_worldTransform
                   << "incl output transform: " << m_painter->transform();
 #endif
 }
