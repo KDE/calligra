@@ -24,18 +24,20 @@
 #include <qpainterpath.h>
 #include <KoShape.h>
 #include <KoPathShape.h>
+#include <SvgShape.h>
 
 #define PresentationViewPortShapeId "PresentationViewPortShape"
 
 class KoParameterShape;
 
-class PresentationViewPortShape : public KoShape
+class PresentationViewPortShape : public KoShape//, public SvgShape
 {
 public:
   /**
    * @brief Constructor
    * @brief initializes a basic PresentationViewPortShape shaped like a [ ]
    */
+    
     PresentationViewPortShape();
     ~PresentationViewPortShape();
     
@@ -46,6 +48,12 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+        /// reimplemented from SvgShape
+    virtual bool saveSvg(SvgSavingContext &context);
+
+    /// reimplemented from SvgShape
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
     virtual QPainterPath outline() const;
 

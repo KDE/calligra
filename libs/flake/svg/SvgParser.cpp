@@ -1242,15 +1242,22 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
 
     QList<KoShapeFactoryBase*> factories = KoShapeRegistry::instance()->factoriesForElement(KoXmlNS::svg, element.tagName());
     foreach (KoShapeFactoryBase *f, factories) {
+//      qDebug() <<"For factory: " << f->id() <<  endl;
         KoShape *shape = f->createDefaultShape(m_documentResourceManager);
+	qDebug() << "Shape whose factory was found: *" << shape->shapeId() << endl;
         if (!shape)
             continue;
-
+	
+	  
         SvgShape *svgShape = dynamic_cast<SvgShape*>(shape);
         if (!svgShape) {
+	  qDebug () << "SvgShape NOT created out of shape: " << shape->shapeId() << endl;
             delete shape;
             continue;
         }
+        else{
+	  qDebug () << "SvgShape created out of shape successfully" << endl;
+	}
 
         // reset transformation that might come from the default shape
         shape->setTransformation(QTransform());

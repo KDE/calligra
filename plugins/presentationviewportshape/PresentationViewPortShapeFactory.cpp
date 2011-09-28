@@ -34,12 +34,19 @@ PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * par
 {	
     setToolTip(i18n("A Presentation View Port"));
     setIcon("rectangle-shape");
-    setLoadingPriority(1);
+    setLoadingPriority(2);
+    
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("rect")));
+    setXmlElements(elementNamesList);
+
 }
 
 KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager *) const
 {
+  qDebug () << "PVPFactory::createDefaultShape()";
     PresentationViewPortShape *viewport = new PresentationViewPortShape();
+    viewport->setShapeId(PresentationViewPortShapeId);
 
     return viewport;
 }
@@ -47,6 +54,6 @@ KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager 
 bool PresentationViewPortShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const
 {
     Q_UNUSED(e);
-    return true;
+    return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::svg);
 }
 

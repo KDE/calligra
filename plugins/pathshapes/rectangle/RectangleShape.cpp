@@ -319,12 +319,19 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
 
     context.shapeWriter().endElement();
-
+    qDebug () << "RectangleShape::saveSvg()" << endl;
     return true;
 }
 
 bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
+  if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "Yes"))
+  {
+    qDebug() << "ViewPort found for rect id = " << element.attribute("id") << endl;
+    return false;
+  }
+  //qDebug () << "View Port not found for rect id = " << element.attribute("id") << endl;
+    
     const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
     const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));
     const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width"));

@@ -21,7 +21,15 @@
 
 #include <qpainter.h>
 #include <KoShapeBackground.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
+#include <SvgUtil.h>
+#include <SvgStyleWriter.h>
+
 #include "PresentationViewPortShapeUtil.h"
 
 PresentationViewPortShape::PresentationViewPortShape() : m_ns("calligra")
@@ -127,7 +135,7 @@ QString PresentationViewPortShape::toString()
 
 void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
-    applyConversion( painter, converter );
+    applyConversion(painter, converter);
         
     painter.setPen(QPen(QColor(Qt::black), 1, Qt::DashLine,
                      Qt::FlatCap, Qt::MiterJoin)); 
@@ -181,4 +189,38 @@ bool PresentationViewPortShape::loadOdf(const KoXmlElement& element, KoShapeLoad
 void PresentationViewPortShape::saveOdf(KoShapeSavingContext& context) const
 {
 //TODO
+}
+
+
+bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
+{
+    context.shapeWriter().startElement("rect");
+    context.shapeWriter().addAttribute("id", context.getID(this));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+
+    //SvgStyleWriter::saveSvgStyle(this, context);
+
+    const QSizeF size = this->size();
+    context.shapeWriter().addAttributePt("width", size.width());
+    context.shapeWriter().addAttributePt("height", size.height());
+
+    context.shapeWriter().endElement();
+    qDebug () << "PVPShape::saveSvg()" << endl;
+    return true;
+}
+
+bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+  qDebug() << "PVPShape found with rect id = " << element.attribute("id") << endl; 
+    const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
+    const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));
+    const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width"));
+    const qreal h = SvgUtil::parseUnitY(context.currentGC(), element.attribute("height"));
+    
+    setSize(QSizeF(w, h));
+    setPosition(QPointF(x, y));
+    if (w == 0.0 || h == 0.0)
+        setVisible(false);
+
+    return true;
 }

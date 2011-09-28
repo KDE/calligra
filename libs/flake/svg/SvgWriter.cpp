@@ -198,11 +198,13 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("d", path->toString(context.userSpaceTransform()));
     context.shapeWriter().endElement();
+    qDebug() <<"SvgWriter::savePath()" << endl;
 }
 
 void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {
-    const QRectF bbox = shape->boundingRect();
+ qDebug() << "SvgWriter::saveGeneric()" << endl;;
+  const QRectF bbox = shape->boundingRect();
 
     // prepare a transparent image, make it twice as big as the original size
     QImage image(2*bbox.size().toSize(), QImage::Format_ARGB32);
