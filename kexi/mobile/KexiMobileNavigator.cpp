@@ -21,8 +21,8 @@
 
 
 #include "KexiMobileNavigator.h"
-#include <widget/KexiProjectModel.h>
-#include <widget/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectModel.h>
+#include <widget/navigator/KexiProjectNavigator.h>
 #include <kdebug.h>
 
 KexiMobileNavigator::KexiMobileNavigator(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f), m_project(0)

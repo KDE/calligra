@@ -4,12 +4,14 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Map Browser
 Name[da]=Kort-browser
+Name[nb]=Kartleser
 Name[pt]=Navegador do Mapa
 Name[pt_BR]=Navegador do mapa
 Name[ru]=Просмотр карт
 Name[sv]=Kartbläddrare
 Name[uk]=Переглядач карт
 Name[x-test]=xxMap Browserxx
+Name[zh_TW]=地圖瀏覽器
 
 X-KDE-Library=kformdesigner_mapbrowser
 X-KFormDesigner-FactoryGroup=kexi

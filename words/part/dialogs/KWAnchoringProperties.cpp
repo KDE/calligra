@@ -28,7 +28,7 @@
 
 #include <QComboBox>
 
-const int KWAnchoringProperties::vertRels[4][20] {
+const int KWAnchoringProperties::vertRels[4][20] = {
     { // KoTextAnchor::AnchorAsCharacter
         KoTextAnchor::VBaseline,
         KoTextAnchor::VChar,
@@ -58,7 +58,7 @@ const int KWAnchoringProperties::vertRels[4][20] {
     }
 };
 
-const int KWAnchoringProperties::horizRels[4][20] {
+const int KWAnchoringProperties::horizRels[4][20] = {
     { // KoTextAnchor::AnchorAsCharacter
         -1
     },

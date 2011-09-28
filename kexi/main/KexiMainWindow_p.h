@@ -1721,7 +1721,7 @@ public:
             info = currentWindow->part()->info();
         }
         const bool visible = (viewMode == Kexi::DesignViewMode)
-            && ((currentWindow && currentWindow->propertySet()) || info->isPropertyEditorAlwaysVisibleInDesignMode());
+            && ((currentWindow && currentWindow->propertySet()) || (info && info->isPropertyEditorAlwaysVisibleInDesignMode()));
         kDebug() << "visible == " << visible;
         enable_slotPropertyEditorVisibilityChanged = false;
         if (visible && propertyEditorCollapsed) { // used when we're switching back to a window with propeditor available but collapsed

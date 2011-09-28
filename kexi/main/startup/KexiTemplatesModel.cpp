@@ -38,8 +38,9 @@ int KexiTemplatesModel::rowCount(const QModelIndex& parent) const
 }
 
 QModelIndex KexiTemplatesModel::index(int row, int column,
-                                      const QModelIndex& parent ) const
+                                      const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     if (row < 0 || row >= m_templates.count())
         return QModelIndex();
     return createIndex(row, column, (void*)&m_templates[row]);

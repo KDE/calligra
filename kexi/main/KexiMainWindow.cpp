@@ -97,12 +97,12 @@
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
-#include <widget/KexiProjectModel.h>
 
-#include <widget/KexiPropertyEditorView.h>
+#include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/KexiDockableWidget.h>
-#include <widget/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectModel.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -1417,11 +1417,17 @@ void KexiMainWindow::invalidateProjectWideActions()
     d->action_project_properties->setEnabled(d->prj);
     d->action_close->setEnabled(d->prj);
     d->action_project_relations->setEnabled(d->prj);
+
+    //DATA MENU
     if (d->action_project_import_data_table)
         d->action_project_import_data_table->setEnabled(d->prj && !readOnly);
+    if (d->action_tools_data_import)
+        d->action_tools_data_import->setEnabled(d->prj && !readOnly);
     d->action_project_export_data_table->setEnabled(
         currentWindow() && currentWindow()->part()->info()->isDataExportSupported()
         && !currentWindow()->neverSaved());
+    if (d->action_edit_paste_special_data_table)
+        d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
 
 #ifndef KEXI_NO_QUICK_PRINTING
     const bool printingActionsEnabled =
@@ -1433,9 +1439,6 @@ void KexiMainWindow::invalidateProjectWideActions()
 #endif
 
     //EDIT MENU
-    if (d->action_edit_paste_special_data_table)
-        d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
-
 //! @todo "copy special" is currently enabled only for data view mode;
 //!  what about allowing it to enable in design view for "kexi/table" ?
     if (currentWindow() && currentWindow()->currentViewMode() == Kexi::DataViewMode) {
@@ -1975,6 +1978,7 @@ tristate KexiMainWindow::closeProject()
         d->navWasVisibleBeforeProjectClosing = d->navDockWidget->isVisible();
         d->navDockWidget->hide();
         d->navigator->setProject(0);
+        slotProjectNavigatorVisibilityChanged(true); // hide side tab
         //d->navigator->clear();
     }
     
@@ -4303,9 +4307,15 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
             KIcon(part ? part->info()->itemIcon() : QString()),
             item->captionOrName());
         d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(*item, part));
-        d->mainWidget->tabWidget()->setTabWhatsThis(
-            tabIndex,
-            i18n("Tab for \"%1\" (%2).", item->captionOrName(), part->info()->instanceCaption()));
+        QString whatsThisText;
+        if (part) {
+            whatsThisText = i18n("Tab for \"%1\" (%2).",
+                                 item->captionOrName(), part->info()->instanceCaption());
+        }
+        else {
+            whatsThisText = i18n("Tab for \"%1\".", item->captionOrName());
+        }
+        d->mainWidget->tabWidget()->setTabWhatsThis(tabIndex, whatsThisText);
         d->mainWidget->tabWidget()->setCurrentWidget(windowContainer);
 
 #ifndef KEXI_NO_PENDING_DIALOGS
