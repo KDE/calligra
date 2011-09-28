@@ -30,7 +30,7 @@
 
 class KoParameterShape;
 
-class PresentationViewPortShape : public KoShape//, public SvgShape
+class PresentationViewPortShape : public KoShape, public SvgShape
 {
 public:
   /**

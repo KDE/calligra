@@ -44,7 +44,7 @@ PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * par
 
 KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager *) const
 {
-  qDebug () << "PVPFactory::createDefaultShape()";
+  //qDebug () << "PVPFactory::createDefaultShape()";
     PresentationViewPortShape *viewport = new PresentationViewPortShape();
     viewport->setShapeId(PresentationViewPortShapeId);
 

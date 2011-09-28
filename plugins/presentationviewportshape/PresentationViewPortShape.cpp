@@ -184,6 +184,7 @@ QSizeF PresentationViewPortShape::size() const
 bool PresentationViewPortShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
     return true;
+    
 }
 
 void PresentationViewPortShape::saveOdf(KoShapeSavingContext& context) const
@@ -195,6 +196,7 @@ void PresentationViewPortShape::saveOdf(KoShapeSavingContext& context) const
 bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
 {
     context.shapeWriter().startElement("rect");
+    context.shapeWriter().addAttribute("calligra:viewport", "yes");
     context.shapeWriter().addAttribute("id", context.getID(this));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
 
@@ -211,7 +213,10 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
 
 bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
-  qDebug() << "PVPShape found with rect id = " << element.attribute("id") << endl; 
+  
+  if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "yes"))
+  {  
+  //qDebug() << "PVPShape found with rect id = " << element.attribute("id") << endl; 
     const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
     const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));
     const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width"));
@@ -223,4 +228,7 @@ bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingC
         setVisible(false);
 
     return true;
+  }
+  else
+    return false;
 }
