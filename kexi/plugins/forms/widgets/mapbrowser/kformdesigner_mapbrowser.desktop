@@ -2,7 +2,7 @@
 Type=Service
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
-Name=Map Browser
+Name=Map Browser Plugin for Kexi Forms
 Name[da]=Kort-browser
 Name[nb]=Kartleser
 Name[pt]=Navegador do Mapa

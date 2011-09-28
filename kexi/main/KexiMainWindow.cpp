@@ -764,7 +764,7 @@ void KexiMainWindow::setupActions()
 #endif
     ac->addAction("tools_import_project",
                   d->action_tools_data_migration = new KAction(
-        KIcon("document-import-database"), i18n("&Import Database..."), this));
+        KIcon("document_import_database"), i18n("&Import Database..."), this));
     d->action_tools_data_migration->setToolTip(i18n("Import entire database as a Kexi project"));
     d->action_tools_data_migration->setWhatsThis(
         i18n("Imports entire database as a Kexi project."));

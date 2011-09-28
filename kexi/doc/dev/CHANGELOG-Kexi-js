@@ -92,9 +92,47 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+STARTUP
+*show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
+
 ===================== Kexi 2.4  =====================
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
+
+Before freeze:
+*minimal search implementation
+*fix bugs...
+
+2011-09-28
+Startup
+*Improve info for recent entries
+**text now skips filename if there is caption for file-based entries
+**tooltips show server type or full filename path
+Forms
+*Move icons from global directory to web/map plugins so these can be part of plugin packages
+Reports
+*Move icons from global kexi or report lib directories to map/web/shape/barcode plugins so these can be part of plugin packages
+*Install icons for reporting plugins into calligra/ icons directory to make the plugins independent of Kexi
+General
+*Rename icons so they do not use '-' character in names to avoid problems with 'report' prefix
+*Updated translated messages retrieving, translations splitted for plugins
+
+2011-09-27
+Core
+*Avoid overlapping current plugin declarations by old-style plugin declarations
+**Without this new report items were not visible if uk.co.piggz.report class was used before
+*Fix loading recent entries for server databases
+KexiDB
+*Make DriverInfo.name lowercse to avoid mistakes when comparing strings
+
+2011-09-26
+Reports
+*Web Report Element by Shreya Pandit
+**fixed all issues noted in review, cleaned up code using astyle
+
+2011-09-23
+*Fix: properly show server-based items on the Recent Projects list
+BUG:282651
 
 2011-09-22
 Forms

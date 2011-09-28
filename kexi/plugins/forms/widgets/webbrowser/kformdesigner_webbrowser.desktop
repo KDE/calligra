@@ -4,7 +4,7 @@ Type=Service
 
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
-Name=Web Browser
+Name=Web Browser Plugin for Kexi Forms
 Name[da]=Webbrowser
 Name[nb]=Nettleser
 Name[nl]=Webbrowser
