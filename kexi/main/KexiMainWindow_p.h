@@ -1735,19 +1735,27 @@ public:
         enable_slotPropertyEditorVisibilityChanged = true;
     }
 
-    void setPropertyEditorTabBarVisible(bool visible) {
-        KMultiTabBar *mtbar = multiTabBars[KMultiTabBar::Right];
-        int id = PROPERTY_EDITOR_TABBAR_ID;
+    void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
+                          KexiDockWidget *dockWidget, bool visible) 
+    {
+        KMultiTabBar *mtbar = multiTabBars.value(position);
         if (!visible) {
             mtbar->removeTab(id);
         }
         else if (!mtbar->tab(id)) {
-            QString t(propEditorDockWidget->windowTitle());
+            QString t(dockWidget->windowTitle());
             t.remove('&');
             mtbar->appendTab(QPixmap(), id, t);
             KMultiTabBarTab *tab = mtbar->tab(id);
-            QObject::connect(tab, SIGNAL(clicked(int)), wnd, SLOT(slotMultiTabBarTabClicked(int)));
+            QObject::connect(tab, SIGNAL(clicked(int)),
+                             wnd, SLOT(slotMultiTabBarTabClicked(int)),
+                             Qt::UniqueConnection);
         }
+    }
+
+    void setPropertyEditorTabBarVisible(bool visible) {
+        setTabBarVisible(KMultiTabBar::Right, PROPERTY_EDITOR_TABBAR_ID,
+                         propEditorDockWidget, visible);
     }
 
 //2.0: unused

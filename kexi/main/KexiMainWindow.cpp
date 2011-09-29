@@ -2080,18 +2080,8 @@ void KexiMainWindow::slotSetPropertyEditorVisible(bool set)
 
 void KexiMainWindow::slotProjectNavigatorVisibilityChanged(bool visible)
 {
-    KMultiTabBar *mtbar = d->multiTabBars[KMultiTabBar::Left];
-    int id = PROJECT_NAVIGATOR_TABBAR_ID;
-    if (visible) {
-        mtbar->removeTab(id);
-    }
-    else {
-        QString t(d->navDockWidget->windowTitle());
-        t.remove('&');
-        mtbar->appendTab(QPixmap(), id, t);
-        KMultiTabBarTab *tab = mtbar->tab(id);
-        connect(tab, SIGNAL(clicked(int)), this, SLOT(slotMultiTabBarTabClicked(int)));
-    }
+    d->setTabBarVisible(KMultiTabBar::Left, PROJECT_NAVIGATOR_TABBAR_ID,
+                        d->navDockWidget, !visible);
 }
 
 void KexiMainWindow::slotPropertyEditorVisibilityChanged(bool visible)
