@@ -854,9 +854,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
             m_listIndent = listFormat.doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
-            if (!pStyle.hasProperty(KoParagraphStyle::ListLevel)) {
+            // according to odf 1.2 17.20 list margin should be used when paragraph margin is
+            // not specified (additionally LO/OO uses 0 as condition so we do too)
+            if (pStyle.leftMargin() == 0) {
                 leftMargin = listFormat.doubleProperty(KoListStyle::Margin);
-                m_listIndent = listFormat.doubleProperty(KoListStyle::Indent);
             }
         }
     }
@@ -1023,8 +1024,22 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                         //|>------------------|
                         //     leftMargin
                         listTab -= leftMargin;
+                    } else {
+                        // How list tab is defined if relative tabs:
+                        // It's relative to leftMargin - list.leftMargin
+                        //              listTab
+                        //       |>-------------------|
+                        //             m_indent
+                        //           |---------<|
+                        //       LABEL                 TEXT STARTS HERE AND GOES ON
+                        //                      TO THE NEXT LINE
+                        //|>--------------------|
+                        //     leftMargin       |
+                        //       |>-------------|
+                        //          list.margin
+                        listTab -= listFormat.doubleProperty(KoListStyle::Margin);
                     }
-                    // How list tab is defined now (aka relative tabs):
+                    // How list tab is defined now:
                     //                    listTab
                     //                    |>-----|
                     //           m_indent
@@ -1033,7 +1048,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     //                    TO THE NEXT LINE
                     //|>------------------|
                     //     leftMargin
-
                     listTab -= m_indent;
 
                     // And now listTab is like this:
@@ -1126,6 +1140,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
 
+        if (documentLayout()->anchoringSoftBreak() <= block.position() + line.textStart() + line.textLength()) {
+            //don't add an anchor that has been moved away 
+            line.setNumColumns(documentLayout()->anchoringSoftBreak() - block.position() - line.textStart(), line.width());
+            softBreak = true;
+            // if the softBreakPos is at the start of the block stop here so
+            // we don't add a line here. That fixes the problem that e.g. the counter is before
+            // the page break and the text is after the page break
+            if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
+                return false;
+            }
+        }
+
         findFootNotes(block, line);
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
@@ -1202,7 +1228,9 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         return guessGlyphWidth * 3 + m_extraTextIndent;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
+        // according to odf 1.2 17.20 list text indent should be used when paragraph text indent is
+        // not specified (additionally LO/OO uses 0 as condition so we do too)
+        if (pStyle.textIndent().value(width()) == 0) {
             return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
