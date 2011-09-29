@@ -626,7 +626,7 @@ protected slots:
     void slotSettings();
     void slotConfigureKeys();
     void slotConfigureToolbars();
-    void slotToolsProjectMigration();
+    void slotToolsImportProject();
     void slotToolsImportTables();
     void slotToolsCompactDatabase();
 

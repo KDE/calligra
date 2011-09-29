@@ -407,22 +407,22 @@ protected:
             topmargin += m_topLineHeight;
             m_menuWidget->setContentsMargins(leftmargin, topmargin, rightmargin, bottommargin);
 
-            m_menuWidget->addAction(ac->action("project_new"));
+            m_menuWidget->addAction(ac->action("project_open_recent"));
             m_menuWidget->addAction(ac->action("project_open"));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::New, this));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::Open, this));
             //menu->setActiveAction(ac->action("project_open"));
-            m_menuWidget->addAction(ac->action("project_open_recent"));
-            m_menuWidget->addSeparator();
-            //menu->addAction(ac->action("project_save"));
-            //menu->addAction(ac->action("project_saveas"));
             m_menuWidget->addAction(ac->action("project_close"));
             m_menuWidget->addSeparator();
+            m_menuWidget->addAction(ac->action("project_new"));
             //menu->addAction(ac->action("tools_import_project"));
+            //menu->addAction(ac->action("project_save"));
+            //menu->addAction(ac->action("project_saveas"));
             m_menuWidget->addAction(ac->action("project_import_export_send"));
             m_menuWidget->addAction(ac->action("project_properties"));
             // todo: project information
             m_menuWidget->addAction(ac->action("settings"));
+            m_menuWidget->addSeparator();
             m_menuWidget->addAction(ac->action("quit"));
             //menu->setFixedWidth(300);
             hlyr->addWidget(m_menuWidget);
@@ -1977,7 +1977,7 @@ public:
     KAction *action_format_font;
 
     //! tools menu
-    KAction *action_tools_data_migration, *action_tools_compact_database, *action_tools_data_import;
+    KAction *action_tools_import_project, *action_tools_compact_database, *action_tools_data_import;
     KActionMenu *action_tools_scripts;
 
     //! window menu
