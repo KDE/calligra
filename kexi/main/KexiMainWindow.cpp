@@ -46,7 +46,6 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaction.h>
-#include <KRecentFilesAction>
 #include <KActionCollection>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
@@ -68,7 +67,6 @@
 #include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <krecentdocument.h>
 #include <KMenu>
 #include <KXMLGUIFactory>
 #include <KMultiTabBar>
@@ -109,7 +107,7 @@
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectAssistant.h"
 #include "startup/KexiOpenProjectAssistant.h"
-#include "startup/KexiRecentProjectsAssistant.h"
+#include "startup/KexiWelcomeAssistant.h"
 #include "startup/KexiImportExportAssistant.h"
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
@@ -117,13 +115,6 @@
 
 //2.x #include "printing/kexisimpleprintingpart.h"
 //2.x #include "printing/kexisimpleprintingpagesetup.h"
-
-//Extreme verbose debug
-//#if defined(Q_WS_WIN)
-//# include <krecentdirs.h>
-//# include <win32_utils.h>
-//# define KexiVDebug kDebug()
-//#endif
 
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kDebug()
@@ -681,14 +672,15 @@ void KexiMainWindow::setupActions()
 #endif
 
     {
-        ac->addAction("project_open_recent",
-            action = d->action_open_recent = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
+        ac->addAction("project_welcome",
+            action = d->action_project_welcome = new KexiMenuWidgetAction(
+                KIcon(), i18n("Welcome"), this));
             addThreeDotsToActionText(action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecent()));
-        setupMainMenuActionShortcut(action, SLOT(slotProjectOpenRecent()));
-        action->setToolTip(i18n("Open recent project"));
+        connect(action, SIGNAL(triggered()), this, SLOT(slotProjectWelcome()));
+        setupMainMenuActionShortcut(action, SLOT(slotProjectWelcome()));
+        action->setToolTip(i18n("Show Welcome page"));
         action->setWhatsThis(
-            i18n("Opens one of the recently opened project. Currently opened project is not affected."));
+            i18n("Shows Welcome page with list of recently opened projects and other information. "));
     }
 
     ac->addAction("project_save",
@@ -1565,7 +1557,7 @@ tristate KexiMainWindow::startup()
         break;
     case KexiStartupHandler::ShowWelcomeScreen:
         //! @todo show welcome screen as soon as is available
-        QTimer::singleShot(1, this, SLOT(slotProjectOpenRecent()));
+        QTimer::singleShot(1, this, SLOT(slotProjectWelcome()));
         break;
     default:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
@@ -1664,25 +1656,6 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 #else
 #pragma WARNING( TODO - remove win32 case )
 #endif
-        /*TODO?
-        #ifdef Q_WS_WIN
-          //! @todo remove
-            QString recentDir = KGlobalSettings::documentPath();
-            if (fname.isEmpty() && !projectData.constConnectionData()->dbFileName().isEmpty()) //propose filename from db template name
-              fname = KFileDialog::getStartURL(startDir, recentDir).path()
-                + '/' + projectData.constConnectionData()->dbFileName();
-            fname = Q3FileDialog::getSaveFileName(
-              KFileDialog::getStartURL(fname.isEmpty() ? startDir : fname, recentDir).path(),
-              KexiUtils::fileDialogFilterStrings(mimetypes, false),
-              this, "CreateProjectFromTemplate", caption);
-            if ( !fname.isEmpty() ) {
-              //save last visited path
-              KUrl url;
-              url.setPath( fname );
-              if (url.isLocalFile())
-                KRecentDirs::add(startDir, url.directory());
-            }
-        #else*/
         Q_UNUSED(projectData);
         if (fname.isEmpty() &&
                 !projectData.constConnectionData()->dbFileName().isEmpty()) {
@@ -1701,9 +1674,6 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
         dlg.setWindowTitle(caption);
         dlg.exec();
         fname = dlg.selectedFile();
-        if (!fname.isEmpty())
-            KRecentDocument::add(fname);
-//#endif
         if (fname.isEmpty())
             return cancelled;
         if (KexiStartupFileWidget::askForOverwriting(fname, this))
@@ -3386,12 +3356,12 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
     return ok;
 }
 
-void KexiMainWindow::slotProjectOpenRecent()
+void KexiMainWindow::slotProjectWelcome()
 {
     if (!d->tabbedToolBar)
         return;
-    d->tabbedToolBar->showMainMenu("project_open_recent");
-    KexiRecentProjectsAssistant* assistant = new KexiRecentProjectsAssistant(
+    d->tabbedToolBar->showMainMenu("project_welcome");
+    KexiWelcomeAssistant* assistant = new KexiWelcomeAssistant(
         Kexi::recentProjects());
     connect(assistant, SIGNAL(openProject(KexiProjectData)), 
             this, SLOT(openProject(KexiProjectData)));

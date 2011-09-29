@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIRECENTPROJECTSASSISTANT_H
-#define KEXIRECENTPROJECTSASSISTANT_H
+#ifndef KEXIWELCOMEASSISTANT_H
+#define KEXIWELCOMEASSISTANT_H
 
 #include <kexidb/connectiondata.h>
 #include <kexidb/msghandler.h>
@@ -33,14 +33,14 @@ class KexiConnSelectorWidget;
 class KexiProjectData;
 class KexiProjectSelectorWidget;
 class KCategorizedView;
-class KexiRecentProjectsAssistant;
+class KexiWelcomeAssistant;
 class KexiRecentProjectsProxyModel;
 
-class KexiMainRecentProjectsPage : public KexiAssistantPage
+class KexiMainWelcomePage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiMainRecentProjectsPage(KexiRecentProjectsAssistant* assistant,
+    explicit KexiMainWelcomePage(KexiWelcomeAssistant* assistant,
                                         QWidget* parent = 0);
 
     QString selectedTemplate;
@@ -55,19 +55,19 @@ private slots:
 private:
     KexiCategorizedView* m_recentProjects;
     KexiRecentProjectsProxyModel* m_recentProjectsProxyModel;
-    KexiRecentProjectsAssistant* m_assistant;
+    KexiWelcomeAssistant* m_assistant;
 };
 
 class KexiProjectData;
 class KexiRecentProjects;
 
-class KexiRecentProjectsAssistant : public KexiAssistantWidget,
-                                    public KexiDB::MessageHandler
+class KexiWelcomeAssistant : public KexiAssistantWidget,
+                             public KexiDB::MessageHandler
 {
     Q_OBJECT
 public:
-    explicit KexiRecentProjectsAssistant(KexiRecentProjects* projects, QWidget* parent = 0);
-    ~KexiRecentProjectsAssistant();
+    explicit KexiWelcomeAssistant(KexiRecentProjects* projects, QWidget* parent = 0);
+    ~KexiWelcomeAssistant();
 
     //! Implementation for KexiDB::MessageHandler.
     virtual void showErrorMessage(const QString &title,

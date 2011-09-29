@@ -407,7 +407,7 @@ protected:
             topmargin += m_topLineHeight;
             m_menuWidget->setContentsMargins(leftmargin, topmargin, rightmargin, bottommargin);
 
-            m_menuWidget->addAction(ac->action("project_open_recent"));
+            m_menuWidget->addAction(ac->action("project_welcome"));
             m_menuWidget->addAction(ac->action("project_open"));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::New, this));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::Open, this));
@@ -1497,8 +1497,8 @@ public:
         action_view_nav = 0;
         action_view_propeditor = 0;
         action_view_mainarea = 0;
-        action_open_recent_projects_title_id = -1;
-        action_open_recent_connections_title_id = -1;
+        action_welcome_projects_title_id = -1;
+        action_welcome_connections_title_id = -1;
         forceWindowClosing = false;
         insideCloseWindow = false;
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1932,18 +1932,17 @@ public:
     //! Kexi menu
     KAction *action_save, *action_save_as, 
     *action_project_import_export_send, *action_close,
-    *action_project_properties, *action_open_recent_more,
+    *action_project_properties,
     *action_project_relations, *action_project_import_data_table,
     *action_project_export_data_table;
 #ifndef KEXI_NO_QUICK_PRINTING
     KAction *action_project_print, *action_project_print_preview,
         *action_project_print_setup;
 #endif
-    KAction *action_open_recent;
+    KAction *action_project_welcome;
     KAction *action_show_other;
-//  int action_open_recent_more_id;
-    int action_open_recent_projects_title_id,
-    action_open_recent_connections_title_id;
+    int action_welcome_projects_title_id,
+    action_welcome_connections_title_id;
     KAction *action_settings;
 
     //! edit menu

@@ -23,7 +23,7 @@ kexinewstuff.cpp
 startup/KexiConnSelector.cpp
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp
-startup/KexiRecentProjectsAssistant.cpp
+startup/KexiWelcomeAssistant.cpp
 startup/KexiImportExportAssistant.cpp
 startup/KexiProjectSelector.cpp
 startup/KexiStartupFileWidget.cpp
