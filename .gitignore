@@ -1,10 +1,12 @@
 *.kdev4
 *~
 .kateconfig
-CMakeLists.txt.user
+CMakeLists.txt.user*
 .directory
 *.rej
 *.orig
 *.patch
+*.autosave
+*.swp
 .gdb_history
 .kdev_include_paths

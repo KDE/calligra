@@ -279,7 +279,7 @@ void Document::processAssociatedStrings()
     }
     if (!strings.title().isNull()) {
         m_metaWriter->startElement("dc:title");
-        qDebug() << "TITLE: " << Conversion::string(strings.title());
+        kDebug(30513) << "TITLE: " << Conversion::string(strings.title());
         m_metaWriter->addTextNode(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }

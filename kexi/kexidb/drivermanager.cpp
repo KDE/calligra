@@ -326,7 +326,7 @@ const KexiDB::Driver::InfoHash DriverManager::driversInfo()
         return d_int->m_driversInfo;
     foreach(KService::Ptr ptr, d_int->m_services) {
         Driver::Info info;
-        info.name = ptr->property("X-Kexi-DriverName").toString();
+        info.name = ptr->property("X-Kexi-DriverName").toString().toLower();
         info.caption = ptr->property("Name").toString();
         info.comment = ptr->property("Comment").toString();
         if (info.caption.isEmpty())

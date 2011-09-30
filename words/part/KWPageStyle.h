@@ -66,9 +66,11 @@ public:
     /**
      * constructor, initializing the data to some default values.
      *
-     * \p masterPageName The name of this page style.
+     * \param mastername the master page name for this page style.
+     * \param displayname the display name for this page style. If not
+     * defined then the \p mastername will be used as display name.
      */
-    explicit KWPageStyle(const QString &mastername);
+    explicit KWPageStyle(const QString &mastername, const QString &displayname = QString());
     /**
      * copy constructor
      *
@@ -213,6 +215,8 @@ public:
 
     /// get the master page name for this page style.
     QString name() const;
+    /// get the display name for this page style.
+    QString displayName() const;
 
     KoText::Direction direction() const;
     void setDirection(KoText::Direction direction);
@@ -248,8 +252,13 @@ public:
     /// internal
     KWPageStylePrivate *priv();
 
-    /// detach from shared data and set a new name for this one.
-    void detach(const QString &name);
+    /**
+     * Detach from shared data and set a new name for this one.
+     *
+     * Note that the detached style is not known by the page-manager yet. Use
+     * KWPageManager::addPageStyle to make the detached page-style permanent.
+     */
+    void detach(const QString &name, const QString &displayName = QString());
 
 private:
     QExplicitlySharedDataPointer<KWPageStylePrivate> d;

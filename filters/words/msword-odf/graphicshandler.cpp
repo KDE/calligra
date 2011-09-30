@@ -905,16 +905,6 @@ void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const Dra
             style.addProperty("style:run-through", "foreground", gt);
         }
     }
-
-    // margins are related to text wrapping
-    // fo:margin-bottom
-    // fo:margin-left
-    // fo:margin-right
-    // fo:margin-top
-    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700., gt);
-    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700., gt);
-    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700., gt);
-    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700., gt);
 }
 
 void WordsGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
@@ -1050,6 +1040,11 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     style.addProperty("fo:border-left", Conversion::setBorderAttributes(m_picf->brcLeft));
     style.addProperty("fo:border-bottom", Conversion::setBorderAttributes(m_picf->brcBottom));
     style.addProperty("fo:border-right", Conversion::setBorderAttributes(m_picf->brcRight));
+
+    // NOTE: The default margin-left/margin-right values DO NOT make sense for
+    // inline pictures, also after conversion of test files to DOCX, both
+    // attributes were set to ZEROs.  Default margin-top/margin-bottom is ZERO.
+    style.addPropertyPt("style:margin", 0);
 
     styleName = out.styles.insert(style);
 

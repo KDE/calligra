@@ -46,6 +46,8 @@ public:
     KPlatoRCPSPlugin( QObject * parent,  const QVariantList & );
     ~KPlatoRCPSPlugin();
 
+    virtual QString description() const;
+    virtual int capabilities() const;
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
 

@@ -155,8 +155,9 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 #define APPEND(what) \
     if (copyToClipboard) buffer.append(what); else (*stream) << (what)
 
-// line endings should be as in RFC 4180
-#define CSV_EOLN "\r\n"
+// use native line ending for copying, RFC 4180 one for saving to file
+#define APPEND_EOLN \
+    if (copyToClipboard) { APPEND('\n'); } else { APPEND("\r\n"); }
 
     kDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
     // 0. Cache information
@@ -208,7 +209,7 @@ kDebug() << 1;
                 APPEND(fields[i]->captionOrAliasOrName());
             }
         }
-        APPEND(CSV_EOLN);
+        APPEND_EOLN
     }
 
     KexiGUIMessageHandler handler;
@@ -250,7 +251,7 @@ kDebug() << 1;
                 APPEND(cursor->value(real_i).toString());
             }
         }
-        APPEND(CSV_EOLN);
+        APPEND_EOLN
     }
 
     if (copyToClipboard)

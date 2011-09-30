@@ -645,7 +645,7 @@ QMimeData *TaskStatusItemModel::mimeData( const QModelIndexList & indexes ) cons
             }
         }
     }
-    m->setData("application/x-vnd.kde.kplato.nodeitemmodel.internal", encodedData);
+    m->setData("application/x-vnd.kde.plan.nodeitemmodel.internal", encodedData);
     return m;
 }
 

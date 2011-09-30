@@ -44,8 +44,8 @@
 #include <QStackedWidget>
 
 #include <widget/utils/klistviewitemtemplate.h>
-#include <widget/KexiProjectListView.h>
-#include <widget/KexiProjectListViewItem.h>
+#include <widget/navigator/KexiProjectListView.h>
+#include <widget/navigator/KexiProjectListViewItem.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 

@@ -188,7 +188,7 @@ QString Duration::toString(Format format) const {
             result = i18nc("<hours>h:<minutes>m", "%1h:%2m", hours, minutes);
             break;
         case Format_i18nDay:
-            result = KGlobal::locale()->formatNumber(toDouble(Unit_d), 2);
+            result = KGlobal::locale()->prettyFormatDuration( m_ms );
             break;
         case Format_i18nWeek:
             result = this->format( Unit_w, 2, KGlobal::locale() );

@@ -19,7 +19,7 @@
 
 
 #include "KexiAutoFormDesigner.h"
-#include <widget/kexidatasourcecombobox.h>
+#include <widget/KexiDataSourceComboBox.h>
 #include <core/KexiMainWindowIface.h>
 #include <QVBoxLayout>
 
