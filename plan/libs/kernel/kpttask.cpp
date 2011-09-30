@@ -2720,15 +2720,14 @@ uint Task::state( long id ) const
             st |= State_FinishedEarly;
         }
     } else if ( completion().isStarted() ) {
-        if ( completion().percentFinished() == 0 ) {
-            st |= Node::State_Started;
-            if ( completion().startTime() > startTime( id ) ) {
-                st |= State_StartedLate;
-            }
-            if ( completion().startTime() < startTime( id ) ) {
-                st |= State_StartedEarly;
-            }
-        } else {
+        st |= Node::State_Started;
+        if ( completion().startTime() > startTime( id ) ) {
+            st |= State_StartedLate;
+        }
+        if ( completion().startTime() < startTime( id ) ) {
+            st |= State_StartedEarly;
+        }
+        if ( completion().percentFinished() > 0 ) {
             st |= State_Running;
         }
     }

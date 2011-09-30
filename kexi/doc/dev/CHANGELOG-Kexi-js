@@ -92,12 +92,82 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+STARTUP
+*show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
+
 ===================== Kexi 2.4  =====================
 
-2011-09-09
+~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
+
+Before freeze:
+*minimal search implementation
+*fix bugs...
+
+2011-09-29
+CSV Export
+*When copying CSV data to clipboard use native line endings, force \r\n only in files
+Main Window
+*Added "Import, Export or Send" menu item and assistant
+*Rearranged Kexi menu items for usability
+*Settings menu item disabled for now
+*"Open Recent" page becomes more generic "Welcome" page
+
+2011-09-28
+Startup
+*Improve info for recent entries
+**text now skips filename if there is caption for file-based entries
+**tooltips show server type or full filename path
+Forms
+*Move icons from global directory to web/map plugins so these can be part of plugin packages
+Reports
+*Move icons from global kexi or report lib directories to map/web/shape/barcode plugins so these can be part of plugin packages
+*Install icons for reporting plugins into calligra/ icons directory to make the plugins independent of Kexi
+General
+*Rename icons so they do not use '-' character in names to avoid problems with 'report' prefix
+*Updated translated messages retrieving, translations splitted for plugins
+
+2011-09-27
+Core
+*Avoid overlapping current plugin declarations by old-style plugin declarations
+**Without this new report items were not visible if uk.co.piggz.report class was used before
+*Fix loading recent entries for server databases
+KexiDB
+*Make DriverInfo.name lowercse to avoid mistakes when comparing strings
+
+2011-09-26
+Reports
+*Web Report Element by Shreya Pandit
+**fixed all issues noted in review, cleaned up code using astyle
+
+2011-09-23
+*Fix: properly show server-based items on the Recent Projects list
+BUG:282651
+
+2011-09-22
+Forms
+*Revert disabling "Save Record" action for editing cancelling
+Main Window
+*Hide Project Navigator pane completely when closing project
+*Update availability of "Import Tables" action when closing project
+
+2011-09-21
+General
+*Fixes in date, time and date/time validating code, little refactoring, simplifing API
+
+2011-09-20
+Main Window
+*Fixed regression: Prevent renaming objects to invalid identifiers in Project Navigator
+BUG:282444
+General
+*Do not load and show objects with invalid metadata in project navigator. Such invalid objects include: objects with id <= 0, objects with name reserved for internal use, objects with name not being valid identifier.
+BUG:282445
+
+2011-09-17
 Table View
 *Fixed input mask for date, time and date/time data fields in table views
 BUG:272994
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 1 (2.3.81) ~~~~~~~~~~~~~~~~
 
 2011-09-09
 Forms
@@ -110,7 +180,7 @@ Main Window
 
 2011-08-28
 Table View
-*fix posible crashe because rnning 'process events' in table view data's destructor
+*fix posible crashes because of running 'process events' in table view data's destructor
 
 2011-08-26
 Table View
@@ -541,7 +611,7 @@ Core
 *Clarify error message: when non-kexi SQLite file is opened, display "Database project '...' does not appear to have been created using Kexi and cannot be opened. It is an SQLite file created using other tools."
 
 2010-08-29
-CSV Export Dialog
+CSV Export
 *fix layout of the CSV Export dialog
 *fixed regression: make "Export Data to File" action enabled when opening object
 

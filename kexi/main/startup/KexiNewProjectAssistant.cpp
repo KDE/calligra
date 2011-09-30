@@ -650,6 +650,8 @@ void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 void KexiNewProjectAssistant::showErrorMessage(
     const QString &title, const QString &details)
 {
+    Q_UNUSED(title);
+    Q_UNUSED(details);
 }
 
 void KexiNewProjectAssistant::showErrorMessage(

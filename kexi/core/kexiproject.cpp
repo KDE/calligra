@@ -52,6 +52,19 @@
 
 #include <assert.h>
 
+//! @return real part class for @a partClass and @a partMime
+//! for compatibility with Kexi 1.x
+static QString realPartClass(const QString &partClass, const QString &partMime)
+{
+    if (partClass.startsWith(QLatin1String("http://"))) {
+        // for compatibility with Kexi 1.x
+        // part mime was used at the time
+        return QLatin1String("org.kexi-project.")
+               + QString(partMime).replace("kexi/", QString());
+    }
+    return partClass;
+}
+
 class KexiProject::Private
 {
 public:
@@ -78,10 +91,14 @@ public:
         unstoredItems.clear();
     }
 
-    void saveClassId(const QString& partClass, int id, const QString& originalPartClass = QString())
+    void saveClassId(const QString& partClass, int id)
     {
-        classIds.insert(originalPartClass.isEmpty() ? partClass : originalPartClass, id);
-        classNames.insert(id, partClass);
+        //QString c(originalPartClass.isEmpty() ? partClass : originalPartClass);
+        if (!classIds.contains(partClass) && !classNames.contains(id)) {
+            classIds.insert(partClass, id);
+            classNames.insert(id, partClass);
+        }
+//! @todo what to do with extra ids for the same part or extra class name for the same ID?
     }
 
     QPointer<KexiDB::Connection> connection;
@@ -606,8 +623,11 @@ bool KexiProject::retrieveItems()
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
         bool ok;
         int partId = cursor->value(3).toInt(&ok);
-        if (!ok || partId <= 0)
+        if (!ok || partId <= 0) {
+            kWarning() << "object of unknown type: id=" << cursor->value(0)
+                       << "name=" <<  cursor->value(1);
             continue;
+        }
         if (recentPartId == partId) {
             if (partClass.isEmpty()) // still the same unknown part id
                 continue;
@@ -621,18 +641,18 @@ bool KexiProject::retrieveItems()
             dict = new KexiPart::ItemDict();
             d->itemDicts.insert(partClass, dict);
         }
-        KexiPart::Item *it = new KexiPart::Item();
         int ident = cursor->value(0).toInt(&ok);
         QString objName(cursor->value(1).toString());
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
                 && KexiUtils::isIdentifier(objName))
         {
+            KexiPart::Item *it = new KexiPart::Item();
             it->setIdentifier(ident);
-            it->setPartClass(partClass); //js: may be not null???
+            it->setPartClass(partClass);
             it->setName(objName);
             it->setCaption(cursor->value(2).toString());
+            dict->insert(it->identifier(), it);
         }
-        dict->insert(it->identifier(), it);
 //  kDebug() << "ITEM ADDED == "<<objName <<" id="<<ident;
     }
 
@@ -1077,7 +1097,7 @@ bool KexiProject::checkProject(const QString& singlePartClass)
         setError(d->connection);
         return false;
     }
-    QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts");
+    QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
     if (!singlePartClass.isEmpty()) {
         sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
     }
@@ -1091,15 +1111,8 @@ bool KexiProject::checkProject(const QString& singlePartClass)
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
         const QString partMime( cursor->value(2).toString() );
         QString partClass( cursor->value(3).toString() );
-        if (partClass.startsWith(QLatin1String("http://"))) {
-            // for compatibility with Kexi 1.x
-            // part mime was used at the time
-            partClass = QLatin1String("org.kexi-project.")
-                + QString(partMime).replace("kexi/", QString());
-        }
-        QString originalPartClass;
+        partClass = realPartClass(partClass, partMime);
         if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
-            originalPartClass = partClass;
             partClass = QLatin1String("org.kexi-project.report");
         }
         KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
@@ -1109,7 +1122,7 @@ bool KexiProject::checkProject(const QString& singlePartClass)
             kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
         }
         if (info && ok && classId > 0) {
-            d->saveClassId(partClass, classId, originalPartClass);
+            d->saveClassId(partClass, classId);
             saved = true;
         }
         else {

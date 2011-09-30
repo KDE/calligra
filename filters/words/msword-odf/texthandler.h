@@ -142,16 +142,32 @@ public:
      */
     QString paragraphBgColor() const { return m_paragraph ? m_paragraph->currentBgColor() : QString(); }
 
+    /**
+     *
+     */
+    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
+
+    /**
+     *
+     */
+    void updateListStyle() throw(InvalidFormatException);
+
+    /**
+     *
+     */
+    bool listIsOpen(); //tell us whether a list is open
+
+    /**
+     *
+     */
+    void closeList();
+
     // Provide access to private attributes for our handlers
     Document* document() const { return m_document; }
     void setDocument(Document * document) { m_document = document; }
     void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
     bool breakBeforePage(void) const { return m_breakBeforePage; }
     int sectionNumber(void) const { return m_sectionNumber; }
-
-    //TODO: let's try to solve all list related stuff locally in TextHandler
-    bool listIsOpen(); //tell us whether a list is open
-    void closeList();
 
     // Communication with Document, without having to know about Document
 signals:
@@ -239,19 +255,14 @@ private:
     // ************************************************
     //  List
     // ************************************************
-    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    void updateListStyle() throw(InvalidFormatException);
-    QString createBulletStyle(const QString& textStyleName) const;
-
     QString m_listSuffixes[9];     // The suffix for every list level seen so far
     QString m_listStyleName;       // track the name of the list style
     bool m_listLevelStyleRequired; // track if a list-level-style is required for current paragraph
-    int m_currentListDepth;        // tells us which list level we're on (-1 if not in a list)
-    int m_currentListID;           // tracks the id of the current list - 0 if no list
+    int m_previousListDepth;        // tells us which list level we're on (-1 if not in a list)
+    int m_previousListID;           // tracks the ID of the current list - 0 if not a list
 
     QStack <KoXmlWriter*> m_usedListWriters;
-    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
-    //int m_previousListID; //track previous list, in case we need to continue the numbering
+    QMap<int, QPair<QString, QList<quint8> > > m_previousLists; //information about already processed lists
 
     // ************************************************
     //  State
@@ -261,7 +272,7 @@ private:
     struct State {
         State(Words::Table* table, Paragraph* paragraph,
               QString listStyleName, int listDepth, int listID,
-              const QMap<int, QString> &prevLists,
+              const QMap<int, QPair<QString, QList<quint8> > > &prevLists,
               KoXmlWriter* drawingWriter, bool insideDrawing) :
 
             table(table),
@@ -278,7 +289,7 @@ private:
         QString listStyleName;
         int listDepth; //tells us which list level we're on (-1 if not in a list)
         int listID;    //tracks the id of the current list - 0 if no list
-        QMap<int, QString> previousLists; //remember previous lists, to continue numbering
+        QMap<int, QPair<QString, QList<quint8> > > previousLists; //remember previous lists, to continue numbering
 
         KoXmlWriter* drawingWriter;
         bool insideDrawing;

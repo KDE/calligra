@@ -18,6 +18,7 @@
  */
 
 #include <KLocale>
+#include <KDebug>
 
 #include "kexitextformatter.h"
 #include <widget/utils/kexidatetimeformatter.h>
@@ -55,70 +56,84 @@ void KexiTextFormatter::setField(KexiDB::Field* field)
     d->field = field;
     if (!d->field)
         return;
-    if (d->field->type() == KexiDB::Field::Date || d->field->type() == KexiDB::Field::DateTime)
+    const KexiDB::Field::Type t = d->field->type();
+    switch (t) {
+    case KexiDB::Field::Date:
+    case KexiDB::Field::DateTime:
         d->dateFormatter = new KexiDateFormatter();
-    else {
+        break;
+    default:
         delete d->dateFormatter;
         d->dateFormatter = 0;
+        break;
     }
-    if (d->field->type() == KexiDB::Field::Time || d->field->type() == KexiDB::Field::DateTime)
+    switch (t) {
+    case KexiDB::Field::Time:
+    case KexiDB::Field::DateTime:
         d->timeFormatter = new KexiTimeFormatter();
-    else {
+        break;
+    default:
         delete d->timeFormatter;
         d->timeFormatter = 0;
+        break;
     }
 }
 
-QString KexiTextFormatter::valueToText(const QVariant& value, const QString& add) const
+QString KexiTextFormatter::toString(const QVariant& value, const QString& add) const
 {
     //cases, in order of expected frequency
-    if (!d->field || d->field->isTextType())
+    if (!d->field || d->field->isTextType()) {
         return value.toString() + add;
+    }
     else if (d->field->isIntegerType()) {
         if (value.toInt() == 0)
             return add; //eat 0
-    } else if (d->field->isFPNumericType()) {
+    }
+    else if (d->field->isFPNumericType()) {
 //! @todo precision!
 //! @todo support 'g' format
         if (value.toDouble() == 0.0)
             return add.isEmpty() ? "0" : add; //eat 0
-    return KexiDB::formatNumberForVisibleDecimalPlaces(
-               value.toDouble(), d->field->visibleDecimalPlaces()) + add;
-}
-else if (d->field->type() == KexiDB::Field::Boolean)
-{
-//! @todo temporary solution for booleans!
-    const bool boolValue = value.isNull() ? QVariant(add).toBool() : value.toBool();
-    return boolValue ? "1" : "0";
-} else if (d->field->type() == KexiDB::Field::Date)
-{
-    return d->dateFormatter->dateToString(value.toString().isEmpty() ? QDate() : value.toDate());
-} else if (d->field->type() == KexiDB::Field::Time)
-{
-    return d->timeFormatter->timeToString(
-               //hack to avoid converting null variant to valid QTime(0,0,0)
-               value.toString().isEmpty() ? value.toTime() : QTime(99, 0, 0));
-} else if (d->field->type() == KexiDB::Field::DateTime)
-{
-    if (value.toString().isEmpty())
-        return add;
-    return d->dateFormatter->dateToString(value.toDateTime().date()) + " " +
-           d->timeFormatter->timeToString(value.toDateTime().time());
-} else if (d->field->type() == KexiDB::Field::BigInteger)
-{
-    if (value.toLongLong() == 0)
-        return add; //eat 0
-}
-//default: text
-return value.toString() + add;
+        return KexiDB::formatNumberForVisibleDecimalPlaces(
+            value.toDouble(), d->field->visibleDecimalPlaces()) + add;
+    }
+
+    switch (d->field->type()) {
+    case KexiDB::Field::Boolean: {
+    //! @todo temporary solution for booleans!
+        const bool boolValue = value.isNull() ? QVariant(add).toBool() : value.toBool();
+        return boolValue ? "1" : "0";
+    }
+    case KexiDB::Field::Date:
+        return d->dateFormatter->toString(
+                   value.toString().isEmpty() ? QDate() : value.toDate());
+    case KexiDB::Field::Time:
+        return d->timeFormatter->toString(
+                   value.toString().isEmpty()
+                   ? QTime(99, 0, 0) //hack to avoid converting null variant to valid QTime(0,0,0)
+                   : value.toTime());
+    case KexiDB::Field::DateTime:
+        if (value.toString().isEmpty())
+            return add;
+        return KexiDateTimeFormatter::toString(
+                   *d->dateFormatter, *d->timeFormatter, value.toDateTime());
+    case KexiDB::Field::BigInteger:
+        if (value.toLongLong() == 0)
+            return add; //eat 0
+        break;
+    default:
+        break;
+    }
+    //default: text
+    return value.toString() + add;
 }
 
-QVariant KexiTextFormatter::textToValue(const QString& text) const
+QVariant KexiTextFormatter::fromString(const QString& text) const
 {
     if (!d->field)
         return QVariant();
-    const KexiDB::Field::Type t = d->field->type();
-    switch (t) {
+
+    switch (d->field->type()) {
     case KexiDB::Field::Text:
     case KexiDB::Field::LongText:
         return text;
@@ -138,19 +153,21 @@ QVariant KexiTextFormatter::textToValue(const QString& text) const
     case KexiDB::Field::Time:
         return d->timeFormatter->stringToVariant(text);
     case KexiDB::Field::DateTime:
-        return stringToDateTime(*d->dateFormatter, *d->timeFormatter, text);
+        return KexiDateTimeFormatter::fromString(
+                   *d->dateFormatter, *d->timeFormatter, text);
     case KexiDB::Field::Float:
     case KexiDB::Field::Double: {
         // replace custom decimal symbol with '.' as required by to{Float|Double}()
         QString fixedText(text);
         fixedText.replace(KGlobal::locale()->decimalSymbol(), ".");
-        if (t == KexiDB::Field::Double)
+        if (d->field->type() == KexiDB::Field::Double)
             return fixedText.toDouble();
         return fixedText.toFloat();
     }
     default:
-        return text;
+        break;
     }
+    return text;
 //! @todo more data types!
 }
 
@@ -160,13 +177,16 @@ bool KexiTextFormatter::valueIsEmpty(const QString& text) const
         return true;
 
     if (d->field) {
-        const KexiDB::Field::Type t = d->field->type();
-        if (t == KexiDB::Field::Date)
+        switch (d->field->type()) {
+        case KexiDB::Field::Date:
             return d->dateFormatter->isEmpty(text);
-        else if (t == KexiDB::Field::Time)
+        case KexiDB::Field::Time:
             return d->timeFormatter->isEmpty(text);
-        else if (t == KexiDB::Field::Time)
-            return dateTimeIsEmpty(*d->dateFormatter, *d->timeFormatter, text);
+        case KexiDB::Field::DateTime:
+            return KexiDateTimeFormatter::isEmpty(*d->dateFormatter, *d->timeFormatter, text);
+        default:
+            break;
+        }
     }
 
 //! @todo
@@ -181,13 +201,16 @@ bool KexiTextFormatter::valueIsValid(const QString& text) const
     if (valueIsEmpty(text)/*ok?*/)
         return true;
 
-    const KexiDB::Field::Type t = d->field->type();
-    if (t == KexiDB::Field::Date)
+    switch (d->field->type()) {
+    case KexiDB::Field::Date:
         return d->dateFormatter->stringToVariant(text).isValid();
-    else if (t == KexiDB::Field::Time)
+    case KexiDB::Field::Time:
         return d->timeFormatter->stringToVariant(text).isValid();
-    else if (t == KexiDB::Field::DateTime)
-        return dateTimeIsValid(*d->dateFormatter, *d->timeFormatter, text);
+    case KexiDB::Field::DateTime:
+        return KexiDateTimeFormatter::isValid(*d->dateFormatter, *d->timeFormatter, text);
+    default:
+        break;
+    }
 
 //! @todo
     return true;
@@ -195,16 +218,18 @@ bool KexiTextFormatter::valueIsValid(const QString& text) const
 
 QString KexiTextFormatter::inputMask() const
 {
-    const KexiDB::Field::Type t = d->field->type();
-    if (t == KexiDB::Field::Date) {
+    switch (d->field->type()) {
+    case KexiDB::Field::Date:
 //! @todo use KDateWidget?
         return d->dateFormatter->inputMask();
-    } else if (t == KexiDB::Field::Time) {
-//! @todo use KTimeWidget
-        d->timeFormatter->inputMask();
-    } else if (t == KexiDB::Field::DateTime) {
-        dateTimeInputMask(*d->dateFormatter, *d->timeFormatter);
+    case KexiDB::Field::Time:
+//! @todo use KTimeWidget?
+        return d->timeFormatter->inputMask();
+    case KexiDB::Field::DateTime:
+        return KexiDateTimeFormatter::inputMask(*d->dateFormatter, *d->timeFormatter);
+    default:
+        break;
     }
+
     return QString();
 }
-

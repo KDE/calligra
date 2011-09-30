@@ -306,9 +306,16 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     // verification OK, now applying the values:
     d->connData.driverName = driverName;
     formatVersion = _formatVersion;
-    d->connData.hostName = cg.readEntry("server"); //empty allowed
+    d->connData.hostName = cg.readEntry("server"); //empty allowed, means localhost
     if (isDatabaseShortcut) {
-        const bool fileBased = d->connData.hostName.isEmpty();
+        KexiDB::DriverManager driverManager;
+        const KexiDB::Driver::Info dinfo = driverManager.driverInfo(d->connData.driverName);
+        if (dinfo.name.isEmpty()) {
+            //ERR: "No valid driver for "engine" found
+            return false;
+        }
+        const bool fileBased = dinfo.fileBased
+                && QString::compare(dinfo.name, d->connData.driverName, Qt::CaseInsensitive) == 0;
         setCaption(cg.readEntry("caption"));
         setDescription(cg.readEntry("comment"));
         d->connData.description.clear();

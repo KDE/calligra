@@ -38,6 +38,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoParagraphStyle.h>
+#include <KoTextAnchor.h>
 
 #include <QTimer>
 #include <kdebug.h>
@@ -256,6 +257,9 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     if (m_textFrameSet->type() != Words::OtherFrameSet && m_textFrameSet->textFrameSetType() != Words::OtherTextFrameSet) {
         // Only header, footer and main-frames have an own KoTextPage. All other frames are embedded into them and inherit the KoTextPage from them.
         area->setPage(new KWPage(rootAreaPage->page));
+        area->setLayoutEnvironmentResctictions(true, false);
+    } else {
+        area->setLayoutEnvironmentResctictions(true, true);
     }
 
     m_pageHash[area] = rootAreaPage;
@@ -589,7 +593,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
                 continue;
             if (! shape->isVisible(true))
                 continue;
-            if (shape->isAnchored())
+            if (frame->anchor()->anchorType() != KoTextAnchor::AnchorPage)
                 continue;
             if (shape->textRunAroundSide() == KoShape::RunThrough)
                 continue;

@@ -474,15 +474,6 @@ void View::createViews()
         createScheduleHandler( cat, "ScheduleHandlerView", QString(), TIP_USE_DEFAULT_TEXT );
 
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
-        createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createPerformanceStatusView( cat, "PerformanceStatusView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createTaskStatusView( cat, "TaskStatusView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createTaskView( cat, "TaskView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
         createGanttView( cat, "GanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -493,6 +484,18 @@ void View::createViews()
         createResourceAppointmentsGanttView( cat, "ResourceAppointmentsGanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        cat = m_viewlist->addCategory( "Execution", i18nc( "Project execution views", "Execution" ) );
+
+        createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createPerformanceStatusView( cat, "PerformanceStatusView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createTaskStatusView( cat, "TaskStatusView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createTaskView( cat, "TaskView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
         cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
         // A little hack to get the user started...

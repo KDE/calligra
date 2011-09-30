@@ -27,8 +27,13 @@
 #include <QSortFilterProxyModel>
 #include <QMetaEnum>
 
+class QByteArray;
 class QPoint;
 
+namespace KIO {
+    class Job;
+}
+class KJob;
 
 namespace KPlato
 {
@@ -140,6 +145,9 @@ protected slots:
     void slotCalendarChanged( Calendar* cal );
     void slotLayoutChanged();
 
+    void slotDataArrived( KIO::Job *job, const QByteArray &data  );
+    void slotJobFinished( KJob *job );
+
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
     
@@ -162,12 +170,22 @@ protected:
     bool setAccount( Resource *res, const QVariant &value, int role );
 
     QList<Resource*> resourceList( QDataStream &stream );
-    
+
+    bool createResources( ResourceGroup *group, const QByteArray &data );
+
 private:
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
     ResourceModel m_model;
 
+    struct DropData {
+        Qt::DropAction action;
+        int row;
+        int column;
+        QModelIndex parent;
+        QByteArray data;
+    } m_dropData;
+    QMap<KJob*, DropData> m_dropDataMap;
 };
 
 class KPLATOMODELS_EXPORT ResourceItemSFModel : public QSortFilterProxyModel
