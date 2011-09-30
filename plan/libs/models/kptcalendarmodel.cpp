@@ -462,7 +462,7 @@ Qt::DropActions CalendarItemModel::supportedDropActions() const
 
 QStringList CalendarItemModel::mimeTypes() const
 {
-    return QStringList() << "application/x-vnd.kde.kplato.calendarid.internal";
+    return QStringList() << "application/x-vnd.kde.plan.calendarid.internal";
 }
 
 QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
@@ -480,7 +480,7 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
             }
         }
     }
-    m->setData("application/x-vnd.kde.kplato.calendarid.internal", encodedData);
+    m->setData("application/x-vnd.kde.plan.calendarid.internal", encodedData);
     return m;
 }
 
@@ -490,13 +490,13 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
     if (action == Qt::IgnoreAction) {
         return true;
     }
-    if ( !data->hasFormat( "application/x-vnd.kde.kplato.calendarid.internal" ) ) {
+    if ( !data->hasFormat( "application/x-vnd.kde.plan.calendarid.internal" ) ) {
         return false;
     }
     if ( action == Qt::MoveAction ) {
         kDebug()<<"MoveAction";
 
-        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.calendarid.internal" );
+        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.calendarid.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
         Calendar *par = 0;
         if ( parent.isValid() ) {
@@ -538,14 +538,14 @@ QList<Calendar*> CalendarItemModel::calendarList( QDataStream &stream ) const
 
 bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 {
-    kDebug()<<on<<data->hasFormat("application/x-vnd.kde.kplato.calendarid.internal");
-    if ( !data->hasFormat("application/x-vnd.kde.kplato.calendarid.internal") ) {
+    kDebug()<<on<<data->hasFormat("application/x-vnd.kde.plan.calendarid.internal");
+    if ( !data->hasFormat("application/x-vnd.kde.plan.calendarid.internal") ) {
         return false;
     }
     if ( on == 0 && ! ( flags( QModelIndex() ) & (int)Qt::ItemIsDropEnabled ) ) {
         return false;
     }
-    QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.calendarid.internal" );
+    QByteArray encodedData = data->data( "application/x-vnd.kde.plan.calendarid.internal" );
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QList<Calendar*> lst = calendarList( stream );
     foreach ( Calendar *c, lst ) {

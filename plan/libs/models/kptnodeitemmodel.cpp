@@ -3559,7 +3559,7 @@ Qt::DropActions NodeItemModel::supportedDropActions() const
 
 QStringList NodeItemModel::mimeTypes() const
 {
-    return QStringList() << "application/x-vnd.kde.kplato.nodeitemmodel.internal";
+    return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal";
 }
 
 QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
@@ -3578,7 +3578,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
             }
         }
     }
-    m->setData("application/x-vnd.kde.kplato.nodeitemmodel.internal", encodedData);
+    m->setData("application/x-vnd.kde.plan.nodeitemmodel.internal", encodedData);
     return m;
 }
 
@@ -3612,13 +3612,13 @@ bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosi
 
 bool NodeItemModel::dropAllowed( Node *on, const QMimeData *data )
 {
-    if ( !data->hasFormat("application/x-vnd.kde.kplato.nodeitemmodel.internal") ) {
+    if ( !data->hasFormat("application/x-vnd.kde.plan.nodeitemmodel.internal") ) {
         return false;
     }
     if ( ! m_projectshown && on == m_project ) {
         return true;
     }
-    QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+    QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QList<Node*> lst = nodeList( stream );
     foreach ( Node *n, lst ) {
@@ -3686,13 +3686,13 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
     if (action == Qt::IgnoreAction) {
         return true;
     }
-    if ( !data->hasFormat( "application/x-vnd.kde.kplato.nodeitemmodel.internal" ) ) {
+    if ( !data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
         return false;
     }
     if ( action == Qt::MoveAction ) {
         //kDebug()<<"MoveAction";
 
-        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
         Node *par = 0;
         if ( parent.isValid() ) {
@@ -4624,7 +4624,7 @@ QMimeData *MilestoneItemModel::mimeData( const QModelIndexList & indexes ) const
             }
         }
     }
-    m->setData("application/x-vnd.kde.kplato.nodeitemmodel.internal", encodedData);
+    m->setData("application/x-vnd.kde.plan.nodeitemmodel.internal", encodedData);
     return m;
 }
 
@@ -4652,13 +4652,13 @@ bool MilestoneItemModel::dropAllowed( const QModelIndex &index, int dropIndicato
 
 bool MilestoneItemModel::dropAllowed( Node *on, const QMimeData *data )
 {
-    if ( !data->hasFormat("application/x-vnd.kde.kplato.nodeitemmodel.internal") ) {
+    if ( !data->hasFormat("application/x-vnd.kde.plan.nodeitemmodel.internal") ) {
         return false;
     }
     if ( on == m_project ) {
         return true;
     }
-    QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+    QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QList<Node*> lst = nodeList( stream );
     foreach ( Node *n, lst ) {
@@ -4726,13 +4726,13 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
     if (action == Qt::IgnoreAction) {
         return true;
     }
-    if ( !data->hasFormat( "application/x-vnd.kde.kplato.nodeitemmodel.internal" ) ) {
+    if ( !data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
         return false;
     }
     if ( action == Qt::MoveAction ) {
         //kDebug()<<"MoveAction";
 
-        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
         Node *par = 0;
         if ( parent.isValid() ) {
