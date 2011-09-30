@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KexiRecentProjectsAssistant.h"
+#include "KexiWelcomeAssistant.h"
 
 #include "KexiRecentProjectsModel.h"
 
@@ -57,9 +57,9 @@
 #include <QProgressBar>
 #include <QTimer>
  
-KexiMainRecentProjectsPage::KexiMainRecentProjectsPage(
-   KexiRecentProjectsAssistant* assistant, QWidget* parent)
- : KexiAssistantPage(i18n("Recent Projects"),
+KexiMainWelcomePage::KexiMainWelcomePage(
+   KexiWelcomeAssistant* assistant, QWidget* parent)
+ : KexiAssistantPage(i18n("Welcome to Kexi"),
                   i18n("Select one of the recently used projects to open."),
                   parent)
  , m_assistant(assistant)
@@ -82,7 +82,7 @@ KexiMainRecentProjectsPage::KexiMainRecentProjectsPage(
     QTimer::singleShot(100, this, SLOT(loadProjects()));
 }
 
-void KexiMainRecentProjectsPage::loadProjects()
+void KexiMainWelcomePage::loadProjects()
 {
     m_recentProjectsProxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
     KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects());
@@ -91,7 +91,7 @@ void KexiMainRecentProjectsPage::loadProjects()
     m_recentProjectsProxyModel->sort(0, Qt::DescendingOrder);
 }
 
-void KexiMainRecentProjectsPage::slotItemClicked(const QModelIndex& index)
+void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
 {
     if (!index.isValid())
         return;
@@ -111,10 +111,10 @@ void KexiMainRecentProjectsPage::slotItemClicked(const QModelIndex& index)
 
 // ----
 
-class KexiRecentProjectsAssistant::Private
+class KexiWelcomeAssistant::Private
 {
 public:
-    Private(KexiRecentProjectsAssistant *qq)
+    Private(KexiWelcomeAssistant *qq)
      : q(qq)
     {
     }
@@ -123,12 +123,12 @@ public:
     {
     }
     
-    KexiMainRecentProjectsPage* mainRecentProjectsPage() {
-        return page<KexiMainRecentProjectsPage>(&m_mainRecentProjectsPage, q);
+    KexiMainWelcomePage* mainWelcomePage() {
+        return page<KexiMainWelcomePage>(&m_mainWelcomePage, q);
     }
     
     template <class C>
-    C* page(QPointer<C>* p, KexiRecentProjectsAssistant *parent = 0) {
+    C* page(QPointer<C>* p, KexiWelcomeAssistant *parent = 0) {
         if (p->isNull()) {
             *p = new C(parent);
             q->addPage(*p);
@@ -136,7 +136,7 @@ public:
         return *p;
     }
 
-    QPointer<KexiMainRecentProjectsPage> m_mainRecentProjectsPage;
+    QPointer<KexiMainWelcomePage> m_mainWelcomePage;
     
     QAction* messageWidgetActionNo;
     QAction* messageWidgetActionTryAgain;
@@ -144,12 +144,12 @@ public:
 
     KexiRecentProjects* projects;
     
-    KexiRecentProjectsAssistant *q;
+    KexiWelcomeAssistant *q;
 };
 
 // ----
 
-KexiRecentProjectsAssistant::KexiRecentProjectsAssistant(
+KexiWelcomeAssistant::KexiWelcomeAssistant(
     KexiRecentProjects* projects, QWidget* parent)
  : KexiAssistantWidget(parent)
  , d(new Private(this))
@@ -157,23 +157,23 @@ KexiRecentProjectsAssistant::KexiRecentProjectsAssistant(
     d->messageWidgetActionNo = 0;
     d->messageWidgetActionTryAgain = 0;
     d->projects = projects;
-    setCurrentPage(d->mainRecentProjectsPage());
-    setFocusProxy(d->mainRecentProjectsPage());
+    setCurrentPage(d->mainWelcomePage());
+    setFocusProxy(d->mainWelcomePage());
 }
 
-KexiRecentProjectsAssistant::~KexiRecentProjectsAssistant()
+KexiWelcomeAssistant::~KexiWelcomeAssistant()
 {
     delete d;
 }
 
-void KexiRecentProjectsAssistant::previousPageRequested(KexiAssistantPage* page)
+void KexiWelcomeAssistant::previousPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
 }
 
-void KexiRecentProjectsAssistant::nextPageRequested(KexiAssistantPage* page)
+void KexiWelcomeAssistant::nextPageRequested(KexiAssistantPage* page)
 {
-    if (page == d->m_mainRecentProjectsPage) {
+    if (page == d->m_mainWelcomePage) {
         /*
         KexiDB::ConnectionData *cdata
             = d->projectConnectionSelectionPage()->connSelector->selectedConnectionData();
@@ -185,20 +185,20 @@ void KexiRecentProjectsAssistant::nextPageRequested(KexiAssistantPage* page)
     }
 }
 
-void KexiRecentProjectsAssistant::cancelRequested(KexiAssistantPage* page)
+void KexiWelcomeAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
     //TODO?
 }
 
-void KexiRecentProjectsAssistant::showErrorMessage(
+void KexiWelcomeAssistant::showErrorMessage(
     const QString &title, const QString &details)
 {
     Q_UNUSED(title);
     Q_UNUSED(details);
 }
 
-void KexiRecentProjectsAssistant::showErrorMessage(
+void KexiWelcomeAssistant::showErrorMessage(
     KexiDB::Object *obj, const QString& msg)
 {
     Q_UNUSED(obj);
@@ -242,14 +242,14 @@ void KexiRecentProjectsAssistant::showErrorMessage(
         b->mapToGlobal(QPoint(0, b->height() / 2)));*/
 }
 
-void KexiRecentProjectsAssistant::tryAgainActionTriggered()
+void KexiWelcomeAssistant::tryAgainActionTriggered()
 {
 //    d->m_projectConnectionSelectionPage->next();
 }
 
-KexiRecentProjects* KexiRecentProjectsAssistant::projects()
+KexiRecentProjects* KexiWelcomeAssistant::projects()
 {
     return d->projects;
 }
 
-#include "KexiRecentProjectsAssistant.moc"
+#include "KexiWelcomeAssistant.moc"
