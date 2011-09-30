@@ -1152,6 +1152,7 @@ void CellView::paintText(QPainter& painter,
 
         painter.rotate(tmpAngle);
         qreal x;
+
         if (tmpAngle > 0)
             x = indent + d->textX + coordinate.x();
         else
@@ -2131,8 +2132,12 @@ void CellView::Private::calculateAngledTextSize(const QFont& font, const QFontMe
 {
     Q_UNUSED(font)
     const qreal angle = fixAngle(style.angle());
-    const qreal height = fontMetrics.ascent() + fontMetrics.descent();
-    const qreal width  = fontMetrics.width(displayText);
+    QStringList lines = displayText.split('\n');
+    const qreal height = fontMetrics.ascent() + fontMetrics.descent() * lines.count();
+    qreal width  = 0;
+    foreach (const QString& line, lines) {
+        width = qMax(width, fontMetrics.width(line));
+    }
     textHeight = qAbs(height * ::cos(angle * M_PI / 180)) + qAbs(width * ::sin(angle * M_PI / 180));
     textWidth = qAbs(height * ::sin(angle * M_PI / 180)) + qAbs(width * ::cos(angle * M_PI / 180));
     fittingHeight = textHeight <= this->width;
