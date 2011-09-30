@@ -189,7 +189,6 @@ void KisColorSpaceSelector::downloadProfile()
 {
     KNS3::DownloadDialog dialog( "kritaiccprofiles.knsrc", this);
     dialog.exec();
-
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
     foreach (const KNS3::Entry& e, dialog.installedEntries()) {
@@ -203,7 +202,7 @@ void KisColorSpaceSelector::downloadProfile()
 
 void KisColorSpaceSelector::uploadProfile()
 {
-    KNS3::UploadDialog dialog("KritaIccProfiles.knsrc", this);
+    KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
     const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
     if(!profile)  return;
     dialog.setUploadFile(KUrl::fromLocalFile(profile->fileName()));
@@ -216,8 +215,8 @@ void KisColorSpaceSelector::buttonUpdate()
    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
    if(!profile)  return;
 
-   QFile f(profile->fileName());
-   if(f.isWritable()) {
+   QFileInfo fileInfo(profile->fileName());
+   if(fileInfo.isWritable()) {
        d->colorSpaceSelector->bnUploadProfile->setEnabled( true );
        return;
    }
