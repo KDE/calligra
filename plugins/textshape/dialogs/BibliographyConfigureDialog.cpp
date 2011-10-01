@@ -27,9 +27,18 @@
 
 BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent) :
     QDialog(parent),
-    m_document(document)
+    m_document(document),
+    m_bibConfiguration(KoTextDocument(m_document).styleManager()->bibliographyConfiguration())
 {
     dialog.setupUi(this);
+    dialog.prefix->setText(m_bibConfiguration->prefix());
+    dialog.suffix->setText(m_bibConfiguration->suffix());
+    dialog.numberedEntries->setChecked(m_bibConfiguration->numberedEntries());
+    dialog.sortAlgorithm->setCurrentIndex(
+                dialog.sortAlgorithm->findText(m_bibConfiguration->sortAlgorithm(),Qt::MatchFixedString));
+
+    dialog.sortByPosition->setChecked(m_bibConfiguration->sortByPosition());
+
     connect(dialog.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(save(QAbstractButton*)));
 }
 
@@ -37,14 +46,12 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
 {
     if (dialog.buttonBox->standardButton(button) == dialog.buttonBox->Apply) {
 
-        KoOdfBibliographyConfiguration *bibConfiguration = new KoOdfBibliographyConfiguration();
+        m_bibConfiguration->setPrefix(dialog.prefix->text());
+        m_bibConfiguration->setSuffix(dialog.suffix->text());
+        m_bibConfiguration->setSortAlgorithm(dialog.sortAlgorithm->currentText());
+        m_bibConfiguration->setSortByPosition(dialog.sortByPosition->isChecked());
 
-        bibConfiguration->setPrefix(dialog.prefix->text());
-        bibConfiguration->setSuffix(dialog.suffix->text());
-        bibConfiguration->setSortAlgorithm(dialog.sortAlgorithm->currentText());
-        bibConfiguration->setSortByPosition(dialog.sortByPosition->isChecked());
-
-        KoTextDocument(m_document).styleManager()->setBibliographyConfiguration(bibConfiguration);
+        KoTextDocument(m_document).styleManager()->setBibliographyConfiguration(m_bibConfiguration);
     }
     emit accept();
 }

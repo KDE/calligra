@@ -40,7 +40,7 @@ public slots:
 private:
     Ui::BibliographyConfigureDialog dialog;
     const QTextDocument *m_document;
-
+    KoOdfBibliographyConfiguration *m_bibConfiguration;
 };
 
 #endif // BIBLIOGRAPHYCONFIGUREDIALOG_H
