@@ -238,100 +238,6 @@ void EmfPainterBackend::setMetaRgn(EmfDeviceContext &context)
 // ----------------------------------------------------------------
 
 
-void EmfPainterBackend::createBrushIndirect(EmfDeviceContext &context,
-                                            quint32 ihBrush, quint32 brushStyle,
-                                            quint8 red, quint8 green, quint8 blue,
-                                            quint8 reserved,
-                                            quint32 brushHatch )
-{
-    Q_UNUSED( reserved );
-    Q_UNUSED( brushHatch );
-
-#if DEBUG_EMFPAINT
-    kDebug(31000) << ihBrush << hex << brushStyle << dec
-                  << red << green << blue << reserved << brushHatch;
-#endif
-
-    QBrush brush;
-
-    switch ( brushStyle ) {
-    case BS_SOLID:
-	brush.setStyle( Qt::SolidPattern );
-	break;
-    case BS_NULL:
-	brush.setStyle( Qt::NoBrush );
-	break;
-    case BS_HATCHED:
-	brush.setStyle( Qt::CrossPattern );
-	break;
-    case BS_PATTERN:
-	Q_ASSERT( 0 );
-	break;
-    case BS_INDEXED:
-	Q_ASSERT( 0 );
-	break;
-    case BS_DIBPATTERN:
-	Q_ASSERT( 0 );
-	break;
-    case BS_DIBPATTERNPT:
-	Q_ASSERT( 0 );
-	break;
-    case BS_PATTERN8X8:
-	Q_ASSERT( 0 );
-	break;
-    case BS_DIBPATTERN8X8:
-	Q_ASSERT( 0 );
-	break;
-    case BS_MONOPATTERN:
-	Q_ASSERT( 0 );
-	break;
-    default:
-	Q_ASSERT( 0 );
-    }
-
-    brush.setColor( QColor( red, green, blue ) );
-
-    // TODO: Handle the BrushHatch enum.
-
-    context.objectTable.insert( ihBrush, brush );
-}
-
-void EmfPainterBackend::createMonoBrush(EmfDeviceContext &context,
-                                        quint32 ihBrush, Bitmap *bitmap )
-{
-
-    QImage  pattern(bitmap->image());
-    QBrush  brush(pattern);
-
-    context.objectTable.insert( ihBrush, brush );
-}
-
-
-void EmfPainterBackend::extCreateFontIndirectW(EmfDeviceContext &context,
-                                               const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
-{
-    QFont font( extCreateFontIndirectW.fontFace() );
-
-    font.setWeight( convertFontWeight( extCreateFontIndirectW.weight() ) );
-
-    if ( extCreateFontIndirectW.height() < 0 ) {
-	font.setPixelSize( -1 * extCreateFontIndirectW.height() );
-    } else if ( extCreateFontIndirectW.height() > 0 ) {
-        font.setPixelSize( extCreateFontIndirectW.height() );
-    } // zero is "use a default size" which is effectively no-op here.
-
-    // .snp files don't always provide 0x01 for italics
-    if ( extCreateFontIndirectW.italic() != 0x00 ) {
-	font.setItalic( true );
-    }
-
-    if ( extCreateFontIndirectW.underline() != 0x00 ) {
-	font.setUnderline( true );
-    }
-
-    context.objectTable.insert( extCreateFontIndirectW.ihFonts(), font );
-}
-
 void EmfPainterBackend::selectStockObject(EmfDeviceContext &context, const quint32 ihObject)
 {
 #if DEBUG_EMFPAINT
@@ -1032,25 +938,6 @@ qreal EmfPainterBackend::angularSpan( const qreal startAngle, const qreal endAng
     }
 
     return spanAngle;
-}
-
-int EmfPainterBackend::convertFontWeight( quint32 emfWeight )
-{
-    // FIXME: See how it's done in the wmf library and check if this is suitable here.
-
-    if ( emfWeight == 0 ) {
-        return QFont::Normal;
-    } else if ( emfWeight <= 200 ) {
-        return QFont::Light;
-    } else if ( emfWeight <= 450 ) {
-        return QFont::Normal;
-    } else if ( emfWeight <= 650 ) {
-        return QFont::DemiBold;
-    } else if ( emfWeight <= 850 ) {
-        return QFont::Bold;
-    } else {
-        return QFont::Black;
-    }
 }
 
 static Qt::FillRule fillModeToQtFillRule(quint32 polyFillMode)

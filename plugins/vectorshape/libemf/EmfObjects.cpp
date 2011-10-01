@@ -16,13 +16,24 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// Own
 #include "EmfObjects.h"
 
+// Qt
+#include <QFont>
+
+// KDE
 #include <KDebug>
+
+// LibEmf
+#include "Bitmap.h"
+#include "EmfRecords.h"
 
 
 namespace Libemf
 {
+
+static int convertFontWeight(quint32 emfWeight);
 
 
 // ================================================================
@@ -227,6 +238,117 @@ QPen extCreatePen(quint32 penStyle, quint32 width,
     pen.setWidth(width);
 
     return pen;
+}
+
+QBrush createBrushIndirect(quint32 brushStyle,
+                           quint8 red, quint8 green, quint8 blue, quint8 reserved,
+                           quint32 brushHatch)
+{
+    Q_UNUSED( reserved );
+    Q_UNUSED( brushHatch );
+
+#if 0
+    kDebug(31000) << hex << brushStyle << dec
+                  << red << green << blue << reserved << brushHatch;
+#endif
+
+    QBrush brush;
+
+    switch ( brushStyle ) {
+    case BS_SOLID:
+	brush.setStyle( Qt::SolidPattern );
+	break;
+    case BS_NULL:
+	brush.setStyle( Qt::NoBrush );
+	break;
+    case BS_HATCHED:
+	brush.setStyle( Qt::CrossPattern );
+	break;
+    case BS_PATTERN:
+	Q_ASSERT( 0 );
+	break;
+    case BS_INDEXED:
+	Q_ASSERT( 0 );
+	break;
+    case BS_DIBPATTERN:
+	Q_ASSERT( 0 );
+	break;
+    case BS_DIBPATTERNPT:
+	Q_ASSERT( 0 );
+	break;
+    case BS_PATTERN8X8:
+	Q_ASSERT( 0 );
+	break;
+    case BS_DIBPATTERN8X8:
+	Q_ASSERT( 0 );
+	break;
+    case BS_MONOPATTERN:
+	Q_ASSERT( 0 );
+	break;
+    default:
+	Q_ASSERT( 0 );
+    }
+
+    brush.setColor( QColor( red, green, blue ) );
+
+    // TODO: Handle the BrushHatch enum.
+
+    return brush;
+}
+
+QBrush createMonoBrush(Bitmap *bitmap)
+{
+    QImage  pattern(bitmap->image());
+    QBrush  brush(pattern);
+
+    return brush;
+}
+
+QFont extCreateFontIndirectW(const ExtCreateFontIndirectWRecord &extCreateFontIndirectW)
+{
+    QFont font( extCreateFontIndirectW.fontFace() );
+
+    font.setWeight( convertFontWeight( extCreateFontIndirectW.weight() ) );
+
+    if ( extCreateFontIndirectW.height() < 0 ) {
+	font.setPixelSize( -1 * extCreateFontIndirectW.height() );
+    } else if ( extCreateFontIndirectW.height() > 0 ) {
+        font.setPixelSize( extCreateFontIndirectW.height() );
+    } // zero is "use a default size" which is effectively no-op here.
+
+    // .snp files don't always provide 0x01 for italics
+    if ( extCreateFontIndirectW.italic() != 0x00 ) {
+	font.setItalic( true );
+    }
+
+    if ( extCreateFontIndirectW.underline() != 0x00 ) {
+	font.setUnderline( true );
+    }
+
+    return font;
+}
+
+
+// ----------------------------------------------------------------
+// static functions
+
+static int convertFontWeight( quint32 emfWeight )
+{
+    // FIXME: See how it's done in the wmf library and check if this is suitable here.
+
+    if ( emfWeight == 0 ) {
+        return QFont::Normal;
+    } else if ( emfWeight <= 200 ) {
+        return QFont::Light;
+    } else if ( emfWeight <= 450 ) {
+        return QFont::Normal;
+    } else if ( emfWeight <= 650 ) {
+        return QFont::DemiBold;
+    } else if ( emfWeight <= 850 ) {
+        return QFont::Bold;
+    } else {
+        return QFont::Black;
+    }
 }
 
 

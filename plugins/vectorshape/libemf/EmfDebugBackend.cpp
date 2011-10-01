@@ -128,32 +128,6 @@ void EmfDebugBackend::rectangle(EmfDeviceContext &context, const QRect &box )
     kDebug(33100) << "EMR_RECTANGLE:" << box;
 }
 
-void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context,
-                                             const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_CREATEFONTINDIRECTW:" << extCreateFontIndirectW.fontFace();
-}
-
-void EmfDebugBackend::createBrushIndirect(EmfDeviceContext &context, quint32 ihBrush, quint32 BrushStyle, quint8 red,
-				       quint8 green, quint8 blue, quint8 reserved,
-				       quint32 BrushHatch )
-{
-    Q_UNUSED(context);
-    Q_UNUSED(reserved);
-
-    kDebug(33100) << "EMR_CREATEBRUSHINDIRECT:" << ihBrush << "style:" << BrushStyle
-             << "Colour:" << QColor( red, green, blue ) << ", Hatch:" << BrushHatch;
-}
-
-void EmfDebugBackend::createMonoBrush(EmfDeviceContext &context, quint32 ihBrush, Bitmap *bitmap )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_CREATEMONOBRUSH:" << ihBrush << "bitmap:" << bitmap;
-}
-
 void EmfDebugBackend::selectObject(EmfDeviceContext &context, const quint32 ihObject )
 {
     Q_UNUSED(context);

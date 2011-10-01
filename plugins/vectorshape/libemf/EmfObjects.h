@@ -26,12 +26,15 @@
 
 #include "EmfEnums.h"
 
-
 /**
    Namespace for Enhanced Metafile (EMF) classes
 */
 namespace Libemf
 {
+
+class Bitmap;
+class ExtCreateFontIndirectWRecord;
+
 
 // There are a number of objects defined in the EMF
 // specification. These objects are common to several different EMF
@@ -107,8 +110,13 @@ private:
 // ================================================================
 // Objects that will be stored in the object table
 
-QPen extCreatePen(quint32 penStyle, quint32 width,
-                  quint8 red, quint8 green, quint8 blue, quint8 reserved);
+QPen   extCreatePen(quint32 penStyle, quint32 width,
+                    quint8 red, quint8 green, quint8 blue, quint8 reserved);
+QBrush createBrushIndirect(quint32 brushStyle,
+                           quint8 red, quint8 green, quint8 blue, quint8 reserved,
+                           quint32 brushHatch);
+QBrush createMonoBrush(Bitmap *bitmap);
+QFont  extCreateFontIndirectW(const ExtCreateFontIndirectWRecord &extCreateFontIndirectW);
 
 }
 

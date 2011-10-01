@@ -619,17 +619,18 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	    quint32 ihBrush;
 	    stream >> ihBrush;
 
-	    quint32 BrushStyle;
-	    stream >> BrushStyle;
+	    quint32 brushStyle;
+	    stream >> brushStyle;
 
 	    quint8 red, green, blue, reserved;
 	    stream >> red >> green >> blue;
 	    stream >> reserved; // unused;
 
-	    quint32 BrushHatch;
-	    stream >> BrushHatch;
+	    quint32 brushHatch;
+	    stream >> brushHatch;
 
-	    mOutput->createBrushIndirect(context, ihBrush, BrushStyle, red, green, blue, reserved, BrushHatch );
+            QBrush brush = createBrushIndirect(brushStyle, red, green, blue, reserved, brushHatch);
+            context.objectTable.insert(ihBrush, brush);
 
 	    break;
 	}
@@ -822,8 +823,10 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	break;
     case EMR_EXTCREATEFONTINDIRECTW:
 	{
-	    ExtCreateFontIndirectWRecord extCreateFontIndirectWRecord( stream, size );
-	    mOutput->extCreateFontIndirectW(context, extCreateFontIndirectWRecord );
+            // FIXME: Get the members directly instead of create the record object?
+	    ExtCreateFontIndirectWRecord extCreateFontIndirectWRecord(stream, size);
+	    QFont font = extCreateFontIndirectW(extCreateFontIndirectWRecord);
+            context.objectTable.insert(extCreateFontIndirectWRecord.ihFonts(), font);
 	}
 	break;
     case EMR_EXTTEXTOUTA:
@@ -1037,8 +1040,8 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             Bitmap bitmap(stream, size, 8 + 6 * 4, // header + 6 ints
                           offBmi, cbBmi, offBits, cbBits);
 
-	    mOutput->createMonoBrush(context, ihBrush, &bitmap);
-
+	    QBrush brush = createMonoBrush(&bitmap);
+            context.objectTable.insert(ihBrush, brush);
         }
         break;
     case EMR_EXTCREATEPEN:

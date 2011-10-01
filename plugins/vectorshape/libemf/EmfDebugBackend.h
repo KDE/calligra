@@ -59,10 +59,6 @@ public:
     void cleanup( const Header *header );
     void eof();
 
-    void createBrushIndirect(EmfDeviceContext &context, quint32 ihBrush, quint32 BrushStyle, quint8 red,
-			      quint8 green, quint8 blue, quint8 reserved, 
-			      quint32 BrushHatch );
-    void createMonoBrush(EmfDeviceContext &context, quint32 ihBrush, Bitmap *bitmap );
     void selectObject(EmfDeviceContext &context, const quint32 ihObject );
     void deleteObject(EmfDeviceContext &context, const quint32 ihObject );
     void arc(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
@@ -71,7 +67,6 @@ public:
     void ellipse(EmfDeviceContext &context, const QRect &box );
     void rectangle(EmfDeviceContext &context, const QRect &box );
     void setMetaRgn(EmfDeviceContext &context);
-    void extCreateFontIndirectW(EmfDeviceContext &context, const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
     void setPixelV(EmfDeviceContext &context, QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved );
     void extTextOut(EmfDeviceContext &context, const QRect &bounds, const EmrTextObject &textObject );
     void moveToEx(EmfDeviceContext &context, const qint32 x, const qint32 y );

@@ -93,16 +93,6 @@ public:
                            QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved) = 0;
 
     /**
-       Handler for the EMR_CREATEBRUSHINDIRECT record type
-    */
-    virtual void createBrushIndirect(EmfDeviceContext &context,
-                                     quint32 ihBrush, quint32 BrushStyle, quint8 red,
-                                     quint8 green, quint8 blue, quint8 reserved, 
-                                     quint32 BrushHatch) = 0;
-
-    virtual void createMonoBrush(EmfDeviceContext &context, quint32 ihBrush, Bitmap *bitmap) = 0;
-
-    /**
        Handler for the EMR_SETMETARGN record type
     */
     virtual void setMetaRgn(EmfDeviceContext &context) = 0;
@@ -164,15 +154,6 @@ public:
       \param box the bounding box for the rectangle
     */
     virtual void rectangle(EmfDeviceContext &context, const QRect &box) = 0;
-
-    /**
-       Handler for the EMR_EXTCREATEFONTINDIRECTW record type
-
-       \param extCreateFontIndirectWRecord the contents of the
-       EMR_EXTCREATEFONTINDIRECTW record
-    */
-    virtual void extCreateFontIndirectW(EmfDeviceContext &context,
-                                        const ExtCreateFontIndirectWRecord &extCreateFontIndirectW) = 0;
 
     /**
        Handler for text rendering, as described in the the
