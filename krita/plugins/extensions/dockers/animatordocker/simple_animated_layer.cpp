@@ -65,51 +65,18 @@ void SimpleAnimatedLayer::loadFrames()
                 
                 KisNode* nn;
                 
-                // Whether we should convert from old style to new
-                bool oldstyle = !chsource->inherits("KisGroupLayer") || !chsource->at(0); // || chsource->at(0)->name().compare(QString("_"));
-                if (oldstyle)
-                {
-//                     getNodeManager()->activateNode(this);
-//                     getNodeManager()->createNode("KisGroupLayer");
-//                     
-//                     KisNode* tmp = getNodeManager()->activeNode().data();
-//                     tmp->setName(chsource->name());
-// //                     getNodeManager()->moveNodeAt(chsource, tmp, 0);
-//                     chsource->setName("_");
-//                     nn = chsource;
-//                     chsource = tmp;
-//                 }
-                } else
-                {
-                
                 frame = new FrameLayer(*dynamic_cast<KisGroupLayer*>( chsource ));
-//                 }
-                
+
                 frame->setName(getNameForFrame(fnum, iskey));
                 frame->setNodeManager(getNodeManager());
                 frame->at(0)->setName("_");
                 
-//                 if (!oldstyle)
                 getNodeManager()->insertNode(frame, this, fnum);
                 
 //                 getNodeManager()->removeNode(chsource->at(0));
                 getNodeManager()->removeNode(chsource);
                 
 //                 frame->setCompositeOp("normal");
-                }
-                if (oldstyle && 0)
-                {
-                    getNodeManager()->moveNodeAt(nn, chsource, 0);
-                    nn->setOpacity(255);
-                    nn->setVisible(true);
-//                     nn->setName("_");
-//                     frame->setContent(chsource);
-                    m_loaded = false;
-                    continue;
-                }
-//                 std::cout << (frame->compositeOp() == 0) << std::endl;
-//                 std::cout << (nn->compositeOp() == 0) << std::endl;
-                std::cout << (getNodeManager() != 0) << std::endl;
             }
             
             if (fnum == m_frames.size())

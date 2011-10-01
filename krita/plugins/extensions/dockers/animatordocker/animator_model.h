@@ -58,6 +58,13 @@ public:
     // ok
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
+public:
+    virtual int getMajor(const KisNode* meta_node);
+    virtual int getMajor();
+    
+    virtual int getMinor(const KisNode* meta_node);
+    virtual int getMinor();
+    
 public slots:
     // ok, +review
     virtual void updateImage();
@@ -103,6 +110,9 @@ protected:
     
     // later
     virtual void visibleAll(bool v);
+    
+protected:
+    void setVersion(int major, int minor);
 
 // public slots:
 //     void testSlot();

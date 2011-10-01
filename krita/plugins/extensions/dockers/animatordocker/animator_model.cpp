@@ -29,6 +29,8 @@
 
 #include "animator_model.h"
 
+#include <sstream>
+
 #include <iostream>
 
 #include "normal_animated_layer.h"
@@ -90,12 +92,31 @@ void AnimatorModel::loadLayers()
     
     m_layers.clear();
     
-    if (! nodes )
+    if (! nodes || nodes->rowCount() == 0 )
         return;
+    
+    // First, we need to check if we've get animated document
+    KisNode* meta_layer = nodes->nodeFromIndex(nodes->index(0, 0)).data();
+    int major = getMajor(meta_layer);
+    if (major == -1)
+        return;                         // Not even an animated image of new format
+    
+    if (major != getMajor())
+        return;                         // Major versions are not compataible
+    
+    int minor = getMinor(meta_layer);
+//     if (minor > getMinor());
+//         this means that some features may be bad represented and probably in some cases data could be lost.
+    
+    if (minor < getMinor())
+        minor = getMinor();
+    
+    // Now write info
+    setVersion(major, minor);
     
     int fnum = 0;
     
-    for (quint32 i = 0; i < nodes->rowCount(); ++i)
+    for (quint32 i = 1; i < nodes->rowCount(); ++i)
     {
         QModelIndex index = sourceModel()->index(i, 0);
 
@@ -192,7 +213,7 @@ void AnimatorModel::convertLayer(KisNode* node)
     KisNode* fr;
     for (int i = 0; i < node->childCount(); ++i)
     {
-        fr = node->at(i);
+        fr = node->at(i).data();
         
     }
 }
@@ -1116,4 +1137,57 @@ bool AnimatorModel::isKey(int l, int f) const
 void AnimatorModel::visibleAll(bool v)
 {
     // TODO
+}
+
+
+// Version control
+int AnimatorModel::getMajor(const KisNode* meta_node)
+{
+    QString t = meta_node->name();
+    
+    if (! t.startsWith("_animator_"))
+        return -1;
+    
+    std::stringstream ns;
+    ns << t.mid(10).toAscii().data();
+    int result;
+    ns >> result;
+    
+    return result;
+}
+
+int AnimatorModel::getMajor()
+{
+    return 1;
+}
+
+int AnimatorModel::getMinor(const KisNode* meta_node)
+{
+    QString t = meta_node->name();
+    
+    if (! t.startsWith("_animator_"))
+        return -1;
+    
+    std::stringstream ns;
+    ns << t.mid(10).toAscii().data();
+    int m, result;
+    char tmp;
+    ns >> m >> tmp >> result;             // major_minor (e.x. 2_5)
+    
+    return result;
+}
+
+int AnimatorModel::getMinor()
+{
+    return 0;
+}
+
+void AnimatorModel::setVersion(int major, int minor)
+{
+    m_nodeman->createNode("KisGroupLayer");
+    
+    KisGroupLayer* meta_node = dynamic_cast<KisGroupLayer*>(m_nodeman->activeLayer().data());
+    
+    meta_node->setName(QString("_animator_")+QString::number(major)+QString("_")+QString::number(minor)+QString("_Please don\'t move this!"));
+    m_nodeman->moveNodeAt(meta_node, 0, 0);
 }
