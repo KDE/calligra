@@ -5,11 +5,13 @@
       - stretchBltMode                                                  [done]
       - rop2                                                            [done]
       - current Point                                                   [done]
-   + Move the object system (Pen, Brush, etc) to the DC
    + Move the current path to the DC                                    [DONE]
    + Move the world transform to the DC                                 [DONE]
 
    + (Implement a real saveDC and restoreDC) Wait until later
+
+* Simplify the backend in addition to the DC
+   + Move the object system (Pen, Brush, etc) to inside the parser
 
 * Implement support for EMFPLUS
    + Make a stream from a EMR_COMMENT_EMFPLUS record and hand that

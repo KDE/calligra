@@ -22,6 +22,9 @@
 #include <QDataStream>
 #include <QRect> // also provides QSize
 #include <QString>
+#include <QPen>
+
+#include "EmfEnums.h"
 
 
 /**
@@ -99,6 +102,13 @@ private:
     // Routine to throw away a specific number of bytes
     void soakBytes( QDataStream &stream, int numBytes );
 };
+
+
+// ================================================================
+// Objects that will be stored in the object table
+
+QPen extCreatePen(quint32 penStyle, quint32 width,
+                  quint8 red, quint8 green, quint8 blue, quint8 reserved);
 
 }
 

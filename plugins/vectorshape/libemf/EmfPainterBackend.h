@@ -75,9 +75,6 @@ public:
     */
     QImage *image();
 
-    void createPen(EmfDeviceContext &context,
-                   quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-                   quint8 red, quint8 green, quint8 blue, quint8 reserved );
     void createBrushIndirect(EmfDeviceContext &context,
                              quint32 ihBrush, quint32 BrushStyle, quint8 red,
                              quint8 green, quint8 blue, quint8 reserved, 
@@ -167,11 +164,6 @@ private:
     int                      m_painterSaves; // The number of times that save() was called.
     QSize                    m_outputSize;
     bool                     m_keepAspectRatio;
-
-    QMap<quint32, QVariant>  m_objectTable;
-
-    //QPainterPath *m_path;
-    //bool          m_currentlyBuildingPath;
 
     QPainter     *m_painter;
     QTransform    m_outputTransform; // The transform that the painter already had

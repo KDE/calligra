@@ -59,8 +59,6 @@ public:
     void cleanup( const Header *header );
     void eof();
 
-    void createPen(EmfDeviceContext &context, quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-		    quint8 red, quint8 green, quint8 blue, quint8 reserved );
     void createBrushIndirect(EmfDeviceContext &context, quint32 ihBrush, quint32 BrushStyle, quint8 red,
 			      quint8 green, quint8 blue, quint8 reserved, 
 			      quint32 BrushHatch );

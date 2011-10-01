@@ -421,6 +421,9 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         {
             QPoint origin;
             stream >> origin;
+#if DEBUG_EMFPARSER
+            kDebug(31000) << "origin" << origin;
+#endif
             context.setWindowOrg(origin);
         }
         break;
@@ -593,6 +596,7 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	    quint32 penStyle;
 	    stream >> penStyle;
 
+            // x stores the width of the pen
 	    quint32 x, y;
 	    stream >> x;
 	    stream >> y; // unused
@@ -601,7 +605,12 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	    stream >> red >> green >> blue;
 	    stream >> reserved; // unused;
 
-	    mOutput->createPen(context, ihPen, penStyle, x, y, red, green, blue, reserved );
+            // FIXME: Use extCreatePen while the parser for the
+            //        EMF_EXTCREATEPEN record only reads as many items
+            //        as this one does.  Then later create a
+            //        createPen() function too.
+            QPen pen = extCreatePen(penStyle, x, red, green, blue, reserved);
+            context.objectTable.insert(ihPen, pen);
 
 	    break;
 	}
@@ -1033,13 +1042,16 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         }
         break;
     case EMR_EXTCREATEPEN:
+        // Extended Pen (see also EMR_CREATEPEN)
 	{
 	    quint32 ihPen;
 	    stream >> ihPen;
 
+            // Optional bitmap object
 	    quint32 offBmi, cbBmi, offBits, cbBits;
 	    stream >> offBmi >> cbBmi >> offBits >> cbBits;
 
+            // Here starts the LogPenEx object
 	    quint32 penStyle;
 	    stream >> penStyle;
 
@@ -1054,10 +1066,11 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	    stream >> reserved; // unused;
 
 	    // TODO: There is more stuff to parse here
+            
+            QPen pen = extCreatePen(penStyle, width, red, green, blue, reserved);
+            context.objectTable.insert(ihPen, pen);
 
-	    // TODO: this needs to go to an extCreatePen() output method
-	    mOutput->createPen(context, ihPen, penStyle, width, 0, red, green, blue, reserved );
-	    soakBytes( stream, size-44 );
+	    soakBytes(stream, size - 44);
 	}
         break;
         case EMR_SETICMMODE:

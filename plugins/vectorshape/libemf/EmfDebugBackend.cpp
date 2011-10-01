@@ -136,17 +136,6 @@ void EmfDebugBackend::extCreateFontIndirectW(EmfDeviceContext &context,
     kDebug(33100) << "EMR_CREATEFONTINDIRECTW:" << extCreateFontIndirectW.fontFace();
 }
 
-void EmfDebugBackend::createPen(EmfDeviceContext &context, quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-			       quint8 red, quint8 green, quint8 blue, quint8 reserved )
-{
-    Q_UNUSED(context);
-    Q_UNUSED(y);
-    Q_UNUSED(reserved);
-
-    kDebug(33100) << "EMR_CREATEPEN" << "ihPen:" << ihPen << ", penStyle:" << penStyle
-                  << "width:" << x << "color:" << QColor( red, green, blue );
-}
-
 void EmfDebugBackend::createBrushIndirect(EmfDeviceContext &context, quint32 ihBrush, quint32 BrushStyle, quint8 red,
 				       quint8 green, quint8 blue, quint8 reserved,
 				       quint32 BrushHatch )

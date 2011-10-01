@@ -79,6 +79,11 @@ void EmfDeviceContext::reset()
     changedItems = 0xffffffff;  // Everything changed the first time.
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // Object table
+
+    objectTable.clear();
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     // Derivative values.  These are calculated from the base values above.
 
     // World transform
@@ -125,10 +130,6 @@ void EmfDeviceContext::reset()
 
 void EmfDeviceContext::setWindowOrg(const QPoint &origin)
 {
-#if DEBUG_EMFPAINT
-    kDebug(31000) << origin;
-#endif
-
     // FIXME: See unanswered question at the start of this section.
     if (windowOrg == origin) {
         //kDebug(31000) << "same origin as before";

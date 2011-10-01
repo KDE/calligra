@@ -93,24 +93,6 @@ public:
                            QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved) = 0;
 
     /**
-       Handler for the EMR_CREATEPEN record type
-
-       This creates a pen object (at position ihPen) using the specified parameters.
-
-       \param ihPen the internal handle for the pen to be created
-       \param penStyle the pen configuration (style, type) - see the PenStyle enumeration
-       \param x the width of the pen
-       \param y reserved value - ignore this
-       \param red the red component of the pen color
-       \param green the green component of the pen color
-       \param blue the blue component of the pen color
-       \param reserved reserved value - ignore this
-    */
-    virtual void createPen(EmfDeviceContext &context,
-                           quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-                           quint8 red, quint8 green, quint8 blue, quint8 reserved) = 0; 
-
-    /**
        Handler for the EMR_CREATEBRUSHINDIRECT record type
     */
     virtual void createBrushIndirect(EmfDeviceContext &context,

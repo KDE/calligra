@@ -29,6 +29,7 @@
 #include <QRegion>
 #include <QPainterPath>
 #include <QTransform>
+#include <QVariant>
 
 
 /**
@@ -126,6 +127,12 @@ public:
     quint32  stretchBltMode;    // Stretchbitblit mode
     quint32  textAlignMode;     // Text alignment mode
     //Text extra space NYI
+
+    // ----------------------------------------------------------------
+    // Object table
+
+    // Table of objects, like pens, brushes, etc.
+    QMap<quint32, QVariant>  objectTable;
 
     // ----------------------------------------------------------------
     //                         Helper data

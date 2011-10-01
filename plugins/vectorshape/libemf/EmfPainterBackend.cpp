@@ -238,82 +238,6 @@ void EmfPainterBackend::setMetaRgn(EmfDeviceContext &context)
 // ----------------------------------------------------------------
 
 
-void EmfPainterBackend::createPen(EmfDeviceContext &context,
-                                  quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-                                  quint8 red, quint8 green, quint8 blue, quint8 reserved )
-{
-    Q_UNUSED( y );
-    Q_UNUSED( reserved );
-
-#if DEBUG_EMFPAINT
-    kDebug(31000) << ihPen << hex << penStyle << dec << x << y
-                  << red << green << blue << reserved;
-#endif
-
-    QPen pen;
-    pen.setColor( QColor( red, green, blue ) );
-
-    if ( penStyle & PS_GEOMETRIC ) {
-	pen.setCosmetic( false );
-    } else {
-	pen.setCosmetic( true );
-    }
-
-    switch ( penStyle & 0xF ) {
-    case PS_SOLID:
-        pen.setStyle( Qt::SolidLine );
-        break;
-    case PS_DASH:
-        pen.setStyle( Qt::DashLine );
-        break;
-    case PS_DOT:
-        pen.setStyle( Qt::DotLine );
-        break;
-    case PS_DASHDOT:
-        pen.setStyle( Qt::DashDotLine );
-        break;
-    case PS_DASHDOTDOT:
-        pen.setStyle( Qt::DashDotDotLine );
-        break;
-    case PS_NULL:
-        pen.setStyle( Qt::NoPen );
-        break;
-    case PS_INSIDEFRAME:
-        // FIXME: We don't properly support this
-        pen.setStyle( Qt::SolidLine );
-        break;
-    case PS_USERSTYLE:
-        kDebug(33100) << "UserStyle pen not yet supported, using SolidLine";
-        pen.setStyle( Qt::SolidLine );
-        break;
-    case PS_ALTERNATE:
-        kDebug(33100) << "Alternate pen not yet supported, using DashLine";
-        pen.setStyle( Qt::DashLine );
-        break;
-    default:
-        kDebug(33100) << "unexpected pen type, using SolidLine" << (penStyle & 0xF);
-        pen.setStyle( Qt::SolidLine );
-    }
-
-    switch ( penStyle & PS_ENDCAP_FLAT ) {
-    case PS_ENDCAP_ROUND:
-        pen.setCapStyle( Qt::RoundCap );
-        break;
-    case PS_ENDCAP_SQUARE:
-        pen.setCapStyle( Qt::SquareCap );
-        break;
-    case PS_ENDCAP_FLAT:
-        pen.setCapStyle( Qt::FlatCap );
-        break;
-    default:
-        kDebug(33100) << "unexpected cap style, using SquareCap" << (penStyle & PS_ENDCAP_FLAT);
-        pen.setCapStyle( Qt::SquareCap );
-    }
-    pen.setWidth( x );
-
-    m_objectTable.insert( ihPen,  pen );
-}
-
 void EmfPainterBackend::createBrushIndirect(EmfDeviceContext &context,
                                             quint32 ihBrush, quint32 brushStyle,
                                             quint8 red, quint8 green, quint8 blue,
@@ -369,7 +293,7 @@ void EmfPainterBackend::createBrushIndirect(EmfDeviceContext &context,
 
     // TODO: Handle the BrushHatch enum.
 
-    m_objectTable.insert( ihBrush, brush );
+    context.objectTable.insert( ihBrush, brush );
 }
 
 void EmfPainterBackend::createMonoBrush(EmfDeviceContext &context,
@@ -379,7 +303,7 @@ void EmfPainterBackend::createMonoBrush(EmfDeviceContext &context,
     QImage  pattern(bitmap->image());
     QBrush  brush(pattern);
 
-    m_objectTable.insert( ihBrush, brush );
+    context.objectTable.insert( ihBrush, brush );
 }
 
 
@@ -405,7 +329,7 @@ void EmfPainterBackend::extCreateFontIndirectW(EmfDeviceContext &context,
 	font.setUnderline( true );
     }
 
-    m_objectTable.insert( extCreateFontIndirectW.ihFonts(), font );
+    context.objectTable.insert( extCreateFontIndirectW.ihFonts(), font );
 }
 
 void EmfPainterBackend::selectStockObject(EmfDeviceContext &context, const quint32 ihObject)
@@ -498,7 +422,7 @@ void EmfPainterBackend::selectObject(EmfDeviceContext &context, const quint32 ih
     if ( ihObject & 0x80000000 ) {
 	selectStockObject(context, ihObject);
     } else {
-	QVariant obj = m_objectTable.value( ihObject );
+	QVariant obj = context.objectTable.value( ihObject );
 
 	switch ( obj.type() ) {
 	case QVariant::Pen :
@@ -521,7 +445,7 @@ void EmfPainterBackend::selectObject(EmfDeviceContext &context, const quint32 ih
 
 void EmfPainterBackend::deleteObject(EmfDeviceContext &context, const quint32 ihObject )
 {
-    m_objectTable.take( ihObject );
+    context.objectTable.take( ihObject );
 }
 
 

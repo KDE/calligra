@@ -151,4 +151,83 @@ void EmrTextObject::soakBytes( QDataStream &stream, int numBytes )
 }
 
 
+// ================================================================
+// Objects that will be stored in the object table
+
+
+QPen extCreatePen(quint32 penStyle, quint32 width,
+                  quint8 red, quint8 green, quint8 blue, quint8 reserved)
+{
+    Q_UNUSED( reserved );
+
+#if 0
+    kDebug(31000) << hex << penStyle << dec << width
+                  << red << green << blue << reserved;
+#endif
+
+    QPen pen;
+    pen.setColor( QColor( red, green, blue ) );
+
+    if ( penStyle & PS_GEOMETRIC ) {
+	pen.setCosmetic( false );
+    } else {
+	pen.setCosmetic( true );
+    }
+
+    switch ( penStyle & 0xF ) {
+    case PS_SOLID:
+        pen.setStyle( Qt::SolidLine );
+        break;
+    case PS_DASH:
+        pen.setStyle( Qt::DashLine );
+        break;
+    case PS_DOT:
+        pen.setStyle( Qt::DotLine );
+        break;
+    case PS_DASHDOT:
+        pen.setStyle( Qt::DashDotLine );
+        break;
+    case PS_DASHDOTDOT:
+        pen.setStyle( Qt::DashDotDotLine );
+        break;
+    case PS_NULL:
+        pen.setStyle( Qt::NoPen );
+        break;
+    case PS_INSIDEFRAME:
+        // FIXME: We don't properly support this
+        pen.setStyle( Qt::SolidLine );
+        break;
+    case PS_USERSTYLE:
+        kDebug(33100) << "UserStyle pen not yet supported, using SolidLine";
+        pen.setStyle( Qt::SolidLine );
+        break;
+    case PS_ALTERNATE:
+        kDebug(33100) << "Alternate pen not yet supported, using DashLine";
+        pen.setStyle( Qt::DashLine );
+        break;
+    default:
+        kDebug(33100) << "unexpected pen type, using SolidLine" << (penStyle & 0xF);
+        pen.setStyle( Qt::SolidLine );
+    }
+
+    switch ( penStyle & PS_ENDCAP_FLAT ) {
+    case PS_ENDCAP_ROUND:
+        pen.setCapStyle( Qt::RoundCap );
+        break;
+    case PS_ENDCAP_SQUARE:
+        pen.setCapStyle( Qt::SquareCap );
+        break;
+    case PS_ENDCAP_FLAT:
+        pen.setCapStyle( Qt::FlatCap );
+        break;
+    default:
+        kDebug(33100) << "unexpected cap style, using SquareCap" << (penStyle & PS_ENDCAP_FLAT);
+        pen.setCapStyle( Qt::SquareCap );
+    }
+    pen.setWidth(width);
+
+    return pen;
+}
+
+
 }
