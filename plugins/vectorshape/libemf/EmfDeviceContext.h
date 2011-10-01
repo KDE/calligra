@@ -102,7 +102,7 @@ public:
 
     // Structure Objects
     QColor  backgroundColor;    // Background color
-    QPoint  currentPosition;    // Drawing position (Current point)
+    QPoint  currentPoint;       // Drawing position (Current point)
     QColor  foregroundTextColor; // Foreground text color
     ;    //Output Surface**  (what is this good for?  Mixing colors?)
     QPoint viewportOrg;         // Viewport origin

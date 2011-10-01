@@ -176,8 +176,8 @@ private:
     QPainterPath *m_path;
     bool          m_currentlyBuildingPath;
 
-    QPainter                *m_painter;
-    QTransform               m_outputTransform; // The transform that the painter already had
+    QPainter     *m_painter;
+    QTransform    m_outputTransform; // The transform that the painter already had
 
     // Everything that has to do with window and viewport calculation
     QPoint        m_windowOrg;
@@ -196,25 +196,6 @@ private:
     // the window / viewport calculation is redone.
     QTransform    m_outputTransform;
 #endif
-
-    // ----------------------------------------------------------------
-    //                     The playback device context
-
-    // The Playback Device Context (PDC) contains the following:
-    //  - bitmap
-    //  - brush	(part of the painter)
-    //  - palette
-    //  - font	(part of the painter)
-    //  - pen	(part of the painter)
-    //  - region
-    //  - drawing mode
-    //  - mapping mode
-    // FIXME: what more?  textalign?  textpen?
-
-    /**
-       The current coordinates
-    */
-    QPoint  m_currentCoords;
 };
 
 }

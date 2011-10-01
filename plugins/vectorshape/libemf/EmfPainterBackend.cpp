@@ -44,7 +44,6 @@ EmfPainterBackend::EmfPainterBackend()
     : m_header( 0 )
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
-    , m_currentCoords()
 {
     m_painter         = 0;
     m_painterSaves    = 0;
@@ -60,7 +59,6 @@ EmfPainterBackend::EmfPainterBackend(QPainter &painter, QSize &size,
     , m_windowExtIsSet(false)
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
-    , m_currentCoords()
 {
     m_painter         = &painter;
     m_painterSaves    = 0;
@@ -695,8 +693,8 @@ void EmfPainterBackend::extTextOut(EmfDeviceContext &context,
 #if DEBUG_EMFPAINT
         kDebug(31000) << "TA_UPDATECP: use current logical position";
 #endif
-        x = m_currentCoords.x();
-        y = m_currentCoords.y();
+        x = context.currentPoint.x();
+        y = context.currentPoint.y();
     }
 
     QFontMetrics  fm = m_painter->fontMetrics();
@@ -785,7 +783,7 @@ void EmfPainterBackend::moveToEx(EmfDeviceContext &context, const qint32 x, cons
     if ( m_currentlyBuildingPath )
         m_path->moveTo( QPoint( x, y ) );
     else
-        m_currentCoords = QPoint( x, y );
+        context.currentPoint = QPoint( x, y );
 }
 
 void EmfPainterBackend::lineTo(EmfDeviceContext &context, const QPoint &finishPoint )
@@ -799,8 +797,8 @@ void EmfPainterBackend::lineTo(EmfDeviceContext &context, const QPoint &finishPo
     if ( m_currentlyBuildingPath )
         m_path->lineTo( finishPoint );
     else {
-        m_painter->drawLine( m_currentCoords, finishPoint );
-        m_currentCoords = finishPoint;
+        m_painter->drawLine( context.currentPoint, finishPoint );
+        context.currentPoint = finishPoint;
     }
 }
 

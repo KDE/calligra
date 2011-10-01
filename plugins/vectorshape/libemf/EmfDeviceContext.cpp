@@ -42,25 +42,25 @@ EmfDeviceContext::EmfDeviceContext()
 void EmfDeviceContext::reset()
 {
     // Graphics Objects
-    brush = QBrush(Qt::NoBrush);
-    image = QImage();
-    font = QFont();
-    escapement = 0;
+    brush       = QBrush(Qt::NoBrush);
+    image       = QImage();
+    font        = QFont();
+    escapement  = 0;
     orientation = 0;
-    height = 0;
+    height      = 0;
     //Palette
-    pen = QPen(Qt::black);
-    clipRegion = QRegion();
+    pen         = QPen(Qt::black);
+    clipRegion  = QRegion();
 
     // Structure Objects
-    backgroundColor = QColor(Qt::white);
-    currentPosition = QPoint(0, 0);
+    backgroundColor     = QColor(Qt::white);
+    currentPoint        = QPoint(0, 0);
     foregroundTextColor = QColor(Qt::black);
     //Output Surface**  (what is this good for?  Mixing colors?)
     viewportExt = QSize();
     viewportOrg = QPoint();
-    windowExt = QSize();
-    windowOrg = QPoint();
+    windowExt   = QSize();
+    windowOrg   = QPoint();
 
     // Graphic Properties
     bkMode = 0;// FIXME: Check the real default
