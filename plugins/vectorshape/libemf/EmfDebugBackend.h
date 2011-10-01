@@ -73,9 +73,6 @@ public:
     void ellipse(EmfDeviceContext &context, const QRect &box );
     void rectangle(EmfDeviceContext &context, const QRect &box );
     void setMetaRgn(EmfDeviceContext &context);
-    void beginPath(EmfDeviceContext &context);
-    void closeFigure(EmfDeviceContext &context);
-    void endPath(EmfDeviceContext &context);
     void extCreateFontIndirectW(EmfDeviceContext &context, const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
     void setPixelV(EmfDeviceContext &context, QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved );
     void extTextOut(EmfDeviceContext &context, const QRect &bounds, const EmrTextObject &textObject );

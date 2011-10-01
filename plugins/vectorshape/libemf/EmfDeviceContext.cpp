@@ -48,9 +48,11 @@ void EmfDeviceContext::reset()
     escapement  = 0;
     orientation = 0;
     height      = 0;
-    //Palette
+    //Palette NYI
     pen         = QPen(Qt::black);
     clipRegion  = QRegion();
+    path        = QPainterPath();
+    isDefiningPath = false;
 
     // Structure Objects
     backgroundColor     = QColor(Qt::white);
@@ -64,8 +66,8 @@ void EmfDeviceContext::reset()
 
     // Graphic Properties
     bkMode = 0;// FIXME: Check the real default
-    //Break extra space
-    //Font mapping mode
+    //Break extra space NYI
+    //Font mapping mode NYI
     rop2Mode = 0;// FIXME: Check the real default
     layoutMode = 0;// FIXME: Check the real default
     mapMode = MM_TEXT;

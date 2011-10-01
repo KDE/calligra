@@ -65,27 +65,6 @@ void EmfDebugBackend::setPixelV(EmfDeviceContext &context,
     kDebug(33100) << "EMR_SETPIXELV:" << point << QColor( red, green, blue );
 }
 
-void EmfDebugBackend::beginPath(EmfDeviceContext &context)
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_BEGINPATH";
-}
-
-void EmfDebugBackend::closeFigure(EmfDeviceContext &context)
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_CLOSEFIGURE";
-}
-
-void EmfDebugBackend::endPath(EmfDeviceContext &context)
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_ENDPATH";
-}
-
 void EmfDebugBackend::saveDC(EmfDeviceContext &context)
 {
     Q_UNUSED(context);

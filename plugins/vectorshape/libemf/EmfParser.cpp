@@ -43,6 +43,9 @@ namespace Libemf
 {
 
 
+static Qt::FillRule               fillModeToQtFillRule(quint32 polyFillMode);
+
+
 // ================================================================
 
 
@@ -689,21 +692,27 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 #endif
         }
 	break;
+
+    // ----------------------------------------------------------------
+    // Path related records
+
     case EMR_BEGINPATH:
-	mOutput->beginPath(context);
+        context.path = QPainterPath();
+        context.isDefiningPath = true;
+        context.path.setFillRule( fillModeToQtFillRule(context.polyFillMode) );
 	break;
     case EMR_ENDPATH:
-	mOutput->endPath(context);
+        context.path.setFillRule( fillModeToQtFillRule(context.polyFillMode) );
+        context.isDefiningPath = false;
 	break;
     case EMR_CLOSEFIGURE:
-	mOutput->closeFigure(context);
+        context.path.closeSubpath();
 	break;
     case EMR_FILLPATH:
 	{
 	    QRect bounds;
 	    stream >> bounds;
 	    mOutput->fillPath(context, bounds );
-            //kDebug(33100) << "xx EMR_FILLPATH" << bounds;
 	}
 	break;
     case EMR_STROKEANDFILLPATH:
@@ -1068,6 +1077,23 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 #endif
 
     return true;
+}
+
+
+// ----------------------------------------------------------------
+//                         static functions
+
+
+static Qt::FillRule fillModeToQtFillRule(quint32 polyFillMode)
+{
+    if ( polyFillMode == ALTERNATE ) {
+	return Qt::OddEvenFill;
+    } else if ( polyFillMode == WINDING ) {
+	return Qt::WindingFill;
+    }
+
+    // Good default?
+    return Qt::OddEvenFill;
 }
 
 }

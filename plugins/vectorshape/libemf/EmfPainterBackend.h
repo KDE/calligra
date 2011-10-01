@@ -91,9 +91,6 @@ public:
     void ellipse(EmfDeviceContext &context, const QRect &box );
     void rectangle(EmfDeviceContext &context, const QRect &box );
     void setMetaRgn(EmfDeviceContext &context);
-    void beginPath(EmfDeviceContext &context);
-    void closeFigure(EmfDeviceContext &context);
-    void endPath(EmfDeviceContext &context);
     void extCreateFontIndirectW(EmfDeviceContext &context,
                                 const ExtCreateFontIndirectWRecord &extCreateFontIndirectW );
     void setPixelV(EmfDeviceContext &context,
@@ -173,8 +170,8 @@ private:
 
     QMap<quint32, QVariant>  m_objectTable;
 
-    QPainterPath *m_path;
-    bool          m_currentlyBuildingPath;
+    //QPainterPath *m_path;
+    //bool          m_currentlyBuildingPath;
 
     QPainter     *m_painter;
     QTransform    m_outputTransform; // The transform that the painter already had

@@ -42,8 +42,6 @@ static Qt::FillRule               fillModeToQtFillRule(quint32 polyFillMode);
 
 EmfPainterBackend::EmfPainterBackend()
     : m_header( 0 )
-    , m_path( 0 )
-    , m_currentlyBuildingPath( false )
 {
     m_painter         = 0;
     m_painterSaves    = 0;
@@ -54,8 +52,6 @@ EmfPainterBackend::EmfPainterBackend()
 EmfPainterBackend::EmfPainterBackend(QPainter &painter, QSize &size,
                                              bool keepAspectRatio)
     : m_header( 0 )
-    , m_path( 0 )
-    , m_currentlyBuildingPath( false )
     , m_windowExtIsSet(false)
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
@@ -69,7 +65,6 @@ EmfPainterBackend::EmfPainterBackend(QPainter &painter, QSize &size,
 EmfPainterBackend::~EmfPainterBackend()
 {
     delete m_header;
-    delete m_path;
 }
 
 void EmfPainterBackend::paintBounds(const Header *header)
@@ -186,36 +181,6 @@ void EmfPainterBackend::cleanup( const Header *header )
 
 void EmfPainterBackend::eof()
 {
-}
-
-void EmfPainterBackend::beginPath(EmfDeviceContext &context)
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000);
-#endif
-
-    delete( m_path );
-    m_path = new QPainterPath;
-    m_currentlyBuildingPath = true;
-}
-
-void EmfPainterBackend::closeFigure(EmfDeviceContext &context)
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000);
-#endif
-
-    m_path->closeSubpath();
-}
-
-void EmfPainterBackend::endPath(EmfDeviceContext &context)
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000);
-#endif
-
-    m_path->setFillRule( fillModeToQtFillRule(context.polyFillMode) );
-    m_currentlyBuildingPath = false;
 }
 
 void EmfPainterBackend::saveDC(EmfDeviceContext &context)
@@ -780,8 +745,8 @@ void EmfPainterBackend::moveToEx(EmfDeviceContext &context, const qint32 x, cons
     kDebug(31000) << x << y;
 #endif
 
-    if ( m_currentlyBuildingPath )
-        m_path->moveTo( QPoint( x, y ) );
+    if ( context.isDefiningPath )
+        context.path.moveTo( QPoint( x, y ) );
     else
         context.currentPoint = QPoint( x, y );
 }
@@ -794,8 +759,8 @@ void EmfPainterBackend::lineTo(EmfDeviceContext &context, const QPoint &finishPo
     kDebug(31000) << finishPoint;
 #endif
 
-    if ( m_currentlyBuildingPath )
-        m_path->lineTo( finishPoint );
+    if ( context.isDefiningPath )
+        context.path.lineTo( finishPoint );
     else {
         m_painter->drawLine( context.currentPoint, finishPoint );
         context.currentPoint = finishPoint;
@@ -817,7 +782,7 @@ void EmfPainterBackend::arcTo(EmfDeviceContext &context,
     qreal endAngle   = angleFromArc( centrePoint, end );
     qreal spanAngle  = angularSpan( startAngle, endAngle );
 
-    m_path->arcTo( box, startAngle, spanAngle );
+    context.path.arcTo( box, startAngle, spanAngle );
 }
 
 void EmfPainterBackend::polygon16(EmfDeviceContext &context,
@@ -908,7 +873,7 @@ void EmfPainterBackend::polyLineTo16(EmfDeviceContext &context,
 #endif
 
     for ( int i = 0; i < points.count(); ++i ) {
-	m_path->lineTo( points[i] );
+	context.path.lineTo( points[i] );
     }
 }
 
@@ -943,7 +908,7 @@ void EmfPainterBackend::polyBezierTo16(EmfDeviceContext &context,
 #endif
 
     for ( int i = 0; i < points.count(); i+=3 ) {
-	m_path->cubicTo( points[i], points[i+1], points[i+2] );
+	context.path.cubicTo( points[i], points[i+1], points[i+2] );
     }
 }
 
@@ -956,7 +921,7 @@ void EmfPainterBackend::fillPath(EmfDeviceContext &context, const QRect &bounds 
 #endif
 
     Q_UNUSED( bounds );
-    m_painter->fillPath( *m_path, m_painter->brush() );
+    m_painter->fillPath(context.path, m_painter->brush());
 }
 
 void EmfPainterBackend::strokeAndFillPath(EmfDeviceContext &context, const QRect &bounds )
@@ -968,7 +933,7 @@ void EmfPainterBackend::strokeAndFillPath(EmfDeviceContext &context, const QRect
 #endif
 
     Q_UNUSED( bounds );
-    m_painter->drawPath( *m_path );
+    m_painter->drawPath(context.path);
 }
 
 void EmfPainterBackend::strokePath(EmfDeviceContext &context, const QRect &bounds )
@@ -980,7 +945,7 @@ void EmfPainterBackend::strokePath(EmfDeviceContext &context, const QRect &bound
 #endif
 
     Q_UNUSED( bounds );
-    m_painter->strokePath( *m_path, m_painter->pen() );
+    m_painter->strokePath(context.path, m_painter->pen());
 }
 
 void EmfPainterBackend::setClipPath(EmfDeviceContext &context, const quint32 regionMode )
@@ -989,15 +954,15 @@ void EmfPainterBackend::setClipPath(EmfDeviceContext &context, const quint32 reg
     kDebug(31000) << hex << regionMode << dec;
 #endif
 
-    switch ( regionMode ) {
+    switch (regionMode) {
     case RGN_AND:
-        m_painter->setClipPath( *m_path, Qt::IntersectClip );
+        m_painter->setClipPath(context.path, Qt::IntersectClip);
         break;
     case RGN_OR:
-        m_painter->setClipPath( *m_path, Qt::UniteClip );
+        m_painter->setClipPath(context.path, Qt::UniteClip);
         break;
     case RGN_COPY:
-        m_painter->setClipPath( *m_path, Qt::ReplaceClip );
+        m_painter->setClipPath(context.path, Qt::ReplaceClip);
         break;
     default:
         qWarning() <<  "Unexpected / unsupported clip region mode:" << regionMode;

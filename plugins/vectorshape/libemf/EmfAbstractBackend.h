@@ -203,21 +203,6 @@ public:
                             const QRect &bounds, const EmrTextObject &textObject) = 0;
 
     /**
-       Handler for the EMR_BEGINPATH record type
-    */
-    virtual void beginPath(EmfDeviceContext &context) = 0;
-
-    /**
-       Handler for the EMR_CLOSEFIGURE record type
-    */
-    virtual void closeFigure(EmfDeviceContext &context) = 0;
-
-    /**
-       Handler for the EMR_ENDPATH record type
-    */
-    virtual void endPath(EmfDeviceContext &context) = 0;
-
-    /**
        Handler for the EMR_MOVETOEX record type
 
        \param x the X coordinate of the point to move to

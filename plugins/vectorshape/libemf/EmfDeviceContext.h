@@ -27,6 +27,7 @@
 #include <QFont>
 #include <QPolygon>
 #include <QRegion>
+#include <QPainterPath>
 #include <QTransform>
 
 
@@ -55,29 +56,30 @@ enum DeviceContextMembers {
     DCPalette        = 0x00000004,
     DCPen            = 0x00000008,
     DCClipRegion     = 0x00000010,
+    DCPath           = 0x00000020,
 
     // Structure objects
-    DCBgColor        = 0x00000020,
-    DCCurrentPos     = 0x00000040,
-    DCFgTextColor    = 0x00000080,
+    DCBgColor        = 0x00000040,
+    DCCurrentPos     = 0x00000080,
+    DCFgTextColor    = 0x00000100,
     // Output surface not supported
-    DCViewportExt    = 0x00000100,
-    DCViewportorg    = 0x00000200,
-    DCWindowExt      = 0x00000400,
-    DCWindoworg      = 0x00000800,
-    DCWorldTransform = 0x00000F00, // All the viewport/window bits together
+    DCViewportExt    = 0x00000200,
+    DCViewportorg    = 0x00000400,
+    DCWindowExt      = 0x00000800,
+    DCWindoworg      = 0x00001000,
+    DCWorldTransform = 0x00001E00, // All the viewport/window bits together
 
     // Graphic properties
-    DCBkMode         = 0x00001000,
-    DCBrExtraSpace   = 0x00002000,
-    DCFontMapMode    = 0x00004000,
-    DCRop2Mode       = 0x00008000,
-    DCLayoutMode     = 0x00010000,
-    DCMapMode        = 0x00020000,
-    DCPolyFillMode   = 0x00040000,
-    DCStretchBltMode = 0x00080000,
-    DCTextAlignMode  = 0x00100000,
-    DCTextExtraSpace = 0x00200000
+    DCBkMode         = 0x00002000,
+    DCBrExtraSpace   = 0x00004000,
+    DCFontMapMode    = 0x00008000,
+    DCRop2Mode       = 0x00010000,
+    DCLayoutMode     = 0x00020000,
+    DCMapMode        = 0x00040000,
+    DCPolyFillMode   = 0x00080000,
+    DCStretchBltMode = 0x00100000,
+    DCTextAlignMode  = 0x00200000,
+    DCTextExtraSpace = 0x00400000
 };
 
 /**
@@ -90,15 +92,18 @@ public:
     void reset();
 
     // Graphic Objects
-    QBrush    brush;            // Brush
-    QImage    image;            //   - extra image
-    QFont     font;             // Font
-    int       escapement;       //   - rotation of the text in 1/10th of a degree
-    int       orientation;      //   - rotation of characters in 1/10th of a degree
-    int       height;           //   - original font height; can be negative
+    QBrush        brush;        // Brush
+    QImage        image;        //   - extra image
+    QFont         font;         // Font
+    int           escapement;   //   - rotation of the text in 1/10th of a degree
+    int           orientation;  //   - rotation of characters in 1/10th of a degree
+    int           height;       //   - original font height; can be negative
     //Palette                   // Palette not supported yet
-    QPen      pen;              // Pen
-    QRegion   clipRegion;       // Region
+    QPen          pen;          // Pen
+    QRegion       clipRegion;   // Region
+    QPainterPath  path;         // Path
+    bool          isDefiningPath; // True when we are defining a path,
+                                // i.e. after an EMR_BEGINPATH record.
 
     // Structure Objects
     QColor  backgroundColor;    // Background color
