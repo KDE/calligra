@@ -222,9 +222,9 @@ namespace wvWare
         /**
          * @internal
          * This function tries to get the list information (if any) from the
-         * given PAP. As the list info handling is completely different in Word6
-         * and in Word97 we have one additional level of indirection here (to
-         * keep the user of the library from fighting multiple versions).
+         * given PAP. As the list info handling is completely different in
+         * Word6 and in Word97 we have one additional level of indirection here
+         * (to keep the user of the library from fighting multiple versions).
          * In case there's no list information for that paragraph it returns
          * false.
          *

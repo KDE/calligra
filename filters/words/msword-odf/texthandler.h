@@ -257,7 +257,6 @@ private:
     // ************************************************
     QString m_listSuffixes[9];     // The suffix for every list level seen so far
     QString m_listStyleName;       // track the name of the list style
-    bool m_listLevelStyleRequired; // track if a list-level-style is required for current paragraph
     int m_previousListDepth;        // tells us which list level we're on (-1 if not in a list)
     int m_previousListID;           // tracks the ID of the current list - 0 if not a list
 
