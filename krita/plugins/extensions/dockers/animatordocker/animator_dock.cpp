@@ -49,6 +49,7 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     m_model->setLightTable(m_light_table);
 
     m_document = 0;
+    m_canvas = 0;
     
     // Setup exporter
     m_exporter = new AnimatorExporter(m_model, m_document);
@@ -122,14 +123,22 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     connect(ext_light_table, SIGNAL(toggled(bool)), m_model, SLOT(toggleExtLTable(bool)));
     addAction( ext_light_table );
     
-    QAction* show_all = m_onion_toolbar->addAction(SmallIcon("layer-visible-on"), i18n("Enable/disable plugin"));
+    QAction* show_all = m_onion_toolbar->addAction(SmallIcon("layer-visible-on"), i18n("Toggle visibility of plugin's effect"));
     show_all->setCheckable(true);
-    connect(show_all, SIGNAL(toggled(bool)), m_model, SLOT(setEnabled(bool)));
-    show_all->setEnabled(true);
+    connect(show_all, SIGNAL(toggled(bool)), m_model, SLOT(setVisible(bool)));
     addAction( show_all );
     
-    // Player toolbar
+    // Player & export toolbar
     m_player_toolbar = new QToolBar(this);
+    
+    QAction* enable_act = m_player_toolbar->addAction(SmallIcon("dialog-ok-apply"), i18n("Enable/disable plugin"));
+    enable_act->setCheckable(true);
+    connect(enable_act, SIGNAL(toggled(bool)), m_model, SLOT(setEnabled(bool)));
+    addAction(enable_act);
+    
+    addAction( m_player_toolbar->addAction(SmallIcon("system-run"), i18n("Convert old frames to new"), m_model, SLOT(convertLayers())) );
+    
+    m_player_toolbar->addSeparator();
     
     QAction* play_act = m_player_toolbar->addAction(SmallIcon("media-playback-start"), i18n("Play/Pause"));
     play_act->setCheckable(true);
@@ -168,9 +177,17 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
 {
 //     std::cout << "CANVAS CHANGED" << std::endl;
     
-    m_canvas = static_cast<KisCanvas2*>(canvas);
+    KisCanvas2* new_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (!new_canvas)
+        return;
+    if (new_canvas == m_canvas)
+        return;
     
-    KisView2* view = m_canvas->view();
+    KisView2* view = new_canvas->view();
+    bool is_new_document = true;
+    if (m_canvas && m_canvas->view())
+        is_new_document = view->document() != m_canvas->view()->document();
+    m_canvas = new_canvas;
     
     m_nodemodel = new KisNodeModel(this);
     m_nodemodel->setImage(m_canvas->image());
@@ -203,7 +220,10 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
     
 //     m_model->setFrame(1);
     
-    m_model->loadLayers();
+    if (is_new_document)
+        m_model->init();
+    else
+        m_model->loadLayers();
     
     
     // Exporter

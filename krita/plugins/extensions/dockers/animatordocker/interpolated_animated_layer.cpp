@@ -40,10 +40,14 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
     }
     
     int inxt = getNextKey(num);
-    KisNode* next = getKeyFrame(inxt);
+    KisCloneLayer* next = 0;
+    if (isKeyFrame(inxt))
+        next = dynamic_cast<KisCloneLayer*>( getKeyFrame(inxt)->getContent() );
     
     int ipre = getPreviousKey(num);
-    KisNode* prev = getKeyFrame(ipre);
+    KisNode* prev = 0;
+    if (isKeyFrame(ipre))
+        prev = getKeyFrame(ipre)->getContent();
 
     if (prev && next && next->inherits("KisCloneLayer"))
     {
@@ -53,26 +57,33 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         double nxt = inxt;
         double p = (cur-pre) / (nxt-pre);
         
-        KisNode* result = dynamic_cast<KisNode*>(interpolate(prev, dynamic_cast<KisCloneLayer*>(next), p));
+        getNodeManager()->activateNode(this);
+        getNodeManager()->createNode("KisGroupLayer");
+        KisNode* target = getNodeManager()->activeNode().data();
+        getNodeManager()->insertNode(interpolate(prev, next, p), target, 0);
+        target->setName(getNameForFrame(num, false));
+//         target->at(0)->setName("_");
         
-        KisNode* old = getFrameAt(num);
+        loadFrames();
         
-        if (result)
-        {
-            insertFrame(num, result, false);
-            
-            // Clear previous
-            if (old)
-            {
-//                 std::cout << "removing" << std::endl;
-                getNodeManager()->removeNode(old);
-            }
-            loadFrames();
-        }
+//         FrameLayer* old = getFrameAt(num);
+        
+//         if (result)
+//         {
+//             insertFrame(num, result, false);
+//             
+//             // Clear previous
+//             if (old)
+//             {
+// //                 std::cout << "removing" << std::endl;
+//                 getNodeManager()->removeNode(old);
+//             }
+//             loadFrames();
+//         }
     }
 }
 
-// KisCloneLayer* InterpolatedAnimatedLayer::interpolate(KisNode* from, KisCloneLayer* to, double percent)
+// KisCloneLayer* InterpolatedAnimatedLayer::interpolate(FrameLayer* from, KisCloneLayer* to, double percent)
 // {
 //     // Position
 //     double x = from->x()*(1.0-percent)+to->x()*percent;
@@ -109,7 +120,7 @@ bool InterpolatedAnimatedLayer::isKeyFrame(int num) const
     return SimpleAnimatedLayer::isKeyFrame(num) && !m_non_keys.contains(num);
 }
 
-void InterpolatedAnimatedLayer::insertFrame(int num, KisNode* frame, bool iskey)
+void InterpolatedAnimatedLayer::insertFrame(int num, FrameLayer* frame, bool iskey)
 {
     SimpleAnimatedLayer::insertFrame(num, frame, iskey);
     if (!iskey)

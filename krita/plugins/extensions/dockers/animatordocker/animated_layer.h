@@ -24,6 +24,8 @@
 #include "kis_group_layer.h"
 #include "kis_node_manager.h"
 
+#include "frame_layer.h"
+
 class AnimatedLayer : public KisGroupLayer
 {
     Q_OBJECT
@@ -40,18 +42,21 @@ public:
     // Animation interface
     // NEW
 public:
-    virtual KisNode* getUpdatedFrame(int num);
-    virtual KisNode* getCachedFrame(int num) const = 0;
+    virtual FrameLayer* getUpdatedFrame(int num);
+    virtual FrameLayer* getCachedFrame(int num) const = 0;
     
-    virtual KisNode* getKeyFrame(int num) const = 0;
-    virtual KisNode* getNextKeyFrame(int num) const;
-    virtual KisNode* getPreviousKeyFrame(int num) const;
+    virtual FrameLayer* getKeyFrame(int num) const = 0;
+    virtual FrameLayer* getNextKeyFrame(int num) const;
+    virtual FrameLayer* getPreviousKeyFrame(int num) const;
     
     virtual bool isKeyFrame(int num) const = 0;
     virtual int getNextKey(int num) const = 0;
     virtual int getPreviousKey(int num) const = 0;
     
     virtual void loadFrames() = 0;
+    virtual bool loaded() = 0;
+    
+    virtual QVariant getVision(int role, bool isCurrent);
     
 public:
 //     virtual const QString& getNameForFrame(int num) const;
@@ -78,7 +83,7 @@ public:
 protected:
     virtual void updateFrame(int num);
     
-    virtual void insertFrame(int num, KisNode* frame, bool iskey) = 0;
+    virtual void insertFrame(int num, FrameLayer* frame, bool iskey) = 0;
     
 private:
     KisNodeManager* m_nodeman;

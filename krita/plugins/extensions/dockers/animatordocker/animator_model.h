@@ -33,6 +33,7 @@
 #include "animator_light_table.h"
 
 #include "simple_animated_layer.h"
+#include "frame_layer.h"
 
 
 class AnimatorModel : public QAbstractTableModel
@@ -63,10 +64,15 @@ public slots:
 
     // ok, +review
     virtual void loadLayers();
+    
+    virtual void convertLayers();
+    virtual void convertLayer(KisNode* node);
+    virtual void setEnabled(bool val);
+    
     // ok
     virtual void forceFramesNumber(int num);
     // ok
-    virtual void setEnabled(bool val);
+    virtual void setVisible(bool val);
     // ok, +todo
     virtual void goNext();
     // ok
@@ -185,13 +191,16 @@ public:
     void disableOnion();
     
 public:
-    AnimatedLayer* getAnimatedLayer(quint32 num);
-    AnimatedLayer* getAnimatedLayerByChild(const KisNode* node);
+    AnimatedLayer* getAnimatedLayer(quint32 num) const;
+    AnimatedLayer* getAnimatedLayerByChild(const KisNode* node) const;
     
-    AnimatedLayer* getActiveAnimatedLayer();
+    AnimatedLayer* getActiveAnimatedLayer() const;
     
-    KisNode* getCachedFrame(quint32 l, quint32 f) const;
-    KisNode* getCachedFrame(const QModelIndex& index) const;
+    FrameLayer* getCachedFrame(quint32 l, quint32 f) const;
+    FrameLayer* getCachedFrame(const QModelIndex& index) const;
+    
+    FrameLayer* getUpdatedFrame(const QModelIndex& index);
+    FrameLayer* getUpdatedFrame(quint32 l, quint32 f);
     
 protected:
 //     /**
@@ -208,8 +217,9 @@ private:
 //     virtual QModelIndex parent(const QModelIndex& child) const;
 
 private:
-    
     bool m_enabled;
+    
+    bool m_visible;
     
     bool m_updating;
     
@@ -220,7 +230,7 @@ private:
     QList< AnimatedLayer* > m_layers;                           // new
     
     const QModelIndex& indexFromNode(KisNode* node) const;
-     
+    
     qint32 m_frame;
     qint32 m_previous_frame;
     quint32 m_frame_num;

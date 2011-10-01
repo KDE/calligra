@@ -76,6 +76,7 @@
 
 #include "ui_wdglayerbox.h"
 
+#include <QDebug>
 
 KisLayerBox::KisLayerBox()
         : QDockWidget(i18n("Layers"))
@@ -323,6 +324,10 @@ void KisLayerBox::updateUI()
         }
         if (active->inherits("KisLayer")) {
             KisLayerSP l = qobject_cast<KisLayer*>(active.data());
+            
+            std::cout << (l->parentLayer().data()?"DD":"ND") << std::endl;
+            QTextStream(stdout) << l->name() << QString("\n");
+            
             slotSetOpacity(l->opacity() * 100.0 / 255);
             slotSetCompositeOp(l->compositeOp());
         }

@@ -27,33 +27,90 @@
 
 #include <iostream>
 #include <iomanip>
+#include "frame_layer.h"
 
 SimpleAnimatedLayer::SimpleAnimatedLayer(const KisGroupLayer& source) : AnimatedLayer(source)
 {
     m_frames.clear();
+    m_loaded = false;
+}
+
+bool SimpleAnimatedLayer::loaded()
+{
+    return m_loaded;
 }
 
 void SimpleAnimatedLayer::loadFrames()
 {
+//     return;
+    m_loaded = true;
+    
     m_frames.clear();
     m_first_frame = 0;
     for ( qint32 i = 0; i < childCount(); ++i )
     {
-        const KisNode* chsource = childNodes(QStringList(),  KoProperties())[i];
+        KisNode* chsource = at(i).data(); //childNodes(QStringList(),  KoProperties())[i];
         bool iskey;
         int fnum = getFrameFromName(chsource->name(), iskey);
         if (fnum >= 0)
-//         if (chsource->name().startsWith("_frame_"))
         {
+            FrameLayer* frame;
             
-            KisNode* frame = const_cast<KisNode*>(chsource);
-//             QString ts = chsource->name();
-//             
-//             qint32 fnum = ts.mid(7).toLong();
-//             
-//             KisNode* frame = mchsource;
-//             getNodeManager()->insertNode(frame, this, fnum);
-//             getNodeManager()->removeNode(mchsource);
+            if (chsource->inherits("FrameLayer"))
+            {
+                frame = dynamic_cast<FrameLayer*>(chsource);
+            } else
+            {
+                QString rname = chsource->name();
+                
+                KisNode* nn;
+                
+                // Whether we should convert from old style to new
+                bool oldstyle = !chsource->inherits("KisGroupLayer") || !chsource->at(0); // || chsource->at(0)->name().compare(QString("_"));
+                if (oldstyle)
+                {
+//                     getNodeManager()->activateNode(this);
+//                     getNodeManager()->createNode("KisGroupLayer");
+//                     
+//                     KisNode* tmp = getNodeManager()->activeNode().data();
+//                     tmp->setName(chsource->name());
+// //                     getNodeManager()->moveNodeAt(chsource, tmp, 0);
+//                     chsource->setName("_");
+//                     nn = chsource;
+//                     chsource = tmp;
+//                 }
+                } else
+                {
+                
+                frame = new FrameLayer(*dynamic_cast<KisGroupLayer*>( chsource ));
+//                 }
+                
+                frame->setName(getNameForFrame(fnum, iskey));
+                frame->setNodeManager(getNodeManager());
+                frame->at(0)->setName("_");
+                
+//                 if (!oldstyle)
+                getNodeManager()->insertNode(frame, this, fnum);
+                
+//                 getNodeManager()->removeNode(chsource->at(0));
+                getNodeManager()->removeNode(chsource);
+                
+//                 frame->setCompositeOp("normal");
+                }
+                if (oldstyle && 0)
+                {
+                    getNodeManager()->moveNodeAt(nn, chsource, 0);
+                    nn->setOpacity(255);
+                    nn->setVisible(true);
+//                     nn->setName("_");
+//                     frame->setContent(chsource);
+                    m_loaded = false;
+                    continue;
+                }
+//                 std::cout << (frame->compositeOp() == 0) << std::endl;
+//                 std::cout << (nn->compositeOp() == 0) << std::endl;
+                std::cout << (getNodeManager() != 0) << std::endl;
+            }
             
             if (fnum == m_frames.size())
             {
@@ -66,7 +123,7 @@ void SimpleAnimatedLayer::loadFrames()
                         m_frames.append(0);
                     }
                 }
-                m_frames[fnum] = dynamic_cast<KisNode*>(frame);
+                m_frames[fnum] = frame;
             }
             if (fnum < m_first_frame)
                 m_first_frame = fnum;
@@ -74,14 +131,43 @@ void SimpleAnimatedLayer::loadFrames()
     }
 }
 
-KisNode* SimpleAnimatedLayer::getFrameAt(int num) const
+void SimpleAnimatedLayer::convertFrames()
+{
+    for ( qint32 i = 0; i < childCount(); ++i )
+    {
+        KisNode* chsource = at(i).data(); //childNodes(QStringList(),  KoProperties())[i];
+        KisNode* nn;
+        bool iskey;
+        int fnum = getFrameFromName(chsource->name(), iskey);
+        if (fnum >= 0)
+        {
+            getNodeManager()->activateNode(this);
+            getNodeManager()->createNode("KisGroupLayer");
+            
+            KisNode* tmp = getNodeManager()->activeNode().data();
+            tmp->setName(chsource->name());
+            
+            chsource->setName("_");
+//             nn = chsource;
+            chsource = tmp;
+        }
+        getNodeManager()->moveNodeAt(nn, chsource, 0);
+        nn->setOpacity(255);
+        nn->setVisible(true);
+//                     nn->setName("_");
+//                     frame->setContent(chsource);
+        m_loaded = false;
+    }
+}
+
+FrameLayer* SimpleAnimatedLayer::getFrameAt(int num) const
 {
     if (num >= dataStart() && num < dataEnd())
         return m_frames[num];
     return 0;
 }
 
-KisNode* SimpleAnimatedLayer::getKeyFrame(int num) const
+FrameLayer* SimpleAnimatedLayer::getKeyFrame(int num) const
 {
     if (isKeyFrame(num))
     {
@@ -91,9 +177,9 @@ KisNode* SimpleAnimatedLayer::getKeyFrame(int num) const
     return 0;
 }
 
-KisNode* SimpleAnimatedLayer::getCachedFrame(int num) const
+FrameLayer* SimpleAnimatedLayer::getCachedFrame(int num) const
 {
-    KisNode* frame = getFrameAt(num);
+    FrameLayer* frame = getFrameAt(num);
     if (frame)
     {
         return frame;
@@ -172,7 +258,7 @@ int SimpleAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) cons
     return -1;
 }
 
-void SimpleAnimatedLayer::insertFrame(int num, KisNode* frame, bool iskey)
+void SimpleAnimatedLayer::insertFrame(int num, FrameLayer* frame, bool iskey)
 {
     frame->setName(getNameForFrame(num, iskey));
     getNodeManager()->insertNode(frame, this, num);

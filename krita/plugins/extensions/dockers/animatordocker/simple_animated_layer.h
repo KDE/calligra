@@ -24,6 +24,7 @@
 #define SIMPLE_ANIMATED_LAYER_H
 
 #include "animated_layer.h"
+#include "frame_layer.h"
 
 class SimpleAnimatedLayer : public AnimatedLayer
 {
@@ -34,10 +35,13 @@ public:
 
 public:
     virtual void loadFrames();
+    virtual void convertFrames();
+    
+    virtual bool loaded();
 
 public:
-    virtual KisNode* getCachedFrame(int num) const;
-    virtual KisNode* getKeyFrame(int num) const;
+    virtual FrameLayer* getCachedFrame(int num) const;
+    virtual FrameLayer* getKeyFrame(int num) const;
     
 public:
     virtual bool isKeyFrame(int num) const;
@@ -50,19 +54,21 @@ public:
     virtual int dataEnd() const;
     
 public:
-    const QString& getNameForFrame(int num, bool iskey) const;
+    virtual const QString& getNameForFrame(int num, bool iskey) const;
 
 protected:
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
     
-    virtual void insertFrame(int num, KisNode* frame, bool iskey);
+    virtual void insertFrame(int num, FrameLayer* frame, bool iskey);
     
-    virtual KisNode* getFrameAt(int num) const;
+    virtual FrameLayer* getFrameAt(int num) const;
     
 private:
+    bool m_loaded;
+    
     int m_first_frame;
 
-    QList< KisNode* > m_frames;
+    QList< FrameLayer* > m_frames;
 };
 
 #endif // SIMPLE_ANIMATED_LAYER_H

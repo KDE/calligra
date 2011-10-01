@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+#include <QBrush>
+
 #include "animated_layer.h"
 
 AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source)
@@ -35,17 +37,17 @@ KisNodeManager* AnimatedLayer::getNodeManager() const
     return m_nodeman;
 }
 
-KisNode* AnimatedLayer::getNextKeyFrame(int num) const
+FrameLayer* AnimatedLayer::getNextKeyFrame(int num) const
 {
     return getKeyFrame(getNextKey(num));
 }
 
-KisNode* AnimatedLayer::getPreviousKeyFrame(int num) const
+FrameLayer* AnimatedLayer::getPreviousKeyFrame(int num) const
 {
     return getKeyFrame(getPreviousKey(num));
 }
 
-KisNode* AnimatedLayer::getUpdatedFrame(int num)
+FrameLayer* AnimatedLayer::getUpdatedFrame(int num)
 {
     updateFrame(num);
     return getCachedFrame(num);
@@ -56,7 +58,9 @@ void AnimatedLayer::updateFrame(int num)
     Q_UNUSED(num);
 }
 
-// const QString& AnimatedLayer::getNameForFrame(int num) const
-// {
-//     return getNameForFrame(num, true);
-// }
+QVariant AnimatedLayer::getVision(int role, bool isCurrent)
+{
+    if (isCurrent && role == Qt::BackgroundRole)
+        return QVariant(QBrush(QColor(127, 127, 127)));
+    return QVariant();
+}

@@ -1,5 +1,5 @@
 /*
- *  Normal animated layer: class for most usually used, universal layer
+ *  Frame layer class
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,16 +17,36 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "normal_animated_layer.h"
 
-NormalAnimatedLayer::NormalAnimatedLayer(const KisGroupLayer& source): InterpolatedAnimatedLayer(source)
-{
-}
+#ifndef FRAME_LAYER_H
+#define FRAME_LAYER_H
 
-KisCloneLayer* NormalAnimatedLayer::interpolate(KisNode* from, KisCloneLayer* to, double position)
+#include <QObject>
+
+#include <kis_group_layer.h>
+#include <kis_node_manager.h>
+
+class FrameLayer : public KisGroupLayer
 {
+    Q_OBJECT
     
-    KisCloneLayer* result =  MovingInterpolation::makeLayer(from, to, position);
-//     YetAnotherInterpolation::changeLayer(result, from, to, position);
-    return result;
-}
+    
+public:
+    FrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
+    FrameLayer(const KisGroupLayer& source);
+    
+public:
+    virtual KisNode* getContent();
+    virtual void setContent(KisNode* c);
+    
+public:
+    virtual QVariant getVision(int role, bool isCurrent);
+    
+    void setNodeManager(KisNodeManager* nm);
+    KisNodeManager* getNodeManager();
+    
+private:
+    KisNodeManager* m_node_manager;
+};
+
+#endif // FRAME_LAYER_H
