@@ -70,11 +70,9 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
     if (m_view->shell())
     {
-        KoModeBoxFactory modeBoxFactory(m_canvasController, i18n("Tools"));
+        KoModeBoxFactory modeBoxFactory(canvasController, i18n("Tools"));
         m_view->shell()->createDockWidget(&modeBoxFactory);
-
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-            m_view->shell()->dockerManager(), SLOT(newOptionWidgets(const QList<QWidget *> &)));
+        m_view->shell()->dockerManager()->removeToolOptionsDocker();
     }
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
