@@ -344,11 +344,6 @@ void KWView::setupActions()
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
 
-    action = new KAction(i18n("Footnote/Endnote..."), this);
-    action->setToolTip(i18n("Insert a footnote referencing the selected text"));
-    actionCollection()->addAction("insert_footendnote", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
-
     action = new KAction(i18n("Page Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
@@ -620,22 +615,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionCreateStyleFromSelection->setToolTip(i18n("Create a new style based on the currently selected text"));
         m_actionCreateStyleFromSelection->setWhatsThis(i18n("Create a new style based on the currently selected text.")); // ## "on the current paragraph, taking the formatting from where the cursor is. Selecting text isn't even needed."
 
-        m_actionConfigureFootEndNote = new KAction(i18n("Footnote..."), 0,
-                this, SLOT(configureFootEndNote()),
-                actionCollection(), "format_footendnote");
-        m_actionConfigureFootEndNote->setToolTip(i18n("Change the look of footnotes"));
-        m_actionConfigureFootEndNote->setWhatsThis(i18n("Change the look of footnotes."));
-
-        m_actionEditFootEndNote= new KAction(i18n("Edit Footnote"), 0,
-                this, SLOT(editFootEndNote()),
-                actionCollection(), "edit_footendnote");
-        m_actionEditFootEndNote->setToolTip(i18n("Change the content of the currently selected footnote"));
-        m_actionEditFootEndNote->setWhatsThis(i18n("Change the content of the currently selected footnote."));
-
-
-        m_actionChangeFootNoteType = new KAction(i18n("Change Footnote/Endnote Parameter"), 0,
-                this, SLOT(changeFootNoteType()),
-                actionCollection(), "change_footendtype");
 
         m_actionSavePicture= new KAction(i18n("Save Picture As..."), 0,
                 this, SLOT(savePicture()),
@@ -647,10 +626,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
                 this, SLOT(autoSpellCheck()),
                 actionCollection(), "tool_auto_spellcheck");
 
-
-        m_actionGoToFootEndNote = new KAction(QString::null, //set dynamically
-                0, this, SLOT(goToFootEndNote()),
-                actionCollection(), "goto_footendnote");
 
         m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
                 this, SLOT(addBookmark()),
@@ -1134,13 +1109,6 @@ void KWView::removeFrameClipping()
         KWRemoveFrameClipCommand *cmd = new KWRemoveFrameClipCommand(unClipFrames.toList(), m_document);
         m_document->addCommand(cmd);
     }
-}
-
-void KWView::insertFootEndNote()
-{
-    KWInsertInlineNoteDialog *diag = new KWInsertInlineNoteDialog(m_document, this);
-    connect(diag, SIGNAL(finished(int)), diag, SLOT(deleteLater()));
-    diag->show();
 }
 
 void KWView::setGuideVisibility(bool on)

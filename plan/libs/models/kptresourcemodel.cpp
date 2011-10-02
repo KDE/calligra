@@ -43,7 +43,9 @@
 #include <kxmlguifactory.h>
 #include <kabc/addressee.h>
 #include <kabc/vcardconverter.h>
-
+#include <kio/netaccess.h>
+#include <kmimetype.h>
+#include <kio/job.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -1184,6 +1186,7 @@ Qt::DropActions ResourceItemModel::supportedDropActions() const
 
 bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
+//     kDebug()<<index<<data;
     Q_UNUSED(data);
     //kDebug()<<index;
     // TODO: if internal, don't allow dropping on my own parent
@@ -1201,7 +1204,62 @@ QStringList ResourceItemModel::mimeTypes() const
     return QStringList()
             << "text/x-vcard"
             << "text/directory"
-            << "application/x-vnd.kde.kplato.resourceitemmodel.internal";
+            << "text/uri-list"
+            << "application/x-vnd.kde.plan.resourceitemmodel.internal";
+}
+
+void ResourceItemModel::slotDataArrived( KIO::Job *job, const QByteArray &data  )
+{
+    if ( m_dropDataMap.contains( job ) ) {
+        m_dropDataMap[ job ].data += data;
+    }
+}
+
+void ResourceItemModel::slotJobFinished( KJob *job )
+{
+    if ( job->error() || ! m_dropDataMap.contains( job ) ) {
+        kDebug()<<(job->error() ? "Job error":"Error: no such job");
+    } else if ( KMimeType::findByContent( m_dropDataMap[ job ].data )->is( "text/x-vcard" ) ) {
+        ResourceGroup *g = 0;
+        if ( m_dropDataMap[ job ].parent.isValid() ) {
+            g = qobject_cast<ResourceGroup*>( object( m_dropDataMap[ job ].parent ) );
+        } else {
+            g = qobject_cast<ResourceGroup*>( object( index( m_dropDataMap[ job ].row, m_dropDataMap[ job ].column, m_dropDataMap[ job ].parent ) ) );
+        }
+        if ( g == 0 ) {
+            kDebug()<<"No group"<<m_dropDataMap[ job ].row<<m_dropDataMap[ job ].column<<m_dropDataMap[ job ].parent;
+        } else {
+            createResources( g, m_dropDataMap[ job ].data );
+        }
+    }
+    if ( m_dropDataMap.contains( job ) ) {
+        m_dropDataMap.remove( job );
+    }
+    disconnect(job, SIGNAL(result(KJob*)), this, SLOT(slotJobFinished(KJob*)));
+    disconnect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(slotDataArrived(KIO::Job*, const QByteArray&)));
+}
+
+bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray &data )
+{
+    KABC::VCardConverter vc;
+    KABC::Addressee::List lst = vc.parseVCards( data );
+    MacroCommand *m = new MacroCommand( i18ncp( "(qtundo-format)", "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
+    foreach( const KABC::Addressee &a, lst ) {
+        Resource *r = new Resource();
+        QString uid = a.uid();
+        if ( ! m_project->findResource( uid ) ) {
+            r->setId( uid );
+        }
+        r->setName( a.formattedName() );
+        r->setEmail( a.preferredEmail() );
+        m->addCommand( new AddResourceCmd( group, r ) );
+    }
+    if ( m->isEmpty() ) {
+        delete m;
+        return false;
+    }
+    emit executeCommand( m );
+    return true;
 }
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
@@ -1224,11 +1282,11 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return false;
     }
     kDebug()<<data->formats()<<g->name();
-    if ( data->hasFormat( "application/x-vnd.kde.kplato.resourceitemmodel.internal" ) ) {
+    if ( data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
         kDebug()<<action<<Qt::MoveAction;
         if ( action == Qt::MoveAction ) {
             MacroCommand *m = 0;
-            QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.resourceitemmodel.internal" );
+            QByteArray encodedData = data->data( "application/x-vnd.kde.plan.resourceitemmodel.internal" );
             QDataStream stream(&encodedData, QIODevice::ReadOnly);
             int i = 0;
             foreach ( Resource *r, resourceList( stream ) ) {
@@ -1249,7 +1307,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         }
         if ( action == Qt::CopyAction ) {
             MacroCommand *m = 0;
-            QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.resourceitemmodel.internal" );
+            QByteArray encodedData = data->data( "application/x-vnd.kde.plan.resourceitemmodel.internal" );
             QDataStream stream(&encodedData, QIODevice::ReadOnly);
             int i = 0;
             foreach ( Resource *r, resourceList( stream ) ) {
@@ -1273,25 +1331,34 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             return false;
         }
         QString f = data->hasFormat( "text/x-vcard" ) ? "text/x-vcard" : "text/directory";
-        MacroCommand *m = 0;
-        QByteArray vcard = data->data( f );
-        KABC::VCardConverter vc;
-        KABC::Addressee::List lst = vc.parseVCards( vcard );
-        foreach( const KABC::Addressee &a, lst ) {
-            if ( m == 0 ) m = new MacroCommand( i18ncp( "(qtundo-format)", "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
-            Resource *r = new Resource();
-            QString uid = a.uid();
-            if ( ! m_project->findResource( uid ) ) {
-                r->setId( uid );
+        return createResources( g, data->data( f ) );
+    }
+    if ( data->hasFormat( "text/uri-list" ) ) {
+        const KUrl::List urls = KUrl::List::fromMimeData( data );
+        if ( urls.isEmpty() ) {
+            return false;
+        }
+        bool result = false;
+        foreach ( const KUrl &url, urls ) {
+            if ( url.protocol() != "akonadi" || ! KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, 0 ) ) {
+                kDebug()<<url<<"is not 'akonadi' or does not exist";
+                continue;
             }
-            r->setName( a.formattedName() );
-            r->setEmail( a.preferredEmail() );
-            m->addCommand( new AddResourceCmd( g, r ) );
+            KIO::TransferJob *job = KIO::get( url, KIO::NoReload, KIO::HideProgressInfo );
+            bool res = connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(slotDataArrived(KIO::Job*, const QByteArray&)));
+            Q_ASSERT( res );
+            res = connect(job, SIGNAL(result(KJob*)), this, SLOT(slotJobFinished(KJob*)));
+            Q_ASSERT( res );
+
+            m_dropDataMap[ job ].action = action;
+            m_dropDataMap[ job ].row = row;
+            m_dropDataMap[ job ].column = column;
+            m_dropDataMap[ job ].parent = parent;
+
+            job->start();
+            result = true;
         }
-        if ( m ) {
-            emit executeCommand( m );
-        }
-        return true;
+        return result;
     }
     return false;
 }
@@ -1334,7 +1401,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
         delete m;
         return 0;
     }
-    m->setData("application/x-vnd.kde.kplato.resourceitemmodel.internal", encodedData);
+    m->setData("application/x-vnd.kde.plan.resourceitemmodel.internal", encodedData);
     return m;
 }
 

@@ -4,16 +4,12 @@ Type=Service
 
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
-Name=Web Browser
-Name[da]=Webbrowser
-Name[nl]=Webbrowser
-Name[pt]=Navegação Web
-Name[pt_BR]=Navegador Web
-Name[ru]=Веб-браузер
-Name[sv]=Webbläsare
-Name[uk]=Переглядач інтернету
-Name[x-test]=xxWeb Browserxx
-Name[zh_TW]=網頁瀏覽器
+Name=Web Browser Plugin for Kexi Forms
+Name[pt]='Plugin' de Navegação Web para os Formulários do Kexi
+Name[sv]=Insticksprogram med webbläsare för Kexi-formulär
+Name[uk]=Додаток перегляду сторінок інтернету для форм Kexi
+Name[x-test]=xxWeb Browser Plugin for Kexi Formsxx
+Name[zh_TW]=Kexi 表單的網頁瀏覽器外掛程式
 
 
 X-KDE-Library=kformdesigner_webbrowser

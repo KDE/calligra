@@ -22,7 +22,7 @@ tool helps to inspect changes.  Type the following lines:
 
 $ find dir1 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" > dir1.txt
 $ find dir2 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" > dir2.txt
-$ diff -u dir1.txt dir2.txt | grep "^+[0-9a-f]" | sed -e "s/[^ ]* //" -e "s/.check\/thumb_/ /" -e "s/\.png$//" | awk '{if (a==$1) {printf(" %d", $2)} else {printf "\n"$0}; a=$1} END{printf("\n")}' > dirdiff.txt
+$ diff -u dir1.txt dir2.txt | grep "^+[0-9a-f]" | sed -e "s/[^ ]* //" -e "s/.check\/thumb_/ /" -e "s/\.png$//" > dirdiff.txt
 $ visualimagecompare dir1 dir2 dirdiff.txt
 
 Note: While scree-shots are being prepared, you can type the following command
@@ -31,8 +31,13 @@ infinite loop):
 
 $ tail -f /tmp/processing.txt 2>/dev/null
 
-Note: Once the verification is done, the failed.txt file contains a list of
-test files with different screen-shots between step 2 and step 3.
+Note: Once the verification in step 3 is finished, the failed.txt file contains
+a list of test files with different screen-shots between step 2 and step 3.
+
+Note: To prepare a report after step 4, containing the name of the test file and
+a sequence of page numbers which changed, use the following Awk command:
+
+$ awk '{if (a==$1) {printf(" %d", $2)} else {printf("\n%s", $0)}; a=$1} END{printf("\n")}' dirdiff.txt > report.txt
 
 
 cstester scripts
@@ -93,3 +98,31 @@ correct exit code is returned to cstrunner.
 
 cstmd5gen - Generates md5sums for a given thumbnail directory and stores them
 into the md5.txt file.
+
+Please make sure this scripts are in the path when running cstrunner.
+
+Run cstrunner
+
+cstrunner docDir resultDir concurrentProcesses
+
+e.g.
+
+cstrunner . ../result/sha1 4
+
+To run over all documents in the current directory and put the thumbnails in to ../result/sha1 with 4 concurrent processes
+
+Do your changes and run it again
+
+cstrunner . ../result/sha2 4
+
+To create the input file for visualimagecomapre use the script 
+
+cstmd5diff.sh <documents dir> <previous result dir> <current result dir>
+
+e.g.
+
+cstmd5diff.sh . ../sha1 ../sha2 > md5-sha1-sha2.log
+
+and then use 
+
+visualimagecompare ../sha1 ../sha2 md5-sha1-sha2.log

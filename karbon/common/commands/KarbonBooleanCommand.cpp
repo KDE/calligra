@@ -18,7 +18,7 @@
  */
 
 #include "KarbonBooleanCommand.h"
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoPathShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
@@ -31,8 +31,8 @@
 class KarbonBooleanCommand::Private
 {
 public:
-    Private(KoShapeControllerBase * c)
-            : controller(c), pathA(0), pathB(0), resultingPath(0)
+    Private(KoShapeBasedDocumentBase * c)
+            : shapeBasedDocument(c), pathA(0), pathB(0), resultingPath(0)
             , resultParent(0), resultParentCmd(0)
             , operation(Intersection), isExecuted(false)
     {}
@@ -43,7 +43,7 @@ public:
             delete resultingPath;
     }
 
-    KoShapeControllerBase *controller;
+    KoShapeBasedDocumentBase *shapeBasedDocument;
     KoPathShape * pathA;
     KoPathShape * pathB;
     KoPathShape * resultingPath;
@@ -54,12 +54,12 @@ public:
 };
 
 KarbonBooleanCommand::KarbonBooleanCommand(
-    KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB,
+    KoShapeBasedDocumentBase *shapeBasedDocument, KoPathShape* pathA, KoPathShape * pathB,
     BooleanOperation operation, KUndo2Command *parent
 )
-        : KUndo2Command(parent), d(new Private(controller))
+        : KUndo2Command(parent), d(new Private(shapeBasedDocument))
 {
-    Q_ASSERT(controller);
+    Q_ASSERT(shapeBasedDocument);
 
     d->pathA = pathA;
     d->pathB = pathB;
@@ -118,10 +118,10 @@ void KarbonBooleanCommand::redo()
         }
     }
 
-    if (d->controller) {
+    if (d->shapeBasedDocument) {
         if (d->resultParent)
             d->resultParent->addShape(d->resultingPath);
-        d->controller->addShape(d->resultingPath);
+        d->shapeBasedDocument->addShape(d->resultingPath);
     }
 
     KUndo2Command::redo();
@@ -133,13 +133,13 @@ void KarbonBooleanCommand::undo()
 {
     KUndo2Command::undo();
 
-    if (d->controller && d->resultingPath) {
+    if (d->shapeBasedDocument && d->resultingPath) {
         if (! d->resultParentCmd) {
             d->resultParent = d->resultingPath->parent();
             if (d->resultParent)
                 d->resultParent->removeShape(d->resultingPath);
         }
-        d->controller->removeShape(d->resultingPath);
+        d->shapeBasedDocument->removeShape(d->resultingPath);
     }
 
     d->isExecuted = false;

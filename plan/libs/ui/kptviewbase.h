@@ -481,6 +481,7 @@ public:
     void setDropIndicatorShown( bool );
     void setDragDropMode( QAbstractItemView::DragDropMode mode );
     void setDragEnabled ( bool mode );
+    void setDefaultDropAction( Qt::DropAction action );
 
     void setStretchLastSection( bool );
     
