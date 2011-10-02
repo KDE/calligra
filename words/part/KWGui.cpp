@@ -33,7 +33,7 @@
 #include <KoSelection.h>
 #include <KoDockerManager.h>
 #include <KoRuler.h>
-#include <KoToolBoxFactory.h>
+#include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
 #include <KActionCollection>
 
@@ -70,8 +70,8 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
     if (m_view->shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools"));
-        m_view->shell()->createDockWidget(&toolBoxFactory);
+        KoModeBoxFactory modeBoxFactory(m_canvasController, i18n("Tools"));
+        m_view->shell()->createDockWidget(&modeBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
             m_view->shell()->dockerManager(), SLOT(newOptionWidgets(const QList<QWidget *> &)));
