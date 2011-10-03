@@ -4,6 +4,7 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Widgets Plugin for Kexi Forms
 Name[pt]='Plugin' de Elementos para os Formulários do Kexi
+Name[pt_BR]=Plugin de Widgets para formulários do Kexi
 Name[sv]=Insticksprogram med grafiska komponent för Kexi-formulär
 Name[uk]=Додаток віджетів для форм Kexi
 Name[x-test]=xxWidgets Plugin for Kexi Formsxx
