@@ -592,9 +592,9 @@ protected slots:
     //! Only called on project opening and closing.
     void updateReadOnlyState();
 
+    void slotProjectWelcome();
     void slotProjectNew();
     void slotProjectOpen();
-    void slotProjectOpenRecent();
     void slotProjectSave();
     void slotProjectSaveAs();
     void slotProjectPrint();
@@ -626,7 +626,7 @@ protected slots:
     void slotSettings();
     void slotConfigureKeys();
     void slotConfigureToolbars();
-    void slotToolsProjectMigration();
+    void slotToolsImportProject();
     void slotToolsImportTables();
     void slotToolsCompactDatabase();
 

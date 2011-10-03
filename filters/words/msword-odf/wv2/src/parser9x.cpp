@@ -43,11 +43,6 @@
 #include "zcodec.hxx"
 #include "wvlog.h"
 
-#include <gsf/gsf-input.h>
-#include <gsf/gsf-output.h>
-#include <gsf/gsf-input-memory.h>
-#include <gsf/gsf-output-memory.h>
-
 #include <numeric>
 #include <string.h>
 

@@ -884,6 +884,9 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPDxaLeft:
         case SPRM::sprmPDxaLeftFE: // asian version, according to OOo (fall-through intended)
             dxaLeft = readS16( ptr );
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "dxaLeft:" << dxaLeft;
+#endif
             break;
         case SPRM::sprmPNest:
             dxaLeft += readS16( ptr );
@@ -892,6 +895,9 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPDxaLeft1:
         case SPRM::sprmPDxaLeft1FE: // asian version, according to OOo (fall-through intended)
             dxaLeft1 = readS16( ptr );
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "dxaLeft1:" << dxaLeft1;
+#endif
             break;
         case SPRM::sprmPDyaLine:
             lspd.dyaLine = readS16( ptr );

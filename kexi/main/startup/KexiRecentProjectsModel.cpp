@@ -91,27 +91,42 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         opened.prepend('\n');
     switch (role) {
     case Qt::DisplayRole: {
+        //! @todo add support for imported entries, e.g. MS Access
         if (fileBased) {
-            QString n = pdata->captionOrName();
-            if (n != pdata->constConnectionData()->dbFileName()) {
-                if (!n.isEmpty())
-                    n += '\n';
-                n += pdata->constConnectionData()->dbFileName();
-            }
+            QString n = pdata->caption().trimmed();
+            if (n.isEmpty())
+                n = pdata->constConnectionData()->dbFileName();
             return n
                    + opened;
         }
         else {
             QString n = pdata->captionOrName();
-            if (!n.isEmpty())
+            if (!n.isEmpty()) {
                 n += '\n';
-            return n
-                   + pdata->connectionData()->serverInfoString()
-                   + opened;
+            }
+            QString serverInfo = pdata->connectionData()->serverInfoString(false /* without user */);
+            // friendly message:
+            if (serverInfo == "localhost") {
+                serverInfo = i18n("on local server");
+            }
+            else {
+                serverInfo = i18n("on \"%1\" server", serverInfo);
+            }
+            return n + serverInfo + opened;
         }
     }
     case Qt::ToolTipRole:
-        return pdata->captionOrName();
+        //! @todo add support for imported entries, e.g. MS Access
+        if (fileBased) {
+            return i18nc("File database <file>", "File database %1",
+                         pdata->constConnectionData()->fileName());
+        }
+        else {
+            KexiDB::DriverManager manager;
+            return i18nc("<type> database", "%1 database",
+                  manager.driverInfo(pdata->constConnectionData()->driverName).caption);
+            return pdata->objectName();
+        }
     case Qt::DecorationRole: {
         //! @todo show icon specific to given database or mimetype
         if (fileBased) {

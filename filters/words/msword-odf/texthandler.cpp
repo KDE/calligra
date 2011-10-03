@@ -84,9 +84,8 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_currentTable(0)
     , m_tableWriter(0)
     , m_tableBuffer(0)
-    , m_listLevelStyleRequired(false)
-    , m_currentListDepth(-1)
-    , m_currentListID(0)
+    , m_previousListDepth(-1)
+    , m_previousListID(0)
     , m_fld(new fld_State())
     , m_fldStart(0)
     , m_fldEnd(0)
@@ -955,12 +954,6 @@ void WordsTextHandler::paragraphEnd()
             m_dropCapString.clear();
         }
     }
-    //add the list-level-style information to the list-style if required
-    if (m_listLevelStyleRequired) {
-        updateListStyle();
-        m_listLevelStyleRequired = false;
-    }
-
     //save the font color
     m_paragraphBaseFontColorBkp = paragraphBaseFontColor();
 
@@ -1816,7 +1809,6 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 {
     kDebug(30513);
 
-    m_listLevelStyleRequired = false;
     int nfc = listInfo->numberFormat();
 
     //check to see if we're in a heading instead of a list if so, just return
@@ -1828,24 +1820,24 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     //put the currently used writer in the stack
     m_usedListWriters.push(writer);
 
-    //process the different places we could be in a list
-    if (m_currentListID != listInfo->lsid()) {
-        //we're entering a different or new list...
-        kDebug(30513) << "opening list " << listInfo->lsid();
-
-        //just in case another list was already open
+    if (m_previousListID != listInfo->lsid()) {
+        kDebug(30513) << "==> Starting a new list:" << listInfo->lsid();
+	//close the previous list
         if (listIsOpen()) {
-            //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
-        // Open <text:list> in the body
         writer->startElement("text:list");
 
         //check for a continued list
         if (m_previousLists.contains(listInfo->lsid())) {
-            writer->addAttribute("text:continue-numbering", "true");
-            writer->addAttribute("text:style-name", m_previousLists[listInfo->lsid()]);
-            m_listStyleName = m_previousLists[listInfo->lsid()];
+            m_listStyleName = m_previousLists[listInfo->lsid()].first;
+            writer->addAttribute("text:style-name", m_listStyleName);
+
+            //TODO: not sure about this one, it seems that each list is a new
+            //one with start value pre-defined
+            if (listInfo->numberFormat() != 23) {
+                writer->addAttribute("text:continue-numbering", "true");
+            }
         } else {
             //need to create a style for this list
             KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
@@ -1855,48 +1847,41 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             }
             m_listStyleName = m_mainStyles->insert(listStyle);
             writer->addAttribute("text:style-name", m_listStyleName);
+            m_previousLists[listInfo->lsid()].first = m_listStyleName;
         }
-        //set the list ID - now is safe as we are done using the old value
-        m_currentListID = listInfo->lsid();
-        m_currentListDepth = pap.ilvl;
-
-        if (m_currentListDepth > 0) {
-            for (int i = 0; i < m_currentListDepth; i++) {
-                writer->startElement("text:list-item");
-                writer->startElement("text:list");
-            }
-        }
-        //a new list-level-style is required
-        m_listLevelStyleRequired = true;
-
-    }
-    else if (pap.ilvl > m_currentListDepth) {
-        //we're going to a new level in the list
-        kDebug(30513) << "going to a new level in list" << m_currentListID;
-        //open a new <text:list> or more levels if needed
-        m_currentListDepth++;
-        writer->startElement("text:list");
-        for (;m_currentListDepth < pap.ilvl; m_currentListDepth++) {
+        for (int i = 0; i < pap.ilvl; i++) {
             writer->startElement("text:list-item");
             writer->startElement("text:list");
         }
-        //a new list-level-style is required
-        m_listLevelStyleRequired = true;
-
-        //FIXME: list-level-style might be already created
+        m_previousListID = listInfo->lsid();
+        m_previousListDepth = pap.ilvl;
     }
+    //going down into a deeper level (same list)
+    else if (pap.ilvl > m_previousListDepth) {
+        writer->startElement("text:list");
+        m_previousListDepth++;
+
+        for (;m_previousListDepth < pap.ilvl; m_previousListDepth++) {
+            writer->startElement("text:list-item");
+            writer->startElement("text:list");
+        }
+    }
+    //coming out to a lower level or staying at the same level (same list)
     else {
-        // We're backing out one or more levels in the list.
-        kDebug(30513) << "backing out one or more levels in list" << m_currentListID;
-        while (m_currentListDepth > pap.ilvl) {
+        while (m_previousListDepth > pap.ilvl) {
             writer->endElement(); //text:list-item
             writer->endElement(); //text:list
-            m_currentListDepth--;
+            m_previousListDepth--;
         }
-        //close the <text:list-item> from the surrounding level
         writer->endElement(); //text:list-item
+    }
 
-        //TODO: new list-level-style might be required
+    // Check if we need a new list-level-style-* definition
+    if (m_previousLists.contains(m_previousListID) &&
+        !m_previousLists[m_previousListID].second.contains(m_previousListDepth))
+    {
+        updateListStyle();
+        m_previousLists[m_previousListID].second.append(m_previousListDepth);
     }
 
     //we always want to open this tag
@@ -1970,7 +1955,9 @@ void setListLevelProperties(KoXmlWriter& out, const wvWare::Word97::PAP& pap, co
         if (pap.itbdMac) {
             position = Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab);
         }
-        out.addAttributePt("text:list-tab-stop-position", position);
+        if (position != 0) {
+            out.addAttributePt("text:list-tab-stop-position", position);
+        }
         break;
     }
     case 1: //A space follows the number text.
@@ -1988,8 +1975,6 @@ void setListLevelProperties(KoXmlWriter& out, const wvWare::Word97::PAP& pap, co
 
 void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
 {
-    kDebug(30513) << "writing the list-level-style-*";
-
     const wvWare::ListInfo* listInfo = m_currentPPs->listInfo();
     if (!listInfo) {
 	return;
@@ -2029,7 +2014,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     // Bulleted List
     // ------------------------
     if (nfc == 23) {
-        kDebug(30513) << "bullets...";
+//         kDebug(30513) << "bullets...";
         out.startElement("text:list-level-style-bullet");
 //         out.addAttribute("text:style-name", textStyleName);
         out.addAttribute("text:level", pap.ilvl + 1);
@@ -2037,7 +2022,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
             // With bullets, text can only be one character, which tells us
             // what kind of bullet to use
             unsigned int code = text[0].unicode();
-            kDebug(30513) << "Bullet code: 0x" << hex << code << "id:" << code%256;
+//             kDebug(30513) << "Bullet code: 0x" << hex << code << "id:" << code%256;
 
             // NOTE: What does the next comment mean, private use area is in
             // <0xE000, 0xF8FF>, disabled the conversion code.
@@ -2071,7 +2056,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     // Numbered/Outline List
     // ------------------------
     else {
-        kDebug(30513) << "numbered/outline... nfc = " << nfc;
+//         kDebug(30513) << "numbered/outline... nfc = " << nfc;
         out.startElement("text:list-level-style-number");
 //         out.addAttribute("text:style-name", textStyleName);
         out.addAttribute("text:level", pap.ilvl + 1);
@@ -2200,8 +2185,8 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     }
 
     //we'll add each one with a unique name
-    QString name("listlevels");
-    listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);
+    QString name(QString::number(listInfo->lsid()));
+    listStyle->addChildElement(name.append("lvl").append(QString::number(pap.ilvl)), contents);
 } //end updateListStyle()
 
 void WordsTextHandler::closeList()
@@ -2214,34 +2199,32 @@ void WordsTextHandler::closeList()
     //for level 0, we need to close the last item and the list
     //for level 1, we need to close the last item and the list, and the last item and the list
     //for level 2, we need to close the last item and the list, and the last item adn the list, and again
-    for (int i = 0; i <= m_currentListDepth; i++) {
+    for (int i = 0; i <= m_previousListDepth; i++) {
         writer->endElement(); //close the last text:list-item
         writer->endElement(); //text:list
     }
 
-    //track this list ID, in case we open it again and need to continue the numbering
-    m_previousLists[m_currentListID] = m_listStyleName;
-    m_currentListID = 0;
-    m_currentListDepth = -1;
+    m_previousListID = 0;
+    m_previousListDepth = -1;
     m_listStyleName = "";
 }
 
 bool WordsTextHandler::listIsOpen()
 {
-    return m_currentListID != 0;
+    return m_previousListID != 0;
 }
 
 void WordsTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
-                           m_currentListDepth, m_currentListID, m_previousLists,
+                           m_previousListDepth, m_previousListID, m_previousLists,
                            m_drawingWriter, m_insideDrawing));
     m_currentTable = 0;
     m_paragraph = 0;
     m_listStyleName = "";
-    m_currentListDepth = -1;
-    m_currentListID = 0;
+    m_previousListDepth = -1;
+    m_previousListID = 0;
     m_previousLists.clear();
 
     m_drawingWriter = 0;
@@ -2273,8 +2256,8 @@ void WordsTextHandler::restoreState()
     m_paragraph = s.paragraph;
     m_currentTable = s.table;
     m_listStyleName = s.listStyleName;
-    m_currentListDepth = s.listDepth;
-    m_currentListID = s.listID;
+    m_previousListDepth = s.listDepth;
+    m_previousListID = s.listID;
     m_previousLists = s.previousLists;
 
     m_drawingWriter = s.drawingWriter;

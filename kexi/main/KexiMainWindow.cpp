@@ -46,7 +46,6 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaction.h>
-#include <KRecentFilesAction>
 #include <KActionCollection>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
@@ -68,7 +67,6 @@
 #include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <krecentdocument.h>
 #include <KMenu>
 #include <KXMLGUIFactory>
 #include <KMultiTabBar>
@@ -109,20 +107,14 @@
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectAssistant.h"
 #include "startup/KexiOpenProjectAssistant.h"
-#include "startup/KexiRecentProjectsAssistant.h"
+#include "startup/KexiWelcomeAssistant.h"
+#include "startup/KexiImportExportAssistant.h"
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
 
 //2.x #include "printing/kexisimpleprintingpart.h"
 //2.x #include "printing/kexisimpleprintingpagesetup.h"
-
-//Extreme verbose debug
-//#if defined(Q_WS_WIN)
-//# include <krecentdirs.h>
-//# include <win32_utils.h>
-//# define KexiVDebug kDebug()
-//#endif
 
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kDebug()
@@ -680,14 +672,15 @@ void KexiMainWindow::setupActions()
 #endif
 
     {
-        ac->addAction("project_open_recent",
-            action = d->action_open_recent = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
+        ac->addAction("project_welcome",
+            action = d->action_project_welcome = new KexiMenuWidgetAction(
+                KIcon(), i18n("Welcome"), this));
             addThreeDotsToActionText(action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecent()));
-        setupMainMenuActionShortcut(action, SLOT(slotProjectOpenRecent()));
-        action->setToolTip(i18n("Open recent project"));
+        connect(action, SIGNAL(triggered()), this, SLOT(slotProjectWelcome()));
+        setupMainMenuActionShortcut(action, SLOT(slotProjectWelcome()));
+        action->setToolTip(i18n("Show Welcome page"));
         action->setWhatsThis(
-            i18n("Opens one of the recently opened project. Currently opened project is not affected."));
+            i18n("Shows Welcome page with list of recently opened projects and other information. "));
     }
 
     ac->addAction("project_save",
@@ -717,7 +710,6 @@ void KexiMainWindow::setupActions()
     d->action_project_properties = d->dummy_action;
 #endif
 
-#ifndef KEXI_NO_UNFINISHED
 #ifdef __GNUC__
 #warning replace document-import icon with something other
 #else
@@ -731,13 +723,10 @@ void KexiMainWindow::setupActions()
         i18n("Imports, exports or sends project."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectImportExportOrSend()));
     setupMainMenuActionShortcut(action, SLOT(slotProjectImportExportOrSend()));
-#else
-    d->action_project_import_export_send = d->dummy_action;
-#endif
 
     ac->addAction("project_close",
         action = d->action_close = new KexiMenuWidgetAction(
-            KIcon("window-close"), i18n("&Close Project"), this));
+            KIcon("window-close"), i18nc("Close Project", "&Close"), this));
     action->setToolTip(i18n("Close the current project"));
     action->setWhatsThis(i18n("Closes the current project."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectClose()));
@@ -763,13 +752,13 @@ void KexiMainWindow::setupActions()
     d->action_project_relations = d->dummy_action;
 #endif
     ac->addAction("tools_import_project",
-                  d->action_tools_data_migration = new KAction(
-        KIcon("document-import-database"), i18n("&Import Database..."), this));
-    d->action_tools_data_migration->setToolTip(i18n("Import entire database as a Kexi project"));
-    d->action_tools_data_migration->setWhatsThis(
+                  d->action_tools_import_project = new KAction(
+        KIcon("document_import_database"), i18n("&Import Database..."), this));
+    d->action_tools_import_project->setToolTip(i18n("Import entire database as a Kexi project"));
+    d->action_tools_import_project->setWhatsThis(
         i18n("Imports entire database as a Kexi project."));
-    connect(d->action_tools_data_migration, SIGNAL(triggered()),
-            this, SLOT(slotToolsProjectMigration()));
+    connect(d->action_tools_import_project, SIGNAL(triggered()),
+            this, SLOT(slotToolsImportProject()));
 
     d->action_tools_data_import = new KAction(KIcon("document-import"), i18n("Import Tables"), this);
     d->action_tools_data_import->setToolTip(i18n("Import data from an external source into this database"));
@@ -808,9 +797,9 @@ void KexiMainWindow::setupActions()
         i18nc("Export->Table or Query Data to File...", "Export Data to &File..."), this));
 //orig:        i18nc("Export->Table or Query Data to File...", "Table or Query Data to &File..."), this));
     d->action_project_export_data_table->setToolTip(
-        i18n("Export data from the active table or query data to a file"));
+        i18n("Export data from the active table or query to a file"));
     d->action_project_export_data_table->setWhatsThis(
-        i18n("Exports data from the active table or query data to a file."));
+        i18n("Exports data from the active table or query to a file."));
     connect(d->action_project_export_data_table, SIGNAL(triggered()),
             this, SLOT(slotProjectExportDataTable()));
 
@@ -1046,7 +1035,7 @@ void KexiMainWindow::setupActions()
     //d->action_data_execute->setToolTip(i18n("")); //TODO
     //d->action_data_execute->setWhatsThis(i18n("")); //TODO
 
-#ifndef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNIMPLEMENTED
     action = createSharedAction(i18n("&Filter"), "view-filter", KShortcut(), "data_filter");
     setActionVolatile(action, true);
 #endif
@@ -1177,6 +1166,7 @@ void KexiMainWindow::setupActions()
     Kexi::tempShowScripts() = false;
 #endif
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 //! @todo 2.0 - implement settings window in a specific way
     ac->addAction("settings",
                   action = d->action_settings = new KexiMenuWidgetAction(
@@ -1187,6 +1177,9 @@ void KexiMainWindow::setupActions()
     action->setWhatsThis(i18n("Lets you to view and change Kexi settings."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSettings()));
     setupMainMenuActionShortcut(action, SLOT(slotSettings()));
+#else
+    d->action_settings = d->dummy_action;
+#endif
 
 #if 0//js: todo reenable later
     KStandardAction::tipOfDay(this, SLOT(slotTipOfTheDayAction()), actionCollection())
@@ -1564,7 +1557,7 @@ tristate KexiMainWindow::startup()
         break;
     case KexiStartupHandler::ShowWelcomeScreen:
         //! @todo show welcome screen as soon as is available
-        QTimer::singleShot(1, this, SLOT(slotProjectOpenRecent()));
+        QTimer::singleShot(1, this, SLOT(slotProjectWelcome()));
         break;
     default:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
@@ -1663,25 +1656,6 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 #else
 #pragma WARNING( TODO - remove win32 case )
 #endif
-        /*TODO?
-        #ifdef Q_WS_WIN
-          //! @todo remove
-            QString recentDir = KGlobalSettings::documentPath();
-            if (fname.isEmpty() && !projectData.constConnectionData()->dbFileName().isEmpty()) //propose filename from db template name
-              fname = KFileDialog::getStartURL(startDir, recentDir).path()
-                + '/' + projectData.constConnectionData()->dbFileName();
-            fname = Q3FileDialog::getSaveFileName(
-              KFileDialog::getStartURL(fname.isEmpty() ? startDir : fname, recentDir).path(),
-              KexiUtils::fileDialogFilterStrings(mimetypes, false),
-              this, "CreateProjectFromTemplate", caption);
-            if ( !fname.isEmpty() ) {
-              //save last visited path
-              KUrl url;
-              url.setPath( fname );
-              if (url.isLocalFile())
-                KRecentDirs::add(startDir, url.directory());
-            }
-        #else*/
         Q_UNUSED(projectData);
         if (fname.isEmpty() &&
                 !projectData.constConnectionData()->dbFileName().isEmpty()) {
@@ -1700,9 +1674,6 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
         dlg.setWindowTitle(caption);
         dlg.exec();
         fname = dlg.selectedFile();
-        if (!fname.isEmpty())
-            KRecentDocument::add(fname);
-//#endif
         if (fname.isEmpty())
             return cancelled;
         if (KexiStartupFileWidget::askForOverwriting(fname, this))
@@ -2080,18 +2051,8 @@ void KexiMainWindow::slotSetPropertyEditorVisible(bool set)
 
 void KexiMainWindow::slotProjectNavigatorVisibilityChanged(bool visible)
 {
-    KMultiTabBar *mtbar = d->multiTabBars[KMultiTabBar::Left];
-    int id = PROJECT_NAVIGATOR_TABBAR_ID;
-    if (visible) {
-        mtbar->removeTab(id);
-    }
-    else {
-        QString t(d->navDockWidget->windowTitle());
-        t.remove('&');
-        mtbar->appendTab(QPixmap(), id, t);
-        KMultiTabBarTab *tab = mtbar->tab(id);
-        connect(tab, SIGNAL(clicked(int)), this, SLOT(slotMultiTabBarTabClicked(int)));
-    }
+    d->setTabBarVisible(KMultiTabBar::Left, PROJECT_NAVIGATOR_TABBAR_ID,
+                        d->navDockWidget, !visible);
 }
 
 void KexiMainWindow::slotPropertyEditorVisibilityChanged(bool visible)
@@ -3395,12 +3356,12 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
     return ok;
 }
 
-void KexiMainWindow::slotProjectOpenRecent()
+void KexiMainWindow::slotProjectWelcome()
 {
     if (!d->tabbedToolBar)
         return;
-    d->tabbedToolBar->showMainMenu("project_open_recent");
-    KexiRecentProjectsAssistant* assistant = new KexiRecentProjectsAssistant(
+    d->tabbedToolBar->showMainMenu("project_welcome");
+    KexiWelcomeAssistant* assistant = new KexiWelcomeAssistant(
         Kexi::recentProjects());
     connect(assistant, SIGNAL(openProject(KexiProjectData)), 
             this, SLOT(openProject(KexiProjectData)));
@@ -3474,9 +3435,11 @@ void KexiMainWindow::slotProjectImportExportOrSend()
     if (!d->tabbedToolBar)
         return;
     d->tabbedToolBar->showMainMenu("project_import_export_send");
-    // dummy
-    QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_import_export_send")->text());
-    d->tabbedToolBar->setMainMenuContent(dummy);
+    KexiImportExportAssistant* assistant = new KexiImportExportAssistant(
+        d->action_project_import_export_send,
+        d->action_tools_import_project);
+    connect(assistant, SIGNAL(importProject()), this, SLOT(slotToolsImportProject()));
+    d->tabbedToolBar->setMainMenuContent(assistant);
 }
 
 void
@@ -4859,8 +4822,10 @@ KexiMainWindow::setupUserActions()
 #endif
 }
 
-void KexiMainWindow::slotToolsProjectMigration()
+void KexiMainWindow::slotToolsImportProject()
 {
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->hideMainMenu();
     showProjectMigrationWizard(QString(), QString());
 }
 
