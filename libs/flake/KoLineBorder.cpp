@@ -152,7 +152,7 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const QPen &pe
             QPainterPath markerEnd = pathShape->markerOutline(KoMarkerData::MarkerEnd, pen.widthF());
             QPainterPath pathOutline;
             QPainterPathStroker stroker;
-            stroker.setWidth(pen.widthF());
+            stroker.setWidth(0);
             stroker.setJoinStyle(Qt::MiterJoin);
 
             if (!markerBegin.isEmpty()) {
@@ -167,6 +167,7 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const QPen &pe
             }
 
             if (!pathOutline.isEmpty()) {
+                stroker.setWidth(pen.widthF());
                 stroker.setJoinStyle(pen.joinStyle());
                 stroker.setMiterLimit(pen.miterLimit());
                 stroker.setCapStyle(pen.capStyle());

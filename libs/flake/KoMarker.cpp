@@ -107,11 +107,9 @@ QPainterPath KoMarker::path(qreal width) const
         return QPainterPath();
     }
 
-    // the width of the arrow it actually the height of the shown arrow
-    qreal height = width * d->viewBox.width() / d->viewBox.height();
+    qreal height = width * d->viewBox.height() / d->viewBox.width();
 
     QTransform transform;
-    transform.scale(height / d->viewBox.width(), width / d->viewBox.height());
-    qDebug() << "XXX" << width << height << transform;
+    transform.scale(width / d->viewBox.width(), height / d->viewBox.height());
     return transform.map(d->path);
 }
