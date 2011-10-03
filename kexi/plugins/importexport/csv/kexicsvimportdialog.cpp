@@ -595,11 +595,9 @@ void KexiCSVImportDialog::fillTable()
 QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(
     QTextStream& inputStream)
 {
-    m_file->seek(0);
-
     // try to detect delimiter
     // \t has priority, then ; then ,
-    const qint64 origOffset = inputStream.device()->pos();
+    const qint64 origOffset = inputStream.pos();
     QChar c, prevChar = 0;
     int detectedDelimiter = 0;
     bool insideQuote = false;
@@ -649,7 +647,7 @@ QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(
         prevChar = c;
     }
 
-    inputStream.device()->seek(origOffset); //restore orig. offset
+    inputStream.seek(origOffset); //restore orig. offset
 
     //now, try to find a delimiter character that exists the same number of times in all the checked lines
     //this detection method has priority over others
@@ -927,7 +925,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
         if (nextRow) {
             nextRow = false;
             //additional speedup: stop processing now if too many bytes were loaded for preview
-            kDebug() << offset;
+            //kDebug() << offset;
             if (inGUI && offset >= m_maximumBytesForPreview && row >= 2) {
                 m_stoppedAt_MAX_BYTES_TO_PREVIEW = true;
                 return true;

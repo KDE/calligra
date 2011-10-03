@@ -42,7 +42,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexiutils/utils.h>
-#include <widget/kexicustompropertyfactory.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
 #include <kexi_global.h>
 

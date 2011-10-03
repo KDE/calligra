@@ -46,6 +46,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 class KoTextSharedLoadingData::Private
 {
@@ -97,6 +98,7 @@ public:
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
     KoOdfNotesConfiguration footnotesConfiguration;
     KoOdfNotesConfiguration endnotesConfiguration;
+    KoOdfBibliographyConfiguration bibliographyConfiguration;
     KoCharacterStyle *applicationDefaultStyle;
 };
 
@@ -613,6 +615,11 @@ KoOdfNotesConfiguration KoTextSharedLoadingData::endnotesConfiguration() const
     return d->endnotesConfiguration;
 }
 
+KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguration() const
+{
+    return d->bibliographyConfiguration;
+}
+
 void KoTextSharedLoadingData::setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle)
 {
     d->applicationDefaultStyle = applicationDefaultStyle;
@@ -623,10 +630,11 @@ KoCharacterStyle *KoTextSharedLoadingData::applicationDefaultStyle() const
     return d->applicationDefaultStyle;
 }
 
-void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
+void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/, KoTextAnchor *anchor)
 {
     Q_UNUSED(shape);
     Q_UNUSED(element);
+    Q_UNUSED(anchor);
 }
 
 void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context)
@@ -635,4 +643,10 @@ void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &conte
             context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Footnote);
     d->endnotesConfiguration =
             context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Endnote);
+}
+
+void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext &context)
+{
+    d->bibliographyConfiguration =
+            context.odfLoadingContext().stylesReader().globalBibliographyConfiguration();
 }

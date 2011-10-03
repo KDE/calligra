@@ -62,7 +62,7 @@ public:
     ReportSourceEditor *m_sourceeditor;
     bool m_modified;
 
-    ReportSourceModel *createSourceModel( QObject *parent = 0 ) const;
+    QStandardItemModel *createSourceModel( QObject *parent = 0 ) const;
 
 signals:
     void insertItem( const QString &name );
@@ -82,21 +82,6 @@ protected:
 
 };
 
-class ReportSourceModel : public QStandardItemModel
-{
-    Q_OBJECT
-public:
-    ReportSourceModel( QObject *parent = 0 );
-    ReportSourceModel( int rows, int columns, QObject *parent = 0 );
-
-    void setChecked( const QModelIndex &idx );
-
-signals:
-    void selectFromChanged( const QString &name );
-
-public slots:
-    void slotSourceChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
-};
 
 } // namespace KPlato
 

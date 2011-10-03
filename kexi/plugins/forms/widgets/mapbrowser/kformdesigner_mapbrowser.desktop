@@ -2,14 +2,12 @@
 Type=Service
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
-Name=Map Browser
-Name[da]=Kort-browser
-Name[pt]=Navegador do Mapa
-Name[pt_BR]=Navegador do mapa
-Name[ru]=Просмотр карт
-Name[sv]=Kartbläddrare
-Name[uk]=Переглядач карт
-Name[x-test]=xxMap Browserxx
+Name=Map Browser Plugin for Kexi Forms
+Name[pt]='Plugin' de Navegação por Mapas para os Formulários do Kexi
+Name[sv]=Insticksprogram med kartbläddring för Kexi-formulär
+Name[uk]=Додаток перегляду карти для форм Kexi
+Name[x-test]=xxMap Browser Plugin for Kexi Formsxx
+Name[zh_TW]=Kexi 表單的地圖瀏覽器外掛程式
 
 X-KDE-Library=kformdesigner_mapbrowser
 X-KFormDesigner-FactoryGroup=kexi

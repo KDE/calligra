@@ -32,6 +32,7 @@
 
 #include <QApplication>
 #include <KMessageBox>
+#include <kptschedulerplugin.h>
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
@@ -49,6 +50,22 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
 
 KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
 {
+}
+
+QString KPlatoRCPSPlugin::description() const
+{
+    return i18nc( "@info:whatsthis", "<title>RCPS Scheduler</title>"
+                    "<para>The Resource Constrained Project Scheduler (RCPS) focuses on scheduling"
+                    " the project to avoid overbooking resources."
+                    " It still respects task dependencies and also tries to fullfill time constraints."
+                    " However, time constraints can make it very difficult to find a good solution,"
+                    " so it may be preferable to use a different scheduler in these cases.</para>"
+                );
+}
+
+int KPlatoRCPSPlugin::capabilities() const
+{
+    return SchedulerPlugin::AvoidOverbooking | SchedulerPlugin::ScheduleForward | SchedulerPlugin::ScheduleBackward;
 }
 
 void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )

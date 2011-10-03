@@ -43,11 +43,6 @@
 #include "zcodec.hxx"
 #include "wvlog.h"
 
-#include <gsf/gsf-input.h>
-#include <gsf/gsf-output.h>
-#include <gsf/gsf-input-memory.h>
-#include <gsf/gsf-output-memory.h>
-
 #include <numeric>
 #include <string.h>
 
@@ -987,10 +982,11 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
         m_textHandler->msodrawObjectFound( globalCP, 0 );
         break;
     case TextHandler::FootnoteAuto:
-        if ( m_subDocument == Footnote || m_subDocument == Endnote )
+        if ( m_subDocument == Footnote || m_subDocument == Endnote ) {
             m_textHandler->footnoteAutoNumber( chp );
-        else
+        } else {
             emitFootnote( UString(character), globalCP, chp);
+        }
         break;
     case TextHandler::FieldBegin:
         {
@@ -998,8 +994,7 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
             if ( fld ) {
                 m_textHandler->fieldStart( fld, chp );
             } else {
-                FLD dummy;
-                m_textHandler->fieldStart( &dummy, chp );
+                wvlog << "FieldStart: Plcfld does not contain this CP, ignoring!";
             }
             break;
         }
@@ -1009,8 +1004,7 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
             if ( fld ) {
                 m_textHandler->fieldSeparator( fld, chp );
             } else {
-                FLD dummy;
-                m_textHandler->fieldSeparator( &dummy, chp );
+                wvlog << "FieldSeparator: Plcfld does not contain this CP, ignoring!";
             }
             break;
         }
@@ -1020,8 +1014,7 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
             if ( fld ) {
                 m_textHandler->fieldEnd( fld, chp );
             } else {
-                FLD dummy;
-                m_textHandler->fieldEnd( &dummy, chp );
+                wvlog << "FieldEnd: Plcfld does not contain this CP, ignoring!";
             }
             break;
         }
@@ -1033,13 +1026,13 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
             }
         }
     case TextHandler::FieldEscapeChar:
-            wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
-    break;
+        wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
+        break;
     default:
-    wvlog << "Parser9x::processSpecialCharacter(): Support for character " << character.unicode()
-            << " not implemented yet." << endl;
-    break;
-}
+        wvlog << "Parser9x::processSpecialCharacter(): Support for character " << character.unicode()
+              << " not implemented yet." << endl;
+        break;
+    }
 }
 
 void Parser9x::emitFootnote( UString characters, U32 globalCP,

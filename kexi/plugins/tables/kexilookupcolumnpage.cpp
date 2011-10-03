@@ -29,10 +29,10 @@
 #include <kdebug.h>
 #include <klineedit.h>
 
-#include <widget/KexiPropertyPaneViewBase.h>
-#include <widget/kexidatasourcecombobox.h>
-#include <widget/kexifieldlistview.h>
-#include <widget/kexifieldcombobox.h>
+#include <widget/properties/KexiPropertyPaneViewBase.h>
+#include <widget/KexiDataSourceComboBox.h>
+#include <widget/fields/KexiFieldListView.h>
+#include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexidb/connection.h>
 #include <kexiproject.h>

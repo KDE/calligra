@@ -48,6 +48,7 @@ void KWPageStylePrivate::clear()
     footNoteSeparatorLineWidth = 0.5; // like in OOo
     footNoteSeparatorLineType = Qt::SolidLine;
 
+    displayName.clear();
     mainFrame = true;
     headerDistance = 10; // ~3mm
     footerDistance = 10;
@@ -71,10 +72,12 @@ void KWPageStylePrivate::clear()
 
 ///////////
 
-KWPageStyle::KWPageStyle(const QString &name)
+KWPageStyle::KWPageStyle(const QString &name, const QString &displayname)
     : d (new KWPageStylePrivate())
 {
     d->name = name;
+    if (!displayname.isEmpty() && displayname != name)
+        d->displayName = displayname;
 }
 
 KWPageStyle::KWPageStyle(const KWPageStyle &ps)
@@ -270,6 +273,11 @@ void KWPageStyle::clear()
 QString KWPageStyle::name() const
 {
     return d->name;
+}
+
+QString KWPageStyle::displayName() const
+{
+    return d->displayName;
 }
 
 KoShapeBackground *KWPageStyle::background() const
@@ -483,10 +491,11 @@ uint qHash(const KWPageStyle &style)
     return style.hash();
 }
 
-void KWPageStyle::detach(const QString &newName)
+void KWPageStyle::detach(const QString &newName, const QString &displayName)
 {
     if (d->fullPageBackground)
         d->fullPageBackground->ref();
     d.detach();
     d->name = newName;
+    d->displayName = displayName;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>376</height>
+    <width>212</width>
+    <height>26</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -15,17 +15,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTreeView" name="ui_source">
-     <property name="headerHidden">
-      <bool>false</bool>
-     </property>
-     <attribute name="headerVisible">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="headerVisible">
-      <bool>true</bool>
-     </attribute>
-    </widget>
+    <widget class="QComboBox" name="ui_source"/>
    </item>
   </layout>
  </widget>

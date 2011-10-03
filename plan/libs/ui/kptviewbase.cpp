@@ -1755,6 +1755,11 @@ void DoubleTreeViewBase::setAcceptDropsOnView( bool mode )
     m_leftview->setAcceptDropsOnView( mode );
 }
 
+void DoubleTreeViewBase::setDefaultDropAction( Qt::DropAction action )
+{
+    m_leftview->setDefaultDropAction( action );
+}
+
 void DoubleTreeViewBase::slotRightHeaderContextMenuRequested( const QPoint &pos )
 {
     //kDebug();

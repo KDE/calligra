@@ -55,7 +55,7 @@ class KoShapeSavingContext;
 class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoDataCenterBase;
 class KoShapeShadow;
 class KoEventAction;
@@ -408,18 +408,6 @@ public:
      * @param threshold the new threshold
      */
     void setTextRunAroundThreshold(qreal threshold);
-
-    /**
-     * Set an indication if the shape is anchored by text.
-     * @param anchored if the shape is anchored by text
-     */
-    void setAnchored(bool anchored);
-
-    /**
-     * Return if the shape is anchored by text
-     * @return true if the shape is anchored by text
-     */
-    bool isAnchored() const;
 
     /**
      * Set the background of the shape.

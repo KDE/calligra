@@ -48,6 +48,7 @@
 #include "KoRdfFoaF.h"
 #include "KoRdfCalendarEvent.h"
 #include "KoRdfLocation.h"
+#include <KoShapeController.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -82,8 +83,8 @@ public:
 
     ~KoDocumentRdfPrivate()
     {
-        delete prefixMapping;
-        delete model;
+        prefixMapping->deleteLater();
+        model->deleteLater();
     }
 
     Soprano::Model *model; ///< Main Model containing all Rdf for doc
@@ -117,15 +118,6 @@ KoDocumentRdf::~KoDocumentRdf()
 const Soprano::Model *KoDocumentRdf::model() const
 {
     return d->model;
-}
-
-KoDocumentRdf *KoDocumentRdf::fromResourceManager(KoCanvasBase *host)
-{
-    KoResourceManager *rm = host->resourceManager();
-    if (!rm->hasResource(KoText::DocumentRdf)) {
-        return 0;
-    }
-    return static_cast<KoDocumentRdf*>(rm->resource(KoText::DocumentRdf).value<void*>());
 }
 
 KoRdfPrefixMapping *KoDocumentRdf::prefixMapping() const
@@ -1000,6 +992,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
         RDEBUG << "Cursor position" << cursor.position();
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+        RDEBUG << "obj" << obj;
 
         // first check for bookmarks
         if (KoBookmark *bookmark = dynamic_cast<KoBookmark*>(obj)) {
@@ -1036,9 +1029,12 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
             break;
         }
 
+        if( cursor.position() <= 0 )
+            break;
+        
         // else continue with the next inline object
         cursor = document->find(QString(QChar::ObjectReplacementCharacter),
-                                cursor.position(),
+                                cursor.position()-1,
                                 QTextDocument::FindBackward);
     }
 

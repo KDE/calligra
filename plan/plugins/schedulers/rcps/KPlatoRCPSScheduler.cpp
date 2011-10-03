@@ -1323,7 +1323,6 @@ void KPlatoRCPSScheduler::setWeights()
     for ( QMap<struct rcps_job*, Task*>::iterator it = m_taskmap.begin(); it != m_taskmap.end(); ++it ) {
         Task *task = it.value();
         struct rcps_job *job = it.key();
-        struct weight_info *wi = m_weight_info_list.value( job );
         if ( m_backward ) {
             switch ( task->constraint() ) {
                 case Node::ASAP:
