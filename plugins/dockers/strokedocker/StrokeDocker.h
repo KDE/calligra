@@ -80,7 +80,7 @@ private:
     void applyChanges();
 
     /// apply begin marker changes to the selected shape
-    void applyMarkerChanges(KoPathShape::MarkerPosition position);
+    void applyMarkerChanges(KoMarkerData::MarkerPosition position);
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );

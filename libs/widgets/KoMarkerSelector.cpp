@@ -33,16 +33,16 @@
 class KoMarkerSelector::Private
 {
 public:
-    Private(QWidget *parent, KoPathShape::MarkerPosition position)
+    Private(KoMarkerData::MarkerPosition position, QWidget *parent)
     : model(new KoMarkerModel(QList<KoMarker*>(), position, parent))
     {}
 
     KoMarkerModel *model;
 };
 
-KoMarkerSelector::KoMarkerSelector(QWidget *parent, KoPathShape::MarkerPosition position)
+KoMarkerSelector::KoMarkerSelector(KoMarkerData::MarkerPosition position, QWidget *parent)
 : QComboBox(parent)
-, d(new Private(this, position))
+, d(new Private(position, this))
 {
     setModel(d->model);
     setItemDelegate(new KoMarkerItemDelegate(this));
@@ -56,20 +56,20 @@ KoMarkerSelector::~KoMarkerSelector()
 void KoMarkerSelector::paintEvent(QPaintEvent *pe)
 {
     QComboBox::paintEvent(pe);
-    
+
     QStyleOptionComboBox option;
     option.initFrom(this);
     option.frame = hasFrame();
     QRect r = style()->subControlRect(QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, this);
     if (!option.frame) // frameless combo boxes have smaller margins but styles do not take this into account
         r.adjust(-14, 0, 14, 1);
-    
+
     QPainter painter(this);
     bool antialiasing = painter.testRenderHint(QPainter::Antialiasing);
     if (!antialiasing) {
         painter.setRenderHint(QPainter::Antialiasing, true);
     }
-    
+
     KoPathShape *pathShape = itemData(currentIndex(), Qt::DisplayRole).value<KoPathShape*>();
     if(pathShape != 0){
         // paint marker

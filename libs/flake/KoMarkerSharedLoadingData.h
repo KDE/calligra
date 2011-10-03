@@ -24,6 +24,8 @@
 
 #include <QHash>
 
+#define MARKER_SHARED_LOADING_ID "KoMarkerShareadLoadingId"
+
 class KoMarker;
 class QString;
 

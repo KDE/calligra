@@ -40,6 +40,7 @@ set(flake_SRCS
     KoShapePainter.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp
+    KoMarkerData.cpp
     KoMarker.cpp
     KoMarkerCollection.cpp
     KoMarkerSharedLoadingData.cpp

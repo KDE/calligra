@@ -24,6 +24,7 @@
 #include "KoSharedLoadingData.h"
 #include "KoShapeControllerBase.h"
 #include "KoImageCollection.h"
+#include "KoMarkerCollection.h"
 #include "KoResourceManager.h"
 #include "KoLoadingShapeUpdater.h"
 
@@ -64,6 +65,10 @@ public:
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoResourceManager *documentResources)
         : d(new Private(context, documentResources))
 {
+    KoMarkerCollection *markerCollection = d->documentResources->resource(KoDocumentResource::MarkerCollection).value<KoMarkerCollection*>();
+    if (markerCollection) {
+        markerCollection->loadOdf(*this);
+    }
 }
 
 KoShapeLoadingContext::~KoShapeLoadingContext()

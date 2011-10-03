@@ -25,6 +25,7 @@
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <kdebug.h>
 
 class KoMarkerCollection::Private
 {
@@ -45,6 +46,7 @@ KoMarkerCollection::~KoMarkerCollection()
 
 bool KoMarkerCollection::loadOdf(KoShapeLoadingContext &context)
 {
+    kDebug(30006);
     QHash<QString, KoMarker*> lookupTable;
 
     QHash<QString, KoXmlElement*> markers = context.odfLoadingContext().stylesReader().drawStyles("marker");
@@ -54,6 +56,7 @@ bool KoMarkerCollection::loadOdf(KoShapeLoadingContext &context)
         if (marker->loadOdf(*(it.value()), context)) {
             marker = addMarker(marker);
             lookupTable.insert(it.key(), marker);
+            kDebug(30006) << "loaded marker" << it.key() << marker;
         }
         else {
             delete marker;

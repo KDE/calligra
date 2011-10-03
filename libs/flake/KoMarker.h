@@ -41,6 +41,7 @@ public:
 
     QString name() const;
     QPainterPath path() const;
+    QPainterPath path(qreal width) const;
 
 private:
     class Private;

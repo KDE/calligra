@@ -24,6 +24,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoPathShape.h>
 
 #include <KoMarker.h>
 
@@ -33,11 +34,12 @@
 #include <QList>
 
 
-KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoPathShape::MarkerPosition position, QObject *parent)
+KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent)
 : QAbstractListModel(parent)
 , m_markers(markers)
 , m_markerPosition(position)
 {
+#if 0
     if(m_markers.size() == 0){
         // No arrow
         m_markers.append(0);
@@ -88,8 +90,8 @@ KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoPathShape::Marker
         KoMarker *smallArrowMarker = new KoMarker();
         smallArrowMarker->loadOdf( smallElement, smallShapeContext );
         m_markers.append(smallArrowMarker);
-        
     }
+#endif
 }
 
 KoMarkerModel::~KoMarkerModel()
@@ -149,7 +151,7 @@ QVariant KoMarkerModel::marker(int index, int role) const
     }
 }
 
-KoPathShape::MarkerPosition KoMarkerModel::position() const
+KoMarkerData::MarkerPosition KoMarkerModel::position() const
 {
     return m_markerPosition;
 }

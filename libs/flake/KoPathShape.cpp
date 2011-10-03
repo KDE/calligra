@@ -34,6 +34,8 @@
 #include "KoShapeContainer.h"
 #include "KoFilterEffectStack.h"
 #include "KoMarker.h"
+#include "KoMarkerSharedLoadingData.h"
+#include "KoLineBorder.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -56,8 +58,8 @@ static bool qIsNaNPoint(const QPointF &p) {
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoTosContainerPrivate(q),
     fillRule(Qt::OddEvenFill),
-    beginMarker(0),
-    endMarker(0)
+    beginMarker(KoMarkerData::MarkerBegin),
+    endMarker(KoMarkerData::MarkerEnd)
 {
 }
 
@@ -214,6 +216,46 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 #ifndef NWORKAROUND_ODF_BUGS
         KoOdfWorkaround::fixMissingFillRule(d->fillRule, context);
 #endif
+    }
+
+    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
+    qreal lineWidth = 0;
+    if (lineBorder) {
+        lineWidth = lineBorder->lineWidth();
+    }
+    KoMarkerSharedLoadingData *markerShared = dynamic_cast<KoMarkerSharedLoadingData*>(context.sharedData(MARKER_SHARED_LOADING_ID));
+    if (markerShared) {
+        //draw:marker-start-width="0.686cm" draw:marker-end="Arrow"
+        // TODO load width
+        // draw:marker-start-width="0.686cm" draw:marker-end="Arrow" draw:marker-end-width="0.686cm" draw:marker-end-center="true"
+        const QString markerStart(styleStack.property(KoXmlNS::draw, "marker-start"));
+        const QString markerStartWidth(styleStack.property(KoXmlNS::draw, "marker-start-width"));
+        if (!markerStart.isEmpty() && !markerStartWidth.isEmpty()) {
+            KoMarker *marker = markerShared->marker(markerStart);
+            if (marker) {
+                d->beginMarker.setMarker(marker);
+                qreal markerWidth = KoUnit::parseValue(markerStartWidth);
+                qreal markerBaseWidth = qMax(qreal(0.0), markerWidth - lineWidth * 1.5);
+                kDebug(30006) << markerWidth << markerBaseWidth << lineWidth * 1.5;
+                d->beginMarker.setWidth(markerBaseWidth);
+                d->beginMarker.setCenter(element.attributeNS(KoXmlNS::draw, "marker-start-center", "false") == "true");
+            }
+        }
+
+        const QString markerEnd(styleStack.property(KoXmlNS::draw, "marker-end"));
+        const QString markerEndWidth(styleStack.property(KoXmlNS::draw, "marker-end-width"));
+        if (!markerEnd.isEmpty() && !markerEndWidth.isEmpty()) {
+            KoMarker *marker = markerShared->marker(markerEnd);
+            if (marker) {
+                d->endMarker.setMarker(marker);
+                qreal markerWidth = KoUnit::parseValue(markerEndWidth);
+                qreal markerBaseWidth = qMax(qreal(0.0), markerWidth - lineWidth * 1.5);
+                kDebug(30006) << markerWidth << markerBaseWidth << lineWidth * 1.5;
+                d->endMarker.setWidth(markerBaseWidth);
+                d->endMarker.setCenter(element.attributeNS(KoXmlNS::draw, "marker-end-center", "false") == "true");
+            }
+        }
+        kDebug(30006) << "use markers" << d->beginMarker.marker() << d->endMarker.marker();
     }
 }
 
@@ -1354,47 +1396,76 @@ bool KoPathShape::hitTest(const QPointF &position) const
     return outlinePath.contains(point);
 }
 
-void KoPathShape::setMarker(KoMarker *marker, KoPathShape::MarkerPosition position)
+void KoPathShape::setMarker(const KoMarkerData &markerData)
 {
+    // TODO Use KoMarkerData here.
     Q_D(KoPathShape);
 
-    if (position == MarkerBegin) {
-        d->beginMarker = marker;
-    } else if (position == MarkerEnd) {
-        d->endMarker = marker;
+    if (markerData.position() == KoMarkerData::MarkerBegin) {
+        d->beginMarker = markerData;
+    }
+    else {
+        d->endMarker = markerData;
     }
 }
 
-KoMarker *KoPathShape::marker(KoPathShape::MarkerPosition position)
+void KoPathShape::setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position)
 {
+    // TODO Use KoMarkerData here.
     Q_D(KoPathShape);
 
-    if (position == MarkerBegin) {
-        return d->beginMarker;
-    } else if (position == MarkerEnd) {
-        return d->endMarker;
+    if (position == KoMarkerData::MarkerBegin) {
+        d->beginMarker.setMarker(marker);
+    }
+    else {
+        d->endMarker.setMarker(marker);
+    }
+}
+
+KoMarker *KoPathShape::marker(KoMarkerData::MarkerPosition position) const
+{
+    Q_D(const KoPathShape);
+
+    if (position == KoMarkerData::MarkerBegin) {
+        return d->beginMarker.marker();
+    }
+    else {
+        return d->endMarker.marker();
     }
 
     return 0;
 }
 
-QPainterPath KoPathShape::markerOutline(MarkerPosition position)
+KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) const
 {
-    KoMarker *m = marker(position);
-    if (m) {
-        return QPainterPath(transformedMarker(m->path(),
-                                position == MarkerBegin ? m_subpaths.first()->first() : m_subpaths.first()->last(),
+    Q_D(const KoPathShape);
+
+    if (position == KoMarkerData::MarkerBegin) {
+        return d->beginMarker;
+    }
+    else {
+        return d->endMarker;
+    }
+}
+
+QPainterPath KoPathShape::markerOutline(KoMarkerData::MarkerPosition position, qreal penWidth)
+{
+    KoMarkerData md = markerData(position);
+    if (md.marker()) {
+        kDebug(30006) << penWidth << md.width() << md.width() + penWidth * 1.5;
+        return QPainterPath(transformedMarker(md.marker()->path(md.width() + penWidth * 1.5),
+                                position == KoMarkerData::MarkerBegin ? m_subpaths.first()->first() : m_subpaths.first()->last(),
                                 position));
     }
     return QPainterPath();
 }
 
-int KoPathShape::computeAngle(KoPathPoint* point, MarkerPosition position) const
+int KoPathShape::computeAngle(KoPathPoint* point, KoMarkerData::MarkerPosition position) const
 {
     KoPathPointIndex index = pathPointIndex(point);
     QPointF vectorPoint;
     /// check if it is a start point
-    if (position == MarkerBegin) {
+    if (position == KoMarkerData::MarkerBegin) {
         if (point->activeControlPoint2()) {
             vectorPoint = point->point() - point->controlPoint2();
         } else {
@@ -1413,7 +1484,7 @@ int KoPathShape::computeAngle(KoPathPoint* point, MarkerPosition position) const
                 vectorPoint = point->point() - next->point();
             }
         }
-    } else if(position == MarkerEnd) {
+    } else if(position == KoMarkerData::MarkerEnd) {
         if (point->activeControlPoint1()) {
             vectorPoint = point->point() - point->controlPoint1();
         } else {
@@ -1439,7 +1510,7 @@ int KoPathShape::computeAngle(KoPathPoint* point, MarkerPosition position) const
     return vector.angle();
 }
 
-QPainterPath KoPathShape::transformedMarker(QPainterPath path, KoPathPoint* point, MarkerPosition position) const
+QPainterPath KoPathShape::transformedMarker(QPainterPath path, KoPathPoint* point, KoMarkerData::MarkerPosition position) const
 {
     QTransform markerTransform;
     int halfWidth = (path.boundingRect().width())/2;

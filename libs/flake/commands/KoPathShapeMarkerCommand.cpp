@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 
-KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoPathShape::MarkerPosition position, KUndo2Command *parent)
+KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent)
 : KUndo2Command(parent)
 , m_shapes(shapes)
 , m_marker(marker)

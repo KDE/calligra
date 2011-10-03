@@ -56,6 +56,8 @@
 #include <KoPathShape.h>
 #include <KoMarker.h>
 #include <KoPathShapeMarkerCommand.h>
+#include <KoShapeController.h>
+#include <KoMarkerCollection.h>
 
 class StrokeDocker::Private
 {
@@ -128,12 +130,12 @@ void StrokeDocker::applyChanges()
     canvasController->canvas()->addCommand(cmd);
 }
 
-void StrokeDocker::applyMarkerChanges(KoPathShape::MarkerPosition position)
+void StrokeDocker::applyMarkerChanges(KoMarkerData::MarkerPosition position)
 {
-    KoMarker *marker;
-    if (position == KoPathShape::MarkerBegin){
+    KoMarker *marker = 0;
+    if (position == KoMarkerData::MarkerBegin){
         marker = d->beginMarker;
-    } else if (position == KoPathShape::MarkerEnd){
+    } else if (position == KoMarkerData::MarkerEnd){
         marker = d->endMarker;
     }
         
@@ -194,13 +196,13 @@ void StrokeDocker::miterLimitChanged()
 void StrokeDocker::beginMarkerChanged()
 {
     d->beginMarker = d->mainWidget->beginMarker();
-    applyMarkerChanges(KoPathShape::MarkerBegin);
+    applyMarkerChanges(KoMarkerData::MarkerBegin);
 }
 
 void StrokeDocker::endMarkerChanged()
 {
     d->endMarker = d->mainWidget->endMarker();
-    applyMarkerChanges(KoPathShape::MarkerEnd);
+    applyMarkerChanges(KoMarkerData::MarkerEnd);
 }
 // ----------------------------------------------------------------
 
@@ -255,6 +257,12 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
     }
 
     d->canvas = canvas;
+    KoResourceManager *resourceManager = canvas->shapeController()->resourceManager();
+    KoMarkerCollection *collection = resourceManager->resource(KoDocumentResource::MarkerCollection).value<KoMarkerCollection*>();
+    if (collection) {
+        d->mainWidget->updateMarkers(collection->markers());
+
+    }
 }
 
 void StrokeDocker::unsetCanvas()

@@ -25,6 +25,7 @@
 #include "KoShapeSavingContext.h"
 
 #include "KoPathShape.h"
+#include "KoMarkerData.h"
 
 #include <QPainterPath>
 
@@ -147,8 +148,8 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const QPen &pe
     if (!pen.isCosmetic()) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
-            QPainterPath markerBegin = pathShape->markerOutline(KoPathShape::MarkerBegin);
-            QPainterPath markerEnd = pathShape->markerOutline(KoPathShape::MarkerEnd);
+            QPainterPath markerBegin = pathShape->markerOutline(KoMarkerData::MarkerBegin, pen.widthF());
+            QPainterPath markerEnd = pathShape->markerOutline(KoMarkerData::MarkerEnd, pen.widthF());
             QPainterPath pathOutline;
             QPainterPathStroker stroker;
             stroker.setWidth(pen.widthF());

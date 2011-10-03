@@ -21,14 +21,14 @@
 #define KOMARKERMODEL_H
 
 #include <QAbstractListModel>
-#include <KoPathShape.h>
+#include <KoMarkerData.h>
 
 class KoMarker;
 
 class KoMarkerModel : public QAbstractListModel
 {
 public:
-    KoMarkerModel(const QList<KoMarker*> markers, KoPathShape::MarkerPosition position, QObject *parent = 0);
+    KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent = 0);
     virtual ~KoMarkerModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -36,11 +36,11 @@ public:
 
     int markerIndex(KoMarker *marker) const;
     QVariant marker(int index, int role = Qt::UserRole) const;
-    KoPathShape::MarkerPosition position() const;
+    KoMarkerData::MarkerPosition position() const;
 
 private:
     QList<KoMarker*> m_markers;
-    KoPathShape::MarkerPosition m_markerPosition;
+    KoMarkerData::MarkerPosition m_markerPosition;
 };
 
 #endif /* KOMARKERMODEL_H */

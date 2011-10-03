@@ -20,8 +20,7 @@
 #define KOPATHSHAPEPRIVATE_H
 
 #include "KoTosContainer_p.h"
-
-class KoMarker;
+#include "KoMarkerData.h"
 
 class KoPathShapePrivate : public KoTosContainerPrivate
 {
@@ -90,8 +89,8 @@ public:
 
     Q_DECLARE_PUBLIC(KoPathShape)
 
-    KoMarker *beginMarker;
-    KoMarker *endMarker;
+    KoMarkerData beginMarker;
+    KoMarkerData endMarker;
 };
 
 #endif

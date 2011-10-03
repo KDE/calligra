@@ -29,8 +29,6 @@
 class KoMarker;
 class KoShapeLoadingContext;
 
-#define MARKER_SHARED_LOADING_ID "KoMarkerCollectionId"
-
 class FLAKE_EXPORT KoMarkerCollection : public QObject
 {
     Q_OBJECT

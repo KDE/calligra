@@ -9,7 +9,7 @@
  * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2006 Peter Simonsson <psn@linux.se>
  * Copyright (C) 2006 Laurent Montel <montel@kde.org>
- * Copyright (C) 2007 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>
  * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -175,13 +175,13 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->addWidget(d->miterLimit, 4, 1, 1, 3);
 
     QList<KoMarker*> markers;
-    
-    d->beginMarkerSelector = new KoMarkerSelector(this, KoPathShape::MarkerBegin);
-    d->beginMarkerSelector->updateMarkers( markers );
+
+    d->beginMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerBegin, this);
+    d->beginMarkerSelector->updateMarkers(markers);
     mainLayout->addWidget(d->beginMarkerSelector, 5, 0, 1, 2);
 
-    d->endMarkerSelector = new KoMarkerSelector(this, KoPathShape::MarkerEnd);
-    d->endMarkerSelector->updateMarkers( markers );
+    d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
+    d->endMarkerSelector->updateMarkers(markers);
     mainLayout->addWidget(d->endMarkerSelector, 5, 2, 1, 2);
 
     // Spacer
@@ -265,6 +265,12 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
     d->miterLimit->setUnit(unit);
 
     blockChildSignals(false);
+}
+
+void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
+{
+    d->beginMarkerSelector->updateMarkers(markers);
+    d->endMarkerSelector->updateMarkers(markers);
 }
 
 void KoStrokeConfigWidget::blockChildSignals(bool block)

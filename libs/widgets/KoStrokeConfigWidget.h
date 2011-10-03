@@ -9,6 +9,7 @@
  * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,7 +43,7 @@ class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoStrokeConfigWidget( QWidget * parent );
+    KoStrokeConfigWidget(QWidget * parent);
     ~KoStrokeConfigWidget();
 
     // Getters
@@ -58,7 +59,9 @@ public:
     void locationChanged(Qt::DockWidgetArea area);
 
 public slots:
-    void setUnit( const KoUnit &unit );
+    void setUnit(const KoUnit &unit);
+
+    void updateMarkers(const QList<KoMarker*> &markers);
 
 signals:
     /// Emitted when the line style changes.

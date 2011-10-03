@@ -30,6 +30,7 @@
 
 #include "KoTosContainer.h"
 #include "KoPathSegment.h"
+#include "KoMarkerData.h"
 
 #define KoPathShapeId "KoPathShape"
 
@@ -75,12 +76,6 @@ typedef QList<KoSubpath *> KoSubpathList;
 class FLAKE_EXPORT KoPathShape : public KoTosContainer
 {
 public:
-    /// Property enum
-    enum MarkerPosition{
-        MarkerBegin = 0, ///< it is the marker where the Path begins
-        MarkerEnd = 1 ///< it is the marker where the Path ends
-    };
-    
     /**
      * @brief constructor
      */
@@ -446,13 +441,18 @@ public:
     static QRectF loadOdfViewbox(const KoXmlElement &element);
 
     /// Marker setter
-    void setMarker(KoMarker *marker, MarkerPosition position);
+    void setMarker(const KoMarkerData &markerData);
+
+    /// Marker setter
+    void setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position);
 
     /// returns the list of all the markers of the path
-    KoMarker *marker(MarkerPosition position);
+    KoMarker *marker(KoMarkerData::MarkerPosition position) const;
+
+    KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
 
     /// return the outline of the marker at the position or an empty path it there is none
-    QPainterPath markerOutline(MarkerPosition position);
+    QPainterPath markerOutline(KoMarkerData::MarkerPosition position, qreal penWidth);
 
 protected:
     /// constructor \internal
@@ -496,7 +496,7 @@ protected:
      * 
      * @return the angle
      */
-    int computeAngle(KoPathPoint* point, MarkerPosition position) const;
+    int computeAngle(KoPathPoint* point, KoMarkerData::MarkerPosition position) const;
 
     /**
      * @brief Return the marker transformed and moved to the given point.
@@ -508,8 +508,8 @@ protected:
      *
      * @return the QPainterPath of the marker ready to be added to the point
      */
-    QPainterPath transformedMarker(QPainterPath path, KoPathPoint* point, MarkerPosition position) const;
-    
+    QPainterPath transformedMarker(QPainterPath path, KoPathPoint* point, KoMarkerData::MarkerPosition position) const;
+
     KoSubpathList m_subpaths;
 
 private:
