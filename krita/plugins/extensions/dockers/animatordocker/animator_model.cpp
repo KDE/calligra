@@ -281,7 +281,7 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
 {
     QVariant t;
     
-    return t;
+//     return t;
     
     if (orientation == Qt::Vertical) {
         if (role == Qt::DisplayRole)
@@ -301,7 +301,7 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
         }
     } else      // orientation == Qt::Horizontal
     {
-        return 0;
+        return 0;       // enabling => much slowness
         if (role == Qt::DisplayRole)
         {
             if (section % 6 == 0)
@@ -310,7 +310,6 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
             }
         } else if (role == Qt::BackgroundRole)
         {
-            // This is probably a slowness factor
 //             if (section == m_frame)
 //             {
 //                 return QBrush(QColor(10, 10, 10, 127));
@@ -330,7 +329,7 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
 int AnimatorModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return m_frame_num;
+    return m_frame_num + 12;
 }
 
 int AnimatorModel::rowCount(const QModelIndex& parent) const
