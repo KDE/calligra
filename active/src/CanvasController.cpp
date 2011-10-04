@@ -42,18 +42,18 @@
 #include <KoPADocument.h>
 #include <KoPAViewBase.h>
 #include <stage/part/KPrDocument.h>
-
-#include <QPoint>
-#include <QSize>
-#include <QGraphicsWidget>
 #include <tables/Sheet.h>
 #include <tables/Map.h>
 #include <tables/DocBase.h>
 #include "PAView.h"
-#include <QSettings>
 #include <flow/part/FlowPage.h>
 #include <part/Doc.h>
-#include <qfileinfo.h>
+
+#include <QtCore/QPoint>
+#include <QtCore/QSize>
+#include <QtGui/QGraphicsWidget>
+#include <QtCore/QSettings>
+#include <QtCore/QFileInfo>
 
 /*!
 * extensions
@@ -74,8 +74,8 @@ const QString EXT_XLSX("xlsx");
 
 CanvasController::CanvasController(QDeclarativeItem* parent)
     : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(CADocumentInfo::Undefined),
-    m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
-    m_documentViewSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
+      m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
+      m_documentViewSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     loadSettings();
@@ -86,7 +86,7 @@ void CanvasController::openDocument(const QString& path)
     QString error;
     QString mimetype = KMimeType::findByPath(path)->name();
     m_doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
-                                                                               QVariantList(), &error);
+            QVariantList(), &error);
     if (!m_doc) {
         kDebug() << "Doc can't be openend" << error;
         return;
@@ -164,7 +164,7 @@ void CanvasController::openDocument(const QString& path)
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
             connect(canvasItem, SIGNAL(documentSizeChanged(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
             //connect(canvasItem, SIGNAL(documentSizeChanged(QSize)),
-                //proxyObject, SLOT(updateDocumentSize(QSize)));
+            //proxyObject, SLOT(updateDocumentSize(QSize)));
             canvasItem->update();
         }
     } else {
@@ -384,17 +384,17 @@ void CanvasController::scrollUp()
 bool CanvasController::isPresentationDocumentExtension(const QString& extension) const
 {
     return 0 == QString::compare(extension, EXT_ODP, Qt::CaseInsensitive)
-       ||  0 == QString::compare(extension, EXT_PPS, Qt::CaseInsensitive)
-       ||  0 == QString::compare(extension, EXT_PPSX, Qt::CaseInsensitive)
-       ||  0 == QString::compare(extension, EXT_PPT, Qt::CaseInsensitive)
-       ||  0 == QString::compare(extension, EXT_PPTX, Qt::CaseInsensitive);
+           ||  0 == QString::compare(extension, EXT_PPS, Qt::CaseInsensitive)
+           ||  0 == QString::compare(extension, EXT_PPSX, Qt::CaseInsensitive)
+           ||  0 == QString::compare(extension, EXT_PPT, Qt::CaseInsensitive)
+           ||  0 == QString::compare(extension, EXT_PPTX, Qt::CaseInsensitive);
 }
 
 bool CanvasController::isSpreadsheetDocumentExtension(const QString& extension) const
 {
     return 0 == QString::compare(extension, EXT_ODS, Qt::CaseInsensitive)
-       ||  0 == QString::compare(extension, EXT_XLS, Qt::CaseInsensitive)
-       ||  0 == QString::compare(extension, EXT_XLSX, Qt::CaseInsensitive);
+           ||  0 == QString::compare(extension, EXT_XLS, Qt::CaseInsensitive)
+           ||  0 == QString::compare(extension, EXT_XLSX, Qt::CaseInsensitive);
 }
 
 int CanvasController::sheetCount() const
@@ -547,15 +547,32 @@ void CanvasController::previousSlide()
 
 void CanvasController::zoomToFit()
 {
-    QSizeF pageSize = m_paView->activePage()->size();
-    QSizeF size = static_cast<KoPACanvasItem*>(m_canvasItem)->size();
-    QSizeF intersect = QRectF(QPoint(0,0), pageSize).intersect(QRectF(QPoint(0,0), size)).size();
+    switch (documentType()) {
+    case CADocumentInfo::Presentation: {
+        QSizeF pageSize = m_paView->activePage()->boundingRect().size();
+        QSizeF canvasSize(width(), height());
+        KoZoomHandler *handler = m_paView->zoomHandler();
+        QGraphicsWidget *canvasItem = m_canvasItem->canvasItem();
+        QSizeF newSize(pageSize);
+        newSize.scale(canvasSize, Qt::KeepAspectRatio);
 
-    KoZoomHandler *handler = m_paView->zoomHandler();
-    if (intersect.width() < intersect.height()) {
-        handler->setZoom(intersect.width()/pageSize.width()*0.71);
-    } else {
-        handler->setZoom(intersect.height()/pageSize.height()*0.75);
+        if (canvasSize.width() < canvasSize.height()) {
+            canvasItem->setGeometry(0, (canvasSize.height()-newSize.height())/2,
+                                    newSize.width(), newSize.height());
+            handler->setZoom(canvasSize.width()/pageSize.width()*0.75);
+        } else {
+            canvasItem->setGeometry((canvasSize.width()-newSize.width())/2, 0,
+                                    newSize.width(), newSize.height());
+            handler->setZoom(canvasSize.height()/pageSize.height()*0.75);
+        }
+
+        break;
+    }
+    case CADocumentInfo::TextDocument:
+    case CADocumentInfo::Spreadsheet:
+    default:
+        //Resize not supported for this type of document yet
+        ;
     }
 }
 
@@ -563,16 +580,16 @@ void CanvasController::updateCanvasItem()
 {
     if (m_canvasItem) {
         switch (m_documentType) {
-            case CADocumentInfo::TextDocument:
-                dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
-                break;
-            case CADocumentInfo::Spreadsheet:
-                dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem)->update();
-                updateDocumentSizeForActiveSheet();
-                break;
-            case CADocumentInfo::Presentation:
-                dynamic_cast<KoPACanvasItem*>(m_canvasItem)->update();
-                break;
+        case CADocumentInfo::TextDocument:
+            dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
+            break;
+        case CADocumentInfo::Spreadsheet:
+            dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem)->update();
+            updateDocumentSizeForActiveSheet();
+            break;
+        case CADocumentInfo::Presentation:
+            dynamic_cast<KoPACanvasItem*>(m_canvasItem)->update();
+            break;
         }
     }
 }
@@ -611,9 +628,7 @@ void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF&
         widget->setVisible(true);
         widget->setGeometry(newGeometry);
 
-        if (m_documentType == CADocumentInfo::Presentation) {
-            zoomToFit();
-        }
+        zoomToFit();
     }
     QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
 }

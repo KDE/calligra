@@ -115,6 +115,11 @@ Rectangle {
                 target: doc
                 anchors.left: parent.left
             }
+            AnchorChanges {
+                target: openFileDialogButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
         },
         State {
             name: "showTextDocs"
