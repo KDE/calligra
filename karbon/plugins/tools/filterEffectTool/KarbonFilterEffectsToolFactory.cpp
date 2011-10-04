@@ -28,7 +28,7 @@ KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
         : KoToolFactoryBase("KarbonFilterEffectsTool")
 {
     setToolTip(i18n("Filter Effects Editing Tool"));
-    setToolType(mainToolType());
+    setToolType("karbon");
     setIcon("effectimages");
     setPriority(3);
 }
