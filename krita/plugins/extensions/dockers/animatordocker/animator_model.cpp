@@ -111,9 +111,6 @@ void AnimatorModel::loadLayers()
     if (minor < getMinor())
         minor = getMinor();
     
-    // Now write info
-    setVersion(major, minor);
-    
     int fnum = 0;
     
     for (quint32 i = 1; i < nodes->rowCount(); ++i)
@@ -178,6 +175,8 @@ void AnimatorModel::loadLayers()
     
     setFramesNumber(fnum);
     
+    // Now write info about version; here - for being not overriden by animated layers
+    setVersion(major, minor);
     
     // CHECK if this is necessary
     emit frameChanged(m_frame);
@@ -190,12 +189,6 @@ void AnimatorModel::loadLayers()
 
 void AnimatorModel::convertLayers()
 {
-//     AnimatedLayer* lay;
-//     foreach (lay, m_layers)
-//     {
-//         if (lay->inherits("SimpleAnimatedLayer"))
-//             dynamic_cast<SimpleAnimatedLayer*>(lay)->convertFrames();
-//     }
     KisNodeModel* nodes = sourceModel();
 
     for (int i = 0; i < nodes->rowCount(); ++i)
@@ -206,15 +199,29 @@ void AnimatorModel::convertLayers()
             convertLayer(node);
         }
     }
+    
+    setVersion(getMajor(), getMinor());
 }
 
 void AnimatorModel::convertLayer(KisNode* node)
 {
-    KisNode* fr;
     for (int i = 0; i < node->childCount(); ++i)
     {
-        fr = node->at(i).data();
+        KisNode* fr = node->at(i).data();
+        fr->setVisible(true);
+        fr->setOpacity(255);
         
+        int ind = node->index(fr);
+        
+        m_nodeman->activateNode(node);
+        m_nodeman->createNode("KisGroupLayer");
+        KisGroupLayer* nf = dynamic_cast<KisGroupLayer*>(m_nodeman->activeLayer().data());
+        
+        m_nodeman->moveNodeAt(fr, nf, 0);                       // This is VERY slow
+        m_nodeman->moveNodeAt(nf, node, ind);
+        
+        nf->setName(fr->name());
+        fr->setName("_");
     }
 }
 
@@ -1182,12 +1189,29 @@ int AnimatorModel::getMinor()
     return 0;
 }
 
+KisNode* AnimatorModel::findMetaLayer()
+{
+    for (int i = 0; i < m_source->rowCount(); ++i)
+    {
+        KisNode* node = m_source->nodeFromIndex(m_source->index(i, 0)).data();
+        if (node->name().startsWith("_animator_"))
+            return node;
+    }
+    return 0;
+}
+
 void AnimatorModel::setVersion(int major, int minor)
 {
-    m_nodeman->createNode("KisGroupLayer");
-    
-    KisGroupLayer* meta_node = dynamic_cast<KisGroupLayer*>(m_nodeman->activeLayer().data());
+    KisNode* meta_node;
+    meta_node = findMetaLayer();
+    if (! meta_node || ! meta_node->name().startsWith("_animator_"))
+    {
+        m_nodeman->createNode("KisGroupLayer");
+        meta_node = m_nodeman->activeLayer().data();
+    }
     
     meta_node->setName(QString("_animator_")+QString::number(major)+QString("_")+QString::number(minor)+QString("_Please don\'t move this!"));
-    m_nodeman->moveNodeAt(meta_node, 0, 0);
+    KisNode* root_node = meta_node;
+    while (root_node->parent()) root_node = root_node->parent().data();
+    m_nodeman->moveNodeAt(meta_node, root_node, root_node->childCount());
 }

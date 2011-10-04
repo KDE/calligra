@@ -112,6 +112,7 @@ protected:
     virtual void visibleAll(bool v);
     
 protected:
+    KisNode* findMetaLayer();
     void setVersion(int major, int minor);
 
 // public slots:

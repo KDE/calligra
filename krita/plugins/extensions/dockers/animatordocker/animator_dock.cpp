@@ -39,6 +39,9 @@
 #include <iostream>
 #include "animator_light_table_dock.h"
 
+// Change this if you want to use enable/disable button
+#define KRITA_ANIMATOR_USE_ENABLE_BUTTON false
+
 AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
 {
     // Setup mode/view
@@ -131,10 +134,12 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     // Player & export toolbar
     m_player_toolbar = new QToolBar(this);
     
+#if KRITA_ANIMATOR_USE_ENABLE_BUTTON
     QAction* enable_act = m_player_toolbar->addAction(SmallIcon("dialog-ok-apply"), i18n("Enable/disable plugin"));
     enable_act->setCheckable(true);
     connect(enable_act, SIGNAL(toggled(bool)), m_model, SLOT(setEnabled(bool)));
     addAction(enable_act);
+#endif
     
     addAction( m_player_toolbar->addAction(SmallIcon("system-run"), i18n("Convert old frames to new"), m_model, SLOT(convertLayers())) );
     
@@ -202,6 +207,10 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
     m_model->setImage(m_canvas->image());
     m_model->setCanvas(m_canvas);
     
+#if ! KRITA_ANIMATOR_USE_ENABLE_BUTTON
+    m_model->setEnabled(true);
+#endif
+    
     m_view->setModel(m_model);
     
 //     static bool t_DELETE_this_variable = false;
@@ -250,7 +259,14 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
 
 void AnimatorDock::unsetCanvas()
 {
-    // No code now, just to be compilable
+    m_canvas = 0;
+    m_document = 0;
+    m_nodemodel = 0;
+    m_exporter->setDocument(0);
+    m_model->setSourceModel(0);
+    m_model->setNodeManager(0);
+    m_model->setImage(0);
+    m_model->setCanvas(0);
 }
 
 void AnimatorDock::slotSetFNumber()
