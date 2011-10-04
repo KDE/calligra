@@ -35,7 +35,6 @@ public:
 
 public:
     virtual void loadFrames();
-    virtual void convertFrames();
     
     virtual bool loaded();
 
@@ -69,6 +68,9 @@ private:
     int m_first_frame;
 
     QList< FrameLayer* > m_frames;
+    
+protected:
+    bool m_updating;
 };
 
 #endif // SIMPLE_ANIMATED_LAYER_H

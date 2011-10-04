@@ -29,5 +29,4 @@ void MovingInterpolation::changeLayer(KisCloneLayer* layer, KisNode* from, KisCl
     
     layer->setX(ix);
     layer->setY(iy);
-    layer->setVisible(false);
 }

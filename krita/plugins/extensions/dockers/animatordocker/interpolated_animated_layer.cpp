@@ -24,6 +24,7 @@
 InterpolatedAnimatedLayer::InterpolatedAnimatedLayer(const KisGroupLayer& source): SimpleAnimatedLayer(source)
 {
     m_non_keys.clear();
+    m_updating = false;
 }
 
 // void InterpolatedAnimatedLayer::loadFrames()
@@ -34,10 +35,14 @@ InterpolatedAnimatedLayer::InterpolatedAnimatedLayer(const KisGroupLayer& source
 
 void InterpolatedAnimatedLayer::updateFrame(int num)
 {
+    if (m_updating)
+        return;
+    
     if (isKeyFrame(num))
     {
         return;
     }
+    m_updating = true;
     
     int inxt = getNextKey(num);
     KisCloneLayer* next = 0;
@@ -59,12 +64,21 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         
         getNodeManager()->activateNode(this);
         getNodeManager()->createNode("KisGroupLayer");
+        
         KisNode* target = getNodeManager()->activeNode().data();
         getNodeManager()->insertNode(interpolate(prev, next, p), target, 0);
-        target->setName(getNameForFrame(num, false));
-//         target->at(0)->setName("_");
         
-        loadFrames();
+        target->setName(getNameForFrame(num, false));
+        target->at(0)->setName("_");
+        
+        m_updating = false;
+//         loadFrames();
+        // This is a hack to call loadFrames() without crashing
+        // TODO: find the reason for crashing & fix it
+        getNodeManager()->activateNode(this);
+        getNodeManager()->createNode("KisPaintLayer");
+        getNodeManager()->removeNode(getNodeManager()->activeNode());
+        m_updating = true;      // not required, but for ethtetic reasons..
         
 //         FrameLayer* old = getFrameAt(num);
         
@@ -81,6 +95,7 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
 //             loadFrames();
 //         }
     }
+    m_updating = false;
 }
 
 // KisCloneLayer* InterpolatedAnimatedLayer::interpolate(FrameLayer* from, KisCloneLayer* to, double percent)

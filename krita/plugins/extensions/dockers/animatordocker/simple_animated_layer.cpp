@@ -42,7 +42,10 @@ bool SimpleAnimatedLayer::loaded()
 
 void SimpleAnimatedLayer::loadFrames()
 {
-//     return;
+    if (m_updating)
+        return;
+    
+    m_updating = true;
     m_loaded = true;
     
     m_frames.clear();
@@ -54,7 +57,7 @@ void SimpleAnimatedLayer::loadFrames()
         int fnum = getFrameFromName(chsource->name(), iskey);
         if (fnum >= 0)
         {
-            FrameLayer* frame;
+            FrameLayer* frame = 0;
             
             if (chsource->inherits("FrameLayer"))
             {
@@ -62,21 +65,16 @@ void SimpleAnimatedLayer::loadFrames()
             } else
             {
                 QString rname = chsource->name();
-                
-                KisNode* nn;
+                int findex = this->index(chsource);
                 
                 frame = new FrameLayer(*dynamic_cast<KisGroupLayer*>( chsource ));
-
+                
                 frame->setName(getNameForFrame(fnum, iskey));
                 frame->setNodeManager(getNodeManager());
                 frame->at(0)->setName("_");
                 
-                getNodeManager()->insertNode(frame, this, fnum);
-                
-//                 getNodeManager()->removeNode(chsource->at(0));
+                getNodeManager()->insertNode(frame, this, findex);
                 getNodeManager()->removeNode(chsource);
-                
-//                 frame->setCompositeOp("normal");
             }
             
             if (fnum == m_frames.size())
@@ -96,35 +94,8 @@ void SimpleAnimatedLayer::loadFrames()
                 m_first_frame = fnum;
         }
     }
-}
-
-void SimpleAnimatedLayer::convertFrames()
-{
-    for ( qint32 i = 0; i < childCount(); ++i )
-    {
-        KisNode* chsource = at(i).data(); //childNodes(QStringList(),  KoProperties())[i];
-        KisNode* nn;
-        bool iskey;
-        int fnum = getFrameFromName(chsource->name(), iskey);
-        if (fnum >= 0)
-        {
-            getNodeManager()->activateNode(this);
-            getNodeManager()->createNode("KisGroupLayer");
-            
-            KisNode* tmp = getNodeManager()->activeNode().data();
-            tmp->setName(chsource->name());
-            
-            chsource->setName("_");
-//             nn = chsource;
-            chsource = tmp;
-        }
-        getNodeManager()->moveNodeAt(nn, chsource, 0);
-        nn->setOpacity(255);
-        nn->setVisible(true);
-//                     nn->setName("_");
-//                     frame->setContent(chsource);
-        m_loaded = false;
-    }
+    
+    m_updating = false;
 }
 
 FrameLayer* SimpleAnimatedLayer::getFrameAt(int num) const
