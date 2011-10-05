@@ -29,9 +29,6 @@
  </Menu>
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
-  <Separator/>
-  <ActionList name="view_split" />
   <!-- Menu name="view_displaymodes"><text>&amp;Display Mode</text>
     <Action name="view_pagemode"/>
     <Action name="view_previewmode"/>
