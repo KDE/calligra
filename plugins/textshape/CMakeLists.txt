@@ -82,15 +82,9 @@ SET ( textshape_SRCS
     dialogs/TableOfContentsStyleDelegate.cpp
     dialogs/TableOfContentsPreview.cpp
 
-    commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
-    commands/ListItemNumberingCommand.cpp
-    commands/TextCommandBase.cpp
-    commands/TextPasteCommand.cpp
     commands/TextCutCommand.cpp
     commands/ShowChangesCommand.cpp
-    commands/ChangeTrackedDeleteCommand.cpp
-    commands/DeleteCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp
     commands/AutoResizeCommand.cpp

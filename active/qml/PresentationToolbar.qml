@@ -28,7 +28,6 @@ Item
 
     Button {
         id: previousSlide
-        text: "Prev"
         drawBackground: false
         imageSource: "qrc:///images/arrow-left.png"
         anchors.left: parent.left
@@ -42,7 +41,6 @@ Item
 
     Button {
         id: nextSlide
-        text: "Next"
         drawBackground: false
         imageSource: "qrc:///images/arrow-right.png"
         anchors.right: parent.right

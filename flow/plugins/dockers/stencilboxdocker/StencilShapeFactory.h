@@ -23,7 +23,7 @@
 #include <KoResourceManager.h>
 #include <KoProperties.h>
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 class StencilShapeFactory : public KoShapeFactoryBase
 {

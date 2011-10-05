@@ -30,7 +30,7 @@
 
 #include <KoDocument.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeUserData.h>
 #include <KoXmlReader.h>
 
@@ -88,7 +88,7 @@ template<typename T> class IntervalMap;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
+class CALLIGRA_TABLES_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeBasedDocumentBase,
         public ProtectableObject
 {
     Q_OBJECT
@@ -131,7 +131,7 @@ public:
      */
     DocBase* doc() const;
 
-    // KoShapeControllerBase interface
+    // KoShapeBasedDocumentBase interface
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
     virtual KoResourceManager* resourceManager() const;

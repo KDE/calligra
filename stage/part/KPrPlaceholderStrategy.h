@@ -28,7 +28,7 @@ class QPainter;
 #include "KoXmlReaderForward.h"
 class KoShape;
 class KoDataCenterBase;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShapeUserData;
