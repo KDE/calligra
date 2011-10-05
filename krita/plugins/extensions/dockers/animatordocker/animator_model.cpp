@@ -708,6 +708,7 @@ void AnimatorModel::clonePrevious(QModelIndex index)
     if (activateBeforeIndex(index))
     {
         m_updating = true;
+        m_nodeman->activateNode(dynamic_cast<FrameLayer*>(m_nodeman->activeNode().data())->getContent());
         m_nodeman->createNode("KisCloneLayer");
         KisNode* content = m_nodeman->activeNode().data();
         
