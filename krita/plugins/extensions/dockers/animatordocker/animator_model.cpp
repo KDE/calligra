@@ -707,9 +707,19 @@ void AnimatorModel::clonePrevious(QModelIndex index)
 {
     if (activateBeforeIndex(index))
     {
+        m_updating = true;
         m_nodeman->createNode("KisCloneLayer");
-	m_nodeman->activeNode()->setName(getAnimatedLayer(index.row())->getNameForFrame(index.column(), true));
+        KisNode* content = m_nodeman->activeNode().data();
         
+        m_nodeman->activateNode(getAnimatedLayer(index.row()));
+        m_nodeman->createNode("KisGroupLayer");
+        KisNode* container = m_nodeman->activeNode().data();
+        
+        content->setName("_");
+        container->setName(getAnimatedLayer(index.row())->getNameForFrame(index.column(), true));
+        m_nodeman->moveNodeAt(content, container, 0);
+        
+        m_updating = false;
         loadLayers();
         updateImage();
     }
