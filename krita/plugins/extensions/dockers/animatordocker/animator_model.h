@@ -65,6 +65,8 @@ public:
     virtual int getMinor(const KisNode* meta_node);
     virtual int getMinor();
     
+    virtual bool isActive();
+    
 public slots:
     // ok, +review
     virtual void updateImage();

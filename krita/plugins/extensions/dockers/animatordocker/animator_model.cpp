@@ -750,7 +750,7 @@ AnimatedLayer* AnimatorModel::getActiveAnimatedLayer() const
 
 QModelIndex AnimatorModel::createLayer()
 {
-    if (! m_enabled)
+    if (! isActive())
         return QModelIndex();
     
     int pos = 0;
@@ -1163,6 +1163,9 @@ void AnimatorModel::visibleAll(bool v)
 // Version control
 int AnimatorModel::getMajor(const KisNode* meta_node)
 {
+    if (! meta_node)
+        return -1;
+    
     QString t = meta_node->name();
     
     if (! t.startsWith("_animator_"))
@@ -1183,6 +1186,9 @@ int AnimatorModel::getMajor()
 
 int AnimatorModel::getMinor(const KisNode* meta_node)
 {
+    if (! meta_node)
+        return -1;
+    
     QString t = meta_node->name();
     
     if (! t.startsWith("_animator_"))
@@ -1200,6 +1206,11 @@ int AnimatorModel::getMinor(const KisNode* meta_node)
 int AnimatorModel::getMinor()
 {
     return 0;
+}
+
+bool AnimatorModel::isActive()
+{
+    return m_enabled && getMajor(findMetaLayer()) == getMajor();
 }
 
 KisNode* AnimatorModel::findMetaLayer()
