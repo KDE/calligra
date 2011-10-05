@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -142,6 +142,8 @@ KexiProjectModel::~KexiProjectModel()
 QVariant KexiProjectModel::data(const QModelIndex& index, int role) const
 {
     KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
+    if (!item)
+        return QVariant();
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -336,7 +338,7 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
 QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
 {
     //kDebug();
-    if (item && item->parent()) {
+    if (item /*&& item->parent()*/) {
         int row = item->row();
         //kDebug() << row;
         return createIndex(row, 0, (void*)item);
@@ -367,3 +369,28 @@ void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
     emit dataChanged(idx, idx);
 }
 
+QModelIndex KexiProjectModel::firstChildPartItem(const QModelIndex &parentIndex) const
+{
+    int count = rowCount(parentIndex);
+    kDebug() << "parent:" << data(parentIndex) << parentIndex.isValid() << count;
+    KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(parentIndex.internalPointer());
+    if (it) {
+        if (it->partItem()) {
+            return parentIndex;
+        }
+    }
+    for (int i = 0; i < count; i++) {
+        QModelIndex index = parentIndex.child(i, 0);
+        kDebug() << data(index);
+        index = firstChildPartItem(index);
+        if (index.isValid()) {
+            return index;
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex KexiProjectModel::firstPartItem() const
+{
+    return firstChildPartItem(indexFromItem(d->rootItem));
+}

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2010-2011 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -52,21 +53,28 @@ public:
     KexiProjectModelItem *modelItemFromName(const QString &name) const;
     
     void clear();
-    
+
+    //! @return index of first part item (looking from the top) or invalid item
+    //! if there are no part items
+    QModelIndex firstPartItem() const;
+
 public slots:
     void slotAddItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);
-    
-private:
-    class Private;  
-    Private * const d;
-    
-    KexiProjectModelItem* addGroup(KexiPart::Info& info, KexiProjectModelItem*) const;
-    KexiProjectModelItem* addItem(KexiPart::Item& item, KexiPart::Info& info, KexiProjectModelItem*) const;
 
 signals:
     void renameItem(KexiPart::Item *item, const QString& _newName, bool &succes);
-    
+
+private:
+    KexiProjectModelItem* addGroup(KexiPart::Info& info, KexiProjectModelItem*) const;
+    KexiProjectModelItem* addItem(KexiPart::Item& item, KexiPart::Info& info,
+                                  KexiProjectModelItem*) const;
+
+    //! @return index of first part item within children of parentIndex (recursively)
+    QModelIndex firstChildPartItem(const QModelIndex &parentIndex) const;
+
+    class Private;  
+    Private * const d;
 };
 
 #endif // KEXIPROJECTMODEL_H
