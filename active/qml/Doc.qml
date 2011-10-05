@@ -71,8 +71,7 @@ Item {
             id: toolbarLoader
             property bool containsMouse: false
 
-            anchors.centerIn: parent
-            width: canvas.width*0.73    //FIXME: Very very dirty hack, fix this the next day
+            anchors.fill: parent
             opacity: 0
         }
 

@@ -78,6 +78,7 @@ CanvasController::CanvasController(QDeclarativeItem* parent)
       m_documentViewSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setClip(true);
     loadSettings();
 }
 
@@ -109,10 +110,9 @@ void CanvasController::openDocument(const QString& path)
         prDocument->openUrl(KUrl::fromPathOrUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
-        if (m_canvasItem) {
-            setCanvas(m_canvasItem);
-        } else {
+        if (!m_canvasItem) {
             kDebug() << "Failed to fetch a canvas item";
+            return;
         }
 
         KoToolManager::instance()->addController(this);
@@ -135,6 +135,8 @@ void CanvasController::openDocument(const QString& path)
             connect(paCanvasItem, SIGNAL(documentSize(QSize)), proxyObject, SLOT(updateDocumentSize(QSize)));
             paCanvasItem->update();
         }
+
+        setCanvas(m_canvasItem);
     } else if (isSpreadsheetDocumentExtension(ext)) {
         m_documentType = CADocumentInfo::Spreadsheet;
         emit documentTypeChanged();
@@ -143,10 +145,9 @@ void CanvasController::openDocument(const QString& path)
         tablesDoc->openUrl(KUrl::fromPathOrUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
-        if (m_canvasItem) {
-            setCanvas(m_canvasItem);
-        } else {
+        if (!m_canvasItem) {
             kDebug() << "Failed to fetch a canvas item";
+            return;
         }
 
         KoToolManager::instance()->addController(this);
@@ -167,6 +168,8 @@ void CanvasController::openDocument(const QString& path)
             //proxyObject, SLOT(updateDocumentSize(QSize)));
             canvasItem->update();
         }
+
+        setCanvas(m_canvasItem);
     } else {
         m_documentType = CADocumentInfo::TextDocument;
         emit documentTypeChanged();
@@ -176,10 +179,9 @@ void CanvasController::openDocument(const QString& path)
         kwDoc->openUrl(KUrl::fromPathOrUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
-        if (m_canvasItem) {
-            setCanvas(m_canvasItem);
-        } else {
+        if (!m_canvasItem) {
             kDebug() << "Failed to fetch a canvas item";
+            return;
         }
 
         kDebug() << "Will now attempt to typecast";
@@ -205,6 +207,8 @@ void CanvasController::openDocument(const QString& path)
             connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvasItem, SLOT(setDocumentOffset(QPoint)));
             canvasItem->updateSize();
         }
+
+        setCanvas(m_canvasItem);
     }
 
     kDebug() << "Requesting tool activation";
@@ -340,11 +344,12 @@ KoCanvasBase* CanvasController::canvas() const
 
 void CanvasController::setCanvas(KoCanvasBase* canvas)
 {
-    canvas->setCanvasController(this);
     QGraphicsWidget *widget = canvas->canvasItem();
     widget->setParentItem(this);
+    canvas->setCanvasController(this);
     widget->setVisible(true);
-    widget->setGeometry(0,0,width(),height());
+
+    zoomToFit();
 }
 
 void CanvasController::setDrawShadow(bool drawShadow)
@@ -571,8 +576,7 @@ void CanvasController::zoomToFit()
     case CADocumentInfo::TextDocument:
     case CADocumentInfo::Spreadsheet:
     default:
-        //Resize not supported for this type of document yet
-        ;
+        m_canvasItem->canvasItem()->setGeometry(0,0,width(),height());
     }
 }
 
