@@ -835,6 +835,7 @@ void AnimatorModel::setLayerName(int l_num, QString& name)
     {
         // TODO: move this to *AnimatedLayer classes
         getAnimatedLayer(l_num)->setName(QString("_ani_")+name);
+        emit headerDataChanged(Qt::Vertical, l_num, l_num);
     }
 }
 

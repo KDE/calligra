@@ -82,6 +82,7 @@ void AnimatorView::setModel(QAbstractItemModel* model)
     connect(this, SIGNAL(activated(QModelIndex)), model, SLOT(activateLayer(QModelIndex)));
     resizeColumnsToContents();
     connect(model, SIGNAL(framesNumberChanged(int)), this, SLOT(resizeColumnsToContents()));
+    connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(resizeColumnsToContents()));
     QTableView::setModel(model);
 }
 
@@ -181,6 +182,7 @@ void AnimatorView::renameLayer(QModelIndex& index)
     KLineEdit* ledit = new KLineEdit(main_widget);
     ledit->setClearButtonShown(true);
     
+    setRenameName(amodel()->getLayerName(index));
     ledit->setText(amodel()->getLayerName(index));
     ledit->setFocus();
     
