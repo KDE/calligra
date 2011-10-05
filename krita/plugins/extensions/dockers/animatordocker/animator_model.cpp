@@ -750,6 +750,9 @@ AnimatedLayer* AnimatorModel::getActiveAnimatedLayer() const
 
 QModelIndex AnimatorModel::createLayer()
 {
+    if (! m_enabled)
+        return QModelIndex();
+    
     int pos = 0;
     
     KisNode* current = getActiveAnimatedLayer();
@@ -764,12 +767,22 @@ QModelIndex AnimatorModel::createLayer()
             }
         }
     }
-
-    KisNode* node = new KisGroupLayer(m_image, "_ani_New Animated Layer", 255);
-    m_nodeman->insertNode(node, m_image->root(), 0);
-
+    
+    bool t = m_updating;
+    m_updating = true;
+    m_nodeman->activateNode(m_image->root()->at(0));
+    m_nodeman->createNode("KisGroupLayer");
+    KisNode* node = m_nodeman->activeNode().data();
+    node->setName("_ani_New Animated Layer");
+    m_nodeman->moveNodeAt(node, m_image->root(), 0);
+    
+    m_updating = false;
     loadLayers();
-
+    m_updating = t;
+    
+    if (m_layers[rowCount()-1]->name() != node->name())
+        return QModelIndex();
+    
     return createIndex(rowCount()-1, 0);
 }
 

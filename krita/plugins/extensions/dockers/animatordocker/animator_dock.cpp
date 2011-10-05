@@ -313,7 +313,8 @@ void AnimatorDock::slotFrameDelete()
 void AnimatorDock::slotCreateLayer()
 {
     QModelIndex nlayer = m_model->createLayer();
-    m_view->renameLayer(nlayer);
+    if (nlayer.isValid())
+        m_view->renameLayer(nlayer);
 }
 
 
