@@ -105,7 +105,12 @@ Before freeze:
 
 2011-10-05
 Code
-*moved general purpose code from main/ to widget/ with some renames
+*[code] Moved general purpose code from main/ to widget/ with some renames
+Main Window
+*Select first item in Project Navigator when focused if there's no selection
+*Simple support for global search box in Kexi
+*Global search box accessible using Ctrl+K
+*Fixed setup of global shortcuts
 
 2011-10-02
 CSV Import
