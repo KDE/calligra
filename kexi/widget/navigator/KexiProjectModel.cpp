@@ -52,13 +52,13 @@ KexiProjectModel::Private::~Private()
 
 KexiProjectModel::KexiProjectModel(QObject* parent): QAbstractItemModel(parent) , d(new Private())
 {
-    kDebug();
+    //kDebug();
     d->rootItem = new KexiProjectModelItem(QString());
 }
 
 void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages)
 {
-    kDebug() << itemsPartClass << ".";
+    //kDebug() << itemsPartClass << ".";
     clear();
     d->itemsPartClass = itemsPartClass;
 
@@ -77,7 +77,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
 
         //load part - we need this to have GUI merged with part's actions
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
-        kDebug() << info->partClass() << info->objectName();
+        //kDebug() << info->partClass() << info->objectName();
 // no need to load part so early:        KexiPart::Part *p = Kexi::partManager().part(info);
 // no need to load part so early:        if (p) {
             KexiProjectModelItem *groupItem = 0;
@@ -283,7 +283,7 @@ KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProje
 
 void KexiProjectModel::slotAddItem(KexiPart::Item& item)
 {
-    kDebug() << item.name();
+    //kDebug() << item.name();
     QModelIndex idx;
   
     KexiProjectModelItem *parent = modelItemFromName(item.partClass());
@@ -335,10 +335,10 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
 
 QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
 {
-    kDebug();
+    //kDebug();
     if (item && item->parent()) {
         int row = item->row();
-        kDebug() << row;
+        //kDebug() << row;
         return createIndex(row, 0, (void*)item);
     } 
     return QModelIndex();
@@ -351,13 +351,13 @@ KexiProjectModelItem* KexiProjectModel::modelItemFromItem(const KexiPart::Item& 
 
 KexiProjectModelItem* KexiProjectModel::modelItemFromName(const QString& name) const
 {
-    kDebug() << name;
+    //kDebug() << name;
     return d->rootItem->modelItemFromName(name);
 }
 
 void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
 {
-    kDebug();
+    //kDebug();
     KexiProjectModelItem *bitem = modelItemFromItem(item);
     if (!bitem)
         return;

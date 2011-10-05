@@ -154,8 +154,8 @@ QString KexiProjectData::databaseName() const
 
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
-    kDebug() << dbName;
-    kDebug() << *this;
+    //kDebug() << dbName;
+    //kDebug() << *this;
     KexiDB::SchemaData::setName(dbName);
 }
 
@@ -351,7 +351,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     d->connData.localSocketFileName = cg.readEntry("localSocketFile");
     d->connData.savePassword = cg.hasKey("password") || cg.hasKey("encryptedPassword");
     if (formatVersion >= 2) {
-        kDebug() << cg.hasKey("encryptedPassword");
+        //kDebug() << cg.hasKey("encryptedPassword");
         d->connData.password = cg.readEntry("encryptedPassword");
         KexiUtils::simpleDecrypt(d->connData.password);
     }
