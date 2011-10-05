@@ -21,6 +21,8 @@
 #include <KoXmlNS.h>
 #include "KoUnit.h"
 
+#include <QList>
+
 class KoOdfBibliographyConfiguration::Private
 {
 public:
@@ -29,6 +31,7 @@ public:
     bool numberedEntries;
     bool sortByPosition;
     QString sortAlgorithm;
+    QList<QString> sortKeys;
 };
 
 KoOdfBibliographyConfiguration::KoOdfBibliographyConfiguration()
@@ -38,6 +41,7 @@ KoOdfBibliographyConfiguration::KoOdfBibliographyConfiguration()
     d->suffix = "]";
     d->numberedEntries = false;
     d->sortByPosition = true;
+    d->sortKeys << "identifier";
 }
 
 KoOdfBibliographyConfiguration::~KoOdfBibliographyConfiguration()
@@ -58,6 +62,7 @@ KoOdfBibliographyConfiguration &KoOdfBibliographyConfiguration::operator=(const 
     d->numberedEntries = other.d->numberedEntries;
     d->sortAlgorithm = other.d->sortAlgorithm;
     d->sortByPosition = other.d->sortByPosition;
+    d->sortKeys = other.d->sortKeys;
 
     return *this;
 }
@@ -67,9 +72,22 @@ void KoOdfBibliographyConfiguration::loadOdf(const KoXmlElement &element)
 {
     d->prefix = element.attributeNS(KoXmlNS::text, "prefix", QString::null);
     d->suffix = element.attributeNS(KoXmlNS::text, "suffix", QString::null);
-    d->numberedEntries = (element.attributeNS(KoXmlNS::text, "numbered-entries", QString("false"))=="true")?true:false;
-    d->sortByPosition = (element.attributeNS(KoXmlNS::text, "sort-by-position", QString("false"))=="true")?true:false;
+    d->numberedEntries = (element.attributeNS(KoXmlNS::text, "numbered-entries", QString("false")) == "true")
+                         ? true : false;
+    d->sortByPosition = (element.attributeNS(KoXmlNS::text, "sort-by-position", QString("false")) == "true")
+                        ? true : false;
     d->sortAlgorithm = element.attributeNS(KoXmlNS::text, "sort-algorithm", QString::null);
+
+    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling())
+    {
+        KoXmlElement child = node.toElement();
+
+        if (child.namespaceURI() == KoXmlNS::text && child.localName() == "sort-key") {
+            QString key = child.attributeNS(KoXmlNS::text, "key", QString::null);
+
+            if(key && KoBibliographyInfo::bibDataFields.contains(key)) d->sortKeys << key;
+        }
+    }
 }
 
 void KoOdfBibliographyConfiguration::saveOdf(KoXmlWriter *writer) const
@@ -88,9 +106,14 @@ void KoOdfBibliographyConfiguration::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:sort-algorithm", d->sortAlgorithm);
     }
 
-    writer->addAttribute("text:numbered-entries",d->numberedEntries?"true":"false");
-    writer->addAttribute("text:sort-by-position",d->sortByPosition?"true":"false");
+    writer->addAttribute("text:numbered-entries", d->numberedEntries ? "true" : "false");
+    writer->addAttribute("text:sort-by-position", d->sortByPosition ? "true" : "false");
 
+    foreach(QString key, d->sortKeys) {
+            writer->startElement("text:sort-key");
+            writer->addAttribute("text:key", key);
+            writer->endElement();
+    }
     writer->endElement();
 }
 

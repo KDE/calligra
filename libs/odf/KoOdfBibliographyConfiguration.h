@@ -26,6 +26,10 @@
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
 #include "koodf_export.h"
+#include <KoBibliographyInfo.h>
+
+class KoBibliographyInfo;
+
 /**
  * load and save the bibliography-configuration element from the text: namespace.
  * • Prefix
