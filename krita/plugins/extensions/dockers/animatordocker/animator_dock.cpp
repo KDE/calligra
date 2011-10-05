@@ -50,6 +50,7 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     m_light_table = new AnimatorLightTable;
     
     m_model->setLightTable(m_light_table);
+    connect( m_model, SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
 
     m_document = 0;
     m_canvas = 0;
@@ -141,7 +142,7 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
     addAction(enable_act);
 #endif
     
-    addAction( m_player_toolbar->addAction(SmallIcon("system-run"), i18n("Convert old frames to new"), m_model, SLOT(convertLayers())) );
+    addAction( m_player_toolbar->addAction(SmallIcon("system-run"), i18n("Convert from old-style animated file or from normal file"), m_model, SLOT(convertLayers())) );
     
     m_player_toolbar->addSeparator();
     
@@ -328,6 +329,12 @@ void AnimatorDock::enableOnionPrevious(bool ch)
     m_model->setOnionPrevious(ch?1:0);
 }
 
+void AnimatorDock::slotStatusChanged(bool ns)
+{
+    m_lays_toolbar->setEnabled(ns);
+    m_frames_toolbar->setEnabled(ns);
+    m_onion_toolbar->setEnabled(ns);
+}
 
 
 void AnimatorDock::testSlot(int n)

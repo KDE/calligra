@@ -178,6 +178,8 @@ signals:
     void frameChanged(int frame_new);
     void framesNumberChanged(int frames);
     
+    void statusChanged(bool ns);
+    
 public:
     KisNodeModel* sourceModel() const;
     void setSourceModel(KisNodeModel* model);

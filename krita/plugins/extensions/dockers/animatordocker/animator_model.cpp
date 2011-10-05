@@ -99,10 +99,16 @@ void AnimatorModel::loadLayers()
     KisNode* meta_layer = nodes->nodeFromIndex(nodes->index(0, 0)).data();
     int major = getMajor(meta_layer);
     if (major == -1)
+    {
+        emit statusChanged(false);
         return;                         // Not even an animated image of new format
+    }
     
     if (major != getMajor())
+    {
+        emit statusChanged(false);
         return;                         // Major versions are not compataible
+    }
     
     int minor = getMinor(meta_layer);
 //     if (minor > getMinor());
@@ -1238,4 +1244,6 @@ void AnimatorModel::setVersion(int major, int minor)
     KisNode* root_node = meta_node;
     while (root_node->parent()) root_node = root_node->parent().data();
     m_nodeman->moveNodeAt(meta_node, root_node, root_node->childCount());
+    
+    emit statusChanged(isActive());
 }

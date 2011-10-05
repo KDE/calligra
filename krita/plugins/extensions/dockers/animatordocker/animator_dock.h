@@ -67,6 +67,8 @@ public slots:
     void enableOnionNext(bool ch);
     void enableOnionPrevious(bool ch);
     
+    void slotStatusChanged(bool ns);
+    
     void testSlot(int n);
     
 //     void exportAll();
