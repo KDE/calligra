@@ -103,6 +103,15 @@ Before freeze:
 *minimal search implementation
 *fix bugs...
 
+2011-10-05
+Code
+*moved general purpose code from main/ to widget/ with some renames
+
+2011-10-02
+CSV Import
+*Fixed crash for larger CSV data
+BUG:282936
+
 2011-09-29
 CSV Export
 *When copying CSV data to clipboard use native line endings, force \r\n only in files
