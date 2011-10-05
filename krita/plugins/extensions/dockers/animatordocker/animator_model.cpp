@@ -997,7 +997,7 @@ void AnimatorModel::goFrame(int num)
 
 bool AnimatorModel::isLast()
 {
-    return m_frame >= columnCount()-1;
+    return m_frame >= m_frame_num-1;
 }
 
 void AnimatorModel::toggleExtLTable(bool val)
