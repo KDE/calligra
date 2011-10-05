@@ -294,9 +294,9 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     win->raise();
     static_cast<QWidget*>(win)->activateWindow();
 #endif
-    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+    /*foreach (QWidget *widget, QApplication::topLevelWidgets()) {
         kDebug() << widget;
-    }
+    }*/
     return 0;
 }
 
@@ -648,7 +648,7 @@ void KexiMainWindow::setupActions()
     ac->addAction("project_new",
         action = new KexiMenuWidgetAction(KStandardAction::New, this));
     addThreeDotsToActionText(action);
-    action->setShortcut(KStandardShortcut::openNew());
+    action->setGlobalShortcut(KStandardShortcut::openNew());
     action->setToolTip(i18n("Create a new project"));
     action->setWhatsThis(
         i18n("Creates a new project. Currently opened project is not affected."));
@@ -742,7 +742,7 @@ void KexiMainWindow::setupActions()
     ac->addAction("project_relations",
                   d->action_project_relations = new KAction(
         KIcon("relation"), i18n("&Relationships..."), this));
-    d->action_project_relations->setShortcut(Qt::CTRL + Qt::Key_R);
+    d->action_project_relations->setGlobalShortcut(KShortcut(Qt::CTRL + Qt::Key_R));
     d->action_project_relations->setToolTip(i18n("Project relationships"));
     d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
     connect(d->action_project_relations, SIGNAL(triggered()),
@@ -940,7 +940,7 @@ void KexiMainWindow::setupActions()
           d->action_view_data_mode = new KToggleAction(
             KIcon("state_data"), i18n("&Data View"), d->action_view_mode) );
     //  d->action_view_data_mode->setObjectName("view_data_mode");
-        d->action_view_data_mode->setShortcut(Qt::Key_F6);
+        d->action_view_data_mode->setGlobalShortcut(KShortcut(Qt::Key_F6));
         //d->action_view_data_mode->setExclusiveGroup("view_mode");
         d->action_view_data_mode->setToolTip(i18n("Switch to data view"));
         d->action_view_data_mode->setWhatsThis(i18n("Switches to data view."));
@@ -958,7 +958,7 @@ void KexiMainWindow::setupActions()
           d->action_view_design_mode = new KToggleAction(
             KIcon("state_edit"), i18n("D&esign View"), d->action_view_mode) );
     //  d->action_view_design_mode->setObjectName("view_design_mode");
-        d->action_view_design_mode->setShortcut(Qt::Key_F7);
+        d->action_view_design_mode->setGlobalShortcut(KShortcut(Qt::Key_F7));
         //d->action_view_design_mode->setExclusiveGroup("view_mode");
         d->action_view_design_mode->setToolTip(i18n("Switch to design view"));
         d->action_view_design_mode->setWhatsThis(i18n("Switches to design view."));
@@ -974,7 +974,7 @@ void KexiMainWindow::setupActions()
           d->action_view_text_mode = new KToggleAction(
             KIcon("state_sql"), i18n("&Text View"), d->action_view_mode) );
         d->action_view_text_mode->setObjectName("view_text_mode");
-        d->action_view_text_mode->setShortcut(Qt::Key_F8);
+        d->action_view_text_mode->setGlobalShortcut(KShortcut(Qt::Key_F8));
         //d->action_view_text_mode->setExclusiveGroup("view_mode");
         d->action_view_text_mode->setToolTip(i18n("Switch to text view"));
         d->action_view_text_mode->setWhatsThis(i18n("Switches to text view."));
@@ -987,37 +987,43 @@ void KexiMainWindow::setupActions()
     */
     if (d->isProjectNavigatorVisible) {
         ac->addAction("view_navigator",
-                      d->action_view_nav = new KAction(i18n("Project Navigator"), this));
-        d->action_view_nav->setShortcut(Qt::ALT | Qt::Key_1);
-        d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
-        d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
+                      d->action_view_nav = new KAction(i18n("Switch to Project Navigator"), this));
+        d->action_view_nav->setGlobalShortcut(KShortcut(Qt::ALT + Qt::Key_1));
+        d->action_view_nav->setToolTip(i18n("Switch to Project Navigator panel"));
+        d->action_view_nav->setWhatsThis(i18n("Switches to Project Navigator panel."));
         connect(d->action_view_nav, SIGNAL(triggered()),
                 this, SLOT(slotViewNavigator()));
     } else
         d->action_view_nav = 0;
 
     ac->addAction("view_mainarea",
-                  d->action_view_mainarea = new KAction(i18n("Main Area"), this));
-    d->action_view_mainarea->setShortcut(Qt::ALT | Qt::Key_2);
-    d->action_view_mainarea->setToolTip(i18n("Go to main area"));
-    d->action_view_mainarea->setWhatsThis(i18n("Goes to main area."));
+                  d->action_view_mainarea = new KAction(i18n("Switch to Main Area"), this));
+    d->action_view_mainarea->setGlobalShortcut(KShortcut(Qt::ALT + Qt::Key_2));
+    d->action_view_mainarea->setToolTip(i18n("Switch to main area"));
+    d->action_view_mainarea->setWhatsThis(i18n("Switches to main area."));
     connect(d->action_view_mainarea, SIGNAL(triggered()),
             this, SLOT(slotViewMainArea()));
 
     if (!d->userMode) {
         ac->addAction("view_propeditor",
-                      d->action_view_propeditor = new KAction(i18n("Property Editor"), this));
-        d->action_view_propeditor->setShortcut(Qt::ALT | Qt::Key_3);
-        d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
-        d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
+                      d->action_view_propeditor = new KAction(i18n("Switch to Property Editor"), this));
+        d->action_view_propeditor->setGlobalShortcut(KShortcut(Qt::ALT + Qt::Key_3));
+        d->action_view_propeditor->setToolTip(i18n("Switch to Property Editor panel"));
+        d->action_view_propeditor->setWhatsThis(i18n("Switches to Property Editor panel."));
         connect(d->action_view_propeditor, SIGNAL(triggered()),
                 this, SLOT(slotViewPropertyEditor()));
     } else
         d->action_view_propeditor = 0;
 
+    ac->addAction("view_global_search",
+                    d->action_view_global_search = new KAction(i18n("Switch to Global Search"), this));
+    d->action_view_global_search->setGlobalShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
+    d->action_view_global_search->setToolTip(i18n("Switch to Global Search box"));
+    d->action_view_global_search->setWhatsThis(i18n("Switches to Global Search box."));
+
     //DATA MENU
     d->action_data_save_row = createSharedAction(i18n("&Save Record"), "dialog-ok",
-                              KShortcut(Qt::SHIFT | Qt::Key_Return), "data_save_row");
+                              KShortcut(Qt::SHIFT + Qt::Key_Return), "data_save_row");
     d->action_data_save_row->setToolTip(i18n("Save changes made to the current record"));
     d->action_data_save_row->setWhatsThis(i18n("Saves changes made to the current record."));
 //temp. disable because of problems with volatile actions setActionVolatile( d->action_data_save_row, true );
@@ -1072,15 +1078,15 @@ void KexiMainWindow::setupActions()
     //WINDOW MENU
 #ifndef Q_WS_WIN
 #ifdef __GNUC__
-#warning kde4 TODO closeWindowAction->setShortcut(KSandardShortcut::close());
+#warning kde4 TODO closeWindowAction->setGlobalShortcut(KSandardShortcut::close());
 #else
-#pragma WARNING( kde4 TODO closeWindowAction->setShortcut(KSandardShortcut::close()); )
+#pragma WARNING( kde4 TODO closeWindowAction->setGlobalShortcut(KSandardShortcut::close()); )
 #endif
     /* TODO???
       //KMDI <= 3.5.1 has no shortcut here:
       QAction *closeWindowAction = actionCollection()->action("window_close");
       if (closeWindowAction) {
-        closeWindowAction->setShortcut(KSandardShortcut::close());
+        closeWindowAction->setGlobalShortcut(KSandardShortcut::close());
       // -- add a few missing tooltip (usable especially in Form's "Assign action" dialog)
         closeWindowAction->setToolTip(i18n("Close the current window"));
       }
@@ -1090,13 +1096,13 @@ void KexiMainWindow::setupActions()
     //additional 'Window' menu items
     ac->addAction("window_next",
                   d->action_window_next = new KAction(i18n("&Next Window"), this));
-    d->action_window_next->setShortcut(
+    d->action_window_next->setGlobalShortcut(KShortcut(
 #ifdef Q_WS_WIN
-        Qt::CTRL | Qt::Key_Tab
+        Qt::CTRL + Qt::Key_Tab
 #else
-        Qt::ALT | Qt::Key_Right
+        Qt::CTRL + Qt::Key_Right
 #endif
-    );
+    ));
     d->action_window_next->setToolTip(i18n("Next window"));
     d->action_window_next->setWhatsThis(i18n("Switches to the next window."));
     connect(d->action_window_next, SIGNAL(triggered()),
@@ -1104,13 +1110,13 @@ void KexiMainWindow::setupActions()
 
     ac->addAction("window_previous",
                   d->action_window_previous = new KAction(i18n("&Previous Window"), this));
-    d->action_window_previous->setShortcut(
+    d->action_window_previous->setGlobalShortcut(KShortcut(
 #ifdef Q_WS_WIN
-        Qt::CTRL | Qt::SHIFT | Qt::Key_Tab
+        Qt::CTRL + Qt::SHIFT + Qt::Key_Tab
 #else
-        Qt::ALT | Qt::Key_Left
+        Qt::CTRL + Qt::Key_Left
 #endif
-    );
+    ));
     d->action_window_previous->setToolTip(i18n("Previous window"));
     d->action_window_previous->setWhatsThis(i18n("Switches to the previous window."));
     connect(d->action_window_previous, SIGNAL(triggered()),
@@ -1199,6 +1205,16 @@ void KexiMainWindow::setupActions()
             this, SLOT(()));
 #endif
 #endif
+
+    // GLOBAL
+    ac->addAction("help_show_menu",
+                  d->action_show_help_menu = new KAction(
+                      i18n("Show Help Menu"), this));
+    d->action_show_help_menu->setGlobalShortcut(KShortcut(Qt::ALT + Qt::Key_H));
+    d->action_show_help_menu->setToolTip(i18n("Show Help menu"));
+    d->action_show_help_menu->setWhatsThis(i18n("Shows Help menu."));
+
+
 // KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 //  actionCollection(), "kexi_settings");
 // actionSettings->setWhatsThis(i18n("Lets you configure Kexi."));
@@ -2001,6 +2017,9 @@ void KexiMainWindow::setupMainWidget()
             KDialog::marginHint() / 2, KDialog::marginHint() / 2);
 
         d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
+        Q_ASSERT(d->action_view_global_search);
+        connect(d->action_view_global_search, SIGNAL(triggered()),
+                d->tabbedToolBar, SLOT(activateSearchLineEdit()));
         tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
     }
     else {

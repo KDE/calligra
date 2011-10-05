@@ -19,6 +19,7 @@ kexistatusbar.cpp
 kexinamewidget.cpp 
 kexinamedialog.cpp 
 kexinewstuff.cpp
+KexiSearchLineEdit.cpp
 
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp
