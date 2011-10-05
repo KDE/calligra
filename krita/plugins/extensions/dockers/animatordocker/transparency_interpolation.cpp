@@ -1,5 +1,5 @@
 /*
- *  Normal animated layer: class for most usually used, universal layer
+ *  Interpolation method for layers with changing transparency
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,23 +18,9 @@
  */
 
 
-#ifndef NORMAL_ANIMATED_LAYER_H
-#define NORMAL_ANIMATED_LAYER_H
-
-#include "interpolated_animated_layer.h"
-
-#include "moving_interpolation.h"
 #include "transparency_interpolation.h"
 
-class NormalAnimatedLayer : public InterpolatedAnimatedLayer, public MovingInterpolation, public TransparencyInterpolation
+void TransparencyInterpolation::changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position)
 {
-    Q_OBJECT
-
-public:
-    NormalAnimatedLayer(const KisGroupLayer& source);
-
-protected:
-    virtual KisCloneLayer* interpolate(KisNode* from, KisCloneLayer* to, double position);
-};
-
-#endif // NORMAL_ANIMATED_LAYER_H
+    layer->setOpacity(from->opacity()*(1.0-position)+to->opacity()*position);
+}
