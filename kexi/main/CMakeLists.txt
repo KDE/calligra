@@ -20,17 +20,13 @@ kexinamewidget.cpp
 kexinamedialog.cpp 
 kexinewstuff.cpp
 
-startup/KexiConnSelector.cpp
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp
 startup/KexiWelcomeAssistant.cpp
 startup/KexiImportExportAssistant.cpp
-startup/KexiProjectSelector.cpp
-startup/KexiStartupFileWidget.cpp
 startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
-startup/KexiDBTitlePage.cpp
 startup/KexiStartupDialogTemplatesPage.cpp
 startup/KexiTemplatesModel.cpp
 startup/KexiRecentProjectsModel.cpp
@@ -44,11 +40,8 @@ startup/KexiRecentProjectsModel.cpp
 
 kde4_add_ui_files(keximain_LIB_SRCS
   kexifinddialog.ui
-  startup/KexiConnSelector.ui
-  startup/KexiDBTitlePage.ui
   startup/KexiProjectStorageTypeSelectionPage.ui
   startup/KexiOpenExistingFile.ui
-  startup/KexiProjectSelector.ui
   startup/KexiServerDBNamePage.ui
   startup/KexiMainImportExportPage.ui
 )

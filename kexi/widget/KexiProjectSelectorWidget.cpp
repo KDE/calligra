@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KexiProjectSelector.h"
+#include "KexiProjectSelectorWidget.h"
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/connectiondata.h>
@@ -365,5 +365,3 @@ void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
     KPageDialog::showEvent(event);
     KPageDialog::centerOnScreen(this);
 }
-
-#include "KexiProjectSelector.moc"

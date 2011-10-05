@@ -25,7 +25,7 @@
 #include <kexi_export.h>
 
 //! @short A helper widget used to displaying a line edit with a label and layout
-class KEXIMAIN_EXPORT KexiDBTitlePage : public QWidget, public Ui_KexiDBTitlePage
+class KEXIEXTWIDGETS_EXPORT KexiDBTitlePage : public QWidget, public Ui_KexiDBTitlePage
 {
 public:
     //! Constructs title page. \a labelText can be provided to change default

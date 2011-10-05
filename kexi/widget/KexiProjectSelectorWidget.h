@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIPROJECTSELECTOR_H
-#define KEXIPROJECTSELECTOR_H
+#ifndef KEXIPROJECTSELECTORWIDGET_H
+#define KEXIPROJECTSELECTORWIDGET_H
 
 #include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
@@ -29,7 +29,7 @@
 
 /*! Widget that allows to select a kexi project (or database)
 */
-class KEXIMAIN_EXPORT KexiProjectSelectorWidget : public QWidget, private Ui_KexiProjectSelector
+class KEXIEXTWIDGETS_EXPORT KexiProjectSelectorWidget : public QWidget, private Ui_KexiProjectSelector
 {
     Q_OBJECT
 
@@ -95,7 +95,7 @@ protected:
 };
 
 /*! Dialog container for KexiProjectSelectorWidget */
-class KexiProjectSelectorDialog : public KPageDialog
+class KEXIEXTWIDGETS_EXPORT KexiProjectSelectorDialog : public KPageDialog
 {
     Q_OBJECT
 public:
@@ -138,4 +138,3 @@ protected:
 };
 
 #endif
-

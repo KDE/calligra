@@ -101,6 +101,7 @@
 #include <widget/utils/KexiDockableWidget.h>
 #include <widget/navigator/KexiProjectNavigator.h>
 #include <widget/navigator/KexiProjectModel.h>
+#include <widget/KexiFileWidget.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -110,7 +111,6 @@
 #include "startup/KexiWelcomeAssistant.h"
 #include "startup/KexiImportExportAssistant.h"
 #include "startup/KexiStartupDialog.h"
-#include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
 
 //2.x #include "printing/kexisimpleprintingpart.h"
@@ -1676,7 +1676,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
         fname = dlg.selectedFile();
         if (fname.isEmpty())
             return cancelled;
-        if (KexiStartupFileWidget::askForOverwriting(fname, this))
+        if (KexiFileWidget::askForOverwriting(fname, this))
             break;
     }
 

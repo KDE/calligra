@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KexiStartupFileWidget.h"
+#include "KexiFileWidget.h"
 #include <kexi_global.h>
 
 #include <kexidb/driver.h>
@@ -51,7 +51,7 @@ namespace KRecentDirs
 };
 
 //! @internal
-class KexiStartupFileWidget::Private
+class KexiFileWidget::Private
 {
 public:
     Private()
@@ -60,7 +60,7 @@ public:
     }
 
     QString lastFileName;
-    KexiStartupFileWidget::Mode mode;
+    KexiFileWidget::Mode mode;
     QSet<QString> additionalMimeTypes, excludedMimeTypes;
     QString defaultExtension;
     bool confirmOverwrites;
@@ -71,7 +71,7 @@ public:
 
 //------------------
 
-KexiStartupFileWidget::KexiStartupFileWidget(
+KexiFileWidget::KexiFileWidget(
     const KUrl &startDirOrVariable, Mode mode, QWidget *parent)
         :  KFileWidget(startDirOrVariable, parent)
         , d(new Private())
@@ -112,7 +112,7 @@ KexiStartupFileWidget::KexiStartupFileWidget(
             this, SLOT(slotExistingFileHighlighted(const QString&)));
 }
 
-KexiStartupFileWidget::~KexiStartupFileWidget()
+KexiFileWidget::~KexiFileWidget()
 {
     kDebug() << d->recentDirClass;
     if (!d->recentDirClass.isEmpty()) {
@@ -137,7 +137,7 @@ KexiStartupFileWidget::~KexiStartupFileWidget()
 //#endif
 }
 
-void KexiStartupFileWidget::slotExistingFileHighlighted(const QString& fileName)
+void KexiFileWidget::slotExistingFileHighlighted(const QString& fileName)
 {
     kDebug() << fileName;
     d->highlightedUrl = KUrl(fileName);
@@ -145,12 +145,12 @@ void KexiStartupFileWidget::slotExistingFileHighlighted(const QString& fileName)
     emit fileHighlighted();
 }
 
-QString KexiStartupFileWidget::highlightedFile() const
+QString KexiFileWidget::highlightedFile() const
 {
     return d->highlightedUrl.toLocalFile();
 }
 
-void KexiStartupFileWidget::setMode(Mode mode)
+void KexiFileWidget::setMode(Mode mode)
 {
     //delayed
     d->mode = mode;
@@ -158,24 +158,24 @@ void KexiStartupFileWidget::setMode(Mode mode)
     updateFilters();
 }
 
-QSet<QString> KexiStartupFileWidget::additionalFilters() const
+QSet<QString> KexiFileWidget::additionalFilters() const
 {
     return d->additionalMimeTypes;
 }
 
-void KexiStartupFileWidget::setAdditionalFilters(const QSet<QString> &mimeTypes)
+void KexiFileWidget::setAdditionalFilters(const QSet<QString> &mimeTypes)
 {
     //delayed
     d->additionalMimeTypes = mimeTypes;
     d->filtersUpdated = false;
 }
 
-QSet<QString> KexiStartupFileWidget::excludedFilters() const
+QSet<QString> KexiFileWidget::excludedFilters() const
 {
     return d->excludedMimeTypes;
 }
 
-void KexiStartupFileWidget::setExcludedFilters(const QSet<QString> &mimeTypes)
+void KexiFileWidget::setExcludedFilters(const QSet<QString> &mimeTypes)
 {
     //delayed
     d->excludedMimeTypes.clear();
@@ -185,7 +185,7 @@ void KexiStartupFileWidget::setExcludedFilters(const QSet<QString> &mimeTypes)
     d->filtersUpdated = false;
 }
 
-void KexiStartupFileWidget::updateFilters()
+void KexiFileWidget::updateFilters()
 {
     if (d->filtersUpdated)
         return;
@@ -273,7 +273,7 @@ void KexiStartupFileWidget::updateFilters()
     }
 }
 
-void KexiStartupFileWidget::showEvent(QShowEvent * event)
+void KexiFileWidget::showEvent(QShowEvent * event)
 {
     d->filtersUpdated = false;
     updateFilters();
@@ -281,7 +281,7 @@ void KexiStartupFileWidget::showEvent(QShowEvent * event)
 }
 
 /*TODO
-QString KexiStartupFileWidget::selectedFile() const
+QString KexiFileWidget::selectedFile() const
 {
 //Qt4 setResult( QDialog::Accepted ); // selectedURL tests for it
 
@@ -329,17 +329,17 @@ QString KexiStartupFileWidget::selectedFile() const
         if (defaultExtension.isEmpty())
           defaultExtension = filters.first().trimmed().mid(2); //first one
         path += (QString(".")+defaultExtension);
-        kDebug() << "KexiStartupFileWidget::checkURL(): append extension, " << path;
+        kDebug() << "KexiFileWidget::checkURL(): append extension, " << path;
 //Qt4    setSelection( path );
       }
     }
   }
-  kDebug() << "KexiStartupFileWidget::currentFileName() == " << path;
+  kDebug() << "KexiFileWidget::currentFileName() == " << path;
   return path;
 }
 */
 
-bool KexiStartupFileWidget::checkSelectedFile()
+bool KexiFileWidget::checkSelectedFile()
 {
     //accept();
 
@@ -395,8 +395,8 @@ bool KexiStartupFileWidget::checkSelectedFile()
         }
     }
 
-    kDebug() << "KexiStartupFileWidget::checkURL() path: " << d->highlightedUrl;
-// kDebug() << "KexiStartupFileWidget::checkURL() fname: " << url.fileName();
+    kDebug() << "KexiFileWidget::checkURL() path: " << d->highlightedUrl;
+// kDebug() << "KexiFileWidget::checkURL() fname: " << url.fileName();
 //todo if ( url.isLocalFile() ) {
     QFileInfo fi(d->highlightedUrl.toLocalFile());
     if (mode() & KFile::ExistingOnly) {
@@ -422,7 +422,7 @@ bool KexiStartupFileWidget::checkSelectedFile()
 }
 
 //static
-bool KexiStartupFileWidget::askForOverwriting(const QString& filePath, QWidget *parent)
+bool KexiFileWidget::askForOverwriting(const QString& filePath, QWidget *parent)
 {
     QFileInfo fi(filePath);
     if (!fi.exists())
@@ -436,9 +436,9 @@ bool KexiStartupFileWidget::askForOverwriting(const QString& filePath, QWidget *
     return false;
 }
 
-void KexiStartupFileWidget::accept()
+void KexiFileWidget::accept()
 {
-    kDebug() << "KexiStartupFileWidget::accept()...";
+    kDebug() << "KexiFileWidget::accept()...";
 
     KFileWidget::accept();
 // kDebug() << selectedFile();
@@ -448,7 +448,7 @@ void KexiStartupFileWidget::accept()
 // QApplication::sendEvent(locationEdit, &ev);
 // QApplication::postEvent(locationEdit, &ev);
 
-// kDebug() << "KexiStartupFileWidget::accept() m_lastUrl == " << m_lastUrl.path();
+// kDebug() << "KexiFileWidget::accept() m_lastUrl == " << m_lastUrl.path();
 // if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
     /*
       if (d->lastFileName==selectedFile()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
@@ -459,7 +459,7 @@ void KexiStartupFileWidget::accept()
         return;
     #endif
       }
-      kDebug() << "KexiStartupFileWidget::accept(): path = " << selectedFile();
+      kDebug() << "KexiFileWidget::accept(): path = " << selectedFile();
       if ( checkSelectedFile() ) {
         emit accepted();
       }
@@ -470,21 +470,21 @@ void KexiStartupFileWidget::accept()
     #endif*/
 }
 
-void KexiStartupFileWidget::reject()
+void KexiFileWidget::reject()
 {
-    kDebug() << "KexiStartupFileWidget: reject!";
+    kDebug() << "KexiFileWidget: reject!";
     emit rejected();
 }
 
 /*#ifndef Q_WS_WIN
-KUrlComboBox *KexiStartupFileWidget::locationWidget() const
+KUrlComboBox *KexiFileWidget::locationWidget() const
 {
   return locationEdit;
 }
 #endif
 */
 
-void KexiStartupFileWidget::setLocationText(const QString& fn)
+void KexiFileWidget::setLocationText(const QString& fn)
 {
     locationEdit()->setUrl(KUrl(fn));
     /*
@@ -499,12 +499,12 @@ void KexiStartupFileWidget::setLocationText(const QString& fn)
     #endif*/
 }
 
-void KexiStartupFileWidget::focusInEvent(QFocusEvent *)
+void KexiFileWidget::focusInEvent(QFocusEvent *)
 {
     locationEdit()->setFocus();
 }
 
-/*bool KexiStartupFileWidget::eventFilter ( QObject * watched, QEvent * e )
+/*bool KexiFileWidget::eventFilter ( QObject * watched, QEvent * e )
 {
   //filter-out ESC key
   if (e->type()==QEvent::KeyPress && static_cast<QKeyEvent*>(e)->key()==Qt::Key_Escape
@@ -513,17 +513,15 @@ void KexiStartupFileWidget::focusInEvent(QFocusEvent *)
     emit rejected();
     return true;
   }
-  return KexiStartupFileWidgetBase::eventFilter(watched,e);
+  return KexiFileWidgetBase::eventFilter(watched,e);
 } */
 
-void KexiStartupFileWidget::setDefaultExtension(const QString& ext)
+void KexiFileWidget::setDefaultExtension(const QString& ext)
 {
     d->defaultExtension = ext;
 }
 
-void KexiStartupFileWidget::setConfirmOverwrites(bool set)
+void KexiFileWidget::setConfirmOverwrites(bool set)
 {
     d->confirmOverwrites = set;
 }
-
-#include "KexiStartupFileWidget.moc"

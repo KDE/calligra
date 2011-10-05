@@ -31,7 +31,7 @@
 class KTabWidget;
 class KexiProjectData;
 class KexiProjectSet;
-class KexiConnSelectorWidget;
+class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiOpenProjectAssistant;
 
@@ -44,8 +44,8 @@ public:
     ~KexiMainOpenProjectPage();
 
     KTabWidget* tabWidget;
-    KexiConnSelectorWidget* fileSelector;
-    KexiConnSelectorWidget* connSelector;
+    KexiConnectionSelectorWidget* fileSelector;
+    KexiConnectionSelectorWidget* connSelector;
 private slots:
     void init();
 private:

@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
    Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
 
@@ -18,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KexiStartupFileWidget_h_
-#define _KexiStartupFileWidget_h_
+#ifndef KEXIFILEWIDGET_H
+#define KEXIFILEWIDGET_H
 
 #include <QSet>
 #include <kfilewidget.h>
@@ -29,7 +28,7 @@ class QEvent;
 
 //! @short Widget for opening/saving files supported by Kexi
 /*! For simplicity, initially the widget has hidden the preview pane. */
-class KEXIMAIN_EXPORT KexiStartupFileWidget : public KFileWidget
+class KEXIEXTWIDGETS_EXPORT KexiFileWidget : public KFileWidget
 {
     Q_OBJECT
 
@@ -48,10 +47,10 @@ public:
     };
     Q_DECLARE_FLAGS(Mode, ModeFlag)
 
-    KexiStartupFileWidget(
+    KexiFileWidget(
         const KUrl &startDirOrVariable, Mode mode, QWidget *parent);
 
-    virtual ~KexiStartupFileWidget();
+    virtual ~KexiFileWidget();
 
     /*! Helper. Displays "The file %1 already exists. Do you want to overwrite it?" yes/no message box.
     \a parent is used as a parent of the KMessageBox.
@@ -126,6 +125,6 @@ private:
     Private * const d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KexiStartupFileWidget::Mode)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiFileWidget::Mode)
 
 #endif
