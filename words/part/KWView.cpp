@@ -56,7 +56,7 @@
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoShapeCreateCommand.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
 #include <KoPasteController.h>
@@ -761,7 +761,7 @@ void KWView::selectBookmark()
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
 
-    KoResourceManager *rm = m_canvas->resourceManager();
+    KoCanvasResourceManager *rm = m_canvas->resourceManager();
     if (bookmark->hasSelection()) {
         rm->setResource(KoText::CurrentTextPosition, bookmark->position());
         rm->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
@@ -1058,7 +1058,7 @@ void KWView::handleDeletePageAction()
 
 void KWView::setShowFormattingChars(bool on)
 {
-    KoResourceManager *rm = m_canvas->resourceManager();
+    KoCanvasResourceManager *rm = m_canvas->resourceManager();
     rm->setResource(KoText::ShowSpaces, on);
     rm->setResource(KoText::ShowTabs, on);
     rm->setResource(KoText::ShowEnters, on);
@@ -1173,7 +1173,7 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     Q_ASSERT(currentPage.isValid());
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
-        m_canvas->resourceManager()->setResource(KoCanvasResource::CurrentPage, m_currentPage.pageNumber());
+        m_canvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, m_currentPage.pageNumber());
 
         QSizeF newPageSize = m_currentPage.rect().size();
         QSizeF newMaxPageSize = QSize(qMax(m_maxPageSize.width(), newPageSize.width()),
@@ -1264,7 +1264,7 @@ void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, 
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0,
                             page.offsetInDocument()), m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);

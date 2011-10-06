@@ -41,7 +41,7 @@
 #include <QLineEdit>
 
 //Calligra Headers
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoText.h>
 #include <KoZoomController.h>
 #include <KoPACanvas.h>

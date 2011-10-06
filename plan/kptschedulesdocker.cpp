@@ -23,7 +23,6 @@
 
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
-#include <KoResourceManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -49,7 +48,7 @@ SchedulesDocker::SchedulesDocker()
     m_sfModel.setFilterFixedString( "true" );
     m_sfModel.setDynamicSortFilter ( true );
 
-    for( int c = 1; c <  m_model.columnCount(); ++c ) { 
+    for( int c = 1; c <  m_model.columnCount(); ++c ) {
         m_view->setColumnHidden( c, true );
     }
     m_view->setHeaderHidden( true );

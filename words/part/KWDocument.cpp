@@ -55,7 +55,8 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoStyleManager.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoInteractionTool.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>

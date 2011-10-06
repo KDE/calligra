@@ -37,7 +37,7 @@
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoProgressUpdater.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
@@ -64,7 +64,7 @@ DocBase::DocBase(QWidget *parentWidget, QObject* parent, bool singleViewMode)
     : KoDocument(parentWidget, parent, singleViewMode)
     , d(new Private)
 {
-    d->resourceManager = new KoResourceManager();
+    d->resourceManager = new KoDocumentResourceManager();
     d->map = new Map(this, CURRENT_SYNTAX_VERSION);
 
     // Document Url for FILENAME function and page header/footer.
@@ -112,7 +112,7 @@ int DocBase::syntaxVersion() const
     return d->map->syntaxVersion();
 }
 
-KoResourceManager* DocBase::resourceManager() const
+KoDocumentResourceManager* DocBase::resourceManager() const
 {
     return d->resourceManager;
 }
