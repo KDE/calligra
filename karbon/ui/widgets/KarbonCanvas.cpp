@@ -12,7 +12,7 @@
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -61,7 +61,7 @@ public:
             , part(0)
             , showMargins(false)
             , documentOffset(0, 0)
-            , viewMargin(100) 
+            , viewMargin(100)
     {
         pixelGrid.setGrid(1.0, 1.0);
         pixelGrid.setShowGrid(true);
@@ -173,7 +173,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     painter.setRenderHint(QPainter::Antialiasing, false);
     // check how big a single point is and paint a pixel grid if big enough
     const qreal pointSize = d->zoomHandler.zoomItX(1.0);
-    if (pointSize > 10.0 && d->part->gridData().showGrid()) { 
+    if (pointSize > 10.0 && d->part->gridData().showGrid()) {
         // set a slightly lighter color than the current grid color
         d->pixelGrid.setGridColor(d->part->gridData().gridColor().lighter(110));
         d->pixelGrid.paintGrid(painter, d->zoomHandler, updateRect);
@@ -359,6 +359,11 @@ void KarbonCanvas::adjustOrigin()
 void KarbonCanvas::setDocumentOffset(const QPoint &offset)
 {
     d->documentOffset = offset;
+}
+
+const QPoint &KarbonCanvas::documentOffset() const
+{
+    return d->documentOffset;
 }
 
 void KarbonCanvas::enableOutlineMode(bool on)

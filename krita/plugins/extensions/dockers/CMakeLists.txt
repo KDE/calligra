@@ -7,4 +7,6 @@ add_subdirectory(presetdocker)
 add_subdirectory(historydocker)
 add_subdirectory(channeldocker)
 add_subdirectory(animatordocker)
-
+add_subdirectory(imagedocker)
+add_subdirectory(artisticcolorselector)
+add_subdirectory(tasksetdocker)

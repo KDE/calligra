@@ -20,6 +20,7 @@
 
 #include "KoShapeGroup.h"
 #include "KoShapeContainerModel.h"
+#include "KoShapeContainer_p.h"
 #include "KoShapeLayer.h"
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
@@ -32,8 +33,66 @@
 
 #include <QPainter>
 
+class ShapeGroupContainerModel : public SimpleShapeContainerModel
+{
+public:
+    ShapeGroupContainerModel(KoShapeGroup *group) : m_group(group) {}
+    ~ShapeGroupContainerModel() {}
+
+    virtual void add(KoShape *child)
+    {
+        SimpleShapeContainerModel::add(child);
+        m_group->invalidateSizeCache();
+    }
+
+    virtual void remove(KoShape *child)
+    {
+        SimpleShapeContainerModel::remove(child);
+        m_group->invalidateSizeCache();
+    }
+
+    virtual void childChanged(KoShape *shape, KoShape::ChangeType type)
+    {
+        SimpleShapeContainerModel::childChanged(shape, type);
+        //kDebug(30006) << type;
+        switch (type) {
+        case KoShape::PositionChanged:
+        case KoShape::RotationChanged:
+        case KoShape::ScaleChanged:
+        case KoShape::ShearChanged:
+        case KoShape::SizeChanged:
+        case KoShape::GenericMatrixChange:
+        case KoShape::ParameterChanged:
+        case KoShape::ClipPathChanged :
+            m_group->invalidateSizeCache();
+            break;
+        default:
+            break;
+        }
+    }
+
+private: // members
+    KoShapeGroup * m_group;
+};
+
+class KoShapeGroupPrivate : public KoShapeContainerPrivate
+{
+public:
+    KoShapeGroupPrivate(KoShapeGroup *q)
+    : KoShapeContainerPrivate(q)
+    {
+        model = new ShapeGroupContainerModel(q);
+    }
+
+    ~KoShapeGroupPrivate()
+    {
+    }
+
+    mutable bool sizeCached;
+};
+
 KoShapeGroup::KoShapeGroup()
-        : KoShapeContainer(new SimpleShapeContainerModel())
+        : KoShapeContainer(*(new KoShapeGroupPrivate(this)))
 {
     setSize(QSizeF(0, 0));
 }
@@ -56,15 +115,47 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
 
 QSizeF KoShapeGroup::size() const
 {
-    return QSizeF(0, 0);
+    Q_D(const KoShapeGroup);
+    //kDebug(30006) << "size" << d->size;
+    if (!d->sizeCached) {
+        QRectF bound;
+        foreach(KoShape *shape, shapes()) {
+            if (bound.isEmpty())
+                bound = shape->transformation().mapRect(shape->outlineRect());
+            else
+                bound |= shape->transformation().mapRect(shape->outlineRect());
+        }
+        d->size = bound.size();
+        d->sizeCached = true;
+        kDebug(30006) << "recalculated size" << d->size;
+    }
+
+    return d->size;
 }
 
-void KoShapeGroup::shapeCountChanged()
+QRectF KoShapeGroup::boundingRect() const
 {
-    // TODO: why is this needed here ? the group/ungroup command should take care of this
-    QRectF br = boundingRect();
-    setAbsolutePosition(br.topLeft(), KoFlake::TopLeftCorner);
-    setSize(br.size());
+    bool first = true;
+    QRectF groupBound;
+    QList<KoShape*> shapes = this->shapes();
+    QList<KoShape*>::const_iterator it = shapes.constBegin();
+    for (; it != shapes.constEnd(); ++it) {
+        const QTransform shapeTransform = (*it)->absoluteTransformation(0);
+        const QRectF shapeRect(QRectF(QPointF(), (*it)->boundingRect().size()));
+        if (first) {
+            groupBound = shapeTransform.mapRect(shapeRect);
+            first = false;
+        } else {
+            groupBound = groupBound.united(shapeTransform.mapRect(shapeRect));
+        }
+    }
+
+    if (this->shadow()) {
+        KoInsets insets;
+        this->shadow()->insets(insets);
+        groupBound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    return groupBound;
 }
 
 void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
@@ -86,7 +177,8 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
 
 bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
+    Q_D(KoShapeGroup);
+    loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
     QMap<KoShapeLayer*, int> usedLayers;
@@ -122,6 +214,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     }
 
     setSize(bound.size());
+    d->sizeCached = true;
     setPosition(bound.topLeft());
 
     foreach(KoShape * shape, shapes())
@@ -133,6 +226,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
+    KoShapeContainer::shapeChanged(type, shape);
     switch (type) {
     case KoShape::BorderChanged:
     {
@@ -144,17 +238,14 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
         }
         break;
     }
-    case KoShape::ShadowChanged:
-    {
-        KoShapeShadow *shade = shadow();
-        if (shade) {
-            if (shade->deref())
-                delete shade;
-            setShadow(0);
-        }
-        break;
-    }
     default:
         break;
     }
 }
+
+void KoShapeGroup::invalidateSizeCache()
+{
+    Q_D(KoShapeGroup);
+    d->sizeCached = false;
+}
+

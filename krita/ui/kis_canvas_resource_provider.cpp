@@ -53,6 +53,7 @@
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
+        , m_displayProfile(0)
 {
     m_fGChanged = true;
     m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
@@ -61,6 +62,11 @@ KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
 {
     disconnect(); // in case Qt gets confused
+}
+
+KoResourceManager* KisCanvasResourceProvider::resourceManager()
+{
+    return m_resourceManager;
 }
 
 void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceManager)
@@ -145,13 +151,13 @@ void KisCanvasResourceProvider::resetDisplayProfile()
         QString monitorProfileName = cfg.monitorProfile();
         m_displayProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     }
+
     emit sigDisplayProfileChanged(m_displayProfile);
 }
 
 const KoColorProfile * KisCanvasResourceProvider::currentDisplayProfile() const
 {
     return m_displayProfile;
-
 }
 
 KisImageWSP KisCanvasResourceProvider::currentImage() const
@@ -264,6 +270,22 @@ void KisCanvasResourceProvider::slotSetDisplayProfile(const KoColorProfile * pro
 {
     m_displayProfile = const_cast<KoColorProfile*>(profile);
     emit sigDisplayProfileChanged(profile);
+}
+
+void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
+{
+    KisImageWSP image = m_view->image();
+    KisCanvas2 *canvas = m_view->canvasBase();
+
+    if(!image || !canvas) return;
+
+    qreal zoomX, zoomY;
+    canvas->coordinatesConverter()->zoom(&zoomX, &zoomY);
+
+    qreal scaleX = zoomX / image->xRes();
+    qreal scaleY = zoomY / image->yRes();
+
+    emit sigOnScreenResolutionChanged(scaleX, scaleY);
 }
 
 void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & res)

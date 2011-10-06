@@ -384,31 +384,32 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
         QString val = m_context->import->documentSettings()["evenAndOddHeaders"].toString();
         useEvenAndOddHeaders = (val != "off" && val != "0" && val != "false");
     }
+    // the numbering in addChildElement is needed to correctly sort the element when writing out the values.
     if (!m_headers.isEmpty()) {
         bool odd = false;
         if (useEvenAndOddHeaders && m_headers["even"] != "") {
-            m_masterPageStyle.addChildElement("style:header-left", m_headers["even"]);
+            m_masterPageStyle.addChildElement("2 style:header-left", m_headers["even"]);
         }
         if (m_headers["default"] != "") {
             odd = true;
-            m_masterPageStyle.addChildElement("style:header", m_headers["default"]);
+            m_masterPageStyle.addChildElement("1 style:header", m_headers["default"]);
         }
         if (!odd) {
-            m_masterPageStyle.addChildElement("style:header", m_headers["first"]);
+            m_masterPageStyle.addChildElement("1 style:header", m_headers["first"]);
         }
     }
 
     if (!m_footers.isEmpty()) {
         bool odd = false;
         if (useEvenAndOddHeaders && m_footers["even"] != "") {
-            m_masterPageStyle.addChildElement("style:footer-left", m_footers["even"]);
+            m_masterPageStyle.addChildElement("4 style:footer-left", m_footers["even"]);
         }
         if (m_footers["default"] != "") {
             odd = true;
-            m_masterPageStyle.addChildElement("style:footer", m_footers["default"]);
+            m_masterPageStyle.addChildElement("3 style:footer", m_footers["default"]);
         }
         if (!odd) {
-           m_masterPageStyle.addChildElement("style:footer", m_footers["first"]);
+           m_masterPageStyle.addChildElement("3 style:footer", m_footers["first"]);
         }
     }
 
@@ -573,7 +574,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     headerWriter.endElement(); // style:header-footer-properties
     headerWriter.endElement(); // style:header-style
     QString headerContents = QString::fromUtf8(headerBuffer.buffer(), headerBuffer.buffer().size() );
-    m_currentPageStyle.addStyleChildElement("header-style", headerContents);
+    // the style elements need to be sorted correctly so that the created odf is valid
+    // therefore we use footer-header-style-1 and footer-header-style-2 to sort header before footer
+    m_currentPageStyle.addStyleChildElement("footer-header-style-1", headerContents);
 
     QBuffer footerBuffer;
     footerBuffer.open( QIODevice::WriteOnly );
@@ -589,7 +592,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     footerWriter.endElement(); // style:header-footer-properties
     footerWriter.endElement(); // style:footer-style
     QString footerContents = QString::fromUtf8(footerBuffer.buffer(), footerBuffer.buffer().size() );
-    m_currentPageStyle.addStyleChildElement("footer-style", footerContents);
+    m_currentPageStyle.addStyleChildElement("footer-header-style-2", footerContents);
 
     readNext();
     READ_EPILOGUE
@@ -2001,7 +2004,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             body = textPBuf.originalWriter();
             if (!m_createSectionToNext) { // In ooxml it seems that nothing should be created if sectPr was present
                 if (m_listFound) {
-                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
                     if (m_moveToStylesXml) {
                         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
                     }
@@ -2073,6 +2076,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                         m_wasCaption = true;
                     }
                 }
+                //insert the XML snippet representing a floating table
+                if (!m_floatingTable.isEmpty()) {
+                    body->addCompleteElement(m_floatingTable.toUtf8());
+                    m_floatingTable.clear();
+                }
+
                 (void)textPBuf.releaseWriter();
                 body->endElement(); //text:p
                 if (m_listFound) {
@@ -2611,7 +2620,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     }
 
     if (m_listFound) {
-        m_currentParagraphStyle.addProperty("style:list-style-name", m_currentListStyleName);
+        m_currentParagraphStyle.addAttribute("style:list-style-name", m_currentListStyleName);
     }
 
     READ_EPILOGUE
@@ -3385,17 +3394,25 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(after)
-    bool ok;
-    const int marginBottom = (TWIP_TO_POINT(after.toDouble(&ok)));
 
+    bool ok = true;
+    int marginBottom = 10;
+    bool afterAutospacing = MSOOXML::Utils::convertBooleanAttr(attrs.value("w:afterAutospacing").toString());
+    if (!afterAutospacing) {
+        TRY_READ_ATTR(after)
+        marginBottom = TWIP_TO_POINT(after.toDouble(&ok));
+    }
     if (ok) {
         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", marginBottom);
     }
 
-    TRY_READ_ATTR(before)
-    const int marginTop = (TWIP_TO_POINT(before.toDouble(&ok)));
-
+    ok = true;
+    int marginTop = 5;
+    bool beforeAutospacing = MSOOXML::Utils::convertBooleanAttr(attrs.value("w:beforeAutospacing").toString());
+    if (!beforeAutospacing) {
+        TRY_READ_ATTR(before)
+        marginTop = TWIP_TO_POINT(before.toDouble(&ok));
+    }
     if (ok) {
         m_currentParagraphStyle.addPropertyPt("fo:margin-top", marginTop);
     }
@@ -3783,6 +3800,135 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
     borderData.width = sz.toDouble() / 8.0;
 
     return borderData;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblpPr
+//! tblpPr handler (Floating Table Positioning)
+/*! ECMA-376, 17.4.58, p. 475.
+
+ Parent elements:
+ - [done] tblPr (§17.4.60)
+ - [done] tblPr (§17.4.59)
+ - [done] tblPr (§17.7.6.4)
+ - [done] tblPr (§17.7.6.3)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblpPr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(bottomFromText)
+    TRY_READ_ATTR(leftFromText)
+    TRY_READ_ATTR(rightFromText)
+    TRY_READ_ATTR(topFromText)
+
+    TRY_READ_ATTR(horzAnchor)
+    TRY_READ_ATTR(vertAnchor)
+
+    TRY_READ_ATTR(tblpX)
+    TRY_READ_ATTR(tblpXSpec)
+    TRY_READ_ATTR(tblpY)
+    TRY_READ_ATTR(tblpYSpec)
+
+    //If the tblpYSpecX/tblpYSpec attribute is also specified, then tblpX/tblpY
+    //value is ignored.
+    m_svgX = m_svgY = 0;
+    if (tblpXSpec.isEmpty()) {
+        STRING_TO_INT(tblpX, m_svgX, QString("w:tblpX"));
+    }
+    if (tblpYSpec.isEmpty()) {
+        STRING_TO_INT(tblpY, m_svgY, QString("w:tblpY"));
+    }
+
+    int bottom = 0, left =0, right = 0, top = 0;
+    STRING_TO_INT(bottomFromText, bottom, QString("w:bottomFromText"));
+    STRING_TO_INT(leftFromText, left, QString("w:leftFromText"));
+    STRING_TO_INT(rightFromText, right, QString("w:rightFromText"));
+    STRING_TO_INT(topFromText, top, QString("w:topFromText"));
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+    //fo:margin
+    m_currentDrawStyle->addPropertyPt("fo:margin-bottom", TWIP_TO_POINT(bottom));
+    m_currentDrawStyle->addPropertyPt("fo:margin-left", TWIP_TO_POINT(left));
+    m_currentDrawStyle->addPropertyPt("fo:margin-right", TWIP_TO_POINT(right));
+    m_currentDrawStyle->addPropertyPt("fo:margin-top", TWIP_TO_POINT(top));
+    //style:horizontal-rel
+    if (horzAnchor.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "page");
+    }
+    else if (horzAnchor == "margin") {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+    }
+    else if (horzAnchor == "page") {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "page");
+    }
+    else if (horzAnchor == "text") {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+    }
+    //style:vertical-rel
+    if (vertAnchor.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+    }
+    else if (vertAnchor == "margin") {
+        m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
+    }
+    else if (vertAnchor == "page") {
+        m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+    }
+    else if (vertAnchor == "text") {
+        m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+    }
+    //style:horizontal-pos
+    if (tblpXSpec.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+    } else {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", tblpXSpec);
+    }
+    //style:vertical-pos
+    if (tblpYSpec.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+    }
+    else if (tblpYSpec == "center") {
+        m_currentDrawStyle->addProperty("style:vertical-pos", "middle");
+    }
+    else if (tblpYSpec == "top") {
+        m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+    }
+    else if (tblpYSpec == "inside") {
+        m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+    }
+    else if (tblpYSpec == "bottom") {
+        m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+    }
+    else if (tblpYSpec == "outside") {
+        m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+    }
+    //style:wrap
+    if (tblpXSpec.isEmpty() || (tblpXSpec == "left")) {
+        m_currentDrawStyle->addProperty("style:wrap", "right");
+    }
+    else if (tblpXSpec == "right") {
+        m_currentDrawStyle->addProperty("style:wrap", "left");
+    } else {
+        m_currentDrawStyle->addProperty("style:wrap", "parallel");
+    }
+    m_currentDrawStyle->addProperty("style:number-wrapped-paragraphs", "no-limit");
+    //draw:auto-grow-height
+    m_currentDrawStyle->addProperty("draw:auto-grow-height", "true");
+
+    m_currentDrawStyleName = mainStyles->insert(*m_currentDrawStyle);
+    popCurrentDrawStyle();
+
+    readNext();
+
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -4194,7 +4340,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
  - [done] rPr (§17.3.2.28);
  - [done] rPr (§17.5.2.27);
  - [done] rPr (§17.7.6.2);
- - [done]  rPr (§17.3.2.27)
+ - [done] rPr (§17.3.2.27)
 
  Child elements:
  - none (?)
@@ -4638,6 +4784,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentLocalTableStyles = new MSOOXML::LocalTableStyles;
 
     m_currentTableStyle.clear();
+    m_currentDrawStyleName.clear();
 
     m_tableMainStyle = KoTblStyle::create();
     if (m_moveToStylesXml) {
@@ -4652,6 +4799,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     }
     // Fix me, for tables inside tables this might not work
     m_activeRoles = 0;
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
 
     while (!atEnd()) {
         readNext();
@@ -4675,6 +4825,21 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         }
     }
 
+    //Floating Table
+    if (!m_currentDrawStyleName.isEmpty()) {
+        body->startElement("draw:frame");
+        body->addAttribute("draw:style-name", m_currentDrawStyleName.toUtf8());
+        body->addAttribute("text:anchor-type", "paragraph");
+        body->addAttributePt("svg:width", TWIP_TO_POINT(m_svgWidth));
+        if (m_svgX != 0) {
+            body->addAttributePt("svg:x", TWIP_TO_POINT(m_svgX));
+        }
+        if (m_svgY != 0) {
+            body->addAttributePt("svg:y", TWIP_TO_POINT(m_svgY));
+        }
+        body->startElement("draw:text-box");
+    }
+
     m_table->setTableStyle(m_tableMainStyle);
 
     defineTableStyles();
@@ -4686,6 +4851,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     }
 
     delete m_currentLocalTableStyles;
+
+    //Floating Table
+    if (!m_currentDrawStyleName.isEmpty()) {
+        body->endElement(); //draw:text-box
+        body->endElement(); //draw:frame
+        body = buffer.releaseWriter(m_floatingTable);
+    } else {
+        body = buffer.releaseWriter();
+    }
 
     READ_EPILOGUE
 }
@@ -4739,7 +4913,7 @@ void DocxXmlDocumentReader::defineTableStyles()
  - tblLayout (Table Layout) §17.4.53
  - tblLook (Table Style Conditional Formatting Settings) §17.4.56
  - tblOverlap (Floating Table Allows Other Tables to Overlap) §17.4.57
- - tblpPr (Floating Table Positioning) §17.4.58
+ - [done] tblpPr (Floating Table Positioning) §17.4.58
  - tblPrChange (Revision Information for Table Properties) §17.13.5.34
  - [done] tblStyle (Referenced Table Style) §17.4.63
  - tblStyleColBandSize (Number of Columns in Column Band) §17.7.6.5
@@ -4756,6 +4930,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tblStyle)
+            ELSE_TRY_READ_IF(tblpPr)
             ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
             ELSE_TRY_READ_IF_IN_CONTEXT(jc)
@@ -4789,6 +4964,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
     READ_PROLOGUE
 
     m_currentTableColumnNumber = 0;
+    m_svgWidth = 0;
 
     while (!atEnd()) {
         readNext();
@@ -4828,8 +5004,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
 
     TRY_READ_ATTR(w)
 
-    const qreal columnWidth = w.toFloat() / 20.0;
+    int width = 0;
+    STRING_TO_INT(w, width, QString("w:w"));
+    m_svgWidth += width;
 
+    const qreal columnWidth = width / 20.0;
     KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
     KoColumnStyle::Ptr style = KoColumnStyle::create();
     if (m_moveToStylesXml) {
@@ -5578,7 +5757,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
  - [done] distR (Distance From Text on Right Edge) (see also: inline)
  - [done] distT (Distance From Text on Top Edge) (see also: inline)
  - hidden (Hidden)
- - layoutInCell (Layout In Table Cell)
+ - [done] layoutInCell (Layout In Table Cell)
  - locked (Lock Anchor)
  - [done] relativeHeight (Relative Z-Ordering Position)
  - simplePos (Page Positioning)
@@ -5614,6 +5793,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     if (!relativeHeight.isEmpty()) {
         m_z_index = relativeHeight.toInt();
     }
+
+    TRY_READ_ATTR_WITHOUT_NS(layoutInCell)
+    m_currentDrawStyle->addProperty("style:flow-with-text",
+                                    MSOOXML::Utils::convertBooleanAttr(layoutInCell, false));
 
     behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
     allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());

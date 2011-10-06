@@ -172,7 +172,7 @@ QTextLength KoParagraphStyle::propertyLength(int key) const
         {
             return QTextLength(QTextLength::FixedLength, variant.toReal());
         }
-        
+
         kWarning(32500) << "This should never happen : requested property can't be converted to QTextLength";
         return QTextLength(QTextLength::FixedLength, 0.0);
     }
@@ -285,7 +285,7 @@ void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
     setProperty(FixedLineHeight, 0.0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     remove(NormalLineHeight);
 }
 
@@ -298,7 +298,7 @@ void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
     setProperty(PercentLineHeight, 0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     remove(NormalLineHeight);
 }
 
@@ -307,7 +307,7 @@ qreal KoParagraphStyle::lineHeightAbsolute() const
     return propertyDouble(FixedLineHeight);
 }
 
-void KoParagraphStyle::setMinimumLineHeight(qreal height)
+void KoParagraphStyle::setMinimumLineHeight(const QTextLength &height)
 {
     setProperty(FixedLineHeight, 0.0);
     setProperty(PercentLineHeight, 0);
@@ -317,7 +317,10 @@ void KoParagraphStyle::setMinimumLineHeight(qreal height)
 
 qreal KoParagraphStyle::minimumLineHeight() const
 {
-    return propertyDouble(MinimumLineHeight);
+    if (parentStyle())
+        return propertyLength(MinimumLineHeight).value(parentStyle()->minimumLineHeight());
+    else
+        return propertyLength(MinimumLineHeight).value(0);
 }
 
 void KoParagraphStyle::setLineSpacing(qreal spacing)
@@ -347,7 +350,7 @@ void KoParagraphStyle::setNormalLineHeight()
     setProperty(NormalLineHeight, true);
     setProperty(PercentLineHeight, 0);
     setProperty(FixedLineHeight, 0.0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     setProperty(LineSpacing, 0.0);
 }
 
@@ -1179,7 +1182,17 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack
 
     //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-    context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
+    kDebug(32500) << "family" << family;
+    if (family == "graphic" || family == "presentation") {
+        QList<QString> typeProperties;
+        typeProperties.append("graphic");
+        typeProperties.append("paragraph");
+        // load all style attributes from "style::graphic-properties" and if not found there from "style:paragraph-properties"
+        context.styleStack().setTypeProperties(typeProperties);
+    }
+    else {
+        context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
+    }
 
     loadOdfProperties(scontext);   // load the KoParagraphStyle from the stylestack
 
@@ -1255,7 +1268,8 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (!autoTextIndent.isEmpty()) {
         setAutoTextIndent(autoTextIndent == "true");
     }
-    else {
+
+    if (autoTextIndent != "true" || autoTextIndent.isEmpty()) {
         const QString textIndent(styleStack.property(KoXmlNS::fo, "text-indent"));
         if (!textIndent.isEmpty()) {
             setTextIndent(KoText::parseLength(textIndent));
@@ -1292,7 +1306,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             setLineSpacing(KoUnit::parseValue(lineSpacing));
         }
     }
-    
+
     // 15.5.30 - 31
     if (styleStack.hasProperty(KoXmlNS::text, "number-lines")) {
         setLineNumbering(styleStack.property(KoXmlNS::text, "number-lines", "false") == "true");
@@ -1307,7 +1321,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     const QString lineHeightAtLeast(styleStack.property(KoXmlNS::style, "line-height-at-least"));
     if (!lineHeightAtLeast.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {    // 3.11.2
-        setMinimumLineHeight(KoUnit::parseValue(lineHeightAtLeast));
+        setMinimumLineHeight(KoText::parseLength(lineHeightAtLeast));
     }  // Line-height-at-least is mutually exclusive with absolute line-height
     const QString fontIndependentLineSpacing(styleStack.property(KoXmlNS::style, "font-independent-line-spacing"));
     if (!fontIndependentLineSpacing.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {
@@ -1561,7 +1575,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (!keepTogether.isEmpty()) {
         setNonBreakableLines(keepTogether == "always");
     }
-    
+
     const QString rawPageNumber(styleStack.property(KoXmlNS::style, "page-number"));
     if (!rawPageNumber.isEmpty()) {
         if (rawPageNumber == "auto") {
@@ -1596,62 +1610,62 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             setBackgroundTransparency(transparencyValue/100);
         }
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "snap-to-layout-grid"))
     {
         setSnapToLayoutGrid(styleStack.property(KoXmlNS::style, "snap-to-layout-grid") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "register-true"))
     {
         setRegisterTrue(styleStack.property(KoXmlNS::style, "register-true") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "join-border"))
     {
         setJoinBorder(styleStack.property(KoXmlNS::style, "join-border") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "line-break"))
     {
         setStrictLineBreak(styleStack.property(KoXmlNS::style, "line-break") == "strict");
     }
-    
+
     // Support for an old non-standard OpenOffice attribute that we still find in too many documents...
     if (styleStack.hasProperty(KoXmlNS::text, "enable-numbering")) {
         setProperty(ForceDisablingList, styleStack.property(KoXmlNS::text, "enable-numbering") == "false");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::fo, "orphans")) {
         bool ok = false;
         int orphans = styleStack.property(KoXmlNS::fo, "orphans").toInt(&ok);
         if (ok)
             setOrphanThreshold(orphans);
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::fo, "widows")) {
         bool ok = false;
         int widows = styleStack.property(KoXmlNS::fo, "widows").toInt(&ok);
         if (ok)
             setWidowThreshold(widows);
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "justify-single-word")) {
         setJustifySingleWord(styleStack.property(KoXmlNS::style, "justify-single-word") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode-automatic")) {
         setAutomaticWritingMode(styleStack.property(KoXmlNS::style, "writing-mode-automatic") == "true");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::fo, "text-align-last")) {
         setAlignLastLine(KoText::alignmentFromString(styleStack.property(KoXmlNS::fo, "text-align-last")));
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
         setKeepWithNext(styleStack.property(KoXmlNS::fo, "keep-with-next") == "always");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "text-autospace")) {
         const QString autoSpace = styleStack.property(KoXmlNS::style, "text-autospace");
         if (autoSpace == "none")
@@ -1659,11 +1673,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         else if (autoSpace == "ideograph-alpha")
             setTextAutoSpace(IdeographAlpha);
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-keep")) {
         setKeepHyphenation(styleStack.property(KoXmlNS::fo, "hyphenation-keep") == "page");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-ladder-count")) {
         QString ladderCount = styleStack.property(KoXmlNS::fo, "hyphenation-ladder-count");
         if (ladderCount == "no-limit")
@@ -1675,11 +1689,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 setHyphenationLadderCount(value);
         }
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "punctuation-wrap")) {
         setPunctuationWrap(styleStack.property(KoXmlNS::style, "punctuation-wrap") == "simple");
     }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "vertical-align")) {
         const QString valign = styleStack.property(KoXmlNS::style, "vertical-align");
         if (valign == "auto")
@@ -1693,8 +1707,8 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         else if (valign == "top")
             setVerticalAlignment(VAlignTop);
     }
-    
-     
+
+
     if (styleStack.hasProperty(KoXmlNS::style, "shadow")) {
         KoShadowStyle shadow;
         if (shadow.loadOdf(styleStack.property(KoXmlNS::style, "shadow")))
@@ -1870,7 +1884,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             keys.removeOne(KoParagraphStyle::BottomPadding);
         }
     }
-    
+
     if (keys.contains(QTextFormat::BlockLeftMargin) && keys.contains(QTextFormat::BlockRightMargin)
             && keys.contains(QTextFormat::BlockBottomMargin) && keys.contains(QTextFormat::BlockTopMargin))
     {
@@ -1882,8 +1896,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             keys.removeOne(QTextFormat::BlockBottomMargin);
         }
     }
-    
-    
+
+
     foreach (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
@@ -1945,7 +1959,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             style.addProperty("fo:orphans", orphanThreshold(), KoGenStyle::ParagraphType);
         } else if (key == WidowThreshold) {
             style.addProperty("fo:widows", widowThreshold(), KoGenStyle::ParagraphType);
-        
+
         // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::ParagraphType);
@@ -1955,7 +1969,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BottomPadding) {
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::ParagraphType);
-        
+
         // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
             style.addPropertyLength("fo:margin-left", propertyLength(QTextFormat::BlockLeftMargin), KoGenStyle::ParagraphType);
@@ -1965,7 +1979,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             style.addPropertyLength("fo:margin-top", propertyLength(QTextFormat::BlockTopMargin), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
             style.addPropertyLength("fo:margin-bottom", propertyLength(QTextFormat::BlockBottomMargin), KoGenStyle::ParagraphType);
-        
+
         // Line spacing
         } else if ( key == KoParagraphStyle::MinimumLineHeight ||
                     key == KoParagraphStyle::LineSpacing ||
@@ -1973,8 +1987,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                     key == KoParagraphStyle::FixedLineHeight ||
                     key == KoParagraphStyle::LineSpacingFromFont) {
 
-            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() != 0) {
-                style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
+            if (key == KoParagraphStyle::MinimumLineHeight && propertyLength(MinimumLineHeight).rawValue() != 0) {
+                style.addPropertyLength("style:line-height-at-least", propertyLength(MinimumLineHeight), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);

@@ -46,12 +46,12 @@
 #include <KexiMainWindowIface.h>
 #include <kexiinternalpart.h>
 #include <kexitableview.h>
-#include <kexitableviewdata.h>
+#include <widget/dataviewcommon/kexitableviewdata.h>
 #include <kexidragobjects.h>
 #include <kexidatatable.h>
 #include <kexi.h>
 #include <kexisectionheader.h>
-#include <widget/tableview/kexidataawarepropertyset.h>
+#include <widget/dataviewcommon/kexidataawarepropertyset.h>
 #include <widget/relations/KexiRelationsView.h>
 #include <widget/relations/KexiRelationsTableContainer.h>
 #include <koproperty/Property.h>

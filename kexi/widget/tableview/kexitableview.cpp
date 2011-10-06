@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -118,7 +118,7 @@ public:
         //const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
         if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
             return i18n("Contains a pointer to the currently selected record");
-        } else if (KexiUtils::hasParent(m_tv->m_navPanel, m_tv->childAt(pos))) {
+        } else if (KexiUtils::hasParent(dynamic_cast<QObject*>(m_tv->m_navPanel), m_tv->childAt(pos))) {
             return i18n("Record navigator");
 //    return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
         }
@@ -268,7 +268,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     // Create headers
     m_horizontalHeader = new KexiTableViewHeader(this);
     m_horizontalHeader->setObjectName("m_horizontalHeader");
-    m_horizontalHeader->setSelectionBackgroundColor(palette().active().highlight());
+    m_horizontalHeader->setSelectionBackgroundColor(palette().color(QPalette::Highlight));
     m_horizontalHeader->setOrientation(Qt::Horizontal);
     m_horizontalHeader->setTracking(false);
     m_horizontalHeader->setMovingEnabled(false);
@@ -371,9 +371,9 @@ void KexiTableView::setupNavigator()
     updateScrollBars();
 
     m_navPanel = new KexiRecordNavigator(this, this, leftMargin());
-    m_navPanel->setObjectName("navPanel");
+    navPanelWidget()->setObjectName("navPanel");
     m_navPanel->setRecordHandler(this);
-    m_navPanel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    navPanelWidget()->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 }
 
 void KexiTableView::initDataContents()
@@ -539,7 +539,7 @@ QSize KexiTableView::sizeHint() const
 {
     const QSize &ts = tableSize();
     int w = qMax(ts.width() + leftMargin() + verticalScrollBar()->sizeHint().width() + 2 * 2,
-                 (m_navPanel->isVisible() ? m_navPanel->width() : 0));
+                 (navPanelWidget()->isVisible() ? navPanelWidget()->width() : 0));
     int h = qMax(ts.height() + topMargin() + horizontalScrollBar()->sizeHint().height(),
                  minimumSizeHint().height());
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
@@ -561,7 +561,7 @@ QSize KexiTableView::minimumSizeHint() const
 {
     return QSize(
                leftMargin() + ((columns() > 0) ? columnWidth(0) : KEXI_DEFAULT_DATA_COLUMN_WIDTH) + 2*2,
-               d->rowHeight*5 / 2 + topMargin() + (m_navPanel && m_navPanel->isVisible() ? m_navPanel->height() : 0)
+                 d->rowHeight*5 / 2 + topMargin() + (m_navPanel && navPanelWidget()->isVisible() ? navPanelWidget()->height() : 0)
            );
 }
 
@@ -893,7 +893,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
              && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
              && usesSelectedTextColor)
     {
-        defaultPen = colorGroup().highlightedText(); //selected text
+        defaultPen = palette().color(QPalette::HighlightedText); //selected text
     } else if (   d->appearance.recordHighlightingEnabled && row == m_curRow
                && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
                && usesSelectedTextColor)
@@ -933,7 +933,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
            )
         {
             edit->paintSelectionBackground(p, isEnabled(), txt, align, x, y_offset, w, h,
-                                           isEnabled() ? colorGroup().highlight() : QColor(200, 200, 200),//d->grayColor,
+                                           isEnabled() ? palette().color(QPalette::Highlight) : QColor(200, 200, 200),//d->grayColor,
                                            p->fontMetrics(), columnReadOnly, d->appearance.fullRecordSelection);
         }
     }
@@ -1028,7 +1028,7 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
         ? horizontalScrollBar()->sizeHint().height() : 0;
 
     reg = reg.subtract(QRect(QPoint(0, 0), ts
-                             - QSize(0, qMax(((m_navPanel && m_navPanel->isVisible()) ? m_navPanel->height() : 0), scrollBarHeight)
+    - QSize(0, qMax(((m_navPanel && navPanelWidget()->isVisible()) ? navPanelWidget()->height() : 0), scrollBarHeight)
                                      /*- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() / 2 : 0)
                                      + (horizontalScrollBar()->isVisible() ? 0 :
                                         d->internal_bottomMargin
@@ -1363,6 +1363,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     if (m_editor) {// if a cell is edited, do some special stuff
         if (k == Qt::Key_Escape) {
             cancelEditor();
+            emit updateSaveCancelActions();
             e->accept();
             return;
         } else if (k == Qt::Key_Return || k == Qt::Key_Enter) {
@@ -1374,7 +1375,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
             e->accept();
             return;
         }
-    } else if (m_rowEditing) {// if a row is in edit mode, do some special stuff
+    } else if (rowEditing()) {// if a row is in edit mode, do some special stuff
         if (shortCutPressed(e, "data_save_row")) {
             kDebug() << "shortCutPressed!!!";
             acceptRowEdit();
@@ -1437,7 +1438,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
                 printable = true; //just space key
         }
     } else if (k == Qt::Key_Escape) {
-        if (nobtn && m_rowEditing) {
+        if (nobtn && rowEditing()) {
             cancelRowEdit();
             return;
         }
@@ -1605,13 +1606,13 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
         return;
     }
 
-    const bool startRowEdit = !m_rowEditing; //remember if we're starting row edit
+    const bool startRowEdit = !rowEditing(); //remember if we're starting row edit
 
-    if (!m_rowEditing) {
+    if (!rowEditing()) {
         //we're starting row editing session
         m_data->clearRowEditBuffer();
 
-        m_rowEditing = true;
+        setRowEditing(true);
         //indicate on the vheader that we are editing:
         m_verticalHeader->setEditRow(m_curRow);
         if (isInsertingEnabled() && m_currentItem == m_insertItem) {
@@ -1654,6 +1655,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 //  m_navPanel->updateButtons(rows()); //refresh 'next' btn
         emit rowEditStarted(m_curRow);
     }
+    m_editor->installListener(this);
 }
 
 void KexiTableView::focusInEvent(QFocusEvent* e)
@@ -2021,7 +2023,7 @@ QSize KexiTableView::tableSize() const
 //-2*d->rowHeight
         );
 
-//  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s;
+//  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
 #ifdef KEXITABLEVIEW_DEBUG
 kDebug() << s;
 #endif
@@ -2051,9 +2053,9 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
         }
       }*/
 
-    if (m_navPanel && m_navPanel->isVisible() && horizontalScrollBar()->isHidden()) {
+    if (m_navPanel && navPanelWidget()->isVisible() && horizontalScrollBar()->isHidden()) {
         //a hack: for visible navigator: increase height of the visible rect 'r'
-        r.setBottom(r.bottom() + m_navPanel->height());
+        r.setBottom(r.bottom() + navPanelWidget()->height());
     }
 
     QPoint pcenter = r.center();
@@ -2523,7 +2525,7 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
     } else if (e->type() == QEvent::Leave) {
         if (o == viewport() && d->appearance.recordMouseOverHighlightingEnabled
                 && d->appearance.persistentSelections) {
-            if (d->highlightedRecord = -1) {
+            if (d->highlightedRecord == -1) {
                 int oldRow = d->highlightedRecord;
                 d->highlightedRecord = -1;
                 updateRow(oldRow);
@@ -2577,7 +2579,7 @@ void KexiTableView::paletteChange(const QPalette &oldPalette)
     if (m_verticalHeader)
         m_verticalHeader->setSelectionBackgroundBrush(palette().brush(QPalette::Highlight));
     if (m_horizontalHeader)
-        m_horizontalHeader->setSelectionBackgroundColor(palette().active().highlight());
+        m_horizontalHeader->setSelectionBackgroundColor(palette().color(QPalette::Highlight));
 }
 
 const KexiTableView::Appearance& KexiTableView::appearance() const
@@ -2604,7 +2606,7 @@ void KexiTableView::setAppearance(const Appearance& a)
     if (a.recordHighlightingEnabled)
         m_updateEntireRowWhenMovingToOtherRow = true;
 
-    m_navPanel->setVisible(a.navigatorEnabled);
+    navPanelWidget()->setVisible(a.navigatorEnabled);
     d->highlightedRecord = -1;
 //! @todo is setMouseTracking useful for other purposes?
     viewport()->setMouseTracking(a.recordMouseOverHighlightingEnabled);
@@ -2656,6 +2658,18 @@ int KexiTableView::lastVisibleRow() const
     return rowAt(contentsY());
 }
 
+void KexiTableView::valueChanged(KexiDataItemInterface* item)
+{
+    kDebug() << item->field()->name() << item->value();
+    // force reload editing-related actions
+    emit updateSaveCancelActions();
+}
+
+bool KexiTableView::cursorAtNewRow() const
+{
+    return m_newRowEditing;
+}
+
 /* not needed after #2010-01-05 fix
 void KexiTableView::slotContentsMoving(int x, int y)
 {
@@ -2663,5 +2677,10 @@ void KexiTableView::slotContentsMoving(int x, int y)
     Q_UNUSED(y);
     updateContents(); // (js) needed in Qt 4, no idea why, this fix consumed me hours
 }*/
+
+QWidget* KexiTableView::navPanelWidget() const
+{
+    return dynamic_cast<QWidget*>(m_navPanel);
+}
 
 #include "kexitableview.moc"

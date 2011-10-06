@@ -98,6 +98,8 @@ void KexiInputTableEdit::init()
     //create internal editor
     m_lineedit = new MyLineEdit(this);
     m_lineedit->setObjectName("KexiInputTableEdit-MyLineEdit");
+    connect(m_lineedit, SIGNAL(textEdited(QString)),
+            this, SLOT(slotTextEdited(QString)));
     KColorScheme cs(QPalette::Active);
     QColor focus = cs.decoration(KColorScheme::FocusColor).color();
     m_lineedit->setStyleSheet(QString("QLineEdit { \
@@ -129,7 +131,7 @@ void KexiInputTableEdit::init()
 
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-    QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+    QString text(m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString()));
     if (text.isEmpty()) {
         if (m_origValue.toString().isEmpty()) {
             //we have to set NULL initial value:
@@ -271,7 +273,7 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
     Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-    qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) );
+    qApp->clipboard()->setText(m_textFormatter.toString(value, QString()));
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -297,13 +299,13 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect,
         const QFontMetrics& fm, bool focused)
 {
-    QString text( value.type()==QVariant::String 
-        ? value.toString() : m_textFormatter.valueToText(value, QString()) );
+    QString text(value.type() == QVariant::String 
+        ? value.toString() : m_textFormatter.toString(value, QString()));
 
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
     internalRect.setWidth(internalRect.width() - rightMargin(focused) - 2*3);
-    kDebug() << rect << " " << internalRect << " " << fm.width(text);
+    kDebug() << rect << internalRect << fm.width(text);
     return fm.width(text) > internalRect.width();
 }
 
@@ -320,6 +322,12 @@ void KexiInputTableEdit::moveCursorToStart()
 void KexiInputTableEdit::selectAll()
 {
     m_lineedit->selectAll();
+}
+
+void KexiInputTableEdit::slotTextEdited(const QString& text)
+{
+    Q_UNUSED(text);
+    signalValueChanged();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

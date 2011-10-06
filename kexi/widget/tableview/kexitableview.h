@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -42,12 +42,13 @@
 
 #include <kdebug.h>
 
-#include "kexitableviewdata.h"
+#include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexitableedit.h"
 #include <kexiutils/tristate.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include "kexidataawareobjectiface.h"
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 class QPrinter;
 class QPrintDialog;
@@ -69,7 +70,8 @@ class KEXIDATATABLE_EXPORT KexiTableView :
             public Q3ScrollView,
             public KexiRecordNavigatorHandler,
             public KexiSharedActionClient,
-            public KexiDataAwareObjectInterface
+            public KexiDataAwareObjectInterface,
+            public KexiDataItemChangesListener
 {
     Q_OBJECT
     KEXI_DATAAWAREOBJECTINTERFACE
@@ -415,13 +417,16 @@ signals:
 // void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
     void sortedColumnChanged(int col);
 
-    //! emmited when row editing is started (for updating or inserting)
+    //! emitted when row editing is started (for updating or inserting)
     void rowEditStarted(int row);
 
-    //! emmited when row editing is terminated (for updating or inserting)
+    //! emitted when row editing is terminated (for updating or inserting)
     //! no matter if accepted or not
     void rowEditTerminated(int row);
 
+    //! emitted when state of 'save/cancel record changes' actions should be updated.
+    void updateSaveCancelActions();
+    
     //! Emitted in initActions() to force reload actions
     //! You should remove existing actions and add them again.
     void reloadActions();
@@ -617,7 +622,7 @@ protected:
 
     /*! Shows context menu at \a pos for selected cell
      if menu is configured,
-     else: contextMenuRequested() signal is emmited.
+     else: contextMenuRequested() signal is emitted.
      Method used in contentsMousePressEvent() (for right button)
      and keyPressEvent() for Qt::Key_Menu key.
      If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.
@@ -677,6 +682,15 @@ protected:
 // //! Called to repaint contents after a row is deleted.
 // void repaintAfterDelete();
 
+    /*! Implementation for KexiDataItemChangesListener.
+     Reaction for change of \a item. */
+    virtual void valueChanged(KexiDataItemInterface* item);
+
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual bool cursorAtNewRow() const;
+
+    QWidget* navPanelWidget() const;
+    
     KexiTableViewPrivate * const d;
 
     class WhatsThis;

@@ -54,7 +54,6 @@ public:
     void updateState(State newState, QString title = QString());
 
     bool deleteInlineObjects(bool backwards = false);
-    void deleteSelection();
     void runDirectionUpdater();
     void clearCharFormatProperty(int propertyId);
 
@@ -70,6 +69,9 @@ public:
 
     QTimer updateRtlTimer;
     QList<int> dirtyBlocks;
+
+    bool editProtected;
+    bool editProtectionCached;
 };
 
 class BlockFormatVisitor

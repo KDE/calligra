@@ -1,4 +1,7 @@
-macro_bool_to_01(SHOULD_BUILD_KARBON BUILD_KARBON)
+macro_optional_add_subdirectory(visualimagecompare)
+macro_optional_add_subdirectory(cstrunner)
+
+macro_bool_to_01(BUILD_karbon BUILD_KARBON)
 configure_file(config_cstester.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_cstester.h)
 
 include_directories(

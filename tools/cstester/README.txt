@@ -1,20 +1,128 @@
-Compare whole directories
--------------------------
+Compare directories
+-------------------
 
-First create a list of files you like to test.
+1. To prepare for example a list of *.docx test files from your calligratests
+working copy, type the following command:
 
-  find ~/kofficetests/interoperability/kword/MSWord2007/ -name "*.docx" > ~/files.txt
+$ find ~/kde4/src/calligratests/interoperability/kword/MSWord2007/ -name "*.docx" > files.txt
 
-Then create the initial screenshots you like later to test against
+2. Prepare initial screen-shots to test against into an existing directory:
 
-  for i in `cat ~/files.txt` ; do echo "$i" > ~/processing.txt ; cstester --create --verbose --outdir ~/dir1 "$i" ; done
+$ while read line ; do echo "$line" > /tmp/processing.txt ; cstester --create --verbose --outdir dir1 "$line" ; done < files.txt
 
-Now create the screenshots that should be used to verify against the screeshots created above
+3. Prepare verification screen-shots into an existing directory (after your
+changes to the calligra source have been applied) and compare them against
+initial scree-shots:
 
-  for i in `cat ~/files.txt` ; do echo "$i" > ~/processing.txt ; ((cstester --verify --verbose --indir ~/dir1 --outdir ~/dir2 "$i") || echo "$i" >> ~/failed.txt) ; done
+$ while read line ; do echo "$line" > /tmp/processing.txt ; ((cstester --verify --verbose --indir dir1 --outdir dir2 "$line") || echo "$line" >> failed.txt) ; done < files.txt
 
-While the both commands above are running you can execute following command in another terminal to see which file is currently processed (useful if you run into an infinite loop)
+4. To compare initial and verification screen-shots, first a list of test files
+with different screen-shots has to be determined.  Then the visualimagecompare
+tool helps to inspect changes.  Type the following lines:
 
-  tail -f ~/processing.txt 2>/dev/null
+$ find dir1 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" > dir1.txt
+$ find dir2 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" > dir2.txt
+$ diff -u dir1.txt dir2.txt | grep "^+[0-9a-f]" | sed -e "s/[^ ]* //" -e "s/.check\/thumb_/ /" -e "s/\.png$//" > dirdiff.txt
+$ visualimagecompare dir1 dir2 dirdiff.txt
 
-Once the verification is done in the ~/failed.txt file you will have a list of documents that changed between the both cstester runs.
+Note: While scree-shots are being prepared, you can type the following command
+in another terminal to see which file is processed (useful if you run into an
+infinite loop):
+
+$ tail -f /tmp/processing.txt 2>/dev/null
+
+Note: Once the verification in step 3 is finished, the failed.txt file contains
+a list of test files with different screen-shots between step 2 and step 3.
+
+Note: To prepare a report after step 4, containing the name of the test file and
+a sequence of page numbers which changed, use the following Awk command:
+
+$ awk '{if (a==$1) {printf(" %d", $2)} else {printf("\n%s", $0)}; a=$1} END{printf("\n")}' dirdiff.txt > report.txt
+
+
+cstester scripts
+----------------
+
+It is of advantage to create a directory structure as in the next example to
+follow the explanation:
+
+tester/
+|-- checkdocs.sh
+|-- verifydocs.sh
+|-- documents/
+|   |-- document1.odt
+|   |-- ...
+|   |-- document10000.xsl
+|-- results/
+    |-- sha-of-commit1
+    |-- sha-of-commit2
+
+
+To create the basis for tests and to inspect regressions in painting/loading
+(crashes), type the following commands:
+
+$ cd tester/documents
+$ mkdir ../results/sha-of-commit1
+$ ../checkdocs.sh ../results/sha-of-commit1
+$ cat tester/error-sha-of-commit1.log
+
+The error-sha-of-commit1.log file contains a list of test files, that either
+crashed or got killed by the script as they used too much CPU or RAM while
+being processed.
+
+To check for changes between different runs, type the following commands:
+
+$ cd tester/documents
+$ mkdir ../results/sha-of-commit2
+$ ../verifydocs.sh ../results/sha-of-commit1 ../results/sha-of-commit2
+$ cat tester/verify-sha-of-commit1-sha-of-commit2.log
+
+The log file contains a list of test files and pages therein, which changed.
+The information can be used with the visualimagecompare script.  Use the
+following format:
+
+$ visualimagecompare file-name page_x page_y
+
+
+cstrunner
+---------
+
+cstrunner is a tool to run cstester in multiple processes.  It creates a report
+of files terminated by a signal.  This can happen as a result of a bug in
+calligra or when the allowed amount of time or CPU usage has been exceeded.
+The md5.txt file providing the ms5sums of generated thumbnails is created in
+each output directory.  The following scripts are used by cstrunner:
+
+cstwrapper - Limits the resources cstester is allowed to use and makes sure the
+correct exit code is returned to cstrunner.
+
+cstmd5gen - Generates md5sums for a given thumbnail directory and stores them
+into the md5.txt file.
+
+Please make sure this scripts are in the path when running cstrunner.
+
+Run cstrunner
+
+cstrunner docDir resultDir concurrentProcesses
+
+e.g.
+
+cstrunner . ../result/sha1 4
+
+To run over all documents in the current directory and put the thumbnails in to ../result/sha1 with 4 concurrent processes
+
+Do your changes and run it again
+
+cstrunner . ../result/sha2 4
+
+To create the input file for visualimagecomapre use the script 
+
+cstmd5diff.sh <documents dir> <previous result dir> <current result dir>
+
+e.g.
+
+cstmd5diff.sh . ../sha1 ../sha2 > md5-sha1-sha2.log
+
+and then use 
+
+visualimagecompare ../sha1 ../sha2 md5-sha1-sha2.log

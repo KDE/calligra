@@ -52,7 +52,7 @@ if (SHOULD_BUILD_WORDS)
 endif (SHOULD_BUILD_WORDS)
 
 if(SHOULD_BUILD_STAGE)
-    macro_optional_add_subdirectory(kpresenter)
+    macro_optional_add_subdirectory(stage)
 endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KFORMULA)

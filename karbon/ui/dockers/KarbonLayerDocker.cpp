@@ -32,7 +32,7 @@
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoSelection.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
@@ -467,7 +467,11 @@ void KarbonLayerDocker::thumbnailView()
 
 void KarbonLayerDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
 {
-    bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+    const bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+
+    // collapse all layers if in thumbnail mode
+    if (!expandable)
+        m_layerView->collapseAll();
 
     m_layerView->setDisplayMode(mode);
     m_layerView->setItemsExpandable(expandable);

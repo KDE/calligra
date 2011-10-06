@@ -2,12 +2,16 @@
 Type=Service
 Name=Calligra Files
 Name[bg]=Файлове на Calligra
+Name[cs]=Soubory Calligra
+Name[da]=Calligra-filer
+Name[de]=Calligra-Dateien
 Name[et]=Calligra failid
 Name[it]=File di Calligra
 Name[nb]=Calligra-filer
 Name[pl]=Pliki Calligra
 Name[pt]=Ficheiros do Calligra
 Name[pt_BR]=Arquivos do Calligra
+Name[ru]=Файлы Calligra
 Name[sv]=Calligra-filer
 Name[uk]=Файли Calligra
 Name[x-test]=xxCalligra Filesxx

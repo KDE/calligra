@@ -224,6 +224,10 @@ public:
         Q_UNUSED(actionName);
     }
 
+    virtual bool isComboBox() const;
+    
+    virtual QWidget* internalEditor() const;
+    
 protected:
     /*! Initializes this editor with \a add value, which should be somewhat added to the current
      value (already storted in m_origValue).
@@ -248,7 +252,7 @@ protected:
     virtual void signalValueChanged();
 
     /*! Used to perform some actions before signalValueChanged() call.
-     We need this because the intrface is not QObject and thus has got no real signals.
+     We need this because the interface is not QObject and thus has got no real signals.
      Used in KexiDBComboBox. */
     virtual void beforeSignalValueChanged() {}
 

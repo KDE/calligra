@@ -23,6 +23,11 @@
 #include "TextTool.h"
 
 class KoCanvasBase;
+class TableOfContentsConfigure;
+class SimpleTableOfContentsWidget;
+class SimpleFootEndNotesWidget;
+class SimpleCitationBibliographyWidget;
+class KoInlineNote;
 class QPainter;
 
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
@@ -47,11 +52,57 @@ protected:
 private slots:
     /// insert a table of contents
     void insertTableOfContents();
-
+    /// insert a citation
+    void insertCitation();
+    /// insert a bibliography
+    void insertBibliography();
+    /// configure a bibliography
+    void configureBibliography();
     /// format the table of contents template
     void formatTableOfContents();
+    /// shows the configuration dialog for a ToC
+    void showConfigureDialog(QAction *action);
+    /// insert an autonumbered footnote
+    void insertAutoFootNote();
+    /// insert a labeled footnote
+    void insertLabeledFootNote(QString label);
+    /// insert an autonumbered endnote
+    void insertAutoEndNote();
+    /// insert a labeled endnote
+    void insertLabeledEndNote(QString label);
+    /// show the configuration dialog for notes
+    void showNotesConfigureDialog();
+    /// enable/disable buttons if cursor in notes' body or not
+    void updateButtons();
+
 
 private:
+    TableOfContentsConfigure *m_configure;
+    SimpleTableOfContentsWidget *m_stocw;
+        SimpleFootEndNotesWidget *m_sfenw;
+        KoInlineNote *m_note;
+    SimpleCitationBibliographyWidget *m_scbw;
+};
+
+class KAction;
+class QLineEdit;
+
+class LabeledNoteWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    LabeledNoteWidget(KAction *action);
+    KAction *m_action;
+    QLineEdit *m_lineEdit;
+
+signals:
+    void triggered(QString label);
+
+private slots:
+    void returnPressed();
+
+protected:
+    virtual void enterEvent(QEvent *event);
 };
 
 #endif // REFERENCESTOOL_H

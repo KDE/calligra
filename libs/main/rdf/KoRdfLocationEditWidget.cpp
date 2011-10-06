@@ -20,15 +20,14 @@
 
 #include "KoRdfLocationEditWidget.h"
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 
 #include <kdebug.h>
 
 // marble for geolocation
 #ifdef CAN_USE_MARBLE
-#include <marble/LatLonEdit.h>
-#include <marble/MarbleWidget.h>
-#include <marble/MarbleWidgetInputHandler.h>
+#include <LatLonEdit.h>
+#include <MarbleWidget.h>
+#include <MarbleWidgetInputHandler.h>
 #endif
 
 class KoRdfLocationEditWidgetPrivate

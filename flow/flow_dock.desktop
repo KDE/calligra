@@ -2,9 +2,12 @@
 Type=ServiceType
 X-KDE-ServiceType=Flow/Dock
 Comment=Docker for Flow
+Comment[ca]=Amarrador per al Flow
 Comment[cs]=Dok pro Proud
+Comment[da]=Dokker til Flow
+Comment[de]=Docker für Flow
 Comment[el]=Προσάρτηση για το Flow
-Comment[es]=Anclaje para Flow
+Comment[es]=Ventana acoplable para Flow
 Comment[et]=Flow dokk
 Comment[it]=Gancio per Flow
 Comment[nb]=Dokker for Flow

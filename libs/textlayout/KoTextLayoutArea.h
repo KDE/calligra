@@ -40,18 +40,24 @@ class QTextList;
 class KoTextBlockBorderData;
 class KoTextLayoutEndNotesArea;
 class KoTextLayoutTableArea;
+class KoTextLayoutNoteArea;
 class FrameIterator;
 
 /**
- * When layout'ing text it is chopped into physical area of space.
- * Example of such areas are:
- *  RootArea (corresponds to a text shape, or a spreadsheet cell)
- *  TableArea (the kind of table that appears in text documents)
- *  SectionArea, that splits text into columns
- * Each of these are implemeted through subclasses, and this is just the interface
+ * When layouting text the text is chopped up into physical area of space.
+ *
+ * Examples of such areas are:
+ * <ul>
+ *  <li>RootArea (corresponds to a text shape, or a spreadsheet cell)
+ *  <li>TableArea (the kind of table that appears in text documents)
+ *  <li>SectionArea, that splits text into columns
+ * </ul>
+ *
+ * Each of these are implemented through subclasses, and this is just the interface.
  *
  * Layout happens until maximalAllowedY() is reached. That maximum may be set by
- * the RootArea, but it may also be set by for example a row in a table with fixed height.
+ * the RootArea, but it may also be set by, for example, a row in a table with
+ * fixed height.
  */
 class TEXTLAYOUT_EXPORT KoTextLayoutArea
 {
@@ -113,8 +119,14 @@ public:
     /// to maximumAllowedWidth
     void setNoWrap(qreal maximumAllowedWidth);
 
-    qreal listIndent() const;
-    qreal textIndent(QTextBlock block, QTextList *textList) const;
+    /// Set if and how this area acts as a layout environment
+    void setLayoutEnvironmentResctictions(bool isLayoutEnvironment, bool actsHorizontally);
+
+    /// Returns the rect of the layout environment (see odf style:flow-with-text).
+    QRectF layoutEnvironmentRect() const;
+
+    qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
+    void setExtraTextIndent(qreal extraTextIndent);
     qreal x() const;
     qreal width() const;
 
@@ -144,6 +156,8 @@ public:
     /// or invalid if not
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
+    static const int MaximumTabPos = 10000;
+
 protected:
     void setBottom(qreal bottom);
 
@@ -162,6 +176,9 @@ protected:
     void expandBoundingRight(qreal x);
 
 private:
+    /// utility method to restartlayout of a block
+    QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
+
     bool layoutBlock(FrameIterator *cursor);
 
     /// Returns vertical height of line
@@ -197,6 +214,8 @@ private:
     qreal m_maximalAllowedBottom;
     qreal m_maximumAllowedWidth; // 0 indicates wrapping is allowed
     QRectF m_boundingRect;
+    bool m_isLayoutEnvironment;
+    bool m_actsHorizontally;
     KoTextBlockBorderData *m_prevBorder;
     qreal m_prevBorderPadding;
 
@@ -220,10 +239,14 @@ private:
 
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;
-    QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
-    QList<KoTextLayoutArea *> m_footNoteAreas;
+    int m_footNoteAutoCount;
+    qreal m_extraTextIndent;
+    QList<KoTextLayoutNoteArea *> m_preregisteredFootNoteAreas;
+    QList<KoTextLayoutNoteArea *> m_footNoteAreas;
+    QList<QTextFrame *> m_preregisteredFootNoteFrames;
+    QList<QTextFrame *> m_footNoteFrames;
     KoTextLayoutEndNotesArea *m_endNotesArea;
-    QList<KoTextLayoutArea *> m_tableOfContentsAreas;
+    QList<KoTextLayoutArea *> m_generatedDocAreas;
 };
 
 #endif

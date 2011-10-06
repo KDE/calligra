@@ -38,8 +38,9 @@
 #include <KDebug>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
-        : m_original(original),
-        m_pageManager(pageManager)
+        : KoShape()
+        ,m_original(original)
+        ,m_pageManager(pageManager)
 {
     setSize(m_original->size());
     setSelectable(original->isSelectable());
@@ -125,6 +126,30 @@ QPainterPath KWCopyShape::outline() const
 {
     Q_ASSERT(m_original);
     return m_original->outline();
+}
+
+QRectF KWCopyShape::outlineRect() const
+{
+    return m_original->outlineRect();
+}
+
+QRectF KWCopyShape::boundingRect() const
+{
+    // Since we paint the originals children we also need to report the translated
+    // boundingRects of those children as part of our own boundingRect in order to
+    // make sure they are drawn if update rect intersects them but not the m_original
+    // itself.
+    QRectF bb = KoShape::boundingRect();
+    QPointF offset = bb.topLeft() - m_original->boundingRect().topLeft();
+
+    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
+    if (container) {
+        foreach (KoShape *shape, container->shapes()) {
+            bb |= shape->boundingRect().translated(offset);
+        }
+    }
+
+    return bb;
 }
 
 void KWCopyShape::saveOdf(KoShapeSavingContext &context) const

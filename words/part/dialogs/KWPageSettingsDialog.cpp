@@ -210,7 +210,7 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
     if (name.isEmpty())
         return;
     pagestyle.detach(name);
-    m_document->pageManager()->addPageStyle(name);
+    m_document->pageManager()->addPageStyle(pagestyle);
     reloadPageStyles();
 }
 

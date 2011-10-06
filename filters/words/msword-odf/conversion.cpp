@@ -933,8 +933,8 @@ QString Conversion::rncToStartNumberingAt(int rnc)
 
 const char* Conversion::getHorizontalPos(qint16 dxaAbs)
 {
-    // [MS-DOC] — v20101219: (-4) - center, (-8) - right, (-12) - inside, (-16)
-    // - outside
+    // [MS-DOC] — v20101219, sprmPDxaAbs:
+    // (-4) center, (-8) right, (-12) inside, (-16) outside
     switch (dxaAbs) {
     case (-4):
         return "center";
@@ -951,7 +951,8 @@ const char* Conversion::getHorizontalPos(qint16 dxaAbs)
 
 const char* Conversion::getHorizontalRel(uint pcHorz)
 {
-    // [MS-DOC] — v20101219: 0 - current column, 1 - margin, 2 - page
+    // [MS-DOC] — v20101219:
+    // 0 - current column, 1 - margin, 2 - page
     switch (pcHorz) {
     case 0:
         return "paragraph";
@@ -966,8 +967,8 @@ const char* Conversion::getHorizontalRel(uint pcHorz)
 
 const char* Conversion::getVerticalPos(qint16 dyaAbs)
 {
-    // [MS-DOC] — v20101219: (-4) - top, (-8) - middle, (-12) - bottom, (-16) -
-    // inside, (-20) - outside
+    // [MS-DOC] — v20101219, sprmPDyaAbs:
+    // (-4) top, (-8) middle, (-12) bottom, (-16) inside, (-20) outside
     switch (dyaAbs) {
     case (-4):
         return "top";
@@ -986,7 +987,8 @@ const char* Conversion::getVerticalPos(qint16 dyaAbs)
 
 const char* Conversion::getVerticalRel(uint pcVert)
 {
-    // [MS-DOC] — v20101219: 0 - margin, 1 - page, 2 - paragraph
+    // [MS-DOC] — v20101219:
+    // 0 - margin, 1 - page, 2 - paragraph
     switch (pcVert) {
     case 0:
         return "page-content";

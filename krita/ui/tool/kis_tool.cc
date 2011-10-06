@@ -87,7 +87,6 @@ struct KisTool::Private {
     KoAbstractGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    QString currentPaintOp;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     float currentExposure;
@@ -599,7 +598,7 @@ void KisTool::setupPainter(KisPainter* painter)
     painter->setGradient(currentGradient());
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
-    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) 
+    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data()))
         painter->setChannelFlags(l->channelLockFlags());
 }
 
@@ -656,14 +655,12 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
     }
     else
 #endif
-#ifdef INDEPENDENT_CANVAS
     if (m_outlinePaintMode==XOR_MODE && !(isCanvasOpenGL() && useWorkaround)) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
     }
     else/* if (m_outlinePaintMode==BW_MODE)*/
-#endif
     {
         QPen pen = painter->pen();
         pen.setWidth(3);
@@ -686,6 +683,9 @@ void KisTool::resetCursorStyle()
         break;
     case CURSOR_STYLE_CROSSHAIR:
         useCursor(KisCursor::crossCursor());
+        break;
+    case CURSOR_STYLE_SMALL_ROUND:
+        useCursor(KisCursor::roundCursor());
         break;
     case CURSOR_STYLE_POINTER:
         useCursor(KisCursor::upArrowCursor());

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Quickstates Plugin
+Name[da]=Quickstates-plugin
 Name[el]=Πρόσθετο Quickstates
 Name[en_GB]=Quickstates Plugin
 Name[es]=Complemento de estados rápidos
@@ -9,7 +10,7 @@ Name[nb]=Quickstates programtillegg
 Name[nl]=Plug-in voor snelstatussen
 Name[pl]=Wtyczka SzybkichStanów
 Name[pt]='Plugin' de Estados Rápidos
-Name[pt_BR]=Plug-in de estados rápidos
+Name[pt_BR]=Plugin de estados rápidos
 Name[ru]=Модуль Quickstates
 Name[sv]=Insticksprogram med snabbtillstånd
 Name[uk]=Додаток станів

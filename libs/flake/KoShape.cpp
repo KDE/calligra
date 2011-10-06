@@ -95,8 +95,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
       textRunAroundDistance(1.0),
-      textRunAroundThreshold(0.0),
-      anchored(false)
+      textRunAroundThreshold(0.0)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -907,18 +906,6 @@ qreal KoShape::textRunAroundThreshold() const
     return d->textRunAroundThreshold;
 }
 
-void KoShape::setAnchored(bool anchored)
-{
-    Q_D(KoShape);
-    d->anchored = anchored;
-}
-
-bool KoShape::isAnchored() const
-{
-    Q_D(const KoShape);
-    return d->anchored;
-}
-
 void KoShape::setTextRunAroundThreshold(qreal threshold)
 {
     Q_D(KoShape);
@@ -934,6 +921,7 @@ void KoShape::setBackground(KoShapeBackground *fill)
     if (d->fill)
         d->fill->ref();
     d->shapeChanged(BackgroundChanged);
+    notifyChanged();
 }
 
 KoShapeBackground * KoShape::background() const
@@ -1189,7 +1177,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         b->fillStyle(style, context);
     }
     else {
-        style.addProperty("draw:stroke", "none");
+        style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
     }
     KoShapeShadow *s = shadow();
     if (s)
@@ -1200,7 +1188,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         bg->fillStyle(style, context);
     }
     else {
-        style.addProperty("draw:fill", "none");
+        style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
     }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
@@ -1217,7 +1205,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         value += "content";
     }
     if (!value.isEmpty()) {
-        style.addProperty("style:protect", value);
+        style.addProperty("style:protect", value, KoGenStyle::GraphicType);
     }
 
     QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
@@ -1238,7 +1226,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 
         style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
                           .arg(top, 10, 'f').arg(right, 10, 'f')
-                          .arg(bottom, 10, 'f').arg(left, 10, 'f'));
+                          .arg(bottom, 10, 'f').arg(left, 10, 'f'), KoGenStyle::GraphicType);
 
     }
 
@@ -1266,9 +1254,9 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             wrap = "run-through";
             break;
     }
-    style.addProperty("style:wrap", wrap);
-    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
-    style.addPropertyPt("fo:margin", textRunAroundDistance());
+    style.addProperty("style:wrap", wrap, KoGenStyle::GraphicType);
+    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold(), KoGenStyle::GraphicType);
+    style.addPropertyPt("fo:margin", textRunAroundDistance(), KoGenStyle::GraphicType);
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
@@ -1498,6 +1486,7 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
         border->setLineWidth(pen.widthF());
         border->setJoinStyle(pen.joinStyle());
         border->setLineStyle(pen.style(), pen.dashPattern());
+        border->setCapStyle(pen.capStyle());
 
         return border;
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1512,6 +1501,7 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
             border->setLineWidth(pen.widthF());
             border->setJoinStyle(pen.joinStyle());
             border->setLineStyle(pen.style(), pen.dashPattern());
+            border->setCapStyle(pen.capStyle());
             border->setColor(pen.color());
 
             return border;

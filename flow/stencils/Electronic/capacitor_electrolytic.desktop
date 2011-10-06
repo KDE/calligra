@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=capacitor electrolytic
 Name[bg]=електролитен кондензатор
+Name[ca]=capacitador electrolític
 Name[el]=ηλεκτρολυτικός πυκνωτής
+Name[it]=condensatore elettrolitico
 Name[nb]=elektrolyttkondensator
 Name[nds]=Elko
 Name[nl]=condensator elektrolytisch
@@ -11,3 +13,4 @@ Name[pt_BR]=capacitor eletrolítico
 Name[sv]=elektrolytkondensator
 Name[uk]=Електролітичний конденсатор
 Name[x-test]=xxcapacitor electrolyticxx
+Name[zh_TW]=capacitor electrolytic

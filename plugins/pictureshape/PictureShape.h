@@ -23,13 +23,15 @@
 #include <QPixmap>
 #include <KoTosContainer.h>
 #include <KoFrameShape.h>
+#include <SvgShape.h>
 
 #define PICTURESHAPEID "PictureShape"
 
 class KoImageCollection;
 class RenderQueue;
+class KJob;
 
-class PictureShape : public KoTosContainer, public KoFrameShape
+class PictureShape : public KoTosContainer, public KoFrameShape, public SvgShape
 {
 public:
     enum PictureMode {
@@ -50,7 +52,10 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     // reimplemented
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
-
+    // reimplemented from SvgShape
+    virtual bool saveSvg(SvgSavingContext &context);
+    // reimplemented from SvgShape
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
     /**
      * Get the collection used in the shape.
      */
@@ -90,6 +95,19 @@ public slots:
 private:
     KoShape *m_pictureShape;
     QList<QSize> m_wantedImageSize;
+};
+
+class LoadWaiter : public QObject
+{
+    Q_OBJECT
+public:
+    LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
+
+public slots:
+    void setImageData(KJob *job);
+
+private:
+    PictureShape *m_pictureShape;
 };
 
 #endif

@@ -105,7 +105,7 @@ public:
     bool vastScrolling;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeControllerBase * sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
@@ -510,6 +510,7 @@ void KisCanvas2::notifyZoomChanged()
         m_d->prescaledProjection->notifyZoomChanged();
     }
     emit scrollAreaSizeChanged();
+    updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
 }
 
 void KisCanvas2::preScale()

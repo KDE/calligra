@@ -183,7 +183,7 @@ public:
 
 Sheet::Sheet(Map* map, const QString &sheetName)
         : KoShapeUserData(map)
-        , KoShapeControllerBase()
+        , KoShapeBasedDocumentBase()
         , d(new Private(this))
 {
     d->workbook = map;
@@ -233,7 +233,7 @@ Sheet::Sheet(Map* map, const QString &sheetName)
 
 Sheet::Sheet(const Sheet &other)
         : KoShapeUserData(other.d->workbook)
-        , KoShapeControllerBase()
+        , KoShapeBasedDocumentBase()
         , ProtectableObject(other)
         , d(new Private(this))
 {

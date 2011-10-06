@@ -29,7 +29,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
-    KoShapeControllerBase.cpp
+    KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
@@ -52,7 +52,6 @@ set(flake_SRCS
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
     KoShapeUserData.cpp
-    KoPointGroup.cpp
     KoParameterShape.cpp
     KoPointerEvent.cpp
     KoShapeController.cpp
@@ -184,6 +183,21 @@ set(flake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/KoPathSegmentChangeStrategy.cpp
+    svg/SvgUtil.cpp
+    svg/SvgGraphicContext.cpp
+    svg/SvgSavingContext.cpp
+    svg/SvgWriter.cpp
+    svg/SvgStyleWriter.cpp
+    svg/SvgShape.cpp
+    svg/SvgParser.cpp
+    svg/SvgStyleParser.cpp
+    svg/SvgGradientHelper.cpp
+    svg/SvgPatternHelper.cpp
+    svg/SvgFilterHelper.cpp
+    svg/SvgCssHelper.cpp
+    svg/SvgClipPathHelper.cpp
+    svg/SvgLoadingContext.cpp
+    svg/SvgShapeFactory.cpp
 )
 
 kde4_add_ui_files(flake_SRCS
@@ -212,13 +226,13 @@ set_target_properties(flake PROPERTIES
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES 
-    flake.desktop 
-    flaketool.desktop 
-    flakeshape.desktop 
-    flakedevice.desktop 
-    presentationeventaction.desktop 
-    scripteventaction.desktop 
+install( FILES
+    flake.desktop
+    flaketool.desktop
+    flakeshape.desktop
+    flakedevice.desktop
+    presentationeventaction.desktop
+    scripteventaction.desktop
     filtereffect.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
@@ -258,7 +272,7 @@ install(
     KoShapeContainerModel.h
     KoShapeContainerDefaultModel.h
     KoShapeController.h
-    KoShapeControllerBase.h
+    KoShapeBasedDocumentBase.h
     KoShapeFactoryBase.h
     KoShapeGroup.h
     KoShapeLayer.h

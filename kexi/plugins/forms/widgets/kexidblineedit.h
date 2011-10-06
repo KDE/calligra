@@ -27,7 +27,7 @@
 #include <klineedit.h>
 #include <qvalidator.h>
 
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
 #include <kexi_global.h>

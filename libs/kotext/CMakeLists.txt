@@ -8,6 +8,7 @@ add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
+    KoDocumentRdfBase.cpp
     KoText.cpp
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
@@ -42,6 +43,7 @@ set(kotext_LIB_SRCS
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
+    KoInlineCite.cpp
     KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
@@ -55,7 +57,10 @@ set(kotext_LIB_SRCS
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
 
+    ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
+    KoBibliographyInfo.cpp
+    BibliographyGenerator.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -72,6 +77,7 @@ set(kotext_LIB_SRCS
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp
+    opendocument/KoTextWriter_p.cpp
     opendocument/KoTextWriter.cpp
 
     changetracker/KoChangeTracker.cpp
@@ -82,12 +88,21 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedRowData.cpp
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
-    KoTextDrag.cpp
 
-    commands/DeleteTableRowCommand.cpp
+    commands/ChangeListCommand.cpp
+    commands/ChangeTrackedDeleteCommand.cpp
+    commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
-    commands/InsertTableRowCommand.cpp
+    commands/DeleteTableRowCommand.cpp
+    commands/InsertDeleteChangesCommand.cpp
     commands/InsertTableColumnCommand.cpp
+    commands/InsertTableRowCommand.cpp
+    commands/ListItemNumberingCommand.cpp
+    commands/RemoveDeleteChangesCommand.cpp
+    commands/TextPasteCommand.cpp
+
+    KoTextDrag.cpp
+    KoTextCommandBase.cpp
 )
 
 if( Soprano_FOUND )
@@ -125,6 +140,7 @@ install( FILES texteditingplugin.desktop inlinetextobject.desktop textvariablepl
 install(
     FILES
     kotext_export.h
+    KoDocumentRdfBase.h
     KoInlineObject.h
     KoTextEditor.h
     KoTextEditingFactory.h
@@ -151,6 +167,7 @@ install(
     KoTextMeta.h
     KoTextSoftPageBreak.cpp
     KoSection.h
+    KoTextCommandBase.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
@@ -168,6 +185,7 @@ install(
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
     styles/KoTableBorderStyle.h
+    styles/KoTableStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )

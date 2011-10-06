@@ -21,30 +21,44 @@
 
 import QtQuick 1.0
 import CalligraActive 1.0
+import org.kde.plasma.core 0.1 as PlasmaCore
 
 ListView {
     id: recentFilesListView
     property int buttonWidth
     property int buttonHeight
+    property string typeFilter
 
     width: parent.width; height: parent.height;
     spacing: 10
 
-    model: recentFilesModel
+    PlasmaCore.DataSource {
+        id: metadataSource
+        engine: "org.kde.active.metadata"
+        connectedSources: ["ResourcesOfType:" + typeFilter]
+        interval: 0
+    }
+    PlasmaCore.DataModel {
+        id: metadataModel
+        keyRoleFilter: ".*"
+        dataSource: metadataSource
+    }
+
+    model: metadataModel
     delegate: Button {
         textPosition: "right"
 
-        text: modelData.name
+        text: label
         width: buttonWidth; height: buttonHeight;
         imageSource: {
-            switch(modelData.type) {
-                case CADocumentInfo.TextDocument:
+            switch(typeFilter) {
+                case "OpenDocumentTextDocument":
                     "qrc:///images/words.png"
                     break;
-                case CADocumentInfo.Spreadsheet:
+                case "Spreadsheet":
                     "qrc:///images/tables.png"
                     break;
-                case CADocumentInfo.Presentation:
+                case "Presentation":
                     "qrc:///images/stage.png"
                     break;
             }
@@ -52,7 +66,7 @@ ListView {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: homeScreen.openDocument(modelData.path);
+            onClicked: homeScreen.openDocument(model["url"]);
         }
     }
 }

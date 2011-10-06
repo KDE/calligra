@@ -44,7 +44,7 @@
 
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
-#include <widget/kexicustompropertyfactory.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
 #include <core/KexiMainWindowIface.h>
 #include <kexiutils/SmallToolButton.h>
 
@@ -249,6 +249,12 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << ":library_widget_KFDTabWidget"
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
             << ":library_widget_Spring"
+#endif
+#ifdef CAN_USE_QTWEBKIT
+            << ":library_widget_WebBrowserWidget"
+#endif
+#ifdef CAN_USE_MARBLE
+            << ":library_widget_MapBrowserWidget"
 #endif
             << QString() //sep
             ;
@@ -550,3 +556,4 @@ void KexiFormManager::slotPointerClicked()
 }
 
 #include "kexiformmanager.moc"
+

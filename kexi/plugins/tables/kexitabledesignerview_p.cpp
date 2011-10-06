@@ -41,8 +41,8 @@
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
-#include <widget/tableview/kexidataawarepropertyset.h>
-#include <widget/kexicustompropertyfactory.h>
+#include <widget/dataviewcommon/kexidataawarepropertyset.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
 #include <kexitableview.h>

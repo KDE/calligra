@@ -29,9 +29,6 @@
  </Menu>
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
-  <Separator/>
-  <ActionList name="view_split" />
   <!-- Menu name="view_displaymodes"><text>&amp;Display Mode</text>
     <Action name="view_pagemode"/>
     <Action name="view_previewmode"/>
@@ -73,14 +70,9 @@
   <Action name="insert_comment"/>
   <Action name="insert_file"/>
   <Action name="add_bookmark"/>
-  <Action name="inline_frame"/>
   <Separator/>
   <!-- Frames - the order matches the order of the keybindings -->
   <Action name="insert_table"/>
-  <Action name="insert_picture"/>
-  <Action name="tools_createtext"/>
-  <Action name="tools_formula"/>
-  <Action name="tools_part"/>
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
   <Action name="text_default"/>
@@ -296,6 +288,7 @@
  <ActionList name="frameset_type_action"/> <!-- Used for frameset type (picture, part...) specific actions -->
  <Action name="spelling_suggestions"/>
  <Separator/>
+ <Action name="anchor"/>
  <Action name="format_frameset"/>
 </Menu>
 </kpartgui>

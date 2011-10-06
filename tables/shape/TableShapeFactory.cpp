@@ -51,7 +51,7 @@ TableShapeFactory::TableShapeFactory()
 {
     setToolTip(i18n("Spreadsheet Shape"));
     setIcon("spreadsheetshape");
-    setOdfElementNames(KoXmlNS::table, QStringList() << "table");
+    setXmlElementNames(KoXmlNS::table, QStringList() << "table");
 }
 
 TableShapeFactory::~TableShapeFactory()

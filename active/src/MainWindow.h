@@ -39,6 +39,8 @@ private:
 
 private slots:
     void adjustWindowSize(QSize size);
+public Q_SLOTS:
+    void openFileDialog();
 };
 
 #endif // MAINWINDOW_H

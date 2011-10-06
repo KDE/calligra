@@ -55,7 +55,7 @@ class KoShapeSavingContext;
 class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoDataCenterBase;
 class KoShapeShadow;
 class KoEventAction;
@@ -302,7 +302,7 @@ public:
     /**
      * @brief Get the bounding box of the shape
      *
-     * This includes the line width but not the shadow of the shape
+     * This includes the line width and the shadow of the shape
      *
      * @return the bounding box of the shape
      */
@@ -408,18 +408,6 @@ public:
      * @param threshold the new threshold
      */
     void setTextRunAroundThreshold(qreal threshold);
-
-    /**
-     * Set an indication if the shape is anchored by text.
-     * @param anchored if the shape is anchored by text
-     */
-    void setAnchored(bool anchored);
-
-    /**
-     * Return if the shape is anchored by text
-     * @return true if the shape is anchored by text
-     */
-    bool isAnchored() const;
 
     /**
      * Set the background of the shape.
@@ -623,7 +611,7 @@ public:
 
     /**
      * returns the outline of the shape in the form of a path.
-     * The outline returned will always have the position() of the shape as the origin, so
+     * The outline returned will always be relative to the position() of the shape, so
      * moving the shape will not alter the result.  The outline is used to draw the border
      * on, for example.
      * @returns the outline of the shape in the form of a path.
@@ -632,8 +620,9 @@ public:
 
     /**
      * returns the outline of the shape in the form of a rect.
-     * The outlineRect returned will always have the position() of the shape as the origin, so
-     * moving the shape will not alter the result.  The outline is used to calculate the boundingRect.
+     * The outlineRect returned will always be relative to the position() of the shape, so
+     * moving the shape will not alter the result.  The outline is used to calculate
+     * the boundingRect.
      * @returns the outline of the shape in the form of a rect.
      */
     virtual QRectF outlineRect() const;

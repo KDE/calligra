@@ -40,11 +40,12 @@ class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoRdfSemanticItem;
+class KoTextAnchor;
 class KActionMenu;
 
 class KToggleAction;
 /**
- * Wordss view class. Following the broad model-view-controller idea this class
+ * Words' view class. Following the broad model-view-controller idea this class
  * shows you one view on the document. There can be multiple views of the same document each
  * in with independent settings for viewMode and zoom etc.
  */
@@ -72,6 +73,9 @@ public:
     KWDocument *kwdocument() const {
         return m_document;
     }
+
+    /// reimplemented from superclass
+    void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
 
     // interface KoView
     /// reimplemented method from superclass
@@ -112,6 +116,13 @@ public slots:
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
 
+    /// turns the border display on/off
+    void toggleViewFrameBorders(bool on);
+    /// go to previous page
+    void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    /// go to next page
+    void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
@@ -119,6 +130,7 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
+    KoTextAnchor *anchorForSelectedFrame(bool create);
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -149,12 +161,8 @@ private slots:
     void bringToFront();
     /** Move the selected frame(s) to be behind all other frames */
     void sendToBack();
-    /// turns the border display on/off
-    void toggleViewFrameBorders(bool on);
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
-    /// convert current frame to an inline frame
-    void inlineFrame();
     /// anchor the current shape "as-char"
     void anchorAsChar();
     /// anchor the current shape "to-char"
@@ -163,8 +171,6 @@ private slots:
     void anchorToParagraph();
     /// anchor the current shape "to-page"
     void anchorToPage();
-    /// make the current shape free floating
-    void setFloating();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
@@ -193,16 +199,8 @@ private slots:
     void handleDeletePageAction();
     /// set the status of the show-statusbar action to reflect the current setting.
     void updateStatusBarAction();
-    /// insert image
-    void insertImage();
-    /// insert a footnote or an endnote
-    void insertFootEndNote();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
-    /// go to previous page
-    void goToPreviousPage();
-    /// go to next page
-    void goToNextPage();
     /// A semantic item was updated and should have it's text refreshed.
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
     /// A match was found when searching.

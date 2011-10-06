@@ -33,6 +33,7 @@
 #include <KoCanvasBase.h>
 #include <KoTextEditor.h>
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
@@ -80,13 +81,6 @@ public:
     ///Returns the change tracker of the document
     KoChangeTracker *changeTracker() const;
 
-    /// set the notes configuration of the document
-    void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
-
-    /// @return the notes configuration
-    KoOdfNotesConfiguration *notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
-
-    /// set the notes configuration of the document
     void setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration);
 
     /// @return the notes configuration
@@ -144,9 +138,7 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
-    QTextFrame* footNotesFrame();
-
-    QTextFrame* endNotesFrame();
+    QTextFrame* auxillaryFrame();
 
     /**
      * Specifies if tabs are relative to paragraph indent.
@@ -164,6 +156,9 @@ public:
      */
     bool relativeTabs() const;
 
+    void setParaTableSpacingAtStart(bool spacingAtStart);
+    bool paraTableSpacingAtStart() const;
+
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
@@ -178,15 +173,14 @@ public:
         ChangeTrackerResource,
         UndoStack,
         TextEditor,
-        FootNotesConfiguration,
-        EndNotesConfiguration,
         LineNumberingConfiguration,
-        EndNotesFrame,
-        FootNotesFrame,
+        AuxillaryFrame,
         RelativeTabs,
         HeadingList,
         Selections,
-        LayoutTextPage /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
+        IndexGeneratorManager
     };
 
     static const QUrl StyleManagerURL;
@@ -195,15 +189,15 @@ public:
     static const QUrl ChangeTrackerURL;
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
-    static const QUrl FootNotesConfigurationURL;
-    static const QUrl EndNotesConfigurationURL;
     static const QUrl LineNumberingConfigurationURL;
-    static const QUrl EndNotesFrameURL;
-    static const QUrl FootNotesFrameURL;
+    static const QUrl BibliographyConfigurationURL;
+    static const QUrl AuxillaryFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;
     static const QUrl LayoutTextPageUrl;
+    static const QUrl ParaTableSpacingAtStartUrl;
+    static const QUrl IndexGeneratorManagerUrl;
 
 private:
     QTextDocument *m_document;

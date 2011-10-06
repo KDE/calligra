@@ -34,34 +34,52 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor)
         : m_shape(shape),
         m_frameBehavior(Words::AutoExtendFrameBehavior),
         m_newFrameBehavior(Words::NoFollowupFrame),
-        m_anchoredPageNumber(pageNumber),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
-        m_minimumFrameHeight(0.0) // no minimum height per default
+        m_minimumFrameHeight(0.0), // no minimum height per default
+        m_anchor(anchor)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
     if (parent)
         parent->addFrame(this);
 
+    if (!m_anchor) {
+        m_anchor = new KoTextAnchor(shape); // sets itself on the shape
+        m_anchor->setAnchorType(KoTextAnchor::AnchorPage);
+    }
+
     KWTextFrameSet* parentFrameSet = dynamic_cast<KWTextFrameSet*>(parent);
     if (parentFrameSet) {
         if (Words::isHeaderFooter(parentFrameSet)) {
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                // header and footer are always auto-grow-height independent of whatever
+                // was defined for them in the document.
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
         if (parentFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            /* NoResize should be default this days. Setting it here would overwrite any value
+              read in TextShape::loadStyle what is not what we want.
+
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
                 data->setResizeMethod(KoTextShapeDataBase::NoResize);
             }
+            */
         } else {
             shape->setGeometryProtected(true);
-            shape->setCollisionDetection(false);
+
+            // We need to keep collision detection on or we will not relayout when page anchored shapes are
+            // moved. For page anchored shapes (which are different from anchored shapes which are usually
+            // children of the shape they are anchored too and therefore the ShapeManager filters collision
+            // events for them out) the KoTextRootAreaProvider::relevantObstructions method is used to produce
+            // obstructions whereas for anchored shapes the KoTextDocumentLayout::registerAnchoredObstruction
+            // is used to explicit register the obstructions.
+            //shape->setCollisionDetection(false);
         }
     }
 

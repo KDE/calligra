@@ -30,6 +30,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 
+#include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -40,7 +41,7 @@
 #include <KoTextSharedSavingData.h>
 
 #include <KoStoreDevice.h>
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 #include <QBuffer>
 #include <QTextCursor>
@@ -110,6 +111,8 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
 
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
+        if (!pageStyle.displayName().isEmpty() && pageStyle.displayName() != pageStyle.name())
+            masterStyle.addProperty("style:display-name", pageStyle.displayName());
         masterStyle.addProperty("style:page-layout-name", mainStyles.insert(layoutStyle, "pm"));
         QString name = mainStyles.insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
         m_masterPages.insert(pageStyle, name);
@@ -242,10 +245,9 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         //     in ODF terms those frames are page-anchored.
 
         if (fs->frameCount() == 1) {
-            KoShape *shape = fs->frames().first()->shape();
             // may be a frame that is anchored to text, don't save those here.
-            // but first check since clipped shapes look similar, but are not anchored to text
-            if (shape->parent() && !shape->parent()->isClipped(shape))
+            KoTextAnchor *anchor = (KoTextAnchor *)fs->frames().first()->anchor();
+            if (anchor && anchor->anchorType() != KoTextAnchor::AnchorPage)
                 continue;
         }
 
@@ -376,6 +378,24 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
 
     settingsWriter->endElement(); // config:config-item-map-entry
     settingsWriter->endElement(); // config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+    KoTextDocument doc(m_document->mainFrameSet()->document());
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.relativeTabs() ? "true" : "false");
+    settingsWriter->endElement();
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.paraTableSpacingAtStart() ? "true" : "false");
+    settingsWriter->endElement();
+
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->endElement(); // office:settings

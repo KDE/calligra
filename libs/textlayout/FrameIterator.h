@@ -33,8 +33,9 @@ class FrameIterator
 {
 public:
     FrameIterator(QTextFrame *frame);
-    FrameIterator(QTextTableCell frame);
+    FrameIterator(const QTextTableCell &frame);
     FrameIterator(FrameIterator *other);
+    ~FrameIterator();
 
     bool operator ==(const FrameIterator &other) const;
 
@@ -52,6 +53,8 @@ public:
     TableIterator *currentTableIterator;  //useful if it is pointing to a table
 
     FrameIterator *currentSubFrameIterator;  //useful if it is pointing to a subFrame
+
+    int endNoteIndex;
 };
 
 #endif

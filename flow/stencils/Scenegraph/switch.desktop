@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=switch
+Name[cs]=přepínač
 Name[nb]=switch
+Name[nl]=wisselen
 Name[pl]=przełącz
 Name[pt]=comutação
 Name[pt_BR]=comutação
@@ -8,3 +10,4 @@ Name[sv]=omkopplare
 Name[ug]=ئالماشتۇر
 Name[uk]=Перемикач
 Name[x-test]=xxswitchxx
+Name[zh_TW]=切換

@@ -19,6 +19,11 @@
 #include "kexirelationdesigntool.h"
 #include "kexirelationdesignshape.h"
 
+#ifdef __GNUC__
+#warning replace KexiStartupDialog by the new assistant
+#else
+#pragma WARNING( replace KexiStartupDialog by the new assistant )
+#endif
 #include "kexi/main/startup/KexiStartupDialog.h"
 #include "kexi/kexidb/utils.h"
 #include <KoSelection.h>

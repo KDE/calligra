@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=TelephoneExchange
+Name[ca]=TelephoneExchange
 Name[el]=TelephoneExchange
+Name[es]=Central telefónica
 Name[et]=Telefonijaam
 Name[nb]=Telefonsentral
 Name[nl]=Telefooncentrale
@@ -11,3 +13,4 @@ Name[ru]=Телефонная станция
 Name[sv]=Telefonväxel
 Name[uk]=Телефонна станція
 Name[x-test]=xxTelephoneExchangexx
+Name[zh_TW]=電話交換器
