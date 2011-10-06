@@ -48,10 +48,17 @@ Item {
         anchors.topMargin: 20
         spacing: 80
 
-        Image {
+//         Image {
+//             id: calligra_logo
+//             source: "qrc:///images/calligra-logo.png"
+//             anchors.horizontalCenter: parent.horizontalCenter
+//         }
+
+        Text {
             id: calligra_logo
-            source: "qrc:///images/calligra-logo.png"
+            text: "Calligra"
             anchors.horizontalCenter: parent.horizontalCenter
+            font.pointSize: 80
         }
 
         Text {
