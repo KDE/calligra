@@ -28,6 +28,8 @@ Item {
         id: theme
     }
 
+    anchors.margins: 20
+
     Button {
         id: back
         drawBackground: false
@@ -44,23 +46,17 @@ Item {
     Column {
         anchors.fill: parent
         anchors.topMargin: 20
-        spacing: 50
-        Text {
-            width: parent.width - 40
+        spacing: 80
+
+        Image {
+            id: calligra_logo
+            source: "qrc:///images/calligra-logo.png"
             anchors.horizontalCenter: parent.horizontalCenter
-            id: title
-            text: "Calligra Active"
-            color: theme.textColor
-            style: Text.Sunken
-            styleColor: theme.backgroundColor
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 20
         }
 
         Text {
             id: description
-            width: parent.width - 40
+            width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap
             text: "<p>Calligra Active 1.0 Beta using Calligra Engine 2.4</p> \
@@ -68,6 +64,7 @@ Item {
                    <p><a href=\"http://www.calligra-suite.org/\">http://www.calligra-suite.org</a></p>"
             color: theme.textColor
             styleColor: theme.backgroundColor
+            font.pointSize: 20
         }
     }
 }
