@@ -69,7 +69,7 @@ QVariant FrameLayer::getVision(int role, bool isCurrent)
 
 KisNode* FrameLayer::getContent()
 {
-    if (!at(0)->name().compare("_"))
+    if (at(0) && !at(0)->name().compare("_"))
     {
         return at(0).data();
     }
@@ -82,8 +82,11 @@ void FrameLayer::setContent(KisNode* c)
     {
         if (getContent())
             getNodeManager()->removeNode(getContent());
-        getNodeManager()->insertNode(c, this, 0);
         c->setName("_");
+        if (c->parent())
+            getNodeManager()->moveNodeAt(c, this, 0);
+        else
+            getNodeManager()->insertNode(c, this, 0);
     }
 }
 

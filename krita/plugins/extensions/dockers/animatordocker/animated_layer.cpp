@@ -27,6 +27,17 @@ AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source)
 {
 }
 
+void AnimatedLayer::init(KisGroupLayer* source)
+{
+    if (! getNodeManager())
+        return;
+    
+    int i;
+    int chcount = source->childCount();
+    for (i = 0; i < chcount; ++i)
+        getNodeManager()->moveNodeAt(source->at(0), this, i);
+}
+
 void AnimatedLayer::setNodeManager(KisNodeManager* nodeman)
 {
     m_nodeman = nodeman;

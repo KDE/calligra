@@ -37,7 +37,7 @@ public:
     AnimatedLayer(const KisGroupLayer& source);
     
 public:
-//     virtual bool needProjection() const;
+    void init(KisGroupLayer* source);
     
     // Animation interface
     // NEW

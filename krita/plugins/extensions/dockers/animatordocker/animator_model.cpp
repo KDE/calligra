@@ -136,30 +136,26 @@ void AnimatorModel::loadLayers()
             if (node->name().startsWith("_ani_"))       // Normal
             {
                 KisGroupLayer* gnode = dynamic_cast<KisGroupLayer*>(node);
-//                 lay = new SimpleAnimatedLayer(*gnode);
-                lay = new NormalAnimatedLayer(*gnode);
+                
+                // This is a little hack to create empty *AnimatedLayer
+                m_nodeman->createNode("KisGroupLayer");
+                
+                KisGroupLayer* tmp_node = dynamic_cast<KisGroupLayer*>(m_nodeman->activeNode().data());
+                lay = new NormalAnimatedLayer(*tmp_node);
+                
+                m_nodeman->removeNode(tmp_node);
                 
                 lay->setName(gnode->name());
                 
-                // CHECK
                 lay->setNodeManager(m_nodeman);
                 
                 const KisNode* pn = gnode->parent();
                 int nindex = pn->index(gnode);
-//                 m_nodeman->activateNode();
                 
+                m_nodeman->insertNode(lay, const_cast<KisNode*>( pn ), nindex);
+                lay->init(gnode);
                 
                 m_nodeman->removeNode(gnode);
-                m_nodeman->insertNode(lay, const_cast<KisNode*>( pn ), nindex);
-                
-                // TODO: move to AnimatedLayer constructor
-                for (int i = 0; i < lay->childCount(); ++i)
-                {
-                    const KisNode* nnode = lay->at(i);
-                    KisNode* ncnode = const_cast<KisNode*>(nnode);
-                    QString tmp = ncnode->name();
-                    ncnode->setName(tmp.mid(14, tmp.size()-15));        // This means: delete "Duplicate of " from name
-                }
             }
         }
         

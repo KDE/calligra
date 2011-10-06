@@ -74,6 +74,9 @@ void SimpleAnimatedLayer::loadFrames()
                 frame->at(0)->setName("_");
                 
                 getNodeManager()->insertNode(frame, this, findex);
+                
+                frame->setContent(chsource->at(0).data());
+                
                 getNodeManager()->removeNode(chsource);
             }
             
