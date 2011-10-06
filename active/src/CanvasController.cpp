@@ -246,7 +246,7 @@ void CanvasController::setZoomWithWheel(bool zoom)
 
 void CanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
-    m_documentViewSize = sz;
+    m_documentViewSize = sz*m_zoomHandler->zoomInPercent();
     emit docHeightChanged();
     emit docWidthChanged();
 
