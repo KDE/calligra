@@ -474,6 +474,7 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setRootIsDecorated( false );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
+    setAlternatingRowColors( true );
 
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
 

@@ -31,7 +31,7 @@
 
 #include <QPointer>
 
-class KexiConnSelectorWidget;
+class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KCategorizedView;
 
@@ -107,7 +107,7 @@ public:
     explicit KexiProjectConnectionSelectionPage(QWidget* parent = 0);
     virtual ~KexiProjectConnectionSelectionPage();
 
-    KexiConnSelectorWidget* connSelector;
+    KexiConnectionSelectorWidget* connSelector;
 };
 
 class KexiServerDBNamePage;

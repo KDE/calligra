@@ -40,6 +40,8 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiDataSourceComboBox.cpp 
     KexiObjectInfoLabel.cpp
     kexicharencodingcombobox.cpp
+    KexiDBTitlePage.cpp
+    KexiProjectSelectorWidget.cpp
   )
 
 IF (KEXI_MOBILE)
@@ -55,25 +57,21 @@ ELSE (KEXI_MOBILE)
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
 #      in kexiactionselectiondialog and remove them
     kexiprjtypeselector.cpp
+    KexiConnectionSelectorWidget.cpp
+    KexiFileWidget.cpp
+  )
+  kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
+    KexiConnectionSelector.ui
+    kexidbconnectionwidget.ui
+    kexidbconnectionwidgetdetails.ui
+    kexiprjtypeselector.ui
   )
 ENDIF (KEXI_MOBILE)
 
-
-
-
 kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
-  kexidbconnectionwidget.ui
-  kexidbconnectionwidgetdetails.ui
-  kexiprjtypeselector.ui
+    KexiDBTitlePage.ui
+    KexiProjectSelector.ui
 )
-
-IF (KEXI_MOBILE)
-
-ELSE(KEXI_MOBILE)
-  #LIST(APPEND kexiextendedwidgets_LIB_SRCS
-  #  kexiprjtypeselector.ui
-  #)
-ENDIF(KEXI_MOBILE)
 
 kde4_add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
@@ -87,13 +85,14 @@ target_link_libraries(
     kexidb
     ${KOPROPERTY_LIBS}
     ${KDE4_KDEUI_LIBS}
-    )
+)
 
 IF (KEXI_MOBILE)
 
 ELSE(KEXI_MOBILE)
   target_link_libraries(
     kexiextendedwidgets
+    ${KDE4_KFILE_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
     )

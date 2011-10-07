@@ -165,6 +165,20 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
         } else {
             return startDate().addDays( section ).toString( i18nc( "Date format used as chart axis labels. Must follow QDate specification.", "MM.dd" ) );
         }
+    } else if ( role == Qt::EditRole ) {
+        if ( orientation == Qt::Horizontal ) {
+            switch ( section ) {
+                case 0: return "BCWS Cost";
+                case 1: return "BCWP Cost";
+                case 2: return "ACWP Cost";
+                case 3: return "BCWS Effort";
+                case 4: return "BCWP Effort";
+                case 5: return "ACWP Effort";
+                default: return QVariant();
+            }
+        } else {
+            return startDate().addDays( section );
+        }
     }  else if ( role == KDChart::DatasetBrushRole ) {
         if ( orientation == Qt::Horizontal ) {
             switch ( section ) {

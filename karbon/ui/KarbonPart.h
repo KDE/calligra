@@ -97,6 +97,9 @@ public:
 public slots:
     void slotDocumentRestored();
 
+signals:
+    void shapeCountChanged();
+
 protected:
     /// reimplemented form KoDocument
     virtual KoView* createViewInstance(QWidget* parent);

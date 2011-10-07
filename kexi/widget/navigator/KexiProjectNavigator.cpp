@@ -463,11 +463,11 @@ void KexiProjectNavigator::slotRename()
 
 void KexiProjectNavigator::setFocus()
 {
-#if 0
-    if (!m_list->currentIndex().isValid() && m_list->firstChild())//select first
-        m_list->setCurrentIndex(m_list->firstChild(), true);
+    if (!m_list->currentIndex().isValid()) { // select first
+        QModelIndex first = m_model->firstPartItem();
+        m_list->setCurrentIndex(first);
+    }
     m_list->setFocus();
-#endif
 }
 
 void KexiProjectNavigator::updateItemName(KexiPart::Item& item, bool dirty)

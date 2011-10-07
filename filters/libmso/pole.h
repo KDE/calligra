@@ -84,19 +84,6 @@ public:
      */
     bool isDirectory(const std::string& name);
 
-    /**
-     * Finds and returns a stream with the specified name.
-     * If reuse is true, this function returns the already created stream
-     * (if any). Otherwise it will create the stream.
-     *
-     * When errors occur, this function returns NULL.
-     *
-     * You do not need to delete the created stream, it will be handled
-     * automatically.
-     **/
-    Stream* stream(const std::string& name, bool reuse = true);
-    //Stream* stream( const std::string& name, int mode = Stream::ReadOnly, bool reuse = true );
-
 private:
     StorageIO* io;
 
