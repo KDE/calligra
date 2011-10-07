@@ -269,9 +269,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
         if (start == 0 ||
             (effort == 0.0 && length == 0.0 && duration == 0.0 && end == 0)) {
             if ( start == 0 ) {
-                TJMH.warningMessage(i18nc("@info/plain", "Cannot schedule: Valid start time is not set"), this);
+                warningMessage(i18nc("@info/plain", "Cannot schedule: Valid start time is not set"));
             } else {
-                TJMH.warningMessage(i18nc("@info/plain", "Cannot schedule: Estimate is 0"), this);
+                warningMessage(i18nc("@info/plain", "Cannot schedule: Estimate is 0"));
             }
             return false;
         }
@@ -300,9 +300,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
         if (end == 0 ||
             (effort == 0.0 && length == 0.0 && duration == 0.0 && start == 0)) {
             if ( end == 0 ) {
-                TJMH.warningMessage(i18nc("@info/plain", "Cannot schedule: Valid end time is not set"), this);
+                warningMessage(i18nc("@info/plain", "Cannot schedule: Valid end time is not set"));
             } else {
-                TJMH.warningMessage(i18nc("@info/plain", "Cannot schedule: Estimate is 0"), this);
+                warningMessage(i18nc("@info/plain", "Cannot schedule: Estimate is 0"));
             }
             return false;
         }
@@ -326,7 +326,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
 
     if ((duration > 0.0) || (length > 0.0))
     {
-        TJMH.debugMessage(QString("Scheduling duration/length at: %1").arg(time2tjp(date)), this);
+//         TJMH.debugMessage(QString("Scheduling duration/length at: %1").arg(time2tjp(date)), this);
         /* Length specifies the number of working days (as daily load)
          * and duration specifies the number of calendar days. */
         if (!allocations.isEmpty())
@@ -483,7 +483,7 @@ Task::propagateStart(int sc, time_t date)
     if (DEBUGTS(11))
         qDebug()<<"PS1: Setting start of"<<this<<"to"<<time2tjp(start);
 
-    TJMH.debugMessage(QString("Set start: %2 ").arg(time2ISO(start)), this);
+//     TJMH.debugMessage(QString("Set start: %2 ").arg(time2ISO(start)), this);
 
     /* If one end of a milestone is fixed, then the other end can be set as
      * well. */
@@ -549,7 +549,7 @@ Task::propagateEnd(int sc, time_t date)
     if (DEBUGTS(11))
         qDebug()<<"PE1: Setting end of"<<name<<"to"<<time2tjp(end);
 
-    TJMH.debugMessage(QString("Set end: %2 ").arg(time2ISO(end)), this);
+//     TJMH.debugMessage(QString("Set end: %2 ").arg(time2ISO(end)), this);
     /* If one end of a milestone is fixed, then the other end can be set as
      * well. */
     if (milestone && date > 0)
@@ -647,7 +647,7 @@ Task::isAvailable( Allocation *allocation, Resource *resource, time_t slot ) con
         foreach (Resource *r, allocation->getRequiredResources(resource)) {
             int a = r->isAvailable(slot);
             if ( a > max ) {
-                TJMH.debugMessage(QString("Required resource '%1' is not available at %2").arg(r->getName()).arg(time2ISO(slot)), this);
+//                 TJMH.debugMessage(QString("Required resource '%1' is not available at %2").arg(r->getName()).arg(time2ISO(slot)), this);
                 max = a;
             }
         }
@@ -666,7 +666,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
         if (DEBUGRS(15))
             qDebug()<<"Task"<<name<<"is not active at"<<time2tjp(date);
         
-        TJMH.debugMessage(QString("Task is not active at %1").arg(time2tjp(date)), this);
+//         TJMH.debugMessage(QString("Task is not active at %1").arg(time2tjp(date)), this);
         return;
     }
 
@@ -696,7 +696,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
         {
             if (!a->isOnShift(Interval(date, date + slotDuration - 1)))
             {
-                TJMH.debugMessage(QString("Mandatory allocation not on shift at: %1").arg(time2tjp(date)), this);
+//                 TJMH.debugMessage(QString("Mandatory allocation not on shift at: %1").arg(time2tjp(date)), this);
                 allMandatoriesAvailables = false;
                 break;
             }
@@ -728,14 +728,14 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                         if ((availability = isAvailable(a, (*rti), date)) > 0 ||
                             mandatoryResources.contains(*rti))
                         {
-                            TJMH.debugMessage(QString("Mandatory resource '%2' not available at: %1").arg(time2tjp(date)).arg((*rti)->getName()), this);
+//                             TJMH.debugMessage(QString("Mandatory resource '%2' not available at: %1").arg(time2tjp(date)).arg((*rti)->getName()), this);
                             allAvailable = false;
                             if (availability >= maxAvailability)
                                 maxAvailability = availability;
                         }
                         else {
                             mandatoryResources.append(*rti);
-                            TJMH.debugMessage(QString("Mandatory resource '%2' available at: %1").arg(time2tjp(date)).arg((*rti)->getName()));
+//                             TJMH.debugMessage(QString("Mandatory resource '%2' available at: %1").arg(time2tjp(date)).arg((*rti)->getName()));
                         }
                     }
                     if (allAvailable)
@@ -752,7 +752,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
         }
     }
     if ( ! allMandatoriesAvailables ) {
-        TJMH.debugMessage(QString("All mandatory resourcea are not available"), this);
+//         TJMH.debugMessage(QString("All mandatory resourcea are not available"), this);
     }
     for (QListIterator<Allocation*> ali(allocations);
          ali.hasNext() && allMandatoriesAvailables &&
@@ -767,7 +767,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
             if (DEBUGRS(15))
                 qDebug()<<"Allocation not on shift at"<<time2tjp(date);
 
-            TJMH.debugMessage(QString("Allocation not on shift at: %1").arg(time2tjp(date)), this);
+//             TJMH.debugMessage(QString("Allocation not on shift at: %1").arg(time2tjp(date)), this);
             continue;
         }
 
@@ -872,7 +872,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                     qDebug()<<"Resource"<<a->getLockedResource()->getId()<<"is not available for task '"<<id<<"'"
                         <<"from"<<time2ISO(a->getConflictStart())<<"to"<<time2ISO(date);
 
-                TJMH.debugMessage(QString("Resource %1 is not available from %2 to %3").arg(a->getLockedResource()->getName()).arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)), this);
+//                 TJMH.debugMessage(QString("Resource %1 is not available from %2 to %3").arg(a->getLockedResource()->getName()).arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)), this);
                 a->setConflictStart(0);
             }
         }
@@ -907,7 +907,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                     }
                     qDebug()<<"No resource of the allocation ("<<candidates<<") is available for task '"<<name<<"' from"<<time2ISO(a->getConflictStart())<<"to"<<time2ISO(date);
                 }
-                TJMH.debugMessage(QString("No resource is available for task from %2 to %3").arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)), this);
+//                 TJMH.debugMessage(QString("No resource is available for task from %2 to %3").arg(time2ISO(a->getConflictStart())).arg(time2ISO(date)), this);
 
                 a->setConflictStart(0);
             }
@@ -928,7 +928,7 @@ Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slot
         if (availability == 0)
         {
             if (!(*rti)->book(new Booking(Interval(date, date + slotDuration - 1), this))) {
-                TJMH.warningMessage(i18nc("@info/plain 1: resource name 2: datetime", "Failed to book resource: '%1' at %2", (*rti)->getName(), formatTime(date)), this);
+                warningMessage(i18nc("@info/plain 1=resource name 2=datetime", "Failed to book resource: '%1' at %2", (*rti)->getName(), formatTime(date)));
                 if (DEBUGTS(2)) {
                     qWarning()<<" Failed to book resource"<<(*rti)->getName()<<"at"<<time2ISO(date);
                 }
@@ -948,7 +948,7 @@ Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slot
                             qDebug()<<" Booked required resource"<<r->getName()<<"at"<<time2ISO(date);
                         }
                     } else {
-                        TJMH.warningMessage(i18nc("@info/plain 1: resource name 2: datetime", "Failed to book required resource: '%1' at %2", r->getName(), formatTime(date)), this);
+                        warningMessage(i18nc("@info/plain 1=resource name 2=datetime", "Failed to book required resource: '%1' at %2", r->getName(), formatTime(date)));
                         if (DEBUGTS(2)) {
                             qWarning()<<" Failed to book required resource"<<r->getName()<<"at"<<time2ISO(date);
                         }
@@ -2028,7 +2028,7 @@ Task::startCanBeDetermined(LDIList& list, int sc) const
         return false;
 
     for (const Task* t = this; t; t = static_cast<const Task*>(t->parent))
-        if (scenarios[sc].specifiedStart != 0)
+        if (scenarios[sc].specifiedStart != 0) //FIXME ?? t->scenarios[sc] ??
         {
             if (DEBUGPF(10))
                 qDebug()<<"Start of task"<<id<<"can be determined (fixed date)";
@@ -2095,7 +2095,7 @@ Task::endCanBeDetermined(LDIList& list, int sc) const
         return false;
 
     for (const Task* t = this; t; t = static_cast<const Task*>(t->parent))
-        if (scenarios[sc].specifiedEnd != 0)
+        if (scenarios[sc].specifiedEnd != 0) //FIXME ?? t->scenarios ??
         {
             if (DEBUGPF(10))
                 qDebug()<<"End of task"<<id<<"can be determined (fixed date)";
@@ -2550,7 +2550,7 @@ Task::scheduleOk(int sc) const
         return false;
 
     if (DEBUGPS(3))
-        qDebug()<<"Checking task"<<id;
+        qDebug()<<"Checking task"<<name;
 
     /* If any of the dependant tasks is a runAway, we can safely surpress all
      * other error messages. */
@@ -2566,20 +2566,19 @@ Task::scheduleOk(int sc) const
     }
     if (start == 0)
     {
-        errorMessage(QString("Task '%1' has no start time")
-                     .arg(name));
+        errorMessage(i18nc("@info/plain", "Start time is not calculated"));
         return false;
     }
     if (start < project->getStart() || start > project->getEnd())
     {
-        errorMessage(QString("Start time '%1' of task '%2' is outside of the "
-                          "project interval (%3 - %4)")
-                     .arg(time2tjp(start))
-                     .arg(name)
-                     .arg(time2tjp(project->getStart()))
-                     .arg(time2tjp(project->getEnd())));
+        errorMessage(i18nc("@info/plain", "Start time %1 is outside of the project target times (%2 - %3)",
+                     formatTime(start),
+                     formatTime(project->getStart()),
+                     formatTime(project->getEnd())));
         return false;
     }
+#if 0
+NOT USED ATM
     if (scenarios[sc].minStart != 0 && start < scenarios[sc].minStart)
     {
         warningMessage(QString("'%1' start time of task '%2' is too early\n"
@@ -2599,22 +2598,22 @@ Task::scheduleOk(int sc) const
                        .arg(time2tjp(scenarios[sc].maxStart)));
         return false;
     }
+#endif
     if (end == 0)
     {
-        errorMessage(QString("Task '%1' has no end time.")
-                     .arg(name));
+        errorMessage(i18nc("info/plain", "End time is not calculated"));
         return false;
     }
     if ((end + 1) < project->getStart() || (end > project->getEnd()))
     {
-        errorMessage(QString("End time '%1' of task '%2' is outside of the "
-                          "project interval (%3 - %4)")
-                     .arg(time2tjp(end + 1))
-                     .arg(name)
-                     .arg(time2tjp(project->getStart()))
-                     .arg(time2tjp(project->getEnd() + 1)));
+        errorMessage(i18nc("info/plain", "End time %1 is outside of the project target times (%2 - %3)",
+                     formatTime(end + 1),
+                     formatTime(project->getStart()),
+                     formatTime(project->getEnd() + 1)));
         return false;
     }
+#if 0
+NOT USED ATM
     if (scenarios[sc].minEnd != 0 && end < scenarios[sc].minEnd)
     {
         warningMessage(QString("'%1' end time of task '%2' is too early\n"
@@ -2669,17 +2668,17 @@ Task::scheduleOk(int sc) const
             }
         }
     }
-
+#endif
     // Check if all previous tasks end before start of this task.
     for (TaskListIterator tli(predecessors); tli.hasNext();) {
         Task *t = static_cast<Task*>(tli.next());
         if (t->end > start && !t->runAway)
         {
-            errorMessage(QString("Impossible dependency:\n"
-                              "Task '%1' ends at %2 but needs to precede\n"
-                              "task '%3' which has a '%4' start time of %5")
-                         .arg(t->getName()).arg(time2tjp(t->end))
-                         .arg(name).arg(scenario).arg(time2tjp(start)));
+            errorMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                              "Task '%1' ends at %2 but must precede<nl/>"
+                              "task '%3' which starts at %4",
+                         t->getName(), formatTime(t->end + 1),
+                         name, formatTime(start)));
             return false;
         }
     }
@@ -2688,20 +2687,20 @@ Task::scheduleOk(int sc) const
         Task *t = static_cast<Task*>(tli.next());
         if (end > t->start && !t->runAway)
         {
-            errorMessage(QString("Impossible dependency:\n"
-                              "Task '%1' starts at %2 but needs to follow\n"
-                              "task %3 which has a '%4' end time of %5")
-                         .arg(t->getName()).arg(time2tjp(t->start))
-                         .arg(name).arg(scenario).arg(time2tjp(end + 1)));
+            errorMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                              "Task '%1' starts at %2 but must follow<nl/>"
+                              "task %3 which ends at %4",
+                         t->getName(), formatTime(t->start),
+                         name, formatTime(end + 1)));
             return false;
         }
     }
     if (!schedulingDone)
     {
-        errorMessage(QString("Task '%1' has not been marked completed.\n"
+        warningMessage(i18nc("info/plain", "Task has not been marked completed.\n"
                           "It is scheduled to last from %2 to %3.\n"
-                          "This might be a bug in the TaskJuggler scheduler.")
-                     .arg(name).arg(time2tjp(start)).arg(time2tjp(end + 1)));
+                          "This might be a bug in the scheduler.",
+                     formatTime(start), formatTime(end + 1)));
         return false;
     }
 
@@ -2760,7 +2759,7 @@ Task::isReadyForScheduling() const
             return true;
         }
     }
-    TJMH.debugMessage(QString("Not ready for scheduling: %1 start=%2, end=%3").arg(scheduling==ASAP?"ASAP":"ALAP").arg(start).arg(end), this);
+//     TJMH.debugMessage(QString("Not ready for scheduling: %1 start=%2, end=%3").arg(scheduling==ASAP?"ASAP":"ALAP").arg(start).arg(end), this);
     return false;
 }
 
@@ -2915,18 +2914,9 @@ Task::prepareScenario(int sc)
                     {
                         /* In case the bookings exceed the specified effort
                          * in strict mode, show a warning. */
-                        warningMessage(QString("Bookings exceed effort on task "
-                                            "%1 in scenario %2\n"
-                                            "Reported Bookings: %3d (%4h)\n"
-                                            "Specified Effort: %5d (%6h)\n")
-                                       .arg(name)
-                                       .arg(project->getScenarioId(sc))
-                                       .arg(doneEffort)
-                                       .arg(doneEffort *
-                                            project->getDailyWorkingHours())
-                                       .arg(effort)
-                                       .arg(effort *
-                                            project->getDailyWorkingHours()));
+                        warningMessage(i18nc("info/plain", "Planned effort %1 exceeds estimated effort %2",
+                                       doneEffort,
+                                       effort));
                     }
                 }
                 else
