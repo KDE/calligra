@@ -243,13 +243,15 @@ Task::addShift(const Interval& i, Shift* s)
 void
 Task::errorMessage(const QString& msg) const
 {
-    TJMH.errorMessage(msg, definitionFile, definitionLine);
+    TJMH.errorMessage(msg, this);
+//     TJMH.errorMessage(msg, definitionFile, definitionLine);
 }
 
 void
 Task::warningMessage(const QString& msg) const
 {
-    TJMH.warningMessage(msg, definitionFile, definitionLine);
+    TJMH.warningMessage(msg, this);
+//     TJMH.warningMessage(msg, definitionFile, definitionLine);
 }
 
 bool
@@ -296,9 +298,14 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
     else
     {
         if (end == 0 ||
-            (effort == 0.0 && length == 0.0 && duration == 0.0 && start == 0))
+            (effort == 0.0 && length == 0.0 && duration == 0.0 && start == 0)) {
+            if ( end == 0 ) {
+                TJMH.warningMessage(i18nc("@info/plain", "Cannot schedule: Valid end time is not set"), this);
+            } else {
+                TJMH.warningMessage(i18nc("@info/plain", "Cannot schedule: Estimate is 0"), this);
+            }
             return false;
-
+        }
         if (lastSlot == 0)
         {
             lastSlot = end + 1;
@@ -380,7 +387,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
                 propagateStart(sc, tentativeStart);
             schedulingDone = true;
             if (DEBUGTS(4)) {
-                qDebug()<<"Scheduling of task"<<name<<"completed:"<<time2ISO(start)<<"-"<<time2ISO(end);
+                qDebug()<<"Scheduling of task"<<this<<"completed:"<<time2ISO(start)<<"-"<<time2ISO(end);
                 qDebug()<<"Effort estimate:"<<effort<<"done:"<<doneEffort;
             }
             TJMH.debugMessage(QString("Task scheduled: %3 - %4, estimated effort=%1d, booked=%2d").arg(effort).arg(doneEffort).arg(time2ISO(start)).arg(time2ISO(end)), this);
@@ -395,6 +402,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
         else
             propagateStart(sc, end + 1);
 
+        if (DEBUGTS(4)) {
+            qDebug()<<"Scheduling of task"<<this<<"completed:"<<time2ISO(start)<<"-"<<time2ISO(end);
+        }
         TJMH.debugMessage(QString("Milestone scheduled: %1").arg(time2ISO(start)), this );
         return true;
     }
@@ -471,7 +481,7 @@ Task::propagateStart(int sc, time_t date)
     start = date;
 
     if (DEBUGTS(11))
-        qDebug()<<"PS1: Setting start of"<<name<<"to"<<time2tjp(start);
+        qDebug()<<"PS1: Setting start of"<<this<<"to"<<time2tjp(start);
 
     TJMH.debugMessage(QString("Set start: %2 ").arg(time2ISO(start)), this);
 
@@ -482,6 +492,10 @@ Task::propagateStart(int sc, time_t date)
         if (!schedulingDone) {
             schedulingDone = true;
             propagateEnd(sc, start - 1);
+            if (DEBUGTS(4)) {
+                qDebug()<<"Scheduling:"<<this<<"completed:"<<time2ISO(start)<<"-"<<time2ISO(end);
+            }
+
         }
         // schedule successor ASAP milestones
         for (TaskListIterator tli(followers); tli.hasNext();) {
@@ -540,11 +554,12 @@ Task::propagateEnd(int sc, time_t date)
      * well. */
     if (milestone && date > 0)
     {
-        if (DEBUGTS(4))
-            qDebug()<<"Scheduling of milestone"<<name<<"completed";
         if (!schedulingDone) {
             schedulingDone = true;
             propagateStart(sc, end + 1);
+            if (DEBUGTS(4)) {
+                qDebug()<<"Scheduling:"<<this<<"completed:"<<time2ISO(start)<<"-"<<time2ISO(end);
+            }
         }
         // schedule predecessor ALAP milestones
         for (TaskListIterator tli(previous); tli.hasNext();) {
@@ -553,7 +568,7 @@ Task::propagateEnd(int sc, time_t date)
                 t->start == 0 && t->earliestStart(sc) != 0)
             {
                 /* Recursively propagate the start date */
-                t->propagateStart(sc, t->earliestStart(sc));
+                t->propagateEnd(sc, t->latestEnd(sc));
             }
         }
     }
@@ -1972,11 +1987,11 @@ Task::checkDetermination(int sc) const
          * If not, is has been reported before already. */
         if (!previous.isEmpty())
             errorMessage
-                (QString("The start of task '%1' (scenario '%2') is "
+                (QString("The start of task '%1' is "
                       "underspecified. This is caused by underspecified "
                       "dependent tasks. You must use more fixed dates to "
                       "solve this problem.")
-                 .arg(name).arg(project->getScenarioId(sc)));
+                 .arg(name));
         return false;
     }
 
@@ -1986,10 +2001,10 @@ Task::checkDetermination(int sc) const
          * If not, is has been reported before already. */
         if (!followers.isEmpty())
             errorMessage
-                (QString("The end of task '%1' (scenario '%2') is underspecified. "
+                (QString("The end of task '%1' is underspecified. "
                       "This is caused by underspecified dependent tasks. You "
                       "must use more fixed dates to solve this problem.")
-                 .arg(name).arg(project->getScenarioId(sc)));
+                 .arg(name));
         return false;
     }
 
@@ -2273,18 +2288,15 @@ Task::preScheduleOk(int sc)
         !scenarios[sc].specifiedScheduled)
     {
         errorMessage(QString
-                     ("No allocations specified for effort based task '%1' "
-                      "in '%2' scenario")
-                     .arg(name).arg(project->getScenarioId(sc)));
+                     ("No allocations specified for effort based task '%1'")
+                     .arg(name));
         return false;
     }
 
     if (scenarios[sc].startBuffer + scenarios[sc].endBuffer >= 100.0)
     {
         errorMessage(QString
-                     ("Start and end buffers may not overlap in '%2' "
-                      "scenario. So their sum must be smaller then 100%.")
-                     .arg(project->getScenarioId(sc)));
+                     ("Start and end buffers may not overlap. So their sum must be smaller then 100%."));
         return false;
     }
 
@@ -2498,14 +2510,14 @@ Task::preScheduleOk(int sc)
         !scenarios[sc].specifiedScheduled)
     {
         errorMessage
-            (QString("Error in task '%1' (scenario '%2'). "
+            (QString("Error in task '%1'. "
                   "An ALAP task can only have bookings if it has been "
                   "completely scheduled. The 'scheduled' attribute must be "
                   "present. Keep in mind that certain attributes such as "
                   "'precedes' or 'end' implicitly set the scheduling mode "
                   "to ALAP. Put 'scheduling asap' at the end of the task "
                   "definition to avoid the problem.")
-             .arg(name).arg(project->getScenarioId(sc)));
+             .arg(name));
         return false;
     }
 
@@ -2554,20 +2566,18 @@ Task::scheduleOk(int sc) const
     }
     if (start == 0)
     {
-        errorMessage(QString("Task '%1' has no start time for the '%2'"
-                          "scenario.")
-                     .arg(name).arg(scenario));
+        errorMessage(QString("Task '%1' has no start time")
+                     .arg(name));
         return false;
     }
     if (start < project->getStart() || start > project->getEnd())
     {
         errorMessage(QString("Start time '%1' of task '%2' is outside of the "
-                          "project interval (%3 - %4) in '%5' scenario.")
+                          "project interval (%3 - %4)")
                      .arg(time2tjp(start))
                      .arg(name)
                      .arg(time2tjp(project->getStart()))
-                     .arg(time2tjp(project->getEnd()))
-                     .arg(scenario));
+                     .arg(time2tjp(project->getEnd())));
         return false;
     }
     if (scenarios[sc].minStart != 0 && start < scenarios[sc].minStart)
@@ -2591,19 +2601,18 @@ Task::scheduleOk(int sc) const
     }
     if (end == 0)
     {
-        errorMessage(QString("Task '%1' has no '%2' end time.")
-                     .arg(name).arg(scenario.lower()));
+        errorMessage(QString("Task '%1' has no end time.")
+                     .arg(name));
         return false;
     }
     if ((end + 1) < project->getStart() || (end > project->getEnd()))
     {
         errorMessage(QString("End time '%1' of task '%2' is outside of the "
-                          "project interval (%3 - %4) in '%5' scenario.")
+                          "project interval (%3 - %4)")
                      .arg(time2tjp(end + 1))
                      .arg(name)
                      .arg(time2tjp(project->getStart()))
-                     .arg(time2tjp(project->getEnd() + 1))
-                     .arg(scenario));
+                     .arg(time2tjp(project->getEnd() + 1)));
         return false;
     }
     if (scenarios[sc].minEnd != 0 && end < scenarios[sc].minEnd)
@@ -2744,13 +2753,14 @@ Task::isReadyForScheduling() const
         if (end != 0)
         {
             if (effort == 0.0 && length == 0.0 && duration == 0.0 &&
-                !milestone && start == 0)
+                !milestone && start == 0) {
                 return false;
+            }
 
             return true;
         }
     }
-
+    TJMH.debugMessage(QString("Not ready for scheduling: %1 start=%2, end=%3").arg(scheduling==ASAP?"ASAP":"ALAP").arg(start).arg(end), this);
     return false;
 }
 

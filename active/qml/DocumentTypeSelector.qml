@@ -40,7 +40,7 @@ QML.Item {
             textPosition: "right"
 
             imageSource: "qrc:///images/words.png"
-            text: "Document"
+            text: "Text Document"
             width: buttonWidth; height: buttonHeight
 
             onClicked: homeScreen.state = "showTextDocs";

@@ -75,7 +75,7 @@ const QString EXT_XLSX("xlsx");
 CanvasController::CanvasController(QDeclarativeItem* parent)
     : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(CADocumentInfo::Undefined),
       m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
-      m_documentViewSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
+      m_documentSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setClip(true);
@@ -246,7 +246,7 @@ void CanvasController::setZoomWithWheel(bool zoom)
 
 void CanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
-    m_documentViewSize = sz;
+    m_documentSize = sz;
     emit docHeightChanged();
     emit docWidthChanged();
 
@@ -425,12 +425,20 @@ CADocumentInfo::DocumentType CanvasController::documentType() const
 
 qreal CanvasController::docHeight() const
 {
-    return m_documentViewSize.height();
+    if (m_zoomHandler) {
+        return m_documentSize.height()*m_zoomHandler->zoomFactorY();
+    } else {
+        return m_documentSize.height();
+    }
 }
 
 qreal CanvasController::docWidth() const
 {
-    return m_documentViewSize.width();
+    if (m_zoomHandler) {
+        return m_documentSize.width()*m_zoomHandler->zoomFactorX();
+    } else {
+        return m_documentSize.width();
+    }
 }
 
 int CanvasController::cameraX() const
@@ -586,6 +594,9 @@ void CanvasController::zoomToFit()
     default:
         m_canvasItem->canvasItem()->setGeometry(0,0,width(),height());
     }
+
+    emit docHeightChanged();
+    emit docWidthChanged();
 }
 
 void CanvasController::updateCanvasItem()

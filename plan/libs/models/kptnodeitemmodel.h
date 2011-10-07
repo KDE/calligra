@@ -439,6 +439,8 @@ public:
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
 
     virtual void setProject( Project *project );
+    ScheduleManager *manager() const { return m_nodemodel.manager(); }
+    long id() const { return m_nodemodel.id(); }
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 

@@ -108,7 +108,7 @@ private:
     KoCanvasBase * m_canvasItem;
     QPoint m_currentPoint;
     CADocumentInfo::DocumentType m_documentType;
-    QSizeF m_documentViewSize;
+    QSizeF m_documentSize;
     KoDocument *m_doc;
     QList<CADocumentInfo*> m_recentFiles;
     int m_currentSlideNum;
