@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,23 +15,26 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- */
+*/
 
-#ifndef KEXIDBTITLEPAGE_H
-#define KEXIDBTITLEPAGE_H
+#ifndef KEXISEARCHLINEEDIT_H
+#define KEXISEARCHLINEEDIT_H
 
-#include "ui_KexiDBTitlePage.h"
-#include <QWidget>
-#include <kexi_export.h>
+#include <KLineEdit>
 
-//! @short A helper widget used to displaying a line edit with a label and layout
-class KEXIMAIN_EXPORT KexiDBTitlePage : public QWidget, public Ui_KexiDBTitlePage
+//! @short A small tool button with icon and optional text
+class KexiSearchLineEdit : public KLineEdit
 {
+    Q_OBJECT
 public:
-    //! Constructs title page. \a labelText can be provided to change default
-    //! "Project caption:" label.
-    KexiDBTitlePage(const QString& labelText, QWidget* parent = 0);
-    ~KexiDBTitlePage();
+    KexiSearchLineEdit(QWidget *parent = 0);
+
+    virtual ~KexiSearchLineEdit();
+
+protected:
+
+    class Private;
+    Private * const d;
 };
 
-#endif // KEXIDBTITLEPAGE_H
+#endif

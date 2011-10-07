@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -52,13 +52,13 @@ KexiProjectModel::Private::~Private()
 
 KexiProjectModel::KexiProjectModel(QObject* parent): QAbstractItemModel(parent) , d(new Private())
 {
-    kDebug();
+    //kDebug();
     d->rootItem = new KexiProjectModelItem(QString());
 }
 
 void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages)
 {
-    kDebug() << itemsPartClass << ".";
+    //kDebug() << itemsPartClass << ".";
     clear();
     d->itemsPartClass = itemsPartClass;
 
@@ -77,7 +77,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
 
         //load part - we need this to have GUI merged with part's actions
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
-        kDebug() << info->partClass() << info->objectName();
+        //kDebug() << info->partClass() << info->objectName();
 // no need to load part so early:        KexiPart::Part *p = Kexi::partManager().part(info);
 // no need to load part so early:        if (p) {
             KexiProjectModelItem *groupItem = 0;
@@ -142,6 +142,8 @@ KexiProjectModel::~KexiProjectModel()
 QVariant KexiProjectModel::data(const QModelIndex& index, int role) const
 {
     KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
+    if (!item)
+        return QVariant();
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -283,7 +285,7 @@ KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProje
 
 void KexiProjectModel::slotAddItem(KexiPart::Item& item)
 {
-    kDebug() << item.name();
+    //kDebug() << item.name();
     QModelIndex idx;
   
     KexiProjectModelItem *parent = modelItemFromName(item.partClass());
@@ -335,10 +337,10 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
 
 QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
 {
-    kDebug();
-    if (item && item->parent()) {
+    //kDebug();
+    if (item /*&& item->parent()*/) {
         int row = item->row();
-        kDebug() << row;
+        //kDebug() << row;
         return createIndex(row, 0, (void*)item);
     } 
     return QModelIndex();
@@ -351,13 +353,13 @@ KexiProjectModelItem* KexiProjectModel::modelItemFromItem(const KexiPart::Item& 
 
 KexiProjectModelItem* KexiProjectModel::modelItemFromName(const QString& name) const
 {
-    kDebug() << name;
+    //kDebug() << name;
     return d->rootItem->modelItemFromName(name);
 }
 
 void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
 {
-    kDebug();
+    //kDebug();
     KexiProjectModelItem *bitem = modelItemFromItem(item);
     if (!bitem)
         return;
@@ -367,3 +369,28 @@ void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
     emit dataChanged(idx, idx);
 }
 
+QModelIndex KexiProjectModel::firstChildPartItem(const QModelIndex &parentIndex) const
+{
+    int count = rowCount(parentIndex);
+    kDebug() << "parent:" << data(parentIndex) << parentIndex.isValid() << count;
+    KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(parentIndex.internalPointer());
+    if (it) {
+        if (it->partItem()) {
+            return parentIndex;
+        }
+    }
+    for (int i = 0; i < count; i++) {
+        QModelIndex index = parentIndex.child(i, 0);
+        kDebug() << data(index);
+        index = firstChildPartItem(index);
+        if (index.isValid()) {
+            return index;
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex KexiProjectModel::firstPartItem() const
+{
+    return firstChildPartItem(indexFromItem(d->rootItem));
+}

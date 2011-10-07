@@ -26,9 +26,6 @@
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>
-            <ActionList name="view_closeallviews"/>
-            <Separator/>
-            <ActionList name="view_split"/>
             <Separator/>
             <Action name="view_normal"/>
             <Action name="view_notes"/>

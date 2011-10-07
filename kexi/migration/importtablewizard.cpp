@@ -37,19 +37,19 @@
 #include <kexidb/utils.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
-#include <KexiConnSelector.h>
-#include <KexiProjectSelector.h>
-#include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
 #include <kexidbdrivercombobox.h>
 #include <kexitextmsghandler.h>
-#include <widget/kexicharencodingcombobox.h>
-#include <widget/kexiprjtypeselector.h>
-#include <main/startup/KexiStartupFileWidget.h>
 #include <kexipart.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
+#include <widget/kexicharencodingcombobox.h>
 #include <widget/kexiprjtypeselector.h>
+#include <widget/kexiprjtypeselector.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiDBTitlePage.h>
+#include <widget/KexiFileWidget.h>
 
 using namespace KexiMigration;
 
@@ -137,7 +137,7 @@ void ImportTableWizard::setupSrcConn()
     QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
     
-    m_srcConnSel = new KexiConnSelectorWidget(Kexi::connset(),
+    m_srcConnSel = new KexiConnectionSelectorWidget(Kexi::connset(),
                                            "kfiledialog:///ProjectMigrationSourceDir",
                                            KAbstractFileWidget::Opening, m_srcConnPageWidget);
                                            
@@ -430,7 +430,7 @@ void ImportTableWizard::arriveFinishPage()
 
 bool ImportTableWizard::fileBasedSrcSelected() const
 {
-    return m_srcConnSel->selectedConnectionType() == KexiConnSelectorWidget::FileBased;
+    return m_srcConnSel->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased;
 }
 
 KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)

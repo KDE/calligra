@@ -23,7 +23,7 @@
 #include <kexidb/kexidb_export.h>
 #include <QPointer>
 
-class KexiConnSelectorWidget;
+class KexiConnectionSelectorWidget;
 class QListWidget;
 class QLabel;
 class QProgressBar;
@@ -62,7 +62,7 @@ Q_OBJECT
     private:
 
         KexiDB::Connection* m_currentDatabase;
-        KexiConnSelectorWidget *m_srcConnSel;
+        KexiConnectionSelectorWidget *m_srcConnSel;
         KexiMigration::MigrateManager *m_migrateManager;
         //KexiMigration::KexiMigrate *m_migrateDriver;
         QPointer<KexiMigration::KexiMigrate> m_migrateDriver;

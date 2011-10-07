@@ -17,29 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXICONNSELECTOR_H
-#define KEXICONNSELECTOR_H
+#ifndef KEXICONNECTIONSELECTORWIDGET_H
+#define KEXICONNECTIONSELECTORWIDGET_H
 
 #include <kexidbconnectionset.h>
 #include <kexidb/driver.h>
-#include "ui_KexiConnSelector.h"
 
 #include <KDialog>
 #include <kabstractfilewidget.h>
 
 #include <QPointer>
+#include <QTreeWidgetItem>
 
-class KexiStartupFileWidget;
-
-class KexiConnSelectorBase : public QWidget, public Ui_KexiConnSelector
-{
-public:
-    KexiConnSelectorBase(QWidget* parent);
-    ~KexiConnSelectorBase();
-};
+class KexiFileWidget;
 
 //! helper class
-class ConnectionDataLVItem : public QTreeWidgetItem
+class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
 {
 public:
     ConnectionDataLVItem(KexiDB::ConnectionData *data,
@@ -60,7 +53,7 @@ protected:
 //! @short Widget that allows to select a database connection (file- or server-based)
 /*! The widget allows to select database connection without choosing database itself.
 */
-class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiConnectionSelectorWidget : public QWidget
 {
     Q_OBJECT
 
@@ -71,16 +64,16 @@ public:
         ServerBased = 2 //!< the widget displays server-based connection
     };
 
-    /*! Constructs a KexiConnSelector which contains \a conn_set as connection set.
+    /*! Constructs a new widget which contains \a conn_set as connection set.
      \a conn_set can be altered, because Add/Edit/Remove buttons are available
      to users. \a startDirOrVariable can be provided to specify a start dir for file browser
      (it can also contain a configuration variable name with "kfiledialog:///" prefix
      as described in KRecentDirs documentation). */
-    KexiConnSelectorWidget(KexiDBConnectionSet& conn_set,
+    KexiConnectionSelectorWidget(KexiDBConnectionSet& conn_set,
                            const QString& startDirOrVariable,
                            KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0);
 
-    virtual ~KexiConnSelectorWidget();
+    virtual ~KexiConnectionSelectorWidget();
 
     /*! After accepting this dialog this method returns wherher user selected
      file- or server-based connection. */
@@ -104,14 +97,9 @@ public:
      Only works when selectedConnectionType()==FileBased. */
     void setSelectedFileName(const QString& fileName);
 
-//  //! Usable when we want to do other things for "back" button
-//  void disconnectShowSimpleConnButton();
-
     QTreeWidget* connectionsList() const;
 
-    KexiConnSelectorBase *m_remote;
-//  KexiOpenExistingFile *m_file;
-    KexiStartupFileWidget *fileWidget;
+    KexiFileWidget *fileWidget;
 
     /*! If true, user will be asked to accept overwriting existing project.
      This is true by default. */
@@ -156,4 +144,4 @@ private:
     Private * const d;
 };
 
-#endif // KEXICONNSELECTOR_H
+#endif // KEXICONNECTIONSELECTORWIDGET_H

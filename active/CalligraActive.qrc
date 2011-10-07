@@ -8,5 +8,9 @@
         <file>images/arrow-left.png</file>
         <file>images/arrow-right.png</file>
         <file>images/tab-detach.png</file>
+        <file>images/active-about.png</file>
+        <file>images/fabrictexture.png</file>
+        <file>images/go-previous.png</file>
+        <file>images/calligra-logo.png</file>
     </qresource>
 </RCC>

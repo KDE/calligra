@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>KexiConnSelector</class>
- <widget class="QWidget" name="KexiConnSelector">
+ <class>KexiConnectionSelector</class>
+ <widget class="QWidget" name="KexiConnectionSelector">
   <property name="geometry">
    <rect>
     <x>0</x>

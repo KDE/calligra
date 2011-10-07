@@ -47,7 +47,7 @@ class LtHashTabEntry
 {
 public:
     LtHashTabEntry() : tms( 0 ), next( 0 ) {}
-    ~LtHashTabEntry() { qDebug()<<"~LtHashTabEntry"; delete tms; }
+    ~LtHashTabEntry() { /*qDebug()<<"~LtHashTabEntry";*/ delete tms; }
     time_t t;
     struct tm* tms;
     LtHashTabEntry* next;

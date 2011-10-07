@@ -1057,6 +1057,39 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
             }
             return QVariant();
         }
+        if ( role == Qt::EditRole ) {
+            if ( section == 0 ) {
+                return "Name";
+            }
+            if ( section == 1 ) {
+                return "Description";
+            }
+            if ( section == 2 ) {
+                return "Total";
+            }
+            int col = section - 3;
+            switch ( m_periodtype ) {
+                case Period_Day: {
+                    return startDate().addDays( col );
+                }
+                case Period_Week: {
+                    return startDate().addDays( ( col ) * 7 ).weekNumber();
+                }
+                case Period_Month: {
+                    int days = startDate().daysInMonth() - startDate().day() + 1;
+                    QDate start = startDate();
+                    for ( int i = 0; i < col; ++i ) {
+                        start = start.addDays( days );
+                        days = start.daysInMonth();
+                    }
+                    return start.month();
+                }
+                default:
+                    return section;
+                    break;
+            }
+            return QVariant();
+        }
         if ( role == Qt::ToolTipRole ) {
             switch ( section ) {
                 case 0: return ToolTip::accountName();

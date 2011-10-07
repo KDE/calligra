@@ -23,7 +23,6 @@
 #ifndef KEXIMENUWIDGET_H
 #define KEXIMENUWIDGET_H
 
-#include <kexi_export.h>
 #include <KStandardAction>
 #include <KAction>
 #include <QtGui/qwidget.h>
@@ -52,7 +51,7 @@ protected:
     KexiMenuWidgetActionPrivate * const d;
 };
 
-class KEXIMAIN_EXPORT KexiMenuWidget : public QWidget
+class KexiMenuWidget : public QWidget
 {
 private:
     Q_OBJECT
