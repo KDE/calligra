@@ -37,6 +37,9 @@ public:
     /// Sets the orientation of the color bar
     void setOrientation(Qt::Orientation orientation);
 
+public slots:
+    void updateDocumentColors();
+
 signals:
     /// Emitted whenever a color was clicked
     void colorSelected(const KoColor &color);
@@ -53,6 +56,7 @@ private:
     QToolButton *m_choosePalette;
     KarbonPaletteWidget * m_colorBar;
 
+    KoColorSet m_documentColors;
     KoResourceServerAdapter<KoColorSet> m_palettes;
 };
 

@@ -393,10 +393,13 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         newSize.setWidth(rootArea->right() - rootArea->left());
     }
+
+    // To make sure footnotes always end up at the bottom of the main area we need to set this
+    rootArea->setBottom(rootArea->top() + newSize.height());
+
     if (newSize != rootArea->associatedShape()->size()) {
         //QPointF centerpos = rootArea->associatedShape()->absolutePosition();
         rootArea->associatedShape()->setSize(newSize);
-        rootArea->setBottom(rootArea->top() + newSize.height());
         //rootArea->associatedShape()->setAbsolutePosition(centerpos);
 
 //TODO we would need to do something like the following to relayout all affected
