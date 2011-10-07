@@ -40,6 +40,8 @@ BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *do
     dialog.sortByPosition->setChecked(m_bibConfiguration->sortByPosition());
 
     connect(dialog.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(save(QAbstractButton*)));
+
+    show();
 }
 
 void BibliographyConfigureDialog::save(QAbstractButton *button)

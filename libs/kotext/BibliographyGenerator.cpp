@@ -85,7 +85,6 @@ void BibliographyGenerator::generate()
         cursor.insertBlock();
     }
 
-    qDebug() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
     QTextCharFormat savedCharFormat = cursor.charFormat();
     QList<KoInlineCite*> citeList = KoTextDocument(m_block.document()).inlineTextObjectManager()->citations(false).values();
 
@@ -111,13 +110,12 @@ void BibliographyGenerator::generate()
         QTextBlock bibEntryTextBlock = cursor.block();
         bibTemplateStyle->applyStyle(bibEntryTextBlock);
         bool spanEnabled = false;           //true if data field is not empty
-        QString debug;
+
         foreach (IndexEntry * entry, bibEntryTemplate.indexEntries) {
             switch(entry->name) {
                 case IndexEntry::BIBLIOGRAPHY: {
                     IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
                     cursor.insertText(cite->dataField(indexEntry->dataField));
-                    debug.append(cite->dataField(indexEntry->dataField));
                     spanEnabled = (cite->dataField(indexEntry->dataField).length()>0);
                     break;
                 }
@@ -125,7 +123,6 @@ void BibliographyGenerator::generate()
                     if(spanEnabled) {
                         IndexEntrySpan *span = static_cast<IndexEntrySpan*>(entry);
                         cursor.insertText(span->text);
-                        debug.append(span->text);
                     }
                     break;
                 }
@@ -152,7 +149,6 @@ void BibliographyGenerator::generate()
                 }
             }
         }// foreach
-        qDebug() << "\n\t" << debug;
     }
     cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
 }

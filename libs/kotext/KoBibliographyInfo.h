@@ -61,7 +61,7 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
-    BibliographyGeneratorInterface * m_generator;
+    BibliographyGeneratorInterface *m_generator;
 };
 
 #endif // KOBIBLIOGRAPHYINFO_H

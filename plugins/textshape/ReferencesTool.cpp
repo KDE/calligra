@@ -185,20 +185,17 @@ void ReferencesTool::insertTableOfContents()
 
 void ReferencesTool::insertCitation()
 {
-    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor(), m_scbw);
-    dialog->show();
+    new CitationInsertionDialog(textEditor(), m_scbw);
 }
 
 void ReferencesTool::insertBibliography()
 {
-    InsertBibliographyDialog *dialog = new InsertBibliographyDialog(textEditor(), m_scbw);
-    dialog->show();
+    new InsertBibliographyDialog(textEditor(), m_scbw);
 }
 
 void ReferencesTool::configureBibliography()
 {
-    BibliographyConfigureDialog *dialog = new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
-    dialog->show();
+    new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
 }
 
 void ReferencesTool::formatTableOfContents()

@@ -41,6 +41,7 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     //connect(dialog.removeTabStop,SIGNAL(clicked()),this,SLOT(removeTabStop()));
 
     setDefaultIndexEntries();
+    show();
 }
 
 void InsertBibliographyDialog::insert()
