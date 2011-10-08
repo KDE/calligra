@@ -1512,8 +1512,9 @@ int KoPathShape::computeAngle(KoPathPoint* point, KoMarkerData::MarkerPosition p
 
 QPainterPath KoPathShape::transformedMarker(QPainterPath path, KoPathPoint* point, KoMarkerData::MarkerPosition position) const
 {
+    kDebug(30006) << path.boundingRect();
     QTransform markerTransform;
-    int halfWidth = (path.boundingRect().width())/2;
+    qreal halfWidth = (path.boundingRect().width()) / 2.0;
     int angle = 0;
     if (point != 0){
         angle = computeAngle(point, position) + 90;
