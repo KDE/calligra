@@ -20,7 +20,7 @@
 #ifndef KSPREAD_CANVAS_RESOURCES
 #define KSPREAD_CANVAS_RESOURCES
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 namespace Calligra
 {
@@ -33,7 +33,7 @@ namespace Tables
 namespace CanvasResource
 {
 enum {
-    Selection = KoCanvasResource::KSpreadStart  ///< the cell selection
+    Selection = KoCanvasResourceManager::KSpreadStart  ///< the cell selection
 };
 } // namespace CanvasResource
 

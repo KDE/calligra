@@ -48,7 +48,7 @@ StencilShapeFactory::~StencilShapeFactory()
     delete m_shape;
 }
 
-KoShape *StencilShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *StencilShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     /*KoDrag drag;
     KoShapeOdfSaveHelper saveHelper(shapes);

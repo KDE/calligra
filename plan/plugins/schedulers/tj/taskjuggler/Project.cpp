@@ -829,9 +829,10 @@ TaskList Project::tasksReadyToBeScheduled(int sc, const TaskList& allLeafTasks)
             workItems.append(static_cast<Task*>(t));
     }
     if ( workItems.isEmpty() ) {
-        TJMH.warningMessage("No tasks ready to schedule");
         foreach (CoreAttributes *t, allLeafTasks) {
-            TJMH.debugMessage("Not ready to schedule", t);
+            if (!static_cast<Task*>(t)->isSchedulingDone() && !static_cast<Task*>(t)->isReadyForScheduling()) {
+                TJMH.debugMessage("Not ready to be scheduled", t);
+            }
         }
         foreach (CoreAttributes *c, allLeafTasks) {
             Task *t = static_cast<Task*>(c);
@@ -943,7 +944,7 @@ Project::schedule(int sc)
     foreach (CoreAttributes *t, taskList) {
         if (!static_cast<Task*>(t)->hasSubs()) {
             allLeafTasks.append(static_cast<Task*>(t));
-            TJMH.debugMessage("Leaf task", t);
+//             TJMH.debugMessage("Leaf task", t);
         }
     }
 
@@ -1076,9 +1077,9 @@ Project::schedule(int sc)
         foreach (CoreAttributes *t, taskList) {
             if (static_cast<Task*>(t)->isRunaway()) {
                 if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
-                    TJMH.errorMessage(i18nc("@info/plain", "End of task does not fit into the project time frame. Try using a later project end date."), t);
+                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projects target finish time. Try using a later project end date.", t->getName()));
                 } else {
-                    TJMH.errorMessage(i18nc("@info/plain", "Start of task does not fit into the project time frame. Try using an earlier project start date."), t);
+                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()));
                 }
             }
         }
