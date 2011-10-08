@@ -95,6 +95,8 @@ public:
     virtual QRectF boundingRect() const;
     /// reimplemented
     virtual QSizeF size() const;
+
+    QPainterPath pathStroke(const QPen pen) const;
     /**
      * Resize the shape
      *
@@ -451,9 +453,6 @@ public:
 
     KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
 
-    /// return the outline of the marker at the position or an empty path it there is none
-    QPainterPath markerOutline(KoMarkerData::MarkerPosition position, qreal penWidth);
-
 protected:
     /// constructor \internal
     KoPathShape(KoPathShapePrivate &);
@@ -486,29 +485,6 @@ protected:
      * very small size of 0.000001 pixels
      */
     QTransform resizeMatrix( const QSizeF &newSize ) const;
-
-    /**
-     * @brief Compute an angle of the tangent of the curve.
-     * 
-     * Compute the angle with a given point, used for a marker.
-     * 
-     * @param point a KoPathPoint on the pathShape
-     * 
-     * @return the angle
-     */
-    int computeAngle(KoPathPoint* point, KoMarkerData::MarkerPosition position) const;
-
-    /**
-     * @brief Return the marker transformed and moved to the given point.
-     *
-     * Return the marker transformed and moved to the given point. It's the compositon of a move and rotate.
-     *
-     * @param path the QPainterPath of the marker we to transform
-     * @param point where the marker should go
-     *
-     * @return the QPainterPath of the marker ready to be added to the point
-     */
-    QPainterPath transformedMarker(QPainterPath path, KoPathPoint* point, KoMarkerData::MarkerPosition position) const;
 
     KoSubpathList m_subpaths;
 

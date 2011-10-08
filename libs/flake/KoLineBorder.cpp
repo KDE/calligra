@@ -148,38 +148,9 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const QPen &pe
     if (!pen.isCosmetic()) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
-            QPainterPath markerBegin = pathShape->markerOutline(KoMarkerData::MarkerBegin, pen.widthF());
-            QPainterPath markerEnd = pathShape->markerOutline(KoMarkerData::MarkerEnd, pen.widthF());
-            QPainterPath pathOutline;
-            QPainterPathStroker stroker;
-            stroker.setWidth(0);
-            stroker.setJoinStyle(Qt::MiterJoin);
-
-            if (!markerBegin.isEmpty()) {
-                QPainterPath beginOutline = stroker.createStroke(markerBegin);
-                beginOutline = beginOutline.united(markerBegin);
-                pathOutline.addPath(beginOutline);
-            }
-            if (!markerEnd.isEmpty()) {
-                QPainterPath endOutline = stroker.createStroke(markerEnd);
-                endOutline = endOutline.united(markerEnd);
-                pathOutline.addPath(endOutline);
-            }
-
-            if (!pathOutline.isEmpty()) {
-                stroker.setWidth(pen.widthF());
-                stroker.setJoinStyle(pen.joinStyle());
-                stroker.setMiterLimit(pen.miterLimit());
-                stroker.setCapStyle(pen.capStyle());
-                stroker.setDashOffset(pen.dashOffset());
-                stroker.setDashPattern(pen.dashPattern());
-                // TODO use a shortent version of the path to make it look nicer
-                QPainterPath path = stroker.createStroke(shape->outline());
-                pathOutline.addPath(path);
-                pathOutline.setFillRule(Qt::WindingFill);
-                painter.fillPath(pathOutline, pen.brush());
-                return;
-            }
+            QPainterPath path = pathShape->pathStroke(pen);
+            painter.fillPath(path, pen.brush());
+            return;
         }
         painter.strokePath(shape->outline(), pen);
     }
