@@ -384,13 +384,13 @@ void AnimatorModel::updateImage()
         if (old_frame)
         {
             old_frame->setVisible(false);
-            m_image->updateProjection(old_frame, old_frame->exactBounds());
+            old_frame->setDirty(old_frame->exactBounds());
         }
         if (frame)
         {
             frame->setOpacity(255);
             frame->setVisible(true);
-            m_image->updateProjection(frame, /*m_image->bounds()*/ /*old_frame?*/ frame->exactBounds() /*| old_frame->exactBounds() : frame->exactBounds()*/);
+            frame->setDirty(frame->exactBounds());
         }
         
         if (m_onion_en && !m_ext_lighttable && 0)
@@ -409,8 +409,7 @@ void AnimatorModel::updateImage()
                 
                 node->setOpacity(opacity);
                 node->setVisible(true);
-                
-                m_image->updateProjection(node, m_image->bounds());
+                node->setDirty(node->exactBounds());
                 
                 fr = indexFromNode(node).column()+1;
                 opacity *= m_onion_opacity;
@@ -431,8 +430,7 @@ void AnimatorModel::updateImage()
                 
                 node->setOpacity(opacity);
                 node->setVisible(true);
-                
-                m_image->updateProjection(node, m_image->bounds());
+                node->setDirty(node->exactBounds());
                 
                 fr = indexFromNode(node).column()-1;
                 opacity *= m_onion_opacity;
@@ -478,7 +476,7 @@ void AnimatorModel::lightTableUpdate()
             if (ofnode && isKey(i, old_f+fnum))
             {
                 ofnode->setVisible(false);
-                m_image->updateProjection(ofnode, ofnode->exactBounds());
+                ofnode->setDirty(ofnode->exactBounds());
             }
         }
         
@@ -493,7 +491,7 @@ void AnimatorModel::lightTableUpdate()
 //                 std::cout << dop << " " << (int)op << std::endl;
                 fnode->setOpacity( op );
                 fnode->setVisible(m_light_table->getVisibility(fnum));
-                m_image->updateProjection(fnode, fnode->exactBounds());
+                fnode->setDirty(fnode->exactBounds());
             }
         }
     }
