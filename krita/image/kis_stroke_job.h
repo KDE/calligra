@@ -54,6 +54,10 @@ public:
         return m_dabData ? m_dabData->isExclusive() : false;
     }
 
+    inline void* utmJobKey() const {
+        return m_dabData;
+    }
+
 private:
     // for testing use only, do not use in real code
     friend QString getJobName(KisStrokeJob *job);

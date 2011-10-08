@@ -25,6 +25,7 @@
 #include "kis_stroke_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
+#include "kis_update_time_monitor_interface.h"
 
 
 class KisUpdateJobItem :  public QObject, public QRunnable
@@ -56,7 +57,9 @@ public:
             runMergeJob();
         } else {
             Q_ASSERT(m_type == STROKE);
+            UTM_THREAD_STARTED(m_strokeJob->utmJobKey());
             m_strokeJob->run();
+            UTM_THREAD_FINISHED();
             delete m_strokeJob;
         }
 

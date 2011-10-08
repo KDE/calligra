@@ -1,5 +1,6 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
+include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests)
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 SET(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
 kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
@@ -391,6 +392,11 @@ target_link_libraries(KisStrokesQueueTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QT
 set(kis_queues_progress_updater_test_SRCS kis_queues_progress_updater_test.cpp )
 kde4_add_unit_test(KisQueuesProgressUpdaterTest TESTNAME krita-image-KisQueuesProgressUpdaterTest ${kis_queues_progress_updater_test_SRCS})
 target_link_libraries(KisQueuesProgressUpdaterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+set(kis_update_time_monitor_test_SRCS kis_update_time_monitor_test.cpp )
+kde4_add_unit_test(KisUpdateTimeMonitorTest TESTNAME krita-image-KisUpdateTimeMonitorTest ${kis_update_time_monitor_test_SRCS})
+target_link_libraries(KisUpdateTimeMonitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

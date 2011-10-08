@@ -78,6 +78,7 @@
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "kis_composite_progress_proxy.h"
+#include "kis_update_time_monitor_interface.h"
 
 
 // #define SANITY_CHECKS
@@ -299,6 +300,7 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
     m_d->unit = KoUnit::Point;
     m_d->width = width;
     m_d->height = height;
+    UTM_SET_BOUNDS(QRect(0,0,width, height));
 
     m_d->recorder = new KisActionRecorder(this);
 
@@ -409,6 +411,7 @@ void KisImage::notifyLayerUpdated(KisLayerSP layer)
 
 void KisImage::setSize(const QSize& size)
 {
+    UTM_SET_BOUNDS(QRect(QPoint(), size));
     m_d->width = size.width();
     m_d->height = size.height();
     emitSizeChanged();
@@ -1210,6 +1213,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     KisStrokeId id;
 
     if (m_d->scheduler) {
+        UTM_START_STROKE(strokeStrategy->name());
         id = m_d->scheduler->startStroke(strokeStrategy);
     }
 
@@ -1219,6 +1223,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
     if (m_d->scheduler) {
+        UTM_JOB_ADDED(data);
         m_d->scheduler->addJob(id, data);
     }
 }
@@ -1227,6 +1232,7 @@ void KisImage::endStroke(KisStrokeId id)
 {
     if (m_d->scheduler) {
         m_d->scheduler->endStroke(id);
+        UTM_END_STROKE();
     }
 }
 
@@ -1268,12 +1274,14 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     if (!root) root = m_d->rootLayer;
 
     if (m_d->scheduler) {
+        UTM_THREAD_UPDATE_REQUESTED(rc & cropRect);
         m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
     }
 }
 
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
+    UTM_UPDATE_FINISHED(rc);
     emit sigImageUpdated(rc);
 }
 
@@ -1281,6 +1289,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->scheduler) {
         dbgImage << "KisImage: requested and update for" << node->name() << rect;
+        UTM_THREAD_UPDATE_REQUESTED(rect);
         m_d->scheduler->updateProjection(node, rect, bounds());
     }
 }
