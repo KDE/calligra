@@ -95,7 +95,7 @@ void AnimatorModel::loadLayers()
     if (! nodes || nodes->rowCount() == 0 )
         return;
     
-    // First, we need to check if we've get animated document
+    // First, we need to check if we've got animated document
     KisNode* meta_layer = nodes->nodeFromIndex(nodes->index(0, 0)).data();
     int major = getMajor(meta_layer);
     if (major == -1)
@@ -185,6 +185,9 @@ void AnimatorModel::loadLayers()
     emit framesNumberChanged(m_frame_num);
     
     emit layoutChanged();
+    
+    // This is done to prevent from crashing. TODO: activate something else ;)
+    m_nodeman->activateNode(m_image->root()->at(0));
     
     m_updating = false;
 }
