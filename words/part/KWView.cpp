@@ -39,7 +39,6 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWInsertPageDialog.h"
-#include "dialogs/KWInsertInlineNoteDialog.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"

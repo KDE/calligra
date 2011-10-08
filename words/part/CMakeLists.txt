@@ -52,7 +52,6 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
     dialogs/KWInsertPageDialog.cpp
-    dialogs/KWInsertInlineNoteDialog.cpp
     dockers/KWStatisticsDocker.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
@@ -84,7 +83,6 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertPageDialog.ui
-    dialogs/KWInsertInlineNoteDialog.ui
     dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
 )
