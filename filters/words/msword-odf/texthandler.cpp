@@ -84,7 +84,6 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_currentTable(0)
     , m_tableWriter(0)
     , m_tableBuffer(0)
-    , m_listLevelStyleRequired(false)
     , m_previousListDepth(-1)
     , m_previousListID(0)
     , m_fld(new fld_State())
@@ -955,12 +954,6 @@ void WordsTextHandler::paragraphEnd()
             m_dropCapString.clear();
         }
     }
-    //add the list-level-style information to the list-style if required
-    if (m_listLevelStyleRequired) {
-        updateListStyle();
-        m_listLevelStyleRequired = false;
-    }
-
     //save the font color
     m_paragraphBaseFontColorBkp = paragraphBaseFontColor();
 
@@ -1816,7 +1809,6 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 {
     kDebug(30513);
 
-    m_listLevelStyleRequired = false;
     int nfc = listInfo->numberFormat();
 
     //check to see if we're in a heading instead of a list if so, just return
@@ -1888,7 +1880,8 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     if (m_previousLists.contains(m_previousListID) &&
         !m_previousLists[m_previousListID].second.contains(m_previousListDepth))
     {
-        m_listLevelStyleRequired = true;
+        updateListStyle();
+        m_previousLists[m_previousListID].second.append(m_previousListDepth);
     }
 
     //we always want to open this tag
@@ -2194,10 +2187,6 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     //we'll add each one with a unique name
     QString name(QString::number(listInfo->lsid()));
     listStyle->addChildElement(name.append("lvl").append(QString::number(pap.ilvl)), contents);
-
-    if (m_previousLists.contains(listInfo->lsid())) {
-        m_previousLists[listInfo->lsid()].second.append(pap.ilvl);
-    }
 } //end updateListStyle()
 
 void WordsTextHandler::closeList()

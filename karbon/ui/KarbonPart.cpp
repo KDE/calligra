@@ -461,6 +461,7 @@ void KarbonPart::addShape(KoShape* shape)
     }
 
     setModified(true);
+    emit shapeCountChanged();
 }
 
 void KarbonPart::removeShape(KoShape* shape)
@@ -476,6 +477,7 @@ void KarbonPart::removeShape(KoShape* shape)
         }
     }
     setModified(true);
+    emit shapeCountChanged();
 }
 
 QMap<QString, KoDataCenterBase*> KarbonPart::dataCenterMap() const

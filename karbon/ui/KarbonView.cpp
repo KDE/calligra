@@ -294,6 +294,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
 
     d->colorBar = new KarbonPaletteBarWidget(Qt::Horizontal, this);
     connect(d->colorBar, SIGNAL(colorSelected(const KoColor&)), this, SLOT(applyPaletteColor(const KoColor&)));
+    connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
+    connect(part(), SIGNAL(shapeCountChanged()), d->colorBar, SLOT(updateDocumentColors()));
 
     if (shell()) {
         // set the first layer active
