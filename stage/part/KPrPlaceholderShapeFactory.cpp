@@ -43,7 +43,7 @@ KPrPlaceholderShapeFactory::~KPrPlaceholderShapeFactory()
 {
 }
 
-KoShape *KPrPlaceholderShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *KPrPlaceholderShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     return new KPrPlaceholderShape();
 }

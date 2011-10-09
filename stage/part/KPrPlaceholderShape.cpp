@@ -92,7 +92,7 @@ void KPrPlaceholderShape::saveOdf( KoShapeSavingContext & context ) const
     writer.endElement(); // draw:frame
 }
 
-KoShape *KPrPlaceholderShape::createShape(KoResourceManager *documentResources)
+KoShape *KPrPlaceholderShape::createShape(KoDocumentResourceManager *documentResources)
 {
     Q_ASSERT( m_strategy );
     KoShape * shape = 0;
@@ -102,7 +102,7 @@ KoShape *KPrPlaceholderShape::createShape(KoResourceManager *documentResources)
     return shape;
 }
 
-void KPrPlaceholderShape::initStrategy(KoResourceManager *documentResources)
+void KPrPlaceholderShape::initStrategy(KoDocumentResourceManager *documentResources)
 {
     Q_ASSERT( m_strategy );
     if ( m_strategy ) {

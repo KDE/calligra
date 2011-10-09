@@ -26,7 +26,7 @@
 #include <kpluginfactory.h>
 #include <klocale.h>
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
@@ -57,15 +57,15 @@ TableDeferredShapeFactory::~TableDeferredShapeFactory()
 {
 }
 
-KoShape *TableDeferredShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *TableDeferredShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    QList<KoResourceManager *>resourceManagers = m_stubFactory->documentResourceManagers();
-    foreach(KoResourceManager *documentResources, resourceManagers) {
+    QList<KoDocumentResourceManager *>resourceManagers = m_stubFactory->documentResourceManagers();
+    foreach(KoDocumentResourceManager *documentResources, resourceManagers) {
         if (!documentResources->hasResource(MapResourceId)) {
             // One spreadsheet map for all inserted tables to allow referencing cells among them.
             QVariant variant;
             Map* map = new Map();
-            // Make the KoResourceManager manage this Map, since we cannot delete it ourselves
+            // Make the KoDocumentResourceManager manage this Map, since we cannot delete it ourselves
             map->setParent(documentResources);
             QObject::connect(documentResources, SIGNAL(destroyed()), map, SLOT(deleteLater()));
             variant.setValue<void*>(map);
