@@ -41,6 +41,7 @@ public:
     
 public:
     virtual QVariant getVision(int role, bool isCurrent);
+    virtual bool isKeyFrame();
     
     void setNodeManager(KisNodeManager* nm);
     KisNodeManager* getNodeManager();

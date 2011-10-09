@@ -54,6 +54,8 @@ public:
     
 public:
     virtual const QString& getNameForFrame(int num, bool iskey) const;
+    
+    virtual QVariant getVision(int role, int num, bool isCurrent);
 
 protected:
     virtual int getFrameFromName(const QString& name, bool& iskey) const;

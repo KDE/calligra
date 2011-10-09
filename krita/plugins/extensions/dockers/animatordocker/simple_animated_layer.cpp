@@ -33,6 +33,7 @@ SimpleAnimatedLayer::SimpleAnimatedLayer(const KisGroupLayer& source) : Animated
 {
     m_frames.clear();
     m_loaded = false;
+    m_updating = false;
 }
 
 bool SimpleAnimatedLayer::loaded()
@@ -65,7 +66,6 @@ void SimpleAnimatedLayer::loadFrames()
             } else
             {
                 QString rname = chsource->name();
-                int findex = this->index(chsource);
                 
                 frame = new FrameLayer(*dynamic_cast<KisGroupLayer*>( chsource ));
                 
@@ -73,9 +73,12 @@ void SimpleAnimatedLayer::loadFrames()
                 frame->setNodeManager(getNodeManager());
                 frame->at(0)->setName("_");
                 
-                getNodeManager()->insertNode(frame, this, findex);
+                getNodeManager()->insertNode(frame, this, i);
                 
                 frame->setContent(chsource->at(0).data());
+                
+                // To be sure active node is present
+                getNodeManager()->activateNode(this);
                 
                 getNodeManager()->removeNode(chsource);
             }
@@ -159,7 +162,7 @@ int SimpleAnimatedLayer::getPreviousKey(int num) const
 
 bool SimpleAnimatedLayer::isKeyFrame(int num) const
 {
-    return num >= dataStart() && num < dataEnd() && m_frames[num]; // && m_frames[num]->isKeyFrame();
+    return num >= dataStart() && num < dataEnd() && m_frames[num] && m_frames[num]->isKeyFrame();
 }
 
 int SimpleAnimatedLayer::dataStart() const
@@ -197,6 +200,13 @@ int SimpleAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) cons
         return fnum;
     }
     return -1;
+}
+
+QVariant SimpleAnimatedLayer::getVision(int role, int num, bool isCurrent)
+{
+    if (getFrameAt(num))
+        return getFrameAt(num)->getVision(role, isCurrent);
+    return AnimatedLayer::getVision(role, num, isCurrent);
 }
 
 void SimpleAnimatedLayer::insertFrame(int num, FrameLayer* frame, bool iskey)

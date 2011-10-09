@@ -272,13 +272,8 @@ void AnimatorModel::forceFramesNumber(int num)
 QVariant AnimatorModel::data(const QModelIndex& index, int role) const
 {
     QVariant result = QVariant();
-    FrameLayer* fl = getCachedFrame(index);
-    if (fl && isKey(index))
-        result = fl->getVision(role, m_frame == index.column());
-    
-    if (result == QVariant())
-        return getAnimatedLayer(index.row())->getVision(role, m_frame == index.column());
-    
+    AnimatedLayer* al = getAnimatedLayer(index.row());
+    result = al->getVision(role, index.column(), m_frame == index.column());
     return result;
 }
 
@@ -378,7 +373,7 @@ void AnimatorModel::updateImage()
     
     for (qint32 i = 0; i < rowCount(); ++i)
     {
-        KisNode* frame = getAnimatedLayer(i)->getUpdatedFrame(m_frame);
+        KisNode* frame = getUpdatedFrame(i, m_frame);
         KisNode* old_frame = getAnimatedLayer(i)->getCachedFrame(m_previous_frame);
         
         if (frame == old_frame)
@@ -872,7 +867,10 @@ FrameLayer* AnimatorModel::getUpdatedFrame(const QModelIndex& index)
 
 FrameLayer* AnimatorModel::getUpdatedFrame(quint32 l, quint32 f)
 {
-    return getAnimatedLayer(l)->getUpdatedFrame(f);
+    m_updating = true;
+    FrameLayer* frame = getAnimatedLayer(l)->getUpdatedFrame(f);
+    m_updating = false;
+    return frame;
 }
 
 AnimatedLayer* AnimatorModel::getAnimatedLayer(quint32 num) const

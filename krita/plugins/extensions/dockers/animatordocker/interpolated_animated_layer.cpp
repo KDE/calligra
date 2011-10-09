@@ -23,15 +23,8 @@
 
 InterpolatedAnimatedLayer::InterpolatedAnimatedLayer(const KisGroupLayer& source): SimpleAnimatedLayer(source)
 {
-    m_non_keys.clear();
     m_updating = false;
 }
-
-// void InterpolatedAnimatedLayer::loadFrames()
-// {
-//     SimpleAnimatedLayer::loadFrames();
-//     
-// }
 
 void InterpolatedAnimatedLayer::updateFrame(int num)
 {
@@ -43,6 +36,9 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         return;
     }
     m_updating = true;
+    
+    if (getFrameAt(num))
+        getNodeManager()->removeNode(getFrameAt(num));
     
     int inxt = getNextKey(num);
     KisCloneLayer* next = 0;
@@ -71,48 +67,14 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         target->setName(getNameForFrame(num, false));
         target->at(0)->setName("_");
         
+        getNodeManager()->activateNode(this);           // be sure that active node is ok
+        
         m_updating = false;
-//         loadFrames();
-        // This is a hack to call loadFrames() without crashing
-        // TODO: find the reason for crashing & fix it
-        getNodeManager()->activateNode(this);
-        getNodeManager()->createNode("KisPaintLayer");
-        getNodeManager()->removeNode(getNodeManager()->activeNode());
+        loadFrames();
         m_updating = true;      // not required, but for ethtetic reasons..
-        
-//         FrameLayer* old = getFrameAt(num);
-        
-//         if (result)
-//         {
-//             insertFrame(num, result, false);
-//             
-//             // Clear previous
-//             if (old)
-//             {
-// //                 std::cout << "removing" << std::endl;
-//                 getNodeManager()->removeNode(old);
-//             }
-//             loadFrames();
-//         }
     }
     m_updating = false;
 }
-
-// KisCloneLayer* InterpolatedAnimatedLayer::interpolate(FrameLayer* from, KisCloneLayer* to, double percent)
-// {
-//     // Position
-//     double x = from->x()*(1.0-percent)+to->x()*percent;
-//     double y = from->y()*(1.0-percent)+to->y()*percent;
-//     qint32 ix = x;
-//     qint32 iy = y;
-//     
-//     KisCloneLayer* result = new KisCloneLayer(*to);
-//     result->setX(ix);
-//     result->setY(iy);
-//     result->setVisible(false);
-//     
-//     return result;
-// }
 
 const QString& InterpolatedAnimatedLayer::getNameForFrame(int num, bool iskey) const
 {
@@ -128,16 +90,4 @@ int InterpolatedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey
     int result = SimpleAnimatedLayer::getFrameFromName(name, iskey);
     iskey = !name.endsWith("_");
     return result;
-}
-
-bool InterpolatedAnimatedLayer::isKeyFrame(int num) const
-{
-    return SimpleAnimatedLayer::isKeyFrame(num) && !m_non_keys.contains(num);
-}
-
-void InterpolatedAnimatedLayer::insertFrame(int num, FrameLayer* frame, bool iskey)
-{
-    SimpleAnimatedLayer::insertFrame(num, frame, iskey);
-    if (!iskey)
-        m_non_keys.insert(num);
 }

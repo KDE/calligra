@@ -69,7 +69,7 @@ void AnimatedLayer::updateFrame(int num)
     Q_UNUSED(num);
 }
 
-QVariant AnimatedLayer::getVision(int role, bool isCurrent)
+QVariant AnimatedLayer::getVision(int role, int num, bool isCurrent)
 {
     if (isCurrent && role == Qt::BackgroundRole)
         return QVariant(QBrush(QColor(127, 127, 127)));

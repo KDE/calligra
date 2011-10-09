@@ -1,4 +1,4 @@
-Before 0.1 release:
+Before 0.1:
 * [DONE] Showing last layer if no frame here
 * [DONE] Create frames from context menu (ui)
 * [DONE] Extending frames count (ui)
@@ -13,7 +13,7 @@ Before 0.1 release:
 * [DONE] Add "onion skin"
 * [DONE] Fix crash on documents without zero frame
 
-Before 0.2 release:
+Before 0.2:
 * [DONE] Export to document directory (or may be to custom directory)
 * [DONE] Add player
 * [DONE] Improve creating frames (more options)
@@ -22,19 +22,43 @@ Before 0.2 release:
 * [DONE] Extended light table
 * [DONE] Fix adding group frame
 
-Before 0.3 release:
-* Group layers full support
-* [INPROGRESS] Moving/deleting/adding frames
-* [INPROGRESS] Animated layers classes
-
-Before 0.4:
-* Support for "image layers" (for audio first of all)
+Before 0.3:
+* [DONE] Moving/deleting/adding frames
+* [DONE] Animated layers classes
+* [DONE] Frame layers classes
+* [DONE] Format versions
+* [DONE] Show empty frames in front of last frame (for easy adding)
 * [INPROGRESS] Basic interpolation
 
-Before 1.0 release:
-* Add support for disabling shape filling
+Before 0.4:
+* Normal view with constant width of columns
+* Support for "image layers" (for audio first of all)
+* Group layers full support
+* Control layers
+* Disable/enable & visible/unvisible layers
+* Update interpolation options
+
+Before 0.5:
+* Allow animated layers inside groups
+* Comments layers
+* Import frames
+* External layers (audio)
+* Ligth Table & onion skin merge
+* Fix state after closing
+
+Before 1.0:
+* Fix all bugs
+* Vertical view
+* Separate additional UI from Dock and from View
 * [DONE] Real-time player
 * Filter extended support (for interpolation)
-* Add support for shape filters to Krita (may be not as plugin)
 * Do not show annoying dialogs on each export
 * Clean UI
+* Configuration
+
+1.x:
+* Interpolation curves
+* More export options
+* Add support for shape filters to Krita (may be not as plugin)
+* Add support for disabling shape filling
+* Drag&drop frames

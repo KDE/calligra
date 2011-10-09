@@ -56,7 +56,7 @@ public:
     virtual void loadFrames() = 0;
     virtual bool loaded() = 0;
     
-    virtual QVariant getVision(int role, bool isCurrent);
+    virtual QVariant getVision(int role, int num, bool isCurrent);
     
 public:
 //     virtual const QString& getNameForFrame(int num) const;

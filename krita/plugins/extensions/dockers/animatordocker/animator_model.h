@@ -74,6 +74,8 @@ public slots:
     // ok, +review
     virtual void loadLayers();
     
+    void lightTableUpdate();
+    
     virtual void convertLayers();
     virtual void convertLayer(KisNode* node);
     virtual void setEnabled(bool val);
@@ -95,11 +97,7 @@ public slots:
 protected:
     // ok
     int previousFrame();
-
-    // later
-    void lightTableUpdate();
-
-    
+   
     // ok
     virtual bool isKey(const QModelIndex& index) const;
     // ok

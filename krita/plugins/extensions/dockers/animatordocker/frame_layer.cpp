@@ -39,29 +39,38 @@ QVariant FrameLayer::getVision(int role, bool isCurrent)
     if (role == Qt::BackgroundRole)
     {
         int r, g, b;
-        r = 127;
-        g = 127;
-        b = 127;
+        r = 96;
+        g = 96;
+        b = 96;
         if (isCurrent)
         {
             r -= 64;
             g -= 64;
             b -= 64;
         }
-        if (!getContent())
+        if (! isKeyFrame())
         {
+            r += 16;
+            g += 16;
+            b += 16;
+        }
+        
+        if (! getContent())
             // it is strange..
             return QVariant();
-        }
+        
+        int addToCh = 64 + (isKeyFrame()?0:-48);
+        
         if (getContent()->inherits("KisPaintLayer"))
         {
-            g += 64;
+            g += addToCh;
         } else if (getContent()->inherits("KisCloneLayer"))
         {
-            b += 64;
+            b += addToCh;
         } else {
-            r += 64;
+            r += addToCh;
         }
+        
         return QVariant(QBrush(QColor(r, g, b)));
     }
     return QVariant();
@@ -98,4 +107,9 @@ void FrameLayer::setNodeManager(KisNodeManager* nm)
 KisNodeManager* FrameLayer::getNodeManager()
 {
     return m_node_manager;
+}
+
+bool FrameLayer::isKeyFrame()
+{
+    return ! name().endsWith("_");
 }

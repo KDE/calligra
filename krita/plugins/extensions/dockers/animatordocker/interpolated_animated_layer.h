@@ -35,10 +35,6 @@ class InterpolatedAnimatedLayer : public SimpleAnimatedLayer
 public:
     InterpolatedAnimatedLayer(const KisGroupLayer& source);
     
-public:
-    virtual bool isKeyFrame(int num) const;
-//     virtual void loadFrames();
-
 protected:
     virtual void updateFrame(int num);
 
@@ -48,10 +44,7 @@ protected:
     virtual const QString& getNameForFrame(int num, bool iskey) const;
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
     
-    virtual void insertFrame(int num, FrameLayer* frame, bool iskey);
-    
 private:
-    QSet<int> m_non_keys;
 };
 
 #endif // INTERPOLATED_ANIMATED_LAYER_H
