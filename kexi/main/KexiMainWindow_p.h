@@ -39,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QKeyEvent>
  
+#include "KexiSearchLineEdit.h"
 #include <kexiutils/SmallToolButton.h>
 class KexiProjectNavigator;
 
@@ -78,6 +79,7 @@ public slots:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
     void toggleMainMenu();
+    void activateSearchLineEdit();
 
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
@@ -407,22 +409,22 @@ protected:
             topmargin += m_topLineHeight;
             m_menuWidget->setContentsMargins(leftmargin, topmargin, rightmargin, bottommargin);
 
-            m_menuWidget->addAction(ac->action("project_new"));
+            m_menuWidget->addAction(ac->action("project_welcome"));
             m_menuWidget->addAction(ac->action("project_open"));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::New, this));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::Open, this));
             //menu->setActiveAction(ac->action("project_open"));
-            m_menuWidget->addAction(ac->action("project_open_recent"));
-            m_menuWidget->addSeparator();
-            //menu->addAction(ac->action("project_save"));
-            //menu->addAction(ac->action("project_saveas"));
             m_menuWidget->addAction(ac->action("project_close"));
             m_menuWidget->addSeparator();
+            m_menuWidget->addAction(ac->action("project_new"));
             //menu->addAction(ac->action("tools_import_project"));
+            //menu->addAction(ac->action("project_save"));
+            //menu->addAction(ac->action("project_saveas"));
             m_menuWidget->addAction(ac->action("project_import_export_send"));
             m_menuWidget->addAction(ac->action("project_properties"));
             // todo: project information
             m_menuWidget->addAction(ac->action("settings"));
+            m_menuWidget->addSeparator();
             m_menuWidget->addAction(ac->action("quit"));
             //menu->setFixedWidth(300);
             hlyr->addWidget(m_menuWidget);
@@ -521,6 +523,7 @@ public:
 
     KToolBar *createToolBar(const char *name, const QString& caption);
 
+
 public slots:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
@@ -550,6 +553,7 @@ public:
     QGraphicsOpacityEffect tabBarOpacityEffect;
     int rolledUpIndex;
     KHelpMenu *helpMenu;
+    KexiSearchLineEdit *searchLineEdit;
 };
 
 #include <kexiutils/styleproxy.h>
@@ -808,6 +812,11 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
     }*/
 }
 
+void KexiTabbedToolBar::activateSearchLineEdit()
+{
+    d->searchLineEdit->setFocus();
+}
+
 void KexiTabbedToolBar::Private::hideMainMenu()
 {
     if (!mainMenu || !mainMenu->isVisible())
@@ -912,31 +921,27 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     QAction* help_about_kde_action = d->ac->action("help_about_kde");
     help_about_kde_action->setWhatsThis(i18n("Shows information about K Desktop Environment."));
 
+    QAction *action_show_help_menu = d->ac->action("help_show_menu");
     KexiSmallToolButton *btn = new KexiSmallToolButton(KIcon(help_contents_action->icon()), QString(), helpWidget);
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
     btn->setPopupMode(QToolButton::InstantPopup);
-    btn->setToolTip(i18n("Show Help menu"));
-    btn->setWhatsThis(i18n("Shows Help menu"));
+    btn->setToolTip(action_show_help_menu->toolTip());
+    btn->setWhatsThis(action_show_help_menu->whatsThis());
     btn->setFocusPolicy(Qt::NoFocus);
     QStyleOptionToolButton opt;
     opt.initFrom(btn);
     int w = btn->sizeHint().width();
     int wAdd = btn->style()->pixelMetric(QStyle::PM_MenuButtonIndicator, &opt, btn);
-    //kDebug() << "++++" << w << wAdd;
     if (w <= (2 * (wAdd + 1))) {
         w += wAdd + 2;
     }
     btn->setMinimumWidth(w);
-    QShortcut *helpShortcut = new QShortcut(QKeySequence(i18nc("Help shortcut", "Alt+H")), this);
-    connect(helpShortcut, SIGNAL(activated()), btn, SLOT(showMenu()));
+    connect(action_show_help_menu, SIGNAL(triggered()), btn, SLOT(showMenu()));
     helpLyr->addWidget(btn);
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
-    KLineEdit *searchLineEdit = new KLineEdit;
-    searchLineEdit->setFocusPolicy(Qt::ClickFocus);
-    searchLineEdit->setClickMessage(i18n("Search"));
-    searchLineEdit->setClearButtonShown(true);
-    helpLyr->addWidget(searchLineEdit);
+    d->searchLineEdit = new KexiSearchLineEdit;
+    helpLyr->addWidget(d->searchLineEdit);
 
     // needed e.g. for Windows style to remove the toolbar's frame
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
@@ -1497,8 +1502,8 @@ public:
         action_view_nav = 0;
         action_view_propeditor = 0;
         action_view_mainarea = 0;
-        action_open_recent_projects_title_id = -1;
-        action_open_recent_connections_title_id = -1;
+        action_welcome_projects_title_id = -1;
+        action_welcome_connections_title_id = -1;
         forceWindowClosing = false;
         insideCloseWindow = false;
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1721,7 +1726,7 @@ public:
             info = currentWindow->part()->info();
         }
         const bool visible = (viewMode == Kexi::DesignViewMode)
-            && ((currentWindow && currentWindow->propertySet()) || info->isPropertyEditorAlwaysVisibleInDesignMode());
+            && ((currentWindow && currentWindow->propertySet()) || (info && info->isPropertyEditorAlwaysVisibleInDesignMode()));
         kDebug() << "visible == " << visible;
         enable_slotPropertyEditorVisibilityChanged = false;
         if (visible && propertyEditorCollapsed) { // used when we're switching back to a window with propeditor available but collapsed
@@ -1735,19 +1740,27 @@ public:
         enable_slotPropertyEditorVisibilityChanged = true;
     }
 
-    void setPropertyEditorTabBarVisible(bool visible) {
-        KMultiTabBar *mtbar = multiTabBars[KMultiTabBar::Right];
-        int id = PROPERTY_EDITOR_TABBAR_ID;
+    void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
+                          KexiDockWidget *dockWidget, bool visible) 
+    {
+        KMultiTabBar *mtbar = multiTabBars.value(position);
         if (!visible) {
             mtbar->removeTab(id);
         }
         else if (!mtbar->tab(id)) {
-            QString t(propEditorDockWidget->windowTitle());
+            QString t(dockWidget->windowTitle());
             t.remove('&');
             mtbar->appendTab(QPixmap(), id, t);
             KMultiTabBarTab *tab = mtbar->tab(id);
-            QObject::connect(tab, SIGNAL(clicked(int)), wnd, SLOT(slotMultiTabBarTabClicked(int)));
+            QObject::connect(tab, SIGNAL(clicked(int)),
+                             wnd, SLOT(slotMultiTabBarTabClicked(int)),
+                             Qt::UniqueConnection);
         }
+    }
+
+    void setPropertyEditorTabBarVisible(bool visible) {
+        setTabBarVisible(KMultiTabBar::Right, PROPERTY_EDITOR_TABBAR_ID,
+                         propEditorDockWidget, visible);
     }
 
 //2.0: unused
@@ -1924,18 +1937,17 @@ public:
     //! Kexi menu
     KAction *action_save, *action_save_as, 
     *action_project_import_export_send, *action_close,
-    *action_project_properties, *action_open_recent_more,
+    *action_project_properties,
     *action_project_relations, *action_project_import_data_table,
     *action_project_export_data_table;
 #ifndef KEXI_NO_QUICK_PRINTING
     KAction *action_project_print, *action_project_print_preview,
         *action_project_print_setup;
 #endif
-    KAction *action_open_recent;
+    KAction *action_project_welcome;
     KAction *action_show_other;
-//  int action_open_recent_more_id;
-    int action_open_recent_projects_title_id,
-    action_open_recent_connections_title_id;
+    int action_welcome_projects_title_id,
+    action_welcome_connections_title_id;
     KAction *action_settings;
 
     //! edit menu
@@ -1969,12 +1981,15 @@ public:
     KAction *action_format_font;
 
     //! tools menu
-    KAction *action_tools_data_migration, *action_tools_compact_database, *action_tools_data_import;
+    KAction *action_tools_import_project, *action_tools_compact_database, *action_tools_data_import;
     KActionMenu *action_tools_scripts;
 
     //! window menu
     KAction *action_window_next, *action_window_previous;
 
+    //! global
+    KAction *action_show_help_menu;
+    KAction *action_view_global_search;
     //! for dock windows
 //2.0: unused  KMdiToolViewAccessor* navToolWindow;
 //2.0: unused  KMdiToolViewAccessor* propEditorToolWindow;

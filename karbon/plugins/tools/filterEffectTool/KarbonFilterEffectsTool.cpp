@@ -26,7 +26,7 @@
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffectConfigWidgetBase.h"
 #include "KoCanvasBase.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "FilterEffectEditWidget.h"

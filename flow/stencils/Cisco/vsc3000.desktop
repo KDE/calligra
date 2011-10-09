@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Virtual switch controller (VSC 3000)
 Name[bg]=Виртуален контролер за комутиране (VSC 3000)
+Name[ca]=Virtual switch controller (VSC 3000)
 Name[de]=Virtual-Switch-Controller (VSC 3000)
 Name[el]=Εικονικός ελεγκτής μεταγωγής (VSC 3000)
 Name[et]=Virtuaalkommutaatori kontroller (VSC 3000)
@@ -13,3 +14,4 @@ Name[pt_BR]=Controlador de comutador virtual (VSC 3000)
 Name[sv]=Virtuell växelstyrenhet (VSC 3000)
 Name[uk]=Віртуальний контролер комутатора (VSC 3000)
 Name[x-test]=xxVirtual switch controller (VSC 3000)xx
+Name[zh_TW]=虛擬交換控制器（VSC 3000）

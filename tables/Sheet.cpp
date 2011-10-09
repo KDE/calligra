@@ -47,7 +47,7 @@
 #include <KoOdfStylesReader.h>
 
 #include <KoShape.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
@@ -183,7 +183,7 @@ public:
 
 Sheet::Sheet(Map* map, const QString &sheetName)
         : KoShapeUserData(map)
-        , KoShapeControllerBase()
+        , KoShapeBasedDocumentBase()
         , d(new Private(this))
 {
     d->workbook = map;
@@ -233,7 +233,7 @@ Sheet::Sheet(Map* map, const QString &sheetName)
 
 Sheet::Sheet(const Sheet &other)
         : KoShapeUserData(other.d->workbook)
-        , KoShapeControllerBase()
+        , KoShapeBasedDocumentBase()
         , ProtectableObject(other)
         , d(new Private(this))
 {
@@ -343,7 +343,7 @@ void Sheet::deleteShapes()
     d->shapes.clear();
 }
 
-KoResourceManager* Sheet::resourceManager() const
+KoDocumentResourceManager* Sheet::resourceManager() const
 {
     return map()->resourceManager();
 }

@@ -22,7 +22,7 @@
 
 #define TextShape_SHAPEID "TextShapeID"
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 class KWFrameSet;
 class KWTextFrameSet;
@@ -73,10 +73,10 @@ namespace Words
         FootNoteSeparatorRight  ///< Right of page
     };
 
-    /// Specifies the Words specific resources that you can put and get from the KoResourceManager
+    /// Specifies the Words specific resources that you can put and get from the KoCanvasResourceManager
     enum WordsCanvasResources {
         // lets try to put Current in front of everything for ease of reading.
-        CurrentFrame = KoCanvasResource::WordsStart,
+        CurrentFrame = KoCanvasResourceManager::WordsStart,
         CurrentFrameSet,
         CurrentFrameSetCount,
         CurrentPictureCount,

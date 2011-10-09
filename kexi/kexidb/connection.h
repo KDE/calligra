@@ -691,12 +691,12 @@ public:
         int identifierEscaping;
 
         //! True if ROWID should be also retrieved. False by default.
-    bool alsoRetrieveROWID : 1;
+        bool alsoRetrieveROWID : 1;
 
         /*! True if relations (LEFT OUTER JOIN) for visible lookup columns should be added.
          True by default. This is set to false when user-visible statement is generated
          e.g. for the Query Designer. */
-    bool addVisibleLookupColumns : 1;
+        bool addVisibleLookupColumns : 1;
     };
 
     /*! \return "SELECT ..." statement's string needed for executing query

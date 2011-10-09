@@ -73,7 +73,6 @@ protected:
     void deserializeData(const QVariant& serialized);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 private:
-    QString m_serializedData;
     //! Used in slotTextChanged()
     bool m_slotMapChanged_enabled;///TODO: do we need this to be 1 bit? As in some other widgets
     bool m_internalReadOnly;

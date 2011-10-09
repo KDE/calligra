@@ -1177,7 +1177,10 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     // flake
     // Change the active shape controller and its shapes.
-    d->canvas->shapeController()->setShapeControllerBase(d->activeSheet, d->canvas);
+    d->canvas->shapeController()->setShapeControllerBase(d->activeSheet);
+    // and then update the toolmanager separately
+    KoToolManager::instance()->updateShapeControllerBase(d->activeSheet, d->canvas->canvasController());
+
     d->canvas->shapeManager()->setShapes(d->activeSheet->shapes());
     // Tell the Canvas about the new visible sheet size.
     sheetView(d->activeSheet)->updateAccessedCellRange();
@@ -1214,7 +1217,7 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     // tell the resource manager of the newly active page
-    d->canvas->resourceManager()->setResource(KoCanvasResource::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
+    d->canvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
 
     // Always repaint the visible cells.
     d->canvas->update();

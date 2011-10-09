@@ -50,9 +50,6 @@
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<   View Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
-  <Separator/>
-  <ActionList name="view_split" />
   <Action name="showPageBorders"/>
 <!--   <Action name="showCommentIndicator"/> -->
   <Separator/>

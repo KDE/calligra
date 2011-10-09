@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Solar Module
+Name[ca]=Mòdul solar
 Name[el]=Ηλιακό άρθρωμα
 Name[it]=Pannello solare
 Name[nb]=Solarmodul
@@ -9,3 +10,4 @@ Name[pt_BR]=Módulo solar
 Name[sv]=Solcellsmodul
 Name[uk]=Модуль сонячної батареї
 Name[x-test]=xxSolar Modulexx
+Name[zh_TW]=太陽能模組

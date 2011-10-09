@@ -19,10 +19,6 @@
 
 #include "KarbonGradientHelper.h"
 
-#include <KoShape.h>
-#include <KoLineBorder.h>
-#include <KoGradientBackground.h>
-
 #include <QtGui/QGradient>
 #include <math.h>
 

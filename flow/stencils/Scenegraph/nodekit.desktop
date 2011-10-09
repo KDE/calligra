@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=nodekit
+Name[ca]=kit de node
 Name[el]=nodekit
 Name[nb]=nodesett
 Name[pl]=nodekit
@@ -8,3 +9,4 @@ Name[pt_BR]=kit de nós
 Name[sv]=styrsats
 Name[uk]=Набір вузлів
 Name[x-test]=xxnodekitxx
+Name[zh_TW]=nodekit

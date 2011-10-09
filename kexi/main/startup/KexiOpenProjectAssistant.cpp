@@ -18,15 +18,15 @@
  */
 
 #include "KexiOpenProjectAssistant.h"
-#include "KexiProjectSelector.h"
-#include "KexiConnSelector.h"
-#include "KexiStartupFileWidget.h"
 
 #include <QTimer>
 #include <QVBoxLayout>
 
 #include <KTabWidget>
 
+#include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiFileWidget.h>
 #include <kexiutils/KexiLinkWidget.h>
 #include <kexidb/utils.h>
 #include <kexiprojectset.h>
@@ -49,7 +49,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     m_fileSelectorWidget = new QWidget;
     tabWidget->addTab(m_fileSelectorWidget, KIcon(KexiDB::defaultFileBasedDriverIcon()),
                       i18n("Projects Stored in File"));
-    fileSelector = new KexiConnSelectorWidget(
+    fileSelector = new KexiConnectionSelectorWidget(
         Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
         KAbstractFileWidget::Opening);
@@ -90,7 +90,7 @@ void KexiMainOpenProjectPage::init()
             "from the list."));
     connSelectorLayout->addWidget(connSelectorLabel);
     connSelectorLayout->addSpacing(KDialog::marginHint());
-    connSelector = new KexiConnSelectorWidget(
+    connSelector = new KexiConnectionSelectorWidget(
         Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
         KAbstractFileWidget::Opening);
@@ -254,11 +254,15 @@ void KexiOpenProjectAssistant::cancelRequested(KexiAssistantPage* page)
 void KexiOpenProjectAssistant::showErrorMessage(
     const QString &title, const QString &details)
 {
+    Q_UNUSED(title);
+    Q_UNUSED(details);
 }
 
 void KexiOpenProjectAssistant::showErrorMessage(
     KexiDB::Object *obj, const QString& msg)
 {
+    Q_UNUSED(obj);
+    Q_UNUSED(msg);
 #if 0
     QString _msg, _details;
     if (!obj) {

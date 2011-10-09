@@ -40,7 +40,7 @@ class QGroupBox;
 class KComboBox;
 class KLineEdit;
 class KPushButton;
-class KexiConnSelectorWidget;
+class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
 class KexiDBTitlePage;
@@ -139,7 +139,7 @@ private:
     KexiDBDriverComboBox *m_dstServerTypeCombo;
     KexiPrjTypeSelector *m_dstPrjTypeSelector;
 
-    KexiConnSelectorWidget *m_srcConn, *m_dstConn;
+    KexiConnectionSelectorWidget *m_srcConn, *m_dstConn;
     KLineEdit *m_dstNewDBNameLineEdit;
     KexiProjectSelectorWidget *m_srcDBName;
 

@@ -300,11 +300,17 @@ NodeGanttViewBase::NodeGanttViewBase( QWidget *parent )
     tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
     setLeftView( tv );
-    setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
+    m_rowController = new KDGantt::TreeViewRowController( tv, ganttProxyModel() );
+    setRowController( m_rowController );
     tv->header()->setStretchLastSection( true );
 
     NodeSortFilterProxyModel *m = new NodeSortFilterProxyModel( &m_defaultModel, this );
     KDGantt::View::setModel( m );
+}
+
+NodeGanttViewBase::~NodeGanttViewBase()
+{
+    delete m_rowController;
 }
 
 NodeSortFilterProxyModel *NodeGanttViewBase::sfModel() const
@@ -454,9 +460,8 @@ void MyKDGanttView::slotProjectCalculated( ScheduleManager *sm )
 
 void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug()<<id<<endl;
     clearDependencies();
-    model()->setScheduleManager( sm );
+    model()->setScheduleManager( 0 );
     m_manager = sm;
     if ( sm && project() ) {
         QDateTime start = project()->startTime( sm->scheduleId() ).addDays( -1 );
@@ -465,6 +470,7 @@ void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
             g->setStartDateTime( start );
         }
     }
+    model()->setScheduleManager( sm );
     createDependencies();
 }
 
@@ -787,7 +793,7 @@ void MilestoneKDGanttView::slotProjectCalculated( ScheduleManager *sm )
 void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<id<<endl;
-    model()->setScheduleManager( sm );
+    model()->setScheduleManager( 0 );
     m_manager = sm;
     if ( sm && m_project ) {
         QDateTime start;
@@ -811,6 +817,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
             g->setStartDateTime( start );
         }
     }
+    model()->setScheduleManager( sm );
 }
 
 //------------------------------------------
@@ -970,7 +977,8 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, 
     tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
     m_gantt->setLeftView( tv );
-    m_gantt->setRowController( new KDGantt::TreeViewRowController( tv, m_gantt->ganttProxyModel() ) );
+    m_rowController = new KDGantt::TreeViewRowController( tv, m_gantt->ganttProxyModel() );
+    m_gantt->setRowController( m_rowController );
     tv->header()->setStretchLastSection( true );
 
 
@@ -993,6 +1001,11 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, 
     connect( m_gantt->leftView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
 
     connect( m_gantt->leftView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+ResourceAppointmentsGanttView::~ResourceAppointmentsGanttView()
+{
+    delete m_rowController;
 }
 
 void ResourceAppointmentsGanttView::setZoom( double )

@@ -23,18 +23,40 @@
 #include "kdgantt_export.h"
 
 #include <QDialog>
+#include <QSlider>
 
 class QHBoxLayout;
 class QToolButton;
 
 namespace KDGantt {
+class DateTimeGrid;
+
+class Slider : public QSlider
+{
+    Q_OBJECT
+public:
+    explicit Slider( QWidget *parent );
+
+    void setGrid( DateTimeGrid *grid );
+
+    void setEnableHideOnLeave( bool hide );
+
+protected:
+    void leaveEvent( QEvent *event );
+
+private Q_SLOTS:
+    void sliderValueChanged( int value );
+
+private:
+    bool m_hide;
+    DateTimeGrid *m_grid;
+};
 
 class Ui_TimeScaleZoomPane
 {
 public:
     QHBoxLayout *horizontalLayout;
-    QToolButton *zoomOut;
-    QToolButton *zoomIn;
+    Slider *zoom;
 
     void setupUi(QDialog *KDGantt__TimeScaleZoomPane);
 
@@ -55,8 +77,7 @@ class KDGANTT_EXPORT TimeScaleZoomDialog : public QDialog
 public:
     explicit TimeScaleZoomDialog( QWidget *parent = 0 );
     
-    QToolButton *zoomIn;
-    QToolButton *zoomOut;
+    Slider *zoom;
     
 private:
     Ui::TimeScaleZoomPane pane;

@@ -2,6 +2,7 @@
 Name=Calligra Flowchart & Diagram Editing Component
 Name[bg]=Компонент за блоксхеми и диаграми в Calligra
 Name[cs]=Komponenta editoru nákresů a diagramů Calligra
+Name[da]=Calligra-komponent til redigering af diagrammer
 Name[de]=Calligra-Komponente für Flussdiagramme & Diagrammbearbeitung
 Name[es]=Componente de edición de de diagramas de flujos y esquemas de Calligra
 Name[et]=Calligra skeemide redigeerimise komponent
@@ -36,7 +37,7 @@ GenericName[de]=Flussdiagramm
 GenericName[el]=Διάγραμμα ροής & απλό διάγραμμα
 GenericName[en_GB]=Flowchart & Diagram
 GenericName[eo]=Fluo- kaj aliaj diagramoj
-GenericName[es]=Diagramas de flujo y genéricos
+GenericName[es]=Diagramas de flujo y esquemas
 GenericName[et]=Skeemid
 GenericName[eu]=Fluxu-diagramak eta diagramak
 GenericName[fa]=روندنما و نمودار

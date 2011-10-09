@@ -90,7 +90,7 @@ koppttoodp(const QString& from) {
     QString to = dirpath + QDir::separator()
                  + QFileInfo(from).baseName() + ".odp";
     QFile::remove(to);
-    PptToOdp ppttoodp;
+    PptToOdp ppttoodp(0, 0);
     ppttoodp.convert(from, to, KoStore::Zip);
     return to;
 }

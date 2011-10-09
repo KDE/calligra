@@ -44,8 +44,8 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
 {
     d->startCell = Cell();
 
-    const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
+    //const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
     Sheet *const sheet = this->selection()->activeSheet();
     Selection *const selection = this->selection();
 
@@ -127,8 +127,8 @@ void SelectionStrategy::handleMouseMove(const QPointF &documentPos,
 {
 #if 0 // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
     Q_UNUSED(modifiers);
-    const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
+    //const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
     Sheet *const sheet = selection()->activeSheet();
 
     if (selection()->referenceSelectionMode()) {

@@ -45,6 +45,10 @@ class QSortFilterProxyModel;
 
 class KoPrintJob;
 
+namespace KDGantt
+{
+    class TreeViewRowController;
+}
 
 namespace KPlato
 {
@@ -166,7 +170,8 @@ class NodeGanttViewBase : public GanttViewBase
     Q_OBJECT
 public:
     NodeGanttViewBase( QWidget *parent );
-    
+    ~NodeGanttViewBase();
+
     NodeSortFilterProxyModel *sfModel() const;
     void setItemModel( ItemModelBase *model );
     ItemModelBase *model() const;
@@ -186,6 +191,7 @@ protected:
     NodeItemModel m_defaultModel;
     friend class GanttPrintingDialog;
     GanttPrintingOptions m_printOptions;
+    KDGantt::TreeViewRowController *m_rowController;
 };
 
 class KPLATOUI_EXPORT MyKDGanttView : public NodeGanttViewBase
@@ -358,6 +364,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase
     Q_OBJECT
 public:
     ResourceAppointmentsGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    ~ResourceAppointmentsGanttView();
 
     virtual void setZoom( double zoom );
     virtual void setProject( Project *project );
@@ -390,6 +397,7 @@ private:
     GanttViewBase *m_gantt;
     Project *m_project;
     ResourceAppointmentsGanttModel *m_model;
+    KDGantt::TreeViewRowController *m_rowController;
 
 };
 

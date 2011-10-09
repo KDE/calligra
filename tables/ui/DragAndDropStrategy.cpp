@@ -57,8 +57,8 @@ DragAndDropStrategy::DragAndDropStrategy(CellToolBase *cellTool,
 {
     d->lastPoint = documentPos;
     Selection *const selection = this->selection();
-    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
+    //const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
 
     // In which cell did the user click?
     qreal xpos;
@@ -84,8 +84,8 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
     if (d->started)
         return;
     d->lastPoint = documentPos;
-    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
+    //const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
 
     // In which cell did the user click?
     qreal xpos;
@@ -120,8 +120,8 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
 
 KUndo2Command* DragAndDropStrategy::createCommand()
 {
-    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = d->lastPoint - (shape ? shape->position() : QPointF(0.0, 0.0));
+    //const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = d->lastPoint /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
 
     // In which cell did the user click?
     qreal xpos;

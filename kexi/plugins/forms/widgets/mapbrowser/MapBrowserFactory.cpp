@@ -18,25 +18,24 @@
 */
 
 
-#include "MapBrowserFactory.h"
-#include "WidgetInfo.h"
-#include "formIO.h"
-#include "klocalizedstring.h"
 #include "MapBrowserWidget.h"
-#include <QVariant>
-#include <QVariantList>
+#include "MapBrowserFactory.h"
 
+#include <formeditor/WidgetInfo.h>
+#include <formeditor/formIO.h>
+#include <KLocalizedString>
 #include <KDebug>
 #include <KLocale>
 #include <KPluginFactory>
-//using namespace KFormDesigner;
+#include <QVariant>
+#include <QVariantList>
 
 MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
-  :WidgetFactory(parent, "mapbrowser")
+  : KexiDBFactoryBase(parent, "mapbrowser")
 {
     Q_UNUSED(args);
     KFormDesigner::WidgetInfo *mapBrowser = new KFormDesigner::WidgetInfo(this);
-    mapBrowser->setPixmap("marbleicon");
+    mapBrowser->setPixmap("map_browser");
     mapBrowser->setClassName("MapBrowserWidget");
     mapBrowser->setName(i18n("Map Browser"));
     mapBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "

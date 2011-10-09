@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Director-class Fibre Channel intelligent switch
+Name[ca]=Director-class Fibre Channel intelligent switch
 Name[nb]=Avansert intelligen fiberkanalsvitsj
 Name[nl]=Director-class Fibre Channel intelligente switch
 Name[pl]=Inteligenty przełącznik kanału światłowodu klasy rozdzielacza (director)
@@ -8,3 +9,4 @@ Name[pt_BR]=Comutador inteligente de Fibre Channel de classe diretor
 Name[sv]=Avancerad intelligent fiberkanalväxel
 Name[uk]=Інтелектуальний комутатор оптоволоконного каналу класу спрямовуючого пристрою
 Name[x-test]=xxDirector-class Fibre Channel intelligent switchxx
+Name[zh_TW]=Director-class 光纖頻道智慧交換器

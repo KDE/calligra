@@ -28,7 +28,7 @@
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoColor.h>
 #include <KoPathPoint.h>
 #include <KoPathPointData.h>

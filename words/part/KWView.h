@@ -40,6 +40,7 @@ class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoRdfSemanticItem;
+class KoTextAnchor;
 class KActionMenu;
 
 class KToggleAction;
@@ -129,6 +130,7 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
+    KoTextAnchor *anchorForSelectedFrame(bool create);
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -161,8 +163,6 @@ private slots:
     void sendToBack();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
-    /// convert current frame to an inline frame
-    void inlineFrame();
     /// anchor the current shape "as-char"
     void anchorAsChar();
     /// anchor the current shape "to-char"
@@ -171,8 +171,6 @@ private slots:
     void anchorToParagraph();
     /// anchor the current shape "to-page"
     void anchorToPage();
-    /// make the current shape free floating
-    void setFloating();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
@@ -201,10 +199,6 @@ private slots:
     void handleDeletePageAction();
     /// set the status of the show-statusbar action to reflect the current setting.
     void updateStatusBarAction();
-    /// insert image
-    void insertImage();
-    /// insert a footnote or an endnote
-    void insertFootEndNote();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
     /// A semantic item was updated and should have it's text refreshed.

@@ -78,6 +78,11 @@ QString SchedulerPlugin::comment() const
     return d->comment;
 }
 
+int SchedulerPlugin::capabilities() const
+{
+    return AvoidOverbooking | AllowOverbooking | ScheduleForward | ScheduleBackward;
+}
+
 void SchedulerPlugin::stopCalculation( ScheduleManager *sm )
 {
     foreach ( SchedulerThread *j, m_jobs ) {
@@ -427,6 +432,50 @@ void SchedulerThread::haltScheduling()
 {
     qDebug()<<"SchedulerThread::haltScheduling:";
     m_haltScheduling = true;
+}
+
+void SchedulerThread::logError( Node *n, Resource *r, const QString &msg, int phase )
+{
+    Schedule::Log log;
+    if ( r == 0 ) {
+        log = Schedule::Log( n, Schedule::Log::Type_Error, msg, phase );
+    } else {
+        log = Schedule::Log( n, r, Schedule::Log::Type_Error, msg, phase );
+    }
+    slotAddLog( log );
+}
+
+void SchedulerThread::logWarning( Node *n, Resource *r, const QString &msg, int phase )
+{
+    Schedule::Log log;
+    if ( r == 0 ) {
+        log = Schedule::Log( n, Schedule::Log::Type_Warning, msg, phase );
+    } else {
+        log = Schedule::Log( n, r, Schedule::Log::Type_Warning, msg, phase );
+    }
+    slotAddLog( log );
+}
+
+void SchedulerThread::logInfo( Node *n, Resource *r, const QString &msg, int phase )
+{
+    Schedule::Log log;
+    if ( r == 0 ) {
+        log = Schedule::Log( n, Schedule::Log::Type_Info, msg, phase );
+    } else {
+        log = Schedule::Log( n, r, Schedule::Log::Type_Info, msg, phase );
+    }
+    slotAddLog( log );
+}
+
+void SchedulerThread::logDebug( Node *n, Resource *r, const QString &msg, int phase )
+{
+    Schedule::Log log;
+    if ( r == 0 ) {
+        log = Schedule::Log( n, Schedule::Log::Type_Debug, msg, phase );
+    } else {
+        log = Schedule::Log( n, r, Schedule::Log::Type_Debug, msg, phase );
+    }
+    slotAddLog( log );
 }
 
 //static

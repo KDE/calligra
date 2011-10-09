@@ -42,7 +42,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexiutils/utils.h>
-#include <widget/kexicustompropertyfactory.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
 #include <kexi_global.h>
 
@@ -71,7 +71,7 @@
 //////////////////////////////////////////
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
-        : KFormDesigner::WidgetFactory(parent, "kexidb")
+        : KexiDBFactoryBase(parent, "kexidb")
         , m_assignAction(0)
 {
     {
@@ -309,7 +309,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         addClass(wi);
     }
 
-    m_propDesc["dataSource"] = i18n("Data Source");
     m_propDesc["formName"] = i18n("Form Name");
     m_propDesc["onClickAction"] = i18n("On Click");
     m_propDesc["onClickActionOption"] = i18n("On Click Option");
@@ -353,7 +352,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     hideClass("KComboBox");
 
     //used in labels, frames...
-    m_propDesc["frameColor"] = i18n("Frame Color");
     m_propDesc["dropDownButtonVisible"] =
         i18nc("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)",
               "Drop-Down\nButton Visible");
@@ -634,10 +632,6 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
         const QByteArray& property, bool isTopLevel)
 {
     //general
-    if (property == "dataSource" || property == "dataSourcePartClass") {
-        return false; //force
-    }
-
     bool ok = true;
 
     if (classname == "KexiPushButton") {
@@ -712,7 +706,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
         ok = property != "autoRepeat";
     }
 
-    return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
+    return ok && KexiDBFactoryBase::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 bool

@@ -37,8 +37,6 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 
 typedef QMap<QString, QDomElement> SavedDocParts;
 
-class KoResourceManager;
-
 namespace Calligra {
 namespace Tables {
 class Map;
@@ -56,7 +54,7 @@ public:
     QStringList spellListIgnoreAll;
     SavedDocParts savedDocParts;
     SheetAccessModel *sheetAccessModel;
-    KoResourceManager *resourceManager;
+    KoDocumentResourceManager *resourceManager;
 };
 
 } // namespace Tables

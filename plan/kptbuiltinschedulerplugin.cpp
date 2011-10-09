@@ -35,12 +35,27 @@ namespace KPlato
 BuiltinSchedulerPlugin::BuiltinSchedulerPlugin(QObject *parent)
     : SchedulerPlugin(parent)
 {
-    setName( i18n( "Network Scheduler" ) );
-    setComment( i18n( "Built-in network based scheduler" ) );
+    setName( i18nc( "Network = task dependency network", "Network Scheduler" ) );
+    setComment( i18nc( "@info:tooltip", "Built-in network (PERT) based scheduler" ) );
 }
  
 BuiltinSchedulerPlugin::~BuiltinSchedulerPlugin()
 {
+}
+
+QString BuiltinSchedulerPlugin::description() const
+{
+    return i18nc( "@info:whatsthis", "<title>Network (PERT) Scheduler</title>"
+                    "<para>The network scheduler generally schedules tasks according to their dependencies."
+                    " When a task is scheduled it is scheduled in full, booking the allocated resources if available."
+                    " If overbooking is not allowed, subsequent tasks that requests the same resource"
+                    " will be scheduled later in time.</para>"
+                    "<para>Tasks with time constraints will be scheduled first to minimize the problem"
+                    " with resource conflicts</para>"
+                    "<para><note>This scheduler does not handle resource conflicts well."
+                    "<nl/>You can try a different scheduler if available."
+                    " You may also change resource allocations or add dummy dependencies to avoid the conflicts.</note></para>"
+                );
 }
 
 void BuiltinSchedulerPlugin::calculate( Project &project, ScheduleManager *sm, bool nothread )

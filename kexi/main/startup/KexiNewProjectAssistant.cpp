@@ -20,10 +20,6 @@
 #include "KexiNewProjectAssistant.h"
 
 #include "ui_KexiServerDBNamePage.h"
-#include "KexiConnSelector.h"
-#include "KexiDBTitlePage.h"
-#include "KexiProjectSelector.h"
-#include "KexiStartupFileWidget.h"
 #include "KexiTemplatesModel.h"
 #include "KexiStartupFileHandler.h"
 
@@ -38,6 +34,10 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
+#include <widget/KexiFileWidget.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiDBTitlePage.h>
+#include <widget/KexiProjectSelectorWidget.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -321,7 +321,7 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
     setNextButtonVisible(true);
 
     QVBoxLayout *lyr = new QVBoxLayout;
-    connSelector = new KexiConnSelectorWidget(
+    connSelector = new KexiConnectionSelectorWidget(
         Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
         KAbstractFileWidget::Saving);
@@ -650,6 +650,8 @@ void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 void KexiNewProjectAssistant::showErrorMessage(
     const QString &title, const QString &details)
 {
+    Q_UNUSED(title);
+    Q_UNUSED(details);
 }
 
 void KexiNewProjectAssistant::showErrorMessage(

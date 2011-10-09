@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Striplight
+Name[ca]=Striplight
 Name[nb]=Flomlys
 Name[pl]=Światło jarzeniowe
 Name[pt]=Luz barra
@@ -7,3 +8,4 @@ Name[pt_BR]=Luz barra
 Name[sv]=Flodljus
 Name[uk]=Вузькоспрямоване світло
 Name[x-test]=xxStriplightxx
+Name[zh_TW]=條狀照明燈
