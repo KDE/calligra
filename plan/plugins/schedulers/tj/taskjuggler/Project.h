@@ -796,6 +796,7 @@ private:
     void prepareScenario(int sc);
     void finishScenario(int sc);
 
+    TaskList tasksReadyToBeScheduled(int sc, const TaskList &leafTasks);
     bool schedule(int sc);
 
     bool checkSchedule(int sc) const;

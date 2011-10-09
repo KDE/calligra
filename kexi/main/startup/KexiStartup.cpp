@@ -23,13 +23,13 @@
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
 #include "kexiguimsghandler.h"
+#include "KexiStartupDialog.h"
 
 #include <kexidb/utils.h>
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
-#include "KexiStartupDialog.h"
-#include "KexiConnSelector.h"
-#include "KexiProjectSelector.h"
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 

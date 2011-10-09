@@ -114,7 +114,7 @@ KPrPlaceholderStrategy::~KPrPlaceholderStrategy()
 {
 }
 
-KoShape *KPrPlaceholderStrategy::createShape(KoResourceManager *rm)
+KoShape *KPrPlaceholderStrategy::createShape(KoDocumentResourceManager *rm)
 {
     KoShape * shape = 0;
     KoShapeFactoryBase * factory = KoShapeRegistry::instance()->value( m_placeholderData->m_shapeId );
@@ -161,7 +161,7 @@ QString KPrPlaceholderStrategy::text() const
     return i18n( m_placeholderData->m_text );
 }
 
-void KPrPlaceholderStrategy::init(KoResourceManager *)
+void KPrPlaceholderStrategy::init(KoDocumentResourceManager *)
 {
 }
 

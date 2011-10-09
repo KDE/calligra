@@ -134,7 +134,7 @@ public:
     // KoShapeBasedDocumentBase interface
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
-    virtual KoResourceManager* resourceManager() const;
+    virtual KoDocumentResourceManager* resourceManager() const;
 
     /**
      * Deletes all shapes without emitting shapeRemoved()

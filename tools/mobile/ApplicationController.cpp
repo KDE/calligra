@@ -93,7 +93,7 @@
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
 #include <KoToolBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoToolManager.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -2359,7 +2359,7 @@ void ApplicationController::startSearch()
         // loop over all pages starting from current page to get
         // search results in the right order
         int curPage = canvas->resourceManager()->resource(\
-                      KoCanvasResource::CurrentPage).toInt() - 1;
+                      KoCanvasResourceManager::CurrentPage).toInt() - 1;
         QList<QPair<KoPAPageBase*, KoShape*> > textShapes;
         QList<QTextDocument*> textDocs;
         for (int page = 0; page < padoc->pageCount(); page++) {
@@ -2489,7 +2489,7 @@ void ApplicationController::highlightText(int aIndex)
     KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     KoToolManager::instance()->switchToolRequested(textToolFactoryId());
 
-    KoResourceManager *provider = canvas->resourceManager();
+    KoCanvasResourceManager *provider = canvas->resourceManager();
     Q_CHECK_PTR(provider);
 
     QString sizeStr = QString::number(m_searchTextPositions.size());
@@ -2893,7 +2893,7 @@ void ApplicationController::setUpSpreadEditorToolBar()
 {
     if (documentType() != SpreadsheetDocument)
         return;
-    
+
     if (!m_ui)
         return;
 
@@ -3299,7 +3299,7 @@ void ApplicationController::insertImage()
     }
     if (documentType() == PresentationDocument) {
         KoPADocument *prDoc = qobject_cast<KoPADocument *>(document());
-        int pageIndex = canvasController()->canvas()->resourceManager()->resource(KoCanvasResource::CurrentPage).toInt() - 1;
+        int pageIndex = canvasController()->canvas()->resourceManager()->resource(KoCanvasResourceManager::CurrentPage).toInt() - 1;
         KoPAPageBase *kprpage = prDoc->pageByIndex( pageIndex, false);
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(kprpage->shapes().first());
         shape = FoImageSelectionWidget::selectImageShape(prDoc->resourceManager(), m_mainWindow);
@@ -3355,7 +3355,7 @@ void ApplicationController::insertNewTextShape()
     KoShape *textShape = factory->createDefaultShape();
     KoCanvasBase *canvasForInserting = canvasController()->canvas();
     Q_CHECK_PTR(canvasForInserting);
-    int curPage = canvasForInserting->resourceManager()->resource(KoCanvasResource::CurrentPage).toInt() - 1;
+    int curPage = canvasForInserting->resourceManager()->resource(KoCanvasResourceManager::CurrentPage).toInt() - 1;
     KoPADocument* paDocForInserting = qobject_cast<KoPADocument*>(document());
     KoPAPageBase* paPageForInserting = paDocForInserting->pageByIndex(curPage, false);
     KoShapeContainer *container =paPageForInserting;

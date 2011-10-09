@@ -20,10 +20,8 @@
 #ifndef KEXINAMEWIDGET_H
 #define KEXINAMEWIDGET_H
 
-#include <kexi_export.h>
 #include <qlabel.h>
 #include <qlayout.h>
-//Added by qt3to4:
 #include <QGridLayout>
 #include <klineedit.h>
 
@@ -33,7 +31,7 @@ class Validator;
 class MultiValidator;
 }
 
-class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
+class KexiNameWidget : public QWidget
 {
     Q_OBJECT
 

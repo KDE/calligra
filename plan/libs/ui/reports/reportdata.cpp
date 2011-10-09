@@ -26,6 +26,8 @@
 #include <kdebug.h>
 
 #include <QSortFilterProxyModel>
+#include <QString>
+#include <QStringList>
 
 namespace KPlato
 {
@@ -243,13 +245,85 @@ void ReportData::setScheduleManager( ScheduleManager *sm )
 //---------------------------
 ChartReportData::ChartReportData()
     : ReportData(),
-    cbs( false )
+    cbs( false ),
+    m_firstrow( 0 ),
+    m_lastrow( -1 )
 {
+    // these controls the amount of data (days) to include in a chart
+    m_keywords << "start"
+                << "end"
+                << "first"
+                << "days";
+}
+
+bool ChartReportData::open()
+{
+    if ( ! ReportData::open() ) {
+        return false;
+    }
+    if ( cbs ) {
+        m_startdate = m_model.headerData( 3, Qt::Horizontal, Qt::EditRole ).toDate();
+    } else {
+        m_startdate = m_model.headerData( 0, Qt::Vertical, Qt::EditRole ).toDate();
+    }
+    kDebug()<<m_expressions;
+    m_firstrow = firstRow();
+    m_lastrow = lastRow();
+    kDebug()<<m_firstrow<<"-"<<m_lastrow<<":"<<recordCount();
+    return true;
+}
+
+int ChartReportData::firstRow()
+{
+    int row = 0;
+    QDate s;
+    if ( m_expressions.contains( "start" ) ) {
+        s = m_expressions[ "start" ].toDate();
+    } else if ( m_expressions.contains( "first" ) ) {
+        s = QDate::currentDate().addDays( m_expressions[ "first" ].toInt() );
+    }
+    if ( s.isValid() ) {
+        if ( m_startdate.isValid() && s > m_startdate ) {
+            row = m_startdate.daysTo( s );
+            m_startdate = s;
+        }
+        kDebug()<<s<<row;
+    }
+    return row;
+}
+
+int ChartReportData::lastRow() const
+{
+    int row = cbs
+            ? m_model.columnCount() - 5 // cbs has data as columns + name, description, total (0-2) and parent (last)
+            : m_model.rowCount() - 1;
+    if ( row < 0 ) {
+        return -1;
+    }
+    QDate e;
+    if ( m_expressions.contains( "end" ) ) {
+        e = m_expressions[ "end" ].toDate();
+    } else if ( m_expressions.contains( "days" ) ) {
+        e = m_startdate.addDays( m_expressions[ "days" ].toInt() - 1 );
+    }
+    if ( e.isValid() ) {
+        QDate last;
+        if ( cbs ) {
+            last = m_model.headerData( row + 3, Qt::Horizontal, Qt::EditRole ).toDate();
+        } else {
+            last = m_model.headerData( row, Qt::Vertical, Qt::EditRole ).toDate();
+        }
+        if ( last.isValid() && e < last ) {
+            row -= ( e.daysTo( last ) );
+        }
+        kDebug()<<last<<e<<row;
+    }
+    return row > m_firstrow ? row : m_firstrow;
 }
 
 bool ChartReportData::moveNext()
 {
-    if ( recordCount() <= m_row + 1 ) {
+    if ( m_row >= recordCount() - 1 ) {
         return false;
     }
     ++m_row;
@@ -258,7 +332,7 @@ bool ChartReportData::moveNext()
 
 bool ChartReportData::movePrevious()
 {
-    if ( m_row == 0  ) {
+    if ( m_row <= 0 ) {
         return false;
     }
     --m_row;
@@ -267,59 +341,53 @@ bool ChartReportData::movePrevious()
 
 bool ChartReportData::moveFirst()
 {
-    if ( recordCount() <= 0  ) {
-        return false;
-    }
     m_row = 0;
     return true;
 }
 
 bool ChartReportData::moveLast()
 {
-    if ( recordCount() == 0  ) {
-        return false;
-    }
     m_row = recordCount() - 1;
     return true;
 }
 
 qint64 ChartReportData::recordCount() const
 {
-    int rows = 0;
-    if ( cbs ) {
-        rows = m_model.columnCount() - 4;
-    } else {
-        rows = m_model.rowCount(); // number of days of data
-    }
-    kDebug()<<this<<rows;
-    return rows;
+    return  m_lastrow < 0 ? 0 : m_lastrow - m_firstrow + 1;
 }
 
 QVariant ChartReportData::value ( unsigned int i ) const
 {
-    if ( recordCount() == 0 ) {
-        return QVariant();
-    }
     QVariant value;
+    int row = m_row + m_firstrow;
     if ( cbs ) {
         if ( i == 0 ) {
             // x-axis labels
-            value = m_model.headerData( m_row + 3, Qt::Horizontal );
+            value = m_model.headerData( row + 3, Qt::Horizontal );
         } else {
             // data
-            value = m_model.index( i - 1, m_row + 2 ).data( Role::Planned );
+            value = m_model.index( i - 1, row + 2 ).data( Role::Planned );
         }
     } else {
         if ( i == 0 ) {
             // x-axis labels
-            value = m_model.headerData( m_row, Qt::Vertical );
+            value = m_model.headerData( row, Qt::Vertical );
         } else {
             // data
-            value = m_model.index( m_row, i -1 ).data();
+            value = m_model.index( row, i - 1 ).data();
+            kDebug()<<this<<row<<m_model.headerData( row, Qt::Vertical, Qt::EditRole )<<i<<"="<<value;
         }
     }
-    kDebug()<<this<<m_row<<i<<"="<<value;
     return value;
+}
+
+QVariant ChartReportData::value( const QString &name ) const
+{
+    kDebug()<<name;
+    if ( m_expressions.contains( name ) ) {
+        return m_expressions[ name ];
+    }
+    return ReportData::value( name );
 }
 
 QStringList ChartReportData::fieldNames() const
@@ -335,14 +403,29 @@ QStringList ChartReportData::fieldNames() const
     } else {
         int count = m_model.columnCount();
         for ( int i = 0; i < count; ++i ) {
-            kDebug()<<this<<i<<"("<<count<<"):"<<m_model.headerData( i, Qt::Horizontal ).toString();
+//             kDebug()<<this<<i<<"("<<count<<"):"<<m_model.headerData( i, Qt::Horizontal ).toString();
             names << m_model.headerData( i, Qt::Horizontal ).toString();
         }
     }
-    kDebug()<<this<<names;
+//     kDebug()<<this<<names;
     return names;
 }
 
+void ChartReportData::addExpression( const QString &field, const QVariant &value, int relation )
+{
+//     kDebug()<<field<<value<<relation;
+    QStringList lst = field.split( '=', QString::SkipEmptyParts );
+    if ( lst.count() == 2 ) {
+        QString key = lst[ 0 ].trimmed().toLower();
+        if ( m_keywords.contains( key ) ) {
+            m_expressions.insert( key, lst[ 1 ].trimmed() );
+        } else {
+            kWarning()<<"unknown key:"<<key;
+        }
+    } else {
+        kWarning()<<"Invalid key or data:"<<field;
+    }
+}
 
 } //namespace KPlato
 

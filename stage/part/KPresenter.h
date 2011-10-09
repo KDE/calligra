@@ -22,14 +22,14 @@
 
 #define TextShape_SHAPEID "TextShapeID"
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 /// The stage-global namespace for all Stage related things.
 namespace KPresenter
 {
-    /// Specifies the KPresenter specific resources that you can put and get from the KoResourceManager
+    /// Specifies the KPresenter specific resources that you can put and get from the KoDocumentResourceManager
     enum KPresenterDocumentResources {
-        SoundCollection = KoDocumentResource::KPresenterStart + 1,
+        SoundCollection = KoDocumentResourceManager::KPresenterStart + 1,
         PageLayouts ///< of type KPrPageLayouts
     };
 }

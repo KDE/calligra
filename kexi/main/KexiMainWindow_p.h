@@ -39,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QKeyEvent>
  
+#include "KexiSearchLineEdit.h"
 #include <kexiutils/SmallToolButton.h>
 class KexiProjectNavigator;
 
@@ -78,6 +79,7 @@ public slots:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
     void toggleMainMenu();
+    void activateSearchLineEdit();
 
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
@@ -521,6 +523,7 @@ public:
 
     KToolBar *createToolBar(const char *name, const QString& caption);
 
+
 public slots:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
@@ -550,6 +553,7 @@ public:
     QGraphicsOpacityEffect tabBarOpacityEffect;
     int rolledUpIndex;
     KHelpMenu *helpMenu;
+    KexiSearchLineEdit *searchLineEdit;
 };
 
 #include <kexiutils/styleproxy.h>
@@ -808,6 +812,11 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
     }*/
 }
 
+void KexiTabbedToolBar::activateSearchLineEdit()
+{
+    d->searchLineEdit->setFocus();
+}
+
 void KexiTabbedToolBar::Private::hideMainMenu()
 {
     if (!mainMenu || !mainMenu->isVisible())
@@ -912,31 +921,27 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     QAction* help_about_kde_action = d->ac->action("help_about_kde");
     help_about_kde_action->setWhatsThis(i18n("Shows information about K Desktop Environment."));
 
+    QAction *action_show_help_menu = d->ac->action("help_show_menu");
     KexiSmallToolButton *btn = new KexiSmallToolButton(KIcon(help_contents_action->icon()), QString(), helpWidget);
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
     btn->setPopupMode(QToolButton::InstantPopup);
-    btn->setToolTip(i18n("Show Help menu"));
-    btn->setWhatsThis(i18n("Shows Help menu"));
+    btn->setToolTip(action_show_help_menu->toolTip());
+    btn->setWhatsThis(action_show_help_menu->whatsThis());
     btn->setFocusPolicy(Qt::NoFocus);
     QStyleOptionToolButton opt;
     opt.initFrom(btn);
     int w = btn->sizeHint().width();
     int wAdd = btn->style()->pixelMetric(QStyle::PM_MenuButtonIndicator, &opt, btn);
-    //kDebug() << "++++" << w << wAdd;
     if (w <= (2 * (wAdd + 1))) {
         w += wAdd + 2;
     }
     btn->setMinimumWidth(w);
-    QShortcut *helpShortcut = new QShortcut(QKeySequence(i18nc("Help shortcut", "Alt+H")), this);
-    connect(helpShortcut, SIGNAL(activated()), btn, SLOT(showMenu()));
+    connect(action_show_help_menu, SIGNAL(triggered()), btn, SLOT(showMenu()));
     helpLyr->addWidget(btn);
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
-    KLineEdit *searchLineEdit = new KLineEdit;
-    searchLineEdit->setFocusPolicy(Qt::ClickFocus);
-    searchLineEdit->setClickMessage(i18n("Search"));
-    searchLineEdit->setClearButtonShown(true);
-    helpLyr->addWidget(searchLineEdit);
+    d->searchLineEdit = new KexiSearchLineEdit;
+    helpLyr->addWidget(d->searchLineEdit);
 
     // needed e.g. for Windows style to remove the toolbar's frame
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
@@ -1982,6 +1987,9 @@ public:
     //! window menu
     KAction *action_window_next, *action_window_previous;
 
+    //! global
+    KAction *action_show_help_menu;
+    KAction *action_view_global_search;
     //! for dock windows
 //2.0: unused  KMdiToolViewAccessor* navToolWindow;
 //2.0: unused  KMdiToolViewAccessor* propEditorToolWindow;

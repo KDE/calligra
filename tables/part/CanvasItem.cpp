@@ -96,7 +96,7 @@
 #include <KoPointerEvent.h>
 #include <KoShapeController.h>
 #include <KoShapeManagerPaintingStrategy.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 // KSpread
 #include "CalculationSettings.h"
@@ -356,7 +356,7 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
     }*/
 
     // tell the resource manager of the newly active page
-    resourceManager()->setResource(KoCanvasResource::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
+    resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
 
     // Always repaint the visible cells.
     update();

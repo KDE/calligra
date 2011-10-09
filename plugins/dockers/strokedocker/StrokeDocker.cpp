@@ -44,7 +44,7 @@
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoDockFactoryBase.h>
 //#include <KoUnitDoubleSpinBox.h>
 //#include <KoLineStyleSelector.h>
@@ -273,7 +273,7 @@ void StrokeDocker::unsetCanvas()
 void StrokeDocker::resourceChanged(int key, const QVariant &value)
 {
     switch (key) {
-    case KoCanvasResource::Unit:
+    case KoCanvasResourceManager::Unit:
         setUnit(value.value<KoUnit>());
         break;
     }
