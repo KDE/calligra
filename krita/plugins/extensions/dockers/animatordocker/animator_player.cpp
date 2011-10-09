@@ -51,13 +51,15 @@ void AnimatorPlayer::play(bool ch)
 {
     if (ch)
     {
-        m_timer->start(getTime());
+        m_model->enableAllLayers(false);
         m_model->disableOnion();
+        m_timer->start(getTime());
 //         m_model->blockSignals(true);
     } else
     {
         m_timer->stop();
         m_model->enableOnion();
+        m_model->enableAllLayers(true);
 //         m_model->blockSignals(false);
     }
 }

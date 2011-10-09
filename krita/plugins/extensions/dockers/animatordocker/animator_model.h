@@ -96,6 +96,7 @@ public slots:
     
     
     virtual void enableLayer(int num, bool value);
+    virtual void enableAllLayers(bool value);
     virtual void visibleLayer(int num, bool value);
     
 
@@ -238,6 +239,8 @@ private:
     bool m_enabled;
     
     bool m_visible;
+    
+    bool m_layers_enabled;
     
     bool m_updating;
     

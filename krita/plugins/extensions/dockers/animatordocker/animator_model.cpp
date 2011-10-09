@@ -64,6 +64,8 @@ void AnimatorModel::init()
     
     forceFramesNumber(12);
     
+    enableAllLayers(true);
+    
     this->blockSignals(false);
     
 //     connect(this, SIGNAL(frameChanged(int)), SLOT(updateImage()));
@@ -867,6 +869,9 @@ FrameLayer* AnimatorModel::getUpdatedFrame(const QModelIndex& index)
 
 FrameLayer* AnimatorModel::getUpdatedFrame(quint32 l, quint32 f)
 {
+    if (! m_layers_enabled)
+        return getCachedFrame(l, f);
+    
     m_updating = true;
     FrameLayer* frame = getAnimatedLayer(l)->getUpdatedFrame(f);
     m_updating = false;
@@ -1257,6 +1262,11 @@ void AnimatorModel::setVersion(int major, int minor)
 void AnimatorModel::enableLayer(int num, bool value)
 {
     getAnimatedLayer(num)->setEnabled(value);
+}
+
+void AnimatorModel::enableAllLayers(bool value)
+{
+    m_layers_enabled = value;
 }
 
 void AnimatorModel::visibleLayer(int num, bool value)
