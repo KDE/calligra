@@ -38,6 +38,7 @@
 #include "taskjuggler/UsageLimits.h"
 #include "taskjuggler/CoreAttributes.h"
 #include "taskjuggler/TjMessageHandler.h"
+#include "taskjuggler/debug.h"
 
 #include <QString>
 #include <QTime>
@@ -88,6 +89,8 @@ void PlanTJScheduler::slotMessage( int type, const QString &msg, TJ::CoreAttribu
         log = Schedule::Log( static_cast<Node*>( m_taskmap[ static_cast<TJ::Task*>( object ) ] ), type, msg );
     } else if ( object && object->getType() == CA_Resource && m_resourcemap.contains( static_cast<TJ::Resource*>( object ) ) ) {
         log = Schedule::Log( 0, m_resourcemap[ static_cast<TJ::Resource*>( object ) ], type, msg );
+    } else if ( object && ! object->getName().isEmpty() ) {
+        log = Schedule::Log( static_cast<Node*>( m_project ), type, QString( "%1: %2" ).arg(object->getName() ).arg( msg ) );
     } else {
         log = Schedule::Log( static_cast<Node*>( m_project ), type, msg );
     }
@@ -205,6 +208,9 @@ bool PlanTJScheduler::solve()
         }
         return false;
     }
+    DebugCtrl.setDebugLevel(5);
+    DebugCtrl.setDebugMode(PSDEBUG+TSDEBUG);
+
     return m_tjProject->scheduleScenario( sc );
 }
 
@@ -631,7 +637,9 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
 {
     switch ( task->constraint() ) {
         case Node::ASAP:
-            job->setScheduling( m_backward ? TJ::Task::ALAP : TJ::Task::ASAP );
+            if ( ! job->isMilestone() ) {
+                job->setScheduling( m_backward ? TJ::Task::ALAP : TJ::Task::ASAP );
+            }
             break;
         case Node::ALAP:
             job->setScheduling( TJ::Task::ALAP);

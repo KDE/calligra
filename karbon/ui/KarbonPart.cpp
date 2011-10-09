@@ -62,7 +62,8 @@
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoStoreDevice.h>
 #include <KoShapePainter.h>
 #include <SvgShapeFactory.h>
@@ -163,8 +164,8 @@ KoView* KarbonPart::createViewInstance(QWidget* parent)
 {
     KarbonView *result = new KarbonView(this, parent);
 
-    KoResourceManager * provider = result->canvasWidget()->resourceManager();
-    provider->setResource(KoCanvasResource::PageSize, d->document.pageSize());
+    KoCanvasResourceManager * provider = result->canvasWidget()->resourceManager();
+    provider->setResource(KoCanvasResourceManager::PageSize, d->document.pageSize());
 
     d->applyCanvasConfiguration(result->canvasWidget(), this);
 
@@ -490,7 +491,7 @@ void KarbonPart::setPageSize(const QSizeF &pageSize)
     d->document.setPageSize(pageSize);
     foreach(KoView *view, views()) {
         KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
-        canvas->resourceManager()->setResource(KoCanvasResource::PageSize, pageSize);
+        canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
     }
 }
 

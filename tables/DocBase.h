@@ -36,7 +36,7 @@
 #include "calligra_tables_export.h"
 
 class KoOasisSettings;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 namespace Calligra
 {
@@ -88,7 +88,7 @@ public:
      * collection and others.
      * @see KoCanvasBase::resourceManager()
      */
-    KoResourceManager *resourceManager() const;
+    KoDocumentResourceManager *resourceManager() const;
 
     SheetAccessModel *sheetAccessModel() const;
 

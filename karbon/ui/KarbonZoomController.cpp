@@ -25,7 +25,7 @@
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
 #include <KoZoomHandler.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
@@ -189,7 +189,7 @@ void KarbonZoomController::setPageSize(const QSizeF &pageSize)
 
 void KarbonZoomController::resourceChanged(int key, const QVariant &value)
 {
-    if (key == KoCanvasResource::PageSize) {
+    if (key == KoCanvasResourceManager::PageSize) {
         setPageSize(value.toSizeF());
 
         // Tell the canvasController that the document in pixels

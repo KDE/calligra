@@ -821,6 +821,116 @@ Project::finishScenario(int sc)
     }
 }
 
+TaskList Project::tasksReadyToBeScheduled(int sc, const TaskList& allLeafTasks)
+{
+    TaskList workItems;
+    foreach (CoreAttributes *t, allLeafTasks) {
+        if (static_cast<Task*>(t)->isReadyForScheduling())
+            workItems.append(static_cast<Task*>(t));
+    }
+    if ( workItems.isEmpty() ) {
+        foreach (CoreAttributes *t, allLeafTasks) {
+            if (!static_cast<Task*>(t)->isSchedulingDone() && !static_cast<Task*>(t)->isReadyForScheduling()) {
+                TJMH.debugMessage("Not ready to be scheduled", t);
+            }
+        }
+        foreach (CoreAttributes *c, allLeafTasks) {
+            Task *t = static_cast<Task*>(c);
+            if (!t->isSchedulingDone() /*&& !t->isRunaway()*/) {
+                if (t->getScheduling() == Task::ASAP) {
+                    time_t es = t->earliestStart(sc);
+                    //qDebug()<<"schedule rest: earliest start"<<time2ISO(es)<<time2ISO(time_t(1));
+                    if (es > 1) { // NOTE: es is 1 if predecessor is not scheduled!
+                        t->propagateStart(sc, es);
+                    } else if (t->hasAlapPredecessor()) {
+                        time_t le = t->latestEnd(sc);
+                        if (le > time_t(0) ) {
+                            t->setScheduling(Task::ALAP);
+                            t->propagateEnd(sc, le );
+                        }// else qDebug()<<"schedule rest: no end time"<<t;
+                    } //else qDebug()<<"schedule rest: no start time"<<t;
+                } else {
+                    time_t le = t->latestEnd(sc);
+                    if (le > time_t(0) ) {
+                        t->propagateEnd(sc, le );
+                    } else qDebug()<<"ALAP schedule rest: no end time"<<t;
+                }
+                if (t->isReadyForScheduling()) {
+                    workItems.append(t);
+                } else qDebug()<<"Schedule rest: not ready"<<t;
+            }
+            if (workItems.isEmpty()) {
+                TaskList lst;
+                foreach (CoreAttributes *c, allLeafTasks) {
+                    Task *t = static_cast<Task*>(c);
+                    if (!t->isSchedulingDone()) {
+                        lst << t;
+                    }
+                }
+                if (lst.isEmpty()) {
+                    return workItems; // finished
+                }
+                if (DEBUGPS(5)) {
+                    if (!lst.isEmpty()) {
+                        qDebug()<<"These tasks are still not ready to be scheduled:"<<allLeafTasks;
+                    }
+                }
+            }
+        }
+    }
+/*    if ( workItems.isEmpty() && getTask("TJ::StartJob")->getScheduling() == Task::ASAP) {
+        foreach (CoreAttributes *c, allLeafTasks) {
+        }
+    }                                                                                                                                                                                                                                                                                                                                                                                               */
+    if ( workItems.isEmpty() && getTask("TJ::StartJob")->getScheduling() == Task::ALAP) {
+        qDebug()<<"tasksReadyToSchedule:"<<"backward, try really hard";
+        foreach (CoreAttributes *c, allLeafTasks) {
+            Task *task = static_cast<Task*>(c);
+            if (!task->isSchedulingDone()) {
+                continue;
+            }
+            qDebug()<<"tasksReadyToSchedule:"<<"scheduled task:"<<task<<time2ISO(task->start)<<time2ISO(task->end);
+            Task *predecessor = 0;
+            long gapLength = 0;
+            long gapDuration = 0;
+            foreach (CoreAttributes *c, task->previous) {
+                Task *t = static_cast<Task*>(c);
+                if (t->isSchedulingDone()) {
+                    continue;
+                }
+                // get the dependency/longest gap
+                foreach (TaskDependency *d, t->precedes) {
+                    if (d->getTaskRef() == task) {
+                        predecessor = t;
+                        gapLength = qMax(gapLength, d->getGapLength(sc));
+                        gapDuration = qMax(gapDuration, d->getGapDuration(sc));
+                    }
+                }
+            }
+            if ( predecessor == 0 ) {
+                continue;
+            }
+            time_t potentialDate = task->start - 1;
+            time_t dateBeforeLengthGap;
+            for (dateBeforeLengthGap = potentialDate; gapLength > 0 && dateBeforeLengthGap >= start; dateBeforeLengthGap -= getScheduleGranularity()) {
+                if (isWorkingTime(dateBeforeLengthGap)) {
+                    gapLength -= getScheduleGranularity();
+                }
+                if (dateBeforeLengthGap < potentialDate - gapDuration) {
+                    potentialDate = dateBeforeLengthGap;
+                } else {
+                    potentialDate -= gapDuration;
+                }
+            }
+            qDebug()<<"tasksReadyToSchedule:"<<"schedule predecessor:"<<predecessor<<time2ISO(potentialDate);
+            predecessor->propagateEnd(sc, potentialDate);
+            workItems << predecessor;
+            break;
+        }
+    }
+    return workItems;
+}
+
 bool
 Project::schedule(int sc)
 {
@@ -832,8 +942,10 @@ Project::schedule(int sc)
     // we create a task list that only contains leaf tasks.
     TaskList allLeafTasks;
     foreach (CoreAttributes *t, taskList) {
-        if (!static_cast<Task*>(t)->hasSubs())
+        if (!static_cast<Task*>(t)->hasSubs()) {
             allLeafTasks.append(static_cast<Task*>(t));
+//             TJMH.debugMessage("Leaf task", t);
+        }
     }
 
     allLeafTasks.setSorting(CoreAttributesList::PrioDown, 0);
@@ -841,18 +953,16 @@ Project::schedule(int sc)
     allLeafTasks.setSorting(CoreAttributesList::SequenceUp, 2);
     allLeafTasks.sort();
     maxProgress = allLeafTasks.count();
+    int sortedTasks = 0;
+    foreach (CoreAttributes *t, allLeafTasks) {
+        if (static_cast<Task*>(t)->isSchedulingDone())
+            sortedTasks++;
+    }
     /* The workItems list contains all tasks that are ready to be scheduled at
      * any given iteration. When a tasks has been scheduled completely, this
      * list needs to be updated again as some tasks may now have become ready
      * to be scheduled. */
-    TaskList workItems;
-    int sortedTasks = 0;
-    foreach (CoreAttributes *t, allLeafTasks) {
-        if (static_cast<Task*>(t)->isReadyForScheduling())
-            workItems.append(static_cast<Task*>(t));
-        if (static_cast<Task*>(t)->isSchedulingDone())
-            sortedTasks++;
-    }
+    TaskList workItems = tasksReadyToBeScheduled(sc, allLeafTasks);
 
     bool done;
     /* While the scheduling process progresses, the list contains more and
@@ -938,12 +1048,10 @@ Project::schedule(int sc)
             // Schedule this task for the current time slot.
             if (static_cast<Task*>(t)->schedule(sc, slot, scheduleGranularity))
             {
-                workItems.clear();
+                workItems = tasksReadyToBeScheduled(sc, allLeafTasks);
                 int oldSortedTasks = sortedTasks;
                 sortedTasks = 0;
                 foreach (CoreAttributes *t, allLeafTasks) {
-                    if (static_cast<Task*>(t)->isReadyForScheduling())
-                        workItems.append(static_cast<Task*>(t));
                     if (static_cast<Task*>(t)->isSchedulingDone())
                         sortedTasks++;
                 }
@@ -953,44 +1061,6 @@ Project::schedule(int sc)
                     setProgressBar(100 * ( (double)sortedTasks / maxProgress ), sortedTasks);
                     setProgressInfo(QString("Scheduling scenario %1 at %2")
                          .arg(getScenarioId(sc)).arg(time2tjp(slot)));
-                }
-                // we may end up with non-scheduled tasks
-                if (workItems.isEmpty()) {
-                    allLeafTasks.clear();
-                    foreach (CoreAttributes *t, taskList) {
-                        if (!static_cast<Task*>(t)->hasSubs() && !static_cast<Task*>(t)->isSchedulingDone()) {
-                            allLeafTasks.append(static_cast<Task*>(t));
-                        }
-                    }
-                    foreach (CoreAttributes *c, allLeafTasks) {
-                        Task *t = static_cast<Task*>(c);
-                        if (!t->isSchedulingDone() /*&& !t->isRunaway()*/) {
-                            if (t->getScheduling() == Task::ASAP) {
-                                time_t es = t->earliestStart(sc);
-                                //qDebug()<<"schedule rest: earliest start"<<time2ISO(es)<<time2ISO(time_t(1));
-                                if (es > 1) { // NOTE: es is 1 if predecessor is not scheduled!
-                                    t->propagateStart(sc, es);
-                                } else if (t->hasAlapPredecessor()) {
-                                    time_t le = t->latestEnd(sc);
-                                    if (le > time_t(0) ) {
-                                        t->setScheduling(Task::ALAP);
-                                        t->propagateEnd(sc, le );
-                                    }// else qDebug()<<"schedule rest: no end time"<<t;
-                                } //else qDebug()<<"schedule rest: no start time"<<t;
-                            } else {
-                                time_t le = t->latestEnd(sc);
-                                if (le > time_t(0) ) {
-                                    t->propagateEnd(sc, le );
-                                }// else qDebug()<<"schedule rest: no end time"<<t;
-                            }
-                            if (t->isReadyForScheduling()) {
-                                workItems.append(t);
-                            }
-                        }
-                    }
-                    if (DEBUGPS(15) && !workItems.isEmpty()) {
-                        qDebug()<<"These tasks where not ready to be scheduled on last run:"<<workItems;
-                    }
                 }
             }
         }
@@ -1007,9 +1077,9 @@ Project::schedule(int sc)
         foreach (CoreAttributes *t, taskList) {
             if (static_cast<Task*>(t)->isRunaway()) {
                 if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
-                    TJMH.errorMessage(i18nc("@info/plain", "End of task does not fit into the project time frame. Try using a later project end date."), t);
+                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projects target finish time. Try using a later project end date.", t->getName()));
                 } else {
-                    TJMH.errorMessage(i18nc("@info/plain", "Start of task does not fit into the project time frame. Try using an earlier project start date."), t);
+                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()));
                 }
             }
         }

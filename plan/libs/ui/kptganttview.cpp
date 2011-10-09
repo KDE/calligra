@@ -460,9 +460,8 @@ void MyKDGanttView::slotProjectCalculated( ScheduleManager *sm )
 
 void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug()<<id<<endl;
     clearDependencies();
-    model()->setScheduleManager( sm );
+    model()->setScheduleManager( 0 );
     m_manager = sm;
     if ( sm && project() ) {
         QDateTime start = project()->startTime( sm->scheduleId() ).addDays( -1 );
@@ -471,6 +470,7 @@ void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
             g->setStartDateTime( start );
         }
     }
+    model()->setScheduleManager( sm );
     createDependencies();
 }
 
@@ -793,7 +793,7 @@ void MilestoneKDGanttView::slotProjectCalculated( ScheduleManager *sm )
 void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<id<<endl;
-    model()->setScheduleManager( sm );
+    model()->setScheduleManager( 0 );
     m_manager = sm;
     if ( sm && m_project ) {
         QDateTime start;
@@ -817,6 +817,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
             g->setStartDateTime( start );
         }
     }
+    model()->setScheduleManager( sm );
 }
 
 //------------------------------------------

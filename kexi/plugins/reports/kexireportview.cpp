@@ -289,9 +289,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             //If using a kexidb source, add a functions scripting object
             if (tempData()->connectionDefinition.attribute("type") == "internal") {
-                if (!m_functions) {
-                    m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
+                //Delete old functions
+                if (m_functions) {
+                    delete m_functions;
                 }
+                
+                m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
 

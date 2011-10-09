@@ -39,9 +39,10 @@ Item {
             anchors.fill: parent
             radius: 5
             gradient: Gradient {
-                GradientStop { position: 0.0; color: "#DCDCDC" }
+                GradientStop { position: 0.0; color: "#FFFFFF" }
                 GradientStop { position: 1.0; color: "#ABABAB" }
             }
+            opacity: 0.5
         }
     }
 
@@ -58,6 +59,7 @@ Item {
         anchors.horizontalCenter: buttonContainer.horizontalCenter
         width: height
         height: buttonContainer.height - buttonText.height
+        smooth: true
 
         MouseArea {
             id: mouseArea1

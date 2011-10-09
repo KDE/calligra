@@ -75,7 +75,7 @@ const QString EXT_XLSX("xlsx");
 CanvasController::CanvasController(QDeclarativeItem* parent)
     : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(CADocumentInfo::Undefined),
       m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
-      m_documentViewSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
+      m_documentSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setClip(true);
@@ -246,7 +246,7 @@ void CanvasController::setZoomWithWheel(bool zoom)
 
 void CanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
-    m_documentViewSize = sz;
+    m_documentSize = sz;
     emit docHeightChanged();
     emit docWidthChanged();
 
@@ -425,12 +425,20 @@ CADocumentInfo::DocumentType CanvasController::documentType() const
 
 qreal CanvasController::docHeight() const
 {
-    return m_documentViewSize.height();
+    if (m_zoomHandler) {
+        return m_documentSize.height()*m_zoomHandler->zoomFactorY();
+    } else {
+        return m_documentSize.height();
+    }
 }
 
 qreal CanvasController::docWidth() const
 {
-    return m_documentViewSize.width();
+    if (m_zoomHandler) {
+        return m_documentSize.width()*m_zoomHandler->zoomFactorX();
+    } else {
+        return m_documentSize.width();
+    }
 }
 
 int CanvasController::cameraX() const
@@ -552,11 +560,11 @@ void CanvasController::previousSlide()
 
 void CanvasController::zoomToFit()
 {
+    QSizeF canvasSize(width(), height());
+
     switch (documentType()) {
     case CADocumentInfo::Presentation: {
         QSizeF pageSize = m_paView->activePage()->boundingRect().size();
-        QSizeF canvasSize(width(), height());
-        KoZoomHandler *handler = m_paView->zoomHandler();
         QGraphicsWidget *canvasItem = m_canvasItem->canvasItem();
         QSizeF newSize(pageSize);
         newSize.scale(canvasSize, Qt::KeepAspectRatio);
@@ -564,20 +572,31 @@ void CanvasController::zoomToFit()
         if (canvasSize.width() < canvasSize.height()) {
             canvasItem->setGeometry(0, (canvasSize.height()-newSize.height())/2,
                                     newSize.width(), newSize.height());
-            handler->setZoom(canvasSize.width()/pageSize.width()*0.75);
+            m_zoomHandler->setZoom(canvasSize.width()/pageSize.width()*0.75);
         } else {
             canvasItem->setGeometry((canvasSize.width()-newSize.width())/2, 0,
                                     newSize.width(), newSize.height());
-            handler->setZoom(canvasSize.height()/pageSize.height()*0.75);
+            m_zoomHandler->setZoom(canvasSize.height()/pageSize.height()*0.75);
         }
 
         break;
     }
-    case CADocumentInfo::TextDocument:
+    case CADocumentInfo::TextDocument: {
+        KWDocument *doc = static_cast<KWDocument*>(m_doc);
+        KWPage currentPage = doc->pageManager()->page(qreal(cameraY()));
+        if (currentPage.isValid()) {
+            m_zoomHandler->setZoom(canvasSize.width()/currentPage.width()*0.75);
+        }
+    }
+    m_canvasItem->canvasItem()->setGeometry(0,0,width(),height());
+    break;
     case CADocumentInfo::Spreadsheet:
     default:
         m_canvasItem->canvasItem()->setGeometry(0,0,width(),height());
     }
+
+    emit docHeightChanged();
+    emit docWidthChanged();
 }
 
 void CanvasController::updateCanvasItem()
