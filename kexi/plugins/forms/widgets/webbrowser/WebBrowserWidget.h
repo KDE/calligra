@@ -18,12 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef WEBBROWSERWIDGET_H
 #define WEBBROWSERWIDGET_H
 #include <QProgressBar>
 #include <QtGui/QWidget>
-#include <QtGui/QPushButton>
 #include "widgetfactory.h"	
 #include "container.h"
 #include <formeditor/FormWidgetInterface.h>
@@ -32,6 +30,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtCore/QUrl>
 #include<QWebView>
+#include <kpushbutton.h>
   
 class QWebView;
 class QVBoxLayout;
@@ -45,13 +44,18 @@ class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget,
 					       public KexiFormDataItemInterface,
 					       public KFormDesigner::FormWidgetInterface
 {
-    Q_OBJECT
+    Q_OBJECT																		
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(QString url READ url WRITE setUrl)
     Q_PROPERTY(qreal zoomFactor READ zoomFactor WRITE setZoomFactor)
     Q_PROPERTY(QString title READ title)
+    Q_PROPERTY(QIcon icon READ icon)
+    Q_PROPERTY(bool modified READ modified)
+    Q_PROPERTY(QString selectedText READ selectedText) 						//Do
+    Q_PROPERTY(qreal textScale READ textScale WRITE setTextScale)
     
+     
 public:
     WebBrowserWidget();    
     ~WebBrowserWidget();
@@ -69,6 +73,11 @@ public:
 	return m_view->url().toString();
     }
     
+    inline bool modified() const {
+	
+ 	return m_view->isModified();
+    }
+
     inline QString title() const {
 	
  	return m_view->title();
@@ -79,22 +88,32 @@ public:
 	return m_view->zoomFactor();
     }
   
+    inline QIcon icon() const 
+    {
+        return m_view->icon();
+    }
+    
+    inline qreal textScale () const
+    {
+      return m_view->textSizeMultiplier();
+    }  
+    
     virtual QVariant value();
-    virtual void setInvalidState(const QString& displayText);
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
-    bool isReadOnly() const ;
+    void updateToolBar();bool isReadOnly() const ;
     virtual void setReadOnly(bool readOnly);  
-    void updateToolBar(); 
+    virtual void setInvalidState(const QString& displayText);
  
 public slots:
     void setDataSource(const QString &ds);
     void setDataSourcePartClass(const QString &ds);
     void setUrl(const QString& url);
     void setZoomFactor(qreal factor);
+    void setTextScale(qreal scale);
     void hide_bar();
     
 protected:
@@ -108,11 +127,11 @@ private:
     QWebHistory* m_history;
     QProgressBar* m_pbar;
     bool  m_urlChanged_enabled;
-    QPushButton* m_backButton;
-    QPushButton* m_forward;
+    KPushButton* m_back;
+    KPushButton* m_forward;
+    KPushButton* m_reload;  
+    KPushButton* m_stop;  
     QHBoxLayout* h_layout;
-    QPushButton* m_reload;  
-    QPushButton* m_stop;  
   
 };
 
