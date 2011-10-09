@@ -93,6 +93,11 @@ public slots:
 
     // ok
     virtual bool isLast();
+    
+    
+    virtual void enableLayer(int num, bool value);
+    virtual void visibleLayer(int num, bool value);
+    
 
 protected:
     // ok

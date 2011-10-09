@@ -75,3 +75,13 @@ QVariant AnimatedLayer::getVision(int role, int num, bool isCurrent)
         return QVariant(QBrush(QColor(127, 127, 127)));
     return QVariant();
 }
+
+bool AnimatedLayer::enabled()
+{
+    return m_enabled;
+}
+
+void AnimatedLayer::setEnabled(bool val)
+{
+    m_enabled = val;
+}

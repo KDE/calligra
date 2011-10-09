@@ -62,6 +62,10 @@ public:
 //     virtual const QString& getNameForFrame(int num) const;
     virtual const QString& getNameForFrame(int num, bool iskey) const = 0;
     
+public:
+    virtual void setEnabled(bool val);
+    virtual bool enabled();
+    
 protected:
     virtual int getFrameFromName(const QString& name, bool &iskey) const = 0;
     
@@ -87,6 +91,8 @@ protected:
     
 private:
     KisNodeManager* m_nodeman;
+    
+    bool m_enabled;
     
 //     bool m_frame_changed;
     

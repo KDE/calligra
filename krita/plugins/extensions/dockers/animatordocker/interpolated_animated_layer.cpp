@@ -24,6 +24,7 @@
 InterpolatedAnimatedLayer::InterpolatedAnimatedLayer(const KisGroupLayer& source): SimpleAnimatedLayer(source)
 {
     m_updating = false;
+    setEnabled(true);
 }
 
 void InterpolatedAnimatedLayer::updateFrame(int num)
@@ -32,9 +33,11 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         return;
     
     if (isKeyFrame(num))
-    {
         return;
-    }
+    
+    if (! enabled())
+        return;
+    
     m_updating = true;
     
     if (getFrameAt(num))

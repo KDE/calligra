@@ -1253,3 +1253,13 @@ void AnimatorModel::setVersion(int major, int minor)
     
     emit statusChanged(isActive());
 }
+
+void AnimatorModel::enableLayer(int num, bool value)
+{
+    getAnimatedLayer(num)->setEnabled(value);
+}
+
+void AnimatorModel::visibleLayer(int num, bool value)
+{
+    getAnimatedLayer(num)->setVisible(value);
+}
