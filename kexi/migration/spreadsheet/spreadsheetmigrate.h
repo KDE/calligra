@@ -36,14 +36,14 @@ namespace KexiMigration
 /**
 @author Adam Pigg
 */
-class KSpreadMigrate : public KexiMigrate
+class SpreadsheetMigrate : public KexiMigrate
 {
     Q_OBJECT
     KEXIMIGRATION_DRIVER
 public:
-    KSpreadMigrate(QObject *parent, const QVariantList &args = QVariantList());
+    SpreadsheetMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
-    virtual ~KSpreadMigrate();
+    virtual ~SpreadsheetMigrate();
 
   protected:
     //! Connect to source
