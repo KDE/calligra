@@ -34,6 +34,7 @@
 #include <kio/job.h>
 #include <KFileDialog>
 #include <kundo2command.h>
+#include <KoDocumentResourceManager.h>
 
 KPrPicturesImport::KPrPicturesImport()
 {
@@ -47,7 +48,7 @@ void KPrPicturesImport::import(KPrView *view)
         m_urls = KFileDialog::getOpenUrls(KUrl(), "image/png image/jpeg image/gif");
 
         // TODO there should be a progress bar
-        // instead of the progress bar opening for each loaded picture 
+        // instead of the progress bar opening for each loaded picture
         m_currentPage = view->activePage();
         KoPAPage *activePage = dynamic_cast<KoPAPage*>(m_currentPage);
         if (activePage) {
@@ -72,7 +73,7 @@ void KPrPicturesImport::import()
     }
     else {
         KUrl url(m_urls.takeAt(0));
-        // todo calculate the correct size so that the image is centered to 
+        // todo calculate the correct size so that the image is centered to
         KIO::StoredTransferJob *job(KIO::storedGet(url, KIO::NoReload, 0));
         connect(job, SIGNAL(result(KJob*)), this, SLOT(pictureImported(KJob*)));
         job->exec();

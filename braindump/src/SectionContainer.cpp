@@ -37,7 +37,7 @@
 #include "SectionShapeContainerModel.h"
 #include "Utils.h"
 #include "Layout.h"
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include "RootSection.h"
 #include "ViewManager.h"
 

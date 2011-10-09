@@ -1217,7 +1217,7 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     // tell the resource manager of the newly active page
-    d->canvas->resourceManager()->setResource(KoCanvasResource::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
+    d->canvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
 
     // Always repaint the visible cells.
     d->canvas->update();

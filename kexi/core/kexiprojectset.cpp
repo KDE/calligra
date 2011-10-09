@@ -40,7 +40,7 @@ public:
     {
         //qDeleteAll(list);
         foreach (KexiProjectData* data, list) {
-            kDebug() << "deleting" << data;
+            //kDebug() << "deleting" << data;
             delete data;
         }
     }

@@ -51,9 +51,7 @@
         <Menu name="view">
             <text>&amp;View</text>
             <Action name="view_newview"/>
-            <ActionList name="view_closeallviews"/>
             <Separator/>
-            <ActionList name="view_split"/>
             <Action name="zoom_in"/>
             <Action name="zoom_out"/>
             <Action name="view_zoom"/>

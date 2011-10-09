@@ -56,7 +56,7 @@
 #include "commands/ChangeListCommand.h"
 #include "commands/DeleteCommand.h"
 #include "KoInlineCite.h"
-#include "KoBibliographyInfo.h"
+#include <KoTextLayoutScheduler.h>
 
 #include <KLocale>
 #include <kundo2stack.h>
@@ -83,6 +83,7 @@
 #include "KoTextSopranoRdfModel_p.h"
 #endif
 
+Q_DECLARE_METATYPE(QTextFrame*)
 
 static bool isRightToLeft(const QString &text)
 {
@@ -1043,7 +1044,7 @@ void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShap
                                                       shapeController));
         }
         else {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
+            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar,
                                                       d->document,
                                                       shapeController));
         }
@@ -1055,7 +1056,7 @@ void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShap
                                          shapeController));
         }
         else {
-            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+            addCommand(new DeleteCommand(DeleteCommand::NextChar,
                                          d->document,
                                          shapeController));
         }
@@ -1103,6 +1104,15 @@ bool KoTextEditor::atBlockStart() const
 
 bool KoTextEditor::atEnd() const
 {
+    QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
+    KoTextDocument::AuxillaryFrameURL);
+    QTextFrame *auxFrame = resource.value<QTextFrame *>();
+    if (auxFrame) {
+        if (d->caret.position() == auxFrame->firstPosition() - 1) {
+            return true;
+        }
+        return false;
+    }
     return d->caret.atEnd();
 }
 
@@ -1598,7 +1608,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
     return note;
 }
 
-void KoTextEditor::insertTableOfContents()
+void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
 {
     if (isEditProtected()) {
         return;
@@ -1607,10 +1617,10 @@ void KoTextEditor::insertTableOfContents()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
 
     QTextBlockFormat tocFormat;
-    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
+    KoTableOfContentsGeneratorInfo *newToCInfo = info->clone();
     QTextDocument *tocDocument = new QTextDocument();
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo *>(newToCInfo) );
+    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
@@ -1639,7 +1649,7 @@ void KoTextEditor::insertTableOfContents()
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
+void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
 {
     if (isEditProtected()) {
         return;
@@ -1657,6 +1667,7 @@ void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, Q
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
+    KoTextLayoutScheduler::markDocumentChanged(document(), document()->firstBlock().position(), 0 , 0);
 }
 
 void KoTextEditor::insertBibliography()
@@ -1818,11 +1829,18 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
     while (qobject_cast<QTextTable *>(afterFrame)) {
         afterFrame = afterFrame->parentFrame();
     }
+
     if (beforeFrame == afterFrame) {
         if (after.selectionEnd() == after.document()->characterCount() -1) {
             QVariant resource = after.document()->resource(KoTextDocument::AuxillaryFrame,
             KoTextDocument::AuxillaryFrameURL);
-            if (resource.isValid()) {
+            QTextFrame *auxFrame = resource.value<QTextFrame *>();
+            if (auxFrame) {
+                if (operation == QTextCursor::End) {
+                    d->caret.setPosition(auxFrame->firstPosition() - 1, mode);
+                    emit cursorPositionChanged();
+                    return true;
+                }
                 return false;
             }
         }

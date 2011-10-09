@@ -993,7 +993,7 @@ void Map::addCommand(KUndo2Command *command)
     emit commandAdded(command);
 }
 
-KoResourceManager* Map::resourceManager() const
+KoDocumentResourceManager* Map::resourceManager() const
 {
     if (!doc()) return 0;
     return doc()->resourceManager();

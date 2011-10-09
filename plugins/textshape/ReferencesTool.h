@@ -28,6 +28,7 @@ class SimpleTableOfContentsWidget;
 class SimpleFootEndNotesWidget;
 class SimpleCitationBibliographyWidget;
 class KoInlineNote;
+class KoTextEditor;
 class QPainter;
 
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
@@ -45,13 +46,15 @@ public:
 
     virtual void createActions();
 
+    KoTextEditor *editor();
+    /// inserts a ToC and open a configure dialog for customization
+    void insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate);
+
 protected:
     /// reimplemented from superclass
     virtual QList<QWidget *> createOptionWidgets();
 
 private slots:
-    /// insert a table of contents
-    void insertTableOfContents();
     /// insert a citation
     void insertCitation();
     /// insert a bibliography
@@ -62,15 +65,22 @@ private slots:
     void formatTableOfContents();
     /// shows the configuration dialog for a ToC
     void showConfigureDialog(QAction *action);
-    /// insert a footnote
-    void insertFootNote();
-    /// insert an endnote
-    void insertEndNote();
+    /// hides the configuration dialog for ToC
+    void hideCofigureDialog(int result);
+    /// insert an autonumbered footnote
+    void insertAutoFootNote();
+    /// insert a labeled footnote
+    void insertLabeledFootNote(QString label);
+    /// insert an autonumbered endnote
+    void insertAutoEndNote();
+    /// insert a labeled endnote
+    void insertLabeledEndNote(QString label);
     /// show the configuration dialog for notes
     void showNotesConfigureDialog();
-    /// disable insert notes' buttons when already in notes' body
-    void disableButtons(QTextCursor cursor);
+    /// enable/disable buttons if cursor in notes' body or not
+    void updateButtons();
 
+    void customToCGenerated();
 
 private:
     TableOfContentsConfigure *m_configure;
@@ -78,6 +88,27 @@ private:
         SimpleFootEndNotesWidget *m_sfenw;
         KoInlineNote *m_note;
     SimpleCitationBibliographyWidget *m_scbw;
+};
+
+class KAction;
+class QLineEdit;
+
+class LabeledNoteWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    LabeledNoteWidget(KAction *action);
+    KAction *m_action;
+    QLineEdit *m_lineEdit;
+
+signals:
+    void triggered(QString label);
+
+private slots:
+    void returnPressed();
+
+protected:
+    virtual void enterEvent(QEvent *event);
 };
 
 #endif // REFERENCESTOOL_H

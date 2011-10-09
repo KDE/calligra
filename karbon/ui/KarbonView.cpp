@@ -66,7 +66,8 @@
 #include <KoMainWindow.h>
 #include <KoLineBorder.h>
 #include <KoCanvasControllerWidget.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoFilterManager.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoPageLayoutDialog.h>
@@ -399,7 +400,7 @@ void KarbonView::dropEvent(QDropEvent *e)
         if (! part())
             return;
 
-        if (d->canvas->resourceManager()->intResource(KoCanvasResource::ActiveStyleType) == KoFlake::Foreground) {
+        if (d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType) == KoFlake::Foreground) {
             QList<KoShapeBorderModel*> borders;
             QList<KoShape*> selectedShapes = selection->selectedShapes();
             foreach(KoShape * shape, selectedShapes) {
@@ -1414,7 +1415,7 @@ void KarbonView::updateUnit(const KoUnit &unit)
 {
     d->horizRuler->setUnit(unit);
     d->vertRuler->setUnit(unit);
-    d->canvas->resourceManager()->setResource(KoCanvasResource::Unit, unit);
+    d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
 }
 
 QList<KoPathShape*> KarbonView::selectedPathShapes()
@@ -1468,7 +1469,7 @@ void KarbonView::applyPaletteColor(const KoColor &color)
     if (! selection->count())
         return;
 
-    int style = d->canvas->resourceManager()->intResource(KoCanvasResource::ActiveStyleType);
+    int style = d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType);
     if (style == KoFlake::Foreground) {
         QList<KoShapeBorderModel*> newStrokes;
         foreach(KoShape *shape, selection->selectedShapes()) {
