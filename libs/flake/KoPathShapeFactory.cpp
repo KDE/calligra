@@ -79,8 +79,8 @@ void KoPathShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *m
         manager->setImageCollection(imgCol);
     }
     // we also need a MarkerCollection so add if it is not there yet
-    if (!manager->hasResource(KoDocumentResource::MarkerCollection)) {
+    if (!manager->hasResource(KoDocumentResourceManager::MarkerCollection)) {
         KoMarkerCollection *markerCollection = new KoMarkerCollection(manager);
-        manager->setResource(KoDocumentResource::MarkerCollection, qVariantFromValue(markerCollection));
+        manager->setResource(KoDocumentResourceManager::MarkerCollection, qVariantFromValue(markerCollection));
     }
 }

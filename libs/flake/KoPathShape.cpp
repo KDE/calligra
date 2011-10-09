@@ -238,7 +238,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
                 qreal markerBaseWidth = qMax(qreal(0.0), markerWidth - lineWidth * 1.5);
                 kDebug(30006) << markerWidth << markerBaseWidth << lineWidth * 1.5;
                 d->beginMarker.setWidth(markerBaseWidth);
-                d->beginMarker.setCenter(element.attributeNS(KoXmlNS::draw, "marker-start-center", "false") == "true");
+                d->beginMarker.setCenter(styleStack.property(KoXmlNS::draw, "marker-start-center") == "true");
             }
         }
 
@@ -252,7 +252,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
                 qreal markerBaseWidth = qMax(qreal(0.0), markerWidth - lineWidth * 1.5);
                 kDebug(30006) << markerWidth << markerBaseWidth << lineWidth * 1.5;
                 d->endMarker.setWidth(markerBaseWidth);
-                d->endMarker.setCenter(element.attributeNS(KoXmlNS::draw, "marker-end-center", "false") == "true");
+                d->endMarker.setCenter(styleStack.property(KoXmlNS::draw, "marker-end-center") == "true");
             }
         }
         kDebug(30006) << "use markers" << d->beginMarker.marker() << d->endMarker.marker();

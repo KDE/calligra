@@ -45,6 +45,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoDockFactoryBase.h>
 //#include <KoUnitDoubleSpinBox.h>
 //#include <KoLineStyleSelector.h>
@@ -257,8 +258,8 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
     }
 
     d->canvas = canvas;
-    KoResourceManager *resourceManager = canvas->shapeController()->resourceManager();
-    KoMarkerCollection *collection = resourceManager->resource(KoDocumentResource::MarkerCollection).value<KoMarkerCollection*>();
+    KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
+    KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
     if (collection) {
         d->mainWidget->updateMarkers(collection->markers());
 

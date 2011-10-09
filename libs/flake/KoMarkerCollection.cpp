@@ -21,7 +21,6 @@
 
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
-#include "KoResourceManager.h"
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
