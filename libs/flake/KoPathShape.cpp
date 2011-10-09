@@ -1456,6 +1456,12 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
     stroker.setWidth(0);
     stroker.setJoinStyle(Qt::MiterJoin);
 
+    QPair<KoPathSegment, KoPathSegment> firstSegments;
+    QPair<KoPathSegment, KoPathSegment> lastSegments;
+
+    KoPathPoint *firstPoint = 0;
+    KoPathPoint *lastPoint = 0;
+
     KoMarkerData mdBegin = markerData(KoMarkerData::MarkerBegin);
     if (mdBegin.marker()) {
         QPainterPath markerPath = mdBegin.marker()->path(mdBegin.width() + pen.widthF() * 1.5);
@@ -1465,15 +1471,12 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             QRectF pathBoundingRect = markerPath.boundingRect();
             qreal shortenLength = pathBoundingRect.height() * 0.7;
             qreal t = firstSegment.paramAtLength(shortenLength);
-            // the points returned are allocated on the heap
-            // TODO free the points at the end of usage
-            QPair<KoPathSegment, KoPathSegment> splittedSegments = firstSegment.splitAt(t);
+            firstSegments = firstSegment.splitAt(t);
             // transform the marker so that it goes from the first point of the first segment to the second point of the first segment
-            QPointF startPoint = splittedSegments.first.first()->point();
-            QPointF newStartPoint = splittedSegments.first.second()->point();
+            QPointF startPoint = firstSegments.first.first()->point();
+            QPointF newStartPoint = firstSegments.first.second()->point();
             QLineF vector(newStartPoint, startPoint);
             qreal angle = -vector.angle() + 90;
-            kDebug(30006) << angle;
             QTransform transform;
             transform.translate(startPoint.x(), startPoint.y()).rotate(angle).translate(-pathBoundingRect.width() / 2.0, 0);
 
@@ -1481,26 +1484,28 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             QPainterPath beginOutline = stroker.createStroke(markerPath);
             beginOutline = beginOutline.united(markerPath);
             pathOutline.addPath(beginOutline);
+            firstPoint = firstSegment.first();
+            if (firstPoint->properties() & KoPathPoint::StartSubpath) {
+                firstSegments.first.second()->setProperty(KoPathPoint::StartSubpath);
+            }
+            kDebug(30006) << "begin marker" << angle << startPoint << newStartPoint << firstPoint->point();
         }
     }
     KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);
     if (mdEnd.marker()) {
         QPainterPath markerPath = mdEnd.marker()->path(mdEnd.width() + pen.widthF() * 1.5);
 
-        KoPathSegment firstSegment = segmentByIndex(KoPathPointIndex(m_subpaths.first()->count() - 2, 0));
-        if (firstSegment.isValid()) {
+        KoPathSegment lastSegment = segmentByIndex(KoPathPointIndex(0, m_subpaths.first()->count() - 2));
+        if (lastSegment.isValid()) {
             QRectF pathBoundingRect = markerPath.boundingRect();
             qreal shortenLength = pathBoundingRect.height() * 0.7;
-            qreal t = firstSegment.paramAtLength(shortenLength);
-            // the points returned are allocated on the heap
-            // TODO free the points at the end of usage
-            QPair<KoPathSegment, KoPathSegment> splittedSegments = firstSegment.splitAt(1 - t);
-            // transform the marker so that it goes from the first point of the first segment to the second point of the first segment
-            QPointF startPoint = splittedSegments.second.second()->point();
-            QPointF newStartPoint = splittedSegments.second.first()->point();
+            qreal t = lastSegment.paramAtLength(shortenLength);
+            lastSegments = lastSegment.splitAt(1 - t);
+            // transform the marker so that it goes from the last point of the first segment to the previous point of the last segment
+            QPointF startPoint = lastSegments.second.second()->point();
+            QPointF newStartPoint = lastSegments.second.first()->point();
             QLineF vector(newStartPoint, startPoint);
             qreal angle = -vector.angle() + 90;
-            kDebug(30006) << angle;
             QTransform transform;
             transform.translate(startPoint.x(), startPoint.y()).rotate(angle).translate(-pathBoundingRect.width() / 2.0, 0);
 
@@ -1508,8 +1513,11 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             QPainterPath beginOutline = stroker.createStroke(markerPath);
             beginOutline = beginOutline.united(markerPath);
             pathOutline.addPath(beginOutline);
+            lastPoint = lastSegment.second();
+            kDebug(30006) << "end marker" << angle << startPoint << newStartPoint << lastPoint->point();
         }
     }
+
 
     stroker.setWidth(pen.widthF());
     stroker.setJoinStyle(pen.joinStyle());
@@ -1517,8 +1525,24 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
     stroker.setCapStyle(pen.capStyle());
     stroker.setDashOffset(pen.dashOffset());
     stroker.setDashPattern(pen.dashPattern());
-    // TODO use a shortent version of the path to make it look nicer
+
+    // shortent the path to make it look nice
+    // replace the point temporarily in case there is an arrow
+    if (firstPoint) {
+        m_subpaths.first()->first() = firstSegments.first.second();
+    }
+    if (lastPoint) {
+        m_subpaths.first()->last() = lastSegments.first.second();
+    }
+
     QPainterPath path = stroker.createStroke(outline());
+
+    if (firstPoint) {
+        m_subpaths.first()->first() = firstPoint;
+    }
+    if (lastPoint) {
+        m_subpaths.first()->last() = lastPoint;
+    }
     pathOutline.addPath(path);
     pathOutline.setFillRule(Qt::WindingFill);
 
