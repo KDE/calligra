@@ -17,21 +17,21 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301, USA.
 */
 
-#include "kspreadmigrate.h"
+#include "spreadsheetmigrate.h"
 
 namespace KexiMigration
 {
 
-K_EXPORT_KEXIMIGRATE_DRIVER(KSpreadMigrate, "kspread")
+K_EXPORT_KEXIMIGRATE_DRIVER(SpreadsheetMigrate, "spreadsheet")
 
-KSpreadMigrate::KSpreadMigrate(QObject *parent, const QVariantList &args)
+SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
   m_CurSheet = 0;
   m_KSDoc = 0;
 }
 
-KSpreadMigrate::~KSpreadMigrate()
+SpreadsheetMigrate::~SpreadsheetMigrate()
 {
   if (m_KSDoc) {
     m_KSDoc->closeUrl();
@@ -39,7 +39,7 @@ KSpreadMigrate::~KSpreadMigrate()
   }
 }
 
-bool KSpreadMigrate::drv_connect()
+bool SpreadsheetMigrate::drv_connect()
 {
   drv_disconnect();
   m_FileName = m_migrateData->source->dbPath() + '/' + m_migrateData->source->dbFileName();
@@ -54,7 +54,7 @@ bool KSpreadMigrate::drv_connect()
   return m_KSDoc->openUrl(m_FileName);
 }
 
-bool KSpreadMigrate::drv_disconnect()
+bool SpreadsheetMigrate::drv_disconnect()
 {
   if (m_KSDoc) {
     m_KSDoc->closeUrl();
@@ -64,7 +64,7 @@ bool KSpreadMigrate::drv_disconnect()
   return true;
 }
 
-bool KSpreadMigrate::drv_tableNames(QStringList& tablenames)
+bool SpreadsheetMigrate::drv_tableNames(QStringList& tablenames)
 {
     QList<Calligra::Tables::Sheet*> sheets = m_KSDoc->map()->sheetList();
   
@@ -77,7 +77,7 @@ bool KSpreadMigrate::drv_tableNames(QStringList& tablenames)
   return true;
 }
 
-bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
+bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
   Calligra::Tables::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
   
@@ -113,7 +113,7 @@ bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::Ta
   return true;
 }
 
-bool KSpreadMigrate::drv_readFromTable(const QString & tableName)
+bool SpreadsheetMigrate::drv_readFromTable(const QString & tableName)
 {
   m_CurSheet = m_KSDoc->map()->findSheet(tableName);
   
@@ -122,7 +122,7 @@ bool KSpreadMigrate::drv_readFromTable(const QString & tableName)
   return m_CurSheet;
 }
 
-bool KSpreadMigrate::drv_moveNext()
+bool SpreadsheetMigrate::drv_moveNext()
 {
   if (!m_CurSheet)
     return false;
@@ -138,7 +138,7 @@ bool KSpreadMigrate::drv_moveNext()
   return false;
 }
 
-bool KSpreadMigrate::drv_movePrevious()
+bool SpreadsheetMigrate::drv_movePrevious()
 {
   if (!m_CurSheet)
     return false;
@@ -151,7 +151,7 @@ bool KSpreadMigrate::drv_movePrevious()
   return false;
 }
 
-bool KSpreadMigrate::drv_moveFirst()
+bool SpreadsheetMigrate::drv_moveFirst()
 {
   if (!m_CurSheet)
     return false;
@@ -160,7 +160,7 @@ bool KSpreadMigrate::drv_moveFirst()
   return drv_moveNext();
 }
 
-bool KSpreadMigrate::drv_moveLast()
+bool SpreadsheetMigrate::drv_moveLast()
 {
   if (!m_CurSheet)
     return false;
@@ -170,7 +170,7 @@ bool KSpreadMigrate::drv_moveLast()
   return true;
 }
 
-QVariant KSpreadMigrate::drv_value(uint i)
+QVariant SpreadsheetMigrate::drv_value(uint i)
 {
     return Calligra::Tables::Cell(m_CurSheet, i+1, m_Row).value().asVariant();
 }
