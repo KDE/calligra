@@ -43,26 +43,6 @@
  * SRC: wv2/src/generator/generator_wword8.htm
  */
 
-
-/**
- * Specifies the version number of the file format used.  Superseded by
- * FibRgCswNew.nFibNew if it is present.
- */
-enum nFib
-{
-    Word2nFib = 0x0063,
-    Word6nFib = 0x0065,
-    Word7nFib = 0x0067,   //also 0x0068
-    Word8nFib = 0x00c1,
-    Word8nFib0 = 0x00c0,
-    Word8nFib2 = 0x00c2,
-    Word2knFib = 0x00D9,
-    Word2k2nFib = 0x0101,
-    Word2k3nFib = 0x010c, //also 0x10b
-    Word2k7nFib = 0x0112
-};
-
-
 #define stiNormal      0     // 0x0000  Default paragraph style
 
 #define stiLev1        1     // 0x0001
@@ -169,7 +149,23 @@ enum nFib
 #define stiUser      0x0ffe  // user styles are distinguished by name
 #define stiNil       0x0fff  // max for 12 bits
 
-
+/**
+ * Specifies the version number of the file format used.  Superseded by
+ * FibRgCswNew.nFibNew if it is present.
+ */
+enum nFib
+{
+    Word2nFib = 0x0063,
+    Word6nFib = 0x0065,
+    Word7nFib = 0x0067,   //also 0x0068
+    Word8nFib = 0x00c1,
+    Word8nFib0 = 0x00c0,
+    Word8nFib2 = 0x00c2,
+    Word2knFib = 0x00D9,
+    Word2k2nFib = 0x0101,
+    Word2k3nFib = 0x010c, //also 0x10b
+    Word2k7nFib = 0x0112
+};
 
 /**
  * Specifies the location from which the offset of a page border is measured.

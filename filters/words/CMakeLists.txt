@@ -10,10 +10,6 @@ IF( ICONV_FOUND )
     SET( ICONV_REQUIRES_CONST ${ICONV_SECOND_ARGUMENT_IS_CONST} )
 ENDIF( ICONV_FOUND )
 
-#
-# Iconv checks for wv2
-# 
-
 INCLUDE( CheckIncludeFile )
 
 CHECK_INCLUDE_FILE( sys/iconv.h HAVE_SYS_ICONV_H )
@@ -97,8 +93,6 @@ endif (NOT TINY)
 add_subdirectory( ascii )
 add_subdirectory( rtf )
 
-# if(ICONV_FOUND)
-	add_subdirectory(msword-odf)
-# endif(ICONV_FOUND)
+add_subdirectory(msword-odf)
 
 add_subdirectory( docx )
