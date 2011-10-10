@@ -68,10 +68,10 @@ namespace Words
      */
     struct Table {
 
-	/**
-	 * Add cell edge position into the cache for a given table.  Keep them
-	 * sorted.
-	 */
+    /**
+     * Add cell edge position into the cache for a given table.  Keep them
+     * sorted.
+     */
         void cacheCellEdge(int cellEdge);
 
         /**

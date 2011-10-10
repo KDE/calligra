@@ -3,15 +3,6 @@ macro_log_feature(DCMTK_FOUND "DCMTK" "DICOM document processing toolkit" "http:
 
 # check whether we can compile wv2
 
-macro_optional_find_package(GObject)
-macro_log_feature(GOBJECT_FOUND "GObject" "GObject" "http://www.gtk.org/" FALSE "" "Required by the msword .doc filter")
-
-macro_optional_find_package(GLIB2)
-macro_log_feature(GLIB2_FOUND "Glib2" "Glib2" "http://www.gtk.org/" FALSE "" "Required by the msword .doc filter")
-
-macro_optional_find_package(LIBGSF)
-macro_log_feature(LIBGSF_FOUND "libgsf" "LibGSF" "ftp://ftp.gnome.org/pub/GNOME/sources/libgsf" FALSE "" "Required by the msword .doc filter")
-
 macro_optional_find_package(Iconv)
 macro_log_feature(ICONV_FOUND "Iconv" "Iconv" "http://www.gnu.org/software/libiconv/" FALSE "" "Required by the msword .doc filter")
 IF( ICONV_FOUND )
@@ -106,8 +97,8 @@ endif (NOT TINY)
 add_subdirectory( ascii )
 add_subdirectory( rtf )
 
-if(GLIB2_FOUND AND GOBJECT_FOUND AND ICONV_FOUND AND LIBGSF_FOUND)
+# if(ICONV_FOUND)
 	add_subdirectory(msword-odf)
-endif(GLIB2_FOUND AND GOBJECT_FOUND AND ICONV_FOUND AND LIBGSF_FOUND)
+# endif(ICONV_FOUND)
 
 add_subdirectory( docx )
