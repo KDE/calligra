@@ -7,12 +7,14 @@
       - current Point                                                   [done]
    + Move the current path to the DC                                    [DONE]
    + Move the world transform to the DC                                 [DONE]
-   + Move the object table (Pen, Brush, etc) to the DC
+   + Move the object table (Pen, Brush, etc) to the DC                  [DONE]
       - Move the object table itself to the DC                          [done]
       - Move the functions that create the objects to EmfObjects        [done]
-      - Move selectObject and deleteObject to the parser.
+      - Move selectObject and deleteObject to the parser.               [done]
 
    + (Implement a real saveDC and restoreDC) Wait until later
+
+
 
 * Implement support for EMFPLUS
    + Make a stream from a EMR_COMMENT_EMFPLUS record and hand that

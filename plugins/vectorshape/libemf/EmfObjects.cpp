@@ -330,6 +330,125 @@ QFont extCreateFontIndirectW(const ExtCreateFontIndirectWRecord &extCreateFontIn
 
 
 // ----------------------------------------------------------------
+
+
+static void selectStockObject(EmfDeviceContext &context, const quint32 ihObject)
+{
+#if 0
+    kDebug(31000) << ihObject;
+#endif
+
+    switch ( ihObject ) {
+    case WHITE_BRUSH:
+        context.brush = QBrush(Qt::white);
+        context.changedItems |= DCBrush;
+	break;
+    case LTGRAY_BRUSH:
+        context.brush = QBrush(Qt::lightGray);
+        context.changedItems |= DCBrush;
+	break;
+    case GRAY_BRUSH:
+        context.brush = QBrush(Qt::gray);
+        context.changedItems |= DCBrush;
+	break;
+    case DKGRAY_BRUSH:
+        context.brush = QBrush(Qt::darkGray);
+        context.changedItems |= DCBrush;
+	break;
+    case BLACK_BRUSH:
+        context.brush = QBrush(Qt::black);
+        context.changedItems |= DCBrush;
+	break;
+    case NULL_BRUSH:
+        context.brush = QBrush();
+        context.changedItems |= DCBrush;
+	break;
+    case WHITE_PEN:
+        context.pen = QPen(Qt::white);
+        context.changedItems |= DCPen;
+	break;
+    case BLACK_PEN:
+        context.pen = QPen(Qt::black);
+        context.changedItems |= DCPen;
+	break;
+    case NULL_PEN:
+        context.pen = Qt::NoPen;
+        context.changedItems |= DCPen;
+	break;
+    case OEM_FIXED_FONT:
+    case ANSI_FIXED_FONT:
+        {
+            QFont  font(QString("Fixed"));
+            context.font = font;
+            context.changedItems |= DCFont;
+            break;
+        }
+    case ANSI_VAR_FONT:
+	Q_ASSERT( 0 );
+	break;
+    case SYSTEM_FONT:
+	// TODO: handle this
+	break;
+    case DEVICE_DEFAULT_FONT:
+	// TODO: handle this
+	break;
+    case DEFAULT_PALETTE:
+	Q_ASSERT( 0 );
+	break;
+    case SYSTEM_FIXED_FONT:
+	Q_ASSERT( 0 );
+	break;
+    case DEFAULT_GUI_FONT:
+	Q_ASSERT( 0 );
+	break;
+    case DC_BRUSH:
+	Q_ASSERT( 0 );
+	break;
+    case DC_PEN:
+	Q_ASSERT( 0 );
+	break;
+    default:
+	qWarning() << "Unexpected stock object:" << ( ihObject & 0x8000000 );
+    }
+}
+
+void selectObject(EmfDeviceContext &context, const quint32 ihObject)
+{
+#if 0
+    kDebug(33100) << hex << ihObject << dec;
+#endif
+
+    if ( ihObject & 0x80000000 ) {
+	selectStockObject(context, ihObject);
+    } else {
+	QVariant obj = context.objectTable.value( ihObject );
+
+	switch ( obj.type() ) {
+	case QVariant::Pen :
+            context.pen = obj.value<QPen>();
+            context.changedItems |= DCPen;
+	    break;
+	case QVariant::Brush :
+            context.brush = obj.value<QBrush>();
+            context.changedItems |= DCBrush;
+	    break;
+	case QVariant::Font :
+            context.font = obj.value<QFont>();
+            context.changedItems |= DCFont;
+	    break;
+	default:
+	    kDebug(33100) << "Unexpected type:" << obj.typeName();
+	}
+    }
+}
+
+void deleteObject(EmfDeviceContext &context, const quint32 ihObject)
+{
+    context.objectTable.take(ihObject);
+}
+
+
+// ----------------------------------------------------------------
 // static functions
 
 static int convertFontWeight( quint32 emfWeight )

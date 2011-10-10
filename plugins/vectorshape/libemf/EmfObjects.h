@@ -25,6 +25,7 @@
 #include <QPen>
 
 #include "EmfEnums.h"
+#include "EmfDeviceContext.h"
 
 /**
    Namespace for Enhanced Metafile (EMF) classes
@@ -108,7 +109,8 @@ private:
 
 
 // ================================================================
-// Objects that will be stored in the object table
+//         Objects that will be stored in the object table
+
 
 QPen   extCreatePen(quint32 penStyle, quint32 width,
                     quint8 red, quint8 green, quint8 blue, quint8 reserved);
@@ -117,6 +119,12 @@ QBrush createBrushIndirect(quint32 brushStyle,
                            quint32 brushHatch);
 QBrush createMonoBrush(Bitmap *bitmap);
 QFont  extCreateFontIndirectW(const ExtCreateFontIndirectWRecord &extCreateFontIndirectW);
+
+// Selection of objects into the device context
+void selectObject(EmfDeviceContext &context, const quint32 ihObject);
+void deleteObject(EmfDeviceContext &context, const quint32 ihObject);
+
+
 
 }
 

@@ -86,13 +86,6 @@ void EmfDebugBackend::setMetaRgn(EmfDeviceContext &context)
     kDebug(33100) << "EMR_SETMETARGN";
 }
 
-void EmfDebugBackend::deleteObject(EmfDeviceContext &context, const quint32 ihObject )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_DELETEOBJECT:" << ihObject;
-}
-
 void EmfDebugBackend::arc(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end )
 {
     Q_UNUSED(context);
@@ -126,13 +119,6 @@ void EmfDebugBackend::rectangle(EmfDeviceContext &context, const QRect &box )
     Q_UNUSED(context);
 
     kDebug(33100) << "EMR_RECTANGLE:" << box;
-}
-
-void EmfDebugBackend::selectObject(EmfDeviceContext &context, const quint32 ihObject )
-{
-    Q_UNUSED(context);
-
-    kDebug(33100) << "EMR_SELECTOBJECT" << ihObject;
 }
 
 void EmfDebugBackend::extTextOut(EmfDeviceContext &context, const QRect &bounds, const EmrTextObject &textObject )

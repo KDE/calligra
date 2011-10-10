@@ -98,20 +98,6 @@ public:
     virtual void setMetaRgn(EmfDeviceContext &context) = 0;
 
     /**
-       Select a previously created (or stock) object
-
-       \param ihObject the reference number for the object to select
-    */
-    virtual void selectObject(EmfDeviceContext &context, const quint32 ihObject) = 0;
-
-    /**
-       Delete a previously created (or stock) object
-
-       \param ihObject the reference number for the object to delete
-    */
-    virtual void deleteObject(EmfDeviceContext &context, const quint32 ihObject) = 0;
-
-    /**
        Handler for the EMR_ARC record type
 
        \param box the bounding box

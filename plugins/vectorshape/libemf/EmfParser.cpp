@@ -586,7 +586,7 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
     case EMR_SELECTOBJECT:
 	quint32 ihObject;
 	stream >> ihObject;
-	mOutput->selectObject(context, ihObject );
+	selectObject(context, ihObject);
         break;
     case EMR_CREATEPEN:
 	{
@@ -638,7 +638,7 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	{
 	    quint32 ihObject;
 	    stream >> ihObject;
-	    mOutput->deleteObject(context, ihObject );
+	    deleteObject(context, ihObject );
 	}
         break;
     case EMR_ELLIPSE:

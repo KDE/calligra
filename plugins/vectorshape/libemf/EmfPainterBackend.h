@@ -75,8 +75,6 @@ public:
     */
     QImage *image();
 
-    void selectObject(EmfDeviceContext &context, const quint32 ihObject );
-    void deleteObject(EmfDeviceContext &context, const quint32 ihObject );
     void arc(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
     void chord(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
     void pie(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
@@ -117,16 +115,6 @@ private:
     /// Recalculate the world transform and then apply it to the painter
     /// This must be called at the end of every function that changes the transform.
     void recalculateWorldTransform();
-
-    /**
-       Select a stock object.
-
-       See [MS-EMF] Section 2.1.31.
-
-       \param ihObject the stock object value
-    */
-    void selectStockObject(EmfDeviceContext &context, const quint32 ihObject);
-
 
     /**
        Helper routine to convert the EMF angle (centrepoint + radial endpoint) into

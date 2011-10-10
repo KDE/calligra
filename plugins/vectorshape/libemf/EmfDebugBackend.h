@@ -59,8 +59,6 @@ public:
     void cleanup( const Header *header );
     void eof();
 
-    void selectObject(EmfDeviceContext &context, const quint32 ihObject );
-    void deleteObject(EmfDeviceContext &context, const quint32 ihObject );
     void arc(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
     void chord(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
     void pie(EmfDeviceContext &context, const QRect &box, const QPoint &start, const QPoint &end );
