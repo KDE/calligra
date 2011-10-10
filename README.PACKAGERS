@@ -85,6 +85,14 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libxbase
  ------------------------------------------------------------------------
+ kexi-spreadsheet-export   Description: Kexi table-to-spreadsheet export plugin
+                           Files:
+                               keximigrate_spreadsheet.so
+                               keximigrate_spreadsheet.desktop
+                           Dependencies:
+                               tables (Calligra Tables)
+ ------------------------------------------------------------------------
+
 
 Plugin .so files are typically installed to $KDEDIR/lib/kde4/,
 and .desktop service files are installed to $KDEDIR/share/services/.
