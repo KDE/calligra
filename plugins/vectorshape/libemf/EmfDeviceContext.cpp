@@ -144,7 +144,7 @@ void EmfDeviceContext::setWindowOrg(const QPoint &origin)
 
 void EmfDeviceContext::setWindowExt(const QSize &size)
 {
-#if DEBUG_EMFPAINT
+#if 0
     kDebug(31000) << size;
 #endif
 
@@ -163,7 +163,7 @@ void EmfDeviceContext::setWindowExt(const QSize &size)
 
 void EmfDeviceContext::setViewportOrg(const QPoint &origin)
 {
-#if DEBUG_EMFPAINT
+#if 0
     kDebug(31000) << origin;
 #endif
 
@@ -181,7 +181,7 @@ void EmfDeviceContext::setViewportOrg(const QPoint &origin)
 
 void EmfDeviceContext::setViewportExt(const QSize &size)
 {
-#if DEBUG_EMFPAINT
+#if 0
     kDebug(31000) << size;
 #endif
 
@@ -201,7 +201,7 @@ void EmfDeviceContext::setViewportExt(const QSize &size)
 void EmfDeviceContext::modifyWorldTransform(const quint32 mode, float M11, float M12,
                                             float M21, float M22, float Dx, float Dy)
 {
-#if DEBUG_EMFPAINT
+#if 0
     if (mode == MWT_IDENTITY)
         kDebug(31000) << "Identity matrix";
     else
@@ -228,7 +228,7 @@ void EmfDeviceContext::modifyWorldTransform(const quint32 mode, float M11, float
 void EmfDeviceContext::setWorldTransform(float M11, float M12, float M21, float M22,
                                          float Dx, float Dy )
 {
-#if DEBUG_EMFPAINT
+#if 0
     kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
