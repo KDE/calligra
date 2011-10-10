@@ -1498,9 +1498,9 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
         KoPathSegment lastSegment = segmentByIndex(KoPathPointIndex(0, m_subpaths.first()->count() - 2));
         if (lastSegment.isValid()) {
             QRectF pathBoundingRect = markerPath.boundingRect();
-            qreal shortenLength = pathBoundingRect.height() * 0.7;
+            qreal shortenLength = lastSegment.length() - pathBoundingRect.height() * 0.7;
             qreal t = lastSegment.paramAtLength(shortenLength);
-            lastSegments = lastSegment.splitAt(1 - t);
+            lastSegments = lastSegment.splitAt(t);
             // transform the marker so that it goes from the last point of the first segment to the previous point of the last segment
             QPointF startPoint = lastSegments.second.second()->point();
             QPointF newStartPoint = lastSegments.second.first()->point();
