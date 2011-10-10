@@ -9,7 +9,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 add_subdirectory(txt)
 
 if (SHOULD_BUILD_TABLES)
-  macro_optional_add_subdirectory(kspread)
+  macro_optional_add_subdirectory(spreadsheet)
 endif (SHOULD_BUILD_TABLES)
 
 macro_optional_find_package(MySQL)
