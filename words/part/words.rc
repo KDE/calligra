@@ -37,6 +37,7 @@
   <Separator/>
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
+  <Action name="view_tableborders"/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
   <Action name="view_show_guides"/>

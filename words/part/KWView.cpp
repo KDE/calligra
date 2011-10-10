@@ -351,6 +351,22 @@ void KWView::setupActions()
     action->setChecked(m_document->config().viewFrameBorders());
     action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
 
+    action = new KAction(i18n("Formatting Characters"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_formattingchars", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
+    action->setChecked(m_document->config().showFormattingChars());
+    action->setToolTip(i18n("Toggle the display of non-printing characters"));
+    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
+
+    action = new KAction(i18n("Table Borders"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_tableborders", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
+    action->setChecked(m_document->config().showTableBorders());
+    action->setToolTip(i18n("Toggle the display of table borders"));
+    action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
+
     action = new KAction(i18n("Page Layout..."), this);
     actionCollection()->addAction("format_page", action);
     action->setToolTip(i18n("Change properties of entire page"));
@@ -432,15 +448,7 @@ void KWView::setupActions()
     handleDeletePageAction(); //decide if we enable or disable this action
     connect(m_document, SIGNAL(pageSetupChanged()), this, SLOT(handleDeletePageAction()));
 
-    action = new KAction(i18n("Formatting Characters"), this);
-    action->setCheckable(true);
-    actionCollection()->addAction("view_formattingchars", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
-    action->setToolTip(i18n("Toggle the display of non-printing characters"));
-    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
-
     action = new KAction(i18n("Select All Shapes"), this);
-
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
 
@@ -842,15 +850,23 @@ void KWView::toggleSnapToGrid()
 
 void KWView::toggleViewFrameBorders(bool on)
 {
-    m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, on);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, on);
     m_canvas->update();
     m_document->config().setViewFrameBorders(on);
 }
 
 void KWView::setShowFormattingChars(bool on)
 {
-    m_canvas->resourceManager()->setResource(KoText::ShowFormattingCharacters, on);
-    update();
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, on);
+    m_canvas->update();
+    m_document->config().setShowFormattingChars(on);
+}
+
+void KWView::setShowTableBorders(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, on);
+    m_canvas->update();
+    m_document->config().setShowTableBorders(on);
 }
 
 void KWView::formatPage()
