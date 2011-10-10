@@ -25,7 +25,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
 #include <KoPattern.h>
@@ -135,7 +135,7 @@ void KarbonPatternTool::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
     case Qt::Key_I: {
-        KoResourceManager *rm = canvas()->shapeController()->resourceManager();
+        KoDocumentResourceManager *rm = canvas()->shapeController()->resourceManager();
         uint handleRadius = rm->handleRadius();
         if (event->modifiers() & Qt::ControlModifier)
             handleRadius--;
@@ -250,7 +250,7 @@ void KarbonPatternTool::deactivate()
 void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoDocumentResource::HandleRadius:
+    case KoDocumentResourceManager::HandleRadius:
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
             strategy->repaint();
 
@@ -259,7 +259,7 @@ void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
             strategy->repaint();
         break;
-    case KoDocumentResource::GrabSensitivity:
+    case KoDocumentResourceManager::GrabSensitivity:
         KarbonPatternEditStrategyBase::setGrabSensitivity(res.toUInt());
         break;
     default:

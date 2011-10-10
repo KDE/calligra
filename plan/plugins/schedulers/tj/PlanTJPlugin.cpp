@@ -51,10 +51,10 @@ PlanTJPlugin::~PlanTJPlugin()
 QString PlanTJPlugin::description() const
 {
     return i18nc( "@info:whatsthis", "<title>TaskJuggler Scheduler</title>"
-                    "<para>This is a sligtly modified version of the scheduler used in TaskJuggler."
+                    "<para>This is a slightly modified version of the scheduler used in TaskJuggler."
                     " It has been enhanced to handle resource units.</para>"
                     "<para>Scheduling backwards is simulated by scheduling all tasks as late as possible.</para>"
-                    "<para><note>Plan does not utilize all of its functionallity.</note></para>"
+                    "<para><note>Plan does not utilize all of its functionality.</note></para>"
                 );
 }
 

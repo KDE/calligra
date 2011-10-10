@@ -24,7 +24,7 @@
 
 #include <KoShapeContainer.h>
 
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoShapeLayer;
 class Section;
 class SectionShapeContainerModel;

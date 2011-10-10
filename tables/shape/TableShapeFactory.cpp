@@ -26,7 +26,7 @@
 #include <kpluginfactory.h>
 #include <klocale.h>
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>

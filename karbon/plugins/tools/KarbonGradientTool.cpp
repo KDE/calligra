@@ -26,7 +26,8 @@
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
@@ -35,6 +36,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoGradientBackground.h>
 #include <KarbonGradientHelper.h>
+#include <KoShapeController.h>
 #include <KoShapeBackground.h>
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
@@ -301,7 +303,8 @@ void KarbonGradientTool::keyPressEvent(QKeyEvent *event)
             handleRadius--;
         else
             handleRadius++;
-        canvas()->resourceManager()->setHandleRadius(handleRadius);
+        // XXX: this is a KoDocumentResourceController feature, but shouldn't it be canvas?
+        canvas()->shapeController()->resourceManager()->setHandleRadius(handleRadius);
     }
     break;
     default:
@@ -468,14 +471,14 @@ void KarbonGradientTool::deactivate()
 void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoDocumentResource::HandleRadius:
+    case KoDocumentResourceManager::HandleRadius:
         foreach(GradientStrategy *strategy, m_strategies)
             strategy->repaint(*canvas()->viewConverter());
         GradientStrategy::setHandleRadius(res.toUInt());
         foreach(GradientStrategy *strategy, m_strategies)
             strategy->repaint(*canvas()->viewConverter());
         break;
-    case KoDocumentResource::GrabSensitivity:
+    case KoDocumentResourceManager::GrabSensitivity:
         GradientStrategy::setGrabSensitivity(res.toUInt());
         break;
     default:

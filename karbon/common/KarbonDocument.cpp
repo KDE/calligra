@@ -39,7 +39,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeSavingContext.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
@@ -85,7 +85,7 @@ public:
 
     QMap<QString, KoDataCenterBase*> dataCenterMap;
     bool hasExternalDataCenterMap;
-    KoResourceManager *resourceManager;
+    KoDocumentResourceManager *resourceManager;
 };
 
 KarbonDocument::KarbonDocument()
@@ -424,12 +424,12 @@ void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenterBase* da
     d->dataCenterMap.insert(key, dataCenter);
 }
 
-KoResourceManager *KarbonDocument::resourceManager() const
+KoDocumentResourceManager *KarbonDocument::resourceManager() const
 {
     return d->resourceManager;
 }
 
-void KarbonDocument::setResourceManager(KoResourceManager *rm)
+void KarbonDocument::setResourceManager(KoDocumentResourceManager *rm)
 {
     d->resourceManager = rm;
 }

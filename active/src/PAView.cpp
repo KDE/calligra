@@ -6,7 +6,7 @@
  * Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -128,7 +128,7 @@ void PAView::setActivePage(KoPAPageBase* page)
     }
 
     // Set the current page number in the canvas resource provider
-    m_paCanvas->resourceManager()->setResource( KoCanvasResource::CurrentPage, m_prDocument->pageIndex(page)+1 );
+    m_paCanvas->resourceManager()->setResource( KoCanvasResourceManager::CurrentPage, m_prDocument->pageIndex(page)+1 );
 }
 
 void PAView::doUpdateActivePage(KoPAPageBase* page)
@@ -145,7 +145,7 @@ void PAView::doUpdateActivePage(KoPAPageBase* page)
     // the page is in the center of the canvas
     m_zoomController->setDocumentSize(pageSize * 3);
     m_zoomController->setPageSize(pageSize);
-    m_paCanvas->resourceManager()->setResource( KoCanvasResource::PageSize, pageSize );
+    m_paCanvas->resourceManager()->setResource( KoCanvasResourceManager::PageSize, pageSize );
     QGraphicsItem *item = dynamic_cast<QGraphicsItem*>(m_paCanvas);
     item->update();
 

@@ -56,7 +56,7 @@ KPrPlaceholderTextStrategy::~KPrPlaceholderTextStrategy()
     delete m_textShape;
 }
 
-KoShape *KPrPlaceholderTextStrategy::createShape(KoResourceManager *documentResources)
+KoShape *KPrPlaceholderTextStrategy::createShape(KoDocumentResourceManager *documentResources)
 {
     KoShape * shape = KPrPlaceholderStrategy::createShape(documentResources);
     if ( m_textShape ) {
@@ -161,7 +161,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
     return true;
 }
 
-void KPrPlaceholderTextStrategy::init(KoResourceManager *documentResources)
+void KPrPlaceholderTextStrategy::init(KoDocumentResourceManager *documentResources)
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );

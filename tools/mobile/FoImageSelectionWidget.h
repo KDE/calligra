@@ -28,7 +28,7 @@
 #include <QWidget>
 
 class KoShape;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 /*!
  * This class implements an image selection widget that replaces KoImageSelectionWidget
@@ -38,7 +38,7 @@ class KoResourceManager;
 class FoImageSelectionWidget
 {
 public:
-    static KoShape *selectImageShape(KoResourceManager *documentResource, QWidget *parent = 0);
+    static KoShape *selectImageShape(KoDocumentResourceManager *documentResource, QWidget *parent = 0);
 };
 
 #endif // FOIMAGESELECTIONWIDGET_H
