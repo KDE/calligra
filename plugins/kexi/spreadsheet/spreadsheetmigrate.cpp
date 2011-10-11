@@ -19,6 +19,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "spreadsheetmigrate.h"
 
+#include <KGlobal>
+
 namespace KexiMigration
 {
 
@@ -27,6 +29,7 @@ K_EXPORT_KEXIMIGRATE_DRIVER(SpreadsheetMigrate, "spreadsheet")
 SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
+  KGlobal::locale()->insertCatalog("KexiSpreadsheetImportPlugin");
   m_CurSheet = 0;
   m_KSDoc = 0;
 }
