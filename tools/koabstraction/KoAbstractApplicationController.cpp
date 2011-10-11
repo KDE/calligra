@@ -33,7 +33,7 @@
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
 #include <KoToolBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoShapeUserData.h>
@@ -248,7 +248,7 @@ bool KoAbstractApplicationController::openDocuments(
         return false;
     }
 
-    //for new files the condition to be checked is m_fileName.isEmpty() 
+    //for new files the condition to be checked is m_fileName.isEmpty()
     if (isNewDocument) {
         m_fileName.clear();
     } else {
@@ -507,7 +507,7 @@ bool KoAbstractApplicationController::openDocument()
                "Presentations (*.ppt *.pptx *.odp *.pps *.ppsx);;"
                "Spreadsheets (*.xls *.xlsx *.ods)");
 
-    const QString file = showGetOpenFileNameDialog(i18n("Open Document"), 
+    const QString file = showGetOpenFileNameDialog(i18n("Open Document"),
                                                    QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
                                                    filter);
 
@@ -864,7 +864,7 @@ bool KoAbstractApplicationController::handleCloseEvent(QCloseEvent *event)
 
 void KoAbstractApplicationController::resourceChanged(int key, const QVariant& value)
 {
-    if (KoCanvasResource::CurrentPage == key) {
+    if (KoCanvasResourceManager::CurrentPage == key) {
         const int prevPage = m_currentPage;
         m_currentPage = value.toInt();
         handleCurrentPageChanged(prevPage);
@@ -921,7 +921,7 @@ void KoAbstractApplicationController::activeToolChanged(KoCanvasController* canv
    kDebug() << "-------------------------------" << newTool;
    // only Pan tool or Text tool should ever be the active tool, so if
    // another tool got activated, switch back to pan tool
-    if (newTool != panToolFactoryId() && newTool != textToolFactoryId() && newTool != cellToolFactoryId() 
+    if (newTool != panToolFactoryId() && newTool != textToolFactoryId() && newTool != cellToolFactoryId()
         && newTool != "InteractionTool") {
         KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     }

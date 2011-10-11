@@ -74,7 +74,7 @@ class WordsTextHandler : public QObject, public wvWare::TextHandler
     Q_OBJECT
 public:
     WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~WordsTextHandler() { }
+    ~WordsTextHandler();
 
     //////// TextHandler interface
 
@@ -257,7 +257,6 @@ private:
     // ************************************************
     QString m_listSuffixes[9];     // The suffix for every list level seen so far
     QString m_listStyleName;       // track the name of the list style
-    bool m_listLevelStyleRequired; // track if a list-level-style is required for current paragraph
     int m_previousListDepth;        // tells us which list level we're on (-1 if not in a list)
     int m_previousListID;           // tracks the ID of the current list - 0 if not a list
 
@@ -426,7 +425,7 @@ private:
 
         //set to UNSUPPORTED for a field we can't handle, anything else is the field type
         fldType m_type;
-        
+
         //other field related variables
         bool m_insideField;
         bool m_afterSeparator;
@@ -441,7 +440,7 @@ private:
         //KoGenStyle name for the <text:span> element encapsulating content of the
         //processed field (if applicable)
         QString m_styleName;
-        
+
         //stores field instructions
         QString m_instructions;
 

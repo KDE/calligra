@@ -21,8 +21,6 @@
 
 #include <core/kexi.h>
 #include <core/kexitemplateloader.h>
-#include "KexiProjectSelector.h"
-#include "KexiConnSelector.h"
 
 #include <QPixmap>
 #include <Q3Header>

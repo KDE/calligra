@@ -36,7 +36,7 @@ KAboutData * newKarbonAboutData()
         version,
         ki18n(description),
         KAboutData::License_LGPL,
-        ki18n("(c) 2001-2009, The Karbon Developers"),
+        ki18n("(c) 2001-2011, The Karbon Developers"),
         ki18n("You are invited to participate in any way."),
         "http://www.calligra-suite.org/karbon/");
     aboutData->setProductName("calligra-karbon"); // for bugs.kde.org

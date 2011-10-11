@@ -365,6 +365,7 @@ void KexiScriptDesignView::execute()
             d->editor->setLineNo(lineno);
     }
     else {
+        // xgettext: no-c-format
         d->statusbrowser->append(i18n("Successfully executed. Time elapsed: %1ms", time.elapsed()));
     }
 }

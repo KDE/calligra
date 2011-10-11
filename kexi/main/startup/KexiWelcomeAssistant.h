@@ -29,7 +29,6 @@
 
 #include <QPointer>
 
-class KexiConnSelectorWidget;
 class KexiProjectData;
 class KexiProjectSelectorWidget;
 class KCategorizedView;

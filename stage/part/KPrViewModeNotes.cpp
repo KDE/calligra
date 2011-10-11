@@ -26,7 +26,7 @@
 
 #include <KDebug>
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>

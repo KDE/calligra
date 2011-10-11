@@ -1347,6 +1347,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             KIO::TransferJob *job = KIO::get( url, KIO::NoReload, KIO::HideProgressInfo );
             bool res = connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(slotDataArrived(KIO::Job*, const QByteArray&)));
             Q_ASSERT( res );
+	    Q_UNUSED( res );
             res = connect(job, SIGNAL(result(KJob*)), this, SLOT(slotJobFinished(KJob*)));
             Q_ASSERT( res );
 

@@ -31,7 +31,7 @@ KAboutData * newKPresenterAboutData()
 {
     KAboutData * aboutData=new KAboutData( "stage", 0, ki18nc("application name", "Stage"),
                                            version, ki18n(description), KAboutData::License_LGPL,
-                                           ki18n("(c) 1998-2010, The Stage Team"), KLocalizedString(),
+                                           ki18n("(c) 1998-2011, The Stage Team"), KLocalizedString(),
                                            "http://www.calligra-suite.org/stage/");
     aboutData->setProductName("calligra-stage"); // for bugs.kde.org
     aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Maintainer"), "zachmann@kde.org");

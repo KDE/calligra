@@ -39,7 +39,6 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWInsertPageDialog.h"
-#include "dialogs/KWInsertInlineNoteDialog.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
@@ -56,7 +55,7 @@
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoShapeCreateCommand.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
 #include <KoPasteController.h>
@@ -433,14 +432,12 @@ void KWView::setupActions()
     handleDeletePageAction(); //decide if we enable or disable this action
     connect(m_document, SIGNAL(pageSetupChanged()), this, SLOT(handleDeletePageAction()));
 
-if (false) { // TODO move this to the text tool as soon as  a) the string freeze is lifted.  b) Qt45 makes this possible
     action = new KAction(i18n("Formatting Characters"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_formattingchars", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
-}
 
     action = new KAction(i18n("Select All Shapes"), this);
 
@@ -761,7 +758,7 @@ void KWView::selectBookmark()
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
 
-    KoResourceManager *rm = m_canvas->resourceManager();
+    KoCanvasResourceManager *rm = m_canvas->resourceManager();
     if (bookmark->hasSelection()) {
         rm->setResource(KoText::CurrentTextPosition, bookmark->position());
         rm->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
@@ -848,6 +845,12 @@ void KWView::toggleViewFrameBorders(bool on)
     m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, on);
     m_canvas->update();
     m_document->config().setViewFrameBorders(on);
+}
+
+void KWView::setShowFormattingChars(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoText::ShowFormattingCharacters, on);
+    update();
 }
 
 void KWView::formatPage()
@@ -1056,15 +1059,6 @@ void KWView::handleDeletePageAction()
     }
 }
 
-void KWView::setShowFormattingChars(bool on)
-{
-    KoResourceManager *rm = m_canvas->resourceManager();
-    rm->setResource(KoText::ShowSpaces, on);
-    rm->setResource(KoText::ShowTabs, on);
-    rm->setResource(KoText::ShowEnters, on);
-    rm->setResource(KoText::ShowSpecialCharacters, on);
-}
-
 void KWView::editSelectAllFrames()
 {
     KoSelection *selection = canvasBase()->shapeManager()->selection();
@@ -1173,7 +1167,7 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     Q_ASSERT(currentPage.isValid());
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
-        m_canvas->resourceManager()->setResource(KoCanvasResource::CurrentPage, m_currentPage.pageNumber());
+        m_canvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, m_currentPage.pageNumber());
 
         QSizeF newPageSize = m_currentPage.rect().size();
         QSizeF newMaxPageSize = QSize(qMax(m_maxPageSize.width(), newPageSize.width()),
@@ -1264,7 +1258,7 @@ void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, 
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0,
                             page.offsetInDocument()), m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);

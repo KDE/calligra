@@ -35,7 +35,7 @@ class ConnectionData;
 }
 
 /*! */
-class KEXIMAIN_EXPORT KexiDBPasswordDialog : public KPasswordDialog
+class KexiDBPasswordDialog : public KPasswordDialog
 {
     Q_OBJECT
 public:
@@ -57,8 +57,7 @@ protected:
 
 /*! Handles startup actions for Kexi application.
 */
-class KEXIMAIN_EXPORT KexiStartupHandler
-            : public QObject, public KexiStartupData, public Kexi::ObjectStatus
+class KexiStartupHandler : public QObject, public KexiStartupData, public Kexi::ObjectStatus
 {
     Q_OBJECT
 
@@ -134,7 +133,7 @@ protected:
 namespace Kexi
 {
 //! \return singleton Startup Handler singleton.
-KEXIMAIN_EXPORT KexiStartupHandler& startupHandler();
+    KexiStartupHandler& startupHandler();
 }
 
 #endif

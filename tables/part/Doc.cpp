@@ -11,7 +11,7 @@
    Copyright 1999-2000 Simon Hausmann <hausmann@kde.org>
    Copyright 1999 David Faure <faure@kde.org>
    Copyright 1998-2000 Torben Weis <weis@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -62,7 +62,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeManager.h>
@@ -130,7 +130,7 @@ public:
     QStringList spellListIgnoreAll;
     SavedDocParts savedDocParts;
     SheetAccessModel *sheetAccessModel;
-    KoResourceManager *resourceManager;
+    KoDocumentResourceManager *resourceManager;
 };
 
 // Make sure an appropriate DTD is available in www/calligra/DTD if changing this value

@@ -67,12 +67,12 @@ void KexiRecentProjects::Private::load()
     QStringList shortcutPaths = dir.entryList(
         QStringList() << QLatin1String("*.kexis"),
         QDir::Files | QDir::NoSymLinks | QDir::Readable | QDir::CaseSensitive);
-    kDebug() << shortcutPaths;
+    //kDebug() << shortcutPaths;
     foreach (const QString& shortcutPath, shortcutPaths) {
-        kDebug() << shortcutPath;
+        //kDebug() << shortcutPath;
         KexiProjectData *data = new KexiProjectData;
         bool ok = data->load(path + shortcutPath);
-        kDebug() << "result:" << ok;
+        //kDebug() << "result:" << ok;
         if (ok) {
             add(data, path + shortcutPath);
         }
@@ -97,16 +97,16 @@ static QString key(const KexiProjectData& data)
 bool KexiRecentProjects::Private::add(KexiProjectData *newData,
                                       const QString& existingShortcutPath)
 {
-    kDebug() << *newData;
+    //kDebug() << *newData;
     KexiProjectData::List list(q->list()); // also loads it
     if (list.contains(newData))
         return true;
 
     // find similar data
     QString newDataKey = key(*newData);
-    kDebug() << "path:" << path << "newDataKey:" << newDataKey;
-    kDebug() << "projectsForKey.keys():" << projectsForKey.keys();
-    kDebug() << "shortcutPaths.values():" << shortcutPaths.values();
+    //kDebug() << "path:" << path << "newDataKey:" << newDataKey;
+    //kDebug() << "projectsForKey.keys():" << projectsForKey.keys();
+    //kDebug() << "shortcutPaths.values():" << shortcutPaths.values();
     KexiProjectData* existingData = projectsForKey.value(newDataKey);
     QString shortcutPath = existingShortcutPath;
     if (existingData) {
@@ -148,15 +148,15 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
     shortcutPaths.insert(newData, shortcutPath);
     q->addProjectDataInternal(newData);
 
-    kDebug() << "existingShortcutPath:" << existingShortcutPath;
-    kDebug() << "shortcutPath:" << shortcutPath;
+    //kDebug() << "existingShortcutPath:" << existingShortcutPath;
+    //kDebug() << "shortcutPath:" << shortcutPath;
 
     bool result = true;
     if (existingShortcutPath.isEmpty()) {
         result = newData->save(shortcutPath, false // !savePassword
                               );
     }
-    kDebug() << "result:" << result;
+    //kDebug() << "result:" << result;
     return result;
 }
 

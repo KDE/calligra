@@ -124,12 +124,16 @@ protected:
     ScheduleManager *m_schedulemanager;
     
     ReportData *m_datasource;
+    QMap<QString, QVariant> m_expressions;
 };
 
 class KPLATOUI_EXPORT ChartReportData : public ReportData
 {
 public:
     explicit ChartReportData();
+
+    /// Prepare the data for access
+    virtual bool open();
 
     //!Move to the next record
     virtual bool moveNext();
@@ -148,12 +152,24 @@ public:
 
     //!Return the value of the field at the given position for the current record
     virtual QVariant value(unsigned int) const;
-    using ReportData::value;
+    //!Return the value of the field named @p name
+    QVariant value( const QString &name ) const;
     
     //!Return the list of field names, used for legends in a chart
     virtual QStringList fieldNames() const;
 
+    void addExpression( const QString &field, const QVariant &value, int relation = '=' );
+
     bool cbs;
+
+protected:
+    int firstRow();
+    int lastRow() const;
+
+    int m_firstrow;
+    int m_lastrow;
+    QDate m_startdate;
+    QStringList m_keywords;
 };
 
 } //namespace KPlato

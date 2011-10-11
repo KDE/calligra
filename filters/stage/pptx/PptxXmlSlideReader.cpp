@@ -50,6 +50,7 @@
 #define MSOOXML_CURRENT_CLASS PptxXmlSlideReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 #define PPTXXMLSLIDEREADER_CPP
+//#define PPTX_DEBUG_LIST_STYLES
 
 #include <MsooXmlReader_p.h>
 #include <MsooXmlContentTypes.h>
@@ -2055,6 +2056,11 @@ void PptxXmlSlideReader::inheritDefaultListStyles()
 {
     int index = 0;
     while (index <  m_context->defaultListStyles.size()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+        kDebug() << "==>Inheriting defaultListStyles!";
+        kDebug() << "marL:" << m_context->defaultListStyles.at(index).margin();
+        kDebug() << "indent:" << m_context->defaultListStyles.at(index).indent();
+#endif
         m_currentCombinedBulletProperties.insert(index + 1, m_context->defaultListStyles.at(index));
         ++index;
     }
@@ -2160,13 +2166,21 @@ void PptxXmlSlideReader::inheritAllTextAndParagraphStyles()
 
 void PptxXmlSlideReader::inheritListStyles()
 {
-    inheritDefaultListStyles();
+    //Only a slide requires the defaults to be applied first.  Any overrides by
+    //the master slide or the slide layout are applied on top of the defaults.
+    //TODO: Notes/NotesMaster
+    if (m_context->type != SlideLayout && m_context->type != SlideMaster) {
+        inheritDefaultListStyles();
+    }
 
     QString id = d->phIdx;
     QString type = d->phType;
     if (id.isEmpty() && type.isEmpty()) {
         type = "other";
     }
+#ifdef PPTX_DEBUG_LIST_STYLES
+    kDebug() << "==> id:" << id << "| type:" << type;
+#endif
 
     if (m_context->type == NotesMaster || m_context->type == Notes) {
         if (!type.isEmpty()) {
@@ -2215,25 +2229,49 @@ void PptxXmlSlideReader::inheritListStyles()
 
     // Masterslide layer
     if (!type.isEmpty()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+        kDebug() << "=> [MasterSlide] type:" << type << "| contains:" <<
+                    m_context->slideMasterProperties->listStyles.contains(type);
+#endif
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[type]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                kDebug() << "==>inheriting defaults!" << "| key:" << i.key() << "| marL:" << i.value().margin()
+                         << "| indent:" << i.value().indent();
+#endif
                 m_currentCombinedBulletProperties.insert(i.key(), i.value());
             }
             else {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                kDebug() << "==>inheriting! | key:" << i.key() << "| marL:" << i.value().margin()
+                         << "| indent:" << i.value().indent();
+#endif
                 m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
             }
         }
     }
     if (!id.isEmpty()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+            kDebug() << "=> [MasterSlide] id:" <<  id << "| contains:" <<
+                        m_context->slideMasterProperties->listStyles.contains(id);
+#endif
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[id]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                kDebug() << "==>inheriting defaults!" << "| key:" << i.key() << "| marL:" << i.value().margin()
+                         << "| indent:" << i.value().indent();
+#endif
                 m_currentCombinedBulletProperties.insert(i.key(), i.value());
             }
             else {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                kDebug() << "==>inheriting!" << "| key:" << i.key() << "| marL:" << i.value().margin()
+                         << "| indent:" << i.value().indent();
+#endif
                 m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
             }
         }
@@ -2241,13 +2279,25 @@ void PptxXmlSlideReader::inheritListStyles()
     // Layout layer
     if (!type.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+            kDebug() << "=> [SlideLayout] type:" << type << "| contains:" <<
+                        m_context->slideLayoutProperties->listStyles.contains(type);
+#endif
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[type]);
             while (i.hasNext()) {
                 i.next();
                 if (i.value().isEmpty()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                    kDebug() << "==>inheriting defaults!" << "| key:" << i.key() << "| marL:" << i.value().margin()
+                             << "| indent:" << i.value().indent();
+#endif
                     m_currentCombinedBulletProperties.insert(i.key(), i.value());
                 }
                 else {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                    kDebug() << "==>inheriting!" << "| key:" << i.key() << "| marL:" << i.value().margin()
+                             << "| indent:" << i.value().indent();
+#endif
                     m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
                 }
             }
@@ -2255,13 +2305,25 @@ void PptxXmlSlideReader::inheritListStyles()
     }
     if (!id.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+            kDebug() << "=> [SlideLayout] id:" << id << "| contains:" <<
+                        m_context->slideLayoutProperties->listStyles.contains(id);
+#endif
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[id]);
             while (i.hasNext()) {
                 i.next();
                 if (i.value().isEmpty()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                    kDebug() << "==>inheriting defaults!" << "| key:" << i.key() << "| marL:" << i.value().margin()
+                             << "| indent:" << i.value().indent();
+#endif
                     m_currentCombinedBulletProperties.insert(i.key(), i.value());
                 }
                 else {
+#ifdef PPTX_DEBUG_LIST_STYLES
+                    kDebug() << "==>inheriting!" << "| key:" << i.key() << "| marL:" << i.value().margin()
+                             << "| indent:" << i.value().indent();
+#endif
                     m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
                 }
             }
@@ -2273,6 +2335,9 @@ void PptxXmlSlideReader::inheritListStyles()
 
         // Slide layer
         if (!slideIdentifier.isEmpty()) {
+#ifdef PPTX_DEBUG_LIST_STYLES
+            kDebug() << "=> [Slide] identifier:" << slideIdentifier;
+#endif
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->currentSlideStyles.listStyles[slideIdentifier]);
             while (i.hasNext()) {
                 i.next();

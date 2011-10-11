@@ -95,7 +95,7 @@ void Annotations::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
         return;
     }
 
-    tableStream->seek( fcRef, G_SEEK_SET );
+    tableStream->seek( fcRef, WV2_SEEK_SET );
     *ref = new PLCF<Word97::FRD>( lcbRef, tableStream );
     *refIt = new PLCFIterator<Word97::FRD>( **ref );
 
@@ -109,7 +109,7 @@ void Annotations::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
     } else {
         if ( static_cast<U32>( tableStream->tell() ) != fcTxt ) {
             wvlog << "Warning: Found a hole in the table stream" << endl;
-            tableStream->seek( fcTxt, G_SEEK_SET );
+            tableStream->seek( fcTxt, WV2_SEEK_SET );
         }
 #ifdef WV2_DEBUG_ANNOTATIONS
         wvlog << "[ PlcfandTxt ]" << endl;

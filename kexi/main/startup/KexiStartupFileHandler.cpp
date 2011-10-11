@@ -567,23 +567,6 @@ void KexiStartupFileHandler::setLocationText(const QString& fn)
     #endif*/
 }
 
-/*void KexiStartupFileDialog::focusInEvent(QFocusEvent *)
-{
-    locationEdit()->setFocus();
-}*/
-
-/*bool KexiStartupFileDialog::eventFilter ( QObject * watched, QEvent * e )
-{
-  //filter-out ESC key
-  if (e->type()==QEvent::KeyPress && static_cast<QKeyEvent*>(e)->key()==Qt::Key_Escape
-   && static_cast<QKeyEvent*>(e)->state()==Qt::NoButton) {
-    static_cast<QKeyEvent*>(e)->accept();
-    emit rejected();
-    return true;
-  }
-  return KexiStartupFileWidgetBase::eventFilter(watched,e);
-} */
-
 void KexiStartupFileHandler::setDefaultExtension(const QString& ext)
 {
     d->defaultExtension = ext;
