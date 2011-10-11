@@ -131,8 +131,10 @@ bool KexiRelationDesignShape::loadOdfFrameElement(const KoXmlElement &element, K
     return true;
 }
 
-void KexiRelationDesignShape::paint(QPainter &painter, const KoViewConverter &converter)
+void KexiRelationDesignShape::paint(QPainter &painter, const KoViewConverter &converter,
+                                    KoShapePaintingContext &paintcontext)
 {
+    Q_UNUSED(paintcontext);
     constPaint(painter, converter);
 }
 
