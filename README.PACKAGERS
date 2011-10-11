@@ -85,7 +85,7 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libxbase
  ------------------------------------------------------------------------
- kexi-spreadsheet-export   Description: Kexi table-to-spreadsheet export plugin
+ kexi-spreadsheet-import   Description: Spreadsheet-to-Kexi-table import plugin
                            Files:
                                keximigrate_spreadsheet.so
                                keximigrate_spreadsheet.desktop
