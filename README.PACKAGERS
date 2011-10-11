@@ -90,7 +90,7 @@ The following matrix lists the packages and dependencies.
                                keximigrate_spreadsheet.so
                                keximigrate_spreadsheet.desktop
                            Translation File:
-                               KexiSpreadsheetImportPlugin.mo
+                               keximigrate_spreadsheet.mo
                            Dependencies:
                                tables (Calligra Tables)
  ------------------------------------------------------------------------
@@ -139,7 +139,7 @@ The following matrix lists the packages and dependencies.
                                kformdesigner_webbrowser.so
                                kformdesigner_webbrowser.desktop
                            Translation File:
-                               KexiWebBrowserFormPlugin.mo
+                               kformdesigner_webbrowser.mo
                            Dependencies:
                                libqt4-webkit or libQtWebKit4 (provides QtWebKit)
  ------------------------------------------------------------------------
@@ -148,7 +148,7 @@ The following matrix lists the packages and dependencies.
                                koreport_webplugin.so
                                koreport_webplugin.desktop
                            Translation File:
-                               ReportingWebPlugin.mo
+                               koreport_webplugin.mo
                            Dependencies:
                                libqt4-webkit or libQtWebKit4 (provides QtWebKit)
  ------------------------------------------------------------------------
@@ -157,7 +157,7 @@ The following matrix lists the packages and dependencies.
                                kformdesigner_mapbrowser.so
                                kformdesigner_mapbrowser.desktop
                            Translation File:
-                               KexiMapBrowserFormPlugin.mo
+                               kformdesigner_mapbrowser.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
@@ -167,7 +167,7 @@ The following matrix lists the packages and dependencies.
                                koreport_mapsplugin.so
                                koreport_mapsplugin.desktop
                            Translation File:
-                               ReportingMapsPlugin.mo
+                               koreport_mapsplugin.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
