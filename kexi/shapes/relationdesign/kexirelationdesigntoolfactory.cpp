@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -21,16 +21,17 @@
 #include "kexirelationdesignshape.h"
 
 KexiRelationDesignToolFactory::KexiRelationDesignToolFactory()
-: KoToolFactoryBase("KexiRelationDesignToolFactoryId")
+    : KoToolFactoryBase("KexiRelationDesignToolFactoryId")
 {
-    setToolTip( i18n( "Relation design tool" ) );
-    setIcon( "kexi" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( KEXIRELATIONDEISGNSHAPEID );
+    setToolTip(i18n("Relation design tool"));
+    setIcon("kexi");
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(KEXIRELATIONDEISGNSHAPEID);
 }
 
-KoToolBase* KexiRelationDesignToolFactory::createTool ( KoCanvasBase* canvas ) {
+KoToolBase *KexiRelationDesignToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KexiRelationDesignTool(canvas);
 }
 

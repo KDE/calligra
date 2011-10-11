@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -23,16 +23,17 @@
 #include <kexidb/queryschema.h>
 #include <KoXmlWriter.h>
 
-class SimpleField {
-    public:
-        SimpleField();
-        SimpleField(KexiDB::QueryColumnInfo*);
-        void save(KoXmlWriter& writer);
-        
-        QString name;
-        QString type;
-        bool pkey;
-        bool notnull;
+class SimpleField
+{
+public:
+    SimpleField();
+    SimpleField(KexiDB::QueryColumnInfo *);
+    void save(KoXmlWriter &writer);
+
+    QString name;
+    QString type;
+    bool pkey;
+    bool notnull;
 };
 
 #endif // SIMPLEFIELD_H

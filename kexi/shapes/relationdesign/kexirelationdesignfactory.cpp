@@ -23,26 +23,27 @@
 #include <kdebug.h>
 
 KexiRelationDesignFactory::KexiRelationDesignFactory()
-        : KoShapeFactoryBase ("KexiRelationDesignShape",
-                           i18n ( "Kexi Relation Design" ) ) {
-    setToolTip ( i18n ( "A kexi relation design shape" ) );
-    setIcon( "kexi" );
-    setXmlElementNames("http://www.calligra-suite.org/kexirelationdesign", QStringList("shape") );
-    setLoadingPriority( 1 );
+    : KoShapeFactoryBase("KexiRelationDesignShape",
+                         i18n("Kexi Relation Design"))
+{
+    setToolTip(i18n("A kexi relation design shape"));
+    setIcon("kexi");
+    setXmlElementNames("http://www.calligra-suite.org/kexirelationdesign", QStringList("shape"));
+    setLoadingPriority(1);
 }
 
 KoShape *KexiRelationDesignFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     kDebug();
-    KexiRelationDesignShape* fooShape = new KexiRelationDesignShape();
+    KexiRelationDesignShape *fooShape = new KexiRelationDesignShape();
     // set defaults
     return fooShape;
 }
 
-bool KexiRelationDesignFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool KexiRelationDesignFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     kDebug();
-    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra-suite.org/kexirelationdesign" );
+    return (e.localName() == "shape") && (e.namespaceURI() == "http://www.calligra-suite.org/kexirelationdesign");
 }
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -19,16 +19,18 @@
 #include "simplefield.h"
 
 
-SimpleField::SimpleField() {
+SimpleField::SimpleField()
+{
     pkey = false;
     notnull = false;
 }
 
-SimpleField::SimpleField ( KexiDB::QueryColumnInfo* col) {
-name = col->aliasOrName();
-type = col->field->typeName();
-pkey = col->field->isPrimaryKey();
-notnull = col->field->isNotNull();
+SimpleField::SimpleField(KexiDB::QueryColumnInfo *col)
+{
+    name = col->aliasOrName();
+    type = col->field->typeName();
+    pkey = col->field->isPrimaryKey();
+    notnull = col->field->isNotNull();
 }
 
 void SimpleField::save(KoXmlWriter &writer)

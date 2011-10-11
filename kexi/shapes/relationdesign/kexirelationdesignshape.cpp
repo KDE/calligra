@@ -31,13 +31,15 @@
 #include <KoZoomHandler.h>
 #include <KoShapeLoadingContext.h>
 
-KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.calligra-suite.org/kexirelationdesign", "shape"){
+KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.calligra-suite.org/kexirelationdesign", "shape")
+{
     m_connection = 0;
     m_connectionData = 0;
     m_relationSchema = 0;
 }
 
-KexiRelationDesignShape::~KexiRelationDesignShape() {
+KexiRelationDesignShape::~KexiRelationDesignShape()
+{
     if (m_connection) {
         m_connection->disconnect();
     }
@@ -45,8 +47,9 @@ KexiRelationDesignShape::~KexiRelationDesignShape() {
     m_connection = 0;
 }
 
-void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
-    KoXmlWriter& writer = context.xmlWriter();
+void KexiRelationDesignShape::saveOdf(KoShapeSavingContext &context) const
+{
+    KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
 
@@ -55,7 +58,7 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     writer.startElement("kexirelationdesign:relation");
     writer.addAttribute("database", m_database);
     writer.addAttribute("relation", m_relation);
-    foreach(SimpleField* column, m_fieldData) {
+    foreach(SimpleField * column, m_fieldData) {
         column->save(writer);
     }
     writer.endElement(); //relation
@@ -72,18 +75,18 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     painter.setRenderHint(QPainter::TextAntialiasing);
 
     //Fill to white
-    painter.fillRect(QRectF(QPointF(0,0), imgSize), Qt::white);
+    painter.fillRect(QRectF(QPointF(0, 0), imgSize), Qt::white);
 
     KoZoomHandler converter;
-    converter.setZoom( 1.0 );
-    converter.setDpi( previewDPI, previewDPI);
+    converter.setZoom(1.0);
+    converter.setDpi(previewDPI, previewDPI);
 
     constPaint(painter, converter);
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
     QString name = context.imageHref(img);
-    writer.addAttribute("xlink:type", "simple" );
-    writer.addAttribute("xlink:show", "embed" );
+    writer.addAttribute("xlink:type", "simple");
+    writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
     writer.endElement(); // draw:image
@@ -93,12 +96,13 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
 
 }
 
-bool KexiRelationDesignShape::loadOdf ( const KoXmlElement& element, KoShapeLoadingContext& context ) {
+bool KexiRelationDesignShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
 
-bool KexiRelationDesignShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool KexiRelationDesignShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(context);
     KoXmlElement relation = KoXml::namedItemNS(element, "http://www.calligra-suite.org/kexirelationdesign", "relation");
@@ -127,17 +131,19 @@ bool KexiRelationDesignShape::loadOdfFrameElement( const KoXmlElement & element,
     return true;
 }
 
-void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& converter ) {
+void KexiRelationDesignShape::paint(QPainter &painter, const KoViewConverter &converter)
+{
     constPaint(painter, converter);
 }
 
-void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConverter& converter ) const {
+void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverter &converter) const
+{
     applyConversion(painter, converter);
 
     painter.save();
     //painter.setRenderHint(QPainter::Antialiasing, true);
     QPainterPath pp;
-    pp.addRoundedRect(QRectF(QPointF(0.0,0.0), size()), 3.0, 3.0);
+    pp.addRoundedRect(QRectF(QPointF(0.0, 0.0), size()), 3.0, 3.0);
 
     painter.setClipPath(pp);
     painter.setPen(QPen(Qt::black, 1.0));
@@ -147,7 +153,7 @@ void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConver
         background()->paint(painter, pp);
     }
     painter.setClipping(false);
-    painter.drawRoundedRect(QRectF(QPointF(0.0,0.0), (size())), 3.0, 3.0);
+    painter.drawRoundedRect(QRectF(QPointF(0.0, 0.0), (size())), 3.0, 3.0);
     painter.drawLine(0, 15, size().width(), 15);
 
     QFont f;
@@ -160,19 +166,20 @@ void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConver
 
     uint i = 0;
     uint offset;
-    foreach (SimpleField *column, m_fieldData) {
+    foreach(SimpleField * column, m_fieldData) {
         ++i;
-        offset = (13.0*i) + 20;
+        offset = (13.0 * i) + 20;
         painter.drawText(QPointF(15.0, offset), column->name + " - " + column->type);
         if (column->pkey) {
-            painter.drawEllipse(QPointF(8.0, offset - 4), 4,4);
+            painter.drawEllipse(QPointF(8.0, offset - 4), 4, 4);
         }
     }
 
     painter.restore();
 }
 
-void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
+void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData *cd)
+{
     if (m_connectionData != cd) {
 
         //Close any existing connection
@@ -190,22 +197,19 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
 
         if (_driver) {
             m_connection = _driver->createConnection(*m_connectionData);
-        }
-        else {
+        } else {
             kDebug() << "Unable to create driver";
         }
 
         if (m_connection) {
             if (m_connection->connect()) {
-                if(m_connection->useDatabase(m_connectionData->dbFileName())){
+                if (m_connection->useDatabase(m_connectionData->dbFileName())) {
                     m_database = m_connection->currentDatabase();
                 }
-            }
-            else {
+            } else {
                 kDebug() << "Unable to connect";
             }
-        }
-        else {
+        } else {
             kDebug() << "No connection";
         }
         update();
@@ -213,15 +217,18 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
     }
 }
 
-KexiDB::ConnectionData* KexiRelationDesignShape::connectionData() {
+KexiDB::ConnectionData *KexiRelationDesignShape::connectionData()
+{
     return m_connectionData;
 }
 
-KexiDB::Connection* KexiRelationDesignShape::connection(){
+KexiDB::Connection *KexiRelationDesignShape::connection()
+{
     return m_connection;
 }
 
-void KexiRelationDesignShape::setRelation(const QString& rel){
+void KexiRelationDesignShape::setRelation(const QString &rel)
+{
     kDebug() << rel;
     if (m_relation != rel) {
         m_relation = rel;
@@ -229,17 +236,17 @@ void KexiRelationDesignShape::setRelation(const QString& rel){
         m_fieldData.clear();
         m_relationSchema = 0;
         if (m_connection && m_connection->isConnected()) {
-            if ( m_connection->tableSchema ( m_relation ) ) {
+            if (m_connection->tableSchema(m_relation)) {
                 kDebug() << m_relation <<  " is a table..";
-                m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->tableSchema ( m_relation ) );
-            } else if ( m_connection->querySchema ( m_relation ) ) {
+                m_relationSchema = new KexiDB::TableOrQuerySchema(m_connection->tableSchema(m_relation));
+            } else if (m_connection->querySchema(m_relation)) {
                 kDebug() << m_relation <<  " is a query..";
-                m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->querySchema ( m_relation ) );
+                m_relationSchema = new KexiDB::TableOrQuerySchema(m_connection->querySchema(m_relation));
             }
         }
         if (m_relationSchema) { //We have the schema, so lets lets paint it
             KexiDB::QueryColumnInfo::Vector columns = m_relationSchema->columns(true);
-            foreach(KexiDB::QueryColumnInfo *column, columns) {
+            foreach(KexiDB::QueryColumnInfo * column, columns) {
                 m_fieldData.append(new SimpleField(column));
             }
         }
@@ -254,11 +261,11 @@ void KexiRelationDesignShape::addConnectionPoints()
 
     uint i = 0;
     int offset = 0;
-    foreach (SimpleField *column, m_fieldData) {
+    foreach(SimpleField * column, m_fieldData) {
         Q_UNUSED(column);
         ++i;
-        offset = (13.0*i) + 15;
-        addConnectionPoint(QPointF(0,offset));
+        offset = (13.0 * i) + 15;
+        addConnectionPoint(QPointF(0, offset));
         addConnectionPoint(QPointF(boundingRect().width(), offset));
     }
 }
