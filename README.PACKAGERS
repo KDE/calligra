@@ -236,7 +236,7 @@ Name       Conditional compilation flag    Globally used in Calligra?   Public A
 ------------------------------------------------------------------------------------------
 
 flake
-kokross    SHOULD_BUILD_SCRIPTING                                      NO
+kokross                                                                NO
 kopageapp
 koplugin                                                               NO
 koproperty                                 Kexi, Plan                  NO
