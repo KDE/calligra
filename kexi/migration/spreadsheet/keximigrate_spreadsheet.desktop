@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Spreadsheet
+Name[pt]=Folha de cálculo
+Name[sv]=Kalkylark
+Name[uk]=Електронні таблиці
+Name[x-test]=xxSpreadsheetxx
 Comment=Spreadsheet Import Plugin for Kexi
+Comment[pt]='Plugin' de Importação de Folhas de Cálculo para o Kexi
+Comment[sv]=Importinsticksprogram av kalkylark för Kexi
+Comment[uk]=Додаток імпортування даних з електронної таблиці для Kexi
+Comment[x-test]=xxSpreadsheet Import Plugin for Kexixx
 X-KDE-Library=keximigrate_spreadsheet
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service
