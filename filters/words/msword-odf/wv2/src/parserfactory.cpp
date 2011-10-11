@@ -104,7 +104,7 @@ namespace
                 wvlog << "Looks like document was created with Word 11/Office 2003"
                     << ", trying with the Word 8 parser." << endl;
             }
-	    // (0x0112), ...
+        // (0x0112), ...
             else {
                 wvlog << "A document newer than Word 8 found"
                     << ", trying with the Word 8 parser." << endl;
@@ -132,17 +132,5 @@ SharedPtr<Parser> ParserFactory::createParser( const std::string& fileName )
         return 0;
     }
 
-    return setupParser( storage );
-}
-
-SharedPtr<Parser> ParserFactory::createParser( const unsigned char* buffer, size_t buflen )
-{
-    OLEStorage* storage( new OLEStorage( buffer, buflen ) );
-    if ( !storage->open( OLEStorage::ReadOnly ) || !storage->isValid() ) {
-        delete storage;
-        if ( buflen >= 4 )
-            diagnose( buffer );
-        return 0;
-    }
     return setupParser( storage );
 }

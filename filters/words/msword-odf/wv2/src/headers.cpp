@@ -56,7 +56,7 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
         wvlog << "Bug: #headers % " << headerTypes << " != 0!" << endl;
     }
 
-    tableStream->seek( fcPlcfhdd, G_SEEK_SET );
+    tableStream->seek( fcPlcfhdd, WV2_SEEK_SET );
 
     U32 i = 0;
     //CPs of footnote/endnote separators related stories
@@ -73,7 +73,7 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
     }
 
     //Add missing header/footer stories based on the number of sections.
-    tableStream->seek( fcPlcfsed, G_SEEK_SET );
+    tableStream->seek( fcPlcfsed, WV2_SEEK_SET );
     PLCF<Word97::SED> plcfsed( lcbPlcfsed, tableStream );
 
     if ( version == Word8 ) {
@@ -112,10 +112,11 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
     //story ends immediately prior to the next CP.  Again the second-to-last CP
     //ends the last story, the last CP must be ignored.
     if ( version == Word8 ) {
-        QList<U32> sect[plcfsed.count()];
+        QList< QList<U32> > sect;
 
         int l = 0;
         for (int k = 0; l < (strsCPs.size() - 2); k++) {
+            sect.append( QList<U32>() );
             for (uint j = 0; j < headerTypes; j++, l++) {
                 if ( (strsCPs[l] <= strsCPs[l + 1]) && (strsCPs[l] < ccpHdd) )
                 {

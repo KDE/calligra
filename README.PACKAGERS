@@ -23,7 +23,8 @@ Table Of Contents
 2. Krita
 2.1. Krita development files
 3. Debug information
-4. Calligra libraries
+4. Calligra plugins
+5. Calligra libraries
 
 1. Kexi
 =======
@@ -84,6 +85,14 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libxbase
  ------------------------------------------------------------------------
+ kexi-spreadsheet-export   Description: Kexi table-to-spreadsheet export plugin
+                           Files:
+                               keximigrate_spreadsheet.so
+                               keximigrate_spreadsheet.desktop
+                           Dependencies:
+                               tables (Calligra Tables)
+ ------------------------------------------------------------------------
+
 
 Plugin .so files are typically installed to $KDEDIR/lib/kde4/,
 and .desktop service files are installed to $KDEDIR/share/services/.
@@ -197,7 +206,24 @@ production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended
 A significant performance increase will be the result.
 
 
-4. Calligra libraries
+4. Calligra plugins
+===================
+
+Calligra applications can use plugins, placed in plugins/ subdirectory.
+Some of them are very special and/or have extra dependencies so should
+be packaged separately.
+
+ Suggested Name            Details
+ ------------------------------------------------------------------------
+ calligra-map-shape      Description: Map shape for Calligra applications
+                           Contents:
+                               mapshape.so
+                               mapshape.desktop
+                           Dependencies:
+                               libmarble4-kde4 or marble
+                                                      (provides libmarblewidget)
+
+5. Calligra libraries
 ====================
 
 Calligra share common functionality within libraries, placed in libs/
