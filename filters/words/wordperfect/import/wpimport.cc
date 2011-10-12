@@ -166,8 +166,8 @@ private:
 WPXMemoryInputStream::WPXMemoryInputStream(uint8_t *data, size_t size) :
         WPXInputStream(false),
         m_offset(0),
-        m_data(data),
         m_size(size),
+        m_data(data),
         m_tmpBuf(NULL)
 {
 }

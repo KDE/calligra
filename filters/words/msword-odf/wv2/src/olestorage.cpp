@@ -24,14 +24,14 @@
 using namespace wvWare;
 
 OLEStorage::OLEStorage()
-    : m_fileName( "" )
-    , m_storage( 0 )
+    : m_storage( 0 )
+    , m_fileName( "" )
 {
 }
 
 OLEStorage::OLEStorage( const std::string& fileName )
-    : m_fileName( fileName )
-    , m_storage( 0 )
+    : m_storage( 0 )
+    , m_fileName( fileName )
 {
 }
 

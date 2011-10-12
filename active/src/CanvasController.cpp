@@ -73,8 +73,8 @@ const QString EXT_XLS("xls");
 const QString EXT_XLSX("xlsx");
 
 CanvasController::CanvasController(QDeclarativeItem* parent)
-    : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(CADocumentInfo::Undefined),
-      m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
+    : QDeclarativeItem(parent), KoCanvasController(0), m_zoomHandler(0), m_zoomController(0), 
+      m_canvasItem(0), m_currentPoint(QPoint(0,0)), m_documentType(CADocumentInfo::Undefined),
       m_documentSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
