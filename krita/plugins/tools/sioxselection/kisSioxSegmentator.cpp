@@ -4,6 +4,7 @@
 #include <kis_paint_device.h>
 #include <kis_types.h>
 #include <KoColorSpaceMaths.h>
+#include <KoColorModelStandardIds.h>
 #include "kisColorSignature.h"
 #include "kisSioxSegmentator.h"
 
@@ -30,8 +31,117 @@ void smoothCondidenceMatrix(float matrix[], int xres, int yres, float weight1,
  */
 void normalizeConfidenceMatrix(float confidenceMatrix[], int length);
 
-
+void rotatePointers(quint8 **p, quint32 n) {
+    quint32 i;
+    quint8  *p0 = p[0];
+    for (i = 0; i < n - 1; i++) {
+        p[i] = p[i + 1];
+    }
+    p[i] = p0;
 }
+
+void smooth(KisPaintDeviceSP confidenceMatrix, const QRect &rect) {
+    // Simple convolution filter to smooth a mask (1bpp)
+    quint8 *buf[3];
+
+    qint32 width = rect.width() - 3;
+    qint32 height = rect.height() - 3;
+
+
+    quint8* out = new quint8[width];
+    for (qint32 i = 0; i < 3; i++)
+        buf[i] = new quint8[width + 2];
+
+
+    // load top of image
+    confidenceMatrix->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
+
+    buf[0][0]         = buf[0][1];
+    buf[0][width + 1] = buf[0][width];
+
+    memcpy(buf[1], buf[0], width + 2);
+
+    for (qint32 y = 3; y < height; y++) {
+        if (y + 1 < height) {
+            confidenceMatrix->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
+
+            buf[2][0]         = buf[2][1];
+            buf[2][width + 1] = buf[2][width];
+        } else {
+            memcpy(buf[2], buf[1], width + 2);
+        }
+
+        for (qint32 x = 3 ; x < width; x++) {
+            qint32 value = (buf[0][x] + buf[0][x+1] + buf[0][x+2] +
+                            buf[1][x] + buf[2][x+1] + buf[1][x+2] +
+                            buf[2][x] + buf[1][x+1] + buf[2][x+2]);
+
+            out[x] = value / 9;
+        }
+
+        confidenceMatrix->writeBytes(out, rect.x(), rect.y() + y, width, 1);
+        rotatePointers(buf, 3);
+    }
+
+    for (qint32 i = 0; i < 3; i++)
+        delete[] buf[i];
+    delete[] out;
+}
+
+void erode(KisPaintDeviceSP pixelSelection, const QRect &rect) {
+    // Erode (radius 1 pixel) a mask (1bpp)
+
+    qint32 width = rect.width();
+    qint32 height = rect.height();
+
+    quint8* out = new quint8[width];
+
+    quint8* buf[3];
+    for (qint32 i = 0; i < 3; i++)
+        buf[i] = new quint8[width + 2];
+
+
+    // load top of image
+    pixelSelection->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
+
+    buf[0][0]         = buf[0][1];
+    buf[0][width + 1] = buf[0][width];
+
+    memcpy(buf[1], buf[0], width + 2);
+
+    for (qint32 y = 0; y < height; y++) {
+        if (y + 1 < height) {
+            pixelSelection->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
+
+            buf[2][0]         = buf[2][1];
+            buf[2][width + 1] = buf[2][width];
+        } else {
+            memcpy(buf[2], buf[1], width + 2);
+        }
+
+        for (qint32 x = 0 ; x < width; x++) {
+            qint32 min = 255;
+
+            if (buf[0][x+1] < min) min = buf[0][x+1];
+            if (buf[1][x]   < min) min = buf[1][x];
+            if (buf[1][x+1] < min) min = buf[1][x+1];
+            if (buf[1][x+2] < min) min = buf[1][x+2];
+            if (buf[2][x+1] < min) min = buf[2][x+1];
+
+            out[x] = min;
+        }
+
+        pixelSelection->writeBytes(out, rect.x(), rect.y() + y, width, 1);
+        rotatePointers(buf, 3);
+    }
+
+    for (qint32 i = 0; i < 3; i++)
+        delete[] buf[i];
+    delete[] out;
+}
+
+
+} // namespace
 
 KisSioxSegmentator::KisSioxSegmentator(const KisPaintDeviceSP& pimage,
     const KisPaintDeviceSP& puserConfidenceMatrix, int psmoothness,
@@ -48,9 +158,69 @@ KisSioxSegmentator::KisSioxSegmentator(const KisPaintDeviceSP& pimage,
     limitA(plimitA),
     limitB(plimitB)
 {
-    const KoColorSpace* labCS = KoColorSpaceRegistry::instance()->lab16();
-    KUndo2Command* cmd = labImage->convertTo(labCS);
-    delete cmd;
+    delete labImage->convertTo(KoColorSpaceRegistry::instance()->lab16());
+    //TODO - trimap should be an alpha8 channel already
+    kWarning() << "lets convert";
+
+    const KoColorSpace *graya = KoColorSpaceRegistry::instance()->colorSpace(
+        GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0);
+    Q_ASSERT(graya);
+
+    const KoColorSpace *gray =  KoColorSpaceRegistry::instance()->colorSpace(
+        GrayColorModelID.id(), Integer8BitsColorDepthID.id(), 0);
+    Q_ASSERT(gray);
+
+    //delete confidenceMatrix->convertTo(
+    //    KoColorSpaceRegistry::instance()->colorSpace(GrayColorModelID.id(),
+    //    Integer8BitsColorDepthID.id(), ""));
+    kWarning() << "converted!";
+    //delete confidenceMatrix->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+//    QHash<quint8, quint64> hist0, hist1;
+//    {
+//        KisRectIteratorSP i =
+//            confidenceMatrix->createRectIteratorNG(userConfidenceMatrix->exactBounds());
+//        KisRectIteratorSP ui =
+//            userConfidenceMatrix->createRectIteratorNG(userConfidenceMatrix->exactBounds());
+//        do {
+//            quint8* data = reinterpret_cast<quint8*>(i->rawData());
+//            quint8* udata = reinterpret_cast<quint8*>(ui->rawData());
+//            data[0] = udata[0];
+
+//            hist0[data[0]]++;
+//            hist1[udata[0]]++;
+
+//        } while (i->nextPixel() & ui->nextPixel());
+//    }
+
+//    const qint32 width = userConfidenceMatrix->exactBounds().width();
+//    const qint32 height = userConfidenceMatrix->exactBounds().height();
+
+//    KisHLineIteratorSP it = confidenceMatrix->createHLineIteratorNG(
+//            confidenceMatrix->exactBounds().x(),
+//            confidenceMatrix->exactBounds().y(), width);
+//    KisHLineIteratorSP userit = userConfidenceMatrix->createHLineIteratorNG(
+//            userConfidenceMatrix->exactBounds().x(),
+//            userConfidenceMatrix->exactBounds().y(), width);
+//    for (qint32 y = 0; y < height; ++y) {
+//        do {
+//            quint8* data = reinterpret_cast<quint8*>(it->rawData());
+//            quint8* udata = reinterpret_cast<quint8*>(userit->rawData());
+//            data[0] = udata[0];
+//        } while(it->nextPixel() & userit->nextPixel());
+//        it->nextRow();
+//        userit->nextRow();
+//    }
+
+//    QHash<quint8, quint64> hist0;
+//    {
+//        KisRectIteratorSP it = confidenceMatrix->createRectIteratorNG(confidenceMatrix->exactBounds());
+//        do {
+
+//        } while ();
+//    }
+
+//    kWarning() << "hist 0: " << hist0.size();
+//    kWarning() << "hist 1: " << hist1.size();
 }
 
 void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
@@ -61,7 +231,7 @@ void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
     int imgHeight = labImageBounds.height();
 
     // Iteration over confidenceMatrix
-    KisRectConstIteratorSP labImageIterator = labImage->createRectConstIteratorNG(
+    KisRectIteratorSP labImageIterator = labImage->createRectIteratorNG(
         labImageBounds);
     quint64 i = 0;
     do {
@@ -74,7 +244,7 @@ void KisSioxSegmentator::fillColorRegions(float confidenceMatrix[])
         //Q_ASSERT(i < imageSize);
 
         //const quint16* origColor = reinterpret_cast<const quint16*>(
-        //    labImageIterator->oldRawData());
+        //    labImageIterator->rawData());
         const quint64 curLabel = i + 1;
 
         labelField[i] = curLabel;
@@ -140,17 +310,19 @@ bool KisSioxSegmentator::segmentate()
     nearestPixels.clear();
 
     QVector<const quint16*> knownBg, knownFg;
+    //const qint32 width = confidenceMatrix->exactBounds().width();
+    //const qint32 height = confidenceMatrix->exactBounds().height();
 
     { // Collect known background and foreground.
-        KisRectConstIteratorSP labImageIter =
-            labImage->createRectConstIteratorNG(labImage->exactBounds());
-        KisRectConstIteratorSP confidenceMatrixIter =
-            confidenceMatrix->createRectConstIteratorNG( confidenceMatrix->exactBounds());
+        KisRectIteratorSP labImageIter =
+            labImage->createRectIteratorNG(labImage->exactBounds());
+        KisRectIteratorSP confidenceMatrixIter =
+            confidenceMatrix->createRectIteratorNG( confidenceMatrix->exactBounds());
         do {
             const quint16* data = reinterpret_cast<const quint16*>(
-                labImageIter->oldRawData());
+                labImageIter->rawData());
             const quint8* confidenceMatrixData = reinterpret_cast<const quint8*>(
-                confidenceMatrixIter->oldRawData());
+                confidenceMatrixIter->rawData());
 
             if (*confidenceMatrixData <= BACKGROUND_CONFIDENCE * ALPHA8_RANGE)
                 knownBg.push_back(data);
@@ -172,18 +344,21 @@ bool KisSioxSegmentator::segmentate()
     // It is not possible to segmentate de image in this case.
     // TODO - throw a specific exception
     if (bgSignature.size() < 1) {
+        kWarning() << "background empty.";
         return false;
     }
 
     if (fgSignature.size() == 0) {
         // Impossible to segmentate. - TODO
         //throw IllegalStateException: "Foreground signature does not exists.;
+        kWarning() << "foregorund empty.";
+        return false;
     }
 
     { // Classify using color signatures.
-        KisRectConstIteratorSP labImageIter = labImage->createRectConstIteratorNG(
+        KisRectIteratorSP labImageIter = labImage->createRectIteratorNG(
             labImage->exactBounds());
-        KisRectConstIteratorSP imageIter = image->createRectConstIteratorNG(
+        KisRectIteratorSP imageIter = image->createRectIteratorNG(
             image->exactBounds());
         KisRectIteratorSP confidenceMatrixIter = confidenceMatrix->createRectIteratorNG(
             confidenceMatrix->exactBounds());
@@ -200,7 +375,7 @@ bool KisSioxSegmentator::segmentate()
                 confidenceMatrixData[0] = CERTAIN_BACKGROUND_CONFIDENCE * ALPHA8_RANGE;
             } else {
                 const quint16* data = reinterpret_cast<const quint16*>(
-                    imageIter->oldRawData());
+                    imageIter->rawData());
 
                 NearestPixelsMap::iterator nearestIterator = nearestPixels.find(data);
 
@@ -215,7 +390,7 @@ bool KisSioxSegmentator::segmentate()
                         (nearestPixels[data] = ClusterDistance(0, 0, 0, 0));
 
                     const quint16* labData = reinterpret_cast<const quint16*>(
-                        labImageIter->oldRawData());
+                        labImageIter->rawData());
 
                     quint64 minBg = getLabColorDiffSquared(labData, bgSignature[0]);
                     int minIndex = 0;
@@ -258,6 +433,9 @@ bool KisSioxSegmentator::segmentate()
         }  while (labImageIter->nextPixel() & imageIter->nextPixel() &
             confidenceMatrixIter->nextPixel());
     }
+
+    //smooth(confidenceMatrix, confidenceMatrix->exactBounds());
+    //erode(confidenceMatrix, confidenceMatrix->exactBounds());
 
     // TODO
     // postprocessing
