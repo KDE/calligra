@@ -300,7 +300,6 @@ TJ::Interval PlanTJScheduler::toTJInterval( const QTime &start, const QTime &end
 bool PlanTJScheduler::kplatoFromTJ()
 {
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
-    // FIXME calculate real start/end
 
     QDateTime start;
     QDateTime end;
