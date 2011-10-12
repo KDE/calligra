@@ -1,10 +1,17 @@
-include_directories( ${KOMAIN_INCLUDES})
+include_directories(
+    ${KOMAIN_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/tables
+    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+)
 
 set(koconverter_SRCS koconverter.cpp )
 
 kde4_add_executable(koconverter ${koconverter_SRCS})
 
-target_link_libraries(koconverter komain)
+target_link_libraries(koconverter
+    komain
+    calligratablescommon
+    kopageapp)
 
 install(TARGETS koconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

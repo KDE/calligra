@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2006 David Faure <faure@kde.org>
    Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2011 Dan Leinir Turthra Jensen <admin@leinir.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,30 +19,78 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QTimer>
+
 #include <kaboutdata.h>
 #include <kimageio.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetype.h>
+#include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
+
+#include <KoDocument.h>
 #include <KoFilterManager.h>
+#include <KoPrintJob.h>
+#include <KoView.h>
+
+#include <tables/part/Doc.h>
+#include <tables/part/View.h>
+#include <tables/Map.h>
+#include <tables/Sheet.h>
 
 #include <calligraversion.h>
 
-bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uOut, const QString & outputFormat, const bool batch )
+bool convert( const KUrl & uIn, const QString & inputFormat, const KUrl & uOut, const QString & outputFormat, const bool batch )
 {
-    KoFilterManager* manager = new KoFilterManager( uIn.path() );
-
-    manager->setBatchMode( batch );
-
-    QByteArray mime( outputFormat.toLatin1() );
-    KoFilter::ConversionStatus status = manager->exportDocument( uOut.path(), mime );
-
-    delete manager;
+    KoFilter::ConversionStatus status = KoFilter::OK;
+    if ( outputFormat == "application/pdf" ) {
+        QString error;
+        KoDocument *doc = KMimeTypeTrader::self()->createPartInstanceFromQuery< KoDocument >(
+            inputFormat, 0, 0, QString(), QVariantList(), &error );
+        if ( doc ) {
+            doc->setCheckAutoSaveFile( false );
+            doc->setAutoErrorHandlingEnabled( false );
+            if ( doc->openUrl( uIn ) ) {
+                doc->setReadWrite( false );
+                KoPrintJob* printJob = 0;
+                Calligra::Tables::Doc* tdoc = qobject_cast< Calligra::Tables::Doc* >( doc );
+                if( tdoc ) {
+                    Calligra::Tables::View* tview = new Calligra::Tables::View( 0, tdoc );
+                    tview->setActiveSheet( tdoc->map()->sheet( 0 ) );
+                    printJob = tview->createPdfPrintJob();
+                }
+                else {
+                    KoView* view = doc->createView();
+                    printJob = view->createPdfPrintJob();
+                }
+                printJob->printer().setOutputFileName( uOut.path() );
+                printJob->printer().setOutputFormat( QPrinter::PdfFormat );
+                printJob->startPrinting();
+            }
+            else {
+                qDebug() << "The document" << uIn.path()
+                    << "of format" << inputFormat
+                    << "failed to open with the error" << error;
+            }
+            doc->deleteLater();
+            doc = 0;
+        }
+        else {
+            status = KoFilter::WrongFormat;
+        }
+    }
+    else {
+        KoFilterManager* manager = new KoFilterManager( uIn.path() );
+        manager->setBatchMode( batch );
+        QByteArray mime( outputFormat.toLatin1() );
+        status = manager->exportDocument( uOut.path(), mime );
+        delete manager;
+    }
     return status == KoFilter::OK;
 }
 
@@ -125,6 +174,8 @@ int main( int argc, char **argv )
 
         QApplication::setOverrideCursor( Qt::WaitCursor );
         bool ok = convert( uIn, inputMimetype->name(), uOut, outputMimetype->name(), batch );
+        QTimer::singleShot( 0, &app, SLOT(quit()) );
+        app.exec();
         QApplication::restoreOverrideCursor();
         if ( ok )
         {
