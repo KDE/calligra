@@ -51,7 +51,7 @@ static Qt::FillRule               fillModeToQtFillRule(quint32 polyFillMode);
 
 
 EmfParser::EmfParser()
-    : mOutput( 0 )
+    : m_backend( 0 )
 {
 }
 
@@ -116,7 +116,7 @@ bool EmfParser::loadFromStream( QDataStream &stream )
         return false;
     }
 
-    mOutput->init( header );
+    m_backend->init( header );
 
     EmfDeviceContext  deviceContext;
 
@@ -127,21 +127,21 @@ bool EmfParser::loadFromStream( QDataStream &stream )
     int numRecords = header->recordCount();
     for ( int i = 1; i < numRecords; ++i ) {
         // kDebug(33100) << "Record" << i << "of" << numRecords;
-        if ( !readRecord(stream, deviceContext) ) {
+        if (!parseRecord(stream, deviceContext)) {
             break;
         }
     }
 
-    mOutput->cleanup( header );
+    m_backend->cleanup( header );
 
     delete header;
 
     return true;
 }
 
-void EmfParser::setOutput( EmfAbstractBackend *output )
+void EmfParser::setBackend(EmfAbstractBackend *backend)
 {
-    mOutput = output;
+    m_backend = backend;
 }
 
 void EmfParser::soakBytes( QDataStream &stream, int numBytes )
@@ -364,9 +364,9 @@ static const struct {
     { 0x0000007A, "EMR_CREATECOLORSPACEW" }
 };
 
-bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
+bool EmfParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
 {
-    if ( ! mOutput ) {
+    if ( ! m_backend ) {
         qWarning() << "Output device not set";
         return false;
     }
@@ -403,7 +403,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
                 stream >> point;
                 aPoints.append( point );
             }
-            mOutput->polyLine(context, bounds, aPoints );
+            m_backend->polyLine(context, bounds, aPoints );
         }
         break;
 
@@ -485,7 +485,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EMR_EOF:
         {
-            mOutput->eof();
+            m_backend->eof();
             soakBytes( stream, size-8 ); // because we already took 8.
             return false;
         }
@@ -496,7 +496,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             quint8 red, green, blue, reserved;
             stream >> point;
             stream >> red >> green >> blue >> reserved;
-            mOutput->setPixelV(context, point, red, green, blue, reserved );
+            m_backend->setPixelV(context, point, red, green, blue, reserved );
         }
         break;
     case EMR_SETMAPMODE:
@@ -555,14 +555,14 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	{
 	    qint32 x, y;
 	    stream >> x >> y;
-	    mOutput->moveToEx(context, x, y );
+	    m_backend->moveToEx(context, x, y );
             //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
 	}
 	break;
     case EMR_SETMETARGN:
         {
             // Takes no arguments
-            mOutput->setMetaRgn(context);
+            m_backend->setMetaRgn(context);
         }
         break;
     case EMR_INTERSECTCLIPRECT:
@@ -574,14 +574,14 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
     break;
     case EMR_SAVEDC:
     {
-        mOutput->saveDC(context);
+        m_backend->saveDC(context);
     }
     break;
     case EMR_RESTOREDC:
     {
         qint32 savedDC;
         stream >> savedDC;
-        mOutput->restoreDC(context, savedDC );
+        m_backend->restoreDC(context, savedDC );
     }
     break;
     case EMR_SELECTOBJECT:
@@ -646,14 +646,14 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         {
             QRect box;
             stream >> box;
-            mOutput->ellipse(context, box );
+            m_backend->ellipse(context, box );
         }
         break;
     case EMR_RECTANGLE:
         {
             QRect box;
             stream >> box;
-            mOutput->rectangle(context, box );
+            m_backend->rectangle(context, box );
             //kDebug(33100) << "xx EMR_RECTANGLE" << box;
         }
         break;
@@ -663,7 +663,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             QPoint start, end;
             stream >> box;
             stream >> start >> end;
-            mOutput->arc(context, box, start, end );
+            m_backend->arc(context, box, start, end );
         }
         break;
     case EMR_CHORD:
@@ -672,7 +672,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             QPoint start, end;
             stream >> box;
             stream >> start >> end;
-            mOutput->chord(context, box, start, end );
+            m_backend->chord(context, box, start, end );
         }
         break;
      case EMR_PIE:
@@ -681,7 +681,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             QPoint start, end;
             stream >> box;
             stream >> start >> end;
-            mOutput->pie(context, box, start, end );
+            m_backend->pie(context, box, start, end );
         }
         break;
     case EMR_SELECTPALLETTE:
@@ -723,14 +723,14 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	{
 	    QRect bounds;
 	    stream >> bounds;
-	    mOutput->fillPath(context, bounds );
+	    m_backend->fillPath(context, bounds );
 	}
 	break;
     case EMR_STROKEANDFILLPATH:
         {
             QRect bounds;
             stream >> bounds;
-            mOutput->strokeAndFillPath(context, bounds );
+            m_backend->strokeAndFillPath(context, bounds );
             //kDebug(33100) << "xx EMR_STROKEANDFILLPATHPATH" << bounds;
         }
         break;
@@ -738,7 +738,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	{
 	    QRect bounds;
 	    stream >> bounds;
-	    mOutput->strokePath(context, bounds );
+	    m_backend->strokePath(context, bounds );
             //kDebug(33100) << "xx EMR_STROKEPATH" << bounds;
 	}
 	break;
@@ -746,7 +746,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
         {
             quint32 regionMode;
             stream >> regionMode;
-            mOutput->setClipPath(context, regionMode );
+            m_backend->setClipPath(context, regionMode );
         }
         break;
     case EMR_LINETO:
@@ -754,7 +754,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	    quint32 x, y;
 	    stream >> x >> y;
 	    QPoint finishPoint( x, y );
-	    mOutput->lineTo(context, finishPoint );
+	    m_backend->lineTo(context, finishPoint );
             //kDebug(33100) << "xx EMR_LINETO" << x << y;
 	}
 	break;
@@ -766,7 +766,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             stream >> start;
             QPoint end;
             stream >> end;
-            mOutput->arcTo(context, box, start, end );
+            m_backend->arcTo(context, box, start, end );
         }
         break;
         case EMR_COMMENT:
@@ -798,7 +798,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
                     emfplusStream.setByteOrder(QDataStream::LittleEndian);
 
                     EmfplusParser emfplusParser;
-                    emfplusParser.parse(emfplusStream, context, mOutput);
+                    emfplusParser.parse(emfplusStream, context, m_backend);
                 }
 #else
                 soakBytes( stream, size-16 ); // because we already took 16.
@@ -829,14 +829,14 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 	{
             //kDebug(31000) << "Found BitBlt record";
 	    BitBltRecord bitBltRecord( stream, size );
-	    mOutput->bitBlt(context, bitBltRecord );
+	    m_backend->bitBlt(context, bitBltRecord );
 	}
 	break;
     case EMR_STRETCHDIBITS:
 	{
 	    StretchDiBitsRecord stretchDiBitsRecord( stream, size );
             if (stretchDiBitsRecord.hasImage()) {
-                mOutput->stretchDiBits(context, stretchDiBitsRecord);
+                m_backend->stretchDiBits(context, stretchDiBitsRecord);
             }
 	}
 	break;
@@ -887,7 +887,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
             EmrTextObject emrText(stream, size,
                                   (type == EMR_EXTTEXTOUTA) ? EmrTextObject::EightBitChars
                                                             : EmrTextObject::SixteenBitChars);
-            mOutput->extTextOut(context, bounds, emrText );
+            m_backend->extTextOut(context, bounds, emrText );
 	}
 	break;
     case EMR_SETLAYOUT:
@@ -909,7 +909,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyBezier16(context, bounds, aPoints );
+	    m_backend->polyBezier16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYGON16:
@@ -925,7 +925,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polygon16(context, bounds, aPoints );
+	    m_backend->polygon16(context, bounds, aPoints );
 	}
 	break;
     case EMR_POLYLINE16:
@@ -941,7 +941,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyLine16(context, bounds, aPoints );
+	    m_backend->polyLine16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYBEZIERTO16:
@@ -957,7 +957,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyBezierTo16(context, bounds, aPoints );
+	    m_backend->polyBezierTo16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYLINETO16:
@@ -973,7 +973,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
 	    }
-	    mOutput->polyLineTo16(context, bounds, aPoints );
+	    m_backend->polyLineTo16(context, bounds, aPoints );
 	}
         break;
     case EMR_POLYPOLYLINE16:
@@ -998,7 +998,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }
             }
-            mOutput->polyPolyLine16(context, bounds, aPoints );
+            m_backend->polyPolyLine16(context, bounds, aPoints );
         }
         break;
     case EMR_POLYPOLYGON16:
@@ -1023,7 +1023,7 @@ bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }
             }
-            mOutput->polyPolygon16(context, bounds, aPoints );
+            m_backend->polyPolygon16(context, bounds, aPoints );
         }
         break;
     case EMR_CREATEMONOBRUSH:

@@ -75,15 +75,15 @@ public:
     bool loadFromStream( QDataStream &stream );
 
     /**
-       Set the output strategy for the parserr
+       Set the backend for the parserr
 
-       \param output pointer to a strategy implementation
+       \param output pointer to an implementation of an EmfAbstractBackend.
     */
-    void setOutput( EmfAbstractBackend *output );
+    void setBackend(EmfAbstractBackend *backend);
 
 private:
     // read a single EMF record
-    bool readRecord(QDataStream &stream, EmfDeviceContext &context);
+    bool parseRecord(QDataStream &stream, EmfDeviceContext &context);
 
     // temporary function to soak up unneeded bytes
     void soakBytes( QDataStream &stream, int numBytes );
@@ -91,8 +91,8 @@ private:
     // temporary function to dump output bytes
     void outputBytes( QDataStream &stream, int numBytes );
 
-    // Pointer to the output strategy
-    EmfAbstractBackend *mOutput;
+    // Pointer to the backend.
+    EmfAbstractBackend *m_backend;
 };
 
 }

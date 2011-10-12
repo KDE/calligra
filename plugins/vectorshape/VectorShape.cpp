@@ -222,11 +222,11 @@ void RenderThread::drawEmf(QPainter &painter) const
 
 #if 1  // Set to 0 to get debug output
     // Create a new painter output strategy.  Last param = true means keep aspect ratio.
-    Libemf::EmfPainterBackend  emfPaintOutput( painter, shapeSizeInt, true );
-    emfParser.setOutput( &emfPaintOutput );
+    Libemf::EmfPainterBackend  emfPainterBackend(painter, shapeSizeInt, true);
+    emfParser.setBackend( &emfPainterBackend );
 #else
     Libemf::OutputDebugStrategy  emfDebugOutput;
-    emfParser.setOutput( &emfDebugOutput );
+    emfParser.setBackend( &emfDebugOutput );
 #endif
     emfParser.load(m_shape->m_contents);
 }
