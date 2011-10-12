@@ -1110,6 +1110,23 @@ void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
     item->setData( log.severity );
     lst.append( item );
     lst.append( new QStandardItem( log.message ) );
+    foreach ( QStandardItem *itm, lst ) {
+            switch ( log.severity ) {
+            case Schedule::Log::Type_Debug:
+                itm->setData( Qt::darkYellow, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Info:
+                break;
+            case Schedule::Log::Type_Warning:
+                itm->setData( Qt::blue, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Error:
+                itm->setData( Qt::red, Qt::ForegroundRole );
+                break;
+            default:
+                break;
+        }
+    }
     appendRow( lst );
 //     kDebug()<<"added:"<<row<<rowCount()<<columnCount();
 }
