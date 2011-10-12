@@ -83,7 +83,9 @@ void EmfDeviceContext::reset()
 
     objectTable.clear();
 
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    emfplusDualMode = -1;
+
+   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     // Derivative values.  These are calculated from the base values above.
 
     // World transform

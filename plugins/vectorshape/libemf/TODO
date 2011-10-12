@@ -19,8 +19,11 @@
 * Implement support for EMFPLUS
    + Make a stream from a EMR_COMMENT_EMFPLUS record and hand that      [DONE]
      to the EMF+ parser.
-   + Support the EmfplusGetDC record, since that one defines the
+   + Support the EMFPLUS control records, since those ones define the   [DONE]
      behaviour of the parsing process.
+      - EmfHeader                                                       [done]
+      - EmfGetDC                                                        [done]
+      - EmfEof                                                          [done]
    + Implement the EMF+ device context
       - Find out what the EMF+ DC has that the EMF DC doesn't
       - Create an EMF+ DC from an EMF DC

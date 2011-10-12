@@ -263,9 +263,21 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
     soakBytes(stream, size - 8);
 #else
     switch (type) {
+        // ---------------- Control records ----------------
     case EmfPlusHeader:
         {
-            soakBytes(stream, size - 8);
+            quint32  dataSize; // redundant. size contains the same value + 12.
+            quint32  version;  // version of OS that created this one.
+            quint32  emfplusFlags; // flags.  Currently only reference device (irrelevant)
+            quint32  logicalDpiX;  // resolution X, pixels per inch
+            quint32  logicalDpiY;
+
+            stream >> dataSize;
+            stream >> version;
+            stream >> emfplusFlags;
+            stream >> logicalDpiX >> logicalDpiY;
+
+            context.emfplusDualMode = (flags & 0x01);
         }
         break;
     case EmfPlusEndOfFile:
@@ -283,6 +295,9 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
             soakBytes(stream, size - 8);
         }
         break;
+
+        // ----------------  ----------------
+
     case EmfPlusMultiFormatStart:
         {
             soakBytes(stream, size - 8);

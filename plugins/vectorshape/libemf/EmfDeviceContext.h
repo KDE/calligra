@@ -135,6 +135,11 @@ public:
     QMap<quint32, QVariant>  objectTable;
 
     // ----------------------------------------------------------------
+    //                         EMF+ data
+
+    int  emfplusDualMode;  // -1: no EMF+, 0: EMF+ non-dual mode, 1: EMF+ dual mode
+
+    // ----------------------------------------------------------------
     //                         Helper data
 
     // This is not part of the actual device context, but indicates
