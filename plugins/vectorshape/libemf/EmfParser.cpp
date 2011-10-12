@@ -31,12 +31,13 @@
 #include "EmfDeviceContext.h"
 #include "EmfRecords.h"
 #include "EmfObjects.h"
+#include "EmfplusParser.h"
 
 
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
-#define DEBUG_EMFPARSER 0
+#define DEBUG_EMFPARSER 1
 
 
 namespace Libemf
@@ -49,17 +50,17 @@ static Qt::FillRule               fillModeToQtFillRule(quint32 polyFillMode);
 // ================================================================
 
 
-Parser::Parser()
+EmfParser::EmfParser()
     : mOutput( 0 )
 {
 }
 
-Parser::~Parser()
+EmfParser::~EmfParser()
 {
 }
 
 
-bool Parser::load( const QString &fileName )
+bool EmfParser::load( const QString &fileName )
 {
     QFile *file = new QFile( fileName );
 
@@ -90,7 +91,7 @@ bool Parser::load( const QString &fileName )
     return result;
 }
 
-bool Parser::load(const QByteArray &contents)
+bool EmfParser::load(const QByteArray &contents)
 {
     // Create a QBuffer to read from...
     QBuffer  emfBuffer((QByteArray *)&contents, 0);
@@ -104,7 +105,7 @@ bool Parser::load(const QByteArray &contents)
     return loadFromStream(emfStream);
 }
 
-bool Parser::loadFromStream( QDataStream &stream ) 
+bool EmfParser::loadFromStream( QDataStream &stream ) 
 {
     stream.setByteOrder( QDataStream::LittleEndian );
 
@@ -138,12 +139,12 @@ bool Parser::loadFromStream( QDataStream &stream )
     return true;
 }
 
-void Parser::setOutput( EmfAbstractBackend *output )
+void EmfParser::setOutput( EmfAbstractBackend *output )
 {
     mOutput = output;
 }
 
-void Parser::soakBytes( QDataStream &stream, int numBytes )
+void EmfParser::soakBytes( QDataStream &stream, int numBytes )
 {
     quint8 scratch;
     for ( int i = 0; i < numBytes; ++i ) {
@@ -151,7 +152,7 @@ void Parser::soakBytes( QDataStream &stream, int numBytes )
     }
 }
 
-void Parser::outputBytes( QDataStream &stream, int numBytes )
+void EmfParser::outputBytes( QDataStream &stream, int numBytes )
 {
     quint8 scratch;
     for ( int i = 0; i < numBytes; ++i ) {
@@ -363,7 +364,7 @@ static const struct {
     { 0x0000007A, "EMR_CREATECOLORSPACEW" }
 };
 
-bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
+bool EmfParser::readRecord(QDataStream &stream, EmfDeviceContext &context)
 {
     if ( ! mOutput ) {
         qWarning() << "Output device not set";
@@ -783,7 +784,25 @@ bool Parser::readRecord(QDataStream &stream, EmfDeviceContext &context)
                 break;
             case EMR_COMMENT_EMFPLUS:
                 kDebug(31000) << "EMR_COMMENT_EMFPLUS";
+#if 1
+                {
+                    // Create a new stream from the record and call the EMFPLUS parser.
+                    //
+                    // FIXME: Don't create a new array. Create the array inside the old one.
+                    //        Do this after we get this to work.
+                    char *rawData = new char[size - 16];
+                    stream.readRawData(rawData, size - 16);
+
+                    QByteArray  dataArray(rawData, size - 16);
+                    QDataStream emfplusStream(&dataArray, QIODevice::ReadOnly);
+                    emfplusStream.setByteOrder(QDataStream::LittleEndian);
+
+                    EmfplusParser emfplusParser;
+                    emfplusParser.parse(emfplusStream, context, mOutput);
+                }
+#else
                 soakBytes( stream, size-16 ); // because we already took 16.
+#endif
                 break;
             case EMR_COMMENT_PUBLIC:
                 quint32 commentType;

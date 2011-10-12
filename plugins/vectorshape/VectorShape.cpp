@@ -218,7 +218,7 @@ void RenderThread::drawEmf(QPainter &painter) const
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
-    Libemf::Parser  emfParser;
+    Libemf::EmfParser  emfParser;
 
 #if 1  // Set to 0 to get debug output
     // Create a new painter output strategy.  Last param = true means keep aspect ratio.

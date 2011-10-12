@@ -37,7 +37,7 @@
 namespace Libemf
 {
 
-class EmfplusDeviceContext;
+    //class EmfplusDeviceContext;
 
 
 /**
@@ -53,21 +53,16 @@ public:
      * Parse EMFPLUS records from a stream
      *
      * \param stream the stream to read from
+     * \param context the playback device context
+     * \param backend the output backend to use
      *
      * \return true on successful parsing, or false on failure
      */
-    bool parse(QDataStream &stream);
-
-    /**
-       Set the backend for the parser.
-
-       \param backend pointer to a backend implementation
-    */
-    void setBackend(EmfAbstractBackend *backend);
+    bool parse(QDataStream &stream, EmfDeviceContext &context, EmfAbstractBackend *backend);
 
 private:
-    // read a single EMF record
-    bool parseRecord(QDataStream &stream, EmfplusDeviceContext &context);
+    // read a single EMFPLUS record
+    bool parseRecord(QDataStream &stream, EmfDeviceContext &context);
 
     // Pointer to the backend.
     EmfAbstractBackend *m_backend;

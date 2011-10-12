@@ -17,16 +17,20 @@
 
 
 * Implement support for EMFPLUS
-   + Make a stream from a EMR_COMMENT_EMFPLUS record and hand that
+   + Make a stream from a EMR_COMMENT_EMFPLUS record and hand that      [DONE]
      to the EMF+ parser.
+   + Support the EmfplusGetDC record, since that one defines the
+     behaviour of the parsing process.
    + Implement the EMF+ device context
       - Find out what the EMF+ DC has that the EMF DC doesn't
       - Create an EMF+ DC from an EMF DC
    + Support EMF+ records
-      - Check which calls are basically same as EMF, and copy code for them
+      - Check which calls are basically same as EMF, and copy code
+        for them
       - One by one, add code to the ones that we don't support yet.
    + Enhance backend to support EMF+
-      - Implement which backend calls we have to add to be able to support EMF+
+      - Implement which backend calls we have to add to be able to
+        support EMF+
 
 * Merge with libkowmf
    - Rename to libwinmetafile (or wmf? But that could be confusing)

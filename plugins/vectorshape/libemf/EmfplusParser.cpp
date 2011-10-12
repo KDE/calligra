@@ -28,7 +28,8 @@
 
 // LibEmf
 #include "EmfplusEnums.h"
-#include "EmfplusDeviceContext.h"
+#include "EmfDeviceContext.h"
+//#include "EmfplusDeviceContext.h"
 //#include "EmfRecords.h"
 //#include "EmfObjects.h"
 
@@ -36,7 +37,7 @@
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
-#define DEBUG_EMFPARSER 1
+#define DEBUG_EMFPLUSPARSER 1
 
 
 namespace Libemf
@@ -65,7 +66,7 @@ static void outputBytes(QDataStream &stream, int numBytes)
 
 
 EmfplusParser::EmfplusParser()
-    : m_backend( 0 )
+    : m_backend(0)
 {
 }
 
@@ -74,43 +75,22 @@ EmfplusParser::~EmfplusParser()
 }
 
 
-bool EmfplusParser::parse( QDataStream &stream ) 
+bool EmfplusParser::parse(QDataStream &stream, EmfDeviceContext &context,
+                          EmfAbstractBackend *backend) 
 {
-    stream.setByteOrder( QDataStream::LittleEndian );
-
-    Header *header = new Header( stream );
-    if ( ! header->isValid() ) {
-        kWarning() << "Failed to parse header, perhaps not an EMF file";
-        delete header;
-        return false;
-    }
-
-    m_backend->init( header );
-
-    EmfplusDeviceContext  deviceContext;
-
-#if DEBUG_EMFPARSER
-    kDebug(31000) << "========================================================== Starting EMF";
+#if DEBUG_EMFPLUSPARSER
+    kDebug(31000) << "================ Starting EMFPLUS";
 #endif
 
-    int numRecords = header->recordCount();
-    for ( int i = 1; i < numRecords; ++i ) {
-        // kDebug(33100) << "Record" << i << "of" << numRecords;
-        if ( !parseRecord(stream, deviceContext) ) {
-            break;
+    m_backend = backend;
+
+    while (!stream.atEnd()) {
+        if (!parseRecord(stream, context)) {
+            return false;
         }
     }
 
-    m_backend->cleanup( header );
-
-    delete header;
-
     return true;
-}
-
-void EmfplusParser::setBackend(EmfAbstractBackend *backend)
-{
-    m_backend = backend;
 }
 
 /**
@@ -119,6 +99,8 @@ void EmfplusParser::setBackend(EmfAbstractBackend *backend)
    See [MS-EMFPLUS] Section 2.1.1.1 for more information.
 */
 enum RecordType {
+    EMFPLUS_FIRSTRECORD            = 0x4000,
+
     EmfPlusHeader                  = 0x4001,
     EmfPlusEndOfFile               = 0x4002,
     EmfPlusComment                 = 0x4003,
@@ -249,271 +231,333 @@ static const struct {
     { 0x403A, "EmfPlusSetTSClip" }, 
 };
 
-bool EmfplusParser::parseRecord(QDataStream &stream, EmfplusDeviceContext &context)
+
+bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
 {
-    if ( ! m_backend ) {
+    if (!m_backend) {
         qWarning() << "backend not set";
         return false;
     }
-    quint32 type;
+
+    quint16 type;
+    quint16 flags;
     quint32 size;
 
     stream >> type;
+    stream >> flags;
     stream >> size;
 
     {
         QString name;
-        if (0x4000 < type && type < EMFPLUS_LASTRECORD)
-            name = EmfplusRecords[type &0xff].name;
+        if (EMFPLUS_FIRSTRECORD < type && type < EMFPLUS_LASTRECORD)
+            name = EmfplusRecords[type & 0xff].name;
         else
             name = "(out of bounds)";
-#if DEBUG_EMFPARSER
-        kDebug(31000) << "type " << hex << type << "(" << dec << type << ")" << name;
+#if DEBUG_EMFPLUSPARSER
+        kDebug(31000) << "Record length" << size << "type" << hex << type << name
+                      << "flags:" << flags << dec;
 #endif
     }
 
-#if DEBUG_EMFPARSER == 2
+#if DEBUG_EMFPLUSPARSER == 2
     soakBytes(stream, size - 8);
 #else
-    switch ( type ) {
+    switch (type) {
     case EmfPlusHeader:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusEndOfFile:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusComment:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusGetDC:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusMultiFormatStart:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusMultiFormatSection:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusMultiFormatEnd:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusObject:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusClear:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillRects:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawRects:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillPolygon:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawLines:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillEllipse:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawEllipse:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillPie:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawPie:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawArc:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillRegion:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillPath:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawPath:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillClosedCurve:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawClosedCurve:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawCurve:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawBeziers:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawImage:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawImagePoints:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawString:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetRenderingOrigin:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetAntiAliasMode:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTextRenderingHint:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTextContrast:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetInterpolationMode:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetPixelOffsetMode:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetCompositingMode:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetCompositingQuality:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSave:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusRestore:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusBeginContainer:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusBeginContainerNoParams:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusEndContainer:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetWorldTransform:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusResetWorldTransform:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusMultiplyWorldTransform:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusTranslateWorldTransform:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusScaleWorldTransform:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusRotateWorldTransform:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetPageTransform:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusResetClip:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetClipRect:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetClipPath:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetClipRegion:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusOffsetClip:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawDriverstring:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusStrokeFillPath:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSerializableObject:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTSGraphics:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTSClip:
         {
+            soakBytes(stream, size - 8);
         }
         break;
     default:
-#if DEBUG_EMFPARSER
+#if DEBUG_EMFPLUSPARSER
         kDebug(31000) << "unknown record type:" << type;
 #endif
-	soakBytes( stream, size-8 ); // because we already took 8.
-	Q_ASSERT( type );
+	soakBytes(stream, size - 8); // because we already took 8.
     }
 #endif
 
