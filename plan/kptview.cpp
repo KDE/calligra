@@ -871,6 +871,9 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
 
     connect( handler, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
+    connect(handler, SIGNAL(editNode(Node*)), this, SLOT(slotOpenNode(Node*)));
+    connect(handler, SIGNAL(editResource(Resource*)), this, SLOT(slotEditResource(Resource*)));
+
     handler->draw( getProject() );
     handler->updateReadWrite( m_readWrite );
     return handler;
@@ -2388,11 +2391,15 @@ void View::slotDeleteRelation()
 void View::slotEditResource()
 {
     //kDebug();
-    Resource * r = currentResource();
-    if ( r == 0 ) {
+    slotEditResource( currentResource() );
+}
+
+void View::slotEditResource( Resource *resource )
+{
+    if ( resource == 0 ) {
         return ;
     }
-    ResourceDialog *dia = new ResourceDialog( getProject(), r, this );
+    ResourceDialog *dia = new ResourceDialog( getProject(), resource, this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotEditResourceFinished(int)));
     dia->show();
     dia->raise();
