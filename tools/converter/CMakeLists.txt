@@ -4,13 +4,13 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
-set(koconverter_SRCS koconverter.cpp )
+set(calligraconverter_SRCS calligraconverter.cpp )
 
-kde4_add_executable(koconverter ${koconverter_SRCS})
+kde4_add_executable(calligraconverter ${calligraconverter_SRCS})
 
-target_link_libraries(koconverter
+target_link_libraries(calligraconverter
     komain
     calligratablescommon)
 
-install(TARGETS koconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligraconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

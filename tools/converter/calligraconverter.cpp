@@ -106,12 +106,13 @@ bool convert( const KUrl & uIn, const QString & inputFormat, const KUrl & uOut, 
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), CALLIGRA_VERSION_STRING,
+    KAboutData aboutData( "calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
                           ki18n("Calligra Document Converter"),
                           KAboutData::License_GPL,
                           ki18n("(c) 2001-2011 Calligra developers") );
     aboutData.addAuthor(ki18n("David Faure"),KLocalizedString(), "faure@kde.org");
     aboutData.addAuthor(ki18n("Nicolas Goutte"),KLocalizedString(), "goutte@kde.org");
+    aboutData.addAuthor(ki18n("Dan Leinir Turthra Jensen"),KLocalizedString(), "admin@leinir.dk");
     KCmdLineArgs::init( argc, argv, &aboutData);
 
     KCmdLineOptions options;
