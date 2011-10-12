@@ -247,7 +247,34 @@ QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicate
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
             answers.insert(cite->identifier(),cite);
+            //TO DO: use sort key(s) from bib conf. instead cite->identifier()
         }
+    }
+    return answers;
+}
+
+QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool duplicatesEnabled, QTextBlock block) const
+{
+    QList<KoInlineCite*> answers;
+
+    while (block.isValid()) {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+
+        while (pos >= 0 && pos <= block.length() ) {
+            QTextCursor cursor(block);
+            cursor.setPosition(block.position() + pos);
+            cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+
+            KoInlineCite *cite = dynamic_cast<KoInlineCite*>(this->inlineTextObject(cursor));
+
+            if (cite && (cite->type() == KoInlineCite::Citation ||
+                         (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
+                answers.append(cite);
+            }
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
     }
     return answers;
 }

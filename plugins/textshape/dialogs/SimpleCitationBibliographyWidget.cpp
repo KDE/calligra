@@ -25,8 +25,7 @@
 #include <QWidget>
 
 SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(TextTool *tool, QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false)
+        : QWidget(parent)
 {
     widget.setupUi(this);
 //    widget.addRowAbove->setDefaultAction(tool->action("insert_tablerow_above"));

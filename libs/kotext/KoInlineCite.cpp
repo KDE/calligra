@@ -600,9 +600,6 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     range.length = d->label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
-    QBrush *brush = new QBrush(Qt::SolidPattern);
-    brush->setColor(Qt::lightGray);
-    range.format.setBackground(*brush);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 

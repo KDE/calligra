@@ -86,7 +86,14 @@ void BibliographyGenerator::generate()
     }
 
     QTextCharFormat savedCharFormat = cursor.charFormat();
-    QList<KoInlineCite*> citeList = KoTextDocument(m_block.document()).inlineTextObjectManager()->citations(false).values();
+
+    QList<KoInlineCite*> citeList;
+    if ( KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortByPosition() ) {
+        citeList = KoTextDocument(m_block.document())
+                .inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock());
+    } else {
+        citeList = KoTextDocument(m_block.document()).inlineTextObjectManager()->citations(false).values();
+    }
 
     foreach (KoInlineCite *cite, citeList)
     {
