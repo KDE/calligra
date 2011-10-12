@@ -148,6 +148,7 @@ public slots:
     void slotUpdate();
     void slotCreateTemplate();
     void slotEditResource();
+    void slotEditResource( Resource *resource );
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();

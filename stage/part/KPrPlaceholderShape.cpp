@@ -44,11 +44,11 @@ KPrPlaceholderShape::~KPrPlaceholderShape()
     delete m_strategy;
 }
 
-void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter )
+void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     QRectF rect( QPointF( 0, 0 ), size() );
     if ( m_strategy ) {
-        m_strategy->paint( painter, converter, rect );
+        m_strategy->paint( painter, converter, rect, paintcontext);
     }
     else {
         applyConversion( painter, converter );

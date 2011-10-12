@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -16,21 +16,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kexirelationdesigntoolfactory.h"
-#include "kexirelationdesigntool.h"
-#include "kexirelationdesignshape.h"
+#include "simplefield.h"
 
-KexiRelationDesignToolFactory::KexiRelationDesignToolFactory()
-: KoToolFactoryBase("KexiRelationDesignToolFactoryId")
+
+SimpleField::SimpleField()
 {
-    setToolTip( i18n( "Relation design tool" ) );
-    setIcon( "kexi" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( KEXIRELATIONDEISGNSHAPEID );
+    pkey = false;
+    notnull = false;
 }
 
-KoToolBase* KexiRelationDesignToolFactory::createTool ( KoCanvasBase* canvas ) {
-    return new KexiRelationDesignTool(canvas);
+SimpleField::SimpleField(KexiDB::QueryColumnInfo *col)
+{
+    name = col->aliasOrName();
+    type = col->field->typeName();
+    pkey = col->field->isPrimaryKey();
+    notnull = col->field->isNotNull();
+}
+
+void SimpleField::save(KoXmlWriter &writer)
+{
+    writer.startElement("kexirelationdesign:column");
+    writer.addAttribute("name", name);
+    writer.addAttribute("type", type);
+    writer.addAttribute("primarykey", pkey);
+    writer.addAttribute("notnull", notnull);
+    writer.endElement();
 }
 

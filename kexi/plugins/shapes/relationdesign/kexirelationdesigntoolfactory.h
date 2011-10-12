@@ -16,17 +16,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIRELATIONDESIGNFACTORY_H
-#define KEXIRELATIONDESIGNFACTORY_H
+#ifndef KEXIRELATIONDESIGNTOOLFACTORY_H
+#define KEXIRELATIONDESIGNTOOLFACTORY_H
 
-#include <KoShapeFactoryBase.h>
+#include <KoToolFactoryBase.h>
 
 
-class KexiRelationDesignFactory : public KoShapeFactoryBase {
-    public:
-        KexiRelationDesignFactory();
-        virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-        virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
+class KexiRelationDesignToolFactory : public KoToolFactoryBase
+{
+public:
+
+    KexiRelationDesignToolFactory();
+
+    virtual KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
-#endif // KEXIRELATIONDESIGNFACTORY_H
+#endif // KEXIRELATIONDESIGNTOOLFACTORY_H

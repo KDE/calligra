@@ -54,7 +54,7 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libmysqlclient
  ------------------------------------------------------------------------
- kexi-postgresql-driver    Description: Kexi PostgreSQL Driver
+ kexi-postgresql-driver    Description: Kexi PostgreSQL driver
                            Database driver files:
                                kexidb_pqxxsqldriver.so
                                kexidb_pqxxsqldriver.desktop
@@ -65,7 +65,7 @@ The following matrix lists the packages and dependencies.
                                libpq
                                libpqxx
  ------------------------------------------------------------------------
- kexi-mssql-driver         Description: Kexi MS SQL & Sybase Server
+ kexi-sybase-driver        Description: Kexi Sybase & MS SQL driver
                            Database driver files:
                                kexidb_sybasedriver.so
                                kexidb_sybasedriver.desktop
@@ -75,7 +75,7 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libsybdb (FreeTDS)
  ------------------------------------------------------------------------
- kexi-xbase-driver         Description: Kexi XBase Driver
+ kexi-xbase-driver         Description: Kexi XBase driver
                            Database driver files:
                                kexidb_xbasedriver.so
                                kexidb_xbasedriver.desktop
@@ -85,10 +85,12 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libxbase
  ------------------------------------------------------------------------
- kexi-spreadsheet-export   Description: Kexi table-to-spreadsheet export plugin
+ kexi-spreadsheet-import   Description: Spreadsheet-to-Kexi-table import plugin
                            Files:
                                keximigrate_spreadsheet.so
                                keximigrate_spreadsheet.desktop
+                           Translation File:
+                               keximigrate_spreadsheet.mo
                            Dependencies:
                                tables (Calligra Tables)
  ------------------------------------------------------------------------
@@ -136,6 +138,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                kformdesigner_webbrowser.so
                                kformdesigner_webbrowser.desktop
+                           Translation File:
+                               kformdesigner_webbrowser.mo
                            Dependencies:
                                libqt4-webkit or libQtWebKit4 (provides QtWebKit)
  ------------------------------------------------------------------------
@@ -143,6 +147,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                koreport_webplugin.so
                                koreport_webplugin.desktop
+                           Translation File:
+                               koreport_webplugin.mo
                            Dependencies:
                                libqt4-webkit or libQtWebKit4 (provides QtWebKit)
  ------------------------------------------------------------------------
@@ -150,6 +156,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                kformdesigner_mapbrowser.so
                                kformdesigner_mapbrowser.desktop
+                           Translation File:
+                               kformdesigner_mapbrowser.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
@@ -158,6 +166,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                koreport_mapsplugin.so
                                koreport_mapsplugin.desktop
+                           Translation File:
+                               koreport_mapsplugin.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
@@ -219,6 +229,8 @@ be packaged separately.
                            Contents:
                                mapshape.so
                                mapshape.desktop
+                           Translation File:
+                               MapShape.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
@@ -236,7 +248,7 @@ Name       Conditional compilation flag    Globally used in Calligra?   Public A
 ------------------------------------------------------------------------------------------
 
 flake
-kokross    SHOULD_BUILD_SCRIPTING                                      NO
+kokross                                                                NO
 kopageapp
 koplugin                                                               NO
 koproperty                                 Kexi, Plan                  NO

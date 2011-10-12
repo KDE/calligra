@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -26,11 +26,12 @@
 K_PLUGIN_FACTORY(KexiRelationDesignShapePluginFactory, registerPlugin<KexiRelationDesignShapePlugin>();)
 K_EXPORT_PLUGIN(KexiRelationDesignShapePluginFactory("KexiRelationDesignShapePlugin"))
 
-KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin ( QObject *parent, const QVariantList& )
-        : QObject ( parent ) {
+KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
+{
     // register the shape's factory
-    KoShapeRegistry::instance()->add (new KexiRelationDesignFactory () );
-    KoToolRegistry::instance()->add (new KexiRelationDesignToolFactory () );
+    KoShapeRegistry::instance()->add(new KexiRelationDesignFactory());
+    KoToolRegistry::instance()->add(new KexiRelationDesignToolFactory());
     // we could register more things here in this same plugin.
 }
 #include "kexirelationdesignshapeplugin.moc"

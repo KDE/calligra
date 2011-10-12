@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -16,28 +16,24 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "simplefield.h"
+#ifndef SIMPLEFIELD_H
+#define SIMPLEFIELD_H
 
+#include <QString>
+#include <kexidb/queryschema.h>
+#include <KoXmlWriter.h>
 
-SimpleField::SimpleField() {
-    pkey = false;
-    notnull = false;
-}
-
-SimpleField::SimpleField ( KexiDB::QueryColumnInfo* col) {
-name = col->aliasOrName();
-type = col->field->typeName();
-pkey = col->field->isPrimaryKey();
-notnull = col->field->isNotNull();
-}
-
-void SimpleField::save(KoXmlWriter &writer)
+class SimpleField
 {
-    writer.startElement("kexirelationdesign:column");
-    writer.addAttribute("name", name);
-    writer.addAttribute("type", type);
-    writer.addAttribute("primarykey", pkey);
-    writer.addAttribute("notnull", notnull);
-    writer.endElement();
-}
+public:
+    SimpleField();
+    SimpleField(KexiDB::QueryColumnInfo *);
+    void save(KoXmlWriter &writer);
 
+    QString name;
+    QString type;
+    bool pkey;
+    bool notnull;
+};
+
+#endif // SIMPLEFIELD_H

@@ -27,6 +27,7 @@
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptresource.h"
 #include "kptschedule.h"
 #include "kptdatetime.h"
 #include "kptschedulerplugin.h"
@@ -1107,9 +1108,31 @@ void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
     }
     lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
     QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
-    item->setData( log.severity );
+    item->setData( log.severity, SeverityRole );
     lst.append( item );
     lst.append( new QStandardItem( log.message ) );
+    foreach ( QStandardItem *itm, lst ) {
+            if ( log.resource ) {
+                itm->setData( log.resource->id(), IdentityRole );
+            } else if ( log.node ) {
+                itm->setData( log.node->id(), IdentityRole );
+            }
+            switch ( log.severity ) {
+            case Schedule::Log::Type_Debug:
+                itm->setData( Qt::darkYellow, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Info:
+                break;
+            case Schedule::Log::Type_Warning:
+                itm->setData( Qt::blue, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Error:
+                itm->setData( Qt::red, Qt::ForegroundRole );
+                break;
+            default:
+                break;
+        }
+    }
     appendRow( lst );
 //     kDebug()<<"added:"<<row<<rowCount()<<columnCount();
 }
@@ -1130,6 +1153,12 @@ void ScheduleLogItemModel::refresh()
     foreach ( const Schedule::Log &l, m_schedule->logs() ) {
         addLogEntry( l, i++ );
     }
+}
+
+QString ScheduleLogItemModel::identity( const QModelIndex &idx ) const
+{
+    QStandardItem *itm = itemFromIndex( idx );
+    return itm ? itm->data( IdentityRole ).toString() : QString();
 }
 
 void ScheduleLogItemModel::slotManagerChanged( ScheduleManager *manager )

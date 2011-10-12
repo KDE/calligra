@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -16,17 +16,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIRELATIONDESIGNSHAPEPLUGIN_H
-#define KEXIRELATIONDESIGNSHAPEPLUGIN_H
+#include "kexirelationdesigntoolfactory.h"
+#include "kexirelationdesigntool.h"
+#include "kexirelationdesignshape.h"
 
-#include <QObject>
-#include <QVariantList>
+KexiRelationDesignToolFactory::KexiRelationDesignToolFactory()
+    : KoToolFactoryBase("KexiRelationDesignToolFactoryId")
+{
+    setToolTip(i18n("Relation design tool"));
+    setIcon("kexi");
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(KEXIRELATIONDEISGNSHAPEID);
+}
 
-class KexiRelationDesignShapePlugin : public QObject {
-    Q_OBJECT
-    public:
-        KexiRelationDesignShapePlugin(QObject *parent, const QVariantList&);
-};
+KoToolBase *KexiRelationDesignToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new KexiRelationDesignTool(canvas);
+}
 
-
-#endif // KEXIRELATIONDESIGNSHAPEPLUGIN_H
