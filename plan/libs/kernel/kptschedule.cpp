@@ -1242,6 +1242,8 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
     duration = Duration::fromString( sch.attribute( "duration" ) );
     constraintError = sch.attribute( "scheduling-conflict", "0" ).toInt();
     schedulingError = sch.attribute( "scheduling-error", "0" ).toInt();
+    //NOTE: we use "scheduled" as default to match old format without "not-scheduled" element
+    notScheduled = sch.attribute( "not-scheduled", "0" ).toInt();
 
     KoXmlNode n = sch.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1302,6 +1304,7 @@ void MainSchedule::saveXML( QDomElement &element ) const
     element.setAttribute( "duration", duration.toString() );
     element.setAttribute( "scheduling-conflict", constraintError );
     element.setAttribute( "scheduling-error", schedulingError );
+    element.setAttribute( "not-scheduled", notScheduled );
 
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
@@ -1996,8 +1999,6 @@ MainSchedule *ScheduleManager::loadMainSchedule( KoXmlElement &element, XMLLoade
         status.project().addSchedule( sch );
         sch->setNode( &(status.project()) );
         status.project().setParentSchedule( sch );
-        // If it's here, it's scheduled!
-        sch->setScheduled( true );
     } else {
         kError() << "Failed to load schedule" << endl;
         delete sch;
@@ -2017,7 +2018,6 @@ bool ScheduleManager::loadMainSchedule( MainSchedule *schedule, KoXmlElement &el
         }
         schedule->setNode( &(status.project()) );
         status.project().setParentSchedule( schedule );
-        schedule->setScheduled( true );
         return true;
     }
     return false;
@@ -2063,7 +2063,7 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
     el.setAttribute( "baselined", m_baselined );
-    if ( m_expected && ! m_expected->isDeleted() ) {
+    if ( m_expected && ! m_expected->isDeleted() ) { // TODO: should we check isScheduled() ?
         QDomElement schs = el.ownerDocument().createElement( "schedule" );
         el.appendChild( schs );
         m_expected->saveXML( schs );
