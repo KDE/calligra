@@ -21,7 +21,7 @@
 
 //!Connect to an external data source
 //!connStr is in the form driver|connection_string|table
-KexiMigrateReportData::KexiMigrateReportData(const QString & connStr) : m_kexiMigrate(0), m_schema(0)
+KexiMigrateReportData::KexiMigrateReportData(const QString & connStr) : m_schema(0), m_kexiMigrate(0)
 {
     QStringList extConn = connStr.split('|');
 

@@ -49,7 +49,7 @@ RightToLeftPaintingStrategy::~RightToLeftPaintingStrategy()
 }
 
 void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
-                                        const KoViewConverter &converter, bool forPrint)
+                                        const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     painter.save();
     const double width = d->canvas->canvasWidget()->width();
@@ -60,7 +60,7 @@ void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
     painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
     if (shapeManager()) {
-        shapeManager()->paintShape(shape, painter, converter, forPrint);
+        shapeManager()->paintShape(shape, painter, converter, paintContext);
     }
 
     painter.restore();  // for the matrix

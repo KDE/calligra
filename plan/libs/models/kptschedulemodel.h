@@ -37,6 +37,8 @@ class Project;
 class ScheduleManager;
 class MainSchedule;
 class Schedule;
+class Node;
+class Resource;
 
 class KPLATOMODELS_EXPORT ScheduleModel : public QObject
 {
@@ -175,6 +177,8 @@ class KPLATOMODELS_EXPORT ScheduleLogItemModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
+    enum DataRoles { SeverityRole = Qt::UserRole + 1, IdentityRole };
+
     explicit ScheduleLogItemModel( QObject *parent = 0 );
     ~ScheduleLogItemModel();
 
@@ -187,6 +191,8 @@ public:
 
     void refresh();
     
+    QString identity( const QModelIndex &idx ) const;
+
 protected slots:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );

@@ -50,7 +50,7 @@
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_kexi(0), m_functions(0), m_pageCount(0), m_currentPage(0)
+        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
 {   
     setObjectName("KexiReportDesigner_DataView");
     m_scrollArea = new QScrollArea(this);

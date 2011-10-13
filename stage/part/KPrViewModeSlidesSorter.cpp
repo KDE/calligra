@@ -277,7 +277,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 void KPrViewModeSlidesSorter::deactivate()
 {
     // Give the ressources back to the canvas
-    m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, 0);
     // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);
     m_view->doUpdateActivePage(m_view->activePage());

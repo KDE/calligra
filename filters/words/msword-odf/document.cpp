@@ -728,11 +728,11 @@ void Document::headerEnd()
             name = m_masterPageName_list.first();
             masterPageStyle = m_masterPageStyle_list.first();
             m_firstOpen = false;
-	}
-	else {
+    }
+    else {
             name = m_masterPageName_list.last();
             masterPageStyle = m_masterPageStyle_list.last();
-	}
+    }
         Q_ASSERT(masterPageStyle);
         m_headerWriter->endElement(); //style:header/footer
 
@@ -827,13 +827,13 @@ void Document::annotationEnd()
 //     //figure out what this is supposed to do!
 
 //     if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
-// 	Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
+//     Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
 //     if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
-// 	Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
+//     Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
 //     if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
-// 	Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
+//     Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
 //     if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
-// 	Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
+//     Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
 
 //     // Frame background brush (color and fill style)
 //     if ( shd.icoFore != 0 || shd.icoBack != 0 )
@@ -842,8 +842,8 @@ void Document::annotationEnd()
 //         // otherwise, icoFore is the one we need to set as bkColor (and icoBack
 //         // is usually white; it's the other color of the pattern, something
 //         // that we can't set in Qt apparently).
-// 	int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-// 	kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
+//     int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
+//     kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
 
 //         // Reverse-engineer MSWord's own hackery: it models various gray levels
 //         // using dithering. But this looks crappy with Qt. So we go back to a

@@ -34,11 +34,11 @@ KPrShapeManagerDisplayMasterStrategy::~KPrShapeManagerDisplayMasterStrategy()
     delete m_strategy;
 }
 
-void KPrShapeManagerDisplayMasterStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint)
+void KPrShapeManagerDisplayMasterStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     if (! dynamic_cast<KPrPlaceholderShape *>(shape)) {
         if (m_strategy->page()->displayShape(shape)) {
-            KoShapeManagerPaintingStrategy::paint(shape, painter, converter, forPrint);
+            KoShapeManagerPaintingStrategy::paint(shape, painter, converter, paintContext);
         }
     }
 }

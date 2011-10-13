@@ -25,7 +25,7 @@
 #include <QString>
 #include <QDebug>
 
-static const char * PROGRAM = "cstwrapper";
+static const char * PROGRAM = "cstwrapper.sh";
 
 CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses)
 : m_resultDir(resultDir)
@@ -116,7 +116,7 @@ void CSTProcessRunner::startMd5(QProcess *process, const QString &document)
     QString dir = m_resultDir + "/" + document + ".check";
     QStringList arguments;
     arguments << dir;
-    process->start("cstmd5gen", arguments, QIODevice::NotOpen);
+    process->start("cstmd5gen.sh", arguments, QIODevice::NotOpen);
 }
 
 void CSTProcessRunner::logResult()

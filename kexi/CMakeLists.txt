@@ -98,7 +98,6 @@ ELSE(KEXI_MOBILE)
   add_subdirectory( main )
   add_subdirectory( formeditor )
   add_subdirectory( migration )
-  add_subdirectory( shapes )
 ENDIF(KEXI_MOBILE)
 
 ########### next target ###############
