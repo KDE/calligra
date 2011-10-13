@@ -45,7 +45,7 @@
 
 #include <calligraversion.h>
 
-bool convert( const KUrl & uIn, const QString & inputFormat, const KUrl & uOut, const QString & outputFormat, const bool batch )
+bool convert( const KUrl & uIn, const QString & inputFormat, const KUrl & uOut, const QString & outputFormat, bool batch )
 {
     KoFilter::ConversionStatus status = KoFilter::OK;
     if ( outputFormat == "application/pdf" ) {
@@ -59,7 +59,7 @@ bool convert( const KUrl & uIn, const QString & inputFormat, const KUrl & uOut, 
                 doc->setReadWrite( false );
                 KoPrintJob* printJob = 0;
                 Calligra::Tables::Doc* tdoc = qobject_cast< Calligra::Tables::Doc* >( doc );
-                if( tdoc ) {
+                if ( tdoc ) {
                     Calligra::Tables::View* tview = new Calligra::Tables::View( 0, tdoc );
                     tview->setActiveSheet( tdoc->map()->sheet( 0 ) );
                     printJob = tview->createPdfPrintJob();
@@ -68,11 +68,21 @@ bool convert( const KUrl & uIn, const QString & inputFormat, const KUrl & uOut, 
                     KoView* view = doc->createView();
                     printJob = view->createPdfPrintJob();
                 }
-                printJob->printer().setOutputFileName( uOut.path() );
-                printJob->printer().setOutputFormat( QPrinter::PdfFormat );
-                printJob->startPrinting();
+                // We should now have a print job - but check to make sure
+                if ( printJob ) {
+                    printJob->printer().setOutputFileName( uOut.path() );
+                    printJob->printer().setOutputFormat( QPrinter::PdfFormat );
+                    printJob->startPrinting();
+                }
+                else {
+                    status = KoFilter::StupidError;
+                    qDebug() << "The document" << uIn.path()
+                    << "of format" << inputFormat
+                    << "was unable to provide a print job for PDF export";
+                }
             }
             else {
+                status = KoFilter::InvalidFormat;
                 qDebug() << "The document" << uIn.path()
                     << "of format" << inputFormat
                     << "failed to open with the error" << error;

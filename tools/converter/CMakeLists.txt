@@ -10,8 +10,7 @@ kde4_add_executable(koconverter ${koconverter_SRCS})
 
 target_link_libraries(koconverter
     komain
-    calligratablescommon
-    kopageapp)
+    calligratablescommon)
 
 install(TARGETS koconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
