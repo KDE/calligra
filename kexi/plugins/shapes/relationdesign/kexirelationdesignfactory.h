@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -16,18 +16,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIRELATIONDESIGNTOOLFACTORY_H
-#define KEXIRELATIONDESIGNTOOLFACTORY_H
+#ifndef KEXIRELATIONDESIGNFACTORY_H
+#define KEXIRELATIONDESIGNFACTORY_H
 
-#include <KoToolFactoryBase.h>
+#include <KoShapeFactoryBase.h>
 
 
-class KexiRelationDesignToolFactory : public KoToolFactoryBase {
-    public:
-        
-        KexiRelationDesignToolFactory ();
-        
-        virtual KoToolBase* createTool ( KoCanvasBase* canvas );
+class KexiRelationDesignFactory : public KoShapeFactoryBase
+{
+public:
+    KexiRelationDesignFactory();
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 };
 
-#endif // KEXIRELATIONDESIGNTOOLFACTORY_H
+#endif // KEXIRELATIONDESIGNFACTORY_H

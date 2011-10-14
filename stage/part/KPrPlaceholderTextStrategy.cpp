@@ -77,7 +77,7 @@ KoShape *KPrPlaceholderTextStrategy::createShape(KoDocumentResourceManager *docu
     return shape;
 }
 
-void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect )
+void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext)
 {
     if ( m_textShape ) {
         painter.save();
@@ -89,7 +89,7 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
         if ( lay ) {
             lay->layout();
         }
-        m_textShape->paint( painter, converter );
+        m_textShape->paint( painter, converter, paintcontext);
 
         KoShape::applyConversion( painter, converter );
         QPen pen( Qt::gray );
@@ -99,7 +99,7 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
         painter.restore();
     }
     else {
-        KPrPlaceholderStrategy::paint( painter, converter, rect );
+        KPrPlaceholderStrategy::paint( painter, converter, rect, paintcontext);
     }
 }
 

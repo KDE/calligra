@@ -22,7 +22,7 @@
 namespace RtfReader
 {
     Destination::Destination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-     m_reader(reader), m_output( output ), m_name( name )
+     m_name( name ), m_reader(reader), m_output( output )
     {
     }
 

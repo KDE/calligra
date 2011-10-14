@@ -16,7 +16,7 @@ else (KEXI_MOBILE)
   if(SHOULD_BUILD_SCRIPTING)
      add_subdirectory(scripting)
   endif(SHOULD_BUILD_SCRIPTING)
-
+  add_subdirectory( shapes )
 endif (KEXI_MOBILE)
 
 #TODO add_subdirectory( relations )

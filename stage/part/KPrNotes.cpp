@@ -44,9 +44,7 @@ class ShapeLoaderHelper : public KoShape
 public:
     ShapeLoaderHelper() { }
 
-    virtual void paint( QPainter &, const KoViewConverter & ) { }
-
-    virtual void paintDecorations( QPainter &, const KoViewConverter &, const KoCanvasBase * ) { }
+    virtual void paint( QPainter &, const KoViewConverter &, KoShapePaintingContext &) { }
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
     {

@@ -118,6 +118,10 @@ public slots:
 
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
+    /// toggle the display of non-printing characters
+    void setShowFormattingChars(bool on);
+    /// toggle the display of table borders
+    void setShowTableBorders(bool on);
     /// go to previous page
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
@@ -185,8 +189,6 @@ private slots:
     void deletePage();
     /// insert a new page
     void insertPage();
-    /// toggle the display of non-printing characters
-    void setShowFormattingChars(bool on);
     /// selects all frames
     void editSelectAllFrames();
     /// calls delete on the active tool
