@@ -1493,7 +1493,9 @@ void View::slotViewSchedule( QAction *act )
         sm = sch->manager();
     }
     setLabel( sm );
+    QApplication::setOverrideCursor( Qt::WaitCursor );
     emit currentScheduleManagerChanged( sm );
+    QApplication::restoreOverrideCursor();
 }
 
 void View::slotActionDestroyed( QObject *o )
@@ -2718,6 +2720,7 @@ void View::slotCreateViewFinished( int )
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
+    QApplication::setOverrideCursor( Qt::WaitCursor );
     if ( prev && prev->type() == ViewListItem::ItemType_Category && m_viewlist->previousViewItem() ) {
         // A view is shown anyway...
         ViewBase *v = qobject_cast<ViewBase*>( m_viewlist->previousViewItem()->view() );
@@ -2742,8 +2745,8 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         if ( v ) {
             v->setGuiActive( true );
         }
-        return;
     }
+    QApplication::restoreOverrideCursor();
 }
 
 QWidget *View::canvas() const

@@ -346,6 +346,9 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
 
 QVariant NodeModel::estimateType( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -371,6 +374,9 @@ QVariant NodeModel::estimateType( const Node *node, int role ) const
 
 QVariant NodeModel::estimateCalendar( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task ) {
@@ -429,6 +435,9 @@ QVariant NodeModel::estimateCalendar( const Node *node, int role ) const
 
 QVariant NodeModel::estimate( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task ) {
@@ -472,6 +481,9 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
 
 QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task && node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
@@ -479,9 +491,15 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
                 s = '(' + s + ')';
                 return s;
             }
-            return node->estimate()->optimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->optimisticRatio();
+            }
+            break;
         case Qt::EditRole:
-            return node->estimate()->optimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->optimisticRatio();
+            }
+            break;
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
@@ -510,6 +528,9 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
 
 QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task && node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
@@ -517,9 +538,15 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
                 s = '(' + s + ')';
                 return s;
             }
-            return node->estimate()->pessimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->pessimisticRatio();
+            }
+            break;
         case Qt::EditRole:
-            return node->estimate()->pessimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->pessimisticRatio();
+            }
+            break;
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
@@ -548,6 +575,9 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
 
 QVariant NodeModel::riskType( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -2634,6 +2664,9 @@ KUndo2Command *NodeModel::setConstraintEndTime( Node *node, const QVariant &valu
 
 KUndo2Command *NodeModel::setEstimateType( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             Estimate::Type v;
@@ -2656,6 +2689,9 @@ KUndo2Command *NodeModel::setEstimateType( Node *node, const QVariant &value, in
 
 KUndo2Command *NodeModel::setEstimateCalendar( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             Calendar *c = 0;
@@ -2679,6 +2715,9 @@ KUndo2Command *NodeModel::setEstimateCalendar( Node *node, const QVariant &value
 
 KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             double d;
@@ -2717,6 +2756,9 @@ KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int ro
 
 KUndo2Command *NodeModel::setOptimisticRatio( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->optimisticRatio() ) {
@@ -2731,6 +2773,9 @@ KUndo2Command *NodeModel::setOptimisticRatio( Node *node, const QVariant &value,
 
 KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->pessimisticRatio() ) {
@@ -2744,6 +2789,9 @@ KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value
 
 KUndo2Command *NodeModel::setRiskType( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             int val = 0;

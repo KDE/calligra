@@ -2042,10 +2042,12 @@ double Project::bcwp( const QDate &date, long id ) const
         plannedCompleted = plan.costTo( date );
         budgetedCompleted = budgetedCostPerformed( date, id );
     }
-    double percentageCompletion = budgetedCompleted / budgetAtCompletion;
-    
-    double c = budgetAtCompletion * percentageCompletion; //??
-    kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+    double c = 0.0;
+    if ( budgetAtCompletion > 0.0 ) {
+        double percentageCompletion = budgetedCompleted / budgetAtCompletion;
+        c = budgetAtCompletion * percentageCompletion; //??
+        kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+    }
     return c;
 }
 
