@@ -1384,12 +1384,13 @@ void View::slotProjectWorktimeFinished( int result )
 }
 
 void View::slotSelectionChanged( ScheduleManager *sm ) {
-    kDebug();
+    kDebug()<<sm;
     if ( sm == 0 ) {
         return;
     }
     int idx = m_scheduleActions.values().indexOf( sm->expected() );
     if ( idx < 0 ) {
+        kDebug()<<sm<<"could not find schedule"<<sm->expected();
         return;
     }
     QAction *a = m_scheduleActions.keys().at( idx );
@@ -1438,8 +1439,8 @@ void View::slotScheduleAdded( const MainSchedule *sch )
     if ( sch->type() != Schedule::Expected ) {
         return; // Only view expected
     }
-    MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
+    MainSchedule *s = const_cast<MainSchedule*>( sch );
+//     kDebug()<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     QAction *checked = m_scheduleActionGroup->checkedAction();
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
@@ -1458,7 +1459,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
 
 void View::slotScheduleChanged( MainSchedule *sch )
 {
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
+//     kDebug()<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     if ( sch->isDeleted() || ! sch->isScheduled() ) {
         slotScheduleRemoved( sch );
         return;
@@ -1472,7 +1473,7 @@ void View::slotScheduleChanged( MainSchedule *sch )
 QAction *View::addScheduleAction( Schedule *sch )
 {
     QAction *act = 0;
-    if ( ! sch->isDeleted() ) {
+    if ( ! sch->isDeleted() && sch->isScheduled() ) {
         QString n = sch->name();
         act = new KToggleAction( n, this);
         actionCollection()->addAction(n, act );
