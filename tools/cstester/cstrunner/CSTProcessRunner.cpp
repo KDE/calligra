@@ -34,7 +34,7 @@ CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &re
     QDir docDir(documentDir);
     QFileInfoList list = docDir.entryInfoList(QDir::Files, QDir::Name);
     foreach(const QFileInfo &entry, list) {
-        m_documents.append(entry.fileName());
+        m_documents.append(entry.filePath());
     }
 }
 
@@ -63,7 +63,7 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
                 if (exitCode & 127) {
                     int signal = exitCode & 127;
                     m_killed[signal].append(document);
-                    //qDebug() << "exit with signal" << signal;
+//                     qDebug() << "exit with signal:" << signal;
                 }
                 startCstester(process);
             }
@@ -74,7 +74,7 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
             }
         }
         else {
-            //qDebug() << "md5 done";
+//             qDebug() << "md5 done";
             startCstester(process);
         }
     }
@@ -101,9 +101,9 @@ void CSTProcessRunner::startCstester(QProcess *process)
         }
     }
     else {
-        //TODO check if result is already there and then do nothing
+        //TODO: check if result is already there and then do nothing
         QString document = m_documents.takeFirst();
-        //qDebug() << "start:" << process << document;
+//         qDebug() << "start:" << process << document;
         QStringList arguments;
         arguments << "--graphicssystem" << "raster" << "--outdir" << m_resultDir << "--create" << document;
         m_processes[process] = document;
