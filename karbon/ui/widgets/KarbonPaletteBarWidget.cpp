@@ -173,13 +173,13 @@ void KarbonPaletteBarWidget::selectPalette()
         if (selectedIndex) {
             selectedColorSet = dynamic_cast<KoColorSet*>(resources.at(selectedIndex-1));
         } else {
-            updateDocumentColors();
             selectedColorSet = &m_documentColors;
         }
         if (selectedColorSet) {
             m_colorBar->setPalette(selectedColorSet);
             KConfigGroup paletteGroup = KGlobal::mainComponent().config()->group("PaletteBar");
             paletteGroup.writeEntry("LastPalette", selectedColorSet->name());
+            updateDocumentColors();
         }
     }
 }
