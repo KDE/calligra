@@ -128,29 +128,13 @@ void Schedule::setType( const QString& type )
     m_type = Expected;
     if ( type == "Expected" )
         m_type = Expected;
-    else if ( type == "Optimistic" )
-        m_type = Optimistic;
-    else if ( type == "Pessimistic" )
-        m_type = Pessimistic;
 }
 
 QString Schedule::typeToString( bool translate ) const
 {
     if ( translate ) {
-        if ( m_type == Expected )
-            return i18n( "Expected" );
-        if ( m_type == Optimistic )
-            return i18n( "Optimistic" );
-        if ( m_type == Pessimistic )
-            return i18n( "Pessimistic" );
         return i18n( "Expected" );
     } else {
-        if ( m_type == Expected )
-            return "Expected";
-        if ( m_type == Optimistic )
-            return "Optimistic";
-        if ( m_type == Pessimistic )
-            return "Pessimistic";
         return "Expected";
     }
 }
@@ -1472,16 +1456,13 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     m_baselined( false ),
     m_allowOverbooking( false ),
     m_checkExternalAppointments( true ),
-    m_calculateAll( false ),
     m_usePert( false ),
     m_recalculate( false ),
     m_schedulingDirection( false ),
     m_scheduling( false ),
     m_progress( 0 ),
     m_maxprogress( 0 ),
-    m_expected( 0 ),
-    m_optimistic( 0 ),
-    m_pessimistic( 0 )
+    m_expected( 0 )
 {
     //kDebug()<<name;
 }
@@ -1525,16 +1506,6 @@ void ScheduleManager::insertChild( ScheduleManager *sm, int index )
 void ScheduleManager::createSchedules()
 {
     setExpected( m_project.createSchedule( m_name, Schedule::Expected ) );
-    if ( m_recalculate ) {
-        m_calculateAll = false;
-    }
-    if ( m_calculateAll ) {
-        setOptimistic( m_project.createSchedule( m_name, Schedule::Optimistic ) );
-        setPessimistic( m_project.createSchedule( m_name, Schedule::Pessimistic ) );
-    } else {
-        setOptimistic( 0 );
-        setPessimistic( 0 );
-    }
 }
 
 int ScheduleManager::indexOf( const ScheduleManager *child ) const
@@ -1589,14 +1560,6 @@ void ScheduleManager::setName( const QString& name )
     if ( m_expected ) {
         m_expected->setName( name );
         m_project.changed( m_expected );
-    }
-    if ( m_optimistic ) {
-        m_optimistic->setName( name );
-        m_project.changed( m_optimistic );
-    }
-    if ( m_pessimistic ) {
-        m_pessimistic->setName( name );
-        m_project.changed( m_pessimistic );
     }
     m_project.changed( this );
 }
@@ -1654,12 +1617,6 @@ void ScheduleManager::setUsePert( bool on )
 {
     m_usePert = on;
     m_project.changed( this );
-}
-
-void ScheduleManager::setCalculateAll( bool on )
-{
-     m_calculateAll = on;
-     m_project.changed( this );
 }
 
 void ScheduleManager::setSchedulingDirection( bool on )
@@ -1774,12 +1731,6 @@ void ScheduleManager::setDeleted( bool on )
     if ( m_expected ) {
         m_expected->setDeleted( on );
     }
-    if ( m_optimistic ) {
-        m_optimistic->setDeleted( on );
-    }
-    if ( m_pessimistic ) {
-        m_pessimistic->setDeleted( on );
-    }
     m_project.changed( this );
 }
 
@@ -1787,65 +1738,17 @@ void ScheduleManager::setExpected( MainSchedule *sch )
 {
     //kDebug()<<m_expected<<","<<sch;
     if ( m_expected ) {
-        int i = m_schedules.indexOf( m_expected );
         m_project.sendScheduleToBeRemoved( m_expected );
         m_expected->setDeleted( true );
-        m_schedules.removeAt( i );
         m_project.sendScheduleRemoved( m_expected );
     }
     m_expected = sch;
     if ( sch ) {
         m_project.sendScheduleToBeAdded( this, 0 );
         sch->setManager( this );
-        m_schedules.insert( 0, sch );
         m_expected->setDeleted( false );
         m_project.sendScheduleAdded( sch );
     }
-    Q_ASSERT( m_schedules.count() <= 3 );
-    m_project.changed( this );
-}
-
-void ScheduleManager::setOptimistic( MainSchedule *sch )
-{
-    if ( m_optimistic ) {
-        int i = m_schedules.indexOf( m_optimistic );
-        m_project.sendScheduleToBeRemoved( m_optimistic );
-        m_optimistic->setDeleted( true );
-        m_schedules.removeAt( i );
-        m_project.sendScheduleRemoved( m_optimistic );
-    }
-    m_optimistic = sch;
-    if ( sch ) {
-        int i = m_schedules.count() >= 1 ? 1 : 0;
-        m_project.sendScheduleToBeAdded( this, i );
-        sch->setManager( this );
-        m_schedules.insert( i, sch );
-        m_optimistic->setDeleted( false );
-        m_project.sendScheduleAdded( sch );
-    }
-    Q_ASSERT( m_schedules.count() <= 3 );
-    m_project.changed( this );
-}
-
-void ScheduleManager::setPessimistic( MainSchedule *sch )
-{
-    if ( m_pessimistic ) {
-        int i = m_schedules.indexOf( m_pessimistic );
-        m_project.sendScheduleToBeRemoved( m_pessimistic );
-        m_pessimistic->setDeleted( true );
-        m_schedules.removeAt( i );
-        m_project.sendScheduleRemoved( m_pessimistic );
-    }
-    m_pessimistic = sch;
-    if ( sch ) {
-        int i = m_schedules.count() >= 2 ? 2 : m_schedules.count();
-        m_project.sendScheduleToBeAdded( this, i );
-        sch->setManager( this );
-        m_schedules.insert( i, sch );
-        m_pessimistic->setDeleted( false );
-        m_project.sendScheduleAdded( sch );
-    }
-    Q_ASSERT( m_schedules.count() <= 3 );
     m_project.changed( this );
 }
 
@@ -1858,18 +1761,8 @@ QStringList ScheduleManager::state() const
     if ( m_scheduling ) {
         return lst << i18n( "Scheduling" );
     }
-    if ( m_expected == 0 && m_optimistic == 0 && m_pessimistic == 0 ) {
+    if ( m_expected == 0 ) {
         return lst << i18n( "Not scheduled" );
-    }
-    if ( Schedule *s = m_pessimistic ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
-            return lst << i18n( "Error" );
-        }
-    }
-    if ( Schedule *s = m_optimistic ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
-            return lst << i18n( "Error" );
-        }
     }
     if ( Schedule *s = m_expected ) {
         if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
@@ -1878,21 +1771,6 @@ QStringList ScheduleManager::state() const
         return s->state();
     }
     return lst;
-}
-
-int ScheduleManager::numSchedules() const
-{
-    return schedules().count();
-}
-
-int ScheduleManager::indexOf( const MainSchedule* sch ) const
-{
-    return schedules().indexOf( const_cast<MainSchedule*>(sch) );
-}
-
-QList<MainSchedule*> ScheduleManager::schedules() const
-{
-    return m_schedules;
 }
 
 void ScheduleManager::incProgress()
@@ -1945,10 +1823,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
             sch->setManager( this );
             switch ( sch->type() ) {
                 case Schedule::Expected: setExpected( sch ); break;
-                case Schedule::Optimistic: setOptimistic( sch ); break;
-                case Schedule::Pessimistic: setPessimistic( sch ); break;
             }
-            m_calculateAll = schedules().count() > 1;
         }
         return true;
     }
@@ -1975,8 +1850,6 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                 sch->setManager( this );
                 switch ( sch->type() ) {
                     case Schedule::Expected: setExpected( sch ); break;
-                    case Schedule::Optimistic: setOptimistic( sch ); break;
-                    case Schedule::Pessimistic: setPessimistic( sch ); break;
                 }
             }
         } else if ( e.tagName() == "plan" ) {
@@ -1989,7 +1862,6 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
-    m_calculateAll = schedules().count() > 1;
     return true;
 }
 
@@ -2037,14 +1909,11 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "scheduler-plugin-id", m_schedulerPluginId );
     el.setAttribute( "recalculate", m_recalculate );
     el.setAttribute( "recalculate-from", m_recalculateFrom.toString( Qt::ISODate ) );
-    foreach ( MainSchedule *s, schedules() ) {
-        //kDebug()<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
-        if ( !s->isDeleted() /*&& s->isScheduled()*/ ) {
-            QDomElement schs = el.ownerDocument().createElement( "schedule" );
-            el.appendChild( schs );
-            s->saveXML( schs );
-            m_project.saveAppointments( schs, s->id() );
-        }
+    if ( m_expected && ! m_expected->isDeleted() ) {
+        QDomElement schs = el.ownerDocument().createElement( "schedule" );
+        el.appendChild( schs );
+        m_expected->saveXML( schs );
+        m_project.saveAppointments( schs, m_expected->id() );
     }
     foreach ( ScheduleManager *sm, m_children ) {
         sm->saveXML( el );
