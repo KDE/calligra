@@ -37,7 +37,12 @@ public:
     ~KoMarker();
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    void saveOdf(KoShapeSavingContext &context) const;
+    /**
+     * Save the marker
+     *
+     * @return The reference of the marker.
+     */
+    QString saveOdf(KoShapeSavingContext &context) const;
 
     QString name() const;
     QPainterPath path() const;

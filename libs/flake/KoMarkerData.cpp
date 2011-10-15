@@ -26,6 +26,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoGenStyle.h>
 #include "KoShapeLoadingContext.h"
+#include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
 
 static const struct {
@@ -137,7 +138,8 @@ bool KoMarkerData::loadOdf(qreal penWidth, KoShapeLoadingContext &context)
 void KoMarkerData::saveStyle(KoGenStyle &style, qreal lineWidth, KoShapeSavingContext &context) const
 {
     if (m_marker) {
-        style.addProperty(markerOdfData[m_position].m_markerPositionSave, "foo", KoGenStyle::GraphicType);
+        QString markerRef = m_marker->saveOdf(context);
+        style.addProperty(markerOdfData[m_position].m_markerPositionSave, markerRef, KoGenStyle::GraphicType);
         style.addPropertyPt(markerOdfData[m_position].m_markerWidthSave, m_width + lineWidth * 1.5, KoGenStyle::GraphicType);
         style.addProperty(markerOdfData[m_position].m_markerCenterSave, m_center, KoGenStyle::GraphicType);
     }

@@ -22,12 +22,15 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include "KoPathShape.h"
 #include "KoPathShapeLoader.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 
 #include <QString>
+#include <QUrl>
 #include <QPainterPath>
 
 class KoMarker::Private
@@ -71,24 +74,23 @@ bool KoMarker::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &conte
     d->path = pathShape.outline();
     d->viewBox = KoPathShape::loadOdfViewbox(element);
 
-    // TODO should the adding to the context be done here?
     QString displayName(element.attributeNS(KoXmlNS::draw, "display-name"));
     if (displayName.isEmpty()) {
         displayName = element.attributeNS(KoXmlNS::draw, "name");
     }
+    d->name = displayName;
     return true;
 }
 
-void KoMarker::saveOdf(KoShapeSavingContext &context) const
+QString KoMarker::saveOdf(KoShapeSavingContext &context) const
 {
-    KoXmlWriter &writer(context.xmlWriter());
-    writer.startElement("draw:marker");
-    writer.addAttribute("svg:d", d->d);
+    KoGenStyle style(KoGenStyle::MarkerStyle);
+    style.addAttribute("draw:display-name", d->name);
+    style.addAttribute("svg:d", d->d);
     QString viewBox = QString("0 0 %1 %2").arg(qRound(d->viewBox.width())).arg(qRound(d->viewBox.height()));
-    writer.addAttribute("svg:viewBox", viewBox);
-    writer.addAttribute("draw:name", ""); // TODO how to save the name via the context?
-    writer.addAttribute("draw:display-name", d->name);
-    writer.endElement();
+    style.addAttribute("svg:viewBox", viewBox);
+    QString name = QString(QUrl::toPercentEncoding(d->name, "", " ")).replace('%', '_');
+    return context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
 }
 
 QString KoMarker::name() const
