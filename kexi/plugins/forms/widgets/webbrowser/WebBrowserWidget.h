@@ -1,6 +1,5 @@
-/* <This file is part of the KDE project>
-    Copyright (C) 2011  Shreya Pandit <shreya@shreyapandit.com>
-
+/* This file is part of the KDE project
+   Copyright (C) 2011  Shreya Pandit <shreya@shreyapandit.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,10 +40,10 @@ class QHBoxLayout;
 class QUrl;
 
 class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget, 
-					       public KexiFormDataItemInterface,
-					       public KFormDesigner::FormWidgetInterface
+                                               public KexiFormDataItemInterface,
+                                               public KFormDesigner::FormWidgetInterface
 {
-    Q_OBJECT																		
+    Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(QString url READ url WRITE setUrl)
@@ -52,7 +51,7 @@ class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget,
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QIcon icon READ icon)
     Q_PROPERTY(bool modified READ modified)
-    Q_PROPERTY(QString selectedText READ selectedText) 						//Do
+    //Q_PROPERTY(QString selectedText READ selectedText) 						//Do
     Q_PROPERTY(qreal textScale READ textScale WRITE setTextScale)
     
      
