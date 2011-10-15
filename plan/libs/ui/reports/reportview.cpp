@@ -818,7 +818,7 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
 void ReportDesignPanel::populateToolbar( KToolBar *tb )
 {
     tb->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    KAction *a = new KAction( i18n( "Section Editor" ), this );
+    KAction *a = new KAction( KIcon( "document-properties" ), i18n( "Section Editor" ), this );
     a->setObjectName("sectionedit");
     connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
     tb->addAction( a );

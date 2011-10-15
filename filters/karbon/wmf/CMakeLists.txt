@@ -12,7 +12,8 @@ kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
 
 target_link_libraries(wmfimport libwmf komain koodf)
 
-install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wmfimport
+        DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -25,16 +26,13 @@ target_link_libraries(
     libwmf
     karboncommon
     karbonui
-    pigmentcms
-    komain
-    flake
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTGUI_LIBRARY}
 )
 
-install(TARGETS wmfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wmfexport
+        DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop
+        DESTINATION ${SERVICES_INSTALL_DIR})
 

@@ -54,7 +54,6 @@ public:
         ScheduleDirection,
         ScheduleOverbooking,
         ScheduleDistribution,
-//        ScheduleCalculate,
         SchedulePlannedStart,
         SchedulePlannedFinish,
         ScheduleScheduler,
@@ -133,9 +132,6 @@ protected:
     
     QVariant usePert( const QModelIndex &index, int role ) const;
     bool setUsePert( const QModelIndex &index, const QVariant &value, int role );
-
-    QVariant calculateAll( const QModelIndex &index, int role ) const;
-    bool setCalculateAll( const QModelIndex &index, const QVariant &value, int role );
 
     QVariant projectStart( const QModelIndex &index, int role ) const;
     QVariant projectEnd( const QModelIndex &index, int role ) const;
