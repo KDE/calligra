@@ -197,6 +197,14 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
     
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
+    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
+    qreal lineWidth = 0;
+    if (lineBorder) {
+        lineWidth = lineBorder->lineWidth();
+    }
+    d->beginMarker.saveStyle(style, lineWidth, context);
+    d->endMarker.saveStyle(style, lineWidth, context);
+
     return KoShape::saveStyle(style, context);
 }
 
@@ -223,40 +231,9 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
     }
-    KoMarkerSharedLoadingData *markerShared = dynamic_cast<KoMarkerSharedLoadingData*>(context.sharedData(MARKER_SHARED_LOADING_ID));
-    if (markerShared) {
-        //draw:marker-start-width="0.686cm" draw:marker-end="Arrow"
-        // TODO load width
-        // draw:marker-start-width="0.686cm" draw:marker-end="Arrow" draw:marker-end-width="0.686cm" draw:marker-end-center="true"
-        const QString markerStart(styleStack.property(KoXmlNS::draw, "marker-start"));
-        const QString markerStartWidth(styleStack.property(KoXmlNS::draw, "marker-start-width"));
-        if (!markerStart.isEmpty() && !markerStartWidth.isEmpty()) {
-            KoMarker *marker = markerShared->marker(markerStart);
-            if (marker) {
-                d->beginMarker.setMarker(marker);
-                qreal markerWidth = KoUnit::parseValue(markerStartWidth);
-                qreal markerBaseWidth = qMax(qreal(0.0), markerWidth - lineWidth * 1.5);
-                kDebug(30006) << markerWidth << markerBaseWidth << lineWidth * 1.5;
-                d->beginMarker.setWidth(markerBaseWidth);
-                d->beginMarker.setCenter(styleStack.property(KoXmlNS::draw, "marker-start-center") == "true");
-            }
-        }
 
-        const QString markerEnd(styleStack.property(KoXmlNS::draw, "marker-end"));
-        const QString markerEndWidth(styleStack.property(KoXmlNS::draw, "marker-end-width"));
-        if (!markerEnd.isEmpty() && !markerEndWidth.isEmpty()) {
-            KoMarker *marker = markerShared->marker(markerEnd);
-            if (marker) {
-                d->endMarker.setMarker(marker);
-                qreal markerWidth = KoUnit::parseValue(markerEndWidth);
-                qreal markerBaseWidth = qMax(qreal(0.0), markerWidth - lineWidth * 1.5);
-                kDebug(30006) << markerWidth << markerBaseWidth << lineWidth * 1.5;
-                d->endMarker.setWidth(markerBaseWidth);
-                d->endMarker.setCenter(styleStack.property(KoXmlNS::draw, "marker-end-center") == "true");
-            }
-        }
-        kDebug(30006) << "use markers" << d->beginMarker.marker() << d->endMarker.marker();
-    }
+    d->beginMarker.loadOdf(lineWidth, context);
+    d->endMarker.loadOdf(lineWidth, context);
 }
 
 QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element)
