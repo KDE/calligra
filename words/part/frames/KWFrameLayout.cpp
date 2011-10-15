@@ -33,6 +33,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeBackground.h>
+#include <KoDocumentResourceManager.h>
 
 #include <QTextLayout>
 #include <QTextDocument>
@@ -51,7 +52,7 @@ public:
     virtual ~KWPageBackground()
     {
     }
-    virtual void paint(QPainter &painter, const KoViewConverter &converter)
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
     {
         if (background()) {
             applyConversion(painter, converter);
@@ -700,7 +701,7 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     if (!factory)
         return 0;
-    KoResourceManager *rm = 0;
+    KoDocumentResourceManager *rm = 0;
     if (m_document)
         rm = m_document->resourceManager();
     KoShape *shape = factory->createDefaultShape(rm);

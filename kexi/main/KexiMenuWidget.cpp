@@ -517,7 +517,11 @@ void KexiMenuWidgetPrivate::updateActionRects() const
     const int hmargin = style->pixelMetric(QStyle::PM_MenuHMargin, &opt, q),
               vmargin = style->pixelMetric(QStyle::PM_MenuVMargin, &opt, q),
               icone = KIconLoader::SizeMedium;
+#ifdef __GNUC__
 #warning todo adjust this size for smaller displays
+#else
+#pragma WARNING( todo adjust this size for smaller displays )
+#endif
               //style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
     const int fw = style->pixelMetric(QStyle::PM_MenuPanelWidth, &opt, q);
     const int deskFw = frameWidth(&opt);

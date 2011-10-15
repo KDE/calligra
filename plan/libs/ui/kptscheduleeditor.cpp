@@ -41,6 +41,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QKeyEvent>
+#include <QContextMenuEvent>
 
 #include <kaction.h>
 #include <kicon.h>
@@ -474,6 +475,7 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setRootIsDecorated( false );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
+    setAlternatingRowColors( true );
 
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
 
@@ -494,6 +496,12 @@ QRegExp ScheduleLogTreeView::filterRegExp() const
 void ScheduleLogTreeView::slotShowDebug( bool on )
 {
     on ? setFilterWildcard( QString() ) : setFilterWildcard("[^0]" );
+}
+
+void ScheduleLogTreeView::contextMenuEvent ( QContextMenuEvent *e )
+{
+    kDebug()<<indexAt(e->pos())<<" at"<<e->pos();
+    emit contextMenuRequested( indexAt( e->pos() ), e->globalPos() );
 }
 
 void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
@@ -594,10 +602,43 @@ void ScheduleLogView::setGuiActive( bool activate )
     }*/
 }
 
+void ScheduleLogView::slotEdit()
+{
+    QString id = sender()->property( "p_identity" ).toString();
+    if ( id.isEmpty() ) {
+        emit editNode( project() );
+        return;
+    }
+    Node *n = project()->findNode( id );
+    if ( n ) {
+        emit editNode( n );
+        return;
+    }
+    Resource *r = project()->findResource( id );
+    if ( r ) {
+        emit editResource( r );
+        return;
+    }
+    kWarning()<<"No object";
+}
+
 void ScheduleLogView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    qDebug()<<index.row()<<","<<index.column()<<":"<<pos;
-    slotHeaderContextMenuRequested( pos );
+    if ( ! isReadWrite() || ! index.isValid() ) {
+        return;
+    }
+    KMenu *m = new KMenu( this );
+    QString id = index.data( ScheduleLogItemModel::IdentityRole ).toString();
+    if ( id.isEmpty() ) {
+        return;
+    }
+    KAction *a = new KAction( KIcon( "document-edit" ), i18n( "Edit..." ), m );
+    a->setProperty( "p_identity", id );
+    m->addAction( a );
+    connect(a, SIGNAL(triggered(bool)), SLOT(slotEdit()));
+    m->addSeparator();
+    m->exec( pos );
+    delete m;
 }
 
 void ScheduleLogView::slotScheduleSelectionChanged( ScheduleManager *sm )
@@ -686,6 +727,8 @@ ScheduleHandlerView::ScheduleHandlerView( KoDocument *part, QWidget *parent )
     v->setObjectName( "ScheduleLogView" );
     addView( v, tab, i18n( "Scheduling Log" ) );
     connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), v, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
+    connect(v, SIGNAL(editNode(Node*)), SIGNAL(editNode(Node*)));
+    connect(v, SIGNAL(editResource(Resource*)), SIGNAL(editResource(Resource*)));
 }
 
 void ScheduleHandlerView::currentTabChanged( int )

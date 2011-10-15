@@ -311,9 +311,7 @@ void KWStatusBar::updateCursorPosition()
     KWTextFrameSet *fs = m_currentView ? m_currentView->kwdocument()->mainFrameSet() : 0;
     KoTextEditor *editor = fs ? KoTextDocument(fs->document()).textEditor() : 0;
     if (editor) {
-        QTextCursor *c = editor->cursor();
-        if (c)
-            line = c->block().firstLineNumber() + 1;
+        line = editor->block().firstLineNumber() + 1;
     }
     m_lineLabel->m_label->setText(i18nLine.subs(line).toString());
     m_lineLabel->m_edit->setText(QString::number(line));
@@ -346,7 +344,7 @@ void KWStatusBar::updateMousePosition(const QPoint &pos)
 void KWStatusBar::resourceChanged(int key, const QVariant &value)
 {
     Q_UNUSED(value);
-    if (key ==  KoCanvasResource::CurrentPage) {
+    if (key ==  KoCanvasResourceManager::CurrentPage) {
         updatePageCount();
         updateCursorPosition();
         updatePageStyle();
@@ -403,7 +401,7 @@ void KWStatusBar::setCurrentView(KWView *view)
     if (m_currentView) {
         KoCanvasBase *const canvas =  m_currentView->canvasBase();
         Q_ASSERT(canvas);
-        KoResourceManager *resourceManager = canvas->resourceManager();
+        KoCanvasResourceManager *resourceManager = canvas->resourceManager();
         Q_ASSERT(resourceManager);
         disconnect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
             this, SLOT(resourceChanged(int, QVariant)));
@@ -444,7 +442,7 @@ void KWStatusBar::setCurrentView(KWView *view)
         QTimer::singleShot(0, this, SLOT(createZoomWidget()));
     }
 
-    KoResourceManager *resourceManager = view->canvasBase()->resourceManager();
+    KoCanvasResourceManager *resourceManager = view->canvasBase()->resourceManager();
     Q_ASSERT(resourceManager);
     connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)), Qt::QueuedConnection);
 

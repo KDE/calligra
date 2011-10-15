@@ -25,10 +25,10 @@ ulimit -t 60
 # make sure not to eat all available memory
 ulimit -v 1269760
 
-for file in $(ls | grep -v "check$")
+ls -b | grep -v "check$" | while read file
 do
     if [ ! -e "${1}/${file}.check" ]
     then
-        cstester --graphicssystem raster --outdir $1 --create $file || echo $file >> $LOG
+        cstester --graphicssystem raster --outdir $1 --create "$file" || echo $file >> $LOG
     fi
 done

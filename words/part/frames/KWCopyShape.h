@@ -42,11 +42,13 @@ public:
     ~KWCopyShape();
 
     /// reimplemented from KoShape
-    void paint(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented from KoShape
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented from KoShape
     QPainterPath outline() const;
+    /// reimplemented from KoShape
+    QRectF outlineRect() const;
+    /// reimplemented from KoShape
+    QRectF boundingRect() const;
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     /// reimplemented

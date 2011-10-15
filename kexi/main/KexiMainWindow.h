@@ -592,9 +592,9 @@ protected slots:
     //! Only called on project opening and closing.
     void updateReadOnlyState();
 
+    void slotProjectWelcome();
     void slotProjectNew();
     void slotProjectOpen();
-    void slotProjectOpenRecent();
     void slotProjectSave();
     void slotProjectSaveAs();
     void slotProjectPrint();
@@ -626,7 +626,7 @@ protected slots:
     void slotSettings();
     void slotConfigureKeys();
     void slotConfigureToolbars();
-    void slotToolsProjectMigration();
+    void slotToolsImportProject();
     void slotToolsImportTables();
     void slotToolsCompactDatabase();
 
@@ -734,6 +734,18 @@ protected slots:
     void slotMultiTabBarTabClicked(int id);
 
 private:
+    //! Adds action @a name with text @a text and optional shortcut @a shortcut.
+    //! This is helper method containing workaround for Kexi
+    //! until KAction::setShortcut() works again.
+    //! @return created action
+    KAction* addAction(const char *name, const QString &text, const char *shortcut = 0);
+
+    //! Like @ref addAction(const char *, const QString&, const char *) but also adds
+    //! icon @a icon.
+    //! @return created action
+    KAction* addAction(const char *name, const KIcon &icon, const QString& text,
+                       const char *shortcut = 0);
+
     class MessageHandler;
     class Private;
     Private * const d;

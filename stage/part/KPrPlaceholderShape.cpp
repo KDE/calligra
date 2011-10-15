@@ -44,11 +44,11 @@ KPrPlaceholderShape::~KPrPlaceholderShape()
     delete m_strategy;
 }
 
-void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter )
+void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     QRectF rect( QPointF( 0, 0 ), size() );
     if ( m_strategy ) {
-        m_strategy->paint( painter, converter, rect );
+        m_strategy->paint( painter, converter, rect, paintcontext);
     }
     else {
         applyConversion( painter, converter );
@@ -92,7 +92,7 @@ void KPrPlaceholderShape::saveOdf( KoShapeSavingContext & context ) const
     writer.endElement(); // draw:frame
 }
 
-KoShape *KPrPlaceholderShape::createShape(KoResourceManager *documentResources)
+KoShape *KPrPlaceholderShape::createShape(KoDocumentResourceManager *documentResources)
 {
     Q_ASSERT( m_strategy );
     KoShape * shape = 0;
@@ -102,7 +102,7 @@ KoShape *KPrPlaceholderShape::createShape(KoResourceManager *documentResources)
     return shape;
 }
 
-void KPrPlaceholderShape::initStrategy(KoResourceManager *documentResources)
+void KPrPlaceholderShape::initStrategy(KoDocumentResourceManager *documentResources)
 {
     Q_ASSERT( m_strategy );
     if ( m_strategy ) {

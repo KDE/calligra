@@ -26,7 +26,7 @@
 
 #include <KDebug>
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>
@@ -147,14 +147,14 @@ void KPrViewModeNotes::wheelEvent(QWheelEvent *event, const QPointF &point)
 void KPrViewModeNotes::activate(KoPAViewMode *previousViewMode)
 {
     Q_UNUSED( previousViewMode );
-    m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, true);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, true);
     m_view->setActionEnabled( KoPAView::AllActions, false );
     updateActivePage( m_view->activePage() );
 }
 
 void KPrViewModeNotes::deactivate()
 {
-    m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, 0);
     m_view->setActionEnabled( KoPAView::AllActions, true );
     m_view->doUpdateActivePage(m_view->activePage());
 }

@@ -25,7 +25,7 @@
 #include <QString>
 #include <QDebug>
 
-static const char * PROGRAM = "cstwrapper";
+static const char * PROGRAM = "cstwrapper.sh";
 
 CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses)
 : m_resultDir(resultDir)
@@ -34,7 +34,7 @@ CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &re
     QDir docDir(documentDir);
     QFileInfoList list = docDir.entryInfoList(QDir::Files, QDir::Name);
     foreach(const QFileInfo &entry, list) {
-        m_documents.append(entry.fileName());
+        m_documents.append(entry.filePath());
     }
 }
 
@@ -63,7 +63,7 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
                 if (exitCode & 127) {
                     int signal = exitCode & 127;
                     m_killed[signal].append(document);
-                    //qDebug() << "exit with signal" << signal;
+//                     qDebug() << "exit with signal:" << signal;
                 }
                 startCstester(process);
             }
@@ -74,7 +74,7 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
             }
         }
         else {
-            //qDebug() << "md5 done";
+//             qDebug() << "md5 done";
             startCstester(process);
         }
     }
@@ -101,9 +101,9 @@ void CSTProcessRunner::startCstester(QProcess *process)
         }
     }
     else {
-        //TODO check if result is already there and then do nothing
+        //TODO: check if result is already there and then do nothing
         QString document = m_documents.takeFirst();
-        //qDebug() << "start:" << process << document;
+//         qDebug() << "start:" << process << document;
         QStringList arguments;
         arguments << "--graphicssystem" << "raster" << "--outdir" << m_resultDir << "--create" << document;
         m_processes[process] = document;
@@ -116,7 +116,7 @@ void CSTProcessRunner::startMd5(QProcess *process, const QString &document)
     QString dir = m_resultDir + "/" + document + ".check";
     QStringList arguments;
     arguments << dir;
-    process->start("cstmd5gen", arguments, QIODevice::NotOpen);
+    process->start("cstmd5gen.sh", arguments, QIODevice::NotOpen);
 }
 
 void CSTProcessRunner::logResult()

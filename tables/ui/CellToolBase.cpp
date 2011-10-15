@@ -106,7 +106,6 @@
 // Calligra
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoResourceManager.h>
 #include <KoColorPopupAction.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
@@ -119,6 +118,7 @@
 #include <KoViewConverter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoColor.h>
 
 // KDE
 #include <KAction>

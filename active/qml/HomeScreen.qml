@@ -22,17 +22,15 @@
 import QtQuick 1.0
 import CalligraActive 1.0
 
-Rectangle {
+Image {
     id: homeScreen
 
     function openDocument(path) {
         doc.openDocument(path);
     }
 
-    gradient: Gradient {
-         GradientStop { position: 0.0; color: "#808080" }
-         GradientStop { position: 1.0; color: "#303030" }
-    }
+    source: "qrc:///images/fabrictexture.png"
+    fillMode: Image.Tile
 
     DocumentTypeSelector {
         id: docTypeSelector
@@ -61,16 +59,33 @@ Rectangle {
 
         imageSource: "qrc:///images/words.png"
 	textPosition: "right"
-	text: "Open Document"
+	text: "Open File"
         width: homeScreen.width/2.1;
 	height: 100;
+
+        anchors.left: parent.left
+        anchors.right: parent.horizontalCenter
+        anchors.bottom: aboutCalligraButton.top
+        anchors.margins: 10
+
+        onClicked: mainwindow.openFileDialog()
+    }
+
+    Button {
+        id: aboutCalligraButton
+
+        imageSource: "qrc:///images/active-about.png"
+        textPosition: "right"
+        text: "About Calligra Active"
+        width: homeScreen.width/2.1;
+        height: 100;
 
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.bottom: progressBar.top
         anchors.margins: 10
 
-        onClicked: mainwindow.openFileDialog()
+        onClicked: homeScreen.state = "showing-about-screen"
     }
 
     Rectangle {
@@ -91,6 +106,14 @@ Rectangle {
         onDocumentLoaded: {
             homeScreen.state = "doc"
         }
+    }
+
+    AboutCalligraActive {
+        id: aboutScreen
+
+        width: parent.width; height: parent.height;
+        anchors.left: parent.right
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     transitions: Transition {
@@ -115,18 +138,55 @@ Rectangle {
                 target: doc
                 anchors.left: parent.left
             }
+            AnchorChanges {
+                target: openFileDialogButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: aboutCalligraButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
         },
         State {
             name: "showTextDocs"
-            PropertyChanges { target: recentFiles; model: recentTextDocsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "OpenDocumentTextDocument"; }
         },
         State {
             name: "showSpreadsheets"
-            PropertyChanges { target: recentFiles; model: recentSpreadsheetsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "Spreadsheet"; }
         },
         State {
             name: "showPresentations"
-            PropertyChanges { target: recentFiles; model: recentPresentationsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "Presentation"; }
+        },
+        State {
+            name: "showing-about-screen"
+            AnchorChanges {
+                target: docTypeSelector
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: recentFiles
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: aboutScreen
+                anchors.left: parent.left
+            }
+            AnchorChanges {
+                target: openFileDialogButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: aboutCalligraButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
         }
     ]
 }

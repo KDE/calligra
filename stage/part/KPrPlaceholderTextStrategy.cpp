@@ -56,7 +56,7 @@ KPrPlaceholderTextStrategy::~KPrPlaceholderTextStrategy()
     delete m_textShape;
 }
 
-KoShape *KPrPlaceholderTextStrategy::createShape(KoResourceManager *documentResources)
+KoShape *KPrPlaceholderTextStrategy::createShape(KoDocumentResourceManager *documentResources)
 {
     KoShape * shape = KPrPlaceholderStrategy::createShape(documentResources);
     if ( m_textShape ) {
@@ -77,7 +77,7 @@ KoShape *KPrPlaceholderTextStrategy::createShape(KoResourceManager *documentReso
     return shape;
 }
 
-void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect )
+void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext)
 {
     if ( m_textShape ) {
         painter.save();
@@ -89,7 +89,7 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
         if ( lay ) {
             lay->layout();
         }
-        m_textShape->paint( painter, converter );
+        m_textShape->paint( painter, converter, paintcontext);
 
         KoShape::applyConversion( painter, converter );
         QPen pen( Qt::gray );
@@ -99,7 +99,7 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
         painter.restore();
     }
     else {
-        KPrPlaceholderStrategy::paint( painter, converter, rect );
+        KPrPlaceholderStrategy::paint( painter, converter, rect, paintcontext);
     }
 }
 
@@ -161,7 +161,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
     return true;
 }
 
-void KPrPlaceholderTextStrategy::init(KoResourceManager *documentResources)
+void KPrPlaceholderTextStrategy::init(KoDocumentResourceManager *documentResources)
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );

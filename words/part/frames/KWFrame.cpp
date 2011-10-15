@@ -34,19 +34,24 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor)
         : m_shape(shape),
         m_frameBehavior(Words::AutoExtendFrameBehavior),
         m_newFrameBehavior(Words::NoFollowupFrame),
-        m_anchoredPageNumber(pageNumber),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
-        m_minimumFrameHeight(0.0) // no minimum height per default
+        m_minimumFrameHeight(0.0), // no minimum height per default
+        m_anchor(anchor)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
     if (parent)
         parent->addFrame(this);
+
+    if (!m_anchor) {
+        m_anchor = new KoTextAnchor(shape); // sets itself on the shape
+        m_anchor->setAnchorType(KoTextAnchor::AnchorPage);
+    }
 
     KWTextFrameSet* parentFrameSet = dynamic_cast<KWTextFrameSet*>(parent);
     if (parentFrameSet) {

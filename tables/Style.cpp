@@ -393,15 +393,16 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
             setVAlign(Style::VDistributed);
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
-        QColor color(styleStack.property(KoXmlNS::fo, "background-color"));
-        if (styleStack.property(KoXmlNS::fo, "background-color") == "transparent") {
-            color = QColor(); // Transparent color found: invalidate it.
+        str = styleStack.property(KoXmlNS::fo, "background-color");
+        if (str == "transparent") {
             kDebug(36003) << "\t\t fo:background-color: transparent";
-            setBackgroundColor(color);
-        }
-        if (color.isValid()) {
-            kDebug(36003) << "\t\t fo:background-color:" << color.name();
-            setBackgroundColor(color);
+            setBackgroundColor(QColor());
+        } else {
+            QColor color(str);
+            if (color.isValid()) {
+                kDebug(36003) << "\t\t fo:background-color:" << color.name();
+                setBackgroundColor(color);
+            }
         }
     }
 

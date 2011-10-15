@@ -24,8 +24,12 @@
 #include "CADocumentInfo.h"
 #include "calligra_active_global.h"
 
+#include <KDE/KGlobal>
+#include <KDE/KStandardDirs>
+
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
+#include <QDeclarativeEngine>
 #include <QSettings>
 #include <QFileDialog>
 #include <QDesktopServices>
@@ -57,6 +61,11 @@ MainWindow::MainWindow(QWidget *parent)
                 break;
         }
     }
+
+    foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
+        m_view->engine()->addImportPath(importPath);
+    }
+
 
     m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFiles));
     m_view->rootContext()->setContextProperty("recentTextDocsModel", QVariant::fromValue(recentTextDocs));

@@ -472,7 +472,7 @@ QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
         }
         PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
         const wvWare::Word97::FSPA* spa = it.current();
-	Q_ASSERT(m_pSpa == spa);
+    Q_ASSERT(m_pSpa == spa);
         return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);
     }
     else if (o.childAnchor) {
@@ -497,7 +497,7 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
             out.setRect(oldCoords);
             //process shape information for the group
             out.setGroupRectangle(*sp->shapeGroup);
-	}
+    }
     }
 
     //create graphic style for the group shape
@@ -736,10 +736,10 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
-	//containers.  Not parsing Blip store because MD4 digests in
-	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
-	//picture path association.
+    //Parse content of the Delay stream by using offsets from OfficeArtFBSE
+    //containers.  Not parsing Blip store because MD4 digests in
+    //OfficeArtFBSE happen to be out-dated, which complicates the pib to
+    //picture path association.
         if (block.anon.is<OfficeArtFBSE>()) {
             OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {
@@ -905,16 +905,6 @@ void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const Dra
             style.addProperty("style:run-through", "foreground", gt);
         }
     }
-
-    // margins are related to text wrapping
-    // fo:margin-bottom
-    // fo:margin-left
-    // fo:margin-right
-    // fo:margin-top
-    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700., gt);
-    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700., gt);
-    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700., gt);
-    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700., gt);
 }
 
 void WordsGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
@@ -1050,6 +1040,11 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     style.addProperty("fo:border-left", Conversion::setBorderAttributes(m_picf->brcLeft));
     style.addProperty("fo:border-bottom", Conversion::setBorderAttributes(m_picf->brcBottom));
     style.addProperty("fo:border-right", Conversion::setBorderAttributes(m_picf->brcRight));
+
+    // NOTE: The default margin-left/margin-right values DO NOT make sense for
+    // inline pictures, also after conversion of test files to DOCX, both
+    // attributes were set to ZEROs.  Default margin-top/margin-bottom is ZERO.
+    style.addPropertyPt("style:margin", 0);
 
     styleName = out.styles.insert(style);
 

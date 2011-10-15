@@ -44,7 +44,7 @@ KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
     delete m_strategy;
 }
 
-void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
+void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
         if ( m_animationCache->value(shape, "visibility", true).toBool() ) {
@@ -59,7 +59,7 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
 
             painter.setTransform(transform);
             // paint shape
-            shapeManager()->paintShape( shape, painter, converter, forPrint );
+            shapeManager()->paintShape( shape, painter, converter, paintContext);
             painter.restore();  // for the transform
         }
     }

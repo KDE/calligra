@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Edge Label Switch Router with NetFlow
+Name[ca]=Edge Label Switch Router with NetFlow
 Name[nb]=Edge Label svitsjruter med NetFlow
 Name[nl]=Edge Label Switch Router met NetFlow
 Name[pl]=Edge Label Switch Router z NetFlow
@@ -8,3 +9,4 @@ Name[pt_BR]=Roteador/Comutador Edge Label com NetFlow
 Name[sv]=Edge etikettbytesrouter med nätflöde
 Name[uk]=Комутатор-маршрутизатор Edge з NetFlow
 Name[x-test]=xxEdge Label Switch Router with NetFlowxx
+Name[zh_TW]=Edge Label 交換路由器，含 NetFlow

@@ -80,7 +80,7 @@ private:
     
 private slots:
     void slotPrintReport();
-    void slotRenderKSpread();
+    void slotRenderTables();
     void slotExportHTML();
     void slotRenderODT();
 };

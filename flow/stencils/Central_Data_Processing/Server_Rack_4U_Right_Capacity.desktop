@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=ServerRack4URightCapacity
+Name[ca]=ServerRack4URightCapacity
 Name[de]=ServerRack4URightCapacity
 Name[el]=ServerRack4URightCapacity
+Name[es]=Rack servidor 4U de capacidad correcta
 Name[et]=ServerRack4URightCapacity
 Name[nb]=ServerRack4URightCapacity
 Name[nl]=ServerRack4UJuisteCapaciteit
@@ -11,3 +13,4 @@ Name[pt_BR]=Rack de servidor 4U de capacidade correta
 Name[sv]=Serverrack 4U rätt kapacitet
 Name[uk]=Серверна стійка 4U правильна місткість
 Name[x-test]=xxServerRack4URightCapacityxx
+Name[zh_TW]=伺服器機架 4U RightCapacity

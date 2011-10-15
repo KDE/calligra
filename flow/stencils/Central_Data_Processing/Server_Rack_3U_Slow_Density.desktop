@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=ServerRack3USlowDensity
+Name[ca]=ServerRack3USlowDensity
 Name[de]=ServerRack3USlowDensity
 Name[el]=ServerRack3USlowDensity
+Name[es]=Rack servidor 3U de capacidad lenta
 Name[et]=ServerRack3USlowDensity
 Name[nb]=ServerRack3USlowDensity
 Name[nl]=ServerRack3ULangzameDichtheid
@@ -11,3 +13,4 @@ Name[pt_BR]=Rack de servidor 3U de densidade lenta
 Name[sv]=Serverrack 3U långsam täthet
 Name[uk]=Серверна стійка 3U повільна щільність
 Name[x-test]=xxServerRack3USlowDensityxx
+Name[zh_TW]=伺服器機架 3U SlowDensity

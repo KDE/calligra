@@ -50,7 +50,7 @@
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_kexi(0), m_functions(0), m_pageCount(0), m_currentPage(0)
+        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
 {   
     setObjectName("KexiReportDesigner_DataView");
     m_scrollArea = new QScrollArea(this);
@@ -75,43 +75,43 @@ KexiReportView::KexiReportView(QWidget *parent)
 #ifndef KEXI_MOBILE
     viewActions << (a = new KAction(KIcon("printer"), i18n("Print"), this));
     a->setObjectName("print_report");
-    a->setToolTip(i18n("Print Report"));
+    a->setToolTip(i18n("Print report"));
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 #endif
     
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(i18n("Export: "), this));
+    viewActions << (a = new KAction(i18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
     viewActions << (a = new KAction(KIcon("words"), QString(), this));
 #else
-    viewActions << (a = new KAction(KIcon("words"), i18n("Save to Words"), this));
+    viewActions << (a = new KAction(KIcon("words"), i18nc("Note: do not translate 'Words'", "Save to Words"), this));
 #endif
     a->setObjectName("save_to_words");
-    a->setToolTip(i18n("Save the report to a Words document"));
-    a->setWhatsThis(i18n("Save the report to a Words document"));
+    a->setToolTip(i18n("Save the report to a Words application's document"));
+    a->setWhatsThis(i18n("Saves the report to a Words application's document."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderODT()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("kspread"), " ", this));
+    viewActions << (a = new KAction(KIcon("tables"), " ", this));
 #else
-    viewActions << (a = new KAction(KIcon("kspread"), i18n("Save to KSpread"), this));
+    viewActions << (a = new KAction(KIcon("tables"), i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet"), this));
 #endif
-    a->setObjectName("save_to_kspread");
-    a->setToolTip(i18n("Save the report to a KSpread document"));
-    a->setWhatsThis(i18n("Saves the current report to a KSpread document."));
+    a->setObjectName("save_to_tables");
+    a->setToolTip(i18n("Save the report to a spreadsheet"));
+    a->setWhatsThis(i18n("Saves the current report to a spreadsheet."));
     a->setEnabled(true);
-    connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
+    connect(a, SIGNAL(triggered()), this, SLOT(slotRenderTables()));
 
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(KIcon("text-html"), " ", this));
 #else
-    viewActions << (a = new KAction(KIcon("text-html"), i18n("Export as Web Page"), this));
+    viewActions << (a = new KAction(KIcon("text-html"), i18n("Save as Web Page"), this));
 #endif
-    a->setObjectName("export_as_web_page");
-    a->setToolTip(i18n("Export the report as web page"));
-    a->setWhatsThis(i18n("Exports the report to a web page file."));
+    a->setObjectName("save_as_web_page");
+    a->setToolTip(i18n("Save the report as web page"));
+    a->setWhatsThis(i18n("Saves the report to a web page file."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportHTML()));
 
@@ -153,7 +153,7 @@ void KexiReportView::slotPrintReport()
     delete renderer;
 }
 
-void KexiReportView::slotRenderKSpread()
+void KexiReportView::slotRenderTables()
 {
     KoReportRendererBase *renderer;
     KoReportRendererContext cxt;
@@ -161,20 +161,19 @@ void KexiReportView::slotRenderKSpread()
     renderer = m_factory.createInstance("ods");
 
     if (renderer) {
-        cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), "*.ods", this, i18n("Save Report to.."));
+        cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), "*.ods", this, i18n("Save Report to..."));
         if (!cxt.destinationUrl.isValid()) {
-            KMessageBox::error(this, i18n("Report not exported.The URL was invalid"), i18n("Not Saved"));
             return;
         }
 
         if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
-            int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+            int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you want to overwrite it?", cxt.destinationUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
             if (wantSave != KMessageBox::Continue) {
                 return;
             }
         }
         if (!renderer->render(cxt, m_reportDocument)) {
-            KMessageBox::error(this, i18n("Failed to open %1 in KSpread", cxt.destinationUrl.prettyUrl()) , i18n("Opening in KSpread failed"));
+            KMessageBox::error(this, i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Tables application.", cxt.destinationUrl.prettyUrl()) , i18n("Opening in Tables application failed"));
         } else {
             KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
@@ -189,20 +188,19 @@ void KexiReportView::slotRenderODT()
     renderer = m_factory.createInstance("odt");
 
     if (renderer) {
-        cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), "*.odt", this, i18n("Save Report to.."));
+        cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), "*.odt", this, i18n("Save Report to..."));
         if (!cxt.destinationUrl.isValid()) {
-            KMessageBox::error(this, i18n("Report not exported.The URL was invalid"), i18n("Not Saved"));
             return;
         }
 
         if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
-            int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+            int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you want to overwrite it?", cxt.destinationUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
             if (wantSave != KMessageBox::Continue) {
                 return;
             }
         }
         if (!renderer->render(cxt, m_reportDocument)) {
-            KMessageBox::error(this, i18n("Failed to save %1 to Words", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words failed"));
+            KMessageBox::error(this, i18nc("Note: do not translate 'Words'", "Failed to save %1 to Words applications", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words application failed"));
         } else {
             KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
@@ -214,14 +212,13 @@ void KexiReportView::slotExportHTML()
     KoReportRendererContext cxt;
     KoReportRendererBase *renderer;
     
-    cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Export Report as Web Page"));
+    cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report as Web Page"));
     if (!cxt.destinationUrl.isValid()) {
-        KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Exported"));
         return;
     }
     if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
         int wantSave = KMessageBox::warningContinueCancel(this,
-            i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()),
+            i18n("The file %1 exists.\nDo you want to overwrite it?", cxt.destinationUrl.path()),
             i18n("Warning"), KGuiItem(i18n("Overwrite")));
         if (wantSave != KMessageBox::Continue) {
             return;
@@ -230,7 +227,7 @@ void KexiReportView::slotExportHTML()
 
     bool css = (KMessageBox::questionYesNo(this,
         i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, "
-             "or export using a Table which outputs a much simpler format."), i18n("Export Style"),
+             "or export using a Table which outputs a much simpler format."), i18n("Style"),
              KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 
     if (css){
@@ -241,9 +238,9 @@ void KexiReportView::slotExportHTML()
     }
     
     if (!renderer->render(cxt, m_reportDocument)) {
-        KMessageBox::error(this, i18n("Exporting report to %1 failed", cxt.destinationUrl.prettyUrl()), i18n("Exporting failed"));
+        KMessageBox::error(this, i18n("Saving report to %1 failed", cxt.destinationUrl.prettyUrl()), i18n("Saving failed"));
     } else {
-        KMessageBox::information(this, i18n("Report exported to %1", cxt.destinationUrl.prettyUrl()) , i18n("Exporting Succeeded"));
+        KMessageBox::information(this, i18n("Report saved to %1", cxt.destinationUrl.prettyUrl()) , i18n("Saving succeeded"));
         KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
     }
 }
@@ -289,9 +286,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             //If using a kexidb source, add a functions scripting object
             if (tempData()->connectionDefinition.attribute("type") == "internal") {
-                if (!m_functions) {
-                    m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
+                //Delete old functions
+                if (m_functions) {
+                    delete m_functions;
                 }
+                
+                m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
 

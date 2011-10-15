@@ -27,6 +27,7 @@
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptresource.h"
 #include "kptschedule.h"
 #include "kptdatetime.h"
 #include "kptschedulerplugin.h"
@@ -251,11 +252,22 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
     }
     flags &= ~Qt::ItemIsEditable;
     ScheduleManager *sm = manager( index );
+    int capabilities = sm->schedulerPlugin()->capabilities();
     if ( sm && ! sm->isBaselined() ) {
         switch ( index.column() ) {
             case ScheduleModel::ScheduleState: break;
+            case ScheduleModel::ScheduleOverbooking:
+                if ( capabilities & SchedulerPlugin::AllowOverbooking &&
+                     capabilities & SchedulerPlugin::AvoidOverbooking )
+                {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
             case ScheduleModel::ScheduleDirection:
-                if ( sm->parentManager() == 0 ) {
+                if ( sm->parentManager() == 0 &&
+                    capabilities & SchedulerPlugin::ScheduleForward &&
+                    capabilities & SchedulerPlugin::ScheduleBackward)
+                {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -433,14 +445,44 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
     if ( sm == 0 ) {
         return QVariant();
     }
+    int capabilities = sm->schedulerPlugin()->capabilities();
     switch ( role ) {
         case Qt::EditRole:
             return sm->allowOverbooking();
         case Qt::DisplayRole:
+            if ( capabilities & SchedulerPlugin::AllowOverbooking &&
+                 capabilities & SchedulerPlugin::AvoidOverbooking )
+            {
+                return sm->allowOverbooking() ? i18n( "Allow" ) : i18n( "Avoid" );
+            }
+            if ( capabilities & SchedulerPlugin::AllowOverbooking ) {
+                return sm->allowOverbooking() ? i18n( "Allow" ) : i18n( "(Avoid)" );
+            }
+            if ( capabilities & SchedulerPlugin::AvoidOverbooking ) {
+                return sm->allowOverbooking() ? i18n( "(Allow)" ) : i18n( "Avoid" );
+            }
+            break;
         case Qt::ToolTipRole:
-            return sm->allowOverbooking() ? i18n( "Allow" ) : i18n( "Avoid" );
+            if ( capabilities & SchedulerPlugin::AllowOverbooking &&
+                 capabilities & SchedulerPlugin::AvoidOverbooking )
+            {
+                return sm->allowOverbooking()
+                            ? i18nc( "@info:tooltip", "Allow overbooking resources" )
+                            : i18nc( "@info:tooltip", "Avoid overbooking resources" );
+            }
+            if ( capabilities & SchedulerPlugin::AllowOverbooking ) {
+                return sm->allowOverbooking()
+                            ? i18nc( "@info:tooltip", "Allow overbooking of resources" )
+                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", sm->schedulerPlugin()->name() );
+            }
+            if ( capabilities & SchedulerPlugin::AvoidOverbooking ) {
+                return sm->allowOverbooking()
+                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", sm->schedulerPlugin()->name() )
+                            : i18nc( "@info:tooltip", "Avoid overbooking resources" );
+            }
+            break;
         case Role::EnumList:
-            return QStringList() << i18n( "Avoid" ) << i18n( "Allow" );
+            return QStringList() << i18nc( "@label:listbox", "Avoid" ) << i18nc( "@label:listbox", "Allow" );
         case Role::EnumListValue:
             return sm->allowOverbooking() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -477,10 +519,13 @@ QVariant ScheduleItemModel::usePert( const QModelIndex &index, int role ) const
         case Qt::EditRole:
             return sm->usePert();
         case Qt::DisplayRole:
-        case Qt::ToolTipRole:
             return sm->usePert() ? i18n( "PERT" ) : i18n( "None" );
+        case Qt::ToolTipRole:
+            return sm->usePert()
+                        ? i18nc( "@info:tooltip", "Use PERT distribution to calculate expected estimate for the tasks" )
+                        : i18nc( "@info:tooltip", "Use the tasks expected estimate directly" );
         case Role::EnumList:
-            return QStringList() << i18n( "None" ) << i18n( "PERT" );
+            return QStringList() << i18nc( "@label:listbox", "None" ) << i18nc( "@label:listbox", "PERT" );
         case Role::EnumListValue:
             return sm->usePert() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -502,46 +547,6 @@ bool ScheduleItemModel::setUsePert( const QModelIndex &index, const QVariant &va
         case Qt::EditRole:
             emit executeCommand( new ModifyScheduleManagerDistributionCmd( *sm, value.toBool(), i18nc( "(qtundo-format)", "Modify scheduling distribution" ) ) );
             emit slotManagerChanged( static_cast<ScheduleManager*>( sm ) );
-            return true;
-    }
-    return false;
-}
-
-QVariant ScheduleItemModel::calculateAll( const QModelIndex &index, int role ) const
-{
-    ScheduleManager *sm = manager ( index );
-    if ( sm == 0 ) {
-        return QVariant();
-    }
-    switch ( role ) {
-        case Qt::EditRole:
-            return sm->calculateAll();
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            return sm->calculateAll() ? i18n( "All" ) : i18n( "Expected only" );
-        case Role::EnumList:
-            return QStringList() << i18n( "Expected only" ) << i18n( "All" );
-        case Role::EnumListValue:
-            return sm->calculateAll() ? 1 : 0;
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVariant &value, int role )
-{
-    ScheduleManager *sm = manager ( index );
-    if ( sm == 0 ) {
-        return false;
-    }
-    switch ( role ) {
-        case Qt::EditRole:
-            //FIXME remove?
-            emit executeCommand( new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify schedule calculate" ) );
             return true;
     }
     return false;
@@ -625,14 +630,44 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
     if ( sm == 0 ) {
         return QVariant();
     }
+    int capabilities = sm->schedulerPlugin()->capabilities();
     switch ( role ) {
         case Qt::EditRole:
             return sm->schedulingDirection();
         case Qt::DisplayRole:
+            if ( capabilities & SchedulerPlugin::ScheduleForward &&
+                 capabilities & SchedulerPlugin::ScheduleBackward )
+            {
+                return sm->schedulingDirection() ? i18n( "Backwards" ) : i18n( "Forward" );
+            }
+            if ( capabilities & SchedulerPlugin::ScheduleForward ) {
+                return sm->schedulingDirection() ? i18n( "(Backwards)" ) : i18n( "Forward" );
+            }
+            if ( capabilities & SchedulerPlugin::ScheduleBackward ) {
+                return sm->schedulingDirection() ? i18n( "Backwards" ) : i18n( "(Forward)" );
+            }
+            break;
         case Qt::ToolTipRole:
-            return sm->schedulingDirection() ? i18n( "Backwards" ) : i18n( "Forward" );
+            if ( capabilities & SchedulerPlugin::ScheduleForward &&
+                 capabilities & SchedulerPlugin::ScheduleBackward )
+            {
+                return sm->schedulingDirection()
+                            ? i18nc( "@info:tooltip", "Schedule project from target end time" )
+                            : i18nc( "@info:tooltip", "Schedule project from target start time" );
+            }
+            if ( capabilities & SchedulerPlugin::ScheduleForward ) {
+                return sm->schedulingDirection()
+                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", sm->schedulerPlugin()->name() )
+                            : i18nc( "@info:tooltip", "Schedule project from target start time" );
+            }
+            if ( capabilities & SchedulerPlugin::ScheduleBackward ) {
+                return sm->schedulingDirection()
+                            ? i18nc( "@info:tooltip", "Schedule project from target end time" )
+                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", sm->schedulerPlugin()->name() );
+            }
+            break;
         case Role::EnumList:
-            return QStringList() << i18n( "Forward" ) << i18n( "Backwards" );
+            return QStringList() << i18nc( "@label:listbox", "Forward" ) << i18nc( "@label:listbox", "Backwards" );
         case Role::EnumListValue:
             return sm->schedulingDirection() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -680,8 +715,11 @@ QVariant ScheduleItemModel::scheduler( const QModelIndex &index, int role ) cons
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::WhatsThisRole: {
+            QString s = pl->description();
+            return s.isEmpty() ? QVariant() : QVariant( s );
+        }
     }
     return QVariant();
 }
@@ -735,7 +773,6 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::ScheduleDirection: result = schedulingDirection( index, role ); break;
         case ScheduleModel::ScheduleOverbooking: result = allowOverbooking( index, role ); break;
         case ScheduleModel::ScheduleDistribution: result = usePert( index, role ); break;
-//        case ScheduleModel::ScheduleCalculate: result = calculateAll( index, role ); break;
         case ScheduleModel::SchedulePlannedStart: result = projectStart(  index, role ); break;
         case ScheduleModel::SchedulePlannedFinish: result = projectEnd( index, role ); break;
         case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;
@@ -1030,9 +1067,31 @@ void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
     }
     lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
     QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
-    item->setData( log.severity );
+    item->setData( log.severity, SeverityRole );
     lst.append( item );
     lst.append( new QStandardItem( log.message ) );
+    foreach ( QStandardItem *itm, lst ) {
+            if ( log.resource ) {
+                itm->setData( log.resource->id(), IdentityRole );
+            } else if ( log.node ) {
+                itm->setData( log.node->id(), IdentityRole );
+            }
+            switch ( log.severity ) {
+            case Schedule::Log::Type_Debug:
+                itm->setData( Qt::darkYellow, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Info:
+                break;
+            case Schedule::Log::Type_Warning:
+                itm->setData( Qt::blue, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Error:
+                itm->setData( Qt::red, Qt::ForegroundRole );
+                break;
+            default:
+                break;
+        }
+    }
     appendRow( lst );
 //     kDebug()<<"added:"<<row<<rowCount()<<columnCount();
 }
@@ -1053,6 +1112,12 @@ void ScheduleLogItemModel::refresh()
     foreach ( const Schedule::Log &l, m_schedule->logs() ) {
         addLogEntry( l, i++ );
     }
+}
+
+QString ScheduleLogItemModel::identity( const QModelIndex &idx ) const
+{
+    QStandardItem *itm = itemFromIndex( idx );
+    return itm ? itm->data( IdentityRole ).toString() : QString();
 }
 
 void ScheduleLogItemModel::slotManagerChanged( ScheduleManager *manager )

@@ -27,11 +27,8 @@
 KWApplicationConfig::KWApplicationConfig()
         : m_viewFrameBorders(true),
         m_viewRulers(false),
-        m_viewFormattingChars(false),
-        m_viewFormattingBreak(false),
-        m_viewFormattingSpace(false),
-        m_viewFormattingEndParag(false),
-        m_viewFormattingTabs(false),
+        m_showFormattingChars(false),
+        m_showTableBorders(true),
         m_createBackupFile(true),
         m_statusBarShowPage(true),
         m_statusBarShowPageStyle(true),
@@ -60,11 +57,8 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setNbPagePerRow(interface.readEntry("nbPagePerRow",4));
 //    m_maxRecentFiles = interface.readEntry("NbRecentFile", 10);
 
-    m_viewFormattingChars = interface.readEntry("ViewFormattingChars", m_viewFormattingChars);
-    m_viewFormattingBreak = interface.readEntry("ViewFormattingBreaks", m_viewFormattingBreak);
-    m_viewFormattingSpace = interface.readEntry("ViewFormattingSpace", m_viewFormattingSpace);
-    m_viewFormattingEndParag = interface.readEntry("ViewFormattingEndParag", m_viewFormattingEndParag);
-    m_viewFormattingTabs = interface.readEntry("ViewFormattingTabs", m_viewFormattingTabs);
+    m_showFormattingChars = interface.readEntry("ViewFormattingChars", m_showFormattingChars);
+    m_showTableBorders = interface.readEntry("ViewTableBorders", m_showTableBorders);
 
     m_viewFrameBorders = interface.readEntry("ViewFrameBorders", m_viewFrameBorders);
 
@@ -130,11 +124,8 @@ void KWApplicationConfig::save()
 {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
-    interface.writeEntry("ViewFormattingChars", m_viewFormattingChars);
-    interface.writeEntry("ViewFormattingBreaks", m_viewFormattingBreak);
-    interface.writeEntry("ViewFormattingEndParag", m_viewFormattingEndParag);
-    interface.writeEntry("ViewFormattingTabs", m_viewFormattingTabs);
-    interface.writeEntry("ViewFormattingSpace", m_viewFormattingSpace);
+    interface.writeEntry("ViewFormattingChars", m_showFormattingChars);
+    interface.writeEntry("ViewTableBorders", m_showTableBorders);
     interface.writeEntry("ViewFrameBorders", m_viewFrameBorders);
     interface.writeEntry("Zoom", m_zoom);
     interface.writeEntry("ZoomMode", (int)m_zoomMode);

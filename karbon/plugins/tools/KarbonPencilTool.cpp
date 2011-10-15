@@ -28,11 +28,12 @@
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoColor.h>
 #include <KoPathPoint.h>
 #include <KoPathPointData.h>
 #include <KoPathPointMergeCommand.h>
+#include <KoShapePaintingContext.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -74,7 +75,8 @@ void KarbonPencilTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.setTransform(m_shape->absoluteTransformation(&converter) * painter.transform());
 
         painter.save();
-        m_shape->paint(painter, converter);
+        KoShapePaintingContext paintContext; //FIXME
+        m_shape->paint(painter, converter, paintContext);
         painter.restore();
 
         if (m_shape->border()) {

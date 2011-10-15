@@ -23,8 +23,7 @@
 #include <kmessagebox.h>
 
 #include "KoDocumentInfo.h"
-#include <KoMainWindow.h>
-#include <KoToolManager.h>
+#include "KoMainWindow.h"
 
 #include <QApplication>
 #include <QLabel>
@@ -43,6 +42,7 @@
 #include <QDomElement>
 #include <kundo2command.h>
 #include <QTimer>
+#include <QDockWidget>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -326,18 +326,10 @@ View::View( Part* part, QWidget* parent )
 
 #endif
 
-    m_progress = 0;
     m_estlabel = new QLabel( "", 0 );
     if ( statusBar() ) {
         addStatusBarItem( m_estlabel, 0, true );
-        //m_progress = new QProgressBar();
-        //addStatusBarItem( m_progress, 0, true );
-        //m_progress->hide();
     }
-    m_progressBarTimer.setSingleShot( true );
-    connect( &m_progressBarTimer, SIGNAL( timeout() ), this, SLOT( removeProgressBarItems() ) );
-
-    connect( &getProject(), SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), this, SLOT(slotCalculationStarted(Project*, ScheduleManager*)));
 
     connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
 
@@ -353,12 +345,27 @@ View::View( Part* part, QWidget* parent )
 
     connect( getPart(), SIGNAL( workPackageLoaded() ), SLOT( slotWorkPackageLoaded() ) );
     //kDebug()<<" end";
+    QTimer::singleShot( 0, this, SLOT( hideToolDocker() ) );
 }
 
 View::~View()
 {
 /*    removeStatusBarItem( m_estlabel );
     delete m_estlabel;*/
+}
+
+// hackish way to get rid of unused docker, but as long as no official way exists...
+void View::hideToolDocker()
+{
+    if ( shell() ) {
+        foreach ( QDockWidget *w, shell()->dockWidgets() ) {
+            if ( w->objectName() == "sharedtooldocker" ) {
+                w->setFeatures( QDockWidget::DockWidgetClosable );
+                w->hide();
+                break;
+            }
+        }
+    }
 }
 
 ViewAdaptor* View::dbusObject()
@@ -459,15 +466,6 @@ void View::createViews()
         createScheduleHandler( cat, "ScheduleHandlerView", QString(), TIP_USE_DEFAULT_TEXT );
 
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
-        createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createPerformanceStatusView( cat, "PerformanceStatusView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createTaskStatusView( cat, "TaskStatusView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createTaskView( cat, "TaskView", QString(), TIP_USE_DEFAULT_TEXT );
-
-        createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
         createGanttView( cat, "GanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -478,6 +476,18 @@ void View::createViews()
         createResourceAppointmentsGanttView( cat, "ResourceAppointmentsGanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        cat = m_viewlist->addCategory( "Execution", i18nc( "Project execution views", "Execution" ) );
+
+        createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createPerformanceStatusView( cat, "PerformanceStatusView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createTaskStatusView( cat, "TaskStatusView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createTaskView( cat, "TaskView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
         cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
         // A little hack to get the user started...
@@ -852,6 +862,9 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), handler, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ) );
 
     connect( handler, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    connect(handler, SIGNAL(editNode(Node*)), this, SLOT(slotOpenNode(Node*)));
+    connect(handler, SIGNAL(editResource(Resource*)), this, SLOT(slotEditResource(Resource*)));
 
     handler->draw( getProject() );
     handler->updateReadWrite( m_readWrite );
@@ -1363,12 +1376,13 @@ void View::slotProjectWorktimeFinished( int result )
 }
 
 void View::slotSelectionChanged( ScheduleManager *sm ) {
-    kDebug();
+    kDebug()<<sm;
     if ( sm == 0 ) {
         return;
     }
     int idx = m_scheduleActions.values().indexOf( sm->expected() );
     if ( idx < 0 ) {
+        kDebug()<<sm<<"could not find schedule"<<sm->expected();
         return;
     }
     QAction *a = m_scheduleActions.keys().at( idx );
@@ -1417,8 +1431,8 @@ void View::slotScheduleAdded( const MainSchedule *sch )
     if ( sch->type() != Schedule::Expected ) {
         return; // Only view expected
     }
-    MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
+    MainSchedule *s = const_cast<MainSchedule*>( sch );
+//     kDebug()<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     QAction *checked = m_scheduleActionGroup->checkedAction();
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
@@ -1437,7 +1451,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
 
 void View::slotScheduleChanged( MainSchedule *sch )
 {
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
+//     kDebug()<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     if ( sch->isDeleted() || ! sch->isScheduled() ) {
         slotScheduleRemoved( sch );
         return;
@@ -1451,7 +1465,7 @@ void View::slotScheduleChanged( MainSchedule *sch )
 QAction *View::addScheduleAction( Schedule *sch )
 {
     QAction *act = 0;
-    if ( ! sch->isDeleted() ) {
+    if ( ! sch->isDeleted() && sch->isScheduled() ) {
         QString n = sch->name();
         act = new KToggleAction( n, this);
         actionCollection()->addAction(n, act );
@@ -1472,7 +1486,9 @@ void View::slotViewSchedule( QAction *act )
         sm = sch->manager();
     }
     setLabel( sm );
+    QApplication::setOverrideCursor( Qt::WaitCursor );
     emit currentScheduleManagerChanged( sm );
+    QApplication::restoreOverrideCursor();
 }
 
 void View::slotActionDestroyed( QObject *o )
@@ -1513,10 +1529,6 @@ void View::slotPlugScheduleActions()
     slotViewSchedule( ca );
 }
 
-void View::slotProgressChanged( int )
-{
-}
-
 void View::slotProjectCalculated( ScheduleManager *sm )
 {
     // we only get here if current schedule was calculated
@@ -1534,78 +1546,12 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
         // the parent must be scheduled
         return;
     }
-    if ( m_progressBarTimer.isActive() ) {
-        m_progressBarTimer.stop();
-        removeProgressBarItems();
-    }
-//    m_calculationcommands.insert( sm, cmd );
-
-    if ( m_progressBarTimer.isActive() ) {
-        m_progressBarTimer.stop();
-        removeProgressBarItems();
-    }
-//    removeStatusBarItem( m_estlabel );
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-//    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
-//    addStatusBarItem( m_text, 0, true );
-    m_progress = new QProgressBar();
-    m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
-//    addStatusBarItem( m_progress, 0, true );
-
-    connect( project, SIGNAL( maxProgress( int ) ), this, SLOT( slotMaxProgress( int ) ) );
-    connect( project, SIGNAL( sigProgress( int ) ), this, SLOT( slotSetProgress( int ) ) );
-    connect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
-
     CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, sm, i18nc( "(qtundo-format) @info:status 1=schedule name", "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
     slotUpdate();
-}
-
-void View::slotMaxProgress( int p )
-{
-    if ( m_progress ) {
-        m_progress->setMaximum( p );
-    }
-}
-void View::slotSetProgress( int p )
-{
-    if ( m_progress ) {
-        m_progress->setValue( p );
-    }
-}
-
-void View::slotCalculationStarted( Project */*project*/, ScheduleManager */*sm */)
-{
-}
-
-void View::slotCalculationFinished( Project *project, ScheduleManager *sm )
-{
-    switch ( sm->calculationResult() ) {
-        case ScheduleManager::CalculationStopped:
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation stopped", sm->name() ) );
-            break;
-        case ScheduleManager::CalculationCanceled:
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation canceled", sm->name() ) );
-            break;
-        case ScheduleManager::CalculationError:
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation error", sm->name() ) );
-            break;
-        default: {
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation done", sm->name() ) );
-            // if multiple views open, only the view that started calculation has a cmd
-            break;
-        }
-    }
-    if ( m_progress ) {
-        //m_progressBarTimer.start( 2000 );
-    }
-
-    disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
-    disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
-    disconnect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
-    disconnect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
 }
 
 void View::slotRemoveCommands()
@@ -1614,17 +1560,6 @@ void View::slotRemoveCommands()
         m_undocommands.last()->undo();
         delete m_undocommands.takeLast();
     }
-}
-
-void View::removeProgressBarItems()
-{
-    removeStatusBarItem( m_progress );
-    removeStatusBarItem( m_text );
-    addStatusBarItem( m_estlabel, 0, true );
-    delete m_progress;
-    m_progress = 0;
-    delete m_text;
-    m_text = 0;
 }
 
 void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
@@ -2370,11 +2305,15 @@ void View::slotDeleteRelation()
 void View::slotEditResource()
 {
     //kDebug();
-    Resource * r = currentResource();
-    if ( r == 0 ) {
+    slotEditResource( currentResource() );
+}
+
+void View::slotEditResource( Resource *resource )
+{
+    if ( resource == 0 ) {
         return ;
     }
-    ResourceDialog *dia = new ResourceDialog( getProject(), r, this );
+    ResourceDialog *dia = new ResourceDialog( getProject(), resource, this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotEditResourceFinished(int)));
     dia->show();
     dia->raise();
@@ -2630,7 +2569,7 @@ void View::slotOpenReportFileFinished( int result )
     }
     QFile file( fn );
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:</br><filename>%1</filename>", fn ) );
+        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
     QDomDocument doc;
@@ -2693,6 +2632,7 @@ void View::slotCreateViewFinished( int )
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
+    QApplication::setOverrideCursor( Qt::WaitCursor );
     if ( prev && prev->type() == ViewListItem::ItemType_Category && m_viewlist->previousViewItem() ) {
         // A view is shown anyway...
         ViewBase *v = qobject_cast<ViewBase*>( m_viewlist->previousViewItem()->view() );
@@ -2717,8 +2657,8 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         if ( v ) {
             v->setGuiActive( true );
         }
-        return;
     }
+    QApplication::restoreOverrideCursor();
 }
 
 QWidget *View::canvas() const
@@ -2946,7 +2886,7 @@ void View::slotCurrencyConfigFinished( int result )
 QString View::standardTaskStatusReport() const
 {
     QString s;
-    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"KPlato\" >";
+    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"Plan\" >";
     s += "<data-source select-from=\"taskstatus\" >";
     s += "<select-from resourceassignments=\"unchecked\" tasks=\"unchecked\" taskstatus=\"checked\" resourcesandgroups=\"unchecked\" />";
     s += "</data-source>";
@@ -2965,11 +2905,11 @@ QString View::standardTaskStatusReport() const
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
-    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"1\" >";
+    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"1\" >";
     s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"0%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
-    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Project:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
+    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Project:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
@@ -2978,7 +2918,7 @@ QString View::standardTaskStatusReport() const
     s += "</report:line>";
     s += "</report:section>";
     s += "<report:section svg:height=\"1.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-report\" >";
-    s += "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.25cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Task Status Report" ) + "\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >";
+    s += "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.97cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Task Status Report" ) + "\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";

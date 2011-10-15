@@ -1120,8 +1120,9 @@ Utils::XmlWriteBuffer::~XmlWriteBuffer()
 KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
 {
     Q_ASSERT(!m_origWriter && !m_newWriter);
-    if (m_origWriter || m_newWriter)
+    if (m_origWriter || m_newWriter) {
         return 0;
+    }
     m_origWriter = writer; // remember
     m_newWriter = new KoXmlWriter(&m_buffer, m_origWriter->indentLevel() + 1);
     return m_newWriter;
@@ -1130,14 +1131,28 @@ KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
 KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter()
 {
     Q_ASSERT(m_newWriter && m_origWriter);
+    if (!m_newWriter || !m_origWriter) {
+        return 0;
+    }
+    m_origWriter->addCompleteElement(&m_buffer);
+    return releaseWriterInternal();
+}
+
+KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter(QString& bkpXmlSnippet)
+{
+    Q_ASSERT(m_newWriter && m_origWriter);
+    if (!m_newWriter || !m_origWriter) {
+        return 0;
+    }
+    bkpXmlSnippet = QString::fromUtf8(m_buffer.buffer(), m_buffer.buffer().size());
     return releaseWriterInternal();
 }
 
 KoXmlWriter* Utils::XmlWriteBuffer::releaseWriterInternal()
 {
-    if (!m_newWriter || !m_origWriter)
+    if (!m_newWriter || !m_origWriter) {
         return 0;
-    m_origWriter->addCompleteElement(&m_buffer);
+    }
     delete m_newWriter;
     m_newWriter = 0;
     KoXmlWriter* tmp = m_origWriter;
@@ -1325,7 +1340,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
-    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
+    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_prefix(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
     m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
 {
 }
@@ -1345,6 +1360,7 @@ void Utils::ParagraphBulletProperties::clear()
     m_bulletFont = UNUSED;
     m_bulletChar = UNUSED;
     m_numFormat = UNUSED;
+    m_prefix = UNUSED;
     m_suffix = UNUSED;
     m_align = UNUSED;
     m_indent = UNUSED;
@@ -1384,6 +1400,11 @@ void Utils::ParagraphBulletProperties::setMargin(const qreal margin)
 void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
 {
     m_indent = QString("%1").arg(indent);
+}
+
+void Utils::ParagraphBulletProperties::setPrefix(const QString& prefixChar)
+{
+    m_prefix = prefixChar;
 }
 
 void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
@@ -1433,6 +1454,16 @@ QString Utils::ParagraphBulletProperties::bulletFont() const
     return m_bulletFont;
 }
 
+QString Utils::ParagraphBulletProperties::margin() const
+{
+    return m_margin;
+}
+
+QString Utils::ParagraphBulletProperties::indent() const
+{
+    return m_indent;
+}
+
 QString Utils::ParagraphBulletProperties::bulletRelativeSize() const
 {
     return m_bulletRelativeSize;
@@ -1452,6 +1483,9 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     }
     if (properties.m_numFormat != UNUSED) {
         m_numFormat = properties.m_numFormat;
+    }
+    if (properties.m_prefix != UNUSED) {
+        m_prefix = properties.m_prefix;
     }
     if (properties.m_suffix != UNUSED) {
         m_suffix = properties.m_suffix;
@@ -1479,13 +1513,16 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     }
 }
 
-QString Utils::ParagraphBulletProperties::convertToListProperties() const
+QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fileByPowerPoint) const
 {
     QString returnValue;
     QString ending;
     if (m_type == ParagraphBulletProperties::NumberType) {
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
         returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
+        if (m_prefix != UNUSED) {
+            returnValue += QString("style:num-prefix=\"%1\" ").arg(m_prefix);
+        }
         if (m_startValue != UNUSED) {
             returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
         }
@@ -1499,18 +1536,14 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     }
     else {
         returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
-        if ((m_bulletFont.startsWith("Wingdings") || m_bulletFont.startsWith("Symbol")) && m_bulletChar != "") {
-            // In case of wingdings we replace with 'best guess'
-            returnValue += QString("text:bullet-char=\"%1\" ").arg("-");
+
+        if (m_bulletChar == UNUSED) {
+            returnValue += QString("text:bullet-char=\"\" ");
         }
         else {
-            if (m_bulletChar == UNUSED) {
-                returnValue += QString("text:bullet-char=\"\" ");
-            }
-            else {
-                returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
-            }
+            returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
         }
+
         ending = "</text:list-level-style-bullet>";
     }
     returnValue += ">";
@@ -1528,21 +1561,77 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     }
     returnValue += ">";
 
+    // NOTE: DrawingML: If indent and marL were not provided by a master slide
+    // or defaults, then according to the spec. a value of -342900 is implied
+    // for indent and a value of 347663 is implied for marL (no matter which
+    // level and which type of text).  However the result is not compliant with
+    // MS PowerPoint => using ZERO values as in the ppt filter.
+    double margin = 0;
+    double indent = 0;
+    bool ok = false;
+
     if (m_margin != "UNUSED") {
-        returnValue += "<style:list-level-label-alignment ";
-        // the text:label-followed-by is a required attribute
-        // TODO check if there is something to get the value from.
-        // For now add the default we use in calligra
-        returnValue += "text:label-followed-by=\"space\" ";
-        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(m_margin);
-        if (m_indent != "UNUSED") {
-            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(m_indent);
+        margin = m_margin.toDouble(&ok);
+        if (!ok) {
+            kDebug() << "STRING_TO_DOUBLE: error converting" << m_margin << "(attribute \"marL\")";
         }
+    }
+    if (m_indent != "UNUSED") {
+        indent = m_indent.toDouble(&ok);
+        if (!ok) {
+            kDebug() << "STRING_TO_DOUBLE: error converting" << m_indent << "(attribute \"indent\")";
+        }
+    }
+
+    if (fileByPowerPoint) {
+        returnValue += "<style:list-level-label-alignment ";
+        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
+
+        if (((m_type == ParagraphBulletProperties::BulletType) && m_bulletChar.isEmpty()) ||
+            (indent == 0))
+        {
+            if ((qAbs(indent) > qAbs(margin)) && (indent < 0)) {
+                //hanging mode
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+            } else {
+                //first line mode
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+            }
+            returnValue += "text:label-followed-by=\"nothing\" ";
+        }
+        else {
+            if (qAbs(indent) > qAbs(margin)) {
+                //hanging mode
+                if (indent < 0) {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+                    returnValue += "text:label-followed-by=\"listtab\" ";
+                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
+                }
+                //first line mode
+                else {
+                    returnValue += QString("fo:text-indent=\"0pt\" ");
+                    returnValue += "text:label-followed-by=\"listtab\" ";
+                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(indent);
+                }
+            } else {
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+                returnValue += "text:label-followed-by=\"listtab\" ";
+                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin);
+            }
+        }
+        returnValue += "/>";
+    }
+    // TODO: The text:label-followed-by is a required attribute, set the proper
+    // value, for now add the default used by calligra.
+    else {
+        returnValue += "<style:list-level-label-alignment ";
+        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
+        returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+        returnValue += "text:label-followed-by=\"space\" ";
         returnValue += "/>";
     }
 
     returnValue += "</style:list-level-properties>";
-
     returnValue += "<style:text-properties ";
 
     if (m_bulletColor != "UNUSED") {
@@ -1551,7 +1640,12 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     if (m_type != ParagraphBulletProperties::PictureType) {
         returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
     }
-
+    //PowerPoint UI does not enable to change the font for numbered lists
+    if (m_bulletFont != "UNUSED") {
+        if (!fileByPowerPoint || (m_type == ParagraphBulletProperties::BulletType)) {
+            returnValue += QString("fo:font-family=\"%1\" ").arg(m_bulletFont);
+        }
+    }
     returnValue += "/>";
 
     returnValue += ending;

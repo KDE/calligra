@@ -84,7 +84,7 @@ using namespace wvWare;
 
 Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     m_main( 0 ), m_header( 0 ), m_footnote( 0 ), m_annotation( 0 ),
-    m_endnote( 0 ), m_textbox( 0 ), m_headerTextbox( 0 )
+    m_endnote( 0 ), m_textbox( 0 ), m_headerTextbox( 0 ), m_bookmark( 0 )
 {
     tableStream->push();
 
@@ -99,7 +99,7 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
           << "  bookmark: fc=" << fib.fcSttbfbkmk << " lcb=" << fib.lcbSttbfbkmk << endl
           << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << endl;
 #endif
-    tableStream->seek( fib.fcPlcffldMom, G_SEEK_SET ); // to make the sanity check work
+    tableStream->seek( fib.fcPlcffldMom, WV2_SEEK_SET ); // to make the sanity check work
     read( fib.fcPlcffldMom, fib.lcbPlcffldMom, tableStream, &m_main );
 
     sanityCheck( tableStream, fib.fcPlcffldHdr, fib.lcbPlcffldHdr );
@@ -128,6 +128,7 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
 Fields::~Fields()
 {
+    delete m_bookmark;
     delete m_headerTextbox;
     delete m_textbox;
     delete m_endnote;
@@ -180,7 +181,7 @@ void Fields::read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCFMap<FLD>**
 {
     if ( lcb == 0 )
         return;
-    tableStream->seek( fc, G_SEEK_SET );
+    tableStream->seek( fc, WV2_SEEK_SET );
     *plcf = new PLCFMap<FLD>( lcb, tableStream );
 }
 

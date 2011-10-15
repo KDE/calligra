@@ -79,9 +79,9 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_paragraphStyle2(0),
         m_inStylesDotXml(inStylesDotXml),
         m_isHeading(isHeading),
+        m_inHeaderFooter(inHeaderFooter),
         m_outlineLevel(0),
         m_dropCapStatus(NoDropCap),
-        m_inHeaderFooter(inHeaderFooter),
         m_containsPageNumberField(false),
         m_combinedCharacters(false)
 {
@@ -340,7 +340,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
         }
         // relative vertical position of the anchor
         QString anchor = Conversion::getVerticalRel(pap.pcVert);
-	if (!anchor.isEmpty()) {
+    if (!anchor.isEmpty()) {
             gs.addProperty("style:vertical-rel", anchor, gt);
         }
         // relative horizontal position of the anchor
@@ -734,12 +734,11 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addChildElement("style:drop-cap", contents);
 #endif
     }
-
     //TODO: introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
 
     // Tabulators, only if not in a list.  itbdMac = number of tabs stops
-    // defined for paragraph.  Must be >= 0 and <= 64.
-    if (pap.itbdMac && (pap.ilfo == 0)) {
+    // defined for paragraph.  Must be in <0,64>.
+    if (pap.itbdMac && ((pap.ilfo == 0) || (paragraph && paragraph->isHeading()))) {
         kDebug(30513) << "processing tab stops";
         //looks like we need to write these out with an xmlwriter
         QBuffer buf;
@@ -792,7 +791,9 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             default:
                 break;
             }
-            tmpWriter.addAttribute("style:leader-text", leader);
+            if (!leader.isNull()) {
+                tmpWriter.addAttribute("style:leader-text", leader);
+            }
             tmpWriter.endElement();//style:tab-stop
 
             if (tabLeader) {
@@ -956,7 +957,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
 
     // if the characters are combined, add proper style
     if (combineCharacters) {
-        style->addProperty("style:text-combine","letters");
+        style->addProperty("style:text-combine", "letters", tt);
     }
 
     //dxaSpace = letterspacing in twips
@@ -969,11 +970,11 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //fTNY = 1 when text is vertical
     if (!refChp || refChp->fTNY != chp->fTNY) {
         if (chp->fTNY) {
-            style->addProperty("style:text-rotation-angle", 90);
+            style->addProperty("style:text-rotation-angle", 90, tt);
             if (chp->fTNYCompress) {
-                style->addProperty("style:text-rotation-scale", "fixed");
+                style->addProperty("style:text-rotation-scale", "fixed", tt);
             } else {
-                style->addProperty("style:text-rotation-scale", "line-height");
+                style->addProperty("style:text-rotation-scale", "line-height", tt);
             }
         }
     }
@@ -981,7 +982,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
     if (!refChp || refChp->wCharScale != chp->wCharScale) {
         if (chp->wCharScale) {
-            style->addProperty("style:text-scale", chp->wCharScale);
+            style->addProperty("style:text-scale", chp->wCharScale, tt);
         }
     }
 
@@ -993,11 +994,6 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     if (!preserveFontColor) {
         m_fontColor = QString();
     }
-}
-
-void Paragraph::setCombinedCharacters(bool isCombined)
-{
-    m_combinedCharacters = isCombined;
 }
 
 Paragraph::DropCapStatus Paragraph::dropCapStatus() const
@@ -1081,6 +1077,9 @@ QString Paragraph::string(int index) const
 
 QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet& styles)
 {
+    if (!chp) {
+        return QString();
+    }
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
     if (!msTextStyle && styles.size()) {
         msTextStyle = styles.styleByID(stiNormalChar);
@@ -1091,21 +1090,19 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
-    KoGenStyle *textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    if (m_inStylesDotXml) {
-        textStyle->setAutoStyleInStylesDotXml(true);
-    }
-
     bool suppresFontSize = false;
     if (m_paragraphProperties->pap().dcs.lines > 1) {
         suppresFontSize = true;
     }
-    applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
+    KoGenStyle textStyle(KoGenStyle::TextAutoStyle, "text");
+    if (m_inStylesDotXml) {
+        textStyle.setAutoStyleInStylesDotXml(true);
+    }
+
+    applyCharacterProperties(chp, &textStyle, msTextStyle, suppresFontSize, m_combinedCharacters);
 
     QString textStyleName('T');
-    textStyleName = m_mainStyles->insert(*textStyle, textStyleName);
-    delete textStyle;
-
+    textStyleName = m_mainStyles->insert(textStyle, textStyleName);
     return textStyleName;
 }
 
@@ -1122,7 +1119,7 @@ const char* getStrokeValue(const uint brcType)
     case 0x19: //threeDEngrave
     case 0x1A: //outset
     case 0x1B: //inset
-	return "solid";
+    return "solid";
     default:
         return "none";
     }
@@ -1152,7 +1149,7 @@ const char* getTextUnderlineStyle(const uint kul)
     case kulDottedHeavy:
         return "dotted";
     case kulThick:
-	return "solid";
+    return "solid";
     case kulDash:
     case kulDashHeavy:
         return "dash";

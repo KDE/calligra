@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=SwitchRack50P
+Name[ca]=SwitchRack50P
 Name[de]=SwitchRack50P
 Name[el]=SwitchRack50P
+Name[es]=Rack conmutable 50P
 Name[et]=SwitchRack50P
 Name[it]=SwitchRack50P
 Name[nb]=SwitchRack50P
@@ -13,3 +15,4 @@ Name[ru]=Стойка коммутаторов на 16 портов
 Name[sv]=Kopplingsskåp 50P
 Name[uk]=Стійка комутаторів 50P
 Name[x-test]=xxSwitchRack50Pxx
+Name[zh_TW]=交換器機架 50P

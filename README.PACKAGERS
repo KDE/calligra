@@ -23,7 +23,8 @@ Table Of Contents
 2. Krita
 2.1. Krita development files
 3. Debug information
-4. Calligra libraries
+4. Calligra plugins
+5. Calligra libraries
 
 1. Kexi
 =======
@@ -53,7 +54,7 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libmysqlclient
  ------------------------------------------------------------------------
- kexi-postgresql-driver    Description: Kexi PostgreSQL Driver
+ kexi-postgresql-driver    Description: Kexi PostgreSQL driver
                            Database driver files:
                                kexidb_pqxxsqldriver.so
                                kexidb_pqxxsqldriver.desktop
@@ -64,7 +65,7 @@ The following matrix lists the packages and dependencies.
                                libpq
                                libpqxx
  ------------------------------------------------------------------------
- kexi-mssql-driver         Description: Kexi MS SQL & Sybase Server
+ kexi-sybase-driver        Description: Kexi Sybase & MS SQL driver
                            Database driver files:
                                kexidb_sybasedriver.so
                                kexidb_sybasedriver.desktop
@@ -74,7 +75,7 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libsybdb (FreeTDS)
  ------------------------------------------------------------------------
- kexi-xbase-driver         Description: Kexi XBase Driver
+ kexi-xbase-driver         Description: Kexi XBase driver
                            Database driver files:
                                kexidb_xbasedriver.so
                                kexidb_xbasedriver.desktop
@@ -84,6 +85,16 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libxbase
  ------------------------------------------------------------------------
+ kexi-spreadsheet-import   Description: Spreadsheet-to-Kexi-table import plugin
+                           Files:
+                               keximigrate_spreadsheet.so
+                               keximigrate_spreadsheet.desktop
+                           Translation File:
+                               keximigrate_spreadsheet.mo
+                           Dependencies:
+                               tables (Calligra Tables)
+ ------------------------------------------------------------------------
+
 
 Plugin .so files are typically installed to $KDEDIR/lib/kde4/,
 and .desktop service files are installed to $KDEDIR/share/services/.
@@ -127,6 +138,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                kformdesigner_webbrowser.so
                                kformdesigner_webbrowser.desktop
+                           Translation File:
+                               kformdesigner_webbrowser.mo
                            Dependencies:
                                libqt4-webkit or libQtWebKit4 (provides QtWebKit)
  ------------------------------------------------------------------------
@@ -134,6 +147,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                koreport_webplugin.so
                                koreport_webplugin.desktop
+                           Translation File:
+                               koreport_webplugin.mo
                            Dependencies:
                                libqt4-webkit or libQtWebKit4 (provides QtWebKit)
  ------------------------------------------------------------------------
@@ -141,6 +156,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                kformdesigner_mapbrowser.so
                                kformdesigner_mapbrowser.desktop
+                           Translation File:
+                               kformdesigner_mapbrowser.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
@@ -149,6 +166,8 @@ The following matrix lists the packages and dependencies.
                            Contents:
                                koreport_mapsplugin.so
                                koreport_mapsplugin.desktop
+                           Translation File:
+                               koreport_mapsplugin.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
@@ -197,7 +216,26 @@ production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended
 A significant performance increase will be the result.
 
 
-4. Calligra libraries
+4. Calligra plugins
+===================
+
+Calligra applications can use plugins, placed in plugins/ subdirectory.
+Some of them are very special and/or have extra dependencies so should
+be packaged separately.
+
+ Suggested Name            Details
+ ------------------------------------------------------------------------
+ calligra-map-shape      Description: Map shape for Calligra applications
+                           Contents:
+                               mapshape.so
+                               mapshape.desktop
+                           Translation File:
+                               MapShape.mo
+                           Dependencies:
+                               libmarble4-kde4 or marble
+                                                      (provides libmarblewidget)
+
+5. Calligra libraries
 ====================
 
 Calligra share common functionality within libraries, placed in libs/
@@ -210,11 +248,11 @@ Name       Conditional compilation flag    Globally used in Calligra?   Public A
 ------------------------------------------------------------------------------------------
 
 flake
-kokross    SHOULD_BUILD_SCRIPTING                                      NO
+kokross                                                                NO
 kopageapp
 koplugin                                                               NO
-koproperty                                 Kexi, KPlato                NO
-koreports                                  Kexi, KPlato                NO
+koproperty                                 Kexi, Plan                  NO
+koreports                                  Kexi, Plan                  NO
 kotext
 main
 odf

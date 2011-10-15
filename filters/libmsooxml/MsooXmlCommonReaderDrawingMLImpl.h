@@ -767,7 +767,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
-
     inheritShapePosition();
 
     if (m_context->type == Slide) {
@@ -1055,7 +1054,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #undef CURRENT_EL
 #define CURRENT_EL style
 //! style handler (Shape style)
-/*
+/*! ECMA-376, 21.3.2.24, p. 3943
+
  Parent elements:
  - [done] cxnSp (§19.3.1.19);
  - [done] pic (§19.3.1.37);
@@ -1064,7 +1064,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
  Child elements:
  - effectRef (Effect Reference) §20.1.4.2.8
  - [done] fillRef (Fill Reference) §20.1.4.2.10
- . [done] fontRef (Font Reference) §20.1.4.1.17
+ - [done] fontRef (Font Reference) §20.1.4.1.17
  - [done] lnRef (Line Reference) §20.1.4.2.19
 
 */
@@ -1622,8 +1622,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Note that if buNone has been specified, we don't create a list
     m_currentListLevel = 1; // By default we're in the first level
 
+    bool fileByPowerPoint = false;
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
+    fileByPowerPoint = true;
 #else
     m_prevListLevel = m_currentListLevel = 0;
 #endif
@@ -1631,7 +1633,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     QString fontSize = QString();
     QString bulletColor = QString();
 
-    // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
+    // Creating a list out of what we have, note that ppr MAY overwrite the
+    // list style
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
     int index = 0;
@@ -1639,7 +1642,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         index++;
         i.next();
         m_currentListStyle.addChildElement(QString("list-style-properties%1").arg(index),
-            i.value().convertToListProperties());
+            i.value().convertToListProperties(fileByPowerPoint));
     }
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
@@ -1689,18 +1692,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 TRY_READ(fld)
             }
             else if (QUALIFIED_NAME_IS(endParaRPr)) {
-#ifdef PPTXXMLSLIDEREADER_CPP
-                if (!m_insideTable) {
-                    inheritDefaultTextStyle(m_currentParagraphStyle);
-                    inheritTextStyle(m_currentParagraphStyle);
-                }
-#endif
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (!m_insideTable) {
+                    inheritTextStyle(m_currentTextStyle);
+                }
+#endif
                 TRY_READ(endParaRPr)
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
+
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
                 fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
                 if (!fontSize.isEmpty()) {
@@ -1720,13 +1724,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!pprRead) {
-        inheritDefaultParagraphStyle(m_currentParagraphStyle);
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
 #else
-Q_UNUSED(pprRead);
+    Q_UNUSED(pprRead);
 #endif
+
+    //check if the automatic numbering information applies
+    if ((m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) ||
+        (m_prevListLevel < m_currentListLevel))
+    {
+        m_continueListNumbering[m_currentListLevel] = false;
+    }
 
     body = textPBuf.originalWriter();
     if (m_listStylePropertiesAltered || m_previousListWasAltered) {
@@ -1744,7 +1754,7 @@ Q_UNUSED(pprRead);
     }
 
     // This approach has the risk that numbered lists might have different bullet sizes -> different lists
-    //  -> numbering won't work as expected
+    // -> numbering won't work as expected
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
         if (!fontSize.isEmpty()) {
@@ -1753,14 +1763,24 @@ Q_UNUSED(pprRead);
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
-    /* Commented out for now, as this creates completely new lists which is not wanted
-       Maybe the correct behaviour would be to default to text color of the text in calligra instead of using this
-    if (m_currentBulletProperties.bulletColor() == "UNUSED") {
-        m_listStylePropertiesAltered = true;
-        if (!bulletColor.isEmpty()) {
-            m_currentBulletProperties.setBulletColor(bulletColor);
-        }
-    }*/
+
+    // NOTE: Commented out for now, as this creates completely new lists which
+    // is not wanted.  Maybe the correct behaviour would be to default to text
+    // color of the text in calligra instead of using this.
+    //
+    // FIXME: The PowerPoint UI enables to change the color of a bullet/number
+    // so we have to respect the information.  If no color for the
+    // bullet/number is provided, then the font color of the 1st text chunk
+    // MUST be used.  Help the layout a bit and provide the information here.
+    // In case of MS Word, the font color from text properties of the paragraph
+    // MUST be used.
+
+/*     if (m_currentBulletProperties.bulletColor() == "UNUSED") { */
+/*         m_listStylePropertiesAltered = true; */
+/*         if (!bulletColor.isEmpty()) { */
+/*             m_currentBulletProperties.setBulletColor(bulletColor); */
+/*         } */
+/*     } */
 
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
@@ -1769,23 +1789,33 @@ Q_UNUSED(pprRead);
         m_currentBulletProperties.m_level = m_currentListLevel;
 
         m_currentListStyle.addChildElement("list-style-properties",
-            m_currentBulletProperties.convertToListProperties());
+            m_currentBulletProperties.convertToListProperties(fileByPowerPoint));
         m_previousListWasAltered = true;
     }
 
-    if (!rRead) {
-        // Making sure that if we were previously in a list and if there's an empty line, that
-        // we don't output a bullet to it
-        m_currentListLevel = 0;
-    }
-    else if ((m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) ||
-             (m_currentBulletProperties.isEmpty() && m_listStylePropertiesAltered)) {
+    if (!m_listStylePropertiesAltered && m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty()) {
+        m_continueListNumbering.clear();
         m_currentListLevel = 0;
     }
 
-    // In MSOffice it's possible that a paragraph defines a list-style that should be used without
-    // being a list-item. We need to handle that case and need to make sure that such paragraph's
-    // end as first-level list-items in ODF.
+    //That's our mistake!
+    if (m_listStylePropertiesAltered && m_currentBulletProperties.isEmpty()) {
+	kDebug() << "Bug: list style modified, but list type set to Default!";
+        m_continueListNumbering.clear();
+        m_currentListLevel = 0;
+    }
+
+    // Making sure that if we were previously in a list and if there's an empty
+    // line, that we don't output a bullet to it.
+    if (!rRead) {
+        m_continueListNumbering.clear();
+        m_currentListLevel = 0;
+    }
+
+    // In MSOffice it's possible that a paragraph defines a list-style that
+    // should be used without being a list-item.  We need to handle that case
+    // and need to make sure that such paragraph's end as first-level
+    // list-items in ODF.
     if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_CPP
          if (m_prevListLevel < m_currentListLevel) {
@@ -1793,7 +1823,7 @@ Q_UNUSED(pprRead);
                  // Because there was an existing list, we need to start ours with list:item
                  body->startElement("text:list-item");
              }
-             for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+             for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                  body->startElement("text:list");
                  if (listDepth == 0) {
                      if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
@@ -1803,8 +1833,13 @@ Q_UNUSED(pprRead);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
                      m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
-                }
-                body->startElement("text:list-item");
+                     if (m_continueListNumbering.contains(m_currentListLevel) &&
+                         m_continueListNumbering[m_currentListLevel])
+                     {
+                         body->addAttribute("text:continue-numbering", "true");
+                     }
+                 }
+                 body->startElement("text:list-item");
              }
          } else if (m_prevListLevel > m_currentListLevel) {
              body->endElement(); // This ends the latest list text:list
@@ -1822,12 +1857,15 @@ Q_UNUSED(pprRead);
              body->startElement("text:list-item");
          }
 #else
-         for(int i = 0; i < m_currentListLevel; ++i) {
+         for (int i = 0; i < m_currentListLevel; ++i) {
              body->startElement("text:list");
-             // Todo, should most likely add the name of the current list style
+             // TODO:, should most likely add the name of the current list style
              body->startElement("text:list-item");
          }
 #endif
+         if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+             m_continueListNumbering[m_currentListLevel] = true;
+         }
      }
 
      // Positioning of list-items defined by fo:margin-left and fo:text-indent
@@ -1936,7 +1974,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!m_insideTable) {
-        inheritDefaultTextStyle(m_currentTextStyle);
         inheritTextStyle(m_currentTextStyle);
     }
 #endif
@@ -1966,9 +2003,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     QString fontSize = m_currentTextStyle.property("fo:font-size");
+
+    //NOTE: in testing phase
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (fontSize.isEmpty()) {
+        fontSize = inheritFontSizeFromOther();
+        m_currentTextStyle.addProperty("fo:font-size", fontSize);
+    }
+#endif
     if (!fontSize.isEmpty()) {
         fontSize.remove("pt");
         qreal realSize = fontSize.toDouble();
@@ -1980,6 +2024,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         }
     }
 
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
@@ -2341,7 +2386,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultParagraphStyle(m_currentParagraphStyle);
     inheritParagraphStyle(m_currentParagraphStyle);
 #endif
 
@@ -2423,6 +2467,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
@@ -4513,8 +4558,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
         m_currentDrawStyle->addProperty("svg:stroke-linecap", "butt");
     }
 
-    //TODO
-    //compound line type
+    //TODO: compound line type
     TRY_READ_ATTR_WITHOUT_NS(cmpd)
     //double lines
     if( cmpd.isEmpty() || cmpd == "sng" ) {
@@ -4821,7 +4865,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
 
     TRY_READ_ATTR_WITHOUT_NS(val)
 
-    // TODO support all of them..
+    // TODO: support all of them..
     if (!val.isEmpty()) {
         if (val == "aliceBlue") {
             m_currentColor = QColor(240, 248, 255);
@@ -4965,12 +5009,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     bool ok = false;
 
-    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
-    inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
 
@@ -5028,13 +5071,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             }
             SKIP_UNKNOWN
         }
-    }
-
-    if (m_currentBulletProperties.bulletFont() == "Wingdings" && m_currentBulletProperties.bulletChar() != "") {
-        // Ooxml files have very often wingdings fonts, but usually they are not installed
-        // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentBulletProperties.setBulletChar("-");
-        m_listStylePropertiesAltered = true;
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
@@ -5429,7 +5465,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     body = fldBuf.setWriter(body);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
 
@@ -5737,44 +5772,75 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
     TRY_READ_ATTR_WITHOUT_NS(type)
 
     if (!type.isEmpty()) {
-        if (type == "arabicPeriod") {
+        if (type == "alphaLcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaLcPeriod") {
             m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaUcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "arabicParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("1");
         }
         else if (type == "arabicParenR") {
             m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("1");
         }
-        else if (type == "alphaUcPeriod") {
+        else if (type == "arabicPeriod") {
             m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("A");
+            m_currentBulletProperties.setNumFormat("1");
         }
-        else if (type == "alphaLcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("a");
+        else if (type == "arabicPlain") {
+            m_currentBulletProperties.setNumFormat("1");
         }
-        else if (type == "alphaUcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("A");
-        }
-        else if (type == "alphaLcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("a");
-        }
-        else if (type == "romanUcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("I");
-        }
-        else if (type == "romanLcPeriod") {
+        else if (type == "romanLcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
             m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanLcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanUcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("I");
         }
         else if (type == "romanUcParenR") {
             m_currentBulletProperties.setSuffix(")");
             m_currentBulletProperties.setNumFormat("I");
         }
-        else if (type == "romanLcParenR") {
-            m_currentBulletProperties.setSuffix(")");
+        else if (type == "romanUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("I");
+        } else {
+            m_currentBulletProperties.setSuffix(".");
             m_currentBulletProperties.setNumFormat("i");
         }
     }
@@ -5793,7 +5859,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 #undef CURRENT_EL
 #define CURRENT_EL defRPr
 //! defRPr - Default Text Run Properties
-/*!
+/*! ECMA-376, 21.1.2.3.2, p.3597
 
  Parent elements:
      - defPPr (§21.1.2.2.2)
@@ -6056,7 +6122,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
 #undef CURRENT_EL
 #define CURRENT_EL txBody
 //! txBody handler (Shape Text Body)
-/*! ECMA-376, 20.1.2.2.40, p. 3050
+/*! ECMA-376, 20.1.2.2.40, p. 3058
  This element specifies the existence of text to be contained within the corresponding cell.
  Only used for text inside a cell.
 */

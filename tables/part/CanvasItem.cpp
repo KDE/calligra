@@ -96,7 +96,7 @@
 #include <KoPointerEvent.h>
 #include <KoShapeController.h>
 #include <KoShapeManagerPaintingStrategy.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 // KSpread
 #include "CalculationSettings.h"
@@ -320,7 +320,10 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
 
     // flake
     // Change the active shape controller and its shapes.
-    shapeController()->setShapeControllerBase(d->activeSheet, this);
+    shapeController()->setShapeControllerBase(d->activeSheet);
+    // and then update the toolmanager separately
+    KoToolManager::instance()->updateShapeControllerBase(d->activeSheet, canvasController());
+
     shapeManager()->setShapes(d->activeSheet->shapes());
     // Tell the Canvas about the new visible sheet size.
     sheetView(d->activeSheet)->updateAccessedCellRange();
@@ -353,7 +356,7 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
     }*/
 
     // tell the resource manager of the newly active page
-    resourceManager()->setResource(KoCanvasResource::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
+    resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
 
     // Always repaint the visible cells.
     update();

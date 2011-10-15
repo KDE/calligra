@@ -40,5 +40,7 @@ Parser95::~Parser95()
 void Parser95::init()
 {
     if ( m_fib.ccpHdd != 0 )
-        m_headers = new Headers95( m_fib.ccpHdd, m_fib.fcPlcfhdd, m_fib.lcbPlcfhdd, m_table, m_properties->dop().grpfIhdt );
+        m_headers = new Headers95( m_fib.ccpHdd, m_fib.fcPlcfhdd, m_fib.lcbPlcfhdd,
+                                   m_fib.fcPlcfsed, m_fib.lcbPlcfsed,
+                                   m_table, m_properties->dop().grpfIhdt );
 }

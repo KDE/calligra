@@ -25,7 +25,7 @@
 #include "FoImageSelectionWidget.h"
 
 #include <KoShape.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include <QDesktopServices>
 #include <QFile>
 
-KoShape *FoImageSelectionWidget::selectImageShape(KoResourceManager *documentResources, QWidget *parent)
+KoShape *FoImageSelectionWidget::selectImageShape(KoDocumentResourceManager *documentResources, QWidget *parent)
 {
     QString imageFilename = QFileDialog::getOpenFileName(parent,i18n("Select Image"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation), "Images (*.jpeg *.jpg *.png *.gif)");
     if(imageFilename.isEmpty())

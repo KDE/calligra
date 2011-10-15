@@ -93,7 +93,7 @@
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
 #include <KoToolBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoToolManager.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -1124,7 +1124,7 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_subscript) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if(textchar.verticalAlignment() == QTextCharFormat::AlignSubScript) {
                 m_subscript->setChecked(true);
             } else {
@@ -1133,19 +1133,19 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_fontsizebutton) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             QFont font=textchar.font();
             m_fontsizebutton->setText(QString().setNum(font.pointSize()));
         }
 
         if(m_fontcombobox) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             QString fonttype = textchar.fontFamily();
             m_fontcombobox->setCurrentFont(QFont(fonttype));
         }
 
         if(m_bold) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if (textchar.fontWeight()==QFont::Bold) {
                 m_bold->setChecked(true);
             } else {
@@ -1154,7 +1154,7 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_italic) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if (textchar.fontItalic()) {
                 m_italic->setChecked(true);
             } else {
@@ -1163,7 +1163,7 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_underline) {
-            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
             if (textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
                 m_underline->setChecked(true);
             } else {
@@ -1175,7 +1175,6 @@ void ApplicationController::activeFontOptionCheck()
 
     if (documentType() == TextDocument) {
         if(m_superscript) {
-            QTextCharFormat textchar = textEditor()->charFormat();
             if (textEditor()->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript) {
                 m_superscript->setChecked(true);
             } else {
@@ -1184,7 +1183,6 @@ void ApplicationController::activeFontOptionCheck()
         }
 
         if(m_subscript) {
-            QTextCharFormat textchar = textEditor()->charFormat();
             if (textEditor()->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript) {
                 m_subscript->setChecked(true);
             } else {
@@ -2361,7 +2359,7 @@ void ApplicationController::startSearch()
         // loop over all pages starting from current page to get
         // search results in the right order
         int curPage = canvas->resourceManager()->resource(\
-                      KoCanvasResource::CurrentPage).toInt() - 1;
+                      KoCanvasResourceManager::CurrentPage).toInt() - 1;
         QList<QPair<KoPAPageBase*, KoShape*> > textShapes;
         QList<QTextDocument*> textDocs;
         for (int page = 0; page < padoc->pageCount(); page++) {
@@ -2491,7 +2489,7 @@ void ApplicationController::highlightText(int aIndex)
     KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     KoToolManager::instance()->switchToolRequested(textToolFactoryId());
 
-    KoResourceManager *provider = canvas->resourceManager();
+    KoCanvasResourceManager *provider = canvas->resourceManager();
     Q_CHECK_PTR(provider);
 
     QString sizeStr = QString::number(m_searchTextPositions.size());
@@ -2895,7 +2893,7 @@ void ApplicationController::setUpSpreadEditorToolBar()
 {
     if (documentType() != SpreadsheetDocument)
         return;
-    
+
     if (!m_ui)
         return;
 
@@ -3100,7 +3098,7 @@ void ApplicationController::startCollaborating() {
                                     m_collabDialog->getPort(),
                                     this);
         connect(m_collab, SIGNAL(saveFile(const QString&)), this, SLOT(collabSaveFile(const QString&)));
-        m_collabEditor = new KoTextEditor(textEditor()->document());
+        m_collabEditor = new KoTextEditor(const_cast<QTextDocument*>(textEditor()->document()));
 
     } else {
         return closeCollabDialog();
@@ -3217,7 +3215,7 @@ void ApplicationController::collabSaveFile(const QString &filename) {
 void ApplicationController::collabOpenFile(const QString &filename) {
     openDocument(filename);
     qDebug() << "============================================";
-    m_collabEditor = new KoTextEditor(textEditor()->document());
+    m_collabEditor = new KoTextEditor(const_cast<QTextDocument*>(textEditor()->document()));
     qDebug() << "::::::::::::::::::::::::::::::::::::::::::::";
 }
 
@@ -3301,7 +3299,7 @@ void ApplicationController::insertImage()
     }
     if (documentType() == PresentationDocument) {
         KoPADocument *prDoc = qobject_cast<KoPADocument *>(document());
-        int pageIndex = canvasController()->canvas()->resourceManager()->resource(KoCanvasResource::CurrentPage).toInt() - 1;
+        int pageIndex = canvasController()->canvas()->resourceManager()->resource(KoCanvasResourceManager::CurrentPage).toInt() - 1;
         KoPAPageBase *kprpage = prDoc->pageByIndex( pageIndex, false);
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(kprpage->shapes().first());
         shape = FoImageSelectionWidget::selectImageShape(prDoc->resourceManager(), m_mainWindow);
@@ -3357,7 +3355,7 @@ void ApplicationController::insertNewTextShape()
     KoShape *textShape = factory->createDefaultShape();
     KoCanvasBase *canvasForInserting = canvasController()->canvas();
     Q_CHECK_PTR(canvasForInserting);
-    int curPage = canvasForInserting->resourceManager()->resource(KoCanvasResource::CurrentPage).toInt() - 1;
+    int curPage = canvasForInserting->resourceManager()->resource(KoCanvasResourceManager::CurrentPage).toInt() - 1;
     KoPADocument* paDocForInserting = qobject_cast<KoPADocument*>(document());
     KoPAPageBase* paPageForInserting = paDocForInserting->pageByIndex(curPage, false);
     KoShapeContainer *container =paPageForInserting;

@@ -706,7 +706,7 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentSlide(0),
   m_processingMasters(false),
   m_isList(false),
-  m_continueList(false)
+  m_previousListLevel(0)
 {
 }
 
@@ -1445,26 +1445,26 @@ QChar
 getBulletChar(const PptTextPFRun& pf)
 {
     quint16 v = (quint16) pf.bulletChar();
-    if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from "Windings" is similar to ●
-        return QChar(0x25cf); //  "●"
-    }
-    if (v == 0xf02d) { // 0xF02D from "Symbol" is similar to –
-        return QChar(0x2013);
-    }
-    if (v == 0xf0e8) { // 0xF0E8 is similar to ➔
-        return QChar(0x2794);
-    }
-    if (v == 0xf0d8) { // 0xF0D8 is similar to ➢
-        return QChar(0x27a2);
-    }
-    if (v == 0xf0fb) { // 0xF0FB is similar to ✗
-        return QChar(0x2717);
-    }
-    if (v == 0xf0fc) { // 0xF0FC is similar to ✔
-        return QChar(0x2714);
-    }
+//     if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from "Windings" is similar to ●
+//         return QChar(0x25cf); //  "●"
+//     }
+//     if (v == 0xf02d) { // 0xF02D from "Symbol" is similar to –
+//         return QChar(0x2013);
+//     }
+//     if (v == 0xf0e8) { // 0xF0E8 is similar to ➔
+//         return QChar(0x2794);
+//     }
+//     if (v == 0xf0d8) { // 0xF0D8 is similar to ➢
+//         return QChar(0x27a2);
+//     }
+//     if (v == 0xf0fb) { // 0xF0FB is similar to ✗
+//         return QChar(0x2717);
+//     }
+//     if (v == 0xf0fc) { // 0xF0FC is similar to ✔
+//         return QChar(0x2714);
+//     }
     return QChar(v);
-    return QChar(0x25cf); //  "●"
+//     return QChar(0x25cf); //  "●"
 }
 
 /**
@@ -1601,8 +1601,9 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
 #endif
             fontRef = i.cf.fontRef();
         }
+        //PowerPoint UI does not enable to change the font for numbered lists
         const MSO::FontEntityAtom* font = getFont(fontRef);
-        if (font) {
+        if (font && !i.pf.fBulletHasAutoNumber()) {
             QString family = QString::fromUtf16(font->lfFaceName.data(),
                                                 font->lfFaceName.size());
             ts.addProperty("fo:font-family", family, text);
@@ -2542,18 +2543,27 @@ PptToOdp::processParagraph(Writer& out,
 	if (!levels.isEmpty() && (levels.first() != listStyle)) {
             writeTextObjectDeIndent(out.xml, 0, levels);
         }
+        if (!pf.fBulletHasAutoNumber() || (m_previousListLevel < depth)) {
+            m_continueNumbering[depth] = false;
+        }
         if (levels.isEmpty()) {
-            addListElement(out.xml, listStyle, levels, depth, pf, m_continueList);
+            bool continueNumbering = false;
+            if (m_continueNumbering.contains(depth)) {
+                continueNumbering = m_continueNumbering[depth];
+            }
+            addListElement(out.xml, listStyle, levels, depth, pf, continueNumbering);
         } else {
             out.xml.endElement(); //text:list-item
             out.xml.startElement("text:list-item");
         }
         if (pf.fBulletHasAutoNumber()) {
-            m_continueList = true;
+            m_continueNumbering[depth] = true;
         }
+        m_previousListLevel = depth;
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
-        m_continueList = false;
+        m_continueNumbering.clear();
+        m_previousListLevel = 0;
     }
 
     out.xml.startElement("text:p");

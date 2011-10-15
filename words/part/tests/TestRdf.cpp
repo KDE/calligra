@@ -63,6 +63,7 @@
 #include <KoDocument.h>
 #include <KoTextShapeDataBase.h>
 #include <KoTextDocument.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -853,7 +854,7 @@ void TestRdf::testRoundtrip()
         editor->insertText(lorem);
 
         editor->insertTable(5,10);
-        QTextTable *table = editor->cursor()->currentTable();
+        const QTextTable *table = editor->currentTable();
 
         KoBookmark *startmark = new KoBookmark(editor->document());
         startmark->setType(KoBookmark::StartBookmark);
@@ -862,7 +863,7 @@ void TestRdf::testRoundtrip()
         QString newId = inlineRdf->createXmlId();
         inlineRdf->setXmlId(newId);
 
-        startmark->setName(newId);
+        startmark->setName("blablabla -- in any case, not the rdf xmlid...");
         startmark->setInlineRdf(inlineRdf);
 
         editor->setPosition(table->firstPosition());
@@ -914,27 +915,27 @@ void TestRdf::testRoundtrip()
         QCOMPARE(position.first, 444);
         QCOMPARE(position.second, 496);
 
-        // Save the document
-
+        // Save the document -- this changes all xmlid's
         doc->saveAs(url);
 
-        // Check the position again
+        // Check the position again -- this xmlid doesn't exist anymore, so
+        // should be 0,0
         position = rdfDoc->findExtent(xmlid);
-        QCOMPARE(position.first, 444);
-        QCOMPARE(position.second, 496);
+        QCOMPARE(position.first, 0);
+        QCOMPARE(position.second, 0);
 
         // Find the location object
         locations = rdfDoc->locations();
         Q_ASSERT(locations.size() == 1);
         KoRdfLocation *location3 = locations[0];
+
         QCOMPARE(location3->dlat(), location->dlat());
         QCOMPARE(location3->dlong(), location->dlong());
 
-        // check the position for the location object we've just found,
-        // and which should be the same as the other one...
-        position = rdfDoc->findExtent(location3->xmlIdList()[0]);
-        QCOMPARE(position.first, 444);
-        QCOMPARE(position.second, 496);
+        QPair<int,int> position3 = rdfDoc->findExtent(location3->xmlIdList()[0]);
+
+        QCOMPARE(position3.first, 444);
+        QCOMPARE(position3.second, 496);
 
         delete doc;
     }
@@ -970,15 +971,15 @@ void TestRdf::testRoundtrip()
         Q_ASSERT(location->xmlIdList().length() == 1);
         QString xmlid = location->xmlIdList()[0];
         QPair<int,int> position = rdfDoc->findExtent(xmlid);
-        qDebug() << position;
         Q_ASSERT(position.first == 443);
         Q_ASSERT(position.second == 545);
 
-
-        editor->setPosition(position.first + 1);
-        Q_ASSERT(editor->cursor()->currentTable());
+        // check whether the table between the bookmarks is in the right position
+        // after loading
+        editor->setPosition(position.first + 2);
+        Q_ASSERT(editor->currentTable());
         editor->setPosition(position.second + 1);
-        Q_ASSERT(!editor->cursor()->currentTable());
+        Q_ASSERT(!editor->currentTable());
         delete doc;
     }
 }

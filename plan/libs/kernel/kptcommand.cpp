@@ -2609,8 +2609,6 @@ AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm
     m_sm( sm ),
     m_index( index ),
     m_exp( sm->expected() ),
-    m_opt( sm->optimistic() ),
-    m_pess( sm->pessimistic() ),
     m_mine( true)
 {
 }
@@ -2622,8 +2620,6 @@ AddScheduleManagerCmd::AddScheduleManagerCmd( ScheduleManager *parent, ScheduleM
     m_sm( sm ),
     m_index( index ),
     m_exp( sm->expected() ),
-    m_opt( sm->optimistic() ),
-    m_pess( sm->pessimistic() ),
     m_mine( true)
 {
 }
@@ -2640,8 +2636,6 @@ void AddScheduleManagerCmd::execute()
 {
     m_node.addScheduleManager( m_sm, m_parent, m_index );
     m_sm->setExpected( m_exp );
-    m_sm->setOptimistic( m_opt );
-    m_sm->setPessimistic( m_pess );
     m_mine = false;
 }
 
@@ -2649,8 +2643,6 @@ void AddScheduleManagerCmd::unexecute()
 {
     m_node.takeScheduleManager( m_sm );
     m_sm->setExpected( 0 );
-    m_sm->setOptimistic( 0 );
-    m_sm->setPessimistic( 0 );
     m_mine = true;
 }
 
@@ -2750,24 +2742,6 @@ void ModifyScheduleManagerDistributionCmd::unexecute()
     m_sm.setUsePert( oldvalue );
 }
 
-ModifyScheduleManagerCalculateAllCmd::ModifyScheduleManagerCalculateAllCmd( ScheduleManager &sm, bool value, const QString& name )
-    : NamedCommand( name ),
-    m_sm( sm ),
-    oldvalue( sm.calculateAll() ),
-    newvalue( value )
-{
-}
-
-void ModifyScheduleManagerCalculateAllCmd::execute()
-{
-    m_sm.setCalculateAll( newvalue );
-}
-
-void ModifyScheduleManagerCalculateAllCmd::unexecute()
-{
-    m_sm.setCalculateAll( oldvalue );
-}
-
 ModifyScheduleManagerSchedulingDirectionCmd::ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name )
     : NamedCommand( name ),
     m_sm( sm ),
@@ -2810,11 +2784,7 @@ CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, 
     m_sm( sm ),
     m_first( true ),
     m_oldexpected( m_sm->expected() ),
-    m_oldoptimistic( m_sm->optimistic() ),
-    m_oldpessimistic( m_sm->pessimistic() ),
-    m_newexpected( 0 ),
-    m_newoptimistic( 0 ),
-    m_newpessimistic( 0 )
+    m_newexpected( 0 )
 {
 }
 
@@ -2827,12 +2797,8 @@ void CalculateScheduleCmd::execute()
             m_first = false;
         }
         m_newexpected = m_sm->expected();
-        m_newoptimistic = m_sm->optimistic();
-        m_newpessimistic = m_sm->pessimistic();
     } else {
         m_sm->setExpected( m_newexpected );
-        m_sm->setOptimistic( m_newoptimistic );
-        m_sm->setPessimistic( m_newpessimistic );
     }
 }
 
@@ -2847,8 +2813,6 @@ void CalculateScheduleCmd::unexecute()
 
     }
     m_sm->setExpected( m_oldexpected );
-    m_sm->setOptimistic( m_oldoptimistic );
-    m_sm->setPessimistic( m_oldpessimistic );
 }
 
 //------------------------

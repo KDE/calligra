@@ -23,15 +23,10 @@
 #include <karboncommon_export.h>
 #include <QtGui/QBrush>
 
-class KoShape;
 class QGradient;
-class KoShapeBackground;
 
 namespace KarbonGradientHelper
 {
-/// applies given gradient stops to given shape returning the new gradient wrapped in a brush
-KARBONCOMMON_EXPORT QBrush applyGradientStops(KoShape *shape, const QGradientStops &stops, bool fillGradient);
-
 /// creates default gradient
 KARBONCOMMON_EXPORT QGradient *defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
 

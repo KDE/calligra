@@ -49,7 +49,7 @@ public:
     void setRows(int rows);
 
     // KoShape interface
-    virtual void paint(QPainter& painter, const KoViewConverter& converter);
+    virtual void paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual void setSize(const QSizeF &size);

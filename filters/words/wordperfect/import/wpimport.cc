@@ -166,8 +166,8 @@ private:
 WPXMemoryInputStream::WPXMemoryInputStream(uint8_t *data, size_t size) :
         WPXInputStream(false),
         m_offset(0),
-        m_data(data),
         m_size(size),
+        m_data(data),
         m_tmpBuf(NULL)
 {
 }
@@ -469,7 +469,7 @@ KoFilter::ConversionStatus WPImport::convert(const QByteArray& from, const QByte
     KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
 
     if (out) {
-        QByteArray cstring = root.utf8();
+        QByteArray cstring = root.toUtf8();
         cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         //qDebug("RESULT:\n%s", (const char*)cstring );
         out->write((const char*) cstring, cstring.length());

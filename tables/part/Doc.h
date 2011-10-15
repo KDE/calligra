@@ -10,7 +10,7 @@
    Copyright 1999-2000 Simon Hausmann <hausmann@kde.org>
    Copyright 1999 David Faure <faure@kde.org>
    Copyright 1998-2000 Torben Weis <weis@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -51,7 +51,7 @@ class QPainter;
 
 class KoGenStyles;
 class KoOasisSettings;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoStore;
 class KoXmlWriter;
 

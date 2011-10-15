@@ -564,21 +564,24 @@ void CellView::paintCellBackground(QPainter& painter, const QRegion &clipRegion,
     if (!clipRegion.intersects(cellRect.toRect()))
         return;
 
-    // disable antialiasing
-    painter.setRenderHint(QPainter::Antialiasing, false);
+    QBrush bgbrush = d->style.backgroundBrush();
 
     if (d->style.backgroundColor().isValid() &&
             d->style.backgroundColor() != QApplication::palette().base().color()) {
-        // Simply fill the cell with its background color,
-        painter.fillRect(cellRect, d->style.backgroundColor());
+        // optimization to not draw the background-color if the background-brush would overwrite it.
+        if (bgbrush.style() != Qt::SolidPattern || bgbrush.color().alphaF() < 1.) {
+            // disable antialiasing
+            painter.setRenderHint(QPainter::Antialiasing, false);
+            // Simply fill the cell with its background color,
+            painter.fillRect(cellRect, d->style.backgroundColor());
+            // restore antialiasing
+            painter.setRenderHint(QPainter::Antialiasing, true);
+        }
     }
 
-    // restore antialiasing
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
-    if (d->style.backgroundBrush().style() != Qt::NoBrush) {
+    if (bgbrush.style() != Qt::NoBrush) {
         // Draw the background pattern.
-        painter.fillRect(cellRect, d->style.backgroundBrush());
+        painter.fillRect(cellRect, bgbrush);
     }
 }
 
@@ -1149,6 +1152,7 @@ void CellView::paintText(QPainter& painter,
 
         painter.rotate(tmpAngle);
         qreal x;
+
         if (tmpAngle > 0)
             x = indent + d->textX + coordinate.x();
         else
@@ -2128,8 +2132,12 @@ void CellView::Private::calculateAngledTextSize(const QFont& font, const QFontMe
 {
     Q_UNUSED(font)
     const qreal angle = fixAngle(style.angle());
-    const qreal height = fontMetrics.ascent() + fontMetrics.descent();
-    const qreal width  = fontMetrics.width(displayText);
+    QStringList lines = displayText.split('\n');
+    const qreal height = fontMetrics.ascent() + fontMetrics.descent() * lines.count();
+    qreal width  = 0;
+    foreach (const QString& line, lines) {
+        width = qMax(width, fontMetrics.width(line));
+    }
     textHeight = qAbs(height * ::cos(angle * M_PI / 180)) + qAbs(width * ::sin(angle * M_PI / 180));
     textWidth = qAbs(height * ::sin(angle * M_PI / 180)) + qAbs(width * ::cos(angle * M_PI / 180));
     fittingHeight = textHeight <= this->width;

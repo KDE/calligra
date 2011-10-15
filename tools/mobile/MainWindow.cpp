@@ -92,7 +92,6 @@
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
 #include <KoToolBase.h>
-#include <KoResourceManager.h>
 #include <KoToolManager.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>

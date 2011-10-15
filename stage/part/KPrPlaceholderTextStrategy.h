@@ -30,15 +30,15 @@ class KPrPlaceholderTextStrategy : public KPrPlaceholderStrategy
 public:
     virtual ~KPrPlaceholderTextStrategy();
 
-    virtual KoShape *createShape(KoResourceManager *documentResources);
+    virtual KoShape *createShape(KoDocumentResourceManager *documentResources);
 
-    virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect );
+    virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext);
 
     virtual void saveOdf( KoShapeSavingContext & context );
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
-    virtual void init(KoResourceManager *documentResources);
+    virtual void init(KoDocumentResourceManager *documentResources);
 
     virtual KoShapeUserData * userData() const;
 

@@ -30,7 +30,7 @@ public:
     TableDeferredShapeFactory(QObject *parent, const QVariantList&);
     ~TableDeferredShapeFactory();
 
-    KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
 private:
     KoShapeFactoryBase *m_stubFactory;
 };

@@ -66,7 +66,7 @@
 // Calligra
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoViewConverter.h>
 
 // KDE

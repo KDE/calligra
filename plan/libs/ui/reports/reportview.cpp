@@ -458,7 +458,7 @@ void ReportView::refresh()
     m_pageSelector->setCurrentPage( 1 );
 
     m_reportWidget = new KoReportPage(this, m_reportDocument);
-    m_reportWidget->setObjectName("KPlatoReportPage");
+    m_reportWidget->setObjectName("ReportPage");
     m_scrollArea->setWidget(m_reportWidget);
     return;
 }
@@ -508,7 +508,11 @@ bool ReportView::loadXML( const QDomDocument &doc )
 bool ReportView::loadContext( const KoXmlElement &context )
 {
     QDomDocument doc( "context" );
-    QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdefinition" );
+    QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "planreportdefinition" );
+    if ( e.isNull() ) {
+        // try to handle old definition
+        e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdefinition" );
+    }
     if ( ! e.isNull() ) {
         m_design = QDomDocument( "context" );
         m_design.appendChild( e );
@@ -700,7 +704,7 @@ void ReportDesignDialog::slotSaveToView()
 void ReportDesignDialog::slotViewCreated( ViewBase *view )
 {
     m_view = dynamic_cast<ReportView*>( view );
-    saveToView(); // allways save
+    saveToView(); // always save
 }
 
 void ReportDesignDialog::saveToView()
@@ -728,17 +732,23 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     KToolBar *tb = new KToolBar( this );
     l->addWidget( tb );
 
+
     QSplitter *sp1 = new QSplitter( this );
     l->addWidget( sp1 );
 
-    QSplitter *sp2 = new QSplitter( sp1 );
-    sp2->setOrientation( Qt::Vertical );
+    QFrame *frame = new QFrame( sp1 );
+    frame->setFrameShadow( QFrame::Sunken );
+    frame->setFrameShape( QFrame::StyledPanel );
 
-    m_sourceeditor = new ReportSourceEditor( sp2 );
-    ReportSourceModel *model = createSourceModel( m_sourceeditor );
+    l = new QVBoxLayout( frame );
+
+    m_sourceeditor = new ReportSourceEditor( frame );
+    l->addWidget( m_sourceeditor );
+    QStandardItemModel *model = createSourceModel( m_sourceeditor );
     m_sourceeditor->setModel( model );
 
-    m_propertyeditor = new KoProperty::EditorView( sp2 );
+    m_propertyeditor = new KoProperty::EditorView( frame );
+    l->addWidget( m_propertyeditor );
 
     QScrollArea *sa = new QScrollArea( sp1 );
     m_designer = new KoReportDesigner( sa );
@@ -763,18 +773,24 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
     KToolBar *tb = new KToolBar( this );
     l->addWidget( tb );
 
+
     QSplitter *sp1 = new QSplitter( this );
     l->addWidget( sp1 );
 
-    QSplitter *sp2 = new QSplitter( sp1 );
-    sp2->setOrientation( Qt::Vertical );
+    QFrame *frame = new QFrame( sp1 );
+    frame->setFrameShadow( QFrame::Sunken );
+    frame->setFrameShape( QFrame::StyledPanel );
 
-    m_sourceeditor = new ReportSourceEditor( sp2 );
-    ReportSourceModel *model = createSourceModel( m_sourceeditor );
+    l = new QVBoxLayout( frame );
+
+    m_sourceeditor = new ReportSourceEditor( frame );
+    l->addWidget( m_sourceeditor );
+    QStandardItemModel *model = createSourceModel( m_sourceeditor );
     m_sourceeditor->setModel( model );
     m_sourceeditor->setSourceData( element.firstChildElement( "data-source" ) );
 
-    m_propertyeditor = new KoProperty::EditorView( sp2 );
+    m_propertyeditor = new KoProperty::EditorView( frame );
+    l->addWidget( m_propertyeditor );
 
     QScrollArea *sa = new QScrollArea( sp1 );
     QDomElement e = element.firstChildElement( "report:content" );
@@ -789,7 +805,7 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
     m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
     slotPropertySetChanged();
 
-    connect( model, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
+    connect( m_sourceeditor, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
 
     connect( this, SIGNAL( insertItem( const QString& ) ), m_designer, SLOT( slotItem( const QString& ) ) );
 
@@ -802,7 +818,7 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
 void ReportDesignPanel::populateToolbar( KToolBar *tb )
 {
     tb->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    KAction *a = new KAction( i18n( "Section Editor" ), this );
+    KAction *a = new KAction( KIcon( "document-properties" ), i18n( "Section Editor" ), this );
     a->setObjectName("sectionedit");
     connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
     tb->addAction( a );
@@ -848,14 +864,14 @@ void ReportDesignPanel::setReportData( const QString &tag )
 
 QDomDocument ReportDesignPanel::document() const
 {
-    QDomDocument document( "kplatoreportdefinition" );
+    QDomDocument document( "planreportdefinition" );
     document.appendChild( document.createProcessingInstruction(
                               "xml",
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement e = document.createElement( "kplatoreportdefinition" );
-    e.setAttribute( "editor", "KPlato" );
-    e.setAttribute( "mime", "application/x-vnd.kde.kplato.report.definition" );
+    QDomElement e = document.createElement( "planreportdefinition" );
+    e.setAttribute( "editor", "Plan" );
+    e.setAttribute( "mime", "application/x-vnd.kde.plan.report.definition" );
     e.setAttribute( "version", "1.0" );
     document.appendChild( e );
 
@@ -889,128 +905,33 @@ ReportData *ReportDesignPanel::createReportData( const QString &type )
     return r;
 }
 
-ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
+QStandardItemModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
 {
-    ReportSourceModel *m = new ReportSourceModel( 1, 2, parent );
-    m->setHorizontalHeaderLabels( QStringList() << "Name" << "Value" );
-    QList<QStandardItem*> lst;
-//     lst << new QStandardItem( "Source type" );
-//     lst.last()->setData( "source-type" );
-//     lst << new QStandardItem( "Source" );
-//     lst.last()->setData( "source" );
+    QStandardItemModel *m = new QStandardItemModel( parent );
 
-    QStandardItem *item = new QStandardItem( "Select from" );
-    item->setData( "select-from" );
+    QStandardItem *item = new QStandardItem( i18n( "Tasks" ) );
+    item->setData( "tasks", Reports::TagRole );
     item->setEditable( false );
-    int sfPos = lst.count();
-    lst << item;
+    m->appendRow( item );
 
-    foreach ( QStandardItem *i, lst ) {
-        m->setItem( lst.indexOf( i ), i );
-        i->setEditable( false );
-    }
-//    int row = 0;
-/*    item = new QStandardItem( "KPlato Project" );
-    item->setData( "KPlato Project" );
-    m->setItem( row++, 1, item );
-    item = new QStandardItem( "Internal" );
-    item->setData( "Internal" );
-    m->setItem( row++, 1, item );*/
+    item = new QStandardItem( i18n( "Task status" ) );
+    item->setData( "taskstatus", Reports::TagRole );
+    item->setEditable( false );
+    m->appendRow( item );
 
-    // Child items
-    QList<QStandardItem*> children;
-    children << new QStandardItem( i18n( "Tasks" ) ) << new QStandardItem();
-    children[ 0 ]->setData( "tasks", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ sfPos ]->appendRow( children );
-    children.clear();
+    item = new QStandardItem( i18n( "Resource assignments" ) );
+    item->setData( "resourceassignments", Reports::TagRole );
+    item->setEditable( false );
+    m->appendRow( item );
 
-    children << new QStandardItem( i18n( "Task status" ) ) << new QStandardItem();
-    children[ 0 ]->setData( "taskstatus", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ sfPos ]->appendRow( children );
-    children.clear();
-
-    children << new QStandardItem( i18n( "Resource assignments" ) ) << new QStandardItem();
-    children[ 0 ]->setData( "resourceassignments", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ sfPos ]->appendRow( children );
-    children.clear();
-
-//     children << new QStandardItem( "Resources" ) << new QStandardItem();
-//     children[ 0 ]->setData( "resources", Reports::TagRole );
-//     children[ 1 ]->setCheckable( true );
-//     lst[ sfPos ]->appendRow( children );
-//     children.clear();
-//
-//     children << new QStandardItem( "Resourcegroups" ) << new QStandardItem();
-//     children[ 0 ]->setData( "resourcegroups", Reports::TagRole );
-//     children[ 1 ]->setCheckable( true );
-//     lst[ sfPos ]->appendRow( children );
-//     children.clear();
-
-    children << new QStandardItem( i18n( "Resources" ) ) << new QStandardItem();
-    children[ 0 ]->setData( "resources", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ sfPos ]->appendRow( children );
-    children.clear();
+    item = new QStandardItem( i18n( "Resources" ) );
+    item->setData( "resources", Reports::TagRole );
+    item->setEditable( false );
+    m->appendRow( item );
 
     return m;
 }
 
-
-//-----------
-ReportSourceModel::ReportSourceModel( QObject *parent )
-    : QStandardItemModel( parent )
-{
-    connect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-}
-
-ReportSourceModel::ReportSourceModel( int rows, int columns, QObject *parent )
-    : QStandardItemModel( rows, columns, parent )
-{
-    connect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-}
-
-void ReportSourceModel::slotSourceChanged( const QModelIndex &topLeft, const QModelIndex &/*bottomRight */)
-{
-    QModelIndex parent = topLeft.parent();
-    if ( ! parent.isValid() ) {
-        return;
-    }
-    if ( parent.data( Reports::TagRole ).toString() == "select-from" ) {
-        if ( topLeft.data( Qt::CheckStateRole ).toInt() == Qt::Checked ) {
-            // set select-from value and tag
-            QModelIndex idx = index( parent.row(), 1, parent.parent() );
-            QString tag = index( topLeft.row(), 0, parent ).data( Reports::TagRole ).toString();
-            QString value = index( topLeft.row(), 0, parent ).data().toString();
-            setData( idx, value, Qt::EditRole );
-            setData( idx, tag, Reports::TagRole );
-            // update checked mark
-            setChecked( topLeft );
-            emit selectFromChanged( tag );
-        } else {
-            // set checked flag; it's not allowed to be reset by user
-            disconnect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-            setData( topLeft, Qt::Checked, Qt::CheckStateRole );
-            connect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-        }
-    }
-}
-
-void ReportSourceModel::setChecked( const QModelIndex &idx )
-{
-    disconnect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-    setData( idx, "checked", Reports::TagRole );
-    for ( int row = 0; row < rowCount( idx.parent() ); ++row ) {
-        QModelIndex i = index( row, 1, idx.parent() );
-        if ( i != idx ) {
-            setData( i, QVariant( (int)Qt::Unchecked ), Qt::CheckStateRole );
-            setData( i, "unchecked", Reports::TagRole );
-        }
-    }
-    connect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-}
 
 //-------------------
 ModifyReportDefinitionCmd ::ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const QString& name )

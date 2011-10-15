@@ -32,8 +32,9 @@
 #include <KoSelection.h>
 #include <KarbonCurveFit.h>
 #include <KoColorBackground.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoColor.h>
+#include <KoShapePaintingContext.h>
 
 #include <KAction>
 #include <KDebug>
@@ -83,7 +84,8 @@ void KarbonCalligraphyTool::paint(QPainter &painter,
 
     painter.setTransform(m_shape->absoluteTransformation(&converter) *
                       painter.transform());
-    m_shape->paint(painter, converter);
+    KoShapePaintingContext paintContext; //FIXME
+    m_shape->paint(painter, converter, paintContext);
 
     painter.restore();
 }

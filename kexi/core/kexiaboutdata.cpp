@@ -86,6 +86,8 @@ KAboutData* Kexi::createAboutData()
     aboutData->addAuthor(
         ki18n("Till Busch"), ki18n("Bugfixes, original Table Widget"), "till@bux.at");
 
+     aboutData->addCredit(
+        ki18n("Dimitrios T. Tanis"), ki18n("Documentation for Kexi 2"),  "jtanis@tanisfood.gr");
     aboutData->addCredit(
         ki18n("Daniel Molkentin"), ki18n("Initial design improvements"),  "molkentin@kde.org");
     aboutData->addCredit(
