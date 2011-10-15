@@ -41,7 +41,7 @@ protected:
     virtual void shapeChanged(ChangeType type, KoShape * shape);
 private:
     // Fake
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) {
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         qFatal("Shouldn't be called");

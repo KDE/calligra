@@ -42,6 +42,7 @@
  *
  * SRC: wv2/src/generator/generator_wword8.htm
  */
+
 #define stiNormal      0     // 0x0000  Default paragraph style
 
 #define stiLev1        1     // 0x0001

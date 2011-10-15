@@ -32,7 +32,7 @@ public:
 
     virtual KoShape *createShape(KoDocumentResourceManager *documentResources);
 
-    virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect );
+    virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext);
 
     virtual void saveOdf( KoShapeSavingContext & context );
 

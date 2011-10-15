@@ -8,10 +8,6 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 
 add_subdirectory(txt)
 
-if (SHOULD_BUILD_TABLES)
-  macro_optional_add_subdirectory(kspread)
-endif (SHOULD_BUILD_TABLES)
-
 macro_optional_find_package(MySQL)
 macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://www.mysql.com" FALSE "" "Required by Kexi MySQL Migration driver")
 IF (MYSQL_FOUND)

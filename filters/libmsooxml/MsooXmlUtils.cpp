@@ -1340,7 +1340,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
-    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
+    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_prefix(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
     m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
 {
 }
@@ -1360,6 +1360,7 @@ void Utils::ParagraphBulletProperties::clear()
     m_bulletFont = UNUSED;
     m_bulletChar = UNUSED;
     m_numFormat = UNUSED;
+    m_prefix = UNUSED;
     m_suffix = UNUSED;
     m_align = UNUSED;
     m_indent = UNUSED;
@@ -1483,6 +1484,9 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     if (properties.m_numFormat != UNUSED) {
         m_numFormat = properties.m_numFormat;
     }
+    if (properties.m_prefix != UNUSED) {
+        m_prefix = properties.m_prefix;
+    }
     if (properties.m_suffix != UNUSED) {
         m_suffix = properties.m_suffix;
     }
@@ -1516,6 +1520,9 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     if (m_type == ParagraphBulletProperties::NumberType) {
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
         returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
+        if (m_prefix != UNUSED) {
+            returnValue += QString("style:num-prefix=\"%1\" ").arg(m_prefix);
+        }
         if (m_startValue != UNUSED) {
             returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
         }
@@ -1579,13 +1586,38 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     if (fileByPowerPoint) {
         returnValue += "<style:list-level-label-alignment ";
         returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
-        if (qAbs(indent) > qAbs(margin)) {
-            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
-            returnValue += "text:label-followed-by=\"listtab\" ";
-            returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
-        } else {
-            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+
+        if (((m_type == ParagraphBulletProperties::BulletType) && m_bulletChar.isEmpty()) ||
+            (indent == 0))
+        {
+            if ((qAbs(indent) > qAbs(margin)) && (indent < 0)) {
+                //hanging mode
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+            } else {
+                //first line mode
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+            }
             returnValue += "text:label-followed-by=\"nothing\" ";
+        }
+        else {
+            if (qAbs(indent) > qAbs(margin)) {
+                //hanging mode
+                if (indent < 0) {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+                    returnValue += "text:label-followed-by=\"listtab\" ";
+                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
+                }
+                //first line mode
+                else {
+                    returnValue += QString("fo:text-indent=\"0pt\" ");
+                    returnValue += "text:label-followed-by=\"listtab\" ";
+                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(indent);
+                }
+            } else {
+                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+                returnValue += "text:label-followed-by=\"listtab\" ";
+                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin);
+            }
         }
         returnValue += "/>";
     }

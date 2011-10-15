@@ -472,7 +472,7 @@ QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
         }
         PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
         const wvWare::Word97::FSPA* spa = it.current();
-	Q_ASSERT(m_pSpa == spa);
+    Q_ASSERT(m_pSpa == spa);
         return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);
     }
     else if (o.childAnchor) {
@@ -497,7 +497,7 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
             out.setRect(oldCoords);
             //process shape information for the group
             out.setGroupRectangle(*sp->shapeGroup);
-	}
+    }
     }
 
     //create graphic style for the group shape
@@ -736,10 +736,10 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
-	//containers.  Not parsing Blip store because MD4 digests in
-	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
-	//picture path association.
+    //Parse content of the Delay stream by using offsets from OfficeArtFBSE
+    //containers.  Not parsing Blip store because MD4 digests in
+    //OfficeArtFBSE happen to be out-dated, which complicates the pib to
+    //picture path association.
         if (block.anon.is<OfficeArtFBSE>()) {
             OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {

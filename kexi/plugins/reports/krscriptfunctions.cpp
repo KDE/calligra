@@ -22,7 +22,6 @@
 
 KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)
 {
-    kDebug() << "###############";
     m_cursor = kodata;
     m_connection = conn;
     m_source = kodata->sourceName();

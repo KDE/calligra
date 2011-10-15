@@ -1496,7 +1496,7 @@ protected:
     ScheduleManager *m_parent;
     ScheduleManager *m_sm;
     int m_index;
-    MainSchedule *m_exp, *m_opt, *m_pess;
+    MainSchedule *m_exp;
     bool m_mine;
 };
 
@@ -1563,18 +1563,6 @@ private:
     bool oldvalue, newvalue;
 };
 
-class KPLATOKERNEL_EXPORT ModifyScheduleManagerCalculateAllCmd : public NamedCommand
-{
-public:
-    ModifyScheduleManagerCalculateAllCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
-    void execute();
-    void unexecute();
-
-private:
-    ScheduleManager &m_sm;
-    bool oldvalue, newvalue;
-};
-
 class KPLATOKERNEL_EXPORT CalculateScheduleCmd : public NamedCommand
 {
 public:
@@ -1587,11 +1575,7 @@ private:
     QPointer<ScheduleManager> m_sm;
     bool m_first;
     MainSchedule *m_oldexpected;
-    MainSchedule *m_oldoptimistic;
-    MainSchedule *m_oldpessimistic;
     MainSchedule *m_newexpected;
-    MainSchedule *m_newoptimistic;
-    MainSchedule *m_newpessimistic;
 };
 
 class KPLATOKERNEL_EXPORT BaselineScheduleCmd : public NamedCommand

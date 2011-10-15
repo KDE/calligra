@@ -1086,7 +1086,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         {
             if ( dataStream ) {
                 dataStream->push();
-                dataStream->seek( readU32( ptr ), G_SEEK_SET );
+                dataStream->seek( readU32( ptr ), WV2_SEEK_SET );
                 const U16 count( dataStream->readU16() );
                 U8* grpprl = new U8[ count ];
                 dataStream->read( grpprl, count );
@@ -2114,7 +2114,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 //             rgdxaCenter[ 0 ] += dxaGapHalf - dxaGapHalfNew;
 //         }
 
-	dxaGapHalf = readS16( ptr );
+    dxaGapHalf = readS16( ptr );
 #ifdef WV2_DEBUG_SPRMS
         wvlog << "dxaGapHalf: " << dxaGapHalf << endl;
 #endif
@@ -2293,11 +2293,11 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmTInsert:
     {
         //NOTE: don't process before sprmTDefTable
-	if ( itcMac == 0 ) {
+    if ( itcMac == 0 ) {
             wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
             break;
         }
-	// Sanity check
+    // Sanity check
         if ( static_cast<std::vector<S16>::size_type>( itcMac ) + 1 != rgdxaCenter.size() ) {
             wvlog << "Bug: Somehow itcMac and the rgdxaCenter.size() aren't in sync anymore!" << endl;
             itcMac = rgdxaCenter.size() - 1;
@@ -2368,7 +2368,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmTDxaCol:
     {
         //NOTE: don't process before sprmTDefTable
-	if ( itcMac == 0 ) {
+    if ( itcMac == 0 ) {
             wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
             break;
         }
@@ -2640,7 +2640,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         wvlog << "--> Parsing PrcData" << endl;
         if ( dataStream ) {
             dataStream->push();
-            dataStream->seek( readU32( ptr ), G_SEEK_SET );
+            dataStream->seek( readU32( ptr ), WV2_SEEK_SET );
 
             const U16 count( dataStream->readU16() );
             U8* grpprl = new U8[ count ];

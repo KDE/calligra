@@ -77,21 +77,6 @@
 #include "kexicsvwidgets.h"
 #include <kexi_global.h>
 
-/*#ifdef Q_WS_WIN
-#include <krecentdirs.h>
-#include <windows.h>
-#endif*/
-
-#if 0
-#include <kspread_cell.h>
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
-#include <kspread_undo.h>
-#include <kspread_view.h>
-#include <kglobal.h>
-#include <q3tl.h>
-#endif
-
 #define _IMPORT_ICON KIcon("table") /*todo: change to "file_import" or so*/
 #define _TEXT_TYPE 0
 //#define _NUMBER_TYPE 1

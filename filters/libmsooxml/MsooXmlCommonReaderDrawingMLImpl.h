@@ -767,7 +767,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
-
     inheritShapePosition();
 
     if (m_context->type == Slide) {
@@ -1055,7 +1054,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #undef CURRENT_EL
 #define CURRENT_EL style
 //! style handler (Shape style)
-/*
+/*! ECMA-376, 21.3.2.24, p. 3943
+
  Parent elements:
  - [done] cxnSp (§19.3.1.19);
  - [done] pic (§19.3.1.37);
@@ -1064,7 +1064,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
  Child elements:
  - effectRef (Effect Reference) §20.1.4.2.8
  - [done] fillRef (Fill Reference) §20.1.4.2.10
- . [done] fontRef (Font Reference) §20.1.4.1.17
+ - [done] fontRef (Font Reference) §20.1.4.1.17
  - [done] lnRef (Line Reference) §20.1.4.2.19
 
 */
@@ -1692,18 +1692,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 TRY_READ(fld)
             }
             else if (QUALIFIED_NAME_IS(endParaRPr)) {
-#ifdef PPTXXMLSLIDEREADER_CPP
-                if (!m_insideTable) {
-                    inheritDefaultTextStyle(m_currentParagraphStyle);
-                    inheritTextStyle(m_currentParagraphStyle);
-                }
-#endif
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (!m_insideTable) {
+                    inheritTextStyle(m_currentTextStyle);
+                }
+#endif
                 TRY_READ(endParaRPr)
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
+
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
                 fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
                 if (!fontSize.isEmpty()) {
@@ -1723,7 +1724,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!pprRead) {
-        inheritDefaultParagraphStyle(m_currentParagraphStyle);
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
@@ -1763,6 +1763,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
+
     // NOTE: Commented out for now, as this creates completely new lists which
     // is not wanted.  Maybe the correct behaviour would be to default to text
     // color of the text in calligra instead of using this.
@@ -1792,18 +1793,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_previousListWasAltered = true;
     }
 
+    if (!m_listStylePropertiesAltered && m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty()) {
+        m_continueListNumbering.clear();
+        m_currentListLevel = 0;
+    }
+
+    //That's our mistake!
+    if (m_listStylePropertiesAltered && m_currentBulletProperties.isEmpty()) {
+	kDebug() << "Bug: list style modified, but list type set to Default!";
+        m_continueListNumbering.clear();
+        m_currentListLevel = 0;
+    }
+
     // Making sure that if we were previously in a list and if there's an empty
     // line, that we don't output a bullet to it.
     if (!rRead) {
-        m_currentListLevel = 0;
         m_continueListNumbering.clear();
-    }
-    else if ((!m_listStylePropertiesAltered &&
-              m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty()) ||
-             (m_listStylePropertiesAltered && m_currentBulletProperties.isEmpty()))
-    {
         m_currentListLevel = 0;
-        m_continueListNumbering.clear();
     }
 
     // In MSOffice it's possible that a paragraph defines a list-style that
@@ -1968,7 +1974,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!m_insideTable) {
-        inheritDefaultTextStyle(m_currentTextStyle);
         inheritTextStyle(m_currentTextStyle);
     }
 #endif
@@ -1998,9 +2003,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     QString fontSize = m_currentTextStyle.property("fo:font-size");
+
+    //NOTE: in testing phase
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (fontSize.isEmpty()) {
+        fontSize = inheritFontSizeFromOther();
+        m_currentTextStyle.addProperty("fo:font-size", fontSize);
+    }
+#endif
     if (!fontSize.isEmpty()) {
         fontSize.remove("pt");
         qreal realSize = fontSize.toDouble();
@@ -2012,6 +2024,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         }
     }
 
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
@@ -2373,7 +2386,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultParagraphStyle(m_currentParagraphStyle);
     inheritParagraphStyle(m_currentParagraphStyle);
 #endif
 
@@ -2455,6 +2467,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
@@ -5001,7 +5014,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
-    inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
 
@@ -5453,7 +5465,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     body = fldBuf.setWriter(body);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
 
@@ -5848,7 +5859,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 #undef CURRENT_EL
 #define CURRENT_EL defRPr
 //! defRPr - Default Text Run Properties
-/*!
+/*! ECMA-376, 21.1.2.3.2, p.3597
 
  Parent elements:
      - defPPr (§21.1.2.2.2)
@@ -6111,7 +6122,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
 #undef CURRENT_EL
 #define CURRENT_EL txBody
 //! txBody handler (Shape Text Body)
-/*! ECMA-376, 20.1.2.2.40, p. 3048
+/*! ECMA-376, 20.1.2.2.40, p. 3058
  This element specifies the existence of text to be contained within the corresponding cell.
  Only used for text inside a cell.
 */
