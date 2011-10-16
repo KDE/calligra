@@ -472,6 +472,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             QPainter tilePainter(&img);
                             tilePainter.setClipRect(QRect(QPoint(0,0), r.size()));
                             tilePainter.translate(-r.left(), -pageTopView - r.top());
+                            tilePainter.setRenderHint(QPainter::Antialiasing);
                             shapeManager()->paint(tilePainter, *viewConverter(), false);
 
                             int tilex = 0, tiley = 0;

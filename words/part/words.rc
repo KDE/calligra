@@ -37,6 +37,7 @@
   <Separator/>
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
+  <Action name="view_tableborders"/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
   <Action name="view_show_guides"/>
@@ -90,35 +91,23 @@
   <Action name="format_header"/>
   <Action name="format_footer"/>
  </Menu>
- <Menu name="tools"><text>&amp;Tools</text>
-  <Menu name="SpellCheck"><text>Spellcheck</text>
-      <Action name="tool_auto_spellcheck"/>
-      <Action name="apply_spellcheck"/>
-      <Action name="tool_configure_spellcheck"/>
-  </Menu>
-  <Action name="enable_autocorrection"/>
-  <Menu name="Changes"><text>Change Tracking</text>
-    <Action name="edit_show_changes"/>
-    <Action name="edit_record_changes"/>
-  </Menu>
-  <Separator/>
-  <Action name="change_case"/>
-  <Action name="sort_text"/>
-  <Action name="personal_expr"/>
-  <Action name="add_personal_expression"/>
-  <Action name="custom_vars"/>
-  <ActionList name="datatools"/>
-  <Separator/>
-  <Action name="edit_sldatabase"/>
- </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="view_toggledockers" group="settings_show"/>
   <Action name="showStatusBar" group="settings_show"/>
   <Action name="direct_cursor" group="settings_show"/>
-  <Action name="configure_autocorrection" group="settings_show"/>
+  <Menu name="SpellCheck"><text>Spellcheck</text>
+      <Action name="tool_auto_spellcheck"/>
+      <Action name="tool_configure_spellcheck"/>
+  </Menu>
+  <Action name="enable_autocorrection"/>
+  <Action name="configure_autocorrection"/>
+  <Menu name="Changes"><text>Change Tracking</text>
+    <Action name="configure_change_tracking"/>
+    <Action name="edit_show_changes"/>
+    <Action name="edit_record_changes"/>
+  </Menu>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="configure_footendnote" group="settings_show"/>
-  <Action name="configure_change_tracking" group="settings_show"/>
   <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>

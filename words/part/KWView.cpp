@@ -39,7 +39,6 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWInsertPageDialog.h"
-#include "dialogs/KWInsertInlineNoteDialog.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
@@ -266,7 +265,6 @@ void KWView::setupActions()
 
     m_actionViewHeader = new KToggleAction(i18n("Enable Document Headers"), this);
     actionCollection()->addAction("format_header", m_actionViewHeader);
-    m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
     m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in Words.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
@@ -275,7 +273,6 @@ void KWView::setupActions()
 
     m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
     actionCollection()->addAction("format_footer", m_actionViewFooter);
-    m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
     m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special shapes at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
@@ -344,13 +341,29 @@ void KWView::setupActions()
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
 
-    action = new KAction(i18n("Page Borders"), this);
+    action = new KAction(i18n("Show Text Shape Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
     action->setChecked(m_document->config().viewFrameBorders());
     action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
+
+    action = new KAction(i18n("Show Formatting Characters"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_formattingchars", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
+    action->setChecked(m_document->config().showFormattingChars());
+    action->setToolTip(i18n("Toggle the display of non-printing characters"));
+    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
+
+    action = new KAction(i18n("Show Table Borders"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_tableborders", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
+    action->setChecked(m_document->config().showTableBorders());
+    action->setToolTip(i18n("Toggle the display of table borders"));
+    action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
 
     action = new KAction(i18n("Page Layout..."), this);
     actionCollection()->addAction("format_page", action);
@@ -433,17 +446,7 @@ void KWView::setupActions()
     handleDeletePageAction(); //decide if we enable or disable this action
     connect(m_document, SIGNAL(pageSetupChanged()), this, SLOT(handleDeletePageAction()));
 
-if (false) { // TODO move this to the text tool as soon as  a) the string freeze is lifted.  b) Qt45 makes this possible
-    action = new KAction(i18n("Formatting Characters"), this);
-    action->setCheckable(true);
-    actionCollection()->addAction("view_formattingchars", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
-    action->setToolTip(i18n("Toggle the display of non-printing characters"));
-    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
-}
-
     action = new KAction(i18n("Select All Shapes"), this);
-
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
 
@@ -475,7 +478,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     connect(action, SIGNAL(triggered()), this, SLOT(removeFrameClipping()));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
-    tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
     tAction->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
@@ -539,28 +541,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
             m_actionViewPreviewMode = 0;
         }
 
-        // ------------------------- Format menu
-        m_actionFormatFrameStylist = new KAction(i18n("Frame Style Manager"), 0,
-                this, SLOT(extraFrameStylist()),
-                actionCollection(), "frame_stylist");
-        m_actionFormatFrameStylist->setToolTip(i18n("Change attributes of framestyles"));
-        m_actionFormatFrameStylist->setWhatsThis(i18n("Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box."));
-
-        // ---------------------- Tools menu
-
-        m_actionAllowAutoFormat = new KToggleAction(i18n("Enable Autocorrection"), 0,
-                this, SLOT(slotAllowAutoFormat()),
-                actionCollection(), "enable_autocorrection");
-        m_actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
-        m_actionAllowAutoFormat->setToolTip(i18n("Toggle autocorrection on and off"));
-        m_actionAllowAutoFormat->setWhatsThis(i18n("Toggle autocorrection on and off."));
-
-        m_actionAutoFormat = new KAction(i18n("Configure Autocorrection..."), 0,
-                this, SLOT(extraAutoFormat()),
-                actionCollection(), "configure_autocorrection");
-        m_actionAutoFormat->setToolTip(i18n("Change autocorrection options"));
-        m_actionAutoFormat->setWhatsThis(i18n("Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>."));
-
         m_actionEditCustomVarsEdit = new KAction(i18n("Custom Variables..."), 0,
                 this, SLOT(editCustomVars()), // TODO: new dialog w add etc.
                 actionCollection(), "custom_vars");
@@ -571,19 +551,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionEditPersonnalExpr->setToolTip(i18n("Add or change one or more personal expressions"));
         m_actionEditPersonnalExpr->setWhatsThis(i18n("Add or change one or more personal expressions.<p>Personal expressions are a way to quickly insert commonly used phrases or text into your document."));
 
-        m_actionChangeCase=new KAction(i18n("Change Case..."), 0,
-                this, SLOT(changeCaseOfText()),
-                actionCollection(), "change_case");
-        m_actionChangeCase->setToolTip(i18n("Alter the capitalization of selected text"));
-        m_actionChangeCase->setWhatsThis(i18n("Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from upper case to lower case and from lower case to upper case in one move."));
-
-
-        //------------------------ Menu frameSet
-        QAction *actionChangePicture=new KAction(i18n("Change Picture..."),"frame_image",0,
-                this, SLOT(changePicture()),
-                actionCollection(), "change_picture");
-        actionChangePicture->setToolTip(i18n("Change the picture in the currently selected frame"));
-        actionChangePicture->setWhatsThis(i18n("You can specify a different picture in the current frame.<br><br>Words automatically resizes the new picture to fit within the old frame."));
 
         m_actionConfigureHeaderFooter=new KAction(i18n("Configure Header/Footer..."), 0,
                 this, SLOT(configureHeaderFooter()),
@@ -601,7 +568,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionConfigureCompletion->setToolTip(i18n("Change the words and options for autocompletion"));
         m_actionConfigureCompletion->setWhatsThis(i18n("Add words or change the options for autocompletion."));
 
-
         new KAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
 
         // --------
@@ -615,17 +581,11 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionCreateStyleFromSelection->setToolTip(i18n("Create a new style based on the currently selected text"));
         m_actionCreateStyleFromSelection->setWhatsThis(i18n("Create a new style based on the currently selected text.")); // ## "on the current paragraph, taking the formatting from where the cursor is. Selecting text isn't even needed."
 
-
         m_actionSavePicture= new KAction(i18n("Save Picture As..."), 0,
                 this, SLOT(savePicture()),
                 actionCollection(), "save_picture");
         m_actionSavePicture->setToolTip(i18n("Save the picture in a separate file"));
         m_actionSavePicture->setWhatsThis(i18n("Save the picture in the currently selected frame in a separate file, outside the Words document."));
-
-        m_actionAllowBgSpellCheck = new KToggleAction(i18n("Autospellcheck"), 0,
-                this, SLOT(autoSpellCheck()),
-                actionCollection(), "tool_auto_spellcheck");
-
 
         m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
                 this, SLOT(addBookmark()),
@@ -643,15 +603,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
                 actionCollection(), "create_framestyle");
         m_actionCreateFrameStyle->setToolTip(i18n("Create a new style based on the currently selected frame"));
         m_actionCreateFrameStyle->setWhatsThis(i18n("Create a new framestyle based on the currently selected frame."));
-
-        m_actionSpellIgnoreAll = new KAction(i18n("Ignore All"), 0,
-                this, SLOT(slotAddIgnoreAllWord()),
-                actionCollection(), "ignore_all");
-
-        m_actionAddWordToPersonalDictionary=new KAction(i18n("Add Word to Dictionary"),0,
-                this, SLOT(addWordToDictionary()),
-                actionCollection(), "add_word_to_dictionary");
-
     */
 }
 
@@ -845,9 +796,23 @@ void KWView::toggleSnapToGrid()
 
 void KWView::toggleViewFrameBorders(bool on)
 {
-    m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, on);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, on);
     m_canvas->update();
     m_document->config().setViewFrameBorders(on);
+}
+
+void KWView::setShowFormattingChars(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, on);
+    m_canvas->update();
+    m_document->config().setShowFormattingChars(on);
+}
+
+void KWView::setShowTableBorders(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, on);
+    m_canvas->update();
+    m_document->config().setShowTableBorders(on);
 }
 
 void KWView::formatPage()
@@ -1054,15 +1019,6 @@ void KWView::handleDeletePageAction()
         action->setEnabled(m_document->pageCount() > 1
                 && m_currentPage.isValid() && !m_currentPage.isAutoGenerated());
     }
-}
-
-void KWView::setShowFormattingChars(bool on)
-{
-    KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    rm->setResource(KoText::ShowSpaces, on);
-    rm->setResource(KoText::ShowTabs, on);
-    rm->setResource(KoText::ShowEnters, on);
-    rm->setResource(KoText::ShowSpecialCharacters, on);
 }
 
 void KWView::editSelectAllFrames()

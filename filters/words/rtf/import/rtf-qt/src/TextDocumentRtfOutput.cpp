@@ -26,7 +26,7 @@
 namespace RtfReader
 {
     TextDocumentRtfOutput::TextDocumentRtfOutput( QTextDocument *document ) : AbstractRtfOutput(),
-      m_document( document ), m_haveSetFont( false )
+      m_haveSetFont( false ), m_document( document )
     {
 	m_cursor = new QTextCursor( m_document );
 	QTextCharFormat defaultCharFormat;

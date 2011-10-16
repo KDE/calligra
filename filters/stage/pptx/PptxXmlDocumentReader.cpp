@@ -769,6 +769,31 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
     READ_EPILOGUE
 }
 
+//! defaultTextStyle (Presentation Default Text Style)
+/*! ECMA-376, 19.2.1.8, p. 2773.
+
+ This element specifies the default text styles that are to be used within the
+ presentation.  The text style defined here can be referenced when inserting a
+ new slide if that slide is not associated with a master slide or if no styling
+ information has been otherwise specified for the text within the presentation
+ slide.
+
+ Parent element:
+ - [done] presentation (§19.2.1.26)
+
+ Child elements:
+ - defPPr (§21.1.2.2.2)
+ - extLst (§20.1.2.2.15)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+*/
 #undef CURRENT_EL
 #define CURRENT_EL defaultTextStyle
 KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()

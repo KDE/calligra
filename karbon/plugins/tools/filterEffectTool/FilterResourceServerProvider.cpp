@@ -41,13 +41,12 @@ FilterResourceServerProvider::FilterResourceServerProvider()
 
     m_filterEffectServer = new KoResourceServer<FilterEffectResource>("ko_effects", "*.svg");
     m_filterEffectThread = new KoResourceLoaderThread(m_filterEffectServer);
-    connect(m_filterEffectThread, SIGNAL(finished()),
-            this, SLOT(filterEffectThreadDone()));
     m_filterEffectThread->start();
 }
 
 FilterResourceServerProvider::~FilterResourceServerProvider()
 {
+    delete m_filterEffectThread;
     delete m_filterEffectServer;
 }
 
@@ -61,13 +60,8 @@ FilterResourceServerProvider* FilterResourceServerProvider::instance()
 
 KoResourceServer<FilterEffectResource>* FilterResourceServerProvider::filterEffectServer()
 {
+    m_filterEffectThread->barrier();
     return m_filterEffectServer;
-}
-
-void FilterResourceServerProvider::filterEffectThreadDone()
-{
-    delete m_filterEffectThread;
-    m_filterEffectThread = 0;
 }
 
 #include "FilterResourceServerProvider.moc"

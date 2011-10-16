@@ -25,6 +25,7 @@
 #include "sharedptr.h"
 #include "functordata.h"
 #include "wv2_export.h"
+#include "word97_generated.h"
 
 namespace wvWare {
 
@@ -77,9 +78,9 @@ namespace wvWare {
         virtual ~SubDocumentHandler();
 
         /**
-	 * Set the progress of WordDocument Stream processing.  All other
-	 * streams (Table, Data) are refered from this one.
-	 */
+     * Set the progress of WordDocument Stream processing.  All other
+     * streams (Table, Data) are refered from this one.
+     */
         virtual void setProgress(const int percent);
 
         /**
@@ -217,15 +218,15 @@ namespace wvWare {
 
         /**
          * This method gets called when a floating object is found.
-	 * @param globalCP (character position)
+     * @param globalCP (character position)
          */
         virtual void handleFloatingObject(unsigned int globalCP);
 
-	/**
-	 * This method gets called when an inline object is found.  @param data
+    /**
+     * This method gets called when an inline object is found.  @param data
          * the picture properties and offset into data stream.
-	 */
-	virtual void handleInlineObject(const PictureData& data);
+     */
+    virtual void handleInlineObject(const PictureData& data);
     };
 
 
