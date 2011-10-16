@@ -361,3 +361,86 @@
    - =KisStrokeStrategyUndoCommandBased=
    - =MoveStrokeStrategy=
 
+
+* Internals of the freehand tool
+** Motivation for so many classes
+   We need to share the codebase between at least four classes:
+   =KisToolFreehand=, =KisToolMultihand=, =KisScratchPad=. All these
+   classes paint on a canvas with =KisPainter=, so they share quite
+   much common code.
+** KisResourcesSnapshot
+   After we introduced the strokes, the moments of time when user
+   paints with mouse and when the line is actually painted on the
+   canvas do not coincide. It means that by the time a thread starts
+   actual changing the device, the contents of
+   =KoCanvasResourceProvider= might have already changed. So before we
+   start a stroke we should create a snapshot of all the resources we
+   have and pass this snapshot to the stroke.
+
+   For this purpose we introduced =KisResourcesSnapshot= class. It
+   solves two problems at the same time: first it stores all the resources
+   we might have and second it encapsulates the algorithm of loading
+   these resources into a =KisPainter= object. So this class is really
+   easy to use. You just create the snapshot and then just load all
+   the resources to the painter when needed.
+
+   #+BEGIN_SRC c++
+     KisResourcesSnapshotSP resources =
+         new KisResourcesSnapshot(image,
+                                  undoAdapter,
+                                  resourceManager);
+     KisPainter painter;
+     painter.begin(device, selection);
+     resources->setupPainter(&painter);
+
+     // paint something
+
+     painter.end();
+   #+END_SRC
+
+   In our implementation this class is usually created by
+   =KisToolFreehandHelper= and passed to the
+   =KisPainterBasedStrokeStrategy= class. The latter one creates
+   painters and initializes them using =setupPainter()=.
+** =KisToolFreehand= and =KisScratchPad=
+   The freehand tool is split into four classes:
+   - =KisToolFreehand= :: highlevel tool class that get the mouse
+        events form the Ko-classes and distributes events among
+        internal classes.
+   - =KisToolPaintingInformationBuilder= :: converts mouse events
+        represented by =KoPointerEvent= objects into
+        =KisPaintInformation= objects.
+   - =KisRecordingAdapter= :: stays in charge of adding recording
+        information into the image's action recorder. This class has
+        two purposes: first we need to be able to disable recording
+        for the scratch pad (then we just pass NULL instead of a
+        recording adapter), second when the strokes are able to do
+        their own recording, it'll be easier to port the freehand tool
+        to it.
+   - =KisToolFreehandHelper= :: this is the main class that combines
+        all the classes we were talking above. It accepts a mouse
+        event, converts it using a painting information builder into
+        the paint information, notifies recording adapter, takes the
+        snapshot of resources and finally starts a stroke. Then it
+        populates the stroke with stroke jobs, when the user moves the
+        mouse (=paint(event)= method) and finishes the stroke in the
+        end.
+
+   Such splitting allows us to use the same classes in both
+   =KisToolFreehand= and =KisScratchPad=. The only difference between
+   them is that the scratch pad doesn't have a recording adapter at
+   all, and uses base class =KisPaintingInformationBuilder= instead of
+   =KisToolPaintingInformationBuilder=. The latter differs from the
+   former one in a way that it supports painting assistants
+   (=adjustDocumentPoint()= method), complex coordinate
+   transformations with =KisCoordinatesConverter= (=documentToImage()=
+   method) and perspective painting (=calculatePerspective()=
+   method). The rest of the code is shared.
+** =KisToolMultihand=
+   Multihand tool uses the same classes. The only difference, it has a
+   couple of modifications in its helper (=KisToolMultihandHelper=),
+   those allow it to have several painters at the same time. The
+   tool's class inherits the freehand tool's class and just
+   substitutes the helper with its own (with =resetHelper()= method).
+
+
