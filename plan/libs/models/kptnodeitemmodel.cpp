@@ -1266,7 +1266,6 @@ QVariant NodeModel::completed( const Node *node, int role ) const
     const Task *t = static_cast<const Task*>( node );
     switch ( role ) {
         case Qt::DisplayRole:
-            kDebug()<<t->name()<<t->completion().percentFinished();
             return t->completion().percentFinished();
         case Qt::EditRole:
             return t->completion().percentFinished();

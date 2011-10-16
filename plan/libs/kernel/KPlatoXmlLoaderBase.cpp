@@ -851,14 +851,11 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
     if ( status.version() <= "0.5" ) {
         manager->setUsePert( false );
         MainSchedule *sch = loadMainSchedule( manager, element, status );
-        if ( sch ) {
+        if ( sch && sch->type() == Schedule::Expected ) {
             sch->setManager( manager );
-            switch ( sch->type() ) {
-                case Schedule::Expected: manager->setExpected( sch ); break;
-                case Schedule::Optimistic: manager->setOptimistic( sch ); break;
-                case Schedule::Pessimistic: manager->setPessimistic( sch ); break;
-            }
-            manager->setCalculateAll( manager->schedules().count() > 1 );
+            manager->setExpected( sch );
+        } else {
+            delete sch;
         }
         return true;
     }
@@ -881,13 +878,11 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
         //kDebug(kplatoXmlDebugArea())<<e.tagName();
         if ( e.tagName() == "schedule" ) {
             sch = loadMainSchedule( manager, e, status );
-            if ( sch ) {
+            if ( sch && sch->type() == Schedule::Expected ) {
                 sch->setManager( manager );
-                switch ( sch->type() ) {
-                    case Schedule::Expected: manager->setExpected( sch ); break;
-                    case Schedule::Optimistic: manager->setOptimistic( sch ); break;
-                    case Schedule::Pessimistic: manager->setPessimistic( sch ); break;
-                }
+                manager->setExpected( sch ); break;
+            } else {
+                delete sch;
             }
         } else if ( e.tagName() == "plan" ) {
             ScheduleManager *sm = new ScheduleManager( status.project() );
@@ -899,7 +894,6 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
             }
         }
     }
-    manager->setCalculateAll( manager->schedules().count() > 1 );
     return true;
 }
 

@@ -32,7 +32,6 @@
 #include <QTimer>
 #include <QMap>
 
-class QProgressBar;
 class QStackedWidget;
 class QSplitter;
 class KUndo2Command;
@@ -197,10 +196,7 @@ protected slots:
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
     void slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent, int index );
     void slotCalculateSchedule( Project*, ScheduleManager* );
-    void slotCalculationStarted( Project *project, ScheduleManager *sm );
-    void slotCalculationFinished( Project *project, ScheduleManager *sm );
     void slotBaselineSchedule( Project *project, ScheduleManager *sm );
-    void slotProgressChanged( int value );
 
     void slotProjectWorktime();
 
@@ -223,8 +219,6 @@ protected slots:
     void slotDeleteResourceObjects( QObjectList );
 
     void slotCurrentChanged( int );
-
-    void removeProgressBarItems();
 
     void slotInsertFile();
 
@@ -305,9 +299,6 @@ private slots:
 
     void slotRemoveCommands();
 
-    void slotMaxProgress( int p );
-    void slotSetProgress( int p );
-
     void hideToolDocker();
 
 private:
@@ -334,9 +325,6 @@ private:
     bool m_updatePertEditor;
 
     QLabel *m_estlabel;
-    QProgressBar *m_progress;
-    QLabel *m_text;
-    QTimer m_progressBarTimer;
 
     ViewAdaptor* m_dbus;
 

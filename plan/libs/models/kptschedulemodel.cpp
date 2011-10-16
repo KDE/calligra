@@ -552,46 +552,6 @@ bool ScheduleItemModel::setUsePert( const QModelIndex &index, const QVariant &va
     return false;
 }
 
-QVariant ScheduleItemModel::calculateAll( const QModelIndex &index, int role ) const
-{
-    ScheduleManager *sm = manager ( index );
-    if ( sm == 0 ) {
-        return QVariant();
-    }
-    switch ( role ) {
-        case Qt::EditRole:
-            return sm->calculateAll();
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            return sm->calculateAll() ? i18n( "All" ) : i18n( "Expected only" );
-        case Role::EnumList:
-            return QStringList() << i18n( "Expected only" ) << i18n( "All" );
-        case Role::EnumListValue:
-            return sm->calculateAll() ? 1 : 0;
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVariant &value, int role )
-{
-    ScheduleManager *sm = manager ( index );
-    if ( sm == 0 ) {
-        return false;
-    }
-    switch ( role ) {
-        case Qt::EditRole:
-            //FIXME remove?
-            emit executeCommand( new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify schedule calculate" ) );
-            return true;
-    }
-    return false;
-}
-
 QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) const
 {
     if ( m_project == 0 ) {
@@ -813,7 +773,6 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::ScheduleDirection: result = schedulingDirection( index, role ); break;
         case ScheduleModel::ScheduleOverbooking: result = allowOverbooking( index, role ); break;
         case ScheduleModel::ScheduleDistribution: result = usePert( index, role ); break;
-//        case ScheduleModel::ScheduleCalculate: result = calculateAll( index, role ); break;
         case ScheduleModel::SchedulePlannedStart: result = projectStart(  index, role ); break;
         case ScheduleModel::SchedulePlannedFinish: result = projectEnd( index, role ); break;
         case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;

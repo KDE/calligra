@@ -229,22 +229,10 @@ void Project::calculate( ScheduleManager &sm )
         incProgress();
         calculate( sm.expected(), sm.recalculateFrom() );
     } else {
-        if ( sm.optimistic() ) {
-            maxprogress += nodes * 3;
-        }
-        if ( sm.pessimistic() ) {
-            maxprogress += nodes * 3;
-        }
         emit maxProgress( maxprogress );
         sm.setMaxProgress( maxprogress );
         calculate( sm.expected() );
         emit scheduleChanged( sm.expected() );
-        if ( sm.optimistic() ) {
-            calculate( sm.optimistic() );
-        }
-        if ( sm.pessimistic() ) {
-            calculate( sm.pessimistic() );
-        }
         setCurrentSchedule( sm.expected()->id() );
     }
     emit sigProgress( maxprogress );
