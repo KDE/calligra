@@ -1438,6 +1438,11 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
 
     KoPathPoint *firstPoint = 0;
     KoPathPoint *lastPoint = 0;
+    KoPathPoint *secondPoint = 0;
+    KoPathPoint *preLastPoint = 0;
+
+    KoSubpath *firstSubpath = m_subpaths.first();
+    bool twoPointPath = subpathPointCount(0) == 2;
 
     KoMarkerData mdBegin = markerData(KoMarkerData::MarkerBegin);
     if (mdBegin.marker()) {
@@ -1461,18 +1466,37 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             QPainterPath beginOutline = stroker.createStroke(markerPath);
             beginOutline = beginOutline.united(markerPath);
             pathOutline.addPath(beginOutline);
-            firstPoint = firstSegment.first();
+            firstPoint = firstSubpath->first();
             if (firstPoint->properties() & KoPathPoint::StartSubpath) {
-                firstSegments.first.second()->setProperty(KoPathPoint::StartSubpath);
+                firstSegments.second.first()->setProperty(KoPathPoint::StartSubpath);
             }
             kDebug(30006) << "begin marker" << angle << startPoint << newStartPoint << firstPoint->point();
+
+            if (!twoPointPath) {
+                if (firstSegment.second()->activeControlPoint2()) {
+                    firstSegments.second.second()->setControlPoint2(firstSegment.second()->controlPoint2());
+                }
+                secondPoint = (*firstSubpath)[1];
+            }
         }
     }
     KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);
     if (mdEnd.marker()) {
         QPainterPath markerPath = mdEnd.marker()->path(mdEnd.width() + pen.widthF() * 1.5);
 
-        KoPathSegment lastSegment = segmentByIndex(KoPathPointIndex(0, m_subpaths.first()->count() - 2));
+        KoPathSegment lastSegment;
+
+        /*
+         * if the path consits only of 2 point and it it has an marker on both ends
+         * use the firstSegments.second as that is the path that needs to be shortened
+         */
+        if (twoPointPath && firstPoint) {
+            lastSegment = firstSegments.second;
+        }
+        else {
+            lastSegment = segmentByIndex(KoPathPointIndex(0, firstSubpath->count() - 2));
+        }
+
         if (lastSegment.isValid()) {
             QRectF pathBoundingRect = markerPath.boundingRect();
             qreal shortenLength = lastSegment.length() - pathBoundingRect.height() * 0.7;
@@ -1490,8 +1514,19 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             QPainterPath beginOutline = stroker.createStroke(markerPath);
             beginOutline = beginOutline.united(markerPath);
             pathOutline.addPath(beginOutline);
-            lastPoint = lastSegment.second();
+            lastPoint = firstSubpath->last();
             kDebug(30006) << "end marker" << angle << startPoint << newStartPoint << lastPoint->point();
+            if (twoPointPath) {
+                if (firstSegments.second.isValid()) {
+                    firstSegments.second.first()->setControlPoint2(lastSegments.first.first()->controlPoint2());
+                }
+            }
+            else {
+                if (lastSegment.first()->activeControlPoint1()) {
+                    lastSegments.first.first()->setControlPoint1(lastSegment.first()->controlPoint1());
+                }
+                preLastPoint = (*firstSubpath)[firstSubpath->count()-2];
+            }
         }
     }
 
@@ -1506,20 +1541,33 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
     // shortent the path to make it look nice
     // replace the point temporarily in case there is an arrow
     if (firstPoint) {
-        m_subpaths.first()->first() = firstSegments.first.second();
+        firstSubpath->first() = firstSegments.second.first();
+        if (secondPoint) {
+            (*firstSubpath)[1] = firstSegments.second.second();
+        }
     }
     if (lastPoint) {
-        m_subpaths.first()->last() = lastSegments.first.second();
+        if (preLastPoint) {
+            (*firstSubpath)[firstSubpath->count() - 2] = lastSegments.first.first();
+        }
+        firstSubpath->last() = lastSegments.first.second();
     }
 
     QPainterPath path = stroker.createStroke(outline());
 
     if (firstPoint) {
-        m_subpaths.first()->first() = firstPoint;
+        firstSubpath->first() = firstPoint;
+        if (secondPoint) {
+            (*firstSubpath)[1] = secondPoint;
+        }
     }
     if (lastPoint) {
-        m_subpaths.first()->last() = lastPoint;
+        if (preLastPoint) {
+            (*firstSubpath)[firstSubpath->count() - 2] = preLastPoint;
+        }
+        firstSubpath->last() = lastPoint;
     }
+
     pathOutline.addPath(path);
     pathOutline.setFillRule(Qt::WindingFill);
 
