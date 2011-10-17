@@ -1401,6 +1401,7 @@ void KarbonView::createLayersTabDock()
                 layerDocker, SLOT(updateView()));
         connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 layerDocker, SLOT(updateView()));
+        connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
         connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part *)),
                 layerDocker, SLOT(setPart(KParts::Part *)));
     }
