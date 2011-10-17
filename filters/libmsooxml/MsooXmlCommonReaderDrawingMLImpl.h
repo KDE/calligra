@@ -6122,7 +6122,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
 #undef CURRENT_EL
 #define CURRENT_EL txBody
 //! txBody handler (Shape Text Body)
-/*! ECMA-376, 20.1.2.2.40, p. 3048
+/*! ECMA-376, 20.1.2.2.40, p. 3058
  This element specifies the existence of text to be contained within the corresponding cell.
  Only used for text inside a cell.
 */

@@ -229,22 +229,10 @@ void Project::calculate( ScheduleManager &sm )
         incProgress();
         calculate( sm.expected(), sm.recalculateFrom() );
     } else {
-        if ( sm.optimistic() ) {
-            maxprogress += nodes * 3;
-        }
-        if ( sm.pessimistic() ) {
-            maxprogress += nodes * 3;
-        }
         emit maxProgress( maxprogress );
         sm.setMaxProgress( maxprogress );
         calculate( sm.expected() );
         emit scheduleChanged( sm.expected() );
-        if ( sm.optimistic() ) {
-            calculate( sm.optimistic() );
-        }
-        if ( sm.pessimistic() ) {
-            calculate( sm.pessimistic() );
-        }
         setCurrentSchedule( sm.expected()->id() );
     }
     emit sigProgress( maxprogress );
@@ -2042,10 +2030,12 @@ double Project::bcwp( const QDate &date, long id ) const
         plannedCompleted = plan.costTo( date );
         budgetedCompleted = budgetedCostPerformed( date, id );
     }
-    double percentageCompletion = budgetedCompleted / budgetAtCompletion;
-    
-    double c = budgetAtCompletion * percentageCompletion; //??
-    kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+    double c = 0.0;
+    if ( budgetAtCompletion > 0.0 ) {
+        double percentageCompletion = budgetedCompleted / budgetAtCompletion;
+        c = budgetAtCompletion * percentageCompletion; //??
+        kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+    }
     return c;
 }
 

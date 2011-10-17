@@ -1,6 +1,3 @@
-if(BUILD_kexi)
-        add_subdirectory(kexi)
-endif(BUILD_kexi)
 add_subdirectory(calligra)
 if(BUILD_kpresenter)
     add_subdirectory(stage)

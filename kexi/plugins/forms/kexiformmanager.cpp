@@ -284,7 +284,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
         }
 
         QSet<QString> iconOnlyActions;
-        iconOnlyActions << "widget_assign_action" << "show_form_ui";
+        iconOnlyActions << "show_form_ui";
         const QList<QAction*> actions( d->collection->actions() );
         foreach( QAction *a, actions ) {
             if (iconOnlyActions.contains(a->objectName())) { // icon only
