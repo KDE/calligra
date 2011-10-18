@@ -1,4 +1,6 @@
-macro_optional_add_subdirectory( converter )
+if(SHOULD_BUILD_TABLES)
+    macro_optional_add_subdirectory( converter )
+endif(SHOULD_BUILD_TABLES)
 macro_optional_add_subdirectory( thumbnail )
 macro_optional_add_subdirectory( kthesaurus )
 macro_optional_add_subdirectory( quickprint )
