@@ -29,7 +29,7 @@ KarbonPatternToolFactory::KarbonPatternToolFactory()
         : KoToolFactoryBase("KarbonPatternTool")
 {
     setToolTip(i18n("Pattern Editing Tool"));
-    setToolType(mainToolType());
+    setToolType("karbon");
     setIcon("pattern");
     setPriority(3);
 }
