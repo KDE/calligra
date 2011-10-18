@@ -426,8 +426,15 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setDayWidth( 30 );
+    // FIXME: improve/cover all options
+    QMap<QString, QString> format;
+    format.insert( "%H", "HH" );
+    format.insert( "%k", "H" );
+    format.insert( "%I", "HH A" );
+    format.insert( "%l", "h a" );
+    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 
     connect( model(), SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
 }
@@ -773,8 +780,15 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setDayWidth( 30 );
+    // FIXME: improve/cover all options
+    QMap<QString, QString> format;
+    format.insert( "%H", "HH" );
+    format.insert( "%k", "H" );
+    format.insert( "%I", "HH A" );
+    format.insert( "%l", "h a" );
+    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 }
 
 MilestoneItemModel *MilestoneKDGanttView::model() const
