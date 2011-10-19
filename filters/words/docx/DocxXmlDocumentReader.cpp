@@ -3783,21 +3783,23 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
 
     if (color.isEmpty()) {
         QString colorString = QString("#").append(color);
-        borderData.color = QColor(colorString);
+        borderData.innerPen.setColor(QColor(colorString));
+        borderData.outerPen.setColor(QColor(colorString));
     }
 
     // Fallback to theme
-    if (!borderData.color.isValid() && !themeColor.isEmpty()) {
+    if (!borderData.innerPen.color().isValid() && !themeColor.isEmpty()) {
 
         MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
         colorItem = m_context->themes->colorScheme.value(themeColor);
         if (colorItem) {
-            borderData.color = colorItem->value();
+            borderData.innerPen.setColor(colorItem->value());
+            borderData.outerPen.setColor(colorItem->value());
         }
     }
 
     TRY_READ_ATTR(sz)
-    borderData.width = sz.toDouble() / 8.0;
+    borderData.innerPen.setWidthF(sz.toDouble() / 8.0);
 
     return borderData;
 }
