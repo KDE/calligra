@@ -444,7 +444,7 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
     }
     switch ( role ) {
         case Qt::DisplayRole:
-            if ( node->type() == Node::Type_Task ) {
+            if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Duration::Unit unit = node->estimate()->unit();
                 QString s = KGlobal::locale()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
                 if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
@@ -3166,10 +3166,16 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case NodeModel::NodeEstimate: // estimate
+            {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
             case NodeModel::NodeOptimisticRatio: // optimisticRatio
             case NodeModel::NodePessimisticRatio: // pessimisticRatio
             {
-                if ( ! baselined && ( n->type() == Node::Type_Task ) ) {
+                if ( ! baselined && n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
