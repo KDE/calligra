@@ -17,34 +17,41 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ANIMATOR_MODEL_FACTORY_H
-#define ANIMATOR_MODEL_FACTORY_H
+#include "animator_manager_factory.h"
 
-#include <QObject>
+#include <KGlobal>
 
-#include "animator_model.h"
+#include <iostream>
 
-#include <kis_image.h>
-
-class AnimatorModelFactory : public QObject
+AnimatorManagerFactory::AnimatorManagerFactory()
 {
-    Q_OBJECT
+    m_instances.clear();
+}
 
-public:
-    AnimatorModelFactory();
-    virtual ~AnimatorModelFactory();
-    
-public:
-    static AnimatorModelFactory* instance();
-    
-public:
-    AnimatorModel* getModel(KisImage* image);
-    
-private:
-    void init();
-    
-private:
-    QMap<KisImage*,AnimatorModel*> m_instances;
-};
+AnimatorManagerFactory::~AnimatorManagerFactory()
+{
+}
 
-#endif // ANIMATOR_MODEL_FACTORY_H
+AnimatorManagerFactory* AnimatorManagerFactory::instance()
+{
+    K_GLOBAL_STATIC(AnimatorManagerFactory, s_instance)
+    if (!s_instance.exists()) {
+        s_instance->init();
+    }
+    return s_instance;
+}
+
+AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image)
+{
+    if (! m_instances[image])
+    {
+        m_instances[image] = new AnimatorManager(image);
+    }
+    
+    return m_instances[image];
+    
+}
+
+void AnimatorManagerFactory::init()
+{
+}

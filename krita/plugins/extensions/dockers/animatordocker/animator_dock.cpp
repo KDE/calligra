@@ -29,7 +29,7 @@
 
 #include "animator_dock.h"
 #include "animator_model.h"
-#include "animator_model_factory.h"
+#include "animator_manager_factory.h"
 // #include "animator_view.h"
 
 #include <iostream>
@@ -37,19 +37,33 @@
 AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
 {
     m_mainModel = 0;
+    
+    setupUI();
+}
+
+void AnimatorDock::setupUI()
+{
+    m_view = new AnimatorView;
+//     m_view->setModel(m_mainModel);
+    
+    setWidget(m_view);
 }
 
 void AnimatorDock::setCanvas(KoCanvasBase* canvas)
 {
     KisCanvas2* kcanvas = dynamic_cast<KisCanvas2*>(canvas);
     KisImage* image = kcanvas->image().data();
-    m_mainModel = AnimatorModelFactory::instance()->getModel(image);
     
-    std::cout << (void*)m_mainModel << std::endl;
+    m_mainModel = new AnimatorModel(image);
+    
+    m_view->setModel(m_mainModel);
+    
+    m_manager = AnimatorManagerFactory::instance()->getManager(image);
 }
 
 void AnimatorDock::unsetCanvas()
 {
+    delete m_mainModel;
     m_mainModel = 0;
 }
 

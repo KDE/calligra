@@ -17,41 +17,20 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "animator_model_factory.h"
+#ifndef ANIMATOR_VIEW_H
+#define ANIMATOR_VIEW_H
 
-#include <KGlobal>
+#include <qtreeview.h>
 
-#include <iostream>
-
-AnimatorModelFactory::AnimatorModelFactory()
-{
-    m_instances.clear();
-}
-
-AnimatorModelFactory::~AnimatorModelFactory()
-{
-}
-
-AnimatorModelFactory* AnimatorModelFactory::instance()
-{
-    K_GLOBAL_STATIC(AnimatorModelFactory, s_instance)
-    if (!s_instance.exists()) {
-        s_instance->init();
-    }
-    return s_instance;
-}
-
-AnimatorModel* AnimatorModelFactory::getModel(KisImage* image)
-{
-    if (! m_instances[image])
-    {
-        m_instances[image] = new AnimatorModel(image);
-    }
+class AnimatorView : public QTreeView {
+    Q_OBJECT
     
-    return m_instances[image];
+public:
+    AnimatorView();
+    virtual ~AnimatorView();
     
-}
+public:
+    
+};
 
-void AnimatorModelFactory::init()
-{
-}
+#endif

@@ -1,5 +1,5 @@
 /*
- *  Docker -- almost all gui is here
+ *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,42 +17,34 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef ANIMATOR_MANAGER_FACTORY_H
+#define ANIMATOR_MANAGER_FACTORY_H
 
-#ifndef _ANIMATOR_DOCK_H_
-#define _ANIMATOR_DOCK_H_
+#include <QObject>
 
-#include <QDockWidget>
-
-#include "kis_view2.h"
-#include "KoCanvasObserverBase.h"
-#include "kis_node_model.h"
-#include "KoMainWindow.h"
-
-#include "animator_model.h"
-#include "animator_view.h"
 #include "animator_manager.h"
 
-class AnimatorDock : public QDockWidget, public KoCanvasObserverBase
+#include <kis_image.h>
+
+class AnimatorManagerFactory : public QObject
 {
     Q_OBJECT
+
+public:
+    AnimatorManagerFactory();
+    virtual ~AnimatorManagerFactory();
     
 public:
-    AnimatorDock();
-
-public slots:
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas();
+    static AnimatorManagerFactory* instance();
+    
+public:
+    AnimatorManager* getManager(KisImage* image);
     
 private:
-    virtual void setupUI();
+    void init();
     
 private:
-    AnimatorManager* m_manager;
-    
-private:
-    AnimatorModel* m_mainModel;
-    AnimatorView* m_view;
+    QMap<KisImage*,AnimatorManager*> m_instances;
 };
 
-
-#endif
+#endif // ANIMATOR_MODEL_FACTORY_H

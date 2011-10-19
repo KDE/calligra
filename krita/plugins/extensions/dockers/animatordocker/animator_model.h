@@ -22,6 +22,7 @@
 
 #include <qt4/QtCore/QModelIndex>
 #include <kis_image.h>
+#include <kis_node_model.h>
 
 
 class AnimatorModel : public QAbstractItemModel
@@ -34,13 +35,28 @@ public:
     
 public slots:
     virtual void removeThis();
+    
+    virtual void layoutChangedSlot();
+    virtual void dataChangedSlot(KisNode* node);
 
 public:
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex& child) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    
+protected:
+    virtual KisNode* nodeFromIndex(const QModelIndex& index) const;
+    virtual QModelIndex indexFromNode(const KisNode* node) const;
+    
+private:
+    
+private:
+    KisNodeModel* m_nodeModel;
+    KisImage* m_image;
 };
 
 #endif // ANIMATOR_MODEL_H
