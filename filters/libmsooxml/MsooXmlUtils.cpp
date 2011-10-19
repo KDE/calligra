@@ -1660,23 +1660,23 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
             (indent == 0))
         {
             if ((qAbs(indent) > qAbs(margin)) && (indent < 0)) {
-                //hanging mode
+                //hanging:
                 returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
             } else {
-                //first line mode
+                //first-line and none:
                 returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
             }
             returnValue += "text:label-followed-by=\"nothing\" ";
         }
         else {
             if (qAbs(indent) > qAbs(margin)) {
-                //hanging mode
+                //hanging:
                 if (indent < 0) {
                     returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
                     returnValue += "text:label-followed-by=\"listtab\" ";
                     returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
                 }
-                //first line mode
+                //first-line:
                 else {
                     returnValue += QString("fo:text-indent=\"0pt\" ");
                     returnValue += "text:label-followed-by=\"listtab\" ";
@@ -1699,27 +1699,23 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
         //text:label-followed-by
         if ((m_followingChar == "tab") || (m_followingChar == UNUSED)) {
             returnValue += "text:label-followed-by=\"listtab\" ";
-            // Layout hints:
+            // Layout hints: none/first-line/hanging are values from the
+            // Special field of the Paragraph dialog in MS Word.
             //
-            // first-line mode:
+            // first-line:
             // IF (indent > 0) and (margin > 0), THEN use default tab stop OR a custom tab stop if defined.
             // IF (indent > 0) and (margin == 0), THEN use default tab stop OR a custom tab stop if defined.
-            // IF (indent > 0) and (margin < 0), THEN use tab stop at 0^{*} AND a custom tab stop if defined.
+            // IF (indent > 0) and (margin < 0), THEN use default tab stop OR a custom tab stop if defined.
             //
+            // none:
             // IF (indent == 0) and (margin > 0), THEN use default tab stop OR a custom tab stop if defined.
             // IF (indent == 0) and (margin == 0), THEN use default tab stop OR a custom tab stop if defined.
-            // IF (indent == 0) and (margin < 0), THEN use tab stop at 0^{*} AND a custom tab stop if defined.
+            // IF (indent == 0) and (margin < 0), THEN use default tab stop OR a custom tab stop if defined.
             //
-            // {*} if applicable: based on the bullet (label) position.
-            //
-            // hanging mode: bullet_position = margin - indent; (that's what you see in MS Word UI)
-            //
-            // NOTE: writing the text:list-tab-stop-position attribute, should
-            // be ignored if margin/indent is defined in the paragraph style.
-            //
-            if (indent < 0) {
-                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin);
-            }
+            // hanging:
+            // 1. the tab should be placed at the margin position
+            // 2. bullet_position = margin - indent; (that's the indentation
+            // left value that can be seen in Paragraph dialog in MS Word)
         }
         //space and nothing are same in OOXML and ODF
         else {
