@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QABSTRACTITEMMODEL_P_H
-#define QABSTRACTITEMMODEL_P_H
+#ifndef KEXI_QABSTRACTITEMMODEL_P_H
+#define KEXI_QABSTRACTITEMMODEL_P_H
 
 //
 //  W A R N I N G
@@ -59,7 +59,7 @@
 #include "QtCore/qset.h"
 #include "QtCore/qhash.h"
 
-QT_BEGIN_NAMESPACE
+//namespace KexiUtils {
 
 class QPersistentModelIndexData
 {
@@ -73,7 +73,7 @@ public:
     static void destroy(QPersistentModelIndexData *data);
 };
 
-class Q_CORE_EXPORT QAbstractItemModelPrivate : public QObjectPrivate
+class KEXIUTILS_EXPORT QAbstractItemModelPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QAbstractItemModel)
 
@@ -96,6 +96,7 @@ public:
     void itemsMoved(const QModelIndex &srcParent, int srcFirst, int srcLast, const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
     bool allowMove(const QModelIndex &srcParent, int srcFirst, int srcLast, const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
     
+#if 0
     inline QModelIndex createIndex(int row, int column, void *data = 0) const {
         return q_func()->createIndex(row, column, data);
     }
@@ -107,7 +108,7 @@ public:
     inline bool indexValid(const QModelIndex &index) const {
          return (index.row() >= 0) && (index.column() >= 0) && (index.model() == q_func());
     }
-
+#endif
     inline void invalidatePersistentIndexes() {
         foreach (QPersistentModelIndexData *data, persistent.indexes) {
             data->index = QModelIndex();
@@ -171,6 +172,6 @@ public:
     static const QHash<int,QByteArray> &defaultRoleNames();
 };
 
-QT_END_NAMESPACE
+//} // namespace KexiUtils
 
-#endif // QABSTRACTITEMMODEL_P_H
+#endif // KEXI_QABSTRACTITEMMODEL_P_H

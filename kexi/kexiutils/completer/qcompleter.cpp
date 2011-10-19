@@ -156,8 +156,8 @@
 #include "QtGui/qdesktopwidget.h"
 #include "QtGui/qlineedit.h"
 
-QT_BEGIN_NAMESPACE
-
+namespace KexiUtils {
+    
 QCompletionModel::QCompletionModel(QCompleterPrivate *c, QObject *parent)
     : QAbstractProxyModel(*new QCompletionModelPrivate, parent),
       c(c), showAll(false)
@@ -938,7 +938,7 @@ void QCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path)
 QCompleter::QCompleter(QObject *parent)
 : QObject(*new QCompleterPrivate(), parent)
 {
-    Q_D(QCompleter);
+    Q_D(KexiUtils::QCompleter);
     d->init();
 }
 
@@ -1826,9 +1826,9 @@ QStringList QCompleter::splitPath(const QString& path) const
     set to QCompleter::InlineCompletion. The item's \a text is given.
 */
 
-QT_END_NAMESPACE
-
 #include "moc_qcompleter.cpp"
 #include "moc_qcompleter_p.cpp"
+
+} //namespace KexiUtils
 
 #endif // QT_NO_COMPLETER

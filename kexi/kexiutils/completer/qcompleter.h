@@ -39,8 +39,10 @@
 **
 ****************************************************************************/
 
-#ifndef QCOMPLETER_H
-#define QCOMPLETER_H
+#ifndef KEXI_QCOMPLETER_H
+#define KEXI_QCOMPLETER_H
+
+#include <kexiutils_export.h>
 
 #include <QtCore/qobject.h>
 #include <QtCore/qpoint.h>
@@ -48,20 +50,17 @@
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qrect.h>
 
-QT_BEGIN_HEADER
-
-QT_BEGIN_NAMESPACE
-
-QT_MODULE(Gui)
-
 #ifndef QT_NO_COMPLETER
 
-class QCompleterPrivate;
 class QAbstractItemView;
 class QAbstractProxyModel;
 class QWidget;
 
-class Q_GUI_EXPORT QCompleter : public QObject
+namespace KexiUtils {
+
+class QCompleterPrivate;
+
+class KEXIUTILS_EXPORT QCompleter : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString completionPrefix READ completionPrefix WRITE setCompletionPrefix)
@@ -162,10 +161,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_fileSystemModelDirectoryLoaded(const QString&))
 };
 
+} // namespace KexiUtils
+    
 #endif // QT_NO_COMPLETER
 
-QT_END_NAMESPACE
-
-QT_END_HEADER
-
-#endif // QCOMPLETER_H
+#endif // KEXI_QCOMPLETER_H

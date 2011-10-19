@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QOBJECT_P_H
-#define QOBJECT_P_H
+#ifndef KEXI_QOBJECT_P_H
+#define KEXI_QOBJECT_P_H
 
 //
 //  W A R N I N G
@@ -53,6 +53,8 @@
 // We mean it.
 //
 
+#include <kexiutils_export.h>
+
 #include "QtCore/qobject.h"
 #include "QtCore/qpointer.h"
 #include "QtCore/qsharedpointer.h"
@@ -62,13 +64,14 @@
 #include "QtCore/qreadwritelock.h"
 #include "QtCore/qvariant.h"
 
-QT_BEGIN_NAMESPACE
-
 class QVariant;
 class QThreadData;
 class QObjectConnectionListVector;
+
 namespace QtSharedPointer { struct ExternalRefCountData; }
 
+//namespace KexiUtils {
+    
 /* mirrored in QtTestLib, DON'T CHANGE without prior warning */
 struct QSignalSpyCallbackSet
 {
@@ -79,13 +82,13 @@ struct QSignalSpyCallbackSet
     EndCallback signal_end_callback,
                 slot_end_callback;
 };
-void Q_CORE_EXPORT qt_register_signal_spy_callbacks(const QSignalSpyCallbackSet &callback_set);
+void KEXIUTILS_EXPORT qt_register_signal_spy_callbacks(const QSignalSpyCallbackSet &callback_set);
 
-extern QSignalSpyCallbackSet Q_CORE_EXPORT qt_signal_spy_callback_set;
+extern QSignalSpyCallbackSet KEXIUTILS_EXPORT qt_signal_spy_callback_set;
 
 enum { QObjectPrivateVersion = QT_VERSION };
 
-class Q_CORE_EXPORT QAbstractDeclarativeData
+class KEXIUTILS_EXPORT QAbstractDeclarativeData
 {
 public:
     static void (*destroyed)(QAbstractDeclarativeData *, QObject *);
@@ -93,7 +96,7 @@ public:
     static void (*objectNameChanged)(QAbstractDeclarativeData *, QObject *);
 };
 
-class Q_CORE_EXPORT QObjectPrivate : public QObjectData
+class KEXIUTILS_EXPORT QObjectPrivate : public QObjectData
 {
     Q_DECLARE_PUBLIC(QObject)
 
@@ -161,21 +164,24 @@ public:
     void sendPendingChildInsertedEvents();
 #endif
 
+#if 0
     static inline Sender *setCurrentSender(QObject *receiver,
                                     Sender *sender);
     static inline void resetCurrentSender(QObject *receiver,
                                    Sender *currentSender,
                                    Sender *previousSender);
+#endif
 #ifdef QT_JAMBI_BUILD
     static int *setDeleteWatch(QObjectPrivate *d, int *newWatch);
     static void resetDeleteWatch(QObjectPrivate *d, int *oldWatch, int deleteWatch);
 #endif
     static void clearGuards(QObject *);
 
+#if 0
     static QObjectPrivate *get(QObject *o) {
         return o->d_func();
     }
-
+#endif
     int signalIndex(const char *signalName) const;
     inline bool isSignalConnected(uint signalIdx) const;
 
@@ -229,6 +235,7 @@ inline bool QObjectPrivate::isSignalConnected(uint signal_index) const
         || qt_signal_spy_callback_set.signal_end_callback);
 }
 
+#if 0
 inline QObjectPrivate::Sender *QObjectPrivate::setCurrentSender(QObject *receiver,
                                                          Sender *sender)
 {
@@ -249,12 +256,8 @@ inline void QObjectPrivate::resetCurrentSender(QObject *receiver,
         previousSender->ref = currentSender->ref;
 }
 
-
-Q_DECLARE_TYPEINFO(QObjectPrivate::Connection, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(QObjectPrivate::Sender, Q_MOVABLE_TYPE);
-
 class QSemaphore;
-class Q_CORE_EXPORT QMetaCallEvent : public QEvent
+class KEXIUTILS_EXPORT QMetaCallEvent : public QEvent
 {
 public:
     QMetaCallEvent(ushort method_offset, ushort method_relative, QObjectPrivate::StaticMetaCallFunction callFunction , const QObject *sender, int signalId,
@@ -290,16 +293,20 @@ private:
     bool reset;
 };
 
-void Q_CORE_EXPORT qDeleteInEventHandler(QObject *o);
+void KEXIUTILS_EXPORT qDeleteInEventHandler(QObject *o);
 
 
-struct Q_CORE_EXPORT QAbstractDynamicMetaObject : public QMetaObject
+struct KEXIUTILS_EXPORT QAbstractDynamicMetaObject : public QMetaObject
 {
     virtual ~QAbstractDynamicMetaObject() {}
     virtual int metaCall(QMetaObject::Call, int _id, void **) { return _id; }
     virtual int createProperty(const char *, const char *) { return -1; }
 };
+#endif
 
-QT_END_NAMESPACE
+//} // namespace KexiUtils
 
-#endif // QOBJECT_P_H
+Q_DECLARE_TYPEINFO(QObjectPrivate::Connection, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(QObjectPrivate::Sender, Q_MOVABLE_TYPE);
+
+#endif // KEXI_QOBJECT_P_H

@@ -49,7 +49,7 @@
 #include <QtCore/QStringList>
 
 
-QT_BEGIN_NAMESPACE
+//namespace KexiUtils {
 
 /*!
     \since 4.1
@@ -87,6 +87,6 @@ void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()
     model = QAbstractItemModelPrivate::staticEmptyModel();
 }
 
-QT_END_NAMESPACE
+//} //namespace KexiUtils
 
 #endif // QT_NO_PROXYMODEL

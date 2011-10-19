@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QCOMPLETER_P_H
-#define QCOMPLETER_P_H
+#ifndef KEXI_QCOMPLETER_P_H
+#define KEXI_QCOMPLETER_P_H
 
 
 //
@@ -65,7 +65,7 @@
 #include "QtGui/qpainter.h"
 #include "private/qabstractproxymodel_p.h"
 
-QT_BEGIN_NAMESPACE
+namespace KexiUtils {
 
 class QCompletionModel;
 
@@ -257,8 +257,8 @@ class QCompletionModelPrivate : public QAbstractProxyModelPrivate
     Q_DECLARE_PUBLIC(QCompletionModel)
 };
 
-QT_END_NAMESPACE
+} // namespace KexiUtils
 
 #endif // QT_NO_COMPLETER
 
-#endif // QCOMPLETER_P_H
+#endif // KEXI_QCOMPLETER_P_H
