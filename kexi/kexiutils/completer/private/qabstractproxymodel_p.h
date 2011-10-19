@@ -62,10 +62,9 @@
 
 class QAbstractProxyModelPrivate : public QAbstractItemModelPrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractProxyModel)
 public:
-    QAbstractProxyModelPrivate() : QAbstractItemModelPrivate(), model(0) {}
-    QAbstractItemModel *model;
+    QAbstractProxyModelPrivate() : QAbstractItemModelPrivate()/*, model(0)*/ {}
+    //QAbstractItemModel *model;
     virtual void _q_sourceModelDestroyed();
 };
 

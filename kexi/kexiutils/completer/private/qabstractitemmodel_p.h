@@ -59,7 +59,7 @@
 #include "QtCore/qset.h"
 #include "QtCore/qhash.h"
 
-//namespace KexiUtils {
+namespace KexiUtils {
 
 class QPersistentModelIndexData
 {
@@ -75,8 +75,6 @@ public:
 
 class KEXIUTILS_EXPORT QAbstractItemModelPrivate : public QObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractItemModel)
-
 public:
     QAbstractItemModelPrivate() : QObjectPrivate(), supportedDragActions(-1), roleNames(defaultRoleNames()) {}
     void removePersistentIndexData(QPersistentModelIndexData *data);
@@ -172,6 +170,6 @@ public:
     static const QHash<int,QByteArray> &defaultRoleNames();
 };
 
-//} // namespace KexiUtils
+} // namespace KexiUtils
 
 #endif // KEXI_QABSTRACTITEMMODEL_P_H

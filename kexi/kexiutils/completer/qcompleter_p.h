@@ -63,7 +63,7 @@
 #include "qcompleter.h"
 #include "QtGui/qitemdelegate.h"
 #include "QtGui/qpainter.h"
-#include "private/qabstractproxymodel_p.h"
+#include "private/qabstractitemmodel_p.h"
 
 namespace KexiUtils {
 
@@ -71,10 +71,8 @@ class QCompletionModel;
 
 class QCompleterPrivate : public QObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QCompleter)
-
 public:
-    QCompleterPrivate();
+    QCompleterPrivate(QCompleter *q);
     ~QCompleterPrivate() { delete popup; }
     void init(QAbstractItemModel *model = 0);
 
@@ -101,6 +99,8 @@ public:
     void _q_autoResizePopup();
     void _q_fileSystemModelDirectoryLoaded(const QString &path);
     void setCurrentIndex(QModelIndex, bool = true);
+
+    QCompleter * const q;
 };
 
 class QIndexMapper
@@ -216,6 +216,7 @@ class QCompletionModel : public QAbstractProxyModel
 
 public:
     QCompletionModel(QCompleterPrivate *c, QObject *parent);
+    ~QCompletionModel();
 
     void createEngine();
     void setFiltered(bool);
@@ -241,8 +242,6 @@ public:
     QScopedPointer<QCompletionEngine> engine;
     bool showAll;
 
-    Q_DECLARE_PRIVATE(QCompletionModel)
-
 signals:
     void rowsAdded();
 
@@ -250,11 +249,16 @@ public Q_SLOTS:
     void invalidate();
     void rowsInserted();
     void modelDestroyed();
+private:
+    QCompletionModelPrivate * const d;
 };
 
-class QCompletionModelPrivate : public QAbstractProxyModelPrivate
+class QCompletionModelPrivate : public QAbstractItemModelPrivate
 {
-    Q_DECLARE_PUBLIC(QCompletionModel)
+    QCompletionModelPrivate(QCompletionModel *q);
+    virtual void _q_sourceModelDestroyed();
+    QCompletionModel * const q;
+    friend class QCompletionModel;
 };
 
 } // namespace KexiUtils

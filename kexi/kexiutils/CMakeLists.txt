@@ -27,7 +27,6 @@ set(kexiutils_LIB_SRCS
   KexiCategorizedView.cpp
   
   completer/qcompleter.cpp
-  completer/qabstractproxymodel.cpp
 )
 
 IF (KEXI_MOBILE)

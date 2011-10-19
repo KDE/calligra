@@ -55,6 +55,7 @@
 class QAbstractItemView;
 class QAbstractProxyModel;
 class QWidget;
+class QItemSelection;
 
 namespace KexiUtils {
 
@@ -153,12 +154,15 @@ Q_SIGNALS:
 
 private:
     Q_DISABLE_COPY(QCompleter)
-    Q_DECLARE_PRIVATE(QCompleter)
 
-    Q_PRIVATE_SLOT(d_func(), void _q_complete(QModelIndex))
-    Q_PRIVATE_SLOT(d_func(), void _q_completionSelected(const QItemSelection&))
-    Q_PRIVATE_SLOT(d_func(), void _q_autoResizePopup())
-    Q_PRIVATE_SLOT(d_func(), void _q_fileSystemModelDirectoryLoaded(const QString&))
+    friend class QCompleterPrivate;
+    QCompleterPrivate * const d;
+
+private Q_SLOTS:
+    void _q_complete(const QModelIndex&);
+    void _q_completionSelected(const QItemSelection&);
+    void _q_autoResizePopup();
+    void _q_fileSystemModelDirectoryLoaded(const QString&);
 };
 
 } // namespace KexiUtils
