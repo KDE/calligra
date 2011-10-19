@@ -1,16 +1,10 @@
-include_directories(
-    ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/tables
-    ${CMAKE_SOURCE_DIR}/libs/kopageapp
-)
+include_directories(${KOMAIN_INCLUDES})
 
-set(calligraconverter_SRCS calligraconverter.cpp )
+set(calligraconverter_SRCS calligraconverter.cpp)
 
 kde4_add_executable(calligraconverter ${calligraconverter_SRCS})
 
-target_link_libraries(calligraconverter
-    komain
-    calligratablescommon)
+target_link_libraries(calligraconverter komain)
 
-install(TARGETS calligraconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligraconverter ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -38,11 +38,6 @@
 #include <KoPrintJob.h>
 #include <KoView.h>
 
-#include <tables/part/Doc.h>
-#include <tables/part/View.h>
-#include <tables/Map.h>
-#include <tables/Sheet.h>
-
 #include <calligraversion.h>
 
 bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, bool batch)
@@ -57,16 +52,8 @@ bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, cons
             doc->setAutoErrorHandlingEnabled(false);
             if (doc->openUrl(uIn)) {
                 doc->setReadWrite(false);
-                KoPrintJob *printJob = 0;
-                Calligra::Tables::Doc *tdoc = qobject_cast< Calligra::Tables::Doc * >(doc);
-                if (tdoc) {
-                    Calligra::Tables::View *tview = new Calligra::Tables::View(0, tdoc);
-                    tview->setActiveSheet(tdoc->map()->sheet(0));
-                    printJob = tview->createPdfPrintJob();
-                } else {
-                    KoView *view = doc->createView();
-                    printJob = view->createPdfPrintJob();
-                }
+                KoView *view = doc->createView();
+                KoPrintJob *printJob = view->createPdfPrintJob();
                 // We should now have a print job - but check to make sure
                 if (printJob) {
                     printJob->printer().setOutputFileName(uOut.path());
