@@ -233,6 +233,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
             ELSE_TRY_READ_IF(numFmt)
             ELSE_TRY_READ_IF(lvlText)
             ELSE_TRY_READ_IF(lvlJc)
+            ELSE_TRY_READ_IF(suff)
             else if (name() == "lvlPicBulletId") {
                 TRY_READ(lvlPicBulletId)
                 pictureType = true;
@@ -463,7 +464,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 
 #undef CURRENT_EL
 #define CURRENT_EL rPr
-//! w:rpr handler (Run Properties)
+//! w:rPr handler (Run Properties)
 /*!
 
  Parent elements:
@@ -494,12 +495,53 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_rPr_numbering()
 
 #undef CURRENT_EL
 #define CURRENT_EL pPr
-//! w:ppr handler (Paragraph Properties)
-/*!
+//! w:pPr handler (Numbering Level Associated Paragraph Properties)
+/*! ECMA-376, §17.9.23, p.808
+
+ Following child element are not provided compared to pPr (17.3.1.26):
+ - rPr (Run Properties for the Paragraph Mark)
+ - sectPr (Section Properties)
 
  Parent elements:
+ - [done] lvl (§17.9.6)
+ - [done] lvl (§17.9.7)
 
  Child elements:
+ - adjustRightInd (Automatically Adjust Right Indent When Using Document Grid) §17.3.1.1
+ - autoSpaceDE (Automatically Adjust Spacing of Latin and East Asian Text) §17.3.1.2
+ - autoSpaceDN (Automatically Adjust Spacing of East Asian Text and Numbers) §17.3.1.3
+ - bidi (Right to Left Paragraph Layout) §17.3.1.6
+ - cnfStyle (Paragraph Conditional Formatting) §17.3.1.8
+ - contextualSpacing (Ignore Spacing Above and Below When Using Identical Styles) §17.3.1.9
+ - divId (Associated HTML div ID) §17.3.1.10
+ - framePr (Text Frame Properties) §17.3.1.11
+ - [done] ind (Paragraph Indentation) §17.3.1.12
+ - jc (Paragraph Alignment) §17.3.1.13
+ - keepLines (Keep All Lines On One Page) §17.3.1.14
+ - keepNext (Keep Paragraph With Next Paragraph) §17.3.1.15
+ - kinsoku (Use East Asian Typography Rules for First and Last Character per Line) §17.3.1.16
+ - mirrorIndents (Use Left/Right Indents as Inside/Outside Indents) §17.3.1.18
+ - numPr (Numbering Definition Instance Reference) §17.3.1.19
+ - outlineLvl (Associated Outline Level) §17.3.1.20
+ - overflowPunct (Allow Punctuation to Extend Past Text Extents) §17.3.1.21
+ - pageBreakBefore (Start Paragraph on Next Page) §17.3.1.23
+ - pBdr (Paragraph Borders) §17.3.1.24
+ - pPrChange (Revision Information for Paragraph Properties) §17.13.5.29
+ - pStyle (Referenced Paragraph Style) §17.3.1.27
+ - shd (Paragraph Shading) §17.3.1.31
+ - snapToGrid (Use Document Grid Settings for Inter-Line Paragraph Spacing) §17.3.1.32
+ - spacing (Spacing Between Lines and Above/Below Paragraph) §17.3.1.33
+ - suppressAutoHyphens (Suppress Hyphenation for Paragraph) §17.3.1.34
+ - suppressLineNumbers (Suppress Line Numbers for Paragraph) §17.3.1.35
+ - suppressOverlap (Prevent Text Frames From Overlapping) §17.3.1.36
+ - tabs (Set of Custom Tab Stops) §17.3.1.38
+ - textAlignment (Vertical Character Alignment on Line) §17.3.1.39
+ - textboxTightWrap (Allow Surrounding Paragraphs to Tight Wrap to Text Box Contents) §17.3.1.40
+ - textDirection (Paragraph Text Flow Direction) §17.3.1.41
+ - topLinePunct (Compress Punctuation at Start of a Line) §17.3.1.43
+ - widowControl (Allow First/Last Line to Display on a Separate Page) §17.3.1.44
+ - wordWrap (Allow Line Breaking At Character Level) §17.3.1.45
+
 //! @todo: Handle all children
 */
 KoFilter::ConversionStatus DocxXmlNumberingReader::read_pPr_numbering()
@@ -595,6 +637,32 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlJc()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL suff
+//! suff (Content Between Numbering Symbol and Paragraph Text)
+/*! ECMA-376, §17.9.29, p.817
+
+ Parent elements:
+ - [done] lvl (§17.9.6)
+ - [done] lvl (§17.9.7)
+
+ Child elements:
+*/
+KoFilter::ConversionStatus DocxXmlNumberingReader::read_suff()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        m_currentBulletProperties.setFollowingChar(val);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL ind
 //! w:ind handler (Indentation)
 /*!
@@ -602,7 +670,8 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlJc()
  Parent elements:
 
  Child elements:
-//! @todo: Handle all children
+
+//! @todo: Handle all attributes!
 */
 KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
 {
@@ -620,12 +689,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
 
     TRY_READ_ATTR(firstLine)
     TRY_READ_ATTR(hanging)
+
     if (!hanging.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
         if (ok) {
            m_currentBulletProperties.setIndent(-firstInd);
         }
-
     }
     else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));

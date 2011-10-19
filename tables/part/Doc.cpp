@@ -221,9 +221,15 @@ void Doc::initConfig()
 KoView* Doc::createViewInstance(QWidget* parent)
 {
     View *view = new View(parent, this);
+    // If we don't have this here, the next call will die horribly
+    KoToolManager::instance()->addController(view->canvasController());
     // explicit switch tool to be sure that the list of option-widgets (CellToolOptionWidget
     // as returned by KoToolBase::optionWidgets) is updated to prevent crashes like bug 278896.
     KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+    // We need to set the active sheet, otherwise we will break various other bits of the API
+    // which expect your view to actually be ready for interaction after being created (e.g.
+    // printing)
+    view->setActiveSheet(map()->sheet(0));
     return view;
 }
 

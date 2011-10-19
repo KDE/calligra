@@ -929,6 +929,61 @@ QColor Utils::colorForLuminance(const QColor& color, const DoubleModifier& modul
     return color;
 }
 
+MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
+{
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+
+    if (tint > 0) {
+        red = tint * red + (1 - tint) * 255;
+        green = tint * green + (1 - tint) * 255;
+        blue = tint * blue + (1 - tint) * 255;
+    }
+    if (shade > 0) {
+        red = shade * red;
+        green = shade * green;
+        blue = shade * blue;
+    }
+
+    // FIXME: This calculation for sure is incorrect,
+    // According to MS forums, RGB should first be converted to linear RGB
+    // Then to HSL and then multiply saturation value by satMod
+    // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
+    // ADD INFO: MS document does not say that when calculating TINT and SHADE
+    // That whether one should use normal RGB or linear RGB, check it!
+
+
+    // This method is used temporarily, it seems to produce visually better results than the lower one.
+    if (satMod > 0) {
+        QColor temp = QColor(red, green, blue);
+        qreal saturationFromFull = 1.0 - temp.saturationF();
+        temp = QColor::fromHsvF(temp.hueF(), temp.saturationF() + saturationFromFull / 10 * satMod, temp.valueF());
+        red = temp.red();
+        green = temp.green();
+        blue = temp.blue();
+    }
+
+    /*
+    if (satMod > 0) {
+        red = red * satMod;
+        green = green * satMod;
+        blue = blue * satMod;
+        if (red > 255) {
+            red = 255;
+        }
+        if (green > 255) {
+            green = 255;
+        }
+        if (blue > 255) {
+            blue = 255;
+        }
+    }
+    */
+
+    color = QColor(red, green, blue);
+}
+
 class ST_PlaceholderType_to_ODFMapping : public QHash<QByteArray, QByteArray>
 {
 public:
@@ -1366,9 +1421,10 @@ void Utils::ParagraphBulletProperties::clear()
     m_indent = UNUSED;
     m_margin = UNUSED;
     m_picturePath = UNUSED;
-    m_bulletSize = QSize();
     m_bulletColor = UNUSED;
     m_bulletRelativeSize = "100"; // by default bullet follows text size
+    m_followingChar = UNUSED;
+    m_bulletSize = QSize();
 }
 
 void Utils::ParagraphBulletProperties::setAlign(const QString& align)
@@ -1439,6 +1495,11 @@ void Utils::ParagraphBulletProperties::setBulletColor(const QString& bulletColor
     m_bulletColor = bulletColor;
 }
 
+void Utils::ParagraphBulletProperties::setFollowingChar(const QString& followingChar)
+{
+    m_followingChar = followingChar;
+}
+
 QString Utils::ParagraphBulletProperties::bulletColor() const
 {
     return m_bulletColor;
@@ -1467,6 +1528,11 @@ QString Utils::ParagraphBulletProperties::indent() const
 QString Utils::ParagraphBulletProperties::bulletRelativeSize() const
 {
     return m_bulletRelativeSize;
+}
+
+QString Utils::ParagraphBulletProperties::followingChar() const
+{
+    return m_followingChar;
 }
 
 void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
@@ -1511,6 +1577,9 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     if (!properties.m_bulletSize.isEmpty()) {
         m_bulletSize = properties.m_bulletSize;
     }
+    if (properties.m_followingChar != UNUSED) {
+        m_followingChar = properties.m_followingChar;
+    }
 }
 
 QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fileByPowerPoint) const
@@ -1549,7 +1618,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     returnValue += ">";
 
     returnValue += "<style:list-level-properties ";
-    if (m_align != "UNUSED") {
+    if (m_align != UNUSED) {
         returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
     }
 
@@ -1570,13 +1639,13 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     double indent = 0;
     bool ok = false;
 
-    if (m_margin != "UNUSED") {
+    if (m_margin != UNUSED) {
         margin = m_margin.toDouble(&ok);
         if (!ok) {
             kDebug() << "STRING_TO_DOUBLE: error converting" << m_margin << "(attribute \"marL\")";
         }
     }
-    if (m_indent != "UNUSED") {
+    if (m_indent != UNUSED) {
         indent = m_indent.toDouble(&ok);
         if (!ok) {
             kDebug() << "STRING_TO_DOUBLE: error converting" << m_indent << "(attribute \"indent\")";
@@ -1591,23 +1660,23 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
             (indent == 0))
         {
             if ((qAbs(indent) > qAbs(margin)) && (indent < 0)) {
-                //hanging mode
+                //hanging:
                 returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
             } else {
-                //first line mode
+                //first-line and none:
                 returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
             }
             returnValue += "text:label-followed-by=\"nothing\" ";
         }
         else {
             if (qAbs(indent) > qAbs(margin)) {
-                //hanging mode
+                //hanging:
                 if (indent < 0) {
                     returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
                     returnValue += "text:label-followed-by=\"listtab\" ";
                     returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
                 }
-                //first line mode
+                //first-line:
                 else {
                     returnValue += QString("fo:text-indent=\"0pt\" ");
                     returnValue += "text:label-followed-by=\"listtab\" ";
@@ -1621,27 +1690,51 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
         }
         returnValue += "/>";
     }
-    // TODO: The text:label-followed-by is a required attribute, set the proper
-    // value, for now add the default used by calligra.
     else {
         returnValue += "<style:list-level-label-alignment ";
+        //fo:margin-left
         returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
+        //fo:text-indent
         returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
-        returnValue += "text:label-followed-by=\"space\" ";
+        //text:label-followed-by
+        if ((m_followingChar == "tab") || (m_followingChar == UNUSED)) {
+            returnValue += "text:label-followed-by=\"listtab\" ";
+            // Layout hints: none/first-line/hanging are values from the
+            // Special field of the Paragraph dialog in MS Word.
+            //
+            // first-line:
+            // IF (indent > 0) and (margin > 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent > 0) and (margin == 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent > 0) and (margin < 0), THEN use default tab stop OR a custom tab stop if defined.
+            //
+            // none:
+            // IF (indent == 0) and (margin > 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent == 0) and (margin == 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent == 0) and (margin < 0), THEN use default tab stop OR a custom tab stop if defined.
+            //
+            // hanging:
+            // 1. the tab should be placed at the margin position
+            // 2. bullet_position = margin - indent; (that's the indentation
+            // left value that can be seen in Paragraph dialog in MS Word)
+        }
+        //space and nothing are same in OOXML and ODF
+        else {
+            returnValue += QString("text:label-followed-by=\"%1\" ").arg(m_followingChar);
+        }
         returnValue += "/>";
     }
 
     returnValue += "</style:list-level-properties>";
     returnValue += "<style:text-properties ";
 
-    if (m_bulletColor != "UNUSED") {
+    if (m_bulletColor != UNUSED) {
     	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
     }
     if (m_type != ParagraphBulletProperties::PictureType) {
         returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
     }
     //PowerPoint UI does not enable to change the font for numbered lists
-    if (m_bulletFont != "UNUSED") {
+    if (m_bulletFont != UNUSED) {
         if (!fileByPowerPoint || (m_type == ParagraphBulletProperties::BulletType)) {
             returnValue += QString("fo:font-family=\"%1\" ").arg(m_bulletFont);
         }
@@ -1651,60 +1744,5 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     returnValue += ending;
 
     return returnValue;
-}
-
-MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
-{
-    int red = color.red();
-    int green = color.green();
-    int blue = color.blue();
-
-    if (tint > 0) {
-        red = tint * red + (1 - tint) * 255;
-        green = tint * green + (1 - tint) * 255;
-        blue = tint * blue + (1 - tint) * 255;
-    }
-    if (shade > 0) {
-        red = shade * red;
-        green = shade * green;
-        blue = shade * blue;
-    }
-
-    // FIXME: This calculation for sure is incorrect,
-    // According to MS forums, RGB should first be converted to linear RGB
-    // Then to HSL and then multiply saturation value by satMod
-    // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
-    // ADD INFO: MS document does not say that when calculating TINT and SHADE
-    // That whether one should use normal RGB or linear RGB, check it!
-
-
-    // This method is used temporarily, it seems to produce visually better results than the lower one.
-    if (satMod > 0) {
-        QColor temp = QColor(red, green, blue);
-        qreal saturationFromFull = 1.0 - temp.saturationF();
-        temp = QColor::fromHsvF(temp.hueF(), temp.saturationF() + saturationFromFull / 10 * satMod, temp.valueF());
-        red = temp.red();
-        green = temp.green();
-        blue = temp.blue();
-    }
-
-    /*
-    if (satMod > 0) {
-        red = red * satMod;
-        green = green * satMod;
-        blue = blue * satMod;
-        if (red > 255) {
-            red = 255;
-        }
-        if (green > 255) {
-            green = 255;
-        }
-        if (blue > 255) {
-            blue = 255;
-        }
-    }
-    */
-
-    color = QColor(red, green, blue);
 }
 

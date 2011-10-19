@@ -100,6 +100,14 @@ public:
 
     void setBulletColor(const QString& bulletColor);
 
+    void setStartValue(const QString& value);
+
+    void setBulletRelativeSize(int size);
+
+    void setFollowingChar(const QString& value);
+
+    QString bulletRelativeSize() const;
+
     QString bulletColor() const;
 
     QString bulletChar() const;
@@ -110,13 +118,9 @@ public:
 
     QString margin() const;
 
+    QString followingChar() const;
+
     void addInheritedValues(const ParagraphBulletProperties& properties);
-
-    void setBulletRelativeSize(int size);
-
-    QString bulletRelativeSize() const;
-
-    void setStartValue(const QString& value);
 
     int m_level;
 
@@ -136,8 +140,9 @@ private:
     QString m_margin;
     QString m_picturePath;
     QString m_bulletColor;
-    QSize m_bulletSize;
     QString m_bulletRelativeSize;
+    QString m_followingChar;
+    QSize m_bulletSize;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.
