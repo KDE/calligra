@@ -34,6 +34,8 @@ class KexiProjectItemDelegate : public QStyledItemDelegate
 public:
     KexiProjectItemDelegate(QObject *parent = 0);
     virtual ~KexiProjectItemDelegate();
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const;
     virtual QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                                   const QModelIndex &index) const;
 

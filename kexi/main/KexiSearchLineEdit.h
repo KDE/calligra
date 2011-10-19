@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,18 +21,51 @@
 #ifndef KEXISEARCHLINEEDIT_H
 #define KEXISEARCHLINEEDIT_H
 
+#include <QPair>
+#include <QModelIndex>
 #include <KLineEdit>
+#include <KexiSearchableModel.h>
 
-//! @short A small tool button with icon and optional text
+class KexiSearchableModel;
+
+//! @short Search line edit with advanced autocompletion
+/*! It works like KLineEdit with QCompleter but uses fork of QCompleter
+    for full-text-search.
+    @note Qt Embedded features of QLineEdit+QCompleter
+          (i.e. those marked with ifdef QT_KEYPAD_NAVIGATION) are not ported. */
 class KexiSearchLineEdit : public KLineEdit
 {
     Q_OBJECT
 public:
-    KexiSearchLineEdit(QWidget *parent = 0);
+    explicit KexiSearchLineEdit(QWidget *parent = 0);
 
     virtual ~KexiSearchLineEdit();
 
+    /*! Add searchable model to the main window. This extends search to a new area. 
+     One example is Project Navigator. */
+    void addSearchableModel(KexiSearchableModel *model);
+
+private slots:
+    void slotCompletionHighlighted(const QString &newText);
+    void slotCompletionHighlighted(const QModelIndex &index);
+    void slotCompletionActivated(const QModelIndex &index);
+
 protected:
+    virtual void inputMethodEvent(QInputMethodEvent *e);
+    virtual void focusInEvent(QFocusEvent *e);
+    virtual void focusOutEvent(QFocusEvent *e);
+    virtual void keyPressEvent(QKeyEvent *e);
+
+private:
+    void connectCompleter();
+    void disconnectCompleter();
+    bool advanceToEnabledItem(int dir);
+    void complete(int key);
+    QString textBeforeSelection() const;
+    QString textAfterSelection() const;
+    int selectionEnd() const;
+    
+    QPair<QModelIndex, KexiSearchableModel*> mapCompletionIndexToSource(const QModelIndex &index) const;
 
     class Private;
     Private * const d;

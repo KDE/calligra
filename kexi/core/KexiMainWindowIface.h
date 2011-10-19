@@ -31,13 +31,13 @@
 
 #include "kexisharedactionhost.h"
 #include "kexi.h"
-//#include "keximdi.h"
 
 class KexiWindow;
 class KexiProject;
 class KActionCollection;
 class KXMLGUIClient;
 class KXMLGUIFactory;
+class KexiSearchableModel;
 namespace KexiPart
 {
 class Item;
@@ -283,6 +283,10 @@ public:
      hidden. */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString()) = 0;
 
+    /*! Add searchable model to the main window. This extends search to a new area. 
+     One example is Project Navigator. */
+    virtual void addSearchableModel(KexiSearchableModel *model) = 0;
+    
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 
