@@ -102,6 +102,11 @@ STARTUP
 Before freeze:
 *fix bugs...
 
+Widgets
+*[code]substringCompletion property added to QCompleter, false by default
+MainWindow
+*Make global search "full text"
+
 2011-10-19
 MainWindow
 *Added minimal global search implementation with completion list, now just searches within Project objects

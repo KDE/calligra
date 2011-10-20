@@ -197,6 +197,7 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     d->completer->setPopup(treeView);
     d->completer->setModel(d->model = new KexiSearchLineEditCompleterPopupModel(d->completer));
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
+    d->completer->setSubstringCompletion(true);
     d->completer->setMaxVisibleItems(12);
     // Use unsorted model, sorting is handled in the source model itself.
     // Moreover, sorting QCompleter::CaseInsensitivelySortedModel breaks
