@@ -507,6 +507,18 @@ void QCompletionEngine::filter(const QStringList& parts)
     curRow = curMatch.isValid() ? 0 : -1;
 }
 
+inline bool matchPrefix(const QString& s1, const QString& s2, Qt::CaseSensitivity cs)
+{
+    return s1.startsWith(s2, cs);
+}
+
+inline bool matchSubstring(const QString& s1, const QString& s2, Qt::CaseSensitivity cs)
+{
+    return s1.contains(s2, cs);
+}
+
+typedef bool (*MatchFunction)(const QString&, const QString&, Qt::CaseSensitivity);
+
 QMatchData QCompletionEngine::filterHistory()
 {
     QAbstractItemModel *source = c->proxy->sourceModel();
@@ -524,9 +536,10 @@ QMatchData QCompletionEngine::filterHistory()
     QIndexMapper im(v);
     QMatchData m(im, -1, true);
 
+    MatchFunction matchFunction = c->substringCompletion ? &matchSubstring : &matchPrefix;
     for (int i = 0; i < source->rowCount(); i++) {
         QString str = source->index(i, c->column).data().toString();
-        if (str.startsWith(c->prefix, c->cs)
+        if (matchFunction(str, c->prefix, c->cs)
 #if (!defined(Q_OS_WIN) || defined(Q_OS_WINCE)) && !defined(Q_OS_SYMBIAN)
             && ((!isFsModel && !isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
 #endif
@@ -749,10 +762,11 @@ int QUnsortedModelEngine::buildIndices(const QString& str, const QModelIndex& pa
     const QAbstractItemModel *model = c->proxy->sourceModel();
     int i, count = 0;
 
+    MatchFunction matchFunction = c->substringCompletion ? &matchSubstring : &matchPrefix;
     for (i = 0; i < indices.count() && count != n; ++i) {
         QModelIndex idx = model->index(indices[i], c->column, parent);
         QString data = model->data(idx, c->role).toString();
-        if (!data.startsWith(str, c->cs) || !(model->flags(idx) & Qt::ItemIsSelectable))
+        if (!matchFunction(data, str, c->cs) || !(model->flags(idx) & Qt::ItemIsSelectable))
             continue;
         m->indices.append(indices[i]);
         ++count;
@@ -821,8 +835,9 @@ QMatchData QUnsortedModelEngine::filter(const QString& part, const QModelIndex& 
 
 ///////////////////////////////////////////////////////////////////////////////
 QCompleterPrivate::QCompleterPrivate(QCompleter *q)
-: widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), role(Qt::EditRole), column(0),
-  maxVisibleItems(7), sorting(QCompleter::UnsortedModel), wrap(true), eatFocusOut(true),
+: widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), substringCompletion(false),
+  role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(QCompleter::UnsortedModel),
+  wrap(true), eatFocusOut(true),
   hiddenBecauseNoMatch(false), q(q)
 {
 }
@@ -1607,7 +1622,7 @@ void QCompleter::setMaxVisibleItems(int maxItems)
 
     The default is Qt::CaseSensitive.
 
-    \sa completionColumn, completionRole, modelSorting
+    \sa substringCompletion, completionColumn, completionRole, modelSorting
 */
 void QCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
 {
@@ -1621,6 +1636,28 @@ void QCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
 Qt::CaseSensitivity QCompleter::caseSensitivity() const
 {
     return d->cs;
+}
+
+/*!
+    \property QCompleter::substringCompletion
+    \brief the completion uses any substring matching
+
+    If true the completion uses any substring matching.
+    If false prefix matching is used. The default is false.
+
+    \sa caseSensitivity
+*/
+void QCompleter::setSubstringCompletion(bool substringCompletion)
+{
+    if (d->substringCompletion == substringCompletion)
+        return;
+    d->substringCompletion = substringCompletion;
+    d->proxy->invalidate();
+}
+
+bool QCompleter::substringCompletion() const
+{
+    return d->substringCompletion;
 }
 
 /*!

@@ -71,6 +71,7 @@ class KEXIUTILS_EXPORT QCompleter : public QObject
     Q_PROPERTY(int completionRole READ completionRole WRITE setCompletionRole)
     Q_PROPERTY(int maxVisibleItems READ maxVisibleItems WRITE setMaxVisibleItems)
     Q_PROPERTY(Qt::CaseSensitivity caseSensitivity READ caseSensitivity WRITE setCaseSensitivity)
+    Q_PROPERTY(bool substringCompletion READ substringCompletion WRITE setSubstringCompletion)
     Q_PROPERTY(bool wrapAround READ wrapAround WRITE setWrapAround)
 
 public:
@@ -107,6 +108,9 @@ public:
 
     void setCaseSensitivity(Qt::CaseSensitivity caseSensitivity);
     Qt::CaseSensitivity caseSensitivity() const;
+
+    void setSubstringCompletion(bool substringCompletion);
+    bool substringCompletion() const;
 
     void setModelSorting(ModelSorting sorting);
     ModelSorting modelSorting() const;

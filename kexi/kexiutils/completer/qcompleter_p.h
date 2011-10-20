@@ -83,6 +83,7 @@ public:
 
     QString prefix;
     Qt::CaseSensitivity cs;
+    bool substringCompletion;
     int role;
     int column;
     int maxVisibleItems;
