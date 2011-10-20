@@ -285,7 +285,9 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
     if (!source.first.isValid())
         return;
     kDebug() << source.second->searchableData(source.first, Qt::EditRole);
-    source.second->activateSearchableObject(source.first);
+    if (source.second->activateSearchableObject(source.first)) {
+        clear();
+    }
 }
 
 // forked bits from QLineEdit::inputMethodEvent()
@@ -418,6 +420,13 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
                 if (!isReadOnly()) {
                     backspace();
                     complete(Qt::Key_Backspace);
+                    return;
+                }
+                break;
+            case Qt::Key_Delete:
+                if (!isReadOnly()) {
+                    KLineEdit::keyPressEvent(event);
+                    complete(Qt::Key_Delete);
                     return;
                 }
                 break;

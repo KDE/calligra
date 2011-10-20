@@ -106,6 +106,9 @@ Widgets
 *[code]substringCompletion property added to QCompleter, false by default
 MainWindow
 *Make global search "full text"
+*Clear contents on activation, update on pressing Delete
+TODO: when pressing Esc or (Back)Tab on empty search line edit, focus previously active widget; 
+      use QApplication::focusWidget() for that
 
 2011-10-19
 MainWindow
