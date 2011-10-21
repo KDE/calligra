@@ -1,6 +1,13 @@
 
-set(KRITA_ANIMATORDOCKER_PART_SRCS animator_manager.cpp animator_view.cpp
-animator.cpp animator_model.cpp animator_manager_factory.cpp animator_dock.cpp )
+set(KRITA_ANIMATORDOCKER_PART_SRCS
+    animator.cpp animator_manager_factory.cpp
+    animator_manager.cpp animator_loader.cpp animator_switcher.cpp
+    animator_model.cpp animator_view.cpp
+    animator_dock.cpp
+    
+    animated_layer.cpp framed_animated_layer.cpp
+    frame_layer.cpp simple_frame_layer.cpp
+)
 
 kde4_add_plugin(kritaanimatordocker ${KRITA_ANIMATORDOCKER_PART_SRCS})
 

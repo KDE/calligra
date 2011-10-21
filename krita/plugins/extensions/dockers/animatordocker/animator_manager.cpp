@@ -19,12 +19,86 @@
 
 #include "animator_manager.h"
 
+#include <kis_canvas2.h>
+#include <kis_view2.h>
+
+#include "animator_loader.h"
+#include "animator_switcher.h"
+
 AnimatorManager::AnimatorManager(KisImage* image)
 {
-
+    m_loader = new AnimatorLoader(this);
+    m_switcher = new AnimatorSwitcher(this);
+    
+    m_image = image;
+    m_nodeManager = 0;
 }
 
 AnimatorManager::~AnimatorManager()
 {
+}
 
+void AnimatorManager::setCanvas(KoCanvasBase* canvas)
+{
+    m_nodeManager = dynamic_cast<KisCanvas2*>(canvas)->view()->nodeManager();
+}
+
+void AnimatorManager::unsetCanvas()
+{
+    m_nodeManager = 0;
+}
+
+
+bool AnimatorManager::ready()
+{
+    return m_nodeManager != 0;
+}
+
+
+AnimatorLoader* AnimatorManager::getLoader()
+{
+    return m_loader;
+}
+
+AnimatorSwitcher* AnimatorManager::getSwitcher()
+{
+    return m_switcher;
+}
+
+
+KisImage* AnimatorManager::image()
+{
+    return m_image;
+}
+
+
+void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNode* content)
+{
+    if (content->parent())
+        m_nodeManager->moveNodeAt(content, frame, 0);
+    else
+        m_nodeManager->insertNode(content, frame, 0);
+    if (! content->name().startsWith("_"))
+        content->setName("_");
+}
+
+void AnimatorManager::insertFrame(FramedAnimatedLayer* layer, SimpleFrameLayer* frame)
+{
+    m_nodeManager->insertNode(layer, frame, 0);
+}
+
+void AnimatorManager::removeFrame(KisNode* frame)
+{
+    m_nodeManager->removeNode(frame);
+}
+
+void AnimatorManager::moveFrames(KisGroupLayerSP to, KisGroupLayerSP from)
+{
+    KisNodeSP child = from->firstChild();
+    int i = 0;
+    while (child)
+    {
+        m_nodeManager->moveNodeAt(child, to, i++);
+        child = from->firstChild();
+    }
 }

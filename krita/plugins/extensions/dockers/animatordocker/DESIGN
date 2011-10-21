@@ -1,0 +1,14 @@
+Core:
+    AnimatorLoader
+    AnimatorManager
+    AnimatorSwitcher
+    AnimatorPlayer
+    AnimatorExporter
+
+Basic UI:
+    AnimatorModel
+    AnimatorView
+
+Control UI:
+    AnimatorActions
+    AnimatorDock

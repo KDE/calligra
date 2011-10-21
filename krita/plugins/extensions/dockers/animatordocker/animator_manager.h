@@ -21,9 +21,24 @@
 #define ANIMATOR_MANAGER_H
 
 #include <QObject>
-#include <kis_image.h>
 
-class AnimatorManager : public QObject {
+#include <KoCanvasObserverBase.h>
+
+#include <kis_image.h>
+#include <kis_node_manager.h>
+
+// #include "animator_switcher.h"
+// #include "animator_loader.h"
+class AnimatorLoader;
+class AnimatorSwitcher;
+
+// #include "animator_player.h"
+// #include "animator_exporter.h"
+
+#include "simple_frame_layer.h"
+#include "framed_animated_layer.h"
+
+class AnimatorManager : public QObject, KoCanvasObserverBase {
     Q_OBJECT
     
 public:
@@ -31,7 +46,32 @@ public:
     virtual ~AnimatorManager();
     
 public:
+    virtual void setCanvas(KoCanvasBase* canvas);
+    virtual void unsetCanvas();
     
+    virtual bool ready();
+    
+public:
+    virtual AnimatorSwitcher* getSwitcher();
+    virtual AnimatorLoader* getLoader();
+    
+    virtual KisImage* image();
+    
+public:
+    virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
+    virtual void insertFrame(FramedAnimatedLayer* layer, SimpleFrameLayer* frame);
+    virtual void removeFrame(KisNode* frame);
+    
+    virtual void moveFrames(KisGroupLayerSP to, KisGroupLayerSP from);
+    
+private:
+    KisImage* m_image;
+    KisNodeManager* m_nodeManager;
+    
+    AnimatorSwitcher* m_switcher;
+    AnimatorLoader* m_loader;
+//     AnimatorPlayer* m_player;
+//     AnimatorExporter* m_exporter;
 };
 
 #endif
