@@ -354,6 +354,10 @@ public slots:
      Also used by KexiFormEventAction. */
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
 
+    /*! Add searchable model to the main window. This extends search to a new area. 
+     One example is Project Navigator. @see KexiMainWindowIface */
+    virtual void addSearchableModel(KexiSearchableModel *model);
+
 signals:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.

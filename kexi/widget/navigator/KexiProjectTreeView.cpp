@@ -19,8 +19,8 @@
 */
 
 #include "KexiProjectTreeView.h"
+#include "KexiProjectModel.h"
 
-//--------------------------------------------
 KexiProjectTreeView::KexiProjectTreeView(QWidget *parent)
         : QTreeView(parent)
         , nameEndsWithAsterisk(false)
@@ -31,4 +31,28 @@ KexiProjectTreeView::KexiProjectTreeView(QWidget *parent)
 
 KexiProjectTreeView::~KexiProjectTreeView()
 {
+}
+
+void KexiProjectTreeView::setModel(KexiProjectModel *model)
+{
+    QTreeView::setModel(model);
+    connect(model, SIGNAL(highlightSearchedItem(QModelIndex)),
+            this, SLOT(slotHighlightSearchedItem(QModelIndex)));
+    connect(model, SIGNAL(activateSearchedItem(QModelIndex)),
+            this, SLOT(slotActivateSearchedItem(QModelIndex)));
+}
+
+void KexiProjectTreeView::slotHighlightSearchedItem(const QModelIndex &index)
+{
+    scrollTo(index);
+    KexiProjectModel* model = qobject_cast<KexiProjectModel*>(this->model());
+    update(model->itemWithSearchHighlight());
+    update(index);
+}
+
+void KexiProjectTreeView::slotActivateSearchedItem(const QModelIndex &index)
+{
+    setFocus();
+    scrollTo(index);
+    setCurrentIndex(index);
 }

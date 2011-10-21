@@ -47,6 +47,7 @@ protected:
     KoFilter::ConversionStatus read_num();
     KoFilter::ConversionStatus read_abstractNumId();
     KoFilter::ConversionStatus read_lvlJc();
+    KoFilter::ConversionStatus read_suff();
     KoFilter::ConversionStatus read_lvlPicBulletId();
     KoFilter::ConversionStatus read_numPicBullet();
     KoFilter::ConversionStatus read_lvlOverride();

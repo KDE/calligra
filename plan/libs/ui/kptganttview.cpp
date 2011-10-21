@@ -357,6 +357,10 @@ bool NodeGanttViewBase::loadContext( const KoXmlElement &settings )
         m_ganttdelegate->showTimeConstraint = (bool)( e.attribute( "show-timeconstraint", "0" ).toInt() );
         m_ganttdelegate->showNegativeFloat = (bool)( e.attribute( "show-negativefloat", "0" ).toInt() );
 
+        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+        g->setScale( static_cast<KDGantt::DateTimeGrid::Scale>( e.attribute( "chart-scale", "0" ).toInt() ) );
+        g->setDayWidth( e.attribute( "chart-daywidth", "30" ).toDouble() );
+
         m_printOptions.loadContext( e );
     }
     return true;
@@ -379,6 +383,10 @@ void NodeGanttViewBase::saveContext( QDomElement &settings ) const
     e.setAttribute( "show-schedulingerror", m_ganttdelegate->showSchedulingError );
     e.setAttribute( "show-timeconstraint", m_ganttdelegate->showTimeConstraint );
     e.setAttribute( "show-negativefloat", m_ganttdelegate->showNegativeFloat );
+
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    e.setAttribute( "chart-scale", g->scale() );
+    e.setAttribute( "chart-daywidth", g->dayWidth() );
 
     m_printOptions.saveContext( e );
 }
@@ -418,8 +426,15 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setDayWidth( 30 );
+    // FIXME: improve/cover all options
+    QMap<QString, QString> format;
+    format.insert( "%H", "HH" );
+    format.insert( "%k", "H" );
+    format.insert( "%I", "HH A" );
+    format.insert( "%l", "h a" );
+    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 
     connect( model(), SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
 }
@@ -765,8 +780,15 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setDayWidth( 30 );
+    // FIXME: improve/cover all options
+    QMap<QString, QString> format;
+    format.insert( "%H", "HH" );
+    format.insert( "%k", "H" );
+    format.insert( "%I", "HH A" );
+    format.insert( "%l", "h a" );
+    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 }
 
 MilestoneItemModel *MilestoneKDGanttView::model() const
@@ -945,13 +967,13 @@ void MilestoneGanttView::slotOptions()
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
-    return m_gantt->treeView()->loadContext( m_gantt->model()->columnMap(), settings );
+    return m_gantt->loadContext( settings );
 }
 
 void MilestoneGanttView::saveContext( QDomElement &settings ) const
 {
     kDebug();
-    return m_gantt->treeView()->saveContext( m_gantt->model()->columnMap(), settings );
+    return m_gantt->saveContext( settings );
 }
 
 void MilestoneGanttView::updateReadWrite( bool on )

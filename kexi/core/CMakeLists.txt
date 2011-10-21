@@ -43,6 +43,7 @@ set(kexicore_LIB_SRCS
    kexitemplateloader.cpp
    KexiRecordNavigatorHandler.cpp
    KexiRecordNavigatorIface.cpp
+   KexiSearchableModel.cpp
 )
 
 kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
