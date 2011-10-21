@@ -5411,5 +5411,10 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
     d->propEditor->updateInfoLabelForPropertySet(d->propertySet, textToDisplayForNullSet);
 }
 
+void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
+{
+    d->tabbedToolBar->addSearchableModel(model);
+}
+
 #include "KexiMainWindow.moc"
 #include "KexiMainWindow_p.moc"

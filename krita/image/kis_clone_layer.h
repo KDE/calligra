@@ -24,6 +24,7 @@
 #include "kis_indirect_painting_support.h"
 
 #include <krita_export.h>
+#include "kis_clone_info.h"
 
 class KisNodeVisitor;
 class KoCompositeOp;
@@ -91,8 +92,8 @@ public:
      * from layer is set when all layers have been created, not during
      * loading.
      */
-    void setCopyFromName(const QString& layerName);
-    QString copyFromName() const;
+    void setCopyFromInfo(KisCloneInfo info);
+    KisCloneInfo copyFromInfo() const;
 
     void setCopyFrom(KisLayerSP layer);
     KisLayerSP copyFrom() const;

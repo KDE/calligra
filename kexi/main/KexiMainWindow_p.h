@@ -73,6 +73,8 @@ public:
 
     KHelpMenu *helpMenu() const;
 
+    void addSearchableModel(KexiSearchableModel *model);
+
 public slots:
     void setMainMenuContent(QWidget *w);
     void selectMainMenuItem(const char *actionName);
@@ -1249,6 +1251,11 @@ void KexiTabbedToolBar::selectMainMenuItem(const char *actionName)
         }
 //        a->setPersistentlySelected(true);
     }
+}
+
+void KexiTabbedToolBar::addSearchableModel(KexiSearchableModel *model)
+{
+    d->searchLineEdit->addSearchableModel(model);
 }
 
 /*

@@ -100,8 +100,49 @@ STARTUP
 ~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
 
 Before freeze:
-*minimal search implementation
 *fix bugs...
+
+Widgets
+*[code]substringCompletion property added to QCompleter, false by default
+MainWindow
+*Make global search "full text"
+*Clear contents on activation, update on pressing Delete
+TODO: when pressing Esc or (Back)Tab on empty search line edit, focus previously active widget; 
+      use QApplication::focusWidget() for that
+
+2011-10-19
+MainWindow
+*Added minimal global search implementation with completion list, now just searches within Project objects
+**after pressing Enter - select object name in Project Navigator
+**on highlighting in completion list, highlights the object name
+**[code]QCompleter which cannot do substring matching (https://bugreports.qt.nokia.com/browse/QTBUG-3414)
+**[code]KCompletion is not better
+**[code]Forked QCompleter and related classes and put in KexiUtils
+
+2011-10-18
+Forms
+*Changed Form Design Toolbar icons order and set to have text under icon
+**first commit by Dimitrios Tanis
+Documentation
+*Official Kexi handbook is now at http://userbase.kde.org/Kexi/Handbook
+
+2011-10-12
+Main Window
+*Simplified background below menu to make it flicker less
+
+2011-10-11
+Code
+*[code] Moved kexi/migration/spreadsheet/ plugin to plugins/kexi/ as it also depends on Tables
+*[code] Moved kexi/shapes/ to kexi/plugins/shapes/ to simplify dir structure
+
+2011-10-12
+Main Window
+*Simplified background below menu to make it flicker less
+
+2011-10-11
+Code
+*[code] Moved kexi/migration/spreadsheet/ plugin to plugins/kexi/ as it also depends on Tables
+*[code] Moved kexi/shapes/ to kexi/plugins/shapes/ to simplify dir structure
 
 2011-10-05
 Code

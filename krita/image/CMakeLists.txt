@@ -110,6 +110,7 @@ set(kritaimage_LIB_SRCS
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
+   kis_clone_info.cpp
    kis_clone_layer.cpp
    kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
@@ -151,6 +152,8 @@ set(kritaimage_LIB_SRCS
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp
    kis_circle_mask_generator.cpp
+   kis_gauss_circle_mask_generator.cpp
+   kis_gauss_rect_mask_generator.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp

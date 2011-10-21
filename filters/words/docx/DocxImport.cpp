@@ -313,14 +313,23 @@ void DocxImport::writeConfigurationSettings(KoXmlWriter* settings) const
 {
     MsooXmlImport::writeConfigurationSettings(settings);
 
-    // The AddParaTableSpacingAtStart config-item is used in KoTextLayoutArea::handleBordersAndSpacing
-    // during layouting. The defined 'Above paragraph' and 'Below paragraph' paragraph spacing (which is
-    // written in the ODF as fo:margin-top for the KoParagraphStyle) are not applied to the first and
-    // the last paragraph if this value is true.
+    // This config item is used in KoTextLayoutArea::handleBordersAndSpacing
+    // during layouting.  The defined 'Above paragraph' and 'Below paragraph'
+    // paragraph spacing (which is written in the ODF as fo:margin-top for the
+    // KoParagraphStyle) are not applied to the first and the last paragraph if
+    // this value is true.
     settings->startElement("config:config-item");
     settings->addAttribute("config:name", "AddParaTableSpacingAtStart");
     settings->addAttribute("config:type", "boolean");
     settings->addTextSpan("true");
+    settings->endElement();
+
+    // OOo requires this config item to display files produced by this filter
+    // correctly.  If true, then the fo:text-indent attribute will be ignored.
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "IgnoreFirstLineIndentInNumbering");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false");
     settings->endElement();
 }
 
