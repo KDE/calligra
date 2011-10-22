@@ -39,59 +39,6 @@ KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::Marke
 , m_markers(markers)
 , m_markerPosition(position)
 {
-#if 0
-    if(m_markers.size() == 0){
-        // No arrow
-        m_markers.append(0);
-
-        // Big arrow
-        KoXmlDocument doc;
-        QString errorMsg;
-        int errorLine;
-        int errorColumn;
-        
-        QBuffer xmldevice;
-        xmldevice.open(  QIODevice::WriteOnly );
-        QTextStream xmlstream(  &xmldevice );
-        
-        xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        xmlstream << "<office:document-content xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:presentation=\"urn:oasis:names:tc:opendocument:xmlns:presentation:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:koffice=\"http://www.koffice.org/2005/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
-        xmlstream << "<draw:marker draw:name=\"Arrow\" svg:viewBox=\"0 0 20 30\" svg:d=\"m10 0-10 30h20z\"/>";
-        xmlstream << "</office:document-content>";
-        xmldevice.close();
-        doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn );
-        KoXmlElement content = doc.documentElement();
-        KoXmlElement element( KoXml::namedItemNS( content, KoXmlNS::draw, "marker" ) );
-        KoOdfStylesReader stylesReader;
-        KoOdfLoadingContext odfContext( stylesReader, 0 );
-        KoShapeLoadingContext shapeContext( odfContext, 0 );
-        
-        KoMarker *bigArrowMarker = new KoMarker();
-        bigArrowMarker->loadOdf( element, shapeContext );
-        m_markers.append(bigArrowMarker);
-        
-        // Small arrow
-        QBuffer smallxmldevice;
-        smallxmldevice.open(  QIODevice::WriteOnly );
-        QTextStream smallxmlstream(  &smallxmldevice );
-        
-        smallxmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        smallxmlstream << "<office:document-content xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:presentation=\"urn:oasis:names:tc:opendocument:xmlns:presentation:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:koffice=\"http://www.koffice.org/2005/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
-        smallxmlstream << "<draw:marker draw:name=\"Arrow\" svg:viewBox=\"0 0 20 30\" svg:d=\"m2 0-2 6h4z\"/>";
-        smallxmlstream << "</office:document-content>";
-        smallxmldevice.close();
-        doc.setContent( &smallxmldevice, true, &errorMsg, &errorLine, &errorColumn );
-        KoXmlElement smallContent = doc.documentElement();
-        KoXmlElement smallElement( KoXml::namedItemNS( smallContent, KoXmlNS::draw, "marker" ) );
-        KoOdfStylesReader smallStylesReader;
-        KoOdfLoadingContext smallOdfContext( smallStylesReader, 0 );
-        KoShapeLoadingContext smallShapeContext( odfContext, 0 );
-
-        KoMarker *smallArrowMarker = new KoMarker();
-        smallArrowMarker->loadOdf( smallElement, smallShapeContext );
-        m_markers.append(smallArrowMarker);
-    }
-#endif
 }
 
 KoMarkerModel::~KoMarkerModel()
@@ -137,7 +84,7 @@ QVariant KoMarkerModel::marker(int index, int role) const
     if (index < 0){
         return QVariant();
     }
-    
+
     switch(role) {
         case Qt::DecorationRole:
             if (index< m_markers.size()) {

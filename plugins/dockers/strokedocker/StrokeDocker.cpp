@@ -91,8 +91,8 @@ StrokeDocker::StrokeDocker()
     connect( d->mainWidget, SIGNAL(miterLimitChanged()),   this, SLOT(miterLimitChanged()));
     connect( d->mainWidget, SIGNAL(currentBeginMarkerChanged()), this, SLOT(beginMarkerChanged()));
     connect( d->mainWidget, SIGNAL(currentEndMarkerChanged()), this, SLOT(endMarkerChanged()));
-    
-    d->mainWidget->updateControls(d->border);
+
+    d->mainWidget->updateControls(d->border, d->beginMarker, d->endMarker);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
@@ -115,7 +115,7 @@ void StrokeDocker::applyChanges()
 
     canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
 
-    d->mainWidget->updateControls(d->border);
+    d->mainWidget->updateControls(d->border, d->beginMarker, d->endMarker);
 
     if (!selection || !selection->count())
         return;
@@ -225,8 +225,6 @@ void StrokeDocker::setStroke( const KoShapeBorderModel *border )
         d->border.setMiterLimit( 0.0 );
         d->border.setLineStyle( Qt::NoPen, QVector<qreal>() );
     }
-
-    d->mainWidget->updateControls(d->border);
 }
 
 void StrokeDocker::setUnit(KoUnit unit)
@@ -239,8 +237,19 @@ void StrokeDocker::selectionChanged()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
-    if (shape)
+    if (shape) {
         setStroke(shape->border());
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        if (pathShape) {
+            d->beginMarker = pathShape->marker(KoMarkerData::MarkerBegin);
+            d->endMarker = pathShape->marker(KoMarkerData::MarkerEnd);
+        }
+        else {
+            d->beginMarker = 0;
+            d->endMarker = 0;
+        }
+        d->mainWidget->updateControls(d->border, d->beginMarker, d->endMarker);
+    }
 }
 
 void StrokeDocker::setCanvas( KoCanvasBase *canvas )

@@ -37,7 +37,7 @@ KoMarkerItemDelegate::~KoMarkerItemDelegate()
 void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     painter->save();
-    
+
     if (option.state & QStyle::State_Selected)
         painter->fillRect(option.rect, option.palette.highlight());
 
@@ -46,7 +46,7 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     if (!antialiasing) {
         painter->setRenderHint(QPainter::Antialiasing, true);
     }
-    
+
     KoPathShape *pathShape = index.data(Qt::DecorationRole).value<KoPathShape*>();
     if (pathShape != 0) {
         // paint marker

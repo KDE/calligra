@@ -75,10 +75,9 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
         // paint marker
         QPen pen(option.palette.text(), 2);
         painter.setPen(pen);
-        QPainterPath path = pathShape->outline();
-        QTransform pathScale;
-        pathScale.scale(1,0.5);
-        painter.drawPath(pathScale.map(path));
+        QPainterPath path = pathShape->pathStroke(pen);
+        painter.fillPath(path, pen.brush());
+        delete pathShape;
     }
 
     if (!antialiasing) {
@@ -110,7 +109,7 @@ void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
 QVariant KoMarkerSelector::itemData(int index, int role) const
 {
     if(role == Qt::DisplayRole) {
-        KoMarker *marker = d->model->marker(index, role).value<KoMarker*>();
+        KoMarker *marker = d->model->marker(index, Qt::DecorationRole).value<KoMarker*>();
         KoPathShape *pathShape = new KoPathShape();
         pathShape->moveTo(QPointF(10, 15));
         pathShape->lineTo(QPointF(70, 15));

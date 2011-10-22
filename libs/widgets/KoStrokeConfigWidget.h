@@ -54,7 +54,7 @@ public:
     KoMarker *beginMarker() const;
     KoMarker *endMarker() const;
 
-    void updateControls(KoLineBorder &border);
+    void updateControls(KoLineBorder &border, KoMarker *beginMarker, KoMarker *endMarker);
 
     void locationChanged(Qt::DockWidgetArea area);
 

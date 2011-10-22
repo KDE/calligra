@@ -243,7 +243,7 @@ KoMarker *KoStrokeConfigWidget::endMarker() const
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateControls(KoLineBorder &border)
+void KoStrokeConfigWidget::updateControls(KoLineBorder &border, KoMarker *beginMarker, KoMarker *endMarker)
 {
     blockChildSignals(true);
 
@@ -253,6 +253,8 @@ void KoStrokeConfigWidget::updateControls(KoLineBorder &border)
     d->miterLimit->changeValue(border.miterLimit());
     d->lineStyle->setLineStyle(border.lineStyle(), border.lineDashes());
     d->miterLimit->setEnabled(border.joinStyle() == Qt::MiterJoin);
+    d->beginMarkerSelector->setMarker(beginMarker);
+    d->endMarkerSelector->setMarker(endMarker);
 
     blockChildSignals(false);
 }
