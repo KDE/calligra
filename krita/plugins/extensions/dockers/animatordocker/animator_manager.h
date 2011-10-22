@@ -59,10 +59,13 @@ public:
     
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
-    virtual void insertFrame(FramedAnimatedLayer* layer, SimpleFrameLayer* frame);
+    virtual void insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer);
     virtual void removeFrame(KisNode* frame);
     
     virtual void moveFrames(KisGroupLayerSP to, KisGroupLayerSP from);
+    
+    virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
+    virtual void removeLayer(KisNode* layer);
     
 private:
     KisImage* m_image;

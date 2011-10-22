@@ -1,5 +1,5 @@
 /*
- *
+ *  Control docker
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,46 +17,37 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "animator_manager_factory.h"
+#ifndef ANIMATOR_CONTROL_DOCK_H
+#define ANIMATOR_CONTROL_DOCK_H
 
-#include <KGlobal>
+#include <QDockWidget>
 
-#include <iostream>
+#include "kis_view2.h"
+#include "KoCanvasObserverBase.h"
+#include "kis_node_model.h"
+#include "KoMainWindow.h"
 
-AnimatorManagerFactory::AnimatorManagerFactory()
+#include "animator_manager.h"
+
+class AnimatorControlDock : public QDockWidget, public KoCanvasObserverBase
 {
-    m_instances.clear();
-}
-
-AnimatorManagerFactory::~AnimatorManagerFactory()
-{
-}
-
-AnimatorManagerFactory* AnimatorManagerFactory::instance()
-{
-    K_GLOBAL_STATIC(AnimatorManagerFactory, s_instance)
-    if (!s_instance.exists()) {
-        s_instance->init();
-    }
-    return s_instance;
-}
-
-AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image, KisCanvas2* canvas)
-{
-    if (! m_instances[image])
-    {
-        m_instances[image] = new AnimatorManager(image);
-    }
+    Q_OBJECT
     
-    if (canvas)
-        m_instances[image]->setCanvas(canvas);
-    else
-        m_instances[image]->unsetCanvas();
-    
-    return m_instances[image];
-    
-}
+public:
+    AnimatorControlDock();
 
-void AnimatorManagerFactory::init()
-{
-}
+public slots:
+    virtual void setCanvas(KoCanvasBase* canvas);
+    virtual void unsetCanvas();
+    
+private:
+    virtual void setupUI();
+    
+private:
+    AnimatorManager* m_manager;
+    
+private:
+};
+
+
+#endif // ANIMATOR_CONTROL_DOCK_H

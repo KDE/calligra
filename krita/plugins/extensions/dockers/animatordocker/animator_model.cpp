@@ -19,12 +19,12 @@
 
 #include "animator_model.h"
 
-#include <iostream>
+#define BASE_COLUMNS_NUMBER 1
+
+#include "framed_animated_layer.h"
 
 AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
-{
-    std::cout << "AnimatorModel(" << (void*) this << ", " << (void*) image << ")" << std::endl;
-    
+{    
 //     m_nodeModel = new KisNodeModel(this);
 //     m_nodeModel->setImage(image);
     m_image = image;
@@ -40,7 +40,6 @@ AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
 
 AnimatorModel::~AnimatorModel()
 {
-    std::cout << "~AnimatorModel(" << (void*) this << ")" << std::endl;
 }
 
 void AnimatorModel::removeThis()
@@ -49,34 +48,13 @@ void AnimatorModel::removeThis()
 }
 
 
-// void AnimatorModel::setSourceModel(KisNodeModel* model)
-// {
-//     m_nodeModel = model;
-//     connect(model, SIGNAL(layoutChanged()), this, SLOT(layoutChangedSlot()));
-//     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(dataChangedSlot(QModelIndex,QModelIndex)));
-//     connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SIGNAL(rowsInserted(const QModelIndex&, int, int)));
-// //     connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(updateUI()));
-// //     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
-//     connect(m_nodeModel, SIGNAL(modelReset()), SIGNAL(modelReset()));
-    
-    
-//     connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(layoutChangedSlot()));
-//     connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(layoutChangedSlot()));
-//     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(layoutChangedSlot()));
-//     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(layoutChangedSlot()));
-    
-    
-// }
-
 void AnimatorModel::dataChangedSlot(KisNode* node)
 {
-    std::cout << "dataChanged" << std::endl;
     emit dataChanged(indexFromNode(node), indexFromNode(node));
 }
 
 void AnimatorModel::layoutChangedSlot()
 {
-    std::cout << "layoutChanged" << std::endl;
     emit layoutChanged();
 }
 
@@ -86,61 +64,73 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
     return QAbstractItemModel::headerData(section, orientation, role);
 }
 
-QVariant AnimatorModel::data(const QModelIndex& index, int role) const
+QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
 {
     // layers, not frames
-    if (index.column() == 0)
+    if (ind.column() == 0)
     {
-        KisNode* node = nodeFromIndex(index);
+        KisNode* node = nodeFromIndex(ind);
         if (role == Qt::DisplayRole)
             return node->name();
         return QVariant();
     } else                      // frames
     {
-//         AnimatedLayer* alayer = nodeFromIndex(index(index.row(), 0, index.parent()));
-//         if (alayer->inherits("FramedAnimatedLayer"))
-//         {
-//             FrameLayer* frame = dynamic_cast<FramedAnimatedLayer*>(alayer)->frameAt(index.column()+1);
-//             if (frame)
-//             {
-//                 if (role == Qt::DisplayRole)
-//                     return "x";
-//             }
-//         }
+        AnimatedLayer* alayer = dynamic_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0, ind.parent())));
+        if (alayer && alayer->inherits("FramedAnimatedLayer"))
+        {
+            FrameLayer* frame = dynamic_cast<FramedAnimatedLayer*>(alayer)->frameAt(ind.column()-BASE_COLUMNS_NUMBER);
+            if (frame)
+            {
+                if (role == Qt::DisplayRole)
+                    return "x";
+            }
+        }
     }
+    
+//     if (role == Qt::DisplayRole)
+//         return "-";
     
     return QVariant();
 }
 
 int AnimatorModel::columnCount(const QModelIndex& parent) const
 {
-    if (! nodeFromIndex(parent)->inherits("AnimatedLayer"))
-        return 1;
+    KisNode* pnode = nodeFromIndex(parent);
+//     if (! pnode->inherits("AnimatedLayer"))
+//     {
+//         return 1;
+//     }
     return 12;
 }
 
 int AnimatorModel::rowCount(const QModelIndex& parent) const
 {
-    if (!parent.isValid() || parent.column() == 0)
+    KisNode* pnode = nodeFromIndex(parent);
+    
+    if (!parent.isValid() || (parent.column() == 0 && !pnode->inherits("AnimatedLayer")))
     {
-        return nodeFromIndex(parent)->childCount();
+        return pnode->childCount();
     }
     return 0;
 }
 
 QModelIndex AnimatorModel::parent(const QModelIndex& child) const
 {
-    if (child.column() == 0)
+//     if (child.column() == 0)
     {
-        KisNode* pnode = nodeFromIndex(child)->parent().data();
+        KisNode* pnode = (KisNode*) child.internalPointer();
         
-        if (pnode == m_image->root())
-            return QModelIndex();
+//         if (pnode == m_image->root())
+//             return QModelIndex();
         
-        KisNode* ppnode = pnode->parent().data();
-        int row = ppnode->childCount()-ppnode->index(pnode)-1;
+//         KisNode* ppnode = pnode->parent().data();
+//         int row = ppnode->childCount()-ppnode->index(pnode)-1;
         
-        return createIndex(row, 0, pnode);
+        return indexFromNode(pnode);
+//     } else
+//     {
+        
+//         return indexFromNode(nodeFromIndex(index(child.row(), 0, child.parent()))->parent());
     }
     return QModelIndex();
 }
@@ -148,15 +138,33 @@ QModelIndex AnimatorModel::parent(const QModelIndex& child) const
 QModelIndex AnimatorModel::index(int row, int column, const QModelIndex& parent) const
 {
     KisNode* pnode = nodeFromIndex(parent);
-    KisNode* node = pnode->at(pnode->childCount()-row-1).data();
-    return createIndex(row, column, node);
+//     KisNode* node = pnode->at(pnode->childCount()-row-1).data();
+    
+//     if (column != 0)
+//     {
+//         FramedAnimatedLayer* al = dynamic_cast<FramedAnimatedLayer*>(node);
+//         if (!al)
+//             return QModelIndex();
+//         node = al->frameAt(column-BASE_COLUMNS_NUMBER);
+//         pnode = pnode->at(pnode->childCount()-row-1).data();
+//     }
+    
+    return createIndex(row, column, pnode);
 }
 
 KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid())
         return (KisNode*)m_image->root().data();
-    return (KisNode*)index.internalPointer();
+    KisNode* node = ((KisNode*)index.internalPointer())->at(index.row()).data();
+    if (index.column() != 0)
+    {
+        FramedAnimatedLayer* al = dynamic_cast<FramedAnimatedLayer*>(node);
+        if (!al)
+            return 0;
+        node = al->frameAt(index.column()-BASE_COLUMNS_NUMBER);
+    }
+    return node;
 }
 
 QModelIndex AnimatorModel::indexFromNode(const KisNode* node) const

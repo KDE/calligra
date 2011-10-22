@@ -25,6 +25,7 @@
 #include "animator_manager.h"
 
 #include <kis_image.h>
+#include <kis_canvas2.h>
 
 class AnimatorManagerFactory : public QObject
 {
@@ -38,7 +39,7 @@ public:
     static AnimatorManagerFactory* instance();
     
 public:
-    AnimatorManager* getManager(KisImage* image);
+    AnimatorManager* getManager(KisImage* image, KisCanvas2* canvas);
     
 private:
     void init();

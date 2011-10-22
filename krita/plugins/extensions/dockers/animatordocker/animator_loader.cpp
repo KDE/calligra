@@ -58,11 +58,13 @@ void AnimatorLoader::loadLayers(KisNodeSP rootNode)
         return;
     }
     
-    KisNodeSP child = rootNode->firstChild();
-    while (child)
+//     KisNodeSP child = rootNode->firstChild();
+//     while (child)
+    for (int i = 0; i < rootNode->childCount(); ++i)
     {
+        KisNodeSP child = rootNode->at(i);
         loadLayers(child);
-        child = child->nextSibling();
+//         child = child->nextSibling();
     }
 }
 
@@ -74,19 +76,29 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
         FramedAnimatedLayer* al = new FramedAnimatedLayer(*gl);
         m_manager->moveFrames(al, gl);
         
-        KisNodeSP child = al->firstChild();
-        while (child)
+//         KisNodeSP child = al->firstChild();
+//         while (child)
+        for (int i = 0; i < al->childCount(); ++i)
         {
+            KisNodeSP child = al->at(i);
             if (child->inherits("KisGroupLayer") && child->name().startsWith("_frame_"))
             {
                 SimpleFrameLayer* frame = new SimpleFrameLayer(* dynamic_cast<KisGroupLayer*>(child.data()));
                 m_manager->setFrameContent(frame, child->at(0).data());
-                m_manager->insertFrame(al, frame);
+                m_manager->insertFrame(frame, al);
                 m_manager->removeFrame(child.data());
+//                 child = frame->nextSibling();
+//             } else {
+//                 child = child->nextSibling();
             }
         }
         
         al->init();
+        
+        KisNodeSP parent = gl->parent();
+        m_manager->insertLayer(al, parent, parent->index(gl));
+//         m_manager->insertLayer(al, m_manager->image()->root(), 0);
+        m_manager->removeLayer(gl);
     } else
     {
         warnKrita << "only normal framed layers are implemented";

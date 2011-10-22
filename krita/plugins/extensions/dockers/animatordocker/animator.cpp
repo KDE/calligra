@@ -37,6 +37,7 @@
 #include "kis_view2.h"
 
 #include "animator_dock.h"
+#include "animator_control_dock.h"
 // #include "animator_light_table_dock.h"
 
 K_PLUGIN_FACTORY(AnimatorPluginFactory, registerPlugin<AnimatorPlugin>();)
@@ -72,6 +73,37 @@ public:
         return DockMinimized;
     }
 private:
+};
+
+class AnimatorControlDockFactory : public KoDockFactoryBase {
+public:
+    AnimatorControlDockFactory()
+    {
+    }
+    
+    virtual QString id() const
+    {
+        return QString( "Animator control" );
+    }
+    
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::BottomDockWidgetArea;
+    }
+    
+    virtual QDockWidget* createDockWidget()
+    {
+        AnimatorControlDock* dockWidget = new AnimatorControlDock();
+        
+        dockWidget->setObjectName(id());
+        
+        return dockWidget;
+    }
+    
+    virtual DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
 };
 
 // class LightTableDockFactory : public KoDockFactoryBase {
@@ -110,6 +142,7 @@ AnimatorPlugin::AnimatorPlugin(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
 {
     KoDockRegistry::instance()->add(new AnimatorDockFactory());
+    KoDockRegistry::instance()->add(new AnimatorControlDockFactory());
 //     KoDockRegistry::instance()->add(new LightTableDockFactory());
 }
 

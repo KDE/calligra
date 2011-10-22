@@ -30,9 +30,7 @@
 #include "animator_dock.h"
 #include "animator_model.h"
 #include "animator_manager_factory.h"
-// #include "animator_view.h"
-
-#include <iostream>
+#include "animator_view.h"
 
 AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
 {
@@ -58,7 +56,7 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
     
     m_view->setModel(m_mainModel);
     
-    m_manager = AnimatorManagerFactory::instance()->getManager(image);
+    m_manager = AnimatorManagerFactory::instance()->getManager(image, kcanvas);
 }
 
 void AnimatorDock::unsetCanvas()

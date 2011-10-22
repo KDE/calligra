@@ -25,6 +25,8 @@
 #include "animator_loader.h"
 #include "animator_switcher.h"
 
+#include <kis_debug.h>
+
 AnimatorManager::AnimatorManager(KisImage* image)
 {
     m_loader = new AnimatorLoader(this);
@@ -82,9 +84,9 @@ void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNode* content)
         content->setName("_");
 }
 
-void AnimatorManager::insertFrame(FramedAnimatedLayer* layer, SimpleFrameLayer* frame)
+void AnimatorManager::insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer)
 {
-    m_nodeManager->insertNode(layer, frame, 0);
+    m_nodeManager->insertNode(frame, layer, 0);
 }
 
 void AnimatorManager::removeFrame(KisNode* frame)
@@ -101,4 +103,15 @@ void AnimatorManager::moveFrames(KisGroupLayerSP to, KisGroupLayerSP from)
         m_nodeManager->moveNodeAt(child, to, i++);
         child = from->firstChild();
     }
+}
+
+void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index)
+{
+    m_nodeManager->insertNode(layer, parent, index);
+    m_nodeManager->moveNodeAt(layer, parent, index);
+}
+
+void AnimatorManager::removeLayer(KisNode* layer)
+{
+    m_nodeManager->removeNode(layer);
 }

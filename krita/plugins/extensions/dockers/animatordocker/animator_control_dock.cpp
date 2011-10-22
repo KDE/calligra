@@ -1,5 +1,5 @@
 /*
- *
+ *  Control docker
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,46 +17,33 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include "animator_control_dock.h"
+
+#include <KLocale>
+
+#include <kis_canvas2.h>
+
 #include "animator_manager_factory.h"
+#include "animator_loader.h"
 
-#include <KGlobal>
-
-#include <iostream>
-
-AnimatorManagerFactory::AnimatorManagerFactory()
-{
-    m_instances.clear();
-}
-
-AnimatorManagerFactory::~AnimatorManagerFactory()
+AnimatorControlDock::AnimatorControlDock() : QDockWidget(i18n("Animator control"))
 {
 }
 
-AnimatorManagerFactory* AnimatorManagerFactory::instance()
+void AnimatorControlDock::setCanvas(KoCanvasBase* canvas)
 {
-    K_GLOBAL_STATIC(AnimatorManagerFactory, s_instance)
-    if (!s_instance.exists()) {
-        s_instance->init();
-    }
-    return s_instance;
+    KisCanvas2* kcanvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisImageSP image = kcanvas->image();
+    m_manager = AnimatorManagerFactory::instance()->getManager(image.data(), kcanvas);
+    m_manager->getLoader()->loadAll();
 }
 
-AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image, KisCanvas2* canvas)
+void AnimatorControlDock::unsetCanvas()
 {
-    if (! m_instances[image])
-    {
-        m_instances[image] = new AnimatorManager(image);
-    }
-    
-    if (canvas)
-        m_instances[image]->setCanvas(canvas);
-    else
-        m_instances[image]->unsetCanvas();
-    
-    return m_instances[image];
-    
+
 }
 
-void AnimatorManagerFactory::init()
+void AnimatorControlDock::setupUI()
 {
+
 }
