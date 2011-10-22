@@ -118,6 +118,7 @@ MainWindow
 **[code]QCompleter which cannot do substring matching (https://bugreports.qt.nokia.com/browse/QTBUG-3414)
 **[code]KCompletion is not better
 **[code]Forked QCompleter and related classes and put in KexiUtils
+**[code]Commented at https://bugreports.qt.nokia.com/browse/QTBUG-7830?focusedCommentId=166309#comment-166309
 
 2011-10-18
 Forms
