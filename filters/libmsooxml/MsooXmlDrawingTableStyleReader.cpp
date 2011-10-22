@@ -907,7 +907,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
     }
 
     TRY_READ_ATTR_WITHOUT_NS(w) //width
-    m_currentBorder.innerPen.setWidthF(EMU_TO_POINT(w.toDouble()));
+    m_currentBorder.outerPen.setWidthF(EMU_TO_POINT(w.toDouble()));
 
     while(!atEnd()) {
         readNext();

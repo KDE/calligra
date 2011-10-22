@@ -3799,7 +3799,7 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
     }
 
     TRY_READ_ATTR(sz)
-    borderData.innerPen.setWidthF(sz.toDouble() / 8.0);
+    borderData.outerPen.setWidthF(sz.toDouble() / 8.0);
 
     return borderData;
 }
