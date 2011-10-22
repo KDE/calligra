@@ -48,12 +48,11 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     }
     
     KoPathShape *pathShape = index.data(Qt::DecorationRole).value<KoPathShape*>();
-    if(pathShape != 0){
+    if (pathShape != 0) {
         // paint marker
         QPen pen(option.palette.text(), 2);
-        painter->setPen(pen);
-        QPainterPath path = pathShape->outline();
-        painter->drawPath(path);
+        QPainterPath path = pathShape->pathStroke(pen);
+        painter->fillPath(path, pen.brush());
     }
 
     if (!antialiasing) {
@@ -65,5 +64,7 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
 QSize KoMarkerItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const
 {
+    Q_UNUSED(option)
+    Q_UNUSED(index)
     return QSize(80,30);
 }
