@@ -156,7 +156,8 @@ KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid())
         return (KisNode*)m_image->root().data();
-    KisNode* node = ((KisNode*)index.internalPointer())->at(index.row()).data();
+    KisNode* parent = (KisNode*)index.internalPointer();
+    KisNode* node = parent->at(parent->childCount()-index.row()-1).data();
     if (index.column() != 0)
     {
         FramedAnimatedLayer* al = dynamic_cast<FramedAnimatedLayer*>(node);
