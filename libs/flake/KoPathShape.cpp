@@ -404,9 +404,21 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
+    Q_D(const KoPathShape);
     QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
-    QRectF bb(transform.map(outline()).boundingRect());
+    QRectF bb;
+    if (d->beginMarker.marker() || d->endMarker.marker()) {
+        KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
+        QPen pen;
+        if (lineBorder) {
+            pen.setWidthF(lineBorder->lineWidth());
+        }
+        bb = transform.map(pathStroke(pen)).boundingRect();
+    }
+    else {
+        bb = transform.map(outline()).boundingRect();
+    }
     if (border()) {
         KoInsets inset;
         border()->borderInsets(this, inset);
@@ -1392,9 +1404,15 @@ void KoPathShape::setMarker(KoMarker *marker, KoMarkerData::MarkerPosition posit
     Q_D(KoPathShape);
 
     if (position == KoMarkerData::MarkerBegin) {
+        if (!d->beginMarker.marker()) {
+            d->beginMarker.setWidth(MM_TO_POINT(3.0));
+        }
         d->beginMarker.setMarker(marker);
     }
     else {
+        if (!d->endMarker.marker()) {
+            d->endMarker.setWidth(MM_TO_POINT(3.0));
+        }
         d->endMarker.setMarker(marker);
     }
 }
