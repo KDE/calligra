@@ -36,6 +36,7 @@ KoMarkerCollection::KoMarkerCollection(QObject *parent)
 : QObject(parent)
 , d(new Private)
 {
+    d->markers.append(0);
 }
 
 KoMarkerCollection::~KoMarkerCollection()
