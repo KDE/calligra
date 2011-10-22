@@ -852,6 +852,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
     d->searchLineEdit = new KexiSearchLineEdit;
+    d->searchLineEdit->installEventFilter(this);
     helpLyr->addWidget(d->searchLineEdit);
 
     // needed e.g. for Windows style to remove the toolbar's frame
@@ -1003,7 +1004,13 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
         QWidget *mainWin = KexiMainWindowIface::global()->thisWidget();
-        if (watched == tabBar()) {
+        // kDebug() << "MouseButtonPress: watched:" << watched << "window()->focusWidget():" << window()->focusWidget();
+        if (watched == d->searchLineEdit) {
+            activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
+                                      // back on Escape key press
+            return true;
+        }
+        else if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
             QPoint p = me->pos();
             KexiTabbedToolBarTabBar *tb = static_cast<KexiTabbedToolBarTabBar*>(tabBar());

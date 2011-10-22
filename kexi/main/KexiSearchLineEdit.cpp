@@ -176,10 +176,11 @@ public:
     {
         // make Escape key clear the search box
         QObject::connect(&clearShortcut, SIGNAL(activated()),
-                         q, SLOT(clear()));
+                         q, SLOT(slotClearShortcutActivated()));
     }
     KexiSearchLineEditCompleter *completer;
     KexiSearchLineEditCompleterPopupModel *model;
+    QPointer<QWidget> previouslyFocusedWidget;
 private:
     KexiSearchLineEdit *q;
     QShortcut clearShortcut;
@@ -214,7 +215,10 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     connect(d->completer, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotCompletionActivated(QModelIndex)));
 
-    setFocusPolicy(Qt::ClickFocus);
+    setFocusPolicy(Qt::NoFocus); // We cannot focus set any policy here.
+                                 // Qt::ClickFocus would make it impossible to find
+                                 // previously focus widget in KexiSearchLineEdit::setFocus().
+                                 // We need this information to focus back when pressing Escape key.
     setClearButtonShown(true);
     setClickMessage(i18n("Search"));
 }
@@ -248,6 +252,19 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QString &newText)
         setText(t.left(p) + newText.mid(p));
         end(false);
         cursorBackward(text().length() - p, true);
+    }
+}
+
+void KexiSearchLineEdit::slotClearShortcutActivated()
+{
+    //kDebug() << (QWidget*)d->previouslyFocusedWidget << text();
+    if (text().isEmpty() && d->previouslyFocusedWidget) {
+        // after second Escape, go back to previously focused widget
+        d->previouslyFocusedWidget->setFocus();
+        d->previouslyFocusedWidget = 0;
+    }
+    else {
+        clear();
     }
 }
 
@@ -301,9 +318,24 @@ void KexiSearchLineEdit::inputMethodEvent(QInputMethodEvent *e)
     }
 }
 
+void KexiSearchLineEdit::setFocus()
+{
+    //kDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
+    //         << "window()->focusWidget():" << window()->focusWidget();
+    if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
+        d->previouslyFocusedWidget = window()->focusWidget();
+    }
+    KLineEdit::setFocus();
+}
+
 // forked bits from QLineEdit::focusInEvent()
 void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
 {
+    //kDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
+    //         << "window()->focusWidget():" << window()->focusWidget();
+    if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
+        d->previouslyFocusedWidget = window()->focusWidget();
+    }
     KLineEdit::focusInEvent(e);
     d->completer->setWidget(this);
     connectCompleter();
@@ -313,6 +345,7 @@ void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
 // forked bits from QLineEdit::focusOutEvent()
 void KexiSearchLineEdit::focusOutEvent(QFocusEvent *e)
 {
+    d->previouslyFocusedWidget = 0;
     KLineEdit::focusOutEvent(e);
     disconnectCompleter();
     update();
@@ -368,6 +401,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     }
 
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        connectCompleter();
         KLineEdit::keyPressEvent(event); /* executes this:
                                             if (hasAcceptableInput() || fixup()) {
                                                 emit returnPressed();
