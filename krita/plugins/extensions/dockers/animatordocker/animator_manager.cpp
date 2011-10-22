@@ -34,6 +34,8 @@ AnimatorManager::AnimatorManager(KisImage* image)
     
     m_image = image;
     m_nodeManager = 0;
+    
+    m_info = new AnimatorMetaInfo(1, 1);
 }
 
 AnimatorManager::~AnimatorManager()
@@ -71,6 +73,17 @@ AnimatorSwitcher* AnimatorManager::getSwitcher()
 KisImage* AnimatorManager::image()
 {
     return m_image;
+}
+
+AnimatorMetaInfo* AnimatorManager::kraMetaInfo()
+{
+    KisNodeSP first = m_image->root()->lastChild();
+    return new AnimatorMetaInfo(dynamic_cast<KisGroupLayer*>(first.data()));
+}
+
+AnimatorMetaInfo* AnimatorManager::metaInfo()
+{
+    return m_info;
 }
 
 

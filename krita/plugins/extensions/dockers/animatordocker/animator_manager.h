@@ -37,6 +37,7 @@ class AnimatorSwitcher;
 
 #include "simple_frame_layer.h"
 #include "framed_animated_layer.h"
+#include "animator_meta_info.h"
 
 class AnimatorManager : public QObject, KoCanvasObserverBase {
     Q_OBJECT
@@ -58,6 +59,10 @@ public:
     virtual KisImage* image();
     
 public:
+    virtual AnimatorMetaInfo* kraMetaInfo();
+    virtual AnimatorMetaInfo* metaInfo();
+    
+public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
     virtual void insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer);
     virtual void removeFrame(KisNode* frame);
@@ -73,6 +78,7 @@ private:
     
     AnimatorSwitcher* m_switcher;
     AnimatorLoader* m_loader;
+    AnimatorMetaInfo* m_info;
 //     AnimatorPlayer* m_player;
 //     AnimatorExporter* m_exporter;
 };

@@ -20,8 +20,10 @@
 #include "animator_loader.h"
 
 #include <kis_debug.h>
+
 #include "framed_animated_layer.h"
 #include "simple_frame_layer.h"
+#include "animator_meta_info.h"
 
 AnimatorLoader::AnimatorLoader(AnimatorManager* manager): QObject(manager)
 {
@@ -40,6 +42,21 @@ void AnimatorLoader::loadAll()
     KisNodeSP rootNode = image->root();
     
     // first, check signature
+    AnimatorMetaInfo* kra_info = m_manager->kraMetaInfo();
+    AnimatorMetaInfo* plugin_info = m_manager->metaInfo();
+    
+    int kmajor = kra_info->getMajor();
+    int pmajor = plugin_info->getMajor();
+    
+    if (kmajor < pmajor)
+    {
+        warnKrita << "importing from older formats is not supported yet";
+        return;
+    } else if (kmajor > pmajor)
+    {
+        warnKrita << "this file was created by newer version of plugin, please update it";
+        return;
+    }
     
     loadLayers(rootNode);
 }
