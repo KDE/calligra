@@ -39,8 +39,10 @@
 **
 ****************************************************************************/
 
-#ifndef QCOMPLETER_H
-#define QCOMPLETER_H
+#ifndef KEXI_QCOMPLETER_H
+#define KEXI_QCOMPLETER_H
+
+#include <kexiutils_export.h>
 
 #include <QtCore/qobject.h>
 #include <QtCore/qpoint.h>
@@ -48,20 +50,18 @@
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qrect.h>
 
-QT_BEGIN_HEADER
-
-QT_BEGIN_NAMESPACE
-
-QT_MODULE(Gui)
-
 #ifndef QT_NO_COMPLETER
 
-class QCompleterPrivate;
 class QAbstractItemView;
 class QAbstractProxyModel;
 class QWidget;
+class QItemSelection;
 
-class Q_GUI_EXPORT QCompleter : public QObject
+namespace KexiUtils {
+
+class QCompleterPrivate;
+
+class KEXIUTILS_EXPORT QCompleter : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString completionPrefix READ completionPrefix WRITE setCompletionPrefix)
@@ -71,6 +71,7 @@ class Q_GUI_EXPORT QCompleter : public QObject
     Q_PROPERTY(int completionRole READ completionRole WRITE setCompletionRole)
     Q_PROPERTY(int maxVisibleItems READ maxVisibleItems WRITE setMaxVisibleItems)
     Q_PROPERTY(Qt::CaseSensitivity caseSensitivity READ caseSensitivity WRITE setCaseSensitivity)
+    Q_PROPERTY(bool substringCompletion READ substringCompletion WRITE setSubstringCompletion)
     Q_PROPERTY(bool wrapAround READ wrapAround WRITE setWrapAround)
 
 public:
@@ -107,6 +108,9 @@ public:
 
     void setCaseSensitivity(Qt::CaseSensitivity caseSensitivity);
     Qt::CaseSensitivity caseSensitivity() const;
+
+    void setSubstringCompletion(bool substringCompletion);
+    bool substringCompletion() const;
 
     void setModelSorting(ModelSorting sorting);
     ModelSorting modelSorting() const;
@@ -154,18 +158,19 @@ Q_SIGNALS:
 
 private:
     Q_DISABLE_COPY(QCompleter)
-    Q_DECLARE_PRIVATE(QCompleter)
 
-    Q_PRIVATE_SLOT(d_func(), void _q_complete(QModelIndex))
-    Q_PRIVATE_SLOT(d_func(), void _q_completionSelected(const QItemSelection&))
-    Q_PRIVATE_SLOT(d_func(), void _q_autoResizePopup())
-    Q_PRIVATE_SLOT(d_func(), void _q_fileSystemModelDirectoryLoaded(const QString&))
+    friend class QCompleterPrivate;
+    QCompleterPrivate * const d;
+
+private Q_SLOTS:
+    void _q_complete(const QModelIndex&);
+    void _q_completionSelected(const QItemSelection&);
+    void _q_autoResizePopup();
+    void _q_fileSystemModelDirectoryLoaded(const QString&);
 };
 
+} // namespace KexiUtils
+    
 #endif // QT_NO_COMPLETER
 
-QT_END_NAMESPACE
-
-QT_END_HEADER
-
-#endif // QCOMPLETER_H
+#endif // KEXI_QCOMPLETER_H

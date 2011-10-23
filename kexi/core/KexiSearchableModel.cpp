@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,39 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIPROJECTTREEVIEW_H
-#define KEXIPROJECTTREEVIEW_H
+#include "KexiSearchableModel.h"
 
-#include <QPointer>
-#include <QTreeView>
-#include <QModelIndex>
-#include <KMenu>
-#include <KActionCollection>
-
-namespace KexiPart
+KexiSearchableModel::KexiSearchableModel()
 {
-    class Info;
-    class Item;
-    class Part;
 }
-class KexiProjectModel;
 
-/*! @internal */
-class KexiProjectTreeView : public QTreeView
+KexiSearchableModel::~KexiSearchableModel()
 {
-    Q_OBJECT
-public:
-    KexiProjectTreeView(QWidget *parent);
-    virtual ~KexiProjectTreeView();
-
-    using QTreeView::setModel;
-    void setModel(KexiProjectModel *model);
-
-    bool nameEndsWithAsterisk;
-
-protected slots:
-    void slotHighlightSearchedItem(const QModelIndex &index);
-    void slotActivateSearchedItem(const QModelIndex &index);
-};
-
-#endif
+}

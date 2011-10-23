@@ -1659,7 +1659,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
         if (((m_type == ParagraphBulletProperties::BulletType) && m_bulletChar.isEmpty()) ||
             (indent == 0))
         {
-            if ((qAbs(indent) > qAbs(margin)) && (indent < 0)) {
+            if ((qAbs(indent) > margin) && (indent < 0)) {
                 //hanging:
                 returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
             } else {
@@ -1669,7 +1669,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
             returnValue += "text:label-followed-by=\"nothing\" ";
         }
         else {
-            if (qAbs(indent) > qAbs(margin)) {
+            if (qAbs(indent) > margin) {
                 //hanging:
                 if (indent < 0) {
                     returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);

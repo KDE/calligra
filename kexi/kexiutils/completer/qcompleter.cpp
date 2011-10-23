@@ -156,19 +156,65 @@
 #include "QtGui/qdesktopwidget.h"
 #include "QtGui/qlineedit.h"
 
-QT_BEGIN_NAMESPACE
+namespace KexiUtils {
+
+class QEmptyItemModel : public QAbstractItemModel
+{
+public:
+    explicit QEmptyItemModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
+    QModelIndex index(int, int, const QModelIndex &) const { return QModelIndex(); }
+    QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
+    int rowCount(const QModelIndex &) const { return 0; }
+    int columnCount(const QModelIndex &) const { return 0; }
+    bool hasChildren(const QModelIndex &) const { return false; }
+    QVariant data(const QModelIndex &, int) const { return QVariant(); }
+};
+
+Q_GLOBAL_STATIC(QEmptyItemModel, qEmptyModel)
+
+QAbstractItemModel *QAbstractItemModelPrivate::staticEmptyModel()
+{
+    return qEmptyModel();
+}
+
+namespace {
+    struct DefaultRoleNames : public QHash<int, QByteArray>
+    {
+        DefaultRoleNames() {
+            (*this)[Qt::DisplayRole] = "display";
+            (*this)[Qt::DecorationRole] = "decoration";
+            (*this)[Qt::EditRole] = "edit";
+            (*this)[Qt::ToolTipRole] = "toolTip";
+            (*this)[Qt::StatusTipRole] = "statusTip";
+            (*this)[Qt::WhatsThisRole] = "whatsThis";
+        }
+    };
+}
+
+Q_GLOBAL_STATIC(DefaultRoleNames, qDefaultRoleNames)
+
+const QHash<int,QByteArray> &QAbstractItemModelPrivate::defaultRoleNames()
+{
+    return *qDefaultRoleNames();
+}
+
 
 QCompletionModel::QCompletionModel(QCompleterPrivate *c, QObject *parent)
-    : QAbstractProxyModel(*new QCompletionModelPrivate, parent),
-      c(c), showAll(false)
+    : QAbstractProxyModel(parent),
+      c(c), showAll(false), d(new QCompletionModelPrivate(this))
 {
+    QAbstractProxyModel::setSourceModel(KexiUtils::QAbstractItemModelPrivate::staticEmptyModel());
     createEngine();
+}
+
+QCompletionModel::~QCompletionModel()
+{
+    delete d;
 }
 
 int QCompletionModel::columnCount(const QModelIndex &) const
 {
-    Q_D(const QCompletionModel);
-    return d->model->columnCount();
+    return sourceModel()->columnCount();
 }
 
 void QCompletionModel::setSourceModel(QAbstractItemModel *source)
@@ -178,7 +224,7 @@ void QCompletionModel::setSourceModel(QAbstractItemModel *source)
     if (hadModel)
         QObject::disconnect(sourceModel(), 0, this, 0);
 
-    QAbstractProxyModel::setSourceModel(source);
+    QAbstractProxyModel::setSourceModel(source ? source : KexiUtils::QAbstractItemModelPrivate::staticEmptyModel());
 
     if (source) {
         // TODO: Optimize updates in the source model
@@ -218,7 +264,6 @@ void QCompletionModel::createEngine()
 
 QModelIndex QCompletionModel::mapToSource(const QModelIndex& index) const
 {
-    Q_D(const QCompletionModel);
     if (!index.isValid())
         return engine->curParent;
 
@@ -239,7 +284,7 @@ QModelIndex QCompletionModel::mapToSource(const QModelIndex& index) const
         row = index.row();
     }
 
-    return d->model->index(row, index.column(), parent);
+    return sourceModel()->index(row, index.column(), parent);
 }
 
 QModelIndex QCompletionModel::mapFromSource(const QModelIndex& idx) const
@@ -311,7 +356,6 @@ QModelIndex QCompletionModel::currentIndex(bool sourceIndex) const
 
 QModelIndex QCompletionModel::index(int row, int column, const QModelIndex& parent) const
 {
-    Q_D(const QCompletionModel);
     if (row < 0 || column < 0 || column >= columnCount(parent) || parent.isValid())
         return QModelIndex();
 
@@ -326,7 +370,7 @@ QModelIndex QCompletionModel::index(int row, int column, const QModelIndex& pare
                 return QModelIndex();
         }
     } else {
-        if (row >= d->model->rowCount(engine->curParent))
+        if (row >= sourceModel()->rowCount(engine->curParent))
             return QModelIndex();
     }
 
@@ -344,7 +388,6 @@ int QCompletionModel::completionCount() const
 
 int QCompletionModel::rowCount(const QModelIndex &parent) const
 {
-    Q_D(const QCompletionModel);
     if (parent.isValid())
         return 0;
 
@@ -353,7 +396,7 @@ int QCompletionModel::rowCount(const QModelIndex &parent) const
         if (engine->curParts.count() != 1  && !engine->matchCount()
             && !engine->curParent.isValid())
             return 0;
-        return d->model->rowCount(engine->curParent);
+        return sourceModel()->rowCount(engine->curParent);
     }
 
     return completionCount();
@@ -369,12 +412,11 @@ void QCompletionModel::setFiltered(bool filtered)
 
 bool QCompletionModel::hasChildren(const QModelIndex &parent) const
 {
-    Q_D(const QCompletionModel);
     if (parent.isValid())
         return false;
 
     if (showAll)
-        return d->model->hasChildren(mapToSource(parent));
+        return sourceModel()->hasChildren(mapToSource(parent));
 
     if (!engine->matchCount())
         return false;
@@ -384,8 +426,7 @@ bool QCompletionModel::hasChildren(const QModelIndex &parent) const
 
 QVariant QCompletionModel::data(const QModelIndex& index, int role) const
 {
-    Q_D(const QCompletionModel);
-    return d->model->data(mapToSource(index), role);
+    return sourceModel()->data(mapToSource(index), role);
 }
 
 void QCompletionModel::modelDestroyed()
@@ -408,12 +449,11 @@ void QCompletionModel::invalidate()
 
 void QCompletionModel::filter(const QStringList& parts)
 {
-    Q_D(QCompletionModel);
     engine->filter(parts);
     resetModel();
 
-    if (d->model->canFetchMore(engine->curParent))
-        d->model->fetchMore(engine->curParent);
+    if (sourceModel()->canFetchMore(engine->curParent))
+        sourceModel()->fetchMore(engine->curParent);
 }
 
 void QCompletionModel::resetModel()
@@ -467,6 +507,18 @@ void QCompletionEngine::filter(const QStringList& parts)
     curRow = curMatch.isValid() ? 0 : -1;
 }
 
+inline bool matchPrefix(const QString& s1, const QString& s2, Qt::CaseSensitivity cs)
+{
+    return s1.startsWith(s2, cs);
+}
+
+inline bool matchSubstring(const QString& s1, const QString& s2, Qt::CaseSensitivity cs)
+{
+    return s1.contains(s2, cs);
+}
+
+typedef bool (*MatchFunction)(const QString&, const QString&, Qt::CaseSensitivity);
+
 QMatchData QCompletionEngine::filterHistory()
 {
     QAbstractItemModel *source = c->proxy->sourceModel();
@@ -484,9 +536,10 @@ QMatchData QCompletionEngine::filterHistory()
     QIndexMapper im(v);
     QMatchData m(im, -1, true);
 
+    MatchFunction matchFunction = c->substringCompletion ? &matchSubstring : &matchPrefix;
     for (int i = 0; i < source->rowCount(); i++) {
         QString str = source->index(i, c->column).data().toString();
-        if (str.startsWith(c->prefix, c->cs)
+        if (matchFunction(str, c->prefix, c->cs)
 #if (!defined(Q_OS_WIN) || defined(Q_OS_WINCE)) && !defined(Q_OS_SYMBIAN)
             && ((!isFsModel && !isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
 #endif
@@ -709,10 +762,11 @@ int QUnsortedModelEngine::buildIndices(const QString& str, const QModelIndex& pa
     const QAbstractItemModel *model = c->proxy->sourceModel();
     int i, count = 0;
 
+    MatchFunction matchFunction = c->substringCompletion ? &matchSubstring : &matchPrefix;
     for (i = 0; i < indices.count() && count != n; ++i) {
         QModelIndex idx = model->index(indices[i], c->column, parent);
         QString data = model->data(idx, c->role).toString();
-        if (!data.startsWith(str, c->cs) || !(model->flags(idx) & Qt::ItemIsSelectable))
+        if (!matchFunction(data, str, c->cs) || !(model->flags(idx) & Qt::ItemIsSelectable))
             continue;
         m->indices.append(indices[i]);
         ++count;
@@ -780,16 +834,16 @@ QMatchData QUnsortedModelEngine::filter(const QString& part, const QModelIndex& 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-QCompleterPrivate::QCompleterPrivate()
-: widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), role(Qt::EditRole), column(0),
-  maxVisibleItems(7), sorting(QCompleter::UnsortedModel), wrap(true), eatFocusOut(true),
-  hiddenBecauseNoMatch(false)
+QCompleterPrivate::QCompleterPrivate(QCompleter *q)
+: widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), substringCompletion(false),
+  role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(QCompleter::UnsortedModel),
+  wrap(true), eatFocusOut(true),
+  hiddenBecauseNoMatch(false), q(q)
 {
 }
 
 void QCompleterPrivate::init(QAbstractItemModel *m)
 {
-    Q_Q(QCompleter);
     proxy = new QCompletionModel(this, q);
     QObject::connect(proxy, SIGNAL(rowsAdded()), q, SLOT(_q_autoResizePopup()));
     q->setModel(m);
@@ -802,7 +856,6 @@ void QCompleterPrivate::init(QAbstractItemModel *m)
 
 void QCompleterPrivate::setCurrentIndex(QModelIndex index, bool select)
 {
-    Q_Q(QCompleter);
     if (!q->popup())
         return;
     if (!select) {
@@ -832,7 +885,6 @@ void QCompleterPrivate::_q_completionSelected(const QItemSelection& selection)
 
 void QCompleterPrivate::_q_complete(QModelIndex index, bool highlighted)
 {
-    Q_Q(QCompleter);
     QString completion;
 
     if (!index.isValid() || (!proxy->showAll && (index.row() >= proxy->engine->matchCount()))) {
@@ -921,7 +973,6 @@ void QCompleterPrivate::showPopup(const QRect& rect)
 
 void QCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path)
 {
-    Q_Q(QCompleter);
     // Slot called when QFileSystemModel has finished loading.
     // If we hide the popup because there was no match because the model was not loaded yet,
     // we re-start the completion when we get the results
@@ -936,9 +987,8 @@ void QCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path)
     Constructs a completer object with the given \a parent.
 */
 QCompleter::QCompleter(QObject *parent)
-: QObject(*new QCompleterPrivate(), parent)
+: QObject(parent), d(new QCompleterPrivate(this))
 {
-    Q_D(QCompleter);
     d->init();
 }
 
@@ -947,9 +997,8 @@ QCompleter::QCompleter(QObject *parent)
     from the specified \a model.
 */
 QCompleter::QCompleter(QAbstractItemModel *model, QObject *parent)
-    : QObject(*new QCompleterPrivate(), parent)
+    : QObject(parent), d(new QCompleterPrivate(this))
 {
-    Q_D(QCompleter);
     d->init(model);
 }
 
@@ -959,9 +1008,8 @@ QCompleter::QCompleter(QAbstractItemModel *model, QObject *parent)
     \a list as a source of possible completions.
 */
 QCompleter::QCompleter(const QStringList& list, QObject *parent)
-: QObject(*new QCompleterPrivate(), parent)
+    : QObject(parent), d(new QCompleterPrivate(this))
 {
-    Q_D(QCompleter);
     d->init(new QStringListModel(list, this));
 }
 #endif // QT_NO_STRINGLISTMODEL
@@ -971,6 +1019,7 @@ QCompleter::QCompleter(const QStringList& list, QObject *parent)
 */
 QCompleter::~QCompleter()
 {
+    delete d;
 }
 
 /*!
@@ -984,7 +1033,8 @@ QCompleter::~QCompleter()
  */
 void QCompleter::setWidget(QWidget *widget)
 {
-    Q_D(QCompleter);
+    if (widget && d->widget == widget)
+        return;
     if (d->widget)
         d->widget->removeEventFilter(this);
     d->widget = widget;
@@ -1003,7 +1053,6 @@ void QCompleter::setWidget(QWidget *widget)
  */
 QWidget *QCompleter::widget() const
 {
-    Q_D(const QCompleter);
     return d->widget;
 }
 
@@ -1020,7 +1069,6 @@ QWidget *QCompleter::widget() const
 */
 void QCompleter::setModel(QAbstractItemModel *model)
 {
-    Q_D(QCompleter);
     QAbstractItemModel *oldModel = d->proxy->sourceModel();
     d->proxy->setSourceModel(model);
     if (d->popup)
@@ -1057,7 +1105,6 @@ void QCompleter::setModel(QAbstractItemModel *model)
 */
 QAbstractItemModel *QCompleter::model() const
 {
-    Q_D(const QCompleter);
     return d->proxy->sourceModel();
 }
 
@@ -1081,7 +1128,6 @@ QAbstractItemModel *QCompleter::model() const
 */
 void QCompleter::setCompletionMode(QCompleter::CompletionMode mode)
 {
-    Q_D(QCompleter);
     d->mode = mode;
     d->proxy->setFiltered(mode != QCompleter::UnfilteredPopupCompletion);
 
@@ -1100,7 +1146,6 @@ void QCompleter::setCompletionMode(QCompleter::CompletionMode mode)
 
 QCompleter::CompletionMode QCompleter::completionMode() const
 {
-    Q_D(const QCompleter);
     return d->mode;
 }
 
@@ -1121,7 +1166,6 @@ QCompleter::CompletionMode QCompleter::completionMode() const
 */
 void QCompleter::setPopup(QAbstractItemView *popup)
 {
-    Q_D(QCompleter);
     Q_ASSERT(popup != 0);
     if (d->popup) {
         QObject::disconnect(d->popup->selectionModel(), 0, this, 0);
@@ -1171,7 +1215,6 @@ void QCompleter::setPopup(QAbstractItemView *popup)
 */
 QAbstractItemView *QCompleter::popup() const
 {
-    Q_D(const QCompleter);
 #ifndef QT_NO_LISTVIEW
     if (!d->popup && completionMode() != QCompleter::InlineCompletion) {
         QListView *listView = new QListView;
@@ -1200,8 +1243,6 @@ bool QCompleter::event(QEvent *ev)
 */
 bool QCompleter::eventFilter(QObject *o, QEvent *e)
 {
-    Q_D(QCompleter);
-
     if (d->eatFocusOut && o == d->widget && e->type() == QEvent::FocusOut) {
         d->hiddenBecauseNoMatch = false;
         if (d->popup && d->popup->isVisible())
@@ -1380,7 +1421,6 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
 */
 void QCompleter::complete(const QRect& rect)
 {
-    Q_D(QCompleter);
     QModelIndex idx = d->proxy->currentIndex(false);
     d->hiddenBecauseNoMatch = false;
     if (d->mode == QCompleter::InlineCompletion) {
@@ -1417,7 +1457,6 @@ void QCompleter::complete(const QRect& rect)
 */
 bool QCompleter::setCurrentRow(int row)
 {
-    Q_D(QCompleter);
     return d->proxy->setCurrentRow(row);
 }
 
@@ -1428,7 +1467,6 @@ bool QCompleter::setCurrentRow(int row)
 */
 int QCompleter::currentRow() const
 {
-    Q_D(const QCompleter);
     return d->proxy->currentRow();
 }
 
@@ -1439,7 +1477,6 @@ int QCompleter::currentRow() const
 */
 int QCompleter::completionCount() const
 {
-    Q_D(const QCompleter);
     return d->proxy->completionCount();
 }
 
@@ -1479,7 +1516,6 @@ int QCompleter::completionCount() const
 */
 void QCompleter::setModelSorting(QCompleter::ModelSorting sorting)
 {
-    Q_D(QCompleter);
     if (d->sorting == sorting)
         return;
     d->sorting = sorting;
@@ -1489,7 +1525,6 @@ void QCompleter::setModelSorting(QCompleter::ModelSorting sorting)
 
 QCompleter::ModelSorting QCompleter::modelSorting() const
 {
-    Q_D(const QCompleter);
     return d->sorting;
 }
 
@@ -1506,7 +1541,6 @@ QCompleter::ModelSorting QCompleter::modelSorting() const
 */
 void QCompleter::setCompletionColumn(int column)
 {
-    Q_D(QCompleter);
     if (d->column == column)
         return;
 #ifndef QT_NO_LISTVIEW
@@ -1519,7 +1553,6 @@ void QCompleter::setCompletionColumn(int column)
 
 int QCompleter::completionColumn() const
 {
-    Q_D(const QCompleter);
     return d->column;
 }
 
@@ -1533,7 +1566,6 @@ int QCompleter::completionColumn() const
 */
 void QCompleter::setCompletionRole(int role)
 {
-    Q_D(QCompleter);
     if (d->role == role)
         return;
     d->role = role;
@@ -1542,7 +1574,6 @@ void QCompleter::setCompletionRole(int role)
 
 int QCompleter::completionRole() const
 {
-    Q_D(const QCompleter);
     return d->role;
 }
 
@@ -1555,7 +1586,6 @@ int QCompleter::completionRole() const
 */
 void QCompleter::setWrapAround(bool wrap)
 {
-    Q_D(QCompleter);
     if (d->wrap == wrap)
         return;
     d->wrap = wrap;
@@ -1563,7 +1593,6 @@ void QCompleter::setWrapAround(bool wrap)
 
 bool QCompleter::wrapAround() const
 {
-    Q_D(const QCompleter);
     return d->wrap;
 }
 
@@ -1576,13 +1605,11 @@ bool QCompleter::wrapAround() const
 */
 int QCompleter::maxVisibleItems() const
 {
-    Q_D(const QCompleter);
     return d->maxVisibleItems;
 }
 
 void QCompleter::setMaxVisibleItems(int maxItems)
 {
-    Q_D(QCompleter);
     if (maxItems < 0) {
         qWarning("QCompleter::setMaxVisibleItems: "
                  "Invalid max visible items (%d) must be >= 0", maxItems);
@@ -1597,11 +1624,10 @@ void QCompleter::setMaxVisibleItems(int maxItems)
 
     The default is Qt::CaseSensitive.
 
-    \sa completionColumn, completionRole, modelSorting
+    \sa substringCompletion, completionColumn, completionRole, modelSorting
 */
 void QCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
 {
-    Q_D(QCompleter);
     if (d->cs == cs)
         return;
     d->cs = cs;
@@ -1611,8 +1637,29 @@ void QCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
 
 Qt::CaseSensitivity QCompleter::caseSensitivity() const
 {
-    Q_D(const QCompleter);
     return d->cs;
+}
+
+/*!
+    \property QCompleter::substringCompletion
+    \brief the completion uses any substring matching
+
+    If true the completion uses any substring matching.
+    If false prefix matching is used. The default is false.
+
+    \sa caseSensitivity
+*/
+void QCompleter::setSubstringCompletion(bool substringCompletion)
+{
+    if (d->substringCompletion == substringCompletion)
+        return;
+    d->substringCompletion = substringCompletion;
+    d->proxy->invalidate();
+}
+
+bool QCompleter::substringCompletion() const
+{
+    return d->substringCompletion;
 }
 
 /*!
@@ -1624,14 +1671,12 @@ Qt::CaseSensitivity QCompleter::caseSensitivity() const
 */
 void QCompleter::setCompletionPrefix(const QString &prefix)
 {
-    Q_D(QCompleter);
     d->prefix = prefix;
     d->proxy->filter(splitPath(prefix));
 }
 
 QString QCompleter::completionPrefix() const
 {
-    Q_D(const QCompleter);
     return d->prefix;
 }
 
@@ -1642,7 +1687,6 @@ QString QCompleter::completionPrefix() const
 */
 QModelIndex QCompleter::currentIndex() const
 {
-    Q_D(const QCompleter);
     return d->proxy->currentIndex(false);
 }
 
@@ -1655,7 +1699,6 @@ QModelIndex QCompleter::currentIndex() const
 */
 QString QCompleter::currentCompletion() const
 {
-    Q_D(const QCompleter);
     return pathFromIndex(d->proxy->currentIndex(true));
 }
 
@@ -1672,7 +1715,6 @@ QString QCompleter::currentCompletion() const
 */
 QAbstractItemModel *QCompleter::completionModel() const
 {
-    Q_D(const QCompleter);
     return d->proxy;
 }
 
@@ -1689,7 +1731,6 @@ QAbstractItemModel *QCompleter::completionModel() const
 
 QString QCompleter::pathFromIndex(const QModelIndex& index) const
 {
-    Q_D(const QCompleter);
     if (!index.isValid())
         return QString();
 
@@ -1748,12 +1789,10 @@ QStringList QCompleter::splitPath(const QString& path) const
     bool isDirModel = false;
     bool isFsModel = false;
 #ifndef QT_NO_DIRMODEL
-    Q_D(const QCompleter);
     isDirModel = qobject_cast<QDirModel *>(d->proxy->sourceModel()) != 0;
 #endif
 #ifndef QT_NO_FILESYSTEMMODEL
 #ifdef QT_NO_DIRMODEL
-    Q_D(const QCompleter);
 #endif
     isFsModel = qobject_cast<QFileSystemModel *>(d->proxy->sourceModel()) != 0;
 #endif
@@ -1826,9 +1865,39 @@ QStringList QCompleter::splitPath(const QString& path) const
     set to QCompleter::InlineCompletion. The item's \a text is given.
 */
 
-QT_END_NAMESPACE
+void QCompleter::_q_complete(const QModelIndex& index)
+{
+    d->_q_complete(index);
+}
+
+void QCompleter::_q_completionSelected(const QItemSelection& selection)
+{
+    d->_q_completionSelected(selection);
+}
+
+void QCompleter::_q_autoResizePopup()
+{
+    d->_q_autoResizePopup();
+}
+
+void QCompleter::_q_fileSystemModelDirectoryLoaded(const QString& dir)
+{
+    d->_q_fileSystemModelDirectoryLoaded(dir);
+}
+
+QCompletionModelPrivate::QCompletionModelPrivate(QCompletionModel *q)
+ : q(q)
+{
+}
+
+void QCompletionModelPrivate::_q_sourceModelDestroyed()
+{
+    q->setSourceModel(KexiUtils::QAbstractItemModelPrivate::staticEmptyModel());
+}
 
 #include "moc_qcompleter.cpp"
 #include "moc_qcompleter_p.cpp"
+
+} //namespace KexiUtils
 
 #endif // QT_NO_COMPLETER

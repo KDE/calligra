@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,39 +17,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIPROJECTTREEVIEW_H
-#define KEXIPROJECTTREEVIEW_H
+#ifndef KEXISEARCHABLEMODEL_H
+#define KEXISEARCHABLEMODEL_H
 
-#include <QPointer>
-#include <QTreeView>
-#include <QModelIndex>
-#include <KMenu>
-#include <KActionCollection>
+#include <kexi_global.h>
 
-namespace KexiPart
+class QModelIndex;
+class QVariant;
+
+class KEXICORE_EXPORT KexiSearchableModel
 {
-    class Info;
-    class Item;
-    class Part;
-}
-class KexiProjectModel;
-
-/*! @internal */
-class KexiProjectTreeView : public QTreeView
-{
-    Q_OBJECT
 public:
-    KexiProjectTreeView(QWidget *parent);
-    virtual ~KexiProjectTreeView();
-
-    using QTreeView::setModel;
-    void setModel(KexiProjectModel *model);
-
-    bool nameEndsWithAsterisk;
-
-protected slots:
-    void slotHighlightSearchedItem(const QModelIndex &index);
-    void slotActivateSearchedItem(const QModelIndex &index);
+    KexiSearchableModel();
+    virtual ~KexiSearchableModel();
+    virtual int searchableObjectCount() const = 0;
+    virtual QModelIndex sourceIndexForSearchableObject(int objectIndex) const = 0;
+    virtual QVariant searchableData(const QModelIndex &sourceIndex, int role) const = 0;
+    virtual QString pathFromIndex(const QModelIndex &sourceIndex) const = 0;
+    virtual bool highlightSearchableObject(const QModelIndex &index) = 0;
+    virtual bool activateSearchableObject(const QModelIndex &index) = 0;
 };
 
 #endif

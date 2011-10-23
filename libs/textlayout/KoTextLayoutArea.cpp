@@ -961,6 +961,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qTabs.append(tab);
     }
 
+    qreal presentationListTabValue; // for use in presentationListTabWorkaround
+
     // For some lists we need to add a special list tab according to odf 1.2 19.830 
     if (textList && listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
         qreal listTab = 0;
@@ -1002,6 +1004,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         //                    TO THE NEXT LINE
         //|>------------------|
         //     leftMargin
+        presentationListTabValue = listTab;
         listTab -= m_indent;
 
         // And now listTab is like this:
@@ -1092,11 +1095,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 m_width -= listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
                 blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
             }
-        } else if (labelBoxWidth > 0.0) { // Alignmentmode and there is a label
+        } else if (labelBoxWidth > 0.0 || blockData->counterText().length() > 0) {
+            // Alignmentmode and there is a label (double check needed to acount for both
+            // picture bullets and non width chars)
             blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
 
             if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab
-                && !presentationListTabWorkaround(textIndent(block, textList, pStyle), labelBoxWidth)) {
+                && !presentationListTabWorkaround(textIndent(block, textList, pStyle), labelBoxWidth, presentationListTabValue)) {
                 foreach(QTextOption::Tab tab, qTabs) {
                     qreal position = tab.position  * 72. / qt_defaultDpiY();
                     if (position > 0.0) {
@@ -1268,11 +1273,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     return true;
 }
 
-bool KoTextLayoutArea::presentationListTabWorkaround(qreal indent, qreal labelBoxWidth)
+bool KoTextLayoutArea::presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue)
 {
     if (!m_documentLayout->wordprocessingMode() && indent < 0.0) {
         // Impress / Powerpoint expects the label to be before the text
-        if (indent + labelBoxWidth >= 0.0) {
+        if (indent + labelBoxWidth >= presentationListTabValue) {
             // but here is an unforseen overlap with normal text
             return true;
         }
@@ -1381,7 +1386,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
                 const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
                 qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
                 blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-            } if ((format.alignment() & Qt::AlignRight) == Qt::AlignRight) {
+            } else if ((format.alignment() & Qt::AlignRight) == Qt::AlignRight) {
                 const qreal padding = line.width() - line.naturalTextWidth();
                 qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
                 blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));

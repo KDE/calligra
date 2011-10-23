@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QABSTRACTPROXYMODEL_P_H
-#define QABSTRACTPROXYMODEL_P_H
+#ifndef KEXI_QABSTRACTPROXYMODEL_P_H
+#define KEXI_QABSTRACTPROXYMODEL_P_H
 
 //
 //  W A R N I N G
@@ -58,19 +58,18 @@
 
 #ifndef QT_NO_PROXYMODEL
 
-QT_BEGIN_NAMESPACE
+//namespace KexiUtils {
 
 class QAbstractProxyModelPrivate : public QAbstractItemModelPrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractProxyModel)
 public:
-    QAbstractProxyModelPrivate() : QAbstractItemModelPrivate(), model(0) {}
-    QAbstractItemModel *model;
+    QAbstractProxyModelPrivate() : QAbstractItemModelPrivate()/*, model(0)*/ {}
+    //QAbstractItemModel *model;
     virtual void _q_sourceModelDestroyed();
 };
 
-QT_END_NAMESPACE
+//} // namespace KexiUtils
 
 #endif // QT_NO_PROXYMODEL
 
-#endif // QABSTRACTPROXYMODEL_P_H
+#endif // KEXI_QABSTRACTPROXYMODEL_P_H
