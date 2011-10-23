@@ -1283,6 +1283,8 @@ ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newval
     m_estimate( node.estimate() ),
     m_oldvalue( oldvalue ),
     m_newvalue( newvalue ),
+    m_optimistic( node.estimate()->optimisticRatio() ),
+    m_pessimistic( node.estimate()->pessimisticRatio() ),
     m_cmd( 0 )
 {
     if ( newvalue == 0.0 ) {
@@ -1299,26 +1301,21 @@ ModifyEstimateCmd::~ModifyEstimateCmd()
 }
 void ModifyEstimateCmd::execute()
 {
-    int pess = m_estimate->pessimisticRatio();
-    int opt = m_estimate->optimisticRatio();
     m_estimate->setExpectedEstimate( m_newvalue );
     if ( m_cmd ) {
         m_cmd->execute();
     }
-    m_estimate->setPessimisticRatio( pess );
-    m_estimate->setOptimisticRatio( opt );
-
+    m_estimate->setPessimisticRatio( m_pessimistic );
+    m_estimate->setOptimisticRatio( m_optimistic );
 }
 void ModifyEstimateCmd::unexecute()
 {
-    int pess = m_estimate->pessimisticRatio();
-    int opt = m_estimate->optimisticRatio();
     m_estimate->setExpectedEstimate( m_oldvalue );
     if ( m_cmd ) {
         m_cmd->unexecute();
     }
-    m_estimate->setPessimisticRatio( pess );
-    m_estimate->setOptimisticRatio( opt );
+    m_estimate->setPessimisticRatio( m_pessimistic );
+    m_estimate->setOptimisticRatio( m_optimistic );
 }
 
 EstimateModifyOptimisticRatioCmd::EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name )

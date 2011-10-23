@@ -1033,6 +1033,8 @@ QCompleter::~QCompleter()
  */
 void QCompleter::setWidget(QWidget *widget)
 {
+    if (widget && d->widget == widget)
+        return;
     if (d->widget)
         d->widget->removeEventFilter(this);
     d->widget = widget;

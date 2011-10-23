@@ -102,13 +102,14 @@ STARTUP
 Before freeze:
 *fix bugs...
 
+2011-10-21..22
 Widgets
 *[code]substringCompletion property added to QCompleter, false by default
 MainWindow
 *Make global search "full text"
 *Clear contents on activation, update on pressing Delete
-TODO: when pressing Esc or (Back)Tab on empty search line edit, focus previously active widget; 
-      use QApplication::focusWidget() for that
+*Make Escape, Tab, Backtab keys set focus back to previously focused widget in Global Search
+*On activating global search box, select all previous text
 
 2011-10-19
 MainWindow
@@ -118,6 +119,7 @@ MainWindow
 **[code]QCompleter which cannot do substring matching (https://bugreports.qt.nokia.com/browse/QTBUG-3414)
 **[code]KCompletion is not better
 **[code]Forked QCompleter and related classes and put in KexiUtils
+**[code]Commented at https://bugreports.qt.nokia.com/browse/QTBUG-7830?focusedCommentId=166309#comment-166309
 
 2011-10-18
 Forms

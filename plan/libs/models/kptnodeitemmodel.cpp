@@ -444,7 +444,7 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
     }
     switch ( role ) {
         case Qt::DisplayRole:
-            if ( node->type() == Node::Type_Task ) {
+            if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Duration::Unit unit = node->estimate()->unit();
                 QString s = KGlobal::locale()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
                 if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
@@ -2560,7 +2560,7 @@ KUndo2Command *NodeModel::setName( Node *node, const QVariant &value, int role )
             }
             QString s = i18nc( "(qtundo-format)", "Modify name" );
             switch ( node->type() ) {
-                case Node::Type_Task: s = i18nc( "(qtundo-format)", "Modify task Name" ); break;
+                case Node::Type_Task: s = i18nc( "(qtundo-format)", "Modify task name" ); break;
                 case Node::Type_Milestone: s = i18nc( "(qtundo-format)", "Modify milestone name" ); break;
                 case Node::Type_Summarytask: s = i18nc( "(qtundo-format)", "Modify summarytask name" ); break;
                 case Node::Type_Project: s = i18nc( "(qtundo-format)", "Modify project name" ); break;
@@ -2765,7 +2765,7 @@ KUndo2Command *NodeModel::setOptimisticRatio( Node *node, const QVariant &value,
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->optimisticRatio() ) {
-                return new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), "Modify estimate" );
+                return new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), i18nc( "(qtundo-format)", "Modify optimistic estimate" ) );
             }
             break;
         default:
@@ -2782,7 +2782,7 @@ KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->pessimisticRatio() ) {
-                return new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), "Modify estimate" );
+                return new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), i18nc( "(qtundo-format)", "Modify pessimistic estimate" ) );
             }
         default:
             break;
@@ -3166,10 +3166,16 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case NodeModel::NodeEstimate: // estimate
+            {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
             case NodeModel::NodeOptimisticRatio: // optimisticRatio
             case NodeModel::NodePessimisticRatio: // pessimisticRatio
             {
-                if ( ! baselined && ( n->type() == Node::Type_Task ) ) {
+                if ( ! baselined && n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -3382,7 +3388,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 cmd = 0;
             }
 
-            QString c = i18n( "Modify resource allocations" );
+            QString c = i18nc( "(qtundo-format)", "Modify resource allocations" );
             // Handle deleted requests
             foreach ( const QString &s, req ) {
                 // if a request is not in alloc, it must have been be removed by the user

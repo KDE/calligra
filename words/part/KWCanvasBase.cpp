@@ -266,7 +266,7 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
         painter.drawLine(lineStart + innerOffset2D, lineEnd + innerOffset2D);
     }
     else {
-        pen.setWidthF(zoom * borderData.innerPen.widthF());
+        pen.setWidthF(zoom * borderData.outerPen.widthF());
         painter.setPen(pen);
         painter.drawLine(lineStart, lineEnd);
     }

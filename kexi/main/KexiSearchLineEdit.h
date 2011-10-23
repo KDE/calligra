@@ -45,10 +45,14 @@ public:
      One example is Project Navigator. */
     void addSearchableModel(KexiSearchableModel *model);
 
+public slots:
+    void setFocus();
+
 private slots:
     void slotCompletionHighlighted(const QString &newText);
     void slotCompletionHighlighted(const QModelIndex &index);
     void slotCompletionActivated(const QModelIndex &index);
+    void slotClearShortcutActivated();
 
 protected:
     virtual void inputMethodEvent(QInputMethodEvent *e);

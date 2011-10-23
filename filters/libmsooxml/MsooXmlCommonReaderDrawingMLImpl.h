@@ -701,6 +701,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
 
+    // FIXME: The draw:fit-to-size attribute specifies whether to stretch the
+    // text content of a drawing object to fill an entire object.  The
+    // style:shrink-to-fit attribute specifies whether content is reduced in
+    // size to fit within a cell or drawing object.  Shrinking means that the
+    // font size of the content is decreased to fit the content into a cell or
+    // drawing object.  That's needed to be compatible with MS PowerPoint.  Any
+    // margin, padding or indent MUST be retained.
     if (m_normAutofit == MSOOXML::Utils::autoFitOn) {
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
@@ -6077,7 +6084,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 #undef CURRENT_EL
 #define CURRENT_EL normAutofit
 //! Normal autofit handler (Normal AutoFit)
-/*!
+/*! ECMA-376, 21.1.2.1.3, p.3555 - DrawingML
 
  Parent elements:
  - [done] bodyPr (§21.1.2.1.1)

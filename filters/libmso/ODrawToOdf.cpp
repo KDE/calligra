@@ -183,7 +183,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:auto-grow-height
     style.addProperty("draw:auto-grow-height", ds.fFitShapeToText(), gt);
     // draw:auto-grow-width
-    style.addProperty("draw:auto-grow-width", "false", gt);
+    style.addProperty("draw:auto-grow-width", ds.fFitShapeToText(), gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -390,10 +390,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:margin-left
     // fo:margin-right
     // fo:margin-top
-    style.addPropertyPt("style:margin-bottom", EMU_TO_POINT(ds.dyWrapDistBottom()), gt);
-    style.addPropertyPt("style:margin-left", EMU_TO_POINT(ds.dxWrapDistLeft()), gt);
-    style.addPropertyPt("style:margin-right", EMU_TO_POINT(ds.dxWrapDistRight()), gt);
-    style.addPropertyPt("style:margin-top", EMU_TO_POINT(ds.dyWrapDistTop()), gt);
+    style.addPropertyPt("fo:margin-bottom", EMU_TO_POINT(ds.dyWrapDistBottom()), gt);
+    style.addPropertyPt("fo:margin-left", EMU_TO_POINT(ds.dxWrapDistLeft()), gt);
+    style.addPropertyPt("fo:margin-right", EMU_TO_POINT(ds.dxWrapDistRight()), gt);
+    style.addPropertyPt("fo:margin-top", EMU_TO_POINT(ds.dyWrapDistTop()), gt);
     // fo:max-height
     // fo:max-width
     // fo:min-height
@@ -413,6 +413,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         style.addPropertyPt("fo:padding-top", EMU_TO_POINT(ds.dyTextTop()), gt);
     }
     // fo:wrap-option
+    // style:background-transparency
     // style:border-line-width
     // style:border-line-width-bottom
     // style:border-line-width-left
@@ -437,6 +438,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:repeat // handled for image see draw:fill-image-name
     // style:run-through
     // style:shadow
+    // style:shrink-to-fit
     // style:vertical-pos
     // NOTE: tests on PPT, XLS required
 //     style.addProperty("style:vertical-pos", getVerticalPos(ds.posV()), gt);
@@ -447,6 +449,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:wrap-contour
     // style:wrap-contour-mode
     // style:wrap-dynamic-treshold
+    // style:writing-mode
     // svg:fill-rule
     QString fillRule(getFillRule(ds.shapeType()));
     if (!fillRule.isEmpty()) {
