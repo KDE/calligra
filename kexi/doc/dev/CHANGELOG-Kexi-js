@@ -109,6 +109,7 @@ MainWindow
 *Make global search "full text"
 *Clear contents on activation, update on pressing Delete
 *Make Escape, Tab, Backtab keys set focus back to previously focused widget in Global Search
+*On activating global search box, select all previous text
 
 2011-10-19
 MainWindow

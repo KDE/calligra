@@ -726,6 +726,7 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
 
 void KexiTabbedToolBar::activateSearchLineEdit()
 {
+    d->searchLineEdit->selectAll();
     d->searchLineEdit->setFocus();
 }
 
