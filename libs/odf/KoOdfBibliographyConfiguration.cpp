@@ -22,6 +22,27 @@
 #include "KoUnit.h"
 
 #include <QList>
+#include <QPair>
+
+const QList<QString> KoOdfBibliographyConfiguration::bibTypes = QList<QString>() << "article" << "book" << "booklet" << "conference"
+                                                                     << "email" << "inbook" << "incollection"
+                                                                     << "inproceedings" << "journal" << "manual"
+                                                                     << "mastersthesis" << "misc" << "phdthesis"
+                                                                     << "proceedings" << "techreport" << "unpublished"
+                                                                     << "www" << "custom1" << "custom2"
+                                                                     << "custom3" << "custom4" << "custom5";
+
+const QList<QString> KoOdfBibliographyConfiguration::bibDataFields = QList<QString>() << "address" << "annote" << "author"
+                                                                          << "bibliography-type" << "booktitle"
+                                                                          << "chapter" << "custom1" << "custom2"
+                                                                          << "custom3" << "custom4" << "custom5"
+                                                                          << "edition" << "editor" << "howpublished"
+                                                                          << "identifier" << "institution" << "isbn"
+                                                                          << "issn" << "journal" << "month" << "note"
+                                                                          << "number" << "organizations" << "pages"
+                                                                          << "publisher" << "report-type" << "school"
+                                                                          << "series" << "title" << "url" << "volume"
+                                                                          << "year";
 
 class KoOdfBibliographyConfiguration::Private
 {
@@ -31,7 +52,7 @@ public:
     bool numberedEntries;
     bool sortByPosition;
     QString sortAlgorithm;
-    QList<QString> sortKeys;
+    QList<SortKeyPair> sortKeys;
 };
 
 KoOdfBibliographyConfiguration::KoOdfBibliographyConfiguration()
@@ -41,7 +62,7 @@ KoOdfBibliographyConfiguration::KoOdfBibliographyConfiguration()
     d->suffix = "]";
     d->numberedEntries = false;
     d->sortByPosition = true;
-    d->sortKeys << "identifier";
+    d->sortKeys << QPair<QString, Qt::SortOrder>("identifier",Qt::AscendingOrder);
 }
 
 KoOdfBibliographyConfiguration::~KoOdfBibliographyConfiguration()
@@ -84,8 +105,11 @@ void KoOdfBibliographyConfiguration::loadOdf(const KoXmlElement &element)
 
         if (child.namespaceURI() == KoXmlNS::text && child.localName() == "sort-key") {
             QString key = child.attributeNS(KoXmlNS::text, "key", QString::null);
-
-            if(key && KoBibliographyInfo::bibDataFields.contains(key)) d->sortKeys << key;
+            Qt::SortOrder order = (child.attributeNS(KoXmlNS::text, "sort-ascending", "true") == "true")
+                    ? (Qt::AscendingOrder): (Qt::DescendingOrder);
+            if(!key.isNull() && KoOdfBibliographyConfiguration::bibDataFields.contains(key)) {
+                d->sortKeys << QPair<QString, Qt::SortOrder>(key,order);
+            }
         }
     }
 }
@@ -109,9 +133,10 @@ void KoOdfBibliographyConfiguration::saveOdf(KoXmlWriter *writer) const
     writer->addAttribute("text:numbered-entries", d->numberedEntries ? "true" : "false");
     writer->addAttribute("text:sort-by-position", d->sortByPosition ? "true" : "false");
 
-    foreach(QString key, d->sortKeys) {
+    foreach (SortKeyPair key, d->sortKeys) {
             writer->startElement("text:sort-key");
-            writer->addAttribute("text:key", key);
+            writer->addAttribute("text:key", key.first);
+            writer->addAttribute("text:sort-ascending",key.second);
             writer->endElement();
     }
     writer->endElement();
@@ -135,6 +160,11 @@ QString KoOdfBibliographyConfiguration::sortAlgorithm() const
 bool KoOdfBibliographyConfiguration::sortByPosition() const
 {
     return d->sortByPosition;
+}
+
+QList<SortKeyPair> KoOdfBibliographyConfiguration::sortKeys() const
+{
+    return d->sortKeys;
 }
 
 bool KoOdfBibliographyConfiguration::numberedEntries() const
@@ -165,4 +195,9 @@ void KoOdfBibliographyConfiguration::setSortAlgorithm(const QString &algorithm)
 void KoOdfBibliographyConfiguration::setSortByPosition(bool enable)
 {
     d->sortByPosition = enable;
+}
+
+void KoOdfBibliographyConfiguration::setSortKeys(const QList<SortKeyPair> &sortKeys)
+{
+    d->sortKeys = sortKeys;
 }
