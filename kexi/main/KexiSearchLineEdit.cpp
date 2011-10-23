@@ -172,18 +172,36 @@ class KexiSearchLineEdit::Private
 {
 public:
     explicit Private(KexiSearchLineEdit *_q)
-     : q(_q), clearShortcut(QKeySequence(Qt::Key_Escape), _q)
+     : q(_q), clearShortcut(QKeySequence(Qt::Key_Escape), _q),
+       recentlyHighlightedModel(0)
     {
         // make Escape key clear the search box
         QObject::connect(&clearShortcut, SIGNAL(activated()),
                          q, SLOT(slotClearShortcutActivated()));
     }
+
+    void highlightSearchableObject(const QPair<QModelIndex, KexiSearchableModel*> &source)
+    {
+        source.second->highlightSearchableObject(source.first);
+        recentlyHighlightedModel = source.second;
+    }
+
+    void removeHighlightingForSearchableObject()
+    {
+        if (recentlyHighlightedModel) {
+            recentlyHighlightedModel->highlightSearchableObject(QModelIndex());
+            recentlyHighlightedModel = 0;
+        }
+    }
+
     KexiSearchLineEditCompleter *completer;
     KexiSearchLineEditCompleterPopupModel *model;
     QPointer<QWidget> previouslyFocusedWidget;
+
 private:
     KexiSearchLineEdit *q;
     QShortcut clearShortcut;
+    KexiSearchableModel *recentlyHighlightedModel;
 };
 
 // ----
@@ -258,6 +276,7 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QString &newText)
 void KexiSearchLineEdit::slotClearShortcutActivated()
 {
     //kDebug() << (QWidget*)d->previouslyFocusedWidget << text();
+    d->removeHighlightingForSearchableObject();
     if (text().isEmpty() && d->previouslyFocusedWidget) {
         // after second Escape, go back to previously focused widget
         d->previouslyFocusedWidget->setFocus();
@@ -293,7 +312,7 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QModelIndex &index)
     if (!source.first.isValid())
         return;
     kDebug() << source.second->searchableData(source.first, Qt::EditRole);
-    source.second->highlightSearchableObject(source.first);
+    d->highlightSearchableObject(source);
 }
 
 void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
@@ -302,6 +321,9 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
     if (!source.first.isValid())
         return;
     kDebug() << source.second->searchableData(source.first, Qt::EditRole);
+    
+    d->highlightSearchableObject(source);
+    d->removeHighlightingForSearchableObject();
     if (source.second->activateSearchableObject(source.first)) {
         clear();
     }
@@ -354,6 +376,7 @@ void KexiSearchLineEdit::focusOutEvent(QFocusEvent *e)
         e->accept();
     }
     d->previouslyFocusedWidget = 0;
+    d->removeHighlightingForSearchableObject();
 }
 
 // forked bits from QLineControl::processKeyEvent()
@@ -361,9 +384,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 {
     bool inlineCompletionAccepted = false;
 
-    kDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
-    if (d->previouslyFocusedWidget && (event->key() == Qt::Key_Tab || event->key() == Qt::Key_Backtab)) {
-    }
+    //kDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
 
     KexiUtils::QCompleter::CompletionMode completionMode = d->completer->completionMode();
     if ((completionMode == KexiUtils::QCompleter::PopupCompletion

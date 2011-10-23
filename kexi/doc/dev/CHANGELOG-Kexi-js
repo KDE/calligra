@@ -99,20 +99,18 @@ STARTUP
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
 
-Before freeze:
-*fix bugs...
-
-2011-10-21..22
+2011-10-21..23
 Widgets
 *[code]substringCompletion property added to QCompleter, false by default
-MainWindow
+Main Window
 *Make global search "full text"
 *Clear contents on activation, update on pressing Delete
 *Make Escape, Tab, Backtab keys set focus back to previously focused widget in Global Search
 *On activating global search box, select all previous text
+*Clear highlighting for objects in global search when needed
 
 2011-10-19
-MainWindow
+Main Window
 *Added minimal global search implementation with completion list, now just searches within Project objects
 **after pressing Enter - select object name in Project Navigator
 **on highlighting in completion list, highlights the object name
