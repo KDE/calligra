@@ -345,16 +345,25 @@ void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
 // forked bits from QLineEdit::focusOutEvent()
 void KexiSearchLineEdit::focusOutEvent(QFocusEvent *e)
 {
-    d->previouslyFocusedWidget = 0;
     KLineEdit::focusOutEvent(e);
     disconnectCompleter();
     update();
+    if (e->reason() == Qt::TabFocusReason || e->reason() == Qt::BacktabFocusReason) {
+        // go back to previously focused widget
+        d->previouslyFocusedWidget->setFocus();
+        e->accept();
+    }
+    d->previouslyFocusedWidget = 0;
 }
 
 // forked bits from QLineControl::processKeyEvent()
 void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 {
     bool inlineCompletionAccepted = false;
+
+    kDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
+    if (d->previouslyFocusedWidget && (event->key() == Qt::Key_Tab || event->key() == Qt::Key_Backtab)) {
+    }
 
     KexiUtils::QCompleter::CompletionMode completionMode = d->completer->completionMode();
     if ((completionMode == KexiUtils::QCompleter::PopupCompletion

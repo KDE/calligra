@@ -102,17 +102,13 @@ STARTUP
 Before freeze:
 *fix bugs...
 
+2011-10-21..22
 Widgets
 *[code]substringCompletion property added to QCompleter, false by default
 MainWindow
 *Make global search "full text"
 *Clear contents on activation, update on pressing Delete
-TODO: when pressing Esc or (Back)Tab on empty search line edit, focus previously active widget; 
-      use QApplication::focusWidget() for that
-
-2011-10-22
-MainWindow
-*Make Escape key set focus back to previously focused widget in Global Search
+*Make Escape, Tab, Backtab keys set focus back to previously focused widget in Global Search
 
 2011-10-19
 MainWindow
