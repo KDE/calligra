@@ -228,10 +228,6 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     if (hasFocus()) {
         connectCompleter();
     }
-    connect(d->completer, SIGNAL(highlighted(QModelIndex)),
-            this, SLOT(slotCompletionHighlighted(QModelIndex)));
-    connect(d->completer, SIGNAL(activated(QModelIndex)),
-            this, SLOT(slotCompletionActivated(QModelIndex)));
 
     setFocusPolicy(Qt::NoFocus); // We cannot focus set any policy here.
                                  // Qt::ClickFocus would make it impossible to find
@@ -250,8 +246,12 @@ void KexiSearchLineEdit::connectCompleter()
 {
     connect(d->completer, SIGNAL(activated(QString)),
             this, SLOT(setText(QString)));
+    connect(d->completer, SIGNAL(activated(QModelIndex)),
+            this, SLOT(slotCompletionActivated(QModelIndex)));
     connect(d->completer, SIGNAL(highlighted(QString)),
             this, SLOT(slotCompletionHighlighted(QString)));
+    connect(d->completer, SIGNAL(highlighted(QModelIndex)),
+            this, SLOT(slotCompletionHighlighted(QModelIndex)));
 }
 
 void KexiSearchLineEdit::disconnectCompleter()
