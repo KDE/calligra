@@ -29,6 +29,18 @@ class AnimatorSwitcher : public QObject
     
 public:
     AnimatorSwitcher(AnimatorManager* manager);
+    
+signals:
+    void frameChanged(int old, int number);
+    
+public slots:
+    virtual void goFrame(int number);
+    
+public:
+    virtual int currentFrame();
+    
+private:
+    int m_frame;
 };
 
 #endif // ANIMATOR_SWITCHER_H

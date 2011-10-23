@@ -48,8 +48,16 @@ public:
     virtual QModelIndex parent(const QModelIndex& child) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     
-protected:
+public:
+    virtual KisImage* image() const;
+    
+public:
+    virtual int frameNumber(const QModelIndex& index) const;
+    virtual int frameNumber(int column) const;
+    
     virtual KisNode* nodeFromIndex(const QModelIndex& index) const;
+    
+protected:
     virtual QModelIndex indexFromNode(const KisNode* node) const;
     
 private:

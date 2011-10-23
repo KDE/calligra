@@ -84,6 +84,9 @@ public:
 public:
     virtual int framesNumber() const;
     
+public:
+    virtual void activate(int frameNumber, KisNode* node);
+    
 private:
     KisImage* m_image;
     KisNodeManager* m_nodeManager;

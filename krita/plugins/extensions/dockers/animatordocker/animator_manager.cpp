@@ -151,3 +151,13 @@ void AnimatorManager::framesNumberCheck(AnimatedLayer* layer, int number)
     if (number > m_framesNumber)
         m_framesNumber = number;
 }
+
+
+void AnimatorManager::activate(int frameNumber, KisNode* node)
+{
+    if (frameNumber >= 0)
+        getSwitcher()->goFrame(frameNumber);
+    
+    if (node)
+        m_nodeManager->activateNode(node);
+}

@@ -60,8 +60,24 @@ void AnimatorModel::layoutChangedSlot()
 }
 
 
+KisImage* AnimatorModel::image() const
+{
+    return m_image;
+}
+
+
 QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    if (orientation == Qt::Horizontal)
+    {
+        if (role == Qt::DisplayRole)
+        {
+            if (frameNumber(section) >= 0)
+                return QString::number(frameNumber(section));
+            else
+                return "Layer";
+        }
+    }
     return QAbstractItemModel::headerData(section, orientation, role);
 }
 
@@ -79,7 +95,7 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
         AnimatedLayer* alayer = dynamic_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0, ind.parent())));
         if (alayer && alayer->inherits("FramedAnimatedLayer"))
         {
-            FrameLayer* frame = dynamic_cast<FramedAnimatedLayer*>(alayer)->frameAt(ind.column()-BASE_COLUMNS_NUMBER);
+            FrameLayer* frame = dynamic_cast<FramedAnimatedLayer*>(alayer)->frameAt(frameNumber(ind));
             if (frame)
             {
                 if (role == Qt::DisplayRole)
@@ -123,6 +139,18 @@ QModelIndex AnimatorModel::index(int row, int column, const QModelIndex& parent)
     return createIndex(row, column, pnode);
 }
 
+
+int AnimatorModel::frameNumber(const QModelIndex& index) const
+{
+    return frameNumber(index.column());
+}
+
+int AnimatorModel::frameNumber(int column) const
+{
+    return column - BASE_COLUMNS_NUMBER;
+}
+
+
 KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid())
@@ -134,7 +162,7 @@ KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
         FramedAnimatedLayer* al = dynamic_cast<FramedAnimatedLayer*>(node);
         if (!al)
             return 0;
-        node = al->frameAt(index.column()-BASE_COLUMNS_NUMBER);
+        node = al->frameAt(frameNumber(index));
     }
     return node;
 }

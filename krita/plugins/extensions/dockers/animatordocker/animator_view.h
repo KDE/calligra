@@ -21,6 +21,7 @@
 #define ANIMATOR_VIEW_H
 
 #include <qtreeview.h>
+#include "animator_model.h"
 
 class AnimatorView : public QTreeView {
     Q_OBJECT
@@ -31,6 +32,12 @@ public:
     
 public:
     
+    
+protected slots:
+    virtual void activate(QModelIndex index);
+    
+protected:
+    AnimatorModel* amodel();
 };
 
 #endif

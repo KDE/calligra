@@ -18,13 +18,27 @@
  */
 
 #include "animator_view.h"
+#include "animator_manager_factory.h"
 
 AnimatorView::AnimatorView()
 {
-
+    connect(this, SIGNAL(activated(QModelIndex)), SLOT(activate(QModelIndex)));
 }
 
 AnimatorView::~AnimatorView()
 {
+}
 
+void AnimatorView::activate(QModelIndex index)
+{
+    if (!amodel())
+        return;
+    KisNode* node = amodel()->nodeFromIndex(index);
+    AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(amodel()->image());
+    manager->activate(amodel()->frameNumber(index), node);
+}
+
+AnimatorModel* AnimatorView::amodel()
+{
+    return dynamic_cast<AnimatorModel*>(model());
 }
