@@ -21,7 +21,7 @@
 #include <ToCBibGeneratorInfo.h>
 #include <BibliographyGenerator.h>
 #include <KoParagraphStyle.h>
-
+#include <KoOdfBibliographyConfiguration.h>
 #include <QMessageBox>
 
 InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent) :
@@ -74,7 +74,7 @@ void InsertBibliographyDialog::updateFields()
             addedFields.insert(bibEntry->dataField);
         }
     }
-    QSet<QString> availableFields = QSet<QString>::fromList(KoBibliographyInfo::bibDataFields) - addedFields;
+    QSet<QString> availableFields = QSet<QString>::fromList(KoOdfBibliographyConfiguration::bibDataFields) - addedFields;
 
     foreach (QString field, availableFields) {
         new QListWidgetItem(field,dialog.availableFields);
@@ -143,7 +143,7 @@ void InsertBibliographyDialog::setDefaultIndexEntries()
     dialog.addedFields->clear();
     dialog.availableFields->clear();
 
-    foreach (QString bibType, KoBibliographyInfo::bibTypes) {
+    foreach (QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
         BibliographyEntryTemplate bibEntryTemplate;
 
         //Now creating default IndexEntries for all BibliographyEntryTemplates

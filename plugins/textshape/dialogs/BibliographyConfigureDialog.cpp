@@ -24,6 +24,10 @@
 #include <KoStyleManager.h>
 
 #include <QAbstractButton>
+#include <QHBoxLayout>
+#include <QComboBox>
+#include <QRadioButton>
+#include <QGroupBox>
 
 BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent) :
     QDialog(parent),
@@ -35,11 +39,20 @@ BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *do
     dialog.suffix->setText(m_bibConfiguration->suffix());
     dialog.numberedEntries->setChecked(m_bibConfiguration->numberedEntries());
     dialog.sortAlgorithm->setCurrentIndex(
-                dialog.sortAlgorithm->findText(m_bibConfiguration->sortAlgorithm(),Qt::MatchFixedString));
+                dialog.sortAlgorithm->findText(m_bibConfiguration->sortAlgorithm(), Qt::MatchFixedString));
 
     dialog.sortByPosition->setChecked(m_bibConfiguration->sortByPosition());
 
-    connect(dialog.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(save(QAbstractButton*)));
+    connect(dialog.buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(save(QAbstractButton*)));
+    connect(dialog.addSortKeyButton, SIGNAL(clicked()), this, SLOT(addSortKey()));
+
+    dialog.sortKeyGroupBox->setVisible(!m_bibConfiguration->sortByPosition()
+                                       || m_bibConfiguration->sortKeys().isEmpty());
+
+    foreach (SortKeyPair key, m_bibConfiguration->sortKeys()) {
+        dialog.sortKeyGroupBox->layout()->addWidget(
+                    new SortKeyWidget(key.first, key.second, dialog.sortKeyGroupBox));
+    }
 
     show();
 }
@@ -53,7 +66,64 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
         m_bibConfiguration->setSortAlgorithm(dialog.sortAlgorithm->currentText());
         m_bibConfiguration->setSortByPosition(dialog.sortByPosition->isChecked());
 
+        QList<SortKeyPair> sortKeys;
+
+        foreach (QObject *o, dialog.sortKeyGroupBox->children()) {
+            SortKeyWidget *widget = dynamic_cast<SortKeyWidget*>(o);
+            if (!widget) {
+                sortKeys << SortKeyPair(widget->sortKey(),widget->sortOrder());
+            }
+        }
+        m_bibConfiguration->setSortKeys(sortKeys);
+
         KoTextDocument(m_document).styleManager()->setBibliographyConfiguration(m_bibConfiguration);
     }
-    emit accept();
+    emit accept();//QObjectList
+}
+
+void BibliographyConfigureDialog::addSortKey()
+{
+    dialog.sortKeyGroupBox->layout()->addWidget(
+                new SortKeyWidget("identifier", Qt::AscendingOrder, dialog.sortKeyGroupBox));
+}
+
+SortKeyWidget::SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *parent) :
+    QWidget(parent),
+    m_dataFields(new QComboBox),
+    m_ascButton(new QRadioButton("Ascending")),
+    m_dscButton(new QRadioButton("Descending")),
+    m_layout(new QHBoxLayout)
+{
+    setLayout(m_layout);
+    m_dataFields->addItems(KoOdfBibliographyConfiguration::bibDataFields);
+    setSortKey(sortKey);
+    setSortOrder(order);
+
+    m_layout->addWidget(m_dataFields);
+    m_layout->addWidget(m_ascButton);
+    m_layout->addWidget(m_dscButton);
+}
+
+void SortKeyWidget::setSortKey(QString &sortKey)
+{
+    int sortKeyIndex = KoOdfBibliographyConfiguration::bibDataFields.indexOf(sortKey);
+    if (sortKeyIndex != -1) {
+        m_dataFields->setCurrentIndex(sortKeyIndex);
+    }
+}
+
+void SortKeyWidget::setSortOrder(Qt::SortOrder order)
+{
+    if (order == Qt::DescendingOrder) m_dscButton->setChecked(true);
+    else m_ascButton->setChecked(true);
+}
+
+QString SortKeyWidget::sortKey() const
+{
+    return m_dataFields->currentText();
+}
+
+Qt::SortOrder SortKeyWidget::sortOrder() const
+{
+    return (m_ascButton->isChecked()) ? Qt::AscendingOrder : Qt::DescendingOrder;
 }
