@@ -108,7 +108,8 @@ Main Window
 *Make Escape, Tab, Backtab keys set focus back to previously focused widget in Global Search
 *On activating global search box, select all previous text
 *Clear highlighting for objects in global search when needed
-
+*Matching substrings are highlighted in completion list of global search
+ 
 2011-10-19
 Main Window
 *Added minimal global search implementation with completion list, now just searches within Project objects

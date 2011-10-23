@@ -31,6 +31,9 @@
 #include <QTreeView>
 #include <QAbstractProxyModel>
 #include <QInputMethodEvent>
+#include <QStyledItemDelegate>
+#include <QTextLayout>
+#include <QPainter>
 
 class SearchableObject
 {
@@ -92,6 +95,7 @@ KexiSearchLineEditCompleterPopupModel::~KexiSearchLineEditCompleterPopupModel()
 
 int KexiSearchLineEditCompleterPopupModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     if (d->cachedCount < 0) {
         d->updateCachedCount();
     }
@@ -168,6 +172,8 @@ public:
 
 // ----
 
+class KexiSearchLineEditPopupItemDelegate;
+
 class KexiSearchLineEdit::Private
 {
 public:
@@ -196,6 +202,7 @@ public:
 
     KexiSearchLineEditCompleter *completer;
     KexiSearchLineEditCompleterPopupModel *model;
+    KexiSearchLineEditPopupItemDelegate *delegate;
     QPointer<QWidget> previouslyFocusedWidget;
 
 private:
@@ -206,13 +213,137 @@ private:
 
 // ----
 
+static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
+{
+    qreal height = 0;
+    qreal widthUsed = 0;
+    textLayout.beginLayout();
+    while (true) {
+        QTextLine line = textLayout.createLine();
+        if (!line.isValid())
+            break;
+        line.setLineWidth(lineWidth);
+        line.setPosition(QPointF(0, height));
+        height += line.height();
+        widthUsed = qMax(widthUsed, line.naturalTextWidth());
+    }
+    textLayout.endLayout();
+    return QSizeF(widthUsed, height);
+}
+
+class KexiSearchLineEditPopupItemDelegate : public QStyledItemDelegate
+{
+public:
+    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiUtils::QCompleter *completer) 
+     : QStyledItemDelegate(parent), highlightMatchingSubstrings(true), m_completer(completer)
+    {
+    }
+
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const
+    {
+        QStyledItemDelegate::paint(painter, option, index);
+        QStyleOptionViewItemV4 v4 = option;
+        QStyledItemDelegate::initStyleOption(&v4, index);
+        // like in QCommonStyle::paint():
+        if (!v4.text.isEmpty()) {
+            painter->save();
+            painter->setClipRect(v4.rect);
+            QPalette::ColorGroup cg = v4.state & QStyle::State_Enabled
+                                    ? QPalette::Normal : QPalette::Disabled;
+            if (cg == QPalette::Normal && !(v4.state & QStyle::State_Active)) {
+                cg = QPalette::Inactive;
+            }
+            if (v4.state & QStyle::State_Selected) {
+                painter->setPen(v4.palette.color(cg, QPalette::HighlightedText));
+            }
+            else {
+                painter->setPen(v4.palette.color(cg, QPalette::Text));
+            }
+            QRect textRect = v4.widget->style()->subElementRect(QStyle::SE_ItemViewItemText,
+                                                                &v4, v4.widget);
+            /*if (v4->state & QStyle::State_Editing) {
+                p->setPen(v4->palette.color(cg, QPalette::Text));
+                p->drawRect(textRect.adjusted(0, 0, -1, -1));
+            }*/
+            viewItemDrawText(painter, &v4, textRect);
+            painter->restore();
+        }
+    }
+    bool highlightMatchingSubstrings;
+
+protected:
+    // bits from qcommonStyle.cpp
+    void viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const
+    {
+        const QWidget *widget = option->widget;
+        const int textMargin = widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, widget) + 1;
+
+        QRect textRect = rect.adjusted(textMargin, 0, -textMargin, 0); // remove width padding
+        const bool wrapText = option->features & QStyleOptionViewItemV2::WrapText;
+        QTextOption textOption;
+        textOption.setWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::ManualWrap);
+        textOption.setTextDirection(option->direction);
+        textOption.setAlignment(QStyle::visualAlignment(option->direction, option->displayAlignment));
+        QTextLayout textLayout;
+        textLayout.setTextOption(textOption);
+        QFont f(option->font);
+        if (highlightMatchingSubstrings) {
+            f.setWeight(QFont::Black);
+        }
+        textLayout.setFont(f);
+        QString text = option->text;
+        textLayout.setText(text);
+
+        viewItemTextLayout(textLayout, textRect.width());
+
+        if (highlightMatchingSubstrings) {
+            QList<QTextLayout::FormatRange> formats;
+            QString substring = m_completer->completionPrefix();
+
+            for (int i = 0; i < text.length();) {
+                i = text.indexOf(substring, i, Qt::CaseInsensitive);
+                if (i == -1)
+                    break;
+                QTextLayout::FormatRange formatRange;
+                formatRange.format.setFontWeight(QFont::Normal);
+                formatRange.length = substring.length();
+                formatRange.start = i;
+                formats.append(formatRange);
+                i += formatRange.length;
+            }
+            textLayout.setAdditionalFormats(formats);
+        }
+        const int lineCount = textLayout.lineCount();
+/*        const QRect layoutRect = QStyle::alignedRect(option->direction, option->displayAlignment,
+                                                    QSize(int(width), int(height)), textRect);*/
+        QPointF position = textRect.topLeft(); /*layoutRect.topLeft();*/
+        for (int i = 0; i < lineCount; ++i) {
+            const QTextLine line = textLayout.lineAt(i);
+            line.draw(p, position);
+            position.setY(position.y() + line.y() + line.ascent());
+        }
+        //textLayout.draw(p, position, QVector<QTextLayout::FormatRange>(), textRect);
+    }
+
+    virtual void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
+    {
+        QStyledItemDelegate::initStyleOption(option, index);
+        QStyleOptionViewItemV4 *v4 = qstyleoption_cast<QStyleOptionViewItemV4*>(option);
+        if (v4) {
+            v4->text.clear();
+        }
+    }
+    KexiUtils::QCompleter *m_completer;
+};
+
+// ----
+
 KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
  : KLineEdit(parent), d(new Private(this))
 {
     d->completer = new KexiSearchLineEditCompleter(this);
     QTreeView *treeView = new QTreeView;
-    treeView->setHeaderHidden(true);
-    treeView->setRootIsDecorated(false);
     d->completer->setPopup(treeView);
     d->completer->setModel(d->model = new KexiSearchLineEditCompleterPopupModel(d->completer));
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -223,7 +354,12 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     // filtering so only table names are displayed.
     d->completer->setModelSorting(KexiUtils::QCompleter::UnsortedModel);
     
-    // forked initialiation like in QLineEdit::setCompleter:
+    treeView->setHeaderHidden(true);
+    treeView->setRootIsDecorated(false);
+    treeView->setItemDelegate(
+        d->delegate = new KexiSearchLineEditPopupItemDelegate(treeView, d->completer));
+    
+    // forked initialization like in QLineEdit::setCompleter:
     d->completer->setWidget(this);
     if (hasFocus()) {
         connectCompleter();
@@ -444,8 +580,6 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    bool unknown = false;
-
     if (event == QKeySequence::MoveToNextChar) {
 #if defined(Q_WS_WIN)
         if (hasSelectedText()
@@ -469,7 +603,6 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 #endif
     }
     else {
-        bool handled = false;
         if (event->modifiers() & Qt::ControlModifier) {
             switch (event->key()) {
             case Qt::Key_Up:
@@ -592,4 +725,14 @@ void KexiSearchLineEdit::complete(int key)
     }
 
     d->completer->complete();
+}
+
+bool KexiSearchLineEdit::highlightMatchingSubstrings() const
+{
+    return d->delegate->highlightMatchingSubstrings;
+}
+
+void KexiSearchLineEdit::setHighlightMatchingSubstrings(bool highlight)
+{
+    d->delegate->highlightMatchingSubstrings = highlight;
 }
