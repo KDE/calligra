@@ -40,6 +40,7 @@ public:
     
 public:
     AnimatorManager* getManager(KisImage* image, KisCanvas2* canvas);
+    AnimatorManager* getManager(KisImage* image);
     
 private:
     void init();

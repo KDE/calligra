@@ -22,6 +22,7 @@
 #define BASE_COLUMNS_NUMBER 1
 
 #include "framed_animated_layer.h"
+#include "animator_manager_factory.h"
 
 AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
 {    
@@ -95,12 +96,8 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
 
 int AnimatorModel::columnCount(const QModelIndex& parent) const
 {
-    KisNode* pnode = nodeFromIndex(parent);
-//     if (! pnode->inherits("AnimatedLayer"))
-//     {
-//         return 1;
-//     }
-    return 12;
+//     KisNode* pnode = nodeFromIndex(parent);
+    return AnimatorManagerFactory::instance()->getManager(m_image)->framesNumber() + BASE_COLUMNS_NUMBER;
 }
 
 int AnimatorModel::rowCount(const QModelIndex& parent) const
@@ -116,39 +113,13 @@ int AnimatorModel::rowCount(const QModelIndex& parent) const
 
 QModelIndex AnimatorModel::parent(const QModelIndex& child) const
 {
-//     if (child.column() == 0)
-    {
-        KisNode* pnode = (KisNode*) child.internalPointer();
-        
-//         if (pnode == m_image->root())
-//             return QModelIndex();
-        
-//         KisNode* ppnode = pnode->parent().data();
-//         int row = ppnode->childCount()-ppnode->index(pnode)-1;
-        
-        return indexFromNode(pnode);
-//     } else
-//     {
-        
-//         return indexFromNode(nodeFromIndex(index(child.row(), 0, child.parent()))->parent());
-    }
-    return QModelIndex();
+    KisNode* pnode = (KisNode*) child.internalPointer();
+    return indexFromNode(pnode);
 }
 
 QModelIndex AnimatorModel::index(int row, int column, const QModelIndex& parent) const
 {
     KisNode* pnode = nodeFromIndex(parent);
-//     KisNode* node = pnode->at(pnode->childCount()-row-1).data();
-    
-//     if (column != 0)
-//     {
-//         FramedAnimatedLayer* al = dynamic_cast<FramedAnimatedLayer*>(node);
-//         if (!al)
-//             return QModelIndex();
-//         node = al->frameAt(column-BASE_COLUMNS_NUMBER);
-//         pnode = pnode->at(pnode->childCount()-row-1).data();
-//     }
-    
     return createIndex(row, column, pnode);
 }
 

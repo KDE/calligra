@@ -35,7 +35,11 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_image = image;
     m_nodeManager = 0;
     
+    m_framesNumber = 0;
+    
     m_info = new AnimatorMetaInfo(1, 1);
+    
+    connect(this, SIGNAL(layerFramesNumberChanged(AnimatedLayer*,int)), SLOT(framesNumberCheck(AnimatedLayer*,int)));
 }
 
 AnimatorManager::~AnimatorManager()
@@ -127,4 +131,23 @@ void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int in
 void AnimatorManager::removeLayer(KisNode* layer)
 {
     m_nodeManager->removeNode(layer);
+}
+
+
+int AnimatorManager::framesNumber() const
+{
+    return m_framesNumber;
+}
+
+
+void AnimatorManager::layerFramesNumberChange(AnimatedLayer* layer, int number)
+{
+    emit layerFramesNumberChanged(layer, number);
+}
+
+void AnimatorManager::framesNumberCheck(AnimatedLayer* layer, int number)
+{
+    // FIXME: now frames number can only grow
+    if (number > m_framesNumber)
+        m_framesNumber = number;
 }

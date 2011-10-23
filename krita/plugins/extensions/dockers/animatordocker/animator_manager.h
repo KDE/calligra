@@ -59,6 +59,15 @@ public:
     virtual KisImage* image();
     
 public:
+    void layerFramesNumberChange(AnimatedLayer* layer, int number);
+    
+signals:
+    void layerFramesNumberChanged(AnimatedLayer* layer, int number);
+    
+protected slots:
+    void framesNumberCheck(AnimatedLayer* layer, int number);
+    
+public:
     virtual AnimatorMetaInfo* kraMetaInfo();
     virtual AnimatorMetaInfo* metaInfo();
     
@@ -72,6 +81,9 @@ public:
     virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
     virtual void removeLayer(KisNode* layer);
     
+public:
+    virtual int framesNumber() const;
+    
 private:
     KisImage* m_image;
     KisNodeManager* m_nodeManager;
@@ -81,6 +93,8 @@ private:
     AnimatorMetaInfo* m_info;
 //     AnimatorPlayer* m_player;
 //     AnimatorExporter* m_exporter;
+    
+    int m_framesNumber;
 };
 
 #endif

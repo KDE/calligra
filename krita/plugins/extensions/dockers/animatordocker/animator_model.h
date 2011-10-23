@@ -38,7 +38,7 @@ public slots:
     
     virtual void layoutChangedSlot();
     virtual void dataChangedSlot(KisNode* node);
-
+    
 public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     
@@ -53,10 +53,10 @@ protected:
     virtual QModelIndex indexFromNode(const KisNode* node) const;
     
 private:
-    
-private:
     KisNodeModel* m_nodeModel;
     KisImage* m_image;
+    
+    int m_frames_number;
 };
 
 #endif // ANIMATOR_MODEL_H

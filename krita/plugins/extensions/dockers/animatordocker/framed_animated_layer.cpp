@@ -25,10 +25,11 @@
 
 #include <sstream>
 
-#include <iostream>
 #include <iomanip>
 #include "frame_layer.h"
 #include "simple_frame_layer.h"
+#include "animator_manager.h"
+#include "animator_manager_factory.h"
 
 FramedAnimatedLayer::FramedAnimatedLayer(const KisGroupLayer& source) : AnimatedLayer(source)
 {
@@ -61,6 +62,9 @@ void FramedAnimatedLayer::init()
         
         child = child->nextSibling();
     }
+    
+    AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
+    manager->layerFramesNumberChange(this, dataEnd());
 }
 
 

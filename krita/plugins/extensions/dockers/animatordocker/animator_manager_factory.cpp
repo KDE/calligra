@@ -43,18 +43,23 @@ AnimatorManagerFactory* AnimatorManagerFactory::instance()
 
 AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image, KisCanvas2* canvas)
 {
+    AnimatorManager* manager = getManager(image);
+    if (canvas)
+        manager->setCanvas(canvas);
+    else
+        manager->unsetCanvas();
+    
+    return manager;
+    
+}
+
+AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image)
+{
     if (! m_instances[image])
     {
         m_instances[image] = new AnimatorManager(image);
     }
-    
-    if (canvas)
-        m_instances[image]->setCanvas(canvas);
-    else
-        m_instances[image]->unsetCanvas();
-    
     return m_instances[image];
-    
 }
 
 void AnimatorManagerFactory::init()
