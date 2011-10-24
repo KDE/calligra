@@ -97,9 +97,10 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
         
 //         KisNodeSP child = al->firstChild();
 //         while (child)
-        for (int i = 0; i < gl->childCount(); ++i)
+        int chcount = gl->childCount();
+        for (int i = 0; i < chcount; ++i)
         {
-            KisNodeSP child = gl->at(i);
+            KisNodeSP child = gl->at(0);
             if (qobject_cast<KisGroupLayer*>(child.data()) && child->name().startsWith("_frame_"))
             {
                 SimpleFrameLayer* frame = new SimpleFrameLayer(* qobject_cast<KisGroupLayer*>(child.data()));
