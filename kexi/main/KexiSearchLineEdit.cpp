@@ -128,11 +128,10 @@ QModelIndex KexiSearchLineEditCompleterPopupModel::index(int row, int column,
         foreach (KexiSearchableModel* searchableModel, d->searchableModels) {
             const int count = searchableModel->searchableObjectCount();
             if (r < count) {
-//! @todo LEAK
                 sobject = new SearchableObject;
                 sobject->model = searchableModel;
                 sobject->index = r;
-                //d->searchableObjects.insert(row, sobject);
+                d->searchableObjects.insert(row, sobject);
                 break;
             }
             else {
