@@ -89,20 +89,22 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
 {
     if (node->name().startsWith("_ani_"))
     {
-        KisGroupLayer* gl = dynamic_cast<KisGroupLayer*>(node.data());
+        KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
         FramedAnimatedLayer* al = new FramedAnimatedLayer(*gl);
-        m_manager->moveFrames(al, gl);
+        
+        KisNodeSP parent = gl->parent();
+        m_manager->insertLayer(al, parent, parent->index(gl));
         
 //         KisNodeSP child = al->firstChild();
 //         while (child)
-        for (int i = 0; i < al->childCount(); ++i)
+        for (int i = 0; i < gl->childCount(); ++i)
         {
-            KisNodeSP child = al->at(i);
-            if (child->inherits("KisGroupLayer") && child->name().startsWith("_frame_"))
+            KisNodeSP child = gl->at(i);
+            if (qobject_cast<KisGroupLayer*>(child.data()) && child->name().startsWith("_frame_"))
             {
-                SimpleFrameLayer* frame = new SimpleFrameLayer(* dynamic_cast<KisGroupLayer*>(child.data()));
-                m_manager->setFrameContent(frame, child->at(0).data());
+                SimpleFrameLayer* frame = new SimpleFrameLayer(* qobject_cast<KisGroupLayer*>(child.data()));
                 m_manager->insertFrame(frame, al);
+                m_manager->setFrameContent(frame, child->at(0).data());
                 m_manager->removeFrame(child.data());
 //                 child = frame->nextSibling();
 //             } else {
@@ -112,8 +114,6 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
         
         al->init();
         
-        KisNodeSP parent = gl->parent();
-        m_manager->insertLayer(al, parent, parent->index(gl));
 //         m_manager->insertLayer(al, m_manager->image()->root(), 0);
         m_manager->removeLayer(gl);
     } else

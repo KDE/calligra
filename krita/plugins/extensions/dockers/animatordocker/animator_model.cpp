@@ -88,7 +88,7 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
     {
         KisNode* node = nodeFromIndex(ind);
         if (role == Qt::DisplayRole)
-            return node->name();
+            return node ? node->name() : "nonode";
         return QVariant();
     } else                      // frames
     {
@@ -120,7 +120,7 @@ int AnimatorModel::rowCount(const QModelIndex& parent) const
 {
     KisNode* pnode = nodeFromIndex(parent);
     
-    if (!parent.isValid() || (parent.column() == 0 && !pnode->inherits("AnimatedLayer")))
+    if (!parent.isValid() || (parent.column() == 0 && pnode && !qobject_cast<AnimatedLayer*>(pnode)))
     {
         return pnode->childCount();
     }
@@ -156,6 +156,8 @@ KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
     if (!index.isValid())
         return (KisNode*)m_image->root().data();
     KisNode* parent = (KisNode*)index.internalPointer();
+    if (!parent)
+        return 0;
     KisNode* node = parent->at(parent->childCount()-index.row()-1).data();
     if (index.column() != 0)
     {
@@ -169,6 +171,8 @@ KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
 
 QModelIndex AnimatorModel::indexFromNode(const KisNode* node) const
 {
+    if (!node)
+        return QModelIndex();
     KisNode* pnode = node->parent().data();
     if (!pnode)
         return QModelIndex();

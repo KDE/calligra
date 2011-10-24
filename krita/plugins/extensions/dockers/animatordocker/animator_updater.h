@@ -17,26 +17,27 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "simple_frame_layer.h"
+#ifndef ANIMATOR_UPDATER_H
+#define ANIMATOR_UPDATER_H
 
-// SimpleFrameLayer::SimpleFrameLayer(KisImageWSP image, const QString& name, quint8 opacity): FrameLayer(image, name, opacity)
-// {
-// }
+#include <QObject>
 
-SimpleFrameLayer::SimpleFrameLayer(const KisGroupLayer& source): FrameLayer(source)
+#include "animator_manager.h"
+
+class AnimatorUpdater : public QObject
 {
-}
+    Q_OBJECT
 
-KisNode* SimpleFrameLayer::getContent()
-{
-    if (at(0) && at(0)->name().startsWith("_"))
-    {
-        return at(0).data();
-    }
-    return 0;
-}
+public:
+    AnimatorUpdater(AnimatorManager* manager);
+    virtual ~AnimatorUpdater();
+    
+public slots:
+    virtual void update(int oldFrame, int newFrame);
+    virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
+    
+private:
+    AnimatorManager* m_manager;
+};
 
-bool SimpleFrameLayer::isKeyFrame()
-{
-    return ! name().endsWith("_");
-}
+#endif // ANIMATOR_UPDATER_H

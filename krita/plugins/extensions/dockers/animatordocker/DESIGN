@@ -1,9 +1,10 @@
 Core:
-    AnimatorLoader
-    AnimatorManager
-    AnimatorSwitcher
-    AnimatorPlayer
-    AnimatorExporter
+    AnimatorLoader              // loads animated layers & frames
+    AnimatorManager             // do all work that requires KisNodeManager calls
+    AnimatorSwitcher            // store current frame & switches it
+    AnimatorUpdater             // updates image (after switching for example)
+    AnimatorPlayer              // player
+    AnimatorExporter            // exporter
 
 Basic UI:
     AnimatorModel
@@ -12,3 +13,13 @@ Basic UI:
 Control UI:
     AnimatorActions
     AnimatorDock
+
+
+Switching frame:
+0) AnimatorManager::activate() or something else
+1) AnimatorSwitcher::goFrame(new)
+2) AnimatorSwitcher::frameChanged(old, new)
+3) AnimatorUpdater::update(old, new)
+
+After adding LightTable:
+3) AnimatorLTUpdater::update(old, new)

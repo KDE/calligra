@@ -27,7 +27,7 @@ class SimpleFrameLayer : public FrameLayer
     Q_OBJECT
     
 public:
-    SimpleFrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
+//     SimpleFrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
     SimpleFrameLayer(const KisGroupLayer& source);
     
 public:

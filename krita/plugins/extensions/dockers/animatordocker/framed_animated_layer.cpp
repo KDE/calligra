@@ -38,7 +38,7 @@ FramedAnimatedLayer::FramedAnimatedLayer(const KisGroupLayer& source) : Animated
 void FramedAnimatedLayer::init()
 {
     m_frames.clear();
-    m_first_frame = -1;
+    m_first_frame = 0;
     
     KisNodeSP child = firstChild();
     while (child)
@@ -157,6 +157,8 @@ int FramedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) cons
 {
     if (name.startsWith("_frame_"))
     {
+        iskey = name.endsWith("_");
+        
         std::stringstream ns;
         ns << (name.mid(7).toAscii().data());
         int fnum;

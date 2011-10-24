@@ -40,6 +40,9 @@ public slots:
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
     
+public slots:
+    virtual void loadLayers();
+    
 private:
     virtual void setupUI();
     

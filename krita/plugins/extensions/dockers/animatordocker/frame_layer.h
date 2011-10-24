@@ -35,12 +35,6 @@ class FrameLayer : public KisGroupLayer
 public:
     FrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
     FrameLayer(const KisGroupLayer& source);
-    
-//     void setNodeManager(KisNodeManager* nm);
-//     KisNodeManager* getNodeManager();
-    
-private:
-//     KisNodeManager* m_node_manager;
 };
 
 #endif // FRAME_LAYER_H

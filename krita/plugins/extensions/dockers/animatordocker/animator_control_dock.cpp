@@ -21,6 +21,8 @@
 
 #include <KLocale>
 
+#include <QToolBar>
+
 #include <kis_canvas2.h>
 
 #include "animator_manager_factory.h"
@@ -28,6 +30,7 @@
 
 AnimatorControlDock::AnimatorControlDock() : QDockWidget(i18n("Animator control"))
 {
+    setupUI();
 }
 
 void AnimatorControlDock::setCanvas(KoCanvasBase* canvas)
@@ -35,7 +38,7 @@ void AnimatorControlDock::setCanvas(KoCanvasBase* canvas)
     KisCanvas2* kcanvas = dynamic_cast<KisCanvas2*>(canvas);
     KisImageSP image = kcanvas->image();
     m_manager = AnimatorManagerFactory::instance()->getManager(image.data(), kcanvas);
-    m_manager->getLoader()->loadAll();
+//     m_manager->getLoader()->loadAll();
 }
 
 void AnimatorControlDock::unsetCanvas()
@@ -45,5 +48,12 @@ void AnimatorControlDock::unsetCanvas()
 
 void AnimatorControlDock::setupUI()
 {
+    QToolBar* tb = new QToolBar(this);
+    tb->addAction(SmallIcon(""), i18n("Load layers"), this, SLOT(loadLayers()));
+    setWidget(tb);
+}
 
+void AnimatorControlDock::loadLayers()
+{
+    m_manager->getLoader()->loadAll();
 }

@@ -27,13 +27,9 @@
 #include <kis_image.h>
 #include <kis_node_manager.h>
 
-// #include "animator_switcher.h"
-// #include "animator_loader.h"
-class AnimatorLoader;
 class AnimatorSwitcher;
-
-// #include "animator_player.h"
-// #include "animator_exporter.h"
+class AnimatorUpdater;
+class AnimatorLoader;
 
 #include "simple_frame_layer.h"
 #include "framed_animated_layer.h"
@@ -54,6 +50,7 @@ public:
     
 public:
     virtual AnimatorSwitcher* getSwitcher();
+    virtual AnimatorUpdater* getUpdater();
     virtual AnimatorLoader* getLoader();
     
     virtual KisImage* image();
@@ -87,15 +84,26 @@ public:
 public:
     virtual void activate(int frameNumber, KisNode* node);
     
+public:
+    virtual QList<AnimatedLayer*> layers();
+    
+protected:
+    virtual void layerAdded(AnimatedLayer* layer);
+    virtual void layerRemoved(AnimatedLayer* layer);
+    
 private:
     KisImage* m_image;
     KisNodeManager* m_nodeManager;
     
     AnimatorSwitcher* m_switcher;
+    AnimatorUpdater* m_updater;
     AnimatorLoader* m_loader;
     AnimatorMetaInfo* m_info;
+    
 //     AnimatorPlayer* m_player;
 //     AnimatorExporter* m_exporter;
+    
+    QList<AnimatedLayer*> m_layers;
     
     int m_framesNumber;
 };

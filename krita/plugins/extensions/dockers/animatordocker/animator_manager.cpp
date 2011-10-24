@@ -24,6 +24,7 @@
 
 #include "animator_loader.h"
 #include "animator_switcher.h"
+#include "animator_updater.h"
 
 #include <kis_debug.h>
 
@@ -31,6 +32,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
 {
     m_loader = new AnimatorLoader(this);
     m_switcher = new AnimatorSwitcher(this);
+    m_updater = new AnimatorUpdater(this);
     
     m_image = image;
     m_nodeManager = 0;
@@ -40,6 +42,8 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_info = new AnimatorMetaInfo(1, 1);
     
     connect(this, SIGNAL(layerFramesNumberChanged(AnimatedLayer*,int)), SLOT(framesNumberCheck(AnimatedLayer*,int)));
+    
+    connect(m_switcher, SIGNAL(frameChanged(int,int)), m_updater, SLOT(update(int,int)));
 }
 
 AnimatorManager::~AnimatorManager()
@@ -71,6 +75,11 @@ AnimatorLoader* AnimatorManager::getLoader()
 AnimatorSwitcher* AnimatorManager::getSwitcher()
 {
     return m_switcher;
+}
+
+AnimatorUpdater* AnimatorManager::getUpdater()
+{
+    return m_updater;
 }
 
 
@@ -126,11 +135,13 @@ void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int in
 {
     m_nodeManager->insertNode(layer, parent, index);
     m_nodeManager->moveNodeAt(layer, parent, index);
+    layerAdded(layer);
 }
 
 void AnimatorManager::removeLayer(KisNode* layer)
 {
     m_nodeManager->removeNode(layer);
+    layerRemoved(dynamic_cast<AnimatedLayer*>(layer));
 }
 
 
@@ -160,4 +171,26 @@ void AnimatorManager::activate(int frameNumber, KisNode* node)
     
     if (node)
         m_nodeManager->activateNode(node);
+}
+
+
+void AnimatorManager::layerAdded(AnimatedLayer* layer)
+{
+    if (!layer)
+        return;
+    m_layers.append(layer);
+}
+
+void AnimatorManager::layerRemoved(AnimatedLayer* layer)
+{
+    if (!layer)
+        return;
+    int i = m_layers.indexOf(layer);
+    if (i >= 0)
+        m_layers.removeAt(i);
+}
+
+QList< AnimatedLayer* > AnimatorManager::layers()
+{
+    return m_layers;
 }
