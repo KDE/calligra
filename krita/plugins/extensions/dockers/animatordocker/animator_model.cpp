@@ -177,5 +177,5 @@ QModelIndex AnimatorModel::indexFromNode(const KisNode* node) const
     if (!pnode)
         return QModelIndex();
     int row = pnode->childCount()-pnode->index(const_cast<KisNode*>(node))-1;
-    return createIndex(row, 0, (void*)node);
+    return createIndex(row, 0, (void*)pnode);
 }
