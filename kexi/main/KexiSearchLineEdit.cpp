@@ -447,7 +447,7 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QModelIndex &index)
     QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
     if (!source.first.isValid())
         return;
-    kDebug() << source.second->searchableData(source.first, Qt::EditRole);
+    //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
     d->highlightSearchableObject(source);
 }
 
@@ -456,7 +456,7 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
     QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
     if (!source.first.isValid())
         return;
-    kDebug() << source.second->searchableData(source.first, Qt::EditRole);
+    //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
     
     d->highlightSearchableObject(source);
     d->removeHighlightingForSearchableObject();
