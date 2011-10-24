@@ -97,9 +97,14 @@ STARTUP
 
 ===================== Kexi 2.4  =====================
 
-~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
+TODO:
+*Add Return shortcut to opening in data mode from navigator
+*Add Ctrl+Return shortcut to opening in design mode from navigator
+*Add Ctrl+Shift+Return shortcut to opening in texts mode from navigator
 
-2011-10-21..23
+~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
+2011-10-21..24
 Widgets
 *[code]substringCompletion property added to QCompleter, false by default
 Main Window
@@ -109,7 +114,15 @@ Main Window
 *On activating global search box, select all previous text
 *Clear highlighting for objects in global search when needed
 *Matching substrings are highlighted in completion list of global search
- 
+*Make behaviour of global search box more intuitive
+**go back to completing when popup is closed and F4/Down pressed
+**hide popup if F4 pressed
+**single item on the completion list => select it automatically
+**more than one item on completion list=>find exact match, if ok, accept
+**there is no matching text => go back to completing
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 3 (2.3.83) ~~~~~~~~~~~~~~~~
+
 2011-10-19
 Main Window
 *Added minimal global search implementation with completion list, now just searches within Project objects
@@ -158,6 +171,8 @@ Main Window
 CSV Import
 *Fixed crash for larger CSV data
 BUG:282936
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
 
 2011-09-29
 CSV Export
