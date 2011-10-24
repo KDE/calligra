@@ -272,7 +272,7 @@ public:
     bool highlightMatchingSubstrings;
 
 protected:
-    // bits from qcommonStyle.cpp
+    // bits from qcommonstyle.cpp
     void viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const
     {
         const QWidget *widget = option->widget;
@@ -394,20 +394,6 @@ void KexiSearchLineEdit::disconnectCompleter()
     disconnect(d->completer, 0, this, 0);
 }
 
-void KexiSearchLineEdit::slotCompletionHighlighted(const QString &newText)
-{
-    if (d->completer->completionMode() != KexiUtils::QCompleter::InlineCompletion) {
-        setText(newText);
-    }
-    else {
-        int p = cursorPosition();
-        QString t = text();
-        setText(t.left(p) + newText.mid(p));
-        end(false);
-        cursorBackward(text().length() - p, true);
-    }
-}
-
 void KexiSearchLineEdit::slotClearShortcutActivated()
 {
     //kDebug() << (QWidget*)d->previouslyFocusedWidget << text();
@@ -439,6 +425,20 @@ QPair<QModelIndex, KexiSearchableModel*> KexiSearchLineEdit::mapCompletionIndexT
         return qMakePair(QModelIndex(), static_cast<KexiSearchableModel*>(0));
     }
     return qMakePair(object->model->sourceIndexForSearchableObject(object->index), object->model);
+}
+
+void KexiSearchLineEdit::slotCompletionHighlighted(const QString &newText)
+{
+    if (d->completer->completionMode() != KexiUtils::QCompleter::InlineCompletion) {
+        setText(newText);
+    }
+    else {
+        int p = cursorPosition();
+        QString t = text();
+        setText(t.left(p) + newText.mid(p));
+        end(false);
+        cursorBackward(text().length() - p, true);
+    }
 }
 
 void KexiSearchLineEdit::slotCompletionHighlighted(const QModelIndex &index)
@@ -532,9 +532,6 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Escape:
             event->ignore();
             return;
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        case Qt::Key_F4:
 #ifdef QT_KEYPAD_NAVIGATION
         case Qt::Key_Select:
             if (!QApplication::keypadNavigationEnabled())
@@ -565,7 +562,67 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         }
     }
 
+    if (d->completer->popup() && !d->completer->popup()->isVisible()
+        && (event->key() == Qt::Key_F4 || event->key() == Qt::Key_Down))
+    {
+        // go back to completing when popup is closed and F4/Down pressed
+        d->completer->complete();
+    }
+    else if (d->completer->popup() && d->completer->popup()->isVisible()
+        && event->key() == Qt::Key_F4)
+    {
+        // hide popup if F4 pressed
+        d->completer->popup()->hide();
+    }
+
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        if (d->completer->popup() && !d->completer->popup()->isVisible()) {
+            d->completer->setCompletionPrefix(text());
+        }
+        if (d->completer->completionCount() == 1) {
+            // single item on the completion list, select it automatically
+            d->completer->setCurrentRow(0);
+            slotCompletionActivated(d->completer->currentIndex());
+            event->accept();
+            if (d->completer->popup()) {
+                d->completer->popup()->hide();
+            }
+            return;
+        }
+        //kDebug() << "currentRow:" << d->completer->currentRow();
+        //kDebug() << "currentIndex:" << d->completer->currentIndex().isValid();
+        //kDebug() << "currentCompletion:" << d->completer->currentCompletion();
+        if (d->completer->popup() && d->completer->completionCount() > 1) {
+            //kDebug () << "11111" << d->completer->completionPrefix()
+            //          << d->completer->completionCount();
+            
+            // more than one item on completion list, find exact match, if found, accept
+            for (int i = 0; i < d->completer->completionCount(); i++) {
+                //kDebug() << d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString();
+                if (d->completer->completionPrefix()
+                    == d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString())
+                {
+                    d->completer->setCurrentRow(i);
+                    slotCompletionActivated(d->completer->currentIndex());
+                    event->accept();
+                    d->completer->popup()->hide();
+                    return;
+                }
+            }
+            // exactly matching item not found
+            bool selectedItem = !d->completer->popup()->selectionModel()->selectedIndexes().isEmpty();
+            if (!selectedItem || !d->completer->popup()->isVisible()) {
+                if (!d->completer->popup()->isVisible()) {
+                    // there is no matching text, go back to completing
+                    d->completer->complete();
+                }
+                // do not hide
+                event->accept();
+                return;
+            }
+        }
+        // applying completion since there is item selected
+        d->completer->popup()->hide();
         connectCompleter();
         KLineEdit::keyPressEvent(event); /* executes this:
                                             if (hasAcceptableInput() || fixup()) {
