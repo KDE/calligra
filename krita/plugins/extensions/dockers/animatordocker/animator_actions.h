@@ -39,7 +39,7 @@ public:
     
 public:
     virtual QList<QAction*> actions() const;
-    virtual QList<QAction*> actions(QString& category) const;
+    virtual QList<QAction*> actions(const QString& category) const;
     
 protected:
     virtual void addAction(const QString& category, QAction* action);

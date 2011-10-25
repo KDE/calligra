@@ -58,7 +58,7 @@ QList< QAction* > AnimatorActions::actions() const
     return list;
 }
 
-QList< QAction* > AnimatorActions::actions(QString& category) const
+QList< QAction* > AnimatorActions::actions(const QString& category) const
 {
     return m_actions[category];
 }

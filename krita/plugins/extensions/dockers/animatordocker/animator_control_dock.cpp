@@ -22,6 +22,7 @@
 #include <KLocale>
 
 #include <QToolBar>
+#include <QLayout>
 
 #include <kis_canvas2.h>
 
@@ -49,7 +50,19 @@ void AnimatorControlDock::unsetCanvas()
 
 void AnimatorControlDock::setupUI()
 {
-    QToolBar* tb = new QToolBar(this);
-    tb->addActions(m_actions->actions());
-    setWidget(tb);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    
+    QToolBar* tbUtil = new QToolBar(this);
+    tbUtil->addActions(m_actions->actions("util"));
+    layout->addWidget(tbUtil);
+    
+    QToolBar* tbPlayer = new QToolBar(this);
+    tbPlayer->addActions(m_actions->actions("player"));
+    layout->addWidget(tbPlayer);
+    
+    layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    
+    QWidget* mainWidget = new QWidget(this);
+    mainWidget->setLayout(layout);
+    setWidget(mainWidget);
 }
