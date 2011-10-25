@@ -38,6 +38,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoParagraphStyle.h>
+#include <KoTableStyle.h>
 #include <KoTextAnchor.h>
 
 #include <QTimer>
@@ -173,10 +174,18 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                     //textlayout-library and provide a more abstract way to deal with content.
                     QTextFrame::iterator it = rootAreasBefore.last()->endTextFrameIterator();
                     QTextBlock firstBlock = it.currentBlock();
+                    QTextTable *firstTable = qobject_cast<QTextTable*>(it.currentFrame());
                     if (firstBlock.isValid()) {
                         masterPageName = firstBlock.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
                         bool ok;
                         int num = firstBlock.blockFormat().property(KoParagraphStyle::PageNumber).toInt(&ok);
+                        if (ok)
+                            visiblePageNumber = num;
+                    }
+                    if (firstTable) {
+                        masterPageName = firstTable->frameFormat().property(KoTableStyle::MasterPageName).toString();
+                        bool ok;
+                        int num = firstTable->frameFormat().property(KoTableStyle::PageNumber).toInt(&ok);
                         if (ok)
                             visiblePageNumber = num;
                     }
