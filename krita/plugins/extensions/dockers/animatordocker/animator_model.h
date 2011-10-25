@@ -49,6 +49,10 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     
 public:
+    virtual int frameWidth() const;
+    virtual void setFrameWidth(int width);
+    
+public:
     virtual KisImage* image() const;
     
 public:
@@ -61,10 +65,10 @@ protected:
     virtual QModelIndex indexFromNode(const KisNode* node) const;
     
 private:
-    KisNodeModel* m_nodeModel;
-    KisImage* m_image;
+    int m_frameWidth;
     
-    int m_frames_number;
+private:
+    KisImage* m_image;
 };
 
 #endif // ANIMATOR_MODEL_H

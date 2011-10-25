@@ -70,16 +70,32 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
 {
     if (orientation == Qt::Horizontal)
     {
-        if (role == Qt::DisplayRole)
+        if (frameNumber(section) >= 0)
         {
-            if (frameNumber(section) >= 0)
+            if (role == Qt::DisplayRole)
                 return QString::number(frameNumber(section));
-            else
+            else if (role == Qt::SizeHintRole)
+                return QSize(frameWidth(), 0);
+        } else
+        {
+            if (role == Qt::DisplayRole)
                 return "Layer";
         }
     }
     return QAbstractItemModel::headerData(section, orientation, role);
 }
+
+
+int AnimatorModel::frameWidth() const
+{
+    return m_frameWidth;
+}
+
+void AnimatorModel::setFrameWidth(int width)
+{
+    m_frameWidth = width;
+}
+
 
 QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
 {
@@ -112,7 +128,7 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
 
 int AnimatorModel::columnCount(const QModelIndex& parent) const
 {
-//     KisNode* pnode = nodeFromIndex(parent);
+    Q_UNUSED(parent);
     return AnimatorManagerFactory::instance()->getManager(m_image)->framesNumber() + BASE_COLUMNS_NUMBER;
 }
 

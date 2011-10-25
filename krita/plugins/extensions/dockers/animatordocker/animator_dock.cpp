@@ -53,6 +53,7 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
     KisImage* image = kcanvas->image().data();
     
     m_mainModel = new AnimatorModel(image);
+    m_mainModel->setFrameWidth(10);             // TODO: make this configurable
     
     m_view->setModel(m_mainModel);
     
