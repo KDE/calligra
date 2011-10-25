@@ -25,6 +25,7 @@
 #include "animator_manager.h"
 #include "animator_loader.h"
 #include "animator_player.h"
+#include "animator_updater.h"
 
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
 {
@@ -89,6 +90,8 @@ void AnimatorActions::loadLayers()
 {
     Q_ASSERT(m_manager);
     m_manager->getLoader()->loadAll();
+    m_manager->getUpdater()->fullUpdate();
+    m_manager->getSwitcher()->goFrame(0);
 }
 
 void AnimatorActions::playPause(bool v)

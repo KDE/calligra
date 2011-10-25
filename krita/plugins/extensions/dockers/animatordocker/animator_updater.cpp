@@ -30,6 +30,25 @@ AnimatorUpdater::~AnimatorUpdater()
 {
 }
 
+void AnimatorUpdater::fullUpdate()
+{
+    QList<AnimatedLayer*> layers = m_manager->layers();
+    AnimatedLayer* layer;
+    foreach (layer, layers)
+    {
+        fullUpdateLayer(layer);
+    }
+}
+
+void AnimatorUpdater::fullUpdateLayer(AnimatedLayer* layer)
+{
+    for (int i = layer->dataStart(); i < layer->dataEnd(); ++i)
+    {
+        FrameLayer* f = layer->getCachedFrame(i);
+        f->setVisible(0);
+        f->setDirty(f->exactBounds());
+    }
+}
 
 void AnimatorUpdater::update(int oldFrame, int newFrame)
 {

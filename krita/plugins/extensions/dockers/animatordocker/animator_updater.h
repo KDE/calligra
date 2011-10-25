@@ -33,6 +33,8 @@ public:
     virtual ~AnimatorUpdater();
     
 public slots:
+    virtual void fullUpdate();
+    virtual void fullUpdateLayer(AnimatedLayer* layer);
     virtual void update(int oldFrame, int newFrame);
     virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
     
