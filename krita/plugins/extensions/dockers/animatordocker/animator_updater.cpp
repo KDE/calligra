@@ -45,8 +45,11 @@ void AnimatorUpdater::fullUpdateLayer(AnimatedLayer* layer)
     for (int i = layer->dataStart(); i < layer->dataEnd(); ++i)
     {
         FrameLayer* f = layer->getCachedFrame(i);
-        f->setVisible(0);
-        f->setDirty(f->exactBounds());
+        if (f)
+        {
+            f->setVisible(0);
+            f->setDirty(f->exactBounds());
+        }
     }
 }
 
