@@ -19,9 +19,9 @@
 
 #include "simple_frame_layer.h"
 
-// SimpleFrameLayer::SimpleFrameLayer(KisImageWSP image, const QString& name, quint8 opacity): FrameLayer(image, name, opacity)
-// {
-// }
+SimpleFrameLayer::SimpleFrameLayer(KisImageWSP image, const QString& name, quint8 opacity): FrameLayer(image, name, opacity)
+{
+}
 
 SimpleFrameLayer::SimpleFrameLayer(const KisGroupLayer& source): FrameLayer(source)
 {

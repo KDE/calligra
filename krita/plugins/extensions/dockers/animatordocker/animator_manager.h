@@ -75,6 +75,8 @@ public:
     virtual void removeLayer();
     virtual AnimatedLayer* getAnimatedLayerByChild(KisNode* child);
     
+    virtual void createFrame(const QString& ftype);
+    
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
     virtual void insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer);

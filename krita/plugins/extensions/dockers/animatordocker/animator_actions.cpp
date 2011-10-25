@@ -94,6 +94,11 @@ void AnimatorActions::initActions()
     t = new QAction(SmallIcon("list-remove"), i18n("Remove layer"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(removeLayer()));
     addAction("layers", t);
+    
+    // FRAMES
+    t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
+    addAction("frames", t);
 }
 
 
@@ -131,4 +136,10 @@ void AnimatorActions::removeLayer()
 {
     Q_ASSERT(m_manager);
     m_manager->removeLayer();
+}
+
+void AnimatorActions::createPaintFrame()
+{
+    Q_ASSERT(m_manager);
+    m_manager->createFrame("KisPaintLayer");
 }

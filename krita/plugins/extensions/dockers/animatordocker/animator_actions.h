@@ -46,13 +46,15 @@ protected:
     virtual void initActions();
     
 protected slots:
-    void loadLayers();
+    virtual void loadLayers();
     
-    void playPause(bool v);
-    void toggleLooping(bool v);
+    virtual void playPause(bool v);
+    virtual void toggleLooping(bool v);
     
-    void createNormalLayer();
-    void removeLayer();
+    virtual void createNormalLayer();
+    virtual void removeLayer();
+    
+    virtual void createPaintFrame();
     
 private:
     QMap< QString, QList<QAction*> > m_actions;

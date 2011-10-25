@@ -60,6 +60,10 @@ void AnimatorControlDock::setupUI()
     tbLayers->addActions(m_actions->actions("layers"));
     layout->addWidget(tbLayers);
     
+    QToolBar* tbFrames = new QToolBar(this);
+    tbFrames->addActions(m_actions->actions("frames"));
+    layout->addWidget(tbFrames);
+    
     QToolBar* tbPlayer = new QToolBar(this);
     tbPlayer->addActions(m_actions->actions("player"));
     layout->addWidget(tbPlayer);
