@@ -1,5 +1,5 @@
 /*
- *  Control docker
+ *  Contains all GUI actions and provide access for them
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,40 +17,39 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ANIMATOR_CONTROL_DOCK_H
-#define ANIMATOR_CONTROL_DOCK_H
+#ifndef ANIMATOR_ACTIONS_H
+#define ANIMATOR_ACTIONS_H
 
-#include <QDockWidget>
-
-#include "kis_view2.h"
-#include "KoCanvasObserverBase.h"
-#include "kis_node_model.h"
-#include "KoMainWindow.h"
+#include <QObject>
+#include <QList>
+#include <QAction>
 
 #include "animator_manager.h"
-#include "animator_actions.h"
 
-class AnimatorControlDock : public QDockWidget, public KoCanvasObserverBase
+class AnimatorActions : public QObject
 {
     Q_OBJECT
+
+public:
+    AnimatorActions(QObject* parent = 0);
+    virtual ~AnimatorActions();
     
 public:
-    AnimatorControlDock();
-
-public slots:
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas();
+    virtual void setManager(AnimatorManager* manager);
+    
+public:
+    virtual QList<QAction*> actions() const;
+    
+protected:
+    virtual void addAction(QAction* action);
+    virtual void initActions();
+    
+protected slots:
+    void loadLayers();
     
 private:
-    virtual void setupUI();
-    
-private:
+    QList<QAction*> m_actions;
     AnimatorManager* m_manager;
-    
-    AnimatorActions* m_actions;
-    
-private:
 };
 
-
-#endif // ANIMATOR_CONTROL_DOCK_H
+#endif // ANIMATOR_ACTIONS_H

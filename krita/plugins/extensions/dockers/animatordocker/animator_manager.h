@@ -56,13 +56,13 @@ public:
     virtual KisImage* image();
     
 public:
-    void layerFramesNumberChange(AnimatedLayer* layer, int number);
+    virtual void layerFramesNumberChange(AnimatedLayer* layer, int number);
     
 signals:
     void layerFramesNumberChanged(AnimatedLayer* layer, int number);
     
 protected slots:
-    void framesNumberCheck(AnimatedLayer* layer, int number);
+    virtual void framesNumberCheck(AnimatedLayer* layer, int number);
     
 public:
     virtual AnimatorMetaInfo* kraMetaInfo();
