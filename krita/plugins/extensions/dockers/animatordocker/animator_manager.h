@@ -74,6 +74,7 @@ public:
     virtual void createNormalLayer();
     virtual void removeLayer();
     virtual void renameLayer(KisNode* layer, const QString& name);
+    virtual void renameLayer(const QString& name);
     
     virtual AnimatedLayer* getAnimatedLayerByChild(KisNode* child);
     virtual KisNode* activeLayer();

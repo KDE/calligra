@@ -53,13 +53,20 @@ protected slots:
     
     virtual void createNormalLayer();
     virtual void removeLayer();
+    
     virtual void renameLayer();
+    virtual void doRenameLayer();
+    virtual void setRenameString(const QString& string);
     
     virtual void createPaintFrame();
     
 private:
     QMap< QString, QList<QAction*> > m_actions;
     AnimatorManager* m_manager;
+    
+private:
+    QString m_renameString;
+    
 };
 
 #endif // ANIMATOR_ACTIONS_H

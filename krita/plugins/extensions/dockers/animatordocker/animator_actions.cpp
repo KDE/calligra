@@ -22,6 +22,11 @@
 #include <KLocale>
 #include <KIconLoader>
 
+#include <KDialog>
+#include <KLineEdit>
+#include <QLayout>
+#include <QLabel>
+
 #include "animator_manager.h"
 #include "animator_loader.h"
 #include "animator_player.h"
@@ -146,8 +151,50 @@ void AnimatorActions::renameLayer()
 {
     Q_ASSERT(m_manager);
     KisNode* layer = m_manager->activeLayer();
-    QString name = "renamed layer";
-    m_manager->renameLayer(layer, name);
+    QString name;
+    
+    AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(layer);
+    if (alayer)
+        name = alayer->aname();
+    else
+        name = layer->name();
+    
+    KDialog* renameDialog = new KDialog();
+    renameDialog->setModal(true);
+    renameDialog->setAttribute(Qt::WA_DeleteOnClose);
+    renameDialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    renameDialog->setCaption(i18n("Rename layer"));
+    
+    QWidget* main_widget = new QWidget(renameDialog);
+    QVBoxLayout* layout = new QVBoxLayout(main_widget);
+    QLabel* label = new QLabel(i18n("Rename layer"), main_widget);
+    KLineEdit* ledit = new KLineEdit(main_widget);
+    ledit->setClearButtonShown(true);
+    
+    setRenameString(name);
+    ledit->setText(name);
+    ledit->setFocus();
+    
+    layout->addWidget(label);
+    layout->addWidget(ledit);
+    
+    connect(ledit, SIGNAL(textChanged(QString)), this, SLOT(setRenameString(QString)));
+    
+    renameDialog->setMainWidget(main_widget);
+    
+    connect(renameDialog, SIGNAL(accepted()), this, SLOT(doRenameLayer()));
+    
+    renameDialog->show();
+}
+
+void AnimatorActions::setRenameString(const QString& string)
+{
+    m_renameString = string;
+}
+
+void AnimatorActions::doRenameLayer()
+{
+    m_manager->renameLayer(m_renameString);
 }
 
 
