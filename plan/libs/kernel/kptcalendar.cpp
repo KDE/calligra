@@ -212,11 +212,12 @@ bool CalendarDay::operator!=(const CalendarDay &day) const {
 }
 
 Duration CalendarDay::effort(const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) {
-    //kDebug()<<start<<" -"<<end;
+//     kDebug()<<start<<" -"<<length;
     return effort( m_date, start, length, spec, sch );
 }
 
 Duration CalendarDay::effort(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) {
+//     kDebug()<<date<<start<<length;
     if ( !date.isValid() ) {
         return Duration::zeroDuration;
     }
@@ -257,7 +258,7 @@ Duration CalendarDay::effort(const QDate &date, const QTime &start, int length, 
         eff += dti.second - dti.first;
         //kDebug()<<dti.first.toString()<<" -"<<dti.second.toString()<<", effort now"<<eff.toString();
     }
-    //kDebug()<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<":"<<start.toString()<<" -"<<end.toString()<<": total="<<eff.toString(Duration::Format_Day);
+//     kDebug()<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<":"<<start.toString()<<" -"<<start.addMSecs(length).toString()<<": total="<<eff.toDouble(Duration::Unit_h)<<"h";
     return eff;
 }
 
@@ -283,7 +284,7 @@ TimeInterval CalendarDay::interval(const QTime &start, int length, const KDateTi
 
 TimeInterval CalendarDay::interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
 {
-    //kDebug()<<"Inp:"<<date<<start<<"+"<<length<<"="<<start.addMSecs( length );
+    //kDebug()<<"Inp:"<<date<<start<<"+"<<length<<"="<<QDateTime(date, start).addMSecs( length );
     Q_ASSERT( length > 0 );
     Q_ASSERT( QTime(0,0,0).msecsTo( start ) + length <= 1000*60*60*24 );
     QTime t1;
@@ -549,7 +550,7 @@ bool CalendarWeekdays::operator!=(const CalendarWeekdays *wd) const {
 }
 
 Duration CalendarWeekdays::effort(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) {
-    //kDebug()<<"Day of week="<<date.dayOfWeek();
+//     kDebug()<<"Day of week="<<date.dayOfWeek();
     Q_ASSERT( QTime(0,0,0).msecsTo( start ) + length <= 1000*60*60*24 );
     CalendarDay *day = weekday( date.dayOfWeek() );
     if (day && day->state() == CalendarDay::Working) {
@@ -1093,18 +1094,24 @@ AppointmentIntervalList Calendar::workIntervals( const DateTime &start, const Da
         //kDebug()<<"Check single day:"<<s.date()<<s.time()<<length;
         res = firstInterval( start.date(), startTime, length, 0 );
         while ( res.isValid() ) {
-            DateTime dt( start.date(), res.startTime() );
-            lst.add( AppointmentInterval( dt, dt.addMSecs( res.second ), load ) );
+            DateTime s( start.date(), res.startTime() );
+            DateTime e( start.date(), s.time().addMSecs( res.second ) );
+            if ( e.time() == QTime( 0, 0, 0 ) ) {
+                // ends at midnight...
+                e = e.addDays( 1 );
+                if ( e > end ) {
+                    e = end;
+                }
+            }
+            lst.add( AppointmentInterval( s, e, load ) );
             length -= res.second;
-            if ( length <= 0 || res.endsMidnight() ) {
+            if ( length <= 0 || e.date() > s.date() ) {
                 break;
             }
             res = firstInterval( start.date(), res.endTime(), length, 0 );
         }
-        //kDebug()<<lst;
         return lst;
     }
-    //kDebug()<<"tospec:"<<s.toString()<<" -"<<e.toString();
     // Multiple days
     for ( QDate date = start.date(); date <= end.date(); date = date.addDays(1) ) {
         if (date > start.date()) {
@@ -1120,23 +1127,31 @@ AppointmentIntervalList Calendar::workIntervals( const DateTime &start, const Da
         }
         res = firstInterval( date, startTime, length );
         while ( res.isValid() ) {
-            DateTime dt( date, res.startTime() );
-            AppointmentInterval i( dt, dt.addMSecs( res.second ), load );
+            DateTime s( date, res.startTime() );
+            DateTime e( date, s.time().addMSecs( res.second ) );
+            if ( e.time() == QTime( 0, 0, 0 ) ) {
+                // ends at midnight...
+                e = e.addDays( 1 );
+                if ( e > end ) {
+                    e = end;
+                }
+            }
+            AppointmentInterval i( s, e, load );
             lst.add( i );
             length -= startTime.msecsTo( res.endTime() );
-            if ( length <= 0 || res.endsMidnight() ) {
+            if ( length <= 0 || e.date() > date ) {
                 break;
             }
             startTime = res.endTime();
             res = firstInterval( date, startTime, length, 0 );
         }
     }
-    //kDebug()<<lst;
+//     kDebug()<<"workintervals:"<<start<<end<<endl<<lst;
     return lst;
 }
 
 Duration Calendar::effort(const QDate &date, const QTime &start, int length, Schedule *sch) const {
-    //kDebug()<<m_name<<":"<<date<<""<<start<<"->"<<length;
+//     kDebug()<<m_name<<":"<<date<<""<<start<<"->"<<length;
     if (length <= 0) {
         return Duration::zeroDuration;
     }
@@ -1168,7 +1183,7 @@ Duration Calendar::effort(const QDate &date, const QTime &start, int length, Sch
 }
 
 Duration Calendar::effort(const KDateTime &start, const KDateTime &end, Schedule *sch) const {
-    //kDebug()<<m_name<<":"<<start<<"to"<<end;
+//     kDebug()<<m_name<<":"<<start<<"to"<<end;
     Duration eff;
     QDate date = start.date();
     QTime startTime = start.time();
@@ -1197,7 +1212,7 @@ Duration Calendar::effort(const KDateTime &start, const KDateTime &end, Schedule
 }
 
 Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *sch) const {
-    //kDebug()<<m_name<<":"<<start<<start.timeSpec()<<"to"<<end<<end.timeSpec();
+//     kDebug()<<m_name<<":"<<start<<start.timeSpec()<<"to"<<end<<end.timeSpec();
     Duration eff;
     if (!start.isValid() || !end.isValid() || end < start) {
         if ( sch && sch->resource() ) kDebug()<<sch->resource()->name()<<sch->name()<<"Available:"<<sch->resource()->availableFrom()<<sch->resource()->availableUntil();

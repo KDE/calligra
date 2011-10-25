@@ -578,11 +578,9 @@ bool valid_enames(DirTree* dirtree, unsigned index)
     DirEntry* e = 0;
 
 #ifdef POLE_DEBUG
-    e = dirtree->entry(index);
-    printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
-           e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
-
-    if (chi.size()) std::cout << "[KIDS]:" << std::endl;
+    if (chi.size()) {
+        std::cout << "[KIDS]:" << std::endl;
+    }
     for (unsigned i = 0; i < chi.size(); i++) {
         e = dirtree->entry(chi[i]);
         printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
@@ -609,6 +607,10 @@ bool DirTree::valid() const
     for (unsigned i = 0; i < entries.size(); i++) {
         e = &entries[i];
 
+#ifdef POLE_DEBUG
+        printf("DirEntry::valid name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+               e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
+#endif
         //Looking for invalid user streams.
         if (!e->valid && e->size) {
             std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
@@ -869,8 +871,9 @@ void DirTree::load(unsigned char* buffer, unsigned size)
             name.erase(0, 1);
         }
 
-        // 0 = Unknown or unallocated, 1 = directory (aka storage),
-        // 2 = file (aka stream), 5 = root
+        // [MS-CFB] — v20110318
+        // 0x00 = Unknown or unallocated, 0x01 = directory (Storage Object),
+        // 0x02 = file (Stream Object), 0x05 = Root Storage Object
         unsigned type = buffer[ 0x42 + p];
 
         DirEntry e;
@@ -884,9 +887,17 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         e.dir = (type != 2);
 
         // sanity checks
-        if ((type != 2) && (type != 1) && (type != 5)) e.valid = false;
-        if (name_len < 1) e.valid = false;
-
+        if ((type != 0) && (type != 1) && (type != 2) && (type != 5)) {
+            e.valid = false;
+        }
+        if ((type != 0) && (name_len < 1)) {
+            e.valid = false;
+        }
+        if (type == 0) {
+            if ((e.child != -1) || (e.prev != -1) || (e.next != -1)) {
+                e.valid = false;
+            }
+        }
         // additional checks
         if ( (((int)e.prev > n) || ((int)e.prev < -1)) ||
              (((int)e.next > n) || ((int)e.next < -1)) ||
@@ -895,8 +906,9 @@ void DirTree::load(unsigned char* buffer, unsigned size)
             e.valid = false;
         }
 
-        // CLSID, contains a object class GUI if this entry is a storage or root
-        // storage or all zero if not.
+        // CLSID contains an object class GUID (globally unique identifier) if
+        // this entry is a storage or root storage.  In a stream object, this
+        // field MUST be set to all zeroes.
 #ifdef POLE_DEBUG
         if (!e.valid) std::cout << "INVALID ";
         printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%lu size=%lu clsid=%lu.%lu.%lu.%lu\n",

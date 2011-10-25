@@ -69,7 +69,9 @@ namespace KDGantt {
                                     qreal offset, QWidget* widget=0 );
 
         void render( QPainter* painter,  const QRectF &target, const QRectF& headerRect, const QRectF& exposedRect, QWidget *widget, Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio );
-	
+        void setHourFormat( const QString &format );
+        QString hourFormat() const;
+
     public Q_SLOTS:
         void zoomIn( qreal factor = 1.25 );
         void zoomOut( qreal factor = 0.8 );

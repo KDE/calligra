@@ -517,8 +517,8 @@
    legacy undo adapter must guard itself from strokes with locking the
    strokes system. That is done with a special kind of lock
    =barrierLock()=. This barrier lock differs from a regular lock in a
-   way that it ways for all the /strokes/ are finished, while a
-   regular lock waits for all the /stroke jobs/ are done. That's the
+   way that it ways for all the running /strokes/ are finished, while a
+   regular lock waits for all the running /stroke jobs/ are done. That's the
    only difference.
 
    The same race conditions problem applies to the undo()/redo()
@@ -542,3 +542,164 @@
 
    #+CAPTION: Undo Adapter vs Undo Store
    [[./img/undo_adapters.png]]
+
+
+* Processings framework
+** Motivation
+   In Krita we have many actions which have common structure of
+   execution. Take a look at actions like Scale Image, Rotate Image,
+   Change Color Space - all of them have common phases:
+   1) Lock the image
+   2) Do the processing of nodes
+   3) Unlock the image
+   4) Emit setDirty() calls and update the projection of the nodes
+   5) Wait until all the setDirty()'es are finished
+   6) Emit image's signals like sigImageSizeChanged
+
+   More than that, you should pay attention to the fact that all these
+   actions should support undo/redo operations. And the last two
+   phases cannot be implemented as usual qt-commands inside a usual
+   macro, because they should always be executed /in the end/ of the
+   action (in qt commands are executed in reverse order during undo
+   operations, that is not what we want).
+
+   And, btw, it would be really good idea to have multithreading
+   support for such actions, because some of them (like Scale Image)
+   may be quite slow.
+
+   =KisNodeVisitor= cannot fit all these requirements, because it has
+   important design limitations: first, walking through nodes is
+   implemented inside the visitor itself and, second, emitting signals
+   is put into visitors as well. These two limitations prevent the
+   code to be shared between actions. That is why we introduced new
+   shiny =KisProcessingVisitor= and a separate framework for them.
+** Processing visitors
+
+   #+CAPTION: Processing framework
+   [[./img/processings_framework.png]]
+
+   The key class of the processing framework is
+   =KisProcessingVisitor=. Its main difference from the old visitor is
+   that it is extremely simple. It performs one task only, it
+   processes one node. And that is all. It does no locking, performs
+   no updates, emits no signals. It just processes (that is, changes
+   the content) a single node. You can look at the reference
+   implementation of it in =KisCropProcessingVisitor= and
+   =KisTransformProcessingVisitor=. The key idea of this framework is
+   to keep the processings as simple as possible. So the rest of the
+   work is done by external classes, those are shared between all the
+   processings.
+
+   We have one such class. Its name is =KisProcessingApplicator=. This
+   class performs several tasks:
+   - creates a stroke. So all the actions executed with this applicator
+     will be undo/redo'able.
+   - applies a visitor to a requested node.
+   - applies a visitor recursively to a node and all its
+     children. Note, that you can choose any sequentiality property
+     for the execution of your visitor. It means that the visitors can
+     be applied to nodes concurrently in multithreaded way.
+   - applies a usual qt-command to the image. Sequentiality properties
+     may vary as well.
+   - emits setDirty() calls for all the nodes which need it. It is
+     done in efficient way, so no nodes are updated twice.
+   - emits image signals /after/ all the actions and updates are
+     finished.
+
+   Lets look at an example:
+
+   #+BEGIN_SRC c++
+        void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
+        {
+            if(newRect == bounds()) return;
+
+            QString actionName = cropLayers ? i18n("Crop Image") : i18n("Resize Image");
+
+        (1) KisImageSignalVector emitSignals;
+        (2) emitSignals << SizeChangedSignal << ModifiedSignal;
+
+        (3) KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                               KisProcessingApplicator::RECURSIVE,
+                                               emitSignals, actionName);
+
+            if(cropLayers || !newRect.topLeft().isNull()) {
+        (4)     KisProcessingVisitorSP visitor =
+                    new KisCropProcessingVisitor(newRect, cropLayers, true);
+        (5)     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+            }
+        (6) applicator.applyCommand(new KisImageResizeCommand(this, newRect.size()));
+        (7) applicator.end();
+        }
+   #+END_SRC
+
+   In lines (1) and (2) we create a list of signals we should emit
+   after the execution of the applicator. This list should be passed
+   to the /constructor/ of the applicator (3) (the list is passed to
+   the constructor instead of end() function, because we face a
+   limitation connected with the internals of the implementation of
+   undo for processings, I doubt it can create any troubles). In the
+   line (3) we create a recursive applicator. In lines (4) and (5) we
+   create a visitor and apply it to nodes recursively in a
+   multithreaded way. *Warning:* the visitor is shared between all the
+   threads so it should be written in a /thread-safe/ way. In line (6)
+   we apply a command sequentially, it means that it'll be executed
+   right after /all/ the threads with visitors has finished. Line (7)
+   closes the stroke an tells it to perform all the updates and emit
+   all the signals.
+
+** Implementation of =KisProcessingApplicator=
+   The applicator is based on the "undo command"-based stroke
+   (=KisStrokeStrategyUndoCommandBased=). It starts the stroke in the
+   constructor and adds undo commands to it on every user request. The
+   processings are inernally wrapped into a special command
+   (=KisProcessingCommand=). This command has its own undo stack that
+   collects the transactions executed by the processing. This can be
+   easily achieved with our undo adapters interface. The command just
+   defines its own =KisSurrogateUndoAdapter= and passes it to the
+   processing. Processing adds its transactions to the fake
+   adapter. And later, the command just uses the undo stack to
+   undo/redo actions executed by the transaction.
+
+   The applicator defines several internal commands as well:
+   =UpdateCommand= and =EmitSignalsCommand=. These commands are added
+   to the beginning and to the end of every stroke, so that they can
+   be executed in the end of both undo and redo operations. The
+   parameter =finalUpdate= controls whether the command is executed
+   during its redo() or undo() operation.
+
+** Emission of signals trick
+   After actions have been moved to separate threads, problems with
+   image signals appeared. When everything was executed in a single
+   thread the connection of signals like =sigAboutToAddNode= and
+   =sigNodeHasBeenAdded= worked as /Qt::DirectConnection/. So these
+   signals were effectively function calls. After we moved the actions
+   to a separate thread, all of them became /Qt::QueuedConnection/. I
+   guess you know what it means. They simply lost all their sense. So
+   we had to start to use /Qt::BlockingQueuedConnection/. But there is
+   another problem with it. Some of the (old) code is still executed
+   in a context of the UI thread and they emit signals as well. So all
+   that code causes deadlocks when using
+   =Qt::BlockingQueuedConnection=. That is why we had to introduce
+   =KisImageSignalRouter=. This class checks which thread emits the
+   signal and emits it either using =Qt::DirectConnection= or
+   =Qt::BlockingQueuedConnection=. So no deadlocks are possible.
+
+** Progress reporting
+   The fact that a processing visitor does a really simple task
+   (processes a single node) that is very easy to report progress
+   using progress bars in the layer box. We just need to use progress
+   pxoxy of the node we process (=KisNodeProgressProxy=). Our
+   processings framework provides even easier way of doing this. You
+   just need to instantiate a =ProgressHelper= object and ask it to
+   greate a =KoUpdater= object for you. And all is done. You can see
+   an example in =KisTransformProcessingVisitor= class.
+
+** Testing
+   Usage of a common framework makes testing really simple. There is a
+   separate unittest in image's tests folder: =KisProcessingsTest=. To
+   test a processing you need to write just a couple of
+   lines. Everything is done by =BaseProcessingTest= helper
+   class. This class will run your processing and compare results
+   against reference png files those are stored in data folder. If
+   there are some problems found, it'll dump result files to the
+   current directory.

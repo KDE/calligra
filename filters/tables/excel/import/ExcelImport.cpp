@@ -82,8 +82,9 @@
 #include "ImportUtils.h"
 #include "conditionals.h"
 
-// enable this definition to make the filter output to an ods file instead of using m_chain.outputDocument() to write the spreadsheet to
-// #define OUTPUT_AS_ODS_FILE
+// Enable this definition to make the filter output to an ods file instead of
+// using m_chain.outputDocument() to write the spreadsheet to.
+//#define OUTPUT_AS_ODS_FILE
 
 K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
 K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
@@ -258,7 +259,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->workbook = 0;
         delete d->storeout;
         d->storeout = 0;
-        return KoFilter::StupidError;
+        return KoFilter::InvalidFormat;
     }
 
     if (d->workbook->isPasswordProtected()) {

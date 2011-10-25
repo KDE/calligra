@@ -94,11 +94,13 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
 void CSTCompareView::keyPressEvent(QKeyEvent * event)
 {
     switch (event->key()) {
+    case Qt::Key_PageUp:
     case Qt::Key_B:
         if (m_dataIndex > 1) {
             --m_dataIndex;
         }
         break;
+    case Qt::Key_PageDown:
     case Qt::Key_N:
         if (m_dataIndex < m_data.size() - 1) {
             ++m_dataIndex;

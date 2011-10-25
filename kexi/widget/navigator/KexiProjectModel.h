@@ -21,22 +21,28 @@
 #define KEXIPROJECTMODEL_H
 
 #include <QModelIndex>
-#include <kexipart.h>
 #include <QAbstractItemModel>
+
+#include <kexipart.h>
+#include <KexiSearchableModel.h>
 
 class KexiProjectModelItem;
 class KexiProject;
 
-class KEXIEXTWIDGETS_EXPORT KexiProjectModel : public QAbstractItemModel
+class KEXIEXTWIDGETS_EXPORT KexiProjectModel : public QAbstractItemModel, public KexiSearchableModel
 {
     Q_OBJECT
 public:
     KexiProjectModel(QObject* parent = 0);
     virtual ~KexiProjectModel();
     
+    enum ExtraRoles {
+        SearchHighlight = Qt::UserRole + 0 //!< item is highlighted when corresponding global search
+                                           //!< completion is highlighted
+    };
+    
     void setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages);
     QString itemsPartClass() const;
-    
     
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -57,6 +63,26 @@ public:
     //! @return index of first part item (looking from the top) or invalid item
     //! if there are no part items
     QModelIndex firstPartItem() const;
+    
+    //! Implemented for KexiSearchableModel
+    virtual int searchableObjectCount() const;
+
+    //! Implemented for KexiSearchableModel
+    virtual QModelIndex sourceIndexForSearchableObject(int objectIndex) const;
+    
+    //! Implemented for KexiSearchableModel
+    virtual QVariant searchableData(const QModelIndex &sourceIndex, int role) const;
+
+    //! Implemented for KexiSearchableModel
+    virtual QString pathFromIndex(const QModelIndex &sourceIndex) const;
+
+    //! Implemented for KexiSearchableModel
+    virtual bool highlightSearchableObject(const QModelIndex &index);
+
+    //! Implemented for KexiSearchableModel
+    virtual bool activateSearchableObject(const QModelIndex &index);
+
+    QPersistentModelIndex itemWithSearchHighlight() const;
 
 public slots:
     void slotAddItem(KexiPart::Item& item);
@@ -64,6 +90,8 @@ public slots:
 
 signals:
     void renameItem(KexiPart::Item *item, const QString& _newName, bool &succes);
+    void highlightSearchedItem(const QModelIndex &index);
+    void activateSearchedItem(const QModelIndex &index);
 
 private:
     KexiProjectModelItem* addGroup(KexiPart::Info& info, KexiProjectModelItem*) const;
