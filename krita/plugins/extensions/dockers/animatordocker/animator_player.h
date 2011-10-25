@@ -17,33 +17,50 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ANIMATOR_UPDATER_H
-#define ANIMATOR_UPDATER_H
+#ifndef ANIMATOR_PLAYER_H
+#define ANIMATOR_PLAYER_H
 
 #include <QObject>
+#include <QTimer>
 
-#include "animator_manager.h"
+#include "animator_switcher.h"
 
-class AnimatorUpdater : public QObject
+class AnimatorPlayer : public QObject
 {
     Q_OBJECT
 
 public:
-    AnimatorUpdater(AnimatorManager* manager);
-    virtual ~AnimatorUpdater();
+    AnimatorPlayer(AnimatorManager* manager);
+    virtual ~AnimatorPlayer();
     
 public slots:
-    virtual void update(int oldFrame, int newFrame);
-    virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
+    void setFps(int fps);
+    void setLooped(bool loop);
+    
+    void play();
+    void pause();
+    void stop();
     
 public:
-    virtual void playerModeOff();
-    virtual void playerModeOn();
+    int fps() const;
+    bool looped() const;
+    
+protected slots:
+    void tick();
+    
+protected:
+    int nextFrame(int frame);
     
 private:
     AnimatorManager* m_manager;
     
-    bool m_playerMode;
+    QTimer* m_timer;
+    int m_fps;
+    
+    bool m_playing;
+    bool m_paused;
+    
+    bool m_looped;
 };
 
-#endif // ANIMATOR_UPDATER_H
+#endif // ANIMATOR_PLAYER_H

@@ -30,6 +30,7 @@
 class AnimatorSwitcher;
 class AnimatorUpdater;
 class AnimatorLoader;
+class AnimatorPlayer;
 
 #include "simple_frame_layer.h"
 #include "framed_animated_layer.h"
@@ -52,6 +53,7 @@ public:
     virtual AnimatorSwitcher* getSwitcher();
     virtual AnimatorUpdater* getUpdater();
     virtual AnimatorLoader* getLoader();
+    virtual AnimatorPlayer* getPlayer();
     
     virtual KisImage* image();
     
@@ -98,9 +100,9 @@ private:
     AnimatorSwitcher* m_switcher;
     AnimatorUpdater* m_updater;
     AnimatorLoader* m_loader;
+    AnimatorPlayer* m_player;
     AnimatorMetaInfo* m_info;
     
-//     AnimatorPlayer* m_player;
 //     AnimatorExporter* m_exporter;
     
     QList<AnimatedLayer*> m_layers;

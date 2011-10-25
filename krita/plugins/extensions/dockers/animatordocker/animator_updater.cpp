@@ -43,7 +43,6 @@ void AnimatorUpdater::update(int oldFrame, int newFrame)
 
 void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
 {
-    warnKrita << "updateLayer(" << layer << ")";
     FrameLayer* oldf = layer->getCachedFrame(oldFrame);
     if (oldf)
     {
@@ -57,4 +56,14 @@ void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFra
         newf->setOpacity(255);
         newf->setDirty(newf->exactBounds());
     }
+}
+
+void AnimatorUpdater::playerModeOn()
+{
+    m_playerMode = true;
+}
+
+void AnimatorUpdater::playerModeOff()
+{
+    m_playerMode = false;
 }

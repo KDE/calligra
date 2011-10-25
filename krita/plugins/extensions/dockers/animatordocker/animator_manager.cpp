@@ -25,6 +25,7 @@
 #include "animator_loader.h"
 #include "animator_switcher.h"
 #include "animator_updater.h"
+#include "animator_player.h"
 
 #include <kis_debug.h>
 
@@ -33,6 +34,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_loader = new AnimatorLoader(this);
     m_switcher = new AnimatorSwitcher(this);
     m_updater = new AnimatorUpdater(this);
+    m_player = new AnimatorPlayer(this);
     
     m_image = image;
     m_nodeManager = 0;
@@ -80,6 +82,11 @@ AnimatorSwitcher* AnimatorManager::getSwitcher()
 AnimatorUpdater* AnimatorManager::getUpdater()
 {
     return m_updater;
+}
+
+AnimatorPlayer* AnimatorManager::getPlayer()
+{
+    return m_player;
 }
 
 
