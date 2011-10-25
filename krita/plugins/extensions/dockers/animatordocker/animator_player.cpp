@@ -24,9 +24,8 @@ AnimatorPlayer::AnimatorPlayer(AnimatorManager* manager): QObject(manager)
 {
     m_manager = manager;
     
-    setFps(12);
-    
     m_timer = new QTimer(this);
+    setFps(12);
     connect(m_timer, SIGNAL(timeout()), SLOT(tick()));
 }
 
