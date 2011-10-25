@@ -31,6 +31,7 @@ class FramedAnimatedLayer : public AnimatedLayer
     Q_OBJECT
     
 public:
+    FramedAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
     FramedAnimatedLayer(const KisGroupLayer& source);
 
 public:

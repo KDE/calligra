@@ -31,6 +31,10 @@
 #include "animator_manager.h"
 #include "animator_manager_factory.h"
 
+FramedAnimatedLayer::FramedAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity): AnimatedLayer(image, name, opacity)
+{
+}
+
 FramedAnimatedLayer::FramedAnimatedLayer(const KisGroupLayer& source) : AnimatedLayer(source)
 {
 }

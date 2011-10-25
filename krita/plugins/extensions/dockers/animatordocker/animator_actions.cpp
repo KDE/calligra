@@ -68,10 +68,12 @@ void AnimatorActions::initActions()
 {
     QAction* t;
     
+    // UTIL
     t = new QAction(SmallIcon("system-run"), i18n("Load layers"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(loadLayers()));
     addAction("util", t);
     
+    // PLAYER
     t = new QAction(SmallIcon("media-playback-start"), i18n("Play/pause"), this);
     t->setCheckable(true);
     t->setChecked(false);
@@ -83,6 +85,11 @@ void AnimatorActions::initActions()
     t->setChecked(false);
     connect(t, SIGNAL(triggered(bool)), SLOT(toggleLooping(bool)));
     addAction("player", t);
+    
+    // LAYERS
+    t = new QAction(SmallIcon("list-add"), i18n("Add layer"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(createNormalLayer()));
+    addAction("layers", t);
 }
 
 
@@ -107,4 +114,11 @@ void AnimatorActions::toggleLooping(bool v)
 {
     Q_ASSERT(m_manager);
     m_manager->getPlayer()->setLooped(v);
+}
+
+
+void AnimatorActions::createNormalLayer()
+{
+    Q_ASSERT(m_manager);
+    m_manager->createNormalLayer();
 }

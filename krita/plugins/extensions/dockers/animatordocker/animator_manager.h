@@ -71,6 +71,10 @@ public:
     virtual AnimatorMetaInfo* metaInfo();
     
 public:
+    virtual void createNormalLayer();
+    virtual AnimatedLayer* getAnimatedLayerByChild(KisNode* child);
+    
+public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
     virtual void insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer);
     virtual void removeFrame(KisNode* frame);

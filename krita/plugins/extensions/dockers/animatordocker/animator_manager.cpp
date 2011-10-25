@@ -201,3 +201,37 @@ QList< AnimatedLayer* > AnimatorManager::layers()
 {
     return m_layers;
 }
+
+
+AnimatedLayer* AnimatorManager::getAnimatedLayerByChild(KisNode* child)
+{
+    KisNode* node = child;
+    bool found = false;
+    while (node->parent() && !found)
+    {
+        if (node->inherits("AnimatedLayer"))
+            found = true;
+        else
+            node = node->parent().data();
+    }
+    return qobject_cast<AnimatedLayer*>(node);
+}
+
+void AnimatorManager::createNormalLayer()
+{
+    FramedAnimatedLayer* newLayer = new FramedAnimatedLayer(image(), "_ani_New Animated Layer", 255);
+    
+    KisNode* activeNode = m_nodeManager->activeNode().data();
+    AnimatedLayer* alayer = getAnimatedLayerByChild(activeNode);
+    if (alayer)
+    {
+        KisNode* parent = alayer->parent().data();
+        m_nodeManager->insertNode(newLayer, parent, parent->index(alayer));
+    } else
+    {
+        m_nodeManager->insertNode(newLayer, image()->root(), 0);
+        m_nodeManager->moveNode(newLayer, activeNode);
+    }
+    
+    layerAdded(newLayer);
+}
