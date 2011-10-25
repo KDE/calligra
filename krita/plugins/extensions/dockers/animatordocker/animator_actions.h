@@ -53,6 +53,7 @@ protected slots:
     
     virtual void createNormalLayer();
     virtual void removeLayer();
+    virtual void renameLayer();
     
     virtual void createPaintFrame();
     

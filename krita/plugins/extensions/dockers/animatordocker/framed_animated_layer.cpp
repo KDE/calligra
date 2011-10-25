@@ -39,6 +39,13 @@ FramedAnimatedLayer::FramedAnimatedLayer(const KisGroupLayer& source) : Animated
 {
 }
 
+
+void FramedAnimatedLayer::rename(const QString& name)
+{
+    setName("_ani_"+name);
+}
+
+
 void FramedAnimatedLayer::init()
 {
     m_frames.clear();

@@ -224,12 +224,21 @@ AnimatedLayer* AnimatorManager::getAnimatedLayerByChild(KisNode* child)
     return qobject_cast<AnimatedLayer*>(node);
 }
 
+KisNode* AnimatorManager::activeLayer()
+{
+    KisNode* node = m_nodeManager->activeNode().data();
+    AnimatedLayer* l = getAnimatedLayerByChild(node);
+    if (l)
+        return l;
+    return node;
+}
+
 void AnimatorManager::createNormalLayer()
 {
     FramedAnimatedLayer* newLayer = new FramedAnimatedLayer(image(), "_ani_New Animated Layer", 255);
     
-    KisNode* activeNode = m_nodeManager->activeNode().data();
-    AnimatedLayer* alayer = getAnimatedLayerByChild(activeNode);
+    KisNode* activeNode = activeLayer();
+    AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(activeNode); //getAnimatedLayerByChild(activeNode);
     if (alayer)
     {
         KisNode* parent = alayer->parent().data();
@@ -247,6 +256,15 @@ void AnimatorManager::removeLayer()
 {
     AnimatedLayer* alayer = getAnimatedLayerByChild(m_nodeManager->activeNode().data());
     removeLayer(alayer);
+}
+
+void AnimatorManager::renameLayer(KisNode* layer, const QString& name)
+{
+    AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(layer);
+    if (alayer)
+        alayer->rename(name);
+    else
+        layer->setName(name);
 }
 
 

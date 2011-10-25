@@ -37,6 +37,9 @@ public:
     AnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
     AnimatedLayer(const KisGroupLayer& source);
     
+public:
+    virtual void rename(const QString& name) = 0;
+    
     // Animation interface
     // NEW
 public:

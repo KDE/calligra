@@ -95,6 +95,10 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(removeLayer()));
     addAction("layers", t);
     
+    t = new QAction(SmallIcon("edit-rename"), i18n("Rename layer"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(renameLayer()));
+    addAction("layers", t);
+    
     // FRAMES
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
@@ -137,6 +141,15 @@ void AnimatorActions::removeLayer()
     Q_ASSERT(m_manager);
     m_manager->removeLayer();
 }
+
+void AnimatorActions::renameLayer()
+{
+    Q_ASSERT(m_manager);
+    KisNode* layer = m_manager->activeLayer();
+    QString name = "renamed layer";
+    m_manager->renameLayer(layer, name);
+}
+
 
 void AnimatorActions::createPaintFrame()
 {
