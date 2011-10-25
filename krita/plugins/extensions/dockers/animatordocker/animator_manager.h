@@ -72,6 +72,7 @@ public:
     
 public:
     virtual void createNormalLayer();
+    virtual void removeLayer();
     virtual AnimatedLayer* getAnimatedLayerByChild(KisNode* child);
     
 public:

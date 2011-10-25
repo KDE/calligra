@@ -52,6 +52,7 @@ protected slots:
     void toggleLooping(bool v);
     
     void createNormalLayer();
+    void removeLayer();
     
 private:
     QMap< QString, QList<QAction*> > m_actions;

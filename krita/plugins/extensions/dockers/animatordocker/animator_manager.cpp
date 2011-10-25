@@ -147,6 +147,8 @@ void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int in
 
 void AnimatorManager::removeLayer(KisNode* layer)
 {
+    if (!layer)
+        return;
     m_nodeManager->removeNode(layer);
     layerRemoved(dynamic_cast<AnimatedLayer*>(layer));
 }
@@ -234,4 +236,10 @@ void AnimatorManager::createNormalLayer()
     }
     
     layerAdded(newLayer);
+}
+
+void AnimatorManager::removeLayer()
+{
+    AnimatedLayer* alayer = getAnimatedLayerByChild(m_nodeManager->activeNode().data());
+    removeLayer(alayer);
 }

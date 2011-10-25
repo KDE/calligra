@@ -90,6 +90,10 @@ void AnimatorActions::initActions()
     t = new QAction(SmallIcon("list-add"), i18n("Add layer"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createNormalLayer()));
     addAction("layers", t);
+    
+    t = new QAction(SmallIcon("list-remove"), i18n("Remove layer"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(removeLayer()));
+    addAction("layers", t);
 }
 
 
@@ -121,4 +125,10 @@ void AnimatorActions::createNormalLayer()
 {
     Q_ASSERT(m_manager);
     m_manager->createNormalLayer();
+}
+
+void AnimatorActions::removeLayer()
+{
+    Q_ASSERT(m_manager);
+    m_manager->removeLayer();
 }
