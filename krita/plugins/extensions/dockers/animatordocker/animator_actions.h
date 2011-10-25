@@ -46,6 +46,7 @@ protected:
     
 protected slots:
     void loadLayers();
+    void playPause(bool v);
     
 private:
     QList<QAction*> m_actions;

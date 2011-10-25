@@ -24,6 +24,7 @@
 
 #include "animator_manager.h"
 #include "animator_loader.h"
+#include "animator_player.h"
 
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
 {
@@ -56,7 +57,13 @@ void AnimatorActions::initActions()
     QAction* t;
     
     t = new QAction(SmallIcon("system-run"), i18n("Load layers"), this);
-    connect(t, SIGNAL(triggered(bool)), this, SLOT(loadLayers()));
+    connect(t, SIGNAL(triggered(bool)), SLOT(loadLayers()));
+    addAction(t);
+    
+    t = new QAction(SmallIcon("media-playback-start"), i18n("Play/pause"), this);
+    t->setCheckable(true);
+    t->setChecked(false);
+    connect(t, SIGNAL(triggered(bool)), SLOT(playPause(bool)));
     addAction(t);
 }
 
@@ -65,4 +72,13 @@ void AnimatorActions::loadLayers()
 {
     Q_ASSERT(m_manager);
     m_manager->getLoader()->loadAll();
+}
+
+void AnimatorActions::playPause(bool v)
+{
+    Q_ASSERT(m_manager);
+    if (v)
+        m_manager->getPlayer()->play();
+    else
+        m_manager->getPlayer()->pause();
 }
