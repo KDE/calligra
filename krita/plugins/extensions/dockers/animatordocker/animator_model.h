@@ -20,7 +20,7 @@
 #ifndef ANIMATOR_MODEL_H
 #define ANIMATOR_MODEL_H
 
-#include <qt4/QtCore/QModelIndex>
+#include <QModelIndex>
 #include <kis_image.h>
 #include <kis_node_model.h>
 

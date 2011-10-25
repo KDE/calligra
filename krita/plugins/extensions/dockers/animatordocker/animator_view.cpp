@@ -29,6 +29,19 @@ AnimatorView::~AnimatorView()
 {
 }
 
+void AnimatorView::setModel(QAbstractItemModel* model)
+{
+    QTreeView::setModel(model);
+    connect(model, SIGNAL(layoutChanged()), SLOT(resizeColumnsToContent()));
+}
+
+void AnimatorView::resizeColumnsToContent()
+{
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
+}
+
+
 void AnimatorView::activate(QModelIndex index)
 {
     if (!amodel())
@@ -40,5 +53,5 @@ void AnimatorView::activate(QModelIndex index)
 
 AnimatorModel* AnimatorView::amodel()
 {
-    return dynamic_cast<AnimatorModel*>(model());
+    return qobject_cast<AnimatorModel*>(model());
 }

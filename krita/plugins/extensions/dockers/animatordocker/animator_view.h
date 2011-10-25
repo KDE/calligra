@@ -31,7 +31,10 @@ public:
     virtual ~AnimatorView();
     
 public:
+    virtual void setModel(QAbstractItemModel* model);
     
+public slots:
+    virtual void resizeColumnsToContent();
     
 protected slots:
     virtual void activate(QModelIndex index);
