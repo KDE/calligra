@@ -179,7 +179,12 @@ void AnimatorManager::activate(int frameNumber, KisNode* node)
         getSwitcher()->goFrame(frameNumber);
     
     if (node)
+    {
+        SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(node);
+        if (frame)
+            node = frame->getContent();
         m_nodeManager->activateNode(node);
+    }
 }
 
 

@@ -47,6 +47,8 @@ void AnimatorView::activate(QModelIndex index)
     if (!amodel())
         return;
     KisNode* node = amodel()->nodeFromIndex(index);
+    if (!node && index.column() != 0)
+        node = amodel()->nodeFromIndex(amodel()->index(index.row(), 0, index.parent()));
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(amodel()->image());
     manager->activate(amodel()->frameNumber(index), node);
 }
