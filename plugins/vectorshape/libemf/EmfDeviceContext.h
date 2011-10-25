@@ -83,6 +83,13 @@ enum DeviceContextMembers {
     DCTextExtraSpace = 0x00400000
 };
 
+enum EmfPlusMode {
+    ModeEmf,                    /// No EMF+ records have been seen or EMF+ EOF record was seen
+    ModeEmfPlusOnly,            /// Emfplus header indicated EMF+ Only mode
+    ModeEmfPlusDual             /// Emfplus header indicated EMF+ Dual mode
+};
+
+
 /**
    EMF Playback Device Context
 */
@@ -135,9 +142,10 @@ public:
     QMap<quint32, QVariant>  objectTable;
 
     // ----------------------------------------------------------------
-    //                         EMF+ data
+    //                         EMF+ parsing
 
-    int  emfplusDualMode;  // -1: no EMF+, 0: EMF+ non-dual mode, 1: EMF+ dual mode
+    EmfPlusMode  emfPlusMode;
+    bool         emfPlusGetDCSeen; // Valid when mode is ModeEmfPlusOnly
 
     // ----------------------------------------------------------------
     //                         Helper data
@@ -146,7 +154,6 @@ public:
     // changed items.  It is used by the backends to update their
     // internal state.
     quint32  changedItems;      // bitmap of DeviceContextMembers
-
 
     // Cached values
 

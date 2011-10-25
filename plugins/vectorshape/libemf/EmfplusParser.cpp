@@ -277,11 +277,16 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
             stream >> emfplusFlags;
             stream >> logicalDpiX >> logicalDpiY;
 
-            context.emfplusDualMode = (flags & 0x01);
+            if (flags & 0x01)
+                context.emfPlusMode = ModeEmfPlusDual;
+            else
+                context.emfPlusMode = ModeEmfPlusOnly;
+            
         }
         break;
     case EmfPlusEndOfFile:
         {
+            context.emfPlusMode = ModeEmf;
             soakBytes(stream, size - 8);
         }
         break;
@@ -292,6 +297,7 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EmfPlusGetDC:
         {
+            context.emfPlusGetDCSeen = true;
             soakBytes(stream, size - 8);
         }
         break;

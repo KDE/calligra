@@ -390,6 +390,21 @@ bool EmfParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
 #if DEBUG_EMFPARSER == 2
     soakBytes(stream, size - 8);
 #else
+
+    // Don't parse EMF records if the Emfplus mode is Emf+ Only, and no Emf+ GetDC.
+    // EMR_COMMENT records are always parsed because they may contain EMF+ records.
+    //
+    // WARNING: This will destroy the images until EMF+ is implemented
+    //          to a state that is equal to the current EMF implementation.
+    if (context.emfPlusMode == ModeEmfPlusOnly
+        && !context.emfPlusGetDCSeen
+        && type != EMR_COMMENT)
+    {
+        kDebug(31000) << "Skipping EMF record";
+        soakBytes(stream, size - 8);
+        return true;
+    }
+
     switch ( type ) {
         case EMR_POLYLINE:
         {
@@ -786,6 +801,10 @@ bool EmfParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
                 kDebug(31000) << "EMR_COMMENT_EMFPLUS";
 #if 1
                 {
+                    // Reset the GetDC flag. No more EMF records will
+                    // be parsed until the next EMF+ GetDC record is seen.
+                    context.emfPlusGetDCSeen = false;
+
                     // Create a new stream from the record and call the EMFPLUS parser.
                     //
                     // FIXME: Don't create a new array. Create the array inside the old one.

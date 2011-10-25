@@ -83,9 +83,13 @@ void EmfDeviceContext::reset()
 
     objectTable.clear();
 
-    emfplusDualMode = -1;
+    // ----------------------------------------------------------------
+    //                         EMF+ parsing
 
-   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    emfPlusMode = ModeEmf;
+    emfPlusGetDCSeen = false;
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     // Derivative values.  These are calculated from the base values above.
 
     // World transform

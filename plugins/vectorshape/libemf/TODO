@@ -24,9 +24,11 @@
       - EmfHeader                                                       [done]
       - EmfGetDC                                                        [done]
       - EmfEof                                                          [done]
-   + Implement the EMF+ device context
-      - Find out what the EMF+ DC has that the EMF DC doesn't
+   + Implement the EMF+ device context                                  [DONE]
+      - Find out what the EMF+ DC has that the EMF DC doesn't           
       - Create an EMF+ DC from an EMF DC
+   + Support the "EMF+ only" and "EMF+ Dual" modes, including support   [DONE]
+     for "EMF+ GetDC".
    + Support EMF+ records
       - Check which calls are basically same as EMF, and copy code
         for them
