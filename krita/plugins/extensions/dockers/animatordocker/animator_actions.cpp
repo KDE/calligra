@@ -65,6 +65,12 @@ void AnimatorActions::initActions()
     t->setChecked(false);
     connect(t, SIGNAL(triggered(bool)), SLOT(playPause(bool)));
     addAction(t);
+    
+    t = new QAction(SmallIcon("task-recurring"), i18n("Toggle player looping"), this);
+    t->setCheckable(true);
+    t->setChecked(false);
+    connect(t, SIGNAL(triggered(bool)), SLOT(toggleLooping(bool)));
+    addAction(t);
 }
 
 
@@ -81,4 +87,10 @@ void AnimatorActions::playPause(bool v)
         m_manager->getPlayer()->play();
     else
         m_manager->getPlayer()->pause();
+}
+
+void AnimatorActions::toggleLooping(bool v)
+{
+    Q_ASSERT(m_manager);
+    m_manager->getPlayer()->setLooped(v);
 }
