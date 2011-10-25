@@ -31,6 +31,7 @@
 #include "animator_model.h"
 #include "animator_manager_factory.h"
 #include "animator_view.h"
+#include "animator_switcher.h"
 
 AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
 {
@@ -52,12 +53,13 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
     KisCanvas2* kcanvas = dynamic_cast<KisCanvas2*>(canvas);
     KisImage* image = kcanvas->image().data();
     
+    m_manager = AnimatorManagerFactory::instance()->getManager(image, kcanvas);
+    
     m_mainModel = new AnimatorModel(image);
     m_mainModel->setFrameWidth(10);             // TODO: make this configurable
+    connect(m_manager->getSwitcher(), SIGNAL(frameChanged(int,int)), m_mainModel, SLOT(dataChangedSlot(int,int)));
     
     m_view->setModel(m_mainModel);
-    
-    m_manager = AnimatorManagerFactory::instance()->getManager(image, kcanvas);
 }
 
 void AnimatorDock::unsetCanvas()

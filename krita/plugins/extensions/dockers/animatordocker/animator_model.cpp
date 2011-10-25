@@ -23,6 +23,7 @@
 
 #include "framed_animated_layer.h"
 #include "animator_manager_factory.h"
+#include "animator_switcher.h"
 
 AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
 {    
@@ -52,6 +53,13 @@ void AnimatorModel::removeThis()
 void AnimatorModel::dataChangedSlot(KisNode* node)
 {
     emit dataChanged(indexFromNode(node), indexFromNode(node));
+}
+
+void AnimatorModel::dataChangedSlot(int from, int to)
+{
+    int last = rowCount(QModelIndex());
+    emit dataChanged(index(0, from, QModelIndex()), index(last, from, QModelIndex()));
+    emit dataChanged(index(0, to, QModelIndex()), index(last, to, QModelIndex()));
 }
 
 void AnimatorModel::layoutChangedSlot()
@@ -118,6 +126,12 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
                     return "x";
             }
         }
+        if (role == Qt::BackgroundRole)
+        {
+            int curFrame = AnimatorManagerFactory::instance()->getManager(image())->getSwitcher()->currentFrame();
+            if (frameNumber(ind) == curFrame)
+                return QBrush(QColor(127, 127, 127));
+        }
     }
     
 //     if (role == Qt::DisplayRole)
@@ -129,7 +143,10 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
 int AnimatorModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return AnimatorManagerFactory::instance()->getManager(m_image)->framesNumber() + BASE_COLUMNS_NUMBER;
+    int fnum = AnimatorManagerFactory::instance()->getManager(m_image)->framesNumber();
+    if (fnum)
+        fnum += 12;
+    return BASE_COLUMNS_NUMBER + fnum;
 }
 
 int AnimatorModel::rowCount(const QModelIndex& parent) const
