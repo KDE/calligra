@@ -42,14 +42,25 @@ void AnimatorActions::setManager(AnimatorManager* manager)
 }
 
 
-void AnimatorActions::addAction(QAction* action)
+void AnimatorActions::addAction(const QString& category, QAction* action)
 {
-    m_actions.append(action);
+    m_actions[category].append(action);
 }
 
 QList< QAction* > AnimatorActions::actions() const
 {
-    return m_actions;
+    QList<QAction*> list;
+    QList<QAction*> sublist;
+    foreach (sublist, m_actions.values())
+    {
+        list.append(sublist);
+    }
+    return list;
+}
+
+QList< QAction* > AnimatorActions::actions(QString& category) const
+{
+    return m_actions[category];
 }
 
 void AnimatorActions::initActions()
@@ -58,19 +69,19 @@ void AnimatorActions::initActions()
     
     t = new QAction(SmallIcon("system-run"), i18n("Load layers"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(loadLayers()));
-    addAction(t);
+    addAction("util", t);
     
     t = new QAction(SmallIcon("media-playback-start"), i18n("Play/pause"), this);
     t->setCheckable(true);
     t->setChecked(false);
     connect(t, SIGNAL(triggered(bool)), SLOT(playPause(bool)));
-    addAction(t);
+    addAction("player", t);
     
     t = new QAction(SmallIcon("task-recurring"), i18n("Toggle player looping"), this);
     t->setCheckable(true);
     t->setChecked(false);
     connect(t, SIGNAL(triggered(bool)), SLOT(toggleLooping(bool)));
-    addAction(t);
+    addAction("player", t);
 }
 
 

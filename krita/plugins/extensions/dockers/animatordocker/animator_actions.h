@@ -39,9 +39,10 @@ public:
     
 public:
     virtual QList<QAction*> actions() const;
+    virtual QList<QAction*> actions(QString& category) const;
     
 protected:
-    virtual void addAction(QAction* action);
+    virtual void addAction(const QString& category, QAction* action);
     virtual void initActions();
     
 protected slots:
@@ -50,7 +51,7 @@ protected slots:
     void toggleLooping(bool v);
     
 private:
-    QList<QAction*> m_actions;
+    QMap< QString, QList<QAction*> > m_actions;
     AnimatorManager* m_manager;
 };
 
