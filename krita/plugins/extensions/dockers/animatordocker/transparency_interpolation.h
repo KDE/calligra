@@ -1,5 +1,5 @@
 /*
- *  Animated layer class
+ *  Interpolation method for layers with changing transparency
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,37 +18,19 @@
  */
 
 
-#include "animated_layer.h"
-#include "kis_image.h"
+#ifndef TRANSPARENCY_INTERPOLATION_H
+#define TRANSPARENCY_INTERPOLATION_H
 
-AnimatedLayer::AnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity): KisGroupLayer(image, name, opacity)
-{
-    setEnabled(true);
-}
+#include "abstract_interpolation.h"
 
-AnimatedLayer::AnimatedLayer(const KisGroupLayer& source): KisGroupLayer(source.image(), source.name(), source.opacity())
+class TransparencyInterpolation : public AbstractInterpolation
 {
-    setEnabled(true);
-}
+public:
+    TransparencyInterpolation(){}
+    virtual ~TransparencyInterpolation(){}
+    
+public:
+    virtual void changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position);
+};
 
-FrameLayer* AnimatedLayer::getUpdatedFrame(int num)
-{
-    if (enabled())
-        updateFrame(num);
-    return getCachedFrame(num);
-}
-
-void AnimatedLayer::updateFrame(int num)
-{
-    Q_UNUSED(num);
-}
-
-bool AnimatedLayer::enabled()
-{
-    return m_enabled;
-}
-
-void AnimatedLayer::setEnabled(bool val)
-{
-    m_enabled = val;
-}
+#endif // TRANSPARENCY_INTERPOLATION_H

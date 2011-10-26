@@ -35,11 +35,6 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
     if (isKeyFrame(num))
         return;
     
-    if (! enabled())
-        return;
-    
-    setEnabled(false);
-    
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
     if (!manager->ready())
         return;
@@ -70,8 +65,6 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         }
         manager->setFrameContent(frame, interpolate(prev, next, p));
     }
-    
-    setEnabled(true);
 }
 
 const QString& InterpolatedAnimatedLayer::getNameForFrame(int num, bool iskey) const
@@ -88,3 +81,5 @@ int InterpolatedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey
     int result = FramedAnimatedLayer::getFrameFromName(name, iskey);
     return result;
 }
+
+#include "moc_interpolated_animated_layer.cpp"

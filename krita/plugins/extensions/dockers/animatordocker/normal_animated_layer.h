@@ -24,9 +24,9 @@
 #include "interpolated_animated_layer.h"
 
 #include "moving_interpolation.h"
-// #include "transparency_interpolation.h"
+#include "transparency_interpolation.h"
 
-class NormalAnimatedLayer : public InterpolatedAnimatedLayer, public MovingInterpolation //, public TransparencyInterpolation
+class NormalAnimatedLayer : public InterpolatedAnimatedLayer, public MovingInterpolation, public TransparencyInterpolation
 {
     Q_OBJECT
 

@@ -26,6 +26,10 @@
 class MovingInterpolation : public AbstractInterpolation
 {
 public:
+    MovingInterpolation(){}
+    virtual ~MovingInterpolation(){}
+    
+public:
     virtual void changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position);
 };
 

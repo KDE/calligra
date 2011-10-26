@@ -9,7 +9,7 @@ set(KRITA_ANIMATORDOCKER_PART_SRCS
     
     animated_layer.cpp framed_animated_layer.cpp
     interpolated_animated_layer.cpp normal_animated_layer.cpp
-    abstract_interpolation.cpp moving_interpolation.cpp
+    abstract_interpolation.cpp moving_interpolation.cpp transparency_interpolation.cpp
     
     frame_layer.cpp simple_frame_layer.cpp
 )
