@@ -6,6 +6,7 @@ set(KRITA_ANIMATORDOCKER_PART_SRCS
     animator_model.cpp animator_view.cpp
     animator_actions.cpp
     animator_dock.cpp animator_control_dock.cpp
+    animator_lt_dock.cpp lt_slider.cpp animator_lt.cpp
     
     animated_layer.cpp framed_animated_layer.cpp
     interpolated_animated_layer.cpp normal_animated_layer.cpp

@@ -38,7 +38,7 @@
 
 #include "animator_dock.h"
 #include "animator_control_dock.h"
-// #include "animator_light_table_dock.h"
+#include "animator_lt_dock.h"
 
 K_PLUGIN_FACTORY(AnimatorPluginFactory, registerPlugin<AnimatorPlugin>();)
 K_EXPORT_PLUGIN(AnimatorPluginFactory("krita"))
@@ -106,36 +106,36 @@ public:
     }
 };
 
-// class LightTableDockFactory : public KoDockFactoryBase {
-// public:
-//     LightTableDockFactory()
-//     {
-//     }
-//     
-//     virtual QString id() const
-//     {
-//         return QString( "Light table" );
-//     }
-//     
-//     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-//     {
-//         return Qt::RightDockWidgetArea;
-//     }
-//     
-//     virtual QDockWidget* createDockWidget()
-//     {
-//         AnimatorLightTableDock* dockWidget = new AnimatorLightTableDock();
-//         
-//         dockWidget->setObjectName(id());
-// 
-//         return dockWidget;
-//     }
-// 
-//     DockPosition defaultDockPosition() const
-//     {
-//         return DockMinimized;
-//     }
-// };
+class AnimatorLTDockFactory : public KoDockFactoryBase {
+public:
+    AnimatorLTDockFactory()
+    {
+    }
+    
+    virtual QString id() const
+    {
+        return QString( "Light table" );
+    }
+    
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::RightDockWidgetArea;
+    }
+    
+    virtual QDockWidget* createDockWidget()
+    {
+        AnimatorLTDock* dockWidget = new AnimatorLTDock();
+        
+        dockWidget->setObjectName(id());
+
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
+};
 
 
 AnimatorPlugin::AnimatorPlugin(QObject *parent, const QVariantList &)
@@ -143,7 +143,7 @@ AnimatorPlugin::AnimatorPlugin(QObject *parent, const QVariantList &)
 {
     KoDockRegistry::instance()->add(new AnimatorDockFactory());
     KoDockRegistry::instance()->add(new AnimatorControlDockFactory());
-//     KoDockRegistry::instance()->add(new LightTableDockFactory());
+    KoDockRegistry::instance()->add(new AnimatorLTDockFactory());
 }
 
 AnimatorPlugin::~AnimatorPlugin()
