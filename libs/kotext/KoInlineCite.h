@@ -50,6 +50,10 @@ public:
 
     virtual ~KoInlineCite();
 
+    bool operator!= ( const KoInlineCite &cite ) const;
+
+    KoInlineCite &operator= ( const KoInlineCite &cite );
+
     Type type() const;        //return type of cite
 
     void setType(Type t);
@@ -187,6 +191,8 @@ public:
     QString custom4() const;
 
     QString custom5() const;
+
+    int posInDocument() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 

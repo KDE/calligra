@@ -49,12 +49,12 @@ CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *
 void CitationInsertionDialog::insert()
 {
     if (m_cites.contains(dialog.shortName->text())) {
-        if (!toCite()->hasSameData(m_cites.value(dialog.shortName->text()))) {      //prompts if values are changed
+        if (*m_cites.value(dialog.shortName->text()) != toCite()) {      //prompts if values are changed
             int ret = QMessageBox::warning(this,i18n("Warning"),i18n("The document already contains the bibliography entry with different data.\n"
                                  "Do you want to adjust existing entries?"),QMessageBox::Yes | QMessageBox::No);
             if ( ret == QMessageBox::Yes) {
                 foreach(KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {
-                    existingCite->copyFrom(toCite());                       //update all cites with new values
+                    *existingCite = toCite();                       //update all cites with new values
                     existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
                 }
                 emit accept();
@@ -69,7 +69,7 @@ void CitationInsertionDialog::insert()
 
         dialog.shortName->setSelection(dialog.shortName->text().length(),0);
     }
-    cite->copyFrom(toCite());
+    *cite = toCite();
     emit accept();
 }
 
@@ -88,41 +88,41 @@ void CitationInsertionDialog::selectionChangedFromExistingCites()
     }
 }
 
-KoInlineCite *CitationInsertionDialog::toCite()
+KoInlineCite CitationInsertionDialog::toCite()
 {
-    KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
-    cite->setAddress(dialog.address->text());
-    cite->setAnnotation(dialog.annotation->text());
-    cite->setAuthor(dialog.author->text());
-    cite->setBibliographyType(dialog.sourceType->currentText().remove(" ").toLower());      //removing spaces and lowering case for exact tag attribute of bibliography-type
-    cite->setBookTitle(dialog.booktitle->text());
-    cite->setChapter(dialog.chapter->text());
-    cite->setCustom1(dialog.ud1->text());
-    cite->setCustom2(dialog.ud2->text());
-    cite->setCustom3(dialog.ud3->text());
-    cite->setCustom4(dialog.ud4->text());
-    cite->setCustom5(dialog.ud5->text());
-    cite->setEdition(dialog.edition->text());
-    cite->setEditor(dialog.editor->text());
-    cite->setIdentifier(dialog.shortName->text());
-    cite->setInstitution(dialog.institution->text());
-    cite->setISBN(dialog.isbn->text());
-    cite->setISSN(dialog.issn->text());
-    cite->setJournal(dialog.journal->text());
-    cite->setMonth(dialog.month->text());
-    cite->setNote(dialog.note->text());
-    cite->setNumber(dialog.number->text());
-    cite->setOrganisation(dialog.organisation->text());
-    cite->setPages(dialog.pages->text());
-    cite->setPublicationType(dialog.publication->text());
-    cite->setPublisher(dialog.publisher->text());
-    cite->setReportType(dialog.reporttype->text());
-    cite->setSchool(dialog.school->text());
-    cite->setSeries(dialog.series->text());
-    cite->setTitle(dialog.title->text());
-    cite->setURL(dialog.url->text());
-    cite->setVolume(dialog.volume->text());
-    cite->setYear(dialog.year->text());
+    KoInlineCite cite(KoInlineCite::Citation);
+    cite.setAddress(dialog.address->text());
+    cite.setAnnotation(dialog.annotation->text());
+    cite.setAuthor(dialog.author->text());
+    cite.setBibliographyType(dialog.sourceType->currentText().remove(" ").toLower());      //removing spaces and lowering case for exact tag attribute of bibliography-type
+    cite.setBookTitle(dialog.booktitle->text());
+    cite.setChapter(dialog.chapter->text());
+    cite.setCustom1(dialog.ud1->text());
+    cite.setCustom2(dialog.ud2->text());
+    cite.setCustom3(dialog.ud3->text());
+    cite.setCustom4(dialog.ud4->text());
+    cite.setCustom5(dialog.ud5->text());
+    cite.setEdition(dialog.edition->text());
+    cite.setEditor(dialog.editor->text());
+    cite.setIdentifier(dialog.shortName->text());
+    cite.setInstitution(dialog.institution->text());
+    cite.setISBN(dialog.isbn->text());
+    cite.setISSN(dialog.issn->text());
+    cite.setJournal(dialog.journal->text());
+    cite.setMonth(dialog.month->text());
+    cite.setNote(dialog.note->text());
+    cite.setNumber(dialog.number->text());
+    cite.setOrganisation(dialog.organisation->text());
+    cite.setPages(dialog.pages->text());
+    cite.setPublicationType(dialog.publication->text());
+    cite.setPublisher(dialog.publisher->text());
+    cite.setReportType(dialog.reporttype->text());
+    cite.setSchool(dialog.school->text());
+    cite.setSeries(dialog.series->text());
+    cite.setTitle(dialog.title->text());
+    cite.setURL(dialog.url->text());
+    cite.setVolume(dialog.volume->text());
+    cite.setYear(dialog.year->text());
     return cite;
 }
 

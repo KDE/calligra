@@ -255,6 +255,11 @@ QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicate
     return answers;
 }
 
+/*static bool isBefore( KoInlineCite *o1, KoInlineCite *o2)
+{
+    return o1->posInDocument() < o2->posInDocument();
+}*/
+
 QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool duplicatesEnabled, QTextBlock block) const
 {
     QList<KoInlineCite*> answers;
@@ -278,6 +283,7 @@ QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool d
         }
         block = block.next();
     }
+    //qSort(answers.begin(), answers.end(), isBefore);
     return answers;
 }
 

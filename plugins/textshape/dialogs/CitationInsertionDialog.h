@@ -33,7 +33,7 @@ class CitationInsertionDialog : public QDialog
     Q_OBJECT
 public:
     explicit CitationInsertionDialog(KoTextEditor *editor ,QWidget *parent = 0);
-    KoInlineCite *toCite();                 //returns cite with values filled in form
+    KoInlineCite toCite();                 //returns cite with values filled in form
     void fillValuesFrom(KoInlineCite *cite);        //fills form with values in cite
 
 public slots:

@@ -70,7 +70,7 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
 
         foreach (QObject *o, dialog.sortKeyGroupBox->children()) {
             SortKeyWidget *widget = dynamic_cast<SortKeyWidget*>(o);
-            if (!widget) {
+            if (widget) {
                 sortKeys << SortKeyPair(widget->sortKey(),widget->sortOrder());
             }
         }

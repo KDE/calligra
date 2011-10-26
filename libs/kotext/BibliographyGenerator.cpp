@@ -122,8 +122,8 @@ void BibliographyGenerator::generate()
             switch(entry->name) {
                 case IndexEntry::BIBLIOGRAPHY: {
                     IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
-                    cursor.insertText(cite->dataField(indexEntry->dataField));
-                    spanEnabled = (cite->dataField(indexEntry->dataField).length()>0);
+                    cursor.insertText(QString(" ").append(cite->dataField(indexEntry->dataField)));
+                    spanEnabled = !cite->dataField(indexEntry->dataField).isEmpty();
                     break;
                 }
                 case IndexEntry::SPAN: {
