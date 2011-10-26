@@ -295,6 +295,10 @@ void AnimatorManager::createFrame(const QString& ftype)
     setFrameContent(frame, m_nodeManager->activeNode().data());
     
     alayer->init();
+    
+    // TODO: don't do full update
+    getUpdater()->fullUpdateLayer(alayer);
+    getUpdater()->updateLayer(alayer, frameNumber, frameNumber);
 }
 
 void AnimatorManager::removeFrame()
@@ -318,4 +322,6 @@ void AnimatorManager::removeFrame()
     activate(frameNumber, alayer);
     
     alayer->init();
+    
+    getUpdater()->updateLayer(alayer, frameNumber, frameNumber);
 }

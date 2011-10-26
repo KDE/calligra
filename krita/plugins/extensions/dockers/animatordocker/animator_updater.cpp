@@ -45,7 +45,7 @@ void AnimatorUpdater::fullUpdateLayer(AnimatedLayer* layer)
     for (int i = layer->dataStart(); i < layer->dataEnd(); ++i)
     {
         FrameLayer* f = layer->getCachedFrame(i);
-        if (f)
+        if (f && f->visible())
         {
             f->setVisible(0);
             f->setDirty(f->exactBounds());
@@ -66,15 +66,19 @@ void AnimatorUpdater::update(int oldFrame, int newFrame)
 void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
 {
     FrameLayer* oldf = layer->getCachedFrame(oldFrame);
-    if (oldf)
+    FrameLayer* newf = layer->getUpdatedFrame(newFrame);
+    
+    if (oldf == newf && (!oldf || oldf->visible() && oldf->opacity() == 255))
+        return;
+    
+    if (oldf && oldf->visible())
     {
-        oldf->setVisible(0);
+        oldf->setVisible(false);
         oldf->setDirty(oldf->exactBounds());
     }
-    FrameLayer* newf = layer->getUpdatedFrame(newFrame);
-    if (newf)
+    if (newf && (!newf->visible() || newf->opacity() != 255))
     {
-        newf->setVisible(1);
+        newf->setVisible(true);
         newf->setOpacity(255);
         newf->setDirty(newf->exactBounds());
     }
