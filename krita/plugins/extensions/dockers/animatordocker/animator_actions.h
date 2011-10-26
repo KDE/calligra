@@ -61,6 +61,9 @@ protected slots:
     virtual void clearFrame();
     virtual void createPaintFrame();
     
+public slots:
+    virtual void setFps(int number);
+    
 private:
     QMap< QString, QList<QAction*> > m_actions;
     AnimatorManager* m_manager;

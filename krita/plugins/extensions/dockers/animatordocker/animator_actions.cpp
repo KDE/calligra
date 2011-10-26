@@ -213,3 +213,10 @@ void AnimatorActions::createPaintFrame()
     Q_ASSERT(m_manager);
     m_manager->createFrame("KisPaintLayer");
 }
+
+
+void AnimatorActions::setFps(int number)
+{
+    Q_ASSERT(m_manager);
+    m_manager->getPlayer()->setFps(number);
+}

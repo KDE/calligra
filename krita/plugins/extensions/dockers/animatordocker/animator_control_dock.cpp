@@ -23,6 +23,7 @@
 
 #include <QToolBar>
 #include <QLayout>
+#include <QSpinBox>
 
 #include <kis_canvas2.h>
 
@@ -66,6 +67,12 @@ void AnimatorControlDock::setupUI()
     
     QToolBar* tbPlayer = new QToolBar(this);
     tbPlayer->addActions(m_actions->actions("player"));
+    QSpinBox* fpsSpin = new QSpinBox(tbPlayer);
+    fpsSpin->setPrefix(i18n("fps: "));
+    fpsSpin->setValue(12);
+    connect(fpsSpin, SIGNAL(valueChanged(int)), m_actions, SLOT(setFps(int)));
+    tbPlayer->addWidget(fpsSpin);
+    
     layout->addWidget(tbPlayer);
     
     layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
