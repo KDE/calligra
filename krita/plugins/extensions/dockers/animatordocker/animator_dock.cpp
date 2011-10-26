@@ -19,6 +19,9 @@
 
 #include <KLocale>
 
+#include <QBoxLayout>
+#include <QSlider>
+
 #include <KoCanvasBase.h>
 
 #include <kis_canvas2.h>
@@ -42,10 +45,22 @@ AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
 
 void AnimatorDock::setupUI()
 {
-    m_view = new AnimatorView;
-//     m_view->setModel(m_mainModel);
+    QWidget* mainWidget = new QWidget(this);
+    QVBoxLayout* mLayout = new QVBoxLayout(mainWidget);
     
-    setWidget(m_view);
+    m_view = new AnimatorView;
+    mLayout->addWidget(m_view);
+    
+    QSlider* columnWidthSlider = new QSlider(mainWidget);
+    columnWidthSlider->setRange(1, 64);
+    columnWidthSlider->setValue(10);
+    columnWidthSlider->setOrientation(Qt::Horizontal);
+    connect(columnWidthSlider, SIGNAL(valueChanged(int)), SLOT(setFrameWidth(int)));
+    mLayout->addWidget(columnWidthSlider);
+    
+    mainWidget->setLayout(mLayout);
+    
+    setWidget(mainWidget);
 }
 
 void AnimatorDock::setCanvas(KoCanvasBase* canvas)
@@ -56,7 +71,7 @@ void AnimatorDock::setCanvas(KoCanvasBase* canvas)
     m_manager = AnimatorManagerFactory::instance()->getManager(image, kcanvas);
     
     m_mainModel = new AnimatorModel(image);
-    m_mainModel->setFrameWidth(10);             // TODO: make this configurable
+    m_mainModel->setFrameWidth(10);
     connect(m_manager->getSwitcher(), SIGNAL(frameChanged(int,int)), m_mainModel, SLOT(dataChangedSlot(int,int)));
     
     m_view->setModel(m_mainModel);
@@ -66,6 +81,16 @@ void AnimatorDock::unsetCanvas()
 {
     delete m_mainModel;
     m_mainModel = 0;
+}
+
+
+void AnimatorDock::setFrameWidth(int width)
+{
+    if (m_mainModel)
+    {
+        m_mainModel->setFrameWidth(width);
+        m_view->resizeColumnsToContent();
+    }
 }
 
 #include "animator_dock.moc"

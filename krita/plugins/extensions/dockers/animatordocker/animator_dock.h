@@ -43,6 +43,9 @@ public slots:
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
     
+protected slots:
+    virtual void setFrameWidth(int width);
+    
 private:
     virtual void setupUI();
     
