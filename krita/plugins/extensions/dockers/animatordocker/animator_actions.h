@@ -58,6 +58,7 @@ protected slots:
     virtual void doRenameLayer();
     virtual void setRenameString(const QString& string);
     
+    virtual void clearFrame();
     virtual void createPaintFrame();
     
 private:

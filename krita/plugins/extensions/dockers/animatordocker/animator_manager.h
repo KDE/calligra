@@ -80,6 +80,7 @@ public:
     virtual KisNode* activeLayer();
     
     virtual void createFrame(const QString& ftype);
+    virtual void removeFrame();
     
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);

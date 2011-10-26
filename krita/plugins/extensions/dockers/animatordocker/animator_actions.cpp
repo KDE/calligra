@@ -105,6 +105,10 @@ void AnimatorActions::initActions()
     addAction("layers", t);
     
     // FRAMES
+    t = new QAction(SmallIcon("edit-delete"), i18n("Clear frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(clearFrame()));
+    addAction("frames", t);
+    
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
     addAction("frames", t);
@@ -197,6 +201,12 @@ void AnimatorActions::doRenameLayer()
     m_manager->renameLayer(m_renameString);
 }
 
+
+void AnimatorActions::clearFrame()
+{
+    Q_ASSERT(m_manager);
+    m_manager->removeFrame();
+}
 
 void AnimatorActions::createPaintFrame()
 {

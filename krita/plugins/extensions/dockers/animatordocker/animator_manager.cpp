@@ -275,11 +275,10 @@ void AnimatorManager::renameLayer(const QString& name)
 
 void AnimatorManager::createFrame(const QString& ftype)
 {
-    KisNode* activeNode = m_nodeManager->activeNode().data();
-    FramedAnimatedLayer* alayer = qobject_cast<FramedAnimatedLayer*>(getAnimatedLayerByChild(activeNode));
+    FramedAnimatedLayer* alayer = qobject_cast<FramedAnimatedLayer*>(activeLayer());
     if (!alayer)
     {
-        warnKrita << "Could not determine animated layer or frame adding not supported, no frame created";
+        warnKrita << "Could not determine animated layer or frame adding is not supported, no frame created";
         return;
     }
     
@@ -294,6 +293,29 @@ void AnimatorManager::createFrame(const QString& ftype)
     insertFrame(frame, alayer);
     m_nodeManager->createNode(ftype);
     setFrameContent(frame, m_nodeManager->activeNode().data());
+    
+    alayer->init();
+}
+
+void AnimatorManager::removeFrame()
+{
+    FramedAnimatedLayer* alayer = qobject_cast<FramedAnimatedLayer*>(activeLayer());
+    if (!alayer)
+    {
+        warnKrita << "Could not determine active animated layer or frame removing is not supported, no frame removed";
+        return;
+    }
+    
+    int frameNumber = getSwitcher()->currentFrame();
+    if (! alayer->frameAt(frameNumber))
+    {
+        warnKrita << "No frame, nothing to remove";
+        return;
+    }
+    
+    removeFrame(alayer->frameAt(frameNumber));
+    
+    activate(frameNumber, alayer);
     
     alayer->init();
 }
