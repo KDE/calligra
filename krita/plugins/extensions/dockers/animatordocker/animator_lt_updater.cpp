@@ -24,6 +24,7 @@
 AnimatorLTUpdater::AnimatorLTUpdater(AnimatorManager* manager) : AnimatorUpdater(manager)
 {
     m_LT = new AnimatorLT();
+    setMode(AnimatorLTUpdater::Disabled);
     connect(m_LT, SIGNAL(opacityChanged(int)), this, SLOT(updateRelFrame(int)));
     connect(m_LT, SIGNAL(visibilityChanged(int)), this, SLOT(updateRelFrame(int)));
 }
@@ -34,6 +35,19 @@ AnimatorLTUpdater::~AnimatorLTUpdater()
 
 void AnimatorLTUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
 {
+    if (mode() == AnimatorLTUpdater::Disabled)
+    {
+        AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
+        return;
+    }
+    
+    if (mode() == AnimatorLTUpdater::KeyFramed)
+    {
+        warnKrita << "KeyFramed mode is not supported yet";
+        AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
+        return;
+    }
+    
     if (playerMode())
     {
         AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
@@ -78,4 +92,20 @@ void AnimatorLTUpdater::updateRelFrame(int relFrame)
 AnimatorLT* AnimatorLTUpdater::getLT()
 {
     return m_LT;
+}
+
+
+AnimatorLTUpdater::LTUpdaterMode AnimatorLTUpdater::mode() const
+{
+    return m_mode;
+}
+
+void AnimatorLTUpdater::setMode(AnimatorLTUpdater::LTUpdaterMode mode)
+{
+    m_mode = mode;
+    
+    // TODO: don't do full update
+    fullUpdate();
+    int frame = m_manager->getSwitcher()->currentFrame();
+    update(frame, frame);
 }

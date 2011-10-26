@@ -29,11 +29,22 @@ class AnimatorLTUpdater : public AnimatorUpdater
     Q_OBJECT
     
 public:
+    enum LTUpdaterMode {
+        Disabled,
+        Normal,
+        KeyFramed
+    };
+    
+public:
     AnimatorLTUpdater(AnimatorManager* manager);
     virtual ~AnimatorLTUpdater();
     
 public:
     virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
+    
+public:
+    virtual void setMode(LTUpdaterMode mode);
+    virtual LTUpdaterMode mode() const;
     
 protected slots:
     virtual void updateRelFrame(int relFrame);
@@ -43,6 +54,8 @@ public:
     
 private:
     AnimatorLT* m_LT;
+    
+    LTUpdaterMode m_mode;
 };
 
 #endif // ANIMATOR_LT_UPDATER_H

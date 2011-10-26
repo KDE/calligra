@@ -61,6 +61,8 @@ protected slots:
     virtual void clearFrame();
     virtual void createPaintFrame();
     
+    virtual void enableLT(bool v);
+    
 public slots:
     virtual void setFps(int number);
     

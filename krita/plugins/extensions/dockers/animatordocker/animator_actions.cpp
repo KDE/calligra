@@ -31,6 +31,7 @@
 #include "animator_loader.h"
 #include "animator_player.h"
 #include "animator_updater.h"
+#include "animator_lt_updater.h"
 
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
 {
@@ -105,13 +106,20 @@ void AnimatorActions::initActions()
     addAction("layers", t);
     
     // FRAMES
-    t = new QAction(SmallIcon("edit-delete"), i18n("Clear frame"), this);
+    t = new QAction(SmallIcon("edit-clear"), i18n("Clear frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(clearFrame()));
     addAction("frames", t);
     
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
     addAction("frames", t);
+    
+    // LIGHT TABLE
+    t = new QAction(SmallIcon("document-properties"), i18n("Enable/disable light table (see additional docker)"), this);
+    t->setCheckable(true);
+    t->setChecked(false);
+    connect(t, SIGNAL(triggered(bool)), SLOT(enableLT(bool)));
+    addAction("lighttable", t);
 }
 
 
@@ -219,4 +227,13 @@ void AnimatorActions::setFps(int number)
 {
     Q_ASSERT(m_manager);
     m_manager->getPlayer()->setFps(number);
+}
+
+
+void AnimatorActions::enableLT(bool v)
+{
+    Q_ASSERT(m_manager);
+    AnimatorLTUpdater* updater = qobject_cast<AnimatorLTUpdater*>(m_manager->getUpdater());
+    if (updater)
+        updater->setMode(v ? AnimatorLTUpdater::Normal : AnimatorLTUpdater::Disabled);
 }

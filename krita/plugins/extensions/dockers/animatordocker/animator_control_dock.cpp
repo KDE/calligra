@@ -75,6 +75,10 @@ void AnimatorControlDock::setupUI()
     
     layout->addWidget(tbPlayer);
     
+    QToolBar* tbLT = new QToolBar(this);
+    tbLT->addActions(m_actions->actions("lighttable"));
+    layout->addWidget(tbLT);
+    
     layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
     
     QWidget* mainWidget = new QWidget(this);
