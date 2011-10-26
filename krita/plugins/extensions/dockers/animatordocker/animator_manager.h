@@ -62,6 +62,7 @@ public:
     
 signals:
     void layerFramesNumberChanged(AnimatedLayer* layer, int number);
+    void framesNumberChanged(int number);
     
 protected slots:
     virtual void framesNumberCheck(AnimatedLayer* layer, int number);
@@ -100,6 +101,9 @@ public:
     
 public:
     virtual QList<AnimatedLayer*> layers();
+
+protected:
+    virtual void calculateFramesNumber();
     
 protected:
     virtual void layerAdded(AnimatedLayer* layer);
@@ -118,6 +122,7 @@ private:
 //     AnimatorExporter* m_exporter;
     
     QList<AnimatedLayer*> m_layers;
+    AnimatedLayer* m_maxFrameLayer;
     
     int m_framesNumber;
 };

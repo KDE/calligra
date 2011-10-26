@@ -167,9 +167,37 @@ void AnimatorManager::layerFramesNumberChange(AnimatedLayer* layer, int number)
 
 void AnimatorManager::framesNumberCheck(AnimatedLayer* layer, int number)
 {
-    // FIXME: now frames number can only grow
+    if (number == m_framesNumber)
+        return;
+    
     if (number > m_framesNumber)
+    {
+        m_maxFrameLayer = layer;
         m_framesNumber = number;
+        emit framesNumberChanged(m_framesNumber);
+        return;
+    }
+    
+    if (layer == m_maxFrameLayer)
+    {
+        // We do not know layer with max frames now
+        calculateFramesNumber();
+    }
+}
+
+void AnimatorManager::calculateFramesNumber()
+{
+    m_framesNumber = 0;
+    AnimatedLayer* layer;
+    foreach (layer, m_layers)
+    {
+        if (layer->dataEnd() > m_framesNumber)
+        {
+            m_framesNumber = layer->dataEnd();
+            m_maxFrameLayer = layer;
+        }
+    }
+    emit framesNumberChanged(m_framesNumber);
 }
 
 
@@ -193,6 +221,8 @@ void AnimatorManager::layerAdded(AnimatedLayer* layer)
     if (!layer)
         return;
     m_layers.append(layer);
+    
+    framesNumberCheck(layer, layer->dataEnd());
 }
 
 void AnimatorManager::layerRemoved(AnimatedLayer* layer)
@@ -202,6 +232,9 @@ void AnimatorManager::layerRemoved(AnimatedLayer* layer)
     int i = m_layers.indexOf(layer);
     if (i >= 0)
         m_layers.removeAt(i);
+    
+    if (layer == m_maxFrameLayer)
+        calculateFramesNumber();
 }
 
 QList< AnimatedLayer* > AnimatorManager::layers()

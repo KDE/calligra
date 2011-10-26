@@ -26,9 +26,7 @@
 #include "animator_switcher.h"
 
 AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
-{    
-//     m_nodeModel = new KisNodeModel(this);
-//     m_nodeModel->setImage(image);
+{
     m_image = image;
     
     connect(m_image, SIGNAL(sigNodeHasBeenAdded(KisNode*,int)), SLOT(layoutChangedSlot()));
@@ -38,6 +36,10 @@ AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
     connect(m_image, SIGNAL(sigNodeChanged(KisNode*)), SLOT(dataChangedSlot(KisNode*)));
     
     connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(removeThis()));
+    
+    AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image);
+    
+    connect(manager, SIGNAL(framesNumberChanged(int)), SLOT(layoutChangedSlot()));
 }
 
 AnimatorModel::~AnimatorModel()
