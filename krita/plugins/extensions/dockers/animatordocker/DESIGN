@@ -13,6 +13,7 @@ Basic UI:
 Control UI:
     AnimatorActions
     AnimatorDock
+    AnimatorControlDock
 
 
 Switching frame:
@@ -23,3 +24,10 @@ Switching frame:
 
 After adding LightTable:
 3) AnimatorLTUpdater::update(old, new)
+
+
+Layers:
+AnimatedLayer
+|-- FramedAnimatedLayer
+    |-- InterpolatedAnimatedLayer
+        |-- NormalAnimatedLayer [inherits some interpolation classes also]

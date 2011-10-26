@@ -19,13 +19,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <KoProperties.h>
-
 #include "framed_animated_layer.h"
 
 #include <sstream>
-
 #include <iomanip>
+
 #include "frame_layer.h"
 #include "simple_frame_layer.h"
 #include "animator_manager.h"
@@ -173,7 +171,7 @@ int FramedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) cons
 {
     if (name.startsWith("_frame_"))
     {
-        iskey = name.endsWith("_");
+        iskey = !name.endsWith("_");
         
         std::stringstream ns;
         ns << (name.mid(7).toAscii().data());

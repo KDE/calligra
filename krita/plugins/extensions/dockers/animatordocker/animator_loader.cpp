@@ -21,7 +21,7 @@
 
 #include <kis_debug.h>
 
-#include "framed_animated_layer.h"
+#include "normal_animated_layer.h"
 #include "simple_frame_layer.h"
 #include "animator_meta_info.h"
 
@@ -90,7 +90,7 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
     if (node->name().startsWith("_ani_"))
     {
         KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
-        FramedAnimatedLayer* al = new FramedAnimatedLayer(*gl);
+        FramedAnimatedLayer* al = new NormalAnimatedLayer(*gl);
         
         KisNodeSP parent = gl->parent();
         m_manager->insertLayer(al, parent, parent->index(gl));

@@ -80,7 +80,10 @@ public:
     virtual AnimatedLayer* getAnimatedLayerByChild(KisNode* child);
     virtual KisNode* activeLayer();
     
+    virtual void createFrame(AnimatedLayer* layer, const QString& ftype);
+    virtual void createFrame(AnimatedLayer* layer, const QString& ftype, bool iskey);
     virtual void createFrame(const QString& ftype);
+    virtual void createFrame(const QString& ftype, bool iskey);
     virtual void removeFrame();
     
 public:

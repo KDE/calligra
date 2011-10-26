@@ -8,6 +8,9 @@ set(KRITA_ANIMATORDOCKER_PART_SRCS
     animator_dock.cpp animator_control_dock.cpp
     
     animated_layer.cpp framed_animated_layer.cpp
+    interpolated_animated_layer.cpp normal_animated_layer.cpp
+    abstract_interpolation.cpp moving_interpolation.cpp
+    
     frame_layer.cpp simple_frame_layer.cpp
 )
 
