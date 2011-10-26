@@ -17,42 +17,32 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ANIMATOR_UPDATER_H
-#define ANIMATOR_UPDATER_H
+#ifndef ANIMATOR_LT_UPDATER_H
+#define ANIMATOR_LT_UPDATER_H
 
-#include <QObject>
+#include "animator_updater.h"
+#include "animator_lt.h"
 
-#include "animator_manager.h"
 
-class AnimatorUpdater : public QObject
+class AnimatorLTUpdater : public AnimatorUpdater
 {
     Q_OBJECT
-
-public:
-    AnimatorUpdater(AnimatorManager* manager);
-    virtual ~AnimatorUpdater();
     
-public slots:
-    virtual void fullUpdate();
-    virtual void fullUpdateLayer(AnimatedLayer* layer);
-    virtual void update(int oldFrame, int newFrame);
+public:
+    AnimatorLTUpdater(AnimatorManager* manager);
+    virtual ~AnimatorLTUpdater();
+    
+public:
     virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
     
+protected slots:
+    virtual void updateRelFrame(int relFrame);
+    
 public:
-    virtual void playerModeOff();
-    virtual void playerModeOn();
-    virtual bool playerMode();
+    AnimatorLT* getLT();
     
-protected:
-    virtual void frameVisible(KisNode* frame, bool visible, int opacity);
-    virtual void frameVisible(KisNode* frame, int opacity);
-    virtual void frameUnvisible(KisNode* frame);
-    
-protected:
-    AnimatorManager* m_manager;
-
 private:
-    bool m_playerMode;
+    AnimatorLT* m_LT;
 };
 
-#endif // ANIMATOR_UPDATER_H
+#endif // ANIMATOR_LT_UPDATER_H

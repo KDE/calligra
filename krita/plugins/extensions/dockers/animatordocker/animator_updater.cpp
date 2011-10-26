@@ -76,18 +76,39 @@ void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFra
     if (oldf == newf && (!oldf || oldf->visible() && oldf->opacity() == 255))
         return;
     
-    if (oldf && oldf->visible())
-    {
-        oldf->setVisible(false);
-        oldf->setDirty(oldf->exactBounds());
-    }
-    if (newf && (!newf->visible() || newf->opacity() != 255))
-    {
-        newf->setVisible(true);
-        newf->setOpacity(255);
-        newf->setDirty(newf->exactBounds());
-    }
+    frameUnvisible(oldf);
+    frameVisible(newf, 255);
 }
+
+void AnimatorUpdater::frameVisible(KisNode* frame, bool visible, int opacity)
+{
+    if (visible)
+        frameVisible(frame, opacity);
+    else
+        frameUnvisible(frame);
+}
+
+void AnimatorUpdater::frameUnvisible(KisNode* frame)
+{
+    if (!frame)
+        return;
+    if (!frame->visible())
+        return;
+    frame->setVisible(false);
+    frame->setDirty(frame->exactBounds());
+}
+
+void AnimatorUpdater::frameVisible(KisNode* frame, int opacity)
+{
+    if (!frame)
+        return;
+    if (frame->visible() && frame->opacity() == opacity)
+        return;
+    frame->setVisible(true);
+    frame->setOpacity(opacity);
+    frame->setDirty(frame->exactBounds());
+}
+
 
 void AnimatorUpdater::playerModeOn()
 {
@@ -97,4 +118,9 @@ void AnimatorUpdater::playerModeOn()
 void AnimatorUpdater::playerModeOff()
 {
     m_playerMode = false;
+}
+
+bool AnimatorUpdater::playerMode()
+{
+    return m_playerMode;
 }

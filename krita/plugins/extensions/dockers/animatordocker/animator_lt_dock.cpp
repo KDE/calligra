@@ -21,15 +21,16 @@
 
 #include <KoDockRegistry.h>
 
-#include "animator_lt_dock.h"
-#include "animator_dock.h"
-
 #include <cstdlib>
+
+#include "animator_lt_dock.h"
+
+#include "animator_dock.h"
+#include "animator_manager_factory.h"
+#include "animator_lt_updater.h"
 
 AnimatorLTDock::AnimatorLTDock() : QDockWidget(i18n("Light table"))
 {
-    m_ltable = new AnimatorLT();
-    
     m_layout = new QVBoxLayout(this);
     QWidget* main_widget = new QWidget(this);
     main_widget->setLayout(m_layout);
@@ -55,6 +56,16 @@ AnimatorLTDock::AnimatorLTDock() : QDockWidget(i18n("Light table"))
 AnimatorLTDock::~AnimatorLTDock()
 {
 
+}
+
+void AnimatorLTDock::setCanvas(KoCanvasBase* canvas)
+{
+    m_manager = AnimatorManagerFactory::instance()->getManager(dynamic_cast<KisCanvas2*>(canvas));
+    setLT(qobject_cast<AnimatorLTUpdater*>(m_manager->getUpdater())->getLT());
+}
+
+void AnimatorLTDock::unsetCanvas()
+{
 }
 
 void AnimatorLTDock::slidersUpdate()
@@ -106,10 +117,10 @@ void AnimatorLTDock::slidersUpdate()
     }
 }
 
-// void AnimatorLTDock::setLT(AnimatorLT* table)
-// {
-//     m_ltable = table;
-//     connect(m_nearSpinbox, SIGNAL(valueChanged(int)), m_ltable, SLOT(setNear(int)));
-//     connect(m_ltable, SIGNAL(nearChanged(int)), this, SLOT(slidersUpdate()));
-//     slidersUpdate();
-// }
+void AnimatorLTDock::setLT(AnimatorLT* table)
+{
+    m_ltable = table;
+    connect(m_nearSpinbox, SIGNAL(valueChanged(int)), m_ltable, SLOT(setNear(int)));
+    connect(m_ltable, SIGNAL(nearChanged(int)), this, SLOT(slidersUpdate()));
+    slidersUpdate();
+}

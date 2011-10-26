@@ -34,13 +34,14 @@ public:
     
 public:
     double getOpacity(int rel_frame);
+    int getOpacityU8(int rel_frame);
     bool getVisibility(int rel_frame);
     int getNear();
     
 signals:
     void nearChanged(int near);
-    void opacityChanged();
-    void visibilityChanged();
+    void opacityChanged(int f);
+    void visibilityChanged(int f);
     
 public slots:
     void setOpacity(int rel_frame, double op);
@@ -48,9 +49,6 @@ public slots:
     void setVisibility(int rel_frame, bool ch);
     
     void setNear(int near);
-    
-protected:
-    void update();
     
 private:
     QList<double> m_opacity;

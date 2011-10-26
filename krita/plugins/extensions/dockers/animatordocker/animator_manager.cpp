@@ -24,17 +24,16 @@
 
 #include "animator_loader.h"
 #include "animator_switcher.h"
-#include "animator_updater.h"
+#include "animator_lt_updater.h"
 #include "animator_player.h"
 
-#include <kis_debug.h>
 #include "normal_animated_layer.h"
 
 AnimatorManager::AnimatorManager(KisImage* image)
 {
     m_loader = new AnimatorLoader(this);
     m_switcher = new AnimatorSwitcher(this);
-    m_updater = new AnimatorUpdater(this);
+    m_updater = new AnimatorLTUpdater(this);
     m_player = new AnimatorPlayer(this);
     
     m_image = image;

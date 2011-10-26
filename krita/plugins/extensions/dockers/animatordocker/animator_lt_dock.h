@@ -31,8 +31,9 @@
 
 #include "animator_lt.h"
 #include "lt_slider.h"
+#include "animator_manager.h"
 
-class AnimatorLTDock : public QDockWidget //, public KoCanvasObserverBase
+class AnimatorLTDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 
@@ -41,13 +42,18 @@ public:
     virtual ~AnimatorLTDock();
     
 public:
-//     void setLT(AnimatorLT* table);
+    virtual void setCanvas(KoCanvasBase* canvas);
+    virtual void unsetCanvas();
     
 public slots:
-    void slidersUpdate();
+    virtual void slidersUpdate();
+    
+protected:
+    virtual void setLT(AnimatorLT* table);
     
 private:
     AnimatorLT* m_ltable;
+    AnimatorManager* m_manager;
     
 private:        // GUI
     QVBoxLayout* m_layout;

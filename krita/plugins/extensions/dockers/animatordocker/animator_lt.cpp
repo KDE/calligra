@@ -37,15 +37,18 @@ AnimatorLT::~AnimatorLT()
 
 double AnimatorLT::getOpacity(int rel_frame)
 {
-    update();
     if (std::abs(rel_frame) > m_near)
         return 0.0;
     return m_opacity[std::abs(rel_frame)*2+(rel_frame < 0)];
 }
 
+int AnimatorLT::getOpacityU8(int rel_frame)
+{
+    return getOpacity(rel_frame)*255;
+}
+
 bool AnimatorLT::getVisibility(int rel_frame)
 {
-    update();
     if (std::abs(rel_frame) > m_near)
         return false;
     return m_vis[std::abs(rel_frame)*2+(rel_frame < 0)];
@@ -55,7 +58,7 @@ void AnimatorLT::setOpacity(int rel_frame, double op)
 {
 //     std::cout << op << std::endl;
     m_opacity[std::abs(rel_frame)*2+(rel_frame < 0)] = op;
-    emit opacityChanged();
+    emit opacityChanged(rel_frame);
 }
 
 void AnimatorLT::setOpacity(int rel_frame, int op)
@@ -67,7 +70,7 @@ void AnimatorLT::setOpacity(int rel_frame, int op)
 void AnimatorLT::setVisibility(int rel_frame, bool ch)
 {
     m_vis[std::abs(rel_frame)*2+(rel_frame < 0)] = ch;
-    emit visibilityChanged();
+    emit visibilityChanged(rel_frame);
 }
 
 void AnimatorLT::setNear(int near)
@@ -90,12 +93,4 @@ void AnimatorLT::setNear(int near)
 int AnimatorLT::getNear()
 {
     return m_near;
-}
-
-void AnimatorLT::update()
-{
-    if (!m_manually)
-    {
-        // 
-    }
 }

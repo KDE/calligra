@@ -53,6 +53,11 @@ AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image, KisCanvas2*
     
 }
 
+AnimatorManager* AnimatorManagerFactory::getManager(KisCanvas2* canvas)
+{
+    return getManager(canvas->image().data(), canvas);
+}
+
 AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image)
 {
     if (! m_instances[image])
