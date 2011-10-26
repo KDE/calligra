@@ -1,0 +1,45 @@
+Player:
+[+] basic player
+[+] fps
+[+] looping
+[-] control layers
+
+Interpolation:
+[+] moving
+[+] transparency
+[-] transform
+[-] shapes
+
+View:
+[+] basic view
+[+] frames displaying
+[+] position displaying
+[+] columns resizing
+[-] frames full dislaying
+[-] view layers
+[-] view audio layers
+
+Frame manupulation:
+[+] add/clean frames
+[-] work with selections
+
+LT:
+[+] basic light table
+[-] keyframed mode
+[-] additional filters for lt
+
+GUI:
+[+] actions
+[+] control docker
+[+] view
+[-] vertical view
+[-] drag&drop
+
+Export:
+[-] basic png export
+[-] export without dialogs
+[-] export through imagemagick&ffmpeg
+
+Import:
+[-] import image sequences
+[-] import trough imagemagick&ffmpeg

@@ -20,6 +20,7 @@
 #include "animator_model.h"
 
 #define BASE_COLUMNS_NUMBER 1
+#define BASE_ROWS_COUNT 1
 
 #include "framed_animated_layer.h"
 #include "animator_manager_factory.h"
@@ -109,6 +110,13 @@ void AnimatorModel::setFrameWidth(int width)
 
 QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
 {
+    // The topmost row is really the header
+    if (ind.row() == 0 && !ind.parent().isValid())
+    {
+        if (role != Qt::BackgroundRole)
+            return headerData(ind.column(), Qt::Horizontal, role);
+    }
+    
     // layers, not frames
     if (ind.column() == 0)
     {
@@ -157,7 +165,10 @@ int AnimatorModel::rowCount(const QModelIndex& parent) const
     
     if (!parent.isValid() || (parent.column() == 0 && pnode && !qobject_cast<AnimatedLayer*>(pnode)))
     {
-        return pnode->childCount();
+        int count = pnode->childCount();
+        if (!parent.isValid())
+            count += BASE_ROWS_COUNT;
+        return count;
     }
     return 0;
 }
@@ -193,7 +204,15 @@ KisNode* AnimatorModel::nodeFromIndex(const QModelIndex& index) const
     KisNode* parent = (KisNode*)index.internalPointer();
     if (!parent)
         return 0;
-    KisNode* node = parent->at(parent->childCount()-index.row()-1).data();
+    
+    if (index.row() == 0 && !parent->parent())
+        return 0;
+    
+    int childNum = parent->childCount()-index.row()-1;
+    if (!parent->parent())
+        childNum += BASE_ROWS_COUNT;
+    KisNode* node = parent->at(childNum).data();
+    
     if (index.column() != 0)
     {
         FramedAnimatedLayer* al = dynamic_cast<FramedAnimatedLayer*>(node);
@@ -212,5 +231,7 @@ QModelIndex AnimatorModel::indexFromNode(const KisNode* node) const
     if (!pnode)
         return QModelIndex();
     int row = pnode->childCount()-pnode->index(const_cast<KisNode*>(node))-1;
+    if (!pnode->parent())
+        row += BASE_ROWS_COUNT;
     return createIndex(row, 0, (void*)pnode);
 }

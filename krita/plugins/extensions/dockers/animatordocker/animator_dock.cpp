@@ -22,6 +22,7 @@
 #include <QBoxLayout>
 #include <qlayoutitem.h>
 #include <QSlider>
+#include <QHeaderView>
 
 #include <KoCanvasBase.h>
 
@@ -50,6 +51,7 @@ void AnimatorDock::setupUI()
     QVBoxLayout* mLayout = new QVBoxLayout(mainWidget);
     
     m_view = new AnimatorView;
+    m_view->header()->hide();
     mLayout->addWidget(m_view);
     
     QHBoxLayout* downLayout = new QHBoxLayout(mainWidget);
