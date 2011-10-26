@@ -20,6 +20,7 @@
 #include <KLocale>
 
 #include <QBoxLayout>
+#include <qlayoutitem.h>
 #include <QSlider>
 
 #include <KoCanvasBase.h>
@@ -51,12 +52,19 @@ void AnimatorDock::setupUI()
     m_view = new AnimatorView;
     mLayout->addWidget(m_view);
     
-    QSlider* columnWidthSlider = new QSlider(mainWidget);
+    QHBoxLayout* downLayout = new QHBoxLayout(mainWidget);
+    
+    QSlider* columnWidthSlider = new QSlider(Qt::Horizontal, mainWidget);
     columnWidthSlider->setRange(1, 64);
     columnWidthSlider->setValue(10);
-    columnWidthSlider->setOrientation(Qt::Horizontal);
+    columnWidthSlider->setPageStep(8);
+    columnWidthSlider->setMaximumWidth(128);
     connect(columnWidthSlider, SIGNAL(valueChanged(int)), SLOT(setFrameWidth(int)));
-    mLayout->addWidget(columnWidthSlider);
+    
+    downLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    downLayout->addWidget(columnWidthSlider);
+    
+    mLayout->addLayout(downLayout);
     
     mainWidget->setLayout(mLayout);
     
