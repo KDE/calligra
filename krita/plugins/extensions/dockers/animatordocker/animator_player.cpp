@@ -67,6 +67,7 @@ void AnimatorPlayer::play()
 void AnimatorPlayer::pause()
 {
     m_timer->stop();
+    m_manager->getUpdater()->playerModeOff();
     m_paused = true;
 }
 
@@ -74,7 +75,6 @@ void AnimatorPlayer::stop()
 {
     pause();
     // TODO: go to first frame
-    m_manager->getUpdater()->playerModeOff();
     m_paused = false;
 }
 

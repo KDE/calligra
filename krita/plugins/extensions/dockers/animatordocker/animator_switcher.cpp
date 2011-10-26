@@ -19,8 +19,6 @@
 
 #include "animator_switcher.h"
 
-#include <kis_debug.h>
-
 AnimatorSwitcher::AnimatorSwitcher(AnimatorManager* manager): QObject(manager)
 {
     m_frame = 0;
@@ -36,6 +34,5 @@ void AnimatorSwitcher::goFrame(int number)
     int old = m_frame;
     m_frame = number;
     
-    warnKrita << "emit frameChanged(" << old << "," << number << ")";
     emit frameChanged(old, number);
 }

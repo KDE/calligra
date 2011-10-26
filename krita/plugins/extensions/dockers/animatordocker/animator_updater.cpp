@@ -24,6 +24,7 @@
 AnimatorUpdater::AnimatorUpdater(AnimatorManager* manager) : QObject(manager)
 {
     m_manager = manager;
+    playerModeOff();
 }
 
 AnimatorUpdater::~AnimatorUpdater()
@@ -66,7 +67,11 @@ void AnimatorUpdater::update(int oldFrame, int newFrame)
 void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
 {
     FrameLayer* oldf = layer->getCachedFrame(oldFrame);
-    FrameLayer* newf = layer->getUpdatedFrame(newFrame);
+    FrameLayer* newf;
+    if (m_playerMode)
+        newf = layer->getCachedFrame(newFrame);
+    else
+        newf = layer->getUpdatedFrame(newFrame);
     
     if (oldf == newf && (!oldf || oldf->visible() && oldf->opacity() == 255))
         return;
