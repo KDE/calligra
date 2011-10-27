@@ -71,6 +71,7 @@ protected slots:
     
 public:
     virtual void setKraMetaInfo(AnimatorMetaInfo* info);
+    virtual void setKraMetaInfo();
     virtual AnimatorMetaInfo* kraMetaInfo();
     virtual AnimatorMetaInfo* metaInfo();
     

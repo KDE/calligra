@@ -80,6 +80,10 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(loadLayers()));
     addAction("util", t);
     
+    t = new QAction(SmallIcon("tool-animator"), i18n("Make this file animated"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(makeAnimated()));
+    addAction("util", t);
+    
     t = new QAction(SmallIcon("document-export"), i18n("Export to png sequence"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(exportFrames()));
     addAction("util", t);
@@ -142,6 +146,12 @@ void AnimatorActions::loadLayers()
     m_manager->getLoader()->loadAll();
     m_manager->getUpdater()->fullUpdate();
     m_manager->getSwitcher()->goFrame(0);
+}
+
+void AnimatorActions::makeAnimated()
+{
+    Q_ASSERT(m_manager);
+    m_manager->setKraMetaInfo();
 }
 
 void AnimatorActions::exportFrames()

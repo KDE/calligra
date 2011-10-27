@@ -63,7 +63,7 @@ void AnimatorLoader::loadAll()
     
     if (kminor < pminor)
     {
-        m_manager->setKraMetaInfo(plugin_info);
+        m_manager->setKraMetaInfo();
     } else if (kminor > pminor)
     {
         warnKrita << "this file can use some features of newer version of animator";

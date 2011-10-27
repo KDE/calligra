@@ -107,7 +107,19 @@ KisImage* AnimatorManager::image()
 void AnimatorManager::setKraMetaInfo(AnimatorMetaInfo* info)
 {
     KisNodeSP first = m_image->root()->lastChild();
-    first->setName("_animator_"+QString::number(info->getMajor())+"_"+QString::number(info->getMinor())+"_Please don't move this");
+    QString lname = "_animator_"+QString::number(info->getMajor())+"_"+QString::number(info->getMinor())+"_Please don't move this";
+    if (kraMetaInfo()->getMajor() < 0)
+    {
+        m_nodeManager->createNode("KisGroupLayer");
+        first = m_nodeManager->activeNode();
+        m_nodeManager->moveNodeAt(first, m_image->root(), m_image->root()->childCount());
+    }
+    first->setName(lname);
+}
+
+void AnimatorManager::setKraMetaInfo()
+{
+    setKraMetaInfo(metaInfo());
 }
 
 AnimatorMetaInfo* AnimatorManager::kraMetaInfo()
