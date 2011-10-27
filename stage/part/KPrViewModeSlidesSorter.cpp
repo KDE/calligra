@@ -173,8 +173,12 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 
     //install selection manager for Slides Sorter View and Custom Shows View
-    new KoSelectionManager(m_slidesSorterView);
+    m_slidesSorterSelectionManager = new KoSelectionManager(m_slidesSorterView);
     new KoSelectionManager(m_customSlideShowView);
+
+    QToolButton *duplicateButton = m_slidesSorterSelectionManager->addContextButton(i18n("Duplicate Slide"),QString("edit-copy"));
+
+    connect(duplicateButton, SIGNAL(clicked()), this, SLOT(duplicateSlide()));
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
@@ -722,4 +726,16 @@ void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
     customShowChanged(m_customSlideShowsList->currentIndex());
 
     connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+}
+
+void KPrViewModeSlidesSorter::duplicateSlide()
+{
+    QList<KoPAPageBase *> slides;
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterSelectionManager->currentIndex().row (), false);
+    if (page) {
+        slides.append(page);
+        updateActivePage(page);
+    }
+    m_slidesSorterModel->copySlides(slides);
+    editPaste();
 }

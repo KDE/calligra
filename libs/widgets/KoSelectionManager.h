@@ -30,6 +30,7 @@ class QAbstractItemView;
 class QItemSelection;
 class KoSelectionToggle;
 class QToolButton;
+class QHBoxLayout;
 class QRect;
 
 /**
@@ -46,13 +47,8 @@ public:
     KoSelectionManager(QAbstractItemView *parent);
     virtual ~KoSelectionManager();
     virtual bool eventFilter(QObject *watched, QEvent *event);
-
-public slots:
-    /**
-     * Resets the selection manager so that the toggle button gets
-     * invisible.
-     */
-    void reset();
+    QToolButton *addContextButton(QString text, QString iconName);
+    QModelIndex currentIndex();
 
 signals:
     /** Is emitted if the selection has been changed by the toggle button. */
@@ -60,11 +56,9 @@ signals:
 
 private slots:
     void slotEntered(const QModelIndex &index);
-    void slotEntered2(const QModelIndex &index);
     void slotViewportEntered();
     void setItemSelected();
     void slotRowsRemoved(const QModelIndex &parent, int start, int end);
-    void slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void updateHoverUi(const QModelIndex& index);
     void showContextBar(const QRect &rect);
     void updateToggleSelectionButton();
@@ -73,11 +67,10 @@ private:
     void applyPointingHandCursor();
     void restoreCursor();
     QAbstractItemView *m_view;
-    KoSelectionToggle *m_toggle;
-    bool m_connected;
     bool m_appliedPointingHandCursor;
     QModelIndex mIndexUnderCursor;
     QWidget *mContextBar;
     QToolButton *mToggleSelectionButton;
+    QHBoxLayout *m_Layout;
 };
 #endif // KOSELECTIONMANAGER_H

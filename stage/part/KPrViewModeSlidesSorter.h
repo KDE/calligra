@@ -28,6 +28,7 @@
 class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;
+class KoSelectionManager;
 class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
 class KPrSelectionManager;
@@ -148,6 +149,7 @@ private:
     QToolButton *m_buttonAddSlideToCurrentShow;
     QToolButton *m_buttonDelSlideFromCurrentShow;
     QComboBox *m_customSlideShowsList;
+    KoSelectionManager *m_slidesSorterSelectionManager;
 
 private slots:
     /** Changes the view active page to match the slides sorter current index*/
@@ -164,6 +166,8 @@ private slots:
 
     /** add a new slide after the current active page*/
     void addSlide();
+
+    void duplicateSlide();
 
     /** Rename current slide on Slides Sorter View */
     void renameCurrentSlide();
