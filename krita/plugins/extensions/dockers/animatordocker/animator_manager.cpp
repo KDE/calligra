@@ -103,6 +103,13 @@ KisImage* AnimatorManager::image()
     return m_image;
 }
 
+
+void AnimatorManager::setKraMetaInfo(AnimatorMetaInfo* info)
+{
+    KisNodeSP first = m_image->root()->lastChild();
+    first->setName("_animator_"+QString::number(info->getMajor())+"_"+QString::number(info->getMinor())+"_Please don't move this");
+}
+
 AnimatorMetaInfo* AnimatorManager::kraMetaInfo()
 {
     KisNodeSP first = m_image->root()->lastChild();

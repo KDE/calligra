@@ -58,6 +58,17 @@ void AnimatorLoader::loadAll()
         return;
     }
     
+    int kminor = kra_info->getMinor();
+    int pminor = plugin_info->getMinor();
+    
+    if (kminor < pminor)
+    {
+        m_manager->setKraMetaInfo(plugin_info);
+    } else if (kminor > pminor)
+    {
+        warnKrita << "this file can use some features of newer version of animator";
+    }
+    
     loadLayers(rootNode);
 }
 

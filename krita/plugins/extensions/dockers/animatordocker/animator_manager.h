@@ -70,6 +70,7 @@ protected slots:
     virtual void framesNumberCheck(AnimatedLayer* layer, int number);
     
 public:
+    virtual void setKraMetaInfo(AnimatorMetaInfo* info);
     virtual AnimatorMetaInfo* kraMetaInfo();
     virtual AnimatorMetaInfo* metaInfo();
     
