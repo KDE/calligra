@@ -61,6 +61,8 @@ protected slots:
     
     virtual void clearFrame();
     virtual void createPaintFrame();
+    virtual void createShapeFrame();
+    virtual void createGroupFrame();
     
     virtual void enableLT(bool v);
     

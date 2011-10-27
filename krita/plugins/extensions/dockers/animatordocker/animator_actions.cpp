@@ -119,6 +119,14 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
     addAction("frames", t);
     
+    t = new QAction(SmallIcon("bookmark-new"), i18n("Create shape frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(createShapeFrame()));
+    addAction("frames", t);
+    
+    t = new QAction(SmallIcon("folder-new"), i18n("Create group frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(createGroupFrame()));
+    addAction("frames", t);
+    
     // LIGHT TABLE
     t = new QAction(SmallIcon("document-properties"), i18n("Enable/disable light table (see additional docker)"), this);
     t->setCheckable(true);
@@ -231,6 +239,18 @@ void AnimatorActions::createPaintFrame()
 {
     Q_ASSERT(m_manager);
     m_manager->createFrame("KisPaintLayer");
+}
+
+void AnimatorActions::createShapeFrame()
+{
+    Q_ASSERT(m_manager);
+    m_manager->createFrame("KisShapeLayer");
+}
+
+void AnimatorActions::createGroupFrame()
+{
+    Q_ASSERT(m_manager);
+    m_manager->createFrame("KisGroupLayer");
 }
 
 
