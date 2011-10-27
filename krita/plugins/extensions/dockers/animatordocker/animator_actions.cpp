@@ -30,6 +30,7 @@
 #include "animator_manager.h"
 #include "animator_loader.h"
 #include "animator_player.h"
+#include "animator_exporter.h"
 #include "animator_updater.h"
 #include "animator_lt_updater.h"
 
@@ -77,6 +78,10 @@ void AnimatorActions::initActions()
     // UTIL
     t = new QAction(SmallIcon("system-run"), i18n("Load layers"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(loadLayers()));
+    addAction("util", t);
+    
+    t = new QAction(SmallIcon("document-export"), i18n("Export to png sequence"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(exportFrames()));
     addAction("util", t);
     
     // PLAYER
@@ -129,6 +134,12 @@ void AnimatorActions::loadLayers()
     m_manager->getLoader()->loadAll();
     m_manager->getUpdater()->fullUpdate();
     m_manager->getSwitcher()->goFrame(0);
+}
+
+void AnimatorActions::exportFrames()
+{
+    Q_ASSERT(m_manager);
+    m_manager->getExporter()->exportAll();
 }
 
 void AnimatorActions::playPause(bool v)

@@ -26,6 +26,7 @@
 #include "animator_switcher.h"
 #include "animator_lt_updater.h"
 #include "animator_player.h"
+#include "animator_exporter.h"
 
 #include "normal_animated_layer.h"
 
@@ -35,6 +36,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_switcher = new AnimatorSwitcher(this);
     m_updater = new AnimatorLTUpdater(this);
     m_player = new AnimatorPlayer(this);
+    m_exporter = new AnimatorExporter(this);
     
     m_image = image;
     m_nodeManager = 0;
@@ -55,6 +57,7 @@ AnimatorManager::~AnimatorManager()
 void AnimatorManager::setCanvas(KoCanvasBase* canvas)
 {
     m_nodeManager = dynamic_cast<KisCanvas2*>(canvas)->view()->nodeManager();
+    m_exporter->setCanvas(canvas);
 }
 
 void AnimatorManager::unsetCanvas()
@@ -87,6 +90,11 @@ AnimatorUpdater* AnimatorManager::getUpdater()
 AnimatorPlayer* AnimatorManager::getPlayer()
 {
     return m_player;
+}
+
+AnimatorExporter* AnimatorManager::getExporter()
+{
+    return m_exporter;
 }
 
 

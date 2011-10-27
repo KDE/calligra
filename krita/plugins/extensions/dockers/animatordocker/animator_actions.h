@@ -47,6 +47,7 @@ protected:
     
 protected slots:
     virtual void loadLayers();
+    virtual void exportFrames();
     
     virtual void playPause(bool v);
     virtual void toggleLooping(bool v);
