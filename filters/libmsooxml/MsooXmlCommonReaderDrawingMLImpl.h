@@ -1817,127 +1817,125 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // list-items in ODF.
     if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_CPP
-         if (m_prevListLevel < m_currentListLevel) {
-             if (m_prevListLevel > 0) {
-                 // Because there was an existing list, we need to start ours with list:item
-                 body->startElement("text:list-item");
-             }
-             for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
-                 body->startElement("text:list");
-                 if (listDepth == 0) {
-                     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-                         m_currentListStyle.setAutoStyleInStylesDotXml(true);
-                     }
-                     QString listStyleName = mainStyles->insert(m_currentListStyle);
-                     Q_ASSERT(!listStyleName.isEmpty());
-                     body->addAttribute("text:style-name", listStyleName);
-                     m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
-                     if (m_continueListNumbering.contains(m_currentListLevel) &&
-                         m_continueListNumbering[m_currentListLevel])
-                     {
-                         body->addAttribute("text:continue-numbering", "true");
-                     }
-                 }
-                 body->startElement("text:list-item");
-             }
-         } else if (m_prevListLevel > m_currentListLevel) {
-             body->endElement(); // This ends the latest list text:list
-             for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
-                 //Ending any additional list levels needed
-                 body->endElement(); // text:list-item
-                 body->endElement(); // text:list
-             }
-             // Starting our own stuff for this level
-             if (m_currentListLevel > 0) {
-                 body->endElement(); // revoving last lists text:list-item
-                 body->startElement("text:list-item");
-             }
-         } else { // m_prevListLevel==m_currentListLevel
-             body->startElement("text:list-item");
-         }
+        if (m_prevListLevel < m_currentListLevel) {
+            if (m_prevListLevel > 0) {
+                // Because there was an existing list, we need to start ours with list:item
+                body->startElement("text:list-item");
+            }
+            for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+                body->startElement("text:list");
+                if (listDepth == 0) {
+                    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                        m_currentListStyle.setAutoStyleInStylesDotXml(true);
+                    }
+                    QString listStyleName = mainStyles->insert(m_currentListStyle);
+                    Q_ASSERT(!listStyleName.isEmpty());
+                    body->addAttribute("text:style-name", listStyleName);
+                    m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
+                    if (m_continueListNumbering.contains(m_currentListLevel) &&
+                        m_continueListNumbering[m_currentListLevel])
+                    {
+                        body->addAttribute("text:continue-numbering", "true");
+                    }
+                }
+                body->startElement("text:list-item");
+            }
+        } else if (m_prevListLevel > m_currentListLevel) {
+            body->endElement(); // This ends the latest list text:list
+            for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
+                //Ending any additional list levels needed
+                body->endElement(); // text:list-item
+                body->endElement(); // text:list
+            }
+            // Starting our own stuff for this level
+            if (m_currentListLevel > 0) {
+                body->endElement(); // revoving last lists text:list-item
+                body->startElement("text:list-item");
+            }
+        } else { // m_prevListLevel==m_currentListLevel
+            body->startElement("text:list-item");
+        }
 #else
-         for (int i = 0; i < m_currentListLevel; ++i) {
-             body->startElement("text:list");
-             // TODO:, should most likely add the name of the current list style
-             body->startElement("text:list-item");
-         }
+        for (int i = 0; i < m_currentListLevel; ++i) {
+            body->startElement("text:list");
+            // TODO:, should most likely add the name of the current list style
+            body->startElement("text:list-item");
+        }
 #endif
-         if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
-             m_continueListNumbering[m_currentListLevel] = true;
-         }
-     }
+        if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+            m_continueListNumbering[m_currentListLevel] = true;
+        }
+    }
 
     // Position of the list-item defined by fo:margin-left and fo:text-indent
     // in the style:list-level-properties element.  In ODF the paragraph style
     // overrides the list style.
-     if (m_currentListLevel > 0) {
-         m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
-         m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
-     }
+    if (m_currentListLevel > 0) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+    }
 
-     body->startElement("text:p", false);
+    body->startElement("text:p", false);
 
-     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
-     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
-     // refers to the corresponding margin of a parent style.  Let's convert
-     // the percentage value into points to keep it simple.
-     //
-     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
-     if (spcBef.contains("%")) {
-         spcBef.remove("%");
-         qreal percentage = spcBef.toDouble();
-         qreal margin = 0;
+    // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
+    // In ODF the value of margin-top/margin-bottom MAY be a percentage that
+    // refers to the corresponding margin of a parent style.  Let's convert
+    // the percentage value into points to keep it simple.
+    //
+    QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
+    if (spcBef.contains("%")) {
+        spcBef.remove("%");
+        qreal percentage = spcBef.toDouble();
+        qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-         margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFont);
 #else
-         margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_largestParaFont) / 100.0;
 #endif
-     m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
-     }
-     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
-     if (spcAft.contains("%")) {
-         spcAft.remove("%");
-         qreal percentage = spcAft.toDouble();
-         qreal margin = 0;
+    m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
+    }
+    QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
+    if (spcAft.contains("%")) {
+        spcAft.remove("%");
+        qreal percentage = spcAft.toDouble();
+        qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-         margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFont);
 #else
-         margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_largestParaFont) / 100.0;
 #endif
-         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
-     }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
+    }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-         m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
-     }
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
+    }
 #endif
-     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
-     body->addAttribute("text:style-name", currentParagraphStyleName);
+    QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+    body->addAttribute("text:style-name", currentParagraphStyleName);
 
-     (void)textPBuf.releaseWriter();
-     body->endElement(); //text:p
+    (void)textPBuf.releaseWriter();
+    body->endElement(); //text:p
 #ifdef PPTXXMLSLIDEREADER_CPP
-     // We should end our own list level
-     if (m_currentListLevel > 0) {
-         body->endElement(); // text:list-item
-     }
-
-     m_prevListLevel = m_currentListLevel;
-
+    // We should end our own list level
+    if (m_currentListLevel > 0) {
+        body->endElement(); // text:list-item
+    }
+    m_prevListLevel = m_currentListLevel;
 #else
-     // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
-     // and excel filters still need to be adjusted to proper handle nested lists.
-     const bool closeList = true;
-     if (closeList) {
-         for(int i = 0; i < m_currentListLevel; ++i) {
-             body->endElement(); // text:list-item
-             body->endElement(); // text:list
-         }
-         m_prevListLevel = m_currentListLevel = 0;
-     } else {
-         m_prevListLevel = m_currentListLevel;
-     }
+    // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
+    // and excel filters still need to be adjusted to proper handle nested lists.
+    const bool closeList = true;
+    if (closeList) {
+        for(int i = 0; i < m_currentListLevel; ++i) {
+            body->endElement(); // text:list-item
+            body->endElement(); // text:list
+        }
+        m_prevListLevel = m_currentListLevel = 0;
+    } else {
+        m_prevListLevel = m_currentListLevel;
+    }
 #endif
     READ_EPILOGUE
 }
