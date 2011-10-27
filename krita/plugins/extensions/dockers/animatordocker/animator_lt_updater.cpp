@@ -75,6 +75,15 @@ void AnimatorLTUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newF
 
 void AnimatorLTUpdater::updateRelFrame(int relFrame)
 {
+    if (mode() == AnimatorLTUpdater::Disabled)
+        return;
+    
+    if (mode() == AnimatorLTUpdater::KeyFramed)
+    {
+        warnKrita << "KeyFramed mode is not supported yet";
+        return;
+    }
+    
     int cFrame = m_manager->getSwitcher()->currentFrame();
     QList<AnimatedLayer*> layers = m_manager->layers();
     AnimatedLayer* layer;
