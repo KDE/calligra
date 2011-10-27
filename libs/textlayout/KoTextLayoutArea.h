@@ -184,6 +184,8 @@ private:
 
     bool layoutBlock(FrameIterator *cursor);
 
+    bool presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue);
+
     /// Returns vertical height of line
     qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);
 
@@ -194,7 +196,7 @@ private:
 
     void drawListItem(QPainter *painter, const QTextBlock &block);
 
-    void decorateParagraph(QPainter *painter, const QTextBlock &block);
+    void decorateParagraph(QPainter *painter, const QTextBlock &block, bool showFormattingCharacter);
 
     void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
@@ -202,7 +204,7 @@ private:
 
     void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
-    int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
+    int decorateTabsAndFormatting(QPainter *painter, const QTextFragment& currentFragment, const QTextLine &line, const int startOfFragmentInBlock, const QVariantList& tabList, int currentTabStop, bool showFormattingCharacter);
 
     void handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block);
 
@@ -225,7 +227,6 @@ private:
     qreal m_x; // text area starts here as defined by margins (so not == m_left)
     qreal m_y;
     qreal m_width; // of text area as defined by margins (so not == m_right - m_left)
-    qreal m_listIndent;
     qreal m_indent;
     qreal m_dropCapsWidth;
     int m_dropCapsNChars;

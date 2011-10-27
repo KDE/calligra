@@ -33,6 +33,7 @@
 #include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 #include <KoListLevelProperties.h>
+#include <KoShapePaintingContext.h>
 
 #include <KDebug>
 
@@ -97,7 +98,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 SimpleParagraphWidget::~SimpleParagraphWidget()
 {
     delete m_thumbnailer;
-    delete m_stylePopup;
 }
 
 void SimpleParagraphWidget::directionChangeRequested()
@@ -204,7 +204,8 @@ void SimpleParagraphWidget::fillListButtons()
             if(lay)
                 lay->layout();
 
-            textShape.paintComponent(p, zoomHandler);
+            KoShapePaintingContext paintContext; //FIXME
+            textShape.paintComponent(p, zoomHandler, paintContext);
             if(KoListStyle::isNumberingStyle(item.style)) {
                 widget.numberedListButton->addItem(pm, static_cast<int> (item.style));
             } else {

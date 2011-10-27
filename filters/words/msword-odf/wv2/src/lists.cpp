@@ -685,14 +685,14 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
 
     tableStream->push();
     if ( fib.lcbPlcfLst != 0 ) {
-        tableStream->seek( fib.fcPlcfLst, G_SEEK_SET );
+        tableStream->seek( fib.fcPlcfLst, WV2_SEEK_SET );
         readListData( tableStream, fib.fcPlcfLst + fib.lcbPlcfLst );
     }
     if ( fib.lcbPlfLfo != 0 ) {
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcPlfLfo ) {
             wvlog << "Found a \"hole\" within the table stream (list data): current="
                   << tableStream->tell() << " expected=" << fib.fcPlfLfo << endl;
-            tableStream->seek( fib.fcPlfLfo, G_SEEK_SET );
+            tableStream->seek( fib.fcPlfLfo, WV2_SEEK_SET );
         }
         readListFormatOverride( tableStream );
     }
@@ -708,7 +708,7 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcSttbListNames ) {
             wvlog << "Found a \"hole\" within the table stream (list format override): current="
                   << tableStream->tell() << " expected=" << fib.fcSttbListNames << endl;
-            tableStream->seek( fib.fcSttbListNames, G_SEEK_SET );
+            tableStream->seek( fib.fcSttbListNames, WV2_SEEK_SET );
         }
         readListNames( tableStream );
     }
@@ -840,8 +840,8 @@ void ListInfoProvider::readListNames( OLEStreamReader* tableStream )
 
 void ListInfoProvider::eatLeading0xff( OLEStreamReader* tableStream )
 {
-    while ( tableStream->readU8() == 0xff ) { }
-    tableStream->seek( -1, G_SEEK_CUR ); // rewind the stream
+    while ( tableStream->readU8() == 0xff ) {}
+    tableStream->seek( -1, WV2_SEEK_CUR ); // rewind the stream
 }
 
 void ListInfoProvider::processOverride( ListFormatOverride* lfo )

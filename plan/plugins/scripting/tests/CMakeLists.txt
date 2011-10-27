@@ -10,7 +10,7 @@ set (ScriptingTester_SRCS ScriptingTester.cpp TestResult.cpp)
 kde4_add_unit_test(ScriptingTester TESTNAME Plan-ScriptingTester  ${ScriptingTester_SRCS})
 
 target_link_libraries(ScriptingTester 
-        krossmodulekplato
+        krossmoduleplan
         planprivate
         kplatokernel
         kokross

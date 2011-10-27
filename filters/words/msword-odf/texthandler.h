@@ -74,7 +74,7 @@ class WordsTextHandler : public QObject, public wvWare::TextHandler
     Q_OBJECT
 public:
     WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~WordsTextHandler() { }
+    ~WordsTextHandler();
 
     //////// TextHandler interface
 
@@ -425,7 +425,7 @@ private:
 
         //set to UNSUPPORTED for a field we can't handle, anything else is the field type
         fldType m_type;
-        
+
         //other field related variables
         bool m_insideField;
         bool m_afterSeparator;
@@ -440,7 +440,7 @@ private:
         //KoGenStyle name for the <text:span> element encapsulating content of the
         //processed field (if applicable)
         QString m_styleName;
-        
+
         //stores field instructions
         QString m_instructions;
 

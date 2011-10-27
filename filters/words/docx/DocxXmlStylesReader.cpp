@@ -537,7 +537,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
     if (type == "firstRow") {
         // In docx predefined styles for first row, even though it may define insideV to be 0 and bottom
         // border to have something, it in reality wishes insideV to also contain the bottom data
-        if (m_currentStyleProperties->insideH.width == 0) {
+        if (m_currentStyleProperties->insideH.innerPen.widthF() == 0) {
             m_currentStyleProperties->insideH = m_currentStyleProperties->bottom;
         }
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstRow, m_currentStyleProperties);
@@ -558,7 +558,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band2Vertical, m_currentStyleProperties);
     }
     else if (type == "firstCol") {
-        if (m_currentStyleProperties->insideV.width == 0) {
+        if (m_currentStyleProperties->insideV.innerPen.widthF() == 0) {
             m_currentStyleProperties->insideV = m_currentStyleProperties->right;
         }
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstCol, m_currentStyleProperties);

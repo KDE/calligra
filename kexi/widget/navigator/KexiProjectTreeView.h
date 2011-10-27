@@ -33,6 +33,7 @@ namespace KexiPart
     class Item;
     class Part;
 }
+class KexiProjectModel;
 
 /*! @internal */
 class KexiProjectTreeView : public QTreeView
@@ -42,8 +43,14 @@ public:
     KexiProjectTreeView(QWidget *parent);
     virtual ~KexiProjectTreeView();
 
-    bool nameEndsWithAsterisk;
-};
+    using QTreeView::setModel;
+    void setModel(KexiProjectModel *model);
 
+    bool nameEndsWithAsterisk;
+
+protected slots:
+    void slotHighlightSearchedItem(const QModelIndex &index);
+    void slotActivateSearchedItem(const QModelIndex &index);
+};
 
 #endif

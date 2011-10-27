@@ -174,6 +174,7 @@ public slots:
     void slotEditCopy();
 
 protected slots:
+    void contextMenuEvent ( QContextMenuEvent *e );
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
@@ -206,11 +207,16 @@ public:
     virtual bool loadContext( const KoXmlElement &/*context*/ );
     /// Save context info from this view.
     virtual void saveContext( QDomElement &/*context*/ ) const;
-    
+
+signals:
+    void editNode( Node *node );
+    void editResource( Resource *resource );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     void slotEditCopy();
+    void slotEdit();
 
 protected slots:
     virtual void slotOptions();
@@ -248,6 +254,8 @@ public:
 
 signals:
     void currentScheduleManagerChanged( ScheduleManager* );
+    void editNode( Node *node );
+    void editResource( Resource *resource );
 
 public slots:
     /// Activate/deactivate the gui (also of subviews)

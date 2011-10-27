@@ -89,7 +89,8 @@ class TextToolSelection : public KoToolSelection
 public:
 
     TextToolSelection(QWeakPointer<KoTextEditor> editor)
-        : m_editor(editor)
+        : KoToolSelection(0)
+        , m_editor(editor)
     {
     }
 
@@ -171,7 +172,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
-            KAction *a = new KAction(i18n("Apply %1", factory->title()), this);
+            KAction *a = new KAction(factory->title(), this);
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             list.append(a);
@@ -736,21 +737,22 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    if (event->button() != Qt::RightButton)
-        updateSelectedShape(event->point);
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
-        selection->deselectAll();
-        selection->select(m_textShape);
-    }
-
     const bool canMoveCaret = !m_textEditor.data()->hasSelection() || event->button() !=  Qt::RightButton;
     if (canMoveCaret) {
-        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if (m_textEditor.data()->hasSelection())
             repaintSelection(); // will erase selection
         else
             repaintCaret();
+
+        updateSelectedShape(event->point);
+
+        KoSelection *selection = canvas()->shapeManager()->selection();
+        if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
+            selection->deselectAll();
+            selection->select(m_textShape);
+        }
+
+        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         KoPointedAt pointedAt = hitTest(event->point);
         if (pointedAt.position != -1) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);

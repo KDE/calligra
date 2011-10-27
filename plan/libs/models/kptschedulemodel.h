@@ -37,6 +37,8 @@ class Project;
 class ScheduleManager;
 class MainSchedule;
 class Schedule;
+class Node;
+class Resource;
 
 class KPLATOMODELS_EXPORT ScheduleModel : public QObject
 {
@@ -52,7 +54,6 @@ public:
         ScheduleDirection,
         ScheduleOverbooking,
         ScheduleDistribution,
-//        ScheduleCalculate,
         SchedulePlannedStart,
         SchedulePlannedFinish,
         ScheduleScheduler,
@@ -132,9 +133,6 @@ protected:
     QVariant usePert( const QModelIndex &index, int role ) const;
     bool setUsePert( const QModelIndex &index, const QVariant &value, int role );
 
-    QVariant calculateAll( const QModelIndex &index, int role ) const;
-    bool setCalculateAll( const QModelIndex &index, const QVariant &value, int role );
-
     QVariant projectStart( const QModelIndex &index, int role ) const;
     QVariant projectEnd( const QModelIndex &index, int role ) const;
 
@@ -175,6 +173,8 @@ class KPLATOMODELS_EXPORT ScheduleLogItemModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
+    enum DataRoles { SeverityRole = Qt::UserRole + 1, IdentityRole };
+
     explicit ScheduleLogItemModel( QObject *parent = 0 );
     ~ScheduleLogItemModel();
 
@@ -187,6 +187,8 @@ public:
 
     void refresh();
     
+    QString identity( const QModelIndex &idx ) const;
+
 protected slots:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );

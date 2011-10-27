@@ -22,7 +22,7 @@ tool helps to inspect changes.  Type the following lines:
 
 $ find dir1 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" > dir1.txt
 $ find dir2 -type f -exec md5sum {} \; | sed "s/ [^\/]*\// /" > dir2.txt
-$ diff -u dir1.txt dir2.txt | grep "^+[0-9a-f]" | sed -e "s/[^ ]* //" -e "s/.check\/thumb_/ /" -e "s/\.png$//" > dirdiff.txt
+$ diff -u dir1.txt dir2.txt | grep "^+[0-9a-f]" | sed -e "s/[^ ]* //" -e "s/.check\/thumb_/ /" -e "s/\.png$//" | awk '{if (a==$1) {printf(" %d", $2)} else {printf("\n%s", $0)}; a=$1} END{printf("\n")}' > dirdiff.txt
 $ visualimagecompare dir1 dir2 dirdiff.txt
 
 Note: While scree-shots are being prepared, you can type the following command
@@ -33,11 +33,6 @@ $ tail -f /tmp/processing.txt 2>/dev/null
 
 Note: Once the verification in step 3 is finished, the failed.txt file contains
 a list of test files with different screen-shots between step 2 and step 3.
-
-Note: To prepare a report after step 4, containing the name of the test file and
-a sequence of page numbers which changed, use the following Awk command:
-
-$ awk '{if (a==$1) {printf(" %d", $2)} else {printf("\n%s", $0)}; a=$1} END{printf("\n")}' dirdiff.txt > report.txt
 
 
 cstester scripts
@@ -78,7 +73,7 @@ $ ../verifydocs.sh ../results/sha-of-commit1 ../results/sha-of-commit2
 $ cat tester/verify-sha-of-commit1-sha-of-commit2.log
 
 The log file contains a list of test files and pages therein, which changed.
-The information can be used with the visualimagecompare script.  Use the
+The information can be used with the visualimagecompare tool.  Use the
 following format:
 
 $ visualimagecompare file-name page_x page_y
@@ -93,36 +88,49 @@ calligra or when the allowed amount of time or CPU usage has been exceeded.
 The md5.txt file providing the ms5sums of generated thumbnails is created in
 each output directory.  The following scripts are used by cstrunner:
 
-cstwrapper - Limits the resources cstester is allowed to use and makes sure the
-correct exit code is returned to cstrunner.
+cstwrapper.sh - Limits the resources cstester is allowed to use and makes sure
+the correct exit code is returned to cstrunner.
 
-cstmd5gen - Generates md5sums for a given thumbnail directory and stores them
-into the md5.txt file.
+cstmd5gen.sh - Generates md5sums for a given thumbnail directory and stores
+them into the md5.txt file.
 
-Please make sure this scripts are in the path when running cstrunner.
+Note: Make sure the mentioned scripts are in your $PATH variable when running
+cstrunner.
 
-Run cstrunner
 
-cstrunner docDir resultDir concurrentProcesses
+Use the following format:
 
-e.g.
-
-cstrunner . ../result/sha1 4
-
-To run over all documents in the current directory and put the thumbnails in to ../result/sha1 with 4 concurrent processes
-
-Do your changes and run it again
-
-cstrunner . ../result/sha2 4
-
-To create the input file for visualimagecomapre use the script 
-
-cstmd5diff.sh <documents dir> <previous result dir> <current result dir>
+$ cstrunner docDir resultDir concurrentProcesses
 
 e.g.
 
-cstmd5diff.sh . ../sha1 ../sha2 > md5-sha1-sha2.log
+$ cstrunner . ../result/sha1 4
 
-and then use 
+To run over all documents in the current directory and put the thumbnails in to
+../result/sha1 with 4 concurrent processes.
 
-visualimagecompare ../sha1 ../sha2 md5-sha1-sha2.log
+Do your changes and run it again:
+
+$ cstrunner . ../result/sha2 4
+
+
+To create the input file for visualimagecomapre use the cstmd5diff.sh script:
+
+$ cstmd5diff.sh <documents dir> <previous result dir> <current result dir>
+
+e.g.
+
+$ cstmd5diff.sh . ../results/sha1 ../results/sha2 > md5-sha1-sha2.log
+$ visualimagecompare ../results/sha1 ../results/sha2 md5-sha1-sha2.log
+
+
+visualimagecompare
+------------------
+
+PageUp, n	Move to the next page of the current document
+PageDown, b	Move to the previous page of the current document
+Up	  	Move to the previous document
+Down		Move to the next document
+Left		Switch to the left tab
+Right		Switch to the right tab
+Space		Switch between tabs

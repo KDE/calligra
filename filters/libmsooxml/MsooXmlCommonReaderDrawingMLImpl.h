@@ -701,6 +701,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
 
+    // FIXME: The draw:fit-to-size attribute specifies whether to stretch the
+    // text content of a drawing object to fill an entire object.  The
+    // style:shrink-to-fit attribute specifies whether content is reduced in
+    // size to fit within a cell or drawing object.  Shrinking means that the
+    // font size of the content is decreased to fit the content into a cell or
+    // drawing object.  That's needed to be compatible with MS PowerPoint.  Any
+    // margin, padding or indent MUST be retained.
     if (m_normAutofit == MSOOXML::Utils::autoFitOn) {
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
@@ -767,7 +774,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
-
     inheritShapePosition();
 
     if (m_context->type == Slide) {
@@ -1055,7 +1061,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #undef CURRENT_EL
 #define CURRENT_EL style
 //! style handler (Shape style)
-/*
+/*! ECMA-376, 21.3.2.24, p. 3943
+
  Parent elements:
  - [done] cxnSp (§19.3.1.19);
  - [done] pic (§19.3.1.37);
@@ -1064,7 +1071,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
  Child elements:
  - effectRef (Effect Reference) §20.1.4.2.8
  - [done] fillRef (Fill Reference) §20.1.4.2.10
- . [done] fontRef (Font Reference) §20.1.4.1.17
+ - [done] fontRef (Font Reference) §20.1.4.1.17
  - [done] lnRef (Line Reference) §20.1.4.2.19
 
 */
@@ -1692,18 +1699,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 TRY_READ(fld)
             }
             else if (QUALIFIED_NAME_IS(endParaRPr)) {
-#ifdef PPTXXMLSLIDEREADER_CPP
-                if (!m_insideTable) {
-                    inheritDefaultTextStyle(m_currentParagraphStyle);
-                    inheritTextStyle(m_currentParagraphStyle);
-                }
-#endif
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (!m_insideTable) {
+                    inheritTextStyle(m_currentTextStyle);
+                }
+#endif
                 TRY_READ(endParaRPr)
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
+
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
                 fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
                 if (!fontSize.isEmpty()) {
@@ -1723,7 +1731,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!pprRead) {
-        inheritDefaultParagraphStyle(m_currentParagraphStyle);
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
@@ -1763,17 +1770,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
-    // NOTE: Commented out for now, as this creates completely new lists which
-    // is not wanted.  Maybe the correct behaviour would be to default to text
-    // color of the text in calligra instead of using this.
-    //
-    // FIXME: The PowerPoint UI enables to change the color of a bullet/number
-    // so we have to respect the information.  If no color for the
-    // bullet/number is provided, then the font color of the 1st text chunk
-    // MUST be used.  Help the layout a bit and provide the information here.
-    // In case of MS Word, the font color from text properties of the paragraph
-    // MUST be used.
 
+    // MS PowerPoint enables the user to change the color of the label.
+    // If the color information is not provided, then the font color of the 1st
+    // text chunk MUST be used.  In case of MS Word, the font color from
+    // text-properties of the paragraph MUST be used.  To help the layout a bit
+    // the information could be provided here.
+    //
+    // NOTE: Commented out for now, as this creates completely new lists which
+    // is not wanted.  An the layout part must support files created by LO/OOo.
+    //
 /*     if (m_currentBulletProperties.bulletColor() == "UNUSED") { */
 /*         m_listStylePropertiesAltered = true; */
 /*         if (!bulletColor.isEmpty()) { */
@@ -1792,18 +1798,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_previousListWasAltered = true;
     }
 
-    // Making sure that if we were previously in a list and if there's an empty
-    // line, that we don't output a bullet to it.
-    if (!rRead) {
-        m_currentListLevel = 0;
+    // A list-item without a numbering style or a bullet character/picture
+    // defined.  MS PowerPoint treats each paragraph as a list-item.
+    if (m_currentBulletProperties.isEmpty()) {
         m_continueListNumbering.clear();
     }
-    else if ((!m_listStylePropertiesAltered &&
-              m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty()) ||
-             (m_listStylePropertiesAltered && m_currentBulletProperties.isEmpty()))
-    {
-        m_currentListLevel = 0;
+
+    // Empty paragraph is NOT considered to be a list-item at the moment.
+    // Prevent stage of displaying a bullet in front of it.
+    if (!rRead) {
         m_continueListNumbering.clear();
+        m_currentListLevel = 0;
     }
 
     // In MSOffice it's possible that a paragraph defines a list-style that
@@ -1812,126 +1817,125 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // list-items in ODF.
     if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_CPP
-         if (m_prevListLevel < m_currentListLevel) {
-             if (m_prevListLevel > 0) {
-                 // Because there was an existing list, we need to start ours with list:item
-                 body->startElement("text:list-item");
-             }
-             for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
-                 body->startElement("text:list");
-                 if (listDepth == 0) {
-                     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-                         m_currentListStyle.setAutoStyleInStylesDotXml(true);
-                     }
-                     QString listStyleName = mainStyles->insert(m_currentListStyle);
-                     Q_ASSERT(!listStyleName.isEmpty());
-                     body->addAttribute("text:style-name", listStyleName);
-                     m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
-                     if (m_continueListNumbering.contains(m_currentListLevel) &&
-                         m_continueListNumbering[m_currentListLevel])
-                     {
-                         body->addAttribute("text:continue-numbering", "true");
-                     }
-                 }
-                 body->startElement("text:list-item");
-             }
-         } else if (m_prevListLevel > m_currentListLevel) {
-             body->endElement(); // This ends the latest list text:list
-             for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
-                 //Ending any additional list levels needed
-                 body->endElement(); // text:list-item
-                 body->endElement(); // text:list
-             }
-             // Starting our own stuff for this level
-             if (m_currentListLevel > 0) {
-                 body->endElement(); // revoving last lists text:list-item
-                 body->startElement("text:list-item");
-             }
-         } else { // m_prevListLevel==m_currentListLevel
-             body->startElement("text:list-item");
-         }
+        if (m_prevListLevel < m_currentListLevel) {
+            if (m_prevListLevel > 0) {
+                // Because there was an existing list, we need to start ours with list:item
+                body->startElement("text:list-item");
+            }
+            for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+                body->startElement("text:list");
+                if (listDepth == 0) {
+                    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                        m_currentListStyle.setAutoStyleInStylesDotXml(true);
+                    }
+                    QString listStyleName = mainStyles->insert(m_currentListStyle);
+                    Q_ASSERT(!listStyleName.isEmpty());
+                    body->addAttribute("text:style-name", listStyleName);
+                    m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
+                    if (m_continueListNumbering.contains(m_currentListLevel) &&
+                        m_continueListNumbering[m_currentListLevel])
+                    {
+                        body->addAttribute("text:continue-numbering", "true");
+                    }
+                }
+                body->startElement("text:list-item");
+            }
+        } else if (m_prevListLevel > m_currentListLevel) {
+            body->endElement(); // This ends the latest list text:list
+            for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
+                //Ending any additional list levels needed
+                body->endElement(); // text:list-item
+                body->endElement(); // text:list
+            }
+            // Starting our own stuff for this level
+            if (m_currentListLevel > 0) {
+                body->endElement(); // revoving last lists text:list-item
+                body->startElement("text:list-item");
+            }
+        } else { // m_prevListLevel==m_currentListLevel
+            body->startElement("text:list-item");
+        }
 #else
-         for (int i = 0; i < m_currentListLevel; ++i) {
-             body->startElement("text:list");
-             // TODO:, should most likely add the name of the current list style
-             body->startElement("text:list-item");
-         }
+        for (int i = 0; i < m_currentListLevel; ++i) {
+            body->startElement("text:list");
+            // TODO:, should most likely add the name of the current list style
+            body->startElement("text:list-item");
+        }
 #endif
-         if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
-             m_continueListNumbering[m_currentListLevel] = true;
-         }
-     }
+        if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+            m_continueListNumbering[m_currentListLevel] = true;
+        }
+    }
 
-     // Positioning of list-items defined by fo:margin-left and fo:text-indent
-     // in the style:list-level-properties element.
-     if (m_currentListLevel > 0) {
-         m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
-         m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
-     }
+    // Position of the list-item defined by fo:margin-left and fo:text-indent
+    // in the style:list-level-properties element.  In ODF the paragraph style
+    // overrides the list style.
+    if (m_currentListLevel > 0) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+    }
 
-     body->startElement("text:p", false);
+    body->startElement("text:p", false);
 
-     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
-     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
-     // refers to the corresponding margin of a parent style.  Let's convert
-     // the percentage value into points to keep it simple.
-     //
-     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
-     if (spcBef.contains("%")) {
-         spcBef.remove("%");
-         qreal percentage = spcBef.toDouble();
-         qreal margin = 0;
+    // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
+    // In ODF the value of margin-top/margin-bottom MAY be a percentage that
+    // refers to the corresponding margin of a parent style.  Let's convert
+    // the percentage value into points to keep it simple.
+    //
+    QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
+    if (spcBef.contains("%")) {
+        spcBef.remove("%");
+        qreal percentage = spcBef.toDouble();
+        qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-         margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFont);
 #else
-         margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_largestParaFont) / 100.0;
 #endif
-     m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
-     }
-     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
-     if (spcAft.contains("%")) {
-         spcAft.remove("%");
-         qreal percentage = spcAft.toDouble();
-         qreal margin = 0;
+    m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
+    }
+    QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
+    if (spcAft.contains("%")) {
+        spcAft.remove("%");
+        qreal percentage = spcAft.toDouble();
+        qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-         margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFont);
 #else
-         margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_largestParaFont) / 100.0;
 #endif
-         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
-     }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
+    }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-         m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
-     }
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
+    }
 #endif
-     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
-     body->addAttribute("text:style-name", currentParagraphStyleName);
+    QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+    body->addAttribute("text:style-name", currentParagraphStyleName);
 
-     (void)textPBuf.releaseWriter();
-     body->endElement(); //text:p
+    (void)textPBuf.releaseWriter();
+    body->endElement(); //text:p
 #ifdef PPTXXMLSLIDEREADER_CPP
-     // We should end our own list level
-     if (m_currentListLevel > 0) {
-         body->endElement(); // text:list-item
-     }
-
-     m_prevListLevel = m_currentListLevel;
-
+    // We should end our own list level
+    if (m_currentListLevel > 0) {
+        body->endElement(); // text:list-item
+    }
+    m_prevListLevel = m_currentListLevel;
 #else
-     // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
-     // and excel filters still need to be adjusted to proper handle nested lists.
-     const bool closeList = true;
-     if (closeList) {
-         for(int i = 0; i < m_currentListLevel; ++i) {
-             body->endElement(); // text:list-item
-             body->endElement(); // text:list
-         }
-         m_prevListLevel = m_currentListLevel = 0;
-     } else {
-         m_prevListLevel = m_currentListLevel;
-     }
+    // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
+    // and excel filters still need to be adjusted to proper handle nested lists.
+    const bool closeList = true;
+    if (closeList) {
+        for(int i = 0; i < m_currentListLevel; ++i) {
+            body->endElement(); // text:list-item
+            body->endElement(); // text:list
+        }
+        m_prevListLevel = m_currentListLevel = 0;
+    } else {
+        m_prevListLevel = m_currentListLevel;
+    }
 #endif
     READ_EPILOGUE
 }
@@ -1968,7 +1972,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!m_insideTable) {
-        inheritDefaultTextStyle(m_currentTextStyle);
         inheritTextStyle(m_currentTextStyle);
     }
 #endif
@@ -1998,9 +2001,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     QString fontSize = m_currentTextStyle.property("fo:font-size");
+
+    //NOTE: in testing phase
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (fontSize.isEmpty()) {
+        fontSize = inheritFontSizeFromOther();
+        m_currentTextStyle.addProperty("fo:font-size", fontSize);
+    }
+#endif
     if (!fontSize.isEmpty()) {
         fontSize.remove("pt");
         qreal realSize = fontSize.toDouble();
@@ -2012,6 +2022,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         }
     }
 
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
@@ -2373,7 +2384,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultParagraphStyle(m_currentParagraphStyle);
     inheritParagraphStyle(m_currentParagraphStyle);
 #endif
 
@@ -2394,18 +2404,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
         m_currentBulletProperties.setMargin(realMarginal);
         m_listStylePropertiesAltered = true;
-
-        // NOTE: No idea to which format the disabled logic applied, looks very
-        // suspicious, started to use fo:text-indent instead.
-        //
-/*         if (!indent.isEmpty()) { */
-/*             realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
-/*         } */
-/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal); */
-    }/*  else if (!indent.isEmpty()) { */
-/*         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
-/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd); */
-/*     } */
+    }
     if (!indent.isEmpty()) {
         qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
@@ -2455,10 +2454,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
-/*     m_currentCombinedBulletProperties[m_currentListLevel] = m_currentBulletProperties; */
 
     READ_EPILOGUE
 }
@@ -5001,7 +5000,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
-    inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
 
@@ -5453,7 +5451,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     body = fldBuf.setWriter(body);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
 
@@ -5848,7 +5845,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 #undef CURRENT_EL
 #define CURRENT_EL defRPr
 //! defRPr - Default Text Run Properties
-/*!
+/*! ECMA-376, 21.1.2.3.2, p.3597
 
  Parent elements:
      - defPPr (§21.1.2.2.2)
@@ -6066,7 +6063,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 #undef CURRENT_EL
 #define CURRENT_EL normAutofit
 //! Normal autofit handler (Normal AutoFit)
-/*!
+/*! ECMA-376, 21.1.2.1.3, p.3555 - DrawingML
 
  Parent elements:
  - [done] bodyPr (§21.1.2.1.1)
@@ -6111,7 +6108,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
 #undef CURRENT_EL
 #define CURRENT_EL txBody
 //! txBody handler (Shape Text Body)
-/*! ECMA-376, 20.1.2.2.40, p. 3048
+/*! ECMA-376, 20.1.2.2.40, p. 3058
  This element specifies the existence of text to be contained within the corresponding cell.
  Only used for text inside a cell.
 */

@@ -37,7 +37,7 @@ public:
     KPrPlaceholderShape( const QString & presentationClass );
     virtual ~KPrPlaceholderShape();
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 

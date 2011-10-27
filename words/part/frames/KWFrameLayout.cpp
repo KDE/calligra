@@ -52,7 +52,7 @@ public:
     virtual ~KWPageBackground()
     {
     }
-    virtual void paint(QPainter &painter, const KoViewConverter &converter)
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
     {
         if (background()) {
             applyConversion(painter, converter);

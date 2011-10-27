@@ -131,38 +131,40 @@ QVariant NodeModel::leader( const Node *node, int role ) const
 
 QVariant NodeModel::allocation( const Node *node, int role ) const
 {
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return node->requests().requestNameList().join( "," );
-        case Qt::ToolTipRole: {
-            QMap<QString, QStringList> lst;
-            foreach ( ResourceRequest *rr, node->requests().resourceRequests( false ) ) {
+    if ( node->type() == Node::Type_Task ) {
+        switch ( role ) {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return node->requests().requestNameList().join( "," );
+            case Qt::ToolTipRole: {
+                QMap<QString, QStringList> lst;
+                foreach ( ResourceRequest *rr, node->requests().resourceRequests( false ) ) {
+                    QStringList sl;
+                    foreach( Resource *r, rr->requiredResources() ) {
+                        sl << r->name();
+                    }
+                    lst.insert( rr->resource()->name(), sl );
+                }
+                if ( lst.isEmpty() ) {
+                    return i18nc( "@info:tooltip", "No resources has been allocated" );
+                }
                 QStringList sl;
-                foreach( Resource *r, rr->requiredResources() ) {
-                    sl << r->name();
+                for ( QMap<QString, QStringList>::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it ) {
+                    if ( it.value().isEmpty() ) {
+                        sl << it.key();
+                    } else {
+                        sl << i18nc( "@info:tooltip 1=resource name, 2=list of requiered resources", "%1 (%2)", it.key(), it.value().join(", ") );
+                    }
                 }
-                lst.insert( rr->resource()->name(), sl );
-            }
-            if ( lst.isEmpty() ) {
-                return i18nc( "@info:tooltip", "No resources has been allocated" );
-            }
-            QStringList sl;
-            for ( QMap<QString, QStringList>::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it ) {
-                if ( it.value().isEmpty() ) {
-                    sl << it.key();
-                } else {
-                    sl << i18nc( "@info:tooltip 1=resource name, 2=list of requiered resources", "%1 (%2)", it.key(), it.value().join(", ") );
+                if ( sl.count() == 1 ) {
+                    return i18nc( "@info:tooltip 1=resource name", "Allocated resource:<nl/>%1", sl.first() );
                 }
+                return i18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1", sl.join( "<nl/>" ) );
             }
-            if ( sl.count() == 1 ) {
-                return i18nc( "@info:tooltip 1=resource name", "Allocated resource:<nl/>%1", sl.first() );
-            }
-            return i18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1", sl.join( "<nl/>" ) );
+            case Qt::StatusTipRole:
+            case Qt::WhatsThisRole:
+                return QVariant();
         }
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
     }
     return QVariant();
 }
@@ -229,7 +231,7 @@ QVariant NodeModel::constraint( const Node *node, int role ) const
             case Qt::WhatsThisRole:
                 return QVariant();
         }
-    } else {
+    } else if ( node->type() != Node::Type_Summarytask ) {
         switch ( role ) {
             case Qt::DisplayRole:
             case Qt::ToolTipRole:
@@ -267,32 +269,33 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
                 return QVariant();
         }
         return QVariant();
-    }
-    switch ( role ) {
-        case Qt::DisplayRole: {
-            QString s = KGlobal::locale()->formatDateTime( node->constraintStartTime() );
-            switch ( node->constraint() ) {
-                case Node::StartNotEarlier:
-                case Node::MustStartOn:
-                case Node::FixedInterval:
-                    return s;
-                default:
-                    break;
-            }
-            return QString( "(%1)" ).arg( s );
-    }
-        case Qt::ToolTipRole: {
-            int c = node->constraint();
-            if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
-                return KGlobal::locale()->formatDateTime( node->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone );
-            }
-            break;
+    } else if ( node->type() != Node::Type_Summarytask ) {
+        switch ( role ) {
+            case Qt::DisplayRole: {
+                QString s = KGlobal::locale()->formatDateTime( node->constraintStartTime() );
+                switch ( node->constraint() ) {
+                    case Node::StartNotEarlier:
+                    case Node::MustStartOn:
+                    case Node::FixedInterval:
+                        return s;
+                    default:
+                        break;
+                }
+                return QString( "(%1)" ).arg( s );
         }
-        case Qt::EditRole:
-            return node->constraintStartTime();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
+            case Qt::ToolTipRole: {
+                int c = node->constraint();
+                if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
+                    return KGlobal::locale()->formatDateTime( node->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone );
+                }
+                break;
+            }
+            case Qt::EditRole:
+                return node->constraintStartTime();
+            case Qt::StatusTipRole:
+            case Qt::WhatsThisRole:
+                return QVariant();
+        }
     }
     return QVariant();
 }
@@ -314,38 +317,42 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
                 return QVariant();
         }
         return QVariant();
-    }
-    switch ( role ) {
-        case Qt::DisplayRole: {
-            QString s = KGlobal::locale()->formatDateTime( node->constraintEndTime() );
-            switch ( node->constraint() ) {
-                case Node::FinishNotLater:
-                case Node::MustFinishOn:
-                case Node::FixedInterval:
-                    return s;
-                default:
-                    break;
+    } else if ( node->type() != Node::Type_Summarytask ) {
+        switch ( role ) {
+            case Qt::DisplayRole: {
+                QString s = KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+                switch ( node->constraint() ) {
+                    case Node::FinishNotLater:
+                    case Node::MustFinishOn:
+                    case Node::FixedInterval:
+                        return s;
+                    default:
+                        break;
+                }
+                return QString( "(%1)" ).arg( s );
             }
-            return QString( "(%1)" ).arg( s );
-        }
-        case Qt::ToolTipRole: {
-            int c = node->constraint();
-            if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
+            case Qt::ToolTipRole: {
+                int c = node->constraint();
+                if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
+                    return KGlobal::locale()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
+                }
+                break;
             }
-            break;
+            case Qt::EditRole:
+                return node->constraintEndTime();
+            case Qt::StatusTipRole:
+            case Qt::WhatsThisRole:
+                return QVariant();
         }
-        case Qt::EditRole:
-            return node->constraintEndTime();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
     }
     return QVariant();
 }
 
 QVariant NodeModel::estimateType( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -371,6 +378,9 @@ QVariant NodeModel::estimateType( const Node *node, int role ) const
 
 QVariant NodeModel::estimateCalendar( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task ) {
@@ -429,9 +439,12 @@ QVariant NodeModel::estimateCalendar( const Node *node, int role ) const
 
 QVariant NodeModel::estimate( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
-            if ( node->type() == Node::Type_Task ) {
+            if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Duration::Unit unit = node->estimate()->unit();
                 QString s = KGlobal::locale()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
                 if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
@@ -472,6 +485,9 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
 
 QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 || node->type() == Node::Type_Summarytask || node->type() == Node::Type_Milestone ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task && node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
@@ -479,9 +495,15 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
                 s = '(' + s + ')';
                 return s;
             }
-            return node->estimate()->optimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->optimisticRatio();
+            }
+            break;
         case Qt::EditRole:
-            return node->estimate()->optimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->optimisticRatio();
+            }
+            break;
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
@@ -510,6 +532,9 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
 
 QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 || node->type() == Node::Type_Summarytask || node->type() == Node::Type_Milestone ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task && node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
@@ -517,9 +542,15 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
                 s = '(' + s + ')';
                 return s;
             }
-            return node->estimate()->pessimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->pessimisticRatio();
+            }
+            break;
         case Qt::EditRole:
-            return node->estimate()->pessimisticRatio();
+            if ( node->estimate() ) {
+                return node->estimate()->pessimisticRatio();
+            }
+            break;
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
@@ -548,6 +579,9 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
 
 QVariant NodeModel::riskType( const Node *node, int role ) const
 {
+    if ( node->estimate() == 0 ) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -1236,7 +1270,6 @@ QVariant NodeModel::completed( const Node *node, int role ) const
     const Task *t = static_cast<const Task*>( node );
     switch ( role ) {
         case Qt::DisplayRole:
-            kDebug()<<t->name()<<t->completion().percentFinished();
             return t->completion().percentFinished();
         case Qt::EditRole:
             return t->completion().percentFinished();
@@ -2527,7 +2560,7 @@ KUndo2Command *NodeModel::setName( Node *node, const QVariant &value, int role )
             }
             QString s = i18nc( "(qtundo-format)", "Modify name" );
             switch ( node->type() ) {
-                case Node::Type_Task: s = i18nc( "(qtundo-format)", "Modify task Name" ); break;
+                case Node::Type_Task: s = i18nc( "(qtundo-format)", "Modify task name" ); break;
                 case Node::Type_Milestone: s = i18nc( "(qtundo-format)", "Modify milestone name" ); break;
                 case Node::Type_Summarytask: s = i18nc( "(qtundo-format)", "Modify summarytask name" ); break;
                 case Node::Type_Project: s = i18nc( "(qtundo-format)", "Modify project name" ); break;
@@ -2634,6 +2667,9 @@ KUndo2Command *NodeModel::setConstraintEndTime( Node *node, const QVariant &valu
 
 KUndo2Command *NodeModel::setEstimateType( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             Estimate::Type v;
@@ -2656,6 +2692,9 @@ KUndo2Command *NodeModel::setEstimateType( Node *node, const QVariant &value, in
 
 KUndo2Command *NodeModel::setEstimateCalendar( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             Calendar *c = 0;
@@ -2679,6 +2718,9 @@ KUndo2Command *NodeModel::setEstimateCalendar( Node *node, const QVariant &value
 
 KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             double d;
@@ -2717,10 +2759,13 @@ KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int ro
 
 KUndo2Command *NodeModel::setOptimisticRatio( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->optimisticRatio() ) {
-                return new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), "Modify estimate" );
+                return new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), i18nc( "(qtundo-format)", "Modify optimistic estimate" ) );
             }
             break;
         default:
@@ -2731,10 +2776,13 @@ KUndo2Command *NodeModel::setOptimisticRatio( Node *node, const QVariant &value,
 
 KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->pessimisticRatio() ) {
-                return new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), "Modify estimate" );
+                return new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), i18nc( "(qtundo-format)", "Modify pessimistic estimate" ) );
             }
         default:
             break;
@@ -2744,6 +2792,9 @@ KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value
 
 KUndo2Command *NodeModel::setRiskType( Node *node, const QVariant &value, int role )
 {
+    if ( node->estimate() == 0 ) {
+        return 0;
+    }
     switch ( role ) {
         case Qt::EditRole: {
             int val = 0;
@@ -3108,11 +3159,23 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             case NodeModel::NodeEstimateType: // estimateType
+            {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
             case NodeModel::NodeEstimate: // estimate
+            {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
             case NodeModel::NodeOptimisticRatio: // optimisticRatio
             case NodeModel::NodePessimisticRatio: // pessimisticRatio
             {
-                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                if ( ! baselined && n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -3325,7 +3388,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 cmd = 0;
             }
 
-            QString c = i18n( "Modify resource allocations" );
+            QString c = i18nc( "(qtundo-format)", "Modify resource allocations" );
             // Handle deleted requests
             foreach ( const QString &s, req ) {
                 // if a request is not in alloc, it must have been be removed by the user

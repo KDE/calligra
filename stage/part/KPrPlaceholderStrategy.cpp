@@ -125,7 +125,7 @@ KoShape *KPrPlaceholderStrategy::createShape(KoDocumentResourceManager *rm)
     return shape;
 }
 
-void KPrPlaceholderStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect )
+void KPrPlaceholderStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext)
 {
     KoShape::applyConversion( painter, converter );
     QPen penText( Qt::black );

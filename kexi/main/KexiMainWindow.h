@@ -354,6 +354,10 @@ public slots:
      Also used by KexiFormEventAction. */
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
 
+    /*! Add searchable model to the main window. This extends search to a new area. 
+     One example is Project Navigator. @see KexiMainWindowIface */
+    virtual void addSearchableModel(KexiSearchableModel *model);
+
 signals:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
@@ -734,6 +738,18 @@ protected slots:
     void slotMultiTabBarTabClicked(int id);
 
 private:
+    //! Adds action @a name with text @a text and optional shortcut @a shortcut.
+    //! This is helper method containing workaround for Kexi
+    //! until KAction::setShortcut() works again.
+    //! @return created action
+    KAction* addAction(const char *name, const QString &text, const char *shortcut = 0);
+
+    //! Like @ref addAction(const char *, const QString&, const char *) but also adds
+    //! icon @a icon.
+    //! @return created action
+    KAction* addAction(const char *name, const KIcon &icon, const QString& text,
+                       const char *shortcut = 0);
+
     class MessageHandler;
     class Private;
     Private * const d;

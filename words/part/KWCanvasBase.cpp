@@ -224,7 +224,7 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
     // Set up the painter and inner and outer pens.
     QPen pen = painter.pen();
     // Line color
-    pen.setColor(borderData.color);
+    pen.setColor(borderData.outerPen.color());
 
     // Line style
     switch (borderData.style) {
@@ -248,9 +248,9 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
         // are the distances from the center line of the whole
         // border to the centerlines of the outer and inner
         // borders respectively.
-        qreal outerWidth = borderData.width - borderData.innerWidth - borderData.spacing;
-        qreal outerOffset = borderData.width / 2.0 + outerWidth / 2.0;
-        qreal innerOffset = borderData.width / 2.0 - borderData.innerWidth / 2.0;
+        qreal outerWidth = borderData.outerPen.widthF() - borderData.innerPen.widthF() - borderData.spacing;
+        qreal outerOffset = borderData.outerPen.widthF() / 2.0 + outerWidth / 2.0;
+        qreal innerOffset = borderData.outerPen.widthF() / 2.0 - borderData.innerPen.widthF() / 2.0;
 
         QPointF outerOffset2D(-inwardsX * outerOffset, -inwardsY * outerOffset);
         QPointF innerOffset2D(inwardsX * innerOffset, inwardsY * innerOffset);
@@ -261,12 +261,12 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
         painter.drawLine(lineStart + outerOffset2D, lineEnd + outerOffset2D);
 
         // Draw the inner line
-        pen.setWidthF(zoom * borderData.innerWidth);
+        pen.setWidthF(zoom * borderData.innerPen.widthF());
         painter.setPen(pen);
         painter.drawLine(lineStart + innerOffset2D, lineEnd + innerOffset2D);
     }
     else {
-        pen.setWidthF(zoom * borderData.width);
+        pen.setWidthF(zoom * borderData.outerPen.widthF());
         painter.setPen(pen);
         painter.drawLine(lineStart, lineEnd);
     }
@@ -472,6 +472,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             QPainter tilePainter(&img);
                             tilePainter.setClipRect(QRect(QPoint(0,0), r.size()));
                             tilePainter.translate(-r.left(), -pageTopView - r.top());
+                            tilePainter.setRenderHint(QPainter::Antialiasing);
                             shapeManager()->paint(tilePainter, *viewConverter(), false);
 
                             int tilex = 0, tiley = 0;

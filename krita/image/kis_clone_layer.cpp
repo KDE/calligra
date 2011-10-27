@@ -29,13 +29,14 @@
 #include "kis_painter.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
+#include "kis_clone_info.h"
 
 
 class KisCloneLayer::Private
 {
 public:
     KisLayerSP copyFrom;
-    QString copyFromName; // Used during loading only
+    KisCloneInfo copyFromInfo;
     CopyLayerType type;
     qint32 x;
     qint32 y;
@@ -188,15 +189,15 @@ CopyLayerType KisCloneLayer::copyType() const
     return m_d->type;
 }
 
-void KisCloneLayer::setCopyFromName(const QString& layerName)
+KisCloneInfo KisCloneLayer::copyFromInfo() const
 {
-    Q_ASSERT(!m_d->copyFrom);
-    m_d->copyFromName = layerName;
+    return m_d->copyFrom ? KisCloneInfo(m_d->copyFrom) : m_d->copyFromInfo;
 }
 
-QString KisCloneLayer::copyFromName() const
+void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
 {
-    return m_d->copyFrom ? m_d->copyFrom->name() : m_d->copyFromName;
+    Q_ASSERT(!m_d->copyFrom);
+    m_d->copyFromInfo = info;
 }
 
 QIcon KisCloneLayer::icon() const

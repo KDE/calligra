@@ -223,6 +223,7 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
     }
     // update main schedule and appointments
     updateAppointments( tp, tm, mp, sm, status );
+    sm->scheduleChanged( sm->expected() );
 }
 
 void SchedulerPlugin::updateNode( const Node *tn, Node *mn, long sid, XMLLoaderObject &status ) const
