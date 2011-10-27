@@ -24,11 +24,13 @@
 
 #include <QObject>
 #include "kowidgets_export.h"
+#include <QModelIndex>
 
 class QAbstractItemView;
-class QModelIndex;
 class QItemSelection;
 class KoSelectionToggle;
+class QToolButton;
+class QRect;
 
 /**
  * @brief Allows to select and deselect items for item views.
@@ -58,10 +60,14 @@ signals:
 
 private slots:
     void slotEntered(const QModelIndex &index);
+    void slotEntered2(const QModelIndex &index);
     void slotViewportEntered();
-    void setItemSelected(bool selected);
+    void setItemSelected();
     void slotRowsRemoved(const QModelIndex &parent, int start, int end);
     void slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void updateHoverUi(const QModelIndex& index);
+    void showContextBar(const QRect &rect);
+    void updateToggleSelectionButton();
 
 private:
     void applyPointingHandCursor();
@@ -70,5 +76,8 @@ private:
     KoSelectionToggle *m_toggle;
     bool m_connected;
     bool m_appliedPointingHandCursor;
+    QModelIndex mIndexUnderCursor;
+    QWidget *mContextBar;
+    QToolButton *mToggleSelectionButton;
 };
 #endif // KOSELECTIONMANAGER_H

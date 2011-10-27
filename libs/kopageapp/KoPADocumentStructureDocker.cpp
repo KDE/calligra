@@ -174,7 +174,6 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     m_sectionView->setSelectionBehavior( QAbstractItemView::SelectRows );
     m_sectionView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
-    new KoSelectionManager(m_sectionView);
 
     connect( m_sectionView, SIGNAL(pressed(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
     connect( m_sectionView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
@@ -190,6 +189,8 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
         setViewMode( mode );
     else
         setViewMode( viewModeFromString( viewModeString ) );
+
+    new KoSelectionManager(m_sectionView);
 }
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
