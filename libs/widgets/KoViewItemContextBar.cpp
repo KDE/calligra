@@ -61,6 +61,7 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
 
     connect(m_ToggleSelectionButton, SIGNAL(clicked()),
             this, SLOT(setItemSelected()));
+    // Hides context bar if item removed
     connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
 

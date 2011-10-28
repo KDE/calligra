@@ -33,10 +33,11 @@ class QHBoxLayout;
 class QRect;
 
 /**
- * @brief Allows to select and deselect items for item views.
+ * @brief Add context buttons to items of QAbstractView subclasses
  *
  * Whenever an item is hovered by the mouse, a toggle button is shown
- * which allows to select/deselect the current item.
+ * which allows to select/deselect the current item, other buttons for
+ * custom actions could be added using addContextButton method.
  */
 class KOWIDGETS_EXPORT KoViewItemContextBar : public QObject
 {
@@ -46,7 +47,15 @@ public:
     KoViewItemContextBar(QAbstractItemView *parent);
     virtual ~KoViewItemContextBar();
     virtual bool eventFilter(QObject *watched, QEvent *event);
+
+    /**
+     * Add a button to the context bar
+     * @param text to be used for button tool tip
+     * @param iconName or name of the icon displayed on the button
+     * @return a QToolButton, so it could be connected to a slot.
+     */
     QToolButton *addContextButton(QString text, QString iconName);
+    //Returns the index of the item under the mouse cursor
     QModelIndex currentIndex();
 
 signals:
@@ -54,6 +63,7 @@ signals:
     void selectionChanged();
 
 public slots:
+    /** Hide context bar */
     void reset();
     void enableContextBar();
     void disableContextBar();
@@ -62,9 +72,12 @@ private slots:
     void slotEntered(const QModelIndex &index);
     void slotViewportEntered();
     void setItemSelected();
+    /** Hide context bar if the selectem item has been removed */
     void slotRowsRemoved(const QModelIndex &parent, int start, int end);
+    /** Updates contex bar buttons state*/
     void updateHoverUi(const QModelIndex& index);
     void showContextBar(const QRect &rect);
+    /** Updates Selection Button state*/
     void updateToggleSelectionButton();
 
 private:

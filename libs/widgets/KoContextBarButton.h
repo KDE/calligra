@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
-/*
-Gwenview: an image viewer
+/* This file is part of the KDE project
 Copyright 2011 Aurélien Gâteau <agateau@kde.org>
+Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,8 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 #ifndef KOCONTEXTBARBUTTON_H
 #define KOCONTEXTBARBUTTON_H
-
-// Local
 
 // KDE
 
@@ -52,7 +50,10 @@ protected:
 
 
 private:
+        /** Starts button fading animation */
         void startFading();
+
+        /** Stops button fading animation */
         void stopFading();
         bool m_isHovered;
         bool m_leftMouseButtonPressed;

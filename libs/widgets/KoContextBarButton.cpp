@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
-/*
-Gwenview: an image viewer
+/* This file is part of the KDE project
 Copyright 2011 Aurélien Gâteau <agateau@kde.org>
+Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
