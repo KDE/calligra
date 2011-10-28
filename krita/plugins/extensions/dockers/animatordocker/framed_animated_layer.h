@@ -62,7 +62,7 @@ public:
 public:
     virtual const QString& getNameForFrame(int num, bool iskey) const;
     
-protected:
+// protected:
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
     
 private:

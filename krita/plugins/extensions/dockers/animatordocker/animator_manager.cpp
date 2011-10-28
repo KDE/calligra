@@ -173,17 +173,6 @@ void AnimatorManager::removeFrame(KisNode* frame)
     m_nodeManager->removeNode(frame);
 }
 
-void AnimatorManager::moveFrames(KisGroupLayerSP to, KisGroupLayerSP from)
-{
-    KisNodeSP child = from->firstChild();
-    int i = 0;
-    while (child)
-    {
-        m_nodeManager->moveNodeAt(child, to, i++);
-        child = from->firstChild();
-    }
-}
-
 void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index)
 {
     m_nodeManager->insertNode(layer, parent, index);
@@ -447,4 +436,19 @@ void AnimatorManager::removeFrame()
     alayer->init();
     
     getUpdater()->updateLayer(alayer, frameNumber, frameNumber);
+}
+
+void AnimatorManager::moveFrame(int relPos)
+{
+    FramedAnimatedLayer* alayer = qobject_cast<FramedAnimatedLayer*>(activeLayer());
+    if (!alayer)
+        return;
+    int fnum = getSwitcher()->currentFrame();
+    FrameLayer* tFrame = alayer->frameAt(fnum);
+    if (!tFrame)
+        return;
+    bool isKey;
+    alayer->getFrameFromName(tFrame->name(), isKey);
+    tFrame->setName(alayer->getNameForFrame(fnum+relPos, isKey));
+    alayer->init();
 }

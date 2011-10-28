@@ -94,12 +94,12 @@ public:
     virtual void interpolate();
     virtual void removeFrame();
     
+    virtual void moveFrame(int relPos);
+    
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
     virtual void insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer);
     virtual void removeFrame(KisNode* frame);
-    
-    virtual void moveFrames(KisGroupLayerSP to, KisGroupLayerSP from);
     
     virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
     virtual void removeLayer(KisNode* layer);

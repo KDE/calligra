@@ -65,10 +65,14 @@ protected slots:
     virtual void setRenameString(const QString& string);
     
     virtual void clearFrame();
+    
     virtual void createPaintFrame();
     virtual void createShapeFrame();
     virtual void createGroupFrame();
     virtual void interpolate();
+    
+    virtual void moveLeft();
+    virtual void moveRight();
     
     virtual void enableLT(bool v);
     

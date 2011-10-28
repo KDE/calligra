@@ -139,6 +139,14 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(interpolate()));
     addAction("frames-adding", t);
     
+    t = new QAction(SmallIcon("go-previous"), i18n("Move frame left"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(moveLeft()));
+    addAction("frames-moving", t);
+    
+    t = new QAction(SmallIcon("go-next"), i18n("Move frame right"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(moveRight()));
+    addAction("frames-moving", t);
+    
     // LIGHT TABLE
     t = new QAction(SmallIcon("document-properties"), i18n("Enable/disable light table (see additional docker)"), this);
     t->setCheckable(true);
@@ -274,6 +282,19 @@ void AnimatorActions::interpolate()
 {
     Q_ASSERT(m_manager);
     m_manager->interpolate();
+}
+
+
+void AnimatorActions::moveLeft()
+{
+    Q_ASSERT(m_manager);
+    m_manager->moveFrame(-1);
+}
+
+void AnimatorActions::moveRight()
+{
+    Q_ASSERT(m_manager);
+    m_manager->moveFrame(+1);
 }
 
 
