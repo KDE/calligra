@@ -91,6 +91,7 @@ public:
     virtual void createFrame(AnimatedLayer* layer, const QString& ftype, bool iskey);
     virtual void createFrame(const QString& ftype);
     virtual void createFrame(const QString& ftype, bool iskey);
+    virtual void interpolate();
     virtual void removeFrame();
     
 public:
@@ -108,6 +109,7 @@ public:
     
 public:
     virtual void activate(int frameNumber, KisNode* node);
+    virtual void activateKeyFrame(AnimatedLayer* alayer, int frameNumber);
     
 public:
     virtual QList<AnimatedLayer*> layers();

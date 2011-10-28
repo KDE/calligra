@@ -135,6 +135,10 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(createGroupFrame()));
     addAction("frames", t);
     
+    t = new QAction(SmallIcon("tools-wizard"), i18n("Interpolate"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(interpolate()));
+    addAction("frames", t);
+    
     // LIGHT TABLE
     t = new QAction(SmallIcon("document-properties"), i18n("Enable/disable light table (see additional docker)"), this);
     t->setCheckable(true);
@@ -264,6 +268,12 @@ void AnimatorActions::createGroupFrame()
 {
     Q_ASSERT(m_manager);
     m_manager->createFrame("KisGroupLayer");
+}
+
+void AnimatorActions::interpolate()
+{
+    Q_ASSERT(m_manager);
+    m_manager->interpolate();
 }
 
 

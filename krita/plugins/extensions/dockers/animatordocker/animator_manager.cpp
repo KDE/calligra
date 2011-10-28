@@ -261,6 +261,14 @@ void AnimatorManager::activate(int frameNumber, KisNode* node)
     }
 }
 
+void AnimatorManager::activateKeyFrame(AnimatedLayer* alayer, int frameNumber)
+{
+    FramedAnimatedLayer* flayer = qobject_cast<FramedAnimatedLayer*>(alayer);
+    if (!flayer)
+        return;
+    activate(frameNumber, flayer->frameAt(flayer->getPreviousKey(frameNumber)));
+}
+
 
 void AnimatorManager::layerAdded(AnimatedLayer* layer)
 {
@@ -396,6 +404,23 @@ void AnimatorManager::createFrame(const QString& ftype, bool iskey)
 void AnimatorManager::createFrame(const QString& ftype)
 {
     createFrame(ftype, true);
+}
+
+void AnimatorManager::interpolate()
+{
+    FramedAnimatedLayer* alayer = qobject_cast<FramedAnimatedLayer*>(activeLayer());
+    if (!alayer)
+        return;
+    int fnum = m_switcher->currentFrame();
+    activateKeyFrame(alayer, fnum);
+    m_nodeManager->createNode("KisCloneLayer");
+    KisNode* content = m_nodeManager->activeNode().data();
+    createFrame(alayer, "");
+    SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(alayer->frameAt(fnum));
+    if (!frame)
+        return;
+    setFrameContent(frame, content);
+    getUpdater()->updateLayer(alayer, fnum, fnum);
 }
 
 
