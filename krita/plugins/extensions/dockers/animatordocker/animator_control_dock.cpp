@@ -63,6 +63,10 @@ void AnimatorControlDock::setupUI()
     
     QToolBar* tbFrames = new QToolBar(this);
     tbFrames->addActions(m_actions->actions("frames"));
+    tbFrames->addSeparator();
+    tbFrames->addActions(m_actions->actions("frames-adding"));
+    tbFrames->addSeparator();
+    tbFrames->addActions(m_actions->actions("frames-moving"));
     layout->addWidget(tbFrames);
     
     QToolBar* tbPlayer = new QToolBar(this);
@@ -76,7 +80,7 @@ void AnimatorControlDock::setupUI()
     layout->addWidget(tbPlayer);
     
     QToolBar* tbLT = new QToolBar(this);
-    tbLT->addActions(m_actions->actions("lighttable"));
+    tbLT->addActions(m_actions->actions("light-table"));
     layout->addWidget(tbLT);
     
     layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));

@@ -125,26 +125,26 @@ void AnimatorActions::initActions()
     
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
-    addAction("frames", t);
+    addAction("frames-adding", t);
     
     t = new QAction(SmallIcon("bookmark-new"), i18n("Create shape frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createShapeFrame()));
-    addAction("frames", t);
+    addAction("frames-adding", t);
     
     t = new QAction(SmallIcon("folder-new"), i18n("Create group frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createGroupFrame()));
-    addAction("frames", t);
+    addAction("frames-adding", t);
     
     t = new QAction(SmallIcon("tools-wizard"), i18n("Interpolate"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(interpolate()));
-    addAction("frames", t);
+    addAction("frames-adding", t);
     
     // LIGHT TABLE
     t = new QAction(SmallIcon("document-properties"), i18n("Enable/disable light table (see additional docker)"), this);
     t->setCheckable(true);
     t->setChecked(false);
     connect(t, SIGNAL(triggered(bool)), SLOT(enableLT(bool)));
-    addAction("lighttable", t);
+    addAction("light-table", t);
 }
 
 #if !LOAD_ON_START
