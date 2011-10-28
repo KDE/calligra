@@ -73,7 +73,12 @@ void AnimatorManager::unsetCanvas()
 
 bool AnimatorManager::ready()
 {
-    return m_nodeManager != 0;
+    bool isReady = m_nodeManager;
+    if (!isReady)
+    {
+        warnKrita << "animator manager is not ready";
+    }
+    return isReady;
 }
 
 
@@ -149,23 +154,26 @@ void AnimatorManager::initLayers()
 
 void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNode* content)
 {
+    if (!ready())
+        return;
+    
     if (!content)
         return;
     
     if (frame->getContent())
         m_nodeManager->removeNode(frame->getContent());
     
-    if (content->parent())
-        m_nodeManager->moveNodeAt(content, frame, 0);
-    else
-        m_nodeManager->insertNode(content, frame, 0);
+    putNodeAt(content, frame, 0);
     if (! content->name().startsWith("_"))
         content->setName("_");
 }
 
-void AnimatorManager::insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer)
+void AnimatorManager::putNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
-    m_nodeManager->insertNode(frame, layer, 0);
+    if (node->parent())
+        m_nodeManager->moveNodeAt(node, parent, index);
+    else
+        m_nodeManager->insertNode(node, parent, index);
 }
 
 void AnimatorManager::removeFrame(KisNode* frame)
@@ -175,8 +183,7 @@ void AnimatorManager::removeFrame(KisNode* frame)
 
 void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index)
 {
-    m_nodeManager->insertNode(layer, parent, index);
-    m_nodeManager->moveNodeAt(layer, parent, index);
+    putNodeAt(layer, parent, index);
     layerAdded(layer);
 }
 
@@ -365,14 +372,12 @@ void AnimatorManager::createFrame(AnimatedLayer* layer, const QString& ftype, bo
     }
     
     SimpleFrameLayer* frame = new SimpleFrameLayer(image(), alayer->getNameForFrame(frameNumber, iskey), 255);
-    insertFrame(frame, alayer);
+    alayer->insertFrame(frame);
     if (ftype != "")
     {
         m_nodeManager->createNode(ftype);
-        setFrameContent(frame, m_nodeManager->activeNode().data());
+        frame->setContent(m_nodeManager->activeNode().data());
     }
-    
-    alayer->init();
     
     // TODO: don't do full update
     getUpdater()->fullUpdateLayer(alayer);
@@ -429,11 +434,9 @@ void AnimatorManager::removeFrame()
         return;
     }
     
-    removeFrame(alayer->frameAt(frameNumber));
+    alayer->removeFrameAt(frameNumber);
     
     activate(frameNumber, alayer);
-    
-    alayer->init();
     
     getUpdater()->updateLayer(alayer, frameNumber, frameNumber);
 }
@@ -450,5 +453,5 @@ void AnimatorManager::moveFrame(int relPos)
     bool isKey;
     alayer->getFrameFromName(tFrame->name(), isKey);
     tFrame->setName(alayer->getNameForFrame(fnum+relPos, isKey));
-    alayer->init();
+    alayer->insertFrame(tFrame);
 }

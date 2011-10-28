@@ -19,13 +19,14 @@
 
 #include "animator_meta_info.h"
 
-#include <strstream>
+#include <sstream>
 
 AnimatorMetaInfo::AnimatorMetaInfo(KisGroupLayerSP meta_node)
 {
     if (! meta_node)
     {
         m_major = -1;
+        m_minor = -1;
         return;
     }
     
@@ -34,10 +35,11 @@ AnimatorMetaInfo::AnimatorMetaInfo(KisGroupLayerSP meta_node)
     if (! t.startsWith("_animator_"))
     {
         m_major = -1;
+        m_minor = -1;
         return;
     }
     
-    std::strstream ns;
+    std::stringstream ns;
     ns << t.mid(10).toAscii().data();
     ns >> m_major;
     

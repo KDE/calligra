@@ -40,7 +40,8 @@ public:
     
 public:
     virtual FrameLayer* frameAt(int num) const;
-//     virtual void setFrameAt(int num, FrameLayer* frame);
+    virtual void insertFrame(FrameLayer* frame);
+    virtual void removeFrameAt(int num);
 
 public:
     virtual FrameLayer* getCachedFrame(int num) const;
@@ -57,18 +58,18 @@ public:
     virtual int dataEnd() const;
     
 public:
-    virtual void init();
-    
-public:
-    virtual const QString& getNameForFrame(int num, bool iskey) const;
+    virtual QString getNameForFrame(int num, bool iskey) const;
     
 // protected:
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
     
+protected:
+    virtual QList<FrameLayer*> frames();
+    
 private:
-    int m_first_frame;
+    int m_firstFrame;
 
-    QList< SimpleFrameLayer* > m_frames;
+    QList< FrameLayer* > m_frames;
 };
 
 #endif // SIMPLE_ANIMATED_LAYER_H

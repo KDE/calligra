@@ -1,8 +1,14 @@
+Here is a list of features that present or should present in Animator:
+[+] -- feature is present
+[*] -- feature is WIP
+[#] -- feature is broken (it worked in a certain version though)
+[-] -- feature is not present
+
 Player:
 [+] basic player
 [+] fps
 [+] looping
-[-] control layers
+[*] control layers
 
 Interpolation:
 [+] moving
@@ -21,7 +27,8 @@ View:
 
 Frame manupulation:
 [+] add/clean frames
-[-] work with selections
+[#] frame moving
+[#] work with selections
 
 LT:
 [+] basic light table
@@ -36,7 +43,7 @@ GUI:
 [-] drag&drop
 
 Export:
-[-] basic png export
+[+] basic png export
 [-] export without dialogs
 [-] export through imagemagick&ffmpeg
 

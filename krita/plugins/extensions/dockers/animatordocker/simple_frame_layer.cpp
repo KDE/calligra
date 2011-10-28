@@ -18,6 +18,7 @@
  */
 
 #include "simple_frame_layer.h"
+#include "animator_manager_factory.h"
 
 SimpleFrameLayer::SimpleFrameLayer(KisImageWSP image, const QString& name, quint8 opacity): FrameLayer(image, name, opacity)
 {
@@ -34,6 +35,11 @@ KisNode* SimpleFrameLayer::getContent()
         return at(0).data();
     }
     return 0;
+}
+
+void SimpleFrameLayer::setContent(KisNode* c)
+{
+    AnimatorManagerFactory::instance()->getManager(image().data())->setFrameContent(this, c);
 }
 
 bool SimpleFrameLayer::isKeyFrame()

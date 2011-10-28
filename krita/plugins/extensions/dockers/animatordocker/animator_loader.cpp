@@ -37,7 +37,6 @@ void AnimatorLoader::loadAll()
         warnKrita << "trying to load layers before AnimatorManager is ready";
         return;
     }
-    
     KisImage* image = m_manager->image();
     KisNodeSP rootNode = image->root();
     
@@ -106,8 +105,6 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
         KisNodeSP parent = gl->parent();
         m_manager->insertLayer(al, parent, parent->index(gl));
         
-//         KisNodeSP child = al->firstChild();
-//         while (child)
         int chcount = gl->childCount();
         for (int i = 0; i < chcount; ++i)
         {
@@ -115,18 +112,12 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
             if (qobject_cast<KisGroupLayer*>(child.data()) && child->name().startsWith("_frame_"))
             {
                 SimpleFrameLayer* frame = new SimpleFrameLayer(* qobject_cast<KisGroupLayer*>(child.data()));
-                m_manager->insertFrame(frame, al);
-                m_manager->setFrameContent(frame, child->at(0).data());
+                al->insertFrame(frame);
+                frame->setContent(child->at(0).data());
                 m_manager->removeFrame(child.data());
-//                 child = frame->nextSibling();
-//             } else {
-//                 child = child->nextSibling();
             }
         }
         
-        al->init();
-        
-//         m_manager->insertLayer(al, m_manager->image()->root(), 0);
         m_manager->removeLayer(gl);
     } else
     {

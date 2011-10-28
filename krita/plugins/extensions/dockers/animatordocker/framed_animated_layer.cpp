@@ -31,10 +31,12 @@
 
 FramedAnimatedLayer::FramedAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity): AnimatedLayer(image, name, opacity)
 {
+    m_firstFrame = 0;
 }
 
 FramedAnimatedLayer::FramedAnimatedLayer(const KisGroupLayer& source) : AnimatedLayer(source)
 {
+    m_firstFrame = 0;
 }
 
 
@@ -49,45 +51,45 @@ void FramedAnimatedLayer::setAName(const QString& name)
 }
 
 
-void FramedAnimatedLayer::init()
-{
-    m_frames.clear();
-    m_first_frame = 0;
-    
-    KisNodeSP child = firstChild();
-    while (child)
-    {
-        SimpleFrameLayer* frame = dynamic_cast<SimpleFrameLayer*>(child.data());
-        if (frame)
-        {
-            bool isKey;
-            int fnum = getFrameFromName(frame->name(), isKey);
-            if (fnum >= m_frames.size())
-            {
-                while (m_frames.size() < fnum)
-                    m_frames.append(0);
-                m_frames.append(frame);
-            } else
-            {
-                Q_ASSERT(m_frames[fnum] == 0);
-                m_frames[fnum] = frame;
-            }
-        }
-        
-        child = child->nextSibling();
-    }
-    
-    AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
-    manager->layerFramesNumberChange(this, dataEnd());
-}
-
-
 FrameLayer* FramedAnimatedLayer::frameAt(int num) const
 {
     if (num >= dataStart() && num < dataEnd())
         return m_frames[num];
     return 0;
 }
+
+void FramedAnimatedLayer::insertFrame(FrameLayer* frame)
+{
+    AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
+    manager->putNodeAt(frame, this, 0);
+    
+    bool isKey;
+    int fnum = getFrameFromName(frame->name(), isKey);
+    if (fnum < 0)
+    {
+        return;
+    }
+    if (fnum >= m_frames.size())
+    {
+        while (m_frames.size() < fnum)
+            m_frames.append(0);
+        m_frames.append(frame);
+    } else
+    {
+        Q_ASSERT(m_frames[fnum] == 0);
+        m_frames[fnum] = frame;
+    }
+    
+    manager->layerFramesNumberChange(this, dataEnd());
+}
+
+void FramedAnimatedLayer::removeFrameAt(int num)
+{
+    AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
+    manager->removeFrame(frameAt(num));
+    m_frames[num] = 0;
+}
+
 
 FrameLayer* FramedAnimatedLayer::getKeyFrame(int num) const
 {
@@ -140,12 +142,12 @@ int FramedAnimatedLayer::getPreviousKey(int num) const
 
 bool FramedAnimatedLayer::isKeyFrame(int num) const
 {
-    return num >= dataStart() && num < dataEnd() && m_frames[num] && m_frames[num]->isKeyFrame();
+    return frameAt(num) && qobject_cast<SimpleFrameLayer*>(frameAt(num))->isKeyFrame();
 }
 
 int FramedAnimatedLayer::dataStart() const
 {
-    return m_first_frame;
+    return m_firstFrame;
 }
 
 int FramedAnimatedLayer::dataEnd() const
@@ -153,7 +155,7 @@ int FramedAnimatedLayer::dataEnd() const
     return m_frames.size();
 }
 
-const QString& FramedAnimatedLayer::getNameForFrame(int num, bool iskey) const
+QString FramedAnimatedLayer::getNameForFrame(int num, bool iskey) const
 {
     std::stringstream ns;
     ns << "_frame_";
@@ -182,26 +184,7 @@ int FramedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) cons
     return -1;
 }
 
-// FrameLayer* FramedAnimatedLayer::insertFrame(int num, FrameLayer* frame, bool iskey)
-// {
-//     frame->setName(getNameForFrame(num, iskey));
-//     getNodeManager()->insertNode(frame, this, num);
-//     return frame;
-// }
-// 
-// FrameLayer* FramedAnimatedLayer::createFrameLayer(KisGroupLayer& src)
-// {
-//     return new FrameLayer(src);
-// }
-// 
-// FrameLayer* FramedAnimatedLayer::createFrame(int num, KisGroupLayer* source, bool iskey)
-// {
-//     FrameLayer* nf = createFrameLayer(*source);
-//     nf->setName(getNameForFrame(num, iskey));
-//     nf->setNodeManager(getNodeManager());
-//     getNodeManager()->activateNode(this);
-//     getNodeManager()->insertNode(nf, this, num);
-//     nf->setContent(source->at(0).data());
-//     getNodeManager()->removeNode(source);
-//     return nf;
-// }
+QList< FrameLayer* > FramedAnimatedLayer::frames()
+{
+    return m_frames;
+}

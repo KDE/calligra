@@ -19,7 +19,6 @@
 
 
 #include "frame_layer.h"
-// #include <kis_node_manager.h>
 #include "kis_image.h"
 
 FrameLayer::FrameLayer(KisImageWSP image, const QString& name, quint8 opacity): KisGroupLayer(image, name, opacity)

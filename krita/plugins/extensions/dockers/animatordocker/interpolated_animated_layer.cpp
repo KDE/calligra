@@ -63,17 +63,17 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
             manager->createFrame(this, "", false);           // this will create frame without content
             frame = qobject_cast<SimpleFrameLayer*>(frameAt(num));
         }
-        manager->setFrameContent(frame, interpolate(prev, next, p));
+        frame->setContent(interpolate(prev, next, p));
     }
 }
 
-const QString& InterpolatedAnimatedLayer::getNameForFrame(int num, bool iskey) const
+QString InterpolatedAnimatedLayer::getNameForFrame(int num, bool iskey) const
 {
-    QString *t = new QString(FramedAnimatedLayer::getNameForFrame(num, iskey));
+    QString t = FramedAnimatedLayer::getNameForFrame(num, iskey);
     if (iskey)
-        return *t;
+        return t;
     else
-        return * ( new QString (*t+QString("_")) );
+        return t+"_";
 }
 
 int InterpolatedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) const

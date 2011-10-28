@@ -32,7 +32,7 @@ public:
     
 public:
     virtual KisNode* getContent();
-//     virtual void setContent(KisNode* c);
+    virtual void setContent(KisNode* c);
     
 public:
     virtual bool isKeyFrame();

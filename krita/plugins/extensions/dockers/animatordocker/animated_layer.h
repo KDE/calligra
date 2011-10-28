@@ -29,10 +29,7 @@
 class AnimatedLayer : public KisGroupLayer
 {
     Q_OBJECT
-
-// signals:
-//     void requireRedraw();
-
+    
 public:
     AnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
     AnimatedLayer(const KisGroupLayer& source);
@@ -41,8 +38,6 @@ public:
     virtual QString aName() const = 0;
     virtual void setAName(const QString& name) = 0;
     
-    // Animation interface
-    // NEW
 public:
     virtual FrameLayer* getUpdatedFrame(int num);
     virtual FrameLayer* getCachedFrame(int num) const = 0;
@@ -61,17 +56,11 @@ public:
      * @return number of last frame with some info+1 [firstFrame; lastFrame)
      */
     virtual int dataEnd() const = 0;
-
-    // May be this should be removed
-//     void setNodeManager(KisNodeManager* nodeman);
-//     KisNodeManager* getNodeManager() const;
-
+    
 protected:
     virtual void updateFrame(int num);
     
 private:
-//     KisNodeManager* m_nodeman;
-    
     bool m_enabled;
 };
 

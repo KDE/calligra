@@ -40,7 +40,7 @@ protected:
 protected:
     virtual KisCloneLayer* interpolate(KisNode* from, KisCloneLayer* to, double position) = 0;
     
-    virtual const QString& getNameForFrame(int num, bool iskey) const;
+    virtual QString getNameForFrame(int num, bool iskey) const;
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
     
 private:

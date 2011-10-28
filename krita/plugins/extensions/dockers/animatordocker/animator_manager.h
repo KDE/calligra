@@ -98,7 +98,7 @@ public:
     
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
-    virtual void insertFrame(SimpleFrameLayer* frame, FramedAnimatedLayer* layer);
+    virtual void putNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     virtual void removeFrame(KisNode* frame);
     
     virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
