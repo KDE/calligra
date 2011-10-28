@@ -38,8 +38,8 @@ public:
     AnimatedLayer(const KisGroupLayer& source);
     
 public:
-    virtual QString aname() const = 0;
-    virtual void rename(const QString& name) = 0;
+    virtual QString aName() const = 0;
+    virtual void setAName(const QString& name) = 0;
     
     // Animation interface
     // NEW

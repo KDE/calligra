@@ -35,8 +35,8 @@ public:
     FramedAnimatedLayer(const KisGroupLayer& source);
 
 public:
-    virtual QString aname() const;
-    virtual void rename(const QString& name);
+    virtual QString aName() const;
+    virtual void setAName(const QString& name);
     
 public:
     virtual FrameLayer* frameAt(int num) const;

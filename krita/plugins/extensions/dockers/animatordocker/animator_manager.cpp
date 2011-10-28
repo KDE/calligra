@@ -338,7 +338,7 @@ void AnimatorManager::renameLayer(KisNode* layer, const QString& name)
 {
     AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(layer);
     if (alayer)
-        alayer->rename(name);
+        alayer->setAName(name);
     else if (layer)
         layer->setName(name);
 }

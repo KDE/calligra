@@ -211,7 +211,7 @@ void AnimatorActions::renameLayer()
     
     AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(layer);
     if (alayer)
-        name = alayer->aname();
+        name = alayer->aName();
     else
         name = layer->name();
     
