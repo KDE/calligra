@@ -160,12 +160,20 @@ void KoViewItemContextBar::updateHoverUi(const QModelIndex &index)
 
 void KoViewItemContextBar::showContextBar(const QRect &rect)
 {
-    m_ContextBar->adjustSize();
     // Center bar in FullContextBar mode, left align in
     // SelectionOnlyContextBar mode
     const int posX = 0;
     const int posY = CONTEXTBAR_MARGIN;
     m_ContextBar->move(rect.topLeft() + QPoint(posX, posY));
+    //Hide buttons if item is too small
+    for (int i=m_contextBarButtons.size()-1; i>=0; --i) {
+        if (rect.width() > ((i+1)*m_ToggleSelectionButton->width())) {
+            m_contextBarButtons.at(i)->setVisible(true);
+            continue;
+        }
+        m_contextBarButtons.at(i)->setVisible(false);
+    }
+    m_ContextBar->adjustSize();
     m_ContextBar->show();
 }
 
@@ -230,6 +238,7 @@ QToolButton * KoViewItemContextBar::addContextButton(QString text, QString iconN
     KoContextBarButton *newContexButton = new KoContextBarButton(iconName);
     newContexButton->setToolTip(text);
     m_Layout->addWidget(newContexButton);
+    m_contextBarButtons.append(newContexButton);
     return newContexButton;
 }
 

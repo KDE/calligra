@@ -90,5 +90,6 @@ private:
     QWidget *m_ContextBar;
     QToolButton *m_ToggleSelectionButton;
     QHBoxLayout *m_Layout;
+    QList <QToolButton*> m_contextBarButtons;
 };
 #endif // KOVIEWITEMCONTEXTBAR_H
