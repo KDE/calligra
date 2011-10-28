@@ -26,6 +26,8 @@
 
 #include "animator_manager.h"
 
+#include "animator_config.h"
+
 class AnimatorActions : public QObject
 {
     Q_OBJECT
@@ -46,7 +48,9 @@ protected:
     virtual void initActions();
     
 protected slots:
+#if !LOAD_ON_START
     virtual void loadLayers();
+#endif
     virtual void makeAnimated();
     virtual void exportFrames();
     

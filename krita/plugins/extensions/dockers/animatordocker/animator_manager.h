@@ -76,6 +76,9 @@ public:
     virtual AnimatorMetaInfo* metaInfo();
     
 public:
+    virtual void initLayers();
+    
+public:
     virtual void createNormalLayer();
     virtual void removeLayer();
     virtual void renameLayer(KisNode* layer, const QString& name);

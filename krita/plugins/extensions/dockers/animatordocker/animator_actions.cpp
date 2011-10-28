@@ -34,6 +34,8 @@
 #include "animator_updater.h"
 #include "animator_lt_updater.h"
 
+#include "animator_config.h"
+
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
 {
     m_manager = 0;
@@ -76,9 +78,11 @@ void AnimatorActions::initActions()
     QAction* t;
     
     // UTIL
+#if !LOAD_ON_START
     t = new QAction(SmallIcon("system-run"), i18n("Load layers"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(loadLayers()));
     addAction("util", t);
+#endif
     
     t = new QAction(SmallIcon("tool-animator"), i18n("Make this file animated"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(makeAnimated()));
@@ -139,14 +143,13 @@ void AnimatorActions::initActions()
     addAction("lighttable", t);
 }
 
-
+#if !LOAD_ON_START
 void AnimatorActions::loadLayers()
 {
     Q_ASSERT(m_manager);
-    m_manager->getLoader()->loadAll();
-    m_manager->getUpdater()->fullUpdate();
-    m_manager->getSwitcher()->goFrame(0);
+    m_manager->initLayers();
 }
+#endif
 
 void AnimatorActions::makeAnimated()
 {

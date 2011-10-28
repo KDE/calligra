@@ -28,6 +28,8 @@
 #include "animator_player.h"
 #include "animator_exporter.h"
 
+#include "animator_config.h"
+
 #include "normal_animated_layer.h"
 
 AnimatorManager::AnimatorManager(KisImage* image)
@@ -58,6 +60,9 @@ void AnimatorManager::setCanvas(KoCanvasBase* canvas)
 {
     m_nodeManager = dynamic_cast<KisCanvas2*>(canvas)->view()->nodeManager();
     m_exporter->setCanvas(canvas);
+#if LOAD_ON_START
+    initLayers();
+#endif
 }
 
 void AnimatorManager::unsetCanvas()
@@ -131,6 +136,14 @@ AnimatorMetaInfo* AnimatorManager::kraMetaInfo()
 AnimatorMetaInfo* AnimatorManager::metaInfo()
 {
     return m_info;
+}
+
+
+void AnimatorManager::initLayers()
+{
+    getLoader()->loadAll();
+    getUpdater()->fullUpdate();
+    getSwitcher()->goFrame(0);
 }
 
 
