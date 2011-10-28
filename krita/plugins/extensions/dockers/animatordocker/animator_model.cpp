@@ -146,8 +146,7 @@ int AnimatorModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
     int fnum = AnimatorManagerFactory::instance()->getManager(m_image)->framesNumber();
-    if (fnum)
-        fnum += 12;
+    fnum += 12;
     return BASE_COLUMNS_NUMBER + fnum;
 }
 

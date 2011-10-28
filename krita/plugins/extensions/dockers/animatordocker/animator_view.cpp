@@ -33,6 +33,7 @@ void AnimatorView::setModel(QAbstractItemModel* model)
 {
     QTreeView::setModel(model);
     connect(model, SIGNAL(layoutChanged()), SLOT(resizeColumnsToContent()));
+    resizeColumnsToContent();
 }
 
 void AnimatorView::resizeColumnsToContent()
