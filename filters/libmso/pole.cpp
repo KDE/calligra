@@ -44,10 +44,10 @@
 //#define POLE_DEBUG
 
 // validate storage object against [MS-CFB] — v20110318
-//#define CHECK_STORAGE_OBJECTS
+//#define POLE_CHECK_STORAGE_OBJECTS
 
 // validate sibling names against positions in the black red tree
-//#define CHECK_SIBLINGS
+//#define POLE_CHECK_SIBLINGS
 
 #define OLE_HEADER_SIZE 0x200
 
@@ -70,7 +70,7 @@ public:
     unsigned long bb_blocks[109];
 
     Header();
-    bool valid(const unsigned max_block) const;
+    bool valid(const unsigned max_sbat_block, const unsigned max_bbat_block) const;
     void load(const unsigned char* buffer);
     void save(unsigned char* buffer);
     void debug();
@@ -132,7 +132,7 @@ public:
     int parent(unsigned index);
     std::string fullName(unsigned index);
     std::vector<unsigned> children(unsigned index);
-    void load(unsigned char* buffer, unsigned len);
+    void load(unsigned char* buffer, unsigned len, const unsigned threshold, const unsigned max_sbat, const unsigned max_bbat);
     void save(unsigned char* buffer);
     unsigned size();
     void debug();
@@ -277,7 +277,7 @@ Header::Header()
         bb_blocks[i] = AllocTable::Avail;
 }
 
-bool Header::valid(const unsigned max_block) const
+bool Header::valid(const unsigned max_sbat_block, const unsigned max_bbat_block) const
 {
     if (threshold != 4096) return false;
     if (num_bat == 0) return false;
@@ -288,8 +288,8 @@ bool Header::valid(const unsigned max_block) const
     if (b_shift > 12) return false;
 
     // additional heuristics to check the header
-    if (num_bat > max_block) return false;
-    if (num_sbat > max_block) return false;
+    if (num_sbat > max_sbat_block) return false;
+    if (num_bat > max_bbat_block) return false;
 
     const unsigned ENDOFCHAIN = 0xfffffffe;
     const unsigned FREESECT = 0xffffffff;
@@ -591,10 +591,12 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 
     for (unsigned i = 0; i < chi.size(); i++) {
         e = dirtree->entry(chi[i]);
-        if (names.contains(e->name)) {
-            return false;
-        } else {
-            names.append(e->name);
+        if (e->valid) {
+            if (names.contains(e->name)) {
+                return false;
+            } else {
+                names.append(e->name);
+            }
         }
     }
     return true;
@@ -611,20 +613,22 @@ bool DirTree::valid() const
         printf("DirEntry::valid name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
                e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
 #endif
+#ifdef POLE_FAIL_ON_INVALID
         //Looking for invalid user streams.
         if (!e->valid && e->size) {
             std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
+#endif
         if ( (i > 0) &&
-             (e->valid && !e->dir) && ((int)e->child != -1))
+             (e->valid && !e->dir) && ((int)e->child != -1) )
         {
             std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
-#ifdef CHECK_STORAGE_OBJECTS
-        //NOTE: It's not possible to detect invalid storages objects.  Too many
-        //false positives on Word8 documents.
+#ifdef POLE_CHECK_STORAGE_OBJECTS
+        //NOTE: Too many false positives on Word8 documents with invalid
+        //storages objects.
         if ( (i > 0) &&
              (e->valid && e->dir) &&
              (((int)e->child == -1) || (e->start != 0) || (e->size != 0)) )
@@ -639,8 +643,8 @@ bool DirTree::valid() const
             return false;
         }
 
-#ifdef CHECK_SIBLINGS
-        //NOTE: Too many False Positives, mainly Word8 files with embedded
+#ifdef POLE_CHECK_SIBLINGS
+        //NOTE: Too many false positives, mainly Word8 files with embedded
         //documents.
         //
         //Check the name of the left/right DirEntry.
@@ -807,7 +811,7 @@ void dirtree_find_siblings(DirTree* dirtree, std::vector<unsigned>& result,
 {
     DirEntry* e = dirtree->entry(index);
     if (!e) return;
-    if (!e->valid) return;
+//     if (!e->valid) return;
 
     // prevent infinite loop
     for (unsigned i = 0; i < result.size(); i++)
@@ -846,7 +850,8 @@ std::vector<unsigned> DirTree::children(unsigned index)
     return result;
 }
 
-void DirTree::load(unsigned char* buffer, unsigned size)
+void DirTree::load(unsigned char* buffer, unsigned size, const unsigned threshold,
+                   const unsigned max_sbat, const unsigned max_bbat)
 {
     entries.clear();
     int n = (size / 128); //num. of directory entries
@@ -894,10 +899,19 @@ void DirTree::load(unsigned char* buffer, unsigned size)
             e.valid = false;
         }
         if (type == 0) {
-            if ((e.child != -1) || (e.prev != -1) || (e.next != -1)) {
+            if ((e.child != 0xFFFFFFFF) || (e.prev != 0xFFFFFFFF) || (e.next != 0xFFFFFFFF)) {
                 e.valid = false;
             }
         }
+        if (type == 2) {
+            if ((e.size >= threshold) && (e.start >= max_bbat)) {
+                e.valid = false;
+            }
+            else if (e.start >= max_sbat) {
+                e.valid = false;
+            }
+        }
+
         // additional checks
         if ( (((int)e.prev > n) || ((int)e.prev < -1)) ||
              (((int)e.next > n) || ((int)e.next < -1)) ||
@@ -1066,11 +1080,14 @@ void StorageIO::load()
     // important block size
     bbat->blockSize = 1 << header->b_shift;
     sbat->blockSize = 1 << header->s_shift;
-    unsigned max_block = (filesize - OLE_HEADER_SIZE) / bbat->blockSize;
+    const unsigned max_bbat_block = (filesize - OLE_HEADER_SIZE) / bbat->blockSize;
+    const unsigned max_sbat_block = (filesize - OLE_HEADER_SIZE) / sbat->blockSize;
 
     // sanity checks
     result = Storage::BadOLE;
-    if (!header->valid(max_block)) return;
+    if (!header->valid(max_sbat_block, max_bbat_block)) {
+        return;
+    }
 
     // find blocks allocated to store big bat
     // the first 109 blocks are in header, the rest in meta bat
@@ -1150,7 +1167,7 @@ void StorageIO::load()
         delete[] buffer;
         return;
     }
-    dirtree->load(buffer, buflen);
+    dirtree->load(buffer, buflen, header->threshold, max_sbat_block, max_bbat_block);
     unsigned sb_start = readU32(buffer + 0x74);
     delete[] buffer;
     if (!dirtree->valid()) {
