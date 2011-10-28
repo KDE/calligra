@@ -306,271 +306,331 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
 
     case EmfPlusMultiFormatStart:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusMultiFormatSection:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusMultiFormatEnd:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusObject:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusClear:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillRects:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawRects:
         {
+
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillPolygon:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawLines:
         {
+            quint32  dataSize;
+            quint32  count;
+
+            bool  isCompressed = (flags & 0x01);
+            
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillEllipse:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawEllipse:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillPie:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawPie:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawArc:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillRegion:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillPath:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawPath:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusFillClosedCurve:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawClosedCurve:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawCurve:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawBeziers:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawImage:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawImagePoints:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawString:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetRenderingOrigin:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetAntiAliasMode:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTextRenderingHint:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTextContrast:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetInterpolationMode:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetPixelOffsetMode:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetCompositingMode:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetCompositingQuality:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSave:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusRestore:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusBeginContainer:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusBeginContainerNoParams:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusEndContainer:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetWorldTransform:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusResetWorldTransform:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusMultiplyWorldTransform:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusTranslateWorldTransform:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusScaleWorldTransform:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusRotateWorldTransform:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetPageTransform:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusResetClip:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetClipRect:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetClipPath:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetClipRegion:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusOffsetClip:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusDrawDriverstring:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusStrokeFillPath:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSerializableObject:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTSGraphics:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
     case EmfPlusSetTSClip:
         {
+            // Not Yet Implemented
             soakBytes(stream, size - 8);
         }
         break;
