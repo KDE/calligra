@@ -1657,35 +1657,44 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
         returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
 
         if (((m_type == ParagraphBulletProperties::BulletType) && m_bulletChar.isEmpty()) ||
-            (indent == 0))
+            (m_type == ParagraphBulletProperties::DefaultType))
         {
-            if ((qAbs(indent) > margin) && (indent < 0)) {
-                //hanging:
-                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
-            } else {
-                //first-line and none:
+            //hanging:
+            if (indent < 0) {
+                if (qAbs(indent) > margin) {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+                } else {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+                }
+            }
+            //first-line and none:
+            else {
                 returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
             }
             returnValue += "text:label-followed-by=\"nothing\" ";
-        }
-        else {
-            if (qAbs(indent) > margin) {
-                //hanging:
-                if (indent < 0) {
+        } else {
+            //hanging:
+            if (indent < 0) {
+                if (qAbs(indent) > margin) {
                     returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
                     returnValue += "text:label-followed-by=\"listtab\" ";
                     returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
-                }
-                //first-line:
-                else {
-                    returnValue += QString("fo:text-indent=\"0pt\" ");
+                } else {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
                     returnValue += "text:label-followed-by=\"listtab\" ";
-                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(indent);
+                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin);
                 }
-            } else {
-                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+            }
+            //first-line:
+            else if (indent > 0) {
+                returnValue += QString("fo:text-indent=\"0pt\" ");
                 returnValue += "text:label-followed-by=\"listtab\" ";
-                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin);
+                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin + indent);
+            }
+            //none
+            else {
+                returnValue += QString("fo:text-indent=\"0pt\" ");
+                returnValue += "text:label-followed-by=\"nothing\" ";
             }
         }
         returnValue += "/>";

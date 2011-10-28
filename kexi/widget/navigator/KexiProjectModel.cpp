@@ -450,7 +450,6 @@ bool KexiProjectModel::highlightSearchableObject(const QModelIndex &index)
         setData(d->searchHighlight, false, SearchHighlight);
     }
     setData(index, true, SearchHighlight);
-    //setData(index, true, SearchHighlight);
     emit highlightSearchedItem(index);
     d->searchHighlight = QPersistentModelIndex(index);
     return true;
