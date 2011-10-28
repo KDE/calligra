@@ -52,7 +52,7 @@
 #include <KoCanvasController.h>
 #include <KoCopyController.h>
 #include <KoCutController.h>
-#include <KoSelectionManager.h>
+#include <KoViewItemContextBar.h>
 
 //KDE Headers
 #include <klocale.h>
@@ -173,12 +173,15 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 
     //install selection manager for Slides Sorter View and Custom Shows View
-    m_slidesSorterSelectionManager = new KoSelectionManager(m_slidesSorterView);
-    new KoSelectionManager(m_customSlideShowView);
+    m_slidesSorterItemContextBar = new KoViewItemContextBar(m_slidesSorterView);
+    new KoViewItemContextBar(m_customSlideShowView);
+    QToolButton *duplicateButton = m_slidesSorterItemContextBar->addContextButton(i18n("Duplicate Slide"),QString("edit-copy"));
+    QToolButton *deleteButton = m_slidesSorterItemContextBar->addContextButton(i18n("Delete Slide"),QString("edit-delete"));
 
-    QToolButton *duplicateButton = m_slidesSorterSelectionManager->addContextButton(i18n("Duplicate Slide"),QString("edit-copy"));
 
-    connect(duplicateButton, SIGNAL(clicked()), this, SLOT(duplicateSlide()));
+    //setup signals for item context bar buttons
+    connect(duplicateButton, SIGNAL(clicked()), this, SLOT(contextBarDuplicateSlide()));
+    connect(deleteButton, SIGNAL(clicked()), this, SLOT(contextBarDeleteSlide()));
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
@@ -728,14 +731,24 @@ void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
     connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
 }
 
-void KPrViewModeSlidesSorter::duplicateSlide()
+void KPrViewModeSlidesSorter::contextBarDuplicateSlide()
 {
     QList<KoPAPageBase *> slides;
-    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterSelectionManager->currentIndex().row (), false);
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row (), false);
     if (page) {
         slides.append(page);
         updateActivePage(page);
     }
     m_slidesSorterModel->copySlides(slides);
     editPaste();
+}
+
+void KPrViewModeSlidesSorter::contextBarDeleteSlide()
+{
+    QList<KoPAPageBase *> slides;
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row (), false);
+    if (page) {
+        slides.append(page);
+    }
+    m_slidesSorterModel->removeSlides(slides);
 }

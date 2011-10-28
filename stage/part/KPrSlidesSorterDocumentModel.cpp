@@ -378,6 +378,7 @@ bool KPrSlidesSorterDocumentModel::removeSlides(const QList<KoPAPageBase *> &sli
         KPrDocument *doc = static_cast<KPrDocument *>(m_document);
         KUndo2Command *cmd = new KPrDeleteSlidesCommand(doc, slides);
         if (cmd) {
+            removeRows(m_document->pageIndex(slides.first()), slides.count(), QModelIndex());
             m_document->addCommand(cmd);
             return true;
         }

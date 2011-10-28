@@ -19,8 +19,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSELECTIONMANAGER_H
-#define KOSELECTIONMANAGER_H
+#ifndef KOVIEWITEMCONTEXTBAR_H
+#define KOVIEWITEMCONTEXTBAR_H
 
 #include <QObject>
 #include "kowidgets_export.h"
@@ -38,13 +38,13 @@ class QRect;
  * Whenever an item is hovered by the mouse, a toggle button is shown
  * which allows to select/deselect the current item.
  */
-class KOWIDGETS_EXPORT KoSelectionManager : public QObject
+class KOWIDGETS_EXPORT KoViewItemContextBar : public QObject
 {
     Q_OBJECT
 
 public:
-    KoSelectionManager(QAbstractItemView *parent);
-    virtual ~KoSelectionManager();
+    KoViewItemContextBar(QAbstractItemView *parent);
+    virtual ~KoViewItemContextBar();
     virtual bool eventFilter(QObject *watched, QEvent *event);
     QToolButton *addContextButton(QString text, QString iconName);
     QModelIndex currentIndex();
@@ -52,6 +52,11 @@ public:
 signals:
     /** Is emitted if the selection has been changed by the toggle button. */
     void selectionChanged();
+
+public slots:
+    void reset();
+    void enableContextBar();
+    void disableContextBar();
 
 private slots:
     void slotEntered(const QModelIndex &index);
@@ -66,10 +71,11 @@ private:
     void applyPointingHandCursor();
     void restoreCursor();
     QAbstractItemView *m_view;
+    bool m_enabled;
     bool m_appliedPointingHandCursor;
-    QModelIndex mIndexUnderCursor;
-    QWidget *mContextBar;
-    QToolButton *mToggleSelectionButton;
+    QModelIndex m_IndexUnderCursor;
+    QWidget *m_ContextBar;
+    QToolButton *m_ToggleSelectionButton;
     QHBoxLayout *m_Layout;
 };
-#endif // KOSELECTIONMANAGER_H
+#endif // KOVIEWITEMCONTEXTBAR_H

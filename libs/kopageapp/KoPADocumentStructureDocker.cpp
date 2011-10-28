@@ -46,7 +46,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
 #include <KoShapePaste.h>
-#include <KoSelectionManager.h>
+#include <KoViewItemContextBar.h>
 
 #include <KMenu>
 #include <klocale.h>
@@ -190,7 +190,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     else
         setViewMode( viewModeFromString( viewModeString ) );
 
-    new KoSelectionManager(m_sectionView);
+    m_itemsContextBar = new KoViewItemContextBar(m_sectionView);
 }
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
@@ -528,16 +528,19 @@ void KoPADocumentStructureDocker::setMasterMode(bool master)
 void KoPADocumentStructureDocker::minimalView()
 {
     setViewMode(KoDocumentSectionView::MinimalMode);
+    m_itemsContextBar->disableContextBar();
 }
 
 void KoPADocumentStructureDocker::detailedView()
 {
     setViewMode(KoDocumentSectionView::DetailedMode);
+    m_itemsContextBar->disableContextBar();
 }
 
 void KoPADocumentStructureDocker::thumbnailView()
 {
     setViewMode(KoDocumentSectionView::ThumbnailMode);
+    m_itemsContextBar->enableContextBar();
 }
 
 void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)

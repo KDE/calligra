@@ -53,8 +53,7 @@ set(kowidgets_LIB_SRCS
     KoLineStyleModel.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
-    KoSelectionManager.cpp
-    KoSelectionToggle.cpp
+    KoViewItemContextBar.cpp
     KoContextBarButton.cpp
 )
 
