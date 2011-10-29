@@ -320,9 +320,11 @@ KisNode* AnimatorManager::activeLayer()
     return node;
 }
 
-void AnimatorManager::createNormalLayer()
+template <class CustomAnimatedLayer>
+void AnimatorManager::createAnimatedLayer()
 {
-    FramedAnimatedLayer* newLayer = new NormalAnimatedLayer(image(), "_ani_New Animated Layer", 255);
+    FramedAnimatedLayer* newLayer = new CustomAnimatedLayer(image(), "", 255);
+    newLayer->setAName("New layer");
     
     KisNode* activeNode = activeLayer();
     AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(activeNode); //getAnimatedLayerByChild(activeNode);
@@ -337,6 +339,16 @@ void AnimatorManager::createNormalLayer()
     }
     
     layerAdded(newLayer);
+}
+
+void AnimatorManager::createNormalLayer()
+{
+    createAnimatedLayer<NormalAnimatedLayer>();
+}
+
+void AnimatorManager::createControlLayer()
+{
+    createAnimatedLayer<ControlAnimatedLayer>();
 }
 
 void AnimatorManager::removeLayer()

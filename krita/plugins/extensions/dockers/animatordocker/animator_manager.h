@@ -81,7 +81,9 @@ public:
     virtual void initLayers();
     
 public:
+    template <class CustomAnimatedLayer> void createAnimatedLayer();
     virtual void createNormalLayer();
+    virtual void createControlLayer();
     virtual void removeLayer();
     virtual void renameLayer(KisNode* layer, const QString& name);
     virtual void renameLayer(const QString& name);

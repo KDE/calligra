@@ -64,6 +64,7 @@ protected slots:
     virtual void toggleLooping(bool v);
     
     virtual void createNormalLayer();
+    virtual void createControlLayer();
     virtual void removeLayer();
     
     virtual void renameLayer();
