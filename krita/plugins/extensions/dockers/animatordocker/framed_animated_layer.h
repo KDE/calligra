@@ -48,6 +48,9 @@ public:
 public:
     virtual FrameLayer* getCachedFrame(int num) const;
     virtual FrameLayer* getKeyFrame(int num) const;
+
+public:
+    virtual bool displayable() const;
     
 public:
     virtual bool isKeyFrame(int num) const;

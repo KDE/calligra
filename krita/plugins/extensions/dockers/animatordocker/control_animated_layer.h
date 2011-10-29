@@ -33,6 +33,7 @@ public:
     virtual ~ControlAnimatedLayer();
 
 public:
+    virtual bool displayable() const;
     virtual QString aName() const;
     virtual void setAName(const QString& name);
     virtual bool isKeyFrame(int num) const;

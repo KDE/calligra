@@ -66,6 +66,9 @@ void AnimatorUpdater::update(int oldFrame, int newFrame)
 
 void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
 {
+    if (! layer->displayable())
+        return;
+    
     FrameLayer* oldf = layer->getCachedFrame(oldFrame);
     FrameLayer* newf;
     if (m_playerMode)

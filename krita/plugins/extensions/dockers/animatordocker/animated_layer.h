@@ -47,6 +47,9 @@ public:
     virtual bool enabled();
     
 public:
+    virtual bool displayable() const = 0;
+    
+public:
     /**
      * @return number of first frame with some info
      */

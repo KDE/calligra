@@ -50,6 +50,11 @@ void FramedAnimatedLayer::setAName(const QString& name)
     setName("_ani_"+name);
 }
 
+bool FramedAnimatedLayer::displayable() const
+{
+    return true;
+}
+
 
 FrameLayer* FramedAnimatedLayer::frameAt(int num) const
 {

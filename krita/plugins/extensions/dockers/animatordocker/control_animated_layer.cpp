@@ -32,6 +32,10 @@ ControlAnimatedLayer::~ControlAnimatedLayer()
 {
 }
 
+bool ControlAnimatedLayer::displayable() const
+{
+    return false;
+}
 
 QString ControlAnimatedLayer::aName() const
 {
