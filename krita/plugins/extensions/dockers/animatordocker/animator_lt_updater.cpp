@@ -35,6 +35,9 @@ AnimatorLTUpdater::~AnimatorLTUpdater()
 
 void AnimatorLTUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
 {
+    if (! layer->displayable())
+        return;
+    
     if (mode() == AnimatorLTUpdater::Disabled)
     {
         AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
