@@ -1,5 +1,5 @@
 /*
- *  Light table docker
+ *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,35 +17,45 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef ANIMATOR_LT_VIEW_H
+#define ANIMATOR_LT_VIEW_H
 
-#ifndef ANIMATOR_LT_DOCK_H
-#define ANIMATOR_LT_DOCK_H
-
-#include <QDockWidget>
-
-#include <KoCanvasObserverBase.h>
+#include <QWidget>
+#include <QSlider>
+#include <QBoxLayout>
+#include <QLayoutItem>
+#include <QSpinBox>
 
 #include "animator_lt.h"
-#include "animator_lt_view.h"
-#include "animator_manager.h"
+#include "lt_slider.h"
 
-class AnimatorLTDock : public QDockWidget, public KoCanvasObserverBase
+class AnimatorLTView : public QWidget
 {
     Q_OBJECT
 
 public:
-    AnimatorLTDock();
-    virtual ~AnimatorLTDock();
+    AnimatorLTView(QWidget* parent = 0);
+    virtual ~AnimatorLTView();
     
 public:
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas();
+    virtual void setLT(AnimatorLT* lt);
     
-protected:
+protected slots:
+    virtual void slidersUpdate();
     virtual void setupUI();
     
 private:
-    AnimatorLTView* m_view;
+    AnimatorLT* m_lt;
+    
+private:
+    QVBoxLayout* m_layout;
+    QHBoxLayout* m_slidersLayout;
+    QList<LTSlider*> m_sliders;
+    QSpinBox* m_nearSpinbox;
+    
+    // Spacers
+    QSpacerItem* m_spL;
+    QSpacerItem* m_spR;
 };
 
-#endif // ANIMATOR_LT_DOCK_H
+#endif // ANIMATOR_LT_VIEW_H

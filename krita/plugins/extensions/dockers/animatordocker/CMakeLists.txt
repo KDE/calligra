@@ -7,8 +7,8 @@ set(KRITA_ANIMATORDOCKER_PART_SRCS
     animator_loader.cpp animator_meta_info.cpp
     animator_model.cpp animator_view.cpp
     animator_actions.cpp
-    animator_dock.cpp animator_control_dock.cpp
-    animator_lt_dock.cpp lt_slider.cpp animator_lt.cpp
+    animator_dock.cpp animator_control_dock.cpp animator_lt_dock.cpp
+    animator_lt.cpp animator_lt_view.cpp lt_slider.cpp
     
     animated_layer.cpp frame_layer.cpp
     framed_animated_layer.cpp simple_frame_layer.cpp
