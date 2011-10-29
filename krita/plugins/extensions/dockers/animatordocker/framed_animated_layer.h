@@ -41,6 +41,8 @@ public:
 public:
     virtual FrameLayer* frameAt(int num) const;
     virtual void insertFrame(FrameLayer* frame);
+    virtual void createFrame(int num, bool isKey);
+    virtual FrameLayer* emptyFrame();
     virtual void removeFrameAt(int num);
 
 public:

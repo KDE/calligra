@@ -36,6 +36,7 @@ public:
     virtual QString aName() const;
     virtual void setAName(const QString& name);
     virtual bool isKeyFrame(int num) const;
+    virtual FrameLayer* emptyFrame();
     
 public:
     // Player interface
@@ -44,7 +45,6 @@ public:
     
     // Control interface
     virtual void setLoop(int from, int to, int number);
-    virtual void clearLoop(int to);
 };
 
 #endif // CONTROL_ANIMATED_LAYER_H

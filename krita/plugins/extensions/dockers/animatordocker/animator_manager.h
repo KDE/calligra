@@ -96,6 +96,8 @@ public:
     virtual void interpolate();
     virtual void removeFrame();
     
+    virtual void createLoopFrame(int target, int repeat);
+    
     virtual void moveFrame(int relPos);
     
 public:

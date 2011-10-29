@@ -83,6 +83,18 @@ void FramedAnimatedLayer::insertFrame(FrameLayer* frame)
     manager->layerFramesNumberChange(this, dataEnd());
 }
 
+void FramedAnimatedLayer::createFrame(int num, bool isKey)
+{
+    FrameLayer* frame = emptyFrame();
+    frame->setName(getNameForFrame(num, isKey));
+    insertFrame(frame);
+}
+
+FrameLayer* FramedAnimatedLayer::emptyFrame()
+{
+    return new SimpleFrameLayer(image(), "", 255);
+}
+
 void FramedAnimatedLayer::removeFrameAt(int num)
 {
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());

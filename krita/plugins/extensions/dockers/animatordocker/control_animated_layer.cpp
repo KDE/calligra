@@ -48,6 +48,11 @@ bool ControlAnimatedLayer::isKeyFrame(int num) const
     return frameAt(num);
 }
 
+FrameLayer* ControlAnimatedLayer::emptyFrame()
+{
+    return new ControlFrameLayer(image(), "", 255);
+}
+
 
 int ControlAnimatedLayer::nextFrame(int fnum)
 {
@@ -67,16 +72,22 @@ void ControlAnimatedLayer::reset()
     foreach (frame, frames())
     {
         ControlFrameLayer* cframe = qobject_cast<ControlFrameLayer*>(frame);
-        cframe->reset();
+        if (cframe)
+            cframe->reset();
     }
 }
 
 void ControlAnimatedLayer::setLoop(int from, int to, int number)
 {
+    if (!isKeyFrame(to))
+    {
+        createFrame(to, true);
+    }
+    ControlFrameLayer* frame = qobject_cast<ControlFrameLayer*>(frameAt(to));
+    if (!frame)
+        return;
     
-}
-
-void ControlAnimatedLayer::clearLoop(int to)
-{
-    
+    frame->setTarget(from);
+    frame->setRepeat(number);
+    frame->reset();
 }

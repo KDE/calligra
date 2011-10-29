@@ -38,6 +38,7 @@
 
 #include "normal_animated_layer.h"
 #include "control_animated_layer.h"
+#include <QSpinBox>
 
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
 {
@@ -311,7 +312,61 @@ void AnimatorActions::interpolate()
 void AnimatorActions::createLoop()
 {
     Q_ASSERT(m_manager);
-    m_manager;
+    
+    int target;
+    int repeat;
+    
+    KDialog* setLoopDialog = new KDialog();
+    setLoopDialog->setModal(true);
+    setLoopDialog->setAttribute(Qt::WA_DeleteOnClose);
+    setLoopDialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    setLoopDialog->setCaption(i18n("Create loop"));
+    
+    QWidget* mainWidget = new QWidget(setLoopDialog);
+    QVBoxLayout* layout = new QVBoxLayout(mainWidget);
+    QLabel* label = new QLabel(i18n("Set loop begining and repeatition number"), mainWidget);
+    QHBoxLayout* spinLayout = new QHBoxLayout(mainWidget);
+    QSpinBox* targetSpin = new QSpinBox(mainWidget);
+    QSpinBox* repeatSpin = new QSpinBox(mainWidget);
+    
+    spinLayout->addWidget(targetSpin);
+    spinLayout->addWidget(repeatSpin);
+    layout->addWidget(label);
+    layout->addLayout(spinLayout);
+    
+    mainWidget->setLayout(layout);
+    
+    connect(targetSpin, SIGNAL(valueChanged(int)), SLOT(setLoopTarget(int)));
+    connect(repeatSpin, SIGNAL(valueChanged(int)), SLOT(setLoopRepeat(int)));
+    
+    targetSpin->setRange(0, 0xffff);
+    targetSpin->setValue(0);
+    setLoopTarget(0);
+    repeatSpin->setRange(-1, 0xff);
+    repeatSpin->setValue(-1);
+    setLoopRepeat(-1);
+    
+    connect(setLoopDialog, SIGNAL(accepted()), SLOT(doCreateLoop()));
+    
+    setLoopDialog->setMainWidget(mainWidget);
+    setLoopDialog->show();
+}
+
+void AnimatorActions::doCreateLoop()
+{
+    Q_ASSERT(m_manager);
+    
+    m_manager->createLoopFrame(m_loopTarget, m_loopRepeat);
+}
+
+void AnimatorActions::setLoopRepeat(int repeat)
+{
+    m_loopRepeat = repeat;
+}
+
+void AnimatorActions::setLoopTarget(int target)
+{
+    m_loopTarget = target;
 }
 
 

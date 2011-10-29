@@ -78,6 +78,9 @@ protected slots:
     virtual void interpolate();
     
     virtual void createLoop();
+    virtual void doCreateLoop();
+    virtual void setLoopTarget(int target);
+    virtual void setLoopRepeat(int repeat);
     
     virtual void moveLeft();
     virtual void moveRight();
@@ -94,6 +97,8 @@ private:
     
 private:
     QString m_renameString;
+    int m_loopTarget;
+    int m_loopRepeat;
 };
 
 #endif // ANIMATOR_ACTIONS_H

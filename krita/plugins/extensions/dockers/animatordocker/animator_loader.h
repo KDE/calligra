@@ -36,7 +36,7 @@ public:
     virtual void loadLayer(KisNodeSP node);
     
 protected:
-    template <class CustomAnimatedLayer, class CustomFrameLayer> void loadFramedLayer(KisNodeSP node);
+    template <class CustomAnimatedLayer, class CustomFrameLayer> CustomAnimatedLayer* loadFramedLayer(KisNodeSP node);
 
 private:
     AnimatorManager* m_manager;

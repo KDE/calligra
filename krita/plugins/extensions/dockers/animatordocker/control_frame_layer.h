@@ -34,6 +34,7 @@ public:
     
 public:
     virtual void setContent(KisNode* c);
+    virtual KisNode* getContent();
     virtual bool isKeyFrame();
     
 public:

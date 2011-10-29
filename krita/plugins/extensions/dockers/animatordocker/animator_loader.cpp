@@ -87,13 +87,10 @@ void AnimatorLoader::loadLayers(KisNodeSP rootNode)
         return;
     }
     
-//     KisNodeSP child = rootNode->firstChild();
-//     while (child)
     for (int i = 0; i < rootNode->childCount(); ++i)
     {
         KisNodeSP child = rootNode->at(i);
         loadLayers(child);
-//         child = child->nextSibling();
     }
 }
 
@@ -104,7 +101,8 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
         loadFramedLayer<NormalAnimatedLayer, SimpleFrameLayer>(node);
     } else if (node->name().startsWith("_anicontrol_"))
     {
-        loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
+        ControlAnimatedLayer* clayer = loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
+        clayer->reset();
     } else
     {
         warnKrita << "only normal framed and control layers are implemented";
@@ -112,7 +110,7 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
 }
 
 template <class CustomAnimatedLayer, class CustomFrameLayer>
-void AnimatorLoader::loadFramedLayer(KisNodeSP node)
+CustomAnimatedLayer* AnimatorLoader::loadFramedLayer(KisNodeSP node)
 {
     KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
     FramedAnimatedLayer* al = new CustomAnimatedLayer(*gl);
@@ -134,4 +132,6 @@ void AnimatorLoader::loadFramedLayer(KisNodeSP node)
     }
 
     m_manager->removeLayer(gl);
+    
+    return qobject_cast<CustomAnimatedLayer*>(al);
 }

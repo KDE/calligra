@@ -31,6 +31,7 @@
 #include "animator_config.h"
 
 #include "normal_animated_layer.h"
+#include "control_animated_layer.h"
 
 AnimatorManager::AnimatorManager(KisImage* image)
 {
@@ -45,7 +46,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
     
     m_framesNumber = 0;
     
-    m_info = new AnimatorMetaInfo(1, 1);
+    m_info = new AnimatorMetaInfo(1, 2);
     
     connect(this, SIGNAL(layerFramesNumberChanged(AnimatedLayer*,int)), SLOT(framesNumberCheck(AnimatedLayer*,int)));
     
@@ -418,6 +419,15 @@ void AnimatorManager::interpolate()
         return;
     setFrameContent(frame, content);
     getUpdater()->updateLayer(alayer, fnum, fnum);
+}
+
+
+void AnimatorManager::createLoopFrame(int target, int repeat)
+{
+    ControlAnimatedLayer* clayer = qobject_cast<ControlAnimatedLayer*>(activeLayer());
+    if (!clayer)
+        return;
+    clayer->setLoop(target, m_switcher->currentFrame(), repeat);
 }
 
 

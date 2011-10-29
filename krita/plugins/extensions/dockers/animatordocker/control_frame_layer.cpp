@@ -22,6 +22,7 @@
 #include <sstream>
 
 #include <kis_debug.h>
+#include "animator_manager_factory.h"
 
 ControlFrameLayer::ControlFrameLayer(const KisGroupLayer& source): SimpleFrameLayer(source)
 {
@@ -41,6 +42,18 @@ void ControlFrameLayer::setContent(KisNode* c)
     load();
 }
 
+KisNode* ControlFrameLayer::getContent()
+{
+    KisNode* content = SimpleFrameLayer::getContent();
+    if (!content)
+    {
+        AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
+        manager->putNodeAt(new KisGroupLayer(image(), "_", 255), this, 0);
+    }
+    content = SimpleFrameLayer::getContent();
+    return content;
+}
+
 bool ControlFrameLayer::isKeyFrame()
 {
     return true;
@@ -49,8 +62,6 @@ bool ControlFrameLayer::isKeyFrame()
 
 void ControlFrameLayer::load()
 {
-    if (!getContent())
-        return;
     if (getContent()->name().startsWith("_loop_"))
     {
         std::stringstream ss;
@@ -71,8 +82,6 @@ void ControlFrameLayer::load()
 
 void ControlFrameLayer::save()
 {
-    if (!getContent())
-        return;
     getContent()->setName("_loop_"+QString::number(target())+"_"+QString::number(repeat()));
 }
 
