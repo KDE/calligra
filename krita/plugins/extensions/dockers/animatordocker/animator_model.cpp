@@ -19,7 +19,9 @@
 
 #include "animator_model.h"
 
-#define BASE_COLUMNS_NUMBER 1
+#define BASE_COLUMNS_NUMBER 3
+
+#include <KIconLoader>
 
 #include "framed_animated_layer.h"
 #include "animator_manager_factory.h"
@@ -88,8 +90,24 @@ QVariant AnimatorModel::headerData(int section, Qt::Orientation orientation, int
                 return QSize(frameWidth(), 0);
         } else
         {
-            if (role == Qt::DisplayRole)
+            if (section == 0 && role == Qt::DisplayRole)
                 return "Layer";
+            
+            if (section == 1)
+            {
+                if (role == Qt::DecorationRole)
+                    return SmallIcon("layer-visible-on");
+                else if (role == Qt::DisplayRole)
+                    return "";
+            }
+            
+            if (section == 2)
+            {
+                if (role == Qt::DecorationRole)
+                    return SmallIcon("dialog-ok-apply");
+                else if (role == Qt::DisplayRole)
+                    return "";
+            }
         }
     }
     return QAbstractItemModel::headerData(section, orientation, role);
@@ -116,6 +134,24 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
         if (role == Qt::DisplayRole)
             return node ? node->name() : "nonode";
         return QVariant();
+    } else if (ind.column() == 1)
+    {
+        if (role == Qt::CheckStateRole)
+        {
+            KisNode* node = nodeFromIndex(index(ind.row(), 0, ind.parent()));
+            return node->visible();
+        }
+    } else if (ind.column() == 2)
+    {
+        if (role == Qt::CheckStateRole)
+        {
+            KisNode* node = nodeFromIndex(index(ind.row(), 0, ind.parent()));
+            AnimatedLayer* layer = qobject_cast<AnimatedLayer*>(node);
+            if (!layer)
+                return node->visible();
+            else
+                return layer->enabled();
+        }
     } else                      // frames
     {
         AnimatedLayer* alayer = dynamic_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0, ind.parent())));
