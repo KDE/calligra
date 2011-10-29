@@ -53,6 +53,9 @@ public:
     virtual int frameWidth() const;
     virtual void setFrameWidth(int width);
     
+    virtual bool showThumbs() const;
+    virtual void setShowThumbs(bool val);
+    
 public:
     virtual KisImage* image() const;
     
@@ -67,6 +70,7 @@ protected:
     
 private:
     int m_frameWidth;
+    bool m_showThumbs;
     
 private:
     KisImage* m_image;

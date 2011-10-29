@@ -22,6 +22,8 @@
 #include <QBoxLayout>
 #include <qlayoutitem.h>
 #include <QSlider>
+#include <QToolButton>
+#include <QToolBar>
 
 #include <KoCanvasBase.h>
 
@@ -54,15 +56,24 @@ void AnimatorDock::setupUI()
     
     QHBoxLayout* downLayout = new QHBoxLayout(mainWidget);
     
+    QToolBar* downToolBar = new QToolBar(mainWidget);
+    
     QSlider* columnWidthSlider = new QSlider(Qt::Horizontal, mainWidget);
     columnWidthSlider->setRange(8, 64);
     columnWidthSlider->setValue(10);
     columnWidthSlider->setPageStep(8);
     columnWidthSlider->setMaximumWidth(128);
     connect(columnWidthSlider, SIGNAL(valueChanged(int)), SLOT(setFrameWidth(int)));
+    downToolBar->addWidget(columnWidthSlider);
+    
+    QAction* showThumbs = new QAction(SmallIcon("view-preview"), i18n("Show frame thumbnails"), mainWidget);
+    showThumbs->setCheckable(true);
+    showThumbs->setChecked(false);
+    connect(showThumbs, SIGNAL(triggered(bool)), SLOT(setShowThumbs(bool)));
+    downToolBar->addAction(showThumbs);
     
     downLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
-    downLayout->addWidget(columnWidthSlider);
+    downLayout->addWidget(downToolBar);
     
     mLayout->addLayout(downLayout);
     
@@ -100,5 +111,12 @@ void AnimatorDock::setFrameWidth(int width)
         m_view->resizeColumnsToContent();
     }
 }
+
+void AnimatorDock::setShowThumbs(bool val)
+{
+    if (m_mainModel)
+        m_mainModel->setShowThumbs(val);
+}
+
 
 #include "animator_dock.moc"

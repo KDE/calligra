@@ -42,6 +42,9 @@ AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image);
     
     connect(manager, SIGNAL(framesNumberChanged(int)), SLOT(layoutChangedSlot()));
+    
+    m_frameWidth = 8;
+    m_showThumbs = false;
 }
 
 AnimatorModel::~AnimatorModel()
@@ -124,6 +127,16 @@ void AnimatorModel::setFrameWidth(int width)
     m_frameWidth = width;
 }
 
+bool AnimatorModel::showThumbs() const
+{
+    return m_showThumbs;
+}
+
+void AnimatorModel::setShowThumbs(bool val)
+{
+    m_showThumbs = val;
+}
+
 
 QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
 {
@@ -159,10 +172,26 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
         if (alayer && alayer->inherits("FramedAnimatedLayer"))
         {
             frame = qobject_cast<FramedAnimatedLayer*>(alayer)->frameAt(frameNumber(ind));
-            if (frame && !alayer->displayable())
+            if (frame)
             {
-                if (role == Qt::DisplayRole)
-                    return "x";
+                if (alayer->displayable() && showThumbs())
+                {
+                    if (role == Qt::DecorationRole)
+                    {
+                        SimpleFrameLayer* sframe = qobject_cast<SimpleFrameLayer*>(frame);
+                        if (sframe && sframe->getContent())
+                        {
+                            KisNode* node = sframe->getContent();
+                            QImage thumb = node->createThumbnail(frameWidth(), frameWidth());
+                            if (!thumb.isNull())
+                                return thumb;
+                        }
+                    }
+                } else
+                {
+                    if (role == Qt::DisplayRole)
+                        return "x";
+                }
             }
         }
         if (role == Qt::BackgroundRole)
@@ -170,17 +199,6 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
             int curFrame = AnimatorManagerFactory::instance()->getManager(image())->getSwitcher()->currentFrame();
             if (frameNumber(ind) == curFrame)
                 return QBrush(QColor(127, 127, 127));
-        }
-        if (role == Qt::DecorationRole)
-        {
-            SimpleFrameLayer* sframe = qobject_cast<SimpleFrameLayer*>(frame);
-            if (sframe && sframe->getContent() && alayer->displayable())
-            {
-                KisNode* node = sframe->getContent();
-                QImage thumb = node->createThumbnail(frameWidth(), frameWidth());
-                if (!thumb.isNull())
-                    return thumb;
-            }
         }
     }
     

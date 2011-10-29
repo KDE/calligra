@@ -45,6 +45,7 @@ public slots:
     
 protected slots:
     virtual void setFrameWidth(int width);
+    virtual void setShowThumbs(bool val);
     
 private:
     virtual void setupUI();
