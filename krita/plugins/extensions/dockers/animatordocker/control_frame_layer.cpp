@@ -26,10 +26,12 @@
 
 ControlFrameLayer::ControlFrameLayer(const KisGroupLayer& source): SimpleFrameLayer(source)
 {
+    setEnabled(true);
 }
 
 ControlFrameLayer::ControlFrameLayer(KisImageWSP image, const QString& name, quint8 opacity): SimpleFrameLayer(image, name, opacity)
 {
+    setEnabled(true);
 }
 
 ControlFrameLayer::~ControlFrameLayer()
