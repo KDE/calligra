@@ -49,7 +49,6 @@ void KWPageStylePrivate::clear()
     footNoteSeparatorLineType = Qt::SolidLine;
 
     displayName.clear();
-    mainFrame = true;
     headerDistance = 10; // ~3mm
     footerDistance = 10;
     headerMinimumHeight = 0;
@@ -153,16 +152,6 @@ Words::HeaderFooterType KWPageStyle::headerPolicy() const
 Words::HeaderFooterType KWPageStyle::footerPolicy() const
 {
     return d->footers;
-}
-
-void KWPageStyle::setHasMainTextFrame(bool on)
-{
-    d->mainFrame = on;
-}
-
-bool KWPageStyle::hasMainTextFrame() const
-{
-    return d->mainFrame;
 }
 
 qreal KWPageStyle::headerDistance() const
