@@ -154,11 +154,12 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
         }
     } else                      // frames
     {
-        AnimatedLayer* alayer = dynamic_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0, ind.parent())));
+        AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0, ind.parent())));
+        FrameLayer* frame = 0;
         if (alayer && alayer->inherits("FramedAnimatedLayer"))
         {
-            FrameLayer* frame = dynamic_cast<FramedAnimatedLayer*>(alayer)->frameAt(frameNumber(ind));
-            if (frame)
+            frame = qobject_cast<FramedAnimatedLayer*>(alayer)->frameAt(frameNumber(ind));
+            if (frame && !alayer->displayable())
             {
                 if (role == Qt::DisplayRole)
                     return "x";
@@ -170,10 +171,18 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
             if (frameNumber(ind) == curFrame)
                 return QBrush(QColor(127, 127, 127));
         }
+        if (role == Qt::DecorationRole)
+        {
+            SimpleFrameLayer* sframe = qobject_cast<SimpleFrameLayer*>(frame);
+            if (sframe && sframe->getContent() && alayer->displayable())
+            {
+                KisNode* node = sframe->getContent();
+                QImage thumb = node->createThumbnail(frameWidth(), frameWidth());
+                if (!thumb.isNull())
+                    return thumb;
+            }
+        }
     }
-    
-//     if (role == Qt::DisplayRole)
-//         return "-";
     
     return QVariant();
 }
