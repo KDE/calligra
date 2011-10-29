@@ -21,6 +21,7 @@
 #define ANIMATOR_CONTROL_DOCK_H
 
 #include <QDockWidget>
+#include <QToolBar>
 
 #include "kis_view2.h"
 #include "KoCanvasObserverBase.h"
@@ -40,8 +41,11 @@ public:
 public slots:
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
+
+protected slots:
+    virtual void setupFramesToolbar();
     
-private:
+protected:
     virtual void setupUI();
     
 private:
@@ -50,6 +54,7 @@ private:
     AnimatorActions* m_actions;
     
 private:
+    QToolBar* m_tbFrames;
 };
 
 

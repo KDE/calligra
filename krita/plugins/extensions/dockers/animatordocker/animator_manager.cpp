@@ -255,6 +255,9 @@ void AnimatorManager::activate(int frameNumber, KisNode* node)
             node = frame->getContent();
         m_nodeManager->activateNode(node);
     }
+    
+    AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(activeLayer());
+    emit animatedLayerActivated(alayer);
 }
 
 void AnimatorManager::activateKeyFrame(AnimatedLayer* alayer, int frameNumber)

@@ -42,6 +42,7 @@ void AnimatorControlDock::setCanvas(KoCanvasBase* canvas)
     KisImageSP image = kcanvas->image();
     m_manager = AnimatorManagerFactory::instance()->getManager(image.data(), kcanvas);
     m_actions->setManager(m_manager);
+    connect(m_actions, SIGNAL(frameActionsChanges()), SLOT(setupFramesToolbar()));
 }
 
 void AnimatorControlDock::unsetCanvas()
@@ -61,13 +62,9 @@ void AnimatorControlDock::setupUI()
     tbLayers->addActions(m_actions->actions("layers"));
     layout->addWidget(tbLayers);
     
-    QToolBar* tbFrames = new QToolBar(this);
-    tbFrames->addActions(m_actions->actions("frames"));
-    tbFrames->addSeparator();
-    tbFrames->addActions(m_actions->actions("frames-adding"));
-    tbFrames->addSeparator();
-    tbFrames->addActions(m_actions->actions("frames-moving"));
-    layout->addWidget(tbFrames);
+    m_tbFrames = new QToolBar(this);
+    setupFramesToolbar();
+    layout->addWidget(m_tbFrames);
     
     QToolBar* tbPlayer = new QToolBar(this);
     tbPlayer->addActions(m_actions->actions("player"));
@@ -88,4 +85,14 @@ void AnimatorControlDock::setupUI()
     QWidget* mainWidget = new QWidget(this);
     mainWidget->setLayout(layout);
     setWidget(mainWidget);
+}
+
+void AnimatorControlDock::setupFramesToolbar()
+{
+    m_tbFrames->clear();
+    m_tbFrames->addActions(m_actions->actions("frames"));
+    m_tbFrames->addSeparator();
+    m_tbFrames->addActions(m_actions->actions("frames-adding"));
+    m_tbFrames->addSeparator();
+    m_tbFrames->addActions(m_actions->actions("frames-moving"));
 }

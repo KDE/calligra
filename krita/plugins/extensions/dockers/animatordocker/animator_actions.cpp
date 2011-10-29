@@ -36,6 +36,9 @@
 
 #include "animator_config.h"
 
+#include "normal_animated_layer.h"
+#include "control_animated_layer.h"
+
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
 {
     m_manager = 0;
@@ -49,6 +52,7 @@ AnimatorActions::~AnimatorActions()
 void AnimatorActions::setManager(AnimatorManager* manager)
 {
     m_manager = manager;
+    connect(m_manager, SIGNAL(animatedLayerActivated(AnimatedLayer*)), SLOT(setupFrameActions(AnimatedLayer*)));
 }
 
 
@@ -70,6 +74,8 @@ QList< QAction* > AnimatorActions::actions() const
 
 QList< QAction* > AnimatorActions::actions(const QString& category) const
 {
+    if (category == "frames-adding")
+        return m_actions[m_frameActionsType];
     return m_actions[category];
 }
 
@@ -125,19 +131,23 @@ void AnimatorActions::initActions()
     
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
-    addAction("frames-adding", t);
+    addAction("frames-adding-normal", t);
     
     t = new QAction(SmallIcon("bookmark-new"), i18n("Create shape frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createShapeFrame()));
-    addAction("frames-adding", t);
+    addAction("frames-adding-normal", t);
     
     t = new QAction(SmallIcon("folder-new"), i18n("Create group frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createGroupFrame()));
-    addAction("frames-adding", t);
+    addAction("frames-adding-normal", t);
     
     t = new QAction(SmallIcon("tools-wizard"), i18n("Interpolate"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(interpolate()));
-    addAction("frames-adding", t);
+    addAction("frames-adding-normal", t);
+    
+    t = new QAction(SmallIcon("fork"), i18n("Create loop"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(createLoop()));
+    addAction("frames-adding-control", t);
     
     t = new QAction(SmallIcon("go-previous"), i18n("Move frame left"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(moveLeft()));
@@ -154,6 +164,19 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(enableLT(bool)));
     addAction("light-table", t);
 }
+
+void AnimatorActions::setupFrameActions(AnimatedLayer* layer)
+{
+    if (qobject_cast<NormalAnimatedLayer*>(layer))
+        m_frameActionsType = "frames-adding-normal";
+    else if (qobject_cast<ControlAnimatedLayer*>(layer))
+        m_frameActionsType = "frames-adding-control";
+    else
+        m_frameActionsType = "none";
+    
+    emit frameActionsChanges();
+}
+
 
 #if !LOAD_ON_START
 void AnimatorActions::loadLayers()
@@ -282,6 +305,13 @@ void AnimatorActions::interpolate()
 {
     Q_ASSERT(m_manager);
     m_manager->interpolate();
+}
+
+
+void AnimatorActions::createLoop()
+{
+    Q_ASSERT(m_manager);
+    m_manager;
 }
 
 

@@ -66,6 +66,8 @@ signals:
     void layerFramesNumberChanged(AnimatedLayer* layer, int number);
     void framesNumberChanged(int number);
     
+    void animatedLayerActivated(AnimatedLayer* layer);
+    
 protected slots:
     virtual void framesNumberCheck(AnimatedLayer* layer, int number);
     

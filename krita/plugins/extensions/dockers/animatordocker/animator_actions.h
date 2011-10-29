@@ -43,9 +43,15 @@ public:
     virtual QList<QAction*> actions() const;
     virtual QList<QAction*> actions(const QString& category) const;
     
+signals:
+    void frameActionsChanges();
+    
 protected:
     virtual void addAction(const QString& category, QAction* action);
     virtual void initActions();
+    
+protected slots:
+    virtual void setupFrameActions(AnimatedLayer* layer);
     
 protected slots:
 #if !LOAD_ON_START
@@ -71,6 +77,8 @@ protected slots:
     virtual void createGroupFrame();
     virtual void interpolate();
     
+    virtual void createLoop();
+    
     virtual void moveLeft();
     virtual void moveRight();
     
@@ -81,11 +89,11 @@ public slots:
     
 private:
     QMap< QString, QList<QAction*> > m_actions;
+    QString m_frameActionsType;
     AnimatorManager* m_manager;
     
 private:
     QString m_renameString;
-    
 };
 
 #endif // ANIMATOR_ACTIONS_H
