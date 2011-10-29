@@ -32,6 +32,8 @@ Frame manupulation:
 
 LT:
 [+] basic light table
+[-] lt profiles
+[-] lt saving
 [-] keyframed mode
 [-] additional filters for lt
 
@@ -49,4 +51,4 @@ Export:
 
 Import:
 [-] import image sequences
-[-] import trough imagemagick&ffmpeg
+[-] import through imagemagick&ffmpeg

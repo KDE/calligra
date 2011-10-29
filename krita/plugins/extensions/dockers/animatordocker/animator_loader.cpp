@@ -24,6 +24,8 @@
 #include "normal_animated_layer.h"
 #include "simple_frame_layer.h"
 #include "animator_meta_info.h"
+#include "control_animated_layer.h"
+#include "control_frame_layer.h"
 
 AnimatorLoader::AnimatorLoader(AnimatorManager* manager): QObject(manager)
 {
@@ -99,28 +101,37 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
 {
     if (node->name().startsWith("_ani_"))
     {
-        KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
-        FramedAnimatedLayer* al = new NormalAnimatedLayer(*gl);
-        
-        KisNodeSP parent = gl->parent();
-        m_manager->insertLayer(al, parent, parent->index(gl));
-        
-        int chcount = gl->childCount();
-        for (int i = 0; i < chcount; ++i)
-        {
-            KisNodeSP child = gl->at(0);
-            if (qobject_cast<KisGroupLayer*>(child.data()) && child->name().startsWith("_frame_"))
-            {
-                SimpleFrameLayer* frame = new SimpleFrameLayer(* qobject_cast<KisGroupLayer*>(child.data()));
-                al->insertFrame(frame);
-                frame->setContent(child->at(0).data());
-                m_manager->removeFrame(child.data());
-            }
-        }
-        
-        m_manager->removeLayer(gl);
+        loadFramedLayer<NormalAnimatedLayer, SimpleFrameLayer>(node);
+    } else if (node->name().startsWith("_anicontrol_"))
+    {
+        loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
     } else
     {
-        warnKrita << "only normal framed layers are implemented";
+        warnKrita << "only normal framed and control layers are implemented";
     }
+}
+
+template <class CustomAnimatedLayer, class CustomFrameLayer>
+void AnimatorLoader::loadFramedLayer(KisNodeSP node)
+{
+    KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
+    FramedAnimatedLayer* al = new CustomAnimatedLayer(*gl);
+
+    KisNodeSP parent = gl->parent();
+    m_manager->insertLayer(al, parent, parent->index(gl));
+
+    int chcount = gl->childCount();
+    for (int i = 0; i < chcount; ++i)
+    {
+        KisNodeSP child = gl->at(0);
+        if (qobject_cast<KisGroupLayer*>(child.data()) && child->name().startsWith("_frame_"))
+        {
+            SimpleFrameLayer* frame = new CustomFrameLayer(* qobject_cast<KisGroupLayer*>(child.data()));
+            al->insertFrame(frame);
+            frame->setContent(child->at(0).data());
+            m_manager->removeFrame(child.data());
+        }
+    }
+
+    m_manager->removeLayer(gl);
 }

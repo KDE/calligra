@@ -19,6 +19,7 @@
 
 #include "animator_player.h"
 #include "animator_updater.h"
+#include "control_animated_layer.h"
 
 AnimatorPlayer::AnimatorPlayer(AnimatorManager* manager): QObject(manager)
 {
@@ -91,12 +92,26 @@ void AnimatorPlayer::tick()
 
 int AnimatorPlayer::nextFrame(int frame)
 {
-    // TODO: use information from control layers
-    if (frame < m_manager->framesNumber()-1)
-        return frame+1;
+    int nxt = frame + 1;
     
-    if (looped())
-        return 0;
-    else
-        return -1;
+    QList<AnimatedLayer*> layers = m_manager->layers();
+    AnimatedLayer* al;
+    foreach (al, layers)
+    {
+        ControlAnimatedLayer* clayer = qobject_cast<ControlAnimatedLayer*>(al);
+        if (clayer)
+        {
+            nxt = clayer->nextFrame(frame);
+        }
+    }
+    
+    if (nxt < 0 || nxt >= m_manager->framesNumber())
+    {
+        if (looped())
+            return 0;
+        else
+            return -1;
+    }
+    
+    return nxt;
 }

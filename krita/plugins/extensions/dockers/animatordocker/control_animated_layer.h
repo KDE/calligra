@@ -1,5 +1,5 @@
 /*
- *  
+ *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,29 +17,34 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ANIMATOR_LOADER_H
-#define ANIMATOR_LOADER_H
+#ifndef CONTROL_ANIMATED_LAYER_H
+#define CONTROL_ANIMATED_LAYER_H
 
-#include <QObject>
-#include "animator_manager.h"
+#include "framed_animated_layer.h"
 
-class AnimatorLoader : public QObject
+
+class ControlAnimatedLayer : public FramedAnimatedLayer
 {
     Q_OBJECT
     
 public:
-    AnimatorLoader(AnimatorManager* manager);
+    ControlAnimatedLayer(const KisGroupLayer& source);
+    ControlAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
+    virtual ~ControlAnimatedLayer();
+
+public:
+    virtual QString aName() const;
+    virtual void setAName(const QString& name);
+    virtual bool isKeyFrame(int num) const;
     
 public:
-    virtual void loadAll();
-    virtual void loadLayers(KisNodeSP rootNode);
-    virtual void loadLayer(KisNodeSP node);
+    // Player interface
+    virtual void reset();
+    virtual int nextFrame(int fnum);
     
-protected:
-    template <class CustomAnimatedLayer, class CustomFrameLayer> void loadFramedLayer(KisNodeSP node);
-
-private:
-    AnimatorManager* m_manager;
+    // Control interface
+    virtual void setLoop(int from, int to, int number);
+    virtual void clearLoop(int to);
 };
 
-#endif // ANIMATOR_LOADER_H
+#endif // CONTROL_ANIMATED_LAYER_H
