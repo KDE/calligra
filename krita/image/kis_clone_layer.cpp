@@ -205,6 +205,30 @@ QIcon KisCloneLayer::icon() const
     return KIcon("edit-copy");
 }
 
+bool KisCloneLayer::allowAsParent(const KisNode* parent) const
+{
+    const KisNode* source = dynamic_cast<KisNode*>(copyFrom().data());
+    if (source)
+    {
+        if (source->inherits("KisGroupLayer"))
+        {
+            while (parent && parent->parent())
+            {
+                if (parent == source || !parent->allowAsChild(const_cast<KisNode*>(source)))
+                {
+                    return false;
+                }
+                parent = parent->parent();
+            }
+        } else if (source->inherits("KisCloneLayer"))
+        {
+            return dynamic_cast<KisCloneLayer*>(const_cast<KisNode*>(source))->allowAsParent(parent);
+        }
+        return true;
+    }
+    return true;
+}
+
 KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
