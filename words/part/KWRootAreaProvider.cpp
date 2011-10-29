@@ -154,7 +154,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     if (rootAreaPage && m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
         Q_ASSERT(rootAreaPage->page.isValid());
         Q_ASSERT(rootAreaPage->page.pageStyle().isValid());
-        requiredRootAreaCount = rootAreaPage->page.pageStyle().hasMainTextFrame() ? rootAreaPage->page.pageStyle().columns().columns : 0;
+        requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().columns;
     }
     if (rootAreaPage && rootAreaPage->rootAreas.count() < requiredRootAreaCount) {
         pageNumber = m_pages.count(); // the root-area is still on the same page

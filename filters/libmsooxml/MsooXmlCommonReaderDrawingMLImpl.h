@@ -1771,17 +1771,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
     }
 
-    // NOTE: Commented out for now, as this creates completely new lists which
-    // is not wanted.  Maybe the correct behaviour would be to default to text
-    // color of the text in calligra instead of using this.
+    // MS PowerPoint enables the user to change the color of the label.
+    // If the color information is not provided, then the font color of the 1st
+    // text chunk MUST be used.  In case of MS Word, the font color from
+    // text-properties of the paragraph MUST be used.  To help the layout a bit
+    // the information could be provided here.
     //
-    // FIXME: The PowerPoint UI enables to change the color of a bullet/number
-    // so we have to respect the information.  If no color for the
-    // bullet/number is provided, then the font color of the 1st text chunk
-    // MUST be used.  Help the layout a bit and provide the information here.
-    // In case of MS Word, the font color from text properties of the paragraph
-    // MUST be used.
-
+    // NOTE: Commented out for now, as this creates completely new lists which
+    // is not wanted.  An the layout part must support files created by LO/OOo.
+    //
 /*     if (m_currentBulletProperties.bulletColor() == "UNUSED") { */
 /*         m_listStylePropertiesAltered = true; */
 /*         if (!bulletColor.isEmpty()) { */
@@ -1800,20 +1798,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_previousListWasAltered = true;
     }
 
-    if (!m_listStylePropertiesAltered && m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty()) {
+    // A list-item without a numbering style or a bullet character/picture
+    // defined.  MS PowerPoint treats each paragraph as a list-item.
+    if (m_currentBulletProperties.isEmpty()) {
         m_continueListNumbering.clear();
-        m_currentListLevel = 0;
     }
 
-    //That's our mistake!
-    if (m_listStylePropertiesAltered && m_currentBulletProperties.isEmpty()) {
-	kDebug() << "Bug: list style modified, but list type set to Default!";
-        m_continueListNumbering.clear();
-        m_currentListLevel = 0;
-    }
-
-    // Making sure that if we were previously in a list and if there's an empty
-    // line, that we don't output a bullet to it.
+    // Empty paragraph is NOT considered to be a list-item at the moment.
+    // Prevent stage of displaying a bullet in front of it.
     if (!rRead) {
         m_continueListNumbering.clear();
         m_currentListLevel = 0;
@@ -1825,126 +1817,125 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // list-items in ODF.
     if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_CPP
-         if (m_prevListLevel < m_currentListLevel) {
-             if (m_prevListLevel > 0) {
-                 // Because there was an existing list, we need to start ours with list:item
-                 body->startElement("text:list-item");
-             }
-             for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
-                 body->startElement("text:list");
-                 if (listDepth == 0) {
-                     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-                         m_currentListStyle.setAutoStyleInStylesDotXml(true);
-                     }
-                     QString listStyleName = mainStyles->insert(m_currentListStyle);
-                     Q_ASSERT(!listStyleName.isEmpty());
-                     body->addAttribute("text:style-name", listStyleName);
-                     m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
-                     if (m_continueListNumbering.contains(m_currentListLevel) &&
-                         m_continueListNumbering[m_currentListLevel])
-                     {
-                         body->addAttribute("text:continue-numbering", "true");
-                     }
-                 }
-                 body->startElement("text:list-item");
-             }
-         } else if (m_prevListLevel > m_currentListLevel) {
-             body->endElement(); // This ends the latest list text:list
-             for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
-                 //Ending any additional list levels needed
-                 body->endElement(); // text:list-item
-                 body->endElement(); // text:list
-             }
-             // Starting our own stuff for this level
-             if (m_currentListLevel > 0) {
-                 body->endElement(); // revoving last lists text:list-item
-                 body->startElement("text:list-item");
-             }
-         } else { // m_prevListLevel==m_currentListLevel
-             body->startElement("text:list-item");
-         }
+        if (m_prevListLevel < m_currentListLevel) {
+            if (m_prevListLevel > 0) {
+                // Because there was an existing list, we need to start ours with list:item
+                body->startElement("text:list-item");
+            }
+            for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+                body->startElement("text:list");
+                if (listDepth == 0) {
+                    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                        m_currentListStyle.setAutoStyleInStylesDotXml(true);
+                    }
+                    QString listStyleName = mainStyles->insert(m_currentListStyle);
+                    Q_ASSERT(!listStyleName.isEmpty());
+                    body->addAttribute("text:style-name", listStyleName);
+                    m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
+                    if (m_continueListNumbering.contains(m_currentListLevel) &&
+                        m_continueListNumbering[m_currentListLevel])
+                    {
+                        body->addAttribute("text:continue-numbering", "true");
+                    }
+                }
+                body->startElement("text:list-item");
+            }
+        } else if (m_prevListLevel > m_currentListLevel) {
+            body->endElement(); // This ends the latest list text:list
+            for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
+                //Ending any additional list levels needed
+                body->endElement(); // text:list-item
+                body->endElement(); // text:list
+            }
+            // Starting our own stuff for this level
+            if (m_currentListLevel > 0) {
+                body->endElement(); // revoving last lists text:list-item
+                body->startElement("text:list-item");
+            }
+        } else { // m_prevListLevel==m_currentListLevel
+            body->startElement("text:list-item");
+        }
 #else
-         for (int i = 0; i < m_currentListLevel; ++i) {
-             body->startElement("text:list");
-             // TODO:, should most likely add the name of the current list style
-             body->startElement("text:list-item");
-         }
+        for (int i = 0; i < m_currentListLevel; ++i) {
+            body->startElement("text:list");
+            // TODO:, should most likely add the name of the current list style
+            body->startElement("text:list-item");
+        }
 #endif
-         if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
-             m_continueListNumbering[m_currentListLevel] = true;
-         }
-     }
+        if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+            m_continueListNumbering[m_currentListLevel] = true;
+        }
+    }
 
-     // Positioning of list-items defined by fo:margin-left and fo:text-indent
-     // in the style:list-level-properties element.
-     if (m_currentListLevel > 0) {
-         m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
-         m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
-     }
+    // Position of the list-item defined by fo:margin-left and fo:text-indent
+    // in the style:list-level-properties element.  In ODF the paragraph style
+    // overrides the list style.
+    if (m_currentListLevel > 0) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+    }
 
-     body->startElement("text:p", false);
+    body->startElement("text:p", false);
 
-     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
-     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
-     // refers to the corresponding margin of a parent style.  Let's convert
-     // the percentage value into points to keep it simple.
-     //
-     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
-     if (spcBef.contains("%")) {
-         spcBef.remove("%");
-         qreal percentage = spcBef.toDouble();
-         qreal margin = 0;
+    // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
+    // In ODF the value of margin-top/margin-bottom MAY be a percentage that
+    // refers to the corresponding margin of a parent style.  Let's convert
+    // the percentage value into points to keep it simple.
+    //
+    QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
+    if (spcBef.contains("%")) {
+        spcBef.remove("%");
+        qreal percentage = spcBef.toDouble();
+        qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-         margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFont);
 #else
-         margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_largestParaFont) / 100.0;
 #endif
-     m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
-     }
-     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
-     if (spcAft.contains("%")) {
-         spcAft.remove("%");
-         qreal percentage = spcAft.toDouble();
-         qreal margin = 0;
+    m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
+    }
+    QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
+    if (spcAft.contains("%")) {
+        spcAft.remove("%");
+        qreal percentage = spcAft.toDouble();
+        qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-         margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFont);
 #else
-         margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_largestParaFont) / 100.0;
 #endif
-         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
-     }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
+    }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-         m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
-     }
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
+    }
 #endif
-     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
-     body->addAttribute("text:style-name", currentParagraphStyleName);
+    QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+    body->addAttribute("text:style-name", currentParagraphStyleName);
 
-     (void)textPBuf.releaseWriter();
-     body->endElement(); //text:p
+    (void)textPBuf.releaseWriter();
+    body->endElement(); //text:p
 #ifdef PPTXXMLSLIDEREADER_CPP
-     // We should end our own list level
-     if (m_currentListLevel > 0) {
-         body->endElement(); // text:list-item
-     }
-
-     m_prevListLevel = m_currentListLevel;
-
+    // We should end our own list level
+    if (m_currentListLevel > 0) {
+        body->endElement(); // text:list-item
+    }
+    m_prevListLevel = m_currentListLevel;
 #else
-     // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
-     // and excel filters still need to be adjusted to proper handle nested lists.
-     const bool closeList = true;
-     if (closeList) {
-         for(int i = 0; i < m_currentListLevel; ++i) {
-             body->endElement(); // text:list-item
-             body->endElement(); // text:list
-         }
-         m_prevListLevel = m_currentListLevel = 0;
-     } else {
-         m_prevListLevel = m_currentListLevel;
-     }
+    // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
+    // and excel filters still need to be adjusted to proper handle nested lists.
+    const bool closeList = true;
+    if (closeList) {
+        for(int i = 0; i < m_currentListLevel; ++i) {
+            body->endElement(); // text:list-item
+            body->endElement(); // text:list
+        }
+        m_prevListLevel = m_currentListLevel = 0;
+    } else {
+        m_prevListLevel = m_currentListLevel;
+    }
 #endif
     READ_EPILOGUE
 }
@@ -2409,24 +2400,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
-        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-        m_currentBulletProperties.setMargin(realMarginal);
+        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+        m_currentBulletProperties.setMargin(marginal);
         m_listStylePropertiesAltered = true;
-
-        // NOTE: No idea to which format the disabled logic applied, looks very
-        // suspicious, started to use fo:text-indent instead.
-        //
-/*         if (!indent.isEmpty()) { */
-/*             realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
-/*         } */
-/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal); */
-    }/*  else if (!indent.isEmpty()) { */
-/*         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok))); */
-/*         m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd); */
-/*     } */
+    }
     if (!indent.isEmpty()) {
-        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
         m_listStylePropertiesAltered = true;
@@ -2478,7 +2458,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
-/*     m_currentCombinedBulletProperties[m_currentListLevel] = m_currentBulletProperties; */
 
     READ_EPILOGUE
 }
@@ -5027,12 +5006,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     // Following settings are only applied if defined so they don't overwrite
     // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
-        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
-        m_currentBulletProperties.setMargin(realMarginal);
+        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+        m_currentBulletProperties.setMargin(marginal);
     }
     if (!indent.isEmpty()) {
-        qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
     }
