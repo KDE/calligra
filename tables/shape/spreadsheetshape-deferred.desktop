@@ -36,4 +36,4 @@ X-KDE-ServiceTypes=Calligra/Deferred
 Type=Service
 X-KDE-Library=spreadsheetshape-deferred
 X-Flake-MinVersion=1
-X-Flake-PluginVersion=2
+X-Flake-PluginVersion=4

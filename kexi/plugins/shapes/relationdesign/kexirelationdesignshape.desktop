@@ -30,4 +30,4 @@ ServiceTypes=Calligra/Flake
 Type=Service
 X-KDE-Library=kexirelationdesignshape
 X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-PluginVersion=4

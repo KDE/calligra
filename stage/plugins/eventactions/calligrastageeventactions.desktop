@@ -33,4 +33,4 @@ X-KDE-ServiceTypes=Calligra/PresentationEventAction
 Type=Service
 X-KDE-Library=calligrastageeventactions
 X-PresentationEventAction-MinVersion=0
-X-PresentationEventAction-PluginVersion=1
+X-PresentationEventAction-PluginVersion=4
