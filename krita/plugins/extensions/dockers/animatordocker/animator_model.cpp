@@ -145,7 +145,12 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
     {
         KisNode* node = nodeFromIndex(ind);
         if (role == Qt::DisplayRole)
+        {
+            AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(node);
+            if (alayer)
+                return alayer->aName();
             return node ? node->name() : "nonode";
+        }
         return QVariant();
     } else if (ind.column() == 1)
     {
