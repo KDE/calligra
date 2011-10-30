@@ -125,6 +125,7 @@ int AnimatorModel::frameWidth() const
 void AnimatorModel::setFrameWidth(int width)
 {
     m_frameWidth = width;
+    emit layoutChanged();
 }
 
 bool AnimatorModel::showThumbs() const
@@ -135,6 +136,7 @@ bool AnimatorModel::showThumbs() const
 void AnimatorModel::setShowThumbs(bool val)
 {
     m_showThumbs = val;
+    emit layoutChanged();
 }
 
 
