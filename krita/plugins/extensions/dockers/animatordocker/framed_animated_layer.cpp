@@ -114,7 +114,7 @@ void FramedAnimatedLayer::clearFrame(int num)
 {
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
     manager->removeNode(frameAt(num));
-    m_frames[num] = 0;
+    setFrameAt(num, 0);
 }
 
 void FramedAnimatedLayer::moveFrame(int from, int to)

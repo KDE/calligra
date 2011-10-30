@@ -78,6 +78,8 @@ QList< QAction* > AnimatorActions::actions(const QString& category) const
 {
     if (category == "frames-adding")
         return m_actions[m_frameActionsType];
+    if (category == "frames-editing" && m_frameActionsType == "none")
+        return QList<QAction*>();
     return m_actions[category];
 }
 
@@ -135,10 +137,6 @@ void AnimatorActions::initActions()
     addAction("layers", t);
     
     // FRAMES
-    t = new QAction(SmallIcon("edit-clear"), i18n("Clear frame"), this);
-    connect(t, SIGNAL(triggered(bool)), SLOT(clearFrame()));
-    addAction("frames", t);
-    
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
     addAction("frames-adding-normal", t);
@@ -159,13 +157,25 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(createLoop()));
     addAction("frames-adding-control", t);
     
+    t = new QAction(SmallIcon("edit-clear"), i18n("Clear frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(clearFrame()));
+    addAction("frames-editing", t);
+    
     t = new QAction(SmallIcon("go-previous"), i18n("Move frame left"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(moveLeft()));
-    addAction("frames-moving", t);
+    addAction("frames-editing", t);
     
     t = new QAction(SmallIcon("go-next"), i18n("Move frame right"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(moveRight()));
-    addAction("frames-moving", t);
+    addAction("frames-editing", t);
+    
+    t = new QAction(SmallIcon("edit-table-insert-column-left"), i18n("Insert frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(insertFrame()));
+    addAction("frames-editing", t);
+    
+    t = new QAction(SmallIcon("edit-table-delete-column"), i18n("Remove frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(removeFrame()));
+    addAction("frames-editing", t);
     
     // LIGHT TABLE
     t = new QAction(SmallIcon("document-properties"), i18n("Enable/disable light table (see additional docker)"), this);
@@ -351,12 +361,6 @@ void AnimatorActions::doRenameLayer()
 }
 
 
-void AnimatorActions::clearFrame()
-{
-    Q_ASSERT(m_manager);
-    m_manager->getFrameManager()->clearRangeActive(1);
-}
-
 void AnimatorActions::createPaintFrame()
 {
     Q_ASSERT(m_manager);
@@ -440,6 +444,12 @@ void AnimatorActions::setLoopTarget(int target)
 }
 
 
+void AnimatorActions::clearFrame()
+{
+    Q_ASSERT(m_manager);
+    m_manager->getFrameManager()->clearRangeActive(1);
+}
+
 void AnimatorActions::moveLeft()
 {
     Q_ASSERT(m_manager);
@@ -450,6 +460,18 @@ void AnimatorActions::moveRight()
 {
     Q_ASSERT(m_manager);
     m_manager->getFrameManager()->moveRangeActive(1, +1);
+}
+
+void AnimatorActions::insertFrame()
+{
+    Q_ASSERT(m_manager);
+    m_manager->getFrameManager()->insertRange(1);
+}
+
+void AnimatorActions::removeFrame()
+{
+    Q_ASSERT(m_manager);
+    m_manager->getFrameManager()->removeRange(1);
 }
 
 

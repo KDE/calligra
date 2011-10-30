@@ -19,6 +19,7 @@
 
 #include "animator_frame_manager.h"
 #include "animator_switcher.h"
+#include <cstdlib>
 
 
 AnimatorFrameManager::AnimatorFrameManager(AnimatorManager* amanager): QObject(amanager)
@@ -38,7 +39,7 @@ void AnimatorFrameManager::removeRange(int n)
 void AnimatorFrameManager::removeRange(int from, int n)
 {
     clearRange(from, n);
-    moveRange(from+n, -1, from);
+    moveRange(from+n, -1, -n);
 }
 
 void AnimatorFrameManager::insertRange(int n)
@@ -48,7 +49,7 @@ void AnimatorFrameManager::insertRange(int n)
 
 void AnimatorFrameManager::insertRange(int from, int n)
 {
-    moveRange(from, -1, from+n);
+    moveRange(from, -1, n);
 }
 
 
@@ -129,21 +130,26 @@ void AnimatorFrameManager::moveRangeActive(int n, int dist)
 
 void AnimatorFrameManager::moveRange(FramedAnimatedLayer* layer, int from, int n, int dist)
 {
-    if (layer == 0 || dist == 0 || n == 0)
+    if (layer == 0 || dist == 0)
         return;
     
-    if (dist >= n || n < 0 && dist > 0)
+    if (n < 0)
+        n = layer->dataEnd()-from;
+    
+    if (n <= 0)
+        return;
+    
+    warnKrita << layer << from << n << dist;
+    
+    if (dist > 0)
     {
-        moveRange(layer, from+dist, n, -dist);
+        for (int i = from+n-1; i >= from; --i)
+        {
+            layer->swapFrames(i, i+dist);
+        }
     } else
     {
-        int end;
-        if (n < 0)
-            end = layer->dataEnd();
-        else
-            end = from+n;
-        
-        for (int i = from; i < end; ++i)
+        for (int i = from; i < from+n; ++i)
         {
             layer->swapFrames(i, i+dist);
         }

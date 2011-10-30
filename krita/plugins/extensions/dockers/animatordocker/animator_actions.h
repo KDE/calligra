@@ -75,8 +75,6 @@ protected slots:
     virtual void doRenameLayer();
     virtual void setRenameString(const QString& string);
     
-    virtual void clearFrame();
-    
     virtual void createPaintFrame();
     virtual void createShapeFrame();
     virtual void createGroupFrame();
@@ -87,8 +85,11 @@ protected slots:
     virtual void setLoopTarget(int target);
     virtual void setLoopRepeat(int repeat);
     
+    virtual void clearFrame();
     virtual void moveLeft();
     virtual void moveRight();
+    virtual void insertFrame();
+    virtual void removeFrame();
     
     virtual void enableLT(bool v);
     

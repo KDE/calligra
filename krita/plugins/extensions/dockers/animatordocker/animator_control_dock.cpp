@@ -90,9 +90,7 @@ void AnimatorControlDock::setupUI()
 void AnimatorControlDock::setupFramesToolbar()
 {
     m_tbFrames->clear();
-    m_tbFrames->addActions(m_actions->actions("frames"));
-    m_tbFrames->addSeparator();
     m_tbFrames->addActions(m_actions->actions("frames-adding"));
     m_tbFrames->addSeparator();
-    m_tbFrames->addActions(m_actions->actions("frames-moving"));
+    m_tbFrames->addActions(m_actions->actions("frames-editing"));
 }

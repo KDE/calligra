@@ -187,7 +187,8 @@ void AnimatorManager::putNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 
 void AnimatorManager::removeNode(KisNodeSP node)
 {
-    m_nodeManager->removeNode(node);
+    if (node)
+        m_nodeManager->removeNode(node);
 }
 
 void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index)
