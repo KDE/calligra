@@ -56,7 +56,7 @@ void AnimatorDock::setupUI()
     
     QHBoxLayout* downLayout = new QHBoxLayout(mainWidget);
     
-    QToolBar* downToolBar = new QToolBar(mainWidget);
+    downLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
     
     QSlider* columnWidthSlider = new QSlider(Qt::Horizontal, mainWidget);
     columnWidthSlider->setRange(8, 64);
@@ -64,16 +64,18 @@ void AnimatorDock::setupUI()
     columnWidthSlider->setPageStep(8);
     columnWidthSlider->setMaximumWidth(128);
     connect(columnWidthSlider, SIGNAL(valueChanged(int)), SLOT(setFrameWidth(int)));
-    downToolBar->addWidget(columnWidthSlider);
+    downLayout->addWidget(columnWidthSlider);
     
     QAction* showThumbs = new QAction(SmallIcon("view-preview"), i18n("Show frame thumbnails"), mainWidget);
     showThumbs->setCheckable(true);
     showThumbs->setChecked(false);
     connect(showThumbs, SIGNAL(triggered(bool)), SLOT(setShowThumbs(bool)));
-    downToolBar->addAction(showThumbs);
     
-    downLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
-    downLayout->addWidget(downToolBar);
+    QToolButton* showThumbsButton = new QToolButton(this);
+    showThumbsButton->setDefaultAction(showThumbs);
+    showThumbsButton->setAutoRaise(true);
+    
+    downLayout->addWidget(showThumbsButton);
     
     mLayout->addLayout(downLayout);
     
