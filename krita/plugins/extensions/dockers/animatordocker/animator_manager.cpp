@@ -32,6 +32,7 @@
 
 #include "normal_animated_layer.h"
 #include "control_animated_layer.h"
+#include "view_animated_layer.h"
 
 AnimatorManager::AnimatorManager(KisImage* image)
 {
@@ -323,7 +324,7 @@ KisNode* AnimatorManager::activeLayer()
 template <class CustomAnimatedLayer>
 void AnimatorManager::createAnimatedLayer()
 {
-    FramedAnimatedLayer* newLayer = new CustomAnimatedLayer(image(), "", 255);
+    CustomAnimatedLayer* newLayer = new CustomAnimatedLayer(image(), "", 255);
     newLayer->setAName("New layer");
     
     KisNode* activeNode = activeLayer();
@@ -339,6 +340,7 @@ void AnimatorManager::createAnimatedLayer()
     }
     
     layerAdded(newLayer);
+    m_nodeManager->activateNode(newLayer);
 }
 
 void AnimatorManager::createNormalLayer()
@@ -350,6 +352,24 @@ void AnimatorManager::createControlLayer()
 {
     createAnimatedLayer<ControlAnimatedLayer>();
 }
+
+void AnimatorManager::convertToViewLayer(int from, int to)
+{
+    KisNode* activeNode = activeLayer();
+    if (qobject_cast<AnimatedLayer*>(activeNode))
+        return;
+    
+    createAnimatedLayer<ViewAnimatedLayer>();
+    ViewAnimatedLayer* vlayer = qobject_cast<ViewAnimatedLayer*>(activeLayer());
+    if (!vlayer)
+        return;
+    putNodeAt(activeNode, vlayer, 0);
+    
+    vlayer->setStart(from);
+    vlayer->setEnd(to);
+    vlayer->save();
+}
+
 
 void AnimatorManager::removeLayer()
 {

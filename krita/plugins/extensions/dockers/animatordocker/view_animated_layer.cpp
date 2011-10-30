@@ -75,8 +75,7 @@ void ViewAnimatedLayer::load()
 
 void ViewAnimatedLayer::save()
 {
-    if (!m_content)
-        return;
+    m_content = at(0).data();
     m_content->setName("_"+QString::number(m_start)+"_"+QString::number(m_end));
 }
 
@@ -88,6 +87,16 @@ int ViewAnimatedLayer::dataStart() const
 int ViewAnimatedLayer::dataEnd() const
 {
     return m_end;
+}
+
+void ViewAnimatedLayer::setStart(int st)
+{
+    m_start = st;
+}
+
+void ViewAnimatedLayer::setEnd(int end)
+{
+    m_end = end;
 }
 
 

@@ -45,6 +45,9 @@ public:
     virtual int dataStart() const;
     virtual int dataEnd() const;
     
+    virtual void setStart(int st);
+    virtual void setEnd(int end);
+    
 public:
     virtual void save();
     virtual void load();
