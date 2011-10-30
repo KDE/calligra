@@ -26,6 +26,7 @@
 #include "framed_animated_layer.h"
 #include "animator_manager_factory.h"
 #include "animator_switcher.h"
+#include "view_animated_layer.h"
 
 AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
 {
@@ -176,29 +177,40 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
     {
         AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0, ind.parent())));
         FrameLayer* frame = 0;
-        if (alayer && alayer->inherits("FramedAnimatedLayer"))
+        if (alayer)
         {
-            frame = qobject_cast<FramedAnimatedLayer*>(alayer)->frameAt(frameNumber(ind));
-            if (frame)
+            FramedAnimatedLayer* flayer = qobject_cast<FramedAnimatedLayer*>(alayer);
+            if (flayer)
             {
-                if (alayer->displayable() && showThumbs())
+                frame = flayer->frameAt(frameNumber(ind));
+                if (frame)
                 {
-                    if (role == Qt::DecorationRole)
+                    SimpleFrameLayer* sframe = qobject_cast<SimpleFrameLayer*>(frame);
+                    if (flayer->hasPreview() && showThumbs())
                     {
-                        SimpleFrameLayer* sframe = qobject_cast<SimpleFrameLayer*>(frame);
-                        if (sframe && sframe->getContent())
+                        if (role == Qt::DecorationRole)
                         {
-                            KisNode* node = sframe->getContent();
-                            QImage thumb = node->createThumbnail(frameWidth(), frameWidth());
-                            if (!thumb.isNull())
-                                return thumb;
+                            if (sframe && sframe->getContent())
+                            {
+                                KisNode* node = sframe->getContent();
+                                QImage thumb = node->createThumbnail(frameWidth(), frameWidth());
+                                if (!thumb.isNull())
+                                    return thumb;
+                            }
                         }
+                    } else
+                    {
+                        if (role == Qt::DisplayRole)
+                            return "x";
                     }
-                } else
-                {
-                    if (role == Qt::DisplayRole)
-                        return "x";
                 }
+            }
+            
+            ViewAnimatedLayer* vlayer = qobject_cast<ViewAnimatedLayer*>(alayer);
+            if (vlayer)
+            {
+                if (role == Qt::DecorationRole && vlayer->enabled())
+                    return vlayer->getThumbnail(frameNumber(ind), frameWidth());
             }
         }
         if (role == Qt::BackgroundRole)

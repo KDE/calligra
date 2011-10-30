@@ -26,6 +26,7 @@
 #include "animator_meta_info.h"
 #include "control_animated_layer.h"
 #include "control_frame_layer.h"
+#include "view_animated_layer.h"
 
 AnimatorLoader::AnimatorLoader(AnimatorManager* manager): QObject(manager)
 {
@@ -103,6 +104,17 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
     {
         ControlAnimatedLayer* clayer = loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
         clayer->reset();
+    } else if (node->name().startsWith("_aniview_"))
+    {
+        KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
+        if (!gl || !gl->at(0))
+            return;
+        ViewAnimatedLayer* vlayer = new ViewAnimatedLayer(*gl);
+        KisNodeSP parent = gl->parent();
+        m_manager->insertLayer(vlayer, parent, parent->index(gl));
+        m_manager->putNodeAt(gl->at(0), vlayer, 0);
+        m_manager->removeLayer(gl);
+        vlayer->load();
     } else
     {
         warnKrita << "only normal framed and control layers are implemented";

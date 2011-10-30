@@ -51,6 +51,7 @@ public:
 
 public:
     virtual bool displayable() const;
+    virtual bool hasPreview() const;
     
 public:
     virtual bool isKeyFrame(int num) const;

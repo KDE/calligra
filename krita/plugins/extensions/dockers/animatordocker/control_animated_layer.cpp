@@ -37,6 +37,11 @@ bool ControlAnimatedLayer::displayable() const
     return false;
 }
 
+bool ControlAnimatedLayer::hasPreview() const
+{
+    return false;
+}
+
 QString ControlAnimatedLayer::aName() const
 {
     return name().mid(12);

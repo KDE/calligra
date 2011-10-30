@@ -55,6 +55,11 @@ bool FramedAnimatedLayer::displayable() const
     return true;
 }
 
+bool FramedAnimatedLayer::hasPreview() const
+{
+    return true;
+}
+
 
 FrameLayer* FramedAnimatedLayer::frameAt(int num) const
 {

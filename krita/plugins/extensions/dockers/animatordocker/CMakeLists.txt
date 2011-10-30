@@ -15,6 +15,7 @@ set(KRITA_ANIMATORDOCKER_PART_SRCS
     interpolated_animated_layer.cpp normal_animated_layer.cpp
     abstract_interpolation.cpp moving_interpolation.cpp transparency_interpolation.cpp
     control_animated_layer.cpp control_frame_layer.cpp
+    view_animated_layer.cpp
 )
 
 kde4_add_plugin(kritaanimatordocker ${KRITA_ANIMATORDOCKER_PART_SRCS})

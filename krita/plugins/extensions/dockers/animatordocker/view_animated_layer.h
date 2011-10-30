@@ -17,36 +17,48 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef CONTROL_ANIMATED_LAYER_H
-#define CONTROL_ANIMATED_LAYER_H
+#ifndef VIEW_ANIMATED_LAYER
+#define VIEW_ANIMATED_LAYER
 
-#include "framed_animated_layer.h"
+#include "animated_layer.h"
 
+#include <QImage>
 
-class ControlAnimatedLayer : public FramedAnimatedLayer
+class ViewAnimatedLayer : public AnimatedLayer
 {
     Q_OBJECT
     
 public:
-    ControlAnimatedLayer(const KisGroupLayer& source);
-    ControlAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
-    virtual ~ControlAnimatedLayer();
-
+    ViewAnimatedLayer(const KisGroupLayer& source);
+    ViewAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
+    virtual ~ViewAnimatedLayer();
+    
 public:
-    virtual bool displayable() const;
-    virtual bool hasPreview() const;
     virtual QString aName() const;
     virtual void setAName(const QString& name);
-    virtual bool isKeyFrame(int num) const;
-    virtual FrameLayer* emptyFrame();
+    
+    virtual bool displayable() const;
+    virtual bool hasPreview() const;
+    
+    virtual FrameLayer* getCachedFrame(int num) const;
+    
+    virtual int dataStart() const;
+    virtual int dataEnd() const;
     
 public:
-    // Player interface
-    virtual void reset();
-    virtual int nextFrame(int fnum);
+    virtual void save();
+    virtual void load();
     
-    // Control interface
-    virtual void setLoop(int from, int to, int number);
+public:
+    virtual QImage getThumbnail(int fnum, int size);
+    
+private:
+    QImage m_fullImage;
+    int m_cached;
+    
+    int m_start;
+    int m_end;
+    KisNode* m_content;
 };
 
-#endif // CONTROL_ANIMATED_LAYER_H
+#endif  // VIEW_ANIMATED_LAYER

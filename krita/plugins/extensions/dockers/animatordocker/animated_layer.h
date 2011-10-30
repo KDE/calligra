@@ -48,6 +48,7 @@ public:
     
 public:
     virtual bool displayable() const = 0;
+    virtual bool hasPreview() const = 0;
     
 public:
     /**
