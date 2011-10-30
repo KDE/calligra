@@ -121,6 +121,10 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(createControlLayer()));
     addAction("layers", t);
     
+    t = new QAction(SmallIcon("image-preview"), i18n("Convert current layer to view layer"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(convertToViewLayer()));
+    addAction("layers", t);
+    
     t = new QAction(SmallIcon("list-remove"), i18n("Remove layer"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(removeLayer()));
     addAction("layers", t);
@@ -230,6 +234,64 @@ void AnimatorActions::createControlLayer()
     Q_ASSERT(m_manager);
     m_manager->createControlLayer();
 }
+
+void AnimatorActions::convertToViewLayer()
+{
+    Q_ASSERT(m_manager);
+    
+    KDialog* setLoopDialog = new KDialog();
+    setLoopDialog->setModal(true);
+    setLoopDialog->setAttribute(Qt::WA_DeleteOnClose);
+    setLoopDialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    setLoopDialog->setCaption(i18n("Create loop"));
+    
+    QWidget* mainWidget = new QWidget(setLoopDialog);
+    QVBoxLayout* layout = new QVBoxLayout(mainWidget);
+    QLabel* label = new QLabel(i18n("Set start and end of new view layer"), mainWidget);
+    QHBoxLayout* spinLayout = new QHBoxLayout(mainWidget);
+    QSpinBox* fromSpin = new QSpinBox(mainWidget);
+    QSpinBox* toSpin = new QSpinBox(mainWidget);
+    
+    spinLayout->addWidget(fromSpin);
+    spinLayout->addWidget(toSpin);
+    layout->addWidget(label);
+    layout->addLayout(spinLayout);
+    
+    mainWidget->setLayout(layout);
+    
+    connect(fromSpin, SIGNAL(valueChanged(int)), SLOT(setConvertFrom(int)));
+    connect(toSpin, SIGNAL(valueChanged(int)), SLOT(setConvertTo(int)));
+    
+    fromSpin->setRange(0, 0xffff);
+    fromSpin->setValue(0);
+    setConvertFrom(0);
+    toSpin->setRange(0, 0xffff);
+    toSpin->setValue(0);
+    setConvertTo(0);
+    
+    connect(setLoopDialog, SIGNAL(accepted()), SLOT(doConvertToViewLayer()));
+    
+    setLoopDialog->setMainWidget(mainWidget);
+    setLoopDialog->show();
+}
+
+void AnimatorActions::doConvertToViewLayer()
+{
+    Q_ASSERT(m_manager);
+    
+    m_manager->convertToViewLayer(m_convertFrom, m_convertTo);
+}
+
+void AnimatorActions::setConvertFrom(int from)
+{
+    m_convertFrom = from;
+}
+
+void AnimatorActions::setConvertTo(int to)
+{
+    m_convertTo = to;
+}
+
 
 void AnimatorActions::removeLayer()
 {

@@ -65,6 +65,10 @@ protected slots:
     
     virtual void createNormalLayer();
     virtual void createControlLayer();
+    virtual void convertToViewLayer();
+    virtual void doConvertToViewLayer();
+    virtual void setConvertFrom(int from);
+    virtual void setConvertTo(int to);
     virtual void removeLayer();
     
     virtual void renameLayer();
@@ -98,8 +102,12 @@ private:
     
 private:
     QString m_renameString;
+    
     int m_loopTarget;
     int m_loopRepeat;
+    
+    int m_convertFrom;
+    int m_convertTo;
 };
 
 #endif // ANIMATOR_ACTIONS_H
