@@ -47,7 +47,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
     
     m_framesNumber = 0;
     
-    m_info = new AnimatorMetaInfo(1, 2);
+    m_info = new AnimatorMetaInfo(1, 3);
     
     connect(this, SIGNAL(layerFramesNumberChanged(AnimatedLayer*,int)), SLOT(framesNumberCheck(AnimatedLayer*,int)));
     
