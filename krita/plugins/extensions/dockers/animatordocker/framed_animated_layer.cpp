@@ -68,6 +68,20 @@ FrameLayer* FramedAnimatedLayer::frameAt(int num) const
     return 0;
 }
 
+void FramedAnimatedLayer::setFrameAt(int fnum, FrameLayer* frame)
+{
+    if (fnum >= m_frames.size())
+    {
+        while (m_frames.size() < fnum)
+            m_frames.append(0);
+        m_frames.append(frame);
+    } else
+    {
+        Q_ASSERT(m_frames[fnum] == 0);
+        m_frames[fnum] = frame;
+    }
+}
+
 void FramedAnimatedLayer::insertFrame(FrameLayer* frame)
 {
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
@@ -79,16 +93,7 @@ void FramedAnimatedLayer::insertFrame(FrameLayer* frame)
     {
         return;
     }
-    if (fnum >= m_frames.size())
-    {
-        while (m_frames.size() < fnum)
-            m_frames.append(0);
-        m_frames.append(frame);
-    } else
-    {
-        Q_ASSERT(m_frames[fnum] == 0);
-        m_frames[fnum] = frame;
-    }
+    setFrameAt(fnum, frame);
     
     manager->layerFramesNumberChange(this, dataEnd());
 }
@@ -105,11 +110,39 @@ FrameLayer* FramedAnimatedLayer::emptyFrame()
     return new SimpleFrameLayer(image(), "", 255);
 }
 
-void FramedAnimatedLayer::removeFrameAt(int num)
+void FramedAnimatedLayer::clearFrame(int num)
 {
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
-    manager->removeFrame(frameAt(num));
+    manager->removeNode(frameAt(num));
     m_frames[num] = 0;
+}
+
+void FramedAnimatedLayer::moveFrame(int from, int to)
+{
+    if (!frameAt(from))
+        return;
+    
+    bool iskey;
+    getFrameFromName(frameAt(from)->name(), iskey);
+    if (!iskey)
+    {
+        warnKrita << "moving non-key frames? don't think it's useful";
+        return;
+    }
+    
+    Q_ASSERT(frameAt(to));
+    setFrameAt(to, frameAt(from));
+    setFrameAt(from, 0);
+    frameAt(to)->setName(getNameForFrame(to, true));
+}
+
+void FramedAnimatedLayer::swapFrames(int first, int second)
+{
+    if (std::min(first, second) < 0)
+        return;
+    FrameLayer* t = frameAt(first);
+    setFrameAt(first, frameAt(second));
+    setFrameAt(second, t);
 }
 
 

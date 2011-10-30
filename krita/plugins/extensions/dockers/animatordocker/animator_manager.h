@@ -27,6 +27,7 @@
 #include <kis_image.h>
 #include <kis_node_manager.h>
 
+class AnimatorFrameManager;
 class AnimatorSwitcher;
 class AnimatorUpdater;
 class AnimatorLoader;
@@ -51,6 +52,7 @@ public:
     virtual bool ready();
     
 public:
+    virtual AnimatorFrameManager* getFrameManager();
     virtual AnimatorSwitcher* getSwitcher();
     virtual AnimatorUpdater* getUpdater();
     virtual AnimatorLoader* getLoader();
@@ -106,7 +108,7 @@ public:
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
     virtual void putNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    virtual void removeFrame(KisNode* frame);
+    virtual void removeNode(KisNodeSP node);
     
     virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
     virtual void removeLayer(KisNode* layer);
@@ -135,6 +137,7 @@ private:
     KisImage* m_image;
     KisNodeManager* m_nodeManager;
     
+    AnimatorFrameManager* m_frameManager;
     AnimatorSwitcher* m_switcher;
     AnimatorUpdater* m_updater;
     AnimatorLoader* m_loader;

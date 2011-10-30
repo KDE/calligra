@@ -39,6 +39,7 @@
 #include "normal_animated_layer.h"
 #include "control_animated_layer.h"
 #include <QSpinBox>
+#include "animator_frame_manager.h"
 
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
 {
@@ -353,7 +354,7 @@ void AnimatorActions::doRenameLayer()
 void AnimatorActions::clearFrame()
 {
     Q_ASSERT(m_manager);
-    m_manager->removeFrame();
+    m_manager->getFrameManager()->clearRangeActive(1);
 }
 
 void AnimatorActions::createPaintFrame()
@@ -384,9 +385,6 @@ void AnimatorActions::interpolate()
 void AnimatorActions::createLoop()
 {
     Q_ASSERT(m_manager);
-    
-    int target;
-    int repeat;
     
     KDialog* setLoopDialog = new KDialog();
     setLoopDialog->setModal(true);
@@ -445,13 +443,13 @@ void AnimatorActions::setLoopTarget(int target)
 void AnimatorActions::moveLeft()
 {
     Q_ASSERT(m_manager);
-    m_manager->moveFrame(-1);
+    m_manager->getFrameManager()->moveRangeActive(1, -1);
 }
 
 void AnimatorActions::moveRight()
 {
     Q_ASSERT(m_manager);
-    m_manager->moveFrame(+1);
+    m_manager->getFrameManager()->moveRangeActive(1, +1);
 }
 
 

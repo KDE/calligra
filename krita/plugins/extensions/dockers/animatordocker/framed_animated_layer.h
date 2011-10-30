@@ -39,11 +39,14 @@ public:
     virtual void setAName(const QString& name);
     
 public:
+    virtual FrameLayer* emptyFrame();
+    
     virtual FrameLayer* frameAt(int num) const;
     virtual void insertFrame(FrameLayer* frame);
     virtual void createFrame(int num, bool isKey);
-    virtual FrameLayer* emptyFrame();
-    virtual void removeFrameAt(int num);
+    virtual void clearFrame(int num);
+    virtual void moveFrame(int from, int to);
+    virtual void swapFrames(int first, int second);
 
 public:
     virtual FrameLayer* getCachedFrame(int num) const;
@@ -70,6 +73,8 @@ public:
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
     
 protected:
+    virtual void setFrameAt(int fnum, FrameLayer* frame);
+    
     virtual QList<FrameLayer*> frames();
     
 private:

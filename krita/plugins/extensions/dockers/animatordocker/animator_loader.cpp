@@ -146,7 +146,7 @@ CustomAnimatedLayer* AnimatorLoader::loadFramedLayer(KisNodeSP node)
             SimpleFrameLayer* frame = new CustomFrameLayer(* qobject_cast<KisGroupLayer*>(child.data()));
             al->insertFrame(frame);
             frame->setContent(child->at(0).data());
-            m_manager->removeFrame(child.data());
+            m_manager->removeNode(child);
         }
     }
 

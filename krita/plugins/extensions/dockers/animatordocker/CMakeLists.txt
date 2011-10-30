@@ -1,7 +1,7 @@
 
 set(KRITA_ANIMATORDOCKER_PART_SRCS
     animator.cpp animator_manager_factory.cpp
-    animator_manager.cpp animator_switcher.cpp
+    animator_manager.cpp animator_frame_manager.cpp animator_switcher.cpp
     animator_player.cpp animator_exporter.cpp
     animator_updater.cpp animator_lt_updater.cpp
     animator_loader.cpp animator_meta_info.cpp

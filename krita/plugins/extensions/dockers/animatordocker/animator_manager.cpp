@@ -27,6 +27,7 @@
 #include "animator_lt_updater.h"
 #include "animator_player.h"
 #include "animator_exporter.h"
+#include "animator_frame_manager.h"
 
 #include "animator_config.h"
 
@@ -41,6 +42,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_updater = new AnimatorLTUpdater(this);
     m_player = new AnimatorPlayer(this);
     m_exporter = new AnimatorExporter(this);
+    m_frameManager = new AnimatorFrameManager(this);
     
     m_image = image;
     m_nodeManager = 0;
@@ -107,6 +109,11 @@ AnimatorPlayer* AnimatorManager::getPlayer()
 AnimatorExporter* AnimatorManager::getExporter()
 {
     return m_exporter;
+}
+
+AnimatorFrameManager* AnimatorManager::getFrameManager()
+{
+    return m_frameManager;
 }
 
 
@@ -178,9 +185,9 @@ void AnimatorManager::putNodeAt(KisNodeSP node, KisNodeSP parent, int index)
         m_nodeManager->insertNode(node, parent, index);
 }
 
-void AnimatorManager::removeFrame(KisNode* frame)
+void AnimatorManager::removeNode(KisNodeSP node)
 {
-    m_nodeManager->removeNode(frame);
+    m_nodeManager->removeNode(node);
 }
 
 void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index)
@@ -485,7 +492,7 @@ void AnimatorManager::removeFrame()
         return;
     }
     
-    alayer->removeFrameAt(frameNumber);
+    alayer->clearFrame(frameNumber);
     
     activate(frameNumber, alayer);
     
