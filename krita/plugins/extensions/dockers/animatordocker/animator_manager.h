@@ -111,6 +111,9 @@ public:
     virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
     virtual void removeLayer(KisNode* layer);
     
+    // for legacy loader
+    virtual void createGroupLayer(KisNodeSP parent);
+    
 public:
     virtual int framesNumber() const;
     

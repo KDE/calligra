@@ -50,15 +50,22 @@ void AnimatorLoader::loadAll()
     int kmajor = kra_info->getMajor();
     int pmajor = plugin_info->getMajor();
     
+    bool needLoading = true;
+    
     if (kmajor < pmajor)
     {
-        warnKrita << "importing from older formats is not supported yet";
-        return;
+        warnKrita << "trying to import from older format";
+        needLoading = loadLegacy(kmajor);
+        if (needLoading)
+            m_manager->setKraMetaInfo();
     } else if (kmajor > pmajor)
     {
         warnKrita << "this file was created by newer version of plugin, please update it";
         return;
     }
+    
+    if (!needLoading)
+        return;
     
     int kminor = kra_info->getMinor();
     int pminor = plugin_info->getMinor();
@@ -146,4 +153,52 @@ CustomAnimatedLayer* AnimatorLoader::loadFramedLayer(KisNodeSP node)
     m_manager->removeLayer(gl);
     
     return qobject_cast<CustomAnimatedLayer*>(al);
+}
+
+// Compatibility code
+bool AnimatorLoader::loadLegacy(int majorv)
+{
+    if (majorv == -1)
+    {
+        return convertAll();
+    }
+    return true;
+}
+
+bool AnimatorLoader::convertAll()
+{
+    return convertLayers(m_manager->image()->root());
+}
+
+bool AnimatorLoader::convertLayers(KisNodeSP rootNode)
+{
+    bool isAnimated = false;
+    for (int i = 0; i < rootNode->childCount(); ++i)
+    {
+        KisNodeSP node = rootNode->at(i);
+        if (node->name().startsWith("_ani_"))
+        {
+            isAnimated = true;
+            convertLayer(node);
+        }
+    }
+    return isAnimated;
+}
+
+void AnimatorLoader::convertLayer(KisNodeSP node)
+{
+    for (int i = 0; i < node->childCount(); ++i)
+    {
+        KisNode* fr = node->at(i).data();
+        fr->setVisible(true);
+        fr->setOpacity(255);
+        
+        m_manager->createGroupLayer(node);
+        KisGroupLayer* nf = dynamic_cast<KisGroupLayer*>(m_manager->activeLayer());
+        
+        m_manager->putNodeAt(fr, nf, 0);                       // This is VERY slow
+        
+        nf->setName(fr->name());
+        fr->setName("_");
+    }
 }

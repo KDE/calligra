@@ -197,6 +197,12 @@ void AnimatorManager::removeLayer(KisNode* layer)
     layerRemoved(dynamic_cast<AnimatedLayer*>(layer));
 }
 
+void AnimatorManager::createGroupLayer(KisNodeSP parent)
+{
+    m_nodeManager->activateNode(parent);
+    m_nodeManager->createNode("KisGroupLayer");
+}
+
 
 int AnimatorManager::framesNumber() const
 {
