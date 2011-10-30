@@ -121,11 +121,9 @@ void AnimatorFrameManager::moveRange(int from, int n, int dist)
 
 void AnimatorFrameManager::moveRangeActive(int n, int dist)
 {
-    moveRange(qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer()),
-               m_manager->getSwitcher()->currentFrame(),
-               n,
-               dist
-    );
+    int cur = m_manager->getSwitcher()->currentFrame();
+    moveRange(qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer()), cur, n, dist);
+    m_manager->getSwitcher()->goFrame(cur+dist);          // for easy moving many times
 }
 
 void AnimatorFrameManager::moveRange(FramedAnimatedLayer* layer, int from, int n, int dist)
