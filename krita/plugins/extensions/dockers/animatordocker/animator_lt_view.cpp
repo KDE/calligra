@@ -23,6 +23,7 @@
 
 AnimatorLTView::AnimatorLTView(QWidget* parent) : QWidget(parent)
 {
+    m_lt = 0;
     setupUI();
 }
 
