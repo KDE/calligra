@@ -481,7 +481,9 @@ mdb_update_index(MdbTableDef *table, MdbIndex *idx, unsigned int num_fields, Mdb
 {
 	MdbCatalogEntry *entry = table->entry;
 	MdbHandle *mdb = entry->mdb;
+	/*
 	int idx_xref[16];
+	*/
 	unsigned int i, j;
 	MdbIndexChain *chain;
 	MdbField idx_fields[10];
@@ -490,7 +492,9 @@ mdb_update_index(MdbTableDef *table, MdbIndex *idx, unsigned int num_fields, Mdb
 		for (j = 0; j < num_fields; j++) {
 			/* key_col_num is 1 based, can't remember why though */
 			if (fields[j].colnum == idx->key_col_num[i]-1) {
+			        /*
 				idx_xref[i] = j;
+				*/
 				idx_fields[i] = fields[j];
 			}
 		}
