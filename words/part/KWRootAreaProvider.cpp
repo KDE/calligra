@@ -251,7 +251,9 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
 
     KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, m_textFrameSet, frame, pageNumber);
-    area->setAcceptsPageBreak(true);
+    if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
+        area->setAcceptsPageBreak(true);
+    }
 
     if (frame) { // Not every KoTextLayoutRootArea has a frame that contains a KoShape for display purposes.
         KoShape *shape = frame->shape();
