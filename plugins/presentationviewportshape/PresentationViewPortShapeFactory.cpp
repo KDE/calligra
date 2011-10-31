@@ -38,6 +38,7 @@ PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * par
     
     QList<QPair<QString, QStringList> > elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("rect")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("calligra:frame")));
     setXmlElements(elementNamesList);
 
 }
@@ -46,8 +47,9 @@ KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager 
 {
   //qDebug () << "PVPFactory::createDefaultShape()";
     PresentationViewPortShape *viewport = new PresentationViewPortShape();
+    qDebug() << "new PVP shape created";
     viewport->setShapeId(PresentationViewPortShapeId);
-
+    
     return viewport;
 }
 

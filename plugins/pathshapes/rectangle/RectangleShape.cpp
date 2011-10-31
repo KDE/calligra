@@ -325,7 +325,7 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
 
 bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
-  if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "Yes")){
+  if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "Yes") || (element.attribute("calligra:viewport") == "yes")){
       return false;
   }
       
