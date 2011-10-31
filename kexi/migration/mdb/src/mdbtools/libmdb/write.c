@@ -763,11 +763,10 @@ mdb_copy_index_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg)
 	MdbCatalogEntry *entry = table->entry;
 	MdbHandle *mdb = entry->mdb;
 	MdbColumn *col;
-	guint32 pg, pg_row;
-	guint16 row;
+	guint32 pg_row;
+	guint16 row = 0;
 	void *new_pg;
 	unsigned char key_hash[256];
-	unsigned char iflag;
 	int keycol;
 
 	new_pg = mdb_new_leaf_pg(entry);
@@ -797,9 +796,7 @@ mdb_copy_index_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg)
 		}
 
 		pg_row = mdb_get_int32_msb(mdb->pg_buf, ipg->offset + ipg->len - 4);
-		pg = pg_row >> 8;
 		row = pg_row & 0xff;
-		iflag = mdb->pg_buf[ipg->offset];
 
 		/* turn the key hash back into a value */
 		mdb_index_swap_n(&mdb->pg_buf[ipg->offset + 1], col->col_size, key_hash);
