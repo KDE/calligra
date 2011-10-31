@@ -1368,7 +1368,7 @@ MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
 {
     // a positive decimal number immediately following by a unit identifier.
-    qreal number;
+    qreal number(0.0);
     QString unit;
     if (!splitNumberAndUnit(value, &number, &unit))
         return QString();
