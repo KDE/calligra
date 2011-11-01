@@ -997,7 +997,6 @@ void KarbonView::initActions()
     d->showPageMargins  = new KToggleAction(KIcon("view_margins"), i18n("Show Page Margins"), this);
     actionCollection()->addAction("view_show_margins", d->showPageMargins);
     connect(d->showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
-    d->showPageMargins->setCheckedState(KGuiItem(i18n("Hide Page Margins")));
 
     // No need for the other actions in read-only (embedded) mode
     if (!shell())
@@ -1068,7 +1067,6 @@ void KarbonView::initActions()
 
     d->showRulerAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection()->addAction("view_show_ruler", d->showRulerAction);
-    d->showRulerAction->setCheckedState(KGuiItem(i18n("Hide Rulers")));
     d->showRulerAction->setToolTip(i18n("Shows or hides rulers"));
     d->showRulerAction->setChecked(false);
     connect(d->showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
@@ -1082,7 +1080,6 @@ void KarbonView::initActions()
 
     d->showPaletteAction = new KToggleAction(i18n("Show Color Palette"), this);
     actionCollection()->addAction("view_show_palette", d->showPaletteAction);
-    d->showPaletteAction->setCheckedState(KGuiItem(i18n("Hide Color Palette")));
     d->showPaletteAction->setToolTip(i18n("Show or hide color palette"));
     d->showPaletteAction->setChecked(true);
     connect(d->showPaletteAction, SIGNAL(triggered()), this, SLOT(showPalette()));
