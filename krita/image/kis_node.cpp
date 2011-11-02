@@ -344,6 +344,10 @@ void KisNode::setDirty(const QRect & rect)
     if(m_d->graphListener) {
         m_d->graphListener->requestProjectionUpdate(this, rect);
     }
+    if (parent())
+    {
+        parent()->setDirty(rect);
+    }
 }
 
 #include "kis_node.moc"

@@ -47,7 +47,7 @@ KAboutData * newAboutData()
 
     aboutData->setProgramIconName( "calligraplan" );
 
-    aboutData->setProductName( "calligra-plan" );
+    aboutData->setProductName( "calligraplan" ); // for bugs.kde.org
 
     return aboutData;
 }

@@ -43,6 +43,7 @@
 #include "Condition.h"
 #include "Global.h"
 #include "Format.h"
+#include "OdfLoadingContext.h"
 
 #include "database/Database.h"
 
@@ -367,7 +368,9 @@ public:
      * @param element An OASIS XML element
      * @param tableContext The loading context assoiated with the XML element
      */
-    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName);
+    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
+        const Styles& autoStyles, const QString& cellStyleName,
+        QList<ShapeLoadingData>& shapeData);
 
     /**
      * \ingroup OpenDocument
@@ -607,7 +610,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfObjects(const KoXmlElement& e, OdfLoadingContext& tableContext);
+    void loadOdfObjects(const KoXmlElement& e, OdfLoadingContext& tableContext, QList<ShapeLoadingData>& shapeData);
 
 
     /**
@@ -615,7 +618,7 @@ protected:
      */
     void saveOdfAnnotation(KoXmlWriter &xmlwriter);
 public:
-    void loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
+    ShapeLoadingData loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 private:
     class Private;
     QSharedDataPointer<Private> d;

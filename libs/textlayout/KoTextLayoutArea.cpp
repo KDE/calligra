@@ -439,8 +439,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->masterPageName = masterPageName;
             }
 
-            if (!virginPage() && (masterPageNameChanged ||
-                   (acceptsPageBreak() && (table->frameFormat().intProperty(KoTableStyle::BreakBefore) & KoText::PageBreak)))) {
+            if (!virginPage() && acceptsPageBreak() && (masterPageNameChanged ||
+                   ((table->frameFormat().intProperty(KoTableStyle::BreakBefore) & KoText::PageBreak)))) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {
@@ -560,10 +560,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     cursor->masterPageName = masterPageName;
                 }
 
-                if (!virginPage() &&
+                if (!virginPage() && acceptsPageBreak() &&
                     (masterPageNameChanged ||
-                        (acceptsPageBreak() &&
-                        (block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak)))) {
+                        (block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak))) {
                     m_endOfArea = new FrameIterator(cursor);
                     setBottom(m_y + m_footNotesHeight);
                     if (!m_blockRects.isEmpty()) {
@@ -968,7 +967,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qTabs.append(tab);
     }
 
-    qreal presentationListTabValue; // for use in presentationListTabWorkaround
+    qreal presentationListTabValue(0.0); // for use in presentationListTabWorkaround
 
     // For some lists we need to add a special list tab according to odf 1.2 19.830 
     if (textList && listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {

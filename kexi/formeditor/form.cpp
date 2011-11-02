@@ -2581,7 +2581,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QPoint pos;
     switch (target) {
     case FormContextMenuTarget: {
-        pos = container->widget()->mapToGlobal(w->pos() + menuPos);
+        pos = w->mapToGlobal(menuPos);
         d->insertionPoint = menuPos;
         break;
     }
@@ -2592,6 +2592,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
     }
 
+    //kDebug() << w << container->widget() << "menuPos=" << menuPos << "pos=" << pos;
     QAction *result = menu.exec(pos);
     if (!result) {
         // nothing to do
