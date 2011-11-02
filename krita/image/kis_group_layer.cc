@@ -70,19 +70,9 @@ KisGroupLayer::~KisGroupLayer()
 
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
-    if (node->inherits("KisCloneLayer"))
-        return dynamic_cast<KisCloneLayer*>(node.data())->allowAsParent(this);
-    if (node->inherits("KisGroupLayer"))
-    {
-        const KisNode* child = node->firstChild();
-        while (child)
-        {
-            if (!allowAsChild(const_cast<KisNode*>(child)))
-                return false;
-            child = child->nextSibling();
-        }
-    }
-    return true;
+    if (!node->inherits("KisCloneLayer"))
+        return true;
+    return dynamic_cast<KisCloneLayer*>(node.data())->isParentOk(this);
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const
