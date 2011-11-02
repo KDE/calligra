@@ -865,12 +865,12 @@ APPLIXSPREADImport::readTypefaceTable(QTextStream &stream, QStringList &typeface
 void
 APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 {
-    int contcount, ok, pos;
+    int contcount, pos;
 
     QString colstr, mystr;
     kDebug() << "Reading colormap:";
 
-    ok = true;
+    bool ok = true;
 
     do {
 
@@ -939,7 +939,6 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
 {
     QString rowcolstr;
     QString mystr, tabname;
-    int ok;
 
     kDebug() << "Reading View";
 
@@ -949,7 +948,7 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
     tabname.remove(tabname.length() - 2, 2);
     kDebug() << "  - Table name:" << tabname;
 
-    ok = true;
+    bool ok = true;
     do {
         mystr = nextLine(stream);
 
