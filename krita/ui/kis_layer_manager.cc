@@ -335,19 +335,19 @@ void KisLayerManager::addCloneLayer()
 
 void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 {
+    Q_ASSERT(!m_activeLayer->inherits("KisGroupLayer"));
     KisImageWSP image = m_view->image();
     if (image) {
         // Check whether we are not cloning a parent layer
         if (KisGroupLayer * from = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
-            KisNodeSP parent1 = parent;
-            while (parent1 && parent1 != image->root()) {
-                if (parent1.data() == from) {
+            KisNodeSP parent = parent;
+            while (parent && parent != image->root()) {
+                if (parent.data() == from) {
                     // The chosen layer is one of our own parents -- this will
-                    // lead to cyclic behaviour when updating. So we need to change parent
-                    parent = parent1->parent();
-                    above = parent1;
+                    // lead to cyclic behaviour when updating. Don't do that!
+                    return;
                 }
-                parent1 = parent1->parent();
+                parent = parent->parent();
             }
         }
 

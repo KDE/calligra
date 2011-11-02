@@ -30,7 +30,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_default_bounds.h"
-#include "kis_clone_layer.h"
 
 class KisGroupLayer::Private
 {
@@ -70,9 +69,8 @@ KisGroupLayer::~KisGroupLayer()
 
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
-    if (!node->inherits("KisCloneLayer"))
-        return true;
-    return dynamic_cast<KisCloneLayer*>(node.data())->isParentOk(this);
+    Q_UNUSED(node);
+    return true;
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const

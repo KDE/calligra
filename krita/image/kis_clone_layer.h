@@ -100,8 +100,6 @@ public:
 
     void setCopyType(CopyLayerType type);
     CopyLayerType copyType() const;
-    
-    bool isParentOk(const KisNode* parent);
 
     /**
      * This function is called by the original to notify
