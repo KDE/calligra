@@ -70,6 +70,7 @@ void AnimatorControlDock::setupUI()
     tbPlayer->addActions(m_actions->actions("player"));
     QSpinBox* fpsSpin = new QSpinBox(tbPlayer);
     fpsSpin->setPrefix(i18n("fps: "));
+    fpsSpin->setRange(1, 0xffff);
     fpsSpin->setValue(12);
     connect(fpsSpin, SIGNAL(valueChanged(int)), m_actions, SLOT(setFps(int)));
     tbPlayer->addWidget(fpsSpin);
