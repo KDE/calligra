@@ -106,6 +106,8 @@ public:
 
     void setFollowingChar(const QString& value);
 
+    QString startValue() const;
+
     QString bulletRelativeSize() const;
 
     QString bulletColor() const;

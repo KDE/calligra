@@ -222,6 +222,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle.setAutoStyleInStylesDotXml(true);
+    }
 #endif
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
@@ -489,6 +493,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
 #endif
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
@@ -748,6 +756,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
@@ -1626,7 +1638,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_listStylePropertiesAltered = false;
 
     m_currentCombinedBulletProperties.clear();
-    // Note that if buNone has been specified, we don't create a list
     m_currentListLevel = 1; // By default we're in the first level
 
     bool fileByPowerPoint = false;
@@ -1634,11 +1645,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     inheritListStyles();
     fileByPowerPoint = true;
 #else
-    m_prevListLevel = m_currentListLevel = 0;
+    // TODO: MS Word: There's a different positioning logic for a list inside
+    // of a textbox compared to a list in a document body.
+/*     m_prevListLevel = m_currentListLevel = 0; */
+    m_currentListLevel = 0;
 #endif
 
     QString fontSize = QString();
     QString bulletColor = QString();
+    QString listStyleName = QString();
 
     // Creating a list out of what we have, note that ppr MAY overwrite the
     // list style
@@ -1738,30 +1753,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     Q_UNUSED(pprRead);
 #endif
 
-    //check if the automatic numbering information applies
-    if ((m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) ||
-        (m_prevListLevel < m_currentListLevel))
-    {
-        m_continueListNumbering[m_currentListLevel] = false;
-    }
-
-    body = textPBuf.originalWriter();
-    if (m_listStylePropertiesAltered || m_previousListWasAltered) {
-        if (m_prevListLevel > 0) {
-            // Ending our current level
-            body->endElement(); // text:list
-            // Ending any additional levels needed
-            for(; m_prevListLevel > 1; --m_prevListLevel) {
-                body->endElement(); // text:list-item
-                body->endElement(); // text:list
-            }
-            m_prevListLevel = 0;
-        }
-        m_previousListWasAltered = false;
-    }
-
-    // This approach has the risk that numbered lists might have different bullet sizes -> different lists
-    // -> numbering won't work as expected
+    //---------------------------------------------
+    // Prepare for the List Style
+    //---------------------------------------------
+    // This approach has the risk that numbered lists might have different
+    // bullet sizes -> different lists -> numbering won't work as expected
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
         if (!fontSize.isEmpty()) {
@@ -1787,86 +1783,144 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 /*         } */
 /*     } */
 
+    //---------------------------------------------
+    // List Style
+    //---------------------------------------------
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
-
-        // For now we take a stand that any altered style makes its own list.
+#ifdef PPTXXMLSLIDEREADER_CPP
+        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+            m_currentListStyle.setAutoStyleInStylesDotXml(true);
+        }
+#elif defined DOCXXMLDOCREADER_CPP
+        if (m_moveToStylesXml) {
+            m_currentListStyle.setAutoStyleInStylesDotXml(true);
+        }
+#endif
         m_currentBulletProperties.m_level = m_currentListLevel;
-
         m_currentListStyle.addChildElement("list-style-properties",
             m_currentBulletProperties.convertToListProperties(fileByPowerPoint));
-        m_previousListWasAltered = true;
-    }
+        listStyleName = mainStyles->insert(m_currentListStyle);
+        Q_ASSERT(!listStyleName.isEmpty());
 
+        if (listStyleName != m_prevListStyleName) {
+            m_prevListStyleName = listStyleName;
+        } else {
+            m_listStylePropertiesAltered = false;
+        }
+    }
+    //---------------------------------------------
+    // Update Automatic Numbering info
+    //---------------------------------------------
+    if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+        m_continueListNumbering[m_currentListLevel] = false;
+    }
     // A list-item without a numbering style or a bullet character/picture
     // defined.  MS PowerPoint treats each paragraph as a list-item.
     if (m_currentBulletProperties.isEmpty()) {
-        m_continueListNumbering.clear();
+        m_continueListNumbering[m_currentListLevel] = false;
+    }
+    if (m_prevListLevel > m_currentListLevel) {
+        m_continueListNumbering[m_prevListLevel] = false;
     }
 
+    //---------------------------------------------
+    // Prepare for the List
+    //---------------------------------------------
+    body = textPBuf.originalWriter();
+
+    // End the previous list in case a new list-style is going to be applied.
+    if (m_listStylePropertiesAltered) {
+        if (m_prevListLevel > 0) {
+            body->endElement(); //text:list
+            for (; m_prevListLevel > 1; --m_prevListLevel) {
+                body->endElement(); //text:list-item
+                body->endElement(); //text:list
+            }
+            m_prevListLevel = 0;
+        }
+    }
     // Empty paragraph is NOT considered to be a list-item at the moment.
     // Prevent stage of displaying a bullet in front of it.
     if (!rRead) {
-        m_continueListNumbering.clear();
+        m_prevListStyleName.clear();
         m_currentListLevel = 0;
     }
 
-    // In MSOffice it's possible that a paragraph defines a list-style that
-    // should be used without being a list-item.  We need to handle that case
-    // and need to make sure that such paragraph's end as first-level
-    // list-items in ODF.
+    //---------------------------------------------
+    // Start the List/List-Item
+    //---------------------------------------------
     if (m_currentListLevel > 0 || m_prevListLevel > 0) {
-#ifdef PPTXXMLSLIDEREADER_CPP
-        if (m_prevListLevel < m_currentListLevel) {
-            if (m_prevListLevel > 0) {
-                // Because there was an existing list, we need to start ours with list:item
+/* #ifdef PPTXXMLSLIDEREADER_CPP */
+        if (m_listStylePropertiesAltered) {
+            Q_ASSERT(m_prevListLevel == 0);
+
+            body->startElement("text:list");
+            body->addAttribute("text:style-name", listStyleName);
+            m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
+            //continue numbering if applicable
+            if (m_continueListNumbering.contains(m_currentListLevel) &&
+                m_continueListNumbering[m_currentListLevel]) {
+                body->addAttribute("text:continue-numbering", "true");
+            }
+            body->startElement("text:list-item");
+            for (int i = 1; i < m_currentListLevel; i++) {
+                body->startElement("text:list");
                 body->startElement("text:list-item");
             }
-            for (int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+
+        } else if (m_prevListLevel < m_currentListLevel) {
+            if (m_prevListLevel > 0) {
+                body->startElement("text:list-item");
+            }
+            for (int i = m_prevListLevel; i < m_currentListLevel; i++) {
                 body->startElement("text:list");
-                if (listDepth == 0) {
-                    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-                        m_currentListStyle.setAutoStyleInStylesDotXml(true);
-                    }
-                    QString listStyleName = mainStyles->insert(m_currentListStyle);
-                    Q_ASSERT(!listStyleName.isEmpty());
-                    body->addAttribute("text:style-name", listStyleName);
-                    m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
-                    if (m_continueListNumbering.contains(m_currentListLevel) &&
-                        m_continueListNumbering[m_currentListLevel])
-                    {
-                        body->addAttribute("text:continue-numbering", "true");
-                    }
-                }
                 body->startElement("text:list-item");
             }
         } else if (m_prevListLevel > m_currentListLevel) {
-            body->endElement(); // This ends the latest list text:list
-            for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
-                //Ending any additional list levels needed
-                body->endElement(); // text:list-item
-                body->endElement(); // text:list
+            body->endElement(); //text:list
+            for (int i = m_prevListLevel - 1; i > m_currentListLevel; i--) {
+                body->endElement(); //text:list-item
+                body->endElement(); //text:list
             }
-            // Starting our own stuff for this level
+            //starting our own stuff for this level
             if (m_currentListLevel > 0) {
-                body->endElement(); // revoving last lists text:list-item
+                body->endElement(); //text:list-item
                 body->startElement("text:list-item");
             }
         } else { // m_prevListLevel==m_currentListLevel
             body->startElement("text:list-item");
         }
-#else
-        for (int i = 0; i < m_currentListLevel; ++i) {
-            body->startElement("text:list");
-            // TODO:, should most likely add the name of the current list style
-            body->startElement("text:list-item");
+        //restart numbering if applicable
+        if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+            if (m_continueListNumbering.contains(m_currentListLevel) &&
+                (m_continueListNumbering[m_currentListLevel] == false)) {
+                body->addAttribute("text:start-value", m_currentBulletProperties.startValue());
+            }
         }
-#endif
+/* #else */
+/*         for (int i = 0; i < m_currentListLevel; ++i) { */
+/*             body->startElement("text:list"); */
+/*             // TODO:, should most likely add the name of the current list style */
+/*             body->startElement("text:list-item"); */
+/*         } */
+/* #endif */
         if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
             m_continueListNumbering[m_currentListLevel] = true;
         }
     }
-
+    //---------------------------------------------
+    // Paragraph Style
+    //---------------------------------------------
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
+    }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
+        m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
+    }
+#endif
     // Position of the list-item defined by fo:margin-left and fo:text-indent
     // in the style:list-level-properties element.  In ODF the paragraph style
     // overrides the list style.
@@ -1875,13 +1929,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
     }
 
-    body->startElement("text:p", false);
-
     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
     // refers to the corresponding margin of a parent style.  Let's convert
     // the percentage value into points to keep it simple.
-    //
     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
     if (spcBef.contains("%")) {
         spcBef.remove("%");
@@ -1892,7 +1943,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #else
         margin = (percentage * m_largestParaFont) / 100.0;
 #endif
-    m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
+        m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
     }
     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
     if (spcAft.contains("%")) {
@@ -1906,37 +1957,35 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
     }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
-    }
-#endif
     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+
+    //---------------------------------------------
+    // Start Paragraph
+    //---------------------------------------------
+    body->startElement("text:p", false);
     body->addAttribute("text:style-name", currentParagraphStyleName);
 
     (void)textPBuf.releaseWriter();
     body->endElement(); //text:p
-#ifdef PPTXXMLSLIDEREADER_CPP
-    // We should end our own list level
+
+    //---------------------------------------------
+    // End List/List-Item
+    //---------------------------------------------
+/* #ifdef PPTXXMLSLIDEREADER_CPP */
     if (m_currentListLevel > 0) {
-        body->endElement(); // text:list-item
+        body->endElement(); //text:list-item
     }
     m_prevListLevel = m_currentListLevel;
-#else
-    // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
-    // and excel filters still need to be adjusted to proper handle nested lists.
-    const bool closeList = true;
-    if (closeList) {
-        for(int i = 0; i < m_currentListLevel; ++i) {
-            body->endElement(); // text:list-item
-            body->endElement(); // text:list
-        }
-        m_prevListLevel = m_currentListLevel = 0;
-    } else {
-        m_prevListLevel = m_currentListLevel;
-    }
-#endif
+/* #else */
+/*     // A new list is created for each paragraph rather then nesting the lists */
+/*     // cause both word and excel filter still need to be adjusted to properly */
+/*     // handle nested lists. */
+/*     for(int i = 0; i < m_currentListLevel; ++i) { */
+/*         body->endElement(); // text:list-item */
+/*         body->endElement(); // text:list */
+/*     } */
+/*     m_prevListLevel = m_currentListLevel = 0; */
+/* #endif */
     READ_EPILOGUE
 }
 
@@ -1966,6 +2015,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
     }
 #endif
@@ -5480,6 +5533,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
     }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
 #endif
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
@@ -6119,7 +6176,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
-    m_previousListWasAltered = false;
+    m_continueListNumbering.clear();
+    m_prevListStyleName.clear();
 
     while (!atEnd()) {
         readNext();
