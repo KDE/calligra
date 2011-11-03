@@ -89,11 +89,6 @@ class ConfigDialog : public KConfigDialog
 public:
     ConfigDialog( QWidget *parent, const QString &name, KConfigSkeleton *config );
 
-    KPageWidgetItem* addPage( QWidget *page, const QString &itemName,
-                const QString &pixmapName=QString(),
-                const QString &header=QString(),
-                bool manage=true );
-
 protected slots:
     /// Return true if any widget has changed
     virtual bool hasChanged();
@@ -121,6 +116,12 @@ protected slots:
     * Example use: User clicks Defaults button in a configure dialog.
     */
     virtual void updateWidgetsDefault();
+
+  /**
+   * Returns whether the current state of the dialog is
+   * the same as the default configuration.
+   */
+  virtual bool isDefault();
 
 private:
     KConfigSkeleton *m_config;
