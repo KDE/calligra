@@ -78,4 +78,4 @@ Comment[zh_TW]=kritaanimatordocker
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaanimatordocker
-X-Krita-Version=4
+X-Krita-Version=5
