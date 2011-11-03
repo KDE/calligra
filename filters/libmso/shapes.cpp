@@ -116,15 +116,21 @@ void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
     if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
         processTextBox(o, out);
     } else {
-        out.xml.startElement("draw:custom-shape");
-        processStyleAndText(o, out);
-        out.xml.startElement("draw:enhanced-geometry");
-        out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
-        out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N");
-        out.xml.addAttribute("draw:type", "rectangle");
-        setShapeMirroring(o, out);
-        out.xml.endElement(); // draw:enhanced-geometry
-        out.xml.endElement(); // draw:custom-shape
+        const DrawStyle ds(0, 0, &o);
+        if (ds.pib()) {
+            // see bug https://bugs.kde.org/show_bug.cgi?id=285577
+            processPictureFrame(o, out);
+        } else {
+            out.xml.startElement("draw:custom-shape");
+            processStyleAndText(o, out);
+            out.xml.startElement("draw:enhanced-geometry");
+            out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+            out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N");
+            out.xml.addAttribute("draw:type", "rectangle");
+            setShapeMirroring(o, out);
+            out.xml.endElement(); // draw:enhanced-geometry
+            out.xml.endElement(); // draw:custom-shape
+        }
     }
 }
 
