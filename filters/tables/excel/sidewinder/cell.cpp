@@ -97,7 +97,6 @@ QString Cell::columnLabel() const
     return columnLabel(column());
 }
 
-// FIXME be careful for integer overflow
 QString Cell::columnLabel(unsigned column)
 {
     QString str;
@@ -111,6 +110,13 @@ QString Cell::columnLabel(unsigned column)
         str = QString(QChar('A' + (c % 26))) + str;
 
     return str;
+}
+
+// provide safety for overflows if an integer is explicit casted to an unsigned
+QString Cell::columnLabel(int column)
+{
+    //Q_ASSERT(column >= 0);
+    return columnLabel(unsigned(qMax(0, column)));
 }
 
 Value Cell::value() const
