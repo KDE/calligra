@@ -438,6 +438,7 @@ public:
         tabBarAnimation.setDuration(500);
         connect(&tabBarAnimation, SIGNAL(finished()), q, SLOT(tabBarAnimationFinished()));
         tabIndex = 0;
+        lowestIndex = 2;
     }
 
     KToolBar *createToolBar(const char *name, const QString& caption);
@@ -468,7 +469,8 @@ public:
     QHash<QString, KToolBar*> toolbarsForName;
     QHash<QString, int> toolbarsIndexForName;
     QHash<QString, QString> toolbarsCaptionForName;
-    QMap<int, bool> toolbarsVisibleForIndex;
+    //QMap<int, bool> toolbarsVisibleForIndex;
+    QVector<bool> toolbarsVisibleForIndex;
     QHash<QWidget*, QAction*> extraActions;
     bool rolledUp;
     QPropertyAnimation tabBarAnimation;
@@ -479,6 +481,7 @@ public:
     void setCurrentTab(const QString& name);
     void hideTab(const QString& name);
     void showTab(const QString& name);
+    int lowestIndex;
 };
 
 #include <kexiutils/styleproxy.h>
@@ -776,7 +779,8 @@ KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QStr
     tbar->setObjectName(name);
     toolbarsCaptionForName.insert(name, caption);
     tabIndex = q->addTab(tbar, caption);
-    toolbarsVisibleForIndex.insert(tabIndex, true);
+    //toolbarsVisibleForIndex.insert(tabIndex, true);
+    toolbarsVisibleForIndex.append(true);
     toolbarsIndexForName.insert(name, tabIndex);
     return tbar;
 }
@@ -877,7 +881,9 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
     dummyWidgetForMainMenu->setObjectName("kexi");
     addTab(dummyWidgetForMainMenu, i18nc("File menu", "&File"));
+    d->toolbarsVisibleForIndex.append(true);
     addTab(new QWidget(this), QString()); // dummy for spacer
+    d->toolbarsVisibleForIndex.append(true);
 
     if (!userMode) {
         d->createWidgetToolBar = d->createToolBar("create", i18n("Create"));
@@ -979,15 +985,17 @@ void KexiTabbedToolBar::Private::showTab(const QString& name)
 {
     if (q->indexOf(toolbarsForName.value(name)) == -1) {
         int h = 0;
-        QMapIterator<int, bool> i(toolbarsVisibleForIndex);
-        while (i.hasNext()) {
-            i.next();
-            if (i.key() >= toolbarsIndexForName.value(name))
-                break;
-            if (!i.value())
+        //QMapIterator<int, bool> i(toolbarsVisibleForIndex);
+        //while (i.hasNext()) {
+        //    i.next();
+        for (int i = 0; i < (toolbarsIndexForName.value(name) + lowestIndex); i++) {
+            //if (i.key() >= toolbarsIndexForName.value(name))
+                //break;
+            //if (!i.value())
+            if (!toolbarsVisibleForIndex.at(i))
                 h++;
         }
-        q->insertTab((toolbarsIndexForName.value(name) - h), toolbarsForName.value(name), toolbarsCaptionForName.value(name));
+        q->insertTab((toolbarsIndexForName.value(name) - h + lowestIndex), toolbarsForName.value(name), toolbarsCaptionForName.value(name));
         toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = true;
     }
 }
