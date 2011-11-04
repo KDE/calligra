@@ -159,7 +159,7 @@ void AnimatorActions::initActions()
     
     t = new QAction(SmallIcon("edit-clear"), i18n("Clear frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(clearFrame()));
-    addAction("frames-editing", t);
+    addAction("frames-clear", t);
     
     t = new QAction(SmallIcon("go-previous"), i18n("Move frame left"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(moveLeft()));

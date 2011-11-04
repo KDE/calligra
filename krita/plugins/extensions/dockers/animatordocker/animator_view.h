@@ -22,6 +22,7 @@
 
 #include <qtreeview.h>
 #include "animator_model.h"
+#include "animator_actions.h"
 
 class AnimatorView : public QTreeView {
     Q_OBJECT
@@ -34,6 +35,9 @@ public:
     virtual void setModel(QAbstractItemModel* model);
     
 public slots:
+    virtual void slotCustomContextMenuRequested(const QPoint &pos);
+    
+public slots:
     virtual void resizeColumnsToContent();
     
 protected slots:
@@ -41,6 +45,9 @@ protected slots:
     
 protected:
     AnimatorModel* amodel();
+    
+private:
+    AnimatorActions* m_actions;
 };
 
 #endif

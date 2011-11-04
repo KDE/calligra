@@ -18,11 +18,17 @@
  */
 
 #include "animator_view.h"
+
+#include <QMenu>
+
 #include "animator_manager_factory.h"
 
 AnimatorView::AnimatorView()
 {
     connect(this, SIGNAL(activated(QModelIndex)), SLOT(activate(QModelIndex)));
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotCustomContextMenuRequested(QPoint)));
+    m_actions = new AnimatorActions(this);
 }
 
 AnimatorView::~AnimatorView()
@@ -33,7 +39,14 @@ void AnimatorView::setModel(QAbstractItemModel* model)
 {
     QTreeView::setModel(model);
     connect(model, SIGNAL(layoutChanged()), SLOT(resizeColumnsToContent()));
+    AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(amodel()->image());
+    m_actions->setManager(manager);
     resizeColumnsToContent();
+}
+
+AnimatorModel* AnimatorView::amodel()
+{
+    return qobject_cast<AnimatorModel*>(model());
 }
 
 void AnimatorView::resizeColumnsToContent()
@@ -54,7 +67,15 @@ void AnimatorView::activate(QModelIndex index)
     manager->activate(amodel()->frameNumber(index), node);
 }
 
-AnimatorModel* AnimatorView::amodel()
+void AnimatorView::slotCustomContextMenuRequested(const QPoint& pos)
 {
-    return qobject_cast<AnimatorModel*>(model());
+    QModelIndex index = indexAt(pos);
+    activate(index);
+    
+    QMenu *menu = new QMenu(this);
+    menu->addActions(m_actions->actions("frames-adding"));
+    menu->addSeparator();
+    menu->addActions(m_actions->actions("frames-clear"));
+    
+    menu->popup(mapToGlobal(pos));
 }

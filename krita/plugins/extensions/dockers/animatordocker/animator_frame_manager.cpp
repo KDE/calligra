@@ -85,6 +85,9 @@ void AnimatorFrameManager::clearRangeActive(int n)
 
 void AnimatorFrameManager::clearRange(FramedAnimatedLayer* layer, int from, int n)
 {
+    if (!layer)
+        return;
+    
     int end;
     if (n < 0)
         end = layer->dataEnd();
