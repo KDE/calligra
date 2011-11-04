@@ -1859,9 +1859,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             body->addAttribute("text:style-name", listStyleName);
             m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
             //continue numbering if applicable
-            if (m_continueListNumbering.contains(m_currentListLevel) &&
-                m_continueListNumbering[m_currentListLevel]) {
-                body->addAttribute("text:continue-numbering", "true");
+            if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+                if (m_continueListNumbering.contains(m_currentListLevel) &&
+                    m_continueListNumbering[m_currentListLevel]) {
+                    body->addAttribute("text:continue-numbering", "true");
+                }
             }
             body->startElement("text:list-item");
             for (int i = 1; i < m_currentListLevel; i++) {
