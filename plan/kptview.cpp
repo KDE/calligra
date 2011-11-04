@@ -55,7 +55,7 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-
+#include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kstandarddirs.h>
@@ -135,6 +135,76 @@ namespace KPlato
 {
 
 //-------------------------------
+ConfigDialog::ConfigDialog(QWidget *parent, const QString& name, KConfigSkeleton *config )
+    : KConfigDialog( parent, name, config ),
+    m_config( config )
+{
+    KConfigDialogManager::changedMap()->insert("KRichTextWidget", SIGNAL(textChanged() ) );
+}
+
+bool ConfigDialog::hasChanged()
+{
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if (  ! item->isEqual( w->toHtml() ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ConfigDialog::updateSettings()
+{
+    bool changed = false;
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            item->setProperty( QVariant( w->toHtml() ) );
+            changed = true;
+        }
+    }
+    if ( changed ) {
+        m_config->writeConfig();
+    }
+}
+
+void ConfigDialog::updateWidgets()
+{
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            w->setHtml( item->property().toString() );
+        }
+    }
+}
+
+void ConfigDialog::updateWidgetsDefault()
+{
+    bool usedefault = m_config->useDefaults( true );
+    updateWidgets();
+    m_config->useDefaults( usedefault );
+}
+
+bool ConfigDialog::isDefault()
+{
+    bool bUseDefaults = m_config->useDefaults(true);
+    bool result = !hasChanged();
+    m_config->useDefaults(bUseDefaults);
+    return result;
+}
+
+//------------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
         m_currentEstimateType( Estimate::Use_Expected ),
@@ -1743,12 +1813,10 @@ void View::slotConfigure()
     if( KConfigDialog::showDialog("Plan Settings") ) {
         return;
     }
-    KConfigDialog *dialog = new KConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
+    ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "view-task" );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), "fill-color" );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "planwork" );
-/*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
-    connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
     dialog->show();
 
 }

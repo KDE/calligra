@@ -97,27 +97,47 @@ STARTUP
 
 ===================== Kexi 2.4  =====================
 
-~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
+TODO:
+*Add Return shortcut to opening in data mode from navigator
+*Add Ctrl+Return shortcut to opening in design mode from navigator
+*Add Ctrl+Shift+Return shortcut to opening in texts mode from navigator
 
-Before freeze:
-*fix bugs...
+~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
+2011-11-02
+Forms
+*Context Menu for container widgets appears misplaced
+BUG:283568
+TODO: fix when using context menu key 
+
+2011-10-21..24
 Widgets
 *[code]substringCompletion property added to QCompleter, false by default
-MainWindow
+Main Window
 *Make global search "full text"
 *Clear contents on activation, update on pressing Delete
-TODO: when pressing Esc or (Back)Tab on empty search line edit, focus previously active widget; 
-      use QApplication::focusWidget() for that
+*Make Escape, Tab, Backtab keys set focus back to previously focused widget in Global Search
+*On activating global search box, select all previous text
+*Clear highlighting for objects in global search when needed
+*Matching substrings are highlighted in completion list of global search
+*Make behaviour of global search box more intuitive
+**go back to completing when popup is closed and F4/Down pressed
+**hide popup if F4 pressed
+**single item on the completion list => select it automatically
+**more than one item on completion list=>find exact match, if ok, accept
+**there is no matching text => go back to completing
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 3 (2.3.83) ~~~~~~~~~~~~~~~~
 
 2011-10-19
-MainWindow
+Main Window
 *Added minimal global search implementation with completion list, now just searches within Project objects
 **after pressing Enter - select object name in Project Navigator
 **on highlighting in completion list, highlights the object name
 **[code]QCompleter which cannot do substring matching (https://bugreports.qt.nokia.com/browse/QTBUG-3414)
 **[code]KCompletion is not better
 **[code]Forked QCompleter and related classes and put in KexiUtils
+**[code]Commented at https://bugreports.qt.nokia.com/browse/QTBUG-7830?focusedCommentId=166309#comment-166309
 
 2011-10-18
 Forms
@@ -157,6 +177,8 @@ Main Window
 CSV Import
 *Fixed crash for larger CSV data
 BUG:282936
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 2 (2.3.82) ~~~~~~~~~~~~~~~~
 
 2011-09-29
 CSV Export

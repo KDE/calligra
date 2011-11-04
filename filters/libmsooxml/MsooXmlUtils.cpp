@@ -1368,7 +1368,7 @@ MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
 {
     // a positive decimal number immediately following by a unit identifier.
-    qreal number;
+    qreal number(0.0);
     QString unit;
     if (!splitNumberAndUnit(value, &number, &unit))
         return QString();
@@ -1394,7 +1394,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 // </units> -------------------
 
 Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
-    m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
+    m_type(ParagraphBulletProperties::DefaultType), m_startValue("1"), m_bulletFont(UNUSED),
     m_bulletChar(UNUSED), m_numFormat(UNUSED), m_prefix(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
     m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
 {
@@ -1410,7 +1410,7 @@ bool Utils::ParagraphBulletProperties::isEmpty() const
 
 void Utils::ParagraphBulletProperties::clear()
 {
-    m_startValue = UNUSED;
+    m_startValue = "1"; //ECMA-376, p.4575
     m_type = ParagraphBulletProperties::DefaultType;
     m_bulletFont = UNUSED;
     m_bulletChar = UNUSED;
@@ -1500,6 +1500,11 @@ void Utils::ParagraphBulletProperties::setFollowingChar(const QString& following
     m_followingChar = followingChar;
 }
 
+QString Utils::ParagraphBulletProperties::startValue() const
+{
+    return m_startValue;
+}
+
 QString Utils::ParagraphBulletProperties::bulletColor() const
 {
     return m_bulletColor;
@@ -1540,6 +1545,9 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     // This function is intented for helping to inherit some values from other properties
     if (properties.m_type != ParagraphBulletProperties::DefaultType) {
         m_type = properties.m_type;
+    }
+    if (properties.m_startValue != "1") {
+        m_startValue = properties.m_startValue;
     }
     if (properties.m_bulletFont != UNUSED) {
         m_bulletFont = properties.m_bulletFont;
@@ -1592,9 +1600,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
         if (m_prefix != UNUSED) {
             returnValue += QString("style:num-prefix=\"%1\" ").arg(m_prefix);
         }
-        if (m_startValue != UNUSED) {
-            returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
-        }
+        returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
         ending = "</text:list-level-style-number>";
     }
     else if (m_type == ParagraphBulletProperties::PictureType) {
@@ -1657,35 +1663,44 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
         returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
 
         if (((m_type == ParagraphBulletProperties::BulletType) && m_bulletChar.isEmpty()) ||
-            (indent == 0))
+            (m_type == ParagraphBulletProperties::DefaultType))
         {
-            if ((qAbs(indent) > margin) && (indent < 0)) {
-                //hanging:
-                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
-            } else {
-                //first-line and none:
+            //hanging:
+            if (indent < 0) {
+                if (qAbs(indent) > margin) {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
+                } else {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+                }
+            }
+            //first-line and none:
+            else {
                 returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
             }
             returnValue += "text:label-followed-by=\"nothing\" ";
-        }
-        else {
-            if (qAbs(indent) > margin) {
-                //hanging:
-                if (indent < 0) {
+        } else {
+            //hanging:
+            if (indent < 0) {
+                if (qAbs(indent) > margin) {
                     returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
                     returnValue += "text:label-followed-by=\"listtab\" ";
                     returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
-                }
-                //first-line:
-                else {
-                    returnValue += QString("fo:text-indent=\"0pt\" ");
+                } else {
+                    returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
                     returnValue += "text:label-followed-by=\"listtab\" ";
-                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(indent);
+                    returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin);
                 }
-            } else {
-                returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
+            }
+            //first-line:
+            else if (indent > 0) {
+                returnValue += QString("fo:text-indent=\"0pt\" ");
                 returnValue += "text:label-followed-by=\"listtab\" ";
-                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin);
+                returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(margin + indent);
+            }
+            //none
+            else {
+                returnValue += QString("fo:text-indent=\"0pt\" ");
+                returnValue += "text:label-followed-by=\"nothing\" ";
             }
         }
         returnValue += "/>";

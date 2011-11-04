@@ -36,6 +36,8 @@ class KexiSearchableModel;
 class KexiSearchLineEdit : public KLineEdit
 {
     Q_OBJECT
+    Q_PROPERTY(bool highlightMatchingSubstrings READ highlightMatchingSubstrings WRITE setHighlightMatchingSubstrings)
+
 public:
     explicit KexiSearchLineEdit(QWidget *parent = 0);
 
@@ -45,10 +47,23 @@ public:
      One example is Project Navigator. */
     void addSearchableModel(KexiSearchableModel *model);
 
+    /*! @return true if matching substrings are highlighted in completion list.
+     @see setHighlightMatchingSubstrings() */
+    bool highlightMatchingSubstrings() const;
+
+    /*! If @a highlight is true makes matching substrings are highlighted in completion list.
+     By default highlighting is on.
+     @see highlightMatchingSubstrings() */
+    void setHighlightMatchingSubstrings(bool highlight);
+
+public slots:
+    void setFocus();
+
 private slots:
     void slotCompletionHighlighted(const QString &newText);
     void slotCompletionHighlighted(const QModelIndex &index);
     void slotCompletionActivated(const QModelIndex &index);
+    void slotClearShortcutActivated();
 
 protected:
     virtual void inputMethodEvent(QInputMethodEvent *e);
