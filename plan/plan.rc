@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="20">
+<kpartgui name="Plan" version="21">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -59,7 +59,7 @@
             <Action name="configure" group="settings_configure"/>
         </Menu>
         <Menu name="help"><text>&amp;Help</text>
-            <Action name="kplato_introduction"/>
+            <Action name="plan_introduction"/>
         </Menu>
     </MenuBar>
     <ToolBar name="project" position="top"><Text>Project</Text>
