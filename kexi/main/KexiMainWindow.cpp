@@ -1649,6 +1649,11 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     enableMessages(false);
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
+    d->tabbedToolBar->showTab("create");
+    d->tabbedToolBar->showTab("data");
+    d->tabbedToolBar->showTab("external");
+    d->tabbedToolBar->showTab("form");
+    d->tabbedToolBar->showTab("report");
     return true;
 }
 
@@ -1977,6 +1982,12 @@ tristate KexiMainWindow::closeProject()
     updateAppCaption();
 
     emit projectClosed();
+    d->tabbedToolBar->hideTab("create");
+    d->tabbedToolBar->hideTab("data");
+    d->tabbedToolBar->hideTab("external");
+    //d->tabbedToolBar->hideTab("tools");
+    d->tabbedToolBar->hideTab("form");
+    d->tabbedToolBar->hideTab("report");
     return true;
 }
 

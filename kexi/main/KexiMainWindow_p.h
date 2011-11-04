@@ -38,7 +38,7 @@
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QKeyEvent>
- 
+#include <KTabWidget>
 #include "KexiSearchLineEdit.h"
 #include <kexiutils/SmallToolButton.h>
 class KexiProjectNavigator;
@@ -76,6 +76,10 @@ public:
     void addSearchableModel(KexiSearchableModel *model);
     
     void setCurrentTab(const QString& name);
+    
+    void hideTab(const QString& name);
+    
+    void showTab(const QString& name);
     
 
 public slots:
@@ -433,10 +437,11 @@ public:
         tabBarAnimation.setPropertyName("opacity");
         tabBarAnimation.setDuration(500);
         connect(&tabBarAnimation, SIGNAL(finished()), q, SLOT(tabBarAnimationFinished()));
+        tabIndex = 0;
     }
 
     KToolBar *createToolBar(const char *name, const QString& caption);
-
+    int tabIndex;
 
 public slots:
     void showMainMenu(const char* actionName = 0);
@@ -461,6 +466,9 @@ public:
 #endif
     //! Toolbars for name
     QHash<QString, KToolBar*> toolbarsForName;
+    QHash<QString, int> toolbarsIndexForName;
+    QHash<QString, QString> toolbarsCaptionForName;
+    QMap<int, bool> toolbarsVisibleForIndex;
     QHash<QWidget*, QAction*> extraActions;
     bool rolledUp;
     QPropertyAnimation tabBarAnimation;
@@ -469,6 +477,8 @@ public:
     KHelpMenu *helpMenu;
     KexiSearchLineEdit *searchLineEdit;
     void setCurrentTab(const QString& name);
+    void hideTab(const QString& name);
+    void showTab(const QString& name);
 };
 
 #include <kexiutils/styleproxy.h>
@@ -764,7 +774,10 @@ KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QStr
     toolbarsForName.insert(name, tbar);
     tbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     tbar->setObjectName(name);
-    q->addTab(tbar, caption);
+    toolbarsCaptionForName.insert(name, caption);
+    tabIndex = q->addTab(tbar, caption);
+    toolbarsVisibleForIndex.insert(tabIndex, true);
+    toolbarsIndexForName.insert(name, tabIndex);
     return tbar;
 }
 
@@ -954,6 +967,29 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 void KexiTabbedToolBar::Private::setCurrentTab(const QString& name)
 {
     q->setCurrentWidget(q->toolBar(name));
+}
+
+void KexiTabbedToolBar::Private::hideTab(const QString& name)
+{
+    q->removeTab(q->indexOf(toolbarsForName.value(name)));
+    toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = false;
+}
+
+void KexiTabbedToolBar::Private::showTab(const QString& name)
+{
+    if (q->indexOf(toolbarsForName.value(name)) == -1) {
+        int h = 0;
+        QMapIterator<int, bool> i(toolbarsVisibleForIndex);
+        while (i.hasNext()) {
+            i.next();
+            if (i.key() >= toolbarsIndexForName.value(name))
+                break;
+            if (!i.value())
+                h++;
+        }
+        q->insertTab((toolbarsIndexForName.value(name) - h), toolbarsForName.value(name), toolbarsCaptionForName.value(name));
+        toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = true;
+    }
 }
 
 KexiTabbedToolBar::~KexiTabbedToolBar()
@@ -1278,6 +1314,16 @@ void KexiTabbedToolBar::addSearchableModel(KexiSearchableModel *model)
 void KexiTabbedToolBar::setCurrentTab(const QString& name)
 {
     d->setCurrentTab(name);
+}
+
+void KexiTabbedToolBar::hideTab(const QString& name)
+{
+    d->hideTab(name);
+}
+
+void KexiTabbedToolBar::showTab(const QString& name)
+{
+    d->showTab(name);
 }
 /*
 class KexiTopDockWidget : public QDockWidget
