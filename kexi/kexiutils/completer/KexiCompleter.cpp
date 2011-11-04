@@ -40,23 +40,23 @@
 ****************************************************************************/
 
 /*!
-    \class QCompleter
-    \brief The QCompleter class provides completions based on an item model.
+    \class KexiCompleter
+    \brief The KexiCompleter class provides completions based on an item model.
     \since 4.2
 
-    You can use QCompleter to provide auto completions in any Qt
+    You can use KexiCompleter to provide auto completions in any Qt
     widget, such as QLineEdit and QComboBox.
-    When the user starts typing a word, QCompleter suggests possible ways of
+    When the user starts typing a word, KexiCompleter suggests possible ways of
     completing the word, based on a word list. The word list is
     provided as a QAbstractItemModel. (For simple applications, where
     the word list is static, you can pass a QStringList to
-    QCompleter's constructor.)
+    KexiCompleter's constructor.)
 
     \tableofcontents
 
     \section1 Basic Usage
 
-    A QCompleter is used typically with a QLineEdit or QComboBox.
+    A KexiCompleter is used typically with a QLineEdit or QComboBox.
     For example, here's how to provide auto completions from a simple
     word list in a QLineEdit:
 
@@ -67,8 +67,8 @@
 
     \snippet doc/src/snippets/code/src_gui_util_qcompleter.cpp 1
 
-    To set the model on which QCompleter should operate, call
-    setModel(). By default, QCompleter will attempt to match the \l
+    To set the model on which KexiCompleter should operate, call
+    setModel(). By default, KexiCompleter will attempt to match the \l
     {completionPrefix}{completion prefix} (i.e., the word that the
     user has started typing) against the Qt::EditRole data stored in
     column 0 in the  model case sensitively. This can be changed
@@ -77,9 +77,9 @@
 
     If the model is sorted on the column and role that are used for completion,
     you can call setModelSorting() with either
-    QCompleter::CaseSensitivelySortedModel or
-    QCompleter::CaseInsensitivelySortedModel as the argument. On large models,
-    this can lead to significant performance improvements, because QCompleter
+    KexiCompleter::CaseSensitivelySortedModel or
+    KexiCompleter::CaseInsensitivelySortedModel as the argument. On large models,
+    this can lead to significant performance improvements, because KexiCompleter
     can then use binary search instead of linear search.
 
     The model can be a \l{QAbstractListModel}{list model},
@@ -114,7 +114,7 @@
 
     \section1 Handling Tree Models
 
-    QCompleter can look for completions in tree models, assuming
+    KexiCompleter can look for completions in tree models, assuming
     that any item (or sub-item or sub-sub-item) can be unambiguously
     represented as a string by specifying the path to the item. The
     completion is then performed one level at a time.
@@ -122,17 +122,17 @@
     Let's take the example of a user typing in a file system path.
     The model is a (hierarchical) QFileSystemModel. The completion
     occurs for every element in the path. For example, if the current
-    text is \c C:\Wind, QCompleter might suggest \c Windows to
+    text is \c C:\Wind, KexiCompleter might suggest \c Windows to
     complete the current path element. Similarly, if the current text
-    is \c C:\Windows\Sy, QCompleter might suggest \c System.
+    is \c C:\Windows\Sy, KexiCompleter might suggest \c System.
 
-    For this kind of completion to work, QCompleter needs to be able to
+    For this kind of completion to work, KexiCompleter needs to be able to
     split the path into a list of strings that are matched at each level.
     For \c C:\Windows\Sy, it needs to be split as "C:", "Windows" and "Sy".
     The default implementation of splitPath(), splits the completionPrefix
     using QDir::separator() if the model is a QFileSystemModel.
 
-    To provide completions, QCompleter needs to know the path from an index.
+    To provide completions, KexiCompleter needs to know the path from an index.
     This is provided by pathFromIndex(). The default implementation of
     pathFromIndex(), returns the data for the \l{Qt::EditRole}{edit role}
     for list models and the absolute file path if the mode is a QFileSystemModel.
@@ -140,7 +140,7 @@
     \sa QAbstractItemModel, QLineEdit, QComboBox, {Completer Example}
 */
 
-#include "qcompleter_p.h"
+#include "KexiCompleter_p.h"
 
 #ifndef QT_NO_COMPLETER
 
@@ -156,12 +156,10 @@
 #include "QtGui/qdesktopwidget.h"
 #include "QtGui/qlineedit.h"
 
-namespace KexiUtils {
-
-class QEmptyItemModel : public QAbstractItemModel
+class KexiEmptyItemModel : public QAbstractItemModel
 {
 public:
-    explicit QEmptyItemModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
+    explicit KexiEmptyItemModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
     QModelIndex index(int, int, const QModelIndex &) const { return QModelIndex(); }
     QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
     int rowCount(const QModelIndex &) const { return 0; }
@@ -170,11 +168,11 @@ public:
     QVariant data(const QModelIndex &, int) const { return QVariant(); }
 };
 
-Q_GLOBAL_STATIC(QEmptyItemModel, qEmptyModel)
+Q_GLOBAL_STATIC(KexiEmptyItemModel, kexiEmptyModel)
 
-QAbstractItemModel *QAbstractItemModelPrivate::staticEmptyModel()
+QAbstractItemModel *KexiAbstractItemModelPrivate::staticEmptyModel()
 {
-    return qEmptyModel();
+    return kexiEmptyModel();
 }
 
 namespace {
@@ -193,38 +191,38 @@ namespace {
 
 Q_GLOBAL_STATIC(DefaultRoleNames, qDefaultRoleNames)
 
-const QHash<int,QByteArray> &QAbstractItemModelPrivate::defaultRoleNames()
+const QHash<int,QByteArray> &KexiAbstractItemModelPrivate::defaultRoleNames()
 {
     return *qDefaultRoleNames();
 }
 
 
-QCompletionModel::QCompletionModel(QCompleterPrivate *c, QObject *parent)
+KexiCompletionModel::KexiCompletionModel(KexiCompleterPrivate *c, QObject *parent)
     : QAbstractProxyModel(parent),
-      c(c), showAll(false), d(new QCompletionModelPrivate(this))
+      c(c), showAll(false), d(new KexiCompletionModelPrivate(this))
 {
-    QAbstractProxyModel::setSourceModel(KexiUtils::QAbstractItemModelPrivate::staticEmptyModel());
+    QAbstractProxyModel::setSourceModel(KexiAbstractItemModelPrivate::staticEmptyModel());
     createEngine();
 }
 
-QCompletionModel::~QCompletionModel()
+KexiCompletionModel::~KexiCompletionModel()
 {
     delete d;
 }
 
-int QCompletionModel::columnCount(const QModelIndex &) const
+int KexiCompletionModel::columnCount(const QModelIndex &) const
 {
     return sourceModel()->columnCount();
 }
 
-void QCompletionModel::setSourceModel(QAbstractItemModel *source)
+void KexiCompletionModel::setSourceModel(QAbstractItemModel *source)
 {
     bool hadModel = (sourceModel() != 0);
 
     if (hadModel)
         QObject::disconnect(sourceModel(), 0, this, 0);
 
-    QAbstractProxyModel::setSourceModel(source ? source : KexiUtils::QAbstractItemModelPrivate::staticEmptyModel());
+    QAbstractProxyModel::setSourceModel(source ? source : KexiAbstractItemModelPrivate::staticEmptyModel());
 
     if (source) {
         // TODO: Optimize updates in the source model
@@ -241,17 +239,17 @@ void QCompletionModel::setSourceModel(QAbstractItemModel *source)
     invalidate();
 }
 
-void QCompletionModel::createEngine()
+void KexiCompletionModel::createEngine()
 {
     bool sortedEngine = false;
     switch (c->sorting) {
-    case QCompleter::UnsortedModel:
+    case KexiCompleter::UnsortedModel:
         sortedEngine = false;
         break;
-    case QCompleter::CaseSensitivelySortedModel:
+    case KexiCompleter::CaseSensitivelySortedModel:
         sortedEngine = c->cs == Qt::CaseSensitive;
         break;
-    case QCompleter::CaseInsensitivelySortedModel:
+    case KexiCompleter::CaseInsensitivelySortedModel:
         sortedEngine = c->cs == Qt::CaseInsensitive;
         break;
     }
@@ -262,7 +260,7 @@ void QCompletionModel::createEngine()
         engine.reset(new QUnsortedModelEngine(c));
 }
 
-QModelIndex QCompletionModel::mapToSource(const QModelIndex& index) const
+QModelIndex KexiCompletionModel::mapToSource(const QModelIndex& index) const
 {
     if (!index.isValid())
         return engine->curParent;
@@ -273,7 +271,7 @@ QModelIndex QCompletionModel::mapToSource(const QModelIndex& index) const
         if (!engine->matchCount())
             return QModelIndex();
         Q_ASSERT(index.row() < engine->matchCount());
-        QIndexMapper& rootIndices = engine->historyMatch.indices;
+        KexiIndexMapper& rootIndices = engine->historyMatch.indices;
         if (index.row() < rootIndices.count()) {
             row = rootIndices[index.row()];
             parent = QModelIndex();
@@ -287,7 +285,7 @@ QModelIndex QCompletionModel::mapToSource(const QModelIndex& index) const
     return sourceModel()->index(row, index.column(), parent);
 }
 
-QModelIndex QCompletionModel::mapFromSource(const QModelIndex& idx) const
+QModelIndex KexiCompletionModel::mapFromSource(const QModelIndex& idx) const
 {
     if (!idx.isValid())
         return QModelIndex();
@@ -297,7 +295,7 @@ QModelIndex QCompletionModel::mapFromSource(const QModelIndex& idx) const
         if (!engine->matchCount())
             return QModelIndex();
 
-        QIndexMapper& rootIndices = engine->historyMatch.indices;
+        KexiIndexMapper& rootIndices = engine->historyMatch.indices;
         if (idx.parent().isValid()) {
             if (idx.parent() != engine->curParent)
                 return QModelIndex();
@@ -308,7 +306,7 @@ QModelIndex QCompletionModel::mapFromSource(const QModelIndex& idx) const
         }
 
         if (row == -1) {
-            QIndexMapper& indices = engine->curMatch.indices;
+            KexiIndexMapper& indices = engine->curMatch.indices;
             engine->filterOnDemand(idx.row() - indices.last());
             row = indices.indexOf(idx.row()) + rootIndices.count();
         }
@@ -324,7 +322,7 @@ QModelIndex QCompletionModel::mapFromSource(const QModelIndex& idx) const
     return createIndex(row, idx.column());
 }
 
-bool QCompletionModel::setCurrentRow(int row)
+bool KexiCompletionModel::setCurrentRow(int row)
 {
     if (row < 0 || !engine->matchCount())
         return false;
@@ -339,7 +337,7 @@ bool QCompletionModel::setCurrentRow(int row)
     return true;
 }
 
-QModelIndex QCompletionModel::currentIndex(bool sourceIndex) const
+QModelIndex KexiCompletionModel::currentIndex(bool sourceIndex) const
 {
     if (!engine->matchCount())
         return QModelIndex();
@@ -354,7 +352,7 @@ QModelIndex QCompletionModel::currentIndex(bool sourceIndex) const
     return mapToSource(idx);
 }
 
-QModelIndex QCompletionModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex KexiCompletionModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (row < 0 || column < 0 || column >= columnCount(parent) || parent.isValid())
         return QModelIndex();
@@ -377,7 +375,7 @@ QModelIndex QCompletionModel::index(int row, int column, const QModelIndex& pare
     return createIndex(row, column);
 }
 
-int QCompletionModel::completionCount() const
+int KexiCompletionModel::completionCount() const
 {
     if (!engine->matchCount())
         return 0;
@@ -386,7 +384,7 @@ int QCompletionModel::completionCount() const
     return engine->matchCount();
 }
 
-int QCompletionModel::rowCount(const QModelIndex &parent) const
+int KexiCompletionModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -402,7 +400,7 @@ int QCompletionModel::rowCount(const QModelIndex &parent) const
     return completionCount();
 }
 
-void QCompletionModel::setFiltered(bool filtered)
+void KexiCompletionModel::setFiltered(bool filtered)
 {
     if (showAll == !filtered)
         return;
@@ -410,7 +408,7 @@ void QCompletionModel::setFiltered(bool filtered)
     resetModel();
 }
 
-bool QCompletionModel::hasChildren(const QModelIndex &parent) const
+bool KexiCompletionModel::hasChildren(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return false;
@@ -424,30 +422,30 @@ bool QCompletionModel::hasChildren(const QModelIndex &parent) const
     return true;
 }
 
-QVariant QCompletionModel::data(const QModelIndex& index, int role) const
+QVariant KexiCompletionModel::data(const QModelIndex& index, int role) const
 {
     return sourceModel()->data(mapToSource(index), role);
 }
 
-void QCompletionModel::modelDestroyed()
+void KexiCompletionModel::modelDestroyed()
 {
     QAbstractProxyModel::setSourceModel(0); // switch to static empty model
     invalidate();
 }
 
-void QCompletionModel::rowsInserted()
+void KexiCompletionModel::rowsInserted()
 {
     invalidate();
     emit rowsAdded();
 }
 
-void QCompletionModel::invalidate()
+void KexiCompletionModel::invalidate()
 {
     engine->cache.clear();
     filter(engine->curParts);
 }
 
-void QCompletionModel::filter(const QStringList& parts)
+void KexiCompletionModel::filter(const QStringList& parts)
 {
     engine->filter(parts);
     resetModel();
@@ -456,7 +454,7 @@ void QCompletionModel::filter(const QStringList& parts)
         sourceModel()->fetchMore(engine->curParent);
 }
 
-void QCompletionModel::resetModel()
+void KexiCompletionModel::resetModel()
 {
     if (rowCount() == 0) {
         reset();
@@ -473,7 +471,7 @@ void QCompletionModel::resetModel()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void QCompletionEngine::filter(const QStringList& parts)
+void KexiCompletionEngine::filter(const QStringList& parts)
 {
     const QAbstractItemModel *model = c->proxy->sourceModel();
     curParts = parts;
@@ -482,7 +480,7 @@ void QCompletionEngine::filter(const QStringList& parts)
 
     curRow = -1;
     curParent = QModelIndex();
-    curMatch = QMatchData();
+    curMatch = KexiMatchData();
     historyMatch = filterHistory();
 
     if (!model)
@@ -501,7 +499,7 @@ void QCompletionEngine::filter(const QStringList& parts)
     // When filtering is disabled, we show all the items under this parent
     curParent = parent;
     if (curParts.last().isEmpty())
-        curMatch = QMatchData(QIndexMapper(0, model->rowCount(curParent) - 1), -1, false);
+        curMatch = KexiMatchData(KexiIndexMapper(0, model->rowCount(curParent) - 1), -1, false);
     else
         curMatch = filter(curParts.last(), curParent, 1); // build at least one
     curRow = curMatch.isValid() ? 0 : -1;
@@ -519,11 +517,11 @@ inline bool matchSubstring(const QString& s1, const QString& s2, Qt::CaseSensiti
 
 typedef bool (*MatchFunction)(const QString&, const QString&, Qt::CaseSensitivity);
 
-QMatchData QCompletionEngine::filterHistory()
+KexiMatchData KexiCompletionEngine::filterHistory()
 {
     QAbstractItemModel *source = c->proxy->sourceModel();
     if (curParts.count() <= 1 || c->proxy->showAll || !source)
-        return QMatchData();
+        return KexiMatchData();
     bool isDirModel = false;
     bool isFsModel = false;
 #ifndef QT_NO_DIRMODEL
@@ -533,8 +531,8 @@ QMatchData QCompletionEngine::filterHistory()
     isFsModel = (qobject_cast<QFileSystemModel *>(source) != 0);
 #endif
     QVector<int> v;
-    QIndexMapper im(v);
-    QMatchData m(im, -1, true);
+    KexiIndexMapper im(v);
+    KexiMatchData m(im, -1, true);
 
     MatchFunction matchFunction = c->substringCompletion ? &matchSubstring : &matchPrefix;
     for (int i = 0; i < source->rowCount(); i++) {
@@ -550,7 +548,7 @@ QMatchData QCompletionEngine::filterHistory()
 }
 
 // Returns a match hint from the cache by chopping the search string
-bool QCompletionEngine::matchHint(QString part, const QModelIndex& parent, QMatchData *hint)
+bool KexiCompletionEngine::matchHint(QString part, const QModelIndex& parent, KexiMatchData *hint)
 {
     if (c->cs == Qt::CaseInsensitive)
         part = part.toLower();
@@ -569,7 +567,7 @@ bool QCompletionEngine::matchHint(QString part, const QModelIndex& parent, QMatc
     return false;
 }
 
-bool QCompletionEngine::lookupCache(QString part, const QModelIndex& parent, QMatchData *m)
+bool KexiCompletionEngine::lookupCache(QString part, const QModelIndex& parent, KexiMatchData *m)
 {
    if (c->cs == Qt::CaseInsensitive)
         part = part.toLower();
@@ -581,16 +579,16 @@ bool QCompletionEngine::lookupCache(QString part, const QModelIndex& parent, QMa
 }
 
 // When the cache size exceeds 1MB, it clears out about 1/2 of the cache.
-void QCompletionEngine::saveInCache(QString part, const QModelIndex& parent, const QMatchData& m)
+void KexiCompletionEngine::saveInCache(QString part, const QModelIndex& parent, const KexiMatchData& m)
 {
-    QMatchData old = cache[parent].take(part);
+    KexiMatchData old = cache[parent].take(part);
     cost = cost + m.indices.cost() - old.indices.cost();
     if (cost * sizeof(int) > 1024 * 1024) {
         QMap<QModelIndex, CacheItem>::iterator it1 = cache.begin();
         while (it1 != cache.end()) {
             CacheItem& ci = it1.value();
             int sz = ci.count()/2;
-            QMap<QString, QMatchData>::iterator it2 = ci.begin();
+            QMap<QString, KexiMatchData>::iterator it2 = ci.begin();
             int i = 0;
             while (it2 != ci.end() && i < sz) {
                 cost -= it2.value().indices.cost();
@@ -611,7 +609,7 @@ void QCompletionEngine::saveInCache(QString part, const QModelIndex& parent, con
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& parent, Qt::SortOrder order)
+KexiIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& parent, Qt::SortOrder order)
 {
     const QAbstractItemModel *model = c->proxy->sourceModel();
 
@@ -627,7 +625,7 @@ QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& pare
 
     // look backward for first valid hint
     for(CacheItem::const_iterator it1 = it; it1-- != map.constBegin();) {
-        const QMatchData& value = it1.value();
+        const KexiMatchData& value = it1.value();
         if (value.isValid()) {
             if (order == Qt::AscendingOrder) {
                 from = value.indices.last() + 1;
@@ -640,7 +638,7 @@ QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& pare
 
     // look forward for first valid hint
     for(CacheItem::const_iterator it2 = it; it2 != map.constEnd(); ++it2) {
-        const QMatchData& value = it2.value();
+        const KexiMatchData& value = it2.value();
         if (value.isValid() && !it2.key().startsWith(part)) {
             if (order == Qt::AscendingOrder) {
                 to = value.indices.first() - 1;
@@ -651,7 +649,7 @@ QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& pare
         }
     }
 
-    return QIndexMapper(from, to);
+    return KexiIndexMapper(from, to);
 }
 
 Qt::SortOrder QSortedModelEngine::sortOrder(const QModelIndex &parent) const
@@ -666,20 +664,20 @@ Qt::SortOrder QSortedModelEngine::sortOrder(const QModelIndex &parent) const
     return QString::compare(first, last, c->cs) <= 0 ? Qt::AscendingOrder : Qt::DescendingOrder;
 }
 
-QMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex& parent, int)
+KexiMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex& parent, int)
 {
     const QAbstractItemModel *model = c->proxy->sourceModel();
 
-    QMatchData hint;
+    KexiMatchData hint;
     if (lookupCache(part, parent, &hint))
         return hint;
 
-    QIndexMapper indices;
+    KexiIndexMapper indices;
     Qt::SortOrder order = sortOrder(parent);
 
     if (matchHint(part, parent, &hint)) {
         if (!hint.isValid())
-            return QMatchData();
+            return KexiMatchData();
         indices = hint.indices;
     } else {
         indices = indexHint(part, parent, order);
@@ -708,15 +706,15 @@ QMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex& pa
 
     if ((order == Qt::AscendingOrder && low == indices.to())
         || (order == Qt::DescendingOrder && high == indices.from())) { // not found
-        saveInCache(part, parent, QMatchData());
-        return QMatchData();
+        saveInCache(part, parent, KexiMatchData());
+        return KexiMatchData();
     }
 
     probeIndex = model->index(order == Qt::AscendingOrder ? low+1 : high-1, c->column, parent);
     probeData = model->data(probeIndex, c->role).toString();
     if (!probeData.startsWith(part, c->cs)) {
-        saveInCache(part, parent, QMatchData());
-        return QMatchData();
+        saveInCache(part, parent, KexiMatchData());
+        return KexiMatchData();
     }
 
     const bool exactMatch = QString::compare(probeData, part, c->cs) == 0;
@@ -748,14 +746,14 @@ QMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex& pa
         }
     }
 
-    QMatchData m(order == Qt::AscendingOrder ? QIndexMapper(from, high - 1) : QIndexMapper(low+1, to), emi, false);
+    KexiMatchData m(order == Qt::AscendingOrder ? KexiIndexMapper(from, high - 1) : KexiIndexMapper(low+1, to), emi, false);
     saveInCache(part, parent, m);
     return m;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 int QUnsortedModelEngine::buildIndices(const QString& str, const QModelIndex& parent, int n,
-                                      const QIndexMapper& indices, QMatchData* m)
+                                      const KexiIndexMapper& indices, KexiMatchData* m)
 {
     Q_ASSERT(m->partial);
     Q_ASSERT(n != -1 || m->exactMatchIndex == -1);
@@ -787,31 +785,31 @@ void QUnsortedModelEngine::filterOnDemand(int n)
     Q_ASSERT(n >= -1);
     const QAbstractItemModel *model = c->proxy->sourceModel();
     int lastRow = model->rowCount(curParent) - 1;
-    QIndexMapper im(curMatch.indices.last() + 1, lastRow);
+    KexiIndexMapper im(curMatch.indices.last() + 1, lastRow);
     int lastIndex = buildIndices(curParts.last(), curParent, n, im, &curMatch);
     curMatch.partial = (lastRow != lastIndex);
     saveInCache(curParts.last(), curParent, curMatch);
 }
 
-QMatchData QUnsortedModelEngine::filter(const QString& part, const QModelIndex& parent, int n)
+KexiMatchData QUnsortedModelEngine::filter(const QString& part, const QModelIndex& parent, int n)
 {
-    QMatchData hint;
+    KexiMatchData hint;
 
     QVector<int> v;
-    QIndexMapper im(v);
-    QMatchData m(im, -1, true);
+    KexiIndexMapper im(v);
+    KexiMatchData m(im, -1, true);
 
     const QAbstractItemModel *model = c->proxy->sourceModel();
     bool foundInCache = lookupCache(part, parent, &m);
 
     if (!foundInCache) {
         if (matchHint(part, parent, &hint) && !hint.isValid())
-            return QMatchData();
+            return KexiMatchData();
     }
 
     if (!foundInCache && !hint.isValid()) {
         const int lastRow = model->rowCount(parent) - 1;
-        QIndexMapper all(0, lastRow);
+        KexiIndexMapper all(0, lastRow);
         int lastIndex = buildIndices(part, parent, n, all, &m);
         m.partial = (lastIndex != lastRow);
     } else {
@@ -822,7 +820,7 @@ QMatchData QUnsortedModelEngine::filter(const QString& part, const QModelIndex& 
         if (m.partial && ((n == -1 && m.exactMatchIndex == -1) || (m.indices.count() < n))) {
             // need more and have more
             const int lastRow = model->rowCount(parent) - 1;
-            QIndexMapper rest(hint.indices.last() + 1, lastRow);
+            KexiIndexMapper rest(hint.indices.last() + 1, lastRow);
             int want = n == -1 ? -1 : n - m.indices.count();
             int lastIndex = buildIndices(part, parent, want, rest, &m);
             m.partial = (lastRow != lastIndex);
@@ -834,27 +832,27 @@ QMatchData QUnsortedModelEngine::filter(const QString& part, const QModelIndex& 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-QCompleterPrivate::QCompleterPrivate(QCompleter *q)
+KexiCompleterPrivate::KexiCompleterPrivate(KexiCompleter *q)
 : widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), substringCompletion(false),
-  role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(QCompleter::UnsortedModel),
+  role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(KexiCompleter::UnsortedModel),
   wrap(true), eatFocusOut(true),
   hiddenBecauseNoMatch(false), q(q)
 {
 }
 
-void QCompleterPrivate::init(QAbstractItemModel *m)
+void KexiCompleterPrivate::init(QAbstractItemModel *m)
 {
-    proxy = new QCompletionModel(this, q);
+    proxy = new KexiCompletionModel(this, q);
     QObject::connect(proxy, SIGNAL(rowsAdded()), q, SLOT(_q_autoResizePopup()));
     q->setModel(m);
 #ifdef QT_NO_LISTVIEW
-    q->setCompletionMode(QCompleter::InlineCompletion);
+    q->setCompletionMode(KexiCompleter::InlineCompletion);
 #else
-    q->setCompletionMode(QCompleter::PopupCompletion);
+    q->setCompletionMode(KexiCompleter::PopupCompletion);
 #endif // QT_NO_LISTVIEW
 }
 
-void QCompleterPrivate::setCurrentIndex(QModelIndex index, bool select)
+void KexiCompleterPrivate::setCurrentIndex(QModelIndex index, bool select)
 {
     if (!q->popup())
         return;
@@ -874,7 +872,7 @@ void QCompleterPrivate::setCurrentIndex(QModelIndex index, bool select)
         popup->scrollTo(index, QAbstractItemView::PositionAtTop);
 }
 
-void QCompleterPrivate::_q_completionSelected(const QItemSelection& selection)
+void KexiCompleterPrivate::_q_completionSelected(const QItemSelection& selection)
 {
     QModelIndex index;
     if (!selection.indexes().isEmpty())
@@ -883,7 +881,7 @@ void QCompleterPrivate::_q_completionSelected(const QItemSelection& selection)
     _q_complete(index, true);
 }
 
-void QCompleterPrivate::_q_complete(QModelIndex index, bool highlighted)
+void KexiCompleterPrivate::_q_complete(QModelIndex index, bool highlighted)
 {
     QString completion;
 
@@ -897,14 +895,14 @@ void QCompleterPrivate::_q_complete(QModelIndex index, bool highlighted)
         completion = q->pathFromIndex(si);
 #ifndef QT_NO_DIRMODEL
         // add a trailing separator in inline
-        if (mode == QCompleter::InlineCompletion) {
+        if (mode == KexiCompleter::InlineCompletion) {
             if (qobject_cast<QDirModel *>(proxy->sourceModel()) && QFileInfo(completion).isDir())
                 completion += QDir::separator();
         }
 #endif
 #ifndef QT_NO_FILESYSTEMMODEL
         // add a trailing separator in inline
-        if (mode == QCompleter::InlineCompletion) {
+        if (mode == KexiCompleter::InlineCompletion) {
             if (qobject_cast<QFileSystemModel *>(proxy->sourceModel()) && QFileInfo(completion).isDir())
                 completion += QDir::separator();
         }
@@ -920,14 +918,14 @@ void QCompleterPrivate::_q_complete(QModelIndex index, bool highlighted)
     }
 }
 
-void QCompleterPrivate::_q_autoResizePopup()
+void KexiCompleterPrivate::_q_autoResizePopup()
 {
     if (!popup || !popup->isVisible())
         return;
     showPopup(popupRect);
 }
 
-void QCompleterPrivate::showPopup(const QRect& rect)
+void KexiCompleterPrivate::showPopup(const QRect& rect)
 {
     const QRect screen = QApplication::desktop()->availableGeometry(widget);
     Qt::LayoutDirection dir = widget->layoutDirection();
@@ -971,7 +969,7 @@ void QCompleterPrivate::showPopup(const QRect& rect)
         popup->show();
 }
 
-void QCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path)
+void KexiCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path)
 {
     // Slot called when QFileSystemModel has finished loading.
     // If we hide the popup because there was no match because the model was not loaded yet,
@@ -986,8 +984,8 @@ void QCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path)
 /*!
     Constructs a completer object with the given \a parent.
 */
-QCompleter::QCompleter(QObject *parent)
-: QObject(parent), d(new QCompleterPrivate(this))
+KexiCompleter::KexiCompleter(QObject *parent)
+: QObject(parent), d(new KexiCompleterPrivate(this))
 {
     d->init();
 }
@@ -996,19 +994,19 @@ QCompleter::QCompleter(QObject *parent)
     Constructs a completer object with the given \a parent that provides completions
     from the specified \a model.
 */
-QCompleter::QCompleter(QAbstractItemModel *model, QObject *parent)
-    : QObject(parent), d(new QCompleterPrivate(this))
+KexiCompleter::KexiCompleter(QAbstractItemModel *model, QObject *parent)
+    : QObject(parent), d(new KexiCompleterPrivate(this))
 {
     d->init(model);
 }
 
 #ifndef QT_NO_STRINGLISTMODEL
 /*!
-    Constructs a QCompleter object with the given \a parent that uses the specified
+    Constructs a KexiCompleter object with the given \a parent that uses the specified
     \a list as a source of possible completions.
 */
-QCompleter::QCompleter(const QStringList& list, QObject *parent)
-    : QObject(parent), d(new QCompleterPrivate(this))
+KexiCompleter::KexiCompleter(const QStringList& list, QObject *parent)
+    : QObject(parent), d(new KexiCompleterPrivate(this))
 {
     d->init(new QStringListModel(list, this));
 }
@@ -1017,21 +1015,21 @@ QCompleter::QCompleter(const QStringList& list, QObject *parent)
 /*!
     Destroys the completer object.
 */
-QCompleter::~QCompleter()
+KexiCompleter::~KexiCompleter()
 {
     delete d;
 }
 
 /*!
     Sets the widget for which completion are provided for to \a widget. This
-    function is automatically called when a QCompleter is set on a QLineEdit
+    function is automatically called when a KexiCompleter is set on a QLineEdit
     using QLineEdit::setCompleter() or on a QComboBox using
     QComboBox::setCompleter(). The widget needs to be set explicitly when
     providing completions for custom widgets.
 
     \sa widget(), setModel(), setPopup()
  */
-void QCompleter::setWidget(QWidget *widget)
+void KexiCompleter::setWidget(QWidget *widget)
 {
     if (widget && d->widget == widget)
         return;
@@ -1051,7 +1049,7 @@ void QCompleter::setWidget(QWidget *widget)
 
     \sa setWidget()
  */
-QWidget *QCompleter::widget() const
+QWidget *KexiCompleter::widget() const
 {
     return d->widget;
 }
@@ -1059,15 +1057,15 @@ QWidget *QCompleter::widget() const
 /*!
     Sets the model which provides completions to \a model. The \a model can
     be list model or a tree model. If a model has been already previously set
-    and it has the QCompleter as its parent, it is deleted.
+    and it has the KexiCompleter as its parent, it is deleted.
 
-    For convenience, if \a model is a QFileSystemModel, QCompleter switches its
+    For convenience, if \a model is a QFileSystemModel, KexiCompleter switches its
     caseSensitivity to Qt::CaseInsensitive on Windows and Qt::CaseSensitive
     on other platforms.
 
     \sa completionModel(), modelSorting, {Handling Tree Models}
 */
-void QCompleter::setModel(QAbstractItemModel *model)
+void KexiCompleter::setModel(QAbstractItemModel *model)
 {
     QAbstractItemModel *oldModel = d->proxy->sourceModel();
     d->proxy->setSourceModel(model);
@@ -1103,13 +1101,13 @@ void QCompleter::setModel(QAbstractItemModel *model)
 
     \sa completionModel()
 */
-QAbstractItemModel *QCompleter::model() const
+QAbstractItemModel *KexiCompleter::model() const
 {
     return d->proxy->sourceModel();
 }
 
 /*!
-    \enum QCompleter::CompletionMode
+    \enum KexiCompleter::CompletionMode
 
     This enum specifies how completions are provided to the user.
 
@@ -1121,17 +1119,17 @@ QAbstractItemModel *QCompleter::model() const
 */
 
 /*!
-    \property QCompleter::completionMode
+    \property KexiCompleter::completionMode
     \brief how the completions are provided to the user
 
-    The default value is QCompleter::PopupCompletion.
+    The default value is KexiCompleter::PopupCompletion.
 */
-void QCompleter::setCompletionMode(QCompleter::CompletionMode mode)
+void KexiCompleter::setCompletionMode(KexiCompleter::CompletionMode mode)
 {
     d->mode = mode;
-    d->proxy->setFiltered(mode != QCompleter::UnfilteredPopupCompletion);
+    d->proxy->setFiltered(mode != KexiCompleter::UnfilteredPopupCompletion);
 
-    if (mode == QCompleter::InlineCompletion) {
+    if (mode == KexiCompleter::InlineCompletion) {
         if (d->widget)
             d->widget->removeEventFilter(this);
         if (d->popup) {
@@ -1144,17 +1142,17 @@ void QCompleter::setCompletionMode(QCompleter::CompletionMode mode)
     }
 }
 
-QCompleter::CompletionMode QCompleter::completionMode() const
+KexiCompleter::CompletionMode KexiCompleter::completionMode() const
 {
     return d->mode;
 }
 
 /*!
-    Sets the popup used to display completions to \a popup. QCompleter takes
+    Sets the popup used to display completions to \a popup. KexiCompleter takes
     ownership of the view.
 
     A QListView is automatically created when the completionMode() is set to
-    QCompleter::PopupCompletion or QCompleter::UnfilteredPopupCompletion. The
+    KexiCompleter::PopupCompletion or KexiCompleter::UnfilteredPopupCompletion. The
     default popup displays the completionColumn().
 
     Ensure that this function is called before the view settings are modified.
@@ -1164,7 +1162,7 @@ QCompleter::CompletionMode QCompleter::completionMode() const
 
     \sa popup()
 */
-void QCompleter::setPopup(QAbstractItemView *popup)
+void KexiCompleter::setPopup(QAbstractItemView *popup)
 {
     Q_ASSERT(popup != 0);
     if (d->popup) {
@@ -1191,7 +1189,7 @@ void QCompleter::setPopup(QAbstractItemView *popup)
 
     popup->setFocusProxy(d->widget);
     popup->installEventFilter(this);
-    popup->setItemDelegate(new QCompleterItemDelegate(popup));
+    popup->setItemDelegate(new KexiCompleterItemDelegate(popup));
 #ifndef QT_NO_LISTVIEW
     if (QListView *listView = qobject_cast<QListView *>(popup)) {
         listView->setModelColumn(d->column);
@@ -1213,17 +1211,17 @@ void QCompleter::setPopup(QAbstractItemView *popup)
 
     \sa setPopup()
 */
-QAbstractItemView *QCompleter::popup() const
+QAbstractItemView *KexiCompleter::popup() const
 {
 #ifndef QT_NO_LISTVIEW
-    if (!d->popup && completionMode() != QCompleter::InlineCompletion) {
+    if (!d->popup && completionMode() != KexiCompleter::InlineCompletion) {
         QListView *listView = new QListView;
         listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         listView->setSelectionBehavior(QAbstractItemView::SelectRows);
         listView->setSelectionMode(QAbstractItemView::SingleSelection);
         listView->setModelColumn(d->column);
-        QCompleter *that = const_cast<QCompleter*>(this);
+        KexiCompleter *that = const_cast<KexiCompleter*>(this);
         that->setPopup(listView);
     }
 #endif // QT_NO_LISTVIEW
@@ -1233,7 +1231,7 @@ QAbstractItemView *QCompleter::popup() const
 /*!
   \reimp
 */
-bool QCompleter::event(QEvent *ev)
+bool KexiCompleter::event(QEvent *ev)
 {
     return QObject::event(ev);
 }
@@ -1241,7 +1239,7 @@ bool QCompleter::event(QEvent *ev)
 /*!
   \reimp
 */
-bool QCompleter::eventFilter(QObject *o, QEvent *e)
+bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
 {
     if (d->eatFocusOut && o == d->widget && e->type() == QEvent::FocusOut) {
         d->hiddenBecauseNoMatch = false;
@@ -1262,7 +1260,7 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
         const int key = ke->key();
         // In UnFilteredPopup mode, select the current item
         if ((key == Qt::Key_Up || key == Qt::Key_Down) && selList.isEmpty() && curIndex.isValid()
-            && d->mode == QCompleter::UnfilteredPopupCompletion) {
+            && d->mode == KexiCompleter::UnfilteredPopupCompletion) {
               d->setCurrentIndex(curIndex);
               return true;
         }
@@ -1410,28 +1408,28 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
 }
 
 /*!
-    For QCompleter::PopupCompletion and QCompletion::UnfilteredPopupCompletion
+    For KexiCompleter::PopupCompletion and KexiCompleter::UnfilteredPopupCompletion
     modes, calling this function displays the popup displaying the current
     completions. By default, if \a rect is not specified, the popup is displayed
     on the bottom of the widget(). If \a rect is specified the popup is
     displayed on the left edge of the rectangle.
 
-    For QCompleter::InlineCompletion mode, the highlighted() signal is fired
+    For KexiCompleter::InlineCompletion mode, the highlighted() signal is fired
     with the current completion.
 */
-void QCompleter::complete(const QRect& rect)
+void KexiCompleter::complete(const QRect& rect)
 {
     QModelIndex idx = d->proxy->currentIndex(false);
     d->hiddenBecauseNoMatch = false;
-    if (d->mode == QCompleter::InlineCompletion) {
+    if (d->mode == KexiCompleter::InlineCompletion) {
         if (idx.isValid())
             d->_q_complete(idx, true);
         return;
     }
 
     Q_ASSERT(d->widget != 0);
-    if ((d->mode == QCompleter::PopupCompletion && !idx.isValid())
-        || (d->mode == QCompleter::UnfilteredPopupCompletion && d->proxy->rowCount() == 0)) {
+    if ((d->mode == KexiCompleter::PopupCompletion && !idx.isValid())
+        || (d->mode == KexiCompleter::UnfilteredPopupCompletion && d->proxy->rowCount() == 0)) {
         if (d->popup)
             d->popup->hide(); // no suggestion, hide
         d->hiddenBecauseNoMatch = true;
@@ -1439,7 +1437,7 @@ void QCompleter::complete(const QRect& rect)
     }
 
     popup();
-    if (d->mode == QCompleter::UnfilteredPopupCompletion)
+    if (d->mode == KexiCompleter::UnfilteredPopupCompletion)
         d->setCurrentIndex(idx, false);
 
     d->showPopup(rect);
@@ -1455,7 +1453,7 @@ void QCompleter::complete(const QRect& rect)
 
     \sa currentCompletion(), completionCount()
 */
-bool QCompleter::setCurrentRow(int row)
+bool KexiCompleter::setCurrentRow(int row)
 {
     return d->proxy->setCurrentRow(row);
 }
@@ -1465,7 +1463,7 @@ bool QCompleter::setCurrentRow(int row)
 
     \sa setCurrentRow()
 */
-int QCompleter::currentRow() const
+int KexiCompleter::currentRow() const
 {
     return d->proxy->currentRow();
 }
@@ -1475,13 +1473,13 @@ int QCompleter::currentRow() const
     model with a large number of items this can be expensive. Use setCurrentRow()
     and currentCompletion() to iterate through all the completions.
 */
-int QCompleter::completionCount() const
+int KexiCompleter::completionCount() const
 {
     return d->proxy->completionCount();
 }
 
 /*!
-    \enum QCompleter::ModelSorting
+    \enum KexiCompleter::ModelSorting
 
     This enum specifies how the items in the model are sorted.
 
@@ -1493,7 +1491,7 @@ int QCompleter::completionCount() const
 */
 
 /*!
-    \property QCompleter::modelSorting
+    \property KexiCompleter::modelSorting
     \brief the way the model is sorted
 
     By default, no assumptions are made about the order of the items
@@ -1512,9 +1510,9 @@ int QCompleter::completionCount() const
     when the completer's \l caseSensitivity is different to the case sensitivity
     used by the model's when sorting.
 
-    \sa setCaseSensitivity(), QCompleter::ModelSorting
+    \sa setCaseSensitivity(), KexiCompleter::ModelSorting
 */
-void QCompleter::setModelSorting(QCompleter::ModelSorting sorting)
+void KexiCompleter::setModelSorting(KexiCompleter::ModelSorting sorting)
 {
     if (d->sorting == sorting)
         return;
@@ -1523,13 +1521,13 @@ void QCompleter::setModelSorting(QCompleter::ModelSorting sorting)
     d->proxy->invalidate();
 }
 
-QCompleter::ModelSorting QCompleter::modelSorting() const
+KexiCompleter::ModelSorting KexiCompleter::modelSorting() const
 {
     return d->sorting;
 }
 
 /*!
-    \property QCompleter::completionColumn
+    \property KexiCompleter::completionColumn
     \brief the column in the model in which completions are searched for.
 
     If the popup() is a QListView, it is automatically setup to display
@@ -1539,7 +1537,7 @@ QCompleter::ModelSorting QCompleter::modelSorting() const
 
     \sa completionRole, caseSensitivity
 */
-void QCompleter::setCompletionColumn(int column)
+void KexiCompleter::setCompletionColumn(int column)
 {
     if (d->column == column)
         return;
@@ -1551,20 +1549,20 @@ void QCompleter::setCompletionColumn(int column)
     d->proxy->invalidate();
 }
 
-int QCompleter::completionColumn() const
+int KexiCompleter::completionColumn() const
 {
     return d->column;
 }
 
 /*!
-    \property QCompleter::completionRole
+    \property KexiCompleter::completionRole
     \brief the item role to be used to query the contents of items for matching.
 
     The default role is Qt::EditRole.
 
     \sa completionColumn, caseSensitivity
 */
-void QCompleter::setCompletionRole(int role)
+void KexiCompleter::setCompletionRole(int role)
 {
     if (d->role == role)
         return;
@@ -1572,46 +1570,46 @@ void QCompleter::setCompletionRole(int role)
     d->proxy->invalidate();
 }
 
-int QCompleter::completionRole() const
+int KexiCompleter::completionRole() const
 {
     return d->role;
 }
 
 /*!
-    \property QCompleter::wrapAround
+    \property KexiCompleter::wrapAround
     \brief the completions wrap around when navigating through items
     \since 4.3
 
     The default is true.
 */
-void QCompleter::setWrapAround(bool wrap)
+void KexiCompleter::setWrapAround(bool wrap)
 {
     if (d->wrap == wrap)
         return;
     d->wrap = wrap;
 }
 
-bool QCompleter::wrapAround() const
+bool KexiCompleter::wrapAround() const
 {
     return d->wrap;
 }
 
 /*!
-    \property QCompleter::maxVisibleItems
+    \property KexiCompleter::maxVisibleItems
     \brief the maximum allowed size on screen of the completer, measured in items
     \since 4.6
 
     By default, this property has a value of 7.
 */
-int QCompleter::maxVisibleItems() const
+int KexiCompleter::maxVisibleItems() const
 {
     return d->maxVisibleItems;
 }
 
-void QCompleter::setMaxVisibleItems(int maxItems)
+void KexiCompleter::setMaxVisibleItems(int maxItems)
 {
     if (maxItems < 0) {
-        qWarning("QCompleter::setMaxVisibleItems: "
+        qWarning("KexiCompleter::setMaxVisibleItems: "
                  "Invalid max visible items (%d) must be >= 0", maxItems);
         return;
     }
@@ -1619,14 +1617,14 @@ void QCompleter::setMaxVisibleItems(int maxItems)
 }
 
 /*!
-    \property QCompleter::caseSensitivity
+    \property KexiCompleter::caseSensitivity
     \brief the case sensitivity of the matching
 
     The default is Qt::CaseSensitive.
 
     \sa substringCompletion, completionColumn, completionRole, modelSorting
 */
-void QCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
+void KexiCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
 {
     if (d->cs == cs)
         return;
@@ -1635,13 +1633,13 @@ void QCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
     d->proxy->invalidate();
 }
 
-Qt::CaseSensitivity QCompleter::caseSensitivity() const
+Qt::CaseSensitivity KexiCompleter::caseSensitivity() const
 {
     return d->cs;
 }
 
 /*!
-    \property QCompleter::substringCompletion
+    \property KexiCompleter::substringCompletion
     \brief the completion uses any substring matching
 
     If true the completion uses any substring matching.
@@ -1649,7 +1647,7 @@ Qt::CaseSensitivity QCompleter::caseSensitivity() const
 
     \sa caseSensitivity
 */
-void QCompleter::setSubstringCompletion(bool substringCompletion)
+void KexiCompleter::setSubstringCompletion(bool substringCompletion)
 {
     if (d->substringCompletion == substringCompletion)
         return;
@@ -1657,25 +1655,25 @@ void QCompleter::setSubstringCompletion(bool substringCompletion)
     d->proxy->invalidate();
 }
 
-bool QCompleter::substringCompletion() const
+bool KexiCompleter::substringCompletion() const
 {
     return d->substringCompletion;
 }
 
 /*!
-    \property QCompleter::completionPrefix
+    \property KexiCompleter::completionPrefix
     \brief the completion prefix used to provide completions.
 
     The completionModel() is updated to reflect the list of possible
     matches for \a prefix.
 */
-void QCompleter::setCompletionPrefix(const QString &prefix)
+void KexiCompleter::setCompletionPrefix(const QString &prefix)
 {
     d->prefix = prefix;
     d->proxy->filter(splitPath(prefix));
 }
 
-QString QCompleter::completionPrefix() const
+QString KexiCompleter::completionPrefix() const
 {
     return d->prefix;
 }
@@ -1685,7 +1683,7 @@ QString QCompleter::completionPrefix() const
 
     \sa setCurrentRow(), currentCompletion(), model()
 */
-QModelIndex QCompleter::currentIndex() const
+QModelIndex KexiCompleter::currentIndex() const
 {
     return d->proxy->currentIndex(false);
 }
@@ -1697,7 +1695,7 @@ QModelIndex QCompleter::currentIndex() const
 
     \sa setCurrentRow(), currentIndex()
 */
-QString QCompleter::currentCompletion() const
+QString KexiCompleter::currentCompletion() const
 {
     return pathFromIndex(d->proxy->currentIndex(true));
 }
@@ -1713,7 +1711,7 @@ QString QCompleter::currentCompletion() const
 
     \sa completionPrefix, model()
 */
-QAbstractItemModel *QCompleter::completionModel() const
+QAbstractItemModel *KexiCompleter::completionModel() const
 {
     return d->proxy;
 }
@@ -1729,7 +1727,7 @@ QAbstractItemModel *QCompleter::completionModel() const
     \sa splitPath()
 */
 
-QString QCompleter::pathFromIndex(const QModelIndex& index) const
+QString KexiCompleter::pathFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid())
         return QString();
@@ -1784,7 +1782,7 @@ QString QCompleter::pathFromIndex(const QModelIndex& index) const
 
     \sa pathFromIndex(), {Handling Tree Models}
 */
-QStringList QCompleter::splitPath(const QString& path) const
+QStringList KexiCompleter::splitPath(const QString& path) const
 {
     bool isDirModel = false;
     bool isFsModel = false;
@@ -1832,7 +1830,7 @@ QStringList QCompleter::splitPath(const QString& path) const
 }
 
 /*!
-    \fn void QCompleter::activated(const QModelIndex& index)
+    \fn void KexiCompleter::activated(const QModelIndex& index)
 
     This signal is sent when an item in the popup() is activated by the user.
     (by clicking or pressing return). The item's \a index in the completionModel()
@@ -1841,7 +1839,7 @@ QStringList QCompleter::splitPath(const QString& path) const
 */
 
 /*!
-    \fn void QCompleter::activated(const QString &text)
+    \fn void KexiCompleter::activated(const QString &text)
 
     This signal is sent when an item in the popup() is activated by the user (by
     clicking or pressing return). The item's \a text is given.
@@ -1849,55 +1847,50 @@ QStringList QCompleter::splitPath(const QString& path) const
 */
 
 /*!
-    \fn void QCompleter::highlighted(const QModelIndex& index)
+    \fn void KexiCompleter::highlighted(const QModelIndex& index)
 
     This signal is sent when an item in the popup() is highlighted by
     the user. It is also sent if complete() is called with the completionMode()
-    set to QCompleter::InlineCompletion. The item's \a index in the completionModel()
+    set to KexiCompleter::InlineCompletion. The item's \a index in the completionModel()
     is given.
 */
 
 /*!
-    \fn void QCompleter::highlighted(const QString &text)
+    \fn void KexiCompleter::highlighted(const QString &text)
 
     This signal is sent when an item in the popup() is highlighted by
     the user. It is also sent if complete() is called with the completionMode()
-    set to QCompleter::InlineCompletion. The item's \a text is given.
+    set to KexiCompleter::InlineCompletion. The item's \a text is given.
 */
 
-void QCompleter::_q_complete(const QModelIndex& index)
+void KexiCompleter::_q_complete(const QModelIndex& index)
 {
     d->_q_complete(index);
 }
 
-void QCompleter::_q_completionSelected(const QItemSelection& selection)
+void KexiCompleter::_q_completionSelected(const QItemSelection& selection)
 {
     d->_q_completionSelected(selection);
 }
 
-void QCompleter::_q_autoResizePopup()
+void KexiCompleter::_q_autoResizePopup()
 {
     d->_q_autoResizePopup();
 }
 
-void QCompleter::_q_fileSystemModelDirectoryLoaded(const QString& dir)
+void KexiCompleter::_q_fileSystemModelDirectoryLoaded(const QString& dir)
 {
     d->_q_fileSystemModelDirectoryLoaded(dir);
 }
 
-QCompletionModelPrivate::QCompletionModelPrivate(QCompletionModel *q)
+KexiCompletionModelPrivate::KexiCompletionModelPrivate(KexiCompletionModel *q)
  : q(q)
 {
 }
 
-void QCompletionModelPrivate::_q_sourceModelDestroyed()
+void KexiCompletionModelPrivate::_q_sourceModelDestroyed()
 {
-    q->setSourceModel(KexiUtils::QAbstractItemModelPrivate::staticEmptyModel());
+    q->setSourceModel(KexiAbstractItemModelPrivate::staticEmptyModel());
 }
-
-#include "moc_qcompleter.cpp"
-#include "moc_qcompleter_p.cpp"
-
-} //namespace KexiUtils
 
 #endif // QT_NO_COMPLETER
