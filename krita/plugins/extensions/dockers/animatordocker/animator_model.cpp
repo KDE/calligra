@@ -160,7 +160,7 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
         if (role == Qt::CheckStateRole)
         {
             KisNode* node = nodeFromIndex(index(ind.row(), 0, ind.parent()));
-            return node->visible();
+            return (node->visible())?Qt::Checked:Qt::Unchecked;
         }
     } else if (ind.column() == 2)
     {
@@ -169,9 +169,9 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
             KisNode* node = nodeFromIndex(index(ind.row(), 0, ind.parent()));
             AnimatedLayer* layer = qobject_cast<AnimatedLayer*>(node);
             if (!layer)
-                return node->visible();
+                return (node->visible())?Qt::Checked:Qt::Unchecked;
             else
-                return layer->enabled();
+                return (layer->enabled())?Qt::Checked:Qt::Unchecked;
         }
     } else                      // frames
     {
@@ -222,6 +222,34 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
     }
     
     return QVariant();
+}
+
+bool AnimatorModel::setData(const QModelIndex& ind, const QVariant& value, int role)
+{
+    if (role == Qt::CheckStateRole) {
+        if (ind.column() == 1) {
+            KisNode *node = nodeFromIndex(index(ind.row(), 0));
+            if (node) {
+                node->setVisible(value == Qt::Checked);
+                node->setDirty();
+            }
+        } else if (ind.column() == 2) {
+            AnimatedLayer *layer = qobject_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0)));
+            if (layer) {
+                layer->setEnabled(value == Qt::Checked);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+Qt::ItemFlags AnimatorModel::flags(const QModelIndex &ind) const
+{
+    if (ind.column() == 1 || ind.column() == 2) {
+        return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsEditable;
+    }
+    return QAbstractItemModel::flags(ind);
 }
 
 int AnimatorModel::columnCount(const QModelIndex& parent) const
