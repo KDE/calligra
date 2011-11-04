@@ -74,6 +74,9 @@ public:
     KHelpMenu *helpMenu() const;
 
     void addSearchableModel(KexiSearchableModel *model);
+    
+    void setCurrentTab(const QString& name);
+    
 
 public slots:
     void setMainMenuContent(QWidget *w);
@@ -465,6 +468,7 @@ public:
     int rolledUpIndex;
     KHelpMenu *helpMenu;
     KexiSearchLineEdit *searchLineEdit;
+    void setCurrentTab(const QString& name);
 };
 
 #include <kexiutils/styleproxy.h>
@@ -947,6 +951,11 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
 }
 
+void KexiTabbedToolBar::Private::setCurrentTab(const QString& name)
+{
+    q->setCurrentWidget(q->toolBar(name));
+}
+
 KexiTabbedToolBar::~KexiTabbedToolBar()
 {
     delete d;
@@ -1266,6 +1275,10 @@ void KexiTabbedToolBar::addSearchableModel(KexiSearchableModel *model)
     d->searchLineEdit->addSearchableModel(model);
 }
 
+void KexiTabbedToolBar::setCurrentTab(const QString& name)
+{
+    d->setCurrentTab(name);
+}
 /*
 class KexiTopDockWidget : public QDockWidget
 {

@@ -210,6 +210,9 @@ public:
 
     // see KexiMainWindowIface
     virtual KToolBar *toolBar(const QString& name) const;
+    
+    //! Sets currently visible tab when switching to design view, according to object type opened.
+    virtual void setDesignTabIfNeeded(const QString &partClass);
 
 public slots:
     /*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.

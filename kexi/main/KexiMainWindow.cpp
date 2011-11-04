@@ -4356,6 +4356,9 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 //  activeWindowChanged(window, previousWindow);
     }
     invalidateProjectWideActions();
+    if (viewMode == Kexi::DesignViewMode) {
+        setDesignTabIfNeeded(item->partClass());
+    }
     return window;
 }
 
@@ -4450,6 +4453,7 @@ bool KexiMainWindow::newObject(KexiPart::Info *info, bool& openingCancelled)
     if (!it->neverSaved()) { //only add stored objects to the browser
         d->navigator->model()->slotAddItem(*it);
     }
+    setDesignTabIfNeeded(it->partClass());
     return openObject(it, Kexi::DesignViewMode, openingCancelled);
 }
 
@@ -5414,6 +5418,19 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
 {
     d->tabbedToolBar->addSearchableModel(model);
+}
+
+void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->setCurrentTab("form"); 
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->setCurrentTab("report"); 
+        break;
+    default:;
+    }  
 }
 
 #include "KexiMainWindow.moc"
