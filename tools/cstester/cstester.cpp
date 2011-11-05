@@ -128,7 +128,7 @@ QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
     }
 #endif
 
-    return tp->createThumbnails(thumbSize);
+    return tp ? tp->createThumbnails(thumbSize) : QList<QPixmap>();
 }
 
 void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
@@ -186,7 +186,7 @@ bool checkThumbnails(const QList<QPixmap> &thumbnails, const QList<QPixmap> &oth
         qDebug() << "Check failed: number of pages different" << thumbnails.size() << "!=" << others.size();
         return false;
     }
-    int i = 0;
+    int i = 1;
     QList<QPixmap>::const_iterator it(thumbnails.constBegin());
     QList<QPixmap>::const_iterator oIt(others.constBegin());
 
@@ -336,6 +336,7 @@ int main(int argc, char *argv[])
             QList<QPixmap> others(createThumbnails(document, QSize(800,800)));
             if (args->isSet("outdir")) {
                 saveThumbnails(file, others, outDir);
+                saveThumbnails(file, thumbnails, outDir + "/before");
             }
             if (checkThumbnails(thumbnails, others, verbose)) {
                 ++successful;
