@@ -144,17 +144,19 @@
 
 #ifndef QT_NO_COMPLETER
 
-#include "QtGui/qscrollbar.h"
-#include "QtGui/qstringlistmodel.h"
-#include "QtGui/qdirmodel.h"
-#include "QtGui/qfilesystemmodel.h"
-#include "QtGui/qheaderview.h"
-#include "QtGui/qlistview.h"
-#include "QtGui/qapplication.h"
-#include "QtGui/qevent.h"
-#include "QtGui/qheaderview.h"
-#include "QtGui/qdesktopwidget.h"
-#include "QtGui/qlineedit.h"
+#include <qscrollbar.h>
+#include <qstringlistmodel.h>
+#include <qdirmodel.h>
+#include <qfilesystemmodel.h>
+#include <qheaderview.h>
+#include <qlistview.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qheaderview.h>
+#include <qdesktopwidget.h>
+#include <qlineedit.h>
+
+#include <limits.h>
 
 class KexiEmptyItemModel : public QAbstractItemModel
 {
