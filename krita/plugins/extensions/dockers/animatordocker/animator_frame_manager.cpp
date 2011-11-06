@@ -158,6 +158,38 @@ void AnimatorFrameManager::moveRange(FramedAnimatedLayer* layer, int from, int n
 }
 
 
+void AnimatorFrameManager::copyPreviousKey()
+{
+    FramedAnimatedLayer *flayer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer());
+    if (flayer) {
+        int fnum = m_manager->getSwitcher()->currentFrame();
+        copyFrame(flayer, flayer->getPreviousKey(fnum), fnum);
+    }
+}
+
+void AnimatorFrameManager::copyNextKey()
+{
+    FramedAnimatedLayer *flayer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer());
+    if (flayer) {
+        int fnum = m_manager->getSwitcher()->currentFrame();
+        copyFrame(flayer, flayer->getNextKey(fnum), fnum);
+    }
+}
+
+void AnimatorFrameManager::copyFrame(FramedAnimatedLayer *layer, int from, int to)
+{
+    if (!layer || !layer->frameAt(from) || layer->frameAt(to))
+        return;
+    
+    KisNode *content = qobject_cast<SimpleFrameLayer*>(layer->frameAt(from))->getContent();
+    if (!content)
+        return;
+    
+    layer->createFrame(to, true);
+    qobject_cast<SimpleFrameLayer*>(layer->frameAt(to))->setContent(content->clone().data());
+}
+
+
 void AnimatorFrameManager::moveTo(FramedAnimatedLayer* source, int sourceFrame, int targetFrame)
 {
     source->moveFrame(sourceFrame, targetFrame);

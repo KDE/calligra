@@ -51,6 +51,11 @@ public:
     virtual void clearRange(FramedAnimatedLayer* layer, int from, int n);
     virtual void clearRangeActive(int n);
     
+    //
+    virtual void copyPreviousKey();
+    virtual void copyNextKey();
+    virtual void copyFrame(FramedAnimatedLayer *layer, int from, int to);
+    
     /**
      * This function just move source frame to target position;
      * no checking for frame at target position.

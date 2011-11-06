@@ -159,7 +159,15 @@ void AnimatorActions::initActions()
     
     t = new QAction(SmallIcon("edit-clear"), i18n("Clear frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(clearFrame()));
-    addAction("frames-clear", t);
+    addAction("frames-edit-one", t);
+    
+    t = new QAction(SmallIcon("edit-copy"), i18n("Copy previous frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(copyPrevious()));
+    addAction("frames-edit-one", t);
+    
+    t = new QAction(SmallIcon("edit-copy"), i18n("Copy next frame"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(copyNext()));
+    addAction("frames-edit-one", t);
     
     t = new QAction(SmallIcon("go-previous"), i18n("Move frame left"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(moveLeft()));
@@ -448,6 +456,18 @@ void AnimatorActions::clearFrame()
 {
     Q_ASSERT(m_manager);
     m_manager->getFrameManager()->clearRangeActive(1);
+}
+
+void AnimatorActions::copyPrevious()
+{
+    Q_ASSERT(m_manager);
+    m_manager->getFrameManager()->copyPreviousKey();
+}
+
+void AnimatorActions::copyNext()
+{
+    Q_ASSERT(m_manager);
+    m_manager->getFrameManager()->copyNextKey();
 }
 
 void AnimatorActions::moveLeft()

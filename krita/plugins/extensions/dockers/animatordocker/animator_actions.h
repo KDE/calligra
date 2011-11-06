@@ -86,6 +86,9 @@ protected slots:
     virtual void setLoopRepeat(int repeat);
     
     virtual void clearFrame();
+    virtual void copyPrevious();
+    virtual void copyNext();
+    
     virtual void moveLeft();
     virtual void moveRight();
     virtual void insertFrame();

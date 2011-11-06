@@ -75,7 +75,7 @@ void AnimatorView::slotCustomContextMenuRequested(const QPoint& pos)
     QMenu *menu = new QMenu(this);
     menu->addActions(m_actions->actions("frames-adding"));
     menu->addSeparator();
-    menu->addActions(m_actions->actions("frames-clear"));
+    menu->addActions(m_actions->actions("frames-edit-one"));
     
     menu->popup(mapToGlobal(pos));
 }
