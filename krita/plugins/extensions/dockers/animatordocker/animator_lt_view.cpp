@@ -19,6 +19,10 @@
 
 #include "animator_lt_view.h"
 
+#include <QAction>
+#include <QToolButton>
+#include <KIconLoader>
+
 #include <cstdlib>
 
 AnimatorLTView::AnimatorLTView(QWidget* parent) : QWidget(parent)
@@ -46,8 +50,18 @@ void AnimatorLTView::setupUI()
     m_layout = new QVBoxLayout(this);
     setLayout(m_layout);
     
+    QHBoxLayout *topLayout = new QHBoxLayout(this);
+    
+    QAction *setLeftFilterAction = new QAction(SmallIcon("view-filter"), "Set filter", this);
+    connect(setLeftFilterAction, SIGNAL(triggered(bool)), SLOT(setLeftFilter()));
+    QToolButton *setLeftFilterButton = new QToolButton(this);
+    setLeftFilterButton->setDefaultAction(setLeftFilterAction);
+    topLayout->addWidget(setLeftFilterButton);
+    
     m_nearSpinbox = new QSpinBox(this);
-    m_layout->addWidget(m_nearSpinbox);
+    topLayout->addWidget(m_nearSpinbox);
+    
+    m_layout->addLayout(topLayout);
     
     connect(m_nearSpinbox, SIGNAL(valueChanged(int)), this, SLOT(slidersUpdate()));
     
@@ -101,5 +115,12 @@ void AnimatorLTView::slidersUpdate()
         }
         
         m_slidersLayout->addSpacerItem(m_spR);
+    }
+}
+
+void AnimatorLTView::setLeftFilter()
+{
+    if (m_lt) {
+        
     }
 }
