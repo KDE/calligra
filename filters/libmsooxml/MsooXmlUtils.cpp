@@ -1596,9 +1596,14 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     QString ending;
     if (m_type == ParagraphBulletProperties::NumberType) {
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
-        returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
+        if (m_numFormat != UNUSED) {
+            returnValue += QString("style:num-format=\"%1\" ").arg(m_numFormat);
+        }
         if (m_prefix != UNUSED) {
             returnValue += QString("style:num-prefix=\"%1\" ").arg(m_prefix);
+        }
+        if (m_suffix != UNUSED) {
+            returnValue += QString("style:num-suffix=\"%1\" ").arg(m_suffix);
         }
         returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
         ending = "</text:list-level-style-number>";

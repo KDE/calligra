@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef KEXI_QCOMPLETER_P_H
-#define KEXI_QCOMPLETER_P_H
+#ifndef KEXICOMPLETER_P_H
+#define KEXICOMPLETER_P_H
 
 
 //
@@ -54,32 +54,28 @@
 // We mean it.
 //
 
-#include "private/qobject_p.h"
-
 #ifndef QT_NO_COMPLETER
 
-#include "QtGui/qtreeview.h"
-#include "QtGui/qabstractproxymodel.h"
-#include "qcompleter.h"
-#include "QtGui/qitemdelegate.h"
-#include "QtGui/qpainter.h"
-#include "private/qabstractitemmodel_p.h"
+#include <QtGui/QTreeView>
+#include <QtGui/QItemDelegate>
+#include <QtGui/QAbstractProxyModel>
+#include <QtGui/QPainter>
+#include "KexiCompleter.h"
+#include "private/KexiAbstractItemModel_p.h"
 
-namespace KexiUtils {
+class KexiCompletionModel;
 
-class QCompletionModel;
-
-class QCompleterPrivate : public QObjectPrivate
+class KexiCompleterPrivate
 {
 public:
-    QCompleterPrivate(QCompleter *q);
-    ~QCompleterPrivate() { delete popup; }
+    KexiCompleterPrivate(KexiCompleter *q);
+    ~KexiCompleterPrivate() { delete popup; }
     void init(QAbstractItemModel *model = 0);
 
     QPointer<QWidget> widget;
-    QCompletionModel *proxy;
+    KexiCompletionModel *proxy;
     QAbstractItemView *popup;
-    QCompleter::CompletionMode mode;
+    KexiCompleter::CompletionMode mode;
 
     QString prefix;
     Qt::CaseSensitivity cs;
@@ -87,7 +83,7 @@ public:
     int role;
     int column;
     int maxVisibleItems;
-    QCompleter::ModelSorting sorting;
+    KexiCompleter::ModelSorting sorting;
     bool wrap;
 
     bool eatFocusOut;
@@ -101,15 +97,15 @@ public:
     void _q_fileSystemModelDirectoryLoaded(const QString &path);
     void setCurrentIndex(QModelIndex, bool = true);
 
-    QCompleter * const q;
+    KexiCompleter * const q;
 };
 
-class QIndexMapper
+class KexiIndexMapper
 {
 public:
-    QIndexMapper() : v(false), f(0), t(-1) { }
-    QIndexMapper(int f, int t) : v(false), f(f), t(t) { }
-    QIndexMapper(QVector<int> vec) : v(true), vector(vec), f(-1), t(-1) { }
+    KexiIndexMapper() : v(false), f(0), t(-1) { }
+    KexiIndexMapper(int f, int t) : v(false), f(f), t(t) { }
+    KexiIndexMapper(QVector<int> vec) : v(true), vector(vec), f(-1), t(-1) { }
 
     inline int count() const { return v ? vector.count() : t - f + 1; }
     inline int operator[] (int index) const { return v ? vector[index] : f + index; }
@@ -129,40 +125,40 @@ private:
     int f, t;
 };
 
-struct QMatchData {
-    QMatchData() : exactMatchIndex(-1) { }
-    QMatchData(const QIndexMapper& indices, int em, bool p) :
+struct KexiMatchData {
+    KexiMatchData() : exactMatchIndex(-1) { }
+    KexiMatchData(const KexiIndexMapper& indices, int em, bool p) :
         indices(indices), exactMatchIndex(em), partial(p) { }
-    QIndexMapper indices;
+    KexiIndexMapper indices;
     inline bool isValid() const { return indices.isValid(); }
     int  exactMatchIndex;
     bool partial;
 };
 
-class QCompletionEngine
+class KexiCompletionEngine
 {
 public:
-    typedef QMap<QString, QMatchData> CacheItem;
+    typedef QMap<QString, KexiMatchData> CacheItem;
     typedef QMap<QModelIndex, CacheItem> Cache;
 
-    QCompletionEngine(QCompleterPrivate *c) : c(c), curRow(-1), cost(0) { }
-    virtual ~QCompletionEngine() { }
+    KexiCompletionEngine(KexiCompleterPrivate *c) : c(c), curRow(-1), cost(0) { }
+    virtual ~KexiCompletionEngine() { }
 
     void filter(const QStringList &parts);
 
-    QMatchData filterHistory();
-    bool matchHint(QString, const QModelIndex&, QMatchData*);
+    KexiMatchData filterHistory();
+    bool matchHint(QString, const QModelIndex&, KexiMatchData*);
 
-    void saveInCache(QString, const QModelIndex&, const QMatchData&);
-    bool lookupCache(QString part, const QModelIndex& parent, QMatchData *m);
+    void saveInCache(QString, const QModelIndex&, const KexiMatchData&);
+    bool lookupCache(QString part, const QModelIndex& parent, KexiMatchData *m);
 
     virtual void filterOnDemand(int) { }
-    virtual QMatchData filter(const QString&, const QModelIndex&, int) = 0;
+    virtual KexiMatchData filter(const QString&, const QModelIndex&, int) = 0;
 
     int matchCount() const { return curMatch.indices.count() + historyMatch.indices.count(); }
 
-    QMatchData curMatch, historyMatch;
-    QCompleterPrivate *c;
+    KexiMatchData curMatch, historyMatch;
+    KexiCompleterPrivate *c;
     QStringList curParts;
     QModelIndex curParent;
     int curRow;
@@ -171,31 +167,31 @@ public:
     int cost;
 };
 
-class QSortedModelEngine : public QCompletionEngine
+class QSortedModelEngine : public KexiCompletionEngine
 {
 public:
-    QSortedModelEngine(QCompleterPrivate *c) : QCompletionEngine(c) { }
-    QMatchData filter(const QString&, const QModelIndex&, int);
-    QIndexMapper indexHint(QString, const QModelIndex&, Qt::SortOrder);
+    QSortedModelEngine(KexiCompleterPrivate *c) : KexiCompletionEngine(c) { }
+    KexiMatchData filter(const QString&, const QModelIndex&, int);
+    KexiIndexMapper indexHint(QString, const QModelIndex&, Qt::SortOrder);
     Qt::SortOrder sortOrder(const QModelIndex&) const;
 };
 
-class QUnsortedModelEngine : public QCompletionEngine
+class QUnsortedModelEngine : public KexiCompletionEngine
 {
 public:
-    QUnsortedModelEngine(QCompleterPrivate *c) : QCompletionEngine(c) { }
+    QUnsortedModelEngine(KexiCompleterPrivate *c) : KexiCompletionEngine(c) { }
 
     void filterOnDemand(int);
-    QMatchData filter(const QString&, const QModelIndex&, int);
+    KexiMatchData filter(const QString&, const QModelIndex&, int);
 private:
     int buildIndices(const QString& str, const QModelIndex& parent, int n,
-                     const QIndexMapper& iv, QMatchData* m);
+                     const KexiIndexMapper& iv, KexiMatchData* m);
 };
 
-class QCompleterItemDelegate : public QItemDelegate
+class KexiCompleterItemDelegate : public QItemDelegate
 {
 public:
-    QCompleterItemDelegate(QAbstractItemView *view)
+    KexiCompleterItemDelegate(QAbstractItemView *view)
         : QItemDelegate(view), view(view) { }
     void paint(QPainter *p, const QStyleOptionViewItem& opt, const QModelIndex& idx) const {
         QStyleOptionViewItem optCopy = opt;
@@ -209,15 +205,15 @@ private:
     QAbstractItemView *view;
 };
 
-class QCompletionModelPrivate;
+class KexiCompletionModelPrivate;
 
-class QCompletionModel : public QAbstractProxyModel
+class KexiCompletionModel : public QAbstractProxyModel
 {
     Q_OBJECT
 
 public:
-    QCompletionModel(QCompleterPrivate *c, QObject *parent);
-    ~QCompletionModel();
+    KexiCompletionModel(KexiCompleterPrivate *c, QObject *parent);
+    ~KexiCompletionModel();
 
     void createEngine();
     void setFiltered(bool);
@@ -239,8 +235,8 @@ public:
     QModelIndex mapToSource(const QModelIndex& proxyIndex) const;
     QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
 
-    QCompleterPrivate *c;
-    QScopedPointer<QCompletionEngine> engine;
+    KexiCompleterPrivate *c;
+    QScopedPointer<KexiCompletionEngine> engine;
     bool showAll;
 
 signals:
@@ -251,19 +247,18 @@ public Q_SLOTS:
     void rowsInserted();
     void modelDestroyed();
 private:
-    QCompletionModelPrivate * const d;
+    KexiCompletionModelPrivate * const d;
 };
 
-class QCompletionModelPrivate : public QAbstractItemModelPrivate
+class KexiCompletionModelPrivate : public KexiAbstractItemModelPrivate
 {
-    QCompletionModelPrivate(QCompletionModel *q);
+    KexiCompletionModelPrivate(KexiCompletionModel *q);
+    virtual ~KexiCompletionModelPrivate() {  }
     virtual void _q_sourceModelDestroyed();
-    QCompletionModel * const q;
-    friend class QCompletionModel;
+    KexiCompletionModel * const q;
+    friend class KexiCompletionModel;
 };
-
-} // namespace KexiUtils
 
 #endif // QT_NO_COMPLETER
 
-#endif // KEXI_QCOMPLETER_P_H
+#endif // KEXICOMPLETER_P_H

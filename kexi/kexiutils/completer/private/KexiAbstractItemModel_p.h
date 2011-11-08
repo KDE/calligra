@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef KEXI_QABSTRACTITEMMODEL_P_H
-#define KEXI_QABSTRACTITEMMODEL_P_H
+#ifndef KEXIABSTRACTITEMMODEL_P_H
+#define KEXIABSTRACTITEMMODEL_P_H
 
 //
 //  W A R N I N G
@@ -54,12 +54,10 @@
 //
 //
 
-#include "private/qobject_p.h"
-#include "QtCore/qstack.h"
-#include "QtCore/qset.h"
-#include "QtCore/qhash.h"
-
-namespace KexiUtils {
+#include <QStack>
+#include <QSet>
+#include <QHash>
+#include <QPointer>
 
 class QPersistentModelIndexData
 {
@@ -73,10 +71,10 @@ public:
     static void destroy(QPersistentModelIndexData *data);
 };
 
-class KEXIUTILS_EXPORT QAbstractItemModelPrivate : public QObjectPrivate
+class KexiAbstractItemModelPrivate
 {
 public:
-    QAbstractItemModelPrivate() : QObjectPrivate(), supportedDragActions(-1), roleNames(defaultRoleNames()) {}
+    KexiAbstractItemModelPrivate() : supportedDragActions(-1), roleNames(defaultRoleNames()) {}
     void removePersistentIndexData(QPersistentModelIndexData *data);
     void movePersistentIndexes(QVector<QPersistentModelIndexData *> indexes, int change, const QModelIndex &parent, Qt::Orientation orientation);
     void rowsAboutToBeInserted(const QModelIndex &parent, int first, int last);
@@ -170,6 +168,4 @@ public:
     static const QHash<int,QByteArray> &defaultRoleNames();
 };
 
-} // namespace KexiUtils
-
-#endif // KEXI_QABSTRACTITEMMODEL_P_H
+#endif // KEXIABSTRACTITEMMODEL_P_H

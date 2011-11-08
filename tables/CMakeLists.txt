@@ -352,6 +352,7 @@ install( FILES
     Global.h
     Map.h
     Number.h
+    OdfLoadingContext.h
     PointStorage.h
     PrintSettings.h
     ProtectableObject.h

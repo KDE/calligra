@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -178,6 +178,10 @@ protected:
     void updateValuesForSubproperties();
 
     virtual void resizeEvent(QResizeEvent *);
+
+    //! Reimplemented for context key event of top-level form widget.
+    //! Redirects to Container::eventFilter().
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
     void initDataSource();
 

@@ -160,7 +160,6 @@ void ProjectTester::oneTask()
     QDate today = QDate::currentDate();
     QDate tomorrow = today.addDays( 1 );
     QDate yesterday = today.addDays( -1 );
-    QDate nextweek = today.addDays( 7 );
     QTime t1( 9, 0, 0 );
     QTime t2 ( 17, 0, 0 );
     int length = t1.msecsTo( t2 );
