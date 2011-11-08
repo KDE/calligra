@@ -21,6 +21,7 @@
 
 #include <kis_canvas2.h>
 #include <kis_view2.h>
+#include <kis_adjustment_layer.h>
 
 #include "animator_loader.h"
 #include "animator_switcher.h"
@@ -183,6 +184,24 @@ void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNode* content)
     putNodeAt(content, frame, 0);
     if (! content->name().startsWith("_"))
         content->setName("_");
+}
+
+void AnimatorManager::setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLayer *filter)
+{
+    if (!ready())
+        return;
+    
+    if (!filter)
+        return;
+    
+    if (!frame->getContent())
+        return;
+    
+    if (frame->filter())
+        m_nodeManager->removeNode(frame->filter());
+    
+    putNodeAt(filter, frame, 1);
+    filter->setName("filter");
 }
 
 void AnimatorManager::putNodeAt(KisNodeSP node, KisNodeSP parent, int index)

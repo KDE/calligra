@@ -21,12 +21,16 @@
 
 #include "animator_switcher.h"
 
+#include "filtered_frame_layer.h"
+#include <kis_adjustment_layer.h>
+
 AnimatorLTUpdater::AnimatorLTUpdater(AnimatorManager* manager) : AnimatorUpdater(manager)
 {
     m_LT = new AnimatorLT();
     setMode(AnimatorLTUpdater::Disabled);
     connect(m_LT, SIGNAL(opacityChanged(int)), this, SLOT(updateRelFrame(int)));
     connect(m_LT, SIGNAL(visibilityChanged(int)), this, SLOT(updateRelFrame(int)));
+    setFilter(0);
 }
 
 AnimatorLTUpdater::~AnimatorLTUpdater()
@@ -64,15 +68,15 @@ void AnimatorLTUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newF
         return;
     }
     
-    for (int i = -getLT()->getNear(); i <= getLT()->getNear(); ++i)
-    {
+    for (int i = -getLT()->getNear(); i <= getLT()->getNear(); ++i) {
         frameUnvisible(framedLayer->frameAt(i+oldFrame));
     }
     
-    for (int i = -getLT()->getNear(); i <= getLT()->getNear(); ++i)
-    {
-        if (getLT()->getVisibility(i))
+    for (int i = -getLT()->getNear(); i <= getLT()->getNear(); ++i) {
+        if (getLT()->getVisibility(i)) {
+            setupFilter(framedLayer->frameAt(i+newFrame), i);
             frameVisible(framedLayer->frameAt(i+newFrame), getLT()->getOpacityU8(i));
+        }
     }
 }
 
@@ -81,8 +85,7 @@ void AnimatorLTUpdater::updateRelFrame(int relFrame)
     if (mode() == AnimatorLTUpdater::Disabled)
         return;
     
-    if (mode() == AnimatorLTUpdater::KeyFramed)
-    {
+    if (mode() == AnimatorLTUpdater::KeyFramed) {
         warnKrita << "KeyFramed mode is not supported yet";
         return;
     }
@@ -90,13 +93,24 @@ void AnimatorLTUpdater::updateRelFrame(int relFrame)
     int cFrame = m_manager->getSwitcher()->currentFrame();
     QList<AnimatedLayer*> layers = m_manager->layers();
     AnimatedLayer* layer;
-    foreach (layer, layers)
-    {
+    foreach (layer, layers) {
         FramedAnimatedLayer* framedLayer = qobject_cast<FramedAnimatedLayer*>(layer);
-        if (framedLayer)
-            frameVisible(framedLayer->frameAt(cFrame+relFrame),
-                         getLT()->getVisibility(relFrame),
-                         getLT()->getOpacityU8(relFrame));
+        if (framedLayer) {
+            SimpleFrameLayer *frame = qobject_cast<SimpleFrameLayer*>(framedLayer->frameAt(cFrame+relFrame));
+            if (frame) {
+                frameVisible(frame, getLT()->getVisibility(relFrame), getLT()->getOpacityU8(relFrame));
+            }
+        }
+    }
+}
+
+void AnimatorLTUpdater::setupFilter(FrameLayer* frame, int rel)
+{
+    FilteredFrameLayer *fframe = qobject_cast<FilteredFrameLayer*>(frame);
+    if (fframe && m_filter) {
+        if (!fframe->filter()) {
+            fframe->setFilter(m_filter);
+        }
     }
 }
 
@@ -120,4 +134,10 @@ void AnimatorLTUpdater::setMode(AnimatorLTUpdater::LTUpdaterMode mode)
     fullUpdate();
     int frame = m_manager->getSwitcher()->currentFrame();
     update(frame, frame);
+}
+
+
+void AnimatorLTUpdater::setFilter(KisAdjustmentLayerSP filter)
+{
+    m_filter = filter.data();
 }

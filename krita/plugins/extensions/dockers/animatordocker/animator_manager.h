@@ -38,6 +38,7 @@ class AnimatorImporter;
 #include "simple_frame_layer.h"
 #include "framed_animated_layer.h"
 #include "animator_meta_info.h"
+#include "filtered_frame_layer.h"
 
 class AnimatorManager : public QObject, KoCanvasObserverBase {
     Q_OBJECT
@@ -108,6 +109,7 @@ public:
     
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
+    virtual void setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLayer *filter);
     virtual void putNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     virtual void removeNode(KisNodeSP node);
     

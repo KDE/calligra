@@ -46,16 +46,25 @@ public:
     virtual void setMode(LTUpdaterMode mode);
     virtual LTUpdaterMode mode() const;
     
+public:
+    virtual AnimatorLT *getLT();
+    
+public:
+    virtual void setFilter(KisAdjustmentLayerSP filter);
+    
 protected slots:
     virtual void updateRelFrame(int relFrame);
     
-public:
-    AnimatorLT* getLT();
+protected:
+    virtual void setupFilter(FrameLayer *frame, int rel);
     
 private:
     AnimatorLT* m_LT;
     
     LTUpdaterMode m_mode;
+    
+private:
+    KisAdjustmentLayer *m_filter;
 };
 
 #endif // ANIMATOR_LT_UPDATER_H
