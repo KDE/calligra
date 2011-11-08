@@ -228,13 +228,13 @@ bool AnimatorModel::setData(const QModelIndex& ind, const QVariant& value, int r
 {
     if (role == Qt::CheckStateRole) {
         if (ind.column() == 1) {
-            KisNode *node = nodeFromIndex(index(ind.row(), 0));
+            KisNode *node = nodeFromIndex(index(ind.row(), 0, parent(ind)));
             if (node) {
                 node->setVisible(value == Qt::Checked);
                 node->setDirty();
             }
         } else if (ind.column() == 2) {
-            AnimatedLayer *layer = qobject_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0)));
+            AnimatedLayer *layer = qobject_cast<AnimatedLayer*>(nodeFromIndex(index(ind.row(), 0, parent(ind))));
             if (layer) {
                 layer->setEnabled(value == Qt::Checked);
             }
