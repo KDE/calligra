@@ -99,7 +99,7 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(makeAnimated()));
     addAction("util", t);
     
-    t = new QAction(SmallIcon("document-import"), i18n("Export from image sequence"), this);
+    t = new QAction(SmallIcon("document-import"), i18n("Import from image sequence"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(importFrames()));
     addAction("util", t);
     
