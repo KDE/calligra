@@ -33,6 +33,7 @@ class AnimatorUpdater;
 class AnimatorLoader;
 class AnimatorPlayer;
 class AnimatorExporter;
+class AnimatorImporter;
 
 #include "simple_frame_layer.h"
 #include "framed_animated_layer.h"
@@ -58,6 +59,7 @@ public:
     virtual AnimatorLoader* getLoader();
     virtual AnimatorPlayer* getPlayer();
     virtual AnimatorExporter* getExporter();
+    virtual AnimatorImporter* getImporter();
     
     virtual KisImage* image();
     
@@ -113,6 +115,8 @@ public:
     virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
     virtual void removeLayer(KisNode* layer);
     
+    virtual KisNodeSP createLayerAt(const QString &layerType, KisNodeSP parent, int index);
+    
     // for legacy loader
     virtual void createGroupLayer(KisNodeSP parent);
     
@@ -143,6 +147,7 @@ private:
     AnimatorLoader* m_loader;
     AnimatorPlayer* m_player;
     AnimatorExporter* m_exporter;
+    AnimatorImporter* m_importer;
     AnimatorMetaInfo* m_info;
     
     

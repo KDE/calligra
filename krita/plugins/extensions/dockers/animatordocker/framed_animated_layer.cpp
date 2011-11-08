@@ -105,6 +105,16 @@ void FramedAnimatedLayer::createFrame(int num, bool isKey)
     insertFrame(frame);
 }
 
+void FramedAnimatedLayer::createFrame(int num, bool isKey, KisNodeSP content)
+{
+    createFrame(num, isKey);
+    SimpleFrameLayer *frame = qobject_cast<SimpleFrameLayer*>(frameAt(num));
+    if (frame) {
+        frame->setContent(content.data());
+    }
+}
+
+
 FrameLayer* FramedAnimatedLayer::emptyFrame()
 {
     return new SimpleFrameLayer(image(), "", 255);

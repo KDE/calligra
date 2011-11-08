@@ -26,11 +26,13 @@
 #include <KLineEdit>
 #include <QLayout>
 #include <QLabel>
+#include <QSpinBox>
 
 #include "animator_manager.h"
 #include "animator_loader.h"
 #include "animator_player.h"
 #include "animator_exporter.h"
+#include "animator_importer.h"
 #include "animator_updater.h"
 #include "animator_lt_updater.h"
 
@@ -38,7 +40,6 @@
 
 #include "normal_animated_layer.h"
 #include "control_animated_layer.h"
-#include <QSpinBox>
 #include "animator_frame_manager.h"
 
 AnimatorActions::AnimatorActions(QObject* parent) : QObject(parent)
@@ -96,6 +97,10 @@ void AnimatorActions::initActions()
     
     t = new QAction(SmallIcon("tool-animator"), i18n("Make this file animated"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(makeAnimated()));
+    addAction("util", t);
+    
+    t = new QAction(SmallIcon("document-import"), i18n("Export from image sequence"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(importFrames()));
     addAction("util", t);
     
     t = new QAction(SmallIcon("document-export"), i18n("Export to png sequence"), this);
@@ -220,11 +225,18 @@ void AnimatorActions::makeAnimated()
     m_manager->setKraMetaInfo();
 }
 
+void AnimatorActions::importFrames()
+{
+    Q_ASSERT(m_manager);
+    m_manager->getImporter()->importUser();
+}
+
 void AnimatorActions::exportFrames()
 {
     Q_ASSERT(m_manager);
     m_manager->getExporter()->exportAll();
 }
+
 
 void AnimatorActions::playPause(bool v)
 {

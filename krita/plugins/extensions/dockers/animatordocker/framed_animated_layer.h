@@ -44,6 +44,7 @@ public:
     virtual FrameLayer* frameAt(int num) const;
     virtual void insertFrame(FrameLayer* frame);
     virtual void createFrame(int num, bool isKey);
+    virtual void createFrame(int num, bool isKey, KisNodeSP content);
     virtual void clearFrame(int num);
     virtual void moveFrame(int from, int to);
     virtual void swapFrames(int first, int second);

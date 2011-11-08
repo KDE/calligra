@@ -27,6 +27,7 @@
 #include "animator_lt_updater.h"
 #include "animator_player.h"
 #include "animator_exporter.h"
+#include "animator_importer.h"
 #include "animator_frame_manager.h"
 
 #include "animator_config.h"
@@ -42,6 +43,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_updater = new AnimatorLTUpdater(this);
     m_player = new AnimatorPlayer(this);
     m_exporter = new AnimatorExporter(this);
+    m_importer = new AnimatorImporter(this);
     m_frameManager = new AnimatorFrameManager(this);
     
     m_image = image;
@@ -64,6 +66,7 @@ void AnimatorManager::setCanvas(KoCanvasBase* canvas)
 {
     m_nodeManager = dynamic_cast<KisCanvas2*>(canvas)->view()->nodeManager();
     m_exporter->setCanvas(canvas);
+    m_importer->setCanvas(canvas);
 #if LOAD_ON_START
     initLayers();
 #endif
@@ -109,6 +112,11 @@ AnimatorPlayer* AnimatorManager::getPlayer()
 AnimatorExporter* AnimatorManager::getExporter()
 {
     return m_exporter;
+}
+
+AnimatorImporter* AnimatorManager::getImporter()
+{
+    return m_importer;
 }
 
 AnimatorFrameManager* AnimatorManager::getFrameManager()
@@ -390,6 +398,15 @@ void AnimatorManager::removeLayer()
     AnimatedLayer* alayer = getAnimatedLayerByChild(m_nodeManager->activeNode().data());
     removeLayer(alayer);
 }
+
+KisNodeSP AnimatorManager::createLayerAt(const QString &layerType, KisNodeSP parent, int index)
+{
+    m_nodeManager->createNode(layerType);
+    KisNodeSP node = m_nodeManager->activeNode();
+    putNodeAt(node, parent, index);
+    return node;
+}
+
 
 void AnimatorManager::renameLayer(KisNode* layer, const QString& name)
 {

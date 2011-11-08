@@ -59,6 +59,7 @@ protected slots:
 #endif
     virtual void makeAnimated();
     virtual void exportFrames();
+    virtual void importFrames();
     
     virtual void playPause(bool v);
     virtual void toggleLooping(bool v);
