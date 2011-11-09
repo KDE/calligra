@@ -1640,15 +1640,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_currentCombinedBulletProperties.clear();
     m_currentListLevel = 1; // By default we're in the first level
 
-    bool fileByPowerPoint = false;
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    fileByPowerPoint = true;
 #else
     // TODO: MS Word: There's a different positioning logic for a list inside
     // of a textbox compared to a list in a document body.
 /*     m_prevListLevel = m_currentListLevel = 0; */
     m_currentListLevel = 0;
+#endif
+
+    MSOOXML::Utils::MSOOXMLFilter currentFilter = MSOOXML::Utils::XlsxFilter;
+#ifdef PPTXXMLSLIDEREADER_CPP
+    currentFilter = MSOOXML::Utils::PptxFilter;
+#elif defined  DOCXXMLDOCREADER_CPP
+    currentFilter = MSOOXML::Utils::DocxFilter;
 #endif
 
     QString fontSize = QString();
@@ -1658,13 +1663,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Creating a list out of what we have, note that ppr MAY overwrite the
     // list style
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
-    QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
+/*     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties); */
+    QMutableMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
     int index = 0;
     while (i.hasNext()) {
         index++;
         i.next();
         m_currentListStyle.addChildElement(QString("list-style-properties%1").arg(index),
-            i.value().convertToListProperties(fileByPowerPoint));
+            i.value().convertToListProperties(*mainStyles, currentFilter));
     }
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
@@ -1758,6 +1764,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     //---------------------------------------------
     // This approach has the risk that numbered lists might have different
     // bullet sizes -> different lists -> numbering won't work as expected
+
+    //TODO: Checking against "UNUSED" is wrong!  Have to update the list
+    //processing logic.
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
         if (!fontSize.isEmpty()) {
@@ -1799,7 +1808,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
         m_currentBulletProperties.m_level = m_currentListLevel;
         m_currentListStyle.addChildElement("list-style-properties",
-            m_currentBulletProperties.convertToListProperties(fileByPowerPoint));
+            m_currentBulletProperties.convertToListProperties(*mainStyles, currentFilter));
         listStyleName = mainStyles->insert(m_currentListStyle);
         Q_ASSERT(!listStyleName.isEmpty());
 

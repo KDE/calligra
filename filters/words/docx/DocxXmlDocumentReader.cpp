@@ -2045,8 +2045,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                             }
 
                             m_currentListStyle.addChildElement("list-style-properties",
-                                m_currentBulletProperties.convertToListProperties());
+                                m_currentBulletProperties.convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
                             ++index;
+
                         }
                         m_currentListStyleName = mainStyles->insert(m_currentListStyle, QString(), KoGenStyles::AllowDuplicates);
                         m_usedListStyles[m_previousNumIdUsed] = m_currentListStyleName;
