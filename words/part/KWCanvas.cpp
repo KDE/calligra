@@ -130,6 +130,9 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        return m_viewMode->documentToView(viewConverter()->viewToDocument(m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()), viewConverter());
+    }
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 
