@@ -2194,13 +2194,11 @@ void addListElement(KoXmlWriter& out, const QString& listStyle,
     } else {
         qDebug() << "Warning: list style name not provided!";
     }
-    //required by stage
     if (continueList) {
         out.addAttribute("text:continue-numbering", "true");
     }
     out.startElement("text:list-item");
 
-    //required by stage
     if (pf.fBulletHasAutoNumber() && !continueList) {
         out.addAttribute("text:start-value", pf.startNum());
     }

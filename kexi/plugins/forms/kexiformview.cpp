@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1118,6 +1118,24 @@ KexiFormView::resizeEvent(QResizeEvent *e)
         m_delayedFormContentsResizeOnShow--;
         m_dbform->resize(e->size() - QSize(30, 30));
     }
+}
+
+void KexiFormView::contextMenuEvent(QContextMenuEvent *e)
+{
+    // kDebug() << form()->selectedWidget() << form()->widget() << e->reason();
+    if (form()->selectedWidget()
+        && form()->selectedWidget() == form()->widget()
+        && e->reason() == QContextMenuEvent::Keyboard)
+    {
+        // Outer form area received context key.
+        // Redirect the event to top-level form widget.
+        // It will be received in Container::eventFilter().
+        e->accept();
+        QContextMenuEvent me(QContextMenuEvent::Keyboard, QPoint(-1, -1));
+        QApplication::sendEvent(form()->widget(), &me);
+        return;
+    }
+    KexiView::contextMenuEvent(e);
 }
 
 void

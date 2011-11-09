@@ -108,6 +108,7 @@ void PointStorageBenchmark::testLookupPerformance()
             }
         }
     }
+    Q_UNUSED(v); //not fully unused but GCC thinks so, so let us just tell it so
 }
 
 void PointStorageBenchmark::testInsertColumnsPerformance()
@@ -253,12 +254,13 @@ void PointStorageBenchmark::testIterationPerformance()
     //     qDebug() << endl << qPrintable( storage.dump() );
     QString prefix = QString("%1 x %2").arg(maxrow).arg(maxcol);
 
+    int v;
     QBENCHMARK {
-        int v;
         for (int i = 0; i < storage.count(); ++i) {
             v = storage.data(i);
         }
     }
+    Q_UNUSED(v); //Not fully unused, but GCC thinks so
 }
 
 QTEST_MAIN(PointStorageBenchmark)

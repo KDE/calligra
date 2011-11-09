@@ -52,13 +52,13 @@ protected:
     KoFilter::ConversionStatus read_numPicBullet();
     KoFilter::ConversionStatus read_lvlOverride();
 
-    // Note we read pPr here for now because we are only interested in subset of pPr/rPr features
-    // which can be used with lists.
+    // NOTE: We read pPr here for now because we are only interested in subset
+    // of pPr features which can be used with lists.
     KoFilter::ConversionStatus read_pPr_numbering();
     KoFilter::ConversionStatus read_ind_numbering();
-    KoFilter::ConversionStatus read_rPr_numbering();
-    KoFilter::ConversionStatus read_rFonts_numbering();
-    KoFilter::ConversionStatus read_color_numbering();
+/*     KoFilter::ConversionStatus read_rPr_numbering(); */
+/*     KoFilter::ConversionStatus read_rFonts_numbering(); */
+/*     KoFilter::ConversionStatus read_color_numbering(); */
 
     bool m_bulletStyle;
 

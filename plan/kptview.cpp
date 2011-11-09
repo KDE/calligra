@@ -55,7 +55,7 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-
+#include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kstandarddirs.h>
@@ -139,22 +139,8 @@ ConfigDialog::ConfigDialog(QWidget *parent, const QString& name, KConfigSkeleton
     : KConfigDialog( parent, name, config ),
     m_config( config )
 {
+    KConfigDialogManager::changedMap()->insert("KRichTextWidget", SIGNAL(textChanged() ) );
 }
-
-KPageWidgetItem *ConfigDialog::addPage(QWidget *page, const QString &itemName, const QString &pixmapName, const QString &header, bool manage)
-{
-    if ( page ) {
-        QRegExp kcfg( "kcfg_*" );
-        foreach ( KRichTextWidget *w, page->findChildren<KRichTextWidget*>( kcfg ) ) {
-            KConfigSkeletonItem *citem = m_config->findItem( w->objectName().mid(5) );
-            if ( citem ) {
-                connect(w, SIGNAL(textChanged()), this, SLOT(updateButtons()));
-            }
-        }
-    }
-    return KConfigDialog::addPage( page, itemName, pixmapName, header, manage );
-}
-
 
 bool ConfigDialog::hasChanged()
 {
@@ -171,6 +157,18 @@ bool ConfigDialog::hasChanged()
 void ConfigDialog::updateSettings()
 {
     bool changed = false;
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            item->setProperty( QVariant( w->toHtml() ) );
+            changed = true;
+        }
+    }
     if ( changed ) {
         m_config->writeConfig();
     }
@@ -178,12 +176,32 @@ void ConfigDialog::updateSettings()
 
 void ConfigDialog::updateWidgets()
 {
-    kDebug()<<sender();
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            w->setHtml( item->property().toString() );
+        }
+    }
 }
 
 void ConfigDialog::updateWidgetsDefault()
 {
-    kDebug()<<sender();
+    bool usedefault = m_config->useDefaults( true );
+    updateWidgets();
+    m_config->useDefaults( usedefault );
+}
+
+bool ConfigDialog::isDefault()
+{
+    bool bUseDefaults = m_config->useDefaults(true);
+    bool result = !hasChanged();
+    m_config->useDefaults(bUseDefaults);
+    return result;
 }
 
 //------------------------------------
@@ -316,7 +334,7 @@ View::View( Part* part, QWidget* parent )
 
     // ------ Help
     actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
-    actionCollection()->addAction("kplato_introduction", actionIntroduction );
+    actionCollection()->addAction("plan_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
     // ------ Popup

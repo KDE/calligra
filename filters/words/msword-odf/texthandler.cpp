@@ -1983,47 +1983,21 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
 {
     const wvWare::ListInfo* listInfo = m_currentPPs->listInfo();
     if (!listInfo) {
-    return;
+        return;
     }
     const wvWare::Word97::PAP& pap = m_currentPPs->pap();
     wvWare::UString text = listInfo->text().text;
     int nfc = listInfo->numberFormat();
 
-    // ------------------------
-    // Text Style - bullet
-    // ------------------------
-    const wvWare::SharedPtr<wvWare::Word97::CHP> chp = listInfo->text().chp;
-    KoGenStyle textStyle(KoGenStyle::TextAutoStyle, "text");
-    if (document()->writingHeader()) {
-        textStyle.setAutoStyleInStylesDotXml(true);
-    }
-//     QString textStyleName('T');
-    if (chp) {
-        QString fontName = getFont(chp->ftcAscii);
-        if (!fontName.isEmpty()) {
-            m_mainStyles->insertFontFace(KoFontFace(fontName));
-            textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
-        }
-        m_paragraph->applyCharacterProperties(chp, &textStyle, 0);
-//         m_mainStyles->insert(textStyle, textStyleName);
-    } else {
-        kDebug(30513) << "Missing CHPs for the bullet/number!";
-    }
-    // ------------------------
-    // Writer
-    // ------------------------
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter out(&buf);
 
-    // ------------------------
-    // Bulleted List
-    // ------------------------
+    //---------------------------------------------
+    // list-level-style-*
+    //---------------------------------------------
     if (nfc == 23) {
-//         kDebug(30513) << "bullets...";
         out.startElement("text:list-level-style-bullet");
-//         out.addAttribute("text:style-name", textStyleName);
-        out.addAttribute("text:level", pap.ilvl + 1);
         if (text.length() == 1) {
             // With bullets, text can only be one character, which tells us
             // what kind of bullet to use
@@ -2048,24 +2022,9 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
         } else {
             kWarning(30513) << "Bullet with more than one character, not supported";
         }
-        //style:list-level-properties
-        setListLevelProperties(out, pap, *listInfo);
-
-        //NOTE: helping the layout, the approach based on the text:style-name
-        //attribute does not work at the moment.
-        if (!textStyle.isEmpty()) {
-            textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
-        }
-        out.endElement(); //text:list-level-style-bullet
     }
-    // ------------------------
-    // Numbered/Outline List
-    // ------------------------
     else {
-//         kDebug(30513) << "numbered/outline... nfc = " << nfc;
         out.startElement("text:list-level-style-number");
-//         out.addAttribute("text:style-name", textStyleName);
-        out.addAttribute("text:level", pap.ilvl + 1);
 
         //*************************************
         int depth = pap.ilvl; //both are 0 based
@@ -2169,19 +2128,56 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
         //listInfo->notRestarted() [by higher level of lists] not supported
         //listInfo->followingchar() ignored, it's always a space in Words currently
         //*************************************
-
-        //style:list-level-properties
-        setListLevelProperties(out, pap, *listInfo);
-
-        //NOTE: helping the layout, the approach based on the text:style-name
-        //attribute does not work at the moment.
-        if (!textStyle.isEmpty()) {
-            textStyle.writeStyleProperties(&out, KoGenStyle::TextType);
-        }
-        out.endElement(); //text:list-level-style-number
     } //end numbered list
 
-    //now add this info to our list style
+    out.addAttribute("text:level", pap.ilvl + 1);
+
+    //---------------------------------------------
+    // text-properties
+    //---------------------------------------------
+    const wvWare::SharedPtr<wvWare::Word97::CHP> chp = listInfo->text().chp;
+    KoGenStyle textStyle(KoGenStyle::TextStyle, "text");
+
+    if (chp) {
+        QString fontName = getFont(chp->ftcAscii);
+        if (!fontName.isEmpty()) {
+            m_mainStyles->insertFontFace(KoFontFace(fontName));
+            textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
+        }
+        m_paragraph->applyCharacterProperties(chp, &textStyle, 0);
+    } else {
+        kDebug(30513) << "Missing CHPs for the bullet/number!";
+    }
+    //NOTE: Setting a num. of text-properties to default values if not provided
+    //for the list style to maintain compatibility with both ODF and MSOffice.
+
+    //MSWord: A label does NOT inherit {Italics, Bold, Underline} from
+    //text-properties of the paragraph style.
+
+    //fo:font-style
+    if ((textStyle.property("fo:font-style")).isEmpty()) {
+        textStyle.addProperty("fo:font-style", "normal");
+    }
+    //fo:font-weight
+    if ((textStyle.property("fo:font-weight")).isEmpty()) {
+        textStyle.addProperty("fo:font-weight", "normal");
+    }
+    //style:text-underline-style
+    if ((textStyle.property("style:text-underline-style")).isEmpty()) {
+        textStyle.addProperty("style:text-underline-style", "none");
+    }
+
+    out.addAttribute("text:style-name", m_mainStyles->insert(textStyle, "T"));
+
+    //---------------------------------------------
+    // list-level-properties
+    //---------------------------------------------
+    setListLevelProperties(out, pap, *listInfo);
+    out.endElement(); //text:list-level-style-*
+
+    //---------------------------------------------
+    // update list style
+    //---------------------------------------------
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     KoGenStyle* listStyle = m_mainStyles->styleForModification(m_listStyleName);
 
@@ -2190,7 +2186,6 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
         throw InvalidFormatException("Could not access listStyle to update it!");
     }
 
-    //we'll add each one with a unique name
     QString name(QString::number(listInfo->lsid()));
     listStyle->addChildElement(name.append("lvl").append(QString::number(pap.ilvl)), contents);
 } //end updateListStyle()

@@ -836,7 +836,8 @@ protected:
                             QHash<QString, QRegion>& rowStyleRegions,
                             QHash<QString, QRegion>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
-                            const Styles& autoStyles);
+                            const Styles& autoStyles,
+                            QList<ShapeLoadingData>& shapeData);
 
     /**
      * \ingroup OpenDocument
@@ -846,7 +847,8 @@ protected:
                        QHash<QString, QRegion>& rowStyleRegions,
                        QHash<QString, QRegion>& cellStyleRegions,
                        const IntervalMap<QString>& columnStyles,
-                       const Styles& autoStyles);
+                       const Styles& autoStyles,
+                       QList<ShapeLoadingData>& shapeData);
 
     /**
      * \ingroup OpenDocument

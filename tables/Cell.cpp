@@ -432,21 +432,24 @@ void Cell::setRawUserInput(const QString& string)
 // square when shown.  This could, for instance, be the calculated
 // result of a formula.
 //
-QString Cell::displayText() const
+QString Cell::displayText(const Style& s, Value * v) const
 {
     if (isNull())
         return QString();
 
     QString string;
-    const Style style = effectiveStyle();
+    const Style style = s.isEmpty() ? effectiveStyle() : s;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
     if (isFormula() && sheet()->getShowFormula() && !(sheet()->isProtected() && style.hideFormula())) {
         string = userInput();
     } else if (!isEmpty()) {
-        string = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
+        Value theValue = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
                  style.floatFormat(), style.prefix(),
-                 style.postfix(), style.currency().symbol()).asString();
+                 style.postfix(), style.currency().symbol(),
+                 style.customFormat(), style.thousandsSep());
+        if (v) *v = theValue;
+        string = theValue.asString();
     }
     return string;
 }
@@ -1329,7 +1332,9 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
     };
 }
 
-bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName)
+bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
+            const Styles& autoStyles, const QString& cellStyleName,
+            QList<ShapeLoadingData>& shapeData)
 {
     static const QString sFormula           = QString::fromLatin1("formula");
     static const QString sValidationName    = QString::fromLatin1("validation-name");
@@ -1610,7 +1615,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
             setComment(comment);
     }
 
-    loadOdfObjects(element, tableContext);
+    loadOdfObjects(element, tableContext, shapeData);
 
     return true;
 }
@@ -1730,7 +1735,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
     }
 }
 
-void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableContext)
+void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableContext, QList<ShapeLoadingData>& shapeData)
 {
     // Register additional attributes, that identify shapes anchored in cells.
     // Their dimensions need adjustment after all rows are loaded,
@@ -1750,16 +1755,21 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
         if (element.namespaceURI() != KoXmlNS::draw)
             continue;
 
-        loadOdfObject(element, *tableContext.shapeContext);
+        ShapeLoadingData data = loadOdfObject(element, *tableContext.shapeContext);
+        if (data.shape) {
+            shapeData.append(data);
+        }
     }
 }
 
-void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
+ShapeLoadingData Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
 {
+    ShapeLoadingData data;
+    data.shape = 0;
     KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
     if (!shape) {
         kDebug(36003) << "Unable to load shape.";
-        return;
+        return data;
     }
 
     d->sheet->addShape(shape);
@@ -1783,23 +1793,29 @@ void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &sha
             !shape->hasAdditionalAttribute("table:end-x") ||
             !shape->hasAdditionalAttribute("table:end-y")) {
         kDebug(36003) << "Not all attributes found, that are necessary for cell anchoring.";
-        return;
+        return data;
     }
 
     Region endCell(Region::loadOdf(shape->additionalAttribute("table:end-cell-address")),
                    d->sheet->map(), d->sheet);
     if (!endCell.isValid() || !endCell.isSingular())
-        return;
+        return data;
 
     QString string = shape->additionalAttribute("table:end-x");
     if (string.isNull())
-        return;
+        return data;
     double endX = KoUnit::parseValue(string);
 
     string = shape->additionalAttribute("table:end-y");
     if (string.isNull())
-        return;
+        return data;
     double endY = KoUnit::parseValue(string);
+
+    data.shape = shape;
+    data.startCell = QPoint(column(), row());
+    data.offset = QPointF(offsetX, offsetY);
+    data.endCell = endCell;
+    data.endPoint = QPointF(endX, endY);
 
     // The column dimensions are already the final ones, but not the row dimensions.
     // The default height is used for the not yet loaded rows.
@@ -1812,6 +1828,8 @@ void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &sha
     if (endCell.firstRange().top() > this->row())
         size += QSizeF(0.0, d->sheet->rowFormats()->totalRowHeight(this->row(), endCell.firstRange().top() - 1));
     shape->setSize(size);
+
+    return data;
 }
 
 bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,

@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef KEXI_QCOMPLETER_H
-#define KEXI_QCOMPLETER_H
+#ifndef KEXICOMPLETER_H
+#define KEXICOMPLETER_H
 
 #include <kexiutils_export.h>
 
@@ -57,11 +57,9 @@ class QAbstractProxyModel;
 class QWidget;
 class QItemSelection;
 
-namespace KexiUtils {
+class KexiCompleterPrivate;
 
-class QCompleterPrivate;
-
-class KEXIUTILS_EXPORT QCompleter : public QObject
+class KEXIUTILS_EXPORT KexiCompleter : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString completionPrefix READ completionPrefix WRITE setCompletionPrefix)
@@ -87,12 +85,12 @@ public:
         CaseInsensitivelySortedModel
     };
 
-    QCompleter(QObject *parent = 0);
-    QCompleter(QAbstractItemModel *model, QObject *parent = 0);
+    KexiCompleter(QObject *parent = 0);
+    KexiCompleter(QAbstractItemModel *model, QObject *parent = 0);
 #ifndef QT_NO_STRINGLISTMODEL
-    QCompleter(const QStringList& completions, QObject *parent = 0);
+    KexiCompleter(const QStringList& completions, QObject *parent = 0);
 #endif
-    ~QCompleter();
+    ~KexiCompleter();
 
     void setWidget(QWidget *widget);
     QWidget *widget() const;
@@ -157,10 +155,10 @@ Q_SIGNALS:
     void highlighted(const QModelIndex &index);
 
 private:
-    Q_DISABLE_COPY(QCompleter)
+    Q_DISABLE_COPY(KexiCompleter)
 
-    friend class QCompleterPrivate;
-    QCompleterPrivate * const d;
+    friend class KexiCompleterPrivate;
+    KexiCompleterPrivate * const d;
 
 private Q_SLOTS:
     void _q_complete(const QModelIndex&);
@@ -169,8 +167,6 @@ private Q_SLOTS:
     void _q_fileSystemModelDirectoryLoaded(const QString&);
 };
 
-} // namespace KexiUtils
-    
 #endif // QT_NO_COMPLETER
 
-#endif // KEXI_QCOMPLETER_H
+#endif // KEXICOMPLETER_H

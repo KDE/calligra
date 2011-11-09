@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef KEXI_QABSTRACTPROXYMODEL_P_H
-#define KEXI_QABSTRACTPROXYMODEL_P_H
+#ifndef KEXIABSTRACTPROXYMODEL_P_H
+#define KEXIABSTRACTPROXYMODEL_P_H
 
 //
 //  W A R N I N G
@@ -54,22 +54,18 @@
 //
 //
 
-#include "private/qabstractitemmodel_p.h"
+#include "private/KexiAbstractItemModel_p.h"
 
 #ifndef QT_NO_PROXYMODEL
 
-//namespace KexiUtils {
-
-class QAbstractProxyModelPrivate : public QAbstractItemModelPrivate
+class KexiAbstractProxyModelPrivate : public KexiAbstractItemModelPrivate
 {
 public:
-    QAbstractProxyModelPrivate() : QAbstractItemModelPrivate()/*, model(0)*/ {}
+    KexiAbstractProxyModelPrivate() : KexiAbstractItemModelPrivate()/*, model(0)*/ {}
     //QAbstractItemModel *model;
     virtual void _q_sourceModelDestroyed();
 };
 
-//} // namespace KexiUtils
-
 #endif // QT_NO_PROXYMODEL
 
-#endif // KEXI_QABSTRACTPROXYMODEL_P_H
+#endif // KEXIABSTRACTPROXYMODEL_P_H

@@ -673,7 +673,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     }
 
     // Set up destination connection data
-    KexiDB::ConnectionData *cdata;
+    KexiDB::ConnectionData *cdata = 0;
     QString dbname;
     if (!result.error()) {
         if (m_dstConn->selectedConnectionData()) {
@@ -722,7 +722,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     KexiUtils::removeWaitCursor();
 
     // Set up source (migration) data required for connection
-    if (sourceDriver && !result.error()) {
+    if (sourceDriver && !result.error() && cdata) {
         // Setup progress feedback for the GUI
         if (sourceDriver->progressSupported()) {
             m_progressBar->updateGeometry();

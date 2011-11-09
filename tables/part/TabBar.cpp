@@ -702,7 +702,7 @@ QString TabBar::activeTab() const
     if (d->activeTab == 0)
         return QString();
     else
-        return d->tabs[ d->activeTab ];
+        return d->tabs[ d->activeTab-1 ];
 }
 
 void TabBar::mousePressEvent(QMouseEvent* ev)
