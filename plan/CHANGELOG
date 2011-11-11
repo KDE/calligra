@@ -1,6 +1,9 @@
 
 Calligra Plan current:
 
+* Resource assignment gantt chart: remember zoom and scale settings
+  Ref bug 284349
+
 * Improve view selector:
   Enable moving views and categories using drag and drop
   Fix various problems with the view selector dialogs
