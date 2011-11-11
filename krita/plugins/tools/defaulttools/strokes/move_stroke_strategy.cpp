@@ -93,7 +93,7 @@ void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
     QRect dirtyRect = moveNode(m_node, offset);
     m_dirtyRect |= dirtyRect;
 
-    m_node->setDirty(dirtyRect);
+    m_updatesFacade->refreshGraphAsync(m_node, dirtyRect);
 }
 
 QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
