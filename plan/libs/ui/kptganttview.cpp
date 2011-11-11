@@ -285,6 +285,20 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 GanttViewBase::GanttViewBase( QWidget *parent )
     : KDGantt::View( parent )
 {
+    const KLocale *locale = KGlobal::locale();
+    if ( locale ) {
+        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+        g->setWeekStart( static_cast<Qt::DayOfWeek>( locale->weekStartDay() ) );
+        int ws = locale->workingWeekStartDay();
+        int we = locale->workingWeekEndDay();
+        QSet<Qt::DayOfWeek> fd;
+        for ( int i = Qt::Monday; i <= Qt::Sunday; ++i ) {
+            if ( i < ws || i > we ) {
+                fd << static_cast<Qt::DayOfWeek>( i );
+            }
+        }
+        g->setFreeDays( fd );
+    }
 }
 
 bool GanttViewBase::loadContext( const KoXmlElement &settings )

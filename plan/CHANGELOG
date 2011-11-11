@@ -1,6 +1,8 @@
 
 Calligra Plan current:
 
+* Gantt chart: Use locale defined weekends/start of week
+
 * Bug 286332: Initially expand resource group in the Task resource allocation dialog
 
 * Resource assignment gantt chart: remember zoom and scale settings
