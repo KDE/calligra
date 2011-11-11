@@ -1,7 +1,9 @@
 
 Calligra Plan current:
 
-* Fix various problems with view selector dialogs
+* Improve view selector:
+  Enable moving views and categories using drag and drop
+  Fix various problems with the view selector dialogs
 
 * Disable dbus adapter
 
