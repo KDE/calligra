@@ -2039,14 +2039,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                                 }
                                 if (!fontSize.isEmpty()) {
                                     fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
-                                    qreal convertedSize = fontSize.toDouble();
-                                    m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+                                    m_currentBulletProperties.setBulletSizePt(fontSize.toDouble());
                                 }
                             }
 
                             m_currentListStyle.addChildElement("list-style-properties",
-                                m_currentBulletProperties.convertToListProperties());
+                                m_currentBulletProperties.convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
                             ++index;
+
                         }
                         m_currentListStyleName = mainStyles->insert(m_currentListStyle, QString(), KoGenStyles::AllowDuplicates);
                         m_usedListStyles[m_previousNumIdUsed] = m_currentListStyleName;

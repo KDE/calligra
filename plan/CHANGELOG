@@ -1,6 +1,10 @@
 
 Calligra Plan current:
 
+* Fix various problems with view selector dialogs
+
+* Disable dbus adapter
+
 * Fix scheduling of resources that works during daylight saving time changes
 
 * Set datetime grid hour format in accordance with kde settings
