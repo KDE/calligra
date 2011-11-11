@@ -104,15 +104,16 @@ void AnimatorLoader::loadLayers(KisNodeSP rootNode)
 
 void AnimatorLoader::loadLayer(KisNodeSP node)
 {
-    if (node->name().startsWith("_ani_"))
-    {
-        loadFramedLayer<NormalAnimatedLayer, SimpleFrameLayer>(node);
-    } else if (node->name().startsWith("_anicontrol_"))
-    {
+    AnimatedLayer *layer = 0;
+    KisLayer *sourceLayer = qobject_cast<KisLayer*>(node.data());
+
+    if (node->name().startsWith("_ani_")) {
+        layer = loadFramedLayer<NormalAnimatedLayer, SimpleFrameLayer>(node);
+    } else if (node->name().startsWith("_anicontrol_")) {
         ControlAnimatedLayer* clayer = loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
         clayer->reset();
-    } else if (node->name().startsWith("_aniview_"))
-    {
+	layer = clayer;
+    } else if (node->name().startsWith("_aniview_")) {
         KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
         if (!gl || !gl->at(0))
             return;
@@ -120,11 +121,22 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
         KisNodeSP parent = gl->parent();
         m_manager->insertLayer(vlayer, parent, parent->index(gl));
         m_manager->putNodeAt(gl->at(0), vlayer, 0);
-        m_manager->removeLayer(gl);
         vlayer->load();
-    } else
-    {
+    } else {
         warnKrita << "only normal framed and control layers are implemented";
+    }
+
+    if (layer && sourceLayer) {
+        // Fix clone layers..
+        QList<KisCloneLayerWSP> clones = sourceLayer->registeredClones();
+        KisCloneLayerWSP clone;
+        foreach (clone, clones) {
+            clone->setCopyFrom(layer);
+        }
+    }
+    
+    if (layer) {
+        m_manager->removeLayer(node.data());
     }
 }
 
@@ -150,8 +162,6 @@ CustomAnimatedLayer* AnimatorLoader::loadFramedLayer(KisNodeSP node)
         }
     }
 
-    m_manager->removeLayer(gl);
-    
     return qobject_cast<CustomAnimatedLayer*>(al);
 }
 
