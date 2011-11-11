@@ -1601,15 +1601,23 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
 #endif
             fontRef = i.cf.fontRef();
         }
-        //PowerPoint UI does not enable to change the font for numbered lists
-        const MSO::FontEntityAtom* font = getFont(fontRef);
-        if (font && !i.pf.fBulletHasAutoNumber()) {
-            QString family = QString::fromUtf16(font->lfFaceName.data(),
-                                                font->lfFaceName.size());
-            ts.addProperty("fo:font-family", family, text);
-        }
         //bulletSize already processed
         ts.addProperty("fo:font-size", bulletSize, text);
+
+        //MSPowerPoint: UI does not enable to change font of a numbered lists.
+        const MSO::FontEntityAtom* font = getFont(fontRef);
+        if (font && !i.pf.fBulletHasAutoNumber()) {
+            QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
+            ts.addProperty("fo:font-family", family, text);
+        }
+        //MSPowerPoint: A label does NOT inherit Underline from text-properties
+        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
+        if (!i.pf.fBulletHasAutoNumber()) {
+            ts.addProperty("fo:font-style", "normal");
+            ts.addProperty("fo:font-weight", "normal");
+        }
+        ts.addProperty("style:text-underline-style", "none");
+
         ts.writeStyleProperties(&out, text);
     }
     out.endElement();  // text:list-level-style-*
@@ -2533,6 +2541,10 @@ PptToOdp::processParagraph(Writer& out,
     if (m_isList) {
         int depth = pf.level() + 1;
         quint32 num = 0;
+
+        // TODO: DO NOT use CFException for the 1st text run, the textlayout
+        // already supports this.
+
         //CFException for the first run of text required for the list style
         cf.addCurrentCFRun(tc, start, num);
         QString listStyle = defineAutoListStyle(out, pf, cf);

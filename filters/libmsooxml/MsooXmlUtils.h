@@ -99,15 +99,15 @@ public:
 
     void setPicturePath(const QString& picturePath);
 
-    void setBulletSize(const QSize& size);
-
     void setBulletFont(const QString& font);
 
     void setBulletColor(const QString& bulletColor);
 
     void setStartValue(const QString& value);
 
-    void setBulletRelativeSize(const qreal size);
+    void setBulletRelativeSize(const int size);
+
+    void setBulletSizePt(const qreal size);
 
     void setFollowingChar(const QString& value);
 
@@ -116,6 +116,8 @@ public:
     QString startValue() const;
 
     QString bulletRelativeSize() const;
+
+    QString bulletSizePt() const;
 
     QString bulletColor() const;
 
@@ -151,7 +153,7 @@ private:
     QString m_bulletColor;
     QString m_followingChar;
     QString m_bulletRelativeSize;
-    QSize m_bulletSize;
+    QString m_bulletSize;
 
     KoGenStyle m_textStyle;
 };
