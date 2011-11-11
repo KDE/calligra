@@ -175,7 +175,7 @@ QString m_shapeTextLeftOff;
 QString m_shapeTextRightOff;
 
 bool m_listStylePropertiesAltered;
-bool m_previousListWasAltered;
+QString m_prevListStyleName;
 
 int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr

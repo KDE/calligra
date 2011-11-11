@@ -267,7 +267,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             return prefix + postfix;
         } else if (formatString.contains(QLatin1Char('.'))) {
             precision = formatString.length() - formatString.indexOf(QLatin1Char('.')) - 1;
-        } else if (precision != -1){
+        } else if (precision != -1) {
             precision = 0;
         }
     }

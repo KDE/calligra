@@ -1585,7 +1585,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
-    m_previousListWasAltered = false;
+    m_continueListNumbering.clear();
+    m_prevListStyleName.clear();
 
     MSOOXML::Utils::XmlWriteBuffer listBuf;
     body = listBuf.setWriter(body);

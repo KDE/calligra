@@ -432,21 +432,24 @@ void Cell::setRawUserInput(const QString& string)
 // square when shown.  This could, for instance, be the calculated
 // result of a formula.
 //
-QString Cell::displayText() const
+QString Cell::displayText(const Style& s, Value * v) const
 {
     if (isNull())
         return QString();
 
     QString string;
-    const Style style = effectiveStyle();
+    const Style style = s.isEmpty() ? effectiveStyle() : s;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
     if (isFormula() && sheet()->getShowFormula() && !(sheet()->isProtected() && style.hideFormula())) {
         string = userInput();
     } else if (!isEmpty()) {
-        string = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
+        Value theValue = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
                  style.floatFormat(), style.prefix(),
-                 style.postfix(), style.currency().symbol()).asString();
+                 style.postfix(), style.currency().symbol(),
+                 style.customFormat(), style.thousandsSep());
+        if (v) *v = theValue;
+        string = theValue.asString();
     }
     return string;
 }
@@ -1213,7 +1216,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         QSharedPointer<QTextDocument> doc = richText();
         if (doc) {
             QTextCharFormat format = style().asCharFormat();
-            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+            ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
             KoEmbeddedDocumentSaver embeddedSaver;
             KoShapeSavingContext shapeContext(xmlwriter, mainStyles, embeddedSaver);
@@ -1710,7 +1713,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             }
 
             QTextCharFormat format = style.asCharFormat();
-            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+            ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
             KoTextLoader loader(*tableContext.shapeContext);
             QSharedPointer<QTextDocument> doc(new QTextDocument);

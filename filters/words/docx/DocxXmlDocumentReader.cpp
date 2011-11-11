@@ -1920,8 +1920,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     m_closeHyperlink = false;
 
     // It is possible that one of the child elements of p has p element
-    // Therefore we push the current style to vector and pop it out when we come out
-    // To make sure in that case we don't lose the previous style
+    // Therefore we push the current style to vector and pop it out when we
+    // come out To make sure in that case we don't lose the previous style
     QVector<KoGenStyle> activeStyles;
     activeStyles.push_back(m_currentParagraphStyle);
 
@@ -1938,8 +1938,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
         }
 
-        // MS2007 has a different way of marking drop cap, it divides them to two paragraphs
-        // here we apply the status to current paragraph if previous one had dropCap
+        // MS2007 has a different way of marking drop cap, it divides them to
+        // two paragraphs here we apply the status to current paragraph if
+        // previous one had dropCap
         if (m_dropCapStatus == DropCapDone) {
             QBuffer frameBuffer;
             frameBuffer.open(QIODevice::WriteOnly);
@@ -1957,7 +1958,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     bool sectionAdded = false;
 
     if (m_createSectionStyle) {
-        // This is done to avoid the style to being duplicate to some other style
+        // This is done to avoid the style to being duplicate to some other
+        // style
         m_currentParagraphStyle.addAttribute("style:master-page-name", "placeholder");
         m_createSectionStyle = false;
         sectionAdded = true;
@@ -1990,19 +1992,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     } else {
         if (m_dropCapStatus == DropCapRead) {
             body = textPBuf.releaseWriter();
-            // If we read a drop cap but there was no text
-            // there might as well be no drop cap
+            // If we read a drop cap but there was no text there might as well
+            // be no drop cap
             m_dropCapStatus = NoDropCap;
         }
         else if (m_dropCapStatus == DropCapDone) {
             // In case of drop cap, we do not wish there to be a paragraph at
-            // this point, this because two ooxml paragraphs with drop cap
-            // in first, trasnfer to one paragraph in odt with drop cap as style.
+            // this point, this because two ooxml paragraphs with drop cap in
+            // first, trasnfer to one paragraph in odt with drop cap as style.
             body = textPBuf.releaseWriter();
         }
         else {
             body = textPBuf.originalWriter();
-            if (!m_createSectionToNext) { // In ooxml it seems that nothing should be created if sectPr was present
+            // In ooxml it seems that nothing should be created if sectPr was present
+            if (!m_createSectionToNext) {
                 if (m_listFound) {
                     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
                     if (m_moveToStylesXml) {
@@ -2015,8 +2018,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                             m_currentBulletProperties = m_currentBulletList.at(index);
 
                             if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType) {
-                                // The reason why we are inserting bullets only here, is that we have to check for the actual
-                                // text size before we can determine how big a potential picture bullet should be
+                                // The reason why we are inserting bullets only
+                                // here, is that we have to check for the
+                                // actual text size before we can determine how
+                                // big a potential picture bullet should be
 
                                 // Try 1 : paragraph defined
                                 QString fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
@@ -2027,7 +2032,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                                         fontSize = parent->property("fo:font-size", KoGenStyle::TextType);
                                         if (fontSize.isEmpty()) {
                                             // Try 3 : default text size
-                                            fontSize = "11pt"; // This should be acquired from stylesreader, do later.
+                                            //TODO: This should be acquired from stylesreader.
+                                            fontSize = "11pt";
                                         }
                                     }
                                 }
@@ -2039,8 +2045,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                             }
 
                             m_currentListStyle.addChildElement("list-style-properties",
-                                m_currentBulletProperties.convertToListProperties());
+                                m_currentBulletProperties.convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
                             ++index;
+
                         }
                         m_currentListStyleName = mainStyles->insert(m_currentListStyle, QString(), KoGenStyles::AllowDuplicates);
                         m_usedListStyles[m_previousNumIdUsed] = m_currentListStyleName;
@@ -2086,8 +2093,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 body->endElement(); //text:p
                 if (m_listFound) {
                     for (int i = 0; i < m_currentListLevel; ++i) {
-                        body->endElement(); // text:list-item
-                        body->endElement(); // text:list
+                        body->endElement(); //text:list-item
+                        body->endElement(); //text:list
                     }
                     body->endElement(); //text:list-item
                     body->endElement(); //text:list
@@ -2097,8 +2104,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
-    // True if this was last paragraph of the section, if we were then it means that next paragraph/table
-    // should have a new section identifier
+    // True if this was last paragraph of the section, if we were then it means
+    // that next paragraph/table should have a new section identifier
     if (m_createSectionToNext) {
         m_createSectionStyle = true;
         m_createSectionToNext = false;

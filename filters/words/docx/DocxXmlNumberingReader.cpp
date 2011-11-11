@@ -213,6 +213,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
 {
     READ_PROLOGUE
 
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR(ilvl)
@@ -242,7 +243,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
                 TRY_READ(pPr_numbering)
             }
             else if (name() == "rPr") {
-                TRY_READ(rPr_numbering)
+                TRY_READ(rPr)
             }
             SKIP_UNKNOWN
         }
@@ -251,6 +252,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
     if (!pictureType && m_bulletStyle && !m_bulletCharacter.isEmpty()) {
         m_currentBulletProperties.setBulletChar(m_bulletCharacter);
     }
+    m_currentBulletProperties.setTextStyle(m_currentTextStyle);
 
     READ_EPILOGUE
 }
@@ -463,48 +465,17 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL rPr
-//! w:rPr handler (Run Properties)
-/*!
-
- Parent elements:
-
- Child elements:
-//! @todo: Handle all children
-*/
-KoFilter::ConversionStatus DocxXmlNumberingReader::read_rPr_numbering()
-{
-    READ_PROLOGUE
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            if (qualifiedName() == QLatin1String("w:rFonts")) {
-                TRY_READ(rFonts_numbering)
-            }
-            else if (qualifiedName() == QLatin1String("w:color")) {
-                TRY_READ(color_numbering)
-            }
-            SKIP_UNKNOWN
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
 #define CURRENT_EL pPr
 //! w:pPr handler (Numbering Level Associated Paragraph Properties)
 /*! ECMA-376, §17.9.23, p.808
 
- Following child element are not provided compared to pPr (17.3.1.26):
- - rPr (Run Properties for the Paragraph Mark)
- - sectPr (Section Properties)
-
  Parent elements:
  - [done] lvl (§17.9.6)
  - [done] lvl (§17.9.7)
+
+ Child element NOT provided compared to pPr (17.3.1.26):
+ - rPr (Run Properties for the Paragraph Mark)
+ - sectPr (Section Properties)
 
  Child elements:
  - adjustRightInd (Automatically Adjust Right Indent When Using Document Grid) §17.3.1.1
@@ -707,27 +678,107 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL color
-//! w:color handler (bullet color)
-KoFilter::ConversionStatus DocxXmlNumberingReader::read_color_numbering()
-{
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
+// #undef CURRENT_EL
+// #define CURRENT_EL rPr
+//! w:rPr handler (Numbering Symbol Run Properties)
+/*! ECMA-376, §17.9.25, p.812
 
-    TRY_READ_ATTR(val)
+ Parent elements:
+ - [done] lvl (§17.9.6)
+ - [done] lvl (§17.9.7)
 
-    if (!val.isEmpty())
-    {
-        m_currentBulletProperties.setBulletColor(QString("#").append(val));
-    }
+ Child element NOT provided compared to rPr (§17.3.2.28):
+ - del (Deleted Paragraph) §17.13.5.15
+ - ins (Inserted Paragraph) §17.13.5.20
+ - moveFrom (Move Source Paragraph) §17.13.5.21
+ - moveTo (Move Destination Paragraph) §17.13.5.26
 
-    readNext();
-    READ_EPILOGUE
-}
+ Child elements:
+ - b (Bold) §17.3.2.1
+ - bCs (Complex Script Bold) §17.3.2.2
+ - bdr (Text Border) §17.3.2.4
+ - caps (Display All Characters As Capital Letters) §17.3.2.5
+ - color (Run Content Color) §17.3.2.6
+ - cs (Use Complex Script Formatting on Run) §17.3.2.7
+ - dstrike (Double Strikethrough) §17.3.2.9
+ - eastAsianLayout (East Asian Typography Settings) §17.3.2.10
+ - effect (Animated Text Effect) §17.3.2.11
+ - em (Emphasis Mark) §17.3.2.12
+ - emboss (Embossing) §17.3.2.13
+ - fitText (Manual Run Width) §17.3.2.14
+ - highlight (Text Highlighting) §17.3.2.15
+ - i (Italics) §17.3.2.16
+ - iCs (Complex Script Italics) §17.3.2.17
+ - imprint (Imprinting) §17.3.2.18
+ - kern (Font Kerning) §17.3.2.19
+ - lang (Languages for Run Content) §17.3.2.20
+ - noProof (Do Not Check Spelling or Grammar) §17.3.2.21
+ - oMath (Office Open XML Math) §17.3.2.22
+ - outline (Display Character Outline) §17.3.2.23
+ - position (Vertically Raised or Lowered Text) §17.3.2.24
+ - rFonts (Run Fonts) §17.3.2.26
+ - rPrChange (Revision Information for Run Properties) §17.13.5.31
+ - rStyle (Referenced Character Style) §17.3.2.29
+ - rtl (Right To Left Text) §17.3.2.30
+ - shadow (Shadow) §17.3.2.31
+ - shd (Run Shading) §17.3.2.32
+ - smallCaps (Small Caps) §17.3.2.33
+ - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
+ - spacing (Character Spacing Adjustment) §17.3.2.35
+ - specVanish (Paragraph Mark Is Always Hidden) §17.3.2.36
+ - strike (Single Strikethrough) §17.3.2.37
+ - sz (Non-Complex Script Font Size) §17.3.2.38
+ - szCs (Complex Script Font Size) §17.3.2.39
+ - u (Underline) §17.3.2.40
+ - vanish (Hidden Text) §17.3.2.41
+ - vertAlign (Subscript/Superscript Text) §17.3.2.42
+ - w (Expanded/Compressed Text) §17.3.2.43
+ - webHidden (Web Hidden Text) §17.3.2.44
 
-#undef CURRENT_EL
-#define CURRENT_EL rFonts
+//! @todo: Handle all children
+*/
+// KoFilter::ConversionStatus DocxXmlNumberingReader::read_rPr_numbering()
+// {
+//     READ_PROLOGUE
+
+//     while (!atEnd()) {
+//         readNext();
+//         BREAK_IF_END_OF(CURRENT_EL)
+//         if (isStartElement()) {
+//             if (qualifiedName() == QLatin1String("w:rFonts")) {
+//                 TRY_READ(rFonts_numbering)
+//             }
+//             else if (qualifiedName() == QLatin1String("w:color")) {
+//                 TRY_READ(color_numbering)
+//             }
+//             SKIP_UNKNOWN
+//         }
+//     }
+
+//     READ_EPILOGUE
+// }
+
+// #undef CURRENT_EL
+// #define CURRENT_EL color
+// //! w:color handler (bullet color)
+// KoFilter::ConversionStatus DocxXmlNumberingReader::read_color_numbering()
+// {
+//     READ_PROLOGUE
+//     const QXmlStreamAttributes attrs(attributes());
+
+//     TRY_READ_ATTR(val)
+
+//     if (!val.isEmpty())
+//     {
+//         m_currentBulletProperties.setBulletColor(QString("#").append(val));
+//     }
+
+//     readNext();
+//     READ_EPILOGUE
+// }
+
+// #undef CURRENT_EL
+// #define CURRENT_EL rFonts
 //! w:rFonts handler (Run Fonts)
 /*!
 
@@ -736,19 +787,19 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_color_numbering()
  Child elements:
 //! @todo: Handle all children
 */
-KoFilter::ConversionStatus DocxXmlNumberingReader::read_rFonts_numbering()
-{
-    READ_PROLOGUE
+// KoFilter::ConversionStatus DocxXmlNumberingReader::read_rFonts_numbering()
+// {
+//     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs(attributes());
+//     const QXmlStreamAttributes attrs(attributes());
 
-    TRY_READ_ATTR(ascii)
+//     TRY_READ_ATTR(ascii)
 
-    if (!ascii.isEmpty()) {
-        m_currentBulletProperties.setBulletFont(ascii);
-    }
+//     if (!ascii.isEmpty()) {
+//         m_currentBulletProperties.setBulletFont(ascii);
+//     }
 
-    readNext();
-    READ_EPILOGUE
-}
+//     readNext();
+//     READ_EPILOGUE
+// }
 

@@ -109,6 +109,12 @@ QRect KisNode::changeRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
+QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
+{
+    Q_UNUSED(pos);
+    return rect;
+}
+
 void KisNode::setSystemLocked(bool l, bool update)
 {
     KisBaseNode::setSystemLocked(l, update);
@@ -343,10 +349,6 @@ void KisNode::setDirty(const QRect & rect)
 {
     if(m_d->graphListener) {
         m_d->graphListener->requestProjectionUpdate(this, rect);
-    }
-    if (parent())
-    {
-        parent()->setDirty(rect);
     }
 }
 

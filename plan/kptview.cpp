@@ -334,7 +334,7 @@ View::View( Part* part, QWidget* parent )
 
     // ------ Help
     actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
-    actionCollection()->addAction("kplato_introduction", actionIntroduction );
+    actionCollection()->addAction("plan_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
     // ------ Popup

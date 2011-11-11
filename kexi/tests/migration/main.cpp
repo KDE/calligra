@@ -47,7 +47,6 @@ int main(int argc, char** argv)
     Q_UNUSED(argv);
     Q_UNUSED(argc);
     // first the formalities
-    KComponentData *instance = 0;
     QByteArray prgname;
 
     //! TODO use KCmdLineArguments with options
@@ -60,7 +59,8 @@ int main(int argc, char** argv)
     QFileInfo info = QFileInfo(argv[0]);
     prgname = info.baseName().toLatin1();
 
-    instance = new KComponentData(prgname);
+    //Needed for variosu things like i18n and kconfig and stuff. No need to keep it around or clean it as this is just a test case so nothing long-lived
+    new KComponentData(prgname);
 
     // write the code for testing migration here
     // Start with a driver manager
