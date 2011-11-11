@@ -28,6 +28,7 @@
 
 // LibEmf
 #include "EmfplusEnums.h"
+#include "EmfplusObjects.h"
 #include "EmfDeviceContext.h"
 //#include "EmfplusDeviceContext.h"
 //#include "EmfRecords.h"
