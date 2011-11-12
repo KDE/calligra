@@ -89,6 +89,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (startType == RectStart) {
         body->startElement("draw:rect");
     }
+    else if (startType == EllipseStart) {
+        body->startElement("draw:ellipse");
+    }
     // Simplifying connector to be a line
     else if (startType == LineStart) {
         body->startElement("draw:line");
@@ -1266,9 +1269,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     READ_EPILOGUE
 }
 
-// Generic helper which approximates all figures to be rectangles
-// use until better implementation is done
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
+// Generic helper to help with draw:xxx shapes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader(FrameStartElement startType)
 {
     const QXmlStreamAttributes attrs(attributes());
 //! @todo support more attrs
@@ -1310,7 +1312,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 
     body = frameBuf.originalWriter();
 
-    createFrameStart(RectStart);
+    createFrameStart(startType);
 
     (void)frameBuf.releaseWriter();
 
@@ -1325,13 +1327,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 #define CURRENT_EL oval
 //! oval handler (Oval)
 // For parents, children, look from rect
-// Note: this is atm. simplified, should in reality make an oval
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_oval()
 {
     READ_PROLOGUE
 
     m_currentVMLProperties.currentEl = "v:oval";
-    KoFilter::ConversionStatus status = genericReader();
+    KoFilter::ConversionStatus status = genericReader(EllipseStart);
     if (status != KoFilter::OK) {
         return status;
     }
@@ -1349,7 +1350,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     READ_PROLOGUE
 
     m_currentVMLProperties.currentEl = "v:roundrect";
-    KoFilter::ConversionStatus status = genericReader();
+    KoFilter::ConversionStatus status = genericReader(RectStart);
     if (status != KoFilter::OK) {
         return status;
     }
