@@ -46,43 +46,6 @@
 
 //#define SWINDER_XLS2RAW
 
-// Use anonymous namespace to cover following functions
-namespace
-{
-
-// RK value is special encoded integer or floating-point
-// see any documentation of Excel file format for detail description
-static inline void decodeRK(unsigned rkvalue, bool& isInteger,
-                            int& i, double& f)
-{
-    double factor = (rkvalue & 0x01) ? 0.01 : 1;
-    if (rkvalue & 0x02) {
-        // FIXME check that int is 32 bits ?
-        isInteger = true;
-        i = *((int*) & rkvalue) >> 2;
-        if (rkvalue & 0x01) {
-            if (i % 100 == 0) {
-                i /= 100;
-            } else {
-                isInteger = false;
-                f = i * 0.01;
-            }
-        }
-    } else {
-        // TODO ensure double takes 8 bytes
-        isInteger = false;
-        rkvalue = qFromLittleEndian<quint32>(rkvalue);
-        unsigned char* s = (unsigned char*) & rkvalue;
-        unsigned char* r = (unsigned char*) & f;
-        r[0] = r[1] = r[2] = r[3] = 0;
-        r[4] = s[0] & 0xfc;
-        r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-        f *= factor;
-    }
-}
-
-}
-
 using namespace Swinder;
 
 //=============================================
