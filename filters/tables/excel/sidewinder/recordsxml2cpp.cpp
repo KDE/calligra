@@ -635,7 +635,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
         QString length = field.attribute("length");
         if (fieldsMap.contains(length))
             length = fieldsMap[length].getterName() + "()";
-        else
+        else if (field.firstChildElement().hasAttribute("name"))
             length = "d->" + field.firstChildElement().attribute("name") + ".size()";
 
         out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
@@ -699,7 +699,7 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
         QString length = field.attribute("length");
         if (fieldsMap.contains(length))
             length = fieldsMap[length].getterName() + "()";
-        else
+        else if (field.firstChildElement().hasAttribute("name"))
             length = "d->" + field.firstChildElement().attribute("name") + ".size()";
 
         out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
