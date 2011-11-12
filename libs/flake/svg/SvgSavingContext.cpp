@@ -60,9 +60,11 @@ public:
     QIODevice &output;
     QBuffer styleBuffer;
     QBuffer shapeBuffer;
+    QBuffer animationPropertiesBuffer;
     KoXmlWriter *styleWriter;
     KoXmlWriter *shapeWriter;
-
+    KoXmlWriter *animationPropertiesWriter;
+    
     QHash<QString, int> uniqueNames;
     QHash<const KoShape*, QString> shapeIds;
     QTransform userSpaceMatrix;
@@ -81,7 +83,9 @@ SvgSavingContext::~SvgSavingContext()
     d->output.write(d->styleBuffer.data());
     d->output.write("\n");
     d->output.write(d->shapeBuffer.data());
-
+    d->output.write("\n");
+    d->output.write(d->animationPropertiesBuffer.data());
+    
     delete d;
 }
 
@@ -93,6 +97,11 @@ KoXmlWriter &SvgSavingContext::styleWriter()
 KoXmlWriter &SvgSavingContext::shapeWriter()
 {
     return *d->shapeWriter;
+}
+
+KoXmlWriter &SvgSavingContext::animationPropertiesWriter()
+{
+    return *d->animationPropertiesWriter;
 }
 
 QString SvgSavingContext::createUID(const QString &base)

@@ -32,7 +32,21 @@
 
 #include "PresentationViewPortShapeUtil.h"
 
-PresentationViewPortShape::PresentationViewPortShape() : m_ns("calligra")
+const QString PresentationViewPortShape::title("title");
+const QString PresentationViewPortShape::refid("refid");
+const QString PresentationViewPortShape::transitionProfile("transition-profile");
+const QString PresentationViewPortShape::transitionZoomPercent("transition-zoom-percent");
+const QString PresentationViewPortShape::transitionZoomPercent("transition-zoom-percent");
+const QString PresentationViewPortShape::transitionZoomPercent("transition-zoom-percent");
+const QString PresentationViewPortShape::transitionDurationMs("transition-duration-ms");
+const QString PresentationViewPortShape::timeoutEnable("timeout-enable");
+const QString PresentationViewPortShape::timeoutMs("timeout-ms");
+const QString PresentationViewPortShape::hide("hide");
+const QString PresentationViewPortShape::clip("clip");
+const QString PresentationViewPortShape::sequence("sequence");
+
+
+PresentationViewPortShape::PresentationViewPortShape() : m_ns("sozi")
 {
     setShapeId(PresentationViewPortShapeId);
     setName("ViewPort");//TODO remove this?
@@ -68,8 +82,8 @@ bool PresentationViewPortShape::setAttribute(const QString& attrName, const QStr
 void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
 {
     foreach(QString key, m_animationAttributes.keys()){
-      if(e.hasAttribute(m_ns + ":" + key))
-      	m_animationAttributes.insert(key, e.attribute(m_ns + ":" + key));
+      if(e.hasAttribute(key))
+      	m_animationAttributes.insert(key, e.attribute(key));
 	}
 }
 
@@ -95,16 +109,16 @@ int PresentationViewPortShape::transitionProfileIndex(const QString& profile)
 void PresentationViewPortShape::initializeAnimationProperties()
 {
     //Initializing the map with default values of all attributes
-    m_animationAttributes.insert("title", "No title");
-    m_animationAttributes.insert("refid", "null");
-    m_animationAttributes.insert("transition-profile", "linear");
-    m_animationAttributes.insert("hide", "true");
-    m_animationAttributes.insert("clip", "true");
-    m_animationAttributes.insert("timeout-enable", "false");
-    m_animationAttributes.insert("sequence", QString("%1").arg(0));
-    m_animationAttributes.insert("transition-zoom-percent", QString("%1").arg(1));
-    m_animationAttributes.insert("transition-duration-ms", QString("%1").arg(5000));
-    m_animationAttributes.insert("timeout-ms", QString("%1").arg(1000));
+    m_animationAttributes.insert(PresentationViewPortShape::title, "No title");
+    m_animationAttributes.insert(PresentationViewPortShape::refid, "null");
+    m_animationAttributes.insert(PresentationViewPortShape::transitionProfile, "linear");
+    m_animationAttributes.insert(PresentationViewPortShape::hide, "true");
+    m_animationAttributes.insert(PresentationViewPortShape::clip, "true");
+    m_animationAttributes.insert(PresentationViewPortShape::timeoutEnable, "false");
+    m_animationAttributes.insert(PresentationViewPortShape::sequence, QString("%1").arg(0));
+    m_animationAttributes.insert(PresentationViewPortShape::transitionZoomPercent, QString("%1").arg(1));
+    m_animationAttributes.insert(PresentationViewPortShape::transitionDurationMs, QString("%1").arg(5000));
+    m_animationAttributes.insert(PresentationViewPortShape::timeoutMs, QString("%1").arg(1000));
 }
 
 
@@ -195,9 +209,13 @@ void PresentationViewPortShape::saveOdf(KoShapeSavingContext& context) const
 
 bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
 {
+    //setRefId(context.getID(this)); Redundant?
+    if(!setAttribute("refid", context.getID(this)))
+      return false;//??
+    
     context.shapeWriter().startElement("rect");
     context.shapeWriter().addAttribute("calligra:viewport", "yes");
-    context.shapeWriter().addAttribute("id", context.getID(this));
+    context.shapeWriter().addAttribute("id", attribute("sozi:refid"));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
 
     //SvgStyleWriter::saveSvgStyle(this, context);
@@ -207,14 +225,33 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().addAttributePt("height", size.height());
 
     context.shapeWriter().endElement();
+    //Save animation attributes
     qDebug () << "PVPShape::saveSvg()" << endl;
+    return true;
+}
+
+bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext& context)
+{
+    context.animationPropertiesWriter().startElement("sozi:frame");
+    context.animationPropertiesWriter().addAttribute("sozi:title", m_animationAttributes[PresentationViewPortShape::title]);
+    context.animationPropertiesWriter().addAttribute("sozi:refid", m_animationAttributes[PresentationViewPortShape::refid]);
+    context.animationPropertiesWriter().addAttribute("sozi:transition-profile", m_animationAttributes[PresentationViewPortShape::transitionProfile]);
+    context.animationPropertiesWriter().addAttribute("sozi:hide", m_animationAttributes[PresentationViewPortShape::hide]);
+    context.animationPropertiesWriter().addAttribute("sozi:clip", m_animationAttributes[PresentationViewPortShape::clip]);
+    context.animationPropertiesWriter().addAttribute("sozi:timeout-enable", m_animationAttributes[PresentationViewPortShape::timeoutEnable]);
+    context.animationPropertiesWriter().addAttribute("sozi:timeout-ms", m_animationAttributes[PresentationViewPortShape::timeoutMs]);
+    context.animationPropertiesWriter().addAttribute("sozi:transition-zoom-percent", m_animationAttributes[PresentationViewPortShape::transitionZoomPercent]);
+    context.animationPropertiesWriter().addAttribute("sozi:transition-timeout-ms", m_animationAttributes[PresentationViewPortShape::transitionDurationMs]);
+    
+    context.animationPropertiesWriter().endElement();
+    
     return true;
 }
 
 bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
   
-  if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "yes"))
+  if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "yes"))//FIXME:Is hasattribute check required at all?
   {  
   //qDebug() << "PVPShape found with rect id = " << element.attribute("id") << endl; 
     const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
@@ -228,6 +265,11 @@ bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingC
         setVisible(false);
 
     return true;
+  }
+  else if(element.localName() == "sozi:frame"){
+    PresentationViewPortShape *shape = dynamic_cast<PresentationViewPortShape*>(context.shapeById(element.attribute("id")));
+    shape->parseAnimationProperties(element);
+    return true;   
   }
   else
     return false;

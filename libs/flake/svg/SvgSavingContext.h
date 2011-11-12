@@ -46,6 +46,9 @@ public:
     /// Provides access to the shape writer
     KoXmlWriter &shapeWriter();
 
+    /// Provides access to the aniamtion properties writer
+    KoXmlWriter &animationPropertiesWriter();
+    
     /// Create a unqiue id from the specified base text
     QString createUID(const QString &base);
 

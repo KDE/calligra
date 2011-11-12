@@ -56,6 +56,6 @@ KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager 
 bool PresentationViewPortShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const
 {
     Q_UNUSED(e);
-    return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::svg);
+    return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::svg) || (e.localName() == "sozi:frame" && e.namespaceURI() == KoXmlNS::svg);
 }
 

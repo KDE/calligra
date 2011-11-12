@@ -1105,7 +1105,8 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                    b.tagName() == "polygon" ||
                    b.tagName() == "path" ||
                    b.tagName() == "image" ||
-                   b.tagName() == "text") {
+                   b.tagName() == "text" ||
+		   b.tagName() == "sozi:frame") {
             KoShape *shape = createObject(b);
             if (shape)
                 shapes.append(shape);

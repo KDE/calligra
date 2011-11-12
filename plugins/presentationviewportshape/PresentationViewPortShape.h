@@ -67,15 +67,28 @@ public:
      * And saves it into this frame.
      */
     void parseAnimationProperties(const KoXmlElement& e); 
-        
-    QString toString();
-    void setRefId(const QString& refid);
+    bool saveAnimationAttributes(SvgSavingContext &context);
     
-    int sequence();
+    QString toString();//TODO:Needed?
+    void setRefId(const QString& refid);//TODO:Redundant?
+    
+    //int sequence();//TODO:Needed?
     QString attribute(const QString& attrName);
     int transitionProfileIndex(const QString& profile);
     
     bool setAttribute(const QString& attrName, const QString& attrValue);
+    
+    static const QString title;
+    static const QString refid;
+    static const QString transitionProfile;
+    static const QString transitionZoomPercent;
+    static const QString transitionDurationMs;
+    static const QString sequence;
+    static const QString timeoutEnable;
+    static const QString timeoutMs;
+    static const QString hide;
+    static const QString clip;
+    
     
 private:     
      /**
