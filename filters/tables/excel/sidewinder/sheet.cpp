@@ -92,6 +92,8 @@ public:
     QMultiHash<int, OfficeArtObject*> sheetDrawObjects;
 
     QList<ConditionalFormat*> conditionalFormats;
+
+    Calligra::Tables::Filter autoFilters;
 };
 
 }
@@ -618,6 +620,16 @@ void Sheet::addConditionalFormat(ConditionalFormat *format)
 QList<ConditionalFormat*> Sheet::conditionalFormats() const
 {
     return d->conditionalFormats;
+}
+
+void Sheet::setAutoFilters(const Calligra::Tables::Filter& filter)
+{
+    d->autoFilters = filter;
+}
+
+Calligra::Tables::Filter Sheet::autoFilters() const
+{
+    return d->autoFilters;
 }
 
 #ifdef SWINDER_XLS2RAW
