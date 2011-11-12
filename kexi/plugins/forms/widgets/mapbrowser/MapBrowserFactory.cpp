@@ -89,6 +89,15 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
     Q_UNUSED(widget);
     return true;
 }
+
+bool MapBrowserFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget* w, const QByteArray& property, bool isTopLevel)
+{
+    if (property == "mapThemeId") {
+        return false;
+    }
+    return KexiDBFactoryBase::isPropertyVisibleInternal(classname, w, property, isTopLevel);
+}
+
      
 K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(MapBrowserFactory, mapbrowser)
 
