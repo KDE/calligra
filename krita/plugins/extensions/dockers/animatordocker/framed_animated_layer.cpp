@@ -68,17 +68,21 @@ FrameLayer* FramedAnimatedLayer::frameAt(int num) const
     return 0;
 }
 
-void FramedAnimatedLayer::setFrameAt(int fnum, FrameLayer* frame)
+void FramedAnimatedLayer::setFrameAt(int fnum, FrameLayer *frame)
 {
-    if (fnum >= m_frames.size())
-    {
+    if (fnum >= m_frames.size()) {
         while (m_frames.size() < fnum)
             m_frames.append(0);
         m_frames.append(frame);
-    } else
-    {
+    } else {
         Q_ASSERT(m_frames[fnum] == 0);
         m_frames[fnum] = frame;
+    }
+    
+    if (frame) {
+        bool isKey;
+        getFrameFromName(frame->name(), isKey);
+        frame->setName(getNameForFrame(fnum, isKey));
     }
 }
 
