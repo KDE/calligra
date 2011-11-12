@@ -46,7 +46,7 @@ public:
         styleWriter = new KoXmlWriter(&styleBuffer, 1);
         styleWriter->startElement("defs");
         shapeWriter = new KoXmlWriter(&shapeBuffer, 1);
-	animationPropertiesWriter = new KoXmlWriter(&animationPropertiesBuffer, 1);
+	animationPropertiesWriter = new KoXmlWriter(&animationPropertiesBuffer, 1);//Should be used in a derived class of SvgSavingCOntext for Stage specifically
 
         const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
         userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);

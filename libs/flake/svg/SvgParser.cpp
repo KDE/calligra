@@ -1105,15 +1105,19 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                    b.tagName() == "polygon" ||
                    b.tagName() == "path" ||
                    b.tagName() == "image" ||
-                   b.tagName() == "text" ||
-		   b.tagName() == "sozi:frame") {
+                   b.tagName() == "text") {
             KoShape *shape = createObject(b);
             if (shape)
                 shapes.append(shape);
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         } else {
+	    KoShape *shape = createObject(b);
+            if (shape)
+                shapes.append(shape);
+	    else {
             continue;
+	    }
         }
 
         // if we are parsing a switch, stop after the first supported element

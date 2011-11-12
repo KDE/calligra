@@ -213,7 +213,7 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
     
     context.shapeWriter().startElement("rect");
     context.shapeWriter().addAttribute("calligra:viewport", "yes");
-    context.shapeWriter().addAttribute("id", attribute("sozi:refid"));
+    context.shapeWriter().addAttribute("id", attribute("refid"));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
 
     //SvgStyleWriter::saveSvgStyle(this, context);
@@ -268,7 +268,7 @@ bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingC
   else if(element.localName() == "sozi:frame"){
     PresentationViewPortShape *shape = dynamic_cast<PresentationViewPortShape*>(context.shapeById(element.attribute("id")));
     shape->parseAnimationProperties(element);
-    return true;   
+    return false;   
   }
   else
     return false;

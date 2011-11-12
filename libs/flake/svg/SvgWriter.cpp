@@ -105,6 +105,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
     svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
 
     svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
+    svgStream << " xmlns:sozi=\"http://sozi.baierouge.fr\""; //For sozi
     svgStream << " width=\"" << m_pageSize.width() << "pt\"";
     svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
 
@@ -125,6 +126,10 @@ bool SvgWriter::save(QIODevice &outputDevice)
             }
         }
     }
+//Javascript for animation
+//FIXME This script should be written by animationPropertiesWriter 
+//of SvgSavingContext only. We don't want this script in every doc created in Karbon
+//Should be read from the code of Sozi
 
     // end tag:
     svgStream << endl << "</svg>" << endl;
