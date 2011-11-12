@@ -40,10 +40,12 @@ class MapBrowserWidget : public Marble::MarbleWidget,
     Q_PROPERTY(Projection projection READ projection WRITE setProjection)// NOTIFY projectionChanged)
     Q_ENUMS(Projection)
 public:
-    enum Projection{
-        spherical = Marble::Spherical,
-        equirectangular = Marble::Equirectangular,
-        mercator = Marble::Mercator};
+    enum Projection {
+        Spherical = Marble::Spherical,
+        Equirectangular = Marble::Equirectangular,
+        Mercator = Marble::Mercator
+    };
+    
     MapBrowserWidget(QWidget *parent=0);
     virtual ~MapBrowserWidget();
 
@@ -64,8 +66,8 @@ public:
     virtual void setInvalidState(const QString&);
     
     virtual bool isReadOnly() const;
-    Projection projection() const { return static_cast<Projection>(MarbleWidget::projection());}
-    void setProjection(Projection projection){MarbleWidget::setProjection(static_cast<int>(projection));}
+    Projection projection() const;
+    void setProjection(Projection projection);
 public slots:
     //! Sets the datasource to \a ds
     inline void setDataSource(const QString &ds) {

@@ -136,8 +136,24 @@ void MapBrowserWidget::slotMapChanged()
     signalValueChanged();
 }
 
+MapBrowserWidget::Projection MapBrowserWidget::projection() const
+{
+    switch (MarbleWidget::projection()) {
+    case Marble::Spherical:
+        return Spherical;
+    case Marble::Equirectangular:
+        return Equirectangular;
+    case Marble::Mercator:
+        return Mercator;
+    default:
+        return Spherical;
+    }
+}
 
 
-
+void MapBrowserWidget::setProjection(MapBrowserWidget::Projection projection)
+{
+    MarbleWidget::setProjection(projection);
+}
 
 #include "MapBrowserWidget.moc"
