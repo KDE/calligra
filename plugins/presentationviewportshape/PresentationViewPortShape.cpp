@@ -36,8 +36,6 @@ const QString PresentationViewPortShape::title("title");
 const QString PresentationViewPortShape::refid("refid");
 const QString PresentationViewPortShape::transitionProfile("transition-profile");
 const QString PresentationViewPortShape::transitionZoomPercent("transition-zoom-percent");
-const QString PresentationViewPortShape::transitionZoomPercent("transition-zoom-percent");
-const QString PresentationViewPortShape::transitionZoomPercent("transition-zoom-percent");
 const QString PresentationViewPortShape::transitionDurationMs("transition-duration-ms");
 const QString PresentationViewPortShape::timeoutEnable("timeout-enable");
 const QString PresentationViewPortShape::timeoutMs("timeout-ms");
@@ -226,6 +224,7 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
 
     context.shapeWriter().endElement();
     //Save animation attributes
+    saveAnimationAttributes(context);
     qDebug () << "PVPShape::saveSvg()" << endl;
     return true;
 }

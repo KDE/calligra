@@ -40,12 +40,13 @@ class SvgSavingContext::Private
 {
 public:
     Private(QIODevice &outputDevice)
-        : output(outputDevice), styleWriter(0), shapeWriter(0)
+        : output(outputDevice), styleWriter(0), shapeWriter(0), animationPropertiesWriter(0)
         , saveInlineImages(true)
     {
         styleWriter = new KoXmlWriter(&styleBuffer, 1);
         styleWriter->startElement("defs");
         shapeWriter = new KoXmlWriter(&shapeBuffer, 1);
+	animationPropertiesWriter = new KoXmlWriter(&animationPropertiesBuffer, 1);
 
         const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
         userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
