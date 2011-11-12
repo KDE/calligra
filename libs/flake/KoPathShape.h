@@ -281,7 +281,7 @@ public:
      *
      * @return true when the subpath is closed, false otherwise
      */
-    bool isClosedSubpath(int subpathIndex);
+    bool isClosedSubpath(int subpathIndex) const;
 
     /**
      * @brief Inserts a new point into the given subpath at the specified position
