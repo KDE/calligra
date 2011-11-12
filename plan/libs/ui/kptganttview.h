@@ -160,6 +160,9 @@ class GanttViewBase : public KDGantt::View
 public:
     GanttViewBase( QWidget *parent );
 
+    bool loadContext( const KoXmlElement &settings );
+    void saveContext( QDomElement &settings ) const;
+
 protected:
     friend class GanttPrintingDialog;
     GanttPrintingOptions m_printOptions;

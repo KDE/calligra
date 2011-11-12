@@ -22,6 +22,7 @@
 import QtQuick 1.0
 import CalligraActive 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.metadatamodels 0.1 as MetadataModels
 
 ListView {
     id: recentFilesListView
@@ -32,16 +33,23 @@ ListView {
     width: parent.width; height: parent.height;
     spacing: 10
 
-    PlasmaCore.DataSource {
-        id: metadataSource
-        engine: "org.kde.active.metadata"
-        connectedSources: ["ResourcesOfType:" + typeFilter]
-        interval: 0
-    }
-    PlasmaCore.DataModel {
+    PlasmaCore.SortFilterModel {
         id: metadataModel
-        keyRoleFilter: ".*"
-        dataSource: metadataSource
+        sourceModel: MetadataModels.MetadataModel {
+            id: metadataInternalModel
+            resourceType: "nfo:" + typeFilter
+            sortOrder: Qt.AscendingOrder
+
+            onResourceTypeChanged: {
+                if (resourceType == "nfo:PaginatedTextDocument") {
+                    metadataModel.filterRole = "mimeType";
+                    metadataModel.filterRegExp = "application/vnd.oasis.opendocument.text";
+                } else {
+                    metadataModel.filterRole = "";
+                    metadataModel.filterRegExp = "";
+                }
+            }
+        }
     }
 
     model: metadataModel
@@ -52,7 +60,7 @@ ListView {
         width: buttonWidth; height: buttonHeight;
         imageSource: {
             switch(typeFilter) {
-                case "OpenDocumentTextDocument":
+                case "PaginatedTextDocument":
                     "qrc:///images/words.png"
                     break;
                 case "Spreadsheet":

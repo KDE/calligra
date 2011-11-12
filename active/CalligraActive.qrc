@@ -12,5 +12,6 @@
         <file>images/fabrictexture.png</file>
         <file>images/go-previous.png</file>
         <file>images/calligra-logo.png</file>
+        <file>images/document-edit.png</file>
     </qresource>
 </RCC>
