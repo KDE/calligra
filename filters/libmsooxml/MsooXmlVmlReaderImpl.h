@@ -293,15 +293,28 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
         }
     }
+#ifdef DOCXXMLDOCREADER_H
     if (!ver_pos_rel.isEmpty()) {
         if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame-content");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
+            }
         }
         else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            }
         }
         else if (ver_pos_rel == "bottom-margin-area") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            }
             // This effectively emulates the bottom-margin-area
             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
@@ -310,7 +323,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-#ifdef DOCXXMLDOCREADER_H
     if (!m_currentVMLProperties.wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
         if (asChar) { // Default
@@ -2734,9 +2746,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     // Documentation says default to be 'page', however because these are always in a paragraph
     // in a text run, a better default for odf purposes seems to be 'paragraph'
 
+#ifdef DOCXMLDOCREADER_H
     if (anchory == "page") {
-        m_currentDrawStyle->addProperty("style:vertical-rel", "page");
-        m_currentVMLProperties.anchorType = "page";
+        if (m_headerActive || m_footerActive) {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+            m_currentVMLProperties.anchorType = "frame";
+        } else {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentVMLProperties.anchorType = "page";
+        }
     }
     else if (anchory == "text") {
         m_currentVMLProperties.anchorType = "as-char";
@@ -2763,6 +2781,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     else {
         m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
     }
+#endif
 
     readNext();
     READ_EPILOGUE
