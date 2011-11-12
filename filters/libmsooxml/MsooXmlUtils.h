@@ -35,6 +35,7 @@
 #include <KoXmlReader.h>
 #include <KDebug>
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
 
 class QLocale;
 class QDomElement;
@@ -66,6 +67,10 @@ enum autoFitStatus {
     autoFitUnUsed, autoFitOn, autoFitOff
 };
 
+enum MSOOXMLFilter {
+    DocxFilter, PptxFilter, XlsxFilter
+};
+
 class MSOOXML_EXPORT ParagraphBulletProperties
 {
 public:
@@ -74,7 +79,7 @@ public:
 
     void clear();
 
-    QString convertToListProperties(const bool fileByPowerPoint = false) const;
+    QString convertToListProperties(KoGenStyles& mainStyles, MSOOXMLFilter filter = XlsxFilter);
 
     bool isEmpty() const;
 
@@ -88,13 +93,11 @@ public:
 
     void setNumFormat(const QString& numFormat);
 
-    void setMargin(qreal margin);
+    void setMargin(const qreal margin);
 
-    void setIndent(qreal indent);
+    void setIndent(const qreal indent);
 
     void setPicturePath(const QString& picturePath);
-
-    void setBulletSize(const QSize& size);
 
     void setBulletFont(const QString& font);
 
@@ -102,11 +105,19 @@ public:
 
     void setStartValue(const QString& value);
 
-    void setBulletRelativeSize(int size);
+    void setBulletRelativeSize(const int size);
+
+    void setBulletSizePt(const qreal size);
 
     void setFollowingChar(const QString& value);
 
+    void setTextStyle(const KoGenStyle& textStyle);
+
+    QString startValue() const;
+
     QString bulletRelativeSize() const;
+
+    QString bulletSizePt() const;
 
     QString bulletColor() const;
 
@@ -140,9 +151,11 @@ private:
     QString m_margin;
     QString m_picturePath;
     QString m_bulletColor;
-    QString m_bulletRelativeSize;
     QString m_followingChar;
-    QSize m_bulletSize;
+    QString m_bulletRelativeSize;
+    QString m_bulletSize;
+
+    KoGenStyle m_textStyle;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.

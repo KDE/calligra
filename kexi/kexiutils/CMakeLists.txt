@@ -26,7 +26,7 @@ set(kexiutils_LIB_SRCS
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
   
-  completer/qcompleter.cpp
+  completer/KexiCompleter.cpp
 )
 
 IF (KEXI_MOBILE)

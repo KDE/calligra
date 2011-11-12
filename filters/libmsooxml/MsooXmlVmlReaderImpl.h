@@ -283,6 +283,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             hor_pos_rel = "page-end-margin";
             m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
+        else if (hor_pos_rel == "text") {
+            hor_pos_rel = "paragraph";
+        }
         if (!asChar) {
             m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
         }

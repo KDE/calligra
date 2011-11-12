@@ -98,7 +98,7 @@ void ConfigTaskPanelImpl::initDescription()
 
 //    toolbar->addAction( collection->action( "format_painter" ) );
 
-    kcfg_Description->append( "" );
+//     kcfg_Description->append( "" );
     kcfg_Description->setReadOnly( false );
     kcfg_Description->setOverwriteMode( false );
     kcfg_Description->setLineWrapMode( KTextEdit::WidgetWidth );

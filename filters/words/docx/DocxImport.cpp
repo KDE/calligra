@@ -240,8 +240,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     reportProgress(30);
 
-    // 5. parse footnotes
     {
+	// 5. parse footnotes
         const QString footnotePathAndFile(relationships->targetForType(documentPath, documentFile,
             QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/footnotes"));
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
@@ -257,10 +257,9 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 footnotePathAndFile, &footnoteReader, writers, errorMessage, &context) )
             mainContext.m_footnotes = context.m_footnotes;
         }
+        reportProgress(35);
 
-    reportProgress(35);
-
-    // 6. parse comments
+        // 6. parse comments
         const QString commentPathAndFile(relationships->targetForType(documentPath, documentFile,
            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/comments"));
         DocxXmlCommentReader commentReader(writers);
@@ -276,11 +275,11 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_comments = context.m_comments;
         }
 
-    reportProgress(40);
+        reportProgress(40);
 
-    // 7. parse endnotes
+        // 7. parse endnotes
         const QString endnotePathAndFile(relationships->targetForType(documentPath, documentFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/endnotes"));
+            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/endnotes"));
         DocxXmlEndnoteReader endnoteReader(writers);
         if (!endnotePathAndFile.isEmpty()) {
             QString endnotePath, endnoteFile;
@@ -293,17 +292,15 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 endnotePathAndFile, &endnoteReader, writers, errorMessage, &context) )
             mainContext.m_endnotes = context.m_endnotes;
         }
+        reportProgress(45);
 
-    reportProgress(45);
-
-    // 8. parse document
+        // 8. parse document
+        // Some of the templates MIGHT be defined in numberingreader.
         DocxXmlDocumentReader documentReader(writers);
-        // It is possible that some of the templates are defined in numberingreader
-        documentReader.m_definedShapeTypes = numberingReader.m_definedShapeTypes;;
+        documentReader.m_definedShapeTypes = numberingReader.m_definedShapeTypes;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
-
     reportProgress(100);
 
     return KoFilter::OK;

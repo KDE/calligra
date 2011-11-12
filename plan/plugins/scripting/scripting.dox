@@ -1,21 +1,21 @@
-/** @mainpage KPlato Scripting Plugin
+/** @mainpage Plan Scripting Plugin
 *
-* The KPlato scripting plugin offers flexible access to the
+* The Plan scripting plugin offers flexible access to the
 * Kross scripting framework. Languages like Python, Ruby or
-* KDE JavaScript could be used to script KPlato, extend the
+* KDE JavaScript could be used to script Plan, extend the
 * functionality with script-packages, automate tasks or
 * control the runtime-environment.
 *
-* The \a Scripting::Module class enables access to the KPlato
+* The \a Scripting::Module class enables access to the Plan
 * functionality from within the scripting backends.
 *
-* \see http://www.calligra-suite.org/words
+* \see http://www.calligra-suite.org/plan
 * \see http://kross.dipe.org
 *
 * @section Legal
 *
 * @li Copyright (c) 2006-2007 Sebastian Sauer <mail@dipe.org>
-* @li Copyright (c) 2008 Dag Andersen <kplato@kde.org>
+* @li Copyright (c) 2008, 2011 Dag Andersen <danders@get2net.dk>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public

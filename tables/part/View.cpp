@@ -1160,7 +1160,10 @@ void View::createTemplate()
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 {
-    if (sheet == d->activeSheet)
+    // It can happen that our tabBar->activeTab() is not in sync with our activeSheet() if
+    // setActiveSheet() was previously called before the delayed View::initialPosition()
+    // was called and had a change to proper TabBar::setTabs().
+    if (sheet == d->activeSheet && (!sheet || d->tabBar->activeTab() == sheet->sheetName()))
         return;
 
     if (d->activeSheet != 0 && !d->selection->referenceSelectionMode()) {
