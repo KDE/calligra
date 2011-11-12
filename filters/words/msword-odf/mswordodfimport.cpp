@@ -292,14 +292,23 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
 
-    // The AddParaTableSpacingAtStart config-item is used in KoTextLayoutArea::handleBordersAndSpacing
-    // during layouting. The defined 'Above paragraph' and 'Below paragraph' paragraph spacing (which is
-    // written in the ODF as fo:margin-top for the KoParagraphStyle) are not applied to the first and
-    // the last paragraph if this value is true.
+    // This config-item is used in KoTextLayoutArea::handleBordersAndSpacing
+    // during layouting.  The defined 'Above paragraph' and 'Below paragraph'
+    // paragraph spacing (which is written in the ODF as fo:margin-top for the
+    // KoParagraphStyle) are not applied to the first and the last paragraph if
+    // this value is true.
     settingsWriter->startElement("config:config-item");
     settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan("true");
+    settingsWriter->endElement();
+
+    // OOo requires this config item to display files produced by this filter
+    // correctly.  If true, then the fo:text-indent attribute will be ignored.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "IgnoreFirstLineIndentInNumbering");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
 
     settingsWriter->endElement(); // config-item-set

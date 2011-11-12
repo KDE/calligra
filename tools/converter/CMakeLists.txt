@@ -1,10 +1,10 @@
-include_directories( ${KOMAIN_INCLUDES})
+include_directories(${KOMAIN_INCLUDES})
 
-set(koconverter_SRCS koconverter.cpp )
+set(calligraconverter_SRCS calligraconverter.cpp)
 
-kde4_add_executable(koconverter ${koconverter_SRCS})
+kde4_add_executable(calligraconverter ${calligraconverter_SRCS})
 
-target_link_libraries(koconverter komain)
+target_link_libraries(calligraconverter komain)
 
-install(TARGETS koconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligraconverter ${INSTALL_TARGETS_DEFAULT_ARGS})
 

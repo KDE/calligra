@@ -6,7 +6,7 @@
 # Author: unknown
 # Maintainer: Hanna Skott
 #
-# This file contains a script that converts documents to ODF format using koconverter
+# This file contains a script that converts documents to ODF format using calligraconverter
 # it also validates the content of the resulting ODF file against RelaxNG XML using jing.
 #
 # EXAMPLE of use: $ ./convertAndValidateODF.py validate_or_not file_directory filename
@@ -24,7 +24,7 @@ def convertAndValidateFilesInDir(dir):
 		for name in files:
 			singleFileConvertAndValidate(name, root)
 
-#This function converts a file using koconverter and then tries to validate the resulting ODF file against RelaxNG using jing
+#This function converts a file using calligraconverter and then tries to validate the resulting ODF file against RelaxNG using jing
 def singleFileConvertAndValidate(filename, validate):
 	
 	filepath = filename
@@ -43,7 +43,7 @@ def singleFileConvertAndValidate(filename, validate):
                     # Do the conversion
                     args = [applicationname, "--roundtrip-filename", convertedfile, filepath]
                 else:
-                    args = ["koconverter", "--batch", filepath, convertedfile]
+                    args = ["calligraconverter", "--batch", filepath, convertedfile]
                     
                 print args
                 fnull = open(os.devnull, 'w')

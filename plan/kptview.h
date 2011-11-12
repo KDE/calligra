@@ -32,6 +32,8 @@
 #include <QTimer>
 #include <QMap>
 
+#include <KConfigDialog>
+
 class QStackedWidget;
 class QSplitter;
 class KUndo2Command;
@@ -39,6 +41,8 @@ class KUndo2Command;
 class KAction;
 class KToggleAction;
 class QLabel;
+class KConfigSkeleton;
+class KConfigSkeletonItem;
 
 class KoView;
 
@@ -78,6 +82,53 @@ class HtmlView;
 class ReportView;
 
 class ReportDesignDialog;
+
+class ConfigDialog : public KConfigDialog
+{
+    Q_OBJECT
+public:
+    ConfigDialog( QWidget *parent, const QString &name, KConfigSkeleton *config );
+
+protected slots:
+    /// Return true if any widget has changed
+    virtual bool hasChanged();
+    /**
+    * Update the settings from the dialog.
+    * Virtual function for custom additions.
+    *
+    * Example use: User clicks Ok or Apply button in a configure dialog.
+    */
+    virtual void updateSettings();
+
+    /**
+    * Update the dialog based on the settings.
+    * Virtual function for custom additions.
+    *
+    * Example use: Initialisation of dialog.
+    * Example use: User clicks Reset button in a configure dialog.
+    */
+    virtual void updateWidgets();
+
+    /**
+    * Update the dialog based on the default settings.
+    * Virtual function for custom additions.
+    *
+    * Example use: User clicks Defaults button in a configure dialog.
+    */
+    virtual void updateWidgetsDefault();
+
+  /**
+   * Returns whether the current state of the dialog is
+   * the same as the default configuration.
+   */
+  virtual bool isDefault();
+
+private:
+    KConfigSkeleton *m_config;
+    QMap<QString, QByteArray> m_signalsmap;
+    QMap<QWidget*, KConfigSkeletonItem*> m_itemmap;
+    QMap<QString, QByteArray> m_propertymap;
+};
 
 //-------------
 class KPLATO_EXPORT View : public KoView

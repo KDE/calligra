@@ -1,6 +1,31 @@
 
 Calligra Plan current:
 
+* Fix various problems with view selector dialogs
+
+* Disable dbus adapter
+
+* Fix scheduling of resources that works during daylight saving time changes
+
+* Set datetime grid hour format in accordance with kde settings
+  (Ref bug 284361)
+
+* Fix bug 284349 Gantt chart: remember zoom and scale settings
+
+* Task editor: Do allow editing of irrelevant data for summary tasks and milestones
+
+* Reports: Use localized number formatting
+
+* Schedule log:
+  Allow opening task- and resource dialog
+  Color log entries in accordance with severity
+
+* Report chart item: Add posibility to limit amount of data to display
+
+* Add drag&drop resources from akonadi address book
+
+* View selector: Add 'Execution' category
+
 * Improve scripting
   Add create capability to make it possible to write importer.
   Use undo commands so it is possible to keep ui consistent.

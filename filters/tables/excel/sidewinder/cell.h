@@ -81,6 +81,7 @@ public:
     // Retuns the column label. As example the column 4 has the label D.
     QString columnLabel() const;
     static QString columnLabel(unsigned column);
+    static QString columnLabel(int column);
 
     // Retuns the value this cell has.
     Value value() const;

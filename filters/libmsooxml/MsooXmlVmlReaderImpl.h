@@ -283,6 +283,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             hor_pos_rel = "page-end-margin";
             m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
+        else if (hor_pos_rel == "text") {
+            hor_pos_rel = "paragraph";
+        }
         if (!asChar) {
             m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
         }
@@ -430,12 +433,20 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentVMLProperties.opacity));
     }
 
+    // FIXME: The draw:fit-to-size attribute specifies whether to stretch the
+    // text content of a drawing object to fill an entire object.  The
+    // style:shrink-to-fit attribute specifies whether content is reduced in
+    // size to fit within a cell or drawing object.  Shrinking means that the
+    // font size of the content is decreased to fit the content into a cell or
+    // drawing object.  That's needed to be compatible with MS PowerPoint.  Any
+    // margin, padding or indent MUST be retained.
     if (m_currentVMLProperties.fitTextToShape) {
         m_currentDrawStyle->addProperty("draw:fit-to-size", "true");
     }
 
     if (m_currentVMLProperties.fitShapeToText) {
         m_currentDrawStyle->addProperty("draw:auto-grow-height", "true");
+        m_currentDrawStyle->addProperty("draw:auto-grow-width", "true");
     }
 
     m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.leftMargin);

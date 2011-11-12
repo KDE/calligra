@@ -35,5 +35,5 @@ Name[zh_TW]=資料表元件
 X-KDE-ServiceTypes=Calligra/Deferred
 Type=Service
 X-KDE-Library=spreadsheetshape-deferred
-X-Flake-MinVersion=1
-X-Flake-PluginVersion=2
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4

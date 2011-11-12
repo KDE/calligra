@@ -233,12 +233,7 @@ CellView::CellView(SheetView* sheetView, int col, int row)
     } else if (!cell.isEmpty()) {
         // Format the value appropriately and set the display text.
         // The format of the resulting value is used below to determine the alignment.
-        value = sheet->map()->formatter()->formatText(cell.value(), d->style.formatType(),
-                d->style.precision(), d->style.floatFormat(),
-                d->style.prefix(), d->style.postfix(),
-                d->style.currency().symbol(), d->style.customFormat(),
-                d->style.thousandsSep());
-        d->displayText = value.asString();
+        d->displayText = cell.displayText(d->style, &value);
 
         QSharedPointer<QTextDocument> doc = cell.richText();
         if (!doc.isNull())

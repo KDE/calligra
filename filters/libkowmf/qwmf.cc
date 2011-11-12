@@ -23,7 +23,7 @@
 #include <assert.h>
 
 #include <QFileInfo>
-#include <QPixmap>
+#include <QImage>
 #include <QPainter>
 #include <QPainterPath>
 #include <QDataStream>
@@ -85,7 +85,7 @@ class WinObjPatternBrushHandle: public WinObjHandle
 public:
     virtual void apply(QPainter& p);
     QBrush brush;
-    QPixmap image;
+    QImage image;
     virtual ~WinObjPatternBrushHandle() {}
 };
 
@@ -884,8 +884,8 @@ void QWinMetaFile::dibCreatePatternBrush(long num, short* parm)
     QImage bmpSrc;
 
     if (dibToBmp(bmpSrc, (char*)&parm[ 2 ], (num - 2) * 2)) {
-        handle->image = QPixmap::fromImage(bmpSrc);
-        handle->brush.setTexture(handle->image);
+        handle->image = bmpSrc;
+        handle->brush.setTextureImage(handle->image);
     }
 }
 

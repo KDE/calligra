@@ -24,7 +24,10 @@
 
 #include <QHash>
 
+#include "Region.h"
+
 class KoShapeLoadingContext;
+class KoShape;
 
 namespace Calligra
 {
@@ -45,6 +48,14 @@ public:
     KoOdfLoadingContext& odfContext;
     KoShapeLoadingContext* shapeContext;
     QHash<QString, KoXmlElement> validities;
+};
+
+struct ShapeLoadingData {
+    KoShape* shape;
+    QPoint startCell;
+    QPointF offset;
+    Region endCell;
+    QPointF endPoint;
 };
 
 } // namespace Tables

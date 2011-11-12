@@ -31,14 +31,8 @@ ColorsConfigPanel::ColorsConfigPanel(QWidget *p )
 
     setupUi(this);
 
-    // why don't kcfg do this?
     kcfg_ColorGradientType->addItem( i18n( "Linear" ) );
     kcfg_ColorGradientType->addItem( i18n( "Flat" ) );
-    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Flat ) {
-        kcfg_ColorGradientType->setCurrentIndex( 1 );
-    } else {
-        kcfg_ColorGradientType->setCurrentIndex( 0 );
-    }
 }
 
 }  //KPlato namespace

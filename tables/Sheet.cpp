@@ -1442,7 +1442,8 @@ void Sheet::loadRowNodes(const KoXmlElement& parent,
                             QHash<QString, QRegion>& rowStyleRegions,
                             QHash<QString, QRegion>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
-                            const Styles& autoStyles
+                            const Styles& autoStyles,
+                            QList<ShapeLoadingData>& shapeData
                             )
 {
     KoXmlNode node = parent.firstChild();
@@ -1452,11 +1453,11 @@ void Sheet::loadRowNodes(const KoXmlElement& parent,
             if (elem.localName() == "table-row") {
                 int columnMaximal = loadRowFormat(elem, rowIndex, tableContext,
                                                         rowStyleRegions, cellStyleRegions,
-                                                        columnStyles, autoStyles);
+                                                        columnStyles, autoStyles, shapeData);
                 // allow the row to define more columns then defined via table-column
                 maxColumn = qMax(maxColumn, columnMaximal);
             } else if (elem.localName() == "table-row-group") {
-                loadRowNodes(elem, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                loadRowNodes(elem, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
             }
         }
         node = node.nextSibling();
@@ -1621,6 +1622,9 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     QHash<QString, QRegion> columnStyleRegions;
     IntervalMap<QString> columnStyles;
 
+    // List of shapes that need to have their size recalculated after loading is complete
+    QList<ShapeLoadingData> shapeData;
+
     int rowIndex = 1;
     int indexCol = 1;
     int maxColumn = 1;
@@ -1653,13 +1657,13 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                 } else if (rowElement.localName() == "table-header-rows") {
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
-                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
                 } else if (rowElement.localName() == "table-row-group") {
-                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
                 } else if (rowElement.localName() == "table-row") {
                     //kDebug(36003) << " table-row found :index row before" << rowIndex;
                     int columnMaximal = loadRowFormat(rowElement, rowIndex, tableContext,
-                                  rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                                  rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
                     // allow the row to define more columns then defined via table-column
                     maxColumn = qMax(maxColumn, columnMaximal);
                     //kDebug(36003) << " table-row found :index row after" << rowIndex;
@@ -1685,6 +1689,18 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
 
         int count = map()->increaseLoadedRowsCounter();
         if (updater && count >= 0) updater->setProgress(count);
+    }
+
+    // now recalculate the size for embedded shapes that had sizes specified relative to a bottom-right corner cell
+    foreach (const ShapeLoadingData& sd, shapeData) {
+        // subtract offset because the accumulated width and height we calculate below starts
+        // at the top-left corner of this cell, but the shape can have an offset to that corner
+        QSizeF size = QSizeF( sd.endPoint.x() - sd.offset.x(), sd.endPoint.y() - sd.offset.y());
+        for (int col = sd.startCell.x(); col < sd.endCell.firstRange().left(); ++col)
+            size += QSizeF(columnFormat(col)->width(), 0.0);
+        if (sd.endCell.firstRange().top() > sd.startCell.y())
+            size += QSizeF(0.0, rowFormats()->totalRowHeight(sd.startCell.y(), sd.endCell.firstRange().top() - 1));
+        sd.shape->setSize(size);
     }
 
     QList<QPair<QRegion, Style> > styleRegions;
@@ -1978,7 +1994,8 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
                           QHash<QString, QRegion>& rowStyleRegions,
                           QHash<QString, QRegion>& cellStyleRegions,
                           const IntervalMap<QString>& columnStyles,
-                          const Styles& autoStyles)
+                          const Styles& autoStyles,
+                          QList<ShapeLoadingData>& shapeData)
 {
     static const QString sStyleName             = QString::fromLatin1("style-name");
     static const QString sNumberRowsRepeated    = QString::fromLatin1("number-rows-repeated");
@@ -2100,7 +2117,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
             cellStyleName = columnStyles.get(columnIndex);
 
         Cell cell(this, columnIndex, rowIndex);
-        cell.loadOdf(cellElement, tableContext, autoStyles, cellStyleName);
+        cell.loadOdf(cellElement, tableContext, autoStyles, cellStyleName, shapeData);
 
         if (!cell.comment().isEmpty())
             cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, this), cell.comment());

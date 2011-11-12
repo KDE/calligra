@@ -207,7 +207,6 @@ bool KWDLoader::load(KoXmlElement &root)
     KoXmlElement attributes = root.namedItem("ATTRIBUTES").toElement();
     if (!attributes.isNull()) {
         if (attributes.attribute("processing", "0") == "1") {
-            m_pageStyle.setHasMainTextFrame(false); // DTP type document.
             m_foundMainFS = true; // we will not reuse the main FS now.
         }
 
@@ -238,7 +237,6 @@ bool KWDLoader::load(KoXmlElement &root)
             && m_firstPageStyle.footerPolicy() != Words::HFTypeNone
             && m_firstPageStyle.headerPolicy() != Words::HFTypeNone) {
         m_firstPageStyle.setColumns(m_pageStyle.columns());
-        m_firstPageStyle.setHasMainTextFrame(m_pageStyle.hasMainTextFrame());
         m_firstPageStyle.setHeaderDistance(m_pageStyle.headerDistance());
         m_firstPageStyle.setFooterDistance(m_pageStyle.footerDistance());
         m_firstPageStyle.setEndNoteDistance(m_pageStyle.endNoteDistance());

@@ -158,7 +158,7 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
     connect(m_pageSelector->ui_last, SIGNAL(clicked()), this, SLOT(lastPage()));
     connect(m_pageSelector->ui_selector, SIGNAL(valueChanged(int)), SLOT(renderPage(int)));
 
-    refresh();
+    slotRefreshView();
 }
 
 QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *project, ScheduleManager *manager, QObject *parent ) const
@@ -424,7 +424,7 @@ void ReportView::setupGui()
 void ReportView::setGuiActive( bool active ) // virtual slot
 {
     if ( active ) {
-        refresh();
+        slotRefreshView();
     }
     ViewBase::setGuiActive( active );
 }
@@ -440,7 +440,7 @@ void ReportView::setReportModels( const QMap<QString, QAbstractItemModel*> &map 
     m_modelmap = map;
 }
 
-void ReportView::refresh()
+void ReportView::slotRefreshView()
 {
     delete m_preRenderer;
     QDomElement e = m_design.documentElement();
@@ -501,7 +501,7 @@ ReportData *ReportView::createReportData( const QString &type )
 bool ReportView::loadXML( const QDomDocument &doc )
 {
     m_design = doc;
-    refresh();
+    slotRefreshView();
     return true;
 }
 
@@ -517,7 +517,7 @@ bool ReportView::loadContext( const KoXmlElement &context )
         m_design = QDomDocument( "context" );
         m_design.appendChild( e );
     } else kDebug()<<"Invalid context xml";
-    refresh();
+    slotRefreshView();
     return true;
 }
 

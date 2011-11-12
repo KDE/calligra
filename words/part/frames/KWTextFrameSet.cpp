@@ -171,6 +171,7 @@ void KWTextFrameSet::setupDocument()
 
     // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
+    lay->setWordprocessingMode();
     m_document->setDocumentLayout(lay);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 }
