@@ -1,7 +1,16 @@
 
 Calligra Plan current:
 
-* Fix various problems with view selector dialogs
+* Gantt chart: Use locale defined weekends/start of week
+
+* Bug 286332: Initially expand resource group in the Task resource allocation dialog
+
+* Resource assignment gantt chart: remember zoom and scale settings
+  Ref bug 284349
+
+* Improve view selector:
+  Enable moving views and categories using drag and drop
+  Fix various problems with the view selector dialogs
 
 * Disable dbus adapter
 

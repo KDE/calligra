@@ -143,7 +143,7 @@ private:
     struct ListStyleInput {
     public:
         const PptTextPFRun& pf;
-        const PptTextCFRun& cf;
+        const PptTextCFRun& cf; //deprecated
         const MSO::TextCFException* cf_; //deprecated
         const MSO::TextCFException9* cf9;
         const MSO::TextCFException10* cf10;
@@ -646,6 +646,7 @@ private:
     bool m_isList; //true - processing a list, false - processing a paragraph
     QMap<quint16, bool> m_continueNumbering; //true - continue numbered list, false - restart numbering
     quint16 m_previousListLevel;
+    quint16 m_firstChunkFontSize;
 
     /**
     * @brief An usedDeclaration.

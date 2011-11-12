@@ -285,6 +285,35 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 GanttViewBase::GanttViewBase( QWidget *parent )
     : KDGantt::View( parent )
 {
+    const KLocale *locale = KGlobal::locale();
+    if ( locale ) {
+        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+        g->setWeekStart( static_cast<Qt::DayOfWeek>( locale->weekStartDay() ) );
+        int ws = locale->workingWeekStartDay();
+        int we = locale->workingWeekEndDay();
+        QSet<Qt::DayOfWeek> fd;
+        for ( int i = Qt::Monday; i <= Qt::Sunday; ++i ) {
+            if ( i < ws || i > we ) {
+                fd << static_cast<Qt::DayOfWeek>( i );
+            }
+        }
+        g->setFreeDays( fd );
+    }
+}
+
+bool GanttViewBase::loadContext( const KoXmlElement &settings )
+{
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setScale( static_cast<KDGantt::DateTimeGrid::Scale>( settings.attribute( "chart-scale", "0" ).toInt() ) );
+    g->setDayWidth( settings.attribute( "chart-daywidth", "30" ).toDouble() );
+    return true;
+}
+
+void GanttViewBase::saveContext( QDomElement &settings ) const
+{
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    settings.setAttribute( "chart-scale", g->scale() );
+    settings.setAttribute( "chart-daywidth", g->dayWidth() );
 }
 
 //-------------------------------------------
@@ -357,9 +386,7 @@ bool NodeGanttViewBase::loadContext( const KoXmlElement &settings )
         m_ganttdelegate->showTimeConstraint = (bool)( e.attribute( "show-timeconstraint", "0" ).toInt() );
         m_ganttdelegate->showNegativeFloat = (bool)( e.attribute( "show-negativefloat", "0" ).toInt() );
 
-        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
-        g->setScale( static_cast<KDGantt::DateTimeGrid::Scale>( e.attribute( "chart-scale", "0" ).toInt() ) );
-        g->setDayWidth( e.attribute( "chart-daywidth", "30" ).toDouble() );
+        GanttViewBase::loadContext( e );
 
         m_printOptions.loadContext( e );
     }
@@ -384,9 +411,7 @@ void NodeGanttViewBase::saveContext( QDomElement &settings ) const
     e.setAttribute( "show-timeconstraint", m_ganttdelegate->showTimeConstraint );
     e.setAttribute( "show-negativefloat", m_ganttdelegate->showNegativeFloat );
 
-    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
-    e.setAttribute( "chart-scale", g->scale() );
-    e.setAttribute( "chart-daywidth", g->dayWidth() );
+    GanttViewBase::saveContext( e );
 
     m_printOptions.saveContext( e );
 }
@@ -1096,12 +1121,14 @@ void ResourceAppointmentsGanttView::slotOptions()
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
+    m_gantt->loadContext( settings );
     return treeView()->loadContext( m_model->columnMap(), settings );
 }
 
 void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const
 {
     kDebug();
+    m_gantt->saveContext( settings );
     treeView()->saveContext( m_model->columnMap(), settings );
 }
 

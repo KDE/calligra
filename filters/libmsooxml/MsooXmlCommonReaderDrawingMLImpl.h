@@ -1946,8 +1946,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // in the style:list-level-properties element.  In ODF the paragraph style
     // overrides the list style.
     if (m_currentListLevel > 0) {
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+        m_currentParagraphStyle.removeProperty("fo:margin-left");
+        m_currentParagraphStyle.removeProperty("fo:text-indent");
     }
 
     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
