@@ -34,11 +34,21 @@ Item {
 
     function initToolbar() {
         if (canvas.documentType == CADocumentInfo.Spreadsheet) {
-            toolbarLoader.source = "SpreadsheetToolbar.qml"
+            toolbarLoader.source = "SpreadsheetToolbar.qml";
         } else if (canvas.documentType == CADocumentInfo.TextDocument) {
-            toolbarLoader.source = "WordsToolbar.qml"
+            toolbarLoader.source = "WordsToolbar.qml";
         } else if (canvas.documentType == CADocumentInfo.Presentation) {
-            toolbarLoader.source = "PresentationToolbar.qml"
+            toolbarLoader.source = "PresentationToolbar.qml";
+        }
+    }
+
+    function toggleEdit() {
+        if (docFlickable.visible) {
+            docFlickable.visible = false;
+            canvas.z = 1
+        } else {
+            docFlickable.visible = true;
+            canvas.z = -1
         }
     }
 
@@ -53,6 +63,19 @@ Item {
 
         Component.onCompleted: documentLoaded.connect(initToolbar)
         onDocumentLoaded: docRootRect.documentLoaded()
+    }
+
+    Button {
+        id: editModeButton
+        drawBackground: false
+        imageSource: "qrc:///images/document-edit.png"
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        height: 64
+        width: 64
+        z: 30
+
+        onClicked: toggleEdit();
     }
 
     MouseArea {
