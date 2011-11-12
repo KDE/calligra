@@ -31,6 +31,8 @@
 #include "conditionals.h"
 #include <QPoint>
 
+#include "database/Filter.h"
+
 //#define SWINDER_XLS2RAW
 
 namespace Swinder
@@ -1126,6 +1128,79 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
     }
 
     d->curConditionalFormat->addConditional(c);
+}
+
+void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord *record)
+{
+    Calligra::Tables::Filter filter = d->sheet->autoFilters();
+
+    int fieldNumber = record->entry();
+
+    if (record->isTopN()) {
+        // TODO: top-N filters
+    } else {
+        Calligra::Tables::Filter::Composition compos =
+            record->join() == AutoFilterRecord::JoinAnd ?
+                Calligra::Tables::Filter::AndComposition :
+                Calligra::Tables::Filter::OrComposition;
+
+        for (int i = 0; i < 2; i++) {
+            Calligra::Tables::Filter::Comparison compar = Calligra::Tables::Filter::Match;
+            switch (record->operation(i)) {
+                case AutoFilterRecord::Less:
+                    compar = Calligra::Tables::Filter::Less;
+                    break;
+                case AutoFilterRecord::Equal:
+                    compar = Calligra::Tables::Filter::Match;
+                    break;
+                case AutoFilterRecord::LEqual:
+                    compar = Calligra::Tables::Filter::LessOrEqual;
+                    break;
+                case AutoFilterRecord::Greater:
+                    compar = Calligra::Tables::Filter::Greater;
+                    break;
+                case AutoFilterRecord::NotEqual:
+                    compar = Calligra::Tables::Filter::NotMatch;
+                    break;
+                case AutoFilterRecord::GEqual:
+                    compar = Calligra::Tables::Filter::GreaterOrEqual;
+                    break;
+            }
+
+            switch (record->valueType(i)) {
+                case AutoFilterRecord::RkNumber: {
+                    bool isInt;
+                    int iv; double dv;
+                    decodeRK(record->rkValue(i), isInt, iv, dv);
+                    if (isInt) dv = iv;
+                    filter.addCondition(compos, fieldNumber, compar, QString::number(dv),
+                        Qt::CaseInsensitive, Calligra::Tables::Filter::Number);
+                    break;
+                }
+                case AutoFilterRecord::XNumber:
+                    filter.addCondition(compos, fieldNumber, compar, QString::number(record->floatValue(i)),
+                        Qt::CaseInsensitive, Calligra::Tables::Filter::Number);
+                    break;
+                case AutoFilterRecord::String:
+                    filter.addCondition(compos, fieldNumber, compar, record->string(i));
+                    break;
+                case AutoFilterRecord::BoolErr:
+                    // TODO
+                    break;
+                case AutoFilterRecord::Blanks:
+                    filter.addCondition(compos, fieldNumber, Calligra::Tables::Filter::Match, "");
+                    break;
+                case AutoFilterRecord::NonBlanks:
+                    filter.addCondition(compos, fieldNumber, Calligra::Tables::Filter::NotMatch, "");
+                    break;
+                case AutoFilterRecord::UndefinedType:
+                default:
+                    break;
+            }
+        }
+    }
+
+    d->sheet->setAutoFilters(filter);
 }
 
 } // namespace Swinder
