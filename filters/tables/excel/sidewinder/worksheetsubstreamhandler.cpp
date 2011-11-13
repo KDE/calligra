@@ -238,6 +238,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleCondFmtRecord(static_cast<CondFmtRecord*>(record));
     else if (type == CFRecord::id)
         handleCFRecord(static_cast<CFRecord*>(record));
+    else if (type == AutoFilterRecord::id)
+        handleAutoFilterRecord(static_cast<AutoFilterRecord*>(record));
     else {
         //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -1132,7 +1134,7 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
 
 void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord *record)
 {
-    Calligra::Tables::Filter filter = d->sheet->autoFilters();
+    Calligra::Tables::Filter filter;
 
     int fieldNumber = record->entry();
 
@@ -1200,7 +1202,9 @@ void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord
         }
     }
 
-    d->sheet->setAutoFilters(filter);
+    Calligra::Tables::Filter oldFilter = d->sheet->autoFilters();
+    oldFilter.addSubFilter(Calligra::Tables::Filter::AndComposition, filter);
+    d->sheet->setAutoFilters(oldFilter);
 }
 
 } // namespace Swinder

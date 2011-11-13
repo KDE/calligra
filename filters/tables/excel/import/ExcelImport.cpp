@@ -646,6 +646,7 @@ void ExcelImport::Private::processSheetForFilters(Sheet* is, Calligra::Tables::S
         r.setBottom(is->maxRow()+1);
         Calligra::Tables::Region range(r, os);
         db.setRange(range);
+        db.setFilter(is->autoFilters());
         os->cellStorage()->setDatabase(range, db);
 
         // xls files don't seem to make a difference between hidden and filtered rows, so
