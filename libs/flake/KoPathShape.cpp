@@ -1538,7 +1538,7 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             lastPoint = firstSubpath->last();
             kDebug(30006) << "end marker" << angle << startPoint << newStartPoint << lastPoint->point();
             if (twoPointPath) {
-                if (firstSegments.second.isValid()) {
+                if (firstSegments.second.isValid() && lastSegments.first.first()->activeControlPoint2()) {
                     firstSegments.second.first()->setControlPoint2(lastSegments.first.first()->controlPoint2());
                 }
             }
