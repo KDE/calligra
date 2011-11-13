@@ -208,7 +208,6 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
     } else {
         format.setProperty(QTextCharFormat::FontPointSize, d->resolveFontSize(12.0));
     }
-
 }
 
 qreal KoCharacterStyle::Private::calculateFontYStretch(QString fontFamily)
@@ -436,6 +435,9 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
     while (it != props.end()) {
         if (!it.value().isNull()) {
             format.setProperty(it.key(), it.value());
+            if (it.key() == QTextFormat::ForegroundBrush) {
+                format.clearProperty(KoCharacterStyle::UseWindowFontColor);
+            }
         }
         ++it;
     }
@@ -767,6 +769,11 @@ void KoCharacterStyle::setForeground(const QBrush &brush)
 {
     d->setProperty(QTextFormat::ForegroundBrush, brush);
 }
+void KoCharacterStyle::setFontAutoColor(bool use)
+{
+    d->setProperty(KoCharacterStyle::UseWindowFontColor, use);
+}
+
 QString KoCharacterStyle::name() const
 {
     return d->name;
@@ -1069,6 +1076,16 @@ QString KoCharacterStyle::language() const
     return d->propertyString(KoCharacterStyle::Language);
 }
 
+bool KoCharacterStyle::blinking() const
+{
+    return d->propertyBoolean(Blink);
+}
+
+void KoCharacterStyle::setBlinking(bool blink)
+{
+    d->setProperty(KoCharacterStyle::Blink, blink);
+}
+
 bool KoCharacterStyle::hasProperty(int key) const
 {
     return d->stylesPrivate.contains(key);
@@ -1285,8 +1302,6 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         if (c.isValid()) {     // 3.10.3
             setForeground(QBrush(c));
         }
-        // if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true")
-            // we should store this property to allow the layout to ignore the above set color in some situations.
     }
 
     QString fontName(styleStack.property(KoXmlNS::fo, "font-family"));
@@ -1343,6 +1358,11 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         // with 'Times New Roman' that looks nearly the same.
         if (fontName == "Thorndale")
             fontName = "Times New Roman";
+
+        // 'StarSymbol' is written by OpenOffice but they actually mean
+        //  'OpenSymbol'.
+        if (fontName == "StarSymbol")
+            fontName = "OpenSymbol";
 
         fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
         setFontFamily(fontName);
@@ -1599,22 +1619,9 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
 
     // The style:use-window-font-color attribute specifies whether or not the window foreground color should be as used as the foreground color for a light background color and white for a dark background color.
-    if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true") {
-        // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...
-
-        QColor back = background().color();
-        QColor front = foreground().color();
-        if ((abs(qGray(back.rgb()) - qGray(front.rgb())) < 10) && (background().style() != Qt::NoBrush)) {
-            front.setRed(255 - front.red());
-            front.setGreen(255 - front.green());
-            front.setBlue(255 - front.blue());
-            QBrush frontBrush = foreground();
-            frontBrush.setColor(front);
-            if (frontBrush.style() == Qt::NoBrush) {
-                frontBrush.setStyle(Qt::SolidPattern);
-            }
-            setForeground(frontBrush);
-        }
+    const QString useWindowFont(styleStack.property(KoXmlNS::style, "use-window-font-color"));
+    if (!useWindowFont.isEmpty()) {
+        setFontAutoColor(useWindowFont == "true");
     }
 
     const QString letterKerning(styleStack.property( KoXmlNS::style, "letter-kerning"));
@@ -1740,6 +1747,10 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             setFontPitch(FixedWidth);
         else if (pitch == "variable")
             setFontPitch(VariableWidth);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "text-blinking")) {
+        setBlinking(styleStack.property(KoXmlNS::style, "text-blinking") == "true");
     }
 
 
@@ -1943,6 +1954,9 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
                 style.addProperty("fo:color", "transparent", KoGenStyle::TextType);
             else
                 style.addProperty("fo:color", brush.color().name(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::UseWindowFontColor) {
+            bool use = d->stylesPrivate.value(key).toBool();
+            style.addProperty("style:use-window-font-color", use ? "true" : "false", KoGenStyle::TextType);
         } else if (key == QTextFormat::TextVerticalAlignment) {
             if (verticalAlignment() == QTextCharFormat::AlignSuperScript)
                 style.addProperty("style:text-position", "super", KoGenStyle::TextType);
@@ -2056,6 +2070,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
                 style.addProperty("style:font-pitch", "fixed");
             else
                 style.addProperty("style:font-pitch", "variable");
+        } else if (key == KoCharacterStyle::Blink) {
+            style.addProperty("style:text-blinking", blinking());
         }
     }
     //TODO: font name and family

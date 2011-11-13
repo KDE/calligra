@@ -197,6 +197,8 @@ public:
      */
     int addCurrentCFRun(const MSO::TextContainer* tc, quint32 start, quint32& num);
 
+    void removeCurrentCFRun();
+
     bool bold() const;
     bool italic() const;
     bool underline() const;

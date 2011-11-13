@@ -356,7 +356,6 @@ bool KisImage::tryBarrierLock()
 
 void KisImage::lock()
 {
-//  blockSignals(true);
     if (!locked()) {
         if (m_d->scheduler) {
             m_d->scheduler->lock();
@@ -382,7 +381,6 @@ void KisImage::unlock()
                 m_d->scheduler->unlock();
             }
         }
-//      blockSignals(false);
     }
 }
 
@@ -1270,7 +1268,7 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
     }
 }
 
-void KisImage::initialRefreshGraphAsync()
+void KisImage::initialRefreshGraph()
 {
     /**
      * NOTE: Tricky part. We set crop rect to null, so the clones
@@ -1278,6 +1276,7 @@ void KisImage::initialRefreshGraphAsync()
      */
 
     refreshGraphAsync(0, bounds(), QRect());
+    waitForDone();
 }
 
 void KisImage::refreshGraphAsync(KisNodeSP root)
@@ -1319,7 +1318,6 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->scheduler) {
-        dbgImage << "KisImage: requested and update for" << node->name() << rect;
         m_d->scheduler->updateProjection(node, rect, bounds());
     }
 }

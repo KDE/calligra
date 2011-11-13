@@ -60,6 +60,7 @@ DocxXmlHeaderReader::~DocxXmlHeaderReader()
 void DocxXmlHeaderReader::init()
 {
     d->counter = 0;
+    m_headerActive = true;
 }
 
 QString DocxXmlHeaderReader::content()
