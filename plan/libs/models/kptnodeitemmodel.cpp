@@ -3585,6 +3585,8 @@ QAbstractItemDelegate *NodeItemModel::createDelegate( int column, QWidget *paren
         case NodeModel::NodePessimisticRatio: return new SpinBoxDelegate( parent );
         case NodeModel::NodeRisk: return new EnumDelegate( parent );
         case NodeModel::NodeConstraint: return new EnumDelegate( parent );
+        case NodeModel::NodeConstraintStart: return new DateTimeCalendarDelegate( parent );
+        case NodeModel::NodeConstraintEnd: return new DateTimeCalendarDelegate( parent );
         case NodeModel::NodeRunningAccount: return new EnumDelegate( parent );
         case NodeModel::NodeStartupAccount: return new EnumDelegate( parent );
         case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
