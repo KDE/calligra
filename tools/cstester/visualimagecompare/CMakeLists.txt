@@ -1,5 +1,9 @@
 macro_optional_find_package(Poppler)
 
+if (POPPLER_FOUND)
+    add_definitions(-DHAS_POPPLER)
+endif (POPPLER_FOUND)
+
 include_directories(
     ${QT_INCLUDES}
     ${POPPLER_INCLUDE_DIR}
