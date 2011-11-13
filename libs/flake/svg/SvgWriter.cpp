@@ -95,7 +95,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
         return false;
 
     QTextStream svgStream(&outputDevice);
-
+    if(m_svgHeader.isEmpty()){
     // standard header:
     svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
     svgStream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ";
@@ -103,34 +103,41 @@ bool SvgWriter::save(QIODevice &outputDevice)
 
     // add some PR.  one line is more than enough.
     svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
-
     svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
-    svgStream << " xmlns:sozi=\"http://sozi.baierouge.fr\""; //FIXME For sozi, shouldn't appear in svgs created in pther applications
     svgStream << " width=\"" << m_pageSize.width() << "pt\"";
     svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
-
+    }
+    else{
+      svgStream << m_svgHeader;
+    }
     {
-        SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
+	SvgSavingContext *context = 0;
 
+	if(!m_savingContext){
+	  context = new SvgSavingContext(outputDevice, m_writeInlineImages);
+	}
+	 else{
+	   context = m_savingContext;
+	 }
         // top level shapes
         foreach(KoShape *shape, m_toplevelShapes) {
             KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
             if(layer) {
-                saveLayer(layer, savingContext);
+                saveLayer(layer, *context);
             } else {
                 KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
                 if (group)
-                    saveGroup(group, savingContext);
+                    saveGroup(group, *context);
                 else
-                    saveShape(shape, savingContext);
+                    saveShape(shape, *context);
             }
         }
+        if(context != m_savingContext){
+	  delete context;
+	}
+	
     }
-//Javascript for animation
-//FIXME This script should be written by animationPropertiesWriter 
-//of SvgSavingContext only. We don't want this script in every doc created in Karbon
-//Should be read from the code of Sozi
-
+    
     // end tag:
     svgStream << endl << "</svg>" << endl;
 
@@ -252,4 +259,14 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
     context.shapeWriter().endElement(); // image
 
     context.shapeWriter().endElement(); // switch
+}
+
+void SvgWriter::setHeader(const QString &header)
+{
+    m_svgHeader = header;
+}
+
+void SvgWriter::setSavingContext(SvgSavingContext &savingContext)
+{
+    m_savingContext = &savingContext;
 }

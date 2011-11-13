@@ -32,6 +32,7 @@
 #include "flake_export.h"
 #include <QtCore/QList>
 #include <QtCore/QSizeF>
+#include <QString>
 
 class SvgSavingContext;
 class KoShapeLayer;
@@ -62,6 +63,9 @@ public:
     /// Writes svg to the specified file
     bool save(const QString &filename, bool writeInlineImages);
 
+    void setHeader(const QString&);
+    void setSavingContext(SvgSavingContext&);
+    
 private:
     void saveLayer(KoShapeLayer *layer, SvgSavingContext &context);
     void saveGroup(KoShapeGroup *group, SvgSavingContext &context);
@@ -72,6 +76,9 @@ private:
     QList<KoShape*> m_toplevelShapes;
     QSizeF m_pageSize;
     bool m_writeInlineImages;
+    
+    QString m_svgHeader;
+    SvgSavingContext *m_savingContext;
 };
 
 #endif // SVGWRITER_H

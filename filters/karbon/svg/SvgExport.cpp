@@ -71,6 +71,18 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
     SvgWriter writer(data.layers(), data.pageSize());
     if (!writer.save(m_chain->outputFile(), true))
         return KoFilter::CreationError;
+    //For stage, will be removed from here
+    QString header("<?xml version=\"1.0\" standalone=\"no\"?>");
+    header.arg("\n").arg("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ");
+    header.arg("http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">");
+    header.arg("<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->");//Has to be changed to stage
+    header.arg("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
+    header.arg(" xmlns:sozi=\"http://sozi.baierouge.fr\"");
+    header.arg(" width=\"").setNum(data.pageSize().width()).arg("pt\"");
+    header.arg(" height=\"").setNum(data.pageSize().height()).arg("pt\">");
+    writer.setHeader(header);
+    
+    
 
     return KoFilter::OK;
 }
