@@ -1465,6 +1465,7 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
     bool closedPath = isClosedSubpath(0);
 
     KoMarkerData mdBegin = markerData(KoMarkerData::MarkerStart);
+    KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);
     if (mdBegin.marker() && !closedPath) {
         QPainterPath markerPath = mdBegin.marker()->path(mdBegin.width() + pen.widthF() * 1.5);
 
@@ -1499,9 +1500,12 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
                 }
                 secondPoint = (*firstSubpath)[1];
             }
+            else if (!mdEnd.marker()) {
+                // in case it is two point path with no end marker we need to modify the last point via the secondPoint
+                secondPoint = (*firstSubpath)[1];
+            }
         }
     }
-    KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);
     if (mdEnd.marker() && !closedPath) {
         QPainterPath markerPath = mdEnd.marker()->path(mdEnd.width() + pen.widthF() * 1.5);
 
@@ -1538,8 +1542,16 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             lastPoint = firstSubpath->last();
             kDebug(30006) << "end marker" << angle << startPoint << newStartPoint << lastPoint->point();
             if (twoPointPath) {
-                if (firstSegments.second.isValid() && lastSegments.first.first()->activeControlPoint2()) {
-                    firstSegments.second.first()->setControlPoint2(lastSegments.first.first()->controlPoint2());
+                if (firstSegments.second.isValid()) {
+                    if (lastSegments.first.first()->activeControlPoint2()) {
+                        firstSegments.second.first()->setControlPoint2(lastSegments.first.first()->controlPoint2());
+                    }
+                }
+                else {
+                    // if there is no start marker we need the first point needs to be changed via the preLastPoint
+                    // the flag needs to be set so the moveTo is done
+                    lastSegments.first.first()->setProperty(KoPathPoint::StartSubpath);
+                    preLastPoint = (*firstSubpath)[firstSubpath->count()-2];
                 }
             }
             else {
