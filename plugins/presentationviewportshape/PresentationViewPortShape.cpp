@@ -81,7 +81,7 @@ void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
 {
     foreach(QString key, m_animationAttributes.keys()){
       if(e.hasAttribute(key))
-      	m_animationAttributes.insert(key, e.attribute(key));
+      	m_animationAttributes.insert(key, "sozi:" + e.attribute(key));
 	}
 }
 

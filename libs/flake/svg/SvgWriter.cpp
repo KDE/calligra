@@ -105,7 +105,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
     svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
 
     svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
-    svgStream << " xmlns:sozi=\"http://sozi.baierouge.fr\""; //For sozi
+    svgStream << " xmlns:sozi=\"http://sozi.baierouge.fr\""; //FIXME For sozi, shouldn't appear in svgs created in pther applications
     svgStream << " width=\"" << m_pageSize.width() << "pt\"";
     svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
 
