@@ -39,7 +39,7 @@ public:
      * Command to set a new shape marker.
      * @param shapes a set of all the shapes that should get the new marker.
      * @param marker the new marker, the same for all given shapes
-     * @param position the position - begin or end - of the marker on the shape
+     * @param position the position - start or end - of the marker on the shape
      * @param parent the parent command used for macro commands
      */
     KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = 0);

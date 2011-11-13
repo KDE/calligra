@@ -34,7 +34,7 @@ class FLAKE_EXPORT KoMarkerData
 public:
     /// Property enum
     enum MarkerPosition {
-        MarkerBegin, ///< it is the marker where the Path begins
+        MarkerStart, ///< it is the marker where the Path begins
         MarkerEnd ///< it is the marker where the Path ends
     };
 

@@ -89,7 +89,7 @@ public:
 
     Q_DECLARE_PUBLIC(KoPathShape)
 
-    KoMarkerData beginMarker;
+    KoMarkerData startMarker;
     KoMarkerData endMarker;
 };
 

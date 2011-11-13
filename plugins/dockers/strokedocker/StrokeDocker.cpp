@@ -134,7 +134,7 @@ void StrokeDocker::applyChanges()
 void StrokeDocker::applyMarkerChanges(KoMarkerData::MarkerPosition position)
 {
     KoMarker *marker = 0;
-    if (position == KoMarkerData::MarkerBegin){
+    if (position == KoMarkerData::MarkerStart){
         marker = d->beginMarker;
     } else if (position == KoMarkerData::MarkerEnd){
         marker = d->endMarker;
@@ -197,7 +197,7 @@ void StrokeDocker::miterLimitChanged()
 void StrokeDocker::beginMarkerChanged()
 {
     d->beginMarker = d->mainWidget->beginMarker();
-    applyMarkerChanges(KoMarkerData::MarkerBegin);
+    applyMarkerChanges(KoMarkerData::MarkerStart);
 }
 
 void StrokeDocker::endMarkerChanged()
@@ -241,7 +241,7 @@ void StrokeDocker::selectionChanged()
         setStroke(shape->border());
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
-            d->beginMarker = pathShape->marker(KoMarkerData::MarkerBegin);
+            d->beginMarker = pathShape->marker(KoMarkerData::MarkerStart);
             d->endMarker = pathShape->marker(KoMarkerData::MarkerEnd);
         }
         else {

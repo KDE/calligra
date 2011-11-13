@@ -176,7 +176,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 
     QList<KoMarker*> markers;
 
-    d->beginMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerBegin, this);
+    d->beginMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
     d->beginMarkerSelector->updateMarkers(markers);
     mainLayout->addWidget(d->beginMarkerSelector, 5, 0, 1, 2);
 
