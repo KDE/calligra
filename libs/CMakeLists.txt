@@ -19,3 +19,7 @@ endif(NOT TINY)
 if (SHOULD_BUILD_KOREPORT)
     add_subdirectory( koreport )
 endif (SHOULD_BUILD_KOREPORT)
+
+if (SHOULD_BUILD_LIBAVOID)
+    add_subdirectory( libavoid )
+endif (SHOULD_BUILD_LIBAVOID)
