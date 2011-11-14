@@ -87,7 +87,8 @@ public:
     void stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord );
 
     // EMF+
-    void rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects);
+   void rects(EmfDeviceContext &context, quint32 drawOps, QPen &pen, QBrush &brush,
+              quint32 count, QVector<QRectF> &rects);
 };
 
 

@@ -349,7 +349,13 @@ public:
     // ----------------------------------------------------------------
     //                         Emf+ handlers
 
-    virtual void rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects) = 0;
+    enum drawOps {
+        DoStroke = 0x01,
+        DoFill   = 0x02
+    };
+
+    virtual void rects(EmfDeviceContext &context, quint32 drawOps, QPen &pen, QBrush &brush,
+                       quint32 count, QVector<QRectF> &rects) = 0;
 };
 
 

@@ -105,7 +105,8 @@ public:
     void bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord );
     void stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord );
 
-    void rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects);
+    void rects(EmfDeviceContext &context, quint32 drawOps, QPen &pen, QBrush &brush,
+               quint32 count, QVector<QRectF> &rects);
 
 private:
     void printPainterTransform(EmfDeviceContext &context, const char *leadText);

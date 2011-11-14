@@ -256,7 +256,8 @@ void EmfDebugBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsReco
 }
 
 
-void EmfDebugBackend::rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects)
+void EmfDebugBackend::rects(EmfDeviceContext &context, quint32 drawOps, QPen &pen, QBrush &brush,
+                            quint32 count, QVector<QRectF> &rects)
 {
 }
 

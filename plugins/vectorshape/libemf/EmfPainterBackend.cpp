@@ -26,7 +26,7 @@
 #include "EmfDeviceContext.h"
 
 
-#define DEBUG_EMFPAINT 0
+#define DEBUG_EMFPAINT 1
 #define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf
@@ -785,12 +785,31 @@ void EmfPainterBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRe
 
 
 
-void EmfPainterBackend::rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects)
+void EmfPainterBackend::rects(EmfDeviceContext &context, quint32 drawOps, QPen &pen, QBrush &brush,
+                              quint32 count, QVector<QRectF> &rects)
 {
-    // FIXME: penID
-    for (int i = 0; i < count; ++i) {
+    Q_UNUSED(context);
+
+    m_painter->save();
+
+    if (drawOps & DoFill) {
+        m_painter->setBrush(brush);
+    }
+    if (drawOps & DoStroke) {
+        m_painter->setPen(pen);
+    }
+
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "Number of rects: " << count;
+#endif
+    for (uint i = 0; i < count; ++i) {
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "rect: " << rects[i];
+#endif
         m_painter->drawRect(rects[i]);
     }
+
+    m_painter->restore();
 }
 
 

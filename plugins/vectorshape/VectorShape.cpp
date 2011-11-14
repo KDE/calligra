@@ -60,10 +60,10 @@
 #include "libsvm/SvmPainterBackend.h"
 
 // Comment out to get uncached painting, which is good for debugging
-//#define VECTORSHAPE_PAINT_UNCACHED
+#define VECTORSHAPE_PAINT_UNCACHED
 
 // Comment out to get unthreaded painting, which is good for debugging
-//#define VECTORSHAPE_PAINT_UNTHREADED
+#define VECTORSHAPE_PAINT_UNTHREADED
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )

@@ -337,8 +337,48 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EmfPlusFillRects:
         {
-            // Not Yet Implemented
-            soakBytes(stream, size - 8);
+            quint32  dataSize; 
+            quint32  count;
+
+            stream >> dataSize;
+
+            QBrush  brush;
+            if (flags & 0x01) {
+                // BrushID is an ARGB color
+                quint8  blue, red, green, alpha;
+                stream >> blue; // Yes, this is the actual order(!).
+                stream >> red;
+                stream >> green;
+                stream >> alpha;
+                brush.setColor(QColor::fromRgb(red, green, blue, alpha));
+            }
+            else {
+                // BrushID is a real BrushID
+                quint32 dummy;
+                stream >> dummy;
+                brush.setColor(Qt::blue); // FIXME:
+            }
+
+            
+            bool     isCompressed = (flags & 0x02);
+            stream >> count;
+            QVector<QRectF>  rects;
+            rects.resize(count);
+#if DEBUG_EMFPLUSPARSER
+#endif
+            for (uint i = 0; i < count; ++i) {
+                if (isCompressed) {
+                    rects[i] = emfPlusRectFromStream(stream);
+                }
+                else {
+                    QRectF  rect;
+                    stream >> rect;
+                    rects[i] = rect;
+                }
+            }
+
+            QPen  dummyPen;
+            m_backend->rects(context, EmfAbstractBackend::DoFill, dummyPen, brush, count, rects);
         }
         break;
     case EmfPlusDrawRects:
@@ -354,7 +394,7 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
             
             QVector<QRectF>  rects;
             rects.resize(count);
-            for (int i = 0; i < count; ++i) {
+            for (uint i = 0; i < count; ++i) {
                 if (isCompressed) {
                     rects[i] = emfPlusRectFromStream(stream);
                 }
@@ -365,8 +405,10 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
                 }
             }
 
-            // FIXME: Get pen here
-            m_backend->rects(context, count, rects);
+            // FIXME: Get pen here from penID
+            QPen     pen = QPen(Qt::black);
+            QBrush   dummyBrush;
+            m_backend->rects(context, EmfAbstractBackend::DoStroke, pen, dummyBrush, count, rects);
         }
         break;
     case EmfPlusFillPolygon:
