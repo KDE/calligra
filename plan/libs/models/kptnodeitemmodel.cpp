@@ -2442,7 +2442,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeEstimate:
             case NodeOptimisticRatio:
             case NodePessimisticRatio:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
             case NodeRisk:
             case NodeConstraint:
                 return (int)(Qt::AlignLeft|Qt::AlignVCenter);
@@ -2452,11 +2452,11 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeStartupAccount:
                 return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeStartupCost:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
             case NodeShutdownAccount:
                 return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeShutdownCost:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
             case NodeDescription:
                 return (int)(Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -2465,7 +2465,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeVarianceEstimate:
             case NodeOptimistic:
             case NodePessimistic:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
 
             // After scheduling
             case NodeStartTime:
@@ -2480,7 +2480,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeNegativeFloat:
             case NodeStartFloat:
             case NodeFinishFloat:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
             case NodeAssignments:
                 return (int)(Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -2489,7 +2489,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeVarianceDuration:
             case NodeOptimisticDuration:
             case NodePessimisticDuration:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
 
             // Completion
             case NodeStatus:
@@ -2501,7 +2501,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeRemainingEffort:
             case NodePlannedCost:
             case NodeActualCost:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
             case NodeActualStart:
             case NodeStarted:
             case NodeActualFinish:
@@ -2523,14 +2523,14 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeWBSCode:
                 return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case NodeLevel:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
 
             // Performance
             case NodeBCWS:
             case NodeBCWP:
             case NodeACWP:
             case NodePerformanceIndex:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter); // number
+                return (int)(Qt::AlignRight|Qt::AlignVCenter); // number
             case NodeCritical:
             case NodeCriticalPath:
                 return (int)(Qt::AlignLeft|Qt::AlignVCenter);

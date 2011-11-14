@@ -562,6 +562,18 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     m->setHeaderData( 3, Qt::Horizontal, i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ), Qt::ToolTipRole );
     m->setHeaderData( 4, Qt::Horizontal, ToolTip::nodePerformanceIndex(), Qt::ToolTipRole );
 
+    m->setData( m->index( 0, 0 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 0, 1 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 0, 2 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 0, 3 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 0, 4 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+
+    m->setData( m->index( 1, 0 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 1, 1 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 1, 2 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 1, 3 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    m->setData( m->index( 1, 4 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+
     BackgroundAttributes backgroundAttrs( ui_chart->backgroundAttributes() );
     backgroundAttrs.setVisible( true );
     backgroundAttrs.setBrush( Qt::white );
