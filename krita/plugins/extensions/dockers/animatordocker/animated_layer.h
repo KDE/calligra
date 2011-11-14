@@ -41,6 +41,7 @@ public:
 public:
     virtual FrameLayer* getUpdatedFrame(int num);
     virtual FrameLayer* getCachedFrame(int num) const = 0;
+    virtual void updateAllFrames();
     
 public:
     virtual void setEnabled(bool val);

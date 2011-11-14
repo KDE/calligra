@@ -38,6 +38,13 @@ FrameLayer* AnimatedLayer::getUpdatedFrame(int num)
     return getCachedFrame(num);
 }
 
+void AnimatedLayer::updateAllFrames()
+{
+    for (int i = dataStart(); i < dataEnd(); ++i) {
+        updateFrame(i);
+    }
+}
+
 void AnimatedLayer::updateFrame(int num)
 {
     Q_UNUSED(num);

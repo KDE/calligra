@@ -70,11 +70,15 @@ protected slots:
     virtual void doConvertToViewLayer();
     virtual void setConvertFrom(int from);
     virtual void setConvertTo(int to);
+    
     virtual void removeLayer();
     
     virtual void renameLayer();
     virtual void doRenameLayer();
     virtual void setRenameString(const QString& string);
+    
+    virtual void calculateLayer();
+    
     
     virtual void createPaintFrame();
     virtual void createShapeFrame();

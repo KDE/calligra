@@ -58,9 +58,8 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         double p = (cur-pre) / (nxt-pre);
         
         SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(frameAt(num));
-        if (!frame)
-        {
-            manager->createFrame(this, "", false);           // this will create frame without content
+        if (!frame) {
+            manager->createFrame(this, num, "", false);           // this will create frame without content
             frame = qobject_cast<SimpleFrameLayer*>(frameAt(num));
         }
         frame->setContent(interpolate(prev, next, p));

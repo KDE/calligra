@@ -93,13 +93,15 @@ public:
     virtual void renameLayer(KisNode* layer, const QString& name);
     virtual void renameLayer(const QString& name);
     
+    virtual void calculateActiveLayer();
+    virtual void calculateLayer(AnimatedLayer *layer);
+    
     virtual AnimatedLayer* getAnimatedLayerByChild(KisNode* child);
     virtual KisNode* activeLayer();
     
-    virtual void createFrame(AnimatedLayer* layer, const QString& ftype);
-    virtual void createFrame(AnimatedLayer* layer, const QString& ftype, bool iskey);
-    virtual void createFrame(const QString& ftype);
-    virtual void createFrame(const QString& ftype, bool iskey);
+    virtual void createFrame(AnimatedLayer* layer, int frameNumber, const QString& ftype, bool iskey = true);
+    virtual void createFrame(AnimatedLayer* layer, const QString& ftype, bool iskey = true);
+    virtual void createFrame(const QString& ftype, bool iskey = true);
     virtual void interpolate();
     
     virtual void createLoopFrame(int target, int repeat);

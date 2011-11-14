@@ -205,11 +205,21 @@ void AnimatorManager::insertLayer(AnimatedLayer* layer, KisNodeSP parent, int in
     layerAdded(layer);
 }
 
-void AnimatorManager::removeLayer(KisNode* layer)
+void AnimatorManager::removeLayer(KisNode *layer)
 {
-    if (!layer)
+    if (!layer || !layer->parent())
         return;
+    
+    KisNodeSP newActive = layer->prevSibling();
+    if (!newActive) {
+        newActive = layer->nextSibling();
+        if (!newActive) {
+            newActive = layer->parent();
+        }
+    }
+    
     m_nodeManager->removeNode(layer);
+    m_nodeManager->activateNode(newActive);
     layerRemoved(dynamic_cast<AnimatedLayer*>(layer));
 }
 
@@ -349,14 +359,13 @@ void AnimatorManager::createAnimatedLayer()
     CustomAnimatedLayer* newLayer = new CustomAnimatedLayer(image(), "", 255);
     newLayer->setAName("New layer");
     
-    KisNode* activeNode = activeLayer();
-    AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(activeNode); //getAnimatedLayerByChild(activeNode);
-    if (alayer)
-    {
-        KisNode* parent = alayer->parent().data();
+    KisNode *activeNode = activeLayer();
+    AnimatedLayer *alayer = qobject_cast<AnimatedLayer*>(activeNode);
+    
+    if (alayer) {
+        KisNode *parent = alayer->parent().data();
         m_nodeManager->insertNode(newLayer, parent, parent->index(alayer));
-    } else
-    {
+    } else {
         m_nodeManager->insertNode(newLayer, image()->root(), 0);
         m_nodeManager->moveNode(newLayer, activeNode);
     }
@@ -422,7 +431,20 @@ void AnimatorManager::renameLayer(const QString& name)
     renameLayer(activeLayer(), name);
 }
 
-void AnimatorManager::createFrame(AnimatedLayer* layer, const QString& ftype, bool iskey)
+
+void AnimatorManager::calculateActiveLayer()
+{
+    calculateLayer(qobject_cast<AnimatedLayer*>(activeLayer()));
+}
+
+void AnimatorManager::calculateLayer(AnimatedLayer* layer)
+{
+    if (layer)
+        layer->updateAllFrames();
+}
+
+
+void AnimatorManager::createFrame(AnimatedLayer* layer, int frameNumber, const QString& ftype, bool iskey)
 {
     FramedAnimatedLayer* alayer = qobject_cast<FramedAnimatedLayer*>(layer);
     if (!alayer)
@@ -431,7 +453,6 @@ void AnimatorManager::createFrame(AnimatedLayer* layer, const QString& ftype, bo
         return;
     }
     
-    int frameNumber = getSwitcher()->currentFrame();
     if (alayer->frameAt(frameNumber))
     {
         warnKrita << "Have frame already, no frame created";
@@ -451,20 +472,16 @@ void AnimatorManager::createFrame(AnimatedLayer* layer, const QString& ftype, bo
     getUpdater()->updateLayer(alayer, frameNumber, frameNumber);
 }
 
-void AnimatorManager::createFrame(AnimatedLayer* layer, const QString& ftype)
+void AnimatorManager::createFrame(AnimatedLayer* layer, const QString& ftype, bool iskey)
 {
-    createFrame(layer, ftype, true);
+    int frameNumber = getSwitcher()->currentFrame();
+    createFrame(layer, frameNumber, ftype, iskey);
 }
 
 void AnimatorManager::createFrame(const QString& ftype, bool iskey)
 {
     AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(activeLayer());
     createFrame(alayer, ftype, iskey);
-}
-
-void AnimatorManager::createFrame(const QString& ftype)
-{
-    createFrame(ftype, true);
 }
 
 void AnimatorManager::interpolate()

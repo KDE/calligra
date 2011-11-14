@@ -141,6 +141,10 @@ void AnimatorActions::initActions()
     connect(t, SIGNAL(triggered(bool)), SLOT(renameLayer()));
     addAction("layers", t);
     
+    t = new QAction(SmallIcon("tools-wizard"), i18n("Calculate layer interpolatation"), this);
+    connect(t, SIGNAL(triggered(bool)), SLOT(calculateLayer()));
+    addAction("layers", t);
+    
     // FRAMES
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
@@ -378,6 +382,13 @@ void AnimatorActions::setRenameString(const QString& string)
 void AnimatorActions::doRenameLayer()
 {
     m_manager->renameLayer(m_renameString);
+}
+
+
+void AnimatorActions::calculateLayer()
+{
+    Q_ASSERT(m_manager);
+    m_manager->calculateActiveLayer();
 }
 
 
