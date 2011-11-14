@@ -25,7 +25,7 @@ include_directories(
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
-message ( STATUS "kdchar include: ${CMAKE_SOURCE_DIR}/kchart/kdchart/include" ) 
+
 #add_subdirectory( tests )
 
 ########### KPlato private library ###############
@@ -91,7 +91,7 @@ set(kplatoui_LIB_SRCS
     kptwbsdefinitiondialog.cpp
     kptwbsdefinitionpanel.cpp
     kptresourceassignmentview.cpp
-
+    kptperformancetablewidget.cpp
     kptresourceallocationeditor.cpp
 
     kptrecalculatedialog.cpp

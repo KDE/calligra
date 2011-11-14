@@ -175,7 +175,7 @@ QString m_shapeTextLeftOff;
 QString m_shapeTextRightOff;
 
 bool m_listStylePropertiesAltered;
-bool m_previousListWasAltered;
+QString m_prevListStyleName;
 
 int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
@@ -186,6 +186,7 @@ QMap<quint16, bool> m_continueListNumbering;
 KoFilter::ConversionStatus read_buClr();
 KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
+KoFilter::ConversionStatus read_buSzPts();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
 KoFilter::ConversionStatus read_buNone();

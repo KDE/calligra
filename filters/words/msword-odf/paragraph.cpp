@@ -340,7 +340,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
         }
         // relative vertical position of the anchor
         QString anchor = Conversion::getVerticalRel(pap.pcVert);
-    if (!anchor.isEmpty()) {
+        if (!anchor.isEmpty()) {
             gs.addProperty("style:vertical-rel", anchor, gt);
         }
         // relative horizontal position of the anchor

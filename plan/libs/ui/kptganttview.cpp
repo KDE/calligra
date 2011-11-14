@@ -285,6 +285,35 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 GanttViewBase::GanttViewBase( QWidget *parent )
     : KDGantt::View( parent )
 {
+    const KLocale *locale = KGlobal::locale();
+    if ( locale ) {
+        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+        g->setWeekStart( static_cast<Qt::DayOfWeek>( locale->weekStartDay() ) );
+        int ws = locale->workingWeekStartDay();
+        int we = locale->workingWeekEndDay();
+        QSet<Qt::DayOfWeek> fd;
+        for ( int i = Qt::Monday; i <= Qt::Sunday; ++i ) {
+            if ( i < ws || i > we ) {
+                fd << static_cast<Qt::DayOfWeek>( i );
+            }
+        }
+        g->setFreeDays( fd );
+    }
+}
+
+bool GanttViewBase::loadContext( const KoXmlElement &settings )
+{
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setScale( static_cast<KDGantt::DateTimeGrid::Scale>( settings.attribute( "chart-scale", "0" ).toInt() ) );
+    g->setDayWidth( settings.attribute( "chart-daywidth", "30" ).toDouble() );
+    return true;
+}
+
+void GanttViewBase::saveContext( QDomElement &settings ) const
+{
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    settings.setAttribute( "chart-scale", g->scale() );
+    settings.setAttribute( "chart-daywidth", g->dayWidth() );
 }
 
 //-------------------------------------------
@@ -357,6 +386,8 @@ bool NodeGanttViewBase::loadContext( const KoXmlElement &settings )
         m_ganttdelegate->showTimeConstraint = (bool)( e.attribute( "show-timeconstraint", "0" ).toInt() );
         m_ganttdelegate->showNegativeFloat = (bool)( e.attribute( "show-negativefloat", "0" ).toInt() );
 
+        GanttViewBase::loadContext( e );
+
         m_printOptions.loadContext( e );
     }
     return true;
@@ -379,6 +410,8 @@ void NodeGanttViewBase::saveContext( QDomElement &settings ) const
     e.setAttribute( "show-schedulingerror", m_ganttdelegate->showSchedulingError );
     e.setAttribute( "show-timeconstraint", m_ganttdelegate->showTimeConstraint );
     e.setAttribute( "show-negativefloat", m_ganttdelegate->showNegativeFloat );
+
+    GanttViewBase::saveContext( e );
 
     m_printOptions.saveContext( e );
 }
@@ -418,8 +451,15 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setDayWidth( 30 );
+    // FIXME: improve/cover all options
+    QMap<QString, QString> format;
+    format.insert( "%H", "HH" );
+    format.insert( "%k", "H" );
+    format.insert( "%I", "HH A" );
+    format.insert( "%l", "h a" );
+    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 
     connect( model(), SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
 }
@@ -765,8 +805,15 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    g->setDayWidth( 30 );
+    // FIXME: improve/cover all options
+    QMap<QString, QString> format;
+    format.insert( "%H", "HH" );
+    format.insert( "%k", "H" );
+    format.insert( "%I", "HH A" );
+    format.insert( "%l", "h a" );
+    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 }
 
 MilestoneItemModel *MilestoneKDGanttView::model() const
@@ -945,13 +992,13 @@ void MilestoneGanttView::slotOptions()
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
-    return m_gantt->treeView()->loadContext( m_gantt->model()->columnMap(), settings );
+    return m_gantt->loadContext( settings );
 }
 
 void MilestoneGanttView::saveContext( QDomElement &settings ) const
 {
     kDebug();
-    return m_gantt->treeView()->saveContext( m_gantt->model()->columnMap(), settings );
+    return m_gantt->saveContext( settings );
 }
 
 void MilestoneGanttView::updateReadWrite( bool on )
@@ -1074,12 +1121,14 @@ void ResourceAppointmentsGanttView::slotOptions()
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
+    m_gantt->loadContext( settings );
     return treeView()->loadContext( m_model->columnMap(), settings );
 }
 
 void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const
 {
     kDebug();
+    m_gantt->saveContext( settings );
     treeView()->saveContext( m_model->columnMap(), settings );
 }
 

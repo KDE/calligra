@@ -836,15 +836,16 @@ APPLIXSPREADImport::writeColor(t_mycolor *mc)
 void
 APPLIXSPREADImport::readTypefaceTable(QTextStream &stream, QStringList &typefacetab)
 {
-    int tftabCounter = 0, ok;
+    int tftabCounter = 0;
     QString mystr;
 
     // Read the colormap
     kDebug() << "Reading typeface table:";
 
-    ok = true;
+    bool ok = true;
     do {
         mystr = nextLine(stream);
+        // FIXME: What happens if the magic words are not present in the stream?
         if (mystr == "END TYPEFACE TABLE") ok = false;
         else {
             //printf ("  %2d: <%s>\n", tftabCounter, mystr.toLatin1());
@@ -864,12 +865,12 @@ APPLIXSPREADImport::readTypefaceTable(QTextStream &stream, QStringList &typeface
 void
 APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 {
-    int contcount, ok, pos;
+    int contcount, pos;
 
     QString colstr, mystr;
     kDebug() << "Reading colormap:";
 
-    ok = true;
+    bool ok = true;
 
     do {
 
@@ -938,7 +939,6 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
 {
     QString rowcolstr;
     QString mystr, tabname;
-    int ok;
 
     kDebug() << "Reading View";
 
@@ -948,7 +948,7 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
     tabname.remove(tabname.length() - 2, 2);
     kDebug() << "  - Table name:" << tabname;
 
-    ok = true;
+    bool ok = true;
     do {
         mystr = nextLine(stream);
 

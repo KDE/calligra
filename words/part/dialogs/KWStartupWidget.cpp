@@ -97,7 +97,6 @@ void KWStartupWidget::buttonClicked()
     KWPageStyle style = m_doc->pageManager()->defaultPageStyle();
     Q_ASSERT(style.isValid());
     style.setColumns(m_columns);
-    style.setHasMainTextFrame(true);
     style.setPageLayout(m_layout);
     m_doc->setUnit(m_unit);
 

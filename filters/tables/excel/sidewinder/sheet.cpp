@@ -92,6 +92,8 @@ public:
     QMultiHash<int, OfficeArtObject*> sheetDrawObjects;
 
     QList<ConditionalFormat*> conditionalFormats;
+
+    Calligra::Tables::Filter* autoFilters;
 };
 
 }
@@ -171,6 +173,7 @@ void Sheet::clear()
     d->firstVisibleCell = QPoint(0,0); // A1
     d->isPageBreakViewEnabled = false;
     d->passwd = 0; // password protection disabled
+    delete d->autoFilters;
 }
 
 QString Sheet::name() const
@@ -618,6 +621,20 @@ void Sheet::addConditionalFormat(ConditionalFormat *format)
 QList<ConditionalFormat*> Sheet::conditionalFormats() const
 {
     return d->conditionalFormats;
+}
+
+void Sheet::setAutoFilters(const Calligra::Tables::Filter& filter)
+{
+    d->autoFilters = new Calligra::Tables::Filter(filter);
+}
+
+Calligra::Tables::Filter Sheet::autoFilters() const
+{
+    if (d->autoFilters) {
+        return *d->autoFilters;
+    } else {
+        return Calligra::Tables::Filter();
+    }
 }
 
 #ifdef SWINDER_XLS2RAW

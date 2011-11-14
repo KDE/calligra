@@ -82,8 +82,9 @@
 #include "ImportUtils.h"
 #include "conditionals.h"
 
-// enable this definition to make the filter output to an ods file instead of using m_chain.outputDocument() to write the spreadsheet to
-// #define OUTPUT_AS_ODS_FILE
+// Enable this definition to make the filter output to an ods file instead of
+// using m_chain.outputDocument() to write the spreadsheet to.
+//#define OUTPUT_AS_ODS_FILE
 
 K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
 K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
@@ -258,7 +259,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->workbook = 0;
         delete d->storeout;
         d->storeout = 0;
-        return KoFilter::StupidError;
+        return KoFilter::InvalidFormat;
     }
 
     if (d->workbook->isPasswordProtected()) {
@@ -645,7 +646,21 @@ void ExcelImport::Private::processSheetForFilters(Sheet* is, Calligra::Tables::S
         r.setBottom(is->maxRow()+1);
         Calligra::Tables::Region range(r, os);
         db.setRange(range);
+        db.setFilter(is->autoFilters());
         os->cellStorage()->setDatabase(range, db);
+
+        // xls files don't seem to make a difference between hidden and filtered rows, so
+        // assume all rows in a database range are filtered, not explicitly hidden
+        int row = r.top() + 1;
+        while (row <= r.bottom()) {
+            int lastRow;
+            bool isHidden = os->rowFormats()->isHidden(row, &lastRow);
+            if (isHidden) {
+                os->rowFormats()->setHidden(row, lastRow, false);
+                os->rowFormats()->setFiltered(row, lastRow, true);
+            }
+            row = lastRow + 1;
+        }
     }
 }
 

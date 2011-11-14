@@ -1090,6 +1090,7 @@ void KWView::zoomChanged(KoZoomMode::Mode mode, qreal zoom)
 {
     m_document->config().setZoom(qRound(zoom * 100.0));
     m_document->config().setZoomMode(mode);
+    m_canvas->update();
 }
 
 void KWView::selectionChanged()

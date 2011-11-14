@@ -94,5 +94,5 @@ Comment[x-test]=xxAllow execution of scriptsxx
 Comment[zh_CN]=允许执行脚本
 Comment[zh_TW]=允許執行命令稿
 Type=Service
-X-KDE-Library=krossmodulekplato
+X-KDE-Library=krossmoduleplan
 X-KDE-Version=1

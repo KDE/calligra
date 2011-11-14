@@ -29,7 +29,7 @@ KarbonPencilToolFactory::KarbonPencilToolFactory()
         : KoToolFactoryBase("KarbonPencilTool")
 {
     setToolTip(i18n("Freehand Path Drawing Tool"));
-    setToolType(mainToolType());
+    setToolType("karbon, krita");
     setIcon("draw-freehand");
     setPriority(3);
     setActivationShapeId("flake/edit");

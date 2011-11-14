@@ -720,6 +720,7 @@ public:
 private:
     Estimate *m_estimate;
     double m_oldvalue, m_newvalue;
+    int m_optimistic, m_pessimistic;
     MacroCommand *m_cmd;
 
 };

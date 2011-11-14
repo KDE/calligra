@@ -1130,6 +1130,8 @@ QAbstractItemDelegate *ResourceItemModel::createDelegate( int col, QWidget *pare
     switch ( col ) {
         case ResourceModel::ResourceType: return new EnumDelegate( parent );
         case ResourceModel::ResourceCalendar: return new EnumDelegate( parent );
+        case ResourceModel::ResourceAvailableFrom: return new DateTimeCalendarDelegate( parent );
+        case ResourceModel::ResourceAvailableUntil: return new DateTimeCalendarDelegate( parent );
         case ResourceModel::ResourceAccount: return new EnumDelegate( parent );
         default: break;
     }

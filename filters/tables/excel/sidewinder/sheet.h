@@ -26,6 +26,8 @@
 #include <QtGui/QImage>
 #include <generated/simpleParser.h>
 
+#include "database/Filter.h"
+
 class QPoint;
 
 namespace Swinder
@@ -186,6 +188,8 @@ public:
     void addConditionalFormat(ConditionalFormat* format);
     QList<ConditionalFormat*> conditionalFormats() const;
 
+    void setAutoFilters(const Calligra::Tables::Filter& filter);
+    Calligra::Tables::Filter autoFilters() const;
 #ifdef SWINDER_XLS2RAW
     void dumpStats();
 #endif

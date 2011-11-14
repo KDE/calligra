@@ -40,15 +40,15 @@ public:
     virtual ~ViewAdaptor();
 
 public Q_SLOTS:
-    void slotEditResource();
-    void slotEditCut();
-    void slotEditCopy();
-    void slotEditPaste();
-    void slotAddTask();
-    void slotAddSubTask();
-    void slotAddMilestone();
-    void slotProjectEdit();
-    void slotConfigure();
+//     void slotEditResource();
+//     void slotEditCut();
+//     void slotEditCopy();
+//     void slotEditPaste();
+//     void slotAddTask();
+//     void slotAddSubTask();
+//     void slotAddMilestone();
+//     void slotProjectEdit();
+//     void slotConfigure();
 
 private:
     View* m_view;

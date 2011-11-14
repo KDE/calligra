@@ -30,6 +30,11 @@
 CSTCompareView::CSTCompareView(QWidget *parent)
 : QWidget(parent)
 , m_currentIndex(0)
+#ifdef HAS_POPPLER
+, m_showPdf(false)
+, m_pdfDelta(0)
+, m_pdfDocument(0)
+#endif
 {
     QGridLayout *layout = new QGridLayout(this);
     m_current = new QLabel(this);
@@ -45,10 +50,11 @@ CSTCompareView::~CSTCompareView()
 {
 }
 
-bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QString &resultFile)
+bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile)
 {
     m_dir1 = QDir(inDir1);
     m_dir2 = QDir(inDir2);
+    m_pdfDir = QDir(pdfDir);
 
     if (!m_dir1.exists()) {
         qWarning() << "dir" << inDir1 << "does not exist!";
@@ -58,6 +64,10 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
     if (!m_dir2.exists()) {
         qWarning() << "dir" << inDir1 << "does not exist!";
         return false;
+    }
+
+    if (!m_pdfDir.exists()) {
+        qWarning() << "pdf directory" << pdfDir << "does not exist, no pdf for you my friend";
     }
 
     QFile file(resultFile);
@@ -94,11 +104,13 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
 void CSTCompareView::keyPressEvent(QKeyEvent * event)
 {
     switch (event->key()) {
+    case Qt::Key_PageUp:
     case Qt::Key_B:
         if (m_dataIndex > 1) {
             --m_dataIndex;
         }
         break;
+    case Qt::Key_PageDown:
     case Qt::Key_N:
         if (m_dataIndex < m_data.size() - 1) {
             ++m_dataIndex;
@@ -108,14 +120,40 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
         if (m_currentIndex > 0) {
             --m_currentIndex;
             m_dataIndex = updateResult(m_currentIndex);
+#ifdef HAS_POPPLER
+            m_pdfDelta = 0;
+            if (m_pdfDocument) {
+                delete(m_pdfDocument);
+                m_pdfDocument = 0;
+            }
+#endif
         }
         break;
     case Qt::Key_Down:
         if (m_currentIndex < m_result.size() - 1) {
             ++m_currentIndex;
             m_dataIndex = updateResult(m_currentIndex);
+#ifdef HAS_POPPLER
+            m_pdfDelta = 0;
+            if (m_pdfDocument) {
+                delete(m_pdfDocument);
+                m_pdfDocument = 0;
+            }
+#endif
         }
         break;
+#ifdef HAS_POPPLER
+    case Qt::Key_P:
+        if (m_pdfDir.exists())
+            m_showPdf = !m_showPdf;
+        break;
+    case Qt::Key_Plus:
+        m_pdfDelta++;
+        break;
+    case Qt::Key_Minus:
+        m_pdfDelta--;
+        break;
+#endif
     default:
         event->setAccepted(false);
         break;
@@ -165,7 +203,7 @@ void CSTCompareView::updateImage(int index)
         return;
     }
 
-    m_currentPage->setText(QString("Page: %1\t%2/%3").arg(m_data[index]).arg(index).arg(m_data.size() - 1));
+    QString currentPageText = QString("Page: %1\t%2/%3").arg(m_data[index]).arg(index).arg(m_data.size() - 1);
 
     QString subpath = m_data[0] + QString(".check/thumb_%2.png").arg(m_data[index]);
 
@@ -185,5 +223,36 @@ void CSTCompareView::updateImage(int index)
         qWarning() << "loading image" << filename2 << "failed!";
     }
 
-    m_compareView->update(image1, image2, m_dir1.dirName(), m_dir2.dirName());
+    QImage pdfView;
+#ifdef HAS_POPPLER
+    if (m_showPdf) {
+        if (!m_pdfDocument) {
+            if (m_pdfDir.exists() && m_pdfDir.exists(m_data[0] + ".pdf")) {
+                m_pdfDocument = Poppler::Document::load(m_pdfDir.filePath(m_data[0] + ".pdf"));
+                if (m_pdfDocument) {
+                    m_pdfDocument->setRenderHint(Poppler::Document::Antialiasing);
+                    m_pdfDocument->setRenderHint(Poppler::Document::TextAntialiasing);
+                }
+            }
+        }
+
+        if (m_pdfDocument) {
+            Poppler::Page *page = m_pdfDocument->page(m_data[index].toInt() - 1 + m_pdfDelta);
+            if (page) {
+                pdfView = page->renderToImage();
+            } else {
+                currentPageText += " - unable to load page from PDF";
+            }
+            if (m_pdfDelta) {
+                currentPageText += QString(" - PDF delta : %1").arg(m_pdfDelta);
+            }
+        } else {
+            currentPageText += " - unable to load PDF";
+        }
+    }
+#endif
+    
+    m_currentPage->setText(currentPageText);
+    
+    m_compareView->update(image1, image2, m_dir1.dirName(), m_dir2.dirName(), pdfView);
 }

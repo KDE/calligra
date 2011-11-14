@@ -1117,11 +1117,11 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
         m_headers->set_headerMask( sep->grpfIhdt );
     }
     else {
-    //check if an even header/footer is expected
+        //check if an even header/footer is expected
         if ( dop().fFacingPages ) {
             data.headerMask |= HeaderData::HeaderEven | HeaderData::FooterEven;
         }
-    //check if a first page header/footer is expected
+        //check if a first page header/footer is expected
         if ( sep->fTitlePage ) {
             data.headerMask |= HeaderData::HeaderFirst | HeaderData::FooterFirst;
         }
@@ -1229,8 +1229,10 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 //         m_subDocumentHandler->headerEnd();
         return;
     }
-    else if ( length > 1 )
-        --length; // get rid of the trailing "end of header/footer" character
+    else if ( length > 1 ) {
+        // get rid of the trailing "end of header/footer" character
+        --length;
+    }
 
     saveState( length, Header );
 

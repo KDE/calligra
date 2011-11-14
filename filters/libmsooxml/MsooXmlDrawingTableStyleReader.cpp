@@ -907,7 +907,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
     }
 
     TRY_READ_ATTR_WITHOUT_NS(w) //width
-    m_currentBorder.width = EMU_TO_POINT(w.toDouble());
+    m_currentBorder.outerPen.setWidthF(EMU_TO_POINT(w.toDouble()));
 
     while(!atEnd()) {
         readNext();
@@ -916,12 +916,14 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
             if(QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill);
                 m_currentBorder.style = KoBorder::BorderSolid;
-                m_currentBorder.color = m_currentColor;
+                m_currentBorder.innerPen.setColor(m_currentColor);
+                m_currentBorder.outerPen.setColor(m_currentColor);
             }
             else if (QUALIFIED_NAME_IS(prstDash)) {
                 attrs = attributes();
                 //TODO find out how other colors are handled
-                m_currentBorder.color = Qt::black;
+                m_currentBorder.innerPen.setColor(Qt::black);
+                m_currentBorder.outerPen.setColor(Qt::black);
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 //TODO support other dash types. Make it its own function.
                 if (val == "dash") {

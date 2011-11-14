@@ -22,5 +22,5 @@ Name[zh_TW]=Flow 嵌入外掛程式
 X-KDE-ServiceTypes=Flow/Dock
 Type=Service
 X-KDE-Library=flowdockersplugin
-X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4

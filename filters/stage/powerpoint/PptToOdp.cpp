@@ -1479,19 +1479,18 @@ getBulletChar(const PptTextPFRun& pf)
  * x in <-4000, -1>, The absolute value specifies the bullet font size in pt.
  *
  * @param value to convert
- * @param fs fonts size of the first text run
- * @return processed value in pt
+ * @return processed value in points or percentage
  */
 QString
-bulletSizeToSizeString(qint16 value, qint16 fs)
+bulletSizeToSizeString(qint16 value)
 {
     QString ret;
     if (value >= 25 && value <= 400) {
-        ret = pt(qFloor((value * fs) / (qreal) 100));
+        ret = percent(value);
     } else if ((value >= -4000) && (value <= -1)) {
-        ret = pt(value);
+        ret = pt(qAbs(value));
     } else {
-        ret = pt(fs);
+        ret = percent(100);
     }
     return ret;
 }
@@ -1502,7 +1501,13 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter out(&buffer);
 
-    QString bulletSize = bulletSizeToSizeString(i.pf.bulletSize(), i.cf.fontSize());
+    QString bulletSize;
+    if (i.pf.bulletSize()) {
+        bulletSize = bulletSizeToSizeString(i.pf.bulletSize());
+    } else {
+        bulletSize = pt(m_firstChunkFontSize);
+    }
+
     QString elementName;
     bool imageBullet = false;
     imageBullet = i.pf.bulletBlipRef() != 65535;
@@ -1551,11 +1556,23 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     out.startElement("style:list-level-properties");
 
     if (imageBullet) {
+        QString pictureSize = bulletSize;
+        if (pictureSize.endsWith("%")) {
+            pictureSize.chop(1);
+            bool ok = false;
+            qreal size = pictureSize.toDouble(&ok);
+            if (!ok) {
+                qDebug() << "defineBulletStyle: error converting" << pictureSize << "to double";
+            }
+            size = m_firstChunkFontSize * size / 100.0;
+            pictureSize = pt(size);
+        }
+
         // fo:text-align
         // fo:height
-        out.addAttribute("fo:height", bulletSize);
+        out.addAttribute("fo:height", pictureSize);
         // fo:width
-        out.addAttribute("fo:width", bulletSize);
+        out.addAttribute("fo:width", pictureSize);
         // style:font-name
         // style:vertical-pos
         out.addAttribute("style:vertical-pos", "middle");
@@ -1572,44 +1589,45 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     out.addAttribute("text:space-before", pptMasterUnitToCm(indent));
     out.endElement(); // style:list-level-properties
 
-    //text-properties - In order to ease the layout, the font-family is also
-    //saved for a numbered list and font-size is always in points.
+    //---------------------------------------------
+    // text-properties
+    //---------------------------------------------
+
     if (!imageBullet) {
         KoGenStyle ts(KoGenStyle::TextStyle);
         const KoGenStyle::PropertyType text = KoGenStyle::TextType;
+
+        //bulletSize already processed
+        ts.addProperty("fo:font-size", bulletSize, text);
 
         //default value doesn't make sense
         QColor color;
         if (i.pf.fBulletHasColor()) {
             color = toQColor(i.pf.bulletColor());
-        } else {
-#ifdef DEBUG_PPTTOODP
-            qDebug() << "> Reusing color of the first text run!";
-#endif
-            color = toQColor(i.cf.color());
-        }
-        if (color.isValid()) {
-            ts.addProperty("fo:color", color.name(), text);
+            if (color.isValid()) {
+                ts.addProperty("fo:color", color.name(), text);
+            }
         }
         //default value doesn't make sense
         quint16 fontRef;
         if (i.pf.fBulletHasFont()) {
             fontRef = i.pf.bulletFontRef();
-        } else {
-#ifdef DEBUG_PPTTOODP
-            qDebug() << "> Reusing font of the first text run!";
-#endif
-            fontRef = i.cf.fontRef();
         }
-        //PowerPoint UI does not enable to change the font for numbered lists
+
+        //MSPowerPoint: UI does not enable to change font of a numbered lists.
         const MSO::FontEntityAtom* font = getFont(fontRef);
         if (font && !i.pf.fBulletHasAutoNumber()) {
-            QString family = QString::fromUtf16(font->lfFaceName.data(),
-                                                font->lfFaceName.size());
+            QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
             ts.addProperty("fo:font-family", family, text);
         }
-        //bulletSize already processed
-        ts.addProperty("fo:font-size", bulletSize, text);
+        //MSPowerPoint: A label does NOT inherit Underline from text-properties
+        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
+        if (!i.pf.fBulletHasAutoNumber()) {
+            ts.addProperty("fo:font-style", "normal");
+            ts.addProperty("fo:font-weight", "normal");
+        }
+        ts.addProperty("style:text-underline-style", "none");
+
         ts.writeStyleProperties(&out, text);
     }
     out.endElement();  // text:list-level-style-*
@@ -2194,13 +2212,11 @@ void addListElement(KoXmlWriter& out, const QString& listStyle,
     } else {
         qDebug() << "Warning: list style name not provided!";
     }
-    //required by stage
     if (continueList) {
         out.addAttribute("text:continue-numbering", "true");
     }
     out.startElement("text:list-item");
 
-    //required by stage
     if (pf.fBulletHasAutoNumber() && !continueList) {
         out.addAttribute("text:start-value", pf.startNum());
     }
@@ -2535,8 +2551,13 @@ PptToOdp::processParagraph(Writer& out,
     if (m_isList) {
         int depth = pf.level() + 1;
         quint32 num = 0;
-        //CFException for the first run of text required for the list style
+
+        //TextCFException for the 1st run of text are required to specify the
+        //font-size of the label in case it's not provided by TextPFException.
         cf.addCurrentCFRun(tc, start, num);
+        m_firstChunkFontSize = cf.fontSize();
+        cf.removeCurrentCFRun();
+
         QString listStyle = defineAutoListStyle(out, pf, cf);
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)

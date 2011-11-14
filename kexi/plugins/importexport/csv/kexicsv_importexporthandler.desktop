@@ -5,6 +5,7 @@ X-KDE-ServiceTypes=Kexi/Handler
 Name=Kexi CSV Data Import/Export Plugin
 Name[ca]=Connector d'importació/Exportació de dades CSV per al Kexi
 Name[ca@valencia]=Connector d'importació/Exportació de dades CSV per al Kexi
+Name[cs]=Modul Kexi pro import a export dat CSV
 Name[da]=Kexi CSV data-import/eksport plugin
 Name[de]=Kexi-CSV-Daten-Import/Export-Modul
 Name[el]=Πρόσθετο εισαγωγής/εξαγωγής CSV δεδομένων του Kexi

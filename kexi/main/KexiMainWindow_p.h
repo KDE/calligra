@@ -73,6 +73,8 @@ public:
 
     KHelpMenu *helpMenu() const;
 
+    void addSearchableModel(KexiSearchableModel *model);
+
 public slots:
     void setMainMenuContent(QWidget *w);
     void selectMainMenuItem(const char *actionName);
@@ -316,11 +318,12 @@ public:
         m_selectFirstItem = true;
     }
 
-    void contentWidgetDestroyed();
-
 signals:
     void contentAreaPressed();
     void hideContentsRequested();
+
+protected slots:
+    void contentWidgetDestroyed();
 
 protected:
     virtual void showEvent(QShowEvent * event) {
@@ -724,6 +727,7 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
 
 void KexiTabbedToolBar::activateSearchLineEdit()
 {
+    d->searchLineEdit->selectAll();
     d->searchLineEdit->setFocus();
 }
 
@@ -850,6 +854,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
     d->searchLineEdit = new KexiSearchLineEdit;
+    d->searchLineEdit->installEventFilter(this);
     helpLyr->addWidget(d->searchLineEdit);
 
     // needed e.g. for Windows style to remove the toolbar's frame
@@ -906,7 +911,6 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     addSeparatorAndAction(tbar, "project_export_data_table");
 
     tbar = d->createToolBar("tools", i18n("Tools"));
-    addAction(tbar, "tools_import_project");
     addAction(tbar, "tools_compact_database");
 
 //! @todo move to form plugin
@@ -1001,7 +1005,13 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
         QWidget *mainWin = KexiMainWindowIface::global()->thisWidget();
-        if (watched == tabBar()) {
+        // kDebug() << "MouseButtonPress: watched:" << watched << "window()->focusWidget():" << window()->focusWidget();
+        if (watched == d->searchLineEdit) {
+            activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
+                                      // back on Escape key press
+            return true;
+        }
+        else if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
             QPoint p = me->pos();
             KexiTabbedToolBarTabBar *tb = static_cast<KexiTabbedToolBarTabBar*>(tabBar());
@@ -1249,6 +1259,11 @@ void KexiTabbedToolBar::selectMainMenuItem(const char *actionName)
         }
 //        a->setPersistentlySelected(true);
     }
+}
+
+void KexiTabbedToolBar::addSearchableModel(KexiSearchableModel *model)
+{
+    d->searchLineEdit->addSearchableModel(model);
 }
 
 /*

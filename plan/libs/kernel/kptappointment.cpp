@@ -556,7 +556,7 @@ QDebug operator<<( QDebug dbg, const KPlato::AppointmentIntervalList &i )
 {
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = i.map().constBegin();
     for ( ; it != i.map().constEnd(); ++it ) {
-        dbg<<it.key()<<":"<<it.value().startTime().time()<<it.value().endTime().time()<<it.value().load()<<"%"<<endl;
+        dbg<<endl<<it.key()<<":"<<it.value().startTime()<<it.value().endTime()<<it.value().load()<<"%";
     }
     return dbg;
 }
