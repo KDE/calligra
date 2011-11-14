@@ -101,11 +101,8 @@ public:
     virtual void createFrame(const QString& ftype);
     virtual void createFrame(const QString& ftype, bool iskey);
     virtual void interpolate();
-    virtual void removeFrame();
     
     virtual void createLoopFrame(int target, int repeat);
-    
-    virtual void moveFrame(int relPos);
     
 public:
     virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
