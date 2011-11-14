@@ -555,13 +555,12 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     dateEdit->setDate( QDate::currentDate() );
     connect(dateEdit, SIGNAL(dateChanged(const QDate &)), SLOT(slotUpdate()));
 #endif
-
-    labelBCWS->setToolTip( ToolTip::nodeBCWS() );
-    labelBCWP->setToolTip( ToolTip::nodeBCWP() );
-    labelACWP->setToolTip( ToolTip::nodeACWP() );
-
-    labelCPI->setToolTip( i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ) );
-    labelSPI->setToolTip( ToolTip::nodePerformanceIndex() );
+    QAbstractItemModel *m = ui_performancetable->model();
+    m->setHeaderData( 0, Qt::Horizontal, ToolTip::nodeBCWS(), Qt::ToolTipRole );
+    m->setHeaderData( 1, Qt::Horizontal, ToolTip::nodeBCWP(), Qt::ToolTipRole );
+    m->setHeaderData( 2, Qt::Horizontal, ToolTip::nodeACWP(), Qt::ToolTipRole );
+    m->setHeaderData( 3, Qt::Horizontal, i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ), Qt::ToolTipRole );
+    m->setHeaderData( 4, Qt::Horizontal, ToolTip::nodePerformanceIndex(), Qt::ToolTipRole );
 
     BackgroundAttributes backgroundAttrs( ui_chart->backgroundAttributes() );
     backgroundAttrs.setVisible( true );
@@ -743,22 +742,24 @@ void PerformanceStatusBase::setupChart()
 
 void PerformanceStatusBase::setEffortValuesVisible( bool visible )
 {
-    labelEffort->setVisible( visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 0, ! visible );
+/*    labelEffort->setVisible( visible );
     bcwsEffort->setVisible( visible );
     bcwpEffort->setVisible( visible );
     acwpEffort->setVisible( visible );
     spiEffort->setVisible( visible );
-    cpiEffort->setVisible( visible );
+    cpiEffort->setVisible( visible );*/
 }
 
 void PerformanceStatusBase::setCostValuesVisible( bool visible )
 {
-    labelCost->setVisible( visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 1, ! visible );
+/*    labelCost->setVisible( visible );
     bcwsCost->setVisible( visible );
     bcwpCost->setVisible( visible );
     acwpCost->setVisible( visible );
     spiCost->setVisible( visible );
-    cpiCost->setVisible( visible );
+    cpiCost->setVisible( visible );*/
 }
 
 void PerformanceStatusBase::setupChart( ChartContents &cc )
@@ -920,14 +921,16 @@ void PerformanceStatusBase::drawValues()
 #ifdef KPLATODEBUG
     date = dateEdit->date();
 #endif
+    QAbstractItemModel *m = ui_performancetable->model();
 
     const EffortCostMap &budget = m_chartmodel.bcwp();
     const EffortCostMap &actual = m_chartmodel.acwp();
 
+    // cost based
     double bc = budget.costTo( date );
-    bcwsCost->setText( locale->formatMoney( bc ) );
-    bcwpCost->setText( locale->formatMoney( budget.bcwpCost( date ) ) );
-    acwpCost->setText( locale->formatMoney( actual.costTo( date ) ) );
+    m->setData( m->index( 0, 0 ), locale->formatMoney( bc ) );
+    m->setData( m->index( 0, 1 ), locale->formatMoney( budget.bcwpCost( date ) ) );
+    m->setData( m->index( 0, 2 ), locale->formatMoney( actual.costTo( date ) ) );
 
     double spi_ = 0.0;
     if ( bc > 0.0 ) {
@@ -937,13 +940,16 @@ void PerformanceStatusBase::drawValues()
     if ( actual.costTo( date ) > 0.0 ) {
         cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
     }
-    spiCost->setText( locale->formatNumber( spi_ ) );
-    cpiCost->setText( locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 0, 3 ), locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 0, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
+    m->setData( m->index( 0, 4 ), locale->formatNumber( spi_ ) );
+    m->setData( m->index( 0, 4 ), ( spi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
 
+    // effort based
     double bh = budget.hoursTo( date );
-    bcwsEffort->setText( locale->formatNumber( bh ) );
-    bcwpEffort->setText( locale->formatNumber( budget.bcwpEffort( date ) ) );
-    acwpEffort->setText( locale->formatNumber( actual.hoursTo( date ) ) );
+    m->setData( m->index( 1, 0 ), locale->formatMoney( bh ) );
+    m->setData( m->index( 1, 1 ), locale->formatMoney( budget.bcwpEffort( date ) ) );
+    m->setData( m->index( 1, 2 ), locale->formatMoney( actual.hoursTo( date ) ) );
 
     spi_ = 0.0;
     if ( bh > 0.0 ) {
@@ -953,8 +959,10 @@ void PerformanceStatusBase::drawValues()
     if ( actual.costTo( date ) > 0.0 ) {
         cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
     }
-    spiEffort->setText( locale->formatNumber( spi_ ) );
-    cpiEffort->setText( locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 1, 3 ), locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 1, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
+    m->setData( m->index( 1, 4 ), locale->formatNumber( spi_ ) );
+    m->setData( m->index( 1, 4 ), ( spi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
 }
 
 

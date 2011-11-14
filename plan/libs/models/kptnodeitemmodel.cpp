@@ -1955,6 +1955,8 @@ QVariant NodeModel::nodePerformanceIndex( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::ForegroundRole:
+            return node->schedulePerformanceIndex( m_now, id() ) < 1.0 ? Qt::red : Qt::black;
     }
     return QVariant();
 }
