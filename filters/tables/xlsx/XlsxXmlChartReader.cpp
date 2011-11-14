@@ -3035,7 +3035,42 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_multiLvlStrRef()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(f)
-            //TODO ELSE_TRY_READ_IF(multiLvlStrCache)
+            ELSE_TRY_READ_IF(multiLvlStrCache)
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL multiLvlStrCache
+KoFilter::ConversionStatus XlsxXmlChartReader::read_multiLvlStrCache()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(lvl)
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl
+KoFilter::ConversionStatus XlsxXmlChartReader::read_lvl()
+{
+    READ_PROLOGUE
+
+    d->m_currentPtCount = &d->m_currentStrCache->m_ptCount;
+    d->m_currentPtCache = &d->m_currentStrCache->m_cache;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(ptCount)
+            ELSE_TRY_READ_IF(pt)
         }
     }
     READ_EPILOGUE
