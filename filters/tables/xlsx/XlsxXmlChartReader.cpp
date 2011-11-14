@@ -846,6 +846,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(strRef)
+            ELSE_TRY_READ_IF(multiLvlStrRef)
             ELSE_TRY_READ_IF(numRef)
         }
     }
@@ -3004,6 +3005,37 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_strRef()
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_TRY_READ_IF(strCache)
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL multiLvlStrRef
+//! multiLvlStrRef (Multi Level String Reference)
+/*! ECMA-376, 5.7.2.116, p.4060
+
+ Parent Elements:
+  - cat (§5.7.2.24); xVal (§5.7.2.235)
+
+ Child Elements:
+  - extLst (Chart Extensibility) §5.7.2.64
+  - f (Formula) §5.7.2.65
+  - multiLvlStrCache (Multi Level String Cache) §5.7.2.115
+*/
+KoFilter::ConversionStatus XlsxXmlChartReader::read_multiLvlStrRef()
+{
+    READ_PROLOGUE
+
+    d->m_currentF = &d->m_currentStrRef->m_f;
+    d->m_currentStrCache = &d->m_currentStrRef->m_strCache;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(f)
+            //TODO ELSE_TRY_READ_IF(multiLvlStrCache)
         }
     }
     READ_EPILOGUE

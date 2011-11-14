@@ -113,6 +113,7 @@ protected:
     KoFilter::ConversionStatus read_idx();
     KoFilter::ConversionStatus read_explosion();
     KoFilter::ConversionStatus read_strRef();
+    KoFilter::ConversionStatus read_multiLvlStrRef();
     KoFilter::ConversionStatus read_numRef();
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_ptCount();
