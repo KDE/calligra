@@ -784,6 +784,16 @@ void EmfPainterBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsRe
 }
 
 
+
+void EmfPainterBackend::rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects)
+{
+    // FIXME: penID
+    for (int i = 0; i < count; ++i) {
+        m_painter->drawRect(rects[i]);
+    }
+}
+
+
 // ----------------------------------------------------------------
 //                         Private functions
 

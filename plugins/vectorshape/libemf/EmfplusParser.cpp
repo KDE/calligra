@@ -343,9 +343,30 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EmfPlusDrawRects:
         {
+            quint32  dataSize; 
+            quint32  count;
 
-            // Not Yet Implemented
-            soakBytes(stream, size - 8);
+            stream >> dataSize;
+            stream >> count;
+
+            bool     isCompressed = (flags & 0x02);
+            quint32  penID = (flags >> 8) & 0xff;
+            
+            QVector<QRectF>  rects;
+            rects.resize(count);
+            for (int i = 0; i < count; ++i) {
+                if (isCompressed) {
+                    rects[i] = emfPlusRectFromStream(stream);
+                }
+                else {
+                    QRectF  rect;
+                    stream >> rect;
+                    rects[i] = rect;
+                }
+            }
+
+            // FIXME: Get pen here
+            m_backend->rects(context, count, rects);
         }
         break;
     case EmfPlusFillPolygon:
@@ -359,7 +380,7 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
             quint32  dataSize;
             quint32  count;
 
-            bool  isCompressed = (flags & 0x01);
+            bool  isCompressed = (flags & 0x02);
             
             // Not Yet Implemented
             soakBytes(stream, size - 8);

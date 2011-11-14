@@ -19,7 +19,7 @@
 #define EMFPLUSOBJECTS_H
 
 #include <QDataStream>
-#include <QRect> // also provides QSize
+#include <QRectF> // also provides QSizeF
 #include <QString>
 
 /**
@@ -789,14 +789,7 @@ struct EmfPlusGraphicsVersion {
     quint32 metafileSignature;
     quint32 graphicsVersion;
 
-    EmfPlusGraphicsVersion(QDataStream &stream)
-    {
-        quint32  temp;
-        stream >> temp;
-
-        metafileSignature = temp & 0x0fffff;       // 20 bits
-        graphicsVersion   = (temp >> 20) & 0x0fff;  // 12 bits
-    };
+    EmfPlusGraphicsVersion(QDataStream &stream);
 };
 
 
@@ -1558,6 +1551,8 @@ Height (2 bytes): A 16-bit signed integer that specifies the height of
                    specification of additional structure objects.
 */
 
+QRectF emfPlusRectFromStream(QDataStream &stream);
+
 /**
    EmfPlusRectF Object
 
@@ -1567,7 +1562,7 @@ Height (2 bytes): A 16-bit signed integer that specifies the height of
    See [MS-EMFPLUS] 2.2.2.39
 */
 
-// Use QRectF
+
 
 /*
 X (4 bytes): A 32-bit floating-point value that specifies the
@@ -2284,11 +2279,7 @@ struct BlurEffect {
     float   blurRadius;
     quint32 expandEdge;
 
-    BlurEffect( QDataStream &stream ) 
-    {
-        stream >> blurRadius;
-        stream >> expandEdge;
-    }
+    BlurEffect(QDataStream &stream);
 };
 
 /*

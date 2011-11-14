@@ -85,6 +85,9 @@ public:
     void setClipPath(EmfDeviceContext &context, const quint32 regionMode );
     void bitBlt(EmfDeviceContext &context, BitBltRecord &bitBltRecord );
     void stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord );
+
+    // EMF+
+    void rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects);
 };
 
 

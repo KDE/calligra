@@ -345,6 +345,11 @@ public:
        \param stretchDiBitsRecord contents of the record type
     */
     virtual void stretchDiBits(EmfDeviceContext &context, StretchDiBitsRecord &stretchDiBitsRecord) = 0;
+
+    // ----------------------------------------------------------------
+    //                         Emf+ handlers
+
+    virtual void rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects) = 0;
 };
 
 

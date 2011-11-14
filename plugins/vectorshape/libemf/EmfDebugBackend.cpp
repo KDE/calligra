@@ -256,4 +256,10 @@ void EmfDebugBackend::stretchDiBits(EmfDeviceContext &context, StretchDiBitsReco
 }
 
 
+void EmfDebugBackend::rects(EmfDeviceContext &context, quint32 count, QVector<QRectF> &rects)
+{
+}
+
+
+
 } // xnamespace...
