@@ -56,7 +56,8 @@ void AnimatorLTView::setupUI()
     QHBoxLayout *topLayout = new QHBoxLayout(this);
     
     QAction *setLeftFilterAction = new QAction(SmallIcon("view-filter"), "Set left filter", this);
-    connect(setLeftFilterAction, SIGNAL(triggered(bool)), SLOT(setLeftFilter()));
+    setLeftFilterAction->setCheckable(true);
+    connect(setLeftFilterAction, SIGNAL(triggered(bool)), SLOT(setLeftFilter(bool)));
     QToolButton *setLeftFilterButton = new QToolButton(this);
     setLeftFilterButton->setDefaultAction(setLeftFilterAction);
     topLayout->addWidget(setLeftFilterButton);
@@ -65,7 +66,8 @@ void AnimatorLTView::setupUI()
     topLayout->addWidget(m_nearSpinbox);
     
     QAction *setRightFilterAction = new QAction(SmallIcon("view-filter"), "Set right filter", this);
-    connect(setRightFilterAction, SIGNAL(triggered(bool)), SLOT(setRightFilter()));
+    setRightFilterAction->setCheckable(true);
+    connect(setRightFilterAction, SIGNAL(triggered(bool)), SLOT(setRightFilter(bool)));
     QToolButton *setRightFilterButton = new QToolButton(this);
     setRightFilterButton->setDefaultAction(setRightFilterAction);
     topLayout->addWidget(setRightFilterButton);
@@ -127,24 +129,28 @@ void AnimatorLTView::slidersUpdate()
     }
 }
 
-void AnimatorLTView::setLeftFilter()
+void AnimatorLTView::setLeftFilter(bool val)
 {
-    setFilter(-1);
+    setFilter(-1, val);
 }
 
-void AnimatorLTView::setRightFilter()
+void AnimatorLTView::setRightFilter(bool val)
 {
-    setFilter(+1);
+    setFilter(+1, val);
 }
 
-void AnimatorLTView::setFilter(int relFrame)
+void AnimatorLTView::setFilter(int relFrame, bool val)
 {
     if (relFrame == 0)
         return;
     
     if (m_lt) {
         // TODO: make dialog for choosing filter
-        m_lt->setFilterUsed(true);
+        m_lt->setFilterUsed(relFrame, val);
+        
+        if (!val)
+            return;
+        
         KisAdjustmentLayerSP filter = m_lt->filter(relFrame);
         if (!filter) {
             warnKrita << "No filter";

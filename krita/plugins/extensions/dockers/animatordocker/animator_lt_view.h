@@ -43,11 +43,11 @@ public:
 protected slots:
     virtual void slidersUpdate();
     virtual void setupUI();
-    virtual void setLeftFilter();
-    virtual void setRightFilter();
+    virtual void setLeftFilter(bool val);
+    virtual void setRightFilter(bool val);
     
 protected:
-    virtual void setFilter(int relFrame);
+    virtual void setFilter(int relFrame, bool val);
     
 private:
     AnimatorFilteredLT* m_lt;
