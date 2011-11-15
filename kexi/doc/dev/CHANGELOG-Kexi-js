@@ -1639,7 +1639,7 @@ Forms
 --added static self()
 --is initialized by KexiFormPart
 -See Also:
- http://wiki.calligra-suite.org/index.php?title=Kexi/Porting#Forms_Refactoring
+ http://wiki.calligra.org/index.php?title=Kexi/Porting#Forms_Refactoring
 
 2009-01-11
 KexiDB
