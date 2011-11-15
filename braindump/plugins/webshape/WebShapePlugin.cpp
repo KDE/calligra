@@ -19,7 +19,7 @@
 
 #include "WebShapePlugin.h"
 
-#include <kgenericfactory.h>
+#include <kcomponentfactory.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
