@@ -470,7 +470,6 @@ void ProjectStatusView::setupGui()
 
 void ProjectStatusView::slotOptions()
 {
-    kDebug();
     ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -562,17 +561,14 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     m->setHeaderData( 3, Qt::Horizontal, i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ), Qt::ToolTipRole );
     m->setHeaderData( 4, Qt::Horizontal, ToolTip::nodePerformanceIndex(), Qt::ToolTipRole );
 
-    m->setData( m->index( 0, 0 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 0, 1 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 0, 2 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 0, 3 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 0, 4 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-
-    m->setData( m->index( 1, 0 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 1, 1 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 1, 2 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 1, 3 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
-    m->setData( m->index( 1, 4 ), ( int )( Qt::AlignRight|Qt::AlignVCenter ), Qt::TextAlignmentRole );
+    for ( int r = 0; r < ui_performancetable->verticalHeader()->count(); ++r ) {
+        for ( int c = 0; c < ui_performancetable->horizontalHeader()->count(); ++c ) {
+            QTableWidgetItem *itm = ui_performancetable->item( r, c );
+            Q_ASSERT( itm );
+            itm->setFlags( Qt::ItemIsEnabled );
+            kDebug()<<itm<<itm->flags();
+        }
+    }
 
     BackgroundAttributes backgroundAttrs( ui_chart->backgroundAttributes() );
     backgroundAttrs.setVisible( true );
@@ -617,6 +613,8 @@ void PerformanceStatusBase::setChartInfo( const PerformanceChartInfo &info )
 
 void PerformanceStatusBase::refreshChart()
 {
+    valuesFrame->resize( QSize() );
+
     // NOTE: Force grid/axis recalculation, couldn't find a better way :(
     QResizeEvent event( ui_chart->size(), QSize() );
     QApplication::sendEvent( ui_chart, &event );

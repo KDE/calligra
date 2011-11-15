@@ -43,12 +43,6 @@
       </property>
       <item>
        <widget class="QFrame" name="valuesFrame">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -73,16 +67,22 @@
          <item>
           <widget class="PerformanceTableWidget" name="ui_performancetable">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
-             <verstretch>100</verstretch>
+             <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
            </property>
            <attribute name="horizontalHeaderCascadingSectionResizes">
             <bool>true</bool>
            </attribute>
            <attribute name="verticalHeaderCascadingSectionResizes">
             <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>25</number>
            </attribute>
            <attribute name="verticalHeaderStretchLastSection">
             <bool>false</bool>
@@ -122,6 +122,56 @@
              <string>SPI</string>
             </property>
            </column>
+           <item row="0" column="0">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="0" column="1">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="0" column="2">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="0" column="3">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="0" column="4">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="1" column="0">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="1" column="1">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="1" column="2">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="1" column="3">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
+           <item row="1" column="4">
+            <property name="textAlignment">
+             <set>AlignRight|AlignVCenter</set>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>

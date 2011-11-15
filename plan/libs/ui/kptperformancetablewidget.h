@@ -31,8 +31,8 @@ class PerformanceTableWidget : public QTableWidget
 public:
     PerformanceTableWidget( QWidget *parent );
 
-protected:
     QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 };
 
 } // namespace KPlato

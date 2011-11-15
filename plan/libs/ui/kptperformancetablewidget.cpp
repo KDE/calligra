@@ -28,20 +28,25 @@ PerformanceTableWidget::PerformanceTableWidget( QWidget *parent )
     : QTableWidget( parent )
 {
     horizontalHeader()->setResizeMode( QHeaderView::Stretch );
-    verticalHeader()->setResizeMode( QHeaderView::Stretch );
+    verticalHeader()->setResizeMode( QHeaderView::Fixed );
 }
 
 QSize PerformanceTableWidget::sizeHint() const
 {
     QSize s = QTableView::sizeHint();
-    int h = horizontalHeader()->height() + frameWidth() * 2;
+    int h = horizontalHeader()->height();
     for ( int r = 0; r < rowCount(); ++r ) {
         if ( ! verticalHeader()->isSectionHidden( r ) ) {
             h += verticalHeader()->sectionSize( r );
         }
     }
-    s.setHeight( h );
+    s.setHeight( h + frameWidth() * 2 );
     return s;
+}
+
+QSize PerformanceTableWidget::minimumSizeHint() const
+{
+    return sizeHint();
 }
 
 } // namespace KPlato
