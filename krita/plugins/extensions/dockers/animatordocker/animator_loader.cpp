@@ -108,7 +108,7 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
     KisLayer *sourceLayer = qobject_cast<KisLayer*>(node.data());
 
     if (node->name().startsWith("_ani_")) {
-        layer = loadFramedLayer<NormalAnimatedLayer, SimpleFrameLayer>(node);
+        layer = loadFramedLayer<NormalAnimatedLayer, FilteredFrameLayer>(node);
     } else if (node->name().startsWith("_anicontrol_")) {
         ControlAnimatedLayer* clayer = loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
         clayer->reset();
