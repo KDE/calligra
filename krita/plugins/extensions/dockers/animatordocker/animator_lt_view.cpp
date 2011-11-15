@@ -148,8 +148,10 @@ void AnimatorLTView::setFilter(int relFrame, bool val)
         // TODO: make dialog for choosing filter
         m_lt->setFilterUsed(relFrame, val);
         
-        if (!val)
+        if (!val) {
+            m_lt->update();
             return;
+        }
         
         KisAdjustmentLayerSP filter = m_lt->filter(relFrame);
         if (!filter) {
@@ -163,5 +165,7 @@ void AnimatorLTView::setFilter(int relFrame, bool val)
         filterConfig->setProperty("s", 100);
         filterConfig->setProperty("v", 100);
         filter->setFilter(filterConfig);
+        
+        m_lt->update();
     }
 }

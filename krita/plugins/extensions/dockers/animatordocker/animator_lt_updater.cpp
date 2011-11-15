@@ -30,6 +30,7 @@ AnimatorLTUpdater::AnimatorLTUpdater(AnimatorManager* manager) : AnimatorUpdater
     setMode(AnimatorLTUpdater::Disabled);
     connect(m_LT, SIGNAL(opacityChanged(int)), this, SLOT(updateRelFrame(int)));
     connect(m_LT, SIGNAL(visibilityChanged(int)), this, SLOT(updateRelFrame(int)));
+    connect(m_LT, SIGNAL(fullUpdate()), this, SLOT(updateRelFrames()));
 }
 
 AnimatorLTUpdater::~AnimatorLTUpdater()
@@ -77,6 +78,13 @@ void AnimatorLTUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newF
             frameVisible(framedLayer->frameAt(i+newFrame), getLT()->getOpacityU8(i));
         }
     }
+}
+
+void AnimatorLTUpdater::updateRelFrames()
+{
+    // TODO: don't use switcher
+    int frame = m_manager->getSwitcher()->currentFrame();
+    update(frame, frame);
 }
 
 void AnimatorLTUpdater::updateRelFrame(int relFrame)

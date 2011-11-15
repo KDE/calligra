@@ -42,6 +42,7 @@ signals:
     void nearChanged(int near);
     void opacityChanged(int f);
     void visibilityChanged(int f);
+    void fullUpdate();
     
 public slots:
     void setOpacity(int rel_frame, double op);

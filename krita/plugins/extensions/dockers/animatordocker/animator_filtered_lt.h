@@ -39,6 +39,8 @@ public:
     virtual void setBasicFilter(KisAdjustmentLayerSP layer);
     virtual void setFilterUsed(int relFrame, bool used);
     
+    virtual void update();
+    
 private:
     KisAdjustmentLayerSP m_leftFilter;
     KisAdjustmentLayerSP m_rightFilter;

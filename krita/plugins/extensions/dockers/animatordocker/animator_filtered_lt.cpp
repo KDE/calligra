@@ -83,3 +83,8 @@ void AnimatorFilteredLT::setFilterUsed(int relFrame, bool used)
     if (relFrame > 0)
         m_usedR = used;
 }
+
+void AnimatorFilteredLT::update()
+{
+    emit fullUpdate();
+}

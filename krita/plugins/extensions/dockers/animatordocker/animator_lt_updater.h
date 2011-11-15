@@ -53,6 +53,7 @@ public:
     virtual KisAdjustmentLayerSP filter(int relFrame);
     
 protected slots:
+    virtual void updateRelFrames();
     virtual void updateRelFrame(int relFrame);
     
 protected:
