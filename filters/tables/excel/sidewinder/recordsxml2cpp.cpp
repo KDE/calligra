@@ -74,6 +74,14 @@ static QString getFieldType(QString xmlType, unsigned bits, QString otherType, c
     return "ERROR";
 }
 
+bool hasParentNode(const QDomNode& n, const QString& name)
+{
+    QDomNode p = n.parentNode();
+    if (p.isNull()) return false;
+    if (p.nodeName() == name) return true;
+    return hasParentNode(p, name);
+}
+
 static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0)
 {
     QDomNodeList types = record.elementsByTagName("type");
@@ -94,7 +102,7 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
         if (!name.startsWith("reserved")) {
             map[name] = Field(name, getFieldType(e.attribute("type"), e.attribute("size").toUInt(), map[name].type, extraTypes));
             if (foundStrings && map[name].type == "QString") *foundStrings = true;
-            if (e.parentNode().nodeName() == "array") {
+            if (hasParentNode(e, "array")) {
                 map[name].isArray = true;
             }
             if (e.elementsByTagName("enum").size() > 0) {
@@ -604,7 +612,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
     } else if (field.tagName() == "if") {
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
         for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
-            processFieldElementForWrite(indent + "    ", out, e, fieldsMap);
+            processFieldElementForWrite(indent + "    ", out, e, fieldsMap, getterArgs);
         out << indent << "}\n";
     } else if (field.tagName() == "choose") {
         bool isFirst = true;
@@ -617,7 +625,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
             out << "{\n";
 
             for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-                processFieldElementForWrite(indent + "    ", out, child, fieldsMap);
+                processFieldElementForWrite(indent + "    ", out, child, fieldsMap, getterArgs);
             }
 
             out << indent << "}";
@@ -627,7 +635,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
         QString length = field.attribute("length");
         if (fieldsMap.contains(length))
             length = fieldsMap[length].getterName() + "()";
-        else
+        else if (field.firstChildElement().hasAttribute("name"))
             length = "d->" + field.firstChildElement().attribute("name") + ".size()";
 
         out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
@@ -637,7 +645,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
     } else if (field.tagName() == "optional") {
         out << indent << "if (has" << ucFirst(field.attribute("name")) << "()) {\n";
         for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
-            processFieldElementForWrite(indent + "    ", out, e, fieldsMap);
+            processFieldElementForWrite(indent + "    ", out, e, fieldsMap, getterArgs);
         out << indent << "}\n";
     }
 }
@@ -668,7 +676,7 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
     } else if (field.tagName() == "if") {
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
         for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
-            processFieldElementForDump(indent + "    ", out, e, fieldsMap);
+            processFieldElementForDump(indent + "    ", out, e, fieldsMap, getterArgs);
         out << indent << "}\n";
     } else if (field.tagName() == "choose") {
         bool isFirst = true;
@@ -681,7 +689,7 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
             out << "{\n";
 
             for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-                processFieldElementForDump(indent + "    ", out, child, fieldsMap);
+                processFieldElementForDump(indent + "    ", out, child, fieldsMap, getterArgs);
             }
 
             out << indent << "}";
@@ -691,7 +699,7 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
         QString length = field.attribute("length");
         if (fieldsMap.contains(length))
             length = fieldsMap[length].getterName() + "()";
-        else
+        else if (field.firstChildElement().hasAttribute("name"))
             length = "d->" + field.firstChildElement().attribute("name") + ".size()";
 
         out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
@@ -701,7 +709,7 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
     } else if (field.tagName() == "optional") {
         out << indent << "if (has" << ucFirst(field.attribute("name")) << "()) {\n";
         for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
-            processFieldElementForDump(indent + "    ", out, e, fieldsMap);
+            processFieldElementForDump(indent + "    ", out, e, fieldsMap, getterArgs);
         out << indent << "}\n";
     }
 }

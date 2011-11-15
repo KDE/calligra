@@ -2039,14 +2039,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                                 }
                                 if (!fontSize.isEmpty()) {
                                     fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
-                                    qreal convertedSize = fontSize.toDouble();
-                                    m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+                                    m_currentBulletProperties.setBulletSizePt(fontSize.toDouble());
                                 }
                             }
 
                             m_currentListStyle.addChildElement("list-style-properties",
-                                m_currentBulletProperties.convertToListProperties());
+                                m_currentBulletProperties.convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
                             ++index;
+
                         }
                         m_currentListStyleName = mainStyles->insert(m_currentListStyle, QString(), KoGenStyles::AllowDuplicates);
                         m_usedListStyles[m_previousNumIdUsed] = m_currentListStyleName;
@@ -3022,21 +3022,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
         }
         else  if (m_relativeFromV == "margin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame-content");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
+            }
         }
         else  if (m_relativeFromV == "outsideMargin") {
              // Not supported propery by ODF, making a best guess
-             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
-             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
         else  if (m_relativeFromV == "page") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            }
         }
         else  if (m_relativeFromV == "paragraph") {
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
         }
         else  if (m_relativeFromV == "topMargin") {
-            // Not supported propery by ODF, making a best guess
             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
             m_currentDrawStyle->addProperty("style:vertical-pos", "top");
         }
@@ -3882,13 +3889,21 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblpPr()
     }
     //style:vertical-rel
     if (vertAnchor.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+        if (m_headerActive || m_footerActive) {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+        } else {
+           m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+        }
     }
     else if (vertAnchor == "margin") {
         m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
     }
     else if (vertAnchor == "page") {
-        m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+        if (m_headerActive || m_footerActive) {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+        } else {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+        }
     }
     else if (vertAnchor == "text") {
         m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");

@@ -1640,15 +1640,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_currentCombinedBulletProperties.clear();
     m_currentListLevel = 1; // By default we're in the first level
 
-    bool fileByPowerPoint = false;
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    fileByPowerPoint = true;
 #else
     // TODO: MS Word: There's a different positioning logic for a list inside
     // of a textbox compared to a list in a document body.
 /*     m_prevListLevel = m_currentListLevel = 0; */
     m_currentListLevel = 0;
+#endif
+
+    MSOOXML::Utils::MSOOXMLFilter currentFilter = MSOOXML::Utils::XlsxFilter;
+#ifdef PPTXXMLSLIDEREADER_CPP
+    currentFilter = MSOOXML::Utils::PptxFilter;
+#elif defined  DOCXXMLDOCREADER_CPP
+    currentFilter = MSOOXML::Utils::DocxFilter;
 #endif
 
     QString fontSize = QString();
@@ -1658,13 +1663,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Creating a list out of what we have, note that ppr MAY overwrite the
     // list style
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
-    QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
+/*     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties); */
+    QMutableMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
     int index = 0;
     while (i.hasNext()) {
         index++;
         i.next();
         m_currentListStyle.addChildElement(QString("list-style-properties%1").arg(index),
-            i.value().convertToListProperties(fileByPowerPoint));
+            i.value().convertToListProperties(*mainStyles, currentFilter));
     }
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
@@ -1728,17 +1734,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 m_currentTextStyleProperties = 0;
 
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
-                fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
-                if (!fontSize.isEmpty()) {
-                    fontSize.remove("pt");
-                    qreal realSize = fontSize.toDouble();
-                    if (realSize > m_largestParaFont) {
-                        m_largestParaFont = realSize;
-                    }
-                    if (realSize < m_minParaFont) {
-                        m_minParaFont = realSize;
-                    }
-                }
             }
             ELSE_WRONG_FORMAT
         }
@@ -1753,17 +1748,43 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     Q_UNUSED(pprRead);
 #endif
 
+    // The endParaRPr element specifies the text run properties that are to be
+    // used if another run is inserted after the last run specified.
+    if (!rRead) {
+        fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
+        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+            fontSize.chop(2);
+            qreal realSize = fontSize.toDouble();
+            if (realSize > m_largestParaFont) {
+                m_largestParaFont = realSize;
+            }
+            if (realSize < m_minParaFont) {
+                m_minParaFont = realSize;
+            }
+        }
+    }
+
     //---------------------------------------------
     // Prepare for the List Style
     //---------------------------------------------
-    // This approach has the risk that numbered lists might have different
-    // bullet sizes -> different lists -> numbering won't work as expected
-    if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
-        m_listStylePropertiesAltered = true;
-        if (!fontSize.isEmpty()) {
-            fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
-            qreal convertedSize = fontSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
-            m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+#ifdef PPTXXMLSLIDEREADER_CPP
+    // MS PowerPoint treats each paragraph as a list-item.
+    m_listStylePropertiesAltered = true;
+#endif
+
+    //required to set size of the picture bullet properly
+    if (m_currentBulletProperties.bulletSizePt() == "UNUSED") {
+        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+            fontSize.chop(2);
+            qreal bulletSize = fontSize.toDouble();
+
+            if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
+                bulletSize = (bulletSize * m_currentBulletProperties.bulletRelativeSize().toDouble()) / 100;
+            } else {
+                m_currentBulletProperties.setBulletRelativeSize(100);
+            }
+            m_currentBulletProperties.setBulletSizePt(bulletSize);
+            m_listStylePropertiesAltered = true;
         }
     }
 
@@ -1773,8 +1794,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // text-properties of the paragraph MUST be used.  To help the layout a bit
     // the information could be provided here.
     //
-    // NOTE: Commented out for now, as this creates completely new lists which
-    // is not wanted.  An the layout part must support files created by LO/OOo.
+    // NOTE: Commented out for now because the textlayout must support files
+    // created by LO/OOo.
     //
 /*     if (m_currentBulletProperties.bulletColor() == "UNUSED") { */
 /*         m_listStylePropertiesAltered = true; */
@@ -1799,7 +1820,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
         m_currentBulletProperties.m_level = m_currentListLevel;
         m_currentListStyle.addChildElement("list-style-properties",
-            m_currentBulletProperties.convertToListProperties(fileByPowerPoint));
+            m_currentBulletProperties.convertToListProperties(*mainStyles, currentFilter));
         listStyleName = mainStyles->insert(m_currentListStyle);
         Q_ASSERT(!listStyleName.isEmpty());
 
@@ -1815,11 +1836,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
         m_continueListNumbering[m_currentListLevel] = false;
     }
-    // A list-item without a numbering style or a bullet character/picture
-    // defined.  MS PowerPoint treats each paragraph as a list-item.
-    if (m_currentBulletProperties.isEmpty()) {
-        m_continueListNumbering[m_currentListLevel] = false;
-    }
     if (m_prevListLevel > m_currentListLevel) {
         m_continueListNumbering[m_prevListLevel] = false;
     }
@@ -1827,6 +1843,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     //---------------------------------------------
     // Prepare for the List
     //---------------------------------------------
+
+    // Empty paragraph is NOT considered to be a list-item at the moment.
+    // Prevent stage of displaying a bullet in front of it.
+    if (!rRead) {
+        m_listStylePropertiesAltered = true;
+        m_prevListStyleName.clear();
+        m_currentListLevel = 0;
+    }
+
     body = textPBuf.originalWriter();
 
     // End the previous list in case a new list-style is going to be applied.
@@ -1839,12 +1864,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             }
             m_prevListLevel = 0;
         }
-    }
-    // Empty paragraph is NOT considered to be a list-item at the moment.
-    // Prevent stage of displaying a bullet in front of it.
-    if (!rRead) {
-        m_prevListStyleName.clear();
-        m_currentListLevel = 0;
     }
 
     //---------------------------------------------
@@ -1927,8 +1946,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // in the style:list-level-properties element.  In ODF the paragraph style
     // overrides the list style.
     if (m_currentListLevel > 0) {
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", 0);
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", 0);
+        m_currentParagraphStyle.removeProperty("fo:margin-left");
+        m_currentParagraphStyle.removeProperty("fo:text-indent");
     }
 
     // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
@@ -2413,8 +2432,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - buFontTx (Follow text) §21.1.2.4.7
   - [done] buNone (No Bullet) §21.1.2.4.8
   - [done] buSzPct (Bullet Size Percentage) §21.1.2.4.9
-  - buSzPts (Bullet Size Points) §21.1.2.4.10
-  - buSzTx (Bullet Size Follows Text) §21.1.2.4.11
+  - [done] buSzPts (Bullet Size Points) §21.1.2.4.10
+  - [done] buSzTx (Bullet Size Follows Text) §21.1.2.4.11
   - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
   - extLst (Extension List) §20.1.2.2.15
   - [done] lnSpc (Line Spacing) §21.1.2.2.5
@@ -2492,6 +2511,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
             ELSE_TRY_READ_IF(buSzPct)
+            ELSE_TRY_READ_IF(buSzPts)
+            else if (QUALIFIED_NAME_IS(buSzTx)) {
+                m_currentBulletProperties.setBulletRelativeSize(100);
+            }
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -5098,6 +5121,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             ELSE_TRY_READ_IF(buClr)
             ELSE_TRY_READ_IF(buClrTx)
             ELSE_TRY_READ_IF(buSzPct)
+            ELSE_TRY_READ_IF(buSzPts)
+            else if (QUALIFIED_NAME_IS(buSzTx)) {
+                m_currentBulletProperties.setBulletRelativeSize(100);
+            }
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -5149,8 +5176,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - buFontTx (Follow text)               §21.1.2.4.7
   - [done] buNone (No Bullet)                   §21.1.2.4.8
   - [done] buSzPct (Bullet Size Percentage)     §21.1.2.4.9
-  - buSzPts (Bullet Size Points)         §21.1.2.4.10
-  - buSzTx (Bullet Size Follows Text)    §21.1.2.4.11
+  - [done] buSzPts (Bullet Size Points)         §21.1.2.4.10
+  - [done] buSzTx (Bullet Size Follows Text)    §21.1.2.4.11
   - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
   - extLst (Extension List)              §20.1.2.2.15
   - [done] lnSpc (Line Spacing)                 §21.1.2.2.5
@@ -5413,7 +5440,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClrTx()
 
 #undef CURRENT_EL
 #define CURRENT_EL buSzPct
-//! buSzPct - bullet size
+//! buSzPct (Bullet Size Percentage) ECMA-376, 21.1.2.4.9, p.3638
 /*!
  Parent elements:
  - defPPr  (§21.1.2.2.2)
@@ -5438,8 +5465,41 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buSzPct()
     TRY_READ_ATTR_WITHOUT_NS(val)
 
     if (!val.isEmpty()) {
-        // As percentage
         m_currentBulletProperties.setBulletRelativeSize(val.toInt()/1000);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buSzPt
+//! buSzPts (Bullet Size Points) ECMA-376, 21.1.2.4.10, p.3639
+/*!
+ Parent elements:
+ - defPPr  (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buSzPts()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    if (!val.isEmpty()) {
+        m_currentBulletProperties.setBulletSizePt(val.toInt()/1000);
     }
 
     readNext();

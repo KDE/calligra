@@ -92,6 +92,44 @@ QSize ItemDelegate::sizeHint( const QStyleOptionViewItem & option, const QModelI
     return QSize( s.width(), qMax( s.height(), 18 ) );
 }
 
+//----------------------
+DateTimeCalendarDelegate::DateTimeCalendarDelegate( QObject *parent )
+    : ItemDelegate( parent )
+{
+}
+
+QWidget *DateTimeCalendarDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    QDateTimeEdit *editor = new QDateTimeEdit(parent);
+    editor->setCalendarPopup( true );
+    editor->installEventFilter(const_cast<DateTimeCalendarDelegate*>(this));
+    return editor;
+}
+
+void DateTimeCalendarDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QDateTime value = index.model()->data(index, Qt::EditRole).toDateTime();
+
+    QDateTimeEdit *e = static_cast<QDateTimeEdit*>(editor);
+    e->setDateTime( value );
+}
+
+void DateTimeCalendarDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    QDateTimeEdit *e = static_cast<QDateTimeEdit*>(editor);
+    model->setData( index, e->dateTime(), Qt::EditRole );
+}
+
+void DateTimeCalendarDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    QRect r = option.rect;
+    //r.setHeight(r.height() 50);
+    editor->setGeometry(r);
+}
+
+
 //-----------------------------
 ProgressBarDelegate::ProgressBarDelegate( QObject *parent )
  : ItemDelegate( parent )

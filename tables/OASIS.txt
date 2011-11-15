@@ -299,7 +299,7 @@ two or more links, only the first link will be used.
 Hyperlink (whole cell)
     <table:table-cell>
       <text:p>
-        <text:a xlink:href="http://www.calligra-suite.org/">Visit Calligra website</text:a>
+        <text:a xlink:href="http://www.calligra.org/">Visit Calligra website</text:a>
       </text:p>
     </table:table-cell>
 

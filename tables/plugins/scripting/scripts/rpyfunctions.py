@@ -7,7 +7,7 @@ module ( http://rpy.sourceforge.net ).
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra-suite.org/kspread
+http://www.calligra.org/kspread
 This script is licensed under the BSD license.
 """
 

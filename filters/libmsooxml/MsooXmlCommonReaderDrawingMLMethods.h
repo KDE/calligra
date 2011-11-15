@@ -186,6 +186,7 @@ QMap<quint16, bool> m_continueListNumbering;
 KoFilter::ConversionStatus read_buClr();
 KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
+KoFilter::ConversionStatus read_buSzPts();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
 KoFilter::ConversionStatus read_buNone();

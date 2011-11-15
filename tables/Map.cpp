@@ -523,7 +523,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     sharedData->loadOdfStyles(shapeContext, textStyleManager());
 
-    fixupStyle(textStyleManager()->defaultParagraphStyle()->characterStyle());
+    fixupStyle((KoCharacterStyle*)textStyleManager()->defaultParagraphStyle());
     foreach (KoCharacterStyle* style, sharedData->characterStyles(true)) {
         fixupStyle(style);
     }

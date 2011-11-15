@@ -93,6 +93,19 @@ private:
     Delegate::EndEditHint m_lastHint;
 };
 
+class KPLATOMODELS_EXPORT DateTimeCalendarDelegate : public ItemDelegate
+{
+  Q_OBJECT
+public:
+    DateTimeCalendarDelegate( QObject *parent = 0 );
+
+    QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+    void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+    void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+
+};
+
 class KPLATOMODELS_EXPORT ProgressBarDelegate : public ItemDelegate
 {
   Q_OBJECT

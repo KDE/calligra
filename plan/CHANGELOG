@@ -1,6 +1,25 @@
 
 Calligra Plan current:
 
+* Fix bug 259225: Display performance index numbers in red when spi/cpi is < 1.0
+
+* Fix bug 286495: Update reports automatically when schedule changes
+
+* Fix bug 286413: Use calendar popups for all datetimes
+
+* Gantt chart: Use locale defined weekends/start of week
+
+* Bug 286332: Initially expand resource group in the Task resource allocation dialog
+
+* Resource assignment gantt chart: remember zoom and scale settings
+  Ref bug 284349
+
+* Improve view selector:
+  Enable moving views and categories using drag and drop
+  Fix various problems with the view selector dialogs
+
+* Disable dbus adapter
+
 * Fix scheduling of resources that works during daylight saving time changes
 
 * Set datetime grid hour format in accordance with kde settings

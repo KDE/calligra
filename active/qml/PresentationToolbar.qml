@@ -23,7 +23,9 @@ import QtQuick 1.0
 
 Item
 {
+    id: presentationToolbarRootItem
     property bool containsMouse: previousSlide.containsMouse || nextSlide.containsMouse
+    signal editTriggered
     anchors.fill: parent
 
     Button {
