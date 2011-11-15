@@ -107,7 +107,7 @@ void AnimatorLTUpdater::setupFilter(FrameLayer* frame, int rel)
 {
     FilteredFrameLayer *fframe = qobject_cast<FilteredFrameLayer*>(frame);
     if (fframe) {
-        if (filter(rel) && !fframe->filter()) {
+        if (filter(rel)) {
             fframe->setFilter(qobject_cast<KisAdjustmentLayer*>(filter(rel)->clone().data()));
         } else if (!filter(rel) && fframe->filter()) {
             fframe->setFilter(0);

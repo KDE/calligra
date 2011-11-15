@@ -29,6 +29,7 @@ AnimatorFilteredLT::AnimatorFilteredLT(KisImage *image) : AnimatorLT()
     m_rightFilter = 0;
     
     m_basicFilter = 0;
+    m_used = false;
     
     m_image = image;
     setBasicFilter(new KisAdjustmentLayer(image, "", new KisFilterConfiguration("hsvadjustment", 0), 0));
@@ -41,6 +42,9 @@ AnimatorFilteredLT::~AnimatorFilteredLT()
 
 KisAdjustmentLayerSP AnimatorFilteredLT::filter(int relFrame)
 {
+    if (!m_used)
+        return 0;
+    
     if (!m_basicFilter) {
         warnKrita << "cannot use filter";
         return 0;
@@ -52,6 +56,11 @@ KisAdjustmentLayerSP AnimatorFilteredLT::filter(int relFrame)
     KisAdjustmentLayerSP result = relFrame<0 ? m_leftFilter : m_rightFilter;
     if (!result) {
         result = new KisAdjustmentLayer(*m_basicFilter);
+        if (relFrame < 0) {
+            m_leftFilter = result;
+        } else {
+            m_rightFilter = result;
+        }
     }
     return result;
 }
@@ -60,4 +69,9 @@ KisAdjustmentLayerSP AnimatorFilteredLT::filter(int relFrame)
 void AnimatorFilteredLT::setBasicFilter(KisAdjustmentLayerSP layer)
 {
     m_basicFilter = layer;
+}
+
+void AnimatorFilteredLT::setFilterUsed(bool used)
+{
+    m_used = true;
 }

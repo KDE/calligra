@@ -144,6 +144,7 @@ void AnimatorLTView::setFilter(int relFrame)
     
     if (m_lt) {
         // TODO: make dialog for choosing filter
+        m_lt->setFilterUsed(true);
         KisAdjustmentLayerSP filter = m_lt->filter(relFrame);
         if (!filter) {
             warnKrita << "No filter";
