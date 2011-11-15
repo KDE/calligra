@@ -52,7 +52,7 @@ AnimatorManager::AnimatorManager(KisImage* image)
     
     m_framesNumber = 0;
     
-    m_info = new AnimatorMetaInfo(1, 3);
+    m_info = new AnimatorMetaInfo(1, 4);
     
     connect(this, SIGNAL(layerFramesNumberChanged(AnimatedLayer*,int)), SLOT(framesNumberCheck(AnimatedLayer*,int)));
     
@@ -191,17 +191,16 @@ void AnimatorManager::setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLay
     if (!ready())
         return;
     
-    if (!filter)
-        return;
-    
     if (!frame->getContent())
         return;
     
     if (frame->filter())
         m_nodeManager->removeNode(frame->filter());
     
-    putNodeAt(filter, frame, 1);
-    filter->setName("filter");
+    if (filter) {
+        putNodeAt(filter, frame, 1);
+        filter->setName("filter");
+    }
 }
 
 void AnimatorManager::putNodeAt(KisNodeSP node, KisNodeSP parent, int index)
