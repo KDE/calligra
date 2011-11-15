@@ -39,6 +39,9 @@
 
 AnimatorManager::AnimatorManager(KisImage* image)
 {
+    m_image = image;
+    m_nodeManager = 0;
+    
     m_loader = new AnimatorLoader(this);
     m_switcher = new AnimatorSwitcher(this);
     m_updater = new AnimatorLTUpdater(this);
@@ -46,9 +49,6 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_exporter = new AnimatorExporter(this);
     m_importer = new AnimatorImporter(this);
     m_frameManager = new AnimatorFrameManager(this);
-    
-    m_image = image;
-    m_nodeManager = 0;
     
     m_framesNumber = 0;
     
@@ -478,7 +478,8 @@ void AnimatorManager::createFrame(AnimatedLayer* layer, int frameNumber, const Q
         return;
     }
     
-    SimpleFrameLayer* frame = new SimpleFrameLayer(image(), alayer->getNameForFrame(frameNumber, iskey), 255);
+    SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(alayer->emptyFrame());
+    frame->setName(alayer->getNameForFrame(frameNumber, iskey));
     alayer->insertFrame(frame);
     if (ftype != "")
     {

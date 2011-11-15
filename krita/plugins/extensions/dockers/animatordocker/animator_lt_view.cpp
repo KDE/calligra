@@ -24,6 +24,9 @@
 #include <KIconLoader>
 
 #include <cstdlib>
+#include <dialogs/kis_dlg_adjustment_layer.h>
+#include <kis_adjustment_layer.h>
+#include <filter/kis_filter_configuration.h>
 
 AnimatorLTView::AnimatorLTView(QWidget* parent) : QWidget(parent)
 {
@@ -39,7 +42,7 @@ AnimatorLTView::~AnimatorLTView()
 
 void AnimatorLTView::setLT(AnimatorLT* lt)
 {
-    m_lt = lt;
+    m_lt = qobject_cast<AnimatorFilteredLT*>(lt);
     connect(m_nearSpinbox, SIGNAL(valueChanged(int)), m_lt, SLOT(setNear(int)));
     connect(m_lt, SIGNAL(nearChanged(int)), SLOT(slidersUpdate()));
     slidersUpdate();
@@ -52,7 +55,7 @@ void AnimatorLTView::setupUI()
     
     QHBoxLayout *topLayout = new QHBoxLayout(this);
     
-    QAction *setLeftFilterAction = new QAction(SmallIcon("view-filter"), "Set filter", this);
+    QAction *setLeftFilterAction = new QAction(SmallIcon("view-filter"), "Set left filter", this);
     connect(setLeftFilterAction, SIGNAL(triggered(bool)), SLOT(setLeftFilter()));
     QToolButton *setLeftFilterButton = new QToolButton(this);
     setLeftFilterButton->setDefaultAction(setLeftFilterAction);
@@ -60,6 +63,12 @@ void AnimatorLTView::setupUI()
     
     m_nearSpinbox = new QSpinBox(this);
     topLayout->addWidget(m_nearSpinbox);
+    
+    QAction *setRightFilterAction = new QAction(SmallIcon("view-filter"), "Set right filter", this);
+    connect(setRightFilterAction, SIGNAL(triggered(bool)), SLOT(setRightFilter()));
+    QToolButton *setRightFilterButton = new QToolButton(this);
+    setRightFilterButton->setDefaultAction(setRightFilterAction);
+    topLayout->addWidget(setRightFilterButton);
     
     m_layout->addLayout(topLayout);
     
@@ -120,7 +129,32 @@ void AnimatorLTView::slidersUpdate()
 
 void AnimatorLTView::setLeftFilter()
 {
+    setFilter(-1);
+}
+
+void AnimatorLTView::setRightFilter()
+{
+    setFilter(+1);
+}
+
+void AnimatorLTView::setFilter(int relFrame)
+{
+    if (relFrame == 0)
+        return;
+    
     if (m_lt) {
+        // TODO: make dialog for choosing filter
+        KisAdjustmentLayerSP filter = m_lt->filter(relFrame);
+        if (!filter) {
+            warnKrita << "No filter";
+            return;
+        }
         
+        KisFilterConfiguration *filterConfig = new KisFilterConfiguration("hsvadjustment", 0);
+        int h = relFrame>0 ? 120 : 0;
+        filterConfig->setProperty("h", h);
+        filterConfig->setProperty("s", 100);
+        filterConfig->setProperty("v", 100);
+        filter->setFilter(filterConfig);
     }
 }

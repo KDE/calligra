@@ -121,7 +121,7 @@ void FramedAnimatedLayer::createFrame(int num, bool isKey, KisNodeSP content)
 
 FrameLayer* FramedAnimatedLayer::emptyFrame()
 {
-    return new SimpleFrameLayer(image(), "", 255);
+    return new FilteredFrameLayer(image(), "", 255);
 }
 
 void FramedAnimatedLayer::clearFrame(int num)

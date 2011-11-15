@@ -17,51 +17,34 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ANIMATOR_LT_UPDATER_H
-#define ANIMATOR_LT_UPDATER_H
+#ifndef ANIMATOR_FILTERED_LT_H
+#define ANIMATOR_FILTERED_LT_H
 
-#include "animator_updater.h"
-#include "animator_filtered_lt.h"
+#include "animator_lt.h"
+#include <kis_types.h>
+#include <kis_image.h>
 
 
-class AnimatorLTUpdater : public AnimatorUpdater
+class AnimatorFilteredLT : public AnimatorLT
 {
     Q_OBJECT
     
 public:
-    enum LTUpdaterMode {
-        Disabled,
-        Normal,
-        KeyFramed
-    };
-    
-public:
-    AnimatorLTUpdater(AnimatorManager* manager);
-    virtual ~AnimatorLTUpdater();
-    
-public:
-    virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
-    
-public:
-    virtual void setMode(LTUpdaterMode mode);
-    virtual LTUpdaterMode mode() const;
-    
-public:
-    virtual AnimatorFilteredLT *getLT();
+    AnimatorFilteredLT(KisImage *image);
+    virtual ~AnimatorFilteredLT();
     
 public:
     virtual KisAdjustmentLayerSP filter(int relFrame);
     
-protected slots:
-    virtual void updateRelFrame(int relFrame);
-    
-protected:
-    virtual void setupFilter(FrameLayer *frame, int rel);
+    virtual void setBasicFilter(KisAdjustmentLayerSP layer);
     
 private:
-    AnimatorFilteredLT *m_LT;
+    KisAdjustmentLayerSP m_leftFilter;
+    KisAdjustmentLayerSP m_rightFilter;
     
-    LTUpdaterMode m_mode;
+    KisAdjustmentLayerSP m_basicFilter;
+    
+    KisImage *m_image;
 };
 
-#endif // ANIMATOR_LT_UPDATER_H
+#endif // ANIMATOR_FILTERED_LT_H

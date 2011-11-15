@@ -26,11 +26,10 @@
 
 AnimatorLTUpdater::AnimatorLTUpdater(AnimatorManager* manager) : AnimatorUpdater(manager)
 {
-    m_LT = new AnimatorLT();
+    m_LT = new AnimatorFilteredLT(manager->image());
     setMode(AnimatorLTUpdater::Disabled);
     connect(m_LT, SIGNAL(opacityChanged(int)), this, SLOT(updateRelFrame(int)));
     connect(m_LT, SIGNAL(visibilityChanged(int)), this, SLOT(updateRelFrame(int)));
-    setFilter(0);
 }
 
 AnimatorLTUpdater::~AnimatorLTUpdater()
@@ -107,15 +106,17 @@ void AnimatorLTUpdater::updateRelFrame(int relFrame)
 void AnimatorLTUpdater::setupFilter(FrameLayer* frame, int rel)
 {
     FilteredFrameLayer *fframe = qobject_cast<FilteredFrameLayer*>(frame);
-    if (fframe && m_filter) {
-        if (!fframe->filter()) {
-            fframe->setFilter(m_filter);
+    if (fframe) {
+        if (filter(rel) && !fframe->filter()) {
+            fframe->setFilter(qobject_cast<KisAdjustmentLayer*>(filter(rel)->clone().data()));
+        } else if (!filter(rel) && fframe->filter()) {
+            fframe->setFilter(0);
         }
     }
 }
 
 
-AnimatorLT* AnimatorLTUpdater::getLT()
+AnimatorFilteredLT* AnimatorLTUpdater::getLT()
 {
     return m_LT;
 }
@@ -137,7 +138,11 @@ void AnimatorLTUpdater::setMode(AnimatorLTUpdater::LTUpdaterMode mode)
 }
 
 
-void AnimatorLTUpdater::setFilter(KisAdjustmentLayerSP filter)
+KisAdjustmentLayerSP AnimatorLTUpdater::filter(int relFrame)
 {
-    m_filter = filter.data();
+    AnimatorFilteredLT *flt = qobject_cast<AnimatorFilteredLT*>(getLT());
+    if (flt) {
+        return flt->filter(relFrame);
+    }
+    return 0;
 }

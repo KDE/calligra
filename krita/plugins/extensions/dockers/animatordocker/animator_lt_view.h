@@ -26,8 +26,8 @@
 #include <QLayoutItem>
 #include <QSpinBox>
 
-#include "animator_lt.h"
 #include "lt_slider.h"
+#include "animator_filtered_lt.h"
 
 class AnimatorLTView : public QWidget
 {
@@ -44,10 +44,13 @@ protected slots:
     virtual void slidersUpdate();
     virtual void setupUI();
     virtual void setLeftFilter();
-//     virtual void setRightFilter();
+    virtual void setRightFilter();
+    
+protected:
+    virtual void setFilter(int relFrame);
     
 private:
-    AnimatorLT* m_lt;
+    AnimatorFilteredLT* m_lt;
     
 private:
     QVBoxLayout* m_layout;
