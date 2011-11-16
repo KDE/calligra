@@ -467,22 +467,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:g, because we have
 
     {
-        // The purpose of this class is to make sure the this->body variable is proper
-        // set back to what it was before even if one of the TRY_READ calls lead to
-        // us skipping out of this method. In that case we need to make sure to restore
-        // the body variable else things may later crash.
-        //
-        // FIXME refactor the XmlWriteBuffer and merge this hack in so we don't
-        // need to work-around at any place where it's used.
-        //
-        class KeepBodyHack {
-        public:
-            KeepBodyHack(MSOOXML_CURRENT_CLASS *self, MSOOXML::Utils::XmlWriteBuffer *buf) : m_self(self), m_buf(buf) {}
-            ~KeepBodyHack() { m_self->body = m_buf->originalWriter(); }
-            MSOOXML_CURRENT_CLASS *m_self;
-            MSOOXML::Utils::XmlWriteBuffer *m_buf;
-        };
-        KeepBodyHack back(this, &drawFrameBuf);
+        MSOOXML::Utils::AutoRestore<KoXmlWriter> autoRestoreBody(&body);
 
         // to write after the child elements are generated
         body = drawFrameBuf.setWriter(body);
@@ -506,6 +491,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
         }
     }
 
+    body = drawFrameBuf.originalWriter();
     body->startElement("draw:g");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
