@@ -268,10 +268,12 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
 
     d->canvas = canvas;
     KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
-    KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-    if (collection) {
-        d->mainWidget->updateMarkers(collection->markers());
+    if (resourceManager) {
+        KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+        if (collection) {
+            d->mainWidget->updateMarkers(collection->markers());
 
+        }
     }
 }
 
