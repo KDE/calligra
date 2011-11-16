@@ -1445,7 +1445,6 @@ KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) cons
 
 QPainterPath KoPathShape::pathStroke(const QPen pen) const
 {
-    Q_D(const KoPathShape);
     QPainterPath pathOutline;
 
     QPainterPathStroker stroker;
@@ -1464,10 +1463,10 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
     bool twoPointPath = subpathPointCount(0) == 2;
     bool closedPath = isClosedSubpath(0);
 
-    KoMarkerData mdBegin = markerData(KoMarkerData::MarkerStart);
+    KoMarkerData mdStart = markerData(KoMarkerData::MarkerStart);
     KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);
-    if (mdBegin.marker() && !closedPath) {
-        QPainterPath markerPath = mdBegin.marker()->path(mdBegin.width() + pen.widthF() * 1.5);
+    if (mdStart.marker() && !closedPath) {
+        QPainterPath markerPath = mdStart.marker()->path(mdStart.width() + pen.widthF() * 1.5);
 
         KoPathSegment firstSegment = segmentByIndex(KoPathPointIndex(0, 0));
         if (firstSegment.isValid()) {
