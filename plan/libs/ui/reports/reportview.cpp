@@ -442,6 +442,10 @@ void ReportView::setReportModels( const QMap<QString, QAbstractItemModel*> &map 
 
 void ReportView::slotRefreshView()
 {
+    if ( ! isVisible() ) {
+        kDebug()<<"Not visible";
+        return;
+    }
     delete m_preRenderer;
     QDomElement e = m_design.documentElement();
     m_preRenderer = new KoReportPreRenderer( e.firstChildElement( "report:content" ) );
