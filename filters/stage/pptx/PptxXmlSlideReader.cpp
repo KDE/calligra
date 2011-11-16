@@ -1415,6 +1415,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);
     m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0/*indentation*/);
+    MSOOXML::Utils::AutoPtrSetter<KoXmlWriter> placeholderElWriterSetter(m_placeholderElWriter);
 
     bool potentiallyAddToLayoutFrames = false;
 
@@ -1479,6 +1480,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     placeholderElBuffer.close();
     m_currentPresentationPageLayoutStyle.addProperty(QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
+    placeholderElWriterSetter.release();
     delete m_placeholderElWriter;
     m_placeholderElWriter = 0;
 
