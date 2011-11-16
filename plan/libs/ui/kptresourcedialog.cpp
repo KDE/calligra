@@ -30,10 +30,10 @@
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
 
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
+#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <akonadi/contact/emailaddressselectionwidget.h>
+#include <akonadi/contact/emailaddressselection.h>
 
-#include <k3command.h>
 #include <kdatetimewidget.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -193,17 +193,22 @@ void ResourceDialogImpl::slotCalculationNeeded(const QString&) {
 
 void ResourceDialogImpl::slotChooseResource()
 {
-    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty()) {
-        nameEdit->setText(a.assembledName());
-        emailEdit->setText(a.preferredEmail());
-        QStringList l = a.assembledName().split(' ');
-        QString in;
-        QStringList::Iterator it = l.begin();
-        for (/*int i = 0*/; it != l.end(); ++it) {
-            in += (*it)[0];
+    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
+    if ( dlg->exec() && dlg ) {
+        QStringList s;
+        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
+        if ( ! selections.isEmpty() ) {
+            const Akonadi::EmailAddressSelection s = selections.first();
+            nameEdit->setText( s.name() );
+            emailEdit->setText( s.email() );
+            QStringList l = s.name().split(' ');
+            QString in;
+            QStringList::Iterator it = l.begin();
+            for (/*int i = 0*/; it != l.end(); ++it) {
+                in += (*it)[0];
+            }
+            initialsEdit->setText(in);
         }
-        initialsEdit->setText(in);
     }
 }
 

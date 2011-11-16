@@ -1216,7 +1216,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         QSharedPointer<QTextDocument> doc = richText();
         if (doc) {
             QTextCharFormat format = style().asCharFormat();
-            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+            ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
             KoEmbeddedDocumentSaver embeddedSaver;
             KoShapeSavingContext shapeContext(xmlwriter, mainStyles, embeddedSaver);
@@ -1713,7 +1713,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             }
 
             QTextCharFormat format = style.asCharFormat();
-            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+            ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
             KoTextLoader loader(*tableContext.shapeContext);
             QSharedPointer<QTextDocument> doc(new QTextDocument);

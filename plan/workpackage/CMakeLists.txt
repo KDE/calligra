@@ -40,9 +40,7 @@ target_link_libraries(
     kplatomodels
     kplatoui
     planprivate
-
     komain
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -74,7 +72,6 @@ target_link_libraries(
     planworkfactory
     kplatokernel
     komain
-    ${QT_QT3SUPPORT_LIBRARY}   
     )
 
 set_target_properties(planworkapp PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -101,7 +98,6 @@ target_link_libraries(
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kdeinit_calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})

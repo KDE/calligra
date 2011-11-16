@@ -312,7 +312,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
             range = range.mid(1, range.length() - 2);
         Calligra::Tables::Region region(Calligra::Tables::Region::loadOdf(range), d->outputDoc->map());
         if (!region.isValid() || !region.lastSheet()) {
-            kDebug() << "invalid area";
+            kDebug() << "invalid area" << range;
             continue;
         }
         d->outputDoc->map()->namedAreaManager()->insert(region, it->first.second);
@@ -646,7 +646,21 @@ void ExcelImport::Private::processSheetForFilters(Sheet* is, Calligra::Tables::S
         r.setBottom(is->maxRow()+1);
         Calligra::Tables::Region range(r, os);
         db.setRange(range);
+        db.setFilter(is->autoFilters());
         os->cellStorage()->setDatabase(range, db);
+
+        // xls files don't seem to make a difference between hidden and filtered rows, so
+        // assume all rows in a database range are filtered, not explicitly hidden
+        int row = r.top() + 1;
+        while (row <= r.bottom()) {
+            int lastRow;
+            bool isHidden = os->rowFormats()->isHidden(row, &lastRow);
+            if (isHidden) {
+                os->rowFormats()->setHidden(row, lastRow, false);
+                os->rowFormats()->setFiltered(row, lastRow, true);
+            }
+            row = lastRow + 1;
+        }
     }
 }
 

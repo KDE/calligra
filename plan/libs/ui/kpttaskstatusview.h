@@ -32,6 +32,7 @@
 #include "kptnodechartmodel.h"
 
 #include <QSplitter>
+#include <QTableWidget>
 
 #include "KDChartBarDiagram"
 

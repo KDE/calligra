@@ -104,6 +104,12 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
+2011-11-16
+Widgets
+*QCommandLinkButton have fonts size hardcoded what breaks accessibility
+**Reported at https://bugreports.qt.nokia.com/browse/QTBUG-3255 but still not fixed
+**Resolved by forking the class because no workaround is possible
+
 2011-11-02..06
 Forms
 *Context Menu for container widgets appears misplaced
@@ -1639,7 +1645,7 @@ Forms
 --added static self()
 --is initialized by KexiFormPart
 -See Also:
- http://wiki.calligra-suite.org/index.php?title=Kexi/Porting#Forms_Refactoring
+ http://wiki.calligra.org/index.php?title=Kexi/Porting#Forms_Refactoring
 
 2009-01-11
 KexiDB

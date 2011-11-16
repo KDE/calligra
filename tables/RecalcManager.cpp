@@ -211,7 +211,11 @@ void RecalcManager::addSheet(Sheet *sheet)
 {
     // Manages also the revival of a deleted sheet.
     Q_UNUSED(sheet);
-    recalcMap(); // FIXME Stefan: Implement a more elegant solution.
+
+    // sebsauer: not recalc everytime on loading - bug 284325
+    if (!d->map->isLoading()) {
+        recalcMap(); // FIXME Stefan: Implement a more elegant solution.
+    }
 }
 
 void RecalcManager::removeSheet(Sheet *sheet)

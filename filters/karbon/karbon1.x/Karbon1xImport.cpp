@@ -156,7 +156,7 @@ bool KarbonImport::loadXML(const KoXmlElement& doc)
                                    "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
 
     // add some PR.  one line is more than enough.
-    m_svgWriter->addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->\n");
+    m_svgWriter->addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->\n");
     m_svgWriter->startElement("svg");
     m_svgWriter->addAttribute("xmlns", "http://www.w3.org/2000/svg");
     m_svgWriter->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");

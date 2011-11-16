@@ -584,7 +584,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
 
     //Decide show or hide Custom Slide Shows View
     if (panelVisible != m_editCustomSlideShow) {
-        const bool animate = KGlobalSettings::graphicEffectsLevel() && KGlobalSettings::SimpleAnimationEffects;
+        const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
         const int duration = animate ? 250 : 1;
         QPropertyAnimation *animation = new QPropertyAnimation(m_customSlideShowView, "maximumHeight");
 

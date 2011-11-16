@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE spreadsheet PUBLIC "-//KDE//DTD kspread 1.2//EN" "http://www.calligra-suite.org/DTD/kspread-1.2.dtd">
-<spreadsheet xmlns="http://www.calligra-suite.org/DTD/kspread" mime="application/x-kspread" syntaxVersion="1" editor="KSpread" >
+<!DOCTYPE spreadsheet PUBLIC "-//KDE//DTD kspread 1.2//EN" "http://www.calligra.org/DTD/kspread-1.2.dtd">
+<spreadsheet xmlns="http://www.calligra.org/DTD/kspread" mime="application/x-kspread" syntaxVersion="1" editor="KSpread" >
  <defaults row-height="13" col-width="65" />
  <defaults row-height="13" col-width="65" />
  <styles>
