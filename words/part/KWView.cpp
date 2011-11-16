@@ -1504,14 +1504,17 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             anchor->setOffset(QPointF(0, -shape->size().height()));
             // insert the anchor into the text document
             KoTextEditor editor(qdoc);
-            editor.insertInlineObject(anchor);
+
+            // create the master command
+            KUndo2Command *macro = new KUndo2Command(i18nc("(qtundo-format)", "Create shape"));
+            editor.insertInlineObject(anchor, macro);
 
             // create the undo step.
-            KoShapeCreateCommand *cmd = new KoShapeCreateCommand(kwdocument(), shape);
+            new KoShapeCreateCommand(kwdocument(), shape, macro);
             KoSelection *selection = m_canvas->shapeManager()->selection();
             selection->deselectAll();
             selection->select(shape);
-            m_canvas->addCommand(cmd);
+            m_canvas->addCommand(macro);
 
         }
         else {
