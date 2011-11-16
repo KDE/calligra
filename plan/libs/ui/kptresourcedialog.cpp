@@ -34,7 +34,6 @@
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 
-#include <k3command.h>
 #include <kdatetimewidget.h>
 #include <kmessagebox.h>
 #include <klocale.h>

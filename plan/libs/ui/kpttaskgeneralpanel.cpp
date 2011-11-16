@@ -33,7 +33,6 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <k3command.h>
 #include <kdatewidget.h>
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
