@@ -51,10 +51,10 @@ public:
     QVector<qreal> lineDashes() const;
     qreal lineWidth() const;
     qreal miterLimit() const;
-    KoMarker *beginMarker() const;
+    KoMarker *startMarker() const;
     KoMarker *endMarker() const;
 
-    void updateControls(KoLineBorder &border, KoMarker *beginMarker, KoMarker *endMarker);
+    void updateControls(KoLineBorder &border, KoMarker *startMarker, KoMarker *endMarker);
 
     void locationChanged(Qt::DockWidgetArea area);
 
@@ -79,8 +79,8 @@ signals:
     /// Emitted when the line miter limit changes.
     void miterLimitChanged();
     
-    /// Emitted when the begin marker changes.
-    void currentBeginMarkerChanged();
+    /// Emitted when the start marker changes.
+    void currentStartMarkerChanged();
 
     /// Emitted when the end marker changes.
     void currentEndMarkerChanged();

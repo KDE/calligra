@@ -68,7 +68,7 @@ public:
         , mainWidget(0)
     {}
 
-    KoMarker *beginMarker;
+    KoMarker *startMarker;
     KoMarker *endMarker;
     KoLineBorder border;
     KoCanvasBase *canvas;
@@ -89,10 +89,10 @@ StrokeDocker::StrokeDocker()
     connect( d->mainWidget, SIGNAL(capChanged(int)),       this, SLOT(slotCapChanged(int)));
     connect( d->mainWidget, SIGNAL(joinChanged(int)),      this, SLOT(slotJoinChanged(int)));
     connect( d->mainWidget, SIGNAL(miterLimitChanged()),   this, SLOT(miterLimitChanged()));
-    connect( d->mainWidget, SIGNAL(currentBeginMarkerChanged()), this, SLOT(beginMarkerChanged()));
+    connect( d->mainWidget, SIGNAL(currentStartMarkerChanged()), this, SLOT(startMarkerChanged()));
     connect( d->mainWidget, SIGNAL(currentEndMarkerChanged()), this, SLOT(endMarkerChanged()));
 
-    d->mainWidget->updateControls(d->border, d->beginMarker, d->endMarker);
+    d->mainWidget->updateControls(d->border, d->startMarker, d->endMarker);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
@@ -115,7 +115,7 @@ void StrokeDocker::applyChanges()
 
     canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
 
-    d->mainWidget->updateControls(d->border, d->beginMarker, d->endMarker);
+    d->mainWidget->updateControls(d->border, d->startMarker, d->endMarker);
 
     if (!selection || !selection->count())
         return;
@@ -135,7 +135,7 @@ void StrokeDocker::applyMarkerChanges(KoMarkerData::MarkerPosition position)
 {
     KoMarker *marker = 0;
     if (position == KoMarkerData::MarkerStart){
-        marker = d->beginMarker;
+        marker = d->startMarker;
     } else if (position == KoMarkerData::MarkerEnd){
         marker = d->endMarker;
     }
@@ -194,9 +194,9 @@ void StrokeDocker::miterLimitChanged()
     applyChanges();
 }
 
-void StrokeDocker::beginMarkerChanged()
+void StrokeDocker::startMarkerChanged()
 {
-    d->beginMarker = d->mainWidget->beginMarker();
+    d->startMarker = d->mainWidget->startMarker();
     applyMarkerChanges(KoMarkerData::MarkerStart);
 }
 
@@ -241,14 +241,14 @@ void StrokeDocker::selectionChanged()
         setStroke(shape->border());
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
-            d->beginMarker = pathShape->marker(KoMarkerData::MarkerStart);
+            d->startMarker = pathShape->marker(KoMarkerData::MarkerStart);
             d->endMarker = pathShape->marker(KoMarkerData::MarkerEnd);
         }
         else {
-            d->beginMarker = 0;
+            d->startMarker = 0;
             d->endMarker = 0;
         }
-        d->mainWidget->updateControls(d->border, d->beginMarker, d->endMarker);
+        d->mainWidget->updateControls(d->border, d->startMarker, d->endMarker);
     }
 }
 

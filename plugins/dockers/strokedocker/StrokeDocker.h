@@ -64,8 +64,8 @@ private slots:
     void slotJoinChanged( int ID );
     /// miter limit has changed
     void miterLimitChanged();
-    /// begin marker has changed
-    void beginMarkerChanged();
+    /// start marker has changed
+    void startMarkerChanged();
     /// end marker has changed
     void endMarkerChanged();
     
@@ -79,7 +79,7 @@ private:
     /// apply line changes to the selected shape
     void applyChanges();
 
-    /// apply begin marker changes to the selected shape
+    /// apply marker changes to the selected shape
     void applyMarkerChanges(KoMarkerData::MarkerPosition position);
 
     /// reimplemented
