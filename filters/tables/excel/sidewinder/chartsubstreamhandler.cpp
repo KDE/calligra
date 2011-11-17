@@ -280,6 +280,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleCrtLine(static_cast<CrtLineRecord*>(record));
     else if (type == CatSerRangeRecord::id)
         handleCatSerRange(static_cast<CatSerRangeRecord*>(record));
+    else if (type == AttachedLabelRecord::id)
+        handleAttachedLabel(static_cast<AttachedLabelRecord*>(record));
+    else if (type == DataLabelExtContentsRecord::id)
+        handleDataLabelExtContents(static_cast<DataLabelExtContentsRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -1100,5 +1104,24 @@ void ChartSubStreamHandler::handleCatSerRange(CatSerRangeRecord *record)
 {
     if (!record) return;
     DEBUG << "fBetween=" << record->isFBetween() << " fMaxCross=" << record->isFMaxCross() << " fReverse=" << record->isFReverse() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleAttachedLabel(AttachedLabelRecord *record)
+{
+    if (!record) return;
+    DEBUG << "fShowValue=" << record->isFShowValue() << " fShowPercent=" << record->isFShowPercent() << " fShowLabelAndPerc=" << record->isFShowLabelAndPerc() << " fShowLabel=" << record->isFShowLabel() << " fShowBubbleSizes=" << record->isFShowBubbleSizes() << " fShowSeriesName=" << record->isFShowSeriesName() << std::endl;
+    if (m_currentSeries) {
+        m_currentSeries->m_showDataLabelValues = record->isFShowValue();
+        m_currentSeries->m_showDataLabelPercent = record->isFShowPercent() || record->isFShowLabelAndPerc();
+        m_currentSeries->m_showDataLabelCategory = record->isFShowLabel() || record->isFShowLabelAndPerc();
+        m_currentSeries->m_showDataLabelSeries = record->isFShowSeriesName();
+    }
+}
+
+void ChartSubStreamHandler::handleDataLabelExtContents(DataLabelExtContentsRecord *record)
+{
+    if (!record) return;
+    DEBUG << "rt=" << record->rt() << " grbitFrt=" << record->grbitFrt() << " fSerName=" << record->isFSerName() << " fCatName=" << record->isFCatName() << " fValue=" << record->isFValue() << " fPercent=" << record->isFPercent() << " fBubSize=" << record->isFBubSize() << std::endl;
     //TODO
 }

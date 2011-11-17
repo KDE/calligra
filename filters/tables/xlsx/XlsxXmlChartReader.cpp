@@ -1040,6 +1040,22 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
     READ_EPILOGUE
 }
 
+void XlsxXmlChartReader::read_showDataLabel()
+{
+    if ( m_currentSeries ) {
+        const QXmlStreamAttributes attrs(attributes());
+        if ( qualifiedName() == "c:showVal" ) {
+            m_currentSeries->m_showDataLabelValues = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        } else if ( qualifiedName() == "c:showPercent" ) {
+            m_currentSeries->m_showDataLabelPercent = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        } else if ( qualifiedName() == "c:showCatName" ) {
+            m_currentSeries->m_showDataLabelCategory = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        } else if ( qualifiedName() == "c:showSerName" ) {
+            m_currentSeries->m_showDataLabelSeries = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        }
+    }
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL dLbl
 //! dLbl (Data Label)
@@ -1071,16 +1087,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbl()
 {
     READ_PROLOGUE
-      while (!atEnd()) {
-          readNext();
-          BREAK_IF_END_OF(CURRENT_EL)
-          if (isStartElement()) {
-              if ( qualifiedName() == "c:showVal" ) {
-                  m_currentSeries->m_showDataValues = true;
-              }
-          }
-      }
-      READ_EPILOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            read_showDataLabel();
+        }
+    }
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -1133,20 +1147,16 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbl()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
 {
     READ_PROLOGUE
-      while (!atEnd()) {
-          readNext();
-          BREAK_IF_END_OF(CURRENT_EL)
-          if (isStartElement()) {
-              TRY_READ_IF(dLbl)
-              if ( qualifiedName() == "c:showVal" ) {
-                  m_currentSeries->m_showDataValues = true;
-              }
-          }
-      }
-      READ_EPILOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(dLbl)
+            read_showDataLabel();
+        }
+    }
+    READ_EPILOGUE
 }
-
-
 
 #undef CURRENT_EL
 #define CURRENT_EL spPr

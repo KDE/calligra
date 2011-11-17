@@ -677,9 +677,18 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 }
             }
         }
-        if ( series->m_showDataValues ) {
+
+        if ( series->m_showDataLabelValues ) {
             seriesstyle.addProperty( "chart:data-label-number", "value", KoGenStyle::ChartType );
         }
+        else if ( series->m_showDataLabelPercent ) {
+            seriesstyle.addProperty( "chart:data-label-number", "percentage", KoGenStyle::ChartType );
+        }
+        if ( series->m_showDataLabelCategory ) {
+            seriesstyle.addProperty( "chart:data-label-text", "true", KoGenStyle::ChartType );
+        }
+        //seriesstyle.addProperty( "chart:data-label-symbol", "true", KoGenStyle::ChartType );
+
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
 
         // ODF does not support custom labels so we depend on the SeriesLegendOrTrendlineName being defined
