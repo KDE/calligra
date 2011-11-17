@@ -123,10 +123,6 @@
 //first fix the geometry
 //#define KEXI_NO_CTXT_HELP 1
 
-#ifndef KEXI_NO_CTXT_HELP
-#include <kexicontexthelp.h>
-#endif
-
 #ifdef HAVE_KNEWSTUFF
 #include <knewstuff/downloaddialog.h>
 #include "kexinewstuff.h"
@@ -1147,14 +1143,6 @@ void KexiMainWindow::setupActions()
       d->action_show_other = new KActionMenu(i18n("Other"),
         actionCollection(), "options_show_other");
         */
-#endif
-
-#ifndef KEXI_NO_CTXT_HELP
-    /*! @todo 2.0
-      d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", Qt::CTRL + Qt::Key_H,
-       actionCollection(), "options_show_contexthelp");
-      d->action_show_helper->setCheckedState(i18n("Hide Context Help"));
-      */
 #endif
 
 #ifdef KEXI_MACROS_SUPPORT

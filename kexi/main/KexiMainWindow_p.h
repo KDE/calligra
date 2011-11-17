@@ -407,7 +407,7 @@ private:
 
 void KexiMainMenu::contentWidgetDestroyed()
 {
-    setContent(0);
+    //not needed setContent(0);
 }
 
 class KexiTabbedToolBarTabBar;
