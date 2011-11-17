@@ -664,6 +664,7 @@ QString Calligra::Tables::Util::adjustFormulaReference(const QString& formula, i
                     replaceFormulaReference(referencedRow, referencedColumn, thisRow, thisColumn, result, cellReferenceStart, i - cellReferenceStart);
                 }
                 state = InStart;
+                --i; // decrement again to handle the current char in the InStart-switch.
             }
             break;
         };
