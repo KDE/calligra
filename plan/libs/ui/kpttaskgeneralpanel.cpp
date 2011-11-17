@@ -225,7 +225,7 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     setObjectName(n);
     setupUi(this);
 #if ! KDE_IS_VERSION( 4, 5, 0 )
-    chooseLeader.hide();
+    chooseLeader->hide();
 #endif
 
     connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));

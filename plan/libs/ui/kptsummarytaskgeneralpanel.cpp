@@ -50,7 +50,7 @@ SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const c
     setObjectName(n);
     setupUi(this);
 #if ! KDE_IS_VERSION( 4, 5, 0 )
-    chooseLeader.hide();
+    chooseLeader->hide();
 #endif
 
     m_description = new TaskDescriptionPanel( task, this );
