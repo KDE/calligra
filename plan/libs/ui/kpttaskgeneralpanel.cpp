@@ -34,9 +34,13 @@
 #include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kdatewidget.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
+#endif
 
 #include <qdatetime.h>
 #include <QPushButton>
@@ -220,6 +224,9 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
 
     setObjectName(n);
     setupUi(this);
+#if ! KDE_IS_VERSION( 4, 5, 0 )
+    chooseLeader.hide();
+#endif
 
     connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
@@ -252,6 +259,7 @@ int TaskGeneralPanelImpl::schedulingType() const
 
 void TaskGeneralPanelImpl::changeLeader()
 {
+#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -275,6 +283,7 @@ void TaskGeneralPanelImpl::changeLeader()
             leaderfield->setText( names.join( ", " ) );
         }
     }
+#endif
 }
 
 void TaskGeneralPanelImpl::setEstimationType( int type )

@@ -29,9 +29,13 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
+#endif
 
 #include <QPushButton>
 #include <kdebug.h>
@@ -45,7 +49,10 @@ SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const c
 {
     setObjectName(n);
     setupUi(this);
-    
+#if ! KDE_IS_VERSION( 4, 5, 0 )
+    chooseLeader.hide();
+#endif
+
     m_description = new TaskDescriptionPanel( task, this );
     m_description->namefield->hide();
     m_description->namelabel->hide();
@@ -113,7 +120,9 @@ bool SummaryTaskGeneralPanel::ok() {
     return true;
 }
 
-void SummaryTaskGeneralPanel::slotChooseResponsible() {
+void SummaryTaskGeneralPanel::slotChooseResponsible()
+{
+#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -137,6 +146,7 @@ void SummaryTaskGeneralPanel::slotChooseResponsible() {
             leaderfield->setText( names.join( ", " ) );
         }
     }
+#endif
 }
 
 

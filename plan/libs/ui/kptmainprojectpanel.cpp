@@ -27,9 +27,13 @@
 #include <kdatewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
+#endif
 
 #include <kdebug.h>
 
@@ -46,6 +50,9 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
       project(p)
 {
     setupUi(this);
+#if ! KDE_IS_VERSION( 4, 5, 0 )
+    chooseLeader->hide();
+#endif
 
     QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
     wbslabel->setWhatsThis( s );
@@ -125,6 +132,7 @@ void MainProjectPanel::slotCheckAllFieldsFilled()
 
 void MainProjectPanel::slotChooseLeader()
 {
+#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -148,6 +156,7 @@ void MainProjectPanel::slotChooseLeader()
             leaderfield->setText( names.join( ", " ) );
         }
     }
+#endif
 }
 
 
