@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Yue Liu <opuspace@gmail.com>
+ * Copyright (c) 2011 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,9 @@
 #define FLOWCANVAS_H
 
 #include "FlowDocument.h"
+#include "FlowView.h"
 
-#include <FlowView.h>
+#include <KoPACanvas.h>
 
 #include <QWidget>
 #include <QList>

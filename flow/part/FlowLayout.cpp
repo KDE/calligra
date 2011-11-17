@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Yue Liu <opuspace@gmail.com>
+ * Copyright (c) 2011 Yue Liu <opuspace@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
