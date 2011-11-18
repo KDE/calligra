@@ -4586,7 +4586,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_color()
     READ_ATTR(val)
 //! @todo more styles
     if (val == MsooXmlReader::constAuto) {
-//         m_currentTextStyle.addProperty("style:use-window-font-color", "true");
+        m_currentTextStyle.addProperty("style:use-window-font-color", "true");
     } else {
         QColor color(MSOOXML::Utils::ST_HexColorRGB_to_QColor(val));
         if (color.isValid()) {

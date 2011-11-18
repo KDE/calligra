@@ -189,9 +189,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
     // set to allow the consumer to automatically choose an appropriate color
     // based on the background color behind the run's content.
     //
-//     if (m_currentTextStyle.property("fo:color").isEmpty()) {
-//         m_currentTextStyle.addProperty("style:use-window-font-color", "true");
-//     }
+    if (m_currentTextStyle.property("fo:color").isEmpty()) {
+        m_currentTextStyle.addProperty("style:use-window-font-color", "true");
+    }
 
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
 
