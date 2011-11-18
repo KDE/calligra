@@ -146,8 +146,6 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
 
-    connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
-
     actionSendPackage  = new KAction(KIcon( "mail-send" ), i18n("Send Package..."), this);
     collection->addAction("edit_sendpackage", actionSendPackage );
     connect( actionSendPackage, SIGNAL( triggered( bool ) ), SLOT( slotSendPackage() ) );
