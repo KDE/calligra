@@ -32,7 +32,9 @@ kde4_add_ui_files(planworkfactory_LIB_SRCS
     taskcompletionpanel.ui
 )
 
-kde4_add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS})
+kde4_add_kcfg_files(planworksettings_SRCS planworksettings.kcfgc)
+
+kde4_add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS})
 
 target_link_libraries(
     planworkfactory
@@ -46,6 +48,7 @@ target_link_libraries(
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS planworkfactory ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES planworksettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 
 ########### KPlatoWork part ###############

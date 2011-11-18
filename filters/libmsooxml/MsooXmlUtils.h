@@ -443,6 +443,12 @@ public:
 
     //! Clears this buffer without performing any output to the writer.
     void clear();
+
+    //! Returns true if the buffer is empty; otherwise returns false.
+    bool isEmpty() const {
+        return m_buffer.buffer().isEmpty();
+    }
+
 private:
     //! Internal, used in releaseWriter() and the destructor; Does not assert when there's nothing to release.
     KoXmlWriter* releaseWriterInternal();

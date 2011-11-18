@@ -92,9 +92,9 @@ public:
     QList<Node*> selectedNodes() const;
     
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext();
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext();
 
     KoPrintJob *createPrintJob();
     

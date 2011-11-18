@@ -781,6 +781,7 @@ void CompletionEntryItemModel::removeRow( int row )
     endRemoveRows();
     kDebug()<<date<<" removed row"<<row;
     m_completion->takeEntry( date );
+    emit rowRemoved( date );
     emit changed();
 }
 
