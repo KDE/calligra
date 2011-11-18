@@ -684,6 +684,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
         relationships, m_context->themes);
     context.m_tableStyles = m_context->m_tableStyles;
     context.m_bulletStyles = m_context->m_bulletStyles;
+    context.m_namedDefaultStyles = m_context->m_namedDefaultStyles;
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
@@ -762,6 +763,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
         relationships, m_context->themes);
     context.m_tableStyles = m_context->m_tableStyles;
     context.m_bulletStyles = m_context->m_bulletStyles;
+    context.m_namedDefaultStyles = m_context->m_namedDefaultStyles;
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
@@ -1987,6 +1989,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
+    if (m_currentParagraphStyle.parentName().isEmpty()) {
+        if (m_context->m_namedDefaultStyles.contains("paragraph")) {
+            m_currentParagraphStyle.setParentName(m_context->m_namedDefaultStyles.value("paragraph"));
+        }
+    }
+
     if (oldWasCaption) {
         //nothing
     } else {
@@ -2326,6 +2334,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
+    if (m_currentTextStyle.parentName().isEmpty()) {
+        if (m_context->m_namedDefaultStyles.contains("text")) {
+            m_currentTextStyle.setParentName(m_context->m_namedDefaultStyles.value("text"));
+        }
+    }
+
     // We want to write to the higher body level
     body = buffer.originalWriter();
     QString currentTextStyleName;
@@ -2590,6 +2604,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
 {
     READ_PROLOGUE
+
+    //FIXME: Do we have any attributes here?
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(pStyle)
     if (!pStyle.isEmpty()) {
@@ -3405,6 +3421,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
 {
+    //TODO: afterLines, beforeLines are critical.
+
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
@@ -3598,8 +3616,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
 //! pStyle handler (Referenced Paragraph Style)
 /*! ECMA-376, WML, 17.3.1.27, p.260.
 
- This element specifies the style ID of the paragraph style which shall be used to format the contents
- of this paragraph. This formatting is applied at the following location in the style hierarchy:
+ This element specifies the style ID of the paragraph style which shall be used
+ to format the contents of this paragraph.  This formatting is applied at the
+ following location in the style hierarchy:
+
  - Document defaults
  - Table styles
  - Numbering styles
@@ -3607,9 +3627,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
  - Character styles
  - Direct Formatting
 
- This means that all properties specified in the style element (§17.7.4.17) with a styleId which
- corresponds to the value in this element's val attribute are applied to the paragraph at the appropriate
- level in the hierarchy.
+ This means that all properties specified in the style element (§17.7.4.17)
+ with a styleId which corresponds to the value in this element's val attribute
+ are applied to the paragraph at the appropriate level in the hierarchy.
 
  Parent elements:
  - [done] pPr (§17.3.1.26)
@@ -4566,7 +4586,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_color()
     READ_ATTR(val)
 //! @todo more styles
     if (val == MsooXmlReader::constAuto) {
-//! @todo set use-window-font-color="true" (currently no way to do this using KoCharacterStyle)
+//         m_currentTextStyle.addProperty("style:use-window-font-color", "true");
     } else {
         QColor color(MSOOXML::Utils::ST_HexColorRGB_to_QColor(val));
         if (color.isValid()) {

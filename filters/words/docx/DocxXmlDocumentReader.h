@@ -386,15 +386,17 @@ public:
 
     MSOOXML::DrawingMLTheme* themes;
 
-    // Contains footnotes when read, the styles of footnotes are already put to correct files.
+    // Contains footnotes when read
     QMap<QString, QString> m_footnotes;
 
-    QMap<QString, QString> m_comments;
-
     QMap<QString, QString> m_endnotes;
+    QMap<QString, QString> m_comments;
     QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
-
     QMap<QString, QList<MSOOXML::Utils::ParagraphBulletProperties> > m_bulletStyles;
+
+    // The map contains names of default styles applied to objects that do not
+    // explicitly declare a style.  The object type (family) is the key.
+    QMap<QString, QString> m_namedDefaultStyles;
 
 private:
 };
