@@ -678,10 +678,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             }
         }
 
-        if ( series->m_showDataLabelValues ) {
+        if ( series->m_showDataLabelValues && series->m_showDataLabelPercent ) {
+            seriesstyle.addProperty( "chart:data-label-number", "value-and-percentage", KoGenStyle::ChartType );
+        } else if ( series->m_showDataLabelValues ) {
             seriesstyle.addProperty( "chart:data-label-number", "value", KoGenStyle::ChartType );
-        }
-        else if ( series->m_showDataLabelPercent ) {
+        } else if ( series->m_showDataLabelPercent ) {
             seriesstyle.addProperty( "chart:data-label-number", "percentage", KoGenStyle::ChartType );
         }
         if ( series->m_showDataLabelCategory ) {
