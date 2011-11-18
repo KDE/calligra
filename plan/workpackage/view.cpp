@@ -24,7 +24,7 @@
 #include "workpackage.h"
 #include "packagesettings.h"
 #include "taskcompletiondialog.h"
-
+#include "planworksettings.h"
 #include "kpttaskeditor.h"
 #include "kpttaskdescriptiondialog.h"
 
@@ -190,6 +190,7 @@ void View::createViews()
 TaskWorkPackageView *View::createTaskWorkPackageView()
 {
     TaskWorkPackageView *v = new TaskWorkPackageView( part(), this );
+    kDebug()<<PlanWorkSettings::self();
     layout()->addWidget( v );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
