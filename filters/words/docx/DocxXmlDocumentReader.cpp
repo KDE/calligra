@@ -1995,6 +1995,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
+    // rPr (Run Properties for the Paragraph Mark), ECMA-376, 17.3.1.29, p.253
+    // The paragraph glyph's formatting is stored in the rPr element under the
+    // paragraph properties, since there is no run saved for the paragraph mark
+    // itself.  ODF: The paragraph mark formatting does not affect other runs
+    // of text so can't save into text-properties of the paragraph style.
+    if (!textPBuf.isEmpty()) {
+        m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
+    }
+
     if (oldWasCaption) {
         //nothing
     } else {
@@ -3045,7 +3054,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
             }
         }
         else  if (m_relativeFromV == "outsideMargin") {
-             // Not supported propery by ODF, making a best guess
+            // Not supported propery by ODF, making a best guess
             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
