@@ -60,6 +60,7 @@ public:
     bool visible;
     bool protect;
     bool autoCalc;
+    bool rightToLeft;
 
     QString leftHeader;
     QString centerHeader;
@@ -174,6 +175,7 @@ void Sheet::clear()
     d->isPageBreakViewEnabled = false;
     d->passwd = 0; // password protection disabled
     delete d->autoFilters;
+    d->rightToLeft = false;
 }
 
 QString Sheet::name() const
@@ -635,6 +637,16 @@ Calligra::Tables::Filter Sheet::autoFilters() const
     } else {
         return Calligra::Tables::Filter();
     }
+}
+
+void Sheet::setRightToLeft(bool rtl)
+{
+    d->rightToLeft = rtl;
+}
+
+bool Sheet::isRightToLeft() const
+{
+    return d->rightToLeft;
 }
 
 #ifdef SWINDER_XLS2RAW
