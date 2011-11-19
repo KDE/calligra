@@ -34,6 +34,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QFile>
+#include <QTextCodec>
 #include <QtEndian>
 
 #include <pole.h>
@@ -2209,6 +2210,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         //const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
         //const unsigned long systemId = readU32( buffer + 4 );
 
+        QTextCodec* codec = QTextCodec::codecForLocale();
+
         summarystream->seek(summarystream->tell() + 16);   // skip CLSID
         bytes_read = summarystream->read(buffer, 4);
         const unsigned long numPropertySets = bytes_read == 4 ? readU32(buffer) : 0;   // must be 0x00000001 or 0x00000002
@@ -2264,9 +2267,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                         const unsigned long length = readU32(buffer);
                         bytes_read = summarystream->read(buffer, length);
                         if (bytes_read != length) break;
-                        QString u = readByteString(buffer, length);
-                        const QChar *c = reinterpret_cast<const QChar*>(u.data());
-                        QString s = QString(c, u.length());
+                        QString s = codec->toUnicode(reinterpret_cast<const char*>(buffer), static_cast<int>(length));
                         workbook->setProperty(propertyId, s);
                     } break;
                     case 0x0040: { //VT_FILETIME
@@ -2286,9 +2287,19 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                         break;
                     }
                     break;
+                case Workbook::PIDSI_CODEPAGE: {
+                    if (type != 0x0002) break; // type should always be 2
+                    bytes_read = summarystream->read(buffer, 4);
+                    unsigned int codepage = readU32(buffer);
+                    QTextCodec* newCodec = QTextCodec::codecForName("CP" + QByteArray::number(codepage));
+                    if (newCodec) {
+                        codec = newCodec;
+                    }
+                    std::cout << "Codepage:" << codepage << std::endl;
+                    }
+                    break;
                 default:
-                    if (propertyId != 0x0001 /* GKPIDDSI_CODEPAGE */ &&
-                            propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */) {
+                    if (propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */) {
                          std::cout << "Ignoring property with unknown id=" << propertyId << " and type=" << type << std::endl;
                     }
                     break;
