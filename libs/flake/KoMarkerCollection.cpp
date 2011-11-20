@@ -36,6 +36,7 @@ KoMarkerCollection::KoMarkerCollection(QObject *parent)
 : QObject(parent)
 , d(new Private)
 {
+    // Add no marker so the user can remove a marker from the line.
     d->markers.append(0);
 }
 

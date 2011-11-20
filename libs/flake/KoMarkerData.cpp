@@ -29,6 +29,12 @@
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
 
+/**
+ * This defines the factor the width of the arrow is widened 
+ * when the width of the line is changed.
+ */
+static const qreal ResizeFactor = 1.5;
+
 static const struct {
     const char * m_markerPositionLoad;
     const char * m_markerWidthLoad;
@@ -43,7 +49,7 @@ static const struct {
 
 KoMarkerData::KoMarkerData(KoMarker *marker, qreal width, MarkerPosition position, bool center)
 : m_marker(marker)
-, m_width(width)
+, m_baseWidth(width)
 , m_position(position)
 , m_center(center)
 {
@@ -51,7 +57,7 @@ KoMarkerData::KoMarkerData(KoMarker *marker, qreal width, MarkerPosition positio
 
 KoMarkerData::KoMarkerData(MarkerPosition position)
 : m_marker(0)
-, m_width(0)
+, m_baseWidth(0)
 , m_position(position)
 , m_center(false)
 {
@@ -71,14 +77,14 @@ void KoMarkerData::setMarker(KoMarker *marker)
     m_marker = marker;
 }
 
-qreal KoMarkerData::width() const
+qreal KoMarkerData::width(qreal penWidth) const
 {
-    return m_width;
+    return m_baseWidth + penWidth * ResizeFactor;
 }
 
-void KoMarkerData::setWidth(qreal width)
+void KoMarkerData::setWidth(qreal width, qreal penWidth)
 {
-    m_width = width;
+    m_baseWidth = qMax(qreal(0.0), width - penWidth * ResizeFactor);;
 }
 
 KoMarkerData::MarkerPosition KoMarkerData::position() const
@@ -105,7 +111,7 @@ KoMarkerData &KoMarkerData::operator=(const KoMarkerData &other)
 {
     if (this != &other) {
         m_marker = other.m_marker;
-        m_width = other.m_width;
+        m_baseWidth = other.m_baseWidth;
         m_position = other.m_position;
         m_center = other.m_center;
     }
@@ -125,9 +131,7 @@ bool KoMarkerData::loadOdf(qreal penWidth, KoShapeLoadingContext &context)
             if (marker) {
                 setMarker(marker);
                 qreal markerWidth = KoUnit::parseValue(markerStartWidth);
-                qreal markerBaseWidth = qMax(qreal(0.0), markerWidth - penWidth * 1.5);
-                kDebug(30006) << markerWidth << markerBaseWidth << penWidth * 1.5;
-                setWidth(markerBaseWidth);
+                setWidth(markerWidth, penWidth);
                 setCenter(styleStack.property(KoXmlNS::draw, markerOdfData[m_position].m_markerCenterLoad) == "true");
             }
         }
@@ -135,12 +139,12 @@ bool KoMarkerData::loadOdf(qreal penWidth, KoShapeLoadingContext &context)
     return true;
 }
 
-void KoMarkerData::saveStyle(KoGenStyle &style, qreal lineWidth, KoShapeSavingContext &context) const
+void KoMarkerData::saveStyle(KoGenStyle &style, qreal penWidth, KoShapeSavingContext &context) const
 {
     if (m_marker) {
         QString markerRef = m_marker->saveOdf(context);
         style.addProperty(markerOdfData[m_position].m_markerPositionSave, markerRef, KoGenStyle::GraphicType);
-        style.addPropertyPt(markerOdfData[m_position].m_markerWidthSave, m_width + lineWidth * 1.5, KoGenStyle::GraphicType);
+        style.addPropertyPt(markerOdfData[m_position].m_markerWidthSave, width(penWidth), KoGenStyle::GraphicType);
         style.addProperty(markerOdfData[m_position].m_markerCenterSave, m_center, KoGenStyle::GraphicType);
     }
 }

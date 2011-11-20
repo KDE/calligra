@@ -55,6 +55,8 @@ static bool qIsNaNPoint(const QPointF &p) {
 }
 #endif
 
+static const qreal DefaultMarkerWidth = 3.0;
+
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoTosContainerPrivate(q),
     fillRule(Qt::OddEvenFill),
@@ -194,7 +196,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
 QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     Q_D(const KoPathShape);
-    
+
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
     KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
@@ -1420,13 +1422,13 @@ void KoPathShape::setMarker(KoMarker *marker, KoMarkerData::MarkerPosition posit
 
     if (position == KoMarkerData::MarkerStart) {
         if (!d->startMarker.marker()) {
-            d->startMarker.setWidth(MM_TO_POINT(3.0));
+            d->startMarker.setWidth(MM_TO_POINT(DefaultMarkerWidth), qreal(0.0));
         }
         d->startMarker.setMarker(marker);
     }
     else {
         if (!d->endMarker.marker()) {
-            d->endMarker.setWidth(MM_TO_POINT(3.0));
+            d->endMarker.setWidth(MM_TO_POINT(DefaultMarkerWidth), qreal(0.0));
         }
         d->endMarker.setMarker(marker);
     }
@@ -1442,8 +1444,6 @@ KoMarker *KoPathShape::marker(KoMarkerData::MarkerPosition position) const
     else {
         return d->endMarker.marker();
     }
-
-    return 0;
 }
 
 KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) const
@@ -1458,7 +1458,7 @@ KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) cons
     }
 }
 
-QPainterPath KoPathShape::pathStroke(const QPen pen) const
+QPainterPath KoPathShape::pathStroke(const QPen &pen) const
 {
     QPainterPath pathOutline;
 
@@ -1478,15 +1478,30 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
     bool twoPointPath = subpathPointCount(0) == 2;
     bool closedPath = isClosedSubpath(0);
 
+    /*
+     * The geometry is horizontally centered. It is vertically positioned relative to an offset value which
+     * is specified by a draw:marker-start-center attribute for markers referenced by a
+     * draw:marker-start attribute, and by the draw:marker-end-center attribute for markers
+     * referenced by a draw:marker-end attribute. The attribute value true defines an offset of 0.5
+     * and the attribute value false defines an offset of 0.3, which is also the default value. The offset
+     * specifies the marker's vertical position in a range from 0.0 to 1.0, where the value 0.0 means the
+     * geometry's bottom bound is aligned to the X axis of the local coordinate system of the marker
+     * geometry, and where the value 1.0 means the top bound to be aligned to the X axis of the local
+     * coordinate system of the marker geometry.
+     *
+     * The shorten factor to use results of the 0.3 which means we need to start at 0.7 * height of the marker
+     */
+    static qreal shortenFactor = 0.7;
+
     KoMarkerData mdStart = markerData(KoMarkerData::MarkerStart);
     KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);
     if (mdStart.marker() && !closedPath) {
-        QPainterPath markerPath = mdStart.marker()->path(mdStart.width() + pen.widthF() * 1.5);
+        QPainterPath markerPath = mdStart.marker()->path(mdStart.width(pen.widthF()));
 
         KoPathSegment firstSegment = segmentByIndex(KoPathPointIndex(0, 0));
         if (firstSegment.isValid()) {
             QRectF pathBoundingRect = markerPath.boundingRect();
-            qreal shortenLength = pathBoundingRect.height() * 0.7;
+            qreal shortenLength = pathBoundingRect.height() * shortenFactor;
             kDebug(30006) << "length" << firstSegment.length() << shortenLength;
             qreal t = firstSegment.paramAtLength(shortenLength);
             firstSegments = firstSegment.splitAt(t);
@@ -1496,7 +1511,9 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
             QLineF vector(newStartPoint, startPoint);
             qreal angle = -vector.angle() + 90;
             QTransform transform;
-            transform.translate(startPoint.x(), startPoint.y()).rotate(angle).translate(-pathBoundingRect.width() / 2.0, 0);
+            transform.translate(startPoint.x(), startPoint.y())
+                     .rotate(angle)
+                     .translate(-pathBoundingRect.width() / 2.0, 0);
 
             markerPath = transform.map(markerPath);
             QPainterPath startOutline = stroker.createStroke(markerPath);
@@ -1521,7 +1538,7 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
         }
     }
     if (mdEnd.marker() && !closedPath) {
-        QPainterPath markerPath = mdEnd.marker()->path(mdEnd.width() + pen.widthF() * 1.5);
+        QPainterPath markerPath = mdEnd.marker()->path(mdEnd.width(pen.widthF()));
 
         KoPathSegment lastSegment;
 
@@ -1538,7 +1555,7 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
 
         if (lastSegment.isValid()) {
             QRectF pathBoundingRect = markerPath.boundingRect();
-            qreal shortenLength = lastSegment.length() - pathBoundingRect.height() * 0.7;
+            qreal shortenLength = lastSegment.length() - pathBoundingRect.height() * shortenFactor;
             qreal t = lastSegment.paramAtLength(shortenLength);
             lastSegments = lastSegment.splitAt(t);
             // transform the marker so that it goes from the last point of the first segment to the previous point of the last segment
@@ -1587,6 +1604,7 @@ QPainterPath KoPathShape::pathStroke(const QPen pen) const
 
     // shortent the path to make it look nice
     // replace the point temporarily in case there is an arrow
+    // BE AWARE: this changes the content of the path so that outline give the correct values.
     if (firstPoint) {
         firstSubpath->first() = firstSegments.second.first();
         if (secondPoint) {

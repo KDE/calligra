@@ -33,7 +33,7 @@ class FLAKE_EXPORT KoMarkerCollection : public QObject
 {
     Q_OBJECT
 public:
-    KoMarkerCollection(QObject *parent = 0);
+    explicit KoMarkerCollection(QObject *parent = 0);
     virtual ~KoMarkerCollection();
 
     bool loadOdf(KoShapeLoadingContext &context);

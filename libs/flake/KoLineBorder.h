@@ -100,8 +100,6 @@ public:
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color);
 
 private:
-    void paintBorder(KoShape *shape, QPainter &painter, const QPen &pen);
-
     class Private;
     Private * const d;
 };

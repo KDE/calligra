@@ -96,7 +96,7 @@ public:
     /// reimplemented
     virtual QSizeF size() const;
 
-    QPainterPath pathStroke(const QPen pen) const;
+    QPainterPath pathStroke(const QPen &pen) const;
     /**
      * Resize the shape
      *

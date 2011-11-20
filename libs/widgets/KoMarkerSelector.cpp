@@ -61,8 +61,9 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
     option.initFrom(this);
     option.frame = hasFrame();
     QRect r = style()->subControlRect(QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, this);
-    if (!option.frame) // frameless combo boxes have smaller margins but styles do not take this into account
+    if (!option.frame) { // frameless combo boxes have smaller margins but styles do not take this into account
         r.adjust(-14, 0, 14, 1);
+    }
 
     QPainter painter(this);
     bool antialiasing = painter.testRenderHint(QPainter::Antialiasing);
@@ -71,7 +72,7 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
     }
 
     KoPathShape *pathShape = itemData(currentIndex(), Qt::DisplayRole).value<KoPathShape*>();
-    if(pathShape != 0){
+    if (pathShape != 0) {
         // paint marker
         QPen pen(option.palette.text(), 2);
         painter.setPen(pen);
@@ -108,7 +109,7 @@ void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
 
 QVariant KoMarkerSelector::itemData(int index, int role) const
 {
-    if(role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole) {
         KoMarker *marker = d->model->marker(index, Qt::DecorationRole).value<KoMarker*>();
         KoPathShape *pathShape = new KoPathShape();
         pathShape->moveTo(QPointF(10, 15));

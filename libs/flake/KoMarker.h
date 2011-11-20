@@ -36,7 +36,14 @@ public:
     KoMarker();
     ~KoMarker();
 
+    /**
+     * Load the marker
+     *
+     * @param element The xml element containing the marker
+     * @param context The shape loading context
+     */
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
     /**
      * Save the marker
      *
@@ -44,8 +51,21 @@ public:
      */
     QString saveOdf(KoShapeSavingContext &context) const;
 
+    /**
+     * Display name of the marker
+     *
+     * @return Display name of the marker
+     */
     QString name() const;
-    QPainterPath path() const;
+
+    /**
+     * Get the path of the marker
+     *
+     * It calculates the offset depending on the line width
+     *
+     * @param The width of the line the marker is attached to.
+     * @return the path of the marker
+     */
     QPainterPath path(qreal width) const;
 
 private:

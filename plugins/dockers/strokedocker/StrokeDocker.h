@@ -68,7 +68,7 @@ private slots:
     void startMarkerChanged();
     /// end marker has changed
     void endMarkerChanged();
-    
+
     void resourceChanged(int key, const QVariant & value);
     void locationChanged(Qt::DockWidgetArea area);
 
@@ -85,7 +85,7 @@ private:
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();
-    
+
 private:
     class Private;
     Private * const d;
