@@ -134,25 +134,27 @@ void StrokeDocker::applyChanges()
 void StrokeDocker::applyMarkerChanges(KoMarkerData::MarkerPosition position)
 {
     KoMarker *marker = 0;
-    if (position == KoMarkerData::MarkerStart){
+    if (position == KoMarkerData::MarkerStart) {
         marker = d->startMarker;
-    } else if (position == KoMarkerData::MarkerEnd){
+    }
+    else if (position == KoMarkerData::MarkerEnd) {
         marker = d->endMarker;
     }
-        
+
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
     canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
 
-    if( ! selection || ! selection->count() )
+    if (! selection || !selection->count()) {
         return;
+    }
 
     QList<KoShape*> shapeList = selection->selectedShapes();
     QList<KoPathShape*> pathShapeList;
-    for(QList<KoShape*>::iterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape){
+    for (QList<KoShape*>::iterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
         KoPathShape* pathShape = dynamic_cast<KoPathShape*>(*itShape);
-        if(pathShape){
+        if (pathShape) {
             pathShapeList << pathShape;
         }
     }

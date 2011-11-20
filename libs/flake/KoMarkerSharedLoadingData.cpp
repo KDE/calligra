@@ -25,7 +25,7 @@ public:
     QHash<QString, KoMarker *> lookupTable;
 };
 
-KoMarkerSharedLoadingData::KoMarkerSharedLoadingData(QHash<QString, KoMarker *> lookupTable)
+KoMarkerSharedLoadingData::KoMarkerSharedLoadingData(const QHash<QString, KoMarker *> &lookupTable)
 : d(new Private())
 {
     d->lookupTable = lookupTable;

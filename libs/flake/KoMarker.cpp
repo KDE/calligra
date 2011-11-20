@@ -98,11 +98,6 @@ QString KoMarker::name() const
     return d->name;
 }
 
-QPainterPath KoMarker::path() const
-{
-    return d->path;
-}
-
 QPainterPath KoMarker::path(qreal width) const
 {
     if (!d->viewBox.isValid() || width == 0) {

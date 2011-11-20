@@ -43,14 +43,14 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = 0);
-    
+
     virtual ~KoPathShapeMarkerCommand();
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
 
-private:    
+private:
     QList<KoPathShape*> m_shapes;  ///< the shapes to set marker for
     QList<KoMarker*> m_oldMarkers; ///< the old markers, one for each shape
     KoMarker* m_marker; ///< the new marker to set

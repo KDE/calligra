@@ -78,7 +78,7 @@ signals:
 
     /// Emitted when the line miter limit changes.
     void miterLimitChanged();
-    
+
     /// Emitted when the start marker changes.
     void currentStartMarkerChanged();
 

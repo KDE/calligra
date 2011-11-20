@@ -32,7 +32,7 @@ class QString;
 class KoMarkerSharedLoadingData : public KoSharedLoadingData
 {
 public:
-    KoMarkerSharedLoadingData(QHash<QString, KoMarker *> lookupTable);
+    KoMarkerSharedLoadingData(const QHash<QString, KoMarker *> &lookupTable);
 
     KoMarker *marker(const QString &name) const;
 
