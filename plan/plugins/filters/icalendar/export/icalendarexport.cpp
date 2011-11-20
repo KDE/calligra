@@ -128,7 +128,7 @@ void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, lo
     todo->setUid( node->id() );
     todo->setSummary(node->name());
     todo->setDescription(node->description());
-    todo->setCategories("KPlato");
+    todo->setCategories("Plan");
     if (! node->projectNode()->leader().isEmpty()) {
         todo->setOrganizer(node->projectNode()->leader());
     }

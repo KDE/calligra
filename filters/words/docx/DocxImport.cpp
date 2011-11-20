@@ -219,6 +219,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 stylesPathAndFile, &stylesReader, writers, errorMessage, &context) )
 
             mainContext.m_tableStyles = context.m_tableStyles;
+            mainContext.m_namedDefaultStyles = context.m_namedDefaultStyles;
         }
     }
 
@@ -252,6 +253,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, footnotePath, footnoteFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            context.m_namedDefaultStyles = mainContext.m_namedDefaultStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 footnotePathAndFile, &footnoteReader, writers, errorMessage, &context) )
@@ -287,6 +289,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, endnotePath, endnoteFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            context.m_namedDefaultStyles = mainContext.m_namedDefaultStyles;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 endnotePathAndFile, &endnoteReader, writers, errorMessage, &context) )
