@@ -85,6 +85,8 @@ TileDrawingJob::~TileDrawingJob()
 void TileDrawingJob::run()
 {
     kDebug() << "start draw for " << m_x << "," << m_y << " " << m_scale;
+    const bool rtl = m_sheet->layoutDirection() == Qt::RightToLeft;
+
     m_image.fill(QColor(255, 255, 255, 0).rgba());
     QPainter pixmapPainter(&m_image);
     pixmapPainter.setClipRect(m_image.rect());
@@ -98,7 +100,11 @@ void TileDrawingJob::run()
             globalPixelRect.height() / m_scale.y()
     );
 
-    pixmapPainter.translate(-docRect.x(), -docRect.y());
+    if (rtl) {
+        pixmapPainter.translate(docRect.x(), -docRect.y());
+    } else {
+        pixmapPainter.translate(-docRect.x(), -docRect.y());
+    }
 
     qreal loffset, toffset;
     const int left = m_sheet->leftColumn(docRect.left(), loffset);
