@@ -548,7 +548,7 @@ void CellView::paintCellBorders(const QRectF& paintRegion, QPainter& painter, co
 
     // Paint the borders if this cell is not part of another merged cell.
     if (!d->merged) {
-        paintCustomBorders(painter, paintRegion, coordinate, paintBorder);
+        paintCustomBorders(painter, paintRegion, coordinate, paintBorder, sheetView->sheet()->layoutDirection() == Qt::RightToLeft);
     }
 
     // Turn clipping back on.
@@ -1324,7 +1324,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 // Paint the cell borders.
 //
 void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
-                                  const QPointF& coordinate, Borders paintBorder) const
+                                  const QPointF& coordinate, Borders paintBorder, bool rtl) const
 {
     //Sanity check: If we are not painting any of the borders then the function
     //really shouldn't be called at all.
@@ -1337,6 +1337,19 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     QPen  rightPen(d->style.rightBorderPen());
     QPen  topPen(d->style.topBorderPen());
     QPen  bottomPen(d->style.bottomBorderPen());
+
+    // if in right-to-left mode, swap left&right pens and bits
+    if (rtl) {
+        qSwap(leftPen, rightPen);
+        Borders lrBorder = paintBorder & (LeftBorder | RightBorder);
+        paintBorder &= ~(LeftBorder | RightBorder);
+        if (lrBorder & LeftBorder) {
+            paintBorder |= RightBorder;
+        }
+        if (lrBorder & RightBorder) {
+            paintBorder |= LeftBorder;
+        }
+    }
 
     // Determine the pens that should be used for drawing
     // the borders.
