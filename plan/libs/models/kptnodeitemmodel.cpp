@@ -2030,7 +2030,7 @@ QVariant NodeModel::wpOwnerName( const Node *node, int role ) const
             if ( task == 0 ) {
                 return QVariant();
             }
-            int sts = wpTransmitionStatus( node, Qt::EditRole ).toInt();
+            int sts = task->wpTransmitionStatus();
             QString t = wpTransmitionTime( node, Qt::DisplayRole ).toString();
             if ( sts == WorkPackage::TS_Send ) {
                 return i18nc( "@info:tooltip", "Latest work package sent to %1 at %2", static_cast<const Task*>( node )->wpOwnerName(), t );
@@ -2094,7 +2094,7 @@ QVariant NodeModel::wpTransmitionTime( const Node *node, int role ) const
             if ( task == 0 ) {
                 return QVariant();
             }
-            int sts = wpTransmitionStatus( node, Qt::EditRole ).toInt();
+            int sts = task->wpTransmitionStatus();
             QString t = wpTransmitionTime( node, Qt::DisplayRole ).toString();
             if ( sts == WorkPackage::TS_Send ) {
                 return i18nc( "@info:tooltip", "Latest work package sent: %1", t );
@@ -2558,7 +2558,7 @@ KUndo2Command *NodeModel::setName( Node *node, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole: {
             if ( value.toString() == node->name() ) {
-                return false;
+                return 0;
             }
             QString s = i18nc( "(qtundo-format)", "Modify name" );
             switch ( node->type() ) {
@@ -2715,7 +2715,7 @@ KUndo2Command *NodeModel::setEstimateCalendar( Node *node, const QVariant &value
         default:
             break;
     }
-    return false;
+    return 0;
 }
 
 KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int role )
@@ -2733,10 +2733,10 @@ KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int ro
             } else if ( value.canConvert<QString>() ) {
                 bool ok = Duration::valueFromString( value.toString(), d, unit );
                 if ( ! ok ) {
-                    return false;
+                    return 0;
                 }
             } else {
-                return false;
+                return 0;
             }
             //kDebug()<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
@@ -2789,7 +2789,7 @@ KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value
         default:
             break;
     }
-    return false;
+    return 0;
 }
 
 KUndo2Command *NodeModel::setRiskType( Node *node, const QVariant &value, int role )
@@ -2949,7 +2949,7 @@ KUndo2Command *NodeModel::setStartedTime( Node *node, const QVariant &value, int
         case Qt::EditRole: {
             Task *t = qobject_cast<Task*>( node );
             if ( t == 0 ) {
-                return false;
+                return 0;
             }
             MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify actual start time" ) );
             if ( ! t->completion().isStarted() ) {
@@ -2978,7 +2978,7 @@ KUndo2Command *NodeModel::setFinishedTime( Node *node, const QVariant &value, in
         case Qt::EditRole: {
             Task *t = qobject_cast<Task*>( node );
             if ( t == 0 ) {
-                return false;
+                return 0;
             }
             MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify actual finish time" ) );
             if ( ! t->completion().isFinished() ) {

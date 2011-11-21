@@ -465,24 +465,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:g, because we have
-    // to write after the child elements are generated
-    body = drawFrameBuf.setWriter(body);
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        kDebug() << *this;
-        if (isStartElement()) {
-            TRY_READ_IF(grpSp)
-            ELSE_TRY_READ_IF(pic)
-            ELSE_TRY_READ_IF(sp)
-            ELSE_TRY_READ_IF(grpSpPr)
-            ELSE_TRY_READ_IF(cxnSp)
-#ifdef PPTXXMLSLIDEREADER_CPP
-            ELSE_TRY_READ_IF(graphicFrame)
-#endif
-            SKIP_UNKNOWN
-        //! @todo add ELSE_WRONG_FORMAT
+    {
+        MSOOXML::Utils::AutoRestore<KoXmlWriter> autoRestoreBody(&body);
+
+        // to write after the child elements are generated
+        body = drawFrameBuf.setWriter(body);
+
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL)
+            kDebug() << *this;
+            if (isStartElement()) {
+                TRY_READ_IF(grpSp)
+                ELSE_TRY_READ_IF(pic)
+                ELSE_TRY_READ_IF(sp)
+                ELSE_TRY_READ_IF(grpSpPr)
+                ELSE_TRY_READ_IF(cxnSp)
+    #ifdef PPTXXMLSLIDEREADER_CPP
+                ELSE_TRY_READ_IF(graphicFrame)
+    #endif
+                SKIP_UNKNOWN
+            //! @todo add ELSE_WRONG_FORMAT
+            }
         }
     }
 

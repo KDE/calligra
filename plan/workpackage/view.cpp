@@ -24,7 +24,7 @@
 #include "workpackage.h"
 #include "packagesettings.h"
 #include "taskcompletiondialog.h"
-
+#include "planworksettings.h"
 #include "kpttaskeditor.h"
 #include "kpttaskdescriptiondialog.h"
 
@@ -146,8 +146,6 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
 
-    connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
-
     actionSendPackage  = new KAction(KIcon( "mail-send" ), i18n("Send Package..."), this);
     collection->addAction("edit_sendpackage", actionSendPackage );
     connect( actionSendPackage, SIGNAL( triggered( bool ) ), SLOT( slotSendPackage() ) );
@@ -192,6 +190,7 @@ void View::createViews()
 TaskWorkPackageView *View::createTaskWorkPackageView()
 {
     TaskWorkPackageView *v = new TaskWorkPackageView( part(), this );
+    kDebug()<<PlanWorkSettings::self();
     layout()->addWidget( v );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );

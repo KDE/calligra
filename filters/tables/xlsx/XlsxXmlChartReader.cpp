@@ -1040,6 +1040,22 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
     READ_EPILOGUE
 }
 
+void XlsxXmlChartReader::read_showDataLabel()
+{
+    if ( m_currentSeries ) {
+        const QXmlStreamAttributes attrs(attributes());
+        if ( qualifiedName() == "c:showVal" ) {
+            m_currentSeries->m_showDataLabelValues = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        } else if ( qualifiedName() == "c:showPercent" ) {
+            m_currentSeries->m_showDataLabelPercent = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        } else if ( qualifiedName() == "c:showCatName" ) {
+            m_currentSeries->m_showDataLabelCategory = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        } else if ( qualifiedName() == "c:showSerName" ) {
+            m_currentSeries->m_showDataLabelSeries = MSOOXML::Utils::convertBooleanAttr(attrs.value("val").toString(), true);
+        }
+    }
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL dLbl
 //! dLbl (Data Label)
@@ -1071,16 +1087,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbl()
 {
     READ_PROLOGUE
-      while (!atEnd()) {
-          readNext();
-          BREAK_IF_END_OF(CURRENT_EL)
-          if (isStartElement()) {
-              if ( qualifiedName() == "c:showVal" ) {
-                  m_currentSeries->m_showDataValues = true;
-              }
-          }
-      }
-      READ_EPILOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            read_showDataLabel();
+        }
+    }
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -1133,20 +1147,16 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbl()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
 {
     READ_PROLOGUE
-      while (!atEnd()) {
-          readNext();
-          BREAK_IF_END_OF(CURRENT_EL)
-          if (isStartElement()) {
-              TRY_READ_IF(dLbl)
-              if ( qualifiedName() == "c:showVal" ) {
-                  m_currentSeries->m_showDataValues = true;
-              }
-          }
-      }
-      READ_EPILOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(dLbl)
+            read_showDataLabel();
+        }
+    }
+    READ_EPILOGUE
 }
-
-
 
 #undef CURRENT_EL
 #define CURRENT_EL spPr
@@ -1727,9 +1737,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
 {
-    Charting::ScatterImpl* impl = new Charting::ScatterImpl();
-    if (!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = impl;
+    Charting::ScatterImpl* impl = dynamic_cast<Charting::ScatterImpl*>(m_context->m_chart->m_impl);
+    if (!impl) {
+        m_context->m_chart->m_impl = impl = new Charting::ScatterImpl();
     }
 
     while (!atEnd()) {
@@ -2208,16 +2218,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
     m_currentSeries->m_labelCell = tempScatterSeriesData->m_tx.writeRefToInternalTable(this);
 
     m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_numLit.m_ptCount;
-    m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeLitToInternalTable(this);
-
-    if (m_currentSeries->m_countXValues == 0 )
-    {
-          m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_strRef.m_strCache.m_ptCount;
-          m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeRefToInternalTable(this);
+    if (m_currentSeries->m_countXValues == 0 ) {
+        m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_strRef.m_strCache.m_ptCount;
+        m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeRefToInternalTable(this);
+    } else {
+        m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeLitToInternalTable(this);
     }
 
     m_currentSeries->m_countYValues = tempScatterSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;
-
     m_currentSeries->m_valuesCellRangeAddress = tempScatterSeriesData->m_yVal.writeRefToInternalTable(this);
 
     //m_currentSeries->m_domainValuesCellRangeAddress.push_back(tempScatterSeriesData->m_xVal.writeRefToInternalTable(this));

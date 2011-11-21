@@ -312,7 +312,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
             range = range.mid(1, range.length() - 2);
         Calligra::Tables::Region region(Calligra::Tables::Region::loadOdf(range), d->outputDoc->map());
         if (!region.isValid() || !region.lastSheet()) {
-            kDebug() << "invalid area";
+            kDebug() << "invalid area" << range;
             continue;
         }
         d->outputDoc->map()->namedAreaManager()->insert(region, it->first.second);

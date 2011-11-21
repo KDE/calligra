@@ -129,6 +129,7 @@ public:
 
 signals:
     void rowInserted( const QDate& );
+    void rowRemoved( const QDate& );
     void changed();
     
 public slots:
@@ -173,6 +174,7 @@ public:
 signals:
     void changed();
     void rowInserted( const QDate );
+    void rowRemoved( const QDate );
     void selectionChanged( const QItemSelection&, const QItemSelection& );
 
 public slots:

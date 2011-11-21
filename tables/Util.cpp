@@ -48,9 +48,11 @@ int Calligra::Tables::Util::decodeColumnLabelText(const QString &labelText)
     const int offset = 'a' - 'A';
     int counterColumn = 0;
     const uint totalLength = labelText.length();
-    uint labelTextLength;
-    for (labelTextLength = 0; labelTextLength < totalLength; labelTextLength++) {
+    uint labelTextLength = 0;
+    for ( ; labelTextLength < totalLength; labelTextLength++) {
         const char c = labelText[labelTextLength].toLatin1();
+        if (labelTextLength == 0 && c == '$')
+            continue; // eat an absolute reference char that could be at the beginning only
         if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')))
             break;
     }
@@ -71,9 +73,9 @@ int Calligra::Tables::Util::decodeColumnLabelText(const QString &labelText)
 
 int Calligra::Tables::Util::decodeRowLabelText(const QString &labelText)
 {
-    QRegExp rx("([A-Za-z]+)([0-9]+)");
+    QRegExp rx("(|\\$)([A-Za-z]+)(|\\$)([0-9]+)");
     if(rx.exactMatch(labelText))
-        return rx.cap(2).toInt();
+        return rx.cap(4).toInt();
     return 0;
 }
 
@@ -609,13 +611,18 @@ static bool isCellnameCharacter(const QChar &c)
 static void replaceFormulaReference(int referencedRow, int referencedColumn, int thisRow, int thisColumn, QString &result, int cellReferenceStart, int cellReferenceLength)
 {
     const QString ref = result.mid(cellReferenceStart, cellReferenceLength);
-    QRegExp rx("(|\\$)[A-Za-z]+[0-9]+");
+    QRegExp rx("(|\\$)[A-Za-z]+(|\\$)[0-9]+");
     if (rx.exactMatch(ref)) {
-        const int c = Calligra::Tables::Util::decodeColumnLabelText(ref) + thisColumn - referencedColumn;
-        const int r = Calligra::Tables::Util::decodeRowLabelText(ref) + thisRow - referencedRow;
+        int c = Calligra::Tables::Util::decodeColumnLabelText(ref);
+        int r = Calligra::Tables::Util::decodeRowLabelText(ref);
+        if (rx.cap(1) != "$") // absolute or relative column?
+            c += thisColumn - referencedColumn;
+        if (rx.cap(2) != "$") // absolute or relative row?
+            r += thisRow - referencedRow;
         result = result.replace(cellReferenceStart,
                                 cellReferenceLength,
-                                Calligra::Tables::Util::encodeColumnLabelText(c) + QString::number(r) );
+                                rx.cap(1) + Calligra::Tables::Util::encodeColumnLabelText(c) +
+                                rx.cap(2) + QString::number(r) );
     }
 }
 
@@ -657,6 +664,7 @@ QString Calligra::Tables::Util::adjustFormulaReference(const QString& formula, i
                     replaceFormulaReference(referencedRow, referencedColumn, thisRow, thisColumn, result, cellReferenceStart, i - cellReferenceStart);
                 }
                 state = InStart;
+                --i; // decrement again to handle the current char in the InStart-switch.
             }
             break;
         };
@@ -671,13 +679,14 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
 {
     if (formula.isEmpty())
         return QString();
-    enum { Start, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName } state;
-    state = Start;
+    enum { InStart, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName, InCellReference } state;
+    state = InStart;
+    int cellReferenceStart = 0;
     QString result = formula.startsWith('=') ? formula : '=' + formula;
     for(int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
         switch (state) {
-        case Start:
+        case InStart:
             if(ch == '(')
                 state = InArguments;
             break;
@@ -686,7 +695,10 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
                 state = InString;
             else if (ch.unicode() == '\'')
                 state = InSheetOrAreaName;
-            else if (ch == ',')
+            else if (isCellnameCharacter(ch)) {
+                state = InCellReference;
+                cellReferenceStart = i;
+            } else if (ch == ',')
                 result[i] = ';'; // replace argument delimiter
             else if (ch == '(' && !result[i-1].isLetterOrNumber())
                 state = InParenthesizedArgument;
@@ -706,6 +718,30 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
         case InSheetOrAreaName:
             if (ch == '\'')
                 state = InArguments;
+            break;
+        case InCellReference:
+            if (!isCellnameCharacter(ch)) {
+                if (ch != '(') /* skip formula-names */ {
+                    // Excel is able to use only the column-name to define a column
+                    // where all rows are selected. Since that is not supproted in
+                    // ODF we add to such definitions the minimum/maximum row-number.
+                    // So, something like "A:B" would become "A$1:B$65536". Note that
+                    // such whole column-definitions are only allowed for ranges like
+                    // "A:B" but not for single column definitions like "A" or "B".
+                    const QString ref = result.mid(qMax(0, cellReferenceStart - 1), i - cellReferenceStart + 2);
+                    QRegExp rxStart(".*(|\\$)[A-Za-z]+\\:");
+                    QRegExp rxEnd("\\:(|\\$)[A-Za-z]+(|(|\\$)[0-9]+).*");
+                    if (rxEnd.exactMatch(ref) && rxEnd.cap(2).isEmpty()) {
+                        result.insert(i, "$65536");
+                        i += 6;
+                    } else if (rxStart.exactMatch(ref)) {
+                        result.insert(i, "$1");
+                        i += 2;
+                    }
+                }
+                state = InArguments;
+                --i; // decrement again to handle the current char in the InArguments-switch.
+            }
             break;
         };
     };

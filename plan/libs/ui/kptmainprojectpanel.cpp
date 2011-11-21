@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004-2007, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,8 +27,13 @@
 #include <kdatewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
+
+#include <kdeversion.h>
+#if KDE_IS_VERSION( 4, 5, 0 )
+#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <akonadi/contact/emailaddressselectionwidget.h>
+#include <akonadi/contact/emailaddressselection.h>
+#endif
 
 #include <kdebug.h>
 
@@ -45,6 +50,9 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
       project(p)
 {
     setupUi(this);
+#if ! KDE_IS_VERSION( 4, 5, 0 )
+    chooseLeader->hide();
+#endif
 
     QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
     wbslabel->setWhatsThis( s );
@@ -124,11 +132,31 @@ void MainProjectPanel::slotCheckAllFieldsFilled()
 
 void MainProjectPanel::slotChooseLeader()
 {
-    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty())
-    {
-        leaderfield->setText(a.fullEmail());
+#if KDE_IS_VERSION( 4, 5, 0 )
+    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
+    if ( dlg->exec() && dlg ) {
+        QStringList names;
+        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
+        foreach ( const Akonadi::EmailAddressSelection &selection, selections ) {
+            QString s = selection.name();
+            if ( ! selection.email().isEmpty() ) {
+                if ( ! selection.name().isEmpty() ) {
+                    s += " <";
+                }
+                s += selection.email();
+                if ( ! selection.name().isEmpty() ) {
+                    s += ">";
+                }
+                if ( ! s.isEmpty() ) {
+                    names << s;
+                }
+            }
+        }
+        if ( ! names.isEmpty() ) {
+            leaderfield->setText( names.join( ", " ) );
+        }
     }
+#endif
 }
 
 
