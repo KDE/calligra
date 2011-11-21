@@ -348,19 +348,39 @@ private:
     MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
 
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
-
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
-    QString m_currentListStyleName;
-    //! The list identifier of the previous list, used to restart numbering if the current ID is different
-    QString m_previousNumIdUsed;
 
-    //! Map of list styles encountered so far, we can used the same list style if we have used it before
-    // instead of creating a new one.
+    QString m_currentNumId;
+
+    //! Map of list styles encountered so far, reuse already created list style.
     QMap<QString, QString> m_usedListStyles;
+
+    //TODO: Merge with m_continueListNumbering defined in MsooXmlCommenReaderDrawingMLMethods.h
+    QMap<QString, QPair<int, bool> > m_continueListNum;
 
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
+
+    // ************************************************
+    //  State
+    // ************************************************
+    //TODO: Add all the other attributes on demand.
+    struct DocumentReaderState {
+        explicit DocumentReaderState(const QMap<QString, QString> &usedListStyles,
+                                     const QMap <QString, QPair<int, bool> > &continueListNum)
+        : usedListStyles(usedListStyles),
+          continueListNum(continueListNum) {}
+
+        DocumentReaderState() {}
+
+        QMap<QString, QString> usedListStyles;
+        QMap<QString, QPair<int, bool> > continueListNum;
+    };
+
+    void saveState();
+    void restoreState();
+    QStack<DocumentReaderState> m_statesBkp;
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
@@ -397,6 +417,10 @@ public:
     // The map contains names of default styles applied to objects that do not
     // explicitly declare a style.  The object type (family) is the key.
     QMap<QString, QString> m_namedDefaultStyles;
+
+    // The map contains abstractNumId of the abstract numbering definition that
+    // is inherited by a numbering definition instance identified by numId (key).
+    QMap<QString, QString> m_abstractNumIDs;
 
 private:
 };

@@ -113,6 +113,8 @@ public:
 
     void setTextStyle(const KoGenStyle& textStyle);
 
+    void setStartOverride(const bool startOverride);
+
     QString startValue() const;
 
     QString bulletRelativeSize() const;
@@ -130,6 +132,8 @@ public:
     QString margin() const;
 
     QString followingChar() const;
+
+    bool startOverride() const;
 
     void addInheritedValues(const ParagraphBulletProperties& properties);
 
@@ -156,6 +160,13 @@ private:
     QString m_bulletSize;
 
     KoGenStyle m_textStyle;
+
+    // MSWord specific: Restart the numbering when this list style is
+    // used for the 1st time.  Otherwise don't restart in case any of the
+    // styles inheriting from the same abstract numbering definition was
+    // already used.  Let's ignore presence of this attribute in
+    // addInheritedValues.
+    bool m_startOverride;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.

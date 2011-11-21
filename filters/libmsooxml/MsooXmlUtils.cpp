@@ -1426,6 +1426,7 @@ void Utils::ParagraphBulletProperties::clear()
     m_followingChar = UNUSED;
     m_bulletRelativeSize = UNUSED;
     m_bulletSize = UNUSED;
+    m_startOverride = false;
 }
 
 void Utils::ParagraphBulletProperties::setAlign(const QString& align)
@@ -1532,6 +1533,11 @@ void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
     }
 }
 
+void Utils::ParagraphBulletProperties::setStartOverride(const bool startOverride)
+{
+    m_startOverride = startOverride;
+}
+
 QString Utils::ParagraphBulletProperties::startValue() const
 {
     return m_startValue;
@@ -1575,6 +1581,11 @@ QString Utils::ParagraphBulletProperties::bulletSizePt() const
 QString Utils::ParagraphBulletProperties::followingChar() const
 {
     return m_followingChar;
+}
+
+bool Utils::ParagraphBulletProperties::startOverride() const
+{
+    return m_startOverride;
 }
 
 void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
