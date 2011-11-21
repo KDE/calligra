@@ -49,7 +49,6 @@ class PaletteRecord;
 class SSTRecord;
 class XFRecord;
 class ProtectRecord;
-class MsoDrawingBlibItem;
 class MsoDrawingGroupRecord;
 class Window1Record;
 class PasswordRecord;
@@ -91,7 +90,6 @@ public:
     virtual QString nameFromIndex(unsigned index) const;
     virtual QString externNameFromIndex(unsigned index) const;
 
-    MsoDrawingBlibItem* drawing(unsigned long pid) const;
     QList< Sheet* >& chartSheets();
 
     KoStore* store() const;

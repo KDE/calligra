@@ -838,13 +838,6 @@ private:
     Private *d;
 };
 
-class MsoDrawingBlibItem
-{
-public:
-    //enum Type { Picture, ... };
-    PictureReference m_picture;
-    explicit MsoDrawingBlibItem(const PictureReference &picture);
-};
 
 class MsoDrawingGroupRecord : public Record
 {
@@ -861,8 +854,8 @@ public:
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
 
+    const QMap<QByteArray,QString>& pictureNames() const;
     const MSO::OfficeArtDggContainer& dggContainer() const;
-    QList<MsoDrawingBlibItem*> blibItems() const;
 private:
     // no copy or assign
     MsoDrawingGroupRecord(const MsoDrawingGroupRecord&);

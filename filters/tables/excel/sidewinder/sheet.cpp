@@ -53,7 +53,6 @@ public:
     QHash<unsigned, Column*> columns;
     QHash<unsigned, Row*> rows;
     Calligra::Tables::PointStorage<Hyperlink> hyperlinks;
-    Calligra::Tables::PointStorage<QList<PictureObject*> > pictures;
     Calligra::Tables::PointStorage<QList<ChartObject*> > charts;
     Calligra::Tables::PointStorage<QList<OfficeArtObject*> > drawObjects;
 
@@ -131,9 +130,6 @@ void Sheet::setAutoCalc(bool a)
 void Sheet::clear()
 {
     // delete all cell data
-    for (int i = 0; i < d->pictures.count(); i++) {
-        qDeleteAll(d->pictures.data(i));
-    }
     for (int i = 0; i < d->charts.count(); i++) {
         qDeleteAll(d->charts.data(i));
     }
@@ -510,26 +506,6 @@ void Sheet::setHyperlink(unsigned column, unsigned row, const Hyperlink& link)
         d->hyperlinks.take(column+1, row+1);
 }
 
-QList<PictureObject*> Sheet::pictures(unsigned column, unsigned row) const
-{
-    return d->pictures.lookup(column+1, row+1);
-}
-
-void Sheet::setPictures(unsigned column, unsigned row, const QList<PictureObject*>& pictures)
-{
-    if (pictures.isEmpty())
-        d->pictures.take(column+1, row+1);
-    else
-        d->pictures.insert(column+1, row+1, pictures);
-}
-
-void Sheet::addPicture(unsigned column, unsigned row, PictureObject* picture)
-{
-    QList<PictureObject*> pics = pictures(column, row);
-    pics.append(picture);
-    setPictures(column, row, pics);
-}
-
 QList<ChartObject*> Sheet::charts(unsigned column, unsigned row) const
 {
     return d->charts.lookup(column+1, row+1);
@@ -549,7 +525,7 @@ void Sheet::addChart(unsigned column, unsigned row, ChartObject* chart)
     chrts.append(chart);
     setCharts(column, row, chrts);
 }
-    
+
 QList<OfficeArtObject*> Sheet::drawObjects(unsigned column, unsigned row) const
 {
     return d->drawObjects.lookup(column+1, row+1);
@@ -651,7 +627,6 @@ void Sheet::dumpStats()
         if (c->columnRepeat() != 1) ndColumnRepeat++;
         if (c->hasHyperlink()) ndHyperlink++;
         if (!c->note().isEmpty()) ndNote++;
-        if (c->pictures().size()) ndPictures++;
         if (c->charts().size()) ndCharts++;
     }
     printf("    rows: %d\n  cols: %d\n  cells: %d\n", d->rows.size(), d->columns.size(), d->cells.size());
