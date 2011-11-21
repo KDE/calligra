@@ -734,6 +734,18 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
     if(row < KS_rowMax && sheetView->cellView(col, row + 1).style().backgroundColor().isValid())
         paintBorder &= ~BottomBorder;
 
+    // Check if we're in right-to-left mode, and if so swap left and right border bits
+    if (cell.sheet()->layoutDirection() == Qt::RightToLeft) {
+        Borders lrBorder = paintBorder & (LeftBorder | RightBorder);
+        paintBorder &= ~(LeftBorder | RightBorder);
+        if (lrBorder & LeftBorder) {
+            paintBorder |= RightBorder;
+        }
+        if (lrBorder & RightBorder) {
+            paintBorder |= LeftBorder;
+        }
+    }
+
     // Set the single-pixel width pen for drawing the borders with.
     // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
     painter.setPen(QPen(cell.sheet()->map()->settings()->gridColor(), 0, Qt::SolidLine));
