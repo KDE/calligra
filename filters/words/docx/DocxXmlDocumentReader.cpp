@@ -2677,16 +2677,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
 {
     READ_PROLOGUE
 
-    //FIXME: Do we have any attributes here?
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(pStyle)
-    if (!pStyle.isEmpty()) {
-        m_currentParagraphStyle.setParentName(pStyle);
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(lvl)
-    m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
