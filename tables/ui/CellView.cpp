@@ -92,6 +92,7 @@ public:
             : style(*defaultStyle)
             , width(defaultWidth)
             , height(defaultHeight)
+            , rtlOffset(0.0)
             , textX(0.0)
             , textY(0.0)
             , textWidth(0.0)
@@ -116,6 +117,11 @@ public:
     Style style;
     qreal  width;
     qreal  height;
+
+    // difference in position between topleft corner of cell
+    // and where painting should be started in the case of
+    // merged and/or obscured cells in an rtl document
+    qreal rtlOffset;
 
     // Position and dimension of displayed text.
     // Doc coordinate system; points; no zoom
@@ -208,6 +214,12 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         d->width = cell.width();
     if (cell.height() != sheetView->sheet()->map()->defaultRowFormat()->height())
         d->height = cell.height();
+
+    if (cell.sheet()->layoutDirection() == Qt::RightToLeft && cell.doesMergeCells()) {
+        for (int i = 1; i <= cell.mergedXCells(); i++) {
+            d->rtlOffset += cell.sheet()->columnFormat(cell.column() + i)->width();
+        }
+    }
 
     if (sheet->columnFormat(col)->isHiddenOrFiltered() ||
             sheet->rowFormats()->isHiddenOrFiltered(row) ||
@@ -373,7 +385,7 @@ bool CellView::hitTestFilterButton(const Cell& cell, const QRect& cellRect, cons
 //              coordinates.
 //
 void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter, const QRegion &clipRegion,
-                                 const QPointF& coordinate,
+                                 const QPointF& coord,
                                  const Cell& cell, SheetView* sheetView) const
 {
     if (d->hidden)
@@ -390,6 +402,7 @@ void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter,
     }
 
     // ----------------  Start the actual painting.  ----------------
+    const QPointF coordinate(coord.x() - d->rtlOffset, coord.y());
 
     // If the rect of this cell doesn't intersect the rect that should
     // be painted, we can skip the rest and return. (Note that we need
@@ -462,10 +475,11 @@ void CellView::Private::calculateCellBorders(const Cell& cell, SheetView* sheetV
 }
 
 void CellView::paintCellBorders(const QRectF& paintRegion, QPainter& painter, const QRegion &clipRegion,
-                                const QPointF& coordinate,
+                                const QPointF& coord,
                                 const QRect& cellRegion,
                                 const Cell& cell, SheetView* sheetView) const
 {
+    const QPointF coordinate(coord.x() - d->rtlOffset, coord.y());
     // If the rect of this cell doesn't intersect the rect that should
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
@@ -554,7 +568,7 @@ void CellView::paintCellBackground(QPainter& painter, const QRegion &clipRegion,
     if (d->merged)
         return;
 
-    const QRectF cellRect = QRectF(coordinate, QSizeF(d->width, d->height));
+    const QRectF cellRect = QRectF(coordinate, QSizeF(d->width, d->height)).translated(-d->rtlOffset, 0);
     // Does the cell intersect the clipped painting region?
     if (!clipRegion.intersects(cellRect.toRect()))
         return;
@@ -584,10 +598,11 @@ void CellView::paintCellBackground(QPainter& painter, const QRegion &clipRegion,
 // Paint the standard light grey borders that are always visible.
 //
 void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion, const QRectF& paintRect,
-                                   const QPointF &coordinate,
+                                   const QPointF &coord,
                                    Borders paintBorder, const QRect& cellRegion,
                                    const Cell& cell, SheetView* sheetView) const
 {
+    const QPointF coordinate(coord.x() - d->rtlOffset, coord.y());
     // Should the default borders be shown?
     if (!cell.sheet()->getShowGrid())
         return;
@@ -1904,6 +1919,9 @@ void CellView::obscureHorizontalCells(SheetView* sheetView, const Cell& masterCe
             if (col > effectiveCol) {
                 d->obscuredCellsX = col - effectiveCol;
                 d->width += extraWidth;
+                if (sheetView->sheet()->layoutDirection() == Qt::RightToLeft) {
+                    d->rtlOffset += extraWidth;
+                }
 
                 const QRect obscuredRange(effectiveCol + 1, masterCell.row(), d->obscuredCellsX, 1);
                 sheetView->obscureCells(masterCell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
