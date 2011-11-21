@@ -1737,9 +1737,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
 {
-    Charting::ScatterImpl* impl = new Charting::ScatterImpl();
-    if (!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = impl;
+    Charting::ScatterImpl* impl = dynamic_cast<Charting::ScatterImpl*>(m_context->m_chart->m_impl);
+    if (!impl) {
+        m_context->m_chart->m_impl = impl = new Charting::ScatterImpl();
     }
 
     while (!atEnd()) {
