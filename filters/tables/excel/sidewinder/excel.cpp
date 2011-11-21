@@ -969,7 +969,6 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         } else { // must satisfy same restrictions then name field on XLNameUnicodeString
             const unsigned opts = readU8(data + 14);
             const bool fHighByte = opts & 0x01;
-            Q_ASSERT((opts << 1) == 0x0);
 
             // XLUnicodeStringNoCch
             QString str = QString();
@@ -1385,19 +1384,20 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         startPict += 6;
         break;
     case Object::Picture: { // pictFormat and pictFlags
-        m_object = new PictureObject(id);
+        m_object = new Object(Object::Picture, id);
         //const unsigned long ft = readU16(startPict);
         //const unsigned long cb = readU16(startPict + 2);
+        // cf specifies Windows Clipboard format -- so far unused
         const unsigned long cf = readU16(startPict + 4);
         switch (cf) {
         case 0x0002:
-            static_cast<PictureObject*>(m_object)->setType(PictureObject::EnhancedMetafile);
+            // enhanced metafile
             break;
         case 0x0009:
-            static_cast<PictureObject*>(m_object)->setType(PictureObject::Bitmap);
+            // bitmap
             break;
         case 0xFFFF:
-            static_cast<PictureObject*>(m_object)->setType(PictureObject::Unspecified);
+            // unspecified format, neither enhanced metafile nor a bitmap
             break;
         default:
             std::cerr << "ObjRecord::setData: invalid ObjRecord Picture" << std::endl;
@@ -1590,11 +1590,12 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             if (fPrstm) { // iposInCtlStm specifies the zero-based offset of this object's data within the control stream.
                 const unsigned int cbBufInCtlStm = readU32(startPict + 4);
                 startPict += 8;
-                static_cast<PictureObject*>(m_object)->setControlStream(iposInCtlStm, cbBufInCtlStm);
+                Q_UNUSED(iposInCtlStm);  // it was used in PictureObject as offset, but nobody used it
+                Q_UNUSED(cbBufInCtlStm); // it was used in PictureObject as size, but nobody used it
             } else { // The object‘s data MUST reside in an embedding storage.
                 std::stringstream out;
                 out << std::setw(8) << std::setfill('0') << std::uppercase << std::hex << iposInCtlStm;
-                static_cast<PictureObject*>(m_object)->setEmbeddedStorage(out.str());
+                // out.str() was used as embedding storage, but nobody used it
             }
         }
 
@@ -1766,7 +1767,7 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
         setIsValid(false);
         return;
     }
-    
+
     // Finally remember the container to be able to extract later content out of it.
     d->container = container;
 }
@@ -1779,7 +1780,7 @@ class MsoDrawingGroupRecord::Private
 {
 public:
     MSO::OfficeArtDggContainer container;
-    QList< MsoDrawingBlibItem* > items;
+    QMap<QByteArray,QString> pictureNames;
 };
 
 MsoDrawingGroupRecord::MsoDrawingGroupRecord(Workbook *book) : Record(book)
@@ -1797,10 +1798,11 @@ const MSO::OfficeArtDggContainer& MsoDrawingGroupRecord::dggContainer() const
     return d->container;
 }
 
-QList<MsoDrawingBlibItem*> MsoDrawingGroupRecord::blibItems() const
+const QMap< QByteArray, QString >& MsoDrawingGroupRecord::pictureNames() const
 {
-    return d->items;
+    return d->pictureNames;
 }
+
 
 void MsoDrawingGroupRecord::dump(std::ostream& out) const
 {
@@ -1814,12 +1816,12 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         setIsValid(false);
         return;
     }
-    
+
     QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
     QBuffer buff(&byteArr);
     buff.open(QIODevice::ReadOnly);
     LEInputStream lei(&buff);
-    
+
     try {
         MSO::parseOfficeArtDggContainer(lei, d->container);
     } catch (const IOException& e) {
@@ -1827,20 +1829,10 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         setIsValid(false);
         return;
     }
-    
+
     if(d->container.blipStore.data() && m_workbook->store()) {
         m_workbook->store()->enterDirectory("Pictures");
-    
-        foreach(MSO::OfficeArtBStoreContainerFileBlock fb, d->container.blipStore->rgfb) {
-            PictureReference ref = savePicture(fb, m_workbook->store());
-            if (ref.name.length() == 0) {
-                std::cerr << "Empty name in picture reference for picture with uid=" << ref.uid << " mimetype=" << ref.mimetype << std::endl;
-                d->items << 0;
-                continue;
-            }
-            d->items << new MsoDrawingBlibItem(ref);
-        }
-    
+        d->pictureNames = createPictures(m_workbook->store(), 0, &d->container.blipStore->rgfb);
         m_workbook->store()->leaveDirectory();
     }
 }
@@ -2606,10 +2598,6 @@ void ExcelReader::handleEOF(EOFRecord* record)
     if (handler != d->globals) delete handler;
 }
 
-MsoDrawingBlibItem::MsoDrawingBlibItem(const PictureReference &picture)
-    : m_picture(picture)
-{
-}
 
 #ifdef SWINDER_XLS2RAW
 

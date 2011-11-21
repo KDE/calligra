@@ -24,7 +24,7 @@
 #include "sheet.h"
 #include "workbook.h"
 
-#ifndef __GNUC__ 
+#ifndef __GNUC__
   #define __PRETTY_FUNCTION__ __FUNCTION__
 #endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
 
@@ -111,8 +111,19 @@ QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor
 
 QString ODrawClient::getPicturePath(const quint32 pib)
 {
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    Q_UNUSED(pib);
+    quint32 offset = 0;
+    QByteArray rgbUid = getRgbUid(*m_sheet->workbook()->officeArtDggContainer(), pib, offset);
+
+    QString fileName;
+    if (rgbUid.isNull()) {
+        qDebug() << "Object in blipStore with pib: " << pib << "was not found.";
+    }else {
+        fileName = m_sheet->workbook()->pictureName(rgbUid);
+    }
+
+    if (!fileName.isEmpty()){
+        return "Pictures/" + fileName;
+    }
     return QString();
 }
 
