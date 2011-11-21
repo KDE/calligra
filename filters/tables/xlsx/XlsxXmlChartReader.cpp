@@ -2218,16 +2218,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
     m_currentSeries->m_labelCell = tempScatterSeriesData->m_tx.writeRefToInternalTable(this);
 
     m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_numLit.m_ptCount;
-    m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeLitToInternalTable(this);
-
-    if (m_currentSeries->m_countXValues == 0 )
-    {
-          m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_strRef.m_strCache.m_ptCount;
-          m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeRefToInternalTable(this);
+    if (m_currentSeries->m_countXValues == 0 ) {
+        m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_strRef.m_strCache.m_ptCount;
+        m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeRefToInternalTable(this);
+    } else {
+        m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeLitToInternalTable(this);
     }
 
     m_currentSeries->m_countYValues = tempScatterSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;
-
     m_currentSeries->m_valuesCellRangeAddress = tempScatterSeriesData->m_yVal.writeRefToInternalTable(this);
 
     //m_currentSeries->m_domainValuesCellRangeAddress.push_back(tempScatterSeriesData->m_xVal.writeRefToInternalTable(this));
