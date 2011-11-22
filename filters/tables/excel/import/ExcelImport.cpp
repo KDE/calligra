@@ -203,6 +203,7 @@ public:
     KoXmlDocument endMemoryXmlWriter(KoXmlWriter* writer);
 
     ExcelImport *q;
+
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QVariantList&)
@@ -341,6 +342,19 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
     store->disallowNameExpansion();
+
+    // Debug odf for shapes
+#if 0
+    d->shapesXml->endElement();
+    d->shapesXml->endDocument();
+
+    d->shapesXml->device()->seek(0);
+
+    QTextStream input(d->shapesXml->device());
+    qDebug() << "-- START SHAPES_XML -- size : " << d->shapesXml->device()->size();
+    qDebug() << input.readAll();
+    qDebug() << "-- SHAPES_XML --";
+#endif
 
     KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
 
@@ -552,6 +566,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
         //TODO
     }
 
+
     const unsigned columnCount = qMin(maximalColumnCount, is->maxColumn());
     for (unsigned i = 0; i <= columnCount; ++i) {
         processColumn(is, i, os);
@@ -585,12 +600,15 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
         ODrawClient client = ODrawClient(is);
         ODrawToOdf odraw(client);
         Writer writer(*shapesXml, *shapeStyles, false);
+
         const QList<OfficeArtObject*> objs = is->drawObjects();
-        for (int i = objs.size()-1; i >= 0; --i) {
+        for (int i = 0; i < objs.size(); ++i) {
             OfficeArtObject* o = objs[i];
             client.setShapeText(o->text());
+            client.setZIndex(o->index());
             odraw.processDrawingObject(o->object(), writer);
         }
+
         for (int i = is->drawObjectsGroupCount()-1; i >= 0; --i) {
             shapesXml->startElement("draw:g");
 
@@ -601,16 +619,18 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
                 QRectF newCoords = getRect(*first->shapeGroup);
                 Writer transw = writer.transform(oldCoords, newCoords);
                 const QList<OfficeArtObject*> gobjs = is->drawObjects(i);
-                for (int j = gobjs.size()-1; j >= 0; --j) {
+                for (int j = 0; j < gobjs.size(); ++j) {
                     OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
+                    client.setZIndex(o->index());
                     odraw.processDrawingObject(o->object(), transw);
                 }
             } else {
                 const QList<OfficeArtObject*> gobjs = is->drawObjects(i);
-                for (int j = gobjs.size()-1; j >= 0; --j) {
+                for (int j = 0; j < gobjs.size(); ++j) {
                     OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
+                    client.setZIndex(o->index());
                     odraw.processDrawingObject(o->object(), writer);
                 }
             }
@@ -619,6 +639,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
 
         shapesXml->endElement();
     }
+
 
     processSheetForFilters(is, os);
     processSheetForConditionals(is, os);
@@ -1047,11 +1068,13 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
             hasObjects = true;
         }
         ODrawClient client = ODrawClient(ic->sheet());
+
         ODrawToOdf odraw(client);
         Writer writer(*shapesXml, *shapeStyles, false);
-        for (int i = objects.size()-1; i >= 0; --i) {
+        for (int i = 0; i < objects.size(); ++i) {
             OfficeArtObject* o = objects[i];
             client.setShapeText(o->text());
+            client.setZIndex(o->index());
             odraw.processDrawingObject(o->object(), writer);
         }
     }

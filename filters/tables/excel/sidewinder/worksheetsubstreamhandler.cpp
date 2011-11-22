@@ -68,6 +68,7 @@ public:
     MSO::OfficeArtDgContainer* lastDrawingObject;
     MSO::OfficeArtSpgrContainer* lastGroupObject;
     OfficeArtObject* lastOfficeArtObject;
+    quint32 officeArtObjectCounter;
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
@@ -87,6 +88,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->lastDrawingObject = 0;
     d->lastGroupObject = 0;
     d->lastOfficeArtObject = 0;
+    d->officeArtObjectCounter = 0;
     d->curConditionalFormat = 0;
 }
 
@@ -806,12 +808,12 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                         qDebug() << "invalid client anchor";
                     } else {
                         Cell *cell = d->sheet->cell(anchor->colL, anchor->rwT);
-                        OfficeArtObject* obj = new OfficeArtObject(o);
+                        OfficeArtObject* obj = new OfficeArtObject(o, d->officeArtObjectCounter++);
                         cell->addDrawObject(obj);
                         d->lastOfficeArtObject = obj;
                     }
                 } else {
-                    OfficeArtObject* obj = new OfficeArtObject(o);
+                    OfficeArtObject* obj = new OfficeArtObject(o, d->officeArtObjectCounter++);
                     d->sheet->addDrawObject(obj, d->lastGroupObject);
                     d->lastOfficeArtObject = obj;
 
