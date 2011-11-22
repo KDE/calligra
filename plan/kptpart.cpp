@@ -59,6 +59,10 @@
 #include <kmimetype.h>
 #include <KTemporaryFile>
 #include <KoGlobal.h>
+#include <kio/global.h>
+#include <kio/jobclasses.h>
+#include <kio/netaccess.h>
+#include <kio/copyjob.h>
 
 namespace KPlato
 {
@@ -775,14 +779,11 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
         QMap<QString, KUrl>::const_iterator it = package->documents.constBegin();
         QMap<QString, KUrl>::const_iterator end = package->documents.constEnd();
         for ( ; it != end; ++it ) {
-            if ( QFile::exists( it.value().toLocalFile() ) ) {
-                QFile::remove( it.value().toLocalFile() );
-            }
-            if ( ! QFile::rename( it.key(), it.value().toLocalFile() ) ) {
-                kError()<<"Failed to write"<<it.key()<<"to file:"<<it.value().toLocalFile();
-                //TODO ui
-            } else {
+            KUrl src( it.key() );
+            KIO::Job *job = KIO::move( src, it.value(), KIO::Overwrite );
+            if ( KIO::NetAccess::synchronousRun( job, 0 ) ) {
                 docsaved = true;
+                //TODO: async
             }
         }
     }
