@@ -390,7 +390,6 @@ protected slots:
     void slotWorkPackageToBeAdded( Node *node, int row );
     void slotWorkPackageAdded( Node *node );
     void slotWorkPackageToBeRemoved( Node *node, int row );
-    void slotWorkPackageRemoved( Node *node );
 
 protected:
     Object *findNodeObject( const Node *node ) const;

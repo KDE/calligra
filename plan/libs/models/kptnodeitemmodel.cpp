@@ -3885,7 +3885,6 @@ void GeneralNodeItemModel::setModus( int modus )
             disconnect( o->node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
             disconnect( o->node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
             disconnect( o->node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-            disconnect( o->node, SIGNAL( workPackageRemoved( Node* ) ), this, SLOT( slotWorkPackageRemoved( Node* ) ) );
         }
     }
     qDeleteAll( m_objects );
@@ -3900,7 +3899,6 @@ void GeneralNodeItemModel::setModus( int modus )
             connect( n, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
             connect( n, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
             connect( n, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-            connect( n, SIGNAL( workPackageRemoved( Node* ) ), this, SLOT( slotWorkPackageRemoved( Node* ) ) );
             for ( int i = 0; i < static_cast<Task*>( n )->workPackageLogCount(); ++i ) {
                 m_objects << new Object( n, Object::Type_WorkPackage, i );
             }
@@ -3937,7 +3935,6 @@ void GeneralNodeItemModel::slotNodeInserted( Node *node )
     connect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
     connect( node, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
     connect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-    connect( node, SIGNAL( workPackageRemoved( Node* ) ), SLOT( slotWorkPackageRemoved( Node* ) ) );
 
     endInsertRows();
 }
@@ -3954,7 +3951,6 @@ void GeneralNodeItemModel::slotNodeToBeRemoved( Node *node )
             disconnect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
             disconnect( node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
             disconnect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-            disconnect( node, SIGNAL( workPackageRemoved( Node* ) ), this, SLOT( slotWorkPackageRemoved( Node* ) ) );
         }
         QModelIndex idx = index( node );
         beginRemoveRows( parent( idx ), idx.row(), idx.row() );
@@ -3982,15 +3978,19 @@ void GeneralNodeItemModel::slotWorkPackageAdded( Node *node )
 
 void GeneralNodeItemModel::slotWorkPackageToBeRemoved( Node *node, int row )
 {
-    QModelIndex idx = index( node );
-    beginRemoveRows( idx, row, row );
-    m_objects.removeAt( row );
-}
-
-void GeneralNodeItemModel::slotWorkPackageRemoved( Node *node )
-{
-    Q_UNUSED(node);
-    endRemoveRows();
+    Object *parent = findNodeObject( node );
+    if ( parent == 0 ) {
+        kError()<<"No node object for node:"<<parent;
+    } else {
+        Object *o = findWPObject( row, parent );
+        if ( o ) {
+            beginRemoveRows( index( node ), row, row );
+            kDebug()<<node->name()<<row<<m_objects.at( row )->isWorkPackage();
+            m_objects.removeAt( m_objects.indexOf( o ) );
+            delete o;
+            endRemoveRows();
+        }
+    }
 }
 
 void GeneralNodeItemModel::slotNodeRemoved( Node *node )
