@@ -22,6 +22,7 @@
 using namespace KPlato;
 
 Package::Package()
+    : task( 0 )
 {
 }
 

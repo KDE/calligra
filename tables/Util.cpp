@@ -682,6 +682,7 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
     enum { InStart, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName, InCellReference } state;
     state = InStart;
     int cellReferenceStart = 0;
+    int sheetOrAreaNameDelimiterCount = 0;
     QString result = formula.startsWith('=') ? formula : '=' + formula;
     for(int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
@@ -693,9 +694,17 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
         case InArguments:
             if (ch == '"')
                 state = InString;
-            else if (ch.unicode() == '\'')
+            else if (ch.unicode() == '\'') {
+                sheetOrAreaNameDelimiterCount = 1;
+                for(int j = i + 1; j < result.length(); ++j) {
+                    if (result[j].unicode() != '\'')
+                        break;
+                    ++sheetOrAreaNameDelimiterCount;
+                }
+                if (sheetOrAreaNameDelimiterCount >= 2)
+                    result.remove(i + 1, sheetOrAreaNameDelimiterCount - 1);
                 state = InSheetOrAreaName;
-            else if (isCellnameCharacter(ch)) {
+            } else if (isCellnameCharacter(ch)) {
                 state = InCellReference;
                 cellReferenceStart = i;
             } else if (ch == ',')
@@ -716,8 +725,23 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
                 state = InArguments;
             break;
         case InSheetOrAreaName:
-            if (ch == '\'')
-                state = InArguments;
+            Q_ASSERT( i >= 1 );
+            if (ch == '\'' && result[i - 1].unicode() != '\\') {
+                int count = 1;
+                for(int j = i + 1; count < sheetOrAreaNameDelimiterCount && j < result.length(); ++j) {
+                    if (result[j].unicode() != '\'')
+                        break;
+                    ++count;
+                }
+                if (count == sheetOrAreaNameDelimiterCount) {
+                    if (sheetOrAreaNameDelimiterCount >= 2)
+                        result.remove(i + 1, sheetOrAreaNameDelimiterCount - 1);
+                    state = InArguments;
+                } else {
+                    result.insert(i, '\'');
+                    ++i;
+                }
+            }
             break;
         case InCellReference:
             if (!isCellnameCharacter(ch)) {
