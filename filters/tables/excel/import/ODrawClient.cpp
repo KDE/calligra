@@ -29,7 +29,7 @@
 #endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
 
 ODrawClient::ODrawClient(Swinder::Sheet* sheet)
-    : m_sheet(sheet)
+    : m_sheet(sheet), m_zIndex(0)
 {
 }
 
@@ -112,6 +112,10 @@ QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor
 QString ODrawClient::getPicturePath(const quint32 pib)
 {
     quint32 offset = 0;
+    if (!m_sheet->workbook()->officeArtDggContainer()) {
+        return QString();
+    }
+
     QByteArray rgbUid = getRgbUid(*m_sheet->workbook()->officeArtDggContainer(), pib, offset);
 
     QString fileName;
@@ -245,4 +249,10 @@ QString ODrawClient::formatPos(qreal v)
 void ODrawClient::setShapeText(const Swinder::TxORecord &text)
 {
     m_shapeText = text;
+}
+
+void ODrawClient::setZIndexAttribute(Writer& out)
+{
+    out.xml.addAttribute("draw:z-index", m_zIndex);
+    m_zIndex++;
 }

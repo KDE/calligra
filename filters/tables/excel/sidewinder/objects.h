@@ -148,16 +148,19 @@ private:
 class OfficeArtObject
 {
 public:
-    explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object);
+    explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object, quint32 index = 0);
     ~OfficeArtObject();
     MSO::OfficeArtSpContainer object() const;
     void setText(const TxORecord& text);
     TxORecord text() const;
+    void setIndex(quint32 index);
+    quint32 index() const;
     bool operator==(const OfficeArtObject& other) const { return this == &other; }
     bool operator!=(const OfficeArtObject& other) const { return !(*this == other); }
 private:
     MSO::OfficeArtSpContainer m_object;
     TxORecord m_text;
+    quint32 m_index;
 };
 
 } // namespace Swinder

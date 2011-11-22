@@ -165,6 +165,7 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("svg:y2", client->formatPos(out.vOffset(y2)));
     out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
     out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
+    client->setZIndexAttribute(out);
     addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     processText(o, out);
@@ -1069,6 +1070,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
         out.xml.addAttribute("svg:y", client->formatPos(trect.y()));
     }
     //draw:z-index
+    client->setZIndexAttribute(out);
     //presentation:class-names
     //presentation:style-name
     //svg:height
