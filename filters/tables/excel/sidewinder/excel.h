@@ -854,7 +854,7 @@ public:
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
 
-    const QMap<QByteArray,QString>& pictureNames() const;
+    const QMap<QByteArray,QString> pictureNames() const;
     const MSO::OfficeArtDggContainer& dggContainer() const;
 private:
     // no copy or assign

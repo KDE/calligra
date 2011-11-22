@@ -119,7 +119,7 @@ QString ODrawClient::getPicturePath(const quint32 pib)
     QByteArray rgbUid = getRgbUid(*m_sheet->workbook()->officeArtDggContainer(), pib, offset);
 
     QString fileName;
-    if (rgbUid.isNull()) {
+    if (rgbUid.isEmpty()) {
         qDebug() << "Object in blipStore with pib: " << pib << "was not found.";
     }else {
         fileName = m_sheet->workbook()->pictureName(rgbUid);

@@ -133,7 +133,7 @@ public:
     void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
     MSO::OfficeArtDggContainer* officeArtDggContainer() const;
 
-    void setPictureNames(const QMap<QByteArray, QString>& pictureNames);
+    void setPictureNames(const QMap<QByteArray, QString> pictureNames);
     QString pictureName(const QByteArray& uid) const;
 
     void setColorTable(const QList<QColor>& colorTable);
