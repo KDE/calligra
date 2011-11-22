@@ -550,6 +550,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_pPr_numbering()
             if (qualifiedName() == QLatin1String("w:ind")) {
                 TRY_READ(ind_numbering)
             }
+            //TODO: tabs are important
             SKIP_UNKNOWN
         }
     }

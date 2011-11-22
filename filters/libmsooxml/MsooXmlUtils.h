@@ -133,6 +133,8 @@ public:
 
     QString followingChar() const;
 
+    KoGenStyle textStyle() const;
+
     bool startOverride() const;
 
     void addInheritedValues(const ParagraphBulletProperties& properties);

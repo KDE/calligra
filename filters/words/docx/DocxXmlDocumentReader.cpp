@@ -1989,6 +1989,44 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
+    //---------------------------------------------
+    // Prepare for the List Style
+    //---------------------------------------------
+    if (m_listFound) {
+        m_currentBulletProperties = m_currentBulletList.at(m_currentListLevel);
+
+        KoGenStyle textStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
+        KoGenStyle::copyPropertiesFromStyle(m_currentParagraphStyle, textStyle, KoGenStyle::TextType);
+
+        if (!textStyle.isEmpty()) {
+
+            //MSWord: A bullet/picture label does not inherit font information
+            //from the paragraph mark.
+            if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+                textStyle.removeProperty("style:font-name");
+                textStyle.removeProperty("style:font-name-complex");
+            }
+            //MSWord: A label does NOT inherit Underline from text-properties
+            //of the paragraph style.  A bullet/picture does not inherit
+            //{Italics, Bold}.
+            if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+                textStyle.removeProperty("fo:font-style");
+                textStyle.removeProperty("fo:font-weight");
+            }
+            textStyle.removeProperty("style:text-underline-color");
+            textStyle.removeProperty("style:text-underline-mode");
+            textStyle.removeProperty("style:text-underline-style");
+            textStyle.removeProperty("style:text-underline-type");
+            textStyle.removeProperty("style:text-underline-width");
+
+            KoGenStyle::copyPropertiesFromStyle(m_currentBulletProperties.textStyle(), textStyle);
+            m_currentBulletProperties.setTextStyle(textStyle);
+        }
+    }
+
+    //---------------------------------------------
+    // Fine-tune Paragraph Style
+    //---------------------------------------------
     if (m_currentParagraphStyle.parentName().isEmpty()) {
         if (m_context->m_namedDefaultStyles.contains("paragraph")) {
             m_currentParagraphStyle.setParentName(m_context->m_namedDefaultStyles.value("paragraph"));
@@ -1999,7 +2037,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     // The paragraph glyph's formatting is stored in the rPr element under the
     // paragraph properties, since there is no run saved for the paragraph mark
     // itself.  ODF: The paragraph mark formatting does not affect other runs
-    // of text so can't save into text-properties of the paragraph style.
+    // of text so it can't be save into text-properties of the paragraph style.
     if (!textPBuf.isEmpty()) {
         m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }
@@ -2024,8 +2062,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             // In ooxml it seems that nothing should be created if sectPr was present
             if (!m_createSectionToNext) {
                 if (m_listFound) {
-                    m_currentBulletProperties = m_currentBulletList.at(m_currentListLevel);
-
                     // update automatic numbering info
                     if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
 
@@ -2061,61 +2097,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                         }
                     }
 
-                    QString listStyleName;
-                    if (!m_usedListStyles.contains(m_currentNumId)) {
-                        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
-                        if (m_moveToStylesXml) {
-                            m_currentListStyle.setAutoStyleInStylesDotXml(true);
-                        }
-                        MSOOXML::Utils::ParagraphBulletProperties* bulletProps = 0;
-                        int index = 0;
-                        while (index < m_currentBulletList.size()) {
-                            bulletProps = const_cast<MSOOXML::Utils::ParagraphBulletProperties*>(&m_currentBulletList.at(index));
-
-                            if (bulletProps->m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType) {
-                                // The reason why we are inserting bullets only
-                                // here, is that we have to check for the
-                                // actual text size before we can determine how
-                                // big a potential picture bullet should be
-
-                                // Try 1 : paragraph defined
-                                QString fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
-                                if (fontSize.isEmpty()) {
-                                    const KoGenStyle *parent = mainStyles->style(m_currentParagraphStyle.parentName());
-                                    if (parent != 0) {
-                                        // Try 2 : parent defined
-                                        fontSize = parent->property("fo:font-size", KoGenStyle::TextType);
-                                        if (fontSize.isEmpty()) {
-                                            // Try 3 : default text size
-                                            //TODO: This should be acquired from stylesreader.
-                                            fontSize = "11pt";
-                                        }
-                                    }
-                                }
-                                if (!fontSize.isEmpty()) {
-                                    fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
-                                    m_currentBulletProperties.setBulletSizePt(fontSize.toDouble());
-                                }
-                            }
-
-                            m_currentListStyle.addChildElement("list-style-properties",
-                                bulletProps->convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
-                            ++index;
-
-                        }
-                        // Stopped using the KoGenStyles::AllowDuplicates
-                        // parameter, because there was a lot of duplicity.  We
-                        // should properly inherit from list styles in
-                        // styles.xml representing abstract numbering
-                        // definitions in OOXML.
-                        listStyleName = mainStyles->insert(m_currentListStyle, QString());
-                        Q_ASSERT(!listStyleName.isEmpty());
-                        m_usedListStyles[m_currentNumId] = listStyleName;
+                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
+                    if (m_moveToStylesXml) {
+                        m_currentListStyle.setAutoStyleInStylesDotXml(true);
                     }
-                    else {
-                        listStyleName = m_usedListStyles.value(m_currentNumId);
-                        Q_ASSERT(!listStyleName.isEmpty());
-                    }
+
+                    m_currentListStyle.addChildElement("list-style-properties",
+                        m_currentBulletProperties.convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
+
+                    QString listStyleName = mainStyles->insert(m_currentListStyle, QString());
+                    Q_ASSERT(!listStyleName.isEmpty());
+                    //TODO: continue an opened list based on this information
+                    m_usedListStyles.insertMulti(m_currentNumId, listStyleName);
+
                     // Start a new list
                     body->startElement("text:list");
                     body->addAttribute("text:style-name", listStyleName);
