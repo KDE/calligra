@@ -20,6 +20,7 @@ Name[ru]=Компонент текстового процессора Calligra W
 Name[sv]=Calligra-ordbehandlingskomponent
 Name[uk]=Компонент текстового редактора Calligra
 Name[x-test]=xxCalligra Word Processing Componentxx
+Name[zh_CN]=Calligra 字处理组件
 Name[zh_TW]=Calligra 文書處理組件
 X-KDE-Library=wordspart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text

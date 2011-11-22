@@ -21,6 +21,7 @@ Name[ru]=Фильтр импорта документов MS Word-ODF в Words
 Name[sv]=Words-importfilter för MS Word-ODF
 Name[uk]=Фільтр імпорту MS Word-ODF для Words
 Name[x-test]=xxWords MS Word-ODF Import Filterxx
+Name[zh_CN]=Words MS Word-ODF 导入过滤器
 Name[zh_TW]=Words MS Word-ODF 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword

@@ -43,6 +43,7 @@ Comment[pt_BR]=Plugin de Importação do xBase para o Kexi
 Comment[sv]=xBase importinsticksprogram för Kexi
 Comment[uk]=Додаток імпортування даних з xBase для Kexi
 Comment[x-test]=xxxBase Import Plugin for Kexixx
+Comment[zh_CN]=Kexi xBase 导入插件
 Comment[zh_TW]=Kexi 的 xBase 匯入外掛程式
 X-KDE-Library=keximigrate_xbase
 X-KDE-ServiceTypes=Kexi/MigrationDriver
