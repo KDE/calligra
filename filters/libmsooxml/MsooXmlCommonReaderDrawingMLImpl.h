@@ -1572,9 +1572,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 #undef CURRENT_EL
 #define CURRENT_EL overrideClrMapping
 //! overrideClrMapping handler (Override Color Mapping)
-/* This element provides an override for the color mapping in a document. When defined, this color mapping is
-   used in place of the already defined color mapping, or master color mapping. This color mapping is defined in
-   the same manner as the other mappings within this document.
+/* This element provides an override for the color mapping in a document. When
+   defined, this color mapping is used in place of the already defined color
+   mapping, or master color mapping. This color mapping is defined in the same
+   manner as the other mappings within this document.
 
  Parent elements:
  - [done] clrMapOvr (§19.3.1.7)
@@ -1585,6 +1586,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 {
+    // FIXME: In case of presentations, this element is located after the
+    // p:cSld element.  It basically applies theme colors to a slideLayout.
+    // But the corresponsing KoGenStyles from the slideMaster and slideLayout
+    // are already prepared so we inherit wrong colors in a presentation Slide.
+
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
@@ -3699,10 +3705,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
 
 #undef CURRENT_EL
 #define CURRENT_EL solidFill
-//!Solid Fill
-//! DrawingML ECMA-376 20.1.8.54, p. 3234.
-/*!
-This element especifies a solid color fill.
+//! solidFill - Solid Fill
+/*! DrawingML ECMA-376 20.1.8.54, p. 3234.
+
+  This element specifies a solid color fill.  The shape is filled entirely with
+  the specified color.
+
  Parents:
     - bg (§21.4.3.1)
     - bgFillStyleLst (§20.1.4.1.7)
@@ -4266,7 +4274,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     READ_ATTR_WITHOUT_NS(val)
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    // We skip reading this one properly as we do not know the correct theme in the time of reading
+    // We skip reading this one properly as we do not know the correct theme in
+    // the time of reading.
     if (m_colorState == PptxXmlDocumentReader::rprState) {
         defaultTextColors[defaultTextColors.size() - 1] = val;
     }
