@@ -116,7 +116,6 @@ void TileDrawingJob::run()
     kDebug() << globalPixelRect << docRect;
     kDebug() << cellRect;
 
-    // TODO
     m_sheetView->SheetView::paintCells(pixmapPainter, docRect, QPointF(loffset, toffset), 0, cellRect);
 
     //m_image.save(QString("/tmp/tile%1_%2.png").arg(m_x).arg(m_y));
