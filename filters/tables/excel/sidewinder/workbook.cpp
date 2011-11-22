@@ -287,7 +287,7 @@ void Workbook::setVersion(Version ver)
     d->version = ver;
 }
 
-void Workbook::setPictureNames(const QMap< QByteArray, QString >& pictureNames)
+void Workbook::setPictureNames(const QMap< QByteArray, QString > pictureNames)
 {
     d->pictureNames = pictureNames;
 }

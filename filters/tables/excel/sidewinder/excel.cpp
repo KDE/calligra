@@ -1798,7 +1798,7 @@ const MSO::OfficeArtDggContainer& MsoDrawingGroupRecord::dggContainer() const
     return d->container;
 }
 
-const QMap< QByteArray, QString >& MsoDrawingGroupRecord::pictureNames() const
+const QMap< QByteArray, QString > MsoDrawingGroupRecord::pictureNames() const
 {
     return d->pictureNames;
 }
