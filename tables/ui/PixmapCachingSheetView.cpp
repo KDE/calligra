@@ -213,12 +213,25 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     tiles.setRight((bottomRight.x() * sx + TILESIZE-1) / TILESIZE);
     tiles.setBottom((bottomRight.y() * sy + TILESIZE-1) / TILESIZE);
 
-    for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
-        for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
-            QPixmap *p = d->getTile(s, x, y, canvas);
-            QPointF pt(x * TILESIZE / scale.x(), y * TILESIZE / scale.y());
-            QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
-            painter.drawPixmap(r, *p, p->rect());
+    bool rtl = s->layoutDirection() == Qt::RightToLeft;
+
+    if (rtl) {
+        for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
+            for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
+                QPixmap *p = d->getTile(s, x, y, canvas);
+                QPointF pt(paintRect.width() - (x+1) * TILESIZE / scale.x(), y * TILESIZE / scale.y());
+                QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
+                painter.drawPixmap(r, *p, p->rect());
+            }
+        }
+    } else {
+        for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
+            for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
+                QPixmap *p = d->getTile(s, x, y, canvas);
+                QPointF pt(x * TILESIZE / scale.x(), y * TILESIZE / scale.y());
+                QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
+                painter.drawPixmap(r, *p, p->rect());
+            }
         }
     }
 }
