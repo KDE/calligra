@@ -56,9 +56,8 @@ class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget,
     
      
 public:
-    WebBrowserWidget();    
+    WebBrowserWidget(QWidget *parent = 0);
     ~WebBrowserWidget();
-    WebBrowserWidget(QWidget *parent=0);
 
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
