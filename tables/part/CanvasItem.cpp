@@ -170,6 +170,7 @@ CanvasItem::CanvasItem(Doc *doc)
     d->selection->setActiveSheet(activeSheet());
     connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
+    connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
     connect(doc->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
             SLOT(handleDamages(const QList<Damage*>&)));
 }
@@ -493,6 +494,11 @@ void CanvasItem::setObscuredRange(const QSize &size)
     if (!sheetView) return;
 
     emit obscuredRangeChanged(sheetView->sheet(), size);
+}
+
+void CanvasItem::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
+{
+    sheetView(sheet)->updateAccessedCellRange(location);
 }
 
 #include "CanvasItem.moc"

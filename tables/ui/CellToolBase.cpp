@@ -1321,11 +1321,6 @@ void CellToolBase::scrollToCell(const QPoint &location)
     canvas()->canvasController()->ensureVisible(canvas()->viewConverter()->documentToView(rect), true);
 }
 
-void CellToolBase::updateAccessedCellRange(Sheet *sheet, const QPoint &location)
-{
-    sheetView(sheet)->updateAccessedCellRange(location);
-}
-
 CellEditorBase* CellToolBase::editor() const
 {
     return d->cellEditor;

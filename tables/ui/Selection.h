@@ -307,6 +307,8 @@ signals:
     void documentReadWriteToggled(bool readWrite);
     void sheetProtectionToggled(bool protect);
 
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+
 protected:
     class Point;
     class Range;

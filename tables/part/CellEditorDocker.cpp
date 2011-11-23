@@ -61,7 +61,6 @@ CellEditorDocker::CellEditorDocker()
 
     d->locationComboBox = new LocationComboBox(w);
     d->locationComboBox->setMinimumWidth(100);
-    connect(d->locationComboBox, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), SLOT(updateAccessedCellRange(Sheet*,QPoint)));
 
     d->formulaButton = new QToolButton(w);
     d->formulaButton->setText(i18n("Formula"));
@@ -151,11 +150,6 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
         }
     }
     QDockWidget::resizeEvent(event);
-}
-
-void CellEditorDocker::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
-{
-    d->canvas->sheetView(sheet)->updateAccessedCellRange(location);
 }
 
 CellEditorDockerFactory::CellEditorDockerFactory()

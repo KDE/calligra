@@ -1086,8 +1086,7 @@ void Selection::scrollToCursor()
     Sheet *const sheet = activeSheet();
 
     // Adjust the maximum accessed column and row for the scrollbars.
-    // TODO: do this here instead of at every place this method is called
-    //canvas()->sheetView(sheet)->updateAccessedCellRange(location);
+    emit updateAccessedCellRange(sheet, location);
 
     // The cell geometry expanded by some pixels in each direction.
     const Cell cell = Cell(sheet, location).masterCell();

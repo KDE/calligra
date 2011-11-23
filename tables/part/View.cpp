@@ -699,6 +699,7 @@ void View::initView()
     connect(d->selection, SIGNAL(modified(const Region&)), this, SLOT(refreshSelection(const Region&)));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
     connect(d->selection, SIGNAL(refreshSheetViews()), this, SLOT(refreshSheetViews()));
+    connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
     connect(this, SIGNAL(documentReadWriteToggled(bool)),
             d->selection, SIGNAL(documentReadWriteToggled(bool)));
     connect(this, SIGNAL(sheetProtectionToggled(bool)),
@@ -2139,6 +2140,11 @@ KoPrintJob * View::createPrintJob()
     // About to print; close the editor.
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);
+}
+
+void View::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
+{
+    sheetView(sheet)->updateAccessedCellRange(location);
 }
 
 #include "View.moc"
