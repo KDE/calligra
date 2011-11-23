@@ -380,18 +380,21 @@ public:
             this->fieldNumber = -1;
         }
     }
-    bool operator!=(const Condition& other) const {
-        if (fieldNumber == other.fieldNumber)
+    bool operator==(const Condition& other) const {
+        if (fieldNumber != other.fieldNumber)
             return false;
-        if (value == other.value)
+        if (value != other.value)
             return false;
-        if (operation == other.operation)
+        if (operation != other.operation)
             return false;
-        if (caseSensitivity == other.caseSensitivity)
+        if (caseSensitivity != other.caseSensitivity)
             return false;
-        if (dataType == other.dataType)
+        if (dataType != other.dataType)
             return false;
         return true;
+    }
+    bool operator!=(const Condition& other) const {
+        return !operator==(other);
     }
     virtual QString dump() const {
         QString result = QString("fieldNumber: %1 ").arg(fieldNumber);
