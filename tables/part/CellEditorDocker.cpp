@@ -56,7 +56,7 @@ CellEditorDocker::CellEditorDocker()
 
     d->canvas = 0;
 
-    QWidget* w = widget();
+    QWidget* w = new QWidget(this);
 
     d->locationComboBox = new LocationComboBox(w);
     d->locationComboBox->setMinimumWidth(100);
@@ -92,7 +92,8 @@ CellEditorDocker::CellEditorDocker()
     d->layout->addWidget(d->editor, 0, 4);
     d->layout->setColumnStretch(4, 1);
 
-//     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+//     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    setWidget(w);
 
     connect(d->applyButton, SIGNAL(clicked(bool)),
             d->editor, SLOT(applyChanges()));
@@ -132,7 +133,7 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
         const int column = d->layout->count() - 1;
         QLayoutItem *const item = d->layout->itemAtPosition(0, column);
         if (!item) {
-            QWidget::resizeEvent(event);
+            QDockWidget::resizeEvent(event);
             return;
         }
         const int itemWidth = item->minimumSize().width();
@@ -148,7 +149,7 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
             d->layout->addItem(item, 0, d->layout->count());
         }
     }
-    QWidget::resizeEvent(event);
+    QDockWidget::resizeEvent(event);
 }
 
 CellEditorDockerFactory::CellEditorDockerFactory()
