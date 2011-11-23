@@ -69,6 +69,7 @@ QObject* KoReportMapsPlugin::createDesignerInstance(KoReportDesigner* designer, 
 
 QObject* KoReportMapsPlugin::createScriptInstance(KoReportItemBase* item)
 {
+    Q_UNUSED(item);
     myDebug() << "\e[35m======\e[0m";
     /*KoReportItemMaps *image = dynamic_cast<KoReportItemMaps*>(item);
     if (image) {

@@ -32,6 +32,7 @@
 #include <MarbleWidget.h>
 #include <RdfForward.h>
 #include <QMap>
+#include <QMutex>
 
 class QImage;
 class OROImage;
@@ -42,9 +43,6 @@ namespace Scripting
 class Maps;
 }
 
-/**
- @author
-*/
 class KoReportItemMaps : public KoReportASyncItemBase
 {
     Q_OBJECT
@@ -62,9 +60,12 @@ public:
     virtual QString itemDataSource() const;
 public slots:
     void requestRedraw();
+    void addProgresItem();
+    void removeProgresItem();
+    //void resetProgres();
 
 protected:
-    Marble::MarbleWidget* initMarble();
+    void initMarble();
     KoProperty::Property * m_controlSource;
     KoProperty::Property* m_resizeMode;
     KoProperty::Property* m_staticImage;
@@ -75,21 +76,21 @@ protected:
     QString mode() const;
     bool isInline() const;
     QByteArray inlineImageData() const;
-    QMap<QString,Marble::MarbleWidget*> m_marbles;
-    class OroIds{
-    public:
-        OroIds():pageId(0),sectionId(0),marbleWidget(0){}
-        OROImage *pageId;
-        OROImage *sectionId;
-        Marble::MarbleWidget* marbleWidget;
-    };
-    QMap<Marble::MarbleModel*, OroIds> m_marbleImgs;
-    QImage* m_mapImage;
+    Marble::MarbleWidget *m_marble;
+    //QImage* m_mapImage;
     
 private:
     virtual void createProperties();
     void deserializeData(const QVariant& serialized);
     friend class Scripting::Maps;
+    QMutex m_jobMutex;
+    int m_totalJobs;
+    int m_completedJobs;
+    bool m_rendering;
+
+    OROPage *m_targetPage;
+    OROSection *m_targetSection;
+    QPointF m_targetOffset;
 };
 
 #endif

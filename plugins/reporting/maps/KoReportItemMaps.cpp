@@ -27,6 +27,7 @@
 #include <renderobjects.h>
 #include <MarbleWidget.h>
 #include <MarbleModel.h>
+#include <HttpDownloadManager.h>
 #include <QImage>
 #include <QPixmap>
 #include <sys/socket.h>
@@ -61,35 +62,39 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
             kDebug() << "====== while parsing image element encountered unknow element: " << n;
 //         }
     }
-    m_mapImage = new QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
-    m_mapImage->fill(QColor(200, 150, 5).rgb());
+    //m_mapImage = new QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
+    //m_mapImage->fill(QColor(200, 150, 5).rgb());
+    m_totalJobs = 0;
+    m_completedJobs = 0;
+    initMarble();
 }
 
-Marble::MarbleWidget* KoReportItemMaps::initMarble()
+void KoReportItemMaps::initMarble()
 {
-    Marble::MarbleWidget* marble = new Marble::MarbleWidget();
+    
+    m_marble = new Marble::MarbleWidget();
     //marble->setMapThemeId("earth/srtm/srtm.dgml");
+
+    connect( m_marble->model()->downloadManager(), SIGNAL( jobAdded() ),
+             this, SLOT( addProgresItem() ), Qt::UniqueConnection );
     
-    marble->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
-    
-    marble->centerOn(20.81,52.12, false);
-    marble->zoomView(2100);
-    marble->setShowOverviewMap(false);
-    marble->setFixedSize(m_size.toScene().toSize());
-    return marble;
+    connect( m_marble->model()->downloadManager(), SIGNAL( jobRemoved() ),
+             this, SLOT( removeProgresItem() ), Qt::UniqueConnection );
+    /// @todo: MapThemId should be loaded form xml or form database.
+    m_marble->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+
+    m_marble->centerOn(20.81,52.12, false);
+    m_marble->zoomView(2100);
+    m_marble->setShowOverviewMap(false);
+    m_marble->setFixedSize(m_size.toScene().toSize());
 }
 
 
 KoReportItemMaps::~KoReportItemMaps()
 {
-    myDebug() << "DIE:" << this << m_marbles.count();
-    delete m_mapImage;
+    //delete m_mapImage;
     delete m_set;
-    QMap<QString, Marble::MarbleWidget*>::iterator i = m_marbles.begin();
-    while(i != m_marbles.end()){
-        delete i.value();
-        i++;
-    }
+    delete m_marble;
 }
 
 // bool KoReportItemMaps::isInline() const
@@ -185,14 +190,25 @@ int KoReportItemMaps::render(OROPage* page,
                              KRScriptHandler *script)
 {
     Q_UNUSED(script)
+
+    m_rendering = true;
+    
     
     myDebug() << this << "data:" << data;
+    
     QString dataKey = data.toString();
     QStringList dataList = dataKey.split(";");
     //myDebug() << "splited:" << dataList;
-    Marble::MarbleWidget* marble;
+
+    m_targetPage = page;
+    m_targetSection = section;
+    m_targetOffset = offset;
+
+    m_marble->setCenterLatitude( dataList[0].toDouble() );
+    m_marble->setCenterLongitude( dataList[1].toDouble() );
+    m_marble->zoomView( dataList[2].toInt() );
     
-    if(m_marbles.count(dataKey)==0){ //no such marble yet
+    /*if(m_marbles.count(dataKey)==0){ //no such marble yet
         marble = initMarble();
         m_marbles.insert(dataKey, marble);
         connect(marble->model(), SIGNAL(modelChanged()), this, SLOT(requestRedraw()));
@@ -211,7 +227,7 @@ int KoReportItemMaps::render(OROPage* page,
     id->setImage(*m_mapImage);
     id->setScaled(false);
 
-    id->setPosition(m_pos.toScene() + offset);
+    id->setPosition(m_pos.tom_progressShowTimerScene() + offset);
     id->setSize(m_size.toScene());
     OroIds oroIds;
     if (page) {
@@ -233,14 +249,14 @@ int KoReportItemMaps::render(OROPage* page,
         oroIds.pageId=0;
     }
     oroIds.marbleWidget = marble;
-    m_marbleImgs[marble->model()]=oroIds;
+    m_marbleImgs[marble->model()]=oroIds;*/
     
     return 0; //Item doesnt stretch the section height
 }
 
 void KoReportItemMaps::requestRedraw()
 {
-    myDebug() << sender();
+    /*myDebug() << sender();
     QImage tmpImg(*m_mapImage);
     Marble::MarbleModel* marbleModel = dynamic_cast<Marble::MarbleModel*>(sender());
     OroIds *oroIds = &m_marbleImgs[marbleModel];
@@ -251,7 +267,49 @@ void KoReportItemMaps::requestRedraw()
         oroIds->sectionId->setImage(tmpImg);
     myDebug() << "pageId sectionId marbleWidget";
     myDebug() << oroIds->pageId << oroIds->sectionId << oroIds->marbleWidget;
+    */
+    OROPicture * pic = new OROPicture();
+    QPainter p( pic->picture() );
+    m_marble->render( &p );
+    QPointF pos = m_pos.toScene();
+    QSizeF size = m_size.toScene();
+
+    pos += m_targetOffset;
+
+    pic->setPosition( pos );
+    pic->setSize( size );
+    if ( m_targetPage ) {
+        m_targetPage->addPrimitive( pic, false, true );
+    }
+
+    OROPicture *p2 = dynamic_cast<OROPicture*>( pic->clone() );
+    p2->setPosition( m_pos.toPoint() );
+    if ( m_targetSection ) {
+        m_targetSection->addPrimitive(p2);
+    }
+
+    m_rendering = false;
+    emit(finishedRendering());
 }
 
+void KoReportItemMaps::addProgresItem()
+{
+    m_jobMutex.lock();
+    ++m_totalJobs;
+    m_jobMutex.unlock();
+    myDebug() << "======" << m_totalJobs;
+}
 
+void KoReportItemMaps::removeProgresItem()
+{
+    
+    m_jobMutex.lock();
+    --m_totalJobs;
+    m_jobMutex.unlock();
+    myDebug() << "======" << m_totalJobs;
+
+    if ( m_totalJobs == 0 ) {
+        requestRedraw();
+    }
+}
 
