@@ -98,6 +98,7 @@ public Q_SLOTS:
      * Scrolls to the cell located at \p location.
      */
     void scrollToCell(const QPoint &location);
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();

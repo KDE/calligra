@@ -167,7 +167,8 @@ void LocationComboBox::slotActivateItem()
     if (!m_selection) return;
 
     if (activateItem()) {
-        emit scrollToCell(m_selection->cursor());
+        emit updateAccessedCellRange(m_selection->activeSheet(), m_selection->cursor());
+        m_selection->scrollToCursor();
     }
 }
 
@@ -247,7 +248,8 @@ void LocationComboBox::keyPressEvent(QKeyEvent * _ev)
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         if (activateItem()) {
-            emit scrollToCell(selection->cursor());
+            emit updateAccessedCellRange(m_selection->activeSheet(), m_selection->cursor());
+            selection->scrollToCursor();
             return;
         }
         _ev->accept(); // QKeyEvent

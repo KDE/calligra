@@ -68,7 +68,7 @@ protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent *event);
 
 Q_SIGNALS:
-    void scrollToCell(const QPoint& location);
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
 
 private Q_SLOTS:
     void slotActivateItem();

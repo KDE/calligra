@@ -280,6 +280,7 @@ public:
     void emitCloseEditor(bool saveChanges, bool expandMatrix = false);
     void emitRequestFocusEditor();
 
+    void scrollToCursor();
 signals:
     /**
      * Emitted when the Selection was changed.

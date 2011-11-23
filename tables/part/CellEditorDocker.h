@@ -29,6 +29,7 @@ namespace Calligra
 {
 namespace Tables
 {
+class Sheet;
 
 class CellEditorDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -43,6 +44,9 @@ public:
 
 protected: // reimplementations
     virtual void resizeEvent(QResizeEvent *event);
+
+private Q_SLOTS:
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
 
 private:
     class Private;

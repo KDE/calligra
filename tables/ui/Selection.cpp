@@ -24,6 +24,8 @@
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoViewConverter.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -1076,6 +1078,29 @@ void Selection::emitChanged(const Region& region)
         extendedRegion.add(masterCells[i].cellPosition(), sheet);
 
     emit changed(extendedRegion);
+}
+
+void Selection::scrollToCursor()
+{
+    const QPoint location = cursor();
+    Sheet *const sheet = activeSheet();
+
+    // Adjust the maximum accessed column and row for the scrollbars.
+    // TODO: do this here instead of at every place this method is called
+    //canvas()->sheetView(sheet)->updateAccessedCellRange(location);
+
+    // The cell geometry expanded by some pixels in each direction.
+    const Cell cell = Cell(sheet, location).masterCell();
+    const double xpos = sheet->columnPosition(cell.cellPosition().x());
+    const double ypos = sheet->rowPosition(cell.cellPosition().y());
+    const double pixelWidth = canvas()->viewConverter()->viewToDocumentX(1);
+    const double pixelHeight = canvas()->viewConverter()->viewToDocumentY(1);
+    QRectF rect(xpos, ypos, cell.width(), cell.height());
+    rect.adjust(-2*pixelWidth, -2*pixelHeight, +2*pixelWidth, +2*pixelHeight);
+    rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
+
+    // Scroll to cell.
+    canvas()->canvasController()->ensureVisible(canvas()->viewConverter()->documentToView(rect), true);
 }
 
 void Selection::dump() const
