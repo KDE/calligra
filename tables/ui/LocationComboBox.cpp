@@ -65,16 +65,18 @@ void LocationComboBox::setSelection(Selection *selection)
 
     m_selection = selection;
 
-    insertItem(0, QString());
-    updateAddress();
-    Map *const map = m_selection->activeSheet()->map();
-    const QList<QString> areaNames = map->namedAreaManager()->areaNames();
-    for (int i = 0; i < areaNames.count(); ++i)
-        slotAddAreaName(areaNames[i]);
+    if (m_selection) {
+        insertItem(0, QString());
+        updateAddress();
+        Map *const map = m_selection->activeSheet()->map();
+        const QList<QString> areaNames = map->namedAreaManager()->areaNames();
+        for (int i = 0; i < areaNames.count(); ++i)
+            slotAddAreaName(areaNames[i]);
 
-    connect(map->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
-    connect(map->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
-    connect(m_selection, SIGNAL(changed(Region)), this, SLOT(slotSelectionChanged()));
+        connect(map->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
+        connect(map->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
+        connect(m_selection, SIGNAL(changed(Region)), this, SLOT(slotSelectionChanged()));
+    }
 }
 
 void LocationComboBox::updateAddress()

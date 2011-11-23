@@ -22,6 +22,7 @@
 
 #include <QDockWidget>
 
+#include <KoCanvasObserverBase.h>
 #include <KoDockFactoryBase.h>
 
 namespace Calligra
@@ -29,16 +30,23 @@ namespace Calligra
 namespace Tables
 {
 
-class CellEditorDocker : public QDockWidget
+class CellEditorDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
     explicit CellEditorDocker();
+    virtual ~CellEditorDocker();
 
-signals:
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
 
-public slots:
+protected: // reimplementations
+    virtual void resizeEvent(QResizeEvent *event);
 
+private:
+    class Private;
+    Private *const d;
 };
 
 class CellEditorDockerFactory : public KoDockFactoryBase
