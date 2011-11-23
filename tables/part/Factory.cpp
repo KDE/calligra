@@ -24,8 +24,11 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
+#include <KoDockRegistry.h>
+
 #include "AboutData.h"
 #include "Doc.h"
+#include "CellEditorDocker.h"
 
 using namespace Calligra::Tables;
 
@@ -80,6 +83,9 @@ const KComponentData &Factory::global()
         s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
         s_global->dirs()->addResourceType("functions", "data", "tables/functions/");
         s_global->dirs()->addResourceType("sheet-styles", "data", "tables/sheetstyles/");
+
+        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+        dockRegistry->add(new CellEditorDockerFactory);
     }
     return *s_global;
 }
