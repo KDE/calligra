@@ -32,6 +32,9 @@
 
 #include <algorithm>
 
+// Print the content of generated content.xml to the console for debugging purpose
+//#define CONTENTXML_DEBUG
+
 using namespace Charting;
 
 ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
@@ -805,6 +808,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->endElement(); // chart:chart
     bodyWriter->endElement(); // office:chart
     bodyWriter->endElement(); // office:body
+
+#ifdef CONTENTXML_DEBUG
+    qDebug() << bodyWriter->toString();
+#endif
 
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     s.closeContentWriter();
