@@ -33,6 +33,7 @@ namespace Calligra
 namespace Tables
 {
 class Selection;
+class Sheet;
 
 /**
  * \class LocationComboBox
@@ -72,6 +73,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotActivateItem();
     void slotSelectionChanged();
+    void slotActiveSheetChanged(Sheet* sheet);
 
 private:
     bool activateItem();

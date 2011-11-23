@@ -117,7 +117,6 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 void CellEditorDocker::unsetCanvas()
 {
     kDebug() << "unsetting canvas";
-    d->locationComboBox->setSelection(0);
 }
 
 void CellEditorDocker::resizeEvent(QResizeEvent *event)
