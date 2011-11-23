@@ -1993,7 +1993,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     // Prepare for the List Style
     //---------------------------------------------
     if (m_listFound && m_currentBulletList.size() > m_currentListLevel) {
-        qDebug() << __PRETTY_FUNCTION__ << m_currentBulletList.size() << m_currentListLevel;
         m_currentBulletProperties = m_currentBulletList.at(m_currentListLevel);
 
         KoGenStyle textStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
