@@ -104,13 +104,16 @@ public:
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
-    Project *loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &url );
+    Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const KUrl& url );
     QMap<Package*, KUrl> workPackages() const { return m_workpackages; }
 
     void insertFile( const QString &filename, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
 
     KPlatoAboutPage &aboutPage() { return m_aboutPage; }
+
+    bool extractFiles( KoStore *store, Package *package );
+    bool extractFile( KoStore *store, Package *package, const Document *doc );
 
 public slots:
     /// Inserts an item into all other views than @p view

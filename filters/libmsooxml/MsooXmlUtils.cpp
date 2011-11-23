@@ -1393,26 +1393,16 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 // </units> -------------------
 
-Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
-    m_type(ParagraphBulletProperties::DefaultType), m_startValue("1"), m_bulletFont(UNUSED),
-    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_prefix(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
-    m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize(UNUSED),
-    m_bulletSize(UNUSED)
+Utils::ParagraphBulletProperties::ParagraphBulletProperties()
 {
-}
-
-bool Utils::ParagraphBulletProperties::isEmpty() const
-{
-    if (m_type == ParagraphBulletProperties::DefaultType) {
-        return true;
-    }
-    return false;
+    clear();
 }
 
 void Utils::ParagraphBulletProperties::clear()
 {
-    m_startValue = "1"; //ECMA-376, p.4575
+    m_level = -1;
     m_type = ParagraphBulletProperties::DefaultType;
+    m_startValue = "1"; //ECMA-376, p.4575
     m_bulletFont = UNUSED;
     m_bulletChar = UNUSED;
     m_numFormat = UNUSED;
@@ -1426,6 +1416,15 @@ void Utils::ParagraphBulletProperties::clear()
     m_followingChar = UNUSED;
     m_bulletRelativeSize = UNUSED;
     m_bulletSize = UNUSED;
+    m_startOverride = false;
+}
+
+bool Utils::ParagraphBulletProperties::isEmpty() const
+{
+    if (m_type == ParagraphBulletProperties::DefaultType) {
+        return true;
+    }
+    return false;
 }
 
 void Utils::ParagraphBulletProperties::setAlign(const QString& align)
@@ -1518,7 +1517,7 @@ void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
     }
     //m_bulletRelativeSize
     //m_bulletSize
-    if (!(m_textStyle.property("fo:font-size")).isEmpty()) {
+    if (!m_textStyle.property("fo:font-size").isEmpty()) {
         QString bulletSize = m_textStyle.property("fo:font-size");
         if (bulletSize.endsWith("%")) {
             bulletSize.chop(1);
@@ -1530,6 +1529,11 @@ void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
             kDebug() << "Unit of font-size NOT supported!";
         }
     }
+}
+
+void Utils::ParagraphBulletProperties::setStartOverride(const bool startOverride)
+{
+    m_startOverride = startOverride;
 }
 
 QString Utils::ParagraphBulletProperties::startValue() const
@@ -1577,9 +1581,22 @@ QString Utils::ParagraphBulletProperties::followingChar() const
     return m_followingChar;
 }
 
+KoGenStyle Utils::ParagraphBulletProperties::textStyle() const
+{
+    return m_textStyle;
+}
+
+bool Utils::ParagraphBulletProperties::startOverride() const
+{
+    return m_startOverride;
+}
+
 void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
 {
     // This function is intented for helping to inherit some values from other properties
+    if (m_level == -1) {
+        m_level = properties.m_level;
+    }
     if (properties.m_type != ParagraphBulletProperties::DefaultType) {
         m_type = properties.m_type;
     }
@@ -1619,7 +1636,7 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     if (properties.m_bulletRelativeSize != UNUSED) {
         m_bulletRelativeSize = properties.m_bulletRelativeSize;
     }
-    if (!properties.m_bulletSize.isEmpty()) {
+    if (properties.m_bulletSize != UNUSED) {
         m_bulletSize = properties.m_bulletSize;
     }
     if (properties.m_followingChar != UNUSED) {
@@ -1686,21 +1703,20 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
 
     if (currentFilter == Utils::DocxFilter) {
 
-        //MSWord: A label does NOT inherit {Italics, Bold, Underline} from
-        //text-properties of the paragraph style.
-
-        //fo:font-style
-        if ((m_textStyle.property("fo:font-style")).isEmpty()) {
-            m_textStyle.addProperty("fo:font-style", "normal");
+        //MSWord: A label does NOT inherit Underline from text-properties of
+        //the paragraph style.  A bullet does not inherit {Italics, Bold}.
+        if (m_type != ParagraphBulletProperties::NumberType) {
+            if ((m_textStyle.property("fo:font-style")).isEmpty()) {
+                m_textStyle.addProperty("fo:font-style", "normal");
+            }
+            if ((m_textStyle.property("fo:font-weight")).isEmpty()) {
+                m_textStyle.addProperty("fo:font-weight", "normal");
+            }
         }
-        //fo:font-weight
-        if ((m_textStyle.property("fo:font-weight")).isEmpty()) {
-            m_textStyle.addProperty("fo:font-weight", "normal");
-        }
-        //style:text-underline-style
         if ((m_textStyle.property("style:text-underline-style")).isEmpty()) {
             m_textStyle.addProperty("style:text-underline-style", "none");
         }
+
         //fo:font-size
         if (m_type != ParagraphBulletProperties::PictureType) {
             if ((m_textStyle.property("fo:font-size")).isEmpty()) {
@@ -1742,13 +1758,13 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     if (m_align != UNUSED) {
         out.addAttribute("fo:text-align", m_align);
     }
-    out.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
     if ((m_type == ParagraphBulletProperties::PictureType) && (m_bulletSize != UNUSED)) {
         QString size = QString(m_bulletSize).append("pt");
         out.addAttribute("fo:width", size);
         out.addAttribute("fo:height", size);
     }
 
+    out.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
     // NOTE: DrawingML: If indent and marL were not provided by a master slide
     // or defaults, then according to the spec. a value of -342900 is implied
     // for indent and a value of 347663 is implied for marL (no matter which

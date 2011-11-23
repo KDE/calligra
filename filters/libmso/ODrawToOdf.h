@@ -116,6 +116,10 @@ public:
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
 
         virtual QString formatPos(qreal v) = 0;
+
+        virtual void setZIndexAttribute(Writer &out){
+            Q_UNUSED(out);
+        }
     };
 private:
     Client* const client;

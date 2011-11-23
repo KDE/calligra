@@ -467,22 +467,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:g, because we have
 
     {
-        // The purpose of this class is to make sure the this->body variable is proper
-        // set back to what it was before even if one of the TRY_READ calls lead to
-        // us skipping out of this method. In that case we need to make sure to restore
-        // the body variable else things may later crash.
-        //
-        // FIXME refactor the XmlWriteBuffer and merge this hack in so we don't
-        // need to work-around at any place where it's used.
-        //
-        class KeepBodyHack {
-        public:
-            KeepBodyHack(MSOOXML_CURRENT_CLASS *self, MSOOXML::Utils::XmlWriteBuffer *buf) : m_self(self), m_buf(buf) {}
-            ~KeepBodyHack() { m_self->body = m_buf->originalWriter(); }
-            MSOOXML_CURRENT_CLASS *m_self;
-            MSOOXML::Utils::XmlWriteBuffer *m_buf;
-        };
-        KeepBodyHack back(this, &drawFrameBuf);
+        MSOOXML::Utils::AutoRestore<KoXmlWriter> autoRestoreBody(&body);
 
         // to write after the child elements are generated
         body = drawFrameBuf.setWriter(body);
@@ -506,6 +491,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
         }
     }
 
+    body = drawFrameBuf.originalWriter();
     body->startElement("draw:g");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1586,9 +1572,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 #undef CURRENT_EL
 #define CURRENT_EL overrideClrMapping
 //! overrideClrMapping handler (Override Color Mapping)
-/* This element provides an override for the color mapping in a document. When defined, this color mapping is
-   used in place of the already defined color mapping, or master color mapping. This color mapping is defined in
-   the same manner as the other mappings within this document.
+/* This element provides an override for the color mapping in a document. When
+   defined, this color mapping is used in place of the already defined color
+   mapping, or master color mapping. This color mapping is defined in the same
+   manner as the other mappings within this document.
 
  Parent elements:
  - [done] clrMapOvr (§19.3.1.7)
@@ -1599,6 +1586,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 {
+    // FIXME: In case of presentations, this element is located after the
+    // p:cSld element.  It basically applies theme colors to a slideLayout.
+    // But the corresponsing KoGenStyles from the slideMaster and slideLayout
+    // are already prepared so we inherit wrong colors in a presentation Slide.
+
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
@@ -3713,10 +3705,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
 
 #undef CURRENT_EL
 #define CURRENT_EL solidFill
-//!Solid Fill
-//! DrawingML ECMA-376 20.1.8.54, p. 3234.
-/*!
-This element especifies a solid color fill.
+//! solidFill - Solid Fill
+/*! DrawingML ECMA-376 20.1.8.54, p. 3234.
+
+  This element specifies a solid color fill.  The shape is filled entirely with
+  the specified color.
+
  Parents:
     - bg (§21.4.3.1)
     - bgFillStyleLst (§20.1.4.1.7)
@@ -4280,7 +4274,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     READ_ATTR_WITHOUT_NS(val)
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    // We skip reading this one properly as we do not know the correct theme in the time of reading
+    // We skip reading this one properly as we do not know the correct theme in
+    // the time of reading.
     if (m_colorState == PptxXmlDocumentReader::rprState) {
         defaultTextColors[defaultTextColors.size() - 1] = val;
     }

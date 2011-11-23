@@ -197,39 +197,53 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
         return QVariant();
     const QPoint offset = m_region.firstRange().topLeft();
     const Sheet* sheet = m_region.firstSheet();
-    const Value value = sheet->cellStorage()->value(offset.x() + index.column(),
-                        offset.y() + index.row());
-    // KoChart::Value is either:
-    //  - a double (interpreted as a value)
-    //  - a QString (interpreted as a label)
-    //  - a QDateTime (interpreted as a date/time value)
-    //  - Invalid (interpreted as empty)
-    QVariant variant;
-    switch (value.type()) {
-    case Value::Float:
-    case Value::Integer:
-        if (value.format() == Value::fmt_DateTime ||
-                value.format() == Value::fmt_Date ||
-                value.format() == Value::fmt_Time) {
-            variant.setValue<QDateTime>(value.asDateTime(sheet->map()->calculationSettings()));
-            break;
+    int row = offset.y() + index.row();
+    int column = offset.x() + index.column();
+    Value value = sheet->cellStorage()->value(column, row);
+
+    switch (role) {
+        case Qt::DisplayRole: {
+            // return the in the cell displayed test
+            Cell c(sheet, column, row);
+            bool showFormula = false;
+            return c.displayText(Style(), &value, &showFormula);
         }
-    case Value::Boolean:
-    case Value::Complex:
-    case Value::Array:
-        variant.setValue<double>(numToDouble(value.asFloat()));
-        break;
-    case Value::String:
-    case Value::Error:
-        variant.setValue<QString>(value.asString());
-        break;
-    case Value::Empty:
-    case Value::CellRange:
-    default:
-        break;
+        case Qt::EditRole: {
+            // return the actual cell value
+            // KoChart::Value is either:
+            //  - a double (interpreted as a value)
+            //  - a QString (interpreted as a label)
+            //  - a QDateTime (interpreted as a date/time value)
+            //  - Invalid (interpreted as empty)
+            QVariant variant;
+            switch (value.type()) {
+                case Value::Float:
+                case Value::Integer:
+                    if (value.format() == Value::fmt_DateTime ||
+                            value.format() == Value::fmt_Date ||
+                            value.format() == Value::fmt_Time) {
+                        variant.setValue<QDateTime>(value.asDateTime(sheet->map()->calculationSettings()));
+                        break;
+                    } // fall through
+                case Value::Boolean:
+                case Value::Complex:
+                case Value::Array:
+                    variant.setValue<double>(numToDouble(value.asFloat()));
+                    break;
+                case Value::String:
+                case Value::Error:
+                    variant.setValue<QString>(value.asString());
+                    break;
+                case Value::Empty:
+                case Value::CellRange:
+                default:
+                    break;
+            }
+            return variant;
+        }
     }
     //kDebug() << index.column() <<"," << index.row() <<"," << variant;
-    return variant;
+    return QVariant();
 }
 
 const Calligra::Tables::Region& BindingModel::region() const

@@ -737,8 +737,20 @@ bool EmfParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
     case EMR_FILLPATH:
 	{
 	    QRect bounds;
-	    stream >> bounds;
+
+            // NOTE: The spec says that there should always be a
+            // bound, i.e. the size should be 24.  But the file
+            // http://www.eventlink.org.uk/uploads/DOCS2/53-Cartledge_Energy_Efficient_IT_Sheffield_Sep10.ppt
+            // has an EMF with a FILLPATH record without this
+            // bound. So let's allow without it too.
+            if (size >= 24) {
+                stream >> bounds;
+            }
+            else if (size > 8)
+                soakBytes(stream, size - 8);
+
 	    m_backend->fillPath(context, bounds );
+            //kDebug(33100) << "xx EMR_FILLPATH" << bounds;
 	}
 	break;
     case EMR_STROKEANDFILLPATH:
@@ -1125,8 +1137,7 @@ bool EmfParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
 #if DEBUG_EMFPARSER
         kDebug(31000) << "unknown record type:" << type;
 #endif
-	soakBytes( stream, size-8 ); // because we already took 8.
-	Q_ASSERT( type );
+	soakBytes(stream, size - 8); // because we already took 8.
     }
 #endif
 

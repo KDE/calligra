@@ -137,7 +137,8 @@ public:
 
     const Map* map;
     // stores providing regions ordered by their consuming cell locations
-    QHash<Cell, Region> providers;
+    // use QMap rather then QHash cause it's faster for our use-case
+    QMap<Cell, Region> providers;
     // stores consuming cell locations ordered by their providing regions
     QHash<Sheet*, RTree<Cell>*> consumers;
     // stores consuming cell locations ordered by their providing named area
@@ -158,7 +159,8 @@ public:
      * \li depth(A2) = 1
      * \li depth(A3) = 2
      */
-    QHash<Cell, int> depths;
+    // use QMap rather then QHash cause it's faster for our use-case
+    QMap<Cell, int> depths;
 };
 
 } // namespace Tables

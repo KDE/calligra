@@ -196,17 +196,24 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     reportProgress(15);
 
-    // Main document context, to which we collect footnotes, endnotes, comments, numbering, tablestyles
+    // Main document context, to which we collect footnotes, endnotes,
+    // comments, numbering, tablestyles
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
 
     // 3. parse styles
     {
-        // get styles path from document's relationships, not from content types; typically returns /word/styles.xml
+        // get styles path from document's relationships, not from content
+        // types; typically returns /word/styles.xml
+        //
         // ECMA-376, 11.3.12 Style Definitions Part, p. 65
-        // An instance of this part type contains the definition for a set of styles used by this document.
-        // A package shall contain at most two Style Definitions parts. One instance of that part shall be
-        // the target of an implicit relationship from the Main Document (§11.3.10) part, and the other shall
-        // be the target of an implicit relationship in from the Glossary Document (§11.3.8) part.
+        //
+        // An instance of this part type contains the definition for a set of
+        // styles used by this document.  A package shall contain at most two
+        // Style Definitions parts.  One instance of that part shall be the
+        // target of an implicit relationship from the Main Document (§11.3.10)
+        // part, and the other shall be the target of an implicit relationship
+        // in from the Glossary Document (§11.3.8) part.
+
         const QString stylesPathAndFile(relationships->targetForType(documentPath, documentFile,
             QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/styles"));
         DocxXmlStylesReader stylesReader(writers);
@@ -219,6 +226,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 stylesPathAndFile, &stylesReader, writers, errorMessage, &context) )
 
             mainContext.m_tableStyles = context.m_tableStyles;
+            mainContext.m_namedDefaultStyles = context.m_namedDefaultStyles;
         }
     }
 
@@ -237,6 +245,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             numberingPathAndFile, &numberingReader, writers, errorMessage, &numberingContext) )
     }
     mainContext.m_bulletStyles = numberingContext.m_bulletStyles;
+    mainContext.m_abstractNumIDs = numberingContext.m_abstractNumIDs;
 
     reportProgress(30);
 
@@ -252,6 +261,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, footnotePath, footnoteFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            context.m_namedDefaultStyles = mainContext.m_namedDefaultStyles;
+            context.m_abstractNumIDs = mainContext.m_abstractNumIDs;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 footnotePathAndFile, &footnoteReader, writers, errorMessage, &context) )
@@ -269,6 +280,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, commentPath, commentFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            //TODO: m_abstractNumIDs and m_namedDefaultStyles might be needed
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 commentPathAndFile, &commentReader, writers, errorMessage, &context) )
@@ -287,6 +299,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, endnotePath, endnoteFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            context.m_namedDefaultStyles = mainContext.m_namedDefaultStyles;
+            context.m_abstractNumIDs = mainContext.m_abstractNumIDs;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 endnotePathAndFile, &endnoteReader, writers, errorMessage, &context) )

@@ -801,6 +801,14 @@
 </record>
 
 <record name="AttachedLabel" id="0x100c">
+  <field name="fShowValue" type="bool" size="1" />
+  <field name="fShowPercent" type="bool" size="1" />
+  <field name="fShowLabelAndPerc" type="bool" size="1" />
+  <field name="unused" type="unsigned" size="1" />
+  <field name="fShowLabel" type="bool" size="1" />
+  <field name="fShowBubbleSizes" type="bool" size="1" />
+  <field name="fShowSeriesName" type="bool" size="1" />
+  <field name="reserved" type="unsigned" size="9" />
 </record>
 
 <record name="ChartFormat" id="0x1014">

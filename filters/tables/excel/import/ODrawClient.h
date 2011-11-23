@@ -45,10 +45,16 @@ public:
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
 
+    virtual void setZIndexAttribute(Writer& out);
+
+    void setZIndex(quint32 zindex){ m_zIndex = zindex; }
+    quint32 zIndex() const { return m_zIndex; }
+
     void setShapeText(const Swinder::TxORecord& text);
 private:
     Swinder::Sheet* m_sheet;
     Swinder::TxORecord m_shapeText;
+    quint32 m_zIndex;
 };
 
 #endif // ODRAWCLIENT_H
