@@ -57,8 +57,10 @@ CellToolOptionWidget::CellToolOptionWidget(CellToolBase *parent)
 
     d->cellTool = parent;
 
-    d->locationComboBox = new LocationComboBox(d->cellTool, this);
+    d->locationComboBox = new LocationComboBox(this);
+    d->locationComboBox->setSelection(d->cellTool->selection());
     d->locationComboBox->setMinimumWidth(100);
+    connect(d->locationComboBox, SIGNAL(scrollToCell(QPoint)), d->cellTool, SLOT(scrollToCell(QPoint)));
 
     d->formulaButton = new QToolButton(this);
     d->formulaButton->setText(i18n("Formula"));

@@ -93,12 +93,12 @@ public:
      */
     void setLastEditorWithFocus(Editor type);
 
+public Q_SLOTS:
     /**
      * Scrolls to the cell located at \p location.
      */
     void scrollToCell(const QPoint &location);
 
-public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 

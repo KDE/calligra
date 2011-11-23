@@ -21,7 +21,6 @@
 
 // KSpread
 #include "CellStorage.h"
-#include "CellToolBase.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Selection.h"
@@ -40,28 +39,48 @@
 
 using namespace Calligra::Tables;
 
-LocationComboBox::LocationComboBox(CellToolBase *cellTool, QWidget *_parent)
+LocationComboBox::LocationComboBox(QWidget *_parent)
         : KComboBox(true, _parent)
-        , m_cellTool(cellTool)
+        , m_selection(0)
 {
     setCompletionObject(&completionList, true);
     setCompletionMode(KGlobalSettings::CompletionAuto);
-
-    insertItem(0, QString());
-    updateAddress();
-    Map *const map = cellTool->selection()->activeSheet()->map();
-    const QList<QString> areaNames = map->namedAreaManager()->areaNames();
-    for (int i = 0; i < areaNames.count(); ++i)
-        slotAddAreaName(areaNames[i]);
 
     connect(this, SIGNAL(activated(const QString &)),
             this, SLOT(slotActivateItem()));
 }
 
+void LocationComboBox::setSelection(Selection *selection)
+{
+    if (m_selection == selection) return;
+
+    completionList.clear();
+    clear();
+    if (m_selection) {
+        Map *const oldMap = m_selection->activeSheet()->map();
+        disconnect(oldMap->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
+        disconnect(oldMap->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
+    }
+
+    m_selection = selection;
+
+    insertItem(0, QString());
+    updateAddress();
+    Map *const map = m_selection->activeSheet()->map();
+    const QList<QString> areaNames = map->namedAreaManager()->areaNames();
+    for (int i = 0; i < areaNames.count(); ++i)
+        slotAddAreaName(areaNames[i]);
+
+    connect(map->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
+    connect(map->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
+}
+
 void LocationComboBox::updateAddress()
 {
+    if (!m_selection) return;
+
     QString address;
-    Selection *const selection = m_cellTool->selection();
+    Selection *const selection = m_selection;
     const QList< QPair<QRectF, QString> > names = selection->activeSheet()->cellStorage()->namedAreas(*selection);
     {
         QRect range;
@@ -122,14 +141,18 @@ void LocationComboBox::removeCompletionItem(const QString &_item)
 
 void LocationComboBox::slotActivateItem()
 {
+    if (!m_selection) return;
+
     if (activateItem()) {
-        m_cellTool->scrollToCell(m_cellTool->selection()->cursor());
+        emit scrollToCell(m_selection->cursor());
     }
 }
 
 bool LocationComboBox::activateItem()
 {
-    Selection *const selection = m_cellTool->selection();
+    if (!m_selection) return false;
+
+    Selection *const selection = m_selection;
 
     // Set the focus back on the canvas.
     parentWidget()->setFocus();
@@ -182,7 +205,9 @@ bool LocationComboBox::activateItem()
 
 void LocationComboBox::keyPressEvent(QKeyEvent * _ev)
 {
-    Selection *const selection = m_cellTool->selection();
+    if (!m_selection) return;
+
+    Selection *const selection = m_selection;
 
     // Do not handle special keys and accelerators. This is
     // done by KComboBox.
@@ -199,7 +224,7 @@ void LocationComboBox::keyPressEvent(QKeyEvent * _ev)
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         if (activateItem()) {
-            m_cellTool->scrollToCell(selection->cursor());
+            emit scrollToCell(selection->cursor());
             return;
         }
         _ev->accept(); // QKeyEvent

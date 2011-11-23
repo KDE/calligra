@@ -1132,11 +1132,6 @@ QList <QWidget*> CellToolBase::createOptionWidgets()
     QList<QWidget *> widgets;
     d->optionWidget = new CellToolOptionWidget(this);
 
-    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
-            d->optionWidget->locationComboBox(), SLOT(slotAddAreaName(const QString&)));
-    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaRemoved(const QString&)),
-            d->optionWidget->locationComboBox(), SLOT(slotRemoveAreaName(const QString&)));
-
     selection()->update(); // initialize the location combobox
     d->optionWidget->setWindowTitle(i18n("Cell Editor"));
     widgets.append(d->optionWidget);
