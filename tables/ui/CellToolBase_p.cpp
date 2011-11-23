@@ -183,7 +183,7 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     const QList<KAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
-    optionWidget->formulaButton()->setEnabled(enable);
+    q->action("insertFormula")->setEnabled(enable);
     externalEditor->setEnabled(enable);
 
     // These actions are always enabled.

@@ -47,6 +47,8 @@ public:
 
     void setCellTool(CellToolBase* cellTool);
 
+    QAction* applyAction() const;
+    QAction* cancelAction() const;
 Q_SIGNALS:
     void textChanged(const QString &text);
 

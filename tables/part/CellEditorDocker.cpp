@@ -69,22 +69,15 @@ CellEditorDocker::CellEditorDocker()
     d->formulaButton->setText(i18n("Formula"));
     //d->formulaButton->setDefaultAction(d->cellTool->action("insertFormula"));
 
-    d->applyButton = new QToolButton(w);
-    d->applyButton->setText(i18n("Apply"));
-    d->applyButton->setToolTip(i18n("Apply changes"));
-    d->applyButton->setIcon(KIcon("dialog-ok"));
-    d->applyButton->setEnabled(false);
-
-    d->cancelButton = new QToolButton(w);
-    d->cancelButton->setText(i18n("Cancel"));
-    d->cancelButton->setToolTip(i18n("Discard changes"));
-    d->cancelButton->setIcon(KIcon("dialog-cancel"));
-    d->cancelButton->setEnabled(false);
-
     d->editor = new ExternalEditor(w);
-    //d->editor->setCellTool(d->cellTool);
     d->editor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 //     d->editor->setMinimumHeight(d->locationComboBox->height());
+
+    d->applyButton = new QToolButton(w);
+    d->applyButton->setDefaultAction(d->editor->applyAction());
+
+    d->cancelButton = new QToolButton(w);
+    d->cancelButton->setDefaultAction(d->editor->cancelAction());
 
     d->layout = new QGridLayout(w);
     d->layout->setObjectName(QLatin1String("CellToolOptionWidget::Layout"));
@@ -97,11 +90,6 @@ CellEditorDocker::CellEditorDocker()
 
 //     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     setWidget(w);
-
-    connect(d->applyButton, SIGNAL(clicked(bool)),
-            d->editor, SLOT(applyChanges()));
-    connect(d->cancelButton, SIGNAL(clicked(bool)),
-            d->editor, SLOT(discardChanges()));
 }
 
 CellEditorDocker::~CellEditorDocker()

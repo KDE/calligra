@@ -1238,7 +1238,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 void CellToolBase::selectionChanged(const Region& region)
 {
     Q_UNUSED(region);
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     // Update the editor, if the reference selection is enabled.
@@ -1352,10 +1352,8 @@ bool CellToolBase::createEditor(bool clear, bool focus)
                     d->externalEditor, SLOT(setText(const QString &)));
             connect(d->externalEditor, SIGNAL(textChanged(const QString &)),
                     d->cellEditor, SLOT(setText(const QString &)));
-            if (d->optionWidget) {
-                d->optionWidget->applyButton()->setEnabled(true);
-                d->optionWidget->cancelButton()->setEnabled(true);
-            }
+            d->externalEditor->applyAction()->setEnabled(true);
+            d->externalEditor->cancelAction()->setEnabled(true);
         }
 
         double w = cell.width();
@@ -1446,8 +1444,8 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     } else {
         selection()->update();
     }
-    d->optionWidget->applyButton()->setEnabled(false);
-    d->optionWidget->cancelButton()->setEnabled(false);
+    d->externalEditor->applyAction()->setEnabled(false);
+    d->externalEditor->cancelAction()->setEnabled(false);
     canvas()->canvasWidget()->setFocus();
 }
 
@@ -1473,7 +1471,7 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
 
 void CellToolBase::updateEditor()
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
@@ -1537,7 +1535,7 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     d->setProtectedActionsEnabled(readWrite);
@@ -1545,7 +1543,7 @@ void CellToolBase::documentReadWriteToggled(bool readWrite)
 
 void CellToolBase::sheetProtectionToggled(bool protect)
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     d->setProtectedActionsEnabled(!protect);

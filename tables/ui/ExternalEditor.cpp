@@ -29,6 +29,7 @@
 // Calligra
 
 // KDE
+#include <KAction>
 #include <kdebug.h>
 
 // Qt
@@ -44,6 +45,8 @@ public:
     CellToolBase* cellTool;
     FormulaEditorHighlighter* highlighter;
     bool isArray;
+    KAction* applyAction;
+    KAction* cancelAction;
 };
 
 ExternalEditor::ExternalEditor(QWidget *parent)
@@ -63,6 +66,16 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
     connect(this, SIGNAL(cursorPositionChanged()),
             this, SLOT(slotCursorPositionChanged()));
+
+    d->applyAction = new KAction(KIcon("dialog-ok"), i18n("Apply"), this);
+    d->applyAction->setToolTip(i18n("Apply changes"));
+    d->applyAction->setEnabled(false);
+    connect(d->applyAction, SIGNAL(triggered()), SLOT(applyChanges()));
+
+    d->cancelAction = new KAction(KIcon("dialog-cancel"), i18n("Cancel"), this);
+    d->cancelAction->setToolTip(i18n("Discard changes"));
+    d->cancelAction->setEnabled(false);
+    connect(d->cancelAction, SIGNAL(triggered()), SLOT(discardChanges()));
 }
 
 ExternalEditor::~ExternalEditor()
@@ -178,6 +191,16 @@ void ExternalEditor::slotCursorPositionChanged()
     if (d->cellTool->editor()->toPlainText() == toPlainText()) {
         d->cellTool->editor()->setCursorPosition(textCursor().position());
     }
+}
+
+QAction* ExternalEditor::applyAction() const
+{
+    return d->applyAction;
+}
+
+QAction* ExternalEditor::cancelAction() const
+{
+    return d->cancelAction;
 }
 
 #include "ExternalEditor.moc"
