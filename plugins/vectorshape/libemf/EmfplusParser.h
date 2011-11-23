@@ -64,6 +64,9 @@ private:
     // read a single EMFPLUS record
     bool parseRecord(QDataStream &stream, EmfDeviceContext &context);
 
+    // Object table for objects defined by EmfPlusObject records and used everywhere.
+    QVector<QVariant>  m_objectTable;
+
     // Pointer to the backend.
     EmfAbstractBackend *m_backend;
 };

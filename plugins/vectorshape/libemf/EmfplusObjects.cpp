@@ -20,6 +20,9 @@
 
 // Qt
 
+// KDE
+#include <KDebug>
+
 // libemf
 #include "EmfplusEnums.h"
 
@@ -39,6 +42,16 @@ using namespace Libemf;
 */
 namespace Libemf
 {
+
+
+static void soakBytes(QDataStream &stream, int numBytes)
+{
+    quint8 scratch;
+    for (int i = 0; i < numBytes; ++i) {
+        stream >> scratch;
+    }
+}
+
 
 
 // ----------------------------------------------------------------
@@ -66,6 +79,81 @@ EmfPlusBrush::EmfPlusBrush(QDataStream &stream, quint32 size)
 }
 
 
+// ----------------------------------------------------------------
+// 2.2.1.6 EmfPlusPath
+
+QPainterPath  emfplusPathFromStream(QDataStream &stream, quint32 objectSize)
+{
+    EmfPlusGraphicsVersion  version(stream); // 4 bytes
+    quint32  pathPointCount;                 // 4 bytes
+    quint16  pathPointFlags;                 // 2 bytes
+    quint16  reserved;                       // 2 bytes
+
+    stream >> pathPointCount;
+    stream >> pathPointFlags;
+    stream >> reserved;
+
+    bool  isCompressed          = (pathPointFlags & 0x02); // Ignore if isRelativeCoordinates set.
+    bool  isRleEncoded          = (pathPointFlags & 0x08);
+    bool  isRelativeCoordinates = (pathPointFlags & 0x10);
+
+    QPainterPath  retval;
+
+    kDebug(31000) << "Point count:" << pathPointCount
+                  << "Flags: C" << isCompressed << "R" << isRleEncoded
+                  << "P" << isRelativeCoordinates;
+
+    // PathPoints;
+    qreal lastX = qreal(0.0);
+    qreal lastY = qreal(0.0);
+    for (uint i = 0; i < pathPointCount; ++i) {
+        qreal  xReal;
+        qreal  yReal;
+        if (isCompressed) {
+            quint16 x;
+            quint16 y;
+            stream >> x >> y;
+            xReal = qreal(x);
+            yReal = qreal(y);
+        }
+        else {
+            stream >> xReal >> yReal;
+        }
+
+        // Handle relative coordinates or not.
+        if (isRelativeCoordinates) {
+            lastX += xReal;
+            lastY += yReal;
+            retval.lineTo(QPointF(lastX, lastY));
+        }
+        else {
+            retval.lineTo(QPointF(xReal, yReal));
+            lastX = xReal;
+            lastY = yReal;
+        }
+    }
+
+
+#if 1 // Path point types not yet implemented
+    soakBytes(stream, objectSize - 12 - 2 * pathPointCount * (isCompressed ? 2 : 4));
+#else
+    // Path point types
+    if (isRleEncoded) {
+        // RLE encoding Not yet implemented
+        soakBytes(stream, recordSize - 12);
+    }
+    else {
+        
+    }
+#endif
+
+    kDebug(31000) << "Returns:" << retval;
+    return retval;
+}
+
+
+// ----------------------------------------------------------------
+// 2.2.2.19 EmfPlusGraphicsVersion
 
 /**
    EmfPlusGraphicsVersion Object

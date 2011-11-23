@@ -67,8 +67,10 @@ static void outputBytes(QDataStream &stream, int numBytes)
 
 
 EmfplusParser::EmfplusParser()
-    : m_backend(0)
+    : m_objectTable()
+    , m_backend(0)
 {
+    m_objectTable.resize(64);  // As defined in the EMFPLUS spec section 2.3.5.1
 }
 
 EmfplusParser::~EmfplusParser()
@@ -325,8 +327,65 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EmfPlusObject:
         {
-            // Not Yet Implemented
-            soakBytes(stream, size - 8);
+            quint32 dataSize;
+            stream >> dataSize;
+
+            bool    doesContinue = (flags & 0x01); // True if this record continues
+                                                   // in the next EmfPlusObject record
+            quint32 objectType = (flags >> 1) & 0x7f;
+            quint32 objectID   = (flags >> 8) & 0xff;
+
+#if DEBUG_EMFPLUSPARSER
+            kDebug(31000) << "EmfPlusObject type" << objectType << "ID" << objectID
+                          << (doesContinue ? "(CONTINUES in next EmfPlusObject record)" : "");
+#endif
+
+
+            switch (objectType) {
+            case ObjectTypeInvalid:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypeBrush:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypePen:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypePath:
+                m_objectTable[objectID] = QVariant::fromValue(emfplusPathFromStream(stream,
+                                                                                    size - 8 - 4));
+                break;
+            case ObjectTypeRegion:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypeImage:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypeFont:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypeStringFormat:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypeImageAttributes:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            case ObjectTypeCustomLineCap:
+                // Not yet implemented
+                soakBytes(stream, size - 8 - 4);
+                break;
+            default:
+                //  Errors in the file: just remove the data.
+                soakBytes(stream, size - 8 - 4); //For dataSize
+            }
         }
         break;
     case EmfPlusClear:
@@ -472,8 +531,17 @@ bool EmfplusParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
         break;
     case EmfPlusDrawPath:
         {
-            // Not Yet Implemented
-            soakBytes(stream, size - 8);
+            quint32  dataSize; 
+            quint32  penID;
+            quint32  objectID = (flags >> 8) & 0xff;
+
+            stream >> dataSize;
+            stream >> penID;
+
+#if DEBUG_EMFPLUSPARSER
+            kDebug(31000) << "Draw object" << objectID << "using pen" << penID;
+#endif
+            // FIXME: Call the backend.
         }
         break;
     case EmfPlusFillClosedCurve:

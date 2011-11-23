@@ -18,9 +18,11 @@
 #ifndef EMFPLUSOBJECTS_H
 #define EMFPLUSOBJECTS_H
 
+#include <QMetaType>
 #include <QDataStream>
 #include <QRectF> // also provides QSizeF
 #include <QString>
+#include <QPainterPath>
 
 /**
    \file
@@ -36,14 +38,15 @@
 using namespace Libwmf;
 using namespace Libemf;
 
+// To make it available for QVariant
+Q_DECLARE_METATYPE(QPainterPath);
+
 /**
    Namespace for Enhanced Metafile (EMF) classes
 */
 namespace Libemf
 {
    
-// Forward declarations
-
 
 // ----------------------------------------------------------------
 //                 2.2.2 Structure Object Types
@@ -2046,64 +2049,7 @@ Reserved2 (4 bytes): A value that SHOULD be set to zero and MUST be
    See [MS-EMFPLUS] 2.2.1.6
 */
 
-/*
-Version (4 bytes): An EmfPlusGraphicsVersion object (section 2.2.2.19)
-                   that specifies the version of operating system
-                   graphics that was used to create this object.
-
-PathPointCount (4 bytes): A 32-bit unsigned integer that specifies the
-                   number of points and associated point types that
-                   are defined by this object.
-
-PathPointFlags (2 bytes): A 32-bit unsigned integer that specifies how
-                   to interpret the points and associated point types
-                   that are defined by this object.
-
-C (1 bit): If set, the PathPoints array specifies absolute locations
-                   in the coordinate space with 16-bit integer
-                   coordinates. If clear, the PathPoints array
-                   specifies absolute locations in the coordinate
-                   space with 32-bit floating-point coordinates. Note
-                   If the P flag (below) is set, this flag MAY <11> be
-                   clear and MUST be ignored. R (1 bit): If set, the
-                   point types in the PathPointTypes array are
-                   specified by EmfPlusPathPointTypeRLE objects
-                   (section 2.2.2.32), which use run-length encoding
-                   (RLE) compression, and/or EmfPlusPathPointType
-                   objects (section 2.2.2.31). See [MS-WMF] section
-                   3.1.6 for more information on RLE compression. If
-                   clear, the point types in the PathPointTypes array
-                   are specified by EmfPlusPathPointType objects. P (1
-                   bit): If set, each element in the PathPoints array
-                   specifies a location in the coordinate space that
-                   is relative to the location specified by the
-                   previous element in the array. In the case of the
-                   first element in PathPoints, a previous location at
-                   coordinates (0,0) is assumed.
-
-                   If clear, each element in the PathPoints array
-                   specifies an absolute location.
-
-Reserved (2 bytes): This field is reserved and MUST be
-                   ignored. PathPoints (variable): An array of
-                   PathPointCount points that specify the path. The
-                   type of objects in this array are specified by the
-                   PathPointFlags field, as follows: If the P flag
-                   is set, the points are relative locations that are
-                   specified by EmfPlusPointR objects (section
-                   2.2.2.37). If the P flag is clear and the C flag
-                   is set, the points are absolute locations that are
-                   specified by EmfPlusPoint objects (section
-                   2.2.2.35). If the P flag is clear and the C flag
-                   is clear, the points are absolute locations that
-                   are specified by EmfPlusPointF objects (section
-                   2.2.2.36). PathPointTypes (variable): An array that
-                   specifies how the points in the PathPoints field
-                   are used to draw the path. The type of objects in
-                   this array is specified by the R flag in the
-                   PathPointFlags field. See section 2.2.1 for the
-                   specification of additional graphics objects.
-*/
+QPainterPath emfplusPathFromStream(QDataStream &stream, quint32 recordSize);
 
 
 /**
