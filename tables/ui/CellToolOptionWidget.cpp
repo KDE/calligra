@@ -98,8 +98,6 @@ CellToolOptionWidget::CellToolOptionWidget(CellToolBase *parent)
             d->editor, SLOT(applyChanges()));
     connect(d->cancelButton, SIGNAL(clicked(bool)),
             d->editor, SLOT(discardChanges()));
-    connect(d->cellTool->selection(), SIGNAL(changed(const Region&)),
-            this, SLOT(updateLocationComboBox()));
 }
 
 CellToolOptionWidget::~CellToolOptionWidget()
@@ -162,14 +160,6 @@ void CellToolOptionWidget::resizeEvent(QResizeEvent *event)
         }
     }
     QWidget::resizeEvent(event);
-}
-
-void CellToolOptionWidget::updateLocationComboBox()
-{
-    if (d->cellTool->selection()->referenceSelectionMode()) {
-        return;
-    }
-    d->locationComboBox->updateAddress();
 }
 
 #include "CellToolOptionWidget.moc"

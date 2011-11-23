@@ -71,10 +71,6 @@ public:
 protected: // reimplementations
     virtual void resizeEvent(QResizeEvent *event);
 
-private Q_SLOTS:
-    /** Updates the location address on selection changes. */
-    void updateLocationComboBox();
-
 private:
     class Private;
     Private *const d;

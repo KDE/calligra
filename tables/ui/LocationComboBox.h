@@ -71,6 +71,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotActivateItem();
+    void slotSelectionChanged();
 
 private:
     bool activateItem();

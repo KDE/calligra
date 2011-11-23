@@ -60,6 +60,7 @@ void LocationComboBox::setSelection(Selection *selection)
         Map *const oldMap = m_selection->activeSheet()->map();
         disconnect(oldMap->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
         disconnect(oldMap->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
+        disconnect(m_selection, SIGNAL(changed(Region)), this, SLOT(slotSelectionChanged()));
     }
 
     m_selection = selection;
@@ -73,6 +74,7 @@ void LocationComboBox::setSelection(Selection *selection)
 
     connect(map->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
     connect(map->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
+    connect(m_selection, SIGNAL(changed(Region)), this, SLOT(slotSelectionChanged()));
 }
 
 void LocationComboBox::updateAddress()
@@ -240,6 +242,13 @@ void LocationComboBox::keyPressEvent(QKeyEvent * _ev)
         KComboBox::keyPressEvent(_ev);
         // Never allow that keys are passed on to the parent.
         _ev->accept(); // QKeyEvent
+    }
+}
+
+void LocationComboBox::slotSelectionChanged()
+{
+    if (!m_selection->referenceSelectionMode()) {
+        updateAddress();
     }
 }
 
