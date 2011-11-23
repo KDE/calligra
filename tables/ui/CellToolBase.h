@@ -41,6 +41,7 @@ namespace Calligra
 {
 namespace Tables
 {
+class ExternalEditor;
 class SheetView;
 class CellEditorBase;
 
@@ -93,6 +94,10 @@ public:
      */
     void setLastEditorWithFocus(Editor type);
 
+    /**
+     * Sets an external editor to be associated with the internal editor of this tool.
+     */
+    void setExternalEditor(Calligra::Tables::ExternalEditor* editor);
 public Q_SLOTS:
     /**
      * Scrolls to the cell located at \p location.

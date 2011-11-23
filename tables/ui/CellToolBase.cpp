@@ -152,6 +152,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
         , d(new Private(this))
 {
     d->cellEditor = 0;
+    d->externalEditor = 0;
     d->formulaDialog = 0;
     d->specialCharDialog = 0;
     d->optionWidget = 0;
@@ -1135,6 +1136,9 @@ QList <QWidget*> CellToolBase::createOptionWidgets()
     selection()->update(); // initialize the location combobox
     d->optionWidget->setWindowTitle(i18n("Cell Editor"));
     widgets.append(d->optionWidget);
+    if (!d->externalEditor) {
+        d->externalEditor = d->optionWidget->editor();
+    }
     return widgets;
 }
 
@@ -1342,14 +1346,17 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(action("permuteFixation"), SIGNAL(triggered(bool)),
                 d->cellEditor, SLOT(permuteFixation()));
-    if(d->optionWidget && d->optionWidget->editor()) {
-        connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
-                d->optionWidget->editor(), SLOT(setText(const QString &)));
-        connect(d->optionWidget->editor(), SIGNAL(textChanged(const QString &)),
-                d->cellEditor, SLOT(setText(const QString &)));
-        d->optionWidget->applyButton()->setEnabled(true);
-        d->optionWidget->cancelButton()->setEnabled(true);
-    }
+
+        if(d->externalEditor) {
+            connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
+                    d->externalEditor, SLOT(setText(const QString &)));
+            connect(d->externalEditor, SIGNAL(textChanged(const QString &)),
+                    d->cellEditor, SLOT(setText(const QString &)));
+            if (d->optionWidget) {
+                d->optionWidget->applyButton()->setEnabled(true);
+                d->optionWidget->cancelButton()->setEnabled(true);
+            }
+        }
 
         double w = cell.width();
         double h = cell.height();
@@ -1486,13 +1493,13 @@ void CellToolBase::focusEditorRequested()
     // This screws up <Tab> though (David)
     if (selection()->originSheet() != selection()->activeSheet()) {
         // Always focus the external editor, if not on the origin sheet.
-        d->optionWidget->editor()->setFocus();
+        d->externalEditor->setFocus();
     } else {
         // Focus the last active editor, if on the origin sheet.
         if (d->lastEditorWithFocus == EmbeddedEditor) {
             editor()->widget()->setFocus();
         } else {
-            d->optionWidget->editor()->setFocus();
+            d->externalEditor->setFocus();
         }
     }
 }
@@ -2851,7 +2858,7 @@ void CellToolBase::edit()
     } else {
         // Switch focus.
         if (editor()->widget()->hasFocus()) {
-            d->optionWidget->editor()->setFocus();
+            d->externalEditor->setFocus();
         } else {
             editor()->widget()->setFocus();
         }
@@ -3501,4 +3508,9 @@ void CellToolBase::breakBeforeRow(bool enable)
     command->setReverse(!enable);
     command->add(*selection());
     command->execute(canvas());
+}
+
+void CellToolBase::setExternalEditor(Calligra::Tables::ExternalEditor *editor)
+{
+    d->externalEditor = editor;
 }

@@ -65,6 +65,8 @@ public:
 
     // Inline editor
     CellEditor* cellEditor;
+    // External editor
+    Calligra::Tables::ExternalEditor* externalEditor;
     // Insert special character dialog
     CharacterSelectDialog* specialCharDialog;
     // Option widget elements

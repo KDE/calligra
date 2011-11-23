@@ -46,6 +46,7 @@ protected: // reimplementations
     virtual void resizeEvent(QResizeEvent *event);
 
 private Q_SLOTS:
+    void toolChanged(const QString& toolId);
 
 private:
     class Private;

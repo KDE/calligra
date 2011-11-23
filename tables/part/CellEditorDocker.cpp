@@ -31,9 +31,11 @@
 #include <kdebug.h>
 
 // Calligra
+#include <KoToolProxy.h>
 
 // Calligra Tables
 #include "CanvasBase.h"
+#include "CellTool.h"
 #include "ui/ExternalEditor.h"
 #include "ui/LocationComboBox.h"
 #include "ui/SheetView.h"
@@ -43,11 +45,12 @@ using namespace Calligra::Tables;
 class CellEditorDocker::Private
 {
 public:
-    CanvasBase* canvas;
-    LocationComboBox* locationComboBox;
+    CanvasBase *canvas;
+    LocationComboBox *locationComboBox;
     QToolButton *formulaButton, *applyButton, *cancelButton;
     ExternalEditor *editor;
     QGridLayout *layout;
+    CellTool *cellTool;
 };
 
 CellEditorDocker::CellEditorDocker()
@@ -109,15 +112,22 @@ CellEditorDocker::~CellEditorDocker()
 void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 {
     kDebug() << "setting canvas to" << canvas;
+    if (d->canvas) {
+        disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+    }
     d->canvas = dynamic_cast<CanvasBase*>(canvas);
     if (d->canvas) {
         d->locationComboBox->setSelection(d->canvas->selection());
+        connect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
     }
 }
 
 void CellEditorDocker::unsetCanvas()
 {
     kDebug() << "unsetting canvas";
+    if (d->canvas) {
+        disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+    }
 }
 
 void CellEditorDocker::resizeEvent(QResizeEvent *event)
@@ -150,6 +160,20 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
         }
     }
     QDockWidget::resizeEvent(event);
+}
+
+void CellEditorDocker::toolChanged(const QString &toolId)
+{
+    kDebug() << "tool changed to" << toolId;
+
+    if (toolId == QLatin1String("KSpreadCellToolId")) {
+        KoToolBase* tool = KoToolManager::instance()->toolById(d->canvas, toolId);
+        d->cellTool = qobject_cast<CellTool*>(tool);
+        Q_ASSERT(d->cellTool);
+        d->editor->setCellTool(d->cellTool);
+        d->cellTool->setExternalEditor(d->editor);
+        kDebug() << tool << d->cellTool;
+    }
 }
 
 CellEditorDockerFactory::CellEditorDockerFactory()
