@@ -86,7 +86,8 @@ public:
             Writer& out) = 0;
 
         /**
-         * Add text properties to the style.
+         * Add text properties to the style. Also add additional application specific
+         * attributes of the element required for layout, like text:anchor-type or draw:z-index.
          * Host application specific style properties are added. These
          * properties are attributes to the elements style:paragraph-properties
          * or style:text-properties.
@@ -117,9 +118,6 @@ public:
 
         virtual QString formatPos(qreal v) = 0;
 
-        virtual void setZIndexAttribute(Writer &out){
-            Q_UNUSED(out);
-        }
     };
 private:
     Client* const client;
