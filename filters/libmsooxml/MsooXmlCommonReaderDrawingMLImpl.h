@@ -5487,7 +5487,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buSzPct()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL buSzPt
+#define CURRENT_EL buSzPts
 //! buSzPts (Bullet Size Points) ECMA-376, 21.1.2.4.10, p.3639
 /*!
  Parent elements:
