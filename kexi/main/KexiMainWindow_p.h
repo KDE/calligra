@@ -318,11 +318,12 @@ public:
         m_selectFirstItem = true;
     }
 
-    void contentWidgetDestroyed();
-
 signals:
     void contentAreaPressed();
     void hideContentsRequested();
+
+protected slots:
+    void contentWidgetDestroyed();
 
 protected:
     virtual void showEvent(QShowEvent * event) {
@@ -406,7 +407,7 @@ private:
 
 void KexiMainMenu::contentWidgetDestroyed()
 {
-    setContent(0);
+    //not needed setContent(0);
 }
 
 class KexiTabbedToolBarTabBar;
@@ -910,7 +911,6 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     addSeparatorAndAction(tbar, "project_export_data_table");
 
     tbar = d->createToolBar("tools", i18n("Tools"));
-    addAction(tbar, "tools_import_project");
     addAction(tbar, "tools_compact_database");
 
 //! @todo move to form plugin

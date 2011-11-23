@@ -201,7 +201,12 @@ void KexiDataAwareView::slotUpdateSaveCancelActions()
     // 'save row' enabled when editing and there's anything to save
     const bool editing = isDataEditingInProgress();
     kDebug() << "editing::::::::" << editing;
+#ifdef __GNUC__
 #warning this did not work well in forms: setAvailable("data_save_row", editing);
+#else
+#pragma WARNING( this did not work well in forms: setAvailable("data_save_row", editing); )
+#endif
+
     setAvailable("data_save_row", m_dataAwareObject->rowEditing());
     // 'cancel row changes' enabled when editing
     setAvailable("data_cancel_row_changes", m_dataAwareObject->rowEditing());

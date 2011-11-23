@@ -33,7 +33,6 @@
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
 #include <kurlrequester.h>
-#include <kfiledialog.h>
 #include <kdebug.h>
 #include <KoFilterManager.h>
 #include <kcombobox.h>

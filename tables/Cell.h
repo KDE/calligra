@@ -197,7 +197,7 @@ public:
     /**
      * \return the output text, e.g. the result of a formula
      */
-    QString displayText(const Style& s = Style(), Value* v = 0) const;
+    QString displayText(const Style& s = Style(), Value* v = 0, bool *showFormula = 0) const;
 
     /**
      * \return the comment associated with this cell

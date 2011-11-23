@@ -94,7 +94,7 @@ int main(int argc, char** argv)
                                       ki18n("(c) 2003-2010, Kexi Team\n"
                                             "(c) 2003-2006, OpenOffice Software.\n"),
                                       KLocalizedString(),
-                                      "http://www.calligra-suite.org/kexi",
+                                      "http://www.calligra.org/kexi",
                                       "submit@bugs.kde.org"
                                      )
                       );

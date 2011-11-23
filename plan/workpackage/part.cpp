@@ -214,7 +214,11 @@ bool DocumentChild::editDoc()
     KUrl filename( filePath() );
     KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
     KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype->name() );
-    return startProcess( service, filename );
+    bool editing = startProcess( service, filename );
+    if ( editing ) {
+        m_type = Type_Other; // FIXME: try to be more specific
+    }
+    return editing;
 }
 
 bool DocumentChild::startProcess( KService::Ptr service, const KUrl &url )

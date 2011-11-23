@@ -432,7 +432,7 @@ void Cell::setRawUserInput(const QString& string)
 // square when shown.  This could, for instance, be the calculated
 // result of a formula.
 //
-QString Cell::displayText(const Style& s, Value * v) const
+QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
 {
     if (isNull())
         return QString();
@@ -441,8 +441,12 @@ QString Cell::displayText(const Style& s, Value * v) const
     const Style style = s.isEmpty() ? effectiveStyle() : s;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
-    if (isFormula() && sheet()->getShowFormula() && !(sheet()->isProtected() && style.hideFormula())) {
+    if ( isFormula() && !(sheet()->isProtected() && style.hideFormula()) &&
+         ( (showFormula && *showFormula) || (!showFormula && sheet()->getShowFormula()) ) )
+    {
         string = userInput();
+        if (showFormula)
+            *showFormula = true;
     } else if (!isEmpty()) {
         Value theValue = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
                  style.floatFormat(), style.prefix(),
@@ -450,6 +454,8 @@ QString Cell::displayText(const Style& s, Value * v) const
                  style.customFormat(), style.thousandsSep());
         if (v) *v = theValue;
         string = theValue.asString();
+        if (showFormula)
+            *showFormula = false;
     }
     return string;
 }

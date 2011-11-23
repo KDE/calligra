@@ -49,7 +49,8 @@ DocxXmlFootnoteReader::DocxXmlFootnoteReader(KoOdfWriters *writers)
     , d(new Private)
 {
     init();
-    DocxXmlDocumentReader::m_moveToStylesXml = true;
+    //MSWord: Footnotes in header/footer not supported
+    DocxXmlDocumentReader::m_moveToStylesXml = false;
 }
 
 DocxXmlFootnoteReader::~DocxXmlFootnoteReader()

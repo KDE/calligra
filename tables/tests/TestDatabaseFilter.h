@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright 2011 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,23 +14,33 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef _kexicontexthelp_p_h_
-#define _kexicontexthelp_p_h_
+#ifndef CALLIGRA_TABLES_DATABASE_FILTER_TEST
+#define CALLIGRA_TABLES_DATABASE_FILTER_TEST
 
-class KexiContextHelpInfo
+#include <QtTest/QtTest>
+
+namespace Calligra
 {
-public:
-    KexiContextHelpInfo() {
-        caption = "";
-        text = "";
-        iconName = "";
-    }
-    QString caption;
-    QString text;
-    QString iconName;
+namespace Tables
+{
 
+class DatabaseFilterTest : public QObject
+{
+    Q_OBJECT
+private Q_SLOTS:
+    void testIsEmpty();
+    void testEmptyEquals();
+    void testSimpleEquals();
+    void testNotEquals1();
+    void testNotEquals2();
+    void testAndEquals();
+    void testOrEquals();
 };
-#endif
+
+} // namespace Tables
+} // namespace Calligra
+
+#endif // CALLIGRA_TABLES_DATABASE_FILTER_TEST

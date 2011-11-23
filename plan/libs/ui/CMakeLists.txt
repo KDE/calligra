@@ -25,7 +25,7 @@ include_directories(
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
-message ( STATUS "kdchar include: ${CMAKE_SOURCE_DIR}/kchart/kdchart/include" ) 
+
 #add_subdirectory( tests )
 
 ########### KPlato private library ###############
@@ -91,7 +91,7 @@ set(kplatoui_LIB_SRCS
     kptwbsdefinitiondialog.cpp
     kptwbsdefinitionpanel.cpp
     kptresourceassignmentview.cpp
-
+    kptperformancetablewidget.cpp
     kptresourceallocationeditor.cpp
 
     kptrecalculatedialog.cpp
@@ -148,7 +148,7 @@ add_definitions(-DKDGANTT_STATICLIB)
 kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 
 set ( KPLATO_REPORTS_LIBS koreport koproperty )
-target_link_libraries(kplatoui ${KDE4_KABC_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart  ${KDE4_KHTML_LIBS} )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

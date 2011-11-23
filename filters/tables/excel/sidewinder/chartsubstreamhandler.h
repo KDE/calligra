@@ -134,6 +134,8 @@ private:
     void handleAxcExt(AxcExtRecord *);
     void handleCrtLine(CrtLineRecord *);
     void handleCatSerRange(CatSerRangeRecord *);
+    void handleAttachedLabel(AttachedLabelRecord *);
+    void handleDataLabelExtContents(DataLabelExtContentsRecord *);
 };
 
 } // namespace Swinder

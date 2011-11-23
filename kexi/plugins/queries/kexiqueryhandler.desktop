@@ -78,6 +78,7 @@ Name[sv]=Förfrågning
 Name[ug]=سۈرۈشتۈر
 Name[uk]=Запит
 Name[x-test]=xxQueryxx
+Name[zh_CN]=查询
 Name[zh_TW]=查詢
 X-KDE-Library=kexihandler_query
 X-KDE-ParentApp=kexi

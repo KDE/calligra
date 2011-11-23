@@ -209,7 +209,7 @@ void DependencyManager::updateAllDependencies(const Map* map)
     }
 }
 
-QHash<Cell, int> DependencyManager::depths() const
+QMap<Cell, int> DependencyManager::depths() const
 {
     return d->depths;
 }

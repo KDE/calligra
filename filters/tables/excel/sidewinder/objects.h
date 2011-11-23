@@ -103,72 +103,6 @@ protected:
     unsigned long m_id;
 };
 
-/**
- * Picture objects are used to store bitmap, enhanced metafiles or
- * other kind of images.
- */
-class PictureObject : public Object
-{
-public:
-    PictureObject(unsigned long id) : Object(Picture, id), m_offset(0), m_size(0) {}
-    virtual ~PictureObject() {}
-
-    /// Enumeration of possible image types.
-    enum Type { EnhancedMetafile, Bitmap, Unspecified };
-    /// Returns the type of the image.
-    Type type() const {
-        return m_type;
-    }
-    /// Sets the type of the image.
-    void setType(const Type &t) {
-        m_type = t;
-    }
-
-    /// Returns the offset of the picture in the control stream.
-    uint controlStreamOffset() {
-        return m_offset;
-    }
-    /// Returns the size of the picture in the control stream.
-    uint controlStreamSize() {
-        return m_size;
-    }
-    /// Sets the offset and size of the picture in the control stream.
-    void setControlStream(uint offset, uint size) {
-        m_offset = offset;
-        m_size = size;
-    }
-
-    /**
-     * Returns the filename of the embedded storage. This can be empty if the
-     * picture is not located in an embedded but e.g. in a control stream.
-     * If not empty then thís is usually a concatenation of "MBD" and a eight
-     * byte hexadecimal representation.
-     */
-    std::string embeddedStorage() const {
-        return m_storage;
-    }
-    /// Set the filename of the embedded storage.
-    void setEmbeddedStorage(const std::string &filename) {
-        m_storage = filename;
-    }
-
-    /**
-     * Returns the path and filename of the picture-file in the KoStore.
-     * This can be something like "Pictures/TheUniqueIdentifierOfThePicture.jpg" for example.
-     */
-    QString fileName() const {
-        return m_filename;
-    }
-    void setFileName(const QString& name) {
-        m_filename = name;
-    }
-    
-private:
-    Type m_type;
-    uint m_offset, m_size;
-    std::string m_storage;
-    QString m_filename;
-};
 
 /**
  * Note objects used to store comments attached to a cell or revision.
@@ -214,16 +148,19 @@ private:
 class OfficeArtObject
 {
 public:
-    explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object);
+    explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object, quint32 index = 0);
     ~OfficeArtObject();
     MSO::OfficeArtSpContainer object() const;
     void setText(const TxORecord& text);
     TxORecord text() const;
+    void setIndex(quint32 index);
+    quint32 index() const;
     bool operator==(const OfficeArtObject& other) const { return this == &other; }
     bool operator!=(const OfficeArtObject& other) const { return !(*this == other); }
 private:
     MSO::OfficeArtSpContainer m_object;
     TxORecord m_text;
+    quint32 m_index;
 };
 
 } // namespace Swinder

@@ -15,8 +15,8 @@
 <para>&kspread; has a limited ability to import (read) and export (write)
 spreadsheet files with foreign formats. &kspread;'s capabilities at the time
 of writing are summarized in the table below, for more up to date
-information visit <ulink url="http://www.calligra-suite.org/filters/status.phtml">
-http://www.calligra-suite.org/filters/status.phtml</ulink>.</para>
+information visit <ulink url="http://www.calligra.org/filters/status.phtml">
+http://www.calligra.org/filters/status.phtml</ulink>.</para>
 
 <informaltable><tgroup cols="3">
 <thead>

@@ -1130,11 +1130,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 
 #undef CURRENT_EL
 #define CURRENT_EL clrMap
-// clrMap handler (Color Scheme Map)
-/*! This element specifies the mapping layer that transforms one color
- scheme definition to another. Each attribute
- represents a color name that can be referenced in this master, and the
- value is the corresponding color in the theme.
+//! clrMap handler (Color Scheme Map)
+/*! This element specifies the mapping layer that transforms one color scheme
+ definition to another.  Each attribute represents a color name that can be
+ referenced in this master, and the value is the corresponding color in the
+ theme.
 
  Parent elements:
  - handoutMaster (§19.3.1.24)

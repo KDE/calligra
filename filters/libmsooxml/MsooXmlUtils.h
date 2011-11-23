@@ -99,23 +99,27 @@ public:
 
     void setPicturePath(const QString& picturePath);
 
-    void setBulletSize(const QSize& size);
-
     void setBulletFont(const QString& font);
 
     void setBulletColor(const QString& bulletColor);
 
     void setStartValue(const QString& value);
 
-    void setBulletRelativeSize(const qreal size);
+    void setBulletRelativeSize(const int size);
+
+    void setBulletSizePt(const qreal size);
 
     void setFollowingChar(const QString& value);
 
     void setTextStyle(const KoGenStyle& textStyle);
 
+    void setStartOverride(const bool startOverride);
+
     QString startValue() const;
 
     QString bulletRelativeSize() const;
+
+    QString bulletSizePt() const;
 
     QString bulletColor() const;
 
@@ -128,6 +132,10 @@ public:
     QString margin() const;
 
     QString followingChar() const;
+
+    KoGenStyle textStyle() const;
+
+    bool startOverride() const;
 
     void addInheritedValues(const ParagraphBulletProperties& properties);
 
@@ -151,9 +159,16 @@ private:
     QString m_bulletColor;
     QString m_followingChar;
     QString m_bulletRelativeSize;
-    QSize m_bulletSize;
+    QString m_bulletSize;
 
     KoGenStyle m_textStyle;
+
+    // MSWord specific: Restart the numbering when this list style is
+    // used for the 1st time.  Otherwise don't restart in case any of the
+    // styles inheriting from the same abstract numbering definition was
+    // already used.  Let's ignore presence of this attribute in
+    // addInheritedValues.
+    bool m_startOverride;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.
@@ -441,6 +456,12 @@ public:
 
     //! Clears this buffer without performing any output to the writer.
     void clear();
+
+    //! Returns true if the buffer is empty; otherwise returns false.
+    bool isEmpty() const {
+        return m_buffer.buffer().isEmpty();
+    }
+
 private:
     //! Internal, used in releaseWriter() and the destructor; Does not assert when there's nothing to release.
     KoXmlWriter* releaseWriterInternal();
@@ -448,6 +469,30 @@ private:
     QBuffer m_buffer;
     KoXmlWriter* m_origWriter;
     KoXmlWriter* m_newWriter;
+};
+
+//! The purpose of this class is to make sure the this->body variable is proper
+//! set back to what it was before even if one of the TRY_READ calls lead to
+//! us skipping out of this method. In that case we need to make sure to restore
+//! the body variable else things may later crash.
+//!
+//! FIXME refactor the XmlWriteBuffer and merge this hack in so we don't
+//! need to work-around at any place where it's used.
+template <typename T>
+class AutoRestore
+{
+public:
+    explicit AutoRestore(T** originalPtr)
+            : m_originalPtr(originalPtr), m_prevValue(*originalPtr) {
+    }
+    ~AutoRestore() {
+        if (m_originalPtr) {
+            *m_originalPtr = m_prevValue;
+        }
+    }
+private:
+    T** m_originalPtr;
+    T* m_prevValue;
 };
 
 } // Utils namespace

@@ -64,7 +64,7 @@ public:
 
     // table of format
     std::map<unsigned, QString> formatsTable;
-    
+
     // cache of formats
     std::map<unsigned, int> formatCache;
 
@@ -74,9 +74,6 @@ public:
 
     // table of Xformat
     std::vector<XFRecord> xfTable;
-
-    // table blib items
-    QList< MsoDrawingBlibItem* > drawingTable;
 
     // list of chart sheets
     QList< Sheet* > chartSheets;
@@ -94,7 +91,6 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
 GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
 {
     delete d->decryption;
-    qDeleteAll(d->drawingTable);
     delete d;
 }
 
@@ -776,19 +772,19 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
 {
     if (!record) return;
     printf("GlobalsSubStreamHandler::handleMsoDrawingGroup\n");
-    Q_ASSERT(d->drawingTable.size() == 0); // if this asserts then multiple MsoDrawingGroupRecord can exist what we need to handle!
-    d->drawingTable = record->blibItems();
+
+    static int validMsoDrawingGroups = 0;
+    // if this pass then multiple MsoDrawingGroupRecord can exist what we need to handle!
+    if (validMsoDrawingGroups > 0) {
+        std::cerr << "Warning: multiple valid MsoDrawingGroupRecord exists : " << validMsoDrawingGroups << std::endl;
+    }
+    validMsoDrawingGroups++;
+
+    d->workbook->setPictureNames(record->pictureNames());
     d->workbook->setOfficeArtDggContainer(record->dggContainer());
+
 }
 
-MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const
-{
-    if (pid < 1 || pid > uint(d->drawingTable.size())) {
-        std::cerr << "GlobalsSubStreamHandler::drawing: Invalid index=" << (pid - 1) << std::endl;
-        return 0;
-    }
-    return d->drawingTable.at(pid - 1);
-}
 
 QList< Sheet* >& GlobalsSubStreamHandler::chartSheets()
 {
