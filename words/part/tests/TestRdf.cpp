@@ -74,7 +74,7 @@
 #include <ktemporaryfile.h>
 #include <kurl.h>
 #include <kcomponentdata.h>
-
+#include <kconfiggroup.h>
 
 using namespace Soprano;
 #define RDEBUG if (0) qDebug()
@@ -832,13 +832,16 @@ void TestRdf::testRoundtrip()
                 );
 
     {
+
         // Get the words part and create a document
         KWDocument *doc = new KWDocument();
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         doc->initEmpty();
 
-        KoDocumentRdf *rdfDoc = doc->documentRdf();
+        KoDocumentRdf *rdfDoc = new KoDocumentRdf(doc);
+        doc->setDocumentRdf(rdfDoc);
+
         Q_ASSERT(rdfDoc);
 
         // get the main text frame
@@ -944,11 +947,14 @@ void TestRdf::testRoundtrip()
         KWDocument *doc = new KWDocument();
         Q_ASSERT(doc);
         doc->setAutoSave(0);
+
+        KoDocumentRdf *rdfDoc = new KoDocumentRdf(doc);
+        doc->setDocumentRdf(rdfDoc);
+
         // this also creates a view...
         bool result = doc->openUrl(url);
         Q_ASSERT(result);
 
-        KoDocumentRdf *rdfDoc = doc->documentRdf();
         // get the main text frame
         KWTextFrameSet *mainFrameSet = doc->mainFrameSet();
         Q_ASSERT(mainFrameSet);
