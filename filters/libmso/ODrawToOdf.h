@@ -86,11 +86,10 @@ public:
             Writer& out) = 0;
 
         /**
-         * Add text properties to the style. Also add additional application specific
-         * attributes of the element required for layout, like text:anchor-type or draw:z-index.
-         * Host application specific style properties are added. These
-         * properties are attributes to the elements style:paragraph-properties
-         * or style:text-properties.
+         * Add host application specific formatting properties for text and
+         * paragraphs to the style of the draw element.  These properties are
+         * attributes to style:paragraph-properties or style:text-properties.
+         * Also add host application specific attributes to the draw element.
          **/
         virtual void addTextStyles(
             const quint16 msospt,
