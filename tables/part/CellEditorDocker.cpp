@@ -25,6 +25,7 @@
 #include <QToolButton>
 
 // KDE
+#include <KAction>
 #include <KIcon>
 #include <KLocale>
 
@@ -67,7 +68,6 @@ CellEditorDocker::CellEditorDocker()
 
     d->formulaButton = new QToolButton(w);
     d->formulaButton->setText(i18n("Formula"));
-    //d->formulaButton->setDefaultAction(d->cellTool->action("insertFormula"));
 
     d->editor = new ExternalEditor(w);
     d->editor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -160,6 +160,7 @@ void CellEditorDocker::toolChanged(const QString &toolId)
         Q_ASSERT(d->cellTool);
         d->editor->setCellTool(d->cellTool);
         d->cellTool->setExternalEditor(d->editor);
+        d->formulaButton->setDefaultAction(d->cellTool->action("insertFormula"));
         kDebug() << tool << d->cellTool;
     }
 }
