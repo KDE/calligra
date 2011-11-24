@@ -40,6 +40,7 @@ public:
 
     KoMarkerData(KoMarker *marker, qreal width, MarkerPosition position, bool center);
     KoMarkerData(MarkerPosition position);
+    KoMarkerData(const KoMarkerData &other);
     ~KoMarkerData();
 
     /**
@@ -125,10 +126,11 @@ public:
     void saveStyle(KoGenStyle &style, qreal penWidth, KoShapeSavingContext &context) const;
 
 private:
-    KoMarker *m_marker;
-    qreal m_baseWidth;
-    MarkerPosition m_position;
-    bool m_center;
+    // make private to be sure it is not used
+    KoMarkerData();
+
+    class Private;
+    Private * const d;
 };
 
 #endif /* KOMARKERDATA_H */

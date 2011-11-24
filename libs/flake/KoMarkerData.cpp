@@ -47,73 +47,96 @@ static const struct {
     { "marker-end"  , "marker-end-width",   "marker-end-center", "draw:marker-end"  , "draw:marker-end-width",   "draw:marker-end-center" }
 };
 
+class KoMarkerData::Private
+{
+public:
+    Private(KoMarker *marker, qreal baseWidth, KoMarkerData::MarkerPosition position, bool center)
+    : marker(marker)
+    , baseWidth(baseWidth)
+    , position(position)
+    , center(center)
+    {}
+
+    KoMarker *marker;
+    qreal baseWidth;
+    MarkerPosition position;
+    bool center;
+};
+
 KoMarkerData::KoMarkerData(KoMarker *marker, qreal width, MarkerPosition position, bool center)
-: m_marker(marker)
-, m_baseWidth(width)
-, m_position(position)
-, m_center(center)
+: d(new Private(marker, width, position, center))
 {
 }
 
 KoMarkerData::KoMarkerData(MarkerPosition position)
-: m_marker(0)
-, m_baseWidth(0)
-, m_position(position)
-, m_center(false)
+: d(new Private(0, 0, position, false))
+{
+}
+
+KoMarkerData::KoMarkerData()
+: d(0)
+{
+    Q_ASSERT(0);
+}
+
+KoMarkerData::KoMarkerData(const KoMarkerData &other)
+: d(new Private(other.d->marker, other.d->baseWidth, other.d->position, other.d->center))
 {
 }
 
 KoMarkerData::~KoMarkerData()
 {
+    delete d;
 }
+
 
 KoMarker *KoMarkerData::marker() const
 {
-    return m_marker;
+    return d->marker;
 }
 
 void KoMarkerData::setMarker(KoMarker *marker)
 {
-    m_marker = marker;
+    d->marker = marker;
 }
 
 qreal KoMarkerData::width(qreal penWidth) const
 {
-    return m_baseWidth + penWidth * ResizeFactor;
+    return d->baseWidth + penWidth * ResizeFactor;
 }
 
 void KoMarkerData::setWidth(qreal width, qreal penWidth)
 {
-    m_baseWidth = qMax(qreal(0.0), width - penWidth * ResizeFactor);;
+    d->baseWidth = qMax(qreal(0.0), width - penWidth * ResizeFactor);;
 }
 
 KoMarkerData::MarkerPosition KoMarkerData::position() const
 {
-    return m_position;
+    return d->position;
 }
 
 void KoMarkerData::setPosition(MarkerPosition position)
 {
-    m_position = position;
+    d->position = position;
 }
 
 bool KoMarkerData::center() const
 {
-    return m_center;
+    return d->center;
 }
 
 void KoMarkerData::setCenter(bool center)
 {
-    m_center = center;
+    d->center = center;
 }
 
 KoMarkerData &KoMarkerData::operator=(const KoMarkerData &other)
 {
     if (this != &other) {
-        m_marker = other.m_marker;
-        m_baseWidth = other.m_baseWidth;
-        m_position = other.m_position;
-        m_center = other.m_center;
+        d->marker = other.d->marker;
+        d->baseWidth = other.d->baseWidth;
+        d->position = other.d->position;
+        d->center = other.d->center;
     }
     return (*this);
 }
@@ -124,15 +147,15 @@ bool KoMarkerData::loadOdf(qreal penWidth, KoShapeLoadingContext &context)
     if (markerShared) {
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
         // draw:marker-end="Arrow" draw:marker-end-width="0.686cm" draw:marker-end-center="true"
-        const QString markerStart(styleStack.property(KoXmlNS::draw, markerOdfData[m_position].m_markerPositionLoad));
-        const QString markerStartWidth(styleStack.property(KoXmlNS::draw, markerOdfData[m_position].m_markerWidthLoad));
+        const QString markerStart(styleStack.property(KoXmlNS::draw, markerOdfData[d->position].m_markerPositionLoad));
+        const QString markerStartWidth(styleStack.property(KoXmlNS::draw, markerOdfData[d->position].m_markerWidthLoad));
         if (!markerStart.isEmpty() && !markerStartWidth.isEmpty()) {
             KoMarker *marker = markerShared->marker(markerStart);
             if (marker) {
                 setMarker(marker);
                 qreal markerWidth = KoUnit::parseValue(markerStartWidth);
                 setWidth(markerWidth, penWidth);
-                setCenter(styleStack.property(KoXmlNS::draw, markerOdfData[m_position].m_markerCenterLoad) == "true");
+                setCenter(styleStack.property(KoXmlNS::draw, markerOdfData[d->position].m_markerCenterLoad) == "true");
             }
         }
     }
@@ -141,10 +164,10 @@ bool KoMarkerData::loadOdf(qreal penWidth, KoShapeLoadingContext &context)
 
 void KoMarkerData::saveStyle(KoGenStyle &style, qreal penWidth, KoShapeSavingContext &context) const
 {
-    if (m_marker) {
-        QString markerRef = m_marker->saveOdf(context);
-        style.addProperty(markerOdfData[m_position].m_markerPositionSave, markerRef, KoGenStyle::GraphicType);
-        style.addPropertyPt(markerOdfData[m_position].m_markerWidthSave, width(penWidth), KoGenStyle::GraphicType);
-        style.addProperty(markerOdfData[m_position].m_markerCenterSave, m_center, KoGenStyle::GraphicType);
+    if (d->marker) {
+        QString markerRef = d->marker->saveOdf(context);
+        style.addProperty(markerOdfData[d->position].m_markerPositionSave, markerRef, KoGenStyle::GraphicType);
+        style.addPropertyPt(markerOdfData[d->position].m_markerWidthSave, width(penWidth), KoGenStyle::GraphicType);
+        style.addProperty(markerOdfData[d->position].m_markerCenterSave, d->center, KoGenStyle::GraphicType);
     }
 }
