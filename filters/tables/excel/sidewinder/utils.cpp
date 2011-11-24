@@ -27,6 +27,32 @@
 namespace Swinder
 {
 
+// Returns A for 1, B for 2, C for 3, etc.
+QString columnName(uint column)
+{
+    QString s;
+    unsigned digits = 1;
+    unsigned offset = 0;
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+        offset += limit;
+    for (unsigned col = column - offset; digits; --digits, col /= 26)
+        s.prepend(QChar('A' + (col % 26)));
+    return s;
+}
+
+QString encodeSheetName(const QString& name)
+{
+    QString sheetName = name;
+    if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
+        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
+    return sheetName;
+}
+
+QString encodeAddress(const QString& sheetName, uint column, uint row)
+{
+    return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
+}
+
 QString readByteString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* size)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);

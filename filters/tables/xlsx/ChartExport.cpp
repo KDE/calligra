@@ -738,7 +738,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     domainRange = normalizeCellRange( replaceSheet( curRange, QString::fromLatin1( "local" ) ) );
                 else
                     domainRange = normalizeCellRange( curRange );
-                bodyWriter->addAttribute( "table:cell-range-address", domainRange ); //"Sheet1.C2:Sheet1.E5");
+                if ( !domainRange.isEmpty() )
+                    bodyWriter->addAttribute( "table:cell-range-address", domainRange );
                 bodyWriter->endElement();
             }
 //             if ( series->m_domainValuesCellRangeAddress.count() == 1 ){
