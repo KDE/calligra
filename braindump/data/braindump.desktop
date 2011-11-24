@@ -45,7 +45,6 @@ Name[ru]=Braindump
 Name[sv]=Braindump
 Name[uk]=Braindump
 Name[x-test]=xxBraindumpxx
-Name[zh_CN]=Braindump
 Name[zh_TW]=Braindump
 StartupNotify=true
 Terminal=false
