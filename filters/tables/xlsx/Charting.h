@@ -301,7 +301,8 @@ namespace Charting
 
         Cell* cell(int columnIndex, int rowIndex, bool autoCreate)
         {
-            const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
+            const uint maximumSpreadsheetColumns = 0x7FFF; // MSOOXML::maximumSpreadsheetColumns()
+            const unsigned hashed = (rowIndex + 1) * maximumSpreadsheetColumns + columnIndex + 1;
             Cell* c = m_cells[ hashed ];
             if (!c && autoCreate) {
                 c = new Cell(columnIndex, rowIndex);
@@ -356,9 +357,9 @@ namespace Charting
         QList<Format*> m_datasetFormat;
         /// List of text records attached to the series.
         QList<Text*> m_texts;
-        // range that contains label
+        /// range that contains label
         QString m_labelCell;
-        // marker type
+        /// marker type
         MarkerType markerType;
         ShapeProperties* spPr;
 

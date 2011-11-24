@@ -26,6 +26,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QUuid>
+#include <QtCore/QRect>
 #include <QtEndian>
 
 namespace Swinder
@@ -48,6 +49,8 @@ QString columnName(uint column);
 QString encodeSheetName(const QString& name);
 // Returns an encoded cell-address like e.g. "Sheet1!A1".
 QString encodeAddress(const QString& sheetName, uint column, uint row);
+// Returns an encoded cell-range like e.g. "Sheet1!A1:B2".
+QString encodeAddress(const QString& sheetName, const QRect &rect);
 
 class Workbook;
 class XlsRecordOutputStream;
