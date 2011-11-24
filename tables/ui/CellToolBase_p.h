@@ -69,8 +69,6 @@ public:
     Calligra::Tables::ExternalEditor* externalEditor;
     // Insert special character dialog
     CharacterSelectDialog* specialCharDialog;
-    // Option widget elements
-    CellToolOptionWidget *optionWidget;
     QPointer<FormulaDialog> formulaDialog;
     // Actions with extended names for the popup menu
     QHash<QString, QAction*> popupMenuActions;

@@ -35,7 +35,6 @@
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "CellEditor.h"
-#include "CellToolOptionWidget.h"
 #include "CellView.h"
 #include "Damages.h"
 #include "database/Database.h"
@@ -155,7 +154,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->externalEditor = 0;
     d->formulaDialog = 0;
     d->specialCharDialog = 0;
-    d->optionWidget = 0;
     d->initialized = false;
     d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
@@ -1131,14 +1129,7 @@ void CellToolBase::init()
 QList <QWidget*> CellToolBase::createOptionWidgets()
 {
     QList<QWidget *> widgets;
-    d->optionWidget = new CellToolOptionWidget(this);
 
-    selection()->update(); // initialize the location combobox
-    d->optionWidget->setWindowTitle(i18n("Cell Editor"));
-    widgets.append(d->optionWidget);
-    if (!d->externalEditor) {
-        d->externalEditor = d->optionWidget->editor();
-    }
     return widgets;
 }
 

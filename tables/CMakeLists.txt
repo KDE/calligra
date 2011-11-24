@@ -167,7 +167,6 @@ SET (ui_DIR_SRCS
     ui/CellEditor.cpp
     ui/CellToolBase.cpp
     ui/CellToolBase_p.cpp
-    ui/CellToolOptionWidget.cpp
     ui/CellView.cpp
     ui/DragAndDropStrategy.cpp
     ui/FormulaEditorHighlighter.cpp
