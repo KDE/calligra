@@ -653,7 +653,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
         }
         }
     }
-    kDebug() << result;
+    //kDebug() << result;
     return result;
 }
 
@@ -855,7 +855,7 @@ void Cell::parseUserInput(const QString& text)
     if (!sheet()->isLoading()) {
         Validity validity = this->validity();
         if (!validity.testValidity(this)) {
-            kDebug() << "Validation failed";
+            kDebug(36003) << "Validation failed";
             //reapply old value if action == stop
             setFormula(oldFormula);
             setUserInput(oldUserInput);
