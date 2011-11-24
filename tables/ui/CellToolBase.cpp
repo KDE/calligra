@@ -41,6 +41,7 @@
 #include "database/FilterPopup.h"
 #include "DragAndDropStrategy.h"
 #include "ExternalEditor.h"
+#include "FontDockWidget.h"
 #include "HyperlinkStrategy.h"
 #include "tests/inspector.h"
 #include "LocationComboBox.h"
@@ -1129,6 +1130,8 @@ void CellToolBase::init()
 QList <QWidget*> CellToolBase::createOptionWidgets()
 {
     QList<QWidget *> widgets;
+
+    widgets.append(new FontDockWidget(this));
 
     return widgets;
 }

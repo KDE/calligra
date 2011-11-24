@@ -114,6 +114,7 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
+    ui/FontDockWidget.ui
     )
 
 SET (functions_DIR_SRCS
@@ -169,6 +170,7 @@ SET (ui_DIR_SRCS
     ui/CellToolBase_p.cpp
     ui/CellView.cpp
     ui/DragAndDropStrategy.cpp
+    ui/FontDockWidget.cpp
     ui/FormulaEditorHighlighter.cpp
     ui/FunctionCompletion.cpp
     ui/ExternalEditor.cpp
