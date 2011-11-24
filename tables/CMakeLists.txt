@@ -130,7 +130,6 @@ SET (part_DIR_SRCS
     part/CanvasBase.cpp
     part/Canvas.cpp
     part/CanvasItem.cpp
-    part/CellEditorDocker.cpp
     part/CellTool.cpp
     part/CellToolFactory.cpp
     #part/Digest.cpp
@@ -165,6 +164,7 @@ SET (ui_DIR_SRCS
     ui/AutoFillStrategy.cpp
     ui/CellEditorBase.cpp
     ui/CellEditor.cpp
+    ui/CellEditorDocker.cpp
     ui/CellToolBase.cpp
     ui/CellToolBase_p.cpp
     ui/CellView.cpp

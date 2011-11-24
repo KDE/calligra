@@ -28,7 +28,7 @@
 
 #include "AboutData.h"
 #include "Doc.h"
-#include "CellEditorDocker.h"
+#include "ui/CellEditorDocker.h"
 
 using namespace Calligra::Tables;
 

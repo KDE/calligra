@@ -35,11 +35,11 @@
 #include <KoToolProxy.h>
 
 // Calligra Tables
-#include "CanvasBase.h"
-#include "CellTool.h"
-#include "ui/ExternalEditor.h"
-#include "ui/LocationComboBox.h"
-#include "ui/SheetView.h"
+#include "CellToolBase.h"
+#include "ExternalEditor.h"
+#include "LocationComboBox.h"
+#include "SheetView.h"
+#include "part/CanvasBase.h"
 
 using namespace Calligra::Tables;
 
@@ -51,7 +51,7 @@ public:
     QToolButton *formulaButton, *applyButton, *cancelButton;
     ExternalEditor *editor;
     QGridLayout *layout;
-    CellTool *cellTool;
+    CellToolBase *cellTool;
 };
 
 CellEditorDocker::CellEditorDocker()
@@ -156,7 +156,7 @@ void CellEditorDocker::toolChanged(const QString &toolId)
 
     if (toolId == QLatin1String("KSpreadCellToolId")) {
         KoToolBase* tool = KoToolManager::instance()->toolById(d->canvas, toolId);
-        d->cellTool = qobject_cast<CellTool*>(tool);
+        d->cellTool = qobject_cast<CellToolBase*>(tool);
         Q_ASSERT(d->cellTool);
         d->editor->setCellTool(d->cellTool);
         d->cellTool->setExternalEditor(d->editor);
