@@ -68,6 +68,7 @@ public:
     MSO::OfficeArtDgContainer* lastDrawingObject;
     MSO::OfficeArtSpgrContainer* lastGroupObject;
     OfficeArtObject* lastOfficeArtObject;
+    quint32 officeArtObjectCounter;
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
@@ -87,6 +88,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->lastDrawingObject = 0;
     d->lastGroupObject = 0;
     d->lastOfficeArtObject = 0;
+    d->officeArtObjectCounter = 0;
     d->curConditionalFormat = 0;
 }
 
@@ -777,17 +779,9 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     if (record->m_object && d->lastDrawingObject && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
         handled = true;
         switch (record->m_object->type()) {
+            // Note: let's handle Pictures as OfficeArtObject, not as PictureObject
             case Object::Picture: {
-                MsoDrawingBlibItem *drawing = d->globals->drawing(record->m_object->id());
-                if(!drawing) {
-                    std::cerr << "WorksheetSubStreamHandler: Skipping unknown object of type=" << record->m_object->type() << " with id=" << record->m_object->id() << std::endl;
-                    return;
-                }
-                PictureObject* pic = dynamic_cast<PictureObject*>(record->m_object);
-                Q_ASSERT(pic);
-                pic->setFileName(drawing->m_picture.name);
-                Cell *cell = d->sheet->cell(record->m_object->m_colL, record->m_object->m_rwT);
-                cell->addPicture(pic);//(record->m_object, drawing->m_picture);
+                handled = false;
             } break;
             case Object::Chart: {
                 d->charts.push_back(id);
@@ -814,12 +808,12 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                         qDebug() << "invalid client anchor";
                     } else {
                         Cell *cell = d->sheet->cell(anchor->colL, anchor->rwT);
-                        OfficeArtObject* obj = new OfficeArtObject(o);
+                        OfficeArtObject* obj = new OfficeArtObject(o, d->officeArtObjectCounter++);
                         cell->addDrawObject(obj);
                         d->lastOfficeArtObject = obj;
                     }
                 } else {
-                    OfficeArtObject* obj = new OfficeArtObject(o);
+                    OfficeArtObject* obj = new OfficeArtObject(o, d->officeArtObjectCounter++);
                     d->sheet->addDrawObject(obj, d->lastGroupObject);
                     d->lastOfficeArtObject = obj;
 
@@ -832,10 +826,10 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
             }
         }
     }
-    
+
     if (record->m_object) d->sharedObjects[id] = record->m_object;
     record->m_object = 0; // take over ownership
-     
+
     delete d->lastDrawingObject;
     d->lastDrawingObject = 0;
 }

@@ -32,6 +32,9 @@
 
 #include <algorithm>
 
+// Print the content of generated content.xml to the console for debugging purpose
+//#define CONTENTXML_DEBUG
+
 using namespace Charting;
 
 ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
@@ -677,9 +680,19 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 }
             }
         }
-        if ( series->m_showDataValues ) {
+
+        if ( series->m_showDataLabelValues && series->m_showDataLabelPercent ) {
+            seriesstyle.addProperty( "chart:data-label-number", "value-and-percentage", KoGenStyle::ChartType );
+        } else if ( series->m_showDataLabelValues ) {
             seriesstyle.addProperty( "chart:data-label-number", "value", KoGenStyle::ChartType );
+        } else if ( series->m_showDataLabelPercent ) {
+            seriesstyle.addProperty( "chart:data-label-number", "percentage", KoGenStyle::ChartType );
         }
+        if ( series->m_showDataLabelCategory ) {
+            seriesstyle.addProperty( "chart:data-label-text", "true", KoGenStyle::ChartType );
+        }
+        //seriesstyle.addProperty( "chart:data-label-symbol", "true", KoGenStyle::ChartType );
+
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
 
         // ODF does not support custom labels so we depend on the SeriesLegendOrTrendlineName being defined
@@ -725,7 +738,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     domainRange = normalizeCellRange( replaceSheet( curRange, QString::fromLatin1( "local" ) ) );
                 else
                     domainRange = normalizeCellRange( curRange );
-                bodyWriter->addAttribute( "table:cell-range-address", domainRange ); //"Sheet1.C2:Sheet1.E5");
+                if ( !domainRange.isEmpty() )
+                    bodyWriter->addAttribute( "table:cell-range-address", domainRange );
                 bodyWriter->endElement();
             }
 //             if ( series->m_domainValuesCellRangeAddress.count() == 1 ){
@@ -795,6 +809,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->endElement(); // chart:chart
     bodyWriter->endElement(); // office:chart
     bodyWriter->endElement(); // office:body
+
+#ifdef CONTENTXML_DEBUG
+    qDebug() << bodyWriter->toString();
+#endif
 
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     s.closeContentWriter();

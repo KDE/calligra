@@ -153,7 +153,8 @@ void DocxXmlDocumentReader::init()
     m_createSectionToNext = false;
     m_currentVMLProperties.insideGroup = false;
     m_outputFrames = true;
-    m_previousNumIdUsed = "";
+    m_currentNumId = "";
+    m_prevListLevel = 0;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -1779,7 +1780,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdtContent()
 {
     READ_PROLOGUE
 
-    // This is not properly supported at all atm. todo: fix
+    // FIXME: This is not properly supported at all atm.
 
     while (!atEnd()) {
         readNext();
@@ -1917,7 +1918,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     READ_PROLOGUE
     m_paragraphStyleNameWritten = false;
     m_currentStyleName.clear();
-    m_currentListStyleName.clear();
     m_listFound = false;
     m_closeHyperlink = false;
 
@@ -1989,6 +1989,44 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
+    //---------------------------------------------
+    // Prepare for the List Style
+    //---------------------------------------------
+    if (m_listFound && m_currentBulletList.size() > m_currentListLevel) {
+        m_currentBulletProperties = m_currentBulletList.at(m_currentListLevel);
+
+        KoGenStyle textStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
+        KoGenStyle::copyPropertiesFromStyle(m_currentParagraphStyle, textStyle, KoGenStyle::TextType);
+
+        if (!textStyle.isEmpty()) {
+
+            //MSWord: A bullet/picture label does not inherit font information
+            //from the paragraph mark.
+            if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+                textStyle.removeProperty("style:font-name");
+                textStyle.removeProperty("style:font-name-complex");
+            }
+            //MSWord: A label does NOT inherit Underline from text-properties
+            //of the paragraph style.  A bullet/picture does not inherit
+            //{Italics, Bold}.
+            if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+                textStyle.removeProperty("fo:font-style");
+                textStyle.removeProperty("fo:font-weight");
+            }
+            textStyle.removeProperty("style:text-underline-color");
+            textStyle.removeProperty("style:text-underline-mode");
+            textStyle.removeProperty("style:text-underline-style");
+            textStyle.removeProperty("style:text-underline-type");
+            textStyle.removeProperty("style:text-underline-width");
+
+            KoGenStyle::copyPropertiesFromStyle(m_currentBulletProperties.textStyle(), textStyle);
+            m_currentBulletProperties.setTextStyle(textStyle);
+        }
+    }
+
+    //---------------------------------------------
+    // Fine-tune Paragraph Style
+    //---------------------------------------------
     if (m_currentParagraphStyle.parentName().isEmpty()) {
         if (m_context->m_namedDefaultStyles.contains("paragraph")) {
             m_currentParagraphStyle.setParentName(m_context->m_namedDefaultStyles.value("paragraph"));
@@ -1999,7 +2037,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     // The paragraph glyph's formatting is stored in the rPr element under the
     // paragraph properties, since there is no run saved for the paragraph mark
     // itself.  ODF: The paragraph mark formatting does not affect other runs
-    // of text so can't save into text-properties of the paragraph style.
+    // of text so it can't be save into text-properties of the paragraph style.
     if (!textPBuf.isEmpty()) {
         m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }
@@ -2024,63 +2062,84 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             // In ooxml it seems that nothing should be created if sectPr was present
             if (!m_createSectionToNext) {
                 if (m_listFound) {
-                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
-                    if (m_moveToStylesXml) {
-                        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-                    }
+                    // update automatic numbering info
+                    if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
 
-                    if (m_usedListStyles.value(m_previousNumIdUsed).isEmpty()) {
-                        int index = 0;
-                        while (index < m_currentBulletList.size()) {
-                            m_currentBulletProperties = m_currentBulletList.at(index);
+                        QString numId;
+                        bool listOpen = false;
+                        if (m_continueListNum.contains(m_currentNumId)) {
+                            listOpen = true;
+                            numId = m_currentNumId;
+                        }
+                        else if (!m_currentBulletProperties.startOverride()) {
 
-                            if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType) {
-                                // The reason why we are inserting bullets only
-                                // here, is that we have to check for the
-                                // actual text size before we can determine how
-                                // big a potential picture bullet should be
-
-                                // Try 1 : paragraph defined
-                                QString fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
-                                if (fontSize.isEmpty()) {
-                                    const KoGenStyle *parent = mainStyles->style(m_currentParagraphStyle.parentName());
-                                    if (parent != 0) {
-                                        // Try 2 : parent defined
-                                        fontSize = parent->property("fo:font-size", KoGenStyle::TextType);
-                                        if (fontSize.isEmpty()) {
-                                            // Try 3 : default text size
-                                            //TODO: This should be acquired from stylesreader.
-                                            fontSize = "11pt";
-                                        }
-                                    }
-                                }
-                                if (!fontSize.isEmpty()) {
-                                    fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
-                                    m_currentBulletProperties.setBulletSizePt(fontSize.toDouble());
+                            // TODO: The most recent one is required to check
+                            // against the correct prevListLevel.
+                            //
+                            // Check if any of the lists that inherit numbering
+                            // from the abstract numbering definition was opened.
+                            QStringList numIDs = m_context->m_abstractNumIDs.keys(m_context->m_abstractNumIDs[m_currentNumId]);
+                            QStringList::const_iterator i;
+                            for (i = numIDs.constBegin(); i != numIDs.constEnd(); ++i) {
+                                if (m_continueListNum.contains(*i)) {
+                                    listOpen = true;
+                                    numId = *i;
+                                    break;
                                 }
                             }
-
-                            m_currentListStyle.addChildElement("list-style-properties",
-                                m_currentBulletProperties.convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
-                            ++index;
-
                         }
-                        m_currentListStyleName = mainStyles->insert(m_currentListStyle, QString(), KoGenStyles::AllowDuplicates);
-                        m_usedListStyles[m_previousNumIdUsed] = m_currentListStyleName;
+                        if (listOpen) {
+                            if (m_currentListLevel <= m_continueListNum[numId].first) {
+                                m_continueListNum[m_currentNumId].second = true;
+                            } else {
+                                m_continueListNum[m_currentNumId].second = false;
+                            }
+                        }
                     }
-                    else {
-                        m_currentListStyleName = m_usedListStyles.value(m_previousNumIdUsed);
+
+                    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
+                    if (m_moveToStylesXml) {
+                        m_currentListStyle.setAutoStyleInStylesDotXml(true);
                     }
+
+                    m_currentListStyle.addChildElement("list-style-properties",
+                        m_currentBulletProperties.convertToListProperties(*mainStyles, MSOOXML::Utils::DocxFilter));
+
+                    QString listStyleName = mainStyles->insert(m_currentListStyle, QString());
+                    Q_ASSERT(!listStyleName.isEmpty());
+                    //TODO: continue an opened list based on this information
+                    m_usedListStyles.insertMulti(m_currentNumId, listStyleName);
+
+                    // Start a new list
                     body->startElement("text:list");
-                    if (!m_currentListStyleName.isEmpty()) {
-                        body->addAttribute("text:style-name", m_currentListStyleName);
+                    body->addAttribute("text:style-name", listStyleName);
+
+                    // continue numbering if applicable
+                    if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+                        if (m_continueListNum.contains(m_currentNumId)) {
+                            if (m_continueListNum[m_currentNumId].second) {
+                                body->addAttribute("text:continue-numbering", "true");
+                            }
+                        }
                     }
                     body->startElement("text:list-item");
                     for (int i = 0; i < m_currentListLevel; ++i) {
                         body->startElement("text:list");
                         body->startElement("text:list-item");
                     }
+                    // restart numbering if applicable
+                    if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+                        if (!m_continueListNum.contains(m_currentNumId) ||
+                            (m_continueListNum.contains(m_currentNumId) &&
+                             !m_continueListNum[m_currentNumId].second))
+                        {
+                            body->addAttribute("text:start-value", m_currentBulletProperties.startValue());
+                        }
+                        m_continueListNum[m_currentNumId] = qMakePair(m_currentListLevel, false);
+                    }
+                    m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
                 }
+
                 body->startElement("text:p", false);
                 if (m_currentStyleName.isEmpty()) {
                     QString currentParagraphStyleName;
@@ -2108,12 +2167,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 (void)textPBuf.releaseWriter();
                 body->endElement(); //text:p
                 if (m_listFound) {
-                    for (int i = 0; i < m_currentListLevel; ++i) {
+                    for (int i = 0; i <= m_currentListLevel; ++i) {
                         body->endElement(); //text:list-item
                         body->endElement(); //text:list
                     }
-                    body->endElement(); //text:list-item
-                    body->endElement(); //text:list
                 }
                 kDebug() << "/text:p";
             }
@@ -2614,16 +2671,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
 {
     READ_PROLOGUE
 
-    //FIXME: Do we have any attributes here?
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(pStyle)
-    if (!pStyle.isEmpty()) {
-        m_currentParagraphStyle.setParentName(pStyle);
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(lvl)
-    m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -2648,10 +2695,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
-    }
-
-    if (m_listFound) {
-        m_currentParagraphStyle.addAttribute("style:list-style-name", m_currentListStyleName);
     }
 
     READ_EPILOGUE
@@ -2901,14 +2944,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ilvl()
 #define CURRENT_EL numId
 //! numPr handler (Numbering Definition Instance Reference)
 /*!
- This element specifies that the current paragraph references a numbering definition instance in the current document.
+ This element specifies that the current paragraph references a numbering
+ definition instance in the current document.
 
- The presence of this element specifies that the paragraph will inherit the properties specified by the numbering
- definition in the num element (§2.9.16) at the level specified by the level specified in the lvl element (§2.9.7)
- and shall have an associated number positioned before the beginning of the text flow in this paragraph. When
- this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
- defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
- numbering definition shall be used instead.
+ The presence of this element specifies that the paragraph will inherit the
+ properties specified by the numbering definition in the num element (§2.9.16)
+ at the level specified by the level specified in the lvl element (§2.9.7) and
+ shall have an associated number positioned before the beginning of the text
+ flow in this paragraph. When this element appears as part of the paragraph
+ formatting for a paragraph style, then any numbering level defined using the
+ ilvl element shall be ignored, and the pStyle element (§2.9.25) on the
+ associated abstract numbering definition shall be used instead.
 
  Parent elements:
  - [done] numPr (§17.3.1.19)
@@ -2924,13 +2970,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
 
     TRY_READ_ATTR(val)
     // In docx, this value defines a predetermined style from numbering xml,
-    // The styles from numbering have to be given some name, NumStyle has been chosen here
+    // The styles from numbering have to be given some name, NumStyle has been
+    // chosen here
     if (!val.isEmpty()) {
         if (val == "0") {
             m_listFound = false; // spec says that this means deleted list
         } else {
             m_currentBulletList = m_context->m_bulletStyles[val];
-            m_previousNumIdUsed = val;
+            m_currentNumId = val;
         }
     }
 
@@ -4824,6 +4871,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 {
     READ_PROLOGUE
 
+    // save current state of lists processing
+    saveState();
+
     KoTable table;
     m_table = &table;
 
@@ -4912,6 +4962,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     } else {
         body = buffer.releaseWriter();
     }
+
+    // restore previous state of lists processing
+    restoreState();
 
     READ_EPILOGUE
 }
@@ -6479,6 +6532,29 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
     body->endElement(); //text:span
 
     READ_EPILOGUE
+}
+
+// ************************************************
+//  State
+// ************************************************
+void DocxXmlDocumentReader::saveState()
+{
+    DocumentReaderState state(m_usedListStyles, m_continueListNum);
+    m_statesBkp.push(state);
+
+    m_usedListStyles.clear();
+    m_continueListNum.clear();
+}
+
+void DocxXmlDocumentReader::restoreState()
+{
+    if (m_statesBkp.isEmpty()) {
+        kWarning() << "Error: DocumentReaderState stack is corrupt!";
+        return;
+    }
+    DocumentReaderState s = m_statesBkp.pop();
+    m_usedListStyles = s.usedListStyles;
+    m_continueListNum = s.continueListNum;
 }
 
 #define DRAWINGML_NS "a"

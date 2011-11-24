@@ -210,10 +210,6 @@ private:
     Hyperlink hyperlink(unsigned column, unsigned row) const;
     void setHyperlink(unsigned column, unsigned row, const Hyperlink& link);
 
-    QList<PictureObject*> pictures(unsigned column, unsigned row) const;
-    void setPictures(unsigned column, unsigned row, const QList<PictureObject*>& pictures);
-    void addPicture(unsigned column, unsigned row, PictureObject* picture);
-
     QList<ChartObject*> charts(unsigned column, unsigned row) const;
     void setCharts(unsigned column, unsigned row, const QList<ChartObject*>& charts);
     void addChart(unsigned column, unsigned row, ChartObject* chart);

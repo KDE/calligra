@@ -1985,9 +1985,18 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     if (!listInfo) {
         return;
     }
+
     const wvWare::Word97::PAP& pap = m_currentPPs->pap();
     wvWare::UString text = listInfo->text().text;
     int nfc = listInfo->numberFormat();
+
+    enum ListType {BulletType, NumberType, PictureType, DefaultType};
+    ListType type = NumberType;
+
+    //TODO: Where is the rest of the logic?
+    if (nfc == 23) {
+        type = BulletType;
+    }
 
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
@@ -1996,7 +2005,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     //---------------------------------------------
     // list-level-style-*
     //---------------------------------------------
-    if (nfc == 23) {
+    if (type == BulletType) {
         out.startElement("text:list-level-style-bullet");
         if (text.length() == 1) {
             // With bullets, text can only be one character, which tells us
@@ -2151,18 +2160,16 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     //NOTE: Setting a num. of text-properties to default values if not provided
     //for the list style to maintain compatibility with both ODF and MSOffice.
 
-    //MSWord: A label does NOT inherit {Italics, Bold, Underline} from
-    //text-properties of the paragraph style.
-
-    //fo:font-style
-    if ((textStyle.property("fo:font-style")).isEmpty()) {
-        textStyle.addProperty("fo:font-style", "normal");
+    //MSWord: A label does NOT inherit Underline from text-properties of the
+    //paragraph style.  A bullet does not inherit {Italics, Bold}.
+    if (type != NumberType) {
+        if ((textStyle.property("fo:font-style")).isEmpty()) {
+            textStyle.addProperty("fo:font-style", "normal");
+        }
+        if ((textStyle.property("fo:font-weight")).isEmpty()) {
+            textStyle.addProperty("fo:font-weight", "normal");
+        }
     }
-    //fo:font-weight
-    if ((textStyle.property("fo:font-weight")).isEmpty()) {
-        textStyle.addProperty("fo:font-weight", "normal");
-    }
-    //style:text-underline-style
     if ((textStyle.property("style:text-underline-style")).isEmpty()) {
         textStyle.addProperty("style:text-underline-style", "none");
     }

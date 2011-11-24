@@ -64,6 +64,7 @@ Comment[pt_BR]=Plugin de Importação do MySQL para o Kexi
 Comment[sv]=MySQL importinsticksprogram för Kexi
 Comment[uk]=Додаток імпортування даних з MySQL для Kexi
 Comment[x-test]=xxMySQL Import Plugin for Kexixx
+Comment[zh_CN]=Kexi MySQL 导入插件
 Comment[zh_TW]=Kexi 的 MySQL 匯入外掛程式
 X-KDE-Library=keximigrate_mysql
 X-KDE-ServiceTypes=Kexi/MigrationDriver
