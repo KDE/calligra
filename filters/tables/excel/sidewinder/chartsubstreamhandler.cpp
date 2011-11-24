@@ -997,14 +997,18 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
         x = m_currentSeries->m_datasetValue[Charting::Value::VerticalValues]->m_formula;
     if (m_currentSeries->m_datasetValue.contains(Charting::Value::HorizontalValues))
         y = m_currentSeries->m_datasetValue[Charting::Value::HorizontalValues]->m_formula;
-    if (record->isFBubbles()) {
-        m_currentSeries->m_domainValuesCellRangeAddress << y << x;
-        if (m_currentSeries->m_datasetValue.contains(Charting::Value::BubbleSizeValues))
-            m_currentSeries->m_valuesCellRangeAddress = m_currentSeries->m_datasetValue[Charting::Value::BubbleSizeValues]->m_formula;
-        qDebug()<<m_currentSeries->m_valuesCellRangeAddress;
-        m_chart->m_verticalCellRangeAddress = m_currentSeries->m_valuesCellRangeAddress;
-    } else {
-        m_currentSeries->m_domainValuesCellRangeAddress << x;
+    foreach(Charting::Series *series, m_chart->m_series) {
+        Q_ASSERT(series->m_domainValuesCellRangeAddress.isEmpty()); // what should we do if that happens?
+        if (!series->m_domainValuesCellRangeAddress.isEmpty())
+            continue;
+        if (record->isFBubbles()) {
+            series->m_domainValuesCellRangeAddress << y << x;
+            if (series->m_datasetValue.contains(Charting::Value::BubbleSizeValues))
+                series->m_valuesCellRangeAddress = series->m_datasetValue[Charting::Value::BubbleSizeValues]->m_formula;
+            //m_chart->m_verticalCellRangeAddress = series->m_valuesCellRangeAddress;
+        } else {
+            series->m_domainValuesCellRangeAddress << x;
+        }
     }
 
     if ( !m_disableAutoMarker ) {
