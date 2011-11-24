@@ -114,6 +114,7 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
+    ui/AlignmentDockWidget.ui
     ui/FontDockWidget.ui
     )
 
@@ -162,6 +163,7 @@ kde4_add_ui_files(part_DIR_SRCS
 
 SET (ui_DIR_SRCS
     ui/AbstractSelectionStrategy.cpp
+    ui/AlignmentDockWidget.cpp
     ui/AutoFillStrategy.cpp
     ui/CellEditorBase.cpp
     ui/CellEditor.cpp

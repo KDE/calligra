@@ -30,6 +30,7 @@
 #include "CellToolBase_p.h"
 
 // KSpread
+#include "AlignmentDockWidget.h"
 #include "ApplicationSettings.h"
 #include "AutoFillStrategy.h"
 #include "CalculationSettings.h"
@@ -1132,6 +1133,7 @@ QList <QWidget*> CellToolBase::createOptionWidgets()
     QList<QWidget *> widgets;
 
     widgets.append(new FontDockWidget(this));
+    widgets.append(new AlignmentDockWidget(this));
 
     return widgets;
 }
