@@ -546,13 +546,13 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
 
 QVariant CompletionEntryItemModel::plannedEffort ( int /*row*/, int role ) const
 {
-    if ( m_node == 0 || m_manager == 0 ) {
+    if ( m_node == 0 ) {
         return QVariant();
     }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration v = m_node->plannedEffort( m_manager->scheduleId(), ECCT_EffortWork );
+            Duration v = m_node->plannedEffort( id(), ECCT_EffortWork );
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit;
             return v.format();
         }
