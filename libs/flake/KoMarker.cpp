@@ -110,3 +110,8 @@ QPainterPath KoMarker::path(qreal width) const
     transform.scale(width / d->viewBox.width(), height / d->viewBox.height());
     return transform.map(d->path);
 }
+
+bool KoMarker::operator==(const KoMarker &other) const
+{
+    return (d->d == other.d->d && d->viewBox ==other.d->viewBox);
+}

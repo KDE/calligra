@@ -68,6 +68,8 @@ public:
      */
     QPainterPath path(qreal width) const;
 
+    bool operator==(const KoMarker &other) const;
+
 private:
     class Private;
     Private * const d;

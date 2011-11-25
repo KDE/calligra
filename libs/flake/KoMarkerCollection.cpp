@@ -55,9 +55,12 @@ bool KoMarkerCollection::loadOdf(KoShapeLoadingContext &context)
     for (; it != markers.constEnd(); ++it) {
         KoMarker *marker = new KoMarker();
         if (marker->loadOdf(*(it.value()), context)) {
-            marker = addMarker(marker);
-            lookupTable.insert(it.key(), marker);
-            kDebug(30006) << "loaded marker" << it.key() << marker;
+            KoMarker *m = addMarker(marker);
+            lookupTable.insert(it.key(), m);
+            kDebug(30006) << "loaded marker" << it.key() << marker << m;
+            if (m != marker) {
+                delete marker;
+            }
         }
         else {
             delete marker;
@@ -77,11 +80,15 @@ QList<KoMarker*> KoMarkerCollection::markers() const
 
 KoMarker * KoMarkerCollection::addMarker(KoMarker *marker)
 {
-    if (d->markers.contains(marker)) {
-        return marker;
+    foreach (KoMarker *m, d->markers) {
+        if (marker == m) {
+            return marker;
+        }
+        if (m && *marker == *m) {
+            kDebug(30006) << "marker is the same as other";
+            return m;
+        }
     }
-
-    // TODO check that the same marker (content) is not yet in the list
     d->markers.append(marker);
     return marker;
 }
