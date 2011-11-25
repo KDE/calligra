@@ -156,6 +156,9 @@ protected:
     bool setStartedTime( Node *node, const QVariant &value, int role );
     bool setFinishedTime( Node *node, const QVariant &value, int role );
 
+    QVariant actualStart( Node *n, int role ) const;
+    QVariant actualFinish( Node *n, int role ) const;
+
 private:
     NodeModel m_nodemodel;
     Part *m_part;

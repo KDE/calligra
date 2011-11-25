@@ -252,6 +252,24 @@ QVariant TaskWorkPackageModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
+QVariant TaskWorkPackageModel::actualStart( Node *n, int role ) const
+{
+    QVariant v = m_nodemodel.startedTime( n, role );
+    if ( role == Qt::EditRole && ! v.toDateTime().isValid() ) {
+        v = QDateTime::currentDateTime();
+    }
+    return v;
+}
+
+QVariant TaskWorkPackageModel::actualFinish( Node *n, int role ) const
+{
+    QVariant v = m_nodemodel.finishedTime( n, role );
+    if ( role == Qt::EditRole && ! v.toDateTime().isValid() ) {
+        v = QDateTime::currentDateTime();
+    }
+    return v;
+}
+
 QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 {
     switch ( column ) {
@@ -270,9 +288,9 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
         case NodePlannedEffort: return m_nodemodel.data( n, NodeModel::NodePlannedEffort, role );
         case NodeActualEffort: return m_nodemodel.data( n, NodeModel::NodeActualEffort, role );
         case NodeRemainingEffort: return m_nodemodel.data( n, NodeModel::NodeRemainingEffort, role );
-        case NodeActualStart: return m_nodemodel.data( n, NodeModel::NodeActualStart, role );
+        case NodeActualStart: return actualStart( n, role );
         case NodeStarted: return m_nodemodel.data( n, NodeModel::NodeStarted, role );
-        case NodeActualFinish: return m_nodemodel.data( n, NodeModel::NodeActualFinish, role );
+        case NodeActualFinish: return actualFinish( n, role );
         case NodeFinished: return m_nodemodel.data( n, NodeModel::NodeFinished, role );
         case NodeStatusNote: return m_nodemodel.data( n, NodeModel::NodeStatusNote, role );
 
@@ -565,6 +583,8 @@ QAbstractItemDelegate *TaskWorkPackageModel::createDelegate( int column, QWidget
         case NodeCompleted: return new TaskCompleteDelegate( parent );
         case NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
         case NodeActualEffort: return new DurationSpinBoxDelegate( parent );
+        case NodeActualStart: return new DateTimeCalendarDelegate( parent );
+        case NodeActualFinish: return new DateTimeCalendarDelegate( parent );
 
         default: break;
     }
