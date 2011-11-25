@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -270,6 +270,20 @@ QVariant TaskWorkPackageModel::actualFinish( Node *n, int role ) const
     return v;
 }
 
+QVariant TaskWorkPackageModel::plannedEffort( Node *n, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+            Duration v = n->plannedEffort( CURRENTSCHEDULE, ECCT_EffortWork );
+            return v.format();
+        }
+        default:
+            break;
+    }
+    return QVariant();
+}
+
 QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 {
     switch ( column ) {
@@ -285,9 +299,9 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 
         // Completion
         case NodeCompleted: return m_nodemodel.data( n, NodeModel::NodeCompleted, role );
-        case NodePlannedEffort: return m_nodemodel.data( n, NodeModel::NodePlannedEffort, role );
         case NodeActualEffort: return m_nodemodel.data( n, NodeModel::NodeActualEffort, role );
         case NodeRemainingEffort: return m_nodemodel.data( n, NodeModel::NodeRemainingEffort, role );
+        case NodePlannedEffort: return plannedEffort( n, role );
         case NodeActualStart: return actualStart( n, role );
         case NodeStarted: return m_nodemodel.data( n, NodeModel::NodeStarted, role );
         case NodeActualFinish: return actualFinish( n, role );
@@ -494,9 +508,9 @@ QVariant TaskWorkPackageModel::headerData( int section, Qt::Orientation orientat
 
         // Completion
         case NodeCompleted: return i18n( "Completion" );
-        case NodePlannedEffort: return i18n( "Planned Effort" );
         case NodeActualEffort: return i18n( "Actual Effort" );
         case NodeRemainingEffort: return i18n( "Remaining Effort" );
+        case NodePlannedEffort: return i18n( "Planned Effort" );
         case NodeActualStart: return i18n( "Actual Start" );
         case NodeStarted: return i18n( "Started" );
         case NodeActualFinish: return i18n( "Actual Finish" );
