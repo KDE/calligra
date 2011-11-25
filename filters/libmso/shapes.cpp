@@ -1068,6 +1068,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
         out.xml.addAttribute("svg:x", client->formatPos(trect.x()));
         out.xml.addAttribute("svg:y", client->formatPos(trect.y()));
     }
+    //NOTE: z-index is set in ODrawToOdf::Client::addTextStyles
     //draw:z-index
     //presentation:class-names
     //presentation:style-name

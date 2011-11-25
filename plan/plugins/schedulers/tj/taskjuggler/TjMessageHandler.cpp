@@ -15,6 +15,8 @@
 #include "taskjuggler.h"
 #include "Utility.h"
 
+#include <qdebug.h>
+
 namespace TJ
 {
 
@@ -37,9 +39,9 @@ TjMessageHandler::warningMessage(const QString& msg, const QString& file, int
     if (consoleMode)
     {
         if (file.isEmpty())
-            qWarning("%s", msg.latin1());
+            qWarning()<<msg;
         else
-            qWarning("%s:%d: %s", file.latin1(), line, msg.latin1());
+            qWarning()<<file<<":"<<line<<":"<<msg;
     }
     else
         printWarning(msg, file, line);
@@ -63,9 +65,9 @@ TjMessageHandler::errorMessage(const QString& msg, const QString& file, int
     if (consoleMode)
     {
         if (file.isEmpty())
-            qWarning("%s", msg.latin1());
+            qWarning()<<msg;
         else
-            qWarning("%s:%d: %s", file.latin1(), line, msg.latin1());
+            qWarning()<<file<<":"<<line<<":"<<msg;
     }
     else
         printError(msg, file, line);
@@ -78,9 +80,9 @@ TjMessageHandler::fatalMessage(const QString& msg, const QString& file, int
     if (consoleMode)
     {
         if (file.isEmpty())
-            qFatal("%s", msg.latin1());
+            qWarning()<<msg;
         else
-            qFatal("%s:%d: %s", file.latin1(), line, msg.latin1());
+            qWarning()<<file<<":"<<line<<":"<<msg;
     }
     else
         printFatal(msg, file, line);

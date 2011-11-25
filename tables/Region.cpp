@@ -985,11 +985,13 @@ Sheet* Region::filterSheetName(QString& sRegion)
     if (delimiterPos < 0)
         delimiterPos = sRegion.lastIndexOf('.');
     if (delimiterPos > -1) {
-        const QString sheetName = sRegion.left(delimiterPos);
+        QString sheetName = sRegion.left(delimiterPos);
         sheet = d->map->findSheet(sheetName);
         // try again without apostrophes
-        if (!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count()-1] == '\'')
-            sheet = d->map->findSheet(sheetName.mid(1, sheetName.count() - 2));
+        while(!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count()-1] == '\'') {
+            sheetName = sheetName.mid(1, sheetName.count() - 2);
+            sheet = d->map->findSheet(sheetName);
+        }
         // remove the sheet name, incl. '!', from the string
         if (sheet)
             sRegion = sRegion.right(sRegion.length() - delimiterPos - 1);

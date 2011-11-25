@@ -15,6 +15,7 @@ Comment[pt_BR]=Interface para um Filtro do Calligra
 Comment[sv]=Calligra-filteromgivning
 Comment[uk]=Обгортка фільтрів Calligra
 Comment[x-test]=xxCalligra Filter Wrapperxx
+Comment[zh_CN]=Calligra 过滤器封装
 Comment[zh_TW]=Calligra 過濾器包裝
 
 [PropertyDef::X-KDE-Wrapper-Import]

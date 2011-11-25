@@ -60,6 +60,7 @@ public:
     //unsigned long m_colL, m_rwT;
 #endif
     qreal m_x, m_y, m_width, m_height; //in pt
+    qreal m_end_x, m_end_y; //in pt
 
     bool saveIndex(KoXmlWriter* xmlWriter);
     bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);

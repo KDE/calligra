@@ -35,6 +35,7 @@ namespace Tables
 {
 class Database;
 class Map;
+class AbstractCondition;
 
 /**
  * OpenDocument, 8.7.1 Table Filter
@@ -116,6 +117,7 @@ private:
     class Condition;
 
     void operator=(const Filter&);
+    static QList<AbstractCondition*> copyList(const QList<AbstractCondition*>& list);
 
     class Private;
     Private * const d;

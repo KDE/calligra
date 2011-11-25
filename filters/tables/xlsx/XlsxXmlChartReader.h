@@ -125,6 +125,8 @@ protected:
 
 private:
 
+    void read_showDataLabel();
+
     enum ReadTxContext{ Title, None };
     enum ReadAreaContext{ PlotArea, ChartArea };
     XlsxXmlChartReaderContext *m_context;

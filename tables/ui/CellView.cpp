@@ -1440,7 +1440,7 @@ void CellView::paintFilterButton(QPainter& painter, const QPointF& coordinate,
     options.fontMetrics = painter.fontMetrics();
     options.frame = false;
     options.rect = sheetView->viewConverter()->documentToView(QRectF(coordinate, QSizeF(d->width, d->height))).toRect();
-//     options.subControls = QStyle::SC_ComboBoxEditField | QStyle::SC_ComboBoxArrow;
+    options.subControls =/* QStyle::SC_ComboBoxEditField | */QStyle::SC_ComboBoxArrow;
 
     painter.save();
     painter.scale(sheetView->viewConverter()->viewToDocumentX(1.0),

@@ -23,6 +23,7 @@ Name[ru]=Фильтр импорта документов LaTeX в Words
 Name[sv]=Words Latex-importfilter
 Name[uk]=Фільтр імпорту LaTeX для Words
 Name[x-test]=xxWords Latex Import Filterxx
+Name[zh_CN]=Words Latex 导入过滤器
 Name[zh_TW]=Words Latex 匯入過濾程式
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service

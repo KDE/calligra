@@ -72,7 +72,7 @@ public:
      * Returns the cell depths.
      * \return the cell depths
      */
-    QHash<Cell, int> depths() const;
+    QMap<Cell, int> depths() const;
 
     /**
      * Returns the region, that consumes the value of \p cell.
