@@ -1252,6 +1252,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+extern QString columnName(uint column);
+//extern int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43);
+//extern int rowHeight(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75);
+#endif
+
 #undef CURRENT_EL
 #define CURRENT_EL chart
 //! chart handler (Charting diagrams)
@@ -1269,26 +1275,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
         Charting::Chart* chart = new Charting::Chart;
         ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+        bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
         chartexport->setSheetReplacement( false );
         if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
-            chart->m_fromRow = f.m_row;
-            chart->m_fromColumn = f.m_col;
+            //chartexport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
+            //chartexport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
+            chartexport->m_x = EMU_TO_POINT(f.m_colOff);
+            chartexport->m_y = EMU_TO_POINT(f.m_rowOff);
+            hasStart = true;
             if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-                chart->m_toRow = f.m_row;
-                chart->m_toColumn = f.m_col;
+                QString sheet = chart->m_sheetName.isEmpty() ? QString() : chart->m_sheetName + '.';
+                chartexport->m_endCellAddress = sheet + columnName(f.m_col) + QString::number(f.m_row);
+                //chartexport->m_end_x = f.m_colOff;
+                //chartexport->m_end_y = f.m_rowOff;
+                chartexport->m_end_x = EMU_TO_POINT(f.m_colOff);
+                chartexport->m_end_y = EMU_TO_POINT(f.m_rowOff);
+                hasEnd = true;
             }
         }
 #else
         chartexport->m_drawLayer = true;
-        chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
-        chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
-        chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
-        chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
 #endif
+        if (!hasStart) {
+            chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
+            chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
+        }
+        if (!hasEnd) {
+            chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
+            chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
+        }
 
         KoStore* storeout = m_context->import->outputStore();
         QScopedPointer<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartexport));

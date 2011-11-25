@@ -38,7 +38,7 @@
 using namespace Charting;
 
 ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
-    : m_x(0), m_y(0), m_width(0), m_height(0), m_chart(chart), m_theme(theme), sheetReplacement(true), paletteSet( false )
+    : m_x(0), m_y(0), m_width(0), m_height(0), m_end_x(0), m_end_y(0), m_chart(chart), m_theme(theme), sheetReplacement(true), paletteSet( false )
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -85,8 +85,11 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
         //    xmlWriter->addAttribute("draw:layer", "layout");
 
         // used in opendocumentspreadsheet to reference cells
-        if(!m_endCellAddress.isEmpty())
+        if(!m_endCellAddress.isEmpty()) {
             xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
+            xmlWriter->addAttributePt("table:end-x", m_end_x);
+            xmlWriter->addAttributePt("table:end-y", m_end_y);
+        }
 
         xmlWriter->addAttributePt("svg:x", m_x);
         xmlWriter->addAttributePt("svg:y", m_y);

@@ -379,7 +379,6 @@ namespace Charting
     {
     public:
         QString m_sheetName;
-        int m_fromRow, m_fromColumn, m_toRow, m_toColumn;
         
         /// If true then the chart is a 3d chart else teh chart is 2d.
         bool m_is3d;
@@ -420,7 +419,7 @@ namespace Charting
         // charts internal table
         InternalTable m_internalTable;
 
-        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_showMarker(false), m_showLines( false ), m_textSize( 10 ) {
+        explicit Chart() : Obj(), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_showMarker(false), m_showLines( false ), m_textSize( 10 ) {
             m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
         }
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_fillGradient; delete m_plotAreaFillGradient; }

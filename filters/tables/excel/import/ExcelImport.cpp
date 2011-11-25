@@ -1010,7 +1010,9 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
         c->setSheetReplacement( false );
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = Swinder::encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
-        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
+        c->m_end_x = offset(columnWidth(sheet, chart->m_colR), chart->m_dxR, 1024);
+        c->m_end_y = offset(columnWidth(sheet, chart->m_rwB), chart->m_dyB, 256);
+        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2"; //TODO don't hardcode!
 
         const unsigned long colL = chart->m_colL;
         const unsigned long dxL = chart->m_dxL;
