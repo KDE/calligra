@@ -85,49 +85,61 @@ const unsigned BRAIRecord::id = 0x1051;
 
 using namespace Swinder;
 
+/// This represents the internal chart data cache aka the "local-table" that
+/// is embedded into the charts content.xml and not fetched from the application
+/// embedding the chart (e.g. from a Calligra Tables sheet).
 class ChartSubStreamHandler::InternalDataCache
 {
 public:
     InternalDataCache(ChartSubStreamHandler *chartSubStreamHandler, unsigned index) : m_chartSubStreamHandler(chartSubStreamHandler), m_siIndex(index) {}
     ~InternalDataCache() {
-#if 0
-        if (m_cellRegion.isNull())
-            return;
-        QString cellRegion = Swinder::encodeAddress("local", m_cellRegion);
+        QString cellRegion = m_cellRegion.isNull() ? QString() : Swinder::encodeAddress("local", m_cellRegion);
         bool isBubble = dynamic_cast<Charting::BubbleImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
         bool isScatter = dynamic_cast<Charting::ScatterImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
-        switch (m_siIndex) {
-            case 0x0001: { // Series values or vertical values (for scatter or bubble chart groups)
-                if (isBubble || isScatter) {
-                    bool change = !m_chartSubStreamHandler->m_currentSeries->m_datasetValue.contains(Charting::Value::VerticalValues) || (m_chartSubStreamHandler->m_currentSeries->m_datasetValue[Charting::Value::VerticalValues]->m_type == Charting::Value::TextOrValue && m_chartSubStreamHandler->m_currentSeries->m_datasetValue[Charting::Value::VerticalValues]->m_formula.isEmpty());
-                    if (change)
-                        m_chartSubStreamHandler->m_currentSeries->m_domainValuesCellRangeAddress[isBubble ? 1 : 0] = cellRegion;
-                } else {
-                    if (m_chartSubStreamHandler->m_currentSeries->m_valuesCellRangeAddress.isEmpty())
-                        m_chartSubStreamHandler->m_currentSeries->m_valuesCellRangeAddress = cellRegion;
-                }
-            } break;
-            case 0x0002: { // Category labels or horizontal values (for scatter or bubble chart groups)
-                if (isBubble /*|| isScatter*/) {
-//                     Q_ASSERT(!isScatter);
-                    bool change = !m_chartSubStreamHandler->m_currentSeries->m_datasetValue.contains(Charting::Value::HorizontalValues) || (m_chartSubStreamHandler->m_currentSeries->m_datasetValue[Charting::Value::HorizontalValues]->m_type == Charting::Value::TextOrValue && m_chartSubStreamHandler->m_currentSeries->m_datasetValue[Charting::Value::HorizontalValues]->m_formula.isEmpty());
-                    if (change)
-                        m_chartSubStreamHandler->m_currentSeries->m_domainValuesCellRangeAddress[isBubble ? 0 : 1] = cellRegion;
-                } else {
-                    if (m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress.isEmpty())
-                        m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress = cellRegion;
-                }
-            } break;
-            case 0x0003: { // Bubble sizes
-                if (isBubble) {
-                    if (m_chartSubStreamHandler->m_currentSeries->m_valuesCellRangeAddress.isEmpty())
-                        m_chartSubStreamHandler->m_currentSeries->m_valuesCellRangeAddress = cellRegion;
-                }
-            } break;
-            default:
-                break;
+        foreach(Charting::Series *series, m_chartSubStreamHandler->m_chart->m_series) {
+            switch (m_siIndex) {
+                case 0x0001: { // Series values or vertical values (for scatter or bubble chart groups)
+                    if (isBubble || isScatter) {
+                        bool change = !series->m_datasetValue.contains(Charting::Value::VerticalValues) || (series->m_datasetValue[Charting::Value::VerticalValues]->m_type == Charting::Value::TextOrValue && series->m_datasetValue[Charting::Value::VerticalValues]->m_formula.isEmpty());
+                        if (change) {
+                            if (isBubble) {
+                                QString y = series->m_domainValuesCellRangeAddress.isEmpty() ? QString() : series->m_domainValuesCellRangeAddress[0];
+                                series->m_domainValuesCellRangeAddress = QStringList() << y << cellRegion;
+                            } else if (isScatter) {
+                                series->m_domainValuesCellRangeAddress = QStringList() << cellRegion;
+                            }
+                            //m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress = cellRegion;
+                        }
+                    } else {
+                        if (series->m_valuesCellRangeAddress.isEmpty())
+                            series->m_valuesCellRangeAddress = cellRegion;
+                    }
+                } break;
+                case 0x0002: { // Category labels or horizontal values (for scatter or bubble chart groups)
+                    if (isBubble || isScatter) {
+                        bool change = !series->m_datasetValue.contains(Charting::Value::HorizontalValues) || (series->m_datasetValue[Charting::Value::HorizontalValues]->m_type == Charting::Value::TextOrValue && series->m_datasetValue[Charting::Value::HorizontalValues]->m_formula.isEmpty());
+                        if (change) {
+                            if (isBubble) {
+                                QString x = series->m_domainValuesCellRangeAddress.count() < 2 ? QString() : series->m_domainValuesCellRangeAddress[1];
+                                series->m_domainValuesCellRangeAddress = QStringList() << cellRegion << x;
+                            }
+                            //series->m_valuesCellRangeAddress = cellRegion;
+                        }
+                    } else {
+                        if (m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress.isEmpty())
+                            m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress = cellRegion;
+                    }
+                } break;
+                case 0x0003: { // Bubble sizes
+                    if (isBubble) {
+                        if (series->m_valuesCellRangeAddress.isEmpty())
+                            series->m_valuesCellRangeAddress = cellRegion;
+                    }
+                } break;
+                default:
+                    break;
+            }
         }
-#endif
     }
     void add(unsigned column, unsigned row) {
         QRect r(column, row, 1, 1);
@@ -518,14 +530,13 @@ void ChartSubStreamHandler::handleNumber(NumberRecord *record)
 
     // The formatting of the value doesn't really matter or does it? Well, maybe for data-value-label's that should be displayed as formatted?
     //m_xfTable[record->xfIndex()]
-#if 0
+
     Charting::Cell *cell = m_chart->m_internalTable.cell(record->column() + 1, record->row() + 1, true);
     cell->m_value = QString::number(record->number(), 'f');
     cell->m_valueType = "float";
 
     if (m_internalDataCache)
         m_internalDataCache->add(record->column(), record->row());
-#endif
 }
 
 // specifies a reference to data in a sheet that is used by a part of a series, legend entry, trendline or error bars.
