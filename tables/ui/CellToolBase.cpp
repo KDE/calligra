@@ -30,7 +30,7 @@
 #include "CellToolBase_p.h"
 
 // KSpread
-#include "AlignmentDockWidget.h"
+#include "ActionOptionWidget.h"
 #include "ApplicationSettings.h"
 #include "AutoFillStrategy.h"
 #include "CalculationSettings.h"
@@ -42,7 +42,6 @@
 #include "database/FilterPopup.h"
 #include "DragAndDropStrategy.h"
 #include "ExternalEditor.h"
-#include "FontDockWidget.h"
 #include "HyperlinkStrategy.h"
 #include "tests/inspector.h"
 #include "LocationComboBox.h"
@@ -132,6 +131,7 @@
 #include <KMessageBox>
 #include <KReplace>
 #include <KStandardAction>
+#include <KStandardDirs>
 #include <KToggleAction>
 
 // Qt
@@ -1132,8 +1132,34 @@ QList <QWidget*> CellToolBase::createOptionWidgets()
 {
     QList<QWidget *> widgets;
 
-    widgets.append(new FontDockWidget(this));
-    widgets.append(new AlignmentDockWidget(this));
+    QString xmlName = KStandardDirs::locate("appdata", "CellToolOptionWidgets.xml");
+    kDebug() << xmlName;
+    if (xmlName.isEmpty()) {
+        kWarning() << "couldn't find CellToolOptionWidgets.xml file";
+        return widgets;
+    }
+
+    QFile f(xmlName);
+    if (!f.open(QIODevice::ReadOnly)) {
+        kWarning() << "couldn't open CellToolOptionWidgets.xml file";
+        return widgets;
+    }
+
+    QDomDocument doc(QString::fromLatin1("optionWidgets"));
+    QString errorMsg;
+    int errorLine, errorCol;
+    if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
+        f.close();
+        kWarning() << "couldn't parse CellToolOptionWidgets.xml file:" << errorMsg << "on line" << errorLine << "column" << errorCol;
+        return widgets;
+    }
+    f.close();
+
+    QDomNodeList widgetNodes = doc.elementsByTagName("optionWidget");
+    for (int i = 0; i < widgetNodes.size(); i++) {
+        QDomElement e = widgetNodes.at(i).toElement();
+        widgets.append(new ActionOptionWidget(this, e));
+    }
 
     return widgets;
 }

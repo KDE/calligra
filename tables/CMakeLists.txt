@@ -114,8 +114,6 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
-    ui/AlignmentDockWidget.ui
-    ui/FontDockWidget.ui
     )
 
 SET (functions_DIR_SRCS
@@ -163,7 +161,7 @@ kde4_add_ui_files(part_DIR_SRCS
 
 SET (ui_DIR_SRCS
     ui/AbstractSelectionStrategy.cpp
-    ui/AlignmentDockWidget.cpp
+    ui/ActionOptionWidget.cpp
     ui/AutoFillStrategy.cpp
     ui/CellEditorBase.cpp
     ui/CellEditor.cpp
@@ -172,7 +170,6 @@ SET (ui_DIR_SRCS
     ui/CellToolBase_p.cpp
     ui/CellView.cpp
     ui/DragAndDropStrategy.cpp
-    ui/FontDockWidget.cpp
     ui/FormulaEditorHighlighter.cpp
     ui/FunctionCompletion.cpp
     ui/ExternalEditor.cpp
@@ -336,6 +333,7 @@ install(TARGETS calligratables  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install( FILES  tables.rc tables_readonly.rc tables.notifyrc DESTINATION ${DATA_INSTALL_DIR}/tables)
+install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/tables)
 install( FILES  tablespart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS  tables.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  tables.kcfg DESTINATION ${KCFG_INSTALL_DIR} )

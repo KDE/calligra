@@ -17,34 +17,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "FontDockWidget.h"
-#include "ui_FontDockWidget.h"
+#ifndef CALLIGRA_TABLES_ACTIONOPTIONWIDGET_H
+#define CALLIGRA_TABLES_ACTIONOPTIONWIDGET_H
 
-// Qt
+#include <QWidget>
 
-// KDE
-#include <KAction>
+class QDomElement;
 
-// Calligra
-
-// Calligra Tables
-#include "CellToolBase.h"
-
-using namespace Calligra::Tables;
-
-FontDockWidget::FontDockWidget(CellToolBase* cellTool, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui_FontDockWidget)
+namespace Calligra
 {
-    ui->setupUi(this);
-    ui->boldButton->setDefaultAction(cellTool->action("bold"));
-    ui->italicsButton->setDefaultAction(cellTool->action("italic"));
-    ui->underlineButton->setDefaultAction(cellTool->action("underline"));
-    ui->increaseFontButton->setDefaultAction(cellTool->action("increaseFontSize"));
-    ui->decreaseFontButton->setDefaultAction(cellTool->action("decreaseFontSize"));
+namespace Tables
+{
+class CellToolBase;
+
+class ActionOptionWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit ActionOptionWidget(CellToolBase* cellTool, const QDomElement& e, QWidget *parent = 0);
+
+signals:
+
+public slots:
+private:
+};
+
+}
 }
 
-FontDockWidget::~FontDockWidget()
-{
-    delete ui;
-}
+#endif // CALLIGRA_TABLES_ACTIONOPTIONWIDGET_H
