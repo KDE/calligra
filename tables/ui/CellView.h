@@ -235,7 +235,8 @@ protected:
      * @internal
      */
     void paintCustomBorders(QPainter& painter, const QRectF &paintRegion,
-                            const QPointF& coordinate, Borders paintBorder) const;
+                            const QPointF& coordinate, Borders paintBorder,
+                            bool rtl) const;
 
     /**
      * helper function for paintCell() function
