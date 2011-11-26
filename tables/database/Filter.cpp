@@ -48,6 +48,8 @@ public:
     virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
     virtual QString dump() const = 0;
+
+    static bool listsAreEqual(const QList<AbstractCondition*>& a, const QList<AbstractCondition*>& b);
 };
 
 /**
@@ -103,7 +105,7 @@ public:
         list = newList;
     }
     bool operator!=(const And& other) const {
-        return list != other.list;
+        return !listsAreEqual(list, other.list);
     }
     virtual QString dump() const {
         QString result = "\t";
@@ -172,7 +174,7 @@ public:
         list = newList;
     }
     bool operator!=(const Or& other) const {
-        return list != other.list;
+        return !listsAreEqual(list, other.list);
     }
     virtual QString dump() const {
         QString result = "\t";
@@ -726,6 +728,21 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
     xmlWriter.endElement();
 }
 
+bool Filter::conditionsEquals(AbstractCondition* a, AbstractCondition* b)
+{
+    if (!a || !b)
+        return a == b;
+    if (a->type() != b->type())
+        return false;
+    if (a->type() == AbstractCondition::And && *static_cast<And*>(a) != *static_cast<And*>(b))
+        return false;
+    if (a->type() == AbstractCondition::Or && *static_cast<Or*>(a) != *static_cast<Or*>(b))
+        return false;
+    if (a->type() == AbstractCondition::Condition && *static_cast<Condition*>(a) != *static_cast<Condition*>(b))
+        return false;
+    return true;
+}
+
 bool Filter::operator==(const Filter& other) const
 {
     if (d->targetRangeAddress != other.d->targetRangeAddress)
@@ -736,20 +753,7 @@ bool Filter::operator==(const Filter& other) const
         return false;
     if (d->displayDuplicates != other.d->displayDuplicates)
         return false;
-    if (!d->condition || !other.d->condition)
-        return d->condition == other.d->condition;
-    if (d->condition->type() != other.d->condition->type())
-        return false;
-    if (d->condition->type() == AbstractCondition::And &&
-            *static_cast<And*>(d->condition) != *static_cast<And*>(other.d->condition))
-        return false;
-    if (d->condition->type() == AbstractCondition::Or &&
-            *static_cast<Or*>(d->condition) != *static_cast<Or*>(other.d->condition))
-        return false;
-    if (d->condition->type() == AbstractCondition::Condition &&
-            *static_cast<Condition*>(d->condition) != *static_cast<Condition*>(other.d->condition))
-        return false;
-    return true;
+    return conditionsEquals(d->condition, other.d->condition);
 }
 
 void Filter::dump() const
@@ -758,4 +762,14 @@ void Filter::dump() const
         kDebug() << "Condition:" + d->condition->dump();
     else
         kDebug() << "Condition: 0";
+}
+
+bool AbstractCondition::listsAreEqual(const QList<AbstractCondition *> &a, const QList<AbstractCondition *> &b)
+{
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); i++) {
+        if (!Filter::conditionsEquals(a[i], b[i]))
+            return false;
+    }
+    return true;
 }
