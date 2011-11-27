@@ -261,3 +261,8 @@ KexiProjectData::List KexiRecentProjects::list() const
     d->load();
     return KexiProjectSet::list();
 }
+
+QString KexiRecentProjects::shortcutPath(const KexiProjectData& data) const
+{
+    return d->shortcutPaths.value(const_cast<KexiProjectData*>(&data));
+}

@@ -1640,6 +1640,20 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     return true;
 }
 
+tristate KexiMainWindow::openProject(const KexiProjectData& data, const QString& shortcutPath,
+                                     bool *opened)
+{
+    if (!shortcutPath.isEmpty() && d->prj) {
+        const tristate result = openProjectInExternalKexiInstance(
+            shortcutPath, QString(), QString());
+        if (result == true) {
+            *opened = true;
+        }
+        return result;
+    }
+    return openProject(data);
+}
+
 tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projectData)
 {
     QStringList mimetypes;
@@ -3364,8 +3378,8 @@ void KexiMainWindow::slotProjectWelcome()
     d->tabbedToolBar->showMainMenu("project_welcome");
     KexiWelcomeAssistant* assistant = new KexiWelcomeAssistant(
         Kexi::recentProjects());
-    connect(assistant, SIGNAL(openProject(KexiProjectData)), 
-            this, SLOT(openProject(KexiProjectData)));
+    connect(assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)), 
+            this, SLOT(openProject(KexiProjectData,QString,bool*)));
     d->tabbedToolBar->setMainMenuContent(assistant);
 }
 

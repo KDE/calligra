@@ -490,23 +490,25 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                         m_projectData = 0;
                         return false;
                     }
-                    d->connDialog = new KexiDBConnectionDialog(0,
-                            *m_projectData, d->shortcutFileName);
-                    connect(d->connDialog, SIGNAL(saveChanges()),
-                            this, SLOT(slotSaveShortcutFileChanges()));
-                    int res = d->connDialog->exec();
-                    if (res == QDialog::Accepted) {
-                        //get (possibly changed) prj data
-                        *m_projectData = d->connDialog->currentProjectData();
-                    }
+                    if (m_projectData->databaseName().isEmpty()) {
+                        d->connDialog = new KexiDBConnectionDialog(0,
+                                *m_projectData, d->shortcutFileName);
+                        connect(d->connDialog, SIGNAL(saveChanges()),
+                                this, SLOT(slotSaveShortcutFileChanges()));
+                        int res = d->connDialog->exec();
+                        if (res == QDialog::Accepted) {
+                            //get (possibly changed) prj data
+                            *m_projectData = d->connDialog->currentProjectData();
+                        }
 
-                    delete d->connDialog;
-                    d->connDialog = 0;
+                        delete d->connDialog;
+                        d->connDialog = 0;
 
-                    if (res == QDialog::Rejected) {
-                        delete m_projectData;
-                        m_projectData = 0;
-                        return cancelled;
+                        if (res == QDialog::Rejected) {
+                            delete m_projectData;
+                            m_projectData = 0;
+                            return cancelled;
+                        }
                     }
                 } else if (cdata.driverName == "connection") {
                     //get information for a connection file

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -325,6 +325,14 @@ public slots:
 
     /*! Helper. Opens project pointed by \a aFileName. */
     tristate openProject(const QString& aFileName);
+
+    /*! Opens project referenced by @a data.
+     If @a shortcutPath is a empty .kexis filename and there is another project opened,
+     a new instance of Kexi is started with the .kexis file as argument. 
+     Value pointed by @a opened is set to true if the database has been opened successfully.
+     @return true on successful opening, cancelled if the operation was cancelled
+     and false on failure.*/
+    tristate openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
 
     /*! Creates a new project usign template pointed by \a projectData.
      Application state (e.g. actions) is updated.
