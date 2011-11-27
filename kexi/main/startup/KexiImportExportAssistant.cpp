@@ -40,6 +40,9 @@ KexiMainImportExportPage::KexiMainImportExportPage(
     setupUi(contents);
     btn_import->setText(stripText(assistant->action_import_project->text()));
     btn_import->setDescription(assistant->action_import_project->toolTip());
+    int dsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+    btn_import->setIcon(assistant->action_import_project->icon());
+    btn_import->setIconSize(QSize(dsize, dsize));
     connect(btn_import, SIGNAL(clicked()), assistant, SIGNAL(importProject()));
 
     setFocusWidget(contents);

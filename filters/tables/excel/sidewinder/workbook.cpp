@@ -42,6 +42,7 @@ public:
     MSO::OfficeArtDggContainer* dggContainer;
     QList<QColor> colorTable;
     Version version;
+    QMap<QByteArray, QString> pictureNames; // uid, filename
 };
 
 Workbook::Workbook(KoStore* store)
@@ -285,6 +286,18 @@ void Workbook::setVersion(Version ver)
 {
     d->version = ver;
 }
+
+void Workbook::setPictureNames(const QMap< QByteArray, QString > pictureNames)
+{
+    d->pictureNames = pictureNames;
+}
+
+
+QString Workbook::pictureName(const QByteArray& uid) const
+{
+    return d->pictureNames.value(uid);
+}
+
 
 #ifdef SWINDER_XLS2RAW
 void Workbook::dumpStats()

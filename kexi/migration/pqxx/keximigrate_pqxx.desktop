@@ -62,6 +62,7 @@ Comment[pt_BR]=Plugin de Importação do PostgreSQL para o Kexi
 Comment[sv]=PostgreSQL importinsticksprogram för Kexi
 Comment[uk]=Додаток імпортування даних з PostgreSQL для Kexi
 Comment[x-test]=xxPostgreSQL Import Plugin for Kexixx
+Comment[zh_CN]=Kexi PostgreSQL 导入插件
 Comment[zh_TW]=Kexi 的 PostgreSQL 匯入外掛程式
 X-KDE-Library=keximigrate_pqxx
 X-KDE-ServiceTypes=Kexi/MigrationDriver

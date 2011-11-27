@@ -35,7 +35,7 @@
 
 using namespace Calligra::Tables;
 
-class AbstractCondition
+class Calligra::Tables::AbstractCondition
 {
 public:
     virtual ~AbstractCondition() {}
@@ -48,6 +48,8 @@ public:
     virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
     virtual QString dump() const = 0;
+
+    static bool listsAreEqual(const QList<AbstractCondition*>& a, const QList<AbstractCondition*>& b);
 };
 
 /**
@@ -58,6 +60,7 @@ class Filter::And : public AbstractCondition
 public:
     And() {}
     And(const And& other);
+    And& operator=(const And& other);
     virtual ~And() {
         qDeleteAll(list);
     }
@@ -102,7 +105,7 @@ public:
         list = newList;
     }
     bool operator!=(const And& other) const {
-        return list != other.list;
+        return !listsAreEqual(list, other.list);
     }
     virtual QString dump() const {
         QString result = "\t";
@@ -126,6 +129,7 @@ class Filter::Or : public AbstractCondition
 public:
     Or() {}
     Or(const Or& other);
+    Or& operator=(const Or& other);
     virtual ~Or() {
         qDeleteAll(list);
     }
@@ -170,7 +174,7 @@ public:
         list = newList;
     }
     bool operator!=(const Or& other) const {
-        return list != other.list;
+        return !listsAreEqual(list, other.list);
     }
     virtual QString dump() const {
         QString result = "\t";
@@ -214,6 +218,7 @@ public:
             , caseSensitivity(other.caseSensitivity)
             , dataType(other.dataType) {
     }
+    Condition& operator=(const Condition& other);
     virtual ~Condition() {}
 
     virtual Type type() const {
@@ -377,18 +382,21 @@ public:
             this->fieldNumber = -1;
         }
     }
-    bool operator!=(const Condition& other) const {
-        if (fieldNumber == other.fieldNumber)
+    bool operator==(const Condition& other) const {
+        if (fieldNumber != other.fieldNumber)
             return false;
-        if (value == other.value)
+        if (value != other.value)
             return false;
-        if (operation == other.operation)
+        if (operation != other.operation)
             return false;
-        if (caseSensitivity == other.caseSensitivity)
+        if (caseSensitivity != other.caseSensitivity)
             return false;
-        if (dataType == other.dataType)
+        if (dataType != other.dataType)
             return false;
         return true;
+    }
+    bool operator!=(const Condition& other) const {
+        return !operator==(other);
     }
     virtual QString dump() const {
         QString result = QString("fieldNumber: %1 ").arg(fieldNumber);
@@ -415,7 +423,7 @@ Filter::And::And(const And& other)
         if (!other.list[i])
             continue;
         else if (other.list[i]->type() == AbstractCondition::And)
-            continue;
+            list.append(new Filter::And(*static_cast<Filter::And*>(other.list[i])));
         else if (other.list[i]->type() == AbstractCondition::Or)
             list.append(new Filter::Or(*static_cast<Filter::Or*>(other.list[i])));
         else
@@ -453,7 +461,7 @@ Filter::Or::Or(const Or& other)
         else if (other.list[i]->type() == AbstractCondition::And)
             list.append(new Filter::And(*static_cast<Filter::And*>(other.list[i])));
         else if (other.list[i]->type() == AbstractCondition::Or)
-            continue;
+            list.append(new Filter::Or(*static_cast<Filter::Or*>(other.list[i])));
         else
             list.append(new Filter::Condition(*static_cast<Filter::Condition*>(other.list[i])));
     }
@@ -553,6 +561,23 @@ void Filter::addCondition(Composition composition,
     }
 }
 
+QList<AbstractCondition*> Filter::copyList(const QList<AbstractCondition*>& list)
+{
+    QList<AbstractCondition*> out;
+    foreach (AbstractCondition* c, list) {
+        if (!c) {
+            continue;
+        } else if (c->type() == AbstractCondition::And) {
+            out.append(new Filter::And(*static_cast<Filter::And*>(c)));
+        } else if (c->type() == AbstractCondition::Or) {
+            out.append(new Filter::Or(*static_cast<Filter::Or*>(c)));
+        } else {
+            out.append(new Filter::Condition(*static_cast<Filter::Condition*>(c)));
+        }
+    }
+    return out;
+}
+
 void Filter::addSubFilter(Composition composition, const Filter& filter)
 {
     if (!d->condition) {
@@ -567,7 +592,7 @@ void Filter::addSubFilter(Composition composition, const Filter& filter)
     } else if (composition == AndComposition) {
         if (filter.d->condition && d->condition->type() == AbstractCondition::And) {
             if (filter.d->condition->type() == AbstractCondition::And)
-                static_cast<And*>(d->condition)->list += static_cast<And*>(filter.d->condition)->list;
+                static_cast<And*>(d->condition)->list += copyList(static_cast<And*>(filter.d->condition)->list);
             else if (filter.d->condition->type() == AbstractCondition::Or)
                 static_cast<And*>(d->condition)->list.append(new Or(*static_cast<Or*>(filter.d->condition)));
             else // if (filter.d->condition->type() == AbstractCondition::Condition)
@@ -576,7 +601,7 @@ void Filter::addSubFilter(Composition composition, const Filter& filter)
             And* andComposition = new And();
             andComposition->list.append(d->condition);
             if (filter.d->condition->type() == AbstractCondition::And)
-                andComposition->list += static_cast<And*>(filter.d->condition)->list;
+                andComposition->list += copyList(static_cast<And*>(filter.d->condition)->list);
             else if (filter.d->condition->type() == AbstractCondition::Or)
                 andComposition->list.append(new Or(*static_cast<Or*>(filter.d->condition)));
             else // if (filter.d->condition->type() == AbstractCondition::Condition)
@@ -588,7 +613,7 @@ void Filter::addSubFilter(Composition composition, const Filter& filter)
             if (filter.d->condition->type() == AbstractCondition::And)
                 static_cast<Or*>(d->condition)->list.append(new And(*static_cast<And*>(filter.d->condition)));
             else if (filter.d->condition->type() == AbstractCondition::Or)
-                static_cast<Or*>(d->condition)->list += static_cast<Or*>(filter.d->condition)->list;
+                static_cast<Or*>(d->condition)->list += copyList(static_cast<Or*>(filter.d->condition)->list);
             else // if (filter.d->condition->type() == AbstractCondition::Condition)
                 static_cast<Or*>(d->condition)->list.append(new Condition(*static_cast<Condition*>(filter.d->condition)));
         } else if (filter.d->condition) {
@@ -597,7 +622,7 @@ void Filter::addSubFilter(Composition composition, const Filter& filter)
             if (filter.d->condition->type() == AbstractCondition::And)
                 orComposition->list.append(new And(*static_cast<And*>(filter.d->condition)));
             else if (filter.d->condition->type() == AbstractCondition::Or)
-                orComposition->list += static_cast<Or*>(filter.d->condition)->list;
+                orComposition->list += copyList(static_cast<Or*>(filter.d->condition)->list);
             else // if (filter.d->condition->type() == AbstractCondition::Condition)
                 orComposition->list.append(new Condition(*static_cast<Condition*>(filter.d->condition)));
             d->condition = orComposition;
@@ -703,6 +728,21 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
     xmlWriter.endElement();
 }
 
+bool Filter::conditionsEquals(AbstractCondition* a, AbstractCondition* b)
+{
+    if (!a || !b)
+        return a == b;
+    if (a->type() != b->type())
+        return false;
+    if (a->type() == AbstractCondition::And && *static_cast<And*>(a) != *static_cast<And*>(b))
+        return false;
+    if (a->type() == AbstractCondition::Or && *static_cast<Or*>(a) != *static_cast<Or*>(b))
+        return false;
+    if (a->type() == AbstractCondition::Condition && *static_cast<Condition*>(a) != *static_cast<Condition*>(b))
+        return false;
+    return true;
+}
+
 bool Filter::operator==(const Filter& other) const
 {
     if (d->targetRangeAddress != other.d->targetRangeAddress)
@@ -713,20 +753,7 @@ bool Filter::operator==(const Filter& other) const
         return false;
     if (d->displayDuplicates != other.d->displayDuplicates)
         return false;
-    if (!d->condition || !other.d->condition)
-        return d->condition == other.d->condition;
-    if (d->condition->type() != other.d->condition->type())
-        return false;
-    if (d->condition->type() == AbstractCondition::And &&
-            *static_cast<And*>(d->condition) != *static_cast<And*>(other.d->condition))
-        return false;
-    if (d->condition->type() == AbstractCondition::Or &&
-            *static_cast<Or*>(d->condition) != *static_cast<Or*>(other.d->condition))
-        return false;
-    if (d->condition->type() == AbstractCondition::Condition &&
-            *static_cast<Condition*>(d->condition) != *static_cast<Condition*>(other.d->condition))
-        return false;
-    return true;
+    return conditionsEquals(d->condition, other.d->condition);
 }
 
 void Filter::dump() const
@@ -735,4 +762,14 @@ void Filter::dump() const
         kDebug() << "Condition:" + d->condition->dump();
     else
         kDebug() << "Condition: 0";
+}
+
+bool AbstractCondition::listsAreEqual(const QList<AbstractCondition *> &a, const QList<AbstractCondition *> &b)
+{
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); i++) {
+        if (!Filter::conditionsEquals(a[i], b[i]))
+            return false;
+    }
+    return true;
 }

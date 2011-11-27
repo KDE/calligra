@@ -120,7 +120,7 @@ bool KexiDBReportData::getSchema()
         else if ( m_connection->querySchema ( m_qstrQuery ) )
         {
             kDebug() << m_qstrQuery <<  " is a query..";
-            m_originalSchema = m_connection->querySchema ( m_qstrQuery );
+            m_originalSchema = new KexiDB::QuerySchema(*(m_connection->querySchema ( m_qstrQuery )));
         }
 
         if (m_originalSchema) {

@@ -31,6 +31,8 @@
 #include "conditionals.h"
 #include <QPoint>
 
+#include "database/Filter.h"
+
 //#define SWINDER_XLS2RAW
 
 namespace Swinder
@@ -66,6 +68,7 @@ public:
     MSO::OfficeArtDgContainer* lastDrawingObject;
     MSO::OfficeArtSpgrContainer* lastGroupObject;
     OfficeArtObject* lastOfficeArtObject;
+    quint32 officeArtObjectCounter;
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
@@ -85,6 +88,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->lastDrawingObject = 0;
     d->lastGroupObject = 0;
     d->lastOfficeArtObject = 0;
+    d->officeArtObjectCounter = 0;
     d->curConditionalFormat = 0;
 }
 
@@ -236,6 +240,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleCondFmtRecord(static_cast<CondFmtRecord*>(record));
     else if (type == CFRecord::id)
         handleCFRecord(static_cast<CFRecord*>(record));
+    else if (type == AutoFilterRecord::id)
+        handleAutoFilterRecord(static_cast<AutoFilterRecord*>(record));
     else {
         //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -773,17 +779,9 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     if (record->m_object && d->lastDrawingObject && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
         handled = true;
         switch (record->m_object->type()) {
+            // Note: let's handle Pictures as OfficeArtObject, not as PictureObject
             case Object::Picture: {
-                MsoDrawingBlibItem *drawing = d->globals->drawing(record->m_object->id());
-                if(!drawing) {
-                    std::cerr << "WorksheetSubStreamHandler: Skipping unknown object of type=" << record->m_object->type() << " with id=" << record->m_object->id() << std::endl;
-                    return;
-                }
-                PictureObject* pic = dynamic_cast<PictureObject*>(record->m_object);
-                Q_ASSERT(pic);
-                pic->setFileName(drawing->m_picture.name);
-                Cell *cell = d->sheet->cell(record->m_object->m_colL, record->m_object->m_rwT);
-                cell->addPicture(pic);//(record->m_object, drawing->m_picture);
+                handled = false;
             } break;
             case Object::Chart: {
                 d->charts.push_back(id);
@@ -810,12 +808,12 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                         qDebug() << "invalid client anchor";
                     } else {
                         Cell *cell = d->sheet->cell(anchor->colL, anchor->rwT);
-                        OfficeArtObject* obj = new OfficeArtObject(o);
+                        OfficeArtObject* obj = new OfficeArtObject(o, d->officeArtObjectCounter++);
                         cell->addDrawObject(obj);
                         d->lastOfficeArtObject = obj;
                     }
                 } else {
-                    OfficeArtObject* obj = new OfficeArtObject(o);
+                    OfficeArtObject* obj = new OfficeArtObject(o, d->officeArtObjectCounter++);
                     d->sheet->addDrawObject(obj, d->lastGroupObject);
                     d->lastOfficeArtObject = obj;
 
@@ -828,10 +826,10 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
             }
         }
     }
-    
+
     if (record->m_object) d->sharedObjects[id] = record->m_object;
     record->m_object = 0; // take over ownership
-     
+
     delete d->lastDrawingObject;
     d->lastDrawingObject = 0;
 }
@@ -892,6 +890,7 @@ void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)
     d->sheet->setShowZeroValues(record->isFDspZerosRt());
     d->sheet->setFirstVisibleCell(QPoint(record->colLeft(),record->rwTop()));
     d->sheet->setPageBreakViewEnabled(record->isFSLV());
+    d->sheet->setRightToLeft(record->isFRightToLeft());
 }
 
 void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
@@ -1126,6 +1125,81 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
     }
 
     d->curConditionalFormat->addConditional(c);
+}
+
+void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord *record)
+{
+    Calligra::Tables::Filter filter;
+
+    int fieldNumber = record->entry();
+
+    if (record->isTopN()) {
+        // TODO: top-N filters
+    } else {
+        Calligra::Tables::Filter::Composition compos =
+            record->join() == AutoFilterRecord::JoinAnd ?
+                Calligra::Tables::Filter::AndComposition :
+                Calligra::Tables::Filter::OrComposition;
+
+        for (int i = 0; i < 2; i++) {
+            Calligra::Tables::Filter::Comparison compar = Calligra::Tables::Filter::Match;
+            switch (record->operation(i)) {
+                case AutoFilterRecord::Less:
+                    compar = Calligra::Tables::Filter::Less;
+                    break;
+                case AutoFilterRecord::Equal:
+                    compar = Calligra::Tables::Filter::Match;
+                    break;
+                case AutoFilterRecord::LEqual:
+                    compar = Calligra::Tables::Filter::LessOrEqual;
+                    break;
+                case AutoFilterRecord::Greater:
+                    compar = Calligra::Tables::Filter::Greater;
+                    break;
+                case AutoFilterRecord::NotEqual:
+                    compar = Calligra::Tables::Filter::NotMatch;
+                    break;
+                case AutoFilterRecord::GEqual:
+                    compar = Calligra::Tables::Filter::GreaterOrEqual;
+                    break;
+            }
+
+            switch (record->valueType(i)) {
+                case AutoFilterRecord::RkNumber: {
+                    bool isInt;
+                    int iv; double dv;
+                    decodeRK(record->rkValue(i), isInt, iv, dv);
+                    if (isInt) dv = iv;
+                    filter.addCondition(compos, fieldNumber, compar, QString::number(dv),
+                        Qt::CaseInsensitive, Calligra::Tables::Filter::Number);
+                    break;
+                }
+                case AutoFilterRecord::XNumber:
+                    filter.addCondition(compos, fieldNumber, compar, QString::number(record->floatValue(i)),
+                        Qt::CaseInsensitive, Calligra::Tables::Filter::Number);
+                    break;
+                case AutoFilterRecord::String:
+                    filter.addCondition(compos, fieldNumber, compar, record->string(i));
+                    break;
+                case AutoFilterRecord::BoolErr:
+                    // TODO
+                    break;
+                case AutoFilterRecord::Blanks:
+                    filter.addCondition(compos, fieldNumber, Calligra::Tables::Filter::Match, "");
+                    break;
+                case AutoFilterRecord::NonBlanks:
+                    filter.addCondition(compos, fieldNumber, Calligra::Tables::Filter::NotMatch, "");
+                    break;
+                case AutoFilterRecord::UndefinedType:
+                default:
+                    break;
+            }
+        }
+    }
+
+    Calligra::Tables::Filter oldFilter = d->sheet->autoFilters();
+    oldFilter.addSubFilter(Calligra::Tables::Filter::AndComposition, filter);
+    d->sheet->setAutoFilters(oldFilter);
 }
 
 } // namespace Swinder

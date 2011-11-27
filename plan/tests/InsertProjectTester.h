@@ -26,27 +26,36 @@ namespace KPlato
 {
 
 class Part;
+class Account;
+class Resource;
+class Task;
+class Relation;
+class Calendar;
 
 class InsertProjectTester : public QObject
 {
     Q_OBJECT
 private slots:
-    void init();
+    void testAccount();
     void testCalendar();
+    void testDefaultCalendar();
     void testResourceGroup();
     void testResource();
+    void testResourceAccount();
     void testTask();
     void testGroupRequest();
     void testResourceRequest();
+    void testDependencies();
 
 private:
-    void addCalendar( Part &part );
+    Account *addAccount( Part &part, Account *parent = 0 );
+    Calendar *addCalendar( Part &part );
     void addResourceGroup( Part &part );
-    void addResource( Part &part );
-    void addTask( Part &part );
+    Resource *addResource( Part &part );
+    Task *addTask( Part &part );
     void addGroupRequest( Part &part );
     void addResourceRequest( Part &part );
-
+    Relation *addDependency( Part &part, Task *t1, Task *t2 );
 };
 
 }

@@ -7,14 +7,14 @@
     <xsl:template match="KSpreadFunctions">
         <xsl:element name="functions">
             <xsl:attribute name="xmlns">
-                <xsl:text>http://www.calligra-suite.org/standards/kspread/functions/1.0</xsl:text>
+                <xsl:text>http://www.calligra.org/standards/kspread/functions/1.0</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="xmlns:xsi">
                 <xsl:text>http://www.w3.org/2001/XMLSchema-instance</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="xsi:schemaLocation">
-                <xsl:text>http://www.calligra-suite.org/standards/kspread/functions/1.0
-                http://www.calligra-suite.org/standards/kspread/functions/1.0/functions.xsd</xsl:text>
+                <xsl:text>http://www.calligra.org/standards/kspread/functions/1.0
+                http://www.calligra.org/standards/kspread/functions/1.0/functions.xsd</xsl:text>
             </xsl:attribute>
             <xsl:for-each select="Group">
                 <xsl:element name="group">

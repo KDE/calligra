@@ -1609,17 +1609,16 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
             }
         }
         //default value doesn't make sense
-        quint16 fontRef;
         if (i.pf.fBulletHasFont()) {
-            fontRef = i.pf.bulletFontRef();
+            quint16 fontRef = i.pf.bulletFontRef();
+            //MSPowerPoint: UI does not enable to change font of a numbered lists.
+            const MSO::FontEntityAtom* font = getFont(fontRef);
+            if (font && !i.pf.fBulletHasAutoNumber()) {
+                QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
+                ts.addProperty("fo:font-family", family, text);
+            }
         }
 
-        //MSPowerPoint: UI does not enable to change font of a numbered lists.
-        const MSO::FontEntityAtom* font = getFont(fontRef);
-        if (font && !i.pf.fBulletHasAutoNumber()) {
-            QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
-            ts.addProperty("fo:font-family", family, text);
-        }
         //MSPowerPoint: A label does NOT inherit Underline from text-properties
         //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
         if (!i.pf.fBulletHasAutoNumber()) {

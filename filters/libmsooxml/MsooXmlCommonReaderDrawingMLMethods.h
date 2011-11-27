@@ -207,6 +207,7 @@ KoFilter::ConversionStatus read_bodyPr();
 KoFilter::ConversionStatus read_normAutofit();
 KoFilter::ConversionStatus read_spAutoFit();
 
+KoFilter::ConversionStatus read_masterClrMapping();
 KoFilter::ConversionStatus read_overrideClrMapping();
 
 //! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()

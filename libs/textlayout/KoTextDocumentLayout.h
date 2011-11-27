@@ -69,7 +69,8 @@ public:
             : viewConverter(0)
             , imageCollection(0)
             , showFormattingCharacters(false)
-            , background(Qt::transparent)
+            , showSpellChecking(false)
+            , background(Qt::white)
         {
         }
 
