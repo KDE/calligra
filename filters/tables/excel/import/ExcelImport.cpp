@@ -531,6 +531,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
     os->setShowPageBorders(is->isPageBreakViewEnabled());
     os->setLcMode(false);
     os->setShowColumnNumber(false);
+    os->setLayoutDirection(is->isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight);
 
     // TODO: page layout
     processSheetForHeaderFooter(is, os);
