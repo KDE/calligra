@@ -36,9 +36,6 @@ class ActionOptionWidget : public QWidget
 public:
     explicit ActionOptionWidget(CellToolBase* cellTool, const QDomElement& e, QWidget *parent = 0);
 
-signals:
-
-public slots:
 private:
 };
 

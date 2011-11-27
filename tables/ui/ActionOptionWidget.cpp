@@ -227,8 +227,15 @@ int GroupFlowLayout::doLayout(const QRect &rect, bool testOnly) const
             lineHeight = 0;
         }
 
-        if (!testOnly)
-            item->setGeometry(QRect(QPoint(x, y), item->sizeHint()));
+        if (!testOnly) {
+            QSize s = item->sizeHint();
+            if (nextX - spaceX > effectiveRect.right()) {
+                QSize minSize = item->minimumSize();
+                int neededW = effectiveRect.right() - x;
+                s.setWidth(qMax(neededW, minSize.width()));
+            }
+            item->setGeometry(QRect(QPoint(x, y), s));
+        }
 
         x = nextX;
         lineHeight = qMax(lineHeight, item->sizeHint().height());
