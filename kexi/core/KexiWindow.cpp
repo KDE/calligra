@@ -23,7 +23,6 @@
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
 
-#include "kexicontexthelp_p.h"
 #include "kexipart.h"
 #include "kexistaticpart.h"
 #include "kexipartitem.h"
@@ -100,7 +99,7 @@ public:
     Kexi::ViewMode currentViewMode;
 
 //  KexiMainWindow *parentWindow;
-#ifdef KEXI_NO_CTXT_HELP
+#ifndef KEXI_NO_CTXT_HELP
     KexiContextHelpInfo *contextHelpInfo;
 #endif
     int id;

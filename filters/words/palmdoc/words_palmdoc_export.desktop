@@ -18,6 +18,7 @@ Name[ru]=Фильтр экспорта документов Words в Palm Doc
 Name[sv]=Words-exportfilter för Palm-dokument
 Name[uk]=Фільтр експорту Palm Doc для Words
 Name[x-test]=xxWords Palm Doc Export Filterxx
+Name[zh_CN]=Words Palm 文档导出过滤器
 Name[zh_TW]=Words Palm Doc 匯出過濾程式
 X-KDE-Export=application/vnd.palm
 X-KDE-Import=application/x-words

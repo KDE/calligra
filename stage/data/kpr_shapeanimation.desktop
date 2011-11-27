@@ -16,6 +16,7 @@ Comment[pt_BR]=Plugin de animação de formas para o Calligra Stage
 Comment[sv]=Insticksprogram med animeringsåtgärderför Calligra Stage
 Comment[uk]=Додаток анімації форм для Calligra Stage
 Comment[x-test]=xxShape animation plugin for Calligra Stagexx
+Comment[zh_CN]=Calligra Stage 形状动画插件
 Comment[zh_TW]=Calligra Stage 元件動畫外掛程式
 [PropertyDef::X-KPresenter-Version]
 Type=int

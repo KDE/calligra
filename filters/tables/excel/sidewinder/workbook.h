@@ -29,6 +29,7 @@
 
 class KoStore;
 
+
 namespace MSO {
     class OfficeArtDggContainer;
 }
@@ -90,6 +91,7 @@ public:
     Sheet* sheet(unsigned index);
 
     enum PropertyType {
+        PIDSI_CODEPAGE = 0x01,
         PIDSI_TITLE = 0x02,
         PIDSI_SUBJECT = 0x03,
         PIDSI_AUTHOR = 0x04,
@@ -131,6 +133,9 @@ public:
 
     void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
     MSO::OfficeArtDggContainer* officeArtDggContainer() const;
+
+    void setPictureNames(const QMap<QByteArray, QString> pictureNames);
+    QString pictureName(const QByteArray& uid) const;
 
     void setColorTable(const QList<QColor>& colorTable);
     QList< QColor > colorTable() const;

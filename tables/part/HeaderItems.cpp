@@ -421,6 +421,14 @@ void ColumnHeaderItem::toolChanged(const QString& toolId)
     doToolChanged(toolId);
 }
 
+void ColumnHeaderItem::scroll(qreal x, qreal y)
+{
+    if (m_pCanvas->layoutDirection() == Qt::RightToLeft) {
+        QGraphicsWidget::scroll(-x, y);
+    } else {
+        QGraphicsWidget::scroll(x, y);
+    }
+}
 
 /****************************************************************
  *

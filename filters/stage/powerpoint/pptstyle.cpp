@@ -703,6 +703,14 @@ int PptTextCFRun::addCurrentCFRun(const TextContainer* tc, quint32 start, quint3
     return n;
 }
 
+void PptTextCFRun::removeCurrentCFRun()
+{
+    if (!cfs.isEmpty()) {
+        cfs.removeFirst() ;
+        m_cfrun_rm = false;
+    }
+}
+
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \

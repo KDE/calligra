@@ -24,12 +24,12 @@
 #include "sheet.h"
 #include "workbook.h"
 
-#ifndef __GNUC__ 
+#ifndef __GNUC__
   #define __PRETTY_FUNCTION__ __FUNCTION__
 #endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
 
 ODrawClient::ODrawClient(Swinder::Sheet* sheet)
-    : m_sheet(sheet)
+    : m_sheet(sheet), m_zIndex(0)
 {
 }
 
@@ -111,8 +111,23 @@ QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor
 
 QString ODrawClient::getPicturePath(const quint32 pib)
 {
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    Q_UNUSED(pib);
+    quint32 offset = 0;
+    if (!m_sheet->workbook()->officeArtDggContainer()) {
+        return QString();
+    }
+
+    QByteArray rgbUid = getRgbUid(*m_sheet->workbook()->officeArtDggContainer(), pib, offset);
+
+    QString fileName;
+    if (rgbUid.isEmpty()) {
+        qDebug() << "Object in blipStore with pib: " << pib << "was not found.";
+    }else {
+        fileName = m_sheet->workbook()->pictureName(rgbUid);
+    }
+
+    if (!fileName.isEmpty()){
+        return "Pictures/" + fileName;
+    }
     return QString();
 }
 
@@ -204,6 +219,8 @@ void ODrawClient::addTextStyles(const quint16 msospt,
     Q_UNUSED(msospt);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
+
+    setZIndexAttribute(out);
 }
 
 const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
@@ -234,4 +251,10 @@ QString ODrawClient::formatPos(qreal v)
 void ODrawClient::setShapeText(const Swinder::TxORecord &text)
 {
     m_shapeText = text;
+}
+
+void ODrawClient::setZIndexAttribute(Writer& out)
+{
+    out.xml.addAttribute("draw:z-index", m_zIndex);
+    m_zIndex++;
 }

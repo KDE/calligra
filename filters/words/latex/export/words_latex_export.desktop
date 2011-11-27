@@ -23,6 +23,7 @@ Name[ru]=Фильтр экспорта документов Words в LaTeX
 Name[sv]=Words Latex-exportfilter
 Name[uk]=Фільтр експорту LATEX для Words
 Name[x-test]=xxWords LATEX Export Filterxx
+Name[zh_CN]=Words LATEX 导出过滤器
 Name[zh_TW]=Words LATEX 匯出過濾程式
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service

@@ -63,7 +63,7 @@ bool Document::operator==( const Document &doc ) const
 
 bool Document::isValid() const
 {
-    return m_url.url().isEmpty();
+    return m_url.isValid();
 }
 
 QStringList Document::typeList( bool trans )
