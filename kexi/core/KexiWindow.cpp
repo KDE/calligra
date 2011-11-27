@@ -133,7 +133,6 @@ protected:
 
 KexiWindow::KexiWindow(/*const QString &caption, */ QWidget *parent,
         Kexi::ViewModes supportedViewModes, KexiPart::Part& part, KexiPart::Item& item)
-// : KexiMdiChildView(parent, caption)
         : QWidget(parent)
         , KexiActionProxy(this, KexiMainWindowIface::global())
         , d(new Private())
@@ -161,7 +160,6 @@ KexiWindow::KexiWindow(/*const QString &caption, */ QWidget *parent,
 }
 
 KexiWindow::KexiWindow()
-// : KexiMdiChildView(parent, caption)
         : QWidget(0)
         , KexiActionProxy(this, KexiMainWindowIface::global())
         , d(new Private())
@@ -365,8 +363,7 @@ QSize KexiWindow::minimumSizeHint() const
     KexiView *v = selectedView();
     if (!v)
         return QWidget::minimumSizeHint();
-    return v->minimumSizeHint()
-           /*+ QSize(0, mdiParent() ? mdiParent()->captionHeight() : 0)*/;
+    return v->minimumSizeHint();
 }
 
 QSize KexiWindow::sizeHint() const
@@ -418,36 +415,11 @@ void KexiWindow::registerWindow()
         return;
     KexiMainWindowIface::global()->registerChild(this);
     d->isRegistered = true;
-    /* kde4
-      if ( m_parentWindow->mdiMode() == KexiMdiMainFrm::ToplevelMode ) {
-        m_parentWindow->addWindow(this, KexiMdiMainFrm::Detach);
-        m_parentWindow->detachWindow(this, true);
-      }
-      else */
-#ifdef __GNUC__
-#warning KexiWindow::registerWindow()
-#else
-#pragma WARNING( KexiWindow::registerWindow() )
-#endif
-//kde4 todo  KexiMainWindo::global()->addWindow(this, KexiMdiMainFrm::StandardAdd);
 }
 
 bool KexiWindow::isRegistered() const
 {
     return d->isRegistered;
-}
-
-void KexiWindow::attachToGUIClient()
-{
-    if (!guiClient())
-        return;
-}
-
-void KexiWindow::detachFromGUIClient()
-{
-    if (!guiClient())
-        return;
-    //TODO
 }
 
 int KexiWindow::id() const

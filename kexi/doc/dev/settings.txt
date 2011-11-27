@@ -24,7 +24,6 @@ Group: MainWindow
 -RightDockPosition [integer: 0..100]
 
 # True if "hover close button" should be available for tabs in the main window.
-# Only affects IDEAl user unterface mode.
 -HoverCloseButtonForTabs [boolean] (default: false)
 
 Group: PropertyEditor

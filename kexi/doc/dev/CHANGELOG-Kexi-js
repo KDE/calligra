@@ -110,6 +110,12 @@ Startup
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
+2011-11-27
+Main Window
+*port MainWindow.HoverCloseButtonForTabs setting to Kexi 2
+*[code] remove old code related to KDE3's KMDI
+*[code] removed custom version macros like KEXI_ADD_CUSTOM_OBJECT_CREATION
+
 2011-11-26
 Startup
 *Do not display connection dialog when opening .kexis file that define database name
