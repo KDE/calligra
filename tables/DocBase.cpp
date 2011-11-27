@@ -32,18 +32,21 @@
 #include "DocBase.moc"
 #include "DocBase_p.h"
 
+#include <KoText.h>
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoProgressUpdater.h>
 #include <KoDocumentResourceManager.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoUpdater.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoVariableManager.h>
 
 #include "calligra_tables_limits.h"
 #include "BindingModel.h"
@@ -117,6 +120,11 @@ KoDocumentResourceManager* DocBase::resourceManager() const
     return d->resourceManager;
 }
 
+KoInlineTextObjectManager *DocBase::inlineTextObjectManager() const
+{
+    return d->resourceManager->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
+}
+
 SheetAccessModel *DocBase::sheetAccessModel() const
 {
     return d->sheetAccessModel;
@@ -153,6 +161,13 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     //todo fixme just add a element for testing saving content.xml
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:spreadsheet");
+
+    // Save user defined variable declarations
+    if (KoInlineTextObjectManager *inlineManager = inlineTextObjectManager()) {
+        if (KoVariableManager *variableManager = inlineManager->variableManager()) {
+            variableManager->saveOdf(bodyWriter);
+        }
+    }
 
     // Saving the map.
     map()->saveOdf(*contentWriter, savingContext);
@@ -239,6 +254,13 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
             setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType(localName)));
         map()->deleteLoadingInfo();
         return false;
+    }
+
+    // Load user defined variable declarations
+    if (KoInlineTextObjectManager *inlineManager = inlineTextObjectManager()) {
+        if (KoVariableManager *variableManager = inlineManager->variableManager()) {
+            variableManager->loadOdf(body);
+        }
     }
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
