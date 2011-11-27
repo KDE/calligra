@@ -86,6 +86,9 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
                 continue;
             }
             QWidget* w = a->requestWidget(this);
+            if (w && w->inherits("KFontComboBox")) {
+                w->setMinimumWidth(w->minimumWidth() / 2);
+            }
             if (!w) {
                 QToolButton* b = new QToolButton(this);
                 b->setDefaultAction(a);
