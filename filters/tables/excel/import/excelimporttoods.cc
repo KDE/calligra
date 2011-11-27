@@ -85,32 +85,6 @@ static qreal rowHeight(Sheet* sheet, unsigned long row) {
     return sheet->defaultRowHeight();
 }
 
-// Returns A for 1, B for 2, C for 3, etc.
-static QString columnName(uint column)
-{
-    QString s;
-    unsigned digits = 1;
-    unsigned offset = 0;
-    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
-        offset += limit;
-    for (unsigned col = column - offset; digits; --digits, col /= 26)
-        s.prepend(QChar('A' + (col % 26)));
-    return s;
-}
-
-static QString encodeSheetName(const QString& name)
-{
-    QString sheetName = name;
-    if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
-        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
-    return sheetName;
-}
-
-static QString encodeAddress(const QString& sheetName, uint column, uint row)
-{
-    return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
-}
-
 }
 
 using namespace Swinder;
@@ -178,7 +152,7 @@ public:
     void createDefaultColumnStyle( Sheet* sheet );
     void processSheetBackground(Sheet* sheet, KoGenStyle& style);
     void addManifestEntries(KoXmlWriter* ManifestWriter);
-    void insertPictureManifest(PictureObject* picture);
+    void insertPictureManifest(const QString &fileName);
 
     bool isDateFormat(const QString& valueFormat);
 
@@ -1395,37 +1369,6 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->endElement(); // office:annotation
     }
 
-    // handle pictures
-    foreach(PictureObject *picture, cell->pictures()) {
-        Sheet* const sheet = cell->sheet();
-        const unsigned long colL = picture->m_colL;
-        const unsigned long dxL = picture->m_dxL;
-        const unsigned long colR = picture->m_colR;
-        const unsigned long dxR = picture->m_dxR;
-        const unsigned long rwB = picture->m_rwB;
-        const unsigned long dyT = picture->m_dyT;
-        const unsigned long rwT = picture->m_rwT;
-        const unsigned long dyB = picture->m_dyB;
-
-        xmlWriter->startElement("draw:frame");
-        //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        xmlWriter->addAttribute("table:end-cell-address", encodeAddress(sheet->name(), picture->m_colR, picture->m_rwB));
-        xmlWriter->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR, 1024));
-        xmlWriter->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB, 256));
-        xmlWriter->addAttribute("draw:z-index", "0");
-        xmlWriter->addAttributePt("svg:x", offset(columnWidth(sheet, colL), dxL, 1024) );
-        xmlWriter->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT, 256));
-
-        xmlWriter->startElement("draw:image");
-        xmlWriter->addAttribute("xlink:href", "Pictures/" + picture->fileName());
-        xmlWriter->addAttribute("xlink:type", "simple");
-        xmlWriter->addAttribute("xlink:show", "embed");
-        xmlWriter->addAttribute("xlink:actuate", "onLoad");
-        xmlWriter->endElement(); // draw:image
-        xmlWriter->endElement(); // draw:frame
-
-        insertPictureManifest(picture);
-    }
 
     // handle charts
     foreach(ChartObject *chart, cell->charts()) {
@@ -1892,10 +1835,9 @@ void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
     }
 }
 
-void ExcelImport::Private::insertPictureManifest(PictureObject* picture)
+void ExcelImport::Private::insertPictureManifest(const QString &fileName)
 {
     QString mimeType;
-    const QString fileName = picture->fileName();
     const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
 
     if( extension == "gif" ) {

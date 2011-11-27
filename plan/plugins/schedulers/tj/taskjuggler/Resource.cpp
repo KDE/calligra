@@ -1099,7 +1099,7 @@ Resource::getPIDs(int sc, const Interval& period, const Task* task,
             continue;
         if ((!task || task == b->getTask() ||
              b->getTask()->isDescendantOf(task)) &&
-            pids.findIndex(b->getTask()->getProjectId()) == -1)
+            pids.indexOf(b->getTask()->getProjectId()) == -1)
         {
             pids.append(b->getTask()->getProjectId());
         }

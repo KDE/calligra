@@ -37,7 +37,7 @@ KAboutData * newWordsAboutData()
     KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Words"),
                                             WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
                                             ki18n("(c) 1998-2011, The Words Team"), KLocalizedString(),
-                                            "http://www.calligra-suite.org/words/");
+                                            "http://www.calligra.org/words/");
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->addAuthor(ki18n("Pierre Ducroquet"), ki18n("Co maintainer"), "");
     aboutData->addAuthor(ki18n("Casper Boemann"), ki18n("Co maintainer"), "cbo@boemann.dk");

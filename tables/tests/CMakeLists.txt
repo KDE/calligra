@@ -167,6 +167,12 @@ set(TestRowFormatStorage_SRCS TestRowFormatStorage.cpp)
 kde4_add_unit_test(TestRowFormatStorage TESTNAME kspread-RowFormatStorage ${TestRowFormatStorage_SRCS})
 target_link_libraries(TestRowFormatStorage calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestDatabaseFilter_SRCS TestDatabaseFilter.cpp)
+kde4_add_unit_test(TestDatabaseFilter TESTNAME kspread-Database-Filter ${TestDatabaseFilter_SRCS})
+target_link_libraries(TestDatabaseFilter calligratablesodf ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
 ########### Benchmarks ###############
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility

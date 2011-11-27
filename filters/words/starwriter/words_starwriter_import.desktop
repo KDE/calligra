@@ -18,6 +18,7 @@ Name[ru]=Фильтр импорта документов StarWriter 5.x в Word
 Name[sv]=Words-importfilter för StarWriter 5.x
 Name[uk]=Фільтр імпорту StarWriter 5.x для Words
 Name[x-test]=xxWords StarWriter 5.x Import Filterxx
+Name[zh_CN]=Words StarWriter 5.x 导入过滤器
 Name[zh_TW]=Words StarWriter 5.x 匯入過濾程式
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service

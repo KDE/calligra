@@ -386,7 +386,7 @@ void UsedEffortEditor::addResource()
 }
 
 //----------------------------------------
-CompletionEntryItemModel::CompletionEntryItemModel ( QWidget *parent )
+CompletionEntryItemModel::CompletionEntryItemModel ( QObject *parent )
     : QAbstractItemModel( parent ),
     m_node( 0 ),
     m_project( 0 ),
@@ -546,13 +546,13 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
 
 QVariant CompletionEntryItemModel::plannedEffort ( int /*row*/, int role ) const
 {
-    if ( m_node == 0 || m_manager == 0 ) {
+    if ( m_node == 0 ) {
         return QVariant();
     }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration v = m_node->plannedEffort( m_manager->scheduleId(), ECCT_EffortWork );
+            Duration v = m_node->plannedEffort( id(), ECCT_EffortWork );
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit;
             return v.format();
         }
@@ -590,11 +590,11 @@ QVariant CompletionEntryItemModel::data ( const QModelIndex &index, int role ) c
         return QVariant();
     }
     switch ( index.column() ) {
-        case 0: return date( index.row(), role );
-        case 1: return percentFinished( index.row(), role );
-        case 2: return actualEffort( index.row(), role );
-        case 3: return remainingEffort( index.row(), role );
-        case 4: return plannedEffort( index.row(), role );
+        case Property_Date: return date( index.row(), role );
+        case Property_Completion: return percentFinished( index.row(), role );
+        case Property_UsedEffort: return actualEffort( index.row(), role );
+        case Property_RemainingEffort: return remainingEffort( index.row(), role );
+        case Property_PlannedEffort: return plannedEffort( index.row(), role );
         default: break;
     }
     return QVariant();
@@ -781,6 +781,7 @@ void CompletionEntryItemModel::removeRow( int row )
     endRemoveRows();
     kDebug()<<date<<" removed row"<<row;
     m_completion->takeEntry( date );
+    emit rowRemoved( date );
     emit changed();
 }
 

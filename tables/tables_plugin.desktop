@@ -21,6 +21,7 @@ Comment[ru]=Модуль Calligra Tables
 Comment[sv]=Insticksprogram för Calligra Tables
 Comment[uk]=Додаток до Tables Calligra
 Comment[x-test]=xxPlugin for Calligra Tablesxx
+Comment[zh_CN]=Calligra Tables 插件
 Comment[zh_TW]=Calligra Tables 的外掛程式
 [PropertyDef::X-CalligraTables-InterfaceVersion]
 Type=int

@@ -1151,6 +1151,7 @@ QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
 bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
     //kDebug()<<objectName();
+    header()->setStretchLastSection( (bool)( element.attribute( "stretch-last-column", "1" ).toInt() ) );
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
         if ( ! map.isValid() ) {
@@ -1211,6 +1212,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
 void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
     //kDebug()<<objectName();
+    element.setAttribute( "stretch-last-column", header()->stretchLastSection() );
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {

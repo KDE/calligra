@@ -38,6 +38,7 @@ Comment[pt_BR]=Plugin de Importação de Texto para o Kexi
 Comment[sv]=Importinsticksprogram av text för Kexi
 Comment[uk]=Додаток імпортування текстових даних для Kexi
 Comment[x-test]=xxText Import Plugin for Kexixx
+Comment[zh_CN]=Kexi 文本导入插件
 Comment[zh_TW]=Kexi 的文字匯入外掛程式
 X-KDE-Library=keximigrate_txt
 X-KDE-ServiceTypes=Kexi/MigrationDriver

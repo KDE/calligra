@@ -2009,13 +2009,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_autoFilter()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(ref)
 
+    // take last numbers and replace it with max row
+    ref.replace(QRegExp("[0-9]+$"), QString::number(m_context->sheet->maxRow()+1));
+
     ref.prepend(".");
-    ref.prepend(m_context->worksheetName);
+    QString sheetName = m_context->worksheetName;
+    if (sheetName.contains('.') || sheetName.contains(' ') || sheetName.contains('\'')) {
+        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
+    }
+    ref.prepend(sheetName);
 
     int colon = ref.indexOf(':');
     if (colon > 0) {
         ref.insert(colon + 1, '.');
-        ref.insert(colon + 1, m_context->worksheetName);
+        ref.insert(colon + 1, sheetName);
     }
 
     XlsxXmlWorksheetReaderContext::AutoFilter autoFilter;

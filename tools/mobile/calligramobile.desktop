@@ -19,6 +19,7 @@ Name[ru]=Calligra Mobile
 Name[sv]=Calligra mobil
 Name[uk]=Calligra Mobile
 Name[x-test]=xxCalligra Mobilexx
+Name[zh_CN]=Calligra 移动版
 Name[zh_TW]=Calligra 行動版
 Exec=/usr/bin/calligramobile
 Icon=calligramobile

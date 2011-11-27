@@ -60,7 +60,6 @@
 #include <kxmlguifactory.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
-#include <k3command.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>
@@ -1329,6 +1328,7 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
     v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );

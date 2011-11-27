@@ -43,4 +43,4 @@ add_definitions(-DSWINDER_XLS2RAW)
 
 kde4_add_executable(sidewinder TEST ${sidewinder_SRCS})
 
-target_link_libraries(sidewinder ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${ZLIB_LIBRARIES} mso koodf)
+target_link_libraries(sidewinder calligratablesodf ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${ZLIB_LIBRARIES} mso koodf)

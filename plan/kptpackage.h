@@ -24,6 +24,8 @@
 
 #include "kptpackage.h" //Note! in parent dir
 
+#include <KUrl>
+
 #include <QString>
 
 namespace KPlato {
@@ -40,6 +42,9 @@ public:
     QString ownerName;
 
     WorkPackageSettings settings;
+
+    Task *task;
+    QMap<QString, KUrl> documents;
 };
 
 }

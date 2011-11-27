@@ -27,6 +27,7 @@
 #include "kptschedule.h"
 #include "kpteffortcostmap.h"
 #include "kptitemviewsettup.h"
+#include "planworksettings.h"
 
 #include <KoDocument.h>
 
@@ -84,7 +85,9 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
             << TaskWorkPackageModel::NodeActualEffort
             << TaskWorkPackageModel::NodeRemainingEffort
             << TaskWorkPackageModel::NodePlannedEffort
+            << TaskWorkPackageModel::NodeStartTime
             << TaskWorkPackageModel::NodeActualStart
+            << TaskWorkPackageModel::NodeEndTime
             << TaskWorkPackageModel::NodeActualFinish
             << TaskWorkPackageModel::ProjectName
             << TaskWorkPackageModel::ProjectManager;
@@ -98,6 +101,8 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     hideColumns( lst1, lst2 );
     slaveView()->setDefaultColumns( show );
     masterView()->setFocus();
+
+    kDebug()<<PlanWorkSettings::self()->taskWorkPackageView();
 }
 
 TaskWorkPackageModel *TaskWorkPackageTreeView::model() const
@@ -192,6 +197,8 @@ TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), SLOT( slotSelectionChanged( const QModelIndexList ) ) );
+
+    loadContext();
 }
 
 void TaskWorkPackageView::updateReadWrite( bool rw )
@@ -316,22 +323,29 @@ void TaskWorkPackageView::slotOptions()
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
     dlg->exec();
     delete dlg;
+    saveContext();
 }
 
-bool TaskWorkPackageView::loadContext( const KoXmlElement &context )
+bool TaskWorkPackageView::loadContext()
 {
-    kDebug();
-//     m_view->setPeriod( context.attribute( "period", QString("%1").arg( m_view->defaultPeriod() ) ).toInt() );
-//
-//     m_view->setPeriodType( context.attribute( "periodtype", QString("%1").arg( m_view->defaultPeriodType() ) ).toInt() );
-//
-//     m_view->setWeekday( context.attribute( "weekday", QString("%1").arg( m_view->defaultWeekday() ) ).toInt() );
+    KoXmlDocument doc;
+    doc.setContent( PlanWorkSettings::self()->taskWorkPackageView() );
+    KoXmlElement context = doc.namedItem( "TaskWorkPackageViewSettings" ).toElement();
+    if ( context.isNull() ) {
+        kDebug()<<"No settings";
+        return false;
+    }
     return m_view->loadContext( model()->columnMap(), context );
 }
 
-void TaskWorkPackageView::saveContext( QDomElement &context ) const
+void TaskWorkPackageView::saveContext()
 {
+    QDomDocument doc ( "TaskWorkPackageView" );
+    QDomElement context = doc.createElement( "TaskWorkPackageViewSettings" );
+    doc.appendChild( context );
     m_view->saveContext( model()->columnMap(), context );
+    PlanWorkSettings::self()->setTaskWorkPackageView( doc.toString() );
+    PlanWorkSettings::self()->writeConfig();
 }
 
 KoPrintJob *TaskWorkPackageView::createPrintJob()

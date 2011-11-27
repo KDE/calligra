@@ -1767,7 +1767,8 @@ public:
     void unexecute();
 
 protected:
-    void addCalendars( Calendar *calendar, Calendar *parent, QMap<Calendar*, Calendar*> &map );
+    void addAccounts( Account *account, Account *parent, QList<Account*> &unused, QMap<QString, Account*> &all );
+    void addCalendars( Calendar *calendar, Calendar *parent, QList<Calendar*> &unused, QMap<QString, Calendar*> &all );
     void addChildNodes( Node *node );
 
 private:
