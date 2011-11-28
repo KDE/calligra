@@ -134,8 +134,7 @@ QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
         QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
         rect = m_viewMode->documentToView(viewConverter()->viewToDocument(rect), viewConverter());
         QPointF scroll(canvasController()->scrollBarValue());
-        if (canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
-                canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+        if (canvasWidget()->layoutDirection() == Qt::RightToLeft) {
             scroll.setX(-scroll.x());
         }
         rect.translate(documentOrigin() - scroll);
