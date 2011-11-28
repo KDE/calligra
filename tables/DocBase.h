@@ -37,7 +37,6 @@
 
 class KoOasisSettings;
 class KoDocumentResourceManager;
-class KoInlineTextObjectManager;
 
 namespace Calligra
 {
@@ -90,12 +89,6 @@ public:
      * @see KoCanvasBase::resourceManager()
      */
     KoDocumentResourceManager *resourceManager() const;
-
-    /**
-     * Return the inlineTextObjectManager for this document or NULL if
-     * this document has no inlineTextObjectManager.
-     */
-    KoInlineTextObjectManager *inlineTextObjectManager() const;
 
     SheetAccessModel *sheetAccessModel() const;
 
