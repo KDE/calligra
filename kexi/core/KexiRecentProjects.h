@@ -40,6 +40,11 @@ public:
     //! @return list of data items.
     KexiProjectData::List list() const;
 
+    /*! @return path to project shortcut that defines @a data or empty string
+     if @a data is not a part this recent projects set
+     or if @a data has not been created by loading shortcut. */
+    QString shortcutPath(const KexiProjectData& data) const;
+
 protected:
     //! Creates recent projects container.
     explicit KexiRecentProjects(KexiDB::MessageHandler* handler = 0);
