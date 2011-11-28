@@ -28,15 +28,10 @@
 #include "kexi.h"
 #include "kexipart.h"
 #include "KexiView.h"
-//#include "keximdi.h"
 
 #include <QPointer>
 #include <QEvent>
 #include <QCloseEvent>
-
-//#include <k3mdichildview.h>
-//#include <kxmlguiwindow.h>
-//#include <kxmlguiclient.h>
 
 class KexiMainWindow;
 class KexiWindowData;
@@ -147,20 +142,7 @@ public:
     /*! Internal reimplementation. */
     virtual bool eventFilter(QObject *obj, QEvent *e);
 
-    /*! Used by Main Window
-     \todo js: PROBABLY REMOVE THESE TWO?
-    */
-    virtual void attachToGUIClient();
-    virtual void detachFromGUIClient();
-
     //! \return true if the window is attached within the main window
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO isAttached()
-#else
-#pragma WARNING( TODO isAttached() )
-#endif
-#endif
     bool isAttached() const {
         return true;
     }

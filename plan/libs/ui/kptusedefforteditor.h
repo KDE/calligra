@@ -102,7 +102,15 @@ class KPLATOUI_EXPORT CompletionEntryItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    CompletionEntryItemModel( QWidget *parent );
+    enum Properties {
+            Property_Date,            /// Date of entry
+            Property_Completion,      /// % Completed
+            Property_UsedEffort,      /// Used Effort
+            Property_RemainingEffort, /// Remaining Effort
+            Property_PlannedEffort    /// Planned Effort
+    };
+
+    CompletionEntryItemModel( QObject *parent = 0 );
     
     void setTask( Task *t );
     

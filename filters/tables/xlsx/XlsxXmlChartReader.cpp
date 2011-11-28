@@ -460,19 +460,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     m_context->m_chartExport->m_href = QString("Chart%1").arg(++chartNumber);
 
     Charting::Chart* c = m_context->m_chart;
-    if(!c->m_sheetName.isEmpty()) {
-        m_context->m_chartExport->m_endCellAddress += c->m_sheetName + '.';
-    }
-    if(c->m_fromColumn > 0 && c->m_fromRow > 0) {
-        m_context->m_chartExport->m_endCellAddress += columnName(c->m_fromColumn) + QString::number(c->m_fromRow);
-        m_context->m_chartExport->m_x = columnWidth(c->m_fromColumn-1, 0 /*f.m_colOff*/);
-        m_context->m_chartExport->m_y = rowHeight(c->m_fromRow-1, 0 /*f.m_rowOff*/);
-        if(c->m_toColumn > 0 && c->m_toRow > 0) {
-            m_context->m_chartExport->m_width = columnWidth( c->m_toColumn - c->m_fromColumn - 1, 0 /*t.m_colOff*/);
-            m_context->m_chartExport->m_height = rowHeight( c->m_toRow - c->m_fromRow - 1, 0 /*t.m_rowOff*/);
-        }
-    }
-
     if (!c->m_cellRangeAddress.isNull() ) {
         m_context->m_chartExport->m_cellRangeAddress.clear();
         if (!c->m_sheetName.isEmpty())

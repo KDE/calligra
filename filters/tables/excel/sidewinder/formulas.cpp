@@ -1399,6 +1399,8 @@ QString FormulaToken::array(unsigned row, unsigned col) const
         #warning TODO Implement FormulaToken::array()
     #endif
 
+    printf("Unhandled formula array-token with row=%i and column=%i\n", row, col);
+
     /*
     unsigned char buf[2];
     buf[0] = d->data[1]; // specs say this should be at the first byte but seems its not true...

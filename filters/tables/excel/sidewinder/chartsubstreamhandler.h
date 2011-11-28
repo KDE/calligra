@@ -67,8 +67,11 @@ private:
     Charting::Series* m_currentSeries;
     Charting::Obj* m_currentObj;
     QStack<Charting::Obj*> m_stack;
-    QList<unsigned> m_siIndexes;
     std::vector<XFRecord> m_xfTable;
+
+    class InternalDataCache;
+    friend class InternalDataCache;
+    InternalDataCache *m_internalDataCache;
 
     //QMap<Charting::Obj*, int> m_defaultObjects;
     int m_defaultTextId;

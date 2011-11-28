@@ -190,6 +190,10 @@ public:
 
     void setAutoFilters(const Calligra::Tables::Filter& filter);
     Calligra::Tables::Filter autoFilters() const;
+
+    void setRightToLeft(bool rtl);
+    bool isRightToLeft() const;
+
 #ifdef SWINDER_XLS2RAW
     void dumpStats();
 #endif

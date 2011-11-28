@@ -1092,9 +1092,9 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
     const DrawStyle ds(drawingGroup, master, &o);
 
     IMsoArray _v = ds.pVertices_complex();
-    IMsoArray _c = ds.pSegmentInfo_complex();
+    IMsoArray segmentInfo = ds.pSegmentInfo_complex();
 
-    if (!_v.data.isEmpty() && !_c.data.isEmpty()) {
+    if (!_v.data.isEmpty() && !segmentInfo.data.isEmpty()) {
 
         QVector<QPoint> verticesPoints;
 
@@ -1144,9 +1144,9 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         ushort msopathtype;
         bool nOffRange = false;
 
-        for (int i = 0, n = 0; ((i < _c.nElems) && !nOffRange); i++) {
+        for (int i = 0, n = 0; ((i < segmentInfo.nElems) && !nOffRange); i++) {
 
-            msopathtype = (((*(ushort *)(_c.data.data() + i * 2)) >> 13) & 0x7);
+            msopathtype = (((*(ushort *)(segmentInfo.data.data() + i * 2)) >> 13) & 0x7);
 
             switch (msopathtype) {
             case msopathLineTo:
@@ -1163,7 +1163,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
             case msopathCurveTo:
             {
-                if (n + 2 > verticesPoints.size()) {
+                if (n + 2 >= verticesPoints.size()) {
                     qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
                     nOffRange = true;
                     break;

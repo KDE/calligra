@@ -1252,6 +1252,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+extern QString columnName(uint column);
+//extern int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43);
+//extern int rowHeight(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75);
+#endif
+
 #undef CURRENT_EL
 #define CURRENT_EL chart
 //! chart handler (Charting diagrams)
@@ -1269,26 +1275,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
         Charting::Chart* chart = new Charting::Chart;
         ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+        bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
         chartexport->setSheetReplacement( false );
         if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
-            chart->m_fromRow = f.m_row;
-            chart->m_fromColumn = f.m_col;
+            //chartexport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
+            //chartexport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
+            chartexport->m_x = EMU_TO_POINT(f.m_colOff);
+            chartexport->m_y = EMU_TO_POINT(f.m_rowOff);
+            hasStart = true;
             if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-                chart->m_toRow = f.m_row;
-                chart->m_toColumn = f.m_col;
+                QString sheet = chart->m_sheetName.isEmpty() ? QString() : chart->m_sheetName + '.';
+                chartexport->m_endCellAddress = sheet + columnName(f.m_col) + QString::number(f.m_row);
+                //chartexport->m_end_x = f.m_colOff;
+                //chartexport->m_end_y = f.m_rowOff;
+                chartexport->m_end_x = EMU_TO_POINT(f.m_colOff);
+                chartexport->m_end_y = EMU_TO_POINT(f.m_rowOff);
+                hasEnd = true;
             }
         }
 #else
         chartexport->m_drawLayer = true;
-        chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
-        chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
-        chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
-        chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
 #endif
+        if (!hasStart) {
+            chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
+            chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
+        }
+        if (!hasEnd) {
+            chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
+            chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
+        }
 
         KoStore* storeout = m_context->import->outputStore();
         QScopedPointer<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartexport));
@@ -1570,6 +1589,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL masterClrMapping
+//! masterClrMapping handler (Master Color Mapping)
+/* This element is a part of a choice for which color mapping is used within
+   the document.  If this element is specified, then we specifically use the
+   color mapping defined in the master.
+
+ Parent elements:
+ - [done] clrMapOvr (§19.3.1.7)
+ */
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_masterClrMapping()
+{
+    READ_PROLOGUE
+
+    // TODO: Add filter specific stuff.
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL overrideClrMapping
 //! overrideClrMapping handler (Override Color Mapping)
 /* This element provides an override for the color mapping in a document. When
@@ -1579,21 +1618,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 
  Parent elements:
  - [done] clrMapOvr (§19.3.1.7)
-
- Child elements:
- - extLst (Extension List) §20.1.2.2.15
-
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 {
-    // FIXME: In case of presentations, this element is located after the
-    // p:cSld element.  It basically applies theme colors to a slideLayout.
-    // But the corresponsing KoGenStyles from the slideMaster and slideLayout
-    // are already prepared so we inherit wrong colors in a presentation Slide.
-
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    QMap<QString, QString> colorMapBkp;
+    if ((m_context->type == SlideLayout) || (m_context->type == Slide)) {
+        colorMapBkp = m_context->colorMap;
+    }
+#endif
 
     int index = 0;
     while (index < attrs.size()) {
@@ -1604,6 +1641,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 #endif
         ++index;
     }
+
+    // FIXME: PPTX: Update styles prepared while processing the p:txStyles
+    // element (Slide Master Text Styles).
+    //
+    // NOTE: Workaround!  Inform the pptx filter that the color mapping
+    // changed compared to slideMaster.  Theme specific default colors should
+    // be used until we get correct style:use-window-font-color support.
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideLayout) {
+        if (m_context->colorMap != colorMapBkp) {
+            m_context->slideLayoutProperties->overrideClrMapping = true;
+            m_context->slideLayoutProperties->colorMap = m_context->colorMap;
+        }
+    }
+    // NOTE: Workaround!  Inform the pptx filter that the color mapping
+    // changed compared to slideMaster.  Theme specific default colors should
+    // be used.
+    if (m_context->type == Slide) {
+        if (m_context->colorMap != colorMapBkp) {
+            m_context->overrideClrMapping = true;
+        }
+    }
+#endif
 
     while (!atEnd()) {
         readNext();
@@ -2106,6 +2166,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
             m_minParaFont = realSize;
         }
     }
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    // NOTE: Workaround!  Themes support is not perfect at the moment so let
+    // the application set the text color automatically instead of using the
+    // wrong color from p:txStyles provided by the slideMaster.  KDE BUG 286101
+    if (m_context->type == Slide) {
+	if (m_currentTextStyle.property("fo:color").isEmpty()) {
+            m_currentTextStyle.addProperty("style:use-window-font-color", "true");
+        }
+    }
+#endif
 
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
     body->startElement("text:span", false);
@@ -4274,15 +4345,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     READ_ATTR_WITHOUT_NS(val)
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    // We skip reading this one properly as we do not know the correct theme in
-    // the time of reading.
-    if (m_colorState == PptxXmlDocumentReader::rprState) {
+    // Skip the rest of the code, the color scheme map (clrMap) is unknown at
+    // time of reading.
+    if (m_colorState == PptxXmlDocumentReader::defRPrState) {
         defaultTextColors[defaultTextColors.size() - 1] = val;
     }
     else {
         defaultBulletColors[defaultBulletColors.size() - 1] = val;
     }
-
     skipCurrentElement();
     READ_EPILOGUE
 #endif
@@ -6000,17 +6070,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
      - effectDag (Effect Container)                    §20.1.8.25
      - effectLst (Effect Container)                    §20.1.8.26
      - extLst (Extension List)                         §20.1.2.2.15
-     - [done] gradFill (Gradient Fill)                        §20.1.8.33
+     - [done] gradFill (Gradient Fill)                 §20.1.8.33
      - grpFill (Group Fill)                            §20.1.8.35
      - highlight (Highlight Color)                     §21.1.2.3.4
      - hlinkClick (Click Hyperlink)                    §21.1.2.3.5
      - hlinkMouseOver (Mouse-Over Hyperlink)           §21.1.2.3.6
-     - [done] latin (Latin Font)                              §21.1.2.3.7
+     - [done] latin (Latin Font)                       §21.1.2.3.7
      - ln (Outline)                                    §20.1.2.2.24
-     - [done] noFill (No Fill)                                §20.1.8.44
+     - [done] noFill (No Fill)                         §20.1.8.44
      - pattFill (Pattern Fill)                         §20.1.8.47
      - rtl (Right to Left Run)                         §21.1.2.2.8
-     - [done] solidFill (Solid Fill)                          §20.1.8.54
+     - [done] solidFill (Solid Fill)                   §20.1.8.54
      - sym (Symbol Font)                               §21.1.2.3.10
      - uFill (Underline Fill)                          §21.1.2.3.12
      - uFillTx (Underline Fill Properties Follow Text) §21.1.2.3.13
@@ -6026,7 +6096,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     m_currentColor = QColor();
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    m_colorState = PptxXmlDocumentReader::rprState;
+    m_colorState = PptxXmlDocumentReader::defRPrState;
 #endif
 
     while (!atEnd()) {
