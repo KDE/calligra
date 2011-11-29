@@ -65,9 +65,11 @@ public:
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
         : d(new Private(context, documentResources))
 {
-    KoMarkerCollection *markerCollection = d->documentResources->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-    if (markerCollection) {
-        markerCollection->loadOdf(*this);
+    if (d->documentResources) {
+        KoMarkerCollection *markerCollection = d->documentResources->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+        if (markerCollection) {
+            markerCollection->loadOdf(*this);
+        }
     }
 }
 
