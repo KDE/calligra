@@ -57,6 +57,7 @@ KoMarker::~KoMarker()
 
 bool KoMarker::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(context);
     // A shape uses draw:marker-end="Arrow" draw:marker-end-width="0.686cm" draw:marker-end-center="true" which marker and how the marker is used
 
     //<draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="m10 0-10 30h20z"/>
