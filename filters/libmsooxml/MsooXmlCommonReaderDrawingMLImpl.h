@@ -5649,11 +5649,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    inheritTextStyle(m_currentTextStyle);
-#endif
-
-    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+    QString textStyleName;
 
     while (!atEnd()) {
         readNext();
@@ -5662,8 +5658,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
             if (QUALIFIED_NAME_IS(rPr)) {
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#elif defined DOCXXMLDOCREADER_CPP
+                if (m_moveToStylesXml) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#endif
+#ifdef PPTXXMLSLIDEREADER_CPP
+                inheritTextStyle(m_currentTextStyle);
+#endif
+                KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+
                 TRY_READ(DrawingML_rPr)
+
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                textStyleName = mainStyles->insert(m_currentTextStyle);
+
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
             }
@@ -5675,23 +5689,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-    }
-#elif defined DOCXXMLDOCREADER_CPP
-    if (m_moveToStylesXml) {
-        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-    }
-#endif
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-
     body = fldBuf.originalWriter();
 
 //! @todo support all possible fields here
 
     body->startElement("text:span", false);
-    body->addAttribute("text:style-name", currentTextStyleName);
+    body->addAttribute("text:style-name", textStyleName);
 
     if (type == "slidenum") {
         body->startElement("text:page-number");
@@ -5702,7 +5705,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     (void)fldBuf.releaseWriter();
 
-    body->endElement(); // text:page-number, some date format
+    body->endElement(); //text:page-number, some date format
     body->endElement(); //text:span
 
     READ_EPILOGUE
