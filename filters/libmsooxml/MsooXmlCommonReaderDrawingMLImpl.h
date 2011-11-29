@@ -33,6 +33,7 @@
 //ECMA-376, 20.1.10.68, p.3431 - ST_TextFontSize (Text Font Size)
 #define FONTSIZE_MAX 4000
 
+
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
 #endif
@@ -1711,6 +1712,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_currentCombinedBulletProperties.clear();
     m_currentListLevel = 1; // By default we're in the first level
 
+    m_lineBreakTextStyleNames.clear();
+
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
 #else
@@ -1755,6 +1758,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
     bool pprRead = false;
     bool rRead = false;
+    bool brRead = false;
+    bool endParaRPrRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -1767,9 +1772,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 pprRead = true;
             }
             else if (QUALIFIED_NAME_IS(br)) {
-                body->startElement("text:line-break");
-                body->endElement(); // text:line-break
-                skipCurrentElement(); // Skipping rest of br element
+                TRY_READ(DrawingML_br)
+                brRead = true;
             }
 // CASE #400.2
 //! @todo add more conditions testing the parent
@@ -1800,6 +1804,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 }
 #endif
                 TRY_READ(endParaRPr)
+                endParaRPrRead = true;
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
@@ -1819,6 +1824,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     Q_UNUSED(pprRead);
 #endif
 
+    // NOTE: This might not be the correct approach but it produces the best
+    // results at the moment.  FIXME: The text style is only required in case
+    // the br element is at the end of the p element.  Avoid using the
+    // styleForModification function.
+    if (brRead) {
+        QString fontSize;
+        if (endParaRPrRead) {
+            fontSize = m_currentTextStyle.property("fo:font-size");
+        } else if (m_minParaFont != FONTSIZE_MAX) {
+            fontSize = QString("%1").arg(m_minParaFont).append("pt");
+        }
+        if (!fontSize.isEmpty()) {
+            KoGenStyle* textStyle = 0;
+            QListIterator<QString> i(m_lineBreakTextStyleNames);
+            while (i.hasNext()) {
+                textStyle = mainStyles->styleForModification(i.next());
+                if (textStyle) {
+                    textStyle->addProperty("fo:font-size", fontSize);
+                    textStyle = 0;
+                }
+            }
+        }
+    }
+
     // The endParaRPr element specifies the text run properties that are to be
     // used if another run is inserted after the last run specified.
     if (!rRead) {
@@ -1833,7 +1862,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 m_minParaFont = realSize;
             }
         }
+    } else {
+        m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }
+
 
     //---------------------------------------------
     // Prepare for the List Style
@@ -2153,7 +2185,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
         fontSize = inheritFontSizeFromOther();
-        m_currentTextStyle.addProperty("fo:font-size", fontSize);
+        if (!fontSize.isEmpty()) {
+            m_currentTextStyle.addProperty("fo:font-size", fontSize);
+        }
     }
 #endif
     if (!fontSize.isEmpty()) {
@@ -2166,17 +2200,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
             m_minParaFont = realSize;
         }
     }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    // NOTE: Workaround!  Themes support is not perfect at the moment so let
-    // the application set the text color automatically instead of using the
-    // wrong color from p:txStyles provided by the slideMaster.  KDE BUG 286101
-    if (m_context->type == Slide) {
-	if (m_currentTextStyle.property("fo:color").isEmpty()) {
-            m_currentTextStyle.addProperty("style:use-window-font-color", "true");
-        }
-    }
-#endif
 
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
     body->startElement("text:span", false);
@@ -2194,6 +2217,87 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL br
+//! br (Text Line Break)
+//! ECMA-376, 21.1.2.2.1, p.3569
+/*
+ This element specifies the existence of a vertical line break between two runs
+ of text within a paragraph.  In addition to specifying a vertical space
+ between two runs of text, this element can also have run properties specified
+ via the rPr child element.  This sets the formatting of text for the line
+ break so that if text is later inserted there that a new run can be generated
+ with the correct formatting.
+
+ Parent elements:
+ - [done] p (§21.1.2.2.6)
+
+ Child elements:
+ - [done] rPr (Text Run Properties) §21.1.2.3.9
+ */
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
+{
+    READ_PROLOGUE
+
+    m_currentTextStyleProperties = new KoCharacterStyle();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#endif
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (!m_insideTable) {
+        inheritTextStyle(m_currentTextStyle);
+    }
+#endif
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(rPr)) {
+                TRY_READ(DrawingML_rPr)
+            }
+            ELSE_WRONG_FORMAT
+        }
+    }
+/*     skipCurrentElement(); */
+
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
+    // Remove selected properties to get text:line-break applied properly
+    // during the layout.  I didn't check any of the problems outside the
+    // filter. (uzak)
+    m_currentTextStyle.removeProperty("fo:text-transform");
+    m_currentTextStyle.removeProperty("style:text-underline-style");
+    m_currentTextStyle.removeProperty("style:text-underline-width");
+
+    //NOTE: workaround: using the styleForModification function later so I
+    //don't a style used by another text chunk.
+    m_currentTextStyle.addProperty("text:condition", "none");
+
+    QString textStyleName = mainStyles->insert(m_currentTextStyle, "T", KoGenStyles::AllowDuplicates);
+    m_lineBreakTextStyleNames.append(textStyleName);
+
+    body->startElement("text:span");
+    body->addAttribute("text:style-name", textStyleName);
+    body->startElement("text:line-break");
+    body->endElement(); //text:line-break
+    body->endElement(); //text:span
+
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+
+    READ_EPILOGUE
+}
+
 
 #undef CURRENT_EL
 #define CURRENT_EL endParaRPr

@@ -104,6 +104,7 @@ read_p_args m_read_DrawingML_p_args;
 
 void handleRprAttributes(const QXmlStreamAttributes& attrs);
 KoFilter::ConversionStatus read_DrawingML_rPr();
+KoFilter::ConversionStatus read_DrawingML_br();
 KoFilter::ConversionStatus read_endParaRPr();
 
 KoFilter::ConversionStatus read_hlinkClick();
@@ -179,6 +180,10 @@ QString m_prevListStyleName;
 
 int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
+
+// Contains names of text styles prepared for each text:line-break element
+// wrote into the current paragraph.
+QStringList m_lineBreakTextStyleNames;
 
 // true - continue numbered list, false - restart numbering
 QMap<quint16, bool> m_continueListNumbering;
