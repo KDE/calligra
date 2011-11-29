@@ -110,9 +110,15 @@ Startup
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
-2011-11-27
+TODO: remove MainWindow.HoverCloseButtonForTabs setting and instead go with FF implementation:
+http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
+TODO: remove left-hand close button (later will be used for window list as in FF)
+
+2011-11-27..29
 Main Window
-*port MainWindow.HoverCloseButtonForTabs setting to Kexi 2
+*set close buttons on view tabs always visible
+*remove main area borders for cleaner GUI
+*remove MainWindow.HoverCloseButtonForTabs setting
 *[code] remove old code related to KDE3's KMDI
 *[code] removed custom version macros like KEXI_ADD_CUSTOM_OBJECT_CREATION
 
