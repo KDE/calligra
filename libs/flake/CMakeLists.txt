@@ -7,6 +7,7 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
+add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(pics)
 

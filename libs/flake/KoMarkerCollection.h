@@ -24,9 +24,11 @@
 
 #include <QObject>
 #include <QList>
+#include <QHash>
 #include <QMetaType>
 
 class KoMarker;
+class KoXmlElement;
 class KoShapeLoadingContext;
 
 class FLAKE_EXPORT KoMarkerCollection : public QObject
@@ -56,6 +58,10 @@ public:
     KoMarker * addMarker(KoMarker *marker);
 
 private:
+    /// load the markers that are available per default.
+    void loadDefaultMarkers();
+    void loadOdfMarkers(const QHash<QString, KoXmlElement*> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker*> &lookupTable);
+
     class Private;
     Private * const d;
 };
