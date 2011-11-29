@@ -106,8 +106,8 @@ bool Object::applyDrawing(const MSO::OfficeArtDgContainer &container)
     return ok;
 }
 
-OfficeArtObject::OfficeArtObject(const MSO::OfficeArtSpContainer &object)
-    : m_object(object)
+OfficeArtObject::OfficeArtObject(const MSO::OfficeArtSpContainer &object, quint32 index)
+    : m_object(object), m_index(index)
 {
 }
 
@@ -128,4 +128,14 @@ void OfficeArtObject::setText(const TxORecord &text)
 TxORecord OfficeArtObject::text() const
 {
     return m_text;
+}
+
+void OfficeArtObject::setIndex(quint32 index)
+{
+    m_index = index;
+}
+
+quint32 OfficeArtObject::index() const
+{
+    return m_index;
 }

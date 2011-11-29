@@ -17,6 +17,7 @@ Name[ru]=Компонент управления проектами Calligra
 Name[sv]=Calligra-projekthanteringskomponent
 Name[uk]=Компонент керування проектами Calligra
 Name[x-test]=xxCalligra Project Management Componentxx
+Name[zh_CN]=Calligra 项目管理组件
 Name[zh_TW]=Calligra 專案管理元件
 X-KDE-Library=planpart
 MimeType=application/x-vnd.kde.plan,application/x-vnd.kde.kplato;

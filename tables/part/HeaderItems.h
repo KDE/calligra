@@ -69,7 +69,7 @@ protected:
 
     virtual QSizeF size() const { return QGraphicsWidget::size(); }
     virtual void setCursor(const QCursor& cursor) { QGraphicsWidget::setCursor(cursor); }
-    virtual void scroll(qreal x, qreal y) { QGraphicsWidget::scroll(x, y); }
+    virtual void scroll(qreal x, qreal y);
     virtual QPalette palette() const { return QGraphicsWidget::palette(); }
 /*private */public Q_SLOTS:
     void toolChanged(const QString& toolId);

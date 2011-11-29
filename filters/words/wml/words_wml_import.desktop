@@ -18,6 +18,7 @@ Name[ru]=Фильтр импорта файлов WML в Words
 Name[sv]=Words WML-importfilter
 Name[uk]=Фільтр імпорту WML для Words
 Name[x-test]=xxWords WML Import Filterxx
+Name[zh_CN]=Words WML 导入过滤器
 Name[zh_TW]=Words WML 匯入過濾程式
 X-KDE-Export=application/x-words
 X-KDE-Import=text/vnd.wap.wml

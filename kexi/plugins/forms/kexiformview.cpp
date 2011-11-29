@@ -1092,11 +1092,6 @@ KexiFormView::setRedoEnabled(bool enabled)
 QSize
 KexiFormView::preferredSizeHint(const QSize& otherSize)
 {
-    if (window()->neverSaved()) {
-        //ignore otherSize if possible
-//  return KexiView::preferredSizeHint( (window() && window()->mdiParent()) ? QSize(10000,10000) : otherSize);
-    }
-
     return (m_dbform->size()
             + QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3 / 2 : 10,
                     m_scrollView->horizontalScrollBar()->isVisible() ? m_scrollView->horizontalScrollBar()->height()*3 / 2 : 10))
@@ -1427,17 +1422,6 @@ void KexiFormView::updateActions(bool activated)
   KexiDataAwareView::updateActions(activated);
   updateActionsInternal();
 }
-
-/*
-void KexiFormView::parentDialogDetached()
-{
-  m_dbform->updateTabStopsOrder(form());
-}
-
-void KexiFormView::parentDialogAttached(KMdiChildFrm *)
-{
-  m_dbform->updateTabStopsOrder(form());
-}*/
 
 void KexiFormView::slotWidgetNameChanged(const QByteArray& oldname, const QByteArray& newname)
 {

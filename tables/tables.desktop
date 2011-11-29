@@ -18,6 +18,7 @@ Name[ru]=Calligra Tables
 Name[sv]=Calligra Tables
 Name[uk]=Tables Calligra
 Name[x-test]=xxCalligra Tablesxx
+Name[zh_CN]=Calligra Tables
 Name[zh_TW]=Calligra Tables
 Exec=calligratables %u
 GenericName=Spreadsheet

@@ -34,7 +34,6 @@ namespace Swinder
 
 class Workbook;
 class Sheet;
-class PictureObject;
 class ChartObject;
 class OfficeArtObject;
 
@@ -112,7 +111,7 @@ public:
     // If the is bigger then the defined number of following cells will be ignored/covered.
     int columnRepeat() const;
     void setColumnRepeat(int repeat);
-    
+
     // Defines if this cell has a hyperlink.
     bool hasHyperlink() const;
     Hyperlink hyperlink() const;
@@ -121,11 +120,6 @@ public:
     // Returns the optional note/comment/annotation of this cell.
     QString note() const;
     void setNote(const QString &n);
-    
-    // Defines a list of pictures anchored to this cell.
-    QList<PictureObject*> pictures() const;
-    void setPictures(const QList<PictureObject*>&);
-    void addPicture(PictureObject*);
 
     // Defines a list of charts anchored to this cell.
     QList<ChartObject*> charts() const;

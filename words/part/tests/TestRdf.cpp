@@ -74,7 +74,7 @@
 #include <ktemporaryfile.h>
 #include <kurl.h>
 #include <kcomponentdata.h>
-
+#include <kconfiggroup.h>
 
 using namespace Soprano;
 #define RDEBUG if (0) qDebug()
@@ -832,13 +832,16 @@ void TestRdf::testRoundtrip()
                 );
 
     {
+
         // Get the words part and create a document
         KWDocument *doc = new KWDocument();
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         doc->initEmpty();
 
-        KoDocumentRdf *rdfDoc = doc->documentRdf();
+        KoDocumentRdf *rdfDoc = new KoDocumentRdf(doc);
+        doc->setDocumentRdf(rdfDoc);
+
         Q_ASSERT(rdfDoc);
 
         // get the main text frame
@@ -899,7 +902,7 @@ void TestRdf::testRoundtrip()
         QString xmlid = location->xmlIdList()[0];
         QPair<int,int> position = rdfDoc->findExtent(location->xmlIdList()[0]);
         QCOMPARE(position.first, 444);
-        QCOMPARE(position.second, 496);
+        QCOMPARE(position.second, 497);
 
         // search for locations and check the position
         // Find the location object
@@ -913,7 +916,7 @@ void TestRdf::testRoundtrip()
         // and which should be the same as the other one...
         position = rdfDoc->findExtent(location2->xmlIdList()[0]);
         QCOMPARE(position.first, 444);
-        QCOMPARE(position.second, 496);
+        QCOMPARE(position.second, 497);
 
         // Save the document -- this changes all xmlid's
         doc->saveAs(url);
@@ -935,7 +938,7 @@ void TestRdf::testRoundtrip()
         QPair<int,int> position3 = rdfDoc->findExtent(location3->xmlIdList()[0]);
 
         QCOMPARE(position3.first, 444);
-        QCOMPARE(position3.second, 496);
+        QCOMPARE(position3.second, 497);
 
         delete doc;
     }
@@ -944,11 +947,14 @@ void TestRdf::testRoundtrip()
         KWDocument *doc = new KWDocument();
         Q_ASSERT(doc);
         doc->setAutoSave(0);
+
+        KoDocumentRdf *rdfDoc = new KoDocumentRdf(doc);
+        doc->setDocumentRdf(rdfDoc);
+
         // this also creates a view...
         bool result = doc->openUrl(url);
         Q_ASSERT(result);
 
-        KoDocumentRdf *rdfDoc = doc->documentRdf();
         // get the main text frame
         KWTextFrameSet *mainFrameSet = doc->mainFrameSet();
         Q_ASSERT(mainFrameSet);
@@ -972,11 +978,11 @@ void TestRdf::testRoundtrip()
         QString xmlid = location->xmlIdList()[0];
         QPair<int,int> position = rdfDoc->findExtent(xmlid);
         Q_ASSERT(position.first == 443);
-        Q_ASSERT(position.second == 545);
+        Q_ASSERT(position.second == 546);
 
         // check whether the table between the bookmarks is in the right position
         // after loading
-        editor->setPosition(position.first + 2);
+        editor->setPosition(position.first + 3);
         Q_ASSERT(editor->currentTable());
         editor->setPosition(position.second + 1);
         Q_ASSERT(!editor->currentTable());

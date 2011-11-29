@@ -18,6 +18,7 @@ Name[ru]=Фильтр импорта документов Applixword в Words
 Name[sv]=Words-importfilter för Applixword
 Name[uk]=Фільтр імпорту Applixword для Words
 Name[x-test]=xxWords Applixword Import Filterxx
+Name[zh_CN]=Words Applixword 导入过滤器
 Name[zh_TW]=Words Applixword 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-applix-word

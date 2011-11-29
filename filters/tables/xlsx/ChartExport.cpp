@@ -32,10 +32,13 @@
 
 #include <algorithm>
 
+// Print the content of generated content.xml to the console for debugging purpose
+//#define CONTENTXML_DEBUG
+
 using namespace Charting;
 
 ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
-    : m_x(0), m_y(0), m_width(0), m_height(0), m_chart(chart), m_theme(theme), sheetReplacement(true), paletteSet( false )
+    : m_x(0), m_y(0), m_width(0), m_height(0), m_end_x(0), m_end_y(0), m_chart(chart), m_theme(theme), sheetReplacement(true), paletteSet( false )
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -82,8 +85,11 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
         //    xmlWriter->addAttribute("draw:layer", "layout");
 
         // used in opendocumentspreadsheet to reference cells
-        if(!m_endCellAddress.isEmpty())
+        if(!m_endCellAddress.isEmpty()) {
             xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
+            xmlWriter->addAttributePt("table:end-x", m_end_x);
+            xmlWriter->addAttributePt("table:end-y", m_end_y);
+        }
 
         xmlWriter->addAttributePt("svg:x", m_x);
         xmlWriter->addAttributePt("svg:y", m_y);
@@ -677,9 +683,19 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 }
             }
         }
-        if ( series->m_showDataValues ) {
+
+        if ( series->m_showDataLabelValues && series->m_showDataLabelPercent ) {
+            seriesstyle.addProperty( "chart:data-label-number", "value-and-percentage", KoGenStyle::ChartType );
+        } else if ( series->m_showDataLabelValues ) {
             seriesstyle.addProperty( "chart:data-label-number", "value", KoGenStyle::ChartType );
+        } else if ( series->m_showDataLabelPercent ) {
+            seriesstyle.addProperty( "chart:data-label-number", "percentage", KoGenStyle::ChartType );
         }
+        if ( series->m_showDataLabelCategory ) {
+            seriesstyle.addProperty( "chart:data-label-text", "true", KoGenStyle::ChartType );
+        }
+        //seriesstyle.addProperty( "chart:data-label-symbol", "true", KoGenStyle::ChartType );
+
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
 
         // ODF does not support custom labels so we depend on the SeriesLegendOrTrendlineName being defined
@@ -725,7 +741,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     domainRange = normalizeCellRange( replaceSheet( curRange, QString::fromLatin1( "local" ) ) );
                 else
                     domainRange = normalizeCellRange( curRange );
-                bodyWriter->addAttribute( "table:cell-range-address", domainRange ); //"Sheet1.C2:Sheet1.E5");
+                if ( !domainRange.isEmpty() )
+                    bodyWriter->addAttribute( "table:cell-range-address", domainRange );
                 bodyWriter->endElement();
             }
 //             if ( series->m_domainValuesCellRangeAddress.count() == 1 ){
@@ -795,6 +812,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->endElement(); // chart:chart
     bodyWriter->endElement(); // office:chart
     bodyWriter->endElement(); // office:body
+
+#ifdef CONTENTXML_DEBUG
+    qDebug() << bodyWriter->toString();
+#endif
 
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     s.closeContentWriter();

@@ -957,9 +957,9 @@ void PerformanceStatusBase::drawValues()
 
     // effort based
     double bh = budget.hoursTo( date );
-    m->setData( m->index( 1, 0 ), locale->formatMoney( bh ) );
-    m->setData( m->index( 1, 1 ), locale->formatMoney( budget.bcwpEffort( date ) ) );
-    m->setData( m->index( 1, 2 ), locale->formatMoney( actual.hoursTo( date ) ) );
+    m->setData( m->index( 1, 0 ), locale->formatNumber( bh, 1 ) );
+    m->setData( m->index( 1, 1 ), locale->formatNumber( budget.bcwpEffort( date ), 1 ) );
+    m->setData( m->index( 1, 2 ), locale->formatNumber( actual.hoursTo( date ), 1 ) );
 
     spi_ = 0.0;
     if ( bh > 0.0 ) {
