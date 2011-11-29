@@ -1404,7 +1404,6 @@ bool KoPathShape::hitTest(const QPointF &position) const
 
 void KoPathShape::setMarker(const KoMarkerData &markerData)
 {
-    // TODO Use KoMarkerData here.
     Q_D(KoPathShape);
 
     if (markerData.position() == KoMarkerData::MarkerStart) {
@@ -1417,7 +1416,6 @@ void KoPathShape::setMarker(const KoMarkerData &markerData)
 
 void KoPathShape::setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position)
 {
-    // TODO Use KoMarkerData here.
     Q_D(KoPathShape);
 
     if (position == KoMarkerData::MarkerStart) {
