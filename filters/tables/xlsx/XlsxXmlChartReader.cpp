@@ -1780,15 +1780,22 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart()
 {
-    if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::RadarImpl();
+    Charting::RadarImpl* impl = dynamic_cast<Charting::RadarImpl*>(m_context->m_chart->m_impl);
+    if (!impl) {
+        m_context->m_chart->m_impl = impl = new Charting::RadarImpl(false);
     }
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(ser)) {
+            if (QUALIFIED_NAME_IS(radarStyle)) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                if (val == "filled")
+                    impl->m_filled = true;
+            }
+            else if (QUALIFIED_NAME_IS(ser)) {
                 TRY_READ(radarChart_Ser)
             }
         }
