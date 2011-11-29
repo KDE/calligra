@@ -530,7 +530,6 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
                     }
                     package->settings.usedEffort = (bool)elem.attribute( "used-effort" ).toInt();
                     package->settings.progress = (bool)elem.attribute( "progress" ).toInt();
-                    package->settings.remainingEffort = (bool)elem.attribute( "remaining-effort" ).toInt();
                     package->settings.documents = (bool)elem.attribute( "documents" ).toInt();
                 }
             }
@@ -710,68 +709,57 @@ void Part::mergeWorkPackage( const Package *package )
 
 void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package )
 {
+    Resource *resource = m_project->findResource( package->ownerId );
+    if ( resource == 0 ) {
+        KMessageBox::error( 0, i18n( "The package owner '%1' is not a resource in this project. You must handle this manually.", package->ownerName ) );
+        return;
+    }
+
     MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
     Completion &org = to->completion();
     const Completion &curr = from->completion();
-/*    if ( org.entrymode() != curr.entrymode() ) {
-        cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
-    }*/
+
     if ( package->settings.progress ) {
         if ( org.isStarted() != curr.isStarted() ) {
             cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
         }
         if ( org.isFinished() != curr.isFinished() ) {
-            cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
+            cmd->addCommand( new ModifyCompletionFinishedCmd( org, curr.isFinished() ) );
         }
         if ( org.startTime() != curr.startTime() ) {
-            cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
+            cmd->addCommand( new ModifyCompletionStartTimeCmd( org, curr.startTime() ) );
         }
         if ( org.finishTime() != curr.finishTime() ) {
-            cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
+            cmd->addCommand( new ModifyCompletionFinishTimeCmd( org, curr.finishTime() ) );
         }
-    }
-    QList<QDate> orgdates = org.entries().keys();
-    QList<QDate> currdates = curr.entries().keys();
-    foreach ( const QDate &d, orgdates ) {
-        if ( currdates.contains( d ) ) {
-            if ( curr.entry( d ) == org.entry( d ) ) {
+        // TODO: review how/if to merge data from different resources
+        // remove entries
+        foreach ( const QDate &d, org.entries().keys() ) {
+            if ( ! curr.entries().contains( d ) ) {
+                kDebug()<<"remove entry "<<d;
+                cmd->addCommand( new RemoveCompletionEntryCmd( org, d ) );
+            }
+        }
+        // add new entries / modify existing
+        foreach ( const QDate &d, curr.entries().keys() ) {
+            if ( org.entries().contains( d ) && curr.entry( d ) == org.entry( d ) ) {
                 continue;
             }
-            kDebug()<<"modify entry "<<d;
             Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
-            cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
-        } else {
-            kDebug()<<"remove entry "<<d;
-            cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
-        }
-    }
-    foreach ( const QDate &d, currdates ) {
-        if ( ! orgdates.contains( d ) ) {
-            Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
-            kDebug()<<"add entry "<<d<<e;
-            cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
+            cmd->addCommand( new ModifyCompletionEntryCmd( org, d, e ) );
         }
     }
     if ( package->settings.usedEffort ) {
-        Resource *r = m_project->findResource( package->ownerId );
-        if ( r == 0 ) {
-            KMessageBox::error( 0, i18n( "The package owner '%1' is not a resource in this project. You must handle this manually.", package->ownerName ) );
-            delete cmd;
-            return;
+        Completion::UsedEffort *ue = new Completion::UsedEffort();
+        Completion::Entry prev;
+        foreach ( const QDate &d, curr.entries().keys() ) {
+            Completion::Entry e = *( curr.entry( d ) );
+            // set used effort from date entry and remove used effort from date entry
+            Completion::UsedEffort::ActualEffort *effort = new Completion::UsedEffort::ActualEffort( e.totalPerformed - prev.totalPerformed );
+            ue->setEffort( d, effort );
+            prev = e;
         }
-        const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
-        foreach ( const Resource *res, map.keys() ) {
-            if ( r->id() != res->id() ) {
-                continue;
-            }
-            Completion::UsedEffort *ue = map[ r ];
-            if ( ue == 0 ) {
-                break;
-            }
-            if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
-                cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
-            }
-        }
+        cmd->addCommand( new AddCompletionUsedEffortCmd( org, resource, ue ) );
     }
     bool docsaved = false;
     if ( package->settings.documents ) {

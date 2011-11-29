@@ -3672,7 +3672,6 @@ void WorkPackage::clear()
 WorkPackageSettings::WorkPackageSettings()
     : usedEffort( true ),
     progress( false ),
-    remainingEffort( false ),
     documents( true )
 {
 }
@@ -3683,7 +3682,6 @@ void WorkPackageSettings::saveXML( QDomElement &element ) const
     element.appendChild( el );
     el.setAttribute( "used-effort", usedEffort );
     el.setAttribute( "progress", progress );
-    el.setAttribute( "remaining-effort", remainingEffort );
     el.setAttribute( "documents", documents );
 }
 
@@ -3691,7 +3689,6 @@ bool WorkPackageSettings::loadXML( const KoXmlElement &element )
 {
     usedEffort = (bool)element.attribute( "used-effort" ).toInt();
     progress = (bool)element.attribute( "progress" ).toInt();
-    remainingEffort = (bool)element.attribute( "remaining-effort" ).toInt();
     documents = (bool)element.attribute( "documents" ).toInt();
     return true;
 }
@@ -3700,7 +3697,6 @@ bool WorkPackageSettings::operator==( const WorkPackageSettings &s ) const
 {
     return usedEffort == s.usedEffort &&
             progress == s.progress &&
-            remainingEffort == s.remainingEffort &&
             documents == s.documents;
 }
 
