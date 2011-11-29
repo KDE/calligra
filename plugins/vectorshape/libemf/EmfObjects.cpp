@@ -388,7 +388,8 @@ static void selectStockObject(EmfDeviceContext &context, const quint32 ihObject)
     case DEFAULT_GUI_FONT:      // Not sure if this is true, but it should work well
         {
             QFont  font(QString("Helvetica")); // Could also be "System"
-            m_painter->setFont(font);
+            context.font = font;
+            context.changedItems |= DCFont;
             break;
         }
 	break;
