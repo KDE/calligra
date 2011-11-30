@@ -114,6 +114,12 @@ TODO: remove MainWindow.HoverCloseButtonForTabs setting and instead go with FF i
 http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
 TODO: remove left-hand close button (later will be used for window list as in FF)
 
+2011-11-30
+Reports
+*Fix bug: no indication of selected toolbox action for report element
+BUG:285583
+*After inserting element, respective toolbox action is deselected
+
 2011-11-27..29
 Main Window
 *set close buttons on view tabs always visible
