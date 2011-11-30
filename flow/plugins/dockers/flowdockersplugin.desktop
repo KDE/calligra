@@ -18,6 +18,7 @@ Name[ru]=Модуль панелей Flow
 Name[sv]=Flow dockningsinsticksprogram
 Name[uk]=Додаток панелей Flow
 Name[x-test]=xxFlow Dockers pluginxx
+Name[zh_CN]=Flow 停靠插件
 Name[zh_TW]=Flow 嵌入外掛程式
 X-KDE-ServiceTypes=Flow/Dock
 Type=Service

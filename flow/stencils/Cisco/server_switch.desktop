@@ -2,6 +2,7 @@
 Name=Server Switch
 Name[ca]=Commutador de servidor
 Name[el]=Server Switch
+Name[it]=Server Switch
 Name[nb]=Tjenersvitsj
 Name[nl]=Server-switch
 Name[pl]=Przełącznik serwerowy
@@ -10,4 +11,5 @@ Name[pt_BR]=Comutador de servidor
 Name[sv]=Serverväxel
 Name[uk]=Сервер з маршрутизатором
 Name[x-test]=xxServer Switchxx
+Name[zh_CN]=服务器路由器
 Name[zh_TW]=伺服器交換器

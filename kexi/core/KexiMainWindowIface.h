@@ -49,7 +49,7 @@ class Item;
  * KexiMainWindow offers simple features what lowers cross-dependency (and also avoids
  * circular dependencies between Kexi modules).
  */
-class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public KexiSharedActionHost
+class KEXICORE_EXPORT KexiMainWindowIface : public KexiSharedActionHost
 {
 // Q_OBJECT
 public:

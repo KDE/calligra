@@ -990,6 +990,8 @@ static QString escapeSheetName(const QString& sheetName)
     if (!hasSpecial) return sheetName;
 
     QString res = sheetName;
+    while(res.startsWith('\'') && res.endsWith('\''))
+        res = res.mid(1, res.length() - 2);
     return "$'" + res.replace('\'', QLatin1String("\'\'")) + "'";
 }
 
@@ -1396,6 +1398,8 @@ QString FormulaToken::array(unsigned row, unsigned col) const
     #ifdef __GNUC__
         #warning TODO Implement FormulaToken::array()
     #endif
+
+    printf("Unhandled formula array-token with row=%i and column=%i\n", row, col);
 
     /*
     unsigned char buf[2];

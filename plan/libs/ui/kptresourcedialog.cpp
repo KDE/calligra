@@ -30,10 +30,13 @@
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
 
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
+#include <kdeversion.h>
+#if KDE_IS_VERSION( 4, 5, 0 )
+#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <akonadi/contact/emailaddressselectionwidget.h>
+#include <akonadi/contact/emailaddressselection.h>
+#endif
 
-#include <k3command.h>
 #include <kdatetimewidget.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -49,6 +52,9 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     m_resource( resource )
 {
     setupUi(this);
+#if ! KDE_IS_VERSION( 4, 5, 0 )
+    chooseBtn->hide();
+#endif
 
     QSortFilterProxyModel *pr = new QSortFilterProxyModel( ui_teamView );
     QStandardItemModel *m = new QStandardItemModel( ui_teamView );
@@ -193,18 +199,25 @@ void ResourceDialogImpl::slotCalculationNeeded(const QString&) {
 
 void ResourceDialogImpl::slotChooseResource()
 {
-    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty()) {
-        nameEdit->setText(a.assembledName());
-        emailEdit->setText(a.preferredEmail());
-        QStringList l = a.assembledName().split(' ');
-        QString in;
-        QStringList::Iterator it = l.begin();
-        for (/*int i = 0*/; it != l.end(); ++it) {
-            in += (*it)[0];
+#if KDE_IS_VERSION( 4, 5, 0 )
+    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
+    if ( dlg->exec() && dlg ) {
+        QStringList s;
+        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
+        if ( ! selections.isEmpty() ) {
+            const Akonadi::EmailAddressSelection s = selections.first();
+            nameEdit->setText( s.name() );
+            emailEdit->setText( s.email() );
+            QStringList l = s.name().split(' ');
+            QString in;
+            QStringList::Iterator it = l.begin();
+            for (/*int i = 0*/; it != l.end(); ++it) {
+                in += (*it)[0];
+            }
+            initialsEdit->setText(in);
         }
-        initialsEdit->setText(in);
     }
+#endif
 }
 
 //////////////////  ResourceDialog  ////////////////////////

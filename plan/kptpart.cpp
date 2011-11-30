@@ -57,8 +57,12 @@
 #include <kstandarddirs.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
-
+#include <KTemporaryFile>
 #include <KoGlobal.h>
+#include <kio/global.h>
+#include <kio/jobclasses.h>
+#include <kio/netaccess.h>
+#include <kio/copyjob.h>
 
 namespace KPlato
 {
@@ -426,6 +430,7 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
 //        QApplication::restoreOverrideCursor();
         return false;
     }
+    Package *package = 0;
     KoXmlDocument doc;
     QString errorMsg; // Error variables for QDomDocument::setContent
     int errorLine, errorColumn;
@@ -436,12 +441,13 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
                 << " Error message: " << errorMsg;
         //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
     } else {
-        Project *p = loadWorkPackageXML( project, store->device(), doc, url );
-        if ( p == 0 ) {
-            ok = false;
-        }
+        package = loadWorkPackageXML( project, store->device(), doc, url );
+        ok = (bool)package;
     }
     store->close();
+    if ( ok && package && package->settings.documents ) {
+        ok = extractFiles( store, package );
+    }
     delete store;
     if ( ! ok ) {
 //        QApplication::restoreOverrideCursor();
@@ -450,7 +456,7 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
     return true;
 }
 
-Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &url )
+Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &url )
 {
     QString value;
     bool ok = true;
@@ -524,17 +530,18 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
                     }
                     package->settings.usedEffort = (bool)elem.attribute( "used-effort" ).toInt();
                     package->settings.progress = (bool)elem.attribute( "progress" ).toInt();
-                    package->settings.remainingEffort = (bool)elem.attribute( "remaining-effort" ).toInt();
                     package->settings.documents = (bool)elem.attribute( "documents" ).toInt();
                 }
             }
         }
         if ( proj->numChildren() > 0 ) {
-            WorkPackage &wp = static_cast<Task*>( proj->childNode( 0 ) )->workPackage();
+            package->task = static_cast<Task*>( proj->childNode( 0 ) );
+            WorkPackage &wp = package->task->workPackage();
             if ( wp.ownerId().isEmpty() ) {
                 wp.setOwnerId( package->ownerId );
                 wp.setOwnerName( package->ownerName );
             }
+            kDebug()<<"Task set:"<<package->task->name();
         }
         m_xmlLoader.stopLoad();
     }
@@ -558,7 +565,40 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     }
     Q_ASSERT( package );
     m_workpackages.insert( package, url );
-    return proj;
+    return package;
+}
+
+bool Part::extractFiles( KoStore *store, Package *package )
+{
+    if ( package->task == 0 ) {
+        kError()<<"No task!";
+        return false;
+    }
+    foreach ( Document *doc, package->task->documents().documents() ) {
+        if ( ! doc->isValid() || doc->type() != Document::Type_Product || doc->sendAs() != Document::SendAs_Copy ) {
+            continue;
+        }
+        if ( ! extractFile( store, package, doc ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Part::extractFile( KoStore *store, Package *package, const Document *doc )
+{
+    KTemporaryFile tmpfile;
+    if ( ! tmpfile.open() ) {
+        kError()<<"Failed to open temporary file";
+        return false;
+    }
+    if ( ! store->extractFile( doc->url().fileName(), tmpfile.fileName() ) ) {
+        kError()<<"Failed to extract file:"<<doc->url().fileName()<<"to:"<<tmpfile.fileName();
+        return false;
+    }
+    package->documents.insert( tmpfile.fileName(), doc->url() );
+    tmpfile.setAutoRemove( false );
+    return true;
 }
 
 void Part::checkForWorkPackages()
@@ -634,7 +674,7 @@ void Part::mergeWorkPackage( const Package *package )
         }
         if ( KPlatoSettings::deleteFile() ) {
             file.remove();
-        } else if ( KPlatoSettings::saveFile() && ! KPlatoSettings::saveUrl(). isEmpty() ) {
+        } else if ( KPlatoSettings::saveFile() && ! KPlatoSettings::saveUrl().isEmpty() ) {
             QDir dir( KPlatoSettings::saveUrl().path() );
             if ( ! dir.exists() ) {
                 if ( ! dir.mkpath( dir.path() ) ) {
@@ -669,73 +709,73 @@ void Part::mergeWorkPackage( const Package *package )
 
 void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package )
 {
+    Resource *resource = m_project->findResource( package->ownerId );
+    if ( resource == 0 ) {
+        KMessageBox::error( 0, i18n( "The package owner '%1' is not a resource in this project. You must handle this manually.", package->ownerName ) );
+        return;
+    }
+
     MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
     Completion &org = to->completion();
     const Completion &curr = from->completion();
-/*    if ( org.entrymode() != curr.entrymode() ) {
-        cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
-    }*/
+
     if ( package->settings.progress ) {
         if ( org.isStarted() != curr.isStarted() ) {
             cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
         }
         if ( org.isFinished() != curr.isFinished() ) {
-            cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
+            cmd->addCommand( new ModifyCompletionFinishedCmd( org, curr.isFinished() ) );
         }
         if ( org.startTime() != curr.startTime() ) {
-            cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
+            cmd->addCommand( new ModifyCompletionStartTimeCmd( org, curr.startTime() ) );
         }
         if ( org.finishTime() != curr.finishTime() ) {
-            cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
+            cmd->addCommand( new ModifyCompletionFinishTimeCmd( org, curr.finishTime() ) );
         }
-    }
-    QList<QDate> orgdates = org.entries().keys();
-    QList<QDate> currdates = curr.entries().keys();
-    foreach ( const QDate &d, orgdates ) {
-        if ( currdates.contains( d ) ) {
-            if ( curr.entry( d ) == org.entry( d ) ) {
+        // TODO: review how/if to merge data from different resources
+        // remove entries
+        foreach ( const QDate &d, org.entries().keys() ) {
+            if ( ! curr.entries().contains( d ) ) {
+                kDebug()<<"remove entry "<<d;
+                cmd->addCommand( new RemoveCompletionEntryCmd( org, d ) );
+            }
+        }
+        // add new entries / modify existing
+        foreach ( const QDate &d, curr.entries().keys() ) {
+            if ( org.entries().contains( d ) && curr.entry( d ) == org.entry( d ) ) {
                 continue;
             }
-            kDebug()<<"modify entry "<<d;
             Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
-            cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
-        } else {
-            kDebug()<<"remove entry "<<d;
-            cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
-        }
-    }
-    foreach ( const QDate &d, currdates ) {
-        if ( ! orgdates.contains( d ) ) {
-            Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
-            kDebug()<<"add entry "<<d<<e;
-            cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
+            cmd->addCommand( new ModifyCompletionEntryCmd( org, d, e ) );
         }
     }
     if ( package->settings.usedEffort ) {
-        Resource *r = m_project->findResource( package->ownerId );
-        if ( r == 0 ) {
-            KMessageBox::error( 0, i18n( "The package owner '%1' is not a resource in this project. You must handle this manually.", package->ownerName ) );
-            delete cmd;
-            return;
+        Completion::UsedEffort *ue = new Completion::UsedEffort();
+        Completion::Entry prev;
+        foreach ( const QDate &d, curr.entries().keys() ) {
+            Completion::Entry e = *( curr.entry( d ) );
+            // set used effort from date entry and remove used effort from date entry
+            Completion::UsedEffort::ActualEffort *effort = new Completion::UsedEffort::ActualEffort( e.totalPerformed - prev.totalPerformed );
+            ue->setEffort( d, effort );
+            prev = e;
         }
-        const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
-        foreach ( const Resource *res, map.keys() ) {
-            if ( r->id() != res->id() ) {
-                continue;
-            }
-            Completion::UsedEffort *ue = map[ r ];
-            if ( ue == 0 ) {
-                break;
-            }
-            if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
-                cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
-            }
-        }
+        cmd->addCommand( new AddCompletionUsedEffortCmd( org, resource, ue ) );
     }
+    bool docsaved = false;
     if ( package->settings.documents ) {
-        //TODO
+        //TODO: handle remote files
+        QMap<QString, KUrl>::const_iterator it = package->documents.constBegin();
+        QMap<QString, KUrl>::const_iterator end = package->documents.constEnd();
+        for ( ; it != end; ++it ) {
+            KUrl src( it.key() );
+            KIO::Job *job = KIO::move( src, it.value(), KIO::Overwrite );
+            if ( KIO::NetAccess::synchronousRun( job, 0 ) ) {
+                docsaved = true;
+                //TODO: async
+            }
+        }
     }
-    if ( cmd->isEmpty() ) {
+    if ( ! docsaved && cmd->isEmpty() ) {
         KMessageBox::information( 0, i18n( "Nothing to save from this package" ) );
     }
     // add a copy to our tasks list of transmitted packages
@@ -746,12 +786,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
     }
     wp->setTransmitionStatus( WorkPackage::TS_Receive );
     cmd->addCommand( new WorkPackageAddCmd( m_project, to, wp ) );
-    if ( cmd->isEmpty() ) {
-        KMessageBox::information( 0, i18n( "Nothing to save from this package" ) );
-        delete cmd;
-    } else {
-        addCommand( cmd );
-    }
+    addCommand( cmd );
 }
 
 void Part::paintContent( QPainter &, const QRect &)

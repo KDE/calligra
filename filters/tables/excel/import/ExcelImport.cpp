@@ -114,33 +114,6 @@ static qreal rowHeight(Sheet* sheet, unsigned long row) {
     return sheet->defaultRowHeight();
 }
 
-// Returns A for 1, B for 2, C for 3, etc.
-static QString columnName(uint column)
-{
-    QString s;
-    unsigned digits = 1;
-    unsigned offset = 0;
-    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
-        offset += limit;
-    for (unsigned col = column - offset; digits; --digits, col /= 26)
-        s.prepend(QChar('A' + (col % 26)));
-    return s;
-}
-
-static QString encodeSheetName(const QString& name)
-{
-    QString sheetName = name;
-    if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
-        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
-    return sheetName;
-}
-
-static QString encodeAddress(const QString& sheetName, uint column, uint row)
-{
-    return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
-}
-
-
 class ExcelImport::Private
 {
 public:
@@ -196,13 +169,14 @@ public:
     void processCharts(KoXmlWriter* manifestWriter);
 
     void addManifestEntries(KoXmlWriter* ManifestWriter);
-    void insertPictureManifest(PictureObject* picture);
+    void insertPictureManifest(const QString& fileName);
     QMap<QString,QString> manifestEntries;
 
     KoXmlWriter* beginMemoryXmlWriter(const char* docElement);
     KoXmlDocument endMemoryXmlWriter(KoXmlWriter* writer);
 
     ExcelImport *q;
+
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QVariantList&)
@@ -244,8 +218,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->outputDoc->setOutputMimeType(to);
 
     emit sigProgress(0);
-    
-    
+
+
     QBuffer storeBuffer; // TODO: use temporary file instead
     delete d->storeout;
     d->storeout = KoStore::createStore(&storeBuffer, KoStore::Write);
@@ -312,7 +286,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
             range = range.mid(1, range.length() - 2);
         Calligra::Tables::Region region(Calligra::Tables::Region::loadOdf(range), d->outputDoc->map());
         if (!region.isValid() || !region.lastSheet()) {
-            kDebug() << "invalid area";
+            kDebug() << "invalid area" << range;
             continue;
         }
         d->outputDoc->map()->namedAreaManager()->insert(region, it->first.second);
@@ -341,6 +315,19 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
     store->disallowNameExpansion();
+
+    // Debug odf for shapes
+#if 0
+    d->shapesXml->endElement();
+    d->shapesXml->endDocument();
+
+    d->shapesXml->device()->seek(0);
+
+    QTextStream input(d->shapesXml->device());
+    qDebug() << "-- START SHAPES_XML -- size : " << d->shapesXml->device()->size();
+    qDebug() << input.readAll();
+    qDebug() << "-- SHAPES_XML --";
+#endif
 
     KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
 
@@ -544,6 +531,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
     os->setShowPageBorders(is->isPageBreakViewEnabled());
     os->setLcMode(false);
     os->setShowColumnNumber(false);
+    os->setLayoutDirection(is->isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight);
 
     // TODO: page layout
     processSheetForHeaderFooter(is, os);
@@ -551,6 +539,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
     if(is->password() != 0) {
         //TODO
     }
+
 
     const unsigned columnCount = qMin(maximalColumnCount, is->maxColumn());
     for (unsigned i = 0; i <= columnCount; ++i) {
@@ -585,12 +574,15 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
         ODrawClient client = ODrawClient(is);
         ODrawToOdf odraw(client);
         Writer writer(*shapesXml, *shapeStyles, false);
+
         const QList<OfficeArtObject*> objs = is->drawObjects();
-        for (int i = objs.size()-1; i >= 0; --i) {
+        for (int i = 0; i < objs.size(); ++i) {
             OfficeArtObject* o = objs[i];
             client.setShapeText(o->text());
+            client.setZIndex(o->index());
             odraw.processDrawingObject(o->object(), writer);
         }
+
         for (int i = is->drawObjectsGroupCount()-1; i >= 0; --i) {
             shapesXml->startElement("draw:g");
 
@@ -601,16 +593,18 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
                 QRectF newCoords = getRect(*first->shapeGroup);
                 Writer transw = writer.transform(oldCoords, newCoords);
                 const QList<OfficeArtObject*> gobjs = is->drawObjects(i);
-                for (int j = gobjs.size()-1; j >= 0; --j) {
+                for (int j = 0; j < gobjs.size(); ++j) {
                     OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
+                    client.setZIndex(o->index());
                     odraw.processDrawingObject(o->object(), transw);
                 }
             } else {
                 const QList<OfficeArtObject*> gobjs = is->drawObjects(i);
-                for (int j = gobjs.size()-1; j >= 0; --j) {
+                for (int j = 0; j < gobjs.size(); ++j) {
                     OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
+                    client.setZIndex(o->index());
                     odraw.processDrawingObject(o->object(), writer);
                 }
             }
@@ -619,6 +613,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
 
         shapesXml->endElement();
     }
+
 
     processSheetForFilters(is, os);
     processSheetForConditionals(is, os);
@@ -728,7 +723,7 @@ void ExcelImport::Private::processSheetForConditionals(Sheet* is, Calligra::Tabl
             qDebug() << "FRM:" << c.cond << kc.cond;
             kc.value1 = convertValue(c.value1);
             kc.value2 = convertValue(c.value2);
-            kc.baseCellAddress = encodeAddress(is->name(), cf->region().boundingRect().left(), cf->region().boundingRect().top());
+            kc.baseCellAddress = Swinder::encodeAddress(is->name(), cf->region().boundingRect().left(), cf->region().boundingRect().top());
 
             Calligra::Tables::CustomStyle* style = new Calligra::Tables::CustomStyle(QString("Excel-Condition-Style-%1").arg(styleNameId++));
             kc.styleName = style->name();
@@ -997,45 +992,6 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
 {
     bool hasObjects = false;
 
-    // handle pictures
-    foreach(PictureObject *picture, ic->pictures()) {
-        if (!hasObjects) {
-            shapesXml->startElement("table:table-cell");
-            shapesXml->addAttribute("table:row", oc.row());
-            shapesXml->addAttribute("table:column", oc.column());
-            hasObjects = true;
-        }
-
-        Sheet* const sheet = ic->sheet();
-        const unsigned long colL = picture->m_colL;
-        const unsigned long dxL = picture->m_dxL;
-        const unsigned long colR = picture->m_colR;
-        const unsigned long dxR = picture->m_dxR;
-        const unsigned long rwB = picture->m_rwB;
-        const unsigned long dyT = picture->m_dyT;
-        const unsigned long rwT = picture->m_rwT;
-        const unsigned long dyB = picture->m_dyB;
-
-        shapesXml->startElement("draw:frame");
-        //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        shapesXml->addAttribute("table:end-cell-address", encodeAddress(sheet->name(), picture->m_colR, picture->m_rwB));
-        shapesXml->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR, 1024));
-        shapesXml->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB, 256));
-        shapesXml->addAttribute("draw:z-index", "0");
-        shapesXml->addAttributePt("svg:x", offset(columnWidth(sheet, colL), dxL, 1024) );
-        shapesXml->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT, 256));
-
-        shapesXml->startElement("draw:image");
-        shapesXml->addAttribute("xlink:href", "Pictures/" + picture->fileName());
-        shapesXml->addAttribute("xlink:type", "simple");
-        shapesXml->addAttribute("xlink:show", "embed");
-        shapesXml->addAttribute("xlink:actuate", "onLoad");
-        shapesXml->endElement(); // draw:image
-        shapesXml->endElement(); // draw:frame
-
-        insertPictureManifest(picture);
-    }
-
     // handle charts
     foreach(ChartObject *chart, ic->charts()) {
         Sheet* const sheet = ic->sheet();
@@ -1054,8 +1010,10 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
         ChartExport *c = new ChartExport(chart->m_chart);
         c->setSheetReplacement( false );
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
-        c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
-        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
+        c->m_endCellAddress = Swinder::encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
+        c->m_end_x = offset(columnWidth(sheet, chart->m_colR), chart->m_dxR, 1024);
+        c->m_end_y = offset(columnWidth(sheet, chart->m_rwB), chart->m_dyB, 256);
+        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2"; //TODO don't hardcode!
 
         const unsigned long colL = chart->m_colL;
         const unsigned long dxL = chart->m_dxL;
@@ -1066,8 +1024,8 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
         c->m_y = offset(rowHeight(sheet, rwT), dyT, 256);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
-            c->m_cellRangeAddress = encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
-                                    encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.right(), chart->m_chart->m_cellRangeAddress.bottom());
+            c->m_cellRangeAddress = Swinder::encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
+                                    Swinder::encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.right(), chart->m_chart->m_cellRangeAddress.bottom());
 
         this->charts << c;
 
@@ -1086,11 +1044,13 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
             hasObjects = true;
         }
         ODrawClient client = ODrawClient(ic->sheet());
+
         ODrawToOdf odraw(client);
         Writer writer(*shapesXml, *shapeStyles, false);
-        for (int i = objects.size()-1; i >= 0; --i) {
+        for (int i = 0; i < objects.size(); ++i) {
             OfficeArtObject* o = objects[i];
             client.setShapeText(o->text());
+            client.setZIndex(o->index());
             odraw.processDrawingObject(o->object(), writer);
         }
     }
@@ -1328,10 +1288,9 @@ QPen ExcelImport::Private::convertBorder(const Pen& pen)
     }
 }
 
-void ExcelImport::Private::insertPictureManifest(PictureObject* picture)
+void ExcelImport::Private::insertPictureManifest(const QString& fileName)
 {
     QString mimeType;
-    const QString fileName = "Pictures/" + picture->fileName();
     const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
 
     if( extension == "gif" ) {
@@ -1357,7 +1316,7 @@ void ExcelImport::Private::insertPictureManifest(PictureObject* picture)
         mimeType = "image/bmp";
     }
 
-    manifestEntries.insert(fileName, mimeType);
+    manifestEntries.insert("Pictures/" + fileName, mimeType);
 }
 
 void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
@@ -1416,7 +1375,7 @@ KoXmlDocument ExcelImport::Private::endMemoryXmlWriter(KoXmlWriter* writer)
     writer->endElement();
     writer->endDocument();
     QBuffer* b = static_cast<QBuffer*>(writer->device());
-    
+
 
     b->seek(0);
     KoXmlDocument doc;

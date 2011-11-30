@@ -33,6 +33,7 @@
 //ECMA-376, 20.1.10.68, p.3431 - ST_TextFontSize (Text Font Size)
 #define FONTSIZE_MAX 4000
 
+
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
 #endif
@@ -465,24 +466,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:g, because we have
-    // to write after the child elements are generated
-    body = drawFrameBuf.setWriter(body);
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        kDebug() << *this;
-        if (isStartElement()) {
-            TRY_READ_IF(grpSp)
-            ELSE_TRY_READ_IF(pic)
-            ELSE_TRY_READ_IF(sp)
-            ELSE_TRY_READ_IF(grpSpPr)
-            ELSE_TRY_READ_IF(cxnSp)
-#ifdef PPTXXMLSLIDEREADER_CPP
-            ELSE_TRY_READ_IF(graphicFrame)
-#endif
-            SKIP_UNKNOWN
-        //! @todo add ELSE_WRONG_FORMAT
+    {
+        MSOOXML::Utils::AutoRestore<KoXmlWriter> autoRestoreBody(&body);
+
+        // to write after the child elements are generated
+        body = drawFrameBuf.setWriter(body);
+
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL)
+            kDebug() << *this;
+            if (isStartElement()) {
+                TRY_READ_IF(grpSp)
+                ELSE_TRY_READ_IF(pic)
+                ELSE_TRY_READ_IF(sp)
+                ELSE_TRY_READ_IF(grpSpPr)
+                ELSE_TRY_READ_IF(cxnSp)
+    #ifdef PPTXXMLSLIDEREADER_CPP
+                ELSE_TRY_READ_IF(graphicFrame)
+    #endif
+                SKIP_UNKNOWN
+            //! @todo add ELSE_WRONG_FORMAT
+            }
         }
     }
 
@@ -1247,6 +1253,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+extern QString columnName(uint column);
+//extern int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43);
+//extern int rowHeight(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75);
+#endif
+
 #undef CURRENT_EL
 #define CURRENT_EL chart
 //! chart handler (Charting diagrams)
@@ -1264,26 +1276,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
         Charting::Chart* chart = new Charting::Chart;
         ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+        bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
         chartexport->setSheetReplacement( false );
         if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
-            chart->m_fromRow = f.m_row;
-            chart->m_fromColumn = f.m_col;
+            //chartexport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
+            //chartexport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
+            chartexport->m_x = EMU_TO_POINT(f.m_colOff);
+            chartexport->m_y = EMU_TO_POINT(f.m_rowOff);
+            hasStart = true;
             if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-                chart->m_toRow = f.m_row;
-                chart->m_toColumn = f.m_col;
+                QString sheet = chart->m_sheetName.isEmpty() ? QString() : chart->m_sheetName + '.';
+                chartexport->m_endCellAddress = sheet + columnName(f.m_col) + QString::number(f.m_row);
+                //chartexport->m_end_x = f.m_colOff;
+                //chartexport->m_end_y = f.m_rowOff;
+                chartexport->m_end_x = EMU_TO_POINT(f.m_colOff);
+                chartexport->m_end_y = EMU_TO_POINT(f.m_rowOff);
+                hasEnd = true;
             }
         }
 #else
         chartexport->m_drawLayer = true;
-        chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
-        chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
-        chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
-        chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
 #endif
+        if (!hasStart) {
+            chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
+            chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
+        }
+        if (!hasEnd) {
+            chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
+            chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
+        }
 
         KoStore* storeout = m_context->import->outputStore();
         QScopedPointer<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartexport));
@@ -1565,24 +1590,48 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL overrideClrMapping
-//! overrideClrMapping handler (Override Color Mapping)
-/* This element provides an override for the color mapping in a document. When defined, this color mapping is
-   used in place of the already defined color mapping, or master color mapping. This color mapping is defined in
-   the same manner as the other mappings within this document.
+#define CURRENT_EL masterClrMapping
+//! masterClrMapping handler (Master Color Mapping)
+/* This element is a part of a choice for which color mapping is used within
+   the document.  If this element is specified, then we specifically use the
+   color mapping defined in the master.
 
  Parent elements:
  - [done] clrMapOvr (§19.3.1.7)
+ */
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_masterClrMapping()
+{
+    READ_PROLOGUE
 
- Child elements:
- - extLst (Extension List) §20.1.2.2.15
+    // TODO: Add filter specific stuff.
 
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL overrideClrMapping
+//! overrideClrMapping handler (Override Color Mapping)
+/* This element provides an override for the color mapping in a document. When
+   defined, this color mapping is used in place of the already defined color
+   mapping, or master color mapping. This color mapping is defined in the same
+   manner as the other mappings within this document.
+
+ Parent elements:
+ - [done] clrMapOvr (§19.3.1.7)
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 {
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    QMap<QString, QString> colorMapBkp;
+    if ((m_context->type == SlideLayout) || (m_context->type == Slide)) {
+        colorMapBkp = m_context->colorMap;
+    }
+#endif
 
     int index = 0;
     while (index < attrs.size()) {
@@ -1593,6 +1642,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 #endif
         ++index;
     }
+
+    // FIXME: PPTX: Update styles prepared while processing the p:txStyles
+    // element (Slide Master Text Styles).
+    //
+    // NOTE: Workaround!  Inform the pptx filter that the color mapping
+    // changed compared to slideMaster.  Theme specific default colors should
+    // be used until we get correct style:use-window-font-color support.
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideLayout) {
+        if (m_context->colorMap != colorMapBkp) {
+            m_context->slideLayoutProperties->overrideClrMapping = true;
+            m_context->slideLayoutProperties->colorMap = m_context->colorMap;
+        }
+    }
+    // NOTE: Workaround!  Inform the pptx filter that the color mapping
+    // changed compared to slideMaster.  Theme specific default colors should
+    // be used.
+    if (m_context->type == Slide) {
+        if (m_context->colorMap != colorMapBkp) {
+            m_context->overrideClrMapping = true;
+        }
+    }
+#endif
 
     while (!atEnd()) {
         readNext();
@@ -1640,6 +1712,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_currentCombinedBulletProperties.clear();
     m_currentListLevel = 1; // By default we're in the first level
 
+    m_lineBreakTextStyleNames.clear();
+
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
 #else
@@ -1684,6 +1758,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
     bool pprRead = false;
     bool rRead = false;
+    bool brRead = false;
+    bool endParaRPrRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -1696,9 +1772,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 pprRead = true;
             }
             else if (QUALIFIED_NAME_IS(br)) {
-                body->startElement("text:line-break");
-                body->endElement(); // text:line-break
-                skipCurrentElement(); // Skipping rest of br element
+                TRY_READ(DrawingML_br)
+                brRead = true;
             }
 // CASE #400.2
 //! @todo add more conditions testing the parent
@@ -1729,6 +1804,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 }
 #endif
                 TRY_READ(endParaRPr)
+                endParaRPrRead = true;
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
@@ -1748,6 +1824,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     Q_UNUSED(pprRead);
 #endif
 
+    // NOTE: This might not be the correct approach but it produces the best
+    // results at the moment.  FIXME: The text style is only required in case
+    // the br element is at the end of the p element.  Avoid using the
+    // styleForModification function.
+    if (brRead) {
+        QString fontSize;
+        if (endParaRPrRead) {
+            fontSize = m_currentTextStyle.property("fo:font-size");
+        } else if (m_minParaFont != FONTSIZE_MAX) {
+            fontSize = QString("%1").arg(m_minParaFont).append("pt");
+        }
+        if (!fontSize.isEmpty()) {
+            KoGenStyle* textStyle = 0;
+            QListIterator<QString> i(m_lineBreakTextStyleNames);
+            while (i.hasNext()) {
+                textStyle = mainStyles->styleForModification(i.next());
+                if (textStyle) {
+                    textStyle->addProperty("fo:font-size", fontSize);
+                    textStyle = 0;
+                }
+            }
+        }
+    }
+
     // The endParaRPr element specifies the text run properties that are to be
     // used if another run is inserted after the last run specified.
     if (!rRead) {
@@ -1762,7 +1862,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 m_minParaFont = realSize;
             }
         }
+    } else {
+        m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }
+
 
     //---------------------------------------------
     // Prepare for the List Style
@@ -2082,7 +2185,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
         fontSize = inheritFontSizeFromOther();
-        m_currentTextStyle.addProperty("fo:font-size", fontSize);
+        if (!fontSize.isEmpty()) {
+            m_currentTextStyle.addProperty("fo:font-size", fontSize);
+        }
     }
 #endif
     if (!fontSize.isEmpty()) {
@@ -2112,6 +2217,87 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL br
+//! br (Text Line Break)
+//! ECMA-376, 21.1.2.2.1, p.3569
+/*
+ This element specifies the existence of a vertical line break between two runs
+ of text within a paragraph.  In addition to specifying a vertical space
+ between two runs of text, this element can also have run properties specified
+ via the rPr child element.  This sets the formatting of text for the line
+ break so that if text is later inserted there that a new run can be generated
+ with the correct formatting.
+
+ Parent elements:
+ - [done] p (§21.1.2.2.6)
+
+ Child elements:
+ - [done] rPr (Text Run Properties) §21.1.2.3.9
+ */
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
+{
+    READ_PROLOGUE
+
+    m_currentTextStyleProperties = new KoCharacterStyle();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#endif
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (!m_insideTable) {
+        inheritTextStyle(m_currentTextStyle);
+    }
+#endif
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(rPr)) {
+                TRY_READ(DrawingML_rPr)
+            }
+            ELSE_WRONG_FORMAT
+        }
+    }
+/*     skipCurrentElement(); */
+
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
+    // Remove selected properties to get text:line-break applied properly
+    // during the layout.  I didn't check any of the problems outside the
+    // filter. (uzak)
+    m_currentTextStyle.removeProperty("fo:text-transform");
+    m_currentTextStyle.removeProperty("style:text-underline-style");
+    m_currentTextStyle.removeProperty("style:text-underline-width");
+
+    //NOTE: workaround: using the styleForModification function later so I
+    //don't a style used by another text chunk.
+    m_currentTextStyle.addProperty("text:condition", "none");
+
+    QString textStyleName = mainStyles->insert(m_currentTextStyle, "T", KoGenStyles::AllowDuplicates);
+    m_lineBreakTextStyleNames.append(textStyleName);
+
+    body->startElement("text:span");
+    body->addAttribute("text:style-name", textStyleName);
+    body->startElement("text:line-break");
+    body->endElement(); //text:line-break
+    body->endElement(); //text:span
+
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+
+    READ_EPILOGUE
+}
+
 
 #undef CURRENT_EL
 #define CURRENT_EL endParaRPr
@@ -3694,10 +3880,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
 
 #undef CURRENT_EL
 #define CURRENT_EL solidFill
-//!Solid Fill
-//! DrawingML ECMA-376 20.1.8.54, p. 3234.
-/*!
-This element especifies a solid color fill.
+//! solidFill - Solid Fill
+/*! DrawingML ECMA-376 20.1.8.54, p. 3234.
+
+  This element specifies a solid color fill.  The shape is filled entirely with
+  the specified color.
+
  Parents:
     - bg (§21.4.3.1)
     - bgFillStyleLst (§20.1.4.1.7)
@@ -4261,14 +4449,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     READ_ATTR_WITHOUT_NS(val)
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    // We skip reading this one properly as we do not know the correct theme in the time of reading
-    if (m_colorState == PptxXmlDocumentReader::rprState) {
+    // Skip the rest of the code, the color scheme map (clrMap) is unknown at
+    // time of reading.
+    if (m_colorState == PptxXmlDocumentReader::defRPrState) {
         defaultTextColors[defaultTextColors.size() - 1] = val;
     }
     else {
         defaultBulletColors[defaultBulletColors.size() - 1] = val;
     }
-
     skipCurrentElement();
     READ_EPILOGUE
 #endif
@@ -5473,7 +5661,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buSzPct()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL buSzPt
+#define CURRENT_EL buSzPts
 //! buSzPts (Bullet Size Points) ECMA-376, 21.1.2.4.10, p.3639
 /*!
  Parent elements:
@@ -5565,11 +5753,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    inheritTextStyle(m_currentTextStyle);
-#endif
-
-    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+    QString textStyleName;
 
     while (!atEnd()) {
         readNext();
@@ -5578,8 +5762,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
             if (QUALIFIED_NAME_IS(rPr)) {
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#elif defined DOCXXMLDOCREADER_CPP
+                if (m_moveToStylesXml) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#endif
+#ifdef PPTXXMLSLIDEREADER_CPP
+                inheritTextStyle(m_currentTextStyle);
+#endif
+                KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+
                 TRY_READ(DrawingML_rPr)
+
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                textStyleName = mainStyles->insert(m_currentTextStyle);
+
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
             }
@@ -5591,23 +5793,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-    }
-#elif defined DOCXXMLDOCREADER_CPP
-    if (m_moveToStylesXml) {
-        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-    }
-#endif
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-
     body = fldBuf.originalWriter();
 
 //! @todo support all possible fields here
 
     body->startElement("text:span", false);
-    body->addAttribute("text:style-name", currentTextStyleName);
+    body->addAttribute("text:style-name", textStyleName);
 
     if (type == "slidenum") {
         body->startElement("text:page-number");
@@ -5618,7 +5809,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     (void)fldBuf.releaseWriter();
 
-    body->endElement(); // text:page-number, some date format
+    body->endElement(); //text:page-number, some date format
     body->endElement(); //text:span
 
     READ_EPILOGUE
@@ -5986,17 +6177,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
      - effectDag (Effect Container)                    §20.1.8.25
      - effectLst (Effect Container)                    §20.1.8.26
      - extLst (Extension List)                         §20.1.2.2.15
-     - [done] gradFill (Gradient Fill)                        §20.1.8.33
+     - [done] gradFill (Gradient Fill)                 §20.1.8.33
      - grpFill (Group Fill)                            §20.1.8.35
      - highlight (Highlight Color)                     §21.1.2.3.4
      - hlinkClick (Click Hyperlink)                    §21.1.2.3.5
      - hlinkMouseOver (Mouse-Over Hyperlink)           §21.1.2.3.6
-     - [done] latin (Latin Font)                              §21.1.2.3.7
+     - [done] latin (Latin Font)                       §21.1.2.3.7
      - ln (Outline)                                    §20.1.2.2.24
-     - [done] noFill (No Fill)                                §20.1.8.44
+     - [done] noFill (No Fill)                         §20.1.8.44
      - pattFill (Pattern Fill)                         §20.1.8.47
      - rtl (Right to Left Run)                         §21.1.2.2.8
-     - [done] solidFill (Solid Fill)                          §20.1.8.54
+     - [done] solidFill (Solid Fill)                   §20.1.8.54
      - sym (Symbol Font)                               §21.1.2.3.10
      - uFill (Underline Fill)                          §21.1.2.3.12
      - uFillTx (Underline Fill Properties Follow Text) §21.1.2.3.13
@@ -6012,7 +6203,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     m_currentColor = QColor();
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    m_colorState = PptxXmlDocumentReader::rprState;
+    m_colorState = PptxXmlDocumentReader::defRPrState;
 #endif
 
     while (!atEnd()) {

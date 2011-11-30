@@ -617,7 +617,7 @@ sameTimeNextDay(time_t t)
     tmc.tm_mday++;
     tmc.tm_isdst = -1;
     if (mktime(&tmc) == -1)
-        qFatal("Error at %s", time2ISO(t).latin1());
+        qFatal("Error at %s", time2ISO(t).toLatin1().constData());
     return mktime(&tmc);
 }
 

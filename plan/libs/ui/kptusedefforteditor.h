@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -102,7 +102,15 @@ class KPLATOUI_EXPORT CompletionEntryItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    CompletionEntryItemModel( QWidget *parent );
+    enum Properties {
+            Property_Date,            /// Date of entry
+            Property_Completion,      /// % Completed
+            Property_UsedEffort,      /// Used Effort
+            Property_RemainingEffort, /// Remaining Effort
+            Property_PlannedEffort    /// Planned Effort
+    };
+
+    CompletionEntryItemModel( QObject *parent = 0 );
     
     void setTask( Task *t );
     
@@ -129,6 +137,7 @@ public:
 
 signals:
     void rowInserted( const QDate& );
+    void rowRemoved( const QDate& );
     void changed();
     
 public slots:
@@ -141,7 +150,7 @@ protected:
     QVariant date ( int row, int role = Qt::DisplayRole ) const;
     QVariant percentFinished ( int row, int role ) const;
     QVariant remainingEffort ( int row, int role ) const;
-    QVariant actualEffort ( int row, int role ) const;
+    virtual QVariant actualEffort ( int row, int role ) const;
     QVariant plannedEffort ( int row, int role ) const;
 
     void removeEntry( const QDate date );
@@ -150,7 +159,7 @@ protected:
     
     QList<qint64> scales() const;
     
-private:
+protected:
     Task *m_node;
     Project *m_project;
     ScheduleManager *m_manager;
@@ -158,7 +167,7 @@ private:
     QList<QDate> m_dates;
     QStringList m_headers;
     QList<QDate> m_datelist;
-    Qt::ItemFlags m_flags[5];
+    QList<Qt::ItemFlags> m_flags;
 };
 
 class KPLATOUI_EXPORT CompletionEntryEditor : public QTableView
@@ -169,10 +178,12 @@ public:
     void setCompletion( Completion *completion );
     
     CompletionEntryItemModel *model() const { return static_cast<CompletionEntryItemModel*>( QTableView::model() ); }
+    void setCompletionModel( CompletionEntryItemModel *m );
 
 signals:
     void changed();
     void rowInserted( const QDate );
+    void rowRemoved( const QDate );
     void selectionChanged( const QItemSelection&, const QItemSelection& );
 
 public slots:

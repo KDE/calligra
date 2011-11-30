@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 
 #include "kptusedefforteditor.h"
 #include "kptcommand.h"
+#include "kptitemmodelbase.h"
 
 #include <QComboBox>
 
@@ -67,6 +68,12 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
 {
     //kDebug();
     setupUi(this);
+
+    CompletionEntryItemModel *m = new CompletionEntryItemModel( this );
+    entryTable->setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
+    entryTable->setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
+    entryTable->setItemDelegateForColumn ( 3, new DurationSpinBoxDelegate( this ) );
+    entryTable->setCompletionModel( m );
 
     Task *task = qobject_cast<Task*>( p.node() );
     m_completion = task->completion();
@@ -271,7 +278,153 @@ void TaskCompletionPanel::slotEditmodeChanged( int index )
     emit changed( true );
 }
 
-}  //KPlatoWork namespace
+//-------------------
+CompletionEntryItemModel::CompletionEntryItemModel( QObject *parent )
+    : KPlato::CompletionEntryItemModel( parent )
+{
+    m_headers << "Accumulated";
+}
 
+int CompletionEntryItemModel::columnCount( const QModelIndex& ) const
+{
+    return 6;
+}
+
+QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
+{
+    Completion::Entry *e = m_completion->entry( date( row ).toDate() );
+    if ( e == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+            Duration v = e->totalPerformed;
+            if ( row > 0 ) {
+                v -= m_completion->entry( date( row - 1 ).toDate() )->totalPerformed;
+            }
+            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            return v.format();
+        }
+        case Qt::EditRole: {
+            Duration v = e->totalPerformed;
+            if ( row > 0 ) {
+                v -= m_completion->entry( date( row - 1 ).toDate() )->totalPerformed;
+            }
+            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            return v.toDouble( Duration::Unit_h );
+        }
+        case Role::DurationScales: {
+            QVariantList lst;
+            lst << 24 << 60 << 60 << 1000;
+            return lst;
+        }
+        case Role::DurationUnit:
+            return static_cast<int>( Duration::Unit_h );
+        case Role::Minimum:
+            return static_cast<int>( Duration::Unit_h );
+        case Role::Maximum:
+            return static_cast<int>( Duration::Unit_h );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+        default:
+            break;
+    }
+    return QVariant();
+}
+
+QVariant CompletionEntryItemModel::data( const QModelIndex &idx, int role ) const
+{
+    if ( idx.column() == Property_ActualAccumulated ) {
+        switch ( role ) {
+            case Qt::DisplayRole: {
+                    Duration v;
+                    Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
+                    if ( e ) {
+                        v = e->totalPerformed;
+                    }
+                    return v.format();
+                }
+            default:
+                return QVariant();
+        }
+    }
+    return KPlato::CompletionEntryItemModel::data( idx, role );
+}
+
+bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &value, int role )
+{
+    //kDebug();
+    switch ( role ) {
+        case Qt::EditRole: {
+            if ( idx.column() == Property_Date ) {
+                QDate od = date( idx.row() ).toDate();
+                removeEntry( od );
+                addEntry( value.toDate() );
+                // emit dataChanged( idx, idx );
+                return true;
+            }
+            if ( idx.column() == Property_Completion ) {
+                Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
+                if ( e == 0 ) {
+                    return false;
+                }
+                e->percentFinished = value.toInt();
+                if ( m_completion->entrymode() == Completion::EnterCompleted && m_node ) {
+                    // calculate used/remaining
+                    Duration est = m_node->plannedEffort( id(), ECCT_EffortWork );
+                    e->totalPerformed = est * e->percentFinished / 100;
+                    e->remainingEffort = est - e->totalPerformed;
+                }
+                emit dataChanged( idx, createIndex( idx.row(), 3 ) );
+                return true;
+            }
+            if ( idx.column() == Property_ActualEffort ) {
+                Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
+                if ( e == 0 ) {
+                    return false;
+                }
+                Duration prev;
+                if ( idx.row() > 0 ) {
+                    Completion::Entry *pe = m_completion->entry( date( idx.row() - 1 ).toDate() );
+                    if ( pe ) {
+                        prev = pe->totalPerformed;
+                    }
+                }
+                double v( value.toList()[0].toDouble() );
+                Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+                Duration d = Estimate::scale( v, unit, scales() );
+                if ( d + prev == e->totalPerformed ) {
+                    return false;
+                }
+                e->totalPerformed = d + prev;
+                emit dataChanged( idx, idx );
+                return true;
+            }
+            if ( idx.column() == Property_RemainigEffort ) {
+                Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
+                if ( e == 0 ) {
+                    return false;
+                }
+                double v( value.toList()[0].toDouble() );
+                Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+                Duration d = Estimate::scale( v, unit, scales() );
+                if ( d == e->remainingEffort ) {
+                    return false;
+                }
+                e->remainingEffort = d;
+                kDebug()<<value<<d.format()<<e->remainingEffort.format();
+                emit dataChanged( idx, idx );
+                return true;
+            }
+            break;
+        }
+        default: break;
+    }
+    return false;
+}
+
+}  //KPlatoWork namespace
 
 #include "taskcompletiondialog.moc"

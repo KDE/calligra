@@ -119,8 +119,13 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
         }
         processedMergedCells.insert(cell);
         // take the coordinate of the master cell
-        for (int c = cell.column(); c < col; ++c)
-            coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
+            for (int c = cell.column()+1; c <= col; ++c)
+                coordinate.setX(coordinate.x() + sheet->columnFormat(c)->width());
+        } else {
+            for (int c = cell.column(); c < col; ++c)
+                coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        }
         for (int r = cell.row(); r < row; ++r)
             coordinate.setY(coordinate.y() - sheet->rowFormats()->rowHeight(r));
     }
@@ -158,8 +163,13 @@ const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coord
         }
         processedObscuredCells.insert(cell);
         // take the coordinate of the obscuring cell
-        for (int c = cell.column(); c < col; ++c)
-            coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
+            for (int c = cell.column()+1; c <= col; ++c)
+                coordinate.setX(coordinate.x() + sheet->columnFormat(c)->width());
+        } else {
+            for (int c = cell.column(); c < col; ++c)
+                coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        }
         for (int r = cell.row(); r < row; ++r)
             coordinate.setY(coordinate.y() - sheet->rowFormats()->rowHeight(r));
         // use the CellView of the obscuring cell
