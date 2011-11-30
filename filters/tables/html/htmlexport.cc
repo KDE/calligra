@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 #include <KoDocumentInfo.h>
 #include <calligraversion.h>
 
