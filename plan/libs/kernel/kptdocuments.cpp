@@ -18,9 +18,10 @@
 */
 
 #include "kptdocuments.h"
-#include "KoXmlReader.h"
+#include "kptnode.h"
 #include "kptxmlloaderobject.h"
 
+#include "KoXmlReader.h"
 #include <KoStore.h>
 
 #include "qdom.h"
@@ -92,6 +93,46 @@ QString Document::sendAsToString( Document::SendAs snd, bool trans )
     return sendAsList( trans ).at( snd );
 }
 
+void Document::setType( Type type )
+{
+    if ( type != m_type ) {
+        m_type = type;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
+void Document::setSendAs( SendAs snd )
+{
+    if ( m_sendAs != snd ) {
+        m_sendAs = snd;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
+void Document::setUrl( const KUrl &url )
+{
+    if ( m_url != url ) {
+        m_url = url;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
+void Document::setStatus( const QString &sts )
+{
+    if ( m_status != sts ) {
+        m_status = sts;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
 bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 {
     Q_UNUSED(status);
@@ -112,11 +153,13 @@ void Document::save(QDomElement &element) const
 
 //----------------
 Documents::Documents()
+    : node( 0 )
 {
     //kDebug()<<this;
 }
 
 Documents::Documents( const Documents &docs )
+    : node( 0 )
 {
     //kDebug()<<this;
     foreach ( Document *doc, docs.documents() ) {
@@ -155,17 +198,28 @@ void Documents::addDocument( Document *doc )
 {
     Q_ASSERT( doc );
     m_docs.append( doc );
+    doc->parent = this;
+    if ( node ) {
+        node->emitDocumentAdded( node, doc, m_docs.count() - 1 );
+    }
 }
 
 void Documents::addDocument( const KUrl &url, Document::Type type )
 {
-    m_docs.append( new Document( url, type ) );
+    addDocument( new Document( url, type ) );
 }
 
 Document *Documents::takeDocument( int index )
 {
     if ( index >= 0 && index < m_docs.count() ) {
-        return m_docs.takeAt( index );
+        Document *doc = m_docs.takeAt( index );
+        if ( doc ) {
+            doc->parent = 0;
+            if ( node ) {
+                node->emitDocumentRemoved( node, doc, index );
+            }
+        }
+        return doc;
     }
     return 0;
 }
@@ -173,7 +227,16 @@ Document *Documents::takeDocument( int index )
 Document *Documents::takeDocument( Document *doc )
 {
     Q_ASSERT( m_docs.contains( doc ) );
-    return takeDocument( m_docs.indexOf( doc ) );
+    int idx = m_docs.indexOf( doc );
+    if ( idx >= 0 ) {
+        takeDocument( idx );
+        doc->parent = 0;
+        if ( node ) {
+            node->emitDocumentRemoved( node, doc, idx );
+        }
+        return doc;
+    }
+    return 0;
 }
 
 Document *Documents::findDocument( const Document *doc ) const
@@ -241,6 +304,13 @@ void Documents::saveToStore( KoStore *store ) const
             store->addLocalFile( path, doc->url().fileName() );
 
         }
+    }
+}
+
+void Documents::documentChanged( Document *doc )
+{
+    if ( node ) {
+        node->emitDocumentChanged( node, doc, indexOf( doc ) );
     }
 }
 

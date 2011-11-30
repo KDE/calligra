@@ -37,6 +37,8 @@ namespace KPlato
 {
     
 class XMLLoaderObject;
+class Node;
+class Documents;
 
 class KPLATOKERNEL_EXPORT Document
 {
@@ -52,21 +54,21 @@ public:
     bool operator!=( const Document &doc ) const { return ! operator==( doc ); }
     
     Type type() const { return m_type; }
-    void  setType( Type type ) { m_type = type; }
+    void  setType( Type type );
     static QStringList typeList( bool trans = false );
     static QString typeToString( Type type, bool trans = false );
     
     SendAs sendAs() const { return m_sendAs; }
-    void setSendAs( SendAs snd ) { m_sendAs = snd; }
+    void setSendAs( SendAs snd );
     static QStringList sendAsList( bool trans = false );
     static QString sendAsToString( SendAs snd, bool trans = false );
     
     KUrl url() const { return m_url; }
-    void setUrl( const KUrl &url ) { m_url = url; }
+    void setUrl( const KUrl &url );
     bool isValid() const;
     
     QString status() const { return m_status; }
-    void setStatus( const QString &sts ) { m_status = sts; }
+    void setStatus( const QString &sts );
     
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
@@ -76,6 +78,9 @@ private:
     KUrl m_url;
     QString m_status;
     SendAs m_sendAs;
+
+    friend class Documents;
+    Documents *parent;
 };
 
 class KPLATOKERNEL_EXPORT Documents
@@ -108,9 +113,15 @@ public:
     void save(QDomElement &element) const;
     
     void saveToStore( KoStore *store ) const;
-    
+
+    void documentChanged( Document *doc );
+
 protected:
     QList<Document*> m_docs;
+
+private:
+    friend class Node;
+    Node *node; // owner node
 };
 
 } //namespace KPlato

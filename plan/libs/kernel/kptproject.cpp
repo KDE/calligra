@@ -2177,6 +2177,21 @@ void Project::setStandardWorktime( StandardWorktime * worktime )
     }
 }
 
+void Project::emitDocumentAdded( Node *node , Document *doc , int index )
+{
+    emit documentAdded( node, doc, index );
+}
+
+void Project::emitDocumentRemoved( Node *node , Document *doc , int index )
+{
+    emit documentRemoved( node, doc, index );
+}
+
+void Project::emitDocumentChanged( Node *node , Document *doc , int index )
+{
+    emit documentChanged( node, doc, index );
+}
+
 bool Project::linkExists( const Node *par, const Node *child ) const
 {
     if ( par == 0 || child == 0 || par == child || par->isDependChildOf( child ) ) {
