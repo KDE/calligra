@@ -81,5 +81,5 @@ X-Calligra-DefaultMimeTypes=application/x-flow
 X-DocPath=http://userbase.kde.org/Flow
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.calligra-suite.flow
+X-DBUS-ServiceName=org.calligra.flow
 Categories=Qt;KDE;Office;
