@@ -110,14 +110,17 @@ Startup
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
-TODO: remove MainWindow.HoverCloseButtonForTabs setting and instead go with FF implementation:
+TODO: go with FF implementation:
 http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
-TODO: remove left-hand close button (later will be used for window list as in FF)
+TODO: use right-hand tab button for window list as in FF
+
+
+TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions()
 
 2011-11-30
 Reports
 *Fix bug: no indication of selected toolbox action for report element
-BUG:285583
+BUG:283888
 *After inserting element, respective toolbox action is deselected
 
 2011-11-27..29
