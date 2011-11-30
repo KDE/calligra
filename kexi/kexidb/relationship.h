@@ -160,6 +160,10 @@ protected:
     friend class IndexSchema;
 };
 
+#ifdef Q_CC_MSVC
+extern template class Q_DECL_IMPORT KexiUtils::AutodeletedList&lt;KexiDB::Relationship*&gt;;
+#endif
+
 } //namespace KexiDB
 
 #endif

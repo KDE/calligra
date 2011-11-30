@@ -22,6 +22,10 @@
 #ifndef KEXIDB_FIELD_H
 #define KEXIDB_FIELD_H
 
+namespace KexiDB
+{
+	class Field;
+}
 #include <QVariant>
 #include <QString>
 #include <QPair>
@@ -735,5 +739,12 @@ private:
 };
 
 } //namespace KexiDB
+
+#ifdef Q_CC_MSVC
+extern template class Q_DECL_IMPORT QList<KexiDB::Field*>;
+extern template class Q_DECL_IMPORT KexiUtils::AutodeletedList<KexiDB::Field*>;
+extern template class Q_DECL_IMPORT QVector<KexiDB::Field*>;
+extern template class Q_DECL_IMPORT QPair<KexiDB::Field*, KexiDB::Field*>;
+#endif
 
 #endif

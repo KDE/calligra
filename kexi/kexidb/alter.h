@@ -505,4 +505,13 @@ protected:
 };
 }
 
+#ifdef Q_CC_MSVC
+extern template class Q_DECL_IMPORT KexiUtils::AutodeletedHash&lt;QByteArray, KexiDB::AlterTableHandler::ActionBase*&gt;;
+extern template class Q_DECL_IMPORT KexiUtils::AutodeletedHash&lt;int, KexiDB::AlterTableHandler::ActionDict*&gt;;
+extern template class Q_DECL_IMPORT QHash&lt;QByteArray, KexiDB::AlterTableHandler::ActionBase*&gt;;
+extern template class Q_DECL_IMPORT QHash&lt;int, KexiDB::AlterTableHandler::ActionDict*&gt;;
+extern template class Q_DECL_IMPORT QVector&lt;KexiDB::AlterTableHandler::ActionBase*&gt;;
+extern template class Q_DECL_IMPORT QList&lt;KexiDB::AlterTableHandler::ActionBase*&gt;;
+#endif
+
 #endif
