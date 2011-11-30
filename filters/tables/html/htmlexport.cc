@@ -120,9 +120,11 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
         }
     }
     m_dialog->setSheets(sheets);
-
-    if (m_dialog->exec() == QDialog::Rejected)
-        return KoFilter::UserCancelled;
+    if (!m_chain->manager()->getBatchMode() ) {
+        if (m_dialog->exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
+    }
 
     Sheet* sheet = 0;
     sheets = m_dialog->sheets();
