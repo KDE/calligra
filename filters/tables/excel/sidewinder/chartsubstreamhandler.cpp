@@ -1064,7 +1064,7 @@ void ChartSubStreamHandler::handleRadar(RadarRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::RadarImpl();
+    m_chart->m_impl = new Charting::RadarImpl(false);
     m_chart->m_showMarker = true;
 }
 
@@ -1073,7 +1073,7 @@ void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::RadarImpl();
+    m_chart->m_impl = new Charting::RadarImpl(true);
 }
 
 // specifies that the chartgroup is a surface chart

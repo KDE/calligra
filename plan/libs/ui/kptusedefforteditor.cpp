@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -400,9 +400,11 @@ CompletionEntryItemModel::CompletionEntryItemModel ( QObject *parent )
             << i18n( "Remaining Effort" )
             << i18n( "Planned Effort" );
 
-    m_flags[ 1 ] = Qt::ItemIsEditable;
-    m_flags[ 3 ] = Qt::ItemIsEditable;
-
+    m_flags.insert( Property_Date, Qt::NoItemFlags );
+    m_flags.insert( Property_Completion, Qt::ItemIsEditable );
+    m_flags.insert( Property_UsedEffort, Qt::NoItemFlags );
+    m_flags.insert( Property_RemainingEffort, Qt::ItemIsEditable );
+    m_flags.insert( Property_PlannedEffort, Qt::NoItemFlags );
 }
 
 void CompletionEntryItemModel::setTask( Task *t )
@@ -427,7 +429,7 @@ void CompletionEntryItemModel::setManager( ScheduleManager *sm )
 
 Qt::ItemFlags CompletionEntryItemModel::flags ( const QModelIndex &index ) const
 {
-    if ( index.isValid() ) {
+    if ( index.isValid() && index.column() < m_flags.count() ) {
         return QAbstractItemModel::flags( index ) | m_flags[ index.column() ];
     }
     return QAbstractItemModel::flags( index );
@@ -813,18 +815,29 @@ CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
     : QTableView( parent )
 {
     CompletionEntryItemModel *m = new CompletionEntryItemModel(this );
-    setModel( m );
-
     setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
     setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 3, new DurationSpinBoxDelegate( this ) );
+    setCompletionModel( m );
+}
 
-    connect ( m, SIGNAL( rowInserted( const QDate ) ), SIGNAL( rowInserted( const QDate ) ) );
-    connect ( m, SIGNAL( rowRemoved( const QDate ) ), SIGNAL( rowRemoved( const QDate ) ) );
-    connect ( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
-    connect ( model(), SIGNAL( changed() ), SIGNAL( changed() ) );
-
-    connect( selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
+void CompletionEntryEditor::setCompletionModel( CompletionEntryItemModel *m )
+{
+    if ( model() ) {
+        disconnect(model(), SIGNAL(rowInserted(const QDate)), this, SIGNAL(rowInserted(const QDate)));
+        disconnect(model(), SIGNAL(rowRemoved(const QDate)), this, SIGNAL(rowRemoved(const QDate)));
+        disconnect(model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SIGNAL(changed()));
+        disconnect(model(), SIGNAL(changed()), this, SIGNAL(changed()));
+        disconnect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)));
+    }
+    setModel( m );
+    if ( model() ) {
+        connect(model(), SIGNAL(rowInserted(const QDate)), this, SIGNAL(rowInserted(const QDate)));
+        connect(model(), SIGNAL(rowRemoved(const QDate)), this, SIGNAL(rowRemoved(const QDate)));
+        connect(model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SIGNAL(changed()));
+        connect(model(), SIGNAL(changed()), this, SIGNAL(changed()));
+        connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)));
+    }
 }
 
 void CompletionEntryEditor::setCompletion( Completion *completion )

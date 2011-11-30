@@ -56,7 +56,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
     Q_ASSERT(column >= 0);
     Q_ASSERT(column < m_properties.columnCount());
 
-    //TODO can we magically improve the creation of the styles?
+    //TODO: can we magically improve the creation of the styles?
     //For now I'll take the naive approach and say no. There are
     //way, way too many things to take into account so, reusing
     //the styles doesn't seem feasible.
@@ -81,9 +81,9 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
     //
     //See MSOOXML Table Styles §17.7.6 for details
 
-     const DrawingTableStyleConverterProperties::Roles& role = m_properties.roles();
-     const int lastRow = m_properties.rowCount() - 1 ;
-     const int lastColumn = m_properties.columnCount() - 1 ;
+    const DrawingTableStyleConverterProperties::Roles& role = m_properties.roles();
+    const int lastRow = m_properties.rowCount() - 1 ;
+    const int lastColumn = m_properties.columnCount() - 1 ;
 
     applyStyle(DrawingTableStyle::WholeTbl, cellStyle, row, column);
 

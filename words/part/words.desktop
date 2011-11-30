@@ -90,6 +90,6 @@ X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.text,application/
 X-DocPath=http://userbase.kde.org/Words
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.calligra-suite.words
+X-DBUS-ServiceName=org.calligra.words
 Categories=Qt;KDE;Office;
 InitialPreference=3

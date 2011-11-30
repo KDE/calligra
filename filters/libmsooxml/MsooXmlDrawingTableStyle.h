@@ -89,7 +89,7 @@ public:
 
 private:
     QMap<Type, TableStyleProperties*> m_properties;
-    //TODO handle the table background stored in the element TblBg
+    //TODO: handle the table background stored in the element TblBg
 };
 
 class MSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties

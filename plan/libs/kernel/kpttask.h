@@ -345,7 +345,6 @@ public:
     bool operator!=( const WorkPackageSettings &settings ) const;
     bool usedEffort;
     bool progress;
-    bool remainingEffort;
     bool documents;
 };
 

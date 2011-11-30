@@ -187,8 +187,10 @@ namespace Charting
     class RadarImpl : public ChartImpl
     {
     public:
-        RadarImpl() : ChartImpl() {}
-        virtual QByteArray name() const { return "radar"; }
+        /// If true then the radar-chart is filled (an RadarArea char) else not.
+        bool m_filled;
+        RadarImpl(bool filled = false) : ChartImpl(), m_filled(filled) {}
+        virtual QByteArray name() const { return m_filled ? "filled-radar" : "radar"; }
     };
 
     class AreaImpl : public ChartImpl

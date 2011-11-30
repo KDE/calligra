@@ -1252,6 +1252,11 @@ private:
     MacroCommand cmd;
 };
 
+/**
+ * Add used effort for @p resource.
+ * Note that the used effort definition in @p value must contain entries for *all* dates.
+ * If used effort is already defined it will be replaced.
+ */
 class KPLATOKERNEL_EXPORT AddCompletionUsedEffortCmd : public NamedCommand
 {
 public:
