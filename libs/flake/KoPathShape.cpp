@@ -1458,6 +1458,9 @@ KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) cons
 
 QPainterPath KoPathShape::pathStroke(const QPen &pen) const
 {
+    if (m_subpaths.isEmpty()) {
+        return QPainterPath();
+    }
     QPainterPath pathOutline;
 
     QPainterPathStroker stroker;
