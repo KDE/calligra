@@ -119,9 +119,9 @@ void ReferencesTool::createActions()
     addAction("insert_labeledendnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
-    action = new KAction(this);
+    action = new KAction(i18n("Configure"), this);
     addAction("format_notes",action);
-    action->setToolTip(i18n("Configure"));
+    action->setToolTip(i18n("Configure the notes"));
     connect(action, SIGNAL(triggered()), this, SLOT(showNotesConfigureDialog()));
 
     action = new KAction(i18n("Insert Citation"),this);
