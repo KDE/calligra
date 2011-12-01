@@ -2594,8 +2594,8 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     // Take the actual used area into account so we also catch shapes that are
     // anchored after any content.
     QRect r = usedArea(false);
-    maxRows = qMax(maxRows, r.bottom()+1);
-    maxCols = qMax(maxCols, r.right()+1);
+    maxRows = qMax(maxRows, r.bottom());
+    maxCols = qMax(maxCols, r.right());
     // OpenDocument needs at least one cell per sheet.
     maxCols = qMin(KS_colMax, qMax(1, maxCols));
     maxRows = qMin(KS_rowMax, qMax(1, maxRows));
