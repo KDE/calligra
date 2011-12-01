@@ -2708,6 +2708,9 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 
+        // We cannot use cellStorage()->rowRepeat(i) here cause the RowRepeatStorage only knows
+        // about the content but not about the shapes anchored to a cell. So, we need to check
+        // for them here to be sure to catch them even when the content in the cell is repeated.
         int repeated = 1;
         // empty row?
         if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) { // row is empty
