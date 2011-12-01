@@ -367,6 +367,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleDataLabelExtContents(static_cast<DataLabelExtContentsRecord*>(record));
     else if (type == XFRecord::id)
         handleXF(static_cast<XFRecord*>(record));
+    else if (type == LabelRecord::id)
+        handleLabel(static_cast<LabelRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -490,13 +492,18 @@ void ChartSubStreamHandler::handleEnd(EndRecord *)
 void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 {
     if (!record) return;
-    if (record->isAutoPosition()) {
-        m_chart->m_x1 = -1;
-        m_chart->m_y1 = -1;
+    DEBUG << "autoPosition=" << record->isAutoPosition() << " autoSize=" << record->isAutoSize() << std::endl;
+    if ( dynamic_cast< Charting::Chart* > ( m_currentObj ) ) {
+        if (record->isAutoPosition()) {
+            m_chart->m_x1 = -1;
+            m_chart->m_y1 = -1;
+        }
+        if (record->isAutoSize()) {
+            m_chart->m_x2 = -1;
+            m_chart->m_y2 = -1;
+        }
     }
-    if (record->isAutoSize()) {
-        m_chart->m_x2 = -1;
-        m_chart->m_y2 = -1;
+    else if ( dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
     }
 }
 
@@ -696,8 +703,7 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
           << " fillStyle=" << record->fls() << std::endl;
     m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background,
                                                           record->fls() != 0x0000);
-    Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj );
-    if ( series )
+    if ( Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj ) )
     {
         const int index = m_chart->m_series.indexOf( series ) % 8;
         if ( !series->spPr )
@@ -713,9 +719,9 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
             series->spPr->areaFill.setColor( foreground );
         }
     }
-    
-//     if ( /*series = */dynamic_cast< Charting::Series* > ( m_currentObj ) )
-        //Q_ASSERT( false );
+    else if ( Charting::PlotArea* plotArea = dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
+        Q_UNUSED(plotArea);
+    }
 }
 
 void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
@@ -860,7 +866,7 @@ void ChartSubStreamHandler::handleSerToCrt(SerToCrtRecord *record)
 void ChartSubStreamHandler::handleShtProps(ShtPropsRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "fManSerAlloc=" << record->isFManSerAlloc() << " fPlotVisOnly=" << record->isFPlotVisOnly() << " fNotSizeWIth=" << record->isFNotSizeWIth() << " fManPlotArea=" << record->isFManPlotArea() << " fAlwaysAutoPlotArea=" << record->isFAlwaysAutoPlotArea() << " mdBlank=" << record->mdBlank() << std::endl;
     //TODO
 }
 
@@ -949,22 +955,29 @@ void ChartSubStreamHandler::handlePlotGrowth(PlotGrowthRecord *record)
 void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
-    m_currentObj = new Charting::Legend();
-    //TODO
+    DEBUG << "fAutoPosition=" << record->isFAutoPosition() << " fAutoPosX=" << record->isFAutoPosX() << " fAutoPosY=" << record->isFAutoPosY() << " fVert=" << record->isFVert() << " fWasDataTable=" << record->isFWasDataTable() << std::endl;
+    m_currentObj = m_chart->m_legend = new Charting::Legend();
 }
 
+// specifies the number of axis groups on the chart.
+// cAxes specifies the number of axis groups on the chart.
+//   0x0001 A single primary axis group is present
+//   0x0002 Both a primary axis group and a secondary axis group are present
 void ChartSubStreamHandler::handleAxesUsed(AxesUsedRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "cAxes=" << record->cAxes() << std::endl;
     //TODO
 }
 
+// specifies properties of an axis group.
+// iax specifies whether the axis group is primary or secondary.
+//   0x0000 Axis group is primary.
+//   0x0001 Axis group is secondary.
 void ChartSubStreamHandler::handleAxisParent(AxisParentRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "iax=" << record->iax() << std::endl;
     //TODO
 }
 
@@ -1170,6 +1183,7 @@ void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
 {
     if (!record) return;
     DEBUG << std::endl;
+    m_currentObj = m_chart->m_plotArea = new Charting::PlotArea();
 }
 
 void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
@@ -1256,6 +1270,14 @@ void ChartSubStreamHandler::handleDataLabelExtContents(DataLabelExtContentsRecor
 void ChartSubStreamHandler::handleXF(XFRecord *record)
 {
     if (!record) return;
-    DEBUG << "formatIndex=" << record->formatIndex();
+    DEBUG << "formatIndex=" << record->formatIndex() << std::endl;
     m_xfTable.push_back(*record);
+}
+
+// This record specifies a label on the category (3) axis for each series.
+void ChartSubStreamHandler::handleLabel(LabelRecord *record)
+{
+    if (!record) return;
+    DEBUG << "row=" << record->row() << " column=" << record->column() << " xfIndex=" << record->xfIndex() << " label=" << record->label().toUtf8().constData() << std::endl;
+    //TODO
 }

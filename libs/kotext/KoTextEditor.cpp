@@ -283,6 +283,7 @@ void KoTextEditor::Private::newLine()
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
     bf.clearProperty(KoParagraphStyle::MasterPageName);
+    bf.clearProperty(KoParagraphStyle::OutlineLevel);
     caret.setBlockFormat(bf);
     if (nextStyle) {
         QTextBlock block = caret.block();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -175,6 +175,9 @@ namespace KPlato
     QString ToolTip::relationType() { return i18nc( "@info:tooltip", "The type of relation" ); }
     QString ToolTip::relationLag() { return i18nc( "@info:tooltip", "The relations time lag" ); }
 
+
+    // Work around string freeze
+    QString UndoText::removeDocument() { return i18nc( "(qtundo-format)", "Remove document" ); }
 
 } //namespace KPlato
 

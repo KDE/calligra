@@ -144,6 +144,7 @@ private:
     void handleAttachedLabel(AttachedLabelRecord *);
     void handleDataLabelExtContents(DataLabelExtContentsRecord *);
     void handleXF(XFRecord *);
+    void handleLabel(LabelRecord *);
 };
 
 } // namespace Swinder

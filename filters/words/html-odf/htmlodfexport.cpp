@@ -35,6 +35,7 @@
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 #include <KoOdfWriteStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -74,8 +75,12 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
 
-    if (m_dialog->exec() == QDialog::Rejected)
-        return KoFilter::UserCancelled;
+
+    if (!m_chain->manager()->getBatchMode() ) {
+        if (m_dialog->exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
+    }
 
     // Create output files
     QFile out(outputFile);
