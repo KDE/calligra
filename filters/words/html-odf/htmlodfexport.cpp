@@ -77,7 +77,6 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
 
 
     if (!m_chain->manager()->getBatchMode() ) {
-        qDebug() << ">>>>>>>>>>>>>>>";
         if (m_dialog->exec() == QDialog::Rejected) {
             return KoFilter::UserCancelled;
         }
