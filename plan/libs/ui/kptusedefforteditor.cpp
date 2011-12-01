@@ -92,18 +92,13 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
                 //kDebug()<<index.row()<<","<<index.column()<<" total"<<endl;
                 double res = 0.0;
                 foreach ( const QDate &d, m_dates ) {
-                    Completion::UsedEffort::ActualEffort *e = ue->effort( d );
-                    if ( e ) {
-                        res += e->normalEffort().toDouble( Duration::Unit_h );
-                    }
+                    Completion::UsedEffort::ActualEffort e = ue->effort( d );
+                    res += e.normalEffort().toDouble( Duration::Unit_h );
                 }
                 return KGlobal::locale()->formatNumber( res, 1 );
             }
-            Completion::UsedEffort::ActualEffort *e = ue->effort( m_dates.value( index.column() - 1 ) );
-            double res = 0.0;
-            if ( e ) {
-                res = e->normalEffort().toDouble( Duration::Unit_h );
-            }
+            Completion::UsedEffort::ActualEffort e = ue->effort( m_dates.value( index.column() - 1 ) );
+            double res = e.normalEffort().toDouble( Duration::Unit_h );
             return KGlobal::locale()->formatNumber( res, 1 );
         }
         case Qt::EditRole: {
@@ -121,12 +116,9 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
                 if ( ue == 0 ) {
                     return QVariant();
                 }
-                Completion::UsedEffort::ActualEffort *e = ue->effort( m_dates.value( index.column() - 1 ) );
-                double res = 0.0;
-                if ( e ) {
-                    res = e->normalEffort().toDouble( Duration::Unit_h );
-                }
-                return res;
+                Completion::UsedEffort::ActualEffort e = ue->effort( m_dates.value( index.column() - 1 ) );
+                double res = e.normalEffort().toDouble( Duration::Unit_h );
+                return KGlobal::locale()->formatNumber( res, 1 );
             }
             break;
         }
@@ -178,12 +170,9 @@ bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &valu
                 return false;
             }
             QDate d = m_dates.value( idx.column() - 1 );
-            Completion::UsedEffort::ActualEffort *e = ue->effort( d );
-            if ( e == 0 ) {
-                e = new Completion::UsedEffort::ActualEffort();
-                ue->setEffort( d, e );
-            }
-            e->setNormalEffort( Duration( value.toDouble(), Duration::Unit_h ) );
+            Completion::UsedEffort::ActualEffort e = ue->effort( d );
+            e.setNormalEffort( Duration( value.toDouble(), Duration::Unit_h ) );
+            ue->setEffort( d, e );
             emit dataChanged( idx, idx );
             return true;
         }
