@@ -194,7 +194,7 @@ QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoG
             }
         }
         if ( !useTheme ) {
-            style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+            style.addProperty( "draw:fill-color", chart()->m_areaFormat && chart()->m_areaFormat->m_fill ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
             if ( chart()->m_areaFormat && chart()->m_areaFormat->m_foreground.alpha() < 255 )
                 style.addProperty( "draw:opacity", QString( "%1\%" ).arg( chart()->m_areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
         }
@@ -212,7 +212,7 @@ QString ChartExport::genChartAreaStyle( const int styleID, KoGenStyles& styles, 
 
 QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    Charting::AreaFormat *areaFormat = ( chart()->m_plotArea && chart()->m_plotArea->m_areaFormat ) ? chart()->m_plotArea->m_areaFormat : chart()->m_areaFormat;
+    Charting::AreaFormat *areaFormat = ( chart()->m_plotArea && chart()->m_plotArea->m_areaFormat && chart()->m_plotArea->m_areaFormat->m_fill ) ? chart()->m_plotArea->m_areaFormat : chart()->m_areaFormat;
     if ( chart()->m_plotAreaFillGradient ) {
         style.addProperty( "draw:fill", "gradient", KoGenStyle::GraphicType );
         style.addProperty( "draw:fill-gradient-name", generateGradientStyle( mainStyles, chart()->m_plotAreaFillGradient ), KoGenStyle::GraphicType );
