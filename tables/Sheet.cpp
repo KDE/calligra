@@ -2591,6 +2591,11 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, tableContext);
     if (tableContext.rowDefaultStyles.count() != 0)
         maxRows = qMax(maxRows, (--tableContext.rowDefaultStyles.constEnd()).key());
+    // Take the actual used area into account so we also catch shapes that are
+    // anchored after any content.
+    QRect r = usedArea(false);
+    maxRows = qMax(maxRows, r.bottom()+1);
+    maxCols = qMax(maxCols, r.right()+1);
     // OpenDocument needs at least one cell per sheet.
     maxCols = qMin(KS_colMax, qMax(1, maxCols));
     maxRows = qMin(KS_rowMax, qMax(1, maxRows));
