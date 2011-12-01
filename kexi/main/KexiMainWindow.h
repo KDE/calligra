@@ -187,9 +187,12 @@ public:
     /*! Implemented for KexiMainWindow. */
     virtual QList<QAction*> allActions() const;
 
-    /*! \return currently active window od 0 if there is no active window.
+    /*! \return currently active window or 0 if there is no active window.
      Implemented for KexiWindow. */
     virtual KexiWindow* currentWindow() const;
+    
+    /*! @return window for tab @a tabIndex or 0 if there is no such tab. */
+    KexiWindow* windowForTab(int tabIndex) const;
 
     /*! Reimplemented */
 //  virtual void readProperties(KConfig *config);
@@ -216,9 +219,10 @@ public slots:
     virtual tristate closeWindow(KexiWindow *window);
 
     /*! Closes the current window. */
-    tristate closeCurrentWindow() {
-        return closeWindow(0);
-    }
+    tristate closeCurrentWindow();
+
+    /*! Closes window inside tab @a tabIndex. */
+    tristate closeWindowForTab(int tabIndex);
 
     /*! Internal implementation. If \a doNotSaveChanges is true,
      messages asking for saving the will be skipped and the changes will be dropped.

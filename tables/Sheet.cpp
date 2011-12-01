@@ -2591,6 +2591,11 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, tableContext);
     if (tableContext.rowDefaultStyles.count() != 0)
         maxRows = qMax(maxRows, (--tableContext.rowDefaultStyles.constEnd()).key());
+    // Take the actual used area into account so we also catch shapes that are
+    // anchored after any content.
+    QRect r = usedArea(false);
+    maxRows = qMax(maxRows, r.bottom());
+    maxCols = qMax(maxCols, r.right());
     // OpenDocument needs at least one cell per sheet.
     maxCols = qMin(KS_colMax, qMax(1, maxCols));
     maxRows = qMin(KS_rowMax, qMax(1, maxRows));
@@ -2703,13 +2708,16 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 
-        int repeated = cellStorage()->rowRepeat(i);
+        // We cannot use cellStorage()->rowRepeat(i) here cause the RowRepeatStorage only knows
+        // about the content but not about the shapes anchored to a cell. So, we need to check
+        // for them here to be sure to catch them even when the content in the cell is repeated.
+        int repeated = 1;
         // empty row?
         if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) { // row is empty
 //             kDebug(36003) <<"Sheet::saveOdfColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row();
-            int j = i + repeated;
+            int j = i + 1;
 
             // search for
             //   next non-empty row
@@ -2726,7 +2734,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                     if (!d->rows.isDefaultRow(j) || !tableContext.rowDefaultStyles.value(j).isDefault())
                         break;
                     // otherwise, jump to the next
-                    j += cellStorage()->rowRepeat(j);
+                    ++j;
                     continue;
                 }
 
@@ -2736,7 +2744,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 if (style != tableContext.rowDefaultStyles.value(j))
                     break;
                 // otherwise, process the next
-                j += cellStorage()->rowRepeat(j);
+                ++j;
             }
             repeated = j - i;
 
@@ -2783,9 +2791,10 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             else if (d->rows.isFiltered(i)) // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "filter");
 
-            int j = i + repeated;
+            int j = i + 1;
             while (j <= maxRows && compareRows(i, j, maxCols, tableContext)) {
-                j += cellStorage()->rowRepeat(j);
+                j++;
+                repeated++;
             }
             repeated = j - i;
             if (repeated > 1) {

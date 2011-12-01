@@ -23,9 +23,6 @@ Group: MainWindow
 # Percentage property editor's width
 -RightDockPosition [integer: 0..100]
 
-# True if "hover close button" should be available for tabs in the main window.
--HoverCloseButtonForTabs [boolean] (default: false)
-
 Group: PropertyEditor
 -FontSize [integer]
 

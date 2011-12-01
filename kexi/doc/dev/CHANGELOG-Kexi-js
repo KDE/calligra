@@ -110,9 +110,22 @@ Startup
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
-2011-11-27
+TODO: go with FF implementation:
+http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
+TODO: use right-hand tab button for window list as in FF
+
+
+TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions()
+
+2011-11-30
+Reports
+*After inserting element, respective toolbox action is deselected
+
+2011-11-27..29
 Main Window
-*port MainWindow.HoverCloseButtonForTabs setting to Kexi 2
+*set close buttons on view tabs always visible
+*remove main area borders for cleaner GUI
+*remove MainWindow.HoverCloseButtonForTabs setting
 *[code] remove old code related to KDE3's KMDI
 *[code] removed custom version macros like KEXI_ADD_CUSTOM_OBJECT_CREATION
 

@@ -45,6 +45,32 @@ QVariant DocumentModel::url( const Document *doc, int role ) const
     return QVariant();
 }
 
+QVariant DocumentModel::name( const Document *doc, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return doc->name();
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool DocumentModel::setName( Document *doc, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            doc->setName( value.toString() );
+            return true;
+        default:
+            break;
+    }
+    return false;
+}
+
 QVariant DocumentModel::type( const Document *doc, int role ) const
 {
     switch ( role ) {
@@ -132,10 +158,11 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
 {
     QVariant result;
     switch ( property ) {
-        case 0: result = url( doc, role ); break;
-        case 1: result = type( doc, role ); break;
-        case 2: result = status( doc, role ); break;
-        case 3: result = sendAs( doc, role ); break;
+        case Property_Url: result = url( doc, role ); break;
+        case Property_Name: result = name( doc, role ); break;
+        case Property_Type: result = type( doc, role ); break;
+        case Property_SendAs: result = sendAs( doc, role ); break;
+        case Property_Status: result = status( doc, role ); break;
         default:
             //kDebug()<<"Invalid property number: "<<property;
             return result;
@@ -145,7 +172,7 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
 
 int DocumentModel::propertyCount()
 {
-    return 4;
+    return 5;
 }
 
 bool DocumentModel::setData( Document *doc, int property, const QVariant & /*value*/, int role )
@@ -168,20 +195,22 @@ QVariant DocumentModel::headerData( int section, int role )
 {
     if ( role == Qt::DisplayRole ) {
         switch ( section ) {
-            case 0: return i18n( "Url" );
-            case 1: return i18n( "Type" );
-            case 2: return i18n( "Status" );
-            case 3: return i18n( "Send As" );
+            case Property_Url: return i18n( "Url" );
+            case Property_Name: return i18n( "Name" );
+            case Property_Type: return i18n( "Type" );
+            case Property_SendAs: return i18n( "Send As" );
+            case Property_Status: return i18n( "Status" );
 
             default: return QVariant();
         }
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::documentUrl();
-            case 1: return ToolTip::documentType();
-            case 2: return ToolTip::documentStatus();
-            case 3: return ToolTip::documentSendAs();
+            case Property_Url: return ToolTip::documentUrl();
+            case Property_Name: return QVariant(); //TODO
+            case Property_Type: return ToolTip::documentType();
+            case Property_SendAs: return ToolTip::documentSendAs();
+            case Property_Status: return ToolTip::documentStatus();
 
             default: return QVariant();
         }
@@ -258,17 +287,20 @@ Qt::ItemFlags DocumentItemModel::flags( const QModelIndex &index ) const
     if ( m_readWrite ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
-            case 0: // url
+            case DocumentModel::Property_Url: // url
                 flags &= ~Qt::ItemIsEditable; // wee need a full path
                 break;
-            case 1: // type
+            case DocumentModel::Property_Name: // name
                 flags |= Qt::ItemIsEditable;
                 break;
-            case 2: // status
+            case DocumentModel::Property_Type: // type
+                flags |= Qt::ItemIsEditable;
+                break;
+            case DocumentModel::Property_SendAs: // sendAs
+                flags |= Qt::ItemIsEditable;
+                break;
+            case DocumentModel::Property_Status: // status
                 flags &= ~Qt::ItemIsEditable;
-                break;
-            case 3: // sendAs
-                flags |= Qt::ItemIsEditable;
                 break;
             default:
                 flags &= ~Qt::ItemIsEditable;
@@ -317,6 +349,16 @@ bool DocumentItemModel::setUrl( Document *doc, const QVariant &value, int role )
             }
             //m_part->addCommand( new DocumentModifyUrlCmd( *doc, value.toString(), "Modify Document Url" ) );
             return true;
+    }
+    return false;
+}
+
+bool DocumentItemModel::setName( Document *doc, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            //m_part->addCommand( new DocumentModifyTypeCmd( *doc, value.toString(), "Modify Document Type" ) );
+            return m_model.setName( doc, value, role );
     }
     return false;
 }
@@ -372,19 +414,22 @@ bool DocumentItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+    if ( ( flags(index) & Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }
     bool result = false;
     Document *doc = document( index );
     switch (index.column()) {
-        case 0:
+        case DocumentModel::Property_Url:
             result = setUrl( doc, value, role );
             break;
-        case 1:
+        case DocumentModel::Property_Name:
+            result = setName( doc, value, role );
+            break;
+        case DocumentModel::Property_Type:
             result = setType( doc, value, role );
             break;
-        case 3:
+        case DocumentModel::Property_SendAs:
             result = setSendAs( doc, value, role );
             break;
         default:
@@ -404,8 +449,8 @@ QVariant DocumentItemModel::headerData( int section, Qt::Orientation orientation
             return m_model.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case 1: return Qt::AlignCenter;
-                case 2: return Qt::AlignCenter;
+                case DocumentModel::Property_Type: return Qt::AlignCenter;
+                case DocumentModel::Property_SendAs: return Qt::AlignCenter;
                 default: return QVariant();
             }
         }
@@ -420,8 +465,8 @@ QAbstractItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *p
 {
     switch ( column ) {
         //case 0: return new KUrlDelegate( parent ); //???????
-        case 1: { kDebug()<< column; return new EnumDelegate( parent ); }
-        case 3: { kDebug()<< column; return new EnumDelegate( parent ); }
+        case DocumentModel::Property_Type: { kDebug()<< column; return new EnumDelegate( parent ); }
+        case DocumentModel::Property_SendAs: { kDebug()<< column; return new EnumDelegate( parent ); }
         default: break;
     }
     return 0;

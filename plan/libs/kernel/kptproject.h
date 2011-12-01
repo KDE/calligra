@@ -501,6 +501,10 @@ public:
     /// return a <id, name> map of all external projects
     QMap<QString, QString> externalProjects() const;
 
+    void emitDocumentAdded( Node*, Document*, int index );
+    void emitDocumentRemoved( Node*, Document*, int index );
+    void emitDocumentChanged( Node*, Document*, int index );
+
 public slots:
     /// Sets m_progress to @p progress and emits signal sigProgress()
     /// If @p sm is not 0, progress is also set for the schedule manager
@@ -540,6 +544,13 @@ signals:
     void nodeToBeMoved( Node* );
     /// This signal is emitted when the node has been moved up, moved down, indented or unindented.
     void nodeMoved( Node* );
+
+    /// This signal is emitted when a document is added
+    void documentAdded( Node*, Document*, int index );
+    /// This signal is emitted when a document is removed
+    void documentRemoved( Node*, Document*, int index );
+    /// This signal is emitted when a document is changed
+    void documentChanged( Node*, Document*, int index );
     
     void resourceGroupChanged( ResourceGroup *group );
     void resourceGroupAdded( const ResourceGroup *group );

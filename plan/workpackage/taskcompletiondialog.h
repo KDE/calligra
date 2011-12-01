@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,8 @@
 #include "ui_taskcompletionpanel.h"
 
 #include "workpackage.h"
+
+#include "kptusedefforteditor.h"
 
 #include <KDialog>
 #include <klocale.h>
@@ -96,6 +98,30 @@ protected:
     int m_dayLength;
     
     Duration scheduledEffort;
+};
+
+class CompletionEntryItemModel : public KPlato::CompletionEntryItemModel
+{
+    Q_OBJECT
+public:
+    enum Properties {
+        Property_Date = KPlato::CompletionEntryItemModel::Property_Date,
+        Property_Completion = KPlato::CompletionEntryItemModel::Property_Completion,
+        Property_ActualEffort =  KPlato::CompletionEntryItemModel::Property_UsedEffort,
+        Property_RemainigEffort = KPlato::CompletionEntryItemModel::Property_RemainingEffort,
+        Property_PlannedEffort = KPlato::CompletionEntryItemModel::Property_PlannedEffort,
+        Property_ActualAccumulated
+    };
+
+    CompletionEntryItemModel( QObject *parent = 0 );
+
+    int columnCount( const QModelIndex &idx = QModelIndex() ) const;
+    QVariant data( const QModelIndex &idx, int role ) const;
+    bool setData( const QModelIndex &idx, const QVariant &value, int role );
+
+protected:
+    virtual QVariant actualEffort( int row, int role ) const;
+
 };
 
 }  //KPlatoWork namespace

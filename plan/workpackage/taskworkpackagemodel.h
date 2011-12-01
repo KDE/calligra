@@ -134,6 +134,10 @@ protected slots:
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
 
+    void slotDocumentAdded( Node *node, Document *doc, int index );
+    void slotDocumentRemoved( Node *node, Document *doc, int index );
+    void slotDocumentChanged( Node *node, Document *doc, int index );
+
 protected:
     QVariant nodeData( Node *node, int column, int role ) const; 
     QVariant documentData( Document *doc, int column, int role ) const; 
