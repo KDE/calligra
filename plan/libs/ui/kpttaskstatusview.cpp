@@ -752,7 +752,7 @@ void PerformanceStatusBase::setupChart()
 
 void PerformanceStatusBase::setEffortValuesVisible( bool visible )
 {
-    ui_performancetable->verticalHeader()->setSectionHidden( 0, ! visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 1, ! visible );
 /*    labelEffort->setVisible( visible );
     bcwsEffort->setVisible( visible );
     bcwpEffort->setVisible( visible );
@@ -763,7 +763,7 @@ void PerformanceStatusBase::setEffortValuesVisible( bool visible )
 
 void PerformanceStatusBase::setCostValuesVisible( bool visible )
 {
-    ui_performancetable->verticalHeader()->setSectionHidden( 1, ! visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 0, ! visible );
 /*    labelCost->setVisible( visible );
     bcwsCost->setVisible( visible );
     bcwpCost->setVisible( visible );
