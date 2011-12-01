@@ -673,6 +673,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
 {
     m_areaContext = PlotArea;
+    if (!m_context->m_chart->m_plotArea) {
+        m_context->m_chart->m_plotArea = new Charting::PlotArea();
+    }
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
@@ -1231,13 +1234,15 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             TRY_READ_ATTR_WITHOUT_NS(val)
             if(!val.isEmpty() && !m_context->m_chart->m_areaFormat) {
                 if(!val.startsWith('#')) val.prepend('#');
-                    if ( readingGradientStop )
+                    if ( readingGradientStop ) {
                         currentStop.knownColorValue = QColor( val );
-                    else
+                    } else {
+                        Charting::AreaFormat *areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
                         if ( m_areaContext == ChartArea )
-                            m_context->m_chart->m_areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
+                            m_context->m_chart->m_areaFormat = areaFormat;
                         else
-                            m_context->m_chart->m_plotAreaFillColor = QColor( val );
+                            m_context->m_chart->m_plotArea->m_areaFormat = areaFormat;
+                    }
             }
             state = Start; // job done
         } else if ( qualifiedName() == "a:srgbClr" ) {
@@ -1246,35 +1251,34 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 if(!val.isEmpty() && !m_context->m_chart->m_areaFormat) {
                     if(!val.startsWith('#')) val.prepend('#');
-                        if ( readingGradientStop ) {
-                            currentStop.knownColorValue = QColor( val );
+                    if ( readingGradientStop ) {
+                        currentStop.knownColorValue = QColor( val );
+                    } else {
+                        Charting::AreaFormat *areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
+                        if ( m_areaContext == ChartArea ) {
+                            m_context->m_chart->m_areaFormat = areaFormat;
                         } else {
-                            if ( m_areaContext == ChartArea ) {
-                                m_context->m_chart->m_areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
-                            } else {
-                                m_context->m_chart->m_plotAreaFillColor = QColor( val );
-                            }
+                            m_context->m_chart->m_plotArea->m_areaFormat = areaFormat;
                         }
+                    }
                 }
             }
         } else if ( qualifiedName() == "a:alpha" ) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_ATTR_WITHOUT_NS(val)
-                  if ( !val.isEmpty() ) {
-                  {
-                      if ( readingGradientStop )
-                      {
-                          currentStop.knownColorValue.setAlphaF( val.toDouble() / 100000.0 );
-                      }
-                      else
-                      {
-                          if ( m_areaContext == ChartArea )
-                              m_context->m_chart->m_areaFormat->m_foreground.setAlphaF( val.toDouble() / 100000.0 );
-                          else
-                              m_context->m_chart->m_plotAreaFillColor.setAlphaF( val.toDouble() / 100000.0 );
-                          }
-                      }
-                  }
+            if ( !val.isEmpty() ) {
+                if ( readingGradientStop ) {
+                    currentStop.knownColorValue.setAlphaF( val.toDouble() / 100000.0 );
+                } else {
+                    if ( m_areaContext == ChartArea ) {
+                        if ( m_context->m_chart->m_areaFormat )
+                            m_context->m_chart->m_areaFormat->m_foreground.setAlphaF( val.toDouble() / 100000.0 );
+                    } else {
+                        if ( m_context->m_chart->m_plotArea->m_areaFormat )
+                            m_context->m_chart->m_plotArea->m_areaFormat->m_foreground.setAlphaF( val.toDouble() / 100000.0 );
+                    }
+                }
+            }
         } else if ( qualifiedName() == "a:gsLst" ) {
             if ( isStartElement() ) {
                 readingGradient = true;
@@ -1328,8 +1332,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             TRY_READ_ATTR_WITHOUT_NS(ang)
             if ( !ang.isEmpty() )
                 gradient->angle = ang.toDouble() / 60000.0;
-        } else if ( qualifiedName() == "a:noFill" )
-        {
+        } else if ( qualifiedName() == "a:noFill" ) {
             m_currentShapeProperties->lineFill.setType( Charting::Fill::None );
         }
     }

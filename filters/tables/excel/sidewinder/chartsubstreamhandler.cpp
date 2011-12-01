@@ -493,13 +493,17 @@ void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 {
     if (!record) return;
     DEBUG << "autoPosition=" << record->isAutoPosition() << " autoSize=" << record->isAutoSize() << std::endl;
-    if (record->isAutoPosition()) {
-        m_chart->m_x1 = -1;
-        m_chart->m_y1 = -1;
+    if ( dynamic_cast< Charting::Chart* > ( m_currentObj ) ) {
+        if (record->isAutoPosition()) {
+            m_chart->m_x1 = -1;
+            m_chart->m_y1 = -1;
+        }
+        if (record->isAutoSize()) {
+            m_chart->m_x2 = -1;
+            m_chart->m_y2 = -1;
+        }
     }
-    if (record->isAutoSize()) {
-        m_chart->m_x2 = -1;
-        m_chart->m_y2 = -1;
+    else if ( dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
     }
 }
 
@@ -699,8 +703,7 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
           << " fillStyle=" << record->fls() << std::endl;
     m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background,
                                                           record->fls() != 0x0000);
-    Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj );
-    if ( series )
+    if ( Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj ) )
     {
         const int index = m_chart->m_series.indexOf( series ) % 8;
         if ( !series->spPr )
@@ -716,9 +719,9 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
             series->spPr->areaFill.setColor( foreground );
         }
     }
-    
-//     if ( /*series = */dynamic_cast< Charting::Series* > ( m_currentObj ) )
-        //Q_ASSERT( false );
+    else if ( Charting::PlotArea* plotArea = dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
+        Q_UNUSED(plotArea);
+    }
 }
 
 void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
@@ -953,7 +956,7 @@ void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 {
     if (!record) return;
     DEBUG << "fAutoPosition=" << record->isFAutoPosition() << " fAutoPosX=" << record->isFAutoPosX() << " fAutoPosY=" << record->isFAutoPosY() << " fVert=" << record->isFVert() << " fWasDataTable=" << record->isFWasDataTable() << std::endl;
-    m_currentObj = new Charting::Legend();
+    m_currentObj = m_chart->m_legend = new Charting::Legend();
 }
 
 // specifies the number of axis groups on the chart.
@@ -1180,6 +1183,7 @@ void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
 {
     if (!record) return;
     DEBUG << std::endl;
+    m_currentObj = m_chart->m_plotArea = new Charting::PlotArea();
 }
 
 void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
