@@ -2703,13 +2703,13 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 
-        int repeated = cellStorage()->rowRepeat(i);
+        int repeated = 1;
         // empty row?
         if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) { // row is empty
 //             kDebug(36003) <<"Sheet::saveOdfColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row();
-            int j = i + repeated;
+            int j = i + 1;
 
             // search for
             //   next non-empty row
@@ -2726,7 +2726,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                     if (!d->rows.isDefaultRow(j) || !tableContext.rowDefaultStyles.value(j).isDefault())
                         break;
                     // otherwise, jump to the next
-                    j += cellStorage()->rowRepeat(j);
+                    ++j;
                     continue;
                 }
 
@@ -2736,7 +2736,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 if (style != tableContext.rowDefaultStyles.value(j))
                     break;
                 // otherwise, process the next
-                j += cellStorage()->rowRepeat(j);
+                ++j;
             }
             repeated = j - i;
 
@@ -2783,9 +2783,10 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             else if (d->rows.isFiltered(i)) // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "filter");
 
-            int j = i + repeated;
+            int j = i + 1;
             while (j <= maxRows && compareRows(i, j, maxCols, tableContext)) {
-                j += cellStorage()->rowRepeat(j);
+                j++;
+                repeated++;
             }
             repeated = j - i;
             if (repeated > 1) {
