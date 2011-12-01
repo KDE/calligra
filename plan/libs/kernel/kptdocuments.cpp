@@ -34,16 +34,18 @@ namespace KPlato
 Document::Document()
     : m_type( Type_None ),
     m_url( KUrl() ),
-    m_sendAs( SendAs_None )
+    m_sendAs( SendAs_None ),
+    parent ( 0 )
 {
     //kDebug()<<this;
 }
 
 Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendAs )
     : m_type( type ),
-    m_url( url ),
-    m_sendAs( sendAs )
+    m_sendAs( sendAs ),
+    parent ( 0 )
 {
+    setUrl( url );
     //kDebug()<<this;
 }
 
@@ -54,7 +56,8 @@ Document::~Document()
 
 bool Document::operator==( const Document &doc ) const
 {
-    bool res = ( m_url == doc.url() && 
+    bool res = ( m_url == doc.url() &&
+                 m_name == doc.m_name &&
                  m_type == doc.type() && 
                  m_status == doc.status() &&
                  m_sendAs == doc.sendAs() 
@@ -93,6 +96,16 @@ QString Document::sendAsToString( Document::SendAs snd, bool trans )
     return sendAsList( trans ).at( snd );
 }
 
+void Document::setName( const QString &name )
+{
+    if ( m_name != name ) {
+        m_name = name;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
 void Document::setType( Type type )
 {
     if ( type != m_type ) {
@@ -117,6 +130,9 @@ void Document::setUrl( const KUrl &url )
 {
     if ( m_url != url ) {
         m_url = url;
+        if ( m_name.isEmpty() ) {
+            m_name = url.fileName();
+        }
         if ( parent ) {
             parent->documentChanged( this );
         }
@@ -137,6 +153,7 @@ bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 {
     Q_UNUSED(status);
     m_url = KUrl( element.attribute( "url" ) );
+    m_name = element.attribute( "name", m_url.fileName() );
     m_type = ( Type )( element.attribute( "type" ).toInt() );
     m_status = element.attribute( "status" );
     m_sendAs = ( SendAs )( element.attribute( "sendas" ).toInt() );
@@ -146,6 +163,7 @@ bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 void Document::save(QDomElement &element) const
 {
     element.setAttribute("url", m_url.url() );
+    element.setAttribute("name", m_name );
     element.setAttribute("type", m_type );
     element.setAttribute("status", m_status );
     element.setAttribute("sendas", m_sendAs );

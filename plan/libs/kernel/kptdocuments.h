@@ -47,12 +47,15 @@ public:
     enum SendAs { SendAs_None, SendAs_Copy, SendAs_Reference };
     
     Document();
-    explicit Document( const KUrl &url, Type type = Type_None, SendAs sendAs = SendAs_Reference );
+    explicit Document( const KUrl &url, Type type = Type_Reference, SendAs sendAs = SendAs_Reference );
     ~Document();
     
     bool operator==( const Document &doc ) const;
     bool operator!=( const Document &doc ) const { return ! operator==( doc ); }
     
+    QString name() const { return m_name; }
+    void setName( const QString &name );
+
     Type type() const { return m_type; }
     void  setType( Type type );
     static QStringList typeList( bool trans = false );
@@ -78,6 +81,7 @@ private:
     KUrl m_url;
     QString m_status;
     SendAs m_sendAs;
+    QString m_name;
 
     friend class Documents;
     Documents *parent;

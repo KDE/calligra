@@ -1716,6 +1716,18 @@ private:
     KUrl m_oldvalue;
 };
 
+class KPLATOKERNEL_EXPORT DocumentModifyNameCmd : public NamedCommand
+{
+public:
+    DocumentModifyNameCmd( Document *doc, const QString &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    Document *m_doc;
+    QString m_value;
+    QString m_oldvalue;
+};
+
 class KPLATOKERNEL_EXPORT DocumentModifyTypeCmd : public NamedCommand
 {
 public:

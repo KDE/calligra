@@ -32,6 +32,14 @@ class KPLATOMODELS_EXPORT DocumentModel : public QObject
 {
     Q_OBJECT
 public:
+    enum Properties {
+        Property_Url = 0,
+        Property_Name,
+        Property_Type,
+        Property_SendAs,
+        Property_Status
+    };
+
     DocumentModel()
         : QObject()
     {}
@@ -45,6 +53,8 @@ public:
     static int propertyCount();
 
     QVariant url( const Document *doc, int role ) const;
+    QVariant name( const Document *doc, int role ) const;
+    bool setName( Document *doc, const QVariant &value, int role );
     QVariant type( const Document *doc, int role ) const;
     bool setType( Document *doc, const QVariant &value, int role );
     QVariant status( const Document *doc, int role ) const;
@@ -101,6 +111,7 @@ protected slots:
 
 protected:
     bool setUrl( Document *doc, const QVariant &value, int role );
+    bool setName( Document *doc, const QVariant &value, int role );
     bool setType( Document *doc, const QVariant &value, int role );
     bool setSendAs( Document *doc, const QVariant &value, int role );
 

@@ -2990,6 +2990,24 @@ void DocumentModifyUrlCmd::unexecute()
 }
 
 //----------------
+DocumentModifyNameCmd::DocumentModifyNameCmd( Document *doc, const QString &value, const QString& name )
+    : NamedCommand( name ),
+    m_doc( doc )
+{
+    Q_ASSERT( doc );
+    m_value = value;
+    m_oldvalue = doc->name();
+}
+void DocumentModifyNameCmd::execute()
+{
+    m_doc->setName( m_value );
+}
+void DocumentModifyNameCmd::unexecute()
+{
+    m_doc->setName( m_oldvalue );
+}
+
+//----------------
 DocumentModifyTypeCmd::DocumentModifyTypeCmd( Document *doc, Document::Type value, const QString& name )
     : NamedCommand( name ),
     m_doc( doc )
