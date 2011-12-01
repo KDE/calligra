@@ -1891,22 +1891,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
     }
 
-    // MS PowerPoint enables the user to change the color of the label.
-    // If the color information is not provided, then the font color of the 1st
-    // text chunk MUST be used.  In case of MS Word, the font color from
-    // text-properties of the paragraph MUST be used.  To help the layout a bit
-    // the information could be provided here.
-    //
-    // NOTE: Commented out for now because the textlayout must support files
-    // created by LO/OOo.
-    //
-/*     if (m_currentBulletProperties.bulletColor() == "UNUSED") { */
-/*         m_listStylePropertiesAltered = true; */
-/*         if (!bulletColor.isEmpty()) { */
-/*             m_currentBulletProperties.setBulletColor(bulletColor); */
-/*         } */
-/*     } */
-
     //---------------------------------------------
     // List Style
     //---------------------------------------------
