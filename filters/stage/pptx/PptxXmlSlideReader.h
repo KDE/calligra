@@ -279,12 +279,12 @@ protected:
 
 
     /**
-     * NOTE: Testing inheritance of missing properties from style
-     * type=="other".
+     * NOTE: Testing inheritance of missing properties from placeholder of type
+     * "other".
      *
      * @return font-size for the corresponding level from type=="other"
      */
-    QString inheritFontSizeFromOther();
+    QString typeOtherFontSize();
 
 private:
 

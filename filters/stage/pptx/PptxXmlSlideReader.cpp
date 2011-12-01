@@ -2825,7 +2825,7 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 #endif
 }
 
-QString PptxXmlSlideReader::inheritFontSizeFromOther()
+QString PptxXmlSlideReader::typeOtherFontSize()
 {
     if ((m_context->type == Slide) && !d->phType.isEmpty()) {
         const QMap<QString, QMap<int,KoGenStyle> >* map = &m_context->slideMasterProperties->textStyles;
