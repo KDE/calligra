@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include "planworksettings.h"
 #include "kpttaskeditor.h"
 #include "kpttaskdescriptiondialog.h"
+#include "kptcommonstrings.h"
 
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
@@ -137,6 +138,7 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     collection->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
+    //------ Popups
     actionEditDocument  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
     collection->addAction("edit_document", actionEditDocument );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
@@ -145,6 +147,10 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     collection->addAction("view_document", actionViewDocument );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
+    // FIXME remove UndoText::removeDocument() when string freeze is lifted
+    actionRemoveDocument = new KAction(KIcon( "list-remove" ), UndoText::removeDocument(), this);
+    collection->addAction("remove_document", actionRemoveDocument );
+    connect( actionRemoveDocument, SIGNAL( triggered( bool ) ), SLOT( slotRemoveDocument() ) );
 
     actionSendPackage  = new KAction(KIcon( "mail-send" ), i18n("Send Package..."), this);
     collection->addAction("edit_sendpackage", actionSendPackage );
@@ -153,10 +159,6 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     actionPackageSettings  = new KAction(KIcon( "document-properties" ), i18n("Package Settings..."), this);
     collection->addAction("edit_packagesettings", actionPackageSettings );
     connect( actionPackageSettings, SIGNAL( triggered( bool ) ), SLOT( slotPackageSettings() ) );
-
-//     actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Edit Progress..."), this);
-//     collection->addAction("task_progress", actionTaskProgress );
-//     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
 
     actionTaskCompletion  = new KAction(KIcon( "document-edit" ), i18n("Edit Progress..."), this);
     collection->addAction("task_progress", actionTaskCompletion );
@@ -318,6 +320,11 @@ void View::slotEditDocument( Document *doc )
 void View::slotViewDocument()
 {
     emit viewDocument( currentDocument() );
+}
+
+void View::slotRemoveDocument()
+{
+    part()->removeDocument( currentDocument() );
 }
 
 void View::slotPackageSettings()
