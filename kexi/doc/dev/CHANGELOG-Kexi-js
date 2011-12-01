@@ -119,8 +119,6 @@ TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions
 
 2011-11-30
 Reports
-*Fix bug: no indication of selected toolbox action for report element
-BUG:283888
 *After inserting element, respective toolbox action is deselected
 
 2011-11-27..29

@@ -1,7 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
- * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,15 +36,12 @@
 class KexiReportPart::Private
 {
 public:
-    Private() : toolboxActionGroup(0)
-    {
+    Private() {
         ksrc = 0;
     }
     ~Private() {
     }
     KexiSourceSelector *ksrc;
-    QActionGroup toolboxActionGroup;
-    QMap<QString, QAction*> toolboxActionsByName;
 };
 
 KexiReportPart::KexiReportPart(QObject *parent, const QVariantList &l)
@@ -81,7 +77,6 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
     } else if (viewMode == Kexi::DesignViewMode) {
         view = new KexiReportDesignView(parent, d->ksrc);
         connect(d->ksrc, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
-        connect(view, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
     }
     return view;
 }
@@ -89,14 +84,12 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 void KexiReportPart::initPartActions()
 {
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    QList<QAction*> reportActions = KoReportDesigner::actions(&d->toolboxActionGroup);
+    QList<QAction*> reportActions = KoReportDesigner::actions(this);
 
     foreach(QAction* action, reportActions) {
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(slotToolboxActionTriggered(bool)));
+        connect(action, SIGNAL(triggered()), this, SLOT(slotActionTriggered()));
         win->addToolBarAction("report", action);
-        d->toolboxActionsByName.insert(action->objectName(), action);
     }
-    
 }
 
 QString KexiReportPart::loadReport(const QString& name)
@@ -167,10 +160,8 @@ void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     tab->setTabToolTip(tab->indexOf(d->ksrc), i18n("Data Source"));
 }
 
-void KexiReportPart::slotToolboxActionTriggered(bool checked)
+void KexiReportPart::slotActionTriggered()
 {
-    if (!checked)
-        return;
     QObject *theSender = sender();
     if (!theSender)
         return;
@@ -190,16 +181,6 @@ void KexiReportPart::slotToolboxActionTriggered(bool checked)
         if (!dv)
             return;
         dv->triggerAction(senderName);
-    }
-}
-
-void KexiReportPart::slotItemInserted(const QString& entity)
-{
-    Q_UNUSED(entity);
-    // uncheck toolbox action after it is used
-    QAction * a = d->toolboxActionGroup.checkedAction();
-    if (a) {
-        a->setChecked(false);
     }
 }
 

@@ -1,7 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
- * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -62,14 +61,13 @@ public:
 
         /*! true, if \a document member has changed in previous view. Used on view switching.
         Check this flag to see if we should refresh data for DataViewMode. */
-        bool reportSchemaChangedInPreviousView;
+    bool reportSchemaChangedInPreviousView :
+        1;
         QString name;
     };
 
 private slots:
-    void slotToolboxActionTriggered(bool checked);
-    //! Unchecks toolbox action for @a entity after it is used.
-    void slotItemInserted(const QString& entity);
+    void slotActionTriggered();
 
 private:
     QString loadReport(const QString&);
