@@ -567,7 +567,22 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_defRPr()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
 {
     READ_PROLOGUE
-    Charting::Axis* axis = new Charting::Axis( Charting::Axis::VerticalValueAxis );
+
+    // The logic here is that if the x-axis defines a category then it should be already
+    // set above using the read_catAx else this read_valAx could be either a x-axis or
+    // a y-axis. In that case we just look if there was already a x-axis defined in
+    // which case we know if must be the y-axis or, if not, then it's the a-axis.
+    // This sounds hacky (and it certainly is) but that's how OO.org does it too.
+    bool xAxisAlreadyDefined = !m_context->m_chart->m_verticalCellRangeAddress.isEmpty();
+    if (!xAxisAlreadyDefined) {
+        foreach(Charting::Axis* axis, m_context->m_chart->m_axes) {
+            if (axis->m_type == Charting::Axis::HorizontalValueAxis) {
+                xAxisAlreadyDefined = true;
+                break;
+            }
+        }
+    }
+    Charting::Axis* axis = new Charting::Axis( xAxisAlreadyDefined ? Charting::Axis::VerticalValueAxis : Charting::Axis::HorizontalValueAxis );
 
     m_context->m_chart->m_axes.push_back( axis );
     while (!atEnd()) {
@@ -575,17 +590,18 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(axPos) ) ) {
-                  const QXmlStreamAttributes attrs(attributes());
-                  TRY_READ_ATTR_WITHOUT_NS(val)
-                  if ( val == QLatin1String( "b" ) ){
-                      axis->m_type = Charting::Axis::HorizontalValueAxis;
-                  }
+//                   const QXmlStreamAttributes attrs(attributes());
+//                   TRY_READ_ATTR_WITHOUT_NS(val)
+//                   if ( val == QLatin1String( "b" ) ){
+//                       axis->m_type = Charting::Axis::HorizontalValueAxis;
+//                   }
 //                   else if ( val == QLatin1String( "l" ) ){
 //                   }
+//             }
             }
-        }
-        else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
-            axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
+                axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+            }
         }
     }
     READ_EPILOGUE
@@ -596,18 +612,19 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
 {
     READ_PROLOGUE
-    Charting::Axis* axis = new Charting::Axis( Charting::Axis::VerticalValueAxis );
+    // category-axis or date-axis are always x-axis. They are only defined for the case the
+    // x-axis itself defines a category. If not then the x-axis will be defined via read_valAx.
+    Charting::Axis* axis = new Charting::Axis( Charting::Axis::HorizontalValueAxis );
     m_context->m_chart->m_axes.push_back( axis );
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(axPos) ) ) {
-                  const QXmlStreamAttributes attrs(attributes());
-                  TRY_READ_ATTR_WITHOUT_NS(val)
-                  if ( val == QLatin1String( "b" ) ){
-                      axis->m_type = Charting::Axis::HorizontalValueAxis;
-                  }
+//                   const QXmlStreamAttributes attrs(attributes());
+//                   TRY_READ_ATTR_WITHOUT_NS(val)
+//                   if ( val == QLatin1String( "b" ) ){
+//                   }
 //                   else if ( val == QLatin1String( "l" ) ){
 //                   }
             }
@@ -662,8 +679,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(spPr)
-            ELSE_TRY_READ_IF(valAx)
-            ELSE_TRY_READ_IF(catAx)
+            ELSE_TRY_READ_IF(valAx) // x-axis or y-axis
+            ELSE_TRY_READ_IF(catAx) // x-axis
+            //ELSE_TRY_READ_IF(serAx) // z-axis
             ELSE_TRY_READ_IF(pieChart)
             ELSE_TRY_READ_IF(pie3DChart)
             ELSE_TRY_READ_IF(doughnutChart)
