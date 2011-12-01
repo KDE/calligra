@@ -496,7 +496,7 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
     const Node *from = wp->node();
     Node *to = node();
 
-    MacroCommand *m = new MacroCommand( "Merge data" );
+    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Merge data" ) );
     if ( to->name() != from->name() ) {
         m->addCommand( new NodeModifyNameCmd( *to, from->name() ) );
     }
