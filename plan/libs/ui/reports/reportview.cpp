@@ -840,7 +840,8 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     tb->addSeparator();
 
-    foreach( QAction *a, m_designer->actions(this) ) {
+    QActionGroup *group = new QActionGroup(tb);
+    foreach( QAction *a, m_designer->actions(group) ) {
         if ( a->objectName() == "report:image" || a->objectName() == "report:shape" ) {
             continue;
         }
