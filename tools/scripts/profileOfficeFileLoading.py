@@ -15,6 +15,17 @@ applications = {
   'calligrastage': ['odp', 'ppt', 'pptx'],
   'calligratables': ['ods', 'xls', 'xlsx']
 }
+extensions = {
+  'odt': 'odt',
+  'doc': 'odt',
+  'docx': 'odt',
+  'odp': 'odp',
+  'ppt': 'odp',
+  'pptx': 'odp',
+  'ods': 'ods',
+  'xls': 'ods',
+  'xlsx': 'ods'
+}
 
 # limit how many backtraces are recordes, since it takes a lot of time
 maxbacktraces = 50
@@ -205,9 +216,13 @@ def profile(dir, file, logger, validator):
 	roundtripfilename = None
 	args = []
 	# in case of ODF file, do a roundtrip
-        m = re.match('.*(\.od.)$', file)
+	m = re.match('.*(\.od.)$', file)
+	(roundtripfd, roundtripfilename) = tempfile.mkstemp("." + extensions[ext])
 	if m:
-		(roundtripfd, roundtripfilename) = tempfile.mkstemp(m.group(1))
+		isOdfFile = True
+	else:
+		isOdfFile = False
+	if isOdfFile:
 		args += ["--roundtrip-filename", roundtripfilename]
 	args += ["--benchmark-loading", "--profile-filename", tmpfilename,
 		"--nocrashhandler", file]
@@ -230,7 +245,13 @@ def profile(dir, file, logger, validator):
 			logger.failTest(r.backtrace)
 		else:
 			logger.failTest("Crash, no backtrace: limit reached.")
-	elif roundtripfilename:
+	else:
+		if not isOdfFile:
+			# convert ms office file to odf
+			exepath = getExecutablePath("calligraconverter")
+			args = [file, roundtripfilename]
+			cr = runCommand(exepath, args, False)
+
 		err = validator.validate(roundtripfilename);
 		if err != None:
 			logger.failTest(str(err))
