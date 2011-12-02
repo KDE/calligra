@@ -83,6 +83,7 @@ class Validity;
 class ValidityStorage;
 class ValueStorage;
 class View;
+class CellStorageTest;
 template<typename T> class IntervalMap;
 
 /**
@@ -962,6 +963,8 @@ private:
 
     // disable assignment operator
     void operator=(const Sheet& other);
+
+    friend class CellStorageTest;
 
     class Private;
     Private * const d;
