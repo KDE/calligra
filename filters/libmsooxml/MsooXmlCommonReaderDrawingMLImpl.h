@@ -33,6 +33,7 @@
 //ECMA-376, 20.1.10.68, p.3431 - ST_TextFontSize (Text Font Size)
 #define TEXT_FONTSIZE_MIN 1
 #define TEXT_FONTSIZE_MAX 4000
+#define TEXT_FONTSIZE_DEFAULT 18
 
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
@@ -2161,13 +2162,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     QString fontSize = m_currentTextStyle.property("fo:font-size");
 
-    //NOTE: in testing phase
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
-        fontSize = typeOtherFontSize();
-        if (!fontSize.isEmpty()) {
-            m_currentTextStyle.addProperty("fo:font-size", fontSize);
-        }
+        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
     }
 #endif
     if (!fontSize.isEmpty()) {
@@ -5772,6 +5770,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
             }
             ELSE_TRY_READ_IF(t)
             ELSE_WRONG_FORMAT
+        }
+    }
+
+    QString fontSize = m_currentTextStyle.property("fo:font-size");
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (fontSize.isEmpty()) {
+        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
+    }
+#endif
+    if (!fontSize.isEmpty()) {
+        fontSize.remove("pt");
+        qreal realSize = fontSize.toDouble();
+        if (realSize > m_maxParaFontPt) {
+            m_maxParaFontPt = realSize;
+        }
+        if (realSize < m_minParaFontPt) {
+            m_minParaFontPt = realSize;
         }
     }
 
