@@ -2179,34 +2179,70 @@ QRect Sheet::usedArea(bool onlyContent) const
     return QRect(1, 1, maxCols, maxRows);
 }
 
-bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tableContext) const
+inline int compareCellInRow(const Cell &cell1, const Cell &cell2, int maxCols)
 {
+    if (cell1.isNull() != cell2.isNull())
+        return 0;
+    if (cell1.isNull())
+        return 2;
+    if (maxCols >= 0 && cell1.column() > maxCols)
+        return 3;
+    if (cell1.column() != cell2.column())
+        return 0;
+    if (!cell1.compareData(cell2))
+        return 0;
+    return 1;
+}
+
+inline bool compareCellsInRows(CellStorage *cellStorage, int row1, int row2, int maxCols)
+{
+    Cell cell1 = cellStorage->firstInRow(row1);
+    Cell cell2 = cellStorage->firstInRow(row2);
+    while (true) {
+        int r = compareCellInRow(cell1, cell2, maxCols);
+        if (r == 0)
+            return false;
+        if (r != 1)
+            break;
+        cell1 = cellStorage->nextInRow(cell1.column(), cell1.row());
+        cell2 = cellStorage->nextInRow(cell2.column(), cell2.row());
+    }
+    return true;
+}
+
+bool Sheet::compareRows(int row1, int row2, int maxCols, OdfSavingContext& tableContext) const
+{
+#if 0
     if (!d->rows.rowsAreEqual(row1, row2)) {
-//         kDebug(36003) <<"\t Formats of" << row1 <<" and" << row2 <<" are different";
         return false;
     }
     if (tableContext.rowHasCellAnchoredShapes(this, row1) != tableContext.rowHasCellAnchoredShapes(this, row2)) {
         return false;
     }
-    Cell cell1 = cellStorage()->firstInRow(row1);
-    Cell cell2 = cellStorage()->firstInRow(row2);
-    if (cell1.isNull() != cell2.isNull())
+    return compareCellsInRows(cellStorage(), row1, row2, maxCols);
+#else
+    // Optimized comparision by using the RowRepeatStorage to compare the content
+    // rather then an expensive loop like compareCellsInRows.
+    int row1repeated = cellStorage()->rowRepeat(row1);
+    Q_ASSERT( row2 > row1 );
+    if (row2 - row1 >= row1repeated) {
         return false;
-    while (!cell1.isNull()) {
-        if (cell1.column() != cell2.column())
-            return false;
-        if (cell1.column() > maxCols)
-            break;
-        if (!cell1.compareData(cell2)) {
-//             kDebug(36003) <<"\t Cell at column" << col <<" in row" << row2 <<" differs from the one in row" << row1;
-            return false;
-        }
-        cell1 = cellStorage()->nextInRow(cell1.column(), cell1.row());
-        cell2 = cellStorage()->nextInRow(cell2.column(), cell2.row());
-        if (cell1.isNull() != cell2.isNull())
-            return false;
     }
+
+    // The RowRepeatStorage does not take to-cell anchored shapes into account
+    // so we need to check for them explicit.
+    if (tableContext.rowHasCellAnchoredShapes(this, row1) != tableContext.rowHasCellAnchoredShapes(this, row2)) {
+        return false;
+    }
+
+    // Some sanity-checks to be sure our RowRepeatStorage works as expected.
+    Q_ASSERT_X( d->rows.rowsAreEqual(row1, row2), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
+    //Q_ASSERT_X( compareCellsInRows(cellStorage(), row1, row2, maxCols), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
+    Q_ASSERT_X( compareCellInRow(cellStorage()->lastInRow(row1), cellStorage()->lastInRow(row2), -1), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
+
+    // If we reached that point then the both rows are equal.
     return true;
+#endif
 }
 
 void Sheet::saveOdfHeaderFooter(KoXmlWriter &xmlWriter) const

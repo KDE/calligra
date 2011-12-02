@@ -914,7 +914,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    bool compareRows(int row1, int row2, int & maxCols, OdfSavingContext& tableContext) const;
+    bool compareRows(int row1, int row2, int maxCols, OdfSavingContext& tableContext) const;
 
     /**
      * \ingroup OpenDocument
