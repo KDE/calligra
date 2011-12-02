@@ -32,7 +32,6 @@ class CellStorageTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testMergedCellsInsertRowBug();
-    void testSaveEmbeddedObjectsBug();
 };
 
 } // namespace Tables

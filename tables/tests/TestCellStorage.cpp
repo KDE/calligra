@@ -19,35 +19,11 @@
 
 #include "TestCellStorage.h"
 
-#include <QBuffer>
-#include <QIODevice>
-
-#include <KoShape.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoGenStyles.h>
-#include <KoEmbeddedDocumentSaver.h>
-
 #include <tables/CellStorage.h>
 #include <tables/Map.h>
 #include <tables/Sheet.h>
-#include <tables/OdfSavingContext.h>
 
 #include <qtest_kde.h>
-
-class MockShape : public KoShape
-{
-public:
-    MockShape() : KoShape() {}
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
-        Q_UNUSED(painter);
-        Q_UNUSED(converter);
-    }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
-        return true;
-    }
-};
 
 using namespace Calligra::Tables;
 
@@ -93,28 +69,6 @@ void CellStorageTest::testMergedCellsInsertRowBug()
     QCOMPARE(storage->mergedYCells(1, 2), 1);
     QCOMPARE(storage->mergedXCells(1, 3), 1);
     QCOMPARE(storage->mergedYCells(1, 3), 2);
-}
-
-// test for bug 287997
-void CellStorageTest::testSaveEmbeddedObjectsBug()
-{
-    Map map;
-    Sheet* sheet = map.addNewSheet();
-    CellStorage* storage = sheet->cellStorage();
-    storage->insertRows(1, 15);
-
-    QBuffer buf;
-    buf.open(QIODevice::ReadWrite);
-    KoXmlWriter xmlWriter(&buf);
-    KoGenStyles mainStyles;
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoShapeSavingContext shapeContext(xmlWriter, mainStyles, embeddedSaver);
-    OdfSavingContext tableContext(shapeContext);
-
-    MockShape shape;
-    tableContext.insertCellAnchoredShape(sheet, 20, 5, &shape);
-
-    QCOMPARE(sheet->compareRows(12,20,1024,tableContext), false);
 }
 
 QTEST_KDEMAIN(CellStorageTest, GUI)
