@@ -900,10 +900,15 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         }
         // TODO: Discuss the font-size logic in case it's not provided in the
         // presentation at the Office Open XML File Format Implementation
-        // forum.  The 18pt value is a result of test files analysis
-        KoGenStyle style(KoGenStyle::TextStyle, "text");
+        // forum.  The 18pt value is a result of test files analysis.
+        KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
         style.setDefaultStyle(true);
-        style.addPropertyPt("fo:font-size", 18);
+        style.addPropertyPt("fo:font-size", 18, KoGenStyle::TextType);
+        mainStyles->insert(style);
+
+        style = KoGenStyle(KoGenStyle::TextStyle, "text");
+        style.setDefaultStyle(true);
+        style.addPropertyPt("fo:font-size", 18, KoGenStyle::TextType);
         mainStyles->insert(style);
     }
 
