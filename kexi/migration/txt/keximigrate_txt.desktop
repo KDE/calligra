@@ -33,6 +33,7 @@ Name[zh_CN]=文本
 Name[zh_TW]=文字
 Comment=Text Import Plugin for Kexi
 Comment[cs]=Modul Kexi pro import textu
+Comment[nb]=Tekst import-programtillegg for Kexi
 Comment[pt]='Plugin' de Importação de Texto para o Kexi
 Comment[pt_BR]=Plugin de Importação de Texto para o Kexi
 Comment[sv]=Importinsticksprogram av text för Kexi
