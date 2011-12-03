@@ -257,8 +257,9 @@ def profile(dir, file, logger, validator):
 			logger.failTest(str(err))
 
 	os.remove(tmpfilename)
-	if roundtripfilename:
-		os.remove(roundtripfilename)
+	# close file descriptor to roundtripfile and remove the roundtripfile
+	os.close(roundtripfd)
+	os.remove(roundtripfilename)
 
 	logger.endTest(int((r.utime + r.stime)*1000))
 	return r
