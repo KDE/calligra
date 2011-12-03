@@ -359,23 +359,28 @@ private:
     //TODO: Merge with m_continueListNumbering defined in MsooXmlCommenReaderDrawingMLMethods.h
     QMap<QString, QPair<int, bool> > m_continueListNum;
 
+    //! Map of numId.level keys and list-item num./last xml:id pairs.
+    QMap<QString, QPair<int, QString> > m_numIdXmlId;
+
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
 
     // ************************************************
     //  State
     // ************************************************
-    //TODO: Add all the other attributes on demand.
     struct DocumentReaderState {
         explicit DocumentReaderState(const QMap<QString, QString> &usedListStyles,
-                                     const QMap <QString, QPair<int, bool> > &continueListNum)
+                                     const QMap <QString, QPair<int, bool> > &continueListNum,
+                                     const QMap <QString, QPair<int, QString> > &numIdXmlId)
         : usedListStyles(usedListStyles),
-          continueListNum(continueListNum) {}
+          continueListNum(continueListNum),
+          numIdXmlId(numIdXmlId) {}
 
         DocumentReaderState() {}
 
         QMap<QString, QString> usedListStyles;
         QMap<QString, QPair<int, bool> > continueListNum;
+        QMap<QString, QPair<int, QString> > numIdXmlId;
     };
 
     void saveState();

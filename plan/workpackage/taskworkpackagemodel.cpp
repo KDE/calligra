@@ -124,7 +124,7 @@ void TaskWorkPackageModel::slotNodeChanged( Node *node )
     emit dataChanged( createIndex( row, 0, node->parentNode() ), createIndex( row, columnCount()-1, node->parentNode() ) );
 }
 
-void TaskWorkPackageModel::slotDocumentAdded( Node *node, Document *doc, int row )
+void TaskWorkPackageModel::slotDocumentAdded( Node *node, Document */*doc*/, int row )
 {
     QModelIndex parent = indexForNode( node );
     if ( parent.isValid() ) {
@@ -133,7 +133,7 @@ void TaskWorkPackageModel::slotDocumentAdded( Node *node, Document *doc, int row
     }
 }
 
-void TaskWorkPackageModel::slotDocumentRemoved( Node *node, Document *doc, int row )
+void TaskWorkPackageModel::slotDocumentRemoved( Node *node, Document */*doc*/, int row )
 {
     QModelIndex parent = indexForNode( node );
     if ( parent.isValid() ) {
@@ -142,7 +142,7 @@ void TaskWorkPackageModel::slotDocumentRemoved( Node *node, Document *doc, int r
     }
 }
 
-void TaskWorkPackageModel::slotDocumentChanged( Node *node, Document *doc, int row )
+void TaskWorkPackageModel::slotDocumentChanged( Node *node, Document */*doc*/, int row )
 {
     QModelIndex parent = indexForNode( node );
     if ( parent.isValid() ) {

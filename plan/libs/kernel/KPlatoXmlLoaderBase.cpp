@@ -1299,9 +1299,9 @@ bool KPlatoXmlLoaderBase::load( Completion::UsedEffort* ue, const KoXmlElement& 
         if (e.tagName() == "actual-effort") {
             QDate date = QDate::fromString( e.attribute("date"), Qt::ISODate );
             if ( date.isValid() ) {
-                Completion::UsedEffort::ActualEffort *a = new Completion::UsedEffort::ActualEffort();
-                a->setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
-                a->setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
+                Completion::UsedEffort::ActualEffort a;
+                a.setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
+                a.setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
                 ue->setEffort( date, a );
             }
         }

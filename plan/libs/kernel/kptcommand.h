@@ -1276,7 +1276,7 @@ private:
 class KPLATOKERNEL_EXPORT AddCompletionActualEffortCmd : public NamedCommand
 {
 public:
-    AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name = QString() );
+    AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const QString& name = QString() );
     ~AddCompletionActualEffortCmd();
     void execute();
     void unexecute();
@@ -1284,9 +1284,8 @@ public:
 private:
     Completion::UsedEffort &m_usedEffort;
     QDate m_date;
-    Completion::UsedEffort::ActualEffort *oldvalue;
-    Completion::UsedEffort::ActualEffort *newvalue;
-    bool m_newmine, m_oldmine;
+    Completion::UsedEffort::ActualEffort oldvalue;
+    Completion::UsedEffort::ActualEffort newvalue;
 };
 
 

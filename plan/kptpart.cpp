@@ -755,7 +755,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
         foreach ( const QDate &d, curr.entries().keys() ) {
             Completion::Entry e = *( curr.entry( d ) );
             // set used effort from date entry and remove used effort from date entry
-            Completion::UsedEffort::ActualEffort *effort = new Completion::UsedEffort::ActualEffort( e.totalPerformed - prev.totalPerformed );
+            Completion::UsedEffort::ActualEffort effort( e.totalPerformed - prev.totalPerformed );
             ue->setEffort( d, effort );
             prev = e;
         }

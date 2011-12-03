@@ -58,8 +58,8 @@ void CompareView::init()
     m_image1Label = new QLabel();
     m_image2Label = new QLabel();
     m_stack = new QStackedWidget();
-    int i1 = m_stack->addWidget(m_image1Label);
-    int i2 = m_stack->addWidget(m_image2Label);
+    m_stack->addWidget(m_image1Label);
+    m_stack->addWidget(m_image2Label);
     layout->addWidget(m_stack, 1, 0);
 
     m_diffLabel = new QLabel(this);

@@ -15,6 +15,17 @@ applications = {
   'calligrastage': ['odp', 'ppt', 'pptx'],
   'calligratables': ['ods', 'xls', 'xlsx']
 }
+extensions = {
+  'odt': 'odt',
+  'doc': 'odt',
+  'docx': 'odt',
+  'odp': 'odp',
+  'ppt': 'odp',
+  'pptx': 'odp',
+  'ods': 'ods',
+  'xls': 'ods',
+  'xlsx': 'ods'
+}
 
 # limit how many backtraces are recordes, since it takes a lot of time
 maxbacktraces = 50
@@ -98,11 +109,11 @@ class odfvalidator:
 		path = sys.path[0]
 		self.relaxNGValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cd05-schema-calligra.rng'),
+				'OpenDocument-v1.2-cs01-schema-calligra.rng'),
 				'r')))
 		self.relaxNGManifextValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cd05-manifest-schema.rng'), \
+				'OpenDocument-v1.2-cs01-manifest-schema.rng'), \
 				'r')))
 	# returns error string on error, None otherwise
 	def validate(self, odtpath): 
@@ -205,9 +216,13 @@ def profile(dir, file, logger, validator):
 	roundtripfilename = None
 	args = []
 	# in case of ODF file, do a roundtrip
-        m = re.match('.*(\.od.)$', file)
+	m = re.match('.*(\.od.)$', file)
+	(roundtripfd, roundtripfilename) = tempfile.mkstemp("." + extensions[ext])
 	if m:
-		(roundtripfd, roundtripfilename) = tempfile.mkstemp(m.group(1))
+		isOdfFile = True
+	else:
+		isOdfFile = False
+	if isOdfFile:
 		args += ["--roundtrip-filename", roundtripfilename]
 	args += ["--benchmark-loading", "--profile-filename", tmpfilename,
 		"--nocrashhandler", file]
@@ -230,14 +245,21 @@ def profile(dir, file, logger, validator):
 			logger.failTest(r.backtrace)
 		else:
 			logger.failTest("Crash, no backtrace: limit reached.")
-	elif roundtripfilename:
+	else:
+		if not isOdfFile:
+			# convert ms office file to odf
+			exepath = getExecutablePath("calligraconverter")
+			args = [file, roundtripfilename]
+			cr = runCommand(exepath, args, False)
+
 		err = validator.validate(roundtripfilename);
 		if err != None:
 			logger.failTest(str(err))
 
 	os.remove(tmpfilename)
-	if roundtripfilename:
-		os.remove(roundtripfilename)
+	# close file descriptor to roundtripfile and remove the roundtripfile
+	os.close(roundtripfd)
+	os.remove(roundtripfilename)
 
 	logger.endTest(int((r.utime + r.stime)*1000))
 	return r

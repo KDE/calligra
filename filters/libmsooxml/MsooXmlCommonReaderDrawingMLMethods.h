@@ -97,8 +97,8 @@ enum blipFillCaller {
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
 bool m_insideTable;
-qreal m_largestParaFont; // Largest font size used in the paragraph
-qreal m_minParaFont;     // minimum font size used in the paragraph
+qreal m_maxParaFontPt; // Largest font size used in the paragraph
+qreal m_minParaFontPt; // minimum font size used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
@@ -180,10 +180,6 @@ QString m_prevListStyleName;
 
 int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
-
-// Contains names of text styles prepared for each text:line-break element
-// wrote into the current paragraph.
-QStringList m_lineBreakTextStyleNames;
 
 // true - continue numbered list, false - restart numbering
 QMap<quint16, bool> m_continueListNumbering;

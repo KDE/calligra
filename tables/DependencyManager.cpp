@@ -107,13 +107,6 @@ void DependencyManager::regionChanged(const Region& region)
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 Cell cell(sheet, col, row);
-            bool first = true;
-                if (first) {
-                    cell = Cell(sheet, col, row);
-                    first = false;
-                } else {
-                    cell = sheet->cellStorage()->nextInRow(col, row);
-                }
                 const Formula formula = cell.formula();
 
                 // remove it and all its consumers from the reference depth list
