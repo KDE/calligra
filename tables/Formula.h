@@ -119,7 +119,7 @@ public:
      * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
      * etc.
      */
-    QString text() const {
+    const QString& text() const {
         return m_text;
     }
 
