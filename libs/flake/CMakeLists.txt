@@ -93,6 +93,7 @@ set(flake_SRCS
     KoShapeOdfSaveHelper.cpp
     KoShapePaste.cpp
     KoConnectionPoint.cpp
+    KoConnectionShapeRouter.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp
     KoConnectionShapeFactory.cpp

@@ -46,7 +46,8 @@
 #include <tables/Map.h>
 #include <tables/DocBase.h>
 #include "PAView.h"
-#include <flow/part/FlowPage.h>
+#include <KoPAPage.h>
+#include <flow/part/FlowDocument.h>
 #include <part/Doc.h>
 
 #include <QtCore/QPoint>

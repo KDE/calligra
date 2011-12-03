@@ -44,6 +44,18 @@ public:
     /// Returns if given handle is connected to a shape
     bool handleConnected(int handleId) const;
 
+    /// create connRef
+    void createConnRef();
+
+    /// update connRef
+    void updateConnRef();
+
+    /// delete connRef
+    void deleteConnRef();
+
+    /// set routing type
+    void setRoutingType();
+
     QList<QPointF> path;
 
     KoShape *shape1;

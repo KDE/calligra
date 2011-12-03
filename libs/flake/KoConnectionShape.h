@@ -114,6 +114,9 @@ public:
     /// Updates connections to shapes
     void updateConnections();
 
+    /// Callback function to Avoid::ConnRef
+    static void connRefCallback(void *ptr);
+
 protected:
     /// reimplemented
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);

@@ -22,6 +22,7 @@
 #include "KoConnectionShape.h"
 #include "KoConnectionShape_p.h"
 
+#include "libavoid/libavoid.h"
 #include "KoViewConverter.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
@@ -269,6 +270,44 @@ bool KoConnectionShapePrivate::handleConnected(int handleId) const
         return true;
 
     return false;
+}
+
+void KoConnectionShapePrivate::createConnRef()
+{
+    QPointF srcPos = connector->firstShape()->absoluteTransformation(0).map(
+                connector->firstShape()->connectionPoint(connector->firstConnectionId()).position);
+    QPointF dstPos = connector->secondShape()->absoluteTransformation(0).map(
+                connector->secondShape()->connectionPoint(connector->secondConnectionId()).position);
+    Avoid::Point srcPt(srcPos.x(), srcPos.y());
+    Avoid::Point dstPt(dstPos.x(), dstPos.y());
+    Avoid::ConnRef *connRef = new Avoid::ConnRef(m_router, srcPt, dstPt);
+        connRef->setCallback(routingCallback, connRef);
+        m_connectorMap.add(connRef);
+}
+
+void KoConnectionShapePrivate::updateConnRef()
+{
+
+}
+
+void KoConnectionShapePrivate::deleteConnRef()
+{
+
+}
+
+void KoConnectionShapePrivate::setRoutingType()
+{
+
+}
+
+static void KoConnectionShape::connRefCallback(void *ptr)
+{
+    Avoid::ConnRef *connRef = (Avoid::ConnRef *) ptr;
+    const Avoid::PolyLine& route = connRef->route();
+    for (size_t i = 0; i < route.ps.size(); ++i) {
+        route.ps[i].x, route.ps[i].y;
+    }
+        printf("\n");
 }
 
 void KoConnectionShape::updateConnections()
@@ -561,47 +600,52 @@ void KoConnectionShape::updatePath(const QSizeF &size)
 
     const qreal MinimumEscapeLength = (qreal)20.;
     clear();
-    switch (d->connectionType) {
-    case Standard: {
-        d->normalPath(MinimumEscapeLength);
-        if (d->path.count() != 0){
-            moveTo(d->path[0]);
-            for (int index = 1; index < d->path.count(); ++index)
-                lineTo(d->path[index]);
-        }
 
-        break;
-    }
-    case Lines: {
-        QPointF direction1 = d->escapeDirection(0);
-        QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
-        moveTo(d->handles[StartHandle]);
-        if (! direction1.isNull())
-            lineTo(d->handles[StartHandle] + MinimumEscapeLength * direction1);
-        if (! direction2.isNull())
-            lineTo(d->handles[EndHandle] + MinimumEscapeLength * direction2);
-        lineTo(d->handles[EndHandle]);
-        break;
-    }
-    case Straight:
-        moveTo(d->handles[StartHandle]);
-        lineTo(d->handles[EndHandle]);
-        break;
-    case Curve:
-        // TODO
-        QPointF direction1 = d->escapeDirection(0);
-        QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
-        moveTo(d->handles[StartHandle]);
-        if (! direction1.isNull() && ! direction2.isNull()) {
-            QPointF curvePoint1 = d->handles[StartHandle] + 5.0 * MinimumEscapeLength * direction1;
-            QPointF curvePoint2 = d->handles[EndHandle] + 5.0 * MinimumEscapeLength * direction2;
-            curveTo(curvePoint1, curvePoint2, d->handles[EndHandle]);
-        } else {
-            lineTo(d->handles[EndHandle]);
+    if (this->connectionShapeRouting()) {
+        //TODO
+    } else {
+        switch (d->connectionType) {
+        case Standard: {
+            d->normalPath(MinimumEscapeLength);
+            if (d->path.count() != 0){
+                moveTo(d->path[0]);
+                for (int index = 1; index < d->path.count(); ++index)
+                    lineTo(d->path[index]);
+            }
+
+            break;
         }
-        break;
+        case Lines: {
+            QPointF direction1 = d->escapeDirection(0);
+            QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
+            moveTo(d->handles[StartHandle]);
+            if (! direction1.isNull())
+                lineTo(d->handles[StartHandle] + MinimumEscapeLength * direction1);
+            if (! direction2.isNull())
+                lineTo(d->handles[EndHandle] + MinimumEscapeLength * direction2);
+            lineTo(d->handles[EndHandle]);
+            break;
+        }
+        case Straight:
+            moveTo(d->handles[StartHandle]);
+            lineTo(d->handles[EndHandle]);
+            break;
+        case Curve:
+            // TODO
+            QPointF direction1 = d->escapeDirection(0);
+            QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
+            moveTo(d->handles[StartHandle]);
+            if (! direction1.isNull() && ! direction2.isNull()) {
+                QPointF curvePoint1 = d->handles[StartHandle] + 5.0 * MinimumEscapeLength * direction1;
+                QPointF curvePoint2 = d->handles[EndHandle] + 5.0 * MinimumEscapeLength * direction2;
+                curveTo(curvePoint1, curvePoint2, d->handles[EndHandle]);
+            } else {
+                lineTo(d->handles[EndHandle]);
+            }
+            break;
+        }
+        normalize();
     }
-    normalize();
 }
 
 bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointId)
@@ -750,6 +794,7 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
     // one of the connected shape has moved
     const bool connectedShapeChanged = shape && (shape == d->shape1 || shape == d->shape2);
 
+    //TODO: if connCallback notified, updateConnections
     if (!updateIsActive && (connectionChanged || connectedShapeChanged) && isParametricShape())
         updateConnections();
 

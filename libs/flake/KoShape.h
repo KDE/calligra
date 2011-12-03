@@ -980,6 +980,18 @@ public:
     void setHyperLink (QString & hyperLink);
 
     /**
+     * Retun whether the shape will join connection shape routing.
+     * @return true if connection shape routing is enabled.
+     */
+    bool connectionShapeRouting() const;
+
+    /**
+     * Set property of connection shape routing.
+     * @param route true if this shape will join connection shape routing.
+     */
+    void setConnectionShapeRouting(bool route);
+
+    /**
      * \internal
      * Returns the private object for use within the flake lib
      */

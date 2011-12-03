@@ -87,6 +87,7 @@ public:
     int selectable : 1;
     int detectCollision : 1;
     int protectContent : 1;
+    int connectionShapeRouting : 1;
 
     KoShape::TextRunAroundSide textRunAroundSide;
 

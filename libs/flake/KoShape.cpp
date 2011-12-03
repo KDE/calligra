@@ -94,6 +94,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       selectable(true),
       detectCollision(false),
       protectContent(false),
+      connectionShapeRouting(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
       textRunAroundDistance(1.0),
       textRunAroundThreshold(0.0)
@@ -1045,6 +1046,18 @@ bool KoShape::collisionDetection()
 {
     Q_D(KoShape);
     return d->detectCollision;
+}
+
+void KoShape::setConnectionShapeRouting(bool route)
+{
+    Q_D(KoShape);
+    d->connectionShapeRouting = route;
+}
+
+bool KoShape::connectionShapeRouting() const
+{
+    Q_D(KoShape);
+    return d->connectionShapeRouting;
 }
 
 KoShapeBorderModel *KoShape::border() const
