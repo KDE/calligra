@@ -771,8 +771,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 #endif
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 #ifndef PPTXXMLSLIDEREADER_CPP
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 #else
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
@@ -793,9 +793,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     // only either draw:style-name or presentation:style-name
     // is allowed, but not both.
     if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
-        QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
+        KoGenStyle::copyPropertiesFromStyle(*m_currentDrawStyle, m_currentPresentationStyle, KoGenStyle::GraphicType);
+        KoGenStyle::copyPropertiesFromStyle(*m_currentDrawStyle, m_currentPresentationStyle, KoGenStyle::TextType);
+        KoGenStyle::copyPropertiesFromStyle(*m_currentDrawStyle, m_currentPresentationStyle, KoGenStyle::ParagraphType);
+        const QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     } else {
+        const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
         body->addAttribute("draw:style-name", styleName);
     }
     inheritShapePosition();
