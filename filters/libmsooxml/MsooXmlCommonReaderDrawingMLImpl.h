@@ -770,10 +770,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-    body->addAttribute("draw:style-name", styleName);
 
-#ifdef PPTXXMLSLIDEREADER_CPP
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+#ifndef PPTXXMLSLIDEREADER_CPP
+    body->addAttribute("draw:style-name", styleName);
+#else
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
 
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -789,9 +790,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
+    // only either draw:style-name or presentation:style-name
+    // is allowed, but not both.
     if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
+    } else {
+        body->addAttribute("draw:style-name", styleName);
     }
     inheritShapePosition();
 
