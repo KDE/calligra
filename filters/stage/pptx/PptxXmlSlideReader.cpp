@@ -2825,32 +2825,6 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 #endif
 }
 
-QString PptxXmlSlideReader::inheritFontSizeFromOther()
-{
-    if (m_context->type == Slide) {
-        const QMap<QString, QMap<int,KoGenStyle> >* map = &m_context->slideMasterProperties->textStyles;
-        const QString type = "other";
-
-#ifdef PPTX_DEBUG_TEXT_STYLES
-        kDebug() << "==> [MasterSlide] type:" << type << "| contains:" << map->contains(type);
-#endif
-        if (map->contains(type)) {
-#ifdef PPTX_DEBUG_TEXT_STYLES
-            kDebug() << "listLevel:" << m_currentListLevel <<
-                        "| contains:" << map->value(type).contains(m_currentListLevel);
-#endif
-            if (map->value(type).contains(m_currentListLevel)) {
-                const KoGenStyle* style = &m_context->slideMasterProperties->textStyles[type][m_currentListLevel];
-#ifdef PPTX_DEBUG_TEXT_STYLES
-                kDebug() << "<== [Other] font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
-#endif
-                return style->property("fo:font-size", KoGenStyle::TextType);
-            }
-        }
-    }
-    return QString();
-}
-
 KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
 {
     kDebug() << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;

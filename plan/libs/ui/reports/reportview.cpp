@@ -71,6 +71,7 @@
 #include <QModelIndex>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QActionGroup>
 
 namespace KPlato
 {
@@ -764,6 +765,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
 
     connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
     connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
+    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
 
     populateToolbar( tb );
 }
@@ -815,7 +817,8 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
 
     connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
     connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
-
+    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
+    
     populateToolbar( tb );
 }
 
@@ -840,10 +843,14 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     tb->addSeparator();
 
-    foreach( QAction *a, m_designer->actions(this) ) {
+    m_actionGroup = new QActionGroup(tb);
+    
+    foreach( QAction *a, m_designer->actions(m_actionGroup) ) {
         if ( a->objectName() == "report:image" || a->objectName() == "report:shape" ) {
+            m_actionGroup->removeAction(a);
             continue;
         }
+
         tb->addAction( a );
         connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
     }
@@ -857,8 +864,15 @@ void ReportDesignPanel::slotPropertySetChanged()
 }
 
 void ReportDesignPanel::slotInsertAction()
-{
+{   
     emit insertItem( sender()->objectName() );
+}
+
+void ReportDesignPanel::slotItemInserted(const QString &) 
+{
+    if (m_actionGroup->checkedAction())  {
+        m_actionGroup->checkedAction()->setChecked(false);
+    }    
 }
 
 void ReportDesignPanel::setReportData( const QString &tag )

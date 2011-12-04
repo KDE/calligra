@@ -16,8 +16,6 @@ macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit with svg plugin" "Translat
 
 if (PSTOEDIT_SVG_PLUGIN_FOUND)
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 set(karbonepsimport_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 
 kde4_add_plugin(karbonepsimport ${karbonepsimport_PART_SRCS})
@@ -28,12 +26,11 @@ install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(
-FILES  
-#karbon_eps_export.desktop  
-	karbon_eps_import.desktop
-#  	karbon_ps_import.desktop
-DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES
+    #karbon_eps_export.desktop
+    karbon_eps_import.desktop
+    #karbon_ps_import.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR}
+)
 
 endif (PSTOEDIT_SVG_PLUGIN_FOUND)
-

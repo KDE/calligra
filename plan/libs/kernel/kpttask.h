@@ -75,15 +75,15 @@ public:
             bool operator==( const UsedEffort &e ) const;
             bool operator!=( const UsedEffort &e ) const { return !operator==( e ); }
             void mergeEffort( const UsedEffort &value );
-            void setEffort( const QDate &date, ActualEffort *value );
+            void setEffort( const QDate &date, const ActualEffort &value );
             /// Returns the total effort up to @p date
             Duration effortTo( const QDate &date ) const;
             /// Returns the total effort on @p date
-            ActualEffort *effort( const QDate &date ) const { return m_actual.value( date ); }
-            ActualEffort *takeEffort( const QDate &date ) { return m_actual.take( date ); }
+            ActualEffort effort( const QDate &date ) const { return m_actual.value( date ); }
+            ActualEffort takeEffort( const QDate &date ) { return m_actual.take( date ); }
             /// Returns the total effort for all registered dates
             Duration effort() const;
-            QMap<QDate, ActualEffort*> actualEffortMap() const { return m_actual; }
+            QMap<QDate, ActualEffort> actualEffortMap() const { return m_actual; }
             
             /// Load from document
             bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
@@ -92,9 +92,9 @@ public:
             bool contains( const QDate &date ) const { return m_actual.contains( date ); }
 
         private:
-            QMap<QDate, ActualEffort*> m_actual;
+            QMap<QDate, ActualEffort> m_actual;
     };
-    typedef QMap<QDate, UsedEffort::ActualEffort*> DateUsedEffortMap;
+    typedef QMap<QDate, UsedEffort::ActualEffort> DateUsedEffortMap;
     
     class KPLATOKERNEL_EXPORT Entry
     {
@@ -345,7 +345,6 @@ public:
     bool operator!=( const WorkPackageSettings &settings ) const;
     bool usedEffort;
     bool progress;
-    bool remainingEffort;
     bool documents;
 };
 

@@ -22,6 +22,8 @@
  *
  */
 
+#include <QTime>
+
 #include "DocxXmlDocumentReader.h"
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
@@ -155,6 +157,7 @@ void DocxXmlDocumentReader::init()
     m_outputFrames = true;
     m_currentNumId = "";
     m_prevListLevel = 0;
+    qsrand(QTime::currentTime().msec());
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -2065,11 +2068,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     // update automatic numbering info
                     if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
 
-                        QString numId;
                         bool listOpen = false;
+
                         if (m_continueListNum.contains(m_currentNumId)) {
                             listOpen = true;
-                            numId = m_currentNumId;
                         }
                         else if (!m_currentBulletProperties.startOverride()) {
 
@@ -2083,16 +2085,25 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                             for (i = numIDs.constBegin(); i != numIDs.constEnd(); ++i) {
                                 if (m_continueListNum.contains(*i)) {
                                     listOpen = true;
-                                    numId = *i;
+                                    m_currentNumId = *i;
                                     break;
                                 }
                             }
                         }
                         if (listOpen) {
-                            if (m_currentListLevel <= m_continueListNum[numId].first) {
+                            if (m_currentListLevel <= m_continueListNum[m_currentNumId].first) {
                                 m_continueListNum[m_currentNumId].second = true;
                             } else {
                                 m_continueListNum[m_currentNumId].second = false;
+
+                                QString key;
+                                int i = m_continueListNum[m_currentNumId].first;
+                                while (i > m_currentListLevel) {
+                                    key = m_currentNumId;
+                                    key.append(QString(".lvl%1").arg(i));
+                                    m_numIdXmlId.remove(key);
+                                    --i;
+                                }
                             }
                         }
                     }
@@ -2108,7 +2119,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     QString listStyleName = mainStyles->insert(m_currentListStyle, QString());
                     Q_ASSERT(!listStyleName.isEmpty());
                     //TODO: continue an opened list based on this information
-                    m_usedListStyles.insertMulti(m_currentNumId, listStyleName);
+//                     m_usedListStyles.insertMulti(m_currentNumId, listStyleName);
 
                     // Start a new list
                     body->startElement("text:list");
@@ -2116,11 +2127,23 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
                     // continue numbering if applicable
                     if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+
+                        QString key = m_currentNumId;
+                        key.append(QString(".lvl%1").arg(m_currentListLevel));
+
+                        // Keeping the id readable for debugging purpose
+                        QString xmlId = key;
+                        xmlId.append(QString("_%1").arg(m_numIdXmlId[key].first)).prepend("lst");
+                        xmlId.append(QString("_%1").arg(qrand()));
+                        body->addAttribute("xml:id", xmlId);
+
                         if (m_continueListNum.contains(m_currentNumId)) {
                             if (m_continueListNum[m_currentNumId].second) {
-                                body->addAttribute("text:continue-numbering", "true");
+                                body->addAttribute("text:continue-list", m_numIdXmlId[key].second);
                             }
                         }
+                        m_numIdXmlId[key].first++;
+                        m_numIdXmlId[key].second = xmlId;
                     }
                     body->startElement("text:list-item");
                     for (int i = 0; i < m_currentListLevel; ++i) {
@@ -6539,11 +6562,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
 // ************************************************
 void DocxXmlDocumentReader::saveState()
 {
-    DocumentReaderState state(m_usedListStyles, m_continueListNum);
+    DocumentReaderState state(m_usedListStyles, m_continueListNum, m_numIdXmlId);
     m_statesBkp.push(state);
 
     m_usedListStyles.clear();
     m_continueListNum.clear();
+    m_numIdXmlId.clear();
 }
 
 void DocxXmlDocumentReader::restoreState()
@@ -6555,6 +6579,7 @@ void DocxXmlDocumentReader::restoreState()
     DocumentReaderState s = m_statesBkp.pop();
     m_usedListStyles = s.usedListStyles;
     m_continueListNum = s.continueListNum;
+    m_numIdXmlId = s.numIdXmlId;
 }
 
 #define DRAWINGML_NS "a"

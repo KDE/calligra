@@ -29,12 +29,12 @@
 
 CSTCompareView::CSTCompareView(QWidget *parent)
 : QWidget(parent)
-, m_currentIndex(0)
 #ifdef HAS_POPPLER
 , m_showPdf(false)
 , m_pdfDelta(0)
 , m_pdfDocument(0)
 #endif
+, m_currentIndex(0)
 {
     QGridLayout *layout = new QGridLayout(this);
     m_current = new QLabel(this);

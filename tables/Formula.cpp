@@ -31,6 +31,7 @@
 #include "NamedAreaManager.h"
 #include "Region.h"
 #include "Value.h"
+#include "Util.h"
 
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -693,11 +694,9 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
             // we're done with identifier
             else {
                 // check for cell reference,  e.g A1, VV123, ...
-                QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
-                int n = exp.indexIn(tokenText);
-                if (n >= 0)
+                if (Util::isCellReference(tokenText)) {
                     state = InCell;
-                else {
+                } else {
                     if (isNamedArea(tokenText))
                         tokens.append(Token(Token::Range, tokenText, tokenStart));
                     else
@@ -710,13 +709,12 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
             break;
 
         case InCell:
-
-            // consume as long as alpha, dollar sign, underscore, or digit
-            if (isIdentifier(ch)  || ch.isDigit()) tokenText.append(ex[i++]);
-
-            // we're done with cell ref, possibly with sheet name (like "Sheet2!B2")
-            // note that "Sheet2!TotalSales" is also possible, in which "TotalSales" is a named area
-            else {
+            if (isIdentifier(ch)  || ch.isDigit()) {
+                // consume as long as alpha, dollar sign, underscore, or digit
+                tokenText.append(ex[i++]);
+            } else {
+                // we're done with cell ref, possibly with sheet name (like "Sheet2!B2")
+                // note that "Sheet2!TotalSales" is also possible, in which "TotalSales" is a named area
 
                 // check if it's a cell ref like A32, not named area
                 QString cell;
@@ -725,18 +723,14 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
                         break;
                     else
                         cell.prepend(tokenText[j]);
-                QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
-                if (exp.indexIn(cell) != 0) {
+                if (!Util::isCellReference(cell)) {
                     // regexp failed, means we have something like "Sheet2!TotalSales"
                     // and not "Sheet2!A2"
                     // thus, assume so far that it's a named area
                     tokens.append(Token(Token::Range, tokenText, tokenStart));
                     tokenText.clear();
                     state = Start;
-                }
-
-                else {
-
+                } else {
                     // so up to now we've got something like A2 or Sheet2!F4
                     // check for range reference
                     if (ch == ':') {

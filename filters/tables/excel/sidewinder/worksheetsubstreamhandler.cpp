@@ -890,6 +890,7 @@ void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)
     d->sheet->setShowZeroValues(record->isFDspZerosRt());
     d->sheet->setFirstVisibleCell(QPoint(record->colLeft(),record->rwTop()));
     d->sheet->setPageBreakViewEnabled(record->isFSLV());
+    d->sheet->setRightToLeft(record->isFRightToLeft());
 }
 
 void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)

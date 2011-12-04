@@ -100,6 +100,9 @@ public:
     Task *task() const;
     Project *project() const { return m_project; }
 
+    /// Remove document @p doc
+    bool removeDocument( Part *part, Document *doc );
+
     /// Set the file path to this package
     void setFilePath( const QString name ) { m_filePath = name; }
     /// Return the file path to this package
@@ -111,13 +114,14 @@ public:
     void removeFile();
 
     /// Merge data from work package @p wp
-    void merge( Part *part, const WorkPackage *wp );
+    void merge( Part *part, const WorkPackage *wp, KoStore *store );
 
     bool isModified() const;
 
     int queryClose( Part *part );
 
     KUrl extractFile( const Document *doc );
+    KUrl extractFile( const Document *doc, KoStore *store );
 
     QString id() const;
 

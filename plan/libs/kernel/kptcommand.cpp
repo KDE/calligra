@@ -2120,12 +2120,15 @@ RemoveCompletionEntryCmd::RemoveCompletionEntryCmd( Completion &completion, cons
 }
 RemoveCompletionEntryCmd::~RemoveCompletionEntryCmd()
 {
+    kDebug()<<m_mine<<value;
     if ( m_mine )
         delete value;
 }
 void RemoveCompletionEntryCmd::execute()
 {
-    Q_ASSERT( m_completion.entries().contains( m_date ) );
+    if ( ! m_completion.entries().contains( m_date ) ) {
+        kWarning()<<"Completion entries does not contain date:"<<m_date;
+    }
     if ( value ) {
         m_completion.takeEntry( m_date );
         m_mine = true;
@@ -2200,42 +2203,31 @@ void AddCompletionUsedEffortCmd::unexecute()
 
 }
 
-AddCompletionActualEffortCmd::AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name )
+AddCompletionActualEffortCmd::AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const QString& name )
         : NamedCommand( name ),
         m_usedEffort( ue ),
         m_date( date ),
-        newvalue( value ),
-        m_newmine( true ),
-        m_oldmine( false)
+        newvalue( value )
 {
     oldvalue = ue.effort( date );
 }
 AddCompletionActualEffortCmd::~AddCompletionActualEffortCmd()
 {
-    if ( m_oldmine )
-        delete oldvalue;
-    if ( m_newmine )
-        delete newvalue;
 }
 void AddCompletionActualEffortCmd::execute()
 {
-    if ( oldvalue ) {
-        m_usedEffort.takeEffort( m_date );
-        m_oldmine = true;
+    m_usedEffort.takeEffort( m_date );
+    if ( newvalue.effort() > 0 ) {
+        m_usedEffort.setEffort( m_date, newvalue );
     }
-    m_usedEffort.setEffort( m_date, newvalue );
-    m_newmine = false;
 
 }
 void AddCompletionActualEffortCmd::unexecute()
 {
     m_usedEffort.takeEffort( m_date );
-    if ( oldvalue ) {
+    if ( oldvalue.effort() > 0 ) {
         m_usedEffort.setEffort( m_date, oldvalue );
     }
-    m_newmine = true;
-    m_oldmine = false;
-
 }
 
 AddAccountCmd::AddAccountCmd( Project &project, Account *account, const QString& parent, int index, const QString& name )
@@ -2987,6 +2979,24 @@ void DocumentModifyUrlCmd::execute()
 void DocumentModifyUrlCmd::unexecute()
 {
     m_doc->setUrl( m_oldvalue );
+}
+
+//----------------
+DocumentModifyNameCmd::DocumentModifyNameCmd( Document *doc, const QString &value, const QString& name )
+    : NamedCommand( name ),
+    m_doc( doc )
+{
+    Q_ASSERT( doc );
+    m_value = value;
+    m_oldvalue = doc->name();
+}
+void DocumentModifyNameCmd::execute()
+{
+    m_doc->setName( m_value );
+}
+void DocumentModifyNameCmd::unexecute()
+{
+    m_doc->setName( m_oldvalue );
 }
 
 //----------------

@@ -31,7 +31,9 @@
 #endif
 
 //ECMA-376, 20.1.10.68, p.3431 - ST_TextFontSize (Text Font Size)
-#define FONTSIZE_MAX 4000
+#define TEXT_FONTSIZE_MIN 1
+#define TEXT_FONTSIZE_MAX 4000
+#define TEXT_FONTSIZE_DEFAULT 18
 
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
@@ -768,10 +770,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-    body->addAttribute("draw:style-name", styleName);
 
-#ifdef PPTXXMLSLIDEREADER_CPP
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+#ifndef PPTXXMLSLIDEREADER_CPP
+    body->addAttribute("draw:style-name", styleName);
+#else
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
 
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -787,9 +790,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
+    // only either draw:style-name or presentation:style-name
+    // is allowed, but not both.
     if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
+    } else {
+        body->addAttribute("draw:style-name", styleName);
     }
     inheritShapePosition();
 
@@ -1702,8 +1709,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 {
     READ_PROLOGUE2(DrawingML_p)
 
-    m_largestParaFont = 0;
-    m_minParaFont = FONTSIZE_MAX;
+    // Using TEXT_FONTSIZE_MAX, because the font-size information might not be
+    // provided, which would break the margin-top/margin-bottom calculation.
+    // NOTE: This might not be the correct approach but it produces the best
+    // results at the moment.
+    m_minParaFontPt = TEXT_FONTSIZE_MAX;
+    m_maxParaFontPt = TEXT_FONTSIZE_MIN;
+
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1731,8 +1743,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     QString bulletColor = QString();
     QString listStyleName = QString();
 
-    // Creating a list out of what we have, note that ppr MAY overwrite the
-    // list style
+    // Creating a list out of what we have, pPr MAY overwrite the list style
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
 /*     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties); */
     QMutableMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
@@ -1755,6 +1766,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
     bool pprRead = false;
     bool rRead = false;
+    bool brLastElement = false;
+    QString endParaRPrFontSize;
 
     while (!atEnd()) {
         readNext();
@@ -1767,9 +1780,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 pprRead = true;
             }
             else if (QUALIFIED_NAME_IS(br)) {
-                body->startElement("text:line-break");
-                body->endElement(); // text:line-break
-                skipCurrentElement(); // Skipping rest of br element
+                TRY_READ(DrawingML_br)
+                brLastElement = true;
             }
 // CASE #400.2
 //! @todo add more conditions testing the parent
@@ -1785,15 +1797,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 if (bulletColor.isEmpty()) {
                     bulletColor = m_currentTextStyle.property("fo:color");
                 }
+                brLastElement = false;
             }
             else if (QUALIFIED_NAME_IS(fld)) {
                 rRead = true;
                 TRY_READ(fld)
+                brLastElement = false;
             }
             else if (QUALIFIED_NAME_IS(endParaRPr)) {
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#elif defined DOCXXMLDOCREADER_CPP
+                if (m_moveToStylesXml) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#endif
 #ifdef PPTXXMLSLIDEREADER_CPP
                 if (!m_insideTable) {
                     inheritTextStyle(m_currentTextStyle);
@@ -1804,7 +1827,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
 
-                KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+                if (brLastElement || !rRead) {
+                    body->startElement("text:span");
+                    body->addAttribute("text:style-name", mainStyles->insert(m_currentTextStyle));
+                    body->endElement(); //text:span
+                }
+                endParaRPrFontSize = m_currentTextStyle.property("fo:font-size");
             }
             ELSE_WRONG_FORMAT
         }
@@ -1819,18 +1847,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     Q_UNUSED(pprRead);
 #endif
 
+    //---------------------------------------------
+    // Empty lines
+    //---------------------------------------------
     // The endParaRPr element specifies the text run properties that are to be
     // used if another run is inserted after the last run specified.
     if (!rRead) {
-        fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
+        QString fontSize = endParaRPrFontSize;
         if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
             fontSize.chop(2);
             qreal realSize = fontSize.toDouble();
-            if (realSize > m_largestParaFont) {
-                m_largestParaFont = realSize;
+            if (realSize > m_maxParaFontPt) {
+                m_maxParaFontPt = realSize;
             }
-            if (realSize < m_minParaFont) {
-                m_minParaFont = realSize;
+            if (realSize < m_minParaFontPt) {
+                m_minParaFontPt = realSize;
             }
         }
     }
@@ -1858,22 +1889,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             m_listStylePropertiesAltered = true;
         }
     }
-
-    // MS PowerPoint enables the user to change the color of the label.
-    // If the color information is not provided, then the font color of the 1st
-    // text chunk MUST be used.  In case of MS Word, the font color from
-    // text-properties of the paragraph MUST be used.  To help the layout a bit
-    // the information could be provided here.
-    //
-    // NOTE: Commented out for now because the textlayout must support files
-    // created by LO/OOo.
-    //
-/*     if (m_currentBulletProperties.bulletColor() == "UNUSED") { */
-/*         m_listStylePropertiesAltered = true; */
-/*         if (!bulletColor.isEmpty()) { */
-/*             m_currentBulletProperties.setBulletColor(bulletColor); */
-/*         } */
-/*     } */
 
     //---------------------------------------------
     // List Style
@@ -2021,7 +2036,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_currentParagraphStyle.removeProperty("fo:text-indent");
     }
 
-    // Margins (paragraph spacing) in OOxml MIGHT be defined as percentage.
+    // Margins (paragraph spacing) in OOXML MIGHT be defined as percentage.
     // In ODF the value of margin-top/margin-bottom MAY be a percentage that
     // refers to the corresponding margin of a parent style.  Let's convert
     // the percentage value into points to keep it simple.
@@ -2031,9 +2046,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         qreal percentage = spcBef.toDouble();
         qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-        margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFontPt);
 #else
-        margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_maxParaFontPt) / 100.0;
 #endif
         m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
     }
@@ -2043,9 +2058,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         qreal percentage = spcAft.toDouble();
         qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
-        margin = processParagraphSpacing(percentage, m_minParaFont);
+        margin = processParagraphSpacing(percentage, m_minParaFontPt);
 #else
-        margin = (percentage * m_largestParaFont) / 100.0;
+        margin = (percentage * m_maxParaFontPt) / 100.0;
 #endif
         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin);
     }
@@ -2116,6 +2131,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 #endif
 
 #ifdef PPTXXMLSLIDEREADER_CPP
+    // FIXME: There's no reason on my mind to NOT inherit the text style. (uzak)
     if (!m_insideTable) {
         inheritTextStyle(m_currentTextStyle);
     }
@@ -2135,6 +2151,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         }
     }
 
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+
     // elements
 
     body = rBuf.originalWriter();
@@ -2145,38 +2165,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
 
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-
     QString fontSize = m_currentTextStyle.property("fo:font-size");
 
-    //NOTE: in testing phase
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
-        fontSize = inheritFontSizeFromOther();
-        m_currentTextStyle.addProperty("fo:font-size", fontSize);
+        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
     }
 #endif
     if (!fontSize.isEmpty()) {
         fontSize.remove("pt");
         qreal realSize = fontSize.toDouble();
-        if (realSize > m_largestParaFont) {
-            m_largestParaFont = realSize;
+        if (realSize > m_maxParaFontPt) {
+            m_maxParaFontPt = realSize;
         }
-        if (realSize < m_minParaFont) {
-            m_minParaFont = realSize;
-        }
-    }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    // NOTE: Workaround!  Themes support is not perfect at the moment so let
-    // the application set the text color automatically instead of using the
-    // wrong color from p:txStyles provided by the slideMaster.  KDE BUG 286101
-    if (m_context->type == Slide) {
-	if (m_currentTextStyle.property("fo:color").isEmpty()) {
-            m_currentTextStyle.addProperty("style:use-window-font-color", "true");
+        if (realSize < m_minParaFontPt) {
+            m_minParaFontPt = realSize;
         }
     }
-#endif
 
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
     body->startElement("text:span", false);
@@ -2189,11 +2195,94 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         body->endElement(); // text:a
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL br
+//! br (Text Line Break)
+//! ECMA-376, 21.1.2.2.1, p.3569
+/*
+ This element specifies the existence of a vertical line break between two runs
+ of text within a paragraph.  In addition to specifying a vertical space
+ between two runs of text, this element can also have run properties specified
+ via the rPr child element.  This sets the formatting of text for the line
+ break so that if text is later inserted there that a new run can be generated
+ with the correct formatting.
+
+ Parent elements:
+ - [done] p (§21.1.2.2.6)
+
+ Child elements:
+ - [done] rPr (Text Run Properties) §21.1.2.3.9
+ */
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
+{
+    READ_PROLOGUE
+
+    m_currentTextStyleProperties = new KoCharacterStyle();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#elif defined DOCXXMLDOCREADER_CPP
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#endif
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (!m_insideTable) {
+        inheritTextStyle(m_currentTextStyle);
+    }
+#endif
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(rPr)) {
+                TRY_READ(DrawingML_rPr)
+            }
+            ELSE_WRONG_FORMAT
+        }
+    }
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
+    // NOTE: workaround: Remove selected properties to get text:line-break
+    // applied properly during layout.  I didn't check the layout part (uzak).
+
+    // If fo:text-transform is present then text:line-break is not applied.
+    m_currentTextStyle.removeProperty("fo:text-transform");
+
+    // The underline is applied until the end of the line during layout when
+    // the text style of text:line-break equals the text style of the chunk.
+    m_currentTextStyle.removeProperty("style:text-underline-style");
+    m_currentTextStyle.removeProperty("style:text-underline-width");
+
+    // The fo:font-size is applied to both the start of a new line and to the
+    // end of the current line during layout, which affects line-height
+    // calculation.  Avoid using the application default font-size!
+    //
+    // NOTE: If the default text style does not specify the font-size, then
+    // overlapping of text occures, because the absolute line-height is
+    // calculated from the MAX font-size defined explicitly by any of the
+    // <text:span> elements.  Then application default font-size applies.
+    m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_MIN);
+
+    body->startElement("text:span");
+    body->addAttribute("text:style-name", mainStyles->insert(m_currentTextStyle));
+    body->startElement("text:line-break");
+    body->endElement(); //text:line-break
+    body->endElement(); //text:span
+
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
 }
+
 
 #undef CURRENT_EL
 #define CURRENT_EL endParaRPr
@@ -5649,11 +5738,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    inheritTextStyle(m_currentTextStyle);
-#endif
-
-    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+    QString textStyleName;
 
     while (!atEnd()) {
         readNext();
@@ -5662,8 +5747,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
             if (QUALIFIED_NAME_IS(rPr)) {
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#elif defined DOCXXMLDOCREADER_CPP
+                if (m_moveToStylesXml) {
+                    m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+                }
+#endif
+#ifdef PPTXXMLSLIDEREADER_CPP
+                inheritTextStyle(m_currentTextStyle);
+#endif
+                KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+
                 TRY_READ(DrawingML_rPr)
+
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                textStyleName = mainStyles->insert(m_currentTextStyle);
+
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
             }
@@ -5675,23 +5778,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         }
     }
 
+    QString fontSize = m_currentTextStyle.property("fo:font-size");
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-    }
-#elif defined DOCXXMLDOCREADER_CPP
-    if (m_moveToStylesXml) {
-        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    if (fontSize.isEmpty()) {
+        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
     }
 #endif
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+    if (!fontSize.isEmpty()) {
+        fontSize.remove("pt");
+        qreal realSize = fontSize.toDouble();
+        if (realSize > m_maxParaFontPt) {
+            m_maxParaFontPt = realSize;
+        }
+        if (realSize < m_minParaFontPt) {
+            m_minParaFontPt = realSize;
+        }
+    }
 
     body = fldBuf.originalWriter();
 
 //! @todo support all possible fields here
 
     body->startElement("text:span", false);
-    body->addAttribute("text:style-name", currentTextStyleName);
+    body->addAttribute("text:style-name", textStyleName);
 
     if (type == "slidenum") {
         body->startElement("text:page-number");
@@ -5702,7 +5812,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     (void)fldBuf.releaseWriter();
 
-    body->endElement(); // text:page-number, some date format
+    body->endElement(); //text:page-number, some date format
     body->endElement(); //text:span
 
     READ_EPILOGUE

@@ -115,9 +115,11 @@ private:
     class And;
     class Or;
     class Condition;
+    friend class AbstractCondition;
 
     void operator=(const Filter&);
     static QList<AbstractCondition*> copyList(const QList<AbstractCondition*>& list);
+    static bool conditionsEquals(AbstractCondition* a, AbstractCondition* b);
 
     class Private;
     Private * const d;

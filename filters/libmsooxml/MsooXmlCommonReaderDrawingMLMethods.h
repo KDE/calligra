@@ -97,13 +97,14 @@ enum blipFillCaller {
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
 bool m_insideTable;
-qreal m_largestParaFont; // Largest font size used in the paragraph
-qreal m_minParaFont;     // minimum font size used in the paragraph
+qreal m_maxParaFontPt; // Largest font size used in the paragraph
+qreal m_minParaFontPt; // minimum font size used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
 void handleRprAttributes(const QXmlStreamAttributes& attrs);
 KoFilter::ConversionStatus read_DrawingML_rPr();
+KoFilter::ConversionStatus read_DrawingML_br();
 KoFilter::ConversionStatus read_endParaRPr();
 
 KoFilter::ConversionStatus read_hlinkClick();

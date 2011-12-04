@@ -29,6 +29,7 @@
 #include "kptcommand.h"
 #include "kptxmlloaderobject.h"
 #include "kptconfigbase.h"
+#include "kptcommonstrings.h"
 
 #include <KoStore.h>
 #include <KoXmlReader.h>
@@ -434,6 +435,16 @@ Task *WorkPackage::task() const
     return task;
 }
 
+bool WorkPackage::removeDocument( Part *part, Document *doc )
+{
+    Node *n = node();
+    if ( n == 0 ) {
+        return false;
+    }
+    part->addCommand( new DocumentRemoveCmd( n->documents(), doc, UndoText::removeDocument() ) );
+    return true;
+}
+
 bool WorkPackage::copyFile( KoStore *from, KoStore *to, const QString &filename )
 {
     QByteArray data;
@@ -479,13 +490,13 @@ QDomDocument WorkPackage::saveXML()
     return document;
 }
 
-void WorkPackage::merge( Part *part, const WorkPackage *wp )
+void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
 {
     kDebug();
     const Node *from = wp->node();
     Node *to = node();
 
-    MacroCommand *m = new MacroCommand( "Merge data" );
+    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Merge data" ) );
     if ( to->name() != from->name() ) {
         m->addCommand( new NodeModifyNameCmd( *to, from->name() ) );
     }
@@ -514,16 +525,46 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp )
                 static_cast<Task*>( to )->workPackage().setOwnerName( static_cast<const Task*>( from )->workPackage().ownerName() );
             }
         }
+        foreach ( Document *doc,  from->documents().documents() ) {
+            Document *org = to->documents().findDocument( doc->url() );
+            if ( org ) {
+                // TODO: also handle modified type, sendas
+                // update ? what if open, modified ...
+                if ( doc->type() == Document::Type_Product ) {
+                    kWarning()<<"We do not update existing deliverables";
+                } else {
+                    kDebug()<<"Update existing doc:"<<doc->url();
+                }
+            } else {
+                kDebug()<<"new document:"<<doc->typeToString(doc->type())<<doc->url();
+                m->addCommand( new DocumentAddCmd( to->documents(), new Document( *doc ) ) );
+                if ( doc->sendAs() == Document::SendAs_Copy ) {
+                    kDebug()<<"Copy file";
+                    DocumentChild *ch = new DocumentChild( this );
+                    if ( ! ch->openDoc( doc, store ) ) {
+                        delete ch;
+                        continue;
+                    }
+                    if ( ! m_childdocs.contains( ch ) ) {
+                        m_childdocs.append( ch );
+                        connect( ch, SIGNAL( fileModified( bool ) ), this, SLOT( slotChildModified( bool ) ) );
+                        kDebug()<<ch;
+                    }
+                }
+            }
+        }
     }
     if ( m->isEmpty() ) {
         delete m;
     } else {
         part->addCommand( m );
+        setModified( true ); // FIXME needs to follow redo/undo
     }
 }
 
 int WorkPackage::queryClose( Part *part )
 {
+    kDebug()<<isModified();
     QString name = node()->name();
     QStringList lst;
     if ( ! m_childdocs.isEmpty() ) {
@@ -587,16 +628,21 @@ KUrl WorkPackage::extractFile( const Document *doc )
         delete store;
         return KUrl();
     }
+    KUrl url = extractFile( doc, store );
+    delete store;
+    return url;
+}
+
+KUrl WorkPackage::extractFile( const Document *doc, KoStore *store )
+{
     //FIXME: should use a special tmp dir
     QString tmp = KStandardDirs::locateLocal( "tmp", QString(), false );
     KUrl url( tmp + doc->url().fileName() );
     kDebug()<<"Extract: "<<doc->url().fileName()<<" -> "<<url.pathOrUrl();
     if ( ! store->extractFile( doc->url().fileName(), url.path() ) ) {
-        delete store;
         KMessageBox::error( 0, i18n( "<p>Work package <b>'%1'</b></p><p>Could not extract file:</p><p>%2</p>", node()->name(), doc->url().fileName() ) );
         return KUrl();
     }
-    delete store;
     return url;
 }
 

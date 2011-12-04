@@ -26,7 +26,6 @@ target_link_libraries(
     ${XBase_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KPARTS_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kexidb_xbasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})

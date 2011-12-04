@@ -91,6 +91,7 @@ public:
     Sheet* sheet(unsigned index);
 
     enum PropertyType {
+        PIDSI_CODEPAGE = 0x01,
         PIDSI_TITLE = 0x02,
         PIDSI_SUBJECT = 0x03,
         PIDSI_AUTHOR = 0x04,
