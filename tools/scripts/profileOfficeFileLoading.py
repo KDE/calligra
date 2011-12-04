@@ -235,6 +235,7 @@ def profile(dir, file, logger, validator):
 	outfile = os.fdopen(fileno, 'r')
 	r.lines = outfile.readlines()
 	outfile.close()
+	os.close(roundtripfd)
 	r.backtrace = None
 	if r.returnValue != 0:
 		if maxbacktraces > 0:
@@ -262,9 +263,8 @@ def profile(dir, file, logger, validator):
 		if err != None:
 			logger.failTest(str(err))
 
+	# remove the roundtripfile and the temporary file
 	os.remove(tmpfilename)
-	# close file descriptor to roundtripfile and remove the roundtripfile
-	os.close(roundtripfd)
 	os.remove(roundtripfilename)
 
 	logger.endTest(int((r.utime + r.stime)*1000))
