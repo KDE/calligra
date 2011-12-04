@@ -71,15 +71,18 @@ class logger:
 		self.suitename = name
 		print "##teamcity[testSuiteStarted name='" + self.suitename \
 			+ "']"
+		sys.stdout.flush()
 	def endTestSuite(self):
 		if not self.suitename: return
 		print "##teamcity[testSuiteFinished name='" + self.suitename \
 			+ "']"
+		sys.stdout.flush()
 		self.suitename = None
 	def startTest(self, name):
 		if not self.suitename: return
 		self.testname = name
 		print "##teamcity[testStarted name='" + self.testname + "']"
+		sys.stdout.flush()
 	# fail the current test
 	def failTest(self, backtrace):
 		if not self.suitename or not self.testname: return
@@ -88,11 +91,13 @@ class logger:
 			bt = bt + self.escape(l)
 		print "##teamcity[testFailed name='" + self.testname \
 			+ "' details='" + bt + "']"
+		sys.stdout.flush()
 	# end test, pass duration as integer representing the milliseconds
 	def endTest(self, duration):
 		if not self.suitename or not self.testname: return
 		print "##teamcity[testFinished name='" + self.testname \
 			+ "' duration='" + str(duration) + "']"
+		sys.stdout.flush()
 		self.testname = None
 
 def containsRealError(err):
@@ -242,6 +247,7 @@ def profile(dir, file, logger, validator):
 			r.backtrace = debugresult.stdout
 			for l in r.backtrace:
 				print l.rstrip()
+				sys.stdout.flush()
 			logger.failTest(r.backtrace)
 		else:
 			logger.failTest("Crash, no backtrace: limit reached.")
