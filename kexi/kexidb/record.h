@@ -20,8 +20,8 @@
 #ifndef KEXIDB_RECORD_H
 #define KEXIDB_RECORD_H
 
-#include <q3valuelist.h>
-#include <qstring.h>
+#include <QList>
+#include <QString>
 
 #include "field.h"
 
@@ -49,7 +49,7 @@ public:
 //js void addPrimaryKey(const QString& key);
 private:
 //js QStringList m_primaryKeys;
-    Q3ValueList<Field> m_fields;
+    QList<Field> m_fields;
     QString m_name;
     Connection* m_conn;
 };
