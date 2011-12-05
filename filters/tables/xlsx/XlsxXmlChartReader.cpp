@@ -386,6 +386,7 @@ XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     , m_autoTitleDeleted(false)
     , m_readTxContext( None )
     , m_areaContext( ChartArea )
+    , m_serMarkerDefined(false)
     , d ( new Private( ) )
 {
 }
@@ -1667,15 +1668,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart()
                 TRY_READ(lineChart_Ser)
             }
             ELSE_TRY_READ_IF(grouping)
-//             if ( qualifiedName() == "c:marker" )
-            {
-                const QXmlStreamAttributes attrs(attributes());
-                TRY_READ_ATTR_WITHOUT_NS(val)
-                if ( val == "1" || val == "true" || val == "on " )
-                { 
-                    m_context->m_chart->m_showMarker = true;
-                }
-            }
+            ELSE_TRY_READ_IF(marker)
         }
     }
 
@@ -2511,31 +2504,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
             else if (QUALIFIED_NAME_IS(tx)) {
                 TRY_READ(seriesText_Tx)
             }
+            else if (QUALIFIED_NAME_IS(marker)) {
+                TRY_READ(serMarker)
+            }
             ELSE_TRY_READ_IF(cat)
             ELSE_TRY_READ_IF(val)
             ELSE_TRY_READ_IF(dLbls)
-            ELSE_TRY_READ_IF(serMarker)
-//             if ( qualifiedName() == "c:marker" )
-//             {
-//                 const QXmlStreamAttributes attrs(attributes());
-//                 TRY_READ_ATTR_WITHOUT_NS(val);
-//                 if ( val == "1" || val == "true" || val == "on " )
-//                 {
-//                     if ( m_currentSeries->markerType == Charting::Series::None )
-//                         switch ( d->m_numReadSeries )
-//                         {
-//                             case 0:
-//                                 m_currentSeries->markerType = Charting::Series::Square;
-//                                 break;
-//                             case 1:
-//                                 m_currentSeries->markerType = Charting::Series::Diamond;
-//                                 break;
-//                             default:
-//                                 break;
-//                         }
-//                     ++d->m_numReadSeries;
-//                 }
-//             }
         }
     }
     if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
@@ -2555,41 +2529,89 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
     READ_EPILOGUE
 }
 
+Charting::MarkerType markerType(const QString &_val)
+{
+    const QString val = _val.toLower();
+    if ( val == "star" )
+        return Charting::StarMarker;
+    if ( val == "dash" )
+        return Charting::DashMarker;
+    if ( val == "dot" )
+        return Charting::DotMarker;
+    if ( val == "plus" )
+        return Charting::PlusMarker;
+    if ( val == "circle" )
+        return Charting::CircleMarker;
+    if ( val == "x" )
+        return Charting::SymbolXMarker;
+    if ( val == "triangle" )
+        return Charting::TriangleMarker;
+    if ( val == "squre" )
+        return Charting::SquareMarker;
+    if ( val == "diamond" )
+        return Charting::DiamondMarker;
+    return Charting::NoMarker;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL marker
-KoFilter::ConversionStatus XlsxXmlChartReader::read_serMarker()
+KoFilter::ConversionStatus XlsxXmlChartReader::read_marker()
 {
-    using namespace Charting;
-    READ_PROLOGUE2( serMarker )
+    READ_PROLOGUE
+
+    bool gotSymbol = m_serMarkerDefined;
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if ( qualifiedName() == "c:symbol" )
-            {
+            if ( !gotSymbol && qualifiedName() == "c:symbol" ) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val);
-                if ( val.toLower() == "star" )
-                    m_currentSeries->markerType = Series::Star;
-                else if ( val.toLower() == "dash" )
-                    m_currentSeries->markerType = Series::Dash;
-                else if ( val.toLower() == "dot" )
-                    m_currentSeries->markerType = Series::Dot;
-                else if ( val.toLower() == "plus" )
-                    m_currentSeries->markerType = Series::Plus;
-                else if ( val.toLower() == "circle" )
-                    m_currentSeries->markerType = Series::Circle;
-                else if ( val.toLower() == "x" )
-                    m_currentSeries->markerType = Series::SymbolX;
-                else if ( val.toLower() == "triangle" )
-                    m_currentSeries->markerType = Series::Triangle;
-                else if ( val.toLower() == "squre" )
-                    m_currentSeries->markerType = Series::Square;
-                else if ( val.toLower() == "diamond" )
-                    m_currentSeries->markerType = Series::Diamond;
+                m_context->m_chart->m_markerType = markerType(val);
+                gotSymbol = true;
             }
         }
     }
+
+    if (!gotSymbol)
+        if (MSOOXML::Utils::convertBooleanAttr(val, true))
+            m_context->m_chart->m_markerType = Charting::AutoMarker;
+
+    READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL marker
+KoFilter::ConversionStatus XlsxXmlChartReader::read_serMarker()
+{
+    READ_PROLOGUE2( serMarker )
+
+    m_serMarkerDefined = true;
+    bool gotSymbol = false;
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if ( qualifiedName() == "c:symbol" ) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val);
+                m_currentSeries->m_markerType = markerType(val);
+                gotSymbol = true;
+            }
+        }
+    }
+
+    if (!gotSymbol)
+        if (MSOOXML::Utils::convertBooleanAttr(val, true))
+            m_currentSeries->m_markerType = Charting::AutoMarker;
+
     READ_EPILOGUE
 }
 

@@ -5,4 +5,6 @@ include_directories(
 	)
 
 add_subdirectory( genericimageexport )
-add_subdirectory( svg )
+if (QT3SUPPORT)
+    add_subdirectory( svg )
+endif (QT3SUPPORT)

@@ -549,6 +549,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
     delete body;
     body = heldBody;
 
+    // Adding drawings, if there are any
+    if (drawingBuffer.size() > 0) {
+        body->startElement("table:shapes");
+        body->addCompleteElement(&drawingBuffer);
+        body->endElement(); // table:shapes
+    }
+
     // now we have everything to start writing the actual cells
     int c = 0;
     while (c <= m_context->sheet->maxColumn()) {
@@ -589,8 +596,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
 
     const int rowCount = m_context->sheet->maxRow();
     for(int r = 0; r <= rowCount; ++r) {
+        const int columnCount = m_context->sheet->maxCellsInRow(r);
+        Row* row = m_context->sheet->row(r, false);
         body->startElement("table:table-row");
-        if (Row* row = m_context->sheet->row(r, false)) {
+        if (!row || columnCount <= 0) {
+            // element table:table-row may not be empty
+            body->startElement("table:table-cell");
+            body->endElement(); // table:table-cell
+        }
+        if (row) {
             if (!row->styleName.isEmpty()) {
                 body->addAttribute("table:style-name", row->styleName);
             }
@@ -599,7 +613,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
             }
             //body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
 
-            const int columnCount = m_context->sheet->maxCellsInRow(r);
             for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = m_context->sheet->cell(c, r, false)) {
@@ -696,11 +709,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
         }
         body->endElement(); // table:table-row
     }
-
-    // Adding drawings, if there are any
-    body->startElement("table:shapes");
-    body->addCompleteElement(&drawingBuffer);
-    body->endElement(); // table:shapes
 
     body->endElement(); // table:table
 

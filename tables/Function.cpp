@@ -159,3 +159,18 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
         // call the function
         return (*d->ptr)(args, calc, extra);
 }
+
+FunctionCaller::FunctionCaller(FunctionPtr ptr, const valVector &args, ValueCalc *calc, FuncExtra *extra)
+    : m_ptr(ptr), m_args(args), m_calc(calc), m_extra(extra)
+{
+}
+
+Value FunctionCaller::exec()
+{
+    return (*m_ptr)(m_args, m_calc, m_extra);
+}
+
+Value FunctionCaller::exec(const valVector &args)
+{
+    return (*m_ptr)(args, m_calc, m_extra);
+}

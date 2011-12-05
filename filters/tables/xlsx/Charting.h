@@ -294,7 +294,7 @@ namespace Charting
         Cell(int columnIndex, int rowIndex) : m_column(columnIndex), m_row(rowIndex), m_valueType("string"){};
     };
 
-    // cell data represetation of internal table
+    /// cell data represetation of internal table
     class InternalTable
     {
     public:
@@ -328,11 +328,25 @@ namespace Charting
         QHash<int, int> m_maxCellsInRow;
     };
 
+    /// Different types of markers.
+    enum MarkerType {
+        NoMarker,
+        AutoMarker,
+        SquareMarker,
+        DiamondMarker,
+        StarMarker,
+        DotMarker,
+        DashMarker,
+        PlusMarker,
+        CircleMarker,
+        SymbolXMarker,
+        TriangleMarker
+        // TODO fill the missing marker types in
+    };
+
     class Series : public Obj
     {
     public:
-        // TODO fill the missing marker types in
-        enum MarkerType{ None, Square, Diamond, Star, Dot, Dash, Plus, Circle, SymbolX, Triangle };
         /// the type of data in categories, or horizontal values on bubble and scatter chart groups, in the series. MUST be either 0x0001=numeric or 0x0003=text.
         int m_dataTypeX;
         /// the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
@@ -362,10 +376,10 @@ namespace Charting
         /// range that contains label
         QString m_labelCell;
         /// marker type
-        MarkerType markerType;
+        MarkerType m_markerType;
         ShapeProperties* spPr;
 
-        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataLabelValues(false), m_showDataLabelPercent(false), m_showDataLabelCategory(false), m_showDataLabelSeries(false), markerType( None ),spPr(0) {}
+        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataLabelValues(false), m_showDataLabelPercent(false), m_showDataLabelCategory(false), m_showDataLabelSeries(false), m_markerType(NoMarker),spPr(0) {}
         virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); delete spPr; }
     };
 
@@ -424,14 +438,14 @@ namespace Charting
         int m_style;
         Gradient* m_fillGradient;
         Gradient* m_plotAreaFillGradient;
-        bool m_showMarker;
+        MarkerType m_markerType;
         bool m_showLines;
         qreal m_textSize;
 
         // charts internal table
         InternalTable m_internalTable;
 
-        explicit Chart() : Obj(), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_plotArea(0), m_legend(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_showMarker(false), m_showLines( false ), m_textSize( 10 ) {
+        explicit Chart() : Obj(), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_plotArea(0), m_legend(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_markerType(NoMarker), m_showLines( false ), m_textSize( 10 ) {
             m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
         }
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_plotArea; delete m_legend; delete m_fillGradient; delete m_plotAreaFillGradient; }

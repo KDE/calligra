@@ -1,4 +1,5 @@
 add_subdirectory(states)
+add_subdirectory(icons)
 
 ### Services ###
 install( FILES

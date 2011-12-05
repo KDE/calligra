@@ -84,6 +84,39 @@ QString Calligra::Tables::Util::encodeColumnLabelText(int column)
     return Cell::columnName(column);
 }
 
+bool Calligra::Tables::Util::isCellReference(const QString &text)
+{
+    int length = text.length();
+    if (length < 1)
+        return false;
+    int pos = 0;
+    if (text[pos] == '$')
+        ++pos;
+    int letterCount = 0;
+    for(; ; ++pos) {
+        if (pos == length)
+            return false;
+        const QChar c = text[pos];
+        if ((c < 'A' || c > 'Z') && (c < 'a' || c > 'z'))
+            break;
+        ++letterCount;
+    }
+    if (letterCount < 1)
+        return false;
+    if (text[pos] == '$')
+        ++pos;
+    int numberCount = 0;
+    for(; pos < length; ++pos) {
+        const QChar c = text[pos];
+        if (c < '0' || c > '9')
+            break;
+        ++numberCount;
+    }
+    if (numberCount < 1)
+        return false;
+    return pos == length;
+}
+
 QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
 {
     QDomElement e(doc.createElement(tagName));

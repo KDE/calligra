@@ -102,6 +102,22 @@ private:
     Private * const d;
 };
 
+/**
+ * \ingroup Value
+ * A helper-class to call a function.
+ */
+class CALLIGRA_TABLES_ODF_EXPORT FunctionCaller {
+public:
+    FunctionPtr m_ptr;
+    valVector m_args;
+    ValueCalc *m_calc;
+    FuncExtra *m_extra;
+
+    FunctionCaller(FunctionPtr ptr, const valVector &args, ValueCalc *calc, FuncExtra *extra = 0);
+    Value exec();
+    Value exec(const valVector &args);
+};
+
 } // namespace Tables
 } // namespace Calligra
 

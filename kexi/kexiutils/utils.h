@@ -104,13 +104,13 @@ inline type findParentByType(QObject* o)
 /*! \return first found child of \a o, inheriting \a className.
  If objName is 0 (the default), all object names match.
  Returned pointer type is casted. */
-KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName);
+KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className, const char* objName);
 
 /*! \return first found child of \a o, that inherit \a className.
  If \a objName is 0 (the default), all object names match.
  Returned pointer type is casted. */
 template<class type>
-inline type findFirstChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName = 0)
+inline type findFirstChild(QObject *o, const char* className, const char* objName = 0)
 {
     return ::qobject_cast< type >(findFirstQObjectChild(o, className, objName));
 }

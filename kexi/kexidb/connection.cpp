@@ -305,10 +305,7 @@ Connection::Connection(Driver *driver, ConnectionData &conn_data)
         , m_insideCloseDatabase(false)
 {
     d->dbProperties = new DatabaseProperties(this);
-//Qt3 m_cursors.setAutoDelete(true);
-// d->transactions.setAutoDelete(true);
-    //reasonable sizes: TODO
-// d->transactions.resize(101);//woohoo! so many transactions?
+
     m_sql.reserve(0x4000);
 }
 

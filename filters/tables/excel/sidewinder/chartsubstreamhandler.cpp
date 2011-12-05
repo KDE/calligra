@@ -739,7 +739,7 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
     const bool legend = dynamic_cast< Charting::Legend* >( m_currentObj );
     if ( m_disableAutoMarker && legend )
         return;
-    m_chart->m_showMarker = false;
+    m_chart->m_markerType = Charting::NoMarker;
 //     Q_ASSERT ( !dynamic_cast< Charting::Text* >( m_currentObj ) );
 //     if( dynamic_cast< Charting::Legend* >( m_currentObj ) )
 //         return;
@@ -758,49 +758,45 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
     const int index = m_chart->m_series.indexOf( series ) % 8;
     if ( record->fAuto() ) {
         if ( !m_disableAutoMarker )
-            m_chart->m_showMarker = true;
+            m_chart->m_markerType = Charting::AutoMarker;
         if ( !series->spPr->areaFill.valid )
             series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 24 + index ) );
-        switch ( index )
-            {
-                case( 0x0000 ):
-                    series->markerType = Charting::Series::Square;
-                    break;
-                case( 0x0001 ):
-                    series->markerType = Charting::Series::Diamond;
-                    break;
-                case( 0x0002 ):
-                    series->markerType = Charting::Series::SymbolX;
-                    break;
-                case( 0x0003 ):
-                    series->markerType = Charting::Series::Square;
-                    break;
-                case( 0x0004 ):
-                    series->markerType = Charting::Series::Dash;
-                    break;
-                case( 0x0005 ):
-                    series->markerType = Charting::Series::Dash;
-                    break;
-                case( 0x0006 ):
-                    series->markerType = Charting::Series::Circle;
-                    break;
-                case( 0x0007 ):
-                    series->markerType = Charting::Series::Plus;
-                    break;
-                default:
-                    series->markerType = Charting::Series::Square;
-                    break;
-            }
+        switch ( index ) {
+            case( 0x0000 ):
+                series->m_markerType = Charting::SquareMarker;
+                break;
+            case( 0x0001 ):
+                series->m_markerType = Charting::DiamondMarker;
+                break;
+            case( 0x0002 ):
+                series->m_markerType = Charting::SymbolXMarker;
+                break;
+            case( 0x0003 ):
+                series->m_markerType = Charting::SquareMarker;
+                break;
+            case( 0x0004 ):
+                series->m_markerType = Charting::DashMarker;
+                break;
+            case( 0x0005 ):
+                series->m_markerType = Charting::DashMarker;
+                break;
+            case( 0x0006 ):
+                series->m_markerType = Charting::CircleMarker;
+                break;
+            case( 0x0007 ):
+                series->m_markerType = Charting::PlusMarker;
+                break;
+            default:
+                series->m_markerType = Charting::SquareMarker;
+                break;
+        }
     } else {
-        if ( series )
-        {          
-            switch ( record->imk() )
-            {
+        if ( series ) {
+            switch ( record->imk() ) {
                 case( 0x0000 ):
-                    series->markerType = Charting::Series::None;
+                    series->m_markerType = Charting::NoMarker;
                     m_disableAutoMarker = true;
-//                     if ( impl )
-//                     {
+//                     if ( impl ) {
 //                         if ( impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker )
 //                             impl->style = Charting::ScatterImpl::Line;
 //                         else
@@ -808,31 +804,31 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 //                     }
                     break;
                 case( 0x0001 ):
-                    series->markerType = Charting::Series::Square;
+                    series->m_markerType = Charting::SquareMarker;
                     break;
                 case( 0x0002 ):
-                    series->markerType = Charting::Series::Diamond;
+                    series->m_markerType = Charting::DiamondMarker;
                     break;
                 case( 0x0003 ):
-                    series->markerType = Charting::Series::SymbolX;
+                    series->m_markerType = Charting::SymbolXMarker;
                     break;
                 case( 0x0004 ):
-                    series->markerType = Charting::Series::Square;
+                    series->m_markerType = Charting::SquareMarker;
                     break;
                 case( 0x0005 ):
-                    series->markerType = Charting::Series::Dash;
+                    series->m_markerType = Charting::DashMarker;
                     break;
                 case( 0x0006 ):
-                    series->markerType = Charting::Series::Dash;
+                    series->m_markerType = Charting::DashMarker;
                     break;
                 case( 0x0007 ):
-                    series->markerType = Charting::Series::Circle;
+                    series->m_markerType = Charting::CircleMarker;
                     break;
                 case( 0x0008 ):
-                    series->markerType = Charting::Series::Plus;
+                    series->m_markerType = Charting::PlusMarker;
                     break;
                 default:
-                    series->markerType = Charting::Series::Square;
+                    series->m_markerType = Charting::SquareMarker;
                     break;
             }
             if ( !series->spPr->areaFill.valid )
@@ -1022,11 +1018,11 @@ void ChartSubStreamHandler::handleLine(LineRecord* record)
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
     if ( !m_disableAutoMarker )
-        m_chart->m_showMarker = true;
+        m_chart->m_markerType = Charting::AutoMarker;
 //     Q_FOREACH( const Charting::Series* const series, m_chart->m_series )
 //     {
-//         if ( series->markerType == Charting::Series::None )
-//             m_chart->m_showMarker = false;
+//         if ( series->m_markerType == Charting::Series::None )
+//             m_chart->m_markerType = Charting::NoMarker;
 //     }
 }
 
@@ -1065,7 +1061,7 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
     }
 
     if ( !m_disableAutoMarker ) {
-        m_chart->m_showMarker = true;
+        m_chart->m_markerType = Charting::AutoMarker;
     }
     // Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
     // if ( impl )
@@ -1078,7 +1074,7 @@ void ChartSubStreamHandler::handleRadar(RadarRecord *record)
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::RadarImpl(false);
-    m_chart->m_showMarker = true;
+    m_chart->m_markerType = Charting::AutoMarker;
 }
 
 // specifies that the chartgroup is a filled radar chart
