@@ -84,6 +84,8 @@ public:
     const Document *doc() const { return m_doc; }
     /// Set document, return true if ok, false if failure
     bool setDoc( const Document *doc );
+    /// Open @p doc from @p store
+    bool openDoc( const Document *doc, KoStore *store );
     /// Open document for editing, return true if ok, false if failure
     bool editDoc();
     bool isOpen() const { return m_process != 0; }
@@ -102,7 +104,7 @@ public:
     void setType( int type ) { m_type = type; }
     
     bool saveToStore( KoStore *store );
-    
+
 signals:
     void modified( bool );
     void fileModified( bool );
@@ -167,6 +169,8 @@ public:
     bool editWorkpackageDocument( const Document *doc );
     /// Open document for editing, return true if ok, false if failure
     bool editOtherDocument( const Document *doc );
+    /// Remove the document @p doc from its workpackage
+    bool removeDocument( Document *doc );
     /// Remove the child document
 //    void removeChildDocument( DocumentChild *child );
     /// Find the child that handles document @p doc
@@ -229,9 +233,9 @@ signals:
 protected:
     /// Load the old kplato format
     bool loadKPlatoXML( const KoXmlDocument &document, KoStore *store );
-    /// Adds work packe @p wp to the list of workpackages.
+    /// Adds work package @p wp to the list of workpackages.
     /// If it already exists, the user is asked if it shall be merged with the existing one.
-    bool setWorkPackage( WorkPackage *wp );
+    bool setWorkPackage( WorkPackage *wp, KoStore *store = 0 );
     bool completeLoading( KoStore *store );
 
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);

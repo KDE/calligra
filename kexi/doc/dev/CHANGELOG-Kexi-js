@@ -92,7 +92,8 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
-STARTUP
+TODO:
+Startup
 *show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
 
 ===================== Kexi 2.4  =====================
@@ -102,7 +103,52 @@ TODO:
 *Add Ctrl+Return shortcut to opening in design mode from navigator
 *Add Ctrl+Shift+Return shortcut to opening in texts mode from navigator
 
+TODO:
+Startup
+*before opening check if database has been already opened and if so, activate the window instead of opening second instance; D-Bus iface needed
+*inform other instances of Kexi that database was opened so they can update last-modified property of the Recently opened projects; D-Bus iface needed
+
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
+TODO: go with FF implementation:
+http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
+TODO: use right-hand tab button for window list as in FF
+
+
+TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions()
+
+2011-11-30
+Reports
+*Fix bug: no indication of selected toolbox action for report element
+BUG:283888
+*After inserting element, respective toolbox action is deselected
+
+2011-11-30
+Reports
+*Fix bug: no indication of selected toolbox action for report element
+BUG:285583
+*After inserting element, respective toolbox action is deselected
+
+2011-11-27..29
+Main Window
+*set close buttons on view tabs always visible
+*remove main area borders for cleaner GUI
+*remove MainWindow.HoverCloseButtonForTabs setting
+*[code] remove old code related to KDE3's KMDI
+*[code] removed custom version macros like KEXI_ADD_CUSTOM_OBJECT_CREATION
+
+2011-11-26
+Startup
+*Do not display connection dialog when opening .kexis file that define database name
+*Welcome view: when clicked on a database open it in a new Kexi instance if another database is already opened in the current instance
+
+2011-11-23..24
+Startup
+*Remove duplicated entries of recent files at startup so the newest entry for given database is displayed
+Main Window
+*fix build of search line edit for msvc
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 4 (2.3.84) ~~~~~~~~~~~~~~~~
 
 2011-11-16
 Widgets
@@ -158,11 +204,6 @@ Documentation
 2011-10-12
 Main Window
 *Simplified background below menu to make it flicker less
-
-2011-10-11
-Code
-*[code] Moved kexi/migration/spreadsheet/ plugin to plugins/kexi/ as it also depends on Tables
-*[code] Moved kexi/shapes/ to kexi/plugins/shapes/ to simplify dir structure
 
 2011-10-12
 Main Window

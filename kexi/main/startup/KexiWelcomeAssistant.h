@@ -46,7 +46,7 @@ public:
     QString selectedCategory;
     
 signals:
-    void openProject(const KexiProjectData& data);
+    void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
 
 private slots:
     void slotItemClicked(const QModelIndex& index);
@@ -84,7 +84,11 @@ public slots:
     void tryAgainActionTriggered();
 
 signals:
-    void openProject(const KexiProjectData& data);
+    /*! Emitted if project @a data was selected to open.
+     @a shortcutPath can be non empty to indicate .kexis filename useful for opening new
+     instance of Kexi. Receiver should set value pointed by @a opened to true if the
+     database has been opened successfully. */
+    void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
 
 private:
     void createProject(

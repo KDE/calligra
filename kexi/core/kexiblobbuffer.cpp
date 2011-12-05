@@ -24,7 +24,6 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qbuffer.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QHash>
 

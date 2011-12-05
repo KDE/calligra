@@ -159,55 +159,45 @@ QString ChartExport::generateGradientStyle ( KoGenStyles& mainStyles, const Char
 
 QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    if( chart()->m_areaFormat && chart()->m_areaFormat->m_fill )
-    {
-        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
-    }
-    else if ( chart()->m_fillGradient )
-    {
+    if ( chart()->m_fillGradient ) {
         style.addProperty( "draw:fill", "gradient", KoGenStyle::GraphicType );
         style.addProperty( "draw:fill-gradient-name", generateGradientStyle( mainStyles, chart()->m_fillGradient ), KoGenStyle::GraphicType );
-    }
-    else if ( m_theme )
-    {        
-        const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
-        style.addProperty( "draw:fill", "solid" );
-        switch( styleID )
-        {
-            case( 33 ):              
-            case( 34 ):
-            case( 35 ):
-            case( 36 ):
-            case( 37 ):
-            case( 38 ):
-            case( 39 ):
-            case( 40 ):
-            {
-                style.addProperty( "draw:fill-color", colorScheme.value( "lt1" )->value().name(), KoGenStyle::GraphicType );
-            }            
-            break;            
-            case( 41 ):
-            case( 42 ):
-            case( 43 ):
-            case( 44 ):
-            case( 45 ):
-            case( 46 ):
-            case( 47 ):
-            case( 48 ):
-            {
-                style.addProperty( "draw:fill-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::GraphicType );
-            }            
-            break;
-            default:
-              style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
-        }
-        //style.addProperty();
-    }
-    else
-    {        
+    } else {
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+        bool useTheme = !chart()->m_areaFormat && m_theme;
+        if ( useTheme ) {
+            const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
+            switch( styleID ) {
+                case( 33 ):
+                case( 34 ):
+                case( 35 ):
+                case( 36 ):
+                case( 37 ):
+                case( 38 ):
+                case( 39 ):
+                case( 40 ): {
+                    style.addProperty( "draw:fill-color", colorScheme.value( "lt1" )->value().name(), KoGenStyle::GraphicType );
+                } break;
+                case( 41 ):
+                case( 42 ):
+                case( 43 ):
+                case( 44 ):
+                case( 45 ):
+                case( 46 ):
+                case( 47 ):
+                case( 48 ): {
+                    style.addProperty( "draw:fill-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::GraphicType );
+                } break;
+                default: {
+                    useTheme = false;
+                } break;
+            }
+        }
+        if ( !useTheme ) {
+            style.addProperty( "draw:fill-color", chart()->m_areaFormat && chart()->m_areaFormat->m_fill ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+            if ( chart()->m_areaFormat && chart()->m_areaFormat->m_foreground.alpha() < 255 )
+                style.addProperty( "draw:opacity", QString( "%1\%" ).arg( chart()->m_areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
+        }
     }
     return styles.insert( style, "ch" );
 }
@@ -222,81 +212,49 @@ QString ChartExport::genChartAreaStyle( const int styleID, KoGenStyles& styles, 
 
 QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    if( chart()->m_plotAreaFillColor.isValid() )
-    {
-        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        style.addProperty( "draw:fill-color", chart()->m_plotAreaFillColor.name(), KoGenStyle::GraphicType );
-        if ( chart()->m_plotAreaFillColor.alpha() < 255 )
-        {
-            style.addProperty( "draw:opacity", QString( "%1\%" ).arg( chart()->m_plotAreaFillColor.alphaF() * 100.0 ), KoGenStyle::GraphicType );
-        }
-    } 
-    else if ( chart()->m_plotAreaFillGradient )
-    {
+    Charting::AreaFormat *areaFormat = ( chart()->m_plotArea && chart()->m_plotArea->m_areaFormat && chart()->m_plotArea->m_areaFormat->m_fill ) ? chart()->m_plotArea->m_areaFormat : chart()->m_areaFormat;
+    if ( chart()->m_plotAreaFillGradient ) {
         style.addProperty( "draw:fill", "gradient", KoGenStyle::GraphicType );
         style.addProperty( "draw:fill-gradient-name", generateGradientStyle( mainStyles, chart()->m_plotAreaFillGradient ), KoGenStyle::GraphicType );
-    }
-    else if ( m_theme )
-    {        
-        const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
+    } else {
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        switch( styleID )
-        {
-            case( 33 ):              
-            case( 34 ):
-            {
-                style.addProperty( "draw:fill-color", tintColor( colorScheme.value( "dk1" )->value(), 0.2 ).name(), KoGenStyle::GraphicType );
-            }
-            break;
-            case( 35 ):
-            case( 36 ):
-            case( 37 ):
-            case( 38 ):
-            case( 39 ):
-            case( 40 ):
-            {
-                QString prop = QString::fromLatin1( "accent%1" ).arg( styleID - 34 );
-                style.addProperty( "draw:fill-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::GraphicType );
-            }            
-            break;            
-            case( 41 ):
-            case( 42 ):
-            case( 43 ):
-            case( 44 ):
-            case( 45 ):
-            case( 46 ):
-            case( 47 ):
-            case( 48 ):
-            {
-                style.addProperty( "draw:fill-color", tintColor( colorScheme.value( "dk1" )->value(), 0.95 ).name(), KoGenStyle::GraphicType );
-            }            
-            break;
-            default:
-            {
-                if ( paletteSet )
-                {
-                    style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#C0C0C0", KoGenStyle::GraphicType );
-                }
-                else
-                {
-                    style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
-                }
+        bool useTheme = !areaFormat && m_theme;
+        if ( useTheme ) {
+            const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
+            switch( styleID ) {
+                case( 33 ):
+                case( 34 ): {
+                    style.addProperty( "draw:fill-color", tintColor( colorScheme.value( "dk1" )->value(), 0.2 ).name(), KoGenStyle::GraphicType );
+                } break;
+                case( 35 ):
+                case( 36 ):
+                case( 37 ):
+                case( 38 ):
+                case( 39 ):
+                case( 40 ): {
+                    QString prop = QString::fromLatin1( "accent%1" ).arg( styleID - 34 );
+                    style.addProperty( "draw:fill-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::GraphicType );
+                } break;
+                case( 41 ):
+                case( 42 ):
+                case( 43 ):
+                case( 44 ):
+                case( 45 ):
+                case( 46 ):
+                case( 47 ):
+                case( 48 ): {
+                    style.addProperty( "draw:fill-color", tintColor( colorScheme.value( "dk1" )->value(), 0.95 ).name(), KoGenStyle::GraphicType );
+                } break;
+                default: {
+                    useTheme = false;
+                } break;
             }
         }
-    }
-    else
-    {        
-        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        if ( paletteSet )
-        {
-            style.addProperty( "draw:fill-color", "#C0C0C0", KoGenStyle::GraphicType );
-            Q_ASSERT( style.property( "draw:fill-color", KoGenStyle::GraphicType ) == "#C0C0C0" );
+        if ( !useTheme ) {
+            style.addProperty( "draw:fill-color", areaFormat ? areaFormat->m_foreground.name() : (paletteSet ? "#C0C0C0" : "#FFFFFF"), KoGenStyle::GraphicType );
+            if ( areaFormat && areaFormat->m_foreground.alpha() < 255 )
+                style.addProperty( "draw:opacity", QString( "%1\%" ).arg( areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
         }
-        else
-        {
-            style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
-        }
-        //style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
     }
     return styles.insert( style, "ch" );
 }
@@ -338,7 +296,7 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
         else if ( series->spPr->areaFill.type == Charting::Fill::None )
             style.addProperty( "draw:fill", "none", KoGenStyle::GraphicType );
     }
-    else if ( paletteSet && !( m_chart->m_showMarker || marker ) && series->markerType == Charting::Series::None )
+    else if ( paletteSet && !( m_chart->m_markerType != Charting::NoMarker || marker ) && series->m_markerType == Charting::NoMarker )
     {
         const int curSerNum = m_chart->m_series.indexOf( series ) % 8;
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
@@ -363,6 +321,52 @@ void ChartExport::set2003ColorPalette( QList < QColor > palette )
 {
     m_palette = palette;
     paletteSet = true;
+}
+
+QString markerType(Charting::MarkerType type, int currentSeriesNumber)
+{
+    QString markerName;
+    switch(type) {
+        case NoMarker:
+            break;
+        case AutoMarker: { // auto marker type
+            const int resNum = currentSeriesNumber % 3;
+            if ( resNum == 0 )
+                markerName = "square";
+            else if ( resNum == 1 )
+                markerName = "diamond";
+            else if ( resNum == 2 )
+                markerName = "circle";
+        } break;
+        case SquareMarker:
+            markerName = "square";
+            break;
+        case DiamondMarker:
+            markerName = "diamond";
+            break;
+        case StarMarker:
+            markerName = "star";
+            break;
+        case TriangleMarker:
+            markerName = "arrow-up";
+            break;
+        case DotMarker:
+            markerName = "dot";
+            break;
+        case PlusMarker:
+            markerName = "plus";
+            break;
+        case SymbolXMarker:
+            markerName = "x";
+            break;
+        case CircleMarker:
+            markerName = "circle";
+            break;
+        case DashMarker:
+            markerName = "horizontal-bar";
+            break;
+    }
+    return markerName;
 }
 
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
@@ -614,61 +618,29 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
         if ( paletteSet && m_chart->m_impl->name() != "ring" && m_chart->m_impl->name() != "circle" )
         {
-            if ( series->markerType == Charting::Series::None && !m_chart->m_showMarker && !marker )
+            if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker )
             {
               seriesstyle.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
               seriesstyle.addProperty( "draw:fill-color", m_palette.at( 16 + curSerNum ).name(), KoGenStyle::GraphicType );
             }
         }
-        if ( series->markerType != Charting::Series::None )
+        if ( series->m_markerType != Charting::NoMarker )
         {
-            QString markerName;
-            switch ( series->markerType )
-            {
-                using namespace Charting;
-                case Series::Square:
-                    markerName = "square";
-                    break;
-                case Series::Diamond:
-                    markerName = "diamond";
-                    break;
-                case Series::Star:
-                    markerName = "star";
-                    break;
-                case Series::Triangle:
-                    markerName = "arrow-up";
-                    break;
-                case Series::Dot:
-                    markerName = "dot";
-                    break;
-                case Series::Plus:
-                    markerName = "plus";
-                    break;
-                case Series::SymbolX:
-                    markerName = "x";
-                    break;
-                case Series::Circle:
-                default:
-                    markerName = "circle";
+            QString markerName = markerType(series->m_markerType, curSerNum);
+            if (!markerName.isEmpty()) {
+                seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
+                seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
             }
-            seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
-            seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
         }
-        else if ( m_chart->m_showMarker || marker )
+        else if ( m_chart->m_markerType != Charting::NoMarker || marker )
         {
-            const int resNum = curSerNum % 3;
-            QString markerName;
-            if ( resNum == 0 )
-                markerName = "square";
-            else if ( resNum == 1 )
-                markerName = "diamond";
-            else if ( resNum == 2 )
-                markerName = "circle";
-            seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
-            seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
+            QString markerName = markerType(m_chart->m_markerType == Charting::NoMarker ? Charting::AutoMarker : m_chart->m_markerType, curSerNum);
+            if (!markerName.isEmpty()) {
+                seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
+                seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
+            }
         }
-        
-        
+
         if ( chart()->m_impl->name() != "circle" && chart()->m_impl->name() != "ring" )
             addDataThemeToStyle( styleID, seriesstyle, curSerNum, chart()->m_series.count(), lines );
         //seriesstyle.addProperty("draw:stroke", "solid");
@@ -767,7 +739,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             {
                 if ( paletteSet )
                 {
-                    if ( series->markerType == Charting::Series::None && !m_chart->m_showMarker && !marker )
+                    if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker )
                     {
                       gs.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
                       gs.addProperty( "draw:fill-color", m_palette.at( 16 + j ).name(), KoGenStyle::GraphicType );

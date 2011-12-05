@@ -1214,12 +1214,6 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
-        QPointF scroll(canvas()->canvasController()->scrollBarValue());
-        if (canvas()->canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
-                canvas()->canvasWidget()->layoutDirection() == Qt::RightToLeft) {
-            scroll.setX(-scroll.x());
-        }
-        rect.translate(canvas()->documentOrigin() - scroll);
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1354,8 +1348,8 @@ void TextTool::updateActions()
     //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
-        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
-        if (bf.alignment() == (Qt::AlignLeading ^ revert))
+        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::RightToLeft);
+        if ((bf.alignment() == Qt::AlignLeading) ^ revert)
             m_actionAlignLeft->setChecked(true);
         else
             m_actionAlignRight->setChecked(true);
