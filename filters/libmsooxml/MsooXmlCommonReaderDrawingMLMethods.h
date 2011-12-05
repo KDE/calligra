@@ -21,7 +21,7 @@
  *
  */
 
-// This is not a normail heder, *don't* add include guards to it.
+// This is not a normal header, *don't* add include guards to it.
 // This will cause the compiler to get wrong offsets and to corrupt the stack.
 
 // included by DocxXmlDocumentReader
@@ -180,6 +180,10 @@ QString m_prevListStyleName;
 
 int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
+
+// Map of level keys and xml:id values of text:list elements to continue
+// automatic numbering.
+QMap<quint16, QString> m_lvlXmlIdMap;
 
 // true - continue numbered list, false - restart numbering
 QMap<quint16, bool> m_continueListNumbering;

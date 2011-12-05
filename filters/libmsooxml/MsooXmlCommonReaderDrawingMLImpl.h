@@ -24,6 +24,7 @@
 #ifndef MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 
+#include <QTime>
 #include <math.h>
 
 #ifndef M_PI
@@ -69,6 +70,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
     m_insideTable = false;
+    qsrand(QTime::currentTime().msec());
 }
 
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
@@ -1924,10 +1926,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Update Automatic Numbering info
     //---------------------------------------------
     if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
-        m_continueListNumbering[m_currentListLevel] = false;
+        QList<quint16> levels = m_continueListNumbering.keys();
+        for (quint16 i = 0; i < levels.size(); i++) {
+            if (levels[i] >= m_currentListLevel) {
+                m_continueListNumbering.remove(levels[i]);
+                m_lvlXmlIdMap.remove(levels[i]);
+            }
+        }
     }
-    if (m_prevListLevel > m_currentListLevel) {
-        m_continueListNumbering[m_prevListLevel] = false;
+    if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+        if (m_prevListLevel > m_currentListLevel) {
+            QList<quint16> levels = m_continueListNumbering.keys();
+            for (quint16 i = 0; i < levels.size(); i++) {
+                if (levels[i] > m_currentListLevel) {
+                    m_continueListNumbering.remove(levels[i]);
+                    m_lvlXmlIdMap.remove(levels[i]);
+                }
+            }
+        }
     }
 
     //---------------------------------------------
@@ -1967,12 +1983,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             body->startElement("text:list");
             body->addAttribute("text:style-name", listStyleName);
             m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
+
             //continue numbering if applicable
             if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+
+                QString xmlId = QString("lvl%1").arg(m_currentListLevel);
+                xmlId.append(QString("_%1").arg(qrand()));
+                body->addAttribute("xml:id", xmlId);
+
                 if (m_continueListNumbering.contains(m_currentListLevel) &&
                     m_continueListNumbering[m_currentListLevel]) {
-                    body->addAttribute("text:continue-numbering", "true");
+                    body->addAttribute("text:continue-list", m_lvlXmlIdMap[m_currentListLevel]);
                 }
+                m_lvlXmlIdMap[m_currentListLevel] = xmlId;
             }
             body->startElement("text:list-item");
             for (int i = 1; i < m_currentListLevel; i++) {
