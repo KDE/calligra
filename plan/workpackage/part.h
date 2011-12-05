@@ -104,7 +104,7 @@ public:
     void setType( int type ) { m_type = type; }
     
     bool saveToStore( KoStore *store );
-    
+
 signals:
     void modified( bool );
     void fileModified( bool );
