@@ -35,6 +35,7 @@
 #include <wv2/src/parser.h>
 #include <wv2/src/fields.h>
 
+#include <QTime>
 #include <QFont>
 #include <QUrl>
 #include <QBuffer>
@@ -46,6 +47,8 @@
 
 #include "document.h"
 #include "msdoc.h"
+
+enum ListType {BulletType, NumberType, PictureType, DefaultType};
 
 wvWare::U8 WordsReplacementHandler::hardLineBreak()
 {
@@ -84,7 +87,7 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_currentTable(0)
     , m_tableWriter(0)
     , m_tableBuffer(0)
-    , m_previousListDepth(-1)
+    , m_previousListLevel(-1)
     , m_previousListID(0)
     , m_fld(new fld_State())
     , m_fldStart(0)
@@ -109,6 +112,8 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     if ((m_parser->fib().nFib <= 0x00D9) && (m_parser->dop().nfcFtnRef2 == 0)) {
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
+    //set a unique xml:id of a text:list element
+    qsrand(QTime::currentTime().msec());
 }
 
 WordsTextHandler::~WordsTextHandler()
@@ -1823,75 +1828,124 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         return false;
     }
 
+    ListType type = NumberType;
+    //TODO: Where is the rest of the logic?
+    if (listInfo->numberFormat() == 23) {
+        type = BulletType;
+    }
+
     //put the currently used writer in the stack
     m_usedListWriters.push(writer);
 
-    if (m_previousListID != listInfo->lsid()) {
-        kDebug(30513) << "==> Starting a new list:" << listInfo->lsid();
-    //close the previous list
+    quint8 listLevel = pap.ilvl;
+    int listId = listInfo->lsid();
+
+    // update automatic numbering info
+    if (type == NumberType) {
+        if (m_continueListNum.contains(listId)) {
+            if (listLevel <= m_continueListNum[listId].first) {
+                m_continueListNum[listId].second = true;
+            } else {
+
+                // TODO: Check if any of the lists that inherit numbering
+                // from the abstract numbering definition was opened.
+
+                m_continueListNum[listId].second = false;
+
+                QString key;
+                int i = m_continueListNum[listId].first;
+                while (i > listLevel) {
+                    key = QString("%1").arg(listId);
+                    key.append(QString(".lvl%1").arg(i));
+                    m_numIdXmlIdMap.remove(key);
+                    --i;
+                }
+            }
+        }
+    }
+
+    if (m_previousListID != listId) {
+        kDebug(30513) << "==> Starting a new list:" << listId;
+        //close the previous list
         if (listIsOpen()) {
             closeList();
         }
         writer->startElement("text:list");
 
-        //check for a continued list
-        if (m_previousLists.contains(listInfo->lsid())) {
-            m_listStyleName = m_previousLists[listInfo->lsid()].first;
+        if (m_previousLists.contains(listId)) {
+            m_listStyleName = m_previousLists[listId].first;
             writer->addAttribute("text:style-name", m_listStyleName);
-
-            //TODO: not sure about this one, it seems that each list is a new
-            //one with start value pre-defined
-            if (listInfo->numberFormat() != 23) {
-                writer->addAttribute("text:continue-numbering", "true");
-            }
         } else {
             //need to create a style for this list
             KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
-
             if (document()->writingHeader()) {
                 listStyle.setAutoStyleInStylesDotXml(true);
             }
             m_listStyleName = m_mainStyles->insert(listStyle);
             writer->addAttribute("text:style-name", m_listStyleName);
-            m_previousLists[listInfo->lsid()].first = m_listStyleName;
+            m_previousLists[listId].first = m_listStyleName;
         }
-        for (int i = 0; i < pap.ilvl; i++) {
+
+        if (type == NumberType) {
+            QString key = QString("%1").arg(listId);
+            key.append(QString(".lvl%1").arg(listLevel));
+
+            //automatic numbering
+            if (m_continueListNum.contains(listId) && m_continueListNum[listId].second) {
+                writer->addAttribute("text:continue-list", m_numIdXmlIdMap[key]);
+            }
+            QString xmlId = key;
+            xmlId.append(QString("_%1").arg(qrand())).prepend("lst");
+            writer->addAttribute("xml:id", xmlId);
+            m_numIdXmlIdMap[key] = xmlId;
+        }
+
+        for (int i = 0; i < listLevel; i++) {
             writer->startElement("text:list-item");
             writer->startElement("text:list");
         }
-        m_previousListID = listInfo->lsid();
-        m_previousListDepth = pap.ilvl;
+        m_previousListID = listId;
+        m_previousListLevel = listLevel;
     }
     //going down into a deeper level (same list)
-    else if (pap.ilvl > m_previousListDepth) {
+    else if (listLevel > m_previousListLevel) {
         writer->startElement("text:list");
-        m_previousListDepth++;
+        m_previousListLevel++;
 
-        for (;m_previousListDepth < pap.ilvl; m_previousListDepth++) {
+        for (;m_previousListLevel < listLevel; m_previousListLevel++) {
             writer->startElement("text:list-item");
             writer->startElement("text:list");
         }
     }
     //coming out to a lower level or staying at the same level (same list)
     else {
-        while (m_previousListDepth > pap.ilvl) {
+        while (m_previousListLevel > listLevel) {
             writer->endElement(); //text:list-item
             writer->endElement(); //text:list
-            m_previousListDepth--;
+            m_previousListLevel--;
         }
         writer->endElement(); //text:list-item
     }
 
     // Check if we need a new list-level-style-* definition
     if (m_previousLists.contains(m_previousListID) &&
-        !m_previousLists[m_previousListID].second.contains(m_previousListDepth))
+        !m_previousLists[m_previousListID].second.contains(m_previousListLevel))
     {
         updateListStyle();
-        m_previousLists[m_previousListID].second.append(m_previousListDepth);
+        m_previousLists[m_previousListID].second.append(m_previousListLevel);
     }
 
     //we always want to open this tag
     writer->startElement("text:list-item");
+
+    // restart numbering if applicable
+    if (type == NumberType) {
+        if (!m_continueListNum.contains(listId) ||
+            (m_continueListNum.contains(listId) && !m_continueListNum[listId].second)) {
+            writer->addAttribute("text:start-value", listInfo->startAt());
+        }
+        m_continueListNum[listId] = qMakePair(listLevel, false);
+    }
 
     return true;
 } //end writeListInfo()
@@ -1990,9 +2044,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
     wvWare::UString text = listInfo->text().text;
     int nfc = listInfo->numberFormat();
 
-    enum ListType {BulletType, NumberType, PictureType, DefaultType};
     ListType type = NumberType;
-
     //TODO: Where is the rest of the logic?
     if (nfc == 23) {
         type = BulletType;
@@ -2207,13 +2259,13 @@ void WordsTextHandler::closeList()
     //for level 0, we need to close the last item and the list
     //for level 1, we need to close the last item and the list, and the last item and the list
     //for level 2, we need to close the last item and the list, and the last item adn the list, and again
-    for (int i = 0; i <= m_previousListDepth; i++) {
+    for (int i = 0; i <= m_previousListLevel; i++) {
         writer->endElement(); //close the last text:list-item
         writer->endElement(); //text:list
     }
 
     m_previousListID = 0;
-    m_previousListDepth = -1;
+    m_previousListLevel = -1;
     m_listStyleName = "";
 }
 
@@ -2226,12 +2278,12 @@ void WordsTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
-                           m_previousListDepth, m_previousListID, m_previousLists,
+                           m_previousListLevel, m_previousListID, m_previousLists,
                            m_drawingWriter, m_insideDrawing));
     m_currentTable = 0;
     m_paragraph = 0;
     m_listStyleName = "";
-    m_previousListDepth = -1;
+    m_previousListLevel = -1;
     m_previousListID = 0;
     m_previousLists.clear();
 
@@ -2264,7 +2316,7 @@ void WordsTextHandler::restoreState()
     m_paragraph = s.paragraph;
     m_currentTable = s.table;
     m_listStyleName = s.listStyleName;
-    m_previousListDepth = s.listDepth;
+    m_previousListLevel = s.listDepth;
     m_previousListID = s.listID;
     m_previousLists = s.previousLists;
 
