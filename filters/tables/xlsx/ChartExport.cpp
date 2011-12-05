@@ -296,7 +296,7 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
         else if ( series->spPr->areaFill.type == Charting::Fill::None )
             style.addProperty( "draw:fill", "none", KoGenStyle::GraphicType );
     }
-    else if ( paletteSet && !( m_chart->m_showMarker || marker ) && series->markerType == Charting::Series::None )
+    else if ( paletteSet && !( m_chart->m_markerType != Charting::NoMarker || marker ) && series->m_markerType == Charting::NoMarker )
     {
         const int curSerNum = m_chart->m_series.indexOf( series ) % 8;
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
@@ -321,6 +321,52 @@ void ChartExport::set2003ColorPalette( QList < QColor > palette )
 {
     m_palette = palette;
     paletteSet = true;
+}
+
+QString markerType(Charting::MarkerType type, int currentSeriesNumber)
+{
+    QString markerName;
+    switch(type) {
+        case NoMarker:
+            break;
+        case AutoMarker: { // auto marker type
+            const int resNum = currentSeriesNumber % 3;
+            if ( resNum == 0 )
+                markerName = "square";
+            else if ( resNum == 1 )
+                markerName = "diamond";
+            else if ( resNum == 2 )
+                markerName = "circle";
+        } break;
+        case SquareMarker:
+            markerName = "square";
+            break;
+        case DiamondMarker:
+            markerName = "diamond";
+            break;
+        case StarMarker:
+            markerName = "star";
+            break;
+        case TriangleMarker:
+            markerName = "arrow-up";
+            break;
+        case DotMarker:
+            markerName = "dot";
+            break;
+        case PlusMarker:
+            markerName = "plus";
+            break;
+        case SymbolXMarker:
+            markerName = "x";
+            break;
+        case CircleMarker:
+            markerName = "circle";
+            break;
+        case DashMarker:
+            markerName = "horizontal-bar";
+            break;
+    }
+    return markerName;
 }
 
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
@@ -572,61 +618,29 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
         if ( paletteSet && m_chart->m_impl->name() != "ring" && m_chart->m_impl->name() != "circle" )
         {
-            if ( series->markerType == Charting::Series::None && !m_chart->m_showMarker && !marker )
+            if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker )
             {
               seriesstyle.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
               seriesstyle.addProperty( "draw:fill-color", m_palette.at( 16 + curSerNum ).name(), KoGenStyle::GraphicType );
             }
         }
-        if ( series->markerType != Charting::Series::None )
+        if ( series->m_markerType != Charting::NoMarker )
         {
-            QString markerName;
-            switch ( series->markerType )
-            {
-                using namespace Charting;
-                case Series::Square:
-                    markerName = "square";
-                    break;
-                case Series::Diamond:
-                    markerName = "diamond";
-                    break;
-                case Series::Star:
-                    markerName = "star";
-                    break;
-                case Series::Triangle:
-                    markerName = "arrow-up";
-                    break;
-                case Series::Dot:
-                    markerName = "dot";
-                    break;
-                case Series::Plus:
-                    markerName = "plus";
-                    break;
-                case Series::SymbolX:
-                    markerName = "x";
-                    break;
-                case Series::Circle:
-                default:
-                    markerName = "circle";
+            QString markerName = markerType(series->m_markerType, curSerNum);
+            if (!markerName.isEmpty()) {
+                seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
+                seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
             }
-            seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
-            seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
         }
-        else if ( m_chart->m_showMarker || marker )
+        else if ( m_chart->m_markerType != Charting::NoMarker || marker )
         {
-            const int resNum = curSerNum % 3;
-            QString markerName;
-            if ( resNum == 0 )
-                markerName = "square";
-            else if ( resNum == 1 )
-                markerName = "diamond";
-            else if ( resNum == 2 )
-                markerName = "circle";
-            seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
-            seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
+            QString markerName = markerType(m_chart->m_markerType == Charting::NoMarker ? Charting::AutoMarker : m_chart->m_markerType, curSerNum);
+            if (!markerName.isEmpty()) {
+                seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
+                seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
+            }
         }
-        
-        
+
         if ( chart()->m_impl->name() != "circle" && chart()->m_impl->name() != "ring" )
             addDataThemeToStyle( styleID, seriesstyle, curSerNum, chart()->m_series.count(), lines );
         //seriesstyle.addProperty("draw:stroke", "solid");
@@ -725,7 +739,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             {
                 if ( paletteSet )
                 {
-                    if ( series->markerType == Charting::Series::None && !m_chart->m_showMarker && !marker )
+                    if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker )
                     {
                       gs.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
                       gs.addProperty( "draw:fill-color", m_palette.at( 16 + j ).name(), KoGenStyle::GraphicType );
