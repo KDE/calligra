@@ -35,9 +35,9 @@ add_subdirectory( karbon1.x )
 if (QT3SUPPORT)
     add_subdirectory( eps )
 endif (QT3SUPPORT)
-if (POPPLER_FOUND)
+if (POPPLER_FOUND and not WIN32)
     add_subdirectory( pdf )
-endif (POPPLER_FOUND)
+endif (POPPLER_FOUND and not WIN32)
 
 # enable again when these filters are ported
 message(STATUS "Karbon: still need to port: applixgraphics, ai, kontour, xcf, xaml, xfig, msod and oodraw filters")
