@@ -2065,6 +2065,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             // In ooxml it seems that nothing should be created if sectPr was present
             if (!m_createSectionToNext) {
                 if (m_listFound) {
+
+                    // update the size of a bullet picture
+                    if ((m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType)
+                        && (m_currentBulletProperties.bulletSizePt() == "UNUSED")) {
+                        int percent = 100;
+                        if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
+                            STRING_TO_INT(m_currentBulletProperties.bulletRelativeSize(), percent,
+                                          QString("PictureType: processing bulletRelativeSize"));
+                        }
+                        QString fontSize = m_currentParagraphStyle.property("fo:font-size",KoGenStyle::TextType);
+                        // Using the default font size at the moment
+                        if (fontSize.isEmpty()) {
+                            fontSize = m_context->m_defaultFontSizePt;
+                        }
+                        qreal base = 10; //fair enough
+                        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+                            fontSize.chop(2);
+                            STRING_TO_QREAL(fontSize, base, QString("PictureType: processing font-size"));
+                        }
+                        m_currentBulletProperties.setBulletSizePt(percent * base / 100);
+                    }
+
                     // update automatic numbering info
                     if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
 

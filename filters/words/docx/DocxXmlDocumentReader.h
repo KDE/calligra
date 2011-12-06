@@ -427,6 +427,8 @@ public:
     // is inherited by a numbering definition instance identified by numId (key).
     QMap<QString, QString> m_abstractNumIDs;
 
+    QString m_defaultFontSizePt;
+
 private:
 };
 

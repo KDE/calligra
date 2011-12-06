@@ -193,6 +193,10 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
         m_currentTextStyle.addProperty("style:use-window-font-color", "true");
     }
 
+    if (!m_currentTextStyle.property("fo:font-size").isEmpty()) {
+        m_context->m_defaultFontSizePt = m_currentTextStyle.property("fo:font-size");
+    }
+
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
 
     if (m_currentParagraphStyle.property("fo:line-height").isEmpty() &&
