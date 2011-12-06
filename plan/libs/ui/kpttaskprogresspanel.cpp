@@ -330,12 +330,20 @@ void TaskProgressPanelImpl::slotEntryChanged()
 }
 
 void TaskProgressPanelImpl::enableWidgets() {
+    editmode->setEnabled( !finished->isChecked() );
+
     started->setEnabled(!finished->isChecked());
     finished->setEnabled(started->isChecked());
     finishTime->setEnabled(finished->isChecked());
     startTime->setEnabled(started->isChecked() && !finished->isChecked());
-    performedGroup->setEnabled(started->isChecked() && !finished->isChecked());
-    usedEffortTab->setEnabled(started->isChecked() && !finished->isChecked() && m_completion.entrymode() == Completion::EnterEffortPerResource);
+
+    addEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
+    removeEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
+    for ( int i = 0; i < entryTable->model()->columnCount(); ++i ) {
+        entryTable->model()->setFlags( i, 0 );
+    }
+
+    resourceTable->model()->setReadOnly( ( ! started->isChecked() ) || finished->isChecked() || m_completion.entrymode() != Completion::EnterEffortPerResource );
 }
 
 

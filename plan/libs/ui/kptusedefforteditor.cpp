@@ -40,7 +40,8 @@ namespace KPlato
 
 UsedEffortItemModel::UsedEffortItemModel ( QWidget *parent )
     : QAbstractItemModel( parent ),
-    m_completion( 0 )
+    m_completion( 0 ),
+    m_readonly( false )
 {
     m_headers << i18n( "Resource" );
     for ( int i = 1; i <= 7; ++i ) {
@@ -53,7 +54,7 @@ Qt::ItemFlags UsedEffortItemModel::flags ( const QModelIndex &index ) const
 {
 
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
-    if ( ! index.isValid() || index.column() == 8 ) {
+    if ( m_readonly || ! index.isValid() || index.column() == 8 ) {
         return flags;
     }
     if ( index.column() == 0 ) {
