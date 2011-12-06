@@ -219,6 +219,8 @@ void ODrawClient::addTextStyles(const quint16 msospt,
     Q_UNUSED(msospt);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
+
+    setZIndexAttribute(out);
 }
 
 const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()

@@ -114,33 +114,6 @@ static qreal rowHeight(Sheet* sheet, unsigned long row) {
     return sheet->defaultRowHeight();
 }
 
-// Returns A for 1, B for 2, C for 3, etc.
-static QString columnName(uint column)
-{
-    QString s;
-    unsigned digits = 1;
-    unsigned offset = 0;
-    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
-        offset += limit;
-    for (unsigned col = column - offset; digits; --digits, col /= 26)
-        s.prepend(QChar('A' + (col % 26)));
-    return s;
-}
-
-static QString encodeSheetName(const QString& name)
-{
-    QString sheetName = name;
-    if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
-        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
-    return sheetName;
-}
-
-static QString encodeAddress(const QString& sheetName, uint column, uint row)
-{
-    return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
-}
-
-
 class ExcelImport::Private
 {
 public:
@@ -558,6 +531,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
     os->setShowPageBorders(is->isPageBreakViewEnabled());
     os->setLcMode(false);
     os->setShowColumnNumber(false);
+    os->setLayoutDirection(is->isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight);
 
     // TODO: page layout
     processSheetForHeaderFooter(is, os);
@@ -749,7 +723,7 @@ void ExcelImport::Private::processSheetForConditionals(Sheet* is, Calligra::Tabl
             qDebug() << "FRM:" << c.cond << kc.cond;
             kc.value1 = convertValue(c.value1);
             kc.value2 = convertValue(c.value2);
-            kc.baseCellAddress = encodeAddress(is->name(), cf->region().boundingRect().left(), cf->region().boundingRect().top());
+            kc.baseCellAddress = Swinder::encodeAddress(is->name(), cf->region().boundingRect().left(), cf->region().boundingRect().top());
 
             Calligra::Tables::CustomStyle* style = new Calligra::Tables::CustomStyle(QString("Excel-Condition-Style-%1").arg(styleNameId++));
             kc.styleName = style->name();
@@ -1036,8 +1010,10 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
         ChartExport *c = new ChartExport(chart->m_chart);
         c->setSheetReplacement( false );
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
-        c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
-        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
+        c->m_endCellAddress = Swinder::encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
+        c->m_end_x = offset(columnWidth(sheet, chart->m_colR), chart->m_dxR, 1024);
+        c->m_end_y = offset(columnWidth(sheet, chart->m_rwB), chart->m_dyB, 256);
+        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2"; //TODO don't hardcode!
 
         const unsigned long colL = chart->m_colL;
         const unsigned long dxL = chart->m_dxL;
@@ -1048,8 +1024,8 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
         c->m_y = offset(rowHeight(sheet, rwT), dyT, 256);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
-            c->m_cellRangeAddress = encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
-                                    encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.right(), chart->m_chart->m_cellRangeAddress.bottom());
+            c->m_cellRangeAddress = Swinder::encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
+                                    Swinder::encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.right(), chart->m_chart->m_cellRangeAddress.bottom());
 
         this->charts << c;
 

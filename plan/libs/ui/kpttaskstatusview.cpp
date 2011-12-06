@@ -752,7 +752,7 @@ void PerformanceStatusBase::setupChart()
 
 void PerformanceStatusBase::setEffortValuesVisible( bool visible )
 {
-    ui_performancetable->verticalHeader()->setSectionHidden( 0, ! visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 1, ! visible );
 /*    labelEffort->setVisible( visible );
     bcwsEffort->setVisible( visible );
     bcwpEffort->setVisible( visible );
@@ -763,7 +763,7 @@ void PerformanceStatusBase::setEffortValuesVisible( bool visible )
 
 void PerformanceStatusBase::setCostValuesVisible( bool visible )
 {
-    ui_performancetable->verticalHeader()->setSectionHidden( 1, ! visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 0, ! visible );
 /*    labelCost->setVisible( visible );
     bcwsCost->setVisible( visible );
     bcwpCost->setVisible( visible );
@@ -957,9 +957,9 @@ void PerformanceStatusBase::drawValues()
 
     // effort based
     double bh = budget.hoursTo( date );
-    m->setData( m->index( 1, 0 ), locale->formatMoney( bh ) );
-    m->setData( m->index( 1, 1 ), locale->formatMoney( budget.bcwpEffort( date ) ) );
-    m->setData( m->index( 1, 2 ), locale->formatMoney( actual.hoursTo( date ) ) );
+    m->setData( m->index( 1, 0 ), locale->formatNumber( bh, 1 ) );
+    m->setData( m->index( 1, 1 ), locale->formatNumber( budget.bcwpEffort( date ), 1 ) );
+    m->setData( m->index( 1, 2 ), locale->formatNumber( actual.hoursTo( date ), 1 ) );
 
     spi_ = 0.0;
     if ( bh > 0.0 ) {

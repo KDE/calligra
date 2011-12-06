@@ -73,7 +73,6 @@ void DatabaseFilterTest::testAndEquals()
     b.addCondition(Filter::AndComposition, 0, Filter::Match, "test");
     a.addCondition(Filter::AndComposition, 0, Filter::Match, "test2");
     b.addCondition(Filter::AndComposition, 0, Filter::Match, "test2");
-    a.dump();
     QVERIFY(a == b);
 }
 
@@ -85,7 +84,6 @@ void DatabaseFilterTest::testOrEquals()
     b.addCondition(Filter::OrComposition, 0, Filter::Match, "test");
     a.addCondition(Filter::OrComposition, 0, Filter::Match, "test2");
     b.addCondition(Filter::OrComposition, 0, Filter::Match, "test2");
-    a.dump();
     QVERIFY(a == b);
 }
 

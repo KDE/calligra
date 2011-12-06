@@ -86,6 +86,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 }
             }
         }
+        if (format.hasProperty(KoParagraphStyle::HiddenByTable)) {
+            block = block.next();
+            continue;
+        }
         if (format.hasProperty(KoParagraphStyle::TableOfContentsData)) {
             saveTableOfContents(document, listStyles, block);
             block = block.next();
@@ -181,6 +185,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
                 continue;
             }
             KoListStyle *listStyle = list->style();
+            if (listStyle && listStyle->isOulineStyle()) {
+                continue;
+            }
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
             listStyle->saveOdf(style, context);
@@ -194,6 +201,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoGenStyle style(KoGenStyle::ListAutoStyle);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
+            if (listStyle.isOulineStyle()) {
+                continue;
+            }
             listStyle.saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle.name());
             listStyles[textList] = generatedName;
@@ -698,6 +708,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         writer->addAttribute("text:style-name", styleName);
 
     if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+        // text:id is deprecated. if present, it must have the same value as
+        // xml:id
+        writer->addAttribute("xml:id", context.subId(blockData));
         writer->addAttribute("text:id", context.subId(blockData));
     }
 
@@ -1367,8 +1380,19 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         TagInformation listTagInformation;
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
-        if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
-            listTagInformation.addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
+
+        bool newList = true;
+        if (listXmlIds.contains(textList)) {
+            newList = false;
+            listTagInformation.addAttribute("text:continue-list", listXmlIds.value(textList));
+        }
+
+        QString listXmlId = QString("list-%1").arg(createXmlId());
+        listTagInformation.addAttribute("xml:id", listXmlId);
+        if (newList) {
+            listXmlIds.insert(textList, listXmlId);
+        }
+
 
         listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List, listTagInformation);
     }
@@ -1418,7 +1442,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 }
 
-                if (textList == topLevelTextList) {
+                if (topListLevel == level && textList == topLevelTextList) {
                     writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, textList);
                     // we are generating a text:list-item. Look forward and generate unnumbered list items.
                     while (true) {
@@ -1430,7 +1454,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    block = saveList(block, listStyles, ++level, currentTable);
+                    block = saveList(block, listStyles, level + 1, currentTable);
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();
@@ -2308,3 +2332,10 @@ void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &n
     }
 }
 
+QString KoTextWriter::Private::createXmlId()
+{
+    QString uuid = QUuid::createUuid().toString();
+    uuid.remove('{');
+    uuid.remove('}');
+    return uuid;
+}

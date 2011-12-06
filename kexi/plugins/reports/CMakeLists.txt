@@ -59,7 +59,6 @@ else (KEXI_MOBILE)
     target_link_libraries (kexihandler_report
     keximain
     keximigrate
-    ${QT_QT3_SUPPORT_LIBRARY}
     )
 endif (KEXI_MOBILE)
 

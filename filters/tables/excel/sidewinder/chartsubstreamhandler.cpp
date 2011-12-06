@@ -85,6 +85,76 @@ const unsigned BRAIRecord::id = 0x1051;
 
 using namespace Swinder;
 
+/// This represents the internal chart data cache aka the "local-table" that
+/// is embedded into the charts content.xml and not fetched from the application
+/// embedding the chart (e.g. from a Calligra Tables sheet).
+class ChartSubStreamHandler::InternalDataCache
+{
+public:
+    InternalDataCache(ChartSubStreamHandler *chartSubStreamHandler, unsigned index) : m_chartSubStreamHandler(chartSubStreamHandler), m_siIndex(index) {}
+    ~InternalDataCache() {
+        QString cellRegion = m_cellRegion.isNull() ? QString() : Swinder::encodeAddress("local", m_cellRegion);
+        bool isBubble = dynamic_cast<Charting::BubbleImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
+        bool isScatter = dynamic_cast<Charting::ScatterImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
+        foreach(Charting::Series *series, m_chartSubStreamHandler->m_chart->m_series) {
+            switch (m_siIndex) {
+                case 0x0001: { // Series values or vertical values (for scatter or bubble chart groups)
+                    if (isBubble || isScatter) {
+                        bool change = !series->m_datasetValue.contains(Charting::Value::VerticalValues) || (series->m_datasetValue[Charting::Value::VerticalValues]->m_type == Charting::Value::TextOrValue && series->m_datasetValue[Charting::Value::VerticalValues]->m_formula.isEmpty());
+                        if (change) {
+                            if (isBubble) {
+                                QString y = series->m_domainValuesCellRangeAddress.isEmpty() ? QString() : series->m_domainValuesCellRangeAddress[0];
+                                series->m_domainValuesCellRangeAddress = QStringList() << y << cellRegion;
+                            } else if (isScatter) {
+                                series->m_domainValuesCellRangeAddress = QStringList() << cellRegion;
+                            }
+                            //m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress = cellRegion;
+                        }
+                    } else {
+                        if (series->m_valuesCellRangeAddress.isEmpty())
+                            series->m_valuesCellRangeAddress = cellRegion;
+                    }
+                } break;
+                case 0x0002: { // Category labels or horizontal values (for scatter or bubble chart groups)
+                    if (isBubble || isScatter) {
+                        bool change = !series->m_datasetValue.contains(Charting::Value::HorizontalValues) || (series->m_datasetValue[Charting::Value::HorizontalValues]->m_type == Charting::Value::TextOrValue && series->m_datasetValue[Charting::Value::HorizontalValues]->m_formula.isEmpty());
+                        if (change) {
+                            if (isBubble) {
+                                QString x = series->m_domainValuesCellRangeAddress.count() < 2 ? QString() : series->m_domainValuesCellRangeAddress[1];
+                                series->m_domainValuesCellRangeAddress = QStringList() << cellRegion << x;
+                            }
+                            //series->m_valuesCellRangeAddress = cellRegion;
+                        }
+                    } else {
+                        if (m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress.isEmpty())
+                            m_chartSubStreamHandler->m_chart->m_verticalCellRangeAddress = cellRegion;
+                    }
+                } break;
+                case 0x0003: { // Bubble sizes
+                    if (isBubble) {
+                        if (series->m_valuesCellRangeAddress.isEmpty())
+                            series->m_valuesCellRangeAddress = cellRegion;
+                    }
+                } break;
+                default:
+                    break;
+            }
+        }
+    }
+    void add(unsigned column, unsigned row) {
+        QRect r(column, row, 1, 1);
+        if (m_cellRegion.isNull()) {
+            m_cellRegion = r;
+        } else {
+            m_cellRegion |= r;
+        }
+    }
+private:
+    ChartSubStreamHandler *m_chartSubStreamHandler;
+    unsigned m_siIndex;
+    QRect m_cellRegion;
+};
+
 ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
                                              SubStreamHandler* parentHandler)
     : SubStreamHandler()
@@ -95,6 +165,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
     , m_chart(0)
     , m_currentSeries(0)
     , m_currentObj(0)
+    , m_internalDataCache(0)
     , m_defaultTextId(-1)
     , m_axisId(-1)
     , m_disableAutoMarker( false )
@@ -160,6 +231,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
 
 ChartSubStreamHandler::~ChartSubStreamHandler()
 {
+    delete m_internalDataCache;
     RecordRegistry::unregisterRecordClass(BRAIRecord::id);
 }
 
@@ -179,6 +251,11 @@ void ChartSubStreamHandler::handleRecord(Record* record)
     if (!record) return;
     if (!m_chart) return;
     const unsigned type = record->rtti();
+
+    if (m_internalDataCache && type != NumberRecord::id) {
+        delete m_internalDataCache;
+        m_internalDataCache = 0;
+    }
 
     if (type == BOFRecord::id)
         handleBOF(static_cast<BOFRecord*>(record));
@@ -208,6 +285,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleFrame(static_cast<FrameRecord*>(record));
     else if (type == SeriesRecord::id)
         handleSeries(static_cast<SeriesRecord*>(record));
+    else if (type == SeriesListRecord::id)
+        handleSeriesList(static_cast<SeriesListRecord*>(record));
+    else if (type == NumberRecord::id)
+        handleNumber(static_cast<NumberRecord*>(record));
     else if (type == DataFormatRecord::id)
         handleDataFormat(static_cast<DataFormatRecord*>(record));
     else if (type == Chart3DBarShapeRecord::id)
@@ -284,6 +365,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleAttachedLabel(static_cast<AttachedLabelRecord*>(record));
     else if (type == DataLabelExtContentsRecord::id)
         handleDataLabelExtContents(static_cast<DataLabelExtContentsRecord*>(record));
+    else if (type == XFRecord::id)
+        handleXF(static_cast<XFRecord*>(record));
+    else if (type == LabelRecord::id)
+        handleLabel(static_cast<LabelRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -396,7 +481,7 @@ void ChartSubStreamHandler::handleBegin(BeginRecord *)
     m_stack.push(m_currentObj);
 }
 
-// sepcified the end of a collection of records
+// specified the end of a collection of records
 void ChartSubStreamHandler::handleEnd(EndRecord *)
 {
     m_currentObj = m_stack.pop();
@@ -407,13 +492,18 @@ void ChartSubStreamHandler::handleEnd(EndRecord *)
 void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 {
     if (!record) return;
-    if (record->isAutoPosition()) {
-        m_chart->m_x1 = -1;
-        m_chart->m_y1 = -1;
+    DEBUG << "autoPosition=" << record->isAutoPosition() << " autoSize=" << record->isAutoSize() << std::endl;
+    if ( dynamic_cast< Charting::Chart* > ( m_currentObj ) ) {
+        if (record->isAutoPosition()) {
+            m_chart->m_x1 = -1;
+            m_chart->m_y1 = -1;
+        }
+        if (record->isAutoSize()) {
+            m_chart->m_x2 = -1;
+            m_chart->m_y2 = -1;
+        }
     }
-    if (record->isAutoSize()) {
-        m_chart->m_x2 = -1;
-        m_chart->m_y2 = -1;
+    else if ( dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
     }
 }
 
@@ -428,8 +518,32 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
     m_currentSeries->m_countXValues = record->countXValues();
     m_currentSeries->m_countYValues = record->countYValues();
     m_currentSeries->m_countBubbleSizeValues = record->countBubbleSizeValues();
+
     m_chart->m_series << m_currentSeries;
     m_currentObj = m_currentSeries;
+}
+
+void ChartSubStreamHandler::handleSeriesList(SeriesListRecord *record)
+{
+    DEBUG << "cser=" << record->cser() << std::endl;
+    for(unsigned i = 0; i < record->cser(); ++i)
+        DEBUG << "number=" << i << " rgiser=" << record->rgiser(i) << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleNumber(NumberRecord *record)
+{
+    DEBUG << "row=" << record->row() << " column=" << record->column() << " xfIndex=" << record->xfIndex() << " number=" << record->number() << std::endl;
+
+    // The formatting of the value doesn't really matter or does it? Well, maybe for data-value-label's that should be displayed as formatted?
+    //m_xfTable[record->xfIndex()]
+
+    Charting::Cell *cell = m_chart->m_internalTable.cell(record->column() + 1, record->row() + 1, true);
+    cell->m_value = QString::number(record->number(), 'f');
+    cell->m_valueType = "float";
+
+    if (m_internalDataCache)
+        m_internalDataCache->add(record->column(), record->row());
 }
 
 // specifies a reference to data in a sheet that is used by a part of a series, legend entry, trendline or error bars.
@@ -448,10 +562,11 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
             if (record->m_value->m_type == Charting::Value::TextOrValue
                 || record->m_value->m_type == Charting::Value::CellRange)
             {
-                if (record->m_value->m_dataId == Charting::Value::HorizontalValues)
+                if (record->m_value->m_dataId == Charting::Value::HorizontalValues) {
                     m_currentSeries->m_valuesCellRangeAddress = record->m_value->m_formula;
-                else if (record->m_value->m_dataId == Charting::Value::VerticalValues)
+                } else if (record->m_value->m_dataId == Charting::Value::VerticalValues) {
                     m_chart->m_verticalCellRangeAddress = record->m_value->m_formula;
+                }
                 
                 // FIXME: We are ignoring the sheetname here but we
                 //        probably should handle the case where a
@@ -565,8 +680,7 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
         Q_ASSERT( false );
     else if ( dynamic_cast< Charting::Chart* > ( m_currentObj ) )
     {
-        DEBUG << "The color is :" << QColor( record->red(), record->green(), record->blue() ).name() << "\n";
-        DEBUG << "automatic " << record->isFAuto() << "\n";
+        DEBUG << "color=" << QColor( record->red(), record->green(), record->blue() ).name() << "automatic=" << record->isFAuto() << std::endl;
         //m_chart->m_showLines = record->isFAuto();
         Q_ASSERT( !dynamic_cast< Charting::Series* > ( m_currentSeries ) );
     }
@@ -589,8 +703,7 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
           << " fillStyle=" << record->fls() << std::endl;
     m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background,
                                                           record->fls() != 0x0000);
-    Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj );
-    if ( series )
+    if ( Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj ) )
     {
         const int index = m_chart->m_series.indexOf( series ) % 8;
         if ( !series->spPr )
@@ -606,9 +719,9 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
             series->spPr->areaFill.setColor( foreground );
         }
     }
-    
-//     if ( /*series = */dynamic_cast< Charting::Series* > ( m_currentObj ) )
-        //Q_ASSERT( false );
+    else if ( Charting::PlotArea* plotArea = dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
+        Q_UNUSED(plotArea);
+    }
 }
 
 void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
@@ -626,7 +739,7 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
     const bool legend = dynamic_cast< Charting::Legend* >( m_currentObj );
     if ( m_disableAutoMarker && legend )
         return;
-    m_chart->m_showMarker = false;
+    m_chart->m_markerType = Charting::NoMarker;
 //     Q_ASSERT ( !dynamic_cast< Charting::Text* >( m_currentObj ) );
 //     if( dynamic_cast< Charting::Legend* >( m_currentObj ) )
 //         return;
@@ -645,49 +758,45 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
     const int index = m_chart->m_series.indexOf( series ) % 8;
     if ( record->fAuto() ) {
         if ( !m_disableAutoMarker )
-            m_chart->m_showMarker = true;
+            m_chart->m_markerType = Charting::AutoMarker;
         if ( !series->spPr->areaFill.valid )
             series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 24 + index ) );
-        switch ( index )
-            {
-                case( 0x0000 ):
-                    series->markerType = Charting::Series::Square;
-                    break;
-                case( 0x0001 ):
-                    series->markerType = Charting::Series::Diamond;
-                    break;
-                case( 0x0002 ):
-                    series->markerType = Charting::Series::SymbolX;
-                    break;
-                case( 0x0003 ):
-                    series->markerType = Charting::Series::Square;
-                    break;
-                case( 0x0004 ):
-                    series->markerType = Charting::Series::Dash;
-                    break;
-                case( 0x0005 ):
-                    series->markerType = Charting::Series::Dash;
-                    break;
-                case( 0x0006 ):
-                    series->markerType = Charting::Series::Circle;
-                    break;
-                case( 0x0007 ):
-                    series->markerType = Charting::Series::Plus;
-                    break;
-                default:
-                    series->markerType = Charting::Series::Square;
-                    break;
-            }
+        switch ( index ) {
+            case( 0x0000 ):
+                series->m_markerType = Charting::SquareMarker;
+                break;
+            case( 0x0001 ):
+                series->m_markerType = Charting::DiamondMarker;
+                break;
+            case( 0x0002 ):
+                series->m_markerType = Charting::SymbolXMarker;
+                break;
+            case( 0x0003 ):
+                series->m_markerType = Charting::SquareMarker;
+                break;
+            case( 0x0004 ):
+                series->m_markerType = Charting::DashMarker;
+                break;
+            case( 0x0005 ):
+                series->m_markerType = Charting::DashMarker;
+                break;
+            case( 0x0006 ):
+                series->m_markerType = Charting::CircleMarker;
+                break;
+            case( 0x0007 ):
+                series->m_markerType = Charting::PlusMarker;
+                break;
+            default:
+                series->m_markerType = Charting::SquareMarker;
+                break;
+        }
     } else {
-        if ( series )
-        {          
-            switch ( record->imk() )
-            {
+        if ( series ) {
+            switch ( record->imk() ) {
                 case( 0x0000 ):
-                    series->markerType = Charting::Series::None;
+                    series->m_markerType = Charting::NoMarker;
                     m_disableAutoMarker = true;
-//                     if ( impl )
-//                     {
+//                     if ( impl ) {
 //                         if ( impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker )
 //                             impl->style = Charting::ScatterImpl::Line;
 //                         else
@@ -695,31 +804,31 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 //                     }
                     break;
                 case( 0x0001 ):
-                    series->markerType = Charting::Series::Square;
+                    series->m_markerType = Charting::SquareMarker;
                     break;
                 case( 0x0002 ):
-                    series->markerType = Charting::Series::Diamond;
+                    series->m_markerType = Charting::DiamondMarker;
                     break;
                 case( 0x0003 ):
-                    series->markerType = Charting::Series::SymbolX;
+                    series->m_markerType = Charting::SymbolXMarker;
                     break;
                 case( 0x0004 ):
-                    series->markerType = Charting::Series::Square;
+                    series->m_markerType = Charting::SquareMarker;
                     break;
                 case( 0x0005 ):
-                    series->markerType = Charting::Series::Dash;
+                    series->m_markerType = Charting::DashMarker;
                     break;
                 case( 0x0006 ):
-                    series->markerType = Charting::Series::Dash;
+                    series->m_markerType = Charting::DashMarker;
                     break;
                 case( 0x0007 ):
-                    series->markerType = Charting::Series::Circle;
+                    series->m_markerType = Charting::CircleMarker;
                     break;
                 case( 0x0008 ):
-                    series->markerType = Charting::Series::Plus;
+                    series->m_markerType = Charting::PlusMarker;
                     break;
                 default:
-                    series->markerType = Charting::Series::Square;
+                    series->m_markerType = Charting::SquareMarker;
                     break;
             }
             if ( !series->spPr->areaFill.valid )
@@ -753,7 +862,7 @@ void ChartSubStreamHandler::handleSerToCrt(SerToCrtRecord *record)
 void ChartSubStreamHandler::handleShtProps(ShtPropsRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "fManSerAlloc=" << record->isFManSerAlloc() << " fPlotVisOnly=" << record->isFPlotVisOnly() << " fNotSizeWIth=" << record->isFNotSizeWIth() << " fManPlotArea=" << record->isFManPlotArea() << " fAlwaysAutoPlotArea=" << record->isFAlwaysAutoPlotArea() << " mdBlank=" << record->mdBlank() << std::endl;
     //TODO
 }
 
@@ -842,22 +951,29 @@ void ChartSubStreamHandler::handlePlotGrowth(PlotGrowthRecord *record)
 void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
-    m_currentObj = new Charting::Legend();
-    //TODO
+    DEBUG << "fAutoPosition=" << record->isFAutoPosition() << " fAutoPosX=" << record->isFAutoPosX() << " fAutoPosY=" << record->isFAutoPosY() << " fVert=" << record->isFVert() << " fWasDataTable=" << record->isFWasDataTable() << std::endl;
+    m_currentObj = m_chart->m_legend = new Charting::Legend();
 }
 
+// specifies the number of axis groups on the chart.
+// cAxes specifies the number of axis groups on the chart.
+//   0x0001 A single primary axis group is present
+//   0x0002 Both a primary axis group and a secondary axis group are present
 void ChartSubStreamHandler::handleAxesUsed(AxesUsedRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "cAxes=" << record->cAxes() << std::endl;
     //TODO
 }
 
+// specifies properties of an axis group.
+// iax specifies whether the axis group is primary or secondary.
+//   0x0000 Axis group is primary.
+//   0x0001 Axis group is secondary.
 void ChartSubStreamHandler::handleAxisParent(AxisParentRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "iax=" << record->iax() << std::endl;
     //TODO
 }
 
@@ -902,11 +1018,11 @@ void ChartSubStreamHandler::handleLine(LineRecord* record)
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
     if ( !m_disableAutoMarker )
-        m_chart->m_showMarker = true;
+        m_chart->m_markerType = Charting::AutoMarker;
 //     Q_FOREACH( const Charting::Series* const series, m_chart->m_series )
 //     {
-//         if ( series->markerType == Charting::Series::None )
-//             m_chart->m_showMarker = false;
+//         if ( series->m_markerType == Charting::Series::None )
+//             m_chart->m_markerType = Charting::NoMarker;
 //     }
 }
 
@@ -919,14 +1035,37 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
         m_chart->m_impl = new Charting::BubbleImpl(Charting::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio(), record->isFShowNegBubbles());
     else
         m_chart->m_impl = new Charting::ScatterImpl();
-    if ( !m_disableAutoMarker )
-    {
-        m_chart->m_showMarker = true;
+
+    // For scatter charts, one <chart:domain> element shall exist. Its table:cell-range-address
+    // attribute references the x coordinate values for the scatter chart.
+    // For bubble charts, two <chart:domain> elements shall exist. The values for the y-coordinates are
+    // given by the first <chart:domain> element. The values for the x-coordinates are given by the
+    // second <chart:domain> element.
+    QString x, y;
+    if (m_currentSeries->m_datasetValue.contains(Charting::Value::VerticalValues))
+        x = m_currentSeries->m_datasetValue[Charting::Value::VerticalValues]->m_formula;
+    if (m_currentSeries->m_datasetValue.contains(Charting::Value::HorizontalValues))
+        y = m_currentSeries->m_datasetValue[Charting::Value::HorizontalValues]->m_formula;
+    foreach(Charting::Series *series, m_chart->m_series) {
+        Q_ASSERT(series->m_domainValuesCellRangeAddress.isEmpty()); // what should we do if that happens?
+        if (!series->m_domainValuesCellRangeAddress.isEmpty())
+            continue;
+        if (record->isFBubbles()) {
+            series->m_domainValuesCellRangeAddress << y << x;
+            if (series->m_datasetValue.contains(Charting::Value::BubbleSizeValues))
+                series->m_valuesCellRangeAddress = series->m_datasetValue[Charting::Value::BubbleSizeValues]->m_formula;
+            //m_chart->m_verticalCellRangeAddress = series->m_valuesCellRangeAddress;
+        } else {
+            series->m_domainValuesCellRangeAddress << x;
+        }
     }
-//     Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
-//     if ( impl )
-//         impl->style = Charting::ScatterImpl::Marker;
-    
+
+    if ( !m_disableAutoMarker ) {
+        m_chart->m_markerType = Charting::AutoMarker;
+    }
+    // Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
+    // if ( impl )
+    //     impl->style = Charting::ScatterImpl::Marker;
 }
 
 // specifies that the chartgroup is a radar chart
@@ -934,8 +1073,8 @@ void ChartSubStreamHandler::handleRadar(RadarRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::RadarImpl();
-    m_chart->m_showMarker = true;
+    m_chart->m_impl = new Charting::RadarImpl(false);
+    m_chart->m_markerType = Charting::AutoMarker;
 }
 
 // specifies that the chartgroup is a filled radar chart
@@ -943,7 +1082,7 @@ void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::RadarImpl();
+    m_chart->m_impl = new Charting::RadarImpl(true);
 }
 
 // specifies that the chartgroup is a surface chart
@@ -971,16 +1110,13 @@ void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
     m_axisId = record->identifier();
 }
 
-// type of data contained in the Number records following
+// Type of data contained in the Number records following.
 void ChartSubStreamHandler::handleSIIndex(SIIndexRecord *record)
 {
     if (!record) return;
     DEBUG << "numIndex=" << record->numIndex() << std::endl;
-    /*TODO
-    0x0001 Series values or vertical values (for scatter or bubble chart groups)
-    0x0002 Category labels or horizontal values (for scatter or bubble chart groups)
-    0x0003 Bubble sizes
-    */
+    Q_ASSERT(!m_internalDataCache);
+    m_internalDataCache = new InternalDataCache(this, record->numIndex());
 }
 
 void ChartSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
@@ -1043,6 +1179,7 @@ void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
 {
     if (!record) return;
     DEBUG << std::endl;
+    m_currentObj = m_chart->m_plotArea = new Charting::PlotArea();
 }
 
 void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
@@ -1123,5 +1260,20 @@ void ChartSubStreamHandler::handleDataLabelExtContents(DataLabelExtContentsRecor
 {
     if (!record) return;
     DEBUG << "rt=" << record->rt() << " grbitFrt=" << record->grbitFrt() << " fSerName=" << record->isFSerName() << " fCatName=" << record->isFCatName() << " fValue=" << record->isFValue() << " fPercent=" << record->isFPercent() << " fBubSize=" << record->isFBubSize() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleXF(XFRecord *record)
+{
+    if (!record) return;
+    DEBUG << "formatIndex=" << record->formatIndex() << std::endl;
+    m_xfTable.push_back(*record);
+}
+
+// This record specifies a label on the category (3) axis for each series.
+void ChartSubStreamHandler::handleLabel(LabelRecord *record)
+{
+    if (!record) return;
+    DEBUG << "row=" << record->row() << " column=" << record->column() << " xfIndex=" << record->xfIndex() << " label=" << record->label().toUtf8().constData() << std::endl;
     //TODO
 }

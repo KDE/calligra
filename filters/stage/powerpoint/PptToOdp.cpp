@@ -33,6 +33,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
 
+#include <QTime>
 #include <QtCore/QBuffer>
 #include <QtCore/qmath.h>
 
@@ -708,6 +709,7 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_isList(false),
   m_previousListLevel(0)
 {
+    qsrand(QTime::currentTime().msec());
 }
 
 PptToOdp::~PptToOdp()
@@ -2181,53 +2183,6 @@ const TextPFRun *findTextPFRun(const StyleTextPropAtom& style, unsigned int pos)
     }
     return 0;
 }
-namespace
-{
-/**
-* @brief Write text deindentations the specified amount. Actually it just
-* closes elements.
-*
-* @param xmlWriter XML writer to write closing tags
-* @param count how many lists and list items to leave open
-* @param levels the list of levels to remove from
-*/
-void writeTextObjectDeIndent(KoXmlWriter& xmlWriter, const int count,
-                             QStack<QString>& levels)
-{
-    while (levels.size() > count) {
-        xmlWriter.endElement(); //text:list-item
-        xmlWriter.endElement(); //text:list
-        levels.pop();
-    }
-}
-void addListElement(KoXmlWriter& out, const QString& listStyle,
-                    QStack<QString>& levels, int depth,
-                    const PptTextPFRun &pf, bool continueList)
-{
-    levels.push(listStyle);
-    out.startElement("text:list");
-    if (!listStyle.isEmpty()) {
-        out.addAttribute("text:style-name", listStyle);
-    } else {
-        qDebug() << "Warning: list style name not provided!";
-    }
-    if (continueList) {
-        out.addAttribute("text:continue-numbering", "true");
-    }
-    out.startElement("text:list-item");
-
-    if (pf.fBulletHasAutoNumber() && !continueList) {
-        out.addAttribute("text:start-value", pf.startNum());
-    }
-
-    // add styleless levels to get the right level of indentation
-    while (levels.size() < depth) {
-        out.startElement("text:list");
-        out.startElement("text:list-item");
-        levels.push("");
-    }
-}
-}
 
 void
 writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
@@ -2282,6 +2237,64 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
         }
     }
     return end;
+}
+
+/**
+* @brief Write text deindentations the specified amount. Actually it just
+* closes elements.
+*
+* @param xmlWriter XML writer to write closing tags
+* @param count how many lists and list items to leave open
+* @param levels the list of levels to remove from
+*/
+void writeTextObjectDeIndent(KoXmlWriter& xmlWriter, const int count,
+                             QStack<QString>& levels)
+{
+    while (levels.size() > count) {
+        xmlWriter.endElement(); //text:list-item
+        xmlWriter.endElement(); //text:list
+        levels.pop();
+    }
+}
+
+void PptToOdp::addListElement(KoXmlWriter& out, const QString& listStyle,
+                    QStack<QString>& levels, quint16 level,
+                    const PptTextPFRun &pf)
+{
+    levels.push(listStyle);
+    out.startElement("text:list");
+    if (!listStyle.isEmpty()) {
+        out.addAttribute("text:style-name", listStyle);
+    } else {
+        qDebug() << "Warning: list style name not provided!";
+    }
+    if (pf.fBulletHasAutoNumber()) {
+        QString xmlId = QString("lvl%1").arg(level);
+        xmlId.append(QString("_%1").arg(qrand()));
+        out.addAttribute("xml:id", xmlId);
+
+        if (m_continueListNumbering.contains(level) &&
+            m_continueListNumbering[level]) {
+            out.addAttribute("text:continue-list", m_lvlXmlIdMap[level]);
+        }
+        m_lvlXmlIdMap[level] = xmlId;
+    }
+    out.startElement("text:list-item");
+
+    if (pf.fBulletHasAutoNumber()) {
+        if (m_continueListNumbering.contains(level) &&
+            (m_continueListNumbering[level] == false)) {
+            out.addAttribute("text:start-value", pf.startNum());
+        }
+        m_continueListNumbering[level] = true;
+    }
+
+    // add styleless levels to get the right level of indentation
+    while (levels.size() < level) {
+        out.startElement("text:list");
+        out.startElement("text:list-item");
+        levels.push("");
+    }
 }
 
 int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
@@ -2563,26 +2576,34 @@ PptToOdp::processParagraph(Writer& out,
 	if (!levels.isEmpty() && (levels.first() != listStyle)) {
             writeTextObjectDeIndent(out.xml, 0, levels);
         }
-        if (!pf.fBulletHasAutoNumber() || (m_previousListLevel < depth)) {
-            m_continueNumbering[depth] = false;
+        if (!pf.fBulletHasAutoNumber()) {
+            QList<quint16> levels = m_continueListNumbering.keys();
+            for (quint16 i = 0; i < levels.size(); i++) {
+                if (levels[i] >= depth) {
+                    m_continueListNumbering.remove(levels[i]);
+                    m_lvlXmlIdMap.remove(levels[i]);
+                }
+            }
+        } else if (m_previousListLevel > depth) {
+            QList<quint16> levels = m_continueListNumbering.keys();
+            for (quint16 i = 0; i < levels.size(); i++) {
+                if (levels[i] > depth) {
+                    m_continueListNumbering.remove(levels[i]);
+                    m_lvlXmlIdMap.remove(levels[i]);
+                }
+            }
         }
         if (levels.isEmpty()) {
-            bool continueNumbering = false;
-            if (m_continueNumbering.contains(depth)) {
-                continueNumbering = m_continueNumbering[depth];
-            }
-            addListElement(out.xml, listStyle, levels, depth, pf, continueNumbering);
+            addListElement(out.xml, listStyle, levels, depth, pf);
         } else {
             out.xml.endElement(); //text:list-item
             out.xml.startElement("text:list-item");
         }
-        if (pf.fBulletHasAutoNumber()) {
-            m_continueNumbering[depth] = true;
-        }
         m_previousListLevel = depth;
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
-        m_continueNumbering.clear();
+        m_continueListNumbering.clear();
+        m_lvlXmlIdMap.clear();
         m_previousListLevel = 0;
     }
 

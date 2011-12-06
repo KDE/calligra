@@ -86,10 +86,10 @@ public:
             Writer& out) = 0;
 
         /**
-         * Add text properties to the style.
-         * Host application specific style properties are added. These
-         * properties are attributes to the elements style:paragraph-properties
-         * or style:text-properties.
+         * Add host application specific formatting properties for text and
+         * paragraphs to the style of the draw element.  These properties are
+         * attributes to style:paragraph-properties or style:text-properties.
+         * Also add host application specific attributes to the draw element.
          **/
         virtual void addTextStyles(
             const quint16 msospt,
@@ -117,9 +117,6 @@ public:
 
         virtual QString formatPos(qreal v) = 0;
 
-        virtual void setZIndexAttribute(Writer &out){
-            Q_UNUSED(out);
-        }
     };
 private:
     Client* const client;

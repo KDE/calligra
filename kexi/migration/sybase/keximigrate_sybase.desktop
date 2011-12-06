@@ -42,6 +42,7 @@ Name[x-test]=xxSybasexx
 Name[zh_CN]=Sybase
 Name[zh_TW]=Sybase
 Comment=Sybase Import Plugin for Kexi
+Comment[nb]=Sybase import-programtillegg for Kexi
 Comment[pt]='Plugin' de Importação de Sybase para o Kexi
 Comment[pt_BR]=Plugin de Importação do Sybase para o Kexi
 Comment[sv]=Sybase importinsticksprogram för Kexi

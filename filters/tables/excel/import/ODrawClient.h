@@ -45,7 +45,7 @@ public:
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
 
-    virtual void setZIndexAttribute(Writer& out);
+    void setZIndexAttribute(Writer& out);
 
     void setZIndex(quint32 zindex){ m_zIndex = zindex; }
     quint32 zIndex() const { return m_zIndex; }

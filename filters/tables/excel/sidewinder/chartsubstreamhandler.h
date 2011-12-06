@@ -67,6 +67,11 @@ private:
     Charting::Series* m_currentSeries;
     Charting::Obj* m_currentObj;
     QStack<Charting::Obj*> m_stack;
+    std::vector<XFRecord> m_xfTable;
+
+    class InternalDataCache;
+    friend class InternalDataCache;
+    InternalDataCache *m_internalDataCache;
 
     //QMap<Charting::Obj*, int> m_defaultObjects;
     int m_defaultTextId;
@@ -92,6 +97,8 @@ private:
     void handleEnd(EndRecord *);
     void handleFrame(FrameRecord *);
     void handleSeries(SeriesRecord *);
+    void handleSeriesList(SeriesListRecord *);
+    void handleNumber(NumberRecord *);
     void handleBRAI(BRAIRecord *);
     void handleDataFormat(DataFormatRecord *);
     void handleChart3DBarShape(Chart3DBarShapeRecord *);
@@ -136,6 +143,8 @@ private:
     void handleCatSerRange(CatSerRangeRecord *);
     void handleAttachedLabel(AttachedLabelRecord *);
     void handleDataLabelExtContents(DataLabelExtContentsRecord *);
+    void handleXF(XFRecord *);
+    void handleLabel(LabelRecord *);
 };
 
 } // namespace Swinder

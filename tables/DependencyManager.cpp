@@ -107,13 +107,6 @@ void DependencyManager::regionChanged(const Region& region)
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 Cell cell(sheet, col, row);
-            bool first = true;
-                if (first) {
-                    cell = Cell(sheet, col, row);
-                    first = false;
-                } else {
-                    cell = sheet->cellStorage()->nextInRow(col, row);
-                }
                 const Formula formula = cell.formula();
 
                 // remove it and all its consumers from the reference depth list
@@ -225,11 +218,14 @@ Calligra::Tables::Region DependencyManager::reduceToProvidingRegion(const Region
     QList< QPair<QRectF, Cell> > pairs;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-        if (!d->consumers.contains((*it)->sheet()))
+        Sheet* const sheet = (*it)->sheet();
+        QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = d->consumers.constFind(sheet);
+        if (cit == d->consumers.constEnd())
             continue;
-        pairs = d->consumers.value((*it)->sheet())->intersectingPairs((*it)->rect()).values();
+
+        pairs = cit.value()->intersectingPairs((*it)->rect()).values();
         for (int i = 0; i < pairs.count(); ++i)
-            providingRegion.add(pairs[i].first.toRect() & (*it)->rect(), (*it)->sheet());
+            providingRegion.add(pairs[i].first.toRect() & (*it)->rect(), sheet);
     }
     return providingRegion;
 }
@@ -243,13 +239,13 @@ void DependencyManager::regionMoved(const Region& movedRegion, const Cell& desti
         Sheet* const sheet = (*it)->sheet();
         locationOffset.setSheet((sheet == destination.sheet()) ? 0 : destination.sheet());
 
-        if (d->consumers.contains(sheet)) {
-            QList<Cell> dependentLocations = d->consumers[sheet]->intersects((*it)->rect());
+        QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = d->consumers.constFind(sheet);
+        if (cit == d->consumers.constEnd())
+            continue;
 
-            for (int i = 0; i < dependentLocations.count(); ++i) {
-                const Cell cell = dependentLocations[i];
-                updateFormula(cell, (*it), locationOffset);
-            }
+        QList<Cell> dependentLocations = cit.value()->intersects((*it)->rect());
+        foreach(const Cell &c, dependentLocations) {
+            updateFormula(c, (*it), locationOffset);
         }
     }
 }
@@ -274,16 +270,13 @@ void DependencyManager::updateFormula(const Cell& cell, const Region::Element* o
 
     QString expression('=');
     Sheet* sheet = cell.sheet();
-    for (int i = 0; i < tokens.count(); ++i) {
-        Token token = tokens[i];
-        Token::Type tokenType = token.type();
-
+    foreach(const Token &token, tokens) {
         //parse each cell/range and put it to our expression
-        if (tokenType == Token::Cell || tokenType == Token::Range) {
+        if (token.type() == Token::Cell || token.type() == Token::Range) {
             // FIXME Stefan: Special handling for named areas
             const Region region(token.text(), sheet->map(), sheet);
+            //kDebug(36002) << region.name();
 
-//             kDebug(36002) << region.name();
             // the offset contains a sheet, only if it was an intersheet move.
             if ((oldLocation->sheet() == region.firstSheet()) &&
                     (oldLocation->rect().contains(region.firstRange()))) {
@@ -308,16 +301,17 @@ void DependencyManager::Private::reset()
 
 Calligra::Tables::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
 {
-    if (!consumers.contains(cell.sheet())) {
-//         kDebug(36002) << "No consumer tree found for the cell's sheet.";
+    QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
+    if (cit == consumers.constEnd()) {
+        //kDebug(36002) << "No consumer tree found for the cell's sheet.";
         return Region();
     }
 
-    const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
+    const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
 
     Region region;
-    for (int i = 0; i < consumers.count(); ++i)
-        region.add(consumers[i].cellPosition(), consumers[i].sheet());
+    foreach(const Cell& c, consumers) 
+        region.add(c.cellPosition(), c.sheet());
     return region;
 }
 
@@ -327,14 +321,15 @@ void DependencyManager::Private::namedAreaModified(const QString& name)
     // basically means that all cells referencing this area should be treated
     // as modified - that will retrieve updated area ranges and also update
     // everything as necessary ...
-    if (!namedAreaConsumers.contains(name))
+    QHash<QString, QList<Cell> >::ConstIterator it = namedAreaConsumers.constFind(name);
+    if (it == namedAreaConsumers.constEnd())
         return;
 
     Region region;
-    const QList<Cell> namedAreaConsumers = this->namedAreaConsumers[name];
-    for (int i = 0; i < namedAreaConsumers.count(); ++i) {
-        generateDependencies(namedAreaConsumers[i], namedAreaConsumers[i].formula());
-        region.add(namedAreaConsumers[i].cellPosition(), namedAreaConsumers[i].sheet());
+    const QList<Cell> namedAreaConsumersList = it.value();
+    foreach(const Cell &c, namedAreaConsumersList) {
+        generateDependencies(c, c.formula());
+        region.add(c.cellPosition(), c.sheet());
     }
     generateDepths(region);
 }
@@ -342,27 +337,28 @@ void DependencyManager::Private::namedAreaModified(const QString& name)
 void DependencyManager::Private::removeDependencies(const Cell& cell)
 {
     // look if the cell has any providers
-    if (!providers.contains(cell))
+    QMap<Cell, Region>::ConstIterator pit = providers.constFind(cell);
+    if (pit == providers.constEnd())
         return;  //it doesn't - nothing more to do
 
     // first this cell is no longer a provider for all consumers
-    Region region = providers[cell];
+    Region region = pit.value();
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-        Sheet* const sheet = (*it)->sheet();
-        const QRect range = (*it)->rect();
-
-        if (consumers.contains(sheet)) {
-            consumers[sheet]->remove(range, cell);
+        QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind((*it)->sheet());
+        if (cit != consumers.constEnd()) {
+            cit.value()->remove((*it)->rect(), cell);
         }
     }
 
     // remove information about named area dependencies
-    const QList<QString> namedAreas = namedAreaConsumers.keys();
-    for (int i = 0; i < namedAreas.count(); ++i) {
-        namedAreaConsumers[namedAreas[i]].removeAll(cell);
-        if (namedAreaConsumers[namedAreas[i]].isEmpty())
-            namedAreaConsumers.remove(namedAreas[i]);
+    QHash<QString, QList<Cell> >::Iterator nit(namedAreaConsumers.begin()), nend(namedAreaConsumers.end());
+    while (nit != nend) {
+        nit.value().removeAll(cell);
+        if (nit.value().isEmpty())
+            nit = namedAreaConsumers.erase(nit);
+        else
+            ++nit;
     }
 
     // clear the circular dependency flags
@@ -375,24 +371,28 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
 
 void DependencyManager::Private::removeDepths(const Cell& cell)
 {
-    if (!depths.contains(cell) || !consumers.contains(cell.sheet()))
+    QMap<Cell, int>::Iterator dit = depths.find(cell);
+    if (dit == depths.end())
         return;
-    depths.remove(cell);
-    const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
-    for (int i = 0; i < consumers.count(); ++i)
-        removeDepths(consumers[i]);
+    QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
+    if (cit == consumers.constEnd())
+        return;
+    depths.erase(dit);
+    const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
+    foreach(const Cell &c, consumers)
+        removeDepths(c);
 }
 
 void DependencyManager::Private::generateDependencies(const Cell& cell, const Formula& formula)
 {
+    //get rid of old dependencies first
+    removeDependencies(cell);
+
     //new dependencies only need to be generated if the cell contains a formula
 //     if (cell.isNull())
 //         return;
 //     if (!cell.isFormula())
 //         return;
-
-    //get rid of old dependencies first
-    removeDependencies(cell);
 
     //now we need to generate the providing region
     computeDependencies(cell, formula);
@@ -424,14 +424,16 @@ void DependencyManager::Private::generateDepths(const Region& region)
                 depths.insert(cell, depth);
 
                 // compute the consumers' depths
-                if (!consumers.contains(cell.sheet())) {
+                QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
+                if (cit == consumers.constEnd()) {
                     formula = sheet->formulaStorage()->nextInRow(col, row, &col);
                     continue;
                 }
-                const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
-                for (int i = 0; i < consumers.count(); ++i) {
-                    if (!region.contains(consumers[i].cellPosition(), consumers[i].sheet()))
-                        generateDepths(consumers[i], computedDepths);
+
+                const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
+                foreach (const Cell &c, consumers) {
+                    if (!region.contains(c.cellPosition(), c.sheet()))
+                        generateDepths(c, computedDepths);
                 }
 
                 formula = sheet->formulaStorage()->nextInRow(col, row, &col);
@@ -465,11 +467,13 @@ void DependencyManager::Private::generateDepths(Cell cell, QSet<Cell>& computedD
 
     // Recursion. We need the whole dependency tree of the changed region.
     // An infinite loop is prevented by the check above.
-    if (!consumers.contains(cell.sheet()))
+    QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
+    if (cit == consumers.constEnd())
         return;
-    const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
-    for (int i = 0; i < consumers.count(); ++i)
-        generateDepths(consumers[i], computedDepths);
+    const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
+    foreach (const Cell &c, consumers) {
+        generateDepths(c, computedDepths);
+    }
 
     // clear the compute reference depth flag
     processedCells.remove(cell);
@@ -510,9 +514,10 @@ int DependencyManager::Private::computeDepth(Cell cell) const
                     continue;
                 }
 
-                if (depths.contains(referencedCell)) {
+                QMap<Cell, int>::ConstIterator it = depths.constFind(referencedCell);
+                if (it != depths.constEnd()) {
                     // the referenced cell depth was already computed
-                    depth = qMax(depths[referencedCell] + 1, depth);
+                    depth = qMax(it.value() + 1, depth);
                     continue;
                 }
 
@@ -586,9 +591,12 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
                     Sheet* sheet = region.firstSheet();
 
                     // create consumer tree, if not existing yet
-                    if (!consumers.contains(sheet)) consumers.insert(sheet, new RTree<Cell>());
+                    QHash<Sheet*, RTree<Cell>*>::ConstIterator it = consumers.constFind(sheet);
+                    if (it == consumers.constEnd()) {
+                        it = consumers.insert(sheet, new RTree<Cell>());
+                    }
                     // add cell as consumer of the range
-                    consumers[sheet]->insert(region.firstRange(), cell);
+                    it.value()->insert(region.firstRange(), cell);
                 }
             }
         }

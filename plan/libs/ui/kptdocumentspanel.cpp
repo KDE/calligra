@@ -217,6 +217,10 @@ MacroCommand *DocumentsPanel::buildCommand()
                 if ( m == 0 ) m = new MacroCommand( txt );
                 m->addCommand( new DocumentModifySendAsCmd( d, i.key()->sendAs(), i18nc( "(qtundo-format)", "Modify document send control" ) ) );
             }
+            if ( i.key()->name() != d->name() ) {
+                if ( m == 0 ) m = new MacroCommand( txt );
+                m->addCommand( new DocumentModifyNameCmd( d, i.key()->name()/*, i18nc( "(qtundo-format)", "Modify document name" )*/ ) );
+            }
         } else if ( i.value() & Added ) {
             if ( m == 0 ) m = new MacroCommand( txt );
             kDebug()<<i.key()<<m_docs.documents();

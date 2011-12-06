@@ -1725,31 +1725,6 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
         }
         out.addAttribute("text:style-name", mainStyles.insert(m_textStyle, "T"));
     }
-    else {
-        out.startElement("style:text-properties");
-        if (m_bulletColor != UNUSED) {
-            out.addAttribute("fo:color", m_bulletColor);
-        }
-        if (m_type != ParagraphBulletProperties::PictureType) {
-            out.addAttribute("fo:font-size", bulletSize);
-        }
-        //MSPowerPoint: UI does not enable to change font of a numbered lists.
-        if (m_bulletFont != UNUSED) {
-            if ((currentFilter != Utils::PptxFilter) || (m_type == ParagraphBulletProperties::BulletType)) {
-                out.addAttribute("fo:font-family", m_bulletFont);
-            }
-        }
-        //MSPowerPoint: A label does NOT inherit Underline from text-properties
-        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
-        if ((currentFilter == Utils::PptxFilter)) {
-            if (m_type != ParagraphBulletProperties::NumberType) {
-                out.addAttribute("fo:font-style", "normal");
-                out.addAttribute("fo:font-weight", "normal");
-            }
-            out.addAttribute("style:text-underline-style", "none");
-        }
-        out.endElement(); //style:text-properties
-    }
 
     //---------------------------------------------
     // list-level-properties
@@ -1866,6 +1841,31 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     }
     out.endElement(); //style:list-level-label-alignment
     out.endElement(); //style:list-level-properties
+    if (currentFilter != Utils::DocxFilter) {
+        out.startElement("style:text-properties");
+        if (m_bulletColor != UNUSED) {
+            out.addAttribute("fo:color", m_bulletColor);
+        }
+        if (m_type != ParagraphBulletProperties::PictureType) {
+            out.addAttribute("fo:font-size", bulletSize);
+        }
+        //MSPowerPoint: UI does not enable to change font of a numbered lists.
+        if (m_bulletFont != UNUSED) {
+            if ((currentFilter != Utils::PptxFilter) || (m_type == ParagraphBulletProperties::BulletType)) {
+                out.addAttribute("fo:font-family", m_bulletFont);
+            }
+        }
+        //MSPowerPoint: A label does NOT inherit Underline from text-properties
+        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
+        if ((currentFilter == Utils::PptxFilter)) {
+            if (m_type != ParagraphBulletProperties::NumberType) {
+                out.addAttribute("fo:font-style", "normal");
+                out.addAttribute("fo:font-weight", "normal");
+            }
+            out.addAttribute("style:text-underline-style", "none");
+        }
+        out.endElement(); //style:text-properties
+    }
     out.endElement(); //text:list-level-style-*
 
     return QString::fromUtf8(buf.buffer(), buf.buffer().size());
