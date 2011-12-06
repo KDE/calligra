@@ -371,7 +371,8 @@ public:
 
 protected slots:
     void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
-    
+    void resizeSplitters();
+
 private:
     TreeViewBase *m_tree;
     PerformanceStatusBase *m_chart;
