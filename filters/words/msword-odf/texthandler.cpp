@@ -1836,7 +1836,7 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 
     ListType type = NumberType;
     //TODO: Where is the rest of the logic?
-    if (listInfo->numberFormat() == 23) {
+    if (listInfo->numberFormat() == msonfcBullet) {
         type = BulletType;
     }
 
@@ -2024,7 +2024,7 @@ void WordsTextHandler::updateListStyle() throw(InvalidFormatException)
 
     ListType type = NumberType;
     //TODO: Where is the rest of the logic?
-    if (nfc == 23) {
+    if (nfc == msonfcBullet) {
         type = BulletType;
     }
 
