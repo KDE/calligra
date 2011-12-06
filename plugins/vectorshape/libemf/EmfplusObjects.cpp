@@ -107,16 +107,17 @@ QPainterPath  emfplusPathFromStream(QDataStream &stream, quint32 objectSize)
     qreal lastX = qreal(0.0);
     qreal lastY = qreal(0.0);
     for (uint i = 0; i < pathPointCount; ++i) {
-        qreal  xReal;
-        qreal  yReal;
+        float  xReal;
+        float  yReal;
         if (isCompressed) {
             quint16 x;
             quint16 y;
             stream >> x >> y;
-            xReal = qreal(x);
-            yReal = qreal(y);
+            xReal = float(x);
+            yReal = float(y);
         }
         else {
+            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
             stream >> xReal >> yReal;
         }
 

@@ -82,6 +82,7 @@ bool EmfParser::load( const QString &fileName )
     // the need to call setFloatingPointPrecision().
     QDataStream stream( file );
     stream.setVersion(QDataStream::Qt_4_6);
+    stream.setByteOrder(QDataStream::LittleEndian);
     stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
 
     bool result = loadFromStream( stream );
@@ -827,6 +828,7 @@ bool EmfParser::parseRecord(QDataStream &stream, EmfDeviceContext &context)
                     QByteArray  dataArray(rawData, size - 16);
                     QDataStream emfplusStream(&dataArray, QIODevice::ReadOnly);
                     emfplusStream.setByteOrder(QDataStream::LittleEndian);
+                    stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
 
                     EmfplusParser emfplusParser;
                     emfplusParser.parse(emfplusStream, context, m_backend);
