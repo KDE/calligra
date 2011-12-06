@@ -272,6 +272,11 @@ void KoInlineCite::setJournal(const QString &journal)
     d->journal = journal;
 }
 
+void KoInlineCite::setLabel(const QString &label)
+{
+    d->label = label;
+}
+
 void KoInlineCite::setMonth(const QString &month)
 {
     d->month = month;
@@ -575,9 +580,17 @@ void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject objec
         return;
 
     KoOdfBibliographyConfiguration *bibConfiguration = KoTextDocument(document).styleManager()->bibliographyConfiguration();
-    d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
-                                .arg(d->identifier)
-                                .arg(bibConfiguration->suffix());
+
+    if (!bibConfiguration->numberedEntries()) {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                                    .arg(d->identifier)
+                                    .arg(bibConfiguration->suffix());
+    } else {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                    .arg(QString::number(manager()->citationsSortedByPosition(true).values().indexOf(this) + 1))
+                    .arg(bibConfiguration->suffix());
+    }
+
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
     object.setWidth(fm.width(d->label));
@@ -595,9 +608,16 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
         return;
 
     KoOdfBibliographyConfiguration *bibConfiguration = KoTextDocument(document).styleManager()->bibliographyConfiguration();
-    d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
-                                .arg(d->identifier)
-                                .arg(bibConfiguration->suffix());
+
+    if (!bibConfiguration->numberedEntries()) {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                                    .arg(d->identifier)
+                                    .arg(bibConfiguration->suffix());
+    } else {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                    .arg(QString::number(manager()->citationsSortedByPosition(true).values().indexOf(this) + 1))
+                    .arg(bibConfiguration->suffix());
+    }
 
     QFont font(format.font(), pd);
     QTextLayout layout(d->label, font, pd);

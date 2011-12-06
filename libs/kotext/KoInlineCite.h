@@ -89,6 +89,8 @@ public:
 
     void setJournal (const QString &journal);
 
+    void setLabel(const QString &label);
+
     void setMonth (const QString &month);
 
     void setNote (const QString &note);
