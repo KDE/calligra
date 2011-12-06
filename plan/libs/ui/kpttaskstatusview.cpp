@@ -967,8 +967,8 @@ void PerformanceStatusBase::drawValues()
         spi_ = budget.bcwpEffort( date ) / bh;
     }
     cpi_ = 0.0;
-    if ( actual.costTo( date ) > 0.0 ) {
-        cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
+    if ( actual.effortTo( date ) > 0.0 ) {
+        cpi_ = budget.bcwpEffort( date ) / actual.hoursTo( date );
     }
     m->setData( m->index( 1, 3 ), locale->formatNumber( cpi_ ) );
     m->setData( m->index( 1, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
