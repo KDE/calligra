@@ -142,11 +142,15 @@ class odfvalidator:
 
 	def validateFile(self, zip, file, validator):
 		try:
-			xml = lxml.etree.XML(zip.read(file));
+			data = zip.read(file)
+			xml = lxml.etree.XML(data);
 		except lxml.etree.XMLSyntaxError as e:
 			return e
 		except KeyError as e:
 			return e
+		if len(data) > 1000000:
+			# if the xml file is larger than 1M, the validator may hang
+			return
 		if not validator.validate(xml):
 			return validator.error_log.last_error
 
