@@ -87,8 +87,8 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_currentTable(0)
     , m_tableWriter(0)
     , m_tableBuffer(0)
-    , m_previousListLevel(-1)
-    , m_previousListID(0)
+    , m_currentListLevel(-1)
+    , m_currentListID(0)
     , m_fld(new fld_State())
     , m_fldStart(0)
     , m_fldEnd(0)
@@ -451,10 +451,9 @@ void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
     //signal Document to parse the footnote
     emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), data.type);
 
-    //TODO: we should really improve processing of lists somehow
-    if (listIsOpen()) {
-        closeList();
-    }
+//     if (listIsOpen()) {
+//         closeList();
+//     }
     restoreState();
 
     //end the elements
@@ -592,10 +591,9 @@ void WordsTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     //signal Document to parse the annotation
     emit annotationFound(new wvWare::AnnotationFunctor(parseAnnotation), 0);
 
-    //TODO: we should really improve processing of lists somehow
-    if (listIsOpen()) {
-        closeList();
-    }
+//     if (listIsOpen()) {
+//         closeList();
+//     }
     restoreState();
 
     //end the elements
@@ -674,12 +672,10 @@ void WordsTextHandler::tableEndFound()
         kWarning(30513) << "Looks like we lost a table somewhere: return";
         return;
     }
-    //TODO: FIX THE OPEN LIST PROBLEM !!!!!!
-    //we cant have an open list when entering a table
-    if (listIsOpen()) {
-        //kDebug(30513) << "closing list " << m_currentListID;
-        closeList();
-    }
+//     if (listIsOpen()) {
+//         //kDebug(30513) << "closing list " << m_currentListID;
+//         closeList();
+//     }
     bool floating = m_currentTable->floating;
 
     if (floating) {
@@ -738,10 +734,9 @@ void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvW
         emit floatingObjectFound(globalCP, writer);
     }
 
-    //TODO: we should really improve processing of lists somehow
-    if (listIsOpen()) {
-        closeList();
-    }
+//     if (listIsOpen()) {
+//         closeList();
+//     }
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
         m_fld->m_hyperLinkActive = false;
@@ -827,13 +822,17 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
     //Lists related logic
     qint16 ilfo = paragraphProperties->pap().ilfo;
-    if (ilfo == 0) {
-        // This paragraph is not in a list.
-        if (listIsOpen()) {
-            //kDebug(30513) << "closing list " << m_currentListID;
-            closeList();
-        }
-    } else if (ilfo > 0) {
+
+    // At the moment each list-item is saved into a separate text:list to make
+    // automatic numbering based on text:continue-list work properly.
+//     if (ilfo == 0) {
+//         //This paragraph is not in a list.
+//         if (listIsOpen()) {
+//             //kDebug(30513) << "closing list " << m_currentListID;
+//             closeList();
+//         }
+//     }
+    if (ilfo > 0) {
         // We're in a list in the word document.
         //
         // At the moment <text:numbered-paragraph> is not supported, we process
@@ -965,6 +964,13 @@ void WordsTextHandler::paragraphEnd()
             m_dropCapString.clear();
         }
     }
+
+    // At the moment each list-item is saved into a separate text:list to make
+    // automatic numbering based on text:continue-list work properly.
+    if (listIsOpen()) {
+        closeList();
+    }
+
     //save the font color
     m_paragraphBaseFontColorBkp = paragraphBaseFontColor();
 
@@ -1840,6 +1846,9 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     quint8 listLevel = pap.ilvl;
     int listId = listInfo->lsid();
 
+    m_currentListID = listId;
+    m_currentListLevel = listLevel;
+
     // update automatic numbering info
     if (type == NumberType) {
         if (m_continueListNum.contains(listId)) {
@@ -1864,79 +1873,48 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         }
     }
 
-    if (m_previousListID != listId) {
-        kDebug(30513) << "==> Starting a new list:" << listId;
-        //close the previous list
-        if (listIsOpen()) {
-            closeList();
+    if (m_previousLists.contains(listId)) {
+        m_listStyleName = m_previousLists[listId].first;
+    } else {
+        //new list style required
+        KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
+        if (document()->writingHeader()) {
+            listStyle.setAutoStyleInStylesDotXml(true);
         }
-        writer->startElement("text:list");
-
-        if (m_previousLists.contains(listId)) {
-            m_listStyleName = m_previousLists[listId].first;
-            writer->addAttribute("text:style-name", m_listStyleName);
-        } else {
-            //need to create a style for this list
-            KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
-            if (document()->writingHeader()) {
-                listStyle.setAutoStyleInStylesDotXml(true);
-            }
-            m_listStyleName = m_mainStyles->insert(listStyle);
-            writer->addAttribute("text:style-name", m_listStyleName);
-            m_previousLists[listId].first = m_listStyleName;
-        }
-
-        if (type == NumberType) {
-            QString key = QString("%1").arg(listId);
-            key.append(QString(".lvl%1").arg(listLevel));
-
-            //automatic numbering
-            if (m_continueListNum.contains(listId) && m_continueListNum[listId].second) {
-                writer->addAttribute("text:continue-list", m_numIdXmlIdMap[key]);
-            }
-            QString xmlId = key;
-            xmlId.append(QString("_%1").arg(qrand())).prepend("lst");
-            writer->addAttribute("xml:id", xmlId);
-            m_numIdXmlIdMap[key] = xmlId;
-        }
-
-        for (int i = 0; i < listLevel; i++) {
-            writer->startElement("text:list-item");
-            writer->startElement("text:list");
-        }
-        m_previousListID = listId;
-        m_previousListLevel = listLevel;
+        m_listStyleName = m_mainStyles->insert(listStyle);
+        m_previousLists[listId].first = m_listStyleName;
     }
-    //going down into a deeper level (same list)
-    else if (listLevel > m_previousListLevel) {
-        writer->startElement("text:list");
-        m_previousListLevel++;
 
-        for (;m_previousListLevel < listLevel; m_previousListLevel++) {
-            writer->startElement("text:list-item");
-            writer->startElement("text:list");
+    writer->startElement("text:list");
+    writer->addAttribute("text:style-name", m_listStyleName);
+
+    if (type == NumberType) {
+        QString key = QString("%1").arg(listId);
+        key.append(QString(".lvl%1").arg(listLevel));
+
+        //automatic numbering
+        if (m_continueListNum.contains(listId) && m_continueListNum[listId].second) {
+            writer->addAttribute("text:continue-list", m_numIdXmlIdMap[key]);
         }
+        QString xmlId = key;
+        xmlId.append(QString("_%1").arg(qrand())).prepend("lst");
+        writer->addAttribute("xml:id", xmlId);
+        m_numIdXmlIdMap[key] = xmlId;
     }
-    //coming out to a lower level or staying at the same level (same list)
-    else {
-        while (m_previousListLevel > listLevel) {
-            writer->endElement(); //text:list-item
-            writer->endElement(); //text:list
-            m_previousListLevel--;
-        }
-        writer->endElement(); //text:list-item
+
+    writer->startElement("text:list-item");
+    for (int i = 0; i < listLevel; i++) {
+        writer->startElement("text:list");
+        writer->startElement("text:list-item");
     }
 
     // Check if we need a new list-level-style-* definition
-    if (m_previousLists.contains(m_previousListID) &&
-        !m_previousLists[m_previousListID].second.contains(m_previousListLevel))
+    if (m_previousLists.contains(listId) &&
+        !m_previousLists[listId].second.contains(listLevel))
     {
         updateListStyle();
-        m_previousLists[m_previousListID].second.append(m_previousListLevel);
+        m_previousLists[listId].second.append(listLevel);
     }
-
-    //we always want to open this tag
-    writer->startElement("text:list-item");
 
     // restart numbering if applicable
     if (type == NumberType) {
@@ -2259,32 +2237,32 @@ void WordsTextHandler::closeList()
     //for level 0, we need to close the last item and the list
     //for level 1, we need to close the last item and the list, and the last item and the list
     //for level 2, we need to close the last item and the list, and the last item adn the list, and again
-    for (int i = 0; i <= m_previousListLevel; i++) {
-        writer->endElement(); //close the last text:list-item
+    for (int i = 0; i <= m_currentListLevel; i++) {
+        writer->endElement(); //text:list-item
         writer->endElement(); //text:list
     }
 
-    m_previousListID = 0;
-    m_previousListLevel = -1;
+    m_currentListID = 0;
+    m_currentListLevel = -1;
     m_listStyleName = "";
 }
 
 bool WordsTextHandler::listIsOpen()
 {
-    return m_previousListID != 0;
+    return m_currentListID != 0;
 }
 
 void WordsTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
-                           m_previousListLevel, m_previousListID, m_previousLists,
+                           m_currentListLevel, m_currentListID, m_previousLists,
                            m_drawingWriter, m_insideDrawing));
     m_currentTable = 0;
     m_paragraph = 0;
     m_listStyleName = "";
-    m_previousListLevel = -1;
-    m_previousListID = 0;
+    m_currentListLevel = -1;
+    m_currentListID = 0;
     m_previousLists.clear();
 
     m_drawingWriter = 0;
@@ -2316,8 +2294,8 @@ void WordsTextHandler::restoreState()
     m_paragraph = s.paragraph;
     m_currentTable = s.table;
     m_listStyleName = s.listStyleName;
-    m_previousListLevel = s.listDepth;
-    m_previousListID = s.listID;
+    m_currentListLevel = s.listDepth;
+    m_currentListID = s.listID;
     m_previousLists = s.previousLists;
 
     m_drawingWriter = s.drawingWriter;

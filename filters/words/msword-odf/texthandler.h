@@ -255,10 +255,10 @@ private:
     // ************************************************
     //  List
     // ************************************************
-    QString m_listSuffixes[9];     // The suffix for every list level seen so far
-    QString m_listStyleName;       // track the name of the list style
-    int m_previousListLevel;        // tells us which list level we're on (-1 if not in a list)
-    int m_previousListID;           // tracks the ID of the current list - 0 if not a list
+    QString m_listSuffixes[9]; // the suffix for every list level seen so far
+    QString m_listStyleName;   // track the name of the list style
+    int m_currentListLevel; // tells us which list level we're on (-1 if not in a list)
+    int m_currentListID;    // tracks the ID of the current list - 0 if not a list
 
     QStack <KoXmlWriter*> m_usedListWriters;
 
