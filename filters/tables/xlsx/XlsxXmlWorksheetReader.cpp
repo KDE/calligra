@@ -599,11 +599,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
         const int columnCount = m_context->sheet->maxCellsInRow(r);
         Row* row = m_context->sheet->row(r, false);
         body->startElement("table:table-row");
-        if (!row || columnCount <= 0) {
-            // element table:table-row may not be empty
-            body->startElement("table:table-cell");
-            body->endElement(); // table:table-cell
-        }
         if (row) {
             if (!row->styleName.isEmpty()) {
                 body->addAttribute("table:style-name", row->styleName);
@@ -706,6 +701,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                 }
                 body->endElement(); // table:table-cell
             }
+        }
+
+        if (!row || columnCount <= 0) {
+            // element table:table-row may not be empty
+            body->startElement("table:table-cell");
+            body->endElement(); // table:table-cell
         }
         body->endElement(); // table:table-row
     }
