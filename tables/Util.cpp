@@ -403,6 +403,7 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
     QString decimal = locale ? locale->decimalSymbol() : ".";
 
     QString result;
+    result.reserve(expression.size());
     QString reference;
 
     int i = 0;
@@ -445,10 +446,9 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
             // look for operator match
             else {
                 int op;
-                QString s;
 
                 // check for two-chars operator, such as '<=', '>=', etc
-                s.append(expression[i]);
+                QString s(expression[i]);
                 if (i + 1 < expression.length())
                     s.append(expression[i+1]);
                 op = matchOperator(s);
@@ -532,22 +532,23 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
         }
         case InIdentifier: {
             // handle problematic functions
-            if (expression.mid(i).startsWith("ERROR.TYPE")) {
+            QString midString(expression.mid(i));
+            if (midString.startsWith("ERROR.TYPE")) {
                 // replace it
                 result.append("ERRORTYPE");
                 i += 10; // number of characters in "ERROR.TYPE"
-            } else if (expression.mid(i).startsWith("LEGACY.NORMSDIST")) {
+            } else if (midString.startsWith("LEGACY.NORMSDIST")) {
                 // replace it
                 result.append("LEGACYNORMSDIST");
                 i += 16; // number of characters in "LEGACY.NORMSDIST"
-            } else if (expression.mid(i).startsWith("LEGACY.NORMSINV")) {
+            } else if (midString.startsWith("LEGACY.NORMSINV")) {
                 // replace it
                 result.append("LEGACYNORMSINV");
                 i += 15; // number of characters in "LEGACY.NORMSINV"
-            } else if (namespacePrefix == "oooc:" && expression.mid(i).startsWith("TABLE") && !isIdentifier(expression[i+5])) {
+            } else if (namespacePrefix == "oooc:" && midString.startsWith("TABLE") && !isIdentifier(expression[i+5])) {
                 result.append("MULTIPLE.OPERATIONS");
                 i += 5;
-            } else if (expression.mid(i).startsWith("NEG") && i+3 < expression.length() && !isIdentifier(expression[i+3])) {
+            } else if (midString.startsWith("NEG") && i+3 < expression.length() && !isIdentifier(expression[i+3])) {
                 result.append("-");
                 i += 3;
             }
