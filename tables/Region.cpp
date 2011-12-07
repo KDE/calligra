@@ -1051,6 +1051,24 @@ Region::Element::~Element()
 /***************************************************************************
   class Point
 ****************************************************************************/
+int firstNonCharPos(const QString& s, int pos = 0)
+{
+    int result = -1;
+    const QChar *data = s.constData();
+    int i = 0;
+    while (!data->isNull()) {
+        if (i >= pos) {
+            char c = data->toLatin1();
+            if (c < 'A' || c > 'z' || (c < 'a' && c > 'Z')) {
+                result = i;
+                break;
+            }
+        }
+        ++data;
+        ++i;
+    }
+    return result;
+}
 
 Region::Point::Point(const QPoint& point)
         : Region::Element()
@@ -1091,7 +1109,7 @@ Region::Point::Point(const QString& string)
     //default is error
     int x = -1;
     //search for the first character != text
-    int result = string.indexOf(QRegExp("[^A-Za-z]+"), p);
+    int result = firstNonCharPos(string, p);
 
     //get the column number for the character between actual position and the first non text charakter
     if (result != -1)
