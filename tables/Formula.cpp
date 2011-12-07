@@ -131,15 +131,11 @@ class TokenStack : public QVector<Token>
 {
 public:
     TokenStack();
-    bool isEmpty() const;
     unsigned itemCount() const;
     void push(const Token& token);
     Token pop();
     const Token& top();
     const Token& top(unsigned index);
-private:
-    void ensureSpace();
-    unsigned topIndex;
 };
 
 } // namespace Tables
@@ -383,29 +379,26 @@ QString Token::description() const
 
 TokenStack::TokenStack(): QVector<Token>()
 {
-    topIndex = 0;
-    ensureSpace();
-}
-
-bool TokenStack::isEmpty() const
-{
-    return topIndex == 0;
 }
 
 unsigned TokenStack::itemCount() const
 {
-    return topIndex;
+    return size();
 }
 
 void TokenStack::push(const Token& token)
 {
-    ensureSpace();
-    insert(topIndex++, token);
+    append(token);
 }
 
 Token TokenStack::pop()
 {
-    return (topIndex > 0) ? Token(at(--topIndex)) : Token();
+    if (!isEmpty()) {
+        Token token = last();
+        pop_back();
+        return token;
+    }
+    return Token();
 }
 
 const Token& TokenStack::top()
@@ -415,16 +408,12 @@ const Token& TokenStack::top()
 
 const Token& TokenStack::top(unsigned index)
 {
-    if (topIndex > index)
-        return at(topIndex - index - 1);
+    int top = size();
+    if (top > index)
+        return at(top - index - 1);
     return Token::null;
 }
 
-void TokenStack::ensureSpace()
-{
-    while ((int) topIndex >= size())
-        resize(size() + 10);
-}
 
 /**********************
     FormulaPrivate
