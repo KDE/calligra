@@ -1596,14 +1596,25 @@ void KexiQueryDesignerGuiEditor::slotBeforeTotalsCellChanged(KexiDB::RecordData 
 void KexiQueryDesignerGuiEditor::slotBeforeSortingCellChanged(KexiDB::RecordData *record,
     QVariant& newValue, KexiDB::ResultInfo* result)
 {
+    bool saveOldValue = true;
     KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    if (!set) {
+        saveOldValue = false;
+        set = createPropertySet(d->dataTable->dataAwareObject()->currentRow(),
+                                (*record)[COLUMN_ID_TABLE].toString(),
+                                (*record)[COLUMN_ID_COLUMN].toString(), true);
+#ifndef KEXI_NO_QUERY_TOTALS
+        d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));//totals
+#endif
+        propertySetSwitched();
+    }
     QString table(set->property("table").value().toString());
     QString field(set->property("field").value().toString());
     if (newValue.toInt() == 0 || sortingAllowed(field, table)) {
         KoProperty::Property &property = set->property("sorting");
         QString key(property.listData()->keysAsStringList()[ newValue.toInt()]);
         kDebug() << "new key=" << key;
-        property.setValue(key, true);
+        property.setValue(key, saveOldValue);
     }
     else { //show msg: sorting is not available
         result->success = false;
