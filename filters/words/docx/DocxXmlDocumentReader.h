@@ -105,6 +105,9 @@ protected:
     KoFilter::ConversionStatus read_numFmt();
     KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
+    KoFilter::ConversionStatus read_del();
+    KoFilter::ConversionStatus read_ins();
+    KoFilter::ConversionStatus read_delText();
     KoFilter::ConversionStatus read_drawing();
     KoFilter::ConversionStatus read_ptab();
     KoFilter::ConversionStatus read_tabs();
@@ -364,6 +367,10 @@ private:
 
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
+
+    //processing the ins/del element (Inserted/Deleted Run Content)
+    enum ChangeTrackingState { InsertedRunContent, DeletedRunContent };
+    QStack<ChangeTrackingState> m_changeTrackingState;
 
     // ************************************************
     //  State
