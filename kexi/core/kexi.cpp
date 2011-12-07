@@ -292,20 +292,9 @@ ObjectStatus::operator KexiDB::MessageHandler*()
     return msgHandler;
 }
 
-void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
+void Kexi::initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData)
 {
-    KAboutData *about = aboutData;
-    if (!about) {
-#if 1 //sebsauer 20061123
-        about = Kexi::createAboutData();
-#else
-        about = 0;
-#endif
-    }
-#ifdef CUSTOM_VERSION
-# include "../custom_startup.h"
-#endif
-    KCmdLineArgs::init(argc, argv, about);
+    KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(kexi_options());
 }
 
