@@ -68,6 +68,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_currentDoubleValue = 0;
     m_hyperLink = false;
     m_listStylePropertiesAltered = false;
+    m_groupDepthCounter = 0;
     m_inGrpSpPr = false;
     m_insideTable = false;
     qsrand(QTime::currentTime().msec());
@@ -163,6 +164,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_flipV = false;
     m_rot = 0;
 
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    KoXmlWriter *tempBodyHolder = 0;
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_groupDepthCounter == 0)) {
+        tempBodyHolder = body;
+        body = m_currentDrawingObject->pictureElement();
+    }
+#endif
+
 #ifndef DOCXXMLDOCREADER_CPP
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -193,6 +202,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("draw:layer", "backgroundobjects");
     }
     body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
+#endif
+
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    if (m_groupDepthCounter == 0) {
+        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+            XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            // use relative position to the cell's top-left corner
+            m_svgX = f.m_colOff;
+            m_svgY = f.m_rowOff;
+
+            if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+                f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+                QString endCellAddress = m_currentDrawingObject->toCellAddress();
+                QString end_x = EMU_TO_CM_STRING(f.m_colOff);
+                QString end_y = EMU_TO_CM_STRING(f.m_rowOff);
+
+                body->addAttribute("table:end-cell-address", endCellAddress);
+                body->addAttribute("table:end-x", end_x); //cm
+                body->addAttribute("table:end-y", end_y); //cm
+            }
+        }
+    }
 #endif
 
     if (m_rot == 0) {
@@ -262,6 +293,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #ifndef DOCXXMLDOCREADER_H
     body->endElement(); //draw:frame
 #endif
+
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    // If we anchored to cell, we save odf to different buffer that body operates on
+    // Here we restore the original body buffer for next drawing which might be anchored
+    // to sheet
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_groupDepthCounter == 0)) {
+        body = tempBodyHolder;
+    }
+#endif
+
 
 #ifndef DOCXXMLDOCREADER_CPP
     popCurrentDrawStyle();
@@ -475,7 +516,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 
         // to write after the child elements are generated
         body = drawFrameBuf.setWriter(body);
-
+        m_groupDepthCounter++;
         while (!atEnd()) {
             readNext();
             BREAK_IF_END_OF(CURRENT_EL)
@@ -493,6 +534,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
             //! @todo add ELSE_WRONG_FORMAT
             }
         }
+        m_groupDepthCounter--;
     }
 
     body = drawFrameBuf.originalWriter();

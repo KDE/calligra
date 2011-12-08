@@ -240,6 +240,8 @@ int m_svgChWidth; //! set by read_chExt()
 int m_svgChHeight; //! set by read_chExt()
 // These have to be in a vector in order to support group shapes within
 // a group shape
+quint32 m_groupDepthCounter; // How deep we currently are
+
 bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
 struct GroupProp {
     qint64 svgXOld;
