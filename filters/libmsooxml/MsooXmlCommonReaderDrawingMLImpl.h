@@ -68,7 +68,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_currentDoubleValue = 0;
     m_hyperLink = false;
     m_listStylePropertiesAltered = false;
-    m_groupDepthCounter = 0;
     m_inGrpSpPr = false;
     m_insideTable = false;
     qsrand(QTime::currentTime().msec());
@@ -166,7 +165,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
 #ifdef XLSXXMLDRAWINGREADER_CPP
     KoXmlWriter *tempBodyHolder = 0;
-    if ( m_currentDrawingObject->isAnchoredToCell() && (m_groupDepthCounter == 0)) {
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
         tempBodyHolder = body;
         body = m_currentDrawingObject->pictureElement();
     }
@@ -205,7 +204,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #endif
 
 #ifdef XLSXXMLDRAWINGREADER_CPP
-    if (m_groupDepthCounter == 0) {
+    if (m_context->m_groupDepthCounter == 0) {
         if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
             // use relative position to the cell's top-left corner
@@ -298,7 +297,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     // If we anchored to cell, we save odf to different buffer that body operates on
     // Here we restore the original body buffer for next drawing which might be anchored
     // to sheet
-    if ( m_currentDrawingObject->isAnchoredToCell() && (m_groupDepthCounter == 0)) {
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
         body = tempBodyHolder;
     }
 #endif
@@ -516,7 +515,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 
         // to write after the child elements are generated
         body = drawFrameBuf.setWriter(body);
-        m_groupDepthCounter++;
+#ifdef XLSXXMLDRAWINGREADER_CPP
+        m_context->m_groupDepthCounter++;
+#endif
         while (!atEnd()) {
             readNext();
             BREAK_IF_END_OF(CURRENT_EL)
@@ -527,14 +528,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
                 ELSE_TRY_READ_IF(sp)
                 ELSE_TRY_READ_IF(grpSpPr)
                 ELSE_TRY_READ_IF(cxnSp)
-    #ifdef PPTXXMLSLIDEREADER_CPP
+#ifdef PPTXXMLSLIDEREADER_CPP
                 ELSE_TRY_READ_IF(graphicFrame)
-    #endif
+#endif
                 SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
             }
         }
-        m_groupDepthCounter--;
+#ifdef XLSXXMLDRAWINGREADER_CPP
+        m_context->m_groupDepthCounter--;
+#endif
     }
 
     body = drawFrameBuf.originalWriter();

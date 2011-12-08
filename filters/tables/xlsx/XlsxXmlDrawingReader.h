@@ -131,6 +131,7 @@ public:
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
     Sheet* sheet;
+    quint32 m_groupDepthCounter; // How deep we currently are
 };
 
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader

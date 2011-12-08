@@ -198,6 +198,7 @@ XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderC
     , themes((_worksheetReaderContext->themes))
     , worksheetReaderContext(_worksheetReaderContext)
     , sheet(_sheet)
+    , m_groupDepthCounter(0)
 {
 }
 
