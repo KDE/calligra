@@ -31,25 +31,6 @@
 namespace Charting
 {
   
-    class Gradient
-    {        
-    public:
-        Gradient(){ angle =  0.0; }
-        class GradientStop
-        {
-        public:
-            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor = QString(); }
-            qreal position;
-            QColor knownColorValue;
-            qreal tintVal;
-            qreal satVal;
-            qreal shadeVal;
-            QString referenceColor;
-        };
-        QVector< GradientStop > gradientStops;
-        qreal angle;
-    };
-
     class Value
     {
     public:
@@ -123,7 +104,26 @@ namespace Charting
         bool m_fill;
         AreaFormat(const QColor &foreground = QColor(), const QColor &background = QColor(), bool fill = false) : Format(), m_foreground(foreground), m_background(background), m_fill(fill) {}
     };
-    
+
+    class Gradient
+    {
+    public:
+        Gradient(){ angle =  0.0; }
+        class GradientStop
+        {
+        public:
+            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor = QString(); }
+            qreal position;
+            QColor knownColorValue;
+            qreal tintVal;
+            qreal satVal;
+            qreal shadeVal;
+            QString referenceColor;
+        };
+        QVector< GradientStop > gradientStops;
+        qreal angle;
+    };
+
     class Fill
     {
     public:        
@@ -187,7 +187,7 @@ namespace Charting
     class RadarImpl : public ChartImpl
     {
     public:
-        /// If true then the radar-chart is filled (an RadarArea char) else not.
+        /// If true then the radar-chart is filled (an RadarArea chart) else not.
         bool m_filled;
         RadarImpl(bool filled = false) : ChartImpl(), m_filled(filled) {}
         virtual QByteArray name() const { return m_filled ? "filled-radar" : "radar"; }
@@ -210,10 +210,10 @@ namespace Charting
     class ScatterImpl : public ChartImpl
     {
     public:
-        enum ScatterStyle{ None, Line, LineMarker, Marker, Smooth, SmoothMarker };
+        enum ScatterStyle { None, Line, LineMarker, Marker, Smooth, SmoothMarker };
+        ScatterStyle style;
         ScatterImpl() : ChartImpl(), style( LineMarker ) {}
         virtual QByteArray name() const { return "scatter"; }
-        ScatterStyle style;
     };
 
     class BubbleImpl : public ChartImpl
@@ -344,6 +344,11 @@ namespace Charting
         // TODO fill the missing marker types in
     };
 
+    class DataPoint : public Obj
+    {
+    public:
+    };
+
     class Series : public Obj
     {
     public:
@@ -369,6 +374,8 @@ namespace Charting
         QStringList m_domainValuesCellRangeAddress;
         /// The referenced values used in the chart
         QMap<Value::DataId, Value*> m_datasetValue;
+        /// The data-points in the series.
+        QList<DataPoint*> m_dataPoints;
         /// The formatting for the referenced values
         QList<Format*> m_datasetFormat;
         /// List of text records attached to the series.
@@ -380,7 +387,7 @@ namespace Charting
         ShapeProperties* spPr;
 
         explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataLabelValues(false), m_showDataLabelPercent(false), m_showDataLabelCategory(false), m_showDataLabelSeries(false), m_markerType(NoMarker),spPr(0) {}
-        virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); delete spPr; }
+        virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_dataPoints); qDeleteAll(m_datasetFormat); delete spPr; }
     };
 
     class PlotArea : public Obj
