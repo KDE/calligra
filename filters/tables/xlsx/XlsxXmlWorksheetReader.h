@@ -107,10 +107,15 @@ protected:
 
 private:
     void init();
+    ///Column width measured as the number of characters of the maximum digit width of the
+    ///numbers 0, 1, 2,..., 9 as rendered in the normal style's font...
+    /// @return column width in cm
+    QString computeColumnWidth(qreal widthNumber) const;
+
+    QString processRowStyle(qreal height = -1.0);
 
     void showWarningAboutWorksheetSize();
     void saveColumnStyle(const QString& widthString);
-    QString processRowStyle(const QString& heightString = QString());
     void appendTableColumns(int columns, const QString& width = QString());
     void appendTableCells(int cells);
     //! Saves annotation element (comments) for cell specified by @a col and @a row it there is any annotation defined.
