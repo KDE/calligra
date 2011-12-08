@@ -986,6 +986,12 @@ void TestFinancialFunctions::testPV_ANNUITY()
     CHECK_EVAL_SHORT("PV_ANNUITY(1000;0.05;5)", Value(4329.47667063));
 }
 
+// RATE
+void TestFinancialFunctions::testRATE()
+{
+    CHECK_EVAL_SHORT("RATE(4*12;-200;8000)", Value(0.00770147));
+}
+
 // RECEIVED
 void TestFinancialFunctions::testRECEIVED()
 {

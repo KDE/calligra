@@ -92,7 +92,7 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pricemat(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv_annuity(valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_rate (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rate(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_received(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rri(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sln(valVector args, ValueCalc *calc, FuncExtra *);
@@ -298,9 +298,9 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("PV_ANNUITY", func_pv_annuity);
     f->setParamCount(3);
     add(f);
-//   f = new Function ("RATE", func_rate);
-//   f->setParamCount (3, 6);
-//   add(f);
+    f = new Function ("RATE", func_rate);
+    f->setParamCount (3, 6);
+    add(f);
     f = new Function("RECEIVED", func_received);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRECEIVED");
     f->setParamCount(4, 5);
@@ -2108,6 +2108,91 @@ Value func_pv_annuity(valVector args, ValueCalc *calc, FuncExtra *)
     Value recpow;
     recpow = calc->div(Value(1), calc->pow(calc->add(interest, Value(1)), periods));
     return calc->mul(amount, calc->div(calc->sub(Value(1), recpow), interest));
+}
+
+
+//
+// Function: RATE
+//
+Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    double fNper = calc->conv()->asFloat(args[0]).asFloat();
+    double fPayment = calc->conv()->asFloat(args[1]).asFloat();
+    double fPv = calc->conv()->asFloat(args[2]).asFloat();
+    double fFv = (args.count() > 3) ? calc->conv()->asFloat(args[3]).asFloat() : 0;
+    double fPayType = (args.count() > 4) ? calc->conv()->asFloat(args[4]).asFloat() : 0;
+    double fGuess = (args.count() > 5) ? calc->conv()->asFloat(args[5]).asFloat() : 0.1;
+
+    if (fNper <= 0.0)
+        return Value::errorVALUE();
+
+    bool bValid = true, bFound = false;
+    double fX, fXnew, fTerm, fTermDerivation;
+    double fGeoSeries, fGeoSeriesDerivation;
+    const unsigned short nIterationsMax = 150;
+    unsigned short nCount = 0;
+    const double fEpsilonSmall = 1.0E-14;
+    const double fEpsilon = 1.0E-7;
+
+    fFv -= fPayment * fPayType;
+    fPv += fPayment * fPayType;
+    if (fNper == qRound( fNper )) {
+        fX = fGuess;
+        double fPowN, fPowNminus1;
+        while (!bFound && nCount < nIterationsMax) {
+            fPowNminus1 = pow( 1.0+fX, fNper-1.0);
+            fPowN = fPowNminus1 * (1.0+fX);
+            if (calc->approxEqual(Value(fabs(fX)), Value(0.0))) {
+                fGeoSeries = fNper;
+                fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
+            } else {
+                fGeoSeries = (fPowN-1.0)/fX;
+                fGeoSeriesDerivation = fNper * fPowNminus1 / fX - fGeoSeries / fX;
+            }
+            fTerm = fFv + fPv *fPowN+ fPayment * fGeoSeries;
+            fTermDerivation = fPv * fNper * fPowNminus1 + fPayment * fGeoSeriesDerivation;
+            if (fabs(fTerm) < fEpsilonSmall) {
+                bFound = true;
+            } else {
+                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0)))
+                    fXnew = fX + 1.1 * fEpsilon;
+                else
+                    fXnew = fX - fTerm / fTermDerivation;
+                ++nCount;
+                bFound = (fabs(fXnew - fX) < fEpsilon);
+                fX = fXnew;
+            }
+        }
+        bValid =(fX >=-1.0);
+    } else {
+        fX = (fGuess < -1.0) ? -1.0 : fGuess;
+        while (bValid && !bFound && nCount < nIterationsMax) {
+            if (calc->approxEqual(Value(fabs(fX)), Value(0.0))) {
+                fGeoSeries = fNper;
+                fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
+            } else {
+                fGeoSeries = (pow( 1.0+fX, fNper) - 1.0) / fX;
+                fGeoSeriesDerivation = fNper * pow( 1.0+fX, fNper-1.0) / fX - fGeoSeries / fX;
+            }
+            fTerm = fFv + fPv *pow(1.0 + fX,fNper)+ fPayment * fGeoSeries;
+            fTermDerivation = fPv * fNper * pow(1.0+fX, fNper-1.0) + fPayment * fGeoSeriesDerivation;
+            if (fabs(fTerm) < fEpsilonSmall) {
+                bFound = true;
+            } else {
+                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0)))
+                    fXnew = fX + 1.1 * fEpsilon;
+                else
+                    fXnew = fX - fTerm / fTermDerivation;
+                ++nCount;
+                bFound = (fabs(fXnew - fX) < fEpsilon);
+                fX = fXnew;
+                bValid = (fX >= -1.0);
+            }
+        }
+    }
+    fGuess = fX;
+    //if (!bValid && bFound) return Value::errorVALUE();
+    return Value(fGuess);
 }
 
 
