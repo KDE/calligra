@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2010 Dag Andersen <danders@get2net.dk>
+    Copyright (C) 2010, 2011 Dag Andersen <danders@get2net.dk>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,12 +17,39 @@
 */
 
 
-#include "kptpackage.h"
+#ifndef KPLATO_KPTPACKAGE_H
+#define KPLATO_KPTPACKAGE_H
 
-using namespace KPlato;
+#include "kplatokernel_export.h"
 
-Package::Package()
-    : task( 0 )
+#include "kpttask.h"
+
+#include <KUrl>
+
+#include <QString>
+
+namespace KPlato {
+
+class Project;
+
+// temporary convinience class
+class KPLATOKERNEL_EXPORT Package
 {
+public:
+    Package();
+    KUrl url;
+    Project *project;
+    KDateTime timeTag;
+    QString ownerId;
+    QString ownerName;
+
+    WorkPackageSettings settings;
+
+    Task *task;
+    Task *toTask;
+    QMap<QString, KUrl> documents;
+};
+
 }
 
+#endif // KPLATO_KPTPACKAGE_H

@@ -1,6 +1,8 @@
 
 Calligra Plan current:
 
+* Improve users control of work package merging
+
 * PlanWork:
   Add remove document command
   Support adding new documents of any type

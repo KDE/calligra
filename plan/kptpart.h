@@ -35,6 +35,8 @@
 
 #include <qfileinfo.h>
 
+#include <KDialog>
+
 class KoView;
 
 /// The main namespace.
@@ -101,6 +103,7 @@ public:
     bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
     void mergeWorkPackages();
     void mergeWorkPackage( const Package *package );
+    void terminateWorkPackage( const Package *package );
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
@@ -122,6 +125,9 @@ public slots:
     void removeViewListItem( View *view, const ViewListItem *item );
     /// View selector has been modified
     void viewlistModified();
+    /// Check for workpackages
+    /// If @p keep is true, packages that has been refused will not be checked for again
+    void checkForWorkPackages( bool keep = false );
 
 signals:
     void changed();
@@ -151,7 +157,7 @@ protected slots:
     virtual void openTemplate( const KUrl& url );
     void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
 
-    void checkForWorkPackages();
+    void autoCheckForWorkPackages();
     void checkForWorkPackage();
 
     void slotModified( bool );
@@ -184,7 +190,7 @@ private:
     QDomDocument m_reports;
 
     bool m_viewlistModified;
-
+    bool m_checkingForWorkPackages;
 };
 
 
