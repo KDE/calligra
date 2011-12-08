@@ -62,6 +62,7 @@ Comment[cs]=Modul Kexi pro import MySQL
 Comment[nb]=MySQL import-programtillegg for Kexi
 Comment[pt]='Plugin' de Importação de MySQL para o Kexi
 Comment[pt_BR]=Plugin de Importação do MySQL para o Kexi
+Comment[ru]=Драйвер миграции MySQL для Kexi
 Comment[sv]=MySQL importinsticksprogram för Kexi
 Comment[uk]=Додаток імпортування даних з MySQL для Kexi
 Comment[x-test]=xxMySQL Import Plugin for Kexixx
