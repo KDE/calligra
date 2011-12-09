@@ -1789,10 +1789,11 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             QTextCharFormat format = style.asCharFormat();
             ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
-            KoTextLoader loader(*tableContext.shapeContext);
             QSharedPointer<QTextDocument> doc(new QTextDocument);
             KoTextDocument(doc.data()).setStyleManager(sheet()->map()->textStyleManager());
 
+            Q_ASSERT(tableContext.shapeContext);
+            KoTextLoader loader(*tableContext.shapeContext);
             QTextCursor cursor(doc.data());
             loader.loadBody(parent, cursor);
 
