@@ -53,7 +53,8 @@ class AlterSchemaWidget : public QWidget
         QTableView *m_table;
         QComboBox *m_columnType;
         QCheckBox *m_columnPKey;
-
+        QLineEdit *m_tableName;
+        
         QStringList m_types;
 
         AlterSchemaTableModel *m_model;
@@ -61,7 +62,8 @@ class AlterSchemaWidget : public QWidget
         QLabel *m_columnNumLabel;
         QLabel *m_columnTypeLabel;
         QLabel *m_columnPKeyLabel;
-
+        QLabel *m_tableNameLabel;
+        
         KexiDB::TableSchema *m_originalSchema;
         KexiDB::TableSchema *m_newSchema;
 
