@@ -76,6 +76,7 @@ void AnimatorExporter::setDocument(KisDoc2* document)
 void AnimatorExporter::exportFrame(int num)
 {
     m_manager->getSwitcher()->goFrame(num);
+    m_manager->image()->waitForDone();
     
     QByteArray* mime = new QByteArray("image/png");
     KoFilter::ConversionStatus status =  m_filter_manager->exportDocument(getName(num), *mime);
