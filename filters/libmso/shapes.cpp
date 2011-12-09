@@ -389,23 +389,6 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     QPainterPath shapePath;
     (this->*drawPath)(sx1, sy1, sx2, sy2, out, shapePath);
 
-    // Temporary support for arrowheads: remove when the core gets marker
-    // support (we already support that via addGraphicStyleToDrawElement).
-    //
-    // The idea is not to render perfectly (rotation, style etc.), but convey
-    // the semantic sense that there *is* an arrowhead.
-    if (ds.lineStartArrowhead()) {
-        shapePath.moveTo(sx1, sy1);
-        shapePath.lineTo(sx1 + 70, sy1 + 70/2);
-        shapePath.lineTo(sx1 + 70, sy1 - 70/2);
-        shapePath.closeSubpath();
-    }
-    if (ds.lineEndArrowhead()) {
-        shapePath.moveTo(sx2, sy2);
-        shapePath.lineTo(sx2 - 70, sy2 + 70/2);
-        shapePath.lineTo(sx2 - 70, sy2 - 70/2);
-        shapePath.closeSubpath();
-    }
     shapePath = m.map(shapePath);
 
     // translate the QPainterPath into svg:d attribute

@@ -124,6 +124,32 @@ void TaskWorkPackageModel::slotNodeChanged( Node *node )
     emit dataChanged( createIndex( row, 0, node->parentNode() ), createIndex( row, columnCount()-1, node->parentNode() ) );
 }
 
+void TaskWorkPackageModel::slotDocumentAdded( Node *node, Document */*doc*/, int row )
+{
+    QModelIndex parent = indexForNode( node );
+    if ( parent.isValid() ) {
+        beginInsertRows( parent, row, row );
+        endInsertRows();
+    }
+}
+
+void TaskWorkPackageModel::slotDocumentRemoved( Node *node, Document */*doc*/, int row )
+{
+    QModelIndex parent = indexForNode( node );
+    if ( parent.isValid() ) {
+        beginRemoveRows( parent, row, row );
+        endRemoveRows();
+    }
+}
+
+void TaskWorkPackageModel::slotDocumentChanged( Node *node, Document */*doc*/, int row )
+{
+    QModelIndex parent = indexForNode( node );
+    if ( parent.isValid() ) {
+        emit dataChanged( index( row, 0, parent ), index( row, columnCount( parent ), parent ) );
+    }
+}
+
 void TaskWorkPackageModel::addWorkPackage( WorkPackage *package, int row )
 {
     beginInsertRows( QModelIndex(), row, row );
@@ -137,6 +163,10 @@ void TaskWorkPackageModel::addWorkPackage( WorkPackage *package, int row )
 
         connect( project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+
+        connect(project, SIGNAL( documentAdded( Node*, Document*, int)), this, SLOT(slotDocumentAdded(Node*, Document*, int)));
+        connect(project, SIGNAL( documentRemoved( Node*, Document*, int)), this, SLOT(slotDocumentRemoved(Node*, Document*, int)));
+        connect(project, SIGNAL( documentChanged( Node*, Document*, int)), this, SLOT(slotDocumentChanged(Node*, Document*, int)));
     }
 }
 
@@ -152,6 +182,10 @@ void TaskWorkPackageModel::removeWorkPackage( WorkPackage *package, int row )
 
         disconnect( project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+
+        disconnect(project, SIGNAL( documentAdded( Node*, Document*, int)), this, SLOT(slotDocumentAdded(Node*, Document*, int)));
+        disconnect(project, SIGNAL( documentRemoved( Node*, Document*, int)), this, SLOT(slotDocumentRemoved(Node*, Document*, int)));
+        disconnect(project, SIGNAL( documentChanged( Node*, Document*, int)), this, SLOT(slotDocumentChanged(Node*, Document*, int)));
     }
     endRemoveRows();
 }
@@ -325,7 +359,7 @@ QVariant TaskWorkPackageModel::documentData( Document *doc, int column, int role
         return QVariant();
     }
     switch ( column ) {
-        case 0: return doc->url().fileName();
+        case NodeName: return doc->name();
         default:
             return "";
     }

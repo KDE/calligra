@@ -37,7 +37,9 @@ class Package
 {
 public:
     Package();
+    KUrl url;
     Project *project;
+    KDateTime timeTag;
     QString ownerId;
     QString ownerName;
 

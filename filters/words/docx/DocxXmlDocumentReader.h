@@ -105,6 +105,9 @@ protected:
     KoFilter::ConversionStatus read_numFmt();
     KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
+    KoFilter::ConversionStatus read_del();
+    KoFilter::ConversionStatus read_ins();
+    KoFilter::ConversionStatus read_delText();
     KoFilter::ConversionStatus read_drawing();
     KoFilter::ConversionStatus read_ptab();
     KoFilter::ConversionStatus read_tabs();
@@ -359,23 +362,32 @@ private:
     //TODO: Merge with m_continueListNumbering defined in MsooXmlCommenReaderDrawingMLMethods.h
     QMap<QString, QPair<int, bool> > m_continueListNum;
 
+    //! Map of numId.level keys and list-item num./last xml:id pairs.
+    QMap<QString, QPair<int, QString> > m_numIdXmlId;
+
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
+
+    //processing the ins/del element (Inserted/Deleted Run Content)
+    enum ChangeTrackingState { InsertedRunContent, DeletedRunContent };
+    QStack<ChangeTrackingState> m_changeTrackingState;
 
     // ************************************************
     //  State
     // ************************************************
-    //TODO: Add all the other attributes on demand.
     struct DocumentReaderState {
         explicit DocumentReaderState(const QMap<QString, QString> &usedListStyles,
-                                     const QMap <QString, QPair<int, bool> > &continueListNum)
+                                     const QMap <QString, QPair<int, bool> > &continueListNum,
+                                     const QMap <QString, QPair<int, QString> > &numIdXmlId)
         : usedListStyles(usedListStyles),
-          continueListNum(continueListNum) {}
+          continueListNum(continueListNum),
+          numIdXmlId(numIdXmlId) {}
 
         DocumentReaderState() {}
 
         QMap<QString, QString> usedListStyles;
         QMap<QString, QPair<int, bool> > continueListNum;
+        QMap<QString, QPair<int, QString> > numIdXmlId;
     };
 
     void saveState();
@@ -421,6 +433,8 @@ public:
     // The map contains abstractNumId of the abstract numbering definition that
     // is inherited by a numbering definition instance identified by numId (key).
     QMap<QString, QString> m_abstractNumIDs;
+
+    QString m_defaultFontSizePt;
 
 private:
 };

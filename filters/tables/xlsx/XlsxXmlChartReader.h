@@ -121,6 +121,7 @@ protected:
     KoFilter::ConversionStatus read_ptCount();
     KoFilter::ConversionStatus read_numLit();
     KoFilter::ConversionStatus read_strCache();
+    KoFilter::ConversionStatus read_marker();
     KoFilter::ConversionStatus read_serMarker();
 
 private:
@@ -136,6 +137,7 @@ private:
     bool m_autoTitleDeleted;
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
+    bool m_serMarkerDefined;
 
     class Private;
     Private * const d;

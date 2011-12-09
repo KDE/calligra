@@ -30,6 +30,7 @@
 
 #include "calligra_tables_export.h"
 #include "Cell.h"
+#include "Value.h"
 
 #define CALLIGRA_TABLES_INLINE_ARRAYS
 
@@ -40,7 +41,6 @@ namespace Calligra
 namespace Tables
 {
 class Sheet;
-class Value;
 typedef QHash<Cell, Cell> CellIndirection;
 
 /**
@@ -119,7 +119,7 @@ public:
      * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
      * etc.
      */
-    QString text() const {
+    const QString& text() const {
         return m_text;
     }
 

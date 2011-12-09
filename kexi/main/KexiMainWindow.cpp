@@ -136,7 +136,6 @@
 #ifdef FEEDBACK_INCLUDE
 #include FEEDBACK_INCLUDE
 #endif
-#include <kapplication.h>
 #include <kaboutdata.h>
 #include <ktoolinvocation.h>
 #endif
@@ -174,6 +173,8 @@ KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget
     m_closeAction->setToolTip(i18n("Close the current tab"));
     m_closeAction->setWhatsThis(i18n("Closes the current tab."));
     connect(m_closeAction, SIGNAL(triggered()), this, SLOT(closeTab()));
+//! @todo  insert window list in the corner widget as in firefox
+#if 0
     // close-tab button:
     QToolButton* rightWidget = new QToolButton(this);
     rightWidget->setDefaultAction(m_closeAction);
@@ -181,7 +182,9 @@ KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget
     rightWidget->setAutoRaise(true);
     rightWidget->adjustSize();
     setCornerWidget(rightWidget, Qt::TopRightCorner);
+#endif
     setMovable(true);
+    setDocumentMode(true);
     tabBar()->setExpanding(true);
 }
 
@@ -226,22 +229,16 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
 }*/
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
+int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutData)
 {
-    Kexi::initCmdLineArgs(argc, argv, aboutdata);
+    Kexi::initCmdLineArgs(argc, argv, aboutData);
 
     bool GUIenabled = true;
-    /// @note According to GCC 4.3 the following variable is not used, commented for now
-    //QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindow is created
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
-
-#ifdef CUSTOM_VERSION
-# include "custom_exec.h"
-#endif
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
@@ -331,9 +328,6 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
-#ifdef KEXI_ADD_CUSTOM_KexiMainWindow
-# include "KexiMainWindow_ctor.h"
-#endif
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -370,10 +364,15 @@ KActionCollection *KexiMainWindow::actionCollection() const
 
 KexiWindow* KexiMainWindow::currentWindow() const
 {
+    return windowForTab(d->mainWidget->tabWidget()->currentIndex());
+}
+
+KexiWindow* KexiMainWindow::windowForTab(int tabIndex) const
+{
     if (!d->mainWidget->tabWidget())
         return 0;
     KexiWindowContainer *windowContainer
-    = dynamic_cast<KexiWindowContainer*>(d->mainWidget->tabWidget()->currentWidget());
+        = dynamic_cast<KexiWindowContainer*>(d->mainWidget->tabWidget()->widget(tabIndex));
     if (!windowContainer)
         return 0;
     return windowContainer->window;
@@ -1765,8 +1764,9 @@ void KexiMainWindow::setupMainWidget()
     d->mainWidget->setParent(this);
     
     KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
-    d->mainWidget->tabWidget()->setTabsClosable(
-        mainWindowGroup.readEntry("HoverCloseButtonForTabs", false));
+    d->mainWidget->tabWidget()->setTabsClosable(true);
+    connect(d->mainWidget->tabWidget(), SIGNAL(tabCloseRequested(int)),
+            this, SLOT(closeWindowForTab(int)));
     mainWidgetContainerLyr->addWidget(d->mainWidget, 1);
 
     mtbar = new KMultiTabBar(KMultiTabBar::Right);
@@ -2997,6 +2997,19 @@ tristate KexiMainWindow::saveObject(KexiWindow *window, const QString& messageWh
 tristate KexiMainWindow::closeWindow(KexiWindow *window)
 {
     return closeWindow(window ? window : currentWindow(), true);
+}
+
+tristate KexiMainWindow::closeCurrentWindow()
+{
+    return closeWindow(0);
+}
+
+tristate KexiMainWindow::closeWindowForTab(int tabIndex)
+{
+    KexiWindow* window = windowForTab(tabIndex);
+    if (!window)
+        return false;
+    return closeWindow(window);
 }
 
 tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, bool doNotSaveChanges)

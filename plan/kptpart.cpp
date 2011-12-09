@@ -442,9 +442,15 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
         //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
     } else {
         package = loadWorkPackageXML( project, store->device(), doc, url );
-        ok = (bool)package;
+        if ( package ) {
+            package->url = url;
+            m_workpackages.insert( package->timeTag, package );
+        } else {
+            ok = false;
+        }
     }
     store->close();
+    //###
     if ( ok && package && package->settings.documents ) {
         ok = extractFiles( store, package );
     }
@@ -462,7 +468,6 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     bool ok = true;
     Project *proj = 0;
     Package *package = 0;
-    QString timeTag;
     KoXmlElement plan = document.documentElement();
 
     // Check if this is the right app
@@ -483,7 +488,7 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
             return false;
         }
         package = loader.package();
-        timeTag = loader.timeTag();
+        package->timeTag = KDateTime::fromString( loader.timeTag(), KDateTime::ISODate );
     } else if ( value != "application/x-vnd.kde.plan.work" ) {
         kDebug() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
@@ -520,9 +525,10 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
                     //TODO add some ui here
                 }
             } else if ( e.tagName() == "workpackage" ) {
-                timeTag = e.attribute( "time-tag" );
+                package->timeTag = KDateTime::fromString( e.attribute( "time-tag" ), KDateTime::ISODate );
                 package->ownerId = e.attribute( "owner-id" );
                 package->ownerName = e.attribute( "owner" );
+                kDebug()<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
                 KoXmlElement elem;
                 forEachElement( elem, e ) {
                     if ( elem.tagName() != "settings" ) {
@@ -530,7 +536,6 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
                     }
                     package->settings.usedEffort = (bool)elem.attribute( "used-effort" ).toInt();
                     package->settings.progress = (bool)elem.attribute( "progress" ).toInt();
-                    package->settings.remainingEffort = (bool)elem.attribute( "remaining-effort" ).toInt();
                     package->settings.documents = (bool)elem.attribute( "documents" ).toInt();
                 }
             }
@@ -548,14 +553,14 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     }
     if ( ok && proj->id() == project.id() && proj->childNode( 0 ) ) {
         ok = project.nodeDict().contains( proj->childNode( 0 )->id() );
-        if ( ok && m_mergedPackages.contains( timeTag ) ) {
+        if ( ok && m_mergedPackages.contains( package->timeTag ) ) {
             ok = false; // already merged
         }
-        if ( ok && ! timeTag.isEmpty() && ! m_mergedPackages.contains( timeTag ) ) {
-            m_mergedPackages[ timeTag ] = proj; // register this for next time
+        if ( ok && package->timeTag.isValid() && ! m_mergedPackages.contains( package->timeTag ) ) {
+            m_mergedPackages[ package->timeTag ] = proj; // register this for next time
         }
-        if ( ok && timeTag.isEmpty() ) {
-            kWarning()<<"Work package is not time tagged";
+        if ( ok && ! package->timeTag.isValid() ) {
+            kWarning()<<"Work package is not time tagged:"<<proj->childNode( 0 )->name()<<package->url;
             ok = false;
         }
     }
@@ -565,7 +570,6 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         return 0;
     }
     Q_ASSERT( package );
-    m_workpackages.insert( package, url );
     return package;
 }
 
@@ -599,6 +603,7 @@ bool Part::extractFile( KoStore *store, Package *package, const Document *doc )
     }
     package->documents.insert( tmpfile.fileName(), doc->url() );
     tmpfile.setAutoRemove( false );
+    kDebug()<<"extracted:"<<doc->url().fileName()<<"->"<<tmpfile.fileName();
     return true;
 }
 
@@ -624,26 +629,29 @@ void Part::checkForWorkPackage()
         }
         // all files read
         // remove other projects
-        QMutableMapIterator<Package*, KUrl> it( m_workpackages );
+        kDebug()<<"All:"<<m_workpackages;
+        QMutableMapIterator<KDateTime, Package*> it( m_workpackages );
         while ( it.hasNext() ) {
             it.next();
-            if ( it.key()->project->id() != m_project->id() ) {
-                delete it.key()->project;
-                delete it.key();
+            Package *package = it.value();
+            if ( package->project->id() != m_project->id() ) {
+                delete package->project;
+                delete package;
                 it.remove();
             }
         }
         // Merge our workpackages
         if ( ! m_workpackages.isEmpty() ) {
+            kDebug()<<"Mine:"<<m_workpackages;
             QStringList lst;
-            foreach ( const Package *p, m_workpackages.keys() ) {
-                lst << QString( "%1: %2" ).arg( static_cast<Task*>( p->project->childNode( 0 ) )->workPackage().ownerName() ).arg( p->project->childNode( 0 )->name() );
+            foreach( Package *p, m_workpackages ) {
+                lst.insert( 0, QString( "%3:  %1: %2" ).arg( static_cast<Task*>( p->project->childNode( 0 ) )->workPackage().ownerName() ).arg( p->project->childNode( 0 )->name() ).arg( KGlobal::locale()->formatDateTime( p->timeTag ) ) );
             }
             int r = KMessageBox::questionYesNoList( 0, "New work packages detected. Merge data with existing tasks?", lst );
             if ( r == KMessageBox::Yes ) {
                 mergeWorkPackages();
             }
-            qDeleteAll( m_workpackages.keys() );
+            qDeleteAll( m_workpackages.values() );
             m_workpackages.clear();
         }
     }
@@ -652,8 +660,8 @@ void Part::checkForWorkPackage()
 
 void Part::mergeWorkPackages()
 {
-    foreach ( const Package *p, m_workpackages.keys() ) {
-        mergeWorkPackage( p );
+    foreach ( Package *package, m_workpackages ) {
+        mergeWorkPackage( package );
     }
 }
 
@@ -669,7 +677,7 @@ void Part::mergeWorkPackage( const Package *package )
         if ( KPlatoSettings::leaveFile() ) {
             return;
         }
-        QFile file( m_workpackages[ const_cast<Package*>(package) ].path() );
+        QFile file( package->url.path() );
         if ( ! file.exists() ) {
             return;
         }
@@ -710,68 +718,57 @@ void Part::mergeWorkPackage( const Package *package )
 
 void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package )
 {
+    Resource *resource = m_project->findResource( package->ownerId );
+    if ( resource == 0 ) {
+        KMessageBox::error( 0, i18n( "The package owner '%1' is not a resource in this project. You must handle this manually.", package->ownerName ) );
+        return;
+    }
+
     MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
     Completion &org = to->completion();
     const Completion &curr = from->completion();
-/*    if ( org.entrymode() != curr.entrymode() ) {
-        cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
-    }*/
+
     if ( package->settings.progress ) {
         if ( org.isStarted() != curr.isStarted() ) {
             cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
         }
         if ( org.isFinished() != curr.isFinished() ) {
-            cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
+            cmd->addCommand( new ModifyCompletionFinishedCmd( org, curr.isFinished() ) );
         }
         if ( org.startTime() != curr.startTime() ) {
-            cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
+            cmd->addCommand( new ModifyCompletionStartTimeCmd( org, curr.startTime() ) );
         }
         if ( org.finishTime() != curr.finishTime() ) {
-            cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
+            cmd->addCommand( new ModifyCompletionFinishTimeCmd( org, curr.finishTime() ) );
         }
-    }
-    QList<QDate> orgdates = org.entries().keys();
-    QList<QDate> currdates = curr.entries().keys();
-    foreach ( const QDate &d, orgdates ) {
-        if ( currdates.contains( d ) ) {
-            if ( curr.entry( d ) == org.entry( d ) ) {
+        // TODO: review how/if to merge data from different resources
+        // remove entries
+        foreach ( const QDate &d, org.entries().keys() ) {
+            if ( ! curr.entries().contains( d ) ) {
+                kDebug()<<"remove entry "<<d;
+                cmd->addCommand( new RemoveCompletionEntryCmd( org, d ) );
+            }
+        }
+        // add new entries / modify existing
+        foreach ( const QDate &d, curr.entries().keys() ) {
+            if ( org.entries().contains( d ) && curr.entry( d ) == org.entry( d ) ) {
                 continue;
             }
-            kDebug()<<"modify entry "<<d;
             Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
-            cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
-        } else {
-            kDebug()<<"remove entry "<<d;
-            cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
-        }
-    }
-    foreach ( const QDate &d, currdates ) {
-        if ( ! orgdates.contains( d ) ) {
-            Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
-            kDebug()<<"add entry "<<d<<e;
-            cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
+            cmd->addCommand( new ModifyCompletionEntryCmd( org, d, e ) );
         }
     }
     if ( package->settings.usedEffort ) {
-        Resource *r = m_project->findResource( package->ownerId );
-        if ( r == 0 ) {
-            KMessageBox::error( 0, i18n( "The package owner '%1' is not a resource in this project. You must handle this manually.", package->ownerName ) );
-            delete cmd;
-            return;
+        Completion::UsedEffort *ue = new Completion::UsedEffort();
+        Completion::Entry prev;
+        foreach ( const QDate &d, curr.entries().keys() ) {
+            Completion::Entry e = *( curr.entry( d ) );
+            // set used effort from date entry and remove used effort from date entry
+            Completion::UsedEffort::ActualEffort effort( e.totalPerformed - prev.totalPerformed );
+            ue->setEffort( d, effort );
+            prev = e;
         }
-        const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
-        foreach ( const Resource *res, map.keys() ) {
-            if ( r->id() != res->id() ) {
-                continue;
-            }
-            Completion::UsedEffort *ue = map[ r ];
-            if ( ue == 0 ) {
-                break;
-            }
-            if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
-                cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
-            }
-        }
+        cmd->addCommand( new AddCompletionUsedEffortCmd( org, resource, ue ) );
     }
     bool docsaved = false;
     if ( package->settings.documents ) {
@@ -784,6 +781,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
             if ( KIO::NetAccess::synchronousRun( job, 0 ) ) {
                 docsaved = true;
                 //TODO: async
+                kDebug()<<"Moved file:"<<src<<it.value();
             }
         }
     }
@@ -794,7 +792,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
     WorkPackage *wp = new WorkPackage( from->workPackage() );
     wp->setParentTask( to );
     if ( ! wp->transmitionTime().isValid() ) {
-        wp->setTransmitionTime( DateTime::currentDateTime() );
+        wp->setTransmitionTime( package->timeTag );
     }
     wp->setTransmitionStatus( WorkPackage::TS_Receive );
     cmd->addCommand( new WorkPackageAddCmd( m_project, to, wp ) );
