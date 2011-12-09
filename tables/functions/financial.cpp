@@ -2116,8 +2116,8 @@ Value func_pv_annuity(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    const Value nper = calc->conv()->asFloat(args[0]);
-    double fNper = nper.asFloat();
+    const Value nper = args[0];
+    double fNper = calc->conv()->asFloat(nper).asFloat();
     double fPayment = calc->conv()->asFloat(args[1]).asFloat();
     double fPv = calc->conv()->asFloat(args[2]).asFloat();
     double fFv = (args.count() > 3) ? calc->conv()->asFloat(args[3]).asFloat() : 0;
