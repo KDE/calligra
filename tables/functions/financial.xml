@@ -1172,7 +1172,7 @@
                    <Type>Float</Type>
                </Parameter>
                <Help>
-                   <Text>The RATE() function calculates the constant interest rate of an investment with regular payments.</Text>
+                   <Text>The RATE() function computes the constant interest rate per period of an investment.</Text>
                    <Syntax>RATE(nper;pmt;pv;fv;type;guess)</Syntax>
                    <Example>RATE(4*12;-200;8000) equals 0.007701472</Example>
                </Help>

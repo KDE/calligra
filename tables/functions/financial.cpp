@@ -2192,7 +2192,8 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
         }
     }
     fGuess = fX;
-    //if (!bValid && bFound) return Value::errorVALUE();
+    // ODF specs do not say that we should return an error in that case
+    //if (!bValid || !bFound) return Value::errorVALUE();
     return Value(fGuess);
 }
 
