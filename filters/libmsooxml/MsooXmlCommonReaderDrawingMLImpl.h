@@ -1310,12 +1310,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
-#if defined(XLSXXMLDRAWINGREADER_CPP)
-extern QString columnName(uint column);
-//extern int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43);
-//extern int rowHeight(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75);
-#endif
-
 #undef CURRENT_EL
 #define CURRENT_EL chart
 //! chart handler (Charting diagrams)
@@ -1346,8 +1340,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
             hasStart = true;
             if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-                QString sheet = chart->m_sheetName.isEmpty() ? QString() : chart->m_sheetName + '.';
-                chartexport->m_endCellAddress = sheet + columnName(f.m_col) + QString::number(f.m_row);
+                chartexport->m_endCellAddress = m_currentDrawingObject->toCellAddress();
                 //chartexport->m_end_x = f.m_colOff;
                 //chartexport->m_end_y = f.m_rowOff;
                 chartexport->m_end_x = EMU_TO_POINT(f.m_colOff);
