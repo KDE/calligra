@@ -80,7 +80,7 @@ public:
     DrawingTableStyle();
     virtual ~DrawingTableStyle();
 
-    ///the style takes ownership of the properties
+    //the style takes ownership of the properties
     void addProperties(Type type, TableStyleProperties* properties);
     TableStyleProperties* properties(Type type) const;
 
