@@ -129,7 +129,7 @@ public:
                       currentAction(0),
                       scroll(0), eventLoop(0), /*tearoff(0),*/ /*tornoff(0),*/ /*tearoffHighlighted(0),*/
                       hasCheckableItems(0), sloppyAction(0), /* doChildEffects(false)*/
-                      hasFrame(true)
+                      hasFrame(true), clickableLogoArea(0)
     {
     }
     virtual ~KexiMenuWidgetPrivate()
@@ -268,6 +268,8 @@ public:
 
     OxygenHelper *oxygenHelper;
 
+    void updateLogo();
+    void updateLogoPixmap();
     QPixmap calligraLogoPixmap;
     ClickableLogoArea *clickableLogoArea;
 };

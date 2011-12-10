@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -264,6 +264,10 @@ KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalet
 /*! @return pixmap @a original colored using @a color color. Used for coloring bitmaps 
  that have to reflect the foreground color. */
 KEXIUTILS_EXPORT QPixmap replaceColors(const QPixmap& original, const QColor& color);
+
+/*! @return true if curent color scheme is light.
+ Lightness of window background is checked to measure this. */
+KEXIUTILS_EXPORT bool isLightColorScheme();
 
 /*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
 KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);

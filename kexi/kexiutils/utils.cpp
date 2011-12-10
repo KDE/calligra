@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,7 @@
 #include <KGlobalSettings>
 #include <KAction>
 #include <KDialog>
+#include <KColorScheme>
 
 using namespace KexiUtils;
 
@@ -720,6 +721,11 @@ QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
     p.setCompositionMode(QPainter::CompositionMode_SourceIn);
     p.fillRect(dest.rect(), color);
     return dest;
+}
+
+bool KexiUtils::isLightColorScheme()
+{
+    return KColorScheme(QPalette::Active, KColorScheme::Window).background().color().lightness() >= 128;
 }
 
 //---------------------

@@ -36,6 +36,7 @@
 #include <KStandardDirs>
 #include <KLocale>
 #include <KDebug>
+#include <kexiutils/utils.h>
 #include <kexi_version.h>
 
 #include "qdebug.h"
@@ -2091,23 +2092,36 @@ void ClickableLogoArea::paintEvent(QPaintEvent*)
 {
 }
 
+void KexiMenuWidgetPrivate::updateLogoPixmap()
+{
+    const QString calligraLogo = KStandardDirs::locate("data",
+        KexiUtils::isLightColorScheme()
+         ? "kexi/pics/calligra-logo-white-glow.png"
+         : "kexi/pics/calligra-logo-black-glow.png");
+    calligraLogoPixmap = QPixmap(calligraLogo);
+}
+
+void KexiMenuWidgetPrivate::updateLogo()
+{
+    const QRect logoRect((q->width() - 2 - 100) / 2,
+                         q->height() - logoBottomMargin - 71 - 12,
+                         100, 71);
+    if (!clickableLogoArea) {
+        updateLogoPixmap();
+        clickableLogoArea = new ClickableLogoArea(q);
+        clickableLogoArea->setCursor(Qt::PointingHandCursor);
+        clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", calligraUrl));
+    }
+    clickableLogoArea->setGeometry(logoRect);
+}
+
 /*!
   \reimp
 */
 void KexiMenuWidget::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
-    const QString calligraLogo
-        = KStandardDirs::locate("data", "kexi/pics/calligra-logo-white-glow.png");
-    d->calligraLogoPixmap = QPixmap(calligraLogo);
-
-    const QRect logoRect((width() - 2 - 100) / 2,
-                         height() - logoBottomMargin - 71 - 12,
-                         100, 71);
-    d->clickableLogoArea = new ClickableLogoArea(this);
-    d->clickableLogoArea->setGeometry(logoRect);
-    d->clickableLogoArea->setCursor(Qt::PointingHandCursor);
-    d->clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", calligraUrl));
+    d->updateLogo();
     d->clickableLogoArea->show();
 }
 
@@ -2398,6 +2412,10 @@ void KexiMenuWidget::changeEvent(QEvent *e)
         }
     } else if (e->type() == QEvent::EnabledChange) {
         d->menuAction->setEnabled(isEnabled());
+    }
+    else if (e->type() == QEvent::PaletteChange) {
+        d->updateLogoPixmap();
+        d->updateLogo();
     }
     QWidget::changeEvent(e);
 }
